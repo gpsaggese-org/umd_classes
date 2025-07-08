@@ -1,12 +1,12 @@
 repo_info:
-  repo_name: msml610
+  repo_name: umd_msml610
   github_repo_account: gpsaggese
   github_host_name: github.com
   invalid_words:
   issue_prefix: MsmlTask
 
 docker_info:
-  docker_image_name: msml610
+  docker_image_name: umd_msml610
 
 s3_bucket_info:
   unit_test_bucket_name: s3://cryptokaizen-unit-test
@@ -20,4 +20,4 @@ container_registry_info:
 runnable_dir_info:
   use_helpers_as_nested_module: 1
   venv_tag: helpers
-  dir_suffix: msml610
+  dir_suffix: umd_msml610
