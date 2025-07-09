@@ -1,8 +1,8 @@
-// notes_to_pdf.py --input MSML610/Lesson07-Bayesian_statistics_1.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
+// notes_to_pdf.py --input lectures_source/Lesson07-Bayesian_statistics_1.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
 
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 

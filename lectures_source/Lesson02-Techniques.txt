@@ -1,6 +1,6 @@
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -691,7 +691,7 @@ digraph BayesianFlow {
      - It works even if there is an analytical solution
 ::::
 :::: {.column width=20%}
- ![](MSML610/figures/Lesson6_Gradient_descent_2.png)
+ ![](lectures_source/figures/Lesson6_Gradient_descent_2.png)
 // TODO: Convert in Tikz or improve
 ::::
 :::
@@ -717,7 +717,7 @@ digraph BayesianFlow {
       linear models)
 ::::
 :::: {.column width=20%}
-![](MSML610/figures/Lesson6_Gradient_descent_1.png)
+![](lectures_source/figures/Lesson6_Gradient_descent_1.png)
 // TODO: Convert in Tikz or improve
 ::::
 :::
@@ -808,7 +808,7 @@ digraph BayesianFlow {
     - The linear approximation fails (higher terms affect values)
     - It "bounces around"
 
- ![](MSML610/figures/Lesson6_Gradient_descent_3.png)
+ ![](lectures_source/figures/Lesson6_Gradient_descent_3.png)
 
 - Idea: vary learning rate $\eta$ during gradient descent
   - Smaller learning rates may find a better minimum
