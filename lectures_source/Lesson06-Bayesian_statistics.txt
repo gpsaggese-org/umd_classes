@@ -30,10 +30,10 @@ MSML610: Advanced Machine Learning
   - Chap 14: Probabilistic reasoning over time
 
 # ##############################################################################
-# Quantifying Uncertainty
+# Logic-Based AI Under Uncertainty
 # ##############################################################################
 
-* Logic-Based AI Acting Under Uncertainty
+* Logic-Based AI Under Uncertainty: Problem
 
 - Logic-based AI systems:
   - Based on propositional logic
@@ -49,37 +49,60 @@ MSML610: Advanced Machine Learning
   - Non-determinism (actions don't always have predictable outcomes)
   - Adversarial conditions (other agents may interfere)
 
-- Logical agents approach
-  - Use a **belief state**: set of all possible current world states
-  - Construct **contingent plans** that handle every possible sensor report
-    - Must consider all possible explanations, even unlikely ones
-    - Plans become large and complex
-    - No guaranteed plan may exist, yet action is required
+* Logic-Based AI Under Uncertainty: Solution
+- Use a **belief state**: set of all possible current world states
+- Use **causal and exhaustive augmentation** for rules
+  - Must consider all possible preconditions for acting, even unlikely ones
+- Construct **contingent plans** that handle every possible sensor report
+  - Plans become large and complex
+  - No guaranteed plan may exist, yet action is required
+
+* Logic-Based AI Under Uncertainty: Example
+- **Example**:
+  - Start a car by pressing the start button
+
+  - Obvious preconditions:
+    - The car has fuel
+    - The car battery is charged
+    - The ignition key or fob is present and functional
+    - The starter motor is working
+    - ...
+
+  - Less obvious preconditions:
+    - The fuel lines are not clogged
+    - The fuel pump is working
+    - The electrical system is intact (no blown fuses)
+    - The engine oil level is sufficient
+    - ...
 
 * Causal and Exhaustive Augmentation
-- To use propositional logic, augment the left-side of $X \implies Y$ to make
-  it:
+- To use propositional logic under uncertainty, augment the left-side of
+  $X \implies Y$ to make it:
   1. **Causal**: identify true causal-effect relationships
   2. **Exhaustive**: identify all possible conditions leading to the outcome
 
-- **Logical qualification problem**: trying to enumerate all the preconditions
-  necessary for an action to succeed
+- **Logical qualification problem**
+  - Try to enumerate all the preconditions necessary for an action to succeed
 
 - **Problems**
-  1. **Laziness**: too much work to create all possible rules
-  2. **Theoretical ignorance**: lack of understanding
+  1. **Laziness**
+     - Too much work to create all possible rules
+  2. **Theoretical ignorance**
      - Science doesn't always have a complete theory of the domain
-     - E.g., medical science doesn't know all the rules
-  3. **Practical ignorance**: lack of facts
-     - Even if we knew all the rules, we might not have all the information
+     - E.g., medical science doesn't know all the "rules"
+  3. **Practical ignorance**
+     - Even if you knew all the rules, you might not have all the information
        needed
      - E.g., not all necessary tests can be run for a particular patient
 
-- This led to expert systems failure and AI winter (mid 1980s, 1990s)
+- Expert systems failure and AI winter (mid 1980s, 1990s)
   - The real world is complex and open-ended
   - Logical rules can't capture all necessary and sufficient conditions
 
 * Failure of Logic-Based AI: Wet Grass Example
+
+::: columns
+:::: {.column width=65%}
 - Consider the propositions:
   - $Rain$ = "it rains"
   - $WetGrass$ = "the grass is wet"
@@ -87,61 +110,96 @@ MSML610: Advanced Machine Learning
   - $Evaporate$ = "the water evaporates quickly"
   - $Sprinkler$ = "the sprinkler system is on"
   - $Dew$ = "there is morning dew"
+::::
+:::: {.column width=30%}
+![](lectures_source/figures/Lesson06_grass_sprinkler.png)
+::::
+:::
 
-- $Rain \implies WetGrass$ is not true in general
+- "$Rain \implies WetGrass$" is not true in general
   - If it rains but there is a cover over the grass, the grass will not be wet
   - If it rains but there is high temperature, the wet grass might dry quickly
 
-- $WetGrass \implies Rain$ is not true in general
+- "$WetGrass \implies Rain$" is not true in general
   - The grass could be wet because of a sprinkler system
   - The grass could be wet because of morning dew
 
-- Identify all exceptions, alternative explanations, and dependencies
-  1. Causal
-     - $Rain \implies (WetGrass \lor (Cover \lor Evaporate \ldots)$: "if it
-       rains and there is no other source of water, the grass will be wet"
-  2. Exhaustive
-     - $WetGrass \iff (Rain \lor (Sprinkler \lor Dew \ldots)$: "if it rains and
-       there is no protective cover, the grass will be wet"
+* Failure of Logic-Based AI: Wet Grass Example
+- Identify all exceptions, alternative explanations, and dependencies to make
+  $X \implies Y$:
+  1. **Causal**
+     - "If it rains and there is no other source of water, the grass will be wet"
+     - $Rain \implies WetGrass \lor Cover \lor Evaporate \ldots$
+  2. **Exhaustive**
+     - "If it rains and there is no protective cover, the grass will be wet"
+     - $WetGrass \implies Rain \lor Sprinkler \lor Dew \ldots$
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
+
+    // Nodes
+    Rain       [label="Rain", fillcolor="#A6C8F4"];
+    WetGrass   [label="WetGrass", fillcolor="#B2E2B2"];
+    Cover      [label="Cover", fillcolor="#FFD1A6"];
+    Evaporate  [label="Evaporate", fillcolor="#F4A6A6"];
+    Sprinkler  [label="Sprinkler", fillcolor="#A0D6D1"];
+    Dew        [label="Dew", fillcolor="#A6E7F4"];
+
+    // Force ranks
+    { rank=same; Cover; Evaporate; }
+    { rank=same; Sprinkler; Dew; }
+
+    // Edges
+    Rain -> WetGrass;
+    Rain -> Cover;
+    Rain -> Evaporate;
+    Cover -> WetGrass [label="blocks", style=dashed];
+    Evaporate -> WetGrass [label="blocks", style=dashed];
+    Sprinkler -> WetGrass;
+    Dew -> WetGrass;
+}
+```
 
 * Acting Under Uncertainty: Solution
-
-- We can't use propositional logic under uncertainty
-  - Need approaches (like probabilistic reasoning) that handle uncertainty and
-    partial knowledge
+- Can't use propositional logic under uncertainty
 
 - Acting under uncertainty requires combining:
-  - **Probabilities**: for possible outcomes
+  - **Probability**: to handle uncertainty and partial knowledge
   - **Utilities**: for evaluating desirability of each outcome
 
 - **Key idea:**
   - Rational choice = plan that maximizes expected utility
+    - Performance measure: combines goals like punctuality, comfort, legal
+      compliance
+    - Belief: agent's internal estimate of outcome likelihoods
   - Evaluate plans based on performance on average, given known information
-  - Even if success is not guaranteed
-
-- Rational decision depends on:
-  - **Performance measure**: combines goals like punctuality, comfort, legal
-    compliance
-  - **Belief**: agent's internal estimate of outcome likelihoods
+  - But success is not guaranteed
 
 * Probability and Knowledge
-- The confusing part is that there no uncertainty in the actual world
+- **Paradox**
+  - There is no uncertainty in the actual world!
   - E.g., the grass is wet, but either it has rained or not
 
-- Probabilities relate to a knowledge state, not the real world
+- **Knowledge is subjective**
+  - Probabilities relate to a knowledge state, not to the real world
   - Updating knowledge can change probability statements
 
-- E.g., updating belief about wet grass and rain:
-  - Initially, we observe wet grass, and from past data we know that:
-    - $\Pr(Rain | WetGrass) = 0.8$: 80% chance it rained if grass is wet
-  - Learn new information:
+- E.g., updating belief about wet grass and rain
+  - Initially, you observe wet grass
+    - From past data you know that $\Pr(Rain | WetGrass) = 0.8$
+    - 80% chance it rained if grass is wet
+  - You learn new information:
     - Sprinkler was on
     - Wet grass could be due to the sprinkler, not rain
-    - Belief changes: $\Pr(Rain | WetGrass) = 0.4$
-  - Further observe:
+    - Belief changes: $\Pr(Rain | WetGrass \land Sprinkler) = 0.4$
+  - You further observe:
     - Weather report says there was no rain
     - Certain it did not rain, despite wet grass
-    - Overrides prior evidence: $\Pr(Rain | WetGrass) = 0$
+    - Overrides prior evidence: $\Pr(Rain | WetGrass \land WeatherReport) = 0$
 
 # ##############################################################################
 # Probabilistic Reasoning
@@ -155,22 +213,24 @@ MSML610: Advanced Machine Learning
 
 - Consider a set of random variables $X_1, X_2, \dots, X_n$
 
-- The **full joint probability distribution** assigns a probability to every
-  possible world:
-  $$
-  \Pr(X_1 = x_1, X_2 = x_2, \dots, X_n = x_n)
-  $$
-  - A possible world = a particular assignment of values to all variables
+- The **full joint probability distribution**
+  - Assigns a probability to every possible world:
+    $$
+    \Pr(X_1 = x_1, X_2 = x_2, \dots, X_n = x_n)
+    $$
+    where a **possible world** is a particular assignment of values to all
+    variables
   - Can answer any probabilistic query about the domain
 
 - **Cons**
-  - Size grows exponentially $k^n$ with the number of variables $n$ and size $k$
+  - Size grows exponentially $k^n$ with the number of variables $n$ and number of
+    values $k$
   - Impractical for real-world problems with many variables
   - Manually specifying each entry is tedious
 
-- **Independence** and **conditional independence** simplify modeling
+- **Independence** (conditional and absolute) simplifies modeling
   - In the real world, many variables are not fully dependent on all others
-  - Reduces the number of parameters needed
+  - Reduces the number of variables needed in the model
   - Makes compact and structured representations possible
     - E.g., factorized probabilistic models, Bayesian networks
 
@@ -179,12 +239,21 @@ MSML610: Advanced Machine Learning
   $$
   \Pr(X, Y) = \Pr(X) \cdot \Pr(Y)
   $$
-- Equivalently, knowing $Y$ tells us nothing about $X$, $\Pr(X | Y) = \Pr(X)$
+  - Equivalently, knowing $Y$ tells nothing about $X$
+  $$
+  \Pr(X | Y) = \Pr(X)
+  $$
 - E.g.,
-  - The events "coin flip result" and "weather" are independent
-  - $\Pr(\text{Coin=Heads} | \text{Weather=Rainy}) = \Pr(\text{Coin=Heads})$
+  - The events "coin flip" and "weather" are independent
+    $$
+    \Pr(\text{Coin=Heads} | \text{Weather=Rainy}) = \Pr(\text{Coin=Heads})
+    $$
 
-- Independence reduces the number of parameters needed to model a system
+- **Independence**:
+  - Reduces the number of parameters needed to model a system
+    $$
+    \Pr(X_1 | X_2, X_3) = \Pr(X_1)
+    $$
   - Allows factorization of joint distribution, if all variables are mutually
     independent, e.g.,
     $$
@@ -192,57 +261,54 @@ MSML610: Advanced Machine Learning
     $$
 
 * Conditional Independence: Definition
-
 - Two random variables $X$ and $Y$ are **conditionally independent** given a
   random variable $Z$ iff knowing $Z$ makes $X$ and $Y$ independent:
-
   $$
-  \Pr(X, Y | Z) = \Pr(X | Z) \Pr(Y | Z)
+  \Pr(X, Y | Z) = \Pr(X | Z) \cdot \Pr(Y | Z)
   $$
 
-- E.g.,
+- **Example**
   - $X$ = "it is raining today"
-  - $Y$ = "if a person is carrying an umbrella"
+  - $Y$ = "a person is carrying an umbrella"
   - $Z$ = "the weather forecast"
-  - Without $Z$, there is a relationship between $X$ and $Y$ ($X$ and $Y$ are
-    not independent)
-  - Given $Z$, rain $X$ may not directly influence whether a person carries an
+  - Without $Z$: there is a relationship between $X$ and $Y$ (i.e., $X$ and $Y$
+    are not independent)
+  - Given $Z$: rain $X$ may not directly influence whether a person carries an
     umbrella $Y$
   - Thus, $X$ and $Y$ can be conditionally independent given $Z$
 
-- True independence is rare; conditional independence is more common and useful
-
-- Conditional independence simplifies probabilistic models
-  - It reduces the joint conditional distribution to the product of individual
-    conditional distributions
+- **Pros**
+  - True independence is rare; conditional independence is more common and useful
+  - Simplify probabilistic models by factorizing the joint conditional
+    distribution into product of individual conditional distributions
 
 * Conditional Independence: Example
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=65%}
 - Two events can become independent once we know a third event
 
-- **Example:**
-  - $Fire$: "there is a fire"
-  - $Toast$: "someone burned toast"
-  - $Alarm$: "the alarm rings"
-  - $Call$: "a friend calls to check on you"
+- **Example**
+  - $Fire$ = "there is a fire"
+  - $Toast$ = "someone burned toast"
+  - $Alarm$ = "the fire alarm rings"
+  - $Call$ = "a friend calls to check on you"
 
-- **Dependencies**:
+- **Dependencies**
   - $Alarm$ depends on $Fire$ or $Toast$
   - $Call$ depends on whether $Alarm$ rings
 
-- **Conditional independence**:
-  - $\Pr(Call \mid Alarm, Fire) = \Pr(Call \mid Alarm)$
+- **Conditional independence**
   - Once we know the alarm rang, the specific cause doesn't affect whether the
     friend calls
+  - $\Pr(Call \mid Alarm, Fire) = \Pr(Call \mid Alarm)$
 
-- **Interpretation**:
-  - $Call$ is conditionally independent of $Fire$ given $Alarm$
-  - Knowing the alarm rang "blocks" the path of influence from $Fire$ to $Call$
+- **Interpretation**
+  - $Call$ is conditionally independent of $Fire$ and $Toast$ given $Alarm$
+  - Knowing the alarm rang "blocks" the path of influence from $Fire$ and $Toast$
+    to $Call$
 ::::
-:::: {.column width=35%}
-
+:::: {.column width=30%}
 ```graphviz
 digraph BayesianFlow {
     splines=true;
