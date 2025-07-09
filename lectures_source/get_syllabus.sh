@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
-# MSML610/example.txt
-# MSML610/Gallery.txt
+# lectures_source/example.txt
+# lectures_source/Gallery.txt
 
-# > ls -1 MSML610/Lesson*
-FILES=$(ls -1 MSML610/Lesson*)
+# > ls -1 lectures_source/Lesson*
+FILES=$(ls -1 lectures_source/Lesson*)
 
 for FILE in $FILES; do
     echo

@@ -1,6 +1,6 @@
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 

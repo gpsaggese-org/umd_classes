@@ -3,7 +3,7 @@
 
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -82,7 +82,7 @@ MSML610: Advanced Machine Learning
 
 * Data Analytics Sophistication
 \begin{center}
-  \includegraphics[width=0.9\textwidth]{MSML610/figures/Lesson9-Analytical_sophistication.png}
+  \includegraphics[width=0.9\textwidth]{lectures_source/figures/Lesson9-Analytical_sophistication.png}
 \end{center}
 
 \begingroup \footnotesize

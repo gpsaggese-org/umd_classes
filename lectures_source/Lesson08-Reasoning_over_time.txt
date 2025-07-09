@@ -1,6 +1,6 @@
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -1483,7 +1483,7 @@ def update(prior, measurement):
 - Time is discrete
 ::::
 :::: {.column width=40%}
-![](MSML610/figures/bichon_pic.jpg){ height=20%}
+![](lectures_source/figures/bichon_pic.jpg){ height=20%}
 (Nuvolo)
 ::::
 :::

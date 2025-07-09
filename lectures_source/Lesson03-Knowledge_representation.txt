@@ -1,8 +1,8 @@
-// notes_to_pdf.py --input MSML610/Lesson13-Knowledge_representation.txt --output tmp.pdf --type slides
+// notes_to_pdf.py --input lectures_source/Lesson13-Knowledge_representation.txt --output tmp.pdf --type slides
 
 ::: columns
 :::: {.column width=15%}
-![](MSML610/UMD_Logo.png)
+![](lectures_source/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -145,13 +145,13 @@ MSML610: Advanced Machine Learning
 - **Neuro-symbolic approaches** blends the two approaches
   - Reason over learned concepts using structured logic
 
- ![](MSML610/figures/Lesson03_symbolic_vs_subsymbolic.png)
+ ![](lectures_source/figures/Lesson03_symbolic_vs_subsymbolic.png)
 
 // TODO: Convert in tikz
 
 * Neuro-symbolic Approach: Conceptual Spaces
 
-![](MSML610/figures/Lesson03_conceptual_spaces.png)
+![](lectures_source/figures/Lesson03_conceptual_spaces.png)
 
 - **Conceptual spaces** are frameworks for representing knowledge using geometric
   structures
@@ -920,7 +920,7 @@ digraph UniversityOntology {
     $\lnot A \lor B \text{ means } (\lnot A) \lor B$
 ::::
 :::: {.column width=45%}
-  ![](MSML610/figures/Lesson13_propositional_logic_BNF.png){ height=50% }
+  ![](lectures_source/figures/Lesson13_propositional_logic_BNF.png){ height=50% }
 ::::
 :::
 
@@ -1214,7 +1214,7 @@ digraph UniversityOntology {
 ::::
 :::: {.column width=35%}
 
-![](MSML610/figures/Lesson03_FOL_Syntax.png)
+![](lectures_source/figures/Lesson03_FOL_Syntax.png)
 
 ::::
 :::
@@ -1621,7 +1621,7 @@ digraph UniversityOntology {
 
 * Example of OWL in RDF
 
-![](MSML610/figures/Lesson03_RDF_example.png)
+![](lectures_source/figures/Lesson03_RDF_example.png)
 
 ```graphviz[width=50%]
 digraph OWL_Example {
