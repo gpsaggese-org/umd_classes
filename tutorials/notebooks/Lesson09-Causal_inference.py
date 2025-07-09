@@ -64,7 +64,7 @@ plt.rc('font', size=20)
 # Chap1
 
 # %%
-dir_name = "/app/notes/MSML610/tutorial_msml610/notebooks/Lesson9-data"
+dir_name = "/app/lectures_source/tutorial_msml610/notebooks/Lesson9-data"
 # !ls $dir_name
 
 # %%

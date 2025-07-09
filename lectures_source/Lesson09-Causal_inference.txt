@@ -1,5 +1,5 @@
-// notes_to_pdf.py --input notes/MSML610/Lesson9-Causal_inference.txt --output tmp.pdf -t slides
-// helpers_root/./dev_scripts_helpers/documentation/render_images.py -i notes/MSML610/Lesson9-Causal_inference.txt -o notes/MSML610/Lesson9-Causal_inference.out.txt
+// notes_to_pdf.py --input lectures_source/Lesson9-Causal_inference.txt --output tmp.pdf -t slides
+// helpers_root/./dev_scripts_helpers/documentation/render_images.py -i lectures_source/Lesson9-Causal_inference.txt -o lectures_source/Lesson9-Causal_inference.out.txt
 
 ::: columns
 :::: {.column width=15%}
