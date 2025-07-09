@@ -64,7 +64,7 @@ def print_obj(*args: any, **kwargs: any) -> None:
 
 def convert_to_filename(string: str) -> str:
     dst_dir = os.path.join(os.environ["CSFY_GIT_ROOT_PATH"],
-                           "notes/MSML610/figures")
+                           "lectures_source/figures")
     dst_dir = os.path.normpath(dst_dir)
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
