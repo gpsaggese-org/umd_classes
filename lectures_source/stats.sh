@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR=MSML610
+DIR=lectures_source
 FILES=$(ls -1 $DIR/Lesson*)
 
 for FILE in $FILES; do

@@ -33,18 +33,20 @@ MSML610: Advanced Machine Learning
 
 * Logic-based AI Acting Under Uncertainty
 
+- Logic-based AI systems:
+  - Based on propositional logic
+  - Represent **actions** using **rules** like:
+    - _"If preconditions P hold, then action A causes effect E"_
+  - Example:
+    - _"If I turn the car key, the engine starts"_
+    - **But**: the battery might be dead, there's no fuel, the starter is broken,
+      etc.
+
 - Real-world agents face **uncertainty** from:
   - Partial observability (agent can't see the full state)
   - Non-determinism (actions don't always have predictable outcomes)
   - Adversarial conditions (other agents may interfere)
 
-- In logic-based AI systems:
-  - Actions are represented using **rules** like:
-    - "If preconditions P hold, then action A causes effect E"
-  - Example:
-    - "If I turn the car key, the engine starts"
-    - But: the battery might be dead, there's no fuel, the starter is broken,
-      etc.
 - Logical agents approach
   - Use a **belief state**: set of all possible current world states
   - Construct **contingent plans** that handle every possible sensor report
