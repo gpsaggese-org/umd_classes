@@ -338,16 +338,10 @@ digraph BayesianFlow {
 ::: columns
 :::: {.column width=70%}
 - Garden world with $Rain$, $Sprinkler$, and $WetGrass$
-
-  $$
-  \Pr(Rain | Sprinkler) = \Pr(Rain) ?
-  $$
+  - Is $\Pr(Rain | Sprinkler) = \Pr(Rain)$ ?
     - **No**: if the sprinkler is on, it's less likely it rained
     - $Rain$ and $Sprinkler$ are not independent
-
-  $$
-  \Pr(Rain | Sprinkler, WetGrass) = \Pr(Rain | WetGrass) ?
-  $$
+  - Is $\Pr(Rain | Sprinkler, WetGrass) = \Pr(Rain | WetGrass)$ ?
     - **Yes**: knowing the grass is wet, whether the sprinkler was on tells us
       nothing more about the rain
     - $Rain$ and $Sprinkler$ are conditionally independent given $WetGrass$
