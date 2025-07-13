@@ -1281,9 +1281,9 @@ digraph StockPriceGraph {
 - Under these assumptions:
   \begin{align*}
   &\Pr(fever | parents(Fever)) \\
-  & \space{1cm} = 1 - \Pr(\lnot fever | cold, \lnot flu, \lnot malaria) \cdot \\
-  & \space{1cm} \Pr(\lnot fever | \lnot cold, flu, \lnot malaria) \cdot \\
-  & \space{1cm} \Pr(\lnot fever | \lnot cold, \lnot flu, malaria)
+  & \vspace{1cm} = 1 - \Pr(\lnot fever | cold, \lnot flu, \lnot malaria) \cdot \\
+  & \vspace{1cm} \Pr(\lnot fever | \lnot cold, flu, \lnot malaria) \cdot \\
+  & \vspace{1cm} \Pr(\lnot fever | \lnot cold, \lnot flu, malaria)
   \end{align*}
 
 * Context-specific independence
