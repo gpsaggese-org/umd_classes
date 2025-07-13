@@ -1249,78 +1249,96 @@ digraph StockPriceGraph {
 // ### 13.2.2, Efficient representation of conditional distributions (p. 433)
 
 * Specifying a Conditional Probability Table
-- Even with a small number of parents $k$, the Conditional Probability Table
-  (CPT) for a node requires $O(2^k)$ values in the worst case
+- The Conditional Probability Table (CPT) for a node requires $O(2^k)$ values in
+  the worst case
+  - Difficult to specify CPT even with a small number of parents $k$
 
-- Often, the relationship is not completely arbitrary
+- Often, the relationship is not completely arbitrary, e.g.,
+  - Deterministic nodes
+  - Noisy logical relationships
+  - Context-specific independence
 
+* Deterministic Nodes
 - **Deterministic nodes** have values specified by their parents, without
   uncertainty, e.g.,
   - A logical relationship:
+    - Useful when a condition is met if any of the sub-conditions are true
     - $IsNorthAmerican = IsCanadian \lor IsUS \lor IsMexican$
   - A numerical relationship:
     - $BestPrice = \min(Price_i)$
 
+- **Note**
+  - Deterministic nodes do not involve randomness or probability
+  - Often used in models to simplify relationships and computations
+
 * Noisy Logical Relationships
-- Noisy logical relationships are a probabilistic version of a logical
-  relationship
-  - E.g., noisy-OR, noisy-MAX distribution
-  - Noisy nodes can be simpler to describe given the $k$ parents
+- **Noisy logical relationships** (e.g., noisy-OR, noisy-MAX):
+  - Are a probabilistic version of a logical relationship
+  - Can be simpler to describe given the $k$ parents
 
-**Example**
+- **Example**
+- In propositional logic
+  $$Fever \iff Cold \lor Flu \lor Malaria$$
 
-- A "noisy-OR" is a probabilistic version of a logical $\lor$
-  - E.g., in propositional logic $Fever \iff Cold \lor Flu \lor Malaria$
+- In Bayesian networks
+  - The assumptions are:
+    1. All the possible causes are listed (you can use a leak node for "misc
+       causes")
+    2. There is uncertainty about the parents to cause the child node
+    3. The probabilities of inhibition are independent
+  - Under these assumptions:
+    \begin{align*}
+    &\Pr(Fever | parents(Fever)) \\
+    & \hspace{1cm} = 1 - \Pr(\lnot Fever | Cold, \lnot Flu, \lnot Malaria) \cdot \\
+    & \hspace{1cm} \Pr(\lnot Fever | \lnot Cold, Flu, \lnot Malaria) \cdot \\
+    & \hspace{1cm} \Pr(\lnot Fever | \lnot Cold, \lnot Flu, Malaria)
+    \end{align*}
 
-- The assumptions are:
-  1. All the possible causes are listed (one can use a leak node for "misc causes")
-  2. There is uncertainty about the ability of the parents to be the cause of the
-     child node, i.e., a probability that a cause is inhibited
-  3. The probabilities of inhibition are independent
-
-- Under these assumptions:
-  \begin{align*}
-  &\Pr(fever | parents(Fever)) \\
-  & \vspace{1cm} = 1 - \Pr(\lnot fever | cold, \lnot flu, \lnot malaria) \cdot \\
-  & \vspace{1cm} \Pr(\lnot fever | \lnot cold, flu, \lnot malaria) \cdot \\
-  & \vspace{1cm} \Pr(\lnot fever | \lnot cold, \lnot flu, malaria)
-  \end{align*}
-
-* Context-specific independence
+* Context-specific Independence
 - A variable exhibits **context-specific independence** if it is conditionally
-  independent of its parents given certain values of others, e.g.,
+  independent of its parents given certain values of others
 
+- **Example**
 - $Damage$ occurs during a period of time depending on the $Ruggedness$ of your
   car and whether an $Accident$ occurred in that period:
 
+  \small
   $$
-  \Pr(Damage | Ruggedness, Accident) = d1 \text{ else } d2(Ruggedness) \text{ if Accident}
+  \Pr(Damage \mid Ruggedness, Accident) =
+  \begin{cases}
+  d_1 & \text{if } Accident = True \\
+  d_2(Ruggedness) & \text{if } Accident = False
+  \end{cases}
   $$
+  \normalsize
 
   where $d1$ and $d2$ are distributions
 
 * Bayesian Networks with Continuous Variables
 - Many real world problems involve continuous quantities
   - E.g., height, mass, temperature, money
-- We can't specify the Conditional Probability Table (CPT) for continuous RVs,
-  but we can use:
+- Conditional Probability Table (CPT) is not suitable for continuous RVs
+- We can use:
   1. Discretization (i.e., use intervals)
      - Cons: loss of accuracy and large CPTs
   2. Continuous variables
      - Families of probability density functions (e.g., Gaussian distribution)
      - Non-parametric PDFs
 
-- **Hybrid Bayesian** networks mix discrete and continuous variables in a
-  Bayesian network
-  - E.g., a customer buys some fruit depending on its cost
+- **Hybrid Bayesian networks** mix discrete and continuous variables, e.g.,
+  - A customer buys a number of apples (discrete) depending on its cost
+    (continuous)
+  - Decide annual premium to charge to insure a vehicle based on applicant
+    information (e.g., make model)
 
 * Bayesian Network: Car Insurance Company (1/2)
 - A car insurance company:
-  - Receives an application from an individual to insure a specific vehicle
-  - Decides on appropriate annual premium to charge (based on the claims and pay
-    out)
+  - Receive an application from an individual to insure a specific vehicle
+  - Analyze information about the individual and its car
+  - Decide on appropriate annual premium to charge
+    - Based on the type of claim and pay out
 
-- Build a Bayes network that captures the causal structure of the domain
+- Build a Bayesian network that captures the causal structure of the domain
 
 - There are 3 kind of claims
   - $MedicalCost$: injuries sustained by the applicant
@@ -1334,44 +1352,47 @@ digraph StockPriceGraph {
   - About the driving situation: $Mileage$, $HasGarage$
 
 * Bayesian Network: Car Insurance Company (2/2)
-::: columns
-:::: {.column width=70%}
-
+- **\blue{Blue nodes}**: information provided by the applicants
+- **\brown{Brown nodes}**: hidden variables (i.e., not input nor output)
+- **\violet{Violet nodes}**: target variables
 ```graphviz
 digraph InsuranceRiskModel {
-    rankdir=TD;
-    node [shape=ellipse, style=filled];
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
 
     // Define node colors
-    Age [fillcolor=lightblue];
-    GoodStudent [fillcolor=lightblue];
-    YearsLicensed [fillcolor=lightblue];
-    DrivingRecord [fillcolor=lightblue];
-    Mileage [fillcolor=lightblue];
-    SafetyFeatures [fillcolor=lightblue];
-    MakeModel [fillcolor=lightblue];
-    VehicleYear [fillcolor=lightblue];
-    CarValue [fillcolor=lightblue];
-    Airbag [fillcolor=lightblue];
-    AntiTheft [fillcolor=lightblue];
-    Garaged [fillcolor=lightblue];
-    ExtraCar [fillcolor=lightblue];
+    Age [fillcolor="#A6C8F4"];
+    GoodStudent [fillcolor="#A6C8F4"];
+    YearsLicensed [fillcolor="#A6C8F4"];
+    DrivingRecord [fillcolor="#A6C8F4"];
+    Mileage [fillcolor="#A6C8F4"];
+    SafetyFeatures [fillcolor="#A6C8F4"];
+    MakeModel [fillcolor="#A6C8F4"];
+    VehicleYear [fillcolor="#A6C8F4"];
+    CarValue [fillcolor="#A6C8F4"];
+    Airbag [fillcolor="#A6C8F4"];
+    AntiTheft [fillcolor="#A6C8F4"];
+    Garaged [fillcolor="#A6C8F4"];
+    ExtraCar [fillcolor="#A6C8F4"];
 
-    RiskAversion [fillcolor=lightsalmon];
-    DrivingSkill [fillcolor=lightsalmon];
-    DrivingBehavior [fillcolor=lightsalmon];
-    Ruggedness [fillcolor=lightsalmon];
-    Theft [fillcolor=lightsalmon];
-    Cushioning [fillcolor=lightsalmon];
-    OwnCarDamage [fillcolor=lightsalmon];
-    OtherCost [fillcolor=lightsalmon];
-    Accident [fillcolor=lightsalmon];
-    SocioEcon [fillcolor=lightsalmon];
+    RiskAversion [fillcolor="#FFD1A6"];
+    DrivingSkill [fillcolor="#FFD1A6"];
+    DrivingBehavior [fillcolor="#FFD1A6"];
+    Ruggedness [fillcolor="#FFD1A6"];
+    Theft [fillcolor="#FFD1A6"];
+    Cushioning [fillcolor="#FFD1A6"];
+    OwnCarDamage [fillcolor="#FFD1A6"];
+    OtherCost [fillcolor="#FFD1A6"];
+    Accident [fillcolor="#FFD1A6"];
+    SocioEcon [fillcolor="#FFD1A6"];
 
-    MedicalCost [fillcolor=lavender];
-    LiabilityCost [fillcolor=lavender];
-    PropertyCost [fillcolor=lavender];
-    OwnCarCost [fillcolor=lavender];
+    MedicalCost [fillcolor="#C6A6F4"];
+    LiabilityCost [fillcolor="#C6A6F4"];
+    PropertyCost [fillcolor="#C6A6F4"];
+    OwnCarCost [fillcolor="#C6A6F4"];
 
     // Define edges
     Age -> YearsLicensed;
@@ -1421,14 +1442,6 @@ digraph InsuranceRiskModel {
     Theft -> OwnCarDamage;
 }
 ```
-::::
-:::: {.column width=30%}
-
-- Blue nodes: information provided by the applicants
-- Brown nodes: hidden variables (i.e., not input nor output)
-- Lavender nodes: target variables
-::::
-:::
 
 // ## 13.3 Exact inference in Bayesian networks (p. 440)
 
