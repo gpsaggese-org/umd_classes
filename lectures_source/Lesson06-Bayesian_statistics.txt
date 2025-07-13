@@ -1340,16 +1340,19 @@ digraph StockPriceGraph {
 
 - Build a Bayesian network that captures the causal structure of the domain
 
-- There are 3 kind of claims
-  - $MedicalCost$: injuries sustained by the applicant
-  - $LiabilityCost$: lawsuits filed by other parties against applicant
-  - $PropertyCost$: vehicle damage to either party and theft of the vehicle
+  - **Input information**:
+    - About the applicant: $Age$, $YearsWithLicense$, $DrivingRecord$,
+      $GoodStudent$
+    - About the vehicle: $MakeModel$, $VehicleYear$, $Airbag$, $SafetyFeatures$
+    - About the driving situation: $Mileage$, $HasGarage$
+  - Some input informations are important but not available:
+    - $RiskAversion$
+    - $DrivingBehavior$
 
-- Input information
-  - About the applicant: $Age$, $YearsWithLicense$, $DrivingRecord$,
-    $GoodStudent$
-  - About the vehicle: $MakeModel$, $VehicleYear$, $Airbag$, $SafetyFeatures$
-  - About the driving situation: $Mileage$, $HasGarage$
+  - **Type of claims**:
+    - $MedicalCost$: injuries sustained by the applicant
+    - $LiabilityCost$: lawsuits filed by other parties against applicant
+    - $PropertyCost$: vehicle damage to either party and theft of the vehicle
 
 * Bayesian Network: Car Insurance Company (2/2)
 - **\blue{Blue nodes}**: information provided by the applicants
@@ -1443,7 +1446,51 @@ digraph InsuranceRiskModel {
 }
 ```
 
+# Inference
+
 // ## 13.3 Exact inference in Bayesian networks (p. 440)
+
+* Exact Inference in Bayesian Networks
+
+- **Goal of exact inference**
+  - Compute the posterior $P(X|\ve)$ for query variable $X$ given evidence $\ve$
+- **Variables involved**
+  - Query variable $X$
+  - Evidence variables $\vE = \{E_1, \dots, E_m\}$
+  - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
+- **Inference by Enumeration**
+  - Use full joint distribution and sum over all hidden variables:
+    $$P(X|e) = \alpha \sum_Y P(X,e,Y)$$
+- **Variable Elimination**
+  - Improves efficiency by caching intermediate results
+  - Eliminates variables systematically to avoid redundant sums
+  - Removing irrelevant variables: leaf nodes not ancestors of query/evidence can
+    be ignored
+- **Complexity of exact inference**
+  - Exact inference is efficient for trees, but intractable in general
+    - Singly connected networks (polytrees): linear in network size
+    - Multiply connected networks: can be exponential; inference is NP-hard
+  - It doesn't work for continuous variables
+  - Basis for approximate methods when exact is impractical
+
+* Exact Inference in Bayesian Networks: Example
+- We observe $JohnCalls = T$, $MaryCalls = T$
+- What is the probability of the burglary
+  $P(Burglary | JohnCalls=True, MaryCalls=True)$ ?
+
+- We know that a conditional probability can be computed summing terms from the
+  full joint distribution
+  $$\Pr(X | \ve) = \alpha \Pr(X, \ve) = \alpha \sum_y \Pr(X, \ve, \vy)$$
+
+- Terms of the joint distribution can be written as products of conditional
+  probabilities from the Bayesian network
+- E.g.,
+  $\Pr(b | j, m)
+  = \alpha \Pr(B, j, m)
+  = \alpha \sum_e \sum_a \Pr(B, j, m, e, a)$
+  - Then the joint probability is written in terms of CPTs of the Bayes net
+  $\Pr(b | j, m) = \alpha \sum_e \sum_a \Pr(b) \Pr(e) \Pr(a | b, e) \Pr(j | a)
+  \Pr(m | a)$
 
 // TODO(gp): Merge this with the rest at the end
 
