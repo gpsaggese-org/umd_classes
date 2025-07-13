@@ -854,6 +854,8 @@ digraph BayesianNetwork {
 
 * Causal vs Diagnostic Models
 
+::: columns
+:::: {.column width=55%}
 - A **causal model** goes from causes to symptoms
   - Simpler (i.e., fewer dependencies)
   - "Easier" to estimate
@@ -863,18 +865,38 @@ digraph BayesianNetwork {
   - These relationship are:
     - Tenuous
     - Difficult to estimate (or unnatural)
+::::
+:::: {.column width=40%}
+```graphviz
+digraph CausalModel {
+    splines=true;
+    nodesep=2.0;
+    ranksep=1.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+    // Node styles
+    Causes [fillcolor="#B2E2B2"];
+    Symptoms [fillcolor="#F4A6A6"];
+    // Edges
+    Causes -> Symptoms [xlabel="Causal\nModel", fontname="Helvetica"];
+    Symptoms -> Causes [xlabel="Diagnostic\nModel", fontname="Helvetica"];
+}
+```
+::::
+:::
 
 * Markov Blanket of a Node
 
 ::: columns
-:::: column
-- The Markov blanket of a node $X_i$ consists of:
-  - The parents of $X_i$ (red nodes), i.e., the nodes that influence $X_i$
-  - The children of $X_i$ (green nodes), i.e., the nodes that are directly
-    influenced by $X_i$
-  - The spouses of $X_i$ (blue nodes), i.e., the nodes that are parents of the
-    children nodes, i.e., that share a child with the node in question :::: ::::
-    column
+:::: {.column width=45%}
+- The **Markov blanket** of a \gray{node} $X$ consists of:
+  1. The **\red{parents}** of $X$
+     - The nodes that influence $X$
+  2. The **\green{children}** of $X$
+     - The nodes that are directly influenced by $X$
+  3. The **\blue{spouses}** of $X$
+     - The nodes that are parents of the children nodes
+::::
+:::: {.column width=50%}
 
 ```graphviz
 digraph CausalModel {
@@ -940,21 +962,18 @@ digraph CausalModel {
 
 * Conditional Independence on Markov Blanket
 ::: columns
-:::: column
-- By construction, each variable is conditionally independent of its
-  predecessors, given its parents
+:::: {.column width=55%}
+- In a Bayesian network, each variable is conditionally independent of :
+  - **Its predecessors** given its parents (by construction)
+  - **All other nodes** in the network given its Markov blanket, i.e., its
+    parents, its children, and its spouses
 
-- In a Bayesian network, a variable is conditionally independent of _all other
-  nodes_ in the network given its Markov blanket (its parents, its children, and
-  its spouses)
-
-- The Markov blanket of a node $X_i$ contains all the nodes necessary to predict
-  the state of the node $X_i$, making the network irrelevant
-  - This enables efficient and localized inference
-
+- The Markov blanket of a node $X_i$:
+  - Contains all the nodes necessary to predict the state of the node $X_i$,
+    making the network irrelevant
+  - Enables efficient and localized inference
 ::::
-:::: column
-
+:::: {.column width=40%}
 ```graphviz
 digraph CausalModel {
   // Set overall graph properties
@@ -1017,73 +1036,106 @@ digraph CausalModel {
 ::::
 :::
 
-* Markov Blanket: Medical Example
+* How Can a Node Be Influenced by Its Children?
+- A descendant can influence its ancestor indirectly through "explaining away"
+  (diagnostic model)
+  - Information flows both ways (casual and diagnostic)
+  - Evidence about the descendant can change what we believe about the ancestor
+    through dependent paths
+
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=55%}
 
-- Consider risk factors and outcomes for heart disease
-
-- Target node
-  - $H$: Heart disease
-- Parent nodes (direct influence of $H$, risk factors)
-  - $A$: Age
-  - $G$: Genetic predisposition
-  - $D$: Diet
-  - $E$: Exercise level
-- Child (direct influenced by $H$, outcomes)
-  - $BP$: Blood pressure
-  - $C$: Cholesterol level
-
-- Note that $A$, $G$, $D$, $E$ also influence $BP$ and $C$ so they are spouse
-  nodes of $H$
-- Knowing the state of $A$, $G$, $D$, $E$, $BP$ allows to compute $H$, without
-  any other information
-
+- E.g.,
+  - Consider the Bayesian network for the Garden World
+  - You know the grass is wet
+  - This evidence increases the probability of either causes $Rain$ or
+    $Sprinkler$
+  - If you find out that the $Sprinkler$ was on, this "explains away" the
+    $WetGrass$, and the probability of $Rain$ goes down
+  - The evidence from a descendant $WetGrass$ can update your belief about an
+    ancestor ($Rain$)
 ::::
-:::: {.column width=50%}
-
+:::: {.column width=40%}
 ```graphviz
-digraph HeartDiseaseGraph {
-  rankdir=TB;
-
-  // Nodes
-  H [label="Heart Disease", shape=oval, color=red, style=filled, fillcolor=pink];
-  A [label="Age", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-  G [label="Genetics", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-  D [label="Diet", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-  E [label="Exercise", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-  BP [label="Blood Pressure", shape=oval, color=green, style=filled, fillcolor=lightgreen];
-  C [label="Cholesterol", shape=oval, color=green, style=filled, fillcolor=lightgreen];
-
-  // Risk factors influencing Heart Disease
-  A -> H;
-  G -> H;
-  D -> H;
-  E -> H;
-
-  // Heart Disease influencing outcomes
-  H -> BP;
-  H -> C;
-
-  // Risk factors also influencing outcomes directly
-  A -> BP;
-  A -> C;
-  G -> BP;
-  G -> C;
-  D -> BP;
-  D -> C;
-  E -> BP;
-  E -> C;
-
-  // Indirect influence paths
-  {rank=same; A; G; D; E} // Align risk factors
-  {rank=same; BP; C} // Align outcomes
+digraph BayesianFlow {
+    // rankdir=LR;
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+    // Node styles
+    Rain [fillcolor="#A6C8F4", label="Rain"];
+    WetGrass [fillcolor="#B2E2B2", label="WetGrass"];
+    Sprinkler [fillcolor="#A6E7F4", label="Sprinkler"];
+    // Force ranks
+    // Edges
+    Rain -> WetGrass;
+    Sprinkler -> WetGrass;
 }
 ```
 ::::
 :::
 
-// TODO(TA): Make it look better
+* Markov Blanket: Medical Example
+::: columns
+:::: {.column width=25%}
+- Consider risk factors and outcomes for heart disease
+::::
+:::: {.column width=70%}
+```graphviz
+digraph HeartDiseaseGraph {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
+
+    // Nodes
+    H [label="Heart Disease", fillcolor="#F4A6A6"];
+    A [label="Age", fillcolor="#A6C8F4"];
+    G [label="Genetics", fillcolor="#A6C8F4"];
+    D [label="Diet", fillcolor="#A6C8F4"];
+    E [label="Exercise", fillcolor="#A6C8F4"];
+    BP [label="Blood Pressure", fillcolor="#B2E2B2"];
+    C [label="Cholesterol", fillcolor="#B2E2B2"];
+
+    // Risk factors influencing Heart Disease
+    A -> H;
+    G -> H;
+    D -> H;
+    E -> H;
+
+    // Heart Disease influencing outcomes
+    H -> BP;
+    H -> C;
+
+    // Risk factors also influencing outcomes directly
+    A -> BP;
+    A -> C;
+    G -> BP;
+    G -> C;
+    D -> BP;
+    D -> C;
+    E -> BP;
+    E -> C;
+
+    // Force ranks
+    {rank=same; A; G; D; E}
+    {rank=same; BP; C}
+}
+```
+::::
+:::
+- **\red{Target node}**
+- **\blue{Parent nodes}** (direct influence of $H$, risk factors)
+- **\green{Children nodes}** (directly influenced by $H$, outcomes)
+
+- Note that $A$, $G$, $D$, $E$ also influence $BP$ and $C$ so they are
+  **\blue{spouse nodes}** of $H$
+
+- Knowing the state of $A$, $G$, $D$, $E$, $BP$, $C$ (Markov Blanket) allows to
+  compute $H$, without any other information
 
 * Markov Blanket: Economic Example
 ::: columns
@@ -1159,35 +1211,37 @@ digraph HousePriceGraph {
 
 ```graphviz
 digraph StockPriceGraph {
-    rankdir=TD;
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
 
     // Nodes with abbreviations
-    SP [label="SP\n(Stock Price)", shape=oval, color=red, style=filled, fillcolor=pink];
-    EPS [label="EPS\n(Earnings Per Share)", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-    IE [label="IE\n(Industry Performance)", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-    MS [label="MS\n(Market Sentiment)", shape=oval, color=blue, style=filled, fillcolor=lightblue];
-    TV [label="TV\n(Trading Volume)", shape=oval, color=green, style=filled, fillcolor=lightgreen];
-    RC [label="RC\n(Regulatory Changes)", shape=oval, color=purple, style=filled, fillcolor=lavender];
-    GE [label="GE\n(Global Economic Conditions)", shape=oval, color=purple, style=filled, fillcolor=lavender];
+    SP [label="SP\n(Stock Price)", fillcolor="#F4A6A6"];
+    EPS [label="EPS\n(Earnings Per Share)", fillcolor="#A6C8F4"];
+    IE [label="IE\n(Industry Performance)", fillcolor="#A6C8F4"];
+    MS [label="MS\n(Market Sentiment)", fillcolor="#A6C8F4"];
+    TV [label="TV\n(Trading Volume)", fillcolor="#B2E2B2"];
+    RC [label="RC\n(Regulatory Changes)", fillcolor="#C6A6F4"];
+    GE [label="GE\n(Global Economic Conditions)", fillcolor="#C6A6F4"];
 
-    // Parent nodes influencing Stock Price
+    // Edges
     EPS -> SP;
     IE -> SP;
     MS -> SP;
 
-    // Stock Price influencing Trading Volume
     SP -> TV;
 
-    // Spouse nodes influencing factors
     RC -> EPS;
     RC -> IE;
     GE -> EPS;
     GE -> MS;
 
-    // Aligning nodes for clarity
-    {rank=same; EPS; IE; MS} // Factors affecting SP
-    {rank=same; RC; GE} // Spouse nodes affecting factors
-    {rank=same; TV} // Outcome
+    // Force ranks
+    {rank=same; EPS; IE; MS}
+    {rank=same; RC; GE}
+    {rank=same; TV}
 }
 ```
 ::::
