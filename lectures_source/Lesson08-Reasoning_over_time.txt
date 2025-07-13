@@ -1095,7 +1095,7 @@ digraph BayesianFlow {
     nodesep=1.0;
     ranksep=0.75;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Node styles
     x0   [label="Initial Conditions (x_0)", shape=box, fillcolor="#F4A6A6"];
