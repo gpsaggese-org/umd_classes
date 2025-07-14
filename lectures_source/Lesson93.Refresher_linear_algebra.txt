@@ -18,7 +18,7 @@ MSML610: Advanced Machine Learning
 \endgroup
 \vspace{1cm}
 
-**Instructor**: GP Saggese, PhD - `gsaggese@umd.edu`
+**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`
 
 **References**:
 
