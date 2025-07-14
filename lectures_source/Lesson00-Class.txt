@@ -26,87 +26,103 @@ MSML610: Advanced Machine Learning
 # MSML610
 # ##############################################################################
 
-* Books of the class
-- The goal is to make the slides self-sufficient
-
-- For each class, I recommend a few books I liked about that topic
-  - Simple $\to$ Medium $\to$ Hardcore
-
-  - **Simple**
-    - Burkov: "Machine Learning Engineering" (2020)
-    - Burkov: "The Hundred-Page Machine Learning Book" (2019)
-
-  - **Medium**
-    - Abu-Mostafa et al.: "Learning From Data" (2012)
-    - Martin: "Bayesian Analysis with Python" (2nd ed, 2021)
-    - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
-
-  - **Hardcore**
-    - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
-    - Koller et al.: "Probabilistic Graphical Models: Principles and Techniques"
-      (2009)
-    - Murphy: Machine Learning: "A Probabilistic Perspective" (2012)
-    - Sutton et al.: "Reinforcement Learning: An Introduction" (2nd ed, 2018)
-
-// TODO: Add book pictures
-
-* Invariants of a class lecture
-- Invariants
+* Invariants of a Class Lecture
+- **Invariants**
   - Focus on intuition over math (unless necessary)
   - Emphasize realistic assumptions and numerical methods
     - Analytical solutions are so 1800s
-  - For each class interactive Jupyter notebook tutorial to foster intuition
-    and hands-on approach
+  - Interactive Jupyter notebook tutorials to foster hands-on approach
     - Tutorials are mainly done at home
     - Videos of each tutorial will be added over time
 
-- Lessons alternate between Slides, Whiteboard, Tutorials
+- Lessons alternate between slides, whiteboard, tutorials
   - 2:45 hours per class lessons
-    - 50 slides
+    - 50 mins
     - 10 break
-    - 50 slides
-    - 10 break
+    - 50 mins
+    - 10 mins
     - 45 slides (Topic refresher!)
 
+* Books of the Class
+- The goal is to make the slides self-sufficient
+
+- For each class, I recommend a few books I liked about that topic
+
+  - **Simple**
+    - Burkov: _"Machine Learning Engineering"_ (2020)
+    - Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
+  - **Medium**
+    - Abu-Mostafa et al.: _"Learning From Data"_ (2012)
+    - Martin: _"Bayesian Analysis with Python"_ (2nd ed, 2021)
+    - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
+  - **Hardcore**
+    - Hastie et al.: _"The Elements of Statistical Learning"_ (2nd ed, 2009)
+    - Koller et al.: _"Probabilistic Graphical Models: Principles and Techniques"_ (2009)
+    - Murphy: Machine Learning: _"A Probabilistic Perspective"_ (2012)
+    - Sutton et al.: _"Reinforcement Learning: An Introduction"_ (2nd ed, 2018)
+
+// TODO: Add book pictures
+
 * Grading
-- Class Participation (10%)
+- **Class Participation** (10%)
   - Attendance
   - Contributions to discussions and engagement
 
-- Quizzes (40%)
-  - Multi-choice quizzes
-  - 4-5 quizzes to make sure everyone studies during the semester and doesn't
-    cram
+- **Quizzes** (40%)
+  - Multi-choice quizzes on previous 2 lessons
+  - 4-5 quizzes to make you study during the semester and don't cram
 
-- Final Project (50%)
+- **Final Project** (50%)
   - A comprehensive application of course concepts
   - Python project selected from a list of topics
 
-* Class projects
-- There is a list of topics you can pick from, e.g.,
+* Class Projects
+- The project is _"Build $X$ with $Y$"_, where $X$ is a use case and $Y$ is a
+  technology
+  - Study and describe a technology $Y$
+  - Implement a use case $X$ using the technology $Y$
+  - Create Jupyter notebooks to demo your project
+  - Commit code to GitHub and contribute to open-source repo
+  - Write a blog entry
+  - Present your project in a video
+
+- Each project:
+  - Is individual
+  - Has different levels of difficulty
+
+- There is a list of $X$ and $Y$ you can pick from, e.g.,
   - LLMs
   - Deep learning
   - Big data
   - Statistical learning
   - ...
-- Different levels of difficulty
-- Each project is individual
-- Content of each project `XYZ`
-  - Study / describe a technology
-  - Implement a use case using the technology
-  - Create Jupyter notebooks to demo your project
-  - Commit code to GitHub and contribute to open-source repo
-  - Write a blog entry
 
 * Links
 - Syllabus
+- Schedule
+- GitHub project
 - FAQs
 - Project specs
 - Announcements on ELMS
 
-# Class map
+* Yours truly
+- GP Saggese, PhD
+  - 2001-2006, PhD / Postdoc at the University of Illinois at Urbana-Champaign
+- **LinkedIn**: https://www.linkedin.com/in/gpsaggese/
+- **Email**: gsaggese@umd.edu
+- **In the real-world**
+  - Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
+  - 3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
+  - 20+ academic papers, 2 US patents
+- **UMD**:
+  - 2023-, Lecturer for UMD DATA605: Big Data Systems
+
+# ##############################################################################
+# Class Map
+# ##############################################################################
 
 // TODO(gp): Refresh this once the slides are complete
+// lectures_source/get_syllabus.sh
 
 * 1. Intro
 - A map of machine learning
@@ -151,7 +167,6 @@ MSML610: Advanced Machine Learning
 - Non-classical Logics
 - Description Logics
   - Semantic Web
-- Advanced topics
 
 * 4. Machine Learning Models
 - Models
@@ -178,11 +193,18 @@ MSML610: Advanced Machine Learning
     - Learning curves
     - Learn-validation approach
 
-* 6. Bayesian statistics
-- Quantifying uncertainty
-- Probabilistic reasoning
+* 6. Bayesian Statistics
+- Logic-Based AI Under Uncertainty
+- Probabilistic Reasoning
+  - Conditional Independence
+  - Bayesian Networks
+  - Semantics of Bayesian Networks
+  - Constructing a Bayesian Network
+  - Exact Inference in Bayesian Networks
+  - Approximate Inference in Bayesian Networks
+    - Direct sampling methods
 
-* 7. Probabilistic programming
+* 7. Probabilistic Programming
 - Probabilistic programming
   - Probability theory
   - Single-parameter inference
@@ -217,20 +239,20 @@ MSML610: Advanced Machine Learning
   - Inference engines
   - 10.1, Inference engines
 
-* 8. Reasoning over time
+* 8. Reasoning Over Time
 - Reasoning over time
 - HMMs
 - Markov random fields
 - Markov logic network
 - State space models and Kalman filter
-  - g-h filter
+  - G-h filter
   - Discrete Bayes filter
 - Dynamic Bayesian networks
 - State space model
 - Variational Inference
   - Expectation-Maximization (EM) Algorithm
 
-* 9. Causal inference
+* 9. Causal Inference
 - Causal AI
   - Why Causal AI?
   - Concepts in Causal AI
@@ -242,7 +264,7 @@ MSML610: Advanced Machine Learning
   - Modeling processes
   - Roles
 
-* 10. Timeseries forecasting
+* 10. Timeseries Forecasting
 - Time Series
   - Basic definition
   - Time series operators
@@ -255,7 +277,7 @@ MSML610: Advanced Machine Learning
   - ARIMA model
   - ARCH model
 
-* 11. Probabilistic deep learning
+* 11. Probabilistic Deep Learning
 - Neural networks
   - Biological inspiration
   - Neural networks
@@ -275,7 +297,7 @@ MSML610: Advanced Machine Learning
 - Modern Research Frontiers
 - Bonus Topics
 
-* 12. Reinforcement learning
+* 12. Reinforcement Learning
 - Sequential decision problems
   - Utilities over time
   - Algorithms for MDPs
@@ -325,7 +347,7 @@ MSML610: Advanced Machine Learning
   - Estimating CDF and statistical functional
   - Bootstrap
 
-* Refresher probability distributions
+* Refresher Probability Distributions
 - Interesting RVs
   - Bernoulli
   - Binomial
@@ -336,7 +358,7 @@ MSML610: Advanced Machine Learning
   - Student's t-distribution
 - Probability inequalities
 
-* Refresher linear algebra
+* Refresher Linear Algebra
 - Linear algebra
   - Vector and vector spaces
   - Affine spaces
@@ -344,19 +366,18 @@ MSML610: Advanced Machine Learning
   - Linear functions
   - Connections between Machine Learning and Linear Algebra
 
-* Refresher information theory
+* Refresher Information Theory
 - Information theory
   - Entropy
     - Kullback-Leibler divergence
   - Connections between Information Theory and ML
 
-* Refresher game theory
+* Refresher Game Theory
 - Game theory
   - Connections between Machine Learning and Game Theory
 
-* Refresher: numerical optimization
+* Refresher: Numerical Optimization
 - Optimization / numerical methods
 
-* Refresher: stochastic processes
+* Refresher: Stochastic Processes
 - Stochastic processes
-
