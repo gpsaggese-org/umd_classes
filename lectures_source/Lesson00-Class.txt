@@ -16,11 +16,11 @@ MSML610: Advanced Machine Learning
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Class mechanics}}$$**
+**$$\text{\blue{MSML610 Class Mechanics}}$$**
 \endgroup
 \vspace{1cm}
 
-**Instructor**: GP Saggese, PhD - `gsaggese@umd.edu`
+**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`
 
 # ##############################################################################
 # MSML610
@@ -28,49 +28,45 @@ MSML610: Advanced Machine Learning
 
 * Books of the class
 - The goal is to make the slides self-sufficient
-- For each lesson, I recommend a few books I liked about that topic
-  - Simple -> Medium -> Hardcore
 
-- Simple
-  - Burkov: "Machine Learning Engineering" (2020)
-  - Burkov: "The Hundred-Page Machine Learning Book" (2019)
+- For each class, I recommend a few books I liked about that topic
+  - Simple $\to$ Medium $\to$ Hardcore
 
-- Medium
-  - Abu-Mostafa et al.: "Learning From Data" (2012)
-  - Martin: "Bayesian Analysis with Python" (2nd ed, 2021)
-  - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
+  - **Simple**
+    - Burkov: "Machine Learning Engineering" (2020)
+    - Burkov: "The Hundred-Page Machine Learning Book" (2019)
 
-- Hardcore
-  - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
-  - Koller et al.: "Probabilistic Graphical Models: Principles and Techniques"
-    (2009)
-  - Murphy: Machine Learning: "A Probabilistic Perspective" (2012)
-  - Sutton et al.: "Reinforcement Learning: An Introduction" (2nd ed, 2018)
+  - **Medium**
+    - Abu-Mostafa et al.: "Learning From Data" (2012)
+    - Martin: "Bayesian Analysis with Python" (2nd ed, 2021)
+    - Russell et al.: "Artificial Intelligence: A Modern Approach" (4th ed, 2020)
+
+  - **Hardcore**
+    - Hastie et al.: "The Elements of Statistical Learning" (2nd ed, 2009)
+    - Koller et al.: "Probabilistic Graphical Models: Principles and Techniques"
+      (2009)
+    - Murphy: Machine Learning: "A Probabilistic Perspective" (2012)
+    - Sutton et al.: "Reinforcement Learning: An Introduction" (2nd ed, 2018)
 
 // TODO: Add book pictures
 
 * Invariants of a class lecture
-- Focus on intuition over math (unless necessary)
+- Invariants
+  - Focus on intuition over math (unless necessary)
+  - Emphasize realistic assumptions and numerical methods
+    - Analytical solutions are so 1800s
+  - For each class interactive Jupyter notebook tutorial to foster intuition
+    and hands-on approach
+    - Tutorials are mainly done at home
+    - Videos of each tutorial will be added over time
 
-- Emphasize realistic assumptions and numerical methods
-  - Analytical solutions are so 1800s
-
-- Lessons include an interactive Jupyter notebook tutorial to foster intuition
-  and hands-on approach
-  - Tutorials are mainly done at home
-  - Videos of each tutorial will be added over time
-
-- Lessons alternate between:
-  - Slides
-  - Whiteboard
-  - Tutorials
-
-- 2:45 hours per class lessons
-  - 50 slides
-  - 10 break
-  - 50 slides
-  - 10 break
-  - 45 slides (Topic refresher!)
+- Lessons alternate between Slides, Whiteboard, Tutorials
+  - 2:45 hours per class lessons
+    - 50 slides
+    - 10 break
+    - 50 slides
+    - 10 break
+    - 45 slides (Topic refresher!)
 
 * Grading
 - Class Participation (10%)
