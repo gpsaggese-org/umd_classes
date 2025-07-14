@@ -383,7 +383,7 @@ digraph BayesianFlow {
 
 * Bayesian Networks: Definition
 - Aka:
-  - "Bayes nets", 
+  - "Bayes nets",
   - "Belief networks"
   - "Probabilistic networks"
   - "Graphical models" (somehow a broader class of statistical models)
@@ -895,6 +895,7 @@ digraph CausalModel {
      - The nodes that are directly influenced by $X$
   3. The **\blue{spouses}** of $X$
      - The nodes that are parents of the children nodes
+		 - I.e., "co-parent"
 ::::
 :::: {.column width=50%}
 
@@ -1464,8 +1465,8 @@ digraph InsuranceRiskModel {
 - **Variable Elimination**
   - Improves efficiency by caching intermediate results
   - Eliminates variables systematically to avoid redundant sums
-  - Removing irrelevant variables: leaf nodes not ancestors of query/evidence can
-    be ignored
+  - Removing irrelevant variables
+    - Variables not ancestors of query or evidence can be ignored
 - **Complexity of exact inference**
   - Exact inference is efficient for trees, but intractable in general
     - Singly connected networks (polytrees): linear in network size
@@ -1485,183 +1486,210 @@ digraph InsuranceRiskModel {
 - Terms of the joint distribution can be written as products of conditional
   probabilities from the Bayesian network
 - E.g.,
-  $\Pr(b | j, m)
+  $$
+  \Pr(b | j, m)
   = \alpha \Pr(B, j, m)
-  = \alpha \sum_e \sum_a \Pr(B, j, m, e, a)$
-  - Then the joint probability is written in terms of CPTs of the Bayes net
-  $\Pr(b | j, m) = \alpha \sum_e \sum_a \Pr(b) \Pr(e) \Pr(a | b, e) \Pr(j | a)
-  \Pr(m | a)$
+  = \alpha \sum_e \sum_a \Pr(B, j, m, e, a)
+  $$
+  - Then the joint probability is written in terms of CPTs of the Bayesian
+    network
+  $$
+  \Pr(b | j, m)
+  = \alpha \sum_e \sum_a \Pr(b) \Pr(e) \Pr(a | b, e) \Pr(j | a) \Pr(m | a)
+  $$
 
-// TODO(gp): Merge this with the rest at the end
+## Approximate Inference in Bayesian Networks
 
-//## Inference in Bayesian networks
-//
-//* Probabilistic inference in Bayesian networks
-//- The goal of probabilistic inference is to compute the posterior probability for
-//  query variables, given some observed event (e.g., assignment of values to
-//  evidence variables)
-//
-//- The world characterized by the set of variables:
-//  - $X$ is the query variable
-//  - $\vE = (E_1, ..., E_m)$ are the evidence variables and $\ve$ is an observed
-//    event $\vE = \ve$
-//  - $\vY$ are the hidden variables (non-evidence and non-query)
-//- We want to compute the posterior probability distribution $\Pr(X | \ve)$
-//
-//- E.g.,
-//  - What is the probability that a burglary has occurred if both John and Mary
-//    call? $\Pr(Burglary | JohnCalls=T, MaryCalls=T)$
-//
-//* Exact inference of Bayesian networks
-//- We know that a conditional probability can be computed summing terms from the
-//  full joint distribution
-//  $$\Pr(X | \ve) = \alpha \Pr(X, \ve) = \alpha \sum_y \Pr(X, \ve, \vy)$$
-//- Terms of the joint distribution can be written as products of conditional
-//  probabilities from the Bayesian network
-//
-//- E.g.,
-//  $$
-//  \begin{align*}
-//  & \Pr(Burglary | JohnCalls=T, MaryCalls=T) \\
-//  & = \Pr(b | j, m) \\
-//  & = \alpha \Pr(B, j, m) \\
-//  & = \alpha \sum_e \sum_a \Pr(B, j, m, e, a) \\
-//  & = \alpha \sum_e \sum_a \Pr(b) \Pr(e) \Pr(a | b, e) \Pr(j | a) \Pr(m | a)$
-//  \end{align*}
-//  $$
-//- Thus the joint probability is written in terms of CPTs of the Bayes network
-//
-//- In the worst case, the complexity of this approach is $O(2^n)$, where $n$ is
-//  the number of variables
-//  - Thus it is intractable
-//
-//- This only works for discrete variables but not for continuous variables
-//
-//## Approximate inference in Bayesian networks
-//
-//* Monte Carlo algorithms
-//- Monte Carlo algorithms are randomized sampling algorithms used to estimate
-//  quantities that are difficult to calculate exactly
-//  - E.g., samples from the posterior probability of a Bayes network
-//- Pros
-//  - The accuracy of the approximation depends on the number of samples generated
-//  - We can get arbitrarily close to the true probability distribution with enough
-//    samples
-//  - Can be used in many branches of science
-//- Cons
-//  - Difficult to understand how the variables interact
-//  - Computationally intensive
-//
-//### Direct sampling methods
-//
-//* Random samples from a given probability distribution
-//- Given a source of uniformly distributed random numbers in $[0, 1]$ it is
-//  possible to generate samples from any discrete or continuous probability
-//  distribution
-//
-//// STOP
-//
-//* Sampling Bayesian network without evidence
-//- We can generate events from a network that has no evidence associated with it
-//- Aka "prior sampling"
-//
-//- **Solution**
-//- Consider a Bayesian network
-//- Sample variables in topological order (to guarantee that parents have values
-//  already)
-//- The source nodes have a known (unconditional) probability distribution
-//  - E.g., $\Pr(Cloudy) = 0.5$
-//- The probability distribution of a conditional variable is conditioned to the
-//  values assigned to the variable's parents
-//  ```
-//  Cloudy    Pr(Sprinkler | Cloudy)
-//  T         0.1
-//  F         0.5
-//  ```
-//  - E.g., $\Pr(Sprinkler | Cloudy = T) = 0.1$
-//
-//- This implements the semantic of the Bayesian network (which represents the
-//  joint probability):
-//  $$
-//  f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
-//  $$
-//  where $PS$ means "Prior Sampling"
-//
-//* Sampling Bayesian network without evidence: consistency
-//- The distribution from the prior sampling converges to the true probability when
-//  the number of samples $N \to \infty$
-//  - I.e., consistency of estimation
-//
-//- If $N_{PS}$ is the number of times a specific event $x_1, ..., x_n$ occurs in
-//  the set of samples, then:
-//  $$
-//  \lim_{N \to \infty} \frac{N_{PS}(x_1, ..., x_n)}{N}
-//  = \Pr(x_1, ..., x_n)
-//  $$
-//
-//- Any probability can be estimated using the approximation:
-//  $$
-//  \Pr(x_1, ..., x_m) \approx \frac{N_{PS}(x_1, ..., x_m)}{N}
-//  $$
-//- It converges with rate equal to $\frac{1}{\sqrt{n}}$
-//
-//* Rejection sampling
-//- = method for producing samples from a hard-to-sample distribution
-//- E.g., compute conditional probabilities like $\Pr(X | \ve)$, in which $\ve$ is
-//  a rare event
-//
-//* Rejection sampling in Bayesian networks
-//- Assume we want to compute $\Pr(X=x| E=e)$ when the evidence $e$ is a rare
-//  event
-//
-//  1. Generate samples from the prior distribution from the network
-//     - This estimates $\Pr(x, e)$
-//  2. Reject all the samples that do not match the evidence, i.e.,
-//     $X \land E \neq e$
-//     - The remaining samples $X \land E=e$ estimate $\Pr(X, E=e)$
-//  3. Count how many times $X=x$ occurs in the remaining samples $X \land E=e$
-//     - This estimates $\Pr(X=x | E=e)$
-//
-//- This is a consistent estimate of the conditional probability, i.e., it
-//  converges to the true value for the number of samples diverging
-//
-//* Rejection sampling in Bayesian networks: example
-//- We want to estimate:
-//  $$
-//  \Pr(Rain | Sprinkler = T)
-//  $$
-//- We sample 100 times
-//  - We have 73 samples with $\lnot Sprinkler$ and they are rejected
-//  - We are left with 27 samples with $Sprinkler$
-//  - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
-//- Thus:
-//
-//  $$
-//  \Pr(Rain | Sprinkler) = \text{Normalize}(8, 19) = 8 / 27
-//  $$
-//
-//* Rejection sampling: cons
-//- We generate a lot of samples that just need to be rejected
-//  - This is related to how rare is $\Pr(E=e)$
-//- The fraction of sample corresponding to the evidence $e$ can decrease
-//  exponentially as the number of evidence variables grows
-//  - Rejection sampling can't be used for complex systems
-//- Difficult to use with continuous-valued variables, since $\Pr(E=e)$ is
-//  theoretically 0 (and practically limited by finite-precision of floating point
-//  numbers)
-//
-//* Importance sampling
-//- = technique to simulate the effect of sampling from a distribution $P$ using
-//  samples from another distribution $Q$ and then applying a correction factor
-//  $\frac{P(\vx)}{Q(\vx)}$ to each sample $\vx$
-//
-//* Importance sampling in Bayesian networks
-//- We want to sample $\Pr(\vz | \ve)$
-//- If we could sample directly from $\Pr(\vz | \ve)$ we could approximate
-//  $$\Pr(\vz | \ve) \approx \frac{N_P(\vz)}{N} = \hat{\Pr(\vz|\ve)}$$
-//  where $N_P(\vz)$ is the number of samples from $\Pr()$ with $Z = \vz$
-//
-//- Instead we sample from $Q(\vz)$ and add a correction factor
-//  $$\Pr(\vz | \ve)
-//  = Q(\vz) \frac{\Pr(\vz | \ve)}{Q(\vz)}
-//  \approx \frac{N_Q(\vz)}{N} \frac{\Pr(\vz | \ve)}{Q(\vz)}$$
+* Monte Carlo Algorithms
+- **Monte Carlo algorithms** are randomized sampling algorithms used to estimate
+  quantities that are difficult to calculate exactly
+  - E.g., samples from the posterior probability of a Bayes network
+- **Pros**
+  - The accuracy of the approximation depends on the number of samples generated
+  - We can get arbitrarily close to the true probability distribution with enough
+    samples
+  - Can be used in many branches of science
+- **Cons**
+  - Difficult to understand how the variables interact
+  - Computationally intensive
+
+### Direct sampling methods
+
+* Sampling from Arbitrary Distributions
+
+- **Goal**: Sample from a discrete or continuous probability distribution
+
+- **Solution**
+	- Start with uniform random numbers $r \in [0, 1]$
+	- Construct CDF (cumulative distribution function) $F(x)$
+		- $F(x) = \Pr(X \leq x)$
+	- For discrete distributions:
+		- Create table of outcomes and cumulative probabilities
+		- Find smallest outcome where $F(x) > r$
+	- For continuous distributions:
+		- Use inverse transform: $x = F^{-1}(r)$, e.g.,
+      $$
+      F(x) = 1 - e^{-\lambda x} \to x = F^{-1}(r) = -\frac{1}{\lambda} \ln(1 - r)
+      $$
+		- If $F^{-1}$ has no closed form, use numerical methods
+
+* Sampling Bayesian Network Without Evidence
+
+- **Goal**: Generate events from a Bayesian network without evidence (prior sampling)
+
+- **Solution**
+	- Sample variables in topological order (ensure parents have values)
+	- Source nodes have known unconditional probability distribution
+		- E.g., $\Pr(Cloudy) = 0.5$
+	- Conditional variable's probability distribution depends on parent's values
+		- E.g., $\Pr(Sprinkler | Cloudy = T) = 0.1$
+	- Implement Bayesian network semantics, representing joint probability:
+		$$
+		f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
+		$$
+		where $PS$ means "Prior Sampling"
+
+* Consistency of Sampling
+- **Consistency of estimation**: distribution from prior sampling converges to
+  true probability as $N \to \infty$
+
+- If $N_{PS}$ is the number of times event $x_1, ..., x_n$ occurs:
+  $$
+  \lim_{N \to \infty} \frac{N_{PS}(x_1, ..., x_n)}{N}
+  = \Pr(x_1, ..., x_n)
+  $$
+
+- Estimate probability using:
+  $$
+  \Pr(x_1, ..., x_m) \approx \frac{N_{PS}(x_1, ..., x_m)}{N}
+  $$
+  - Converges with rate $\frac{1}{\sqrt{n}}$
+
+* Rejection Sampling
+- **Rejection sampling** is a method for sampling from a hard-to-sample
+  distribution
+
+- **Goal**: Compute $\Pr(X=x| E=e)$ when evidence $e$ is rare
+  1. Generate samples from the prior distribution
+     - Estimate $\Pr(x, e)$
+  2. Reject samples not matching evidence, i.e., $X \land E \neq e$
+     - Remaining samples $X \land E=e$ estimate $\Pr(X, E=e)$
+  3. Count occurrences of $X=x$ in remaining samples $X \land E=e$
+     - Estimate $\Pr(X=x | E=e)$
+
+- **Example**:
+  - You want to estimate $\Pr(Rain | Sprinkler = T)$
+  - Sample 100 times
+    - You get 73 samples with $\lnot Sprinkler$ and they are rejected
+    - You are left with 27 samples with $Sprinkler$
+    - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
+  - Thus:
+    $$
+    \Pr(Rain | Sprinkler) = \frac{8}{27}
+    $$
+
+* Rejection Sampling: Pros and Cons
+- **Pros**
+  - Consistent estimate (converges to true value as samples increase)
+
+- **Cons**
+  - Many samples are rejected, depending on rarity of $\Pr(E=e)$
+  - Fraction of samples matching evidence $e$ decreases exponentially with more
+    evidence variables
+    - Not suitable for complex systems
+  - Difficult with continuous variables, as $\Pr(E=e)$ is theoretically 0
+    (limited by floating-point precision)
+
+* Importance Sampling
+- Importance sampling:
+  - Draw samples from an easier distribution $Q(X)$
+  - Weight each sample by its importance weight $w = \frac{P(X)}{Q(X)}$
+  - Estimate desired probability by averaging weighted samples:
+    $$
+    E[f(X)] \approx \frac{1}{N} \sum_{i=1}^N w_i f(X_i)
+    $$
+
+- For Bayesian networks use the network's structure to define $Q(X)$ that
+  respects observed evidence
+
+- **Example**:
+  - Estimating $P(A | E=e)$ where $E$ is rare
+  - Standard sampling might never see $E=e$
+  - Importance sampling focuses samples near $E=e$ with appropriate reweighting
+  - Analogy: Like rebalancing a biased survey by giving underrepresented groups
+    higher weights
+
+- **Pros**
+  - Reduces variance and improves efficiency of inference over rejection sampling
+
+- **Cons**
+  - Performance degrades as the number of evidence variables increases
+
+* Markov Chain Monte Carlo
+- **Purpose**: Approximate inference method for Bayesian networks when exact
+  inference is computationally hard
+	- Markov Chain Monte Carlo (MCMC) are different than rejection and importance
+		sampling
+	- Instead of generating each sample as independent, make a random change to
+		the preceding sample
+
+- Construct a Markov Chain from the Bayesian network and the sampling technique
+	(e.g., Gibbs sampling, Metropolis-Hastings sampling)
+	- Markov Chain:
+		- Is used as process to generate a sequence of states
+		- Has initial state and transition matrix $\Pr(\vx \to \vx')$
+		- After $t$ steps, probability of being in state $\vx$ is $\pi_t(\vx)$
+		- Stationary distribution is achieved when $\pi_t(\vx) = \pi_{t+1}(\vx)$
+
+- Under certain conditions (ergodicity, aperiodicity) the stationary
+	distribution is the posterior distribution for the non-evidence variables
+	conditioned on the evidence
+
+* Gibbs Sampling in Bayesian Networks
+- Special case of MCMC that samples one variable at a time
+
+- **Algorithm**:
+  - Start with an initial complete assignment to all non-evidence variables
+  - Keep evidence variables fixed at observed values
+  - For each non-evidence variable $X_i$:
+		- Sample $X_i$ from $P(X_i | \text{MB}(X_i))$ where $\text{MB}(X_i)$ is
+			the Markov blanket, i.e., parents, children, spouse of a node
+
+- **Example**:
+  - Weather network: $P(Cloudy | Sprinkler, Rain, WetGrass)$
+  - Fix $WetGrass = true$, $Sprinkler = true$
+  - Sample $Cloudy$ and $Rain$ iteratively
+
+- **Pros**
+  - Simple to implement for any Bayesian network
+  - Handles large, complex graphs with local updates
+
+- **Cons**
+  - Can mix slowly if variables are highly correlated
+  - May need many samples for accurate estimates
+
+* Metropolis–Hastings Sampling
+- More general Markov Chain Monte Carlo (MCMC) method, than Gibbs sampling
+
+- Key idea:
+  - Construct a Markov chain with the desired stationary distribution
+  - Uses a proposal distribution to suggest new states
+
+- **Algorithm**
+  - Start at a current state $x$
+  - Propose a new state $x'$ from a proposal distribution $q(x'|x)$, e.g.,
+		- With 95% probability Gibbs sampling
+		- Otherwise use importance sampling
+		- Avoid to getting "stuck" in a part of the sampling space
+  - Compute the acceptance probability:
+    - $A(x, x') = \min(1, \frac{\pi(x')q(x|x')}{\pi(x)q(x'|x)})$
+  - Accept $x'$ with probability $A(x,x')$
+    - If accepted, move to $x'$
+    - Otherwise, stay at $x$
+
+- **Pros**
+  - Very flexible: works with any proposal distribution
+  - Can handle high-dimensional spaces
+- **Cons**
+  - May mix slowly if proposal steps are poorly chosen
+  - Requires careful tuning of proposal distribution for efficiency
