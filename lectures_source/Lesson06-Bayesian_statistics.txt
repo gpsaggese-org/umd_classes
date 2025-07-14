@@ -207,6 +207,8 @@ digraph BayesianFlow {
 
 // From AIMA 13, Probabilistic reasoning (p. 425)
 
+## Conditional Independence
+
 // ## 13.1, Representing knowledge in an uncertain domain (p. 425)
 
 * Full Joint Probability Distribution
@@ -380,6 +382,8 @@ digraph BayesianFlow {
   - Observing the effect creates a dependence between the causes
   - Evidence for one explains the effect and reduces the need to believe in the
     other
+
+## Bayesian Networks
 
 * Bayesian Networks: Definition
 - Aka:
@@ -649,6 +653,8 @@ digraph BayesianFlow {
 ::::
 :::
 
+## Semantics of Bayesian Networks
+
 // ## 13.2 The semantics of Bayesian networks (p. 427)
 
 * Bayesian Networks: Semantics
@@ -760,7 +766,9 @@ digraph BayesianNetwork {
   & \hspace{1cm} \Pr(\lnot Burglary) \Pr(\lnot Earthquake) \\
   \end{align*}
 
-* Constructing a Bayesian network
+## Constructing a Bayesian Network
+
+* Constructing a Bayesian Network
 1. Gather domain knowledge
    - Identify key variables and their potential interactions
    - List all relevant random variables necessary to describe the system
@@ -895,7 +903,7 @@ digraph CausalModel {
      - The nodes that are directly influenced by $X$
   3. The **\blue{spouses}** of $X$
      - The nodes that are parents of the children nodes
-		 - I.e., "co-parent"
+     - I.e., "co-parent"
 ::::
 :::: {.column width=50%}
 
@@ -1447,7 +1455,7 @@ digraph InsuranceRiskModel {
 }
 ```
 
-# Inference
+## Exact Inference in Bayesian Networks
 
 // ## 13.3 Exact inference in Bayesian networks (p. 440)
 
@@ -1520,34 +1528,34 @@ digraph InsuranceRiskModel {
 - **Goal**: Sample from a discrete or continuous probability distribution
 
 - **Solution**
-	- Start with uniform random numbers $r \in [0, 1]$
-	- Construct CDF (cumulative distribution function) $F(x)$
-		- $F(x) = \Pr(X \leq x)$
-	- For discrete distributions:
-		- Create table of outcomes and cumulative probabilities
-		- Find smallest outcome where $F(x) > r$
-	- For continuous distributions:
-		- Use inverse transform: $x = F^{-1}(r)$, e.g.,
+  - Start with uniform random numbers $r \in [0, 1]$
+  - Construct CDF (cumulative distribution function) $F(x)$
+    - $F(x) = \Pr(X \leq x)$
+  - For discrete distributions:
+    - Create table of outcomes and cumulative probabilities
+    - Find smallest outcome where $F(x) > r$
+  - For continuous distributions:
+    - Use inverse transform: $x = F^{-1}(r)$, e.g.,
       $$
       F(x) = 1 - e^{-\lambda x} \to x = F^{-1}(r) = -\frac{1}{\lambda} \ln(1 - r)
       $$
-		- If $F^{-1}$ has no closed form, use numerical methods
+    - If $F^{-1}$ has no closed form, use numerical methods
 
 * Sampling Bayesian Network Without Evidence
 
 - **Goal**: Generate events from a Bayesian network without evidence (prior sampling)
 
 - **Solution**
-	- Sample variables in topological order (ensure parents have values)
-	- Source nodes have known unconditional probability distribution
-		- E.g., $\Pr(Cloudy) = 0.5$
-	- Conditional variable's probability distribution depends on parent's values
-		- E.g., $\Pr(Sprinkler | Cloudy = T) = 0.1$
-	- Implement Bayesian network semantics, representing joint probability:
-		$$
-		f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
-		$$
-		where $PS$ means "Prior Sampling"
+  - Sample variables in topological order (ensure parents have values)
+  - Source nodes have known unconditional probability distribution
+    - E.g., $\Pr(Cloudy) = 0.5$
+  - Conditional variable's probability distribution depends on parent's values
+    - E.g., $\Pr(Sprinkler | Cloudy = T) = 0.1$
+  - Implement Bayesian network semantics, representing joint probability:
+    $$
+    f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
+    $$
+    where $PS$ means "Prior Sampling"
 
 * Consistency of Sampling
 - **Consistency of estimation**: distribution from prior sampling converges to
@@ -1628,32 +1636,48 @@ digraph InsuranceRiskModel {
 * Markov Chain Monte Carlo
 - **Purpose**: Approximate inference method for Bayesian networks when exact
   inference is computationally hard
-	- Markov Chain Monte Carlo (MCMC) are different than rejection and importance
-		sampling
-	- Instead of generating each sample as independent, make a random change to
-		the preceding sample
+  - Markov Chain Monte Carlo (MCMC) are different than rejection and importance
+    sampling
+  - Instead of generating each sample as independent, make a random change to
+    the preceding sample
 
 - Construct a Markov Chain from the Bayesian network and the sampling technique
-	(e.g., Gibbs sampling, Metropolis-Hastings sampling)
-	- Markov Chain:
-		- Is used as process to generate a sequence of states
-		- Has initial state and transition matrix $\Pr(\vx \to \vx')$
-		- After $t$ steps, probability of being in state $\vx$ is $\pi_t(\vx)$
-		- Stationary distribution is achieved when $\pi_t(\vx) = \pi_{t+1}(\vx)$
+  (e.g., Gibbs sampling, Metropolis-Hastings sampling)
+  - Markov Chain:
+    - Is used as process to generate a sequence of states
+    - Has initial state and transition matrix $\Pr(\vx \to \vx')$
+    - After $t$ steps, probability of being in state $\vx$ is $\pi_t(\vx)$
+    - Stationary distribution is achieved when $\pi_t(\vx) = \pi_{t+1}(\vx)$
 
 - Under certain conditions (ergodicity, aperiodicity) the stationary
-	distribution is the posterior distribution for the non-evidence variables
-	conditioned on the evidence
+  distribution is the posterior distribution for the non-evidence variables
+  conditioned on the evidence
+
+* Markov Chain Monte Carlo: Mixing
+- **Mixing** describes how quickly a Markov chain forgets its starting point and
+  explores the whole state space efficiently
+  - A well-mixed chain:
+    - Moves between different high-probability regions often
+    - Has low correlation between successive samples
+  - Poor mixing:
+    - Chain gets stuck in one mode for a long time
+    - Leads to biased estimates and high variance
+
+- **Example**
+  - If sampling from a bimodal distribution:
+    - "Poor mixing" means the chain stays in one peak
+    - "Good mixing" jumps between both peaks to reflect the true posterior
 
 * Gibbs Sampling in Bayesian Networks
-- Special case of MCMC that samples one variable at a time
+- Special case of Markov Chain Monte Carlo (MCMC) method that samples one
+  variable at a time
 
 - **Algorithm**:
   - Start with an initial complete assignment to all non-evidence variables
   - Keep evidence variables fixed at observed values
   - For each non-evidence variable $X_i$:
-		- Sample $X_i$ from $P(X_i | \text{MB}(X_i))$ where $\text{MB}(X_i)$ is
-			the Markov blanket, i.e., parents, children, spouse of a node
+    - Sample $X_i$ from $P(X_i | \text{MB}(X_i))$ where $\text{MB}(X_i)$ is
+      the Markov blanket, i.e., parents, children, spouse of a node
 
 - **Example**:
   - Weather network: $P(Cloudy | Sprinkler, Rain, WetGrass)$
@@ -1669,27 +1693,27 @@ digraph InsuranceRiskModel {
   - May need many samples for accurate estimates
 
 * Metropolis–Hastings Sampling
-- More general Markov Chain Monte Carlo (MCMC) method, than Gibbs sampling
-
-- Key idea:
-  - Construct a Markov chain with the desired stationary distribution
-  - Uses a proposal distribution to suggest new states
+- More general Markov Chain Monte Carlo method than Gibbs sampling
 
 - **Algorithm**
-  - Start at a current state $x$
-  - Propose a new state $x'$ from a proposal distribution $q(x'|x)$, e.g.,
-		- With 95% probability Gibbs sampling
-		- Otherwise use importance sampling
-		- Avoid to getting "stuck" in a part of the sampling space
+  - Start at a current state $\vx$
+  - Propose a new state $\vx'$ from a proposal distribution $q(x' | x)$, e.g.,
+    - With 95% probability Gibbs sampling
+    - Otherwise use importance sampling
   - Compute the acceptance probability:
     - $A(x, x') = \min(1, \frac{\pi(x')q(x|x')}{\pi(x)q(x'|x)})$
-  - Accept $x'$ with probability $A(x,x')$
-    - If accepted, move to $x'$
-    - Otherwise, stay at $x$
+  - Move to $x'$ with probability $A(x,x')$, otherwise stay at $x$
+
+- **Intuition**
+  - Propose local moves
+  - Accept if they lead to higher probability, or sometimes accept
+    lower-probability states to explore
+  - Balances exploration and exploitation to avoid getting stuck in local modes
 
 - **Pros**
   - Very flexible: works with any proposal distribution
   - Can handle high-dimensional spaces
+
 - **Cons**
-  - May mix slowly if proposal steps are poorly chosen
+  - May "mix" slowly if proposal steps are poorly chosen
   - Requires careful tuning of proposal distribution for efficiency
