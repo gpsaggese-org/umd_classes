@@ -29,7 +29,9 @@ MSML610: Advanced Machine Learning
 // Model assessment and selection
 // Hastie 7 (p. 238)
 
+# ##############################################################################
 # Paradigms
+# ##############################################################################
 
 * Machine Learning Paradigms with Examples (1/3)
 
@@ -102,24 +104,24 @@ MSML610: Advanced Machine Learning
 
 * Supervised Learning
 
-- Learn a function $f: X \to Y$ that maps inputs to correct outputs from training
-  examples $(\vx, y)$ where input-output pairs are known
+- Learn a function $f: X \to Y$ that maps inputs to correct outputs from
+  training examples $(\vx, y)$ where input-output pairs are known
   - Requires labeled data for training
   - Performance measured by error on a separate test set
 
 - **Classification**: output is a discrete label, e.g.,
-    - Predict `Spam` vs `Not Spam`
-    - Digit recognition `0`, `1`, ...
-    - Sentiment analysis `Pos`, `Neg`, `Neutral`
+  - Predict `Spam` vs `Not Spam`
+  - Digit recognition `0`, `1`, ...
+  - Sentiment analysis `Pos`, `Neg`, `Neutral`
 - **Regression**: output is a continuous value, e.g.,
-    - Predicting house prices given features like size and location
-    - Predict demand
-    - Forecast stock prices
+  - Predicting house prices given features like size and location
+  - Predict demand
+  - Forecast stock prices
 
 - Common algorithms:
   - Linear Regression
   - Decision Trees
-  - k-NN
+  - K-nearest neighbors
   - Neural Networks
   - ...
 
@@ -144,7 +146,7 @@ MSML610: Advanced Machine Learning
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
 - **Common algorithms:**
-  - k-means
+  - K-means
   - PCA
   - Autoencoders
 
@@ -177,11 +179,15 @@ MSML610: Advanced Machine Learning
     - E.g., newsfeed ranking adjusting based on user clicks
   - In healthcare, optimize treatment plans over time
 
+# ##############################################################################
 # Techniques
+# ##############################################################################
 
-## Machine learning in practice
+## #############################################################################
+## Machine Learning in Practice
+## #############################################################################
 
-* Machine learning flow
+* Machine Learning Flow
 
 ::: columns
 :::: {.column width=90%}
@@ -198,8 +204,8 @@ MSML610: Advanced Machine Learning
 - Evaluation
   - E.g., accuracy, precision, recall
 
-- _"If I were given one hour to save the planet, I would spend 59 minutes defining
-  the problem and one minute resolving it"_ (Albert Einstein)
+- _"If I were given one hour to save the planet, I would spend 59 minutes
+  defining the problem and one minute resolving it"_ (Albert Einstein)
 
 - **Not all phases are equally important!**
   - Question $>$ Data $>$ Features $>$ Algorithm
@@ -243,8 +249,8 @@ digraph BayesianFlow {
   - Align the question with business or research objectives
   - E.g.,:
     - **Bad**: _"How can we improve sales?"_
-    - **Good**: _"What factors most significantly impact the sales of product X in
-      region Y during season Z?"_
+    - **Good**: _"What factors most significantly impact the sales of product X
+      in region Y during season Z?"_
 
 - This is the most important part of the whole machine learning problem
   - It's like not understanding the problem in an exam: you might solve the
@@ -252,10 +258,10 @@ digraph BayesianFlow {
   - Misalignment can lead to gathering the wrong data, choosing inappropriate
     algorithms, ... $\to$ failing of the ML project
 
-* Input data
+* Input Data
 - Ensure data is specific to the prediction goal
-  - E.g., _"Use known movie ratings to predict unseen movie ratings from the same
-    population of people and movie"_
+  - E.g., _"Use known movie ratings to predict unseen movie ratings from the
+    same population of people and movie"_
   - Training set $\approx$ test set
 
 - A relationship between data and prediction is not always direct
@@ -271,10 +277,10 @@ digraph BayesianFlow {
 - More data vs better models
   - Meta-studies have shown that the difference between a generic model and the
     best model for a problem improves like 5\%
-  - _"It's not who has the best algorithm that wins. It's who has the most data"_
-    (Google researcher)
-  - _"Every time I fire a linguist, the performance of the speech recognizer goes
-    up"_ (IBM researcher in speech recognition)
+  - _"It's not who has the best algorithm that wins. It's who has the most
+    data"_ (Google researcher)
+  - _"Every time I fire a linguist, the performance of the speech recognizer
+    goes up"_ (IBM researcher in speech recognition)
 
 * Features
 - Features provide high-level information about inputs
@@ -316,11 +322,15 @@ digraph BayesianFlow {
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
       algorithm since it wasn't scalable enough
 
-## How to do research
+## #############################################################################
+## How to Do Research
+## #############################################################################
 
-### Simple is better
+### ############################################################################
+### Simple Is Better
+### ############################################################################
 
-* Occam's Razor
+* Occam'S Razor
 - _The **simplest** model that fits the data is also the **most plausible**_
   (Occam)
   - Trim the model to the bare minimum necessary to explain the data
@@ -344,10 +354,10 @@ digraph BayesianFlow {
       Kolmogorov complexity
   - Complexity of a hypothesis set $\calH$
     - E.g., VC dimension of the model
-  - Complexity of $h$ and $\calH$ are related by counting: if we need $l$ bits to
-    specify $h$, then $h$ is one of $2^l$ elements of a set $\calH$
+  - Complexity of $h$ and $\calH$ are related by counting: if we need $l$ bits
+    to specify $h$, then $h$ is one of $2^l$ elements of a set $\calH$
 
-* Model soundness
+* Model Soundness
 - We cannot blindly accept the result of modeling
   - A model should tell a story
   - Always ask yourself: _"what criticisms would you give to the model if it was
@@ -368,19 +378,19 @@ digraph BayesianFlow {
     - The data cannot falsify the hypothesis
   - The model (line) is too complex for the data set (only 2 points)
 
-* Sampling bias
+* Sampling Bias
 - A model, when learning, sees the world in terms of the training data
   - If data is sampled in a biased way, learning will produce a biased outcome
 
-- Formally: one of the few hypothesis of Hoeffding in learning theory is
-  that training and testing distributions are the same
+- Formally: one of the few hypothesis of Hoeffding in learning theory is that
+  training and testing distributions are the same
 
 - Addressing sampling bias
   - Weight or re-sample data to match testing distribution
   - If data points have zero probability ($\Pr = 0$) in the data set, no
     remedies are possible
 
-* Data snooping
+* Data Snooping
 - **Data snooping** is the improper use of data that biases ML model results
   - Common trap for practitioners
 
@@ -391,11 +401,12 @@ digraph BayesianFlow {
      selection, hyperparameter tuning), its assessment becomes optimistic
 
 - **Effects** of data snooping
-  - Models show inflated performance metrics which do not translate out of sample
-  - Snooping leads to seemingly better performance: 
+  - Models show inflated performance metrics which do not translate out of
+    sample
+  - Snooping leads to seemingly better performance:
     - It is a "happy minefield"
 
-* "Burning the test set"
+* "Burning the Test Set"
 - Repeatedly using the same data eventually leads to "success"
   - The model starts fitting to specific data quirks
   - The test set should not be used for training; this leads to over-optimism
@@ -408,19 +419,25 @@ digraph BayesianFlow {
   - MDL accounts for the number of fitting attempts in overfitting measurement
   - Adjust p-values for multiple experiments
 
-### Research methodology
+### ############################################################################
+### Research Methodology
+### ############################################################################
 
-* How to achieve out-of-sample fit
+* How to Achieve Out-Of-Sample Fit
 - Goal: choose an hypothesis $g$ approximates the unknown target hypothesis $f$
-  $$g \approx f \iff E_{out}(g) \approx 0$$
+
+  $$
+  g \approx f \iff E_{out}(g) \approx 0
+  $$
 
 - Solution:
   - Achieve
-    1. Good in-sample performance $E_{in}(g) \approx 0$ 
+    1. Good in-sample performance $E_{in}(g) \approx 0$
     2. Good generalization $E_{out}(g) \approx E_{in}(g)$
-  - Then 1. + 2. $\implies$ good out-of-sample performance $E_{out}(g) \approx 0$
+  - Then 1. + 2. $\implies$ good out-of-sample performance
+    $E_{out}(g) \approx 0$
 
-* What to do if out-of-sample fit is poor?
+* What to Do If Out-Of-Sample Fit Is Poor?
 - The model performs well in sample ($E_{in} \approx 0$) but poorly out of
   sample ($E_{out} \gg E_{in}$)
 
@@ -446,25 +463,33 @@ digraph BayesianFlow {
      - Decrease regularization amount $\lambda$ $\iff$ fixes high bias
      - Increase regularization amount $\lambda$ $\iff$ fixes high variance
 
-* Why using a lot of data?
+* Why Using a Lot of Data?
 - Several studies show that:
   - Different algorithms/models have remarkably similar performance
   - Increasing training set improves performance
 
 - Thus it holds that:
+
   $$
   \text{High capacity model + massive training set = good performance}
   $$
 
 - Using a high capacity model with many parameters (e.g., neural network)
-  $$E_{in} \approx 0$$
+  $$
+  E_{in} \approx 0
+  $$
   due to low bias (and high variance)
 - A massive data set helps avoid overfitting
-  $$E_{out} \approx E_{in}$$
+  $$
+  E_{out} \approx E_{in}
+  $$
 - These two conditions together
-  $$E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0$$
 
-* What to do when one has lots of data?
+  $$
+  E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0
+  $$
+
+* What to Do When One Has Lots of Data?
 - You have $m$ = 100M examples in data set, what do you do?
 
 - Training on a lot of data might yield scalability issue:
@@ -473,14 +498,15 @@ digraph BayesianFlow {
   - Require work on infrastructure
   - ...
 
-- Plot the learning curves as function of increasing $m = 1k, 10k, 100k, 1M, ...$
+- Plot the learning curves as function of increasing
+  $m = 1k, 10k, 100k, 1M, ...$
   - If the algorithm has large bias, it converges (training and validation
     performance are similar) at $m = 1000$
     - Add more features and complicate the model rather than training on 100M
       instances
   - If the variance is large, use all instances to train the model
 
-* Why we do things?
+* Why We Do Things?
 - Always
   - Ask: _"Why are we doing something?"_
     - To understand the purpose of the task
@@ -503,7 +529,7 @@ digraph BayesianFlow {
   - _"What are the specific goals?"_
     - Set target number of new leads or click-through rates
 
-* Summary of the results, next steps, follow ups
+* Summary of the Results, Next Steps, Follow Ups
 - Always have a summary of the results
   - It's like a high-level map of what we have done and what we have discovered
     - E.g., "smoothing model coefficients helps"
@@ -527,7 +553,7 @@ digraph BayesianFlow {
     contributing most to sales growth"_
   - Outline potential experiments or analyses to validate findings further
 
-* Example of spam filter classification
+* Example of Spam Filter Classification
 - We use $N = 4$ words in an email to distinguish spam from non-spam emails
   using logistic regression
   - Words can be: `buy`, `now`, `deal`, `discount`, `<your name>`
@@ -544,7 +570,7 @@ digraph BayesianFlow {
        classifier
      - Use stemming software
 
-* Right and wrong approach to research
+* Right and Wrong Approach to Research
 
 - **Bad**
   1. It is not clear how to prioritize the different possible tasks
@@ -569,9 +595,11 @@ digraph BayesianFlow {
 - Sometimes an approach must be tried to see if it works
   - E.g., stemming software to consider certain words equivalent
 
-## Pipeline organization
+## #############################################################################
+## Pipeline Organization
+## #############################################################################
 
-* How are machine learning systems organized?
+* How Are Machine Learning Systems Organized?
 - Machine learning systems are typically organized in a pipeline
   1. Break down the problem into sub-problems
   2. Solve problems one at the time
@@ -579,12 +607,16 @@ digraph BayesianFlow {
      problem
 
 - The performance $p$ of the entire ML pipeline are given by:
-  $$p_{system} = \sum_i p_i \cdot \alpha_i$$
+
+  $$
+  p_{system} = \sum_i p_i \cdot \alpha_i
+  $$
+
   where:
   - $p_i$ is the performance of each stage $p_i$
-  - $\alpha_i$ is the importance of each stage 
+  - $\alpha_i$ is the importance of each stage
 
-* ML pipeline: Example of Photo OCR system
+* ML Pipeline: Example of Photo OCR System
 - Goal: build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
@@ -608,7 +640,8 @@ digraph BayesianFlow {
 - **Text detection**
   - Train a classifier to recognize letters vs non-letters
   - Scan image in two directions, different sizes looking for text
-  - Create a map of text likelihood (e.g., heatmap) using classifier probabilities
+  - Create a map of text likelihood (e.g., heatmap) using classifier
+    probabilities
   - Enclose text areas in boxes
   - Discard boxes not fitting aspect ratio (valid text width > height)
 
@@ -616,8 +649,9 @@ digraph BayesianFlow {
   - Use sliding window classifiers to find "breaks" between characters
   - Use a 1D sliding window for character segmentation
 
-* The ideal recipe for ML
+* The Ideal Recipe for ML
 - The ideal recipe for ML is:
+
   $$
   \text{low-bias algorithm + massive amount of data to train}
   $$
@@ -631,7 +665,7 @@ digraph BayesianFlow {
   2. Collect and label by hand
      - E.g., crowd sourcing like Amazon Mechanical Turk
 
-* OCR pipeline: example of artificial data synthesis
+* OCR Pipeline: Example of Artificial Data Synthesis
 - How can we increase data set size?
   1. Synthesize data set
      - Use font libraries to generate large training sets
@@ -644,7 +678,7 @@ digraph BayesianFlow {
 - Transformations and noise should be specific to the application domain
   - E.g., Gaussian noise is not always appropriate
 
-* Ceiling analysis for ML pipeline
+* Ceiling Analysis for ML Pipeline
 - The most valuable resource is time
   - Sometimes one works on an optimization for months
   - The optimization doesn't make much difference
@@ -656,24 +690,33 @@ digraph BayesianFlow {
   - Have a single number representing the performance of the entire system
     - E.g., accuracy for an OCR system
   - For each component:
-    - Mock the component with a box that always gives the correct output (=oracle)
+    - Mock the component with a box that always gives the correct output
+      (=oracle)
     - Leave the remaining components untouched
     - Compute performance of the entire pipeline
   - Understand which component is critical to performance by estimating an upper
     bound for overall performance when that component improves 10\%
   - Don't trust your gut feeling but measure!
 
-## Input processing
+## #############################################################################
+## Input Processing
+## #############################################################################
+
 // TODO(gp): Add something
+
 - Data cleaning
 - Dimensionality reduction
 - Feature engineering
 
-## Learning algorithms
+## #############################################################################
+## Learning Algorithms
+## #############################################################################
 
-### Gradient descent
+### ############################################################################
+### Gradient Descent
+### ############################################################################
 
-* The problem of minimizing a function
+* The Problem of Minimizing a Function
 
 ::: columns
 :::: {.column width=80%}
@@ -696,7 +739,7 @@ digraph BayesianFlow {
 ::::
 :::
 
-* Gradient descent: intuition
+* Gradient Descent: Intuition
 
 ::: columns
 :::: {.column width=80%}
@@ -730,9 +773,11 @@ digraph BayesianFlow {
 
 - At each step, move a fixed amount $\eta$ in the weight space (fixed learning
   rate):
+
   $$
   \vw(t + 1) = \vw(t) + \eta \hat{\vvv}
   $$
+
   where $\hat{\vvv}$ is a unit vector
 
 - Pick $\hat{\vvv}$ to move to a value of $E_{in}(\vw)$ as negative as possible
@@ -751,9 +796,9 @@ digraph BayesianFlow {
     \endgroup
   - Gradient descent keeps only $O(\eta)$ the term and ignores the rest
   - Conjugate gradient considers up to $O(\eta^2)$ and ignores higher
-    order infinitesimals
+    infinitesimals
 
-* Gradient descent with fixed learning rate (2/3)
+* Gradient Descent with Fixed Learning Rate (2/3)
 
 - The minimal value of the scalar product
   - Is $- \eta \|\nabla E_{in}(\vw(t))\|$,
@@ -766,7 +811,7 @@ digraph BayesianFlow {
 - It is called "gradient descent" since we descend along the gradient of the
   function to optimize
 
-* Gradient descent with fixed learning rate (3/3)
+* Gradient Descent with Fixed Learning Rate (3/3)
 - Each component of the weight $\vw$ is updated with the partial derivative with
   respect to that coordinate:
   \begin{align*}
@@ -785,7 +830,7 @@ digraph BayesianFlow {
 - A step of the optimization when we update the solution (weights) is called
   epoch
 
-* Gradient descent: stopping criteria
+* Gradient Descent: Stopping Criteria
 - In theory, stop when $\Delta E_{in} = \vv{0}$
   - Numerically this might not occur
 - In practice, stop when
@@ -799,7 +844,7 @@ digraph BayesianFlow {
   - In practice, need to monitor the algorithm progress by recomputing the cost
     function $J(\vw)$ periodically to make sure it is decreasing
 
-* Setting $\eta$ in gradient descent with fixed learning rate
+* Setting $\eta$ in Gradient Descent with Fixed Learning Rate
 - Consider a 1D convex function
   - If $\eta$ is small:
     - The linear approximation of $E_{in}$ is effective
@@ -808,16 +853,17 @@ digraph BayesianFlow {
     - The linear approximation fails (higher terms affect values)
     - It "bounces around"
 
- ![](lectures_source/figures/Lesson6_Gradient_descent_3.png)
+![](lectures_source/figures/Lesson6_Gradient_descent_3.png)
 
 - Idea: vary learning rate $\eta$ during gradient descent
   - Smaller learning rates may find a better minimum
   - Reduce $\eta$ as a function of iterations
   - Cons: this introduces an additional parameter to tune
 
-* Gradient descent with variable learning rate
+* Gradient Descent with Variable Learning Rate
 - In gradient descent with fixed learning rate (i.e., constant change in weight
   space), we use:
+
   $$
   \Delta \vw = - \eta \frac{\nabla J}{\|\nabla J\|}
   $$
@@ -831,18 +877,19 @@ digraph BayesianFlow {
 - Ideally, $\eta$ should increase with the slope: $\eta \propto \|\nabla J\|$
 
 - This is called gradient descent with variable learning rate:
+
   $$
   \Delta \vw = - \eta \nabla J
   $$
 
-* Feature scaling in gradient descent
+* Feature Scaling in Gradient Descent
 - Gradient descent converges faster if features are scaled to the same range
   - Feature scaling techniques include min-max scaling and standardization
   - E.g., applying standardization to a dataset can transform feature values to
     have a mean of 0 and a standard deviation of 1
 
-- Otherwise, different gradient components have different errors due to numerical
-  approximation, causing the gradient to bounce around
+- Otherwise, different gradient components have different errors due to
+  numerical approximation, causing the gradient to bounce around
   - Unscaled features can lead to slow and unstable convergence due to varying
     magnitudes
   - E.g., if one feature ranges from 1 to 1000 and another ranges from 0.01 to
@@ -872,7 +919,9 @@ digraph BayesianFlow {
     examples for a single update
   - Requires storing all the data in memory
 
-### Stochastic gradient descent
+### ############################################################################
+### Stochastic Gradient Descent
+### ############################################################################
 
 * Stochastic Gradient Descent
 - **Idea** of Stochastic Gradient Descent (SGD)
@@ -905,7 +954,7 @@ digraph BayesianFlow {
   - The path in the weight space is more random
   - It does not even converge but rather oscillates around the local minimum
 
-* Mini-batch Gradient Descent
+* Mini-Batch Gradient Descent
 - Bring together characteristics of both Batch and Stochastic Gradient Descent
 
 - Use $b$ examples to make an update to the current weight
@@ -915,7 +964,7 @@ digraph BayesianFlow {
 - Mini-batch GD offers a balance between SGD noisiness and full-batch
   approaches, using small, random data samples for updates
 
-* On-line learning and gradient descent
+* On-Line Learning and Gradient Descent
 - Continuous stream of training examples requires updating the model
   - In real-time systems, new data points arrive and the model adapts without
     fully retraining
@@ -931,7 +980,7 @@ digraph BayesianFlow {
   - E.g., in training a language model on live chat data, older conversations
     might be discarded after updates to maintain relevant patterns in the model
 
-* SGD vs BGD vs Mini-batch
+* SGD vs BGD vs Mini-Batch
 - To update the weights:
   - BGD (batch gradient descent) uses all the training examples
   - SGD (stochastic gradient descent) uses a single (random) training example
@@ -940,7 +989,7 @@ digraph BayesianFlow {
 \begingroup \scriptsize
 
 | **Aspect**      | **Batch Gradient Descent**               | **Stochastic Gradient Descent**      |
-|-----------------|------------------------------------------|--------------------------------------|
+| --------------- | ---------------------------------------- | ------------------------------------ |
 | Computation     | Uses all examples                        | One example at a time                |
 | Memory          | Requires all examples in memory          | Require less memory                  |
 | Randomization   | More likely to terminate in flat regions | Avoid local minima due to randomness |
@@ -950,7 +999,7 @@ digraph BayesianFlow {
 
 \endgroup
 
-* Map-reduce for batch gradient descent
+* Map-Reduce for Batch Gradient Descent
 - In map-reduce we use $k$ machines to parallelize the summation (map step) and
   then we send the $k$ partial sums to a single node to accumulate the result
   (reduce step)
@@ -959,7 +1008,7 @@ digraph BayesianFlow {
 
 // TODO: Add a tikz picture
 
-* Coordinate descend
+* Coordinate Descend
 - Minimize $J(x_0, ..., x_n)$ by optimizing along one direction $x_i$ at a time
   - Instead of computing all derivatives
 
@@ -969,13 +1018,13 @@ digraph BayesianFlow {
   - Find the minimum along the current coordinate (1D optimization problem)
   - Move to the next coordinate $x_{i+1}$
   - The sequence of $\vw(t)$ is decreasing
-  - A minimum is found if there is no improvement after one cycle of scanning all
-    coordinates
+  - A minimum is found if there is no improvement after one cycle of scanning
+    all coordinates
   - The minimum is local
 
-* Gradient descent vs pseudo-inverse for linear models
-- For linear models we can use either pseudo-inverse or gradient descent to
-  find optimal $\vw^*$
+* Gradient Descent vs Pseudo-Inverse for Linear Models
+- For linear models we can use either pseudo-inverse or gradient descent to find
+  optimal $\vw^*$
 
 - **Gradient descent**
   - Choose learning rate $\eta$
@@ -990,9 +1039,11 @@ digraph BayesianFlow {
     - Inverse complexity $O(P^3)$
     - E.g., for $P \approx 10,000$, gradient descent is preferable
 
-## Performance metrics
+## #############################################################################
+## Performance Metrics
+## #############################################################################
 
-* How to make progress in ML research
+* How to Make Progress in ML Research
 - There are many possible directions for research
   - Different features
   - Different data preprocessing methods
@@ -1011,7 +1062,7 @@ digraph BayesianFlow {
     - Utilize hypothesis testing for genuine improvements
     - Conduct A/B testing for real-world validation
 
-* How to measure classifier's performance?
+* How to Measure Classifier'S Performance?
 - Success / hit / win rate (or error / miss rate)
   - Measures the proportion of correct predictions by the model
   - Important for understanding overall accuracy
@@ -1040,7 +1091,7 @@ digraph BayesianFlow {
   - E.g., in medical diagnosis, a utility function might give higher weight to
     minimizing false negatives to prevent missed diagnoses
 
-* Training vs test set
+* Training vs Test Set
 - Performance on train set $E_{in}$ is an optimistic estimate of $E_{out}$
   - One can have:
     - 0\% error rate on training data (e.g., memorizing responses for training
@@ -1055,7 +1106,7 @@ digraph BayesianFlow {
       with data from a bank branch in New York
     - Characteristics of the populations are very different
 
-* Lots of data scenario vs scarce data scenario
+* Lots of Data Scenario vs Scarce Data Scenario
 - **Lots of data scenario**
   - Ideal to have lots of data (ideally infinite)
   - Learn on lots of data
@@ -1077,7 +1128,7 @@ digraph BayesianFlow {
 
 // TODO: Add plot for the splitting of data
 
-* Splitting Data into Training, Validation, Test Sets
+* Splitting Data Into Training, Validation, Test Sets
 - Training, validation, and test sets must be:
   - Distinct
   - Representative of the problem
@@ -1093,7 +1144,7 @@ digraph BayesianFlow {
   - Sample and check statistics of variables (e.g., mean, std dev, PDF)
     - Compare these statistics to ensure each set mirrors the broader dataset
 
-* Rule of thumbs for data set splits
+* Rule of Thumbs for Data Set Splits
 - If $n$ is **large** $\to$ use a 60-20-20 split
   - Training: 60%
   - Validation: 20%
@@ -1109,7 +1160,7 @@ digraph BayesianFlow {
   - Be cautious of the increased chance of high accuracy by chance
   - Is machine learning for the given sample size even suitable?
 
-* Can we ever use test set as training set?
+* Can We Ever Use Test Set as Training Set?
 - Once the model is selected and validated, reuse all available data (including
   the test set) to generate the model for deployment
   - This ensures the model benefits from all available information
@@ -1120,29 +1171,35 @@ digraph BayesianFlow {
   - Eventually, adding more data results in smaller accuracy gains and may not
     justify the increased computational cost
 
-* In-sample vs out-of-sample error expressions
+* In-Sample vs Out-Of-Sample Error Expressions
 - We want to find a function $h$ that approximates the unknown function $f$,
   $h \approx f$ over the space of inputs $\vx \in \calX$ ("script X")
 
 - The error is usually defined point-wise:
-  $$e(h(\vx_i), f(\vx_i))$$
+
+  $$
+  e(h(\vx_i), f(\vx_i))
+  $$
   - E.g.,
     - Squared error: $e(\vx) = (h(\vx) - f(\vx))^2$
     - 0-1 binary error: $e(\vx) = I[h(\vx) == f(\vx)]$
     - Log probability: $e(\vx) = - \log( \Pr(h(\vx) == f(\vx)) )$
 
 - In-sample error is computed using all points in the training set:
+
   $$
   E_{in}{(h)} = \frac{1}{N} \sum_{i=1}^N e(h(\vx_i), f(\vx_i))
   $$
 
 - Out-of-sample error is computed on the entire space of inputs $\calX$
+
   $$
   E_{out}(h) = \EE_{\vx \in \calX}[e(h(\vx), f(\vx))]
   $$
 
-* Mean squared error (MSE)
+* Mean Squared Error (MSE)
 - MSE is the average difference of squared error:
+
   $$
   \text{MSE}
   \defeq \frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2
@@ -1161,8 +1218,9 @@ digraph BayesianFlow {
     - Use median absolute deviation (MAD), median of squared error for
       robustness against outliers
 
-* Root mean squared error (RMSE)
+* Root Mean Squared Error (RMSE)
 - RMSE is the standard deviation of the Mean Squared Error (MSE):
+
   $$
   \text{RMSE} \defeq \sqrt{\text{MSE}}
   = \sqrt{\frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2}
@@ -1179,7 +1237,7 @@ digraph BayesianFlow {
   - May not be suitable for ranking models when outliers or skewed distributions
     are present
 
-* Median-based metrics
+* Median-Based Metrics
 - We can use metric based on median (i.e., the 0.5 quantile of absolute error):
 
 - Median absolute deviation:
@@ -1194,9 +1252,10 @@ digraph BayesianFlow {
   \defeq \text{median}_i(|h(\vx_i) - f(\vx_i)|^2)
   $$
 
-* How to choose an error measure?
- Error measure depends on the **application** and should be **specified by the
- "customer"**:
+* How to Choose an Error Measure?
+
+- Error measure depends on the **application** and should be **specified by the
+  "customer"**:
   - The customer needs to define what constitutes an acceptable level of error
     for their specific use case
   - E.g., medical applications might have a low tolerance for errors, while a
@@ -1212,25 +1271,25 @@ digraph BayesianFlow {
     - Convex optimization-friendly measures ensure optimization algorithms find
       the global minimum easily
 
-* Error measures: fingerprint verification example
+* Error Measures: Fingerprint Verification Example
 - In fingerprint verification:
   - Recognizing a valid fingerprint has no error
   - Otherwise, it is a false positive or a false negative
 
 - Error weight depends on the application
   - For the same problem in two set-ups, the error measure is the opposite
-
   - For supermarket applications:
     - False positives are minor (e.g., one more discount)
     - False negatives are costly (e.g., annoyed customer, slow line)
-
   - For CIA building access:
     - False negatives are acceptable (triggers further security)
     - False positives are disastrous
 
-### Precision and recall
+### ############################################################################
+### Precision and Recall
+### ############################################################################
 
-* Error metrics for skewed classes
+* Error Metrics for Skewed Classes
 - When classes are skewed (i.e., one class is very rare), accuracy can be
   misleading
   - Use metrics like confusion matrix, precision, and recall
@@ -1245,9 +1304,7 @@ digraph BayesianFlow {
     - A trivial classifier that always outputs $y = 0$ has a 0.5% error rate!
     - Now a 1% error rate does not look good anymore
 
-* Decision matrix
-::: columns
-:::: {.column width=60%}
+* Decision Matrix ::: Columns :::: {.Column Width=60%}
 - Aka confusion matrix
 
 - Typically $y = 1$ encodes the rare class to predict
@@ -1290,40 +1347,49 @@ digraph BayesianFlow {
 * Precision vs recall
 - Assume that $y = 1$ encodes the rare event we want to detect
 
-- **Precision** measures how often there is a true positive _given that pred = 1_
+- **Precision** measures how often there is a true positive _given that pred =
+  1_
+
   \begingroup \small
+
   $$
   \text{precision}
   \defeq \Pr(\text{TP} | \text{pred == 1})
   = \frac{|\text{pred == 1} \land \text{act == 1}|}{|\text{pred == 1}|}
   = \frac{\text{TP}}{\text{TP} + \text{FP}}
   $$
+
   \endgroup
 
 - **Recall** measures how often there is a true positive _given that act = 1_
   \begingroup \small
+
   $$
   \text{recall}
   \defeq \Pr(\text{TP} | \text{act == 1})
   = \frac{\text{TP}}{|\text{act == 1}|}
   = \frac{\text{TP}}{\text{TP} + \text{FN}}
   $$
+
   \endgroup
 
-- Both are conditional probability measuring the fraction of TP under different circumstances:
+- Both are conditional probability measuring the fraction of TP under different
+  circumstances:
   - (Pre)cision: pred = 1
   - Rec(a)ll: act = 1
 
 - Precision/recall are widely used in information retrieval
   - E.g., a search engine:
-    - Returns 30 pages; only 20 are relevant $\implies$ precision = 20 / 30 = 2 / 3
-    - Fails to return another 40 relevant pages $\implies$ recall = 20 / (40 + 20) = 20 / 60 = 1 / 3
+    - Returns 30 pages; only 20 are relevant $\implies$ precision = 20 / 30 = 2
+      / 3
+    - Fails to return another 40 relevant pages $\implies$ recall = 20 /
+      (40 + 20) = 20 / 60 = 1 / 3
 
-* Precision / recall in terms of quality / quantity
+* Precision / Recall in Terms of Quality / Quantity
 - **Precision**
   - Increasing precision means when we predict 1, we are more likely to be right
-    - E.g., in a spam email detection system, "precision is 90%" means 90% of the
-      emails marked as spam are actually spam
+    - E.g., in a spam email detection system, "precision is 90%" means 90% of
+      the emails marked as spam are actually spam
   - A higher precision indicates fewer false positives
   - Measures "quality" of prediction
 
@@ -1368,7 +1434,7 @@ digraph BayesianFlow {
   \end{alignat*}
 - A trivial classifier has precision or recall close to 0
 
-* Trading off precision and recall
+* Trading Off Precision and Recall
 - In theory, we want to increase both precision and recall
 
 - In practice, modify the threshold of a probabilistic classifier to trade off
@@ -1385,7 +1451,7 @@ digraph BayesianFlow {
 
 // TODO: Pic from notebook
 
-* Precision-recall: pros / cons
+* Precision-Recall: Pros / Cons
 - Pros:
   - Give insight on the behavior of a classifier (e.g., confusion matrix)
   - Avoid mistaking a trivial classifier for a good classifier
@@ -1395,11 +1461,11 @@ digraph BayesianFlow {
     to each other
   - Solutions: F-score, AUC
 
-* Precision-recall curves
+* Precision-Recall Curves
 - **Aka ROC curves**
 
-- Plot the curve on a precision-recall plane: ($y =$ precision, $1 - x =$ recall)
-  to show the precision vs recall trade-off for a classifier
+- Plot the curve on a precision-recall plane: ($y =$ precision, $1 - x =$
+  recall) to show the precision vs recall trade-off for a classifier
   - E.g., changing the threshold of logistic regression
 
 - A curve higher than another means a better classifier, since for the same
@@ -1413,7 +1479,7 @@ digraph BayesianFlow {
 
 // TODO: Pic from notebook
 
-* Area under the curve
+* Area Under the Curve
 - **AUC** is the area under the precision-recall curve
   - Provides a robust metric by integrating over all thresholds
   - Higher AUC indicates better performance in differentiating between classes
@@ -1430,8 +1496,9 @@ digraph BayesianFlow {
   - The AUC helps understand how well the model distinguishes between patients
     with and without a disease across all thresholds
 
-* F-score
+* F-Score
 - The F-score is the harmonic mean of precision and recall:
+
   $$
   \text{F-score}
   \defeq \frac{2}{\frac{1}{P} + \frac{1}{R}}
@@ -1448,10 +1515,10 @@ digraph BayesianFlow {
   - $\frac{P + R}{2} = \frac{1}{2}$, while we prefer a low value (ideally 0)
 
 ## #############################################################################
-## Model selection
+## Model Selection
 ## #############################################################################
 
-* Model selection problem
+* Model Selection Problem
 - Model selection chooses the best model from a set of candidates based on
   performance
   - Needed when multiple hypotheses can explain the data
@@ -1473,7 +1540,8 @@ digraph BayesianFlow {
 - Consider computational cost
   - E.g., a simple logistic regression is faster than a complex neural network
 
-* Model selection process
+* Model Selection Process
+
 1. Split data into $D_{train}, D_{val}, D_{test}$
    - Commonly: 60\% training, 20\% validation, 20\% test
    - Like splitting 80\% training between two learning phases
@@ -1485,15 +1553,15 @@ digraph BayesianFlow {
 
 4. Pick model $g_m$ with minimum $E_{val}^{(m)}$
 
-5. Use test set $D_{test}$ to estimate fair performance of model $g_m$,
-   i.e., $E_{val} \approx E_{out}$
+5. Use test set $D_{test}$ to estimate fair performance of model $g_m$, i.e.,
+   $E_{val} \approx E_{out}$
 
 6. Retrain model with entire $D = D_{train} \cup D_{val} \cup D_{test}$ to get
    final $g_m^{*}$
 
 // TODO: Add a tikz plot
 
-* Model selection as learning
+* Model Selection as Learning
 - "Picking the model with smallest $E_{val}$" is a form of learning:
   - Hypothesis set: $\{g_1, ... , g_N\}$
   - Training set: $D_{val}$
@@ -1504,15 +1572,19 @@ digraph BayesianFlow {
     (optimistically) biased estimate of $E_{out}(g_m)$
   - Theoretically:
     - The penalty for model complexity with a finite set of hypotheses is
-      $$E_{out}(g_m) \le E_{val}(g_m) + O(\sqrt{\log(N / K)})$$
+      $$
+      E_{out}(g_m) \le E_{val}(g_m) + O(\sqrt{\log(N / K)})
+      $$
     - Use VC dimension for an infinite number of hypotheses (e.g., choice of
       $\lambda$ for regularization)
 
 // TODO: Add a tikz plot
 
+## #############################################################################
 ## Aggregation
+## #############################################################################
 
-* Ensemble learning: intuition
+* Ensemble Learning: Intuition
 - Ensemble learning combines multiple models to improve prediction accuracy
   - **Idea**: a group of weak learners can form a strong learner
 
@@ -1522,8 +1594,8 @@ digraph BayesianFlow {
   - Each model contributes its unique perspective, reducing overfitting
   - E.g., like a panel of voting experts
 
-- Example: in computer vision detecting a face is difficult task (at least circa
-  2010)
+- Example: in computer vision detecting a face is difficult task (at least
+  circa 2010)
   - Look for different features:
     - Are there eyes?
     - Is there a nose?
@@ -1531,7 +1603,7 @@ digraph BayesianFlow {
     - ...
   - Each feature is weak per-se, but together they become reliable
 
-* Ensemble learning: Different Techniques
+* Ensemble Learning: Different Techniques
 - **Bagging** (bootstrap + aggregation)
   - Reduces variance by averaging predictions from different models
   - E.g., decision trees $\to$ bagging $\to$ random forest
@@ -1542,8 +1614,8 @@ digraph BayesianFlow {
 - **Boosting**
   - Reduces bias by focusing on errors made by previous models
   - Sequentially adds models, each correcting its predecessor
-  - E.g., `adaBoost` increases weights of incorrectly classified data points
-    to learn the next model
+  - E.g., `adaBoost` increases weights of incorrectly classified data points to
+    learn the next model
 
 - **Stacking**
   - Uses a meta-model to combine separate models using weights
@@ -1552,7 +1624,7 @@ digraph BayesianFlow {
     - Combines the predictions of other models (e.g., decision trees, support
       vector machines, and neural networks)
 
-* Ensemble learning: relation with statistics
+* Ensemble Learning: Relation with Statistics
 - **Bagging**
   - Improves performance by adding randomized variants (mimicking multiple
     training sets)
@@ -1584,7 +1656,7 @@ digraph BayesianFlow {
   - Risk of overfitting (model complexity is increased)
   - Ensemble learning contradicts Occam's razor, which advocates simplicity
 
-* When ensemble learning works
+* When Ensemble Learning Works
 - Combining multiple models with ensemble learning works when models:
   - Are very different from each other
   - Treat a reasonable percentage of the data correctly
@@ -1592,7 +1664,7 @@ digraph BayesianFlow {
   - Complement each other: they are specialists in a part of the domain where
     the others don't perform well
 
-* How to combine outputs in ensemble learning
+* How to Combine Outputs in Ensemble Learning
 - **Regression**
   - Weighted average of prediction
   - E.g., by accuracy of each model or by a prior
@@ -1606,14 +1678,16 @@ digraph BayesianFlow {
 
 - We can also learn a meta-learner (stacking) to combine multiple models
 
+### ############################################################################
 ### Bagging
+### ############################################################################
 
 * Bagging
 - Bagging stands for "Bootstrap AGGregation"
 
 - **Learning procedure**
-  - Several training datasets are extracted randomly by sampling with replacement
-    from the original dataset (i.e., bootstrap)
+  - Several training datasets are extracted randomly by sampling with
+    replacement from the original dataset (i.e., bootstrap)
   - Learn multiple models, one for each training set
   - Combine outputs using various methods
   - Result is a better model than a single model
@@ -1625,7 +1699,7 @@ digraph BayesianFlow {
   - Bagging mimics extracting more training sets (though not independent) from
     the unknown distribution
 
-* Bagging and instability in learning algorithms
+* Bagging and Instability in Learning Algorithms
 - Bagging works best with different models, especially non-linear models
 
 - Introduce randomization in the learning algorithm intentionally
@@ -1644,7 +1718,9 @@ digraph BayesianFlow {
   - Resampling the training set has limited impact, as it is equivalent to
     changing example weights
 
+### ############################################################################
 ### Boosting
+### ############################################################################
 
 * Boosting
 - Boosting builds models that complement each other
@@ -1678,7 +1754,9 @@ digraph BayesianFlow {
     - Evaluate the ensemble
     - Adjust weights for examples classified correctly/incorrectly
 
+### ############################################################################
 ### Stacking
+### ############################################################################
 
 * Stacking
 - Stacking learns how to combine models (not necessarily of the same type)
@@ -1695,25 +1773,25 @@ digraph BayesianFlow {
     - Then learn level 1
     - Use a simple model for level 1 (e.g., linear models or trees) to avoid
       overfitting
-    - Use probabilities from level 0, so level 1 can assess the confidence of each
-      model
+    - Use probabilities from level 0, so level 1 can assess the confidence of
+      each model
 
-* Boosting vs bagging vs stacking
-
+* Boosting vs Bagging vs Stacking
 
 \begingroup \scriptsize
 
-| **Aspect**            | **Bagging**                         | **Boosting**                         | **Stacking**                            |
-|-----------------------|-------------------------------------|--------------------------------------|-----------------------------------------|
-| **Combines**          | Models of the same type             | Models of the same type              | Models of different types               |
-| | | |
-| **Learning**          | Models trained independently        | Iterative training                   | Models trained independently            |
-| **Predicting**        | Uses uniform or data-driven weights | Uses learned weights from training   | Uses learned weights or confidence      |
-| **Main Objective**    | Reduce variance                     | Reduce bias                          | Improve generalization through diversity|
-| **Base Learners**     | Often strong learners               | Often weak learners                  | Any model type (heterogeneous ensemble) |
-| **Sensitivity to Noise** | Low                              | High                                 | Medium                                  |
-| **Parallelizable**    | Yes                                 | No (sequential dependency)           | Partially (base models parallelized)    |
-| **Meta-model**        | Not used                            | Not used                             | Required                                |
-| | | |
-| **Examples**          | Random Forest                       | AdaBoost, Gradient Boosting          | Stacked Generalization, Blending        |
+| **Aspect**               | **Bagging**                         | **Boosting**                       | **Stacking**                             |
+| ------------------------ | ----------------------------------- | ---------------------------------- | ---------------------------------------- |
+| **Combines**             | Models of the same type             | Models of the same type            | Models of different types                |
+|                          |                                     |                                    |
+| **Learning**             | Models trained independently        | Iterative training                 | Models trained independently             |
+| **Predicting**           | Uses uniform or data-driven weights | Uses learned weights from training | Uses learned weights or confidence       |
+| **Main Objective**       | Reduce variance                     | Reduce bias                        | Improve generalization through diversity |
+| **Base Learners**        | Often strong learners               | Often weak learners                | Any model type (heterogeneous ensemble)  |
+| **Sensitivity to Noise** | Low                                 | High                               | Medium                                   |
+| **Parallelizable**       | Yes                                 | No (sequential dependency)         | Partially (base models parallelized)     |
+| **Meta-model**           | Not used                            | Not used                           | Required                                 |
+|                          |                                     |                                    |
+| **Examples**             | Random Forest                       | AdaBoost, Gradient Boosting        | Stacked Generalization, Blending         |
+
 \endgroup
