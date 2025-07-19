@@ -53,8 +53,8 @@ MSML610: Advanced Machine Learning
 
 - **Semi-Supervised Learning**
   - Combine small labeled data with large unlabeled data to improve performance
-  - E.g., named entity recognition with few annotated sentences with entity
-    tags, combined with many raw text documents
+  - E.g., named entity recognition (NER) using annotated sentences with entity
+    tags combined with many raw text documents
 
 * Machine Learning Paradigms with Examples (2/3)
 
@@ -63,17 +63,16 @@ MSML610: Advanced Machine Learning
   - E.g., online logistic regression for click-through rate prediction
 
 - **Multi-Task Learning**
-  - Train a model to perform multiple related tasks simultaneously
+  - Train simultaneously a model to perform multiple related tasks
   - E.g., learn sentiment analysis and question answering
 
 - **Meta-Learning**
-  - "Learning to learn": Adapt quickly to new tasks using prior experience
-  - E.g., learn a similarity function between examples
-  - E.g., train a model's initialization such that it can be fine-tuned quickly
-    on a new task using just a few gradient steps.
+  - "Learning to learn": adapt quickly to new tasks using prior experience
+  - E.g., a model can be fine-tuned quickly on a new task using just a few
+    gradient steps
 
-- **Few-Shot / Zero-Shot Learning**
-  - Generalize to new tasks with few or no labeled examples
+- **Zero-Shot / Few-Shot Learning**
+  - Generalize to new tasks with no or few labeled examples
   - E.g., GPT-4 solving tasks with zero-shot prompting
 
 - **Active Learning**
@@ -99,7 +98,7 @@ MSML610: Advanced Machine Learning
 
 - **Multi-Agent Learning**
   - Multiple agents learn and interact in shared environments, often in
-    game-theoretic settings
+    game-theoretic settings (e.g., competition, collaboration)
   - E.g., AlphaStar to play StarCraft II
 
 * Supervised Learning
