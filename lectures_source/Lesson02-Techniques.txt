@@ -102,22 +102,22 @@ MSML610: Advanced Machine Learning
   - E.g., AlphaStar to play StarCraft II
 
 * Supervised Learning
-
-- Learn a function $f: X \to Y$ that maps inputs to correct outputs from
-  training examples $(\vx, y)$ where input-output pairs are known
+- Learn a function $f: X \to Y$ that maps inputs to correct outputs using
+  training examples $(\vx, y)$ where inputs and correct output pairs are known
   - Requires labeled data for training
-  - Performance measured by error on a separate test set
+  - Measure performance with error on a separate test set
 
 - **Classification**: output is a discrete label, e.g.,
-  - Predict `Spam` vs `Not Spam`
+  - `Spam` vs `Not Spam`
   - Digit recognition `0`, `1`, ...
   - Sentiment analysis `Pos`, `Neg`, `Neutral`
-- **Regression**: output is a continuous value, e.g.,
-  - Predicting house prices given features like size and location
-  - Predict demand
-  - Forecast stock prices
 
-- Common algorithms:
+- **Regression**: output is a continuous value, e.g.,
+  - House prices given features like size and location
+  - House demand
+  - Stock prices
+
+- **Common algorithms**:
   - Linear Regression
   - Decision Trees
   - K-nearest neighbors
@@ -125,23 +125,22 @@ MSML610: Advanced Machine Learning
   - ...
 
 * Unsupervised Learning
-
-- Learn from data without labeled outputs
+- Learn from data **without** labeled outputs
   - Goal: discover patterns, groupings, or structure in the data
   - No explicit feedback signal
-  - Evaluation is often qualitative
+  - Evaluation can be qualitative
 
-- **Main techniques:**
-  - **Clustering**: Group similar examples
-    - E.g., customer segmentation
-    - E.g., grouping news articles by topic without knowing the topics
-  - **Dimensionality Reduction**: Reduce number of features
-    - Reduce number of variables with PCA while preserving structure
-    - E.g., visualizing high-dimensional data in 2D
+- **Main techniques**:
+  - **Clustering**: Group similar examples, e.g.,
+    - Customer segmentation
+    - Grouping news articles by topic without knowing the topics
+  - **Dimensionality Reduction**: Reduce number of variables with PCA while
+    preserving structure
+    - E.g., visualize high-dimensional data in 2D
   - **Density Estimation**: Estimate probability distribution of data
     - E.g., anomaly detection in server logs
-  - **Association Rule Learning**
-    - Discover interesting relations between variables
+  - **Association Rule Learning**: Discover interesting relations between
+    variables
     - E.g., market basket analysis (e.g., "people who buy X also buy Y")
 
 - **Common algorithms:**
@@ -150,33 +149,61 @@ MSML610: Advanced Machine Learning
   - Autoencoders
 
 * Reinforcement Learning
-
-- Learn by interacting with an environment to maximize cumulative reward
-  - Learn a policy $\pi(s) \to a$ that maximizes expected reward
+- Learn by **interacting with an environment** to **maximize cumulative reward**
+  - Learn policy $\pi(s) \to a$ that maximizes expected reward
   - Trade-off between exploration (trying new actions) and exploitation (using
     known good actions)
   - Environments provide clear rules and feedback (win/loss/reward)
-  - Often involves physical simulation or real-world interaction
+  - Often involve physical simulation or real-world interaction
 
+::: columns
+:::: {.column width=60%}
 - **Core elements:**
   - Agent: Learner and decision maker
   - Environment: Everything the agent interacts with
-  - State $s$, Action $a$, Reward $r$
+  - State $s$
+  - Action $a$
+  - Reward $r$
 
 - **Algorithms:**
   - Q-learning
   - Policy Gradient methods
+::::
+:::: {.column width=35%}
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
 
-- **Examples**:
-  - In game playing learn strategies through trial and error
-    - E.g., AlphaGo mastering the game of Go
-  - In robotics learn control policies for movement and manipulation
-  - In autonomous driving learn safe and efficient driving behaviors
-  - In resource management optimize allocation of limited resources over time
-    - E.g., data center cooling or CPU job scheduling
-  - In personalized recommendations adapt suggestions based on user interaction
-    - E.g., newsfeed ranking adjusting based on user clicks
-  - In healthcare, optimize treatment plans over time
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    // Node styles
+    Agent      [label="Agent", shape=box, fillcolor="#F4A6A6"];
+    Env        [label="Environment", shape=box, fillcolor="#B2E2B2"];
+
+    // Force ranks
+    //{ rank=same; Agent; Env; }
+
+    // Edges
+    Agent -> Agent [label="  State", fontcolor=black, labeldistance=2.0];
+    Agent -> Env [label="  Action", fontcolor=black, labeldistance=2.0];
+    Env -> Agent [label="  Reward", fontcolor=black, labeldistance=2.0];
+}
+```
+::::
+:::
+
+* Reinforcement Learning: Examples
+- In game playing, learn strategies through trial and error
+	- E.g., AlphaGo mastering the game of Go
+- In robotics, learn control policies for movement and manipulation
+- In autonomous driving, learn safe and efficient driving behaviors
+- In resource management, optimize allocation of limited resources over time
+	- E.g., data center cooling or CPU job scheduling
+- In personalized recommendations, adapt suggestions based on user interaction
+	- E.g., newsfeed ranking adjusting based on user clicks
+- In healthcare, optimize treatment plans over time
 
 # ##############################################################################
 # Techniques
@@ -187,37 +214,24 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 * Machine Learning Flow
-
-::: columns
-:::: {.column width=90%}
-- Question
+- **Question**
   - E.g., "How can we predict house prices?"
-- Input data
+- **Input data**
   - E.g., historical data of house sales
-- Features
+- **Features**
   - E.g., number of bedrooms, location, square footage
-- Algorithm
+- **Algorithm**
   - E.g., linear regression, decision trees
-- Parameters
+- **Parameters**
   - E.g., learning rate, number of trees in a random forest
-- Evaluation
+- **Evaluation**
   - E.g., accuracy, precision, recall
 
-- _"If I were given one hour to save the planet, I would spend 59 minutes
-  defining the problem and one minute resolving it"_ (Albert Einstein)
+* Machine Learning Flow
 
-- **Not all phases are equally important!**
-  - Question $>$ Data $>$ Features $>$ Algorithm
-  - Clarity of the question impacts project success
-  - Quality and relevance of data are crucial for performance
-  - Proper feature selection simplifies the model and improves accuracy
-  - Algorithm is often less important (contrary to popular belief!)
-::::
-:::: {.column width=5%}
-
-```graphviz[height=90%]
+```graphviz[height=80%]
 digraph BayesianFlow {
-    rankdir=TD;
+    rankdir=LR;
     splines=true;
     nodesep=1.0;
     ranksep=0.75;
@@ -238,86 +252,94 @@ digraph BayesianFlow {
     "Parameters" -> "Evaluation";
 }
 ```
-::::
-:::
+
+- **Not all phases are equally important!**
+  - Question $>$ Data $>$ Features $>$ Algorithm
+
+- Clarity of the question impacts project success
+- Quality and relevance of data are crucial for performance
+- Proper feature selection simplifies the model and improves accuracy
+- Algorithm is often less important (contrary to popular belief!)
 
 * Question
-- The question needs to be as concrete and precise as possible
-  - Clearly define the problem you are trying to solve
-  - Specify the inputs and expected outputs
-  - Align the question with business or research objectives
+- **Make the question concrete and precise**
+  - Define the problem clearly
+  - Specify inputs and expected outputs
+  - Align question with business or research objectives
   - E.g.,:
     - **Bad**: _"How can we improve sales?"_
-    - **Good**: _"What factors most significantly impact the sales of product X
-      in region Y during season Z?"_
+    - **Good**: _"What factors most significantly impact sales of product X in
+      region Y during season Z?"_
 
-- This is the most important part of the whole machine learning problem
-  - It's like not understanding the problem in an exam: you might solve the
-    problem, but it's the wrong one
-  - Misalignment can lead to gathering the wrong data, choosing inappropriate
-    algorithms, ... $\to$ failing of the ML project
+- Formulating question is **the most important part** of the machine learning
+problem
+  - Misunderstanding leads to:
+    - Solving the wrong problem
+    - Collecting wrong data
+    - ...
+
+- _"If I were given one hour to save the planet, I would spend 59 minutes
+  defining the problem and one minute resolving it"_ (Albert Einstein)
 
 * Input Data
-- Ensure data is specific to the prediction goal
-  - E.g., _"Use known movie ratings to predict unseen movie ratings from the
-    same population of people and movie"_
+- Ensure **data is specific to prediction** goal
+  - E.g., use known movie ratings to predict unseen movie ratings from the same
+    population
   - Training set $\approx$ test set
 
-- A relationship between data and prediction is not always direct
+- Relationship between data and prediction goal is **not always direct**
   - E.g., interested in prices but predict supply and demand instead
 
 - Poor-quality data leads to inaccurate predictions
   - _"Garbage in - garbage out"_
 
-- Recognize when data is insufficient and prevents deriving a valid answer
-  - _"Combination of data and desire for an answer does not ensure that a
-    reasonable answer can be extracted from the data"_ (John Tukey)
+- Recognize **when data is insufficient** for valid answers
+  - _"Combination of data and desire for an answer does not ensure a reasonable
+    answer can be extracted"_ (John Tukey)
 
-- More data vs better models
-  - Meta-studies have shown that the difference between a generic model and the
-    best model for a problem improves like 5\%
+- **More data vs better models**
+  - Meta-studies show difference between generic and best model is like
+    5\%
   - _"It's not who has the best algorithm that wins. It's who has the most
     data"_ (Google researcher)
   - _"Every time I fire a linguist, the performance of the speech recognizer
     goes up"_ (IBM researcher in speech recognition)
 
 * Features
-- Features provide high-level information about inputs
-  - Simplify inputs by extracting features based on problem understanding
+- **Features** provide high-level information about inputs
   - E.g., use intensity and symmetry for scanned numbers instead of raw bit maps
 
-- Characteristics of good features:
+- **Characteristics of good features**:
   1. Enable data compression
   2. Retain relevant information
   3. Often created with expert knowledge
 
-- Common mistakes in feature building:
+- **Common mistakes in feature building**:
   1. Automating feature selection may lead to overfitting
-     - Black box predictions can be accurate but stop working at any time
+     - Black box predictions can be accurate but stop working anytime
      - E.g., Google Flu's unclear feature-model link
   2. Ignoring data-specific quirks
      - E.g., mislabeling outliers
   3. Unnecessarily discarding information
 
 * Models
-- **Characteristics of best models**
-  - Interpretable
-    - Allows users to understand and trust the model's decisions
+- Best models are:
+  - **Interpretable**
+    - Allow users to understand and trust the model's decisions
     - E.g., decision trees are appropriate in medical studies since they produce
       a "reasoning"
-  - Simple
+  - **Simple**
     - Easier to implement and maintain
     - Reduces the risk of overfitting
-  - Accurate
+  - **Accurate**
     - Often accuracy is traded off for remaining characteristics
     - E.g., accuracy vs interpretability, accuracy vs speed
-  - Fast
+  - **Fast**
     - To train and test
     - Essential for real-time applications
-    - Reduces computational costs
-  - Scalable
-    - Can handle large datasets efficiently
-    - Important for growing data and user bases
+    - Reduce computational costs
+  - **Scalable**
+    - Can handle large datasets efficiently (growing data and user bases)
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
       algorithm since it wasn't scalable enough
 
@@ -329,176 +351,233 @@ digraph BayesianFlow {
 ### Simple Is Better
 ### ############################################################################
 
-* Occam'S Razor
-- _The **simplest** model that fits the data is also the **most plausible**_
+* Occam's Razor
+- _"The simplest model that fits the data is also the most plausible"_
   (Occam)
-  - Trim the model to the bare minimum necessary to explain the data
-  - _"An explanation of the data should be as simple as possible, but not
-    simpler"_ (Einstein?)
-  - **Simple** means:
-    - Less likely to fit a given data by coincidence
-    - An unlikely event is more significant if it happens (formalized in terms
-      entropy)
-  - **Better** means better out of sample performance
 
+- _"An explanation of the data should be as simple as possible, but not
+  simpler"_ (Einstein?)
+
+- Corollary:
+  - Trim the model to the bare minimum necessary to explain the data
+
+ - What does **simple** mean?
+  - An object is simple when it is one of few possible objects
+
+- What does **better** mean?
+  - A model is better means better out of sample performance
+
+- **Why it's true**?
+  - Less likely to fit a given data by coincidence
+  - An unlikely event is more significant if it happens (formalized in terms
+    entropy)
+
+* What is a "simple model"?
 - An object is **simple** when it is one of few possible objects
-  - Polynomial of order 2 is simpler than a polynomial of order 17
-    - There are many more polynomials of order 17 compared to order 2, although
-      both are infinite sets
+
+- **Examples**:
+  - Polynomial of order 2 is simpler than order 17
+    - More polynomials of order 17 than order 2, though both are infinite sets
   - SVM (Support Vector Machine) characteristics:
-    - The separating hyperplane appears wiggly, but it is defined by a few
-      support vectors
-  - Complexity of a hypothesis $h$
-    - E.g., polynomial order, MDL (describe the hypothesis in terms of bits),
-      Kolmogorov complexity
+    - Separating hyperplane appears wiggly, but defined by few support vectors
+
+- **Measures of complexity**
+  - Complexity of a single hypothesis $h$
+    - E.g., polynomial order, MDL (describe hypothesis in bits), Kolmogorov
+      complexity
   - Complexity of a hypothesis set $\calH$
     - E.g., VC dimension of the model
-  - Complexity of $h$ and $\calH$ are related by counting: if we need $l$ bits
-    to specify $h$, then $h$ is one of $2^l$ elements of a set $\calH$
+  - Complexity of $h$ and $\calH$ related by counting:
+    - If you need $l$ bits to specify $h$, then $h$ is one of $2^l$ elements of
+      set $\calH$
 
 * Model Soundness
-- We cannot blindly accept the result of modeling
-  - A model should tell a story
-  - Always ask yourself: _"what criticisms would you give to the model if it was
-    presented to us for the first time?"_
+- **Model should tell a story**
+  - You cannot blindly accept results of modeling
+  - Ask: _"What criticisms would you give if the model was presented for the
+    first time?"_
 
-- Benchmark models: what are the performance if the model outputs:
-  - Outputs always 0 or 1
+- **Benchmark models**: compute performance if model outputs:
+  - Always 0 or 1
     - E.g., long-only model for stock predictions
   - Random results
-    - I.e., bootstrap of null hypothesis "there is no prediction power"
+    - E.g., bootstrap of null hypothesis "no prediction power"
 
-- A perfect fit can mean nothing, e.g.,
+- Example of "perfect fit can mean nothing", e.g.,
   - Get 2 data points on a plane
     - Fit data with a linear relationship
-    - It is a perfect fit
-  - This means nothing since:
-    - There is always a line between 2 points
-    - The data cannot falsify the hypothesis
-  - The model (line) is too complex for the data set (only 2 points)
+    - Perfect fit
+  - Means nothing since:
+    - Always a line between 2 points
+    - Data cannot falsify hypothesis
+  - The model (line) is too complex for data set (only 2 points)
 
 * Sampling Bias
-- A model, when learning, sees the world in terms of the training data
-  - If data is sampled in a biased way, learning will produce a biased outcome
 
-- Formally: one of the few hypothesis of Hoeffding in learning theory is that
-  training and testing distributions are the same
+- **Sampling bias** occurs when data is not representative of the intended
+  population
+  - If data is sampled in a biased way, learning produces a biased outcome
+  - Model sees the world in terms of training data
+  - Hoeffding's hypothesis: training and testing distributions are the same
 
-- Addressing sampling bias
-  - Weight or re-sample data to match testing distribution
-  - If data points have zero probability ($\Pr = 0$) in the data set, no
-    remedies are possible
+- **Causes of Sampling Bias**
+  - _Non-random sampling_: Favors certain outcomes or groups
+  - _Undercoverage_: Inadequate representation of some population members
+  - _Survivorship bias_: Includes only surviving or successful subjects
+  - _Self-selection bias_: Participants choose to participate, introducing bias
+
+- **Consequences**
+  - Leads to systematic errors distorting relationships or predictions
+  - Models trained on biased samples perform poorly on real-world data
+  - Leads to incorrect conclusions or unfair decisions in AI systems
+
+* Sampling Bias
+
+- **Examples**
+  - Training facial recognition on lighter-skinned faces causes poor accuracy on
+    darker-skinned faces
+  - Predicting income using data only from employed individuals omits unemployed
+    people
+
+- **Mitigation**
+  - Compare sample statistics with known population statistics
+  - Use stratified sampling or resampling to balance data
+  - Apply reweighting or bias correction techniques
+  - If data points have zero probability ($\Pr = 0$), no remedies possible
 
 * Data Snooping
-- **Data snooping** is the improper use of data that biases ML model results
-  - Common trap for practitioners
 
-- **Sources** of data snooping
-  1. Contamination of training and test sets
-  2. Multiple testing issue
-  3. If data affects any learning step (e.g., feature engineering, model
-     selection, hyperparameter tuning), its assessment becomes optimistic
+- **Data snooping** occurs when test set information improperly influences
+    model-building
 
-- **Effects** of data snooping
-  - Models show inflated performance metrics which do not translate out of
-    sample
-  - Snooping leads to seemingly better performance:
-    - It is a "happy minefield"
+- **Typical Sources**
+  - _Train-test contamination_: Test data leaks into training
+    - E.g., Using test data during feature engineering, model selection, or
+      tuning
+  - _Multiple hypothesis testing_: Trying many models inflates performance
+
+- **Consequences**
+  - Leads to overly optimistic evaluations
+  - Models perform well in validation but fail on unseen data
+
+- **Why It's Dangerous**
+  - Creates misleading results
+  - Common pitfall in machine learning workflows
+  - Encourages false confidence in model quality
+
+* Data Snooping
+
+- **Example**
+  - Choosing features based on the full dataset before splitting gives foresight
+    not present in deployment
+
+- **Preventive Strategies**
+  - Keep training, validation, and test sets separate
+  - Use cross-validation properly
+  - Fit preprocessing steps only on training data, then apply to test data
 
 * "Burning the Test Set"
-- Repeatedly using the same data eventually leads to "success"
-  - The model starts fitting to specific data quirks
-  - The test set should not be used for training; this leads to over-optimism
-  - _"If you torture the data long enough, it will confess whatever you want"_
+- **Problem**
+  - Repeated test set use during development leaks into training
+  - Overfitting to test data misleads performance estimates
+  - _"If you torture the data long enough, it will confess whatever you want."_
+    (Tukey)
 
-- Solutions:
-  - Use the test set _exactly once_
-  - The VC dimension applies to the overall learning model, including all
-    attempted models
-  - MDL accounts for the number of fitting attempts in overfitting measurement
-  - Adjust p-values for multiple experiments
+- **Symptoms**
+  - Test accuracy improves; real-world performance stagnates or degrades
+  - Model evaluation becomes untrustworthy
+
+- **Solutions**
+  - _One-time use principle_: Evaluate on test set once, post-tuning
+  - _Use a validation set_: For model development and tuning
+  - _Statistical adjustments_:
+    - Adjust p-values for multiple testing
+    - Use Bonferroni or False Discovery Rate corrections
+  - _Theoretical tools_:
+    - VC dimension reflects learning capacity, including repeated trials
+    - Minimum Description Length (MDL) penalizes complex models and repeated
+      fitting
 
 ### ############################################################################
 ### Research Methodology
 ### ############################################################################
 
 * How to Achieve Out-Of-Sample Fit
-- Goal: choose an hypothesis $g$ approximates the unknown target hypothesis $f$
+- **Goal**: Choose an hypothesis $g \in \calH$ approximates the unknown target
+  function $f$
+  - What does $g \approx f$ mean?
+    $$
+    g \approx f \iff E_{out}(g) \approx 0
+    $$
 
-  $$
-  g \approx f \iff E_{out}(g) \approx 0
-  $$
-
-- Solution:
-  - Achieve
-    1. Good in-sample performance $E_{in}(g) \approx 0$
-    2. Good generalization $E_{out}(g) \approx E_{in}(g)$
-  - Then 1. + 2. $\implies$ good out-of-sample performance
+- **Solution**:
+  - Achieve:
+    - Good in-sample performance $E_{in}(g) \approx 0$
+    - Good generalization $E_{out}(g) \approx E_{in}(g)$
+  - Together $\implies$ good out-of-sample performance
     $E_{out}(g) \approx 0$
 
-* What to Do If Out-Of-Sample Fit Is Poor?
+* What If Out-Of-Sample Fit Is Poor?
 - The model performs well in sample ($E_{in} \approx 0$) but poorly out of
   sample ($E_{out} \gg E_{in}$)
 
-- What does it mean?
-  - The in-sample performance are optimistic
-  - The model is overfitted and fails to generalize
+- **What does it mean?**
+  - In-sample performance is optimistic
+  - Model is overfitted and fails to generalize
 
-- What do we do?
-  - Run diagnostics before embarking in long term projects
-  - Gain insight on what works / does not work to understand how to improve
-    performance
+- **What do you do?**
+  - Run diagnostics before long-term projects
+  - Gain insight on what works/doesn't to improve performance
     - E.g., bias-variance curves and learning curves
 
-- How to fix?
-  - It depends on the diagnostics!
+- **How to fix?**
   1. Training data
-     - Get more training data (it can take long time) $\iff$ fixes high variance
+    - Get more training data $\iff$ fixes high variance
   2. Features
-     - Remove features $\iff$ fixes high variance
-     - Add more features (it can take long time) $\iff$ fixes high bias
-     - Add derived features (e.g., polynomial features) $\iff$ fixes high bias
+    - Remove features $\iff$ fixes high variance
+    - Add features $\iff$ fixes high bias
+    - Add derived features (e.g., polynomial features) $\iff$ fixes high bias
   3. Regularization
-     - Decrease regularization amount $\lambda$ $\iff$ fixes high bias
-     - Increase regularization amount $\lambda$ $\iff$ fixes high variance
+    - Decrease regularization $\lambda$ $\iff$ fixes high bias
+    - Increase regularization $\lambda$ $\iff$ fixes high variance
 
 * Why Using a Lot of Data?
-- Several studies show that:
+- **Several studies** show that:
   - Different algorithms/models have remarkably similar performance
   - Increasing training set improves performance
 
-- Thus it holds that:
+- **Consequence**
+  - High capacity model + massive training set = good performance
 
-  $$
-  \text{High capacity model + massive training set = good performance}
-  $$
-
-- Using a high capacity model with many parameters (e.g., neural network)
-  $$
-  E_{in} \approx 0
-  $$
-  due to low bias (and high variance)
-- A massive data set helps avoid overfitting
-  $$
-  E_{out} \approx E_{in}
-  $$
-- These two conditions together
-
-  $$
-  E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0
-  $$
+- **Why**
+  - Using a high capacity model with many parameters (e.g., neural network)
+    $$
+    E_{in} \approx 0
+    $$
+    due to low bias (and high variance)
+  - A massive data set helps avoid overfitting
+    $$
+    E_{out} \approx E_{in}
+    $$
+  - These two conditions together
+    $$
+    E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0
+    $$
 
 * What to Do When One Has Lots of Data?
 - You have $m$ = 100M examples in data set, what do you do?
 
-- Training on a lot of data might yield scalability issue:
+- **Pros**
+  - Machine learning time!
+
+- **Cons**
+  - Scalability issue
   - Slow
   - Lots of compute
   - Require work on infrastructure
   - ...
 
-- Plot the learning curves as function of increasing
-  $m = 1k, 10k, 100k, 1M, ...$
+- Plot the learning curves for increasing $m = 1k, 10k, 100k, 1M, ...$
   - If the algorithm has large bias, it converges (training and validation
     performance are similar) at $m = 1000$
     - Add more features and complicate the model rather than training on 100M
