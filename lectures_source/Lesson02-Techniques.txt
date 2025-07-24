@@ -564,35 +564,36 @@ problem
     E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0
     $$
 
-* What to Do When One Has Lots of Data?
+* What to Do When You Have Lots of Data?
 - You have $m$ = 100M examples in data set, what do you do?
 
 - **Pros**
   - Machine learning time!
 
 - **Cons**
-  - Scalability issue
-  - Slow
-  - Lots of compute
+  - Scalability issue (slow, lots of compute)
   - Require work on infrastructure
   - ...
 
-- Plot the learning curves for increasing $m = 1k, 10k, 100k, 1M, ...$
-  - If the algorithm has large bias, it converges (training and validation
-    performance are similar) at $m = 1000$
-    - Add more features and complicate the model rather than training on 100M
-      instances
-  - If the variance is large, use all instances to train the model
+- **Next step**: plot the learning curves for increasing
+  $m = 1k, 10k, 100k, 1M, ...$
+  - I.e., in-sample and out-of-sample performance as function of amount of data
+    $m$
+  - If the algorithm has large bias
+    - E.g., learning curves converge (training and validation performance are
+      similar) at $m = 1M$
+    - Use more complex model rather than training on $100M$ instances
+  - If the variance is large
+    - Use all $100M$ instances to train the model
 
 * Why We Do Things?
 - Always
-  - Ask: _"Why are we doing something?"_
-    - To understand the purpose of the task
-  - Ask: _"What do we hope to determine by performing the task?"_
-    - To clarify goals and outcomes of the task
-  - Encourage thinking about actions with the bigger picture in mind
-  - Avoid merely going through motions
-  - Promote critical thinking and awareness
+  - Understand the purpose of the task
+    - Ask: _"Why are we doing something?"_
+  - Clarify goals and outcomes of the task
+    - Ask: _"What do we hope to determine by performing the task?"_
+  - Think about actions with the bigger picture in mind
+  - Avoid going through motions
   - Prioritize tasks by importance and impact
 
 - E.g., when conducting a customer survey, ask:
@@ -607,32 +608,30 @@ problem
   - _"What are the specific goals?"_
     - Set target number of new leads or click-through rates
 
-* Summary of the Results, Next Steps, Follow Ups
-- Always have a summary of the results
-  - It's like a high-level map of what we have done and what we have discovered
+* Summary of the Results, Next Steps
+- Always have a **summary of results**
+  - High-level map of discoveries
     - E.g., "smoothing model coefficients helps"
   - Highlight major findings
-  - Interpret the results
-    - E.g., _"The increase in sales is likely due to the new marketing
-      strategy."_
+  - Interpret results
+    - E.g., _"Increase in sales likely due to new marketing strategy."_
   - Conclusions
-    - Summarize what the data suggests or confirms
-    - E.g., _"Our hypothesis that user engagement increases retention is
-      supported"_
+    - Summarize data suggestions or confirmations
+    - E.g., _"Hypothesis that user engagement increases retention is supported"_
 
-- Always have a reference to more detailed results
-  - Provide quick insights before diving into details
+- Always have a **reference to detailed results**
+  - Provide quick insights before details
 
-- Always have next steps / follow-ups
-  - What do you expect that will happen?
-  - What results do you expect?
+- Always have **next steps**
+  - What do you expect to happen?
+  - Expected results
     - Like thinking $n$ moves ahead in chess
-  - E.g., _"Next, we will conduct a detailed analysis on the demographics
-    contributing most to sales growth"_
+  - E.g., _"Next, conduct detailed analysis on demographics contributing most to
+    sales growth"_
   - Outline potential experiments or analyses to validate findings further
 
 * Example of Spam Filter Classification
-- We use $N = 4$ words in an email to distinguish spam from non-spam emails
+- You use $N = 4$ words in an email to distinguish spam from non-spam emails
   using logistic regression
   - Words can be: `buy`, `now`, `deal`, `discount`, `<your name>`
 
