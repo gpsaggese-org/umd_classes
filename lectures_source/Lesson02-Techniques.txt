@@ -609,7 +609,7 @@ problem
     - Set target number of new leads or click-through rates
 
 * Summary of the Results, Next Steps
-- Always have a **summary of results**
+- **Always have a summary of results**
   - High-level map of discoveries
     - E.g., "smoothing model coefficients helps"
   - Highlight major findings
@@ -619,10 +619,10 @@ problem
     - Summarize data suggestions or confirmations
     - E.g., _"Hypothesis that user engagement increases retention is supported"_
 
-- Always have a **reference to detailed results**
+- **Always have a reference to detailed results**
   - Provide quick insights before details
 
-- Always have **next steps**
+- **Always have next steps**
   - What do you expect to happen?
   - Expected results
     - Like thinking $n$ moves ahead in chess
@@ -630,47 +630,75 @@ problem
     sales growth"_
   - Outline potential experiments or analyses to validate findings further
 
-* Example of Spam Filter Classification
-- You use $N = 4$ words in an email to distinguish spam from non-spam emails
+* Spam Filter Classification: Example
+- You use $N = 5$ words in an email to distinguish spam from non-spam emails
   using logistic regression
-  - Words can be: `buy`, `now`, `deal`, `discount`, `<your name>`
+  - Words: `buy`, `now`, `deal`, `discount`, `<your name>`
 
-- How to improve the performance of this classifier?
-  1. Collect more data
-     - E.g., honeypot project: set up fake email account and collect spam
-  2. Use better features
-     - E.g., email routing information: spammers use unusual accounts and mask
-       emails as legitimate
-  3. Use better features from message body
-  4. Detect intentional misspellings
-     - Spammers use misspelled words (e.g., `w4tch` for `watch`) to confuse the
-       classifier
+- Improve classifier performance:
+  1. **Collect more data**
+     - Honeypot project: fake email account to collect spam
+  2. **Use better features**
+     - Email routing info (spammers use unusual accounts, mask emails as
+       legitimate)
+  3. **Use better features from message body**
+  4. **Detect intentional misspellings**
+     - Spammers use misspelled words (e.g., `w4tch` for `watch`)
      - Use stemming software
 
 * Right and Wrong Approach to Research
 
+- It is not clear how to prioritize the different possible tasks
+
 - **Bad**
-  1. It is not clear how to prioritize the different possible tasks
-  2. Use gut feeling and pick one task
-  3. Complete the task
-  4. Re-evaluate performance
+  1. Use gut feeling to choose a task
+  2. Complete task
+  3. Re-evaluate performance
 
 - **Good**
   1. Build a simple algorithm
      - Within 1 day
-  2. Set up the performance evaluation framework
-     - A single number and bounds to evaluate
-     - Aim to improve that number
-     - Evaluate with cross-validation
+  2. Set up performance evaluation
+     - Single number and bounds to improve
+     - Use cross-validation
   3. Set up diagnostic tools
      - Compute learning and bias-variance curves
-     - Avoid premature optimization by understanding the issue before fixing it
-  4. Manually review misclassified emails in the cross-validated set
-     - What features might help to improve performance?
-     - E.g., what types of emails are misclassified?
+     - Understand issues before fixing (avoid premature optimization)
+  4. Review misclassified emails manually
+     - Identify features to improve performance
+     - E.g., what are types of misclassified emails?
 
-- Sometimes an approach must be tried to see if it works
-  - E.g., stemming software to consider certain words equivalent
+- Sometimes you just need to try approaches to see if they work
+  - E.g., use stemming software to equate words
+
+* Iterative vs Incremental
+
+::: columns
+:::: {.column width=55%}
+
+- **Incremental Development**
+  - Build product piece by piece, adding functional components in each increment
+  - Each increment delivers usable, potentially shippable part of system
+  - Allow early delivery of core functionality
+  - Reduce risk with early feedback on completed increments
+
+- **Iterative Development**
+  - Refine and improve product through repeated cycles
+  - Start with basic implementation, evolve through continuous refinement
+  - Emphasize feedback-driven development
+  - Uncover and adjust for unknown requirements
+
+- Incremental >> Iterative
+
+::::
+:::: {.column width=40%}
+
+![](lectures_source/figures/Lesson02_Monalisa_incremental.png)
+
+![](lectures_source/figures/Lesson02_Monalisa_iterative.png)
+
+::::
+:::
 
 ## #############################################################################
 ## Pipeline Organization
