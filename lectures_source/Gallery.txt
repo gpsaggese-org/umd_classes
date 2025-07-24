@@ -224,33 +224,33 @@ Normal
 \endgroup
 
 * Align on multiple columns
-  \small
-  \begin{alignat*}{2}
-  & \red{\text{Divide up the evidence}}
-  &\quad
-  &= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}})
-  \\
-  & \green{\text{Bayes rule given }} \green{e_{1:t}}
-  &\quad
-  &= \alpha \Pr(e_{t+1}|X_{t+1},\green{e_{1:t}}) \Pr(X_{t+1}|\green{e_{1:t}})
-  \\
-  & \text{\cyan{Markov sensor assumption}}
-  &\quad
-  &= \alpha \Pr(e_{t+1}|X_{t+1}) \Pr(X_{t+1}|e_{1:t})
-  \\
-  & \text{\blue{Condition on current state}}
-  &\quad
-  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|\blue{x_t},\violet{e_{1:t}}) \Pr(\blue{x_t} | e_{1:t})
-  \\
-  & \text{\violet{Markov assumption}}
-  &\quad
-  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
-  \\
-  &
-  &\quad
-  &= \text{Sensor model} \times \text{Transition model} \times \text{Recursive state}
-  \\
-  \end{alignat*}
+\small
+\begin{alignat*}{2}
+& \red{\text{Divide up the evidence}}
+&\quad
+&= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}})
+\\
+& \green{\text{Bayes rule given }} \green{e_{1:t}}
+&\quad
+&= \alpha \Pr(e_{t+1}|X_{t+1},\green{e_{1:t}}) \Pr(X_{t+1}|\green{e_{1:t}})
+\\
+& \text{\cyan{Markov sensor assumption}}
+&\quad
+&= \alpha \Pr(e_{t+1}|X_{t+1}) \Pr(X_{t+1}|e_{1:t})
+\\
+& \text{\blue{Condition on current state}}
+&\quad
+&= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|\blue{x_t},\violet{e_{1:t}}) \Pr(\blue{x_t} | e_{1:t})
+\\
+& \text{\violet{Markov assumption}}
+&\quad
+&= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
+\\
+&
+&\quad
+&= \text{Sensor model} \times \text{Transition model} \times \text{Recursive state}
+\\
+\end{alignat*}
 
 # Images
 
