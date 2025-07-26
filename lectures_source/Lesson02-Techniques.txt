@@ -565,26 +565,28 @@ problem
     $$
 
 * What to Do When You Have Lots of Data?
-- You have $m$ = 100M examples in data set, what do you do?
-
-- **Pros**
-  - Machine learning time!
+- You have $m$ = 100M examples in data set: great!
 
 - **Cons**
   - Scalability issue (slow, lots of compute)
   - Require work on infrastructure
-  - ...
 
-- **Next step**: plot the learning curves for increasing
-  $m = 1k, 10k, 100k, 1M, ...$
-  - I.e., in-sample and out-of-sample performance as function of amount of data
-    $m$
-  - If the algorithm has large bias
-    - E.g., learning curves converge (training and validation performance are
-      similar) at $m = 1M$
-    - Use more complex model rather than training on $100M$ instances
-  - If the variance is large
-    - Use all $100M$ instances to train the model
+::: columns
+:::: {.column width=55%}
+- **First step**:
+  - Plot learning curves (in-sample and out-of-sample performance) for increasing
+    amount of data $m = 1k, 10k, 100k, 1M, ...$
+- **Next step**:
+- If model has large bias (
+  - Training and validation performance are similar at $1M$
+  - Next step: use more complex model rather than training on $100M$ instances
+- If model has large variance
+  - Next step: use all $100M$ instances to train the model
+::::
+:::: {.column width=40%}
+![](lectures_source/figures/Lesson02_Learning_curves.png)
+::::
+:::
 
 * Why We Do Things?
 - Always
@@ -677,26 +679,36 @@ problem
 :::: {.column width=55%}
 
 - **Incremental Development**
-  - Build product piece by piece, adding functional components in each increment
-  - Each increment delivers usable, potentially shippable part of system
-  - Allow early delivery of core functionality
-  - Reduce risk with early feedback on completed increments
+  - Each increment adds functional components
+  - Require upfront planning to divide features meaningfully
+  - Integration of increments can be complex
 
 - **Iterative Development**
+  - Each increment delivers usable system
   - Refine and improve product through repeated cycles
-  - Start with basic implementation, evolve through continuous refinement
-  - Emphasize feedback-driven development
+  - Get feedback
   - Uncover and adjust for unknown requirements
 
-- Incremental >> Iterative
+- **Incremental $\gg$ Iterative**
 
 ::::
 :::: {.column width=40%}
 
-![](lectures_source/figures/Lesson02_Monalisa_incremental.png)
+![](lectures_source/figures/Lesson02_Monalisa_incremental.png){width=90%}
 
-![](lectures_source/figures/Lesson02_Monalisa_iterative.png)
+\small Incremental
 
+\vspace{0.5cm}
+
+![](lectures_source/figures/Lesson02_Monalisa_iterative.png){width=90%}
+
+\small Iterative
+
+\vspace{0.5cm}
+
+![](lectures_source/figures/Lesson02_Skateboard.png){width=90%}
+
+\small Incremental vs Iterative
 ::::
 :::
 
@@ -705,65 +717,56 @@ problem
 ## #############################################################################
 
 * How Are Machine Learning Systems Organized?
-- Machine learning systems are typically organized in a pipeline
-  1. Break down the problem into sub-problems
-  2. Solve problems one at the time
-  3. Combine the solutions to the sub-problems into a solution to the initial
-     problem
+- Machine learning systems are organized in a pipeline
+  1. Break down problem into sub-problems
+  2. Solve problems one at a time
+  3. Combine solutions to sub-problems to solve initial problem
 
-- The performance $p$ of the entire ML pipeline are given by:
-
+- Performance $p$ of ML pipeline:
   $$
   p_{system} = \sum_i p_i \cdot \alpha_i
   $$
-
   where:
-  - $p_i$ is the performance of each stage $p_i$
-  - $\alpha_i$ is the importance of each stage
+  - $p_i$: Performance of each stage
+  - $\alpha_i$: Importance of each stage
 
-* ML Pipeline: Example of Photo OCR System
-- Goal: build systems to read text in a picture
+* Example of Photo OCR System
+- **Goal**: build systems to read text in a picture
   - OCR = "Optical Character Recognition"
 
-- Stages of ML pipeline for OCR:
-  - Text detection: find areas of the picture with text
-  - Character segmentation: split text into boxes, one per letter
+- **Stages of ML pipeline for OCR:**
+  - Text detection: find text areas in the picture
+  - Character segmentation: split text into letter boxes
     - E.g., `h e l l o`
-  - Character classification: classify characters, one at a time
-  - Spelling correction: fix errors in text using context
+  - Character classification: classify characters individually
+  - Spelling correction: fix text errors using context
     - E.g., `hell0` corrected to `hello`
 
-- Issues with text detection:
-  - Unknown text location and size
+- **Sliding window approach**
+  - **Problem**: Unknown text location and size
 
-- Solution
-  - Use a sliding window classifier
-  - Works as evaluating a classifier is often cheap compared to training
-  - Sliding window classifiers can be used for text detection and character
-    segmentation
+  - Text detection
+    - Train a classifier to recognize letters vs non-letters
+    - Scan image in two directions with different sizes for text
+    - Evaluating a classifier is cheaper than training
+    - Create a text likelihood map (e.g., heatmap) using classifier probabilities
+    - Enclose text areas in boxes
+    - Discard boxes not fitting aspect ratio (valid text width > height)
 
-- **Text detection**
-  - Train a classifier to recognize letters vs non-letters
-  - Scan image in two directions, different sizes looking for text
-  - Create a map of text likelihood (e.g., heatmap) using classifier
-    probabilities
-  - Enclose text areas in boxes
-  - Discard boxes not fitting aspect ratio (valid text width > height)
+  - Character segmentation
+    - Use sliding window classifiers to find "breaks" between characters
 
-- **Character segmentation**
-  - Use sliding window classifiers to find "breaks" between characters
-  - Use a 1D sliding window for character segmentation
-
-* The Ideal Recipe for ML
+* Getting More Data
 - The ideal recipe for ML is:
+  "low-bias algorithm + train on massive amount of data"
 
-  $$
-  \text{low-bias algorithm + massive amount of data to train}
-  $$
-  - Use learning curves to make sure we are taking advantage of more data
+- Use learning curves to make sure we are taking advantage of more data
 
-- Always ask yourself: _"how much work is to get 10x more data than we currently
-  have?"_
+- The **problem** is getting large amount of data
+
+- Always ask yourself: _"how much work is to get 10x more data than we
+  currently have?"_
+
 - Often it is not that difficult:
   1. Artificial data
      - E.g., synthesize or amplify data set
@@ -777,41 +780,186 @@ problem
      - Paste characters against random backgrounds
      - Apply scaling, distortion, adding noise, etc
   2. Amplify a data set
-     - Start from a training set and add examples by warping/distorting existing
-       examples
+     - Add examples by warping/distorting existing examples
 
 - Transformations and noise should be specific to the application domain
   - E.g., Gaussian noise is not always appropriate
 
 * Ceiling Analysis for ML Pipeline
 - The most valuable resource is time
-  - Sometimes one works on an optimization for months
-  - The optimization doesn't make much difference
+  - You work on optimization for months
+  - Find out that the optimization doesn't make much difference
 
 - **Problem**: On which part of the pipeline should time/resource be spent?
 
-- **Solution**: Ceiling analysis
-  - Technique to analyze performance of pipelines
-  - Have a single number representing the performance of the entire system
-    - E.g., accuracy for an OCR system
+- **Solution**: Ceiling analysis to Analyze pipeline performance
+  - Single number for system performance
+    - E.g., accuracy for OCR
   - For each component:
-    - Mock the component with a box that always gives the correct output
-      (=oracle)
-    - Leave the remaining components untouched
-    - Compute performance of the entire pipeline
-  - Understand which component is critical to performance by estimating an upper
-    bound for overall performance when that component improves 10\%
-  - Don't trust your gut feeling but measure!
+    - Mock component with "oracle" (always give correct output)
+    - Leave others untouched
+    - Compute pipeline performance
+  - Identify critical components by estimating performance improvement with 10%
+    component improvement
+  - Measure, don't guess!
 
 ## #############################################################################
 ## Input Processing
 ## #############################################################################
 
-// TODO(gp): Add something
+* Data Processing Transformations
 
-- Data cleaning
-- Dimensionality reduction
-- Feature engineering
+- **Purpose of Data Processing**
+  - Prepare raw data for effective machine learning
+  - Improve model performance and generalization
+
+- **Data Cleanup**
+  - Apply filters or smoothing to remove irrelevant variations
+
+- **Handling Missing Data**
+
+- **Types of Transformations**
+  - Normalization and standardization
+  - Encoding categorical data
+  - Feature construction
+  - Dimensionality reduction
+  - Discretization
+
+- **Data Augmentation**
+  - Increase dataset size using transformations (common in vision)
+
+* Data Cleaning
+
+- **Purpose of Data Cleaning**
+  - Ensure data quality for accurate model training
+  - Detect and correct errors or inconsistencies in the dataset
+
+- **Typical Steps in Data Cleaning**
+  - *Remove duplicates*: Identical records are eliminated
+  - *Correct data entry errors*: Fix misspellings or misformatted entries
+  - *Standardize data*:
+    - Convert dates formatted as both `MM/DD/YYYY` and `DD-MM-YYYY` into
+      consistent format
+    - String normalization (e.g., lowercase conversion)
+    - Type conversion (e.g., strings to integers)
+    - Dealing with unexpected characters or encodings
+
+- **Relevance to ML Models**
+  - Poor data quality leads to biased or incorrect predictions
+  - Clean data reduces variance and improves generalization
+
+* Handling Outliers and Missing Data
+
+- **Outliers**
+  - *Definition*: Data points significantly different from others
+  - *Causes*: Measurement errors, variability in the data
+  - *Detection*: Box plots, Z-scores, or interquartile method
+  - *Treatment*: Removal, capping, or transformation (e.g., log scale)
+
+- **Missing Data**
+  - *Detection*: Count of null values or incomplete entries
+
+- **Remediation**
+  - *Deletion*: Remove rows or columns with too many missing values
+  - *Imputation*:
+    - Mean/median/mode substitution
+    - K-nearest neighbors (KNN)
+    - Regression or model-based approaches
+    - E.g., for a missing temperature reading, impute using the mean of the day's
+      surrounding values
+
+* Normalization and Standardization
+
+- **Goal**: Adjust feature scales for better convergence and learning
+  - *Normalize*: Rescale to fixed range, typically $[0, 1]$
+  - *Standardize*: Rescale to zero mean and unit variance
+- **Why it helps**
+  - Ensures features contribute equally to distance-based models
+  - Helps gradient-based algorithms converge faster
+  - Enables regularization
+  - Easier interpretation of features
+- **Common methods**
+  - Min-Max normalization: $x' = \frac{x - x_{min}}{x_{max} - x_{min}}$
+  - Z-score standardization: $x' = \frac{x - \mu}{\sigma}$
+
+* Encoding Categorical Data
+
+- **Goal**: Convert non-numeric categories into numeric representations
+
+- **One-hot encoding**
+  - Creates binary vector per category
+    - E.g., `red`, `green`, `blue` $\to$ `[1,0,0]`, `[0,1,0]`, `[0,0,1]`
+  - Avoids ordinal assumption
+  - Increases dimensionality
+
+- **Label encoding**
+  - Assigns an integer to each category
+    - E.g., `red`, `green`, `blue` $\to$ `1`, `2`, `3`
+  - Can mislead models if order is not meaningful
+
+* Feature Construction
+
+- **Goal**: Derive more informative features from raw inputs
+
+- **Methods**
+  - Combining variables (e.g., area = height × width)
+  - Extracting parts (e.g., year from a date)
+  - Logical features
+    - E.g., transform `2023-04-15` $\to$ (`Saturday`, `is_weekend = True`)
+
+- **Why it helps**
+  - Encodes domain knowledge
+  - Improves model expressiveness and performance
+
+* Dimensionality Reduction
+
+- **Goal**: Reduce number of features while preserving key information
+
+- **Why it helps**
+  - Reduce overfitting
+  - Reduce data redundancy
+  - Improve model speed
+  - Allow visualization
+
+- **Common techniques**
+  - PCA: linear combinations that maximize variance
+  - LDA: projects data to maximize class separability
+
+- **Example**
+  - Reduce 100 image pixels to 10 principal components
+  - Quantize color images into gray scale
+
+* Discretization
+
+- **Goal**: Convert continuous values into categorical bins
+
+- **Why it helps**
+  - Simplifies models or enables categorical algorithms
+  - Helps detect threshold effects in data
+
+- **Techniques**
+  - Equal-width binning
+  - Quantile binning
+
+- **Example**
+  - Discretize age
+    - `Child`: $[0, 13)$
+    - `Teen`: $[13, 20)$
+    - `Adult`: $[20, 65)$
+    - `Senior`: $[65, \infty)$
+  - Age 32 $\to$ `Adult`
+
+* Noise Removal
+
+- **Goal**: Remove irrelevant or corrupt data variations
+
+- **Why it helps**
+  - Improves signal clarity and model robustness
+    - E.g., clean noisy speech by removing high-frequency noise
+
+- **Methods**
+  - Smoothing (e.g., moving average)
+  - Filtering (e.g., low-pass filter in audio)
 
 ## #############################################################################
 ## Learning Algorithms
