@@ -1160,7 +1160,7 @@ problem
 - Consider squared error with $n$ samples:
   $$
   E_{in}(\vw)
-  \defeq \frac{1}{n} \sum_{i=1}^n (h_{\vw}(\vx_i) - y_i) ^ 2
+  \triangleq \frac{1}{n} \sum_{i=1}^n (h_{\vw}(\vx_i) - y_i) ^ 2
   $$
 
 - **Batch Gradient Descent (BSD)** updates each weight component:
@@ -1538,127 +1538,134 @@ digraph BayesianFlow {
 
 * Mean Squared Error (MSE)
 - MSE is the **average squared difference of error**:
-
   $$
   \text{MSE}
   \defeq \frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2
   $$
-  - MSE measures the estimator quality, quantifying the difference between
-    estimated and actual values
-  - E.g., in a house price prediction model, MSE determines how close predicted
-    prices are to actual prices
+  - Measures estimator quality, quantifying difference between estimated and
+    actual values
+  - E.g., in house price prediction, determines how close predicted prices are
+    to actual prices
+
+- **Pros:**
+  - Related to Gaussian error
+  - Optimization friendly
 
 - **Cons:**
-  - It doesn't share the unit of measure with the output
-    - Distorts error interpretation; predicted and actual values are usually in
-      different units
+  - Doesn't share unit of measure with output
+    - Distorts error interpretation
   - Sensitive to outliers
-    - A single large error can disproportionately affect the MSE
+    - Single large error can disproportionately affect MSE
     - Use median absolute deviation (MAD), median of squared error for
       robustness against outliers
 
 * Root Mean Squared Error (RMSE)
-- RMSE is the standard deviation of the Mean Squared Error (MSE):
-
+- RMSE is the **standard deviation of Mean Squared Error (MSE)**:
   $$
   \text{RMSE} \defeq \sqrt{\text{MSE}}
   = \sqrt{\frac{1}{N} \sum_{i=1}^N (h(\vx_i) - f(\vx_i))^2}
   $$
 
 - **Pros:**
-  - Same units as the output, allowing intuition of its magnitude compared to
-    the mean
-  - Facilitates comparison between different data sets or models since the
-    metric is normalized to the output's scale
+  - Same units as output, allowing intuition of magnitude compared to mean
+  - Facilitates comparison between data sets or models since metric is
+    normalized to output's scale
 
 - **Cons:**
-  - Sensitive to outliers (like MSE) which can excessively affect the metric
-  - May not be suitable for ranking models when outliers or skewed distributions
-    are present
+  - Sensitive to outliers, which can excessively affect metric
+  - May not be suitable for outliers or skewed distributions
 
 * Median-Based Metrics
-- We can use metric based on median (i.e., the 0.5 quantile of absolute error):
+- Use metrics based on median (i.e., the 0.5 quantile of absolute error):
 
-- Median absolute deviation:
+- **Median absolute deviation**:
 
   $$
   \text{MAD} \defeq \text{median}_i(|h(\vx_i) - f(\vx_i)|)
   $$
 
-- Median squared error:
+- **Median squared error**:
 
   $$
   \defeq \text{median}_i(|h(\vx_i) - f(\vx_i)|^2)
   $$
 
+- **Pros:**
+  - Robust to outliers
+
+- **Cons:**
+  - Difficult to evaluate
+
 * How to Choose an Error Measure?
 
-- Error measure depends on the **application** and should be **specified by the
-  "customer"**:
-  - The customer needs to define what constitutes an acceptable level of error
-    for their specific use case
-  - E.g., medical applications might have a low tolerance for errors, while a
-    recommendation system might have a higher tolerance
+- Error measure depends on **application** and **"customer"** should define
+  acceptable error level for their use case, e.g.,
+    - Medical applications have low error tolerance
+    - Recommendation systems have higher tolerance
 
-- Otherwise, we can pick:
-  - A **plausible error measure**:
-    - E.g., squared error is commonly used when assuming Gaussian noise in the
-      data
-  - A **"friendly error" measure**:
-    - E.g., measures that allow for closed-form solutions simplify calculations
-      significantly
-    - Convex optimization-friendly measures ensure optimization algorithms find
-      the global minimum easily
+- Otherwise, pick error measure that is
+  - **Plausible**:
+    - E.g., squared error for Gaussian noise
+  - **Friendly**:
+    - E.g., measures allowing closed-form solutions simplify calculations
+    - Convex optimization-friendly measures ensure algorithms find global
+      minimum easily
 
 * Error Measures: Fingerprint Verification Example
-- In fingerprint verification:
-  - Recognizing a valid fingerprint has no error
-  - Otherwise, it is a false positive or a false negative
+- In **fingerprint verification**:
+  - Recognizing a valid fingerprint $\to$ no error
+  - Otherwise $\to$ false positive or false negative
 
-- Error weight depends on the application
-  - For the same problem in two set-ups, the error measure is the opposite
-  - For supermarket applications:
-    - False positives are minor (e.g., one more discount)
-    - False negatives are costly (e.g., annoyed customer, slow line)
-  - For CIA building access:
-    - False negatives are acceptable (triggers further security)
-    - False positives are disastrous
+- **Error weight depends on the application**
+
+\begingroup \scriptsize
+| **Application**  | **False Positive**       | **False Negative** |
+|------------------|--------------------------|--------------------------|
+| **Supermarket**  | ![](pics/check_mark.png){ width=10px } Minor issue | ![](pics/warning.png){ width=10px } Costly |
+|                  | One extra discount       | Annoyed customer, delays       |
+|                  |                          |                                |
+| **CIA Building** | ![](pics/skull.png){ width=10px } Critical | ![](pics/check_mark.png){ width=10px } Acceptable |
+|                  | Security breach                            | Triggers further checks    |
+\endgroup
+
+  - For the same problem in two set-ups, the error measure is the opposite!
 
 ### ############################################################################
 ### Precision and Recall
 ### ############################################################################
 
 * Error Metrics for Skewed Classes
-- When classes are skewed (i.e., one class is very rare), accuracy can be
-  misleading
+- When **classes are skewed** (i.e., one class is very rare)
+  - Accuracy can be misleading
   - Use metrics like confusion matrix, precision, and recall
 
-- Example:
+- **Example:**
   - Train a classifier to distinguish tumors as:
     - $y = 1$: malignant
     - $y = 0$: benign
-  - Classifier's error rate is 1% (i.e., guess correctly 99% of the time) seems
-    good
+  - Classifier's error rate is 1% (i.e., guess correctly 99% of the time)
+    - 1% error rate seems good!
   - But only 0.5% of patients have cancer
     - A trivial classifier that always outputs $y = 0$ has a 0.5% error rate!
     - Now a 1% error rate does not look good anymore
 
-* Decision Matrix ::: Columns :::: {.Column Width=60%}
-- Aka confusion matrix
+* Confusion Matrix
+- Assume
+  - Actual/predicted class $\in \{0, 1\}$
+  - Typically $y = 1$ encodes the rare class to predict
 
-- Typically $y = 1$ encodes the rare class to predict
+::: columns
+:::: {.column width=65%}
 
-- Assuming actual and predicted class $\in \{0, 1\}$, we have 4 possible cases:
-  - $act = 1$, $pred = 1$: true positive (TP)
-  - $act = 0$, $pred = 0$: true negative (TN)
-  - $act = 1$, $pred = 0$: false negative (FN) (output $pred = 0$, but it is
-    wrong)
-  - $act = 0$, $pred = 1$: false positive (FP) (output $pred = 1$, but it is
-    wrong)
-
-- Aggregate decision matrix in precision and recall
+- You have 4 possible cases:
+  - $act = 1$, $pred = 1$ $\to$ true positive (TP)
+  - $act = 0$, $pred = 0$ $\to$ true negative (TN)
+  - $act = 1$, $pred = 0$ $\to$ false negative (FN)
+    - Model outputs $pred = 0$, but it is wrong
+  - $act = 0$, $pred = 1$ $\to$ false positive (FP)
+    - Model outputs $pred = 1$, but it is wrong
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 
 ```tikz
 % Draw matrix
@@ -1683,33 +1690,32 @@ digraph BayesianFlow {
 ::::
 :::
 
-* Precision vs recall
-- Assume that $y = 1$ encodes the rare event we want to detect
+- You can aggregate confusion matrix in **precision** and **recall**
+
+* Precision vs Recall: Definition
+- Assume that $y = 1$ encodes the rare event
 
 - **Precision** measures how often there is a true positive _given that pred =
   1_
-
   \begingroup \small
-
   $$
+  \vspace{-0.2cm}
   \text{precision}
   \defeq \Pr(\text{TP} | \text{pred == 1})
   = \frac{|\text{pred == 1} \land \text{act == 1}|}{|\text{pred == 1}|}
   = \frac{\text{TP}}{\text{TP} + \text{FP}}
   $$
-
   \endgroup
 
 - **Recall** measures how often there is a true positive _given that act = 1_
   \begingroup \small
-
   $$
+  \vspace{-0.2cm}
   \text{recall}
   \defeq \Pr(\text{TP} | \text{act == 1})
   = \frac{\text{TP}}{|\text{act == 1}|}
   = \frac{\text{TP}}{\text{TP} + \text{FN}}
   $$
-
   \endgroup
 
 - Both are conditional probability measuring the fraction of TP under different
@@ -1719,39 +1725,44 @@ digraph BayesianFlow {
 
 - Precision/recall are widely used in information retrieval
   - E.g., a search engine:
-    - Returns 30 pages; only 20 are relevant $\implies$ precision = 20 / 30 = 2
-      / 3
-    - Fails to return another 40 relevant pages $\implies$ recall = 20 /
-      (40 + 20) = 20 / 60 = 1 / 3
+    - Returns 30 pages; only 20 are relevant $\to$ precision =
+      $\frac{20}{30} = \frac{2}{3}$
+    - Fails to return other 40 relevant pages $\to$ recall =
+      $\frac{20}{(40 + 20)} = \frac{20}{60} = \frac{1}{3}$
 
-* Precision / Recall in Terms of Quality / Quantity
-- **Precision**
-  - Increasing precision means when we predict 1, we are more likely to be right
+* Precision / Recall as Quality / Quantity
+- **"Increasing precision"** means when you predict 1, you are more likely to be
+  right
     - E.g., in a spam email detection system, "precision is 90%" means 90% of
       the emails marked as spam are actually spam
   - A higher precision indicates fewer false positives
   - Measures "quality" of prediction
 
-- **Recall**
-  - Increasing recall means we predict more instances when the outcome is 1
+- **"Increasing recall"** means you predict more instances when the outcome is 1
     - E.g., in a spam email detection system, "recall is 80%" indicates 80% of
       all actual spam emails were correctly identified as spam
   - A higher recall means fewer false negatives
   - Measures "quantity" of prediction (coverage)
 
-* Precision / recall for trivial classifiers
+* Precision / Recall for Trivial Classifiers
 - A classifier that outputs always the most common class 0 has:
-  \begin{alignat*}{3}
+  \begingroup \small
+  \begin{alignat*}{2}
   \text{precision}
-  & = 0
+  \defeq \Pr(\text{TP} | \text{pred == 1})
+  = 0
   & \text{(since TP = 0)}
   \\
   \text{recall}
-  & = 0
+  \defeq \Pr(\text{TP} | \text{act == 1})
+  = 0
   & \text{(since TP = 0)}
   \\
   \end{alignat*}
+  \endgroup
+
 - A classifier that outputs always the rare class 1 has:
+  \begingroup \small
   \begin{alignat*}{3}
   \text{recall}
   & = 1
@@ -1771,6 +1782,8 @@ digraph BayesianFlow {
   & \text{(the positive class is very rare)}
   \\
   \end{alignat*}
+  \endgroup
+
 - A trivial classifier has precision or recall close to 0
 
 * Trading Off Precision and Recall
