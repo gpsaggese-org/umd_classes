@@ -656,7 +656,7 @@ satisfying the following 6 axioms:
 
 * Rank of a set S of vectors / matrix
 - Rank is the dimension of the space spanned by a set:
-  $$\Rank(S) \dd= \Dim(\Span(S))$$
+  $$\Rank(S) \defeq \Dim(\Span(S))$$
 - By definition of basis, the rank of a set of vectors $S$ is the number of
   linearly independent vectors included in $S$
 
