@@ -1733,35 +1733,36 @@ digraph BayesianFlow {
 * Precision / Recall as Quality / Quantity
 - **"Increasing precision"** means when you predict 1, you are more likely to be
   right
+  - A higher precision indicates fewer false positives
     - E.g., in a spam email detection system, "precision is 90%" means 90% of
       the emails marked as spam are actually spam
-  - A higher precision indicates fewer false positives
   - Measures "quality" of prediction
 
 - **"Increasing recall"** means you predict more instances when the outcome is 1
+  - A higher recall means fewer false negatives
     - E.g., in a spam email detection system, "recall is 80%" indicates 80% of
       all actual spam emails were correctly identified as spam
-  - A higher recall means fewer false negatives
   - Measures "quantity" of prediction (coverage)
 
 * Precision / Recall for Trivial Classifiers
-- A classifier that outputs always the most common class 0 has:
+- A **classifier that outputs always most common class** has:
+
   \begingroup \small
-  \begin{alignat*}{2}
+  \begin{alignat*}{3}
   \text{precision}
-  \defeq \Pr(\text{TP} | \text{pred == 1})
+  & \defeq \Pr(\text{TP} | \text{pred == 1})
   = 0
   & \text{(since TP = 0)}
   \\
   \text{recall}
-  \defeq \Pr(\text{TP} | \text{act == 1})
+  & \defeq \Pr(\text{TP} | \text{act == 1})
   = 0
   & \text{(since TP = 0)}
   \\
   \end{alignat*}
   \endgroup
 
-- A classifier that outputs always the rare class 1 has:
+- A **classifier that outputs always rare class** has:
   \begingroup \small
   \begin{alignat*}{3}
   \text{recall}
@@ -1787,69 +1788,70 @@ digraph BayesianFlow {
 - A trivial classifier has precision or recall close to 0
 
 * Trading Off Precision and Recall
-- In theory, we want to increase both precision and recall
-
-- In practice, modify the threshold of a probabilistic classifier to trade off
-  precision and recall in practice
+- In theory, you want to increase **both precision and recall**
+- In practice, you can modify the threshold of a probabilistic classifier to
+  **trade off precision and recall**
 
 - E.g., use logistic regression to predict cancer:
-  - With a threshold = 0.5, the classifier has:
+  - With a threshold $\theta = 0.5$, the classifier has:
     - Precision = $\frac{\text{TP}}{|\text{pred == 1}|}$
     - Recall = $\frac{\text{TP}}{|\text{act == 1}|}$
-  - Increase the threshold $\implies$ output 1 only if more confident, i.e.,
-    increase precision
-  - Decrease the threshold $\implies$ output 1 more often, decreasing the
-    chances of missing a possible case of cancer, i.e., increase recall
+  - Increase threshold $\theta$
+    - Output 1 only if more confident
+    - I.e., increase precision
+  - Decrease threshold $\theta$
+    - Output 1 more often
+    - Decrease the chances of missing a possible case of cancer
+    - I.e., increase recall
 
 // TODO: Pic from notebook
 
 * Precision-Recall: Pros / Cons
-- Pros:
+- **Pros:**
   - Give insight on the behavior of a classifier (e.g., confusion matrix)
   - Avoid mistaking a trivial classifier for a good classifier
 
-- Cons:
-  - We have two different numbers, thus it is difficult to compare classifiers
+- **Cons:**
+  - You have two different numbers, thus it is difficult to compare classifiers
     to each other
   - Solutions: F-score, AUC
 
 * Precision-Recall Curves
-- **Aka ROC curves**
+- Aka ROC curves
 
-- Plot the curve on a precision-recall plane: ($y =$ precision, $1 - x =$
-  recall) to show the precision vs recall trade-off for a classifier
-  - E.g., changing the threshold of logistic regression
+- Show precision vs recall trade-off for a classifier
+  - Plot the curve on a precision-recall plane ($y =$ precision, $1 - x =$ recall)
+  - E.g., changing threshold of logistic regression
 
-- A curve higher than another means a better classifier, since for the same
-  recall we can get a higher precision
-  - The best classifier (precision = recall = 1) is in the top-right corner
-
-- The precision-recall plot can have different shapes, e.g.,
+- Precision-recall plot can have **different shapes**, e.g.,
   - Diagonal (pure luck)
   - Convex up (better than luck)
   - Convex down (worse than luck)
 
+- A curve **higher** than another means a better classifier, since for the same
+  recall you get higher precision
+  - Best classifier (precision = recall = 1) is in the top-right corner
+
 // TODO: Pic from notebook
 
 * Area Under the Curve
-- **AUC** is the area under the precision-recall curve
+- AUC is the **area under the precision-recall curve**
   - Provides a robust metric by integrating over all thresholds
-  - Higher AUC indicates better performance in differentiating between classes
-  - AUC = 0.5 suggests no discriminative power, similar to random guessing,
+  - Higher AUC indicates better class differentiation
+  - AUC = 0.5 suggests no discriminative power, like random guessing
   - AUC closer to 1.0 indicates high performance
 
-- **Pros**:
-  - Single number summarizing classifier behavior, useful for comparing
-    different models
+- **Pros:**
+  - Single number summarizing classifier behavior, useful for comparing models
   - Does not require selecting a threshold for performance calculation
-  - Can handle imbalanced datasets effectively
+  - Handles imbalanced datasets effectively
 
 - E.g., consider a classifier for medical diagnosis
-  - The AUC helps understand how well the model distinguishes between patients
-    with and without a disease across all thresholds
+  - AUC helps understand model's ability to distinguish between patients with
+    and without a disease
 
 * F-Score
-- The F-score is the harmonic mean of precision and recall:
+- The F-score is defined as the **harmonic mean of precision and recall**:
 
   $$
   \text{F-score}
@@ -1858,39 +1860,42 @@ digraph BayesianFlow {
   $$
 
 - **Interpretation:**
-  - Trivial classifiers: $P = 0$ or $R = 0$ => F-score = 0
-  - Perfect classifiers: $P = R = 1$ => F-score = 1
+  - Trivial classifiers
+    - $P = 0$ or $R = 0$ $\implies$ F-score = 0
+  - Perfect classifiers
+    - $P = R = 1$ $\implies$ F-score = 1
   - For F-score to be large, both $P$ and $R$ must be high
 
 - Why not just averaging $P, R$?
-  - A classifier that always outputs 1 has $R = 1$ and $P = 0$
-  - $\frac{P + R}{2} = \frac{1}{2}$, while we prefer a low value (ideally 0)
+  - A classifier that always outputs 1 has:
+    - $R = 1$ and $P = 0$
+    - $\frac{P + R}{2} = \frac{1}{2}$
+    - We prefer a low value (ideally 0)
 
 ## #############################################################################
 ## Model Selection
 ## #############################################################################
 
-* Model Selection Problem
-- Model selection chooses the best model from a set of candidates based on
-  performance
-  - Needed when multiple hypotheses can explain the data
+* The Problem of Model Selection
+- Model selection:
+  - Chooses the best model from candidates based on performance
+  - Is needed when multiple hypotheses explain data
 
-- Certain parameters are fixed, while others need to be picked, e.g.,
+- Across models certain parameters are fixed
+- Others need selection, e.g.,
   - Set of features
-    - E.g., selecting a subset of features from a dataset with 100 variables
+    - E.g., select a subset from 100 variables
   - Learning algorithms
-    - E.g., deciding how to train a neural network
+    - E.g., decide how to train a neural network
   - Model types
-    - E.g., linear regression model vs. Support Vector Machine (SVM)
+    - E.g., linear regression vs. SVM
   - Model complexity
-    - E.g., models with polynomials of degree $d < 10$
-  - Values of the regularization parameter
-    - E.g., trying different values like 0.01, 0.1, and 1.0
+    - E.g., polynomials of degree $d < 10$
+  - Values of regularization parameter
+    - E.g., try values like 0.01, 0.1, 1.0
 
-- Evaluate model accuracy, precision, and recall
-- Perform cross-validation to assess model performance
-- Consider computational cost
-  - E.g., a simple logistic regression is faster than a complex neural network
+- Evaluate metrics (e.g., model accuracy, precision, recall) with
+  cross-validation
 
 * Model Selection Process
 
@@ -1914,14 +1919,19 @@ digraph BayesianFlow {
 // TODO: Add a tikz plot
 
 * Model Selection as Learning
-- "Picking the model with smallest $E_{val}$" is a form of learning:
+- _"Picking the model with smallest $E_{val}$"_ is a **form of learning**:
   - Hypothesis set: $\{g_1, ... , g_N\}$
   - Training set: $D_{val}$
   - Pick the best model $g_m$
 
-- After model selection
-  - Experimentally $E_{val}(g_m) < E_{out}(g_m)$, i.e., $E_{val}(g_m)$ is a
-    (optimistically) biased estimate of $E_{out}(g_m)$
+- After model selection, you need to **assess the true performance** on
+  $D_{test}$
+  - Experimentally
+    $$
+    E_{val}(g_m) < E_{out}(g_m)
+    $$
+    - I.e., $E_{val}(g_m)$ is a (optimistically) biased estimate of
+      $E_{out}(g_m)$
   - Theoretically:
     - The penalty for model complexity with a finite set of hypotheses is
       $$
@@ -1937,31 +1947,30 @@ digraph BayesianFlow {
 ## #############################################################################
 
 * Ensemble Learning: Intuition
-- Ensemble learning combines multiple models to improve prediction accuracy
-  - **Idea**: a group of weak learners can form a strong learner
+- **Idea**
+  - A group of weak learners can form a strong learner
+  - Combine multiple models to improve prediction accuracy
 
-- Combine outputs of models $X_i$ to build a model $X^*$ better than any $X_i$,
-  with the wisdom of all
-  - Utilizes diversity in model predictions to improve accuracy
+- **Combine outputs of models** $X_i$ to build a model $X^*$ better than any
+  $X_i$
+  - Utilize diversity in model predictions to improve accuracy
   - Each model contributes its unique perspective, reducing overfitting
   - E.g., like a panel of voting experts
 
-- Example: in computer vision detecting a face is difficult task (at least
-  circa 2010)
+- **Example**: in computer vision detecting a face is difficult task (circa 2010)
   - Look for different features:
     - Are there eyes?
     - Is there a nose?
     - Are eyes and nose in the correct position?
-    - ...
-  - Each feature is weak per-se, but together they become reliable
+  - Each feature is weak by itself, but together they become reliable
 
 * Ensemble Learning: Different Techniques
 - **Bagging** (bootstrap + aggregation)
   - Reduces variance by averaging predictions from different models
-  - E.g., decision trees $\to$ bagging $\to$ random forest
-    - Bagging creates multiple versions of a decision tree (each trained on a
-      random sample of data)
-    - Average their predictions to improve accuracy
+  - E.g., decision trees + bagging = random forest
+    - Creates multiple versions of a decision tree
+    - Each tree is trained on a random sample of data
+    - Averages predictions to improve accuracy
 
 - **Boosting**
   - Reduces bias by focusing on errors made by previous models
@@ -1972,9 +1981,9 @@ digraph BayesianFlow {
 - **Stacking**
   - Uses a meta-model to combine separate models using weights
   - E.g., a stacking ensemble
-    - Uses a logistic regression as a meta-model
-    - Combines the predictions of other models (e.g., decision trees, support
-      vector machines, and neural networks)
+    - Uses logistic regression as a meta-model
+    - Combines predictions of other models (e.g., decision trees, support vector
+      machines, neural networks)
 
 * Ensemble Learning: Relation with Statistics
 - **Bagging**
@@ -1983,9 +1992,9 @@ digraph BayesianFlow {
   - Reduce variance without affecting bias
 
 - **Boosting**
-  - Use another model to learn residuals, i.e., difference between predicted and
-    true values
-  - Related to the statistical technique of "forward stagewise additive models"
+  - Use another model to learn the residuals, i.e., difference between predicted
+    and true values
+  - Related to "forward stagewise additive models"
 
 - **Stacking**
   - If we have 3 independent classifiers, each with $\Pr(\text{correct}) = 0.7$
@@ -1997,7 +2006,7 @@ digraph BayesianFlow {
     &\approx 0.78 > 0.7
     \end{alignat*}
 
-* Ensemble learning: pros and cons
+* Ensemble Learning: Pros and Cons
 - **Pros**
   - Hypothesis set $\calH$ is increased by combining hypotheses from different
     models
@@ -2012,7 +2021,7 @@ digraph BayesianFlow {
 - Combining multiple models with ensemble learning works when models:
   - Are very different from each other
   - Treat a reasonable percentage of the data correctly
-    - E.g., one cannot do much if all classifiers have 50% accuracy
+    - E.g., you cannot do much if all classifiers have 50% accuracy
   - Complement each other: they are specialists in a part of the domain where
     the others don't perform well
 
@@ -2028,7 +2037,7 @@ digraph BayesianFlow {
 - **Probabilistic classification**
   - Weighted average of class probabilities
 
-- We can also learn a meta-learner (stacking) to combine multiple models
+- **Learn a meta-learner** (i.e., stacking) to combine multiple models
 
 ### ############################################################################
 ### Bagging
@@ -2052,9 +2061,8 @@ digraph BayesianFlow {
     the unknown distribution
 
 * Bagging and Instability in Learning Algorithms
-- Bagging works best with different models, especially non-linear models
-
-- Introduce randomization in the learning algorithm intentionally
+- Bagging works best with highly different models, especially non-linear models
+  - Introduce randomization in the learning algorithm intentionally
 
 - **Decision Trees**
   - Disable pruning
@@ -2081,7 +2089,7 @@ digraph BayesianFlow {
 - Strong classifiers can be built from weak classifiers
   - E.g., decision stumps = decision trees with one level
 
-- Statistical meaning of boosting:
+- **Why boosting works?**
   - Boosting implements forward stagewise additive modeling
   - Use another model to learn residuals (difference between predicted and true
     values)
@@ -2111,7 +2119,8 @@ digraph BayesianFlow {
 ### ############################################################################
 
 * Stacking
-- Stacking learns how to combine models (not necessarily of the same type)
+- Stacking is about learning how to combine models (not necessarily of the same
+  type)
 
 - The problem is that with voting / averaging we don't know which model to trust
 - Instead of voting or weighting we can use a meta-learner (level 1) to learn
