@@ -61,7 +61,7 @@ mindmap
       Neural networks
       KNN
       SVM
-      Graphical
+      Graphical models
     (**Techniques**)
       Pre-processing
       Model building
@@ -70,94 +70,94 @@ mindmap
       Ensemble learning
 ```
 
-// TODO: Make it look better?
+* Machine Learning Theory
+- **VC theory**
+  - Measure model capacity and generalize based on hypothesis space complexity
 
-* ML Theory
-- **VC Theory**
-  - Measures model capacity and generalize based on hypothesis space complexity
+- **Bias-variance decomposition**
+  - Prediction error is the sum of:
+    - Bias: Error from simplistic model assumptions
+    - Variance: Error due to sensitivity to training data fluctuations
 
-- **Bias-Variance Decomposition**
-  - Prediction error consists of:
-    - **Bias**: Error from simplistic model assumptions, causing underfitting
-    - **Variance**: Error due to sensitivity to training data fluctuations,
-      causing overfitting
-
-- **Computation Complexity**
-  - Balances model complexity and fit
+- **Computation complexity**
   - Related to information theory and compression
-  - E.g., Minimum Description Length (MDL) measures computational complexity via
+  - E.g., Minimum Description Length (MDL) measures model complexity via
     efficient model and data description
 
-- **Bayesian Approach**
-  - Treats ML as probability
-  - Combines prior knowledge with observed data to update belief about a model
+- **Bayesian approach**
+  - Treat ML as probability
+  - Combine prior knowledge with observed data to update belief about a model
 
-- **Problem in ML Theory:** Assumptions may not align with practical problems
+- **Problem in ML theory**
+  - Assumptions may not align with practical problems
 
-* ML Paradigms
-- Machine learning paradigms are structured approaches to learning problems
+* Machine Learning Paradigms
+- How do you set up the learning problem?
 
-- **Supervised learning**
-  - The dataset includes inputs with corresponding outputs
-  - Develop an input-output relationship
+  - **Supervised learning**
+    - The dataset includes inputs with corresponding outputs
+    - Develop an input-output relationship
 
-- **Unsupervised learning**
-  - The data is unlabeled
-  - Discover structure within the data
-  - E.g., anomaly detection, clustering
+  - **Unsupervised learning**
+    - The data is unlabeled, discover structure within the data
+    - E.g., anomaly detection, clustering
 
-- **Reinforcement learning**
-  - The correct answer isn't immediately available
-  - Evaluate actions based on final outcomes
+  - **Reinforcement learning**
+    - The correct answer is not immediately available
+    - Evaluate actions based on final outcomes
 
-- **Active learning**
-  - Not all examples are available initially
-  - Request outputs for specific inputs
+  - **Active learning**
+    - Not all examples are available initially
+    - Request outputs for specific inputs
 
-- **Online learning**
-  - The dataset cannot be stored in memory
-  - Data is streamed and the model is updated in real-time
+  - ...
 
-* ML Models
-- Linear models
+* Machine Learning Models
+- What is the form of the model and how to fit / predict from the data?
 
-- Generalized linear models
-  - E.g., logistic, Poisson regression
+  - Linear models
 
-- Neural networks
+  - Generalized linear models
+    - E.g., logistic, Poisson regression
 
-- SVM
+  - Support Vector Machines (SVM)
 
-- Nearest neighbors
-  - E.g., k-means clustering, KNN
+  - Nearest neighbors
+    - E.g., k-means clustering, KNN
 
-- Gaussian processes
+  - Gaussian processes
 
-- Graphical models
-  - Model joint distributions with graphs
-  - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
+  - Graphical models
+    - Model joint distributions with graphs
+    - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
 
-* ML Techniques
-- Input Processing
-  - Data Cleaning
-  - Dimensionality Reduction
-  - Feature Engineering
+  - Neural networks
 
-- Model Building
-  - Models
-  - Learning Algorithms
+  - ...
 
-- Performance Evaluation
-  - Cross-Validation
-  - Bias/Variance Curves
-  - Learning Curves
+* Machine Learning Techniques
+- What are the stages of a ML pipeline?
 
-- Regularization
+  - **Input processing**
+    - Data cleaning
+    - Dimensionality reduction
+    - Feature engineering
 
-- Aggregation
-  - Boosting
-  - Bagging
-  - Stacking
+  - **Model building**
+    - Models
+    - Learning algorithms
+
+  - **Performance evaluation**
+    - Cross-validation
+    - Bias-variance curves
+    - Learning curves
+
+  - **Regularization**
+
+  - **Aggregation**
+    - Boosting
+    - Bagging
+    - Stacking
 
 # ##############################################################################
 # What Is Artificial Intelligence
@@ -168,32 +168,31 @@ mindmap
 ## #############################################################################
 
 * Human Intelligence
-- We call ourselves "homo sapiens" because intelligence sets us apart from other
-  animals
+- We call ourselves "homo sapiens" because intelligence sets us apart from animals
 
-- For thousands of years, we've tried to understand how we think
-  - Our brain is a small mass of matter
-  - How can our brain perceive, understand, predict, and manipulate a world far
-    more complicated than itself?
+- For thousands of years, we tried to understand how we think
+  - Brain is a small mass of matter
+  - How can brain perceive, understand, predict, and manipulate a world more
+    complicated than itself?
 
 * Artificial Intelligence
 - The term "Artificial Intelligence" was coined in 1956
 
-- AI aims to:
+- **AI aims to:**
   - Understand human intelligence
   - Create intelligent entities
 
-- AI is a technology
-  - Is universal and applicable to any human activity and task
-  - Will have an impact greater than any previous historical event
+- **AI is a technology**
+  - Universal and applicable to any human activity and task
+  - Its impact greater than any previous historical event
   - Currently generates trillions of dollars annually in revenue
-  - Presents many unresolved problems, while major concepts in physics might
-    already be established
+  - Presents many unresolved problems
+    - E.g., major concepts in physics might be established
 
 * AI Formal Definition
-- AI is defined around two axes:
-  - Thinking (thought process, reasoning) vs. Acting (behavior)
-  - Human (human performance) vs. Rational (ideal performance)
+- AI is defined around **two axes**:
+  - Thinking vs. Acting
+  - Human vs. Rational (ideal performance)
 
 - This leads to four possible definitions of AI as a machine that can:
   1. Think humanly
@@ -201,31 +200,52 @@ mindmap
   3. Act humanly
   4. Act rationally
 
-* 1) AI as Thinking Humanly
-- We need to determine how humans think
+* AI Formal Definition: Quiz
+- Four possible definitions of AI as a machine that can:
+  1. Think humanly
+  2. Think rationally
+  3. Act humanly
+  4. Act rationally
 
-- Pros
-  - Once we have a precise theory of the human mind, we can express it as a
-    computer program
+- **Which one do you think is the best definition?**
 
-- Cons
-  - We don't know exactly how the human mind works
-  - Definition is anthropocentric
+* AI Formal Definition: Quiz
+- Four possible definitions of AI as a machine that can:
+  1. Think humanly
+  2. Think rationally
+  3. Act humanly
+  4. Act rationally
 
-* 2) AI as Thinking Rationally
-- Apply rules of "correct thinking": given correct premises, yield correct
-  conclusions
+- **Which one do you think is the best definition?**
 
-- Logic studies the "laws of thought"
-  - Formalizes statements about objects and their relations
+- We will see that building machines that can **"act rationally"** should be
+  ultimate goal of AI
 
-- Automatic Theorem Proving
+* 1. AI as Thinking Humanly
+- To build machines that think like humans we need to **determine how humans
+  think**
+
+- **Pros**
+  - Express precise theory of the human mind as a computer program
+
+- **Cons**
+  - Unknown workings of the human mind
+  - Anthropocentric definition
+
+* 2. AI as Thinking Rationally
+- What are the rules of "correct thinking"?
+  - Given correct premises, yield correct conclusions
+
+- **Logic** studies the "laws of thought"
+  - Formalize statements about objects and their relations
+
+- **Automatic theorem proving**
   - Programs solve problems in logical notation
-  - They run indefinitely if no solution exists (related to the halting problem)
+  - Run indefinitely if no solution exists (related to the halting problem)
 
 * Thinking Rationally: Cons
 
-1. Difficulty in Formalizing Informal Knowledge
+1. **Formalizing informal knowledge is difficult**
    - Example: _"A handshake occurs when two people extend, grip, shake hands,
      then release."_
    - Formal logic representation: 
@@ -233,22 +253,23 @@ mindmap
          &\exists x, y \, ( \text{Person}(x) \land \text{Person}(y) \land x \neq y \land \\
          &\quad \text{Hand}(x, h_x) \land \text{Hand}(y, h_y) \land \\
          &\quad \text{MoveToward}(h_x, h_y) \land \text{Contact}(h_x, h_y) \land \\
-         &\quad \text{Shake}(h_x, h_y) )
+         &\quad \text{Shake}(h_x, h_y) \land \\
+         &\quad \text{Release}(h_x, h_y) )
      \end{align*}
-2. Probabilistic Nature of Knowledge
+2. **Probabilistic nature of knowledge**
    - Example in medicine: _"Fever, cough, and fatigue could indicate flu,
      COVID-19, or another illness."_
-3. Scalability Challenges
+3. **Scalability challenges**
    - Large problems may need heuristics for practical solutions
-4. Beyond Rational Thinking for Intelligent Behavior
+4. **Intelligence requires more than rational thinking**
    - Importance of agent interaction with the world
    - Problem of the "body"
 
-* 3) AI as Acting Humanly
-- Design AI that can act like humans
-  - Agent is something that perceives and acts to reach a goal
+* 3. AI as Acting Humanly
+- **Agent** is something that perceives and acts to reach a goal
+  - AI designs agent that can act like humans
 
-- Turing test
+- **(Embodied) Turing test**
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
   - Passing the Turing test requires:
@@ -262,25 +283,24 @@ mindmap
 
 * Turing Test: Pros and Cons
 
-**Pros**
+- **Pros**
+  - Operational definition of intelligence
+  - Sidestep philosophical vagueness of "What is consciousness? Can a machine
+    think? ..."
 
-- It is an operational definition of intelligence
-- Sidestep the philosophical vagueness of the question "can a machine think?"
-
-**Cons**
-
-- Anthropomorphic criteria that defines intelligence in terms of humans
-  - There can be multiple forms of intelligence that are not human
+- **Cons**
+  - Anthropomorphic criteria define intelligence in human terms
+    - Multiple forms of non-human intelligence exist
   - Intelligence in terms of Turing test
-    - Is about designing intelligence that imitates human intelligence
-    - Is about fooling humans of being a human
+    - Design intelligence to imitate humans
+    - Fool humans into thinking it's human
   - E.g., aeronautical engineering:
-    - Is about wind tunnels and aerodynamics
-    - Is not about designing flying machines that imitate exactly birds
-    - Is not about fooling other birds of being a bird
+    - Focus on wind tunnels and aerodynamics
+    - Not about designing machines that imitate birds
+    - Not about fooling birds into thinking it's a bird
 
-* 4) AI as Acting Rationally
-- Rational agents do the "right thing" given what they know
+* 4. AI as Acting Rationally
+- Rational agents $\iff$ do the "right thing" given what they know
 
 - Computer agents that act rationally should:
   1. Operate autonomously
@@ -294,95 +314,115 @@ mindmap
   - Acting vs. Thinking
   - Rational vs. Human
 
-- Acting > Thinking
+- **Acting > Thinking**
   - Acting rationally is broader than just thinking rationally
 
-- Rational > Human
+- **Rational > Human**
   - Rationality can be mathematically defined
   - Human behavior is shaped by evolutionary conditions
 
-- AI focuses on "agents acting rationally," meaning "agents that do the right
-  thing" based on available knowledge
-  - E.g., you leave the house and a meteorite strikes you
+- AI focuses on **agents acting rationally**
+  - I.e., "agents that do the right thing" based on available knowledge
+  - E.g., you leave the house and a branch strikes you
     - Did you act rationally?
+    - Probably
   - E.g., you cross the street and a car knocks you over
-    - Was crossing the street rational? It depends!
+    - Did you act rationally?
+    - Id depends!
 
 * Goals of a Rational Agent
-- A rational agent aims for:
+- A **rational agent** aims for:
   - The best outcome in a deterministic setup
   - The best expected outcome under uncertainty
 
-- "Best" is determined by the objective function:
+- **Best** is determined by the objective function:
   - E.g., cost function, sum of rewards, loss function, utility
 
-- Acting rationally: problems
+- **Problems** with acting rationally
   - Sometimes no provably correct action exists
     - Yet, an action must be taken
-  - Perfect rationality (taking the optimal action) is not feasible in complex
-    environments due to:
+  - Perfect rationality is not always feasible due to:
     - Cost of acquiring all data
     - Computational demands
-    - Limited rationality = acting appropriately when lacking time for all
-      computations
+  - Acting "appropriately", "satisficing"
 
 ## #############################################################################
-## ML
+## Machine Learning
 ## #############################################################################
-
-* What Machine Learning Really Is
-- Machines don't learn like humans
-  - Artificial intelligence differs from human intelligence
-
-- A learning machine finds a mathematical formula that, when applied to inputs,
-  produces (mostly) correct outputs
-  - The formula is "learned" from training data
-  - Training data should statistically represent general inputs $\rightarrow$
-    outputs relationship
-
-- The main problem with current ML / AI
-  - Human and animal intelligence is more robust than ML/AI
-    - Slight distortion of inputs can cause ML models to fail
-  - Example:
-    - A machine learns to play a video game
-    - You slightly rotate the screen
-    - A human can still play with the rotated screen
-    - The machine may not play unless trained for screen rotation
 
 * Machine Learning: Definitions
+- Artificial intelligence differs from human intelligence
+  - Machines don't learn like humans (e.g., LLMs)
+
 - _"Machine learning is the field of study that gives computers the ability to
-  learn without being explicitly programmed"_ Arthur Samuel (1959)
+  learn without being explicitly programmed"_, (Arthur Samuel, 1959)
 - _"A computer program is said to learn from experience $E$ with respect to some
   task $T$ and some performance measure $P$, if $P(T)$ improves with experience
-  $E$"_ Tom Mitchell (1998)
+  $E$"_, (Tom Mitchell, 1998)
 
 - Machine learning is the science of building machines capable of doing useful
   things without being explicitly programmed to do so
   - E.g. a computer learn to play checkers by playing against itself, memorizing
     which positions lead to winning a game
 
+* Limits of ML Compared to Human Intelligence
+
+- **Fragility to input variations**
+  - ML models fail with slight input distortions
+    - E.g., adversarial attacks cause misclassification by altering one pixel
+    - E.g., a model trained for a video game may fail if the screen is slightly
+      rotated; humans continue effortlessly
+
+- **Lack of transfer learning**
+  - ML systems cannot apply knowledge across domains without retraining
+
+- **Massive data and compute requirements**
+  - ML requires enormous datasets and computational resources
+    - E.g., a teenager learns to drive in hours; self-driving systems need
+      billions of compute hours and extensive data
+
+- **Poor common sense and reasoning**
+  - ML lacks built-in world knowledge and intuitive logic
+
+* Limits of ML Compared to Human Intelligence
+
+- **Opaque decision-making**
+  - Many ML models offer little transparency into decision processes
+    - Limits trust, interpretability, and accountability in critical
+      applications
+
+- **Dependence on narrow objectives**
+  - ML systems excel at optimizing narrow tasks but fail with ambiguous goals
+    - E.g., an algorithm maximizing user engagement may promote harmful
+      content
+
+- **Susceptibility to bias and data quality**
+  - Models inherit and amplify biases in training data
+
+- **Lack of embodiment and physical interaction**
+  - Human cognition is grounded in physical and sensory experience
+
 * The 3 Machine Learning Assumptions
 - Machine learning involves solving a practical problem by:
   - Gathering a dataset
   - Building a statistical model from the dataset algorithmically
 
-- The three assumptions of machine learning
+- The **three assumptions** of machine learning
   - A pattern exists
-  - The pattern cannot be precisely defined mathematically
+  - Pattern cannot be precisely defined mathematically
   - Data is available
 
-- Which ML assumption is really essential?
+- Which ML assumption is essential?
   - _A pattern exists_
-    - If there is no pattern, we can try learning, measure the effectiveness of
-      learning, conclude that it does not work
-  - _We cannot pin down the pattern mathematically_
-    - If a solution is achievable in one step or can be directly programmed,
-      machine learning is not recommended, but it may still be applicable
+    - If no pattern, try learning, measure effectiveness, conclude it doesn't
+      work
+  - _Cannot pin down pattern mathematically_
+    - If solution is direct, ML not recommended, but may still apply
   - _We have data_
     - Without data, no progress can be made
-    - Data is crucial and is of utmost importance
+    - Data is crucial
 
-* ML Adages
+* Machine Learning Adages
 
 - _"An explanation of the data should be as simple as possible, but not
   simpler"_ (Einstein)
@@ -408,24 +448,27 @@ mindmap
 ## #############################################################################
 
 * AI vs ML vs Deep-Learning
-- AI: Machines programmed to think, reason, learn, and act in a rational way
+::: columns
+:::: {.column width=65%}
+- **AI**: Machines programmed to reason, learn, and act in a rational way
 
-- ML: Machines capable of performing useful tasks without being explicitly
-  programmed
-  - Most advances in AI are driven by ML, such as:
-    - Natural language processing
-    - Computer vision
-    - Speech recognition
+- **ML**: Machines capable of performing tasks without being explicitly programmed,
+  e.g.,
+  - Natural language processing
+  - Computer vision
+  - Speech recognition
 
-- AI without ML:
+- **AI without ML**:
   - Example: Rule-based systems (e.g., IBM Deep Blue playing chess)
 
-- Deep Learning (DL): A subset of ML using neural networks with multiple layers
-  to perform complex tasks
+- **Deep Learning (DL)**: ML using neural networks with multiple layers
   - Example: Autonomous vehicles
 
-- Large Language Models (LLM) are a kind of neural network model trained on
-  massive text datasets
+- **Large Language Models (LLM)**: neural networks trained on massive text
+  datasets and RLHS
+
+::::
+:::: {.column width=30%}
 
 ```tikz
   % Define colors (optional)
@@ -454,6 +497,8 @@ mindmap
   \draw (1.2,-1.2) circle (0.6);
   \node[above] at (1.2,-1.4) {\textbf{LLMs}};
 ```
+::::
+:::
 
 ## #############################################################################
 ## The Foundation of AI
@@ -476,57 +521,55 @@ mindmap
 
 * AI and Philosophy (1/2)
 
-_**Can formal rules be used to draw valid conclusions?**_
+- **Can formal rules be used to draw valid conclusions?**
 
-- **Reasoning**
-  - Aristotle formulated laws governing the rational mind
-    - E.g., syllogism, deduction (400 BC)
-  - Machines were built for arithmetic operations
-    - E.g., Pascaline by Blaise Pascal (1640)
-  - Logic studies rules of proper reasoning
+  - Reasoning
+    - Aristotle (400 BC) formulated laws governing the rational mind
+    - Machines were built for arithmetic operations (e.g., Pascaline, 1600)
+    - Logic studies rules of proper reasoning
 
-- **Rationalism** = use reasoning to understand the world
+  - Rationalism
+    - Use reasoning to understand the world
 
-_**How does the mind arise from a physical brain?**_
+- **How does the mind arise from a physical brain?**
 
-- **Dualism**
-  - Nature follows physical laws
-  - Part of the human mind ("the soul") is exempt from physical laws
+  - Dualism
+    - Nature follows physical laws
+    - Part of the human mind ("the soul") is exempt from physical laws
 
-- **Materialism**
-  - The mind is a physical system, following the laws of physics
-  - Where is free will?
-    - Free will is the perception of available choices
+  - Materialism
+    - The mind is a physical system, following the laws of physics
+    - Where is free will? Free will is the perception of available choices
 
 * AI and Philosophy (2/2)
 
-_**What does knowledge come from?**_
+- **What does knowledge come from?**
 
-- **Empiricism**
-  - Knowledge via senses
-  - Example: Observing a tree to know it is green
+  - Empiricism
+    - Knowledge via senses
+    - Example: learn that trees are green by looking at them
 
-- **Induction**
-  - General rules from associations
-  - Example: Seeing many swans are white, inferring all swans are white
+  - Induction
+    - General rules from associations
+    - Example: seeing many swans are white, inferring all swans are white
 
-- **Logical Positivism**
-  - Knowledge as logical theories linked to sensory observations
-  - Example: Scientific hypotheses connected to experimental data
+  - Logical Positivism
+    - Knowledge as logical theories linked to sensory observations
+    - Example: scientific hypotheses connected to experimental data
 
-_**How does knowledge lead to action?**_
+- **How does knowledge lead to action?**
 
-- **Utilitarianism**
-  - Measures "utility" linking knowledge to action
-  - Actions justified by logic connecting goals and outcomes
+  - Utilitarianism
+    - Measures "utility" linking knowledge to action
+    - Actions justified by logic connecting goals and outcomes
 
-- **Consequentialism**
-  - Right or wrong determined by action's expected outcomes
-  - E.g., "If you kill, you will go to jail"
+  - Consequentialism
+    - Right or wrong determined by action's expected outcomes
+    - E.g., "If you kill, you will go to jail"
 
-- **Deontological ethics**
-  - Opposes consequentialism
-  - "Right actions" based on universal laws, not outcomes
+  - Deontological ethics
+    - Opposes consequentialism
+    - "Right actions" based on universal laws, not outcomes
     - E.g., "don't kill", "don't lie"
 
 * AI and Cognitive Psychology
