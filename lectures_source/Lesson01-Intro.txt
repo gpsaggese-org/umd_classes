@@ -574,37 +574,37 @@ mindmap
 
 * AI and Cognitive Psychology
 
-_**How do humans think and act?**_
+- **How do humans think and act?**
 
-- **Cognitive Psychology**
-  - Brain as an information-processing device
+  - Cognitive Psychology
+    - Brain as an information-processing device
     - Stimuli translated into internal representation
     - Representation manipulated by cognitive processes to derive new internal
       representations ("beliefs")
     - Representations turned into actions ("goals")
 
-- **Cognitive Science**
-  - Use computer models to address memory, language, and logic thinking
+  - Cognitive Science
+    - Use computer models to address memory, language, and logic thinking
 
-- **Human-Computer Interaction (HCI)**
-  - From artificial intelligence (AI) to intelligence augmentation (IA)
-  - Computers augment human abilities
+  - Human-Computer Interaction (HCI)
+    - From artificial intelligence (AI) to intelligence augmentation (IA)
+    - Computers augment human abilities
 
 * AI and Mathematics
 
-_**What are the formal rules to draw valid conclusions?**_
+- **What are the formal rules to draw valid conclusions?**
 
-- **Formal Logic**
-  - Boole established logical deduction rules (1850)
-  - Frege expanded Boole's logic to include objects and relations, creating
-    first-order logic (1879)
+  - Formal Logic
+    - Logical deduction rules (Boole, 1850)
+    - Expand Boole's logic to include objects and relations, creating first-order
+      logic (Frege, 1879)
 
-- **Limits to Deduction**
-  - Some statements are "undecidable."
-  - Godel's incompleteness theorem (1931): True statements exist that cannot be
-    proved in any formal theory
+  - Limits to Deduction
+    - Some statements are "undecidable"
+    - Incompleteness theorem: true statements exist that cannot be proved in any
+      formal theory (Godel, 1931)
 
-_**How do we reason with uncertain information?**_
+- **How do we reason with uncertain information?**
 
 - **Probability**
   - Mathematics of uncertainty

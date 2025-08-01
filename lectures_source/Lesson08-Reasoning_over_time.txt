@@ -1047,17 +1047,17 @@ digraph Viterbi {
 
 - **Filter**: algorithm to estimate the state of the system
 
-- **State of the system `x`**: current values you are interested in
+- **State of the system** `x`: current values you are interested in
   - E.g., weight
   - Part of the state might be hidden (i.e., not observable)
   - You cannot observe the entire state directly, only measure it indirectly
 
-- **Measurement `z`**: the measured value of the system
+- **Measurement** `z`: the measured value of the system
   - It is observable
   - It can be inaccurate
     - E.g., 99.3kg instead of 100kg
 
-- **State estimate `x_est`**: filter estimate of the state
+- **State estimate** `x_est`: filter estimate of the state
 
 - **System model**: mathematical model of the system
   - E.g., "weight today = weight yesterday + weight gain"
