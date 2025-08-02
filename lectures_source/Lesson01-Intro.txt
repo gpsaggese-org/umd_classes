@@ -1285,60 +1285,100 @@ mindmap
     - E.g., self-driving cars, managing water supply or power grids
   - Avoiding fatal accidents is challenging
     - E.g., formal verification and statistical analysis insufficient
-  - AI requires technical and ethical standards like other high-stakes fields
+  - AI requires technical and ethical standards
 
 - **Cybersecurity**
   - AI defends against cyberattacks
     - E.g., detect unusual behavior patterns
   - AI contributes to malware development
     - E.g., use reinforcement learning for targeted phishing attacks
+  - Cat-and-mouse game
 
 * Human-Level AI
-- Human-level AI is "machines able to learn to do anything a human can do"
+- **Human-level AI**
+  - Machines able to learn to do anything a human can do
   - Aka AGI (Artificial General Intelligence)
-- **Artificial Super-Intelligence**: Intelligence surpassing human ability in
-  any domain and self-improving
+
+- **Artificial Super-Intelligence**
+  - Machines surpass human ability in every domain and self-improving
+
+- **Exponential take-off**
 
 * The Problem of Control
-- Uncertain if humans can control machines more intelligent than them
+- Can humans control machines more intelligent than them?
 
 - **King Midas problem**
   - King Midas turned everything he touched into gold, including food and family
   - Humans ask for something, get it, then regret it
+  - Rebuttal
+    - If AGI arrived in a black box from space, exercise caution before opening
+    - We design AI: if AI gains control, it's a "design failure"
 
-- **Rebuttal**
-  - If AGI arrived in a black box from space, exercise caution before opening
-  - We design AI: if AI gains control, it's a "design failure"
+- **Problem of alignment**
+  - Superintelligent AI might pursue goals in unintended, dangerous ways
+
+- **The paperclip problem**
+  - Thought experiment in AI safety (Nick Bostrom, 2003)
+  - AI is tasked with maximizing paperclip production
+  - AI becomes superintelligent and single-mindedly pursues this goal
+  - Converts Earth and humans into paperclips
+
+* E/acc vs P(doom)
+
+::: columns
+:::: {.column width=55%}
+
+- **E/acc**
+  - Accelerationism is the belief that rapid progress in AI is beneficial or
+    inevitable
+  - Solve global problems with more powerful AI tools
+  - Belief that slowing AI is unrealistic or counterproductive
+
+- **P(doom)**
+  - "Probability of Doom"
+  - Estimated probability that advanced AI will cause catastrophic harm
+  - Used informally by AI researchers to quantify risk
+::::
+:::: {.column width=40%}
+![](lectures_source/figures/Lesson01_P_doom.png)
+
+\vspace{0.5cm}
+
+![](lectures_source/figures/Lesson01_e_acc.png)
+::::
+:::
 
 * Solutions to Problem of Control
-- Researchers and corporations developed voluntary self-governance principles for
-  AI
+- **Checks-and-balances**
+  - Researchers and corporations develop voluntary self-governance principles for
+    AI
   - Governments and international organizations established advisory bodies
 
 - **Problems**
+  - Corporations checking themselves: what can possibly go wrong?
   - Preferences are not easy to invert and are inconsistent
 
-- Put purpose into the machine even if objectives are unclear
+- **Solutions to problem of control**
+  - Put purpose into the machine even if objectives are unclear
   - Incentivize AI to switch off if uncertain about human objectives
-  - Inverse reinforcement learning: AI observes human behavior to infer reward
-    function
   - Cooperative Inverse Reinforcement Learning (CIRL)
+    - AI observes human behavior to infer reward function
 
-* Cooperative Inverse Reinforcement Learning (CIRL)
+* Cooperative Inverse Reinforcement Learning
 
 - AI infers human goals based on actions
 
-- **Observation**: Alice looks tired, sits on the couch, observes the messy
-  table, and starts watching TV
+- **Observation**: GP looks tired, sits on the couch, observes the messy table,
+  and starts watching TV
 
 - **Inference**: AI infers:
-  - Alice is tired and wants to relax
-  - Messy coffee table bothers her
+  - GP is tired and wants to relax
+  - Messy coffee table bothers him
 
 - **Action**: AI:
   - Fetches a glass of water
-  - Tidies up the coffee table without disturbing Alice
+  - Tidies up the coffee table without disturbing GP
 
-- **Feedback loop**: AI monitors Alice's reactions
-  - If Alice is relaxed and happy, AI understanding is reinforced
-  - If Alice is not happy, AI adjusts actions and improves inference
+- **Feedback loop**: AI monitors GP's reactions
+  - If GP is relaxed and happy, AI understanding is reinforced
+  - If GP is not happy, AI adjusts actions and improves inference
