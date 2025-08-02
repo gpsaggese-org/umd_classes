@@ -1229,22 +1229,19 @@ mindmap
   - Greater machine intelligence leads to better human society
   - _"First solve AI, then use AI to solve everything else"_
 
-- **Benefits**
-  - Free humanity from menial work (AI and robots)
+- **Benefits of AI and robots**
+  - Free humanity from menial work
   - Increase production of goods and services
   - Expand human cognition
   - Accelerate scientific research, e.g.,
     - Cures for diseases
     - Solutions for climate change
     - Resource shortages
-
 ::::
 :::: {.column width=40%}
 ![](lectures_source/figures/Lesson01_Friendly_AI.png)
 ::::
 :::
-
-
 
 * Risks of AI (1/2)
 
@@ -1265,15 +1262,17 @@ mindmap
 ::::
 :::: {.column width=40%}
 ![](lectures_source/figures/Lesson01_Terminator.png)
+
+![](lectures_source/figures/Lesson01_Misinformation.png)
 ::::
 :::
 
 * Risks of AI (2/2)
 - **Impact on employment**
-  - Machines can eliminate jobs
+  - Machines eliminate jobs
   - Rebuttal
-    - Machines enhance human productivity ->
-    - Companies become more profitable ->
+    - Machines enhance productivity $\to$
+    - Companies become more profitable $\to$
     - Higher wages
   - Counter-rebuttal
     - Wealth shifts from labor to capital, increasing inequality
@@ -1282,17 +1281,17 @@ mindmap
       adaptation followed
 
 - **Safety critical applications**
-  - AI used in safety-critical applications
+  - AI in safety-critical applications
     - E.g., self-driving cars, managing water supply or power grids
   - Avoiding fatal accidents is challenging
-    - E.g., formal verification and statistical analysis are insufficient
+    - E.g., formal verification and statistical analysis insufficient
   - AI requires technical and ethical standards like other high-stakes fields
-    (e.g., engineering, healthcare)
 
 - **Cybersecurity**
-  - AI helps defend against cyberattacks (e.g., detect unusual behavior
-    patterns) and contributes to malware development
-  - E.g., use reinforcement learning for targeted phishing attacks
+  - AI defends against cyberattacks
+    - E.g., detect unusual behavior patterns
+  - AI contributes to malware development
+    - E.g., use reinforcement learning for targeted phishing attacks
 
 * Human-Level AI
 - Human-level AI is "machines able to learn to do anything a human can do"
@@ -1301,29 +1300,28 @@ mindmap
   any domain and self-improving
 
 * The Problem of Control
-- It is uncertain we can control machines more intelligent than us
+- Uncertain if humans can control machines more intelligent than them
 
 - **King Midas problem**
-  - Myths of humans asking for something, getting it, then regretting it
   - King Midas turned everything he touched into gold, including food and family
+  - Humans ask for something, get it, then regret it
 
 - **Rebuttal**
-  - If AGI arrived in a black box from space, caution is needed before opening
-  - We design AI: if AI gains control, it is a "design failure"
+  - If AGI arrived in a black box from space, exercise caution before opening
+  - We design AI: if AI gains control, it's a "design failure"
 
 * Solutions to Problem of Control
-- AI researchers and corporations developed voluntary self-governance principles
-  for AI
+- Researchers and corporations developed voluntary self-governance principles for
+  AI
   - Governments and international organizations established advisory bodies
 
 - **Problems**
-  - Preferences are not easy to "invert" and are not consistent
+  - Preferences are not easy to invert and are inconsistent
 
-- We should put "purpose into the machine" even if we don't know exactly what
-  the objectives are
-  - Incentivize AI to be switched off if uncertain about human objectives
-  - Inverse reinforcement learning: AI observes human behavior to infer
-    underlying reward function
+- Put purpose into the machine even if objectives are unclear
+  - Incentivize AI to switch off if uncertain about human objectives
+  - Inverse reinforcement learning: AI observes human behavior to infer reward
+    function
   - Cooperative Inverse Reinforcement Learning (CIRL)
 
 * Cooperative Inverse Reinforcement Learning (CIRL)
