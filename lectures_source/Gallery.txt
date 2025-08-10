@@ -1,7 +1,7 @@
 // Controlling size:
 //
 // ![](lectures_source/figures/Chap7_Binomial_distribution.png){ height=50% }
-// Bad ![Smile Emoji](pics/angry_devil.png){ width=12px }
+// Bad ![Smile Emoji](emoji/angry_devil.png){ width=12px }
 // \includegraphics[width=0.6\textwidth]{lectures_source/figures/Chap7_Binomial_distribution.png}
 // ```latex[width=50%]
 
@@ -80,24 +80,24 @@
 
 * Emoji
 - Applications
-- Bad ![Smile Emoji](pics/angry_devil.png){ width=12px }
+- Bad ![Smile Emoji](emoji/angry_devil.png){ width=12px }
 - Challenges
-- Check mark ![](pics/check_mark.png){ width=12px }
+- Check mark ![](emoji/check_mark.png){ width=12px }
 - Cons
-- Counterpoints ![](pics/balance_scale.png){ width=14px }
-- E.g., ![](pics/backhand_pointing_right.png){ width=14px }
-- E.g., ![](pics/pushpin_tack.png){ width=12px }
-- Fail ![](pics/skull.png){ width=14px }
-- Good ![Smile Emoji](pics/emoji_smile.png){ width=12px }
-- Idea ![](pics/lightbulb.png){ width=14px }
-- Intuition ![](pics/lightbulb.png){ width=14px }
-- Issues ![](pics/warning.png){ width=14px }
-- Problem ![](pics/puzzle.png){ width=14px }
+- Counterpoints ![](emoji/balance_scale.png){ width=14px }
+- E.g., ![](emoji/backhand_pointing_right.png){ width=14px }
+- E.g., ![](emoji/pushpin_tack.png){ width=12px }
+- Fail ![](emoji/skull.png){ width=14px }
+- Good ![Smile Emoji](emoji/emoji_smile.png){ width=12px }
+- Idea ![](emoji/lightbulb.png){ width=14px }
+- Intuition ![](emoji/lightbulb.png){ width=14px }
+- Issues ![](emoji/warning.png){ width=14px }
+- Problem ![](emoji/puzzle.png){ width=14px }
 - Pros
-- Question ![](pics/question_mark.png){ width=14px }
-- Remark ![](pics/exclamation_mark.png){ width=14px }
-- Solution ![](pics/lightbulb.png){ width=14px }
-- Wrong ![](pics/wrong.png){ width=12px }
+- Question ![](emoji/question_mark.png){ width=14px }
+- Remark ![](emoji/exclamation_mark.png){ width=14px }
+- Solution ![](emoji/lightbulb.png){ width=14px }
+- Wrong ![](emoji/wrong.png){ width=12px }
 
 * Emoji (Mac)
 - Good ![Smile Emoji](mac_emojis/emoji_smile.png){ width=12px }
