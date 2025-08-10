@@ -1621,10 +1621,10 @@ digraph BayesianFlow {
 \begingroup \scriptsize
 | **Application**  | **False Positive**       | **False Negative** |
 |------------------|--------------------------|--------------------------|
-| **Supermarket**  | ![](pics/check_mark.png){ width=10px } Minor issue | ![](pics/warning.png){ width=10px } Costly |
+| **Supermarket**  | ![](emoji/check_mark.png){ width=10px } Minor issue | ![](emoji/warning.png){ width=10px } Costly |
 |                  | One extra discount       | Annoyed customer, delays       |
 |                  |                          |                                |
-| **CIA Building** | ![](pics/skull.png){ width=10px } Critical | ![](pics/check_mark.png){ width=10px } Acceptable |
+| **CIA Building** | ![](emoji/skull.png){ width=10px } Critical | ![](emoji/check_mark.png){ width=10px } Acceptable |
 |                  | Security breach                            | Triggers further checks    |
 \endgroup
 
