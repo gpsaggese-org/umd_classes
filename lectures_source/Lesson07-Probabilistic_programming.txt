@@ -490,23 +490,21 @@ digraph BayesTheorem {
 - Probabilistic programming languages impact like Fortran on scientific computing
   - Build algorithms, ignore computational details
 
-* Coin Example: Numerical Solution 1/3
+* Coin Example: Numerical Solution (1/3)
 
-1. Assume we know the true value of $\theta$, which is not true in general
-2. Observe samples of the variable $y$
-3. Model the prior $\theta$ and the likelihood $y | \theta$
-   - Binomial with $n = 1$ is a Bernoulli RV
-   - Beta with $\alpha = \beta = 1$ is a uniform RV
-   \begin{align*}
-   & \theta \sim \text{Beta}(\alpha = 1, \beta = 1) \\
-   & Y \sim \text{Binomial}(n = 1, p = \theta) \\
-   \end{align*}
-4. Run inference
-5. Generate samples of the posterior
-6. Summarize posterior
+- Assume you know the true value of $\theta$ (not true in general)
+- Observe samples of the variable $y$
+- Model the prior $\theta$ and the likelihood $y | \theta$
+  \begin{align*}
+  & \theta \sim \text{Beta}(\alpha = 1, \beta = 1) \\
+  & Y \sim \text{Binomial}(n = 1, p = \theta) \\
+  \end{align*}
+- Run inference
+- Generate samples of the posterior
+- Summarize posterior
    - E.g., Highest-Posterior Density (HPD)
 
-* Coin Example: Numerical Solution 2/3
+* Coin Example: Numerical Solution (2/3)
 
 ::: columns
 :::: {.column width=70%}
@@ -517,16 +515,13 @@ digraph BayesTheorem {
 \begingroup
 \scriptsize
 
-- Generate some data from the (ground truth) model
-
-- Build a PyMC model which is one-to-one to the mathematical model
-
-- PyMC uses a NUTS sampler, computes 4 chains (since there are 4 cores)
-- No trace is diverging
-- Kernel density estimation (KDE) for the posterior (they should be Beta!)
-- Traces look "noisy" and non-diverging (good!)
-
-- Numerical summary of the posterior, e.g., mean, std dev, HDI
+- Generate data from ground truth model
+- Build PyMC model matching mathematical model
+- PyMC uses NUTS sampler, computes 4 chains
+- No trace diverges
+- Kernel density estimation (KDE) for posterior (should be Beta)
+- Traces appear "noisy" and non-diverging (good)
+- Numerical summary of posterior: mean, std dev, HDI
 - $\EE[\hat{\theta}] \approx 0.324$
 - $\Pr(\hat{\theta} \in [0.031, 0.653]) = 0.94$
 
@@ -534,7 +529,7 @@ digraph BayesTheorem {
 ::::
 :::
 
-* Coin Example: Numerical Solution 3/3
+* Coin Example: Numerical Solution (3/3)
 
 ::: columns
 :::: {.column width=70%}
@@ -542,31 +537,36 @@ digraph BayesTheorem {
 ::::
 
 :::: {.column width=30%}
-- Compute a single KDE for all chains
-- Rank plot to check sanity of results
-- Histograms should look uniform so that they are exploring different regions of
-  the posterior (ideally all posterior)
-- Single KDE with more statistics
+\begingroup
+\small
+
+- Compute single KDE for all chains
+- Rank plot to check results
+- Histograms should look uniform, exploring different (and all) posterior regions
+- Plot single KDE with all statistics
+
+\endgroup
 ::::
 :::
 
-## Posterior-based decisions
+## Posterior-based Decisions
 
-* Posterior-based decisions
-- Sometimes describing the posterior is not enough, but we need to make decisions
-  based on our inference
+* Posterior-based Decisions
+- Sometimes describing the posterior is not enough
+  - You need to make decisions based on our inference
 
 - E.g., is the coin fair ($\theta = 0.5$) or biased?
   - Since $\EE[\hat{\theta}] = 0.324$ it seems that the coin is biased
-  - We can't rule out the possibility that the coin in unbiased since
-    $HPI = [0.03, 0.65]$ and 0.5 is inside HPI
+  - You can't rule out that the coin in unbiased since
+    - $HPI = [0.03, 0.65]$
+    - $0.5 \in HPI$
 
-- If we want a sharper decision, we need to:
+- If you want a sharper decision, you need to:
   - Collect more data to reduce the spread of the posterior
   - Define a more informative prior
 
 * Savage-Dickey Density Ratio
-- The Savage-Dickey ratio tests point null hypotheses in Bayesian inference
+- The Savage-Dickey ratio tests a point null-hypotheses in Bayesian inference
 
 - **Idea**: compare prior and posterior densities at a single point $\theta_0$
   $$
@@ -579,7 +579,7 @@ digraph BayesTheorem {
     $H_1$ evaluated at $\theta_0$
 
 \begingroup \scriptsize
-| **Bayes Factor (BF)** | **Interpretation**      |
+| **Bayes Factor (BF)** | **Interpretation**  |
 |-------------------|-------------------------|
 | 1 - 3           | Not enough evidence       |
 | 3 - 10          | Substantial evidence      |
@@ -587,58 +587,60 @@ digraph BayesTheorem {
 | > 100           | Decisive evidence         |
 \endgroup
 
-- **Intuition**: this ratio tells us how much the data has changed our belief
-  about $\theta_0$
-  - If the posterior density at $\theta_0$ is much smaller than the prior
-    density, the Bayes factor suggests strong evidence against $H_0$
+- **Intuition**: this ratio shows how much data changes belief about $\theta_0$
+  - If posterior density at $\theta_0$ is much smaller than prior density, Bayes
+    factor suggests strong evidence against $H_0$
 
 * Savage-Dickey Density Ratio: Example
 
-:::
+::: columns
 :::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Savage_Dickey.png)
+
 ::::
-:::: column
+:::: {.column width=30%}
 - $H_0$: "coin is fair"
 - The prior for $H_0$ is 0.87
 - The posterior for $H_0$ is 1.15
 - $BF_{10} = $
+
 ::::
 :::
+
 // TODO: improve
 
 * ROPE: Region of Practical Equivalence
-- A **ROPE** is an interval for a parameter where all values inside are
-  considered "equivalent", e.g.,
-  - A $H_0$: _"coin is fair"_ iff $\theta = 0.5$ is impractical
-  - For a coin, the interval $\theta \in [0.45, 0.55]$ is equivalent to $0.5$
+- **ROPE** = an interval for a parameter where all values inside are considered
+  "equivalent"
+  - $H_0$: _"coin is fair"_ iff $\theta = 0.5$ is impractical
+  - ROPE: $\theta \in [0.45, 0.55]$ is equivalent to $0.5$
 
 - **Hypothesis testing with ROPE and HPI**
-  - Compare Region Of Practical Equivalence (ROPE) with Highest-Posterior
-    Interval (HPI)
-    - If the HPI is within ROPE, no effect: $H_1$ is rejected
-    - If the HPI is outside ROPE, there is an effect: $H_0$ is rejected
-    - If the HPI overlaps with ROPE, the result is inconclusive
+  - Compare ROPE (Region Of Practical Equivalence) with HPI (Highest-Posterior
+    Interval)
+    - If HPI is within ROPE, no effect: $H_1$ is rejected
+    - If HPI is outside ROPE, there is an effect: $H_0$ is rejected
+    - If HPI overlaps with ROPE, result is inconclusive
 
-- The ROPE should be decided before analysis based on domain knowledge
+- Decide ROPE before analysis based on domain knowledge
   - Picking it after analysis is like picking the p-value threshold after seeing
     the p-value
 
 * Loss Function: Motivation
-- For many problems, the cost of a decision is asymmetric
-  - E.g., the cost of a bad decision is much greater than the benefit of a good
-    decision
-  - E.g., vaccines can cause an overreaction, but the benefits outweigh the risk
-    significantly
+- You need to make decisions based on our inference
+
+- For many problems, decision cost is asymmetric
+  - E.g., cost of a bad decision > benefit of a good decision
+  - E.g., vaccines may cause overreaction, but benefits outweigh risks
 
 - To make the best decision, measure:
   - Benefits of a correct decision
   - Cost of a mistake
-  - Decide the trade-off using a loss function
-  - Use loss function to make decisions
+  - Decide trade-off between benefits and costs using a loss function
+  - Use loss we function for decisions
 
-- The loss captures _"how bad is to make an estimation mistake?"_
-  - The larger the loss, the worse the estimation
+- Loss quantifies _"how bad is an estimation mistake?"_
+  - Larger loss indicates worse estimation
 
 * Loss Function
 - Aka "cost function"
@@ -648,28 +650,31 @@ digraph BayesTheorem {
   - The true value $\theta$; and
   - The estimated value $\hat{\theta}$
 
-| **Loss**       | **Expression**               | **Point estimate**    |
-| -------------- | ---------------------------- | --------------------- | 
-| Quadratic loss | $(\theta - \hat{\theta})^2$  | Mean of posterior     |
-| Absolute loss  | $|\theta - \hat{\theta}|$    | Median of posterior   |
-| 1-0 loss       | $I(\theta \ne \hat{\theta})$ | Mode of posterior     |
+  \begingroup \small
+  | **Loss**       | **Expression**               | **Point estimate**    |
+  | -------------- | ---------------------------- | --------------------- | 
+  | Quadratic loss | $(\theta - \hat{\theta})^2$  | Mean of posterior     |
+  | Absolute loss  | $|\theta - \hat{\theta}|$    | Median of posterior   |
+  | 1-0 loss       | $I(\theta \ne \hat{\theta})$ | Mode of posterior     |
+  \endgroup
 
 - Making decisions in Bayesian statistics using loss function
   - Goal: pick a single value $\hat{\theta}$
-  - We don't know the true value $\theta$
+  - You don't know the true value $\theta$
   - Estimate $\theta$ in terms of the posterior distribution
   - Find the value $\hat{\theta}$ that minimizes the expected loss function
 
 * Use of Gaussians in Bayesian Analysis
 - Aka "normal" distribution
-- Gaussians are easy to work with and abundant in nature
-  1. The average of something using a big enough sample size tends to be a
-     Gaussian (CLT)
-  2. Many phenomena can be approximated using Gaussians, since they are average
-     of effects
-  3. Conjugate prior of Gaussian is Gaussian
 
-- On the other hand, it's important to relax the assumption of Gaussianity
+- **Pros**:
+  - Gaussians are easy to work with and abundant in nature
+  - Average of large sample size tends to be Gaussian (CLT)
+  - Many phenomena approximated using Gaussians (since they are average of
+    effects)
+  - Conjugate prior of Gaussian is Gaussian
+
+- Important to relax assumption of Gaussianity
 
 * Chemical Shift
 
@@ -687,62 +692,61 @@ digraph BayesTheorem {
 ::::
 :::
 
-* Chemical shift: example
+* Chemical Shift: Example
 
 ::: columns
 :::: {.column width=50%}
 - Assume Gaussian is a decent approximation of the data
+
+- The likelihood $y | \mu, \sigma$ comes from a normal distribution:
+  $$Y \sim N(\mu, \sigma)$$
+
 ::::
 :::: {.column width=45%}
 ![](lectures_source/figures/Chap7_Chemical_shift.png)
 ::::
 :::
 
-- The likelihood $y | \mu, \sigma$ comes from a normal distribution:
-  $$Y \sim N(\mu, \sigma)$$
-
 - Priors for mean and sigma of $Y$
-  1. The mean comes from a uniform distribution with boundaries $l$ and $h$:
+  1. Mean from uniform distribution $U(l, h)$:
      $$
      \mu \sim U(l, h)
      $$
-     - Set $\mu$ as a uniform distribution larger than the data range, E.g.,
-       $[40, 75]$
-  2. The std dev comes from a half-normal distribution (i.e., a regular normal
-     but restricted to non-negative values):
+     - Set $\mu$ larger than data range, e.g., $[40, 75]$
+  2. Std dev from half-normal distribution (i.e., a regular normal, but
+     restricted to non-negative values):
      $$
      \sigma \sim HalfNormal(0, \sigma_\sigma)
      $$
-     - If we don't know possible values of $\mu$ and $\sigma$, set
-       $\sigma_\sigma = 10$ as a large value
+     - If unknown, set $\sigma_\sigma = 10$
 
-* Chemical Shift: Pymc
+* Chemical Shift: PyMC
 
 ![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution1.png)
 
 - The code is one-to-one with the model:
   \begin{alignat*}{1}
-  & Y \sim N(\mu, \sigma) \\
   & \mu \sim U(l=40, h=75) \\
   & \sigma \sim HalfNormal(0, \sigma_\sigma=10) \\
+  & Y \sim N(\mu, \sigma) \\
   \end{alignat*}
 
 - Get 1000 samples from the posterior
 
-* Chemical shift: PyMC
+* Chemical Shift: PyMC
 
 ::: columns
 :::: {.column width=70%}
 ![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution2.png)
 ::::
-:::: {.column width=25%}
-::::
-:::
+:::: {.column width=30%}
 
-- Compute 4 traces for the 2 variables $\mu$, $\sigma$
-  - The results of the inference are well-formed
+- Compute 4 traces for 2 variables $\mu$, $\sigma$
+  - Results are well-formed
   - $\mu \in [52.55, 54.45]$
   - $\sigma \in [2.86, 4.23]$
+::::
+:::
 
 ## #############################################################################
 ## Posterior Predictive Checks
@@ -755,14 +759,15 @@ digraph BayesTheorem {
 
   $$
   \Pr(\red{\tilde{y}} | \green{y})
-  = \int \Pr(\tilde{y} | \hat{\theta}) \Pr(\theta | y) d\theta
+  = \int_{\theta} \Pr(\tilde{y} | \hat{\theta}) \Pr(\theta | y) d\theta
   = \int \text{model} \times \text{posterior}
   $$
+// TODO(gp): Is it \hat{\theta}?
 
 - This is called the "**\red{posterior} \blue{predictive} distribution**" as it
   predicts \blue{future data} using the \red{posterior distribution}
 
-- **Conceptually:**
+- Conceptually:
   - Sample a value of $\theta$ from the posterior $\Pr(\theta | y)$
   - Feed the value of $\theta$ to the likelihood $\Pr(y | \theta)$
   - Obtain $\tilde{y}$
@@ -774,80 +779,76 @@ digraph BayesTheorem {
     - Captured by the likelihood $\Pr(y | \theta)$
 
 * Posterior Predictive Check (PPC)
+- **Intuition**: can the model reproduce observed data?
+
 - PPC approach:
   - Generate predictions $\tilde{y}$ with observed data $y$
   - Check for consistency
-
-- **Intuition**: can the model reproduce observed data?
 
 - Models should always be checked
   - Differences can arise by mistakes or limitations of the problem/data
   - E.g., the model works well for average behavior but fails to predict rare
     values
 
-* A Bayesian Workflow
+* Bayesian Workflow Using PPC
 
-1. We have data from a process
-   - True distribution of the data is unknown / unknowable
+1. You have data from a process
+   - True distribution unknown / unknowable
 2. Sample
-   - Get a finite sample $y$ through sampling
-   - E.g., experiment, survey, simulation)
+   - Get finite sample $y$ through sampling
+   - E.g., experiment, survey, simulation
 3. Inference
-   - From the observed sample $y$ we build a probabilistic model using prior
-     $\Pr(\theta)$ and likelihood $\Pr(y | \theta)$ to get a posterior
-     distribution $\Pr(theta | y)$
-   - The posterior distribution is a distribution of the parameters of the
-     models $\theta$ given the data
+   - Build probabilistic model using prior $\Pr(\theta)$ and likelihood
+     $\Pr(y | \theta)$ to get posterior distribution $\Pr(\theta | y)$
+   - Posterior distribution: distribution of model parameters $\theta$ given data
 4. Predictive distribution
-   - From posterior distribution we can compute predictions (posterior
-     predictive distribution)
-   - The posterior predictive distribution is a distribution of predicted
-     samples averaged over the posterior distribution
+   - Compute predictions from posterior distribution (i.e., posterior predictive
+     distribution)
+   - Posterior predictive distribution: distribution of predicted samples
+     averaged over posterior distribution
 5. Validation
-   - Validate the model by comparing the original samples vs the predicted
-     samples
+   - Validate model by comparing original samples vs predicted samples
 
 ## #############################################################################
 ## Robust Inference
 ## #############################################################################
 
-* Posterior predictive check: Chemical shift example
+* Chemical Shift Example: PPC
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution3.png)
 ::::
-:::: {.column width=45%}
+:::: {.column width=40%}
 - **Is the PPC model good?**
 - No
-  - The mean of the posterior is more to the right than the data
-  - The std dev of the posterior is larger
+  - Posterior mean is more to the right than data
+  - Posterior std dev is larger
 ::::
 :::
 
-* Chemical shift: model critique
+* Chemical Shift: Model Critique
 ::: columns
 :::: {.column width=40%}
 ![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution3.png)
 ::::
 :::: {.column width=55%}
 - **Problem**
-  - Two data points lie on the tails of the distribution
+  - Two data points on the tails of the distribution
   - The normal distribution is "surprised" by these points and "reacts" by
     adjusting the mean towards them and increasing the standard deviation
-  - A normal distribution for the chemical shift creates issues
 ::::
 :::
 
 - **Solution**
-  - We could declare these points outliers and discard them
-    - E.g., it's malfunction of the equipment (we need evidence!)
-  - We can change the model
+  - Declare points as outliers and discard
+    - E.g., equipment malfunction (need evidence)
+  - Change the model
 
-- In general Bayesians prefer to "encode" assumptions:
-  - Into the model (e.g., in priors and likelihoods)
+- Bayesians prefer to encode assumptions into the model (e.g., priors,
+  likelihoods)
   - Rather than ad-hoc heuristics (e.g., outlier removal rules)
 
-* Student'S t-distribution: Recap
+* Student's t-distribution: Recap
 - Student's t-distribution has 3 params:
   1. Mean $\mu$
      - It doesn't always exist
@@ -858,15 +859,15 @@ digraph BayesTheorem {
        distribution
      - With $\nu=1$: heavy tails and no mean (Cauchy)
      - With $\nu \to \infty$ we recover the Gaussian
-- Heavy tails (high kurtosis) means "it is more likely to find values away from
-  the mean compared to a Normal"
+- Heavy tails (high kurtosis) means _"values are more likely to be far from the
+  mean compared to a Normal"_
 
 ![](lectures_source/figures/Chap7_Student-t.png){ height=30%}
 
-* Chemical shift: use Student's t-dist (1/3)
+* Chemical Shift: Use Student's t-dist (1/3)
 ::: columns
 :::: column
-- Let's use a Student's t-distribution model, instead than Normal
+- Use Student's t-distribution model instead of Normal
 \begin{align*}
 & \mu \sim U(l, h) \\
 & \sigma \sim HalfNornal(0, \sigma) \\
@@ -879,31 +880,29 @@ digraph BayesTheorem {
 ::::
 :::
 
-* Chemical shift: use Student's t-dist (2/3)
+* Chemical Shift: Use Student's t-dist (2/3)
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=70%}
 ![](lectures_source/figures/Chap7_Chemical_shift_robust_model2.png)
 ::::
 :::: {.column width=35%}
-- The outliers decrease the value of $\nu$ (i.e., less Gaussian) instead of
-  increasing mean and standard deviation
-  - $\mu$ is similar to the estimate with a Gaussian
-  - $\sigma$ is smaller
+- Outliers decrease $\nu$ (less Gaussian) instead of increasing mean and standard
+  deviation
+  - $\mu$ similar to Gaussian estimate
+  - $\sigma$ smaller
   - $\nu \approx 5$ (not very Gaussian)
-- The estimation is more robust since outliers have less effects
+- Estimation more robust; outliers have less effect
 ::::
 :::
 
-* Chemical shift: use Student's t-dist (3/3)
+* Chemical Shift: Use Student's t-dist (3/3)
 ::: columns
 :::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Chemical_shift_robust_model3.png)
 ::::
 :::: {.column width=35%}
-- The PPC (posterior predictive check) is a much better fit than with Normal
-  model
-- The plot is "hairy" because the KDE is estimated only in the actual interval of
-  the data and it's 0 outside
+- PPC (posterior predictive check) fits better than Normal model
+- Plot is "hairy" because KDE is estimated only in data interval and 0 outside
 ::::
 :::
 
@@ -912,68 +911,61 @@ digraph BayesTheorem {
 ## #############################################################################
 
 * Group Comparison
-- **Group comparison** is hypothesis testing for statistically significant
-  results when comparing a "treatment" to a "control group"
+- **Group comparison** tests for statistically significant results between
+  "treatment" and "control group"
 
 - E.g., ![](emoji/pushpin_tack.png){ width=12px }
-  - How well patient respond to a new drug (vs a group receiving nothing or a
-    placebo)?
-  - Is there a reduction of car accidents after new traffic regulation?
-  - Does college students' performance improves if they don't have cellphone at
-    school?
+  - How well do patients respond to a new drug vs a placebo?
+  - Is there a reduction in car accidents after new traffic regulation?
+  - Does college student performance improve without cellphones at school?
 
 - **Effect size** quantifies the difference between two groups
-  - It moves from questions like "does it work?" (hypothesis testing) to "how
-    well does it work?" (estimate effect size)
+  - Moves from "does it work?" (hypothesis testing) to "how well does it work?"
+    (estimate effect size)
 
 * Bogus Control Groups
 - When something is claimed to be harder/better/faster/stronger, ask for the
   baseline used for comparison
-
-- **E.g.,**
-  - Sell sugary yogurts to boost the immune system by comparing it to using milk
-  - A better control group would be a less sugary yogurt
+  - E.g.,
+    - Sell sugary yogurts to boost the immune system by comparing it to using
+      milk
+    - A better control group would be a less sugary yogurt
 
 - **Placebo** is a psychological phenomenon where a patient experiences
   improvements after receiving an inactive treatment
   - Using a placebo is better than "no treatment"
-  - It shows how difficult it is to account for all factors in an experiment
+  - Shows difficulty in accounting for all factors in an experiment
 
 * Group Comparison Bayesian-Style
-- The frequentist approach is to compare the p-value of difference of means in
-  each group
+- **Frequentist approach**
+  - Compare p-value of difference of means in each group
 
-- Bayesian approach is to compare the posterior distribution of the means
-  between groups using:
-  - Plot of posterior as reference
-  - Cohen's d
-  - Probability of superiority
+- **Bayesian approach**
+  - Compare posterior distribution of means between groups using:
+    - Plot of posterior
+    - Cohen's d
+    - Probability of superiority
 
 * Sample Size Effect
-- **Sample size effect** is the impact of the number of observations (i.e.,
-  sample size) has on statistical results (e.g., p-values, confidence intervals)
-  - With a small sample, a large mean difference might not be statistical
-    significant (low p-value)
-  - With a large sample, a tiny mean difference can be highly significant (small
-    p-value) but be meaningless
+- **Sample size effect** is the impact of the number of observations on
+  statistical results (e.g., p-values, confidence intervals)
+  - Small sample: Large mean difference might not be statistically significant
+    (low p-value)
+  - Large sample: Tiny mean difference can be highly significant (small p-value)
+    but meaningless
   - E.g., Cohen's d
 
 * Cohen's d
-- **Cohen's d** is the difference of the means with respect to the pooled
-  standard deviation of both groups
-
+- **Cohen's d** is the difference of means relative to pooled standard deviation
   $$
   \frac{\mu_2 - \mu_1}{\sqrt{(\sigma_1^2 + \sigma_2^2) / 2}}
   $$
-  - It normalizes the effect by the variability for the sample size for a pooled
-    std dev
-  - Bayesian analysis directly estimates the actual std dev
-
-- The variability of each group normalizes the difference between means
-  - It's like a Z-score, i.e., number of std dev by which the values differ
-
+  - Normalizes effect by variability for pooled std dev
+  - Bayesian analysis estimates actual std dev
+- Variability of each group normalizes mean difference
+  - Similar to a Z-score, number of std dev values differ
 - Compute posterior distribution of means and std
-- Compute the distribution of Cohen's d or use the formula
+- Compute distribution of Cohen's d or use formula
 
 * Probability of Superiority
 - = probability that a data point taken randomly from one group is larger than a
@@ -992,159 +984,156 @@ digraph BayesTheorem {
 * Hierarchical Models
 - Aka "multilevel", "nested", "mixed-effects" models
 
-- **Observation**: Data points share some common structure, but also have their
-  own variations
-  - Data can be grouped together
-    - E.g., sales in different cities: each city is a different market, but
-      there are common trends
-  - There is a hierarchical structure
-    - E.g., students within a school: each student is different, but there are
-      common educational factors
-  - Repeated measurements on the same objects
+- **Observation**: Data points share common structure, but also have variations
+  - Group data
+    - E.g., sales in cities: each city is a market, with common trends
+  - Hierarchical structure
+    - E.g., students in a school: each student is different, with common
+      educational factors
+  - Repeated measurements on same objects
 
 - **Approach**: ![](emoji/lightbulb.png){ width=14px }
-  - Model shares information between groups and allow differences between groups
-  - The parameters of the prior distributions have also a prior distribution,
-    aka "hyper-priors"
+  - Model shares information between groups, but it allows differences
+  - Parameters of prior distributions have a prior distribution, aka
+    "hyper-priors"
 
-* Hierarchical Models:
+* Hierarchical Models: Examples
 - Many data structures lend themselves to hierarchical descriptions
 
 - E.g.,
   - Medical research:
-    - We want to estimate effectiveness of drugs in treating a disease
-    - Categorize the patients based on demographic information, disease severity
-    - Estimate probability of cure for each subgroup
+    - Estimate drug effectiveness in treating a disease
+    - Categorize patients by demographics, disease severity
+    - Estimate cure probability for each subgroup
   - Market research
-    - We want to understand the purchasing behavior of consumers
+    - Understand consumer purchasing behavior
     - Categorize consumers by age, gender, income, education
 
-* Un-Pooled, Pooled, Hierarchical Models
-- Unpooled
+* Unpooled, Pooled, Hierarchical Models
+- **Unpooled**
   - Groups have different priors
-- Pooled
+- **Pooled**
   - Groups have the same priors
-- Hierarchical
+- **Hierarchical**
   - Groups have different priors which come from a common prior
 
-![](lectures_source/figures/Chap7_Pooled_unpooled_hierarchical_models.png)
+![](lectures_source/figures/Chap7_Pooled_unpooled_hierarchical_models.png){ width=80% }
+
+// TODO(gp): Convert it into graphviz
 
 // ## 3.2, Hierarchical shifts
 
 * Hierarchical Models: Chemical Shift
-- Proteins are made out of 20 amino acids
-  - Proteins can be studied with nuclear magnetic resonance
-  - One of the quantity measured is "chemical shift"
+- Proteins are made of 20 amino acids
+  - Study proteins with nuclear magnetic resonance
+  - Measure "chemical shift"
 
 - The data looks like:
 
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=40%}
 ![](lectures_source/figures/Chap7_Chemical_shift_hierarchical1.png)
 ::::
-:::: {.column width=45%}
-- ID: code of the protein
-- aa: name of the amino acid (e.g., ILE, TYR, SER, ..., PRO)
-- theo: theoretical values of chemical shift
-- exp: experimental value
-- diff: difference between theoretical and experimental value
+:::: {.column width=55%}
+- `ID`: Code of the protein
+- `aa`: Name of the amino acid
+- `theo`: Theoretical values of chemical shift
+- `exp`: Experimental value
+- `diff`: Difference between theoretical and experimental value
 ::::
 :::
 
 * Hierarchical Models: Chemical Shift
-- We have experimental measures of chemical shifts vs theoretical values
-  - We want to evaluate the model using different "styles" of modeling
-  1. **Unpooled**
-     - There are 20 amino acids and so we should fit 20 Gaussians
-     - More detailed analysis, but with less accuracy
-  2. **Pooled**
-     - Compute the difference between estimates and measures and fit a Gaussian
-     - More accurate estimates (since we have more data), but we loose
-       information about different amino acids
-  3. **Hierarchical**
-     - Build a model to estimate groups assuming they belong to a common
-       population
+- Experimental measures of chemical shifts vs theoretical values
+- Evaluate model using different modeling styles
+1. **Unpooled**
+   - Fit 20 Gaussians for 20 amino acids
+   - Detailed analysis, less accuracy
+2. **Pooled**
+   - Compute difference between estimates and measures, fit Gaussian
+   - More accurate estimates, lose amino acid information
+3. **Hierarchical**
+   - Model groups assuming common population
 
-* Chemical shift: unpooled model
+* Chemical Shift: Unpooled Model
 
 ::: columns
 :::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Chemical_shift_hierarchical2.png)
 ::::
 :::: {.column width=35%}
-- We model each group independently
-- Same structure of model to compare different groups
+- Model each group independently
+- Use same model structure to compare groups
 ::::
 :::
 
-* Chemical shift: hierarchical model
+* Chemical Shift: Hierarchical Model
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Chemical_shift_hierarchical3.png)
 ::::
-:::: {.column width=45%}
-- Add two hyperpriors, one for the mean of $\mu$ and one for the standard
-  deviation of $\mu$
-- We assume that the variance is the same for all groups
-  - This is a modeling choice
-  - One could also add hyperpriors for $\sigma$
-- It is an intermediate situation between a single group and 20 separate groups
+:::: {.column width=35%}
+- Add two hyperpriors:
+  - One for mean of $\mu$
+  - One for standard deviation of $\mu$
+- Assume same variance for all groups
+  - Modeling choice
+  - Option to add hyperpriors for $\sigma$
+- Intermediate situation between single group and 20 separate groups
 ::::
 :::
 
-* Chemical shift: results
+* Chemical Shift: Results
 ::: columns
 :::: {.column width=50%}
 ![](lectures_source/figures/Chap7_Chemical_shift_hierarchical4.png)
 ::::
 :::: {.column width=45%}
-- We have two models and we want to compare the estimates
-- There are 20 groups and each model has 4 estimates
-  - We plot the 94% credible intervals
-  - The black vertical line is the global mean according to the hierarchical model
-  - The blue (hierarchical) means are pulled towards the mean with respect to
-    the orange (non-hierarchical) ones
-  - There is "shrinkage"
+- Compare estimates of two models
+- 20 groups, each model has 4 estimated variable
+  - Plot 94% credible intervals
+  - Black vertical line: global mean (hierarchical model)
+  - Blue (hierarchical) means pulled towards mean compared to orange
+    (non-hierarchical)
+  - "Shrinkage" occurs
 ::::
 :::
 
 * Shrinkage
-- Hierarchical models shrink parameters towards a common mean, as groups share
-  information through the hyper-prior
-  - Groups are modeled neither as independent nor as a single group, but as
-    something in between
-  - The model is less responsive to extreme values in individual groups
-  - A hierarchical model improves estimation for small groups using data from
-    other groups
-
-- The amount of shrinkage depends on the data:
-  - Groups with more data influence the estimate more than those with fewer data
-    points
+- Hierarchical models **shrink parameters towards a common mean**, as groups
+  share information through the hyper-prior
+  - Model groups as neither independent nor a single group, but in between
+  - Less responsive to extreme values in individual groups
+  - Improves estimation for small groups using data from others
+- **Amount of shrinkage** depends on data:
+  - Groups with more data influence estimates more
   - Similar groups reinforce common estimation
-
 - **Result**: inference is more stable
 
-* Football Example
-- We have data for different leagues over 4 years
-- We want to compute goals-per-shot metric
-  - We can estimate it with $n$ shots and $y$ goals
-
-- $\theta$ is the success rate for each player
-  - There are `n_players`
-- The success rate $gs \sim Beta(\theta)$
-- The hyperparams of the Beta distributions are 4-dim vectors $\mu_p$ and
-  $\nu_p$ for each position
-  - `DF` defender
-  - `MF` midfielder
-  - `FW` forward
-  - `GK` goalkeeper
+\\* Football Example
+\\- We have data for different leagues over 4 years
+\\- We want to compute goals-per-shot metric
+\\  - We can estimate it with $n$ shots and $y$ goals
+\\
+\\- $\theta$ is the success rate for each player
+\\  - There are `n_players`
+\\- The success rate $gs \sim Beta(\theta)$
+\\- The hyperparams of the Beta distributions are 4-dim vectors $\mu_p$ and
+\\  $\nu_p$ for each position
+\\  - `DF` defender
+\\  - `MF` midfielder
+\\  - `FW` forward
+\\  - `GK` goalkeeper
 
 * You Need to Know When to Stop
-- One can create hierarchical models with as many levels as we want
-- The more levels:
-  - Don't improve the quality of the inference
-  - Make the interpretation difficult
-- The goal is to take advantage of the structure of the data
+- Create hierarchical models with as many levels as you want
+- More levels:
+  - Don't improve inference quality
+  - Complicate interpretation
+- Goal:
+  - Leverage data structure
+  - Add as many degrees as freedom as needed, but not more than what is warranted
+    (Occam's razor)
 
 // 4, Modeling with lines
 
@@ -1153,19 +1142,20 @@ digraph BayesTheorem {
 # ##############################################################################
 
 * Linear Model
-- Many problems can be stated as in the following:
-  - $X$ and $Y$ are uni-dimensional continuous RVs
-  - Given a dataset of paired observations $\{(x_1, y_1), ..., (x_n, y_n)\}$
-  - $X$ can be considered an independent variable
-  - We want to model/predict variable (dependent) $Y$
+- Many problems can be stated as:
+  - $X$ and $Y$: uni-dimensional continuous RVs
+  - Dataset of paired observations $\{(x_1, y_1), ..., (x_n, y_n)\}$
+  - $X$: independent variable
+  - Model/predict dependent variable $Y$
+  - Assume a linear relationship between $Y$ and $X$
 
-- E.g.,
-  - Average temperature vs Number of Nobel laureates in that country
-  - Daily sugar intake vs Blood glucose level
+- E.g.,:
+  - Average temperature vs Nobel laureates in a country
+  - Sugar intake vs Blood glucose
   - Years of education vs Annual income
-  - Advertising spend vs Product sales
-  - Number of hours studied vs Exam score
-  - Coffee consumption vs Productivity rating
+  - Advertising spend vs Sales
+  - Study hours vs Exam score
+  - Coffee consumption vs Productivity
 
 * Linear Model: Frequentist Approach
 - A linear model is described by:
