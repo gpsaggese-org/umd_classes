@@ -1158,85 +1158,81 @@ digraph BayesTheorem {
   - Coffee consumption vs Productivity
 
 * Linear Model: Frequentist Approach
-- A linear model is described by:
-
+- A **linear model** is described by:
   $$
   y = \alpha + \beta x
   $$
-
-- Frequentist approach:
-  - Find the parameters $\alpha, \beta$ using least square fitting
-    - I.e., pick the values that minimizes the average quadratic error between
-      observed $y$ and predicted $\hat{y}$
-  - Point-estimate from least squares corresponds to a maximum a-posteriori with
+- **Frequentist approach**:
+  - Find parameters $\alpha, \beta$ using least square fitting
+    - Minimize average quadratic error between observed $y$ and predicted
+      $\hat{y}$
+  - Point-estimate from least squares corresponds to maximum a-posteriori with
     flat priors
 
 * Linear Model: Bayesian Approach
-- A linear model is described by:
-
+- A **linear model** is described by:
   $$
   y = \alpha + \beta x
   $$
-
-- The Bayesian approach assumes
-  - The data is distributed as a Gaussian with mean $\alpha + \beta x$ and
-    standard deviation $\sigma$: $y \sim N(mu=\alpha + \beta x, \sigma)$
+- **Bayesian approach assumes**:
+  - Data is Gaussian with mean $\alpha + \beta x$ and standard deviation
+    $\sigma$: $y \sim N(\mu=\alpha + \beta x, \sigma)$
   - $\alpha, \beta, \sigma$ are independent
-  - The priors on the values are:
+  - Priors:
     \begin{align*}
     & \alpha \sim Normal(\mu_\alpha, \sigma_\alpha) \\
     & \beta \sim Normal(\mu_\beta, \sigma_\beta) \\
     & \sigma \sim HalfNormal(0, \sigma_\epsilon) \\
     \end{align*}
-
-- We can use **vague priors**:
-  - The prior of the intercept $\alpha$ is often centered around $0$
-  - Sometimes we have info on the sign of $\beta$
-  - Half-Cauchy / exponential distribution for $\sigma$ is a good way to
-    regularize
-  - Uniform prior if the parameter is restricted to hard boundaries
+- Use **vague priors**:
+  - Prior of intercept $\alpha$ often centered around $0$
+  - Info on sign of $\beta$ sometimes available
+  - Half-Cauchy / exponential distribution for $\sigma$
+  - Uniform prior if parameter has hard boundaries
 
 // ## Linear model: synthetic example
 
-* Linear model: synthetic example
+* Linear Model: Synthetic Example
 ::: columns
-:::: {.column width=60%}
-![](lectures_source/figures/Chap7_Linear_regression_synthetic_example1.png)
-
-::::
-:::: column
-- Generate random data from the ground truth
+:::: {.column width=35%}
+- Generate random data from ground truth
   - $\alpha = 2.5$
-  - $beta = 0.9$
-  - Add some noise
+  - $\beta = 0.9$
+  - Add noise
+::::
+:::: {.column width=70%}
+![](lectures_source/figures/Chap7_Linear_regression_synthetic_example1.png)
 ::::
 :::
 
-* Linear model: synthetic example
+* Linear Model: Synthetic Example
 ::: columns
+:::: {.column width=35%}
+- Create linear model in PyMC
+- Use vague priors
+  - Prior of intercept $\alpha$ and $\beta$ centered around $0$
+  - Half-Cauchy distribution for $\sigma$
+
+::::
 :::: {.column width=60%}
 ![](lectures_source/figures/Chap7_Linear_regression_synthetic_example2.png)
-
-::::
-:::: column
-- Create linear model in PyMC with some vague priors
 ::::
 :::
 
-* Linear model: synthetic example
+* Linear Model: Synthetic Example
 ::: columns
-:::: {.column width=60%}
-![](lectures_source/figures/Chap7_Linear_regression_synthetic_example3.png)
-
-::::
-:::: column
+:::: {.column width=35%}
 - Run the sampler
 - Ground truth
   - $\alpha = 2.5$
-  - $beta = 0.9$
+  - $\beta = 0.9$
 - Recovered values
   - $\alpha = 2.12$
-  - $beta = 0.95$
+  - $\beta = 0.95$
+
+::::
+:::: {.column width=70%}
+![](lectures_source/figures/Chap7_Linear_regression_synthetic_example3.png)
 ::::
 :::
 
@@ -1244,50 +1240,40 @@ digraph BayesTheorem {
 
 * Linear Model: Bike Rental Example
 
-- We want to model relationship between temperature $X$ and number of bikes
-  rented in a city $Y$
-
+- **Goal**: model relationship between temperature $X$ and number of bikes rented
+  $Y$
 // Notebook
-
-- Pics
-
-- Use an intermediate variable $\mu = \alpha + \beta * X$, which is the mean
-  number of bikes rented for a temperature $X$
-
+- TODO: Add pics
+- Use intermediate variable $\mu = \alpha + \beta X$, mean number of bikes
+  rented for temperature $X$
   $$
   Y \sim N(\mu, \sigma)
   $$
-  - The fit model is $\mu = 69 + 7.9 X$
-
+- Fit model: $\mu = 69 + 7.9 X$
 - Interpreting the model
-  - When the temperature is 0, the expected value of rented bikes is 69
-  - For every degree of temperature increase, the expected value increases of
-    7.9
-
-- All parameters have uncertainty
-  - The posterior accounts for the combined uncertainty
-  - There are bands representing the quantiles [0.25, 0.75] and [0.03, 0.97] of
-    the prediction
-
-- Do you see a problem? ![](emoji/puzzle.png){ width=14px }
+  - For temperature 0 expected rented bikes = 69
+  - Each degree increase: expected value increases by 7.9
+- Parameters have uncertainty
+  - Posterior accounts for combined uncertainty
+  - Bands represent quantiles [0.25, 0.75] and [0.03, 0.97] of prediction
+- **Do you see a problem?** ![](emoji/puzzle.png){ width=14px }
 
 * Linear Model: Bike Rental Example (Criticism)
 
 - **Problems**
-  - The model can output a negative number of bikes which makes no sense
-  - The model predict a real number of bikes, while the count is discrete
+  - Model outputs negative bike numbers
+  - Model predicts real numbers, but count is discrete
 
-- It is not surprising since we are using a Normal as likelihood
+- **Root cause**: Not surprising since using Normal likelihood:
   - Extends to negative numbers
   - Is continuous
 
 - **Solutions**:
-  - We could clip predictions lower than 0 and discretize the output (hack)
-  - Use a better model that is defined only for positive numbers
+  - Clip predictions below 0 and discretize output (hack)
+  - Use model defined for positive numbers only
 
 * Generalized Liner Model (GLM)
-- It is a generalization of the linear model that uses different distributions
-  for the likelihood
+- Generalization of linear model using different distributions for likelihood:
   \begin{align*}
   & \alpha \sim prior \\
   & \beta \sim prior \\
@@ -1296,85 +1282,79 @@ digraph BayesTheorem {
   & Y \sim \phi(f(\mu), \theta) \\
   \end{align*}
   where:
-  - $\phi$ is an arbitrary distribution
+  - $\phi$: arbitrary distribution
     - E.g., Normal, Student's t, negative binomial
-  - $\theta$ is an auxiliary parameter for the distribution $\phi$
-    - E.g., $\sigma$ for a Normal
-  - $f()$ is the "inverse link function" which transforms the values of $\mu$
-    from the real line to the domain of $\phi$
+  - $\theta$: auxiliary parameter for $\phi$
+    - E.g., $\sigma$ for Normal
+  - $f()$: "inverse link function" transforming $\mu$ from the real line to
+    domain of $\phi$
 
 // ## 4.4 Counting bikes
 
 * Count Data
-- "Count data" is when the RV is a discrete number and bounded at 0
+- **Count data** = when the RV is a discrete number and bounded at 0
   - E.g., the number of rented bikes
-- If the number is large, we can use a continuous distribution (e.g., Gaussian)
-- Other times, it's modeled as discrete (e.g., Poisson, negative binomial)
+- If the number is large, we can use a continuous distribution
+  - E.g., Gaussian
+- Other times, it's modeled as discrete
+  - E.g., Poisson, negative binomial
 
 * Poisson Distribution
 - **Poisson distribution**
-  - Models the number of events in a fixed interval of time, space, etc
-  - Assumes events happen independently and at a constant average rate
+  - Models number of events in a fixed interval (e.g., in time, in space)
+  - Assumes events happen independently at a constant average rate
 
 - **E.g.,**
-  - Call centers: model the number of customers per hour
-  - Natural events: model the number of earthquakes in a region over time
-  - Traffic flow: model the number of cars passing through a toll booth in a day
-  - Biology: count the number of mutations in a DNA segment over time
+  - Call centers: number of customers per hour
+  - Natural events: number of earthquakes in a region over time
+  - Traffic flow: number of cars through a toll booth per day
+  - Biology: count mutations in a DNA segment over time
 
 - **Cons**:
-  - Assumes mean equal to variance (can't model "overdispersion")
+  - Assumes mean equals variance (can't model "overdispersion")
 
 // TODO: Add plot from 1.11
 
 * Negative Binomial Distribution
-- Negative binomial distribution:
-  - Models the number of failures/trials to achieve a fixed number of successes
-    in a sequence of IID Bernoulli trials
-  - Generalizes the geometric distribution, which models the number of trials
-    needed to achieve the first success
-  - Models overdispersion (i.e., when mean is much smaller than variance)
-
+- **Negative binomial distribution**
+  - Models failures/trials to achieve fixed number of successes in IID Bernoulli
+    trials
+  - Generalizes geometric distribution, which models number of trials to achieve
+    first success
+  - Models overdispersion (i.e., mean << variance)
 - **E.g.,**
-  - Customer service: model the number of unsuccessful customer interactions
-    before achieving success
-  - Sports: number of games a team needs to lose before winning a number of
-    games
+  - Customer service: unsuccessful interactions before success
+  - Sports: games lost before winning a fixed number of games
 
 // TODO: Add plot from 1.12
 
 * Overdispersion
-- **Overdispersion** occurs when the variance of count data is significantly
-  larger (e.g., 15-20x) than the mean
-
+- **Overdispersion** occurs when variance of count data is much larger (e.g.,
+  15-20x) than mean
 - **E.g.,**
-  - Epidemiology: when modeling disease outbreak, the number of new infections
-    on a given day might fluctuate widely
-  - Customer service: some days there are few complaints, other days there are
-    many complaints
-
-// TODO: Add example from notebook of Counting (done)
+  - Epidemiology: when modeling disease outbreak, number of new infections on a
+    given day might fluctuate widely
+  - Customer service: large variation of number of daily complaints
 
 - **How to model it?**
-  - A Poisson distribution has mean and variance equal ![](emoji/wrong.png){
-    width=12px }
-  - A negative binomial has a second parameter that controls the variance
-    ![](emoji/check_mark.png){ width=12px }
-  - When using a Normal model
-    - Largest mismatch when the model predicts a negative number of rented bikes
-    - Even on the positive side we see that the fit is not that good
-  - When using Negative Binomial model seems to be a better fit, although not
-    perfect
-    - The right tail for the predictions than observations, but also the
-      probability of this very high demand is low
-    - Overall the Negative Binomial model is better than the Normal model
+  - Poisson distribution:
+    - Mean and variance equal ![](emoji/wrong.png){ width=12px }
+  - Negative binomial:
+    - Second parameter controls variance ![](emoji/check_mark.png){ width=12px }
+  - **Model using Normal**:
+    - Mismatch when predicting negative rented bikes
+    - Poor fit even on positive side
+  - **Model using Negative Binomial**:
+    - Better fit, though not perfect
+    - Right tail predictions differ, but high demand probability is low
+    - Overall better than Normal model
 
 // ## 4.5, Robust regression
 
 * Robust Regression
-- "Outliers" pull a regression line away from the bulk of the data
+- Outliers pull regression line away from bulk of data
 - Student's t-distribution has heavier tails than Normal, gives less importance
-  to "outliers"
+  to outliers
 
 // TODO: Add example from notebook (done)
 
