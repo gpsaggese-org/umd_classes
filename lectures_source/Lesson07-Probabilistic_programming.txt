@@ -206,8 +206,6 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
 ::::
 :::
 
-// TODO: Fix the plot (the value for n is missing)
-
 * Beta Distribution
 
 ::: columns
@@ -377,10 +375,12 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
 :::: {.column width=65%}
 - Communicate probabilistic models
   - Coin-flip distributions:
-    \begin{align*}
-    & \theta \sim \Beta(\alpha, \beta) \\
-    & y \sim Binomial(n=1, p=\theta) \\
-    \end{align*}
+    \begin{equation*}
+      \begin{cases}
+      \theta \sim \Beta(\alpha, \beta) \\
+      y \sim Binomial(n=1, p=\theta) \\
+      \end{cases}
+    \end{equation*}
 - Bayesian analysis result: posterior distribution
   - Summarized with location and dispersion
   - Mean (or mode, median)
@@ -495,10 +495,12 @@ digraph BayesTheorem {
 - Assume you know the true value of $\theta$ (not true in general)
 - Observe samples of the variable $y$
 - Model the prior $\theta$ and the likelihood $y | \theta$
-  \begin{align*}
-  & \theta \sim \text{Beta}(\alpha = 1, \beta = 1) \\
-  & Y \sim \text{Binomial}(n = 1, p = \theta) \\
-  \end{align*}
+  \begin{equation*}
+    \begin{cases}
+    \theta \sim \text{Beta}(\alpha = 1, \beta = 1) \\
+    Y \sim \text{Binomial}(n = 1, p = \theta) \\
+    \end{cases}
+  \end{equation*}
 - Run inference
 - Generate samples of the posterior
 - Summarize posterior
@@ -725,11 +727,13 @@ digraph BayesTheorem {
 ![](lectures_source/figures/Lesson07_Chemical_shift_pymc_solution1.png)
 
 - The code is one-to-one with the model:
-  \begin{alignat*}{1}
-  & \mu \sim U(l=40, h=75) \\
-  & \sigma \sim HalfNormal(0, \sigma_\sigma=10) \\
-  & Y \sim N(\mu, \sigma) \\
-  \end{alignat*}
+  \begin{equation*}
+    \begin{cases}
+    \mu \sim U(l=40, h=75) \\
+    \sigma \sim HalfNormal(0, \sigma_\sigma=10) \\
+    Y \sim N(\mu, \sigma) \\
+    \end{cases}
+  \end{equation*}
 
 - Get 1000 samples from the posterior
 
@@ -868,12 +872,15 @@ digraph BayesTheorem {
 ::: columns
 :::: column
 - Use Student's t-distribution model instead of Normal
-\begin{align*}
-& \mu \sim U(l, h) \\
-& \sigma \sim HalfNornal(0, \sigma) \\
-& \nu \sim Exp(\lambda) \\
-& y \sim StudentT(\mu, \sigma, \nu) \\
-\end{align*}
+
+\begin{equation*}
+  \begin{cases}
+  \mu \sim U(l, h) \\
+  \sigma \sim HalfNornal(0, \sigma) \\
+  \nu \sim Exp(\lambda) \\
+  y \sim StudentT(\mu, \sigma, \nu) \\
+  \end{cases}
+\end{equation*}
 ::::
 :::: column
 ![](lectures_source/figures/Lesson07_Chemical_shift_robust_model.png)
@@ -1179,11 +1186,13 @@ digraph BayesTheorem {
     $\sigma$: $y \sim N(\mu=\alpha + \beta x, \sigma)$
   - $\alpha, \beta, \sigma$ are independent
   - Priors:
-    \begin{align*}
-    & \alpha \sim Normal(\mu_\alpha, \sigma_\alpha) \\
-    & \beta \sim Normal(\mu_\beta, \sigma_\beta) \\
-    & \sigma \sim HalfNormal(0, \sigma_\epsilon) \\
-    \end{align*}
+    \begin{equation*}
+      \begin{cases}
+      \alpha \sim Normal(\mu_\alpha, \sigma_\alpha) \\
+      \beta \sim Normal(\mu_\beta, \sigma_\beta) \\
+      \sigma \sim HalfNormal(0, \sigma_\epsilon) \\
+      \end{cases}
+    \end{equation*}
 - Use **vague priors**:
   - Prior of intercept $\alpha$ often centered around $0$
   - Info on sign of $\beta$ sometimes available
@@ -1240,23 +1249,41 @@ digraph BayesTheorem {
 
 * Linear Model: Bike Rental Example
 
-- **Goal**: model relationship between temperature $X$ and number of bikes rented
-  $Y$
-// Notebook
-- TODO: Add pics
+- Model relationship between temperature $X$ and number of bikes rented $Y$
+
+![](lectures_source/figures/Lesson07_Bike_rental_data.png){ width=80% }
+
 - Use intermediate variable $\mu = \alpha + \beta X$, mean number of bikes
   rented for temperature $X$
   $$
   Y \sim N(\mu, \sigma)
   $$
+
+* Linear Model: Bike Rental Example
+
+::: columns
+:::: {.column width=45%}
+
 - Fit model: $\mu = 69 + 7.9 X$
+
 - Interpreting the model
   - For temperature 0 expected rented bikes = 69
   - Each degree increase: expected value increases by 7.9
+
 - Parameters have uncertainty
   - Posterior accounts for combined uncertainty
   - Bands represent quantiles [0.25, 0.75] and [0.03, 0.97] of prediction
-- **Do you see a problem?** ![](emoji/puzzle.png){ width=14px }
+
+::::
+:::: {.column width=50%}
+
+![](lectures_source/figures/Lesson07_Bike_rental_data_2.png)
+![](lectures_source/figures/Lesson07_Bike_rental_data_3.png)
+
+::::
+:::
+
+- **Do you see any problem in the model?** ![](emoji/puzzle.png){ width=14px }
 
 * Linear Model: Bike Rental Example (Criticism)
 
@@ -1274,13 +1301,15 @@ digraph BayesTheorem {
 
 * Generalized Liner Model (GLM)
 - Generalization of linear model using different distributions for likelihood:
-  \begin{align*}
-  & \alpha \sim prior \\
-  & \beta \sim prior \\
-  & \mu = \alpha + \beta X \\
-  & \theta \sim prior \\
-  & Y \sim \phi(f(\mu), \theta) \\
-  \end{align*}
+  \begin{equation*}
+    \begin{cases}
+    \alpha \sim prior \\
+    \beta \sim prior \\
+    \mu = \alpha + \beta X \\
+    \theta \sim prior \\
+    Y \sim \phi(f(\mu), \theta) \\
+    \end{cases}
+  \end{equation*}
   where:
   - $\phi$: arbitrary distribution
     - E.g., Normal, Student's t, negative binomial
@@ -1300,8 +1329,11 @@ digraph BayesTheorem {
   - E.g., Poisson, negative binomial
 
 * Poisson Distribution
+
+::: columns
+:::: {.column width=50%}
 - **Poisson distribution**
-  - Models number of events in a fixed interval (e.g., in time, in space)
+  - Models number of events in a fixed interval (e.g., time, space)
   - Assumes events happen independently at a constant average rate
 
 - **E.g.,**
@@ -1312,10 +1344,17 @@ digraph BayesTheorem {
 
 - **Cons**:
   - Assumes mean equals variance (can't model "overdispersion")
+::::
+:::: {.column width=50%}
 
-// TODO: Add plot from 1.11
+![](lectures_source/figures/Lesson07_Poisson_PMF.png)
+
+::::
+:::
 
 * Negative Binomial Distribution
+::: columns
+:::: {.column width=50%}
 - **Negative binomial distribution**
   - Models failures/trials to achieve fixed number of successes in IID Bernoulli
     trials
@@ -1325,8 +1364,13 @@ digraph BayesTheorem {
 - **E.g.,**
   - Customer service: unsuccessful interactions before success
   - Sports: games lost before winning a fixed number of games
+::::
+:::: {.column width=50%}
 
-// TODO: Add plot from 1.12
+![](lectures_source/figures/Lesson07_Neg_binomial_PMF.png)
+
+::::
+:::
 
 * Overdispersion
 - **Overdispersion** occurs when variance of count data is much larger (e.g.,
@@ -1356,6 +1400,8 @@ digraph BayesTheorem {
 - Student's t-distribution has heavier tails than Normal, gives less importance
   to outliers
 
+  ![](lectures_source/figures/Lesson07_Robust_regression_1.png)
+
 // TODO: Add example from notebook (done)
 
 // ## 4.6, Logistic regression
@@ -1371,10 +1417,12 @@ digraph BayesTheorem {
     - E.g., ham/spam, safe/unsafe, cloudy/sunny, hotdog/not hotdog
 
 - The logistic model is:
-  \begin{align*}
-  & \theta = logit(\alpha + \beta x) \\
-  & y \sim Bernoulli(\theta) \\
-  \end{align*}
+  \begin{equation*}
+    \begin{cases}
+    \theta = logit(\alpha + \beta x) \\
+    y \sim Bernoulli(\theta) \\
+    \end{cases}
+  \end{equation*}
 
 ::: columns
 :::: {.column width=40%}

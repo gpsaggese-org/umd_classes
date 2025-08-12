@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.7
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -49,7 +49,7 @@ import matplotlib.pyplot as plt
 import preliz as pz
 
 # %%
-import notes.MSML610.tutorial_msml610.msml610_utils as ut
+import msml610_utils as ut
 
 ut.config_notebook()
 
@@ -383,7 +383,8 @@ for i in range(3):
         # Evaluate the PDF in several points.
         y = stats.poisson(lambda_).pmf(x)
         # Plot the PDF.
-        ax[i, j].plot(x, y, marker=".")
+        #ax[i, j].plot(x, y, marker=".")
+        ax[i, j].bar(x, y)
         # Add the legend.
         ax[i, j].plot([], label="lambda={:3.2f}".format(lambda_), alpha=0)
         ax[i, j].legend(loc=1)
@@ -442,7 +443,8 @@ for i in range(len(r_params)):
         # Evaluate the PDF in several points.
         y = stats.nbinom(n=r, p=p).pmf(x)
         # Plot the PDF.
-        ax[i, j].plot(x, y, marker=".")
+        #ax[i, j].plot(x, y, marker=".")
+        ax[i, j].bar(x, y)
         # Add the legend.
         ax[i, j].plot([], label=f"r={r}, p={p}", alpha=0)
         ax[i, j].legend(loc=1)

@@ -46,7 +46,12 @@ import matplotlib.pyplot as plt
 import preliz as pz
 
 # %%
-# !ls /app
+# ls .
+
+# %%
+dir_name = "./Lesson07-data"
+
+# !ls $dir_name
 
 # %%
 import msml610_utils as ut
@@ -369,7 +374,7 @@ plt.legend();
 title = "Chap7: Student-t"
 ut.process_figure(title);
 
-# %% jupyter={"outputs_hidden": true}
+# %%
 # Use a Student-T model.
 with pm.Model() as model_t:
     mu = pm.Uniform("mu", 40, 75)
@@ -698,6 +703,9 @@ az.plot_ppc(
 
 # %% [markdown]
 # ## Robust regression
+
+# %%
+# !ls 
 
 # %%
 ans = pd.read_csv(dir_name + "/anscombe_3.csv")
