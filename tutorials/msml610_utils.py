@@ -91,7 +91,7 @@ def process_figure(title: str) -> None:
 def plot_binomial() -> None:
     n_params = [2, 4, 8]
     p_params = [0, 0.25, 0.5, 0.75, 1]
-    max_n = max(n_params)
+    max_n = max(n_params) + 1
     # Create a plot.
     _, ax = plt.subplots(len(n_params),
                         len(p_params),
@@ -109,19 +109,20 @@ def plot_binomial() -> None:
             p = p_params[j]
             # Evaluate the PDF in several points.
             y = stats.binom(n=n, p=p).pmf(x)
-            y = [y[k] if k < n else np.nan for k in range(max_n)]
+            y = [y[k] if k <= n else np.nan for k in range(max_n)]
             #print(n, p, x, y)
             # Plot the PDF.
-            ax[i, j].plot(x, y, marker='o', linestyle='-')
+            #ax[i, j].plot(x, y, marker='o', linestyle='--')
+            ax[i, j].bar(x, y)  # vertical bars
             # Add the legend.
             ax[i, j].plot([], label="n={:3.2f}\np={:3.2f}".format(n, p), alpha=0)
-            ax[i, j].legend(loc=1)
+            ax[i, j].legend(loc="best")
     ax[2, 1].set_xlabel('x')
     ax[1, 0].set_ylabel('p(x)', rotation=0, labelpad=20);
     #ax[1, 0].set_yticks([])
-    ax[1, 0].set_xticks(range(1, max_n + 1))
+    ax[1, 0].set_xticks(range(0, max_n))
     #
-    title = "Chap7: Binomial distribution"
+    title = "Binomial distribution"
     process_figure(title)
 
 
