@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.7
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -49,13 +49,9 @@ import preliz as pz
 # !ls /app
 
 # %%
-import notes.MSML610.tutorial_msml610.msml610_utils as ut
+import msml610_utils as ut
 
 ut.config_notebook()
-
-# %%
-dir_name = "/app/code/book.2018.Martin.Bayesian_Analysis_with_Python.2e/data2"
-# !ls $dir_name
 
 # %% [markdown] heading_collapsed=true
 # # Chap1: Thinking probabilistically

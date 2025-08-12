@@ -202,7 +202,7 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
   & \Pr(k) = \frac{n!}{k! (n - k)!} p^k (1 - p)^{n-k} \\
 \end{align*}
 
-![](lectures_source/figures/Chap7_Binomial_distribution.png)
+![](lectures_source/figures/Lesson07_Binomial_distribution.png)
 ::::
 :::
 
@@ -235,7 +235,7 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
     \theta^{\alpha - 1} (1 - \theta)^{\beta - 1} \\
 \end{align*}
 
-![](lectures_source/figures/Chap7_Beta_distribution.png)
+![](lectures_source/figures/Lesson07_Beta_distribution.png)
 ::::
 :::
 
@@ -301,7 +301,7 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
 ::::
 :::: {.column width=60%}
 
-![](lectures_source/figures/Chap7_Updating_the_prior.png)
+![](lectures_source/figures/Lesson07_Updating_the_prior.png)
 ::::
 :::
 
@@ -317,7 +317,7 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
 ::::
 :::: {.column width=55%}
 
-![](lectures_source/figures/Chap7_Updating_the_prior.png)
+![](lectures_source/figures/Lesson07_Updating_the_prior.png)
 ::::
 :::
 
@@ -395,7 +395,7 @@ Probability of $k$ heads out of $n$ tosses given $p$ is:
 :::: {.column width=30%}
 
 Kruschke diagram
-![](lectures_source/figures/Chap7_Kruschke_diagram.png){ height=50%}
+![](lectures_source/figures/Lesson07_Kruschke_diagram.png){ height=50%}
 ::::
 :::
 
@@ -508,7 +508,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Coin_example_numerical_solution.png)
+![](lectures_source/figures/Lesson07_Coin_example_numerical_solution.png)
 ::::
 
 :::: {.column width=30%}
@@ -533,7 +533,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Coin_example_numerical_solution_2.png)
+![](lectures_source/figures/Lesson07_Coin_example_numerical_solution_2.png)
 ::::
 
 :::: {.column width=30%}
@@ -595,7 +595,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Savage_Dickey.png)
+![](lectures_source/figures/Lesson07_Savage_Dickey.png)
 
 ::::
 :::: {.column width=30%}
@@ -688,7 +688,7 @@ digraph BayesTheorem {
 - Data looks Gaussian with a couple of outliers
 ::::
 :::: {.column width=45%}
-![](lectures_source/figures/Chap7_Chemical_shift.png)
+![](lectures_source/figures/Lesson07_Chemical_shift.png)
 ::::
 :::
 
@@ -703,7 +703,7 @@ digraph BayesTheorem {
 
 ::::
 :::: {.column width=45%}
-![](lectures_source/figures/Chap7_Chemical_shift.png)
+![](lectures_source/figures/Lesson07_Chemical_shift.png)
 ::::
 :::
 
@@ -722,7 +722,7 @@ digraph BayesTheorem {
 
 * Chemical Shift: PyMC
 
-![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution1.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_pymc_solution1.png)
 
 - The code is one-to-one with the model:
   \begin{alignat*}{1}
@@ -737,7 +737,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution2.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_pymc_solution2.png)
 ::::
 :::: {.column width=30%}
 
@@ -816,7 +816,7 @@ digraph BayesTheorem {
 * Chemical Shift Example: PPC
 ::: columns
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution3.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_pymc_solution3.png)
 ::::
 :::: {.column width=40%}
 - **Is the PPC model good?**
@@ -829,7 +829,7 @@ digraph BayesTheorem {
 * Chemical Shift: Model Critique
 ::: columns
 :::: {.column width=40%}
-![](lectures_source/figures/Chap7_Chemical_shift_pymc_solution3.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_pymc_solution3.png)
 ::::
 :::: {.column width=55%}
 - **Problem**
@@ -862,7 +862,7 @@ digraph BayesTheorem {
 - Heavy tails (high kurtosis) means _"values are more likely to be far from the
   mean compared to a Normal"_
 
-![](lectures_source/figures/Chap7_Student-t.png){ height=30%}
+![](lectures_source/figures/Lesson07_Student-t.png){ height=30%}
 
 * Chemical Shift: Use Student's t-dist (1/3)
 ::: columns
@@ -876,14 +876,14 @@ digraph BayesTheorem {
 \end{align*}
 ::::
 :::: column
-![](lectures_source/figures/Chap7_Chemical_shift_robust_model.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_robust_model.png)
 ::::
 :::
 
 * Chemical Shift: Use Student's t-dist (2/3)
 ::: columns
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Chemical_shift_robust_model2.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_robust_model2.png)
 ::::
 :::: {.column width=35%}
 - Outliers decrease $\nu$ (less Gaussian) instead of increasing mean and standard
@@ -898,7 +898,7 @@ digraph BayesTheorem {
 * Chemical Shift: Use Student's t-dist (3/3)
 ::: columns
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Chemical_shift_robust_model3.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_robust_model3.png)
 ::::
 :::: {.column width=35%}
 - PPC (posterior predictive check) fits better than Normal model
@@ -1017,7 +1017,7 @@ digraph BayesTheorem {
 - **Hierarchical**
   - Groups have different priors which come from a common prior
 
-![](lectures_source/figures/Chap7_Pooled_unpooled_hierarchical_models.png){ width=80% }
+![](lectures_source/figures/Lesson07_Pooled_unpooled_hierarchical_models.png){ width=80% }
 
 // TODO(gp): Convert it into graphviz
 
@@ -1032,7 +1032,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=40%}
-![](lectures_source/figures/Chap7_Chemical_shift_hierarchical1.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_hierarchical1.png)
 ::::
 :::: {.column width=55%}
 - `ID`: Code of the protein
@@ -1059,7 +1059,7 @@ digraph BayesTheorem {
 
 ::: columns
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Chemical_shift_hierarchical2.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_hierarchical2.png)
 ::::
 :::: {.column width=35%}
 - Model each group independently
@@ -1070,7 +1070,7 @@ digraph BayesTheorem {
 * Chemical Shift: Hierarchical Model
 ::: columns
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Chemical_shift_hierarchical3.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_hierarchical3.png)
 ::::
 :::: {.column width=35%}
 - Add two hyperpriors:
@@ -1086,7 +1086,7 @@ digraph BayesTheorem {
 * Chemical Shift: Results
 ::: columns
 :::: {.column width=50%}
-![](lectures_source/figures/Chap7_Chemical_shift_hierarchical4.png)
+![](lectures_source/figures/Lesson07_Chemical_shift_hierarchical4.png)
 ::::
 :::: {.column width=45%}
 - Compare estimates of two models
@@ -1201,7 +1201,7 @@ digraph BayesTheorem {
   - Add noise
 ::::
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Linear_regression_synthetic_example1.png)
+![](lectures_source/figures/Lesson07_Linear_regression_synthetic_example1.png)
 ::::
 :::
 
@@ -1215,7 +1215,7 @@ digraph BayesTheorem {
 
 ::::
 :::: {.column width=60%}
-![](lectures_source/figures/Chap7_Linear_regression_synthetic_example2.png)
+![](lectures_source/figures/Lesson07_Linear_regression_synthetic_example2.png)
 ::::
 :::
 
@@ -1232,7 +1232,7 @@ digraph BayesTheorem {
 
 ::::
 :::: {.column width=70%}
-![](lectures_source/figures/Chap7_Linear_regression_synthetic_example3.png)
+![](lectures_source/figures/Lesson07_Linear_regression_synthetic_example3.png)
 ::::
 :::
 
@@ -1368,7 +1368,7 @@ digraph BayesTheorem {
 - Logistic regression model
   - Is a generalized linear model
   - Models the response variable as binary
-  - E.g., ham/spam, safe/unsafe, cloudy/sunny, hotdog/not hotdog
+    - E.g., ham/spam, safe/unsafe, cloudy/sunny, hotdog/not hotdog
 
 - The logistic model is:
   \begin{align*}
@@ -1376,13 +1376,59 @@ digraph BayesTheorem {
   & y \sim Bernoulli(\theta) \\
   \end{align*}
 
+::: columns
+:::: {.column width=40%}
+
 - Logistic function (aka sigmoid)
 
   $$
   logit(z) = \frac{1}{1 + \exp^{-z}}
   $$
-  - Is the "inverse link function"
   - Converts real numbers from $\theta$ to [0, 1] for the Bernoulli distribution
+
+::::
+:::: {.column width=55%}
+
+```tikz
+\begin{axis}[
+    width=12cm, height=7cm,
+    xmin=-6, xmax=6,
+    ymin=-0.05, ymax=1.05,
+    axis lines=left,
+    xlabel={$x$},
+    ylabel={$P(y=1 \mid x)$},
+    domain=-6:6,
+    samples=400,
+    grid=both,
+    minor grid style={gray!15},
+    major grid style={gray!25},
+    legend style={draw=none, fill=none, at={(0.02,0.98)}, anchor=north west, font=\small},
+    tick label style={font=\small},
+    label style={font=\small},
+  ]
+
+  % --- logistic curve: P(y=1|x) = 1/(1 + exp(-(a x + b)))
+  % adjust a (slope) and b (intercept) to taste:
+  \def\a{1.2}
+  \def\b{-0.5}
+  \addplot[very thick] {1/(1 + exp(-(\a*x + \b)))}; 
+
+  % --- decision threshold at 0.5
+  \addplot[densely dashed] coordinates {(-6,0.5) (6,0.5)};
+  \addlegendentry{Threshold $=0.5$}
+
+  % --- implied decision boundary x* where a x + b = 0  =>  x* = -b/a
+  \pgfmathsetmacro{\xb}{-(\b)/(\a)}
+  \addplot[densely dotted] coordinates {(\xb, -0.05) (\xb, 1.05)};
+  \addlegendentry{Boundary $x^\star=-b/a$}
+
+  % --- optional: annotate boundary
+  \node[anchor=north east, font=\small] at (axis cs:\xb,0.0) {$x^\star$};
+
+\end{axis}
+```
+::::
+:::
 
 * Iris Dataset
 - Classical dataset of measurements from flowers from 3 closely related species
@@ -1393,80 +1439,69 @@ digraph BayesTheorem {
 // TODO: From notebook
 
 * Classification with Logistic Regression
-- "Classification with logistic regression" might seem a misnomer
-  - **Regression** predicts a continuous variable given one or more input
-    variables
-  - **Classification** predicts the output as a discrete variable given one or
-    more input variables
 
-- Logistic regression:
-  - Is a "regression" because it computes the probability that the output is a
-    certain value
+- **Logistic regression**:
+  - Computes the probability that the output is a certain value
   - Models $\theta = \Pr(Y=1 | X)$
-  - Can classify the output using a "decision rule" for classification, e.g.,
+  - Classifies the output using a decision rule, e.g.,
     $$
-    \Pr(Y = \text{versicolor} | \text{sepal\_length}) > 0.5
+    \Pr(Y = \texttt{versicolor} | \texttt{sepal\_length}) > 0.5
     $$
+
+- "Classification with logistic regression" might seem a **misnomer**
+  - **Regression** predicts a continuous variable given input variables
+  - **Classification** predicts a discrete variable given input variables
+  - Is a "regression" since it computes the probability that the output is a
+    certain value
 
 * Boundary Decision for a Classifier
-- The **boundary decision** $\delta$ for a classifier is the values of the
-  independent variables that makes the prob equal to 0.5
+- **Boundary Decision** $\delta$ for a classifier = values of independent
+  variables making probability equal to 0.5
 
-- For logistic regression $\delta$ is given by:
-  \begin{align*}
-  & 0.5 = logit(\alpha + \beta \delta) \\
-  & 0 = \alpha + \beta \delta\\
-  & \delta = - \frac{\alpha}{\beta} \\
-  \end{align*}
+- For logistic regression $\delta$:
+    \begin{align*}
+    & 0.5 = logit(\alpha + \beta \delta) \\
+    & 0 = \alpha + \beta \delta\\
+    & \delta = - \frac{\alpha}{\beta} \\
+    \end{align*}
+  - Decision boundary has uncertainty due to uncertainty in $\alpha$ and $\beta$
 
-- The decision boundary has uncertainty because we have uncertainty around the
-  values of $\alpha$ and $\beta$ also
-
-- Note that $0.5$ is chosen since we are ok with misclassifying a data point in
-  either direction
-  - Some times the misclassification cost is not symmetrical
-  - E.g., minimize false negatives ("the patient has a disease, but we don't
-    predict it") or false positives ("the patient doesn't have a disease, but we
-    predict they do")
+- The probability threshold $0.5$ chosen for equal misclassification risk
+  - Misclassification cost may not be symmetrical
+  - E.g., minimize false negatives ("patient has disease, not predicted") or
+    false positives ("patient doesn't have disease, predicted")
 
 * Odds
-- The quantity, called the "odds of $y=1$", is:
-
+- The **odds** of event $y=1$ is:
   $$
   \text{odds} \defeq \frac{\Pr(y=1)}{1 - \Pr(y=1)}
   $$
+  - Ratio between favorable vs unfavorable events
 
-  i.e., probability of success over probability of failure
+- Transformation exists between probability, odds, and log-odds
 
-- Odds is the ratio between favorable vs unfavorable events
-  - More intuitive than probability when "gambling"
-  - E.g., the odds of getting a 2 rolling a fair die are
-    $\frac{1/6}{5/6} = 1/5 = 0.2$ so it's one favorable event for 5 unfavorable
-    events
-  - There is a transformation between probability, odds, and log-odds
+- More intuitive than probability in "gambling"
+  - E.g., odds of getting a 2 rolling a fair die are
+    $\frac{1/6}{5/6} = \frac{1}{5} = 0.2$
+  - One favorable event for 5 unfavorable events
 
-- Interpreting logistic regression in terms of odds
-  - Since $\theta = logit(\alpha + \beta x)$ and $\theta = \Pr(y = 1)$ we get
-    the expression:
+- Interpreting **logistic regression in terms of odds**:
+  - Since $\theta = logit(\alpha + \beta x)$ and $\theta = \Pr(y = 1)$, we get:
     $$
     \alpha + \beta x = \log ( \frac{\Pr(y=1)}{1 - \Pr(y=1)} )
     $$
   - Logistic regression models log-odds as linear regression
   - $\beta$ is the increase of log-odds for a unit change of $x$
 
-## #############################################################################
-## Variable Variance
-## #############################################################################
-
 * Heteroskedasticity
-- **Heteroskedasticity** is when the variance of the errors is not constant in
-  all the observations
-  - E.g., the variance can be a linear function of the dependent variable
+- **Heteroskedasticity** happens when variance of errors is not constant across
+  observations
+  - E.g., variance can be a linear function of the dependent variable
 
-- E.g.,
-  - The variance of height of babies as function of their age is heteroskedastic
+- Examples:
+  - Variance of baby height as a function of age is heteroskedastic
   - $\sigma$ is a linear function of the predictor variable
-  - The mean $\mu$ is square root of a linear model
+  - Mean $\mu$ is square root of a linear model
 
 // TODO: From the notebook
 
@@ -1504,18 +1539,17 @@ digraph BayesTheorem {
 ## Multiple linear regression
 
 * Multiple linear regression
-- It is not unusual to have several independent variables
+- Several independent variables are common in prediction problems
   - E.g., student's grades = f(family income, mother's education, ...)
 
-- There are $k$ independent variables and $N$ observations
-
+- $k$ independent variables, $N$ observations
   $$
   \mu = \alpha + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k
   $$
-  - In practice we find an hyperplane of dimension $k$ that explains the data
+  - Find a hyperplane of dimension $k$ to explain data
 
-- The functional form of multiple linear regression is the same as polynomial
-  regressions but the independent variables are powers of the same one
+- Multiple linear regression form is same as polynomial regressions but
+  independent variables are powers of the same one
 
 * Multiple linear regression: synthetic example
 // TODO: Synthetic example
@@ -1530,16 +1564,18 @@ digraph BayesTheorem {
 # ##############################################################################
 
 * Models as Maps of the Real World
-- Models are:
-  - Approximations that help understand a particular problem
-  - Not copies of the real world, but like a map of the real world
-    - All models are wrong since they are not the actual territory
-    - Not all models are equally wrong: some models are better than others at
-      describing a given problem
+- Often you need to compare models to understand which one is "better"
 
-- Models have a purpose in mind
-  - A model can't reproduce all aspects of a problem equally well
-  - Different models often capture different aspects of data
+- Models are:
+  - Approximations to understand a problem
+  - Not copies of the real world, like but like "a map"
+    - All models are wrong since they aren't the actual territory
+    - Some models describe a problem better than others
+    - "All models are wrong, but some are useful" (Box, 1976)
+
+- Models have a purpose
+  - A model can't reproduce all aspects equally well
+  - Different models capture different data aspects
 
 // ## 5.1., Posterior predictive checks
 
@@ -1549,33 +1585,28 @@ digraph BayesTheorem {
 
 * Posterior Predictive Checks
 - The goal of PPC is:
-  - Evaluate how well models explain the data used to fit the model
-  - Understand what are the limitations of the model
+  - Evaluate model's explanation of data
+  - Understand model limitations
   - Improve the model
-
-- Given some data from a parabola + noise
-  - Fit data with a linear
+- Given data from a parabola + noise
+  - Fit data with a linear model
   - Fit data with a quadratic model
-  - Compare various quantities of the predicted data from the model (i.e.,
-    posterior) vs the observed data
+  - Compare predicted data (posterior) vs observed data
 
-- Compare the KDE of the observed data and the predicted data from the models
-  - The linear model KDE doesn't match the data
-  - The quadratic model KDE is a better match
-  - For both models there is a lot of uncertainty, especially at the tails of
-    the distribution since we don't have many data points
+- Compare KDE of observed and predicted data
+  - Linear model KDE doesn't match data
+  - Quadratic model KDE matches better
+  - High uncertainty in both models, especially at distribution tails
 
 // TODO: Pics from Lesson07-Probabilistic_programming-2.ipynb
 
-- Compare the mean / the interquartile range for the data vs the model
-  - E.g., plot the dispersion of mean and IQR for models vs data
-  - The data set gives us a single point
-  - The posterior gives us a distribution
+- Compare mean / interquartile range for data vs model
+  - Plot dispersion of mean and IQR for models vs data
+  - Data set provides a single point
+  - Posterior provides a distribution
 
 // TODO: Pics
-
-- In general a statistics that is "orthogonal" to what the model is explicitly
-  modeling is more informative
+- Statistics "orthogonal" to model's focus are more informative
 
 * Bayesian P-Value for a Statistic
 - A Bayesian p-value summarizes the comparison between simulated and observed
