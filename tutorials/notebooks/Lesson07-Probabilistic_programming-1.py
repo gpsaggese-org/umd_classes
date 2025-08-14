@@ -732,12 +732,31 @@ def save_ax(ax, file_name):
     print(cmd)
 
 
-def save_dot(dot, file_name):
-    dot = copy.deepcopy(dot)
+
+
+
+def save_dot(model, file_name):
+    dot = pm.model_to_graphviz(model)
+    dot2 = copy.deepcopy(dot)
     file_name = os.path.join(fig_dir, file_name)
-    dot.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
-    dot.render(file_name, format='png', cleanup=True)
+    dot2.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
+    dot2.render(file_name, format='png', cleanup=True)
     #dot.graph_attr['dpi'] = '96'  # 300 is print quality; try 600 for very sharp images
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+    return dot
+
+
+# !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet dataframe_image)"
+
+import dataframe_image as dfi
+
+
+def save_df(df, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
     #
     file_name = file_name.replace("/app/", "")
     cmd = f"![]({file_name})"
@@ -755,8 +774,6 @@ ax.plot(ans.x, (alpha_c + beta_c * ans.x), "C0:", label="non-robust")
 ax.plot(ans.x, ans.y, "C0o");
 
 save_ax(ax, "Lesson07_Non_robust_regression1.png")
-
-# %%
 
 # %%
 with pm.Model() as model_t:
@@ -777,9 +794,8 @@ with pm.Model() as model_t:
     idata_t.extend(pm.sample_posterior_predictive(idata_t))
 
 # %%
-dot = pm.model_to_graphviz(model_t)
-save_dot(dot, "Lesson07_Robust_regression_model")
-dot
+#dot = pm.model_to_graphviz(model_t)
+save_dot(model_t, "Lesson07_Robust_regression_model")
 
 # %%
 var_names = "alpha beta sigma nu".split()
@@ -827,6 +843,9 @@ iris = pd.read_csv(dir_name + "/iris.csv")
 iris.head()
 
 # %%
+save_df(iris.head(), "Lesson07_Logistic_regression_df.png")
+
+# %%
 # Filter the dataframe keeping only 2 values for species.
 df = iris.query("species == ('setosa', 'versicolor')")
 df.head()
@@ -858,12 +877,23 @@ with pm.Model() as model_lrs:
     idata_lrs = pm.sample(random_seed=123)
 
 # %%
-pm.model_to_graphviz(model_lrs)
+save_dot(model_lrs, "Lesson07_Logistic_regression_model.png")
 
 # %%
 var_names = ["~bd", "~theta"]
-az.plot_trace(idata_lrs, var_names=var_names)
 az.summary(idata_lrs, var_names=var_names, round_to=2, kind="stats")
+
+# %%
+ax = az.plot_trace(idata_lrs, var_names=var_names)
+
+# %%
+type(ax)
+
+# %%
+fig = ax[0, 0].figure  # grab the parent figure from any Axes
+fig.savefig("traceplot.png", dpi=300, bbox_inches="tight")
+
+# %%
 
 # %%
 posterior = idata_lrs.posterior
