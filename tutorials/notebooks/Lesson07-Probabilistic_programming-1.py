@@ -732,7 +732,14 @@ def save_ax(ax, file_name):
     print(cmd)
 
 
-
+def save_fig(axes, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    fig = axes[0, 0].figure
+    ax.savefig(file_name, dpi=300, bbox_inches='tight')
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
 
 
 def save_dot(model, file_name):
@@ -887,13 +894,7 @@ az.summary(idata_lrs, var_names=var_names, round_to=2, kind="stats")
 ax = az.plot_trace(idata_lrs, var_names=var_names)
 
 # %%
-type(ax)
-
-# %%
-fig = ax[0, 0].figure  # grab the parent figure from any Axes
-fig.savefig("traceplot.png", dpi=300, bbox_inches="tight")
-
-# %%
+save_fig(ax, "
 
 # %%
 posterior = idata_lrs.posterior
