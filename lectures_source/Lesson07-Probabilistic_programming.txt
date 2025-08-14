@@ -1503,7 +1503,7 @@ digraph BayesTheorem {
   - E.g., we want to predict the probability of a flower being `setosa` from the
     `sepal_length`
 
-// TODO: From notebook
+![](lectures_source/figures/Lesson07_Logistic_regression_df.png)
 
 * Classification with Logistic Regression
 
@@ -1559,6 +1559,12 @@ digraph BayesTheorem {
     $$
   - Logistic regression models log-odds as linear regression
   - $\beta$ is the increase of log-odds for a unit change of $x$
+
+* Classification with Logistic Regression: Bayesian
+
+![](lectures_source/figures/Lesson07_Logistic_regression_code.png)
+
+![](lectures_source/figures/Lesson07_Logistic_regression_model.png)
 
 * Heteroskedasticity
 - **Heteroskedasticity** happens when variance of errors is not constant across
