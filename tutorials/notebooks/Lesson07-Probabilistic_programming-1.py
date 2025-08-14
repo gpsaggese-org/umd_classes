@@ -735,7 +735,7 @@ def save_ax(ax, file_name):
 def save_fig(axes, file_name):
     file_name = os.path.join(fig_dir, file_name)
     fig = axes[0, 0].figure
-    ax.savefig(file_name, dpi=300, bbox_inches='tight')
+    fig.savefig(file_name, dpi=300, bbox_inches='tight')
     #
     file_name = file_name.replace("/app/", "")
     cmd = f"![]({file_name})"
@@ -745,6 +745,7 @@ def save_fig(axes, file_name):
 def save_dot(model, file_name):
     dot = pm.model_to_graphviz(model)
     dot2 = copy.deepcopy(dot)
+    file_name = file_name.replace(".png", "")
     file_name = os.path.join(fig_dir, file_name)
     dot2.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
     dot2.render(file_name, format='png', cleanup=True)
@@ -753,7 +754,6 @@ def save_dot(model, file_name):
     file_name = file_name.replace("/app/", "")
     cmd = f"![]({file_name})"
     print(cmd)
-    return dot
 
 
 # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet dataframe_image)"
@@ -764,6 +764,15 @@ import dataframe_image as dfi
 def save_df(df, file_name):
     file_name = os.path.join(fig_dir, file_name)
     dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_plt(file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    plt.savefig(file_name, dpi=300, bbox_inches='tight')
     #
     file_name = file_name.replace("/app/", "")
     cmd = f"![]({file_name})"
@@ -894,7 +903,7 @@ az.summary(idata_lrs, var_names=var_names, round_to=2, kind="stats")
 ax = az.plot_trace(idata_lrs, var_names=var_names)
 
 # %%
-save_fig(ax, "
+save_fig(ax, "Lesson07_Logistic_regression_result.png")
 
 # %%
 posterior = idata_lrs.posterior
@@ -917,6 +926,8 @@ ax.scatter(x_c, np.random.normal(y_0, 0.02), marker=".")
 
 az.plot_hdi(x_c, posterior["theta"], color="C0", ax=ax)
 
+save_ax(ax, "Lesson07_Logistic_regression_result2.png")
+
 # %% [markdown]
 # ## Variable variance
 
@@ -926,6 +937,10 @@ data = pd.read_csv(dir_name + "/babies.csv")
 data.columns = ["month", "length"]
 data.plot.scatter("month", "length");
 display(data.head())
+
+# %%
+ax = data.plot.scatter("month", "length")
+save_ax(ax, "Lesson07_Variable_variance_data.png")
 
 # %%
 with pm.Model() as model_vv:
@@ -948,6 +963,9 @@ with pm.Model() as model_vv:
 pm.model_to_graphviz(model_vv)
 
 # %%
+save_dot(model_vv, "Lesson07_Variable_variance_model.png")
+
+# %%
 # Plot the data.
 plt.plot(data.month, data.length, "C0.", alpha=0.1)
 
@@ -960,6 +978,8 @@ sigma_m = posterior["sigma"].mean("sample").values
 plt.plot(data.month, mu_m, c="k")
 plt.fill_between(data.month, mu_m + 1 * sigma_m, mu_m - 1 * sigma_m, alpha=0.6, color="C1")
 plt.fill_between(data.month, mu_m + 2 * sigma_m, mu_m - 2 * sigma_m, alpha=0.4, color="C1")
+#plt.savefig("my_plot.png")
+save_plt("Lesson07_Variable_variance_result.png")
 
 # %% [markdown]
 # # Multiple linear regression

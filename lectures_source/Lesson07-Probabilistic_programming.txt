@@ -1562,9 +1562,27 @@ digraph BayesTheorem {
 
 * Classification with Logistic Regression: Bayesian
 
+::: columns
+:::: {.column width=50%}
 ![](lectures_source/figures/Lesson07_Logistic_regression_code.png)
 
-![](lectures_source/figures/Lesson07_Logistic_regression_model.png)
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Logistic_regression_model.png){ height=50% }
+
+::::
+:::
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Logistic_regression_result.png)
+
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Logistic_regression_result2.png)
+
+::::
+:::
 
 * Heteroskedasticity
 - **Heteroskedasticity** happens when variance of errors is not constant across
@@ -1576,7 +1594,32 @@ digraph BayesTheorem {
   - $\sigma$ is a linear function of the predictor variable
   - Mean $\mu$ is square root of a linear model
 
-// TODO: From the notebook
+![](lectures_source/figures/Lesson07_Variable_variance_data.png)
+
+* Heteroskedasticity: Bayesian Model
+::: columns
+:::: {.column width=50%}
+
+![](lectures_source/figures/Lesson07_Variable_variance_code.png)
+
+
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Variable_variance_model.png)
+
+
+::::
+:::
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Variable_variance_result.png)
+
+::::
+:::: {.column width=50%}
+
+::::
+:::
 
 //## Hierarchical linear regression
 //
