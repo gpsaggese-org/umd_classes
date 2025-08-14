@@ -640,6 +640,12 @@ def plot_data_and_model(bikes, idata):
 
 
 # %%
+print(x_plot.shape)
+
+# %%
+print(mean_line.shape)
+
+# %%
 # - Plot the data
 # zorder is to plot behind the line.
 plt.plot(bikes.temperature, bikes.rented, "C2.", zorder=-3);
@@ -705,14 +711,38 @@ az.plot_ppc(
 # ## Robust regression
 
 # %%
-# !ls 
-
-# %%
 ans = pd.read_csv(dir_name + "/anscombe_3.csv")
 display(ans.head())
 
 # %%
 ans.plot("x", "y", kind="scatter");
+
+# %%
+fig_dir = "/app/lectures_source/figures"
+import copy
+import os
+
+
+def save_ax(ax, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    ax.figure.savefig(file_name, dpi=300, bbox_inches='tight')
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_dot(dot, file_name):
+    dot = copy.deepcopy(dot)
+    file_name = os.path.join(fig_dir, file_name)
+    dot.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
+    dot.render(file_name, format='png', cleanup=True)
+    #dot.graph_attr['dpi'] = '96'  # 300 is print quality; try 600 for very sharp images
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
 
 # %%
 import scipy
@@ -723,6 +753,10 @@ beta_c, alpha_c, *_ = scipy.stats.linregress(ans.x, ans.y)
 _, ax = plt.subplots()
 ax.plot(ans.x, (alpha_c + beta_c * ans.x), "C0:", label="non-robust")
 ax.plot(ans.x, ans.y, "C0o");
+
+save_ax(ax, "Lesson07_Non_robust_regression1.png")
+
+# %%
 
 # %%
 with pm.Model() as model_t:
@@ -743,7 +777,9 @@ with pm.Model() as model_t:
     idata_t.extend(pm.sample_posterior_predictive(idata_t))
 
 # %%
-pm.model_to_graphviz(model_neg)
+dot = pm.model_to_graphviz(model_t)
+save_dot(dot, "Lesson07_Robust_regression_model")
+dot
 
 # %%
 var_names = "alpha beta sigma nu".split()
@@ -767,6 +803,8 @@ az.plot_hdi(ans.x, az.hdi(idata_t.posterior["mu"])["mu"].T, ax=ax)
 ax.set_xlabel("x")
 ax.set_ylabel("y", rotation=0)
 ax.legend(loc=2);
+
+save_ax(ax, "Lesson07_Non_robust_regression2")
 
 # %%
 # #?pm.sample_posterior_predictive

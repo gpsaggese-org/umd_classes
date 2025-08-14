@@ -1396,13 +1396,32 @@ digraph BayesTheorem {
 // ## 4.5, Robust regression
 
 * Robust Regression
+::: columns
+:::: {.column width=40%}
 - Outliers pull regression line away from bulk of data
-- Student's t-distribution has heavier tails than Normal, gives less importance
-  to outliers
 
-  ![](lectures_source/figures/Lesson07_Robust_regression_1.png)
+::::
+:::: {.column width=55%}
+![](lectures_source/figures/Lesson07_Non_robust_regression1.png)
+::::
+:::
 
-// TODO: Add example from notebook (done)
+- Student's t-distribution
+  - Has heavier tails than Normal
+  - Gives less importance to outliers
+
+::: columns
+:::: {.column width=45%}
+
+//![](lectures_source/figures/Lesson07_Robust_regression_code.png)
+![](lectures_source/figures/Lesson07_Robust_regression_model.png)
+
+::::
+:::: {.column width=45%}
+![](lectures_source/figures/Lesson07_Non_robust_regression2.png)
+
+::::
+:::
 
 // ## 4.6, Logistic regression
 
