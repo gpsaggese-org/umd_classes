@@ -76,8 +76,7 @@ plt.scatter(x_c[0], y_c)
 plt.xlabel('x')
 plt.ylabel('y');
 
-# %%
-ut.save_plt("Lesson07_Comparing_models_data.png")
+ut.save_plt("Lesson07.Comparing_models.data.png")
 
 # %%
 # Linear model.
@@ -145,8 +144,7 @@ plt.plot(x_c[0], y_p_post, "C1", label="quadratic model")
 # Plot data.
 plt.plot(x_c[0], y_c, "C2.");
 
-# %%
-ut.save_plt("Lesson07_Comparing_models_model_fit.png")
+ut.save_plt("Lesson07.Comparing_models.model_fit.png")
 
 # %%
 #
@@ -155,12 +153,11 @@ ut.save_plt("Lesson07_Comparing_models_model_fit.png")
 
 az.plot_ppc(idata_l, num_pp_samples=100, colors=["C1", "C0", "C1"])
 plt.title("linear model");
+ut.save_plt("Lesson07.Comparing_models.lin_model_PPC.png")
 
 az.plot_ppc(idata_q, num_pp_samples=100, colors=["C1", "C0", "C1"])
 plt.title("quadratic model");
-
-# %%
-ut.save_plt("Lesson07_Comparing_models_model_PPC.png")
+ut.save_plt("Lesson07.Comparing_models.quadr_model_PPC.png")
 
 # %%
 # #?az.plot_bpv
