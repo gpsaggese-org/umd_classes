@@ -29,11 +29,7 @@ MSML610: Advanced Machine Learning
 
 - Martin, Bayesian Analysis with Python, 2018 (2e)
 
-# ##############################################################################
-# Probabilistic Programming
-# ##############################################################################
-
-## Concepts
+# Concepts
 
 // From Martin.Bayesian_Analysis_with_Python.2e.txt
 
@@ -164,6 +160,8 @@ MSML610: Advanced Machine Learning
     - Correct coding errors
     - Improve model
     - Gather more or different data
+
+# Coin Example
 
 ## #############################################################################
 ## Coin Example: Analytical Approach
@@ -555,7 +553,7 @@ digraph BayesTheorem {
 ::::
 :::
 
-## Posterior-Based Decisions
+# Posterior-Based Decisions
 
 * Posterior-Based Decisions
 - Sometimes describing the posterior is not enough
@@ -682,6 +680,8 @@ digraph BayesTheorem {
 
 - Important to relax assumption of Gaussianity
 
+## Chemical Shift: Example
+
 * Chemical Shift
 
 ::: columns
@@ -756,7 +756,7 @@ digraph BayesTheorem {
 ::::
 :::
 
-### Posterior Predictive Checks
+## Posterior Predictive Checks
 
 * Samples from Posterior Distribution
 - Given a \blue{posterior distribution $\Pr(\theta | y)$}, you can generate
@@ -913,9 +913,9 @@ digraph BayesTheorem {
 ::::
 :::
 
-## #############################################################################
-## Groups Comparison
-## #############################################################################
+# #############################################################################
+# Groups Comparison
+# #############################################################################
 
 * Group Comparison
 - **Group comparison** tests for statistically significant results between
@@ -984,9 +984,9 @@ digraph BayesTheorem {
 
 // 3, Hierarchical models
 
-## #############################################################################
-## Hierarchical Models
-## #############################################################################
+# #############################################################################
+# Hierarchical Models
+# #############################################################################
 
 * Hierarchical Models
 - Aka "multilevel", "nested", "mixed-effects" models
