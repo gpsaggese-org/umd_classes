@@ -532,4 +532,66 @@ def plot_dog_in_office_pdf(
     plt.legend()
     plt.show()
 
-# Example
+# #############################################################################
+# Save figures.
+# #############################################################################
+
+
+fig_dir = "/app/lectures_source/figures"
+import copy
+import os
+
+#!sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet dataframe_image)"
+
+import dataframe_image as dfi
+
+
+def save_ax(ax, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    ax.figure.savefig(file_name, dpi=300, bbox_inches='tight')
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_fig(axes, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    fig = axes[0, 0].figure
+    fig.savefig(file_name, dpi=300, bbox_inches='tight')
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_dot(model, file_name):
+    dot = pm.model_to_graphviz(model)
+    dot2 = copy.deepcopy(dot)
+    file_name = file_name.replace(".png", "")
+    file_name = os.path.join(fig_dir, file_name)
+    dot2.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
+    dot2.render(file_name, format='png', cleanup=True)
+    #dot.graph_attr['dpi'] = '96'  # 300 is print quality; try 600 for very sharp images
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_df(df, file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)
+
+
+def save_plt(file_name):
+    file_name = os.path.join(fig_dir, file_name)
+    plt.savefig(file_name, dpi=300, bbox_inches='tight')
+    #
+    file_name = file_name.replace("/app/", "")
+    cmd = f"![]({file_name})"
+    print(cmd)

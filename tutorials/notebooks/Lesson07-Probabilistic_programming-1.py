@@ -26,6 +26,9 @@
 # %%
 # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet graphviz)"
 
+# %%
+# !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet dataframe_image)"
+
 # %% [markdown]
 # ### Import modules
 
@@ -715,68 +718,6 @@ display(ans.head())
 ans.plot("x", "y", kind="scatter");
 
 # %%
-fig_dir = "/app/lectures_source/figures"
-import copy
-import os
-
-
-def save_ax(ax, file_name):
-    file_name = os.path.join(fig_dir, file_name)
-    ax.figure.savefig(file_name, dpi=300, bbox_inches='tight')
-    #
-    file_name = file_name.replace("/app/", "")
-    cmd = f"![]({file_name})"
-    print(cmd)
-
-
-def save_fig(axes, file_name):
-    file_name = os.path.join(fig_dir, file_name)
-    fig = axes[0, 0].figure
-    fig.savefig(file_name, dpi=300, bbox_inches='tight')
-    #
-    file_name = file_name.replace("/app/", "")
-    cmd = f"![]({file_name})"
-    print(cmd)
-
-
-def save_dot(model, file_name):
-    dot = pm.model_to_graphviz(model)
-    dot2 = copy.deepcopy(dot)
-    file_name = file_name.replace(".png", "")
-    file_name = os.path.join(fig_dir, file_name)
-    dot2.graph_attr['dpi'] = '300'  # 300 is print quality; try 600 for very sharp images
-    dot2.render(file_name, format='png', cleanup=True)
-    #dot.graph_attr['dpi'] = '96'  # 300 is print quality; try 600 for very sharp images
-    #
-    file_name = file_name.replace("/app/", "")
-    cmd = f"![]({file_name})"
-    print(cmd)
-
-
-# !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet dataframe_image)"
-
-import dataframe_image as dfi
-
-
-def save_df(df, file_name):
-    file_name = os.path.join(fig_dir, file_name)
-    dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
-    #
-    file_name = file_name.replace("/app/", "")
-    cmd = f"![]({file_name})"
-    print(cmd)
-
-
-def save_plt(file_name):
-    file_name = os.path.join(fig_dir, file_name)
-    plt.savefig(file_name, dpi=300, bbox_inches='tight')
-    #
-    file_name = file_name.replace("/app/", "")
-    cmd = f"![]({file_name})"
-    print(cmd)
-
-
-# %%
 import scipy
 from scipy.stats import linregress
 
@@ -786,7 +727,7 @@ _, ax = plt.subplots()
 ax.plot(ans.x, (alpha_c + beta_c * ans.x), "C0:", label="non-robust")
 ax.plot(ans.x, ans.y, "C0o");
 
-save_ax(ax, "Lesson07_Non_robust_regression1.png")
+ut.save_ax(ax, "Lesson07_Non_robust_regression1.png")
 
 # %%
 with pm.Model() as model_t:
@@ -808,7 +749,7 @@ with pm.Model() as model_t:
 
 # %%
 #dot = pm.model_to_graphviz(model_t)
-save_dot(model_t, "Lesson07_Robust_regression_model")
+ut.save_dot(model_t, "Lesson07_Robust_regression_model")
 
 # %%
 var_names = "alpha beta sigma nu".split()
@@ -833,7 +774,7 @@ ax.set_xlabel("x")
 ax.set_ylabel("y", rotation=0)
 ax.legend(loc=2);
 
-save_ax(ax, "Lesson07_Non_robust_regression2")
+ut.save_ax(ax, "Lesson07_Non_robust_regression2")
 
 # %%
 # #?pm.sample_posterior_predictive
@@ -856,7 +797,7 @@ iris = pd.read_csv(dir_name + "/iris.csv")
 iris.head()
 
 # %%
-save_df(iris.head(), "Lesson07_Logistic_regression_df.png")
+ut.save_df(iris.head(), "Lesson07_Logistic_regression_df.png")
 
 # %%
 # Filter the dataframe keeping only 2 values for species.
@@ -890,7 +831,7 @@ with pm.Model() as model_lrs:
     idata_lrs = pm.sample(random_seed=123)
 
 # %%
-save_dot(model_lrs, "Lesson07_Logistic_regression_model.png")
+ut.save_dot(model_lrs, "Lesson07_Logistic_regression_model.png")
 
 # %%
 var_names = ["~bd", "~theta"]
@@ -900,7 +841,7 @@ az.summary(idata_lrs, var_names=var_names, round_to=2, kind="stats")
 ax = az.plot_trace(idata_lrs, var_names=var_names)
 
 # %%
-save_fig(ax, "Lesson07_Logistic_regression_result.png")
+ut.save_fig(ax, "Lesson07_Logistic_regression_result.png")
 
 # %%
 posterior = idata_lrs.posterior
@@ -1024,7 +965,7 @@ def scatter_plot(x, y):
 
 
 scatter_plot(X_centered, y)
-save_plt("Lesson07_Multiple_linear_regression3.png")
+ut.save_plt("Lesson07_Multiple_linear_regression3.png")
 
 # %%
 with pm.Model() as model_mlr:
@@ -1043,17 +984,17 @@ with pm.Model() as model_mlr:
     idata_mlr = pm.sample(2000)
 
 # %%
-save_dot(model_mlr, "Lesson07_Multiple_linear_regression_model.png")
+ut.save_dot(model_mlr, "Lesson07_Multiple_linear_regression_model.png")
 pm.model_to_graphviz(model_mlr)
 
 # %%
 var_names = ["alpha", "beta", "eps"]
 az.plot_trace(idata_mlr, var_names=var_names);
-save_plt("Lesson07_Multiple_linear_regression_results1.png")
+ut.save_plt("Lesson07_Multiple_linear_regression_results1.png")
 
 # %%
 df = az.summary(idata_mlr, var_names=var_names, round_to=2, kind="stats")
-save_df(df, "Lesson07_Multiple_linear_regression_results2.png")
+ut.save_df(df, "Lesson07_Multiple_linear_regression_results2.png")
 df
 
 # %% [markdown]
@@ -1075,12 +1016,12 @@ with pm.Model() as model_mlb:
 pm.model_to_graphviz(model_mlb)
 
 # %%
-save_dot(model_mlb, "Lesson07_Multiple_linear_regression_model_RentedBikes_model.png")
+ut.save_dot(model_mlb, "Lesson07_Multiple_linear_regression_model_RentedBikes_model.png")
 
 # %%
 var_names = ["alpha", "beta0", "beta1", "sigma"]
 az.plot_trace(idata_mlb, var_names=var_names);
-save_plt("Lesson07_Multiple_linear_regression_model_RentedBikes_model_trace.png")
+ut.save_plt("Lesson07_Multiple_linear_regression_model_RentedBikes_model_trace.png")
 
 # %%
 df = az.summary(idata_mlb, var_names=var_names, round_to=2, kind="stats")
