@@ -164,7 +164,7 @@ MSML610: Advanced Machine Learning
 # Coin Example
 
 ## #############################################################################
-## Coin Example: Analytical Approach
+## Analytical Approach
 ## #############################################################################
 
 * Coin Example: Problem
@@ -421,7 +421,7 @@ Kruschke diagram
 // 2, Programming probabilistically
 
 ## #############################################################################
-## Coin Example: Probabilistic Programming
+## Probabilistic Programming
 ## #############################################################################
 
 * Bayesian Statistics
@@ -1117,21 +1117,6 @@ digraph BayesTheorem {
   - Similar groups reinforce common estimation
 - **Result**: inference is more stable
 
-\\* Football Example
-\\- We have data for different leagues over 4 years
-\\- We want to compute goals-per-shot metric
-\\  - We can estimate it with $n$ shots and $y$ goals
-\\
-\\- $\theta$ is the success rate for each player
-\\  - There are `n_players`
-\\- The success rate $gs \sim Beta(\theta)$
-\\- The hyperparams of the Beta distributions are 4-dim vectors $\mu_p$ and
-\\  $\nu_p$ for each position
-\\  - `DF` defender
-\\  - `MF` midfielder
-\\  - `FW` forward
-\\  - `GK` goalkeeper
-
 * You Need to Know When to Stop
 - Create hierarchical models with as many levels as you want
 - More levels:
@@ -1702,7 +1687,7 @@ digraph BayesTheorem {
 ::::
 :::
 
-* Multiple Linear Regression: Rented Bike Example 1/2
+* Multiple Regression: Rented Bike Example 1/2
 
 - Assumption: number of bike rented is function of temperature and hour of the
   day
@@ -1718,7 +1703,7 @@ digraph BayesTheorem {
 ::::
 :::
 
-* Multiple Linear Regression: Rented Bike Example 2/2
+* Multiple Regression: Rented Bike Example 2/2
 
 - Solve model
 
@@ -1739,16 +1724,15 @@ digraph BayesTheorem {
 # ##############################################################################
 
 * Models as Maps of the Real World
-- Often you need to compare models to understand which one is "better"
+- Often you need to compare models to understand which one is **"better"**
 
-- Models are:
-  - Approximations to understand a problem
-  - Not copies of the real world, like but like "a map"
+- Models are a **map, not a copy** of the real world
+  - _"All models are wrong, but some are useful"_ (Box, 1976)
     - All models are wrong since they aren't the actual territory
     - Some models describe a problem better than others
-    - "All models are wrong, but some are useful" (Box, 1976)
 
-- Models have a purpose
+- Models have a **purpose**
+  - Are approximations to understand a problem
   - A model can't reproduce all aspects equally well
   - Different models capture different data aspects
 
@@ -1759,29 +1743,52 @@ digraph BayesTheorem {
 ### ############################################################################
 
 * Posterior Predictive Checks
-- The goal of PPC is:
-  - Evaluate model's explanation of data
+
+::: columns
+:::: {.column width=50%}
+- Goal of PPC:
+  - Evaluate model's data explanation
   - Understand model limitations
-  - Improve the model
-- Given data from a parabola + noise
-  - Fit data with a linear model
-  - Fit data with a quadratic model
-  - Compare predicted data (posterior) vs observed data
+  - Improve model
 
-- Compare KDE of observed and predicted data
-  - Linear model KDE doesn't match data
+- Given data from parabola + noise:
+  - Fit with linear model
+  - Fit with quadratic model
+  - Compare predicted (posterior) vs observed data
+
+::::
+:::: {.column width=50%}
+
+![](lectures_source/figures/Lesson07_Comparing_models_data.png)
+
+//![](lectures_source/figures/Lesson07_Comparing_models_model_code.png)
+
+![](lectures_source/figures/Lesson07_Comparing_models_model_fit.png)
+
+::::
+:::
+
+* Posterior Predictive Checks
+
+::: columns
+:::: {.column width=50%}
+- Compare KDE of observed and predicted data:
+  - Linear model KDE doesn't match
   - Quadratic model KDE matches better
-  - High uncertainty in both models, especially at distribution tails
-
-// TODO: Pics from Lesson07-Probabilistic_programming-2.ipynb
+  - High uncertainty in both models, especially at tails
 
 - Compare mean / interquartile range for data vs model
   - Plot dispersion of mean and IQR for models vs data
   - Data set provides a single point
   - Posterior provides a distribution
 
-// TODO: Pics
 - Statistics "orthogonal" to model's focus are more informative
+
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Comparing_models_model_PPC.png)
+::::
+:::
 
 * Bayesian P-Value for a Statistic
 - A Bayesian p-value summarizes the comparison between simulated and observed

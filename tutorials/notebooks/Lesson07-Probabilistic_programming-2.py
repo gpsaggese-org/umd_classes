@@ -51,6 +51,11 @@ ut.config_notebook()
 # # Posterior predictive check: Examples
 
 # %%
+dir_name = "./Lesson07-data"
+
+# !ls $dir_name
+
+# %%
 # Load some data it's mainly a linear relationship with some data.
 dummy_data = np.loadtxt(dir_name + '/dummy.csv')
 x = dummy_data[:, 0]
@@ -70,6 +75,9 @@ y_c = (y - y.mean()) / y.std()
 plt.scatter(x_c[0], y_c)
 plt.xlabel('x')
 plt.ylabel('y');
+
+# %%
+ut.save_plt("Lesson07_Comparing_models_data.png")
 
 # %%
 # Linear model.
@@ -101,9 +109,6 @@ with pm.Model() as model_p:
     #
     idata_q = pm.sample(2000, idata_kwargs={"log_likelihood": True})
     idata_q.extend(pm.sample_posterior_predictive(idata_q))
-
-# %% [markdown]
-# # 
 
 # %%
 #
@@ -141,6 +146,9 @@ plt.plot(x_c[0], y_p_post, "C1", label="quadratic model")
 plt.plot(x_c[0], y_c, "C2.");
 
 # %%
+ut.save_plt("Lesson07_Comparing_models_model_fit.png")
+
+# %%
 #
 # Plot the posterior predictive check for both models.
 #
@@ -150,6 +158,9 @@ plt.title("linear model");
 
 az.plot_ppc(idata_q, num_pp_samples=100, colors=["C1", "C0", "C1"])
 plt.title("quadratic model");
+
+# %%
+ut.save_plt("Lesson07_Comparing_models_model_PPC.png")
 
 # %%
 # #?az.plot_bpv
