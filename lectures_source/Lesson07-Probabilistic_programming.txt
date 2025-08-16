@@ -1759,11 +1759,9 @@ digraph BayesTheorem {
 ::::
 :::: {.column width=50%}
 
-![](lectures_source/figures/Lesson07_Comparing_models_data.png)
+![](lectures_source/figures/Lesson07.Comparing_models.data.png)
 
-//![](lectures_source/figures/Lesson07_Comparing_models_model_code.png)
-
-![](lectures_source/figures/Lesson07_Comparing_models_model_fit.png)
+![](lectures_source/figures/Lesson07.Comparing_models.model_code.png)
 
 ::::
 :::
@@ -1786,7 +1784,10 @@ digraph BayesTheorem {
 
 ::::
 :::: {.column width=50%}
-![](lectures_source/figures/Lesson07_Comparing_models_model_PPC.png)
+![](lectures_source/figures/Lesson07.Comparing_models.model_fit.png)
+
+![](lectures_source/figures/Lesson07.Comparing_models.lin_model_PPC.png)
+![](lectures_source/figures/Lesson07.Comparing_models.quadr_model_PPC.png)
 ::::
 :::
 
