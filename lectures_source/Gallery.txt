@@ -324,6 +324,30 @@ Normal
 ::::
 :::
 
+* Four pieces
+
+- Create model
+
+::: columns
+:::: {.column width=50%}
+Figure 1
+::::
+:::: {.column width=50%}
+Figure 2
+::::
+:::
+
+- Solve model
+
+::: columns
+:::: {.column width=50%}
+Figure 3
+::::
+:::: {.column width=50%}
+Figure 4
+::::
+:::
+
 * Tables and comments on two columns
 ::: columns
 :::: column

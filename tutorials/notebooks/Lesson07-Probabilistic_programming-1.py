@@ -46,9 +46,6 @@ import matplotlib.pyplot as plt
 import preliz as pz
 
 # %%
-# ls .
-
-# %%
 dir_name = "./Lesson07-data"
 
 # !ls $dir_name
@@ -978,7 +975,7 @@ sigma_m = posterior["sigma"].mean("sample").values
 plt.plot(data.month, mu_m, c="k")
 plt.fill_between(data.month, mu_m + 1 * sigma_m, mu_m - 1 * sigma_m, alpha=0.6, color="C1")
 plt.fill_between(data.month, mu_m + 2 * sigma_m, mu_m - 2 * sigma_m, alpha=0.4, color="C1")
-#plt.savefig("my_plot.png")
+
 save_plt("Lesson07_Variable_variance_result.png")
 
 # %% [markdown]
@@ -1027,6 +1024,7 @@ def scatter_plot(x, y):
 
 
 scatter_plot(X_centered, y)
+save_plt("Lesson07_Multiple_linear_regression3.png")
 
 # %%
 with pm.Model() as model_mlr:
@@ -1045,12 +1043,18 @@ with pm.Model() as model_mlr:
     idata_mlr = pm.sample(2000)
 
 # %%
+save_dot(model_mlr, "Lesson07_Multiple_linear_regression_model.png")
 pm.model_to_graphviz(model_mlr)
 
 # %%
 var_names = ["alpha", "beta", "eps"]
-az.plot_trace(idata_mlr, var_names=var_names)
-az.summary(idata_mlr, var_names=var_names, round_to=2, kind="stats")
+az.plot_trace(idata_mlr, var_names=var_names);
+save_plt("Lesson07_Multiple_linear_regression_results1.png")
+
+# %%
+df = az.summary(idata_mlr, var_names=var_names, round_to=2, kind="stats")
+save_df(df, "Lesson07_Multiple_linear_regression_results2.png")
+df
 
 # %% [markdown]
 # ## Rented bikes
@@ -1071,6 +1075,13 @@ with pm.Model() as model_mlb:
 pm.model_to_graphviz(model_mlb)
 
 # %%
+save_dot(model_mlb, "Lesson07_Multiple_linear_regression_model_RentedBikes_model.png")
+
+# %%
 var_names = ["alpha", "beta0", "beta1", "sigma"]
-az.plot_trace(idata_mlb, var_names=var_names)
-az.summary(idata_mlb, var_names=var_names, round_to=2, kind="stats")
+az.plot_trace(idata_mlb, var_names=var_names);
+save_plt("Lesson07_Multiple_linear_regression_model_RentedBikes_model_trace.png")
+
+# %%
+df = az.summary(idata_mlb, var_names=var_names, round_to=2, kind="stats")
+df

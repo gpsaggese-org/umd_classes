@@ -27,9 +27,13 @@ MSML610: Advanced Machine Learning
 - AIMA (Artificial Intelligence: a Modern Approach)
   - Chap 15: Probabilistic programming
 
+- Martin, Bayesian Analysis with Python, 2018 (2e)
+
 # ##############################################################################
 # Probabilistic Programming
 # ##############################################################################
+
+## Concepts
 
 // From Martin.Bayesian_Analysis_with_Python.2e.txt
 
@@ -69,8 +73,7 @@ MSML610: Advanced Machine Learning
     - Iterate until you get a "good" fit on out-of-sample data
 
 - **Good** ![Smile Emoji](emoji/emoji_smile.png){ width=12px }
-- Bayesian statistics
-  - General approach to statistical inference
+  - General approach to statistical inference (Bayesian statistics)
   - Remove limitations from closed analytical form
   - Probabilistic approach unifies (seemingly) disparate methods
     - E.g., statistical methods and machine learning
@@ -104,6 +107,7 @@ MSML610: Advanced Machine Learning
 * Models
 - Models are simplified descriptions of a given system/process
   - A more complex model is not always a better one
+
 - **Goal**:
   - Capture the most relevant aspects of the system
   - Ignore minor details
@@ -136,10 +140,6 @@ MSML610: Advanced Machine Learning
   = \frac{\teal{Likelihood} \cdot \blue{Prior}}{\violet{Evidence}}
   $$
 
-## #############################################################################
-## Single-Parameter Inference
-## #############################################################################
-
 * Bayesian Models
 - **Probabilities** measure uncertainty about parameters
 - **Bayes' theorem** updates the probabilities in light of new data (hopefully)
@@ -164,6 +164,10 @@ MSML610: Advanced Machine Learning
     - Correct coding errors
     - Improve model
     - Gather more or different data
+
+## #############################################################################
+## Coin Example: Analytical Approach
+## #############################################################################
 
 * Coin Example: Problem
 - **Problem**:
@@ -419,7 +423,7 @@ Kruschke diagram
 // 2, Programming probabilistically
 
 ## #############################################################################
-## Probabilistic Programming
+## Coin Example: Probabilistic Programming
 ## #############################################################################
 
 * Bayesian Statistics
@@ -551,9 +555,9 @@ digraph BayesTheorem {
 ::::
 :::
 
-## Posterior-based Decisions
+## Posterior-Based Decisions
 
-* Posterior-based Decisions
+* Posterior-Based Decisions
 - Sometimes describing the posterior is not enough
   - You need to make decisions based on our inference
 
@@ -752,11 +756,9 @@ digraph BayesTheorem {
 ::::
 :::
 
-## #############################################################################
-## Posterior Predictive Checks
-## #############################################################################
+### Posterior Predictive Checks
 
-* Samples From Posterior Distribution
+* Samples from Posterior Distribution
 - Given a \blue{posterior distribution $\Pr(\theta | y)$}, you can generate
   predictions \red{$\tilde{y}$} based on the data \green{$y$} and the estimated
   parameters $\hat{\theta}$:
@@ -813,9 +815,7 @@ digraph BayesTheorem {
 5. Validation
    - Validate model by comparing original samples vs predicted samples
 
-## #############################################################################
-## Robust Inference
-## #############################################################################
+### Robust Inference
 
 * Chemical Shift Example: PPC
 ::: columns
@@ -1585,11 +1585,11 @@ digraph BayesTheorem {
 :::
 
 * Heteroskedasticity
-- **Heteroskedasticity** happens when variance of errors is not constant across
+- **Heteroskedasticity** = when variance of errors is not constant across
   observations
   - E.g., variance can be a linear function of the dependent variable
 
-- Examples:
+- **Example**:
   - Variance of baby height as a function of age is heteroskedastic
   - $\sigma$ is a linear function of the predictor variable
   - Mean $\mu$ is square root of a linear model
@@ -1602,11 +1602,9 @@ digraph BayesTheorem {
 
 ![](lectures_source/figures/Lesson07_Variable_variance_code.png)
 
-
 ::::
 :::: {.column width=50%}
 ![](lectures_source/figures/Lesson07_Variable_variance_model.png)
-
 
 ::::
 :::
@@ -1652,26 +1650,87 @@ digraph BayesTheorem {
 //    group
 //  - The information is represented in the same way
 
-## Multiple linear regression
+# Multiple linear regression
 
-* Multiple linear regression
-- Several independent variables are common in prediction problems
+* Multiple Linear Regression
+- In prediction problems, several independent variables are common 
   - E.g., student's grades = f(family income, mother's education, ...)
 
-- $k$ independent variables, $N$ observations
+- **Problem formulation**
+  - $k$ independent variables
+  - $N$ observations
+  - Find a hyperplane of dimension $k$ to explain data
   $$
   \mu = \alpha + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_k x_k
   $$
-  - Find a hyperplane of dimension $k$ to explain data
+  - Same as polynomial regressions but with independent variables
 
-- Multiple linear regression form is same as polynomial regressions but
-  independent variables are powers of the same one
+* Multiple Regression: Synthetic Example 1/2
 
-* Multiple linear regression: synthetic example
-// TODO: Synthetic example
+- Generate random data
 
-* Multiple linear regression: rented bike example
-// TODO: Rented bikes
+::: columns
+:::: {.column width=40%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression1.png)
+::::
+:::: {.column width=55%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression2.png)
+::::
+:::
+
+- Create PyMC model
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model_code.png)
+::::
+:::: {.column width=45%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model.png)
+::::
+:::
+
+* Multiple Regression: Synthetic Example 2/2
+
+- Solve model
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_results1.png)
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_results2.png)
+::::
+:::
+
+* Multiple Linear Regression: Rented Bike Example 1/2
+
+- Assumption: number of bike rented is function of temperature and hour of the
+  day
+
+- Create model
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model_RentedBikes_model_code.png)
+::::
+:::: {.column width=45%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model_RentedBikes_model.png)
+::::
+:::
+
+* Multiple Linear Regression: Rented Bike Example 2/2
+
+- Solve model
+
+::: columns
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model_RentedBikes_model_trace.png)
+
+::::
+:::: {.column width=50%}
+![](lectures_source/figures/Lesson07_Multiple_linear_regression_model_RentedBikes_model_results.png)
+::::
+:::
 
 // 5, Comparing models
 
