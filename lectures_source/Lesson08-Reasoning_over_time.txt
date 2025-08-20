@@ -33,6 +33,24 @@ MSML610: Advanced Machine Learning
 * Reference
 - AIMA: 14
 
+* Static vs Dynamic Probabilistic Reasoning
+- **Static probabilistic reasoning**
+  - Each random variable has a single fixed value over time
+  - E.g., when repairing a car:
+    - Whatever is broken stays broken during the diagnosis
+    - Observed evidence remains fixed
+
+- **Dynamic probabilistic reasoning**
+  - Random variables change over time
+  - E.g.,
+    - Tracking the location of a plane
+    - Tracking the economic activity of a nation
+  - E.g., treating a diabetic patient
+    - Goal: assess the state of the patient and decide on insulin dose
+    - Evidence: previous insulin doses, food intake, blood sugar (which change
+      over time)
+    - Dependency on time (e.g., metabolic activity and time of day)
+
 * Agents
 
 ```graphviz
@@ -70,63 +88,115 @@ digraph BeliefStateTracking {
 
 - Time is handled by making each quantity a function of time
 
-* Static vs Dynamic Probabilistic Reasoning: Example
-- **Static probabilistic reasoning**
-  - Each random variable has a single fixed value over time
-  - E.g., when repairing a car:
-    - Whatever is broken stays broken during the diagnosis
-    - Observed evidence remains fixed
-
-- **Dynamic probabilistic reasoning**
-  - Random variables change over time
-  - E.g.,
-    - Tracking the location of a plane
-    - Tracking the economic activity of a nation
-  - E.g., treating a diabetic patient
-    - Goal: assess the state of the patient and decide on insulin dose
-    - Evidence: previous insulin doses, food intake, blood sugar (which change
-      over time)
-    - Dependency on time (e.g., metabolic activity and time of day)
-
 * Model Components
 
-1. State of the world: $\vX_t$
-2. Prior probability of the state at time 0: $\vX_0$
-3. Evidence variables: $\vE_t$
-4. Transition model: $\Pr(\vX_t | \vX_{0:t-1})$
-   - How the world evolves
+1. **State of the world**: $\vX_t$
+   - Typically hidden
+2. **Prior probability of the state** at time 0: $\vX_0$
+3. **Evidence variables**: $\vE_t$
+   - Observable
+4. **Transition model**: $\Pr(\vX_t | \vX_{0:t-1})$
+   - Models how the world evolves
    - Specifies the probability distribution of the state $\vX_t$, given all
      previous values
-5. Sensor model: $\Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})$
-   - How the evidence variables $\vE_t$ are generated
+5. **Sensor model**: $\Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})$
+   - Models how the evidence variables $\vE_t$ are generated
 
-// TODO: Add graph?
+// TODO: Improve graph
+
+```graphviz
+digraph POMDP_Model {
+  rankdir=LR;
+  labelloc="t";
+  compound=true;
+  splines=true;
+  fontname="Helvetica";
+
+  node [fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+
+  // ---- Prior ----
+  Prior [shape=box, style="rounded,filled", fillcolor="#E6F2FF", label="Prior  P(X₀)"];
+
+  // ---- Time 0 ----
+  subgraph cluster_t0 {
+    label="time 0";
+    color="#CCCCCC"; style="rounded";
+    X0 [shape=ellipse, label=<X<sub>0</sub>>];
+    E0 [shape=ellipse, label=<E<sub>0</sub>>];
+  }
+
+  // ---- Time 1 ----
+  subgraph cluster_t1 {
+    label="time 1";
+    color="#CCCCCC"; style="rounded";
+    X1 [shape=ellipse, label=<X<sub>1</sub>>];
+    E1 [shape=ellipse, label=<E<sub>1</sub>>];
+    T1 [shape=box, style="filled", fillcolor="#F7F7F7", label="Transition model T₁\nPr(X₁ | X₀:…)" ];
+    S1 [shape=box, style="filled", fillcolor="#F7F7F7", label="Sensor model S₁\nPr(E₁ | X₀:1, E₀:0)"];
+  }
+
+  // ---- Time 2 ----
+  subgraph cluster_t2 {
+    label="time 2";
+    color="#CCCCCC"; style="rounded";
+    X2 [shape=ellipse, label=<X<sub>2</sub>>];
+    E2 [shape=ellipse, label=<E<sub>2</sub>>];
+    T2 [shape=box, style="filled", fillcolor="#F7F7F7", label="Transition model T₂\nPr(X₂ | X₀:1, …)" ];
+    S2 [shape=box, style="filled", fillcolor="#F7F7F7", label="Sensor model S₂\nPr(E₂ | X₀:2, E₀:1)"];
+  }
+
+  // ---- Edges: Prior to initial state ----
+  Prior -> X0;
+
+  // ---- Edges: Transition dynamics (core) ----
+  X0 -> T1 -> X1;
+  X1 -> T2 -> X2;
+
+  // (Optional) show possible higher-order dependence with dashed edges
+  X0 -> T2 [style=dashed, color="#888888"];
+
+  // ---- Edges: Sensor/Observation generation ----
+  // Evidence at t depends on current state X_t and previous evidence (to reflect Pr(E_t | X_{0:t}, E_{0:t-1}))
+  X1 -> S1 -> E1;
+  E0 -> S1;
+
+  X2 -> S2 -> E2;
+  E1 -> S2;
+
+  // ---- Light coupling between slices for readability ----
+  E0 -> E1 [style=invis]; // keeps ranks tidy
+  E1 -> E2 [style=invis];
+
+}
+```
 
 * Discrete vs Continuous Time Models
 - **Discrete time models**
-  - View the world as a series of time slices ("snapshots")
-    - Assume time intervals are equal, so samples are equispaced
+  - View world as time slices ("snapshots")
+    - Assume equal time intervals, equispaced samples
     - Label times $t = 0, 1, 2, ...$
-  - Each time slice contains random variables:
-    - Some RVs are not observable $\vX_t$ (hidden)
-    - Other RVs are observable $\vE_t$ (evidence)
+  - Each slice contains random variables:
+    - Hidden RVs (e.g., $\vX_t$)
+    - Observable RVs (e.g., $\vE_t$)
     - $\vX_{a:b}$ represents variables in $[a, b]$
 
 - **Continuous time models**
-  - Uncertainty over continuous time can be modeled by stochastic differential
-    equations (SDEs)
-  - Discrete time models can be discrete approximations to SDEs
+  - Model uncertainty over continuous time with stochastic differential equations
+    (SDEs)
+  - Discrete time models approximate SDEs
 
 * Markov Property
-- In general, the current state $\vX_t$ depends on a growing number of past
+- **In general**, current state $\vX_t$ depends on a growing number of past
   states:
   $$
   \Pr(\vX_t | history) =
   \Pr(\vX_t | \vX_0, \vX_1, ..., \vX_{t-1})
   $$
-- **Markov property**: the current state (conditionally) depends only on a
-  finite fixed number of $k$ previous states:
+  - Of course, there is no dependency from the future $\vX_{t + k} \; k > 1$
 
+- **Markov property**: current state depends (conditionally) only on a finite
+  fixed number of $k$ previous states:
   $$
   \Pr(\vX_t | \red{\vX_0, \vX_1, ..., \vX_{t-k-1}}, \blue{\vX_{t-k}, ..., \vX_{t-1}})
   = \Pr(\vX_t | \blue{\vX_{t-1:t-k}})
@@ -134,91 +204,98 @@ digraph BeliefStateTracking {
 
 * Markov Process
 - **Markov processes** (aka **Markov chains**) have the Markov property
-
   $$
   \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1:t-k}})
+  \; \forall k, t
   $$
 
-- **First-order Markov process**: the current state depends only on the previous
-  state (and no other earlier state):
-
+- **First-order Markov process**: current state depends only on the previous
+  state:
   $$
-  \Pr(\vX_t | history) = \Pr(\vX_t | \green{\vX_{t-1}})
+  \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1}})
+  \; \forall k, t
   $$
-  - E.g., the probability of rain today depends only on what happened yesterday
-    $\Pr(R_t | R_{t-1}) \; \forall t$
-  - The Bayesian network for a first-order Markov process looks like:
-
+  - The next state depends only on the previous state, not the full history
+  - The system "forgets" everything except the immediate last state
+  - Bayesian network for a first-order Markov process:
   ```graphviz
   digraph TemporalModel {
       rankdir=LR
-      node [shape=ellipse style=filled fillcolor=lightblue fontname="Times-Italic"]
-
+      node [shape=ellipse style=filled fillcolor=lightblue fontname="Helvetica", penwidth=1.7]
       X_t_2 [label="X_{t-2}"]
       X_t_1 [label="X_{t-1}"]
       X_t   [label="X_t" style=bold]
       X_t1  [label="X_{t+1}"]
       X_t2  [label="X_{t+2}"]
-
       X_t_2 -> X_t_1 -> X_t -> X_t1 -> X_t2
   }
   ```
+  - E.g., probability of rain today depends only on yesterday
+    $\Pr(R_t | R_{t-1}) \; \forall t$
 
-- **Second-order Markov process**: the current state $\vX_t$ is conditionally
-  dependent only on $\vX_{t-1}$ and $\vX_{t-2}$ and no other earlier state
+- **Second-order Markov process**: current state $\vX_t$ depends only on
+  $\vX_{t-1}$ and $\vX_{t-2}$
 
 * Time-Homogeneous Process
-- Even with the Markov assumption, there are infinite probability distributions
-  $\Pr(\vX_t | \vX_{t-1})$, one for every value of $t$
+- Even with the Markov assumption, infinite probability distributions exist
+  $\Pr(\vX_t | \vX_{t-1})$, one for each $t$
 
-- **Stationarity**: the transition probability doesn't change over time
-
+- **Stationarity**: transition probability remains constant
   $$
   \Pr(\blue{\vX_t} | \vX_{0:t-1}) = \Pr(\blue{\vX_{t-k}} | \vX_{0:t-k-1}) \; \forall k, t
   $$
-  - The process evolves over time, but the governing laws don't change
+  - Even if process evolves, governing laws remain unchanged
+  - E.g., in the real-world, most physical laws are constant
 
-- **First-order time-homogeneous**: only one conditional probability table is
-  needed
+* First-Order Time-Homogeneous Process
+- **First-order time-homogeneous**:
+  - First-order Markov property:
+    $$
+    \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1}})
+    $$
+  - Time-homogeneous:
+    $$
+    \Pr(\blue{\vX_t} | \vX_{0:t-1}) = \Pr(\blue{\vX_{t-k}} | \vX_{0:t-k-1}) \;
+    \forall k, t
+    $$
 
+- One conditional probability table suffices:
   $$
   \Pr(\vX_t | \vX_{t-1}) = \Pr(\vX_{t-k} | \vX_{t-k-1}) \; \forall k, t
   $$
-  - E.g., the probability of rain depends on what happened yesterday and is the
-    same every day: $\Pr(R_t | R_{t-1}) = f(R_{t-1}) \; \forall t$
+  - E.g., rain probability for today depends only on yesterday and is consistent:
+    $\Pr(R_t | R_{t-1}) = f(R_{t-1}) \; \forall t$
 
 * Sensor Model
-- **Aka "observation model"**
+- Aka "observation model"
 
-- In general, the evidence variables $\vE_t$ could depend on previous $\vX$
+- **In general**, evidence variables $\vE_t$ could depend on previous $\vX$
   (state of the world) and $\vE$ (sensor value) variables:
-
   $$
   \Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})
   $$
 
 - **Sensor Markov property**
-  - We assume that the sensor value $\vE_t$ depends only on the current state of
-    the world $\vX_t$, not on previous sensor values
+  - Assume sensor value $\vE_t$ depends only on current state $\vX_t$, not on
+    previous sensor values
     $$
-    \Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})
+    \Pr(\vE_t | \vX_{0:t}, \red{\vE_{0:t-1}})
     = \Pr(\vE_t | \vX_t)
     $$
-  - In a Bayesian network, even if $vX_t$ and $\vE_t$ are contemporaneous in the
-    time step, the arrow goes from the state of the world $\vX_t$ to the sensor
-    value $\vE_t$, i.e., $\vX_t \to \vE_t$ since the world causes the sensor to
-    take on particular values
+  - In a Bayesian network, even if $\vX_t$ and $\vE_t$ are contemporaneous, the
+    arrow goes from $\vX_t \to \vE_t$ since the world causes the sensor to take
+    on particular values
 
 * Sensor Model: Rain Example
 
-- In a Bayesian network, $\vX_t \to \vE_t$ since the world causes the sensor to
-  take on particular values
-  - E.g., the rain "causes" the umbrella to appear
-  - The inference goes in the other direction: we see the umbrella and need to
-    guess if it's raining
+- In a Bayesian network, $\vX_t \to \vE_t$ as the world causes the sensor to take
+  specific values
+  - E.g., $Rain_t \to Umbrella_t$, since rain "causes" the umbrella to appear
+
+- Inference goes the other direction: _"see the umbrella, guess if it's raining"_
 
 ::: columns
-:::: {.column width=70%}
+:::: {.column width=50%}
 - E.g.,
   - The transition model is $\Pr(Rain_t | Rain_{t-1})$
     - $\Pr(R_t | R_{t-1}=T) = 0.7$
@@ -228,11 +305,12 @@ digraph BeliefStateTracking {
     - $\Pr(U_t | R_t=T) = 0.9$
     - $\Pr(U_t | R_t=F) = 0.2$
 ::::
-:::: {.column width=25%}
+:::: {.column width=45%}
+  \vspace{1cm}
   ```graphviz
   digraph UmbrellaHMM {
     rankdir=LR
-    node [shape=ellipse, style=filled, fillcolor=lightblue, fontname="Times-Italic"]
+    node [shape=ellipse, style=filled, fillcolor=lightblue, fontname="Helvetica", penwidth=1.7]
 
     // Hidden states (Rain)
     Rain_t_1 [label="Rain_{t-1}"]
@@ -263,44 +341,92 @@ digraph BeliefStateTracking {
 
 
 * Prior Probability
-- To complete the system specification, we need the prior probability of the
-  state variables at time 0, $\Pr(\vX_0)$
-  - Represents the initial belief about the state of the system before any
-    observations are made
-  - It is crucial for initializing the state estimation process
+- Complete system specification needs the prior probability of the state
+  variables at time 0, $\Pr(\vX_0)$
+  - Represents initial belief about system state before observations
+  - Crucial for initializing state estimation process
 - E.g.,
-  - $\vX_0$ represents the position and velocity of a moving object
+  - $\vX_0$ represents position and velocity of a moving object
   - $\Pr(\vX_0)$ could be a Gaussian distribution centered around an initial
-    guess of the object's position and velocity with some uncertainty
+    guess of object's position and velocity with uncertainty
 
 * First-Order Markov Process: Joint Distribution
 - Model a sequence of states $\vX_0, \vX_1, ..., \vX_t$ and observations
-  $\vE_1,
-  ..., \vE_t$ over time, with the simplifying assumptions:
-  - First-order Markov assumption:
-    $\Pr(\vX_i | \vX_{0:i-1}) = \Pr(\vX_i | \vX_{i-1})$
-  - Sensor model: $\Pr(\vE_i | \vX_{0:i}, \vE_{1:i-1}) = \Pr(\vE_i | \vX_i)$
+  $\vE_1, ..., \vE_t$ over time, i.e., $\Pr(\vX_{0:t}, \vE_{1:t})$
 
-- The joint distribution of $n$ random variables:
-  $$\Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | \text{parents}(X_i))$$
+- Express the joint distribution of $n$ random variables using the chain rule:
+  $$
+  \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{0:i-1})
+  $$
 
-- The joint distribution probability can be written for any $t$:
-  \begin{align*}
-  \Pr(\vX_{0:t}, \vE_{1:t})
-  & = \red{\Pr(\vX_0)} \prod_{i=1}^t \green{\Pr(\vX_i | \vX_{i-1})} \blue{\Pr(\vE_i | \vX_i)} \\
-  & = \red{prior} \times \prod_{i} \green{transition model} \times \blue{sensor model} \\
-  \end{align*}
+- Bayesian network joint distribution factorizes according to graph dependencies
+  $$
+  \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | \text{parents}(X_i))
+  $$
+
+::: columns
+:::: {.column width=45%}
+- First-order Markov assumption:
+  $$\Pr(\vX_i | \vX_{0:i-1}) = \Pr(\vX_i | \vX_{i-1})$$
+- First-order sensor model:
+  $$\Pr(\vE_i | \vX_{0:i}, \vE_{1:i-1}) = \Pr(\vE_i | \vX_i)$$
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph HMM {
+    rankdir=TB;
+    node [shape=circle, fontname="Helvetica", fontsize=12, penwidth=1.7]
+
+    // Hidden states
+    X0 -> X1 -> X2 -> dotsX -> Xt;
+
+    // Observations
+    X0 -> E1;
+    X1 -> E2;
+    X2 -> E3;
+    dotsX -> dotE;
+    Xt -> Et;
+
+    // Style observations differently
+    E1 [shape=box, style=filled, fillcolor=lightblue];
+    E2 [shape=box, style=filled, fillcolor=lightblue];
+    E3 [shape=box, style=filled, fillcolor=lightblue];
+    dotE [label="...", shape=plaintext];
+    Et [shape=box, style=filled, fillcolor=lightblue];
+
+    // Labels for states
+    X0 [label="X0"];
+    X1 [label="X1"];
+    X2 [label="X2"];
+    dotsX [label="... ", shape=plaintext];
+    Xt [label="Xt"];
+
+    // Labels for observations
+    E1 [label="E1"];
+    E2 [label="E2"];
+    E3 [label="E3"];
+    Et [label="Et"];
+
+    // Alignment
+    { rank = same; X0; X1; X2; dotsX; Xt }
+    { rank = same; E1; E2; E3; dotE }
+}
+```
+::::
+:::
 
 * First-order Markov process: intuition
 - The joint distribution probability for a time-homogeneous first-order Markov
-  process can be written, for any $t$:
+  process:
   \begin{align*}
   \Pr(\vX_{0:t}, \vE_{1:t})
   & = \red{\Pr(\vX_0)} \prod_{i=1}^t \green{\Pr(\vX_i | \vX_{i-1})} \blue{\Pr(\vE_i | \vX_i)} \\
   & = \red{prior} \times \prod_{i} \green{transition model} \times \blue{sensor model} \\
   \end{align*}
-- Intuition:
-  - Each observation depends only on the current state (sensor model)
+
+- **Intuition**:
+  - Each observation depends on the current state (sensor model)
   - The state evolves probabilistically from the previous state (transition
     model)
   - This structure reduces complexity and enables tractable inference
@@ -308,7 +434,7 @@ digraph BeliefStateTracking {
 - How to represent this process?
   - A Bayesian network can represent a temporal model by modeling time with
     indices $t$, i.e., "unrolling the model"
-  - Problem: There are infinite $t$, even assuming the Markov property
+  - **Problem**: Infinite $t$, even assuming the Markov property
 
 * Improving Approximation of Real-World Systems
 - A first-order Markov process can be reasonable or not, e.g.,
