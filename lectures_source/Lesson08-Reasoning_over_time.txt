@@ -33,10 +33,30 @@ MSML610: Advanced Machine Learning
 - AIMA: 14
 
 * Agents
+```graphviz
+digraph BeliefStateTracking {
+    rankdir=LR;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7]
+
+    Percepts [label="Percepts", fillcolor=white,];
+    SensorModel [label="Sensor Model", fillcolor=white,];
+    BeliefUpdate [label="Update Belief\n(Posterior Distribution)", fillcolor=white,];
+    BeliefState [label="Belief State", fillcolor=white,];
+    TransitionModel [label="Transition Model", fillcolor=white,];
+    Prediction [label="Predict Next State", fillcolor=white,];
+
+    Percepts -> SensorModel;
+    SensorModel -> BeliefUpdate;
+    BeliefState -> Prediction;
+    TransitionModel -> Prediction;
+    Prediction -> BeliefUpdate;
+    BeliefUpdate -> BeliefState;
+}
+```
 - Agents in partially observable environments track the current state using
   sensor information
   1. **Belief state**
-     - Store possible world states (by enumeration or logical formulas)
+     - Store possible world states (e.g., by enumeration or logical formulas)
      - Use probability theory to quantify belief
      - Belief state is the posterior distribution of the current state given all
        evidence so far
@@ -47,28 +67,7 @@ MSML610: Advanced Machine Learning
 
 - Time is handled by making each quantity a function of time
 
-```graphviz
-digraph BeliefStateTracking {
-    rankdir=LR;
-    node [shape=box, style=rounded, fontname="Helvetica"];
-
-    Percepts [label="Percepts"];
-    SensorModel [label="Sensor Model"];
-    BeliefUpdate [label="Update Belief\n(Posterior Distribution)"];
-    BeliefState [label="Belief State"];
-    TransitionModel [label="Transition Model"];
-    Prediction [label="Predict Next State"];
-
-    Percepts -> SensorModel;
-    SensorModel -> BeliefUpdate;
-    BeliefState -> Prediction;
-    TransitionModel -> Prediction;
-    Prediction -> BeliefUpdate;
-    BeliefUpdate -> BeliefState;
-}
-```
-
-* Static vs dynamic probabilistic reasoning: example
+* Static vs Dynamic Probabilistic Reasoning: Example
 - **Static probabilistic reasoning**
   - Each random variable has a single fixed value over time
   - E.g., when repairing a car:
