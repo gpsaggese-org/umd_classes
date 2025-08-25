@@ -35,14 +35,13 @@ MSML610: Advanced Machine Learning
 
 * Static vs Dynamic Probabilistic Reasoning
 - **Static probabilistic reasoning**
-  - Each random variable has a single fixed value over time
+  - Random variables have a fixed value over time
   - E.g., when repairing a car:
     - Whatever is broken stays broken during the diagnosis
     - Observed evidence remains fixed
 
 - **Dynamic probabilistic reasoning**
-  - Random variables change over time
-  - E.g.,
+  - Random variables change over time, e.g.,
     - Tracking the location of a plane
     - Tracking the economic activity of a nation
   - E.g., treating a diabetic patient
@@ -51,7 +50,7 @@ MSML610: Advanced Machine Learning
       over time)
     - Dependency on time (e.g., metabolic activity and time of day)
 
-* Agents
+* Agents in Partially Observable Environments
 
 ```graphviz
 digraph BeliefStateTracking {
@@ -60,7 +59,7 @@ digraph BeliefStateTracking {
 
     Percepts [label="Percepts", fillcolor=white,];
     SensorModel [label="Sensor Model", fillcolor=white,];
-    BeliefUpdate [label="Update Belief\n(Posterior Distribution)", fillcolor=white,];
+    BeliefUpdate [label="Update Belief", fillcolor=white,];
     BeliefState [label="Belief State", fillcolor=white,];
     TransitionModel [label="Transition Model", fillcolor=white,];
     Prediction [label="Predict Next State", fillcolor=white,];
@@ -75,23 +74,26 @@ digraph BeliefStateTracking {
 ```
 
 - Agents in partially observable environments track the current state using
-  sensor information
+  transition model and sensor information
   1. **Belief state**
-     - Store possible world states (e.g., by enumeration or logical formulas)
+     - Store possible world states
      - Use probability theory to quantify belief
      - Belief state is the posterior distribution of the current state given all
        evidence so far
-  2. **Belief state** + **Transition model**
+  2. **Belief state + Transition model**
      - Predict how the world might evolve in the next step
-  3. **Sensor model** + **Percepts**
+  3. **Sensor model + Percepts**
      - Update belief state
 
 - Time is handled by making each quantity a function of time
 
-* Model Components
+// TODO: Add colors to the diagram to keep it in sync with text
+// TODO: Use circle for state and square for transform
+
+* Agent: Model Components
 
 1. **State of the world**: $\vX_t$
-   - Typically hidden
+   - Typically not observable directly
 2. **Prior probability of the state** at time 0: $\vX_0$
 3. **Evidence variables**: $\vE_t$
    - Observable
@@ -187,30 +189,33 @@ digraph POMDP_Model {
   - Discrete time models approximate SDEs
 
 * Markov Property
-- **In general**, current state $\vX_t$ depends on a growing number of past
+- In general, current state $\vX_t$ depends on a growing number of past
   states:
   $$
-  \Pr(\vX_t | history) =
-  \Pr(\vX_t | \vX_0, \vX_1, ..., \vX_{t-1})
+  \Pr(\vX_t | history)
+  \defeq \Pr(\vX_t | \vX_{0:t-1})
+  = \Pr(\vX_t | \vX_0, \vX_1, ..., \vX_{t-1})
   $$
-  - Of course, there is no dependency from the future $\vX_{t + k} \; k > 1$
+  - Of course, there can't be dependency from the future $\vX_{t + k} \; k > 1$
 
 - **Markov property**: current state depends (conditionally) only on a finite
   fixed number of $k$ previous states:
   $$
-  \Pr(\vX_t | \red{\vX_0, \vX_1, ..., \vX_{t-k-1}}, \blue{\vX_{t-k}, ..., \vX_{t-1}})
-  = \Pr(\vX_t | \blue{\vX_{t-1:t-k}})
+  \Pr(\vX_t | \vX_{0:t-1})
+  = \Pr(\vX_t | \red{\vX_0, \vX_1, ..., \vX_{t-k-1}}, \blue{\vX_{t-k}, ..., \vX_{t-1}})
+  = \Pr(\vX_t | \blue{\vX_{t-k:t-1}})
   $$
+// TODO: Use align*
 
 * Markov Process
-- **Markov processes** (aka **Markov chains**) have the Markov property
+- **Markov processes** (aka Markov chains) have the Markov property
   $$
-  \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1:t-k}})
+  \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-k:t-1}})
   \; \forall k, t
   $$
 
-- **First-order Markov process**: current state depends only on the previous
-  state:
+- **First-order Markov process**: current state $\vX_t$ depends only on the
+  previous state $\vX_{t-1}$:
   $$
   \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1}})
   \; \forall k, t
@@ -230,17 +235,19 @@ digraph POMDP_Model {
       X_t_2 -> X_t_1 -> X_t -> X_t1 -> X_t2
   }
   ```
-  - E.g., probability of rain today depends only on yesterday
+  - E.g., probability of rain today depends only on yesterday,
     $\Pr(R_t | R_{t-1}) \; \forall t$
 
 - **Second-order Markov process**: current state $\vX_t$ depends only on
   $\vX_{t-1}$ and $\vX_{t-2}$
 
 * Time-Homogeneous Process
-- Even with the Markov assumption, infinite probability distributions exist
-  $\Pr(\vX_t | \vX_{t-1})$, one for each $t$
+- Even with the Markov assumption, there in an infinite number of probability
+  distributions
+  $\Pr(\vX_t | \vX_{t-1:t-k})$, one for each $t$
 
-- **Stationarity**: transition probability remains constant
+- **Time-homogeneous** (aka stationarity): probability remains constant by
+  translation over $t$
   $$
   \Pr(\blue{\vX_t} | \vX_{0:t-1}) = \Pr(\blue{\vX_{t-k}} | \vX_{0:t-k-1}) \; \forall k, t
   $$
@@ -248,29 +255,30 @@ digraph POMDP_Model {
   - E.g., in the real-world, most physical laws are constant
 
 * First-Order Time-Homogeneous Process
-- **First-order time-homogeneous**:
-  - First-order Markov property:
+- First-order time-homogeneous:
+  - **First-order Markov property**:
     $$
     \Pr(\vX_t | history) = \Pr(\vX_t | \blue{\vX_{t-1}})
     $$
-  - Time-homogeneous:
+  - **Time-homogeneous**:
     $$
     \Pr(\blue{\vX_t} | \vX_{0:t-1}) = \Pr(\blue{\vX_{t-k}} | \vX_{0:t-k-1}) \;
     \forall k, t
     $$
 
-- One conditional probability table suffices:
+- Putting both properties together, one conditional probability table suffices:
   $$
   \Pr(\vX_t | \vX_{t-1}) = \Pr(\vX_{t-k} | \vX_{t-k-1}) \; \forall k, t
   $$
-  - E.g., rain probability for today depends only on yesterday and is consistent:
+  - E.g., rain probability for today depends only on yesterday and is constant:
     $\Pr(R_t | R_{t-1}) = f(R_{t-1}) \; \forall t$
 
 * Sensor Model
 - Aka "observation model"
 
-- **In general**, evidence variables $\vE_t$ could depend on previous $\vX$
-  (state of the world) and $\vE$ (sensor value) variables:
+- In general, evidence variables $\vE_t$ depend on:
+  - Previous state of the world $\vX_{0:t}$
+  - Previous sensor values $\vE_{0:t-1}$
   $$
   \Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})
   $$
@@ -299,7 +307,7 @@ digraph POMDP_Model {
 - E.g.,
   - The transition model is $\Pr(Rain_t | Rain_{t-1})$
     - $\Pr(R_t | R_{t-1}=T) = 0.7$
-    - $\Pr(R_t | R_{t-1}=F) = 0.3$
+    - $\Pr(R_t | R_{t-1}=F) = 0.1$
     - The sum doesn't have to be 1 since it's a conditional probability
   - The sensor model is $\Pr(Umbrella_t | Rain_t)$
     - $\Pr(U_t | R_t=T) = 0.9$
@@ -342,7 +350,7 @@ digraph POMDP_Model {
 
 * Prior Probability
 - Complete system specification needs the prior probability of the state
-  variables at time 0, $\Pr(\vX_0)$
+  variables at initial time $\Pr(\vX_0)$
   - Represents initial belief about system state before observations
   - Crucial for initializing state estimation process
 - E.g.,
@@ -354,24 +362,25 @@ digraph POMDP_Model {
 - Model a sequence of states $\vX_0, \vX_1, ..., \vX_t$ and observations
   $\vE_1, ..., \vE_t$ over time, i.e., $\Pr(\vX_{0:t}, \vE_{1:t})$
 
-- Express the joint distribution of $n$ random variables using the chain rule:
-  $$
-  \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{0:i-1})
-  $$
+  - Express the joint distribution of $n$ random variables using the chain rule:
+    $$
+    \Pr(Y_1, ..., Y_n) = \prod_{i=1}^n \Pr(Y_i | Y_{0:i-1})
+    $$
 
-- Bayesian network joint distribution factorizes according to graph dependencies
-  $$
-  \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | \text{parents}(X_i))
-  $$
+  - Bayesian networks factorize joint distribution according to graph
+    dependencies
+    $$
+    \Pr(Y_1, ..., Y_n) = \prod_{i=1}^n \Pr(Y_i | \text{parents}(Y_i))
+    $$
 
 ::: columns
-:::: {.column width=45%}
+:::: {.column width=55%}
 - First-order Markov assumption:
   $$\Pr(\vX_i | \vX_{0:i-1}) = \Pr(\vX_i | \vX_{i-1})$$
-- First-order sensor model:
+- First-order Markov sensor model:
   $$\Pr(\vE_i | \vX_{0:i}, \vE_{1:i-1}) = \Pr(\vE_i | \vX_i)$$
 ::::
-:::: {.column width=50%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph HMM {
@@ -416,41 +425,40 @@ digraph HMM {
 ::::
 :::
 
-* First-order Markov process: intuition
-- The joint distribution probability for a time-homogeneous first-order Markov
-  process:
+* First-Order Markov Process: Intuition
+- Putting everything together, the joint distribution probability for a
+  time-homogeneous first-order Markov process:
   \begin{align*}
   \Pr(\vX_{0:t}, \vE_{1:t})
   & = \red{\Pr(\vX_0)} \prod_{i=1}^t \green{\Pr(\vX_i | \vX_{i-1})} \blue{\Pr(\vE_i | \vX_i)} \\
   & = \red{prior} \times \prod_{i} \green{transition model} \times \blue{sensor model} \\
   \end{align*}
 
-- **Intuition**:
-  - Each observation depends on the current state (sensor model)
+- **Remarks**:
   - The state evolves probabilistically from the previous state (transition
     model)
   - This structure reduces complexity and enables tractable inference
 
-- How to represent this process?
+- **How to represent this process?**
   - A Bayesian network can represent a temporal model by modeling time with
     indices $t$, i.e., "unrolling the model"
   - **Problem**: Infinite $t$, even assuming the Markov property
 
 * Improving Approximation of Real-World Systems
-- A first-order Markov process can be reasonable or not, e.g.,
+- Is first-order Markov process a **reasonable approximation of reality**?
   - A particle following a random walk is well represented by Markov process (by
     definition)
   - In the umbrella example the rain depends only on what happened the previous
     day
 
-- How to improve the approximation
-  1. Increase the order of the Markov process model
+- **How to improve the approximation**
+  1. **Increase the order of the Markov process model**
      - E.g., to model "rarely rains more than two days in a row", we need a
        second-order Markov model $\Pr(Rain_t | Rain_{t-1}, Rain_{t-2})$
-  2. Increase the set of state variables
+  2. **Increase the number of state variables**
      - E.g., add $Season_t$ to incorporate the historical records
      - This makes the transition model more complicated
-  3. Increase the number of sensor variables
+  3. **Increase the number of sensor variables**
      - E.g., $Location_t, Temperature_t, Humidity_t, Pressure_t$
      - This can simplify modeling of the state
 
@@ -458,23 +466,24 @@ digraph HMM {
 
 * Inference Tasks in Temporal Models
 
-- There are several possible applications that we will consider in details
+- There are several possible applications
 
 \begingroup \scriptsize
 | **Task**                | **Description**                                             | **Estimate** |
 | ----------------------- | ------------------------------------------------------------| ------------------------------------------ |
 | Filtering               | Estimate _current_ state given past / current obs           | $\Pr(\vX_t | \vE_{1:t})$ |
-| Prediction              | Estimate _future_ state given past / current obs            | $\Pr(\vX\_{t+k} | \vE_{1:t})$ for $k > 0$ |
-| Smoothing               | Estimate _past_ state given past, current, and _future_ obs | $\Pr(\vX_k | \vE_{1:T})$ for $k < T$ |
-| Most Likely Explanation | Find most probable sequence of states given the evidence    | $\argmax_{\vx_{1:T}} \Pr(\vX_{1:t} | \vE_{1:t})$ |
+| Prediction              | Estimate _future_ state given past / current obs            | $\Pr(\vX_{t+k} | \vE_{1:t})$ for $k > 0$ |
+| Smoothing               | Estimate _past_ state given past, current, and _future_ obs | $\Pr(\vX_k | \vE_{1:T})$ for $T < k$ |
+| Most likely explanation | Find most probable sequence of states given the evidence    | $\argmax_{\vx_{1:T}} \Pr(\vX_{1:t} | \vE_{1:t})$ |
 | Learning                | Learn model parameters or structure from data               | $\theta$ of a model |
 \endgroup
 
-* Task 1: Filtering
-- **Aka "state estimation"**
+- Let's consider each of these applications in details
 
-- **Filtering** computes the posterior distribution of the _current_ state
-  (belief state) given all evidence to date:
+* Task 1: Filtering
+
+- **Filtering** (aka "state estimation") computes the posterior distribution of
+  the _current state_ given _all evidence to date_:
 
   $$
   \Pr(\vX_t | \vE_{1:t} = \ve_{1:t})
@@ -482,20 +491,17 @@ digraph HMM {
   - E.g., estimate the probability of rain today, given all umbrella
     observations so far $\Pr(Rain_t | Umbrella_{1:t})$
 
-- Filtering is needed by a rational agent to track the current state of the
-  world
-  - The agent has a belief about the current state $\Pr(\vX_{t-1})$ at time
-    $t - 1$
+- Filtering needed by a rational agent to track the current state of the world:
+  - Agent believes current state $\Pr(\vX_{t-1})$ at time $t - 1$
   - New evidence $\ve_t$ arrives for time $t$
-  - The agent updates its belief about the current state $\Pr(\vX_t)$ at time
-    $t$
+  - Agent updates belief about current state $\Pr(\vX_t)$ at time $t$
 
-- The term "filtering" refers to the problem in signal processing of filtering
-  out noise in a signal by estimating system parameters
+- The term "filtering" refers to filtering out noise in a signal by estimating
+  system parameters
 
 * Task 2: Prediction
-- **Prediction** involves predicting the posterior distribution over a _future_
-  state, given all evidence to date:
+- **Prediction** involves predicting the posterior distribution over a _future
+  state_, given _all evidence to date_:
 
   $$
   \Pr(\vX_{t+k} | \ve_{1:t}) \text{ with } k > 0
@@ -505,38 +511,36 @@ digraph HMM {
     \Pr(Rain_{t+3} | Umbrella_{0:t})
     $$
 
-- Prediction helps a rational agent evaluate possible actions based on expected
-  outcomes
+- Prediction helps rational agents evaluate actions based on expected outcomes
 
 * Task 3: Smoothing
-- **Smoothing** is the task of computing the posterior distribution over a
-  _past_ state given _all_ the past, present, and future evidence:
+- **Smoothing** compute posterior distribution over a _past state_ given _all
+  past, present, and future evidence_:
 
   $$
   \Pr(\vX_k | \ve_{1:t}) \text{ with } 0 \le k < t
   $$
-  - Note: you have information about the "future" of the evidence, but you don't
-    know the state
-  - Smoothing provides a better estimate of the state since it incorporates more
-    evidence about the future
-  - E.g., compute the probability that it rained last Wednesday, given all the
-    observations made up to today
+  - **Note**: you have information about the "future" of the evidence, but not
+    the state
+  - Smoothing provides a better state estimate by incorporating more future
+    evidence
+  - E.g., compute the probability it rained last Wednesday, given all
+    observations up to today
 
-- The name "smoothing" refers to the fact that the state estimate is smoother
-  than filtering
+- The term "smoothing" refers to the state estimate being smoother than filtering
 
 * Task 4: Most-Likely Explanation
-- **Most-likely explanation** finds the sequence of states $\vx_{1:t}$ most
-  likely to have generated observations $\ve_{1:t}$:
+- **Most-likely explanation** finds the sequence of states $\vX_{1:t}$ most
+  likely to have generated observations $\vE_{1:t}$:
 
   $$
-  \argmax_{\vx_{1:t}} \Pr(\vx_{1:t} | \ve_{1:t})
+  \argmax_{\vX_{1:t}} \Pr(\vX_{1:t} | \vE_{1:t})
   $$
   - E.g.,
     - Umbrella appeared on 3 days, not on the fourth
     - Most likely explanation: rained for 3 days, then stopped
 
-- Applications
+- **Applications**
   - Speech recognition: most likely sequence of words given sounds
   - Digital processing: reconstruct bit strings over a noisy channel
 
