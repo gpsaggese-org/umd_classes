@@ -30,6 +30,8 @@ MSML610: Advanced Machine Learning
 
 // TODO: Decide if time starts at 0 or 1 and be consistent
 
+## Definitions
+
 * Reference
 - AIMA: 14
 
@@ -462,6 +464,8 @@ digraph HMM {
      - E.g., $Location_t, Temperature_t, Humidity_t, Pressure_t$
      - This can simplify modeling of the state
 
+## Defining Temporal Inference Tasks
+
 // ## 14.2, Inference in temporal models (p. 478)
 
 * Inference Tasks in Temporal Models
@@ -545,86 +549,102 @@ digraph HMM {
   - Digital processing: reconstruct bit strings over a noisy channel
 
 * Task 5: Learning
-- Learning involves estimating the transition model $\Pr(\vX_t | \vX_{0:t-1})$
+- **Learning** involves estimating the transition model $\Pr(\vX_t | \vX_{0:t-1})$
   and the sensor model $\Pr(\vE_i | \vX_i)$ from observations
 
-- **Learning:**
-  - Can be a byproduct of inference
-  - Requires smoothing rather than filtering for better state estimates
-    - Smoothing uses all available data to estimate states, leading to more
-      accurate models
-    - E.g., in a weather prediction system, smoothing might use past, present,
-      and future data to better estimate the current weather state
+- Learning benefits from smoothing rather than filtering for better state
+  estimates
+    - Smoothing uses all data to estimate states, leading to more accurate models
+    - E.g., in weather prediction, smoothing uses past, present, and future data
+      to better estimate current weather state
+
+## Solving Temporal Inference Tasks
 
 // ### 14.2.1, Filtering and prediction (p. 479)
 
-* Task 1: Recursive Filtering: Goal
-- Aka "recursive state estimation"
+* Solving Task 1: Filtering
+- **Filtering** computes the posterior distribution of the _current state_ given
+  _all evidence to date_, i.e., $\Pr(\vX_t | \vE_{1:t} = \ve_{1:t})$
+
 - A practical filtering algorithm updates the current state estimate $\vX_{t+1}$
-  using the previous state $\vX_t$ and the new evidence $\ve_{t+1}$, rather than
-  recomputing it by going over the entire history of the percepts
-
-  $$
-  \Pr(\vX_{t+1} | \ve_{1:t+1}) = f(\Pr(\vX_t | \ve_{1:t}), \ve_{t+1})
-  $$
-
-  $$
-  NextState = f(PreviousState, e_{t+1})
-  $$
+  using the previous state $\vX_t$ and the new evidence $\ve_{t+1}$
+  - Instead of recomputing each state by going over the entire history of the
+    percepts
+  - Aka "recursive state estimation"
+    \begin{align*}
+    & \Pr(\vX_{t+1} | \ve_{1:t+1}) = f(\Pr(\vX_t | \ve_{1:t}), \ve_{t+1}) \\
+    & NextState = f(PreviousState, \ve_{t+1}) \\
+    \end{align*}
 
 - **Why?**
-  - Time and space requirements for updating must be constant if a (finite)
-    agent needs to keep track of current state indefinitively
+  - Time and space requirements for updating must be constant for a (finite)
+    agent to keep track of current state indefinitively
 
 - **Is it possible?**
   - What is the formula $f(...)$?
 
-* Task 1: Recursive Filtering: Update Formula
+* Recursive Filtering: Update Formula
 - Compute the state at time $t+1$ with all the evidence up to that time
-- Assume that state and evidence are scalar and not vector:
-  $\Pr(X_{t+1} | e_{1:t+1})$
 
+- Assume that state and evidence are scalar and not vector
   \begingroup \footnotesize
   \begin{alignat*}{2}
-  & \red{\text{Divide up the evidence}} &\quad
-    &= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}}) \\
-  & \green{\text{Bayes rule given }} \green{e_{1:t}} &\quad
-    &= \alpha \Pr(e_{t+1}|X_{t+1},\green{e_{1:t}}) \Pr(X_{t+1}|\green{e_{1:t}}) \\
-  & \text{\cyan{Markov sensor assumption}} &\quad
-    &= \alpha \Pr(e_{t+1}|X_{t+1}) \Pr(X_{t+1}|e_{1:t}) \\
-  & \text{\blue{Condition on current state}} &\quad
-    &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|\blue{x_t},\violet{e_{1:t}}) \Pr(\blue{x_t} | e_{1:t}) \\
-  & \text{\violet{Markov assumption}} &\quad
-    &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t}) \\
+  & \Pr(X_{t+1} | e_{1:t+1}) 
+    & & \\
+//
+  &= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}})
+    & \quad & \red{\text{Divide up the evidence}} \\
+//
+  &= \alpha \Pr(e_{t+1}|X_{t+1},\green{e_{1:t}}) \Pr(X_{t+1}|\green{e_{1:t}})
+    & \quad & \green{\text{Bayes rule given }} \\
+//
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \Pr(X_{t+1}|e_{1:t})
+    & \quad & \text{\cyan{Markov sensor assumption}} \\
+//
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|\blue{x_t},\violet{e_{1:t}}) \Pr(\blue{x_t} | e_{1:t})
+    & \quad & \text{\blue{Condition on current state}} \\
+//
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
+    & \quad & \text{\violet{Markov assumption}} \\
   \end{alignat*}
   \endgroup
+
+- It has the expected form:
   $$
   \Pr(X_{t+1} | e_{1:t+1}) = f(\Pr(X_t | e_{1:t}), e_{t+1})
   $$
 
+* Recursive Filtering: Update Formula
+- The update formula for the state is:
+  $$
+  \Pr(X_{t+1} | e_{1:t+1}) 
+  = \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
+  $$
 - The next state is "Sensor model x Transition model x Recursive state"
   - Sensor model: $\Pr(e_{t+1}|X_{t+1})$
   - Transition model: $\Pr(X_{t+1}|x_t)$
   - Recursive term: $\Pr(x_t|e_{1:t})$
 
-* Task 1: Recursive Filtering: Intuition
-- Recursive state estimation updates in **two steps** the belief about a
-  system's state over time as new evidence arrives
+// TODO: Add colors
 
+* Recursive Filtering: Intuition
+- Recursive state estimation updates the state belief as new evidence arrives
   $$
   \red{\Pr(X_{t+1} | e_{1:t+1})}
   = \green{\alpha \Pr(e_{t+1} | X_{t+1})}
-  \blue{\sum_{x_t} \Pr(X_{t+1} | x_t) \teal{\Pr(x_t | e_{1:t})}}
+  \blue{\sum_{x_t} \Pr(X_{t+1} | x_t) \purple{\Pr(x_t | e_{1:t})}}
   $$
-  1. **\blue{Prediction step}**: Use the transition model to predict the next
+  in **\black{two steps}**
+
+  1. **\black{Prediction step}**: Use the transition model to predict the next
      state based on the current belief
      $$
      \blue{\Pr(X_{t+1} | e_{1:t})
-       = \sum_{x_t} \Pr(X_{t+1} | x_t) \teal{\Pr(x_t | e_{1:t})}}
+       = \sum_{x_t} \Pr(X_{t+1} | x_t) \purple{\Pr(x_t | e_{1:t})}}
      $$
      - Intuition: Project the current belief forward using the model of system
        evolution
-  2. **\red{Update step}**: Incorporate the new observation to refine the
+  2. **\black{Update step}**: Incorporate the new observation to refine the
      prediction
      $$
      \red{\Pr(X_{t+1} | e_{1:t+1})} =
@@ -633,13 +653,13 @@ digraph HMM {
      - Intuition: Correct the prediction using the likelihood of the new
        evidence
 
-- Maintain \teal{$\Pr(X_t | e_{1:t})$}, the probability of the current state
+- Maintain \purple{$\Pr(X_t | e_{1:t})$}, the probability of the current state
   given all past evidence
   - E.g., in a weather model, if it was likely to rain today and rain usually
     continues, the prediction leans toward rain tomorrow
   - Seeing an umbrella supports this and updates the belief accordingly
 
-* Task 1: Forward update
+* Forward update
 - We achieved:
   \begin{align*}
   \Pr(\vX_{t+1} | \ve_{1:t+1})
@@ -649,11 +669,9 @@ digraph HMM {
 
 - The filtered estimate $\vf_{1:t} = \Pr(\vX_t | \ve_{1:t})$ is propagated
   forward and updated by each transition and new observation
-
   $$
   \vf_{1:t+1} = Forward(\vf_{1:t}, \ve_{t+1})
   $$
-
   starting with the initial condition $\vf_{1:0} = \Pr(\vX_0)$
   - This is called "forward update"
 
@@ -662,9 +680,9 @@ digraph HMM {
   - Time and space requirements for updating is constant
   - A (finite) agent can keep track of current state indefinitively
 
-* Task 2: Prediction: Update Formula
+* Solving Task 2: Prediction
 - Prediction is equivalent to filtering without updating the state with new
-  evidence (since we lack evidence)
+  evidence, since there is no evidence
   - Only the transition model is needed, not the sensor model
 
 - The rule predicting state $\vX_{t+k+1}$ given state $\vX_{t+k}$ and evidence
@@ -680,24 +698,21 @@ digraph HMM {
 
 // ### Smoothing (p. 594)
 
-* Task 3: Smoothing: Intuition
+* Solving Task 3: Smoothing
 
-- We want to calculate the probability distribution over the hidden state at
+- You want to calculate the probability distribution over the hidden state at
   time $k$, given all evidence up to time $t$ (in the future!)
-
   $$
   \Pr(X_k | e_{1:t}) \text{  where } 0 \le k < t
   $$
+  - Filtering gives $\Pr(X_k | e_{1:k})$ using past and present evidence
+  - Smoothing refines the estimate of past states using later evidence
 
-- Filtering gives $\Pr(X_k | e_{1:k})$ using past and present evidence
-
-- Smoothing refines the estimate of past states using later evidence
-
-- **E.g.,**
+- **Example**
   - You're tracking whether it was raining yesterday
   - You had some evidence up to yesterday (e.g., a cloudy sky)
   - Today you see puddles on the ground
-  - That new observation supports the idea that it was raining
+  - That new observation supports the idea that yesterday was raining
 
 * Task 3: Smoothing: Update Formula
 - Using the same math as for filtering and the two key assumptions of Markov
