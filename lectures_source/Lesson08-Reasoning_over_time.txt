@@ -23,12 +23,17 @@ MSML610: Advanced Machine Learning
 **References**:
 
 - AIMA 14: Probabilistic reasoning over time
+- https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
+
+// ./notes/math.Kalman_filter.txt
+// ./notes/math.Kalman_and_Bayesian_filters_in_Python.Labbe.2018.txt
+// ./notebooks/quantopian/quantopian_kalman_filter.ipynb
+// ./notebooks/Kalman_and_Bayesian_filters_in_python
+// - AIMA 14.4 (p. 479)
 
 # ##############################################################################
 # Reasoning Over Time
 # ##############################################################################
-
-// TODO: Decide if time starts at 0 or 1 and be consistent
 
 ## Definitions
 
@@ -309,11 +314,11 @@ digraph POMDP_Model {
 - E.g.,
   - The transition model is $\Pr(Rain_t | Rain_{t-1})$
     - $\Pr(R_t | R_{t-1}=T) = 0.7$
-    - $\Pr(R_t | R_{t-1}=F) = 0.1$
+    - $\Pr(R_t | R_{t-1}=F) = 0.4$
     - The sum doesn't have to be 1 since it's a conditional probability
   - The sensor model is $\Pr(Umbrella_t | Rain_t)$
-    - $\Pr(U_t | R_t=T) = 0.9$
-    - $\Pr(U_t | R_t=F) = 0.2$
+    - $\Pr(U_t | R_t=T) = 0.9$ (people forget the umbrella)
+    - $\Pr(U_t | R_t=F) = 0.2$ (people are paranoid)
 ::::
 :::: {.column width=45%}
   \vspace{1cm}
@@ -589,7 +594,7 @@ digraph HMM {
 - Assume that state and evidence are scalar and not vector
   \begingroup \footnotesize
   \begin{alignat*}{2}
-  & \Pr(X_{t+1} | e_{1:t+1}) 
+  & \Pr(X_{t+1} | e_{1:t+1})
     & & \\
 //
   &= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}})
@@ -617,7 +622,7 @@ digraph HMM {
 * Recursive Filtering: Update Formula
 - The update formula for the state is:
   $$
-  \Pr(X_{t+1} | e_{1:t+1}) 
+  \Pr(X_{t+1} | e_{1:t+1})
   = \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
   $$
 - The next state is "Sensor model x Transition model x Recursive state"
@@ -729,7 +734,7 @@ digraph HMM {
 - **Backward Pass (aka smoothing):**
   - Move backward through time from time $t$, computing:
     $$
-    b_{k+1:t} = P(e_{k+1:t} | X_k)
+    b_{k+1:t} = \Pr(e_{k+1:t} | X_k)
     $$
   - This captures how likely the future evidence is, given a particular value of
     $X_k$
@@ -737,26 +742,26 @@ digraph HMM {
 - **Combine them:**
   - Multiply forward and backward messages to get:
     $$
-    P(X_k | e_{1:t}) \propto f_{1:k} \times b_{k+1:t}
+    \Pr(X_k | e_{1:t}) \propto f_{1:k} \times b_{k+1:t}
     $$
 
 * Task 4: Most Likely Explanation: Intuition 1/2
 - You are tracking the weather (sunny or rainy) based on whether someone carries
   an umbrella
-- You can't see $Weather$ directly (hidden state), but you observe umbrellas
-  (which is a noisy observation)
+  - You can't see $Weather$ directly (hidden state), but you observe umbrellas
+    (which is a noisy observation)
   - You have 5 observations $Umbrella = [T, T, F, T, T]$
-- Question: what is the most likely sequence of $Weather$ states that explains
-  the $Umbrella$ observations?
-  - You know something about the transition model (i.e., "it tends to rain
-    several days in a row") and the sensor model (i.e., "people often forget the
-    umbrella")
 
-- Mathematically
+- **Question**: what is the most likely sequence of $Weather$ states that
+  explains the $Umbrella$ observations?
+  - You know something about:
+    - the transition model (i.e., "it tends to rain several days in a row")
+    - the sensor model (i.e., "people often forget the umbrella")
 
+- Mathematically:
   $$
   \argmax_{x_{1:t}} \Pr(x_{1:t} | e_{1:t}) =
-  argmax_{Weather_{1:t}} \Pr(Weather_{1:t} | Umbrella_{1:t})
+  \argmax_{Weather_{1:t}} \Pr(Weather_{1:t} | Umbrella_{1:t})
   $$
 
 * Task 4: Most Likely Explanation: Intuition 2/2
@@ -774,67 +779,66 @@ digraph HMM {
   - Finds the most likely entire path through the hidden states
 
 - **Key difference:**
-  - E.g., in speech recognition, find the most likely word sequence behind a
-    noisy audio signal
-  - Smoothing: Best guess per time step (may not find words that are not English
-    and / or suboptimal sequence)
-  - Viterbi: Best overall path (maximizes joint probability of the entire
-    sequence)
+  - In speech recognition, find the most likely word sequence behind a noisy
+    audio signal
+    - Smoothing: Best guess per time step (may miss non-English words or
+      suboptimal sequence)
+    - Viterbi: Best overall path (maximizes joint probability of the entire
+      sequence)
 
 * Viterbi Algorithm: Intuition
 
-- Objective: Find the most likely **sequence** of hidden states given
-  observations
+- **Goal**: Find the most likely sequence of hidden states given observations
 
 1. Initialization
-   - At $t = 1$, estimate the probability of starting in each state using the
-     initial state distribution and observation likelihood
+   - At $t = 1$, estimate probability of starting in each state using initial
+     state distribution and observation likelihood
 
 2. Recursion via dynamic programming
-   - At each time $t > 1$, for each state $x_t$:
-   - Compute the maximum probability path to $x_t$ from any previous state
+   - For each $t > 1$, for each state $x_t$:
+   - Compute maximum probability path to $x_t$ from any previous state
    - Use:
      - $\Pr(x_t | x_{t-1})$: transition model
      - $\Pr(e_t | x_t)$: sensor model
      - Best path probability to $x_{t-1}$ from prior step
-   - Store the probability and the corresponding back-pointer to $x_{t-1}$
+   - Store probability and corresponding back-pointer to $x_{t-1}$
 
 3. Termination and backtrace
-   - At final time $t = T$, identify the state with the highest final
-     probability
-   - Trace back through the stored pointers to reconstruct the optimal path
+   - At final time $t = T$, identify state with highest final probability
+   - Trace back through stored pointers to reconstruct optimal path
 
 * Viterbi Algorithm: Example 1/2
 
-- You observe a friend carrying an umbrella over 3 days:
-  $Umbrella = [Yes, Yes, No]$
+- You observe a friend carrying an umbrella over 3 days
+  - $Umbrella = [Yes, Yes, No]$
+
 - You want to infer the most likely sequence of hidden $Weather$ states
   - States: $S = \{\text{Sunny}, \text{Rainy}\}$ (weather)
   - Observations: $O = \{\text{Yes}, \text{No}\}$ (umbrella)
 
-- Initial Probabilities:
+  - Initial Probabilities:
 
-  $$
-  \Pr(\text{Sunny}) = 0.6, \quad \Pr(\text{Rainy}) = 0.4
-  $$
+    $$
+    \Pr(\text{Sunny}) = 0.6, \quad \Pr(\text{Rainy}) = 0.4
+    $$
 
-- Transition Probabilities:
+  - Transition Probabilities:
 
-  $$
-  \begin{aligned}
-  \Pr(\text{Sunny} \to \text{Sunny}) &= 0.7, \quad \Pr(\text{Sunny} \to \text{Rainy}) = 0.3 \\
-  \Pr(\text{Rainy} \to \text{Sunny}) &= 0.4, \quad \Pr(\text{Rainy} \to \text{Rainy}) = 0.6
-  \end{aligned}
-  $$
+    $$
+    \begin{aligned}
+    \Pr(\text{Sunny} \to \text{Sunny}) &= 0.7, \quad \Pr(\text{Sunny} \to \text{Rainy}) = 0.3 \\
+    \Pr(\text{Rainy} \to \text{Sunny}) &= 0.4, \quad \Pr(\text{Rainy} \to \text{Rainy}) = 0.6
+    \end{aligned}
+    $$
 
-- Observation (Emission) Probabilities:
+  - Observation (Emission) Probabilities:
 
-  $$
-  \begin{aligned}
-  \Pr(\text{Yes} | \text{Sunny}) &= 0.1, \quad \Pr(\text{No} | \text{Sunny}) = 0.9 \\
-  \Pr(\text{Yes} | \text{Rainy}) &= 0.8, \quad \Pr(\text{No} | \text{Rainy}) = 0.2
-  \end{aligned}
-  $$
+    $$
+    \begin{aligned}
+    \Pr(\text{Yes} | \text{Sunny}) &= 0.1, \quad \Pr(\text{No} | \text{Sunny}) = 0.9 \\
+    \Pr(\text{Yes} | \text{Rainy}) &= 0.8, \quad \Pr(\text{No} | \text{Rainy}) = 0.2
+    \end{aligned}
+    $$
 
 * Viterbi Algorithm: Example 2/2
 
@@ -854,9 +858,10 @@ digraph HMM {
 ::: columns
 :::: {.column width=50%}
 
-- Final most probable state: **Sunny** (Day 3)
-- Find the most likely sequence:
-  ${Rainy} \rightarrow \text{Rainy} \rightarrow \text{Sunny}$
+- Final most probable state
+  - Sunny (Day 3)
+- Find the most likely sequence
+  - $\text{Rainy} \rightarrow \text{Rainy} \rightarrow \text{Sunny}$
 
 ::::
 :::: {.column width=45%}
@@ -903,52 +908,49 @@ digraph Viterbi {
 
 * Algorithms for Specific Models
 
-- General temporal probabilistic reasoning makes minimal assumptions:
+- **General temporal probabilistic reasoning** makes minimal assumptions:
   - Markov property for transitions
-  - Sensor model depends only on current state
+  - Markov property for sensor model
   - No constraints on:
     - Mathematical form of transition/sensor models
     - Nature of state and evidence variables (discrete or continuous)
 
-- Efficiency and accuracy can improve by exploiting specific model structures:
+- Improve efficiency and accuracy by exploiting specific model structures:
   - **Hidden Markov Models (HMMs)**:
     - State is a single discrete variable
     - Transition and observation models are discrete probability tables
-    - Enables fast algorithms like the Viterbi algorithm, forward-backward, etc
-  - **Kalman Filters** (for continuous domains):
+    - Enables fast algorithms like Viterbi, forward-backward, etc
+  - **Kalman Filters**:
     - State variables are continuous and normally distributed
-    - Linear-Gaussian models for transitions and observations
+    - Linear Gaussian models for transitions and observations
     - Allows exact, efficient updates using matrix operations
 
 - Tailored algorithms can be orders of magnitude faster and more accurate than
   general methods
 
-* Hidden Markov Model: State and Transition Model
+* Hidden Markov Model: Formulation
 
-- **Hidden Markov Model (HMM)**: A temporal model with simplified structure for
+- **Hidden Markov Model (HMM)**: Temporal model with simplified structure for
   efficiency
   - **State model**:
-    - The system state at time $t$ is a discrete random variable
+    - System state at time $t$ is a discrete random variable
       $X_t \in \{1, \dots, S\}$
-    - E.g., in the umbrella domain, $X_t = Rain_t$ with states {rain, no rain}
-    - Generality: Multiple variables can be combined into one "mega-state"
-      variable
+    - E.g., in umbrella world, $X_t = Rain_t$ with states {$Rain$, $Sunny$}
+    - Can combine multiple variables into one "mega-state" variable
   - **Transition model** $\Pr(X_t | X_{t-1})$:
-    - Described by a transition matrix $\vT$ of size $S \times S$
+    - Transition matrix $\vT$ of size $S \times S$
     - Entry $T_{ij} = \Pr(X_t = j | X_{t-1} = i)$: probability of transitioning
       from state $i$ to $j$
   - **Sensor model**:
     - Defined as $\Pr(E_t | X_t = i)$ for each state $i$
-    - Representable as a vector (discrete observations) or a diagonal matrix
-      $\vO$ (for convenience)
-    - No assumptions about the number or type (discrete / continuous) of
-      observation variables
+    - Representable as a vector or diagonal matrix $\vO$
+    - No assumptions about number or type (discrete/continuous) of observation
+      variables
 
 - **Benefit**
-  - This structure enables efficient algorithms like forward, backward, and
-    Viterbi
+  - Enables efficient algorithms like forward, backward, and Viterbi
 
-* Hidden Markov Model: Umbrella Example
+* Hidden Markov Model: Example
 
 - E.g., if $Rain = T$ is state 1 and $Rain = F$ is state 2, then the transition
   matrix for the umbrella world
@@ -988,39 +990,36 @@ digraph Viterbi {
   $$
 
 * Hidden Markov Model: Algorithms
-- Using the matrix representation all the forward / backward computations become
+- Using matrix representation all the forward / backward computations become
   matrix operations:
-
   \begin{align*}
-  & \mathbf{f}_{1:t+1} = \alpha \mathbf{O}_{t+1} \mathbf{T}^\top \mathbf{f}_{1:t}
-  & \mathbf{b}_{k+1:t} = \mathbf{T} \mathbf{O}_{k+1} \mathbf{b}_{k+2:t}
+  & \mathbf{f}_{1:t+1} = \alpha \mathbf{O}_{t+1} \mathbf{T}^\top \mathbf{f}_{1:t} \\
+  & \mathbf{b}_{k+1:t} = \mathbf{T} \mathbf{O}_{k+1} \mathbf{b}_{k+2:t} \\
   \end{align*}
+  - Express inference tasks (e.g., filtering, smoothing) as efficient matrix
+    multiplication
 
-- So all the inference tasks (e.g., filtering, smoothing) can be expressed as
-  matrix multiplication which are typically efficient
+- Specialized algorithms to improve time and space complexity
 
-- There are several improvements that can be done to reduce time and space
-  complexity
-  - Baum-Welch
-    - Special case of Expectation-Maximization (EM) algorithm
-    - Pros: Converge to a local maximum of the likelihood
-    - Cons: Only point-estimation of params, no uncertainty estimation
-  - Viterbi
-    - Find the most likely sequence of hidden states
-    - Pros: Fast approximation of BW
-    - Cons: returns a local optimum
-  - Gradient-based methods
-    - For more complex models with differentiable form
-    - Use gradient descent to optimize parameter
-    - Pros: fast
-    - Cons: needs differentiable model
-    - E.g., PyTorch / TensorFlow probability
-  - HMM with MCMC
-    - Use Bayesian inference
-    - Learn posterior distribution of the parameters
-    - Pros: Flexible and accounts for uncertainty
-    - Cons: computationally expensive
-    - E.g., PyMC
+* Hidden Markov Model: Algorithms
+- Baum-Welch
+  - Special case of Expectation-Maximization (EM) algorithm
+  - Pros: Converges to local maximum of likelihood
+  - Cons: Only point-estimation, no uncertainty estimation
+- Viterbi
+  - Finds most likely sequence of hidden states
+  - Pros: Fast approximation of BW
+  - Cons: Returns local optimum
+- Gradient-based methods
+  - Use gradient descent to optimize parameters
+  - Pros: Fast
+  - Cons: Needs differentiable model
+  - E.g., PyTorch / TensorFlow probability
+- HMM with MCMC
+  - Learn posterior distribution of parameters using Bayesian inference
+  - Pros: Flexible, accounts for uncertainty
+  - Cons: Computationally expensive
+  - E.g., PyMC
 
 // TODO: Tutorial
 // Use pyMC
@@ -1031,64 +1030,132 @@ digraph Viterbi {
 // pyro
 
 * Hidden Markov Model: Applications
-- HMMs are very versatile to model systems that have hidden states which produce
-  observable outputs
+- HMMs model systems with hidden states producing observable outputs
 
-- Audio / speech
+- **Audio / speech**
   - Speech recognition: map audio to phonemes, words
   - Speaker identification: model vocal traits to recognize a speaker
   - Music generation and transcription
 
-- Biology / genomics
-  - Gene prediction: find regions of DNA
+- **Biology / genomics**
+  - Gene prediction: find DNA regions
   - Protein structure prediction
 
-- Finance / economics
-  - Market regime detection: e.g., bull/bear markets, volatility regimes
-  - Credit scoring: observe purchases and estimate financial health (hidden
-    variable)
+- **Finance / economics**
+  - Market regime detection: bull/bear markets, volatility regimes
+  - Credit scoring: observe purchases, estimate financial health (hidden variable)
 
-- Security / anomaly detection
-  - User behavior modeling: detect anomalous login patterns or usage activities
-  - Intrusion detection: model normal traffic patterns to spot attacks
-  - Fraud detection: identify unusual transaction behaviors
+* Hidden Markov Model: Applications
+- **Security / anomaly detection**
+  - User behavior modeling: detect anomalous login patterns or usage
+  - Intrusion detection: model normal traffic to spot attacks
+  - Fraud detection: identify unusual transactions
 
-- NLP
-  - Part-of-speech tagging: map words to their syntactic roles
+- **NLP**
+  - Part-of-speech tagging: map words to syntactic roles
   - Named entity recognition: identify entities, people, places
 
-- Operations and process monitoring
-  - Predictive maintenance: model machine health sate from sensor readings
-  - Process monitoring: detect deviation from normal operational sequence
-  - Customer behavior modeling: understand customer intent (latent)
+- **Operations and process monitoring**
+  - Predictive maintenance: model machine health from sensor readings
+  - Process monitoring: detect deviation from normal operations
+  - Customer behavior modeling: understand customer intent
 
-- Environmental monitoring
-  - Weather prediction: infer atmospheric state from observed variable
+- **Environmental monitoring**
+  - Weather prediction: infer atmospheric state from observed variables
 
-* HMMs: Limitations
-- Short memory
-  - Markov assumption, i.e., current state depends only on the previous state
-  - Inefficient for capturing long-range dependencies or context
-- Predefined and fixed number of states
-  - Underestimating / overestimating the number of states can lead to
-    underfitting or overfitting
-- Stationarity assumption
-  - Transition and sensor probabilities are assumed to be constant over time
-- Use an atomic representation
-  - The states have no internal structure and are simply labels
-- Training is computationally expensive for large datasets
-- Struggles with sparse data
-- Hard to interpret when there is a lot of states or states don't have a clean
-  meaning
+* Hidden Markov Model: Limitations
+- **Short memory**
+  - Markov assumption: current state depends only on previous state
+  - Inefficient for long-range dependencies
 
-- Alternatives
-  - Bayesian networks use a factored representation
-  - Deep learning can handle complex temporal dependencies and long term
+- **Predefined, fixed number of states**
+  - Mis-estimating states leads to underfitting or overfitting
+
+- **Stationarity assumption**
+  - Transition and sensor probabilities constant over time
+
+- **Use atomic representation**
+  - States are labels with no internal structure
+  - Hard to interpret with many states or unclear state meanings
+
+- **Training** is computationally expensive for large datasets
+  - Struggles with sparse data
+
+- **Alternatives**
+  - Bayesian networks using factored representation
+  - Deep learning handles complex temporal dependencies and long-term
     relationships
 
 # ##############################################################################
 # Markov Random Fields
 # ##############################################################################
+
+* Markov Random Fields
+
+- A **Markov Random Field** is a probabilistic graphical model
+  - Represents a joint distribution using an undirected graph
+    - Nodes = random variables
+    - Edges = relationships (dependencies) between variables
+
+  - Key idea: **Markov property**
+    - Each variable is conditionally independent of non-neighbors given its
+      neighbors
+
+  - Model **spatial and contextual dependencies**
+    - Capture local interactions that combine into a global structure
+
+- **Example**: Image de-noising
+  - Each pixel tends to have similar intensity to its neighbors
+  - Noise introduces local inconsistencies
+  - MRF models smoothness while respecting observed data
+
+- **Example**: Social networks
+  - Friends influence each other's behavior
+  - Dependencies exist only among connected individuals
+
+* Markov Random Fields: Model Form
+::: columns
+:::: {.column width=55%}
+- $Pr(X) = \frac{1}{Z} \prod_{C \in \mathcal{C}} \psi_C(X_C)$
+- $X$: set of all random variables in the model
+- $\mathcal{C}$: set of cliques in the graph (fully connected subset of nodes)
+- $\psi_C(X_C)$: **potential function** for clique $C$
+  - Assigns a positive score to each possible configuration of variables in $C$
+  - Clique potentials $\psi_C$ encode preferences or constraints
+  - Intuition: measures "compatibility" of values
+  - High $\psi_C$ = compatible configuration
+  - Low $\psi_C$ = unlikely configuration
+- $Z$: **partition function**
+  - Ensures probabilities sum to $1$
+  - Usually very hard to compute for large graphs
+
+::::
+:::: {.column width=40%}
+
+```graphviz
+graph MRF {
+  rankdir=TB;
+  nodesep=0.6; ranksep=0.6;
+  node [shape=circle, style=filled, fillcolor=white, fontname="Helvetica"];
+  edge [fontname="Helvetica"];
+
+  X1 [label="X_1"];
+  X2 [label="X_2"];
+  X3 [label="X_3"];
+  X4 [label="X_4"];
+
+  {rank=same; X1; X2}
+  {rank=same; X3; X4}
+
+  X1 -- X2 [label="ψ_{12}"];
+  X1 -- X3 [label="ψ_{13}"];
+  X2 -- X4 [label="ψ_{24}"];
+  X3 -- X4 [label="ψ_{34}"];
+  X2 -- X3 [label="ψ_{23}", style=dashed];
+}
+```
+::::
+:::
 
 # ##############################################################################
 # Markov Logic Network
@@ -1096,18 +1163,60 @@ digraph Viterbi {
 
 // https://en.wikipedia.org/wiki/Markov_logic_network
 
+* Markov Logic Networks: Intuition
+- **Intuition**:
+  - Logic rules are often _soft_ (have exceptions) rather than _absolute_ (true
+    or false)
+- Example: Social network friendships
+  - Rule: "Friends of friends are likely friends"
+  - Not always true, but often holds
+- Example: Natural language processing
+  - Rule: "Every sentence has a subject" weighted by importance
+
+- Markov Logic Networks
+  - Unify knowledge representation (logic) with uncertainty handling
+    (probability)
+  - Allow violations of rules but penalize them probabilistically
+
+- Applications:
+  - Information extraction
+  - Entity resolution
+  - Relational learning
+
+- Main challenge: inference and learning are computationally expensive
+
+* Markov Logic Networks: Basics
+- A **Markov Logic Network** (MLN) combines:
+  - First-order logic (expressing knowledge with rules and quantifiers)
+  - Markov Random Fields (modeling uncertainty with probabilities)
+
+- Each element is a pair $(F_i, w_i)$
+  - $F_i$: a first-order logic formula
+    - E.g., "$Friends(x,y) \implies Similar(x,y)$"
+  - $w_i$: a weight measuring the strength of belief in $F_i$
+    - Higher $w_i$ = formula more important in shaping the probability
+      distribution
+
+- **Semantics**:
+  - An MLN defines a probability distribution over _possible worlds_
+  - A world = a complete assignment of truth values to all ground atoms
+  - If a world satisfies many high-weight formulas, it becomes _more probable_
+
+- **Joint distribution**:
+  - $\Pr(X=x) = \frac{1}{Z} \exp\left(\sum_i w_i n_i(x)\right)$
+  - $n_i(x)$ = number of **true groundings** of formula $F_i$ in world $x$
+    - Example: If $F_i$ = "Friends(x,y) → Similar(x,y)" and in world $x$ this
+      holds for 7 pairs $(x,y)$ out of 10, then $n_i(x)=7$
+
+- **Special cases**:
+  - If all weights $w_i \to \infty$: only worlds where all formulas are satisfied
+    have nonzero probability $\to$ recovers _classical logic_
+  - If all weights are finite: allows some violations but assigns them lower
+    probability
+
 # ##############################################################################
 # State Space Models and Kalman Filter
 # ##############################################################################
-
-* Reference
-- https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python
-
-// ./notes/math.Kalman_filter.txt
-// ./notes/math.Kalman_and_Bayesian_filters_in_Python.Labbe.2018.txt
-// ./notebooks/quantopian/quantopian_kalman_filter.ipynb
-// ./notebooks/Kalman_and_Bayesian_filters_in_python
-// - AIMA 14.4 (p. 479)
 
 * Tracking Objects
 - Many problems can be formulated as "tracking objects", e.g.,
@@ -2052,7 +2161,7 @@ def update(prior, measurement):
   - $S_t = (X_t, \dot{X}_t, \text{BatteryLevel}_t)$
   - $E_t = (\text{GPS}_t, \text{BMeter}_t)$
 
-* DBN Example: Tracking a Robot (2/3) 
+* DBN Example: Tracking a Robot (2/3)
 ::: columns
 :::: {.column width=40%}
 - The DBN structure models both intra-slice (within time) and inter-slice
