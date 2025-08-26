@@ -5,6 +5,10 @@
 // \includegraphics[width=0.6\textwidth]{lectures_source/figures/Chap7_Binomial_distribution.png}
 // ```latex[width=50%]
 
+# Link
+
+[\textcolor{blue}{\underline{Hello}}](www.hello.com)
+
 # Color
 
 * Color text

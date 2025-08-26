@@ -35,7 +35,8 @@ MSML610: Advanced Machine Learning
     - Tutorials are mainly done at home
     - Videos of each tutorial will be added over time
 
-- Lessons alternate between slides, whiteboard, tutorials
+- **Class flow**
+  - Lessons alternate between slides, whiteboard, tutorials
   - 2:45 hours per class lessons
     - 50 mins
     - 10 break
@@ -44,7 +45,7 @@ MSML610: Advanced Machine Learning
     - 45 slides (Topic refresher!)
 
 * Books of the Class
-- The goal is to make the slides self-sufficient
+- **Goal**: make the slides self-sufficient
 
 - For each class, I recommend a few books I liked about that topic
 
@@ -79,7 +80,7 @@ MSML610: Advanced Machine Learning
 * Class Projects
 - The project is _"Build $X$ with $Y$"_, where $X$ is a use case and $Y$ is a
   technology
-  - Study and describe a technology $Y$
+  - Study and describe technology $Y$
   - Implement a use case $X$ using the technology $Y$
   - Create Jupyter notebooks to demo your project
   - Commit code to GitHub and contribute to open-source repo
@@ -97,25 +98,39 @@ MSML610: Advanced Machine Learning
   - Statistical learning
   - ...
 
+// TODO: Add link
+
 * Links
-- Syllabus
-- Schedule
-- GitHub project
-- FAQs
-- Project specs
+
+// [\textcolor{blue}{\underline{XYZ}}]()
+
+- [\textcolor{blue}{\underline{Syllabus}}](https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk/edit?tab=t.0#heading=h.278ryn4xodsb)
+
+- [\textcolor{blue}{\underline{Schedule}}](https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk/edit?tab=t.0#heading=h.s84poixczbkg)
+
+- [\textcolor{blue}{\underline{GitHub project}}](https://github.com/gpsaggese/umd_data605/tree/master/MSML610/lectures)
+
+- [\textcolor{blue}{\underline{Class FAQs}}](https://docs.google.com/document/d/1updvJmP5wl4cRGf4ncF51NTaCMsvio4SEqbswLm0NIk/edit?tab=t.0#heading=h.u1q3ejttmkkq)
+
+- [\textcolor{blue}{\underline{Project specs}}](TBD)
 - Announcements on ELMS
 
-* Yours truly
-- GP Saggese, PhD
+// TODO: Add link to project specs
+
+* Yours Truly
+- **GP Saggese**
   - 2001-2006, PhD / Postdoc at the University of Illinois at Urbana-Champaign
-- **LinkedIn**: https://www.linkedin.com/in/gpsaggese/
-- **Email**: gsaggese@umd.edu
+  - [\textcolor{blue}{\underline{LinkedIn}}](https://www.linkedin.com/in/gpsaggese/)
+  - [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+- **University of Maryland**:
+  - 2023-, Lecturer for UMD DATA605: Big Data Systems
+  - 2025-, Lecturer for UMD MSML610: Advanced Machine Learning
 - **In the real-world**
   - Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
   - 3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
   - 20+ academic papers, 2 US patents
-- **UMD**:
-  - 2023-, Lecturer for UMD DATA605: Big Data Systems
+
+// TODO: Add pic of GP in his coding environment
 
 # ##############################################################################
 # Class Map
@@ -125,31 +140,31 @@ MSML610: Advanced Machine Learning
 // lectures_source/get_syllabus.sh
 
 * 1. Intro
-- A map of machine learning
-- What is Artificial Intelligence
+- A Map of Machine Learning
+- What Is Artificial Intelligence
   - AI
-  - ML
-  - AI vs ML vs Deep-learning
-  - The foundation of AI
-  - Brief history of AI
-  - AI state of the art
-  - Risks and benefits of AI
+  - Machine Learning
+  - AI vs ML vs Deep-Learning
+  - The Foundation of AI
+  - Brief History of AI
+  - AI State of the Art
+  - Risks and Benefits of AI
 
 * 2. Techniques
 - Paradigms
 - Techniques
-  - Machine learning in practice
-  - How to do research
-    - Simple is better
-    - Research methodology
-  - Pipeline organization
-  - Input processing
-  - Learning algorithms
-    - Gradient descent
-    - Stochastic gradient descent
-  - Performance metrics
-    - Precision and recall
-  - Model selection
+  - Machine Learning in Practice
+  - How to Do Research
+    - Simple Is Better
+    - Research Methodology
+  - Pipeline Organization
+  - Input Processing
+  - Learning Algorithms
+    - Gradient Descent
+    - Stochastic Gradient Descent
+  - Performance Metrics
+    - Precision and Recall
+  - Model Selection
   - Aggregation
     - Bagging
     - Boosting
@@ -184,14 +199,15 @@ MSML610: Advanced Machine Learning
   - Anomaly detection
 
 * 5. Machine Learning Theories
-- Is learning possible?
-  - Training vs Testing
-  - Growth function
-  - The VC dimension
-  - Regularization
-    - Bias vs variance
-    - Learning curves
-    - Learn-validation approach
+- Is machine learning possible?
+- Growth function
+- The VC dimension
+- Overfitting
+- Bias Variance Analysis
+- Learning curves
+- Learn-validation approach
+  - Train / test
+  - Cross-validation
 
 * 6. Bayesian Statistics
 - Logic-Based AI Under Uncertainty
@@ -205,39 +221,30 @@ MSML610: Advanced Machine Learning
     - Direct sampling methods
 
 * 7. Probabilistic Programming
-- Probabilistic programming
-  - Probability theory
-  - Single-parameter inference
-  - How to choose priors
-  - Communicating a Bayesian analysis
-  - Probabilistic programming
-  - Posterior-based decisions
-  - Gaussians all the way down
-  - Posterior predictive checks
-  - Robust inference
-  - Groups comparison
-  - Hierarchical models
-  - Simple linear model
-  - Variable variance
-  - Hierarchical linear regression
-  - Multiple linear regression
-  - Comparing models
-    - Posterior predictive checks
-  - The balance between simplicity and accuracy
-  - Measures of predictive accuracy
-    - Information criteria
-    - Cross-validation
-  - Model averaging
-  - Bayes factors
-    - Bayes factors and information criteria
+- Concepts
+- Coin Example
+  - Analytical Approach
+  - Communicating a Bayesian Analysis
+  - Probabilistic Programming
+- Posterior-Based Decisions
+  - Chemical Shift: Example
+  - Posterior Predictive Checks
+    - Robust Inference
+- Groups Comparison
+- Hierarchical Models
+- Simple Linear Model
+  - Logistic Regression
+- Multiple linear regression
+- Comparing Models
+    - Posterior Predictive Checks
+  - The Balance Between Simplicity and Accuracy
+  - Measures of Predictive Accuracy
+    - Information Criteria
+    - Cross-Validation
+    - Bayes Factors and Information Criteria
   - Regularizing priors
-  - Mixture models
-  - 7.5, Zero-inflated and hurdle models
-  - 7.6, Mixture models and clustering
-  - 7.7, Non-finite mixture models
-  - 7.8, Continuous mixtures
-  - Inference engines
-  - 10.1, Inference engines
+  - Regularizing Priors
+  - Mixture Models
 
 * 8. Reasoning Over Time
 - Reasoning over time

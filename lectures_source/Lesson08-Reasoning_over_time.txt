@@ -1219,38 +1219,37 @@ graph MRF {
 # ##############################################################################
 
 * Tracking Objects
-- Many problems can be formulated as "tracking objects", e.g.,
+- Many problems can be formulated as **tracking objects**
+
+- **Examples**
   - Navigation of aircraft, drones, autonomous cars
   - Robotics: arm kinematics to predict the position of joints
   - Sensor fusion: merge multiple sensor readings
   - Finance: predict economic variables (e.g., stock prices)
   - Computer vision: track moving objects across video
-  - Aerospace: radar tracking, missile, satellite
 
-- Kalman filter is widely used for state estimation in dynamic systems, when
-  measurements are noisy and uncertain
-  - Track something over time using a combination of predictions (i.e., a model)
-    and observations
+- **Kalman filter**
+  - Used for state estimation in dynamic systems with noisy, uncertain
+    measurements
+  - Track over time using predictions (model) and observations
 
 * Some Guiding Principles
 - **The world is noisy**
-  - A car might swerve around a pothole or brake for a pedestrian
-  - Wind or ice might change the car's path
+  - E.g., a car might swerve around a pothole or brake for a pedestrian
+  - E.g., wind or ice might change the car's path
 
 - **Sensors are noisy**
-  - E.g., a kitchen scale gives different readings for the same object
-
-- Data is better than a guess
-  - Even if noisy
+  - A kitchen scale gives different readings for the same object
 
 - **Knowledge is uncertain**
-  - We alter beliefs based on evidence strength
+  - You alter beliefs based on evidence strength
 
 - Use past information and system knowledge to estimate future information
   - E.g., if a car moves at a certain speed at time $t$, the speed at time $t+1$
     is likely close to the previous speed
 
-- Never discard information, no matter how poor
+- Data is better than a guess, even if noisy
+  - Never discard information, no matter how poor
   - E.g., two sensors, even if one is less accurate, are better than one
 
 ## #############################################################################
