@@ -41,6 +41,13 @@ MSML610: Advanced Machine Learning
 
 * A Map of Machine Learning
 
+- Machine Learning is a field with many branches
+  - Theory
+  - Paradigms
+  - Models
+  - Techniques
+  - ...
+
 ```mermaid
 mindmap
   root((**Machine Learning**))
@@ -167,13 +174,25 @@ mindmap
 ## AI
 ## #############################################################################
 
+* ML, AI, and Intelligence
+- Machine Learning is a subset of AI
+  - All of it confused with deep learning, large-language models, predictive
+    analytics, ...
+
+- What is artificial intelligence?
+- What is intelligence?
+
 * Human Intelligence
 - We call ourselves "homo sapiens" because intelligence sets us apart from animals
 
 - For thousands of years, we tried to understand how we think
+
+- One of the biggest mysteries
   - Brain is a small mass of matter
-  - How can brain perceive, understand, predict, and manipulate a world more
-    complicated than itself?
+  - Our brain can understand nature secrets, e.g., theory of relativity, quantum
+    mechanics, black holes in the universe
+  - How can brain understand, predict, and manipulate a world more complicated
+    than itself?
 
 * Artificial Intelligence
 - The term "Artificial Intelligence" was coined in 1956
@@ -181,6 +200,7 @@ mindmap
 - **AI aims to:**
   - Understand human intelligence
   - Create intelligent entities
+  - _"What I cannot create, I do not understand"_ (Feynman, 1988)
 
 - **AI is a technology**
   - Universal and applicable to any human activity and task
@@ -195,10 +215,30 @@ mindmap
   - Human vs. Rational (ideal performance)
 
 - This leads to four possible definitions of AI as a machine that can:
-  1. Think humanly
-  2. Think rationally
-  3. Act humanly
-  4. Act rationally
+
+```tikz
+  % Axes
+  \draw[->, thick] (-5,0) -- (5,0) node[anchor=west]{};
+  \draw[->, thick] (0,-3.5) -- (0,3.5) node[anchor=south]{};
+
+  % Titles
+  \node[font=\bfseries] at (-2.4,2.6) {Think humanly};
+  \node[font=\bfseries] at ( 2.4,2.6) {Think rationally};
+  \node[font=\bfseries] at (-2.4,-0.6) {Act humanly};
+  \node[font=\bfseries] at ( 2.4,-0.6) {Act rationally};
+
+  % Small descriptors (optional)
+  \node[align=center, text width=4.5cm] at (-2.4,1.4) {Focus on cognitive processes\\(e.g., introspection, cognitive models)};
+  \node[align=center, text width=4.5cm] at ( 2.4,1.4) {Focus on correct reasoning\\(e.g., logic, decision theory)};
+  \node[align=center, text width=4.5cm] at (-2.4,-1.8) {Focus on behavior indistinguishable from humans\\(e.g., Turing Test)};
+  \node[align=center, text width=4.5cm] at ( 2.4,-1.8) {Focus on optimal actions\\(e.g., rational agents)};
+
+  % Axis tick labels (optional)
+  \node[anchor=north] at (-3.8,0) {Thinking};
+  \node[anchor=north] at ( 3.8,0) {Acting};
+  \node[anchor=east]  at (0, 3.0) {Human};
+  \node[anchor=east]  at (0,-3.0) {Rational};
+```
 
 * AI Formal Definition: Quiz
 - Four possible definitions of AI as a machine that can:
@@ -207,16 +247,9 @@ mindmap
   3. Act humanly
   4. Act rationally
 
-- **Which one do you think is the best definition?**
+- **Q**: Which one do you think is the best definition?
 
-* AI Formal Definition: Quiz
-- Four possible definitions of AI as a machine that can:
-  1. Think humanly
-  2. Think rationally
-  3. Act humanly
-  4. Act rationally
-
-- **Which one do you think is the best definition?**
+\pause
 
 - We will see that building machines that can **"act rationally"** should be
   ultimate goal of AI
@@ -233,7 +266,7 @@ mindmap
   - Anthropocentric definition
 
 * 2. AI as Thinking Rationally
-- What are the rules of "correct thinking"?
+- What are the rules of **\black{correct thinking}**?
   - Given correct premises, yield correct conclusions
 
 - **Logic** studies the "laws of thought"
@@ -267,26 +300,29 @@ mindmap
 
 * 3. AI as Acting Humanly
 - **Agent** is something that perceives and acts to reach a goal
-  - AI designs agent that can act like humans
+
+- **Definition**: AI designs **agents that can act like humans**
 
 - **(Embodied) Turing test**
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
   - Passing the Turing test requires:
-    1. Natural language processing to communicate in English
-    2. Knowledge representation to store what it knows
-    3. Automated reasoning to use stored knowledge to answer questions
-    4. Machine learning to detect and extrapolate patterns
+    1. Natural language processing to communicate
+    2. Knowledge representation to store information
+    3. Automated reasoning to use stored knowledge and answer questions
+    4. Machine learning to detect patterns
     5. Computer vision and speech recognition to perceive objects and understand
-       human talking to them
-    6. Robotics to manipulate objects and move around
+       speech
+    6. Robotics to manipulate objects and move
 
 * Turing Test: Pros and Cons
 
 - **Pros**
   - Operational definition of intelligence
-  - Sidestep philosophical vagueness of "What is consciousness? Can a machine
-    think? ..."
+  - Sidestep philosophical vagueness
+    - "What is consciousness?"
+    - "Can a machine think?"
+    - ...
 
 - **Cons**
   - Anthropomorphic criteria define intelligence in human terms
@@ -295,14 +331,14 @@ mindmap
     - Design intelligence to imitate humans
     - Fool humans into thinking it's human
   - E.g., aeronautical engineering:
-    - Focus on wind tunnels and aerodynamics
-    - Not about designing machines that imitate birds
-    - Not about fooling birds into thinking it's a bird
+    - Yes: Focus on wind tunnels and aerodynamics
+    - No: Designing machines that imitate birds
+    - No: Fooling birds into thinking it's a bird
 
 * 4. AI as Acting Rationally
-- Rational agents $\iff$ do the "right thing" given what they know
+- **Rational agents**: agents that do the "right thing" given what they know
 
-- Computer agents that act rationally should:
+- Agents that act rationally should:
   1. Operate autonomously
   2. Perceive environment
   3. Persist over a prolonged time period
@@ -322,13 +358,23 @@ mindmap
   - Human behavior is shaped by evolutionary conditions
 
 - AI focuses on **agents acting rationally**
-  - I.e., "agents that do the right thing" based on available knowledge
-  - E.g., you leave the house and a branch strikes you
-    - Did you act rationally?
-    - Probably
-  - E.g., you cross the street and a car knocks you over
-    - Did you act rationally?
-    - Id depends!
+
+* Rationally is Not Absolute
+
+- AI wants to build agents that **do the right thing** based on **available
+  knowledge**
+
+- E.g., you leave the house and a branch strikes you
+  - **Q**: Did you act rationally?
+  \pause
+  - Probably
+
+\pause
+
+- E.g., you cross the street and a car knocks you over
+  - **Q**: Did you act rationally?
+  \pause
+  - It depends, but probably no
 
 * Goals of a Rational Agent
 - A **rational agent** aims for:
@@ -344,15 +390,14 @@ mindmap
   - Perfect rationality is not always feasible due to:
     - Cost of acquiring all data
     - Computational demands
-  - Acting "appropriately", "satisficing"
+  - Acting "appropriately" vs "satisficing"
 
 ## #############################################################################
 ## Machine Learning
 ## #############################################################################
 
 * Machine Learning: Definitions
-- Artificial intelligence differs from human intelligence
-  - Machines don't learn like humans (e.g., LLMs)
+- How to define machine learning?
 
 - _"Machine learning is the field of study that gives computers the ability to
   learn without being explicitly programmed"_, (Arthur Samuel, 1959)
@@ -360,17 +405,19 @@ mindmap
   task $T$ and some performance measure $P$, if $P(T)$ improves with experience
   $E$"_, (Tom Mitchell, 1998)
 
-- Machine learning is the science of building machines capable of doing useful
-  things without being explicitly programmed to do so
-  - E.g. a computer learn to play checkers by playing against itself, memorizing
-    which positions lead to winning a game
+- **Machine learning** is building machines to do **useful things** without being
+  **explicitly programmed**
+  - E.g. a computer learns to play checkers by playing against itself, memorizing
+    positions that lead to winning
 
 * Limits of ML Compared to Human Intelligence
+- Artificial intelligence differs from human intelligence
+  - Machines don't learn like humans (e.g., LLMs)
 
 - **Fragility to input variations**
   - ML models fail with slight input distortions
-    - E.g., adversarial attacks cause misclassification by altering one pixel
-    - E.g., a model trained for a video game may fail if the screen is slightly
+    - Adversarial attacks cause misclassification by altering one pixel
+    - A model trained for a video game may fail if the screen is slightly
       rotated; humans continue effortlessly
 
 - **Lack of transfer learning**
@@ -378,8 +425,8 @@ mindmap
 
 - **Massive data and compute requirements**
   - ML requires enormous datasets and computational resources
-    - E.g., a teenager learns to drive in hours; self-driving systems need
-      billions of compute hours and extensive data
+    - A teenager learns to drive in hours; self-driving systems need billions of
+      compute hours and extensive data
 
 - **Poor common sense and reasoning**
   - ML lacks built-in world knowledge and intuitive logic
