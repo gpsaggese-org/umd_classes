@@ -46,11 +46,8 @@ MSML610: Advanced Machine Learning
 
 * Books of the Class
 ::: columns
-:::: {.column width=70%}
-- **Goal**: make the slides self-sufficient
-
-- Recommended books
-
+:::: {.column width=65%}
+- **Goal**: make the slides self-sufficient from recommended books
   - **Simple**
     - Burkov: _"Machine Learning Engineering"_ (2020)
     - Burkov: _"The Hundred-Page Machine Learning Book"_ (2019)
@@ -65,17 +62,19 @@ MSML610: Advanced Machine Learning
     - Sutton et al.: _"Reinforcement Learning: An Introduction"_ (2nd ed, 2018)
 
 ::::
-:::: {.column width=25%}
+:::: {.column width=40%}
 
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book..jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
 ![](msml610/lectures_source/figures/book_covers/Book_cover_Machine_Learning_Engineering.jpeg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book..jpg){ height=20% }
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
+
 ![](msml610/lectures_source/figures/book_covers/Book_cover_ML_A_probabilistic_perspective.jpg){ height=20% }
 ![](msml610/lectures_source/figures/book_covers/Book_cover_Probabilistic_Graphical_Models.jpg){ height=20% }
-![](msml610/lectures_source/figures/book_covers/Book_cover_Reinforcement_learning.jpg){ height=20% }
 ![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Reinforcement_learning.jpg){ height=20% }
 ::::
 :::
 
@@ -89,8 +88,8 @@ MSML610: Advanced Machine Learning
   - Python project selected from a list of topics
 
 * Class Projects
-- The project is _"Build $X$ with $Y$"_, where $X$ is a use case and $Y$ is a
-  technology
+- The project is _"Build $X$ with $Y$"_, where $X$ is a "use case" and $Y$ is a
+  "technology"
   - Study and describe technology $Y$
   - Implement a use case $X$ using the technology $Y$
   - Create Jupyter notebooks to demo your project
@@ -98,18 +97,16 @@ MSML610: Advanced Machine Learning
   - Write a blog entry
   - Present your project in a video
 
-- Each project:
-  - Is individual
-  - Has different levels of difficulty
-
 - There is a list of $X$ and $Y$ you can pick from, e.g.,
+  - Statistical learning
+  - Big data
   - LLMs
   - Deep learning
-  - Big data
-  - Statistical learning
   - ...
 
-// TODO: Add link
+- Each project:
+  - Is individual or group ($n \lte 3$)
+  - Has different levels of difficulty
 
 * Links
 
@@ -125,6 +122,9 @@ MSML610: Advanced Machine Learning
 // TODO: Add link to project specs
 
 * Yours Truly
+::: columns
+:::: {.column width=50%}
+
 - **GP Saggese**
   - 2001-2006, PhD / Postdoc at the University of Illinois at Urbana-Champaign
   - [\textcolor{blue}{\underline{LinkedIn}}](https://www.linkedin.com/in/gpsaggese/)
@@ -136,8 +136,11 @@ MSML610: Advanced Machine Learning
   - Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
   - 3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
   - 20+ academic papers, 2 US patents
-
-// TODO: Add pic of GP in his coding environment
+::::
+:::: {.column width=45%}
+![](msml610/lectures_source/figures/GP_in_coding_state.png)
+::::
+:::
 
 # ##############################################################################
 # Class Map
@@ -157,7 +160,7 @@ MSML610: Advanced Machine Learning
   - AI State of the Art
   - Risks and Benefits of AI
 
-* 2. Techniques
+* 2. Machine Learning Techniques
 - Paradigms
 - Techniques
   - Machine Learning in Practice

@@ -1,8 +1,8 @@
-// notes_to_pdf.py --input lectures_source/Lesson1-Intro.txt --output tmp.pdf --type slides --skip_action cleanup_after --debug_on_error --toc_type navigation
+// notes_to_pdf.py --input msml610/lectures_source/Lesson1-Intro.txt --output tmp.pdf --type slides --skip_action cleanup_after --debug_on_error --toc_type navigation
 
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](msml610/lectures_source/figures/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -31,7 +31,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::: {.column width=20%}
 
-![](lectures_source/covers/Lesson01-Intro.png){width=70%}
+// ![](msml610/lectures_source/covers/Lesson01-Intro.png){width=70%}
 ::::
 :::
 
@@ -42,8 +42,8 @@ MSML610: Advanced Machine Learning
 * A Map of Machine Learning
 
 - Machine Learning is a field with many branches
-  - Theory
   - Paradigms
+  - Theory
   - Models
   - Techniques
   - ...
@@ -77,27 +77,6 @@ mindmap
       Ensemble learning
 ```
 
-* Machine Learning Theory
-- **VC theory**
-  - Measure model capacity and generalize based on hypothesis space complexity
-
-- **Bias-variance decomposition**
-  - Prediction error is the sum of:
-    - Bias: Error from simplistic model assumptions
-    - Variance: Error due to sensitivity to training data fluctuations
-
-- **Computation complexity**
-  - Related to information theory and compression
-  - E.g., Minimum Description Length (MDL) measures model complexity via
-    efficient model and data description
-
-- **Bayesian approach**
-  - Treat ML as probability
-  - Combine prior knowledge with observed data to update belief about a model
-
-- **Problem in ML theory**
-  - Assumptions may not align with practical problems
-
 * Machine Learning Paradigms
 - How do you set up the learning problem?
 
@@ -118,6 +97,27 @@ mindmap
     - Request outputs for specific inputs
 
   - ...
+
+* Machine Learning Theory
+- **VC theory**
+  - Measure model capacity and generalize based on hypothesis space complexity
+
+- **Bias-variance decomposition**
+  - Prediction error is the sum of:
+    - Bias: Error from simplistic model assumptions
+    - Variance: Error due to sensitivity to training data fluctuations
+
+- **Computation complexity**
+  - Related to information theory and compression
+  - E.g., Minimum Description Length (MDL) measures model complexity via
+    efficient model and data description
+
+- **Bayesian approach**
+  - Treat ML as probability
+  - Combine prior knowledge with observed data to update belief about a model
+
+- **Problem in ML theory**
+  - Assumptions may not align with practical problems
 
 * Machine Learning Models
 - What is the form of the model and how to fit / predict from the data?
@@ -214,33 +214,6 @@ mindmap
   - Thinking vs. Acting
   - Human vs. Rational (ideal performance)
 
-- This leads to four possible definitions of AI as a machine that can:
-
-```tikz
-  % Axes
-  \draw[->, thick] (-5,0) -- (5,0) node[anchor=west]{};
-  \draw[->, thick] (0,-3.5) -- (0,3.5) node[anchor=south]{};
-
-  % Titles
-  \node[font=\bfseries] at (-2.4,2.6) {Think humanly};
-  \node[font=\bfseries] at ( 2.4,2.6) {Think rationally};
-  \node[font=\bfseries] at (-2.4,-0.6) {Act humanly};
-  \node[font=\bfseries] at ( 2.4,-0.6) {Act rationally};
-
-  % Small descriptors (optional)
-  \node[align=center, text width=4.5cm] at (-2.4,1.4) {Focus on cognitive processes\\(e.g., introspection, cognitive models)};
-  \node[align=center, text width=4.5cm] at ( 2.4,1.4) {Focus on correct reasoning\\(e.g., logic, decision theory)};
-  \node[align=center, text width=4.5cm] at (-2.4,-1.8) {Focus on behavior indistinguishable from humans\\(e.g., Turing Test)};
-  \node[align=center, text width=4.5cm] at ( 2.4,-1.8) {Focus on optimal actions\\(e.g., rational agents)};
-
-  % Axis tick labels (optional)
-  \node[anchor=north] at (-3.8,0) {Thinking};
-  \node[anchor=north] at ( 3.8,0) {Acting};
-  \node[anchor=east]  at (0, 3.0) {Human};
-  \node[anchor=east]  at (0,-3.0) {Rational};
-```
-
-* AI Formal Definition: Quiz
 - Four possible definitions of AI as a machine that can:
   1. Think humanly
   2. Think rationally
@@ -303,17 +276,25 @@ mindmap
 
 - **Definition**: AI designs **agents that can act like humans**
 
-- **(Embodied) Turing test**
+- **Turing test**
   - _"A computer passes the Turing test if a human cannot tell whether the
     answers to questions came from a person or a computer"_
-  - Passing the Turing test requires:
-    1. Natural language processing to communicate
-    2. Knowledge representation to store information
-    3. Automated reasoning to use stored knowledge and answer questions
-    4. Machine learning to detect patterns
-    5. Computer vision and speech recognition to perceive objects and understand
-       speech
-    6. Robotics to manipulate objects and move
+
+::: columns
+:::: {.column width=65%}
+- Passing the (embodied) Turing test requires:
+  1. Natural language processing to communicate
+  2. Knowledge representation to store information
+  3. Automated reasoning to use stored knowledge and answer questions
+  4. Machine learning to detect patterns
+  5. Computer vision and speech recognition to perceive objects and understand
+     speech
+  6. Robotics to manipulate objects and move
+::::
+:::: {.column width=30%}
+![](msml610/lectures_source/figures/Lesson01_Ex_machina.jpg)
+::::
+:::
 
 * Turing Test: Pros and Cons
 
@@ -325,20 +306,18 @@ mindmap
     - ...
 
 - **Cons**
-  - Anthropomorphic criteria define intelligence in human terms
+  - **Anthropomorphic** criteria define intelligence in human terms
     - Multiple forms of non-human intelligence exist
-  - Intelligence in terms of Turing test
-    - Design intelligence to imitate humans
-    - Fool humans into thinking it's human
-  - E.g., aeronautical engineering:
+  - Intelligence in terms of Turing test is **fooling humans** into thinking it's
+    human
+  - E.g., aeronautical engineering is about:
     - Yes: Focus on wind tunnels and aerodynamics
     - No: Designing machines that imitate birds
-    - No: Fooling birds into thinking it's a bird
 
 * 4. AI as Acting Rationally
 - **Rational agents**: agents that do the "right thing" given what they know
 
-- Agents that act rationally should:
+- Agents that **act rationally** should:
   1. Operate autonomously
   2. Perceive environment
   3. Persist over a prolonged time period
@@ -349,6 +328,8 @@ mindmap
 - Which definition of AI to use?
   - Acting vs. Thinking
   - Rational vs. Human
+
+\pause
 
 - **Acting > Thinking**
   - Acting rationally is broader than just thinking rationally
@@ -361,8 +342,10 @@ mindmap
 
 * Rationally is Not Absolute
 
-- AI wants to build agents that **do the right thing** based on **available
-  knowledge**
+- AI wants to build agents that **do the right thing**
+  - What is the right thing?
+
+\pause
 
 - E.g., you leave the house and a branch strikes you
   - **Q**: Did you act rationally?
@@ -376,21 +359,32 @@ mindmap
   \pause
   - It depends, but probably no
 
-* Goals of a Rational Agent
-- A **rational agent** aims for:
-  - The best outcome in a deterministic setup
-  - The best expected outcome under uncertainty
+\pause
+
+- E.g., moral issues with self-driving car 
+  - Swerve and hit a pedestrian to avoid a frontal crash that would kill 2 people
+
+* Problems of a Rational Agent
+- **Probabilistic environment**
+  - A rational agent aims for:
+    - The best outcome in a deterministic setup
+    - The best expected outcome under uncertainty
 
 - **Best** is determined by the objective function:
   - E.g., cost function, sum of rewards, loss function, utility
 
-- **Problems** with acting rationally
-  - Sometimes no provably correct action exists
-    - Yet, an action must be taken
-  - Perfect rationality is not always feasible due to:
-    - Cost of acquiring all data
-    - Computational demands
-  - Acting "appropriately" vs "satisficing"
+- Omniscience vs **no-regrets**
+  - Best based on available information
+
+- Sometimes **no provably correct action** exists
+  - Yet, an action must be taken
+
+- Even **with perfect information** rationality can't be feasible due to:
+  - Cost of acquiring all data (e.g., in medicine)
+  - Computational demands
+
+- Perfect good enough vs perfect
+  - Acting appropriately ("satisficing")
 
 ## #############################################################################
 ## Machine Learning
@@ -400,19 +394,27 @@ mindmap
 - How to define machine learning?
 
 - _"Machine learning is the field of study that gives computers the ability to
-  learn without being explicitly programmed"_, (Arthur Samuel, 1959)
-- _"A computer program is said to learn from experience $E$ with respect to some
-  task $T$ and some performance measure $P$, if $P(T)$ improves with experience
-  $E$"_, (Tom Mitchell, 1998)
+  learn without being explicitly programmed"_ (Samuel, 1959)
 
-- **Machine learning** is building machines to do **useful things** without being
-  **explicitly programmed**
+- **Machine learning** is about building machines to do **useful things** without
+  being **explicitly programmed**
   - E.g. a computer learns to play checkers by playing against itself, memorizing
     positions that lead to winning
 
+- _"A computer program is said to learn from experience $E$ with respect to some
+  task $T$ and some performance measure $P$, if $P(T)$ improves with experience
+  $E$"_ (Mitchell, 1998)
+
+- E.g.,
+  - Computer vision
+  - Speech recognition
+  - Natural language processing
+
 * Limits of ML Compared to Human Intelligence
-- Artificial intelligence differs from human intelligence
+- **AI differs from human intelligence**
   - Machines don't learn like humans (e.g., LLMs)
+
+\pause
 
 - **Fragility to input variations**
   - ML models fail with slight input distortions
@@ -425,8 +427,8 @@ mindmap
 
 - **Massive data and compute requirements**
   - ML requires enormous datasets and computational resources
-    - A teenager learns to drive in hours; self-driving systems need billions of
-      compute hours and extensive data
+    - A teenager learns to drive in hours
+    - Self-driving systems need billions of compute hours and extensive data
 
 - **Poor common sense and reasoning**
   - ML lacks built-in world knowledge and intuitive logic
@@ -450,24 +452,26 @@ mindmap
   - Human cognition is grounded in physical and sensory experience
 
 * The 3 Machine Learning Assumptions
-- Machine learning involves solving a practical problem by:
+
+- In practice, ML involves solving a practical problem by:
   - Gathering a dataset
   - Building a statistical model from the dataset algorithmically
 
 - The **three assumptions** of machine learning
-  - A pattern exists
-  - Pattern cannot be precisely defined mathematically
-  - Data is available
+  - A **pattern exists**
+  - Pattern cannot be **precisely defined mathematically**
+  - **Data is available**
 
-- Which ML assumption is essential?
-  - _A pattern exists_
+- Which ML assumption is **essential**?
+  \pause
+  - A pattern exists
     - If no pattern, try learning, measure effectiveness, conclude it doesn't
       work
-  - _Cannot pin down pattern mathematically_
+  - Pattern cannot be precisely defined mathematically
     - If solution is direct, ML not recommended, but may still apply
-  - _We have data_
+  - Data is available
     - Without data, no progress can be made
-    - Data is crucial
+    - **Data is crucial**
 
 * Machine Learning Adages
 
@@ -497,32 +501,31 @@ mindmap
 * AI vs ML vs Deep-Learning
 ::: columns
 :::: {.column width=65%}
-- **AI**: Machines programmed to reason, learn, and act in a rational way
+- **AI**
+  - Machines programmed to reason, learn, and act in a rational way
 
-- **ML**: Machines capable of performing tasks without being explicitly programmed,
-  e.g.,
-  - Natural language processing
-  - Computer vision
-  - Speech recognition
+- **ML**
+  - Machines capable of performing tasks without being explicitly programmed
 
 - **AI without ML**:
   - Example: Rule-based systems (e.g., IBM Deep Blue playing chess)
 
-- **Deep Learning (DL)**: ML using neural networks with multiple layers
+- **Deep Learning (DL)**
+  - ML using neural networks with multiple layers
   - Example: Autonomous vehicles
 
-- **Large Language Models (LLM)**: neural networks trained on massive text
-  datasets and RLHS
+- **Large Language Models (LLM)**
+  - Neural networks trained on massive text datasets and RLHS
 
 ::::
 :::: {.column width=30%}
 
 ```tikz
   % Define colors (optional)
-  \definecolor{AIcolor}{RGB}{200, 200, 255}
-  \definecolor{MLcolor}{RGB}{200, 255, 200}
-  \definecolor{DLcolor}{RGB}{255, 200, 200}
-  \definecolor{LLMcolor}{RGB}{255, 255, 150}
+  \definecolor{AIcolor}{RGB}{255,150,150}    % Light Red
+  \definecolor{MLcolor}{RGB}{150,255,150}    % Light Green
+  \definecolor{DLcolor}{RGB}{150,255,255}    % Light Teal/Cyan
+  \definecolor{LLMcolor}{RGB}{230,150,230}   % Light Purple
 
   % Draw AI circle
   \fill[AIcolor] (0,0) circle (3);
@@ -548,7 +551,7 @@ mindmap
 :::
 
 ## #############################################################################
-## The Foundation of AI
+## The Foundations of AI
 ## #############################################################################
 
 * AI Relates to Many Other Disciplines
@@ -568,162 +571,146 @@ mindmap
 
 * AI and Philosophy (1/2)
 
-- **Can formal rules be used to draw valid conclusions?**
-
-  - Reasoning
+- **\black{Can formal rules be used to draw valid conclusions?}**
+  - **Reasoning**
+    - Logic studies rules of proper reasoning
     - Aristotle (400 BCE) formulated laws governing the rational mind
     - Machines were built for arithmetic operations (e.g., Pascaline, 1600)
-    - Logic studies rules of proper reasoning
-
-  - Rationalism
+  - **Rationalism**
     - Use reasoning to understand the world
 
-- **How does the mind arise from a physical brain?**
-
-  - Dualism
+- **\black{How does the mind arise from a physical brain?}**
+  - **Dualism**
     - Nature follows physical laws
     - Part of the human mind ("the soul") is exempt from physical laws
-
-  - Materialism
+  - **Materialism**
     - The mind is a physical system, following the laws of physics
     - Where is free will? Free will is the perception of available choices
 
 * AI and Philosophy (2/2)
 
-- **What does knowledge come from?**
-
-  - Empiricism
-    - Knowledge via senses
-    - Example: learn that trees are green by looking at them
-
-  - Induction
+::: columns
+:::: {.column width=75%}
+- **\black{What does knowledge come from?}**
+  - **Empiricism**
+    - Knowledge acquired via senses
+    - E.g., learn that trees are green by looking at them
+  - **Induction**
     - General rules from associations
-    - Example: seeing many swans are white, inferring all swans are white
+    - E.g., many swans are white, infer all swans are white
+  - **Logical Positivism**
+    - Knowledge as logical theories linked to observations
+    - E.g., scientific hypotheses connected to experimental data
+::::
+:::: {.column width=20%}
 
-  - Logical Positivism
-    - Knowledge as logical theories linked to sensory observations
-    - Example: scientific hypotheses connected to experimental data
+![](msml610/lectures_source/figures/Lesson01_black_swans.jpg)
+::::
+:::
 
-- **How does knowledge lead to action?**
-
-  - Utilitarianism
-    - Measures "utility" linking knowledge to action
+- **\black{How does knowledge lead to action?}**
+  - **Utilitarianism**
     - Actions justified by logic connecting goals and outcomes
-
-  - Consequentialism
+  - **Consequentialism**
     - Right or wrong determined by action's expected outcomes
     - E.g., "If you kill, you will go to jail"
-
-  - Deontological ethics
-    - Opposes consequentialism
+  - **Deontological ethics**
     - "Right actions" based on universal laws, not outcomes
     - E.g., "don't kill", "don't lie"
 
 * AI and Cognitive Psychology
 
-- **How do humans think and act?**
-
-  - Cognitive Psychology
-    - Brain as an information-processing device
+- **\black{How do humans think and act?}**
+  - **Cognitive psychology**
+    - Brain is an information-processing device
     - Stimuli translated into internal representation
     - Representation manipulated by cognitive processes to derive new internal
       representations ("beliefs")
     - Representations turned into actions ("goals")
-
-  - Cognitive Science
+  - **Cognitive science**
     - Use computer models to address memory, language, and logic thinking
-
-  - Human-Computer Interaction (HCI)
-    - From artificial intelligence (AI) to intelligence augmentation (IA)
+    - Dual / opposite of AI
+  - **Human-computer interaction**
     - Computers augment human abilities
+    - From artificial intelligence (AI) to intelligence augmentation (IA)
 
 * AI and Mathematics
 
-- **What are the formal rules to draw valid conclusions?**
-
-  - Formal Logic
+- **\black{What are the formal rules to draw valid conclusions?}**
+  - **Formal logic**
     - Logical deduction rules (Boole, 1850)
     - First-order logic includes objects and relations (Frege, 1879)
-
-  - Limits to Deduction
+  - **Limits to deduction**
     - Some statements are "undecidable"
-    - Incompleteness theorem: true statements exist that cannot be proved in any
-      formal theory (Godel, 1931)
+    - Incompleteness theorem: in any formal theory true statements exist that
+      cannot be proved (Godel, 1931)
 
-- **How do we reason with uncertain information?**
-
-  - Probability
+- **\black{How do we reason with uncertain information?}**
+  - **Probability**
     - Mathematics of uncertainty
-    - Key contributors: Cardano, Pascal, Bernoulli, Bayes (1500-1700)
-
-  - Statistics
+    - Cardano, Pascal, Bernoulli, Bayes (1500-1700)
+  - **Statistics**
     - Combines data with probability
     - E.g., experiment design, data analysis, hypothesis testing, asymptotics
 
 * AI and Economics (1/2)
 
-- **How to make decisions to maximize payoff given preferences?**
-
-  - Economies
+- **\black{How to make decisions to maximize payoff given preferences?}**
+  - **Economies**
     - Agents maximize economic well-being (utility)
     - Studies desires and preferences
-
-  - Decision theory
+  - **Decision theory**
     - Making decisions under uncertainty for preferred outcomes
     - Probability theory + utility theory
-    - Examples: Investment choices, policy decisions
+    - E.g., investment choices, policy decisions
 
-- ** How to make decisions when payoffs are result of several actions?**
-
-  - Operations Research
+- **\black{How to make decisions when payoffs are result of several actions?}**
+  - **Operations research**
     - Make rational decisions with payoffs for sequence of actions (Bellman, 1957)
     - E.g., Markov Decision Processes
-
-  - Satisficing
+  - **Satisficing**
     - Decisions that are good enough
     - Closer to human behavior
-    - Example: Choosing a restaurant that meets basic criteria rather than finding
+    - E.g., choosing a restaurant that meets basic criteria rather than finding
       the perfect one
 
 * AI and Economics (2/2)
 
-- **\red{How multiple agents with different goals act?}**
-
-  - **Large Economies**
+- **\black{How multiple agents with different goals act?}**
+  - **Large economies**
     - Many agents with no mutual impact
     - Ignore other agents' actions
     - E.g., national economy where individual actions don't affect market
-
-  - **Small Economies**
+  - **Small economies**
     - One player's actions influence others' utility
     - E.g., local market where one seller's pricing affects competitors
-
-  - **Game Theory**
+  - **Game theory**
     - Small economies resemble a "game" (Von Neumann, 1944)
     - Rational agents might need randomized strategies
     - E.g., rock-paper-scissors where randomization prevents predictability
 
 * AI and Linguistics
-
-- **How can you create systems that understand natural language?**
-
-  - Computational linguistics (NLP) studies sentence structure and meaning
+- **\black{How can you create systems that understand natural language?}**
+  - **Computational linguistics** (NLP)
+    - Studies sentence structure and meaning
     - Machine translation (e.g., Google Translate)
     - Sentiment analysis in social media
     - Automated customer support chatbots
 
-- **How does language relate to thought?**
-
-  - Knowledge representation: how to represent knowledge for computer reasoning
-  - E.g., first order knowledge, knowledge graphs
+- **\black{How does language relate to thought?}**
+  - **Knowledge representation**
+    - How to represent knowledge for computer reasoning
+    - E.g., first order knowledge, knowledge graphs
 
 * AI and Neuroscience
+::: columns
+:::: {.column width=55%}
 - **Brain**
   - Parts handle specific cognitive functions
   - Information processing in the cerebral cortex
   - E.g., frontal lobe injury may impair decision-making
 
-- **Anatomy of the Brain**
+- **Anatomy of the brain**V
   - Composed of neurons (~100 billion)
     - Each neuron connects with 10-100k others via synapses
     - Axons enable long-range connections
@@ -733,18 +720,23 @@ mindmap
 - **Memory**
   - No theory yet about individual memory storage
   - Current theory: memories reconstructed
+::::
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/Lesson01_brain.jpg)
+![](msml610/lectures_source/figures/Lesson01_neuron.png)
+::::
+:::
 
 * The Brain Causes the Mind
-- _Simple cells lead to thought and consciousness_
-  - Truly amazing conclusion!
+- Truly amazing: **simple cells lead to thought and consciousness**
   - Complex processes emerge
   - Supercomputers' complexity rivals the brain
   - Achieving brain's intelligence level remains unknown
 
-- **Brain-Machine Interface**
+- **Brain-machine Interface**
   - Brain adjusts to devices (e.g., learn to use prosthetics as limbs)
 
-- **AI Singularity**
+- **AI singularity**
   - Future point when AI surpasses human intelligence
     - AI improves autonomously, leading to rapid growth
     - Recursive self-improvement leads to superintelligence
@@ -1286,7 +1278,7 @@ mindmap
     - Resource shortages
 ::::
 :::: {.column width=40%}
-![](lectures_source/figures/Lesson01_Friendly_AI.png)
+![](msml610/lectures_source/figures/Lesson01_Friendly_AI.png)
 ::::
 :::
 
@@ -1308,9 +1300,9 @@ mindmap
   - E.g., parole evaluations, loan applications
 ::::
 :::: {.column width=40%}
-![](lectures_source/figures/Lesson01_Terminator.png)
+![](msml610/lectures_source/figures/Lesson01_Terminator.png)
 
-![](lectures_source/figures/Lesson01_Misinformation.png)
+![](msml610/lectures_source/figures/Lesson01_Misinformation.png)
 ::::
 :::
 
@@ -1387,11 +1379,11 @@ mindmap
   - Used informally by AI researchers to quantify risk
 ::::
 :::: {.column width=40%}
-![](lectures_source/figures/Lesson01_P_doom.png)
+![](msml610/lectures_source/figures/Lesson01_P_doom.png)
 
 \vspace{0.5cm}
 
-![](lectures_source/figures/Lesson01_e_acc.png)
+![](msml610/lectures_source/figures/Lesson01_e_acc.png)
 ::::
 :::
 
