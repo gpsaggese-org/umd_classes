@@ -704,14 +704,14 @@ mindmap
 
 * AI and Neuroscience
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=65%}
 - **Brain**
   - Parts handle specific cognitive functions
   - Information processing in the cerebral cortex
   - E.g., frontal lobe injury may impair decision-making
 
-- **Anatomy of the brain**V
-  - Composed of neurons (~100 billion)
+- **Anatomy of the brain**
+  - Composed of ~100 billion neurons
     - Each neuron connects with 10-100k others via synapses
     - Axons enable long-range connections
   - Signals propagate through electrochemical reactions
@@ -721,20 +721,22 @@ mindmap
   - No theory yet about individual memory storage
   - Current theory: memories reconstructed
 ::::
-:::: {.column width=40%}
+:::: {.column width=35%}
 ![](msml610/lectures_source/figures/Lesson01_brain.jpg)
 ![](msml610/lectures_source/figures/Lesson01_neuron.png)
 ::::
 :::
 
 * The Brain Causes the Mind
-- Truly amazing: **simple cells lead to thought and consciousness**
+- **Simple cells lead to thought and consciousness**
+  - **Truly amazing!**
   - Complex processes emerge
-  - Supercomputers' complexity rivals the brain
-  - Achieving brain's intelligence level remains unknown
 
-- **Brain-machine Interface**
-  - Brain adjusts to devices (e.g., learn to use prosthetics as limbs)
+- Supercomputers' complexity rivals the brain
+
+- **Brain-machine interface**
+  - Brain adjusts to devices
+  - E.g., learn to use prosthetics as limbs
 
 - **AI singularity**
   - Future point when AI surpasses human intelligence
@@ -743,29 +745,25 @@ mindmap
   - Potential societal impact
     - Control problem/value alignment: ensure AI aligns with human values
     - Economic/social disruption due to automation
-  - Hard to predict
+  - Achieving brain's intelligence level remains unknown
 
 * AI and Computer Science
-
-- **What can be computed?**
-  - Algorithm
+- **\black{What can be computed?}**
+  - **Algorithm**
     - Procedure to solve problems
     - E.g., algorithm for computing GCD (Euclid, 300 BCE)
-
-  - Limits to Computation
-    - Turing machine (1936): Computes any computable function
+  - **Limits to computation**
+    - Turing machine (1936): computes any computable function
     - Some functions are non-computable
     - E.g., the halting problem, i.e., decide if a program terminates
-
-  - Tractability
+  - **Tractability**
+    - Complexity classes: polynomial vs exponential complexity
     - Problem is intractable if solving time grows exponentially with size
-    - Complexity classes: Polynomial vs exponential complexity (NP-problems)
+    - P vs NP
 
-* AI and Control Theory and Cybernetics
-
-- **How can artifacts operate under their own control?**
-
-  - Control theory
+* AI and Control Theory
+- **\black{How can artifacts operate under their own control?}**
+  - **Control theory**
     - Study self-regulating feedback control systems
     - E.g., a water regulator that maintains a constant water flow
     - Mechanisms to minimize error between current and goal states
@@ -775,29 +773,34 @@ mindmap
 
 * AI and Computer Engineering
 
-- **How can we build an efficient computer?**
+::: columns
+:::: {.column width=55%}
 
-  - Electronic computers
+- **\black{How can we build an efficient computer?}**
+  - **Electronic computers**
     - Built during World War II
-
-  - Moore's Law
+  - **Moore's Law**
     - Performance doubled every 18 months (1970-2005)
     - Power and scaling issues shifted focus to multi-core over clock speed
-
-  - Hardware for AI
+  - **Hardware for AI**
     - GPUs
     - TPUs
     - Wafer-scale engines
-
-  - Current Trends
+  - **Current Trends**
     - Massive parallelism (like brain function)
     - Computing power doubling every 3 months
     - GPUs / TPUs used in deep learning
     - High precision (e.g., 64b) often unnecessary
-
-  - Quantum Computing
+  - **Quantum Computing**
     - Potential for significant acceleration in key computations
     - E.g., Shor's algorithm for factorization
+::::
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/Lesson01_eniac.png)
+![](msml610/lectures_source/figures/Lesson01.Moore_Law.png)
+![](msml610/lectures_source/figures/Lesson01.CPU_GPU_TPU.png)
+::::
+:::
 
 ## #############################################################################
 ## Brief History of AI
@@ -911,89 +914,86 @@ mindmap
 \end{document}
 ```
 
-* AI Timeline (v2)
-```raw_latex
-\documentclass[tikz]{standalone}
-\usepackage{tikz}
-\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
-
-\begin{document}
-\begin{tikzpicture}[
-  font=\sffamily,
-  year/.style={font=\bfseries, text=blue!70!black},
-  circlemark/.style={
-    draw=blue!70!black, fill=white, line width=2pt, circle, minimum size=10pt
-  },
-  event/.style={
-    align=left, text width=5.5cm, font=\small
-  }
-]
-
-% Diagonal timeline
-\draw[blue!70!black, thick] (0,0) -- (16,16);
-
-% Adjusted coordinates: x and y increase together
-\foreach \i/\x/\y in {
-  1943/0/0, 1956/2/2, 1969/4/4, 1973/5.5/5.5, 1986/7/7, 1988/8/8,
-  2001/9.5/9.5, 2011/11/11, 2020/13/13, 2025/15.5/15.5
-} {
-  \node[circlemark] at (\x,\y) {};
-  \node[year, left=0pt] at (\x-0.2,\y-0.0) {\Large\i};
-}
-
-% Events with date ranges on the nodes
-\foreach \title/\dates/\x/\y/\xshift/\yshift in {
-  {The Dawn of AI}/{1943--1956}/0.3/0.3/-1.5/1.5,
-  {The Birth of AI Research}/{1956--1969}/1.7/1.7/1.5/-1.5,
-  {The First Reality Check}/{1966--1973}/3.1/3.1/-1.5/1.5,
-  {The Rise of Expert Systems}/{1970--1987}/4.6/4.6/1.5/-1.5,
-  {The First AI Winter}/{1987--1993}/6/6/-1.5/1.5,
-  {Return of Neural Networks}/{1986--1990s}/7.4/7.4/1.5/-1.5,
-  {The Probabilistic Turn}/{Late 1980s--2000s}/8.8/8.8/-1.5/1.5,
-  {Machine Learning Matures}/{1990s--2000s}/10.2/10.2/1.5/-1.5,
-  {Advances in Speech and Vision}/{1990s--2000s}/11.6/11.6/-1.5/1.5,
-  {Reinforcement Learning Emerges}/{1990s--Present}/13/13/1.5/-1.5,
-  {The Era of Big Data}/{2001--Present}/14.2/14.2/-1.5/1.5,
-  {Deep Learning Revolution}/{2011--Present}/15.3/15.3/1.5/-1.5,
-  {Reunification of AI Subfields}/{2010s--Present}/16.5/16.5/-1.5/1.5
-} {
-  \node[event, xshift=\xshift cm, yshift=\yshift cm] at (\x,\y) {\Large\textbf{\title}\\\dates};
-}
-
-\end{tikzpicture}
-\end{document}
-```
+//* AI Timeline (v2)
+//```raw_latex
+//\documentclass[tikz]{standalone}
+//\usepackage{tikz}
+//\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+//
+//\begin{document}
+//\begin{tikzpicture}[
+//  font=\sffamily,
+//  year/.style={font=\bfseries, text=blue!70!black},
+//  circlemark/.style={
+//    draw=blue!70!black, fill=white, line width=2pt, circle, minimum size=10pt
+//  },
+//  event/.style={
+//    align=left, text width=5.5cm, font=\small
+//  }
+//]
+//
+//% Diagonal timeline
+//\draw[blue!70!black, thick] (0,0) -- (16,16);
+//
+//% Adjusted coordinates: x and y increase together
+//\foreach \i/\x/\y in {
+//  1943/0/0, 1956/2/2, 1969/4/4, 1973/5.5/5.5, 1986/7/7, 1988/8/8,
+//  2001/9.5/9.5, 2011/11/11, 2020/13/13, 2025/15.5/15.5
+//} {
+//  \node[circlemark] at (\x,\y) {};
+//  \node[year, left=0pt] at (\x-0.2,\y-0.0) {\Large\i};
+//}
+//
+//% Events with date ranges on the nodes
+//\foreach \title/\dates/\x/\y/\xshift/\yshift in {
+//  {The Dawn of AI}/{1943--1956}/0.3/0.3/-1.5/1.5,
+//  {The Birth of AI Research}/{1956--1969}/1.7/1.7/1.5/-1.5,
+//  {The First Reality Check}/{1966--1973}/3.1/3.1/-1.5/1.5,
+//  {The Rise of Expert Systems}/{1970--1987}/4.6/4.6/1.5/-1.5,
+//  {The First AI Winter}/{1987--1993}/6/6/-1.5/1.5,
+//  {Return of Neural Networks}/{1986--1990s}/7.4/7.4/1.5/-1.5,
+//  {The Probabilistic Turn}/{Late 1980s--2000s}/8.8/8.8/-1.5/1.5,
+//  {Machine Learning Matures}/{1990s--2000s}/10.2/10.2/1.5/-1.5,
+//  {Advances in Speech and Vision}/{1990s--2000s}/11.6/11.6/-1.5/1.5,
+//  {Reinforcement Learning Emerges}/{1990s--Present}/13/13/1.5/-1.5,
+//  {The Era of Big Data}/{2001--Present}/14.2/14.2/-1.5/1.5,
+//  {Deep Learning Revolution}/{2011--Present}/15.3/15.3/1.5/-1.5,
+//  {Reunification of AI Subfields}/{2010s--Present}/16.5/16.5/-1.5/1.5
+//} {
+//  \node[event, xshift=\xshift cm, yshift=\yshift cm] at (\x,\y) {\Large\textbf{\title}\\\dates};
+//}
+//
+//\end{tikzpicture}
+//\end{document}
+//```
 
 * The Beginning (1943-1956)
 - **Artificial neuron**
   - Model (McCullock-Pitts 1943) based on:
     - Brain physiology
     - Propositional logic
-    - Computation theory
   - Compute any function with connected neurons
     - Neuron on/off based on stimulation from neighboring neurons
     - Implement logical AND, OR, NOT with simple neuron networks
 
 - **Alan Turing, 1947**
   - Turing test, machine learning, reinforcement learning
-  - Create human-level AI:
+  - Create human-level AI
     - Develop learning algorithms
     - Teach machine like a child
 
 - **Birth of AI**
   - McCarthy organized first AI workshop (1956)
-  - The Logic Theorist
+  - The Logic Theorist (Newell and Simon, 1956)
     - Programs to "think non-numerically" and prove theorems
-    - Newell and Simon (1956)
 
 * Enthusiasm and Great Expectations (1952-1969)
-
 - **Early years of AI were full of successes**
-  - Until than computers could only do arithmetics
-  - _"A machine can never do games, puzzles, IQ tests, ..."_
-  - AI researchers showed machines could do that after another
+  - Before computers could only do arithmetics
+  - _"A machine can never do X (e.g., games, puzzles, IQ tests, ...)"_
+    - AI researchers showed machines could do one $X$ after another
 
-- **General Problem Server**
+- **General Problem Solver**
   - Imitate human problem-solving
   - Consider sub-goals and possible actions
 
@@ -1005,7 +1005,7 @@ mindmap
 
 - **First neural network**
   - 3000 vacuum tubes for 40 neurons
-  - Marvin Minsky (1959)
+  - Minsky (1959)
 
 - **MIT and Stanford**
   - Minsky at MIT
@@ -1013,40 +1013,44 @@ mindmap
   - McCarthy at Stanford
     - Focus on representation, logic
 
-* A Dose of Reality (1966-1973)
-- Researchers were confident about AI's upcoming successes
+* First AI winter (1975-1980)
+- **Early successes** of AI set high expectations
 
-- AI didn't succeed on real problems due to:
-  - Solutions based on human problem-solving methods
-  - Difficulty handling "combinatorial explosion":
+- In 1965-1975 AI didn't succeed on **real problems** due to:
+  - Solutions were based on human problem-solving methods
+  - Difficulty handling "combinatorial explosion"
     - Theorem proving handles small problems with brute force, but doesn't scale
-  - Neural networks needed algorithms (e.g., backpropagation), compute power,
-    and data
+  - Neural networks needed:
+    - Algorithms (e.g., backpropagation)
+    - Compute power
+    - Data
 
-* Expert Systems (1969-1979)
+- **First AI winter**
+  - Research funding and enthusiasm dropped significantly
+  - Slow AI progress through late 1970s
 
-- **Weak AI (Narrow AI)**
-  - Performs specific tasks, not general reasoning
-  - Operates in a limited, well-defined domain
-  - Uses "weak methods" (search, logic) that struggle to scale
-  - Improves with domain-specific knowledge
-
-- **Expert Systems**
-  - Known as "knowledge-based systems"
+* Expert Systems (1980-1990)
+- **Expert systems**
+  - Aka "knowledge-based systems"
   - Combine weak methods with extensive domain knowledge as rules
   - Use inference engines to apply rules to facts
   - E.g., rule-based systems, logic programming (e.g., Prolog)
 
-- **Commercial Adoption and Industry Growth (1980–)**
+- **Weak AI**
+  - Aka narrow AI
+  - Performs specific tasks, not general reasoning
+  - Operates in a limited, well-defined domain
+  - Uses "weak methods" (search, logic) that struggle to scale
+
+- **Commercial adoption and industry growth**
   - AI shifted to practical applications
   - Major US corporations deployed expert systems
   - AI emerged as a commercial industry
 
-* (First) AI Winter (1980)
+* Second AI Winter (late 1980-early 1990)
+- **Hype in expert systems** didn't deliver
 
-- AI overconfidence/hype didn't deliver
-
-- **Reasons:**
+- **Reasons**
   - Building/maintaining expert systems is difficult
   - Reasoning methods ignore uncertainty
   - Systems can't learn from experience
@@ -1055,37 +1059,34 @@ mindmap
   - E.g., early AI chess systems couldn't adapt to new strategies without manual
     updates
 
-* Return of Neural Networks (1986-)
+- **Second AI winter** in late 1980-early 1990
 
-- Mid-1980s: Discovered back-propagation algorithm
+* Return of Neural Networks (1986-)
+- Back-propagation algorithm is (re)discovered (mid-1980s)
   - Developed in early 1960s
 
-- **Connectionist approach vs. Symbolic approach**
-  - Connectionist: Neural networks
+- **Two approaches to AI are back**
+  - Connectionist paradigm
+    - Neural networks
     - E.g., recognizing handwritten digits
-  - Symbolic: General Problem Solver
+  - Symbolic paradigm
     - E.g., solving logical puzzles with rules
 
-- **Why connectionist approach**
+- **Why connectionist approach?**
   - Concepts not well-defined using symbolic axioms
     - Forms fluid internal concepts
     - Represents real-world complexity better
-  - Neural networks learn from examples
-    - Adjust parameters for improved predictions
-  - E.g.,
-    - Image recognition: Identify objects by learning from labeled images
+  - Neural networks can learn from examples, e.g.,
+    - Image recognition: identify objects by learning from labeled images
 
 * Probabilistic Reasoning and ML (1987-)
-
 - **AI and scientific method**
   - Rigorous methods to test performance
   - E.g., speech recognition, handwritten character recognition
-
-- **Benchmarks for progress**
-  - Examples:
-    - MNIST: Handwritten digit recognition
-    - ImageNet: Image object recognition
-    - SAT Competitions: Boolean satisfiability solvers
+  - Benchmarks for progress, e.g.,
+    - MNIST: handwritten digit recognition
+    - ImageNet: image object recognition
+    - SAT Competitions: boolean satisfiability solvers
 
 - **AI shifts ...**
   - From Boolean logic to probability
@@ -1093,23 +1094,27 @@ mindmap
   - From a-priori reasoning to experimental results
 
 * Progress in Speech Recognition
-
-- **1970s: Ad-hoc approaches**
+- **1970s: ad-hoc approaches**
   - Various architectures and approaches were attempted
   - Rule-based systems with limited robustness
-  - Cons: Ad-hoc, fragile
+  - Cons
+    - Ad-hoc, fragile
+  - _"Every time I fire a linguist, the performance of the speech recognizer goes
+    up" (Jelinek, 1988)
 
-- **1980s: HMMs**
-  - Hidden Markov Models (HMMs) became dominant
-  - Pros: Strong theoretical foundation
-  - Methods: Effective learning techniques
-  - Data: Trained on large speech corpora
-  - No claim humans use HMMs for speech recognition
+- **1980s: hidden Markov Models**
+  - HMMs became dominant
+  - Effective learning techniques
+  - Trained on large speech corpora
+  - Pros
+    - Strong theoretical foundation
+
+- The bitter lesson (Sutton, 2019)
+  - General methods + lots of data beat handcrafted systems
 
 * Bayesian Networks
-
 - **Bayesian networks**
-  - Judea Pearl, 1988
+  - Pearl, 1988
   - AI is linked with:
     - Probability
     - Decision theory
@@ -1123,24 +1128,19 @@ mindmap
   - Fraud detection in banking
 
 * Reinforcement Learning
-
 - **Reinforcement learning**
   - Sutton, 1988
-  - Reinforcement Learning (RL) involves agents learning by interacting with an
-    environment
-  - Markov Decision Problems (MDPs) provide a mathematical framework for modeling
+  - RL involves agents learning by interacting with an environment
+    - E.g., a robot learning to navigate a maze by receiving rewards for
+      successful paths
+  - Markov Decision Problems (MDPs) provide a framework for modeling
     decision-making
+    - E.g., a game strategy modeled where each move influences the outcome with
+      certain probabilities
 
-- **Examples**
-  - RL: A robot learning to navigate a maze by receiving rewards for successful
-    paths
-  - MDPs: A game strategy modeled where each move influences the outcome with
-    certain probabilities
-
-* Reunification
-
-- **Reunification of AI with**:
-  - Data
+* Reunification (1990s-2000s)
+- **Reunification of AI**:
+  - Data engineering
   - Statistical modeling
   - Optimization
   - Machine learning
@@ -1153,48 +1153,44 @@ mindmap
   - NLP
 
 * Big Data (2001-Present)
-
 - **Focus shifts from algorithms to data**
   - For 60 years, AI focused on algorithms and models
 
-  - For some problems, data availability matters more than algorithms, e.g.,
-    - Trillions of English words
-    - Billions of web images
-    - Billions of speech and video hours
-    - Social network data
-    - Click stream data
+- For many problems, data availability matters more than algorithms, e.g.,
+  - Trillions of English words
+  - Billions of web images
+  - Billions of speech and video hours
+  - Social network data
+  - Click stream data
 
-  - Algorithms leverage large datasets
+- Algorithms and infrastructure to leverage large datasets
+  - E.g., map reduce, cloud computing
 
-- In 2011, IBM's Watson beat human Jeopardy! champions
+- In 2011, IBM's Watson beat human _Jeopardy!_ champions
 
 * Deep Learning (2011-Present)
-
 - **Deep learning**
   - Use ML models with multiple layers of computing elements
   - Ideas known since 1970s, but then forgot
   - Success in handwritten digit recognition in 1990s
 
-- **In 2011, DL took off**
-  - Surge of interest in AI among researchers, students, companies, investors,
-    government, and public
-  - In 2012, a DL system showed dramatic improvement in `ImageNet` competition
-    - Previous systems used handcrafted features
+- **In 2012**, a DL system showed dramatic improvement in `ImageNet` competition
+  - Previous systems used handcrafted features
+  - Surge of interest in AI among researchers, companies, and investors
 
-- Today, DL exceeds human performance in several vision and speech recognition
-  tasks
-- DL needs specialized hardware (e.g., GPU, TPU, FGPA) for parallel tensor
-  operations
+- Pros
+  - DL exceeds human performance in several vision and speech recognition tasks
 
-- **General Artificial Intelligence**
+- Cons
+  - DL needs specialized hardware (e.g., GPU, TPU, FGPA) for parallel tensor
+    operations
+
+- Towards **general artificial intelligence**
   - Universal algorithm for learning and acting, not just specialized tasks
-    (e.g., driving, playing chess, recognizing speech)
-
-## #############################################################################
-## AI State of the Art
-## #############################################################################
+  - E.g., driving, playing chess, recognizing speech
 
 * Progress in AI Research
+- Huge interest in deep learning
 
 - **Between 2010 and 2019**
   - AI papers increased 20x
@@ -1211,6 +1207,9 @@ mindmap
   - AI computing power doubles every 3 months
 
 * What Can AI Do Today? (1/2)
+
+::: columns
+:::: {.column width=65%}
 
 - **Robotic vehicles**
   - Waymo passed 10 million miles without serious accident
@@ -1233,29 +1232,33 @@ mindmap
   - ML recommends based on past experiences
   - Spam filtering 99.9% accuracy
   - E.g., Amazon, Facebook, Netflix, Spotify, YouTube
+::::
+:::: {.column width=30%}
+
+![](msml610/lectures_source/figures/Lesson01.Waymo.png)
+![](msml610/lectures_source/figures/Lesson01.Big_dog.png)
+![](msml610/lectures_source/figures/Lesson01.Mars_Rover.png)
+
+::::
+:::
 
 * What Can AI Do Today? (2/2)
-
 - **Game playing**
   - 1997: Deep Blue defeated Kasparov
   - 2011: Watson beat Jeopardy! champion
   - 2017: AlphaGo beat Go champion
-  - 2018: AlphaZero super-human in Go, chess with only rules, self-play
+  - 2018: AlphaZero super-human in Go and chess with only rules + self-play
   - AI beats humans in videogames: Dota2, StarCraft, Quake
 
 - **Image understanding**
   - Object recognition
   - Image captioning
+  - ...
 
 - **Medicine**
   - AI equivalent to health care professionals
 
-- **When AGI**
-  - When will AI systems achieve human-level performance across all tasks?
-  - Expert prediction average: 2099
-    - Papers show that expert predictions no better than amateurs
-    - Experts expected AI to take 100 years to beat humans in Go
-  - Unclear if new breakthroughs or refinements needed
+- When will we reach AGI (Artificial General Intelligence)?
 
 ## #############################################################################
 ## Risks and Benefits of AI
@@ -1263,10 +1266,15 @@ mindmap
 
 * Benefits of AI
 ::: columns
-:::: {.column width=55%}
-- Our civilization is the product of human intelligence
+:::: {.column width=65%}
+- Our civilization is the **product of human intelligence**
   - Greater machine intelligence leads to better human society
   - _"First solve AI, then use AI to solve everything else"_
+::::
+:::: {.column width=30%}
+![](msml610/lectures_source/figures/Lesson01_Friendly_AI.png)
+::::
+:::
 
 - **Benefits of AI and robots**
   - Free humanity from menial work
@@ -1275,31 +1283,23 @@ mindmap
   - Accelerate scientific research, e.g.,
     - Cures for diseases
     - Solutions for climate change
-    - Resource shortages
-::::
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/Lesson01_Friendly_AI.png)
-::::
-:::
+    - Resource and energy shortages
 
 * Risks of AI (1/2)
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=65%}
 - **Autonomous weapons**
-  - Locate, select, eliminate human targets without intervention
-  - Scalability: deploy a large number of weapons
-
+  - Locate and eliminate targets autonomously
+  - Deploy large number of weapons
 - **Surveillance and persuasion**
-  - AI (speech recognition, computer vision, natural language understanding) for
-    mass surveillance
-  - Tailoring information flows through social media to modify behavior
-
+  - AI for mass surveillance
+  - Tailor information on social media to modify behavior
 - **Biased decision making**
-  - Misuse of ML can result in biased decisions due to societal bias
+  - Misuse of ML results in biased decisions
   - E.g., parole evaluations, loan applications
 ::::
-:::: {.column width=40%}
+:::: {.column width=30%}
 ![](msml610/lectures_source/figures/Lesson01_Terminator.png)
 
 ![](msml610/lectures_source/figures/Lesson01_Misinformation.png)
@@ -1310,9 +1310,8 @@ mindmap
 - **Impact on employment**
   - Machines eliminate jobs
   - Rebuttal
-    - Machines enhance productivity $\to$
-    - Companies become more profitable $\to$
-    - Higher wages
+    - Machines enhance productivity $\to$ companies become more profitable $\to$
+      higher wages
   - Counter-rebuttal
     - Wealth shifts from labor to capital, increasing inequality
   - Counter-counter-rebuttal
@@ -1333,18 +1332,23 @@ mindmap
     - E.g., use reinforcement learning for targeted phishing attacks
   - Cat-and-mouse game
 
-* Human-Level AI
+* Human-level AI / AGI
 - **Human-level AI**
   - Machines able to learn to do anything a human can do
   - Aka AGI (Artificial General Intelligence)
 
+- **When AGI?**
+  - Expert prediction average is 2099
+    - Papers show that expert predictions no better than amateurs
+    - Experts expected AI to take 100 years to beat humans in Go
+  - Unclear if new breakthroughs or refinements needed
+
 - **Artificial Super-Intelligence**
   - Machines surpass human ability in every domain and self-improving
-
-- **Exponential take-off**
+  - Exponential take-off
 
 * The Problem of Control
-- Can humans control machines more intelligent than them?
+- **Can humans control machines more intelligent than them?**
 
 - **King Midas problem**
   - King Midas turned everything he touched into gold, including food and family
@@ -1354,7 +1358,7 @@ mindmap
     - We design AI: if AI gains control, it's a "design failure"
 
 - **Problem of alignment**
-  - Superintelligent AI might pursue goals in unintended, dangerous ways
+  - Super-intelligent AI might pursue goals in unintended, dangerous ways
 
 - **The paperclip problem**
   - Thought experiment in AI safety (Nick Bostrom, 2003)
@@ -1368,10 +1372,10 @@ mindmap
 :::: {.column width=55%}
 
 - **E/acc**
-  - Accelerationism is the belief that rapid progress in AI is beneficial or
-    inevitable
+  - Accelerationism
+  - Belief that rapid progress in AI is beneficial or inevitable
   - Solve global problems with more powerful AI tools
-  - Belief that slowing AI is unrealistic or counterproductive
+  - Slowing AI is unrealistic or counterproductive
 
 - **P(doom)**
   - "Probability of Doom"
@@ -1379,11 +1383,33 @@ mindmap
   - Used informally by AI researchers to quantify risk
 ::::
 :::: {.column width=40%}
-![](msml610/lectures_source/figures/Lesson01_P_doom.png)
+![](msml610/lectures_source/figures/Lesson01_e_acc.png)
 
 \vspace{0.5cm}
 
-![](msml610/lectures_source/figures/Lesson01_e_acc.png)
+![](msml610/lectures_source/figures/Lesson01_P_doom.png)
+::::
+:::
+
+* My take
+
+::: columns
+:::: {.column width=55%}
+- Yes it's a serious philosophical problem
+
+- But it's like worrying about what political system we need when humanity lives
+  on Mars
+
+- Philosophical issue
+  - Most tech people have used it for marketing
+
+- We can't get airport terminals to work
+
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/Lesson01.Windows_failure.png)
+
 ::::
 :::
 
