@@ -27,11 +27,10 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-- AIMA Chap 1
+- AIMA: Chap 1
 ::::
 :::: {.column width=20%}
-
-// ![](msml610/lectures_source/covers/Lesson01-Intro.png){width=70%}
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 ::::
 :::
 
@@ -1367,7 +1366,6 @@ mindmap
   - Converts Earth and humans into paperclips
 
 * E/acc vs P(doom)
-
 ::: columns
 :::: {.column width=55%}
 
@@ -1391,25 +1389,21 @@ mindmap
 ::::
 :::
 
-* My take
-
+* My 2 cents
 ::: columns
 :::: {.column width=55%}
-- Yes it's a serious philosophical problem
+- AI alignment is a serious problem
+  - For now philosophical, at some point a real one
+  - Most tech people have used it for marketing themselves and their companies
 
-- But it's like worrying about what political system we need when humanity lives
-  on Mars
-
-- Philosophical issue
-  - Most tech people have used it for marketing
-
+- It's as urgent as debating what political system humanity will need when
+  living on Mars
 - We can't get airport terminals to work
-
 ::::
 :::: {.column width=40%}
-
 ![](msml610/lectures_source/figures/Lesson01.Windows_failure.png)
 
+![](msml610/lectures_source/figures/Lesson01.Y2K.png)
 ::::
 :::
 
@@ -1419,18 +1413,17 @@ mindmap
     AI
   - Governments and international organizations established advisory bodies
 
-- **Problems**
-  - Corporations checking themselves: what can possibly go wrong?
+- **Cons**
+  - Corporations checking themselves? What can possibly go wrong?
   - Preferences are not easy to invert and are inconsistent
 
-- **Solutions to problem of control**
+- **Solutions**
   - Put purpose into the machine even if objectives are unclear
   - Incentivize AI to switch off if uncertain about human objectives
   - Cooperative Inverse Reinforcement Learning (CIRL)
     - AI observes human behavior to infer reward function
 
 * Cooperative Inverse Reinforcement Learning
-
 - AI infers human goals based on actions
 
 - **Observation**: GP looks tired, sits on the couch, observes the messy table,

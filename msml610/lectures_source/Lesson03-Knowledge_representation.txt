@@ -821,6 +821,8 @@ digraph UniversityOntology {
 
 # Propositional logic
 
+## Syntax
+
 // ## 7.4, Propositional logic (p. 263)
 
 * Propositional Logic
@@ -924,7 +926,7 @@ digraph UniversityOntology {
 ::::
 :::
 
-// ## Semantics of propositional logic
+## Semantics
 
 * Semantics of propositional logic
 - Semantics are rules for determining the truth of a sentence $\alpha$ with
@@ -1133,6 +1135,8 @@ digraph UniversityOntology {
 
 // # 8, First-order logic (p. 264)
 
+## Syntax
+
 * Natural languages
 - Natural languages (e.g., English, Italian) are:
   - Expressive
@@ -1219,7 +1223,7 @@ digraph UniversityOntology {
 ::::
 :::
 
-* 
+* Sentences
 - Term is a logical expression that refers to an object in a FOL model
 
 - Atomic sentence = predicate symbol (i.e., which corresponds to relations) followed by a list of
@@ -1281,6 +1285,8 @@ digraph UniversityOntology {
   (\exists x P) \iff (\lnot \forall x \lnot P)
   $$
 
+## Semantics
+
 * First-order logic: Semantics
 - Semantics define how sentences are interpreted in a domain
 
@@ -1328,6 +1334,8 @@ digraph UniversityOntology {
 - Enables reasoning about objects, properties, and their relationships
 
 # Non-classical Logics
+
+## Intro
 
 * Ontological commitment
 - Ontological commitments are assumptions about reality made by a language
@@ -1516,7 +1524,7 @@ digraph UniversityOntology {
   - Computational complexity with large datasets
   - Handling noisy, incomplete, or ambiguous data
 
-# Description Logics
+## Description Logics
 
 // https://en.wikipedia.org/wiki/Description_logic
 
@@ -1965,70 +1973,3 @@ digraph UniversityOntology {
   - Subset of Prolog used in databases and deductive reasoning
   - Uses Horn clauses with no function symbols (ensuring decidability)
   - Often used in static analysis, data integration, and semantic web
-
-/*
-
-# Advanced topics
-
-* Statistical Relational Learning (SRL)
-
-- SRL models combine logic with probability to handle uncertainty in relations
-  - **Markov Logic Networks**: weighted first-order logic formulas
-  - **Probabilistic Soft Logic**: continuous truth values in logic
-  - **Bayesian Logic Programs**: unify logic and Bayesian networks
-- Enable reasoning over structured, uncertain domains (e.g., social sciences)
-- Capture dependencies across multiple entities and relations
-- Useful for knowledge base completion, link prediction, and entity resolution
-
-* Neuro-Symbolic Integration
-
-- Combines deep learning's pattern recognition with symbolic logic's reasoning
-- **Logic Tensor Networks (LTNs)**: embed logic constraints in neural nets
-- **DeepProbLog**: merges logic programming with differentiable learning
-- Symbolic component provides structure, rules, and reasoning capacity
-- Neural component handles perception and unstructured data (e.g., images)
-- Use cases: visual question answering (VQA), robot planning, RL
-- Goal: interpretable and generalizable AI that reasons and learns jointly
-
-* Learning Representations from Data
-
-- Symbolic embeddings: encode entities/relations in vector space (e.g., TransE,
-  RotatE)
-- Goal: combine symbolic structure with learned representations
-- **Inductive Logic Programming (ILP)**: learn rules from labeled examples
-- **Differentiable ILP** and logic-based neural nets enable learning + reasoning
-- Applications in recommendation, biomedical relation extraction, theorem
-  proving
-- Helps scale KR to large, noisy, real-world datasets
-- Bridges logic-based systems with data-driven ML
-
-* Temporal and Dynamic Knowledge
-
-- Time-sensitive knowledge requires temporal logic
-- **LTL (Linear Temporal Logic)**: sequences of states over time
-- **CTL (Computation Tree Logic)**: branching time structures
-- **Event calculus** and **situation calculus** for event-based reasoning
-- Useful in dynamic planning, monitoring, and agent-based simulations
-- Enables reasoning about persistence, change, and actions
-- Applications: autonomous systems, real-time monitoring, narratives
-
-* Practical: Building a Knowledge Graph
-
-- Extract triples from text using NLP (e.g., spaCy, OpenIE)
-- Structure output into subject–predicate–object format
-- Resolve entity names using Named Entity Recognition (NER)
-- Store and query KG using RDF + SPARQL or Neo4j
-- Add ontologies for richer semantics and reasoning
-- Practice: build a KG from a domain-specific dataset (e.g., movies, research)
-- Visualize using tools like Graphviz or Gephi
-
-* Practical: Logic & Neuro-Symbolic Projects
-
-- Implement rule-based inference using Prolog or Datalog
-- Use PyMLNs, ProbLog, or Tuffy to experiment with MLNs
-- Train neural models constrained by symbolic rules (e.g., DeepProbLog)
-- Combine knowledge graph embeddings with GNNs
-- Integrate KGs with LLMs via retrieval-augmented generation (RAG)
-- Explore hybrid pipelines: NLP $\implies$ KG $\implies$ reasoning $\implies$
-  answer generation
-*/

@@ -1,6 +1,6 @@
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](msml610/lectures_source/figures/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -18,20 +18,33 @@ MSML610: Advanced Machine Learning
 \endgroup
 \vspace{1cm}
 
+::: columns
+:::: {.column width=65%}
 **Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`
 
 **References**:
 
-- AIMA: ?
+- AIMA
 
-- Hastie: ?
+- Hastie
+
+::::
+:::: {.column width=40%}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book..jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg){ height=20% }
+::::
+:::
 
 // Model assessment and selection
 // Hastie 7 (p. 238)
 
 # ##############################################################################
-# Paradigms
+# Machine Learning Paradigms
 # ##############################################################################
+
+## Major Paradigms
 
 * Machine Learning Paradigms with Examples (1/3)
 
@@ -89,21 +102,23 @@ MSML610: Advanced Machine Learning
 - **Evolutionary Learning**
   - Optimize model structures or parameters using evolutionary algorithms
     inspired by natural selection and genetics
-  - Gradient free, global search, discrete structures, variable length inputs
+  - Gradient free, global search, variable length inputs
   - E.g., genetic algorithms
 
 - **Curriculum Learning**
   - Train models on easier tasks first, gradually increasing difficulty
-  - E.g., curriculum-based training in robotic control simulations
+  - E.g., training in robotic control simulations
 
 - **Multi-Agent Learning**
   - Multiple agents learn and interact in shared environments, often in
     game-theoretic settings (e.g., competition, collaboration)
   - E.g., AlphaStar to play StarCraft II
 
+## Some Examples
+
 * Supervised Learning
-- Learn a function $f: X \to Y$ that maps inputs to correct outputs using
-  training examples $(\vx, y)$ where inputs and correct output pairs are known
+- Learn a function $f: X \to Y$ that maps inputs to correct outputs
+  - Training examples $(\vx, y)$ with pairs of inputs and correct outputs
   - Requires labeled data for training
   - Measure performance with error on a separate test set
 
@@ -126,7 +141,7 @@ MSML610: Advanced Machine Learning
 
 * Unsupervised Learning
 - Learn from data **without** labeled outputs
-  - Goal: discover patterns, groupings, or structure in the data
+  - Goal: discover patterns or structure in the data
   - No explicit feedback signal
   - Evaluation can be qualitative
 
@@ -195,25 +210,26 @@ digraph BayesianFlow {
 :::
 
 * Reinforcement Learning: Examples
-- In game playing, learn strategies through trial and error
-	- E.g., AlphaGo mastering the game of Go
-- In robotics, learn control policies for movement and manipulation
-- In autonomous driving, learn safe and efficient driving behaviors
-- In resource management, optimize allocation of limited resources over time
-	- E.g., data center cooling or CPU job scheduling
-- In personalized recommendations, adapt suggestions based on user interaction
-	- E.g., newsfeed ranking adjusting based on user clicks
-- In healthcare, optimize treatment plans over time
+- In **game playing**, learn strategies through trial and error
+  - E.g., AlphaGo mastering the game of Go
+- In **robotics**, learn control policies for movement and manipulation
+- In **autonomous driving**, learn safe and efficient driving behaviors
+- In **resource management**, optimize allocation of limited resources over time
+  - E.g., data center cooling or CPU job scheduling
+- In **personalized recommendations**, adapt suggestions based on user
+  interaction
+  - E.g., newsfeed ranking adjusting based on user clicks
+- In **healthcare**, optimize treatment plans over time
 
 # ##############################################################################
-# Techniques
+# Machine Learning Techniques
 # ##############################################################################
 
 ## #############################################################################
 ## Machine Learning in Practice
 ## #############################################################################
 
-* Machine Learning Flow
+* Machine Learning Flow (1/2)
 - **Question**
   - E.g., "How can we predict house prices?"
 - **Input data**
@@ -227,7 +243,7 @@ digraph BayesianFlow {
 - **Evaluation**
   - E.g., accuracy, precision, recall
 
-* Machine Learning Flow
+* Machine Learning Flow (2/2)
 
 ```graphviz[height=80%]
 digraph BayesianFlow {
@@ -256,10 +272,10 @@ digraph BayesianFlow {
 - **Not all phases are equally important!**
   - Question $>$ Data $>$ Features $>$ Algorithm
 
-- Clarity of the question impacts project success
-- Quality and relevance of data are crucial for performance
-- Proper feature selection simplifies the model and improves accuracy
-- Algorithm is often less important (contrary to popular belief!)
+- Clarity of the **question** impacts project success
+- Quality and relevance of **data** are crucial for performance
+- Proper **feature** selection simplifies the model and improves accuracy
+- **Algorithm** is often less important (contrary to popular belief!)
 
 * Question
 - **Make the question concrete and precise**
@@ -279,7 +295,7 @@ problem
     - ...
 
 - _"If I were given one hour to save the planet, I would spend 59 minutes
-  defining the problem and one minute resolving it"_ (Albert Einstein)
+  defining the problem and one minute resolving it"_ (Einstein)
 
 * Input Data
 - Ensure **data is specific to prediction** goal
@@ -310,7 +326,7 @@ problem
   - E.g., use intensity and symmetry for scanned numbers instead of raw bit maps
 
 - **Characteristics of good features**:
-  1. Enable data compression
+  1. Perform data compression
   2. Retain relevant information
   3. Often created with expert knowledge
 
@@ -335,9 +351,8 @@ problem
     - Often accuracy is traded off for remaining characteristics
     - E.g., accuracy vs interpretability, accuracy vs speed
   - **Fast**
-    - To train and test
-    - Essential for real-time applications
-    - Reduce computational costs
+    - Reduce computational costs to train and test
+    - E.g., real-time applications
   - **Scalable**
     - Can handle large datasets efficiently (growing data and user bases)
     - E.g., in the Netflix prize, Netflix didn't end up implementing the best
@@ -352,25 +367,25 @@ problem
 ### ############################################################################
 
 * Occam's Razor
-- _"The simplest model that fits the data is also the most plausible"_
-  (Occam)
+- **Simple is better**
+  - _"The simplest model that fits the data is also the most plausible"_
+    (Occam)
 
-- _"An explanation of the data should be as simple as possible, but not
-  simpler"_ (Einstein?)
+  - _"An explanation of the data should be as simple as possible, but not
+    simpler"_ (Einstein?)
 
 - Corollary:
   - Trim the model to the bare minimum necessary to explain the data
 
- - What does **simple** mean?
-  - An object is simple when it is one of few possible objects
+- What does **simple** mean?
+  - A model is simple when it is one of few possible objects
 
 - What does **better** mean?
   - A model is better means better out of sample performance
 
 - **Why it's true**?
   - Less likely to fit a given data by coincidence
-  - An unlikely event is more significant if it happens (formalized in terms
-    entropy)
+  - An event is more significant if it is unlikely (formalized in terms entropy)
 
 * What is a "simple model"?
 - An object is **simple** when it is one of few possible objects
@@ -403,7 +418,7 @@ problem
   - Random results
     - E.g., bootstrap of null hypothesis "no prediction power"
 
-- Example of "perfect fit can mean nothing", e.g.,
+- **Perfect fit can mean nothing**, e.g.,
   - Get 2 data points on a plane
     - Fit data with a linear relationship
     - Perfect fit
@@ -413,26 +428,24 @@ problem
   - The model (line) is too complex for data set (only 2 points)
 
 * Sampling Bias
-
 - **Sampling bias** occurs when data is not representative of the intended
   population
-  - If data is sampled in a biased way, learning produces a biased outcome
-  - Model sees the world in terms of training data
+  - Biased sampling leads to biased outcomes
+  - Model views world through training data
   - Hoeffding's hypothesis: training and testing distributions are the same
 
 - **Causes of Sampling Bias**
   - _Non-random sampling_: Favors certain outcomes or groups
   - _Undercoverage_: Inadequate representation of some population members
-  - _Survivorship bias_: Includes only surviving or successful subjects
+  - _Survivorship bias_: Includes only successful subjects
   - _Self-selection bias_: Participants choose to participate, introducing bias
 
 - **Consequences**
-  - Leads to systematic errors distorting relationships or predictions
+  - Systematic errors distort relationships or predictions
   - Models trained on biased samples perform poorly on real-world data
   - Leads to incorrect conclusions or unfair decisions in AI systems
 
 * Sampling Bias
-
 - **Examples**
   - Training facial recognition on lighter-skinned faces causes poor accuracy on
     darker-skinned faces
@@ -446,7 +459,6 @@ problem
   - If data points have zero probability ($\Pr = 0$), no remedies possible
 
 * Data Snooping
-
 - **Data snooping** occurs when test set information improperly influences
     model-building
 
@@ -584,7 +596,7 @@ problem
   - Next step: use all $100M$ instances to train the model
 ::::
 :::: {.column width=40%}
-![](lectures_source/figures/Lesson02_Learning_curves.png)
+![](msml610/lectures_source/figures/Lesson02_Learning_curves.png)
 ::::
 :::
 
@@ -694,19 +706,19 @@ problem
 ::::
 :::: {.column width=40%}
 
-![](lectures_source/figures/Lesson02_Monalisa_incremental.png){width=90%}
+![](msml610/lectures_source/figures/Lesson02_Monalisa_incremental.png){width=90%}
 
 \small Incremental
 
 \vspace{0.5cm}
 
-![](lectures_source/figures/Lesson02_Monalisa_iterative.png){width=90%}
+![](msml610/lectures_source/figures/Lesson02_Monalisa_iterative.png){width=90%}
 
 \small Iterative
 
 \vspace{0.5cm}
 
-![](lectures_source/figures/Lesson02_Skateboard.png){width=90%}
+![](msml610/lectures_source/figures/Lesson02_Skateboard.png){width=90%}
 
 \small Incremental vs Iterative
 ::::
@@ -987,7 +999,7 @@ problem
      - It works even if there is an analytical solution
 ::::
 :::: {.column width=30%}
- ![](lectures_source/figures/Lesson6_Gradient_descent_2.png)
+ ![](msml610/lectures_source/figures/Lesson6_Gradient_descent_2.png)
 // TODO: Convert in Tikz or improve
 ::::
 :::
@@ -1012,7 +1024,7 @@ problem
     - E.g., logistic regression and linear models
 ::::
 :::: {.column width=30%}
-![](lectures_source/figures/Lesson6_Gradient_descent_1.png)
+![](msml610/lectures_source/figures/Lesson6_Gradient_descent_1.png)
 // TODO: Convert in Tikz or improve
 ::::
 :::
@@ -1115,7 +1127,7 @@ problem
     - Linear approximation fails (higher terms affect values)
     - It "bounces around"
 
-![](lectures_source/figures/Lesson6_Gradient_descent_3.png){width=90%}
+![](msml610/lectures_source/figures/Lesson6_Gradient_descent_3.png){width=90%}
 // TODO: Put the 3 figures vertically
 
 - **Idea**: vary learning rate $\eta$ during gradient descent
