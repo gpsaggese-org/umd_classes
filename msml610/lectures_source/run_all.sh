@@ -1,14 +1,10 @@
 #!/bin/bash -e
 # > ls -1 lectures_source/Lesson*
 FILES="
-lectures_source/Lesson09-Causal_inference.txt
-lectures_source/Lesson10-Timeseries_forecasting.txt
-lectures_source/Lesson11-Probabilistic_deep_learning.txt
-lectures_source/Lesson12-Reinforcement_learning.txt
+lectures_source/Lesson00-Class.txt
+lectures_source/Lesson01-Intro.txt
 "
 
-#lectures_source/Lesson00-Class.txt
-#lectures_source/Lesson01-Intro.txt
 #lectures_source/Lesson02-Techniques.txt
 #lectures_source/Lesson03-Knowledge_representation.txt
 #lectures_source/Lesson04-Models.txt
@@ -16,6 +12,10 @@ lectures_source/Lesson12-Reinforcement_learning.txt
 #lectures_source/Lesson06-Bayesian_statistics.txt
 #lectures_source/Lesson07-Probabilistic_programming.txt
 #lectures_source/Lesson08-Reasoning_over_time.txt
+#lectures_source/Lesson09-Causal_inference.txt
+#lectures_source/Lesson10-Timeseries_forecasting.txt
+#lectures_source/Lesson11-Probabilistic_deep_learning.txt
+#lectures_source/Lesson12-Reinforcement_learning.txt
 #lectures_source/Lesson91.Refresher_probability.txt
 #lectures_source/Lesson92.Refresher_probability_distributions.txt
 #lectures_source/Lesson93.Refresher_linear_algebra.txt

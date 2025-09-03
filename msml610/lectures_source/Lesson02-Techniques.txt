@@ -427,7 +427,7 @@ problem
     - Data cannot falsify hypothesis
   - The model (line) is too complex for data set (only 2 points)
 
-* Sampling Bias
+* Sampling Bias (1/2)
 - **Sampling bias** occurs when data is not representative of the intended
   population
   - Biased sampling leads to biased outcomes
@@ -443,24 +443,24 @@ problem
 - **Consequences**
   - Systematic errors distort relationships or predictions
   - Models trained on biased samples perform poorly on real-world data
-  - Leads to incorrect conclusions or unfair decisions in AI systems
+  - Leads to incorrect or unfair decisions
 
-* Sampling Bias
+* Sampling Bias (2/2)
 - **Examples**
-  - Training facial recognition on lighter-skinned faces causes poor accuracy on
+  - Training facial recognition on lighter-skinned faces reduces accuracy on
     darker-skinned faces
   - Predicting income using data only from employed individuals omits unemployed
     people
 
 - **Mitigation**
-  - Compare sample statistics with known population statistics
+  - Compare sample statistics with population statistics
   - Use stratified sampling or resampling to balance data
-  - Apply reweighting or bias correction techniques
+  - Apply re-weighting or bias correction techniques
   - If data points have zero probability ($\Pr = 0$), no remedies possible
 
-* Data Snooping
+* Data Snooping (1/2)
 - **Data snooping** occurs when test set information improperly influences
-    model-building
+  model-building
 
 - **Typical Sources**
   - _Train-test contamination_: Test data leaks into training
@@ -469,19 +469,19 @@ problem
   - _Multiple hypothesis testing_: Trying many models inflates performance
 
 - **Consequences**
-  - Leads to overly optimistic evaluations
+  - Overly optimistic evaluations
   - Models perform well in validation but fail on unseen data
 
 - **Why It's Dangerous**
-  - Creates misleading results
+  - Misleading results
+  - False confidence in model quality
   - Common pitfall in machine learning workflows
-  - Encourages false confidence in model quality
 
-* Data Snooping
-
-- **Example**
+* Data Snooping (2/2)
+- **Examples**
   - Choosing features based on the full dataset before splitting gives foresight
     not present in deployment
+  - E.g., demean the entire data and then split in train / test
 
 - **Preventive Strategies**
   - Keep training, validation, and test sets separate
@@ -491,7 +491,7 @@ problem
 * "Burning the Test Set"
 - **Problem**
   - Repeated test set use during development leaks into training
-  - Overfitting to test data misleads performance estimates
+  - Overfitting to test data
   - _"If you torture the data long enough, it will confess whatever you want."_
     (Tukey)
 
@@ -530,8 +530,8 @@ problem
     $E_{out}(g) \approx 0$
 
 * What If Out-Of-Sample Fit Is Poor?
-- The model performs well in sample ($E_{in} \approx 0$) but poorly out of
-  sample ($E_{out} \gg E_{in}$)
+- The model performs well in sample ($E_{in} \approx 0$) but poorly out of sample
+  ($E_{out} \gg E_{in}$)
 
 - **What does it mean?**
   - In-sample performance is optimistic
@@ -544,14 +544,14 @@ problem
 
 - **How to fix?**
   1. Training data
-    - Get more training data $\iff$ fixes high variance
+     - Get more training data $\iff$ fixes high variance
   2. Features
-    - Remove features $\iff$ fixes high variance
-    - Add features $\iff$ fixes high bias
-    - Add derived features (e.g., polynomial features) $\iff$ fixes high bias
+     - Remove features $\iff$ fixes high variance
+     - Add features $\iff$ fixes high bias
+     - Add derived features (e.g., polynomial features) $\iff$ fixes high bias
   3. Regularization
-    - Decrease regularization $\lambda$ $\iff$ fixes high bias
-    - Increase regularization $\lambda$ $\iff$ fixes high variance
+     - Decrease regularization $\lambda$ $\iff$ fixes high bias
+     - Increase regularization $\lambda$ $\iff$ fixes high variance
 
 * Why Using a Lot of Data?
 - **Several studies** show that:

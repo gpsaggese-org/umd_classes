@@ -105,7 +105,7 @@ MSML610: Advanced Machine Learning
   - ...
 
 - Each project:
-  - Is individual or group ($n \lte 3$)
+  - Is individual or group ($n < 4$)
   - Has different levels of difficulty
 
 * Links
