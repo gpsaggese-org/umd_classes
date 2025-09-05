@@ -288,7 +288,7 @@ digraph BayesianFlow {
       region Y during season Z?"_
 
 - Formulating question is **the most important part** of the machine learning
-problem
+  problem
   - Misunderstanding leads to:
     - Solving the wrong problem
     - Collecting wrong data
@@ -492,8 +492,8 @@ problem
 - **Problem**
   - Repeated test set use during development leaks into training
   - Overfitting to test data
-  - _"If you torture the data long enough, it will confess whatever you want."_
-    (Tukey)
+  - _"If you torture the data long enough, it will confess whatever you want"_
+    (Coase, 1982)
 
 - **Symptoms**
   - Test accuracy improves; real-world performance stagnates or degrades
@@ -589,11 +589,11 @@ problem
   - Plot learning curves (in-sample and out-of-sample performance) for increasing
     amount of data $m = 1k, 10k, 100k, 1M, ...$
 - **Next step**:
-- If model has large bias (
-  - Training and validation performance are similar at $1M$
-  - Next step: use more complex model rather than training on $100M$ instances
-- If model has large variance
-  - Next step: use all $100M$ instances to train the model
+  - If model has large bias
+    - Training and validation performance are similar at $1M$
+    - Next step: use more complex model rather than training on $100M$ instances
+  - If model has large variance
+    - Next step: use all $100M$ instances to train the model
 ::::
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/Lesson02_Learning_curves.png)

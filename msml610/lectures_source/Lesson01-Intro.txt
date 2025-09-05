@@ -426,26 +426,18 @@ mindmap
   - Assumptions may not align with practical problems
 
 * Machine Learning Models
-- What is the form of the model and how to fit / predict from the data?
-
+- What is the **form of the model** and **how to fit / predict** from the data?
   - Linear models
-
   - Generalized linear models
     - E.g., logistic, Poisson regression
-
   - Support Vector Machines (SVM)
-
   - Nearest neighbors
     - E.g., k-means clustering, KNN
-
   - Gaussian processes
-
   - Graphical models
     - Model joint distributions with graphs
     - E.g., hidden Markov models (HMM), Kalman filters, Bayesian networks
-
   - Neural networks
-
   - ...
 
 * Machine Learning Techniques
@@ -483,7 +475,7 @@ mindmap
 
 - _"Garbage in, garbage out"_ (Fuechse, 1957)
 
-- _"All models are wrong, but some are useful"_ (George E. P. Box, 1976)
+- _"All models are wrong, but some are useful"_ (Box, 1976)
 
 - _"If you torture the data long enough it will confess whatever you want"_
   (Coase, 1982)
@@ -494,9 +486,7 @@ mindmap
 
 - _"The unreasonable effectiveness of data"_ (Halevy, Norvig, Pereira, 2009)
 
-## #############################################################################
-## AI vs ML vs Deep-Learning
-## #############################################################################
+- _"The bitter lesson"_ (Sutton, 2019)
 
 * AI vs ML vs Deep-Learning
 ::: columns
@@ -511,8 +501,7 @@ mindmap
   - Example: Rule-based systems (e.g., IBM Deep Blue playing chess)
 
 - **Deep Learning (DL)**
-  - ML using neural networks with multiple layers
-  - Example: Autonomous vehicles
+  - ML using neural networks with many layers
 
 - **Large Language Models (LLM)**
   - Neural networks trained on massive text datasets and RLHS
