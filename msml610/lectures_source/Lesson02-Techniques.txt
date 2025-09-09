@@ -819,32 +819,32 @@ digraph BayesianFlow {
 
 * Data Processing Transformations
 
-- **Purpose of Data Processing**
+- **Purpose of data processing**
   - Prepare raw data for effective machine learning
   - Improve model performance and generalization
 
-- **Data Cleanup**
+- **Data cleanup**
   - Apply filters or smoothing to remove irrelevant variations
 
-- **Handling Missing Data**
+- **Handling missing data**
 
-- **Types of Transformations**
+- **Types of transformations**
   - Normalization and standardization
   - Encoding categorical data
   - Feature construction
   - Dimensionality reduction
   - Discretization
 
-- **Data Augmentation**
+- **Data augmentation**
   - Increase dataset size using transformations (common in vision)
 
 * Data Cleaning
 
-- **Purpose of Data Cleaning**
+- **Purpose of data cleaning**
   - Ensure data quality for accurate model training
   - Detect and correct errors or inconsistencies in the dataset
 
-- **Typical Steps in Data Cleaning**
+- **Typical steps in data cleaning**
   - *Remove duplicates*: Identical records are eliminated
   - *Correct data entry errors*: Fix misspellings or misformatted entries
   - *Standardize data*:
@@ -854,7 +854,7 @@ digraph BayesianFlow {
     - Type conversion (e.g., strings to integers)
     - Dealing with unexpected characters or encodings
 
-- **Relevance to ML Models**
+- **Relevance to ML models**
   - Poor data quality leads to biased or incorrect predictions
   - Clean data reduces variance and improves generalization
 
@@ -866,7 +866,7 @@ digraph BayesianFlow {
   - *Detection*: Box plots, Z-scores, or interquartile method
   - *Treatment*: Removal, capping, or transformation (e.g., log scale)
 
-- **Missing Data**
+- **Missing data**
   - *Detection*: Count of null values or incomplete entries
 
 - **Remediation**
@@ -881,13 +881,15 @@ digraph BayesianFlow {
 * Normalization and Standardization
 
 - **Goal**: Adjust feature scales for better convergence and learning
-  - *Normalize*: Rescale to fixed range, typically $[0, 1]$
-  - *Standardize*: Rescale to zero mean and unit variance
+  - _Normalize_: Rescale to $[0, 1]$
+  - _Standardize_: Zero mean, unit variance
+
 - **Why it helps**
-  - Ensures features contribute equally to distance-based models
-  - Helps gradient-based algorithms converge faster
+  - Equal feature contribution in distance-based models
+  - Faster convergence in gradient-based algorithms
   - Enables regularization
-  - Easier interpretation of features
+  - Easier feature interpretation
+
 - **Common methods**
   - Min-Max normalization: $x' = \frac{x - x_{min}}{x_{max} - x_{min}}$
   - Z-score standardization: $x' = \frac{x - \mu}{\sigma}$
@@ -896,16 +898,16 @@ digraph BayesianFlow {
 
 - **Goal**: Convert non-numeric categories into numeric representations
 
+- **Label encoding**
+  - Assigns an integer to each category
+    - E.g., `red`, `green`, `blue` $\to$ `1`, `2`, `3`
+  - Can mislead models if order is not meaningful
+
 - **One-hot encoding**
   - Creates binary vector per category
     - E.g., `red`, `green`, `blue` $\to$ `[1,0,0]`, `[0,1,0]`, `[0,0,1]`
   - Avoids ordinal assumption
   - Increases dimensionality
-
-- **Label encoding**
-  - Assigns an integer to each category
-    - E.g., `red`, `green`, `blue` $\to$ `1`, `2`, `3`
-  - Can mislead models if order is not meaningful
 
 * Feature Construction
 
@@ -936,7 +938,7 @@ digraph BayesianFlow {
   - LDA: projects data to maximize class separability
 
 - **Example**
-  - Reduce 100 image pixels to 10 principal components
+  - Reduce 1024x640 image pixels to 10 principal components
   - Quantize color images into gray scale
 
 * Discretization
@@ -1153,18 +1155,16 @@ digraph BayesianFlow {
   $$
 
 * Feature Scaling in Gradient Descent
-- **Problem**: different gradient components have different errors due to
-  numerical approximation, causing the gradient to bounce around
-  - Unscaled features lead to slow, unstable convergence due to varying
-    magnitudes
+
+- **Problem**: Different gradient components have different errors due to
+  numerical approximation, causing bouncing
+  - Unscaled features lead to slow, unstable convergence
   - E.g., feature ranging from 1 to 1000 vs. 0.01 to 1 causes inefficient
     updates
 
-- **Solution**: gradient descent converges faster if features are scaled to the
-  same range
+- **Solution**: Converge faster by scaling features to the same range
   - Min-max scaling
-  - Standardization (i.e., transforms feature values to mean 0, standard
-    deviation 1)
+  - Standardization (transforms feature values to mean 0, standard deviation 1)
 
 * Issues with Batch Gradient Descent
 - Consider squared error with $n$ samples:
@@ -1173,7 +1173,7 @@ digraph BayesianFlow {
   \triangleq \frac{1}{n} \sum_{i=1}^n (h_{\vw}(\vx_i) - y_i) ^ 2
   $$
 
-- **Batch Gradient Descent (BSD)** updates each weight component:
+- **Batch Gradient Descent (BGD)** updates each weight component:
   $$
   \vw(t + 1) = \vw(t) - \eta \frac{\nabla E_{in}}{\|\nabla E_{in}\|}
   $$
@@ -1202,9 +1202,7 @@ digraph BayesianFlow {
 - **Algorithm**
   - Pick one $(\vx_n, y_n)$ at a time from the available examples
   - Compute $\nabla e(h(\vx_n), y_n)$ to update the weights:
-    $$
-    \Delta \vw = -\eta \nabla e
-    $$
+    $\Delta \vw = -\eta \nabla e$
   - Update the weight considering only one random example:
     $$
     w_j(t + 1) = w_j(t) -
@@ -1213,7 +1211,7 @@ digraph BayesianFlow {
     \frac{\partial h_{\vw}(\vx_t)}{\partial w_j}
     $$
 
-- **Cons**: in Stochastic Gradient Descent (SGD)
+- **Cons**: in Stochastic Gradient Descent
   - Path in weight space is random
   - Oscillates around local minimum
 
@@ -1240,19 +1238,20 @@ digraph BayesianFlow {
 * On-Line Learning and Gradient Descent
 ::: columns
 :::: {.column width=65%}
+
 - In many applications, **continuous stream** of training examples $\to$ requires
   updating the model
   - In real-time systems, adapt model with new data points without full
     retraining
   - Handle variation in underlying process dynamics
 
-- Stochastic GD and mini-batch GD suitable for online learning
+- Stochastic GD and mini-batch GD **suitable for online learning**
   - Update model one example at a time
   - Discard examples for "compressed" model representation
     - Useful for large data streams where storing every data point is impractical
     - E.g., in stock market prediction
     - E.g., in training a language model on live chat data, discard older
-      conversations after updates to maintain relevant patterns
+      conversations after updates
 
 ::::
 :::: {.column width=40%}
@@ -1277,25 +1276,26 @@ digraph StreamModel {
     Model -> Output;
 }
 ```
+
 ::::
 :::
 
 * SGD vs BGD vs Mini-Batch
 - To update the weights:
   - **BGD (batch gradient descent)** uses all the training examples
-  - **SGD (stochastic gradient descent)** uses a single (random) training example
+  - **SGD (stochastic gradient descent)** uses a single random training example
   - **Mini-batch GD** uses a random subset of training examples
 
 \begingroup \scriptsize
 
-| **Aspect**      | **Batch Gradient Descent**               | **Stochastic Gradient Descent**      |
-| --------------- | ---------------------------------------- | ------------------------------------ |
-| Computation     | Uses all examples                        | One example at a time                |
-| Memory          | Requires all examples in memory          | Require less memory                  |
-| Randomization   | More likely to terminate in flat regions | Avoid local minima due to randomness |
-| Regularization  | No implicit regularization               | Oscillations act as regularization   |
-| Parallelization | Can be parallelized                      | Less parallel-friendly               |
-| Online Learning | Not suitable                             | Suitable for online learning         |
+| **Aspect**        | **Batch Gradient Descent**               | **Stochastic Gradient Descent**      |
+| ----------------- | ---------------------------------------- | ------------------------------------ |
+| *Computation*     | Uses all examples                        | One example at a time                |
+| *Memory*          | Requires all examples in memory          | Require less memory                  |
+| *Randomization*   | More likely to terminate in flat regions | Avoid local minima due to randomness |
+| *Regularization*  | No implicit regularization               | Oscillations act as regularization   |
+| *Parallelization* | Can be parallelized                      | Less parallel-friendly               |
+| *Online Learning* | Not suitable                             | Suitable for online learning         |
 
 \endgroup
 
@@ -1378,9 +1378,9 @@ digraph BayesianFlow {
     all coordinates
   - The minimum is local
 
-* Gradient Descent vs Pseudo-Inverse for Linear Models
-- For linear models, use pseudo-inverse or gradient descent to find optimal
-  $\vw^*$
+* Gradient Descent vs Pseudo-Inverse
+- For linear models, you can use pseudo-inverse or gradient descent to find
+  optimal $\vw^*$
 
 - **Gradient descent**
   - Choose learning rate $\eta$
@@ -1391,7 +1391,7 @@ digraph BayesianFlow {
 - **Pseudo-inverse**
   - No parameter selection
   - Converges in one iteration
-  - Computes $(\mX^T \mX)^{-1}$, a $P \times P$ matrix
+  - Computes a $P \times P$ matrix $(\mX^T \mX)^{-1}$
     - Complexity of matrix inversion $O(P^3)$
     - For $P \approx 10,000$, prefer gradient descent
 
@@ -1406,17 +1406,16 @@ digraph BayesianFlow {
   - Different models
   - Different training algorithms
   - Different evaluation techniques
-  - Different optimization strategies
 
 - **What to do?**
 
-- **Approach**
+- **Right approach**
   - Evaluate models systematically using a single number
     - Implement metrics (e.g., accuracy, F1 score) for insight
     - Use cross-validation for model validation
   - Statistical tests to ensure differences are not random
     - Utilize hypothesis testing for genuine improvements
-    - Conduct A/B testing for real-world validation
+    - Conduct A/B testing in real-world
 
 * How to Measure Classifier's Performance?
 - **Success/hit/win rate (or error/miss rate)**
@@ -1442,7 +1441,7 @@ digraph BayesianFlow {
   - E.g., in medical diagnosis, prioritize minimizing false negatives
 
 * Training vs Test Set
-- Performance on train set $E_{in}$ is an optimistic estimate of $E_{out}$
+- Performance on train set $E_{in}$ is an **optimistic estimate** of $E_{out}$
   - A model can have:
     - 0\% error rate on training data (e.g., memorizing responses for training
       set)
@@ -1472,20 +1471,20 @@ digraph BayesianFlow {
     - Split data 70-30 or 80-20 in train and test sets
     - Use cross-validation to maximize data usage
   - Other approaches:
-    - Augment data artificially, like data augmentation in image processing
+    - Augment data artificially, like in image processing
     - Use transfer learning with pre-trained models on related tasks
 
 // TODO: Add plot for the splitting of data
 // E.g., https://medium.com/@rahulchavan4894/understanding-train-test-and-validation-dataset-split-in-simple-quick-terms-5a8630fe58c8
 
 * Splitting Data Into Training, Validation, Test Sets
-- Training, validation, and test sets must be:
+- Training, validation, and test sets **must be**:
   - Distinct
   - Representative of the problem
     - E.g., each class in all sets represented according to original data
   - Sized based on data and problem needs
 
-- Ensure sets have the same distribution:
+- Ensure sets have the **same distribution**:
   - Stratified sampling
     - E.g., each class label proportionally represented in each set
   - Shuffle and sample
