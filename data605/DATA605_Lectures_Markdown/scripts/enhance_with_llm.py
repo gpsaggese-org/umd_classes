@@ -219,12 +219,9 @@ def main():
 
     # Configure the Gemini client
     try:
-        # Try to get API key from environment variable first
         api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
-            # Fallback to hardcoded key (not recommended for production)
-            api_key = "AIzaSyBSn66YhKlNL0oyhvaRaJmrs7GnCAj2zZI"
-            logging.warning("Using hardcoded API key. Consider setting GOOGLE_API_KEY environment variable.")
+            logging.warning("Set GOOGLE_API_KEY in environment variable to use Gemini API.")
         
         genai.configure(api_key=api_key)
         model = genai.GenerativeModel('gemini-2.0-flash')
