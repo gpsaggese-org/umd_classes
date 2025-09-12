@@ -26,20 +26,33 @@ In this project, students will utilize Prefect, a workflow orchestration tool, t
 
 ---
 
-### Project 2: Real-Time Twitter Sentiment Analysis (Difficulty: 2)
+**Project 2: Twitter Sentiment Analysis (Batch Mode)**
 
-**Project Objective**: Develop a data pipeline to collect tweets in real-time related to a specific topic and perform sentiment analysis to gauge public opinion.
+**Difficulty: 2 (Medium)**
 
-**Dataset Suggestions**:
-- **Dataset**: Twitter API for real-time data (free tier)
-- **Link**: [Twitter Developer Portal](https://developer.twitter.com/en/docs/twitter-api)
+**Project Objective**
+Analyze public sentiment on a specific topic by collecting historical tweets and applying sentiment analysis, optimizing for accuracy and interpretability.
 
-**Tasks**:
-- **Set Up Prefect Flow**: Create a flow to manage the data pipeline for Twitter API integration.
-- **Stream Tweets**: Use Prefect to continuously fetch tweets containing specific keywords using the Twitter API.
-- **Sentiment Analysis**: Integrate a pre-trained model (e.g., VADER) to analyze the sentiment of each tweet.
-- **Data Storage**: Store the results in a structured format (e.g., CSV or a database) for further analysis.
-- **Visualization**: Create visualizations to display sentiment trends over time.
+**Dataset Suggestions**
+Kaggle Dataset: Twitter US Airline Sentiment
+
+**Tasks**
+
+- **Data Ingestion**: Load the historical tweets dataset into your workflow.
+
+- **Text Preprocessing**: Clean tweets (remove hashtags, mentions, links, emojis).
+
+- **Sentiment Analysis**: Use a pre-trained model (e.g., VADER, Hugging Face DistilBERT) to classify sentiment as positive/negative/neutral.
+
+- **Data Storage**: Save results into CSV or a SQLite database for further exploration.
+
+- **Visualization**: Plot sentiment distributions, word clouds, or topic-specific sentiment trends.
+
+**Bonus Ideas (Optional)**
+
+- Compare traditional lexicon-based methods (VADER/TextBlob) with transformer-based sentiment classifiers.
+- Perform topic modeling (e.g., LDA or BERTopic) to see which themes drive positive vs negative sentiment.
+- Extend analysis to multi-class classification (e.g., joy, anger, sadness) using emotion-labeled datasets.
 
 ---
 

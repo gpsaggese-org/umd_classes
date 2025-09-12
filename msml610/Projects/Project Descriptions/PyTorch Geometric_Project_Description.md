@@ -1,71 +1,60 @@
-**Description**
-
-PyTorch Geometric is a library built on top of PyTorch designed for deep learning on irregular structures such as graphs. It provides a variety of tools and methods for working with graph-structured data, making it suitable for tasks like node classification, link prediction, and graph classification. 
-
-Technologies Used
-PyTorch Geometric
-
-- Facilitates the implementation of graph neural networks (GNNs) with a focus on efficiency and scalability.
-- Offers a range of pre-built models and layers for common graph tasks.
-- Provides utilities for data loading, processing, and augmentation specific to graph data.
+**Tool Description: PyTorch Geometric**  
+PyTorch Geometric is a library built on top of PyTorch that facilitates deep learning on irregularly structured data, particularly graphs. It provides efficient implementations of various graph neural network (GNN) architectures, along with data loaders and utilities for handling graph-structured data. Key features include:
+- Support for various graph neural network architectures (e.g., GCN, GAT).
+- Efficient data handling for large graphs.
+- Predefined datasets and utilities for graph processing.
+- Built-in support for message passing and graph convolutions.
 
 ---
 
-### Project 1: Social Network Node Classification
-**Difficulty**: 1 (Easy)
+**Project 1: Social Network Analysis for Community Detection**
 
-**Project Objective**: The goal is to classify users in a social network based on their connections and attributes, optimizing for accuracy in predicting user types (e.g., influencers, casual users).
+**Difficulty: 1 Easy**
 
-**Dataset Suggestions**: 
-- Use the "Cora" dataset available on PyTorch Geometric (https://pytorch-geometric.readthedocs.io/en/latest/notes/introduction.html).
+**Project Objective**
+The goal is to identify and visualize communities within a social network graph by learning node embeddings and clustering them into groups, optimizing for modularity as a measure of community structure.
+
+**Dataset Suggestions**
+Use the "Facebook Social Network" dataset available on Kaggle
+
+**Tasks**
+
+- Load and preprocess the social network graph using PyTorch Geometric utilities.
+- Train a Graph Convolutional Network (GCN) to learn node embeddings.
+- Apply a clustering algorithm (e.g., k-means) to group nodes into communities.
+- Evaluate clustering quality using modularity and visualize communities in the graph.
+
+**Bonus Ideas (Optional)**
+Experiment with different GNN architectures (e.g., GAT) for embeddings; try other clustering methods (spectral clustering, DBSCAN) and compare results.
+
+
+### Project 2: Fraud Detection in Financial Transactions  
+**Difficulty**: 2  
+**Project Objective**: The aim is to detect fraudulent transactions in a financial network by classifying transaction nodes, optimizing for precision and recall metrics.  
+
+**Dataset Suggestions**: Utilize the "Credit Card Fraud Detection" dataset from [Kaggle](https://www.kaggle.com/datasets/dalpozz/creditcard-fraud).  
 
 **Tasks**:
-- **Data Loading**: Utilize PyTorch Geometric's data loaders to import the Cora dataset.
-- **Graph Construction**: Construct a graph from the dataset, defining nodes and edges based on user relationships.
-- **Model Training**: Implement a simple Graph Convolutional Network (GCN) to classify nodes.
-- **Evaluation**: Measure the model's accuracy using train-test splits and visualize results with confusion matrices.
+- Construct a transaction graph where nodes represent accounts and edges represent transactions.
+- Use node embeddings from a GraphSAGE model to capture transaction patterns.
+- Train a classifier (e.g., logistic regression) on the embeddings to identify fraudulent transactions.
+- Evaluate the model using precision, recall, and F1 score metrics.
 
-**Bonus Ideas**: 
-- Experiment with different GNN architectures (e.g., GAT, GraphSAGE).
-- Compare performance with traditional machine learning models like Random Forests or SVMs.
+**Bonus Ideas**: Implement a semi-supervised learning approach to improve fraud detection; analyze the model's performance on different transaction types.
 
 ---
 
-### Project 2: Molecular Property Prediction
-**Difficulty**: 2 (Medium)
+### Project 3: Drug-Drug Interaction Prediction  
+**Difficulty**: 3  
+**Project Objective**: The goal is to predict potential interactions between drugs based on their molecular structures represented as graphs, optimizing for the accuracy of predictions.  
 
-**Project Objective**: The objective is to predict molecular properties (e.g., solubility, toxicity) based on molecular graphs, optimizing for prediction accuracy and model interpretability.
-
-**Dataset Suggestions**: 
-- Use the "MoleculeNet" dataset, specifically the "ESOL" dataset for solubility prediction, available on Kaggle (https://www.kaggle.com/datasets/graphcore/esol).
+**Dataset Suggestions**: Use the "Drug-Drug Interaction" dataset from [Kaggle](https://www.kaggle.com/datasets/andrews124/drug-drug-interaction).  
 
 **Tasks**:
-- **Data Preparation**: Load and preprocess molecular graphs from the ESOL dataset.
-- **Feature Engineering**: Generate features for nodes (atoms) and edges (bonds) in the molecular graphs.
-- **Model Development**: Implement a GNN model to predict molecular properties.
-- **Hyperparameter Tuning**: Optimize model parameters and evaluate using metrics like RMSE and MAE.
+- Transform molecular structures into graph representations using atom and bond information.
+- Implement a Graph Neural Network (GNN) like Graph Attention Network (GAT) to learn drug representations.
+- Train the model to predict interactions between drug pairs and evaluate using ROC-AUC scores.
+- Analyze feature importance to understand which molecular features contribute to interactions.
 
-**Bonus Ideas**: 
-- Extend the project to predict multiple properties simultaneously.
-- Visualize molecular structures and their predicted properties using cheminformatics libraries.
-
----
-
-### Project 3: Traffic Flow Prediction with Graph Neural Networks
-**Difficulty**: 3 (Hard)
-
-**Project Objective**: The goal is to predict traffic flow at various intersections in a city using historical traffic data represented as a graph, optimizing for forecasting accuracy and real-time performance.
-
-**Dataset Suggestions**: 
-- Use the "METR-LA" dataset, which contains traffic flow data from Los Angeles road networks, available on GitHub (https://github.com/liyaguang/DCRNN).
-
-**Tasks**:
-- **Data Ingestion**: Load and preprocess traffic flow data into a graph format, where nodes represent intersections and edges represent roads.
-- **Graph Representation**: Create a temporal graph to capture traffic flow changes over time.
-- **Modeling**: Implement a Spatio-Temporal Graph Convolutional Network (ST-GCN) for traffic flow prediction.
-- **Evaluation**: Evaluate the model on unseen data using metrics like MAE and visualize the results on maps.
-
-**Bonus Ideas**: 
-- Incorporate external factors such as weather data or special events to improve predictions.
-- Experiment with real-time prediction by integrating with a live traffic API (e.g., Google Maps Traffic API).
+**Bonus Ideas**: Explore transfer learning with pre-trained GNN models on similar datasets; conduct a comparative analysis with traditional machine learning methods for interaction prediction.
 

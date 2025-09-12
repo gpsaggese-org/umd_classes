@@ -1,101 +1,66 @@
-**Description**
-
-Pomegranate is a powerful Python library for probabilistic modeling, providing tools for building and analyzing probabilistic graphical models, such as Hidden Markov Models (HMMs), Bayesian Networks, and more. It allows for efficient training and inference, making it suitable for a variety of machine learning tasks, particularly in time-series analysis and classification.
-
-Technologies Used
-Pomegranate
-
-- Supports a variety of probabilistic models including HMMs and Bayesian Networks.
-- Efficiently handles large datasets with its optimized algorithms.
-- Offers easy-to-use interfaces for model training, prediction, and evaluation.
-- Provides probabilistic inference capabilities for complex data structures.
+**Pomegranate Description**:  
+Pomegranate is a Python library designed for probabilistic modeling, providing tools for Bayesian networks, Hidden Markov Models, and more. It allows users to build complex probabilistic models easily and efficiently, making it ideal for tasks involving uncertainty and prediction.
 
 ---
 
-**Project 1: Anomaly Detection in Network Traffic**  
-**Difficulty**: 1 (Easy)
+### Project 1: Predicting Customer Churn (Difficulty: 1)
 
 **Project Objective**:  
-Detect anomalies in network traffic using Hidden Markov Models (HMMs) to identify unusual patterns that may indicate security threats or breaches.
+The goal is to predict whether a customer will churn (leave) based on their usage patterns, optimizing the model for accuracy.
 
 **Dataset Suggestions**:  
-- UNSW-NB15 Dataset: Available on [Kaggle](https://www.kaggle.com/datasets/mohammadami/unsw-nb15) — a comprehensive dataset for network intrusion detection.
+- **Dataset**: "Telco Customer Churn"  
+- **Source**: Kaggle (https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
-**Tasks**:
-- Data Preprocessing:
-    - Clean and preprocess the dataset for analysis, focusing on relevant features like packet size and protocol type.
-  
-- Model Training:
-    - Build a Hidden Markov Model to capture normal network behavior based on the training data.
-  
-- Anomaly Detection:
-    - Use the trained model to identify deviations from normal patterns in a test dataset.
+**Tasks**:  
+- Load and preprocess the dataset, handling missing values and categorical variables.  
+- Use Pomegranate to create a Hidden Markov Model to capture customer behavior patterns.  
+- Train the model and evaluate its performance using accuracy, precision, recall and confusion matrix metrics.  
+- Visualize the results to identify key factors influencing churn.
 
-- Evaluation:
-    - Assess the model's performance using metrics such as precision, recall, and F1-score.
-
-- Visualization:
-    - Visualize the detected anomalies over time to understand their distribution and characteristics.
+**Bonus Ideas (Optional)**:  
+- Compare the performance of the Hidden Markov Model with traditional classification models like logistic regression.  
+- Implement a feature importance analysis to determine which features most influence churn predictions.
 
 ---
 
-**Project 2: Predicting Stock Price Movements**  
-**Difficulty**: 2 (Medium)
+### Project 2: Time Series Forecasting of Stock Prices (Difficulty: 2)
 
 **Project Objective**:  
-Utilize Bayesian Networks to predict stock price movements based on historical price data and external factors such as trading volume and market sentiment.
+The aim is to forecast future stock prices using historical data, optimizing for mean absolute error (MAE).
 
 **Dataset Suggestions**:  
-- Yahoo Finance API: Use the free tier to gather historical stock price data for a selected company (e.g., AAPL, MSFT).
+- **Dataset**: "Apple Stock Price Data"  
+- **Source**: Yahoo Finance API (free and active)
 
-**Tasks**:
-- Data Collection:
-    - Fetch historical stock prices and relevant features (trading volume, market news sentiment) using the Yahoo Finance API.
+**Tasks**:  
+- Collect and preprocess the historical stock price data, ensuring it is clean and formatted for analysis.  
+- Utilize Pomegranate’s Bayesian networks to model the relationships between different stock price features over time.  
+- Train the model on historical data and evaluate its forecasting accuracy using MAE and visualizations of predicted vs. actual prices.  
+- Fine-tune the model by adjusting hyperparameters and validating against a holdout dataset.
 
-- Feature Engineering:
-    - Create new features that may influence stock price movements, such as moving averages or volatility measures.
-
-- Model Construction:
-    - Develop a Bayesian Network to model the relationships between the engineered features and stock price movements.
-
-- Inference and Prediction:
-    - Use the network to make predictions about future stock price movements based on the latest data.
-
-- Evaluation:
-    - Evaluate model accuracy by comparing predicted movements against actual price changes.
+**Bonus Ideas (Optional)**:  
+- Extend the model to include external factors such as market indices or economic indicators.  
+- Compare the Bayesian network approach with other time series forecasting methods like ARIMA or LSTM.
 
 ---
 
-**Project 3: Gene Expression Analysis for Disease Classification**  
-**Difficulty**: 3 (Hard)
+### Project 3: Anomaly Detection in Network Traffic (Difficulty: 3)
 
 **Project Objective**:  
-Develop a probabilistic model using Pomegranate to classify gene expression profiles associated with different types of cancer, aiming to improve diagnostic accuracy.
+The objective is to detect anomalies in network traffic data, optimizing for the precision and recall of the detection system.
 
 **Dataset Suggestions**:  
-- The Cancer Genome Atlas (TCGA): Access gene expression data for various cancers, available at [GDC Data Portal](https://portal.gdc.cancer.gov/).
+- **Dataset**: "UNSW-NB15"  
+- **Source**: Kaggle (https://www.kaggle.com/datasets/mrwellsdavid/unsw-nb15)
 
-**Tasks**:
-- Data Acquisition:
-    - Retrieve gene expression data and corresponding cancer types from the TCGA database.
+**Tasks**:  
+- Load and preprocess the UNSW-NB15 dataset, focusing on feature selection and normalization.  
+- Implement a probabilistic model using Pomegranate to identify normal vs. anomalous patterns in network traffic.  
+- Train the model on labeled data and evaluate its performance using precision, recall, and F1-score metrics.  
+- Analyze the results to understand the characteristics of detected anomalies and refine the model as necessary.
 
-- Data Preprocessing:
-    - Normalize gene expression levels and handle missing values to prepare the dataset for analysis.
-
-- Model Development:
-    - Construct a Bayesian Network to model the relationships between gene expressions and cancer types.
-
-- Training and Validation:
-    - Train the model on a subset of the data and validate it using cross-validation techniques.
-
-- Performance Metrics:
-    - Assess the model's classification performance using confusion matrices and ROC curves.
-
-- Interpretation:
-    - Analyze the model to identify key genes that contribute significantly to cancer classification.
-
-**Bonus Ideas (Optional)**:
-- Extend the anomaly detection project by incorporating real-time data streaming for live monitoring.
-- In the stock prediction project, implement a sentiment analysis component to gauge market sentiment from news articles.
-- For the gene expression analysis, explore the integration of additional genomic data types (e.g., methylation or mutation data) to enhance classification accuracy.
+**Bonus Ideas (Optional)**:  
+- Explore ensemble methods to combine multiple models for improved anomaly detection performance.  
+- Implement real-time anomaly detection using a streaming data approach with the same dataset to simulate live network traffic.
 

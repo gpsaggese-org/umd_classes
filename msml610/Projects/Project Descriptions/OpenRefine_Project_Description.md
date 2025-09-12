@@ -1,63 +1,67 @@
-**Description**
-
-OpenRefine is a powerful tool for working with messy data, allowing users to clean, transform, and explore datasets effectively. It provides features for data cleaning, transformation, and reconciliation, making it easier to prepare data for analysis. 
-
-Technologies Used
-OpenRefine
-
-- Facilitates data cleaning and transformation with a user-friendly interface.
-- Supports data reconciliation and linking with external datasets.
-- Offers powerful faceting and clustering features to identify and correct inconsistencies.
+**Tool Description: OpenRefine**  
+OpenRefine is a powerful tool for working with messy data: cleaning it, transforming it from one format into another, and exploring it. It provides features for data cleaning, transformation, and reconciliation with external datasets. It allows users to perform complex data operations in an intuitive web-based interface.
 
 ---
 
-### Project 1: Data Cleaning for Movie Ratings
-**Difficulty**: 1 (Easy)
+### Project 1: Exploring and Cleaning Movie Data  
+**Difficulty**: 1  
+**Project Objective**: The goal is to clean and analyze a dataset of movie ratings to derive insights about user preferences and movie trends.
 
-**Project Objective**: The goal is to clean and preprocess a messy dataset of movie ratings to prepare it for analysis, ensuring that the data is accurate and consistent for further exploration.
+**Dataset Suggestions**:  
+- **Dataset**: MovieLens 20M Dataset  
+- **Source**: [MovieLens](https://grouplens.org/datasets/movielens/20m/)  
 
-**Dataset Suggestions**: Use the "MovieLens 20M Dataset" available on Kaggle (https://www.kaggle.com/grouplens/movielens-20m-dataset).
+**Tasks**:  
+- Import the MovieLens dataset into OpenRefine for initial exploration.  
+- Identify and rectify inconsistencies in movie titles and genres.  
+- Remove duplicate entries and handle missing values in user ratings.  
+- Create visualizations to analyze trends in user ratings over time using OpenRefine's data export capabilities.  
+- Build a simple collaborative filtering recommendation model in Python (using surprise or scikit-learn).
 
-**Tasks**:
-- **Import Data**: Load the MovieLens dataset into OpenRefine.
-- **Identify Inconsistencies**: Use faceting to detect duplicates and inconsistencies in movie titles and genres.
-- **Data Cleaning**: Apply transformations to standardize genres and titles, removing extraneous characters.
-- **Handle Missing Values**: Identify and fill or remove missing rating values appropriately.
-- **Export Cleaned Data**: Save the cleaned dataset for further analysis in Python or R.
-
----
-
-### Project 2: Enhancing a Public Health Dataset
-**Difficulty**: 2 (Medium)
-
-**Project Objective**: The project aims to enhance a public health dataset by cleaning and enriching it with additional data sources, enabling better analysis of health trends over time.
-
-**Dataset Suggestions**: Use the "CDC COVID-19 Data" available on the CDC website (https://data.cdc.gov/).
-
-**Tasks**:
-- **Load Dataset**: Import the CDC COVID-19 dataset into OpenRefine.
-- **Standardize Column Names**: Rename columns to ensure consistency and clarity.
-- **Data Transformation**: Convert date formats and ensure numerical fields are in the correct format.
-- **Data Reconciliation**: Link the dataset with external data (e.g., population data from the U.S. Census Bureau) to enrich the dataset.
-- **Quality Assurance**: Use clustering features to identify and correct any remaining inconsistencies in the dataset.
-
-**Bonus Ideas**: Explore temporal trends in COVID-19 cases by merging with historical data or visualizing the impact of population density on case rates.
+**Bonus Ideas (Optional)**:  
+- Compare user ratings by genre and visualize the results.  
+- Integrate external datasets, such as IMDb ratings, to enrich the analysis.
 
 ---
 
-### Project 3: E-commerce Product Review Analysis
-**Difficulty**: 3 (Hard)
+### Project 2: Analyzing COVID-19 Vaccination Data  
+**Difficulty**: 2  
+**Project Objective**: The aim is to clean and analyze COVID-19 vaccination data to identify trends and disparities in vaccination rates across different demographics.
 
-**Project Objective**: The goal is to clean and analyze a large dataset of product reviews from an e-commerce platform, preparing it for sentiment analysis and trend detection.
+**Dataset Suggestions**:  
+- **Dataset**: COVID-19 Vaccination Data (U.S.)  
+- **Source**: [Kaggle - COVID-19 Vaccination Data](https://www.kaggle.com/datasets/saurabhshahane/covid19-vaccination-and-case-trends)  
 
-**Dataset Suggestions**: Use the "Amazon Product Reviews" dataset available on Kaggle (https://www.kaggle.com/snap/amazon-fine-food-reviews).
+**Tasks**:  
+- Load the vaccination dataset into OpenRefine and perform exploratory data analysis.  
+- Clean the dataset by standardizing demographic categories and addressing missing values.  
+- Analyze vaccination rates by age group and region, creating summary statistics.  
+- Visualize the cleaned data to show disparities in vaccination coverage across different demographics.
+- Train a regression model (e.g., Random Forest, XGBoost) in Python to predict vaccination rates.
+- Evaluate model using appropriate metrics.
 
-**Tasks**:
-- **Import Reviews Data**: Load the Amazon product reviews dataset into OpenRefine.
-- **Text Cleaning**: Use OpenRefine's text transformation features to standardize text (e.g., removing HTML tags, correcting typos).
-- **Sentiment Preparation**: Extract and categorize sentiment scores based on review ratings, creating a new column for sentiment classification.
-- **Data Enrichment**: Reconcile product IDs with additional product information (e.g., categories, brands) from a separate dataset.
-- **Export for Analysis**: Save the cleaned and enriched dataset for further analysis using machine learning techniques in Python.
 
-**Bonus Ideas**: Implement advanced sentiment analysis using pre-trained models or explore the relationship between review length and sentiment scores.
+**Bonus Ideas (Optional)**:  
+- Extend the analysis by comparing vaccination rates with COVID-19 infection rates using external datasets.  
+- Explore temporal trends in vaccination rates over time.
+
+---
+
+### Project 3: Cleaning and Classifying Twitter Sentiment Data  
+**Difficulty**: 3  
+**Project Objective**: The goal is to clean and prepare a dataset of tweets for sentiment analysis, followed by building a classification model to predict sentiment.
+
+**Dataset Suggestions**:  
+- **Dataset**: Sentiment140 Dataset  
+- **Source**: [Sentiment140](http://help.sentiment140.com/for-students/)  
+
+**Tasks**:  
+- Import the Sentiment140 dataset into OpenRefine for initial data exploration and cleaning.  
+- Standardize and clean the text data, removing noise such as URLs, special characters, and stop words.  
+- Use OpenRefine to create features from the cleaned text, such as word counts or sentiment scores.  
+- Train a pre-trained model (e.g., BERT) for sentiment classification using the cleaned dataset and evaluate its performance.  
+
+**Bonus Ideas (Optional)**:  
+- Experiment with different text preprocessing techniques and compare their impact on model performance.  
+- Explore the use of different classification models beyond BERT, such as logistic regression or random forests, and compare results.
 
