@@ -7,7 +7,8 @@ Apache Arrow (PyArrow) is a cross-language development platform for in-memory da
   - Facilitates interoperability between different data processing frameworks like Pandas, Dask, and Spark.  
 
 ---
-
+ 
+ 
 ### Project 1: Airbnb Price Prediction with Efficient Data Pipelines  
 **Difficulty**: 1 (Easy)  
 
