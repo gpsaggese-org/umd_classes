@@ -26,23 +26,6 @@ GraphQL is a query language for APIs and a runtime for executing those queries b
 
 ---
 
-### Project 2: Real-Time COVID-19 Data Dashboard
-**Difficulty**: 2 (Medium)
-
-**Project Objective**: Build a real-time dashboard that displays COVID-19 statistics and trends using data from multiple sources.
-
-**Dataset Suggestions**: Utilize the [COVID-19 Open Data](https://covid19data.com/) from Google Cloud, which is available via a public API.
-
-**Tasks**:
-- **GraphQL API Setup**: Develop a GraphQL API to aggregate COVID-19 data from various sources.
-- **Data Retrieval**: Write queries to fetch data on cases, vaccinations, and demographics.
-- **Data Processing**: Clean and preprocess the data to ensure consistency and accuracy.
-- **Visualization**: Create an interactive dashboard using a visualization library (e.g., Plotly or D3.js) to display trends.
-- **User Interaction**: Allow users to filter data by location, date, and type of statistic.
-
-**Bonus Ideas**: Incorporate predictive modeling to forecast future cases using time series analysis. Add features to compare statistics between different countries or regions.
-
----
 
 ### Project 3: E-commerce Sales Forecasting
 **Difficulty**: 3 (Hard)
@@ -56,7 +39,7 @@ GraphQL is a query language for APIs and a runtime for executing those queries b
 - **Data Integration**: Combine historical sales data with external datasets (like holidays or economic indicators) through GraphQL queries.
 - **Feature Engineering**: Extract relevant features such as rolling averages, seasonal trends, and promotional impacts.
 - **Model Training**: Implement machine learning models (e.g., XGBoost or ARIMA) to predict future sales.
-- **Evaluation and Visualization**: Assess model performance using metrics like MAP or MAPE and visualize forecast results.
+- **Evaluation and Visualization**: Assess model performance using metrics like MAE or MAPE and visualize forecast results.
 
 **Bonus Ideas**: Explore advanced techniques like ensemble modeling or deep learning for time series forecasting. Implement a feedback loop to refine model predictions based on real-time sales data.
 
