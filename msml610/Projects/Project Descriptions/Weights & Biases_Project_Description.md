@@ -6,7 +6,7 @@ Weights & Biases (W&B) is a powerful tool designed for tracking machine learning
 **Difficulty**: 1 (Easy)  
 **Project Objective**: The goal is to build a regression model that predicts housing prices based on various features such as location, size, and number of bedrooms. The project aims to optimize the model's performance by fine-tuning hyperparameters.
 
-**Dataset Suggestions**: Use the "California Housing Prices" dataset available on Kaggle. Link: [California Housing Prices](https://www.kaggle.com/c/house-prices-advanced-regression-techniques)
+**Dataset Suggestions**: Use the "California Housing Prices" dataset available on Kaggle. Link: [California Housing Prices](https://www.kaggle.com/datasets/camnugent/california-housing-prices)
 
 **Tasks**:
 - **Set Up W&B**: Initialize a W&B project and configure the experiment tracking.

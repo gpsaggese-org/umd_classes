@@ -1,68 +1,68 @@
-**Description**
+**Tool Description:**
+torch.distributed is a PyTorch library that facilitates distributed training of deep learning models across multiple devices and nodes. It provides features such as:
 
-Torch.distributed is a package in PyTorch that enables distributed training of deep learning models across multiple devices and nodes. It allows for efficient parallel processing, which is essential for scaling up machine learning tasks and handling large datasets. Key features include:
-
-- **Data Parallelism**: Distributes the training of models across multiple GPUs or nodes to speed up the training process.
-- **Collective Communication**: Implements various communication patterns like broadcast, gather, and scatter to facilitate data sharing among processes.
-- **Fault Tolerance**: Supports robust training sessions that can recover from failures, ensuring uninterrupted model training.
-
----
-
-### Project 1: Image Classification with Distributed Training
-**Difficulty**: 1 (Easy)  
-**Project Objective**: Build a convolutional neural network (CNN) for classifying images from the CIFAR-10 dataset using distributed training to improve training time and model performance.
-
-**Dataset Suggestions**:  
-- CIFAR-10 dataset, available on Kaggle: [CIFAR-10](https://www.kaggle.com/c/cifar-10)
-
-**Tasks**:
-- **Set Up Distributed Environment**: Configure a local or cloud-based environment with multiple GPUs for distributed training.
-- **Load and Preprocess Data**: Use PyTorch's DataLoader to load CIFAR-10 images and apply necessary transformations.
-- **Define CNN Model**: Create a simple CNN architecture for image classification.
-- **Implement Distributed Training**: Utilize `torch.distributed` to parallelize the training process across available GPUs.
-- **Evaluate Model Performance**: Assess the trained model's accuracy on the test dataset and visualize results.
-
-**Bonus Ideas**: 
-- Experiment with different CNN architectures (e.g., ResNet, VGG).
-- Compare the performance of distributed training versus single-GPU training.
+- Easy-to-use APIs for communication between processes.
+- Support for various backends like NCCL and Gloo.
+- Data parallelism and model parallelism for efficient training.
+- Synchronization mechanisms to ensure consistent model updates.
 
 ---
 
-### Project 2: Natural Language Processing with Distributed Training
-**Difficulty**: 2 (Medium)  
-**Project Objective**: Implement a transformer-based model for sentiment analysis on the IMDb reviews dataset using distributed training to handle large text data efficiently.
+### Project 1: Predicting House Prices with Distributed Training
+**Difficulty**: 1 (Easy)
 
-**Dataset Suggestions**:  
-- IMDb Movie Reviews dataset, available on Kaggle: [IMDb Dataset](https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews)
+**Project Objective**: The goal is to build a regression model that predicts house prices based on various features, optimizing for mean squared error.
+
+**Dataset Suggestions**: Use the "California Housing Prices" dataset available on Kaggle: [California Housing Prices](https://www.kaggle.com/c/california-housing-prices).
 
 **Tasks**:
-- **Set Up Distributed Environment**: Configure distributed training on a multi-GPU setup using PyTorch.
-- **Load and Preprocess Data**: Use the Hugging Face Transformers library to load and tokenize the IMDb dataset.
-- **Define Transformer Model**: Implement a transformer model (e.g., BERT) for sentiment classification.
-- **Implement Distributed Training**: Use `torch.distributed` to distribute training tasks across multiple GPUs.
-- **Evaluate Model Performance**: Measure accuracy and F1 score on the validation set and visualize the confusion matrix.
+- Data Preprocessing: Clean and preprocess the dataset using Pandas.
+- Feature Selection: Identify and select relevant features for the model.
+- Model Training: Utilize a simple feedforward neural network with PyTorch for regression.
+- Distributed Training: Implement torch.distributed to train the model across multiple GPUs.
+- Evaluation: Assess model performance using RMSE and visualize results.
 
-**Bonus Ideas**: 
-- Experiment with different pre-trained transformer models.
-- Fine-tune hyperparameters to improve model performance.
+**Bonus Ideas (Optional)**:
+- Experiment with different neural network architectures.
+- Implement hyperparameter tuning using a grid search approach.
 
 ---
 
-### Project 3: Time Series Forecasting with Distributed Training
-**Difficulty**: 3 (Hard)  
-**Project Objective**: Develop a Long Short-Term Memory (LSTM) model for forecasting stock prices using distributed training to manage a large historical dataset.
+### Project 2: Image Classification with Distributed Convolutional Neural Networks
+**Difficulty**: 2 (Medium)
 
-**Dataset Suggestions**:  
-- Yahoo Finance stock price dataset, accessible via the yfinance library: [yfinance](https://pypi.org/project/yfinance/)
+**Project Objective**: The objective is to classify images from the CIFAR-10 dataset using a convolutional neural network (CNN), optimizing for accuracy.
+
+**Dataset Suggestions**: Use the CIFAR-10 dataset available on Kaggle: [CIFAR-10](https://www.kaggle.com/c/cifar-10).
 
 **Tasks**:
-- **Set Up Distributed Environment**: Configure a multi-node or multi-GPU environment for distributed training.
-- **Load and Preprocess Data**: Use the yfinance library to download historical stock price data and preprocess it for LSTM input.
-- **Define LSTM Model**: Create an LSTM architecture suitable for time series forecasting.
-- **Implement Distributed Training**: Leverage `torch.distributed` to parallelize data processing and model training.
-- **Evaluate Model Performance**: Use metrics like Mean Absolute Error (MAE) and visualize predictions against actual stock prices.
+- Data Loading: Use torchvision to load and preprocess the CIFAR-10 dataset.
+- Model Architecture: Build a convolutional neural network using PyTorch.
+- Distributed Data Parallelism: Implement torch.distributed to parallelize training across multiple GPUs.
+- Training: Train the model and monitor loss and accuracy metrics.
+- Evaluation: Evaluate the model on the test set and generate a confusion matrix.
 
-**Bonus Ideas**: 
-- Incorporate additional features such as technical indicators (e.g., moving averages).
-- Explore ensemble methods by combining predictions from multiple models.
+**Bonus Ideas (Optional)**:
+- Fine-tune a pre-trained model from torchvision.
+- Explore data augmentation techniques to improve model robustness.
+
+---
+
+### Project 3: Distributed Anomaly Detection in Network Traffic
+**Difficulty**: 3 (Hard)
+
+**Project Objective**: The goal is to develop an anomaly detection system for network traffic data, optimizing for the F1 score to identify malicious activities.
+
+**Dataset Suggestions**: Use the "UNSW-NB15" dataset available on Kaggle: [UNSW-NB15](https://www.kaggle.com/datasets/mohammadami/unsw-nb15).
+
+**Tasks**:
+- Data Exploration: Analyze the dataset to understand its structure and features.
+- Feature Engineering: Create new features and perform dimensionality reduction using PCA.
+- Model Selection: Choose an appropriate anomaly detection algorithm (e.g., Autoencoder).
+- Distributed Training: Implement torch.distributed for training the model across multiple nodes.
+- Evaluation: Use precision, recall, and F1 score to evaluate model performance.
+
+**Bonus Ideas (Optional)**:
+- Compare the performance of different anomaly detection algorithms.
+- Visualize the detected anomalies on a time-series graph for better insights.
 
