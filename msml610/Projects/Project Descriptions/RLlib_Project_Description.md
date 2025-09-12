@@ -1,98 +1,81 @@
-**Description**
-
-RLlib is an open-source library for reinforcement learning (RL) built on top of Ray, designed to enable scalable and distributed RL algorithms. It provides a unified API for various RL algorithms, making it easier to train and evaluate agents in complex environments. With RLlib, users can leverage pre-built environments and customize their training processes while benefiting from efficient parallel execution.
-
-Technologies Used
-RLlib
-
-- Supports a wide range of RL algorithms, including DQN, PPO, and A3C.
-- Facilitates easy integration with popular machine learning frameworks like TensorFlow and PyTorch.
-- Allows for distributed training across multiple nodes and environments.
+**Description of RLlib:**
+RLlib is a scalable reinforcement learning library built on Ray, designed to facilitate the development and deployment of reinforcement learning algorithms. It provides a unified API for various RL algorithms, support for multi-agent systems, and easy integration with other libraries. Key features include:
+- Support for a variety of state-of-the-art RL algorithms.
+- Multi-agent training capabilities.
+- Built-in support for distributed training.
+- High-level abstractions for environment creation and training.
 
 ---
 
-### Project 1: Simple Grid World Navigation (Difficulty: 1)
+### Project 1: Basic Reinforcement Learning with Grid World
+**Difficulty**: 1 (Easy)
 
-**Project Objective**  
-Create a reinforcement learning agent that learns to navigate a simple grid world to reach a designated goal while avoiding obstacles.
+**Project Objective**: Implement a basic reinforcement learning agent to learn optimal policies in a Grid World environment, optimizing for maximum cumulative rewards.
 
-**Dataset Suggestions**  
-- Simulated environment using OpenAI Gym's `GridWorld` or a custom grid environment.
+**Dataset Suggestions**: 
+- Simulated Grid World environment (create a custom environment using OpenAI Gym).
 
-**Tasks**  
-- Set Up Environment:  
-  Create a grid world environment with obstacles and a goal location using OpenAI Gym.
+**Tasks**:
+- **Environment Setup**: Create a Grid World environment using OpenAI Gym.
+- **Agent Implementation**: Use RLlib to implement a Q-learning agent.
+- **Training**: Train the agent in the Grid World environment and evaluate its performance.
+- **Visualization**: Visualize the agent's learned policy and rewards over episodes.
 
-- Implement RL Agent:  
-  Use RLlib to create a DQN agent to learn the navigation policy.
-
-- Train the Agent:  
-  Train the agent to navigate to the goal while avoiding obstacles, tuning hyperparameters as necessary.
-
-- Evaluate Performance:  
-  Measure success rates and average steps taken to reach the goal across multiple episodes.
-
-- Visualization:  
-  Visualize the agent's path and learning progress using Matplotlib.
+**Bonus Ideas (Optional)**: Experiment with different reward structures or modify the grid layout to create more complex environments.
 
 ---
 
-### Project 2: Stock Trading with Reinforcement Learning (Difficulty: 2)
+### Project 2: Reinforcement Learning for CartPole Balancing
+**Difficulty**: 2 (Medium)
 
-**Project Objective**  
-Develop a reinforcement learning agent that learns to make trading decisions in a simulated stock market environment to maximize returns.
+**Project Objective**: Develop a reinforcement learning agent that can balance a pole on a moving cart, optimizing for the longest time the pole remains upright.
 
-**Dataset Suggestions**  
-- Use the `Yahoo Finance API` to fetch historical stock price data for a specific stock (e.g., Apple Inc. - AAPL).
+**Dataset Suggestions**: 
+- OpenAI Gym's CartPole environment (available directly through the library).
 
-**Tasks**  
-- Set Up Trading Environment:  
-  Create a custom trading environment using OpenAI Gym that simulates buying, selling, and holding stocks.
+**Tasks**:
+- **Environment Selection**: Import the CartPole environment from OpenAI Gym.
+- **Agent Creation**: Utilize RLlib to implement a Proximal Policy Optimization (PPO) agent.
+- **Hyperparameter Tuning**: Experiment with different hyperparameters to optimize the agent's performance.
+- **Evaluation**: Evaluate the agent's performance and visualize the average reward over multiple episodes.
 
-- Implement RL Agent:  
-  Utilize RLlib to implement a PPO agent to learn trading strategies based on historical data.
-
-- Feature Engineering:  
-  Extract relevant features from stock data like moving averages, volatility, and trading volume.
-
-- Train the Agent:  
-  Train the agent on historical data while optimizing for maximum cumulative returns.
-
-- Performance Evaluation:  
-  Evaluate the agent's performance against a buy-and-hold strategy, analyzing metrics such as Sharpe ratio and drawdown.
-
-- Visualization:  
-  Plot the agent's trading actions and portfolio value over time.
+**Bonus Ideas (Optional)**: Compare the performance of different algorithms in RLlib (e.g., PPO vs. DQN) on the same task.
 
 ---
 
-### Project 3: Autonomous Drone Navigation (Difficulty: 3)
+### Project 3: Autonomous Drone Navigation Difficulty: 3 (Hard)
 
-**Project Objective**  
-Build a reinforcement learning agent that controls a drone to navigate through a complex environment while avoiding obstacles and reaching a target location.
 
-**Dataset Suggestions**  
-- Simulated environment using `AirSim` or `OpenAI Gym` with a custom drone navigation setup.
+**Project Objective**
+Build a reinforcement learning agent that controls a drone (or simulated vehicle) to navigate through an environment, avoiding obstacles and reaching a target location.
 
-**Tasks**  
-- Set Up Simulation Environment:  
-  Configure a drone simulation environment that includes obstacles and a target waypoint using AirSim.
+**Dataset Suggestions**
 
-- Implement RL Agent:  
-  Use RLlib to create an A3C agent that learns the optimal flight policy for navigation.
+Default (lightweight): Use PyBullet’s drone or continuous-control environments (e.g., LunarLanderContinuous-v2) for fast training on laptops/Colab.
 
-- Multi-Agent Coordination (Optional):  
-  Extend the project to include multiple drones navigating simultaneously, requiring coordination.
+**Tasks**
 
-- Train the Agent:  
-  Train the agent to learn navigation strategies through trial and error, adjusting for various environmental conditions.
+- Set Up Simulation Environment
+  Default: Install PyBullet and configure a simple drone or continuous-control navigation task (e.g., LunarLanderContinuous).
 
-- Performance Evaluation:  
-  Assess the agent's ability to reach the target while minimizing collisions and flight time.
+- Implement RL Agent
+  Use RLlib to create an A3C (Asynchronous Advantage Actor-Critic) agent for continuous action spaces.
+  Define state (e.g., position, velocity, orientation) and action (thrust, pitch, yaw).
 
-- Visualization:  
-  Visualize the drone’s path and performance metrics using 3D plotting tools. 
+- Train the Agent
+  Train agents to navigate toward a goal while avoiding obstacles.
+  Experiment with different reward functions (e.g., penalties for collisions, bonuses for smooth flight).
 
-- Bonus Ideas:  
-  Implement different weather conditions to challenge the agent or compare performance with traditional pathfinding algorithms.
+- Performance Evaluation
+  Metrics: task completion rate, average time to goal, number of collisions.
+  Evaluate across multiple episodes under varied initial conditions.
 
+- Visualization
+  Default: Use 2D/3D plots in Matplotlib or PyBullet built-in viewers to show flight paths.
+
+**Bonus Ideas (Optional)**
+
+ - Implement different weather or lighting conditions (AirSim).
+ - Explore multi-agent coordination (multiple drones reaching goals simultaneously).
+ - Compare A3C with PPO or SAC for continuous navigation.
+ - Add energy efficiency metrics (penalize excessive thrust).

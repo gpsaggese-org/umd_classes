@@ -11,62 +11,64 @@ ONNX
 
 ---
 
-**Project 1: Image Classification of Handwritten Digits**  
+## **Project 1: Classifying Fashion Items**  
 **Difficulty**: 1 (Easy)  
-**Project Objective**: Build a simple image classification model to recognize handwritten digits from the MNIST dataset, optimizing accuracy and performance using ONNX for model conversion.
 
-**Dataset Suggestions**: 
-- MNIST Handwritten Digits Dataset available on Kaggle: [MNIST Dataset](https://www.kaggle.com/c/digit-recognizer).
+**Project Objective**: Build an image classifier for clothing categories and convert the model into ONNX for cross-framework inference.  
 
-**Tasks**:
-- **Data Preprocessing**: Load the MNIST dataset, normalize pixel values, and split it into training and testing sets.
-- **Model Training**: Use a simple Convolutional Neural Network (CNN) in PyTorch to train on the MNIST dataset.
-- **Export to ONNX**: Convert the trained model to ONNX format for compatibility with other frameworks.
-- **Inference with ONNX**: Load the ONNX model in a different environment (e.g., TensorFlow) and perform inference on the test set.
-- **Evaluate Performance**: Measure the accuracy of predictions and compare it with the original PyTorch model.
+**Dataset Suggestions**:  
+- **Fashion-MNIST** — [Kaggle: Fashion MNIST](https://www.kaggle.com/datasets/zalando-research/fashionmnist)  
 
-**Bonus Ideas**: 
-- Experiment with different model architectures (e.g., deeper CNNs) and compare performance.
-- Implement model quantization to reduce the model size and improve inference speed.
+**Tasks**:  
+- Preprocess images (normalize, train/test split).  
+- Train a **PyTorch CNN** to classify clothing items (t-shirt, dress, shoes, bag, etc.).  
+- Convert the trained model to **ONNX**.  
+- Run inference using **ONNX Runtime** or in TensorFlow.  
+- Compare speed and accuracy between PyTorch and ONNX inference.  
+
+**Bonus Ideas**:  
+- Try a **MobileNetV2 pretrained model** and export to ONNX.  
+- Apply **quantization** to reduce model size and test inference on CPU.  
 
 ---
 
-**Project 2: Sentiment Analysis on Movie Reviews**  
+## **Project 2: Fake News Detection**  
 **Difficulty**: 2 (Medium)  
-**Project Objective**: Develop a sentiment analysis model to classify movie reviews as positive or negative, optimizing the model using ONNX for deployment across different platforms.
 
-**Dataset Suggestions**: 
-- IMDb Movie Reviews Dataset available on Kaggle: [IMDb Dataset](https://www.kaggle.com/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews).
+**Project Objective**: Build a text classification model to distinguish between real and fake news articles, then convert it to ONNX for deployment.  
 
-**Tasks**:
-- **Data Preparation**: Load the IMDb dataset, clean text data, and perform tokenization and padding.
-- **Model Development**: Build a Recurrent Neural Network (RNN) or Long Short-Term Memory (LSTM) model in TensorFlow/Keras for sentiment classification.
-- **Convert to ONNX**: Export the trained model to ONNX format for cross-platform compatibility.
-- **Inference in Another Framework**: Load the ONNX model in a different environment (e.g., PyTorch) and run inference on a sample of reviews.
-- **Performance Evaluation**: Analyze metrics such as accuracy, precision, and recall on the test set.
+**Dataset Suggestions**:  
+- **Fake and Real News Dataset** — [Kaggle: Fake and Real News Dataset](https://www.kaggle.com/datasets/clmentbisaillon/fake-and-real-news-dataset)  
 
-**Bonus Ideas**: 
-- Implement transfer learning by fine-tuning a pre-trained BERT model for sentiment analysis.
-- Create a web application to deploy the ONNX model for real-time sentiment analysis.
+**Tasks**:  
+- Preprocess text (cleaning, tokenization, padding).  
+- Train a **TensorFlow/Keras LSTM or GRU model** for binary classification.  
+- Convert the trained model to **ONNX**.  
+- Perform inference with ONNX Runtime or load in PyTorch for evaluation.  
+- Evaluate results using **accuracy, precision, recall, F1-score**.  
+
+**Bonus Ideas**:  
+- Fine-tune a **DistilBERT model** from HuggingFace and convert it to ONNX.  
+- Deploy the ONNX model in a simple **FastAPI service** to detect fake news in real time.  
 
 ---
 
-**Project 3: Time Series Forecasting of Stock Prices**  
+## **Project 3: Time Series Forecasting of Stock Prices**  
 **Difficulty**: 3 (Hard)  
-**Project Objective**: Build a model to forecast stock prices using historical data, optimizing the model for performance and interoperability with ONNX.
 
-**Dataset Suggestions**: 
-- Yahoo Finance API for historical stock price data. Use the free tier to download stock data for a specific company (e.g., Apple Inc. - AAPL).
+**Project Objective**: Build a time series forecasting model for stock prices using historical financial data, and use ONNX for cross-framework deployment.  
 
-**Tasks**:
-- **Data Collection**: Use the Yahoo Finance API to gather historical stock price data for the specified company.
-- **Feature Engineering**: Create features such as moving averages, volatility, and other technical indicators.
-- **Model Selection**: Train a complex model like a Long Short-Term Memory (LSTM) network in TensorFlow/Keras for forecasting.
-- **Export to ONNX**: Convert the trained LSTM model to ONNX format for deployment.
-- **Cross-Platform Inference**: Load the ONNX model in a different environment (e.g., Scikit-learn) and evaluate its forecasting performance on a validation dataset.
-- **Performance Metrics**: Measure forecasting accuracy using metrics like Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE).
+**Dataset Suggestions**:  
+- **Price and Volume Data for All US Stocks & ETFs** — [Kaggle: Stock Prices Dataset](https://www.kaggle.com/datasets/borismarjanovic/price-volume-data-for-all-us-stocks-etfs)  
 
-**Bonus Ideas**: 
-- Experiment with ensemble methods by combining multiple forecasting models.
-- Implement real-time forecasting by integrating the ONNX model with a live stock price feed using the Yahoo Finance API.
+**Tasks**:  
+- Preprocess stock price data (moving averages, volatility indicators).  
+- Train a **TensorFlow/Keras LSTM model** for price forecasting.  
+- Convert the model to **ONNX**.  
+- Perform inference with ONNX Runtime and compare results across frameworks.  
+- Evaluate forecasts using **MAE, RMSE, MAPE**.  
 
+**Bonus Ideas**:  
+- Compare ONNX-based deployment of **LSTM vs. Transformer** time-series models.  
+- Build an **ensemble of ONNX models** for forecasting.  
+- Create a **Streamlit dashboard** to visualize live forecasts using ONNX Runtime.  
