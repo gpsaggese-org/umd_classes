@@ -1,69 +1,63 @@
-**Description**
-
-Tetrad is an open-source software tool designed for causal discovery and graphical modeling. It provides a framework for understanding the relationships between variables and can be used to infer causal structures from data. Its features include:
-
-- **Causal Discovery Algorithms**: Implements various algorithms such as PC, GES, and FCI for identifying causal relationships.
-- **Graphical Models**: Supports the visualization and manipulation of directed acyclic graphs (DAGs).
-- **Statistical Testing**: Offers tools for evaluating independence and conditional independence among variables.
-- **User-Friendly Interface**: Provides an intuitive GUI for users to interact with data and causal models.
+**Tool Description: Tetrad**  
+Tetrad is a powerful tool for causal inference and statistical analysis, enabling users to explore, visualize, and analyze causal relationships in data. It offers features such as graphical models, constraint-based algorithms, and simulation capabilities, making it an excellent choice for understanding complex data structures and uncovering hidden dependencies.
 
 ---
 
-**Project 1: Causal Analysis of Health Factors**  
+### Project 1: Causal Analysis of Health Factors  
 **Difficulty**: 1 (Easy)  
-**Project Objective**: The goal is to identify and visualize the causal relationships among various health-related factors (e.g., diet, exercise, sleep) and their impact on overall health outcomes.
+**Project Objective**: To identify and visualize causal relationships between various health factors (e.g., exercise, diet, smoking) and health outcomes (e.g., obesity, diabetes).  
 
 **Dataset Suggestions**:  
-- Use the "Health Survey Data" available on Kaggle: [Health Survey Data](https://www.kaggle.com/datasets/health-survey-data).
-- This dataset includes various health metrics and lifestyle choices.
+- **Dataset Name**: "National Health and Nutrition Examination Survey (NHANES)"  
+- **Source**: Available on the CDC website (https://www.cdc.gov/nchs/nhanes/index.htm)  
 
 **Tasks**:  
-- **Data Preparation**: Load the dataset and preprocess it to handle missing values and categorical data.
-- **Causal Discovery**: Apply Tetrad's PC algorithm to identify causal relationships among health factors.
-- **Graph Visualization**: Create a directed acyclic graph (DAG) to visualize identified causal relationships.
-- **Statistical Testing**: Conduct independence tests to validate the causal structure inferred by the algorithm.
+- Import and preprocess the NHANES dataset to focus on relevant health factors and outcomes.  
+- Use Tetrad to create a directed acyclic graph (DAG) representing the causal relationships.  
+- Apply constraint-based algorithms (e.g., PC algorithm) to infer causal connections.  
+- Evaluate the model and visualize the causal structure using Tetrad's graphical capabilities.  
 
-**Bonus Ideas**:  
-- Compare results using different causal discovery algorithms available in Tetrad.
-- Extend the analysis to include demographic factors (age, gender) and their influence on health outcomes.
+**Bonus Ideas (Optional)**:  
+- Compare the inferred causal graph with existing literature on health outcomes.  
+- Analyze the impact of introducing a new variable (e.g., sleep quality) on the causal structure.
 
 ---
 
-**Project 2: Understanding Economic Indicators**  
+### Project 2: Causal Discovery in Economic Indicators  
 **Difficulty**: 2 (Medium)  
-**Project Objective**: The aim is to explore and model the causal relationships among key economic indicators (e.g., GDP, unemployment rate, inflation) and assess their impact on economic growth.
+**Project Objective**: To uncover and analyze the causal relationships among key economic indicators (e.g., unemployment rate, inflation, GDP growth).  
 
 **Dataset Suggestions**:  
-- Use the "World Development Indicators" dataset from the World Bank: [World Development Indicators](https://data.worldbank.org/indicator).
-- Focus on a specific country or region to simplify the analysis.
+- **Dataset Name**: "World Bank Global Economic Monitor"  
+- **Source**: Available on the World Bank website (https://databankfiles.worldbank.org/public/ddpext/)  
 
 **Tasks**:  
-- **Data Acquisition**: Download and clean the dataset, focusing on relevant economic indicators.
-- **Causal Inference**: Utilize Tetrad's GES algorithm to discover causal relationships among the selected indicators.
-- **Model Evaluation**: Assess the robustness of the inferred causal model using statistical tests for independence.
-- **Interpretation**: Analyze the implications of the causal structure on economic policy decisions.
+- Collect and preprocess economic data from the World Bank database for the last 20 years.  
+- Utilize Tetrad to construct a causal graph and identify potential causal relationships among the indicators.  
+- Implement the GES algorithm to refine the causal structure and validate findings.  
+- Analyze the implications of the discovered causal relationships on economic policy-making.  
 
-**Bonus Ideas**:  
-- Implement a time-series analysis on the economic indicators to observe trends over time.
-- Explore the impact of external factors (e.g., global events) on the causal relationships.
+**Bonus Ideas (Optional)**:  
+- Explore the impact of external shocks (e.g., financial crises) on the causal relationships.  
+- Create a predictive model based on the causal graph to forecast future economic trends.
 
 ---
 
-**Project 3: Causal Relationships in Climate Data**  
+### Project 3: Causal Inference in Social Media Sentiment Analysis  
 **Difficulty**: 3 (Hard)  
-**Project Objective**: The project aims to uncover causal relationships between various climate factors (e.g., temperature, CO2 levels, precipitation) and their effects on environmental changes.
+**Project Objective**: To investigate the causal effects of social media sentiment on stock market movements using Twitter data and stock prices.  
 
 **Dataset Suggestions**:  
-- Use the "Global Climate Data" dataset available on Kaggle: [Global Climate Data](https://www.kaggle.com/datasets/berkeleyearth/climate-change-earth-surface-temperature-data).
-- This dataset contains historical climate data across multiple regions.
+- **Dataset Name**: "Twitter Sentiment Analysis Dataset" (e.g., Twitter API for sentiment data) and "Yahoo Finance Stock Prices"  
+- **Source**: Twitter API (free tier) for sentiment analysis and Yahoo Finance for historical stock data (https://finance.yahoo.com/)  
 
 **Tasks**:  
-- **Data Preparation**: Clean and preprocess the climate dataset, ensuring proper handling of time-series data.
-- **Causal Discovery**: Apply Tetrad's FCI algorithm to identify complex causal relationships among climate variables.
-- **Graphical Representation**: Visualize the causal relationships using Tetrad's graphical modeling capabilities.
-- **Sensitivity Analysis**: Conduct a sensitivity analysis to determine the robustness of the causal inferences against variations in the data.
+- Gather and preprocess tweets related to selected stocks and their corresponding stock prices over time.  
+- Use Tetrad to analyze the temporal relationships and construct a causal graph between sentiment and stock prices.  
+- Apply the FCI algorithm to refine the graph and identify direct and indirect causal effects.  
+- Assess the robustness of the causal relationships through simulations and sensitivity analyses.  
 
-**Bonus Ideas**:  
-- Incorporate machine learning models to predict future climate conditions based on the causal relationships identified.
-- Explore the impact of human activities (e.g., industrialization) on the causal relationships within the climate data.
+**Bonus Ideas (Optional)**:  
+- Extend the analysis by including additional variables such as trading volume or market news.  
+- Compare the performance of the causal model with traditional time series forecasting methods.
 

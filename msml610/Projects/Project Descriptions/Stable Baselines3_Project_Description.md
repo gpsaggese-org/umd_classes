@@ -1,72 +1,56 @@
-**Description**
+**Tool Description: Stable Baselines3**  
+Stable Baselines3 is a set of reliable implementations of reinforcement learning algorithms in Python. It is built on top of PyTorch and provides a simple interface to train, evaluate, and tune reinforcement learning agents. Its features include:
 
-Stable Baselines3 is a set of reliable implementations of reinforcement learning algorithms in Python. It provides a user-friendly interface for developing and training reinforcement learning agents, making it easier to experiment with various algorithms and environments. Key features include:
-
-- **Multiple Algorithms**: Supports popular algorithms like PPO, DDPG, A2C, and SAC.
-- **Easy Integration**: Seamlessly integrates with OpenAI Gym environments for testing and training.
-- **Pre-trained Agents**: Offers pre-trained models to kickstart projects and facilitate comparison.
-- **Custom Callbacks**: Allows for custom training callbacks for monitoring and logging.
-
----
-
-### Project 1: Reinforcement Learning for Cart-Pole Balancing
-**Difficulty**: 1 (Easy)
-
-**Project Objective**: The goal is to train an agent to balance a pole on a cart using reinforcement learning. The agent will learn to control the cart's position to keep the pole upright for as long as possible.
-
-**Dataset Suggestions**: 
-- Use the OpenAI Gym's CartPole-v1 environment (no external dataset needed).
-
-**Tasks**:
-- **Set Up Environment**: Initialize the CartPole environment using OpenAI Gym.
-- **Define the Agent**: Create a PPO agent using Stable Baselines3.
-- **Train the Agent**: Train the agent in the CartPole environment and monitor its performance.
-- **Evaluate Performance**: Test the trained agent and measure the average reward over multiple episodes.
-- **Visualize Results**: Plot the training rewards over time to visualize learning progress.
-
-**Bonus Ideas (Optional)**:
-- Experiment with different hyperparameters (learning rate, gamma) to optimize performance.
-- Compare the performance of different algorithms (PPO vs. DDPG) on the same task.
+- A collection of state-of-the-art reinforcement learning algorithms (PPO, DDPG, A2C, etc.)
+- Support for vectorized environments for efficient training
+- Easy integration with Gym environments
+- Extensive documentation and examples for quick onboarding
 
 ---
 
-### Project 2: Reinforcement Learning for Traffic Signal Control
-**Difficulty**: 2 (Medium)
+### Project 1: Simple Game AI (Difficulty: 1)
 
-**Project Objective**: Develop a reinforcement learning agent to optimize traffic signal timings in a simulated intersection to minimize waiting time and improve traffic flow.
+**Project Objective**: Develop a reinforcement learning agent that can play a simple game (e.g., CartPole) and optimize its score.
 
-**Dataset Suggestions**: 
-- Use the Traffic Signal Control environment from the OpenAI Gym (e.g., `TrafficLight`).
+**Dataset Suggestions**: Use the OpenAI Gym environment, specifically the `CartPole-v1` environment.
 
 **Tasks**:
-- **Set Up Environment**: Configure the Traffic Signal Control environment.
-- **Agent Design**: Implement a DQN agent using Stable Baselines3 for controlling traffic lights.
-- **Training**: Train the agent to learn optimal signal timings based on traffic flow data.
-- **Performance Evaluation**: Measure the average waiting time and throughput of vehicles.
-- **Visualization**: Create visualizations to compare the performance of the RL agent against fixed signal timings.
+- Set up the Gym environment and visualize the game.
+- Implement a PPO agent using Stable Baselines3.
+- Train the agent and log its performance over episodes.
+- Evaluate the trained agent and visualize its performance.
 
-**Bonus Ideas (Optional)**:
-- Integrate additional state information (e.g., pedestrian crossings) into the agent's decision-making process.
-- Implement a multi-agent system where multiple intersections coordinate with each other.
+**Bonus Ideas (Optional)**: Experiment with different hyperparameters for the PPO agent and compare their performance.
 
 ---
 
-### Project 3: Reinforcement Learning for Stock Trading Strategy
-**Difficulty**: 3 (Hard)
+### Project 2: Stock Trading Agent (Difficulty: 2)
 
-**Project Objective**: Create a reinforcement learning agent that learns to make buy/sell/hold decisions in stock trading based on historical price data to maximize returns.
+**Project Objective**: Create a reinforcement learning agent that learns to trade stocks based on historical price data, optimizing for maximum profit.
 
-**Dataset Suggestions**: 
-- Use the `Alpha Vantage` API to gather historical stock price data (free tier available).
+**Dataset Suggestions**: Use the `S&P 500 Historical Data` dataset available on Kaggle (https://www.kaggle.com/datasets/sbhatti/stock-market-data).
 
 **Tasks**:
-- **Data Collection**: Use the Alpha Vantage API to fetch historical stock data (e.g., daily prices for a specific stock).
-- **Environment Setup**: Create a custom trading environment compatible with Stable Baselines3 where the agent can interact with stock prices.
-- **Agent Design**: Implement an A2C agent to learn trading strategies based on the defined environment.
-- **Training and Evaluation**: Train the agent and evaluate its performance based on cumulative returns and risk metrics.
-- **Visualization**: Plot the agent's trading decisions against actual stock price movements to analyze performance.
+- Preprocess the stock price data and create a trading environment using the Gym framework.
+- Implement a DDPG agent using Stable Baselines3 for continuous action space.
+- Train the agent and evaluate its trading performance against a buy-and-hold strategy.
+- Analyze the agent’s trading strategy and visualize profit and loss over time.
 
-**Bonus Ideas (Optional)**:
-- Experiment with different reward structures (e.g., penalizing for high drawdowns).
-- Compare the RL agent's performance with traditional trading strategies (e.g., moving average crossover).
+**Bonus Ideas (Optional)**: Incorporate additional features like technical indicators (e.g., moving averages) to improve the agent's decision-making process.
+
+---
+
+### Project 3: Autonomous Driving Simulation (Difficulty: 3)
+
+**Project Objective**: Build a reinforcement learning agent that can navigate a simulated driving environment while avoiding obstacles and optimizing for safe and efficient driving.
+
+**Dataset Suggestions**: Use the `CarRacing-v0` environment from OpenAI Gym, which provides a driving simulation.
+
+**Tasks**:
+- Set up the CarRacing environment and visualize the simulation.
+- Implement a PPO agent using Stable Baselines3 tailored for continuous action spaces.
+- Train the agent using various reward functions to balance speed and safety.
+- Evaluate the agent’s performance and visualize its driving path, including obstacles encountered.
+
+**Bonus Ideas (Optional)**: Experiment with different reward strategies (e.g., penalties for collisions) and assess their impact on the agent's learning and performance.
 

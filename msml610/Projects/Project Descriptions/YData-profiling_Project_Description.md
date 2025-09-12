@@ -1,100 +1,68 @@
-**Description**
-
-YData Profiling is a Python library that generates profile reports from a pandas DataFrame, providing a comprehensive overview of the dataset's structure, including data types, missing values, statistical summaries, and visualizations. It helps data scientists quickly understand the characteristics of their data, making it easier to identify issues and inform subsequent analysis.
-
-Features:
-
-- Generates detailed reports that summarize data distributions, correlations, and missing values.
-- Offers visualizations for better understanding of data characteristics.
-- Supports integration with Jupyter notebooks for interactive data exploration.
+### Tool Description: YData-profiling
+YData-profiling is an open-source Python library that automates the process of data profiling. It generates comprehensive reports that provide insights into the structure, quality, and characteristics of datasets. Key features include:
+- Automatic generation of descriptive statistics.
+- Visualization of data distributions.
+- Detection of missing values and outliers.
+- Correlation analysis between features.
+- Support for various data types and formats.
 
 ---
 
-### Project 1: Exploratory Data Analysis on Titanic Survival Data (Difficulty: 1)
+### Project 1: **Customer Segmentation Analysis**
+**Difficulty**: 1 (Easy)
 
-**Project Objective**  
-The goal of this project is to explore the Titanic dataset to understand the factors affecting passenger survival rates. Students will optimize their understanding of the data and identify key features that correlate with survival.
+**Project Objective**: The goal is to segment customers based on their purchasing behavior to optimize marketing strategies and improve customer retention.
 
-**Dataset Suggestions**  
-- Titanic dataset available on Kaggle: [Titanic: Machine Learning from Disaster](https://www.kaggle.com/c/titanic/data)
+**Dataset Suggestions**: Use the "Online Retail" dataset available on Kaggle, which contains transactional data of an online retail store.
 
-**Tasks**  
-- Load and Prepare Data:
-  - Import the Titanic dataset and clean any inconsistencies.
-  
-- Generate Profile Report:
-  - Use YData Profiling to generate a comprehensive report of the dataset.
-  
-- Analyze Missing Values:
-  - Identify and visualize missing data patterns to understand their impact on analysis.
-  
-- Feature Correlation:
-  - Explore correlations between features and survival rates using the profile report.
-  
-- Summary Statistics:
-  - Extract key statistical insights from the report to present findings.
+**Tasks**:
+- Load the dataset and conduct initial data profiling using YData-profiling to understand data distributions and missing values.
+- Clean the dataset by handling missing values and filtering out irrelevant records.
+- Perform exploratory data analysis (EDA) to visualize customer purchasing patterns.
+- Implement K-Means clustering to identify distinct customer segments.
+- Evaluate the clustering results and interpret the segments based on profiling insights.
 
-**Bonus Ideas (Optional)**  
-- Compare survival rates across different passenger classes and genders using visualizations.
-- Predict survival using a simple classification model (e.g., logistic regression) based on key features identified in the analysis.
+**Bonus Ideas (Optional)**: 
+- Compare clustering results with other algorithms like DBSCAN or Agglomerative Clustering.
+- Create visual profiles for each customer segment using YData-profiling insights.
 
 ---
 
-### Project 2: E-commerce Customer Segmentation (Difficulty: 2)
+### Project 2: **Predictive Maintenance for Manufacturing Equipment**
+**Difficulty**: 2 (Medium)
 
-**Project Objective**  
-This project aims to analyze customer data from an e-commerce platform to identify distinct customer segments. The goal is to optimize marketing strategies based on customer behavior and demographics.
+**Project Objective**: The goal is to predict equipment failures based on operational data to schedule maintenance proactively and reduce downtime.
 
-**Dataset Suggestions**  
-- E-commerce customer data available on Kaggle: [Online Retail Dataset](https://www.kaggle.com/datasets/irfanasrullah/online-retail-dataset)
+**Dataset Suggestions**: Use the "NASA Turbofan Engine Degradation Simulation Data Set" available on Kaggle, which includes multiple operational parameters of engines.
 
-**Tasks**  
-- Load and Clean Data:
-  - Import the e-commerce dataset and perform initial cleaning and preprocessing.
-  
-- Generate Profile Report:
-  - Use YData Profiling to create a report that highlights customer demographics and purchase behaviors.
-  
-- Feature Engineering:
-  - Create new features based on customer purchase history (e.g., frequency, recency, monetary value).
-  
-- Segmentation Analysis:
-  - Identify key segments using clustering techniques (e.g., K-means) based on insights from the profile report.
-  
-- Visualization:
-  - Visualize customer segments and their characteristics using appropriate charts.
+**Tasks**:
+- Utilize YData-profiling to generate a comprehensive report of the dataset, focusing on trends and anomalies.
+- Preprocess the data by normalizing features and handling missing values.
+- Engineer features that capture the degradation patterns over time.
+- Train a Random Forest model to predict the time to failure.
+- Evaluate model performance using metrics like RMSE and visualize the predictions against actual failures.
 
-**Bonus Ideas (Optional)**  
-- Perform a comparative analysis of customer segments to devise targeted marketing strategies.
-- Implement a predictive model to forecast future purchases based on customer segments.
+**Bonus Ideas (Optional)**: 
+- Implement a survival analysis approach to assess the lifespan of the equipment.
+- Compare the performance of the Random Forest model with other models such as Gradient Boosting or SVM.
 
 ---
 
-### Project 3: Analyzing Air Quality Data for Urban Planning (Difficulty: 3)
+### Project 3: **Sentiment Analysis on Social Media Posts**
+**Difficulty**: 3 (Hard)
 
-**Project Objective**  
-The objective of this project is to analyze air quality data from multiple urban locations to identify pollution patterns and their correlation with health outcomes. Students will aim to provide insights that could inform urban planning decisions.
+**Project Objective**: The goal is to analyze sentiment in social media posts to understand public opinion on various topics and trends.
 
-**Dataset Suggestions**  
-- Air quality dataset available on Kaggle: [Air Quality Data Set](https://www.kaggle.com/datasets/uciml/air-quality-data-set)
+**Dataset Suggestions**: Use the "Twitter US Airline Sentiment" dataset available on Kaggle, which contains tweets about US airlines labeled with positive, negative, and neutral sentiments.
 
-**Tasks**  
-- Data Collection and Preparation:
-  - Import the air quality dataset and perform initial cleaning and preprocessing to handle noise and missing values.
-  
-- Generate Profile Report:
-  - Utilize YData Profiling to create a detailed report that summarizes air quality metrics and trends.
-  
-- Temporal Analysis:
-  - Analyze how air quality changes over time and correlate with health data (if available) to detect trends.
-  
-- Advanced Feature Engineering:
-  - Develop features that capture seasonal variations and extreme pollution events.
-  
-- Predictive Modeling:
-  - Implement regression models to predict health outcomes based on air quality metrics and evaluate model performance.
+**Tasks**:
+- Use YData-profiling to analyze the dataset, focusing on text data distribution and sentiment class balance.
+- Preprocess the text data, including tokenization, stop word removal, and lemmatization.
+- Use pre-trained embeddings such as Word2Vec or BERT for feature extraction from the text.
+- Train a classification model (e.g., LSTM or fine-tuned BERT) to predict sentiment.
+- Evaluate the model using accuracy, precision, recall, and F1-score, and visualize the sentiment distribution.
 
-**Bonus Ideas (Optional)**  
-- Explore the impact of specific pollutants on health outcomes using statistical tests.
-- Create a dashboard that visualizes air quality trends and predictions for urban planners.
+**Bonus Ideas (Optional)**: 
+- Implement a topic modeling approach to identify prevalent themes in the tweets.
+- Create a dashboard to visualize sentiment trends over time using the insights from YData-profiling.
 
