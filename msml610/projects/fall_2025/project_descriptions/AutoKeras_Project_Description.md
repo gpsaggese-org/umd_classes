@@ -1,76 +1,63 @@
-## Description  
-AutoKeras is an open-source software library designed for automated machine learning (AutoML) that simplifies the process of model selection and hyperparameter tuning. It allows users to quickly build and evaluate deep learning models without extensive knowledge of the underlying algorithms. Key features include:  
+**Description**
 
-- **Neural Architecture Search**: Automatically searches for the best model architecture for the given task.  
-- **Hyperparameter Optimization**: Efficiently optimizes model parameters to improve performance.  
-- **User-Friendly Interface**: Simplifies model training and evaluation with intuitive APIs.  
-- **Support for Various Data Types**: Handles image, text, time series, and tabular data seamlessly.  
+AutoKeras is an open-source software library designed for automated machine learning (AutoML) that simplifies the process of model selection and hyperparameter tuning. It allows users to quickly build and evaluate deep learning models without extensive knowledge of the underlying algorithms. Key features include:
 
----
-
-### Project 1: Predicting House Prices  
-**Difficulty**: 1 (Easy)  
-
-**Project Objective**:  
-Predict house prices based on property characteristics such as location, size, and amenities. The goal is to use AutoKeras to automate feature selection and model optimization for improved prediction accuracy.  
-
-**Dataset Suggestions**:  
-- **Dataset**: Melbourne Housing Market Dataset  
-- **Link**: [Melbourne Housing Market (Kaggle)](https://www.kaggle.com/datasets/dansbecker/melbourne-housing-snapshot)  
-
-**Tasks**:  
-- **Data Preprocessing**: Handle missing values, encode categorical variables, and normalize numerical features.  
-- **Model Training with AutoKeras**: Use AutoKeras to train multiple regression models automatically.  
-- **Model Comparison**: Compare AutoKeras’ best model against baseline models (Linear Regression, Random Forest, XGBoost).  
-- **Evaluation**: Evaluate models using RMSE and R².  
-
-**Bonus Ideas (Optional)**:  
-- Visualize the most influential features identified by AutoKeras.  
-- Try feature engineering (e.g., interaction features) before applying AutoKeras to see if it improves performance.  
+- **Neural Architecture Search**: Automatically searches for the best model architecture for the given task.
+- **Hyperparameter Optimization**: Efficiently optimizes model parameters to improve performance.
+- **User-Friendly Interface**: Simplifies model training and evaluation with intuitive APIs.
+- **Support for Various Data Types**: Handles image, text, and tabular data seamlessly.
 
 ---
 
-### Project 2: Fashion Product Image Classification  
-**Difficulty**: 2 (Medium)  
+### Project 1: Predicting House Prices
 
-**Project Objective**:  
-Classify fashion product images into categories (e.g., shirts, shoes, bags) to optimize image-based classification accuracy using AutoKeras.  
+**Difficulty**: 1 (Easy)
 
-**Dataset Suggestions**:  
-- **Dataset**: Fashion Product Images (Small) Dataset  
-- **Link**: [Fashion Product Images (Kaggle)](https://www.kaggle.com/datasets/paramaggarwal/fashion-product-images-small)  
+**Project Objective**: The goal is to predict house prices based on various features such as location, size, and amenities. The project aims to optimize the prediction accuracy using AutoKeras to automate model selection.
 
-**Tasks**:  
-- **Data Loading & Augmentation**: Load images and apply augmentation (rotations, flips, brightness adjustments).  
-- **Model Training with AutoKeras**: Use AutoKeras’ ImageClassifier to automatically search for the best CNN architecture.  
-- **Model Comparison**: Compare AutoKeras’ selected CNN with a pre-trained baseline (e.g., MobileNet or ResNet).  
-- **Evaluation**: Evaluate classification accuracy, precision, recall, and F1-score.  
-- **Visualization**: Display misclassified images and predicted vs. true labels.  
+**Dataset Suggestions**: Use the "House Prices - Advanced Regression Techniques" dataset from Kaggle ([link](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data)).
 
-**Bonus Ideas (Optional)**:  
-- Test transfer learning using a pre-trained model on ImageNet and compare with AutoKeras results.  
-- Create a simple web app that lets users upload an image and receive predicted categories.  
+**Tasks**:
+- **Data Preprocessing**: Load the dataset, handle missing values, and encode categorical variables.
+- **Model Training with AutoKeras**: Use AutoKeras to train a regression model on the processed dataset.
+- **Model Evaluation**: Assess model performance using metrics like RMSE and R².
+- **Feature Importance Analysis**: Analyze which features contribute most to the predictions.
+
+**Bonus Ideas**: Experiment with different feature engineering techniques or compare AutoKeras results with a traditional regression model (e.g., Linear Regression).
 
 ---
 
-### Project 3: Electricity Load Forecasting  
-**Difficulty**: 3 (Hard)  
+### Project 2: Image Classification of Fashion Products
 
-**Project Objective**:  
-Forecast hourly electricity demand using historical energy consumption data. AutoKeras will automate model selection and hyperparameter tuning for time series forecasting.  
+**Difficulty**: 2 (Medium)
 
-**Dataset Suggestions**:  
-- **Dataset**: Hourly Energy Consumption Dataset  
-- **Link**: [Electricity Load Forecasting (Kaggle)](https://www.kaggle.com/datasets/robikscube/hourly-energy-consumption)  
+**Project Objective**: The aim is to classify images of fashion items into different categories (e.g., shirts, shoes, bags). This project will optimize classification accuracy and explore the effectiveness of AutoKeras for image data.
 
-**Tasks**:  
-- **Data Preprocessing**: Handle missing values, create time-based features (lags, rolling averages), and normalize values.  
-- **Model Training with AutoKeras**: Use AutoKeras’ TimeSeriesForecaster to predict future energy consumption.  
-- **Model Comparison**: Compare AutoKeras’ forecasting model with baselines (ARIMA, Prophet, LSTM).  
-- **Evaluation**: Use metrics such as MAE, RMSE, and MAPE to evaluate performance.  
-- **Visualization**: Plot actual vs. predicted energy demand curves.  
+**Dataset Suggestions**: Use the "Fashion MNIST" dataset available on Kaggle ([link](https://www.kaggle.com/zalando-research/fashionmnist)).
 
-**Bonus Ideas (Optional)**:  
-- Explore multi-step forecasting (predicting several hours ahead).  
-- Incorporate external data (e.g., weather conditions) to improve forecasts.  
-- Build a dashboard that visualizes real-time forecasts and updates dynamically.  
+**Tasks**:
+- **Data Loading and Augmentation**: Load the Fashion MNIST dataset and apply data augmentation techniques to enhance the dataset.
+- **Model Training with AutoKeras**: Utilize AutoKeras to automatically find the best convolutional neural network (CNN) architecture for image classification.
+- **Model Evaluation**: Evaluate model accuracy using a confusion matrix and classification report.
+- **Visualize Results**: Create visualizations of misclassified images and their predicted labels.
+
+**Bonus Ideas**: Implement transfer learning by incorporating a pre-trained model (e.g., MobileNet) and compare its performance with the AutoKeras model.
+
+---
+
+### Project 3: Time Series Forecasting of Stock Prices
+
+**Difficulty**: 3 (Hard)
+
+**Project Objective**: The project focuses on forecasting future stock prices based on historical data. The aim is to automate the model selection process using AutoKeras and optimize the forecasting accuracy.
+
+**Dataset Suggestions**: Use the "AAPL Stock Price" dataset available from Yahoo Finance via the `yfinance` library or Kaggle's stock price datasets ([link](https://www.kaggle.com/dgawlik/stockmarket)).
+
+**Tasks**:
+- **Data Collection and Preprocessing**: Gather historical stock prices, handle missing values, and create time series features.
+- **Model Training with AutoKeras**: Train a time series forecasting model using AutoKeras, focusing on recurrent neural networks (RNNs) or temporal convolutions.
+- **Model Evaluation**: Assess model performance using metrics such as MAE and MAPE, and visualize the predicted vs. actual prices.
+- **Hyperparameter Tuning**: Experiment with different configurations in AutoKeras to improve forecasting accuracy.
+
+**Bonus Ideas**: Explore ensemble methods by combining predictions from multiple models, or implement an explainability technique to interpret the model's decisions.
+
