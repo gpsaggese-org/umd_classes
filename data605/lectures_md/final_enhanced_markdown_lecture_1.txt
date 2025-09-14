@@ -71,11 +71,11 @@ UMD DATA605
 
 4/58
 
-![](images/lecture_1/lec_1_slide_4_image_1.png)
-![](images/lecture_1/lec_1_slide_4_image_2.png)
-![](images/lecture_1/lec_1_slide_4_image_3.png)
-![](images/lecture_1/lec_1_slide_4_image_4.png)
-![](images/lecture_1/lec_1_slide_4_image_5.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_4_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_4_image_2.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_4_image_3.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_4_image_4.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_4_image_5.png)
 
 # ##############################################################################
 # Tools We Will Learn To Use
@@ -272,7 +272,7 @@ UMD DATA605
 # ##############################################################################
 
 * Scale of Data Size
-![](images/lecture_1/lec_1_slide_13_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_13_image_1.png)
 
 13/58
 
@@ -292,7 +292,7 @@ From Latency Numbers Every Programmer Should Know (by year)
 - Disk seek: 2ms
 - Packet round-trip from CA to Netherland: 150ms
 
-![](images/lecture_1/lec_1_slide_14_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_14_image_1.png)
 
 14/58
 
@@ -360,7 +360,7 @@ UMD DATA605
 
 17/58
 
-![](images/lecture_1/lec_1_slide_17_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_17_image_1.png)
 
 # ##############################################################################
 # Big Data Applications (3)
@@ -416,7 +416,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_20_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_20_image_1.png)
 
 20/58
 
@@ -443,7 +443,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_21_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_21_image_1.png)
 
 21/58
 
@@ -505,7 +505,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_24_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_24_image_1.png)
 
 24/58
  
@@ -549,14 +549,14 @@ UMD DATA605
   - Highly valuable for business intelligence
 - **Cons**
   - Typically semi-structured or unstructured data
-    - Text, images, movies
+    - Text, data605/lectures_md/images, movies
   - It takes an investment before you can reap the value
     - Acquire → Store → Clean → Retrieve → Process → Insights
   - Surveillance capitalism
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_26_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_26_image_1.png)
 
 26/58
 
@@ -600,7 +600,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_28_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_28_image_1.png)
 
 28/58
 
@@ -632,7 +632,7 @@ UMD DATA605
 * What was Cool in 2012?
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_30_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_30_image_1.png)
 
 30/58
 
@@ -643,7 +643,7 @@ UMD DATA605
 * What was Cool in 2017?
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_31_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_31_image_1.png)
 
 31/58
 
@@ -654,7 +654,7 @@ UMD DATA605
 * What was Cool in 2022?
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_32_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_32_image_1.png)
 
 32/58
  
@@ -669,7 +669,7 @@ UMD DATA605
 
 33/58
 
-![](images/lecture_1/lec_1_slide_33_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_33_image_1.png)
 
 # ##############################################################################
 # Key Shifts Before/After Big-Data
@@ -720,7 +720,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_35_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_35_image_1.png)
 
 35/58
 
@@ -758,7 +758,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_37_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_37_image_1.png)
 
 37/58
 
@@ -771,7 +771,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_38_image_1.jpeg)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_38_image_1.jpeg)
 
 38/58
 
@@ -782,7 +782,7 @@ UMD DATA605
 * Where Data Scientist Spends Most Time
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_39_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_39_image_1.png)
 
 - 80-90% of the work is data cleaning and wrangling
 - 'Janitor Work' in Data Science
@@ -872,7 +872,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_43_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_43_image_1.png)
 
 43/58
 
@@ -897,7 +897,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_44_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_44_image_1.png)
 
 44/58
 
@@ -1036,9 +1036,9 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_50_image_1.png)
-![](images/lecture_1/lec_1_slide_50_image_2.png)
-![](images/lecture_1/lec_1_slide_50_image_3.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_50_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_50_image_2.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_50_image_3.png)
 
 50/58
 
@@ -1083,9 +1083,9 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_52_image_1.png)
-![](images/lecture_1/lec_1_slide_52_image_2.png)
-![](images/lecture_1/lec_1_slide_52_image_3.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_52_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_52_image_2.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_52_image_3.png)
 
 52/58
 
@@ -1193,7 +1193,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_56_image_1.png)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_56_image_1.png)
 
 ```
 01    <http://example.org/bob#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
@@ -1221,7 +1221,7 @@ UMD DATA605
 
 UMD DATA605
 
-![](images/lecture_1/lec_1_slide_57_image_1.jpeg)
+![](data605/lectures_md/images/lecture_1/lec_1_slide_57_image_1.jpeg)
 
 57/58
 
