@@ -2,7 +2,7 @@
 
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -48,7 +48,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-© UMD DATA605
+
 
 
 
@@ -61,7 +61,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_4_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png)
 
 
 * From SQL to NoSQL
@@ -89,7 +89,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
   - Use more than one DB in each project
   - Relational DBs are not going to disappear any time soon
 
-![](images/lecture_5_0/lec_5_0_slide_5_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_5_image_1.png)
 
 
 
@@ -112,8 +112,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 * 1 App-DB Impedance Mismatch: Problem
-- **Mismatch between how data is represented in the code and in a relational DB
-**
+- **Mismatch between how data is represented in the code and in a relational DB**
   - Code thinks in terms of:
     - Data structures (e.g., lists, dictionaries, sets)
     - Objects
@@ -123,38 +122,32 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
     - Relationships between tables (relationships between entities)
 - **Example of the app-DB mismatch**:
   - Application stores a simple Python map like:
-**# Store a dictionary from name (string) to tags (list of strings).
-**
-**tag_dict: Dict[str, List[str]]
-**
+```text \# Store a dictionary from name (string) to tags (list of strings). tag_dict: Dict[str, List[str]] ```
   - A relational DB needs 3 tables:
     - **Names(**nameId**, name)** to store the keys
     - **Tags(**tagId**, tag)** to store the values
-    - **Names_To_Tags(**nameId**, **tagId**)** to map the keys to the values
+    - ```text Names_To_Tags(**nameId**, **tagId**) ``` to map the keys to the values
   - One could denormalize the tables using a single table
-    - **Names(name, tag)**
+    - ```text Names(name, tag) ```
 
 
 
 
 * 1 App-DB Impedance Mismatch: Solutions
-- **Ad-hoc mapping layer
-**
+- **Ad-hoc mapping layer**
   - Translate objects and data structures into DB data model
-    - E.g., you implement a layer that handles storing into the DB “Name to Tags” transparently
+    - E.g., you implement a layer that handles storing into the DB "Name to Tags" transparently
     - The code thinks in terms of a map, but there are 3 tables in the DB
   - Cons
     - You need to write / maintain code
-- **Object-relational mapping (ORM)
-**
+- **Object-relational mapping (ORM)**
   - Pros
     - Convert automatically data between object code and relational DB
-    - E.g., implement a **Person** object (e.g., name, phone number, addresses) using DB
+    - E.g., implement a Person object (e.g., name, phone number, addresses) using DB
     - E.g., SQLAlchemy for Python and SQL
   - Cons
     - Complex types (e.g., struct), polymorphism, inheritance
-- **NoSQL approach
-**
+- ```text NoSQL approach ```
   - No schema
     - Every object can be flat or complex (e.g., nested JSON)
     - Stored objects (aka documents) can be different
@@ -191,7 +184,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
   - Application crash (e.g., OS issue)
   - Hardware failure (e.g., RAM ECC error, disk)
   - Power failure
-- **Relational DBs enforce **ACID** properties**
+- **Relational DBs enforce ACID properties**
   - Need to be guaranteed for any system failure
 - **Atomicity**
   - = transactions are "*all or nothing*"
@@ -199,17 +192,17 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 - **Consistency**
   - = any transaction brings the DB *from a valid state to another*
   - The "invariants" of the DB (e.g., primary, foreign key constraints) must be maintained
-- **Isolation**
+- ```text Isolation ```
   - = if transactions are executed *concurrently*, the result is the same as if the transactions were executed *sequentially*
-- **Durability**
+- ```text Durability ```
   - = once a transaction has been committed, the *content is preserved for any system failure*
   - Just record the data in non-volatile memory
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_10_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_10_image_1.png)
 
-![](images/lecture_5_0/lec_5_0_slide_10_image_2.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_10_image_2.png)
 
 **Hardware failure **
 
@@ -232,7 +225,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_11_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_11_image_1.png)
 
 
 * CAP Theorem
@@ -247,7 +240,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_12_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_12_image_1.png)
 
 
 * CAP Corollary
@@ -262,7 +255,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_13_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_13_image_1.png)
 
 **You are here**
 
@@ -286,7 +279,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_14_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_14_image_1.png)
 
 **X**
 
@@ -315,9 +308,9 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_15_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_15_image_1.png)
 
-![](images/lecture_5_0/lec_5_0_slide_15_image_2.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_15_image_2.png)
 
 *Primary-secondary replication*
 
@@ -339,7 +332,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_16_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_16_image_1.png)
 ```
 
 ```markdown
@@ -385,18 +378,13 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 - **Table denormalization**
   - = approach used to increase relational DB performance by adding redundant data
   - Pros
-    - Reads become faster
-      - Lock only one table, instead of multiple ones, reducing resource contention
-      - No need for joins
+    - Reads become faster: Lock only one table instead of multiple ones (reducing resource contention), No need for joins
   - Cons
-    - Writes become slower
-      - There is more data to update
-      - E.g., to update a *category name*, need to do a scan
+    - Writes become slower: There is more data to update (E.g., to update a *category name*, need to do a scan)
     - If we join the tables, we lose relations between tables (this is the main reason of using a relational DB!)
 - **Relax consistency**
   - Give up on part of ACID
-  - Make definition of consistency weaker
-    - E.g., eventual consistency
+  - Make definition of consistency weaker (E.g., eventual consistency)
 - **NoSQL**
 
 
@@ -535,7 +523,7 @@ NoSQL Taxonomy
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_26_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_26_image_1.png)
 
 
 * Document Store
@@ -557,7 +545,7 @@ NoSQL Taxonomy
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_27_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_27_image_1.png)
 
 
 * Columnar Store
@@ -582,7 +570,7 @@ NoSQL Taxonomy
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_28_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_28_image_1.png)
 
 
 * Graph DB
@@ -603,13 +591,13 @@ NoSQL Taxonomy
     - Store the graph in the graph DB and the relations in a key-value store
 
 
-![](images/lecture_5_0/lec_5_0_slide_29_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_29_image_1.png)
 
 
 * Taxonomy by CAP
 
 
-![](images/lecture_5_0/lec_5_0_slide_30_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_30_image_1.png)
 
 From http://blog.nahurst.com/visual-guide-to-nosql-systems
 
@@ -634,7 +622,7 @@ From http://blog.nahurst.com/visual-guide-to-nosql-systems
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_31_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_31_image_1.png)
 
 
 * Taxonomy by CAP
@@ -659,9 +647,9 @@ NoSQL Taxonomy
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_33_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_33_image_1.png)
 
-![](images/lecture_5_0/lec_5_0_slide_34_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_34_image_1.png)
 
 
 * (Apache) HBase
@@ -710,17 +698,17 @@ NoSQL Taxonomy
 
 * From HDFS to HBase
 - **Different types of workloads for DB backends**
-  - **OLTP** (**O**n-**L**ine **T**ransactional **P**rocessing)
+  - **OLTP** (On-Line Transactional Processing)
     - Read and write individual data items in a large table
     - E.g., update inventory and price as orders come in
-  - **OLAP** (**O**n-**L**ine **A**nalytical **P**rocessing)
+  - **OLAP** (On-Line Analytical Processing)
     - Read large amount of data and process it
     - E.g., analyze item purchases over time
-- **Hadoop FileSystem (HDFS) supports OLAP workloads**
+- ```text Hadoop FileSystem (HDFS) supports OLAP workloads ```
   - Provide a filesystem consisting of arbitrarily large files
   - Data should be read sequentially, end-to-end
   - Rarely updated
-- **HBase supports OLTP interactions**
+- ```text HBase supports OLTP interactions ```
   - Built on top of HDFS
   - Use additional storage and memory to organize the tables
   - Write tables back to HDFS as needed
@@ -732,19 +720,19 @@ NoSQL Taxonomy
 - **Warning**: HBase uses names similar to relational DB concepts, but with different meanings
 - A **database** consists of multiple tables
 - Each **table** consists of multiple rows, sorted by row key
-- Each row contains a **row key** and one or more column families
-- Each **column family**
-  - Can contain multiple **columns** (family:column)
+- Each row contains a *row key* and one or more column families
+- ```text Each column family ```
+  - Can contain multiple columns (family:column)
   - Is defined when the table is created
-- A **cell**
+- ```text A cell ```
   - Is uniquely identified by (table, row, family:column)
-  - Contains **metadata** (e.g., timestamp) and an uninterpreted array of bytes (blob)
+  - Contains metadata (e.g., timestamp) and an uninterpreted array of bytes (blob)
 - Versioning
   - New values don't overwrite the old ones
   - `put()` and `get()` allow to specify a timestamp (otherwise uses current time)
 
 
-
+```text
 HBase Database: from table name to Table.
 **Database** = Dict[str, Table]
 # HBase Table.
@@ -765,6 +753,7 @@ HBase Database: from table name to Table.
 # Querying data.
 (**value**, **metadata**) = \
 **table**['**row1**']['**cf1**:**col1**']
+```
 
 
 * Example 1: Colors and Shape
@@ -785,15 +774,15 @@ HBase Database: from table name to Table.
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_38_image_1.png)
-
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_38_image_1.png)
+```text
 **table** = {
 
   '**first**': {
     # (**column family**, **column**) → **value**
-    '**color**': {'**red**': '**#F00**',
-              '**blue**': '**#00F**',
-              '**yellow**': '**#FF0**'}
+    '**color**': {'**red**': '**\#F00**',
+              '**blue**': '**\#00F**',
+              '**yellow**': '**\#FF0**'}
     '**shape**': {'**square**': '**4**'}
   },
   '**second**': {
@@ -801,8 +790,9 @@ HBase Database: from table name to Table.
               '**square**': '**4**'}
   }
 }
+```
 
-![](images/lecture_5_0/lec_5_0_slide_38_image_2.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_38_image_2.png)
 
 
 * Why all this convoluted stuff?
@@ -818,7 +808,7 @@ HBase Database: from table name to Table.
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_39_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_39_image_1.png)
 
 
 * Example 2: Storing a Wiki
@@ -835,8 +825,9 @@ HBase Database: from table name to Table.
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_40_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_40_image_1.png)
 
+```text
 **wikipedia_table** = {
   # wiki id.
   'Home': {
@@ -853,8 +844,6 @@ database: Database = {'wikipedia':  wiki_table}
 wiki_table['Home']['text']
 ```
 
-```markdown
-
 * Example 2: Storing a Wiki
 **Add data**
 - Columns don't need to be predefined when creating a table
@@ -868,8 +857,8 @@ text: timestamp=1295774833226, value=Welcome!
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_41_image_1.png)
-
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_41_image_1.png)
+```text
 **wikipedia_table** = {
   # wiki id.
   'Home': {
@@ -884,6 +873,7 @@ Database = Dict[str, Table]
 database: Database = {'wikipedia':  wiki_table}
 (queried_value, metadata) = \
 wiki_table['Home']['text']
+```
 
 
 * Example 2: Improved Wiki
@@ -906,9 +896,9 @@ wiki_table['Home']['text']
 
 
 
-![](images/lecture_5_0/lec_5_0_slide_42_image_1.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_42_image_1.png)
 
-![](images/lecture_5_0/lec_5_0_slide_42_image_2.png)
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_42_image_2.png)
 
 
 * Data in Tabular Form
@@ -944,7 +934,7 @@ be added at runtime
 *
 
 
-
+```text
 Table People(Name, Home, Office)
 {
 	101: {
@@ -961,9 +951,11 @@ Table People(Name, Home, Office)
 	},
 	…
 }
+```
 
 
 * Nested Data Representation
+```text
 **GET People:101**
 	{
 		Timestamp: T403;
@@ -975,7 +967,7 @@ Table People(Name, Home, Office)
 	{First=“Florian”, Last=“Krepsbach”}
 **GET People:101:Name:First**
 	“Florian”
-
+```
 
 
 |  | Name | Home | Office |  |  |  |
@@ -1054,9 +1046,6 @@ Table People(Name, Home, Office)
   - O(1)
 
 
-```
-
-```markdown
 
 * Write-Ahead Log (WAL)
 
@@ -1098,6 +1087,7 @@ Table People(Name, Home, Office)
 		Office: {Phone=“666-1212”, Email=“fk@phc.com”}
 	},
 ...
+}
 
 **SQL Table**
 **People(ID: Integer, FirstName: CHAR[20], LastName: CHAR[20], Phone: CHAR[8])**
@@ -1123,17 +1113,17 @@ Need to use pointers
 - **How to store the web on disk?**
 - **HBase is backed by HDFS**
   - Store each table (e.g., Wikipedia) in one file
-  - “One file” means one gigantic file stored in HDFS
+  - "One file" means one gigantic file stored in HDFS
     - HDFS splits/replicate file into blocks on different servers
 - Here is the idea in several steps:
   - **Idea 1: Put an entire table in one file**
     - Need to overwrite the file every time there is a change in any cell
     - Too slow
-  - **Idea 2: One file + WAL**
-    - Better, but doesn’t scale to large data
-  - **Idea 3: One file per column family + WAL**
+  - ```text Idea 2: One file + WAL ```
+    - Better, but doesn't scale to large data
+  - ```text Idea 3: One file per column family + WAL ```
     - Getting better!
-  - **Idea 4: Partition table into regions by key**
+  - ```text Idea 4: Partition table into regions by key ```
     - Region = a chunk of rows [a, b)
     - Regions never overlap
 
@@ -1220,7 +1210,7 @@ PUT 102:Home:Email = mt@yahoo.com
 
 PUT 101:Office:Phone = “555-3434”
 PUT 102:Home:Email = mt@yahoo.com
-….
+...
 
 **WAL for Table People:**
 
