@@ -1,6 +1,6 @@
-::: columns
+ ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -54,11 +54,11 @@ gsaggese@umd.edu
 - Mastery
 - Data Pipelines with Apache Airflow
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_2_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_2_image_1.png)
 
 
 * Workflow Managers
@@ -73,15 +73,15 @@ gsaggese@umd.edu
   - Meet real-time constraints
   - Scale performance
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_3_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_3_image_1.png)
 
 
 * Workflow Managers
-![](images/lecture_7_1/lec_7_1_slide_4_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_1.png)
 
 - **E.g., live weather dashboard**
   - Fetch the weather data from API
@@ -94,13 +94,13 @@ gsaggese@umd.edu
   - Quickly one wants to add machine learning
   - Quickly the complexity increases
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_4_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_2.png)
 
-![](images/lecture_7_1/lec_7_1_slide_4_image_3.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_3.png)
 
 
 * Workflow Managers
@@ -121,15 +121,15 @@ gsaggese@umd.edu
   - Horizontally scalable (e.g., multiple runners)
 - **Provide monitoring web interface**
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_5_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_5_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_2.png)
 
-![](images/lecture_7_1/lec_7_1_slide_5_image_3.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_3.png)
 
 
 * Airflow
@@ -148,11 +148,11 @@ gsaggese@umd.edu
   - Run Airflow on your laptop (e.g., in tutorial)
   - Managed solution (e.g., AWS)
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_6_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_6_image_1.png)
 
 
 * Airflow: Execution Semantics
@@ -171,7 +171,7 @@ gsaggese@umd.edu
   - Execute DAG for historical schedule intervals that occurred in the past
   - E.g., if the data pipeline has changed one needs to re-process data from scratch
 
-© UMD DATA605
+ 
 
 
 
@@ -190,16 +190,14 @@ gsaggese@umd.edu
   - No tracking of updates to the data
   - Need to be implemented manually
 
-© UMD DATA605
+ 
 
 
-![](images/lecture_7_1/lec_7_1_slide_8_image_1.png)
-```
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_8_image_1.png)
 
-```
 
 * Airflow: Components
-![](images/lecture_7_1/lec_7_1_slide_9_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_9_image_1.png)
 
 - **Users (DevOps)**
 - **Web-server**
@@ -221,7 +219,7 @@ gsaggese@umd.edu
   - Execute the tasks
   - Register task outcome in Metastore
 
-© UMD DATA605
+ 
 
 
 
@@ -242,7 +240,7 @@ gsaggese@umd.edu
 - Follow Airflow Tutorial in README
 - From the tutorial for Airflow
 
-© UMD DATA605
+ 
 
 
 
@@ -254,11 +252,11 @@ gsaggese@umd.edu
 - The **Scheduler** executes the code to build DAG
 - **BashOperator** creates a task wrapping a Bash command
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_12_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_12_image_1.png)
 
 
 * Airflow: Tutorial
@@ -266,13 +264,13 @@ gsaggese@umd.edu
   - E.g., different set-ups for dev vs prod
 - Instantiate the DAG
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_13_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_13_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_13_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_13_image_2.png)
 
 
 * Airflow: Tutorial
@@ -282,14 +280,14 @@ gsaggese@umd.edu
 - One can use a Jinja template
 - Add tasks to the DAG with dependencies
 
-© UMD DATA605
+ 
 
 
-![](images/lecture_7_1/lec_7_1_slide_14_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_14_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_2.png)
 
-![](images/lecture_7_1/lec_7_1_slide_14_image_3.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_3.png)
 
 **UMD DATA605 - Big Data Systems**
 Orchestration with Airflow
@@ -299,7 +297,7 @@ Deployment
 Dr. GP Saggese
 gsaggese@umd.edu
 
-© UMD DATA605
+ 
 
 
 * Resources
@@ -314,9 +312,9 @@ gsaggese@umd.edu
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_16_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_16_image_1.png)
 
-© UMD DATA605
+ 
 ```
 
 ```
@@ -335,15 +333,15 @@ gsaggese@umd.edu
 
 
 
-© UMD DATA605
+ 
 
 
 * Overview
 
 
-![](images/lecture_7_1/lec_7_1_slide_18_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_18_image_1.png)
 
-© UMD DATA605
+ 
 
 
 * Overview
@@ -360,19 +358,19 @@ gsaggese@umd.edu
 
 
 
-© UMD DATA605
+ 
 
 
 * Overview
 
 
-![](images/lecture_7_1/lec_7_1_slide_20_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_20_image_1.png)
 
 - From Data Cleaning: Problems and Current Approaches
 - Paper somewhat old: data is mostly coming from structured sources
 - Today unstructured/semi-structured are equally important
 
-© UMD DATA605
+ 
 
 
 * Data Extraction
@@ -395,7 +393,7 @@ gsaggese@umd.edu
 
 
 
-© UMD DATA605
+ 
 
 
 * Tidy Data
@@ -406,13 +404,13 @@ gsaggese@umd.edu
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_22_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_22_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_2.png)
 
-![](images/lecture_7_1/lec_7_1_slide_22_image_3.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_3.png)
 
-![](images/lecture_7_1/lec_7_1_slide_22_image_4.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_4.png)
 
 “Messy” data
 
@@ -422,17 +420,17 @@ Wide format
 
 Long format
 
-![](images/lecture_7_1/lec_7_1_slide_22_image_5.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_5.png)
 
-© UMD DATA605
-
-
-* **Data Quality Problems
+ 
 
 
-![](images/lecture_7_1/lec_7_1_slide_23_image_1.png)
+* Data Quality Problems
 
-© UMD DATA605
+
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_23_image_1.png)
+
+ 
 
 
 * Single-Source Problems
@@ -452,7 +450,7 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
 
 * Data Quality Problems
@@ -461,13 +459,13 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_25_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_25_image_1.png)
 
-© UMD DATA605
+ 
 
 
 * Multi-Source Problems
-## Multi-Source Problems
+\#\# Multi-Source Problems
 
 - Different data sources are:
   - Developed separately
@@ -487,11 +485,11 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
 
 * Data Cleaning: Outlier Detection
-## Data Cleaning: Outlier Detection
+\#\# Data Cleaning: Outlier Detection
 
 - Quantitative Data Cleaning for Large Databases, Hellerstein, 2008
   - Focuses on numerical data (i.e., integers/floats that measure some quantities of interest)
@@ -503,11 +501,11 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
 
 * Univariate Outlier Detection
-## Univariate Outlier Detection
+\#\# Univariate Outlier Detection
 
 - A set of values can be characterized by metrics such as
   - Center (e.g., mean)
@@ -525,15 +523,15 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_28_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_28_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_2.png)
 
-© UMD DATA605
+ 
 
 
 * Outlier Detection
-## Outlier Detection
+\#\# Outlier Detection
 
 - For Gaussian data
   - Any data points 1.4826x MAD away from median
@@ -555,18 +553,18 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
 
 * Multivariate Outliers
-## Multivariate Outliers
+\#\# Multivariate Outliers
 
 - One set of techniques *multivariate Gaussian distribution* data
-  - Defined by a *mean* μ and a *covariance matrix* Σ
+  - Defined by a *mean* $\mu$ and a *covariance matrix* $\Sigma$
 - Mean / covariance are not *robust* (sensitive to outliers)
 - Robust statistics analogous to univariate case
 - Iterative approach
-  - Mahalanobis distance of a point is the square root of (x - μ)'Σ-1(x - μ)
+  - Mahalanobis distance of a point is the square root of $(x - \mu)'\Sigma^{-1}(x - \mu)$
   - Measures how far the point x is from a multivariate normal distribution
   - Outliers are points that are too far away according to Mahalanobis distance
   - Remove outlier points
@@ -577,15 +575,15 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_30_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_30_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_2.png)
 
-© UMD DATA605
+ 
 
 
 * Time Series Outliers
-## Time Series Outliers
+\#\# Time Series Outliers
 
 - Often data is in the form of a time series
 - A **time series** is a sequence of data points recorded at regular time intervals tracking a variable over time
@@ -606,16 +604,16 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_31_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_31_image_1.png)
 
 **Time
 **
 
-© UMD DATA605
+ 
 
 
 * Split-Apply-Combine
-## Split-Apply-Combine
+\#\# Split-Apply-Combine
 
 - The Split-Apply-Combine Strategy for Data Analysis, Wickam, 2011
 - Common data analysis pattern
@@ -636,9 +634,9 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_32_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_32_image_1.png)
 
-© UMD DATA605
+ 
 
 
 * Serialization Formats
@@ -650,7 +648,7 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
 
 * Comma Separated Values (CSV)
@@ -674,10 +672,10 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_35_image_1.png)
-![](images/lecture_7_1/lec_7_1_slide_35_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_35_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_35_image_2.png)
 
-© UMD DATA605
+ 
 
 
 * (Apache) Parquet
@@ -700,9 +698,9 @@ Long format
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_36_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_36_image_1.png)
 
-© UMD DATA605
+ 
 
 
 * JSON
@@ -713,11 +711,12 @@ Long format
   - Less boilerplate
   - Executable in JavaScript (and Python)
 
-**{     "firstName": "John",     "lastName": "Smith",     "isAlive": true,     "age": 25,     "height_cm": 167.6,     "address": {        "streetAddress": "21 2nd Street",        "city": "New York",        "state": "NY",        "postalCode": "10021-3100"     }, 
-**   "phoneNumbers": [        {        "type": "home",        "number": "212 555-1234”       },        {        "type": "office",        "number": "646 555-4567"        }     ],     "children": [],     "spouse": null  }**
+```json
+{     "firstName": "John",     "lastName": "Smith",     "isAlive": true,     "age": 25,     "height_cm": 167.6,     "address": {        "streetAddress": "21 2nd Street",        "city": "New York",        "state": "NY",        "postalCode": "10021-3100"     }, 
+   "phoneNumbers": [        {        "type": "home",        "number": "212 555-1234”       },        {        "type": "office",        "number": "646 555-4567"        }     ],     "children": [],     "spouse": null  }
+```
 
-
-© UMD DATA605
+ 
 
 
 * Protocol Buffers
@@ -736,36 +735,39 @@ Long format
 - Schema specified using a **.proto** file
 - Compiled by **protoc** to produce C++, Java, or Python code to initialize, read, serialize objects
 
-**import addressbook_pb2
-**person = addressbook_pb2.Person()
-**person.id = 1234
-**person.name = "John Doe"
-**person.email = "jdoe@example.com"
-**phone = person.phones.add()
-**phone.number = "555-4321"
-**phone.type = addressbook_pb2.Person.HOME
-**
+```python
+import addressbook_pb2
+person = addressbook_pb2.Person()
+person.id = 1234
+person.name = "John Doe"
+person.email = "jdoe@example.com"
+phone = person.phones.add()
+phone.number = "555-4321"
+phone.type = addressbook_pb2.Person.HOME
+```
 
-**message Person {
-**  optional string name = 1;
-**  optional int32 id = 2;
-**  optional string email = 3;
-**  enum PhoneType {
-**    MOBILE = 0;
-**    HOME = 1;
-**    WORK = 2;
-**  }
-**  message PhoneNumber {
-**    optional string number = 1;
-**    optional PhoneType type = 2;
-**  }
-**  repeated PhoneNumber phones = 4;
-**}
-**
+```proto
+message Person {
+  optional string name = 1;
+  optional int32 id = 2;
+  optional string email = 3;
+  enum PhoneType {
+    MOBILE = 0;
+    HOME = 1;
+    WORK = 2;
+  }
+  message PhoneNumber {
+    optional string number = 1;
+    optional PhoneType type = 2;
+  }
+  repeated PhoneNumber phones = 4;
+}
+```
 
 
 
-© UMD DATA605
+
+ 
 
 
 * Serialization Formats
@@ -778,11 +780,12 @@ Long format
   - More languages supported
   - Supports exceptions and sets
 
-**{        "namespace": "example.avro",        "type": "record",        "name": "User",        "fields": [                   {"name": "name", "type": "string"},                   {"name": "favorite_number", "type": ["int", "null"]},                   {"name": "favorite_color", "type": ["string", "null"]}        ] }**
+```json 
+{        "namespace": "example.avro",        "type": "record",        "name": "User",        "fields": [                   {"name": "name", "type": "string"},                   {"name": "favorite_number", "type": ["int", "null"]},                   {"name": "favorite_color", "type": ["string", "null"]}        ] }
+```
 
 
-
-© UMD DATA605
+ 
 
 
 * Remote Procedure Call
@@ -798,12 +801,12 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
-![](images/lecture_7_1/lec_7_1_slide_40_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_40_image_1.png)
 ```
 
-# Content processing error - slide missing
+\# Content processing error - slide missing
 
 ```
 
@@ -818,9 +821,9 @@ Long format
 
 
 
-© UMD DATA605
+ 
 
-![](images/lecture_7_1/lec_7_1_slide_41_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_41_image_1.png)
 
 
 * Software testing
@@ -836,7 +839,7 @@ Long format
 - **Integration testing**: ensure that components work together as expected (e.g., detect interface defects)
 - **System testing**: evaluate a fully integrated system's compliance with its specified requirements
 
-© UMD DATA605
+ 
 
 
 
@@ -855,7 +858,7 @@ Long format
   - E.g., UI/UX
 - **Compatibility testing**: check if the software is compatible with different browsers, database versions, operating systems, mobile devices, ...
 
-© UMD DATA605
+ 
 
 
 
@@ -874,7 +877,7 @@ Long format
   - **Goal**: new features, bug fixes, and updates are continuously delivered to users in real-time
 - E.g., GitHub actions, GitLab workflows, AWS Code, Jenkins
 
-© UMD DATA605
+ 
 
 
 
@@ -896,7 +899,7 @@ Long format
   - No shared state
   - Inspired by HTTP (modulo cookies)
 
-© UMD DATA605
+ 
 
 
 
@@ -912,11 +915,11 @@ Long format
   - Each layer cannot "see" beyond the immediate layer that they interface
   - E.g., in a tier application
 
-© UMD DATA605
+ 
 
 
 
-![](images/lecture_7_1/lec_7_1_slide_46_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_46_image_1.png)
 
 
 * Stages of deployment
@@ -940,7 +943,7 @@ Long format
   - Highly optimized for security, performance, and scalability
   - Focus is on uptime, user experience, and data integrity
 
-© UMD DATA605
+ 
 
 
 
@@ -962,7 +965,7 @@ Long format
   - Optional metadata to denote build information or environment specifics
   - E.g., 1.0.0+20210313120000 or 1.0.0+f8a34b3228c
 
-© UMD DATA605
+ 
 
 
 
@@ -970,9 +973,9 @@ Long format
 * Microservices vs Monolithic Architecture
 
 
-![](images/lecture_7_1/lec_7_1_slide_49_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_1.png)
 
-![](images/lecture_7_1/lec_7_1_slide_49_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_2.png)
 
 “Microservice” interest over time (from Google Trends)
 

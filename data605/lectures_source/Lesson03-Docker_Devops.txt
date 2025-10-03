@@ -179,9 +179,9 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 ![](images/lecture_3/lec_3_slide_8_image_1.png)
 
 ![](images/lecture_3/lec_3_slide_8_image_2.png)
-```
 
-```text
+
+
 
 * Serverless Computing
 - **Containers run in an OS, OS runs on a host**
@@ -337,14 +337,16 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
   - Can be shared across containers
 
 
-```
 
-```markdown
+
+
 
 * Docker Repos
 - **Docker Repo (Registry)**
   - Store Docker images
+      ```
     - **\<registry>/\<repo>:\<tag>**
+    ```text
     - **docker.io/alpine:latest**
     - E.g., DockerHub, AWS ECR
   - Some repos are vetted by Docker
@@ -428,62 +430,65 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 * Docker: Commands
 Show all the available images
-**> docker images**
-**REPOSITORY TAG IMAGE ID CREATED SIZE**
-**counter_app-web-fe latest 4bf6439418a1 17 minutes ago 54.7MB**
+```
+**\> docker images**
+REPOSITORY TAG IMAGE ID CREATED SIZE
+counter_app-web-fe latest 4bf6439418a1 17 minutes ago 54.7MB
 **…**
 Show a particular image
-**> docker images counter_app_web-fe**
-**counter_app-web-fe latest 4bf6439418a1 17 minutes ago 54.7MB**
-**…**
+**\> docker images counter_app_web-fe**
+counter_app-web-fe latest 4bf6439418a1 17 minutes ago 54.7MB
+…
 Note that docker images ls is incorrect since it shows the image ls
 Delete an image
-**> docker rmi …**
+**\> docker rmi …**
 Show the running containers
-**> docker container ls**
-**CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES**
-**505541bcfe8b counter_app-web-fe "python app.py" 7 minutes ago Up 7 minutes 0.0.0.0:5001->5000/tcp counter_app-web-fe-1**
-**c1889540cfd2 redis:alpine "docker-entrypoint.s…" 7 minutes ago Up 7 minutes 6379/tcp counter_app-redis-1**
+**\> docker container ls**
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+505541bcfe8b counter_app-web-fe "python app.py" 7 minutes ago Up 7 minutes 0.0.0.0:5001->5000/tcp counter_app-web-fe-1
+c1889540cfd2 redis:alpine "docker-entrypoint.s…" 7 minutes ago Up 7 minutes 6379/tcp counter_app-redis-1
 
-
+```
 
 
 * Docker: Commands
 Show running containers
-**> docker container ls**
-**CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES**
-**281d654f6b8d counter_app_web-fe "python app.py" 5 minutes ago Up 5 minutes 0.0.0.0:5000->5001/tcp counter_app-web-fe-1**
-**de55ae4104da redis:alpine "docker-entrypoint.s…" 5 minutes ago Up 5 minutes 6379/tcp counter_app-redis-1**
+
+> docker container ls
+CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
+281d654f6b8d counter_app_web-fe "python app.py" 5 minutes ago Up 5 minutes 0.0.0.0:5000->5001/tcp counter_app-web-fe-1
+de55ae4104da redis:alpine "docker-entrypoint.s…" 5 minutes ago Up 5 minutes 6379/tcp counter_app-redis-1
 Show volumes and networks
-**> docker volume ls**
-**DRIVER VOLUME NAME**
-**local counter_app_counter-vol**
-**> docker network ls**
-**NETWORK ID NAME DRIVER SCOPE**
-**b4c1976d7c27 bridge bridge local**
-**33ff702253b3 counter-app_counter-net bridge local**
+> docker volume ls
+DRIVER VOLUME NAME
+local counter_app_counter-vol
+> docker network ls
+NETWORK ID NAME DRIVER SCOPE
+b4c1976d7c27 bridge bridge local
+33ff702253b3 counter-app_counter-net bridge local
 
 
 
 
 * Docker: Delete state
-**> docker container ls**
-**> docker container rm $(docker container ls -q)**
-**> docker images**
-**> docker rmi $(docker images -q)**
-**> docker volume ls**
-**> docker volume rm $(docker volume ls -q)**
-**> docker network ls**
-**> docker network rm $(docker network ls -q)**
+Commands:
+-`> docker container ls`
+-`> docker container rm $(docker container ls -q)`
+-`> docker images`
+-`> docker rmi $(docker images -q)`
+-`> docker volume ls`
+-`> docker volume rm $(docker volume ls -q)`
+-`> docker network ls`
+-`> docker network rm $(docker network ls -q)`
 
 
-```
 
-```
+
+
 
 * Docker Tutorial
 - tutorial_docker.md
-© UMD DATA605
+
 
 
 
@@ -501,7 +506,7 @@ Show volumes and networks
 - **Manage multi-container apps running on multiple hosts**
   - Docker Stacks / Swarm
   - Kubernetes
-© UMD DATA605
+
 
 
 
@@ -523,37 +528,43 @@ Show volumes and networks
 - **Key in services** describe a different “service” in terms of container
   - **Inner keys** specify the params of Docker run command
 
-  **version**: "3.8"
-  **services**:
-    **web-fe**:
-      **build**: .
-      **command**: python app.py
-      **ports**:
+  ```yaml
+  version: "3.8"
+  services:
+    web-fe:
+      build: .
+      command: python app.py
+      ports:
         - target: 5000
           published: 5001
-      **networks**:
+      networks:
         - counter-net
-      **volumes**:
+      volumes:
         - type: volume
           source: counter-vol
           target: /code
-    **redis**:
-      **image**: "redis:alpine"
-      **networks**:
+    redis:
+      image: "redis:alpine"
+      networks:
         counter-net:
-  **networks**:
+  networks:
     counter-net:
-  **volumes**:
+  volumes:
     counter-vol:
-
+  ```
 
 * Docker Compose: Commands
 > docker compose --help
+```text
 Usage:  docker compose [OPTIONS] COMMAND
 Options:
       --env-file string            Specify an alternate environment file.
   -f, --file stringArray           Compose configuration files
   -p, --project-name string        Project name
+```
+
+
+```text
 Commands:
   build       Build or rebuild services
   convert     Converts the compose file to platform's canonical format
@@ -580,87 +591,88 @@ Commands:
   unpause     Unpause services
   up          Create and start containers
   version     Show the Docker Compose version information
+```
 
+* Docker Compose: Commands
+Build the containers for the services
+> docker compose build
+Pull the needed images for the services
+> docker compose pull
+Show the running services
+> docker compose ps
+Show the status of the service
+> docker compose ls
+Bring up the entire service
+> docker compose up
+Rebuild after trying out some changes in dockerfile/compose file
+> docker-compose up --build --force-recreate
+Show the processes inside each container
+> docker compose top
+```text
+counter_app-redis-1
+UID   PID     PPID    C    STIME   TTY   TIME       CMD
+999   49590   49549   0    10:40   ?     00:00:02   redis-server *:6379
+counter_app-web-fe-1
+UID    PID     PPID    C    STIME   TTY   TIME       CMD
+root   49614   49574   0    10:40   ?     00:00:00   python app.py
+root   49734   49614   1    10:40   ?     00:00:08   /usr/local/bin/python /code/app.py
+```
 
 
 * Docker Compose: Commands
 Build the containers for the services
-**> docker compose build**
-Pull the needed images for the services
-**> docker compose pull**
-Show the running services
-**> docker compose ps**
-Show the status of the service
-**> docker compose ls**
-Bring up the entire service
-**> docker compose up**
-Rebuild after trying out some changes in dockerfile/compose file
-**> docker-compose up --build --force-recreate**
-Show the processes inside each container
-**> docker compose top**
-**counter_app-redis-1**
-**UID   PID     PPID    C    STIME   TTY   TIME       CMD**
-**999   49590   49549   0    10:40   ?     00:00:02   redis-server *:6379**
-**counter_app-web-fe-1**
-**UID    PID     PPID    C    STIME   TTY   TIME       CMD**
-**root   49614   49574   0    10:40   ?     00:00:00   python app.py**
-**root   49734   49614   1    10:40   ?     00:00:08   /usr/local/bin/python /code/app.py**
 
-
-
-* Docker Compose: Commands
-Build the containers for the services**
-****
-**> docker compose down**
-**[+] Running 3/2**
-** Container counter_app-redis-1    Removed                                                
-** Container counter_app-web-fe-1   Removed**
-** Network counter_app_counter-net  Removed**
+> docker compose down
+[+] Running 3/2
+ Container counter_app-redis-1    Removed                                                
+ Container counter_app-web-fe-1   Removed
+ Network counter_app_counter-net  Removed
 Shutdown service removing the volume (i.e., resetting state)
-**> docker-compose down -v**
+> `docker-compose down -v`
 Shutdown service removing images and volume
-**> docker-compose down -v --rmi all**
+> `docker-compose down -v --rmi all`
 
 
 
 * Docker Compose: Tutorial
 - Example taken from https://github.com/nigelpoulton/counter-app
 - tutorial_docker_compose
-- > cd tutorials/tutorial_docker_compose
-- > vi tutorial_docker_compose.md
+- `> cd tutorials/tutorial_docker_compose`
+- `> vi tutorial_docker_compose.md`
 
 
 
 
 * Class Announcements
-**1 Project teams**
-- Posted UMD DATA605 - Class Project Teams - Spring 2023
-- If your name is not on any of the teams, please send me an email
-- No midterm or final exam, complete class project to get a grade
-**2 Team composition**
-- Teams based on your self-assessed skills
-- In each group there should be someone with experience with Git, Docker, Python, and so on
-- Teams are not perfect, but none of your team at your future jobs will be
-- Working in a team is a skill that takes a long time to hone: let’s start practicing it
-**3 Class project complexity**
-- Projects have about the same complexity
-- If not, we will try to account for this when grading
-- Projects were assigned randomly to the teams
+-**1 Project teams**
+  - Posted UMD DATA605 - Class Project Teams - Spring 2023
+  - If your name is not on any of the teams, please send me an email
+  - No midterm or final exam, complete class project to get a grade
+-**2 Team composition**
+  - Teams based on your self-assessed skills
+  - In each group there should be someone with experience with Git, Docker, Python, and so on
+  - Teams are not perfect, but none of your team at your future jobs will be
+  - Working in a team is a skill that takes a long time to hone: let’s start practicing it
+-**3 Class project complexity**
+  - Projects have about the same complexity
+  - If not, we will try to account for this when grading
+  - Projects were assigned randomly to the teams
 
 
 
 * Class Announcements
-**4) Add personal info**
-- Fill the spreadsheet UMD DATA605 - Class Project Teams - Spring 2023 with your information
-- Email
-- GitHub username (free account at https://github.com)
-- Telegram Handle for IM (free account at https://telegram.org)
-**5) Next steps**
-- Read carefully UMD DATA605 - Class Project
-- If things are not clear send us an email or add a comment to the Google Doc
-- Read the Google doc corresponding to your assigned project from UMD DATA605 - Class Project Teams - Spring 2023
-- Read the first Deliverable 1 from UMD DATA605 - Class Project
-**6) Golden rule**
-- *Treat others how you want to be treated*
-  - Everybody comes from a different place and different skill level, somebody has a job, somebody has a full-time work
-- *If you want to go fast, go alone; if you want to go far, go together*
+-**4 Add personal info**
+  - Fill the spreadsheet UMD DATA605 - Class Project Teams - Spring 2023 with your information
+  - Email
+  - GitHub username (free account at https://github.com)
+  - Telegram Handle for IM (free account at https://telegram.org)
+-**5 Next steps**
+  - Read carefully UMD DATA605 - Class Project
+  - If things are not clear send us an email or add a comment to the Google Doc
+  - Read the Google doc corresponding to your assigned project from UMD DATA605 - Class Project Teams - Spring 2023
+  - Read the first Deliverable 1 from UMD DATA605 - Class Project
+-**6 Golden rule**
+  - *Treat others how you want to be treated*
+    - Everybody comes from a different place and different skill level, somebody has a job, somebody has a full-time work
+  - *If you want to go fast, go alone; if you want to go far, go together*
+
