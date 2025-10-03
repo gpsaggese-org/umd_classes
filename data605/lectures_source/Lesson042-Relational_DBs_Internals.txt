@@ -1,7 +1,7 @@
 
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -77,18 +77,18 @@ Sources: Silberschatz et al. 2020, Chap 12, Physical Storage Systems
 **SELECT * FROM employee**
   - **Random**: read the data from anywhere at any time
 **SELECT * FROM employee**
-**WHERE name LIKE ‘__a__b’**
+**WHERE name LIKE '\_\_a\_\_b'**
   - Need to know how data is stored in order to optimize access
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_4_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_4_image_1.png)
 
 
 * Storage Hierarchy
 
 
-![](images/lecture_4_2/lec_4_2_slide_5_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_5_image_1.png)
 
 The various storage can be organized in a hierarchy according to (decreasing) speed and cost
 **Cache**
@@ -105,20 +105,20 @@ The various storage can be organized in a hierarchy according to (decreasing) sp
 **Magnetic disk**
 - Long-term on-line storage
 - Non-volatile (can survive failures and system crashes)
-**Optical disk (CD, Blue Ray)**
+```text Optical disk (CD, Blue Ray) ```
 - Mainly read-only
-**Magnetic tapes**
+```text Magnetic tapes ```
 - Backup and archival data
 - Stored for long period of time, e.g., for legal reasons
 - Sequential-access
 
 **Primary storage**: cache, main memory
-**Secondary** (or **online**): flash memory, magnetic disk
-**Offline**: optical, magnetic tape
+```text Secondary (or online): flash memory, magnetic disk ```
+```text Offline: optical, magnetic tape ```
 
 
 * Storage Hierarchy
-![](images/lecture_4_2/lec_4_2_slide_6_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_6_image_1.png)
 
 source: http://cse1.net/recaps/4-memory.html
 
@@ -157,28 +157,19 @@ source: http://cse1.net/recaps/4-memory.html
 - **Disks** (magnetic and SSDs) can be **connected to computer**:
   - Through high-speed bus interconnections; or
   - Through high-speed network
-- **Through a high-speed interconnection
-**
+- **Through a high-speed interconnection**
   - Serial ATA (SATA)
   - Serial Attached SCSI (SAS)
   - NVMe (Non-volatile Memory Express)
-- **Through high-speed networks
-**
-  - Storage Area Network (SAN)
-    - ISCSI
-    - Fiber Channel
-    - InfiniBand
-  - **Network Attached Storage (NAS)
-**
+- ```text Through high-speed networks ```
+  - Storage Area Network (SAN): ISCSI, Fiber Channel, InfiniBand
+  - ```text Network Attached Storage (NAS) ```
     - Provides a file-system interface (e.g., NFS)
-    - Cloud storage
-      - Data is stored in the cloud and accessed via an API
-      - Object store
-      - High latency
+    - Cloud storage: Data is stored in the cloud and accessed via an API, Object store, High latency
 
 
 
-![images/lecture_4_2/lec_4_2_slide_10_image_1.png](images/lecture_4_2/lec_4_2_slide_10_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_10_image_1.png)
 
 *1956*
 
@@ -186,21 +177,13 @@ source: http://cse1.net/recaps/4-memory.html
 - 24” platters
 - 5 million characters
 
-![images/lecture_4_2/lec_4_2_slide_10_image_2.jpeg](images/lecture_4_2/lec_4_2_slide_10_image_2.jpeg)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_10_image_2.jpeg)
 
 
 
 
-* Magnetic Disks
 
-
-
-
-* Magnetic Disks
-
-
-
-![images/lecture_4_2/lec_4_2_slide_12_image_1.png](images/lecture_4_2/lec_4_2_slide_12_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_12_image_1.png)
 
 **Platters
 **
@@ -224,20 +207,20 @@ source: http://cse1.net/recaps/4-memory.html
 
 * Magnetic Disks: Components
 
-![images/lecture_4_2/lec_4_2_slide_12_image_2.png](images/lecture_4_2/lec_4_2_slide_12_image_2.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_12_image_2.png)
 
 
 * Magnetic Disks: Current Specs
 - **Capacity
 **
-  - 10 terabyte and more
+- 10 terabyte and more
 - **Access time
 **
-  - = Time to start reading data
-  - Seek time
-    - = Move the arm across cylinders (2-20ms)
-  - Rotational latency time
-    - = Wait for sector to be accessed (4-12ms)
+- = Time to start reading data
+- Seek time
+  - = Move the arm across cylinders (2-20ms)
+- Rotational latency time
+  - = Wait for sector to be accessed (4-12ms)
 - **Data-transfer rate
 **
   - Once the data is reached the transfer begins
@@ -253,26 +236,18 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![images/lecture_4_2/lec_4_2_slide_13_image_1.png](images/lecture_4_2/lec_4_2_slide_13_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_13_image_1.png)
 
 
 * Accessing Data Speed
-- **Random data transfer rates
-**
+- **Random data transfer rates**
   - = how long it takes to read a random sector
   - It has 3 components
-    - Seek time
-      - Time to *seek *to the track
-      - Average 4 to 10ms
-    - Rotational latency
-      - Waiting for the sector to get under the head
-      - Average 4 to 11ms
-    - Transfer time
-      - Time to transfer the data
-      - Very low
+    - Seek time: Time to seek to the track (Average 4 to 10ms)
+    - Rotational latency: Waiting for the sector to get under the head (Average 4 to 11ms)
+    - Transfer time: Time to transfer the data (Very low)
   - About 10ms per access
-    - So if randomly accessed blocks, can only do 100 block transfers
-    - 100 / sec x 4 KB per block = 50 KB/s
+    - So if randomly accessed blocks, can only do 100 block transfers (100 / sec x 4 KB per block = 50 KB/s)
 - **Serial data transfer rates**
   - = rate at which data can be transferred (without any seek)
   - 30-50MB/s to up to 200MB/s
@@ -310,7 +285,7 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![images/lecture_4_2/lec_4_2_slide_15_image_1.png](images/lecture_4_2/lec_4_2_slide_15_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_15_image_1.png)
 
 
 * Outline
@@ -345,7 +320,7 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_17_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_17_image_1.png)
 
 
 * Improve Reliability / Performance with RAID
@@ -367,7 +342,7 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_18_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_18_image_1.png)
 
 
 * RAID Levels
@@ -392,11 +367,11 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_19_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_19_image_1.png)
 
-![](images/lecture_4_2/lec_4_2_slide_19_image_2.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_19_image_2.png)
 
-![](images/lecture_4_2/lec_4_2_slide_19_image_3.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_19_image_3.png)
 
 
 * Choosing a RAID Level
@@ -412,11 +387,11 @@ source: http://cse1.net/recaps/4-memory.html
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_20_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_20_image_1.png)
 
-![](images/lecture_4_2/lec_4_2_slide_20_image_2.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_20_image_2.png)
 
-![](images/lecture_4_2/lec_4_2_slide_20_image_3.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_20_image_3.png)
 
 
 * Outline
@@ -453,7 +428,7 @@ Shared memory
 
 
 
-![](images/lecture_4_2/lec_4_2_slide_22_image_1.png)
+![](data605/lectures_source/images/lecture_4_2/lec_4_2_slide_22_image_1.png)
 
 
 * DB Internals

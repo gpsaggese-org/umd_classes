@@ -1,6 +1,6 @@
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -62,7 +62,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_4_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_4_image_1.png)
 
 **Volume of data in the world**
 
@@ -82,7 +82,7 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_5_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_5_image_1.png)
 
 **Volume of data in the world**
 
@@ -132,11 +132,11 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_8_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_8_image_1.png)
 
 ```
 
-# Content processing error - slide missing
+\# Content processing error - slide missing
 
 ```
 
@@ -308,7 +308,7 @@ Switch
 
 
 
-![alt_text](images/lecture_8_1/lec_8_1_slide_17_image_1.png)
+![alt_text](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_17_image_1.png)
 
 
 * Cluster Architecture: Network Bandwidth
@@ -452,13 +452,14 @@ cross 1
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_25_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_25_image_1.png)
 
 
 * MapReduce: Word Count
 **Example**
 “One a penny, two a penny, hot cross buns.”
 **Map:**
+```text
 [(“one”, 1), (“a”, 1),
 (“penny”, 1),(“two”, 1),
 (“a”, 1), (“penny”, 1),
@@ -479,16 +480,18 @@ cross 1
 (“hot”, 1),
 (“cross”, 1),
 (“buns”, 1)]
+```
 
 
 
 **Python code**
-**values = read(file_name)**
-**def map(values):**
+```python
+values = read(file_name)
+def map(values):
   # values: words in document
   for word in values:
 		emit(word, 1)
-**def reduce(key, values):**
+def reduce(key, values):
    # key: a word
    # value: a list of counts
    result = 0
@@ -496,6 +499,7 @@ cross 1
    for count in values:
 	result += count
    emit(key, result)
+```
 
 **Action**
 Read input
@@ -584,14 +588,15 @@ can output 0 or more tuples for each input
 
 * MapReduce: Reduce Step
 
-
-**reduce(key: word, values: List[int]):**
+```python
+reduce(key: word, values: List[int]):
    # key: a word
    # value: an iterator over counts
    result = 0
    for count in values:
 	result += count
    emit(key, result)
+```
 
 
 * MapReduce: Interfaces
@@ -631,9 +636,10 @@ can output 0 or more tuples for each input
   - Write results on disk separated by newline
 
 
-![](images/lecture_8_1/lec_8_1_slide_31_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_31_image_1.png)
 
 **After Input**
+```text
 **After Map**
 **[`/slide-dir/11.ppt`, 1), ...)]**
 **After GroupBy**
@@ -646,10 +652,12 @@ can output 0 or more tuples for each input
 **...**
 **/slide-dir/12.ppt 2**
 **...**
+```
 
 
 * MapReduce: Data Flow
 - **Input**
+```text
 - **Map**
   - **mk****i** = map keys
   - **mv****i** = map input values
@@ -659,10 +667,10 @@ can output 0 or more tuples for each input
   - **rk****i** = reduce keys
   - **rv****i** = reduce input values
   - Reduce outputs are not shown
+```
 
 
-
-![](images/lecture_8_1/lec_8_1_slide_32_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_32_image_1.png)
 
 **Input**
 
@@ -694,12 +702,12 @@ can output 0 or more tuples for each input
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_33_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_33_image_1.png)
 
 - All operations use HDFS as storage
 - Machines are reused for multiple computations (Map, GroupBy, Reduce) at different times
 
-![](images/lecture_8_1/lec_8_1_slide_34_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_34_image_1.png)
 
 
 * Master Node Responsibilities
@@ -734,15 +742,10 @@ can output 0 or more tuples for each input
 - **N** **worker nodes**
 - Rules of thumb
   - *M* >> *N*
-    - Pros
-      - Improve dynamic load balancing
-      - Speed up recovery from worker failures
-    - Cons
-      - More communication between *Master* and *Worker Nodes*
-      - Lots of smaller files
+    - Pros: Improve dynamic load balancing, Speed up recovery from worker failures
+    - Cons: More communication between *Master* and *Worker Nodes*, Lots of smaller files
   - *R* > *N*
-    - Usually *R* < *M*
-    - Output is spread across fewer files
+    - Usually *R* < *M*, Output is spread across fewer files
 
 
 
@@ -769,12 +772,16 @@ can output 0 or more tuples for each input
 * Refinement: Combiners
 - **Problem**
   - Often a *Map* task produces many pairs for the same key *k*
-**[(k** **1**,v**1**), (k**1**,v**2**), …]**
+```python
+[(k1, v1), (k1, v2), …]
+```
   - E.g., common words in the word count example
   - Increase complexity of the GroupBy stage
 - **Solution**
   - Pre-aggregate values in the *Map* with a *Combine*
-**[(k** **1**,**(v** **1**,v**2**, …), k**2**,**([…])**]**
+```python
+[k1, (v1, v2, …), k2, ([…])]
+```
   - *Combine* is usually the same as the *Reduce* function
   - Works only if *Reduce* function is commutative and associative
 - **Result**
@@ -782,7 +789,7 @@ can output 0 or more tuples for each input
   - Less shuffling and reordering
   - Less network / disk traffic
 
-![](images/lecture_8_1/lec_8_1_slide_38_image_1.gif)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_38_image_1.gif)
 
 
 
@@ -837,7 +844,7 @@ can output 0 or more tuples for each input
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_42_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_42_image_1.png)
 
 
 * Data Flow
@@ -857,12 +864,11 @@ can output 0 or more tuples for each input
     - Line-based log files
     - Binary files
     - Multi-line input records
-    - Something else
-      - E.g., an SQL database
+    - Something else (E.g., an SQL database)
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_44_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_44_image_1.png)
 
 
 * InputFormat
@@ -879,7 +885,7 @@ can output 0 or more tuples for each input
 | KeyValueInputFormat | Parses lines into (K, V) pairs | Everything up to the first tab character | The remainder of the line |
 | SequenceFileInputFormat | A Hadoop-specific high-performance binary format | User-defined | User-defined |
 
-![](images/lecture_8_1/lec_8_1_slide_45_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_45_image_1.png)
 
 
 * InputSplit
@@ -891,7 +897,7 @@ can output 0 or more tuples for each input
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_46_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_46_image_1.png)
 
 
 * RecordReader
@@ -903,7 +909,7 @@ can output 0 or more tuples for each input
 
 
 
-![](images/lecture_8_1/lec_8_1_slide_47_image_1.png)
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_47_image_1.png)
 
 
 * OutputFormat
@@ -990,7 +996,7 @@ OutputFormat
 - Statistical machine translation
   - Need to count number of times every 5-word sequence occurs in a large corpus of documents
 - Large Language Models
-  - OpenAI GPT*
+  - OpenAI GPT
 - Very easy with MapReduce
   - Map
     - Extract (5-word sequence, count) from document
@@ -1004,16 +1010,16 @@ OutputFormat
 
 - **Quantify the cost of a parallel algorithm in terms of:**
 - Communication cost
-    - = total I/O of all processes
-    - Related to disk usage as well
+  - = total I/O of all processes
+  - Related to disk usage as well
 - Elapsed communication cost
-    - = max I/O along any path (critical path)
+  - = max I/O along any path (critical path)
 - Elapsed computation cost
-    - = end-to-end running time of algorithm
-    - It is the wall-clock time using parallelism
+  - = end-to-end running time of algorithm
+  - It is the wall-clock time using parallelism
 - **Total cost**
   - = what you pay as rent to your “friendly” neighborhood cloud provider
-    - CPU + disk + I/O used
+  - CPU + disk + I/O used
   - Either CPU, disk, I/O cost dominates → ignore the others
 - **In this case, the big-O notation is not the most useful**
   - The actual cost matters and not the asymptotic cost!
@@ -1025,20 +1031,19 @@ OutputFormat
 
 * MapReduce Cost Measures
 
-- **For a map-reduce algorithm:**
-  - **Communication cost**
-    - = total I/O of all processes
-    - input file size
-    - + 2 × (sum of the sizes of all files passed from Map processes to Reduce processes)
-      - You need to write and read back the data
-    - + the sum of the output sizes of the Reduce processes
-  - **Elapsed communication cost**
-    - = max of I/O along any path
-    - sum of the largest input + output for any Map process, plus the same for any Reduce process
-  - **Elapsed computation cost**
-    - = end-to-end running time of algorithm
-    - Ideally all Map and Reduce processes end at the same time
-    - Workload is “perfectly balanced”
+-**For a `map-reduce` algorithm:**
+- **Communication cost**
+  - = total I/O of all processes
+  - input file size
+  - + 2 × (sum of the sizes of all files passed from Map processes to Reduce processes) [You need to write and read back the data]
+  - + the sum of the output sizes of the Reduce processes
+- **Elapsed communication cost**
+  - = max of I/O along any path
+  - sum of the largest input + output for any Map process, plus the same for any Reduce process
+- **Elapsed computation cost**
+  - = end-to-end running time of algorithm
+  - Ideally all Map and Reduce processes end at the same time
+  - Workload is “perfectly balanced”
 
 
 
@@ -1131,15 +1136,15 @@ OutputFormat
 
 * History
 
-- MapReduce
-  - Is very good at doing what it was designed for
-    - If the application maps well to MapReduce, one can achieve optimal theoretical speed-up
-  - May not be ideal for more complex tasks
-    - E.g., no notion of “query optimization”, e.g., operator order optimization
-    - The sequence of MapReduce tasks makes it procedural within a single machine
-  - Assumes a single input
-    - E.g., joins are tricky to do, but doable
+- **MapReduce**
+- Is very good at doing what it was designed for
+  - If the application maps well to MapReduce, one can achieve optimal theoretical speed-up
+- May not be ideal for more complex tasks
+  - E.g., no notion of “query optimization”, e.g., operator order optimization
+  - The sequence of MapReduce tasks makes it procedural within a single machine
+- Assumes a single input
+  - E.g., joins are tricky to do, but doable
 - Much work in recent years on extending the basic MapReduce functionality, e.g.,
-  - Hadoop Zoo
-  - E.g., Spark, Dask, Ray
+- Hadoop Zoo
+- E.g., Spark, Dask, Ray
 
