@@ -179,6 +179,7 @@ UMD DATA605: Big Data Systems
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_20_image_1.png)
 ::::
 :::
+
 * The Six V'S of Big Data
 - What makes "Big Data" big?
 
@@ -286,6 +287,7 @@ UMD DATA605: Big Data Systems
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_26_image_1.png)
 ::::
 :::
+
 * Sources of Big Data: Organizations
 - **Organizations generate data**
   - Commercial transactions
@@ -398,6 +400,7 @@ UMD DATA605: Big Data Systems
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_35_image_1.png)
 ::::
 :::
+
 * Examples: Google Flu Trends
 - 5% to 20% of the US population gets the flu annually; **40k deaths**
   - Early warnings help in prevention and control

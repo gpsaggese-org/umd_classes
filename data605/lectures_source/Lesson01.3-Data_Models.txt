@@ -89,39 +89,6 @@ UMD DATA605: Big Data Systems
 ::::
 :::
 
-* Examples of Data Models
-- We will cover:
-  - Relational model (SQL)
-  - Entity-relationship (ER) model
-  - XML
-  - Object-oriented (OO)
-  - Object-relational
-  - RDF
-  - Property graph
-- Serialization formats as data models
-  - CSV
-  - Parquet
-  - JSON
-  - Protocol Buffer
-  - Avro/Thrift
-  - Python Pickle
-
-* Good Data Models
-- Data model should be:
-  - Expressive
-    - Capture real-world data
-  - Easy to use
-  - Perform well
-- Tension between characteristics
-  - Powerful models
-    - Represent more datasets
-    - Harder to use/query
-    - Less efficient (e.g., more memory, time)
-- Evolution of data modeling tools captures data structure
-  - Structured data $\to$ Relational DBs
-  - Semi-structured web data $\to$ XML, JSON
-  - Unstructured data $\to$ NoSQL DBs
-
 * Data Independence
 - **Logical data independence**
   - Change data representation without altering programs
@@ -134,34 +101,73 @@ UMD DATA605: Big Data Systems
     - Compress data
     - Sort data
 
-* Databases: A Brief History
+* Examples of Data Models
+- **Some examples of data models**
+  - Relational model (SQL)
+  - Entity-relationship (ER) model
+  - XML
+  - Object-oriented (OO)
+  - Object-relational
+  - RDF
+  - Property graph
+- **Serialization formats** as data models
+  - CSV
+  - Parquet
+  - JSON
+  - Protocol Buffer
+  - Avro/Thrift
+  - Python Pickle
+
+* Good Data Models
+- **Good data model** should be:
+  - Expressive
+    - Capture real-world data
+  - Easy to use
+  - Perform well
+
+- **Trade-off between characteristics**
+  - E.g., more powerful models
+    - Represent more datasets
+    - Harder to use/query
+    - Less efficient (e.g., more memory, time)
+
+- **Evolution of data models** captures data structure
+  - Structured data $\to$ Relational DBs
+  - Semi-structured web data $\to$ XML, JSON
+  - Unstructured data $\to$ NoSQL DBs
+
+* A Brief History of Databases (Early 1960s)
 - **1960s: Early beginning**
   - Computers become attractive technology
   - Enterprises adopt computers
   - Applications use own data stores
     - Each application has its own format
     - Data unavailable to other programs
-  - **Database**: term for "shared data banks" by multiple applications
-    - Define data format
-    - Store as "data dictionary" (schema)
-    - Implement "database management" software to access data
-  - Issues:
-    - How to write data dictionaries?
-    - How to access data?
-    - Who controls the data?
+
+- **Database**: term for "shared data banks" by multiple applications
+  - Define data format
+  - Store as "data dictionary" (schema)
+  - Implement "database management" software to access data
+
+- **Issues**
+  - How to write data dictionaries?
+  - How to access data?
+  - Who controls the data?
     - E.g., integrity, security, privacy concerns
 
-* Databases: A Brief History
+* A Brief History of Databases (1960s)
 - **1960s, Hierarchical and Network Model**
   - Connect records of different types
   - Example: connect accounts with customers
   - Network model aimed for generality and flexibility
+
 - IBM's IMS Hierarchical Database (1966)
   - Designed for Apollo space program
   - Predates hard disks
   - Used by over 95% of top Fortune 1000 companies
-  - Processes 50 billion transactions daily, manages 15 million gigabytes of data
-- Cons:
+  - Processes 50 billion transactions daily, manages 15 million GBs of data
+
+- **Cons**
   - Exposed too much internal data (structures/pointers)
   - Leaky abstraction
 
@@ -172,11 +178,17 @@ UMD DATA605: Big Data Systems
 - **Relational model**
   - Data as tuples in relations
   - SQL
+
+\vspace{1cm}
+
 - **Hierarchical model**
   - Tree-like structure
     - One parent, many children
     - Connected through links
   - XML DBs resurgence in 1990s
+
+\vspace{1cm}
+
 - **Network model**
   - Graph organization
     - Multiple parents and children
@@ -184,15 +196,15 @@ UMD DATA605: Big Data Systems
 ::::
 :::: {.column width=45%}
 
-![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_1.png)
-
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_2.png)
 
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_3.png)
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_1.png)
 ::::
 :::
 
-* Databases: A Brief History
+* A Brief History of Databases (1970s)
 - **1970s: Relational model**
   - Set theory, first-order predicate logic
     - Ted Codd developed the Relational Model
@@ -204,37 +216,47 @@ UMD DATA605: Big Data Systems
   - Notion of normal forms
     - Reason about data and relations
     - Remove redundancies
-- Influential projects:
+
+- **Influential projects**
   - INGRES (UC Berkeley), System R (IBM)
   - Ignored IMS compatibility
-- Debates: Relational Model vs Network Model proponents
+
+- **Debates**:
+  - Relational Model vs Network Model proponents
 
 * Entity-Relationship Model
 
 ::: columns
 :::: {.column width=50%}
 
-- 1976: Peter Chen proposed "Entity-Relationship Model"
-- Describes knowledge as entities and relationships
-- **Entities**: Physical or logical objects, "Nouns"
-- **Relationships**: Connections between entities, "Verbs"
-- Map ER model to relational DB: Entities, relationships $\to$ tables
+- **Entity-Relationship Model**
+  - Proposed in 1976 by Peter Chen
+
+- Describes knowledge as:
+  - **Entities**: Physical or logical objects, "Nouns"
+  - **Relationships**: Connections between entities, "Verbs"
+
+- Map ER model to relational DB
+  - Entities, relationships $\to$ tables
 ::::
 :::: {.column width=45%}
 
-![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_1.png)
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_2.png)
+
+\vspace{0.5cm}
+
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_3.png)
 
 ::::
 :::
 
-* Databases: A Brief History
+* A Brief History of Databases (1980s)
 - **1980s: Relational model acceptance**
   - SQL standard due to IBM's backing
   - Enhanced relational model
     - Set-valued attributes, aggregation
-- Late 80's
+
+- **Late 80's**
   - Object-oriented DBs
     - Store objects, not tables
     - Overcome _impedance mismatch_ between languages and databases
@@ -248,10 +270,10 @@ UMD DATA605: Big Data Systems
   - Object behavior described through data (fields) and code (methods)
 
 - **Composition**
-  - Aka `has-a` relationships
+  - `has-a` relationships
   - E.g., `Employee` class has an `Address` class
 - **Inheritance**
-  - Aka `is-a` relationships
+  - `is-a` relationships
   - E.g., `Employee` class derives from `Person` class
 
 - **Polymorphism**
@@ -264,14 +286,22 @@ UMD DATA605: Big Data Systems
   - E.g., private vs public fields/members
   - Prevents external code from accessing inner workings of an object
 
-* Databases: A Brief History
+* A Brief History of Databases (1990s)
+::: columns
+:::: {.column width=50%}
 - **Late 90's-today**
 - Web/Internet emerges
 - XML: eXtensible Markup Language
   - For _semi-structured_ data
   - Tree-like structure
   - Flexible schema
-```
+
+::::
+:::: {.column width=45%}
+
+\scriptsize
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Edited by XMLSpy -->
   <CATALOG>
@@ -293,48 +323,46 @@ UMD DATA605: Big Data Systems
     </CD>
     ...
 ```
+::::
+:::
 
 * Resource Description Framework
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=40%}
 - Aka RDF
-- Key construct: "subject-predicate-object" triple
-  - Subject=sky
-  - Predicate=has-the-color
-  - Object=blue
+- **(subject, predicate, object) triple**
+
+- Example of RDF triple
+  - `Subject`=sky
+  - `Predicate`=has-the-color
+  - `Object`=blue
+
 - Maps to a labeled, directed multi-graph
   - More general than a tree
-- Stored in:
+
+- **Stored in**:
   - Relational DBs
   - Dedicated "triple-stores" DBs
 ::::
-:::: {.column width=45%}
+:::: {.column width=55%}
 
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_56_image_1.png)
-```
-01    <http://example.org/bob#me> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://xmlns.com/foaf/0.1/Person> .
-02    <http://example.org/bob#me> <http://xmlns.com/foaf/0.1/knows> <http://example.org/alice#me> .
-03    <http://example.org/bob#me> <http://schema.org/birthDate> "1990-07-04"^^<http://www.w3.org/2001/XMLSchema#date> .
-04    <http://example.org/bob#me> <http://xmlns.com/foaf/0.1/topic_interest> <http://www.wikidata.org/entity/Q12418> .
-05    <http://www.wikidata.org/entity/Q12418> <http://purl.org/dc/terms/title> "Mona Lisa" .
-06    <http://www.wikidata.org/entity/Q12418> <http://purl.org/dc/terms/creator> <http://dbpedia.org/resource/Leonardo_da_Vinci> .
-07    <http://data.europeana.eu/item/04802/243FA8618938F4117025F17A8B813C5F9AA4D619> <http://purl.org/dc/terms/subject> <http://www.wikidata.org/entity/Q12418> .
-```
 ::::
 :::
 
 * Property Graph Model
 
 ::: columns
-:::: {.column width=50%}
-- Graph:
+:::: {.column width=40%}
+- **Graph**:
   - Vertices and edges
   - Properties for each edge and vertex
-- Stored in:
+
+- **Stored in**:
   - Relational DBs
   - Graph DBs
 ::::
-:::: {.column width=45%}
+:::: {.column width=55%}
 
 ![](data605/lectures_source/images/lecture_1/lec_1_slide_57_image_1.jpeg)
 
