@@ -51,7 +51,7 @@ UMD DATA605: Big Data Systems
   - Sensing devices/networks monitor processes 24/7
     - E.g., temperature of your room, your vital signs, pollution in the air
   - Sophisticated smart-phones
-    - 80% of the world population has a smart-phone
+    - 80%+ of the world population has a smart-phone
   - Internet and social networks make it easy to publish data
   - Internet of Things (IoT): everything is connected to the internet
     - E.g., power supply, toasters
@@ -66,7 +66,7 @@ UMD DATA605: Big Data Systems
 :::: {.column width=45%}
 - **Megabyte** = $2^{20} \approx 10^6$ bytes
   - Typical English book
-- **Gigabyte** = $10^9$ bytes = 1,000 MB
+- **Gigabyte** = $2^{30}$ bytes = 1,000 MB
   - 1/2 hour of video
   - Wikipedia (compressed, no media) is 22GB
 - **Terabyte** = 1 million MB
@@ -80,7 +80,7 @@ UMD DATA605: Big Data Systems
 :::: {.column width=50%}
 - **Exabyte** = 1M TB
   - Global yearly Internet traffic in 2004
-- **Zetabyte** = 1B TB = $10^{21}$ bytes
+- **Zettabyte** = 1B TB = $10^{21}$ bytes
   - Global yearly Internet traffic in 2016
   - Fill 20% of Manhattan, New York with data centers
 - **Yottabytes** = $10^{24}$ bytes
