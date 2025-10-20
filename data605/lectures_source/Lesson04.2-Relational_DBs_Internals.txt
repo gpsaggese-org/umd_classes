@@ -16,7 +16,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Relational DB Internals}}$$**
+**$$\text{\blue{Lesson 4.2: Relational DB Internals}}$$**
 \endgroup
 
 ::: columns
