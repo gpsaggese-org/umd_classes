@@ -18,7 +18,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Relational DBs}}$$**
+**$$\text{\blue{Lesson 4.1: Relational DBs}}$$**
 \endgroup
 
 ::: columns
@@ -52,18 +52,17 @@ UMD DATA605 - Big Data Systems
 
 * Relational Model: Key Definitions
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=60%}
 
-- Relational DB: Collection of **tables / relations**
+- Relational DB is a collection of **tables / relations**
   - Unique name and schema for each table
+  - E.g., `instructor` and `course` relations
 
 - **Row / tuple / record**: Represents a relationship among values
 
 - **Element**: Corresponds to a **column / field / attribute**
   - Atomic elements (e.g., phone number as a single object)
   - `NULL` for unknown or non-existent values
-
-- E.g., `instructor` and `course` relations
 
 - **Schema of a relation**
   - List of attributes and their domains
@@ -95,14 +94,14 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 
-- UML class diagram
+- **UML class diagram**
   - UML = Unified Modeling Language
   - Used in OOP and DB design
+
+\vspace{1cm}
+
 - **In OOP design**
   - Diagram showing classes, attributes, methods, and relationships
-
-\vspace{2cm}
-  - Diagram shows classes, attributes, methods, relationships \vspace{2cm}
 
 - **In DB design**
   - Each box is a table / relation
@@ -115,11 +114,11 @@ UMD DATA605 - Big Data Systems
 
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_1.png)
 
-![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_2.png){ width=60% }
+![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_2.png){width=60%}
 
 ![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_3.png)
 
-![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_4.png){ width=60% }
+![](data605/lectures_source/images/lecture_4_1/lec_4_1_slide_5_image_4.png){width=70%}
 ::::
 :::
 
