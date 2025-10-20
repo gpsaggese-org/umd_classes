@@ -18,7 +18,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Git}}$$**
+**$$\text{\blue{Lesson 2.1: Git}}$$**
 \endgroup
 
 ::: columns
@@ -36,17 +36,17 @@ UMD DATA605 - Big Data Systems
 * Bash / Linux: Resources
 ::: columns
 :::: {.column width=55%}
-- Command line
-  - [Command-Line for Beginners](https://ubuntu.com/tutorials/command-line-for-beginners)
-  - E.g., `find`, `xargs`, `chmod`, `chown`, symbolic, and hard links
-
-- How Linux works
+- **How Linux works**
   - Processes
   - File ownership and permissions
   - Virtual memory
   - How to administer a Linux box as root
 
-- Mastery
+- **Easy**
+  - [Command-Line for Beginners](https://ubuntu.com/tutorials/command-line-for-beginners)
+  - E.g., `find`, `xargs`, `chmod`, `chown`, symbolic, and hard links
+
+- **Mastery**
   - [The Linux Command Line](https://linuxcommand.org/tlcl.php)
 ::::
 :::: {.column width=40%}
@@ -116,12 +116,12 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 ::: columns
 :::: {.column width=55%}
 - **Distributed VCS**
-  - E.g., `Git`, `Mercurial`, `Bazaar`, `Dart`
+  - E.g., `Git`, `Mercurial`, `Bazaar`
   - Each client has the entire history of the repo locally
   - Each node is both a client and a server
   - **Cons**: complex
@@ -133,34 +133,34 @@ UMD DATA605 - Big Data Systems
 
 * VCS: How to Track Data
 - Consider a directory with project files inside
-- **How do you track changes to the data?**
+  - **How do you track changes to the data?**
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=45%}
 - **Delta-based VCS**
   - E.g., `Subversion`
-  - Store the data in terms of patches (changes of files over time)
+  - Store the data in terms of "patches" (changes of files)
   - Can reconstruct the state of the repo by applying the patches
 ::::
-:::: {.column width=40%}
+:::: {.column width=50%}
 
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_7_image_1.png)
 
 ::::
 :::
 
-\vspace{1cm}
+\vspace{.3cm}
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=45%}
 - **Stream of snapshots VCS**
   - E.g., `Git`
-  - Store data in terms of snapshots of a filesystem
+  - Store data in terms of "snapshots" of a filesystem
   - Take a "picture" of what files look like
   - Store reference (hash) to the snapshots
   - Save link to previous identical files
 ::::
-:::: {.column width=40%}
+:::: {.column width=50%}
 
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_7_image_2.png)
 
@@ -280,10 +280,10 @@ UMD DATA605 - Big Data Systems
   - `git push <REMOTE> <BRANCH>`: push local data to remote
     - E.g., `git push origin master`
 
-- Multiple forks of the same repo with different policies
+- **Multiple forks** of the same repo with different policies
   - E.g., read-only, read-write
 
-- If someone pushed to remote, you **can't push changes immediately**:
+- You **can't push changes immediately** if someone pushed to remote:
   - Fetch changes
   - Merge changes to your branch
   - Resolve conflicts, if needed
@@ -293,7 +293,8 @@ UMD DATA605 - Big Data Systems
 * Git Tagging
 - Git allows marking points in history with a **tag**
   - E.g., release points
-  - Check out a tag
+
+- Check out a tag
 
 - Enter detached `HEAD` state
   - Committing won't add changes to the tag or branch
@@ -305,13 +306,13 @@ UMD DATA605 - Big Data Systems
 
 - **Understand Git only if you understand its data model**
   - Git is a key-value store with a VCS interface
-  - Key = hash of a file
-  - Value = content of a file
+  - _Key_ = hash of a file
+  - _Value_ = content of a file
 
 - **Git objects**
-  - Commits: pointers to the tree and commit metadata
-  - Trees: directories and mapping between files and blobs
-  - Blobs: content of files
+  - _Commits_: pointers to the tree and commit metadata
+  - _Trees_: directories and mapping between files and blobs
+  - _Blobs_: content of files
 
 - Refs:
   - Easy: [Understanding Git Data Model](https://konrad126.medium.com/https-medium-com-zspajich-understanding-git-data-model-95eb16cc99f5)
@@ -319,14 +320,16 @@ UMD DATA605 - Big Data Systems
 ::::
 :::: {.column width=40%}
 
-*Commit tree*
+\scriptsize \centering
+
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_14_image_1.png)
+*Commit tree*
 
-*Commit parents*
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_14_image_2.png)
+*Commit parents*
 
-*Commit history of a branch*
 ![](data605/lectures_source/images/lecture_2/lec_2_slide_14_image_3.png)
+*Commit history of a branch*
 
 ::::
 :::
@@ -421,17 +424,19 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - Tutorials
-- [Work on main](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#work-on-main)
-- [Hot fix](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#hot-fix)
+  - [Work on main](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#work-on-main)
+  - [Hot fix](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials/tutorial_git/tutorial_git.md#hot-fix)
 
 - Start from a project with some commits
 
 - Branch to work on a new feature "Issue 53"
+  \begingroup \small \color{blue}
   ```
   > git checkout -b iss53
   work ... work ... work
   > git commit
   ```
+  \endgroup
 ::::
 :::: {.column width=40%}
 
@@ -447,6 +452,7 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - **Need a hotfix** to `master`
+  \begingroup \small \color{blue}
   ```
   > git checkout master
   > git checkout -b hotfix
@@ -455,6 +461,7 @@ UMD DATA605 - Big Data Systems
   > git checkout master
   > git merge hotfix
   ```
+  \endgroup
 
 - **Fast forward**
   - Now there is a divergent history between `master` and `iss53`
@@ -472,19 +479,23 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=55%}
 - Keep working on `iss53`
+  \begingroup \small \color{blue}
   ```
   > git checkout iss53
   work ... work ... work
   ```
+  \endgroup
   - The branch keeps diverging
 
 - At some point you are done with `iss53`
   - You want to merge your work back to `master`
   - Go to the target branch
-  ```
-  > git checkout master
-  > git merge iss53
-  ```
+    \begingroup \small \color{blue}
+    ```
+    > git checkout master
+    > git merge iss53
+    ```
+    \endgroup
 
 - Git can't fast forward
 ::::
@@ -499,7 +510,11 @@ UMD DATA605 - Big Data Systems
 - Git creates a new snapshot with the 3-way "merge commit" (i.e., a commit with
   more than one parent)
 - Delete the branch
-  `> git branch -d iss53`
+  \begingroup \small \color{blue}
+  ```
+  > git branch -d iss53
+  ```
+  \endgroup
 
 * Fast Forward Merge
 - **Fast forward merge**
@@ -514,10 +529,12 @@ UMD DATA605 - Big Data Systems
 - **Mental model**: a branch is just a pointer that says where the tip of the
   branch is
 - E.g., `C4'` is reachable from `C3`
+  \begingroup \small \color{blue}
   ```
   > git checkout master
   > git merge experiment
   ```
+  \endgroup
 - Git moves the pointer of master to `C4'`
 ::::
 :::: {.column width=40%}
@@ -570,25 +587,30 @@ UMD DATA605 - Big Data Systems
 
 - **Merge**
   - Go to the target branch
+    \begingroup \small \color{blue}
     ```
     > git checkout master
     > git merge experiment
     ```
+    \endgroup
   - Create a new snapshot `C5` and commit
 
 - **Rebase**
   - Go to the branch to rebase
+    \begingroup \small \color{blue}
     ```
     > git checkout experiment
     > git rebase master
     ```
+    \endgroup
+
   - Rebase algo:
     - Get all the changes committed in the branch (`C4`) where we are on
       (`experiment`) since the common ancestor (`C2`)
     - Sync to the branch that we are rebasing onto (`master` at `C3`)
     - Apply the changes `C4`
     - Only current branch is affected
-    - Finally fast forward master
+    - Finally fast forward `experiment`
 ::::
 :::: {.column width=40%}
 
@@ -704,11 +726,13 @@ UMD DATA605 - Big Data Systems
 
 * Remote Branches
 - **Remote branches** are pointers to branches in remote repos
+  \begingroup \small \color{blue}
   ```
   git remote -v
   origin  git@github.com:gpsaggese/umd_classes.git (fetch)
   origin  git@github.com:gpsaggese/umd_classes.git (push)
   ```
+  \endgroup
 
 - **Tracking branches**
   - Local references representing the state of the remote repo
@@ -718,14 +742,18 @@ UMD DATA605 - Big Data Systems
   - Git updates tracking branches when you do `git fetch origin` (or `git pull`)
 
 - To share code in a local branch you need to push it to a remote
+  \begingroup \small \color{blue}
   ```
   > git push origin serverfix
   ```
+  \endgroup
 
 - To work on it
+  \begingroup \small \color{blue}
   ```
   > git checkout -b serverfix origin/serverfix
   ```
+  \endgroup
 
 * Git Workflows
 ::: columns
@@ -796,8 +824,6 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Forking Workflows
-::: columns
-:::: {.column width=80%}
 - Typically devs don't have permissions to update directly branches on a project
   - Read-write permissions for core contributors
   - Read-only for anybody else
@@ -816,6 +842,8 @@ UMD DATA605 - Big Data Systems
   - In practice it's the project maintainer that pulls the code when it's ready,
     instead of external contributors pushing the code
 
+::: columns
+:::: {.column width=80%}
 - **Aka "GitHub workflow"**
   - "Innovation" was forking (Fork me on GitHub!)
   - GitHub acquired by Microsoft for 7.5b USD
@@ -893,7 +921,18 @@ UMD DATA605 - Big Data Systems
   - Like a "difference"
   - `git log master..experiment` $\to$ `D,C`
   - `git log experiment..master`$\to$ `F,E`
+::::
+:::: {.column width=40%}
 
+![](data605/lectures_source/images/lecture_2/lec_2_slide_32_image_1.png)
+
+::::
+:::
+
+\vspace{0.5cm}
+
+::: columns
+:::: {.column width=55%}
 - **Triple-dot notation**
   - `1...2` = commits that are reachable from either branch but not from both
   - Like "union excluding intersection"
@@ -914,7 +953,7 @@ UMD DATA605 - Big Data Systems
   - Apply later
 
 - **Cherry-picking**
-  - Rebase for a single commit
+  - Apply a single commit from one branch onto another
 
 - **rerere**
   - = "Reuse Recorded Resolution"
@@ -925,10 +964,11 @@ UMD DATA605 - Big Data Systems
 
 * Advanced Git
 - **bisect**
-  - Bug appears at top of tree
-  - Unknown revision where it started
-  - Script returns 0 if good, non-0 if bad
-  - `git bisect` finds revision where script changes from good to bad
+  - `git bisect` helps identifying the commit that introduced a bug
+    - Bug appears at top of tree
+    - Unknown revision where it started
+    - Script returns 0 if good, non-0 if bad
+    - `git bisect` finds revision where script changes from good to bad
 
 - **filter-branch**
   - Rewrite repo history in a script-able way

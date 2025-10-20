@@ -18,7 +18,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{DevOps with Docker}}$$**
+**$$\text{\blue{Lesson 3.1: DevOps with Docker}}$$**
 \endgroup
 
 ::: columns
@@ -40,9 +40,17 @@ UMD DATA605 - Big Data Systems
 - We will use Docker during the class project and most tutorials
 
 - Concepts in the slides
+
 - Class tutorials:
   - [tutorial\_docker](https://github.com/gpsaggese/umd_classes/tree/master/data605/tutorials/tutorial_docker)
   - [tutorial\_docker\_compose](https://github.com/gpsaggese/umd_classes/tree/master/data605/tutorials/tutorial_docker_compose)
+
+::::
+::::{.column width=25%}
+![](data605/lectures_source/images/lecture_3/lec_3_slide_3_image_1.png)
+::::
+:::
+
 - Web resources:
   - [Docker Tutorial for beginners](https://www.youtube.com/watch?v=zJ6WbK9zFpI)
   - [https://labs.play-with-docker.com/](https://labs.play-with-docker.com/)
@@ -52,20 +60,14 @@ UMD DATA605 - Big Data Systems
 - Mastery:
   - Poulton, [Docker Deep Dive: Zero to Docker in a single book](https://www.amazon.com/Docker-Deep-Dive-Nigel-Poulton/dp/1521822808), 2020
 
-::::
-::::{.column width=25%}
-\vspace{2cm}
-![](data605/lectures_source/images/lecture_3/lec_3_slide_3_image_1.png)
-::::
-:::
-
 * Application Deployment
-- **For (almost all) Internet companies, the application is the business**
-  - If the application breaks, the business stops working
-  - E.g., Amazon, Google, Facebook, on-line banks, travel sites (e.g., Expedia),
-    ...
+- For (almost all) Internet companies, **the application is the business**
+  - If the application breaks, the business stops
+  - E.g., Amazon, Google, Facebook, online banks, travel sites, ...
+
 - **Problem**
-  - How to release / deploy / manage / monitor applications?
+  - Release, deploy, manage, monitor applications
+
 - **Solutions**
   - Before 2000s: "bare-metal era"
   - 2000s-2010s: "virtual machine era"
@@ -75,14 +77,15 @@ UMD DATA605 - Big Data Systems
 
 :::columns
 ::::{.column width=65%}
-- **DevOps** = set of practices that combines:
+- **DevOps** = practices combining:
   - Software development (_dev_)
   - IT operations (_ops_)
+
 - **Containers revolutionized DevOps**
-  - Enable true independence between application development and IT ops
-    - One team creates an application
-    - Another team deploys and manages the applications
-  - Create a model for better collaboration (fewer conflicts) and innovation
+  - Enable independence between app development and IT ops
+    - One team creates an app
+    - Another team deploys and manages apps
+  - Foster collaboration and innovation
     - IT: "It doesn't work!"
     - Devs: "What? It works for me"
 
@@ -108,18 +111,23 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=80%}
 - **< 2000s**
-  - Running one or few applications on each server (without virtualization)
+  - Running few applications per server (no virtualization)
+
 - **Pros**
   - No virtualization overhead
+
 - **Cons**
-  - Not safe / not secure since no separation between applications
+  - Insecure due to no application separation
   - Expensive
+
 - **Expensive / low efficiency**
-  - IT would buy a new server for each application
-  - Difficult to spec out the machine $\to$ buy "big and fast servers"
-    - Overpowered servers operating at 5-10% of capacity
-    - Tons of money in the 2000 DotCom boom was spent on machines and networks
-- It kind of came back in 2020 but with different use cases in Cloud Computing
+  - New server for each application
+  - Hard to spec machines $\to$ buy "big and fast servers"
+    - Overpowered servers at 5-10% capacity
+    - Significant spending during 2000 DotCom boom on machines and networks
+
+- Resurfaced in 2020 with different Cloud Computing use cases
+
 - **Winners**: Cisco, Sun, Microsoft
 ::::
 ::::{.column width=20%}
@@ -132,15 +140,18 @@ UMD DATA605 - Big Data Systems
 :::columns
 ::::{.column width=75%}
 - **Circa 2000-2010: Virtual Machine**
-  - Virtual machine technology = run multiple copies of OSes on the same hardware
+  - Run multiple OS copies on the same hardware
+
 - **Pros**
-  - VM runs safely and securely multiple applications on a single server
-  - IT could run apps on existing servers with spare capacity
+  - Run multiple apps safely on one server
+  - Use existing servers with spare capacity
+
 - **Cons**
-  - Every VM requires an OS (waste of CPU, RAM, and disk)
-  - Buy an OS license
+  - Each VM needs an OS (wastes CPU, RAM, disk)
+  - Buy OS license
   - Monitor and patch each OS
-  - VMs are slow to boot
+  - Slow boot times
+
 - **Winners**: VMWare, RedHat, Citrix
 ::::
 ::::{.column width=25%}
@@ -238,7 +249,7 @@ UMD DATA605 - Big Data Systems
 - **Docker client**
   - Command line interface
   - Communicate with server through IPC socket
-    - E.g., **/var/run/docker.sock** or IP port
+    - E.g., `/var/run/docker.sock` or IP port
 
 - **Docker engine**
   - Run and manage containers
@@ -275,10 +286,6 @@ UMD DATA605 - Big Data Systems
   - Manage clusters of nodes
   - Replaced by Kubernetes
 
-- **Open Container Initiative (OCI)**
-  - Standardize low-level components of container infrastructure
-  - E.g., image format, run-time API
-  - "Death" of Docker
 ::::
 ::::{.column width=35%}
 
@@ -287,32 +294,42 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
+- **Open Container Initiative (OCI)**
+  - Standardize low-level components of container infrastructure
+  - E.g., image format, run-time API
+  - "Death" of Docker
+
 * Docker Container
 
 - **Docker Container**
   - Unit of computation
   - Lightweight, stand-alone, executable software package
-  - Includes everything needed to run, e.g.,
-    - Code
-    - Runtime/system libraries
-    - Settings
-  - Run-time object
-    - Docker images are build-time objects
-    - Like program running (container) vs program code (image)
+
+- **Includes everything needed to run**
+  - Code
+  - Runtime/system libraries
+  - Settings
+
+- **Run-time object**
+  - Docker images are build-time objects
+  - Like program running (container) vs program code (image)
 
 * Docker Image
 - **Docker Image**
   - Unit of deployment
-  - Contains everything needed to run an app
-    - Application code
-    - Application dependencies
-    - Minimal OS support
-    - File system
-  - Users can
-    - Build images from Dockerfiles
-    - Pull pre-built images from a registry
-  - Multiple layers stacked
-    - Typically few 100s MBs
+
+- **Contains everything needed to run an app**
+  - Application code
+  - Application dependencies
+  - Minimal OS support
+  - File system
+
+- Users can
+  - Build images from Dockerfiles
+  - Pull pre-built images from a registry
+
+- Multiple layers stacked
+  - Typically few 100s MBs
 
 * Docker Image Layers
 :::columns
@@ -499,7 +516,7 @@ CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
 
 * Docker: Commands
 - Show running containers
-  \begingroup \tiny \color{blue}
+  \begingroup \scriptsize \color{blue}
   ```
   > docker container ls
   CONTAINER ID   IMAGE                COMMAND                  CREATED         STATUS        
@@ -545,8 +562,7 @@ CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
   \endgroup
 
 * Docker Tutorial
-- [tutorial_docker.md](
-  https://github.com/gpsaggese/umd_classes/blob/main/data605/tutorials/tutorial_docker/tutorial_docker.md)
+- [Docker tutorial](https://github.com/gpsaggese/umd_classes/blob/main/data605/tutorials/tutorial_docker/tutorial_docker.md)
 
 * Docker Compose
 - **Manage multi-container apps running on a single node**
@@ -556,8 +572,7 @@ CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
   - Examples:
     - Client app and Postgres DB
     - Microservices: Web front-end, Ordering, Back-end DB
-
-- In 2020, Docker Compose became an open standard for "code-to-cloud" process
+  - In 2020, Docker Compose became an open standard for "code-to-cloud" process
 
 - **Manage multi-container apps running on multiple hosts**
   - Docker Stacks / Swarm
@@ -614,7 +629,7 @@ CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
 :::
 
 * Docker Compose: Commands
-\begingroup \tiny
+\begingroup \tiny \color{blue}
 ```text
 > docker compose --help
 Usage:  docker compose [OPTIONS] COMMAND
@@ -697,7 +712,7 @@ Commands:
 
 * Docker Compose: Commands
 - Show the processes inside each container
-  \begingroup \tiny \color{blue}
+  \begingroup \footnotesize \color{blue}
   ```
   > docker compose top
   counter_app-redis-1
@@ -713,34 +728,36 @@ Commands:
 
 * Docker Compose: Commands
 - Build the containers for the services
-\begingroup \footnotesize \color{blue}
-```
-> docker compose down
-[+] Running 3/2
- Container counter_app-redis-1    Removed                                                
- Container counter_app-web-fe-1   Removed
- Network counter_app_counter-net  Removed
-```
-\endgroup
+  \begingroup \footnotesize \color{blue}
+  ```
+  > docker compose down
+  [+] Running 3/2
+   Container counter_app-redis-1    Removed                                                
+   Container counter_app-web-fe-1   Removed
+   Network counter_app_counter-net  Removed
+  ```
+  \endgroup
 
 - Shutdown service removing the volume (i.e., resetting state)
-\begingroup \footnotesize \color{blue}
-```
-> docker-compose down -v
-```
-\endgroup
+  \begingroup \footnotesize \color{blue}
+  ```
+  > docker-compose down -v
+  ```
+  \endgroup
 
 - Shutdown service removing images and volume
-\begingroup \footnotesize \color{blue}
-```
-> docker-compose down -v --rmi all
-```
-\endgroup
+  \begingroup \footnotesize \color{blue}
+  ```
+  > docker-compose down -v --rmi all
+  ```
+  \endgroup
 
 * Docker Compose: Tutorial
 - Example taken from https://github.com/nigelpoulton/counter-app
 - [tutorial\_docker\_compose](https://github.com/gpsaggese/umd_classes/tree/main/data605/tutorials/tutorial_docker_compose)
+  \begingroup \scriptsize \color{blue}
   ```
   > cd tutorials/tutorial_docker_compose
   > vi tutorial_docker_compose.md
   ```
+  \endgroup

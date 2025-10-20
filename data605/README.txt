@@ -24,6 +24,10 @@ vimdiff $SRC_NAME process_slides.txt
 > process_lessons.py --lectures 01.1* --class data605 --action slide_check --limit 0:2
 ```
 
+```
+> slide_check.sh 01.2
+```
+
 # Reduce all slides
 ```
 SRC_NAME=$(ls $DIR/lectures_source/Lesson04.2*); echo $SRC_NAME
