@@ -1,0 +1,112 @@
+// Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
+// 
+// https://docs.google.com/presentation/d/1vPnS1ExXBWG7fDwiBFiKWXvSNaocFCRhuPiUtL6KlOM/edit?slide=id.g14f60704d11_0_6#slide=id.g14f60704d11_0_6
+
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{MongoDB and CouchDB}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+\vspace{1cm}
+
+**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+
+- All concepts in slides
+- MongoDB tutorial
+- Web
+  - https://www.mongodb.com/
+  - Official docs
+  - pymongo
+- Book
+  - Seven Databases in Seven Weeks, 2e
+::::
+:::: {.column width=50%} 
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_5_image_1.png)
+::::
+:::
+
+## Couchbase
+
+* Couchbase
+::: columns 
+:::: {.column width=50%}
+- NoSQL document-oriented DB (like MongoDB)
+- Couchbase = merge of CouchDB and membase
+  - *CouchDB*
+    - Open source document store
+    - HTTP RESTful API to add, update, delete documents
+    - Support all 4 ACID properties
+  - *membase*
+    - Distributed key-value store (like Redis)
+    - Designed to scale both up and down
+    - Highly available and partition tolerant
+  - Uses HTTP protocol to query and interact with objects in the DB
+    - No query language
+  - Objects stored in *buckets*
+    - Collection of JSON docs, with no special relation to one another
+- From CAP point of view:
+  - Supports consistency and partition tolerance
+  - High availability is achieved through use of multiple clusters
+::::
+::::{.column width=50%}
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_42_image_1.png)
+
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_42_image_2.png)
+::::
+:::
+
+* Architecture
+::: columns
+::::{.column width=50%}
+- Every Couchbase node consists of **different services**:
+  - Data service
+  - Index service
+  - Query service
+  - Cluster manager component
+- Services can run on separate nodes of the cluster, if needed
+- **Data replication**
+  - Across nodes of a cluster
+  - Across data centers
+- **Data service**
+  - Writes data *asynchronously* to disk after acknowledging to the client
+  - Optionally *synchronous:* ensure data is written to more than one server before acknowledging a write
+::::
+::::{.column width=50%}
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_43_image_1.png)
+
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_43_image_2.png)
+::::
+:::
+
+* Queries
+- **Can create multiple views over documents**
+  - Views are optimized / indexed by Couchbase for fast queries
+  - Re-indexed when underlying documents changes
+  - Can do full-text searches using the indexes
+- **Perform well when:**
+  - There are infrequent changes to the structure of documents
+  - Know in advance what kinds of queries you want to execute
+- **Query**
+  - Uses a custom query language called N1QL ("nickel")
+  - Extends SQL to JSON documents
+  - Queries over multiple documents using (server-side) joins
+
+- **Map-reduce support**
+  - (Map) First define a view with the columns of the document your are interested in
+  - (Reduce) Optionally define aggregate functions over the data
