@@ -16,7 +16,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Lesson 4.2: Relational DB Internals}}$$**
+**$$\text{\blue{Lesson 4.3: Data Storage}}$$**
 \endgroup
 
 ::: columns
@@ -138,6 +138,7 @@ source: http://cse1.net/recaps/4-memory.html
     - Disks still store most data today
 
 - Algorithms depend on available technology
+
 ## Magnetic Disks / SSD
 
 * Connecting disks to a server
