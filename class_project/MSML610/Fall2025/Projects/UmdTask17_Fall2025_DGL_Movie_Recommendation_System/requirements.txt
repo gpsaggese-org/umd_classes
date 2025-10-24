@@ -1,0 +1,18 @@
+# === Core (CPU) ===
+torch==2.4.0
+
+# === Data & ML ===
+numpy==2.3.1
+pandas==2.3.3
+scikit-learn==1.7.0
+scipy==1.16.2
+
+# === Notebooks & viz ===
+ipykernel==6.29.5
+jupyterlab==4.2.7
+matplotlib==3.9.2
+tqdm==4.66.5
+
+# === Utilities ===
+networkx==3.3
+EOF
