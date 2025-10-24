@@ -15,4 +15,8 @@ tqdm==4.66.5
 
 # === Utilities ===
 networkx==3.3
+
 EOF
+
+# == DGL === Seperate Pip
+#pip install "dgl==2.4.0" -f https://data.dgl.ai/wheels/torch-2.4/repo.html
