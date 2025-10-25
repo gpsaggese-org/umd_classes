@@ -46,4 +46,10 @@ process_slides.py --in_file $SRC_NAME --action slide_reduce --out_file $SRC_NAME
 
 > find data605/lectures/Lesson0*.pdf -type f -name "*.pdf" -print -exec mdls -name kMDItemNumberOfPages {} \;
 
+> find data605/lectures/Lesson0*.pdf -type f -name "*.pdf" -print0 | while IFS= read -r -d '' file; do     pages=$(mdls -name kMDItemNumberOfPages "$file" | awk -F'= ' '{print $2}');     echo -e "${file}\t${pages}"; done | tee tmp.txt
+
+data605/lectures/Lesson01.1-Intro.pdf   10
+data605/lectures/Lesson01.2-Big_Data.pdf        17
+data605/lectures/Lesson01.3-Is_Data_Science_Just_Hype.pdf       14
+
 // process_slides.py --in_file data605/lectures_source/Lesson02-Git_Data_Pipelines.txt --action slide_format_figures --out_file data605/lectures_source/Lesson02-Git_Data_Pipelines.txt --use_llm_transform
