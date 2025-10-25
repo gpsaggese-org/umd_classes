@@ -73,7 +73,7 @@ UMD DATA605 - Big Data Systems
 
 - **Not so good for**
   - Hierarchical data (not a nice row in tables)
-  - Variable/dishomogeneous data (record-to-record variation)
+  - Variable/heterogeneous data (record-to-record variation)
 
 * Key-Value Store
 :::columns
@@ -114,7 +114,7 @@ UMD DATA605 - Big Data Systems
   - Key-value with document as value (nested dict)
   - Unique ID for each document (e.g., hash)
   - Any number of fields per document, including nested
-    - E.g., jSON, XML, dict data
+    - E.g., JSON, XML, dict data
 
 - **Application**
   - Semi-structured data
@@ -206,9 +206,7 @@ UMD DATA605 - Big Data Systems
   - Struggle with availability, maintain consistency across partitions
   - BigTable (column-oriented/tabular)
   - HBase (column-oriented/tabular)
-  - MongoDB (document-oriented)
   - Redis (key-value)
-  - MemcacheDB (key-value)
   - Berkeley DB (key-value)
 ::::
 ::::{.column width=35%}
@@ -219,6 +217,8 @@ UMD DATA605 - Big Data Systems
 
 - **AP (Available, Partition-Tolerant) systems**
   - Achieve "eventual consistency" via replication and verification
+  - MongoDB (document-oriented)
+  - MemcacheDB (key-value)
   - Dynamo (key-value)
   - Cassandra (column-oriented/tabular)
   - CouchDB (document-oriented)
