@@ -16,7 +16,7 @@ docker> gen_data605_script.sh 01 --limit 1:5
 ```
 SRC_NAME=$(ls $DIR/lectures_source/Lesson02*); echo $SRC_NAME
 DST_NAME=process_slides.txt
-docker> process_slides.py --in_file $SRC_NAME --action slide_check --out_file $DST_NAME --use_llm_transform --limit 0:10
+docker> process_slides.py --in_file $SRC_NAME --action text_check --out_file $DST_NAME --use_llm_transform --limit 0:10
 vimdiff $SRC_NAME process_slides.txt
 ```
 
