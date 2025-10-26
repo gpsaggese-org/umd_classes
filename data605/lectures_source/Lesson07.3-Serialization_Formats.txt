@@ -1,6 +1,6 @@
 // Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
-// 
-// 
+//
+//
 
 ::: columns
 :::: {.column width=15%}
@@ -22,363 +22,132 @@ UMD DATA605 - Big Data Systems
 \endgroup
 
 ::: columns
-:::: {.column width=65%}
+:::: {.column width=75%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 ::::
-:::: {.column width=30%}
-::::
-:::
-
-
-* Overview
-- **Data wrangling**
-  - Aka "data preparation", "data munging", "data curation"
-  - Get data into a structured form suitable for analysis
-  - Often it is the step where majority of time (80-90%) is spent
-- **Key steps**
-  - **Scraping**: extract information from sources (e.g., webpages)
-  - **Data cleaning**: remove inconsistencies / errors
-  - **Data transformation**: get data into the right structure
-  - **Data integration**: combine data from multiple sources
-  - **Information extraction**: extract structured information from unstructured / text sources
-
-* Overview
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_18_image_1.png)
-
-* Overview
-- Many of the data wrangling problems are not easy to formalize, and have seen little research work, e.g.,
-  - Data cleaning: mainly statistics, outlier detection, imputation
-  - Data transformation, i.e., put the data in the "right" structure (e.g., tidy data)
-  - Information extraction: feature computation, highly domain specific
-- Others aspects have been studied in depth, e.g.,
-  - Schema mapping
-  - Data integration
-- In an ETL process
-  - Data extraction is the E step
-  - Data wrangling is the T step
-
-* Overview
-::: columns
-:::: {.column width=60%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_20_image_1.png)
-::::
-:::: {.column width=40%}
-
-- From Data Cleaning: Problems and Current Approaches
-- Paper somewhat old: data is mostly coming from structured sources
-- Today unstructured/semi-structured are equally important
+:::: {.column width=20%}
 ::::
 :::
-
-* Data Extraction
-- Data may reside in a wide variety of different sources
-  - Files (e.g., CSV, JSON, XML)
-  - Many databases
-  - Spreadsheets
-  - AWS S3 buckets
-  - ...
-  - Most analytical tools support importing data from such sources through adapters
-- Web scraping
-  - In some cases there may be APIs, in other cases data may have to be explicitly scraped
-  - Scraping data from web sources is tough
-    - Can be fragile
-    - Throttling
-    - It's cat-and-mouse game between scrapers and website
-  - Often pipelines are set up to do this on a periodic basis
-  - Several tools out there to do this (somewhat) automatically
-    - E.g., import.io, portia, ...
-
-* Tidy Data
-::: columns
-:::: {.column width=40%}
-- Tidy data, Wickham, 2014
-  - Each variable forms a column
-  - Each observation forms a row
-- Wide vs long format
-
-Wide format
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_4.png)
-::::
-:::: {.column width=40%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_1.png)
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_2.png)
-"Messy" data
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_3.png)
-Tidy data
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_5.png)
-Long format
-::::
-:::
-
-
-
-
-
-
-
-
-
-* Data Quality Problems
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_23_image_1.png)
-
-* Single-Source Problems
-- Depends largely on the source
-- Databases can enforce constraints
-- Data extracted from spreadsheets is often "clean"
-  - At least there is a schema
-- Logs are messy
-- Data scraped from web-pages is much more messy
-- Types of problems:
-  - Ill-formatted data
-  - Missing or illegal values, misspellings, use of wrong fields, extraction issues (e.g., not easy to separate out different fields)
-  - Duplicated records, contradicting information, referential integrity violations
-  - Unclear default/missing values
-  - Evolving schemas or classification schemes (for categorical attributes)
-  - Outliers
-
-* Data Quality Problems
-**Data Quality Problems
-**
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_25_image_1.png)
-
-* Multi-Source Problems
-
-- Different data sources are:
-  - Developed separately
-  - Maintained by different people
-  - Stored in different systems
-  - ...
-- Schema mapping / transformation
-  - Mapping information across sources
-  - Naming conflicts: same name used for different objects, different names for same objects
-  - Structural conflicts: different representations across sources
-- Entity resolution
-  - Matching entities across sources
-- Data quality issues
-  - Contradicting information
-  - Mismatched information
-  - ...
-
-* Data Cleaning: Outlier Detection
-
-
-- Quantitative Data Cleaning for Large Databases, Hellerstein, 2008
-  - Focuses on numerical data (i.e., integers/floats that measure some quantities of interest)
-- Sources of errors in data
-  - Data entry errors: users putting in arbitrary values to satisfy the form
-  - Measurement errors: especially sensor data
-  - Distillation errors: errors that pop up during processing and summarization
-  - Data integration errors: inconsistencies across sources that are combined together
-
-* Univariate Outlier Detection
-::: columns
-:::: {.column width=50%}
-
-- A set of values can be characterized by metrics such as
-  - Center (e.g., mean)
-  - Dispersion (e.g., standard deviation)
-  - Higher momenta (e.g., skew, kurtosis)
-- Use statistics to identify outliers
-  - Must watch out for "masking": one extreme outlier may alter the metrics sufficiently to mask other outliers
-  - Robust statistics: minimize effect of corrupted data
-  - Robust center metrics:
-    - Median
-    - k%-trimmed mean (i.e., discard lowest and highest k% values)
-  - Robust dispersion:
-    - Median absolute deviation (MAD)
-    - Median distance of values from the median value
-::::
-::::{.column width=50%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_1.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_2.png)
-::::
-:::
-* Outlier Detection
-
-
-- For Gaussian data
-  - Any data points 1.4826x MAD away from median
-  - May need to eyeball the data (e.g., plot a histogram) to decide if this is true
-- For non-Gaussian data
-  - Estimate generating distribution (parametric approach)
-  - Distance-based methods: look for data points that do not have many neighbors
-  - Density-based methods:
-    - Define *density* to be average distance to *k* nearest neighbors
-    - *Relative density* = density of node/average density of its neighbors
-    - Use relative density to decide if a node is an outlier
-- Most of these techniques start breaking down as the dimensionality of the data increases
-  - *Curse of dimensionality*
-    - You need an O(e^n) points with n dimensions to estimate
-    - "In high dimensional spaces, data is always is sparse"
-  - Can project data into lower-dimensional space and look for outliers there
-    - Not as straightforward
-- Wikipedia article on Outliers
-
-* Multivariate Outliers
-::: columns
-:::: {.column width=60%}
-
-- One set of techniques *multivariate Gaussian distribution* data
-  - Defined by a *mean* $\mu$ and a *covariance matrix* $\Sigma$
-- Mean / covariance are not *robust* (sensitive to outliers)
-- Robust statistics analogous to univariate case
-- Iterative approach
-  - Mahalanobis distance of a point is the square root of $(x - \mu)'\Sigma^{-1}(x - \mu)$
-  - Measures how far the point x is from a multivariate normal distribution
-  - Outliers are points that are too far away according to Mahalanobis distance
-  - Remove outlier points
-  - Recompute the mean and covariance
-- Often volume of data is too much
-  - Approximation techniques often used
-- Need to try different techniques based on the data
-::::
-:::: {.column width=40%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_1.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_2.png)
-::::
-:::
-
-* Time Series Outliers
-::: columns
-:::: {.column width=60%}
-
-- Often data is in the form of a time series
-- A **time series** is a sequence of data points recorded at regular time intervals tracking a variable over time
-  - Stock prices
-  - Sales revenue
-  - Website traffic
-  - Inventory levels
-  - Energy consumption
-  - Market demand
-  - Social media engagement
-  - Hourly energy usage
-  - Customer satisfaction ratings over time
-  - Weekly retail foot traffic
-  - ...
-- Rich literature on *forecasting* in time series data
-- Can use the historical patterns in the data to flag outliers
-  - Rolling MAD (median absolute variation)
-::::
-:::: {.column width=40%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_31_image_1.png)
-::::
-:::
-
-
-
-* Split-Apply-Combine
-::: columns
-:::: {.column width=60%}
-
-- The Split-Apply-Combine Strategy for Data Analysis, Wickam, 2011
-- Common data analysis pattern
-  - Split: break data into smaller pieces
-  - Apply: operate on each piece independently
-  - Combine: combine the pieces back together
-- Pros
-  - Code is compact
-  - Easy to parallelize
-- E.g.,
-  - group-wise ranking
-  - group vars (e.g., sums, means, counts)
-  - create new models per group
-- Supported by many languages
-  - Pandas
-  - SQL GROUP BY operator
-  - Map-Reduce
-::::
-:::: {.column width=40%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_32_image_1.png)
-::::
-:::
-
-
-
-
 
 * Serialization Formats
-- Programs need to send data to each other (on the network, on disk)
-  - E.g., Remote Procedure Calls (RPCs)
-  - Several recent technologies based around schemas
+- Programs need to send data to each other (network, disk)
+  - E.g., remote Procedure Calls (RPCs)
+  - Recent technologies based on schemas
     - JSON, YAML, Protocol Buffer, Python Pickle
+
 - Serialization formats are data models
 
 * Comma Separated Values (CSV)
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=50%}
 - CSV stores data row-wise as text without schema
-  - Each line of the file is a data record
-  - Each record consists of one or more fields, separated by commas
+  - Each line is a data record
+  - Records have fields separated by commas
+
 - **Pros**
   - Very portable
-    - It's text
-    - Supported by every tool
+    - Text format
+    - Supported by all tools
   - Human-friendly
-- **Cons**
-  - Large footprint
-    - Compression
-  - Parsing is CPU intensive
-  - No easy random access
-  - No read only a subset of columns
-  - No schema / types
-    - Annotate CSV files with schema
-  - Mainly read-only, difficult to modify
 ::::
-:::: {.column width=40%}
+:::: {.column width=45%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_35_image_1.png)
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_35_image_2.png)
 ::::
 :::
+
+- **Cons**
+  - Large footprint
+    - Requires compression
+  - Parsing is CPU intensive
+  - No easy random access
+  - Can't read only a subset of columns
+  - No schema/types
+    - Annotate CSV with schema
+  - Mainly read-only, hard to modify
+
 * (Apache) Parquet
 ::: columns
 :::: {.column width=70%}
-- Parquet allows to read tiles of data
-  - That's what the name comes from
-- Supports multi-dimensional and nested data
-  - A generalization of dataframes
+- Parquet reads data tiles
+
+- Supports multi-dimensional, nested data
+  - Generalizes dataframes
+
 - Column-storage
-  - Each column is stored together, has uniform data type, and compressed (efficiently)
-- Queries can be executed by IO layer
-  - Only the necessary chunks of data is read from disk
+  - Stores each column together, uniform data type, compressed efficiently
+
+- IO layer executes queries
+  - Reads only necessary data chunks from disk
+
 - **Pros**
   - 10x smaller than CSV
-  - 10x faster (with multi-threading)
-  - You can read only a subset of columns and rows
+  - 10x faster with multi-threading
+  - Read subset of columns and rows
+
 - **Cons**
-  - Binary, non-human friendly
-  - Need ingestion step converting the inbound format to Parquet
-  - Mainly read-only, difficult to modify
+  - Binary, not human-friendly
+  - Requires ingestion step to convert to Parquet
+  - Mainly read-only, hard to modify
 ::::
-:::: {.column width=30%}
+:::: {.column width=25%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_36_image_1.png)
 ::::
 :::
+
 * JSON
+::: columns
+:::: {.column width=50%}
 - JSON = JavaScript Object Notation
-- Data is nested dictionaries and arrays
-- Very similar to XML
+
+- Nested dictionaries and arrays
+
+- Similar to XML
   - More human-readable
   - Less boilerplate
-  - Executable in JavaScript (and Python)
-
+  - Executable in JavaScript and Python
+::::
+:::: {.column width=45%}
+\scriptsize
 ```json
-{     "firstName": "John",     "lastName": "Smith",     "isAlive": true,     "age": 25,     "height_cm": 167.6,     "address": {        "streetAddress": "21 2nd Street",        "city": "New York",        "state": "NY",        "postalCode": "10021-3100"     }, 
-   "phoneNumbers": [        {        "type": "home",        "number": "212 555-1234"       },        {        "type": "office",        "number": "646 555-4567"        }     ],     "children": [],     "spouse": null  }
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "isAlive": true,
+  "age": 25,
+  "height_cm": 167.6,
+  "address": {
+    "streetAddress": "21 2nd Street",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10021-3100"
+  },
+  "phoneNumbers": [
+    {
+      "type": "home",
+      "number": "212 555-1234"
+    },
+    {
+      "type": "office",
+      "number": "646 555-4567"
+    }
+  ],
+  "children": [],
+  "spouse": null
+}
 ```
+::::
+:::
 
 * Protocol Buffers
+::: columns
+:::: {.column width=50%}
 - Developed by Google
 - Open-source
-- Represent data structures in:
+- Represent data structures:
   - Language agnostic
   - Platform agnostic
   - Versioning
@@ -388,9 +157,14 @@ Long format
   - Default values
   - Structures
   - Arrays
-- Schema specified using a **.proto** file
-- Compiled by **protoc** to produce C++, Java, or Python code to initialize, read, serialize objects
 
+- Schema specified using a `.proto` file
+
+- Compiled by `protoc` to produce C++, Java, or Python code to initialize, read,
+  serialize objects
+::::
+:::: {.column width=45%}
+\scriptsize
 ```python
 import addressbook_pb2
 person = addressbook_pb2.Person()
@@ -401,6 +175,8 @@ phone = person.phones.add()
 phone.number = "555-4321"
 phone.type = addressbook_pb2.Person.HOME
 ```
+
+\vspace{0.5cm}
 
 ```proto
 message Person {
@@ -419,8 +195,12 @@ message Person {
   repeated PhoneNumber phones = 4;
 }
 ```
+::::
+:::
 
 * Serialization Formats
+::: columns
+:::: {.column width=50%}
 - Avro
   - Richer data structures
   - JSON-specified schema
@@ -429,22 +209,55 @@ message Person {
   - Now Apache project
   - More languages supported
   - Supports exceptions and sets
-
-```json 
-{        "namespace": "example.avro",        "type": "record",        "name": "User",        "fields": [                   {"name": "name", "type": "string"},                   {"name": "favorite_number", "type": ["int", "null"]},                   {"name": "favorite_color", "type": ["string", "null"]}        ] }
+::::
+:::: {.column width=45%}
+\scriptsize
+```json
+{
+  "namespace": "example.avro",
+  "type": "record",
+  "name": "User",
+  "fields": [
+    {
+      "name": "name",
+      "type": "string"
+    },
+    {
+      "name": "favorite_number",
+      "type": [
+        "int",
+        "null"
+      ]
+    },
+    {
+      "name": "favorite_color",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  ]
+}
 ```
+::::
+:::
 
 * Remote Procedure Call
 ::: columns
-:::: {.column width=70%}
-- **Remote Procedure Call** (RPC) is a protocol to request a service from a program located in another computer abstracting the details of the network communication
-- **Goal**: similar to how procedure calls are made within a single process, without having to understand the network's details
+:::: {.column width=65%}
+- **Remote Procedure Call** (RPC) requests services from programs on other
+  computers, abstracting network communication
+
+- **Goal**: Make remote calls like local procedure calls without network details
+
 - **Problems**
   - Can't serialize pointers
   - Asynchronous communication
   - Failures and retry
+
 - Used in distributed systems
-  - E.g., microservices architectures, cloud services, and client-server applications
+  - E.g., microservices, cloud services, client-server applications
+
 - Can be synchronous or asynchronous
 ::::
 :::: {.column width=30%}
@@ -452,26 +265,20 @@ message Person {
 ::::
 :::
 
-```
-
-
-
-```
-
 * RPCs: Internals
 ::: columns
-:::: {.column width=40%}
-- **Client procedure call**: Client calls a stub function, providing the necessary arguments
-- **Request marshalling**: Client stub serializes the procedure's arguments into a format suitable for transmission over the network
-- **Server communication**: Client's RPC runtime sends the procedure request across the network to the server
-- **Server-side unmarshalling**: Server's RPC runtime receives the request and deserializes the arguments
-- **Procedure execution**: Server calls the actual procedure on the server-side
-- **Response marshalling**: Once the procedure completes, the return values are marshaled into a response message
-- **Client communication **/ **response unmarshalling** / **return to client**: Return values are passed back to the client's original stub call, and execution continues as if the call were local.
+:::: {.column width=50%}
+- _Client procedure call_: Client calls stub function with arguments
+- _Request marshalling_: Client stub serializes arguments for network
+  transmission
+- _Server communication_: Client's RPC runtime sends request to server
+- _Server-side unmarshalling_: Server's RPC runtime deserializes arguments
+- _Procedure execution_: Server calls procedure
 ::::
-:::: {.column width=60%}
+:::: {.column width=45%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_41_image_1.png)
 ::::
 :::
-
-
+- _Response marshalling_: Return values marshaled into response message
+- _Client communication_ / _response unmarshalling_ / _return to client_:
+  Return values passed back to client's stub call, execution continues locally
