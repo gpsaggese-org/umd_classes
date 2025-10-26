@@ -33,7 +33,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-* Software testing
+* Software Testing
 - Evaluate functionality, reliability, performance, and security of a product to
   ensure it meets requirements
   - Software testing is critical in development
@@ -51,7 +51,7 @@ UMD DATA605 - Big Data Systems
   - _System testing_: Evaluate a fully integrated system's compliance with
     specified requirements
 
-* Software testing
+* Software Testing
 - **Smoke/sanity testing**: Quick check of functionalities to ensure main
   functions work
   - E.g., decide if a new build is stable
@@ -120,7 +120,7 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-* Stages of deployment
+* Stages of Deployment
 - The deployment of software progresses through several environments
   - Each environment tests, validates, and prepares software for release to end
     user
@@ -142,7 +142,7 @@ UMD DATA605 - Big Data Systems
   - Optimized for security, performance, and scalability
   - Focus on uptime, user experience, and data integrity
 
-* Semantic versioning
+* Semantic Versioning
 - **Semantic versioning** is a versioning scheme for software that conveys meaning
   about underlying changes
   - Systematic approach
