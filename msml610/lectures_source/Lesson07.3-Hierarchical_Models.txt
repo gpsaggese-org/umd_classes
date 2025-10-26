@@ -1,0 +1,203 @@
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Probabilistic Programming}}$$**
+\endgroup
+\vspace{1cm}
+
+::: columns
+:::: {.column width=75%}
+\vspace{1cm}
+**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`
+
+**References**:
+
+- AIMA (Artificial Intelligence: a Modern Approach)
+  - Chap 15: Probabilistic programming
+
+- Martin, Bayesian Analysis with Python, 2018 (2e)
+
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
+
+::::
+:::
+
+// 3, Hierarchical models
+
+# #############################################################################
+# Hierarchical Models
+# #############################################################################
+
+* Hierarchical Models
+- Aka "multilevel", "nested", "mixed-effects" models
+
+- **Key observation**: often data points share common structure, but also have
+  variations
+  - **Group data**
+    - E.g., sales in cities: each city is a different market, but there are
+      common trends
+  - **Hierarchical structure**
+    - E.g., students in a school: each student is different, with common
+      educational factors
+  - **Repeated measurements on same objects**
+
+- **Approach**: ![](emoji/lightbulb.png){ width=14px }
+  - Model shares information between groups, but it allows differences
+  - Parameters of prior distributions have a prior distribution
+    - Aka "hyper-priors" (!)
+
+- You can't do this with frequentist approach, only with Bayesian approach
+
+* Hierarchical Models: Examples
+- Many data problems lend themselves to **hierarchical descriptions**
+
+- E.g.,
+  - Medical research:
+    - Estimate drug effectiveness in treating a disease
+    - Categorize patients by demographics, disease severity
+    - Estimate cure probability for each subgroup
+  - Market research
+    - Understand consumer purchasing behavior
+    - Categorize consumers by age, gender, income, education
+
+* Unpooled, Pooled, Hierarchical Models
+- **Pooled**
+  - Groups have the same priors
+- **Unpooled**
+  - Groups have different priors
+- **Hierarchical**
+  - Groups have different priors which come from a common prior
+
+![](msml610/lectures_source/figures/Lesson07_Pooled_unpooled_hierarchical_models.png){ width=80% }
+
+// TODO(gp): Convert it into graphviz
+
+// ## 3.2, Hierarchical shifts
+
+* Hierarchical Models: Chemical Shift
+- Proteins are made of 20 amino acids
+  - Study proteins with nuclear magnetic resonance
+  - Measure "chemical shift"
+
+- The data looks like:
+
+::: columns
+:::: {.column width=40%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_hierarchical1.png)
+::::
+:::: {.column width=55%}
+- `ID`: Code of the protein
+- `aa`: Name of the amino acid
+- `theo`: Theoretical values of chemical shift
+- `exp`: Experimental value
+- `diff`: Difference between theoretical and experimental value
+::::
+:::
+
+* Hierarchical Models: Chemical Shift
+- Experimental measures of chemical shifts vs theoretical values
+
+- Evaluate model using different modeling styles
+  1. **Pooled**
+     - Compute difference between estimates and measures, fit Gaussian
+     - More accurate estimates, lose amino acid information
+  2. **Unpooled**
+     - Fit 20 Gaussians for 20 amino acids
+     - Detailed analysis, less accuracy
+  3. **Hierarchical**
+     - Model groups assuming common population
+
+* Chemical Shift: Unpooled Model
+
+::: columns
+:::: {.column width=55%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_hierarchical2.png)
+::::
+:::: {.column width=40%}
+- **Model each group independently**
+  - Use same model structure to compare groups
+::::
+:::
+
+* Chemical Shift: Hierarchical Model
+::: columns
+:::: {.column width=55%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_hierarchical3.png)
+::::
+:::: {.column width=40%}
+- **Add two hyperpriors on $\mu$**
+  - One for mean of $\mu$
+  - One for standard deviation of $\mu$
+- **Assume same variance $\sigma$ for all groups**
+  - Modeling choice
+  - Option to add hyperpriors for $\sigma$
+- Intermediate situation between single group and 20 separate groups
+::::
+:::
+
+* Chemical Shift: Results
+::: columns
+:::: {.column width=50%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_hierarchical4.png)
+::::
+:::: {.column width=45%}
+- Compare estimates of two models
+  - 20 groups
+  - Each model has 4 estimated variable
+
+- Plot 94% credible intervals
+  - Blue is hierarchical
+  - Orange is non-hierarchical
+  - Black vertical line: global mean (hierarchical model)
+  - Blue / hierarchical means pulled towards mean compared to orange
+    (non-hierarchical)
+  - **There is shrinkage**
+::::
+:::
+
+* Shrinkage
+- **Hierarchical models shrink parameters towards a common mean**
+  - As groups share information through the hyper-prior
+  - Model groups as neither independent nor a single group, but in between
+  - Less responsive to extreme values in individual groups
+  - Improves estimation for small groups using data from others
+
+- **Amount of shrinkage** depends on data:
+  - Groups with more data influence estimates more
+  - Similar groups reinforce common estimation
+  - It's a global optimization!
+
+- **Result**: inference is more stable
+
+* You Need to Know When to Stop
+- You can create **hierarchical models with as many levels** as you want
+
+- **Pros**:
+  - Leverage data structure
+
+- **Cons**
+  - Don't improve inference quality
+  - Complicate interpretation
+
+- _"Add as many degrees as freedom as needed, but not more than what is
+  warranted"_ (Occam's razor)
+
+* Tutorial
+
+- [Hierarchical Models](https://github.com/gpsaggese/umd_classes/blob/master/msml610/tutorials/notebooks/Lesson07.03_Hierarchical_Models.ipynb)

@@ -35,23 +35,18 @@ MSML610: Advanced Machine Learning
   - The direction of the arrow represent **conditional dependence** (not
     causality)
     - $A \to B$ requires to estimate $\Pr(A | B)$
-  - There are many possible **edges** and **node ordering** for the same Bayesian
-    network
-
 ::: columns
 :::: {.column width=60%}
 
-- E.g., a Bayesian network with $Fire$ and $Smoke$, which are dependent
-  - $Fire \to Smoke$
-    - Need $\Pr(Fire)$ and $\Pr(Smoke | Fire)$ to compute $\Pr(Fire, Smoke)$
-  - $Smoke \to Fire$
-    - Need $\Pr(Smoke)$ and $\Pr(Fire | Smoke)$
-  - Networks are equivalent and convey the same information
-  - Different difficulties to estimate
-
+- There are **many possible** _edges_ and _node ordering_ for the same Bayesian
+  network
+  - E.g., a Bayesian network with $Fire$ and $Smoke$, which are dependent
+    - $Fire \to Smoke$
+      - Need $\Pr(Fire)$ and $\Pr(Smoke | Fire)$ to compute $\Pr(Fire, Smoke)$
+    - $Smoke \to Fire$
+      - Need $\Pr(Smoke)$ and $\Pr(Fire | Smoke)$
 ::::
 :::: {.column width=35%}
-
 ```graphviz
 digraph BayesianNetwork1 {
     rankdir=LR;
@@ -61,6 +56,8 @@ digraph BayesianNetwork1 {
 }
 ```
 
+\vspace{1cm}
+
 ```graphviz
 digraph BayesianNetwork1 {
     rankdir=LR;
@@ -69,11 +66,14 @@ digraph BayesianNetwork1 {
     Smoke -> Fire [label="P(Fire | Smoke)"];
 }
 ```
-
 ::::
 :::
 
-- There is an **asymmetry in nature**
+- Different Bayesian networks:
+  - Are equivalent and convey the same information
+  - Have different difficulties to be estimated
+
+- At the same time, there is an **asymmetry in nature**
   - Extinguishing fire stops smoke
   - Clearing smoke doesn't affect fire
 
@@ -84,32 +84,32 @@ digraph BayesianNetwork1 {
   - E.g., from _"Are random variables $Smoke$ and $Fire$ correlated?"_ to _"What
     causes what, $Smoke$ or $Fire$?"_
 
-- **"Dependency in nature" is like assignment in programming**
+- **"Dependency in nature"** is like assignment in programming
   - E.g., nature assigns $Smoke$ based on $Fire$:
     - ![](emoji/check_mark.png){ width=12px } $Smoke := f(Fire)$
     - ![](emoji/wrong.png){ width=12px } $Fire := f(Smoke)$
-  - Structural equations describe "assignment mechanism" in causal graphs
-    $$
-    X_i := f(X_j) \iff X_j \to X_i
-    $$
+
+- **Structural equations** describe "assignment mechanism" in causal graphs
+  $$
+  X_i := f(X_j) \iff X_j \to X_i
+  $$
 
 * Causal DAG
 - **Causal DAG**
-  - _Directed_: Arrows show direction of cause $\rightarrow$ effect
+  - _Directed_: Arrows show cause $\rightarrow$ effect
   - _Acyclic_: No feedback loops
-    - Causal relationships assume a temporal order: cause happens before effect
-    - A cycle would imply a variable is both a cause and effect of itself
-      (paradox)
+    - Causal relationships assume temporal order: cause before effect
+    - A cycle implies a variable is both cause and effect of itself
 
 - **Benefits**
-  - DAGs encode _causal_ rather than _associative_ links
-  - Enables reasoning about interventions and counterfactuals
-  - Supports explainable AI models
-  - Stability to conditional probability estimation
+  - DAGs encode _causal_ links
+  - Reason about interventions and counterfactuals
+  - Support explainable AI models
+  - Stability in conditional probability estimation
 
 - **Limitations**
-  - Requires domain knowledge to specify structure
-  - Assumes all relevant variables are included (e.g., no hidden confounders)
+  - Requires domain knowledge for structure
+  - Assumes all relevant variables included (no hidden confounders)
 
 * Causal Edges are Stable
 
