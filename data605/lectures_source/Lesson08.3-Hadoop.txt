@@ -39,42 +39,47 @@ UMD DATA605 - Big Data Systems
 * Implementations of MapReduce
 - **Google**
   - Not available outside Google
+
 - **Hadoop**
-  - Website
-  - An open-source implementation in Java
-  - Uses HDFS for stable storage
-  - Hadoop Wiki
-    - Introduction, Getting Started, Map/Reduce Overview
+  - Open-source in Java
+  - Uses HDFS for storage
+  - Hadoop Wiki: Intro, Getting Started, Map/Reduce Overview
+
 - **Amazon Elastic MapReduce (EMR)**
-  - Website
-  - Hadoop MapReduce running on Amazon EC2
-  - Can also run Spark, HBase, Hive, ...
+  - Hadoop MapReduce on Amazon EC2
+  - Also runs Spark, HBase, Hive,
+
 - **Spark**
+
 - **Dask**
 
 * MapReduce: Hadoop
-- Hadoop is an open-source implementation of MapReduce
+
+- Hadoop: open-source MapReduce implementation
+
 - Functionalities
-  - Partition the input data (HDFS)
+  - Partition input data (HDFS)
   - Input adapters
-    - E.g., HBase, MongoDB, Cassandra, Amazon Dynamo
-  - Schedule program's execution across a set of machines
+    - E.g., hBase, MongoDB, Cassandra, Amazon Dynamo
+  - Schedule program execution across machines
   - Handle machine failures
   - Manage inter-machine communication
-  - Perform the *GroupByKey* step
+  - Perform _GroupByKey_ step
   - Output adapters
-    - E.g., Avro, ORC, Parquet
-  - Schedule multiple *MapReduce* jobs
-
+    - E.g., avro, ORC, Parquet
+  - Schedule multiple _MapReduce_ jobs
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_42_image_1.png){width=80%}
 
 * Data Flow
-- Input, intermediate, final outputs are stored in a distributed file system (HDFS)
-  - Every operation in Hadoop goes from disk to disk
-- Adapters to read / partition the data in chunks
-- Scheduler tries to schedule map tasks "close" to physical storage location of input data
-  - Intermediate results (e.g., GroupBy) are stored on local FS of Map and Reduce workers
-- Output is often input to another MapReduce task
+- Store input, intermediate, final outputs in HDFS
+  - Operations in Hadoop move disk to disk
+
+- Use adapters to read/partition data in chunks
+
+- Scheduler places map tasks near physical storage of input data
+  - Store intermediate results on local FS of Map and Reduce workers
+
+- Output often serves as input for another MapReduce task
 
 * Input Data
   - **InputData** stores the data for a **MapTask** typically in a distributed file system (e.g., HDFS)

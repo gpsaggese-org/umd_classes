@@ -38,88 +38,50 @@ UMD DATA605 - Big Data Systems
 * Big Data: Sources and Applications
 :::columns
 ::::{.column width=60%}
+
 - **Growth of World Wide Web in 1990s and 2000s**
-- Storing and querying data much larger than enterprise data
-- Extremely valuable data to target advertisements and marketing
-- Web server logs, web links
-- Social media
-- Data from mobile phone apps
-- Transaction data
-- Data from sensors / Internet of Things
-- Metadata from communication data
+  - Store and query data larger than enterprise data
+  - Valuable data for advertisements and marketing
+  - Web server logs, web links
+  - Social media
+  - Mobile phone app data
+  - Transaction data
+  - Sensor/Internet of Things data
+  - Communication metadata
 ::::
 ::::{.column width=40%}
 \vspace{1cm}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_4_image_1.png)
-\footnotesize
-**Volume of data in the world
-**
+\footnotesize \centering
+_Volume of data in the world_
 ::::
 :::
-
-* Big Data: Sources and Applications
-:::columns
-::::{.column width=60%}
-- **Big Data characteristics**
-- Volume:
-  - Amount of data to store and process is much larger than traditional DBs
-  - Too big even for parallel DB systems with 10-100 machines
-- Velocity
-  - Store data at very high rate, due to rate of arrival
-  - Data might be processed in real-time (e.g., streaming systems)
-- Variety
-  - Not all data is relational
-  - E.g., semi-structured, textual, graphical data
-- **Solution**: process data with 10,000-100,000 machines
-::::
-::::{.column width=40%}
-\vspace{1cm}
-![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_5_image_1.png)
-\footnotesize
-**Volume of data in the world
-**
-::::
-:::
-
-* Big Data: Sources and Applications
-- **Web server logs**
-- Record user interactions with web servers
-- Billions of users click on thousands links per day $\to$ TB of data / day
-- Decide what information (e.g., posts, news) to present to users to keep them "engaged"
-  - E.g., what user has viewed, what other similar users have viewed
-- Understand visit patterns to optimize for users to find information
-- Determine user preferences and trends to inform business decisions
-- Decide what advertisements to show to which users
-  - Maximize benefit to the advertiser
-  - Websites are paid for click-through or conversion
-- **Click-through rate**
-- A user clicks on an advertisement to get more information
-- It is a measure of success in getting user attention/engagement
-- **Conversion rate**
-  - When a user actually purchases the advertised product or service
 
 * Big Data: Storing and Computing
 
 - Big data needs 10k-100k machines
+
 - **Two problems**
   - Storing big data
   - Processing big data
-- **Need to be solved together and *efficiently***
-  - If one phase is slow $\to$ the entire system is slow
+
+- **Solve together efficiently**
+  - One slow phase slows entire system
 
 * Processing the Web: Example
 :::columns
 ::::{.column width=50%}
-- The web has:
-  - 20+ billion web pages
-  - Total 5M TBs = 5 ZB
-  - 1M 5TB hard drives to store the web
-  - 100/HDD -> 100M to store the web
-  - Not too bad!
-- One computer reads 300 MB/sec from disk
-  - 5e6 * 1024 * 1024 * 8 / 300 / 3600 / 24 / 365
-= 4,433 years to read the web serially from disk
-- It takes even more to do something useful with the data!
+
+- Web contains:
+  - 20+ billion pages
+  - 5M TBs = 5 ZB
+  - 1M 5TB hard drives needed
+  - $100/HDD -> $100M total
+
+- One computer reads 300 MB/sec
+  - 4,433 years to read web serially
+
+- More time needed for data processing
 ::::
 ::::{.column width=50%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_8_image_1.png)
@@ -127,114 +89,140 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Big Data: Storage Systems
-- How can we store big data?
+
+- Store big data
+
 - **Distributed file systems**
-  - E.g., store large files like log files
+  - Store large files like log files
+
 - **Sharding across multiple DBs**
-  - Partition records based on shard key across multiple systems
+  - Partition records based on shard key
+
 - **Parallel and distributed DBs**
-  - Store data / perform queries across multiple machines
-  - Use traditional relational DB interface
+  - Store data / perform queries across machines
+  - Use relational DB interface
+
 - **Key-value stores**
-  - Data stored and retrieved based on a key
-  - Limitations on semantics, consistency, querying with respect to relational DBs
+  - Store/retrieve data based on a key
+  - Limitations on semantics, consistency, querying
   - E.g., NoSQL DB, Mongo, Redis
 
 * 1 Distributed File Systems
+
 - **Distributed file system**
-  - Files stored across a number of machines, giving a single file-system view to clients
+  - Files stored across machines, single file-system view to clients
     - E.g., Google File System (GFS)
-    - E.g., Hadoop File System (HDFS) based on GFS architecture
+    - E.g., Hadoop File System (HDFS) based on GFS
     - E.g., AWS S3
   - Files are:
-    - Broken into multiple blocks
-    - Blocks are partitioned across multiple machines
-    - Blocks are often replicated across machines
+    - Broken into blocks
+    - Blocks partitioned across machines
+    - Blocks often replicated
   - **Goals**:
-    - Store data that doesn't fit on one machine
+    - Store data not fitting on one machine
     - Increase performance
     - Increase reliability/availability/fault tolerance
 
 * 2 Sharding Across Multiple DBs
-- **Sharding** = process of partitioning records across multiple DBs or machines
+
+- **Sharding**: Partition records across multiple DBs or machines
+
 - Shard keys
   - Aka partitioning keys / partition attributes
-- One or more attributes to partition the data
+
+- Attributes to partition data
   - Range partition (e.g., timeseries)
   - Hash partition
+
 - **Pros**
-  - Scale beyond a centralized DB to handle more users, storage, processing speed
+  - Scale beyond a centralized DB for more users, storage, processing speed
+
 - **Cons**
-  - Replication is often needed to deal with failures
+  - Replication needed for failures
   - Ensuring consistency is challenging
-  - Relational DBs are not good at supporting constraints (e.g., foreign key) and transactions on multiple machines
+  - Relational DBs struggle with constraints (e.g., foreign key) and
+    transactions on multiple machines
 
 * 3 Parallel and Distributed DBs
-- **Parallel and distributed DBs**: store and process data running on multiple machines (aka "cluster")
-  - E.g., Mongo
+
+- **Parallel and distributed DBs**: store and process data on multiple machines
+  (cluster)
+  - E.g., mongo
+
 - **Pros**
   - Programmer viewpoint
     - Traditional relational DB interface
-    - Looks like a DB running on a single machine
-  - Can run on 10s-100s of machines
-  - Data is replicated for performance and reliability
-    - Failures are "frequent" with 100s of machines
-    - A query can be just restarted using a different machine
+    - Appears as a single-machine DB
+  - Operates on 10s-100s of machines
+  - Data replication enhances performance and reliability
+    - Frequent failures with 100s of machines
+    - Queries can restart on different machines
+
 - **Cons**
-  - Run a query incrementally requires a lot of complexity
-  - Limit to the scalability
+  - Incremental query execution is complex
+  - Scalability limits
 
 * 4 Key-value Stores
+
 - **Problem**
-- Many applications (e.g., web) store a very large number (billions or more) small records (few KBs to few MBs)
-- File systems can't store such a large number of files
-- RDBMSs don't support constraints and transactions on multiple machines
+  - Applications store billions of small records
+  - File systems can't handle so many files
+  - RDBMSs lack multi-machine constraints and transactions
+
 - **Solution**
-- Key-value stores / Document / NoSQL systems
-- Records are stored, updated, and retrieved based on a key
-- Operations are: **put(key, value)** to store, **get(key)** to retrieve data
+  - Key-value stores / Document / NoSQL systems
+  - Store, update, retrieve records by key
+  - Operations: **put(key, value)**, **get(key)**
+
 - **Pros**
-- Partition data across multiple machines easily
-- Support replication and consistency (no referential integrity)
-- Balance workload and add more machines
+  - Partition data across machines
+  - Support replication and consistency
+  - Balance workload, add machines
+
 - **Cons**
-- Features are sacrificed to achieve scalability on large clusters
-  - Declarative querying
-  - Transactions
-  - Retrieval based on non-key attributes
+  - Sacrifice features for scalability
+    - Declarative querying
+    - Transactions
+    - Non-key attribute retrieval
 
 * 4 Parallel Key-value Stores
+
 - **Parallel key-value stores**
-- BigTable (Google)
-- Apache HBase (open source version of BigTable)
-- Dynamo, S3 (AWS)
-- Cassandra (Facebook)
-- Azure cloud storage (Microsoft)
-- Redis
+  - BigTable (Google)
+  - Apache HBase (open source BigTable)
+  - Dynamo, S3 (AWS)
+  - Cassandra (Facebook)
+  - Azure cloud storage (Microsoft)
+  - Redis
+
 - **Parallel document stores**
-- MongoDB cluster
-- Couchbase
+  - MongoDB cluster
+  - Couchbase
+
 - **In-memory caching systems**
-- Store some relations (or parts of relations) into an in-memory cache
-- Replicated or partitioned across multiple machines
-- E.g., memcached or Redis
+  - Store relations in-memory
+  - Replicated or partitioned across machines
+  - E.g., memcached or Redis
 
 * Big Data: Computing Systems
+
 - **How to process Big Data?**
+
 - **Challenges**
-  - How to distribute computation?
-  - How can we make it easy to write distributed programs?
-    - Distributed / parallel programming is hard
-  - How to store data in a distributed system?
-  - How to survive failures?
-    - One server may stay up 3 years (1,000 days)
-    - If you have 1,000 servers, expect to lose 1 / day
-    - E.g., 1M machines (Google in 2011) $\to$ 1,000 machines fail every day!
+  - Distribute computation
+  - Simplify writing distributed programs
+    - Distributed/parallel programming is hard
+  - Store data in a distributed system
+  - Survive failures
+    - One server may last 3 years (1,000 days)
+    - With 1,000 servers, expect 1 failure/day
+    - E.g., 1M machines (Google in 2011) $\to$ 1,000 machines fail daily
+
 - **MapReduce**
-  - Solve these problems for certain kinds of computations
-  - An elegant way to work with big data
-  - Started as Google's data manipulation model
-    - (But it wasn't an entirely new idea)
+  - Solve these problems for specific computations
+  - Elegant way to work with big data
+  - Originated as Google's data manipulation model
+    - Not an entirely new idea
 
 * Cluster Architecture
 - Today, a standard architecture for big data computation has emerged:
@@ -358,39 +346,45 @@ digraph G {
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_17_image_1.png)
 
 * Cluster Architecture: Network Bandwidth
+
 - **Problems**
-  - Data is hosted on different machines in a cluster
-  - Copying data over a network takes time
+  - Data hosted on different machines
+  - Network data transfer takes time
+
 - **Solutions**
-  - Bring computation close to the data
+  - Bring computation to data
   - Store files multiple times for reliability/performance
+
 - **MapReduce**
-  - Addresses both these problems
-  - Storage infrastructure: distributed file system
+  - Addresses these problems
+  - Storage: distributed file system
     - Google GFS, Hadoop HDFS
   - Programming model: MapReduce
 
 * Storage Infrastructure
 
 - **Problem**
-  - How to store data *persistently* and *efficiently* when nodes can fail?
+  - Store data persistently and efficiently despite node failures
+
 - **Typical data usage pattern**
   - Huge files (100s of GB to 1TB)
-  - Reads and appends are common operations
-  - Data is rarely updated in place
+  - Common operations: reads and appends
+  - Rare in-place updates
+
 - **Solution**
   - Distributed file system
-  - Allow files to be stored across a number of machines
+  - Store files across multiple machines
   - Files are:
-    - Broken into multiple blocks
-    - Partitioned across multiple machines
-    - Typically with replication across machines
-  - Give a single file-system view to clients
+    - Broken into blocks
+    - Partitioned across machines
+    - Replicated across machines
+  - Provide a single file-system view to clients
 
 * Distributed File System
+
 - Reliable distributed file system
-  - Data kept in "**chunks**" spread across machines
-  - Each chunk **replicated** on different machines
+  - Data in "chunks" across machines
+  - Each chunk replicated on different machines
   - Seamless recovery from disk or machine failure
 - Bring computation directly to the data
   - "chunk servers" also serve as "compute servers"
@@ -464,25 +458,27 @@ graph LR
 * Hadoop Distributed File System
 
 - **NameNode**
-  - Store file / dir hierarchy
-  - Store metadata about files (e.g., where are stored, size, permissions)
+  - Store file/dir hierarchy
+  - Store file metadata (location, size, permissions)
+
 - **DataNodes**
   - Store data blocks
-  - File is split into contiguous 16-64MB blocks
-  - Each chunk is replicated (usually 2x or 3x)
-  - Keep replicas in different server racks
+  - Split file into 16-64MB blocks
+  - Replicate chunks (2x or 3x)
+  - Keep replicas in different racks
 
 * Hadoop Distributed File System
 
 - **Library for file access**
   - Read:
-    - Talk to *NameNode* to find *DataNode* and pointer to block
-    - Connect directly to *DataNode* to access data
+    - Contact _NameNode_ for _DataNode_ and block pointer
+    - Connect to _DataNode_ for data access
   - Write:
-    - *NameNode* creates blocks
-    - Assign blocks to several *DataNodes*
-    - Client sends data to assigned *DataNodes*
-    - *DataNodes* store data
+    - _NameNode_ creates blocks
+    - Assign blocks to multiple _DataNodes_
+    - Client sends data to _DataNodes_
+    - _DataNodes_ store data
+
 - **Client**
-  - API (e.g,. Python, Java) to internal library
+  - API (e.g., Python, Java) to library
   - Mount HDFS on local filesystem
