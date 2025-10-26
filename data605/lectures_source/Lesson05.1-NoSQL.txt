@@ -34,7 +34,6 @@ UMD DATA605 - Big Data Systems
 
 ![](data605/lectures_source/images/Silberschatz_book.png){width=2cm}
 ![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png){width=2cm}
-
 ::::
 :::
 

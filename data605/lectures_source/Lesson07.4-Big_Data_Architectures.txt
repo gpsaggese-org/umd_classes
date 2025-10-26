@@ -1,4 +1,8 @@
- ::: columns
+// Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
+// 
+// 
+
+::: columns
 :::: {.column width=15%}
 ![](data605/lectures_source/images/UMD_Logo.png)
 ::::
@@ -14,21 +18,17 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**Orchestration with Airflow
-Data wrangling
-Deployment 
-**
+**$$\text{\blue{7.4: Big Data Architectures}}$$**
 \endgroup
 
 ::: columns
-:::: {.column width=75%}
+:::: {.column width=65%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`**
+**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
-**v1.1**
 ::::
-:::: {.column width=20%}
+:::: {.column width=30%}
 
 ::::
 :::

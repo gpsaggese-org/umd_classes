@@ -1,4 +1,8 @@
- ::: columns
+// Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
+// 
+// 
+
+::: columns
 :::: {.column width=15%}
 ![](data605/lectures_source/images/UMD_Logo.png)
 ::::
@@ -14,77 +18,43 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**Orchestration with Airflow
-Data wrangling
-Deployment 
-**
+**$$\text{\blue{7.2: Data Wrangling}}$$**
 \endgroup
 
 ::: columns
-:::: {.column width=75%}
+:::: {.column width=65%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`**
+**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
-**v1.1**
+- **Reference**
+  - Pandas tutorial
+  - Class project
+  - Web
+    - https://pandas.pydata.org
+    - Onslaught of free resources
+  - Mastery
+    - https://wesmckinney.com/book
+    - Read cover-to-cover and execute all examples 2-3x time to really _master_
 ::::
-:::: {.column width=20%}
-
-::::
-:::
-
-UMD DATA605 - Big Data Systems
-
-* UMD DATA605 - Big Data Systems Orchestration with Airflow
-**UMD DATA605 - Big Data Systems** **Orchestration with Airflow**
-Data wrangling
-Deployment
-
-Dr. GP Saggese
-gsaggese@umd.edu
-
-
-
-* **UMD DATA605 - Big Data Systems**
-Orchestration with Airflow
-**Data wrangling (Pandas)**
-Deployment
-
-Dr. GP Saggese
-gsaggese@umd.edu
-
-* Resources
-::: columns
-:::: {.column width=40%}
-- Pandas tutorial
-- Class project
-- Web
-  - https://pandas.pydata.org
-  - Onslaught of free resources
-- Mastery
-  - https://wesmckinney.com/book
-  - Read cover-to-cover and execute all examples 2-3x time to really *master*
-::::
-:::: {.column width=40%}
+:::: {.column width=30%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_16_image_1.png)
 ::::
 :::
 
-```
-
-```
-
 * Overview
 - **Data wrangling**
   - Aka "data preparation", "data munging", "data curation"
-  - Get data into a structured form suitable for analysis
-  - Often it is the step where majority of time (80-90%) is spent
+  - Structure data for analysis
+  - Majority of time (80-90%) spent here
+
 - **Key steps**
-  - **Scraping**: extract information from sources (e.g., webpages)
-  - **Data cleaning**: remove inconsistencies / errors
-  - **Data transformation**: get data into the right structure
+  - **Scraping**: extract info from sources (e.g., webpages)
+  - **Data cleaning**: remove inconsistencies/errors
+  - **Data transformation**: structure data correctly
   - **Data integration**: combine data from multiple sources
-  - **Information extraction**: extract structured information from unstructured / text sources
+  - **Information extraction**: extract structured info from unstructured/text
+    sources
 
 * Overview
 
