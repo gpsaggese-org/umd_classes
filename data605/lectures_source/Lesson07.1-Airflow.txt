@@ -1,4 +1,4 @@
- ::: columns
+::: columns
 :::: {.column width=15%}
 ![](data605/lectures_source/images/UMD_Logo.png)
 ::::
@@ -44,6 +44,8 @@ Dr. GP Saggese
 gsaggese@umd.edu
 
 * Orchestration - Resources
+::: columns
+:::: {.column width=55%}
 - Concepts in the slides
 - Airflow tutorial
 - Web resources
@@ -51,10 +53,15 @@ gsaggese@umd.edu
 - Tutorial
 - Mastery
 - Data Pipelines with Apache Airflow
-
+::::
+:::: {.column width=45%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_2_image_1.png)
+::::
+:::
 
 * Workflow Managers
+::: columns 
+:::: {.column width=60%}
 - **Data pipelines** move/transform data across data stores
 - **Orchestration problem** = data pipelines require to coordinate jobs across systems
   - Run tasks on a certain schedule
@@ -65,12 +72,15 @@ gsaggese@umd.edu
     - Track how long it takes to run
   - Meet real-time constraints
   - Scale performance
-
+::::
+:::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_3_image_1.png)
+::::
+:::
 
 * Workflow Managers
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_1.png)
-
+::: columns
+:::: {.column width=70%}
 - **E.g., live weather dashboard**
   - Fetch the weather data from API
   - Clean / transform the data
@@ -81,12 +91,17 @@ gsaggese@umd.edu
   - Monitor functionality and performance
   - Quickly one wants to add machine learning
   - Quickly the complexity increases
-
+::::
+:::: {.column width=30%}
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_1.png)
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_2.png)
-
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_4_image_3.png)
+::::
+:::
 
 * Workflow Managers
+::: columns
+:::: {.column width=60%}
 - **Workflow managers address the orchestration problem**
   - E.g., Airflow, Luigi, Metaflow, make, cron ...
 - **Represent data pipelines as DAGs**
@@ -103,14 +118,19 @@ gsaggese@umd.edu
 - **Provide backfilling and catch-up**
   - Horizontally scalable (e.g., multiple runners)
 - **Provide monitoring web interface**
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_1.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_2.png)
+::::
+:::: {.column width=45%}
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_3.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_2.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_5_image_1.png)
+
+::::
+:::
 
 * Airflow
+::: columns
+:::: {.column width=60%}
 - Developed at AirBnB in 2015
   - Open-sourced as part of Apache project
 - **Batch oriented framework** for building data pipelines (not streaming)
@@ -125,10 +145,15 @@ gsaggese@umd.edu
 - **Hosted and managed solution**
   - Run Airflow on your laptop (e.g., in tutorial)
   - Managed solution (e.g., AWS)
+::::
+:::: {.column width=40%}
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_6_image_1.png)
+::::
+:::
 
 * Airflow: Execution Semantics
+
 - **Scheduling semantic**
   - Describe when the next scheduling interval is
     - E.g., "every day at midnight", "every 5 minutes on the hour"
@@ -145,6 +170,8 @@ gsaggese@umd.edu
   - E.g., if the data pipeline has changed one needs to re-process data from scratch
 
 * Airflow: What Doesn't Do Well
+::: columns
+:::: {.column width=60%}
 - **Not great for streaming pipelines**
   - Better for recurring batch-oriented tasks
   - Time is assumed to be discrete and not continuous
@@ -157,12 +184,16 @@ gsaggese@umd.edu
 - **No data versioning**
   - No tracking of updates to the data
   - Need to be implemented manually
+::::
+:::: {.column width=40%}
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_8_image_1.png)
+::::
+:::
 
 * Airflow: Components
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_9_image_1.png)
-
+::: columns
+:::: {.column width=50%} 
 - **Users (DevOps)**
 - **Web-server**
   - Visualize DAGs
@@ -182,7 +213,11 @@ gsaggese@umd.edu
   - Pick up tasks from Queue
   - Execute the tasks
   - Register task outcome in Metastore
-
+::::
+:::: {.column width=50%}
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_9_image_1.png)
+::::
+:::
 * Airflow: Concepts
 - Each DAG run represents a data interval, i.e., an interval between two times
   - E.g., a DAG scheduled **@daily**
@@ -197,32 +232,46 @@ gsaggese@umd.edu
 - From the tutorial for Airflow
 
 * Airflow: Tutorial
+::: columns
+:::: {.column width=40%}
 - The script describes the DAG structure as Python code
   - There is no computation inside the DAG code
   - It only defines the DAG structure and the metadata (e.g., about scheduling)
 - The **Scheduler** executes the code to build DAG
 - **BashOperator** creates a task wrapping a Bash command
-
+::::
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_12_image_1.png)
-
+::::
+:::
 * Airflow: Tutorial
+::: columns
+:::: {.column width=40%}
 - Dict with various default params to pass to the DAG constructor
   - E.g., different set-ups for dev vs prod
 - Instantiate the DAG
-
+::::
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_13_image_1.png)
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_13_image_2.png)
+::::
+:::
 
 * Airflow: Tutorial
+::: columns
+:::: {.column width=40%}
 - DAG defines tasks by instantiating **Operator** objects
   - The default params are passed to all the tasks
   - Can be overridden explicitly
 - One can use a Jinja template
 - Add tasks to the DAG with dependencies
-
+::::
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_1.png)
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_2.png)
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_14_image_3.png)
+::::
+:::

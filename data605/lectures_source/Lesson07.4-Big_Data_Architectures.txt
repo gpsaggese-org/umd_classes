@@ -61,14 +61,12 @@ Deployment
 - **Compatibility testing**: check if the software is compatible with different browsers, database versions, operating systems, mobile devices, ...
 
 * CI / CD
-- **Continuous integration (CI)
-**
+- **Continuous integration (CI)**
   - Devs merge their code changes into a central repository, often multiple times a day
   - Automated build and test code after each change
   - **Goal**: Detect and fix integration errors quickly
   - Need unit tests! Add code together with tests!
-- **Continuous deployment (CD)
-**
+- **Continuous deployment (CD)**
   - Automatically deploy all code changes to a production environment
     - without human intervention
     - after the build and test phases pass
@@ -93,35 +91,33 @@ Deployment
   - Inspired by HTTP (modulo cookies)
 
 * RESTful API
-- **Cacheable
-**
+::: columns
+:::: {.column width=60%}
+- **Cacheable**
   - The data in a response should be labeled as cacheable or non-cacheable
   - If cacheable, the client can reuse the response later
   - Increase scalability and performance
-- **Layered system
-**
+- **Layered system**
   - Each layer cannot "see" beyond the immediate layer that they interface
   - E.g., in a tier application
-
+::::
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_46_image_1.png)
-
+::::
+:::
 * Stages of deployment
 - The deployment of software progresses through several environments
   - Each environment is designed to progressively test, validate, and prepare the software for release to end user
-- **Development environment (Dev)
-**
+- **Development environment (Dev)**
   - Individual for each developer or feature team
   - Goal: Where developers write and initially test the code
-- **Testing or Quality Assurance (QA) environment
-**
+- **Testing or Quality Assurance (QA) environment**
   - Mirrors the production environment as closely as possible to perform under conditions similar to production
   - Goal: systematic testing of the software to uncover defects and ensure quality
-- **Staging/Pre-Prod environment
-**
+- **Staging/Pre-Prod environment**
   - Final testing phase before deployment to production
   - Replica of the production environment used for final checks and for stakeholders to review the new changes
-- **Production Environment (Prod)
-**
+- **Production Environment (Prod)**
   - It is the live environment where the software is available to their end users
   - Highly optimized for security, performance, and scalability
   - Focus is on uptime, user experience, and data integrity
@@ -144,15 +140,20 @@ Deployment
   - E.g., 1.0.0+20210313120000 or 1.0.0+f8a34b3228c
 
 * Microservices vs Monolithic Architecture
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_1.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_2.png)
-
-"Microservice" interest over time (from Google Trends)
-
+::: columns
+:::: {.column width=40%}
 - Different styles of building complex systems
 - Find the right granularity
+::::
+:::: {.column width=60%}
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_49_image_2.png)
+
+
+::::
+"Microservice" interest over time (from Google Trends)
+:::
+
 
 * Microservice Architecture
 - **Modularity**: composed of small, independently deployable services, each implementing a specific business functionality

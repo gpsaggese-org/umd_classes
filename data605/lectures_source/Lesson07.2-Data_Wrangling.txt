@@ -33,7 +33,19 @@ Deployment
 ::::
 :::
 
-**UMD DATA605 - Big Data Systems**
+UMD DATA605 - Big Data Systems
+
+* UMD DATA605 - Big Data Systems Orchestration with Airflow
+**UMD DATA605 - Big Data Systems** **Orchestration with Airflow**
+Data wrangling
+Deployment
+
+Dr. GP Saggese
+gsaggese@umd.edu
+
+
+
+* **UMD DATA605 - Big Data Systems**
 Orchestration with Airflow
 **Data wrangling (Pandas)**
 Deployment
@@ -42,6 +54,8 @@ Dr. GP Saggese
 gsaggese@umd.edu
 
 * Resources
+::: columns
+:::: {.column width=40%}
 - Pandas tutorial
 - Class project
 - Web
@@ -50,8 +64,11 @@ gsaggese@umd.edu
 - Mastery
   - https://wesmckinney.com/book
   - Read cover-to-cover and execute all examples 2-3x time to really *master*
-
+::::
+:::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_16_image_1.png)
+::::
+:::
 
 ```
 
@@ -86,12 +103,17 @@ gsaggese@umd.edu
   - Data wrangling is the T step
 
 * Overview
-
+::: columns
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_20_image_1.png)
+::::
+:::: {.column width=40%}
 
 - From Data Cleaning: Problems and Current Approaches
 - Paper somewhat old: data is mostly coming from structured sources
 - Today unstructured/semi-structured are equally important
+::::
+:::
 
 * Data Extraction
 - Data may reside in a wide variety of different sources
@@ -112,28 +134,35 @@ gsaggese@umd.edu
     - E.g., import.io, portia, ...
 
 * Tidy Data
+::: columns
+:::: {.column width=40%}
 - Tidy data, Wickham, 2014
   - Each variable forms a column
   - Each observation forms a row
 - Wide vs long format
 
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_1.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_2.png)
-
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_3.png)
-
+Wide format
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_4.png)
-
+::::
+:::: {.column width=40%}
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_1.png)
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_2.png)
 "Messy" data
-
+![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_3.png)
 Tidy data
 
-Wide format
-
-Long format
-
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_22_image_5.png)
+Long format
+::::
+:::
+
+
+
+
+
+
+
+
 
 * Data Quality Problems
 
@@ -161,7 +190,6 @@ Long format
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_25_image_1.png)
 
 * Multi-Source Problems
-\#\# Multi-Source Problems
 
 - Different data sources are:
   - Developed separately
@@ -180,7 +208,7 @@ Long format
   - ...
 
 * Data Cleaning: Outlier Detection
-\#\# Data Cleaning: Outlier Detection
+
 
 - Quantitative Data Cleaning for Large Databases, Hellerstein, 2008
   - Focuses on numerical data (i.e., integers/floats that measure some quantities of interest)
@@ -191,7 +219,8 @@ Long format
   - Data integration errors: inconsistencies across sources that are combined together
 
 * Univariate Outlier Detection
-\#\# Univariate Outlier Detection
+::: columns
+:::: {.column width=50%}
 
 - A set of values can be characterized by metrics such as
   - Center (e.g., mean)
@@ -206,13 +235,15 @@ Long format
   - Robust dispersion:
     - Median absolute deviation (MAD)
     - Median distance of values from the median value
-
+::::
+::::{.column width=50%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_1.png)
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_28_image_2.png)
-
+::::
+:::
 * Outlier Detection
-\#\# Outlier Detection
+
 
 - For Gaussian data
   - Any data points 1.4826x MAD away from median
@@ -233,7 +264,8 @@ Long format
 - Wikipedia article on Outliers
 
 * Multivariate Outliers
-\#\# Multivariate Outliers
+::: columns
+:::: {.column width=60%}
 
 - One set of techniques *multivariate Gaussian distribution* data
   - Defined by a *mean* $\mu$ and a *covariance matrix* $\Sigma$
@@ -248,13 +280,17 @@ Long format
 - Often volume of data is too much
   - Approximation techniques often used
 - Need to try different techniques based on the data
-
+::::
+:::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_1.png)
 
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_30_image_2.png)
+::::
+:::
 
 * Time Series Outliers
-\#\# Time Series Outliers
+::: columns
+:::: {.column width=60%}
 
 - Often data is in the form of a time series
 - A **time series** is a sequence of data points recorded at regular time intervals tracking a variable over time
@@ -272,14 +308,17 @@ Long format
 - Rich literature on *forecasting* in time series data
 - Can use the historical patterns in the data to flag outliers
   - Rolling MAD (median absolute variation)
-
+::::
+:::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_31_image_1.png)
+::::
+:::
 
-**Time
-**
+
 
 * Split-Apply-Combine
-\#\# Split-Apply-Combine
+::: columns
+:::: {.column width=60%}
 
 - The Split-Apply-Combine Strategy for Data Analysis, Wickam, 2011
 - Common data analysis pattern
@@ -297,6 +336,11 @@ Long format
   - Pandas
   - SQL GROUP BY operator
   - Map-Reduce
-
+::::
+:::: {.column width=40%}
 ![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_32_image_1.png)
+::::
+:::
+
+
 
