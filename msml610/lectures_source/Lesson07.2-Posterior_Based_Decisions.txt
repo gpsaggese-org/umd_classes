@@ -284,119 +284,117 @@ MSML610: Advanced Machine Learning
 
 - **\black{Conceptually}**
   - Sample a value of $\theta$ from the posterior $\Pr(\theta | y)$
-  - Feed the value of $\theta$ to the likelihood $\Pr(y | \theta)$
+  - Feed the value of $\theta$ to the likelihood $\Pr(\tilde{y} | \theta)$
   - Obtain $\tilde{y}$
 
 - This process has **\black{two sources of uncertainty}**:
   - Parameter uncertainty
     - Captured by the posterior $\Pr(\theta | y)$
   - Sampling uncertainty
-    - Captured by the likelihood $\Pr(y | \theta)$
+    - Captured by the likelihood $\Pr(\tilde{y} | \theta)$
 
 * Posterior Predictive Check (PPC)
-- **Intuition**: can the model reproduce observed data?
 
 - **PPC approach**:
-  - Generate predictions $\tilde{y}$ with observed data $y$
-  - Check consistency between predicted values and observed data
+  - Generate predictions $\tilde{y}$ with observed data $y$ from posterior
+    distribution
+  - Check consistency between predictions and observed data
 
-- Models should always be checked
-- Differences can arise by:
+- **Intuition**: can the model reproduce observed data?
+  - Always check!
+
+- **Differences** arise from:
   - Mistakes
-  - Limitations of the model
-    - E.g., the model works well for average behavior but fails to predict rare
-      values
-  - Limitations of the data
+  - Model limitations
+    - E.g., works for average behavior but fails for rare values
+  - Data limitations
 
 * Bayesian Workflow Using PPC
 
-1. Given a process
-   - True distribution of the process is unknown / unknowable
+1. Given a process, **true distribution** is unknown / unknowable
 
 2. **Sample the process**
-   - Get finite sample $y$ through sampling
+   - Get finite sample $y$
    - E.g., experiment, survey, simulation
 
 3. **Inference**
    - Build probabilistic model using prior $\Pr(\theta)$ and likelihood
-     $\Pr(y | \theta)$ to get posterior distribution $\Pr(\theta | y)$
-   - Posterior distribution: distribution of model parameters $\theta$ given data
+     $\Pr(y | \theta)$ to get posterior $\Pr(\theta | y)$
+   - Posterior is distribution of model parameters $\theta$ given data
 
 4. **Predictive distribution**
-   - Compute predictions from posterior distribution (i.e., posterior predictive
-     distribution)
-   - Posterior predictive distribution is the distribution of predicted samples
-     averaged over posterior distribution
+   - Compute predictions from posterior (posterior predictive distribution)
+   - Posterior predictive is distribution of predicted samples averaged over
+     posterior
 
 5. **Validation**
-   - Validate model by comparing original samples vs predicted samples
+   - Validate model by comparing original vs predicted samples
 
 ### Robust Inference
 
 * Chemical Shift Example: PPC
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=50%}
 ![](msml610/lectures_source/figures/Lesson07_Chemical_shift_pymc_solution3.png)
 ::::
-:::: {.column width=40%}
-- Sample the posterior
-- Apply the model
-- Get predictive posterior distribution (dashed orange distribution)
-- Compare to data (black distribution)
+:::: {.column width=45%}
+- **Apply the Bayesian workflow**
+  - Sample posterior
+  - Apply model
+  - Get predictive posterior distribution (dashed orange)
+  - Compare to data (black)
 
 - **Is the PPC model good?**
-- **No**
-  - Posterior mean is more to the right than data
+  - **No!**
+  - Posterior mean is right of data
   - Posterior std dev is larger
+  - You can't generate the data from the model!
 ::::
 :::
 
 * Chemical Shift: Model Critique
 ::: columns
-:::: {.column width=40%}
-![](msml610/lectures_source/figures/Lesson07_Chemical_shift_pymc_solution3.png)
-::::
-:::: {.column width=55%}
+:::: {.column width=50%}
 - **Problem**
-  - Two data points on the tails of the distribution
-  - The normal distribution is
-    - "surprised" by these points
-    - "reacts" by adjusting the mean towards them and increasing the standard
+  - Two data points on distribution tails
+  - Normal distribution:
+    - is "surprised" by these points
+    - "reacts" by adjusting mean towards them and increasing the standard
       deviation
+::::
+:::: {.column width=45%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_pymc_solution3.png)
 ::::
 :::
 
-- **Solution**
-  - Declare points as outliers and discard
-    - E.g., equipment malfunction (you need evidence!)
-  - Change the model
-
-- **Bayesian philosophy**
-  - Encode assumptions into the model (e.g., priors, likelihoods)
-  - Instead of ad-hoc heuristics (e.g., outlier removal rules)
+- **Possible solutions**
+  1) Declare and discard outliers
+     - E.g., equipment malfunction (requires evidence)
+  2) Change the model
+  3) **Bayesian philosophy**
+     - Encode assumptions into the model (e.g., priors, likelihoods)
+     - Avoid ad-hoc heuristics (e.g., outlier removal rules)
 
 * Student's t-distribution: Recap
 - **Student's t-distribution** has 3 params:
   1. Mean $\mu$
-     - It doesn't always exist
+     - Doesn't always exist
   2. Scale $\sigma$
-     - Similar to std dev, but it doesn't always exist
-  3. Degrees of freedom $\nu \in [0, \infty]$
-     - Aka "normality parameter", since it controls how "normal" is the
-       distribution
-     - With $\nu=1$: heavy tails and no mean (Cauchy)
-     - With $\nu \to \infty$ we recover the Gaussian
+     - Similar to std dev, but doesn't always exist
+3. Degrees of freedom $\nu \in [0, \infty]$
+   - "Normality parameter": controls distribution normality
+   - $\nu=1$: heavy tails, no mean (Cauchy)
+   - $\nu \to \infty$: Gaussian
 
-- Student's t has **heavy tails**
-  - Heavy tails (high kurtosis) means _"values are more likely to be far from the
-    mean compared to a Normal"_
+- Student's t has **heavy tails** (high kurtosis)
+  - Values more likely far from mean compared to Normal
 
 ![](msml610/lectures_source/figures/Lesson07_Student-t.png){ height=30%}
 
 * Chemical Shift: Use Student's t-dist (1/3)
 ::: columns
-:::: column
-- Use Student's t-distribution model instead of Normal
+:::: {.column width=45%}
+- Use Student's t-distribution instead of Normal in model for chemical shift
 
 \begin{equation*}
   \begin{cases}
@@ -407,24 +405,24 @@ MSML610: Advanced Machine Learning
   \end{cases}
 \end{equation*}
 ::::
-:::: column
+:::: {.column width=50%}
 ![](msml610/lectures_source/figures/Lesson07_Chemical_shift_robust_model.png)
 ::::
 :::
 
 * Chemical Shift: Use Student's t-dist (2/3)
 ::: columns
-:::: {.column width=70%}
-![](msml610/lectures_source/figures/Lesson07_Chemical_shift_robust_model2.png)
-::::
 :::: {.column width=35%}
-- Outliers decrease $\nu$ (less Gaussian) instead of increasing mean and standard
+- Decrease $\nu$ (**less Gaussian**) instead of increasing mean and standard
   deviation
   - $\mu$ similar to Gaussian estimate
   - $\sigma$ smaller
   - $\nu \approx 5$ (not very Gaussian)
-- Estimation more robust
+- **Estimation more robust**
   - Outliers have less effect
+::::
+:::: {.column width=60%}
+![](msml610/lectures_source/figures/Lesson07_Chemical_shift_robust_model2.png)
 ::::
 :::
 
@@ -434,7 +432,7 @@ MSML610: Advanced Machine Learning
 ![](msml610/lectures_source/figures/Lesson07_Chemical_shift_robust_model3.png)
 ::::
 :::: {.column width=35%}
-- PPC (posterior predictive check) fits better than Normal model
+- PPC fits better than Normal model
 - Plot is "hairy" because KDE is estimated only in data interval and 0 outside
 ::::
 :::
@@ -446,8 +444,9 @@ MSML610: Advanced Machine Learning
 ## Groups Comparison
 
 * Group Comparison
+
 - **Group comparison** tests for statistically significant results between
-  _"treatment"_ and _"control group"_
+  _treatment_ and _control group_
 
 - E.g.,
   - _How well do patients respond to a new drug vs a placebo?_
@@ -459,12 +458,10 @@ MSML610: Advanced Machine Learning
     (estimate effect size)
 
 * Bogus Control Groups
-- When something is claimed to be harder/better/faster/stronger, **ask for the
-  baseline used for comparison**
-  - E.g.,
-    - Sell sugary yogurts to boost the immune system by comparing it to using
-      milk
-    - A better control group would be a less sugary yogurt
+- **Always ask for the baseline** used for comparison, when something is claimed
+  to be harder/better/faster/stronger
+  - E.g., sell sugary yogurts to boost the immune system by comparing it to milk
+    - Better control group: less sugary yogurt
 
 - **Placebo** is a psychological phenomenon where a patient experiences
   improvements after receiving an inactive treatment
@@ -518,10 +515,9 @@ MSML610: Advanced Machine Learning
   - Normalizes effect by variability for pooled std dev
   - Variability of each group normalizes mean difference
   - Similar to a Z-score, number of std dev values differ
+    ![](msml610/lectures_source/figures/Lesson07_Cohen_d.png)
 
-![](msml610/lectures_source/figures/Lesson07_Cohen_d.png)
-
-- Bayesian approach
+- **Bayesian approach**
   - Compute posterior distribution of means and std $\to$ formula
   - Compute distribution of Cohen's d $\to$ summary statistics
 
