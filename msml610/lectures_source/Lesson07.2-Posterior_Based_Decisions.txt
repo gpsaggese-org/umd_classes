@@ -11,7 +11,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 \begingroup \Large
 **$$\text{\blue{7.2: Posterior-based Decisions}}$$**
@@ -21,17 +21,21 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=75%}
 \vspace{1cm}
-**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`
+**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 **References**:
+
 - AIMA (Artificial Intelligence: a Modern Approach)
   - Chap 15: Probabilistic programming
+
 - Martin, Bayesian Analysis with Python, 2018 (2e)
 
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg){width=1.5cm}
 
 ::::
 :::
