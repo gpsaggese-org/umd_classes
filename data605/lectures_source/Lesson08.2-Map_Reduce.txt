@@ -18,7 +18,7 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{8.1: Map Reduce}}$$**
+**$$\text{\blue{8.2: Map Reduce}}$$**
 \endgroup
 
 ::: columns
@@ -94,9 +94,11 @@ UMD DATA605 - Big Data Systems
   - Analyze web server logs for popular URLs
 
 - **Linux solution**
-:::columns
-::::{.column width=70%}
-\begingroup\color{blue}
+
+::: columns
+:::: {.column width=70%}
+
+\begingroup \color{blue}
 ```bash
 > more doc.txt
 One a penny, two a penny, hot cross buns.
@@ -107,23 +109,24 @@ cross 1
 ...
 ```
 \endgroup
+
 ::::
-::::{.column width=30%}
+:::: {.column width=30%}
+
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_25_image_1.png){width=80%}
+
 ::::
 :::
 
 - `words` outputs words one per line
-
 - Unix pipeline is parallelizable in MapReduce sense
 
 * MapReduce: Word Count
-:::columns
-::::{.column width=33%}
+::: columns
+:::: {.column width=33%}
 **Action**
 \footnotesize
 ```
-
 Read input
 ```
 
@@ -149,7 +152,7 @@ Reduce:
 ```
 - Combine the list of outputs with same keys
 ::::
-::::{.column width=33%}
+:::: {.column width=33%}
 **Python code**
 \footnotesize
 ```python
@@ -171,7 +174,7 @@ def reduce(key, values):
    emit(key, result)
 ```
 ::::
-::::{.column width=33%}
+:::: {.column width=33%}
 **Example**
 \footnotesize
 \begingroup\color{blue}\tiny
@@ -226,217 +229,218 @@ def reduce(key, values):
 ::::
 :::
 
-* MapReduce: Word Count
-```graphviz
-digraph MapReduce {
-    // --- Graph-level settings ---
-    graph [
-        // rankdir=LR,     // Default is TB (Top-Bottom)
-        ranksep=0.5,    // Increase space between columns
-        nodesep=1.0,    // Increase space between nodes on the same rank
-        splines=false,  // Use straight lines
-        bgcolor=white,  // Set background to white
-        fontname="Helvetica"
-    ];
+//* MapReduce: Word Count
+//```graphviz
+//digraph MapReduce {
+//    // --- Graph-level settings ---
+//    graph [
+//        // rankdir=LR,     // Default is TB (Top-Bottom)
+//        ranksep=0.5,    // Increase space between columns
+//        nodesep=1.0,    // Increase space between nodes on the same rank
+//        splines=false,  // Use straight lines
+//        bgcolor=white,  // Set background to white
+//        fontname="Helvetica"
+//    ];
+//
+//    // --- Default node settings ---
+//    node [
+//        fontname="Helvetica",
+//        fontsize=14,
+//        fontcolor=black
+//    ];
+//
+//    // --- Default edge settings (for the big dashed arrows) ---
+//    edge [
+//        style="dashed,bold",
+//        arrowhead=none,
+//        penwidth=6,
+//        color=black
+//    ];
+//
+//    // --- Column Headers ---
+//    // We create invisible nodes to hold the header text
+//    node [shape=plaintext, fontsize=16, fontcolor=black];
+//    input_header  [label=""]; // Empty placeholder for doc, to match group_header
+//    map_header    [label=<<b>Provided by the<br/>programmer</b>>];
+//    group_header  [label=""]; // Empty placeholder for alignment
+//    reduce_header [label=<<b>Provided by the<br/>programmer</b>>];
+//
+//    
+//    // --- Node Definitions ---
+//
+//    // 1. Big Document
+//    // Converted to an HTML-like label to add ports to each text block
+//    node [
+//        shape=box,
+//        style=solid,
+//        color=black,
+//        width=2.5,
+//        height=3.5,
+//        align=left
+//    ];
+//    doc [
+//        label=<
+//<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part1">The crew of the space<BR/>
+//shuttle Endeavor recently<BR/>
+//returned to Earth as<BR/>
+//ambassadors, harbingers<BR/>
+//of a new era of space<BR/>
+//exploration. Scientists at</TD></TR>
+//  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">------------------------------</FONT></TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part2">
+//NASA are saying that the<BR/>
+//recent assembly of the<BR/>
+//Dextre bot is the first step<BR/>
+//in a long-term space-based<BR/>
+//man/machine partnership.</TD></TR>
+//  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">------------------------------</FONT></TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part3">
+//\"The work we're doing now<BR/>
+//-- the robotics we're doing<BR/>
+//-- is what we're going to<BR/>
+//need ...</TD></TR>
+//</TABLE>
+//>,
+//        xlabel=<<b><font color="darkgreen">Big document</font></b>>
+//    ];
+//
+//    // 2. Map Node
+//    // Data section is now multiple rows, each with a port
+//    node [
+//        shape=box,
+//        style="filled,rounded",
+//        fillcolor="#d29a9a", // Reddish color
+//        width=2.5,
+//        height=3.5,
+//        fontcolor=black
+//    ];
+//    map_node [
+//        label=<
+//<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
+//  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Map:</B><BR/>Read input<BR/>Produce a set of<BR/>key-value pairs</TD></TR>
+//  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data1">(The, 1)<BR/>(crew, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data2">(of, 1)<BR/>(the, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data3">(space, 1)<BR/>(shuttle, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data4">(Endeavor, 1)<BR/>(recently, 1)<BR/>....</TD></TR>
+//</TABLE>
+//>,
+//        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
+//    ];
+//
+//    // 3. Group by key Node
+//    // Data section is now multiple rows, each with a port
+//    node [
+//        shape=box,
+//        style="filled,rounded",
+//        fillcolor="#8c96c6", // Bluish color
+//        width=2.5,
+//        height=3.5,
+//        fontcolor=black
+//    ];
+//    group_node [
+//        label=<
+//<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
+//  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Group by<BR/>key:</B><BR/>Collect all pairs<BR/>with same key</TD></TR>
+//  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_crew">(crew, [1, 1])</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_space">(space, [1])</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_the">(the, [1, 1, 1])</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_shuttle">(shuttle, [1])</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_recently">(recently, [1])</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_dots">...</TD></TR>
+//</TABLE>
+//>,
+//        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
+//    ];
+//
+//    // 4. Reduce Node
+//    // Data section is now multiple rows, each with a port
+//    node [
+//        shape=box,
+//        style="filled,rounded",
+//        fillcolor="#a68cc6", // Purplish color
+//        width=2.5,
+//        height=3.5,
+//        fontcolor=black
+//    ];
+//    reduce_node [
+//        label=<
+//<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
+//  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Reduce:</B><BR/>Collect all values<BR/>belonging to the<BR/>key and output</TD></TR>
+//  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_crew">(crew, 2)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_space">(space, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_the">(the, 3)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_shuttle">(shuttle, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_recently">(recently, 1)</TD></TR>
+//  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_dots">...</TD></TR>
+//</TABLE>
+//>,
+//        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
+//    ];
+//
+//    
+//    // --- Layout and Edges ---
+//
+//    // Place all headers on the same top rank
+//    { rank=same; input_header; map_header; group_header; reduce_header; }
+//
+//    // Place all main nodes on the same rank below the headers
+//    { rank=same; doc; map_node; group_node; reduce_node; }
+//
+//    // Use invisible edges to align headers vertically with their nodes
+//    input_header -> doc          [style=invis];
+//    map_header -> map_node       [style=invis];
+//    group_header -> group_node   [style=invis];
+//    reduce_header -> reduce_node [style=invis];
+//
+//    // Define the main data flow
+//    // 1. Big dashed arrow from Doc to Map
+//    // This edge uses the default style (dashed, bold) defined at the top.
+//    doc:part1 -> map_node:desc; // Connects from a part of the doc to the map description
+//
+//    // 2. New dotted lines from Map to Group
+//    // We change the edge style *only* for these connections
+//    edge [style=dotted, color=black, penwidth=2, arrowhead=normal, arrowsize=0.8, constraint=false];
+//    map_node:m_data1 -> group_node:g_crew;     // (crew, 1) -> (crew, [1, 1])
+//    map_node:m_data2 -> group_node:g_the;      // (the, 1) -> (the, [1, 1, 1])
+//    map_node:m_data3 -> group_node:g_space;    // (space, 1) -> (space, [1])
+//    map_node:m_data3 -> group_node:g_shuttle;  // (shuttle, 1) -> (shuttle, [1])
+//    map_node:m_data4 -> group_node:g_recently; // (recently, 1) -> (recently, [1])
+//    // Note: (The, 1) and (of, 1) don't have obvious matches in the group list, so they are not explicitly connected
+//
+//    // 3. New dotted lines from Group to Reduce
+//    // These edges will *inherit* the dotted style from the change above
+//    group_node:g_crew -> reduce_node:r_crew;
+//    group_node:g_space -> reduce_node:r_space;
+//    group_node:g_the -> reduce_node:r_the;
+//    group_node:g_shuttle -> reduce_node:r_shuttle;
+//    group_node:g_recently -> reduce_node:r_recently;
+//}
+//```
 
-    // --- Default node settings ---
-    node [
-        fontname="Helvetica",
-        fontsize=14,
-        fontcolor=black
-    ];
-
-    // --- Default edge settings (for the big dashed arrows) ---
-    edge [
-        style="dashed,bold",
-        arrowhead=none,
-        penwidth=6,
-        color=black
-    ];
-
-    // --- Column Headers ---
-    // We create invisible nodes to hold the header text
-    node [shape=plaintext, fontsize=16, fontcolor=black];
-    input_header  [label=""]; // Empty placeholder for doc, to match group_header
-    map_header    [label=<<b>Provided by the<br/>programmer</b>>];
-    group_header  [label=""]; // Empty placeholder for alignment
-    reduce_header [label=<<b>Provided by the<br/>programmer</b>>];
-
-    
-    // --- Node Definitions ---
-
-    // 1. Big Document
-    // Converted to an HTML-like label to add ports to each text block
-    node [
-        shape=box,
-        style=solid,
-        color=black,
-        width=2.5,
-        height=3.5,
-        align=left
-    ];
-    doc [
-        label=<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part1">The crew of the space<BR/>
-shuttle Endeavor recently<BR/>
-returned to Earth as<BR/>
-ambassadors, harbingers<BR/>
-of a new era of space<BR/>
-exploration. Scientists at</TD></TR>
-  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">------------------------------</FONT></TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part2">
-NASA are saying that the<BR/>
-recent assembly of the<BR/>
-Dextre bot is the first step<BR/>
-in a long-term space-based<BR/>
-man/machine partnership.</TD></TR>
-  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">------------------------------</FONT></TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="part3">
-\"The work we're doing now<BR/>
--- the robotics we're doing<BR/>
--- is what we're going to<BR/>
-need ...</TD></TR>
-</TABLE>
->,
-        xlabel=<<b><font color="darkgreen">Big document</font></b>>
-    ];
-
-    // 2. Map Node
-    // Data section is now multiple rows, each with a port
-    node [
-        shape=box,
-        style="filled,rounded",
-        fillcolor="#d29a9a", // Reddish color
-        width=2.5,
-        height=3.5,
-        fontcolor=black
-    ];
-    map_node [
-        label=<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
-  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Map:</B><BR/>Read input<BR/>Produce a set of<BR/>key-value pairs</TD></TR>
-  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data1">(The, 1)<BR/>(crew, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data2">(of, 1)<BR/>(the, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data3">(space, 1)<BR/>(shuttle, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="m_data4">(Endeavor, 1)<BR/>(recently, 1)<BR/>....</TD></TR>
-</TABLE>
->,
-        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
-    ];
-
-    // 3. Group by key Node
-    // Data section is now multiple rows, each with a port
-    node [
-        shape=box,
-        style="filled,rounded",
-        fillcolor="#8c96c6", // Bluish color
-        width=2.5,
-        height=3.5,
-        fontcolor=black
-    ];
-    group_node [
-        label=<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
-  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Group by<BR/>key:</B><BR/>Collect all pairs<BR/>with same key</TD></TR>
-  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_crew">(crew, [1, 1])</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_space">(space, [1])</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_the">(the, [1, 1, 1])</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_shuttle">(shuttle, [1])</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_recently">(recently, [1])</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="g_dots">...</TD></TR>
-</TABLE>
->,
-        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
-    ];
-
-    // 4. Reduce Node
-    // Data section is now multiple rows, each with a port
-    node [
-        shape=box,
-        style="filled,rounded",
-        fillcolor="#a68cc6", // Purplish color
-        width=2.5,
-        height=3.5,
-        fontcolor=black
-    ];
-    reduce_node [
-        label=<
-<TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0" ALIGN="LEFT">
-  <TR><TD ALIGN="LEFT" CELLPADDING="8" PORT="desc"><B>Reduce:</B><BR/>Collect all values<BR/>belonging to the<BR/>key and output</TD></TR>
-  <TR><TD ALIGN="CENTER" HEIGHT="1" VALIGN="MIDDLE"><FONT FACE="monospace" POINT-SIZE="8">--------------------------</FONT></TD></TR> <!-- Simulated dashed line -->
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_crew">(crew, 2)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_space">(space, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_the">(the, 3)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_shuttle">(shuttle, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_recently">(recently, 1)</TD></TR>
-  <TR><TD ALIGN="LEFT" CELLPADDING="4" PORT="r_dots">...</TD></TR>
-</TABLE>
->,
-        xlabel=<<b><font color="darkgreen">(key, value)</font></b>>
-    ];
-
-    
-    // --- Layout and Edges ---
-
-    // Place all headers on the same top rank
-    { rank=same; input_header; map_header; group_header; reduce_header; }
-
-    // Place all main nodes on the same rank below the headers
-    { rank=same; doc; map_node; group_node; reduce_node; }
-
-    // Use invisible edges to align headers vertically with their nodes
-    input_header -> doc          [style=invis];
-    map_header -> map_node       [style=invis];
-    group_header -> group_node   [style=invis];
-    reduce_header -> reduce_node [style=invis];
-
-    // Define the main data flow
-    // 1. Big dashed arrow from Doc to Map
-    // This edge uses the default style (dashed, bold) defined at the top.
-    doc:part1 -> map_node:desc; // Connects from a part of the doc to the map description
-
-    // 2. New dotted lines from Map to Group
-    // We change the edge style *only* for these connections
-    edge [style=dotted, color=black, penwidth=2, arrowhead=normal, arrowsize=0.8, constraint=false];
-    map_node:m_data1 -> group_node:g_crew;     // (crew, 1) -> (crew, [1, 1])
-    map_node:m_data2 -> group_node:g_the;      // (the, 1) -> (the, [1, 1, 1])
-    map_node:m_data3 -> group_node:g_space;    // (space, 1) -> (space, [1])
-    map_node:m_data3 -> group_node:g_shuttle;  // (shuttle, 1) -> (shuttle, [1])
-    map_node:m_data4 -> group_node:g_recently; // (recently, 1) -> (recently, [1])
-    // Note: (The, 1) and (of, 1) don't have obvious matches in the group list, so they are not explicitly connected
-
-    // 3. New dotted lines from Group to Reduce
-    // These edges will *inherit* the dotted style from the change above
-    group_node:g_crew -> reduce_node:r_crew;
-    group_node:g_space -> reduce_node:r_space;
-    group_node:g_the -> reduce_node:r_the;
-    group_node:g_shuttle -> reduce_node:r_shuttle;
-    group_node:g_recently -> reduce_node:r_recently;
-}
-
-* MapReduce: Map Step
-:::columns
-::::{.column width=40%}
-\vspace{1cm}
-
-- `map(values: List):`
-  \begingroup\footnotesize
-  ```python
-  # values: words in document
-  for word in values: emit(word, 1) \endgroup
-  ```
-
-- `ma()` processes all values
-
-- Outputs 0 or more tuples per input
-::::
-::::{.column width=60%}
-![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_28_image_1.png){width=90%}
-::::
-:::
+//* MapReduce: Map Step
+//::: columns
+//:::: {.column width=40%}
+//\vspace{1cm}
+//
+//- `map(values: List):`
+//  \begingroup\footnotesize
+//  ```python
+//  # values: words in document
+//  for word in values: emit(word, 1) \endgroup
+//  ```
+//
+//- `ma()` processes all values
+//
+//- Outputs 0 or more tuples per input
+//::::
+//:::: {.column width=60%}
+//![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_28_image_1.png){width=90%}
+//::::
+//:::
 
 * MapReduce: Reduce Step
 ```python
@@ -449,8 +453,6 @@ reduce(key: word, values: List[int]):
    emit(key, result)
 ```
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_29_image_1.png)
-
-
 
 * MapReduce: Interfaces
 - Input: read key-value pairs **List[Tuple[k, v]]**
@@ -469,8 +471,8 @@ reduce(key: word, values: List[int]):
 - Output: write key-value pairs **List[Tuple[k, v]]**
 
 * MapReduce: Log Processing
-:::columns
-::::{.column width=60%}
+::: columns
+:::: {.column width=60%}
 \footnotesize
 - Log file recording access to a website with format
 ```
@@ -492,7 +494,7 @@ date, hour, filename
   - Write results on disk separated by newline
 
 ::::
-::::{.column width=40%}
+:::: {.column width=40%}
 \footnotesize
 **After Input**
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_31_image_1.png)
@@ -530,11 +532,11 @@ date, hour, filename
 Focusing on MapReduce functionality / flow of the data to 
 expose the parallelism
 ```
-:::columns
-::::{.column width=60%}
+::: columns
+:::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_32_image_1.png){width=110%}
 ::::
-::::{.column width=40%}
+:::: {.column width=40%}
 - **Input**
 - **Map**
   - mki = map keys
@@ -548,20 +550,20 @@ expose the parallelism
 ::::
 :::
 \vspace{0.25cm}
-:::columns
-::::{.column width=10%}
+::: columns
+:::: {.column width=10%}
 **Input**
 ::::
-::::{.column width=15%}
+:::: {.column width=15%}
 **Map**
 ::::
-::::{.column width=10%}
+:::: {.column width=10%}
 **GroupBy**
 ::::
-::::{.column width=10%}
+:::: {.column width=10%}
 **Reduce**
 ::::
-::::{.column width=40%}
+:::: {.column width=40%}
 ```
 .
 ```
@@ -569,8 +571,8 @@ expose the parallelism
 :::
 
 * MapReduce: Parallel Data Flow
-:::columns
-::::{.column width=55%}
+::: columns
+:::: {.column width=55%}
 \footnotesize
 - **User program** specifies map/reduce code
 - **Input data** is partitioned across multiple machines (HDFS)
@@ -589,7 +591,7 @@ expose the parallelism
 - **Write to disk**
 
 ::::
-::::{.column width=50%}
+:::: {.column width=50%}
 
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_33_image_1.png)
 
@@ -600,8 +602,8 @@ expose the parallelism
 
 
 * Master Node Responsibilities
-:::columns
-::::{.column width=50%}
+::: columns
+:::: {.column width=50%}
 
 - **Master node coordinates**
   - Task status: idle, in-progress, completed
@@ -612,7 +614,7 @@ expose the parallelism
 
 - **Master node pings workers to detect failures**
 ::::
-::::{.column width=50%}
+:::: {.column width=50%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_34_image_1.png)
 ::::
 :::
@@ -659,8 +661,8 @@ expose the parallelism
   - Shorten job completion time
 
 * Refinement: Combiners
-:::columns
-::::{.column width=60%}
+::: columns
+:::: {.column width=60%}
 - **Problem**
   - Often a *Map* task produces many pairs for the same key *k*
 ```
@@ -680,7 +682,7 @@ expose the parallelism
   - Less shuffling and reordering
   - Less network / disk traffic
 ::::
-::::{.column width=50%}
+:::: {.column width=50%}
 \vspace{1cm}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_38_image_1.gif)
 ::::
