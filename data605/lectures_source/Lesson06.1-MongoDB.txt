@@ -18,26 +18,25 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{MongoDB and CouchDB}}$$**
+**$$\text{\blue{6.1: MongoDB}}$$**
 \endgroup
 
 ::: columns
-:::: {.column width=75%}
+:::: {.column width=65%}
 \vspace{1cm}
 
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
-- All concepts in slides
-- MongoDB tutorial
-- Web
-  - https://www.mongodb.com/
-  - Official docs
-  - pymongo
-- Book
+- **References**:
+  - All concepts in slides
+  - MongoDB tutorial
+  - Web
+    - https://www.mongodb.com/
+    - Official docs
   - Seven Databases in Seven Weeks, 2e
 ::::
-:::: {.column width=50%} 
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_5_image_1.png)
+:::: {.column width=30%} 
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png){width=2cm}
 ::::
 :::
 
@@ -45,24 +44,25 @@ UMD DATA605 - Big Data Systems
 ::: columns
 :::: {.column width=60%}
 - **Key-value stores**
-  - Basically a map or a dictionary
-    - E.g., HBase, Redis
-  - Typically only look up values by key
-    - Sometimes can do search in value field with a pattern
-  - Uninterpreted value (e.g., binary blob) associated with a key
-  - Typically one namespace for all key-values
+  - Function as a map or dictionary
+    - Examples: HBase, Redis
+  - Primarily retrieve values using keys
+    - Occasionally search within value fields using patterns
+  - Store uninterpreted values (e.g., binary blobs) linked to keys
+  - Use a single namespace for all key-value pairs
+
 - **Document DBs**
-  - Collect sets of key-value pairs into *documents*
-    - E.g., MongoDB, CouchDB
-  - Documents represented in JSON, XML, or BSON (binary JSON)
-  - Documents organized into *collections*
-    - Similar to *tables* in relational DBs
+  - Group key-value pairs into _documents_
+    - Examples: MongoDB, CouchDB
+  - Documents formatted in JSON, XML, or BSON (binary JSON)
+  - Documents are part of _collections_
+    - Comparable to _tables_ in relational databases
     - Large collections can be partitioned and indexed
 ::::
 :::: {.column width=35%}
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_3_image_1.png)
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_3_image_1.png){width=80%}
 
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_3_image_2.png)
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_3_image_2.png){width=80%}
 ::::
 :::
 
@@ -79,20 +79,19 @@ UMD DATA605 - Big Data Systems
 ::::
 :::
 
-- One of the most used NoSQL DBs (if not the most used)
-- **Document-oriented NoSQL database**
+- Highly popular NoSQL database
+- **Document-oriented NoSQL DB**
   - Schema-less
-    - No Data Definition Language (DDL), like for SQL
-    - You can store maps with any keys and values
-    - Application tracks the schema, mapping between documents and their meaning
-  - Keys are hashes stored as strings
-    - Document Identifiers **\_id** created for each document (field name
-      reserved by Mongo)
-  - Values use BSON format
-    - Based on JSON (B stands for Binary)
-- Written in C++
-- Supports APIs (drivers) in many languages
-  - E.g., JavaScript, Python, Ruby, Java, Scala, C++, ...
+    - No Data Definition Language (DDL) like SQL
+    - Store maps with any keys and values
+    - Application manages schema, linking documents to meanings
+  - Keys are string-stored hashes
+    - Each document has a unique `_id` (reserved by Mongo)
+  - Values in BSON format
+    - Based on JSON (B for Binary)
+- Developed in C++
+- Supports APIs (drivers) in various languages
+  - Examples: JavaScript, Python, Ruby, Java, Scala, C++, etc
 
 * MongoDB: Example of Document
 
@@ -107,20 +106,25 @@ UMD DATA605 - Big Data Systems
 * MongoDB: Functionalities
 - **Design goals**
   - Performance
-  - Availability / scalability
+  - Availability/scalability
   - Rich data storage (not rich querying!)
+
 - **Dynamic schema**
-  - No DDL (Data Definition Language)
+  - No DDL
   - Secondary indexes
-  - Query language via an API
+  - Query language via API
+
 - **Several levels of data consistency**
-  - E.g., atomic writes and fully-consistent reads (at document level)
+  - Atomic writes and fully-consistent reads (document level)
+
 - **No joins nor transactions across multiple documents**
-  - Makes distributed queries easy and fast
+  - Distributed queries easy and fast
+
 - **High availability through replica sets**
-  - E.g., primary replication with automated failover
+  - Primary replication with automated failover
+
 - **Built-in sharding**
-  - Horizontal scaling via automated range-based partitioning of data
+  - Horizontal scaling via automated range-based partitioning
   - Reads and writes distributed over shards
 
 * MongoDB: Hierarchical Objects
@@ -129,36 +133,37 @@ UMD DATA605 - Big Data Systems
 - A Mongo **instance** has:
   - Zero or more "databases"
   - Mongo instance ~ Postgres instance
+
 - A Mongo **database** has:
   - Zero or more "collections"
     - Mongo collection ~ Postgres tables
   - Mongo database ~ Postgres database
+
 - A Mongo **collection** has:
   - Zero or more "documents"
     - Mongo document ~ Postgres rows
+
 - A Mongo **document** has:
   - One or more "fields"
-    - It has always primary key `_id`
+    - Always has primary key `_id`
     - Mongo field ~ Postgres columns
 ::::
-::::{.column width=50%}
+::::{.column width=45%}
 ![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_9_image_1.png)
 ::::
 :::
 
-[ref](https://www.mongodb.com/docs/manual/core/data-modeling-introduction)
-
 * Relational DBs vs MongoDB: Concepts
 
-\small
-| RDBMS Concept | MongoDB Concept | Meaning in MongoDB |
+\scriptsize
+| **RDBMS Concept** | **MongoDB Concept** | **Meaning in MongoDB** |
 |---------|---------|---------|
 | database | database | Container for collections |
 | relation / table / view | collection | Group of documents |
 | row / instance | document | Group of fields |
 | column / attribute | field | A name-value pair |
 | index | index | Automatic |
-| primary keys | \_id field | Always the primary key |
+| primary keys | `_id` field | Always the primary key |
 | foreign key | reference | Pointers |
 | table joins | embedded documents | Nested name-value pairs |
 
@@ -167,58 +172,62 @@ UMD DATA605 - Big Data Systems
 * Relational vs Document DB: Workflows
 - **Relational DBs**
   - E.g., PostgreSQL
-  - Know what you want to store
+  - Know what to store
     - Tabular data
-  - Do not know how to use it
-    - Static schema allows query flexibility (e.g., joins)
-  - Complexity is at insertion time
-    - Decide how to represent the data (i.e., schema)
+  - Static schema allows query flexibility (e.g., joins)
+  - Complexity at insertion time
+    - Decide data representation (schema)
+
 - **Document DBs**
   - E.g., MongoDB
-  - No assumptions on what to store
+  - No assumptions on storage
     - E.g., irregular JSON data
-  - Know a bit how to access data
-    - You want to access the data by key
-    - E.g., it's a nested key-value map
-  - Complexity is at access time
-    - Get the data from the server
-    - Process data on the client side
+  - Access data by key
+    - Nested key-value map
+  - Complexity at access time
+    - Retrieve data from server
+    - Process data client-side
 
 * Why Use MongoDB?
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=45%}
 - Simple to query
-  - Do the work on client side
-- It's fast
+  - Work on client side
+
+- Fast
   - 2-10x faster than Postgres
-- Data model / functionalities suitable for most web applications
+
+- Data model/functionalities suitable for most web applications
   - Semi-structured data
   - Quickly evolving systems
-- Easy and fast integration of data
-- Not well suited for heavy and complex transactions systems
+
+- Easy and fast data integration
+
+- Not suited for heavy, complex transaction systems
   - E.g., banking system
 ::::
-::::{.column width=40%}
+::::{.column width=50%}
 ![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_12_image_1.png)
 ::::
 :::
 
 * MongoDB: Data Model
 :::columns
-::::{.column width=50%}
+::::{.column width=45%}
 
-- **Documents** are composed of field and value pairs
-  - **Field names** are strings
-  - **Values** are any BSON type
+- **Documents** are field-value pairs
+  - **Field names**: strings
+  - **Values**: any BSON type
     - Arrays of documents
     - Native data types
     - Other documents
-- E.g.,
-  - `_id` holds an `ObjectId`
-  - name holds a document that contains the fields first and last
-  - birth and death are of Date type
-  - contribs holds an array of strings
-  - views holds a value of the NumberLong type
+
+- Examples:
+  - `_id`: `ObjectId`
+  - `name`: document with fields first and last
+  - `birth` and `death`: date type
+  - `contribs`: array of strings
+  - `views`: NumberLong type
 
 ::::
 ::::{.column width=50%}
@@ -229,13 +238,15 @@ UMD DATA605 - Big Data Systems
 
 * MongoDB: Data Model
 :::columns
-::::{.column width=50%}
+::::{.column width=45%}
 
 - Documents can be nested
   - Embedded sub-document
+
 - **Denormalized data models**
-  - Store multiple related pieces of information in the same record
-  - Conceptually is the result of a join operation
+  - Store related information in the same record
+  - Result of a join operation
+
 - **Normalized data models**
   - Eliminate duplication
   - Represent many-to-many relationships
@@ -247,48 +258,44 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Schema Free
-- MongoDB does not need any pre-defined data schema
+- MongoDB does not need pre-defined data schema
+
 - Every **document** in a **collection** can have different fields and values
   - No need for `NULL` values / union of fields like in relational DBs
+
 - E.g., dishomogeneous data instances
 
-:::columns
-::::{.column width=33%}
-**Document**
-::::
-::::{.column width=33%}
-**Document**
-::::
-::::{.column width=33%}
-
-**Collection**
-::::
-:::
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_15_image_1.png)
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_15_image_1.png){width=80%}
 
 * JSON Format
 - JSON = JavaScript Object Notation
-- Data is stored in field / value pairs
-- A field / value pair consists of:
-  - A field name (always a string)
-  - Followed by a colon :
-  - Followed by a typed value
-  ```
-  "name": "R2-D2"
-  ```
+  - Data is stored in field / value pairs
+  - A field / value pair consists of:
+    - A field name (always a string)
+    - Followed by a colon :
+    - Followed by a typed value
+    ```python
+    "name": "R2-D2"
+    ```
 - **Data in documents is separated by commas `,`**
-  ```
+  \begingroup \small
+  ```python
   "name": "R2-D2", race: "Droid"
   ``` 
+  \endgroup
 - Curly braces {} hold documents
-  ```
+  \begingroup \small
+  ```python
   {"name": "R2-D2", race : "Droid", affiliation: "rebels"}
   ```
+  \endgroup
 - An array is stored in brackets []
-  ```
+  \begingroup \small
+  ```python
   [{"name": "R2-D2", race: "Droid", affiliation: "rebels"},
    {"name": "Yoda", affiliation: "rebels"}]
   ```
+  \endgroup
 - Supports:
   - Embedding of nested objects within other objects
   - Just references
@@ -296,48 +303,61 @@ UMD DATA605 - Big Data Systems
 * BSON Format 
 - Binary-encoded serialization of JSON-like documents
   - https://bsonspec.org
-- Zero or more key/value pairs are stored as a single entity
+
+- Store zero or more key/value pairs as a single entity
   - Each entry consists of:
-    - a field name (string)
-    - a data type
-    - a value
+    - Field name (string)
+    - Data type
+    - Value
+
 - Similar to Protocol Buffer, but more schema-less
-- Large elements in a BSON document are prefixed with a length field to facilitate scanning
-- MongoDB understands the internals of BSON objects, even nested ones
-  - Can build indexes and match objects against query expressions for BSON keys
+
+- Prefix large elements in BSON document with a length field for scanning
+
+- MongoDB understands BSON objects, even nested
+  - Build indexes and match objects against query expressions for BSON keys
 
 * ObjectID
 :::columns
 ::::{.column width=50%}
 - Each JSON data contains an `_id` field of type `ObjectId`
-  - Same as a SERIAL constraint incrementing a numeric primary key in PostgreSQL
+  - Similar to SERIAL constraint incrementing a numeric primary key in
+    PostgreSQL
+
 - An `ObjectId` is 12 bytes, composed of:
-  - a timestamp
-  - client machine ID
-  - client process ID
-  - a 3-byte auto-incremented counter
-- Each Mongo process can handle its own ID generation without colliding
-  - Mongo has a distributed nature
-- Details [here](https://www.mongodb.com/docs/manual/reference/bson-types/#objectid)
+  - Timestamp
+  - Client machine ID
+  - Client process ID
+  - 3-byte auto-incremented counter
 
 ::::
-::::{.column width=33%}
+::::{.column width=45%}
 ![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_18_image_1.png)
 ::::
 :::
 
+- Each Mongo process handles its own ID generation without colliding
+  - Mongo's distributed nature
+
+- Details
+  [here](https://www.mongodb.com/docs/manual/reference/bson-types/#objectid)
+
 * Indexes
 - **Primary index**
-  - Automatically created on the \_id field
+  - Automatically created on `_id` field
   - B+ tree indexes
+
 - **Secondary index**
-- Users can create secondary indexes to:
   - Improve query performance
-  - Enforce unique values for a particular field 
+  - Enforce unique values for a field
+
 - Single field index and compound index (like SQL)
-  - Order of the fields in a compound index matters
+  - Order of fields in a compound index matters
+
 - Sparse property of an index
-  - The index contains only entries for documents that have the indexed field
-  - Ignore records that do not have the field defined 
-- Reject records with duplicate key value if an index is unique and sparse
+  - Index contains entries for documents with the indexed field
+  - Ignore records without the field
+
+- Reject records with duplicate key if index is unique and sparse
+
 - Details [here](https://www.mongodb.com/docs/manual/indexes/)

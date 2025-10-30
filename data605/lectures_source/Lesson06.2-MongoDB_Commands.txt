@@ -1,5 +1,5 @@
 // Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
-// 
+//
 // https://docs.google.com/presentation/d/1vPnS1ExXBWG7fDwiBFiKWXvSNaocFCRhuPiUtL6KlOM/edit?slide=id.g14f60704d11_0_6#slide=id.g14f60704d11_0_6
 
 ::: columns
@@ -18,26 +18,26 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{MongoDB and CouchDB}}$$**
+**$$\text{\blue{6.2: MongoDB Commands}}$$**
 \endgroup
 
 ::: columns
-:::: {.column width=75%}
+:::: {.column width=65%}
 \vspace{1cm}
 
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
-- All concepts in slides
-- MongoDB tutorial
-- Web
-  - https://www.mongodb.com/
-  - Official docs
-  - pymongo
-- Book
+- **References**:
+  - All concepts in slides
+  - MongoDB tutorial
+  - Web
+    - https://www.mongodb.com/
+    - Official docs
+    - pymongo
   - Seven Databases in Seven Weeks, 2e
 ::::
-:::: {.column width=50%} 
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_5_image_1.png)
+:::: {.column width=30%}
+![](data605/lectures_source/images/lecture_5_0/lec_5_0_slide_4_image_1.png){width=2cm}
 ::::
 :::
 
@@ -45,22 +45,22 @@ UMD DATA605 - Big Data Systems
 - CRUD = Create, Read, Update, Delete
 
 - **Create**
-  ```
+  ```python
   db.collection.insert(<document>)
   db.collection.update(<query>, <update>, {upsert: true})
   ```
   - Upsert = update (if exists) or insert (if it doesn't)
 - **Read**
-  ```
+  ```python
   db.collection.find(<query>, <projection>)
   db.collection.findOne(<query>, <projection>)
   ```
 - **Update**
-  ```
+  ```python
   db.collection.update(<query>, <update>, <options>)
   ```
 - **Delete**
-  ``` 
+  ```python
   db.collection.remove(<query>, <justOne>)
   ```
 
@@ -68,39 +68,39 @@ UMD DATA605 - Big Data Systems
 
 * Create Operations
 - `db.collection` specifies the collection (like an SQL table) to store the
-  document 
-  ```
+  document
+  ```python
   db.collection.insert(<document>)
   ```
   - Without `_id` field, MongoDB generates a unique key
-    ```
+    ```python
     db.parts.insert({type: "screwdriver", quantity: 15})
     ```
   - Use `_id` field if it has a special meaning
-    ```
-    db.parts.insert({\_id: 10, type: "hammer", quantity: 1})
+    ```python
+    db.parts.insert({_id: 10, type: "hammer", quantity: 1})
     ```
 - Update 1 or more records in a collection satisfying **query**
-  ```
+  ```python
   db.collection.update(<query>, <update>, {upsert: true})
   ```
-- Update an existing record or create a new record 
-  ```
+- Update an existing record or create a new record
+  ```python
   db.collection.save(<document>)
   ```
 - A more modern OOP-like syntax than the COBOL / FORTRAN-inspired SQL
 
 * Read Operations
-- `find` provides functionality similar to `SQL SELECT` command 
-  ```
+- `find` provides functionality similar to `SQL SELECT` command
+  ```python
   db.collection.find(<query>, <projection>).cursor
   ```
   with:
-    - <query> = WHERE condition
-    - <projection> = fields in result set 
+    - `<query>` = `WHERE` condition
+    - `<projection>` = fields in result set
 
 - `db.parts.find({parts: "hammer"}).limit(5)`
-  - Return cursor to handle a result set 
+  - Return cursor to handle a result set
   - Can modify the query to impose limits, skips, and sort orders
   - Can specify to return the ‘top' number of records from the result set
 
@@ -115,18 +115,19 @@ UMD DATA605 - Big Data Systems
 \footnotesize
 **SQL**
 ```sql
-SELECT * FROM users WHERE age>33 
+SELECT * FROM users WHERE age>33
 
-SELECT * FROM users WHERE age!=33 
+SELECT * FROM users WHERE age!=33
 
-SELECT * FROM users WHERE name LIKE "%Joe%"
+SELECT * FROM users
+  WHERE name LIKE "%Joe%"
 
-SELECT * FROM users WHERE a=1 and b='q' 
+SELECT * FROM users WHERE a=1 and b='q'
 
-SELECT * FROM users WHERE a=1 or b=2 
+SELECT * FROM users WHERE a=1 or b=2
 
 SELECT * FROM foo
-  WHERE name='bob' and (a=1 or b=2 ) 
+  WHERE name='bob' and (a=1 or b=2 )
 
 SELECT * FROM users
   WHERE age>33 AND age<=40
@@ -136,38 +137,36 @@ SELECT * FROM users
 ::::{.column width=40%}
 \footnotesize
 **Mongo**
-```mongo
-db.users.find({age: {$gt: 33}}) 
+```python
+db.users.find({age: {$gt: 33}})
 
-db.users.find({age: {$ne: 33}}) 
+db.users.find({age: {$ne: 33}})
 
-db.users.find({name: /Joe/}) 
+db.users.find({name: /Joe/})
 
-db.users.find({a: 1, b: 'q'}) 
+db.users.find({a: 1, b: 'q'})
 
-db.users.find({$or: [{a: 1}, {b: 2}]}) 
+db.users.find({$or: [{a: 1}, {b: 2}]})
 
 db.foo.find({name: "bob",
-
-$or: [{a: 1}, {b: 2}]})
+  $or: [{a: 1}, {b: 2}]})
 
 db.users.find({'age':
-
-{$gt: 33, $lte: 40}}) 
+  {$gt: 33, $lte: 40}})
 ```
 ::::
 :::
 
 * Query Operators
 
-![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_24_image_1.png){width=80%}
+![](data605/lectures_source/images/lecture_6_1/lec_6_1_slide_24_image_1.png){width=70%}
 
 * Update Operations
 - `db.collection.insert(<document>)`
   - Omit the `_id` field to have MongoDB generate a unique key
     ```mongo
     db.parts.insert({type: "screwdriver", quantity: 15})
-    db.parts.insert({\_id: 10, type: "hammer", quantity: 1})
+    db.parts.insert({_id: 10, type: "hammer", quantity: 1})
     ```
 - `db.collection.save(<document>)`
   - Updates an existing record or creates a new record
@@ -178,9 +177,9 @@ db.users.find({'age':
   - Retrieve old or new version of the record
 
 * Delete Operations
-- `db.collection.remove(<query>, <justone>)`
+- `db.collection.remove(<query>, <just_one>)`
   - Delete all records from a collection or matching a criterion
-  - `<justone>` specifies to delete only 1 record matching the criterion
+  - `<just_one>` specifies to delete only 1 record matching the criterion
 - Remove all records in `parts` with `type` starting with h
   - `db.parts.remove(type: /h/ )`
 - Delete all documents in the `parts` collection
@@ -188,16 +187,20 @@ db.users.find({'age':
 
 * MongoDB Features
 - Document-oriented NoSQL store
+
 - Rich querying
   - Full index support (primary and secondary)
+
 - Fast in-place updates
+
 - Agile and scalable
   - Replication and high availability
   - Auto-sharding
   - Map-reduce functionality
+
 - Scale horizontally over commodity hardware
   - Horizontally = add more machines
-  - Commodity hardware = relatively inexpensive servers
+  - Commodity hardware = inexpensive servers
 
 * MongoDB vs Relational DBs
 - Keep the functionality that works well in RDBMSs
@@ -210,10 +213,9 @@ db.users.find({'age':
   - Joins
 
 * MongoDB Tutorial
-Tutorial is at GitHub
-The instructions are here:
-```
-> cd $GIT\_REPO/tutorials/tutorial\_mongodb
-
-> vi tutorial\_mongo.md
-```
+- Tutorial is at GitHub
+- The instructions are here:
+  ```bash
+  > cd $GIT_REPO/tutorials/tutorial_mongodb
+  > vi tutorial_mongo.md
+  ```

@@ -197,11 +197,11 @@ SELECT A_1, A_2, ..., A_n
 \vspace{0.5cm}
 
 - How does it work
-  - FROM is evaluated to create a relation
-  - (optional) WHERE is used to filter
-  - GROUP BY collects tuples into groups
-  - (optional) HAVING is applied to each group and groups are filtered
-  - SELECT generates tuples of the results, applying aggregate functions to get
+  - `FROM` is evaluated to create a relation
+  - (optional) `WHERE` is used to filter
+  - `GROUP BY` collects tuples into groups
+  - (optional) `HAVING` is applied to each group and groups are filtered
+  - `SELECT` generates tuples of the results, applying aggregate functions to get
     a single result for each group
 
 * Nested Subqueries
