@@ -109,6 +109,7 @@ UMD DATA605 - Big Data Systems
   - Instantaneous
   - A branch is a pointer to a commit
   - Git stores data as snapshots, not file differences
+
 - **Git workflows branch and merge often**
   - Multiple times a day
   - Surprising for users of centralized VCS
@@ -266,11 +267,12 @@ UMD DATA605 - Big Data Systems
   \endgroup
 
 * Fast Forward Merge
-* **Fast forward merge**
   - Merge a commit `Y` with a commit `X` that can be reached by following the
     history of commit `Y`
-* There is no divergent history to merge
+
+- There is no divergent history to merge
   - Git simply moves the branch pointer forward from X to Y
+
 ::: columns
 :::: {.column width=55%}
 - **Mental model**: a branch is just a pointer that indicates where the tip of
@@ -327,9 +329,10 @@ UMD DATA605 - Big Data Systems
 * Git Rebasing
 
 - In Git, there are **two ways of merging divergent history**
-  - E.g., `master` and `experiment` have a common ancestor `C2`
+- E.g., consider `master` and `experiment` have a common ancestor `C2`
+
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=60%}
 
 - **Merge**
   - Go to the target branch
@@ -450,7 +453,7 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Rebase vs Merge: Philosophical Considerations
-- Many man-centuries have been wasted discussing rebase-vs-merge at the
+- **Many man-centuries have been wasted** discussing rebase-vs-merge at the
   watercooler
   - Total waste of time! Tell people to get back to work!
 
@@ -473,7 +476,7 @@ UMD DATA605 - Big Data Systems
 - **Remote branches** are pointers to branches in remote repositories
   \begingroup \small \color{blue}
   ```
-  git remote -v
+  > git remote -v
   origin  git@github.com:gpsaggese/umd_classes.git (fetch)
   origin  git@github.com:gpsaggese/umd_classes.git (push)
   ```
@@ -550,12 +553,6 @@ UMD DATA605 - Big Data Systems
     - Modify the code locally
     - Push it back to the central hub (assuming no conflicts with the latest
       copy, otherwise they need to merge)
-- **Centralized workflow in Git**
-  - Developers:
-    - Have push (i.e., write) access to the central repo
-    - Need to fetch and then merge
-    - Cannot push code that will overwrite each other's code (only fast-forward
-      changes)
 ::::
 :::: {.column width=40%}
 
@@ -563,6 +560,13 @@ UMD DATA605 - Big Data Systems
 
 ::::
 :::
+
+- **Centralized workflow in Git**
+  - Developers:
+    - Have push (i.e., write) access to the central repo
+    - Need to fetch and then merge
+    - Cannot push code that will overwrite each other's code (only fast-forward
+      changes)
 
 * Forking Workflows
 - Typically, developers don't have permissions to update branches directly on a
