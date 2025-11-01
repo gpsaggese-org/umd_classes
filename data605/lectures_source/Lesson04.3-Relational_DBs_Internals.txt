@@ -42,12 +42,12 @@ UMD DATA605 - Big Data Systems
 ::::{.column width=70%}
 
 - Storage media trade-offs:
-  - Speed of access (e.g., 500-3,500MB/sec)
+  - Speed of access (e.g., 500-3,500 MB/sec)
   - Cost per data unit (e.g., 50 USD/TB)
   - Medium reliability
 
 - Volatile vs non-volatile storage
-  - **Volatile**: loses contents when power switched off
+  - **Volatile**: loses contents when power is switched off
   - **Non-volatile**: can survive failures and system crashes
 
 - Sequential vs random access
@@ -57,10 +57,9 @@ UMD DATA605 - Big Data Systems
   ```
 
 - **Random**: read the data from anywhere at any time
-
   ```sql
     SELECT * FROM employee
-    WHERE name LIKE '\_\_a\_\_b'
+    WHERE name LIKE '__a__b'
   ```
 
 - Need to know how data is stored in order to optimize access
@@ -88,14 +87,13 @@ Organize storage by speed and cost
   - Volatile
 
 - **Flash memory / SSDs**
-  - More expensive than RAM, less than magnetic disk
+  - Less expensive than RAM, more than magnetic disk
   - Non-volatile, random access
-
 - **Magnetic disk**
   - Long-term online storage
   - Non-volatile
 
-- **Optical disk (CD, Blue Ray)**
+- **Optical disk (CD, Blu-ray)**
   - Mainly read-only
 
 - **Magnetic tapes**
@@ -122,44 +120,42 @@ source: http://cse1.net/recaps/4-memory.html
 
 * How Important Is Memory Hierarchy?
 
-- Trade-offs shifted over last 10-15 years
+- Trade-offs have shifted over the last 10-15 years
 
 - **Innovations:**
-  - Fast network, SSDs, large memories
-  - Data volume growing rapidly
+  - Fast networks, SSDs, large memories
+  - Data volume is growing rapidly
 
 - **Observations:**
-  - Faster to access another computer's memory through network than your own
-    disk
+  - It is faster to access another computer's memory through a network than your
+    own disk
   - Cache plays a crucial role
-  - In-memory DBs
-    - Data often fits in memory of a machine cluster
-  - Disk considerations less important
+  - In-memory databases
+    - Data often fits in the memory of a machine cluster
+  - Disk considerations are less important
     - Disks still store most data today
 
 - Algorithms depend on available technology
 
-## Magnetic Disks / SSD
-
-* Connecting disks to a server
+## Magnetic Disks / SSDs
 
 * Connecting Disks to a Server
 
-- **Disks** (magnetic and SSDs) connect to computer:
+- **Disks** (magnetic and SSDs) connect to computers via:
   - High-speed bus interconnections
-  - High-speed network
+  - High-speed networks
 
-- **High-speed interconnection**
+- **High-speed interconnections**
   - Serial ATA (SATA)
   - Serial Attached SCSI (SAS)
-  - NVMe (Non-volatile Memory Express)
+  - NVMe (Non-Volatile Memory Express)
 
 - **High-speed networks**
-  - Storage Area Network (SAN): ISCSI, Fiber Channel, InfiniBand
+  - Storage Area Network (SAN): iSCSI, Fibre Channel, InfiniBand
   - **Network Attached Storage (NAS)**
-    - Provides file-system interface (e.g., NFS)
-    - Cloud storage: Data stored in cloud, accessed via API, Object store, High
-      latency
+    - Provides a file-system interface (e.g., NFS)
+    - Cloud storage: Data stored in the cloud, accessed via API, object store,
+      high latency
 
 * Magnetic Disks
 :::columns
@@ -177,11 +173,12 @@ source: http://cse1.net/recaps/4-memory.html
 :::
 
 * Magnetic Disks
+
 :::columns
 ::::{.column width=20%}
 
 - 1979
-  - SEAGATE
+  - Seagate
   - 5MB
 ::::
 ::::{.column width=30%}
@@ -190,7 +187,7 @@ source: http://cse1.net/recaps/4-memory.html
 ::::{.column width=20%}
 
 - 1998
-  - SEAGATE
+  - Seagate
   - 47GB
 ::::
 ::::{.column width=30%}
@@ -216,14 +213,14 @@ source: http://cse1.net/recaps/4-memory.html
 
 - **Platters**
   - Rigid metal with magnetic material on both surfaces
-  - Spins at 5400 or 9600 RPM
+  - Spins at 5400 or 7200 RPM
   - _Tracks_ subdivided into _sectors_ (smallest unit read/written, with a
     checksum)
 
 - **Read-write heads**
   - Store information magnetically
   - Spinning creates a cushion maintaining heads a few microns from the surface
-  - _Cylinder_ is the i-th tracks of all platters (read/written together)
+  - _Cylinder_ is the i-th track of all platters (read/written together)
 
 - **Arm**
   - Moves all heads along the disks
@@ -281,7 +278,7 @@ source: http://cse1.net/recaps/4-memory.html
       4 to 11ms)
     - Transfer time: Time to transfer the data (Very low)
   - About 10ms per access
-    - Randomly accessed blocks: 100 block transfers (100/sec x 4 KB/block = 50
+    - Randomly accessed blocks: 100 block transfers (100/sec x 4 KB/block = 400
       KB/s)
 
 - **Serial data transfer rates**
@@ -296,7 +293,7 @@ source: http://cse1.net/recaps/4-memory.html
 - Mainstream around 2000s
 - Like non-volatile RAM (NAND and NOR)
 - **Capacity**
-  - 250, 500 GBs (vs 1-10 TB for HDD)
+  - 250, 500 GB (vs 1-10 TB for HDD)
 - **Access time**
   - Latency for random access 1,000x smaller than HDD
     - E.g., 20-100 us (vs 10 ms HDDs)
@@ -313,7 +310,7 @@ source: http://cse1.net/recaps/4-memory.html
 - **Data-transfer rate**
   - 1 GB/s (vs 200 MB/s HDD)
   - Typically limited by interface speed
-  - Reads and writes ~500MB/s for SATA and 2-3 GB/s for NVMe
+  - Reads and writes ~500 MB/s for SATA and 2-3 GB/s for NVMe
   - Lower power consumption than HDDs
   - Writing to SSD slower than reading (~2-3x)
     - Requires erasing all pages in the block
