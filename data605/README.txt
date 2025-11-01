@@ -15,7 +15,7 @@
 
 - Run from outside the container
   ```bash
-  > gen_data605_script.sh
+  > gen_data605_script.sh 04.3
   ```
 
 # Check correctness of all the slides
@@ -48,11 +48,11 @@ process_slides.py --in_file $SRC_NAME --action slide_reduce --out_file $SRC_NAME
 > slide_reduce.sh 01.1*
 ```
 
-# Generate all the slides.
+# Generate all the slides
 
 > process_lessons.py --lectures 0*:1* --class data605 --action pdf
 
-# Count pages.
+# Count pages
 
 > find data605/lectures/Lesson0*.pdf -type f -name "*.pdf" -print -exec mdls -name kMDItemNumberOfPages {} \;
 
@@ -61,5 +61,7 @@ process_slides.py --in_file $SRC_NAME --action slide_reduce --out_file $SRC_NAME
 data605/lectures/Lesson01.1-Intro.pdf   10
 data605/lectures/Lesson01.2-Big_Data.pdf        17
 data605/lectures/Lesson01.3-Is_Data_Science_Just_Hype.pdf       14
+
+> count_pages.sh | pbcopy
 
 // process_slides.py --in_file data605/lectures_source/Lesson02-Git_Data_Pipelines.txt --action slide_format_figures --out_file data605/lectures_source/Lesson02-Git_Data_Pipelines.txt --use_llm_transform
