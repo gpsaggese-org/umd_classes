@@ -25,9 +25,9 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 \vspace{1cm}
 
-- **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **Resources**
+- **References**
   - Silbershatz: Chap 10
   - Ghemawat et al.: _The Google File System_, 2003
   - Dean et al.: _MapReduce: Simplified Data Processing on Large Clusters_, 2004

@@ -25,9 +25,9 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 \vspace{1cm}
 
-- **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- **Resources**
+- **References**:
   - Silbershatz: Chap 10
 ::::
 :::: {.column width=20%}

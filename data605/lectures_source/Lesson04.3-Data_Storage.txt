@@ -25,9 +25,9 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- Sources
+- **References**
   - Silberschatz et al. 2020, Chap 12, Physical Storage Systems
   - Silberschatz et al. 2020, Chap 13: Data Storage Structures
 

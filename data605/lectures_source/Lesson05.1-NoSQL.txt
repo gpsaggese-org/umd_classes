@@ -23,9 +23,9 @@ UMD DATA605 - Big Data Systems
 :::: {.column width=75%}
 \vspace{1cm}
 
-**Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- References:
+- **References**:
   - Online tutorials
   - Silbershatz: Chap 10.2
   - Seven Databases in Seven Weeks, 2e
