@@ -1,32 +1,42 @@
-# Generate the script.
-> i docker_bash --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp --skip-pull
+# Generate the lecture script
 
-docker> sudo /bin/bash -c "(source /venv/bin/activate; pip install --upgrade openai)"
+- Run from inside a container
+  ```bash
+  > i docker_bash --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp --skip-pull
 
-docker> generate_slide_script.py \
-  --in_file data605/lectures_source/Lesson01-Intro.txt \
-  --out_file data605/lectures_source/Lesson01-Intro.script.txt \
-  --slides_per_group 3 \
-  --limit 1:5
+  docker> sudo /bin/bash -c "(source /venv/bin/activate; pip install --upgrade openai)"
 
-docker> gen_data605_script.sh 01 --limit 1:5
+  docker> generate_slide_script.py \
+    --in_file data605/lectures_source/Lesson01-Intro.txt \
+    --out_file data605/lectures_source/Lesson01-Intro.script.txt \
+    --slides_per_group 3 \
+    --limit 1:5
+  ```
 
-# Check correctness of all the slides.
+- Run from outside the container
+  ```bash
+  > gen_data605_script.sh
+  ```
 
-```
-SRC_NAME=$(ls $DIR/lectures_source/Lesson02*); echo $SRC_NAME
-DST_NAME=process_slides.txt
-docker> process_slides.py --in_file $SRC_NAME --action text_check --out_file $DST_NAME --use_llm_transform --limit 0:10
-vimdiff $SRC_NAME process_slides.txt
-```
+# Check correctness of all the slides
 
-```
-> process_lessons.py --lectures 01.1* --class data605 --action slide_check --limit 0:2
-```
+- Run for one lecture from inside the container
+  ```
+  > SRC_NAME=$(ls $DIR/lectures_source/Lesson02*); echo $SRC_NAME
+  > DST_NAME=process_slides.txt
+  docker> process_slides.py --in_file $SRC_NAME --action text_check --out_file $DST_NAME --use_llm_transform --limit 0:10
+  > vimdiff $SRC_NAME process_slides.txt
+  ```
 
-```
-> slide_check.sh 01.2
-```
+- Run for one lecture outside the container
+  ```
+  > slide_check.sh 01.2
+  ```
+
+- Run for several lessons
+  ```
+  > process_lessons.py --lectures 01.1* --class data605 --action slide_check --limit 0:2
+  ```
 
 # Reduce all slides
 ```
