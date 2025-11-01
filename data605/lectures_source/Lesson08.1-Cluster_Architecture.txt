@@ -31,7 +31,7 @@ UMD DATA605 - Big Data Systems
   - Silbershatz: Chap 10
 ::::
 :::: {.column width=20%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_2_image_1.png)
+![](data605/lectures_source/images/Silberschatz_book.png)
 ::::
 :::
 
