@@ -2,276 +2,225 @@
 # Bash / Linux: Resources
 # ##############################################################################
 
-This slide provides resources for understanding and mastering Linux. It starts
-with the basics of how Linux operates, including processes, file ownership,
-permissions, virtual memory, and system administration as a root user. For
-beginners, it suggests a tutorial on command-line basics, covering essential
-commands like `find`, `xargs`, `chmod`, and `chown`, as well as understanding
-symbolic and hard links. For those seeking deeper knowledge, it recommends "The
-Linux Command Line" as a resource for mastery. The slide emphasizes the
-importance of these skills for effectively managing and navigating a Linux
-system, which is crucial for anyone working in tech fields that involve server
-management or software development.
+This slide provides resources for learning Linux, focusing on how Linux operates
+and how to manage it. Key areas include understanding processes, file
+permissions, and virtual memory. For beginners, there is a tutorial on basic
+command-line usage, covering commands like `find`, `xargs`, `chmod`, and
+`chown`. For those seeking deeper knowledge, "The Linux Command Line" is
+recommended for mastering Linux commands and administration. These resources are
+essential for anyone looking to effectively use and manage a Linux system.
 
-Let's move on to discuss resources for Git, a vital tool for version control in
-software development.
+Let's move on to explore resources for Git, a crucial tool for version control.
 
 # ##############################################################################
 # Git Resources
 # ##############################################################################
 
-This slide introduces resources for learning and mastering Git, a widely-used
-version control system. It highlights the importance of understanding Git
-concepts, as they will be used during the project. For beginners, a tutorial is
-provided to get started with Git. For those looking to deepen their
-understanding, "Pro Git" is recommended as a comprehensive, free resource. The
-slide also lists several web resources for learning Git, including interactive
-and humorous sites like "Oh Sh\*t, Git!?!" which offer practical advice in a
-light-hearted manner. Additionally, it mentions a Git branching playground for
-hands-on practice. These resources are essential for anyone involved in
-collaborative software development, as Git is a fundamental tool for managing
-code changes and collaboration.
+This slide offers resources for learning Git, a vital tool for version control
+in software development. It includes a tutorial to get started and emphasizes
+the importance of using Git in projects. For advanced learning, "Pro Git" is
+recommended, which is available for free. Several web resources provide
+additional guidance, including interactive sites like "Oh Sh\*t, Git!?!" and
+"Learn Git Branching" for hands-on practice. These resources are designed to
+help users understand Git concepts and improve their skills in managing code
+changes effectively.
 
-Next, we will explore the concept of Git branching, an important feature for
-managing code development.
+Next, we will delve into the concept of Git branching and its significance.
 
 # ##############################################################################
 # Git Branching
 # ##############################################################################
 
-This slide explains the concept of Git branching, which allows developers to
-diverge from the main development line. Branching is useful because it enables
-work to be done without affecting the main codebase, preventing unwanted changes
-in the main branch. Once work is completed, code can be merged downstream for
-updates or upstream after completion. The slide emphasizes that Git branching is
-lightweight and instantaneous, with branches acting as pointers to commits. Git
-stores data as snapshots, not file differences, making branching and merging
-efficient. It also notes that Git workflows often involve frequent branching and
-merging, which may be surprising to users of other distributed version control
-systems. Branches are inexpensive, so they should be used to isolate and
-organize work effectively.
-
-This concludes our discussion on Git branching, highlighting its efficiency and
-importance in software development workflows.
+This slide explains the concept of branching in Git, which allows developers to
+work on different parts of a project without affecting the main codebase.
+Branching is useful for experimenting, avoiding disruptions in the main branch,
+and integrating updates smoothly. Git's branching is lightweight and
+instantaneous, as branches are simply pointers to commits. Git stores data as
+snapshots, making branching and merging frequent and efficient. This approach is
+surprising to those used to other version control systems, as it encourages
+frequent branching to organize and isolate work effectively.
 
 # ##############################################################################
 # Git Branching
 # ##############################################################################
 
-This slide explains the concept of branching in Git, which is a way to manage
-different versions of a project. The master or main branch is the primary line
-of development, and it moves forward with each new commit. The HEAD is a pointer
-that indicates the current branch you are working on, such as master or testing.
-You can switch between branches using the git checkout command. Creating a new
-branch, like testing, involves making a new pointer that starts at the current
-commit. This pointer can move as you make new commits. Divergent history occurs
-when work progresses on two separate branches, allowing for parallel
-development. This is useful for working on new features or fixing bugs without
-affecting the main branch.
+This slide explains the concept of branching in Git. The `master` or `main`
+branch is the primary branch that points to the last commit and moves forward
+with each new commit. The `HEAD` is a pointer to the current local branch, such
+as `master` or `testing`. Using `git checkout <BRANCH>`, you can switch between
+branches. Creating a new branch with `git branch testing` establishes a new
+pointer that can move independently. Divergent history occurs when work
+progresses on two separate branches, allowing for parallel development paths.
 
-Now, let's see how to switch between branches using Git Checkout.
+Transition: Now, let's see how to switch between these branches using Git
+Checkout.
 
 # ##############################################################################
 # Git Checkout
 # ##############################################################################
 
-This slide focuses on the git checkout command, which is used to switch between
-branches in a Git repository. When you use git checkout, the HEAD pointer moves
-to the branch you specify, and the files in your working directory change to
-match the state of that branch. For example, if you have two branches, master
-and testing, and you are currently on the master branch, using git checkout
-testing will move the pointer to the testing branch and update your working
-directory accordingly. You can then continue working and make commits on the
-testing branch, and the pointer for testing will move forward with each commit.
-This allows you to work on different tasks or features in separate branches
-without interfering with each other.
+This slide focuses on the `git checkout` command, which allows you to switch
+between branches. When you use `git checkout`, the `HEAD` pointer moves to the
+new branch, and the files in your working directory change to match the branch's
+state. For example, if you have two branches, `master` and `testing`, and you
+are currently on `master`, executing `git checkout testing` will move the
+pointer and change the working directory to reflect the `testing` branch. You
+can continue working and committing on `testing`, and the pointer will move
+forward with each commit.
 
-Next, let's explore how branching and merging work together in Git.
-
-# ##############################################################################
-# Git Branching and Merging
-# ##############################################################################
-
-This slide introduces the concept of branching and merging in Git, which are
-essential for managing changes in a project. The slide provides links to
-tutorials on working on the main branch and making hot fixes. To start, you need
-a project with some existing commits. When you want to work on a new feature,
-such as "Issue 53," you create a new branch using the git checkout -b iss53
-command. This command creates a new branch named iss53 and switches to it,
-allowing you to work on the new feature independently. As you make changes and
-commit them, the iss53 branch will move forward. Once the work is complete, you
-can merge the changes back into the main branch, integrating the new feature
-into the project. This process helps keep the main branch stable while allowing
-for parallel development of new features or bug fixes.
+Transition: Next, we will discuss how to branch and merge in Git for effective
+project management.
 
 # ##############################################################################
 # Git Branching and Merging
 # ##############################################################################
 
-This slide explains how to apply a hotfix to the master branch using Git. A
-hotfix is an urgent change that needs to be applied directly to the master
-branch. The process involves creating a new branch from the master, making the
-necessary fixes, and then merging the changes back into the master branch. This
-ensures that the master branch is updated with the latest fixes. The slide also
-mentions a "fast forward" scenario, which occurs when there is a divergent
-history between the master and another branch, such as iss53. This means that
-changes have been made in both branches, and they need to be reconciled. The
-images on the slide likely illustrate the branching and merging process, showing
-how changes flow between branches.
-
-Transition: Now, let's see how to continue working on a feature branch and merge
-it back to master.
+This slide introduces branching and merging in Git, with links to tutorials for
+working on the main branch and handling hot fixes. You start with a project that
+has some commits and create a new branch to work on a feature, such as "Issue
+53". By using the command `git checkout -b iss53`, you create and switch to a
+new branch named `iss53`. You can then work on the feature, make changes, and
+commit them. This process allows you to develop new features or fixes in
+isolation before merging them back into the main branch.
 
 # ##############################################################################
 # Git Branching and Merging
 # ##############################################################################
 
-This slide continues with the process of working on a feature branch, in this
-case, iss53. You keep working on this branch, and as you make changes, the
-branch diverges further from the master. Once you are done with your work on
-iss53, you need to merge it back into the master branch. To do this, you switch
-to the master branch and perform a merge. However, Git cannot perform a fast
-forward merge because there is a divergent history. Instead, Git creates a new
-snapshot with a 3-way merge commit, which combines changes from both branches.
-After merging, you can delete the iss53 branch as it is no longer needed. The
-images likely show the branching and merging process, highlighting the creation
-of the merge commit.
+This slide explains how to apply a hotfix to the master branch using Git. The
+process involves creating a new branch for the hotfix, making the necessary
+changes, and then merging it back into the master branch. This ensures that
+urgent fixes can be applied without disrupting ongoing work in other branches.
+The slide also introduces the concept of fast forward, which occurs when there
+is a straightforward path from one branch to another without any divergent
+history. This means that the changes can be applied directly without any complex
+merging.
 
-Transition: Let's explore the concept of a fast forward merge in more detail.
+Transition: Let's continue with how to handle ongoing work on a branch.
+
+# ##############################################################################
+# Git Branching and Merging
+# ##############################################################################
+
+This slide focuses on continuing work on a specific branch, such as `iss53`, and
+eventually merging it back into the master branch. It highlights the process of
+switching to the branch, completing the work, and then merging it back. If the
+branch has diverged from the master, Git cannot perform a fast forward merge,
+requiring a 3-way merge commit. This creates a new snapshot that combines
+changes from both branches. After merging, the branch can be safely deleted to
+keep the repository clean.
+
+Transition: Now, let's explore the concept of fast forward merges in more
+detail.
 
 # ##############################################################################
 # Fast Forward Merge
 # ##############################################################################
 
-This slide explains the concept of a fast forward merge in Git. A fast forward
-merge occurs when there is no divergent history between two branches. In this
-case, Git can simply move the branch pointer forward from one commit to another
-without creating a new merge commit. The slide emphasizes the mental model of a
-branch as a pointer that indicates the tip of the branch. For example, if commit
-C4' is reachable from commit C3, Git can move the master branch pointer directly
-to C4' during the merge. This process is efficient and keeps the commit history
-linear. The images likely illustrate how the branch pointer moves during a fast
-forward merge, showing the simplicity of this type of merge.
+This slide explains the fast forward merge, which occurs when there is no
+divergent history between branches. In this case, Git simply moves the branch
+pointer forward from one commit to another, effectively incorporating the
+changes without creating a new merge commit. The slide emphasizes the mental
+model of a branch as a pointer to the latest commit. For example, if `C4'` is
+reachable from `C3`, Git can move the master branch pointer to `C4'` during the
+merge. This process is efficient and keeps the commit history linear and clean.
 
 # ##############################################################################
 # Merging Conflicts
 # ##############################################################################
 
-Description of the slide
+Merging conflicts in Git occur when changes in different branches clash. This
+can happen if the same file is modified in both branches or if one branch
+modifies a file while another deletes it. When this happens, Git cannot
+automatically merge the branches and pauses the process, adding conflict
+resolution markers to the files. Users must manually resolve these conflicts by
+editing the files, marking them as resolved with `git add`, and committing the
+changes. Tools like PyCharm or VS Code can assist in this process, making it
+easier to handle conflicts.
 
-- Merging conflicts in Git occur when changes in different branches clash. This
-  can happen if the same file is modified in both branches or if one branch
-  modifies a file while another deletes it. When Git encounters such conflicts,
-  it cannot automatically merge the branches. Instead, it pauses the process and
-  adds conflict resolution markers to the files. This requires the user to
-  manually resolve the conflicts. Users can edit the files using tools like
-  `git mergetool`, and once resolved, they mark the changes as resolved with
-  `git add` and commit them using `git commit`. Integrated development
-  environments like PyCharm or VS Code can also assist in resolving these
-  conflicts.
-
-Transition: Now, let's explore another important Git feature, rebasing.
+Transition: Now, let's explore another important Git concept: rebasing.
 
 # ##############################################################################
 # Git Rebasing
 # ##############################################################################
 
-Description of the slide
+Git offers two methods to merge divergent histories: merging and rebasing.
+Merging involves creating a new commit that combines changes from different
+branches. In contrast, rebasing re-applies changes from one branch onto another,
+effectively rewriting the commit history. This process involves checking out the
+branch to be rebased, syncing it with the target branch, and applying the
+changes. Only the current branch is affected, and the branch is fast-forwarded
+to include the new changes. Rebasing can help maintain a cleaner project history
+by avoiding unnecessary merge commits.
 
-- Git offers two methods for merging divergent histories: merging and rebasing.
-  When merging, you switch to the target branch, such as `master`, and merge the
-  changes from another branch, like `experiment`. This creates a new commit that
-  combines the histories. On the other hand, rebasing involves switching to the
-  branch you want to rebase, such as `experiment`, and applying its changes onto
-  the target branch, like `master`. The rebase algorithm identifies changes made
-  since the common ancestor and applies them to the target branch. This process
-  affects only the current branch and results in a linear history. Finally, the
-  branch is fast-forwarded to reflect the changes.
-
-Transition: Let's delve into the benefits of using rebase in Git.
+Transition: Let's delve into the benefits and uses of rebasing.
 
 # ##############################################################################
 # Uses of Rebase
 # ##############################################################################
 
-Description of the slide
-
-- Rebasing in Git is beneficial for creating a cleaner project history. It makes
-  the history appear as if all work was done sequentially, even though it was
-  actually done in parallel. This is particularly useful when contributing to a
-  project you don't maintain. As a developer, you work on your branch and, when
-  ready, rebase your changes onto `origin/master`. This simplifies the
-  integration process for the project maintainer, who can then perform a fast
-  forward or clean apply without dealing with conflicts. This streamlined
-  process makes collaboration more efficient and keeps the project history tidy.
+Rebasing is beneficial for maintaining a clean project history, making it appear
+as though all work was done sequentially, even if it was done in parallel. This
+is particularly useful when contributing to projects you don't maintain. As a
+developer, you can work on your branch and rebase it onto the main branch when
+ready to integrate your work. This simplifies the process for the project
+maintainer, who can then easily fast forward or apply changes without dealing
+with conflicts, streamlining the integration process.
 
 # ##############################################################################
 # Golden Rule of Rebasing
 # ##############################################################################
 
-Rebasing is a powerful tool in Git, but it comes with a significant caveat. When
-you rebase, you essentially discard existing commits and create new ones that
-are similar but not identical. This can cause issues when collaborating with
-others. If you push commits to a remote repository and others have already
-pulled those commits to base their work on, rebasing and then force-pushing can
-create a situation where your collaborators have to re-merge their work. To
-avoid this, a strict rule is to never rebase commits that are outside your own
-repository. However, if you are the only one using a branch, even if it is
-pushed to a server, you can rebase it. This approach helps maintain a clean and
-understandable commit history without disrupting others' work.
+Rebasing is a process in Git where you replace existing commits with new ones
+that are similar but not identical. This can cause issues if others have based
+their work on the original commits. If you rebase and then force push, your
+collaborators will need to re-merge their work. To avoid this, it's best to
+follow some guidelines. Strictly, you should never rebase commits that are
+outside your repository. However, if you're the only one using a branch, you can
+rebase it even if it's on a server.
 
-Let's explore the philosophical considerations of choosing between rebase and
-merge.
+Transition: Now, let's explore the philosophical considerations between rebase
+and merge.
 
 # ##############################################################################
 # Rebase vs Merge: Philosophical Considerations
 # ##############################################################################
 
-The choice between using rebase or merge often boils down to how you view the
-commit history of a repository. If you believe that history should be an
-accurate record of what actually happened, even if it's messy, then using git
-merge is the way to go. This approach keeps the history intact and shows the
-true sequence of events. On the other hand, if you think history should be
-presented in a way that is most useful for future readers, then using git rebase
-and filter-branch is preferable. This method allows you to clean up the history
-and present it in a more logical and understandable way. Both approaches have
-their merits, and the decision often depends on personal or team preferences.
+Choosing between rebase and merge depends on how you view commit history. If you
+see history as a record of what actually happened, even if it's messy, you
+should use git merge. This approach keeps the history intact. On the other hand,
+if you believe history should be presented in the best way for future readers,
+you might prefer git rebase. This allows you to clean up and organize the
+history to make it more understandable.
 
-Now, let's delve into the practical considerations of rebase versus merge.
+Transition: Let's delve deeper into the practical considerations of rebase
+versus merge.
 
 # ##############################################################################
 # Rebase vs Merge: Practical Considerations
 # ##############################################################################
 
-The debate over rebase versus merge can be endless, but it's important to focus
-on practical solutions. When contributing to a project, the decision is often
-made for you based on the project's established practices. A balanced approach
-is to rebase changes in your local repository, especially if the branch is
-solely yours. This can be done even if the branch has been pushed, as long as
-you are the only one using it. Using git pull --rebase helps clean up your work
-history. However, if the branch is shared, it's crucial to use git merge to
-avoid disrupting others. When merging to the master branch, it's best to
-preserve the history of how the project was built. Personally, I prefer to
-squash-and-merge branches to master, as my commits often serve as checkpoints
-rather than complete pieces of work.
+The debate between rebase and merge can be time-consuming and often
+unproductive. In practice, the choice is often made by the project's
+maintainers. A good approach is to rebase changes in your local repository,
+especially if the branch is yours alone. Use git pull --rebase to tidy up your
+work history. However, if the branch is shared, you should use git merge to
+ensure everyone’s work is preserved. Personally, I prefer to squash-and-merge
+branches to master, as my commits are usually just checkpoints rather than
+complete pieces of work.
 
 # ##############################################################################
 # Remote Branches
 # ##############################################################################
 
-Remote branches are essentially markers that point to branches in remote
-repositories. They help you keep track of the state of branches that are not on
-your local machine. When you run the command `git remote -v`, it shows you the
-URLs of the remote repositories you are connected to, both for fetching and
-pushing changes. Tracking branches are local references that represent the state
-of the remote repository. For example, your local `master` branch might track
-the `origin/master` branch on the remote. While you cannot directly change a
-remote branch like `origin/master`, you can modify your local tracking branch.
-When you fetch or pull from the remote, Git updates these tracking branches. To
-share your work from a local branch, you need to push it to the remote using a
-command like `git push origin serverfix`. To start working on a remote branch,
-you can check it out with a command like
-`git checkout -b serverfix origin/serverfix`.
+Remote branches are essentially pointers to branches in remote repositories.
+They help you keep track of the state of a branch on a remote server. When you
+run `git remote -v`, you can see the URLs for fetching and pushing code.
+Tracking branches are local references that represent the state of the remote
+repository. For example, your local `master` branch might track `origin/master`.
+You cannot directly change a remote branch, but you can update your tracking
+branch by fetching or pulling from the remote. To share your local work, you
+need to push your branch to the remote repository.
 
 Transition: Now, let's explore how Git workflows help in organizing and
 collaborating on projects.
@@ -281,18 +230,15 @@ collaborating on projects.
 # ##############################################################################
 
 Git workflows are strategies for using Git to collaborate effectively. They
-involve using different types of branches to manage the development process.
-Long-running branches are always open and represent different levels of
-stability. The `master` branch is typically stable and ready for release, while
-the `develop` branch is used for ongoing development. Topic or feature branches
-are created for specific tasks or features. Once these branches are stable
-enough, they are merged into the more stable branches. This approach helps in
-organizing work and ensuring that the main branches remain stable. The image on
-the right illustrates how these branches interact and flow into each other,
-showing a typical Git workflow.
+often involve long-running branches, which are branches that remain open and
+represent different levels of stability. The `master` branch is typically always
+ready for release, while the `develop` branch is used for ongoing development.
+Topic or feature branches are created for specific tasks or features. Once these
+branches are stable enough, they are merged into the main branches. This
+structure helps teams manage code changes and ensure stability in the main
+codebase.
 
-Transition: Let's delve deeper into the concept of topic branches and their role
-in Git workflows.
+Transition: Let's delve deeper into the role of topic branches in Git workflows.
 
 # ##############################################################################
 # Git Workflows
@@ -300,30 +246,25 @@ in Git workflows.
 
 Topic branches are short-lived branches created for a single feature or task.
 Examples include branches named `hotfix` or `wip-XYZ`. These branches are easy
-to review and are isolated from the rest of the codebase, allowing for focused
-development. This isolation is a strength of Git, as other version control
-systems may not support branching as effectively. For instance, you might start
-a branch called `iss91`, make some changes, and then decide to create a new
-version called `iss91v2`. Meanwhile, someone else might start a `dumbidea`
-branch and merge it into `master`. You can then squash and merge your `iss91v2`
-branch to keep the history clean. The image on the right provides a visual
-representation of how topic branches can be managed and merged within a Git
-workflow.
+to review and are isolated from the rest of the codebase, making them ideal for
+focused development. Git excels in handling these branches, unlike some other
+version control systems. For instance, you might start a branch `iss91`, make
+changes, and then create a new version `iss91v2`. Sometimes, branches like
+`dumbidea` might be merged into `master`, and you can use squash-and-merge to
+combine changes from `iss91v2`.
 
 # ##############################################################################
 # Centralized Workflow
 # ##############################################################################
 
 In a centralized workflow using a centralized version control system (VCS),
-developers work by checking out code from a central repository to their local
-machines. They make changes locally and then push these changes back to the
-central hub. If there are no conflicts with the latest version, the process is
-straightforward. However, if conflicts arise, developers must resolve them
-through merging. In Git, the centralized workflow requires developers to have
-write access to the central repository. They need to fetch the latest changes
-and merge them before pushing their updates. Git prevents overwriting others'
-work by allowing only fast-forward changes, ensuring that developers cannot
-accidentally overwrite each other's code.
+developers check out code from a central repository, make local modifications,
+and then push changes back to the central hub. If there are no conflicts with
+the latest version, the process is straightforward; otherwise, developers must
+merge changes. In Git, developers with push access to the central repository
+must fetch and merge changes before pushing. They cannot overwrite each other's
+code, ensuring only fast-forward changes are made. This workflow emphasizes the
+importance of coordination and conflict resolution among developers.
 
 Transition: Let's explore how forking workflows differ from centralized
 workflows.
@@ -334,14 +275,13 @@ workflows.
 
 In forking workflows, developers typically do not have direct permission to
 update branches on a project. Core contributors have read-write permissions,
-while others have read-only access. The solution is to "fork" a repository.
-External contributors clone the repository, create a branch for their work, and
-push branches to their fork. They then prepare a pull request (PR) with their
-changes. The project maintainer reviews, accepts, and integrates these PRs. In
-practice, the maintainer pulls the code when it's ready, rather than external
-contributors pushing it. This method is often referred to as the "GitHub
-workflow," where forking is a key innovation. GitHub, known for this workflow,
-was acquired by Microsoft for 7.5 billion USD.
+while others have read-only access. The solution is to fork a repository,
+allowing external contributors to clone the repo, create a branch, and push
+changes to their fork. They then prepare a pull request (PR) for the project
+maintainer, who reviews, accepts, and integrates the PR. The project maintainer
+pulls the code when ready, rather than external contributors pushing it. This
+method, known as the GitHub workflow, was popularized by GitHub, which was
+acquired by Microsoft for 7.5 billion USD.
 
 Transition: Now, let's look at the integration-manager workflow, a classic model
 for open-source development.
@@ -352,32 +292,28 @@ for open-source development.
 
 The integration-manager workflow is a traditional model for open-source
 development, used by projects like Linux and GitHub's forking workflow. In this
-model, one repository is designated as the official project, and only the
-project maintainer can push changes to the public repository. Each contributor
-has read access to other public repositories and forks the project into a
-private copy, where they have write access. Contributors make changes, push them
-to their public copy, and send a pull request to the maintainer. The maintainer
-then adds the contributor's repository as a remote, merges the changes into a
-local branch, tests them, and finally pushes the branch to the official
-repository. This workflow ensures that the project maintainer has control over
-what gets integrated into the official project.
+model, one repository is the official project, and only the project maintainer
+pushes to the public repo. Contributors have read access to others' public repos
+and fork the project into a private copy, where they have write access. They
+make changes, push them to their public copy, and send a pull request to the
+maintainer. The maintainer adds the contributor's repo as a remote, merges
+changes into a local branch, tests them, and then pushes the branch to the
+official repo. This workflow ensures a structured and controlled integration
+process.
 
 # ##############################################################################
 # Git log
 # ##############################################################################
 
-This slide introduces the `git log` command, which is essential for viewing the
-history of commits in a Git repository. It provides information about each
-commit, such as the author, date, and message. The slide also explains the
-concept of references, which are pointers to specific commits or branches. Key
-references include `HEAD`, which points to the current commit you are working
-on, `origin/master`, which is the remote branch, and `experiment`, a local
-branch. Additionally, specific commit identifiers like `d921970` are also
-considered references. The slide further explains the use of the caret symbol
-(`^`) to navigate through commit history. For example, `HEAD^` refers to the
-commit before the current `HEAD`, and `^2` is equivalent to `^^`, indicating the
-second parent in a merge commit. Understanding these concepts is crucial for
-effectively managing and navigating a Git repository.
+This slide explains how the `git log` command provides information about commits
+in a Git repository. It highlights the concept of references, which are pointers
+to specific commits or branches. For example, `HEAD` is the commit you are
+currently working on, while `origin/master` refers to a remote branch. Local
+branches like `experiment` and specific commits like `d921970` are also examples
+of references. The slide also introduces the caret (`^`) notation, which helps
+navigate to parent commits. For instance, `HEAD^` refers to the commit before
+the current `HEAD`, and `^2` is equivalent to `^^`, indicating the second parent
+in a merge commit.
 
 Let's move on to understanding dot notation in Git.
 
@@ -385,17 +321,14 @@ Let's move on to understanding dot notation in Git.
 # Dot notation
 # ##############################################################################
 
-This slide explains the concept of dot notation in Git, which is used to compare
-commits between branches. The double-dot notation (`1..2`) is used to find
-commits that are reachable from the second reference but not from the first. It
-acts like a "difference" between two branches. For example,
-`git log master..experiment` will show commits `D` and `C`, while
-`git log experiment..master` will show commits `F` and `E`. The triple-dot
-notation (`1...2`) is used to find commits that are reachable from either branch
-but not from both, similar to a "union excluding intersection." For instance,
-`git log master...experiment` will display commits `F`, `E`, `D`, and `C`. These
-notations are useful for understanding the differences and similarities between
-branches, helping developers track changes and manage code effectively.
+This slide covers the double-dot and triple-dot notations in Git, which are used
+to compare commits between branches. The double-dot notation (`1..2`) shows
+commits reachable from the second reference but not from the first, essentially
+highlighting differences. For example, `git log master..experiment` lists
+commits `D` and `C`, while `git log experiment..master` lists `F` and `E`. The
+triple-dot notation (`1...2`) displays commits reachable from either branch but
+not both, acting like a union excluding the intersection. For instance,
+`git log master...experiment` results in commits `F`, `E`, `D`, and `C`.
 
 Now, let's explore some advanced Git features.
 
@@ -403,60 +336,54 @@ Now, let's explore some advanced Git features.
 # Advanced Git
 # ##############################################################################
 
-This slide covers advanced Git features that enhance workflow efficiency.
-Stashing is a feature that allows you to temporarily save the state of your
-working directory, including modified and staged files, in a stack. This is
-useful when you need to switch branches without committing changes.
-Cherry-picking is another feature that lets you apply a single commit from one
-branch onto another, which is helpful for selectively integrating changes. The
-`rerere` feature, short for "Reuse Recorded Resolution," caches how certain
-conflicts were resolved, making it easier to handle recurring conflicts. Lastly,
+This slide introduces advanced Git features that enhance workflow efficiency.
+Stashing allows you to save the current state of your working directory,
+including modified and staged files, onto a stack for later use. Cherry-picking
+enables you to apply a single commit from one branch onto another, facilitating
+selective changes. The `rerere` feature, short for "Reuse Recorded Resolution,"
+caches solutions to conflicts, making future resolutions easier. Lastly,
 submodules and subtrees allow a project to include other Git projects, enabling
-modular project management. These advanced features provide powerful tools for
-managing complex projects and improving collaboration in a team environment.
+modular development and management of dependencies within a repository.
 
 # ##############################################################################
 # Advanced Git
 # ##############################################################################
 
-This slide introduces some advanced features of Git that can be very useful for
-developers.
+Description of the slide
 
-- Bisect: This is a powerful tool for identifying which commit introduced a bug.
-  When you have a bug at the top of your code tree but don't know when it
-  started, `git bisect` can help. It works by checking out different commits and
-  running a script that returns 0 if the commit is good and non-0 if it's bad.
-  This way, it narrows down the specific commit where the bug was introduced.
+- Git bisect is a useful tool for finding the specific commit that introduced a
+  bug in your code. It works by identifying when a bug appears at the top of the
+  tree and helps trace back to the unknown revision where it started. You can
+  use a script that returns 0 if the code is good and a non-zero value if it's
+  bad. Git bisect will then find the revision where the script's result changes
+  from good to bad.
 
-- Filter-branch: This feature allows you to rewrite the history of your
-  repository in a scriptable way. This can be useful for tasks like changing an
-  email address or removing a sensitive file from the history. It works by
-  checking out each version, running a command, and then committing the result.
+- The filter-branch command allows you to rewrite the history of your repository
+  in a scriptable way. This can be useful for tasks like changing an email
+  address or removing a sensitive file. It works by checking out each version,
+  running a command, and committing the result.
 
-- Hooks: These are scripts that run automatically before certain Git actions
-  like committing or merging. They can be used to enforce certain rules or
-  automate tasks.
+- Git hooks are scripts that run automatically before certain Git actions, such
+  as committing or merging. They can be used to automate tasks or enforce
+  certain rules.
 
-Now, let's explore GitHub and its significance in the world of Git repositories.
+Transition: Now, let's explore GitHub and its significance in the world of Git
+repositories.
 
 # ##############################################################################
 # GitHub
 # ##############################################################################
 
-This slide focuses on GitHub, a major platform for hosting Git repositories, and
-its features.
+Description of the slide
 
-- GitHub was acquired by Microsoft for $7.5 billion, highlighting its importance
-  in the tech industry. It is the largest host for Git repositories, with over
-  100 million open-source projects. GitHub offers various features like pull
-  requests, forks, issue tracking, code review, collaboration tools, wikis, and
-  actions for continuous integration and continuous deployment (CI/CD).
+- GitHub, acquired by Microsoft for $7.5 billion, is the largest host for Git
+  repositories. It supports over 100 million open-source projects and offers
+  features like pull requests, forks, issue tracking, code review,
+  collaboration, wikis, and actions for continuous integration and continuous
+  deployment (CI/CD).
 
-- Forking a project: In open-source communities, forking can have a negative
-  connotation as it implies creating a competing project. However, in GitHub's
-  context, forking means copying a project to contribute to it without having
-  push or write access. This allows developers to work on improvements or bug
-  fixes independently before submitting them back to the original project.
-
-These features make GitHub an essential tool for developers and open-source
-communities.
+- Forking a project in open-source communities can have a negative connotation,
+  as it involves modifying and creating a competing project. However, in GitHub
+  parlance, forking means copying a project to contribute without having push or
+  write access. This allows users to make changes and propose them back to the
+  original project.
