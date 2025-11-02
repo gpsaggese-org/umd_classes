@@ -211,8 +211,6 @@ S
   - Designed to support ACID
     - Most MapReduce applications don't care about ACID consistency
 
-
-
 * History
 - **MapReduce**
 - Is very good at doing what it was designed for
@@ -225,26 +223,3 @@ S
 - Much work in recent years on extending the basic MapReduce functionality, e.g.,
 - Hadoop Zoo
 - E.g., Spark, Dask, Ray
-
-* Hadoop Ecosystem (aka Hadoop Zoo)
-:::columns
-::::{.column width=50%}
-- Pig
-  - High-level data-flow language and execution framework for parallel computation
-- HBase
-  - Scalable, distributed database
-  - Supports structured data storage for large tables (like Google BigTable)
-- Cassandra
-  - Scalable multi-master database with no single points of failure
-- Hive
-  - Data warehouse infrastructure
-  - Provide data summarization and ad-hoc querying
-- ZooKeeper
-High-performance coordination service for distributed applications
-- YARN, Kafka, Storm, Spark, Solr, ...
-::::
-::::{.column width=50%}
-\vspace{1cm}
-![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_59_image_1.png)
-::::
-:::
