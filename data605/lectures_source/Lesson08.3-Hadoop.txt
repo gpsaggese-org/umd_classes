@@ -21,9 +21,10 @@ UMD DATA605 - Big Data Systems
 **$$\text{\blue{8.3: Apache Hadoop}}$$**
 \endgroup
 
+\vspace{1cm}
+
 ::: columns
 :::: {.column width=75%}
-\vspace{1cm}
 
 - **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
@@ -32,23 +33,53 @@ UMD DATA605 - Big Data Systems
   - Dean et al.: _MapReduce: Simplified Data Processing on Large Clusters_, 2004
 ::::
 :::: {.column width=20%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_2_image_1.png)
 
 ::::
 :::
 
-* Hadoop Distributed File System
+## Hadoop Distributed File System
 
 ::: columns
-:::: {.column width=40%}
+:::: {.column width=60%}
+* Hadoop Distributed File System (HDFS)
+- **HDFS** is a **distributed file system**
+  - Designed to **store large data sets reliably**
+  - Part of the Apache Hadoop ecosystem
+  - Inspired by the Google File System (GFS)
+
+1. Optimized for **high-throughput access** to large files
+   - Suitable for batch processing
+   - Not low-latency access
+
+2. Designed for **fault tolerance and scalability**
+   - Ensures fault tolerance through replication
+     - Default replication factor is 3
+   - Blocks are stored on different nodes and racks
+   - Follows a primary-secondary architecture
+   - Provides data availability even if some nodes fail
+   - Replication strategy improves read performance
+
+::::
+:::: {.column width=35%}
+
+![](data605/lectures_source/images/lecture_8_1/lec_8_3_slide_1_image_1.png)
+
+![](data605/lectures_source/images/lecture_8_1/lec_8_3_slide_1_image_2.png)
+
+::::
+:::
+
+* HDFS Architecture
+::: columns
+:::: {.column width=50%}
 - **NameNode**
   - Store file/dir hierarchy
-  - Store file metadata (location, size, permissions)
+  - Store file metadata (block location, size, permissions)
 
 - **DataNodes**
-  - Store data blocks
+  - Store actual data blocks
   - Split file into 16-64MB blocks
-  - Replicate chunks (2x or 3x)
+  - Replicate chunks (2x or 3x) across multiple _DataNodes_
   - Keep replicas in different racks
 ::::
 :::: {.column width=45%}
@@ -57,18 +88,22 @@ UMD DATA605 - Big Data Systems
 :::
 
 * Hadoop Distributed File System
-
 ::: columns
 :::: {.column width=40%}
 - **Library for file access**
   - Read:
     - Contact _NameNode_ for _DataNode_ and block pointer
+    - Choose the nearest _DataNode_ for each block
     - Connect to _DataNode_ for data access
+    - Reads blocks in parallel to improve performance
+    - Data is reassembled by the client in correct order
   - Write:
     - _NameNode_ creates blocks
     - Assign blocks to multiple _DataNodes_
     - Client sends data to _DataNodes_
     - _DataNodes_ store data
+    - Blocks are pipelined to other replicas
+    - Write is considered successful after all replicas acknowledge
 
 - **Client**
   - API (e.g., Python, Java) to library
@@ -78,6 +113,24 @@ UMD DATA605 - Big Data Systems
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_18_image_1.png)
 ::::
 :::
+
+* Fault Tolerance and Recovery
+- _NameNode_ monitors _DataNode_ heartbeat signals
+- On failure, blocks are re-replicated to maintain replication factor
+- _NameNode_ itself is a single point of failure
+  - Solved with HDFS High Availability
+- Data integrity ensured using checksums
+
+* HDFS vs Traditional File Systems
+- Best for storing and processing large-scale logs, media, sensor data
+- Commonly used in data lakes and ETL pipelines
+- Optimized for write-once, read-many access pattern
+- Supports very large files and directories
+  - Performance degrades with many small files
+- Lacks low-latency access, but provides high throughput
+  - Not suitable for transactional or low-latency systems
+
+## Hadoop MapReduce
 
 * Implementations of MapReduce
 - **Google**
@@ -109,7 +162,7 @@ UMD DATA605 - Big Data Systems
   - Manage inter-machine communication
   - Perform _GroupByKey_ step
   - Output adapters
-    - E.g., avro, ORC, Parquet
+    - E.g., Avro, ORC, Parquet
   - Schedule multiple _MapReduce_ jobs
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_42_image_1.png){width=80%}
 
