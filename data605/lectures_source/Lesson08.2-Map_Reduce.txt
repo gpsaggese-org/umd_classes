@@ -22,19 +22,18 @@ UMD DATA605 - Big Data Systems
 \endgroup
 
 ::: columns
-:::: {.column width=65%}
+:::: {.column width=75%}
 \vspace{1cm}
 
-- **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-- Resources
+- **References**
   - Silbershatz: Chap 10
-  - Seminal papers
-    - Sanjay Ghemawat, Howard Gobioff, and Shun-Tak Leung: The Google File System, 2003
-    - Jeffrey Dean and Sanjay Ghemawat: MapReduce: Simplified Data Processing on Large Clusters, 2004
+  - Ghemawat et al.: _The Google File System_, 2003
+  - Dean et al.: _MapReduce: Simplified Data Processing on Large Clusters_, 2004
 ::::
-:::: {.column width=30%}
-![](data605/lectures_source/images/lecture_7_1/lec_7_1_slide_2_image_1.png)
+:::: {.column width=20%}
+![](data605/lectures_source/images/Silberschatz_book.png)
 ::::
 :::
 

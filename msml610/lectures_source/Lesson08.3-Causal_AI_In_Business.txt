@@ -14,15 +14,14 @@ MSML610: Advanced Machine Learning
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Causal AI in Business}}$$**
+**$$\text{\blue{8.3: Causal AI in Business}}$$**
 \endgroup
 \vspace{1cm}
 
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 **References**:
-  - Hurwitz, Thompson: Causal Artificial Intelligence: The Next Step in Effective
-    Business AI, 2024
+  - Hurwitz, Thompson: Causal Artificial Intelligence, 2024
 
 # ##############################################################################
 # Business Processes Around Data Modeling
@@ -32,49 +31,55 @@ MSML610: Advanced Machine Learning
 ## Modeling Processes
 ## #############################################################################
 
-* Digital Transformation
+* Digital Transformation in Business
 
-- Integration of Digital Technology
-  - Embed digital tools (AI, cloud, IoT, automation) into all business areas to
-    enhance efficiency and value delivery
-- Cultural & Organizational Change
-  - Encourage innovation, agility, and a data-driven mindset to adapt to new
-    digital workflows and business models
-- Customer-Centric Approach
-  - Use digital solutions (e.g., personalized experiences, AI-driven insights)
-    to enhance customer engagement and satisfaction
-- Process Automation & Optimization
-  - Streamline operations through AI, robots, and analytics to reduce costs and
-    improve decision-making
-- Data-Driven Decision Making
-  - Leverage big data, machine learning, and real-time analytics to make
-    smarter, faster, and more strategic business decisions
+- **Digital transformation** is the process of using digital technologies to:
+  - Reduce costs
+  - Improve revenues
 
-* Causal Modeling Process
+- How?
+  - **Integration of digital technology**
+    - Embed digital tools (AI, cloud, IoT, automation) into all business areas
 
-- The overall modeling process looks like:
+  - **Cultural and organizational change**
+    - Encourage innovation, agility, and a data-driven mindset
 
-```graphviz
+  - **Customer-centric approach**
+    - Use digital solutions (personalized experiences, AI-driven insights) to
+      enhance customer engagement and satisfaction
+
+  - **Process automation and optimization**
+    - Streamline operations through AI, robots, and analytics
+
+  - **Data-driven decision making**
+    - Leverage big data, machine learning, and real-time analytics to make
+      smarter, faster, and more strategic decisions
+
+* AI in Business
+
+- How do you use (Causal) AI in Business?
+
+\centering
+
+```graphviz[width=80%]
 digraph CausalFlowGrid {
   layout=neato;
-  node [shape=box, style=rounded, fontname="Helvetica", fontsize=12, width=1.4, height=0.6, fixedsize=true];
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, width=1.4, height=0.6, fixedsize=true];
 
-  // Top row
-  BusinessGoals   [label="Business Goals", pos="0,2!"];
-  UseCases        [label="Use Cases", pos="2,2!"];
-  CausalModels    [label="Causal Models", pos="4,2!"];
+  // Design-grade rainbow in edge order (ROYGBIV + magenta wrap)
+  BusinessGoals   [label="Business Goals",        pos="0,2!",  fillcolor="#E53935", fontcolor="white"]; // Red
+  UseCases        [label="Use Cases",             pos="2,2!",  fillcolor="#FB8C00", fontcolor="black"]; // Orange
+  CausalModels    [label="Causal Models",         pos="4,2!",  fillcolor="#FDD835", fontcolor="black"]; // Yellow
+  DataSources     [label="Data Sources",          pos="4,1!",  fillcolor="#43A047", fontcolor="white"]; // Green
+  KnowledgeModels [label="Knowledge\nModels",     pos="4,0!",  fillcolor="#1E88E5", fontcolor="white"]; // Blue
+  Algorithms      [label="Algorithms/\nLibraries", pos="2,0!", fillcolor="#5E35B1", fontcolor="white"]; // Indigo
+  Interventions   [label="Interventions/\nCounterfactuals", pos="0,0!", fillcolor="#8E24AA", fontcolor="white"]; // Violet
+  Results         [label="Key Results/\nTakeaways", pos="0,1!", fillcolor="#D81B60", fontcolor="white"]; // Magenta (wrap toward red)
 
-  // Middle row
-  Results         [label="Key Results/\nTakeaways", pos="0,1!"];
-  Placeholder     [label="", pos="2,1!", style=invis]; // Center of grid
-  DataSources     [label="Data Sources", pos="4,1!"];
+  Placeholder     [label="", pos="2,1!", style=invis]; // layout anchor
 
-  // Bottom row
-  Interventions   [label="Interventions/\nCounterfactuals", pos="0,0!"];
-  Algorithms      [label="Algorithms/\nLibraries", pos="2,0!"];
-  KnowledgeModels [label="Knowledge\nModels", pos="4,0!"];
+  edge [color="#555555", penwidth=1.4, splines=true];
 
-  // Edges connecting flow
   BusinessGoals -> UseCases;
   UseCases -> CausalModels;
   CausalModels -> DataSources;
@@ -83,341 +88,311 @@ digraph CausalFlowGrid {
   Algorithms -> Interventions;
   Interventions -> Results;
   Results -> BusinessGoals;
-
-  edge [splines=true];
 }
 ```
 
 * Step 1: What Are the Intended Outcomes?
-- What is the process/environment we are interested in analyzing?
+- What is the **process** we are interested in analyzing?
 
-- What will happen if a course of action is (or not) taken?
-- What outcomes are positive, negative, unacceptable, optimal?
-- What are the possible / feasible interventions?
-- What confounding factors might be correlated with outcomes and treatments?
-- What factors exist but we cannot accurately measure?
-- What related data sets can be combine / leverage?
+- What will happen if a **course of action** is (or not) taken?
+  - What outcomes are positive, negative, unacceptable, optimal?
+
+- What **related data** can be combine / leverage?
+
+- (Causal AI): What are the possible / feasible **interventions**?
+  - What confounding factors might be correlated with outcomes and treatments?
+  - What factors exist but we cannot accurately measure?
 
 * Step 2: What Are the Proposed Interventions?
-- We will make reference to a use case of customer marketing
+- E.g., customer marketing for a product
 
-- Can we introduce a new product?
-- Should we buy one or more competitors?
-- Does bundling multiple products improve sales?
-- Does bundling multiple products inhibit long-term sales?
-- Should advertisement focus on quality of our product vs other options?
-- Should we divest the product line?
-- Should we discontinue the product?
-- Should we add more variations of the same product?
+- (Causal AI)
+  - Should we introduce a **new product**?
+  - Does bundling **multiple products** ...
+    - Improve sales?
+    - Inhibit long-term sales?
+  - Should advertisement focus on quality of our product vs other options?
+  - Should we add more variations of the same product?
+  - Should we discontinue the product?
+  - ...
+  - Should we divest the product line?
 
-* Marketing example: price intervention
-::: columns
-:::: column
-- Assume price is our intervention and the Causal DAG is:
-  ```graphviz[height=50%]
-  digraph CausalDiagram {
-    rankdir=TB;
-    node [shape=box, style="rounded,filled", fillcolor=white, color=black];
-
-    M [label="M = Price"];
-    X [label="X = Behavior"];
-    Y [label="Y = Outcome"];
-
-    M -> X;
-    M -> Y;
-    X -> Y;
-  }
-  ```
-::::
-:::: column
-
-- What happens to sales when we change the price often?
-- What pricing interventions are optimal?
-  - Should we increase the price and how much?
-  - Should we decrease the price and how much?
-  - Should price change in one-time or over time?
-- Should we adopt a dynamic pricing model?
-- Should we develop individual pricing model for each customer?
-
-::::
-:::
-
-* Step 3: What are the confounding factors?
-- There can be a variable $W$ that affects both $X$ and $Y$
-  ```graphviz[width=50%]
-  digraph CausalTriangle {
-    rankdir=TB;
-    node [shape=box, style=rounded, fontname="Helvetica", fontsize=12];
-
-    Confounder [label="W (Confounder)"];
-    Treatment  [label="X (Treatment)"];
-    Outcome    [label="Y (Outcome)"];
-
-    Confounder -> Treatment;
-    Confounder -> Outcome;
-    Treatment  -> Outcome;
-
-    // Align Treatment and Outcome on the same horizontal level
-    {rank=same; Treatment; Outcome;}
-  }
-  ```
-- E.g.,
-  - Competitive offers
-  - Distance to store
-  - Amount of product
-  - Time to consume product
-
-- A confounder can:
-  - Make it difficult to understand the relationship between variables
+* Step 3: What Are the Proposed Interventions?
+- **Identify confounders**
+  - Difficult to understand the relationship between variables
   - Mute or inflate a relationship
 
-* Marketing Example: Effect of Confounder
-- E.g.,
-  - Intervention = a marketing campaign to sell winter jackets
-  - A confounding variable can be "running the campaign in the middle of the
-    winter, after customers have already purchased their jackets"
-  - A confounding var can be "a warm winter"
+* Step 4: What Factors Create Changes?
 
-  ```graphviz[width=50%]
-  digraph CausalDiagram {
-    rankdir=TB;
-    node [shape=box, style="rounded,filled"];
+- **Direct effect**
+  - Effect introduced through intervention
 
-    W [label="W = Confounder"];
-    M [label="M = Price"];
-    X [label="X = Behavior"];
-    Y [label="Y = Outcome"];
+- **Indirect effect**
+  - Effect introduced by environment or as a byproduct of intervention
 
-    W -> X;
-    W -> Y;
-    M -> X;
-    M -> Y;
-    X -> Y;
-  }
-  ```
-
-* Step 4: What Are the Factors Creating the Effects and Changes?
-
-- Total causal effect
-  - Effect of all factors in the environment or model that modify the outcome
-- Direct effect
-  - Effect introduced through an intervention
-- Indirect effect
-  - Effect introduced by environment or it is a byproduct of the intervention in
-    a way that was not planned
+- **Total causal effect**
+  - Effect of all factors in environment or model modifying outcome
 
 * Step 5: Build Causal DAG
 
-- Causal models
-  - Simplify complex systems without losing key relationships
+- **Causal models**
+  - _Simplify complex systems_ without losing key relationships
   - Focus on essential variables and their interactions
-- Visual models (e.g., DAGs) help abstract complexity into interpretable formats
+
+- **Visual models** (e.g., DAGs)
+  - Help abstract complexity into interpretable formats
   - Highlight direction and strength of influence between variables
-- Simplicity
+
+- **Simplicity**
   - Aids communication between technical and non-technical stakeholders
   - Promotes shared understanding and collaborative refinement
   - Reduces cognitive overload by excluding irrelevant details or noise
   - Guides data collection by identifying the most impactful variables
   - Supports hypothesis testing through counterfactual and intervention
     scenarios
-- Balance is key
+
+- **Balance is key**
   - Too much simplicity loses insight
   - Too much complexity loses clarity
 
-* Step 7: Data Acquisition and Integration
-- You can use the data collected for correlation-based ML
+* Marketing Example: Price Intervention
+::: columns
+:::: column
+- Assume **price is our intervention**
 
-- Data collection can be done specifically for causal AI
-  - Treating, conditioning, transforming data
+- What happens to sales when we change the price often?
+- What pricing interventions are optimal?
+  - Should we increase the price and how much?
+  - Should we decrease the price and how much?
+  - Should price change in one-time or over time?
+  - Should we develop individual pricing model for each customer?
+::::
+:::: column
+
+- The Causal DAG is:
+  ```graphviz[height=50%]
+  digraph CausalDiagram {
+      splines=true;
+      nodesep=1.0;
+      ranksep=0.75;
+
+      node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+      // Node styles
+      Price [label="Price", fillcolor="#F4A6A6"];
+      Behavior [label="Behavior", fillcolor="#FFD1A6"];
+      ProductAmount [label="Product Amount", fillcolor="#B2E2B2"];
+      Revenue [label="Revenue", fillcolor="#A6C8F4"];
+      CompetitiveOffers [label="Competitive Offers", fillcolor="#C6A6F4"];
+      Supply [label="Product Supply", fillcolor="#A6E7F4"];
+      StoreDistance [label="Distance to store", fillcolor="#D2B48C"];
+      Outcome [label="Outcome", fillcolor="#A0D6D1"];
+
+      // Edges
+      Price -> Behavior;
+      Behavior -> Outcome;
+      Price -> ProductAmount;
+      ProductAmount -> Revenue;
+      Price -> CompetitiveOffers;
+      CompetitiveOffers -> ProductAmount;
+      Supply -> ProductAmount;
+      StoreDistance -> ProductAmount;
+  }
+  ```
+
+- Lots of confounders!
+::::
+:::
+
+* Step 7: Data Acquisition and Integration
+- Use **data collected** for correlation-based ML
+
+- Collect **data specifically** for causal AI
+  - Treat, condition, transform data
 
 * Step 8: Model Modification
-- Once the DAG is designed, use software packages to build models
-  - Refine the initial DAG and causal model to reduce bias and improve
-    reliability
+- **After initial DAG** is designed
+  - Refine to reduce bias and improve reliability
   - Clarify variables as confounders, mediators, or outcomes
-- Avoid common pitfalls:
+
+- **Avoid common pitfalls**
   - Do not control for mediators or effects, which can distort results
   - Control for direct and indirect confounders to prevent biased estimates
-- Implementation tools:
-  - Use libraries to operationalize models
-  - Test models against technical and business objectives
-- D-separation:
-  - Identifies conditional independence relationships in a DAG
-  - Determines necessary controls to isolate causal effects
-  - Based on Judea Pearl's definition: independence = separation in the graph
-  - Prevent unintentional inclusion of bias
+
+- **Test models** against technical and business objectives
+
+- Determines necessary controls to **isolate causal effects**
   - Ensure causal assumptions align with data and domain logic
   - Improve model interpretability and predictive power
-- Goal: Ensure final models are technically valid and business-relevant before
-  proceeding to data transformation and testing stages
 
 * Step 10: Data Transformation
+- Prepare data to match refined causal model
+  - Clean, normalize, align data with model assumptions
 
-- Prepare the data to match the refined causal model
-  - Clean, normalize, and align data with model assumptions
+- **Transformation data**
+  - Map observed variables to DAG nodes
+  - Encode categorical variables
+  - Handle missing data (imputation or exclusion)
+  - Normalize or scale values
 
-- Transformations include:
-  - Mapping observed variables to nodes in the DAG
-  - Encoding categorical variables appropriately
-  - Handling missing or unobserved data (e.g., imputation or exclusion)
-  - Normalizing or scaling values to align with model expectations
-- Control for bias and confounding:
-  - Apply methods like propensity score matching or stratification
-  - Exclude or adjust for variables that introduce bias per d-separation
-    insights
+- Control for bias and confounding
 
-- Goal: Ensure the data structure supports causal estimation
-  - Consistent with assumptions made in model refinement
-  - Aligned with theoretical model
-  - Fit for downstream tasks like estimation, inference, and simulation
+- **Goal**: Ensure data structure supports causal estimation
 
 * Step 11: Preparing for Deployment in Business
 
-- Operationalize the causal model within a business context
-  - Transition from experimentation to integration with decision-making
-    processes
-  - Validate the model against real-world business data and outcomes
-  - Ensure stakeholders understand and trust the causal logic and assumptions
-- Model packaging:
-  - Develop user-friendly interfaces or dashboards for business users
+- Transition **from experimentation to decision-making processes**
+  - Validate model against real-world business outcomes
+  - Ensure stakeholders understand and trust causal logic and assumptions
+
+- **Develop user-friendly interfaces** for business users
   - Automate data pipelines for timely updates and monitoring
-  - Embed the model within decision-support tools or policy engines
-- Governance and monitoring:
+
+- **Set up monitoring**:
   - Establish metrics for performance tracking and drift detection
   - Create feedback loops to refine and improve models post-deployment
-- Documentation and training:
+
+- **Document and train**:
   - Provide clear model documentation for auditors and users
-  - Train stakeholders on interpreting causal results and making informed
-    decisions
-- Goal: A deployable causal AI solution that supports strategic decisions and
-  delivers measurable business value
+  - Train stakeholders on interpreting results and making informed decisions
+
+- **Goal**: Deliver measurable business value
 
 ## #############################################################################
 ## Roles
 ## #############################################################################
 
 * Why ML / AI Projects Fail?
-- AI projects fail because they approach problems only from a ML perspective
+- **AI projects fail** because they approach problems only from a ML perspective
   - Data scientists:
-    - Use data to create models
-    - Work in isolation from business users and internal data teams
-  - Black-box models unable to produce solutions to real-world problems
+    - Focus on model accuracy and technical metrics
+    - Work in isolation from domain experts, business users, and data engineers
+  - Lack of understanding of problem context leads to irrelevant solutions
+
+- **Black-box models** fail to solve real-world problems
+  - Models are difficult to interpret or explain to stakeholders
+  - Lack of transparency reduces trust and adoption
+
+- **Data issues** undermine model performance
+  - Poor quality, missing, or biased data
+
+- **Deployment and integration challenges**
+  - Models not easily integrated into production systems
+  - Real-time constraints or infrastructure limitations
+
+- **Lack of feedback loops**
+  - No process for monitoring model performance post-deployment
+
+- **Misalignment with business goals**
+  - Models solve the wrong problem or answer irrelevant questions
 
 * How to Make ML / AI Project Succeed
 
-1. Create a hybrid team
-   - Organizations are complex in structure and offerings
-   - A single group lacks the knowledge / skills to tackle difficult problems
-   - Need an hybrid team:
-     - Represents all aspects of the business problem
-     - Uses a collaborative framework
-     - Communicates with a single language (e.g., through DAGs)
-     - Team size depends on company size and project complexity
-2. Meet regularly to ensure project continuity
-3. Find an executive sponsor for the project
-   - Someone who understands the project's goals and potential
-4. Initial pilot
-   - Small team for a targeted problem
-   - Demonstrate the merit of the AI approach
+1. **Create a hybrid team**
+   - Organizations are complex
+   - Single group lacks skills for difficult problems
+   - Hybrid team:
+     - Represents all business aspects
+     - Uses collaborative framework
+     - Communicates with a single language (e.g., DAGs)
+     - Team size varies by company and project complexity
+
+2. **Meet regularly to ensure continuity**
+
+3. **Find an executive sponsor**
+   - Understands project's goals and potential
+
+4. **Initial pilot**
+   - Small team for targeted problem
+   - Demonstrate AI approach merit
 
 * Roles in Hybrid Teams
 
-\begingroup \small
-
-| Role                   | Responsibilities                            |
-| ---------------------- | ------------------------------------------- |
-| Business Strategists   | Align modeling with business goals          |
-|                        | Sponsor projects                            |
-|                        | Communicate insights to stakeholders        |
-| Subject-Matter Experts | Provide domain expertise                    |
-|                        | Identify relevant variables and assumptions |
-|                        | Validate DAGs                               |
-| Data Experts           | Source and clean data                       |
-|                        | Map data to model variables                 |
-|                        | Handle missing values                       |
-| Data Scientists        | Construct and validate DAGs                 |
-|                        | Apply causal inference methods              |
-|                        | Simulate decisions                          |
-| Software Developers    | Build tools and interfaces                  |
-|                        | Create data pipelines                       |
-| IT Professionals       | Provide infrastructure and governance       |
-|                        | Ensure model execution                      |
-|                        | Integrate with enterprise systems           |
-| Project Managers       | Coordinate collaboration and timelines      |
-|                        | Manage documentation                        |
-|                        | Ensure alignment with strategic goals       |
-
+\begingroup \scriptsize
+| **Role**               | **Responsibilities**                   |
+| ---------------------- | -------------------------------------- |
+| Business Strategists   | Align modeling with business goals     |
+|                        | Sponsor projects                       |
+|                        | Communicate insights to stakeholders   |
+| Subject-Matter Experts | Provide domain expertise               |
+|                        | Identify relevant variables            |
+|                        | Validate DAGs                          |
+| Data Experts           | Source and clean data                  |
+|                        | Map data to model variables            |
+|                        | Handle missing values                  |
+| Data Scientists        | Construct and validate DAGs            |
+|                        | Apply causal inference methods         |
+|                        | Simulate decisions                     |
+| Software Developers    | Build tools and interfaces             |
+|                        | Create data pipelines                  |
+| IT Professionals       | Provide infrastructure and governance  |
+|                        | Ensure model execution                 |
+|                        | Integrate with enterprise systems      |
+| Project Managers       | Coordinate collaboration and timelines |
+|                        | Manage documentation                   |
+|                        | Ensure alignment with strategic goals  |
 \endgroup
 
 * Steps for a Hybrid Team Project
 
-- **Establish a Phased, Collaborative Approach**
+- **Establish a phased / collaborative approach**
   - Align strategic goals with technical efforts
   - Emphasize early stakeholder engagement and shared ownership
-- **Strategic Kickoff Meeting**
-  - Unite business, technical, and operational roles
-  - Clarify problems, outcomes, responsibilities, success metrics
-- **Define Team Goals**
+
+- **Define team goals**
   - Use SMART objectives aligned with business strategy
-  - Focus on outcomes and supported decisions, not tools
-- **Target a Project**
+
+- **Target a project**
   - Choose a bounded, feasible, high-value use case
   - Prioritize early wins for trust and momentum
-- **Define the Hypothesis**
-  - Translate business problems into testable causal assumptions
+
+- **Define the hypothesis**
   - Build a preliminary DAG with experts' input
-- **Incremental Model Development**
-  - Build the model in small, reviewable stages
-  - Iterate with regular feedback, refining scope and variables
-- **Embrace Iteration and Continuous Refinement**
-  - Keep progress collaborative and aligned with business needs
-  - Add complexity gradually to manage risk and enhance understanding
+
+- **Incremental model development**
+  - Build the model in small stages
+  - Iterate with regular feedback
 
 * The Importance of Explainability
 
-- Managers rely on AI systems to automate decision-making
-  - Decisions rely on complex algorithms and data
-- Understanding AI-based models is growing in importance
+- **Understanding AI-based models** is growing in importance
   - How do ML models make decisions?
-  - How can they be trusted?
+  - Can they be trusted?
   - Are they biased?
-- Management often faces demands to prove code validity
-  - Loss of trust, regulation violations, fines, additional development costs,
-    lawsuits
-  - E.g., a false negative in a medical screening for cancer
-- Well-designed AI systems must foster trust, transparency, and user confidence
+
+- AI systems need to foster trust, transparency, and user confidence
+
+- Management faces
+  - Loss of trust, regulation violations, fines, lawsuits
+  - E.g., false negative in medical screening for cancer
 
 - **Humans in the loop**
-  - AI systems lack true reasoning and contextual understanding
-  - Human involvement ensures interpretation and context are considered
+  - Ensure interpretation and context are considered
 
 * Techniques for Interpretability
-- Local Interpretable Model-agnostic Explanations (LIME)
-  - Focuses on a single prediction (local fidelity)
-  - Approximates the model locally with an interpretable model
-  - Perturbs input data and observes changes in predictions
-- Partial Dependence Plots (PDP)
-  - Show the marginal effect of one or two features on the predicted outcome
-  - Vary the value of one feature while keeping others constant
-  - Plot feature values against the average predicted outcome
-- Individual Conditional Expectation (ICE)
-  - Show the relationship between a feature and the prediction for individual
-    instances
+- **Local Interpretable Model-agnostic Explanations** (LIME)
+  - Focus on a single prediction
+  - Approximate the model locally with an interpretable model
+  - Perturb input data and observe changes in predictions
 
-- SHapley Additive exPlanations (SHAP)
+- **Partial Dependence Plots** (PDP)
+  - Show marginal effect of one or two features on predicted outcome
+  - Vary value of one feature while keeping others constant
+
+- **Individual Conditional Expectation** (ICE)
+  - Show relationship between a feature and prediction for individual instances
+
+- **SHapley Additive exPlanations** (SHAP)
   - Quantify the contribution of each feature to a specific prediction
 
 * Causal AI in Interpretable AI
-- Causal AI helps understand causes, effects, and potential solutions
-  - Uses causal graphical models to present variables, relationships, and
-    strengths
-  - Counterfactual analysis predicts outcomes of different actions or policies
-    before deployment
-  - Model output is understandable to humans and non-experts
-  - Removing confounding variables prevents skewed causal estimates due to
-    hidden influences
-  - Hybrid teams (technical + domain experts) enhance context awareness and
-    reduce blind spots
+- Causal AI helps understand causes, effects, and solutions
+  - Causal DAGs present variables, relationships, strengths
+  - Counterfactual analysis predicts outcomes of actions
+  - Model output is understandable to humans, non-experts
+  - Hybrid teams (technical + domain experts) enhance context awareness, reduce
+    blind spots
+  - Removing confounding variables prevents skewed causal estimates
 
 //// # Chap 7: Tools, practices, and techniques (p. 168)
 //
@@ -613,11 +588,11 @@ digraph CausalFlowGrid {
 //  - Used to generate synthetic data
 
 * The Future of Causal AI
-- Causal AI:
-  - Is moving out of academia into the commercial world
-  - Is a departure from the 2000 approach of a purely data-driven AI systems
-  - Is a reflection of the reality of how humans think, analyze, and make
-    decisions and how the real world works
+
+- **Causal AI**:
+  - Moves from academia to commercial use
+  - Departs from purely data-driven AI systems
+  - Reflects human thinking, analysis, decision-making
 
 - Causal, traditional AI, deep learning, and generative techniques will merge
 
