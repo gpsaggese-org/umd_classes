@@ -21,10 +21,10 @@ UMD DATA605 - Big Data Systems
 **$$\text{\blue{8.2: Map Reduce}}$$**
 \endgroup
 
-::: columns
-:::: {.column width=75%}
 \vspace{1cm}
 
+::: columns
+:::: {.column width=75%}
 - **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
 - **References**
