@@ -322,24 +322,23 @@ _Output_
   - `Map(Tuple[k, v]) → List[Tuple[k, v]]`
   - Take a key-value pair and output a set of key-value pairs
     - E.g., key is a file, value is the number of occurrences
-    - "One a penny" → [("One", 1), ("a", 1), ("penny", 1)]
-  - There is one `Map` call for every *(*k*, v) pair*
+    - "One a penny" $\to$ `[("One", 1), ("a", 1), ("penny", 1)]`
+  - There is one `Map` call for every `(k, v)` pair
+
 - **GroupBy**
   - `GroupBy(List[Tuple[k, v]]) → List[Tuple[k, List[v]]]]`
   - Group and optionally sort all the records with the reduce key
 
 - **Reduce**
   - `Reduce(Tuple[k, List[v]]) → Tuple[k, v]`
-  - All values *v'* with same key *k'* are reduced together
-  - There is one `Reduce` call per unique key *k'*
+  - All values `v'` with same key `k'` are reduced together
+  - There is one `Reduce` call per unique key `*k'`
 
 - **Output**: write key-value pairs `List[Tuple[k, v]]`
 
 * MapReduce: Data Flow
-```
-Focusing on MapReduce functionality / flow of the data to 
-expose the parallelism
-```
+- Focusing on MapReduce flow of the data to expose the parallelism
+
 ::: columns
 :::: {.column width=60%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_32_image_1.png){width=110%}
@@ -347,80 +346,73 @@ expose the parallelism
 :::: {.column width=40%}
 - **Input**
 - **Map**
-  - mki = map keys
-  - mvi = map input values
+  - $mk_i$ = map keys
+  - $mv_i$ = map values
 - **GroupBy**
   - Shuffle / collect the data
 - **Reduce**
-  - rki = reduce keys
-  - rvi** = reduce input values
+  - $rk_i$ = reduce keys
+  - $rv_i$ = reduce values
   - Reduce outputs are not shown
 ::::
 :::
-\vspace{0.25cm}
-::: columns
-:::: {.column width=10%}
-**Input**
-::::
-:::: {.column width=15%}
-**Map**
-::::
-:::: {.column width=10%}
-**GroupBy**
-::::
-:::: {.column width=10%}
-**Reduce**
-::::
-:::: {.column width=40%}
-```
-.
-```
-::::
-:::
+\hspace{0.5cm}
+Input
+\hspace{1.5cm}
+Map
+\hspace{0.5cm}
+GroupBy
+\hspace{0.5cm}
+Reduce
 
 * MapReduce: Parallel Data Flow
 ::: columns
 :::: {.column width=55%}
-\footnotesize
+
 - **User program** specifies map/reduce code
-- **Input data** is partitioned across multiple machines (HDFS)
-- **Master** node sends copies of the code to all computing nodes
-- **Map**
-  - *n* data chunks to process
-  - Functions executed in parallel on multiple *k* machines
-  - Output data from *Map* is saved on disk
-- **GroupBy / Sort**
-  - Output data from *Map* is sorted and partitioned based on reduce key
-  - Different files are created for each *Reduce* task
-- **Reduce**
-  - Functions executed in parallel on multiple machines
-  - Each work on some part of the data
-  - Output data from Reduce is saved on disk
-- **Write to disk**
+  - _MasterNode_ sends code to all computing nodes
+  - _Machines_ reused for multiple computations (`Map`, `Reduce`) at different
+    times
+  - All operations use HDFS as storage
 
 ::::
-:::: {.column width=50%}
+:::: {.column width=40%}
 
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_33_image_1.png)
 
-- All operations use HDFS as storage
-- Machines are reused for multiple computations (Map, GroupBy, Reduce) at different times
 ::::
 :::
 
+\small
 
-* Master Node Responsibilities
+- **Map**
+  - _n_ data chunks to process
+  - Functions executed in parallel on _k_ machines
+  - Output data saved on disk
+
+- **GroupBy / Sort**
+  - Output data sorted and partitioned by reduce key
+  - Files created for each `Reduce` task
+
+- **Reduce**
+  - Functions executed in parallel on multiple machines
+  - Each works on part of the data
+  - Output data saved on disk
+
+* MasterNode Responsibilities
 ::: columns
 :::: {.column width=50%}
 
-- **Master node coordinates**
+- _MasterNode_ **coordinates / schedule tasks**
   - Task status: idle, in-progress, completed
   - Schedule idle tasks as workers become available
-  - Map task completion sends location and sizes of intermediate files to Master
-  - Master informs Reduce tasks
-  - Schedule idle Reduce tasks
+  - `Map` task completion sends location and sizes of intermediate files to
+    Master
+  - Master informs `Reduce` tasks
+  - Schedule idle `Reduce` tasks
 
-- **Master node pings workers to detect failures**
+- _MasterNode_ **pings workers to detect failures**
+  - Heartbeat
 ::::
 :::: {.column width=50%}
 ![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_34_image_1.png)
@@ -441,16 +433,22 @@ expose the parallelism
   - Abort MapReduce task
   - Notify client
 
-* How many Map and Reduce jobs?
-- **M** **map tasks**
-- **R** **reduce tasks**
-- **N** **worker nodes**
-- Rules of thumb
-  - *M* >> *N*
-    - Pros: Improve dynamic load balancing, Speed up recovery from worker failures
-    - Cons: More communication between *Master* and *Worker Nodes*, Lots of smaller files
-  - *R* > *N*
-    - Usually *R* < *M*, Output is spread across fewer files
+* How Many `Map` and `Reduce` Jobs?
+- Number of map tasks = _M_
+- Number of reduce tasks = _R_
+- Number of worker nodes = _N_
+
+- Typically $M \gg N$
+  - Pros:
+    - Improve dynamic load balancing
+    - Speed up recovery from worker failures
+  - Cons:
+    - More communication between _MasterNode_ and _WorkerNodes_
+    - Lots of smaller files
+
+- Typically $R > N$
+
+- Usually $R < M$, output is spread across fewer files
 
 * Refinements: Backup Tasks
 - **Problem**
@@ -461,66 +459,63 @@ expose the parallelism
     - Other jobs on the machine
     - Bad disks
     - OS thrashing / virtual memory hell
+
 - **Solution**
-  - Near the end of Map / Reduce phase
+  - Near the end of `Map` / `Reduce` phase
     - Spawn backup copies of tasks
     - Whichever one finishes first "wins"
+
 - **Result**
   - Shorten job completion time
 
 * Refinement: Combiners
-::: columns
-:::: {.column width=60%}
 - **Problem**
-  - Often a *Map* task produces many pairs for the same key *k*
-```
-  [(k1, v1), (k1, v2), ...]
-```
+  - Often a `Map` task produces many pairs for the same key `k`
+    ```python
+    [(k1, v1), (k1, v2), ...]
+    ```
   - E.g., common words in the word count example
-  - Increase complexity of the GroupBy stage
+  - Increase complexity of the `GroupBy` stage
+
 - **Solution**
-  - Pre-aggregate values in the *Map* with a *Combine*
-```
-  [k1, (v1, v2, ...), k2, ([...])]
-```
-  - *Combine* is usually the same as the *Reduce* function
-  - Works only if *Reduce* function is commutative and associative
+  - Pre-aggregate values in the `Map` with a `Combine`
+    ```python
+    [k1, (v1, v2, ...), k2, ([...])]
+    ```
+  - `Combine` is usually the same as the `Reduce` function
+  - Works only if `Reduce` function is commutative and associative
+
 - **Result**
   - Better data locality
   - Less shuffling and reordering
   - Less network / disk traffic
-::::
-:::: {.column width=50%}
-\vspace{1cm}
-![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_38_image_1.gif)
-::::
-:::
 
 * Refinement: Partition Function
 - **Problem**
-  - Sometimes users want to control how keys get partitioned
-  - Inputs to *Map* tasks are created by contiguous splits of input file
-  - MapReduce uses a default partition function
-**hash(key) mod R**
-  - Reduce needs to ensure that records with the same intermediate key end up at the same worker
+  - Users want to control key partitioning
+  - Inputs to `Map` tasks created by contiguous input file splits
+  - Default partition function: `hash(key) mod R`
+  - Ensure records with the same intermediate key go to the same worker
+
 - **Solution**
-  - Sometimes useful to override the hash function:
-  - E.g., **hash(hostname(URL)) mod R** ensures URLs from a host end up in the same output file
+  - Override hash function:
+  - E.g., `hash(hostname(URL)) mod R` ensures URLs from a host end up in the
+    same output file
 
 * Implementations of MapReduce
 - There are many implementations of map reduce
-- **Google**
-  - Not available outside Google
+  - **Google**
+    - Not available outside Google
 
-- **Hadoop**
-  - Open-source in Java
-  - Uses HDFS for storage
-  - Hadoop Wiki: Intro, Getting Started, Map/Reduce Overview
+  - **Hadoop**
+    - Open-source in Java
+    - Uses HDFS for storage
+    - Hadoop Wiki: Intro, Getting Started, Map/Reduce Overview
 
-- **Amazon Elastic MapReduce (EMR)**
-  - Hadoop MapReduce on Amazon EC2
-  - Also runs Spark, HBase, Hive,
+  - **Amazon Elastic MapReduce (EMR)**
+    - Hadoop MapReduce on Amazon EC2
+    - Also runs Spark, HBase, Hive,
 
-- **Spark**
+  - **Spark**
 
-- **Dask**
+  - **Dask**
