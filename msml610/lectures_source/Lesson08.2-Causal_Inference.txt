@@ -38,488 +38,576 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-//# Causal Networks
-//
-//// ## 13.5 Causal networks (p. 462)
-//
-//* (Non-Causal) Bayesian Networks
-//- **Bayesian networks** represent a joint distribution function
-//  - The direction of the arrow represent **conditional dependence** (not
-//    causality)
-//    - $A \to B$ requires to estimate $\Pr(A | B)$
-//
-//::: columns
-//:::: {.column width=60%}
-//
-//- There are **many possible** _edges_ and _node ordering_ for the same Bayesian
-//  network
-//- E.g., a Bayesian network with $Fire$ and $Smoke$, which are dependent
-//  - $Fire \to Smoke$
-//    - Need $\Pr(Fire)$ and $\Pr(Smoke | Fire)$ to compute $\Pr(Fire, Smoke)$
-//  - $Smoke \to Fire$
-//  - Need $\Pr(Smoke)$ and $\Pr(Fire | Smoke)$
-//::::
-//:::: {.column width=35%}
-//```graphviz
-//digraph BayesianNetwork1 {
-//    rankdir=LR;
-//    Fire [label="P(Fire)"];
-//    Smoke [label="P(Smoke)"];
-//    Fire -> Smoke [label="P(Smoke | Fire)"];
-//}
-//```
-//
-//\vspace{1cm}
-//
-//```graphviz
-//digraph BayesianNetwork1 {
-//    rankdir=LR;
-//    Fire [label="P(Fire)"];
-//    Smoke [label="P(Smoke)"];
-//    Smoke -> Fire [label="P(Fire | Smoke)"];
-//}
-//```
-//::::
-//:::
-//
-//- Different Bayesian networks:
-//  - Are equivalent and convey the same information
-//  - Have different difficulties to be estimated
-//
-//- At the same time, there is an **asymmetry in nature**
-//  - Extinguishing fire stops smoke
-//  - Clearing smoke doesn't affect fire
-//
-//* Causal (Bayesian) Networks
-//- **Causal networks** are Bayesian networks forbidding **non-causal edges**
-//
-//- Use judgment based on nature instead of just statistics
-//  - E.g., from _"Are random variables $Smoke$ and $Fire$ correlated?"_ to _"What
-//    causes what, $Smoke$ or $Fire$?"_
-//
-//- **"Dependency in nature"** is like assignment in programming
-//  - E.g., nature assigns $Smoke$ based on $Fire$:
-//    - ![](emoji/check_mark.png){ width=12px } $Smoke := f(Fire)$
-//    - ![](emoji/wrong.png){ width=12px } $Fire := f(Smoke)$
-//
-//- **Structural equations** describe "assignment mechanism" in causal graphs
-//  $$
-//  X_i := f(X_j) \iff X_j \to X_i
-//  $$
-//
-//* Causal DAG
-//- **Causal DAG**
-//  - _Directed_: Arrows show cause $\rightarrow$ effect
-//  - _Acyclic_: No feedback loops
-//    - Causal relationships assume temporal order: cause before effect
-//    - A cycle implies a variable is both cause and effect of itself
-//
-//- **Benefits**
-//  - DAGs encode _causal_ links
-//  - Reason about interventions and counterfactuals
-//  - Support explainable AI models
-//  - Stability in conditional probability estimation
-//
-//- **Limitations**
-//  - Requires domain knowledge for structure
-//  - Assumes all relevant variables included (no hidden confounders)
-//
-//* Causal Edges are Stable
-//
-//- **Causal edge** $X \rightarrow Y$ shows direct causal influence of $X$ on $Y$,
-//  holding other variables constant
-//  - Captures how manipulating $X$ changes $Y$, not just their covariance
-//
-//- Causal edges reflect **stable relationship**
-//
-//  - Mechanistic stability
-//    - Causal relationships show system function, not just behavior in one dataset
-//    - E.g., "Temperature $\rightarrow$ ice melting rate" holds true in Alaska and
-//      Arizona
-//
-//  - Invariance under interventions
-//    - If $X$ causes $Y$, intervening on $X$ affects $Y$ consistently, despite
-//      confounders or context changes
-//
-//  - Easier estimation through causal modeling
-//    - Identifying causal direction focuses estimation on effect size (e.g.,
-//      regression of $Y$ on $X$ under intervention)
-//
-//  - Reduced sensitivity to sampling and omitted variables
-//    - Correlations may change with confounder addition or removal
-//    - True causal edge persists, stable across model specifications
-//
-//- **Example**: study $Exercise \rightarrow Health$:
-//  - Correlation may differ in young or elderly populations
-//  - Causal effect remains stable, as physiological mechanism doesn't change
-//
-//* Structural Causal Model
-//- A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
-//  equations
-//  - DAGs show structure (variables and arrows)
-//  - SCMs use equations to define how variables interact
-//
-//- **Structure of SCMs**
-//  - Variables $X_1, X_2, ..., X_n$ represent quantities in the system
-//  - Equations model each variable as a function of its direct causes
-//  - Formally, $X_i$ is modeled as:
-//    $$X_i = f_i(Parents(X_i), \varepsilon_i)$$
-//    where:
-//    - $Parents(X_i)$ are direct causes of $X_i$
-//    - $\varepsilon_i$ is an exogenous (external, unobserved) noise term
-//
-//- **Properties**
-//  - Explain causal relationships between variables
-//  - Provide a foundation for causal reasoning and simulation
-//  - Describe how the world works, not just variable correlations
-//
-//* Structural Causal Model: Example
-//::: columns
-//:::: {.column width=50%}
-//- **Explanatory variables**
-//  - You can manipulate or observe when changes are applied
-//  - E.g., _"does a large cup of coffee before an exam help with a test?"_
-//
-//- **Outcome variables**
-//  - Result of the action
-//  - E.g., _"by how much did the score test improve?"_
-//::::
-//:::: {.column width=45%}
-//```graphviz
-//digraph SCMExample {
-//  rankdir=TB;
-//  splines=true;
-//  nodesep=1.0;
-//  ranksep=0.75;
-//  node [shape=box, style="rounded,filled", fillcolor=white, fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
-//  // Nodes
-//  Coffee [label="Large Cup of Coffee", fillcolor="#b3cde3"];
-//  TestScore [label="Test Score Improvement", fillcolor="#ccebc5"];
-//  RoomTemp [label="Room Temperature", fillcolor="#decbe4"];
-//
-//  // Edges
-//  Coffee -> TestScore;
-//  RoomTemp -> TestScore [style=dashed];
-//}
-//```
-//::::
-//:::
-//
-//- **Unobserved variables**
-//  - Not seen or more difficult to account
-//  - E.g., _"temperature of the room makes students sleepy and less alert"_
-//
-//* Structural Causal Model: Sprinkler Example
-//::: columns
-//:::: {.column width=25%}
-//
-//```graphviz
-//digraph BayesianFlow {
-//    rankdir=TD;
-//    splines=true;
-//    nodesep=1.0;
-//    ranksep=0.75;
-//    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
-//    // Node styles
-//    Cloudy        [label="Cloudy",        fillcolor="#b3cde3"];
-//    Sprinkler     [label="Sprinkler",     fillcolor="#ccebc5"];
-//    Rain          [label="Rain",          fillcolor="#ccebc5"];
-//    WetGrass      [label="Wet Grass",     fillcolor="#decbe4"];
-//    GreenerGrass  [label="Greener Grass", fillcolor="#fed9a6"];
-//
-//    // Force ranks
-//    { rank=same; Sprinkler; Rain; }
-//
-//    // Edges
-//    Cloudy -> Sprinkler;
-//    Cloudy -> Rain;
-//    Sprinkler -> WetGrass;
-//    Rain -> WetGrass;
-//    WetGrass -> GreenerGrass;
-//}
-//```
-//::::
-//:::: {.column width=70%}
-//- Structural equations for this model:
-//  \begingroup \small
-//  $$
-//  \left\{
-//  \begin{aligned}
-//    & C := f_C(\varepsilon_C) \\
-//    & R := f_R(C, \varepsilon_R) \\
-//    & S := f_S(C, \varepsilon_S) \\
-//    & W := f_W(R, S, \varepsilon_W) \\
-//    & G := f_G(W, \varepsilon_G) \\
-//  \end{aligned}
-//  \right.
-//  $$
-//  \endgroup
-//
-//- Unmodeled variables $\varepsilon_x$ represent error terms
-//  - E.g., $\varepsilon_W$ is another source of wetness besides $Sprinkler$ and $Rain$
-//    (e.g., $MorningDew$)
-//- Assume unmodeled variables are exogenous, independent, with a certain
-//  distribution (prior)
-//::::
-//:::
-//
-//- Express joint distribution of five variables as a product of conditional
-//  distributions using causal DAG topology:
-//  \begingroup \small
-//  $$
-//  \Pr(C, R, S, W, G) = \Pr(C) \Pr(R|C) \Pr(S|C) \Pr(W|R,S) \Pr(G|W)
-//  $$
-//  \endgroup
-//
-//## #############################################################################
-//## Variables
-//## #############################################################################
-//
-//* Observed Vs. Unobserved Variables
-//::: columns
-//:::: {.column width=45%}
-//- **Observed variables**
-//  - Aka "measurable" or "visible"
-//  - Variables directly measured or collected in a dataset
-//  - E.g.,
-//    - Education
-//    - Income
-//    - Blood pressure
-//    - Product price
-//
-//::::
-//:::: {.column width=50%}
-//
-//```graphviz
-//digraph EducationIncomeModel_ObservedUnobserved_Vertical {
-//    rankdir=TD; // top-down layout
-//    splines=true;
-//    nodesep=0.8;
-//    ranksep=0.9;
-//    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
-//    Education       [label="Education",       fillcolor="#ccebc5"];
-//    Income          [label="Income",          fillcolor="#ccebc5"];
-//    EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
-//    Motivation      [label="Motivation",      fillcolor="#decbe4"];
-//    NaturalTalent   [label="Natural Talent",  fillcolor="#decbe4"];
-//    Weather         [label="Weather",         fillcolor="#decbe4"];
-//    News            [label="News",            fillcolor="#decbe4"];
-//
-//    // Vertical order (top to bottom)
-//    { rank=same; EconomicPolicy; }
-//    { rank=same; NaturalTalent; }
-//    { rank=same; Education; }
-//    { rank=same; Motivation; }
-//    { rank=same; Income; }
-//    { rank=same; Weather; }
-//    { rank=same; News; }
-//
-//    // Causal links
-//    EconomicPolicy  -> Education;
-//    EconomicPolicy  -> Income;
-//    NaturalTalent   -> Education;
-//    NaturalTalent   -> Motivation;
-//    Motivation      -> Education;
-//    Motivation      -> Income;
-//    Education       -> Income;
-//    Weather         -> Income;
-//    News            -> Income;
-//
-//    // Legend (top, vertical stack)
-//    subgraph cluster_legend {
-//        label="Legend";
-//        fontsize=11;
-//        color="#dddddd";
-//        style="rounded";
-//        rankdir=TB; // vertical stacking
-//
-//        key1 [label="Observed", shape=box, style="rounded,filled", fillcolor="#ccebc5"];
-//        key2 [label="Unobserved",  shape=box, style="rounded,filled", fillcolor="#decbe4"];
-//
-//        key1 -> key2 [style=invis];
-//    }
-//}
-//```
-//::::
-//:::
-//
-//- **Unobserved variables**
-//  - Aka "latent" or "hidden"
-//  - Exist but not measured or included in data
-//  - E.g.,
-//    - Natural talent
-//    - Motivation
-//    - Company culture
-//  - Ignoring unobserved variables distorts causal relationships
-//    - Observed: $IceCreamSales$ and $DrowningRates$
-//    - Unobserved: $Temperature$
-//    - Misleading conclusion: $IceCream$ causes $Drowning$
-//
-//* Endogenous Vs. Exogenous Variables
-//::: columns
-//:::: {.column width=45%}
-//- **Endogenous variables**
-//  - Values determined _within_ the model
-//    - Dependent on other variables in the system
-//  - Represent system's internal behavior and outcomes
-//  - E.g.,
-//    - Motivation
-//    - Income
-//
-//::::
-//:::: {.column width=50%}
-//
-//```graphviz
-//digraph EducationIncomeModel_EndoExo{
-//    rankdir=TD; // top-down layout
-//    splines=true;
-//    nodesep=0.8;
-//    ranksep=0.9;
-//    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
-//    Education       [label="Education",       fillcolor="#fed9a6"];
-//    Income          [label="Income",          fillcolor="#b3cde3"];
-//    EconomicPolicy  [label="Economic Policy", fillcolor="#fed9a6"];
-//    Motivation      [label="Motivation",      fillcolor="#b3cde3"];
-//    NaturalTalent   [label="Natural Talent",  fillcolor="#fed9a6"];
-//    Weather         [label="Weather",         fillcolor="#fed9a6"];
-//    News            [label="News",            fillcolor="#fed9a6"];
-//
-//    // Vertical order (top to bottom)
-//    { rank=same; EconomicPolicy; }
-//    { rank=same; NaturalTalent; }
-//    { rank=same; Education; }
-//    { rank=same; Motivation; }
-//    { rank=same; Income; }
-//    { rank=same; Weather; }
-//    { rank=same; News; }
-//
-//    // Causal links
-//    EconomicPolicy  -> Education;
-//    EconomicPolicy  -> Income;
-//    NaturalTalent   -> Education;
-//    NaturalTalent   -> Motivation;
-//    Motivation      -> Education;
-//    Motivation      -> Income;
-//    Education       -> Income;
-//    Weather         -> Income;
-//    News            -> Income;
-//
-//    // Legend at top
-//    subgraph cluster_legend {
-//        label="Legend";
-//        fontsize=11;
-//        color="#dddddd";
-//        style="rounded";
-//        rankdir=TB; // vertical stacking
-//
-//        key1 [label="Endogenous", shape=box, style="rounded,filled", fillcolor="#b3cde3"];
-//        key2 [label="Exogenous",  shape=box, style="rounded,filled", fillcolor="#fed9a6"];
-//
-//        key1 -> key2 [style=invis];
-//    }
-//}
-//```
-//::::
-//:::
-//- **Exogenous variables**
-//  - Originate _outside_ the system being modeled
-//    - Not caused by other variables in the model
-//  - Represent background conditions or external shocks
-//  - E.g.,
-//    - Natural talent
-//    - Economic policy
-//    - Weather
-//    - News
-//
-//* Endo / Exogenous, Observed / Unobserved Vars
-//::: columns
-//:::: {.column width=40%}
-//- In **Structural Causal Models**
-//  $$
-//  X_i = f_i(Parents(X_i), \varepsilon_i)
-//  $$
-//  where:
-//  - $X_i$: endogenous
-//  - $\varepsilon_i$: exogenous noise
-//
-//- **Typically**
-//  - _Endogenous variables_: focus for prediction and intervention
-//  - _Exogenous variables_: capture randomness or unknown external factors
-//
-//::::
-//:::: {.column width=55%}
-//
-//```graphviz
-//digraph EducationIncomeModel_EndoExo{
-//    rankdir=TD; // top-down layout
-//    splines=true;
-//    nodesep=0.8;
-//    ranksep=0.9;
-//    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
-//    Education       [label="Education",       fillcolor="#ccebc5"];
-//    Income          [label="Income",          fillcolor="#b3cde3"];
-//    EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
-//    Motivation      [label="Motivation",      fillcolor="#decbe4"];
-//    NaturalTalent   [label="Natural Talent",  fillcolor="#fed9a6"];
-//    Weather         [label="Weather",         fillcolor="#fed9a6"];
-//    News            [label="News",            fillcolor="#fed9a6"];
-//
-//    // Vertical order (top to bottom)
-//    { rank=same; EconomicPolicy; }
-//    { rank=same; NaturalTalent; }
-//    { rank=same; Education; }
-//    { rank=same; Motivation; }
-//    { rank=same; Income; }
-//    { rank=same; Weather; }
-//    { rank=same; News; }
-//
-//    // Causal links
-//    EconomicPolicy  -> Education;
-//    EconomicPolicy  -> Income;
-//    NaturalTalent   -> Education;
-//    NaturalTalent   -> Motivation;
-//    Motivation      -> Education;
-//    Motivation      -> Income;
-//    Education       -> Income;
-//    Weather         -> Income;
-//    News            -> Income;
-//
-//    // Legend
-//    subgraph cluster_legend {
-//        label="Legend";
-//        fontsize=11;
-//        color="#dddddd";
-//        style="rounded";
-//        rankdir=TB; // vertical layout for legend
-//
-//        key1 [label="Endogenous / Observed", shape=box, style="rounded,filled", fillcolor="#b3cde3"];
-//        key2 [label="Exogenous / Observed",  shape=box, style="rounded,filled", fillcolor="#ccebc5"];
-//        key3 [label="Endogenous / Unobserved", shape=box, style="rounded,filled", fillcolor="#decbe4"];
-//        key4 [label="Exogenous / Unobserved",  shape=box, style="rounded,filled", fillcolor="#fed9a6"];
-//
-//        key1 -> key2 [style=invis];
-//        key2 -> key3 [style=invis];
-//        key3 -> key4 [style=invis];
-//    }
-//}
-//```
-//
-//\begingroup \scriptsize
-//| **Variable Type**        | **Observability**   | **Example**          |
-//|---------------------------|---------------------|---------------------|
-//| Endogenous               | Observed            | Income               |
-//| Exogenous                | Observed            | Education            |
-//| Endogenous               | Unobserved          | Motivation           |
-//| Exogenous                | Unobserved          | Natural Talent       |
-//\endgroup
-//
-//::::
-//:::
+# Causal Networks
+
+// ## 13.5 Causal networks (p. 462)
+
+* (Non-Causal) Bayesian Networks
+- **Bayesian networks** represent a joint distribution function
+  - The direction of the arrow represent **conditional dependence** (not
+    causality)
+    - $A \to B$ requires to estimate $\Pr(A | B)$
+
+::: columns
+:::: {.column width=60%}
+
+- There are **many possible** _edges_ and _node ordering_ for the same Bayesian
+  network
+- E.g., a Bayesian network with $Fire$ and $Smoke$, which are dependent
+  - $Fire \to Smoke$
+    - Need $\Pr(Fire)$ and $\Pr(Smoke | Fire)$ to compute $\Pr(Fire, Smoke)$
+  - $Smoke \to Fire$
+  - Need $\Pr(Smoke)$ and $\Pr(Fire | Smoke)$
+::::
+:::: {.column width=35%}
+```graphviz
+digraph BayesianNetwork1 {
+    rankdir=LR;
+    Fire [label="P(Fire)"];
+    Smoke [label="P(Smoke)"];
+    Fire -> Smoke [label="P(Smoke | Fire)"];
+}
+```
+
+\vspace{1cm}
+
+```graphviz
+digraph BayesianNetwork1 {
+    rankdir=LR;
+    Fire [label="P(Fire)"];
+    Smoke [label="P(Smoke)"];
+    Smoke -> Fire [label="P(Fire | Smoke)"];
+}
+```
+::::
+:::
+
+- Different Bayesian networks:
+  - Are equivalent and convey the same information
+  - Have different difficulties to be estimated
+
+- At the same time, there is an **asymmetry in nature**
+  - Extinguishing fire stops smoke
+  - Clearing smoke doesn't affect fire
+
+* Causal (Bayesian) Networks
+- **Causal networks** are Bayesian networks forbidding **non-causal edges**
+
+- Use judgment based on nature instead of just statistics
+  - E.g., from _"Are random variables $Smoke$ and $Fire$ correlated?"_ to _"What
+    causes what, $Smoke$ or $Fire$?"_
+
+- **"Dependency in nature"** is like assignment in programming
+  - E.g., nature assigns $Smoke$ based on $Fire$:
+    - ![](emoji/check_mark.png){ width=12px } $Smoke := f(Fire)$
+    - ![](emoji/wrong.png){ width=12px } $Fire := f(Smoke)$
+
+- **Structural equations** describe "assignment mechanism" in causal graphs
+  $$
+  X_i := f(X_j) \iff X_j \to X_i
+  $$
+
+* Causal DAG
+- **Causal DAG**
+  - _Directed_: Arrows show cause $\rightarrow$ effect
+  - _Acyclic_: No feedback loops
+    - Causal relationships assume temporal order: cause before effect
+    - A cycle implies a variable is both cause and effect of itself
+
+- **Benefits**
+  - DAGs encode _causal_ links
+  - Reason about interventions and counterfactuals
+  - Support explainable AI models
+  - Stability in conditional probability estimation
+
+- **Limitations**
+  - Requires domain knowledge for structure
+  - Assumes all relevant variables included (no hidden confounders)
+
+* Causal Edges are Stable
+
+- **Causal edge** $X \rightarrow Y$ shows direct causal influence of $X$ on $Y$,
+  holding other variables constant
+  - Captures how manipulating $X$ changes $Y$, not just their covariance
+
+- Causal edges reflect **stable relationship**
+
+  - Mechanistic stability
+    - Causal relationships show system function, not just behavior in one dataset
+    - E.g., "Temperature $\rightarrow$ ice melting rate" holds true in Alaska and
+      Arizona
+
+  - Invariance under interventions
+    - If $X$ causes $Y$, intervening on $X$ affects $Y$ consistently, despite
+      confounders or context changes
+
+  - Easier estimation through causal modeling
+    - Identifying causal direction focuses estimation on effect size (e.g.,
+      regression of $Y$ on $X$ under intervention)
+
+  - Reduced sensitivity to sampling and omitted variables
+    - Correlations may change with confounder addition or removal
+    - True causal edge persists, stable across model specifications
+
+- **Example**: study $Exercise \rightarrow Health$:
+  - Correlation may differ in young or elderly populations
+  - Causal effect remains stable, as physiological mechanism doesn't change
+
+* Structural Causal Model
+- A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
+  equations
+  - DAGs show structure (variables and arrows)
+  - SCMs use equations to define how variables interact
+
+- **Structure of SCMs**
+  - Variables $X_1, X_2, ..., X_n$ represent quantities in the system
+  - Equations model each variable as a function of its direct causes
+  - Formally, $X_i$ is modeled as:
+    $$X_i = f_i(Parents(X_i), \varepsilon_i)$$
+    where:
+    - $Parents(X_i)$ are direct causes of $X_i$
+    - $\varepsilon_i$ is an exogenous (external, unobserved) noise term
+
+- **Properties**
+  - Explain causal relationships between variables
+  - Provide a foundation for causal reasoning and simulation
+  - Describe how the world works, not just variable correlations
+
+* Structural Causal Model: Example
+::: columns
+:::: {.column width=50%}
+- **Explanatory variables**
+  - You can manipulate or observe when changes are applied
+  - E.g., _"does a large cup of coffee before an exam help with a test?"_
+
+- **Outcome variables**
+  - Result of the action
+  - E.g., _"by how much did the score test improve?"_
+::::
+:::: {.column width=45%}
+```graphviz
+digraph SCMExample {
+  rankdir=TB;
+  splines=true;
+  nodesep=1.0;
+  ranksep=0.75;
+  node [shape=box, style="rounded,filled", fillcolor=white, fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+  // Nodes
+  Coffee [label="Large Cup of Coffee", fillcolor="#b3cde3"];
+  TestScore [label="Test Score Improvement", fillcolor="#ccebc5"];
+  RoomTemp [label="Room Temperature", fillcolor="#decbe4"];
+
+  // Edges
+  Coffee -> TestScore;
+  RoomTemp -> TestScore [style=dashed];
+}
+```
+::::
+:::
+
+- **Unobserved variables**
+  - Not seen or more difficult to account
+  - E.g., _"temperature of the room makes students sleepy and less alert"_
+
+* Structural Causal Model: Sprinkler Example
+::: columns
+:::: {.column width=25%}
+
+```graphviz
+digraph BayesianFlow {
+    rankdir=TD;
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    // Node styles
+    Cloudy        [label="Cloudy",        fillcolor="#b3cde3"];
+    Sprinkler     [label="Sprinkler",     fillcolor="#ccebc5"];
+    Rain          [label="Rain",          fillcolor="#ccebc5"];
+    WetGrass      [label="Wet Grass",     fillcolor="#decbe4"];
+    GreenerGrass  [label="Greener Grass", fillcolor="#fed9a6"];
+
+    // Force ranks
+    { rank=same; Sprinkler; Rain; }
+
+    // Edges
+    Cloudy -> Sprinkler;
+    Cloudy -> Rain;
+    Sprinkler -> WetGrass;
+    Rain -> WetGrass;
+    WetGrass -> GreenerGrass;
+}
+```
+::::
+:::: {.column width=70%}
+- Structural equations for this model:
+  \begingroup \small
+  $$
+  \left\{
+  \begin{aligned}
+    & C := f_C(\varepsilon_C) \\
+    & R := f_R(C, \varepsilon_R) \\
+    & S := f_S(C, \varepsilon_S) \\
+    & W := f_W(R, S, \varepsilon_W) \\
+    & G := f_G(W, \varepsilon_G) \\
+  \end{aligned}
+  \right.
+  $$
+  \endgroup
+
+- Unmodeled variables $\varepsilon_x$ represent error terms
+  - E.g., $\varepsilon_W$ is another source of wetness besides $Sprinkler$ and $Rain$
+    (e.g., $MorningDew$)
+- Assume unmodeled variables are exogenous, independent, with a certain
+  distribution (prior)
+::::
+:::
+
+- Express joint distribution of five variables as a product of conditional
+  distributions using causal DAG topology:
+  \begingroup \small
+  $$
+  \Pr(C, R, S, W, G) = \Pr(C) \Pr(R|C) \Pr(S|C) \Pr(W|R,S) \Pr(G|W)
+  $$
+  \endgroup
+
+## #############################################################################
+## Variables
+## #############################################################################
+
+* Observed Vs. Unobserved Variables
+::: columns
+:::: {.column width=45%}
+- **Observed variables**
+  - Aka "measurable" or "visible"
+  - Variables directly measured or collected in a dataset
+  - E.g.,
+    - Education
+    - Income
+    - Blood pressure
+    - Product price
+
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph EducationIncomeModel_ObservedUnobserved_Vertical {
+    rankdir=TD; // top-down layout
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.9;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Education       [label="Education",       fillcolor="#ccebc5"];
+    Income          [label="Income",          fillcolor="#ccebc5"];
+    EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
+    Motivation      [label="Motivation",      fillcolor="#decbe4"];
+    NaturalTalent   [label="Natural Talent",  fillcolor="#decbe4"];
+    Weather         [label="Weather",         fillcolor="#decbe4"];
+    News            [label="News",            fillcolor="#decbe4"];
+
+    // Vertical order (top to bottom)
+    { rank=same; EconomicPolicy; }
+    { rank=same; NaturalTalent; }
+    { rank=same; Education; }
+    { rank=same; Motivation; }
+    { rank=same; Income; }
+    { rank=same; Weather; }
+    { rank=same; News; }
+
+    // Causal links
+    EconomicPolicy  -> Education;
+    EconomicPolicy  -> Income;
+    NaturalTalent   -> Education;
+    NaturalTalent   -> Motivation;
+    Motivation      -> Education;
+    Motivation      -> Income;
+    Education       -> Income;
+    Weather         -> Income;
+    News            -> Income;
+
+    // Legend (top, vertical stack)
+    subgraph cluster_legend {
+        label="Legend";
+        fontsize=11;
+        color="#dddddd";
+        style="rounded";
+        rankdir=TB; // vertical stacking
+
+        key1 [label="Observed", shape=box, style="rounded,filled", fillcolor="#ccebc5"];
+        key2 [label="Unobserved",  shape=box, style="rounded,filled", fillcolor="#decbe4"];
+
+        key1 -> key2 [style=invis];
+    }
+}
+```
+::::
+:::
+
+- **Unobserved variables**
+  - Aka "latent" or "hidden"
+  - Exist but not measured or included in data
+  - E.g.,
+    - Natural talent
+    - Motivation
+    - Company culture
+  - Ignoring unobserved variables distorts causal relationships
+    - Observed: $IceCreamSales$ and $DrowningRates$
+    - Unobserved: $Temperature$
+    - Misleading conclusion: $IceCream$ causes $Drowning$
+
+* Endogenous Vs. Exogenous Variables
+::: columns
+:::: {.column width=45%}
+- **Endogenous variables**
+  - Values determined _within_ the model
+    - Dependent on other variables in the system
+  - Represent system's internal behavior and outcomes
+  - E.g.,
+    - Motivation
+    - Income
+
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph EducationIncomeModel_EndoExo{
+    rankdir=TD; // top-down layout
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.9;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Education       [label="Education",       fillcolor="#fed9a6"];
+    Income          [label="Income",          fillcolor="#b3cde3"];
+    EconomicPolicy  [label="Economic Policy", fillcolor="#fed9a6"];
+    Motivation      [label="Motivation",      fillcolor="#b3cde3"];
+    NaturalTalent   [label="Natural Talent",  fillcolor="#fed9a6"];
+    Weather         [label="Weather",         fillcolor="#fed9a6"];
+    News            [label="News",            fillcolor="#fed9a6"];
+
+    // Vertical order (top to bottom)
+    { rank=same; EconomicPolicy; }
+    { rank=same; NaturalTalent; }
+    { rank=same; Education; }
+    { rank=same; Motivation; }
+    { rank=same; Income; }
+    { rank=same; Weather; }
+    { rank=same; News; }
+
+    // Causal links
+    EconomicPolicy  -> Education;
+    EconomicPolicy  -> Income;
+    NaturalTalent   -> Education;
+    NaturalTalent   -> Motivation;
+    Motivation      -> Education;
+    Motivation      -> Income;
+    Education       -> Income;
+    Weather         -> Income;
+    News            -> Income;
+
+    // Legend at top
+    subgraph cluster_legend {
+        label="Legend";
+        fontsize=11;
+        color="#dddddd";
+        style="rounded";
+        rankdir=TB; // vertical stacking
+
+        key1 [label="Endogenous", shape=box, style="rounded,filled", fillcolor="#b3cde3"];
+        key2 [label="Exogenous",  shape=box, style="rounded,filled", fillcolor="#fed9a6"];
+
+        key1 -> key2 [style=invis];
+    }
+}
+```
+::::
+:::
+- **Exogenous variables**
+  - Originate _outside_ the system being modeled
+    - Not caused by other variables in the model
+  - Represent background conditions or external shocks
+  - E.g.,
+    - Natural talent
+    - Economic policy
+    - Weather
+    - News
+
+* Endo / Exogenous, Observed / Unobserved Vars
+::: columns
+:::: {.column width=40%}
+- In **Structural Causal Models**
+  $$
+  X_i = f_i(Parents(X_i), \varepsilon_i)
+  $$
+  where:
+  - $X_i$: endogenous
+  - $\varepsilon_i$: exogenous noise
+
+- **Typically**
+  - _Endogenous variables_: focus for prediction and intervention
+  - _Exogenous variables_: capture randomness or unknown external factors
+
+::::
+:::: {.column width=55%}
+
+```graphviz
+digraph EducationIncomeModel_EndoExo{
+    rankdir=TD; // top-down layout
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.9;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Education       [label="Education",       fillcolor="#ccebc5"];
+    Income          [label="Income",          fillcolor="#b3cde3"];
+    EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
+    Motivation      [label="Motivation",      fillcolor="#decbe4"];
+    NaturalTalent   [label="Natural Talent",  fillcolor="#fed9a6"];
+    Weather         [label="Weather",         fillcolor="#fed9a6"];
+    News            [label="News",            fillcolor="#fed9a6"];
+
+    // Vertical order (top to bottom)
+    { rank=same; EconomicPolicy; }
+    { rank=same; NaturalTalent; }
+    { rank=same; Education; }
+    { rank=same; Motivation; }
+    { rank=same; Income; }
+    { rank=same; Weather; }
+    { rank=same; News; }
+
+    // Causal links
+    EconomicPolicy  -> Education;
+    EconomicPolicy  -> Income;
+    NaturalTalent   -> Education;
+    NaturalTalent   -> Motivation;
+    Motivation      -> Education;
+    Motivation      -> Income;
+    Education       -> Income;
+    Weather         -> Income;
+    News            -> Income;
+
+    // Legend
+    subgraph cluster_legend {
+        label="Legend";
+        fontsize=11;
+        color="#dddddd";
+        style="rounded";
+        rankdir=TB; // vertical layout for legend
+
+        key1 [label="Endogenous / Observed", shape=box, style="rounded,filled", fillcolor="#b3cde3"];
+        key2 [label="Exogenous / Observed",  shape=box, style="rounded,filled", fillcolor="#ccebc5"];
+        key3 [label="Endogenous / Unobserved", shape=box, style="rounded,filled", fillcolor="#decbe4"];
+        key4 [label="Exogenous / Unobserved",  shape=box, style="rounded,filled", fillcolor="#fed9a6"];
+
+        key1 -> key2 [style=invis];
+        key2 -> key3 [style=invis];
+        key3 -> key4 [style=invis];
+    }
+}
+```
+
+\begingroup \scriptsize
+| **Variable Type**        | **Observability**   | **Example**          |
+|---------------------------|---------------------|---------------------|
+| Endogenous               | Observed            | Income               |
+| Exogenous                | Observed            | Education            |
+| Endogenous               | Unobserved          | Motivation           |
+| Exogenous                | Unobserved          | Natural Talent       |
+\endgroup
+
+::::
+:::
+
+* Building a Causal DAG
+- **Causal models** visually represent complex environments and relationships
+
+- Nodes are like "nouns" in the model:
+  - E.g., "price", "sales", "revenue", "birth weight", "gestation period"
+  - Variables can be endogenous/exogenous and observed/unobserved
+  - Complex relationships between variables:
+    - Parents, children (direct relationships)
+    - Descendants, ancestors (along the path)
+    - Neighbors
+
+- **Iterative Refinement**:
+  - Continuously update models with new variables and insights
+
+- **Modeling as a Communication Tool**:
+  - Shared language bridges gaps between technical and non-technical team
+    members
+
+- **Unobservable Variables**:
+  - Include variables not empirically observed but known to exist
+  - E.g., trust or competitor activity modeled despite lack of direct data
+
+* Heart Attack: Example
+::: columns
+:::: {.column width=50%}
+- What's the relationship between stress and heart attacks?
+  - Stress is the treatment
+  - Heart attack is the outcome
+  - Stress is not a direct cause of heart attack
+    - E.g., a stressed person tend to have poor eating habits
+::::
+:::: {.column width=45%}
+
+```graphviz
+digraph CausalGraph {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Stress [fillcolor="#F4A6A6"];
+    Diet [fillcolor="#FFD1A6"];
+    Exercise [fillcolor="#B2E2B2"];
+    Heart_Attacks [fillcolor="#A0D6D1"];
+    Genetic [fillcolor="#A6E7F4"];
+
+    Stress -> Diet;
+    Stress -> Exercise;
+    Diet -> Heart_Attacks;
+    Exercise -> Heart_Attacks;
+    Genetic -> Heart_Attacks;
+}
+```
+::::
+:::
+
+* Weights
+- Assign weights to paths to represent causal strength
+  - Estimate weights using statistical methods
+
+- Sign indicates direction
+
+```graphviz
+digraph RiskFactors {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Age [fillcolor="#F4A6A6"];
+    Gender [fillcolor="#FFD1A6"];
+    Blood_Pressure [fillcolor="#B2E2B2"];
+    Cholesterol [fillcolor="#A0D6D1"];
+    Exercise [fillcolor="#A6E7F4"];
+    Heart_Disease [fillcolor="#A6C8F4"];
+
+    Age -> Heart_Disease [label="+0.8"];
+    Gender -> Heart_Disease [label="+0.3"];
+    Blood_Pressure -> Heart_Disease [label="+0.7"];
+    Cholesterol -> Heart_Disease [label="+0.5"];
+    Exercise -> Heart_Disease [label="-0.6"];
+}
+```
+
+
 //
 //## Intervention
 //
@@ -1377,11 +1465,11 @@ digraph ColliderDiagram {
 :::: {.column width=60%}
 - A **fork** $D \leftarrow X \rightarrow C$ occurs when a single variable
   causally influences two or more variables
-- $X$ is a **confounder** (common cause) of $C$ and $D$
+  - $X$ is a **confounder** (common cause) of $C$ and $D$
+  - Forks induce statistical dependence between $C$ and $D$
+    even if $C$ and $D$ are not causally linked
 
-- Forks induce statistical dependence between $C$ and $D$
-  even if $C$ and $D$ are not causally linked
-- Conditioning on $X$ blocks the path and removes spurious correlation
+- **Conditioning** on $X$ blocks the path and removes spurious correlation
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -1438,15 +1526,15 @@ digraph CausalDAG {
 * Inverted Fork
 
 ::: columns
-:::: {.column width=70%}
+:::: {.column width=60%}
 - An **inverted fork** occurs when two or more arrows converge on a common node
-  - Also known as a **collider**
-- Colliders block associations unless the collider or its descendants are
-  conditioned on
-- Conditioning on a collider "opens" a path, inducing spurious correlations
+  - **Colliders** block associations unless the collider or its descendants are
+    conditioned on
+
+- **Conditioning on a collider** _opens a path_, inducing spurious correlations
   - This is the basis of selection bias
 ::::
-:::: {.column width=25%}
+:::: {.column width=35%}
 ```graphviz
 digraph ColliderExample {
     splines=true;
@@ -1468,15 +1556,18 @@ digraph ColliderExample {
 ::::
 :::
 
+\vspace{0.5cm}
+
 ::: columns
-:::: {.column width=70%}
-- Example:
+:::: {.column width=60%}
+- **Example**
   - Sales influenced by multiple independent causes
   - $MarketingSpend$ and $ProductQuality$ both influence $Sales$
   - Conditioning on $Sales$ can induce false dependence between $MarketingSpend$
     and $ProductQuality$
 ::::
-:::: {.column width=25%}
+:::: {.column width=35%}
+```graphviz
 digraph ImprovedDiagram {
     splines=true;
     nodesep=1.0;
@@ -1647,64 +1738,6 @@ digraph CausalDAG {
 ::::
 :::
 
-
-* Building a DAG
-- **Causal models** visually represent complex environments and relationships
-- Nodes are like "nouns" in the model:
-  - E.g., "price", "sales", "revenue", "birth weight", "gestation period"
-  - Variables can be endogenous/exogenous and observed/unobserved
-  - Complex relationships between variables:
-    - Parents, children (direct relationships)
-    - Descendants, ancestors (along the path)
-    - Neighbors
-- **Iterative Refinement**:
-  - Models are continuously updated with new variables and insights
-- **Modeling as a Communication Tool**:
-  - A shared language that bridges gaps between technical and non-technical team
-    members
-- **Unobservable Variables**:
-  - Supports inclusion of variables not empirically observed but known to exist
-  - E.g., trust or competitor activity can be modeled despite lack of direct
-    data
-
-* Heart Attack: Example
-- What's the relationship between stress and heart attacks?
-  - Stress is the treatment
-  - Heart attack is the outcome
-  - Stress is not a direct cause of heart attack
-    - E.g., a stressed person tend to have poor eating habits
-
-  ```graphviz
-  digraph CausalGraph {
-    rankdir=LR;
-    node [shape=box, style=rounded, fontname="Helvetica", fontsize=12];
-
-    Stress -> Diet;
-    Stress -> Exercise;
-    Diet -> Heart_Attacks;
-    Exercise -> Heart_Attacks;
-    Genetic -> Heart_Attacks;
-  }
-  ```
-
-* Weights
-- Weights can be assigned to paths to represent the strength of the causal
-  relationship
-  - Weights can be estimated using statistical methods
-- Sign represents the direction
-
-  ```graphviz
-  digraph RiskFactors {
-    rankdir=LR;
-    node [shape=box, style=rounded, fontname="Helvetica", fontsize=12];
-
-    Age -> Heart_Disease [label="+0.8"];
-    Gender -> Heart_Disease [label="+0.3"];
-    Blood_Pressure -> Heart_Disease [label="+0.7"];
-    Cholesterol -> Heart_Disease [label="+0.5"];
-    Exercise -> Heart_Disease [label="-0.6"];
-  }
-  ```
 
 * Counterfactuals
 
