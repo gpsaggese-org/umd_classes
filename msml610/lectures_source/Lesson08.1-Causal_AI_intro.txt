@@ -25,7 +25,7 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-  - Hurwitz, Thompson: Causal Artificial Intelligence, 2024
+- Hurwitz, Thompson: Causal Artificial Intelligence, 2024
 ::::
 :::: {.column width=20%}
 

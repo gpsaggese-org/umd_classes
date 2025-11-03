@@ -24,7 +24,7 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-  - Hurwitz, Thompson: Causal Artificial Intelligence, 2024
+- Hurwitz, Thompson: Causal Artificial Intelligence, 2024
 ::::
 :::: {.column width=20%}
 
@@ -605,51 +605,3 @@ digraph CausalFlowGrid {
   - Reflects human thinking, analysis, decision-making
 
 - Causal, traditional AI, deep learning, and generative techniques will merge
-
-// ###########################################################################
-
-
-// ### 13.5.2, The back-door criterion
-
-
-// TODO(gp): Add d-separation
-
-// TODO(gp): Add Facuce?
-
-// Do-operator
-
-//* Causal Discovery
-//
-//- **Definition**
-//  - Causal discovery identifies **cause–effect relationships** among variables
-//  - Understand **which variables influence others** and **how interventions
-//    change outcomes**
-//
-//- **Key Idea**
-//  - Networks like $Fire \to Smoke$ and $Smoke \to Fire$ can represent the same
-//    probability, but only one shows the **true causal direction**
-//  - Causal discovery infers this direction from **observational or experimental
-//    data**
-//
-//- **Interventions and the $do()$ Operator**
-//  - Introduced by Judea Pearl for **interventions**
-//  - $\Pr(X_i | do(X_j = x_j))$ describes the effect of **actively setting**
-//    $X_j$ to a value
-//
-//- **Learning from Data**
-//  - Causal discovery algorithms recover the **causal graph** structure using:
-//    - **Conditional independence tests**
-//    - **Score-based search**
-//    - **Hybrid methods**
-//  - Determine which links in a Bayesian network represent **true causal
-//    influences**
-//
-//- **Relation to Causal Inference**
-//  - Causal discovery identifies **the structure** of causality
-//  - Causal inference predicts **effects of actions or interventions**
-//
-//- **Example**
-//  - Observe **Sprinkler** and **Rain** affecting **WetGrass**
-//  - Causal discovery determines if **Rain causes WetGrass directly**
-//    **through influencing Sprinkler**.
-//
