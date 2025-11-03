@@ -21,7 +21,7 @@ MSML610: Advanced Machine Learning
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 **References**:
-  - Hurwitz, Thompson: Causal Artificial Intelligence, 2024
+- Hurwitz, Thompson: Causal Artificial Intelligence, 2024
 
 # ##############################################################################
 # Business Processes Around Data Modeling

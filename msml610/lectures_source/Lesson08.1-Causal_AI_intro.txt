@@ -14,16 +14,25 @@ MSML610: Advanced Machine Learning
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{9.1: Intro to Causal AI}}$$**
+**$$\text{\blue{8.1: Intro to Causal AI}}$$**
 \endgroup
+
 \vspace{1cm}
 
+::: columns
+:::: {.column width=75%}
 **Instructor**: Dr. GP Saggese - [](gsaggese@umd.edu)
 
 **References**:
 
-- Easy:
   - Hurwitz, Thompson: Causal Artificial Intelligence, 2024
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){width=1.5cm}
+
+::::
+:::
 
 # ##############################################################################
 # Causal AI
