@@ -40,6 +40,8 @@ MSML610: Advanced Machine Learning
 
 # Causal Networks
 
+## Causal DAGs and Structural Causal Models
+
 // ## 13.5 Causal networks (p. 462)
 
 * (Non-Causal) Bayesian Networks
@@ -64,10 +66,17 @@ MSML610: Advanced Machine Learning
 :::: {.column width=35%}
 ```graphviz
 digraph BayesianNetwork1 {
+    splines=true;
+    nodesep=0.5
+    ranksep=0.5;
     rankdir=LR;
-    Fire [label="P(Fire)"];
-    Smoke [label="P(Smoke)"];
-    Fire -> Smoke [label="P(Smoke | Fire)"];
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Fire [label="P(Fire)", fillcolor="#F4A6A6"];
+    Smoke [label="P(Smoke)", fillcolor="#A6E7F4"];
+
+    Fire -> Smoke [label="Pr(Smoke | Fire)"];
 }
 ```
 
@@ -75,10 +84,17 @@ digraph BayesianNetwork1 {
 
 ```graphviz
 digraph BayesianNetwork1 {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=LR;
-    Fire [label="P(Fire)"];
-    Smoke [label="P(Smoke)"];
-    Smoke -> Fire [label="P(Fire | Smoke)"];
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Fire [label="Fire", fillcolor="#F4A6A6"];
+    Smoke [label="Smoke", fillcolor="#A6E7F4"];
+
+    Smoke -> Fire [label="Pr(Fire | Smoke)"];
 }
 ```
 ::::
@@ -164,16 +180,16 @@ digraph BayesianNetwork1 {
 digraph SCMExample {
   rankdir=TB;
   splines=true;
-  nodesep=1.0;
-  ranksep=0.75;
+  nodesep=0.5;
+  ranksep=0.5;
   node [shape=box, style="rounded,filled", fillcolor=white, fontname="Helvetica", fontsize=12, penwidth=1.4];
 
   Coffee [label="Large Cup of Coffee", fillcolor="#b3cde3"];
-  TestScore [label="Test Score Improvement", fillcolor="#ccebc5"];
-  RoomTemp [label="Room Temperature", fillcolor="#decbe4"];
+  Test_Score [label="Test Score Improvement", fillcolor="#ccebc5"];
+  Room_Temp [label="Room Temperature", fillcolor="#decbe4", style="rounded,filled,dashed"];
 
-  Coffee -> TestScore;
-  RoomTemp -> TestScore [style=dashed];
+  Coffee -> Test_Score;
+  Room_Temp -> Test_Score [style=dashed];
 }
 ```
 ::::
@@ -185,13 +201,11 @@ digraph SCMExample {
 
 * Structural Causal Model
 - A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
-  equations
-  - DAGs show structure (nodes and edges)
-  - SCMs use equations to define how variables interact
+  equations to define how variables interact
 
 - **Structure of SCMs**
-  - Variables $X_1, X_2, ..., X_n$ represent quantities in the system
-  - Equations model each variable as a function of its direct causes
+  - _Variables_ $X_1, X_2, ..., X_n$ represent quantities in the system
+  - _Equations_ model each variable as a function of its direct causes
   - Formally, $X_i$ is modeled as:
     $$X_i = f_i(Parents(X_i), \varepsilon_i)$$
     where:
@@ -205,19 +219,41 @@ digraph SCMExample {
     - ...
   - Quantify effect
 
-- Used in econometrics and genetics for a long time
-  - Even before theory of causality
+- Used in econometrics and genetics for a long time (even before theory of
+  causality)
 
 * Structural Causal Model: Sprinkler Example
 ::: columns
-:::: {.column width=25%}
+:::: {.column width=70%}
+- **Structural equations** for this causal DAG:
+  \begingroup \small
+  $$
+  \left\{
+  \begin{aligned}
+    & C := f_C(\varepsilon_C) \\
+    & R := f_R(C, \varepsilon_R) \\
+    & S := f_S(C, \varepsilon_S) \\
+    & W := f_W(R, S, \varepsilon_W) \\
+    & G := f_G(W, \varepsilon_G) \\
+  \end{aligned}
+  \right.
+  $$
+  \endgroup
 
+- **Unmodeled variables** $\varepsilon_x$ represent error terms
+  - E.g., $\varepsilon_W$ is another source of wetness (e.g., $MorningDew$)
+    besides $Sprinkler$ and $Rain$
+  - Assume unmodeled variables are exogenous, independent, with a certain
+    distribution (prior)
+
+::::
+:::: {.column width=25%}
 ```graphviz
 digraph BayesianFlow {
     rankdir=TD;
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     Cloudy        [label="Cloudy",        fillcolor="#b3cde3"];
@@ -237,35 +273,13 @@ digraph BayesianFlow {
 }
 ```
 ::::
-:::: {.column width=70%}
-- Structural equations for this model:
-  \begingroup \small
-  $$
-  \left\{
-  \begin{aligned}
-    & C := f_C(\varepsilon_C) \\
-    & R := f_R(C, \varepsilon_R) \\
-    & S := f_S(C, \varepsilon_S) \\
-    & W := f_W(R, S, \varepsilon_W) \\
-    & G := f_G(W, \varepsilon_G) \\
-  \end{aligned}
-  \right.
-  $$
-  \endgroup
-
-- Unmodeled variables $\varepsilon_x$ represent error terms
-  - E.g., $\varepsilon_W$ is another source of wetness besides $Sprinkler$ and $Rain$
-    (e.g., $MorningDew$)
-- Assume unmodeled variables are exogenous, independent, with a certain
-  distribution (prior)
-::::
 :::
 
-- Express joint distribution of five variables as a product of conditional
+- Express **joint distribution** of all variables as a product of conditional
   distributions using causal DAG topology:
   \begingroup \small
   $$
-  \Pr(C, R, S, W, G) = \Pr(C) \Pr(R|C) \Pr(S|C) \Pr(W|R,S) \Pr(G|W)
+  \Pr(C, R, S, W, G) = \Pr(W|R,S) \Pr(G|W) \Pr(S|C) \Pr(R|C) \Pr(C)
   $$
   \endgroup
 
@@ -282,8 +296,6 @@ digraph BayesianFlow {
   - E.g.,
     - Education
     - Income
-    - Blood pressure
-    - Product price
 
 ::::
 :::: {.column width=50%}
@@ -292,26 +304,26 @@ digraph BayesianFlow {
 digraph EducationIncomeModel_ObservedUnobserved_Vertical {
     rankdir=TD; // top-down layout
     splines=true;
-    nodesep=0.8;
-    ranksep=0.9;
+    nodesep=0.5;
+    ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     Education       [label="Education",       fillcolor="#ccebc5"];
     Income          [label="Income",          fillcolor="#ccebc5"];
     EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
-    Motivation      [label="Motivation",      fillcolor="#decbe4"];
-    NaturalTalent   [label="Natural Talent",  fillcolor="#decbe4"];
-    Weather         [label="Weather",         fillcolor="#decbe4"];
-    News            [label="News",            fillcolor="#decbe4"];
+
+    Motivation      [label="Motivation",      fillcolor="#decbe4", style="rounded,filled,dashed"];
+    NaturalTalent   [label="Natural Talent",  fillcolor="#decbe4", style="rounded,filled,dashed"];
+    Weather         [label="Weather",         fillcolor="#decbe4", style="rounded,filled,dashed"];
+    News            [label="News",            fillcolor="#decbe4", style="rounded,filled,dashed"];
 
     // Vertical order (top to bottom)
     { rank=same; EconomicPolicy; }
     { rank=same; NaturalTalent; }
     { rank=same; Education; }
     { rank=same; Motivation; }
+    { rank=same; News; Weather; }
     { rank=same; Income; }
-    { rank=same; Weather; }
-    { rank=same; News; }
 
     // Causal links
     EconomicPolicy  -> Education;
@@ -321,7 +333,6 @@ digraph EducationIncomeModel_ObservedUnobserved_Vertical {
     Motivation      -> Education;
     Motivation      -> Income;
     Education       -> Income;
-    Weather         -> Income;
     News            -> Income;
 
     // Legend (top, vertical stack)
@@ -333,7 +344,7 @@ digraph EducationIncomeModel_ObservedUnobserved_Vertical {
         rankdir=TB; // vertical stacking
 
         key1 [label="Observed", shape=box, style="rounded,filled", fillcolor="#ccebc5"];
-        key2 [label="Unobserved",  shape=box, style="rounded,filled", fillcolor="#decbe4"];
+        key2 [label="Unobserved",  shape=box, style="rounded,filled,dashed", fillcolor="#decbe4"];
 
         key1 -> key2 [style=invis];
     }
@@ -348,11 +359,9 @@ digraph EducationIncomeModel_ObservedUnobserved_Vertical {
   - E.g.,
     - Natural talent
     - Motivation
-    - Company culture
-  - Ignoring unobserved variables distorts causal relationships
-    - Observed: $IceCreamSales$ and $DrowningRates$
-    - Unobserved: $Temperature$
-    - Misleading conclusion: $IceCream$ causes $Drowning$
+  - Ignoring unobserved variables leads to incorrect conclusions
+    - E.g., $IceCreamSales$ $\leftarrow$ $Temperature$ $\rightarrow$
+      $DrowningRates$
 
 * Endogenous Vs. Exogenous Variables
 ::: columns
@@ -372,11 +381,11 @@ digraph EducationIncomeModel_ObservedUnobserved_Vertical {
 digraph EducationIncomeModel_EndoExo{
     rankdir=TD; // top-down layout
     splines=true;
-    nodesep=0.8;
-    ranksep=0.9;
+    nodesep=0.5;
+    ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Education       [label="Education",       fillcolor="#fed9a6"];
+    Education       [label="Education",       fillcolor="#b3cde3"];
     Income          [label="Income",          fillcolor="#b3cde3"];
     EconomicPolicy  [label="Economic Policy", fillcolor="#fed9a6"];
     Motivation      [label="Motivation",      fillcolor="#b3cde3"];
@@ -389,9 +398,8 @@ digraph EducationIncomeModel_EndoExo{
     { rank=same; NaturalTalent; }
     { rank=same; Education; }
     { rank=same; Motivation; }
+    { rank=same; News; Weather; }
     { rank=same; Income; }
-    { rank=same; Weather; }
-    { rank=same; News; }
 
     // Causal links
     EconomicPolicy  -> Education;
@@ -401,7 +409,6 @@ digraph EducationIncomeModel_EndoExo{
     Motivation      -> Education;
     Motivation      -> Income;
     Education       -> Income;
-    Weather         -> Income;
     News            -> Income;
 
     // Legend at top
@@ -410,7 +417,8 @@ digraph EducationIncomeModel_EndoExo{
         fontsize=11;
         color="#dddddd";
         style="rounded";
-        rankdir=TB; // vertical stacking
+        // Vertical stacking.
+        rankdir=TB;
 
         key1 [label="Endogenous", shape=box, style="rounded,filled", fillcolor="#b3cde3"];
         key2 [label="Exogenous",  shape=box, style="rounded,filled", fillcolor="#fed9a6"];
@@ -434,17 +442,12 @@ digraph EducationIncomeModel_EndoExo{
 * Endo / Exogenous, Observed / Unobserved Vars
 ::: columns
 :::: {.column width=40%}
-- In **Structural Causal Models**
-  $$
-  X_i = f_i(Parents(X_i), \varepsilon_i)
-  $$
-  where:
-  - $X_i$: endogenous
-  - $\varepsilon_i$: exogenous noise
-
 - **Typically**
-  - _Endogenous variables_: focus for prediction and intervention
-  - _Exogenous variables_: capture randomness or unknown external factors
+  - _Exogenous / unobserved variables_: capture randomness or unknown external
+    factors
+  - _Exogenous / observed variables_: potential intervention
+    factors
+  - _Endogenous / observed variables_: focus for prediction and intervention
 
 ::::
 :::: {.column width=55%}
@@ -453,11 +456,11 @@ digraph EducationIncomeModel_EndoExo{
 digraph EducationIncomeModel_EndoExo{
     rankdir=TD; // top-down layout
     splines=true;
-    nodesep=0.8;
-    ranksep=0.9;
+    nodesep=0.5;
+    ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Education       [label="Education",       fillcolor="#ccebc5"];
+    Education       [label="Education",       fillcolor="#b3cde3"];
     Income          [label="Income",          fillcolor="#b3cde3"];
     EconomicPolicy  [label="Economic Policy", fillcolor="#ccebc5"];
     Motivation      [label="Motivation",      fillcolor="#decbe4"];
@@ -471,8 +474,7 @@ digraph EducationIncomeModel_EndoExo{
     { rank=same; Education; }
     { rank=same; Motivation; }
     { rank=same; Income; }
-    { rank=same; Weather; }
-    { rank=same; News; }
+    { rank=same; News; Weather; }
 
     EconomicPolicy  -> Education;
     EconomicPolicy  -> Income;
@@ -481,7 +483,6 @@ digraph EducationIncomeModel_EndoExo{
     Motivation      -> Education;
     Motivation      -> Income;
     Education       -> Income;
-    Weather         -> Income;
     News            -> Income;
 
     // Legend
@@ -518,56 +519,55 @@ digraph EducationIncomeModel_EndoExo{
 
 * Building a Causal DAG
 - **Causal models** visually represent complex environments and relationships
-
-- Nodes are like "nouns" in the model:
-  - E.g., "price", "sales", "revenue", "birth weight", "gestation period"
-  - Variables can be endogenous/exogenous and observed/unobserved
-  - Complex relationships between variables:
+  - Nodes are like "nouns":
+    - E.g., "price", "sales", "revenue", "birth weight", "gestation period"
+    - Variables can be endogenous/exogenous and observed/unobserved
+  - Relationships between variables are "verbs":
     - Parents, children (direct relationships)
     - Descendants, ancestors (along the path)
     - Neighbors
-
-- **Iterative Refinement**:
-  - Continuously update models with new variables and insights
 
 - **Modeling as a Communication Tool**:
   - Shared language bridges gaps between technical and non-technical team
     members
 
-- **Unobservable Variables**:
-  - Include variables not empirically observed but known to exist
-  - E.g., trust or competitor activity modeled despite lack of direct data
+- **Iterative Refinement**:
+  - Continuously update models with new variables and insights
 
 * Heart Attack: Example
 ::: columns
 :::: {.column width=50%}
-- What's the relationship between stress and heart attacks?
-  - Stress is the treatment
-  - Heart attack is the outcome
-  - Stress is not a direct cause of heart attack
-    - E.g., a stressed person tend to have poor eating habits
+- Research question: _What's the relationship between stress and heart attacks_?
+
+- **Build a causal DAG**
+  - _Stress_ is the treatment
+  - _Heart attack_ is the outcome
+  - Stress is _not a direct cause_ of heart attack
+    - E.g., a stressed person tend to have poor eating habits and tends not to
+      exercise
+  - _Genetics_ is unobserved
 ::::
 :::: {.column width=45%}
 
 ```graphviz
 digraph CausalGraph {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     Stress [fillcolor="#F4A6A6"];
     Diet [fillcolor="#FFD1A6"];
     Exercise [fillcolor="#B2E2B2"];
-    Heart_Attacks [fillcolor="#A0D6D1"];
-    Genetic [fillcolor="#A6E7F4"];
+    Heart_Attack [label="Heart Attack", fillcolor="#A0D6D1"];
+    Genetic [fillcolor="#A6E7F4", style="rounded,filled,dashed"];
 
     Stress -> Diet;
     Stress -> Exercise;
-    Diet -> Heart_Attacks;
-    Exercise -> Heart_Attacks;
-    Genetic -> Heart_Attacks;
+    Diet -> Heart_Attack;
+    Exercise -> Heart_Attack;
+    Genetic -> Heart_Attack;
 }
 ```
 ::::
@@ -575,15 +575,13 @@ digraph CausalGraph {
 
 * Weights
 - Assign weights to paths to represent causal strength
-  - Estimate weights using statistical methods
-
 - Sign indicates direction
 
 ```graphviz
 digraph RiskFactors {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -592,15 +590,19 @@ digraph RiskFactors {
     Blood_Pressure [fillcolor="#B2E2B2"];
     Cholesterol [fillcolor="#A0D6D1"];
     Exercise [fillcolor="#A6E7F4"];
-    Heart_Disease [fillcolor="#A6C8F4"];
+    Heart_Attack [label="Heart Attach", fillcolor="#A6C8F4"];
 
-    Age -> Heart_Disease [label="+0.8"];
-    Gender -> Heart_Disease [label="+0.3"];
-    Blood_Pressure -> Heart_Disease [label="+0.7"];
-    Cholesterol -> Heart_Disease [label="+0.5"];
-    Exercise -> Heart_Disease [label="-0.6"];
+    Age -> Heart_Attack [label="+0.8"];
+    Gender -> Heart_Attack [label="+0.3"];
+    Blood_Pressure -> Heart_Attack [label="+0.7"];
+    Cholesterol -> Heart_Attack [label="+0.5"];
+    Exercise -> Heart_Attack [label="-0.6"];
 }
 ```
+
+- **How to estimate sign and weight**
+  - Estimate using correlation
+  - Use priors and then estimate using Bayesian approach
 
 ## Type of Variables in Causal AI
 
@@ -618,8 +620,8 @@ digraph RiskFactors {
 ```graphviz
 digraph CausalFlow {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=LR;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
@@ -653,27 +655,32 @@ digraph CausalFlow {
   - Path: $X \rightarrow M \rightarrow Y$
 
 - **Direct vs. Indirect effects**
-  - _Indirect effect_ $X$ affects $Y$ through $M$
-  - _Direct effect_ $X$ affects $Y$ not through $M$
+  - _Indirect effect_: $X$ affects $Y$ through $M$
+  - _Direct effect_: $X$ affects $Y$ not through $M$
   - Controlling for $M$ separates effects, clarifying training impact
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 
 ```graphviz
 digraph CausalFlow {
+    rankdir=LR;
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    X [label="Training program", fillcolor="#FFD1A6", color=black];
-    M [label="Job satisfaction", fillcolor="#F4A6A6", color=black];
-    Y [label="Employee productivity", fillcolor="#A6E7F4", color=black];
+    X [label="Training program (X)", fillcolor="#FFD1A6", color=black];
+    M [label="Job satisfaction (M)", fillcolor="#F4A6A6", color=black];
+    Y [label="Employee productivity (Y)", fillcolor="#A6E7F4", color=black];
+
+    // Force ranks
+    { rank=same; X; M; Y; }
 
     X -> M;
     M -> Y;
+    X -> Y [style=dashed];
 }
 ```
 ::::
@@ -695,7 +702,7 @@ digraph ModeratorModel {
 
     X [label="Treatment\n(X)", fillcolor="#A6C8F4", pos="0,1!"];
     Y [label="Outcome\n(Y)", fillcolor="#A6C8F4", pos="2,1!"];
-    M [label="Moderator (M)\nVariable", pos="1,0!", fillcolor="#F4A6A6"];
+    M [label="Moderator\n(M)", pos="1,0!", fillcolor="#F4A6A6"];
     XY [label="", shape=point, width=0.01, style=invis, pos="1,1!"];
 
     X -> XY [arrowhead=none];
@@ -713,8 +720,8 @@ digraph ModeratorModel {
 
 ::: columns
 :::: {.column width=50%}
-- **Research question**: _"Study relationship between stress $X$ and job
-  performance $Y$"_
+- **Research question**: _"Study relationship between stress and job
+  performance"_
 
 - **Social support** $M$ as a moderator
   - High social support weakens stress's negative effect on performance
@@ -726,9 +733,9 @@ digraph ModeratorModel {
     rankdir=TB;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    X [label="Stress", fillcolor="#FFD1A6", pos="0,1!"];
-    Y [label="Job\nPerformance", fillcolor="#A6E7F4", pos="2,1!"];
-    M [label="Social Support", pos="1,0!", fillcolor="#F4A6A6"];
+    X [label="Stress (X)", fillcolor="#FFD1A6", pos="0,1!"];
+    Y [label="Job\nPerformance (M)", fillcolor="#A6E7F4", pos="2,1!"];
+    M [label="Social Support (Y)", pos="1,0!", fillcolor="#F4A6A6"];
     XY [label="", shape=circle, width=0.01, style=invis, pos="1,1!"];
 
     X -> XY [arrowhead=none];
@@ -755,8 +762,8 @@ digraph ModeratorModel {
 ```graphviz
 digraph CausalTriangle {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -815,8 +822,8 @@ digraph CausalTriangle {
 digraph CausalTriangle {
     rankdir=TB;
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -903,8 +910,8 @@ digraph CausalTriangle {
 digraph CausalTriangle {
     rankdir=TB;
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1049,8 +1056,8 @@ digraph ColliderDiagram {
 ```graphviz
 digraph CausalDAG {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1079,8 +1086,8 @@ digraph CausalDAG {
 ```graphviz
 digraph CausalDAG {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1112,8 +1119,8 @@ digraph CausalDAG {
 ```graphviz
 digraph ColliderExample {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1144,8 +1151,8 @@ digraph ColliderExample {
 ```graphviz
 digraph ImprovedDiagram {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1182,8 +1189,8 @@ digraph ImprovedDiagram {
 ```graphviz
 digraph CausalDAG {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
@@ -1289,8 +1296,8 @@ digraph CausalDAG {
 ```graphviz
 digraph CerealAds {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=TB;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
@@ -1335,8 +1342,8 @@ digraph CerealAds {
 ```graphviz
 digraph CerealAds {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=TB;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
@@ -1405,8 +1412,8 @@ digraph CerealAds {
 ```graphviz
 digraph CerealAds {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=TB;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
@@ -1440,8 +1447,8 @@ digraph CerealAds {
 ```graphviz
 digraph CerealAds {
     splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
+    nodesep=0.5;
+    ranksep=0.5;
     rankdir=TB;
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
