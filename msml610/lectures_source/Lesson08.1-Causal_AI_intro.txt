@@ -66,21 +66,25 @@ MSML610: Advanced Machine Learning
   - Aggregated, organized data sets for analysis
   - E.g., customer purchase histories in a CRM system
 
-- **Dashboards**
-  - Visual displays of key metrics for insights
-  - E.g., dashboard showing quarterly revenue, expenses
-
 - **Descriptive statistics**
   - Summary metrics: mean, median, mode, standard deviation
   - E.g., average sales per quarter to understand trends
 
 - **Historical reports**
-  - Examination of past performance
+  - Examination of _past performance_
   - E.g., monthly sales reports for past fiscal year
 
+- **Dashboards**
+  - Visual displays of key metrics for insights
+  - E.g., dashboard showing quarterly revenue, expenses
+
 - **Models**
-  - Statistical representations to forecast, explain phenomena
-  - E.g., predictive model to anticipate customer churn based on behavioral data
+  - Statistical representations to _forecast, explain phenomena_
+  - E.g., model to anticipate customer churn based on behavioral data
+
+// ![](msml610/lectures_source/figures/Lesson9-Dashboard.png)
+
+// TODO: Add some pics
 
 * Data Analytics Sophistication
 
@@ -97,26 +101,26 @@ MSML610: Advanced Machine Learning
   \includegraphics[width=0.9\textwidth]{msml610/lectures_source/figures/Lesson9-Analytical_sophistication.png}
 \end{center}
 
-* Explainability
-- **Regulators** require that if you are making decisions using ML / AI, you
-  should be able to defend the results of your analysis
-  - E.g., decide who to hire, how to set up a policy
-
-- Organizations can:
-  - Be **fined** by regulatory authorities
-  - Face **backlash** from customers and activists
+* AI / ML Explainability
+- **Regulators** require you to defend ML/AI decision results
+  - E.g., hiring decisions, policy setup
 
 - E.g., neural networks are "black boxes"
   - Lack of explainability
-    - Humans can't understand how inputs are combined into a conclusion
-    - Cannot explain to shareholders why certain decisions were made
+    - Humans can't understand input-to-conclusion process (easily or at all)
+    - Can't explain decisions to shareholders
   - Bias
-    - E.g., using age, race, sex as a feature can introduce bias
+    - E.g., using age, race, sex as features can introduce bias
 
-- **Explainable AI** allow users to:
-  - Comprehend
-  - Explain
-  - Trust the results by the machine
+- Drawbacks: organizations can:
+  - **Be fined** by authorities
+  - **Face backlash** from customers and activists
+
+- Solution:
+  - **Explainable AI** allows users to:
+    - Comprehend
+    - Explain
+    - Trust machine results
 
 * Correlation is Not Causation!
 - **Correlation** is a statistical method for understanding relationships
@@ -154,44 +158,47 @@ MSML610: Advanced Machine Learning
 
 - **Improving decision-making**
   - Provides understanding of relationships for better decisions
-  - E.g., improving supply chain by understanding logistic impact
+  - E.g., improve supply chain by understanding impact of decisions on logistics
 
 * Causal AI vs Traditional AI
-- _"The next revolution of data science is the science of interpreting reality,
-  not of summarizing data"_ (Judea Pearl, 2021)
-
-- Current AI uses correlation to:
+- **Current AI** uses correlation to:
   - Analyze data
   - Identify patterns
   - Make predictions
 
-- Models depend on data quality
+- **Models depend on data quality**
   - Biased or unclean data $\implies$ poor model
+
+- _"The next revolution of data science is the science of interpreting reality,
+  not of summarizing data"_ (Judea Pearl, 2021)
 
 ## The Ladder of Causation
 
 * The Ladder of Causation
 
-- Pearl provided a 3-layer framework for understanding causality
+- Pearl provided a 3-level framework for understanding causality
+  1) Association
+  2) Intervention
+  3) Counterfactuals
 
 \begingroup \scriptsize
-| **Level**          | **Symbol**         | **Activity** | **Typical Questions**    |
-| ------------------ | -------------------| -------------| ------------------------ |
-| 1. Association     | $\Pr(Y | X)$       | Observing    | What is?                 |
-| 2. Intervention    | $\Pr(Y | do(X), Z)$| Intervening  | What if?                 |
-| 3. Counterfactuals | $\Pr(Y_X | x', y')$| Imagining    | Why?                     |
+| **Level**          | **Symbol**         | **Activity** | **Typical Questions** |
+| ------------------ | -------------------| -------------| ----------------------|
+| 1. Association     | $\Pr(Y | X)$       | Observing    | What is?              |
+| 2. Intervention    | $\Pr(Y | do(X), Z)$| Intervening  | What if?              |
+| 3. Counterfactuals | $\Pr(Y_X | x', y')$| Imagining    | Why?                  |
 \endgroup
 
 * Rung 1: Association
 - **Question**: _"How would seeing $X$ change our belief in $Y$?"_
 
-- **Symbol**: $\Pr(Y|X)$
-  - Bayesian update
+- **In math terms**: $\Pr(Y|X)$
 
 - **Activity**
-  - It is just "passive observation"
-  - Determine if two things are related
+  - It is just "passive observation" to determine if $X, Y$ are related
   - Traditional AI and ML is based on this
+  - In the best case, it's Bayesian update
+  - In the worst case, it's some hacked up overfitted model
 
 - **Example**
   - _"The tree has green leaves during spring"_
@@ -201,15 +208,15 @@ MSML610: Advanced Machine Learning
 * Rung 2: Intervention
 - **Question**: _"What happens to $Y$ if you do $X$?"_
 
-- **Symbol**: $\Pr(Y | do(X), Z)$
+- **In math terms**: $\Pr(Y | do(X), Z)$
 
 - **Activity**
-  - Understand the impact of an action
-  - E.g., _"tree has green leaves"_ vs _"spring makes tree leaves turn green"_
+  - Understand the impact of an action $X$ on $Y$ under conditions $Z$
   - Association is just about observations
   - Interventions involve "doing something" and need a causal model
 
 - **Example**
+  - _"Spring makes tree leaves turn green"_ (vs _"tree has green leaves"_)
   - _"Why did the headache go away?"_
     - "Because the pain reliever" or "Because you ate food after skipping lunch"
   - _"If you take aspirin, will your headache be cured?"_
@@ -249,7 +256,7 @@ MSML610: Advanced Machine Learning
   - Causal-based AI first creates a business-focused model before integrating data
 
 * Correlation-Based Model Process
-- **Correlation-based AI** is "data first"
+- **Correlation-based AI is "data first"**
   - The more data collected the better
 
 - **Modeling process**
@@ -264,10 +271,10 @@ MSML610: Advanced Machine Learning
   - Cultural and organizational issues
   - Models are opaque and lack explainability
   - Spurious correlations
-  - Missing articulating "what's the goal of doing ML?"
+  - Missing articulating _"what's the goal of doing ML?"_
 
 * Causation-based Model Process
-- **Causal AI** is "model first"
+- **Causal AI is "model first"**
   - Understand business question before ingest and transform the data
 
 - **Modeling process**

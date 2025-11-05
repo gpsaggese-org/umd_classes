@@ -751,14 +751,14 @@ digraph ModeratorModel {
 
 * Confounder Variable
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=50%}
 
 - A **confounder** $C$
-  - Affects both treatment (cause) and outcome
-  - Creates misleading association if not controlled
+  - Affects both treatment (cause) and outcome (effect)
+  - Creates misleading association, if not controlled
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=45%}
 ```graphviz
 digraph CausalTriangle {
     splines=true;
@@ -783,16 +783,20 @@ digraph CausalTriangle {
 
 * Confounder Variable: Example
 
-::: columns
-:::: {.column width=50%}
-- $IceCreamSales$ and $Drowning$ move together
-  - Correlation-based model claims association, but how to use this
-    relationship?
+- $IceCreamSales$ and $Drowning$ **move together**
+  - Correlation-based model claims association
+  - Is it true?
+  - You can always find an explanation (e.g., from ChatGPT)
+    - Eating ice cream may distract children or guardians:
+    - Cold food shock reflex causes hyperventilation in water
+    - Sugar spike $\to$ hyperactivity near pools
+
+- **How to use this relationship?**
   - Ban ice cream to prevent drowning?
   - Ice cream maker increase drowning to boost sales?
 
-::::
-:::: {.column width=30%}
+::: columns
+:::: {.column width=40%}
 ```tikz
 \begin{axis}[
     xlabel={Ice cream sales},
@@ -816,7 +820,7 @@ digraph CausalTriangle {
 \end{axis}
 ```
 ::::
-:::: {.column width=20%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph CausalTriangle {
@@ -839,16 +843,15 @@ digraph CausalTriangle {
 ::::
 :::
 
-\vspace{0.5cm}
+* Confounder Variable: Example
+
+- In reality, **no cause-effect** between $IceCreamSales$ and $Drowning$
+  - $Temperature$ is a confounder
+- In fact, when control for temperature (in regression or intervention),
+  association disappears
 
 ::: columns
 :::: {.column width=50%}
-- No cause-effect between $IceCreamSales$ and $Drowning$
-  - $Temperature$ is a confounder
-  - Control for season in regression or intervention, association disappears
-
-::::
-:::: {.column width=30%}
 
 ```tikz
 \begin{axis}[
@@ -905,7 +908,7 @@ digraph CausalTriangle {
 ```
 
 ::::
-:::: {.column width=20%}
+:::: {.column width=40%}
 ```graphviz
 digraph CausalTriangle {
     rankdir=TB;
@@ -997,7 +1000,7 @@ digraph ColliderDiagram {
 
 ::: columns
 :::: {.column width=70%}
-- Consider the variables:
+- **Example**
   - $Diet$ (D)
   - $Exercise$ (E)
   - $BodyWeight$ (W)
@@ -1036,10 +1039,11 @@ digraph ColliderDiagram {
   - Introduce dependency between $E$ and $D$
   - With $W$ fixed, changes in $E$ balanced by changes in $D$, inducing spurious
     correlation between $E$ and $D$
+  - In Bayesian network it was called _"explaining away"_
 
 // TODO: Add an example in the tutorial
 
-## Paths
+## Types of Paths in Causal AI
 
 * Fork Structure
 ::: columns
@@ -1050,7 +1054,7 @@ digraph ColliderDiagram {
   - Forks induce statistical dependence between $C$ and $D$
     even if $C$ and $D$ are not causally linked
 
-- **Conditioning** on $X$ blocks the path and removes spurious correlation
+- **Conditioning** on $X$ _blocks the path_ and removes spurious correlation
 ::::
 :::: {.column width=35%}
 ```graphviz
@@ -1063,7 +1067,7 @@ digraph CausalDAG {
 
     X [fillcolor="#F4A6A6"];
     C [fillcolor="#A6C8F4"];
-    D [fillcolor="#A6E7F4"];
+    D [fillcolor="#A6C8F4"];
 
     {rank=same; C; D;}
 
@@ -1091,9 +1095,9 @@ digraph CausalDAG {
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Lifestyle [label="Lifestyle", fillcolor="#FFD1A6"];
-    Weight [label="Weight", fillcolor="#B2E2B2"];
-    BP [label="Blood\nPressure", fillcolor="#A6E7F4"];
+    Lifestyle [label="Lifestyle", fillcolor="#F4A6A6"];
+    Weight [label="Weight", fillcolor="#A6C8F4"];
+    BP [label="Blood\nPressure", fillcolor="#A6C8F4"];
 
     {rank=same; Weight; BP;}
 
@@ -1124,9 +1128,9 @@ digraph ColliderExample {
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    X [label="X", fillcolor="#F4A6A6"];
+    X [label="X", fillcolor="#A6C8F4"];
     Y [label="Y", fillcolor="#A6C8F4"];
-    Z [label="Z", fillcolor="#A6E7F4"];
+    Z [label="Z", fillcolor="#F4A6A6"];
 
     {rank=same; X; Y;}
 
@@ -1156,9 +1160,9 @@ digraph ImprovedDiagram {
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Marketing [label="Marketing Spend", fillcolor="#F4A6A6"];
-    Quality [label="Product Quality", fillcolor="#B2E2B2"];
-    Sales [label="Sales", fillcolor="#A6C8F4"];
+    Marketing [label="Marketing Spend", fillcolor="#A6C8F4"];
+    Quality [label="Product Quality", fillcolor="#A6C8F4"];
+    Sales [label="Sales", fillcolor="#F4A6A6"];
 
     {rank=same; Marketing; Quality;}
 
@@ -1169,24 +1173,254 @@ digraph ImprovedDiagram {
 ::::
 :::
 
+## Intervention and Counterfactuals
+
+* Interventions in Causal Networks
+
+- **Causal Bayesian Networks** represent cause–effect relations between variables
+  - E.g., $Rain$ $\rightarrow$ $WetGrass$
+
+- **Interventions**
+  - _Intervention_ means setting a variable to a fixed value, overriding its
+    causal mechanism
+
+::: columns
+:::: {.column width=40%}
+- E.g., _"Turning the sprinkler on manually"_ regardless of cloudiness
+  - Replace equation $S = f_S(C, U_S)$ with $S = \text{true}$
+  - Causal link from $Cloudy$ to $Sprinkler$ is _cut_, forming a new "mutilated"
+    model
+::::
+:::: {.column width=25%}
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Weather [label="Weather", fillcolor="#A6E7F4", xlabel="P(W)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FFD1A6", xlabel="P(S | W)"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+
+    { rank = same; Rain; Sprinkler; }
+
+    Weather -> Rain;
+    Weather -> Sprinkler;
+    Rain -> WetGrass;
+    Sprinkler -> WetGrass;
+}
+```
+\scriptsize \center
+_Original graph_
+::::
+:::: {.column width=25%}
+```graphviz
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Weather [label="Weather", fillcolor="#A6E7F4", xlabel="P(W)"];
+    Rain [label="Rain", fillcolor="#A6C8F4", xlabel="P(R | W)"];
+    Sprinkler [label="Sprinkler", fillcolor="#FF8888", xlabel="P(S | W) = True"];
+    WetGrass [label="WetGrass", fillcolor="#B2E2B2", xlabel="P(G | R, S)"];
+
+    { rank = same; Rain; Sprinkler; }
+
+    Weather -> Rain;
+    Rain -> WetGrass;
+    Sprinkler -> WetGrass;
+}
+
+```
+\scriptsize \center
+_Mutilated graph_
+::::
+:::
+
+* Interventions in Causal Networks
+
+- **The do-operator**
+  - Denoted as $\text{do}(X = x)$
+  - Represents performing an action that _sets_ $X$ to $x$, not _observing_
+    $X = x$
+  - $\text{do}(X_j = x_j^k)$ removes $\Pr(x_j | \text{parents}(X_j))$ from the
+    product and gives a new joint distribution:
+    $$
+    P_{X_j = x_j^k}(x_1, \ldots, x_n) =
+    \begin{cases}
+    \prod_{i \ne j} \Pr(x_i | \text{parents}(X_i)) & \text{if } X_j = x_j^k \\
+    0 & \text{otherwise}
+    \end{cases}
+    $$
+
+- **Difference between observation and intervention**
+    $$\Pr(Y | do(X=x) \ne \Pr(Y | X)$$
+  - Observing $S = \text{true}$ _provides information_ about its causes (e.g.,
+    weather)
+  - Intervening with $\text{do}(S = \text{true})$ _breaks_ those causal
+    dependencies (e.g., it doesn't inform about the weather)
+
+* Intervention
+- **Estimate causal effect** of $X_j$ on $X_i$ with adjustment formula:
+    $$
+    \Pr(X_i = x_i | \text{do}(X_j = x_j^k)) =
+    \sum_{\text{parents}(X_j)} \Pr(x_i | x_j^k, \text{parents}(X_j)) \Pr(\text{parents}(X_j))
+    $$
+
+- **Example**
+  - In the Sprinkler model) $\text{do}(S=\text{true})$ $\rightarrow$ gives the
+    new distribution:
+    $$
+    \Pr(c, r, w, g | \text{do}(S=\text{true})) = \Pr(c)\Pr(r|c)\Pr(w|r, S=\text{true})\Pr(g|w)
+    $$
+    - Only descendants of $Sprinkler$ (i.e., $WetGrass$) change
+    - $Weather$ and $Rain$ remain unaffected
+
+- **Intuition**
+  - Do-operator isolates _causal effects_ by simulating external manipulation
+  - Essential for answering "what if" questions: _What happens if you intervene
+    and change X?_
+
+* Counterfactuals
+
+- A **counterfactual** describes what would have happened under a different
+  scenario
+  - _"What would the outcome have been if X had been different?"_
+
+- **Business examples**
+  - _"What if we had two suppliers instead of one? Would we have more sales?"_
+  - _"Would customers be more satisfied if we shipped products in one week
+    instead of three?"_
+  - That's what businesses want, but they can't get it from correlation-based
+    models!
+
+- **Causal reasoning**
+  - Goes beyond correlation and association
+  - Requires a causal model to simulate alternate realities
+  - E.g.,
+    - Actual: _"A student received tutoring and scored 85%"_
+    - Counterfactual: _"What if the student didn't receive tutoring?"_
+    - Causal model estimates the alternative outcome (e.g., 70%)
+
+- **Challenges**
+  - Requires strong assumptions and accurate models
+  - Difficult to validate directly since counterfactuals are unobservable
+
+* Causal Discovery
+
+- **Definition**
+  - Causal discovery learns causal network structure from data
+  - Identify which variables directly cause others (learn causal directions, not
+    just correlations)
+
+- **Approaches to causal discovery**
+  - **Search-based methods**
+    - Start with an empty or initial model and iteratively modify it (add,
+      reverse, or delete links)
+    - Evaluate each candidate network based on fit to data (e.g., likelihood)
+    - Use search strategies while ensuring the network remains acyclic
+  - **Constraint-based methods**
+    - Infer causal directions from conditional independence tests among
+      variables
+    - If $X$ and $Y$ are independent given $Z$, this constrains possible arrows
+
+- **Dealing with complexity**
+  - Possible network structures grow superexponentially with the number of
+    variables
+  - Complexity penalties to avoid overfitting
+
+- **Causality connection**
+  - Causal discovery bridges Bayesian learning and causal inference
+  - Under certain assumptions, infer causality from observational data not only
+    from experiments
+
+## Randomized Controlled Treatment
+
+* What is a Randomized Controlled Treatment?
+- **RCTs estimate causal effects** by comparing treatment and control groups
+  - Randomly assign treatment, not chosen by subjects
+    - E.g., assign new drug vs placebo by lottery
+  - Ensure groups are statistically equivalent except for treatment
+  - Isolate treatment effect
+
+- **Goal**: estimate $\Pr(Y | do(X))$
+  - Randomization simulates do-operator by removing incoming arrows to $X$
+  - Eliminate (known and unknown) confounding paths from background variables
+  - Turn observational data into experimental data
+    - Use $\Pr(Y | X)$ to measure $\Pr(Y | do(X))$
+  - Allow causal inference without knowing the causal graph
+
+- **Pros**
+  - Implement intervention in a principled, unbiased way
+  - Foundation for scientific experimentation and evidence-based policy
+  - Gold standard of causal inference (when feasible)
+
+* Randomized Controlled Treatment: Example
+- **Research question**: _"Does offering an after-school tutoring program
+  increase the probability that a student passes the end-of-term exam?"_
+
+- **Population**: eligible students in a district with proper sample size $n$
+
+- **Treatment and control**
+  - $X = 1$ (treatment): student is offered/assigned to tutoring.
+  - $X = 0$ (control): student is not offered tutoring
+
+- **Assignment mechanism (RCT)**
+  - Students are randomly assigned to $X \in \{0, 1\}$
+  - Randomization ensures, in expectation, balance on prior GPA, motivation,
+    parental income, etc
+
+- **Outcome**
+  - $\Pr(Y \mid do(X)) = \Pr(Y \mid X)$
+  - $Y_{X=x} = I \{\text{pass exam}\}$ measured at term’s end for treatment vs
+    control
+  - Measure and report $Y_{X=1} - Y_{X=0}$
+
+* Randomized Controlled Treatment: Limits
+- **May be unethical**
+  - E.g., assigning harmful treatment
+  - E.g., you want to verify if asbestos causes cancer
+
+- Can be **expensive or impractical**
+
+- **It doesn't always work**
+  - Non-compliance: some participants may not follow assigned treatment
+  - Attrition: dropout rates may differ between groups
+  - May not generalize to broader populations
+  - Requires careful implementation and monitoring
+
+- **Blind RCT**: participants don’t know which group they’re in (e.g., placebo)
+
+- **Double-blind RCTs**: participants and investigators/clinicians don't know
+  assignments
+
 ## Back-door Adjustment
 
-* Back-Door Paths
+* Back-Door Paths: Example
 ::: columns
-:::: {.column width=50%}
-- A company wants to understand the causal effect of price on sales
+:::: {.column width=65%}
+- **Example**
+  - A company wants to understand the causal effect of _price_ on _sales_
+  - Advertising spend $AdSpend$ is a **confounder** since it can affect both:
+    - The _price_ the company can set
+    - E.g., the cost increases to cover advertisement costs and the product is
+      perceived as more valuable
+    - The _sales_ (directly)
 
-- Advertising spend $AdSpend$ is a confounder since it can affect both:
-  - The price the company can set (e.g., the cost increases to cover
-    advertisement costs and the product is perceived as more valuable)
-  - The sales (directly)
-
-- The back-door path goes from $Price$ to $Sales$ via $AdSpend$
+- The **back-door path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$ 
 
 ::::
-:::: {.column width=45%}
+:::: {.column width=30%}
 
-```graphviz
+![](msml610/lectures_source/figures/Lesson9-Price_Quantity.png){height=30%}
+
+```graphviz[width=70%]
 digraph CausalDAG {
     splines=true;
     nodesep=0.5;
@@ -1209,73 +1443,86 @@ digraph CausalDAG {
 ::::
 :::
 
-- The company needs to control for $AdSpend$ to estimate the causal effect of
+- The company **needs to control** for $AdSpend$ to estimate the causal effect of
   $Price$ on $Sales$ by:
-  - Using $AdSpent$ as covariate in the regression
-  - Designing experiment holding $AdSpend$ constant or randomized
-  - Using back-door criterion
+  1. Using $AdSpent$ as covariate in the regression
+  2. Designing experiment holding $AdSpend$ constant or randomized
+  3. Using back-door criterion
+
+* The Back-Door Adjustment
+- **Hypotheses**
+  - You have a (correct) causal graph
+  - You block the back-door paths (needs definition!) that satisfy the back-door
+    criterion (needs definitions!)
+
+- **Thesis**
+  - The *adjustment formula* holds
+    $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
+
+- **Consequences**
+  - It allows you an intervention (level 2 of the causality ladder) only using
+    observational data (level 1 of the causality ladder)
+    - Correlation implies causation
+  - This is an alternative to randomized controlled experiments
+    - Foundation of many empirical studies in epidemiology, economics, and social science
+  - **Mind blown!**
 
 * Back-Door Criterion: Overview
-- A method to control for confounding in observational studies
-- Relies on a causal graph (DAG) representing relationships
-  - Ensures identification of causal effect from $X$ to $Y$
-  - Blocks all non-causal (back-door) paths from $X$ to $Y$
-  - Allows estimation of $\Pr(Y \mid do(X))$ from observational data
-    $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
-- Essential when randomization is not possible
-- Key to understanding when correlation can imply causation
-
-- Foundation of many empirical studies in epidemiology, economics, and social science
-
-* What is a Back-Door Path?
-- Any path from $X$ to $Y$ that starts with an arrow into $X$
-- Represents potential confounding, not causal influence
+- A **back-door path** is any path from $X$ to $Y$ that starts with an arrow into
+  $X$ and ends into $Y$
+  - The direction of the arrow doesn't matter
   - If unblocked, back-door paths create spurious associations
 
-- Goal: block these paths without disturbing the causal effect
-  - Blocking done by conditioning on variables (adjusting for them)
-  - Not all paths need to be blocked—only the back-door ones
-  - Conditioning improperly can introduce bias (e.g., colliders)
+- **Back-door criterion**
+  - A set of variables $Z$ satisfies the back-door criterion relative to $(X, Y)$ if:
+    - No variable in $Z$ is a descendant of $X$
+    - $Z$ blocks every path from $X$ to $Y$ that starts with an arrow into $X$
 
-* Back-Door Criterion: Formal Definition
-- A set of variables $Z$ satisfies the back-door criterion relative to $(X, Y)$ if:
-  - No variable in $Z$ is a descendant of $X$
-  - $Z$ blocks every path from $X$ to $Y$ that starts with an arrow into $X$
-- If $Z$ satisfies this, then:
-  $$\Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z=z) \Pr(Z=z)$$
-- This is called the *adjustment formula*
-- It allows us to use observational data to compute causal effect
 
 * Chains, Forks, and Colliders
 - In a **chain** $X \rightarrow M \rightarrow Y$
-  - Conditioning on $M$ blocks causal effect (avoid)
+  - Conditioning on $M$ blocks causal effect
+  - _Do not do it_!
 - In a **fork** $X \leftarrow Z \rightarrow Y$
-  - Conditioning on $Z$ removes
-  confounding (good)
+  - Conditioning on $Z$ removes confounding
+  - _Need to do it_!
 - In a **collider** $X \rightarrow M \leftarrow Y$
-  - Conditioning on $M$ introduces bias (avoid)
+  - Conditioning on $M$ introduces bias
+  - _Do not do it_!
 
-- Back-door sets block forks, not colliders
+- Back-door requires to block confounders / forks, not colliders / inverted forks
   - Colliders must remain unconditioned unless for specific causal queries
 
-- Essential to read and interpret graph structure correctly
+- It is essential to read and interpret graph structure correctly
 
 * Common Mistakes
-- Conditioning on a descendant of $X$ can bias the estimate
-- Controlling for too many variables can open colliders (introduce bias)
-- Forgetting to block all back-door paths
-- Using variables that lie on the causal path (blocks the effect)
-- Ignoring unobserved confounders: can make causal effect unidentifiable
+- The back-door criterion tells you all and only what you need to condition on
+  (i.e., block) to transform observation in intervention
+
+- The solution that people use is to "condition on everything"
+  - **This is incorrect!**
+
+- **Common mistakes**
+  - Conditioning on a descendant of $X$ can bias the estimate
+  - Controlling for too many variables can open colliders and introduce bias
+  - Forgetting to block all back-door paths
+  - Using variables that lie on the causal path (blocks the effect)
+  - Ignoring unobserved confounders: can make causal effect unidentifiable
+
+- **1000s of papers and their conclusions are wrong!**
+  - In medicine, economics, social science that use observational study
+    incorrectly 
 
 * When Back-Door Adjustment Fails
-- No set of observable variables satisfies the back-door criterion
-- Unobserved confounders make $\Pr(Y \mid do(X))$ non-identifiable
-- Alternatives:
-  - **Front-door criterion**: uses mediators
-  - **Instrumental variables**: uses external variation
-  - **Do-calculus**: symbolic transformations to eliminate $do()$
-- Graph structure determines whether causal effect can be estimated
-- Back-door is simple but not universally applicable
+- **Back-door is simple but not universally applicable**
+  - No set of observable variables satisfies the back-door criterion
+    - In order to condition on a variable it needs to be observable
+    - E.g., an unobserved or unknown confounders
+
+- **Alternatives**:
+  - _Front-door criterion_: uses mediators
+  - _Instrumental variables_: uses external variation
+  - _Do-calculus_: symbolic transformations to eliminate $do()$
 
 ## Front-door Adjustment
 
@@ -1286,7 +1533,7 @@ digraph CausalDAG {
 
 ::: columns
 :::: {.column width=60%}
-- Basic Setup
+- Assume the causal graph looks like:
   - $X$: treatment or cause
   - $M$: mediator
   - $Y$: outcome
@@ -1318,12 +1565,12 @@ digraph CerealAds {
 ::::
 :::
 
-- Hypotheses:
+- **Hypotheses**:
   1. _All directed paths_ from $X$ to $Y$ go through $M$
   2. _No unobserved confounder_ affects $X$ and $M$
   3. _All backdoor paths_ from $M$ to $Y$ are blocked by $X$
 
-- Thesis: estimate the causal effect $P(Y | do(X))$ despite unobserved $U$
+- **Thesis**: estimate the causal effect $P(Y | do(X))$ despite unobserved $U$
   \begingroup \small
   $$P(Y \mid do(X)) = \sum_m P(M \mid X) \sum_{x'} P(Y \mid M, X') P(X')$$
   \endgroup
@@ -1334,8 +1581,10 @@ digraph CerealAds {
 :::: {.column width=50%}
 - **Research question**: _"Does watching ads (X) make people buy more cereal (Y)?"_
 
-- **Hidden factor**: _"Parents who care about breakfast (U)"_ might
-  - Let kids watch more TV (see ads)
+- **Of course!**
+
+- **Hidden factor**: _"Parents who care about breakfast (U)"_ might:
+  - Let kids watch more TV and see ads
   - Buy more cereal anyway
 ::::
 :::: {.column width=45%}
@@ -1362,10 +1611,16 @@ digraph CerealAds {
 ::::
 :::
 
-- Hidden factor $U$ confounds ads and buying
+- Hidden factor $U$ confounds "watching ads" and "buying cereals"
   - Correlation exists even if ads don't cause it
   - Observing $X$ and $Y$ without controlling for $U$ leads to spurious
     association
+  - Same of "ice cream" and "drowning"
+
+- A spurious relationship is **terrible for the business**!
+  - It means you spend money on ads and that doesn't matter
+  - Google and Facebook are worth $3T and it's all predicated on "buy ads" to
+    "increase sales"
 
 * Cereal and Ads: Solutions
 - **Strategy 1: Back-Door adjustment**
@@ -1404,9 +1659,9 @@ digraph CerealAds {
 :::: {.column width=45%}
 - So the **causal chain** is:
   - Ads $(X)$ $\to$ Kids Nagging $(M)$ $\to$ Parents Buy Cereal $(Y)$
-- The hidden factor _"parents' breakfast attitude"_ $U$:
+- The hidden factor _"parents that care about breakfast"_ $U$:
   - Affects how much cereal gets bought
-  - But doesn't affect how much kids nag (only ads do that)
+  - Doesn't affect how much kids nag (only ads do that)
 ::::
 :::: {.column width=50%}
 ```graphviz
@@ -1437,7 +1692,7 @@ digraph CerealAds {
 * When Front-Door Works
 ::: columns
 :::: {.column width=55%}
-- You can use _"kids' nagging"_ $M$ to "see inside" the causal path if:
+- **Is the front-door criterion verified** for _"kids' nagging"_ $M$?
   - Influence of ads on buying goes through nagging ($X \to M \to Y$)
   - No hidden confounders affect both ads and nagging (TV schedule is random,
     not linked to parents' breakfast attitudes)
@@ -1469,18 +1724,20 @@ digraph CerealAds {
 ::::
 :::
 
+- **Yes! The front-door criterion is verified**
+
 - Instead of doing an intervention $do(X)$, just observe!
-  1. Measure how often ads make kids nag ($\Pr(M | X)$)
-  2. Measure how nagging changes buying ($\Pr(Y | M, X')$)
+  1. Observe how often ads make kids nag ($\Pr(M | X)$)
+  2. Observe nagging changes buying ($\Pr(Y | M, X')$)
   3. Combine both to estimate what happens if you _force_ more ads
      $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
      - Intuition: "How ads cause nagging" × "How nagging causes buying"
 
-## Do-calculus
+## Do-Calculus
 
 * Do-Calculus
-- Do-calculus is a formal system for reasoning about causal effects in graphical
-  models (Judea Pearl, 2000)
+- **Do-calculus** is a formal system for reasoning about causal effects in
+  graphical models (Judea Pearl, 2000)
 
 - Provides algebraic rules to transform intervention expressions (do-operator,
   e.g., do(X = x)) into expressions computable from observational data, given
@@ -1490,14 +1747,14 @@ digraph CerealAds {
   $$
   \Pr(Y | do(X = x))
   $$
-  Distribution of Y if you intervene and set X to x, breaking causal links into
-  X
+  - I.e., distribution of $Y$ if you intervene and set $X$ to $x$, breaking
+    causal links into $X$
 
 - Observational data provides:
   $$
   \Pr(Y | X = x)
   $$
-  Generally **not equal** to $\Pr(Y | do(X = x))$ due to confounding
+  - This is generally **not equal** to $\Pr(Y | do(X = x))$ due to confounding
 
 * The Rules of Do-Calculus
 - Do-calculus provides **three transformation rules** for manipulating
@@ -1544,166 +1801,3 @@ digraph CerealAds {
   P(Y \mid do(X)) = \sum_z P(Z \mid X) \sum_{x'} P(Y \mid Z, X') P(X')
   $$
 
-## Intervention and Counterfactuals
-
-* The do-operator and interventions in causal inference
-
-- **Causal Bayesian Networks**
-  - Represent cause–effect relations between variables (e.g.,
-    `Rain` $\rightarrow$ `WetGrass`)
-
-- **Interventions**
-  - _Intervention_ means setting a variable to a fixed value, overriding its
-    causal mechanism
-  - E.g., _Turning the sprinkler on manually_ regardless of cloudiness
-  - Replace equation $S = f_S(C, U_S)$ with $S = \text{true}$
-  - Causal link from `Cloudy` to `Sprinkler` is _cut_, forming a new "mutilated"
-    model
-
-- **The do-operator**
-  - Denoted as $\text{do}(X = x)$
-  - Represents performing an action that _sets_ $X$ to $x$, not _observing_
-    $X = x$
-  - After $\text{do}(X_j = x_j^k)$, new joint distribution:
-    $$
-    P_{x_j^k}(x_1, \ldots, x_n) =
-    \begin{cases}
-    \prod_{i \ne j} \Pr(x_i | \text{parents}(X_i)) & \text{if } x_j = x_j^k, \\
-    0 & \text{otherwise.}
-    \end{cases}
-    $$
-    Removes $\Pr(x_j | \text{parents}(X_j))$ from the product
-
-- **Difference between observation and intervention**
-  - Observing $S = \text{true}$ provides _information_ about its causes (e.g.,
-    weather)
-  - Intervening with $\text{do}(S = \text{true})$ _breaks_ those causal
-    dependencies — doesn't inform about the weather
-
-* Intervention
-- **Effect estimation**
-  - Causal effect of $X_j$ on $X_i$:
-    $$
-    \Pr(X_i = x_i | \text{do}(X_j = x_j^k)) =
-    \sum_{\text{parents}(X_j)} \Pr(x_i | x_j^k, \text{parents}(X_j)) \Pr(\text{parents}(X_j))
-    $$
-  - Known as the _adjustment formula_
-
-- **Example (Sprinkler model)**
-  - $\text{do}(S=\text{true})$ $\rightarrow$ New distribution:
-    $$
-    \Pr(c, r, w, g | \text{do}(S=\text{true})) = \Pr(c)\Pr(r|c)\Pr(w|r, S=\text{true})\Pr(g|w)
-    $$
-    - Only descendants of `Sprinkler` (WetGrass, GreenerGrass) change
-    - `Cloudy` and `Rain` remain unaffected
-
-- **Intuition**
-  - Do-operator isolates _causal effects_ by simulating external manipulation
-  - Essential for answering "what if" questions: _What happens if you intervene
-    and change X?_
-
-* Counterfactuals
-
-- A **counterfactual** describes what would have happened under a different
-  scenario
-  - _"What would the outcome have been if X had been different?"_
-  - _"If kangaroos had no tails, they would topple over"_
-  - _"What if we had two suppliers instead of one? Would we have more sales?"_
-  - _"Would customers be more satisfied if we shipped products in one week
-    instead of three?"_
-
-- **Causal reasoning**:
-  - Goes beyond correlation and association
-  - Requires a causal model to simulate alternate realities
-  - E.g.,
-    - Actual: A student received tutoring and scored 85%
-    - Counterfactual: What if the student didn't receive tutoring?
-    - Causal model estimates the alternative outcome (e.g., 70%)
-
-- **Challenges**:
-  - Requires strong assumptions and accurate models
-  - Difficult to validate directly since counterfactuals are unobservable
-
-* Causal Discovery
-
-- **Definition**
-  - Causal discovery learns the structure of a causal network from data
-  - Identify which variables directly cause others (learn the direction of
-    causal arrows, not just correlations)
-
-- **Approaches to causal discovery**
-  - **Search-based methods**
-    - Start with an empty or initial model and iteratively modify it (adding,
-      reversing, or deleting links)
-    - Evaluate each candidate network based on its fit to data (likelihood or
-      score-based approach)
-    - Use search strategies like hill climbing or simulated annealing while
-      ensuring the network remains acyclic
-  - **Constraint-based methods**
-    - Infer causal directions from conditional independence tests among
-      variables
-    - If $X$ and $Y$ are independent given $Z$, this constrains which arrows are
-      possible
-    - E.g., the PC algorithm uses statistical independence tests to infer
-      structure
-
-- **Dealing with complexity**
-  - The number of possible network structures grows superexponentially with the
-    number of variables
-  - Complexity penalties help avoid overfitting by discouraging unnecessary
-    links
-
-- **Causality connection**
-  - Causal discovery bridges Bayesian learning and causal inference
-  - Pearl showed that under certain assumptions, causality can be inferred from
-    observational data — not only from experiments
-
-## Randomized Controlled Treatment
-
-* What is a Randomized Controlled Treatment?
-- A method to estimate causal effects by comparing treatment and control groups
-- Treatment is assigned randomly, not chosen by the subjects
-- Ensures the two groups are statistically equivalent in all respects except for the treatment
-- Goal is to isolate the effect of the treatment itself
-- Fundamental question: $\Pr(Y \mid do(X))$ vs $\Pr(Y \mid X)$
-- Randomization simulates the do-operator by removing all incoming arrows to $X$
-- Eliminates confounding paths from background variables
-- Allows causal inference without knowing all confounders
-
-* Why is Randomization Important?
-- Removes influence of hidden biases and confounders
-- Ensures independence between treatment and background variables
-- Guarantees that observed differences in outcomes are due to the treatment
-- Makes $\Pr(Y \mid X) = \Pr(Y \mid do(X))$
-- Randomization turns observational data into experimental data
-- Enables fair comparisons between groups
-- Example: Assigning a new drug vs placebo to patients by lottery
-- Prevents self-selection bias (e.g., healthier people choosing treatment)
-
-* Limits of RCT
-- May be unethical (e.g., assigning harmful treatment)
-- Can be expensive or impractical
-- Non-compliance: some participants may not follow assigned treatment
-- Attrition: dropout rates may differ between groups
-- May not generalize to broader populations
-- Requires careful implementation and monitoring
-
-* RCT vs Observational Studies
-- Observational: treatment not randomized, subject to confounding
-- RCT: removes confounding by design
-- Observational data gives $\Pr(Y \mid X)$
-- Causal effect requires $\Pr(Y \mid do(X))$
-- In observational studies, need methods like back-door adjustment, instrumental variables, or front-door criterion
-- RCTs bypass need for model assumptions if implemented correctly
-- RCT is a design strategy, not a statistical formula
-- Key distinction: intervention (doing) vs passive observation (seeing)
-
-* Summary: Why RCT is Powerful
-- Implements intervention in a principled, unbiased way
-- Severs all back-door paths to isolate treatment effect
-- Translates the abstract $do(X)$ into concrete randomized assignments
-- Gold standard of causal inference (when feasible)
-- Empowers data to answer causal, not just correlational, questions
-- Supported by formal tools like causal diagrams and do-calculus
-- Bridges the gap between statistics and cause-effect reasoning
-- Foundation for scientific experimentation and evidence-based policy
