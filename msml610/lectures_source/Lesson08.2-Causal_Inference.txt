@@ -40,7 +40,7 @@ MSML610: Advanced Machine Learning
 
 # Causal Networks
 
-## Causal DAGs and Structural Causal Models
+## Causal DAGs
 
 // ## 13.5 Causal networks (p. 462)
 
@@ -305,9 +305,46 @@ digraph Tornado_Warning {
   - Yes
   - Breaks "rules of nature" as $A$ broadcasts only if $W$ is issued
     - Like removing edge $W \to A$ in graph
-    - Set $A$ to _true_: $do(A{=}1)$
+    - Set $A$ to _true_: $do(A=1)$
   - Expect $B$ did _not_ broadcast
     - Forcing $A$ shouldn't affect $B$ (no $A \to B$ edge)
+::::
+:::: {.column width=45%}
+```graphviz
+digraph Tornado_Warning {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    // Node styles
+    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
+    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
+    A [
+      label="Radio broadcasts (A)",
+      fillcolor="#FFF4A3",
+      xlabel=<<B><FONT COLOR="red">do(A = 1)</FONT></B>>
+    ]; // Orange
+    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
+    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
+
+    // Force ranks (top to bottom)
+    { rank=min;  T; }
+    { rank=same; W; }
+    { rank=same; A; B; }
+    { rank=max;  R; }
+
+    T -> W;
+    W -> A [style=invis];
+    W -> B;
+    A -> R;
+    B -> R;
+}
+```
+::::
+:::
 
 - **Key difference between "seeing" and "doing"**
   - If _see_ $A$ broadcast, conclude $B$ broadcast too
@@ -316,56 +353,21 @@ digraph Tornado_Warning {
 - **Observational data wouldn't reveal causal structure**
   - Either all variables $T,W,A,B,R$ are true or all are false
   - Correlations alone are uninformative
-::::
-:::: {.column width=45%}
-```graphviz
-digraph Tornado_Warning {
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
-
-    // Node styles
-    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
-    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
-    A [
-      label="Radio broadcasts (A)",
-      fillcolor="#FFF4A3",
-      xlabel=<<B><FONT COLOR="red">A = 1</FONT></B>>
-    ]; // Orange
-    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
-    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
-
-    // Force ranks (top to bottom)
-    { rank=min;  T; }
-    { rank=same; W; }
-    { rank=same; A; B; }
-    { rank=max;  R; }
-
-    T -> W;
-    W -> A [style=invis];
-    W -> B;
-    A -> R;
-    B -> R;
-}
-```
-::::
-:::
 
 * Tornado Warning: Level 3 (Counterfactual)
 ::: columns
 :::: {.column width=50%}
-- Assume that residents are warned $R=1$
-  - We know $A$ and $B$ broadcast because the NWS issued a warning $W$ after a
-    tornado formed $T$
+- **Assume that residents are warned $R=1$**
+  - You know $A$ and $B$ broadcast because
+  - ... a warning $W$ was issued
+  - ... after a tornado formed $T$
 
 - **Would residents be warned if $A$ had not broadcast?**
-  - Remove the edge into $A$ and set $do(A=0)$
-  - Yes
+  - Remove the edge into $A$
+  - Set $do(A=0)$
   - TV $B$ still broadcasts (due to $W$), and $R=(A \lor B)$ remains
     true
+  - Yes, $R=1$
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -383,7 +385,7 @@ digraph Tornado_Warning {
     A [
       label="Radio broadcasts (A)",
       fillcolor="#FFF4A3",
-      xlabel=<<B><FONT COLOR="red">A = 0</FONT></B>>
+      xlabel=<<B><FONT COLOR="red">do(A = 0)</FONT></B>>
     ]; // Orange
     B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
     R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
@@ -404,7 +406,7 @@ digraph Tornado_Warning {
 ::::
 :::
 
-### SCMs
+## Structural Causal Model
 
 * Structural Causal Model
 - A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
