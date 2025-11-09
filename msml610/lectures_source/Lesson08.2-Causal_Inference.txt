@@ -199,6 +199,213 @@ digraph SCMExample {
   - Not seen or more difficult to account
   - E.g., _"temperature of the room makes students sleepy and less alert"_
 
+### Example of ladder of causation
+
+* Example: Tornado Warning
+::: columns
+:::: {.column width=50%}
+- **Example**: Severe weather alert to the public
+
+- **Causal diagram**:
+  - $T$: Tornado forms
+  - $W$: National Weather Service issues tornado warning
+  - $A, B$: Radio and TV broadcast emergency
+  - $R$: Residents warned
+
+- **Assumptions**
+  - Channels broadcast only on official order
+  - Delivery systems never fail
+  - If either channel activates, residents warned
+::::
+:::: {.column width=45%}
+```graphviz
+digraph Tornado_Warning {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    // Node styles
+    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
+    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
+    A [label="Radio broadcasts (A)", fillcolor="#FFF4A3"]; // pastel yellow
+    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
+    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
+
+    // Force ranks (top to bottom)
+    { rank=min;  T; }
+    { rank=same; W; }
+    { rank=same; A; B; }
+    { rank=max;  R; }
+
+    T -> W;
+    W -> A;
+    W -> B;
+    A -> R;
+    B -> R;
+}
+```
+::::
+:::
+
+* Tornado Warning: Level 1 (Association)
+::: columns
+:::: {.column width=50%}
+- **Use causal graph to understand how one fact informs another**
+  - Use predicate logic to answer
+
+- **If residents are warned, was a warning issued?**
+  - Does $R \implies W$? 
+  - Yes
+
+- **If radio $A$ broadcast, did TV $B$ also broadcast?**
+  - Yes
+  - True even though $A$ doesn't cause $B$
+  - Correlated through common cause $W$ (confounder)
+::::
+:::: {.column width=45%}
+```graphviz
+digraph Tornado_Warning {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    // Node styles
+    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
+    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
+    A [label="Radio broadcasts (A)", fillcolor="#FFF4A3"]; // pastel yellow
+    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
+    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
+
+    // Force ranks (top to bottom)
+    { rank=min;  T; }
+    { rank=same; W; }
+    { rank=same; A; B; }
+    { rank=max;  R; }
+
+    T -> W;
+    W -> A;
+    W -> B;
+    A -> R;
+    B -> R;
+}
+```
+::::
+:::
+
+* Tornado Warning: Level 2 (Intervention)
+::: columns
+:::: {.column width=50%}
+- **If you make radio broadcast, will residents be warned?**
+  - Yes
+  - Breaks "rules of nature" as $A$ broadcasts only if $W$ is issued
+    - Like removing edge $W \to A$ in graph
+    - Set $A$ to _true_: $do(A{=}1)$
+  - Expect $B$ did _not_ broadcast
+    - Forcing $A$ shouldn't affect $B$ (no $A \to B$ edge)
+
+- **Key difference between "seeing" and "doing"**
+  - If _see_ $A$ broadcast, conclude $B$ broadcast too
+  - If _make_ $A$ broadcast, expect $B$ didn't
+
+- **Observational data wouldn't reveal causal structure**
+  - Either all variables $T,W,A,B,R$ are true or all are false
+  - Correlations alone are uninformative
+::::
+:::: {.column width=45%}
+```graphviz
+digraph Tornado_Warning {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    // Node styles
+    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
+    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
+    A [
+      label="Radio broadcasts (A)",
+      fillcolor="#FFF4A3",
+      xlabel=<<B><FONT COLOR="red">A = 1</FONT></B>>
+    ]; // Orange
+    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
+    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
+
+    // Force ranks (top to bottom)
+    { rank=min;  T; }
+    { rank=same; W; }
+    { rank=same; A; B; }
+    { rank=max;  R; }
+
+    T -> W;
+    W -> A [style=invis];
+    W -> B;
+    A -> R;
+    B -> R;
+}
+```
+::::
+:::
+
+* Tornado Warning: Level 3 (Counterfactual)
+::: columns
+:::: {.column width=50%}
+- Assume that residents are warned $R=1$
+  - We know $A$ and $B$ broadcast because the NWS issued a warning $W$ after a
+    tornado formed $T$
+
+- **Would residents be warned if $A$ had not broadcast?**
+  - Remove the edge into $A$ and set $do(A=0)$
+  - Yes
+  - TV $B$ still broadcasts (due to $W$), and $R=(A \lor B)$ remains
+    true
+::::
+:::: {.column width=45%}
+```graphviz
+digraph Tornado_Warning {
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    // Node styles
+    T [label="Tornado forms (T)", fillcolor="#FFB3BA"]; // pastel red
+    W [label="Tornado warning (W)", fillcolor="#FFD1A6"]; // pastel orange
+    A [
+      label="Radio broadcasts (A)",
+      fillcolor="#FFF4A3",
+      xlabel=<<B><FONT COLOR="red">A = 0</FONT></B>>
+    ]; // Orange
+    B [label="TV broadcasts (B)", fillcolor="#CFECCF"];   // pastel green
+    R [label="Residents warned (R)", fillcolor="#A6C8F4"]; // pastel blue
+
+    // Force ranks (top to bottom)
+    { rank=min;  T; }
+    { rank=same; W; }
+    { rank=same; A; B; }
+    { rank=max;  R; }
+
+    T -> W;
+    W -> A [style=invis];
+    W -> B;
+    A -> R;
+    B -> R;
+}
+```
+::::
+:::
+
+### SCMs
+
 * Structural Causal Model
 - A **Structural Causal Model** (SCM) translates a causal DAG into mathematical
   equations to define how variables interact
@@ -1340,9 +1547,9 @@ _Mutilated graph_
   - Under certain assumptions, infer causality from observational data not only
     from experiments
 
-## Randomized Controlled Treatment
+## Randomized Controlled Trial
 
-* What is a Randomized Controlled Treatment?
+* What is a Randomized Controlled Trial?
 - **RCTs estimate causal effects** by comparing treatment and control groups
   - Randomly assign treatment, not chosen by subjects
     - E.g., assign new drug vs placebo by lottery
@@ -1361,7 +1568,7 @@ _Mutilated graph_
   - Foundation for scientific experimentation and evidence-based policy
   - Gold standard of causal inference (when feasible)
 
-* Randomized Controlled Treatment: Example
+* Randomized Controlled Trial: Example
 - **Research question**: _"Does offering an after-school tutoring program
   increase the probability that a student passes the end-of-term exam?"_
 
@@ -1382,7 +1589,7 @@ _Mutilated graph_
     control
   - Measure and report $Y_{X=1} - Y_{X=0}$
 
-* Randomized Controlled Treatment: Limits
+* Randomized Controlled Trial: Limits
 - **May be unethical**
   - E.g., assigning harmful treatment
   - E.g., you want to verify if asbestos causes cancer
@@ -1801,3 +2008,5 @@ digraph CerealAds {
   P(Y \mid do(X)) = \sum_z P(Z \mid X) \sum_{x'} P(Y \mid Z, X') P(X')
   $$
 
+// Propensity score
+// Significance tests
