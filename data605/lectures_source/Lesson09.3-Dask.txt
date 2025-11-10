@@ -37,7 +37,7 @@ UMD DATA605 - Big Data Systems
     - Data science with Python and Dask, 2019
 ::::
 :::: {.column width=20%}
-![alt_text](data605/lectures_source/images/lecture_9_2/lec_9_2_slide_2_image_1.png)
+![](data605/lectures_source/images/lecture_9_2/lec_9_2_slide_2_image_1.png)
 ::::
 :::
 
