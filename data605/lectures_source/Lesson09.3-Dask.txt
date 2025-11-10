@@ -1,6 +1,10 @@
+// Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
+// 
+// 
+
 ::: columns
 :::: {.column width=15%}
-![](lectures_source/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
@@ -14,41 +18,25 @@ UMD DATA605 - Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**Python Dask**
+**$$\text{\blue{9.3: Python Dask}}$$**
 \endgroup
 
 ::: columns
 :::: {.column width=75%}
-\vspace{1cm}
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
 
-**Instructor**: Dr. GP Saggese - `gsaggese@umd.edu`**
-
-**TAs**:
-Krishna Pratardan Taduri, kptaduri@umd.edu
-Prahar Kaushikbhai Modi, pmodi08@umd.edu
-
-**v1.1**
+- **Resources**
+  - Web resources:
+    - Dask project
+    - Dask examples
+  - Tutorial
+    - Dask_tutorial
+    - Dask_advanced_tutorial
+  - Class project
+  - Mastery
+    - Data science with Python and Dask, 2019
 ::::
 :::: {.column width=20%}
-
-::::
-:::
-
-* Dask: Resources
-::: columns
-:::: {.column width=60%}
-- Web resources:
-  - Dask project
-  - Dask examples
-- Tutorial
-  - Dask_tutorial
-  - Dask_advanced_tutorial
-- Class project
-- Mastery
-  - Data science with Python and Dask, 2019
-    - Amazon
-::::
-:::: {.column width=40%}
 ![alt_text](data605/lectures_source/images/lecture_9_2/lec_9_2_slide_2_image_1.png)
 ::::
 :::
@@ -353,4 +341,3 @@ Prahar Kaushikbhai Modi, pmodi08@umd.edu
 Tutorial
 - From the official documentation
 https://docs.dask.org/en/stable/10-minutes-to-dask.html
-
