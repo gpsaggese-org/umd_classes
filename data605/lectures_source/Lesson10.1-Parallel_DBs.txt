@@ -1,31 +1,60 @@
-**UMD DATA605 - Big Data Systems**
-Parallel Systems and Databases
+// Dir is https://drive.google.com/drive/folders/1u8ZUAkLc8yZBwGgXvfBcAY_oSCyzT_pp
+// 
+// 
 
-GP Saggese
-gsaggese@umd.edu
-with thanks to Alan Sussman, Amol Deshpande
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{10.1: Parallel DBs}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+::::
+:::: {.column width=20%}
+::::
+:::
 
 * Client-Server Architecture
 :::columns
-::::{.column width=65%}
-- The **client-server** is a model for distributed applications that partitions tasks between:
-  - **Clients**: request a service (e.g., dashboard, GUI, client applications)
-
-  - **Servers**: provide resource or service (e.g., a database)
+::::{.column width=60%}
+- **Client-server**: Model for distributed applications partitioning tasks
+  between:
+  - _Clients_: Request service (e.g., dashboard, GUI, client applications)
+  - _Servers_: Provide resource or service (e.g., database)
 ::::
 ::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_2_image_2.png)
 ::::
 :::
 
+\vspace{1cm}
+
 :::columns
-::::{.column width=65%}
-- The **architecture of a database system** can be divided into:
-  - **Back-end** (Server): manage access, query evaluation and optimization, concurrency control, and recovery
-  - **Front-end** (Clients): consist of tools such as forms, report-writers, and graphical user interface (GUI)
-- The interface between the front-end and the back-end is through:
-  - SQL; or
-  - An application programming interface (API)
+::::{.column width=60%}
+- **Architecture of a database system**:
+  - _Back-end_ (Server): manage access, query evaluation, optimization,
+    concurrency control, recovery
+  - _Front-end_ (Clients): tools like forms, report-writers, GUI
+
+- Interface between front-end and back-end:
+  - SQL
+  - Application programming interface (API)
 ::::
 ::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_2_image_1.png)
@@ -36,26 +65,27 @@ with thanks to Alan Sussman, Amol Deshpande
 :::columns
 ::::{.column width=60%}
 - **Parallel computing**
-
   - One computer with multiple CPUs
-  - Cluster = many similar computers with multiple CPUs
-  - Homogenous and (geographically) close computing nodes
-  - Working on one task
+  - Cluster: many similar computers with multiple CPUs
+  - Homogenous, geographically close computing nodes
+  - Work on one task
 
 ::::
-::::{.column width=40%}
+::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_3_image_2.png)
 ::::
 :::
 
+\vspace{1cm}
+
 :::columns
 ::::{.column width=60%}
 - **Distributed computing**
-  - Several autonomous (often geographically separate) computers systems
+  - Autonomous, geographically separate computer systems
   - Heterogeneous and distant
-  - Working on separate tasks
+  - Perform separate tasks
 ::::
-::::{.column width=40%}
+::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_3_image_1.png)
 ::::
 :::
@@ -64,131 +94,152 @@ with thanks to Alan Sussman, Amol Deshpande
 * Parallel Systems
 :::columns
 ::::{.column width=65%}
-- Parallel systems consist of:
+- **Parallel systems** consist of:
   - Multiple processors
   - Multiple memories
   - Multiple disks
-  - Connected by a fast interconnection network
-- **Coarse-grain parallel machine**
+  - Fast interconnection network
 
+- **Coarse-grain parallel machine**
   - Small number of powerful processors
   - E.g., your laptop with multiple CPUs
+
 - **Fine-grain parallel machine**
   - Aka massively parallel
   - Thousands of smaller processors
-  - Much larger degree of parallelism
+  - Larger degree of parallelism
   - With or without shared memory
   - E.g., GPUs, The Connection Machine
 ::::
 ::::{.column width=40%}
-\tiny
+\center \scriptsize
+
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_4_image_3.png){width=70%}
 
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_4_image_1.png){width=70%}
-The Connection Machine, MIT, 1980s
+
+_The Connection Machine, MIT, 1980s_
 
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_4_image_2.png){width=70%}
-Connection Machine in Jurassic Park
+
+_Connection Machine in Jurassic Park_
 ::::
 :::
 
 * Parallel Databases: Introduction
 - **Parallel DBs were historically the standard approach before MapReduce**
+
 - **Parallel machines have become common and affordable**
-  - Prices of microprocessors, memory, and disks keep dropping sharply
-  - Desktop / laptop computers feature multiple processors
+  - Prices of microprocessors, memory, and disks drop sharply
+  - Desktop/laptop computers feature multiple processors
   - This trend will continue
+
 - **DBs are growing increasingly large**
-  - Large volumes of transaction data are collected and stored for later analysis
-  - Multimedia objects like data605/lectures_source/images are increasingly stored in databases
+  - Large volumes of transaction data collected and stored for analysis
+  - Multimedia objects increasingly stored in databases
+
 - **Large-scale parallel DBs increasingly used for:**
   - Storing large volumes of data
   - Processing time-consuming queries
   - Providing high throughput for transaction processing
 
 * Parallel Databases
-- Internet / Big Data created the need for large and fast DBs, e.g.,
+- Internet / Big Data created need for large, fast DBs
   - Store petabytes of data
-  - Process thousands of transactions per second (e.g., commerce web-site)
+  - Process thousands of transactions per second (e.g., commerce website)
+
 - **Databases can be parallelized**
-  - The set-oriented nature of DB queries often lends itself to parallelization
-  - Some database operations are embarrassingly parallel
-    - E.g., a join between R and S on R.b = S.b can be done as MapReduce task
+  - Set-oriented nature of DB queries suits parallelization
+  - Some operations are embarrassingly parallel
+    - E.g., join between `R` and `S on R.b = S.b as MapReduce task
+
 - **Parallel DBs**
-  - More transactions per second, or less time per query
+  - More transactions per second or less time per query
   - Throughput vs response time
   - Speed-up vs scale-up
-- But, **perfect speedup doesn't happen** because of:
+
+- **Perfect speedup doesn't happen** due to:
   - Start-up costs
-  - Interference of tasks
+  - Task interference
   - Skew
 
 * How to Measure Parallel Performance
 
 :::columns
-::::{.column width=70%}
+::::{.column width=65%}
 - **Throughput**
-  - = the number of tasks that can be completed in a given time interval
-  - Increase throughput by processing many tasks in parallel
-- **Latency**
-  - = the amount of time it takes to complete a single task from the time it is submitted
-  - Decrease response time by performing subtasks of each task in parallel
-- **Throughput and latency are related but are not the same thing**
+  - Number of tasks completed in a given time
+  - Increase by processing tasks in parallel
 
-  - E.g., increase throughput by reducing latency
-  - E.g., increase throughput by pipelining, i.e., overlapping execution of tasks
-    - E.g., building a car takes weeks but one car is completed per hour
-    - Pipelining of instructions of microprocessor
+- **Latency**
+  - Time to complete a single task from submission
+  - Decrease by performing subtasks in parallel
+
+- **Throughput and latency are related but not the same**
+  - Increase throughput by reducing latency
+  - Increase throughput by pipelining (overlapping task execution)
+    - E.g., building a car takes weeks, but one car is completed per hour
+    - Pipelining of microprocessor instructions
 ::::
 ::::{.column width=30%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_1.png)
+
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_3.png)
+
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_2.png)
-\tiny
-Pipelining of instructions in microprocessor
+\center \scriptsize
+_Pipelining of instructions in microprocessor_
 ::::
 :::
+
 * Speed-Up and Scale-Up: Intuition
 
 - **You have a workload to execute**
-
-  - The amount of work can be changed (*M*)
-    - Number of DB transactions; or
+  - Change workload $M$
+    - Number of DB transactions
     - Amount of DB data to query
-- **You need to execute the workload on a machine**
 
-  - The amount of computing power can be changed (*N*)
+- **You need to execute the workload on a machine**
+  - Change computing power $N$
     - Better CPU (scale vertically, scale up)
     - More CPUs (scale horizontally, scale out)
-- **Two ways for measuring efficiency when increasing workload and computing power**
 
-  - **Speed-up**
-
-    - Keep constant problem size *M*
-    - Increase the power of the machine *N*
-  - **Scale-up**
-
-    - Increase the problem size *M*
-    - Increase the power of the machine *N*
+- Two **ways to measure efficiency** when increasing workload and computing power
+  - _Speed-up_
+    - Keep constant problem size $M$
+    - Increase machine power $N$
+  - _Scale-up_
+    - Increase problem size $M$
+    - Increase machine power $N$
 
 * Speed-Up vs Scale-Up
+- The amount of computing power can be changed _N_
+- The amount of work can be changed _M_
+
 :::columns
 ::::{.column width=60%}
-- The amount of computing power can be changed (*N*)
-- The amount of work can be changed (*M*)
-- **Speed-up**: a fixed-sized problem executing on a small system is given to a system which is *N*-times larger
-  - Measured by:
-     *speed-up = small system elapsed time* / *large system elapsed time*
-  - **Speed-up is linear if equation equals N**
-- **Scale-up**: increase the size of both the problem (*M*) and the system (*N*)
-  - *N*-times larger system to perform *M*-times larger job
-  - Measured by:
-     *scale-up = small system-problem time * / *big system-problem time *
-  - **Scale-up is linear if equation equals 1**
+- **Speed-up**: fixed-sized problem on a small system given to a system
+  $N$-times larger
+    $$\text{speed-up} = \frac{\text{small system elapsed time}}
+      {\text{large system elapsed time}}$$
+  - Speed-up is linear if equation equals $N$
 ::::
-::::{.column width=30%}
+::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_9_image_1.png)
-\vspace{1cm}
+::::
+:::
+
+\vspace{0.5cm}
+
+:::columns
+::::{.column width=60%}
+- **Scale-up**: increase size of both problem $M$ and system $N$
+  - $N$-times larger system to perform $M$-times larger job
+    $$\text{scale-up} = \frac{\text{small system-problem time}}
+      {\text{big system-problem time}}$$
+  - Scale-up is linear if equation equals 1
+::::
+::::{.column width=35%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_9_image_2.png)
 ::::
 :::
@@ -197,17 +248,20 @@ Pipelining of instructions in microprocessor
 :::columns
 ::::{.column width=60%}
 - Speed-up and scale-up are often sub-linear due to several issues
-- **Sequential computation**
-  - Some pieces of the computation can be executed in parallel, others must be executed sequentially
-            Amdahl's Law
-  - p = fraction of computation that can be parallelized
-  - s = number of nodes
-  - T = the execution time in the serial case
-  - T(p) = the execution time on s nodes
-= (1-p)T + (p / s)T
-  - Speedup(s) = T / T(s) = ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_10_image_2.png){width=40%}
-  - E.g., if 90% is parallelizable, the max speed-up is 10x
-  - If 50% is parallelizable, the max speed-up is 2x (even with infinite amount of nodes!)
+
+- E.g., some computation is parallel, others sequential 
+- **Amdahl's Law**
+  - $p$ = fraction parallelizable
+  - $s$ = number of nodes
+  - $T$ = execution time serially
+  - $T(p)$ = execution time on s nodes = $(1-p)T + (p / s)T$
+  $$
+  Speedup(s)
+  = \frac{T}{T(s)}
+  = \frac{1}{(1 - p) + \frac{p}{s}}
+  $$
+  - E.g., 90% parallelizable, max speed-up 10x
+  - 50% parallelizable, max speed-up 2x (even with infinite nodes)
 ::::
 ::::{.column width=40%}
 ![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_10_image_1.png)
@@ -216,28 +270,30 @@ Pipelining of instructions in microprocessor
 
 * Factors Limiting Speed-up and Scale-up
 - **Startup costs**
-  - Cost of starting up many processes may dominate computation time
-  - E.g., DBs create a pool of threads when they start, instead of waiting for requests
-- **Interference**
-  - Processes accessing shared resources (e.g., system bus, disks, or locks) compete with each other
-  - Time spent waiting on other processes, rather than performing useful work
-  - E.g., when lots of devs touch the same code creating merge conflicts
-- **Cost of synchronization**
+  - Starting many processes may dominate computation time
+  - E.g., DBs create a thread pool at startup
 
-  - The smaller the pieces to work on, the more complex is synchronizing the workers
-  - E.g., same problem when hiring many developers in a company
+- **Interference**
+  - Processes compete for shared resources (e.g., system bus, disks, locks)
+  - Time spent waiting on other processes
+  - E.g., devs touching the same code create merge conflicts
+
+- **Cost of synchronization**
+  - Smaller work pieces increase synchronization complexity
+  - E.g., hiring many developers in a company
+
 - **Skew**
-  - Splitting the work to do increases the variance in response time of parallely executed tasks
-  - Difficult to keep a task split in equally sized parts
-  - Overall execution time determined by slowest of parallely executing tasks
+  - Splitting work increases variance in task response time
+  - Difficult to split tasks equally
+  - Execution time determined by slowest task
 
 * Topology of Parallel Systems
 :::columns
 ::::{.column width=30%}
 - Several ways to organize computation and storage
-  - M = memory
-  - P = processors
-  - D = disks
+  - $M$ = memory
+  - $P$ = processors
+  - $D$ = disks
 - Topology
   - Shared memory
   - Shared disk
