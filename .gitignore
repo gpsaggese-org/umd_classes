@@ -1,10 +1,1 @@
-# Python
-.venv/
-__pycache__/
-*.so
-
-# Data & binaries
-#*.zip
-
-# Notebooks outputs
-.ipynb_checkpoints/
+helpers_root/.gitignore
