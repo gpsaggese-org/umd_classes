@@ -1,4 +1,4 @@
-## Assignment 1: Git Tutorial
+## Assignment #1: Git Tutorial
 
 Hello DATA605 team,
 
@@ -27,19 +27,7 @@ This is a preparation for the in-class quiz and for the class project.
    - [Helpers](https://github.com/causify-ai/helpers)
    - Please fork and star these repos so that GitHub promotes them
 
-Best,
-GP
-
-## Announcement 2: Drill Quiz
-
-Hello DATA605 team,
-
-1) Before the next class, we’ll do a "drill" to make sure you know how to use the
-  Lockdown browser
-  ([http://go.umd.edu/lockdown-browserLinks](http://go.umd.edu/lockdown-browserLinks))
-  and you get a sense of the quizzes
-- This will not be graded!
-- The goal is only to make sure you know how to take the quiz and know what to expect
+## Quiz #1: Drill Quiz
 
 - We can use the following questions
   ```
@@ -72,16 +60,27 @@ Hello DATA605 team,
     - E) Can store semi-structured data
   ```
 
-2) Prepare for Quiz #1 on Git and Data Pipelines
-- The quizzes will be multi-choice
-- There will be 20 questions and you will have 15 minutes to solve it
-- The quizzes are taken at home without any other resource (cheating doesn't pay
-  off!)
-- The quiz can only be solved from the external application Lockdown browser
-- You can decide when to take the quiz over 3 days (typically all day Friday and
-  Saturday) to make sure it works for everyone
+## Assignment #2: Drill Quiz
 
-## Assignment 3: Docker Tutorial
+Hello DATA605 team,
+
+1) Before the next class, we’ll do a "drill" to make sure you know how to use the
+   Lockdown browser
+   ([http://go.umd.edu/lockdown-browserLinks](http://go.umd.edu/lockdown-browserLinks))
+   and you get a sense of the quizzes
+   - This will not be graded!
+   - The goal is only to make sure you know how to take the quiz and know what to expect
+
+2) Prepare for Quiz #1 on Git and Data Pipelines
+   - The quizzes will be multi-choice
+   - There will be 20 questions and you will have 15 minutes to solve it
+   - The quizzes are taken at home without any other resource (cheating doesn't pay
+     off!)
+   - The quiz can only be solved from the external application Lockdown browser
+   - You can decide when to take the quiz over 3 days (typically all day Friday and
+     Saturday) to make sure it works for everyone
+
+## Assignment #3: Docker Tutorial
 
 As we said, Linux/bash/Docker works decently only Mac and Linux, but not Windows.
 We have tried several times to get Windows to work, but failed, so the plan is to
