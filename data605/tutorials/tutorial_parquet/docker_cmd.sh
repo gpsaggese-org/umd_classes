@@ -7,7 +7,7 @@ CMD="$@"
 echo "Executing: '$CMD'"
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/docker_common/utils.sh
+source $GIT_ROOT/project_template/utils.sh
 
 # Find the name of the container.
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
@@ -29,4 +29,4 @@ docker run \
     $DOCKER_RUN_OPTS \
     -v $(pwd):/data \
     $FULL_IMAGE_NAME \
-    $CMD
+    bash -c "$CMD"

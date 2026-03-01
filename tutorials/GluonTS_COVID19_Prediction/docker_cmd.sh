@@ -11,7 +11,7 @@ echo "Executing: '$CMD'"
 
 # Import the utility functions.
 GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/docker_common/utils.sh
+source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Execute the script setting the vars for this tutorial.
 get_docker_vars_script ${BASH_SOURCE[0]}
@@ -29,4 +29,4 @@ run "docker run \
     $DOCKER_RUN_OPTS \
     -v $(pwd):/data \
     $FULL_IMAGE_NAME \
-    $CMD"
+    bash -c '$CMD'"
