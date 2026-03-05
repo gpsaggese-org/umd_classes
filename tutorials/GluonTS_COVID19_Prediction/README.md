@@ -43,7 +43,7 @@ Save to `data/` directory:
 
 Or run:
 ```bash
-python utils.py
+python GluonTS_utils.py
 ```
 
 ### Build and Run
@@ -72,13 +72,16 @@ Opens at http://localhost:8888
 - `GluonTS.example.ipynb` — COVID-19 end-to-end application
 
 **Utilities**
-- `utils.py` — Consolidated utilities: data I/O, download, preprocessing,
+- `GluonTS_utils.py` — Consolidated utilities: data I/O, download, preprocessing,
   GluonTS conversion, model training, evaluation, visualization, synthetic data
 
 **Data** (auto-downloaded)
 - `data/cases.csv` — Daily confirmed cases
 - `data/deaths.csv` — Daily deaths
 - `data/mobility.csv` — Mobility patterns
+
+**Documentation**
+- `blog_GluonTS.md` — Blog post covering GluonTS and COVID-19 forecasting
 
 **Docker**
 - `Dockerfile` — Container setup
@@ -93,8 +96,8 @@ The notebooks are organized for learning. Implementation details (data loading, 
 
 Instead of notebook cells with 20 lines of matplotlib code, you see:
 ```python
-import utils as viz
-viz.plot_data_overview(train_df, test_df)
+import GluonTS_utils as gluonts
+gluonts.plot_data_overview(train_df, test_df)
 ```
 
 This keeps notebooks clean and readable.
@@ -103,9 +106,9 @@ This keeps notebooks clean and readable.
 
 | Model                 | External Features           | Training Time | Best Use Case                       |
 | --------------------- | --------------------------- | ------------- | ----------------------------------- |
-| **DeepAR**            | Yes (deaths, mobility, CFR) | 3-4 min       | Complex patterns, highest accuracy  |
-| **SimpleFeedForward** | No                          | 30-60 sec     | Quick baselines, stable trends      |
-| **DeepNPTS**          | Yes (deaths, mobility, CFR) | 3-4 min       | Regime changes, distribution shifts |
+| **DeepAR**            | Yes (deaths, mobility, CFR) | 1 min       | Complex patterns, highest accuracy  |
+| **SimpleFeedForward** | No                          | 30-40 sec     | Quick baselines, stable trends      |
+| **DeepNPTS**          | Yes (deaths, mobility, CFR) | 15-20 sec       | Regime changes, distribution shifts |
 
 ## Data Pipeline
 
@@ -151,62 +154,6 @@ flowchart TB
 - **MAPE** = Percentage error, scale-independent (lower = better)
 - **CRPS** = Probabilistic forecast quality (lower = better)
 
-## Troubleshooting
-
-**Port 8888 already in use?**
-
-Another Jupyter is running. Either stop it or change the port. Edit `docker_jupyter.sh` line 14:
-```bash
--p 8889:8888  # Use 8889 instead
-```
-
-**Docker build fails?**
-
-Make sure Docker is actually running:
-```bash
-docker info
-```
-
-**"MPS not supported" warning on Mac?**
-
-That's expected! The scripts automatically set `PYTORCH_ENABLE_MPS_FALLBACK=1` to use your CPU for unsupported operations. You'll see a warning during training—that's normal and won't slow you down.
-
-**Out of memory?**
-
-Your system is running too many things. Either reduce batch size in the notebook (`batch_size = 16`) or close other applications. Training will be slower but still work.
-
-**Data files not found?**
-
-Verify the data directory:
-```bash
-ls data/
-# Should show: cases.csv, deaths.csv, mobility.csv
-```
-
-If it's empty, go back to the "Data Setup" section above and run the downloader.
-
-## Quick Start Commands
-
-```bash
-# Download data (only needed if automatic download failed)
-python utils.py
-
-# Build Docker image
-./docker_build.sh
-
-# Start Jupyter Notebook
-./docker_jupyter.sh
-
-# Start interactive Python shell
-./docker_bash.sh
-
-# View running containers
-docker ps
-
-# Stop everything
-# Press Ctrl+C in the terminal where Jupyter is running
-```
-
 ## Learning Resources
 
 **GluonTS**  
@@ -221,7 +168,3 @@ docker ps
 - [JHU COVID-19 Data Repository](https://github.com/CSSEGISandData/COVID-19)
 - [Google COVID-19 Community Mobility Reports](https://www.google.com/covid19/mobility/)
 - [CDC COVID-19 Data Tracker](https://covid.cdc.gov/covid-data-tracker/)
-
-## Changelog
-
-- 2026-03-01: Initial release
