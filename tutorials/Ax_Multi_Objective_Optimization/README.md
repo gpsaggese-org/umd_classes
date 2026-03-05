@@ -53,30 +53,24 @@ The project is designed to be run in a Docker container. As long as Docker is av
 - `version.sh`
   - Displays the versions of the installed software and packages
 
-### Data Files
-
-`models/` contains the models and datasets used to simulate a real-time bidding campaign.
-
 ### Description of the API
 
-The API documentation is available in [Ax.API.md](Ax.API.md).
-
-The Jupyter Notebook to demonstrate the use of this API is available in [Ax.API.ipynb](Ax.API.ipynb).
+The API documentation as well as the code to demonstrate the use of this API is available in [Ax.package.ipynb](Ax.package.ipynb).
 
 ### Real-Time Bidding Algorithms with Bayesian Optimization
 
-The use of the Bayesian Optimization technique is described in [Ax.example.md](Ax.example.md). The code for the simulation is available in [Ax.example.ipynb](Ax.example.ipynb).
+[Ax.example.ipynb](Ax.example.ipynb) demonstrates the use of the Ax library to find the optimal hyperparameters for a bidding strategy in a real-time bidding campaign.
 
-### Multi-Armed Bandits
+#### DSP Simulation
 
-A second example of Bayesian Optimization is the use of the Ax library to find the optimal bandit strategy to maximize the reward in a multi-armed bandit problem. It's also described in [Ax.example.md](Ax.example.md).
+Bayesian Optimization is used to find the optimal hyperparameters for the bidding strategy. This strategy requires the prediction of the Click-Through Rate (CTR) usually done by a marketing DSP platform.
 
-### DSP Simulation
-
-Bayesian Optimization is used to find the optimal hyperparameters for a bidding strategy. This strategy is usually based on the prediction of the Click-Through Rate (CTR) for a marketing campaign. In order to demonstrate the optimization of the hyperparameters, a simulation of a CTR prediction model is used.
+The prediction of the CTR is out of the scope of this project. In order to demonstrate how the hyperparameter optimization works, a simulation of a CTR prediction model is used.
 
 The creation of this predictive model is described in [dsp_pctr_prediction_model.ipynb](dsp_pctr_prediction_model.ipynb).
 
-## Changelog
+**Note:** To save time during the execution of this tutorial, the predicted CTR has been appended to the dataset. The bidding simulation will know beforehand what's the CTR a machine learning model would have predicted.
 
-- 2026-03-01: Initial release
+### Multi-Armed Bandits
+
+A second example of Bayesian Optimization is the use of the Ax library to find the optimal bandit strategy to maximize the reward in a multi-armed bandit problem. It's also described in [Ax.example.ipynb](Ax.example.ipynb).
