@@ -7,8 +7,9 @@ There are competing
 shorter time horizons -> smaller returns, more predictability
 What is the hit rate to achieve a certain value of 
 
-
 # A Causal Analysis of HF Performance
+
+# A Causal Analysis of Age and Startup Success
 
 # Create a tutorial about Sampling
 
@@ -232,4 +233,3 @@ https://code.claude.com/docs/en/devcontainer
 
 dockerized executables (hard)
 Improve the logic and make it more transparent
-
