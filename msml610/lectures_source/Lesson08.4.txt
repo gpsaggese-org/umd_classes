@@ -46,7 +46,10 @@ MSML610: Advanced Machine Learning
 * Sales example
 - There are stores that put product on sales for Christmas
   
+  \begingroup
+  \centering
   ![](msml610/lectures_source/figures/L08.4.xmas_sales_df.png){width=60%}
+  \endgroup
 
   where
   - `store`: id of the store
@@ -60,18 +63,46 @@ MSML610: Advanced Machine Learning
   - E.g., when is the best moment to have sales (i.e., `weeks_to_xmas`)?
 
 * Definition
-- **Treatment for unit $i$**
+::: columns
+:::: {.column width=80%}
+- **Treatment $T$**
   - $T_i = 1$ if unit $i$ has received the treatment
-  - E.g., `weeks_to_xmas` `is_on_sale`
   - Sometimes $T$ is denoted with $D$
-
-- **Outcome** 
+  - E.g., `is_on_sale` at `weeks_to_xmas`, `is_on_sale`, `received_discount`,
+    `saw_ad`
+- **Outcome $Y$**
   - The variable one wants to influence, $Y_i$
   - E.g., `weekly_amount_sold`
-
 - **Unit of analysis**
-  - The thing you wish to intervene on / treat
-  - E.g., _"people who buy Y"_
+  - The entity for which outcomes are measured
+
+\begingroup \small
+| **Study**          | **Unit of analysis** |
+|--------------------|------------------|
+| Drug experiment    | Patient          |
+| Marketing experiment | Customer       |
+| Sales promotion    | Store or product |
+| Education policy   | Student          |
+\endgroup
+
+::::
+:::: {.column width=15%}
+```graphviz
+digraph CausalDiagram {
+  rankdir=TB;
+  splines=true;
+  nodesep=0.5;
+  ranksep=0.5;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+  // Node styles
+  T   [label="T", fillcolor="#A6E7F4"];
+  Y   [label="Y", fillcolor="#A6C8F4"];
+  // Edges
+  T   -> Y;
+}
+```
+::::
+:::
 
 * The Fundamental Problem of Causal Inference
 - **The Fundamental Problem of Causal Inference**
@@ -80,33 +111,35 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=50%}
 - **Example**
-- Plot outcome `weekly_amount_sold` by treatment `is_on_sale`
-- Stores with price drops sell more (from 50 to 150)
-- Matches intuition: _"people buy more when prices are low due to sales"_
+  - Plot outcome `weekly_amount_sold` conditioned on treatment `is_on_sale`
+  - Stores with price drops sell more (from 50 to 150)
+  - Matches intuition: _"people buy more when prices are low due to sales"_
 ::::
 :::: {.column width=45%}
 ![](msml610/lectures_source/figures/L08.4.xmas_boxplot.png)
 ::::
 :::
-- Is it true?
+- **Is it true?**
   - Maybe only larger businesses afford aggressive price drops?
   - Maybe customers buy close to Christmas anyway?
 
 - Observing both counterfactual situations would reveal the effect of price
-  drops $\to$ impossible
+  drops (this is **impossible**)
 
 * Causal Model
 - A **causal model** is a series of assignments $\leftarrow$
   - Causality is non-reversible: you can't rearrange the equation
 
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=60%}
 - **Example**
   $$
+  \left\{
   \begin{aligned}
   & T \leftarrow f_t(u_t) \\
   & Y \leftarrow f_y(T, u_y) \\
   \end{aligned}
+  \right.
   $$
   where:
   - $u_t, u_y$ are _exogenous_ variables (outside the model)
@@ -115,7 +148,7 @@ MSML610: Advanced Machine Learning
   - $T$ and $Y$ are _endogenous_ variables (inside the model)
 
 ::::
-:::: {.column width=45%}
+:::: {.column width=35%}
   ```graphviz[width=80%]
   digraph CausalDiagram {
     rankdir=TB;
@@ -139,21 +172,24 @@ MSML610: Advanced Machine Learning
 
 * Causal Model: Sales Example
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=60%}
 
-- Causal model for sales example adding a $BusinessSize$
+- Causal model for sales example:
   $$
+  \small
+  \left\{
   \begin{aligned}
   & BusinessSize \leftarrow f_s(u_s) \\
   & IsOnSales \leftarrow f_t(BusinessSize, u_t) \\
   & AmountSold \leftarrow f_y(IsOnSales, BusinessSize, u_y) \\
   \end{aligned}
+  \right.
   $$
 
 ::::
-:::: {.column width=45%}
+:::: {.column width=35%}
 
-```graphviz[width=80%]
+```graphviz
 digraph SalesModelExtended {
   rankdir=TB;
   splines=true;
@@ -189,12 +225,15 @@ digraph SalesModelExtended {
 ::::
 ::::
 
+\vspace{0.5cm}
+
 - One can make an assumption of linear model for $f_y(.)$ and say
   $$AmountSold = \alpha + \beta_1 IsOnSales + \beta_2 BusinessSize + \varepsilon$$
 
 * Applying a Treatment to Sales Example
-- Causal model is
+- Assume the **causal model** is:
   $$
+  \small
   \left\{
   \begin{aligned}
   & T \leftarrow f_t(u_t) \\
@@ -202,22 +241,25 @@ digraph SalesModelExtended {
   \end{aligned}
   \right.
   $$
-- Ask _"what would happen to the outcome $Y$ if I were to set the treatment to
-  $t_0$?"_
-  $$
-  \left\{
-  \begin{aligned}
-  & T \leftarrow t_0 \\
-  & Y \leftarrow f_y(T, u_y) \\
-  \end{aligned}
-  \right.
-  $$
+  - Ask _"what would happen to the outcome $Y$ if I were to set the treatment to
+    $t_0$?"_
+    $$
+    \small
+    \left\{
+    \begin{aligned}
+    & T \leftarrow t_0 \\
+    & Y \leftarrow f_y(T, u_y) \\
+    \end{aligned}
+    \right.
+    $$
   - The intervention is represented by the $do()$ operator, e.g., $do(T = t_0)$
 
-- Note that:
-  $$\EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]$$
-  - The **first** is what happens to businesses that make a price cut (e.g., a
-    big business)
+- Note that **conditioning** and **intervention** are different:
+  $$
+  \small
+  \EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]
+  $$
+  - The **first** is what happens to businesses that make a price cut
     - Some business (e.g., big businesses) are "self-selecting" to cut prices
   - The **second** is what happens if you force every business to engage in sales
 
