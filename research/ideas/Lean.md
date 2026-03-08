@@ -1,87 +1,3 @@
-# Ideas from papers/Research_plan/paper.tex
-
-# Causal Analysis of Financial Tradability
-
-We want to find the optimal trading horizon
-There are competing
-shorter time horizons -> smaller returns, more predictability
-What is the hit rate to achieve a certain value of 
-
-# A Causal Analysis of HF Performance
-
-# A Causal Analysis of Age and Startup Success
-
-# Create a tutorial about Sampling
-
-Refs:
-https://ermongroup.github.io/cs228-notes/inference/sampling/
-
-# Planning vs execution
-
-Is it better to try things or plan hard?
-Bayesian entrepreneurship
-
-# **Misc ML ideas**
-
-### **Can time be a feature of machine learning**
-
-What if the system is changing slowly can you generalize the learning bounds (VC bounds) with a similar mathematical approach of learning theory?
-
-Why does
-
-### **Quasi-stationarity learning**
-
-How to compute the VC dimension when the system and the is changing
-
-Kolmogorov complexity over time
-
-Different types of non stationary systems
-
-* regime shift
-* Covariate
-* Concept
-
-How much data to use to train when the world is changing
-Eg use exponential tau as hyper parameter
-
-### **MDL extensions**
-
-VC dimension including also the research process
-
-VC dimension for a system specified through a causal / Bayesian network
-
-Measure complexity of back testing in terms of VC dimension
-
-Complexity of a model with priors
-
-Shannon entropy
-
-Kolmogorov complexity
-
-Rademacher complexity
-
-### **Fouriered learning**
-
-Apply Fourier transform on inputs and outputs and then learn the coefficients
-Exchange learning and Fourier transform
-
-### **Gradient descent as NN**
-
-Can you create a neural network that implements learning”
-Create inputs, learn weights as input set
-Then learn this relationship
-
-VC ability to predict winners
-Hedge funds
-
-### **Closed formulization**
-
-Interpolate formula from casual skill analysis
-
-* then check whether out of sample holds
-*
-* 👉 **arXiv:1905.11481 — AI Feynman: a Physics-Inspired Method for Symbolic Regression**
-
 # Lean
 
 **Lean**
@@ -115,8 +31,8 @@ Everybody should have 2-3 agents going at very single time
 	•	**Mind map** (visual, branching ideas)
 	•	**Table/chart** (good for comparisons)
 **Highlight structure** – Use headings, bullet points, and numbering to show relationships between ideas.
-	7\.	**Use symbols and abbreviations** – E.g., “→” for leads to, “↑” for increase, “w/” for with.
-	8\.	**Mark confusing points** – Use a star or “?” so you know to ask later.
+	7\.	**Use symbols and abbreviations** – E.g., "→" for leads to, "↑" for increase, "w/" for with.
+	8\.	**Mark confusing points** – Use a star or "?" so you know to ask later.
 The **outline method** is a note-taking style where you organize information in a **hierarchical, bullet-point format** — starting with the main topic, then indenting subtopics and details underneath.
 [https://chatgpt.com/share/6897526e-5db4-8013-b189-3c7a73c6e6a5](https://chatgpt.com/share/6897526e-5db4-8013-b189-3c7a73c6e6a5)
 livestream here: https://youtube.com/live/2Auc57lxgeU
@@ -185,51 +101,3 @@ https://www.evolver.ai/
 [https://papers.ssrn.com/sol3/Delivery.cfm/SSRN\_ID4706629\_code2969338.pdf?abstractid=4706629\&mirid=1\&type=2](https://papers.ssrn.com/sol3/Delivery.cfm/SSRN_ID4706629_code2969338.pdf?abstractid=4706629&mirid=1&type=2)
 [https://m.youtube.com/watch?v=WWCWsub3YkE\&pp=ygUTRnBnYXMgbm90IGdvb2QgZGVlcA%3D%3D](https://m.youtube.com/watch?v=WWCWsub3YkE&pp=ygUTRnBnYXMgbm90IGdvb2QgZGVlcA%3D%3D)
 https://m.youtube.com/playlist?list=PLJePd8QU\_LYKZwJnByZ8FHDg5l1rXtcIq
-
-# GP's law
-
-The world GDP is $100T / year
-"GP's law": a substantial share (even 90%\!) is wasted in bad business decisions
-
-Businesses make 100s decisions / day
-Pricing changes
-Hiring / promotions
-Capital projects
-Product feature priorities
-Vendor / partner selection
-...
-
-Humans are terrible decision makers
-Don't understand probability
-Do not use data
-Can't think counterfactually
-Use heuristics and gut feelings
-
-In a study of 500 managers, 98% failed to apply even basic decision-making best practices \[Larson, E. (2017)\]
-\~50% of decisions rely on intuition over data \[BARC Survey (2016)\]
-Businesses use only 40-50% of available information \[BARC Survey (2016)\]
-
-# Symbolic regression
-
-1) AI Feynman (Max Tegmark’s approach)
-	•	Install: pip install aifeynman
-	•	Note: Docs say it’s supported on Linux & macOS (not Windows-native).
-2) PySR (very popular, high-performance)
-	•	Python interface to a fast backend; widely used in science for interpretable formulas.
-	•	Available on PyPI/conda-forge (recent releases continue).
-3) gplearn (scikit-learn-style genetic programming)
-	•	Classic symbolic regression with SymbolicRegressor, sklearn-like API.
-4) PhySO (physics-oriented symbolic regression)
-	•	Explicitly aimed at inferring analytical functions from data; strong for physics-style problems.
-https://arxiv.org/abs/2505.10762
-
-# VS Code and containers
-
-VS Code developing inside a container
-https://code.visualstudio.com/docs/devcontainers/containers
-https://code.claude.com/docs/en/devcontainer
-
-# Improve dockerized executables
-
-dockerized executables (hard)
-Improve the logic and make it more transparent
