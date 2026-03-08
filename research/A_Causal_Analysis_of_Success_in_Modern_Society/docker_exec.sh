@@ -1,24 +1,25 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# """
+# Execute a bash shell in a running Docker container.
+#
+# This script connects to an already running Docker container and opens an
+# interactive bash session for debugging or inspection purposes.
+# """
+
+# Exit immediately if any command exits with a non-zero status.
 set -e
 
-IMAGE_NAME="causal_success_analysis"
+# Print each command to stdout before executing it.
+set -x
 
-echo "============================================"
-echo "Attaching to running container"
-echo "Image: ${IMAGE_NAME}"
-echo "============================================"
+# Import the utility functions.
+GIT_ROOT=$(git rev-parse --show-toplevel)
+source $GIT_ROOT/class_project/project_template/utils.sh
 
-# Find the first running container from this image
-CONTAINER_ID=$(docker ps -q --filter "ancestor=${IMAGE_NAME}")
+# Load Docker configuration variables for this script.
+get_docker_vars_script ${BASH_SOURCE[0]}
+source $DOCKER_NAME
+print_docker_vars
 
-if [ -z "${CONTAINER_ID}" ]; then
-    echo "No running container found for image '${IMAGE_NAME}'."
-    echo "Start Jupyter first with: ./docker_jupyter.sh"
-    exit 1
-fi
-
-echo "Container ID: ${CONTAINER_ID}"
-echo "Opening interactive shell..."
-echo "============================================"
-
-docker exec -it "${CONTAINER_ID}" bash
+# Execute bash shell in the running container.
+exec_container

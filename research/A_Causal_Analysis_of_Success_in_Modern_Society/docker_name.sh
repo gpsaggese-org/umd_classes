@@ -1,10 +1,12 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash
+# """
+# Docker image naming configuration.
+#
+# This file defines the repository name, image name, and full image name
+# variables used by all docker_*.sh scripts in the project template.
+# """
 
-echo "============================================"
-echo "Running Docker containers (names only)"
-echo "============================================"
-
-docker ps --format "Container: {{.Names}}"
-
-echo "============================================"
+REPO_NAME=gpsaggese
+# The file should be all lower case.
+IMAGE_NAME=umd_causal_success_analysis
+FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME

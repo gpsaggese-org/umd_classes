@@ -1,20 +1,27 @@
-#!/usr/bin/env bash
-set -e
+#!/bin/bash -xe
+# """
+# Launch Jupyter Lab server.
+#
+# This script starts Jupyter Lab on port 8888 with the following configuration:
+# - No browser auto-launch (useful for Docker containers)
+# - Accessible from any IP address (0.0.0.0)
+# - Root user allowed (required for Docker environments)
+# - No authentication token or password (for development convenience)
+# """
 
-IMAGE_NAME="causal_success_analysis"
-PORT_HOST=8888
-PORT_CONTAINER=8888
+# Start Jupyter Lab with development-friendly settings.
+jupyter lab \
+    --port=8888 \
+    --no-browser \
+    --ip=0.0.0.0 \
+    --allow-root \
+    --ServerApp.token='' \
+    --ServerApp.password=''
 
-echo "============================================"
-echo "Launching Jupyter Lab"
-echo "Image: ${IMAGE_NAME}"
-echo "URL:   http://localhost:${PORT_HOST}"
-echo "============================================"
-echo "Press Ctrl+C to stop."
-echo ""
-
-docker run -it --rm \
-  -p "${PORT_HOST}:${PORT_CONTAINER}" \
-  -v "$(pwd):/app" \
-  -w /app \
-  "${IMAGE_NAME}"
+# Alternative: Use classic Jupyter Notebook instead of Jupyter Lab.
+#jupyter-notebook \
+#    --port=8888 \
+#    --no-browser --ip=0.0.0.0 \
+#    --allow-root \
+#    --NotebookApp.token='' \
+#    --NotebookApp.password=''
