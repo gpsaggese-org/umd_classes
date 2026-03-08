@@ -386,14 +386,3 @@ The layout of each project should follow the examples in:
     expectations
   - Are there signs that the project was rushed or left unfinished or AI
     generated
-
-### Submission Checklist
-
-- [ ] Is Docker approach followed?
-- [ ] Is all the possible code in the notebook moved to a `*_utils.py` file?
-- [ ] Are `project.API.ipynb` and `project.example.ipynb` in the right format?
-- [ ] Do the notebooks run end-to-end?
-
-- Optional
-  - [ ] Did you run `linters2/lint_branch.sh`?
-  - [ ] Are all the notebooks paired using Jupytext?
