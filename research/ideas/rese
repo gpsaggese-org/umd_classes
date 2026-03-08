@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+# Find the script directory.
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+vi "$SCRIPT_DIR/$1/README.md"

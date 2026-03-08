@@ -1,0 +1,31 @@
+#!/bin/bash -e
+
+# Make sure $1 contains a research idea name
+if [[ -z "$1" ]]; then
+    echo "ERROR: Provide a research idea name" >&2
+    exit 1
+fi
+IDEA="$1"
+
+# Find the script directory.
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
+# Check that the corresponding dir doesn't exist
+IDEA_DIR="$SCRIPT_DIR/$IDEA"
+if [[ -d "$IDEA_DIR" ]]; then
+    echo "ERROR: Idea dir already exists: $IDEA_DIR" >&2
+    exit 1
+fi
+
+# Create the dir.
+mkdir -p "$IDEA_DIR"
+
+# Create the README.md file inside the dir.
+README="$IDEA_DIR/README.md"
+cat > "$README" <<EOF
+# $IDEA
+
+EOF
+
+# Print the full path of the README.md.
+echo "$README"
