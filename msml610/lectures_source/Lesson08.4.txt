@@ -28,7 +28,7 @@ MSML610: Advanced Machine Learning
 - AIMA (Artificial Intelligence: a Modern Approach)
 
 - Pearl et al., The Book of Why, 2017
-- Facuce
+- Facure, Causal Inference in Python, 2023
 
 ::::
 :::: {.column width=20%}
@@ -40,8 +40,8 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-// Causal_inference_in_Python.Facure.2023.txt
 // /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf 
+// /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
 
 * Sales example
 - There are stores that put product on sales for Christmas
@@ -470,39 +470,42 @@ digraph SalesModelExtended {
   - Women apply more to harder department, making their overall acceptance rate
     appear lower, despite higher acceptance in each department
 
-* Identifying the treatment effect
+* Identifying the Treatment Effect
 - We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
   potential outcomes $Y_{1i}$ or $Y_{0i}$ and _not both_ 
 - How can we recover causal quantities from observable data?
 
 - The bias equation says that:
   $$E[Y | T = 1] - E[Y | T = 0] = 
-  E[Y_1 - Y_0 | T = 1] + 
+  E[(Y_1 - Y_0) | T = 1] + 
   \underbrace{E[Y_0 | T = 1] - E[Y_0 | T = 0]}_{\text{Bias}}
   $$
-- If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control group are
-  comparable (exchangeable) regardless of the treatment, then the bias term
-  vanishes
-  $$E[Y | T = 1] - E[Y | T = 0] = E[Y_1 - Y_0 | T = 1] = ATT$$
-- But it also holds $\EE[Y_1 - Y_0 | T=1] = \EE[Y_1 - Y_0|T=0]$
-  $$ATT = ATE = \EE[Y_1 - Y_0]$$
-  then the difference in means is the average causal effect
-// TODO: Unclear
+- If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control
+  group are comparable (exchangeable) regardless of the treatment, then
+  - the bias term vanishes $bias = 0$
+  - association is causation
+  - the measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
+  - the measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
 
-- The intuition is that if businesses that do and don't cut prices are similar to
-  each other, then the difference in amount sold between the ones that cut prices
-  and the ones that don't, can be entirely attributed to the price cut
+- **Sales Example**
+  - If businesses that do and don't cut prices are similar to each other (i.e.,
+    interchangeable), then the difference in amount sold between the ones that
+    cut prices and the ones that don't, can be entirely attributed to the price
+    cut
 
-* Independence assumption
-- The exchangeability property means that the outcomes are independent of the
-  treatment, $(Y_0, Y_1) \perp T$
-
-- $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
+* Independence Assumption
+- The exchangeability property is equivalent to having outcomes being independent
+  of the treatment:
+  $$
+  (Y_0, Y_1) \perp T
+  $$
+  i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
   potential outcomes
-- In other terms $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$
+  - In other terms $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$
 
-- In the business example, we couldn't tell apart businesses that chose to engage
-  in sales from those that didn't
+- **Sales Example**
+  - We can't tell apart businesses that chose to engage in sales from those that
+    didn't
 
 * Phases of causal inference
 - A causal inference problem is often broken down into two steps

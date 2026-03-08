@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -99,7 +99,7 @@ hmatplo.save_fig(
 
 # %%
 # # i = unit identifier
-# # y0, y1 = outcomes under control and treatment
+# # y0, y1 = potential outcomes under control and treatment (idealized situation)
 # # t = treatment indicator
 # # x = group
 # df1 = pd.DataFrame(
