@@ -10,6 +10,7 @@ statsmodels
 econml
 
 jupyterlab
+jupyterlab-vim
 tqdm
 
 pymc==5.16.2

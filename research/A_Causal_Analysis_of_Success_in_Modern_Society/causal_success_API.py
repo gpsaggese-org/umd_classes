@@ -50,12 +50,23 @@
 # First we need to bring in the functions we're going to demonstrate.
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
 import sys
 from pathlib import Path
 
-# -------------------------------------------------------------------
-# Ensure the project module is importable (works locally and in Docker)
-# -------------------------------------------------------------------
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+# Ensure the project module is importable (works locally and in Docker).
 project_root = Path.cwd()
 
 if (project_root / "causal_success_utils.py").exists():
@@ -63,11 +74,7 @@ if (project_root / "causal_success_utils.py").exists():
 elif Path("/app/causal_success_utils.py").exists():
     sys.path.insert(0, "/app")
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# Import simulation components
+# Import simulation components.
 from causal_success_utils import (
     Agent,
     create_population,
@@ -79,13 +86,13 @@ from causal_success_utils import (
     validate_simulation_results,
 )
 
-# Plotting configuration
+# Plotting configuration.
 # %matplotlib inline
 plt.style.use("seaborn-v0_8-darkgrid")
 
-print("Environment configured successfully")
-print(f"NumPy version:  {np.__version__}")
-print(f"Pandas version: {pd.__version__}")
+_LOG.info("Environment configured successfully")
+_LOG.info("NumPy version:  %s", np.__version__)
+_LOG.info("Pandas version: %s", pd.__version__)
 
 # %% [markdown]
 # ## Demo 1: Creating a Single Agent
@@ -320,10 +327,10 @@ print(
 #
 # From the summary statistics, we can already observe several important facts. Average capital remains close to \$1 00, which is consistent with gains and losses roughly balancing out over this short run. At the same time, there is meaningful dispersion: some agents accumulated over \$1.60 after experiencing multiple lucky events, while others suffered repeated unlucky events and fell below \$0.50.
 #
-# Using a DataFrame allows us to compute correlations, rank agents by outcomes, and prepare the data for causal analysis methods in later sections. These operations would be cumbersome and error-prone if we worked directly with lists of agent obcts.
-# jects.
-# ects.
-# ects.
+# Using a DataFrame allows us to compute correlations, rank agents by outcomes,
+# and prepare the data for causal analysis methods in later sections. These
+# operations would be cumbersome and error-prone if we worked directly with
+# lists of agent objects.
 #
 
 # %% [markdown]
@@ -552,7 +559,8 @@ print(f"Correlation between luck and success is {corr:.3f} (strong!)")
 #
 # For the broader motivation, theoretical background, and interpretation of results, see **`README.md`**.
 #
-# You now have a clear understanding of the individual pieces. The next notebookshows how they fit together.
+# You now have a clear understanding of the individual pieces. The next notebook
+# shows how they fit together.
 #
 
 # %% [markdown]

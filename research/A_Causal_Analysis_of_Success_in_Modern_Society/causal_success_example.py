@@ -13,27 +13,41 @@
 # ---
 
 # %%
-if True:
-    # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet jupyterlab-vim)"
-    # !jupyter labextension enable
-    # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet econml)"
-
-# %%
 # %load_ext autoreload
 # %autoreload 2
+
+import logging
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
 # %matplotlib inline
+
+# Make sure the project root is importable (works in Docker and locally).
+import os
+
+PROJECT_ROOT = "/app" if os.path.exists("/app") else os.getcwd()
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 # %% [markdown]
 # # A Causal Analysis of Success in Modern Society
 #
 # ## Tutorial: Talent, Luck, and Causal Inference
 #
-# Author: Krishna Kishore Buddi  
-# Course: MSML610  
-# Instructor: Prof. GP Saggese  
+# Author: Krishna Kishore Buddi
+# Course: MSML610
+# Instructor: Prof. GP Saggese
 # Institution: University of Maryland
-#
-# ---
 #
 # ## What this notebook does
 #
@@ -66,33 +80,25 @@ if True:
 #
 # We start by setting up the Python environment and importing the core libraries used throughout the tutorial. NumPy handles numerical computations, Pandas provides tools for working with tabular data, and Matplotlib/Seaborn support visualization. For the causal analysis, we rely on scikit-learn for general machine learning routines and EconML for modern double machine learning and causal forest estimators.
 #
-# This section simply ensures that all dependencies are available and configured, so the later parts of the notebook can focus on the model, the simulation, and the interpretation of results rather than on technical setup detals.
+# This section simply ensures that all dependencies are available and
+# configured, so the later parts of the notebook can focus on the model, the
+# simulation, and the interpretation of results rather than on technical setup
+# details.
 #
 
 # %%
+import importlib
 import os
-import sys
 
-# Make sure the project root is importable (works in Docker and locally)
-PROJECT_ROOT = "/app" if os.path.exists("/app") else os.getcwd()
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy import stats
 from sklearn.ensemble import RandomForestRegressor
 from econml.dml import LinearDML, CausalForestDML
 
-# Reload the utils module to pick up any local changes during development
-import importlib
 import causal_success_utils
 
 importlib.reload(causal_success_utils)
 
-# Import everything the notebook uses from the utils module
+# Import everything the notebook uses from the utils module.
 from causal_success_utils import (
     create_population,
     run_simulation,
@@ -100,49 +106,48 @@ from causal_success_utils import (
     get_results_dataframe,
 )
 
+# Configure plotting and numpy.
 np.random.seed(42)
 sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (14, 6)
 plt.rcParams["font.size"] = 10
 
-print("Environment configured successfully")
-print(f"Project root: {PROJECT_ROOT}")
-print(f"NumPy version: {np.__version__}")
-print(f"Pandas version: {pd.__version__}")
-print(f"Python executable: {sys.executable}")
-print("causal_success_utils module imported successfully")
+_LOG.info("Environment configured successfully")
+_LOG.info("Project root: %s", PROJECT_ROOT)
+_LOG.info("NumPy version: %s", np.__version__)
+_LOG.info("Pandas version: %s", pd.__version__)
+_LOG.info("causal_success_utils module imported successfully")
 
 # %%
-# Experimental Configuration
+# Experimental Configuration.
 
-# Population parameters
-N_AGENTS = 100  # Number of agents in the simulation
+# Population parameters.
+N_AGENTS = 100
 
-# Time parameters
-N_ROUNDS = 200  # Number of time steps (periods)
+# Time parameters.
+N_ROUNDS = 200
 
-# Event parameters
+# Event parameters.
 LUCKY_EVENTS_PER_ROUND = 10
 UNLUCKY_EVENTS_PER_ROUND = 10
 EVENTS_PER_ROUND = LUCKY_EVENTS_PER_ROUND + UNLUCKY_EVENTS_PER_ROUND
 
-# Event impact parameters
-# Lucky events: on average +35% with moderate spread
+# Event impact parameters (lucky events: on average +35% with moderate spread).
 LUCKY_MEAN = 0.35
 LUCKY_STD = 0.12
 
-# Unlucky events: on average -10% with smaller spread
+# Unlucky events: on average -10% with smaller spread.
 UNLUCKY_MEAN = 0.10
 UNLUCKY_STD = 0.04
 
-# Random seed for reproducibility
+# Random seed for reproducibility.
 RANDOM_SEED = 42
 
-print("Experimental configuration loaded")
-print(f"  Agents: {N_AGENTS}")
-print(f"  Rounds: {N_ROUNDS}")
-print(f"  Events per round: {EVENTS_PER_ROUND}")
-print(f"  Random seed: {RANDOM_SEED}")
+_LOG.info("Experimental configuration loaded")
+_LOG.info("Agents: %s", N_AGENTS)
+_LOG.info("Rounds: %s", N_ROUNDS)
+_LOG.info("Events per round: %s", EVENTS_PER_ROUND)
+_LOG.info("Random seed: %s", RANDOM_SEED)
 
 # %%
 # ===============================
