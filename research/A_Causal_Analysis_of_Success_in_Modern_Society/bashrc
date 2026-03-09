@@ -1,5 +1,1 @@
 set -o vi
-
-# Enable vim keybindings in Jupyter (JupyterLab and classic Notebook).
-# Default to 1 if not already set by docker_jupyter.sh via -u flag.
-export JUPYTER_USE_VIM=${JUPYTER_USE_VIM:-1}

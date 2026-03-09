@@ -21,6 +21,7 @@ source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Load Docker configuration variables (REPO_NAME, IMAGE_NAME, FULL_IMAGE_NAME).
 get_docker_vars_script ${BASH_SOURCE[0]}
+source $DOCKER_NAME
 print_docker_vars
 
 # Configure Docker build settings.
