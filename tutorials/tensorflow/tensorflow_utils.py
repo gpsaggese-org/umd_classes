@@ -12,10 +12,8 @@ from typing import Dict, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import seaborn as sns
-
-import helpers.hdbg as hdbg
+import pandas as pd
 
 _LOG = logging.getLogger(__name__)
 
@@ -184,7 +182,6 @@ def plot_forecast(
     :param x_formatter: optional Matplotlib x-axis formatter
     :return: tuple ``(fig, ax)``
     """
-    hdbg.dassert_eq(len(x), len(y))
     colors = sns.color_palette()
     c1, c2 = colors[0], colors[1]
     fig = plt.figure(figsize=(12, 6))
@@ -244,9 +241,7 @@ def plot_components(
     :return: tuple ``(fig, axes_dict)`` where ``axes_dict`` is an
         ``OrderedDict`` keyed by component name
     """
-    hdbg.dassert_eq(
-        set(component_means_dict.keys()), set(component_stddevs_dict.keys())
-    )
+
     colors = sns.color_palette()
     c2 = colors[1]
     axes_dict = collections.OrderedDict()
@@ -272,3 +267,28 @@ def plot_components(
     fig.autofmt_xdate()
     fig.tight_layout()
     return fig, axes_dict
+
+
+def df_to_str_simple(df: pd.DataFrame, num_rows: int = 6) -> str:
+    """
+    Convert a DataFrame (or Series/Index) to a string for logging.
+
+    Shows `num_rows` from top and bottom if DataFrame is large.
+    """
+    if df is None:
+        return ""
+    # Convert Series or Index to DataFrame
+    if isinstance(df, pd.Series):
+        df = df.to_frame()
+    elif isinstance(df, pd.Index):
+        df = df.to_frame(index=False)
+    
+    # Limit rows if needed
+    if num_rows is not None and len(df) > num_rows:
+        top = df.head(num_rows // 2)
+        bottom = df.tail(num_rows // 2)
+        df_to_print = pd.concat([top, bottom])
+    else:
+        df_to_print = df
+    
+    return df_to_print.to_string()
