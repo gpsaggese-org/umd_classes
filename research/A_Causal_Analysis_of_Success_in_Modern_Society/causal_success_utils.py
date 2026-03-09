@@ -1,17 +1,17 @@
 """
 Causal Success Analysis - Simulation and Inference Utilities.
+
 Import as:
 
-    import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as csu
+import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as csu
 """
-
-# TODO(ai_gp): Is this needed?
-from __future__ import annotations
 
 from typing import List, Optional, Dict, Any
 
 import numpy as np
 import pandas as pd
+
+import helpers.hdbg as hdbg
 
 # Optional Bayesian dependencies (simulation works without these).
 # try:
@@ -43,8 +43,6 @@ class Agent:
     """
     Agent representing an individual in the simulation.
 
-    TALENT DIMENSIONS
-    =================
     Each agent has four characteristics that define their position in the system:
 
     1. Intensity (0-1): Activity level and effort.
@@ -69,12 +67,6 @@ class Agent:
        - Set to 1.0 for all agents in baseline simulation.
        - This ensures inequality EMERGES from dynamics, not inherited advantages.
        - Minimum enforced: 0.01 (prevent collapse to zero).
-
-    :param agent_id: Unique agent identifier (typically agent's index)
-    :param intensity: Intensity talent, affects event exposure (0-1)
-    :param iq: IQ talent, affects ability to capitalize on luck (0-1)
-    :param networking: Networking talent, affects spillover effects (0-1)
-    :param initial_capital: Starting wealth level (default 1.0)
     """
 
     def __init__(
@@ -86,14 +78,15 @@ class Agent:
         *,
         initial_capital: float = 1.0,
     ):
-    # TODO(ai_gp): Convert to docstring
-    # :ivar id: Unique agent identifier
-    # :ivar talent: dict with keys: 'intensity', 'iq', 'networking', 'initial_capital'
-    # :ivar capital: Current wealth level (evolves over simulation)
-    # :ivar capital_history: List tracking capital at each time step
-    # :ivar lucky_events: Count of beneficial events agent received
-    # :ivar unlucky_events: Count of detrimental events agent experienced
-    # :ivar talent_norm: L2 norm of talent vector (read-only property)
+        """
+        Initialize the Agent with talents and initial capital.
+
+        :param agent_id: Unique agent identifier (typically agent's index)
+        :param intensity: Intensity talent, affects event exposure (0-1)
+        :param iq: IQ talent, affects ability to capitalize on luck (0-1)
+        :param networking: Networking talent, affects spillover effects (0-1)
+        :param initial_capital: Starting wealth level (default 1.0)
+        """
         self.id = int(agent_id)
         # Enforce bounds and safe floor for capital.
         self.talent = {
@@ -168,6 +161,7 @@ def create_population(n_agents: int = 100, *, seed: int = 42) -> List[Agent]:
     :param seed: RNG seed for reproducibility (default 42)
     :return: List of Agent objects, each with random talents and capital=1.0
     """
+    # TODO(ai_gp): dassert_lt
     if n_agents <= 0:
         raise ValueError("n_agents must be positive")
     rng = np.random.default_rng(seed)
@@ -190,12 +184,14 @@ def calculate_gini(values: np.ndarray) -> float:
     :return: Gini coefficient in [0, 1]
     """
     x = np.asarray(values, dtype=float)
-    # TODOD(ai_gp): Use dassert_
-    if x.size == 0:
-        raise ValueError("Cannot calculate Gini coefficient for empty array")
-    # TODOD(ai_gp): Use dassert_
-    if np.any(x < 0):
-        raise ValueError("Gini coefficient requires non-negative values")
+    # TODO(ai_gp): dassert_lt
+    hdbg.dassert(
+        x.size > 0, "Cannot calculate Gini coefficient for empty array"
+    )
+    hdbg.dassert(
+        not np.any(x < 0),
+        "Gini coefficient requires non-negative values",
+    )
     if np.all(x == 0):
         return 0.0
     x_sorted = np.sort(x)
@@ -240,8 +236,23 @@ def generate_summary_statistics(agents: List[Agent]) -> Dict[str, float]:
     Generate comprehensive summary statistics for the simulation output.
 
     :param agents: List of Agent objects (after simulation)
-    :return: Dictionary mapping metric names to float values
-    # TODO(ai_gp): Add an example of output
+    :return: Dictionary mapping metric names to float values. Example output:
+        {
+            'n_agents': 100.0,
+            'mean_capital': 2.15,
+            'median_capital': 1.85,
+            'std_capital': 1.42,
+            'min_capital': 0.01,
+            'max_capital': 8.50,
+            'capital_range': 850.0,
+            'gini_coefficient': 0.38,
+            'top_10_pct_share': 0.35,
+            'top_20_pct_share': 0.52,
+            'bottom_50_pct_share': 0.15,
+            'mean_lucky_events': 4.2,
+            'mean_unlucky_events': 4.1,
+            'mean_talent_norm': 1.95,
+        }
     """
     df = get_results_dataframe(agents)
     if df.empty:
@@ -285,23 +296,24 @@ def validate_simulation_results(agents: List[Agent]) -> bool:
     """
     Validate simulation results for basic correctness.
 
-    Raises ValueError if anything looks inconsistent.
+    Raises AssertionError if anything looks inconsistent.
 
     :param agents: List of Agent objects to validate
     :return: True if validation passes
     """
     df = get_results_dataframe(agents)
-    # TODO(ai_gp): Use dassert_
-    if df.empty:
-        raise ValueError("No agents provided to validate")
-    if (df["capital"] < 0).any():
-        raise ValueError("Negative capital detected")
-    if df.isnull().any().any():
-        raise ValueError("NaN values detected")
-    if (df["lucky_events"] < 0).any() or (df["unlucky_events"] < 0).any():
-        raise ValueError("Negative event counts detected")
+    hdbg.dassert(not df.empty, "No agents provided to validate")
+    hdbg.dassert(
+        not (df["capital"] < 0).any(), "Negative capital detected"
+    )
+    hdbg.dassert(not df.isnull().any().any(), "NaN values detected")
+    hdbg.dassert(
+        not ((df["lucky_events"] < 0).any() or (df["unlucky_events"] < 0).any()),
+        "Negative event counts detected",
+    )
     for a in agents:
         expected = 1 + a.lucky_events + a.unlucky_events
+        # TODO(ai_gp): dassert_eq
         if len(a.capital_history) != expected:
             raise ValueError(
                 f"Agent {a.id} has inconsistent capital history length "
@@ -338,13 +350,12 @@ def run_simulation(
     :param verbose: Show progress bar if True (requires tqdm, default False)
     :return: Same agents list with updated capital and event histories
     """
-    # TODO(ai_gp): Use dassert_
-    if n_periods <= 0:
-        raise ValueError(f"n_periods must be positive, got {n_periods}")
-    if not agents:
-        raise ValueError("agents list cannot be empty")
-    if n_lucky_events_per_period < 0 or n_unlucky_events_per_period < 0:
-        raise ValueError("event counts per period must be non-negative")
+    hdbg.dassert_lt(0, n_periods, "n_periods must be positive")
+    hdbg.dassert(agents, "agents list cannot be empty")
+    hdbg.dassert(
+        n_lucky_events_per_period >= 0 and n_unlucky_events_per_period >= 0,
+        "event counts per period must be non-negative",
+    )
 
     rng = np.random.default_rng(seed)
     n_agents = len(agents)
@@ -462,11 +473,11 @@ def run_policy_simulation(
                               (e.g., n_periods=80, seed=42, verbose=True)
     :return: Same agents list after resource allocation and full simulation
     """
-    # TODO(ai_gp): Use dassert_
-    if not agents:
-        raise ValueError("agents list cannot be empty")
-    if resource_amount < 0:
-        raise ValueError("resource_amount must be non-negative")
+    hdbg.dassert(agents, "agents list cannot be empty")
+    # TODO(ai_gp): use dassert_lt
+    hdbg.dassert(
+        resource_amount >= 0, "resource_amount must be non-negative"
+    )
     n = len(agents)
     rng = np.random.default_rng(simulation_kwargs.get("seed", None))
     # Handle random policy separately (single winner).
@@ -484,11 +495,13 @@ def run_policy_simulation(
     elif policy == "performance":
         weights = np.array([a.capital for a in agents], dtype=float)
     elif policy == "cate_optimal":
+        # TODO(ai_gp): dassert_is_not
         if cate_values is None:
             raise ValueError(
                 "cate_values must be provided when policy='cate_optimal'."
             )
         cate_array = np.asarray(cate_values, dtype=float)
+        # TODO(ai_gp): dassert_eq
         if cate_array.shape[0] != n:
             raise ValueError(
                 f"cate_values must have length {n}, got {cate_array.shape[0]}."
@@ -514,8 +527,9 @@ def run_policy_simulation(
     return run_simulation(agents, **simulation_kwargs)
 
 
-# -------------------------------------------------------------------
-# Bayesian model: effect of luck on log-capital, controlling for talent.
+# #############################################################################
+# Bayesian model
+# #############################################################################
 # -------------------------------------------------------------------
 
 
@@ -574,12 +588,6 @@ def fit_bayesian_luck_model(
     # All coefficients use weakly informative N(0, 1) priors (centered at 0).
     #This allows the data to dominate the inference without strong prior beliefs.
 
-    # TODO(ai_gp): Use dassert_
-    if pm is None or az is None:
-        raise ImportError(
-            "PyMC / ArviZ are not available. Install them to use the Bayesian model, "
-            "or skip this step if you only need the simulation."
-        )
     required_cols = [
         "capital",
         "lucky_events",
@@ -588,8 +596,7 @@ def fit_bayesian_luck_model(
         "talent_networking",
     ]
     missing = [c for c in required_cols if c not in df.columns]
-    if missing:
-        raise ValueError(f"DataFrame is missing required columns: {missing}")
+    hdbg.dassert(not missing, "DataFrame is missing required columns:", missing)
     capital = df["capital"].to_numpy(dtype=float)
     y = np.log(capital)  # log-capital is more stable and closer to normal.
     lucky = df["lucky_events"].to_numpy(dtype=float)
@@ -635,10 +642,6 @@ def summarize_bayesian_fit(
     :param var_names: optional subset of parameter names to summarize
     :return: pandas DataFrame with summary statistics (mean, sd, hdi, etc.)
     """
-    if az is None:
-        raise ImportError(
-            "ArviZ is not available. Install it to summarize Bayesian results."
-        )
     if var_names is None:
         # By default, summarize the main coefficients and sigma.
         var_names = [
@@ -675,10 +678,6 @@ def posterior_predictive_check(
         - "y_pred_mean": posterior predictive mean log-capital per agent
         - "y_pred_std": posterior predictive std-dev per agent
     """
-    if pm is None:
-        raise ImportError(
-            "PyMC is not available. Install it to run posterior predictive checks."
-        )
     capital = df["capital"].to_numpy(dtype=float)
     y_obs = np.log(capital)
     with model:
