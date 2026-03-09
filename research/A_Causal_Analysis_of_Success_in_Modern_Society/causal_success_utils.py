@@ -161,9 +161,7 @@ def create_population(n_agents: int = 100, *, seed: int = 42) -> List[Agent]:
     :param seed: RNG seed for reproducibility (default 42)
     :return: List of Agent objects, each with random talents and capital=1.0
     """
-    # TODO(ai_gp): dassert_lt
-    if n_agents <= 0:
-        raise ValueError("n_agents must be positive")
+    hdbg.dassert_lt(0, n_agents, "n_agents must be positive")
     rng = np.random.default_rng(seed)
     agents: List[Agent] = []
     for i in range(n_agents):
@@ -184,10 +182,7 @@ def calculate_gini(values: np.ndarray) -> float:
     :return: Gini coefficient in [0, 1]
     """
     x = np.asarray(values, dtype=float)
-    # TODO(ai_gp): dassert_lt
-    hdbg.dassert(
-        x.size > 0, "Cannot calculate Gini coefficient for empty array"
-    )
+    hdbg.dassert_lt(0, x.size, "Cannot calculate Gini coefficient for empty array")
     hdbg.dassert(
         not np.any(x < 0),
         "Gini coefficient requires non-negative values",
@@ -313,12 +308,13 @@ def validate_simulation_results(agents: List[Agent]) -> bool:
     )
     for a in agents:
         expected = 1 + a.lucky_events + a.unlucky_events
-        # TODO(ai_gp): dassert_eq
-        if len(a.capital_history) != expected:
-            raise ValueError(
-                f"Agent {a.id} has inconsistent capital history length "
-                f"(expected {expected}, got {len(a.capital_history)})"
-            )
+        hdbg.dassert_eq(
+            len(a.capital_history),
+            expected,
+            "Agent has inconsistent capital history length (expected, got):",
+            expected,
+            len(a.capital_history),
+        )
     return True
 
 
@@ -474,9 +470,8 @@ def run_policy_simulation(
     :return: Same agents list after resource allocation and full simulation
     """
     hdbg.dassert(agents, "agents list cannot be empty")
-    # TODO(ai_gp): use dassert_lt
-    hdbg.dassert(
-        resource_amount >= 0, "resource_amount must be non-negative"
+    hdbg.dassert_lt(
+        -0.0001, resource_amount, "resource_amount must be non-negative"
     )
     n = len(agents)
     rng = np.random.default_rng(simulation_kwargs.get("seed", None))
@@ -495,17 +490,17 @@ def run_policy_simulation(
     elif policy == "performance":
         weights = np.array([a.capital for a in agents], dtype=float)
     elif policy == "cate_optimal":
-        # TODO(ai_gp): dassert_is_not
-        if cate_values is None:
-            raise ValueError(
-                "cate_values must be provided when policy='cate_optimal'."
-            )
+        hdbg.dassert_is_not(
+            cate_values, None, "cate_values must be provided when policy='cate_optimal'."
+        )
         cate_array = np.asarray(cate_values, dtype=float)
-        # TODO(ai_gp): dassert_eq
-        if cate_array.shape[0] != n:
-            raise ValueError(
-                f"cate_values must have length {n}, got {cate_array.shape[0]}."
-            )
+        hdbg.dassert_eq(
+            cate_array.shape[0],
+            n,
+            "cate_values must have length (expected, got):",
+            n,
+            cate_array.shape[0],
+        )
         # Use only non-negative CATEs; negative values are clamped to zero.
         weights = np.maximum(cate_array, 0.0)
     else:
@@ -559,8 +554,21 @@ def fit_bayesian_luck_model(
         - idata: ArviZ InferenceData object containing posterior samples
                 Use with summarize_bayesian_fit() or posterior_predictive_check()
     """
-
-    # TODO(ai_gp): Move this information to the code.
+    required_cols = [
+        "capital",
+        "lucky_events",
+        "talent_intensity",
+        "talent_iq",
+        "talent_networking",
+    ]
+    missing = [c for c in required_cols if c not in df.columns]
+    hdbg.dassert(not missing, "DataFrame is missing required columns:", missing)
+    capital = df["capital"].to_numpy(dtype=float)
+    y = np.log(capital)  # log-capital is more stable and closer to normal.
+    lucky = df["lucky_events"].to_numpy(dtype=float)
+    intensity = df["talent_intensity"].to_numpy(dtype=float)
+    iq = df["talent_iq"].to_numpy(dtype=float)
+    networking = df["talent_networking"].to_numpy(dtype=float)
     # THE QUESTION
     # ============
     # Does luck causally affect outcomes, even after controlling for talent?
@@ -587,22 +595,6 @@ def fit_bayesian_luck_model(
     # ======
     # All coefficients use weakly informative N(0, 1) priors (centered at 0).
     #This allows the data to dominate the inference without strong prior beliefs.
-
-    required_cols = [
-        "capital",
-        "lucky_events",
-        "talent_intensity",
-        "talent_iq",
-        "talent_networking",
-    ]
-    missing = [c for c in required_cols if c not in df.columns]
-    hdbg.dassert(not missing, "DataFrame is missing required columns:", missing)
-    capital = df["capital"].to_numpy(dtype=float)
-    y = np.log(capital)  # log-capital is more stable and closer to normal.
-    lucky = df["lucky_events"].to_numpy(dtype=float)
-    intensity = df["talent_intensity"].to_numpy(dtype=float)
-    iq = df["talent_iq"].to_numpy(dtype=float)
-    networking = df["talent_networking"].to_numpy(dtype=float)
     with pm.Model() as model:
         # Priors: fairly weakly informative, centered at 0.
         alpha = pm.Normal("alpha", mu=0.0, sigma=1.0)
