@@ -1,27 +1,28 @@
 # Planning vs Execution: A Causal Analysis of Decision Strategy and Startup Success
 
 ## Description
-- **Agent-based causal model** that investigates whether entrepreneurs benefit more
-  from extensive upfront planning or from iterative execution and learning
-- **Simulation framework** using talent heterogeneity (planning ability, execution
-  speed, adaptability) and stochastic events to analyze success trajectories
+- **Agent-based causal model** that investigates whether entrepreneurs benefit
+  more from extensive upfront planning or from iterative execution and learning
+- **Simulation framework** using talent heterogeneity (planning ability,
+  execution speed, adaptability) and stochastic events to analyze success
+  trajectories
 - **Policy interventions** testing whether strategic resource allocation to
   planning, execution, or balanced approaches produces different outcomes
 - **Bayesian inference** to estimate causal effects of different strategies on
   founder wealth and startup survival rates
-- **Counterfactual analysis** to determine: "What if the same founder had invested
-  more time in planning vs. execution?"
+- **Counterfactual analysis** to determine: "What if the same founder had
+  invested more time in planning vs. execution?"
 - **Real-world implications** addressing the classic entrepreneurship debate: Is
   analysis paralysis worse than launching prematurely?
 
 ## Project Objective
 To determine the **causal effect of planning vs. execution on startup success**
-using an agent-based simulation combined with causal inference methods. The project
-will quantify how different decision strategies (early planning, rapid iteration,
-balanced approach) interact with founder talents to produce different outcomes.
-Rather than observational correlation, this project uses a computational model to
-answer: **How much of startup success is driven by planning quality versus
-execution speed?**
+using an agent-based simulation combined with causal inference methods. The
+project will quantify how different decision strategies (early planning, rapid
+iteration, balanced approach) interact with founder talents to produce different
+outcomes. Rather than observational correlation, this project uses a
+computational model to answer: **How much of startup success is driven by
+planning quality versus execution speed?**
 
 Use a framework like
 https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
@@ -36,7 +37,8 @@ Each simulated founder has three key talents:
   - Higher planning = better preparation, clearer roadmaps
   - Diminishing returns: over-planning can cause delays
 - **Execution Speed**: ability to implement decisions quickly and iterate
-  - Higher execution speed = faster learning loops, more experiments per unit time
+  - Higher execution speed = faster learning loops, more experiments per unit
+    time
   - Risk: speed without direction leads to wasted effort
 - **Adaptability**: ability to pivot strategies based on market feedback
   - Higher adaptability = better learning from failures and setbacks
@@ -52,7 +54,8 @@ The simulation includes stochastic events representing:
 - **Market Shifts**: require strategy pivots
   - Adaptability + execution speed enable quick response
 - **Resource Scarcity**: negative shocks limiting growth
-  - Planning ability helps weather; execution speed helps secure alternative resources
+  - Planning ability helps weather; execution speed helps secure alternative
+    resources
 
 ### Strategic Choices
 Founders choose allocation of effort between:
@@ -89,23 +92,23 @@ Founders choose allocation of effort between:
 
 ## Policy Interventions to Test
 
-### 1. **Pure Planning Strategy** ($k = T/2$ or higher)
+### 1. **Pure Planning Strategy** ($K = T/2$ or Higher)
 - Founders spend significant upfront time on market research, business planning,
   and risk mitigation
 - Execution compressed into shorter timeframe
 - **Outcome question**: Does this reduce failure risk or miss market windows?
 
-### 2. **Rapid Execution / MVP Strategy** ($k \approx 0$)
+### 2. **Rapid Execution / MVP Strategy** ($K \Approx 0$)
 - Minimal upfront planning; launch quickly and learn through iteration
 - Maximum number of feedback loops in market
 - **Outcome question**: Does speed and learning overcome lack of preparation?
 
-### 3. **Balanced Strategy** ($k = T/3$)
+### 3. **Balanced Strategy** ($K = T/3$)
 - Moderate upfront planning followed by extended execution
 - Combines preparation benefits with learning advantages
 - **Baseline hypothesis**: This should dominate both extremes
 
-### 4. **Adaptive Strategy** (time-varying)
+### 4. **Adaptive Strategy** (Time-Varying)
 - Planning-execution ratio adjusts based on real-time uncertainty
 - High adaptability founders shift emphasis when market feedback suggests pivot
 - **Outcome question**: Does flexibility outperform fixed strategies?
@@ -114,7 +117,6 @@ Founders choose allocation of effort between:
 
 ### 1. Causal Effect Estimation
 Run Bayesian regression to estimate:
-
 ```
 log(final_capital_i) = α
   + β_planning * [planning_phase_duration]_i
@@ -128,7 +130,8 @@ log(final_capital_i) = α
 
 - **Primary quantity of interest**: $\beta_{\text{planning}}$ vs.
   $\beta_{\text{execution}}$ (net effects after controlling for talent)
-- **Secondary interest**: interaction terms (do planning benefits depend on talent?)
+- **Secondary interest**: interaction terms (do planning benefits depend on
+  talent?)
 
 ### 2. Heterogeneous Effects Analysis
 Stratify results by founder talent profiles:
@@ -152,8 +155,8 @@ Measure Gini coefficient of final capital across founder populations:
 ## Expected Findings (Hypotheses)
 
 ### H1: Non-Monotonic Planning Effect
-Planning has diminishing returns; excessive planning produces worse outcomes than
-moderate planning due to opportunity cost.
+Planning has diminishing returns; excessive planning produces worse outcomes
+than moderate planning due to opportunity cost.
 
 ### H2: Execution Speed Dominates for High-Adaptability Founders
 Founders with high adaptability benefit more from rapid execution than from
@@ -163,9 +166,9 @@ extensive planning because they can learn and adjust.
 The benefit of a long planning phase depends on planning ability; low-ability
 planners waste time in extended planning.
 
-### H4: Balanced Strategy is Robust
-A balanced strategy produces moderate outcomes across all talent distributions and
-is less risky than extreme strategies.
+### H4: Balanced Strategy Is Robust
+A balanced strategy produces moderate outcomes across all talent distributions
+and is less risky than extreme strategies.
 
 ### H5: Talent Heterogeneity Explains Success Variation
 Within each strategy, founder talent explains more variance than the strategy
@@ -191,10 +194,12 @@ choice itself; strategy optimization is secondary to founder quality.
 - [ ] Specify agent dynamics: how planning/execution allocations affect event
       probabilities and magnitudes
 - [ ] Define event generation process and feedback mechanisms
-- [ ] Validate simulation parameters match stylized facts about startup timelines
+- [ ] Validate simulation parameters match stylized facts about startup
+      timelines
 
 ### Task 2: Simulation Implementation
-- [ ] Implement Agent class with planning, execution speed, adaptability attributes
+- [ ] Implement Agent class with planning, execution speed, adaptability
+      attributes
 - [ ] Build event generation with strategy-dependent impact modulation
 - [ ] Code allocation strategy policies (planning vs. execution tradeoffs)
 - [ ] Run large-scale simulations with 100 replicates per strategy
@@ -221,36 +226,35 @@ choice itself; strategy optimization is secondary to founder quality.
       iterate fast?
 
 ### Task 6: Interpretation & Visualization
-- [ ] Create causal graph showing pathways: (planning/execution) → (event exposure)
-      → (capital growth)
+- [ ] Create causal graph showing pathways: (planning/execution) → (event
+      exposure) → (capital growth)
 - [ ] Plot effect size of planning vs. execution with credible intervals
 - [ ] Show optimal allocation curves: planning_time(talent_profile)
-- [ ] Visualize heterogeneous effects: how recommendations differ by founder type
+- [ ] Visualize heterogeneous effects: how recommendations differ by founder
+      type
 
 ## Bonus Ideas
-
-- **Network Effects**: Allow founders to share learning across network if both use
-  execution-heavy strategies; measure information spillovers
-- **Market Timing**: Vary attractiveness of market windows over time; test whether
-  planning strategies miss first-mover advantages
+- **Network Effects**: Allow founders to share learning across network if both
+  use execution-heavy strategies; measure information spillovers
+- **Market Timing**: Vary attractiveness of market windows over time; test
+  whether planning strategies miss first-mover advantages
 - **Team Composition**: Model co-founder dynamics where one co-founder prefers
   planning and one prefers execution; measure conflict effects
 - **Learning Dynamics**: Make planning ability and execution speed improve over
   time through learning from events; test convergence
 - **Real Startup Data**: Calibrate simulation to real founder timelines
   (time-to-launch, iteration frequency) from Crunchbase or survey data
-- **Cognitive Biases**: Add founder biases (overconfidence, anchoring) that affect
-  planning quality
+- **Cognitive Biases**: Add founder biases (overconfidence, anchoring) that
+  affect planning quality
 - **Asymmetric Information**: Assume founders don't know true market parameters;
   test whether planning helps reduce information uncertainty
 
 ## Useful Resources
-
 - [Lean Startup Methodology](http://theleanstartup.com/) — Classic reference on
   execution-first, rapid iteration approach
 - [Good Strategy / Bad Strategy](https://www.amazon.com/Good-Strategy-Bad-Difference-Matters/dp/0307886239)
   — Discusses planning vs. execution tensions in practice
 - [Startup Genome Report](https://www.startupgenome.com/article/startup-genome-report)
   — Data on startup timelines and strategy outcomes
-- [Y Combinator Advice](https://www.ycombinator.com/library) — Empirical wisdom on
-  iteration speed and market validation
+- [Y Combinator Advice](https://www.ycombinator.com/library) — Empirical wisdom
+  on iteration speed and market validation
