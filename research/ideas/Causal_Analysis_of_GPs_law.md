@@ -4,6 +4,7 @@ The world GDP is $100T / year
 "GP's law": a substantial share (even 90%\!) is wasted in bad business decisions
 
 Businesses make 100s decisions / day
+
 - Pricing changes
 - Hiring / promotions
 - Capital projects
@@ -11,13 +12,14 @@ Businesses make 100s decisions / day
 - Vendor / partner selection ...
 
 Humans are terrible decision makers
+
 - Don't understand probability
 - Do not use data
 - Can't think counterfactually
 - Use heuristics and gut feelings
 
 - Create a simulation framework to measure this like
-https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
+  https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
 
 In a study of 500 managers, 98% failed to apply even basic decision-making best
 practices \[Larson, E. (2017)\] \~50% of decisions rely on intuition over data
@@ -90,7 +92,6 @@ figure is closer to **$111T**.
 [World Bank, 2024](https://data.worldbank.org/country/world)
 
 ### 2) "GP's law: a substantial share (even 90%) is wasted in bad business decisions"
-
 What the evidence _does_ support:
 
 - McKinsey says executives spend **almost 40% of their time making decisions**,
