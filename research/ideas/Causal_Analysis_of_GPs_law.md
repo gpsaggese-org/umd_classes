@@ -1,12 +1,22 @@
-# GP's Law
-The world GDP is $100T / year "GP's law": a substantial share (even 90%\!) is
-wasted in bad business decisions
+# A Causal Proof of GP's Law
+The world GDP is $100T / year
 
-Businesses make 100s decisions / day Pricing changes Hiring / promotions Capital
-projects Product feature priorities Vendor / partner selection ...
+"GP's law": a substantial share (even 90%\!) is wasted in bad business decisions
 
-Humans are terrible decision makers Don't understand probability Do not use data
-Can't think counterfactually Use heuristics and gut feelings
+Businesses make 100s decisions / day
+- Pricing changes
+- Hiring / promotions
+- Capital projects
+- Product feature priorities
+- Vendor / partner selection ...
+
+Humans are terrible decision makers
+- Don't understand probability
+- Do not use data
+- Can't think counterfactually
+- Use heuristics and gut feelings
+
+- Create a simulation framework to measure this
 
 In a study of 500 managers, 98% failed to apply even basic decision-making best
 practices \[Larson, E. (2017)\] \~50% of decisions rely on intuition over data
@@ -61,12 +71,6 @@ The strongest supported points are these:
   [Brynjolfsson, Hitt & Kim, 2011 working paper](https://ide.mit.edu/sites/default/files/publications/2011.12_Brynjolfsson_Hitt_Kim_Strength%20in%20Numbers_302.pdf)
 
 The weakest claim is the one that matters most rhetorically:
-
-- **"GP's law": 90% of GDP is wasted in bad business decisions** is **not
-  supported by credible evidence** in the public literature I could find. There
-  is strong evidence that poor decisions are costly and widespread, but **no
-  serious empirical basis** for a precise global loss figure remotely as large
-  as 90% of GDP.
 
 A stronger, evidence-based framing would be:
 
