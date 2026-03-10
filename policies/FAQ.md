@@ -8,15 +8,15 @@ contribution, and what you'll gain from the internship.
 ## What Do You Gain From Working with GP's Research Group?
 - Write blogs, papers, and more that make your resume stand out
 - Work on interesting technical projects that build your resume
-- Meet interesting people that will be useful as part of your network
+- Meet interesting people who will be useful as part of your network
 - Get recommendation letters and advice from GP
 - Get TA or RA positions
   - Disclaimer: with all the funding cuts, we are rebuilding the internship and
     funding pipeline to use private funding, so things are not great, but in
     about 6 months we should be back on track
 - Get exposure to companies
-  - GP is a liaison between UMD CS and Engineering and startups, venture
-    capital, and large companies
+  - GP is a liaison between UMD CS/Engineering and startups, venture capital,
+    and large companies
 
 ## Authorship Policy
 Ideas and projects go through the following life cycle:
@@ -38,9 +38,10 @@ See published work: https://gpsaggese.github.io/umd_classes/05_publications/
 - Avoid uneven commitment (e.g., working hard for 1 week, then disappearing for
   3, then working hard again for 2 weeks). There is always a reason not to make
   progress, but your job is to find the time anyway
-- When people don't make progress, this has a negative effect on everyone (see
-  [broken window theory](https://en.wikipedia.org/wiki/Broken_windows_theory))
-  and takes limited resources from team members who deserve support
+- When people don't make progress, this has a negative effect on everyone
+  (similar to [broken windows theory](https://en.wikipedia.org/wiki/Broken_windows_theory):
+  inconsistent effort erodes team culture) and takes limited resources from team
+  members who deserve support
 - People have built excellent coding projects in 1-2 hours at night after work,
   just by putting time in every single day
 - School always has priority, so we take breaks during final periods
@@ -74,21 +75,21 @@ We follow the collaboration rules of an open-source project:
 - Post an update on the GitHub issue every 2-3 days with what's done, what's
   next, and any blockers
 
-## "What project will I work on?", "I really want to work on XYZ"
-- We guarantee you'll work on an interesting AI, ML, DevOps, or coding project,
-  but not necessarily the one you want
-- Whatever project you feel is a must-learn will likely become irrelevant within
-  6 months
-- The most important task during this internship is learning and mastering the
-  fundamentals:
-  - Contributing to an open-source project
-  - Writing maintainable code
-  - Fixing bugs and documenting
-  - Writing unit tests and reading code
-  - Improving other people's code
-  - Working on a team
-- Focus on fundamentals that never change, not whatever is trending on
-  HackerNews
+## Will I Work on a Specific Project I Choose?
+We guarantee you'll work on an interesting AI, ML, DevOps, or coding project,
+but not necessarily the one you want. Whatever project feels like a must-learn
+will likely become irrelevant within 6 months.
+
+The most important task during this internship is learning and mastering these
+fundamentals:
+- Contributing to an open-source project
+- Writing maintainable code
+- Fixing bugs and documenting
+- Writing unit tests and reading code
+- Improving other people's code
+- Working on a team
+
+Focus on fundamentals that never change, not whatever is trending on HackerNews.
 
 ## How Do Interns Get Feedback to Improve?
 We have a process to help you improve and reach your full potential. See:
