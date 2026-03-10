@@ -1,93 +1,104 @@
-# **FAQs**
+# FAQs
 
-## **What do you gain from working with GP's research group?**
+# Summary
+This document answers common questions about joining and working with GP's
+research group, including benefits, authorship policies, expectations for
+contribution, and what you'll gain from the internship.
 
-- Write blogs, papers, ... that make your resume stand out  
-- Work on interesting technical projects that build your resume  
-- Meet interesting people that will be useful as part of your network  
-- Get recommendation letters and advice from GP  
-- Get TA GP's classes  
-- Get RA  
-  - Disclaimer: with all the funding cuts, we have to rebuild the internship / funding pipeline to use private funding, so things are not great, but in \~6 months I believe we are going to be back on track  
-- Get exposure to companies  
-  - GP is a liaison between UMD CS / Eng and startup / venture capital / large companies
+## What Do You Gain From Working with GP's Research Group?
+- Write blogs, papers, and more that make your resume stand out
+- Work on interesting technical projects that build your resume
+- Meet interesting people that will be useful as part of your network
+- Get recommendation letters and advice from GP
+- Get TA or RA positions
+  - Disclaimer: with all the funding cuts, we are rebuilding the internship and
+    funding pipeline to use private funding, so things are not great, but in
+    about 6 months we should be back on track
+- Get exposure to companies
+  - GP is a liaison between UMD CS and Engineering and startups, venture
+    capital, and large companies
 
-## **Authorship policy**
-
+## Authorship Policy
 Ideas and projects go through the following life cycle:
 
-- class projects  
-- blog  
-- academic papers  
-- (potential) books
+- Class projects
+- Blog
+- Academic papers
+- Potential books
 
-The authorship is very simple: "You contribute to one of the activities (writing code, writing the article, ...), you are an author".
+The authorship is simple: if you contribute to one of the activities (writing
+code, writing the article, etc.), you are an author.
 
-## **Examples**
+## Examples
+See published work: https://gpsaggese.github.io/umd_classes/05_publications/
 
-https://gpsaggese.github.io/umd\_classes/05\_publications/
+## Meaningful, Constant, High-Quality Progress
+- It's difficult to specify a minimum number of hours, since some people can
+  make lots of progress in 2-3 hours a week
+- Avoid uneven commitment (e.g., working hard for 1 week, then disappearing for
+  3, then working hard again for 2 weeks). There is always a reason not to make
+  progress, but your job is to find the time anyway
+- When people don't make progress, this has a negative effect on everyone (see
+  [broken window theory](https://en.wikipedia.org/wiki/Broken_windows_theory))
+  and takes limited resources from team members who deserve support
+- People have built excellent coding projects in 1-2 hours at night after work,
+  just by putting time in every single day
+- School always has priority, so we take breaks during final periods
 
-## **Meaningful, constant, high-quality progress**
+## When to Contribute
+We don't care when you find time to contribute (at night or over the weekend),
+but be reliable about delivering.
 
-- It's difficult to say "the minimum to collaborate is X hours", since some people can make lots of progress even in 2-3 hours a week  
-- What we want to avoid is uneven commitment (e.g., do a good job for 1 week and then disappear for 3, then work hard for 2 weeks). There is always a reason not to make progress. Your job is not find one.  
-- When people around you don't make progress, this has a bad effect on everyone (see [broken window theory](https://en.wikipedia.org/wiki/Broken_windows_theory)) and takes our limited resources from team members who don't deserve  
-- People have built insanely good coding projects in 1-2 hours at night after work, just by putting time every single day  
-- Of course, school has always priority, so we tend to take breaks during final periods
+- Taking up something and not being able to deliver is one of the biggest
+  mistakes people make when starting a new role
+- You have only one opportunity to make a first impression. Once people see you
+  as unreliable or as someone who over-commits and under-delivers, it's very
+  difficult to change that perception
 
-## **When to contribute**
+## We Work as an Open Source Project
+We follow the collaboration rules of an open-source project:
 
-We don’t care when you find the time to contribute (at night or over the weekend).
+- Most work happens through GitHub
+- Minimal communication via email
+- Use instant messaging only for high-priority questions
+- Meetings are scheduled regularly and we avoid on-demand meetings unless
+  strictly necessary
 
-- Taking up something and not being able to deliver is one of the single biggest mistakes people make when starting a new job  
-- You have only one opportunity to make a first impression. Once you give the impression of somebody who is not reliable or who over-commits and under-delivers, it is very difficult to change that impression.
+## Always Reply to Emails with Everyone in Cc
+- Always add the rest of the team to emails to get quicker responses
+- Emailing only GP is not scalable (unless it's a personal matter)
 
-## **We work as an open source project**
+## Always Create an Issue Before Starting to Work
+- Create a GitHub issue describing what you want to do and how you plan to do it
+- Create a PR for that issue and commit code regularly to show progress
+- Post an update on the GitHub issue every 2-3 days with what's done, what's
+  next, and any blockers
 
-We follow the collaboration rules of an open-source project
+## "What project will I work on?", "I really want to work on XYZ"
+- We guarantee you'll work on an interesting AI, ML, DevOps, or coding project,
+  but not necessarily the one you want
+- Whatever project you feel is a must-learn will likely become irrelevant within
+  6 months
+- The most important task during this internship is learning and mastering the
+  fundamentals:
+  - Contributing to an open-source project
+  - Writing maintainable code
+  - Fixing bugs and documenting
+  - Writing unit tests and reading code
+  - Improving other people's code
+  - Working on a team
+- Focus on fundamentals that never change, not whatever is trending on
+  HackerNews
 
-- Mostly everything happens through GitHub  
-- Minimal communication via email  
-- Use IM only for high-priority questions  
-- Meetings are scheduled regularly and try to avoid on-demand meetings unless strictly necessary
+## How Do Interns Get Feedback to Improve?
+We have a process to help you improve and reach your full potential. See:
+[Contributor Feedback README](https://docs.google.com/document/d/10-sT92CGpHsr7M1W2-v1UrhLmlOIUWv-Qc4D2uvOZHI/edit?tab=t.0)
 
-## **Always reply to emails with everyone in cc**
-
-- Always add the rest of the team to the emails to get a quicker response  
-- Emailing only GP is not scalable (unless it's a personal thing)
-
-## **Always create an issue before starting to work**
-
-- Create a GitHub issue  
-- Explain what you want to do  
-- How you want to do  
-- Create a PR for that issue and commit code regularly so you show progress and you can get progress  
-- Post an update on the GitHub issue every 2-3 days with what so done, what's next and so on
-
-## **“What project will I work on?”, “I really want to work on XYZ”**
-
-- We can guarantee that you will work on an interesting AI / ML / devops / coding project, but not necessarily the one you want  
-- Whatever the XYZ project is that you feel is a must-learn, will likely become irrelevant within 6 months  
-- The most important task to focus on during this internship is learning and mastering the fundamentals, such as  
-  - contributing to an open-source project  
-  - writing maintainable code  
-  - fixing bugs, documenting  
-  - writing unit tests, reading  
-  - read and improve other people’s code  
-  - work on a team  
-  - ...  
-- You need to learn how to master the fundamentals that never change and not whatever is the latest shiny object on HackerNews
-
-## **How do interns get feedback to improve?**
-
-We have a process to help you improve and reach your full potential  
-[Contributor Feedback \- README](https://docs.google.com/document/d/10-sT92CGpHsr7M1W2-v1UrhLmlOIUWv-Qc4D2uvOZHI/edit?tab=t.0)
-
-## **What will I get during the internship?**
-
-- You will learn the fundamentals of working on a high-performing distributed startup team  
-- Contribute to a research paper, blogs, tutorial, books  
-- Learn how to develop using AI tools in the right way, so that you are not obsolete in 6 months  
-- Get exposure to companies, startups, interesting people, events on campus, ...  
-- Recommendation letter and whatever help you need for your career
-
+## What Will I Get During the Internship?
+- Learn the fundamentals of working on a high-performing distributed startup
+  team
+- Contribute to research papers, blogs, tutorials, and books
+- Learn how to develop using AI tools correctly, so you stay relevant beyond 6
+  months
+- Get exposure to companies, startups, interesting people, and events on campus
+- Receive a recommendation letter and career guidance
