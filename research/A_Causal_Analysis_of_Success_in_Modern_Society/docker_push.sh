@@ -1,30 +1,25 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# """
+# Push Docker container image to Docker Hub or registry.
+#
+# This script authenticates with the Docker registry using credentials from
+# ~/.docker/passwd.$REPO_NAME.txt and pushes the locally built container
+# image to the remote repository.
+# """
+
+# Exit immediately if any command exits with a non-zero status.
 set -e
 
-IMAGE_NAME="causal_success_analysis"
+# Print each command to stdout before executing it.
+set -x
 
-if [ -z "$1" ]; then
-    echo "Usage: ./docker_push.sh <docker-hub-username>"
-    exit 1
-fi
+# Import the utility functions.
+GIT_ROOT=$(git rev-parse --show-toplevel)
+source $GIT_ROOT/class_project/project_template/utils.sh
 
-DOCKER_USER="$1"
-REMOTE_IMAGE="${DOCKER_USER}/${IMAGE_NAME}:latest"
+# Load Docker image naming configuration.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $SCRIPT_DIR/docker_name.sh
 
-echo "============================================"
-echo "Preparing Docker image for push"
-echo "Local image : ${IMAGE_NAME}"
-echo "Remote image: ${REMOTE_IMAGE}"
-echo "============================================"
-
-echo "Tagging image..."
-docker tag "${IMAGE_NAME}" "${REMOTE_IMAGE}"
-
-echo "Pushing image to Docker Hub..."
-docker push "${REMOTE_IMAGE}"
-
-echo "============================================"
-echo "Push complete!"
-echo "Image available at:"
-echo "https://hub.docker.com/r/${DOCKER_USER}/${IMAGE_NAME}"
-echo "============================================"
+# Push the container image to the registry.
+push_container_image

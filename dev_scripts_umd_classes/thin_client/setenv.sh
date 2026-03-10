@@ -132,4 +132,6 @@ configure_specific_project
 
 print_env_signature
 
+export PATH=$GIT_ROOT_DIR/research/ideas:$PATH
+
 echo -e "${INFO}: ${SCRIPT_PATH} successful"
