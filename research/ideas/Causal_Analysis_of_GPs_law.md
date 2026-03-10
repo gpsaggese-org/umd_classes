@@ -16,7 +16,8 @@ Humans are terrible decision makers
 - Can't think counterfactually
 - Use heuristics and gut feelings
 
-- Create a simulation framework to measure this
+- Create a simulation framework to measure this like
+https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
 
 In a study of 500 managers, 98% failed to apply even basic decision-making best
 practices \[Larson, E. (2017)\] \~50% of decisions rely on intuition over data
@@ -89,13 +90,6 @@ figure is closer to **$111T**.
 [World Bank, 2024](https://data.worldbank.org/country/world)
 
 ### 2) "GP's law: a substantial share (even 90%) is wasted in bad business decisions"
-**Assessment:** not substantiated.
-
-I found **no credible academic, multilateral, or major consulting source**
-supporting a quantitative claim that anything like **90% of GDP** is lost to
-poor business decisions. There is strong evidence of decision inefficiency, but
-the gap between "decision quality matters a lot" and "90% of GDP is wasted" is
-enormous.
 
 What the evidence _does_ support:
 
