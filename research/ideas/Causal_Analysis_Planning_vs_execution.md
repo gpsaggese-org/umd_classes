@@ -23,6 +23,9 @@ Rather than observational correlation, this project uses a computational model t
 answer: **How much of startup success is driven by planning quality versus
 execution speed?**
 
+Use a framework like
+https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
+
 ## Core Model Components
 
 ### Agent Attributes (Founder Talents)
