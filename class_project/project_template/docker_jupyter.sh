@@ -2,9 +2,9 @@
 # """
 # Execute Jupyter Lab in a Docker container.
 #
-# This script launches a Docker container running Jupyter Lab with configurable
-# port, directory mounting, and vim bindings. It passes command-line options to
-# the run_jupyter.sh script inside the container.
+# This script launches a Docker container running Jupyter Lab with
+# configurable port, directory mounting, and vim bindings. It passes
+# command-line options to the run_jupyter.sh script inside the container.
 #
 # Usage:
 # > docker_jupyter.sh -d /path/to/notebooks -v -u -p 8889
