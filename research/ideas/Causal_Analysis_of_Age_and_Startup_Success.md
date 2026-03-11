@@ -25,6 +25,9 @@ instrumental variables, or causal DAGs to estimate whether age directly
 influences startup outcomes or if the observed relationship is explained by
 other factors.
 
+Use a framework like
+https://github.com/gpsaggese/gpsaggese.github.io/blob/master/papers/Causal_Analysis_of_Agent_Skill_And_Luck/Causal_Analysis_of_Agent_Skill_And_Luck.pdf
+
 ## Dataset Suggestions
 1. **Crunchbase** (via Kaggle or direct API)
    - Source:
