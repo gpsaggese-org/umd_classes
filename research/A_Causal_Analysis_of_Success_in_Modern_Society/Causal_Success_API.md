@@ -6,8 +6,7 @@ This document explains the core functions and classes in
 `causal_success_utils.py`. If you're new to the project, this is where you'll
 learn what each function does and how to use it. The code implements an
 agent-based simulation where a population of individuals (agents) experience
-random events over time, and we measure how inequality emerges from these
-events.
+random events over time.
 
 Think of this as the technical manual. For a step-by-step walkthrough of the
 complete analysis, check out `causal_success_example.md` instead. For a
@@ -15,8 +14,7 @@ higher-level narrative and motivation, see `causal_success_tutorial.md`.
 
 ## The Agent Class
 
-Every simulation needs agents. In our case, an agent represents a person with
-certain abilities and resources.
+In our case, an agent represents a person with certain abilities and resources.
 
 ### What an Agent Contains
 
@@ -321,8 +319,7 @@ In addition to the simulation and descriptive statistics, the project includes a
 while controlling for talent.
 
 All Bayesian functions live in `causal_success_utils.py` and rely on **PyMC**
-and **ArviZ**. They are **optional**: if these libraries are not installed, you
-can still run the simulation and summary functions.
+and **ArviZ**.
 
 ### Overview of the Model
 

@@ -2,11 +2,6 @@
 
 ## What This Document Does
 
-You're about to walk through the entire analysis pipeline step by step. This
-document mirrors what happens in `causal_success_example.ipynb`, but explains it
-in plain language instead of just showing code. Think of it as your guide
-through the notebook.
-
 If you want technical details about specific functions, check
 `causal_success_API.md` instead. If you want the big picture motivation and
 theory, start with `README.md`. This document sits in the middle: it's about how
@@ -14,49 +9,10 @@ everything fits together in practice.
 
 ## Before You Start
 
-Make sure you've got the Docker environment running and Jupyter Lab open. The
-notebook has 12 sections, and we'll go through each one explaining what's
-happening and why.
-
-**Expected runtime:** About 2 to 3 minutes total when you run all cells. Most of
-that is the simulation itself (Section 4), which processes 100 agents through 80
-time periods.
 
 **Key question we're answering:** If everyone starts equal and has similar
 abilities, why do outcomes become so unequal? Specifically, is it talent
 differences or random luck that matters more?
-
-## Section 1: Setting Everything Up
-
-First things first, we need to import the right packages and configure the
-environment.
-
-**What gets imported:**
-
-We bring in NumPy and Pandas for data handling. Matplotlib and Seaborn handle
-visualizations. SciPy provides statistical tools. The big one is EconML, which
-gives us the causal inference machinery (Double Machine Learning and Causal
-Forests). We also import everything from our custom simulation module.
-
-**Configuration details:**
-
-The notebook sets `np.random.seed(42)` right away. This makes everything
-reproducible. Every time you run it with seed 42, you get exactly the same
-results. That's essential for science because it means others can verify your
-work.
-
-We also configure matplotlib to use a specific style and figure size. This is
-just about making plots look consistent and readable. Nothing deep, just
-housekeeping.
-
-**What you should see:**
-
-When you run this cell, it prints version numbers for the key packages and
-confirms that everything imported successfully. You should see something like
-"NumPy version: 1.24.3" and "Environment configured successfully."
-
-If something fails to import, you'll get an error here. Most common issue is
-missing EconML, which you'd install with `pip install econml`.
 
 ## Section 2: Understanding the Theory
 
@@ -528,45 +484,6 @@ attributes.
 
 The notebook is meant to be interactive. Run it, understand it, then customize
 it.
-
-## Common Questions and Troubleshooting
-
-**Q: The simulation is taking forever. What's wrong?**
-
-A: Most likely issue is n_periods or n_agents set too high. 100 agents and 80
-periods should run in under a minute. If you're doing 1000 agents and 500
-periods, that could take a while. Reduce the numbers to test, then scale up.
-
-**Q: My Gini coefficient is way different from what's described here.**
-
-A: First check your random seed. If seed=42, you should get very consistent
-results. If you're using a different seed or no seed, results will vary. Second,
-check your parameter values. Very low lucky_mean or very few n_periods can
-produce low Gini. Very high unlucky_mean can produce extreme Gini.
-
-**Q: Correlations are negative or don't make sense.**
-
-A: Make sure you're using log(capital) not raw capital for correlation analysis.
-Raw capital correlations are unstable due to outliers. Also verify your agents
-actually ran through simulation (check that lucky_events and unlucky_events are
-non zero).
-
-**Q: Import errors when running the notebook.**
-
-A: Most likely you're missing EconML. Run `pip install econml` in your
-environment. Or if you're in Docker, rebuild the container after adding econml
-to requirements.txt.
-
-**Q: Visualizations aren't showing up.**
-
-A: Add `%matplotlib inline` at the top of the notebook. This tells Jupyter to
-display plots in the notebook instead of in separate windows.
-
-**Q: Can I run this with 1000 agents?**
-
-A: Yes, but it'll be slower. The computational complexity scales roughly
-linearly with n_agents, so 1000 agents takes about 10x as long as 100 agents.
-Still very doable, just be patient.
 
 ## Relationship to Other Documents
 

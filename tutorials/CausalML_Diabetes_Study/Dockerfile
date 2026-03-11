@@ -42,10 +42,6 @@ RUN mkdir /install
 COPY requirements.txt /install/requirements.txt
 RUN pip3 install --no-cache-dir -r /install/requirements.txt
 
-# Install Jupyter extensions.
-#ADD install_jupyter_extensions.sh /install
-#RUN /install/install_jupyter_extensions.sh
-
 # Config.
 ADD etc_sudoers /install/
 COPY etc_sudoers /etc/sudoers
