@@ -31,6 +31,12 @@ ENV PATH="/venv/bin:$PATH"
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip
 
+# Install uv, if needed.
+#RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+#ENV PATH="/root/.local/bin:$PATH"
+#COPY pyproject.toml uv.lock /app/
+#RUN uv sync
+
 # Install Jupyter.
 RUN pip3 install jupyterlab
 
@@ -44,21 +50,6 @@ RUN mkdir /install
 ADD etc_sudoers /install/
 COPY etc_sudoers /etc/sudoers
 COPY bashrc /root/.bashrc
-
-# Install Jupyter extensions.
-ADD install_jupyter_extensions.sh /install/
-RUN /install/install_jupyter_extensions.sh
-
-# Install MongoDB.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gnupg curl && \
-    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
-    gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor && \
-    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/7.0 multiverse" | \
-    tee /etc/apt/sources.list.d/mongodb-org-7.0.list && \
-    apt-get update && \
-    apt-get install -y mongodb-org && \
-    rm -rf /var/lib/apt/lists/*
 
 # Report package versions.
 ADD version.sh /install/
