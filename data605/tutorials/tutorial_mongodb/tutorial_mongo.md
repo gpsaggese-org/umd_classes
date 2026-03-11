@@ -121,7 +121,7 @@
 
 - After starting Mongo, start Jupyter server inside your container with:
   ```
-  docker> run_jupyter.sh
+  docker> /data/run_jupyter.sh
   [I 09:13:03.745 NotebookApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
   ...
   [I 09:13:15.033 NotebookApp] Serving notebooks from local directory: /

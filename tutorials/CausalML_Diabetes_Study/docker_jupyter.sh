@@ -69,5 +69,6 @@ run "docker run \
     -v $(pwd):/curr_dir \
     -v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e JUPYTER_USE_VIM=$JUPYTER_USE_VIM \
     $FULL_IMAGE_NAME \
     $CMD"

@@ -31,12 +31,6 @@ ENV PATH="/venv/bin:$PATH"
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip
 
-# Install uv, if needed.
-#RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-#ENV PATH="/root/.local/bin:$PATH"
-#COPY pyproject.toml uv.lock /app/
-#RUN uv sync
-
 # Install Jupyter.
 RUN pip3 install jupyterlab
 
