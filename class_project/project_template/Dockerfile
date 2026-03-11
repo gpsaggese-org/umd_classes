@@ -23,28 +23,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment.
-RUN python3 -m venv /venv
+RUN python3 -m venv /opt/venv
 
 # Make the venv the default Python.
-ENV PATH="/venv/bin:$PATH"
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip
 
-# Install uv, if needed.
-#RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-#ENV PATH="/root/.local/bin:$PATH"
-#COPY pyproject.toml uv.lock /app/
-#RUN uv sync
-
 # Install Jupyter.
 RUN pip3 install jupyterlab
 
-# Install project specific packages.
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
 RUN mkdir /install
+
+# Install project specific packages.
+COPY requirements.txt /install/requirements.txt
+RUN pip3 install --no-cache-dir -r /install/requirements.txt
 
 # Config.
 ADD etc_sudoers /install/
