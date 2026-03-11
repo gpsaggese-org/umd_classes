@@ -1,2 +1,3 @@
-pymongo>=4.0
 ipython-mongo
+pandas
+pymongo>=4.0

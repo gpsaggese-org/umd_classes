@@ -14,11 +14,10 @@ if [[ ! -d $DIR_NAME ]]; then
   mkdir -p $DIR_NAME
 fi;
 
-# Install extensions.
-sudo jupyter contrib nbextension install
-
-# Enable extensions.
-extensions="
+# Install extensions if jupyter-contrib-nbextensions is available.
+if jupyter contrib nbextension install 2>/dev/null; then
+  # Enable extensions.
+  extensions="
 autosavetime/main
 code_prettify/code_prettify
 collapsible_headings/main
@@ -32,12 +31,16 @@ runtools/main
 toc2/main
 spellchecker/main"
 
-for v in $extensions; do
-  jupyter nbextension enable $v
-done;
+  for v in $extensions; do
+    jupyter nbextension enable "$v" || true
+  done;
+else
+  echo "jupyter-contrib-nbextensions not installed, skipping extensions"
+fi
 
 # Disable configuration for nbextensions without explicit compatibility.
-echo "{\"nbext_hide_incompat\": false}" > /$HOME/.jupyter/nbconfig/common.json
+mkdir -p /root/.jupyter/nbconfig
+echo "{\"nbext_hide_incompat\": false}" > /root/.jupyter/nbconfig/common.json
 
 DIR=$(jupyter --data-dir)/nbextensions
 if [[ ! -e $DIR ]]; then
@@ -54,4 +57,5 @@ git clone https://github.com/lambdalisue/jupyter-vim-binding vim_binding
 
 #jupyter nbextension enable vim_binding/vim_binding
 
-jupyter notebook --generate-config -y
+# Generate Jupyter config (skip if notebook command not available)
+jupyter notebook --generate-config -y 2>/dev/null || echo "jupyter notebook config generation skipped (JupyterLab in use)"

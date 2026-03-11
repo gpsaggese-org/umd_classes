@@ -25,7 +25,7 @@ run "docker image ls $FULL_IMAGE_NAME"
 # Configure and run the Docker container with interactive bash shell.
 # - Container is removed automatically on exit (--rm)
 # - Interactive mode with TTY allocation (-ti)
-# - Port forwarding for services
+# - Port forwarding for Jupyter or other services
 # - Current directory mounted to /data inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=8889
