@@ -28,11 +28,10 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Port forwarding for Jupyter or other services
 # - Current directory mounted to /data inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8889
+PORT=8888
 cmd="docker run --rm -ti \
     --name $CONTAINER_NAME \
-    -p 8888:8888 -p 5432:5432 \
-    -p $PORT:$PORT \
+    -p $PORT:8888 -p 5432:5432 \
     -v $(pwd):/data \
     -v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \

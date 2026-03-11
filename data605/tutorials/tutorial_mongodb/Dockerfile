@@ -1,5 +1,7 @@
-FROM ubuntu:24.04
-ENV DEBIAN_FRONTEND noninteractive
+## Note: Ubuntu 22.04 is used because MongoDB official packages do not yet support Ubuntu 24.04.
+## Once MongoDB supports Ubuntu 24.04, this can be upgraded.
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -45,15 +47,15 @@ ADD etc_sudoers /install/
 COPY etc_sudoers /etc/sudoers
 COPY bashrc /root/.bashrc
 
-# Install MongoDB.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends gnupg curl && \
-    curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | \
-    gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor && \
-    echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu noble/mongodb-org/8.0 multiverse" | \
-    tee /etc/apt/sources.list.d/mongodb-org-8.0.list && \
+## Install MongoDB 7.0.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gnupg curl && \
+    curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
+    gpg --dearmor | tee /etc/apt/trusted.gpg.d/mongodb-server-7.0.gpg > /dev/null && \
+    echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | \
+    tee /etc/apt/sources.list.d/mongodb-org-7.0.list && \
     apt-get update && \
-    apt-get install -y mongodb-org && \
+    apt-get install -y --no-install-recommends mongodb-org && \
     rm -rf /var/lib/apt/lists/*
 
 # Report package versions.
