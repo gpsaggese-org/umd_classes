@@ -1,0 +1,66 @@
+- Lots of tutorials in the form of notebook that show examples of using tech  
+- They are also blog entries
+
+# **Big data tutorials**
+
+- Reuse the DATA605 projects
+
+## **TODOs**
+
+- Move all the tutorials from kaizen-ai
+
+## **Topics**
+
+Data systems  
+\- virtual envs  
+\- pip install  
+\- Poetry  
+\- Uv   
+\- Docker  
+\- Git  
+\- Bash  
+\- FastAPI  
+\- Postgres
+
+### **Tutorial on Docker**
+
+- Already in DATA605
+
+### **Tutorial on Git**
+
+- Already in DATA605
+
+### **Tutorial on Bash**
+
+- ?
+
+### **Easily create environments**
+
+- [https://github.com/pyenv/pyenv](https://github.com/pyenv/pyenv)  
+- Poetry  
+- How to simply create environments / Docker containers to experiment with packages  
+- Already in DATA605
+
+### **From data605**
+
+\> ls \-1 tutorials/  
+old  
+tutorial\_airflow  
+tutorial\_dask  
+tutorial\_docker  
+tutorial\_docker\_compose  
+tutorial\_git  
+tutorial\_github  
+tutorial\_jupyter  
+tutorial\_mongodb  
+tutorial\_packages  
+tutorial\_pandas  
+tutorial\_postgres  
+tutorial\_spark  
+tutorial\_template
+
+### **Package tutorials**
+
+ffind.py tutorial  
+ffind.py gallery  
+./helpers/notebooks  
