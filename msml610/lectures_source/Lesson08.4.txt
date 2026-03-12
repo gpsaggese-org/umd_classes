@@ -583,13 +583,19 @@ digraph SalesModelExtended {
        $$te = \EE[Y|T=1] - \EE[Y|T=0]$$
 
 * Randomization removes bias
-- Randomization of treatment forces independence to hold and removes bias
+- Randomization of treatment forces independence to hold $\implies$ removes bias
 
-- Assume you can randomize the treatment
-  \begin{align*}
+- Assume you can randomize the treatment (e.g., you can force a business to cut
+  prices)
+  $$
+  \left\{
+  \begin{aligned}
   & IsOnSales \leftarrow rand(t) \\
   & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
-  \end{align*}
-- The dependency to $u_t$ disappears since the assignment mechanism of the
-  treatment is fully known
+  \end{aligned}
+  \right.
+  $$
+- The dependency from $u_t$ disappears since the assignment mechanism is:
+  - tied to a coin flip (unrelated to other factors in causal mechanism)
+  - fully known
 - Treatment becomes independent from potential outcomes
