@@ -1,12 +1,25 @@
-#!/usr/bin/env python
-# coding: utf-8
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,py:percent
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.1
+#   kernelspec:
+#     display_name: Python 3 (ipykernel)
+#     language: python
+#     name: python3
+# ---
 
+# %% [markdown]
 # # TensorFlow: Structural Time Series Forecasting
-# 
+#
 # This notebook demonstrates a complete end-to-end time series forecasting
 # pipeline using **TensorFlow Probability's Structural Time Series (STS)**
 # module.
-# 
+#
 # **Workflow:**
 # 1. Generate a synthetic daily time series with trend, seasonality, holidays,
 #    and autoregressive noise
@@ -14,12 +27,10 @@
 # 3. Fit the model via Variational Inference (VI)
 # 4. Forecast future values and evaluate performance
 
-# In[1]:
-
-
-get_ipython().run_line_magic('load_ext', 'autoreload')
-get_ipython().run_line_magic('autoreload', '2')
-get_ipython().run_line_magic('matplotlib', 'inline')
+# %%
+# %load_ext autoreload
+# %autoreload 2
+# %matplotlib inline
 
 import logging
 
@@ -34,15 +45,13 @@ import tensorflow_utils as tteteuti
 
 _LOG = logging.getLogger(__name__)
 
-
+# %% [markdown]
 # ## Config
-# 
+#
 # All model and data parameters are centralised here so the notebook can be
 # reproduced by changing a single dictionary.
 
-# In[2]:
-
-
+# %%
 config = {
     # Train / test split.
     "train_start_date": "2020-01-01",
@@ -82,29 +91,24 @@ config = {
 }
 print(config)
 
-
+# %% [markdown]
 # ## Part 1: Data Generation
-# 
+#
 # We generate a realistic synthetic daily time series that combines:
 # - A **linear trend** (slow upward drift)
 # - **Weekly seasonality** with stochastic drift
 # - **Holiday effects** (additive spikes on Christmas each year)
 # - **AR(1) autoregression** to capture temporal dependence
 # - **Gaussian observation noise**
-# 
+#
 # Using synthetic data lets us later verify that the model recovers the known
 # ground-truth parameters.
 
-# In[3]:
-
-
+# %%
 df = tteteuti.generate_time_series_data(config)
 _LOG.info(tteteuti.df_to_str_simple(df))
 
-
-# In[4]:
-
-
+# %%
 df.set_index("ds")["y"].plot(
     title="Synthetic Daily Time Series",
     ylabel="Target variable",
@@ -112,10 +116,7 @@ df.set_index("ds")["y"].plot(
     figsize=(12, 4),
 )
 
-
-# In[5]:
-
-
+# %%
 # Split into train and test sets.
 train_mask = (df["ds"] >= config["train_start_date"]) & (
     df["ds"] <= config["train_end_date"]
@@ -127,55 +128,45 @@ df_train = df[train_mask].reset_index(drop=True)
 df_test = df[test_mask].reset_index(drop=True)
 _LOG.info("Train rows=%d, Test rows=%d", len(df_train), len(df_test))
 
-
+# %% [markdown]
 # ## Part 2: Model Building
-# 
+#
 # The STS model decomposes the observed series into four interpretable
 # components:
-# 
+#
 # | Component | Purpose |
 # |---|---|
 # | `LocalLinearTrend` | Captures slow-moving level and slope |
 # | `Seasonal` (7 seasons) | Weekly day-of-week effects |
 # | `Autoregressive` (AR-1) | Short-term temporal dependence |
 # | `LinearRegression` | Additive holiday spikes |
-# 
+#
 # The components are summed into a `tfp.sts.Sum` model.
 
-# In[6]:
-
-
+# %%
 # Build one-hot holiday indicator matrix for the full date range.
 holiday_indicators = tteteuti.build_holiday_indicators(config)
 _LOG.info("holiday_indicators shape=%s", holiday_indicators.shape)
 
-
-# In[7]:
-
-
+# %%
 model = tteteuti.build_sts_model(
     df_train["y"].to_numpy(), holiday_indicators, config
 )
 
-
+# %% [markdown]
 # ### Variational Inference
-# 
+#
 # We approximate the posterior over model parameters using **Variational
 # Inference (VI)**:
 # 1. Define a factored surrogate posterior `q(θ)` (one Normal per parameter)
 # 2. Maximise the ELBO: `ELBO = E_q[log p(y, θ)] - KL(q || prior)`
 # 3. Use the Adam optimiser for gradient-based optimisation
 
-# In[8]:
-
-
+# %%
 # Build the variational surrogate posteriors.
 variational_posteriors = tfp.sts.build_factored_surrogate_posterior(model=model)
 
-
-# In[9]:
-
-
+# %%
 elbo_loss_curve = tfp.vi.fit_surrogate_posterior(
     target_log_prob_fn=model.joint_distribution(
         observed_time_series=df_train["y"].to_numpy()
@@ -195,17 +186,11 @@ plt.title("Variational Optimisation Progress")
 plt.legend()
 plt.tight_layout()
 
-
-# In[10]:
-
-
+# %%
 # Draw posterior samples.
 q_samples_ = variational_posteriors.sample(50)
 
-
-# In[11]:
-
-
+# %%
 # Report inferred parameter values.
 _LOG.info("Inferred parameters:")
 for param in model.parameters:
@@ -216,17 +201,15 @@ for param in model.parameters:
         np.std(q_samples_[param.name], axis=0),
     )
 
-
+# %% [markdown]
 # ## Part 3: Forecasting and Evaluation
-# 
+#
 # With the fitted posterior we:
 # 1. Decompose the training signal into its constituent components
 # 2. Forecast `num_steps_forecast` steps into the future
 # 3. Evaluate using MAE and MSE
 
-# In[12]:
-
-
+# %%
 # Decompose training data into components.
 component_dists = tfp.sts.decompose_by_component(
     model,
@@ -236,18 +219,12 @@ component_dists = tfp.sts.decompose_by_component(
 component_means_ = {k.name: c.mean() for k, c in component_dists.items()}
 component_stddevs_ = {k.name: c.stddev() for k, c in component_dists.items()}
 
-
-# In[13]:
-
-
+# %%
 _ = tteteuti.plot_components(
     df_train["ds"], component_means_, component_stddevs_
 )
 
-
-# In[14]:
-
-
+# %%
 # Forecast the test period.
 forecast_dist = tfp.sts.forecast(
     model=model,
@@ -260,10 +237,7 @@ forecast_mean = forecast_dist.mean().numpy()[..., 0]
 forecast_scale = forecast_dist.stddev().numpy()[..., 0]
 forecast_samples = forecast_dist.sample(num_samples).numpy()[..., 0]
 
-
-# In[15]:
-
-
+# %%
 fig, ax = tteteuti.plot_forecast(
     df_test["ds"],
     df_test["y"].to_numpy(),
@@ -274,10 +248,7 @@ fig, ax = tteteuti.plot_forecast(
 )
 fig.tight_layout()
 
-
-# In[16]:
-
-
+# %%
 # Residual analysis.
 residuals = df_test["y"].to_numpy() - forecast_mean
 fig, axes = plt.subplots(1, 2, figsize=(14, 5))
@@ -290,13 +261,9 @@ stats.probplot(residuals, dist="norm", plot=axes[1])
 axes[1].set_title("Q-Q Plot of Residuals")
 plt.tight_layout()
 
-
-# In[17]:
-
-
+# %%
 # Performance metrics.
 mae = metrics.mean_absolute_error(df_test["y"].to_numpy(), forecast_mean)
 mse = metrics.mean_squared_error(df_test["y"].to_numpy(), forecast_mean)
 _LOG.info("MAE=%.4f", mae)
 _LOG.info("MSE=%.4f", mse)
-
