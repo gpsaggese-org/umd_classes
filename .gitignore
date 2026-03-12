@@ -71,3 +71,4 @@ tensorboard/
 # Secrets
 .env
 .env.*
+tutorials/tutorial_llamaindex/data/gutenberg/
