@@ -1,11 +1,13 @@
-# Project Template
+# Summary
 
-This guide explains how to set up Docker-based projects using the template,
-customize it for your needs, and maintain it over time.
+This directory contains a Docker-based development environment template with:
+- Utility scripts for Docker operations (build, run, clean, push)
+- Configuration files for Dockerfile and environment setup
+- Jupyter notebook templates for standardized project development
+- Shell utilities and Python helpers for container-based workflows
 
-This directory contains a Docker-based development environment template with
-utility scripts, configuration files, and Jupyter notebook templates for
-standardizing projects.
+A guide to set up Docker-based projects using the template, customize it for your
+needs, and maintain it over time.
 
 ## Description of Files
 - `bashrc`
@@ -59,11 +61,10 @@ standardizing projects.
 - All commands should be run from inside the project directory
   ```bash
   > cd tutorials/FilterPy
-  ...
   ```
 
 - To build the container for a project
-  ```
+  ```bash
   > cd $PROJECT
   # Build the container.
   > docker_build.sh
@@ -85,21 +86,19 @@ standardizing projects.
 
 ## How to customize a project template
 
-- Copy the
-  ```
+- Copy the template
+  ```bash
   > cp -r class_project/project_template $TARGET
   ```
-- TODO(gp): Complete
 
 ## Description of Executables
 
 ### `copy_docker_files.py`
 - **What It Does**
-
-- Copies Docker configuration and utility files from project_template to a
-  destination directory
-- Preserves all file permissions and attributes during copying
-- Creates destination directory if it doesn't exist
+  - Copies Docker configuration and utility files from project_template to a
+    destination directory
+  - Preserves all file permissions and attributes during copying
+  - Creates destination directory if it doesn't exist
 
 - Copy all Docker files to a target directory:
   ```bash
@@ -282,30 +281,28 @@ your project:
 
 ### Step 3: Set Up Your Dockerfile
 
-- **Keep the reference files**: Keep these Dockerfiles as references
+- Delete unused reference files
   ```bash
-  > Dockerfile.ubuntu
-  > Dockerfile.python_slim
-  > Dockerfile.uv
+  > rm Dockerfile.ubuntu Dockerfile.python_slim Dockerfile.uv
   ```
 
-- **Create your working Dockerfile**
+- Create your working Dockerfile
   ```bash
   > cp Dockerfile.ubuntu Dockerfile
   ```
 
-- **Add your dependencies**
+- Add your dependencies
   ```bash
   > echo "numpy\npandas\nscikit-learn" > requirements.in
   > pip-compile requirements.in > requirements.txt
   ```
 
 ### Step 4: Keep Customization Minimal
-- **Only modify** what's necessary for your project
-- **Use `requirements.txt`** for all Python packages (don't edit Dockerfile for
-  this)
-- **Keep `bashrc` and `etc_sudoers`** as-is unless you need custom shell setup
-- **Keep base image and Python version** unless you have specific requirements
+
+- Only modify what's necessary for your project
+- Use `requirements.txt` for all Python packages (don't edit Dockerfile for this)
+- Keep `bashrc` and `etc_sudoers` as-is unless you need custom shell setup
+- Keep base image and Python version unless you have specific requirements
 
 ## Understanding the Dockerfile Flow
 Each Dockerfile follows the same structure. Here are the key stages:
@@ -404,7 +401,7 @@ RUN pip install --no-cache-dir -r /install/requirements.txt
   - **For complex dependencies**: Use `requirements.in` with `pip-tools` or `pip-compile`
 
 - **Example requirements.txt**:
-  ```
+  ```text
   numpy==1.24.0
   pandas==2.0.0
   scikit-learn==1.2.2
@@ -477,27 +474,29 @@ This approach:
 - Ensures consistency across similar projects
 
 ### How to Do It Right
+
 | What             | Where                        | Example                         |
-| ---------------- | ---------------------------- | ------------------------------- |
+| :------------- | :--------------------------- | :------------------------------ |
 | Python packages  | `requirements.txt`           | `numpy==1.24.0`                 |
 | System tools     | Dockerfile `apt-get` section | `postgresql-client`             |
 | Shell aliases    | `bashrc`                     | `alias jlab="jupyter lab"`      |
 | Custom scripts   | `scripts/` directory         | Setup or initialization scripts |
 | User permissions | `etc_sudoers`                | Grant passwordless sudo         |
 
-### Wrong Vs. Right Approach
-**Wrong**: Embed everything in the Dockerfile
-```dockerfile
-RUN pip install my-package && python my_setup.py && npm install
-```
+### Wrong vs. Right Approach
 
-**Right**: Use separate files and keep Dockerfile clean
-```dockerfile
-COPY requirements.txt /install/
-RUN pip install -r /install/requirements.txt
-COPY scripts/setup.sh /install/
-RUN /install/setup.sh
-```
+- **Wrong**: Embed everything in the Dockerfile
+  ```dockerfile
+  RUN pip install my-package && python my_setup.py && npm install
+  ```
+
+- **Right**: Use separate files and keep Dockerfile clean
+  ```dockerfile
+  COPY requirements.txt /install/
+  RUN pip install -r /install/requirements.txt
+  COPY scripts/setup.sh /install/
+  RUN /install/setup.sh
+  ```
 
 ## .Dockerignore Policy
 
@@ -511,153 +510,134 @@ The `.dockerignore` file prevents unnecessary files from being added to the Dock
 
 ### What to Exclude: Category Breakdown
 
-#### 1. Python Artifacts (Always Exclude)
-
-```
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-```
-
-- **Why**: Compiled bytecode generated at runtime. Regenerated in container, adds bloat
-
-#### 2. Virtual Environments (Always Exclude)
-
-```
-venv/
-.venv/
-env/
-.env/
-```
-
-- **Why**: Local venvs aren't portable to containers. The Dockerfile creates its own
-
-#### 3. Jupyter Checkpoints (Always Exclude)
-
-```
-.ipynb_checkpoints/
-```
-
-- **Why**: Auto-generated by Jupyter, not needed in the image
-
-#### 4. Git and Version Control (Always Exclude)
-
-```
-.git/
-.gitignore
-.gitattributes
-```
-
-- **Why**: Repository history not needed at runtime
-
-#### 5. Docker Build Scripts (Always Exclude)
-
-```
-docker_build.sh
-docker_push.sh
-docker_clean.sh
-docker_exec.sh
-docker_cmd.sh
-docker_bash.sh
-docker_jupyter.sh
-docker_name.sh
-Dockerfile.*
-```
-
-- **Why**: Local development scripts don't run inside the container
-
-#### 6. Large Data Files (Recommended)
-
-```
-data/
-*.csv
-*.pkl
-*.h5
-*.parquet
-```
-
-- **Why**: Don't ship large training and test data in the image. Mount via volume instead
-
-- **Best practice**:
-  ```bash
-  > docker run -v /path/to/data:/data my-image
+- Python Artifacts (Always Exclude)
+  ```verbatim
+  __pycache__/
+  *.pyc
+  *.pyo
+  *.pyd
   ```
+  - Why: Compiled bytecode generated at runtime. Regenerated in container, adds bloat
 
-#### 7. Test Files (Project-Dependent)
+- Virtual Environments (Always Exclude)
+  ```verbatim
+  venv/
+  .venv/
+  env/
+  .env/
+  ```
+  - Why: Local venvs aren't portable to containers. The Dockerfile creates its own
 
-```
-tests/
-tutorials/
-```
+- Jupyter Checkpoints (Always Exclude)
+  ```verbatim
+  .ipynb_checkpoints/
+  ```
+  - Why: Auto-generated by Jupyter, not needed in the image
 
-- **Why**: Exclude if tests don't run in the container
-- **When to include**: If CI and CD runs tests inside the container
+- Git and Version Control (Always Exclude)
+  ```verbatim
+  .git/
+  .gitignore
+  .gitattributes
+  ```
+  - Why: Repository history not needed at runtime
 
-#### 8. Documentation (Recommended)
+- Docker Build Scripts (Always Exclude)
+  ```verbatim
+  docker_build.sh
+  docker_push.sh
+  docker_clean.sh
+  docker_exec.sh
+  docker_cmd.sh
+  docker_bash.sh
+  docker_jupyter.sh
+  docker_name.sh
+  Dockerfile.*
+  ```
+  - Why: Local development scripts don't run inside the container
 
-```
-README.md
-docs/
-*.md
-```
+- Large Data Files (Recommended)
+  ```verbatim
+  data/
+  *.csv
+  *.pkl
+  *.h5
+  *.parquet
+  ```
+  - Why: Don't ship large training and test data in the image. Mount via volume instead
+  - Best practice:
+    ```bash
+    > docker run -v /path/to/data:/data my-image
+    ```
 
-- **Why**: Not needed at runtime
-- **Exception**: Only keep if your app reads these files at runtime
+- Test Files (Project-Dependent)
+  ```verbatim
+  tests/
+  tutorials/
+  ```
+  - Why: Exclude if tests don't run in the container
+  - When to include: If CI and CD runs tests inside the container
 
-#### 9. Generated Files (Always Exclude)
+- Documentation (Recommended)
+  ```verbatim
+  README.md
+  docs/
+  *.md
+  ```
+  - Why: Not needed at runtime
+  - Exception: Only keep if your app reads these files at runtime
 
-```
-*.log
-*.tmp
-*.cache
-build/
-dist/
-```
-
-- **Why**: Generated at runtime, not needed in the image
+- Generated Files (Always Exclude)
+  ```verbatim
+  *.log
+  *.tmp
+  *.cache
+  build/
+  dist/
+  ```
+  - Why: Generated at runtime, not needed in the image
 
 ## Workflow: From Template to Your Project
 
 ### Complete Setup Checklist
 
-- **Copy the template**
+- Copy the template
   ```bash
   > cp -r project_template my-new-project
   > cd my-new-project
   ```
 
-- **Keep all reference Dockerfiles**
-  ```
+- Keep all reference Dockerfiles
+  ```verbatim
   Dockerfile.ubuntu_24_04
   Dockerfile.python_slim
   Dockerfile.uv
   ```
 
-- **Create your working Dockerfile**
+- Create your working Dockerfile
   ```bash
   > cp Dockerfile.ubuntu_24_04 Dockerfile
   ```
 
-- **Add your dependencies**
+- Add your dependencies
   ```bash
   > pip freeze > requirements.txt
   ```
 
-- **Configure .dockerignore**: Review the template `.dockerignore` and add your project-specific exclusions (e.g., data directories)
+- Configure `.dockerignore`: Review the template `.dockerignore` and add your project-specific exclusions (e.g., data directories)
 
-- **Test the build**
+- Test the build
   ```bash
   > docker build -t my-project:latest .
   > docker run -it my-project:latest bash
   ```
 
-- **Test Jupyter (if using)**
+- Test Jupyter (if using)
   ```bash
   > ./docker_jupyter.sh -p 8888
   ```
 
-- **Document customizations** in your project README:
+- Document customizations in your project README:
   - Base image chosen and why
   - Key dependencies
   - Any Dockerfile modifications
