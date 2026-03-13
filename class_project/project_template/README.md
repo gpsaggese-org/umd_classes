@@ -713,10 +713,11 @@ Example improvements:
 - Check `etc_sudoers`: Ensure user has appropriate permissions
 - Check file ownership: Ensure COPY doesn't create root-only files
 
-### Jupyter Won't Connect
+### Jupyter Won'T Connect
 - Run Jupyter
   ```bash
   > ./docker_jupyter.sh -p 8888
   ```
 
-- Verify http://localhost:8888 (not https). Check firewall if remote access needed
+- Verify http://localhost:8888 (not https). Check firewall if remote access
+  needed
