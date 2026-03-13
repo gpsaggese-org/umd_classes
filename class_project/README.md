@@ -1,5 +1,4 @@
 # Class Project Guidelines: Learn X in 60 Minutes
-
 - The goal of the class project (e.g., for `DATA605`, `MSML610`) is to learn a
   cutting-edge modern big data technology and write a (small) example of a
   system using it
@@ -15,7 +14,6 @@
 ## Choosing a Project
 
 ### Project Types
-
 There are three types of projects:
 
 - **"Build X using Y"**: Build a system or application using a specific
@@ -29,7 +27,6 @@ There are three types of projects:
   are the most challenging.
 
 ### Selection Rules
-
 - The project is done by a single student or a group of students
   - Students should not have exactly the same project
   - Groups are made of at most 3 students (`<= 3`)
@@ -45,7 +42,7 @@ There are three types of projects:
 - The goal of the project is to get your hands dirty and figure things out
   - Often solving problems is about trying different approaches until one works
   - Make sure you understand the tool and what your code is doing
-  - `Google` and `ChatGPT` are your friends, but don't abuse them: copy-pasting
+  - Search engines and AI tools are helpful, but don't abuse them: copy-pasting
     code is not recommended and won't benefit the learning outcomes
 
 - We expect a project to take 6-8 full days to complete (e.g., 40 hours)
@@ -61,7 +58,6 @@ There are three types of projects:
   - **Adherence to guidelines**: correct structure, naming, and PR workflow
 
 ### Paid Cloud Services
-
 - If you choose to use a paid service (e.g., an Amazon service), you are
   responsible for the costs incurred
   - You are expected to use the services efficiently to keep them within free
@@ -70,7 +66,6 @@ There are three types of projects:
     turned off/shutdown when not being used
 
 ### Project Timeline
-
 - The project schedule is described in the "Class assignment" column in the
   class schedule
 
@@ -84,8 +79,7 @@ There are three types of projects:
   - ... Work, work, work with us in class lab ...
   - Final submission
 
-## Pre-requisites
-
+## Pre-Requisites
 - Watch, star, and fork the repos
   - [`umd_classes`](https://github.com/gpsaggese/umd_classes)
   - [`helpers`](https://github.com/causify-ai/helpers)
@@ -98,24 +92,23 @@ There are three types of projects:
 
 - Check your `GitHub` issue on https://github.com/gpsaggese/umd_classes/issues
   - Make sure you are assigned to it
-- Only `Python` should be used together with the needed configs for the specific
-  tools
+- Only `Python` should be used, along with necessary configuration files for the
+  specific tools
 
 - Unless specified by project description, everything needs to run locally
   without using cloud resources
-  - E.g., it's not ok to use an `AWS` DB instance, you want to install
-    `Postgres` in your container for any database requirements
+  - E.g., instead of using an `AWS` RDS instance, install `Postgres` in your
+    Docker container for any database requirements
 
 - If you did not take DATA605 or you are not familiar with the basic technology
   we rely on (e.g., `Git`, `Docker`, `Jupyter`, `Python`, `bash`), take time to
   get familiar with them through the DATA605 tutorials
 
 ## Contribution to the Repo
-
 - You will work in the same way open-source developers contribute to a project
-- Each class project will need to be organized like a proper open source project,
-  including filing issues, opening PRs, checking in the code in
-  [https://github.com/gpsaggese/umd_classes/tree/master](https://github.com/gpsaggese/umd_classes/tree/master)
+- Each class project will need to be organized like a proper open source
+  project, including filing issues, opening PRs, and checking in code in the
+  [umd_classes repository](https://github.com/gpsaggese/umd_classes)
 
 - (Optional) You can use some of the tooling we use for interns and Causify
   - Set up your working environment by following the instructions in the
@@ -128,7 +121,6 @@ There are three types of projects:
     give you some feedback on what to improve (adopting `Agile` methodology)
 
 ### Project Tag Naming Convention
-
 - Your project tag should follow this format:
   `{Class}_Spring{year}_{project_title_without_spaces}`
   - Example: if your project title is **"Redis cache to fetch user profiles"**
@@ -136,21 +128,25 @@ There are three types of projects:
     `DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
 
 ### Create a GitHub Issue for Your Project
-  - [ ] Create a **`GitHub` issue** with your **project tag** as the title
-    - Example: `DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
-  - [ ] Copy/paste the project description and add a link to the document with
-        project specs
-      - E.g., https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/DATA605/Spring2026/projects_descriptions/ActiveCampaign_Project_Description.md
-  - [ ] Assign the GH issue to yourself (if you have permissions) or tag the
-      issue with the individuals working on the project
-      - E.g., `Author: @gpsaggese`
-      -  This issue will be used for project-related discussions
+- Create a **GitHub issue** with your **project tag** as the title
+  - Example: `DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
+
+- Copy/paste the project description and add a link to the document with
+  project specs
+  - E.g.,
+    https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/DATA605/Spring2026/projects_descriptions/ActiveCampaign_Project_Description.md
+
+- Assign the GitHub issue to yourself (if you have permissions) or tag the
+  issue with the individuals working on the project
+  - E.g., `Author: @gpsaggese`
+  - This issue will be used for project-related discussions
 
 ### Create a Local Branch to Work in
-- You should create this in your fork
-- [ ] Name your `Git` branch as follows `UmdTask{issue_number}_{project_tag}`
-  - Example: If your issue number is **#645**, your branch name should be:
-    UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
+Create a new branch in your fork with the following naming convention:
+
+- Name your `Git` branch as follows: `UmdTask{issue_number}_{project_tag}`
+  - Example: If your issue number is `#645`, your branch name should be:
+    `UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
 
 - **Steps to create the branch:**
   ```bash
@@ -171,23 +167,21 @@ There are three types of projects:
 - Start working on the files
 
 ### Create a Pull Request (PR)
-
-- [ ] Always create a **Pull Request (PR)** from your branch
-- [ ] Name the PR the same as your project branch, and reference the issue number
-      your branch is based on
-- [ ] Add your TAs and `@gpsaggese` as reviewers
-- [ ] Assign the PR to yourself
-- [ ] You should **not** be able to push directly to the `master` branch. Only
-  push commits to **your project branch**
+- Always create a **Pull Request (PR)** from your branch
+- Name the PR the same as your project branch and reference the issue number
+  your branch is based on
+- Add your TAs and `@gpsaggese` as reviewers
+- Assign the PR to yourself
+- You should **not** be able to push directly to the `master` branch—only push
+  commits to **your project branch**
 
 - When making progress during the semester (e.g., when a PR is merged), use
-  incremental branch names by appending `_1`, `_2`  to your branch name, etc.
+  incremental branch names by appending `_1`, `_2` to your branch name, etc.
   - Example:
     - `UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles_1`
     - `UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles_2`
 
 ### Video Recording Guidelines
-
 The final project requires students to submit a video recording of their
 project. The goal is to learn how to present your work in a professional manner
 (which will be extremely important in your career).
@@ -226,36 +220,37 @@ project. The goal is to learn how to present your work in a professional manner
 
 ## Examples of a Class Project
 
-The layout of each project should follow the examples in:
+- The layout of each project should follow these reference examples in the
+  `umd_classes` repository:
+  - **[`tutorials/Autogen`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/Autogen)**
+    - Contains: `docker_build.sh`, `autogen.API.ipynb`, `autogen.example.ipynb`,
+      `autogen_utils.py`
+    - Study this first for the recommended directory layout
 
-- [`tutorials/autogen`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/autogen)
-  — the closest reference for the expected structure (`docker_build.sh`,
-  `autogen.API.ipynb`, `autogen.example.ipynb`, `autogen_utils.py`)
-- [`tutorials/tensorflow`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/tensorflow)
-  — another self-contained example following the same template
-- [`class_project/project_template`](https://github.com/gpsaggese/umd_classes/tree/master/class_project/project_template)
-  — the canonical starting point with blank `template.API.ipynb` and
-  `template.example.ipynb` notebooks
+  - **[`tutorials/tensorflow`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/tensorflow)**
 
-- Review some of the best projects from previous years:
-  - [`tutorial_langchain`](https://github.com/causify-ai/tutorials/tree/master/tutorial_langchain)
-  - [`tutorial_langgraph`](https://github.com/causify-ai/tutorials/tree/master/tutorial_langgraph)
-  - [`tutorial_openai`](https://github.com/causify-ai/tutorials/tree/master/tutorial_openai)
-  - [`tutorial_prophet`](https://github.com/causify-ai/tutorials/tree/master/tutorial_prophet)
+  - **[`class_project/project_template`](https://github.com/gpsaggese/umd_classes/tree/master/class_project/project_template)**
+    - The canonical starting point template for new projects
+    - Contains blank `template.API.ipynb` and `template.example.ipynb` notebooks
+    - Use this as a foundation for your project structure
 
-- Peruse/draw inspiration from lots of projects from your colleagues in the
-  sister class DATA605:
-  - Projects:
+- Review these exemplary projects from colleagues to understand what excellence
+  looks like:
+  - [`tutorial_langchain`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/tutorial_langchain)
+  - [`tutorial_langgraph`](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/tutorial_langgraph)
+
+- **From DATA605 class projects:**
+  - **Projects:**
     [https://github.com/gpsaggese/umd_classes/tree/master/class_project/DATA605](https://github.com/gpsaggese/umd_classes/tree/master/class_project/DATA605)
-  - Videos:
-    [https://drive.google.com/drive/folders/1QLtgPCAS0mqE9cr1hE3UVoIbzakCNtaC](https://drive.google.com/drive/folders/1QLtgPCAS0mqE9cr1hE3UVoIbzakCNtaC)
+  - **Project videos:**
+    [Google Drive folder](https://drive.google.com/drive/folders/1QLtgPCAS0mqE9cr1hE3UVoIbzakCNtaC)
 
 - If you see any problem in the tutorials (code or video), please send an email
-  to me with your TAs in cc. To make this more interesting, there might be (or
-  maybe not!) some mistakes on purpose. See if you find them!
+  to the instructor with your TAs in cc
+- To make this more interesting, there might be (or maybe not!) some mistakes on
+  purpose in the examples: see if you find them!
 
 ## Grading Rubric
-
 - All deliverables delivered (10 points)
   - Are all required components submitted, including code, documentation, and
     any other specified materials
@@ -293,8 +288,8 @@ The layout of each project should follow the examples in:
   - Is the code clean, modular, and easy to understand
   - Are comments and docstrings used appropriately to explain non-obvious logic
   - Is the overall structure of the codebase sensible and maintainable
-  - Does it follow consistent style conventions (e.g., PEP 8 or another
-    relevant standard)
+  - Does it follow consistent style conventions (e.g., PEP 8 or another relevant
+    standard)
 
 - PR quality (5 points)
   - Was the pull request (PR) well-organized, with meaningful commit messages
@@ -320,5 +315,4 @@ The layout of each project should follow the examples in:
   - Are there major parts of the project that are missing or obviously broken
   - Does the submission fail to meet critical functional or structural
     expectations
-  - Are there signs that the project was rushed or left unfinished or AI
-    generated
+  - Are there signs that the project was rushed or left unfinished
