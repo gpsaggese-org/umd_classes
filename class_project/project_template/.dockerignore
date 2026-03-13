@@ -1,6 +1,5 @@
-# .dockerignore - Exclude files from Docker build context
-# This prevents unnecessary files from being sent to Docker daemon,
-# reducing build time and image size.
+# Exclude files from Docker build context. This prevents unnecessary files from
+# being sent to Docker daemon, reducing build time and image size.
 
 # Python artifacts
 __pycache__/

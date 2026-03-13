@@ -396,50 +396,48 @@ digraph SalesModelExtended {
     \endgroup
   - Association = causation + a bias term 
 
-<start>
-* Decomposing Observed Difference into Treatment Effect and Bias
-
-- Observed Outcomes
-  - Each unit has two potential outcomes but only one is observed:
-
-$$Y | T=1 = Y_1 | T=1 \quad \text{(only treated potential outcome observed)}$$
-
-$$Y | T=0 = Y_0 | T=0 \quad \text{(only control potential outcome observed)}$$
-
-- Step 2: Difference in Means
-
-The observed difference between treated and untreated groups:
-
-$$\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0]$$
-
-- Step 3: Add and Subtract the Counterfactual
-
-To decompose this into effect and bias, add and subtract $\mathbb{E}[Y_0 | T=1]$:
-
-$$\mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=1]$$
-
-- Step 4: Regroup Terms
-
-Rearrange to group the treatment effect and bias separately:
-
-$$= \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
-
-- Step 5: Merge Expectations
-
-Combine the first two terms using linearity of expectation:
-
-$$= \mathbb{E}[Y_1 - Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
-
-- Final Decomposition
-
-$$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 - Y_0 | T=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]}_{\text{Bias}}}$$
-
-- Interpretation
-  - **ATT** (Average Treatment Effect on the Treated): The causal effect—what we want to estimate
-  - **Bias**: The difference in control potential outcomes between treated and untreated groups
-    - If bias = 0, then observed difference = causal effect
-    - If bias not 0, observed difference is misleading (confounded)
-<end>
+//* Decomposing Observed Difference into Treatment Effect and Bias
+//
+//- Observed Outcomes
+//  - Each unit has two potential outcomes but only one is observed:
+//
+//$$Y | T=1 = Y_1 | T=1 \quad \text{(only treated potential outcome observed)}$$
+//
+//$$Y | T=0 = Y_0 | T=0 \quad \text{(only control potential outcome observed)}$$
+//
+//- Step 2: Difference in Means
+//
+//The observed difference between treated and untreated groups:
+//
+//$$\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Step 3: Add and Subtract the Counterfactual
+//
+//To decompose this into effect and bias, add and subtract $\mathbb{E}[Y_0 | T=1]$:
+//
+//$$\mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=1]$$
+//
+//- Step 4: Regroup Terms
+//
+//Rearrange to group the treatment effect and bias separately:
+//
+//$$= \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Step 5: Merge Expectations
+//
+//Combine the first two terms using linearity of expectation:
+//
+//$$= \mathbb{E}[Y_1 - Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Final Decomposition
+//
+//$$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 - Y_0 | T=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]}_{\text{Bias}}}$$
+//
+//- Interpretation
+//  - **ATT** (Average Treatment Effect on the Treated): The causal effect—what we want to estimate
+//  - **Bias**: The difference in control potential outcomes between treated and untreated groups
+//    - If bias = 0, then observed difference = causal effect
+//    - If bias not 0, observed difference is misleading (confounded)
 
 * The Bias Equation: Remarks
 - Association = causation + a bias term 
@@ -480,8 +478,8 @@ $$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 
 ::: columns
 :::: {.column width=50%}
 - Difference in amount sold between groups has two causes
-  1. _Treatment effect_: Price cut increases amount sold
-  2. _Business size_: Bigger businesses sell more, can do more price cuts
+  - _Treatment effect_: Price cut increases amount sold
+  - _Business size_: Bigger businesses sell more, can do more price cuts
 
 - The challenge for causal inference is to untangle the two effects
 ::::
@@ -534,28 +532,31 @@ $$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 
   - Women apply more to harder department, making their overall acceptance rate
     appear lower, despite higher acceptance in each department
 
+// Identifying the Treatment Effect
+
 * Identifying the Treatment Effect
 - We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
-  potential outcomes $Y_{1i}$ or $Y_{0i}$ and _not both_ 
-- How can we recover causal quantities from observable data?
+  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_ 
+  - How can we recover causal quantities from observable data?
 
 - The bias equation says that:
-  $$E[Y | T = 1] - E[Y | T = 0] = 
-  E[(Y_1 - Y_0) | T = 1] + 
-  \underbrace{E[Y_0 | T = 1] - E[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \EE[Y | T = 1] - \EE[Y | T = 0] = 
+  \EE[(Y_1 - Y_0) | T = 1] + 
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
 - If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control
-  group are comparable (exchangeable) regardless of the treatment, then
-  - the bias term vanishes $bias = 0$
-  - association is causation
-  - the measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
-  - the measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
+  group are comparable (exchangeable) regardless of the treatment, then:
+  - The bias term vanishes $bias = 0$
+  - Association is causation
+  - The measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
+  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
 
 - **Sales Example**
   - If businesses that do and don't cut prices are similar to each other (i.e.,
-    interchangeable), then the difference in amount sold between the ones that
-    cut prices and the ones that don't, can be entirely attributed to the price
-    cut
+    interchangeable), then
+  - The difference in amount sold between the ones that cut prices and the ones
+    that don't, can be entirely attributed to the price cut
 
 * Independence Assumption
 - The exchangeability property is equivalent to having outcomes being independent
@@ -564,34 +565,39 @@ $$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 
   (Y_0, Y_1) \perp T
   $$
   i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
-  potential outcomes
-  - In other terms $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$
+  potential outcomes (i.e., $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$)
 
 - **Sales Example**
   - We can't tell apart businesses that chose to engage in sales from those that
     didn't
 
 * Phases of Causal Inference
-- A causal inference problem is often broken down into two steps
-  1. **Identification**
+- A causal inference problem is often broken down into two steps:
+  - **Identification**
      - Express the causal quantity of interest in terms of observable data
      - Remove the bias, making treated and untreated comparable, so that all
        the difference can be attributed to the treatment effect
        $$\EE[Y_0 | T=0] = \EE[Y_0 | T=1]$$
      - You need to know how the treatment was distributed or assigned
      - This is why data alone (observational) cannot answer causal questions
-  2. Estimation
-     - Use data to estimate the causal quantity identified in 1.
-       $$te = \EE[Y|T=1] - \EE[Y|T=0]$$
+  - **Estimation**
+     - Use data to estimate the causal quantity of interest:
+       $$te = \EE[Y | T=1] - \EE[Y | T=0]$$
 
-* Randomization removes bias
-- Randomization of treatment forces independence to hold and removes bias
+* Randomization Removes Bias
+- Randomization of treatment forces independence to hold $\implies$ removes bias
 
-- Assume you can randomize the treatment
-  \begin{align*}
+- Assume you can randomize the treatment (e.g., you can force a business to cut
+  prices)
+  $$
+  \left\{
+  \begin{aligned}
   & IsOnSales \leftarrow rand(t) \\
   & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
-  \end{align*}
-- The dependency to $u_t$ disappears since the assignment mechanism of the
-  treatment is fully known
+  \end{aligned}
+  \right.
+  $$
+- The dependency from $u_t$ disappears since the assignment mechanism is:
+  - Tied to a coin flip (unrelated to other factors in causal mechanism)
+  - Fully known
 - Treatment becomes independent from potential outcomes
