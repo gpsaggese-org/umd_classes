@@ -231,7 +231,7 @@ your needs, and maintain it over time.
 
 - Start Jupyter Lab server (typically called from docker_jupyter.sh):
   ```bash
-    > ./run_jupyter.sh
+  > ./run_jupyter.sh
   ```
 
 ### `version.sh`
@@ -242,12 +242,12 @@ your needs, and maintain it over time.
 
 - Display version information:
   ```bash
-    > ./version.sh
+  > ./version.sh
   ```
 
 - Save version information to a log file:
   ```bash
-    > ./version.sh 2>&1 | tee version.log
+  > ./version.sh 2>&1 | tee version.log
   ```
 
 # Template Customization and Maintenance
@@ -445,7 +445,7 @@ RUN /install/version.sh 2>&1 | tee version.log
 - **How to use**: After building, review `version.log` to verify all
   dependencies installed correctly
   ```bash
-    > docker build -t my-project .
+  > docker build -t my-project .
   > cat version.log
   ```
 
@@ -713,7 +713,7 @@ Example improvements:
 - Check `etc_sudoers`: Ensure user has appropriate permissions
 - Check file ownership: Ensure COPY doesn't create root-only files
 
-### Jupyter Won'T Connect
+### Jupyter Won't Connect
 - Run Jupyter
   ```bash
   > ./docker_jupyter.sh -p 8888
