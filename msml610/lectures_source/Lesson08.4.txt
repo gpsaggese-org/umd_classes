@@ -532,28 +532,31 @@ digraph SalesModelExtended {
   - Women apply more to harder department, making their overall acceptance rate
     appear lower, despite higher acceptance in each department
 
+// Identifying the Treatment Effect
+
 * Identifying the Treatment Effect
 - We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
-  potential outcomes $Y_{1i}$ or $Y_{0i}$ and _not both_ 
-- How can we recover causal quantities from observable data?
+  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_ 
+  - How can we recover causal quantities from observable data?
 
 - The bias equation says that:
-  $$E[Y | T = 1] - E[Y | T = 0] = 
-  E[(Y_1 - Y_0) | T = 1] + 
-  \underbrace{E[Y_0 | T = 1] - E[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \EE[Y | T = 1] - \EE[Y | T = 0] = 
+  \EE[(Y_1 - Y_0) | T = 1] + 
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
 - If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control
-  group are comparable (exchangeable) regardless of the treatment, then
-  - the bias term vanishes $bias = 0$
-  - association is causation
-  - the measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
-  - the measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
+  group are comparable (exchangeable) regardless of the treatment, then:
+  - The bias term vanishes $bias = 0$
+  - Association is causation
+  - The measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
+  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
 
 - **Sales Example**
   - If businesses that do and don't cut prices are similar to each other (i.e.,
-    interchangeable), then the difference in amount sold between the ones that
-    cut prices and the ones that don't, can be entirely attributed to the price
-    cut
+    interchangeable), then
+  - The difference in amount sold between the ones that cut prices and the ones
+    that don't, can be entirely attributed to the price cut
 
 * Independence Assumption
 - The exchangeability property is equivalent to having outcomes being independent
@@ -562,15 +565,14 @@ digraph SalesModelExtended {
   (Y_0, Y_1) \perp T
   $$
   i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
-  potential outcomes
-  - In other terms $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$
+  potential outcomes (i.e., $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$)
 
 - **Sales Example**
   - We can't tell apart businesses that chose to engage in sales from those that
     didn't
 
 * Phases of Causal Inference
-- A causal inference problem is often broken down into two steps
+- A causal inference problem is often broken down into two steps:
   - **Identification**
      - Express the causal quantity of interest in terms of observable data
      - Remove the bias, making treated and untreated comparable, so that all
@@ -579,10 +581,10 @@ digraph SalesModelExtended {
      - You need to know how the treatment was distributed or assigned
      - This is why data alone (observational) cannot answer causal questions
   - **Estimation**
-     - Use data to estimate the causal quantity identified in 1
-       $$te = \EE[Y|T=1] - \EE[Y|T=0]$$
+     - Use data to estimate the causal quantity of interest:
+       $$te = \EE[Y | T=1] - \EE[Y | T=0]$$
 
-* Randomization removes bias
+* Randomization Removes Bias
 - Randomization of treatment forces independence to hold $\implies$ removes bias
 
 - Assume you can randomize the treatment (e.g., you can force a business to cut
@@ -596,6 +598,6 @@ digraph SalesModelExtended {
   \right.
   $$
 - The dependency from $u_t$ disappears since the assignment mechanism is:
-  - tied to a coin flip (unrelated to other factors in causal mechanism)
-  - fully known
+  - Tied to a coin flip (unrelated to other factors in causal mechanism)
+  - Fully known
 - Treatment becomes independent from potential outcomes
