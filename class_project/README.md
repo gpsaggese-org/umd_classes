@@ -1,4 +1,4 @@
-# Class Project Guidelines "Learn X in 60 minutes"
+# Class Project Guidelines: Learn X in 60 Minutes
 
 - The goal of the class project (e.g., for `DATA605`, `MSML610`) is to learn a
   cutting-edge modern big data technology and write a (small) example of a
@@ -106,8 +106,6 @@ There are three types of projects:
   - E.g., it's not ok to use an `AWS` DB instance, you want to install
     `Postgres` in your container for any database requirements
 
-### Learn or Refresh Basic Data Science Tools
-
 - If you did not take DATA605 or you are not familiar with the basic technology
   we rely on (e.g., `Git`, `Docker`, `Jupyter`, `Python`, `bash`), take time to
   get familiar with them through the DATA605 tutorials
@@ -115,12 +113,13 @@ There are three types of projects:
 ## Contribution to the Repo
 
 - You will work in the same way open-source developers contribute to a project
-- Each project will need to be organized like a proper open source project,
+- Each class project will need to be organized like a proper open source project,
   including filing issues, opening PRs, checking in the code in
   [https://github.com/gpsaggese/umd_classes/tree/master](https://github.com/gpsaggese/umd_classes/tree/master)
 
-- Set up your working environment by following the instructions in the
-  [document](https://github.com/causify-ai/helpers/blob/master/docs/onboarding/intern.set_up_development_on_laptop.how_to_guide.md)
+- (Optional) You can use some of the tooling we use for interns and Causify
+  - Set up your working environment by following the instructions in the
+    [document](https://github.com/causify-ai/helpers/blob/master/docs/onboarding/intern.set_up_development_on_laptop.how_to_guide.md)
 
 - Each step of the project is delivered by committing code to the dir
   corresponding to your project and doing a `GitHub` Pull Request (PR)
@@ -128,129 +127,66 @@ There are three types of projects:
   - We will specifically do reviews of intermediate results of the project and
     give you some feedback on what to improve (adopting `Agile` methodology)
 
-- **Project Tag Naming Convention**
-  - Your project tag should follow this format:
-    `Spring{year}_{project_title_without_spaces}`
-    - Example: if your project title is **"Redis cache to fetch user
-      profiles"** for Spring 2026, your project tag will be:
-      **`Spring2026_Redis_cache_to_fetch_user_profiles`**
+### Project Tag Naming Convention
 
-- **Create a GitHub Issue**
+- Your project tag should follow this format:
+  `{Class}_Spring{year}_{project_title_without_spaces}`
+  - Example: if your project title is **"Redis cache to fetch user profiles"**
+    for DATA605 Spring 2026, your project tag will be:
+    `DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
+
+### Create a GitHub Issue for Your Project
   - [ ] Create a **`GitHub` issue** with your **project tag** as the title
-    - Example: `Spring2026_Redis_cache_to_fetch_user_profiles`
-  - [ ] Copy/paste the project description and add a link to the `Google Doc`
-        with the details
-  - [ ] Assign the issue to yourself. This issue will be used for
-        project-related discussions
+    - Example: `DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
+  - [ ] Copy/paste the project description and add a link to the document with
+        project specs
+      - E.g., https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/DATA605/Spring2026/projects_descriptions/ActiveCampaign_Project_Description.md
+  - [ ] Assign the GH issue to yourself (if you have permissions) or tag the
+      issue with the individuals working on the project
+      - E.g., `Author: @gpsaggese`
+      -  This issue will be used for project-related discussions
 
-- **Create a Git Branch Named After the Issue**
-  - [ ] Name your `Git` branch as follows:
-        `TutorTask{issue_number}_{project_tag}`
-    - Example: If your issue number is **#645**, your branch name should be:
-      **`TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles`**
+### Create a Local Branch to Work in
+- You should create this in your fork
+- [ ] Name your `Git` branch as follows `UmdTask{issue_number}_{project_tag}`
+  - Example: If your issue number is **#645**, your branch name should be:
+    UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
 
 - **Steps to create the branch:**
-
   ```bash
   > cd $HOME/src
   > git clone --recursive git@github.com:gpsaggese/umd_classes.git umd_classes1
   > cd $HOME/src/umd_classes1
   > git checkout master
-  > git checkout -b TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles
+  > git checkout -b UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles
   ```
 
-- **Add Files Only in Your Project Directory**
-  - Add your project files under the following directory:
-    `{GIT_ROOT}/class_project/{COURSE_CODE}/{TERM}{YEAR}/projects/{branch_name}`
-    - Example for DATA605 Spring 2026:
-      `~/src/umd_classes1/class_project/DATA605/Spring2026/projects/TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles`
-  - Copy the project template to your directory:
-    ```bash
-    > cp -r ~/src/umd_classes1/class_project/project_template/ \
-        ~/src/umd_classes1/class_project/DATA605/Spring2026/projects/TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles
-    ```
-  - Start working on the files
+### Add Files Only in Your Project Directory
+- Add your project files under the following directory:
+  `{GIT_ROOT}/class_project/{COURSE_CODE}/{TERM}{YEAR}/projects/{branch_name}`
+  - Example for DATA605 Spring 2026:
+    `~/src/umd_classes1/class_project/DATA605/Spring2026/projects/UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles`
+- **Important**: You should add files only under your project directory!
+- Follow the instructions (carefully!) in class_project/project_template/README.md
+- Start working on the files
 
-- **Create a Pull Request (PR)**:
-  - [ ] Always create a **Pull Request (PR)** from your branch
-  - [ ] Name the PR the same as your project branch, and reference the issue
-        number your branch is based on
-  - [ ] Add your TAs and `@gpsaggese` as reviewers
-  - [ ] Assign the PR to yourself
-  - [ ] Do **not** push directly to the `master` branch. Only push commits to
-        **your project branch**
+### Create a Pull Request (PR)
 
-- **Naming for Consecutive Updates**
-  - When making progress, use incremental branch names by appending `_1`, `_2`
-    to your branch name, etc.
-    - Example:
-      - `TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles_1`
-      - `TutorTask645_Spring2026_Redis_cache_to_fetch_user_profiles_2`
+- [ ] Always create a **Pull Request (PR)** from your branch
+- [ ] Name the PR the same as your project branch, and reference the issue number
+      your branch is based on
+- [ ] Add your TAs and `@gpsaggese` as reviewers
+- [ ] Assign the PR to yourself
+- [ ] You should **not** be able to push directly to the `master` branch. Only
+  push commits to **your project branch**
 
-## Quick Start
+- When making progress during the semester (e.g., when a PR is merged), use
+  incremental branch names by appending `_1`, `_2`  to your branch name, etc.
+  - Example:
+    - `UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles_1`
+    - `UmdTask645_DATA605_Spring2026_Redis_cache_to_fetch_user_profiles_2`
 
-- After creating your branch and project directory (see "Contribution to the
-  Repo" above), change directory to your project folder:
-  ```bash
-  > cd ~/src/umd_classes1/class_project/DATA605/Spring2026/projects/{branch_name}
-  ```
-
-- Copy the project template files into your directory (if not already done):
-  ```bash
-  > cp -r ~/src/umd_classes1/class_project/project_template/* .
-  ```
-
-- Customize the content of the files `Dockerfile`, `requirements.txt`
-
-- Build the Docker image:
-  ```bash
-  > ./docker_build.sh
-  ```
-
-- Launch Jupyter to work on the notebooks:
-  ```bash
-  > ./docker_jupyter.sh
-  ```
-
-- To open a bash shell inside the container for debugging:
-  ```bash
-  > ./docker_bash.sh
-  ```
-
-- To remove the container and free resources:
-  ```bash
-  > ./docker_clean.sh
-  ```
-
-- Complete the notebooks in this order:
-  1. **`{project}.API.ipynb`**: explore the tool's native API and core features
-  2. **`{project}.example.ipynb`**: Build and demonstrate your end-to-end
-     application
-
-## Configuring Your System
-
-### `docker_template`
-
-- There are simple scripts (`docker_build.sh`, `docker_bash.sh`,
-  `docker_jupyter.sh`) to help you build the container, launch it, and debug it
-
-- In this approach each directory is self-contained and nothing is shared among
-  directories and projects
-  - The only common part is that there are scripts with a shared interface that
-    makes it easy to understand how to run the basic functionalities
-  - This is the approach we use for the `data605/tutorials`
-
-- To use this approach:
-  ```bash
-  > cp -r class_project/docker_template ...
-  ```
-  - Then customize the `Dockerfile`, expose other ports, or add
-    project-specific dependencies as needed
-
-- Examples are in `class_project/docker_template` and
-  `class_project/docker_template_example`
-
-## Video Recording Guidelines
+### Video Recording Guidelines
 
 The final project requires students to submit a video recording of their
 project. The goal is to learn how to present your work in a professional manner
