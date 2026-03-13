@@ -120,17 +120,21 @@ have Windows laptop get to install a VM and run linux
 
 Hello team,
 
-- We ran the algo to assign the projects on the first batch of the requests
-
-- The current status is
-  https://docs.google.com/spreadsheets/d/1kxqgvD1DDMuq2NJZ-niGPNSETkVpScH1nYJFDVBaoWE/edit?gid=0#gid=0
-
-1) For groups, everybody in the team should sign up. I'll clarify the instructions for next year
-   - I've created some placeholders. If you see your UMD id without all the info, pls submit your info so we can complete  https://docs.google.com/forms/d/1ddzqNN3eV5_2lGcuplRVuBn4oocyCtN3oNHCj9XUSsI/edit
-
-2) If you see any mistake in the table, please add a comment to the table and
-   send me and your TAM and email explaining what's the problem
-
-3) If everything looks correct, you can start making progress
-   - You need to:
-    - Open an issue in the repo
+- We ran the algorithm to assign the projects on the first batch of the project
+  requests
+- The current project assignment is [DATA605 \- Spring 2026 \- Project
+  Assignment](https://docs.google.com/spreadsheets/d/1kxqgvD1DDMuq2NJZ-niGPNSETkVpScH1nYJFDVBaoWE)
+- For groups, everybody in the team should sign up. I'll clarify the instructions
+  for next year
+- I've created some placeholders in the spreadsheet, so if you see your UMD ID
+  without all the info, please submit your info so we can complete the assignment
+  using the form: [DATA605 \- Spring 2026 \- Class
+  Project](https://docs.google.com/forms/d/e/1FAIpQLSczE7sQRw7NFTVrwFHGy4fwzkPJHAVRzN-czYNVkD0WtkdlvA)
+- If you see any mistakes in the table, please add a comment to the table and
+  send me and your TA an email explaining the problem
+- If everything looks correct, you can start making progress following the
+  instructions in class\_project/README.md and
+  class\_project/project\_template/[README.md](http://README.md)
+  - Make sure to follow the instructions carefully (very carefully\!) since part
+    of the class grade also comes from your ability to understand and follow
+    directions
