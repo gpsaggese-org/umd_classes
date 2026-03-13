@@ -43,6 +43,8 @@ MSML610: Advanced Machine Learning
 // /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf 
 // /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
 
+// Chap 1: Introduction to Causal Inference
+
 * Sales example
 - There are stores that put product on sales for Christmas
   
@@ -558,14 +560,26 @@ digraph SalesModelExtended {
   - The difference in amount sold between the ones that cut prices and the ones
     that don't, can be entirely attributed to the price cut
 
-* Independence Assumption
-- The exchangeability property is equivalent to having outcomes being independent
-  of the treatment:
+* Exchangeability Property
+- The exchangeability property is equivalent to having _potential outcomes_ being
+  independent of the treatment:
   $$
   (Y_0, Y_1) \perp T
   $$
   i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
   potential outcomes (i.e., $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$)
+
+- **Note**
+  - We are not asking for _observed outcome_ $Y$ and treatment $T$ to be
+    independent
+    - This means that treatment has no effect
+  - We are asking for the potential outcome to be independent of the treatment
+    - The outcome observed if the subjects received the treatment is independent
+      if it received the treatment or not
+  - "Knowing whether someone received the treatment tells you nothing about what
+    their outcome would have been without it"
+  - The treatment is the only thing that causes difference in outcome between
+    treatment and control
 
 - **Sales Example**
   - We can't tell apart businesses that chose to engage in sales from those that
@@ -601,3 +615,58 @@ digraph SalesModelExtended {
   - Tied to a coin flip (unrelated to other factors in causal mechanism)
   - Fully known
 - Treatment becomes independent from potential outcomes
+
+// Chap 2: Randomized Experiments and Stats Review
+
+* A/B Testing Example
+- A common strategy among companies is to
+  - have a cheap / free product that serves to attract customers
+  - Cross-sell other products that are more profitable
+    - Use email campaigns to sell premium product
+    - When a customer get an email and buys the premium product, they are
+      "converted"
+
+- Non-randomized data, you see that:
+  $$
+  \EE[ Conversion | Email = 1] > \EE[ Conversion | Email = 0]
+  $$
+  - Problem: marketing team tends to send emails for customers who they think
+    they will convert (e.g., using a survey, customers who visited the website
+    the most)
+  $$
+  \EE[ Conversion_0 | Email = 1] > \EE[ Conversion_0 | Email = 0]
+  $$
+  - I.e., customers would have converted even if the email was not sent
+
+- You need to make the treated and untreated comparable
+  - E.g., you can randomize who gets the email
+
+- Imagine that you have 3 emails
+  - No email (`no_email`)
+  - Long and beautiful email (`long`)
+  - Short and to-the-point email (`short`)
+
+- Once you collect the data you get data like:
+  ```
+  id  gender  cross_sell_email   age    conversion
+  --------------
+  0         
+  ```
+  - Compute the mean by group in `cross_sell_email`
+    ```
+    cross_sell_email    conversion
+    ------------------------------
+    no_email            0.042
+    long                0.055
+    short               0.125
+    ```
+  - Compute the ATE, i.e., difference between each treated group and control
+    $$ATE = \EE[Y | T=t] - \EE[Y | T=0]$$
+    - Sending the short and to-the-point email is best
+
+- You should still do a sanity check that randomization was done right
+  - E.g., you can check if `gender` and `age` are balanced in the groups (using a
+    statistical test)
+  - If not, it might be that the effect is due to sending the email to a specific
+    demographic
+  - Biases sampling has large effect on small data
