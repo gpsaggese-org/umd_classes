@@ -680,4 +680,27 @@ digraph SalesModelExtended {
   - Sometimes impossible
 
 - You can use an RCT as a benchmark
-  - What is the best experiment to answer your question, if it's not feasible
+  - What is the best experiment to answer your question (even if it's not) feasible?
+  - Can help discover the causal effect
+
+* 
+- Standard error of the mean is related to the sample size $n$
+  $$
+  SE = \frac{\sigma}{n}
+  $$
+
+- Imagine you have data about schools in terms of number of students and average
+  SAT score
+  - An frequent effect is that the top-performing schools have a small number of
+    students
+    - An explanation is that "fewer students allows teachers to give focused
+      attention to each student"
+
+  - In reality
+    - Also bottom 1% of schools have few students
+    - The effect is due to standard error of the mean: more students means more
+      precise estimate and less variation due to chance
+    - This is shown by a "triangular" shape of `avg_score` vs
+      `number_of_students`
+
+

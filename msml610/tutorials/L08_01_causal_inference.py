@@ -211,3 +211,31 @@ hmatplo.save_fig(
 fig = mtl0cireout.plot_university_simpsons_paradox()
 
 # %%
+# Cell 2: A/B testing
+
+# %%
+data = pd.read_csv("L08_data/cross_sell_email.csv")
+print(data.shape)
+display(data.head(3))
+
+# %%
+data.groupby(["cross_sell_email"]).mean()
+
+# %%
+# Evaluate balance co-variate.
+X = ["gender", "age"]
+mu = data.groupby("cross_sell_email")[X].mean()
+var = data.groupby("cross_sell_email")[X].var()
+norm_diff = ((mu - mu.loc["no_email"])/
+    np.sqrt((var + var.loc["no_email"])/2))
+norm_diff
+
+# %%
+df = pd.read_csv("L08_data/enem_scores.csv")
+print(df.shape)
+df.head(3)
+
+# %%
+df.sort_values(by="avg_score", ascending=False).head(5)
+
+# %%
