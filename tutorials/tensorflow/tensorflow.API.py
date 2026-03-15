@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -37,9 +37,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import tf_keras
 
-import helpers.hdbg as hdbg
 
-hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 # %% [markdown]
@@ -253,3 +251,160 @@ plt.xlabel("Optimization step")
 plt.ylabel("Negative ELBO")
 plt.title("Variational Inference Convergence")
 plt.tight_layout()
+
+# %%
+# Visualize generated data and true parameters
+plt.figure(figsize=(8, 4))
+
+plt.hist(data, bins=30, density=True, alpha=0.6, label="Sampled Data")
+
+# True mean line
+plt.axvline(TRUE_MEAN, linestyle="--", linewidth=2, label="True Mean")
+
+# True mean ± std
+plt.axvline(TRUE_MEAN + TRUE_STD, linestyle=":", label="Mean + 1 Std")
+plt.axvline(TRUE_MEAN - TRUE_STD, linestyle=":", label="Mean - 1 Std")
+
+plt.xlabel("Value")
+plt.ylabel("Density")
+plt.title("Synthetic Data Distribution with True Parameters")
+plt.legend()
+plt.tight_layout()
+
+# %% [markdown]
+# # Decomposing the Past, Forecasting the Future
+
+# %%
+tfd = tfp.distributions
+sts = tfp.sts
+
+np.random.seed(42)
+num_steps = 150
+
+trend      = np.linspace(0, 5, num_steps)
+seasonality = np.sin(np.linspace(0, 6 * np.pi, num_steps))  # ~3 weekly cycles
+noise       = np.random.normal(0, 0.3, num_steps)
+
+observed = (trend + seasonality + noise).astype(np.float32)
+observed_tensor = tf.constant(observed[:, np.newaxis])  # shape [T, 1]
+
+# %% [markdown]
+# ### 1. Build STS
+
+# %%
+trend_component = sts.LocalLinearTrend(observed_time_series=observed_tensor)
+
+seasonal_component = sts.Seasonal(
+    num_seasons=7,
+    observed_time_series=observed_tensor,
+    name='day_of_week'
+)
+
+model = sts.Sum(
+    components=[trend_component, seasonal_component],
+    observed_time_series=observed_tensor
+)
+
+# %% [markdown]
+# ### 2. Variational Inference
+
+# %%
+# Build surrogate posterior and run VI
+surrogate_posterior = tfp.sts.build_factored_surrogate_posterior(model=model)
+
+num_variational_steps = 200
+optimizer = tf.optimizers.Adam(learning_rate=0.1)
+
+@tf.function(experimental_compile=True)
+def run_vi():
+    return tfp.vi.fit_surrogate_posterior(
+        target_log_prob_fn=model.joint_distribution(observed_tensor).log_prob,
+        surrogate_posterior=surrogate_posterior,
+        optimizer=optimizer,
+        num_steps=num_variational_steps
+    )
+
+losses = run_vi()
+plt.plot(losses)
+plt.title("ELBO Loss")
+plt.xlabel("VI Step")
+plt.ylabel("Negative ELBO")
+plt.show()
+
+# %% [markdown]
+# ### 3. Component Decomposition - `tfp.sts.decompose_by_component`
+#
+# Once the model is fitted, we can ask: *how much did each component contribute to the observed signal at every timestep?*
+#
+# `decompose_by_component` runs a Kalman smoother using samples drawn from the fitted posterior, and returns a distribution over each component's latent trajectory. The result is a dictionary mapping each component to a `tfd.Distribution`, where:
+# - `.mean()` gives the expected contribution of that component at each timestep
+# - `.stddev()` gives the uncertainty around that estimate
+#
+# The shaded bands in the plot reflect posterior uncertainty - a wider band means the model is less certain about that component's individual contribution.
+
+# %%
+# Draw samples from the fitted posterior
+posterior_samples = surrogate_posterior.sample(50)
+
+# Decompose the observed series into per-component contributions
+component_dists = sts.decompose_by_component(
+    model=model,
+    observed_time_series=observed_tensor,
+    parameter_samples=posterior_samples
+)
+
+# Plot each component's mean ± 1 std
+fig, axes = plt.subplots(len(component_dists), 1, figsize=(12, 4 * len(component_dists)))
+
+for ax, (component, dist) in zip(axes, component_dists.items()):
+    mean = dist.mean().numpy().squeeze()   # shape [T]
+    std  = dist.stddev().numpy().squeeze()
+    ax.plot(mean, label='Mean')
+    ax.fill_between(range(len(mean)), mean - std, mean + std, alpha=0.3, label='±1 std')
+    ax.set_title(f'Component: {component.name}')
+    ax.legend()
+
+plt.tight_layout()
+plt.show()
+
+# %% [markdown]
+# ### 4. Forecasting — `tfp.sts.forecast`
+#
+# With the model fitted on observed data, we can now extrapolate forward in time.
+#
+# `tfp.sts.forecast` runs a Kalman filter through the observed series to capture the final latent state, then propagates it forward for `num_steps_forecast` steps using the model's transition dynamics. Uncertainty in the fitted parameters (via `parameter_samples`) flows directly into the forecast, giving us a full distribution over future values rather than just a point estimate:
+# - `.mean()` is the point forecast
+# - `.stddev()` is the spread, which naturally grows the further out we predict
+#
+# The widening uncertainty band over the forecast horizon is expected — the model becomes honestly less confident the further it looks ahead.
+
+# %%
+num_steps_forecast = 30
+
+forecast_dist = sts.forecast(
+    model=model,
+    observed_time_series=observed_tensor,
+    parameter_samples=posterior_samples,
+    num_steps_forecast=num_steps_forecast
+)
+
+forecast_mean = forecast_dist.mean().numpy().squeeze()     # shape [num_steps_forecast]
+forecast_std  = forecast_dist.stddev().numpy().squeeze()
+
+# Plot observed + forecast
+plt.figure(figsize=(14, 5))
+t_obs      = np.arange(num_steps)
+t_forecast = np.arange(num_steps, num_steps + num_steps_forecast)
+
+plt.plot(t_obs, observed, label='Observed', color='steelblue')
+plt.plot(t_forecast, forecast_mean, label='Forecast mean', color='tomato')
+plt.fill_between(
+    t_forecast,
+    forecast_mean - 2 * forecast_std,
+    forecast_mean + 2 * forecast_std,
+    alpha=0.3, color='tomato', label='95% interval'
+)
+plt.axvline(num_steps, linestyle='--', color='gray', label='Forecast start')
+plt.title("STS Forecast")
+plt.legend()
+plt.show()
