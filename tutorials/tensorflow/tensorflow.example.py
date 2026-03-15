@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -41,11 +41,8 @@ import sklearn.metrics as metrics
 import tensorflow_probability as tfp
 import tf_keras
 
-import helpers.hdbg as hdbg
-import helpers.hpandas as hpandas
-import tutorials.tensorflow.tensorflow_utils as tteteuti
+import tensorflow_utils as tteteuti
 
-hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 # %% [markdown]
@@ -109,7 +106,7 @@ print(config)
 
 # %%
 df = tteteuti.generate_time_series_data(config)
-_LOG.info(hpandas.df_to_str(df, log_level=logging.INFO))
+_LOG.info(tteteuti.df_to_str_simple(df))
 
 # %%
 df.set_index("ds")["y"].plot(
