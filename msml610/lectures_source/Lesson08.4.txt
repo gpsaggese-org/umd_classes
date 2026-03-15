@@ -670,3 +670,14 @@ digraph SalesModelExtended {
   - If not, it might be that the effect is due to sending the email to a specific
     demographic
   - Biases sampling has large effect on small data
+
+* Randomized Controlled Trials
+- RCTs are the most reliable way to measure causal effects
+
+- The problem is
+  - Very expensive (in time and money)
+  - Potentially unethical
+  - Sometimes impossible
+
+- You can use an RCT as a benchmark
+  - What is the best experiment to answer your question, if it's not feasible
