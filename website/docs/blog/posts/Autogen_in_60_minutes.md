@@ -45,31 +45,28 @@ Key capabilities:
 
 ## Tutorial Content
 
-This tutorial includes all the code, notebooks, and Docker containers in
-`tutorials/Autogen/`.
+This tutorial includes all the code, notebooks, and Docker containers in the
+`tutorials/Autogen/` directory of the repository.
 
-- [`tutorials/Autogen/README.md`](../../../../tutorials/Autogen/README.md): Instructions and setup for the tutorial
-  environment
-- A Docker system to build and run the environment using our standardized
-  approach
-- [`autogen.API.ipynb`](../../../../tutorials/Autogen/autogen.API.ipynb): Tutorial notebook focusing on API configurations and
-  basic agent setup
-- [`autogen.example1.ipynb`](../../../../tutorials/Autogen/AutoGen.example1.ipynb): Advanced end-to-end agentic workflow example Part 1
-- [`autogen.example2.ipynb`](../../../../tutorials/Autogen/AutoGen.example2.ipynb): Advanced end-to-end agentic workflow example Part 1
-- [`autogen_utils.py`](../../../../tutorials/Autogen/autogen_utils.py): Utility functions required by [`autogen.example1.ipynb`](../../../../tutorials/Autogen/AutoGen.example1.ipynb) and [`autogen.example2.ipynb`](../../../../tutorials/Autogen/AutoGen.example2.ipynb)
+- **README.md**: Instructions and setup for the tutorial environment
+- A Docker system to build and run the environment using our standardized approach
+- **autogen.API.ipynb**: Tutorial notebook focusing on API configurations and basic agent setup
+- **autogen.example1.ipynb**: Advanced end-to-end agentic workflow example Part 1
+- **autogen.example2.ipynb**: Advanced end-to-end agentic workflow example Part 2
+- **autogen_utils.py**: Utility functions required by the example notebooks
 
-## [`autogen.example1.ipynb`](../../../../tutorials/Autogen/AutoGen.example1.ipynb) and [`autogen.example2.ipynb`](../../../../tutorials/Autogen/AutoGen.example2.ipynb)
+## Example Notebooks
 
 Each notebook contains two end-to-end practical examples, as shown below.
 
-### [Part 1: Dynamic Market Debate and Live Data](../../../../tutorials/Autogen/AutoGen.example1.ipynb)
+### Part 1: Dynamic Market Debate and Live Data
 
 - Fetches real-time stock data from Yahoo Finance
 - Bull and Bear strategist agents debate market trends
 - Selector agent dynamically decides which expert to call at each step
 - Generates stock charts and financial summaries
 
-### [Part 2: SEC Filings and Quantitative RAG Analysis](../../../../tutorials/Autogen/AutoGen.example2.ipynb)
+### Part 2: SEC Filings and Quantitative RAG Analysis
 
 Part 2 extends Part 1 by combining live market data with deep, structured
 analysis of SEC filings.

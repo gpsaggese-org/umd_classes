@@ -8,7 +8,7 @@ containerized environment.
 From the root of the repository, change your directory to the BambooAI tutorial folder:
 
 ```bash
-> cd tutorials/Bambooai-blog
+> cd tutorials/BambooAI
 ```
 
 Once the location has been changed to the repo run the command to build the image
@@ -33,8 +33,9 @@ the tutorials:
 2. **`bambooai.example.ipynb`**: Proceed to this notebook to explore a complete,
    real-world application workflow using BambooAI.
 
-For more information on the Docker build system refer to [Project template README](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/README.md)
+For more information on the Docker build system refer to [Project template
+README](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/README.md)
 
 ## Changelog
 
-- 2026-03-01: Initial release
+- 2026-03-15: Initial release
