@@ -22,12 +22,7 @@
   > ./docker_jupyter.sh
   ```
 
-- Once the `./docker_jupyter.sh` script is running, follow this sequence to
-  explore the tutorials:
-  1. `autogen.API.ipynb`: Start here to master the fundamental commands and
-     basic configurations of the AutoGen framework.
-  2. `Autogen.example.ipynb`: Proceed to this notebook to explore more
-     complex, multi-agent scenarios and advanced problem-solving techniques.
+- Once the `./docker_jupyter.sh` script is running, you can execute the tutorials
 
 - For more informations on the Docker build system refer to [Project template
   readme](/class_project/project_template/README.md)
