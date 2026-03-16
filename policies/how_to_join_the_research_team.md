@@ -3,7 +3,7 @@
 - Take one of GP's classes DATA605 and MSML610 and do a good job
 
 - Take a look at the kind of work we do
-  - [Papers](https://gpsaggese.github.io/05_publications/)
+  - [Papers](https://gpsaggese.github.io/06_research/)
   - [Blog](https://gpsaggese.github.io/blog/)
 
 - Read the [policies](/policies)
