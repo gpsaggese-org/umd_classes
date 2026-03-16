@@ -7,6 +7,7 @@ date: 2026-03-15
 description:
 categories:
   - AI Research
+  - Software Engineering
 ---
 
 TL;DR: Learn how to build intelligent data analysis systems with BambooAI in 60
@@ -15,14 +16,7 @@ analysis, and dynamic code generation.
 
 <!-- more -->
 
-This tutorial's goal is to show you in 60 minutes:
-
-- The basic API of BambooAI (a framework for building multi-agent AI systems
-  that can reason over data)
-- Concrete examples of using BambooAI to build specialized agents that analyze
-  dataframes, generate code, and execute complex workflows
-
-## BambooAI in 30 Seconds
+## Tutorial in 30 Seconds
 BambooAI is a flexible framework for building intelligent systems made of
 multiple collaborating LLM agents that can reason over data and execute code.
 
@@ -39,49 +33,36 @@ Key capabilities:
 - **Extensible architecture**: Easy to add custom agents and integrate with
   external tools like Google Search
 
+This tutorial's goal is to show you in 60 minutes:
+
+- The basic API of BambooAI (a framework for building multi-agent AI systems
+  that can reason over data)
+- Concrete examples of using BambooAI to build specialized agents that analyze
+  dataframes, generate code, and execute complex workflows
+
 ## Official References
+
 - [BambooAI GitHub Repository](https://github.com/bamboo-ai/bamboo)
 - [BambooAI Documentation](https://bamboo-ai.github.io/)
 
 ## Tutorial Content
-This tutorial includes all the code, notebooks, and Docker containers in the
-`tutorials/BambooAI/` directory of the repository.
 
-- **README.md**: Instructions and setup for the tutorial environment
-- A Docker system to build and run the environment using our standardized approach
-- **bambooai.API.ipynb**: Tutorial notebook focusing on fundamental classes,
+This tutorial includes all the code, notebooks, and Docker containers in
+[tutorials/BambooAI](https://github.com/gpsaggese/umd_classes/tree/master/tutorials/BambooAI)
+
+- [`README.md`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/README.md): Instructions and setup for the tutorial environment
+- A Docker system to build and run the environment using our standardized
+  approach
+- [`bambooai.API.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.API.ipynb): Tutorial notebook focusing on fundamental classes,
   methods, and API configurations
-- **bambooai.example.ipynb**: Complete real-world application workflow using
-  BambooAI
-- **bambooai.example.py**: Stand-alone script version of the example for quick
+- [`bambooai.example.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.example.ipynb): Complete real-world application workflow using BambooAI
+  - Data exploration: Using Dataframe Inspector and Analyst agents to
+    understand your data
+  - Dynamic planning: Planner agent that decomposes complex analysis tasks
+    into steps
+  - Code generation: Code Generator agent that writes and proposes solutions
+  - Error handling: Error Corrector agent that fixes and improves generated
+    code
+- [`bambooai.example.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.example.py): Stand-alone script version of the example for quick
   reference or automation
-- **bambooai_utils.py**: Utility functions required by the example notebooks
-
-## Getting Started with BambooAI APIs
-Start here to master the fundamental classes, methods, and basic configurations
-of the BambooAI framework.
-
-This notebook covers:
-
-- Core API concepts and agent configuration
-- How to initialize and configure specialized agents
-- Basic agent interactions and message passing
-- Integration with different LLM providers (OpenAI, Gemini, Claude, etc.)
-
-## End-to-End Data Analysis Workflow
-Proceed to this notebook to explore a complete, real-world application workflow
-using BambooAI.
-
-This example demonstrates:
-
-- **Data exploration**: Using Dataframe Inspector and Analyst agents to
-  understand your data
-- **Dynamic planning**: Planner agent that decomposes complex analysis tasks
-  into steps
-- **Code generation**: Code Generator agent that writes and proposes solutions
-- **Error handling**: Error Corrector agent that fixes and improves generated
-  code
-- **Collaborative reasoning**: Multiple agents working together to analyze data
-  and produce insights
-- **External integrations**: Leveraging Google Search Executor for web-based
-  research integrated into workflows
+- [`bambooai_utils.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai_utils.py): Utility functions required by the example notebooks
