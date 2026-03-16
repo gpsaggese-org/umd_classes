@@ -1,8 +1,10 @@
 ---
-title: "Probabilistic Time Series Forecasting with GluonTS: Predicting COVID-19 Cases"
+title: "GluonTS: Predicting COVID-19 Cases"
+draft: True
 authors:
   - utkrisht nath
   - Harsh Yadav
+  - gpsaggese
 date: 2026-02-07
 description:
 categories:
@@ -21,7 +23,7 @@ You'll learn why uncertainty matters and how probabilistic forecasts enable bett
 
 You'll discover how to choose between **DeepAR**, **SimpleFeedForward**, and **DeepNPTS** models. We'll teach you interpretation skills to read prediction intervals and assess model confidence. Finally, you'll apply forecasting to COVID-19 with scenario analysis.
 
-This tutorial assumes basic Python familiarity (pandas, numpy helpful), understanding of time series concepts, and Docker installed. To get started, follow the [README](README.md) to set up your environment, then run `./docker_jupyter.sh` to launch Jupyter notebooks.
+This tutorial assumes basic Python familiarity (pandas, numpy helpful), understanding of time series concepts, and Docker installed. To get started, follow the README to set up your environment, then run `./docker_jupyter.sh` to launch Jupyter notebooks.
 
 ## Understanding Probabilistic Forecasting
 
@@ -61,7 +63,7 @@ graph LR
     C --> G[Samples]
 ```
 
-See forecast visualizations in the [GluonTS.API.ipynb notebook](GluonTS.API.ipynb).
+See forecast visualizations in the GluonTS.API.ipynb notebook.
 
 ## Introduction to GluonTS
 
@@ -108,7 +110,7 @@ The workflow consists of five main steps:
 | **SimpleFeedForward** | Stable trends, quick baselines, limited compute            | 30-60 sec     |
 | **DeepNPTS**          | Regime shifts, distribution changes, flexible uncertainty  | 1-3 min       |
 
-For detailed API documentation, see [GluonTS.API.ipynb](GluonTS.API.ipynb).
+For detailed API documentation, see GluonTS.API.ipynb.
 
 ## The COVID-19 Forecasting Problem
 
@@ -216,7 +218,7 @@ flowchart TD
 - **Complex patterns, highest accuracy** → DeepAR
 - **Regime changes, variant transitions** → DeepNPTS
 
-See detailed model comparisons in [GluonTS.API.ipynb](GluonTS.API.ipynb).
+See detailed model comparisons in GluonTS.API.ipynb.
 
 ## Hands-On: Building Your First Forecast
 
@@ -293,7 +295,7 @@ upper_80 = forecast.quantile(0.9)  # 90th percentile
 samples = forecast.samples  # Shape: (100, 14)
 ```
 
-See the complete walkthrough in [GluonTS.example.ipynb](GluonTS.example.ipynb).
+See the complete walkthrough in GluonTS.example.ipynb.
 
 ## Interpreting Probabilistic Forecasts
 
@@ -333,7 +335,7 @@ Understanding probabilistic forecasts requires interpreting prediction intervals
 
 **Best practice:** Always consider the full distribution, not just the mean.
 
-See forecast interpretation examples in [GluonTS.example.ipynb - Section 5](GluonTS.example.ipynb).
+See forecast interpretation examples in GluonTS.example.ipynb - Section 5.
 
 ## Model Evaluation: Beyond Accuracy
 
@@ -365,7 +367,7 @@ When comparing models, consider accuracy (lowest MAE/RMSE), uncertainty quality 
 
 **Example:** DeepAR (best accuracy, well-calibrated), SimpleFeedForward (good accuracy, fastest), DeepNPTS (good accuracy, flexible uncertainty, adapts to changes).
 
-See evaluation code and metrics in [GluonTS.example.ipynb - Section 5](GluonTS.example.ipynb).
+See evaluation code and metrics in GluonTS.example.ipynb - Section 5.
 
 ## Real-World Application: Scenario Analysis
 
@@ -403,7 +405,7 @@ Healthcare Strain         48,455       678,376        3.0% more
 
 **Key insights:** Quantify intervention impact with uncertainty bounds, compare scenarios probabilistically, make informed decisions balancing multiple factors.
 
-See complete scenario analysis in [GluonTS.example.ipynb - Section 6](GluonTS.example.ipynb).
+See complete scenario analysis in GluonTS.example.ipynb - Section 6.
 
 ## Key Takeaways and Next Steps
 
@@ -457,7 +459,7 @@ Probabilistic models **quantify uncertainty** and **adapt to variability**, maki
 
 - [Official Documentation](https://ts.gluon.ai/)
 - [GitHub Repository](https://github.com/awslabs/gluonts)
-- [API Reference](GluonTS.API.ipynb)
+- API Reference
 
 **Research Papers:** [DeepAR Paper](https://arxiv.org/abs/1704.04110), [GluonTS Paper](https://arxiv.org/abs/1906.05264).
 
@@ -471,4 +473,4 @@ Probabilistic time series forecasting with GluonTS enables you to capture uncert
 
 Whether forecasting COVID-19 cases, sales, or any time series, probabilistic forecasts provide **uncertainty quantification** and **variability awareness** needed for real-world decision-making.
 
-**Ready to get started?** Follow the [README](README.md) to set up your environment, then dive into the [GluonTS.API.ipynb](GluonTS.API.ipynb) and [GluonTS.example.ipynb](GluonTS.example.ipynb) notebooks.
+**Ready to get started?** Follow the README to set up your environment, then dive into the GluonTS.API.ipynb and GluonTS.example.ipynb notebooks.
