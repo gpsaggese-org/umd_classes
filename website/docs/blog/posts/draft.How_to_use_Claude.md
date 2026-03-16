@@ -1,3 +1,14 @@
+---
+title: "How to Use Claude"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-01-01
+description: Draft guide on using Claude
+categories:
+  - Software Engineering
+---
+
 // https://platform.claude.com/docs/en/home
 
 # Developer Guide

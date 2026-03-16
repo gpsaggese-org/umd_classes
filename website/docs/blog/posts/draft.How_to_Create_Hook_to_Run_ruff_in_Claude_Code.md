@@ -1,6 +1,6 @@
 ---
-draft: true
 title: ""
+draft: true
 authors:
   - gpsaggese
 date: 2026-03-02
