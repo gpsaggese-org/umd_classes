@@ -1,8 +1,10 @@
 ---
-title: "Probabilistic Time Series Forecasting with GluonTS: Predicting COVID-19 Cases"
+title: "GluonTS: Predicting COVID-19 Cases"
+draft: True
 authors:
   - utkrisht nath
   - Harsh Yadav
+  - gpsaggese
 date: 2026-02-07
 description:
 categories:
