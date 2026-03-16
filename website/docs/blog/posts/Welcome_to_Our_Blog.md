@@ -71,3 +71,6 @@ I'd love to hear from you! Feel free to reach out via:
 - GitHub: [github.com/gpsaggese](https://github.com/gpsaggese)
 
 Stay tuned for upcoming posts from our team, and thank you for visiting!
+
+## The team
+
