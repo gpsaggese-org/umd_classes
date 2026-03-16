@@ -1,3 +1,14 @@
+---
+title: "Google Workspace CLI"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-01-01
+description: Draft tutorial on Google Workspace CLI
+categories:
+  - Software Engineering
+---
+
 npm install -g @googleworkspace/cli
 
 
