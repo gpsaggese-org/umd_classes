@@ -82,15 +82,23 @@ need to update dependencies manually:
 
 Work through the following notebooks in order:
 
-1. [`tensorflow.API.ipynb`](tensorflow.API.ipynb):  Core TensorFlow fundamentals
+- [`tensorflow.API.ipynb`](tensorflow.API.ipynb): Core TensorFlow fundamentals
    - Tensors and tensor operations
    - Automatic differentiation
    - Keras regression models
    - TensorFlow Probability distributions
 
-2. [`tensorflow.example.ipynb`](tensorflow.example.ipynb): Structural time series
-   forecasting
+- [`tensorflow.example.ipynb`](tensorflow.example.ipynb): Advanced structural
+  time series forecasting
+   - Data Generation: Synthetic daily time series combining multiple
+     components
+   - Model Building: Approximate posterior over model parameters using
+     Variational Inference (VI)
+   - Forecasting and Evaluation: End-to-end pipeline for predictions and
+     model assessment
    - Building trend and seasonality components
    - Incorporating holiday effects
    - Autoregressive modeling
-   - End-to-end forecasting pipeline
+
+- [`tensorflow_utils.py`](tensorflow_utils.py): Utility functions supporting the
+  tutorial notebooks
