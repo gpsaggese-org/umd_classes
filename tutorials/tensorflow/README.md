@@ -78,6 +78,9 @@ need to update dependencies manually:
   > uv pip sync requirements.txt
   ```
 
+- For more informations on the Docker build system refer to [Project template
+  readme](/class_project/project_template/README.md)
+
 ## Tutorial Notebooks
 
 Work through the following notebooks in order:
@@ -102,3 +105,7 @@ Work through the following notebooks in order:
 
 - [`tensorflow_utils.py`](tensorflow_utils.py): Utility functions supporting the
   tutorial notebooks
+
+## Changelog
+
+- 2026-03-01: Initial release

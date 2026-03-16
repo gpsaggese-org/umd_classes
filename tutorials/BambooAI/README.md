@@ -25,16 +25,31 @@ launch jupyter notebook using the created image using the command:
 > ./docker_jupyter.sh
 ```
 
-Once the `./docker_jupyter.sh` script is running, follow this sequence to explore
-the tutorials:
-
-1. **`bambooai.API.ipynb`**: Start here to master the fundamental classes,
-   methods, and basic configurations of the BambooAI framework.
-2. **`bambooai.example.ipynb`**: Proceed to this notebook to explore a complete,
-   real-world application workflow using BambooAI.
+Once the `./docker_jupyter.sh` script is running, work through the following
+notebooks in order.
 
 For more information on the Docker build system refer to [Project template
-README](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/README.md)
+README](/class_project/project_template/README.md)
+
+## Tutorial Notebooks
+
+Work through the following notebooks in order:
+
+- [`bambooai.API.ipynb`](bambooai.API.ipynb): Core BambooAI fundamentals
+  - Understanding the BambooAI framework architecture
+  - Working with BambooAI classes and methods
+  - Building basic agent configurations
+  - Integration with language models
+
+- [`bambooai.example.ipynb`](bambooai.example.ipynb): Real-world application
+  workflow
+  - End-to-end agentic application example
+  - Practical problem-solving with BambooAI
+  - Advanced agent interactions and workflows
+  - Best practices and patterns
+
+- [`bambooai_utils.py`](bambooai_utils.py): Utility functions supporting the
+  tutorial notebooks
 
 ## Changelog
 

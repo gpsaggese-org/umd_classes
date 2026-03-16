@@ -30,34 +30,35 @@
      complex, multi-agent scenarios and advanced problem-solving techniques.
 
 - For more informations on the Docker build system refer to [Project template
-  readme](https://github.com/gpsaggese/umd_classes/blob/master/class_project/project_template/README.md)
+  readme](/class_project/project_template/README.md)
 
 ## Tutorial Notebooks
 
-This tutorial includes Docker containers and the following Jupyter notebooks:
+Work through the following notebooks in order:
 
-- **`autogen.API.ipynb`**: Tutorial notebook focusing on API configurations and
-  basic agent setup
+- [`autogen.API.ipynb`](autogen.API.ipynb): Tutorial notebook focusing on API
+  configurations and basic agent setup
   - Master the fundamental commands and basic configurations of the AutoGen
     framework
 
-- **`autogen.example1.ipynb`**: Advanced end-to-end agentic workflow example
-  Part 1
+- [`autogen.example1.ipynb`](autogen.example1.ipynb): Advanced end-to-end
+  agentic workflow example Part 1
   - Fetches real-time stock data from Yahoo Finance
   - Bull and Bear strategist agents debate market trends
   - Selector agent dynamically decides which expert to call at each step
   - Generates stock charts and financial summaries
 
-- **`autogen.example2.ipynb`**: Advanced end-to-end agentic workflow example
-  Part 2
+- [`autogen.example2.ipynb`](autogen.example2.ipynb): Advanced end-to-end
+  agentic workflow example Part 2
   - Pulls 10-K filings from SEC EDGAR and cleans them
-  - Embeds documents into a **ChromaDB** vector database
+  - Embeds documents into a ChromaDB vector database
   - Senior Quant Analyst agent queries the database to extract revenue splits,
     risk factors, and other insights
   - Quant Runtime agent executes Python code locally to transform raw tables
     into structured visualizations
 
-- **`autogen_utils.py`**: Utility functions required by the example notebooks
+- [`autogen_utils.py`](autogen_utils.py): Utility functions required by the
+  example notebooks
 
 ## Changelog
 
