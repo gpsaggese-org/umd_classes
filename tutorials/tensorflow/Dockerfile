@@ -1,63 +1,40 @@
-FROM ubuntu:24.04
-ENV DEBIAN_FRONTEND noninteractive
+FROM python:3.12-slim
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
-
-# Install system utilities.
-RUN apt install -y --no-install-recommends \
-    sudo \
-    curl \
-    systemctl \
-    gnupg \
-    git \
-    vim
-
-# Install Python and build deps (venv requires python3-venv on Debian/Ubuntu).
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3 \
-    python3-pip \
-    python3-dev \
-    python3-venv \
-    && rm -rf /var/lib/apt/lists/*
-
-# Create virtual environment.
-RUN python3 -m venv /opt/venv
-
-# Make the venv the default Python.
+ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Upgrade pip inside the venv.
-RUN python -m pip install --upgrade pip
+# Install build + runtime deps
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    build-essential \
+    curl \
+    sudo \
+    gnupg \
+    git \
+    vim \
+    libgl1 \
+    libglib2.0-0 \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install uv, if needed.
-#RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-#ENV PATH="/root/.local/bin:$PATH"
-#COPY pyproject.toml uv.lock /app/
-#RUN uv sync
+# Install uv
+RUN curl -Ls https://astral.sh/uv/install.sh | sh
+ENV PATH="/root/.local/bin:$PATH"
 
-# Install Jupyter.
-RUN pip3 install jupyterlab
+# Create virtual environment and install dependencies via uv
+RUN uv venv /opt/venv
+COPY requirements.txt /install/requirements.txt
+RUN uv pip install --python /opt/venv/bin/python --no-cache -r /install/requirements.txt jupyterlab
 
-# Install project specific packages.
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
-RUN mkdir /install
-
-# Install Jupyter extensions.
-#ADD install_jupyter_extensions.sh /install
-#RUN /install/install_jupyter_extensions.sh
-
-# Config.
-ADD etc_sudoers /install/
+# Copy workspace and configs
+COPY . /workspace/
+RUN mkdir -p /install
 COPY etc_sudoers /etc/sudoers
 COPY bashrc /root/.bashrc
+COPY version.sh /install/version.sh
 
-# Report package versions.
-ADD version.sh /install/
+# Run version report
 RUN /install/version.sh 2>&1 | tee version.log
 
-# Jupyter.
+WORKDIR /workspace
 EXPOSE 8888
