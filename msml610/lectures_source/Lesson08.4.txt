@@ -40,14 +40,17 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf 
+// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf
+// https://matheusfacure.github.io/python-causality-handbook/landing-page.html
+// GitHub: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
+
 // /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
 
 // Chap 1: Introduction to Causal Inference
 
 * Sales example
 - There are stores that put product on sales for Christmas
-  
+
   \begingroup
   \centering
   ![](msml610/lectures_source/figures/L08.4.xmas_sales_df.png){width=60%}
@@ -281,7 +284,7 @@ digraph SalesModelExtended {
 - Aka "counterfactuals"
 
 - The $do()$ operator represents _"unit $i$ outcome is $Y$ if treatment is set to
-  $t$"_ 
+  $t$"_
   $$Y_{t,i} \triangleq Y_i | do(T_i = t)$$
   - The first is "Rubin's notation", the second is "Pearl's notation"
 
@@ -391,12 +394,12 @@ digraph SalesModelExtended {
     \begingroup
     \small
     $$
-    \EE[Y | T = 1] - E[Y | T = 0] = 
+    \EE[Y | T = 1] - E[Y | T = 0] =
     \EE[Y_1 - Y_0 | T = 1] +
     \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
     $$
     \endgroup
-  - Association = causation + a bias term 
+  - Association = causation + a bias term
 
 //* Decomposing Observed Difference into Treatment Effect and Bias
 //
@@ -442,11 +445,11 @@ digraph SalesModelExtended {
 //    - If bias not 0, observed difference is misleading (confounded)
 
 * The Bias Equation: Remarks
-- Association = causation + a bias term 
+- Association = causation + a bias term
   \begingroup
   \small
   $$
-  \EE[Y | T = 1] - E[Y | T = 0] = 
+  \EE[Y | T = 1] - E[Y | T = 0] =
   \EE[Y_1 - Y_0 | T = 1] +
   \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
@@ -538,13 +541,13 @@ digraph SalesModelExtended {
 
 * Identifying the Treatment Effect
 - We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
-  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_ 
+  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_
   - How can we recover causal quantities from observable data?
 
 - The bias equation says that:
   $$
-  \EE[Y | T = 1] - \EE[Y | T = 0] = 
-  \EE[(Y_1 - Y_0) | T = 1] + 
+  \EE[Y | T = 1] - \EE[Y | T = 0] =
+  \EE[(Y_1 - Y_0) | T = 1] +
   \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
   $$
 - If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control
@@ -650,7 +653,7 @@ digraph SalesModelExtended {
   ```
   id  gender  cross_sell_email   age    conversion
   --------------
-  0         
+  0
   ```
   - Compute the mean by group in `cross_sell_email`
     ```
@@ -683,7 +686,7 @@ digraph SalesModelExtended {
   - What is the best experiment to answer your question (even if it's not) feasible?
   - Can help discover the causal effect
 
-* 
+*
 - Standard error of the mean is related to the sample size $n$
   $$
   SE = \frac{\sigma}{n}
@@ -702,5 +705,112 @@ digraph SalesModelExtended {
       precise estimate and less variation due to chance
     - This is shown by a "triangular" shape of `avg_score` vs
       `number_of_students`
+
+![](msml610/lectures_source/figures/L08.4.School_score_by_number_students.png)
+
+// Chap 3: Graphical Causal Models
+
+*
+- Estimate the impact of emails on conversion
+  - Cross-sell email = treatment $T$
+  - Customer converted to a new product (or not) = outcome $Y$
+
+- $T$ was randomized, so
+  - The treatment is independent from the potential outcomes
+    $$
+    (Y_0, Y_1) \perp T
+    $$
+  - Thus association equals causation 
+    $$
+    \EE[Y_1 - Y_0] = \EE[Y | T=1] - \EE[Y | T=0]
+    $$
+
+- You can't infer the independence assumption from the data
+  - You need to have information to the treatment assignment mechanism (e.g.,
+    "emails were randomized")
+
+- Imagine that you believe that `age`, `gender` also cause conversion
+  - There are also other variables $U$ (i.e., unobserved) that we didn't measure
+    (e.g., customer income, city we are operating in)
+
+```graphviz
+digraph CausalKG {
+  rankdir=LR;
+
+  u [shape=ellipse, style="filled,dashed", color="#183B4A", fillcolor="#E6EEF1", fontcolor="#183B4A", label="u"];
+
+  age [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="age"];
+  gender [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="gender"];
+
+  rnd [shape=ellipse, penwidth=2, style="filled,solid", color="#408AB0", fillcolor="#EAF3F8", fontcolor="black", label="rnd"];
+
+  cross_sell_email [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="cross_sell_email"];
+
+  conversion [shape=box, penwidth=2, style="filled,solid", color="#F8D476", fillcolor="#FFF6DA", fontcolor="black", label="conversion"];
+
+  u -> age [style=solid, color=black];
+  u -> gender [style=solid, color=black];
+  age -> conversion [style=solid, color=black];
+  gender -> conversion [style=solid, color=black];
+  rnd -> cross_sell_email [style=solid, color=black];
+  cross_sell_email -> conversion [style=solid, color=black];
+  u -> conversion [style=solid, color=black];
+}
+```
+
+* Are Consultants Worth It?
+
+- You are a manager and you need to decide whether to hire expensive consultants
+
+  - Do expensive consultants improve business? Or
+  - Only very profitable businesses can afford consultants?
+
+- Setting up a randomized trial is difficult
+  - We need to untangle causation from association
+
+```graphviz
+digraph CausalGraph {
+  rankdir=LR;
+
+  // Exogenous variable: profits_prev_6m
+  profits_prev_6m [
+    shape=ellipse,
+    penwidth=2,
+    color="#408AB0",
+    fillcolor="#EAF3F8",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_prev_6m"
+  ];
+
+  // Endogenous variable: Consultancy
+  Consultancy [
+    shape=box,
+    penwidth=1,
+    color="#62D4A4",
+    fillcolor="#EAF9F3",
+    style="filled,rounded,solid",
+    fontcolor=black,
+    label="Consultancy"
+  ];
+
+  // Target variable: profits_next_6m
+  profits_next_6m [
+    shape=box,
+    penwidth=2,
+    color="#F8D476",
+    fillcolor="#FFF6DA",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_next_6m"
+  ];
+
+  // Causal edges
+  profits_prev_6m -> Consultancy [style=solid, dir=forward, color=black];
+  profits_prev_6m -> profits_next_6m [style=solid, dir=forward, color=black];
+  Consultancy -> profits_next_6m [style=solid, dir=forward, color=black];
+}
+```
+
 
 

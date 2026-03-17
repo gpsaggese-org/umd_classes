@@ -39,8 +39,6 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-
-
 ## Intervention and Counterfactuals
 
 * Interventions in Causal Networks
@@ -269,6 +267,7 @@ _Mutilated graph_
 ## Back-door Adjustment
 
 * Back-Door Paths: Example
+
 ::: columns
 :::: {.column width=65%}
 - **Example**
@@ -279,7 +278,7 @@ _Mutilated graph_
       perceived as more valuable
     - The _sales_ (directly)
 
-- The **back-door path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$ 
+- The **back-door path** is $Price$ $\to$ $AdSpend$ $\to$ $Sales$
 
 ::::
 :::: {.column width=30%}
@@ -518,9 +517,9 @@ digraph CerealAds {
 :::
 
 - **Hypotheses**:
-  1. _All directed paths_ from $X$ to $Y$ go through $M$
-  2. _No unobserved confounder_ affects $X$ and $M$
-  3. _All backdoor paths_ from $M$ to $Y$ are blocked by $X$
+  - _All directed paths_ from $X$ to $Y$ go through $M$
+  - _No unobserved confounder_ affects $X$ and $M$
+  - _All backdoor paths_ from $M$ to $Y$ are blocked by $X$
 
 - **Thesis**: estimate the causal effect $P(Y | do(X))$ despite unobserved $U$
   \begingroup \small
@@ -681,9 +680,9 @@ digraph CerealAds {
 - **Yes! The front-door criterion is verified**
 
 - Instead of doing an intervention $do(X)$, just observe!
-  1. Observe how often ads make kids nag, $\Pr(M | X)$
-  2. Observe nagging changes buying, $\Pr(Y | M, X')$
-  3. Combine both to estimate what happens if you _force_ more ads
+  - Observe how often ads make kids nag, $\Pr(M | X)$
+  - Observe nagging changes buying, $\Pr(Y | M, X')$
+  - Combine both to estimate what happens if you _force_ more ads
      $$\Pr(Y | do(X)) = \sum_m \Pr(M | X) \sum_{x'} \Pr(Y | M, X') \Pr(X')$$
      - _Intuition_: "How ads cause nagging" × "How nagging causes buying"
 
@@ -716,20 +715,20 @@ digraph CerealAds {
 - Do-calculus provides **three transformation rules** for manipulating
   expressions involving $do()$:
 
-  1. **Insertion/Deletion of Observations:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}}$ (where incoming edges to X
-     are removed), then:
-     $$\Pr(Y \mid do(X), Z, W) = \Pr(Y \mid do(X), W)$$
+  - **Insertion/Deletion of Observations:**
+    If $Y \perp Z \mid X, W$ in $G_{\overline{X}}$ (where incoming edges to X
+    are removed), then:
+    $$\Pr(Y \mid do(X), Z, W) = \Pr(Y \mid do(X), W)$$
 
-  2. **Action/Observation Exchange:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$ (incoming edges
-     to X removed, outgoing from Z removed), then:
-     $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), Z, W)$$
+  - **Action/Observation Exchange:**
+    If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$ (incoming edges
+    to X removed, outgoing from Z removed), then:
+    $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), Z, W)$$
 
-  3. **Insertion/Deletion of Actions:**
-     If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \overline{Z(W)}}$ (incoming
-     edges to X and to Z excluding those from W removed), then:
-     $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), W)$$
+  - **Insertion/Deletion of Actions:**
+    If $Y \perp Z \mid X, W$ in $G_{\overline{X}, \overline{Z(W)}}$ (incoming
+    edges to X and to Z excluding those from W removed), then:
+    $$\Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), W)$$
 
 - These rules allow the systematic reduction of expressions involving $do()$ into
   observational terms, if the causal graph permits
@@ -747,10 +746,11 @@ digraph CerealAds {
   $$
 
 - **Front-door adjustment**: If there exists a variable $Z$ such that:
-  1. Z is affected by X
-  2. Z affects Y
-  3. All back-door paths from X to Z are blocked
-  4. All back-door paths from Z to Y are blocked by X
+  - Z is affected by X
+  - Z affects Y
+  - All back-door paths from X to Z are blocked
+  - All back-door paths from Z to Y are blocked by X
+
   then:
   $$
   \Pr(Y | do(X)) = \sum_z \Pr(Z | X) \sum_{x'} \Pr(Y | Z, X') \Pr(X')
