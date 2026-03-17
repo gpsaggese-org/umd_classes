@@ -4,7 +4,7 @@ import sys
 
 # Docker image name
 DOCKER_IMAGE = "gpsaggese/umd_tutorial_tensorflow:latest"
-NOTEBOOK_DIR = "tutorials/tensorflow"  # folder containing notebooks
+NOTEBOOK_DIR = "tutorials/TensorFlow"  # folder containing notebooks
 
 
 def image_exists() -> bool:
