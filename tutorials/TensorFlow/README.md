@@ -45,7 +45,7 @@ additional setup is required beyond the steps below.
 
 1. **Navigate to the tutorial directory:**
    ```bash
-   > cd tutorials/tensorflow
+   > cd tutorials/TensorFlow
    ```
 
 2. **Build the Docker image:**
