@@ -12,8 +12,8 @@
 - Join the Research team [Slack channel](https://join.slack.com/t/umdresearch/shared_invite/zt-3r5n86n8n-shQn627VgjZ6NKfAU5b_ZQ)
 
 - Join one or both weekly office hours
-  - Wed morning [invite](https://calendar.google.com/calendar/u/0/r/eventedit/ZnUzdGs5MjZ1MDc3c2JkYmN0aW1idTRhZmdfMjAyNjAzMThUMTUzMDAwWiBnc2FnZ2VzZUB1bWQuZWR1)
-  - Thur afternoon [invite]()
+  - Wed morning [Join](https://calendar.google.com/calendar/u/0/r/eventedit/ZnUzdGs5MjZ1MDc3c2JkYmN0aW1idTRhZmdfMjAyNjAzMThUMTUzMDAwWiBnc2FnZ2VzZUB1bWQuZWR1)
+  - Thur afternoon [Join](https://calendar.google.com/calendar/u/0/r/eventedit/M2VxMnN1YWV1OThldGtwOHR2N2owYmYyanJfMjAyNjAzMTlUMjAwMDAwWiBnc2FnZ2VzZUB1bWQuZWR1)
 
 - Ask to be added to the [big board](https://docs.google.com/spreadsheets/d/1FpBI4tysk2kMSNeTc3WTGOw8KZkr4yG85nfDwqu8Fdo/edit?gid=1349922149#gid=1349922149)
   sending all the information
