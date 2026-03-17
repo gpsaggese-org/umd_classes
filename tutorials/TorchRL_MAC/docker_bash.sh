@@ -21,4 +21,3 @@ docker run --rm -it ${PLATFORM_FLAG} \
   -e HOME=/tmp \
   --shm-size=1g \
   "${IMAGE_TAG}"
-
