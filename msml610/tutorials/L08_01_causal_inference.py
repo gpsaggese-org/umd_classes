@@ -48,8 +48,8 @@ _LOG = logging.getLogger(__name__)
 
 # %%
 hmodule.install_module_if_not_present(
-  "dataframe_image",
-  use_activate=True,
+    "dataframe_image",
+    use_activate=True,
 )
 
 # %% [markdown]
@@ -61,7 +61,7 @@ dir_name = "L08_data"
 
 out_dir_name = "figures/"
 
-markdown_path_prefix="msml610/lectures_source"
+markdown_path_prefix = "msml610/lectures_source"
 # # cp msml610/lectures_source/figures/L08*.png msml610/lectures_source/figures
 
 # %%
@@ -70,13 +70,13 @@ print(data.shape)
 data.head(6)
 
 # %%
-xmas_sales_df_png = os.path.join(out_dir_name, 'L08.4.xmas_sales_df.png')
+xmas_sales_df_png = os.path.join(out_dir_name, "L08.4.xmas_sales_df.png")
 hpandisp.convert_df_to_png(
     data.head(6),
     xmas_sales_df_png,
     index=True,
     print_markdown=True,
-    markdown_path_prefix=markdown_path_prefix
+    markdown_path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -88,10 +88,7 @@ hpandisp.convert_df_to_png(
 fig = mtl0cireout.plot_xmas_sales_boxplot(data)
 xmas_boxplot_png = os.path.join(out_dir_name, "L08.4.xmas_boxplot.png")
 hmatplo.save_fig(
-    fig,
-    xmas_boxplot_png,
-    print_markdown=True,
-    path_prefix=markdown_path_prefix
+    fig, xmas_boxplot_png, print_markdown=True, path_prefix=markdown_path_prefix
 )
 
 # %% [markdown]
@@ -160,12 +157,14 @@ hmatplo.save_fig(
 
 # %%
 fig = mtl0cireout.plot_sales_bias_analysis(data)
-bias_analysis0_png = os.path.join(out_dir_name, "L08.4.Association_Causation_Bias0.png")
+bias_analysis0_png = os.path.join(
+    out_dir_name, "L08.4.Association_Causation_Bias0.png"
+)
 hmatplo.save_fig(
     fig,
     bias_analysis0_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -175,12 +174,14 @@ hmatplo.save_fig(
 
 # %%
 fig = mtl0cireout.plot_single_vs_separate_trends()
-bias_analysis1_png = os.path.join(out_dir_name, "L08.4.Association_Causation_Bias1.png")
+bias_analysis1_png = os.path.join(
+    out_dir_name, "L08.4.Association_Causation_Bias1.png"
+)
 hmatplo.save_fig(
     fig,
     bias_analysis1_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -197,7 +198,7 @@ hmatplo.save_fig(
     fig,
     simpsons_paradox_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -226,8 +227,7 @@ data.groupby(["cross_sell_email"]).mean()
 X = ["gender", "age"]
 mu = data.groupby("cross_sell_email")[X].mean()
 var = data.groupby("cross_sell_email")[X].var()
-norm_diff = ((mu - mu.loc["no_email"])/
-    np.sqrt((var + var.loc["no_email"])/2))
+norm_diff = (mu - mu.loc["no_email"]) / np.sqrt((var + var.loc["no_email"]) / 2)
 norm_diff
 
 # %%
