@@ -29,15 +29,9 @@ run "docker image ls $FULL_IMAGE_NAME"
 #(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Configure and run the Docker container with the specified command.
-DOCKER_RUN_OPTS=""
 CONTAINER_NAME=$IMAGE_NAME
-run "docker run \
-    --rm -i \
-    --name $CONTAINER_NAME \
-    $DOCKER_RUN_OPTS \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s) \
-    $FULL_IMAGE_NAME \
-    bash -c '$CMD'"
+DOCKER_CMD=$(get_docker_cmd_command)
+PORT=""
+DOCKER_RUN_OPTS=""
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT $DOCKER_RUN_OPTS)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME bash -c '$CMD'"

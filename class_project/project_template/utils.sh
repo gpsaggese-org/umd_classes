@@ -3,6 +3,52 @@
 # Utility functions for Docker container management.
 # """
 
+get_docker_bash_command() {
+    # """
+    # Return the base docker run command for an interactive bash shell.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    echo "docker run --rm -ti"
+}
+
+
+get_docker_cmd_command() {
+    # """
+    # Return the base docker run command for executing a non-interactive command.
+    #
+    # :return: docker run command string with --rm and -i flags
+    # """
+    echo "docker run --rm -i"
+}
+
+
+get_docker_bash_options() {
+    # """
+    # Return docker run options for a Docker container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param port: Port number to forward (optional, skipped if empty)
+    # :param extra_opts: Additional docker run options (optional)
+    # :return: docker run options string with name, volume mounts, and env vars
+    # """
+    local container_name=$1
+    local port=$2
+    local extra_opts=$3
+    local port_opt=""
+    if [[ -n $port ]]; then
+        port_opt="-p $port:$port"
+    fi
+    echo "--name $container_name \
+    $port_opt \
+    $extra_opts \
+    -v $(pwd):/data \
+    -v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s)"
+}
+
+
 get_docker_vars_script() {
     # """
     # Load Docker variables from docker_name.sh script.

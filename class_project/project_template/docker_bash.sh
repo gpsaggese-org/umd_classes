@@ -29,11 +29,6 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Current directory mounted to /data inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=8889
-cmd="docker run --rm -ti \
-    --name $CONTAINER_NAME \
-    -p $PORT:$PORT \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    $FULL_IMAGE_NAME"
-run $cmd
+DOCKER_CMD=$(get_docker_bash_command)
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"
