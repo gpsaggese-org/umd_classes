@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.16.7
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -38,14 +38,14 @@ import networkx as nx
 import pandas as pd
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 
 # +
 hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hprint.config_notebook()
+hnotebook.config_notebook()
 # -
 
 # ## Start Neo4j server

@@ -39,12 +39,12 @@ import logging
 import os
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 import tutorials.tutorial_asana.asana_utils as ttuaasuti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %% [markdown]
 # ## 1. Authentication

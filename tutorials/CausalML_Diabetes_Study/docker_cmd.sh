@@ -36,5 +36,7 @@ run "docker run \
     --name $CONTAINER_NAME \
     $DOCKER_RUN_OPTS \
     -v $(pwd):/data \
+    -v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root \
     $FULL_IMAGE_NAME \
     bash -c '$CMD'"
