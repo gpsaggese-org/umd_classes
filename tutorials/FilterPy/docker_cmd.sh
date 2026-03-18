@@ -32,11 +32,12 @@ run "docker image ls $FULL_IMAGE_NAME"
 DOCKER_RUN_OPTS=""
 CONTAINER_NAME=$IMAGE_NAME
 run "docker run \
-    --rm -ti \
+    --rm -i \
     --name $CONTAINER_NAME \
     $DOCKER_RUN_OPTS \
     -v $(pwd):/data \
     -v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
     $FULL_IMAGE_NAME \
     bash -c '$CMD'"
