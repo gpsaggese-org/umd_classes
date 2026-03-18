@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # """
 # Execute a command in a Docker container.
 #
@@ -28,20 +28,10 @@ print_docker_vars
 run "docker image ls $FULL_IMAGE_NAME"
 #(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
-# Configure and run the Docker container with interactive bash shell.
-# - Container is removed automatically on exit (--rm)
-# - Interactive mode with TTY allocation (-ti)
-# - Port forwarding for Jupyter and PostgreSQL services
-# - Current directory mounted to /data inside container
-CONTAINER_NAME=${IMAGE_NAME}_cmd
+# Configure and run the Docker container with the specified command.
+CONTAINER_NAME=$IMAGE_NAME
+DOCKER_CMD=$(get_docker_cmd_command)
 PORT=8888
-cmd="docker run --rm -ti \
-    --name $CONTAINER_NAME \
-    -p $PORT:$PORT \
-    -p 5432:5432 \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    $FULL_IMAGE_NAME \
-    bash -c '$CMD'"
-run $cmd
+DOCKER_RUN_OPTS="-p 5432:5432"
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT "$DOCKER_RUN_OPTS")
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME bash -c '$CMD'"

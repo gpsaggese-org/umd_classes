@@ -1,6 +1,10 @@
-#!/bin/bash -e
+#!/bin/bash
 # """
-# Execute a command inside the tsfresh Docker container.
+# Execute a command in a Docker container.
+#
+# This script runs a specified command inside a new Docker container instance.
+# The container is removed automatically after the command completes. The
+# current directory is mounted to /data inside the container.
 # """
 
 # Exit immediately if any command exits with a non-zero status.
@@ -22,13 +26,12 @@ print_docker_vars
 
 # List available Docker images matching the expected image name.
 run "docker image ls $FULL_IMAGE_NAME"
+#(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
+# Configure and run the Docker container with the specified command.
 CONTAINER_NAME=$IMAGE_NAME
-run "docker run \
-    --rm -ti \
-    --name $CONTAINER_NAME \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    $FULL_IMAGE_NAME \
-    bash -c '$CMD'"
+DOCKER_CMD=$(get_docker_cmd_command)
+PORT=""
+DOCKER_RUN_OPTS=""
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT $DOCKER_RUN_OPTS)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME bash -c '$CMD'"

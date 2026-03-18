@@ -8,7 +8,7 @@
 set -e
 
 # Print each command to stdout before executing it.
-set -x
+#set -x
 
 # Import the utility functions from the project template.
 GIT_ROOT=$(git rev-parse --show-toplevel)
@@ -25,15 +25,9 @@ run "docker image ls $FULL_IMAGE_NAME"
 # Configure and run the Docker container with interactive bash shell.
 # - Container is removed automatically on exit (--rm)
 # - Interactive mode with TTY allocation (-ti)
-# - Port forwarding for Jupyter or other services
 # - Current directory mounted to /data inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8889
-cmd="docker run --rm -ti \
-    --name $CONTAINER_NAME \
-    -p $PORT:$PORT \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    $FULL_IMAGE_NAME"
-run $cmd
+PORT=""
+DOCKER_CMD=$(get_docker_bash_command)
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"
