@@ -51,13 +51,13 @@ import scipy.stats
 
 import helpers.hdbg as hdbg
 import helpers.hpandas as hpandas
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 
 import tutorials.tutorial_prophet.prophet_utils as tprpru
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %% [markdown]
 # ## Config

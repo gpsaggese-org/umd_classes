@@ -16,7 +16,10 @@ import numpy as np
 import pandas as pd
 from IPython.display import display
 
-import msml610_utils as mtumsuti
+try:
+    import msml610_utils as mtumsuti
+except ImportError:
+    import msml610.tutorials.msml610_utils as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

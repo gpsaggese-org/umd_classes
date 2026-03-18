@@ -479,8 +479,8 @@ digraph BayesianUpdateAlgo {
 
 - **A simpler notation:**
   - Indicate the "prior" version of the variables (i.e., after the system
-    update) with an overline (E.g., $\overline{x}$, $\overline{\bx}$,
-    $\overline{\bX}$)
+    update) with an overline (E.g., $\overline{x}$, $\overline{\vx}$,
+    $\overline{\vX}$)
   - Omit the indices $t + 1$ and $t$ and use an assignment notation
     (representing "update in place" of a variable):
     $$
@@ -498,26 +498,26 @@ digraph BayesianUpdateAlgo {
 * Multivariate Kalman Filter
 
 - With the previous notation:
-  - State update: $\overline{\bx} = \bF \bx + \bB \bu$
-  - State uncertainty: $\overline{\bP} = \bF \bP \bF^T + \bQ$
-  - Residual: $\by = \bz - \bH \overline{\bx}$
+  - State update: $\overline{\vx} = \mF \vx + \mB \vu$
+  - State uncertainty: $\overline{\mP} = \mF \mP \mF^T + \mQ$
+  - Residual: $\vy = \vz - \mH \overline{\vx}$
   - Kalman gain:
-    $\bK = \overline{\bP} \bH^T (\bH \overline{\bP} \bH^T + \bR)^{-1}$
-  - Updated state: $\bx = \overline{\bx} + \bK \by$
-  - Update state uncertainty: $\bP = (\bI - \bK \bH) \overline{\bP}$
+    $\mK = \overline{\mP} \mH^T (\mH \overline{\mP} \mH^T + \mR)^{-1}$
+  - Updated state: $\vx = \overline{\vx} + \mK \vy$
+  - Update state uncertainty: $\mP = (\mI - \mK \mH) \overline{\mP}$
 
 - Where
-  - $\bx$ and $\bP$ are the state mean and covariance
-  - $\bF$ is the state transition function
-  - $\bQ$ is the system error (i.e., the noise in the model assessment)
-  - $\bB$ and $\bu$ model the control inputs to the system
-  - $\bH$ is the measurement function
-  - $\bz$ and $\bR$ are the measurement mean and covariance
-  - $\by$ is the residual
-  - $\bK$ is the Kalman gain
+  - $\vx$ and $\mP$ are the state mean and covariance
+  - $\mF$ is the state transition function
+  - $\mQ$ is the system error (i.e., the noise in the model assessment)
+  - $\mB$ and $\vu$ model the control inputs to the system
+  - $\mH$ is the measurement function
+  - $\vz$ and $\mR$ are the measurement mean and covariance
+  - $\vy$ is the residual
+  - $\mK$ is the Kalman gain
 
 - Use the system model to predict the next state
-  - When we multiply $\bF$ to $\bx$ we get the prior (i.e., the state before
+  - When we multiply $\mF$ to $\vx$ we get the prior (i.e., the state before
     seeing any measurement)
 - Form an estimate between the prior and the measurement
 
@@ -537,25 +537,25 @@ digraph BayesianUpdateAlgo {
   State update &
   $\overline{\mu} = \mu + \mu_{f}$ &
   $\overline{x} = x + dx$ &
-  $\overline{\bx} = \bF \bx + \bB \bu$ \\
+  $\overline{\vx} = \mF \vx + \mB \vu$ \\
 
 \hline
   State uncertainty &
   $\overline{\sigma}^2 = \sigma^2 + \sigma_f^2$ &
   $\overline{P} = P + Q$ &
-  $\overline{\bP} = \bF \bP \bF^T + \bQ$ \\
+  $\overline{\mP} = \mF \mP \mF^T + \mQ$ \\
 
 \hline
   Residual &
   &
   $y = z - \overline{x}$ &
-  $\by = \bz - \bH \overline{\bx}$ \\
+  $\vy = \vz - \mH \overline{\vx}$ \\
 
 \hline
   Kalman gain &
   &
   $K = \frac{\overline{P}}{\overline{P} + R}$ &
-  $\bK = \overline{\bP} \bH^T (\bH \overline{\bP} \bH^T + \bR)^{-1}$ \\
+  $\mK = \overline{\mP} \mH^T (\mH \overline{\mP} \mH^T + \mR)^{-1}$ \\
 
 \hline
   Updated state &
@@ -563,14 +563,14 @@ digraph BayesianUpdateAlgo {
   = \frac{\overline{\sigma}^2 \mu_z + \sigma_z^2 \overline{\mu}}
     {\overline{\sigma}^2 + \sigma_z^2}$ &
   $x = \overline{x} + K y$ &
-  $\bx = \overline{\bx} + \bK \by$ \\
+  $\vx = \overline{\vx} + \mK \vy$ \\
 
 \hline
   Upd. state uncertainty &
   $\sigma^2
   = \frac{\overline{\sigma}^2 \sigma_z^2}{\overline{\sigma}^2 + \sigma_z^2}$ &
   $P = (1 - K) \overline{P}$ &
-  $\bP = (\bI - \bK \bH) \overline{\bP}$ \\
+  $\mP = (\mI - \mK \mH) \overline{\mP}$ \\
 \hline
 \end{tabular}
 \endgroup
@@ -612,39 +612,39 @@ digraph BayesianUpdateAlgo {
 
 - It is possible to convert a set of higher order differential equations into a
 set of first-order differential equations
-  $$\dot{\mathbf x}=\mathbf A\mathbf x+\mathbf B\mathbf u+\mathbf w$$
+  $$\dot{\vx}=\mA\vx+\mB\vu+\vw$$
   where
-  - $\mathbf A$ is the system dynamics matrix
+  - $\mA$ is the system dynamics matrix
   - $u$ are control inputs (e.g., pressing accelerator)
-  - $\mathbf w$ is noise
+  - $\vw$ is noise
 
 - We are interested in finding a (recursive) equation that finds the value
-  of $\mathbf x_k = \mathbf x (t_k)$ from the previous (discrete) state
-  $\mathbf x_{k-1}$
-  $$\mathbf x_k=\mathbf F\mathbf x_{k-1}+\mathbf B_k\mathbf u_k$$
+  of $\vx_k = \vx (t_k)$ from the previous (discrete) state
+  $\vx_{k-1}$
+  $$\vx_k=\mF\vx_{k-1}+\mB_k\vu_k$$
   where
-  - $\mathbf F$ is the state transition matrix (aka "fundamental matrix")
+  - $\mF$ is the state transition matrix (aka "fundamental matrix")
 
 - State space methods because we express the solution of the differential
   equations in terms of system state
 
 - There are methods for finding the state transition matrix
-  - Compute the matrix exponential $e^{\mathbf A} t$ (many different ways to do
+  - Compute the matrix exponential $e^{\mA} t$ (many different ways to do
     it, despite numerical difficulties)
   - Linear Time Invariant theory (if time invariant): use inverse Laplace
     transform
   - Numerical solutions
 
 * Designing the Process Noise Matrix
-- Designing the matrix $\mathbf Q$ is very difficult
+- Designing the matrix $\mQ$ is very difficult
   - When you model a given process, you ignore certain effects and then you
     need to estimate the error
 - E.g., model a thrown baseball
   - There are unknown factors (e.g., ball rotation, spin decay, drag, effects of
     wind and air density)
 
-- If $\mathbf Q$ is too small, the filter is overconfident in the prediction model
-- If $\mathbf Q$ is too large, the filter is unduly influenced by the noise in
+- If $\mQ$ is too small, the filter is overconfident in the prediction model
+- If $\mQ$ is too large, the filter is unduly influenced by the noise in
   the measurements
 
 ## #############################################################################
@@ -684,8 +684,8 @@ set of first-order differential equations
   where
   - $f(\cdot)$ and $h(\cdot)$ nonlinear
 - Noise often assumed Gaussian:
-  - $w_t \sim \mathcal{N}(0, \mathbf Q)$
-  - $v_t \sim \mathcal{N}(0, \mathbfR)$
+  - $w_t \sim \mathcal{N}(0, \mQ)$
+  - $v_t \sim \mathcal{N}(0, \mR)$
 - Exact Bayesian filter requires propagating full probability density
   - Generally intractable
 - Nonlinear Kalman filters approximate the posterior

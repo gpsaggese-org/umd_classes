@@ -20,10 +20,10 @@ class Test_loss1(hunitest.TestCase):
         y = np.array([3, 4])
         yhat = np.array([1, 2])
         loss = mtl0bcout.squared_loss(y, yhat)
-        self.assert_equal(loss, [4, 4])
+        self.assert_equal(str(loss), str(np.array([4, 4])))
 
     def test_squared_loss3(self) -> None:
         y = np.array([3, 4])
         yhat = 1
         loss = mtl0bcout.squared_loss(y, yhat)
-        self.assert_equal(loss, [4, 9])
+        self.assert_equal(str(loss), str(np.array([4, 9])))
