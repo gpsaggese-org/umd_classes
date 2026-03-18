@@ -42,12 +42,12 @@ import neo4j as nj
 import py2neo as pyneo
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 import tutorials.tutorial_neo4j.neo4j_utils as ttneouti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %% [markdown]
 # ## 1. Starting the Neo4j Server

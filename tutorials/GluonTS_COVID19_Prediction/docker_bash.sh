@@ -35,5 +35,7 @@ cmd="docker run --rm -ti \
     -p $PORT:$PORT \
     -e PYTORCH_ENABLE_MPS_FALLBACK=1 \
     -v $(pwd):/data \
+    -v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root \
     $FULL_IMAGE_NAME"
 run $cmd

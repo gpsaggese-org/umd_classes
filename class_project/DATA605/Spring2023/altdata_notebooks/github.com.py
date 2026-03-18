@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -42,7 +42,7 @@ import requests
 
 import helpers.hdbg as hdbg
 import helpers.henv as henv
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 
 # %%
 hdbg.init_logger(verbosity=logging.INFO)
@@ -51,7 +51,7 @@ _LOG = logging.getLogger(__name__)
 
 _LOG.info("%s", henv.get_system_signature()[0])
 
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %% [markdown]
 # # Common repository info

@@ -1,6 +1,5 @@
 # FAQs
 
-# Summary
 This document answers common questions about joining and working with GP's
 research group, including benefits, authorship policies, expectations for
 contribution, and what you'll gain from the internship.
