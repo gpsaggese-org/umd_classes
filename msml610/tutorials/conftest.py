@@ -1,16 +1,41 @@
+"""
+Configuration for pytest in msml610/tutorials directory.
+"""
+
 import logging
 import os
-from typing import Any, Generator
+import pathlib
+import sys
+from typing import Any, Generator, Optional
+
+# Add helpers_root to Python path for imports.
+test_dir = os.path.dirname(__file__)
+msml610_dir = os.path.dirname(test_dir)
+project_root = os.path.dirname(msml610_dir)
+helpers_root = os.path.join(project_root, "helpers_root")
+
+if helpers_root not in sys.path:
+    sys.path.insert(0, helpers_root)
+
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 import helpers.hdbg as dbg
 import helpers.hunit_test as hut
 
+# Define fixture at module level to ensure it's always registered.
+import pytest
+
+@pytest.fixture(autouse=True)
+def populate_globals(capsys: Any) -> None:
+    """
+    Populate global capsys for pytest output capture.
+    """
+    hut._GLOBAL_CAPSYS = capsys
+
 # Hack to workaround pytest not happy with multiple redundant conftest.py
 # (bug #34).
 if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
-    # import helpers.hversion as hversi
-    # hversi.check_version()
-
     # pylint: disable=protected-access
     hut._CONFTEST_ALREADY_PARSED = True
 
@@ -26,15 +51,6 @@ if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
         _ = config
         # pylint: disable=protected-access
         hut._CONFTEST_IN_PYTEST = False
-
-    # Create a variable to store the object used by pytest to print independently
-    # of the capture mode.
-    # https://stackoverflow.com/questions/41794888
-    import pytest
-
-    @pytest.fixture(autouse=True)
-    def populate_globals(capsys: Any) -> None:
-        hut._GLOBAL_CAPSYS = capsys
 
     # Add custom options.
     def pytest_addoption(parser: Any) -> None:
@@ -61,16 +77,6 @@ if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
             action="store_true",
             help="Set the logging level to TRACE",
         )
-        parser.addoption(
-            "--image_version",
-            action="store",
-            help="Version of the image to test against",
-        )
-        parser.addoption(
-            "--image_stage",
-            action="store",
-            help="Stage of the image to test against",
-        )
 
     def pytest_collection_modifyitems(config: Any, items: Any) -> None:
         _ = items
@@ -79,7 +85,7 @@ if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
         _WARNING = "\033[33mWARNING\033[0m"
         try:
             print(henv.get_system_signature()[0])
-        except:
+        except Exception:
             print(f"\n{_WARNING}: Can't print system_signature")
         if config.getoption("--update_outcomes"):
             print(f"\n{_WARNING}: Updating test outcomes")
@@ -95,10 +101,11 @@ if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
             if config.getoption("--dbg_verbosity", None):
                 level = config.getoption("--dbg_verbosity")
             elif config.getoption("--dbg", None):
-                level = logging.TRACE
+                # Use 5 as fallback TRACE level.
+                level = getattr(logging, "TRACE", 5)
             else:
                 raise ValueError("Can't get here")
-            print(f"\n{_WARNING}: Setting verbosity level to %s" % level)
+            print(f"\n{_WARNING}: Setting verbosity level to {level}")
             # When we specify the debug verbosity we monkey patch the command
             # line to add the '-s' option to pytest to not suppress the output.
             # NOTE: monkey patching sys.argv is often fragile.
@@ -108,37 +115,3 @@ if not hasattr(hut, "_CONFTEST_ALREADY_PARSED"):
             sys.argv.append("-o log_cli=true")
         # TODO(gp): redirect also the stderr to file.
         dbg.init_logger(level, in_pytest=True, log_filename="tmp.pytest.log")
-
-    if "PYANNOTATE" in os.environ:
-        print("\nWARNING: Collecting information about types through pyannotate")
-        # From https://github.com/dropbox/pyannotate/blob/master/example/example_conftest.py
-        import pytest
-
-        def pytest_collection_finish(session: Any) -> None:
-            """
-            Handle the pytest collection finish hook: configure pyannotate.
-
-            Explicitly delay importing `collect_types` until all tests
-            have been collected.  This gives gevent a chance to monkey
-            patch the world before importing pyannotate.
-            """
-            # mypy: Cannot find module named 'pyannotate_runtime'
-            import pyannotate_runtime  # type: ignore
-
-            _ = session
-            pyannotate_runtime.collect_types.init_types_collection()
-
-        @pytest.fixture(autouse=True)
-        def collect_types_fixture() -> Generator:
-            import pyannotate_runtime
-
-            pyannotate_runtime.collect_types.start()
-            yield
-            pyannotate_runtime.collect_types.stop()
-
-        def pytest_sessionfinish(session: Any, exitstatus: Any) -> None:
-            import pyannotate_runtime
-
-            _ = session, exitstatus
-            pyannotate_runtime.collect_types.dump_stats("type_info.json")
-            print("\n*** Collected types ***")

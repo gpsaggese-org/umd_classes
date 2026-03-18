@@ -325,9 +325,9 @@ def squared_loss(y_hat: LossValue, y_true: LossValue) -> LossValue:
 
     :param y_hat: Predicted value(s)
     :param y_true: True value(s)
-    :return: Mean squared error
+    :return: Squared error (per-element for arrays, scalar for scalars)
     """
-    return np.mean((y_true - y_hat) ** 2)
+    return (y_true - y_hat) ** 2
 
 
 def abs_loss(y_hat: LossValue, y_true: LossValue) -> LossValue:

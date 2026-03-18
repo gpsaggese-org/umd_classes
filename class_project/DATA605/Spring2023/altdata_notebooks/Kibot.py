@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.14.1
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -36,7 +36,7 @@ import tqdm
 import helpers.hdbg as hdbg
 import helpers.henv as henv
 import helpers.hio as hio
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 import im.kibot.data.config as imkidacon
 import im.kibot.data.extract.download as imkdaexdo
 import im.kibot.metadata.load.kibot_metadata as imkmlkime
@@ -48,7 +48,7 @@ _LOG = logging.getLogger(__name__)
 
 _LOG.info("%s", henv.get_system_signature()[0])
 
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %% [markdown]
 # # Metadata
