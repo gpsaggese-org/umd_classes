@@ -1,0 +1,10 @@
+ipython
+ipywidgets
+jupyterlab
+jupyterlab-vim
+matplotlib
+numpy
+pandas
+PyGithub
+seaborn
+tqdm
