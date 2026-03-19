@@ -8,7 +8,7 @@
 set -e
 
 # Print each command to stdout before executing it.
-set -x
+#set -x
 
 # Import the utility functions from the project template.
 GIT_ROOT=$(git rev-parse --show-toplevel)
@@ -28,7 +28,7 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Port forwarding for Jupyter or other services
 # - Current directory mounted to /data inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8889
+PORT=8888
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
 run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"
