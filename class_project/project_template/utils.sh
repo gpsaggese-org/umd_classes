@@ -23,6 +23,77 @@ get_docker_cmd_command() {
 }
 
 
+parse_docker_jupyter_args() {
+    # """
+    # Parse command-line arguments for docker_jupyter.sh.
+    #
+    # Sets JUPYTER_HOST_PORT, JUPYTER_USE_VIM, TARGET_DIR, VERBOSE, and
+    # OLD_CMD_OPTS in the caller's scope.  Enables set -x when -v is passed.
+    #
+    # :param @: command-line arguments forwarded from the calling script
+    # """
+    # Set defaults.
+    JUPYTER_HOST_PORT=8888
+    JUPYTER_USE_VIM=0
+    TARGET_DIR=.
+    VERBOSE=0
+    # Save original args to pass through to run_jupyter.sh.
+    OLD_CMD_OPTS="$*"
+    # Parse options.
+    while getopts p:d:uv flag
+    do
+        case "${flag}" in
+            p) JUPYTER_HOST_PORT=${OPTARG};;  # Port for Jupyter Lab.
+            u) JUPYTER_USE_VIM=1;;            # Enable vim bindings.
+            d) TARGET_DIR=${OPTARG};;         # Directory to mount as /data.
+            v) VERBOSE=1;;                    # Enable verbose output.
+        esac
+    done
+    # Enable command tracing if verbose mode is requested.
+    if [[ $VERBOSE == 1 ]]; then
+        set -x
+    fi
+}
+
+
+get_docker_jupyter_command() {
+    # """
+    # Return the base docker run command for running Jupyter Lab interactively.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    echo "docker run --rm -ti"
+}
+
+
+get_docker_jupyter_options() {
+    # """
+    # Return docker run options for a Jupyter Lab container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param host_port: Host port to forward to container port 8888
+    # :param target_dir: Optional directory to mount as /data (empty to skip)
+    # :param jupyter_use_vim: 0 or 1 to enable vim bindings
+    # :return: docker run options string
+    # """
+    local container_name=$1
+    local host_port=$2
+    local target_dir=$3
+    local jupyter_use_vim=$4
+    local target_dir_opt=""
+    if [[ -n $target_dir ]]; then
+        target_dir_opt="-v $target_dir:/data"
+    fi
+    echo "--name $container_name \
+    -p $host_port:8888 \
+    $target_dir_opt \
+    -v $(pwd):/curr_dir \
+    -v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e JUPYTER_USE_VIM=$jupyter_use_vim"
+}
+
+
 get_docker_bash_options() {
     # """
     # Return docker run options for a Docker container.

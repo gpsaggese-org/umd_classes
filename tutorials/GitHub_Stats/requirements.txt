@@ -1,7 +1,4 @@
 ipython
-ipywidgets
-jupyterlab
-jupyterlab-vim
 matplotlib
 numpy
 pandas

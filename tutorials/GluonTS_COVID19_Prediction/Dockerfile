@@ -22,7 +22,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN python -m pip install --upgrade pip
 
 # Install Jupyter.
-RUN pip3 install jupyterlab
+RUN pip3 install jupyterlab jupyterlab_vim
 
 # Install project specific packages.
 RUN mkdir -p /install

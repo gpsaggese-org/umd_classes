@@ -376,15 +376,22 @@ RUN python -m pip install --upgrade pip
 
 ### Stage 5: Jupyter Installation
 ```dockerfile
-RUN pip install jupyterlab
+RUN pip install jupyterlab jupyterlab_vim
 ```
 
-- **Purpose**: Install Jupyter Lab for interactive development and data
-  exploration
+- **Purpose**: Install JupyterLab and the Vim keybinding extension for
+  interactive development
+  - `jupyterlab`: the main IDE for running notebooks in the browser
+  - `jupyterlab_vim`: adds Vim-style navigation to notebook cells
+
+- **Why in Dockerfile, not requirements.txt**: These are infrastructure
+  packages (the IDE itself), not project-specific dependencies
+  - Do NOT add `jupyterlab`, `jupyterlab-vim`, or `ipywidgets` to
+    `requirements.txt`; they are already installed here
 
 - **When to customize**:
   - **Remove** this line if your project doesn't use Jupyter
-  - **Add extensions** if needed (e.g., `jupyterlab-git`,
+  - **Add more extensions** if needed (e.g., `jupyterlab-git`,
     `jupyterlab-variableinspector`)
 
 ### Stage 6: Project Dependencies
@@ -481,13 +488,18 @@ This approach:
 - Ensures consistency across similar projects
 
 ### How to Do It Right
-| What             | Where                        | Example                         |
-| :--------------- | :--------------------------- | :------------------------------ |
-| Python packages  | `requirements.txt`           | `numpy==1.24.0`                 |
-| System tools     | Dockerfile `apt-get` section | `postgresql-client`             |
-| Shell aliases    | `bashrc`                     | `alias jlab="jupyter lab"`      |
-| Custom scripts   | `scripts/` directory         | Setup or initialization scripts |
-| User permissions | `etc_sudoers`                | Grant passwordless sudo         |
+| What                         | Where                        | Example                         |
+| :--------------------------- | :--------------------------- | :------------------------------ |
+| Project Python packages      | `requirements.txt`           | `numpy==1.24.0`                 |
+| Jupyter + Vim (always there) | Dockerfile Stage 5           | `jupyterlab jupyterlab_vim`     |
+| System tools                 | Dockerfile `apt-get` section | `postgresql-client`             |
+| Shell aliases                | `bashrc`                     | `alias jlab="jupyter lab"`      |
+| Custom scripts               | `scripts/` directory         | Setup or initialization scripts |
+| User permissions             | `etc_sudoers`                | Grant passwordless sudo         |
+
+- **Do NOT add to `requirements.txt`**: `jupyterlab`, `jupyterlab-vim`,
+  `jupyterlab_vim`, or `ipywidgets` — these are Jupyter infrastructure packages
+  and are already installed in Stage 5 of the Dockerfile
 
 ### Wrong Vs. Right Approach
 - **Wrong**: Embed everything in the Dockerfile
