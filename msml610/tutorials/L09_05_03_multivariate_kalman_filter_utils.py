@@ -777,8 +777,7 @@ def compute_dog_data(
 # Kalman Filter for Dog Tracking
 # #############################################################################
 
-# TODO(ai_gp): Use import filterpy.kalman as kf
-from filterpy.kalman import KalmanFilter
+import filterpy.kalman as kf
 
 
 def run_dog_kalman_filter(
@@ -824,21 +823,21 @@ def run_dog_kalman_filter(
     # Measurement noise.
     R = np.array([[z_var]])
     # Build and initialize filter.
-    kf = KalmanFilter(dim_x=2, dim_z=1)
-    kf.F = F
-    kf.H = H
-    kf.P = P.copy()
-    kf.Q = Q
-    kf.R = R
-    kf.x = np.array([[initial_pos], [initial_vel]])
+    kalman_filter = kf.KalmanFilter(dim_x=2, dim_z=1)
+    kalman_filter.F = F
+    kalman_filter.H = H
+    kalman_filter.P = P.copy()
+    kalman_filter.Q = Q
+    kalman_filter.R = R
+    kalman_filter.x = np.array([[initial_pos], [initial_vel]])
     # Run filter over all measurements.
     means = []
     variances = []
     for z in zs:
-        kf.predict()
-        kf.update(np.array([[z]]))
-        means.append(float(kf.x[0]))
-        variances.append(float(kf.P[0, 0]))
+        kalman_filter.predict()
+        kalman_filter.update(np.array([[z]]))
+        means.append(float(kalman_filter.x[0]))
+        variances.append(float(kalman_filter.P[0, 0]))
     return np.array(means), np.array(variances)
 
 
@@ -922,20 +921,20 @@ def run_dog_kalman_filter_1d(
     :param dt: time step duration (unused, kept for API symmetry)
     :return: (means, variances) 1D arrays of estimated position and variance
     """
-    kf = KalmanFilter(dim_x=1, dim_z=1)
-    kf.F = np.array([[1.0]])
-    kf.H = np.array([[1.0]])
-    kf.P = np.array([[500.0]])
-    kf.Q = np.array([[process_var]])
-    kf.R = np.array([[z_var]])
-    kf.x = np.array([[0.0]])
+    kalman_filter = kf.KalmanFilter(dim_x=1, dim_z=1)
+    kalman_filter.F = np.array([[1.0]])
+    kalman_filter.H = np.array([[1.0]])
+    kalman_filter.P = np.array([[500.0]])
+    kalman_filter.Q = np.array([[process_var]])
+    kalman_filter.R = np.array([[z_var]])
+    kalman_filter.x = np.array([[0.0]])
     means = []
     variances = []
     for z in zs:
-        kf.predict()
-        kf.update(np.array([[z]]))
-        means.append(float(kf.x[0]))
-        variances.append(float(kf.P[0, 0]))
+        kalman_filter.predict()
+        kalman_filter.update(np.array([[z]]))
+        means.append(float(kalman_filter.x[0]))
+        variances.append(float(kalman_filter.P[0, 0]))
     return np.array(means), np.array(variances)
 
 

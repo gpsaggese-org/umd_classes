@@ -859,7 +859,7 @@ digraph CausalGraph {
     impressive resume), asking you a tech question won't give new information
     about if you are a good employee or not
 
-* Immorality / Collider
+* Collider
 - In a collider $T \rightarrow X \leftarrow Y$:
   - $X$ is a "collider" (two arrows collide at it)
   - $T$ and $Y$ are independent: $T \perp Y$
@@ -883,3 +883,15 @@ digraph CausalGraph {
     $Statistics \rightarrow Promotion \rightarrow Salary \leftarrow FlatteringBoss$:
     conditioning on $Salary$ opens the
     $Statistics \perp FlatteringBoss$ path
+
+* D-separation
+- A path is **blocked** given a conditioning set $Z$ if and only if either
+  condition holds:
+  1. It contains a non-collider that has been conditioned on
+  2. It contains a collider that has not been conditioned on and has no descendants
+     that have been conditioned on
+
+- Otherwise the path is **open** (nodes can be dependent)
+
+- Two nodes $A$ and $B$ are d-separated (independent) if and only if all the
+  paths between them are blocked
