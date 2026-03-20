@@ -1,4 +1,3 @@
-
 ::: columns
 :::: {.column width=15%}
 ![](msml610/lectures_source/figures/UMD_Logo.png)
@@ -38,8 +37,6 @@ MSML610: Advanced Machine Learning
 
 ::::
 :::
-
-
 
 # Causal Networks
 
@@ -1384,4 +1381,3 @@ digraph ImprovedDiagram {
 ```
 ::::
 :::
-
