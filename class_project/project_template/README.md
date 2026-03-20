@@ -55,10 +55,12 @@ your needs, and maintain it over time.
 
 - `utils.sh`
   - Bash utility library with reusable functions for Docker operations
-  - Provides centralized Jupyter configuration logic: argument parsing, vim
-    keybindings, notification settings, and Docker run option builders
-  - All `docker_jupyter.sh` and `run_jupyter.sh` scripts across the repo source
-    this file from `class_project/project_template/utils.sh`
+  - Provides centralized argument parsing (`parse_default_args`) for `-h` and
+    `-v` flags used by all `docker_*.sh` scripts
+  - Provides Jupyter configuration logic: vim keybindings, notification
+    settings, and Docker run option builders
+  - All `docker_*.sh`, `docker_jupyter.sh`, and `run_jupyter.sh` scripts across
+    the repo source this file from `class_project/project_template/utils.sh`
 
 ## Workflows
 - All commands should be run from inside the project directory
@@ -71,8 +73,22 @@ your needs, and maintain it over time.
   > cd $PROJECT
   # Build the container.
   > docker_build.sh
+  # Build without cache (pass extra args after -v).
+  > docker_build.sh --no-cache
   # Test the container.
   > docker_bash.sh ls
+  ```
+
+- Enable verbose (trace) output with `-v`
+  ```bash
+  > docker_build.sh -v
+  > docker_bash.sh -v
+  ```
+
+- Get help for any docker script
+  ```bash
+  > docker_build.sh -h
+  > docker_jupyter.sh -h
   ```
 
 - Start Jupyter
@@ -116,11 +132,17 @@ your needs, and maintain it over time.
 - **What It Does**
   - Launches an interactive bash shell inside a Docker container
   - Mounts the current working directory as `/data` inside the container
-  - Exposes port 8889 for potential services running in the container
+  - Exposes port 8888 for potential services running in the container
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
 
 - Launch bash shell in the container:
   ```bash
   > ./docker_bash.sh
+  ```
+
+- Launch with verbose output (prints each command):
+  ```bash
+  > ./docker_bash.sh -v
   ```
 
 ### `docker_build.sh`
@@ -129,10 +151,17 @@ your needs, and maintain it over time.
   - Supports single-architecture builds (default) or multi-architecture builds
     (`linux/arm64`, `linux/amd64`)
   - Copies project files to temporary build directory and generates build logs
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags; any extra arguments
+    after flags are forwarded to `docker build`
 
 - Build container image for current architecture:
   ```bash
   > ./docker_build.sh
+  ```
+
+- Build without Docker layer cache:
+  ```bash
+  > ./docker_build.sh --no-cache
   ```
 
 - Build multi-architecture image (requires setting `DOCKER_BUILD_MULTI_ARCH=1`
@@ -159,6 +188,8 @@ your needs, and maintain it over time.
   - Executes arbitrary commands inside a Docker container
   - Mounts current directory as `/data` for accessing project files
   - Automatically removes container after command execution completes
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags; remaining arguments
+    form the command to execute
 
 - Run Python script inside container:
   ```bash
@@ -181,6 +212,7 @@ your needs, and maintain it over time.
     shell
   - Finds the container ID automatically based on the image name
   - Useful for debugging or inspecting running containers
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
 
 - Attach to running container:
   ```bash
@@ -248,8 +280,14 @@ your needs, and maintain it over time.
 
 ### `utils.sh`
 - **What It Does**
-  - Central Bash library sourced by all `docker_jupyter.sh` and `run_jupyter.sh`
+  - Central Bash library sourced by all `docker_*.sh` and `run_jupyter.sh`
     scripts across the repository
+  - Provides `parse_default_args` which adds `-h` (help) and `-v`
+    (verbose/`set -x`) flags to every docker script
+  - Provides `build_container_image`, `push_container_image`,
+    `remove_container_image`, `kill_container`, `exec_container` utilities
+  - Provides Jupyter configuration helpers: vim keybindings, notification
+    suppression, and Docker run option builders
 
 ### `version.sh`
 - **What It Does**
