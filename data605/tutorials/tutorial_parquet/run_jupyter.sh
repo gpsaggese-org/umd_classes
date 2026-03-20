@@ -1,67 +1,75 @@
-#!/bin/bash -e
+#!/bin/bash -xe
+# """
+# Launch Jupyter Lab server.
+#
+# This script starts Jupyter Lab on port 8888 with the following configuration:
+# - No browser auto-launch (useful for Docker containers)
+# - Accessible from any IP address (0.0.0.0)
+# - Root user allowed (required for Docker environments)
+# - No authentication token or password (for development convenience)
+# - Vim keybindings can be enabled via JUPYTER_USE_VIM environment variable
+# """
 
-# Parse params.
-export JUPYTER_HOST_PORT=8888
-export JUPYTER_USE_VIM=0
-export TARGET_DIR=""
-export VERBOSE=0
-
-OLD_CMD_OPTS=$@
-while getopts p:d:uv flag
-do
-    case "${flag}" in
-        p) JUPYTER_HOST_PORT=${OPTARG};;
-        u) JUPYTER_USE_VIM=1;;
-        d) TARGET_DIR=${OPTARG};;
-        # /Users/saggese/src/git_gp1/code/
-        v) VERBOSE=1;;
-    esac
-done
-
-if [[ $VERBOSE == 1 ]]; then
-    set -x
-fi;
-
-jupyter nbextension enable autosavetime/main
-
-if [[ $JUPYTER_USE_VIM != 0 ]]; then
-    jupyter nbextension enable vim_binding/vim_binding
-fi;
-
-cat << EOT >> ~/.jupyter/jupyter_notebook_config.py
-#------------------------------------------------------------------------------
-# Jupytext
-#------------------------------------------------------------------------------
-# The following line yields:
-# ```
-# [C 14:54:35.676 NotebookApp] Bad config encountered during initialization:
-# The 'contents_manager_class' trait of a NotebookApp instance expected a
-# subclass of notebook.services.contents.manager.ContentsManager or
-# jupyter_server.contents.services.managers.ContentsManage, not the
-# JupytextContentsManager JupytextContentsManager.
-# ```
-# Not needed according to https://bytemeta.vip/repo/mwouts/jupytext/issues/953
-#c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
-# Always pair ipynb notebooks to py files
-c.ContentsManager.default_jupytext_formats = "ipynb,py"
-# Use the percent format when saving as py
-c.ContentsManager.preferred_jupytext_formats_save = "py:percent"
-c.ContentsManager.outdated_text_notebook_margin = float("inf")
-EOT
-
-mkdir -p ~/.jupyter/nbextensions/autosavetime
-cat << EOT >> ~/.jupyter/nbextensions/autosavetime/main.js
-var params = {
-    autosavetime_set_starting_interval: 1,
-    autosavetime_starting_interval: 1,
-    autosavetime_show_selector : false,
+mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
+if [[ $JUPYTER_USE_VIM == 1 ]]; then
+    # Check that jupyterlab_vim is installed before trying to enable it.
+    if ! pip show jupyterlab_vim > /dev/null 2>&1; then
+        echo "ERROR: jupyterlab_vim is not installed but vim bindings were requested."
+        echo "Install it with: pip install jupyterlab_vim"
+        exit 1
+    fi
+    echo "Enabling vim."
+    cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": true,
+    "enabledInEditors": true,
+    "extraKeybindings": []
 }
-EOT
+EOF
+else
+    echo "Disabling vim."
+    cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": false,
+    "enabledInEditors": false,
+    "extraKeybindings": []
+}
+EOF
+fi;
 
-# Run Jupyter.
-jupyter-notebook \
-    --port=$JUPYTER_HOST_PORT \
-    --no-browser \
-    --ip=* \
-    --NotebookApp.token='' --NotebookApp.password='' \
-    --allow-root
+mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
+cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/apputils-extension/notification.jupyterlab-settings
+{
+    // Notifications
+    // @jupyterlab/apputils-extension:notification
+    // Notifications settings.
+
+    // Fetch official Jupyter news
+    // Whether to fetch news from the Jupyter news feed. If Always (`true`), it will make a request to a website.
+    "fetchNews": "false",
+    "checkForUpdates": false
+}
+EOF
+
+# Initialize Jupyter Lab command with base configuration.
+JUPYTER_ARGS=(
+    "--port=8888"
+    "--no-browser"
+    "--ip=0.0.0.0"
+    "--allow-root"
+    "--ServerApp.token=''"
+    "--ServerApp.password=''"
+)
+
+# Note: jupyterlab-vim extension can be disabled via JupyterLab settings if needed.
+
+# Start Jupyter Lab with development-friendly settings.
+jupyter lab "${JUPYTER_ARGS[@]}"
+
+# Alternative: Use classic Jupyter Notebook instead of Jupyter Lab.
+#jupyter-notebook \
+#    --port=8888 \
+#    --no-browser --ip=0.0.0.0 \
+#    --allow-root \
+#    --NotebookApp.token='' \
+#    --NotebookApp.password=''

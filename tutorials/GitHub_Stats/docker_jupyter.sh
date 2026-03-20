@@ -7,12 +7,11 @@
 # command-line options to the run_jupyter.sh script inside the container.
 #
 # Usage:
-# > docker_jupyter.sh -d /path/to/notebooks -v -u -p 8889
+# > docker_jupyter.sh [options]
 # """
 
 # Exit immediately if any command exits with a non-zero status.
 set -e
-#set -x
 
 # Import the utility functions.
 GIT_ROOT=$(git rev-parse --show-toplevel)

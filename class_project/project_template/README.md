@@ -228,10 +228,18 @@ your needs, and maintain it over time.
     disabled)
   - Binds to all network interfaces (0.0.0.0) on port 8888
   - Allows root access for container environments
+  - When `JUPYTER_USE_VIM=1`, verifies that `jupyterlab_vim` is installed
+    before enabling vim keybindings; exits with an error if not found
 
 - Start Jupyter Lab server (typically called from docker_jupyter.sh):
   ```bash
   > ./run_jupyter.sh
+  ```
+
+- Start with vim keybindings (requires `jupyterlab_vim` installed in the
+  container):
+  ```bash
+  > JUPYTER_USE_VIM=1 ./run_jupyter.sh
   ```
 
 ### `version.sh`
@@ -733,3 +741,15 @@ Example improvements:
 
 - Verify http://localhost:8888 (not https). Check firewall if remote access
   needed
+
+### Vim Keybindings Not Working
+- If `run_jupyter.sh` exits with `ERROR: jupyterlab_vim is not installed`, it
+  means `jupyterlab_vim` is missing from the container image
+- Make sure `jupyterlab_vim` is installed in the Dockerfile:
+  ```dockerfile
+  RUN pip install jupyterlab jupyterlab_vim
+  ```
+- Rebuild the image after adding the package:
+  ```bash
+  > ./docker_build.sh
+  ```

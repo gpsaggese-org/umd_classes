@@ -12,6 +12,12 @@
 
 mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
 if [[ $JUPYTER_USE_VIM == 1 ]]; then
+    # Check that jupyterlab_vim is installed before trying to enable it.
+    if ! pip show jupyterlab_vim > /dev/null 2>&1; then
+        echo "ERROR: jupyterlab_vim is not installed but vim bindings were requested."
+        echo "Install it with: pip install jupyterlab_vim"
+        exit 1
+    fi
     echo "Enabling vim."
     cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
 {

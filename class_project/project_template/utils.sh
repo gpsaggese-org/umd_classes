@@ -23,36 +23,138 @@ get_docker_cmd_command() {
 }
 
 
+_print_docker_jupyter_help() {
+    # """
+    # Print usage information and available options for docker_jupyter.sh.
+    # """
+    echo "Usage: $(basename $0) [options]"
+    echo ""
+    echo "Launch Jupyter Lab inside a Docker container."
+    echo ""
+    echo "Options:"
+    echo "  -h          Print this help message and exit"
+    echo "  -p PORT     Host port to forward to Jupyter Lab (default: 8888)"
+    echo "  -d DIR      Directory to mount as /data inside the container (default: git root)"
+    echo "  -u          Enable vim keybindings in Jupyter Lab"
+    echo "  -v          Enable verbose output (set -x)"
+}
+
+
 parse_docker_jupyter_args() {
     # """
     # Parse command-line arguments for docker_jupyter.sh.
     #
     # Sets JUPYTER_HOST_PORT, JUPYTER_USE_VIM, TARGET_DIR, VERBOSE, and
     # OLD_CMD_OPTS in the caller's scope.  Enables set -x when -v is passed.
+    # Prints help and exits when -h is passed.
     #
     # :param @: command-line arguments forwarded from the calling script
     # """
     # Set defaults.
     JUPYTER_HOST_PORT=8888
     JUPYTER_USE_VIM=0
-    TARGET_DIR=.
+    TARGET_DIR=$GIT_ROOT
     VERBOSE=0
     # Save original args to pass through to run_jupyter.sh.
     OLD_CMD_OPTS="$*"
     # Parse options.
-    while getopts p:d:uv flag
-    do
+    while getopts "hp:d:uv" flag; do
         case "${flag}" in
+            h) _print_docker_jupyter_help; exit 0;;
             p) JUPYTER_HOST_PORT=${OPTARG};;  # Port for Jupyter Lab.
             u) JUPYTER_USE_VIM=1;;            # Enable vim bindings.
             d) TARGET_DIR=${OPTARG};;         # Directory to mount as /data.
             v) VERBOSE=1;;                    # Enable verbose output.
+            *) _print_docker_jupyter_help; exit 1;;
         esac
     done
     # Enable command tracing if verbose mode is requested.
+    enable_verbose_mode
+}
+
+
+enable_verbose_mode() {
+    # """
+    # Enable shell command tracing (set -x) when VERBOSE is set to 1.
+    #
+    # Reads the VERBOSE variable set by parse_docker_jupyter_args.
+    # Call this after parsing args to activate tracing for the rest of the script.
+    # """
     if [[ $VERBOSE == 1 ]]; then
         set -x
     fi
+}
+
+
+# #############################################################################
+# Jupyter configuration
+# #############################################################################
+
+
+configure_jupyter_vim_keybindings() {
+    # """
+    # Configure JupyterLab vim keybindings based on JUPYTER_USE_VIM env var.
+    #
+    # Reads JUPYTER_USE_VIM; if 1, verifies jupyterlab_vim is installed and
+    # writes enabled settings; otherwise writes disabled settings.
+    # """
+    mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
+    if [[ $JUPYTER_USE_VIM == 1 ]]; then
+        # Check that jupyterlab_vim is installed before trying to enable it.
+        if ! pip show jupyterlab_vim > /dev/null 2>&1; then
+            echo "ERROR: jupyterlab_vim is not installed but vim bindings were requested."
+            echo "Install it with: pip install jupyterlab_vim"
+            exit 1
+        fi
+        echo "Enabling vim."
+        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": true,
+    "enabledInEditors": true,
+    "extraKeybindings": []
+}
+EOF
+    else
+        echo "Disabling vim."
+        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": false,
+    "enabledInEditors": false,
+    "extraKeybindings": []
+}
+EOF
+    fi;
+}
+
+
+configure_jupyter_notifications() {
+    # """
+    # Disable JupyterLab news fetching and update checks.
+    # """
+    mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
+    cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/apputils-extension/notification.jupyterlab-settings
+{
+    // Notifications
+    // @jupyterlab/apputils-extension:notification
+    // Notifications settings.
+
+    // Fetch official Jupyter news
+    // Whether to fetch news from the Jupyter news feed. If Always (`true`), it will make a request to a website.
+    "fetchNews": "false",
+    "checkForUpdates": false
+}
+EOF
+}
+
+
+get_jupyter_args() {
+    # """
+    # Print the standard Jupyter Lab command-line arguments.
+    #
+    # :return: space-separated Jupyter Lab args for port 8888 with no browser,
+    #   allow root, and no authentication
+    # """
+    echo "--port=8888 --no-browser --ip=0.0.0.0 --allow-root --ServerApp.token='' --ServerApp.password=''"
 }
 
 
