@@ -38,7 +38,7 @@ RUN python -m pip install --upgrade pip
 #RUN uv sync
     
 # Install Jupyter.
-RUN pip3 install jupyterlab
+RUN pip3 install jupyterlab jupyterlab_vim
 
 # Install project specific packages.
 COPY requirements.txt requirements.txt
