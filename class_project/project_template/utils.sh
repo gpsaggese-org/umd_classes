@@ -253,7 +253,8 @@ get_docker_bash_options() {
     -v $(pwd):/data \
     -v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s)"
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
+    -e CSFY_HOST_NAME=$(hostname)"
 }
 
 
