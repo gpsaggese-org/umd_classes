@@ -1,0 +1,7 @@
+ipython
+matplotlib
+numpy
+pandas
+PyGithub
+seaborn
+tqdm

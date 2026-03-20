@@ -55,6 +55,12 @@ your needs, and maintain it over time.
 
 - `utils.sh`
   - Bash utility library with reusable functions for Docker operations
+  - Provides centralized argument parsing (`parse_default_args`) for `-h` and
+    `-v` flags used by all `docker_*.sh` scripts
+  - Provides Jupyter configuration logic: vim keybindings, notification
+    settings, and Docker run option builders
+  - All `docker_*.sh`, `docker_jupyter.sh`, and `run_jupyter.sh` scripts across
+    the repo source this file from `class_project/project_template/utils.sh`
 
 ## Workflows
 - All commands should be run from inside the project directory
@@ -67,8 +73,22 @@ your needs, and maintain it over time.
   > cd $PROJECT
   # Build the container.
   > docker_build.sh
+  # Build without cache (pass extra args after -v).
+  > docker_build.sh --no-cache
   # Test the container.
   > docker_bash.sh ls
+  ```
+
+- Enable verbose (trace) output with `-v`
+  ```bash
+  > docker_build.sh -v
+  > docker_bash.sh -v
+  ```
+
+- Get help for any docker script
+  ```bash
+  > docker_build.sh -h
+  > docker_jupyter.sh -h
   ```
 
 - Start Jupyter
@@ -112,11 +132,17 @@ your needs, and maintain it over time.
 - **What It Does**
   - Launches an interactive bash shell inside a Docker container
   - Mounts the current working directory as `/data` inside the container
-  - Exposes port 8889 for potential services running in the container
+  - Exposes port 8888 for potential services running in the container
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
 
 - Launch bash shell in the container:
   ```bash
   > ./docker_bash.sh
+  ```
+
+- Launch with verbose output (prints each command):
+  ```bash
+  > ./docker_bash.sh -v
   ```
 
 ### `docker_build.sh`
@@ -125,10 +151,17 @@ your needs, and maintain it over time.
   - Supports single-architecture builds (default) or multi-architecture builds
     (`linux/arm64`, `linux/amd64`)
   - Copies project files to temporary build directory and generates build logs
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags; any extra arguments
+    after flags are forwarded to `docker build`
 
 - Build container image for current architecture:
   ```bash
   > ./docker_build.sh
+  ```
+
+- Build without Docker layer cache:
+  ```bash
+  > ./docker_build.sh --no-cache
   ```
 
 - Build multi-architecture image (requires setting `DOCKER_BUILD_MULTI_ARCH=1`
@@ -155,6 +188,8 @@ your needs, and maintain it over time.
   - Executes arbitrary commands inside a Docker container
   - Mounts current directory as `/data` for accessing project files
   - Automatically removes container after command execution completes
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags; remaining arguments
+    form the command to execute
 
 - Run Python script inside container:
   ```bash
@@ -177,6 +212,7 @@ your needs, and maintain it over time.
     shell
   - Finds the container ID automatically based on the image name
   - Useful for debugging or inspecting running containers
+  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
 
 - Attach to running container:
   ```bash
@@ -228,11 +264,30 @@ your needs, and maintain it over time.
     disabled)
   - Binds to all network interfaces (0.0.0.0) on port 8888
   - Allows root access for container environments
+  - When `JUPYTER_USE_VIM=1`, verifies that `jupyterlab_vim` is installed
+    before enabling vim keybindings; exits with an error if not found
 
 - Start Jupyter Lab server (typically called from docker_jupyter.sh):
   ```bash
   > ./run_jupyter.sh
   ```
+
+- Start with vim keybindings (requires `jupyterlab_vim` installed in the
+  container):
+  ```bash
+  > JUPYTER_USE_VIM=1 ./run_jupyter.sh
+  ```
+
+### `utils.sh`
+- **What It Does**
+  - Central Bash library sourced by all `docker_*.sh` and `run_jupyter.sh`
+    scripts across the repository
+  - Provides `parse_default_args` which adds `-h` (help) and `-v`
+    (verbose/`set -x`) flags to every docker script
+  - Provides `build_container_image`, `push_container_image`,
+    `remove_container_image`, `kill_container`, `exec_container` utilities
+  - Provides Jupyter configuration helpers: vim keybindings, notification
+    suppression, and Docker run option builders
 
 ### `version.sh`
 - **What It Does**
@@ -376,15 +431,22 @@ RUN python -m pip install --upgrade pip
 
 ### Stage 5: Jupyter Installation
 ```dockerfile
-RUN pip install jupyterlab
+RUN pip install jupyterlab jupyterlab_vim
 ```
 
-- **Purpose**: Install Jupyter Lab for interactive development and data
-  exploration
+- **Purpose**: Install JupyterLab and the Vim keybinding extension for
+  interactive development
+  - `jupyterlab`: the main IDE for running notebooks in the browser
+  - `jupyterlab_vim`: adds Vim-style navigation to notebook cells
+
+- **Why in Dockerfile, not requirements.txt**: These are infrastructure
+  packages (the IDE itself), not project-specific dependencies
+  - Do NOT add `jupyterlab`, `jupyterlab-vim`, or `ipywidgets` to
+    `requirements.txt`; they are already installed here
 
 - **When to customize**:
   - **Remove** this line if your project doesn't use Jupyter
-  - **Add extensions** if needed (e.g., `jupyterlab-git`,
+  - **Add more extensions** if needed (e.g., `jupyterlab-git`,
     `jupyterlab-variableinspector`)
 
 ### Stage 6: Project Dependencies
@@ -481,13 +543,18 @@ This approach:
 - Ensures consistency across similar projects
 
 ### How to Do It Right
-| What             | Where                        | Example                         |
-| :--------------- | :--------------------------- | :------------------------------ |
-| Python packages  | `requirements.txt`           | `numpy==1.24.0`                 |
-| System tools     | Dockerfile `apt-get` section | `postgresql-client`             |
-| Shell aliases    | `bashrc`                     | `alias jlab="jupyter lab"`      |
-| Custom scripts   | `scripts/` directory         | Setup or initialization scripts |
-| User permissions | `etc_sudoers`                | Grant passwordless sudo         |
+| What                         | Where                        | Example                         |
+| :--------------------------- | :--------------------------- | :------------------------------ |
+| Project Python packages      | `requirements.txt`           | `numpy==1.24.0`                 |
+| Jupyter + Vim (always there) | Dockerfile Stage 5           | `jupyterlab jupyterlab_vim`     |
+| System tools                 | Dockerfile `apt-get` section | `postgresql-client`             |
+| Shell aliases                | `bashrc`                     | `alias jlab="jupyter lab"`      |
+| Custom scripts               | `scripts/` directory         | Setup or initialization scripts |
+| User permissions             | `etc_sudoers`                | Grant passwordless sudo         |
+
+- **Do NOT add to `requirements.txt`**: `jupyterlab`, `jupyterlab-vim`,
+  `jupyterlab_vim`, or `ipywidgets` — these are Jupyter infrastructure packages
+  and are already installed in Stage 5 of the Dockerfile
 
 ### Wrong Vs. Right Approach
 - **Wrong**: Embed everything in the Dockerfile
@@ -721,3 +788,15 @@ Example improvements:
 
 - Verify http://localhost:8888 (not https). Check firewall if remote access
   needed
+
+### Vim Keybindings Not Working
+- If `run_jupyter.sh` exits with `ERROR: jupyterlab_vim is not installed`, it
+  means `jupyterlab_vim` is missing from the container image
+- Make sure `jupyterlab_vim` is installed in the Dockerfile:
+  ```dockerfile
+  RUN pip install jupyterlab jupyterlab_vim
+  ```
+- Rebuild the image after adding the package:
+  ```bash
+  > ./docker_build.sh
+  ```

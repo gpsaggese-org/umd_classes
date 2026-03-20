@@ -1,67 +1,36 @@
-#!/bin/bash -e
+#!/bin/bash
+# """
+# Launch Jupyter Lab server.
+#
+# This script starts Jupyter Lab on port 8888 with the following configuration:
+# - No browser auto-launch (useful for Docker containers)
+# - Accessible from any IP address (0.0.0.0)
+# - Root user allowed (required for Docker environments)
+# - No authentication token or password (for development convenience)
+# - Vim keybindings can be enabled via JUPYTER_USE_VIM environment variable
+# """
 
-# Parse params.
-export JUPYTER_HOST_PORT=8888
-export JUPYTER_USE_VIM=0
-export TARGET_DIR=""
-export VERBOSE=0
+# Exit immediately if any command exits with a non-zero status.
+set -e
 
-OLD_CMD_OPTS=$@
-while getopts p:d:uv flag
-do
-    case "${flag}" in
-        p) JUPYTER_HOST_PORT=${OPTARG};;
-        u) JUPYTER_USE_VIM=1;;
-        d) TARGET_DIR=${OPTARG};;
-        # /Users/saggese/src/git_gp1/code/
-        v) VERBOSE=1;;
-    esac
-done
+# Print each command to stdout before executing it.
+#set -x
 
-if [[ $VERBOSE == 1 ]]; then
-    set -x
-fi;
+# Import the utility functions from the project template.
+GIT_ROOT=/data
+source $GIT_ROOT/class_project/project_template/utils.sh
 
-jupyter nbextension enable autosavetime/main
+# Load Docker configuration variables for this script.
+get_docker_vars_script ${BASH_SOURCE[0]}
+source $DOCKER_NAME
+print_docker_vars
 
-if [[ $JUPYTER_USE_VIM != 0 ]]; then
-    jupyter nbextension enable vim_binding/vim_binding
-fi;
+# Configure vim keybindings and notifications.
+configure_jupyter_vim_keybindings
+configure_jupyter_notifications
 
-cat << EOT >> ~/.jupyter/jupyter_notebook_config.py
-#------------------------------------------------------------------------------
-# Jupytext
-#------------------------------------------------------------------------------
-# The following line yields:
-# ```
-# [C 14:54:35.676 NotebookApp] Bad config encountered during initialization:
-# The 'contents_manager_class' trait of a NotebookApp instance expected a
-# subclass of notebook.services.contents.manager.ContentsManager or
-# jupyter_server.contents.services.managers.ContentsManage, not the
-# JupytextContentsManager JupytextContentsManager.
-# ```
-# Not needed according to https://bytemeta.vip/repo/mwouts/jupytext/issues/953
-#c.NotebookApp.contents_manager_class = "jupytext.TextFileContentsManager"
-# Always pair ipynb notebooks to py files
-c.ContentsManager.default_jupytext_formats = "ipynb,py"
-# Use the percent format when saving as py
-c.ContentsManager.preferred_jupytext_formats_save = "py:percent"
-c.ContentsManager.outdated_text_notebook_margin = float("inf")
-EOT
+# Initialize Jupyter Lab command with base configuration.
+JUPYTER_ARGS=$(get_jupyter_args)
 
-mkdir -p ~/.jupyter/nbextensions/autosavetime
-cat << EOT >> ~/.jupyter/nbextensions/autosavetime/main.js
-var params = {
-    autosavetime_set_starting_interval: 1,
-    autosavetime_starting_interval: 1,
-    autosavetime_show_selector : false,
-}
-EOT
-
-# Run Jupyter.
-jupyter-notebook \
-    --port=$JUPYTER_HOST_PORT \
-    --no-browser \
-    --ip=* \
-    --NotebookApp.token='' --NotebookApp.password='' \
-    --allow-root
+# Start Jupyter Lab with development-friendly settings.
+run "jupyter lab $JUPYTER_ARGS"

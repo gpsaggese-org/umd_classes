@@ -8,8 +8,6 @@ google-generativeai
 groq
 gunicorn
 ipython
-jupyterlab
-jupyterlab-vim
 lxml_html_clean
 matplotlib
 mistralai
