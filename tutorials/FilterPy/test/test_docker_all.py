@@ -41,6 +41,8 @@ class Test_docker_build(hunitest.TestCase):
         hsystem.system(cmd)
 
 
+# TODO(ai_gp): Add a test for docker_cmd.sh 'ls /data'
+
 # #############################################################################
 # Test_docker_run_notebooks
 # #############################################################################

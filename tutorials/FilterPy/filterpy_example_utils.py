@@ -1415,12 +1415,12 @@ def _run_enkf_portfolio(
     for i, z in enumerate(noisy_prices):
         enkf.predict()
         enkf.update(np.array([z]))
-        enc_mean[i] = np.mean(enkf.ensemble[:, 0])
-        enc_std[i] = np.std(enkf.ensemble[:, 0])
+        enc_mean[i] = np.mean(enkf.sigmas[:, 0])
+        enc_std[i] = np.std(enkf.sigmas[:, 0])
         if i % 5 == 0:
-            all_particles.append((i, enkf.ensemble[:, 0].copy()))
+            all_particles.append((i, enkf.sigmas[:, 0].copy()))
     # Final ensemble.
-    particles_final = enkf.ensemble[:, 0].copy()
+    particles_final = enkf.sigmas[:, 0].copy()
     return days, true_trend, enc_mean, enc_std, particles_final, all_particles
 
 
@@ -1684,8 +1684,8 @@ def _run_all_filters_financial(
     for i, z in enumerate(noisy_prices):
         enkf2.predict()
         enkf2.update(np.array([z]))
-        enkf_est[i] = np.mean(enkf2.ensemble[:, 0])
-        enkf_std[i] = np.std(enkf2.ensemble[:, 0])
+        enkf_est[i] = np.mean(enkf2.sigmas[:, 0])
+        enkf_std[i] = np.std(enkf2.sigmas[:, 0])
     results["EnKF"] = (enkf_est, enkf_std)
     return days, true_trend, noisy_prices, results
 

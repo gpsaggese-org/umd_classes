@@ -6,12 +6,12 @@
 # Exit immediately if any command exits with a non-zero status.
 set -e
 
-# Print each command to stdout before executing it.
-set -x
-
 # Import the utility functions from the project template.
 GIT_ROOT=$(git rev-parse --show-toplevel)
 source $GIT_ROOT/class_project/project_template/utils.sh
+
+# Parse default args (-h, -v) and enable set -x if -v is passed.
+parse_default_args "$@"
 
 # Load Docker configuration variables for this script.
 get_docker_vars_script ${BASH_SOURCE[0]}
@@ -22,12 +22,7 @@ print_docker_vars
 run "docker image ls $FULL_IMAGE_NAME"
 
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8889
-cmd="docker run --rm -ti \
-    --name $CONTAINER_NAME \
-    -p $PORT:$PORT \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    $FULL_IMAGE_NAME"
-run $cmd
+PORT=8888
+DOCKER_CMD=$(get_docker_bash_command)
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"

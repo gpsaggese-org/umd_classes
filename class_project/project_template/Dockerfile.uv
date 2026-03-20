@@ -24,6 +24,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     g++ \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Jupyter.
+#RUN pip3 install jupyterlab jupyterlab_vim
+
 # Install uv for package management.
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"

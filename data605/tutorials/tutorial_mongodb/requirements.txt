@@ -1,5 +1,3 @@
 ipython-mongo
-jupyterlab
-jupyterlab-vim
 pandas
 pymongo>=4.0
