@@ -1,6 +1,5 @@
 notebook==7.*
 ipykernel==6.*
-ipywidgets==8.*
 numpy==1.*
 pandas==2.*
 scikit-learn==1.*

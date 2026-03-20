@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 # """
 # Execute a command in a Docker container.
 #
@@ -29,12 +29,9 @@ run "docker image ls $FULL_IMAGE_NAME"
 #(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Configure and run the Docker container with the specified command.
-DOCKER_RUN_OPTS=""
 CONTAINER_NAME=$IMAGE_NAME
-run "docker run \
-    --rm -ti \
-    --name $CONTAINER_NAME \
-    $DOCKER_RUN_OPTS \
-    -v $(pwd):/data \
-    $FULL_IMAGE_NAME \
-    bash -c '$CMD'"
+DOCKER_CMD=$(get_docker_cmd_command)
+PORT=""
+DOCKER_RUN_OPTS=""
+DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT $DOCKER_RUN_OPTS)
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME bash -c '$CMD'"
