@@ -351,6 +351,7 @@ build_container_image() {
     (cd $DIR; docker run --rm -it -v $(pwd):/data $FULL_IMAGE_NAME bash -c "/data/version.sh") 2>&1 | tee docker_build.version.log
     #
     docker image ls $REPO_NAME/$IMAGE_NAME
+    rm -rf $DIR
     echo "*****************************"
     echo "SUCCESS"
     echo "*****************************"
