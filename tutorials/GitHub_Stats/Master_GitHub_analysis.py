@@ -6,56 +6,39 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.1
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
 
-# %% [markdown]
-# CONTENTS:
-# - [Github API to understand user Contribution](#github-api-to-understand-user-contribution)
-# - [Authenticate GitHub Client](#authenticate-github-client)
-# - [Define Time Period](#define-time-period)
-# - [Specify Users and Repos to Fetch and Cache Data](#specify-users-and-repos-to-fetch-and-cache-data)
-#   - [Pre-fetch all the data you need in cache](#pre-fetch-all-the-data-you-need-in-cache)
-# - [Collect Daily Metrics](#collect-daily-metrics)
-# - [Summarize Contributions and Visualize for Entire period that was cached](#summarize-contributions-and-visualize-for-entire-period-that-was-cached)
-#   - [a. Compare users Total performance across selected repos](#a.-compare-users-total-performance-across-selected-repos)
-#   - [b. Compare a users performance Individually across repos](#b.-compare-a-users-performance-individually-across-repos)
-#   - [c. Compare Multiple users inside one repo](#c.-compare-multiple-users-inside-one-repo)
-# - [Performance Evaluation](#performance-evaluation)
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import datetime
+import logging
+import os
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+import github_utils
 
 # %% [markdown]
-# <a name='github-api-to-understand-user-contribution'></a>
 # # Github API to understand user Contribution
 
 # %% [markdown]
-# These numbers come straight from the upstream repo via the REST API, so they only include commits and PRs where you’re the author or the committer on that repo. They **do not** pick up any work you did in a fork (or the individual commits squashed into a single merge), which is why they’ll always undercount what GitHub Insights shows for your overall contributions.
-#
+# These numbers come straight from the upstream repo via the REST API, so they only include commits and PRs where you're the author or the committer on that repo. They **do not** pick up any work you did in a fork (or the individual commits squashed into a single merge), which is why they'll always undercount what GitHub Insights shows for your overall contributions.
 
 # %%
 # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet jupyterlab-vim PyGithub)"
 # !jupyter labextension enable
 
-# %%
-import datetime
-import logging
-import os
-
-import github_utils
-
-# Enable logging.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
-
-# %%
-# %load_ext autoreload
-# %autoreload 2
-
 # %% [markdown]
-# <a name='authenticate-github-client'></a>
 # # Authenticate GitHub Client
 
 # %%
@@ -74,10 +57,9 @@ client = github_utils.GitHubAPI(access_token=access_token).get_client()
 users = github_utils.get_contributors_for_repo(
     client, "causify-ai", "tutorials", top_n=30
 )
-print(users)
+_LOG.info("users: %s", users)
 
 # %% [markdown]
-# <a name='define-time-period'></a>
 # # Define Time Period
 
 # %%
@@ -86,7 +68,6 @@ period_full = github_utils.utc_period("2024-01-01", "2025-06-01")
 period_slice = github_utils.utc_period("2025-04-01", "2025-05-31")
 
 # %% [markdown]
-# <a name='specify-users-and-repos-to-fetch-and-cache-data'></a>
 # # Specify Users and Repos to Fetch and Cache Data
 
 # %%
@@ -105,8 +86,6 @@ repos = ["helpers", "tutorials", "cmamp"]
 org = "causify-ai"
 
 # %% [markdown]
-# <a name='pre-fetch-all-the-data-you-need-in-cache'></a>
-# <a name='pre-feth-all-the-data-you-need-in-cache'></a>
 # ## Pre-fetch all the data you need in cache
 
 # %% [markdown]
@@ -121,9 +100,7 @@ github_utils.prefetch_periodic_user_repo_data(
     client, org, repos, users, period_full
 )
 
-
 # %% [markdown]
-# <a name='collect-daily-metrics'></a>
 # # Collect Daily Metrics
 
 # %%
@@ -133,15 +110,13 @@ combined_df = github_utils.collect_all_metrics(
 )
 
 # %%
-print(len(combined_df))
+_LOG.info("len(combined_df): %s", len(combined_df))
 combined_df[904:].head()
 
 # %% [markdown]
-# <a name='summarize-contributions-and-visualize-for-entire-period-that-was-cached'></a>
 # # Summarize Contributions and Visualize for Entire period that was cached
 
 # %% [markdown]
-# <a name='a.-compare-users-total-performance-across-selected-repos'></a>
 # ## a. Compare users Total performance across selected repos
 
 # %%
@@ -155,7 +130,6 @@ github_utils.plot_multi_metrics_totals_by_user(
 )
 
 # %% [markdown]
-# <a name='b.-compare-a-users-performance-individually-across-repos'></a>
 # ## b. Compare a users performance Individually across repos
 
 # %%
@@ -168,7 +142,6 @@ github_utils.plot_metrics_by_repo(
 )
 
 # %% [markdown]
-# <a name='c.-compare-multiple-users-inside-one-repo'></a>
 # ## c. Compare Multiple users inside one repo
 
 # %%
@@ -181,30 +154,27 @@ github_utils.plot_metrics_by_user(
     end=datetime.datetime(2025, 5, 15),
 )
 
-
 # %% [markdown]
-# <a name='performance-evaluation'></a>
 # # Performance Evaluation
 
 # %%
-# Step 0: Define your slice
+# Step 0: Define your slice.
 users = ["Shaunak01", "tkpratardan", "Prahar08modi", "sandeepthalapanane"]
 repos = ["cmamp", "helpers"]
 metrics = ["commits", "prs", "issues_closed"]
 
-# Step 1: Summarize total metrics across users/repos
+# Step 1: Summarize total metrics across users/repos.
 summary_users = github_utils.summarize_users_across_repos(
     combined_df, users=users, repos=repos
 )
 
-# Step 2: Add z-scores and percentiles
+# Step 2: Add z-scores and percentiles.
 z_df = github_utils.compute_z_scores(summary_users, metrics)
 stats = github_utils.compute_percentile_ranks(z_df, metrics)
 
-# Step 3: Visualize — will automatically pick up all *_z or *_pctile columns
+# Step 3: Visualize -- will automatically pick up all *_z or *_pctile columns.
 github_utils.visualize_user_metric_comparison(stats, score_type="z")
 github_utils.visualize_user_metric_comparison(stats, score_type="percentile")
-
 
 # %% [markdown]
 # There are many more helper funcs to see and compare statistics. Look at github_utils for more info -> `docker_causify_style/github_utils.py`

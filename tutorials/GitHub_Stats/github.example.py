@@ -6,12 +6,32 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
+
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
+import os
+from datetime import datetime, timedelta
+from itertools import chain
+
+import pandas as pd
+import plotly.express as px
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+import github_utils
+from github import Github
 
 # %% [markdown]
 # # Assessing Developer Performance via GitHub API
@@ -20,7 +40,7 @@
 #
 # This notebook demonstrates how to use a custom Python-based wrapper around the GitHub API to **analyze developer activity** and **contributions** within an organization. It provides practical tools for engineering managers, team leads, and data analysts to measure productivity and engagement over time.
 #
-# GitHub stores a wealth of activity data such as commits, pull requests (PRs), and issue interactions. However, extracting meaningful insights from GitHub’s native API can be challenging due to its raw structure and pagination mechanisms. To simplify this, we’ve built a software layer that exposes **clean**, and **high-level functions** that return structured metrics ready for analysis.
+# GitHub stores a wealth of activity data such as commits, pull requests (PRs), and issue interactions. However, extracting meaningful insights from GitHub's native API can be challenging due to its raw structure and pagination mechanisms. To simplify this, we've built a software layer that exposes **clean**, and **high-level functions** that return structured metrics ready for analysis.
 #
 # With these APIs, you can:
 #
@@ -30,7 +50,7 @@
 # - Visualize patterns across repositories and timeframes.
 # - Support engineering OKRs, sprint planning, and retrospectives with data.
 #
-# Throughout this notebook, we’ll implement real-life scenarios that use these APIs and visualize the insights with interactive Plotly charts.
+# Throughout this notebook, we'll implement real-life scenarios that use these APIs and visualize the insights with interactive Plotly charts.
 
 # %% [markdown]
 # ## Potential Applications
@@ -91,30 +111,12 @@
 # !jupyter labextension enable
 
 # %% [markdown]
-# ### Install required libraries
-# Install the required libraries: 
+# ### Install Required Libraries
+# Install the required libraries:
 
 # %%
 # Install plotly.
 # !sudo /venv/bin/pip install plotly
-
-# %% [markdown]
-# ### Import Required Modules
-# Import the necessary libraries:
-
-# %%
-import os
-import logging
-import github_utils
-import pandas as pd
-from github import Github
-from datetime import datetime, timedelta
-import plotly.express as px
-from itertools import chain
-
-# Enable logging.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ### Set Up GitHub Authentication
@@ -150,11 +152,11 @@ if not access_token:
 # Define the configuration settings.
 config = {
     # Replace with actual GitHub organization or username.
-    "org_name": "causify-ai",  
+    "org_name": "causify-ai",
     "start_date": (datetime(2025, 1, 20)),
     "end_date": (datetime(2025, 2, 25)),
     # Load from environment variable.
-    "access_token": access_token,  
+    "access_token": access_token,
 }
 
 # %% [markdown]
@@ -165,18 +167,15 @@ config = {
 client = Github(config["access_token"])
 
 # Verify authentication by retrieving the authenticated user.
-try:
-    authenticated_user = client.get_user().login
-    print(f"Successfully authenticated as: {authenticated_user}")
-except Exception as e:
-    print(f"Authentication failed: {e}")
+authenticated_user = client.get_user().login
+_LOG.info("Successfully authenticated as: %s", authenticated_user)
 
 # %% [markdown]
 # ## Scenario 1: Individual Developer Contribution Report
 #
 # This section generates a contribution summary for a single developer in the organization across all repositories over a given time window.
 #
-# We’ll compute:
+# We'll compute:
 # - Total commits
 # - PRs created
 # - Closed but unmerged PRs
@@ -243,7 +242,7 @@ fig_prs.show()
 # - **Total PRs:** 39
 # - **Unmerged PRs:** 10
 #
-# This snapshot gives a clear view of how actively the developer has contributed via code commits and PRs. It’s also useful to identify how many PRs were potentially abandoned or rejected.
+# This snapshot gives a clear view of how actively the developer has contributed via code commits and PRs. It's also useful to identify how many PRs were potentially abandoned or rejected.
 
 # %% [markdown]
 # ## Scenario 2: Comparative Productivity Analysis Between Two Developers
@@ -259,7 +258,6 @@ fig_prs.show()
 # - Identifying trends or support needs in collaborative teams
 #
 # We will display these comparisons using interactive Plotly bar charts.
-#
 
 # %%
 # Define developer GitHub usernames.
@@ -283,7 +281,6 @@ for username in usernames:
         client, username, config["org_name"],
         period=(config["start_date"], config["end_date"])
     )
-    
     comparison_results.append({
         "Username": username,
         "Commits": commits_data["total_commits"],
@@ -355,13 +352,12 @@ contributors_dict = github_utils.get_github_contributors(client, qualified_repos
 
 # Flatten the list of contributors and remove duplicates.
 unique_contributors = list(set(chain.from_iterable(contributors_dict.values())))
-print(f" Found {len(unique_contributors)} unique contributors.")
+_LOG.info("Found %s unique contributors.", len(unique_contributors))
 
 # Gather metrics for each contributor.
 top_contributor_stats = []
 for user in unique_contributors:
     commit_data = github_utils.get_commits_by_person(client, user, config["org_name"], period=(config["start_date"], config["end_date"]))
-    
     top_contributor_stats.append({
         "Username": user,
         "Commits": commit_data["total_commits"],
@@ -371,7 +367,6 @@ for user in unique_contributors:
 df_top_contributors = pd.DataFrame(top_contributor_stats)
 df_top_contributors_sorted = df_top_contributors.sort_values(by="Commits", ascending=False).reset_index(drop=True)
 df_top_contributors_sorted.head(10)
-
 
 # %% [markdown]
 # ### Visualization
@@ -385,7 +380,6 @@ fig_top_commits = px.bar(
     text="Commits", color="Username"
 )
 fig_top_commits.show()
-
 
 # %% [markdown]
 # ### Summary
@@ -402,7 +396,7 @@ fig_top_commits.show()
 #
 # - **Individual-level Tracking**: Using `get_commits_by_person`, `get_prs_by_person`, and related functions, you can track the contributions of specific users across time.
 # - **Comparative Analysis**: With visualizations, it becomes easier to compare contributions between developers and uncover collaboration patterns.
-# - **Identifying Stale Work**: Unmerged PR analysis helps flag efforts that didn’t result in merged changes—providing opportunities to investigate blockers or improve review processes.
+# - **Identifying Stale Work**: Unmerged PR analysis helps flag efforts that didn't result in merged changes--providing opportunities to investigate blockers or improve review processes.
 # - **Top Contributor Reporting**: You can rank contributors and recognize their efforts across repositories, which is useful for performance reviews, public recognition, or retrospectives.
 #
 # ### How to Use These Insights

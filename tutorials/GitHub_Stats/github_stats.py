@@ -13,6 +13,19 @@
 #     name: python3
 # ---
 
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+import helpers.github_utils as hgitutil
+
 # %% [markdown]
 # # GitHub PR Statistics
 #
@@ -20,18 +33,6 @@
 # - Connect to the GitHub API
 # - Count open PRs broken down by author and draft/ready status
 # - Count closed PRs over a specified time period broken down by author
-
-# %%
-# %load_ext autoreload
-# %autoreload 2
-
-import logging
-
-import helpers.github_utils as hgitutil
-
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## Configuration

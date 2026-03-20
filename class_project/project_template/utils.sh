@@ -23,6 +23,40 @@ get_docker_cmd_command() {
 }
 
 
+_print_default_help() {
+    # """
+    # Print usage information and available default options for docker scripts.
+    # """
+    echo "Usage: $(basename $0) [options]"
+    echo ""
+    echo "Options:"
+    echo "  -h    Print this help message and exit"
+    echo "  -v    Enable verbose output (set -x)"
+}
+
+
+parse_default_args() {
+    # """
+    # Parse default command-line arguments for docker scripts.
+    #
+    # Sets VERBOSE variable in the caller's scope and enables set -x when -v
+    # is passed.  Prints help and exits when -h is passed.
+    # Updates OPTIND so the caller can shift away processed arguments.
+    #
+    # :param @: command-line arguments forwarded from the calling script
+    # """
+    VERBOSE=0
+    while getopts "hv" flag; do
+        case "${flag}" in
+            h) _print_default_help; exit 0;;
+            v) VERBOSE=1;;
+            *) _print_default_help; exit 1;;
+        esac
+    done
+    enable_verbose_mode
+}
+
+
 _print_docker_jupyter_help() {
     # """
     # Print usage information and available options for docker_jupyter.sh.
