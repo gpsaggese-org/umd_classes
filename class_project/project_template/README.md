@@ -55,6 +55,10 @@ your needs, and maintain it over time.
 
 - `utils.sh`
   - Bash utility library with reusable functions for Docker operations
+  - Provides centralized Jupyter configuration logic: argument parsing, vim
+    keybindings, notification settings, and Docker run option builders
+  - All `docker_jupyter.sh` and `run_jupyter.sh` scripts across the repo source
+    this file from `class_project/project_template/utils.sh`
 
 ## Workflows
 - All commands should be run from inside the project directory
@@ -241,6 +245,11 @@ your needs, and maintain it over time.
   ```bash
   > JUPYTER_USE_VIM=1 ./run_jupyter.sh
   ```
+
+### `utils.sh`
+- **What It Does**
+  - Central Bash library sourced by all `docker_jupyter.sh` and `run_jupyter.sh`
+    scripts across the repository
 
 ### `version.sh`
 - **What It Does**

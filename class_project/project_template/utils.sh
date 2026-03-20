@@ -192,6 +192,7 @@ get_docker_jupyter_options() {
     -v $(pwd):/curr_dir \
     -v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
     -e JUPYTER_USE_VIM=$jupyter_use_vim"
 }
 
