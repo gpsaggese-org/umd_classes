@@ -3,7 +3,7 @@ Utility functions for Kalman filter tutorial (L09_05_02).
 
 Import as:
 
-import msml610.tutorials.L09_05_02_univariate_kalman_filter_utils as mtl090502ukfuti
+import msml610.tutorials.L09_05_02_univariate_kalman_filter_utils as mtl00ukfu
 """
 
 import logging
@@ -484,7 +484,7 @@ def cell1_2_plot_gaussian_product() -> None:
 
 
 # #############################################################################
-# Dog Simulation
+# DogSimulation
 # #############################################################################
 
 
@@ -580,7 +580,9 @@ def predict(pos: Gaussian, movement: Gaussian) -> Gaussian:
 
 
 # Prior, Measurement, Actual Position, Posterior.
-KfInfo = namedtuple("KfInfo", ["prior", "measurement", "actual_pos", "posterior"])
+KfInfo = namedtuple(
+    "KfInfo", ["prior", "measurement", "actual_pos", "posterior"]
+)
 
 
 def kf_info_to_df(info: List[KfInfo]) -> pd.DataFrame:
@@ -891,24 +893,28 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create initial_position widget (belief about where the dog starts).
-    initial_position_slider, initial_position_box = mtumsuti.build_widget_control(
-        name="initial_position",
-        description="initial_position",
-        min_val=-50.0,
-        max_val=500.0,
-        step=1.0,
-        initial_value=0.0,
-        is_float=True,
+    initial_position_slider, initial_position_box = (
+        mtumsuti.build_widget_control(
+            name="initial_position",
+            description="initial_position",
+            min_val=-50.0,
+            max_val=500.0,
+            step=1.0,
+            initial_value=0.0,
+            is_float=True,
+        )
     )
     # Create actual_initial_pos widget (true starting position of the dog).
-    actual_initial_pos_slider, actual_initial_pos_box = mtumsuti.build_widget_control(
-        name="actual_initial_pos",
-        description="actual_initial_pos",
-        min_val=-50.0,
-        max_val=500.0,
-        step=1.0,
-        initial_value=0.0,
-        is_float=True,
+    actual_initial_pos_slider, actual_initial_pos_box = (
+        mtumsuti.build_widget_control(
+            name="actual_initial_pos",
+            description="actual_initial_pos",
+            min_val=-50.0,
+            max_val=500.0,
+            step=1.0,
+            initial_value=0.0,
+            is_float=True,
+        )
     )
     # Create initial_pos_var widget (uncertainty in initial position belief).
     initial_pos_var_slider, initial_pos_var_box = mtumsuti.build_widget_control(

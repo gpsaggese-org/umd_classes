@@ -42,12 +42,12 @@ import neo4j as nj
 import py2neo as pyneo
 
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 import tutorials.tutorial_neo4j.neo4j_utils as ttneouti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## 1. Starting the Neo4j Server
@@ -231,7 +231,12 @@ with driver.session() as session:
     )
     # MERGE: add Alice-Charlie relationship.
     session.execute_write(
-        ttneouti.merge_relationship, "Person", "Alice", "KNOWS", "Person", "Charlie"
+        ttneouti.merge_relationship,
+        "Person",
+        "Alice",
+        "KNOWS",
+        "Person",
+        "Charlie",
     )
     # SET: update Alice's age and add city.
     session.execute_write(

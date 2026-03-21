@@ -18,18 +18,18 @@ contribution, and what you'll gain from the internship.
     and large companies
 
 ## Authorship Policy
-Ideas and projects go through the following life cycle:
+- Ideas and projects go through the following life cycle:
 
-- Class projects
-- Blog
-- Academic papers
-- Potential books
+  - Class projects
+  - Blog
+  - Academic papers
+  - Potential books
 
-The authorship is simple: if you contribute to one of the activities (writing
-code, writing the article, etc.), you are an author.
+- The authorship is simple: if you contribute to one of the activities (writing
+  code, writing the article, etc.), you are an author.
 
 ## Examples
-See published work: https://gpsaggese.github.io/umd_classes/05_publications/
+- See published work: https://gpsaggese.github.io/umd_classes/05_publications/
 
 ## Meaningful, Constant, High-Quality Progress
 - It's difficult to specify a minimum number of hours, since some people can
@@ -46,23 +46,23 @@ See published work: https://gpsaggese.github.io/umd_classes/05_publications/
 - School always has priority, so we take breaks during final periods
 
 ## When to Contribute
-We don't care when you find time to contribute (at night or over the weekend),
-but be reliable about delivering.
+- We don't care when you find time to contribute (at night or over the weekend),
+  but be reliable about delivering.
 
-- Taking up something and not being able to deliver is one of the biggest
-  mistakes people make when starting a new role
-- You have only one opportunity to make a first impression. Once people see you
-  as unreliable or as someone who over-commits and under-delivers, it's very
-  difficult to change that perception
+  - Taking up something and not being able to deliver is one of the biggest
+    mistakes people make when starting a new role
+  - You have only one opportunity to make a first impression. Once people see you
+    as unreliable or as someone who over-commits and under-delivers, it's very
+    difficult to change that perception
 
 ## We Work as an Open Source Project
-We follow the collaboration rules of an open-source project:
+- We follow the collaboration rules of an open-source project:
 
-- Most work happens through GitHub
-- Minimal communication via email
-- Use instant messaging only for high-priority questions
-- Meetings are scheduled regularly and we avoid on-demand meetings unless
-  strictly necessary
+  - Most work happens through GitHub
+  - Minimal communication via email
+  - Use instant messaging only for high-priority questions
+  - Meetings are scheduled regularly and we avoid on-demand meetings unless
+    strictly necessary
 
 ## Always Reply to Emails with Everyone in Cc
 - Always add the rest of the team to emails to get quicker responses
@@ -75,24 +75,26 @@ We follow the collaboration rules of an open-source project:
   next, and any blockers
 
 ## Will I Work on a Specific Project I Choose?
-We guarantee you'll work on an interesting AI, ML, DevOps, or coding project,
-but not necessarily the one you want. Whatever project feels like a must-learn
-will likely become irrelevant within 6 months.
 
-The most important task during this internship is learning and mastering these
-fundamentals:
-- Contributing to an open-source project
-- Writing maintainable code
-- Fixing bugs and documenting
-- Writing unit tests and reading code
-- Improving other people's code
-- Working on a team
+- We guarantee you'll work on an interesting AI, ML, DevOps, or coding project,
+  but not necessarily the one you want. Whatever project feels like a must-learn
+  will likely become irrelevant within 6 months.
 
-Focus on fundamentals that never change, not whatever is trending on HackerNews.
+- The most important task during this internship is learning and mastering these
+  fundamentals:
+  - Contributing to an open-source project
+  - Writing maintainable code
+  - Fixing bugs and documenting
+  - Writing unit tests and reading code
+  - Improving other people's code
+  - Working on a team
+
+- Focus on fundamentals that never change, not whatever is trending on HackerNews.
 
 ## How Do Interns Get Feedback to Improve?
-We have a process to help you improve and reach your full potential. See:
-[Contributor Feedback README](https://docs.google.com/document/d/10-sT92CGpHsr7M1W2-v1UrhLmlOIUWv-Qc4D2uvOZHI/edit?tab=t.0)
+- We have a process to help you improve and reach your full potential
+- See [Contributor Feedback
+  README](https://docs.google.com/document/d/10-sT92CGpHsr7M1W2-v1UrhLmlOIUWv-Qc4D2uvOZHI/edit?tab=t.0)
 
 ## What Will I Get During the Internship?
 - Learn the fundamentals of working on a high-performing distributed startup
@@ -102,3 +104,16 @@ We have a process to help you improve and reach your full potential. See:
   months
 - Get exposure to companies, startups, interesting people, and events on campus
 - Receive a recommendation letter and career guidance
+
+## Review Process
+
+- Our approach is to merge when a PR is a clear improvement over what we have
+  in `master`
+- We don't merge when there are large files or junk (e.g., temporary files,
+  artifacts, etc)
+  - In those cases the PR requests is blocking and we wait for the author to fix
+    things until it's ready to go
+- We keep blogs as drafts until everything is good enough to be published
+  - Blogs and other work can always be improved after they are published
+- For the text we use a sober technical tone, instead of the click-baity one
+  that lately is everywhere

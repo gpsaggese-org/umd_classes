@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.2
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -242,11 +242,14 @@ df.head(3)
 df.sort_values(by="avg_score", ascending=False).head(5)
 
 # %%
-# TODO(ai_gp): Do this in a less convoluted way.
-plot_data = (df
-             .assign(top_school = df["avg_score"] >= np.quantile(df["avg_score"], .99))
-             [["top_school", "number_of_students"]]
-             .query(f"number_of_students<{np.quantile(df['number_of_students'], .98)}")) # remove outliers
+threshold_score = np.quantile(df["avg_score"], 0.99)
+threshold_students = np.quantile(df["number_of_students"], 0.98)
+plot_data = df[["avg_score", "number_of_students"]].copy()
+plot_data["top_school"] = plot_data["avg_score"] >= threshold_score
+# Remove outliers.
+plot_data = plot_data[plot_data["number_of_students"] < threshold_students][
+    ["top_school", "number_of_students"]
+]
 
 plt.figure(figsize=(8,4))
 ax = sns.boxplot(x="top_school", y="number_of_students", data=plot_data)
@@ -254,14 +257,11 @@ ax = sns.boxplot(x="top_school", y="number_of_students", data=plot_data)
 plt.title("Number of Students of 1% Top Schools (Right)")
 
 # %%
-# TODO(ai_gp): Do this in a less convoluted way.
-q_99 = np.quantile(df["avg_score"], .99)
-q_01 = np.quantile(df["avg_score"], .01)
-
-plot_data = (df
-             .sample(10000)
-             .assign(Group = lambda d: np.select([(d["avg_score"] > q_99) | (d["avg_score"] < q_01)],
-                                                 ["Top and Bottom"], "Middle")))
+q_99 = np.quantile(df["avg_score"], 0.99)
+q_01 = np.quantile(df["avg_score"], 0.01)
+plot_data = df.sample(10000).copy()
+is_extreme = (plot_data["avg_score"] > q_99) | (plot_data["avg_score"] < q_01)
+plot_data["Group"] = np.where(is_extreme, "Top and Bottom", "Middle")
 plt.figure(figsize=(10,5))
 sns.scatterplot(y="avg_score", x="number_of_students", data=plot_data.query("Group=='Middle'"), label="Middle")
 ax = sns.scatterplot(y="avg_score", x="number_of_students", data=plot_data.query("Group!='Middle'"), color="0.7", label="Top and Bottom")
@@ -315,7 +315,7 @@ print("SE for Short Email:", se(short_email))
 n = 100
 conv_rate = 0.08
 
-def run_experiment(): 
+def run_experiment():
     return np.random.binomial(1, conv_rate, size=n)
 
 np.random.seed(42)
@@ -341,7 +341,7 @@ print("95% CI for Short Email: ", ci)
 # %%
 from scipy import stats
 
-# 99% 
+# 99%
 conf = 0.95
 #conf = 0.99
 z = np.abs(stats.norm.ppf((1-conf)/2))
@@ -398,7 +398,7 @@ print(f"95% CI for the differece (short email - no email):\n{ci}")
 
 # %%
 # Shifting the CI.
-diff_mu_shifted =  short_email.mean() - no_email.mean() - 0.01 
+diff_mu_shifted =  short_email.mean() - no_email.mean() - 0.01
 diff_se = np.sqrt(no_email.sem()**2 + short_email.sem()**2)
 
 ci = (diff_mu_shifted - 1.96*diff_se, diff_mu_shifted + 1.96*diff_se)

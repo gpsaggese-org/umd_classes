@@ -3,7 +3,7 @@ Utility functions for multivariate Kalman filter tutorial (L09_05_03).
 
 Import as:
 
-import msml610.tutorials.L09_05_03_multivariate_kalman_filter_utils as mtl090503mkfuti
+import msml610.tutorials.L09_05_03_multivariate_kalman_filter_utils as mtl00mkfu
 """
 
 import logging
@@ -197,17 +197,11 @@ def _plot_sum_of_gaussians(
     # Plot ellipses at 1 and 2 standard deviations.
     stats.plot_covariance_ellipse(mean, cov1, fc="y", alpha=0.4)
     stats.plot_covariance_ellipse(mean, cov2, fc="g", alpha=0.4)
-    stats.plot_covariance_ellipse(
-        mean, cov_sum, fc="b", alpha=0.4
-    )
+    stats.plot_covariance_ellipse(mean, cov_sum, fc="b", alpha=0.4)
     plt.xlabel("X")
     plt.ylabel("Y")
-    cov1_str = (
-        f"[[{var_x1:.1f}, {cov_xy1:.1f}], [{cov_xy1:.1f}, {var_y1:.1f}]]"
-    )
-    cov2_str = (
-        f"[[{var_x2:.1f}, {cov_xy2:.1f}], [{cov_xy2:.1f}, {var_y2:.1f}]]"
-    )
+    cov1_str = f"[[{var_x1:.1f}, {cov_xy1:.1f}], [{cov_xy1:.1f}, {var_y1:.1f}]]"
+    cov2_str = f"[[{var_x2:.1f}, {cov_xy2:.1f}], [{cov_xy2:.1f}, {var_y2:.1f}]]"
     plt.title(f"Sum of Gaussians\nG1={cov1_str}\nG2={cov2_str}")
     legend_elements = [
         matplotlib.patches.Patch(fc="y", alpha=0.4, label="G1"),
@@ -266,24 +260,16 @@ def _plot_product_of_gaussians(
     # Plot ellipses at 1 and 2 standard deviations.
     stats.plot_covariance_ellipse(mean, cov1, fc="y", alpha=0.4)
     stats.plot_covariance_ellipse(mean, cov2, fc="g", alpha=0.4)
-    stats.plot_covariance_ellipse(
-        mean, cov_prod, fc="b", alpha=0.6
-    )
+    stats.plot_covariance_ellipse(mean, cov_prod, fc="b", alpha=0.6)
     plt.xlabel("X")
     plt.ylabel("Y")
-    cov1_str = (
-        f"[[{var_x1:.1f}, {cov_xy1:.1f}], [{cov_xy1:.1f}, {var_y1:.1f}]]"
-    )
-    cov2_str = (
-        f"[[{var_x2:.1f}, {cov_xy2:.1f}], [{cov_xy2:.1f}, {var_y2:.1f}]]"
-    )
+    cov1_str = f"[[{var_x1:.1f}, {cov_xy1:.1f}], [{cov_xy1:.1f}, {var_y1:.1f}]]"
+    cov2_str = f"[[{var_x2:.1f}, {cov_xy2:.1f}], [{cov_xy2:.1f}, {var_y2:.1f}]]"
     plt.title(f"Product of Gaussians\nG1={cov1_str}\nG2={cov2_str}")
     legend_elements = [
         matplotlib.patches.Patch(fc="y", alpha=0.4, label="G1"),
         matplotlib.patches.Patch(fc="g", alpha=0.4, label="G2"),
-        matplotlib.patches.Patch(
-            fc="b", alpha=0.6, label="G1 * G2 (product)"
-        ),
+        matplotlib.patches.Patch(fc="b", alpha=0.6, label="G1 * G2 (product)"),
     ]
     plt.legend(handles=legend_elements)
     plt.grid(True, alpha=0.3)
@@ -318,9 +304,7 @@ def _plot_covariance_matrix(
     samples = np.random.multivariate_normal(mean, cov, n_samples)
     plt.figure(figsize=(6, 6))
     # Plot samples.
-    plt.scatter(
-        samples[:, 0], samples[:, 1], alpha=0.3, s=10, label="Samples"
-    )
+    plt.scatter(samples[:, 0], samples[:, 1], alpha=0.3, s=10, label="Samples")
     # Plot covariance ellipse at 1, 2, 3 standard deviations.
     # Use axis_equal=False to avoid conflict with fixed xlim/ylim; set equal
     # aspect manually with adjustable='box' so the axes box is resized instead
@@ -333,9 +317,7 @@ def _plot_covariance_matrix(
     )
     plt.xlabel("X")
     plt.ylabel("Y")
-    cov_str = (
-        f"[[{var_x:.2f}, {cov_xy:.2f}], [{cov_xy:.2f}, {var_y:.2f}]]"
-    )
+    cov_str = f"[[{var_x:.2f}, {cov_xy:.2f}], [{cov_xy:.2f}, {var_y:.2f}]]"
     plt.title(f"2D Covariance: {cov_str}\nN={n_samples}, seed={seed}")
     plt.xlim(-10, 10)
     plt.ylim(-10, 10)
@@ -375,9 +357,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         nonlocal fig_sum
         if fig_sum is not None:
             plt.close(fig_sum)
-        _plot_sum_of_gaussians(
-            var_x1, var_y1, cov_xy1, var_x2, var_y2, cov_xy2
-        )
+        _plot_sum_of_gaussians(var_x1, var_y1, cov_xy1, var_x2, var_y2, cov_xy2)
         fig_sum = plt.gcf()
 
     # Create widgets for Gaussian 1.
@@ -777,8 +757,7 @@ def compute_dog_data(
 # Kalman Filter for Dog Tracking
 # #############################################################################
 
-# TODO(ai_gp): Use import filterpy.kalman as kf
-from filterpy.kalman import KalmanFilter
+import filterpy.kalman as kf
 
 
 def run_dog_kalman_filter(
@@ -824,21 +803,21 @@ def run_dog_kalman_filter(
     # Measurement noise.
     R = np.array([[z_var]])
     # Build and initialize filter.
-    kf = KalmanFilter(dim_x=2, dim_z=1)
-    kf.F = F
-    kf.H = H
-    kf.P = P.copy()
-    kf.Q = Q
-    kf.R = R
-    kf.x = np.array([[initial_pos], [initial_vel]])
+    kalman_filter = kf.KalmanFilter(dim_x=2, dim_z=1)
+    kalman_filter.F = F
+    kalman_filter.H = H
+    kalman_filter.P = P.copy()
+    kalman_filter.Q = Q
+    kalman_filter.R = R
+    kalman_filter.x = np.array([[initial_pos], [initial_vel]])
     # Run filter over all measurements.
     means = []
     variances = []
     for z in zs:
-        kf.predict()
-        kf.update(np.array([[z]]))
-        means.append(float(kf.x[0]))
-        variances.append(float(kf.P[0, 0]))
+        kalman_filter.predict()
+        kalman_filter.update(np.array([[z]]))
+        means.append(float(kalman_filter.x[0]))
+        variances.append(float(kalman_filter.P[0, 0]))
     return np.array(means), np.array(variances)
 
 
@@ -922,20 +901,20 @@ def run_dog_kalman_filter_1d(
     :param dt: time step duration (unused, kept for API symmetry)
     :return: (means, variances) 1D arrays of estimated position and variance
     """
-    kf = KalmanFilter(dim_x=1, dim_z=1)
-    kf.F = np.array([[1.0]])
-    kf.H = np.array([[1.0]])
-    kf.P = np.array([[500.0]])
-    kf.Q = np.array([[process_var]])
-    kf.R = np.array([[z_var]])
-    kf.x = np.array([[0.0]])
+    kalman_filter = kf.KalmanFilter(dim_x=1, dim_z=1)
+    kalman_filter.F = np.array([[1.0]])
+    kalman_filter.H = np.array([[1.0]])
+    kalman_filter.P = np.array([[500.0]])
+    kalman_filter.Q = np.array([[process_var]])
+    kalman_filter.R = np.array([[z_var]])
+    kalman_filter.x = np.array([[0.0]])
     means = []
     variances = []
     for z in zs:
-        kf.predict()
-        kf.update(np.array([[z]]))
-        means.append(float(kf.x[0]))
-        variances.append(float(kf.P[0, 0]))
+        kalman_filter.predict()
+        kalman_filter.update(np.array([[z]]))
+        means.append(float(kalman_filter.x[0]))
+        variances.append(float(kalman_filter.P[0, 0]))
     return np.array(means), np.array(variances)
 
 
@@ -997,9 +976,7 @@ def plot_hidden_variable_comparison(
         ax.grid(True, alpha=0.3)
     mse_1d = float(np.mean((means_1d - xs) ** 2))
     mse_2d = float(np.mean((means_2d - xs) ** 2))
-    fig.suptitle(
-        f"{title}\nMSE: 1D={mse_1d:.3f}  2D={mse_2d:.3f}", fontsize=12
-    )
+    fig.suptitle(f"{title}\nMSE: 1D={mse_1d:.3f}  2D={mse_2d:.3f}", fontsize=12)
     plt.tight_layout()
 
 
@@ -1040,9 +1017,7 @@ def cell_hidden_variable_comparison_interactive() -> None:
             plt.close(fig_cmp)
         np.random.seed(seed)
         xs_i, zs_i = compute_dog_data(z_var, process_var, count=count)
-        means_1d, var_1d = run_dog_kalman_filter_1d(
-            zs_i, z_var, process_var
-        )
+        means_1d, var_1d = run_dog_kalman_filter_1d(zs_i, z_var, process_var)
         means_2d, var_2d = run_dog_kalman_filter(zs_i, z_var, process_var)
         plot_hidden_variable_comparison(
             xs_i, zs_i, means_1d, var_1d, means_2d, var_2d

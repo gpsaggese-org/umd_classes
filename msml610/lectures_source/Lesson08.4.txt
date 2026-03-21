@@ -762,11 +762,12 @@ digraph CausalKG {
 
 - You are a manager and you need to decide whether to hire expensive consultants
 
-  - Do expensive consultants improve business? Or
+- Which one is true?
+  - Do expensive consultants improve business?
   - Only very profitable businesses can afford consultants?
 
 - Setting up a randomized trial is difficult
-  - We need to untangle causation from association
+  - You need to untangle causation from association
 
 ```graphviz
 digraph CausalGraph {
@@ -812,5 +813,85 @@ digraph CausalGraph {
 }
 ```
 
+// TODO(gp): Merge in Lesson08.2
 
+* Chains
+- In case of $T \to M \to Y$:
+  - $M$ is "mediator" since it mediates the relationship between $T$ and $Y$
+  - Causation flows only in the direction of the arrows
+  - Association flows both ways
 
+- E.g., $Study \to SolveProblems \to JobPromotion$
+  - Job promotion is causally dependent on studying
+  - The association goes both ways
+    - The more you study, the more likely to get a promotion
+    - The greater the chances of promotion, the greater your chance of having
+      studied (otherwise it would be difficult to get a promotion)
+  - So $Study$ and $JobPromotion$ are
+    - Dependent or
+    - Not independent $Study \cancel \perp JobPromotion$
+
+- If you hold the intermediary variable fixed (i.e., conditioning on $M$, looking
+  for only people with the same skills at problem solving), the dependency is
+  blocked
+  - $T$ and $Y$ are independent given $M$, i.e., $(T \perp Y) | M$
+  - $\EE[Y | T, M] = \EE[Y | M]$ and also the inverse $\EE[T | Y, M] = \EE[T | M]$
+
+* Forks
+// TODO(gp): Add graphs
+- In a fork $T \leftarrow X \rightarrow Y$:
+  - $X$ is a "confounder" (common cause of $T$ and $Y$)
+  - Association flows backward through the arrows
+  - $T$ and $Y$ are dependent even though neither causes the other: $T \not\perp Y$
+
+- E.g., $CausalKnowledge \leftarrow Statistics \rightarrow MachineLearning$
+  - Assume that causal inference doesn't help with machine learning, and vice
+    versa, so there is no edge between the 2
+  - Knowing causal inference signals statistics knowledge, which predicts ML skill
+
+- E.g., $AnswerQuestion \leftarrow GoodProgrammer \rightarrow GoodEmployee$
+  - For this reason in tech interviews you are asked to solve problems that might
+    you never find in the job you apply for (e.g., "invert a binary tree")
+
+- Conditioning on the common cause blocks the association:
+  $$T \cancel \perp Y, (T \perp Y) | X$$
+  - E.g., if you know that you are a good programmer (e.g., you have an
+    impressive resume), asking you a tech question won't give new information
+    about if you are a good employee or not
+
+* Collider
+- In a collider $T \rightarrow X \leftarrow Y$:
+  - $X$ is a "collider" (two arrows collide at it)
+  - $T$ and $Y$ are independent: $T \perp Y$
+  - Conditioning on $X$ opens the path, making $T$ and $Y$ dependent:
+    $T \cancel \perp Y | X$
+
+- E.g., $Statistics \rightarrow Promotion \leftarrow FlatteringBoss$
+  - There are two ways to get a job promotion
+    - You can be good at statistics
+    - You can flatter your boss
+  - If I don't know if you get or not the promotion (i.e., I don't condition on
+    $Promotion$) your level of statistics and flattering are independent
+  - If I know you got promoted, and I know you are bad at statistics, then you
+    must be good at flattering your boss
+    - "Explaining away" since one cause explains the effect, making the other
+      cause less likely
+
+- Conditioning on any _descendant_ of the collider opens the path, making the
+  variables dependent
+  - E.g.,
+    $Statistics \rightarrow Promotion \rightarrow Salary \leftarrow FlatteringBoss$:
+    conditioning on $Salary$ opens the
+    $Statistics \perp FlatteringBoss$ path
+
+* D-separation
+- A path is **blocked** given a conditioning set $Z$ if and only if either
+  condition holds:
+  1. It contains a non-collider that has been conditioned on
+  2. It contains a collider that has not been conditioned on and has no descendants
+     that have been conditioned on
+
+- Otherwise the path is **open** (nodes can be dependent)
+
+- Two nodes $A$ and $B$ are d-separated (independent) if and only if all the
+  paths between them are blocked
