@@ -1,4 +1,6 @@
-# They Might Be in the Wall
+---
+title: They Might Be in the Wall
+---
 
 Right before falling asleep, I heard a sound in the wall. Not the ordinary creak
 of an old house settling, but something deliberate. Something alive. Scratching,

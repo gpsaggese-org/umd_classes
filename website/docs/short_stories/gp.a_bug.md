@@ -1,4 +1,6 @@
-# A Bug
+---
+title: A Bug
+---
 
 The heat trapped in the black tar for the entire day was finally being released,
 and I was coming back from work yet again after midnight. It was a hot night in

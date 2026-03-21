@@ -1,4 +1,6 @@
-# The Mind Clinic
+---
+title: The Mind Clinic
+---
 
 Giorgio Ponti was an AI engineer checking out in a wellness center for a mild
 case of work-related burn out.

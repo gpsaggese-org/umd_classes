@@ -1,4 +1,6 @@
-# All You Need Is Luck
+---
+title: All You Need Is Luck
+---
 
 The laboratory was built below the river because Giovanni Perri believed water
 muffled coincidence. He liked that thought: above them the city gambled with

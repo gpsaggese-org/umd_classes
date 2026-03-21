@@ -1,8 +1,8 @@
-# Short Stories
+---
+title: Short Stories
+---
 
 Short fiction about technology, identity, and memory.
-
-## Stories
 
 - [The Mind Clinic](gp.the_mind_clinic.md): An AI engineer checks into a
   wellness clinic for mild burnout and finds himself descending, level by level,

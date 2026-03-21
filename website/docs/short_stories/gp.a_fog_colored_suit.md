@@ -1,4 +1,6 @@
-# The Fog-Colored Suit
+---
+title: The Fog-Colored Suit
+---
 
 In Naples, in 1960, when the city ached with uncertain traffic and the bay
 glittered with the particular brightness that makes Naples seem immune to
