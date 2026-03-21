@@ -1,7 +1,7 @@
 """
 Import as:
 
-import docker_causify_style.github_utils as tgcsgiut
+import tutorials.GitHub_Stats.github_utils as tgstgiut
 """
 
 import datetime

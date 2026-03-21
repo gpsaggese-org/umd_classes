@@ -51,13 +51,13 @@ import scipy.stats
 
 import helpers.hdbg as hdbg
 import helpers.hpandas as hpandas
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 
 import tutorials.tutorial_prophet.prophet_utils as tprpru
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## Config
@@ -240,8 +240,11 @@ _LOG.info(hpandas.df_to_str(forecast.head(), log_level=logging.INFO))
 # Split forecast into train and test windows for separate analysis.
 ins_forecast = forecast[forecast["ds"] <= config["train_end_date"]]
 oos_forecast = forecast[forecast["ds"] >= config["test_start_date"]]
-_LOG.info("In-sample rows: %d, Out-of-sample rows: %d",
-          len(ins_forecast), len(oos_forecast))
+_LOG.info(
+    "In-sample rows: %d, Out-of-sample rows: %d",
+    len(ins_forecast),
+    len(oos_forecast),
+)
 
 # %%
 # --- In-sample residual diagnostics ---
@@ -261,15 +264,20 @@ plt.tight_layout()
 # %%
 # Plot observed vs predicted for the training period.
 plt.figure(figsize=(12, 4))
-plt.plot(ins_forecast["ds"], ins_forecast["y"],
-         label="Observed", color="blue")
-plt.plot(ins_forecast["ds"], ins_forecast["yhat"],
-         label="Point Estimate", ls="--", color="#0072B2")
+plt.plot(ins_forecast["ds"], ins_forecast["y"], label="Observed", color="blue")
+plt.plot(
+    ins_forecast["ds"],
+    ins_forecast["yhat"],
+    label="Point Estimate",
+    ls="--",
+    color="#0072B2",
+)
 plt.fill_between(
     ins_forecast["ds"],
     ins_forecast["yhat_lower"],
     ins_forecast["yhat_upper"],
-    color="blue", alpha=0.2,
+    color="blue",
+    alpha=0.2,
     label="95% Credible Interval",
 )
 plt.title("In-sample: Observed vs Predicted (train set)")
@@ -338,7 +346,9 @@ fig_plotly.show()
 metrics = forecaster.evaluate(oos_forecast)
 _LOG.info(
     "Test set metrics — MAE=%.4f, RMSE=%.4f, MAPE=%.4f%%",
-    metrics["mae"], metrics["rmse"], metrics["mape"],
+    metrics["mae"],
+    metrics["rmse"],
+    metrics["mape"],
 )
 
 # %%

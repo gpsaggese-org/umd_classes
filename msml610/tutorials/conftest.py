@@ -4,9 +4,8 @@ Configuration for pytest in msml610/tutorials directory.
 
 import logging
 import os
-import pathlib
 import sys
-from typing import Any, Generator, Optional
+from typing import Any
 
 # Add helpers_root to Python path for imports.
 test_dir = os.path.dirname(__file__)
@@ -26,12 +25,14 @@ import helpers.hunit_test as hut
 # Define fixture at module level to ensure it's always registered.
 import pytest
 
+
 @pytest.fixture(autouse=True)
 def populate_globals(capsys: Any) -> None:
     """
     Populate global capsys for pytest output capture.
     """
     hut._GLOBAL_CAPSYS = capsys
+
 
 # Hack to workaround pytest not happy with multiple redundant conftest.py
 # (bug #34).
