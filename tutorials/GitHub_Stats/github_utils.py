@@ -145,7 +145,9 @@ def normalize_period_to_utc(
         return res
 
     norm = (
-        tuple(to_utc(dt) for dt in period) if period is not None else (None, None)
+        tuple(to_utc(dt) for dt in period)
+        if period is not None
+        else (None, None)
     )
     return norm
 
@@ -539,7 +541,9 @@ def get_commit_datetimes_by_repo_period_intrinsic(
         committer_login = c.committer.login if c.committer else None
         if username in (author_login, committer_login):
             dt = c.commit.author.date
-            dt_utc = dt if dt.tzinfo else dt.replace(tzinfo=datetime.timezone.utc)
+            dt_utc = (
+                dt if dt.tzinfo else dt.replace(tzinfo=datetime.timezone.utc)
+            )
             timestamps.append(dt_utc.isoformat())
     if not timestamps:
         _LOG.info(
@@ -588,7 +592,9 @@ def get_pr_datetimes_by_repo_period_intrinsic(
         results = client.search_issues(query)
         for issue in results:
             dt = issue.created_at
-            dt_utc = dt if dt.tzinfo else dt.replace(tzinfo=datetime.timezone.utc)
+            dt_utc = (
+                dt if dt.tzinfo else dt.replace(tzinfo=datetime.timezone.utc)
+            )
             timestamps.append(dt_utc.isoformat())
     except github.GithubException as e:
         _LOG.info(
@@ -993,7 +999,9 @@ def prefetch_periodic_user_repo_data(
     since, until = period
     user_repo_pairs = list(itertools.product(repos, users))
     # Prefetch and cache GitHub data for each user-repo pair
-    for repo, user in td.tqdm(user_repo_pairs, desc="Prefetching user-repo data"):
+    for repo, user in td.tqdm(
+        user_repo_pairs, desc="Prefetching user-repo data"
+    ):
         commits = get_commit_datetimes_by_repo_period_intrinsic(
             client, org, repo, user, since, until
         )
@@ -1049,7 +1057,9 @@ def collect_all_metrics(
         for user in users:
             # Ensure user is a string.
             if not isinstance(user, str):
-                raise ValueError(f"Expected user to be a string but got {user!r}")
+                raise ValueError(
+                    f"Expected user to be a string but got {user!r}"
+                )
             # Build each metric DataFrame.
             df_c = build_daily_commit_df(client, org, repo, user, period)
             df_p = build_daily_pr_df(client, org, repo, user, period)
@@ -1548,7 +1558,8 @@ def visualize_user_metric_comparison(
     fig, ax = plt.subplots(figsize=(max(8, 0.5 * len(top_users)), 4))
     ax.bar(top_users["user"], top_users["__score_avg__"], color="skyblue")
     ax.set_ylabel(
-        "Average Score" + (" (Z-score)" if score_type == "z" else " (Percentile)")
+        "Average Score"
+        + (" (Z-score)" if score_type == "z" else " (Percentile)")
     )
     ax.set_title(f"Top {top_n_display} Users by Average {score_type.title()}")
     ax.axhline(0 if score_type == "z" else 0.5, color="gray", linestyle="--")

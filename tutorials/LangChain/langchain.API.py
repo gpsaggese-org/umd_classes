@@ -47,7 +47,6 @@
 
 # %%
 import logging
-import os
 import random
 import time
 
@@ -74,7 +73,7 @@ _LOG = logging.getLogger(__name__)
 
 # %%
 # Add OpenAPI to environment variable.
-#os.environ["OPENAI_API_KEY"] = ""
+# os.environ["OPENAI_API_KEY"] = ""
 # Initiate OpenAI model.
 chat_model = lngchopai.ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
@@ -216,15 +215,15 @@ REVIEWS_CSV_PATH = "data/reviews.csv"
 df = pd.read_csv(REVIEWS_CSV_PATH)
 df.head(3)
 
+# Load reviews dataset.
+loader = csvloader.CSVLoader(file_path=REVIEWS_CSV_PATH, source_column="review")
+reviews = loader.load()
+
 # %%
 len(reviews)
 
 # %%
 REVIEWS_CHROMA_PATH = "chroma_data"
-
-# Load reviews dataset.
-loader = csvloader.CSVLoader(file_path=REVIEWS_CSV_PATH, source_column="review")
-reviews = loader.load()
 
 # Create a vector store.
 reviews_vector_db = vectorstores.Chroma.from_documents(
@@ -260,7 +259,7 @@ review_chain = (
 
 # Test the QA chain.
 question = "Has anyone complained about communication with the hospital staff?"
-#question = "Has anyone complained the price of eggs?"
+# question = "Has anyone complained the price of eggs?"
 review_chain.invoke(question)
 
 

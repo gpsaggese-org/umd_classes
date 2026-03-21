@@ -3,7 +3,7 @@ Utility functions for CrewAI-based workflows.
 
 Import as:
 
-import tutorials.crewai.crewai_utils as tcrwuti
+import tutorials.crewai.crewai_utils as tcrcruti
 """
 
 import io
@@ -120,9 +120,7 @@ def groupby_agg(path: str, by: str, metric: str) -> str:
     df = pd.read_csv(path)
     hdbg.dassert_in(by, df.columns, "Group-by column not in CSV")
     hdbg.dassert_in(metric, df.columns, "Metric column not in CSV")
-    grouped = (
-        df.groupby(by, dropna=False)[metric].mean().reset_index()
-    )
+    grouped = df.groupby(by, dropna=False)[metric].mean().reset_index()
     grouped.rename(columns={metric: f"mean_{metric}"}, inplace=True)
     buf = io.StringIO()
     grouped.to_string(buf, index=False)

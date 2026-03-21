@@ -3,6 +3,10 @@ MAC (Multi-Agent Communication) Utilities for PettingZoo MPE
 simple_reference with TorchRL.
 
 Actor and Critic Neural Net Model Setup.
+
+Import as:
+
+import tutorials.TorchRL_MAC.TorchRL_MAC_utils as ttmtmaut
 """
 
 import logging
@@ -19,8 +23,9 @@ from torch.distributions import Categorical, Normal
 
 _LOG = logging.getLogger(__name__)
 
+
 # #############################################################################
-# Configuration Setup
+# MacConfig
 # #############################################################################
 
 
@@ -184,6 +189,11 @@ def _orthogonal_init(layer, gain=1.0):
         nn.init.constant_(layer.bias, 0)
 
 
+# #############################################################################
+# MLPNetwork
+# #############################################################################
+
+
 class MLPNetwork(nn.Module):
     """
     Enhanced Multi-layer perceptron network.
@@ -227,6 +237,11 @@ class MLPNetwork(nn.Module):
         return self.network(x)
 
 
+# #############################################################################
+# DiscreteActor
+# #############################################################################
+
+
 class DiscreteActor(nn.Module):
     """
     Actor network for discrete action spaces (Categorical policy).
@@ -263,6 +278,11 @@ class DiscreteActor(nn.Module):
         Return null (zero) action for the given batch size.
         """
         return torch.zeros(batch_size, dtype=torch.long, device=device)
+
+
+# #############################################################################
+# ContinuousActor
+# #############################################################################
 
 
 class ContinuousActor(nn.Module):
@@ -333,6 +353,11 @@ class ContinuousActor(nn.Module):
         Return null (zero) action for the given batch size.
         """
         return torch.zeros(batch_size, self.action_dim, device=device)
+
+
+# #############################################################################
+# CentralizedCritic
+# #############################################################################
 
 
 class CentralizedCritic(nn.Module):
@@ -480,9 +505,7 @@ def collect_rollout(
         reset_result = pz_env.reset(seed=cfg.seed + env_idx)
         # Handle TorchRL TensorDict or plain dict.
         if isinstance(reset_result, tuple):
-            obs_dict = (
-                reset_result[0] if len(reset_result) > 0 else reset_result
-            )
+            obs_dict = reset_result[0] if len(reset_result) > 0 else reset_result
         else:
             obs_dict = reset_result
         # Collect rollout_len steps.
@@ -492,9 +515,7 @@ def collect_rollout(
             for agent in agent_names:
                 # Handle TensorDict from TorchRL.
                 if hasattr(obs_dict, "get"):
-                    obs = obs_dict.get(
-                        agent, obs_dict.get(("agents", agent))
-                    )
+                    obs = obs_dict.get(agent, obs_dict.get(("agents", agent)))
                 else:
                     obs = (
                         obs_dict[agent]
@@ -697,9 +718,7 @@ def compute_loss(
             - old_values[t].item()
         )
         # Using hardcoded lambda=0.95.
-        lastgaelam = (
-            delta + cfg.gamma * 0.95 * next_non_terminal * lastgaelam
-        )
+        lastgaelam = delta + cfg.gamma * 0.95 * next_non_terminal * lastgaelam
         advantages[t] = lastgaelam
     # Ensure old_values is 1D for proper addition.
     old_values_flat = (
@@ -742,9 +761,7 @@ def compute_loss(
                 # Get agent specific mini-batch data.
                 mb_obs = batch["obs"][agent].to(device)[mb_inds]
                 mb_actions = batch["actions"][agent].to(device)[mb_inds]
-                mb_old_logp = (
-                    batch["logp"][agent].to(device)[mb_inds].detach()
-                )
+                mb_old_logp = batch["logp"][agent].to(device)[mb_inds].detach()
                 actor = actors[agent]
                 # Evaluate current policy.
                 new_logp, dist_entropy = actor.evaluate_actions(
@@ -784,8 +801,7 @@ def compute_loss(
         ratio = torch.exp(new_logp - old_logp)
         surr1 = ratio * advantages
         surr2 = (
-            torch.clamp(ratio, 1.0 - clip_param, 1.0 + clip_param)
-            * advantages
+            torch.clamp(ratio, 1.0 - clip_param, 1.0 + clip_param) * advantages
         )
         final_actor_loss += -torch.min(surr1, surr2).mean()
         final_entropy += entropy.mean()
@@ -920,9 +936,7 @@ def load_checkpoint(path: str, device: Optional[str] = None) -> dict:
 # #############################################################################
 
 
-def evaluate(
-    cfg: MacConfig, ckpt_path: str, *, mode: str = "normal"
-) -> dict:
+def evaluate(cfg: MacConfig, ckpt_path: str, *, mode: str = "normal") -> dict:
     """
     Evaluate trained policy.
 
@@ -959,9 +973,7 @@ def evaluate(
     for ep in range(cfg.eval_episodes):
         reset_result = pz_env.reset(seed=cfg.seed + ep)
         if isinstance(reset_result, tuple):
-            obs_dict = (
-                reset_result[0] if len(reset_result) > 0 else reset_result
-            )
+            obs_dict = reset_result[0] if len(reset_result) > 0 else reset_result
         else:
             obs_dict = reset_result
         done = False
@@ -974,9 +986,7 @@ def evaluate(
             for agent in agent_names:
                 # Handle TensorDict from TorchRL.
                 if hasattr(obs_dict, "get"):
-                    obs = obs_dict.get(
-                        agent, obs_dict.get(("agents", agent))
-                    )
+                    obs = obs_dict.get(agent, obs_dict.get(("agents", agent)))
                 else:
                     obs = (
                         obs_dict[agent]
@@ -1006,9 +1016,11 @@ def evaluate(
                         # ContinuousActor.
                         if mode == "no_comm" and agent == speaker_name:
                             # Force null action (zeros).
-                            action = actor.get_null_action(
-                                1, cfg.device
-                            ).cpu().numpy()[0]
+                            action = (
+                                actor.get_null_action(1, cfg.device)
+                                .cpu()
+                                .numpy()[0]
+                            )
                         else:
                             action, _, _ = actor.get_action(
                                 obs_tensor, deterministic=True
@@ -1017,9 +1029,7 @@ def evaluate(
                         actions_dict[agent] = action
                         # Track comm cost for continuous (L2 norm).
                         if agent == speaker_name:
-                            episode_comm_cost += float(
-                                np.linalg.norm(action)
-                            )
+                            episode_comm_cost += float(np.linalg.norm(action))
             # Environment step.
             step_result = pz_env.step(actions_dict)
             # Handle TorchRL TensorDict.
@@ -1106,9 +1116,7 @@ def evaluate(
     # Compute metrics.
     success_rate = np.mean(successes)
     comm_cost = np.mean(comm_costs)
-    avg_reward = (
-        np.mean([episode_reward]) if "episode_reward" in locals() else 0
-    )
+    avg_reward = np.mean([episode_reward]) if "episode_reward" in locals() else 0
     positive_score = -avg_reward
     metrics = {
         "success_rate": success_rate,
@@ -1224,9 +1232,7 @@ if __name__ == "__main__":
     ckpt_path, stats = train(cfg)
     _LOG.info("6. Loading checkpoint...")
     ckpt = load_checkpoint(ckpt_path)
-    _LOG.info(
-        "   Loaded checkpoint from iteration %d", ckpt["iteration"]
-    )
+    _LOG.info("   Loaded checkpoint from iteration %d", ckpt["iteration"])
     _LOG.info("7. Evaluating...")
     cfg.eval_episodes = 5
     metrics = evaluate_with_comparison(cfg, ckpt_path)

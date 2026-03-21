@@ -3,7 +3,7 @@ Utility functions for tsfresh-based time series feature extraction workflows.
 
 Import as:
 
-import tsfresh_utils as ttsfuti
+import tutorials.tsfresh.tsfresh_utils as ttstsuti
 """
 
 import logging
@@ -98,9 +98,7 @@ def load_inertial_split(split, root):
         fn = base / f"{ch}_{split}.txt"
         arrays[ch] = np.loadtxt(fn)
     y = np.loadtxt(root / split / f"y_{split}.txt").astype(int)
-    subjects = np.loadtxt(
-        root / split / f"subject_{split}.txt"
-    ).astype(int)
+    subjects = np.loadtxt(root / split / f"subject_{split}.txt").astype(int)
     return arrays, y, subjects
 
 
@@ -167,9 +165,7 @@ def extract_tsfresh_features(df_long, fc_parameters=None, n_jobs=0):
         disable_progressbar=False,
     )
     # Replace NaN/inf with 0.
-    X_features = X_features.fillna(0).replace(
-        [float("inf"), float("-inf")], 0
-    )
+    X_features = X_features.fillna(0).replace([float("inf"), float("-inf")], 0)
     return X_features
 
 

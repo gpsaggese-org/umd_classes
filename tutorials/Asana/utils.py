@@ -1,14 +1,24 @@
+"""
+Import as:
+
+import tutorials.Asana.utils as tasautil
+"""
+
 import logging
 from typing import Any, List, Callable
 
 import asana
 import pandas as pd
-from datetime import datetime
 import time
-import helpers.hdbg as hdbg
 
 
 _LOG = logging.getLogger(__name__)
+
+
+# #############################################################################
+# AsanaClient
+# #############################################################################
+
 
 class AsanaClient:
     def __init__(self, access_token: str) -> None:
@@ -25,11 +35,11 @@ class AsanaClient:
 
 
 def fetch_with_retries(
-    func: Callable[..., Any],  
-    *args: Any, 
-    retries: int = 3,  
-    delay: int = 2,  
-    **kwargs: Any  
+    func: Callable[..., Any],
+    *args: Any,
+    retries: int = 3,
+    delay: int = 2,
+    **kwargs: Any,
 ) -> Any:
     """
     Helper function to retry API calls in case of transient errors.
@@ -41,14 +51,18 @@ def fetch_with_retries(
     :param kwargs: keyword arguments for the function
     :return: result of the function call
     """
-    # 
+    #
     for attempt in range(retries):
         try:
             return func(*args, **kwargs)
         except asana.rest.ApiException as e:
             if e.status == 429:  # Rate limit exceeded
-                retry_after = int(e.body.get("retry_after", delay)) if e.body else delay
-                print(f"Rate limit exceeded. Retrying in {retry_after} seconds...")
+                retry_after = (
+                    int(e.body.get("retry_after", delay)) if e.body else delay
+                )
+                print(
+                    f"Rate limit exceeded. Retrying in {retry_after} seconds..."
+                )
                 time.sleep(retry_after)
             elif e.status >= 500:  # Server error
                 print(f"Server error encountered: {e.reason}. Retrying...")
@@ -62,10 +76,7 @@ def fetch_with_retries(
 
 
 def fetch_tasks(
-    client: AsanaClient, 
-    project_ids: List[str], 
-    start_date: str, 
-    end_date: str
+    client: AsanaClient, project_ids: List[str], start_date: str, end_date: str
 ) -> pd.DataFrame:
     """
     Fetch tasks from multiple projects and filter by date range.
@@ -76,7 +87,7 @@ def fetch_tasks(
     :param end_date: end date in the format "YYYY-MM-DD"
     :return: consolidated DataFrame
     """
-    
+
     all_tasks = []
     start_dt = pd.to_datetime(start_date)
     end_dt = pd.to_datetime(end_date)
@@ -86,34 +97,53 @@ def fetch_tasks(
             # Fetch tasks for each project.
             tasks = fetch_with_retries(
                 client.tasks_api.get_tasks_for_project,
-                {"project": project_id, "opt_fields": "name,assignee.name,completed_at,created_at"}
+                {
+                    "project": project_id,
+                    "opt_fields": "name,assignee.name,completed_at,created_at",
+                },
             )
             df = pd.DataFrame(tasks["data"])
             if not df.empty:
                 # Rename and parse fields.
                 df.rename(columns={"gid": "task_id"}, inplace=True)
-                df["created_at"] = pd.to_datetime(df["created_at"], errors="coerce")
-                df["completed_at"] = pd.to_datetime(df["completed_at"], errors="coerce")
-                df["assignee"] = df["assignee"].apply(lambda x: x["name"] if isinstance(x, dict) else None)
+                df["created_at"] = pd.to_datetime(
+                    df["created_at"], errors="coerce"
+                )
+                df["completed_at"] = pd.to_datetime(
+                    df["completed_at"], errors="coerce"
+                )
+                df["assignee"] = df["assignee"].apply(
+                    lambda x: x["name"] if isinstance(x, dict) else None
+                )
                 # Add project ID for context.
-                df["project_id"] = project_id  
+                df["project_id"] = project_id
                 # Filter by date range.
                 df = df[
-                    (df["created_at"] >= start_dt) &
-                    (df["created_at"] < end_dt)
+                    (df["created_at"] >= start_dt) & (df["created_at"] < end_dt)
                 ]
                 # Append to the consolidated DataFrame.
                 all_tasks.append(df)
         # Handle if API call fails.
         except asana.rest.ApiException as e:
-            _LOG.debug(f"Failed to fetch tasks for project {project_id}: {e.reason} (Status: {e.status})")
+            _LOG.debug(
+                f"Failed to fetch tasks for project {project_id}: {e.reason} (Status: {e.status})"
+            )
             _LOG.debug(f"Details: {e.body}")
     # Concatenate all tasks into a single DataFrame.
     if all_tasks is not None:
         df = pd.concat(all_tasks, ignore_index=True)
     else:
         # Return an empty DataFrame if no tasks are found.
-        df = pd.DataFrame(columns=["task_id", "name", "assignee", "created_at", "completed_at", "project_id"])
+        df = pd.DataFrame(
+            columns=[
+                "task_id",
+                "name",
+                "assignee",
+                "created_at",
+                "completed_at",
+                "project_id",
+            ]
+        )
     return df
 
 
@@ -131,25 +161,30 @@ def fetch_comments(client: AsanaClient, task_id: str) -> pd.DataFrame:
         stories = fetch_with_retries(
             client.comments_api.get_stories_for_task,
             task_id,
-            {"opt_fields": "text,created_at,created_by.name,resource_subtype"}
+            {"opt_fields": "text,created_at,created_by.name,resource_subtype"},
         )
         comments = [
             {
                 "task_id": task_id,
                 "text": s.get("text", ""),
                 "author": s.get("created_by", {}).get("name", None),
-                "created_at": s.get("created_at")
+                "created_at": s.get("created_at"),
             }
-            for s in stories if s.get("resource_subtype") == "comment_added"
+            for s in stories
+            if s.get("resource_subtype") == "comment_added"
         ]
-        df =  pd.DataFrame(comments)
+        df = pd.DataFrame(comments)
     # Handle if API call fails.
     except asana.rest.ApiException as e:
-        _LOG.debug(f"Failed to fetch comments for task {task_id}: {e.reason} (Status: {e.status})", only_warning=True)
+        _LOG.debug(
+            f"Failed to fetch comments for task {task_id}: {e.reason} (Status: {e.status})",
+            only_warning=True,
+        )
         _LOG.debug(f"Details: {e.body}", only_warning=True)
         df = pd.DataFrame(columns=["task_id", "text", "author", "created_at"])
     # Return the DataFrame.
     return df
+
 
 def get_user_activity_stats(tasks_df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -159,13 +194,19 @@ def get_user_activity_stats(tasks_df: pd.DataFrame) -> pd.DataFrame:
     :return: df with user activity statistics
     """
     # Group by assignee and count tasks opened and closed.
-    return tasks_df.groupby("assignee").agg(
-        tasks_opened=("task_id", "count"),
-        tasks_closed=("completed_at", lambda x: x.notnull().sum())
-    ).reset_index()
+    return (
+        tasks_df.groupby("assignee")
+        .agg(
+            tasks_opened=("task_id", "count"),
+            tasks_closed=("completed_at", lambda x: x.notnull().sum()),
+        )
+        .reset_index()
+    )
 
 
-def get_comments_stats(client: AsanaClient, tasks_df: pd.DataFrame) -> pd.DataFrame:
+def get_comments_stats(
+    client: AsanaClient, tasks_df: pd.DataFrame
+) -> pd.DataFrame:
     """
     Compute comment statistics for tasks.
 
@@ -175,8 +216,8 @@ def get_comments_stats(client: AsanaClient, tasks_df: pd.DataFrame) -> pd.DataFr
     """
     all_comments = pd.concat(
         [fetch_comments(client, task_id) for task_id in tasks_df["task_id"]],
-        ignore_index=True
+        ignore_index=True,
     )
-    return all_comments.groupby("author").size().reset_index(name="comments_count")
-
-
+    return (
+        all_comments.groupby("author").size().reset_index(name="comments_count")
+    )

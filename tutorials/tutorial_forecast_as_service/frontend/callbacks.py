@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.frontend.callbacks as tfasfrca
+import tutorials.tutorial_forecast_as_service.frontend.callbacks as ttfasfrca
 """
 
 from typing import Any, Tuple
@@ -45,7 +45,9 @@ def handle_forecast(n_clicks: int) -> Tuple[Any, Any, Any]:
     result = tfasfdaut.get_forecast_from_api()
     if not result["success"]:
         return (
-            tfasfuico.create_error_message(f"Forecast failed: {result['error']}"),
+            tfasfuico.create_error_message(
+                f"Forecast failed: {result['error']}"
+            ),
             {},
             dash.html.Div(),
         )

@@ -68,8 +68,8 @@ pd.set_option("display.max_columns", None)
 # | `GenHlth` | Covariate (X) | Self-reported health (1=Excellent, 5=Poor) |
 # | `BMI` | Covariate (X / M) | Body mass index (used as confounder in estimation) |
 #
-# > **Download the data first:**  
-# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators  
+# > **Download the data first:**
+# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
 # > Place the CSV in `data/unprocessed/` before running the next cell.
 
 # %%
@@ -279,10 +279,10 @@ navigator.plot_heterogeneity(df_results, col="GenHlth")
 navigator.run_placebo_test(X, T, Y, n_simulations=5)
 
 # %% [markdown]
-# The actual estimate (-0.002) falls outside the placebo distribution, 
-# indicating the result is not attributable to random chance. However, 
-# the placebo distribution's slight positive bias (~+0.001) suggests 
-# residual confounding or model instability, consistent with our 
+# The actual estimate (-0.002) falls outside the placebo distribution,
+# indicating the result is not attributable to random chance. However,
+# the placebo distribution's slight positive bias (~+0.001) suggests
+# residual confounding or model instability, consistent with our
 # cross-sectional design limitations.
 
 # %% [markdown]
@@ -343,41 +343,41 @@ navigator.run_sensitivity_analysis(X, T, Y)
 navigator.compare_estimators(X, T, Y)
 
 # %% [markdown]
-# The comparative evaluation of meta-learners reveals three distinct 
+# The comparative evaluation of meta-learners reveals three distinct
 # performance tiers based on Qini coefficients and uplift curves.
 #
 # **Top-performing estimators (Qini: -0.468 to -0.481):**
-# The T-Learner, X-Learner, and R-Learner exhibit statistically similar 
-# performance, with Qini scores varying by less than 3%. The T-Learner 
-# achieves the highest score (-0.481), followed closely by X-Learner 
-# (-0.469) and R-Learner (-0.468). These methods share a common 
-# theoretical foundation: separate modeling of treatment and control 
-# response surfaces, which enables flexible estimation of heterogeneous 
+# The T-Learner, X-Learner, and R-Learner exhibit statistically similar
+# performance, with Qini scores varying by less than 3%. The T-Learner
+# achieves the highest score (-0.481), followed closely by X-Learner
+# (-0.469) and R-Learner (-0.468). These methods share a common
+# theoretical foundation: separate modeling of treatment and control
+# response surfaces, which enables flexible estimation of heterogeneous
 # treatment effects.
 #
 # **Moderate performance (Qini: -0.449):**
-# The DR-Learner demonstrates approximately 7% lower performance relative 
-# to top-tier methods. While doubly robust estimators offer theoretical 
-# protection against misspecification of either the propensity or outcome 
-# model, this advantage requires at least one model to be correctly 
-# specified. In observational settings with violated identification 
-# assumptions, the dual-model dependency may amplify rather than mitigate 
+# The DR-Learner demonstrates approximately 7% lower performance relative
+# to top-tier methods. While doubly robust estimators offer theoretical
+# protection against misspecification of either the propensity or outcome
+# model, this advantage requires at least one model to be correctly
+# specified. In observational settings with violated identification
+# assumptions, the dual-model dependency may amplify rather than mitigate
 # estimation error.
 #
 # **Poor performance (Qini: -0.362):**
-# The S-Learner substantially underperforms, achieving 25% lower scores 
-# than top methods. This result is consistent with known limitations of 
-# single-model approaches: when treatment effects are small relative to 
-# main effects of confounders, regularization techniques prioritize 
-# fitting dominant predictors at the expense of subtle treatment 
+# The S-Learner substantially underperforms, achieving 25% lower scores
+# than top methods. This result is consistent with known limitations of
+# single-model approaches: when treatment effects are small relative to
+# main effects of confounders, regularization techniques prioritize
+# fitting dominant predictors at the expense of subtle treatment
 # heterogeneity.
 #
 # **Model selection justification:**
-# The X-Learner is retained as the primary estimator for this analysis. 
-# While the T-Learner achieves marginally superior performance (ΔQini = 
-# 0.012), the X-Learner's explicit propensity score weighting provides 
-# more stable estimates under treatment imbalance, a key characteristic 
-# of our data (74% treatment prevalence). The negligible performance 
+# The X-Learner is retained as the primary estimator for this analysis.
+# While the T-Learner achieves marginally superior performance (ΔQini =
+# 0.012), the X-Learner's explicit propensity score weighting provides
+# more stable estimates under treatment imbalance, a key characteristic
+# of our data (74% treatment prevalence). The negligible performance
 # difference validates this methodological choice.
 
 # %% [markdown]

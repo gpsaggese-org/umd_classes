@@ -7,7 +7,7 @@ statistics.
 
 Import as:
 
-import tutorials.tutorial_asana.asana_utils as ttuaasuti
+import tutorials.Asana.asana_utils as tasasuti
 """
 
 import logging
@@ -23,7 +23,7 @@ _LOG = logging.getLogger(__name__)
 
 
 # #############################################################################
-# Client
+# AsanaClient
 # #############################################################################
 
 

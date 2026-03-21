@@ -19,7 +19,7 @@
 
 import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from itertools import chain
 
 import pandas as pd
@@ -137,7 +137,9 @@ access_token = os.getenv("GITHUB_ACCESS_TOKEN")
 
 # Ensure the token is set correctly.
 if not access_token:
-    raise ValueError("GitHub Access Token is not set. Please configure it before proceeding.")
+    raise ValueError(
+        "GitHub Access Token is not set. Please configure it before proceeding."
+    )
 
 # %% [markdown]
 # Now, you're ready to interact with the GitHub API!
@@ -190,17 +192,23 @@ developer_username = "heanhsok"
 
 # Compute contribution statistics.
 commits_by_user = github_utils.get_commits_by_person(
-    client, developer_username, config["org_name"],
-    period=(config["start_date"], config["end_date"])
+    client,
+    developer_username,
+    config["org_name"],
+    period=(config["start_date"], config["end_date"]),
 )
 prs_by_user = github_utils.get_prs_by_person(
-    client, developer_username, config["org_name"],
+    client,
+    developer_username,
+    config["org_name"],
     period=(config["start_date"], config["end_date"]),
-    state="all"
+    state="all",
 )
 unmerged_prs_by_user = github_utils.get_prs_not_merged_by_person(
-    client, developer_username, config["org_name"],
-    period=(config["start_date"], config["end_date"])
+    client,
+    developer_username,
+    config["org_name"],
+    period=(config["start_date"], config["end_date"]),
 )
 
 # Display raw output (optional).
@@ -212,26 +220,40 @@ commits_by_user, prs_by_user, unmerged_prs_by_user
 # %% vscode={"languageId": "plaintext"}
 # Convert dictionaries to dataframes for visualization.
 df_commits = (
-    pd.DataFrame.from_dict(commits_by_user["commits_per_repository"], orient="index", columns=["Commits"])
-    .reset_index().rename(columns={"index": "Repository"})
+    pd.DataFrame.from_dict(
+        commits_by_user["commits_per_repository"],
+        orient="index",
+        columns=["Commits"],
+    )
+    .reset_index()
+    .rename(columns={"index": "Repository"})
 )
 df_prs = (
-    pd.DataFrame.from_dict(prs_by_user["prs_per_repository"], orient="index", columns=["PRs"])
-    .reset_index().rename(columns={"index": "Repository"})
+    pd.DataFrame.from_dict(
+        prs_by_user["prs_per_repository"], orient="index", columns=["PRs"]
+    )
+    .reset_index()
+    .rename(columns={"index": "Repository"})
 )
 
 # Plotly Bar Charts.
 fig_commits = px.bar(
-    df_commits, x="Repository", y="Commits",
+    df_commits,
+    x="Repository",
+    y="Commits",
     title=f"Commits by {developer_username}",
-    labels={"Commits": "Number of Commits"}, text="Commits"
+    labels={"Commits": "Number of Commits"},
+    text="Commits",
 )
 fig_commits.show()
 
 fig_prs = px.bar(
-    df_prs, x="Repository", y="PRs",
+    df_prs,
+    x="Repository",
+    y="PRs",
     title=f"Pull Requests by {developer_username}",
-    labels={"PRs": "Number of PRs"}, text="PRs"
+    labels={"PRs": "Number of PRs"},
+    text="PRs",
 )
 fig_prs.show()
 
@@ -269,24 +291,32 @@ comparison_results = []
 # Collect metrics for each user.
 for username in usernames:
     commits_data = github_utils.get_commits_by_person(
-        client, username, config["org_name"],
-        period=(config["start_date"], config["end_date"])
+        client,
+        username,
+        config["org_name"],
+        period=(config["start_date"], config["end_date"]),
     )
     prs_data = github_utils.get_prs_by_person(
-        client, username, config["org_name"],
+        client,
+        username,
+        config["org_name"],
         period=(config["start_date"], config["end_date"]),
-        state="all"
+        state="all",
     )
     unmerged_data = github_utils.get_prs_not_merged_by_person(
-        client, username, config["org_name"],
-        period=(config["start_date"], config["end_date"])
+        client,
+        username,
+        config["org_name"],
+        period=(config["start_date"], config["end_date"]),
     )
-    comparison_results.append({
-        "Username": username,
-        "Commits": commits_data["total_commits"],
-        "Total PRs": prs_data["total_prs"],
-        "Unmerged PRs": unmerged_data["prs_not_merged"]
-    })
+    comparison_results.append(
+        {
+            "Username": username,
+            "Commits": commits_data["total_commits"],
+            "Total PRs": prs_data["total_prs"],
+            "Unmerged PRs": unmerged_data["prs_not_merged"],
+        }
+    )
 
 # Create DataFrame.
 df_comparison = pd.DataFrame(comparison_results)
@@ -298,25 +328,34 @@ df_comparison
 # %%
 # Commits Comparison.
 fig_commits = px.bar(
-    df_comparison, x="Username", y="Commits",
+    df_comparison,
+    x="Username",
+    y="Commits",
     title="Total Commits per Developer",
-    text="Commits", color="Username"
+    text="Commits",
+    color="Username",
 )
 fig_commits.show()
 
 # PRs Comparison.
 fig_prs = px.bar(
-    df_comparison, x="Username", y="Total PRs",
+    df_comparison,
+    x="Username",
+    y="Total PRs",
     title="Total PRs per Developer",
-    text="Total PRs", color="Username"
+    text="Total PRs",
+    color="Username",
 )
 fig_prs.show()
 
 # Unmerged PRs Comparison.
 fig_unmerged_prs = px.bar(
-    df_comparison, x="Username", y="Unmerged PRs",
+    df_comparison,
+    x="Username",
+    y="Unmerged PRs",
     title="Unmerged PRs per Developer",
-    text="Unmerged PRs", color="Username"
+    text="Unmerged PRs",
+    color="Username",
 )
 fig_unmerged_prs.show()
 
@@ -344,7 +383,9 @@ fig_unmerged_prs.show()
 
 # %%
 # Get all repositories in the organization.
-repo_list = github_utils.get_repo_names(client, config["org_name"])["repositories"]
+repo_list = github_utils.get_repo_names(client, config["org_name"])[
+    "repositories"
+]
 qualified_repos = [f"{config['org_name']}/{repo}" for repo in repo_list]
 
 # Get contributors across all repos.
@@ -357,15 +398,24 @@ _LOG.info("Found %s unique contributors.", len(unique_contributors))
 # Gather metrics for each contributor.
 top_contributor_stats = []
 for user in unique_contributors:
-    commit_data = github_utils.get_commits_by_person(client, user, config["org_name"], period=(config["start_date"], config["end_date"]))
-    top_contributor_stats.append({
-        "Username": user,
-        "Commits": commit_data["total_commits"],
-    })
+    commit_data = github_utils.get_commits_by_person(
+        client,
+        user,
+        config["org_name"],
+        period=(config["start_date"], config["end_date"]),
+    )
+    top_contributor_stats.append(
+        {
+            "Username": user,
+            "Commits": commit_data["total_commits"],
+        }
+    )
 
 # Create DataFrame and sort.
 df_top_contributors = pd.DataFrame(top_contributor_stats)
-df_top_contributors_sorted = df_top_contributors.sort_values(by="Commits", ascending=False).reset_index(drop=True)
+df_top_contributors_sorted = df_top_contributors.sort_values(
+    by="Commits", ascending=False
+).reset_index(drop=True)
 df_top_contributors_sorted.head(10)
 
 # %% [markdown]
@@ -375,9 +425,11 @@ df_top_contributors_sorted.head(10)
 # Top 10 Contributors by Commits.
 fig_top_commits = px.bar(
     df_top_contributors_sorted.head(10),
-    x="Username", y="Commits",
+    x="Username",
+    y="Commits",
     title="Top 10 Contributors by Commits",
-    text="Commits", color="Username"
+    text="Commits",
+    color="Username",
 )
 fig_top_commits.show()
 

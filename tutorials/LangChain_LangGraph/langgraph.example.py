@@ -706,6 +706,12 @@ _last_text(out)
 # - parent graph that composes them
 #
 
+
+# #############################################################################
+# SubState
+# #############################################################################
+
+
 # %%
 # This cell will:
 # - Build and compile a `StateGraph` (a small LangGraph workflow).
@@ -949,4 +955,3 @@ out2 = hitl_graph.invoke(
     Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
 )
 victim.exists()
-

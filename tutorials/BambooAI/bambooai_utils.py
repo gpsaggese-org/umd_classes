@@ -6,13 +6,14 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: bambooaivenv (3.12.3)
 #     language: python
 #     name: python3
 # ---
 
+# %%
 
 import logging
 
@@ -104,7 +105,11 @@ def _load_dataframe(csv_path: Path) -> pd.DataFrame:
 
 
 def _build_bamboo_agent(
-    df: pd.DataFrame, *, planning: bool = True, vector_db: bool = False, search_tool: bool = False
+    df: pd.DataFrame,
+    *,
+    planning: bool = True,
+    vector_db: bool = False,
+    search_tool: bool = False,
 ) -> BambooAI:
     """
     Construct and configure the BambooAI agent instance.

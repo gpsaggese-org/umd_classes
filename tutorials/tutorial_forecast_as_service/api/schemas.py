@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.api.schemas as tfasapsc
+import tutorials.tutorial_forecast_as_service.api.schemas as ttfasapsc
 """
 
 from typing import Dict, List, Optional
@@ -18,6 +18,7 @@ class ForecastRequest(pydantic.BaseModel):
     """
     Input schema for posting a forecasting request.
     """
+
     # The input time series data.
     df: List[Dict]
     # Configurations for the forecasting model.
@@ -35,6 +36,7 @@ class ForecastResponse(pydantic.BaseModel):
     """
     Output schema for returning forecasted values.
     """
+
     # Forecasted records.
     forecast: List[Dict]
 
@@ -48,5 +50,6 @@ class UploadResponse(pydantic.BaseModel):
     """
     Output schema for successful file upload.
     """
+
     # Confirmation message on successful upload.
     message: str
