@@ -1,10 +1,15 @@
+"""
+Import as:
+
+import tutorials.LangChain.langchain_utils as tlalauti
+"""
+
 import hashlib
 import logging
 import os
 import pathlib
 from typing import Any, Dict, List, Optional
 
-import helpers.hdbg as hdbg
 import langchain
 import langchain.chains
 import langchain.docstore.document as lngchdocstordoc
@@ -54,7 +59,9 @@ def initialize_known_files(dir_path: str) -> Dict[str, float]:
     return known_files
 
 
-def parse_markdown_files(file_paths: List[str]) -> List[lngchdocstordoc.Document]:
+def parse_markdown_files(
+    file_paths: List[str],
+) -> List[lngchdocstordoc.Document]:
     """
     Parse markdown files into LangChain Documents with metadata.
 
@@ -119,7 +126,9 @@ def create_vector_store(
     return vector_store
 
 
-def build_retriever(vector_store: FAISS, *, search_kwargs: Optional[Dict[str, int]] = None) -> retriever.BaseRetriever:
+def build_retriever(
+    vector_store: FAISS, *, search_kwargs: Optional[Dict[str, int]] = None
+) -> retriever.BaseRetriever:
     """
     Build retriever from vector store.
 
@@ -235,7 +244,8 @@ def update_vector_store_from_changes(
         else:
             # Alert if files changed but we couldn't extract valid content
             _LOG.warning(
-                "No valid documents found in %d changed files", len(changed_files)
+                "No valid documents found in %d changed files",
+                len(changed_files),
             )
     # Currently we don't handle deletions since it would require rebuilding.
     # indexes Flag this limitation to operators through logs.

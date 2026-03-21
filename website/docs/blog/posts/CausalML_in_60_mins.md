@@ -2,6 +2,7 @@
 title: "CausalML in 60 Minutes"
 authors:
   - MohammedSyed
+  - gpsaggese
 date: 2026-03-18
 description:
 categories:

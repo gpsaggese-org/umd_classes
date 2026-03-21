@@ -202,6 +202,23 @@ get_docker_jupyter_command() {
 }
 
 
+get_docker_common_options() {
+    # """
+    # Return docker run options common to all container types.
+    #
+    # Includes volume mounts for the current directory and git root, plus
+    # environment variables for PYTHONPATH and host OS name.
+    #
+    # :return: docker run options string with volume mounts and env vars
+    # """
+    echo "-v $(pwd):/curr_dir \
+    -v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
+    -e CSFY_HOST_NAME=$(uname -n)"
+}
+
+
 get_docker_jupyter_options() {
     # """
     # Return docker run options for a Jupyter Lab container.
@@ -223,10 +240,7 @@ get_docker_jupyter_options() {
     echo "--name $container_name \
     -p $host_port:8888 \
     $target_dir_opt \
-    -v $(pwd):/curr_dir \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s) \
+    $(get_docker_common_options) \
     -e JUPYTER_USE_VIM=$jupyter_use_vim"
 }
 
@@ -250,10 +264,7 @@ get_docker_bash_options() {
     echo "--name $container_name \
     $port_opt \
     $extra_opts \
-    -v $(pwd):/data \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s)"
+    $(get_docker_common_options)"
 }
 
 
@@ -351,6 +362,7 @@ build_container_image() {
     (cd $DIR; docker run --rm -it -v $(pwd):/data $FULL_IMAGE_NAME bash -c "/data/version.sh") 2>&1 | tee docker_build.version.log
     #
     docker image ls $REPO_NAME/$IMAGE_NAME
+    rm -rf $DIR
     echo "*****************************"
     echo "SUCCESS"
     echo "*****************************"

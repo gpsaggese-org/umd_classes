@@ -281,9 +281,9 @@ sts = tfp.sts
 np.random.seed(42)
 num_steps = 150
 
-trend      = np.linspace(0, 5, num_steps)
+trend = np.linspace(0, 5, num_steps)
 seasonality = np.sin(np.linspace(0, 6 * np.pi, num_steps))  # ~3 weekly cycles
-noise       = np.random.normal(0, 0.3, num_steps)
+noise = np.random.normal(0, 0.3, num_steps)
 
 observed = (trend + seasonality + noise).astype(np.float32)
 observed_tensor = tf.constant(observed[:, np.newaxis])  # shape [T, 1]
@@ -295,14 +295,12 @@ observed_tensor = tf.constant(observed[:, np.newaxis])  # shape [T, 1]
 trend_component = sts.LocalLinearTrend(observed_time_series=observed_tensor)
 
 seasonal_component = sts.Seasonal(
-    num_seasons=7,
-    observed_time_series=observed_tensor,
-    name='day_of_week'
+    num_seasons=7, observed_time_series=observed_tensor, name="day_of_week"
 )
 
 model = sts.Sum(
     components=[trend_component, seasonal_component],
-    observed_time_series=observed_tensor
+    observed_time_series=observed_tensor,
 )
 
 # %% [markdown]
@@ -315,14 +313,16 @@ surrogate_posterior = tfp.sts.build_factored_surrogate_posterior(model=model)
 num_variational_steps = 200
 optimizer = tf.optimizers.Adam(learning_rate=0.1)
 
+
 @tf.function(experimental_compile=True)
 def run_vi():
     return tfp.vi.fit_surrogate_posterior(
         target_log_prob_fn=model.joint_distribution(observed_tensor).log_prob,
         surrogate_posterior=surrogate_posterior,
         optimizer=optimizer,
-        num_steps=num_variational_steps
+        num_steps=num_variational_steps,
     )
+
 
 losses = run_vi()
 plt.plot(losses)
@@ -350,18 +350,22 @@ posterior_samples = surrogate_posterior.sample(50)
 component_dists = sts.decompose_by_component(
     model=model,
     observed_time_series=observed_tensor,
-    parameter_samples=posterior_samples
+    parameter_samples=posterior_samples,
 )
 
 # Plot each component's mean ± 1 std
-fig, axes = plt.subplots(len(component_dists), 1, figsize=(12, 4 * len(component_dists)))
+fig, axes = plt.subplots(
+    len(component_dists), 1, figsize=(12, 4 * len(component_dists))
+)
 
 for ax, (component, dist) in zip(axes, component_dists.items()):
-    mean = dist.mean().numpy().squeeze()   # shape [T]
-    std  = dist.stddev().numpy().squeeze()
-    ax.plot(mean, label='Mean')
-    ax.fill_between(range(len(mean)), mean - std, mean + std, alpha=0.3, label='±1 std')
-    ax.set_title(f'Component: {component.name}')
+    mean = dist.mean().numpy().squeeze()  # shape [T]
+    std = dist.stddev().numpy().squeeze()
+    ax.plot(mean, label="Mean")
+    ax.fill_between(
+        range(len(mean)), mean - std, mean + std, alpha=0.3, label="±1 std"
+    )
+    ax.set_title(f"Component: {component.name}")
     ax.legend()
 
 plt.tight_layout()
@@ -385,26 +389,30 @@ forecast_dist = sts.forecast(
     model=model,
     observed_time_series=observed_tensor,
     parameter_samples=posterior_samples,
-    num_steps_forecast=num_steps_forecast
+    num_steps_forecast=num_steps_forecast,
 )
 
-forecast_mean = forecast_dist.mean().numpy().squeeze()     # shape [num_steps_forecast]
-forecast_std  = forecast_dist.stddev().numpy().squeeze()
+forecast_mean = (
+    forecast_dist.mean().numpy().squeeze()
+)  # shape [num_steps_forecast]
+forecast_std = forecast_dist.stddev().numpy().squeeze()
 
 # Plot observed + forecast
 plt.figure(figsize=(14, 5))
-t_obs      = np.arange(num_steps)
+t_obs = np.arange(num_steps)
 t_forecast = np.arange(num_steps, num_steps + num_steps_forecast)
 
-plt.plot(t_obs, observed, label='Observed', color='steelblue')
-plt.plot(t_forecast, forecast_mean, label='Forecast mean', color='tomato')
+plt.plot(t_obs, observed, label="Observed", color="steelblue")
+plt.plot(t_forecast, forecast_mean, label="Forecast mean", color="tomato")
 plt.fill_between(
     t_forecast,
     forecast_mean - 2 * forecast_std,
     forecast_mean + 2 * forecast_std,
-    alpha=0.3, color='tomato', label='95% interval'
+    alpha=0.3,
+    color="tomato",
+    label="95% interval",
 )
-plt.axvline(num_steps, linestyle='--', color='gray', label='Forecast start')
+plt.axvline(num_steps, linestyle="--", color="gray", label="Forecast start")
 plt.title("STS Forecast")
 plt.legend()
 plt.show()

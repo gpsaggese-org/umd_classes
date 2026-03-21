@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -35,7 +35,7 @@
 import logging
 import os
 
-from crewai import Agent, Crew, LLM, Process, Task
+from crewai import Agent, Crew, Process, Task
 from crewai.tools import tool
 
 import crewai_utils as tcrwuti
@@ -161,6 +161,7 @@ print("\n=== RESULT ===\n", result)
 # - The **docstring** becomes the tool description shown to the LLM.
 # - Arguments must be type-annotated; CrewAI auto-generates the schema.
 
+
 # %%
 @tool
 def word_count(text: str) -> str:
@@ -249,7 +250,7 @@ memory_crew = Crew(
     agents=[summarizer],
     tasks=[summarise_task],
     process=Process.sequential,
-    memory=True,   # enables short-term shared memory
+    memory=True,  # enables short-term shared memory
     verbose=False,
 )
 print("Memory crew created with memory=True")

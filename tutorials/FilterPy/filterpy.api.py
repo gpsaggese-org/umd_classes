@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -56,7 +56,7 @@ for _path in [_git_root, _helpers_root]:
 import logging
 
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 
 # %% [markdown]
 # ## Configuration
@@ -66,10 +66,10 @@ hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 # %%
-import tutorials.FilterPy.filterpy_api_utils as utils
+import tutorials.FilterPy.filterpy_api_utils as tffiaput
 
 # %% [markdown]
 # ---
@@ -88,11 +88,11 @@ import tutorials.FilterPy.filterpy_api_utils as utils
 
 # %%
 # Show predict-update cycle diagram.
-utils.plot_predict_update_diagram()
+tffiaput.plot_predict_update_diagram()
 
 # %%
 # Show matrix reference table.
-utils.show_matrix_table()
+tffiaput.show_matrix_table()
 
 # %% [markdown]
 # ---
@@ -108,7 +108,7 @@ utils.show_matrix_table()
 
 # %%
 # Display interactive 1D KF tracking with R and Q sliders.
-utils.show_linear_kf_tracking_interactive()
+tffiaput.show_linear_kf_tracking_interactive()
 
 # %% [markdown]
 # ---
@@ -121,7 +121,7 @@ utils.show_linear_kf_tracking_interactive()
 
 # %%
 # Display interactive covariance and Kalman gain convergence.
-utils.show_uncertainty_evolution_interactive()
+tffiaput.show_uncertainty_evolution_interactive()
 
 # %% [markdown]
 # ---
@@ -139,7 +139,7 @@ utils.show_uncertainty_evolution_interactive()
 
 # %%
 # Display interactive EKF radar tracking with noise sliders.
-utils.show_ekf_radar_interactive()
+tffiaput.show_ekf_radar_interactive()
 
 # %% [markdown]
 # ---
@@ -154,7 +154,7 @@ utils.show_ekf_radar_interactive()
 
 # %%
 # Display interactive Jacobian linearization visualization.
-utils.show_linearization_interactive()
+tffiaput.show_linearization_interactive()
 
 # %% [markdown]
 # ---
@@ -175,7 +175,7 @@ utils.show_linearization_interactive()
 
 # %%
 # Display interactive sigma points visualization.
-utils.show_sigma_points_interactive()
+tffiaput.show_sigma_points_interactive()
 
 # %% [markdown]
 # ---
@@ -190,7 +190,7 @@ utils.show_sigma_points_interactive()
 
 # %%
 # Display interactive EKF vs UKF comparison.
-utils.show_ekf_vs_ukf_interactive()
+tffiaput.show_ekf_vs_ukf_interactive()
 
 # %% [markdown]
 # ---
@@ -212,7 +212,7 @@ utils.show_ekf_vs_ukf_interactive()
 
 # %%
 # Display interactive EnKF ensemble particle visualization.
-utils.show_enkf_interactive()
+tffiaput.show_enkf_interactive()
 
 # %% [markdown]
 # ---
@@ -230,4 +230,4 @@ utils.show_enkf_interactive()
 
 # %%
 # Run and display all four filters side by side.
-utils.plot_all_filters_comparison()
+tffiaput.plot_all_filters_comparison()

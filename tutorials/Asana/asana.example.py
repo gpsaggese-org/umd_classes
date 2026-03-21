@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -42,12 +42,12 @@ import os
 
 import helpers.hdbg as hdbg
 import helpers.hpandas as hpandas
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 import tutorials.tutorial_asana.asana_utils as ttuaasuti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## Part 1: Configuration
@@ -108,9 +108,7 @@ tasks_df = ttuaasuti.fetch_tasks(
     start_date=config["start_date"],
     end_date=config["end_date"],
 )
-_LOG.info(
-    "tasks_df=\n%s", hpandas.df_to_str(tasks_df, log_level=logging.INFO)
-)
+_LOG.info("tasks_df=\n%s", hpandas.df_to_str(tasks_df, log_level=logging.INFO))
 
 # %% [markdown]
 # ## Part 4: Fetch Comments
