@@ -11,8 +11,7 @@ import os
 
 import pytest
 
-import helpers.hdbg as hdbg
-import helpers.hsystem as hsystem
+import helpers.hdocker_tests as hdoctest
 import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
@@ -35,13 +34,30 @@ class Test_docker_build(hunitest.TestCase):
         """
         # Prepare inputs.
         script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        docker_build_script = os.path.join(script_dir, "docker_build.sh")
         # Run test.
-        cmd = f"cd {script_dir} && bash {docker_build_script}"
-        hsystem.system(cmd)
+        hdoctest.run_docker_build(script_dir)
 
 
-# TODO(ai_gp): Add a test for docker_cmd.sh 'ls /data'
+# #############################################################################
+# Test_docker_cmd
+# #############################################################################
+
+
+class Test_docker_cmd(hunitest.TestCase):
+    """
+    Test that docker_cmd.sh can run arbitrary shell commands inside Docker.
+    """
+
+    @pytest.mark.slow
+    def test1(self) -> None:
+        """
+        Test that docker_cmd.sh 'ls /data' runs without error.
+        """
+        # Prepare inputs.
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # Run test.
+        hdoctest.run_docker_cmd(script_dir)
+
 
 # #############################################################################
 # Test_docker_run_notebooks
@@ -64,19 +80,8 @@ class Test_docker_run_notebooks(hunitest.TestCase):
         # Prepare inputs.
         test_dir = os.path.dirname(os.path.abspath(__file__))
         script_dir = os.path.dirname(test_dir)
-        docker_cmd_script = os.path.join(script_dir, "docker_cmd.sh")
-        notebook_path = os.path.join(script_dir, notebook_name)
-        hdbg.dassert_file_exists(notebook_path)
         # Run test.
-        # cd into script_dir so docker_cmd.sh mounts the right directory.
-        # Inside the container the notebooks are at /data/<notebook_name>.
-        cmd = (
-            f"cd {script_dir} && "
-            f"bash {docker_cmd_script} "
-            f"'jupyter nbconvert --execute --to html "
-            f"--ExecutePreprocessor.timeout=-1 /data/{notebook_name}'"
-        )
-        hsystem.system(cmd)
+        hdoctest.run_notebook_in_docker(notebook_name, script_dir)
 
     @pytest.mark.slow
     def test1(self) -> None:
