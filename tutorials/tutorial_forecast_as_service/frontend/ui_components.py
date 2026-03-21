@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.frontend.ui_components as tfasfuico
+import tutorials.tutorial_forecast_as_service.frontend.ui_components as ttfasfuco
 """
 
 import dash
@@ -52,7 +52,9 @@ def create_upload_success_info(filename: str, df: pd.DataFrame) -> dash.html.Div
                 f"Success: File '{filename}' uploaded successfully!",
                 style={"color": tfasfrco.SUCCESS_COLOR},
             ),
-            dash.html.P(f"Data shape: {df.shape[0]} rows, {df.shape[1]} columns"),
+            dash.html.P(
+                f"Data shape: {df.shape[0]} rows, {df.shape[1]} columns"
+            ),
             dash.html.P(f"Date range: {df['ds'].min()} to {df['ds'].max()}"),
         ]
     )

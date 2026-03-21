@@ -1,3 +1,9 @@
+"""
+Import as:
+
+import tutorials.BambooAI.bambooai.qa_retrieval as tbbaqare
+"""
+
 import os
 import uuid
 from openai import OpenAI
@@ -6,9 +12,19 @@ from qdrant_client import QdrantClient, models
 import numpy as np
 
 
+# #############################################################################
+# EmbeddingClientIntegration
+# #############################################################################
+
+
 class EmbeddingClientIntegration:
     def vectorize(self, text_input):
         raise NotImplementedError
+
+
+# #############################################################################
+# OpenAIEmbeddingClient
+# #############################################################################
 
 
 class OpenAIEmbeddingClient(EmbeddingClientIntegration):
@@ -22,6 +38,11 @@ class OpenAIEmbeddingClient(EmbeddingClientIntegration):
         return response.data[0].embedding
 
 
+# #############################################################################
+# HFSentenceTransformersClient
+# #############################################################################
+
+
 class HFSentenceTransformersClient(EmbeddingClientIntegration):
     def __init__(self):
         try:
@@ -33,6 +54,11 @@ class HFSentenceTransformersClient(EmbeddingClientIntegration):
 
     def vectorize(self, text_input):
         return self.model.encode([text_input])[0].tolist()
+
+
+# #############################################################################
+# BaseVectorDBWrapper
+# #############################################################################
 
 
 class BaseVectorDBWrapper:
@@ -50,7 +76,9 @@ class BaseVectorDBWrapper:
                 )
             return
 
-        self.collection_name, self.dimension = self.determine_collection_settings()
+        self.collection_name, self.dimension = (
+            self.determine_collection_settings()
+        )
         if not self.collection_name or not self.dimension:
             if self.output_manager:
                 self.output_manager.display_system_messages(
@@ -97,7 +125,9 @@ class BaseVectorDBWrapper:
         cosine_sim = dot_product / (norm_vec1 * norm_vec2)
         return cosine_sim
 
-    def retrieve_matching_record(self, intent_text, data_descr, similarity_threshold):
+    def retrieve_matching_record(
+        self, intent_text, data_descr, similarity_threshold
+    ):
         """Retrieve the best matching record based on intent and data description similarity"""
         intent_matches = self.query_index(intent_text, top_k=5)
 
@@ -120,7 +150,7 @@ class BaseVectorDBWrapper:
 
         try:
             new_data_descr_vector = self.vectorize_intent(data_descr)
-        except Exception as e:
+        except Exception:
             return qualified_intent_matches[0]
 
         for match in qualified_intent_matches:
@@ -130,11 +160,13 @@ class BaseVectorDBWrapper:
                 current_data_descr_similarity = -1.0
             else:
                 try:
-                    stored_data_descr_vector = self.vectorize_intent(stored_data_descr)
+                    stored_data_descr_vector = self.vectorize_intent(
+                        stored_data_descr
+                    )
                     current_data_descr_similarity = self.cosine_similarity_np(
                         new_data_descr_vector, stored_data_descr_vector
                     )
-                except Exception as e:
+                except Exception:
                     current_data_descr_similarity = -1.0
 
             if current_data_descr_similarity > highest_data_descr_similarity:
@@ -190,7 +222,9 @@ class BaseVectorDBWrapper:
         )
 
         if semantically_similar_existing_match:
-            existing_semantic_match_id = semantically_similar_existing_match["id"]
+            existing_semantic_match_id = semantically_similar_existing_match[
+                "id"
+            ]
             existing_semantic_match_rank = int(
                 semantically_similar_existing_match["metadata"]["rank"]
             )
@@ -234,6 +268,11 @@ class BaseVectorDBWrapper:
         raise NotImplementedError
 
 
+# #############################################################################
+# PineconeWrapper
+# #############################################################################
+
+
 class PineconeWrapper(BaseVectorDBWrapper):
     """Pinecone based implementation of vector database wrapper"""
 
@@ -254,14 +293,19 @@ class PineconeWrapper(BaseVectorDBWrapper):
                 384,
             ),
             "openai": (
-                os.getenv("OPENAI_PINECONE_INDEX_NAME", "bambooai-qa-retrieval-openai"),
+                os.getenv(
+                    "OPENAI_PINECONE_INDEX_NAME", "bambooai-qa-retrieval-openai"
+                ),
                 1536,
             ),
         }
         return settings.get(self.embed_platform, (None, None))
 
     def ensure_collection_exists(self):
-        if self.collection_name not in self.pinecone_client.list_indexes().names():
+        if (
+            self.collection_name
+            not in self.pinecone_client.list_indexes().names()
+        ):
             if self.output_manager:
                 self.output_manager.display_system_messages(
                     f"Creating a new vector db index. Please wait... {self.collection_name}"
@@ -337,6 +381,11 @@ class PineconeWrapper(BaseVectorDBWrapper):
             return []
 
 
+# #############################################################################
+# QdrantWrapper
+# #############################################################################
+
+
 class QdrantWrapper(BaseVectorDBWrapper):
     """Qdrant based implementation of vector database wrapper"""
 
@@ -350,12 +399,15 @@ class QdrantWrapper(BaseVectorDBWrapper):
     def determine_collection_settings(self):
         settings = {
             "hf_sentence_transformers": (
-                os.getenv("HF_QDRANT_COLLECTION_NAME", "bambooai-qa-retrieval-hf"),
+                os.getenv(
+                    "HF_QDRANT_COLLECTION_NAME", "bambooai-qa-retrieval-hf"
+                ),
                 384,
             ),
             "openai": (
                 os.getenv(
-                    "OPENAI_QDRANT_COLLECTION_NAME", "bambooai-qa-retrieval-openai"
+                    "OPENAI_QDRANT_COLLECTION_NAME",
+                    "bambooai-qa-retrieval-openai",
                 ),
                 1536,
             ),
@@ -425,7 +477,9 @@ class QdrantWrapper(BaseVectorDBWrapper):
         try:
             uuid_id = self._generate_uuid_from_id(record_id)
             result = self.qdrant_client.retrieve(
-                collection_name=self.collection_name, ids=[uuid_id], with_payload=True
+                collection_name=self.collection_name,
+                ids=[uuid_id],
+                with_payload=True,
             )
             if result and len(result) > 0:
                 original_id = self._extract_original_id(result[0].payload)
@@ -448,7 +502,9 @@ class QdrantWrapper(BaseVectorDBWrapper):
         self.qdrant_client.upsert(
             collection_name=self.collection_name,
             points=[
-                models.PointStruct(id=uuid_id, vector=vector, payload=prepared_metadata)
+                models.PointStruct(
+                    id=uuid_id, vector=vector, payload=prepared_metadata
+                )
             ],
         )
 
@@ -489,7 +545,10 @@ class QdrantWrapper(BaseVectorDBWrapper):
                 if result.score > threshold:
                     original_id = self._extract_original_id(result.payload)
                     search_results.append(
-                        {"id": original_id or str(result.id), "score": result.score}
+                        {
+                            "id": original_id or str(result.id),
+                            "score": result.score,
+                        }
                     )
 
             return search_results

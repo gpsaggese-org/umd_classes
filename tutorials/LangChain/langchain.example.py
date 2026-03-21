@@ -42,13 +42,10 @@ import logging
 import helpers.hdbg as hdbg
 import langchain
 import langchain.chains
-import langchain.docstore.document as lngchdocstordoc
 import langchain.embeddings
 import langchain.hub
 import langchain.text_splitter
 import langchain_openai
-from langchain_community.document_loaders import UnstructuredMarkdownLoader
-from langchain_community.vectorstores import FAISS
 
 # %%
 import langchain_utils as ut
@@ -89,7 +86,7 @@ hdbg.dassert_dir_exists(config["source_directory"])
 
 # %%
 # Set the OpenAI API key.
-#os.environ["OPENAI_API_KEY"] = config["open_ai_api_key"]
+# os.environ["OPENAI_API_KEY"] = config["open_ai_api_key"]
 # Initialize the chat model.
 print(config["language_model"])
 chat_model = langchain_openai.ChatOpenAI(**config["language_model"])
@@ -120,7 +117,7 @@ chunked_documents = ut.split_documents(
 )
 
 # %%
-more 
+more
 
 # %%
 print(chunked_documents[1])
@@ -138,7 +135,9 @@ print(chunked_documents[2])
 embeddings = langchain.embeddings.OpenAIEmbeddings()
 # Create a FAISS vector store.
 vector_store = ut.create_vector_store(chunked_documents, embeddings)
-_LOG.info("FAISS vector store created with %d documents.", len(chunked_documents))
+_LOG.info(
+    "FAISS vector store created with %d documents.", len(chunked_documents)
+)
 
 # %% [markdown]
 # ## Build a QA Chain
@@ -165,7 +164,7 @@ _LOG.info("RetrievalQA chain initialized.")
 
 # %%
 # Define a user query.
-#query = "What are the guidelines for setting up a new project?"
+# query = "What are the guidelines for setting up a new project?"
 query = "Is there any mention of Diataxis?"
 
 # Query the chatbot.

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -36,7 +36,6 @@
 
 import logging
 
-import IPython.display
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
@@ -64,6 +63,7 @@ print(f"Dataset saved to: {csv_path}")
 
 # Quick sanity check – preview the first few rows.
 import pandas as pd
+
 df = pd.read_csv(csv_path)
 print(df.head())
 
@@ -94,8 +94,7 @@ analyst = Agent(
         "report succinct results."
     ),
     backstory=(
-        "Prefers precise, minimal outputs. "
-        "Uses tools exactly as requested."
+        "Prefers precise, minimal outputs. Uses tools exactly as requested."
     ),
     tools=tcrwuti.EDA_TOOLS,
     llm=llm,

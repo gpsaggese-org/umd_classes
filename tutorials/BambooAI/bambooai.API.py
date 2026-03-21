@@ -101,6 +101,7 @@
 # %%
 # Run this cell
 import sys
+
 # # %pip install -q qdrant-client
 sys.path.insert(0, "/app/tutorials-Bambooai-blog")
 import logging
@@ -109,6 +110,7 @@ import sys
 from pathlib import Path
 from bambooai import BambooAI
 from dotenv import load_dotenv
+
 load_dotenv()
 import numpy as np
 import pandas as pd
@@ -168,9 +170,13 @@ if config:
     print(f"{source} found. Agent configs:")
     for agent in config.get("agent_configs", []):
         details = agent.get("details", {})
-        print(f"- {agent.get('agent')}: {details.get('provider')}/{details.get('model')}")
+        print(
+            f"- {agent.get('agent')}: {details.get('provider')}/{details.get('model')}"
+        )
 else:
-    print("No LLM_CONFIG found. BambooAI will use its package defaults (see BambooAI docs/config).")
+    print(
+        "No LLM_CONFIG found. BambooAI will use its package defaults (see BambooAI docs/config)."
+    )
 
 
 # %% [markdown]
@@ -196,7 +202,7 @@ else:
 # | `custom_prompt_file` | `str` | `None` | YAML file with custom prompt templates. |
 #
 # Vector DB and ontology notes
-# - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from. 
+# - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from.
 #
 # - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
 #
@@ -294,6 +300,7 @@ def _mask(value: str) -> str:
         return "*" * len(value)
     return f"{value[:3]}...{value[-2:]}"
 
+
 keys = [
     "EXECUTION_MODE",
     "LLM_CONFIG",
@@ -350,12 +357,11 @@ if "df" not in globals():
     df = _load_dataframe(csv_path)
 
 bamboo_quick = _build_bamboo_agent(
-    df,
-    planning=False,
-    vector_db=False,
-    search_tool=False
+    df, planning=False, vector_db=False, search_tool=False
 )
-print("BambooAI ready. When the loop starts, paste one prompt, then type 'exit' or press Ctrl+D to stop.")
+print(
+    "BambooAI ready. When the loop starts, paste one prompt, then type 'exit' or press Ctrl+D to stop."
+)
 _run_agent(bamboo_quick)
 
 
@@ -508,7 +514,9 @@ try:
     print("Search tool enabled agent ready.")
     _run_agent(bamboo_search)
 except Exception as e:
-    print("Search tool init failed. Check search tool availability and credentials.")
+    print(
+        "Search tool init failed. Check search tool availability and credentials."
+    )
     print("Error:", e)
 
 
@@ -582,7 +590,9 @@ try:
     print("Vector DB enabled agent ready.")
     _run_agent(bamboo_vector)
 except Exception as e:
-    print("Vector DB init failed. Check Pinecone/Qdrant env vars and credentials.")
+    print(
+        "Vector DB init failed. Check Pinecone/Qdrant env vars and credentials."
+    )
     print("Error:", e)
 
 
@@ -710,7 +720,6 @@ _run_agent(bamboo_exploratory)
 
 
 if "df" not in globals():
-    
     csv_path = _DEFAULT_CSV
     df = _load_dataframe(csv_path)
 
@@ -719,8 +728,8 @@ ARTIFACTS_DIR.mkdir(exist_ok=True)
 custom_prompt_path = ARTIFACTS_DIR / "custom_prompts.yaml"
 custom_prompt_path.write_text(
     "# Placeholder prompts for BambooAI\n"
-    "planner_prompt: \"You are a careful planner.\"\n"
-    "code_prompt: \"Write concise pandas code.\"\n"
+    'planner_prompt: "You are a careful planner."\n'
+    'code_prompt: "Write concise pandas code."\n'
 )
 print("Wrote custom prompts:", custom_prompt_path)
 
@@ -777,4 +786,3 @@ print(f"Loaded dataset shape: {loaded_df.shape}")
 print(f"BambooAI agent ready: {type(bamboo_agent).__name__}")
 print("\\nSample rows from the dataset:")
 print(loaded_df.head())
-

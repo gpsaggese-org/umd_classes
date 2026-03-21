@@ -96,9 +96,10 @@ def fetch_data(url=DATA_URL, out_dir=DATA_DIR):
         resp = requests.get(url, stream=True, timeout=20)
         resp.raise_for_status()
         total = int(resp.headers.get("content-length", 0))
-        with open(zip_path, "wb") as f, tq_vis(
-            total=total, unit="B", unit_scale=True
-        ) as pbar:
+        with (
+            open(zip_path, "wb") as f,
+            tq_vis(total=total, unit="B", unit_scale=True) as pbar,
+        ):
             for chunk in resp.iter_content(chunk_size=8192):
                 if chunk:
                     f.write(chunk)

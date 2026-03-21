@@ -65,9 +65,9 @@
 # %%
 import os
 import sys
-import platform
 from pathlib import Path
 from IPython.display import display
+
 # %pip install -q plotly bambooai
 # In Docker use /app/helpers_root; locally use <repo>/helpers_root
 helpers_root_docker = Path("/app/helpers_root")
@@ -85,7 +85,12 @@ except Exception:
 
 try:
     import bambooai
-    version = md.version("bambooai") if md else getattr(bambooai, "__version__", "unknown")
+
+    version = (
+        md.version("bambooai")
+        if md
+        else getattr(bambooai, "__version__", "unknown")
+    )
     print("bambooai version:", version)
 except Exception as e:
     print("bambooai import failed:", e)
@@ -99,6 +104,7 @@ from bambooai_utils import (
     _parse,
     _resolve_execution_mode,
 )
+
 print("bambooai_utils imported successfully")
 
 ARTIFACTS_DIR = Path("artifacts")
@@ -120,7 +126,6 @@ _setup_env()
 
 # %%
 from pathlib import Path
-import os
 
 print("EXECUTION_MODE:", os.getenv("EXECUTION_MODE", "<not set>"))
 llm_config_env = os.getenv("LLM_CONFIG")
@@ -133,7 +138,9 @@ if not llm_config_env and not Path("LLM_CONFIG.json").exists():
 key_vars = ["OPENAI_API_KEY", "AZURE_OPENAI_API_KEY", "ANTHROPIC_API_KEY"]
 present = [k for k in key_vars if os.getenv(k)]
 if not present:
-    print("WARNING: No provider API keys found in env (checked OPENAI/AZURE/ANTHROPIC).")
+    print(
+        "WARNING: No provider API keys found in env (checked OPENAI/AZURE/ANTHROPIC)."
+    )
 else:
     print("Provider keys set for:", ", ".join(present))
 
@@ -169,16 +176,20 @@ from pathlib import Path
 import pandas as pd
 import random
 
+
 def assert_or_create_testdata(path: str = "testdata.csv") -> Path:
     csv_path = Path(path)
     if csv_path.exists():
         return csv_path
     random.seed(42)
     n = 20
+
     def rint(a, b):
         return random.randint(a, b)
+
     def rfloat(a, b, nd=2):
         return round(random.uniform(a, b), nd)
+
     def rchoice(seq):
         return random.choice(seq)
 
@@ -205,6 +216,7 @@ def assert_or_create_testdata(path: str = "testdata.csv") -> Path:
     df_sample.to_csv(csv_path, index=False)
     print("Created sample dataset:", csv_path)
     return csv_path
+
 
 csv_path = assert_or_create_testdata("testdata.csv")
 
@@ -331,7 +343,9 @@ try:
         search_tool=enable_search_tool,
     )
 except Exception as e:
-    print("Semantic search config failed, falling back with vector_db and search_tool disabled.")
+    print(
+        "Semantic search config failed, falling back with vector_db and search_tool disabled."
+    )
     print("Error:", e)
     enable_vector_db = False
     enable_search_tool = False
@@ -358,21 +372,21 @@ from bambooai import BambooAI
 ARTIFACTS_DIR.mkdir(exist_ok=True)
 ontology_path = ARTIFACTS_DIR / "mini_ontology.ttl"
 ontology_path.write_text(
-    '@prefix ex: <http://example.com/> .\n'
-    '@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n'
-    '@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n'
-    'ex:Customer a rdfs:Class .\n'
-    'ex:churned a rdfs:Property ;\n'
-    '  rdfs:domain ex:Customer ;\n'
-    '  rdfs:range xsd:boolean ;\n'
+    "@prefix ex: <http://example.com/> .\n"
+    "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n"
+    "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n"
+    "ex:Customer a rdfs:Class .\n"
+    "ex:churned a rdfs:Property ;\n"
+    "  rdfs:domain ex:Customer ;\n"
+    "  rdfs:range xsd:boolean ;\n"
     '  rdfs:label "churned" .\n'
-    'ex:monthly_spend_usd a rdfs:Property ;\n'
-    '  rdfs:domain ex:Customer ;\n'
-    '  rdfs:range xsd:decimal ;\n'
+    "ex:monthly_spend_usd a rdfs:Property ;\n"
+    "  rdfs:domain ex:Customer ;\n"
+    "  rdfs:range xsd:decimal ;\n"
     '  rdfs:label "monthly_spend_usd" .\n'
-    'ex:has_premium a rdfs:Property ;\n'
-    '  rdfs:domain ex:Customer ;\n'
-    '  rdfs:range xsd:boolean ;\n'
+    "ex:has_premium a rdfs:Property ;\n"
+    "  rdfs:domain ex:Customer ;\n"
+    "  rdfs:range xsd:boolean ;\n"
     '  rdfs:label "has_premium" .\n'
 )
 print("Wrote ontology:", ontology_path)
@@ -400,8 +414,8 @@ ARTIFACTS_DIR.mkdir(exist_ok=True)
 custom_prompt_path = ARTIFACTS_DIR / "custom_prompts.yaml"
 custom_prompt_path.write_text(
     "# Placeholder prompts for BambooAI\n"
-    "planner_prompt: \"You are a careful planner.\"\n"
-    "code_prompt: \"Write concise pandas code.\"\n"
+    'planner_prompt: "You are a careful planner."\n'
+    'code_prompt: "Write concise pandas code."\n'
 )
 print("Wrote custom prompts:", custom_prompt_path)
 
@@ -474,7 +488,9 @@ if missing:
 
 aux_list = [str(aux_path)] if aux_path.exists() else []
 df_ontology = str(ontology_path) if ontology_path.exists() else None
-custom_prompt_file = str(custom_prompt_path) if custom_prompt_path.exists() else None
+custom_prompt_file = (
+    str(custom_prompt_path) if custom_prompt_path.exists() else None
+)
 
 try:
     enable_vector_db
@@ -485,10 +501,12 @@ try:
 except NameError:
     enable_search_tool = True
 
+
 def print_config_summary(config: dict) -> None:
     print("Config Summary")
     for key, value in config.items():
         print(f"- {key}: {value}")
+
 
 base_config = {
     "df": df,
@@ -509,7 +527,9 @@ print_config_summary(base_config)
 try:
     bamboo_full = BambooAI(**base_config)
 except Exception as e:
-    print("Full featured config failed, falling back with vector_db and search_tool disabled.")
+    print(
+        "Full featured config failed, falling back with vector_db and search_tool disabled."
+    )
     print("Error:", e)
     base_config["vector_db"] = False
     base_config["search_tool"] = False
