@@ -1,6 +1,6 @@
 ---
-draft: true
 title: "How to Use Claude Code"
+draft: true
 authors:
   - gpsaggese
 date: 2026-03-01

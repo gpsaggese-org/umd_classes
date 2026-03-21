@@ -14,7 +14,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import clear_output, display
 
-import msml610_utils as mtumsuti
+try:
+    import msml610_utils as mtumsuti
+except ImportError:
+    import msml610.tutorials.msml610_utils as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

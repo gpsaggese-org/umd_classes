@@ -15,7 +15,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Upgrade pip and install Jupyter Lab.
 RUN pip install --upgrade pip && \
-    pip install jupyterlab
+    pip install jupyterlab jupyterlab_vim
 
 # Install project-specific requirements.
 COPY requirements.txt /tmp/requirements.txt

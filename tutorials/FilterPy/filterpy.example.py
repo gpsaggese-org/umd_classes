@@ -56,7 +56,7 @@ for _path in [_git_root, _helpers_root]:
 import logging
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebook
 
 # %% [markdown]
 # ## Configuration
@@ -66,7 +66,7 @@ hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hprint.config_notebook()
+hnotebook.config_notebook()
 
 # %%
 import tutorials.FilterPy.filterpy_example_utils as utils
