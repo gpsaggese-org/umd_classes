@@ -39,12 +39,12 @@ import logging
 import os
 
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 import tutorials.tutorial_asana.asana_utils as ttuaasuti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## 1. Authentication
@@ -99,7 +99,11 @@ if PROJECT_GID:
         PROJECT_GID,
         {"opt_fields": "name,archived"},
     )
-    _LOG.info("Project name: %s  archived: %s", project_info.get("name"), project_info.get("archived"))
+    _LOG.info(
+        "Project name: %s  archived: %s",
+        project_info.get("name"),
+        project_info.get("archived"),
+    )
 else:
     _LOG.warning("Set ASANA_PROJECT_GID to see a live demo.")
 
@@ -166,6 +170,7 @@ if PROJECT_GID:
 else:
     print("(Set ASANA_PROJECT_GID to see live output.)")
     import pandas as pd
+
     # Show the expected schema as a placeholder.
     tasks_df = pd.DataFrame(
         columns=["task_id", "name", "assignee", "task_status"]
@@ -190,7 +195,9 @@ else:
 if PROJECT_GID and not tasks_df.empty:
     sample_ids = tasks_df["task_id"].head(3).tolist()
     comments_df = ttuaasuti.fetch_comments(client, task_ids=sample_ids)
-    _LOG.info("Fetched %d comments for %d tasks.", len(comments_df), len(sample_ids))
+    _LOG.info(
+        "Fetched %d comments for %d tasks.", len(comments_df), len(sample_ids)
+    )
     print(comments_df[["task_id", "author", "text"]].head())
 else:
     print("(Set ASANA_PROJECT_GID to see live output.)")

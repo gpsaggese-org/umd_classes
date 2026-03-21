@@ -3,6 +3,7 @@ title: "Getting Started with LangChain"
 draft: true
 authors:
   - indro
+  - gpsaggese
 date: 2026-03-19
 description: A story-driven starter on the LangChain building blocks we found useful while automating analytical workflows at Causify.
 categories:

@@ -1,5 +1,9 @@
 """
-Prevent pytest from collecting tests in this directory.
+Disable all tests under class_project/ta/.
+
+Import as:
+
+import class_project.ta.conftest as cptaconf
 """
 
 
