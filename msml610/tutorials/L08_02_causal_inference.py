@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -62,6 +62,17 @@ import networkx as nx
 
 import pgmpy.base as pgmpy_base
 
+# %% [markdown]
+# # Causal Roles Explorer
+
+# %%
+# Display interactive causal roles explorer: select a graph, treatment, and
+# outcome to highlight confounders, mediators, and colliders.
+mtl0cireout.causal_roles_explorer()
+
+# %% [markdown]
+# # Cell 
+
 # %%
 model = nx.DiGraph([
     ("C", "A"),
@@ -113,5 +124,19 @@ print(dag.is_dconnected("G", "F"))
 # %%
 print("Are G and F dependent given E?")
 print(dag.is_dconnected("G", "F", observed=["E"]))
+
+# %% [markdown]
+# # Interactive D-Separation Explorer
+
+# %%
+# Display interactive d-separation explorer for node1, node2, and conditioning
+# set (use shift to select multiple conditioning nodes).
+mtl0cireout.d_separation_explorer(
+    model,
+    dag,
+    default_node1="D",
+    default_node2="C",
+    default_conditioning=["A"],
+)
 
 # %%
