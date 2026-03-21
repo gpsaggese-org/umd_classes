@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -18,7 +18,6 @@
 
 import logging
 import sys
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -51,7 +50,7 @@ if PROJECT_ROOT not in sys.path:
 #
 # ## What this notebook does
 #
-# This notebook walks through the entire analysis pipeline for the project *“A Causal Analysis of Success in Modern Society.”*  
+# This notebook walks through the entire analysis pipeline for the project *“A Causal Analysis of Success in Modern Society.”*
 # You will:
 #
 # - simulate a population of agents with different talents,
@@ -233,16 +232,16 @@ print(f"  Relative strength |luck|/|talent|: {relative_strength:.2f}x")
 #
 # Each agent \(i\) is described by a talent vector \(T_i\) with several components. These dimensions are not meant to be perfect psychological constructs, but convenient knobs that capture different ways people can be “good at” navigating opportunities.
 #
-# - **Intensity (\(t_{\text{intensity}}\))**  
+# - **Intensity (\(t_{\text{intensity}}\))**
 #   Intensity stands in for effort, persistence, and general activity level. In the model, this drives **exposure to events**: high-intensity agents “show up” more often, talk to more people, and try more things, so they are more likely to bump into both good and bad events. This is our formalization of the “surface area of luck” idea.
 #
-# - **IQ (\(t_{\text{iq}}\))**  
+# - **IQ (\(t_{\text{iq}}\))**
 #   IQ represents cognitive ability and problem-solving skill. Intensity determines how many opportunities you see; IQ affects the **probability of turning a lucky event into an actual gain**. An agent with high intensity but low IQ may see many chances but fail to convert them; high IQ but very low intensity may simply not be in the right place at the right time.
 #
-# - **Networking (\(t_{\text{networking}}\))**  
+# - **Networking (\(t_{\text{networking}}\))**
 #   Networking measures social capital: the strength and reach of an agent’s relationships. In the simulation, this allows opportunities to **spill over** from one agent to another. A lucky event that hits one person can sometimes partially benefit someone else with strong connections, mirroring referrals, recommendations, and “who you know” effects.
 #
-# - **Initial Capital (\(C_{0}\))**  
+# - **Initial Capital (\(C_{0}\))**
 #   All agents begin with the same initial capital in the baseline setup, typically \(C_0 = 1\). This isolates the role of random events and talent. Initial capital gives everyone a baseline but, in the core model, it does **not** affect event probabilities directly.
 #
 # Together, these components give each agent a fixed talent profile that shapes how they interact with randomness over time.
@@ -253,15 +252,15 @@ print(f"  Relative strength |luck|/|talent|: {relative_strength:.2f}x")
 #
 # At each time period, agents may experience **events** that change their capital. Events have three key ingredients:
 #
-# - A **type**:  
-#   - Beneficial (“lucky”)  
+# - A **type**:
+#   - Beneficial (“lucky”)
 #   - Detrimental (“unlucky”)
 #
-# - An **impact magnitude \(\Delta\)**:  
-#   - Lucky events: sampled from a normal distribution with a positive mean (e.g., 25–35%), then clipped to a reasonable range (e.g., 5–50%).  
+# - An **impact magnitude \(\Delta\)**:
+#   - Lucky events: sampled from a normal distribution with a positive mean (e.g., 25–35%), then clipped to a reasonable range (e.g., 5–50%).
 #   - Unlucky events: sampled from a normal distribution with a smaller positive mean (interpreted as a loss) and clipped similarly (e.g., 5–30%).
 #
-# - An **assignment probability**:  
+# - An **assignment probability**:
 #   - Who actually receives each event is determined probabilistically, based on talent (primarily intensity, with networking affecting spillovers).
 #
 # Capital evolves **multiplicatively**:
@@ -290,35 +289,35 @@ print(f"  Relative strength |luck|/|talent|: {relative_strength:.2f}x")
 #
 # The difficulty is that **treatment is not randomly assigned**. More talented agents may both receive more opportunities and be better at using them. If we simply regress outcomes on the number of lucky events, we would mix up three things:
 #
-# 1. The true causal effect of lucky events  
-# 2. The fact that high-talent agents get more opportunities  
+# 1. The true causal effect of lucky events
+# 2. The fact that high-talent agents get more opportunities
 # 3. The fact that high-talent agents would do well even with fewer events
 #
 # To disentangle these pieces, we define:
 #
-# - **Treatment variable \(T\)**  
+# - **Treatment variable \(T\)**
 #   The count of beneficial (lucky) events an agent experiences over the simulation.
 #
-# - **Outcome variable \(Y\)**  
-#   Final log capital, \(\log(C_{\text{final}})\).  
+# - **Outcome variable \(Y\)**
+#   Final log capital, \(\log(C_{\text{final}})\).
 #   Using the logarithm makes multiplicative effects more additive and stabilizes variance, so a one-unit change in \(Y\) roughly corresponds to a percentage change in wealth.
 #
-# - **Confounders \(X\)**  
+# - **Confounders \(X\)**
 #   The talent dimensions: intensity, IQ, networking, and any other features that influence both how many lucky events an agent gets and how well they convert those events into capital.
 #
 # With this setup, the target quantity is the **causal effect of \(T\) on \(Y\)**, holding \(X\) fixed.
 #
 # We use two complementary tools:
 #
-# 1. **Double Machine Learning (DML)**  
-#    - Model how treatment \(T\) depends on talents \(X\) (who tends to get more opportunities).  
-#    - Model how outcome \(Y\) depends on talents \(X\) (who tends to do well given their abilities).  
-#    - Remove the part of \(T\) and \(Y\) that can be explained by \(X\), then estimate the effect of the remaining (residual) variation in \(T\) on the residual in \(Y\).  
+# 1. **Double Machine Learning (DML)**
+#    - Model how treatment \(T\) depends on talents \(X\) (who tends to get more opportunities).
+#    - Model how outcome \(Y\) depends on talents \(X\) (who tends to do well given their abilities).
+#    - Remove the part of \(T\) and \(Y\) that can be explained by \(X\), then estimate the effect of the remaining (residual) variation in \(T\) on the residual in \(Y\).
 #    This procedure corrects for confounding under fairly general conditions and gives an estimate of the **average treatment effect** of an additional lucky event.
 #
-# 2. **Causal Forests (CF)**  
-#    - Extend the idea above to allow the treatment effect to vary with \(X\).  
-#    - Instead of one global effect, we obtain a **Conditional Average Treatment Effect (CATE)** for each agent or subgroup.  
+# 2. **Causal Forests (CF)**
+#    - Extend the idea above to allow the treatment effect to vary with \(X\).
+#    - Instead of one global effect, we obtain a **Conditional Average Treatment Effect (CATE)** for each agent or subgroup.
 #    This reveals heterogeneity: some combinations of intensity, IQ, and networking benefit more from extra opportunities than others.
 #
 # Together, DML and causal forests let us answer both:
@@ -338,8 +337,8 @@ print(f"  Relative strength |luck|/|talent|: {relative_strength:.2f}x")
 #
 # Because our talent dimensions represent probabilities or normalized scores, we **clip all values to the \([0, 1]\) range**. This keeps the interpretation straightforward:
 #
-# - 0 means “very low” on that dimension  
-# - 1 means “very high”  
+# - 0 means “very low” on that dimension
+# - 1 means “very high”
 # - values near 0.5 represent typical, “average” capability
 #
 # At this stage, all agents also receive the **same initial capital** (usually \(C_0 = 1\)). Any inequality that emerges later in the tutorial will therefore come from differences in event histories and talent interactions, not from unequal starting points. This makes it easier to see how randomness and ability combine to create unequal outcome over time.
@@ -623,7 +622,7 @@ print("starting from equality and using only random processes.")
 # We now examine which factors correlate more strongly with final outcomes. Standard Pearson correlations quantify linear relationships between variables. We compare correlations between:
 #
 # 1. Talent and log(capital)
-# 2. Beneficial events and log(capital)  
+# 2. Beneficial events and log(capital)
 # 3. Net events (beneficial minus detrimental) and log(capital)
 #
 # The log transformation of capital improves linearity and interpretability.
@@ -1113,6 +1112,7 @@ print("\nThese patterns inform optimal resource allocation strategies.")
 #
 # For each policy, we simulate adding resources and evaluate resulting outcomes.
 
+
 # %%
 def compare_allocation_policies(df_results):
     """
@@ -1315,16 +1315,16 @@ print("=" * 80)
 #
 # Across typical runs of the simulation, we see that:
 #
-# 1. **Normal inputs, heavy-tailed outputs**  
+# 1. **Normal inputs, heavy-tailed outputs**
 #    Talent is roughly normal, but final capital is strongly right-skewed with a long tail of big winners.
 #
-# 2. **Luck dominates correlations**  
+# 2. **Luck dominates correlations**
 #    The correlation between the number of lucky events and log(final capital) is much stronger than the correlation between talent and log(final capital). In many runs, the “luck vs talent” correlation ratio is on the order of 10:1.
 #
-# 3. **Top performers are not the top talents**  
+# 3. **Top performers are not the top talents**
 #    The agents with the highest final capital usually have **average** talent but unusually many lucky events. Exceptional success tends to reflect being “lucky among the good enough” rather than being uniquely gifted.
 #
-# 4. **Inequality emerges quickly**  
+# 4. **Inequality emerges quickly**
 #    Even over 80 periods, Gini coefficients in the 0.30–0.50 range are common, despite identical starting wealth.
 #
 # ### Causal estimates

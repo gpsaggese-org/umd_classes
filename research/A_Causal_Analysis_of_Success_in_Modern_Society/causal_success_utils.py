@@ -3,7 +3,7 @@ Causal Success Analysis - Simulation and Inference Utilities.
 
 Import as:
 
-import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as csu
+import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as racaosimscsu
 """
 
 from typing import List, Optional, Dict, Any
@@ -35,9 +35,11 @@ import arviz as az  # type: ignore
 #     "posterior_predictive_check",
 # ]
 
+
 # #############################################################################
 # Agent
 # #############################################################################
+
 
 class Agent:
     """
@@ -150,6 +152,7 @@ class Agent:
             raise ValueError(f"Unknown event type: {event_type}")
         self.capital_history.append(self.capital)
 
+
 # #############################################################################
 
 
@@ -182,7 +185,9 @@ def calculate_gini(values: np.ndarray) -> float:
     :return: Gini coefficient in [0, 1]
     """
     x = np.asarray(values, dtype=float)
-    hdbg.dassert_lt(0, x.size, "Cannot calculate Gini coefficient for empty array")
+    hdbg.dassert_lt(
+        0, x.size, "Cannot calculate Gini coefficient for empty array"
+    )
     hdbg.dassert(
         not np.any(x < 0),
         "Gini coefficient requires non-negative values",
@@ -298,9 +303,7 @@ def validate_simulation_results(agents: List[Agent]) -> bool:
     """
     df = get_results_dataframe(agents)
     hdbg.dassert(not df.empty, "No agents provided to validate")
-    hdbg.dassert(
-        not (df["capital"] < 0).any(), "Negative capital detected"
-    )
+    hdbg.dassert(not (df["capital"] < 0).any(), "Negative capital detected")
     hdbg.dassert(not df.isnull().any().any(), "NaN values detected")
     hdbg.dassert(
         not ((df["lucky_events"] < 0).any() or (df["unlucky_events"] < 0).any()),
@@ -491,7 +494,9 @@ def run_policy_simulation(
         weights = np.array([a.capital for a in agents], dtype=float)
     elif policy == "cate_optimal":
         hdbg.dassert_is_not(
-            cate_values, None, "cate_values must be provided when policy='cate_optimal'."
+            cate_values,
+            None,
+            "cate_values must be provided when policy='cate_optimal'.",
         )
         cate_array = np.asarray(cate_values, dtype=float)
         hdbg.dassert_eq(
@@ -594,7 +599,7 @@ def fit_bayesian_luck_model(
     # PRIORS
     # ======
     # All coefficients use weakly informative N(0, 1) priors (centered at 0).
-    #This allows the data to dominate the inference without strong prior beliefs.
+    # This allows the data to dominate the inference without strong prior beliefs.
     with pm.Model() as model:
         # Priors: fairly weakly informative, centered at 0.
         alpha = pm.Normal("alpha", mu=0.0, sigma=1.0)
