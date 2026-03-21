@@ -23,7 +23,7 @@
 # - Add citations.
 # - Keep the notebook flow clear.
 # - Comments should be imperative and have a period at the end.
-# - Your code should be well commented. 
+# - Your code should be well commented.
 #
 # The name of this notebook should in the following format:
 # - if the notebook is exploring `pycaret API`, then it is `pycaret.API.ipynb`
@@ -44,7 +44,7 @@ import logging
 # Avoid imports like import *, from ... import ..., from ... import *, etc.
 
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 
 # %% [markdown]
 # ## Configuration
@@ -54,7 +54,7 @@ hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 
 # %% [markdown]
@@ -67,19 +67,26 @@ hnotebook.config_notebook()
 # - Do analysis
 # - Show results
 
+
+# #############################################################################
+# Template
+# #############################################################################
+
+
 # %%
 class Template:
     """
     Brief imperative description of what the class does in one line, if needed.
     """
+
     def __init__(self):
         pass
-    
-    def method1(self, arg1:int) -> None:
+
+    def method1(self, arg1: int) -> None:
         """
         Brief imperative description of what the method does in one line.
 
-        You can elaborate more in the method docstring in this section, for e.g. explaining 
+        You can elaborate more in the method docstring in this section, for e.g. explaining
         the formula/algorithm. Every method/function should have a docstring, typehints and include the
         parameters and return as follows:
 
@@ -92,11 +99,11 @@ class Template:
         pass
 
 
-def template_function(arg1:int) -> None:
+def template_function(arg1: int) -> None:
     """
     Brief imperative description of what the function does in one line.
 
-    You can elaborate more in the function docstring in this section, for e.g. explaining 
+    You can elaborate more in the function docstring in this section, for e.g. explaining
     the formula/algorithm. Every function should have a docstring, typehints and include the
     parameters and return as follows:
 

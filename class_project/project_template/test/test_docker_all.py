@@ -11,7 +11,7 @@ import os
 
 import pytest
 
-import helpers.hdocker_tests as hdtests
+import helpers.hdocker_tests as hdoctest
 import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
@@ -35,7 +35,7 @@ class Test_docker_build(hunitest.TestCase):
         # Prepare inputs.
         script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # Run test.
-        hdtests.run_docker_build(script_dir)
+        hdoctest.run_docker_build(script_dir)
 
 
 # #############################################################################
@@ -56,7 +56,7 @@ class Test_docker_cmd(hunitest.TestCase):
         # Prepare inputs.
         script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # Run test.
-        hdtests.run_docker_cmd(script_dir)
+        hdoctest.run_docker_cmd(script_dir)
 
 
 # #############################################################################
@@ -81,7 +81,7 @@ class Test_docker_run_notebooks(hunitest.TestCase):
         test_dir = os.path.dirname(os.path.abspath(__file__))
         script_dir = os.path.dirname(test_dir)
         # Run test.
-        hdtests.run_notebook_in_docker(notebook_name, script_dir)
+        hdoctest.run_notebook_in_docker(notebook_name, script_dir)
 
     @pytest.mark.slow
     def test1(self) -> None:

@@ -47,9 +47,9 @@ def _get_first_lecture_file(msml610_dir: str) -> tuple:
     :return: tuple of (source_path, source_name)
     """
     lectures_source_dir = os.path.join(msml610_dir, "lectures_source")
-    lesson_files = sorted(glob.glob(
-        os.path.join(lectures_source_dir, "Lesson[0-9]*.txt")
-    ))
+    lesson_files = sorted(
+        glob.glob(os.path.join(lectures_source_dir, "Lesson[0-9]*.txt"))
+    )
     hdbg.dassert_lt(0, len(lesson_files), "No lesson files found")
     source_path = lesson_files[0]
     source_name = os.path.basename(source_path)
@@ -157,10 +157,7 @@ class Test__generate_pdf(hunitest.TestCase):
         with mock.patch("helpers.hsystem.system") as mock_system:
             if limit is None:
                 dshsprle._generate_pdf(
-                    msml610_dir,
-                    source_path,
-                    source_name,
-                    skip_action="open"
+                    msml610_dir, source_path, source_name, skip_action="open"
                 )
             else:
                 dshsprle._generate_pdf(
@@ -168,7 +165,7 @@ class Test__generate_pdf(hunitest.TestCase):
                     source_path,
                     source_name,
                     limit=limit,
-                    skip_action="open"
+                    skip_action="open",
                 )
             mock_system.assert_called_once()
             cmd_str = mock_system.call_args[0][0]

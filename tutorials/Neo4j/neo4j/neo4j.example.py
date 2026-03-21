@@ -38,14 +38,14 @@ import networkx as nx
 import pandas as pd
 
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 
 # +
 hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 # -
 
 # ## Start Neo4j server
@@ -62,24 +62,24 @@ hnotebook.config_notebook()
 # URI = "neo4j://localhost:7687"
 # USER = "neo4j"
 # PASSWORD = "neo4j"
-# 
+#
 # # Create a driver instance.
 # driver = nj.GraphDatabase.driver(URI, auth=(USER, PASSWORD))
 # driver.verify_connectivity()
 # _LOG.info("Connection established.")
-# 
+#
 # def change_password(tx, current_password, new_password):
 #     tx.run(
 #         "ALTER CURRENT USER SET PASSWORD FROM $current_password TO $new_password",
 #         current_password=current_password,
 #         new_password=new_password,
 #     )
-# 
-# 
+#
+#
 # # Change the password.
 # with driver.session(database="system") as session:
 #     session.write_transaction(change_password, "neo4j", "new_password")
-# 
+#
 # # Reconnect with the new password.
 # driver = nj.GraphDatabase.driver(URI, auth=("neo4j", "new_password"))
 # driver.verify_connectivity()
@@ -104,6 +104,7 @@ data.head()
 
 
 # ## Define a custom class
+
 
 # #############################################################################
 # Neo4jAPI
@@ -224,7 +225,9 @@ class Neo4jAPI:
         nx.draw_networkx_labels(G, pos, font_size=10, font_color="black")
         # Draw edge labels.
         edge_labels = nx.get_edge_attributes(G, "relationship")
-        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
+        nx.draw_networkx_edge_labels(
+            G, pos, edge_labels=edge_labels, font_size=8
+        )
         # Add legend.
         plt.legend(scatterpoints=1, loc="upper right", fontsize=10)
         # Title and display.

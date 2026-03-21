@@ -71,17 +71,19 @@ import pgmpy.base as pgmpy_base
 mtl0cireout.causal_roles_explorer()
 
 # %% [markdown]
-# # Cell 
+# # Cell
 
 # %%
-model = nx.DiGraph([
-    ("C", "A"),
-    ("C", "B"),
-    ("D", "A"),
-    ("B", "E"),
-    ("F", "E"),
-    ("A", "G"),
-])
+model = nx.DiGraph(
+    [
+        ("C", "A"),
+        ("C", "B"),
+        ("D", "A"),
+        ("B", "E"),
+        ("F", "E"),
+        ("A", "G"),
+    ]
+)
 
 mtl0cireout.plot_graph_highlight(model)
 

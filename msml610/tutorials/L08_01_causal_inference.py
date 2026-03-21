@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -315,7 +315,7 @@ print("SE for Short Email:", se(short_email))
 n = 100
 conv_rate = 0.08
 
-def run_experiment(): 
+def run_experiment():
     return np.random.binomial(1, conv_rate, size=n)
 
 np.random.seed(42)
@@ -341,7 +341,7 @@ print("95% CI for Short Email: ", ci)
 # %%
 from scipy import stats
 
-# 99% 
+# 99%
 conf = 0.95
 #conf = 0.99
 z = np.abs(stats.norm.ppf((1-conf)/2))
@@ -398,7 +398,7 @@ print(f"95% CI for the differece (short email - no email):\n{ci}")
 
 # %%
 # Shifting the CI.
-diff_mu_shifted =  short_email.mean() - no_email.mean() - 0.01 
+diff_mu_shifted =  short_email.mean() - no_email.mean() - 0.01
 diff_se = np.sqrt(no_email.sem()**2 + short_email.sem()**2)
 
 ci = (diff_mu_shifted - 1.96*diff_se, diff_mu_shifted + 1.96*diff_se)

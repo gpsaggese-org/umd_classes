@@ -3,7 +3,7 @@ Utility functions for L08_02 causal inference tutorial.
 
 Import as:
 
-import msml610.tutorials.L08_02_causal_inference_utils as mtl0cireout
+import msml610.tutorials.L08_02_causal_inference_utils as mtl0cinut
 """
 
 import logging
@@ -75,7 +75,9 @@ def plot_graph_highlight(
     :param layout: layout algorithm ("shell", "spring", "kamada_kawai")
     :param figsize: figure size
     """
-    conditioning_node_set = set(conditioning_node_set) if conditioning_node_set else set()
+    conditioning_node_set = (
+        set(conditioning_node_set) if conditioning_node_set else set()
+    )
     plt.figure(figsize=figsize)
     # Choose layout.
     if layout == "spring":
@@ -100,12 +102,10 @@ def plot_graph_highlight(
     if node1 and node2:
         path_edges = _find_path_edges(graph, node1, node2)
     edge_colors = [
-        "orange" if (u, v) in path_edges else "gray"
-        for u, v in graph.edges()
+        "orange" if (u, v) in path_edges else "gray" for u, v in graph.edges()
     ]
     edge_widths = [
-        3.0 if (u, v) in path_edges else 1.0
-        for u, v in graph.edges()
+        3.0 if (u, v) in path_edges else 1.0 for u, v in graph.edges()
     ]
     # Draw.
     nx.draw(
@@ -223,22 +223,28 @@ def d_separation_explorer(
                 conditioning_node_set=conditioning_node_set,
             )
             # Report d-separation result.
-            observed = set(conditioning_node_set) if conditioning_node_set else set()
+            observed = (
+                set(conditioning_node_set) if conditioning_node_set else set()
+            )
             is_dependent = dag.is_dconnected(node1, node2, observed=observed)
             cond_str = (
                 "given {" + ", ".join(sorted(observed)) + "}"
                 if observed
                 else "unconditionally"
             )
-            print(f"Are {node1} and {node2} dependent {cond_str}? {is_dependent}")
+            print(
+                f"Are {node1} and {node2} dependent {cond_str}? {is_dependent}"
+            )
 
     run_button.on_click(_on_run_clicked)
     # Assemble controls and output.
-    controls = ipywidgets.VBox([
-        ipywidgets.HBox([node1_widget, node2_widget]),
-        cond_widget,
-        run_button,
-    ])
+    controls = ipywidgets.VBox(
+        [
+            ipywidgets.HBox([node1_widget, node2_widget]),
+            cond_widget,
+            run_button,
+        ]
+    )
     return ipywidgets.VBox([controls, output])
 
 
@@ -530,10 +536,12 @@ def causal_roles_explorer() -> ipywidgets.VBox:
             _plot_causal_roles(graph, treatment, outcome)
 
     show_button.on_click(_on_show_clicked)
-    controls = ipywidgets.HBox([
-        graph_selector,
-        treatment_selector,
-        outcome_selector,
-        show_button,
-    ])
+    controls = ipywidgets.HBox(
+        [
+            graph_selector,
+            treatment_selector,
+            outcome_selector,
+            show_button,
+        ]
+    )
     return ipywidgets.VBox([controls, output])
