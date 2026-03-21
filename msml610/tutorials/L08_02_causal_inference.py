@@ -140,5 +140,3 @@ mtl0cireout.d_separation_explorer(
     default_node2="C",
     default_conditioning=["A"],
 )
-
-# %%
