@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.15.2
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -13,40 +13,49 @@
 # ---
 
 # %%
-# #!pip install xarray
-# !sudo /bin/bash -c "(source /venv/bin/activate; pip install xarray)"
+try:
+    import xarray
+except ModuleNotFoundError:
+    # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet xarray)"
+    pass
 
 # %%
-# !sudo /bin/bash -c "(source /venv/bin/activate; pip install yapf)"
-
-# %%
+#
 import numpy as np
 
 print("numpy version=", np.__version__)
+
+#
 import xarray as xr
 
 print("xarray version=", xr.__version__)
 
 # %%
-from IPython.display import HTML, display
+# from IPython.display import HTML, display
 
-display(HTML("<style>.container { width:77% !important; }</style>"))
+# display(HTML("<style>.container { width:77% !important; }</style>"))
 
 # %% [markdown]
 # # Overview: why xarray?
+#
+# From https://docs.xarray.dev/en/stable/getting-started-guide/why-xarray.html
 
 # %% [markdown]
-# - `xarray` adds labels (e.g., dimensions, coordinates, attributes) to `numpy` N-dim arrays (aka tensors)
+# - `numpy` N-dim arrays (aka tensors) are used in many parts of computational science
 #
-# - `xarray` allows to:
-#     - apply operations over dimensions by name
-#     - use dimension names (e.g., `dim='time'` vs `axis=0`)
-#     - select values by label (instead of integer location)
-#     - vectorizes
-#     - split-apply-combine paradigm
-#     - write less code
-#     - label-based operations frees users to know how the data is organized
+# - `numpy` provides raw N-dimensional arrays
+# - Real-world datasets need labels to encode information about how array values map to actual data
+# - `xarray` adds labels (e.g., dimensions, coordinates, attributes) to `numpy` N-dim arrays
 #
+# - `xarray`:
+#     - applies operations over dimensions by name
+#     - uses dimension names (e.g., `dim='time'` vs `axis=0`)
+#     - selects values by label (instead of integer location)
+#     - vectorizes operations based on dimension names and not shape
+#     - implements split-apply-combine paradigm
+
+# %% [markdown]
+# ## Core data structures
 # - `DataArray` is labeled N-dimensional array
 #     - generalizes `pd.Series` to N dimensions
 #     - attaches labels to `np.ndarray`
@@ -60,64 +69,75 @@ display(HTML("<style>.container { width:77% !important; }</style>"))
 # %% [markdown]
 # # Quick overview
 #
-# From https://docs.xarray.dev/en/stable/getting-started-guide/quick-overview.html
+# https://docs.xarray.dev/en/stable/getting-started-guide/quick-overview.html
 
 # %% [markdown]
-# ## Create DataArray
+# ## Create a DataArray
 
 # %%
 np.random.seed(314)
+
+# Create a 2D array.
+data = np.array([[1, 2, 3], [4, 5, 6]])
+print("data=", data)
+
+# Create an xarray.
 data = xr.DataArray(
-    # - Create a 2D array.
-    # np.random.rand(2, 3),
-    [[1, 2, 3], [4, 5, 6]],
+    data,
     # - Assign x and y to the dimensions.
     dims=("x", "y"),
     # - Assign coordinate labels 10 and 20 to locations along x dimension.
     coords={"x": [10, 20]},
 )
+
+# %%
+# Show as HTML.
 data
 
-# x has 2 dimensions "x", "y"
-# the x dimensions has coordinates/names
+# %% [markdown]
+# - `data` has 2 dimensions `x`, `y`, with 2 and 3 elements, respectively
+# - The `x` dimension has coordinates/names
+#     - `x` has an Pandas index using ints
+# - The `y` domension has no coordinates
+# - `data` has no attributes
 
 # %%
 print(type(data))
 
 # %%
+# Print as string.
 print(data)
 
 # %%
 # Extract the numpy data structure.
 vals = data.values
-print(type(vals))
-print(vals)
+print("type(vals)=", type(vals))
+print("vals=\n", vals)
 
 # %%
 # Extract the dimension names which are a tuple.
-print(type(data.dims))
 print(data.dims)
 
 # %%
 # Extract the coordinates.
-print(type(data.coords))
-print(data.coords)
+print("# type(data.coords)=\n%s" % type(data.coords))
+print("# data.coords=\n%s" % data.coords)
 
 # %%
-# Extract the attributes.
+# Extract the attributes, which can store arbitrary metadata.
 data.attrs
 
 # %% [markdown]
 # ### Indexing
+#
+# - Slicing an xarray returns another xarray with the slice
 
 # %%
 data
 
-# %% [markdown]
-# - Slicing an xarray returns another xarray with the slice
-
 # %%
-# Set the x dimension to be 0 (like numpy), so get the first row.
+# Slice like NumPy-style.
+# Set the x dimension to be 0, so get the first row.
 data[0, :]
 
 # %%
@@ -148,7 +168,7 @@ data.sel(x=10)
 # ### Attributes
 #
 # - You can add metadata attributes to `DataArray` or to coordinates
-# - They are used automatically in the plots
+# - Some of them are used automatically in the plots
 
 # %%
 data.attrs["long_name"] = "random_velocity"
@@ -168,42 +188,61 @@ data
 
 # %% [markdown]
 # ### Computation
+#
+# - Data arrays work very similarly to numpy ndarrays
 
 # %%
+# Sum 10 element-wise.
 data + 10
 
 # %%
+# Sum elements across all the dimensions
 data.sum()
 
 # %%
-# Compute mean over one dimension by label.
+# Compute mean along one dimension by label.
 data.mean(dim="x")
 
 # %%
-# Transposition.
+# Transpose.
 data.T
 
+# %% [markdown]
+# - Arithmetic operations broadcast based on dimension name
+# - You don't need to insert dummy dimensions for alignment
+
 # %%
-np.random.seed(314)
-# Create a 1-vector with coordinates.
-a = xr.DataArray(np.random.randn(3), {"y": [0, 1, 2]})
+# Create a 1-vector with coordinates along the `y` axis.
+a = xr.DataArray([1, 2, 3], {"y": [0, 1, 2]})
+
+# Create a 1-vector with dimension `z` and no coordinates.
+b = xr.DataArray([10, 20, 30, 40], dims="z")
+
+# %%
 display(a)
-# Create a 1-vector with dimension.
-b = xr.DataArray(np.random.randn(4), dims="z")
 display(b)
 
 # %%
-# No need for
+# The broadcast happens along the dimensions by name, without worrying about the order.
 a + b
+
+# %% [markdown]
+# The dimensions don't have the same name.
 
 # %%
-np.random.seed(314)
-# Create a 1-vector with coordinates.
-a = xr.DataArray(np.random.randn(3), {"z": [0, 1, 2]})
-# Create a 1-vector with dimension.
-b = xr.DataArray(np.random.randn(3), dims="z")
+# Create a 1-vector with coordinates along `z`.
+a = xr.DataArray([1, 2, 3], {"z": [0, 1, 2]})
+# Create a 1-vector with `z` dimension.
+b = xr.DataArray([10, 20, 30], dims="z")
 
 a + b
+
+# %% [markdown]
+# ### Plotting
+
+# %%
+# The plot uses the attributes.
+data.plot();
 
 # %% [markdown]
 # ### Pandas interaction
@@ -222,17 +261,15 @@ df = data.to_dataframe(name="hello")
 df
 
 # %% [markdown]
-# ### Plotting
-
-# %%
-# The plot uses the attributes.
-data.plot()
-
-# %% [markdown]
 # ## Datasets
 #
+# - `xarray.Dataset` is a dict-like container of aligned `xarray.DataArray`
+#     - It is like a generalization of a `pd.DataFrame`
 # - Variables in a `Dataset` can have different dimensions and dtypes
 # - If two variables have the same dimension (e.g., `x`) the dimension must be identical in both variables
+
+# %% [markdown]
+# ### Build from dictionary
 
 # %%
 # Create a dictionary with heterogeneous data.
@@ -240,24 +277,88 @@ dict_ = dict(foo=data, bar=("x", [1, 2]), baz=np.pi)
 print(dict_)
 
 # %%
-# Create a dataset from the dict.
-# - foo is a DataArray (with 2 dimensions)
-# - bar is a one-dimensional
-# - baz is a scalar (with no dimensions)
+# Create a `xarray.Dataset` from the dictionary.
+# - `foo` is a DataArray (with 2 dimensions `x` and `y`)
+# - `bar` is a one-dimensional array with dimension `x`
+# - `baz` is a scalar (with no dimensions)
 ds = xr.Dataset(dict_)
 ds
+
+# %% [markdown]
+# ### Extract one variable
 
 # %%
 # Extract one variable from the dataset.
 ds["foo"]
-# Equivalent to:
+# This is equivalent to
 # ds.foo
+assert str(ds.foo) == str(ds["foo"])
 
 # %%
-# Both `foo` and `bar` variables have the same coordinate `x`.
-# So we can use `x` to slice the data.
+ds["bar"]
+
+# %%
+ds["baz"]
+
+# %% [markdown]
+# ### Extract multiple vars
+
+# %%
+ds[["foo", "bar"]].to_dataframe().values
+
+# %% [markdown]
+# ### Slicing
+
+# %%
+# Both `foo` and `bar` variables have the same coordinate `x`, so we can use `x` to slice the data.
 ds["x"]
 # ds.bar["x"]
 # ds.foo["x"]
 
-# %%
+# %% [markdown]
+# ### Computation
+#
+# Most of the computations for `DataArray` are possible also on `Dataset`
+
+# %% [markdown]
+# # FAQ
+#
+# https://docs.xarray.dev/en/stable/getting-started-guide/faq.html
+
+# %% [markdown]
+# - `xarray` API is inspired by Pandas
+# - Pandas dataframe is focused on low-dimensional tabular data, where there is a rows-and-columns structure
+#     - Pandas N-dimensional panels were deprecated in favor of `xarray.DataArray`
+# - `xarray` allows ndim > 2 dimensional array for which the order of dimensions doesn't really matter
+#     - E.g., a movie is represented as a 4-dim array with time, row, column, color
+
+# %% [markdown]
+# # User Guide
+#
+# https://docs.xarray.dev/en/stable/user-guide/index.html
+
+# %% [markdown]
+# ## Terminology
+#
+# https://docs.xarray.dev/en/stable/user-guide/terminology.html
+
+# %% [markdown]
+# - `DataArray`
+#     - A multidimensional array with labeled dimensions
+#     - It contains metadata, such as dimension, names, coordinates, and attributes to the data
+#
+# - `Dataset`
+#     - A dict-like collection of `DataArray` objects with aligned dimensions
+#
+# - Dimension
+#     - The dimension of data is related to the number of degrees of freedom of it
+#
+# - Dimension axis
+#     - Set of all points in which all but one of the degrees of freedom is fixed
+#     - Each dimension axis has a name (e.g., "x dimension")
+#     - The dimensions are stored in `da.dims`
+#
+# - Coordinate
+#     - An array that labels a dimension (like tick labels along a dimension)
+#     - A dimension can have a coordinate or not
+#     - A dimension can have an index (to use selection and alignment) or not

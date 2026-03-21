@@ -105,9 +105,7 @@ print(
 # Convert train split.
 X_long_train = ttsfuti.to_long_format(train_arrays, start_id=0)
 # Convert test split with ids that continue after train ids.
-X_long_test = ttsfuti.to_long_format(
-    test_arrays, start_id=n_train
-)
+X_long_test = ttsfuti.to_long_format(test_arrays, start_id=n_train)
 
 print("Long-format train shape:", X_long_train.shape)
 print(X_long_train.head(8))
@@ -119,12 +117,8 @@ y_test = pd.Series(y_test_raw, index=np.arange(n_train, n_train + n_test))
 
 # Encode labels to 0-based integers.
 le = LabelEncoder()
-y_train_enc = pd.Series(
-    le.fit_transform(y_train), index=y_train.index
-)
-y_test_enc = pd.Series(
-    le.transform(y_test), index=y_test.index
-)
+y_train_enc = pd.Series(le.fit_transform(y_train), index=y_train.index)
+y_test_enc = pd.Series(le.transform(y_test), index=y_test.index)
 print("Activity classes:", le.classes_)
 
 # %% [markdown]
@@ -161,14 +155,10 @@ print("Test feature matrix shape:", X_feat_test.shape)
 
 # %%
 X_sel_train = ttsfuti.select_tsfresh_features(X_feat_train, y_train_enc)
-print(
-    f"Selected {X_sel_train.shape[1]} features out of {X_feat_train.shape[1]}"
-)
+print(f"Selected {X_sel_train.shape[1]} features out of {X_feat_train.shape[1]}")
 
 # Align test features to the same columns selected from training.
-X_sel_test = X_feat_test.reindex(
-    columns=X_sel_train.columns, fill_value=0.0
-)
+X_sel_test = X_feat_test.reindex(columns=X_sel_train.columns, fill_value=0.0)
 
 # %% [markdown]
 # ## Part 5: Classification & Evaluation
@@ -206,9 +196,7 @@ print(
 
 # %%
 n_classes = len(le.classes_)
-y_test_bin = label_binarize(
-    y_test_enc, classes=np.arange(n_classes)
-)
+y_test_bin = label_binarize(y_test_enc, classes=np.arange(n_classes))
 
 plt.figure(figsize=(8, 6))
 for k, cls in enumerate(le.classes_):

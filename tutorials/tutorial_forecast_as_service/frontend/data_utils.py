@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.frontend.data_utils as tfasfdaut
+import tutorials.tutorial_forecast_as_service.frontend.data_utils as ttfasfdut
 """
 
 import base64
@@ -53,7 +53,9 @@ def upload_data_to_api(df: pd.DataFrame) -> Dict[str, Any]:
         files = {"file": ("data.csv", csv_string, "text/csv")}
         _LOG.info("Uploading %d rows to API", len(df))
         # Get API request.
-        response = requests.post(tfasfrco.UPLOAD_ENDPOINT, files=files, timeout=5)
+        response = requests.post(
+            tfasfrco.UPLOAD_ENDPOINT, files=files, timeout=5
+        )
         response.raise_for_status()
         # Parse response.
         response_data = response.json()

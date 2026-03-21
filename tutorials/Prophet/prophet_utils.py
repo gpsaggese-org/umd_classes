@@ -3,7 +3,7 @@ Utility functions for Prophet-based time series forecasting workflows.
 
 Import as:
 
-import tutorials.tutorial_prophet.prophet_utils as tprpru
+import tutorials.Prophet.prophet_utils as tprpruti
 """
 
 import logging

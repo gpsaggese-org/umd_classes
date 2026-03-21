@@ -31,14 +31,12 @@ import openai
 # %autoreload 2
 
 # %%
-import pprint
-import logging
 import os
 import urllib
 from PIL import Image
 import matplotlib.pyplot as plt
 import io
-from typing import List, Tuple, Dict
+from typing import List, Dict
 
 # %% [markdown]
 # ### Getting ready
@@ -59,10 +57,10 @@ agent = openai.OpenAI()
 # %%
 # Example function for querying the assistant
 def get_assistant_response(
-    model: str, 
-    messages: List[Dict[str, str]], 
-    temperature: float = 0.7, 
-    max_tokens: int = 150
+    model: str,
+    messages: List[Dict[str, str]],
+    temperature: float = 0.7,
+    max_tokens: int = 150,
 ) -> str:
     """
     Queries the OpenAI API to get a response from the assistant.
@@ -78,22 +76,27 @@ def get_assistant_response(
         model=model,
         messages=messages,
         temperature=temperature,
-        max_tokens=max_tokens
+        max_tokens=max_tokens,
     )
     return response.choices[0].message.content
-
 
 
 # %%
 # Example scenario: Customer inquiry about product return policy
 messages = [
-    {"role": "system", "content": "You are a friendly and professional customer support assistant."},
-    {"role": "user", "content": "Hi, I need to return a product I purchased last week. Can you tell me the process?"}
+    {
+        "role": "system",
+        "content": "You are a friendly and professional customer support assistant.",
+    },
+    {
+        "role": "user",
+        "content": "Hi, I need to return a product I purchased last week. Can you tell me the process?",
+    },
 ]
 
-response  = get_assistant_response(
+response = get_assistant_response(
     model="gpt-4o-mini",  # Use a robust model for nuanced conversations
-    messages=messages
+    messages=messages,
 )
 
 print("Assistant's Response:")
@@ -102,14 +105,18 @@ print(response)
 # %%
 # Escalation for complex issues
 follow_up = [
-    {"role": "system", "content": "You are a customer support assistant. If the issue is complex, provide a response and escalate to a human agent."},
-    {"role": "user", "content": "The product I received is damaged, and I need it replaced immediately."}
+    {
+        "role": "system",
+        "content": "You are a customer support assistant. If the issue is complex, provide a response and escalate to a human agent.",
+    },
+    {
+        "role": "user",
+        "content": "The product I received is damaged, and I need it replaced immediately.",
+    },
 ]
 
 response = get_assistant_response(
-    model="gpt-4o-mini",
-    messages=follow_up,
-    temperature=0.6
+    model="gpt-4o-mini", messages=follow_up, temperature=0.6
 )
 
 print("\nEscalation Scenario:")
@@ -119,11 +126,12 @@ print(response)
 # %% [markdown]
 # ### Coding Assistant
 
+
 # %%
 def query_coding_agent(task: str, model_name: str = "gpt-4o-mini") -> str:
     """
     Interacts with the coding assistant to complete a given task.
-    
+
     param task: detailed description of the coding task or question.
     param model_name: name of the model to use.
 
@@ -135,31 +143,27 @@ def query_coding_agent(task: str, model_name: str = "gpt-4o-mini") -> str:
             model=model_name,
             name="Coding Assistant",
             description="An AI assistant skilled in programming, debugging, and code documentation.",
-            instructions="You are a helpful coding assistant. You are an expert in Python, JavaScript, and debugging common errors. Assist the user by generating code snippets, fixing errors, and explaining concepts in simple terms."
+            instructions="You are a helpful coding assistant. You are an expert in Python, JavaScript, and debugging common errors. Assist the user by generating code snippets, fixing errors, and explaining concepts in simple terms.",
         )
-    
+
         # Step 2: Create a thread for the task (conversation with the assistant)
         thread = agent.beta.threads.create()
 
         # Step 3: Send the coding task to the assistant
         message = agent.beta.threads.messages.create(
-            thread_id=thread.id,
-            role="user",
-            content=task
+            thread_id=thread.id, role="user", content=task
         )
 
         # Step 4: Run the assistant to execute the task and get the response
         run = agent.beta.threads.runs.create_and_poll(
             thread_id=thread.id,
             assistant_id=coding_agent.id,
-            instructions="Please respond with the solution to the user's coding problem."
+            instructions="Please respond with the solution to the user's coding problem.",
         )
 
         # Step 5: Check if the task was completed and retrieve the assistant's response
-        if run.status == 'completed':
-            messages = agent.beta.threads.messages.list(
-                thread_id=thread.id
-            )
+        if run.status == "completed":
+            messages = agent.beta.threads.messages.list(thread_id=thread.id)
             # Return the first message from the assistant's response
             return messages.data[0].content[0].text.value
         else:
@@ -241,6 +245,7 @@ print(doc_response)
 #
 # OpenAI offers access to its DALL-E model through an API. DALL-E is a multimodal version of GPT-3, containing 12 billion parameters, designed to convert text descriptions into images. It has been trained on a vast collection of text-image pairs sourced from the web (including Wikipedia), allowing it to generate images based on written prompts. This model is accessible through the same API.
 
+
 # %%
 def generate_image(prompt: str):
     com = agent.images.generate(prompt=prompt, n=1, size="512x512")
@@ -253,7 +258,7 @@ def generate_image(prompt: str):
     frame1.axes.yaxis.set_ticklabels([])
     plt.xticks([])
     plt.yticks([])
-    #Display the image
+    # Display the image
     plt.imshow(image)
     plt.show()
 

@@ -4,22 +4,21 @@
 # In[16]:
 
 
-get_ipython().run_line_magic('load_ext', 'autoreload')
-get_ipython().run_line_magic('autoreload', '2')
+get_ipython().run_line_magic("load_ext", "autoreload")
+get_ipython().run_line_magic("autoreload", "2")
 
-import logging, warnings
+import logging
+import warnings
 import os
 import re
 
 import matplotlib.pyplot as plt
-from IPython.display import Image as IPImage
 from IPython.display import Markdown, display
 
 # AutoGen Chat Components.
 from autogen_agentchat.agents import (
     AssistantAgent,
     CodeExecutorAgent,
-    UserProxyAgent,
 )
 from autogen_agentchat.conditions import TextMentionTermination
 from autogen_agentchat.teams import SelectorGroupChat
@@ -53,11 +52,11 @@ logging.getLogger().setLevel(logging.ERROR)
 
 # ## Part 2: SEC Filings & Quantitative RAG
 # **Objective:** Perform a deep-dive analysis into official company filings using Retrieval-Augmented Generation.
-# 
+#
 # - **Data Pipeline:** A manual process to fetch 10-K filings from SEC EDGAR, clean HTML/PDF noise, and embed chunks into **ChromaDB**.
 # - **Agentic RAG:** The **Senior Quant Analyst** queries the vector database to find specific geographic revenue splits and risk factors.
 # - **Code Execution:** The **Quant Runtime** agent writes and executes Python code locally to transform raw 10-K tables into formatted visualizations.
-# 
+#
 # The cell below retrieves the SEC annual reports for the user-specified stocks and embeds them into the Chroma database.
 
 # In[20]:
@@ -78,13 +77,13 @@ if ticker_in:
 
 
 # The cell below defines an asynchronous function `run_beautified_mission` that generates a comprehensive financial brief for a given stock ticker. It orchestrates a team of agents to:
-# 
+#
 # 1. **Revenue Breakdown** - Extract revenue data from the 10-K by geography, or fallback to product/segment revenue if geographic data is missing.
 # 2. **Pie Chart** - Automatically generate a pie chart of the revenue breakdown using actual dollar figures and save it as `analysis_output.png`.
 # 3. **Financial Ratios** - Retrieve key metrics like Trailing P/E, Forward P/E, Profit Margin, Revenue Growth (YoY), and Debt-to-Equity, and display them as a clean Markdown table.
 # 4. **Top 3 Risks** - Identify the top three material risks from the 10-K.
 # 5. **In-Depth Analysis** - Summarize the company's financials and suggest a buy/sell recommendation.
-# 
+#
 # It then streams outputs from the agents: displaying clean Markdown for the Analyst's results, confirming chart creation or showing errors from the Runtime agent, and finally printing a mission completion message when the `TERMINATE` keyword is reached.
 
 # In[10]:
@@ -118,12 +117,15 @@ async def _run_beautified_mission(ticker_symbol: str):
             if message.source == "Analyst" and isinstance(message.content, str):
                 content = message.content
                 # Block raw tool bleed-through.
-                if any(skip in content for skip in [
-                    "Evidence from",
-                    "### Evidence",
-                    "Financials for",
-                    "exitcode:",
-                ]):
+                if any(
+                    skip in content
+                    for skip in [
+                        "Evidence from",
+                        "### Evidence",
+                        "Financials for",
+                        "exitcode:",
+                    ]
+                ):
                     continue
                 display_text = autogen_utils.clean_markdown(content)
                 if display_text:
@@ -137,7 +139,7 @@ async def _run_beautified_mission(ticker_symbol: str):
                     print("[System]: Code execution failed:")
                     # Extract just the error, not the whole blob.
                     error_match = re.search(
-                        r'(Traceback.*?)(?=\n\n|\Z)', content_str, re.DOTALL
+                        r"(Traceback.*?)(?=\n\n|\Z)", content_str, re.DOTALL
                     )
                     if error_match:
                         print(error_match.group(1))
@@ -148,7 +150,7 @@ async def _run_beautified_mission(ticker_symbol: str):
 
 
 # The cell below sets up the quant analysis environment:
-# 
+#
 # - Initializes `gpt-4o` chat client and a local code executor (`quant_sandbox`).
 # - Defines the **Analyst agent** to fetch 10-K data via RAG and financial tools, produce clean Markdown tables, and generate pie charts of actual revenue figures.
 # - Defines the **Runtime agent** to execute Python code.
@@ -225,20 +227,17 @@ if user_ticker:
 # In[15]:
 
 
-import matplotlib.pyplot as plt
-
 # Data for the pie chart
-labels = ['United States', 'Taiwan', 'China (including Hong Kong)', 'Other']
+labels = ["United States", "Taiwan", "China (including Hong Kong)", "Other"]
 sizes = [149617, 42345, 19677, 4299]  # Revenue figures in millions
 
 # Create a pie chart
 plt.figure(figsize=(8, 8))
-plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+plt.pie(sizes, labels=labels, autopct="%1.1f%%", startangle=140)
 
 # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.axis('equal')
-plt.title('NVIDIA Revenue Breakdown by Geography (FY 2026)')
+plt.axis("equal")
+plt.title("NVIDIA Revenue Breakdown by Geography (FY 2026)")
 
 # Save the pie chart as an image file
-plt.savefig('analysis_output.png')
-
+plt.savefig("analysis_output.png")

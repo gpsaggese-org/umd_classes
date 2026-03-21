@@ -1,25 +1,40 @@
+"""
+Import as:
+
+import tutorials.BambooAI.bambooai.models.gemini_models_openai as tbbmgmoop
+"""
+
 import json
 import os
 import time
 import openai
 import tiktoken
 
-from bambooai import google_search, utils, context_retrieval
+from bambooai import google_search, utils
 
 google_search_function = google_search.SmartSearchOrchestrator()
 
+
 def init():
-    API_KEY = os.environ.get('GEMINI_API_KEY')
+    API_KEY = os.environ.get("GEMINI_API_KEY")
     if API_KEY is None:
         return
     else:
         openai_client = openai.OpenAI()
         openai_client.api_key = API_KEY
-        openai_client.base_url = "https://generativelanguage.googleapis.com/v1beta/openai/"
+        openai_client.base_url = (
+            "https://generativelanguage.googleapis.com/v1beta/openai/"
+        )
         return openai_client
 
-def llm_call(messages: str,model: str,temperature: str,max_tokens: str, response_format: str = None):  
 
+def llm_call(
+    messages: str,
+    model: str,
+    temperature: str,
+    max_tokens: str,
+    response_format: str = None,
+):
     openai_client = init()
 
     try:
@@ -40,7 +55,7 @@ def llm_call(messages: str,model: str,temperature: str,max_tokens: str, response
             messages=messages,
             temperature=temperature,
             max_tokens=max_tokens,
-            response_format = response_format,
+            response_format=response_format,
         )
         end_time = time.time()
 
@@ -59,14 +74,43 @@ def llm_call(messages: str,model: str,temperature: str,max_tokens: str, response
     else:
         tokens_per_second = 0
 
-    return content, messages, prompt_tokens_used, completion_tokens_used, total_tokens_used, elapsed_time, tokens_per_second
+    return (
+        content,
+        messages,
+        prompt_tokens_used,
+        completion_tokens_used,
+        total_tokens_used,
+        elapsed_time,
+        tokens_per_second,
+    )
 
-def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: str, messages: str,model: str,temperature: str,max_tokens: str,tools: str = None, response_format: str = None, reasoning_models: list = None, reasoning_effort:str = "medium"):  
+
+def llm_stream(
+    prompt_manager,
+    log_and_call_manager,
+    output_manager,
+    chain_id: str,
+    messages: str,
+    model: str,
+    temperature: str,
+    max_tokens: str,
+    tools: str = None,
+    response_format: str = None,
+    reasoning_models: list = None,
+    reasoning_effort: str = "medium",
+):
     collected_chunks = []
     collected_messages = []
     tool_calls = []
     search_triplets = []
-    google_search_messages = [{"role": "system", "content": prompt_manager.google_search_react_system.format(utils.get_readable_date())}]
+    google_search_messages = [
+        {
+            "role": "system",
+            "content": prompt_manager.google_search_react_system.format(
+                utils.get_readable_date()
+            ),
+        }
+    ]
 
     tools = tools
 
@@ -77,15 +121,13 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
     }
 
     def add_triplet(query, result, links):
-        '''Add a triplet to the search_triplets list'''
-        triplet = {
-            "query": query,
-            "result": result,
-            "links": links
-        }
+        """Add a triplet to the search_triplets list"""
+        triplet = {"query": query, "result": result, "links": links}
         search_triplets.append(triplet)
 
-    def get_response(model, messages, temperature, max_tokens, tools, response_format):
+    def get_response(
+        model, messages, temperature, max_tokens, tools, response_format
+    ):
         return openai_client.chat.completions.create(
             model=model,
             messages=messages,
@@ -95,9 +137,11 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
             stream=True,
             response_format=response_format,
         )
-    
+
     try:
-        response = get_response(model, messages, temperature, max_tokens, tools, response_format)
+        response = get_response(
+            model, messages, temperature, max_tokens, tools, response_format
+        )
 
         start_time = time.time()
         # iterate through the stream of events
@@ -107,13 +151,21 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
 
             if delta and delta.content:
                 collected_messages.append(delta.content)  # save the message
-                output_manager.print_wrapper(delta.content, end='', flush=True, chain_id=chain_id)
+                output_manager.print_wrapper(
+                    delta.content, end="", flush=True, chain_id=chain_id
+                )
             elif delta and delta.tool_calls:
                 tcchunklist = delta.tool_calls
                 for tcchunk in tcchunklist:
                     if len(tool_calls) <= tcchunk.index:
-                        tool_calls.append({"id": "", "type": "function", "function": { "name": "", "arguments": "" } })
-                    tc = tool_calls[tcchunk.index] 
+                        tool_calls.append(
+                            {
+                                "id": "",
+                                "type": "function",
+                                "function": {"name": "", "arguments": ""},
+                            }
+                        )
+                    tc = tool_calls[tcchunk.index]
 
                     if tcchunk.id:
                         tc["id"] += tcchunk.id
@@ -126,38 +178,52 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
             messages.append(
                 {
                     "tool_calls": tool_calls,
-                    "role": 'assistant',
-                }                    
+                    "role": "assistant",
+                }
             )
-        
+
         for index, tool_call in enumerate(tool_calls):
-            function_name = tool_call['function']['name']
+            function_name = tool_call["function"]["name"]
             function_to_call = available_functions[function_name]
-            function_args = json.loads(tool_call['function']['arguments'])
-            
+            function_args = json.loads(tool_call["function"]["arguments"])
+
             if function_name == "google_search":
-                google_search_messages.append({"role": "user", "content": function_args.get("search_query")})
+                google_search_messages.append(
+                    {
+                        "role": "user",
+                        "content": function_args.get("search_query"),
+                    }
+                )
                 function_response, links = function_to_call(
                     prompt_manager,
                     log_and_call_manager,
-                    output_manager, 
+                    output_manager,
                     chain_id,
-                    messages=google_search_messages
+                    messages=google_search_messages,
                 )
-                add_triplet(function_args.get("search_query"), function_response, links)
- 
+                add_triplet(
+                    function_args.get("search_query"), function_response, links
+                )
+
             messages.append(
                 {
-                    "tool_call_id": tool_call['id'],
+                    "tool_call_id": tool_call["id"],
                     "role": "tool",
                     "name": function_name,
                     "content": function_response,
                 }  # extend conversation with function response
             )
 
-            # Check if it's the last tool call in the list before calling 
+            # Check if it's the last tool call in the list before calling
             if index == len(tool_calls) - 1:
-                response = get_response(model, messages, temperature, max_tokens, tools, response_format)
+                response = get_response(
+                    model,
+                    messages,
+                    temperature,
+                    max_tokens,
+                    tools,
+                    response_format,
+                )
 
         # iterate through the stream of events
         for chunk in response:
@@ -166,7 +232,9 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
 
             if delta and delta.content:
                 collected_messages.append(delta.content)  # save the message
-                output_manager.print_wrapper(delta.content, end='', flush=True, chain_id=chain_id)
+                output_manager.print_wrapper(
+                    delta.content, end="", flush=True, chain_id=chain_id
+                )
 
         end_time = time.time()
         elapsed_time = end_time - start_time
@@ -174,23 +242,23 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
     except Exception as e:
         output_manager.display_system_messages(f"Gemini API Error: {str(e)}")
         raise
-    
-    output_manager.print_wrapper("",chain_id=chain_id)
+
+    output_manager.print_wrapper("", chain_id=chain_id)
 
     # get the complete text received
-    full_reply_content = ''.join([m for m in collected_messages])
-    
+    full_reply_content = "".join([m for m in collected_messages])
+
     # Tiktoken encoding
     encoding = tiktoken.encoding_for_model("gpt-4")
 
     # count the number of response tokens used
     completion_tokens_used = len(encoding.encode(full_reply_content))
 
-    # count the number of prompt tokens used   
+    # count the number of prompt tokens used
     tokens_per_message = 3
     tokens_per_name = 1
     prompt_tokens_used = 0
-    
+
     for message in messages:
         prompt_tokens_used += tokens_per_message
         for key, value in message.items():
@@ -198,20 +266,39 @@ def llm_stream(prompt_manager, log_and_call_manager, output_manager, chain_id: s
                 prompt_tokens_used += len(encoding.encode(value))
             if key == "name":
                 prompt_tokens_used += tokens_per_name
-    prompt_tokens_used += 3  # every reply is primed with <|start|>assistant<|message|>
-    
+    prompt_tokens_used += (
+        3  # every reply is primed with <|start|>assistant<|message|>
+    )
+
     # calculate the total tokens used
     total_tokens_used = prompt_tokens_used + completion_tokens_used
-    
+
     if elapsed_time > 0:
         tokens_per_second = completion_tokens_used / elapsed_time
     else:
         tokens_per_second = 0
 
-    #if search_triplets:
-        #output_handler.display_results(research=search_triplets)
+    # if search_triplets:
+    # output_handler.display_results(research=search_triplets)
 
     if tools:
-        return full_reply_content, search_triplets, messages, prompt_tokens_used, completion_tokens_used, total_tokens_used, elapsed_time, tokens_per_second
+        return (
+            full_reply_content,
+            search_triplets,
+            messages,
+            prompt_tokens_used,
+            completion_tokens_used,
+            total_tokens_used,
+            elapsed_time,
+            tokens_per_second,
+        )
     else:
-        return full_reply_content, messages, prompt_tokens_used, completion_tokens_used, total_tokens_used, elapsed_time, tokens_per_second
+        return (
+            full_reply_content,
+            messages,
+            prompt_tokens_used,
+            completion_tokens_used,
+            total_tokens_used,
+            elapsed_time,
+            tokens_per_second,
+        )

@@ -20,8 +20,10 @@
 # Import the helper script.
 import helpers.hllm as hllm
 import pandas as pd
+
 # Set up logging for debugging.
 import logging
+
 logging.basicConfig(level=logging.INFO)
 
 # Set OpenAI API key.
@@ -32,13 +34,13 @@ from typing import List, Tuple
 os.environ["OPENAI_API_KEY"] = "<your_api_key_here>"
 
 # %% [markdown]
-# ## 1. Travel Agent chat assistant: 
+# ## 1. Travel Agent chat assistant:
 # #### Goal: Cretae a chat agent that will help the user to create an itinary to visit New York Trip considering all the constraints.
 
 # %%
 # Define the prompt for the travel assistant
 user_prompt = """
-I am visiting New York City for 3 days. Please create a detailed itinerary, 
+I am visiting New York City for 3 days. Please create a detailed itinerary,
 including popular attractions, food recommendations, and some evening activities.
 I already booked flight tickets and hotel near Newark penn station.
 Constraints:
@@ -60,7 +62,7 @@ trip_plan = hllm.get_completion(
     user_prompt=user_prompt,
     system_prompt=system_instructions,
     model="gpt-4o-mini",
-    temperature=0.7  # Slightly increase temperature for creative outputs
+    temperature=0.7,  # Slightly increase temperature for creative outputs
 )
 
 # Print the generated trip itinerary
@@ -75,9 +77,10 @@ print(trip_plan)
 # Upload files to a vector store.
 vector_store_name = "batch_vector_store"
 file_paths = [
-    "../helpers_root/docs/tools/all.imports_and_packages.how_to_guide.md", 
+    "../helpers_root/docs/tools/all.imports_and_packages.how_to_guide.md",
     "../helpers_root/docs/tools/unit_test/all.write_unit_tests.how_to_guide.md",
-             "../helpers_root/docs/code_guidelines/all.coding_style.how_to_guide.md"]  # Example paths
+    "../helpers_root/docs/code_guidelines/all.coding_style.how_to_guide.md",
+]  # Example paths
 
 question = "Is `from pathlib import Path` a correct import according to the coding guidelines?"
 
@@ -94,15 +97,19 @@ file_batch = client.vector_stores.file_batches.upload_and_poll(
 )
 
 if file_batch.status != "completed" or file_batch.file_counts.failed > 0:
-    raise RuntimeError(f"Ingestion not ready: status={file_batch.status}, counts={file_batch.counts}")
+    raise RuntimeError(
+        f"Ingestion not ready: status={file_batch.status}, counts={file_batch.counts}"
+    )
 
 resp = client.responses.create(
     model="gpt-4o",
     input=question,
-    tools=[{
-        "type": "file_search",
-        "vector_store_ids": [vector_store.id],
-    }],
+    tools=[
+        {
+            "type": "file_search",
+            "vector_store_ids": [vector_store.id],
+        }
+    ],
 )
 
 # Extract the assistant's text.
@@ -113,7 +120,9 @@ sources: List[Tuple[str, str]] = []
 for item in getattr(resp, "output", []) or []:
     for part in getattr(item, "content", []) or []:
         if getattr(part, "type", "") == "output_text":
-            annotations = getattr(getattr(part, "text", None), "annotations", []) or []
+            annotations = (
+                getattr(getattr(part, "text", None), "annotations", []) or []
+            )
             for ann in annotations:
                 if getattr(ann, "type", "") == "file_citation":
                     file_id = ann.file_citation.file_id
@@ -134,11 +143,15 @@ if sources:
 # #### Goal: Run prompts batch-wise on a lot of data
 
 # %%
-df = pd.DataFrame({"question": [
-    "Summarize: Attention is all you need.",
-    "Summarize: Diffusion models in 2 sentences.",
-    "Summarize: Convnets vs Transformers for vision.",
-]})
+df = pd.DataFrame(
+    {
+        "question": [
+            "Summarize: Attention is all you need.",
+            "Summarize: Diffusion models in 2 sentences.",
+            "Summarize: Convnets vs Transformers for vision.",
+        ]
+    }
+)
 
 df_out = hllm.apply_prompt_to_dataframe(
     df=df,
@@ -147,7 +160,7 @@ df_out = hllm.apply_prompt_to_dataframe(
     input_col="question",
     response_col="summary",
     chunk_size=3,
-    allow_overwrite=True, 
+    allow_overwrite=True,
 )
 print(df_out.head())
 
@@ -164,8 +177,8 @@ txt = hllm.get_completion(
     cache_mode="NORMAL",
     temperature=0.1,
     max_tokens=1000,
-    print_cost=True,            
-    cost_tracker=tracker,       
+    print_cost=True,
+    cost_tracker=tracker,
 )
 
 txt2 = hllm.get_completion(
@@ -175,8 +188,8 @@ txt2 = hllm.get_completion(
     cache_mode="NORMAL",
     temperature=0.1,
     max_tokens=1000,
-    print_cost=True,         
-    cost_tracker=tracker,       
+    print_cost=True,
+    cost_tracker=tracker,
 )
 
 txt3 = hllm.get_completion(
@@ -186,8 +199,8 @@ txt3 = hllm.get_completion(
     cache_mode="NORMAL",
     temperature=0.1,
     max_tokens=1000,
-    print_cost=True,           
-    cost_tracker=tracker,      
+    print_cost=True,
+    cost_tracker=tracker,
 )
 
 print("Custom tracker total: $", tracker.get_current_cost())

@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.api.main as tfasapma
+import tutorials.tutorial_forecast_as_service.api.main as ttfasapma
 """
 
 import logging

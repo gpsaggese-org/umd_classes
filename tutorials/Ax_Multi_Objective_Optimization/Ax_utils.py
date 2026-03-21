@@ -7,6 +7,10 @@ This file contains utility functions that support the tutorial notebooks.
 - This helps keep the notebooks clean, modular, and easier to debug.
 - Students should implement functions here for data preprocessing,
   model setup, evaluation, or any reusable logic.
+
+Import as:
+
+import tutorials.Ax_Multi_Objective_Optimization.Ax_utils as tamooaxut
 """
 
 import logging
@@ -28,26 +32,31 @@ logger = logging.getLogger(__name__)
 
 # Definition of the Hartmann function for the API example
 
+
 def hartmann6(x1, x2, x3, x4, x5, x6):
     alpha = np.array([1.0, 1.2, 3.0, 3.2])
-    A = np.array([
-        [10, 3, 17, 3.5, 1.7, 8],
-        [0.05, 10, 17, 0.1, 8, 14],
-        [3, 3.5, 1.7, 10, 17, 8],
-        [17, 8, 0.05, 10, 0.1, 14]
-    ])
-    P = 10**-4 * np.array([
-        [1312, 1696, 5569, 124, 8283, 5886],
-        [2329, 4135, 8307, 3736, 1004, 9991],
-        [2348, 1451, 3522, 2883, 3047, 6650],
-        [4047, 8828, 8732, 5743, 1091, 381]
-    ])
+    A = np.array(
+        [
+            [10, 3, 17, 3.5, 1.7, 8],
+            [0.05, 10, 17, 0.1, 8, 14],
+            [3, 3.5, 1.7, 10, 17, 8],
+            [17, 8, 0.05, 10, 0.1, 14],
+        ]
+    )
+    P = 10**-4 * np.array(
+        [
+            [1312, 1696, 5569, 124, 8283, 5886],
+            [2329, 4135, 8307, 3736, 1004, 9991],
+            [2348, 1451, 3522, 2883, 3047, 6650],
+            [4047, 8828, 8732, 5743, 1091, 381],
+        ]
+    )
 
     outer = 0.0
     for i in range(4):
         inner = 0.0
         for j, x in enumerate([x1, x2, x3, x4, x5, x6]):
-            inner += A[i, j] * (x - P[i, j])**2
+            inner += A[i, j] * (x - P[i, j]) ** 2
         outer += alpha[i] * np.exp(-inner)
     return -outer
 
@@ -56,14 +65,18 @@ def hartmann6(x1, x2, x3, x4, x5, x6):
 # DSP Simulation section
 # ===============================
 
+
 def get_avg_spent_per_day(date: str):
     """
     This method retrieves the known daily average spent at the moment
     """
     date = datetime.strptime(date, "%Y%m%d")
     prev_date = date - timedelta(days=1)
-    prev_date_str = prev_date.strftime('%Y%m%d')
-    return json.load(open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json"))["avg_spent_per_day"]
+    prev_date_str = prev_date.strftime("%Y%m%d")
+    return json.load(
+        open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json")
+    )["avg_spent_per_day"]
+
 
 def load_pctr_prediction_model(date: str):
     """
@@ -71,18 +84,23 @@ def load_pctr_prediction_model(date: str):
     """
     date = datetime.strptime(date, "%Y%m%d")
     prev_date = date - timedelta(days=1)
-    prev_date_str = prev_date.strftime('%Y%m%d')
-    date_str = date.strftime('%Y%m%d')
+    prev_date_str = prev_date.strftime("%Y%m%d")
+    date_str = date.strftime("%Y%m%d")
 
     # Load the model and the features
     model = joblib.load(f"models/xgb_model_{prev_date_str}.joblib")
-    features = open(f"models/features_{prev_date_str}.txt", "r").read().splitlines()
+    features = (
+        open(f"models/features_{prev_date_str}.txt", "r").read().splitlines()
+    )
 
     # Load the average CTR and the bid to pay ratio
-    average_ctr_and_bid_to_pay_ratio = json.load(open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json"))
+    average_ctr_and_bid_to_pay_ratio = json.load(
+        open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json")
+    )
     average_ctr = average_ctr_and_bid_to_pay_ratio["average_ctr"]
     bid_to_pay_ratio = average_ctr_and_bid_to_pay_ratio["bid_to_pay_ratio"]
     return model, features, average_ctr, bid_to_pay_ratio
+
 
 def load_average_ctr_and_bid_to_pay_ratio(date: str):
     """
@@ -90,18 +108,38 @@ def load_average_ctr_and_bid_to_pay_ratio(date: str):
     """
     date = datetime.strptime(date, "%Y%m%d")
     prev_date = date - timedelta(days=1)
-    prev_date_str = prev_date.strftime('%Y%m%d')
-    average_ctr_and_bid_to_pay_ratio = json.load(open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json"))
+    prev_date_str = prev_date.strftime("%Y%m%d")
+    average_ctr_and_bid_to_pay_ratio = json.load(
+        open(f"models/average_ctr_and_bid_to_pay_ratio_{prev_date_str}.json")
+    )
     average_ctr = average_ctr_and_bid_to_pay_ratio["average_ctr"]
     bid_to_pay_ratio = average_ctr_and_bid_to_pay_ratio["bid_to_pay_ratio"]
     return average_ctr, bid_to_pay_ratio
 
-def dsp_simulation(date: str, base_bid: float, budget: float, ctr_reg_coef: float, bid_to_pay_ratio_reg_coef: float, pacing_reg_coef: float, offset: int = 0, limit: Optional[int] = None):
+
+def dsp_simulation(
+    date: str,
+    base_bid: float,
+    budget: float,
+    ctr_reg_coef: float,
+    bid_to_pay_ratio_reg_coef: float,
+    pacing_reg_coef: float,
+    offset: int = 0,
+    limit: Optional[int] = None,
+):
     """
     This method processes the dataset for a given date, loads the ctr prediction model, simulates the bidding strategy and returns the results.
     """
     # Load the dataset for the given date
-    df_bids = pd.read_csv(f"dataset/bid_with_features_and_pctr_{date}.csv").iloc[offset:offset+limit] if limit is not None else pd.read_csv(f"dataset/bid_with_features_and_pctr_{date}.csv").iloc[offset:]
+    df_bids = (
+        pd.read_csv(f"dataset/bid_with_features_and_pctr_{date}.csv").iloc[
+            offset : offset + limit
+        ]
+        if limit is not None
+        else pd.read_csv(f"dataset/bid_with_features_and_pctr_{date}.csv").iloc[
+            offset:
+        ]
+    )
     if len(df_bids) == 0:
         return 0, 0, 0, 0, 0
     # Load the ctr prediction model
@@ -109,10 +147,14 @@ def dsp_simulation(date: str, base_bid: float, budget: float, ctr_reg_coef: floa
     # Obtained the predicted CTR for each bid from the dataset
     df_bids["sim_pctr"] = df_bids["pctr"]
     # Calculate the rawbid amount
-    df_bids["sim_ctr_ratio"] = (df_bids["sim_pctr"] / average_ctr)
-    df_bids["sim_raw_bid"] = base_bid * (1 + ctr_reg_coef * (df_bids["sim_ctr_ratio"] - 1))
+    df_bids["sim_ctr_ratio"] = df_bids["sim_pctr"] / average_ctr
+    df_bids["sim_raw_bid"] = base_bid * (
+        1 + ctr_reg_coef * (df_bids["sim_ctr_ratio"] - 1)
+    )
     # Calculate the pay to bid ratio
-    df_bids["sim_final_bid"] = df_bids["sim_raw_bid"] * (1 + bid_to_pay_ratio_reg_coef * (bid_to_pay_ratio - 1))
+    df_bids["sim_final_bid"] = df_bids["sim_raw_bid"] * (
+        1 + bid_to_pay_ratio_reg_coef * (bid_to_pay_ratio - 1)
+    )
 
     # The pacing coefficient has to be calculated based on the on going budget spent as the simulation runs
 
@@ -126,19 +168,20 @@ def dsp_simulation(date: str, base_bid: float, budget: float, ctr_reg_coef: floa
 
     # Iterate through each record in df_bids
     for idx, row in df_bids.iterrows():
-        hour = row['hour']
-        
+        hour = row["hour"]
+
         # Calculate pacing coefficient
         expected_budget_spent = (budget / 24.0) * (hour + 1)
         actual_budget_spent = budget - budget_remaining if budget > 0 else 0
         pacing_coef = np.clip(
-            expected_budget_spent / (actual_budget_spent + 1e-9),
-            0.5, 2.0
+            expected_budget_spent / (actual_budget_spent + 1e-9), 0.5, 2.0
         )
 
         # Apply pacing coefficient
-        sim_final_bid = row['sim_final_bid'] * (1 + pacing_reg_coef * (pacing_coef - 1))
-        row['sim_final_bid_paced'] = sim_final_bid
+        sim_final_bid = row["sim_final_bid"] * (
+            1 + pacing_reg_coef * (pacing_coef - 1)
+        )
+        row["sim_final_bid_paced"] = sim_final_bid
 
         # Verify that the budget is not exhausted
         if budget_remaining <= 0:
@@ -147,23 +190,36 @@ def dsp_simulation(date: str, base_bid: float, budget: float, ctr_reg_coef: floa
         pay_price = 0
         total_bids += 1
         # Verify if the bid is done
-        if (sim_final_bid >= row['slot_floor_price']):
+        if sim_final_bid >= row["slot_floor_price"]:
             total_bids_done += 1
             # The DSP wins if the bid is greated than the paid price
-            if sim_final_bid >= row['pay_price']:
+            if sim_final_bid >= row["pay_price"]:
                 total_bids_won += 1
-                pay_price = row['pay_price']
+                pay_price = row["pay_price"]
                 budget_remaining -= pay_price
                 total_budget_spent += pay_price
                 # Verify if the bid was clicked
-                if row['clicked'] == 1:
+                if row["clicked"] == 1:
                     total_clicks += 1
 
-    return total_bids, total_bids_done, total_bids_won, total_budget_spent, total_clicks, 
+    return (
+        total_bids,
+        total_bids_done,
+        total_bids_won,
+        total_budget_spent,
+        total_clicks,
+    )
+
 
 # ===============================
 # Multi-Armed Bandit section
 # ===============================
+
+
+# #############################################################################
+# MultiArmedBanditAlgorithm
+# #############################################################################
+
 
 class MultiArmedBanditAlgorithm(ABC):
     """Abstract class to be implemented by the A/B Testing, UCB1, Thompson Sampling, and GP-Bandit algorithms."""
@@ -191,6 +247,12 @@ class MultiArmedBanditAlgorithm(ABC):
         self.total_reward += reward
         self.total_trials += 1
 
+
+# #############################################################################
+# AB_Testing
+# #############################################################################
+
+
 class AB_Testing(MultiArmedBanditAlgorithm):
     def __init__(self, n_arms: int):
         super().__init__(n_arms)
@@ -200,6 +262,12 @@ class AB_Testing(MultiArmedBanditAlgorithm):
 
     def update(self, arm: int, reward: float) -> None:
         super().update(arm, reward)
+
+
+# #############################################################################
+# UCB1
+# #############################################################################
+
 
 class UCB1(MultiArmedBanditAlgorithm):
     def __init__(self, n_arms: int, kappa: float = 1.41):
@@ -218,15 +286,25 @@ class UCB1(MultiArmedBanditAlgorithm):
                 ucb[i] = np.inf
             else:
                 # Calculate the UCB for the arm
-                ucb[i] = self.expected_rewards[i] + self.kappa * np.sqrt(2 * np.log(self.total_pulls) / self.n_pulls[i])
+                ucb[i] = self.expected_rewards[i] + self.kappa * np.sqrt(
+                    2 * np.log(self.total_pulls) / self.n_pulls[i]
+                )
         return np.argmax(ucb)
 
     def update(self, arm: int, reward: float) -> None:
         super().update(arm, reward)
         # Recalculate the mean
-        self.expected_rewards[arm] = (self.expected_rewards[arm] * self.n_pulls[arm] + reward) / (self.n_pulls[arm] + 1)
+        self.expected_rewards[arm] = (
+            self.expected_rewards[arm] * self.n_pulls[arm] + reward
+        ) / (self.n_pulls[arm] + 1)
         self.n_pulls[arm] += 1
         self.total_pulls += 1
+
+
+# #############################################################################
+# ThompsonSampling
+# #############################################################################
+
 
 class ThompsonSampling(MultiArmedBanditAlgorithm):
     def __init__(self, n_arms: int):
@@ -249,11 +327,17 @@ class ThompsonSampling(MultiArmedBanditAlgorithm):
         else:
             raise ValueError("Reward must be 0.0 or 1.0")
 
-class GP_Bandit(MultiArmedBanditAlgorithm):
 
+# #############################################################################
+# GP_Bandit
+# #############################################################################
+
+
+class GP_Bandit(MultiArmedBanditAlgorithm):
     """
     The GP-Bandit method is implemented using the Ax library.
     """
+
     def __init__(self, n_arms: int, batch_size: int = 1000):
         super().__init__(n_arms)
         self.client = Client()
@@ -264,12 +348,21 @@ class GP_Bandit(MultiArmedBanditAlgorithm):
         # So, in case of n_arms, I need to create n_arms - 1 variables.
 
         # Create n - 1 variables
-        parameters = [RangeParameterConfig(name=f"w_{i}", bounds=(0.0, 1.0), parameter_type="float") for i in range(n_arms - 1)]
+        parameters = [
+            RangeParameterConfig(
+                name=f"w_{i}", bounds=(0.0, 1.0), parameter_type="float"
+            )
+            for i in range(n_arms - 1)
+        ]
         parameters_constraints = [
             # The sum of the variables must be less than or equal to 1
             " + ".join([f"w_{i}" for i in range(n_arms - 1)]) + " <= 1.0"
         ]
-        self.client.configure_experiment(name="GP_Bandit", parameters=parameters, parameter_constraints=parameters_constraints)
+        self.client.configure_experiment(
+            name="GP_Bandit",
+            parameters=parameters,
+            parameter_constraints=parameters_constraints,
+        )
         self.client.configure_optimization(objective="clicks")
 
         # Get initial set of weights
@@ -297,7 +390,10 @@ class GP_Bandit(MultiArmedBanditAlgorithm):
         self.batch_index += 1
         if self.batch_index == self.batch_size:
             # After a number of experiments, we call Ax to update the GP model and get a new set of weights
-            self.client.complete_trial(trial_index=self.last_trial_index, raw_data={"clicks": self.batch_reward})
+            self.client.complete_trial(
+                trial_index=self.last_trial_index,
+                raw_data={"clicks": self.batch_reward},
+            )
             self.batch_reward = 0
             self.batch_index = 0
             # Get new set of weights
@@ -311,18 +407,33 @@ class GP_Bandit(MultiArmedBanditAlgorithm):
             self.weights.append(last_weight)
             self.last_trial_index = trial_index
 
+
+# #############################################################################
+# SimulationExperiment
+# #############################################################################
+
+
 class SimulationExperiment:
-    def __init__(self, ctr_means: list[float], ctr_stds: list[float], algorithm: MultiArmedBanditAlgorithm):
+    def __init__(
+        self,
+        ctr_means: list[float],
+        ctr_stds: list[float],
+        algorithm: MultiArmedBanditAlgorithm,
+    ):
         if len(ctr_means) != len(ctr_stds):
             raise ValueError("ctr_means and ctr_stds must have the same length")
         if len(ctr_means) != algorithm.n_arms:
-            raise ValueError("ctr_means and ctr_stds must have the same length as the number of arms")
+            raise ValueError(
+                "ctr_means and ctr_stds must have the same length as the number of arms"
+            )
 
         self.ctr_means = ctr_means
         self.ctr_stds = ctr_stds
         self.algorithm = algorithm
 
-    def run_experiment(self, n_trials: int) -> tuple[float, int, np.ndarray, np.ndarray]:
+    def run_experiment(
+        self, n_trials: int
+    ) -> tuple[float, int, np.ndarray, np.ndarray]:
         # Stats to calculate the results of the experiment
         # How many clicks were accumulated over time
         accum_rewards_per_trial = np.zeros(n_trials)
@@ -339,22 +450,40 @@ class SimulationExperiment:
             self.algorithm.update(arm, reward)
 
             # For the selected arm, update the reward
-            accum_rewards_per_trial[i] = accum_rewards_per_trial[i-1] + reward if i > 0 else reward
+            accum_rewards_per_trial[i] = (
+                accum_rewards_per_trial[i - 1] + reward if i > 0 else reward
+            )
             # For the selected arm, update the number of pulls
-            pulls_per_arm_per_trial[i, arm] = (pulls_per_arm_per_trial[i-1, arm] + 1) if i > 0 else 1
+            pulls_per_arm_per_trial[i, arm] = (
+                (pulls_per_arm_per_trial[i - 1, arm] + 1) if i > 0 else 1
+            )
 
             # The expected value is updated on the selected arm
-            expected_rewards_per_arm[arm] = (expected_rewards_per_arm[arm] * pulls_per_arm_per_trial[i, arm] + reward) / (pulls_per_arm_per_trial[i, arm] + 1)
+            expected_rewards_per_arm[arm] = (
+                expected_rewards_per_arm[arm] * pulls_per_arm_per_trial[i, arm]
+                + reward
+            ) / (pulls_per_arm_per_trial[i, arm] + 1)
             # The arms that were not selected are updated with the same value as the previous trial
             for j in range(self.algorithm.n_arms):
                 if j != arm:
-                    pulls_per_arm_per_trial[i, j] = pulls_per_arm_per_trial[i-1, j]
+                    pulls_per_arm_per_trial[i, j] = pulls_per_arm_per_trial[
+                        i - 1, j
+                    ]
                     expected_rewards_per_arm[j] = expected_rewards_per_arm[j]
-            
+
         # Calculate the regret for each trial
         # Now that the experiment is over, we have the final expected reward for each arm and we can calculate the total reward if we chose the best arm all the time.
         accumulated_regret_per_trial = np.zeros(n_trials)
         for j in range(n_trials):
-            accumulated_regret_per_trial[j] = max(expected_rewards_per_arm) * (j+1) - accum_rewards_per_trial[j]
-        
-        return self.algorithm.total_reward, self.algorithm.total_trials, accum_rewards_per_trial, pulls_per_arm_per_trial, expected_rewards_per_arm, accumulated_regret_per_trial
+            accumulated_regret_per_trial[j] = (
+                max(expected_rewards_per_arm) * (j + 1)
+                - accum_rewards_per_trial[j]
+            )
+        return (
+            self.algorithm.total_reward,
+            self.algorithm.total_trials,
+            accum_rewards_per_trial,
+            pulls_per_arm_per_trial,
+            expected_rewards_per_arm,
+            accumulated_regret_per_trial,
+        )

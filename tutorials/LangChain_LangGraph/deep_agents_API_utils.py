@@ -5,7 +5,8 @@ All reusable functions extracted from the notebook live here, organised in the
 same order as the notebook sections they belong to.
 
 Import as:
-    import deep_agents_API_utils as ut
+
+import tutorials.LangChain_LangGraph.deep_agents_API_utils as tlldaaput
 """
 
 import logging
@@ -97,7 +98,9 @@ def run_hitl_demo(model, thread_id: str = "API_HITL_GUARDRAIL"):
     from langgraph.types import Command
 
     try:
-        from langchain.agents.middleware.human_in_the_loop import InterruptOnConfig
+        from langchain.agents.middleware.human_in_the_loop import (
+            InterruptOnConfig,
+        )
     except ModuleNotFoundError as e:  # pragma: no cover
         raise RuntimeError(
             "This Deep Agents HITL demo needs the tutorial dependencies.\n\n"
@@ -111,7 +114,9 @@ def run_hitl_demo(model, thread_id: str = "API_HITL_GUARDRAIL"):
         checkpointer=MemorySaver(),
         backend=backend,
         interrupt_on={
-            "edit_file": InterruptOnConfig(allowed_decisions=["approve", "reject"])
+            "edit_file": InterruptOnConfig(
+                allowed_decisions=["approve", "reject"]
+            )
         },
     )
     agent.invoke(
