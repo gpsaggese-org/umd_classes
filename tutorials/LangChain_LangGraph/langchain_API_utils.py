@@ -6,7 +6,7 @@ organised in the same order as the notebook sections they belong to.
 
 Import as:
 
-import tutorials.LangChain_LangGraph.langchain.API_utils as tlllaput
+import tutorials.LangChain_LangGraph.langchain_API_utils as tlllaput
 """
 
 import base64

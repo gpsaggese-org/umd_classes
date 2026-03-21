@@ -1,3 +1,9 @@
+"""
+Import as:
+
+import tutorials.LangChain_LangGraph.langchain_utils as tllalaut
+"""
+
 import hashlib
 import os
 from pathlib import Path
@@ -156,5 +162,7 @@ def format_docs(documents: list[Document]) -> str:
     for document in documents:
         source = document.metadata.get("source", "(unknown)")
         chunk = document.metadata.get("chunk_index", "?")
-        blocks.append(f"[source={source} chunk={chunk}]\n{document.page_content}")
+        blocks.append(
+            f"[source={source} chunk={chunk}]\n{document.page_content}"
+        )
     return "\n\n---\n\n".join(blocks)

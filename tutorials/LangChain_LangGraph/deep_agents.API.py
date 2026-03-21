@@ -16,7 +16,7 @@
 # %% [markdown]
 # ## Deep Agents — API overview (used in `langchain.example.ipynb`)
 #
-# Deep Agents (the `deepagents` package used in this tutorial) is an optional layer that bundles a few "agent app" conveniences:
+# Deep Agents (the `deepagents` package used in this tutorial) is an optional layer that bundles a few “agent app” conveniences:
 #
 # - a ready-to-run agent loop (`create_deep_agent(...)`)
 # - a toolbox (todos, filesystem tools, delegation to subagents)
@@ -37,8 +37,8 @@
 # - Enable auto-reloading so edits are picked up without restarting the kernel.
 # - Import the notebook utility library (deep_agents_API_utils.py).
 # - Verify that deepagents is importable.
-# %load_ext autoreload
-# %autoreload 2
+# # %load_ext autoreload
+# # %autoreload 2
 
 import deep_agents_API_utils as ut
 
@@ -47,7 +47,7 @@ print("deepagents:", version)
 
 
 # %% [markdown]
-# This next cell shows how Deep Agents' **virtual filesystem** works.
+# This next cell shows how Deep Agents’ **virtual filesystem** works.
 #
 # - The agent will refer to files like `/workspace/hello.txt`.
 # - Under the hood, that maps to a real folder you can see locally: `./workspace/hello.txt`.

@@ -41,7 +41,6 @@ import logging
 import numpy as np
 import pandas as pd
 
-import tsfresh
 import tsfresh.feature_extraction as fe
 from tsfresh import extract_features, select_features
 
@@ -82,7 +81,9 @@ n_time = 10
 
 rows = []
 for sid in range(n_series):
-    signal = np.sin(np.linspace(0, 2 * np.pi, n_time)) + np.random.randn(n_time) * 0.1
+    signal = (
+        np.sin(np.linspace(0, 2 * np.pi, n_time)) + np.random.randn(n_time) * 0.1
+    )
     for t, v in enumerate(signal):
         rows.append({"id": sid, "time": t, "value": v})
 

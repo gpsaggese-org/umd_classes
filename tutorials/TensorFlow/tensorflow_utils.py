@@ -3,7 +3,7 @@ Utility functions for TensorFlow-based time series workflows.
 
 Import as:
 
-import tutorials.tensorflow.tensorflow_utils as tteteuti
+import tutorials.TensorFlow.tensorflow_utils as tteteuti
 """
 
 import collections
@@ -282,7 +282,7 @@ def df_to_str_simple(df: pd.DataFrame, num_rows: int = 6) -> str:
         df = df.to_frame()
     elif isinstance(df, pd.Index):
         df = df.to_frame(index=False)
-    
+
     # Limit rows if needed
     if num_rows is not None and len(df) > num_rows:
         top = df.head(num_rows // 2)
@@ -290,5 +290,5 @@ def df_to_str_simple(df: pd.DataFrame, num_rows: int = 6) -> str:
         df_to_print = pd.concat([top, bottom])
     else:
         df_to_print = df
-    
+
     return df_to_print.to_string()
