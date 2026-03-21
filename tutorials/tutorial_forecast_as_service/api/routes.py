@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.api.routes as tfasapro
+import tutorials.tutorial_forecast_as_service.api.routes as ttfasapro
 """
 
 import logging

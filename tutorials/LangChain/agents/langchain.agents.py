@@ -78,26 +78,32 @@ from langchain_core.runnables import RunnableLambda, RunnablePassthrough
 from langchain_core.tools import tool
 
 from typing import List, TypedDict
-from langchain_ollama import ChatOllama
-from langchain_core.messages import AnyMessage, HumanMessage, AIMessage, ToolMessage
-from langchain_core.tools import BaseTool
+from langchain_core.messages import (
+    AnyMessage,
+    HumanMessage,
+    AIMessage,
+    ToolMessage,
+)
 import matplotlib.pyplot as plt
 
 # %% id="check_ollama"
 try:
-    with urlopen('http://host.docker.internal:11434/api/tags', timeout=2) as r:
-        data = json.loads(r.read().decode('utf-8'))
-    print('Ollama is running. Installed models:')
-    for m in data.get('models', []):
-        print(' -', m.get('name'))
+    with urlopen("http://host.docker.internal:11434/api/tags", timeout=2) as r:
+        data = json.loads(r.read().decode("utf-8"))
+    print("Ollama is running. Installed models:")
+    for m in data.get("models", []):
+        print(" -", m.get("name"))
 except Exception as e:
-    print('Ollama not reachable on http://127.0.0.1:11434. Start it with `ollama serve`.', file=sys.stderr)
-    print('Error:', e, file=sys.stderr)
+    print(
+        "Ollama not reachable on http://127.0.0.1:11434. Start it with `ollama serve`.",
+        file=sys.stderr,
+    )
+    print("Error:", e, file=sys.stderr)
 
-print('\nTo pull models (uncomment as needed):')
-print('  # !ollama pull qwen2:7b')
-print('  # !ollama pull gemma2:9b')
-print('  # !ollama pull nomic-embed-text  # embeddings')
+print("\nTo pull models (uncomment as needed):")
+print("  # !ollama pull qwen2:7b")
+print("  # !ollama pull gemma2:9b")
+print("  # !ollama pull nomic-embed-text  # embeddings")
 
 
 # %% [markdown] tags=["init"]
@@ -107,20 +113,23 @@ print('  # !ollama pull nomic-embed-text  # embeddings')
 
 # %%
 # Choose one main chat model
-llm = ChatOllama(model='qwen3:latest', temperature=0, num_ctx=8192, request_timeout=180)
+llm = ChatOllama(
+    model="qwen3:latest", temperature=0, num_ctx=8192, request_timeout=180
+)
 # Alternative:
 # llm = ChatOllama(model='gemma2:9b', temperature=0, num_ctx=8192, request_timeout=180)
 
 # Local embeddings via Ollama (pull the model first)
-embeddings = OllamaEmbeddings(model='nomic-embed-text')
+embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
-print('LLM and embeddings initialized.')
+print("LLM and embeddings initialized.")
 
 
 # %% [markdown] tags=["tools"]
 # ## 4) Define Tools <a id='tools'></a>
 #
 # Tools should be **small, typed, deterministic** with clear docstrings. We also include a file reader and a simple summarizer.
+
 
 # %%
 @tool
@@ -131,24 +140,28 @@ def calc(expression: str) -> str:
     except Exception as e:
         return f"error: {e}"
 
+
 @tool
 def now() -> str:
     """Return current local datetime ISO string."""
-    return datetime.now().isoformat(timespec='seconds')
+    return datetime.now().isoformat(timespec="seconds")
+
 
 @tool
 def read_file(path: str) -> str:
     """Read a small UTF-8 text file from disk."""
-    with open(path, 'r', encoding='utf-8') as f:
+    with open(path, "r", encoding="utf-8") as f:
         return f.read()
+
 
 @tool
 def summarize(text: str) -> str:
     """Summarize a short passage (naive)."""
-    return (f"Summary: {text[:200]}..." if len(text) > 220 else f"Summary: {text}")
+    return f"Summary: {text[:200]}..." if len(text) > 220 else f"Summary: {text}"
+
 
 tools_basic = [calc, now, read_file, summarize]
-print('Tools defined:', [t.name for t in tools_basic])
+print("Tools defined:", [t.name for t in tools_basic])
 
 
 # %% [markdown] tags=["minimal"]
@@ -159,11 +172,12 @@ print('Tools defined:', [t.name for t in tools_basic])
 # %%
 # 1) LLM points to your working Ollama endpoint
 llm = ChatOllama(
-    model="gemma3",                            # must match your installed model name
+    model="gemma3",  # must match your installed model name
     base_url="http://host.docker.internal:11434",
     temperature=0,
     timeout=60,
 )
+
 
 # 2) Simple calc tool
 @tool
@@ -171,20 +185,25 @@ def calc(expression: str) -> str:
     """Compute a Python arithmetic expression like '37*42+5'."""
     return str(eval(expression))
 
+
 tools = [calc]
 
 # 3) ReAct prompt (keep agent_scratchpad as a STRING slot to avoid BaseMessage type errors)
-prompt = ChatPromptTemplate.from_messages([
-    ("system",
-     "You are a calculator assistant. Use tools to compute.\n\n"
-     "You have access to the following tools:\n{tools}\n\n"
-     "When you need to call a tool, use EXACTLY this format:\n"
-     "Action: one of [{tool_names}]\n"
-     "Action Input: <JSON or plain text>\n\n"
-     "When done, reply with:\n"
-     "Final Answer: <answer>"),
-    ("human", "{input}\n\n{agent_scratchpad}")
-])
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You are a calculator assistant. Use tools to compute.\n\n"
+            "You have access to the following tools:\n{tools}\n\n"
+            "When you need to call a tool, use EXACTLY this format:\n"
+            "Action: one of [{tool_names}]\n"
+            "Action Input: <JSON or plain text>\n\n"
+            "When done, reply with:\n"
+            "Final Answer: <answer>",
+        ),
+        ("human", "{input}\n\n{agent_scratchpad}"),
+    ]
+)
 
 # 4) Build agent + executor
 agent = create_react_agent(llm, tools, prompt=prompt)
@@ -197,7 +216,9 @@ executor = AgentExecutor(
 )
 
 # 5) Run
-res = executor.invoke({"input": "Compute (37*42)+5 using the tool."})  # do NOT pass agent_scratchpad explicitly
+res = executor.invoke(
+    {"input": "Compute (37*42)+5 using the tool."}
+)  # do NOT pass agent_scratchpad explicitly
 print(res["output"])
 
 # %% [markdown] tags=["multi"]
@@ -234,6 +255,7 @@ llm = ChatOllama(
 
 # -------- Tools --------
 
+
 @tool
 def head_file(args: dict = None) -> str:
     """Return the first N lines of a UTF-8 text file.
@@ -247,37 +269,50 @@ def head_file(args: dict = None) -> str:
     lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
     return f"FILE: {path}\nLINES:\n" + "\n".join(lines[:n])
 
+
 @tool
 def now_time(args: dict = None) -> str:
     """Return current local time in ISO8601 (seconds). Ignores args."""
     return datetime.now().isoformat(timespec="seconds")
 
+
 # Register for your agent
 tools_basic = [head_file, now_time]
 
 # -------- Prompt --------
-prompt = ChatPromptTemplate.from_messages([
-    ("system",
-     "You can use tools. Prefer minimal steps.\n"
-     "Tools available:\n{tools}\n\n"
-     "TOOL CALL FORMAT (strict):\n"
-     "Action: one of [{tool_names}]\n"
-     "Action Input: <JSON or plain text>\n\n"
-     "RULES:\n"
-     "- Emit EXACTLY ONE tool call per step.\n"
-     "- For reading first lines, call: Action: head_file  |  Action Input: {{\"path\": \"./demo.txt\", \"n\": 3}}\n"
-     "- For current time, call:       Action: now_time   |  Action Input: \"\"\n"
-     "- Final output must be a SINGLE line starting with:\n"
-     "Final Answer: <answer>\n"),
-    ("human", "{input}\n\n{agent_scratchpad}"),
-])
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You can use tools. Prefer minimal steps.\n"
+            "Tools available:\n{tools}\n\n"
+            "TOOL CALL FORMAT (strict):\n"
+            "Action: one of [{tool_names}]\n"
+            "Action Input: <JSON or plain text>\n\n"
+            "RULES:\n"
+            "- Emit EXACTLY ONE tool call per step.\n"
+            '- For reading first lines, call: Action: head_file  |  Action Input: {{"path": "./demo.txt", "n": 3}}\n'
+            '- For current time, call:       Action: now_time   |  Action Input: ""\n'
+            "- Final output must be a SINGLE line starting with:\n"
+            "Final Answer: <answer>\n",
+        ),
+        ("human", "{input}\n\n{agent_scratchpad}"),
+    ]
+)
+
+
+# #############################################################################
+# PreferFinishParser
+# #############################################################################
+
 
 # -------- Output parser --------
 class PreferFinishParser:
     _pair_re = re.compile(
         r"Action:\s*(?P<tool>[^\n|]+?)\s*(?:\|\s*)?Action Input:\s*(?P<input>.*?)(?=\nAction:|\Z)",
-        flags=re.S
+        flags=re.S,
     )
+
     def __call__(self, text: str) -> Union[AgentAction, AgentFinish]:
         if "Final Answer:" in text:
             final = text.split("Final Answer:", 1)[1].strip()
@@ -299,21 +334,26 @@ class PreferFinishParser:
             parsed = {"path": "./demo.txt", "n": 3}
         return AgentAction(tool=tool, tool_input=parsed, log=text)
 
+
 output_parser = PreferFinishParser()
 
 # -------- Agent --------
 agent = (
-    RunnablePassthrough()
-    .assign(
-        tools=lambda x: "\n".join(f"- {t.name}: {t.description or ''}" for t in tools_basic),
+    RunnablePassthrough().assign(
+        tools=lambda x: "\n".join(
+            f"- {t.name}: {t.description or ''}" for t in tools_basic
+        ),
         tool_names=lambda x: ", ".join(t.name for t in tools_basic),
         agent_scratchpad=lambda x: "\n".join(
-            m.content for m in format_log_to_messages(x.get("intermediate_steps", []))
+            m.content
+            for m in format_log_to_messages(x.get("intermediate_steps", []))
         ),
     )
     | prompt
     | llm
-    | RunnableLambda(lambda m: output_parser(m.content if hasattr(m, "content") else str(m)))
+    | RunnableLambda(
+        lambda m: output_parser(m.content if hasattr(m, "content") else str(m))
+    )
 )
 
 executor = AgentExecutor(
@@ -326,9 +366,11 @@ executor = AgentExecutor(
 )
 
 # -------- Demo --------
-result = executor.invoke({
-    "input": "Read ./demo.txt, summarize the first 3 lines (cite the filename), then tell the current time."
-})
+result = executor.invoke(
+    {
+        "input": "Read ./demo.txt, summarize the first 3 lines (cite the filename), then tell the current time."
+    }
+)
 print(result["output"])
 
 
@@ -355,6 +397,7 @@ demo_df.head()
 # %% [markdown]
 # ## 7.2) Tools
 
+
 # %%
 @tool
 def read_head(path: str, n: int = 5) -> str:
@@ -368,6 +411,7 @@ def read_head(path: str, n: int = 5) -> str:
     df = pd.read_csv(path)
     display(df.head(n))
     return "Displayed preview."
+
 
 @tool
 def plot_histogram(path: str, column: str, bins: int = 20) -> str:
@@ -390,6 +434,7 @@ def plot_histogram(path: str, column: str, bins: int = 20) -> str:
     plt.show()
     return "Displayed histogram."
 
+
 @tool
 def groupby_agg(path: str, by: str, metric: str) -> str:
     """
@@ -405,33 +450,43 @@ def groupby_agg(path: str, by: str, metric: str) -> str:
     display(grouped)
     return "Displayed grouped means."
 
+
 EDA_TOOLS = [read_head, plot_histogram, groupby_agg]
 
 
 # %%
 # ---- 1) LLM with tools bound (Qwen local via Ollama) ----
 llm = ChatOllama(
-    model="qwen3:latest",                       
+    model="qwen3:latest",
     base_url="http://host.docker.internal:11434",
     temperature=0,
 ).bind_tools(EDA_TOOLS)
 
+
+# #############################################################################
+# AgentState
+# #############################################################################
+
+
 # ---- 2) Agent "state" type ----
 class AgentState(TypedDict):
     messages: List[AnyMessage]
+
 
 # ---- 3) Assistant node: produce next AI message from conversation ----
 def assistant_node(state: AgentState) -> AgentState:
     ai_msg: AIMessage = llm.invoke(state["messages"])
     return {"messages": [ai_msg]}
 
+
 # ---- 4) Tool node: execute tools requested by the model ----
-_tool_map = {t.name: t for t in EDA_TOOLS}    # type: dict[str, BaseTool]
+_tool_map = {t.name: t for t in EDA_TOOLS}  # type: dict[str, BaseTool]
+
 
 def tools_node(state: AgentState) -> AgentState:
-    last: AIMessage = state["messages"][-1]   # the AI that requested tools
+    last: AIMessage = state["messages"][-1]  # the AI that requested tools
     out: list[ToolMessage] = []
-    for tc in (last.tool_calls or []):
+    for tc in last.tool_calls or []:
         name = tc.get("name")
         args = tc.get("args", {}) or {}
         tool = _tool_map.get(name)
@@ -442,6 +497,7 @@ def tools_node(state: AgentState) -> AgentState:
         out.append(ToolMessage(content=str(result), tool_call_id=tc["id"]))
     return {"messages": out}
 
+
 # ---- 5) assistant -> (if tool_calls) tools -> assistant -> ... else END
 def run_app(user_text: str, max_loops: int = 4) -> List[AnyMessage]:
     msgs: List[AnyMessage] = [HumanMessage(content=user_text)]
@@ -450,13 +506,12 @@ def run_app(user_text: str, max_loops: int = 4) -> List[AnyMessage]:
         step = assistant_node({"messages": msgs})
         msgs.extend(step["messages"])
         ai: AIMessage = step["messages"][-1]
-        if not ai.tool_calls:                  # assistant chose to answer -> END
+        if not ai.tool_calls:  # assistant chose to answer -> END
             break
         # tools
         tstep = tools_node({"messages": [ai]})
-        msgs.extend(tstep["messages"])         # feed tool outputs back
+        msgs.extend(tstep["messages"])  # feed tool outputs back
     return msgs
-
 
 
 # %% [markdown]

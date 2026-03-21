@@ -21,7 +21,7 @@ shift $((OPTIND-1))
 
 # Capture the command to execute from remaining arguments.
 CMD="$@"
-echo "Executing: \'$CMD\'"
+echo "Executing: '$CMD'"
 
 # Load Docker configuration variables for this script.
 get_docker_vars_script ${BASH_SOURCE[0]}

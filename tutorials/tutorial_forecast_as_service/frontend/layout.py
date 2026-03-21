@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.frontend.layout as tfasfrla
+import tutorials.tutorial_forecast_as_service.frontend.layout as ttfasfrla
 """
 
 import dash
