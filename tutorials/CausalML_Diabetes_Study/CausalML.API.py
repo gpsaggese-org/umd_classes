@@ -53,9 +53,7 @@
 # %autoreload 2
 
 import os
-import urllib.request
 import warnings
-import zipfile
 
 import numpy as np
 
@@ -91,17 +89,7 @@ DATA_PATH = os.path.join("data", "unprocessed", filename)
 # Direct download URL for the CDC Diabetes Health Indicators dataset from UCI.
 URL = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
 # Download and extract the dataset if not already present.
-if not os.path.exists(DATA_PATH):
-    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
-    zip_path = os.path.join("data", "unprocessed", "tmp.download.zip")
-    urllib.request.urlretrieve(URL, zip_path)
-    with zipfile.ZipFile(zip_path, "r") as z:
-        for name in z.namelist():
-            if filename in name:
-                with z.open(name) as src, open(DATA_PATH, "wb") as dst:
-                    dst.write(src.read())
-                break
-    os.remove(zip_path)
+utils.download_cdc_data_if_needed(DATA_PATH, URL)
 df_raw = utils.load_cdc_data(DATA_PATH)
 
 # %%

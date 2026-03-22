@@ -5,6 +5,9 @@ import tutorials.CausalML_Diabetes_Study.utils as tcdistut
 """
 
 import logging
+import os
+import urllib.request
+import zipfile
 from typing import List, Tuple
 
 import matplotlib.pyplot as plt
@@ -13,6 +16,7 @@ import pandas as pd
 import seaborn as sns
 
 import helpers.hdbg as hdbg
+import helpers.hio as hio
 import causalml.inference.meta
 import causalml.metrics
 import sklearn.model_selection
@@ -27,6 +31,31 @@ sns.set_theme(style="whitegrid")
 # #############################################################################
 # Data Loading & Specific Preprocessing
 # #############################################################################
+
+
+def download_cdc_data_if_needed(data_path: str, url: str) -> None:
+    """
+    Download and extract the CDC Diabetes dataset if not already present.
+
+    :param data_path: local path where the CSV file should be saved
+    :param url: direct download URL for the zipped dataset
+    """
+    if os.path.exists(data_path):
+        _LOG.info("Dataset already present at: %s", data_path)
+        return
+    _LOG.info("Downloading dataset from: %s", url)
+    hio.create_dir(os.path.dirname(data_path), incremental=True)
+    zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
+    urllib.request.urlretrieve(url, zip_path)
+    filename = os.path.basename(data_path)
+    with zipfile.ZipFile(zip_path, "r") as z:
+        for name in z.namelist():
+            if filename in name:
+                with z.open(name) as src, open(data_path, "wb") as dst:
+                    dst.write(src.read())
+                break
+    hio.delete_file(zip_path)
+    _LOG.info("Dataset saved to: %s", data_path)
 
 
 def load_cdc_data(filepath: str) -> pd.DataFrame:
@@ -68,7 +97,10 @@ def preprocess_for_causal(
     """
     # Basic validation.
     hdbg.dassert_in(
-        treatment_col, df.columns, "Treatment column not found: %s", treatment_col
+        treatment_col,
+        df.columns,
+        "Treatment column not found: %s",
+        treatment_col,
     )
     hdbg.dassert_in(
         outcome_col, df.columns, "Outcome column not found: %s", outcome_col
@@ -109,7 +141,9 @@ class CausalNavigator:
         """
         self.learner_type = learner_type.upper()
         hdbg.dassert_in(
-            self.learner_type, ["S", "T", "X"], "learner_type must be 'S', 'T', or 'X'"
+            self.learner_type,
+            ["S", "T", "X"],
+            "learner_type must be 'S', 'T', or 'X'",
         )
         self.control_name = control_name
         self.treatment_name = treatment_name
@@ -218,8 +252,9 @@ class CausalNavigator:
         :param df_original: original dataframe
         :return: dataframe with CATE column added
         """
-        if self.cate_estimates is None:
-            raise ValueError("Model not fitted. Run fit_estimate first")
+        hdbg.dassert_is_not(
+            self.cate_estimates, None, "Model not fitted. Run fit_estimate first"
+        )
         df_out = df_original.copy()
         df_out["cate"] = self.cate_estimates
         return df_out
@@ -289,8 +324,11 @@ class CausalNavigator:
         :param n_simulations: how many times to shuffle and retrain (keep low, e.g. 5-10)
         """
         _LOG.info("Running Placebo Test (%s permutations)", n_simulations)
-        if self.cate_estimates is None:
-            raise ValueError("Run fit_estimate() first to establish a baseline")
+        hdbg.dassert_is_not(
+            self.cate_estimates,
+            None,
+            "Run fit_estimate() first to establish a baseline",
+        )
         original_ate = self.cate_estimates.mean()
         placebo_ates = []
         # Handle label mapping once for consistency.
@@ -451,17 +489,29 @@ class CausalNavigator:
         """
         _LOG.info("Starting Estimator Tournament")
         # Split data.
-        X_train, X_test, T_train, T_test, y_train, y_test = sklearn.model_selection.train_test_split(
-            X, T, Y, test_size=0.3, random_state=42
+        X_train, X_test, T_train, T_test, y_train, y_test = (
+            sklearn.model_selection.train_test_split(
+                X, T, Y, test_size=0.3, random_state=42
+            )
         )
         # Define candidates (using XGBoost for consistency).
         # Note: R and DR learners are more sensitive to hyperparams, but we use defaults.
         learners = {
-            "S-Learner": causalml.inference.meta.BaseSRegressor(learner=self.model_y),
-            "T-Learner": causalml.inference.meta.BaseTRegressor(learner=self.model_y),
-            "X-Learner": causalml.inference.meta.BaseXRegressor(learner=self.model_y),
-            "R-Learner": causalml.inference.meta.BaseRRegressor(learner=self.model_y),
-            "DR-Learner": causalml.inference.meta.BaseDRRegressor(learner=self.model_y),
+            "S-Learner": causalml.inference.meta.BaseSRegressor(
+                learner=self.model_y
+            ),
+            "T-Learner": causalml.inference.meta.BaseTRegressor(
+                learner=self.model_y
+            ),
+            "X-Learner": causalml.inference.meta.BaseXRegressor(
+                learner=self.model_y
+            ),
+            "R-Learner": causalml.inference.meta.BaseRRegressor(
+                learner=self.model_y
+            ),
+            "DR-Learner": causalml.inference.meta.BaseDRRegressor(
+                learner=self.model_y
+            ),
         }
         pred_results = pd.DataFrame()
         # Train and predict loop.
