@@ -13,6 +13,28 @@
 #     name: python3
 # ---
 
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+import helpers.hnotebook as ut
+
+ut.config_notebook()
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+import pydanticai_API_utils as utils
+
 # %% [markdown]
 # ## PydanticAI API Tutorial Introduction
 #
@@ -103,12 +125,13 @@
 #
 
 # %%
-# Run this cell
+# !pip install -q pydantic-ai
+
+# %%
 import os
 from dotenv import load_dotenv, find_dotenv
 import nest_asyncio
 nest_asyncio.apply()
-import pydanticai_API_utils as utils
 
 
 env_path = find_dotenv(usecwd=True)

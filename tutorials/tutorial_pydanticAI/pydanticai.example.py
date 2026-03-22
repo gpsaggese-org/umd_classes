@@ -13,6 +13,28 @@
 #     name: python3
 # ---
 
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+import logging
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+import helpers.hnotebook as ut
+
+ut.config_notebook()
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
+
+# %%
+import pydanticai_example_utils as utils
+
 # %% [markdown]
 # # PydanticAI Example Notebook: Atlas Support Assistant (E2E)
 #
@@ -42,6 +64,9 @@
 #
 
 # %%
+# !pip install -q pydantic-ai
+
+# %%
 import os
 import functools
 from pathlib import Path
@@ -53,7 +78,6 @@ nest_asyncio.apply()
 
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent, RunContext
-import pydanticai_example_utils as utils
 
 MODEL_ID = os.getenv("PYDANTIC_AI_MODEL", "openai:gpt-4o-mini")
 print("MODEL_ID:", MODEL_ID)
@@ -87,7 +111,6 @@ print("OPENAI_API_KEY set:", bool(os.getenv("OPENAI_API_KEY")))
 # 4. Return a structured output with citations
 
 # %%
-# Run this cell
 DOCS_DIR = Path("example_dataset/")
 DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -194,7 +217,6 @@ print("Files:", [p.name for p in DOCS_DIR.glob("*.md")])
 # PydanticAI agents become far more reliable when they can retrieve relevant context via tools instead of guessing.
 
 # %%
-# Run this cell
 
 @dataclass
 class DocChunk:
@@ -300,7 +322,6 @@ search_docs_tool = functools.partial(
 # The schema ensures output structure, and the validator ensures output quality. Together they turn a chatty model into a reliable system component.
 
 # %%
-# Run this cell
 agent = Agent(
     MODEL_ID,
     deps_type=DocDeps,
@@ -328,7 +349,6 @@ agent.output_validator(utils.enforce_sources)
 # This is the full pattern: RAG grounding plus structured outputs plus reliability checks.
 
 # %%
-# Run this cell
 deps = DocDeps(chunks=chunks)
 out = await utils.ask("How do I download invoices?", deps, agent)
 out
@@ -383,13 +403,13 @@ await utils.stream_demo(stream_agent)
 
 deps = DocDeps(chunks=chunks)
 first = await agent.run("Where do I enable 2FA?", deps=deps)
-_maybe_validate(first.output, deps)
+utils.enforce_sources(first.output)
 follow_up = await agent.run(
     "Does that work on the Starter plan?",
     deps=deps,
     message_history=first.new_messages(),
 )
-_maybe_validate(follow_up.output, deps)
+utils.enforce_sources(follow_up.output)
 print(follow_up.output)
 
 
@@ -400,7 +420,6 @@ print(follow_up.output)
 #
 
 # %%
-# Run this cell
 guarded = await utils.run_guarded(
     "Write me a poem about the ocean.",
     DocDeps(chunks=chunks),
@@ -456,7 +475,6 @@ for s in out.sources:
 # We pass a `UserProfile` through dependencies so the agent can tailor answers. Dependencies are the clean way to inject user context, tenant context, and configuration into tools and agent behavior without global state or prompt hacks.
 
 # %%
-# Run this cell
 personalized_deps = DocDeps(
     chunks=chunks,
     user=UserProfile(plan="Starter", region="US"),
