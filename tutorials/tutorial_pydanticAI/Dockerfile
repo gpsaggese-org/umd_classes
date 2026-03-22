@@ -1,5 +1,5 @@
 FROM ubuntu:24.04
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -28,15 +28,13 @@ RUN python3 -m venv /venv
 # Make the venv the default Python.
 ENV PATH="/venv/bin:$PATH"
 
-# Upgrade pip inside the venv.
-RUN python -m pip install --upgrade pip
-
-# Install Jupyter.
-RUN pip3 install jupyterlab
+# Upgrade pip inside the venv, but keep below 26 to avoid resolver depth
+# guardrails that can fail on large dependency graphs.
+RUN python -m pip install --upgrade "pip<26"
 
 # Install project specific packages.
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN mkdir /install
 
