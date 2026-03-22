@@ -42,7 +42,7 @@ import os
 import seaborn as sns
 import warnings
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
+import utils
 
 # Configuration
 warnings.filterwarnings("ignore")
@@ -79,7 +79,7 @@ filename = "diabetes_binary_health_indicators_BRFSS2015.csv"
 DATA_PATH = os.path.join("data", "unprocessed", filename)
 try:
     print(f"Attempting to load: {DATA_PATH}")
-    df_raw = load_cdc_data(DATA_PATH)
+    df_raw = utils.load_cdc_data(DATA_PATH)
     print(f"Data Loaded Successfully. Rows: {df_raw.shape[0]}")
 except Exception as e:
     print(f"Error: {e}")
@@ -156,7 +156,7 @@ covariate_cols = [
     "Income",
     "BMI",
 ]
-df_clean, X, T, Y = preprocess_for_causal(
+df_clean, X, T, Y = utils.preprocess_for_causal(
     df_raw, treatment_col, outcome_col, covariate_cols
 )
 print("--- Analysis Population ---")
@@ -183,7 +183,7 @@ print(f"Outcome Rate (Diabetes): {Y.mean():.2%}")
 
 # %%
 # Initialize our CausalNavigator with X-Learner
-navigator = CausalNavigator(
+navigator = utils.CausalNavigator(
     learner_type="X", control_name="Sedentary", treatment_name="Active"
 )
 # Check Common Support

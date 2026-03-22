@@ -59,14 +59,14 @@ import zipfile
 
 import numpy as np
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
+import utils
 
 warnings.filterwarnings("ignore")
 
 # %% [markdown]
 # ## Helper Functions
 #
-# ### `load_cdc_data(filepath)`
+# ### `utils.load_cdc_data(filepath)`
 #
 # **Purpose**: Robustly loads the CDC dataset from a local directory.
 #
@@ -102,7 +102,7 @@ if not os.path.exists(DATA_PATH):
                     dst.write(src.read())
                 break
     os.remove(zip_path)
-df_raw = load_cdc_data(DATA_PATH)
+df_raw = utils.load_cdc_data(DATA_PATH)
 
 # %%
 # Use a subset of columns for the API demo.
@@ -117,7 +117,7 @@ covariate_cols = [
     "GenHlth",
     "BMI",
 ]
-df_clean, X, T, Y = preprocess_for_causal(
+df_clean, X, T, Y = utils.preprocess_for_causal(
     df_raw,
     treatment_col=treatment_col,
     outcome_col=outcome_col,
@@ -154,7 +154,7 @@ display(X_demo.head())
 
 # %%
 # Initialize the CausalNavigator.
-navigator = CausalNavigator(
+navigator = utils.CausalNavigator(
     learner_type="X", control_name="Sedentary", treatment_name="Active"
 )
 

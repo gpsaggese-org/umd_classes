@@ -122,11 +122,11 @@ class CausalNavigator:
         )
         # Initialize the CausalML meta-learner.
         if self.learner_type == "X":
-            self.learner = BaseXRegressor(
+            self.learner = causalml.inference.meta.BaseXRegressor(
                 learner=self.model_y, control_name=control_name
             )
         elif self.learner_type == "T":
-            self.learner = BaseTRegressor(
+            self.learner = causalml.inference.meta.BaseTRegressor(
                 learner=self.model_y, control_name=control_name
             )
         elif self.learner_type == "S":
@@ -310,11 +310,11 @@ class CausalNavigator:
             T_shuffled.index = X.index  # Align indices.
             # We create a fresh instance to avoid side effects.
             if self.learner_type == "X":
-                temp_learner = BaseXRegressor(
+                temp_learner = causalml.inference.meta.BaseXRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             elif self.learner_type == "T":
-                temp_learner = BaseTRegressor(
+                temp_learner = causalml.inference.meta.BaseTRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
@@ -391,11 +391,11 @@ class CausalNavigator:
             X_drop = X.drop(columns=[feature])
             # Re-initialize learner (same type as original).
             if self.learner_type == "X":
-                temp_learner = BaseXRegressor(
+                temp_learner = causalml.inference.meta.BaseXRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             elif self.learner_type == "T":
-                temp_learner = BaseTRegressor(
+                temp_learner = causalml.inference.meta.BaseTRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
@@ -451,15 +451,15 @@ class CausalNavigator:
         """
         _LOG.info("Starting Estimator Tournament")
         # Split data.
-        X_train, X_test, T_train, T_test, y_train, y_test = train_test_split(
+        X_train, X_test, T_train, T_test, y_train, y_test = sklearn.model_selection.train_test_split(
             X, T, Y, test_size=0.3, random_state=42
         )
         # Define candidates (using XGBoost for consistency).
         # Note: R and DR learners are more sensitive to hyperparams, but we use defaults.
         learners = {
             "S-Learner": causalml.inference.meta.BaseSRegressor(learner=self.model_y),
-            "T-Learner": BaseTRegressor(learner=self.model_y),
-            "X-Learner": BaseXRegressor(learner=self.model_y),
+            "T-Learner": causalml.inference.meta.BaseTRegressor(learner=self.model_y),
+            "X-Learner": causalml.inference.meta.BaseXRegressor(learner=self.model_y),
             "R-Learner": causalml.inference.meta.BaseRRegressor(learner=self.model_y),
             "DR-Learner": causalml.inference.meta.BaseDRRegressor(learner=self.model_y),
         }
@@ -481,18 +481,18 @@ class CausalNavigator:
                 _LOG.error("%s failed: %s", name, str(e))
         # Evaluate using Cumulative Gain (Qini Curve).
         _LOG.info("Generating Uplift Curves (Metrics on Test Set)")
-        # plot_gain expects a DataFrame containing the predictions, outcome, and treatment.
+        # causalml.metrics.plot_gain expects a DataFrame containing the predictions, outcome, and treatment.
         df_preds = pred_results.copy()
         df_preds["y"] = y_test.values
         df_preds["t"] = T_test.values
         # Calculate AUUC score.
-        auuc = auuc_score(
+        auuc = causalml.metrics.auuc_score(
             df_preds, outcome_col="y", treatment_col="t", normalize=True
         )
         # Display table.
         _LOG.info("--- Qini / AUUC Scores (Higher is Better) ---")
         _LOG.info("\n%s", str(auuc.sort_values(ascending=False)))
-        plot_gain(
+        causalml.metrics.plot_gain(
             df_preds,
             outcome_col="y",
             treatment_col="t",
