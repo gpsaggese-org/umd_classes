@@ -26,7 +26,6 @@ This project contains the following files.
   - `troubleshooting.md`
 - Docker/dev runtime files
   - `Dockerfile`
-  - `docker-compose.yml`
   - `docker_build.sh`
   - `docker_bash.sh`
   - `docker_jupyter.sh`
@@ -37,7 +36,6 @@ This project contains the following files.
   - `docker_name.sh`
   - `version.sh`
   - `run_jupyter.sh`
-  - `install_jupyter_extensions.sh`
   - `etc_sudoers`
 
 # Setup and Dependencies
