@@ -75,7 +75,8 @@ class Test_docker_run_notebooks(hunitest.TestCase):
         successfully.
 
         :param notebook_name: name of the notebook file relative to the
-            class_project/project_template/ directory (e.g., template.example.ipynb)
+            class_project/project_template/ directory (e.g.,
+            `template.example.ipynb`)
         """
         # Prepare inputs.
         test_dir = os.path.dirname(os.path.abspath(__file__))

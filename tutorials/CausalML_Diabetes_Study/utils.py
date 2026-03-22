@@ -5,23 +5,18 @@ import tutorials.CausalML_Diabetes_Study.utils as tcdistut
 """
 
 import logging
-import os
 from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from causalml.inference.meta import (
-    BaseDRRegressor,
-    BaseRRegressor,
-    BaseSRegressor,
-    BaseTRegressor,
-    BaseXRegressor,
-)
-from causalml.metrics import auuc_score, plot_gain
-from sklearn.model_selection import train_test_split
-from xgboost import XGBClassifier, XGBRegressor
+
+import helpers.hdbg as hdbg
+import causalml.inference.meta
+import causalml.metrics
+import sklearn.model_selection
+import xgboost
 
 _LOG = logging.getLogger(__name__)
 
@@ -43,8 +38,7 @@ def load_cdc_data(filepath: str) -> pd.DataFrame:
     :param filepath: relative path to the CSV file
     :return: cleaned dataframe ready for processing
     """
-    if not os.path.exists(filepath):
-        raise FileNotFoundError(f"File not found: {filepath}")
+    hdbg.dassert_file_exists(filepath)
     _LOG.info("Loading data from: %s", filepath)
     df = pd.read_csv(filepath)
     # Drop duplicates.
@@ -73,10 +67,12 @@ def preprocess_for_causal(
     :return: tuple of (df_filtered, X, T, Y)
     """
     # Basic validation.
-    if treatment_col not in df.columns:
-        raise ValueError(f"Treatment column not found: {treatment_col}")
-    if outcome_col not in df.columns:
-        raise ValueError(f"Outcome column not found: {outcome_col}")
+    hdbg.dassert_in(
+        treatment_col, df.columns, "Treatment column not found: %s", treatment_col
+    )
+    hdbg.dassert_in(
+        outcome_col, df.columns, "Outcome column not found: %s", outcome_col
+    )
     # Filter data to ensure columns exist and drop NAs.
     keep_cols = covariate_cols + [treatment_col, outcome_col]
     df_clean = df[keep_cols].dropna().copy()
@@ -112,15 +108,16 @@ class CausalNavigator:
         :param treatment_name: label for T=1
         """
         self.learner_type = learner_type.upper()
-        if self.learner_type not in ["S", "T", "X"]:
-            raise ValueError("learner_type must be 'S', 'T', or 'X'")
+        hdbg.dassert_in(
+            self.learner_type, ["S", "T", "X"], "learner_type must be 'S', 'T', or 'X'"
+        )
         self.control_name = control_name
         self.treatment_name = treatment_name
         # Define base learners (using XGBoost for speed and performance).
-        self.model_t = XGBClassifier(
+        self.model_t = xgboost.XGBClassifier(
             n_estimators=100, max_depth=4, random_state=42, eval_metric="logloss"
         )
-        self.model_y = XGBRegressor(
+        self.model_y = xgboost.XGBRegressor(
             n_estimators=100, max_depth=4, random_state=42
         )
         # Initialize the CausalML meta-learner.
@@ -133,7 +130,7 @@ class CausalNavigator:
                 learner=self.model_y, control_name=control_name
             )
         elif self.learner_type == "S":
-            self.learner = BaseSRegressor(
+            self.learner = causalml.inference.meta.BaseSRegressor(
                 learner=self.model_y, control_name=control_name
             )
         self.cate_estimates = None
@@ -149,7 +146,7 @@ class CausalNavigator:
         :param T: treatment vector
         """
         _LOG.info("Calculating Propensity Scores for Overlap Check")
-        ps_model = XGBClassifier(
+        ps_model = xgboost.XGBClassifier(
             n_estimators=50, max_depth=3, eval_metric="logloss", random_state=42
         )
         ps_model.fit(X, T)
@@ -239,8 +236,7 @@ class CausalNavigator:
         :param col: the column to group by (e.g., 'Age', 'Income')
         :param bins: number of bins if the column is continuous
         """
-        if col not in df_with_cate.columns:
-            raise ValueError(f"Column not found: {col}")
+        hdbg.dassert_in(col, df_with_cate.columns, "Column not found: %s", col)
         plt.figure(figsize=(10, 6))
         # Check if column is effectively continuous or categorical.
         unique_vals = df_with_cate[col].nunique()
@@ -322,7 +318,7 @@ class CausalNavigator:
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
-                temp_learner = BaseSRegressor(
+                temp_learner = causalml.inference.meta.BaseSRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             # Estimate pseudo-effect.
@@ -403,7 +399,7 @@ class CausalNavigator:
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
-                temp_learner = BaseSRegressor(
+                temp_learner = causalml.inference.meta.BaseSRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             # Estimate.
@@ -461,11 +457,11 @@ class CausalNavigator:
         # Define candidates (using XGBoost for consistency).
         # Note: R and DR learners are more sensitive to hyperparams, but we use defaults.
         learners = {
-            "S-Learner": BaseSRegressor(learner=self.model_y),
+            "S-Learner": causalml.inference.meta.BaseSRegressor(learner=self.model_y),
             "T-Learner": BaseTRegressor(learner=self.model_y),
             "X-Learner": BaseXRegressor(learner=self.model_y),
-            "R-Learner": BaseRRegressor(learner=self.model_y),
-            "DR-Learner": BaseDRRegressor(learner=self.model_y),
+            "R-Learner": causalml.inference.meta.BaseRRegressor(learner=self.model_y),
+            "DR-Learner": causalml.inference.meta.BaseDRRegressor(learner=self.model_y),
         }
         pred_results = pd.DataFrame()
         # Train and predict loop.
