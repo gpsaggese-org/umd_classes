@@ -1,19 +1,32 @@
-# Summary
-This directory contains a Docker-based development environment for the
-`tutorial_pydanticAI` project with:
+<!-- toc -->
 
-- Docker utility scripts for build, shell, command execution, cleanup, and push
-- Jupyter launch scripts with configurable port, mount directory, and vim mode
-- Tutorial notebooks and supporting markdown dataset files
+- [Project files](#project-files)
+- [Setup and Dependencies](#setup-and-dependencies)
+  * [Building and Running the Docker Container](#building-and-running-the-docker-container)
+    + [Environment Setup](#environment-setup)
 
-## Project Files
-- `README.md`
-- `pydanticai.API.ipynb`
-- `pydanticai.example.ipynb`
-- `requirements.txt`
-- `example_dataset/`
-- Docker runtime files:
+<!-- tocstop -->
+
+# Project files
+
+This project contains the following files.
+
+- `README.md`: This file
+- `pydanticai.API.ipynb`: notebook describing core PydanticAI APIs
+- `pydanticai.example.ipynb`: notebook with applied, end-to-end examples
+- `requirements.txt`: Python dependencies used by this tutorial
+- `example_dataset/`: supporting markdown files used in examples
+  - `api.md`
+  - `billing.md`
+  - `integrations.md`
+  - `limits.md`
+  - `overview.md`
+  - `security.md`
+  - `support.md`
+  - `troubleshooting.md`
+- Docker/dev runtime files
   - `Dockerfile`
+  - `docker-compose.yml`
   - `docker_build.sh`
   - `docker_bash.sh`
   - `docker_jupyter.sh`
@@ -24,49 +37,36 @@ This directory contains a Docker-based development environment for the
   - `docker_name.sh`
   - `version.sh`
   - `run_jupyter.sh`
+  - `install_jupyter_extensions.sh`
   - `etc_sudoers`
 
-## Workflows
-- Run all commands from this project directory:
+# Setup and Dependencies
+
+## Building and Running the Docker Container
+
+- Go to the project directory:
   ```bash
   > cd tutorials/tutorial_pydanticAI
   ```
-
-- Build the container:
+- Build Docker image:
   ```bash
   > ./docker_build.sh
-  > ./docker_build.sh --no-cache
-  > ./docker_bash.sh ls
   ```
-
-- Enable verbose tracing:
+- Run container shell:
   ```bash
-  > ./docker_build.sh -v
-  > ./docker_bash.sh -v
+  > ./docker_bash.sh
   ```
-
-- Get help on any Docker script:
-  ```bash
-  > ./docker_build.sh -h
-  > ./docker_jupyter.sh -h
-  ```
-
-- Start Jupyter:
+- Launch Jupyter Notebook:
   ```bash
   > ./docker_jupyter.sh
-  # Open localhost:8888
   ```
 
-- Start Jupyter on a specific port with vim keybindings:
-  ```bash
-  > ./docker_jupyter.sh -p 8890 -u
-  # Open localhost:8890
-  ```
+### Environment Setup
 
-## Environment Setup
-Set the `OPENAI_API_KEY` environment variable before running notebook examples:
+Set the `OPENAI_API_KEY` environment variable for API access:
 
 ```python
 import os
 os.environ["OPENAI_API_KEY"] = "<your_openai_api_key>"
 ```
+

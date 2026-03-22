@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -xe
 # """
 # Launch Jupyter Lab server.
 #
@@ -7,30 +7,21 @@
 # - Accessible from any IP address (0.0.0.0)
 # - Root user allowed (required for Docker environments)
 # - No authentication token or password (for development convenience)
-# - Vim keybindings can be enabled via JUPYTER_USE_VIM environment variable
 # """
 
-# Exit immediately if any command exits with a non-zero status.
-set -e
-
-# Print each command to stdout before executing it.
-#set -x
-
-# Import the utility functions from the project template.
-GIT_ROOT=/data
-source $GIT_ROOT/class_project/project_template/utils.sh
-
-# Load Docker configuration variables for this script.
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
-
-# Configure vim keybindings and notifications.
-configure_jupyter_vim_keybindings
-configure_jupyter_notifications
-
-# Initialize Jupyter Lab command with base configuration.
-JUPYTER_ARGS=$(get_jupyter_args)
-
 # Start Jupyter Lab with development-friendly settings.
-run "jupyter lab $JUPYTER_ARGS"
+jupyter lab \
+    --port=8888 \
+    --no-browser \
+    --ip=0.0.0.0 \
+    --allow-root \
+    --ServerApp.token='' \
+    --ServerApp.password=''
+
+# Alternative: Use classic Jupyter Notebook instead of Jupyter Lab.
+#jupyter-notebook \
+#    --port=8888 \
+#    --no-browser --ip=0.0.0.0 \
+#    --allow-root \
+#    --NotebookApp.token='' \
+#    --NotebookApp.password=''
