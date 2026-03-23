@@ -1,9 +1,9 @@
 """
-Utility functions for causal inference tutorial (L08_01).
+Utility functions for causal inference tutorial (L08_04_01).
 
 Import as:
 
-import L08_01_causal_inference_utils as mtl0cireout
+import L08_04_01_causal_inference_utils as mtl0cireout
 """
 
 import os

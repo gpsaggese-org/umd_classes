@@ -33,7 +33,6 @@ plt.rcParams["figure.figsize"] = (12, 6)
 # %%
 import helpers.hmodule as hmodule
 
-<<<<<<<< HEAD:msml610/tutorials/L08_04_02_causal_inference.py
 hmodule.install_module_if_not_present(
     "networkx",
     use_activate=True,
@@ -46,10 +45,6 @@ hmodule.install_module_if_not_present(
 # %%
 import msml610_utils as ut
 import L08_04_02_causal_inference_utils as mtl0cireout
-========
-import msml610.tutorials.msml610_utils as ut
-import L08_02_causal_inference_utils as mtl0cireout
->>>>>>>> master:msml610/tutorials/L08_causal_inference/L08_02_causal_inference.py
 
 ut.config_notebook()
 

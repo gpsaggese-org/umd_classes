@@ -37,13 +37,8 @@ import helpers.hmatplotlib as hmatplo
 import helpers.hmodule as hmodule
 import helpers.hpandas_display as hpandisp
 
-<<<<<<<< HEAD:msml610/tutorials/L08_04_01_causal_inference.py
 import msml610_utils as ut
 import L08_04_01_causal_inference_utils as mtl0cireout
-========
-import msml610.tutorials.msml610_utils as ut
-import L08_01_causal_inference_utils as mtl0cireout
->>>>>>>> master:msml610/tutorials/L08_causal_inference/L08_01_causal_inference.py
 
 ut.config_notebook()
 

@@ -88,19 +88,19 @@ class Test_docker_run_notebooks(hunitest.TestCase):
     @pytest.mark.slow
     def test1(self) -> None:
         """
-        Test that L08_01_causal_inference.ipynb runs without error.
+        Test that L08_04_01_causal_inference.ipynb runs without error.
         """
         # Prepare inputs.
-        notebook_name = "L08_01_causal_inference.ipynb"
+        notebook_name = "L08_04_01_causal_inference.ipynb"
         # Run test.
         self._helper(notebook_name)
 
     @pytest.mark.slow
     def test2(self) -> None:
         """
-        Test that L08_02_causal_inference.ipynb runs without error.
+        Test that L08_04_02_causal_inference.ipynb runs without error.
         """
         # Prepare inputs.
-        notebook_name = "L08_02_causal_inference.ipynb"
+        notebook_name = "L08_04_02_causal_inference.ipynb"
         # Run test.
         self._helper(notebook_name)
