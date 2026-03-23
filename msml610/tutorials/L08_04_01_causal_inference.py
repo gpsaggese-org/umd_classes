@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -38,7 +38,7 @@ import helpers.hmodule as hmodule
 import helpers.hpandas_display as hpandisp
 
 import msml610_utils as ut
-import L08_01_causal_inference_utils as mtl0cireout
+import L08_04_01_causal_inference_utils as mtl0cireout
 
 ut.config_notebook()
 

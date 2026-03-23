@@ -6,7 +6,6 @@
 - **Industry experiences**
     - Tech: NVIDIA, Synopsys
     - Finance: June, Teza, Engineers' Gate
-    - Declined pre-IPO offers from Google, Facebook, and others to start companies
 - Been writing code almost every day for the last 35 years (see [GitHub stats](https://github.com/gpsaggese?tab=activity))
 
 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
@@ -39,6 +38,7 @@
 - [Publications](05_publications.md)
 - [Research](06_research.md)
 - [Coding](07_coding.md)
+- [Screw ups](08_screw_ups.md)
 
 ## Languages
 

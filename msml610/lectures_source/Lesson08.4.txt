@@ -895,3 +895,67 @@ digraph CausalGraph {
 
 - Two nodes $A$ and $B$ are d-separated (independent) if and only if all the
   paths between them are blocked
+
+// Identification Revisited
+
+* Identification
+
+- It is hard to find the causal effect because treated and untreated are not
+  comparable to each other, which results in bias
+
+- Using causal graphs, you can understand where the bias is coming from and thus
+  how to neutralize it
+
+- Thus the identification phase becomes equivalent to "close all undesirable flows of
+  association"
+
+- E.g., in the consultancy graph, there is:
+  - A fork on `profits_next_6m`
+  - A confounder `profits_prev_6m`
+  - A causal path `consultancy` $\to$ `profits_next_6m`
+  - A non-causal path (aka "backdoor path") `profits_prev_6m` $\to$
+    `profits_next_6m`
+
+```graphviz
+digraph CausalGraph {
+  rankdir=LR;
+
+  // Exogenous variable: profits_prev_6m
+  profits_prev_6m [
+    shape=ellipse,
+    penwidth=2,
+    color="#408AB0",
+    fillcolor="#EAF3F8",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_prev_6m"
+  ];
+
+  // Endogenous variable: Consultancy
+  Consultancy [
+    shape=box,
+    penwidth=1,
+    color="#62D4A4",
+    fillcolor="#EAF9F3",
+    style="filled,rounded,solid",
+    fontcolor=black,
+    label="Consultancy"
+  ];
+
+  // Target variable: profits_next_6m
+  profits_next_6m [
+    shape=box,
+    penwidth=2,
+    color="#F8D476",
+    fillcolor="#FFF6DA",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_next_6m"
+  ];
+
+  // Causal edges
+  profits_prev_6m -> Consultancy [style=solid, dir=forward, color=black];
+  profits_prev_6m -> profits_next_6m [style=solid, dir=forward, color=black];
+  Consultancy -> profits_next_6m [style=solid, dir=forward, color=black];
+}
+```

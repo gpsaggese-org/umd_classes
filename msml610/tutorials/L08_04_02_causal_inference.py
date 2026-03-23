@@ -44,7 +44,7 @@ hmodule.install_module_if_not_present(
 
 # %%
 import msml610_utils as ut
-import L08_02_causal_inference_utils as mtl0cireout
+import L08_04_02_causal_inference_utils as mtl0cireout
 
 ut.config_notebook()
 
