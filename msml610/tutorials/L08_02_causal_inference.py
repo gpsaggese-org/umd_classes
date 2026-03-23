@@ -30,22 +30,10 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
-import helpers.hmodule as hmodule
-
-import msml610_utils as ut
-import L08_02_causal_inference_utils as mtl0cireout
-
-ut.config_notebook()
-
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
-
-# %%
-hmodule.install_module_if_not_present(
-    "dataframe_image",
-    use_activate=True,
-)
+# hmodule.install_module_if_not_present(
+#     "dataframe_image",
+#     use_activate=True,
+# )
 
 hmodule.install_module_if_not_present(
     "networkx",
@@ -56,6 +44,18 @@ hmodule.install_module_if_not_present(
     "pgmpy",
     use_activate=True,
 )
+
+# %%
+import helpers.hmodule as hmodule
+
+import msml610_utils as ut
+import L08_02_causal_inference_utils as mtl0cireout
+
+ut.config_notebook()
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
 
 # %%
 import networkx as nx
@@ -136,7 +136,6 @@ print(dag.is_dconnected("G", "F", observed=["E"]))
 mtl0cireout.d_separation_explorer(
     model,
     dag,
-    default_node1="D",
-    default_node2="C",
-    default_conditioning=["A"],
 )
+
+# %%

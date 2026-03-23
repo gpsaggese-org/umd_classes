@@ -152,8 +152,8 @@ def d_separation_explorer(
     model: nx.DiGraph,
     dag: Any,
     *,
-    default_node1: str = "",
-    default_node2: str = "",
+    default_node1: Optional[str] = None,
+    default_node2: Optional[str] = None,
     default_conditioning: Optional[Iterable[str]] = None,
 ) -> ipywidgets.VBox:
     """
@@ -170,6 +170,12 @@ def d_separation_explorer(
     :param default_conditioning: initial selection for conditioning nodes
     :return: VBox widget ready to display in a notebook
     """
+    if not default_node1:
+        default_node1 = "D"
+    if not default_node2:
+        default_node2 = "C"
+    if not default_conditioning:
+        default_conditioning = ["A"]
     all_nodes = sorted(model.nodes())
     # Set defaults if not provided.
     node1_default = default_node1 if default_node1 in all_nodes else all_nodes[0]
@@ -204,7 +210,9 @@ def d_separation_explorer(
     )
     output = ipywidgets.Output()
 
-    def _on_run_clicked(_button: ipywidgets.Button) -> None:
+    def _on_run_clicked(
+        _button: Optional[ipywidgets.Button],
+    ) -> None:
         """
         Update plot and d-separation result when the Run button is clicked.
         """
@@ -245,6 +253,8 @@ def d_separation_explorer(
             run_button,
         ]
     )
+    # Render the plot automatically on first display.
+    _on_run_clicked(None)
     return ipywidgets.VBox([controls, output])
 
 
@@ -523,7 +533,9 @@ def causal_roles_explorer() -> ipywidgets.VBox:
 
     graph_selector.observe(_update_node_selectors, names="value")
 
-    def _on_show_clicked(_button: ipywidgets.Button) -> None:
+    def _on_show_clicked(
+        _button: Optional[ipywidgets.Button],
+    ) -> None:
         """
         Render the causal roles plot when the Show button is clicked.
         """
@@ -544,4 +556,6 @@ def causal_roles_explorer() -> ipywidgets.VBox:
             show_button,
         ]
     )
+    # Render the plot automatically on first display.
+    _on_show_clicked(None)
     return ipywidgets.VBox([controls, output])
