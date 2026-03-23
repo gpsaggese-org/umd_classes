@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.2
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -30,24 +30,18 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
-# hmodule.install_module_if_not_present(
-#     "dataframe_image",
-#     use_activate=True,
-# )
+import helpers.hmodule as hmodule
 
 hmodule.install_module_if_not_present(
     "networkx",
     use_activate=True,
 )
-
 hmodule.install_module_if_not_present(
     "pgmpy",
     use_activate=True,
 )
 
 # %%
-import helpers.hmodule as hmodule
-
 import msml610_utils as ut
 import L08_02_causal_inference_utils as mtl0cireout
 
@@ -63,15 +57,43 @@ import networkx as nx
 import pgmpy.base as pgmpy_base
 
 # %% [markdown]
-# # Causal Roles Explorer
+# # Cell 1: Causal Roles Explorer
+#
+# **Goal**:
+# - Visualize which nodes in a DAG play the role of confounders, mediators, or
+#   colliders relative to a selected treatment-outcome pair
+# - Build intuition for how graph structure determines causal relationships
+#
+# **Plots**:
+# - A DAG with nodes color-coded by their causal role:
+#   - _Treatment_: green
+#   - _Outcome_: blue
+#   - _Confounders_: orange (common ancestors of treatment and outcome)
+#   - _Mediators_: purple (on a directed path from treatment to outcome)
+#   - _Colliders_: red (receives arrows from both neighbors on some path)
+#   - _Other_: light blue
+#
+# **Parameters**:
+# - `Graph`: select a predefined causal graph (Confounder, Mediator, Collider,
+#   etc.)
+# - `Treatment`: the treatment node
+# - `Outcome`: the outcome node
+#
+# **Key observations**:
+# - The same node can play different roles depending on the treatment-outcome pair
+# - Conditioning on a collider opens a previously closed path (collider bias)
+# - Conditioning on a mediator blocks the causal path from treatment to outcome
 
 # %%
 # Display interactive causal roles explorer: select a graph, treatment, and
 # outcome to highlight confounders, mediators, and colliders.
-mtl0cireout.causal_roles_explorer()
+mtl0cireout.cell1_causal_roles_explorer()
 
 # %% [markdown]
-# # Cell
+# # Cell 2: D-Separation Graph Analysis
+#
+# - Build a specific DAG and manually query d-separation properties
+# - Demonstrate how conditioning on a node can open or close paths between nodes
 
 # %%
 model = nx.DiGraph(
@@ -128,14 +150,33 @@ print("Are G and F dependent given E?")
 print(dag.is_dconnected("G", "F", observed=["E"]))
 
 # %% [markdown]
-# # Interactive D-Separation Explorer
+# # Cell 3: Interactive D-Separation Explorer
+#
+# **Goal**:
+# - Interactively explore d-separation for any pair of nodes in the DAG built
+#   in Cell 2
+# - See how adding nodes to the conditioning set opens or closes paths
+#
+# **Plots**:
+# - The reachable subgraph containing the selected nodes and their descendants
+# - Nodes color-coded: node1 green, node2 blue, conditioning nodes red
+# - Paths between node1 and node2 highlighted in orange
+#
+# **Parameters**:
+# - `Node 1`: first node to query
+# - `Node 2`: second node to query
+# - `Conditioning`: set of nodes to condition on (shift-click to select multiple)
+#
+# **Key observations**:
+# - Two nodes that are marginally independent can become dependent when
+#   conditioning on a collider between them
+# - Two nodes that are marginally dependent can become independent when
+#   conditioning on a confounder or mediator
 
 # %%
 # Display interactive d-separation explorer for node1, node2, and conditioning
 # set (use shift to select multiple conditioning nodes).
-mtl0cireout.d_separation_explorer(
+mtl0cireout.cell3_d_separation_explorer(
     model,
     dag,
 )
-
-# %%
