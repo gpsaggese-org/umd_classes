@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Set plotting style.
+# TODO(gp): Is this needed?
 sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
