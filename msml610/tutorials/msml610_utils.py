@@ -12,12 +12,11 @@ import os
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 import seaborn as sns
 
 if TYPE_CHECKING:
     import ipywidgets
+    import pandas as pd
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -82,6 +81,7 @@ def obj_to_str(var_name: str, val: Any, *, top_n: int = 3) -> str:
     :param top_n: Number of elements to show from start and end for arrays
     :return: String representation of the object
     """
+    import numpy as np
     txt = []
     txt_tmp = "var_name=%s (type=%s)" % (var_name, str(type(val)))
     txt.append(txt_tmp)
@@ -500,6 +500,7 @@ def generate_animation_values(
     :param extra_constants: Additional constant variables as keyword arguments.
     :return: List of values.
     """
+    import numpy as np
     if mode == "linear":
         sweep_values = np.linspace(sweep_min, sweep_max, n_steps)
     else:
@@ -671,7 +672,7 @@ def save_dot(model: Any, file_name: str) -> None:
     _LOG.info(cmd)
 
 
-def save_df(df: pd.DataFrame, file_name: str) -> None:
+def save_df(df: "pd.DataFrame", file_name: str) -> None:
     """
     Save DataFrame as image file and print markdown reference.
 
