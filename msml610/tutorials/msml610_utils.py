@@ -11,7 +11,9 @@ import logging
 import os
 from typing import TYPE_CHECKING, Any, Callable, List, Optional, Tuple, Union
 
+import matplotlib.axes
 import matplotlib.pyplot as plt
+import matplotlib.text
 import seaborn as sns
 
 if TYPE_CHECKING:
@@ -408,7 +410,7 @@ def build_log_widget_control(
 
 
 def add_fitted_text_box(
-    ax: plt.Axes,
+    ax: matplotlib.axes.Axes,
     text: str,
     box_xy: Tuple[float, float] = (0.02, 0.98),
     box_width: float = 0.96,
@@ -416,7 +418,7 @@ def add_fitted_text_box(
     *,
     max_fontsize: int = 16,
     min_fontsize: int = 8,
-) -> None:
+) -> Optional[matplotlib.text.Text]:
     """
     Add a text box that fills a given axes region and automatically scales font size to fit vertically.
 
@@ -429,7 +431,7 @@ def add_fitted_text_box(
     :param min_fontsize: Minimum font size to use
     """
     ax.figure.canvas.draw()
-    renderer = ax.figure.canvas.get_renderer()
+    renderer = ax.figure.canvas.get_renderer()  # type: ignore[attr-defined]
     for fontsize in range(max_fontsize, min_fontsize - 1, -1):
         txt = ax.text(
             box_xy[0],
@@ -585,9 +587,9 @@ def generate_animation(
         dimensions = []
         for frame_file in frame_files:
             frame_path = os.path.join(dst_dir, frame_file)
-            import PIL
+            from PIL import Image as PILImage
 
-            with PIL.Image.open(frame_path) as img:
+            with PILImage.open(frame_path) as img:
                 dimensions.append((frame_file, img.size))
         # Check if all dimensions are the same.
         unique_dimensions = set(dim[1] for dim in dimensions)
@@ -679,7 +681,7 @@ def save_df(df: "pd.DataFrame", file_name: str) -> None:
     :param df: DataFrame to save
     :param file_name: Output filename
     """
-    import dataframe_image as dfi
+    import dataframe_image as dfi  # type: ignore[import-untyped]
 
     file_name = os.path.join(FIG_DIR, file_name)
     dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
