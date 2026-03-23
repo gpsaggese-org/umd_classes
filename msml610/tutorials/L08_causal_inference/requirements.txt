@@ -1,3 +1,4 @@
+dataframe_image
 ipywidgets
 matplotlib
 networkx

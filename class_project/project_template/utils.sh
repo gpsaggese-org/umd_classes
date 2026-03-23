@@ -237,6 +237,11 @@ get_docker_jupyter_options() {
     if [[ -n $target_dir ]]; then
         target_dir_opt="-v $target_dir:/data"
     fi
+    # Run as the current user when user is saggese.
+    if [[ "$(whoami)" == "saggese" ]]; then
+        echo "Overwriting jupyter_use_vim since user='saggese'"
+        jupyter_use_vim=1
+    fi
     echo "--name $container_name \
     -p $host_port:8888 \
     $target_dir_opt \

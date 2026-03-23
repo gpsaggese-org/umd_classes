@@ -17,6 +17,12 @@ import helpers.hunit_test as hunitest
 _LOG = logging.getLogger(__name__)
 
 
+# TODO(gp): Factor out more
+# 1) pass __file__ instead of script_dir =
+# os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# 2) Create a TestDockerTestCase with methods calls automatically docker_build
+#    test_cmd
+
 # #############################################################################
 # Test_docker_build
 # #############################################################################
@@ -26,6 +32,8 @@ class Test_docker_build(hunitest.TestCase):
     """
     Test that docker_build.sh builds the Docker image successfully.
     """
+
+    # TODO(gp): Build container from scratch as superslow test.
 
     @pytest.mark.slow
     def test1(self) -> None:
@@ -48,7 +56,6 @@ class Test_docker_cmd(hunitest.TestCase):
     Test that docker_cmd.sh can run arbitrary shell commands inside Docker.
     """
 
-    @pytest.mark.slow
     def test1(self) -> None:
         """
         Test that docker_cmd.sh 'ls /data' runs without error.
@@ -57,6 +64,26 @@ class Test_docker_cmd(hunitest.TestCase):
         script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         # Run test.
         hdoctest.run_docker_cmd(script_dir)
+
+
+# #############################################################################
+# Test_docker_bash
+# #############################################################################
+
+
+class Test_docker_bash(hunitest.TestCase):
+    """
+    Test that docker_bash.sh can run commands piped via stdin inside Docker.
+    """
+
+    def test1(self) -> None:
+        """
+        Test that docker_bash.sh runs 'ls /git_root' and exits without error.
+        """
+        # Prepare inputs.
+        script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # Run test.
+        hdoctest.run_docker_bash(script_dir, shell_cmd="ls /git_root")
 
 
 # #############################################################################
