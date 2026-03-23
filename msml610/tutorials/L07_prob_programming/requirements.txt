@@ -1,0 +1,10 @@
+arviz
+ipywidgets
+matplotlib
+numpy
+pandas
+preliz
+pymc
+scipy
+seaborn
+xarray
