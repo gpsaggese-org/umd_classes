@@ -9,16 +9,16 @@ import msml610.tutorials.msml610_utils as mtumsuti
 import copy
 import logging
 import os
-from typing import Any, Callable, List, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Callable, List, Optional, Tuple, Union
 
+import matplotlib.axes
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import pymc as pm
+import matplotlib.text
 import seaborn as sns
-import ipywidgets
-import PIL
 
+if TYPE_CHECKING:
+    import ipywidgets
+    import pandas as pd
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -50,24 +50,20 @@ def notebook_signature() -> None:
     os.system(cmd)
     cmd = "uname -a"
     os.system(cmd)
-    modules = ["numpy", "pymc", "matplotlib", "arviz", "preliz"]
+    modules = ["numpy", "pymc", "matplotlib", "arviz", "preliz", "sns"]
     for module in modules:
-        cmd = f"import {module}"
-        exec(cmd)
-        version = eval(f"{module}.__version__")
-        _LOG.info("%s version=%s", module, version)
+        try:
+            exec(f"import {module}")
+            version = eval(f"{module}.__version__")
+            _LOG.info("%s version=%s", module, version)
+        except ImportError:
+            _LOG.warning("%s is not installed", module)
 
 
 def config_notebook() -> None:
     """
     Configure notebook with default style and display environment signature.
     """
-    if os.environ["CSFY_HOST_USER_NAME"] == "saggese":
-        cmd = 'sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet jupyterlab-vim)"'
-        hsystem.system(cmd)
-        cmd = "jupyter labextension enable"
-        hsystem.system(cmd)
-        _LOG.warning("vim support installed: restart the notebook, if needed")
     set_notebook_style()
     notebook_signature()
 
@@ -81,6 +77,7 @@ def obj_to_str(var_name: str, val: Any, *, top_n: int = 3) -> str:
     :param top_n: Number of elements to show from start and end for arrays
     :return: String representation of the object
     """
+    import numpy as np
     txt = []
     txt_tmp = "var_name=%s (type=%s)" % (var_name, str(type(val)))
     txt.append(txt_tmp)
@@ -176,6 +173,7 @@ def _create_slider_widget(
     :param is_float: If True, create FloatSlider/FloatText, else IntSlider/IntText
     :return: Tuple of (slider, text, minus_button, plus_button)
     """
+    import ipywidgets
     _ = description
     # Create widgets based on type.
     if is_float:
@@ -221,10 +219,10 @@ def _create_slider_widget(
 
 
 def _link_slider_widgets(
-    slider: Union[ipywidgets.FloatSlider, ipywidgets.IntSlider],
-    text: Union[ipywidgets.FloatText, ipywidgets.IntText],
-    minus_button: ipywidgets.Button,
-    plus_button: ipywidgets.Button,
+    slider: Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"],
+    text: Union["ipywidgets.FloatText", "ipywidgets.IntText"],
+    minus_button: "ipywidgets.Button",
+    plus_button: "ipywidgets.Button",
 ) -> None:
     """
     Link slider, text field, and buttons together.
@@ -258,13 +256,13 @@ def _link_slider_widgets(
     plus_button.on_click(plus_clicked)
 
 
-# TODO(gp): Inline
+# TODO(ai_gp): Inline
 def _create_widget_box(
-    slider: Union[ipywidgets.FloatSlider, ipywidgets.IntSlider],
-    minus_button: ipywidgets.Button,
-    text: Union[ipywidgets.FloatText, ipywidgets.IntText],
-    plus_button: ipywidgets.Button,
-) -> ipywidgets.HBox:
+    slider: Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"],
+    minus_button: "ipywidgets.Button",
+    text: Union["ipywidgets.FloatText", "ipywidgets.IntText"],
+    plus_button: "ipywidgets.Button",
+) -> "ipywidgets.HBox":
     """
     Create horizontal box layout for widget controls.
 
@@ -274,6 +272,7 @@ def _create_widget_box(
     :param plus_button: The increment button
     :return: HBox containing all widgets in proper order
     """
+    import ipywidgets
     return ipywidgets.HBox([slider, minus_button, text, plus_button])
 
 
@@ -286,7 +285,7 @@ def build_widget_control(
     initial_value: float,
     *,
     is_float: bool = True,
-) -> Tuple[Union[ipywidgets.FloatSlider, ipywidgets.IntSlider], ipywidgets.HBox]:
+) -> Tuple[Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"], "ipywidgets.HBox"]:
     """
     Build a complete widget control with slider, text field, and +/- buttons.
 
@@ -328,12 +327,12 @@ def build_log_widget_control(
     initial_exp: int,
     *,
     base: int = 2,
-) -> Tuple[ipywidgets.IntSlider, ipywidgets.HBox]:
+) -> Tuple["ipywidgets.IntSlider", "ipywidgets.HBox"]:
     """
     Build a logarithmic widget control that displays true values.
 
     Creates a slider that operates on exponents but displays actual values.
-    For base=2: exponent 2→4, 3→8, 4→16, etc.
+    For base=2: exponent 2->4, 3->8, 4->16, etc.
     Clicking + doubles the value, clicking - halves it.
 
     :param name: Variable name (e.g., "log(N)")
@@ -345,6 +344,7 @@ def build_log_widget_control(
     :return: Tuple of (slider, box) where slider controls the exponent and box
         is the HBox layout containing all components
     """
+    import ipywidgets
     # Create slider that operates on exponents.
     exp_slider = ipywidgets.IntSlider(
         min=min_exp,
@@ -404,7 +404,7 @@ def build_log_widget_control(
 
 
 def add_fitted_text_box(
-    ax: plt.Axes,
+    ax: matplotlib.axes.Axes,
     text: str,
     box_xy: Tuple[float, float] = (0.02, 0.98),
     box_width: float = 0.96,
@@ -412,7 +412,7 @@ def add_fitted_text_box(
     *,
     max_fontsize: int = 16,
     min_fontsize: int = 8,
-) -> None:
+) -> Optional[matplotlib.text.Text]:
     """
     Add a text box that fills a given axes region and automatically scales font size to fit vertically.
 
@@ -425,7 +425,7 @@ def add_fitted_text_box(
     :param min_fontsize: Minimum font size to use
     """
     ax.figure.canvas.draw()
-    renderer = ax.figure.canvas.get_renderer()
+    renderer = ax.figure.canvas.get_renderer()  # type: ignore[attr-defined]
     for fontsize in range(max_fontsize, min_fontsize - 1, -1):
         txt = ax.text(
             box_xy[0],
@@ -496,6 +496,7 @@ def generate_animation_values(
     :param extra_constants: Additional constant variables as keyword arguments.
     :return: List of values.
     """
+    import numpy as np
     if mode == "linear":
         sweep_values = np.linspace(sweep_min, sweep_max, n_steps)
     else:
@@ -580,7 +581,9 @@ def generate_animation(
         dimensions = []
         for frame_file in frame_files:
             frame_path = os.path.join(dst_dir, frame_file)
-            with PIL.Image.open(frame_path) as img:
+            from PIL import Image as PILImage
+
+            with PILImage.open(frame_path) as img:
                 dimensions.append((frame_file, img.size))
         # Check if all dimensions are the same.
         unique_dimensions = set(dim[1] for dim in dimensions)
@@ -650,6 +653,8 @@ def save_dot(model: Any, file_name: str) -> None:
     :param model: PyMC model object
     :param file_name: Output filename
     """
+    import pymc as pm
+
     dot = pm.model_to_graphviz(model)
     dot2 = copy.deepcopy(dot)
     file_name = file_name.replace(".png", "")
@@ -663,14 +668,14 @@ def save_dot(model: Any, file_name: str) -> None:
     _LOG.info(cmd)
 
 
-def save_df(df: pd.DataFrame, file_name: str) -> None:
+def save_df(df: "pd.DataFrame", file_name: str) -> None:
     """
     Save DataFrame as image file and print markdown reference.
 
     :param df: DataFrame to save
     :param file_name: Output filename
     """
-    import dataframe_image as dfi
+    import dataframe_image as dfi  # type: ignore[import-untyped]
 
     file_name = os.path.join(FIG_DIR, file_name)
     dfi.export(df, file_name, table_conversion="matplotlib", dpi=300)
