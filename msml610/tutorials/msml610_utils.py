@@ -14,10 +14,8 @@ from typing import Any, Callable, List, Optional, Tuple, Union
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import pymc as pm
 import seaborn as sns
 import ipywidgets
-import PIL
 
 
 import helpers.hdbg as hdbg
@@ -50,12 +48,14 @@ def notebook_signature() -> None:
     os.system(cmd)
     cmd = "uname -a"
     os.system(cmd)
-    modules = ["numpy", "pymc", "matplotlib", "arviz", "preliz"]
+    modules = ["numpy", "pymc", "matplotlib", "arviz", "preliz", "sns"]
     for module in modules:
-        cmd = f"import {module}"
-        exec(cmd)
-        version = eval(f"{module}.__version__")
-        _LOG.info("%s version=%s", module, version)
+        try:
+            exec(f"import {module}")
+            version = eval(f"{module}.__version__")
+            _LOG.info("%s version=%s", module, version)
+        except ImportError:
+            _LOG.warning("%s is not installed", module)
 
 
 def config_notebook() -> None:
@@ -258,7 +258,7 @@ def _link_slider_widgets(
     plus_button.on_click(plus_clicked)
 
 
-# TODO(gp): Inline
+# TODO(ai_gp): Inline
 def _create_widget_box(
     slider: Union[ipywidgets.FloatSlider, ipywidgets.IntSlider],
     minus_button: ipywidgets.Button,
@@ -580,6 +580,8 @@ def generate_animation(
         dimensions = []
         for frame_file in frame_files:
             frame_path = os.path.join(dst_dir, frame_file)
+            import PIL
+
             with PIL.Image.open(frame_path) as img:
                 dimensions.append((frame_file, img.size))
         # Check if all dimensions are the same.
@@ -650,6 +652,8 @@ def save_dot(model: Any, file_name: str) -> None:
     :param model: PyMC model object
     :param file_name: Output filename
     """
+    import pymc as pm
+
     dot = pm.model_to_graphviz(model)
     dot2 = copy.deepcopy(dot)
     file_name = file_name.replace(".png", "")
