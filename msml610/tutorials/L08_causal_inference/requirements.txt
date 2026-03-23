@@ -1,12 +1,9 @@
-arviz
 ipywidgets
 matplotlib
 networkx
 numpy
 pandas
 pgmpy
-preliz
-pymc
 scikit-learn
 scipy
 seaborn
