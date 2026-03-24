@@ -4,10 +4,10 @@
 
 ## Part I — From Prediction to Decision Intelligence
 1. **Introduction: The Limits of Prediction**
-   - Prediction vs. decision-making
+   - Prediction vs. reasoning vs. decision-making: a three-way distinction
    - Why correlation is not enough
-   - From ML models to decision systems
-   - Overview of causal AI and explainability
+   - From ML models to reasoning systems to decision systems
+   - Overview of causal AI, automatic reasoning, and explainability
    - TUTORIAL: DoWhy (end-to-end causal reasoning from observational data)
 
 2. **Data Science vs. Decision Science**
@@ -36,10 +36,11 @@
    - TUTORIAL: CausalImpact (detecting causal impact of interventions vs. spurious trends)
 
 5. **Structural Causal Models**
-   - Causal graphs (DAGs)
+   - Causal graphs (DAGs) as a reasoning formalism
    - Structural equations
    - Interventions and counterfactuals
    - The do-operator
+   - Automated reasoning over causal graphs: d-separation, identification algorithms
    - TUTORIAL: pgmpy (building and querying Bayesian networks and DAGs)
    - TUTORIAL: CausalGraphicalModels (defining and visualizing structural causal models)
    - TUTORIAL: Dagitty (DAG creation and causal effect identification)
@@ -225,7 +226,18 @@
     - TUTORIAL: Tetrad (suite for causal model discovery and analysis)
     - TUTORIAL: Causal Discovery Toolbox (framework for causal structure discovery)
 
-25. **From Prediction Systems to Decision Systems**
+25. **Neuro-Symbolic Causal Reasoning**
+    - Symbolic reasoning: logic, rules, and knowledge bases
+    - Neural reasoning: learning from data
+    - Combining neural and symbolic: neuro-symbolic AI
+    - Causal structure as symbolic knowledge + neural estimation
+    - Knowledge graphs and causal ontologies
+    - Probabilistic logic and soft constraints
+    - TUTORIAL: DeepProbLog (probabilistic logic programming with neural predicates)
+    - TUTORIAL: PyReason (neuro-symbolic reasoning with temporal logic)
+    - TUTORIAL: CausalNex (knowledge graph reasoning with Bayesian Networks)
+
+26. **From Prediction Systems to Decision Systems**
     - Recommendation systems
     - Pricing systems
     - Marketing interventions
@@ -243,7 +255,19 @@
     - TUTORIAL: llm (minimal library for working with LLMs for coding tasks)
     - TUTORIAL: HuggingFace (transformer models for code generation and review)
 
-27. **Building Data Science Agents**
+28. **LLM Reasoning Techniques**
+    - Why LLMs struggle with reasoning and how to fix it
+    - Chain-of-thought (CoT): step-by-step reasoning prompting
+    - Tree-of-thought (ToT): branching and backtracking over reasoning paths
+    - Self-consistency: sampling multiple reasoning chains and voting
+    - Reflection and self-correction: Reflexion and iterative refinement
+    - Tool-augmented reasoning: calculators, code, search, knowledge bases
+    - Connecting LLM reasoning to causal and probabilistic reasoning
+    - TUTORIAL: LangChain (CoT and tool-augmented reasoning pipelines)
+    - TUTORIAL: Reflexion (self-reflective LLM reasoning with iterative improvement)
+    - TUTORIAL: LlamaIndex (knowledge-grounded reasoning over structured data)
+
+29. **Building Data Science Agents**
     - Agent architectures
     - Tool use and function calling
     - Autonomous data analysis agents
@@ -254,7 +278,7 @@
     - TUTORIAL: Griptape (framework for building AI-powered applications)
     - TUTORIAL: AutoGPT (autonomous GPT-based agent for task planning)
 
-28. **Automating Machine Learning Workflows**
+30. **Automating Machine Learning Workflows**
     - AutoML
     - Feature engineering agents
     - Experimentation agents
@@ -265,7 +289,7 @@
     - TUTORIAL: optuna (automated hyperparameter optimization)
     - TUTORIAL: Featuretools (automated feature engineering)
 
-29. **Decision-Making Agents**
+31. **Decision-Making Agents**
     - Planning agents
     - Simulation environments
     - Decision optimization agents
@@ -275,7 +299,7 @@
     - TUTORIAL: Griptape (decision optimization agent pipelines)
     - TUTORIAL: gymnasium (simulation environments for agent decision making)
 
-30. **Causal AI Agents**
+32. **Causal AI Agents**
     - Agents that reason with causal models
     - Counterfactual reasoning agents
     - Experiment design agents
@@ -285,26 +309,37 @@
     - TUTORIAL: EconML (policy optimization agents with causal models)
     - TUTORIAL: Reflexion (counterfactual reasoning via self-reflection in agents)
 
+44. **Automated Scientific Reasoning**
+    - Hypothesis generation and testing with AI
+    - Experiment design agents: active learning and causal exploration
+    - LLM-guided causal discovery: from text to causal graphs
+    - Automated statistical reasoning: from data to conclusions
+    - Human-AI collaboration in scientific discovery
+    - Open problems: grounding, verification, and trust
+    - TUTORIAL: DoWhy (LLM-assisted causal graph construction and querying)
+    - TUTORIAL: causal-learn (automated causal structure search as reasoning)
+    - TUTORIAL: Reflexion (iterative hypothesis refinement via self-reflection)
+
 ## Part VII — Real-World Systems and Case Studies
-31. **Marketing and Uplift Modeling**
+33. **Marketing and Uplift Modeling**
     - TUTORIAL: CausalML (uplift modeling and marketing intervention analysis)
     - TUTORIAL: EconML (heterogeneous treatment effects for targeted marketing)
 
-32. **Recommendation Systems and Interventions**
+34. **Recommendation Systems and Interventions**
     - TUTORIAL: DoWhy (causal recommendation systems beyond collaborative filtering)
     - TUTORIAL: EconML (intervention-based recommendation optimization)
 
-33. **Pricing and Revenue Optimization**
+35. **Pricing and Revenue Optimization**
     - TUTORIAL: EconML (causal pricing and revenue optimization)
     - TUTORIAL: optuna (pricing strategy optimization with Bayesian search)
 
-34. **Healthcare and Treatment Effects**
+36. **Healthcare and Treatment Effects**
     - TUTORIAL: DoWhy (observational study analysis for treatment effects)
     - TUTORIAL: EconML (heterogeneous treatment effects in clinical data)
     - TUTORIAL: CausalML (propensity scoring and matching for healthcare studies)
     - TUTORIAL: IBM Causal Inference 360 (causal inference toolkit for health outcomes)
 
-35. **Supply Chain Forecasting**
+37. **Supply Chain Forecasting**
     - Demand forecasting pipelines: from data to decisions
     - Hierarchical forecasting across SKUs, regions, and time horizons
     - Reconciliation methods: bottom-up, top-down, optimal reconciliation
@@ -315,7 +350,7 @@
     - TUTORIAL: orbit (Bayesian time series models for supply chain planning)
     - TUTORIAL: GluonTS (probabilistic demand forecasting)
 
-36. **Forecast-Driven Decision Systems**
+38. **Forecast-Driven Decision Systems**
     - Connecting forecasts to inventory, staffing, and procurement decisions
     - Newsvendor model and service-level optimization
     - Causal factors in demand: promotions, price, weather, events
@@ -324,7 +359,7 @@
     - TUTORIAL: EconML (causal demand modeling for pricing and promotion decisions)
     - TUTORIAL: CausalImpact (measuring the causal effect of promotions on demand)
 
-37. **Risk, Fraud, and Decision Intelligence**
+39. **Risk, Fraud, and Decision Intelligence**
     - TUTORIAL: SHAP (model explanation for fraud detection models)
     - TUTORIAL: AI Fairness 360 (bias detection in risk scoring systems)
     - TUTORIAL: Fairlearn (fairness-aware risk models)
@@ -336,5 +371,6 @@
 - Optimization methods
 - Reinforcement learning math
 - Time series math: stationarity, spectral analysis, state space representations
+- Neuro-symbolic reasoning and probabilistic logic
 - Python libraries for causal ML and explainability
 - Further reading and research papers
