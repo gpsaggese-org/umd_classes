@@ -71,16 +71,27 @@
    - TUTORIAL: CausalPy (causal effect estimation with Bayesian models)
    - TUTORIAL: CausalImpact (policy evaluation using interrupted time-series analysis)
 
-## Part III — Machine Learning Explainability
-9. **Why Explainability Matters**
-   - Black box models
-   - Regulation and trust
-   - Debugging ML models
-   - Explainability vs interpretability
-   - TUTORIAL: SHAP (explaining black-box model predictions with Shapley values)
-   - TUTORIAL: AI Fairness 360 (bias detection and regulation-driven fairness auditing)
+9. **Causal Inference for Time Series**
+   - Time series vs. cross-sectional causal inference
+   - Granger causality: definition, assumptions, and limitations
+   - Interrupted time series (ITS) and regression discontinuity
+   - Difference-in-differences (DiD) and parallel trends assumption
+   - Synthetic control: constructing a counterfactual from donor series
+   - When temporal structure helps and when it misleads
+   - TUTORIAL: CausalImpact (Bayesian interrupted time series for causal inference)
+   - TUTORIAL: statsmodels (Granger causality tests and VAR models)
+   - TUTORIAL: CausalPy (DiD and synthetic control with Bayesian models)
 
-10. **Model-Specific Interpretability**
+## Part III — Machine Learning Explainability
+10. **Why Explainability Matters**
+    - Black box models
+    - Regulation and trust
+    - Debugging ML models
+    - Explainability vs interpretability
+    - TUTORIAL: SHAP (explaining black-box model predictions with Shapley values)
+    - TUTORIAL: AI Fairness 360 (bias detection and regulation-driven fairness auditing)
+
+11. **Model-Specific Interpretability**
     - Linear models
     - Decision trees
     - Rule-based models
@@ -88,7 +99,7 @@
     - TUTORIAL: What-If Tool (interactive model interpretability and comparison)
     - TUTORIAL: SHAP (feature attribution for linear models and tree-based models)
 
-11. **Model-Agnostic Explainability**
+12. **Model-Agnostic Explainability**
     - Feature importance
     - Partial dependence plots
     - ICE plots
@@ -96,7 +107,7 @@
     - TUTORIAL: SHAP (global and local model-agnostic explanations)
     - TUTORIAL: LIME (local interpretable model-agnostic explanations)
 
-12. **SHAP, LIME, and Modern Explanation Methods**
+13. **SHAP, LIME, and Modern Explanation Methods**
     - Shapley values
     - LIME explanations
     - Counterfactual explanations
@@ -105,7 +116,7 @@
     - TUTORIAL: LIME (local surrogate model explanations)
     - TUTORIAL: Fairlearn (fairness metrics and counterfactual fairness)
 
-13. **Explainability vs Causality**
+14. **Explainability vs Causality**
     - Feature importance is not causality
     - When explanations are misleading
     - Causal feature importance
@@ -115,7 +126,7 @@
     - TUTORIAL: SHAP (showing limitations when correlations mislead attribution)
 
 ## Part IV — Decision-Making Under Uncertainty
-14. **Decision Theory for Data Scientists**
+15. **Decision Theory for Data Scientists**
     - Utility theory
     - Loss functions vs utility
     - Expected value and expected utility
@@ -123,7 +134,7 @@
     - TUTORIAL: optuna (hyperparameter optimization as a decision problem)
     - TUTORIAL: Ax (adaptive experimentation and expected utility maximization)
 
-15. **Bayesian Decision Making**
+16. **Bayesian Decision Making**
     - Bayesian inference
     - Posterior distributions
     - Thompson sampling
@@ -133,7 +144,20 @@
     - TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
     - TUTORIAL: pyro (probabilistic programming with PyTorch)
 
-16. **Sequential State Estimation and Filtering**
+17. **Time Series Forecasting and Uncertainty**
+    - Time series decomposition: trend, seasonality, residuals
+    - Classical models: ARIMA, SARIMA, exponential smoothing
+    - Machine learning models: XGBoost, LightGBM on time features
+    - Deep learning models: N-BEATS, TFT, PatchTST
+    - Probabilistic forecasting and prediction intervals
+    - Conformal prediction for time series
+    - Evaluating forecasts: MASE, CRPS, calibration
+    - TUTORIAL: Darts (unified forecasting with classical, ML, and deep learning models)
+    - TUTORIAL: sktime (time series ML framework for forecasting and classification)
+    - TUTORIAL: NeuralForecast (deep learning models for probabilistic time series)
+    - TUTORIAL: GluonTS (probabilistic time-series modeling with uncertainty)
+
+18. **Sequential State Estimation and Filtering**
     - Hidden state and the state space model
     - Discrete Bayes filter (the foundation of all filtering)
     - Hidden Markov Models and the forward algorithm
@@ -145,7 +169,7 @@
     - TUTORIAL: pykalman (linear Kalman filter and Kalman smoother)
     - TUTORIAL: HMMlearn (discrete filtering with Gaussian and multinomial HMMs)
 
-17. **Reinforcement Learning and Sequential Decisions**
+19. **Reinforcement Learning and Sequential Decisions**
     - Markov decision processes
     - Partially observable MDPs (POMDPs) and belief states
     - Exploration vs exploitation
@@ -156,7 +180,7 @@
     - TUTORIAL: ray[rllib] (scalable reinforcement learning)
     - TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
 
-18. **Causal Decision Making**
+20. **Causal Decision Making**
     - Policy interventions
     - Counterfactual reasoning
     - Decision optimization with causal models
@@ -166,14 +190,14 @@
     - TUTORIAL: CausalML (causal policy learning and uplift modeling)
 
 ## Part V — Causal AI: Going Beyond Correlation
-20. **What is Causal AI**
+21. **What is Causal AI**
     - Predictive AI vs Causal AI
     - Decision intelligence systems
     - Causal reasoning systems
     - TUTORIAL: DoWhy (causal reasoning pipeline vs. predictive pipeline)
     - TUTORIAL: EconML (causal AI for business decision systems)
 
-21. **Causal Machine Learning**
+22. **Causal Machine Learning**
     - Double machine learning
     - Causal forests
     - Meta-learners (S-learner, T-learner, X-learner)
@@ -181,7 +205,7 @@
     - TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
     - TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
 
-22. **Causal Representation Learning**
+23. **Causal Representation Learning**
     - Learning causal structure
     - Invariant risk minimization
     - Domain adaptation and causality
@@ -189,7 +213,7 @@
     - TUTORIAL: Causica (combining causal discovery and inference with deep learning)
     - TUTORIAL: CausalNex (causal representation with Bayesian Networks)
 
-23. **Causal Discovery**
+24. **Causal Discovery**
     - Constraint-based methods
     - Score-based methods
     - Granger causality and state space representations
@@ -201,7 +225,7 @@
     - TUTORIAL: Tetrad (suite for causal model discovery and analysis)
     - TUTORIAL: Causal Discovery Toolbox (framework for causal structure discovery)
 
-24. **From Prediction Systems to Decision Systems**
+25. **From Prediction Systems to Decision Systems**
     - Recommendation systems
     - Pricing systems
     - Marketing interventions
@@ -211,7 +235,7 @@
     - TUTORIAL: DoWhy (end-to-end decision systems with causal models)
 
 ## Part VI — AI Coding, Agents, and Automation
-25. **AI-Assisted Programming**
+26. **AI-Assisted Programming**
     - Code generation with LLMs
     - Prompt engineering for coding
     - Code review and debugging with AI
@@ -219,7 +243,7 @@
     - TUTORIAL: llm (minimal library for working with LLMs for coding tasks)
     - TUTORIAL: HuggingFace (transformer models for code generation and review)
 
-26. **Building Data Science Agents**
+27. **Building Data Science Agents**
     - Agent architectures
     - Tool use and function calling
     - Autonomous data analysis agents
@@ -230,7 +254,7 @@
     - TUTORIAL: Griptape (framework for building AI-powered applications)
     - TUTORIAL: AutoGPT (autonomous GPT-based agent for task planning)
 
-27. **Automating Machine Learning Workflows**
+28. **Automating Machine Learning Workflows**
     - AutoML
     - Feature engineering agents
     - Experimentation agents
@@ -241,7 +265,7 @@
     - TUTORIAL: optuna (automated hyperparameter optimization)
     - TUTORIAL: Featuretools (automated feature engineering)
 
-28. **Decision-Making Agents**
+29. **Decision-Making Agents**
     - Planning agents
     - Simulation environments
     - Decision optimization agents
@@ -251,7 +275,7 @@
     - TUTORIAL: Griptape (decision optimization agent pipelines)
     - TUTORIAL: gymnasium (simulation environments for agent decision making)
 
-29. **Causal AI Agents**
+30. **Causal AI Agents**
     - Agents that reason with causal models
     - Counterfactual reasoning agents
     - Experiment design agents
@@ -262,48 +286,55 @@
     - TUTORIAL: Reflexion (counterfactual reasoning via self-reflection in agents)
 
 ## Part VII — Real-World Systems and Case Studies
-30. **Marketing and Uplift Modeling**
+31. **Marketing and Uplift Modeling**
     - TUTORIAL: CausalML (uplift modeling and marketing intervention analysis)
     - TUTORIAL: EconML (heterogeneous treatment effects for targeted marketing)
 
-31. **Recommendation Systems and Interventions**
+32. **Recommendation Systems and Interventions**
     - TUTORIAL: DoWhy (causal recommendation systems beyond collaborative filtering)
     - TUTORIAL: EconML (intervention-based recommendation optimization)
 
-32. **Pricing and Revenue Optimization**
+33. **Pricing and Revenue Optimization**
     - TUTORIAL: EconML (causal pricing and revenue optimization)
     - TUTORIAL: optuna (pricing strategy optimization with Bayesian search)
 
-33. **Healthcare and Treatment Effects**
+34. **Healthcare and Treatment Effects**
     - TUTORIAL: DoWhy (observational study analysis for treatment effects)
     - TUTORIAL: EconML (heterogeneous treatment effects in clinical data)
     - TUTORIAL: CausalML (propensity scoring and matching for healthcare studies)
     - TUTORIAL: IBM Causal Inference 360 (causal inference toolkit for health outcomes)
 
-34. **Supply Chain and Forecast + Decision Systems**
-    - TUTORIAL: pykalman (Kalman smoothing for demand estimation and inventory tracking)
-    - TUTORIAL: Darts (time series forecasting for supply chain)
-    - TUTORIAL: sktime (time series ML framework for demand forecasting)
+35. **Supply Chain Forecasting**
+    - Demand forecasting pipelines: from data to decisions
+    - Hierarchical forecasting across SKUs, regions, and time horizons
+    - Reconciliation methods: bottom-up, top-down, optimal reconciliation
+    - Anomaly detection in supply chain signals
+    - Forecast evaluation and model selection at scale
+    - TUTORIAL: Darts (multi-model forecasting for demand planning)
+    - TUTORIAL: sktime (hierarchical forecasting and reconciliation)
     - TUTORIAL: orbit (Bayesian time series models for supply chain planning)
-    - TUTORIAL: GluonTS (probabilistic time-series modeling for forecasting)
+    - TUTORIAL: GluonTS (probabilistic demand forecasting)
 
-35. **Risk, Fraud, and Decision Intelligence**
+36. **Forecast-Driven Decision Systems**
+    - Connecting forecasts to inventory, staffing, and procurement decisions
+    - Newsvendor model and service-level optimization
+    - Causal factors in demand: promotions, price, weather, events
+    - Measuring forecast value in downstream decisions
+    - TUTORIAL: pykalman (Kalman smoothing for demand estimation and inventory tracking)
+    - TUTORIAL: EconML (causal demand modeling for pricing and promotion decisions)
+    - TUTORIAL: CausalImpact (measuring the causal effect of promotions on demand)
+
+37. **Risk, Fraud, and Decision Intelligence**
     - TUTORIAL: SHAP (model explanation for fraud detection models)
     - TUTORIAL: AI Fairness 360 (bias detection in risk scoring systems)
     - TUTORIAL: Fairlearn (fairness-aware risk models)
     - TUTORIAL: pysyft (privacy-preserving ML for sensitive risk data)
-
-## Part VIII — The Future of Data Science and AI
-36. **From Data Scientist to Decision Scientist**
-37. **The Rise of Causal AI**
-38. **Autonomous Decision Systems**
-39. **AI Agents that Run Companies**
-40. **Open Problems in Causal AI and Decision Intelligence**
 
 ## Appendix
 - Mathematical foundations of causal inference
 - Bayesian statistics refresher
 - Optimization methods
 - Reinforcement learning math
+- Time series math: stationarity, spectral analysis, state space representations
 - Python libraries for causal ML and explainability
 - Further reading and research papers
