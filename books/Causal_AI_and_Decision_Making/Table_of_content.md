@@ -2,10 +2,7 @@
 
 ## Table of Contents
 
----
-
 ## Part I — From Prediction to Decision Intelligence
-
 1. **Introduction: The Limits of Prediction**
    - Prediction vs. decision-making
    - Why correlation is not enough
@@ -24,13 +21,10 @@
    - Bayesian thinking for ML practitioners
    - Risk-aware decision-making
 
----
-
 ## Part II — Foundations of Causal Inference
-
 4. **Causality vs. Correlation**
    - Spurious correlations
-   - Simpson’s paradox
+   - Simpson's paradox
    - Confounding variables
    - Causal questions vs. predictive questions
 
@@ -59,10 +53,7 @@
    - Policy evaluation
    - Observational vs experimental data
 
----
-
 ## Part III — Machine Learning Explainability
-
 9. **Why Explainability Matters**
    - Black box models
    - Regulation and trust
@@ -93,10 +84,7 @@
     - Causal feature importance
     - Interventions vs attribution
 
----
-
 ## Part IV — Decision-Making Under Uncertainty
-
 14. **Decision Theory for Data Scientists**
     - Utility theory
     - Loss functions vs utility
@@ -121,10 +109,7 @@
     - Decision optimization with causal models
     - Uplift and treatment policies
 
----
-
 ## Part V — Causal AI: Going Beyond Correlation
-
 18. **What is Causal AI**
     - Predictive AI vs Causal AI
     - Decision intelligence systems
@@ -154,10 +139,7 @@
     - Marketing interventions
     - Healthcare decision systems
 
----
-
 ## Part VI — AI Coding, Agents, and Automation
-
 23. **AI-Assisted Programming**
     - Code generation with LLMs
     - Prompt engineering for coding
@@ -188,10 +170,7 @@
     - Experiment design agents
     - Policy optimization agents
 
----
-
 ## Part VII — Real-World Systems and Case Studies
-
 28. **Marketing and Uplift Modeling**
 29. **Recommendation Systems and Interventions**
 30. **Pricing and Revenue Optimization**
@@ -199,20 +178,14 @@
 32. **Supply Chain and Forecast + Decision Systems**
 33. **Risk, Fraud, and Decision Intelligence**
 
----
-
-## Part VIII — The Future of Data Science and AI
-
+## Part VIII — the Future of Data Science and AI
 34. **From Data Scientist to Decision Scientist**
 35. **The Rise of Causal AI**
 36. **Autonomous Decision Systems**
 37. **AI Agents that Run Companies**
 38. **Open Problems in Causal AI and Decision Intelligence**
 
----
-
 ## Appendix
-
 - Mathematical foundations of causal inference
 - Bayesian statistics refresher
 - Optimization methods
