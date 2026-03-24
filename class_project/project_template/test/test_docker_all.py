@@ -58,7 +58,7 @@ class Test_docker_cmd(hunitest.TestCase):
 
     def test1(self) -> None:
         """
-        Test that docker_cmd.sh 'ls /data' runs without error.
+        Test that docker_cmd.sh 'ls /git_root' runs without error.
         """
         # Prepare inputs.
         script_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

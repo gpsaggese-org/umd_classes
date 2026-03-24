@@ -26,3 +26,5 @@ RUN /install/version.sh 2>&1 | tee version.log
 
 # Jupyter.
 EXPOSE 8888
+
+CMD ["/bin/bash"]

@@ -9,7 +9,34 @@ get_docker_bash_command() {
     #
     # :return: docker run command string with --rm and -ti flags
     # """
-    echo "docker run --rm -ti"
+    if [ -t 0 ]; then
+        echo "docker run --rm -ti"
+    else
+        echo "docker run --rm -i"
+    fi
+}
+
+
+get_docker_bash_options() {
+    # """
+    # Return docker run options for a Docker container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param port: Port number to forward (optional, skipped if empty)
+    # :param extra_opts: Additional docker run options (optional)
+    # :return: docker run options string with name, volume mounts, and env vars
+    # """
+    local container_name=$1
+    local port=$2
+    local extra_opts=$3
+    local port_opt=""
+    if [[ -n $port ]]; then
+        port_opt="-p $port:$port"
+    fi
+    echo "--name $container_name \
+    $port_opt \
+    $extra_opts \
+    $(get_docker_common_options)"
 }
 
 
@@ -68,7 +95,6 @@ _print_docker_jupyter_help() {
     echo "Options:"
     echo "  -h          Print this help message and exit"
     echo "  -p PORT     Host port to forward to Jupyter Lab (default: 8888)"
-    echo "  -d DIR      Directory to mount as /data inside the container (default: git root)"
     echo "  -u          Enable vim keybindings in Jupyter Lab"
     echo "  -v          Enable verbose output (set -x)"
 }
@@ -87,17 +113,15 @@ parse_docker_jupyter_args() {
     # Set defaults.
     JUPYTER_HOST_PORT=8888
     JUPYTER_USE_VIM=0
-    TARGET_DIR=$GIT_ROOT
     VERBOSE=0
     # Save original args to pass through to run_jupyter.sh.
     OLD_CMD_OPTS="$*"
     # Parse options.
-    while getopts "hp:d:uv" flag; do
+    while getopts "hp:uv" flag; do
         case "${flag}" in
             h) _print_docker_jupyter_help; exit 0;;
             p) JUPYTER_HOST_PORT=${OPTARG};;  # Port for Jupyter Lab.
             u) JUPYTER_USE_VIM=1;;            # Enable vim bindings.
-            d) TARGET_DIR=${OPTARG};;         # Directory to mount as /data.
             v) VERBOSE=1;;                    # Enable verbose output.
             *) _print_docker_jupyter_help; exit 1;;
         esac
@@ -206,13 +230,12 @@ get_docker_common_options() {
     # """
     # Return docker run options common to all container types.
     #
-    # Includes volume mounts for the current directory and git root, plus
-    # environment variables for PYTHONPATH and host OS name.
+    # Includes volume mount for the git root, plus environment variables for
+    # PYTHONPATH and host OS name.
     #
     # :return: docker run options string with volume mounts and env vars
     # """
-    echo "-v $(pwd):/curr_dir \
-    -v $GIT_ROOT:/git_root \
+    echo "-v $GIT_ROOT:/git_root \
     -e PYTHONPATH=/git_root:/git_root/helpers_root \
     -e CSFY_HOST_OS_NAME=$(uname -s) \
     -e CSFY_HOST_NAME=$(uname -n)"
@@ -225,18 +248,12 @@ get_docker_jupyter_options() {
     #
     # :param container_name: Name for the Docker container
     # :param host_port: Host port to forward to container port 8888
-    # :param target_dir: Optional directory to mount as /data (empty to skip)
     # :param jupyter_use_vim: 0 or 1 to enable vim bindings
     # :return: docker run options string
     # """
     local container_name=$1
     local host_port=$2
-    local target_dir=$3
-    local jupyter_use_vim=$4
-    local target_dir_opt=""
-    if [[ -n $target_dir ]]; then
-        target_dir_opt="-v $target_dir:/data"
-    fi
+    local jupyter_use_vim=$3
     # Run as the current user when user is saggese.
     if [[ "$(whoami)" == "saggese" ]]; then
         echo "Overwriting jupyter_use_vim since user='saggese'"
@@ -244,32 +261,8 @@ get_docker_jupyter_options() {
     fi
     echo "--name $container_name \
     -p $host_port:8888 \
-    $target_dir_opt \
     $(get_docker_common_options) \
     -e JUPYTER_USE_VIM=$jupyter_use_vim"
-}
-
-
-get_docker_bash_options() {
-    # """
-    # Return docker run options for a Docker container.
-    #
-    # :param container_name: Name for the Docker container
-    # :param port: Port number to forward (optional, skipped if empty)
-    # :param extra_opts: Additional docker run options (optional)
-    # :return: docker run options string with name, volume mounts, and env vars
-    # """
-    local container_name=$1
-    local port=$2
-    local extra_opts=$3
-    local port_opt=""
-    if [[ -n $port ]]; then
-        port_opt="-p $port:$port"
-    fi
-    echo "--name $container_name \
-    $port_opt \
-    $extra_opts \
-    $(get_docker_common_options)"
 }
 
 
