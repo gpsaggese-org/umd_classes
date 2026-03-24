@@ -122,108 +122,6 @@ parse_docker_jupyter_args() {
 
 
 # #############################################################################
-# Docker commands and options
-# #############################################################################
-
-
-get_docker_bash_command() {
-    # """
-    # Return the base docker run command for an interactive bash shell.
-    #
-    # :return: docker run command string with --rm and -ti flags
-    # """
-    if [ -t 0 ]; then
-        echo "docker run --rm -ti"
-    else
-        echo "docker run --rm -i"
-    fi
-}
-
-
-get_docker_cmd_command() {
-    # """
-    # Return the base docker run command for executing a non-interactive command.
-    #
-    # :return: docker run command string with --rm and -i flags
-    # """
-    echo "docker run --rm -i"
-}
-
-
-get_docker_jupyter_command() {
-    # """
-    # Return the base docker run command for running Jupyter Lab interactively.
-    #
-    # :return: docker run command string with --rm and -ti flags
-    # """
-    echo "docker run --rm -ti"
-}
-
-
-get_docker_common_options() {
-    # """
-    # Return docker run options common to all container types.
-    #
-    # Includes volume mount for the git root, plus environment variables for
-    # PYTHONPATH and host OS name.
-    #
-    # :return: docker run options string with volume mounts and env vars
-    # """
-    echo "-v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s) \
-    -e CSFY_HOST_NAME=$(uname -n)"
-}
-
-
-get_docker_bash_options() {
-    # """
-    # Return docker run options for a Docker container.
-    #
-    # :param container_name: Name for the Docker container
-    # :param port: Port number to forward (optional, skipped if empty)
-    # :param extra_opts: Additional docker run options (optional)
-    # :return: docker run options string with name, volume mounts, and env vars
-    # """
-    local container_name=$1
-    local port=$2
-    local extra_opts=$3
-    local port_opt=""
-    if [[ -n $port ]]; then
-        port_opt="-p $port:$port"
-    fi
-    echo "--name $container_name \
-    $port_opt \
-    $extra_opts \
-    $(get_docker_common_options)"
-}
-
-
-get_docker_jupyter_options() {
-    # """
-    # Return docker run options for a Jupyter Lab container.
-    #
-    # :param container_name: Name for the Docker container
-    # :param host_port: Host port to forward to container port 8888
-    # :param jupyter_use_vim: 0 or 1 to enable vim bindings
-    # :return: docker run options string
-    # """
-    local container_name=$1
-    local host_port=$2
-    local jupyter_use_vim=$3
-    # Run as the current user when user is saggese.
-    if [[ "$(whoami)" == "saggese" ]]; then
-        echo "Overwriting jupyter_use_vim since user='saggese'"
-        jupyter_use_vim=1
-    fi
-    echo "--name $container_name \
-    -p $host_port:8888 \
-    $(get_docker_common_options) \
-    -e JUPYTER_USE_VIM=$jupyter_use_vim"
-}
-
-
-# #############################################################################
 # Docker image management
 # #############################################################################
 
@@ -358,6 +256,11 @@ pull_container_image() {
 }
 
 
+# #############################################################################
+# Docker container management
+# #############################################################################
+
+
 kill_container() {
     # """
     # Kill and remove Docker container(s) matching the current configuration.
@@ -397,8 +300,121 @@ exec_container() {
 
 
 # #############################################################################
-# Jupyter configuration
+# Docker common options
 # #############################################################################
+
+
+get_docker_common_options() {
+    # """
+    # Return docker run options common to all container types.
+    #
+    # Includes volume mount for the git root, plus environment variables for
+    # PYTHONPATH and host OS name.
+    #
+    # :return: docker run options string with volume mounts and env vars
+    # """
+    echo "-v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root:/git_root/msml610/tutorials \
+    -e CSFY_GIT_ROOT_PATH=/git_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
+    -e CSFY_HOST_NAME=$(uname -n)"
+}
+
+
+# #############################################################################
+# Docker bash
+# #############################################################################
+
+
+get_docker_bash_command() {
+    # """
+    # Return the base docker run command for an interactive bash shell.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    if [ -t 0 ]; then
+        echo "docker run --rm -ti"
+    else
+        echo "docker run --rm -i"
+    fi
+}
+
+
+get_docker_bash_options() {
+    # """
+    # Return docker run options for a Docker container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param port: Port number to forward (optional, skipped if empty)
+    # :param extra_opts: Additional docker run options (optional)
+    # :return: docker run options string with name, volume mounts, and env vars
+    # """
+    local container_name=$1
+    local port=$2
+    local extra_opts=$3
+    local port_opt=""
+    if [[ -n $port ]]; then
+        port_opt="-p $port:$port"
+    fi
+    echo "--name $container_name \
+    $port_opt \
+    $extra_opts \
+    $(get_docker_common_options)"
+}
+
+
+# #############################################################################
+# Docker cmd
+# #############################################################################
+
+
+get_docker_cmd_command() {
+    # """
+    # Return the base docker run command for executing a non-interactive command.
+    #
+    # :return: docker run command string with --rm and -i flags
+    # """
+    echo "docker run --rm -i"
+}
+
+
+# #############################################################################
+# Docker Jupyter
+# #############################################################################
+
+
+get_docker_jupyter_command() {
+    # """
+    # Return the base docker run command for running Jupyter Lab interactively.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    echo "docker run --rm -ti"
+}
+
+
+get_docker_jupyter_options() {
+    # """
+    # Return docker run options for a Jupyter Lab container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param host_port: Host port to forward to container port 8888
+    # :param jupyter_use_vim: 0 or 1 to enable vim bindings
+    # :return: docker run options string
+    # """
+    local container_name=$1
+    local host_port=$2
+    local jupyter_use_vim=$3
+    # Run as the current user when user is saggese.
+    if [[ "$(whoami)" == "saggese" ]]; then
+        echo "Overwriting jupyter_use_vim since user='saggese'"
+        jupyter_use_vim=1
+    fi
+    echo "--name $container_name \
+    -p $host_port:8888 \
+    $(get_docker_common_options) \
+    -e JUPYTER_USE_VIM=$jupyter_use_vim"
+}
 
 
 configure_jupyter_vim_keybindings() {
