@@ -22,6 +22,7 @@
    - Confidence intervals and prediction intervals
    - Bayesian thinking for ML practitioners
    - Risk-aware decision-making
+   - Uncertainty propagation through time (preview of Kalman filtering)
    - TUTORIAL: PyMC3 (Bayesian statistical modeling and uncertainty quantification)
    - TUTORIAL: TensorFlow Probability (probabilistic reasoning and uncertainty estimation)
 
@@ -132,8 +133,21 @@
     - TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
     - TUTORIAL: pyro (probabilistic programming with PyTorch)
 
-16. **Reinforcement Learning and Sequential Decisions**
+16. **Sequential State Estimation and Filtering**
+    - Hidden state and the state space model
+    - Discrete Bayes filter (the foundation of all filtering)
+    - Hidden Markov Models and the forward algorithm
+    - Kalman filter: linear-Gaussian exact Bayesian inference
+    - Discretizing continuous systems (matrix exponential, Van Loan method)
+    - Extended and Unscented Kalman filters for nonlinear systems
+    - Particle filters for non-Gaussian and nonlinear systems
+    - Applications: tracking, sensor fusion, demand estimation
+    - TUTORIAL: pykalman (linear Kalman filter and Kalman smoother)
+    - TUTORIAL: HMMlearn (discrete filtering with Gaussian and multinomial HMMs)
+
+17. **Reinforcement Learning and Sequential Decisions**
     - Markov decision processes
+    - Partially observable MDPs (POMDPs) and belief states
     - Exploration vs exploitation
     - Policy learning
     - Offline reinforcement learning
@@ -142,7 +156,7 @@
     - TUTORIAL: ray[rllib] (scalable reinforcement learning)
     - TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
 
-17. **Causal Decision Making**
+18. **Causal Decision Making**
     - Policy interventions
     - Counterfactual reasoning
     - Decision optimization with causal models
@@ -152,14 +166,14 @@
     - TUTORIAL: CausalML (causal policy learning and uplift modeling)
 
 ## Part V — Causal AI: Going Beyond Correlation
-18. **What is Causal AI**
+20. **What is Causal AI**
     - Predictive AI vs Causal AI
     - Decision intelligence systems
     - Causal reasoning systems
     - TUTORIAL: DoWhy (causal reasoning pipeline vs. predictive pipeline)
     - TUTORIAL: EconML (causal AI for business decision systems)
 
-19. **Causal Machine Learning**
+21. **Causal Machine Learning**
     - Double machine learning
     - Causal forests
     - Meta-learners (S-learner, T-learner, X-learner)
@@ -167,7 +181,7 @@
     - TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
     - TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
 
-20. **Causal Representation Learning**
+22. **Causal Representation Learning**
     - Learning causal structure
     - Invariant risk minimization
     - Domain adaptation and causality
@@ -175,10 +189,10 @@
     - TUTORIAL: Causica (combining causal discovery and inference with deep learning)
     - TUTORIAL: CausalNex (causal representation with Bayesian Networks)
 
-21. **Causal Discovery**
+23. **Causal Discovery**
     - Constraint-based methods
     - Score-based methods
-    - Granger causality
+    - Granger causality and state space representations
     - Practical limitations
     - TUTORIAL: causal-learn (PC algorithm, GES, and constraint-based discovery)
     - TUTORIAL: LiNGAM (linear non-Gaussian causal model discovery)
@@ -187,7 +201,7 @@
     - TUTORIAL: Tetrad (suite for causal model discovery and analysis)
     - TUTORIAL: Causal Discovery Toolbox (framework for causal structure discovery)
 
-22. **From Prediction Systems to Decision Systems**
+24. **From Prediction Systems to Decision Systems**
     - Recommendation systems
     - Pricing systems
     - Marketing interventions
@@ -197,7 +211,7 @@
     - TUTORIAL: DoWhy (end-to-end decision systems with causal models)
 
 ## Part VI — AI Coding, Agents, and Automation
-23. **AI-Assisted Programming**
+25. **AI-Assisted Programming**
     - Code generation with LLMs
     - Prompt engineering for coding
     - Code review and debugging with AI
@@ -205,7 +219,7 @@
     - TUTORIAL: llm (minimal library for working with LLMs for coding tasks)
     - TUTORIAL: HuggingFace (transformer models for code generation and review)
 
-24. **Building Data Science Agents**
+26. **Building Data Science Agents**
     - Agent architectures
     - Tool use and function calling
     - Autonomous data analysis agents
@@ -216,7 +230,7 @@
     - TUTORIAL: Griptape (framework for building AI-powered applications)
     - TUTORIAL: AutoGPT (autonomous GPT-based agent for task planning)
 
-25. **Automating Machine Learning Workflows**
+27. **Automating Machine Learning Workflows**
     - AutoML
     - Feature engineering agents
     - Experimentation agents
@@ -227,7 +241,7 @@
     - TUTORIAL: optuna (automated hyperparameter optimization)
     - TUTORIAL: Featuretools (automated feature engineering)
 
-26. **Decision-Making Agents**
+28. **Decision-Making Agents**
     - Planning agents
     - Simulation environments
     - Decision optimization agents
@@ -237,7 +251,7 @@
     - TUTORIAL: Griptape (decision optimization agent pipelines)
     - TUTORIAL: gymnasium (simulation environments for agent decision making)
 
-27. **Causal AI Agents**
+29. **Causal AI Agents**
     - Agents that reason with causal models
     - Counterfactual reasoning agents
     - Experiment design agents
@@ -248,42 +262,43 @@
     - TUTORIAL: Reflexion (counterfactual reasoning via self-reflection in agents)
 
 ## Part VII — Real-World Systems and Case Studies
-28. **Marketing and Uplift Modeling**
+30. **Marketing and Uplift Modeling**
     - TUTORIAL: CausalML (uplift modeling and marketing intervention analysis)
     - TUTORIAL: EconML (heterogeneous treatment effects for targeted marketing)
 
-29. **Recommendation Systems and Interventions**
+31. **Recommendation Systems and Interventions**
     - TUTORIAL: DoWhy (causal recommendation systems beyond collaborative filtering)
     - TUTORIAL: EconML (intervention-based recommendation optimization)
 
-30. **Pricing and Revenue Optimization**
+32. **Pricing and Revenue Optimization**
     - TUTORIAL: EconML (causal pricing and revenue optimization)
     - TUTORIAL: optuna (pricing strategy optimization with Bayesian search)
 
-31. **Healthcare and Treatment Effects**
+33. **Healthcare and Treatment Effects**
     - TUTORIAL: DoWhy (observational study analysis for treatment effects)
     - TUTORIAL: EconML (heterogeneous treatment effects in clinical data)
     - TUTORIAL: CausalML (propensity scoring and matching for healthcare studies)
     - TUTORIAL: IBM Causal Inference 360 (causal inference toolkit for health outcomes)
 
-32. **Supply Chain and Forecast + Decision Systems**
+34. **Supply Chain and Forecast + Decision Systems**
+    - TUTORIAL: pykalman (Kalman smoothing for demand estimation and inventory tracking)
     - TUTORIAL: Darts (time series forecasting for supply chain)
     - TUTORIAL: sktime (time series ML framework for demand forecasting)
     - TUTORIAL: orbit (Bayesian time series models for supply chain planning)
     - TUTORIAL: GluonTS (probabilistic time-series modeling for forecasting)
 
-33. **Risk, Fraud, and Decision Intelligence**
+35. **Risk, Fraud, and Decision Intelligence**
     - TUTORIAL: SHAP (model explanation for fraud detection models)
     - TUTORIAL: AI Fairness 360 (bias detection in risk scoring systems)
     - TUTORIAL: Fairlearn (fairness-aware risk models)
     - TUTORIAL: pysyft (privacy-preserving ML for sensitive risk data)
 
-## Part VIII — the Future of Data Science and AI
-34. **From Data Scientist to Decision Scientist**
-35. **The Rise of Causal AI**
-36. **Autonomous Decision Systems**
-37. **AI Agents that Run Companies**
-38. **Open Problems in Causal AI and Decision Intelligence**
+## Part VIII — The Future of Data Science and AI
+36. **From Data Scientist to Decision Scientist**
+37. **The Rise of Causal AI**
+38. **Autonomous Decision Systems**
+39. **AI Agents that Run Companies**
+40. **Open Problems in Causal AI and Decision Intelligence**
 
 ## Appendix
 - Mathematical foundations of causal inference
