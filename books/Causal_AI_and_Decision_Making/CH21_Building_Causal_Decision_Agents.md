@@ -1,44 +1,29 @@
 # Building Causal Decision Agents
-Autonomous agents must make decisions in complex, uncertain environments.
-Traditional agents use reactive rules or learned value functions, but they often
-lack principled reasoning about cause and effect. Causal decision agents
-integrate causal models explicitly into their decision-making processes,
-enabling them to reason about interventions, plan under uncertainty, and adapt
-to distribution shifts. This chapter explores architectures for causal decision
-agents, methods for integrating causal models into action selection, and the
-challenges of real-world deployment with multiple agents and human oversight.
+
+Autonomous agents must make decisions in complex, uncertain environments.[1] Traditional agents use reactive rules or learned value functions, but they often lack principled reasoning about cause and effect.[2] Causal decision agents integrate causal models explicitly into their decision-making processes, enabling them to reason about interventions, plan under uncertainty, and adapt to distribution shifts.[3] This chapter explores architectures for causal decision agents, methods for integrating causal models into action selection, and the challenges of real-world deployment with multiple agents and human oversight.
 
 ## Agent Architectures: Reactive, Deliberative, Causal
-Agent architectures vary in their complexity and reasoning capabilities.
-Understanding the spectrum from reactive to causal agents helps clarify what
-each approach can and cannot achieve.
+
+Agent architectures vary in their complexity and reasoning capabilities.[4] Understanding the spectrum from reactive to causal agents helps clarify what each approach can and cannot achieve.
 
 ### Reactive Agents
-- **Definition**: Reactive agents respond directly to sensory inputs with
-  actions, following condition-action rules (stimulus-response). They have
-  minimal or no internal state and no explicit planning.
 
-- **Mechanism**: Condition-action rules map observations to actions. For
-  example: "If battery low → seek charging station" or "If obstacle ahead → turn
-  left."
+- **Definition**: Reactive agents respond directly to sensory inputs with actions, following condition-action rules (stimulus-response).[5] They have minimal or no internal state and no explicit planning.
+
+- **Mechanism**: Condition-action rules map observations to actions.[6] For example: "If battery low → seek charging station" or "If obstacle ahead → turn left."
 
 - **Advantages**:
   - Simple and fast: minimal computational overhead
-  - Robust to some environmental changes: if rules are sufficiently general
+  - Robust to some environmental changes: if rules are sufficiently general[7]
   - Easy to understand and debug: rules are explicit
 
 - **Limitations**:
   - No planning: cannot foresee consequences of actions beyond immediate rewards
-  - No counterfactual reasoning: cannot ask "what if I do X instead of Y?"
-  - Brittle to distribution shift: rules that worked in training may fail in new
-    situations
-  - Cannot reason about causal chains: if multiple conditions affect the same
-    goal, reactive agents cannot distinguish between independent causes
+  - No counterfactual reasoning: cannot ask "what if I do X instead of Y?"[8]
+  - Brittle to distribution shift: rules that worked in training may fail in new situations[9]
+  - Cannot reason about causal chains: if multiple conditions affect the same goal, reactive agents cannot distinguish between independent causes
 
-- **Example**: A robot that reactively follows objects when they appear and
-  stops when they disappear. This works in controlled settings but fails if an
-  object moves behind an obstacle—the robot cannot reason that the object still
-  exists and will reappear.
+- **Example**: A robot that reactively follows objects when they appear and stops when they disappear. This works in controlled settings but fails if an object moves behind an obstacle—the robot cannot reason that the object still exists and will reappear.
 
 ### Deliberative Agents
 - **Definition**: Deliberative agents maintain an internal model of the world,
