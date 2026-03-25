@@ -1,101 +1,105 @@
-# LLMs and Causal Reasoning
-Large Language Models (LLMs) have transformed how we approach language
-understanding and generation, but their relationship with causal reasoning is
-complex [1]. LLMs excel at pattern recognition and statistical language modeling
-but lack explicit causal mechanisms [2]. This chapter explores what LLMs can and
-cannot tell us about causality, and how we can augment them with structured
-reasoning frameworks to improve causal inference and decision-making tasks.
+# Summary
+- Large Language Models (LLMs) excel at pattern recognition and statistical
+  language modeling but lack explicit causal mechanisms
+- This chapter explores what LLMs can and cannot tell us about causality
+- Hybrid systems combining LLMs with formal causal frameworks offer the most
+  promising path forward for improved causal inference and decision-making
 
-The rise of large-scale transformer-based language models has created
-significant interest in their potential for scientific and technical reasoning
-[3]. However, the fundamental training objective of next-token prediction does
-not inherently encode causal knowledge [4]. Understanding this distinction
-between correlation-based pattern learning and principled causal reasoning is
-critical for practitioners seeking to leverage LLMs for causal inference tasks.
+# LLMs and Causal Reasoning
+
+## Introduction
+- LLMs transform how we approach language understanding and generation, but
+  their relationship with causality is complex
+- LLMs excel at pattern recognition and statistical language modeling but lack
+  explicit causal mechanisms
+- The fundamental training objective of next-token prediction does not
+  inherently encode causal knowledge
+- Understanding the distinction between correlation-based pattern learning and
+  principled causal reasoning is critical for practitioners
+- Key question: what can LLMs tell us about causality, and how can we augment
+  them with structured reasoning frameworks
 
 ## What LLMs Get Right and Wrong About Causality
-LLMs are trained on vast amounts of text data using next-token prediction
-objectives, which means they learn statistical associations between words and
-concepts [5]. This training paradigm, while effective for language understanding
-and generation tasks, has fundamental implications for causal reasoning
-capabilities [6]. This gives them certain strengths and critical limitations
-when reasoning about causality.
+- LLMs are trained on vast amounts of text data using next-token prediction
+  objectives
+  - They learn statistical associations between words and concepts
+  - This training paradigm is effective for language understanding and
+    generation
+  - It has fundamental implications for causal reasoning capabilities
+  - This gives them certain strengths and critical limitations when reasoning
+    about causality
 
-Formally, the training objective can be expressed as maximizing the likelihood
-$\mathcal{L} = \sum_i \log P(x_i | x_{<i})$, where each token's probability
-depends only on preceding context [7]. This statistical foundation explains both
-the successes and failures of LLMs in causal reasoning tasks.
+- Training objective is to maximize: $\mathcal{L} = \sum_i \log P(x_i | x_{<i})$
+  - Each token's probability depends only on preceding context
+  - This statistical foundation explains both successes and failures of LLMs in
+    causal reasoning tasks
 
 ### What LLMs Get Right
 - **Recognizing causal language patterns**: LLMs can identify common causal
-  expressions like "because," "caused by," "led to," and "resulted in." They can
-  extract causal relationships that are explicitly stated in text [8]. This
-  capability stems from the abundant causal language patterns in training
-  corpora, which LLMs learn to recognize through statistical regularities.
-  However, this recognition is fundamentally linguistic rather than semantic—the
-  model identifies markers of causal claims without necessarily understanding
-  the underlying causal mechanisms.
+  expressions like "because," "caused by," "led to," and "resulted in." They
+  extract causal relationships explicitly stated in text. This stems from
+  abundant causal language patterns in training corpora. However, this
+  recognition is fundamentally linguistic rather than semantic—the model
+  identifies markers of causal claims without understanding the underlying
+  causal mechanisms
 
 - **Reasoning with causal narratives**: When causal relationships are present in
-  training data, LLMs can reproduce and extend causal arguments [9]. They
-  understand temporal ordering and can connect events in a sequence. This
-  narrative reasoning ability makes LLMs particularly useful for tasks involving
-  explanatory text generation, where temporal and logical coherence is valued.
+  training data, LLMs can reproduce and extend causal arguments. They understand
+  temporal ordering and can connect events in a sequence. This narrative
+  reasoning makes LLMs useful for tasks involving explanatory text generation,
+  where temporal and logical coherence is valued
 
 - **Common sense reasoning**: LLMs capture commonsense knowledge about physical,
-  social, and biological causality [10]. For example, they understand that "rain
+  social, and biological causality. For example, they understand that "rain
   causes wet ground" and "studying causes better test scores." This commonsense
-  understanding, while imperfect, reflects the prevalence of such knowledge
-  patterns in natural language corpora and provides a foundation for many
-  practical reasoning tasks.
+  understanding reflects the prevalence of such knowledge patterns in natural
+  language corpora and provides a foundation for practical reasoning tasks
 
 - **Generating plausible explanations**: LLMs can generate coherent explanations
   and narratives about why events happen, drawing on patterns in their training
-  data [11]. This generative capability is particularly valuable in domains
-  where multiple valid explanations exist and the goal is to produce
-  interpretable reasoning rather than discover ground-truth causal mechanisms.
+  data. This generative capability is particularly valuable in domains where
+  multiple valid explanations exist and the goal is to produce interpretable
+  reasoning
 
 ### What LLMs Get Wrong
 - **No explicit causal mechanism**: LLMs do not have an internal model of
-  causality (like a causal graph) [12]. They cannot perform interventional
-  reasoning (what if we change X?) without explicit guidance [13]. They reason
-  from correlation and association, not from causal mechanisms [14]. Formally,
-  LLMs lack the ability to perform the `do-operator` intervention calculus
-  introduced in Pearl's causal framework, which is essential for distinguishing
-  causation from correlation.
+  causality (like a causal graph). They cannot perform interventional reasoning
+  (what if we change X?) without explicit guidance. They reason from correlation
+  and association, not from causal mechanisms. LLMs lack the ability to perform
+  the `do-operator` intervention calculus introduced in Pearl's causal
+  framework, which is essential for distinguishing causation from correlation
 
 - **Confounding and spurious correlations**: LLMs can be misled by spurious
-  correlations in their training data [15]. If two variables are highly
-  correlated in text but not causally related, an LLM may confidently claim
-  causation. For example, if ice cream sales and shark attacks are frequently
-  mentioned together in summer articles, an LLM might conclude one causes the
-  other [16]. This reflects a fundamental limitation: the model cannot
-  distinguish confounding by season from direct causation.
+  correlations in their training data. If two variables are highly correlated in
+  text but not causally related, an LLM may confidently claim causation. For
+  example, if ice cream sales and shark attacks are frequently mentioned
+  together in summer articles, an LLM might conclude one causes the other. This
+  reflects a fundamental limitation: the model cannot distinguish confounding by
+  season from direct causation
 
 - **No principled counterfactual reasoning**: Generating true counterfactuals
-  ("What if X had been different?") requires understanding causal mechanisms
-  [17]. LLMs generate plausible counterfactuals based on patterns but without
-  causal justification [18]. They may produce grammatically correct but causally
-  inconsistent counterfactuals. For instance, when asked "If X had not happened,
-  would Y still occur?", the model cannot reliably account for downstream causal
-  dependencies that would be disrupted by such interventions.
+  ("What if X had been different?") requires understanding causal mechanisms.
+  LLMs generate plausible counterfactuals based on patterns but without causal
+  justification. They may produce grammatically correct but causally
+  inconsistent counterfactuals. When asked "If X had not happened, would Y still
+  occur?", the model cannot reliably account for downstream causal dependencies
+  that would be disrupted by such interventions
 
 - **Brittleness to distribution shift**: LLMs trained on observed data struggle
   when asked to reason about interventions or scenarios far from their training
-  distribution [19]. They cannot generalize causal relationships to new contexts
-  in the principled way causal models can. This represents a critical limitation
+  distribution. They cannot generalize causal relationships to new contexts in
+  the principled way causal models can. This represents a critical limitation
   for transfer learning in causal inference tasks, where robustness across
-  different domains is essential.
+  different domains is essential
 
 - **Confusing observation with intervention**: LLMs often treat observational
-  statements and interventional statements identically, leading to errors [20].
+  statements and interventional statements identically, leading to errors.
   Asking "What does X predict about Y?" and "If we change X, what happens to Y?"
   should yield different answers in most causal settings, but LLMs may conflate
   them. This conflation violates fundamental principles of causal inference,
-  where $P(Y|X=x)$ differs from $P(Y|do(X=x))$ in the presence of confounding.
+  where $P(Y|X=x)$ differs from $P(Y|do(X=x))$ in the presence of confounding
 
-**References for Section 1**
-
+## References
 [1] Bommasani, R., Hudson, D. A., Adeli, E., et al. (2021). On the Opportunities
 and Risks of Foundation Models. _arXiv preprint arXiv:2108.07258_.
 https://arxiv.org/abs/2108.07258
