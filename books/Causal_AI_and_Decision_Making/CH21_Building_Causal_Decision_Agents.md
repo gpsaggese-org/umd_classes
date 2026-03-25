@@ -1,13 +1,18 @@
 # Building Causal Decision Agents
-Autonomous agents must make decisions in complex, uncertain environments.[1]
-Traditional agents use reactive rules or learned value functions, but they often
-lack principled reasoning about cause and effect.[2] Causal decision agents
-integrate causal models explicitly into their decision-making processes,
-enabling them to reason about interventions, plan under uncertainty, and adapt
-to distribution shifts.[3] This chapter explores architectures for causal
-decision agents, methods for integrating causal models into action selection,
-and the challenges of real-world deployment with multiple agents and human
-oversight.
+
+# Summary
+- Autonomous agents must make decisions in complex, uncertain environments[1]
+- Traditional agents use reactive rules or learned value functions, but lack
+  principled reasoning about cause and effect[2]
+- Causal decision agents integrate causal models explicitly into their
+  decision-making processes, enabling:
+  - Reasoning about interventions
+  - Planning under uncertainty
+  - Adaptation to distribution shifts[3]
+- This chapter explores:
+  - Architectures for causal decision agents
+  - Methods for integrating causal models into action selection
+  - Challenges of real-world deployment with multiple agents and human oversight
 
 ## Agent Architectures: Reactive, Deliberative, Causal
 Agent architectures vary in their complexity and reasoning capabilities.[4]
@@ -17,34 +22,35 @@ each approach can and cannot achieve.
 ### Reactive Agents
 - **Definition**: Reactive agents respond directly to sensory inputs with
   actions, following condition-action rules (stimulus-response).[5] They have
-  minimal or no internal state and no explicit planning.
+  minimal or no internal state and no explicit planning
 
-- **Mechanism**: Condition-action rules map observations to actions.[6] For
-  example: "If battery low → seek charging station" or "If obstacle ahead → turn
-  left."
+- **Mechanism**: Condition-action rules map observations to actions[6]
+  - Example: "If battery low → seek charging station"
+  - Example: "If obstacle ahead → turn left"
 
 - **Advantages**:
-  - Simple and fast: minimal computational overhead
-  - Robust to some environmental changes: if rules are sufficiently general[7]
-  - Easy to understand and debug: rules are explicit
+  - Simple and fast with minimal computational overhead
+  - Robust to some environmental changes if rules are sufficiently general[7]
+  - Easy to understand and debug with explicit rules
 
 - **Limitations**:
   - No planning: cannot foresee consequences of actions beyond immediate rewards
   - No counterfactual reasoning: cannot ask "what if I do X instead of Y?"[8]
   - Brittle to distribution shift: rules that worked in training may fail in new
     situations[9]
-  - Cannot reason about causal chains: if multiple conditions affect the same
-    goal, reactive agents cannot distinguish between independent causes
+  - Cannot reason about causal chains: cannot distinguish between independent
+    causes affecting the same goal
 
 - **Example**: A robot that reactively follows objects when they appear and
-  stops when they disappear. This works in controlled settings but fails if an
-  object moves behind an obstacle—the robot cannot reason that the object still
-  exists and will reappear.
+  stops when they disappear
+  - Works in controlled settings
+  - Fails if an object moves behind an obstacle—the robot cannot reason that the
+    object still exists and will reappear
 
 ### Deliberative Agents
 - **Definition**: Deliberative agents maintain an internal model of the world,
-  plan sequences of actions, and execute those plans.[10] They use explicit
-  reasoning to anticipate consequences and select actions.
+  plan sequences of actions, and execute those plans[10]. They use explicit
+  reasoning to anticipate consequences and select actions
 
 - **Mechanism**:
   1. Perceive the current state
@@ -54,39 +60,37 @@ each approach can and cannot achieve.
   5. Monitor outcomes and replan if needed
 
 - **Planning methods**:
-  - Classical planning (STRIPS, PDDL):[11] logical preconditions and effects
-  - Hierarchical planning (HTN):[12] decompose high-level goals into subgoals
-  - Graph search:[13] A\*, heuristic search over state spaces
-  - Reinforcement learning:[14] learn value functions or policies from
+  - Classical planning (STRIPS, PDDL)[11]: logical preconditions and effects
+  - Hierarchical planning (HTN)[12]: decompose high-level goals into subgoals
+  - Graph search[13]: A\*, heuristic search over state spaces
+  - Reinforcement learning[14]: learn value functions or policies from
     experience
 
 - **Advantages**:
   - Foresight: can anticipate consequences multiple steps ahead[15]
   - Flexibility: plans can adapt to unexpected changes
   - Explainability: planning steps reveal the agent's reasoning
-  - Handles novel situations: generalizable world models can work in new
+  - Handles novel situations with generalizable world models that work in new
     contexts
 
 - **Limitations**:
   - Computational complexity: planning scales poorly with state/action space
     size[16]
-  - Requires accurate models: planning relies on correct world model; wrong
-    models lead to bad plans[17]
-  - Still no explicit causality:[18] planning models capture transitions (what
+  - Requires accurate models: wrong models lead to bad plans[17]
+  - Still no explicit causality[18]: planning models capture transitions (what
     happens next) but not causal mechanisms (why it happens)
-  - Struggles with hidden confounders:[19] standard planning assumes full
-    observability or uses probability, but cannot distinguish causation from
+  - Struggles with hidden confounders[19]: cannot distinguish causation from
     correlation
 
-- **Example**: A robot planning to rearrange furniture. It uses a model of
-  physics and spatial layout to plan a sequence of moves. However, if the model
-  is wrong (e.g., misestimates friction), the plan may fail.
+- **Example**: A robot planning to rearrange furniture using a model of physics
+  and spatial layout
+  - Plans a sequence of moves
+  - Fails if the model is wrong (e.g., misestimates friction)
 
 ### Causal Agents
-- **Definition**: Causal agents explicitly reason about causal mechanisms.[20]
+- **Definition** = Causal agents explicitly reason about causal mechanisms[20].
   They maintain causal models (e.g., causal graphs, structural causal
-  models)[21] and use causal inference to select actions that will achieve
-  goals.
+  models)[21] and use causal inference to select actions that will achieve goals
 
 - **Mechanism**:
   1. Represent the domain as a causal model (DAG, SCM, or causal graph)[22]
@@ -97,46 +101,46 @@ each approach can and cannot achieve.
      confounders and feedback loops[25]
 
 - **Causal capabilities**:
-  - Interventional reasoning:[26] "If I do(X=x), what happens to Y?"
-  - Counterfactual reasoning:[27] "Given that I observed Z, if I had done(X=x')
+  - Interventional reasoning[26]: "If I do(X=x), what happens to Y?"
+  - Counterfactual reasoning[27]: "Given that I observed Z, if I had done(X=x')
     instead, what would have happened?"
-  - Distinguishing causation from correlation:[28] can identify spurious
+  - Distinguishing causation from correlation[28]: can identify spurious
     associations and true causal effects
-  - Handling distribution shift:[29] causal models generalize to new
+  - Handling distribution shift[29]: causal models generalize to new
     distributions if the causal structure remains stable
-  - Adapting to new environments:[30] can quickly learn causal parameters in new
+  - Adapting to new environments[30]: can quickly learn causal parameters in new
     settings
 
 - **Advantages**:
-  - Principled reasoning:[31] decisions are grounded in causal mathematics
-  - Robust to distribution shift:[32] causal relationships are more stable than
+  - Principled reasoning[31]: decisions are grounded in causal mathematics
+  - Robust to distribution shift[32]: causal relationships are more stable than
     correlations
-  - Explainability:[33] causal reasoning provides clear explanations for
-    decisions ("I chose this action because it has the largest causal effect on
-    my goal")
-  - Handles hidden confounders:[34] causal inference can adjust for unmeasured
+  - Explainability[33]: causal reasoning provides clear explanations for
+    decisions
+  - Handles hidden confounders[34]: causal inference can adjust for unmeasured
     confounders if identifiable
-  - Enables transfer learning:[35] causal models from one domain can be adapted
+  - Enables transfer learning[35]: causal models from one domain can be adapted
     to related domains
 
 - **Limitations**:
-  - Requires causal knowledge:[36] must have domain expertise to specify causal
+  - Requires causal knowledge[36]: must have domain expertise to specify causal
     structures
-  - Identifiability challenges:[37] not all causal effects are identifiable from
+  - Identifiability challenges[37]: not all causal effects are identifiable from
     available data
-  - Computational complexity:[38] causal inference and optimization can be
+  - Computational complexity[38]: causal inference and optimization can be
     computationally expensive
-  - Model misspecification:[39] if the true causal model differs from the
+  - Model misspecification[39]: if the true causal model differs from the
     agent's model, causal reasoning may be wrong
-  - Limited real-world data:[40] in many domains, we have limited interventional
+  - Limited real-world data[40]: in many domains, we have limited interventional
     data to learn causal models
 
-- **Example**: An autonomous vehicle makes decisions using a causal model of how
-  weather, road conditions, and driver actions affect safety and fuel
-  efficiency.[41] When it observes rain, it reasons: "Rain causes reduced tire
-  grip, which causes increased stopping distance. Therefore, I should increase
-  following distance and reduce speed." This reasoning is grounded in causal
-  mechanisms, not just correlations in historical driving data.
+- **Example**: An autonomous vehicle using a causal model of how weather, road
+  conditions, and driver actions affect safety and fuel efficiency[41]
+  - When it observes rain, it reasons: "Rain causes reduced tire grip, which
+    causes increased stopping distance"
+  - Decision: increase following distance and reduce speed
+  - This reasoning is grounded in causal mechanisms, not just correlations in
+    historical driving data
 
 **References for Agent Architectures Section**
 
