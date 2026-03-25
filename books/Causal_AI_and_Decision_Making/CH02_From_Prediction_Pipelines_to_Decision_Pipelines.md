@@ -45,6 +45,18 @@
   - The pipeline predicts; the decision layer acts - but the decision layer is
     rarely modeled as rigorously as the prediction layer
 
+### How Production ML Systems Make Decisions Today
+- Burkov, A. _The Hundred-Page Machine Learning Book_ (2019)
+  - Accessible overview of supervised, unsupervised, and reinforcement learning
+    paradigms with emphasis on practical pipeline organization
+- Russell, S. and Norvig, P. _Artificial Intelligence: A Modern Approach_ (4th
+  ed., 2020)
+  - Chapter 18-19 on learning agents and building ML pipelines
+- Hastie, T., Tibshirani, R., and Friedman, J. _The Elements of Statistical
+  Learning_ (2nd ed., 2009)
+  - Chapter 7 on model assessment and selection, foundational for understanding
+    pipeline evaluation
+
 ## Feedback Loops and Distribution Shift
 - Production ML systems do not operate in a static world
   - The data-generating process changes over time
@@ -85,6 +97,17 @@
   - Designing retraining schedules that account for concept drift
   - Building causal models that separate stable relationships from unstable
     correlations
+
+### Feedback Loops and Distribution Shift
+- Quionero-Candela, J. et al. _Dataset Shift in Machine Learning_ (2009)
+  - Comprehensive treatment of covariate shift, label shift, and concept drift
+- Sculley, D. et al. "Hidden Technical Debt in Machine Learning Systems"
+  (NeurIPS 2015)
+  - Production ML failures including feedback loop and distribution shift
+    failure modes
+- Lazer, D. et al. "The Parable of Google Flu: Traps in Big Data Analysis"
+  _Science_ (2014)
+  - Case study of distribution shift and spurious correlation at scale
 
 ## Optimization Vs. Inference Vs. Decision Theory
 - Production ML conflates three conceptually distinct tasks:
@@ -178,6 +201,18 @@
   - The gap between predictive accuracy and decision quality is the cost of
     ignoring causality
 
+### Optimization Vs. Inference Vs. Decision Theory
+- Berger, J. O. _Statistical Decision Theory and Bayesian Analysis_ (2nd
+  ed., 1985)
+  - Foundational treatment of decision theory, expected utility, and Bayesian
+    decision-making
+- Sutton, R. S. and Barto, A. G. _Reinforcement Learning: An Introduction_ (2nd
+  ed., 2018)
+  - Definitive text on RL as a framework for sequential decision-making under
+    uncertainty
+- Manski, C. F. _Identification Problems in the Social Sciences_ (1995)
+  - The gap between what inference can establish and what decisions require
+
 ## Data Science Vs. Decision Science
 - **Data Science** focuses on extracting patterns from data
   - Core questions: "What happened?", "What is likely to happen?"
@@ -221,57 +256,6 @@
   - Design experiments when observational data is insufficient
   - Use counterfactual reasoning to evaluate policies retrospectively
 
-## TUTORIAL: Pgmpy (Bayesian Decision Networks and Decision Pipeline Modeling)
-
-## References
-
-### How Production ML Systems Make Decisions Today
-- Burkov, A. _The Hundred-Page Machine Learning Book_ (2019)
-  - Accessible overview of supervised, unsupervised, and reinforcement learning
-    paradigms with emphasis on practical pipeline organization
-- Russell, S. and Norvig, P. _Artificial Intelligence: A Modern Approach_ (4th
-  ed., 2020)
-  - Chapter 18-19 on learning agents and building ML pipelines
-- Hastie, T., Tibshirani, R., and Friedman, J. _The Elements of Statistical
-  Learning_ (2nd ed., 2009)
-  - Chapter 7 on model assessment and selection, foundational for understanding
-    pipeline evaluation
-
-### Feedback Loops and Distribution Shift
-- Quionero-Candela, J. et al. _Dataset Shift in Machine Learning_ (2009)
-  - Comprehensive treatment of covariate shift, label shift, and concept drift
-- Sculley, D. et al. "Hidden Technical Debt in Machine Learning Systems"
-  (NeurIPS 2015)
-  - Production ML failures including feedback loop and distribution shift
-    failure modes
-- Lazer, D. et al. "The Parable of Google Flu: Traps in Big Data Analysis"
-  _Science_ (2014)
-  - Case study of distribution shift and spurious correlation at scale
-
-### Optimization Vs. Inference Vs. Decision Theory
-- Berger, J. O. _Statistical Decision Theory and Bayesian Analysis_ (2nd
-  ed., 1985)
-  - Foundational treatment of decision theory, expected utility, and Bayesian
-    decision-making
-- Sutton, R. S. and Barto, A. G. _Reinforcement Learning: An Introduction_ (2nd
-  ed., 2018)
-  - Definitive text on RL as a framework for sequential decision-making under
-    uncertainty
-- Manski, C. F. _Identification Problems in the Social Sciences_ (1995)
-  - The gap between what inference can establish and what decisions require
-
-### The Cost of Ignoring Causality: Concrete Failure Modes
-- Pearl, J. and Mackenzie, D. _The Book of Why_ (2018)
-  - Intuitive exposition of causal reasoning and the failure modes of purely
-    associative ML
-- Obermeyer, Z. et al. "Dissecting Racial Bias in an Algorithm Used to Manage
-  the Health of Populations" _Science_ (2019)
-  - Concrete failure mode: optimizing a proxy metric (cost) produces racially
-    biased healthcare recommendations
-- Angwin, J. et al. "Machine Bias" _ProPublica_ (2016)
-  - Case study of feedback-driven bias in the COMPAS recidivism prediction
-    system
-
 ### Data Science Vs. Decision Science
 - Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)
   - Formal treatment of Pearl's Ladder of Causation and the distinction between
@@ -283,3 +267,5 @@
   (2nd ed., 2000)
   - Foundational text on causal discovery and the role of causal structure in
     building decision-relevant models
+
+## TUTORIAL: Pgmpy (Bayesian Decision Networks and Decision Pipeline Modeling)
