@@ -1,5 +1,19 @@
-#!/usr/bin/env python
-# coding: utf-8
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,py:percent
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.1
+#   kernelspec:
+#     display_name: Python 3 (ipykernel)
+#     language: python
+#     name: python3
+# ---
+
+# %%
 
 # CONTENTS:
 # - [AutoGen: An Introduction to Autogen](#autogen:-an-introduction-to-autogen)
@@ -27,7 +41,7 @@
 #
 # The 2 cells below import the required libraries and set up the notebook for execution. Please add your API key as required.
 
-# In[1]:
+# %%
 
 
 get_ipython().run_line_magic("load_ext", "autoreload")
@@ -57,7 +71,7 @@ logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 
-# In[3]:
+# %%
 
 
 # Replace "YOUR_OPENAI_API_KEY" with your actual OpenAI API key.
@@ -72,7 +86,7 @@ os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 # - **Tools:** Integration with `yfinance` via `market_tool` and `plot_tool`.
 # - **Visualization:** The Analyst generates and displays a technical trend chart directly in the notebook.
 
-# In[3]:
+# %%
 
 
 async def _run_stock_mission(
@@ -145,7 +159,7 @@ async def _run_stock_mission(
 # - Lets user pick mission type: standard, bear-case, or peer comparison.
 # - Maps choice to a task and runs `run_stock_mission`.
 
-# In[5]:
+# %%
 
 
 # Set user inputs.

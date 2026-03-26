@@ -17,15 +17,6 @@
 # # Description
 #
 # ## Learn LangChain in 60 Minutes — API notebook
-#
-# Welcome — if you’re new to LangChain/LangGraph, you’re in the right place.
-#
-# This notebook is the **“show me the pieces”** tour: lots of small, runnable snippets that build a mental model.
-# When you’re ready for full workflows (agent loops, graphs, subagents, memory), jump to `langchain.example.ipynb`.
-
-# %%
-# !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet jupyterlab-vim)"
-# !jupyter labextension enable
 
 # %% [markdown]
 # ## APIs covered (parity with `langchain.example.ipynb`)
@@ -33,7 +24,7 @@
 # A mental model before we start:
 #
 # - **LangChain** is the toolkit: prompts, models, tools, and composable building blocks ("runnables").
-# - **LangGraph** is the orchestrator: stateful graphs, routing, checkpointing/memory, and **interrupts** for human‑in‑the‑loop (HITL).
+# - **LangGraph** is the orchestrator: stateful graphs, routing, checkpointing/memory, and interrupts for human‑in‑the‑loop (HITL).
 # - **Deep Agents (`deepagents`)** is an optional, higher-level layer used later in this tutorial for “agent app” patterns
 #   (filesystem tools, todos, subagents, sandboxing, and HITL gates).
 #
@@ -55,49 +46,13 @@
 
 # %% [markdown]
 # # Imports
-#
-# We’ll do a tiny bit of setup before the fun parts.
-# If the next cell errors with “No module named …”, that’s not you — it just means you’re not running with this tutorial’s pinned dependencies yet.
-#
 
 # %%
-# This cell will:
-# - Enable auto-reloading so edits are picked up without restarting the kernel.
-# - Import the notebook utility library (`langchain.API_utils.py`) so all reusable functions and classes are available.
 # %load_ext autoreload
 # %autoreload 2
 
-# import importlib.util as _ilu
 import os
 import sys
-
-
-# def _require_import(module_name: str):
-#     try:
-#         return importlib.import_module(module_name)
-#     except ModuleNotFoundError as e:
-#         raise RuntimeError(
-#             f"""Missing Python package {module_name!r}.
-
-# This tutorial is meant to be run from `tutorials/LangChain_LangGraph` with its pinned dependencies.
-
-# Quick fixes:
-# - Docker (recommended): `cd tutorials/LangChain_LangGraph && docker compose up --build`
-# - Local venv: `cd tutorials/LangChain_LangGraph && pip install -r requirements.txt`
-# """
-#         ) from e
-
-
-# langchain = _require_import("langchain")
-# langchain_core = _require_import("langchain_core")
-# langgraph = _require_import("langgraph")
-
-# # Load utility library for this notebook.
-# _utils_path = _Path("langchain.API_utils.py")
-# _spec = _ilu.spec_from_file_location("langchain_api_utils", str(_utils_path))
-# _mod = _ilu.module_from_spec(_spec)
-# sys.modules["langchain_api_utils"] = _mod
-# _spec.loader.exec_module(_mod)
 
 import langchain
 import langchain_core
@@ -117,31 +72,18 @@ print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
 
 
 # %% [markdown]
-# ## Model (configured via `.env`)
+# ## Model
 #
 # These notebooks are provider-agnostic: you pick a provider in `.env`, and the helper function builds the right chat model.
 #
 # Supported now:
 # - `openai`
 # - `anthropic`
-# - optional `ollama` (install `langchain-ollama` first)
-#
-# Optional observability:
-# - set `LANGSMITH_TRACING=true` (+ `LANGSMITH_API_KEY`) to trace runs in LangSmith
-#
-# If you don’t want to spend money while reading, you can skip the LLM-invoking cells — the markdown still explains what they’re doing.
-#
 
 # %%
-# This cell will:
-# - Load `.env` and check for optional LangSmith tracing.
-# - `LlmConfig`, `load_llm_config`, and `get_chat_model` are defined in `langchain.API_utils`.
 import os
 
 from dotenv import load_dotenv
-
-# LlmConfig, _require_env, load_llm_config, get_chat_model are in langchain.API_utils.
-
 load_dotenv()
 
 if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
@@ -149,8 +91,9 @@ if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
 
 
 # %%
-# This cell will:
-# - Instantiate the chat model from your `.env` configuration.
+# !cat langchain.env
+
+# %%
 llm = ut.get_chat_model()
 llm
 

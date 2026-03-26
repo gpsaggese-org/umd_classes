@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -705,8 +705,8 @@ _last_text(out)
 # - small graph for “summarize”
 # - parent graph that composes them
 #
-
-
+#
+#
 # #############################################################################
 # SubState
 # #############################################################################

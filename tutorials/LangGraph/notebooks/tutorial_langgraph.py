@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -142,8 +142,8 @@ EDA_TOOLS = [read_head, plot_histogram, groupby_agg]
 
 # %% [markdown]
 # ## Define agent state and nodes
-
-
+#
+#
 # #############################################################################
 # AgentState
 # #############################################################################
