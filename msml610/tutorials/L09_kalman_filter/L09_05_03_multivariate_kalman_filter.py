@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.2
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -74,10 +74,10 @@ print("cov=\n", np.cov(height, weight))
 # %%
 from filterpy.stats import gaussian, multivariate_gaussian
 
-x = [2.5, 7.3]
-mu = [2.0, 7.0]
-P = [[8., 0.], 
-     [0., 3.]]
+x = np.array([2.5, 7.3])
+mu = np.array([2.0, 7.0])
+P = np.array([[8., 0.],
+              [0., 3.]])
 
 multivariate_gaussian(x, mu, P)
 

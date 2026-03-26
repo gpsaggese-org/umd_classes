@@ -1,5 +1,5 @@
 import helpers.hunit_test as hunitest
-import msml610.tutorials.L07_01_bayesian_coin_utils as mtl0bcout
+import msml610.tutorials.L07_prob_programming.L07_01_bayesian_coin_utils as mtl0bcout
 
 import numpy as np
 

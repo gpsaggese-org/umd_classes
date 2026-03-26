@@ -1,9 +1,9 @@
 """
-Utility functions for L08_02 causal inference tutorial.
+Utility functions for L08_04_02 causal inference tutorial.
 
 Import as:
 
-import L08_02_causal_inference_utils as mtl0cinut
+import L08_04_02_causal_inference_utils as mtl0cinut
 """
 
 import logging
@@ -144,112 +144,7 @@ def reachable_subgraph(graph: nx.DiGraph, nodes: Iterable[str]) -> nx.Graph:
 
 
 # #############################################################################
-# Interactive D-Separation Explorer
-# #############################################################################
-
-
-def d_separation_explorer(
-    model: nx.DiGraph,
-    dag: Any,
-    *,
-    default_node1: str = "",
-    default_node2: str = "",
-    default_conditioning: Optional[Iterable[str]] = None,
-) -> ipywidgets.VBox:
-    """
-    Build an interactive widget for exploring d-separation in a DAG.
-
-    Given two nodes and a conditioning set, the widget plots the reachable
-    subgraph with highlighted nodes, highlights all paths between the two nodes,
-    and reports whether they are d-connected given the conditioning set.
-
-    :param model: directed graph representing the causal model
-    :param dag: pgmpy DAG used for d-separation queries
-    :param default_node1: initial value for node 1 dropdown
-    :param default_node2: initial value for node 2 dropdown
-    :param default_conditioning: initial selection for conditioning nodes
-    :return: VBox widget ready to display in a notebook
-    """
-    all_nodes = sorted(model.nodes())
-    # Set defaults if not provided.
-    node1_default = default_node1 if default_node1 in all_nodes else all_nodes[0]
-    node2_default = default_node2 if default_node2 in all_nodes else all_nodes[1]
-    cond_default = [n for n in (default_conditioning or []) if n in all_nodes]
-    # Build selection widgets.
-    node1_widget = ipywidgets.Dropdown(
-        options=all_nodes,
-        value=node1_default,
-        description="Node 1:",
-        style={"description_width": "80px"},
-        layout={"width": "250px"},
-    )
-    node2_widget = ipywidgets.Dropdown(
-        options=all_nodes,
-        value=node2_default,
-        description="Node 2:",
-        style={"description_width": "80px"},
-        layout={"width": "250px"},
-    )
-    cond_widget = ipywidgets.SelectMultiple(
-        options=all_nodes,
-        value=cond_default,
-        description="Conditioning:",
-        style={"description_width": "90px"},
-        layout={"width": "250px", "height": "160px"},
-    )
-    run_button = ipywidgets.Button(
-        description="Run",
-        button_style="primary",
-        layout={"width": "100px"},
-    )
-    output = ipywidgets.Output()
-
-    def _on_run_clicked(_button: ipywidgets.Button) -> None:
-        """
-        Update plot and d-separation result when the Run button is clicked.
-        """
-        node1 = node1_widget.value
-        node2 = node2_widget.value
-        conditioning_node_set = list(cond_widget.value)
-        output.clear_output(wait=True)
-        with output:
-            # Compute subgraph including selected nodes and their descendants.
-            nodes_of_interest = [node1, node2] + conditioning_node_set
-            subgraph = reachable_subgraph(model, nodes_of_interest)
-            plot_graph_highlight(
-                subgraph,
-                node1=node1,
-                node2=node2,
-                conditioning_node_set=conditioning_node_set,
-            )
-            # Report d-separation result.
-            observed = (
-                set(conditioning_node_set) if conditioning_node_set else set()
-            )
-            is_dependent = dag.is_dconnected(node1, node2, observed=observed)
-            cond_str = (
-                "given {" + ", ".join(sorted(observed)) + "}"
-                if observed
-                else "unconditionally"
-            )
-            print(
-                f"Are {node1} and {node2} dependent {cond_str}? {is_dependent}"
-            )
-
-    run_button.on_click(_on_run_clicked)
-    # Assemble controls and output.
-    controls = ipywidgets.VBox(
-        [
-            ipywidgets.HBox([node1_widget, node2_widget]),
-            cond_widget,
-            run_button,
-        ]
-    )
-    return ipywidgets.VBox([controls, output])
-
-
-# #############################################################################
-# Causal Roles Explorer
+# Cell 1: Causal Roles Explorer
 # #############################################################################
 
 
@@ -465,7 +360,7 @@ def _plot_causal_roles(
     plt.show()
 
 
-def causal_roles_explorer() -> ipywidgets.VBox:
+def cell1_causal_roles_explorer() -> ipywidgets.VBox:
     """
     Build an interactive widget for exploring causal roles in a DAG.
 
@@ -523,7 +418,9 @@ def causal_roles_explorer() -> ipywidgets.VBox:
 
     graph_selector.observe(_update_node_selectors, names="value")
 
-    def _on_show_clicked(_button: ipywidgets.Button) -> None:
+    def _on_show_clicked(
+        _button: Optional[ipywidgets.Button],
+    ) -> None:
         """
         Render the causal roles plot when the Show button is clicked.
         """
@@ -544,4 +441,123 @@ def causal_roles_explorer() -> ipywidgets.VBox:
             show_button,
         ]
     )
+    # Render the plot automatically on first display.
+    _on_show_clicked(None)
     return ipywidgets.VBox([controls, output])
+
+
+# #############################################################################
+# Cell 3: Interactive D-Separation Explorer
+# #############################################################################
+
+
+def cell3_d_separation_explorer(
+    model: nx.DiGraph,
+    dag: Any,
+    *,
+    default_node1: Optional[str] = None,
+    default_node2: Optional[str] = None,
+    default_conditioning: Optional[Iterable[str]] = None,
+) -> ipywidgets.VBox:
+    """
+    Build an interactive widget for exploring d-separation in a DAG.
+
+    Given two nodes and a conditioning set, the widget plots the reachable
+    subgraph with highlighted nodes, highlights all paths between the two nodes,
+    and reports whether they are d-connected given the conditioning set.
+
+    :param model: directed graph representing the causal model
+    :param dag: pgmpy DAG used for d-separation queries
+    :param default_node1: initial value for node 1 dropdown
+    :param default_node2: initial value for node 2 dropdown
+    :param default_conditioning: initial selection for conditioning nodes
+    :return: VBox widget ready to display in a notebook
+    """
+    if not default_node1:
+        default_node1 = "D"
+    if not default_node2:
+        default_node2 = "C"
+    if not default_conditioning:
+        default_conditioning = ["A"]
+    all_nodes = sorted(model.nodes())
+    # Set defaults if not provided.
+    node1_default = default_node1 if default_node1 in all_nodes else all_nodes[0]
+    node2_default = default_node2 if default_node2 in all_nodes else all_nodes[1]
+    cond_default = [n for n in (default_conditioning or []) if n in all_nodes]
+    # Build selection widgets.
+    node1_widget = ipywidgets.Dropdown(
+        options=all_nodes,
+        value=node1_default,
+        description="Node 1:",
+        style={"description_width": "80px"},
+        layout={"width": "250px"},
+    )
+    node2_widget = ipywidgets.Dropdown(
+        options=all_nodes,
+        value=node2_default,
+        description="Node 2:",
+        style={"description_width": "80px"},
+        layout={"width": "250px"},
+    )
+    cond_widget = ipywidgets.SelectMultiple(
+        options=all_nodes,
+        value=cond_default,
+        description="Conditioning:",
+        style={"description_width": "90px"},
+        layout={"width": "250px", "height": "160px"},
+    )
+    run_button = ipywidgets.Button(
+        description="Run",
+        button_style="primary",
+        layout={"width": "100px"},
+    )
+    output = ipywidgets.Output()
+
+    def _on_run_clicked(
+        _button: Optional[ipywidgets.Button],
+    ) -> None:
+        """
+        Update plot and d-separation result when the Run button is clicked.
+        """
+        node1 = node1_widget.value
+        node2 = node2_widget.value
+        conditioning_node_set = list(cond_widget.value)
+        output.clear_output(wait=True)
+        with output:
+            # Compute subgraph including selected nodes and their descendants.
+            nodes_of_interest = [node1, node2] + conditioning_node_set
+            subgraph = reachable_subgraph(model, nodes_of_interest)
+            plot_graph_highlight(
+                subgraph,
+                node1=node1,
+                node2=node2,
+                conditioning_node_set=conditioning_node_set,
+            )
+            # Report d-separation result.
+            observed = (
+                set(conditioning_node_set) if conditioning_node_set else set()
+            )
+            is_dependent = dag.is_dconnected(node1, node2, observed=observed)
+            cond_str = (
+                "given {" + ", ".join(sorted(observed)) + "}"
+                if observed
+                else "unconditionally"
+            )
+            print(
+                f"Are {node1} and {node2} dependent {cond_str}? {is_dependent}"
+            )
+
+    run_button.on_click(_on_run_clicked)
+    # Assemble controls and output.
+    controls = ipywidgets.VBox(
+        [
+            ipywidgets.HBox([node1_widget, node2_widget]),
+            cond_widget,
+            run_button,
+        ]
+    )
+    # Render the plot automatically on first display.
+    _on_run_clicked(None)
+    return ipywidgets.VBox([controls, output])
+
+
