@@ -67,8 +67,9 @@ print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
 # %%
 import os
 
-from dotenv import load_dotenv
-load_dotenv("langchain.env")
+import dotenv
+
+dotenv.load_dotenv("langchain.env")
 
 if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
     _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
@@ -88,13 +89,13 @@ llm
 # We’ll use a local CSV so the examples feel concrete.
 
 # %%
-from pathlib import Path
+import pathlib
 import shutil
 
 import pandas as pd
 
 # TODO(ai_gp): Move this to a function in *_utils.py
-DATASET_PATH = Path("data/T1_slice.csv").resolve()
+DATASET_PATH = pathlib.Path("data/T1_slice.csv").resolve()
 df = pd.read_csv(DATASET_PATH)
 TIME_COL = "Date/Time"
 if TIME_COL in df.columns:
@@ -103,13 +104,12 @@ if TIME_COL in df.columns:
     )
 
 # Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
-WORKSPACE_DIR = Path("workspace").resolve()
+WORKSPACE_DIR = pathlib.Path("workspace").resolve()
 WORKSPACE_DATA_DIR = WORKSPACE_DIR / "data"
 WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
 if not WORKSPACE_DATASET_PATH.exists():
     shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
-
 
 
 # %%
@@ -130,16 +130,16 @@ DATASET_META
 # - parse the result
 
 # %%
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+import langchain_core.prompts
+import langchain_core.output_parsers
 
-prompt = ChatPromptTemplate.from_messages(
+prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You are a concise tutor. Answer clearly."),
         ("human", "{question}"),
     ]
 )
-chain = prompt | llm | StrOutputParser()
+chain = prompt | llm | langchain_core.output_parsers.StrOutputParser()
 chain.invoke({"question": "Explain LCEL in one sentence."})
 
 
@@ -158,25 +158,27 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 #
 
 # %%
-from langchain_core.runnables import RunnableParallel
+import langchain_core.prompts
+import langchain_core.output_parsers
+import langchain_core.runnables
 
-summary_prompt = ChatPromptTemplate.from_messages(
+summary_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You write crisp summaries."),
         ("human", "Summarize in 3 bullets:\n\n{text}"),
     ]
 )
-risks_prompt = ChatPromptTemplate.from_messages(
+risks_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You list caveats."),
         ("human", "List 3 risks/caveats:\n\n{text}"),
     ]
 )
 
-summary_chain = summary_prompt | llm | StrOutputParser()
-risks_chain = risks_prompt | llm | StrOutputParser()
+summary_chain = summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+risks_chain = risks_prompt | llm | langchain_core.output_parsers.StrOutputParser()
 
-parallel = RunnableParallel(summary=summary_chain, risks=risks_chain)
+parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
 parallel.invoke(
     {"text": "LangChain provides composable building blocks for LLM apps."},
     config={"max_concurrency": 2},
@@ -218,16 +220,16 @@ final[:300] + ("..." if len(final) > 300 else "")
 #
 
 # %%
-from langchain_core.messages import AIMessage
-from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt import ToolNode
+import langchain_core.messages
+import langgraph.graph
+import langgraph.prebuilt
 
-tool_node = ToolNode([ut.mean, ut.zscore])
+tool_node = langgraph.prebuilt.ToolNode([ut.mean, ut.zscore])
 
-g = StateGraph(ut.ToolState)
+g = langgraph.graph.StateGraph(ut.ToolState)
 g.add_node("tools", tool_node)
-g.add_edge(START, "tools")
-g.add_edge("tools", END)
+g.add_edge(langgraph.graph.START, "tools")
+g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
 tool_calls = [
@@ -245,7 +247,7 @@ tool_calls = [
     },  # error (std=0)
 ]
 
-out = graph.invoke({"messages": [AIMessage(content="", tool_calls=tool_calls)]})
+out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", tool_calls=tool_calls)]})
 [
     type(m).__name__ + ":" + (getattr(m, "content", "")[:80])
     for m in out["messages"]
@@ -269,21 +271,21 @@ out = graph.invoke({"messages": [AIMessage(content="", tool_calls=tool_calls)]})
 # %%
 import json
 
-from langchain_core.messages import AIMessage
-from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt import ToolNode
+import langchain_core.messages
+import langgraph.graph
+import langgraph.prebuilt
 
-tool_node = ToolNode([ut.dataset_brief])
-g = StateGraph(ut.InjectedStateState)
+tool_node = langgraph.prebuilt.ToolNode([ut.dataset_brief])
+g = langgraph.graph.StateGraph(ut.InjectedStateState)
 g.add_node("tools", tool_node)
-g.add_edge(START, "tools")
-g.add_edge("tools", END)
+g.add_edge(langgraph.graph.START, "tools")
+g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
 state_in: ut.InjectedStateState = {
     "dataset_meta": DATASET_META,
     "messages": [
-        AIMessage(
+        langchain_core.messages.AIMessage(
             content="",
             tool_calls=[
                 {
@@ -313,23 +315,23 @@ json.loads(out["messages"][-1].content)
 #
 
 # %%
-from langchain_core.messages import AIMessage
-from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt import ToolNode
-from langgraph.store.memory import InMemoryStore
+import langchain_core.messages
+import langgraph.graph
+import langgraph.prebuilt
+import langgraph.store.memory
 
-store = InMemoryStore()
-tool_node = ToolNode([ut.save_pref, ut.load_pref])
-g = StateGraph(ut.StoreState)
+store = langgraph.store.memory.InMemoryStore()
+tool_node = langgraph.prebuilt.ToolNode([ut.save_pref, ut.load_pref])
+g = langgraph.graph.StateGraph(ut.StoreState)
 g.add_node("tools", tool_node)
-g.add_edge(START, "tools")
-g.add_edge("tools", END)
+g.add_edge(langgraph.graph.START, "tools")
+g.add_edge("tools", langgraph.graph.END)
 graph = g.compile(store=store)
 
 out1 = graph.invoke(
     {
         "messages": [
-            AIMessage(
+            langchain_core.messages.AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -350,7 +352,7 @@ out1 = graph.invoke(
 out2 = graph.invoke(
     {
         "messages": [
-            AIMessage(
+            langchain_core.messages.AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -381,10 +383,10 @@ out1["messages"][-1].content, out2["messages"][-1].content
 #
 
 # %%
-from langchain.agents import create_agent
-from langchain_core.messages import HumanMessage
+import langchain.agents
+import langchain_core.messages
 
-agent = create_agent(
+agent = langchain.agents.create_agent(
     model=llm,
     tools=[ut.utc_now],
     system_prompt="Use tools when a tool can answer the question more reliably than guessing.",
@@ -392,7 +394,7 @@ agent = create_agent(
 out = agent.invoke(
     {
         "messages": [
-            HumanMessage(content="Call utc_now and return the exact value.")
+            langchain_core.messages.HumanMessage(content="Call utc_now and return the exact value.")
         ]
     }
 )
@@ -413,7 +415,10 @@ out = agent.invoke(
 #
 
 # %%
-contract_agent = create_agent(
+import langchain.agents
+import langchain_core.messages
+
+contract_agent = langchain.agents.create_agent(
     model=llm,
     tools=[ut.utc_now],
     system_prompt=(
@@ -424,7 +429,7 @@ contract_agent = create_agent(
 contract_out = contract_agent.invoke(
     {
         "messages": [
-            HumanMessage(content="What is the current UTC time? Use your tool.")
+            langchain_core.messages.HumanMessage(content="What is the current UTC time? Use your tool.")
         ]
     }
 )
@@ -447,11 +452,11 @@ print(getattr(contract_out["messages"][-1], "content", ""))
 # %%
 import json
 
-from langchain.agents import create_agent
+import langchain.agents
 
 CustomState, extract_facts = ut.make_custom_state_and_tool()
 
-supervisor = create_agent(
+supervisor = langchain.agents.create_agent(
     llm,
     tools=[extract_facts],
     system_prompt="First call extract_facts, then summarize the returned facts.",
@@ -492,21 +497,21 @@ state = supervisor.invoke(
 #
 
 # %%
-from pathlib import Path
+import pathlib
 
-from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import END, START, StateGraph
-from langgraph.types import Command
+import langgraph.checkpoint.memory
+import langgraph.graph
+import langgraph.types
 
-builder = StateGraph(ut.HITLState)
+builder = langgraph.graph.StateGraph(ut.HITLState)
 builder.add_node("propose", ut.propose_delete)
 builder.add_node("delete", ut.do_delete)
-builder.add_edge(START, "propose")
+builder.add_edge(langgraph.graph.START, "propose")
 builder.add_edge("propose", "delete")
-builder.add_edge("delete", END)
-graph = builder.compile(checkpointer=MemorySaver())
+builder.add_edge("delete", langgraph.graph.END)
+graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
 
-tmp_dir = Path("tmp_runs/hitl").resolve()
+tmp_dir = pathlib.Path("tmp_runs/hitl").resolve()
 tmp_dir.mkdir(parents=True, exist_ok=True)
 victim = tmp_dir / "victim.txt"
 victim.write_text("delete me", encoding="utf-8")
@@ -520,6 +525,6 @@ pending = (
     out1.get("__interrupt__", [])[0].value if "__interrupt__" in out1 else None
 )
 out2 = graph.invoke(
-    Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
+    langgraph.types.Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
 )
 {"pending": pending, "victim_exists_after": victim.exists()}
