@@ -26,9 +26,9 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Container is removed automatically on exit (--rm)
 # - Interactive mode with TTY allocation (-ti)
 # - Port forwarding for Jupyter or other services
-# - Current directory mounted to /data inside container
+# - Git root mounted to /git_root inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8888
+PORT=
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_RUN_OPTS="-e ASANA_ACCESS_TOKEN=$ASANA_ACCESS_TOKEN -e ASANA_PROJECT_GID=$ASANA_PROJECT_GID"
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT "$DOCKER_RUN_OPTS")

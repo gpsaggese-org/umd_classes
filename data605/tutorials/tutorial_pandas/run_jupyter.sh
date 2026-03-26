@@ -17,7 +17,7 @@ set -e
 #set -x
 
 # Import the utility functions from the project template.
-GIT_ROOT=/data
+GIT_ROOT=/git_root
 source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Load Docker configuration variables for this script.

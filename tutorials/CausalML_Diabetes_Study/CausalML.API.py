@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -24,40 +24,6 @@
 # includes the `CausalNavigator` class for heterogeneous treatment effect
 # estimation, diagnostic methods for assumption validation, and helper
 # functions for data preprocessing and visualisation.
-#
-# > Coming from the blog? Run cells top-to-bottom, no other setup needed (see
-# > Docker instructions below).
-
-# %% [markdown]
-# ## Installation and Docker Setup
-#
-# To ensure reproducibility, this project is containerised. Follow these steps
-# to build and run the analysis.
-#
-# ### 1. Build the Image
-#
-# Run this command in the project root (where the `Dockerfile` is located):
-#
-# ```bash
-# ./docker_build.sh
-# ```
-#
-# ### 2. Run the Container
-#
-# Start the Jupyter environment with volume mounting (to save your notebook
-# changes):
-#
-# ```bash
-# # Mac/Linux/WSL
-# ./docker_jupyter.sh
-# ```
-#
-# ### 3. Access the Project
-#
-# - Click the `http://127.0.0.1:8888...` link in your terminal to open
-#   JupyterLab
-# - Open `CausalML.API.ipynb` to test the API (this file)
-# - Open `CausalML.example.ipynb` to see the full diabetes analysis
 
 # %% [markdown]
 # ## Architecture
@@ -91,14 +57,14 @@ import warnings
 
 import numpy as np
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
+import utils
 
 warnings.filterwarnings("ignore")
 
 # %% [markdown]
 # ## Helper Functions
 #
-# ### `load_cdc_data(filepath)`
+# ### `utils.load_cdc_data(filepath)`
 #
 # **Purpose**: Robustly loads the CDC dataset from a local directory.
 #
@@ -116,44 +82,44 @@ warnings.filterwarnings("ignore")
 # 1. **X (Covariates)** - features used to control for confounding
 # 2. **T (Treatment)** - the binary intervention vector
 # 3. **Y (Outcome)** - the target variable
-#
-# > **Download the data first:**
-# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
-# > Place the CSV in `data/unprocessed/` before running the next cell.
 
 # %%
-# Download the dataset and place it in data/unprocessed/ before running.
-# Download link: https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
 filename = "diabetes_binary_health_indicators_BRFSS2015.csv"
 DATA_PATH = os.path.join("data", "unprocessed", filename)
-try:
-    df_raw = load_cdc_data(DATA_PATH)
-    # Use a subset of columns for the API demo.
-    df_clean, X, T, Y = preprocess_for_causal(
-        df_raw,
-        treatment_col="PhysActivity",
-        outcome_col="Diabetes_binary",
-        covariate_cols=[
-            "HighBP",
-            "HighChol",
-            "Age",
-            "Income",
-            "Sex",
-            "GenHlth",
-            "BMI",
-        ],
-    )
-    # Subsample 10k rows for speed.
-    sample_indices = np.random.choice(X.index, size=10000, replace=False)
-    X_demo, T_demo, Y_demo = (
-        X.loc[sample_indices],
-        T.loc[sample_indices],
-        Y.loc[sample_indices],
-    )
-    print(f"API Demo Data Loaded. Shape: {X_demo.shape}")
-    display(X_demo.head())
-except Exception as e:
-    print(f"Error: {e}")
+# Direct download URL for the CDC Diabetes Health Indicators dataset from UCI.
+URL = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
+# Download and extract the dataset if not already present.
+utils.download_cdc_data_if_needed(DATA_PATH, URL)
+df_raw = utils.load_cdc_data(DATA_PATH)
+
+# %%
+# Use a subset of columns for the API demo.
+treatment_col = "PhysActivity"
+outcome_col = "Diabetes_binary"
+covariate_cols = [
+    "HighBP",
+    "HighChol",
+    "Age",
+    "Income",
+    "Sex",
+    "GenHlth",
+    "BMI",
+]
+df_clean, X, T, Y = utils.preprocess_for_causal(
+    df_raw,
+    treatment_col=treatment_col,
+    outcome_col=outcome_col,
+    covariate_cols=covariate_cols,
+)
+# Set seed for reproducibility.
+np.random.seed(42)
+# Subsample 10k rows for speed.
+sample_indices = np.random.choice(X.index, size=10000, replace=False)
+X_demo = X.loc[sample_indices]
+T_demo = T.loc[sample_indices]
+Y_demo = Y.loc[sample_indices]
+print(f"API Demo Data Loaded. Shape: {X_demo.shape}")
+display(X_demo.head())
 
 # %% [markdown]
 # ## Class Reference: `CausalNavigator`
@@ -176,7 +142,7 @@ except Exception as e:
 
 # %%
 # Initialize the CausalNavigator.
-navigator = CausalNavigator(
+navigator = utils.CausalNavigator(
     learner_type="X", control_name="Sedentary", treatment_name="Active"
 )
 

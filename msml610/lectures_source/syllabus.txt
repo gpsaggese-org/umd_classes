@@ -1,166 +1,223 @@
-
-# #############################################################################
-# lectures_source/Lesson00-Class.txt
-# #############################################################################
+# Lesson00-Class.txt
 - MSML610
+- Class Map
 
-# #############################################################################
-# lectures_source/Lesson01-Intro.txt
-# #############################################################################
-- A map of machine learning
-- What is Artificial Intelligence
-  - AI
-  - ML
-  - AI vs ML vs Deep-learning
-  - The foundation of AI
-  - Brief history of AI
-  - AI state of the art
-  - Risks and benefits of AI
+# Lesson01.1-AI_and_Machine_Learning.txt
+- AI and Machine Learning
+  - What is AI?
+  - What is Machine Learning?
 
-# #############################################################################
-# lectures_source/Lesson02-Techniques.txt
-# #############################################################################
-- Paradigms
-- Techniques
-  - Machine learning in practice
-  - How to do research
-    - Simple is better
-    - Research methodology
-  - Pipeline organization
-  - Input processing
-  - Learning algorithms
-    - Gradient descent
-    - Stochastic gradient descent
-  - Performance metrics
-    - Precision and recall
-  - Model selection
+# Lesson01.2-The_Foundations_of_AI.txt
+  - The Foundations of AI
+
+# Lesson01.3-Brief_History_of_AI.txt
+  - Brief History of AI
+  - Risks and Benefits of AI
+
+# Lesson02.1-A_Map_of_Machine_Learning.txt
+- A Map of Machine Learning
+
+# Lesson02.2-ML_Paradigms.txt
+- Machine Learning Paradigms
+  - Major Paradigms
+  - Some Examples
+  - Machine Learning in Practice
+  - Pipeline Organization
+
+# Lesson02.3-ML_Techniques_Input_Processing.txt
+  - Input Processing
+
+# Lesson02.4-ML_Techniques_Model_Learning.txt
+  - Learning Algorithms
+    - Gradient Descent
+    - Stochastic Gradient Descent
+
+# Lesson02.5-ML_Techniques_Model_Evaluation.txt
+  - Performance Metrics
+    - Precision and Recall
+  - Model Selection
   - Aggregation
     - Bagging
     - Boosting
     - Stacking
 
-# #############################################################################
-# lectures_source/Lesson04-Models.txt
-# #############################################################################
-- Models
-  - Naive Bayes
-  - Decision trees
-  - Random forests
-  - Linear models
-  - Perceptron / linear regression for classification
-  - Logistic regression
+# Lesson02.6-ML_Techniques_How_To_Do_Research.txt
+  - How to Do Research
+    - Simple Is Better
+    - Research Methodology
+
+# Lesson03-Knowledge_representation.txt
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+- Propositional logic
+  - Syntax
+  - Semantics
+- First-order Logic
+  - Syntax
+  - Semantics
+- Non-classical Logics
+  - Intro and Examples
+  - Description Logics
+  - Semantic Web
+
+# Lesson04.1-Models.txt
+  - Naive Bayes Model
+  - Decision Trees
+  - Random Forests
+  - Linear Models
+  - Perceptron
+
+# Lesson04.2-Models.txt
+  - Logistic Regression
   - LDA, QDA
-  - Kernel methods
-  - Support vector machines
-  - Similarity-based models
+  - Kernel Methods
+  - Support Vector Machines (Optional)
+
+# Lesson04.3-Models.txt
+  - Similarity-Based Models
   - Clustering
-  - Anomaly detection
-  - Recommender systems
+  - Anomaly Detection
 
-# #############################################################################
-# lectures_source/Lesson05-Theories.txt
-# #############################################################################
-- Is learning possible?
-  - Training vs Testing
-  - Growth function
-  - The VC dimension
-  - Regularization
-    - Bias vs variance
-    - Learning curves
-    - Learn-validation approach
+# Lesson05.1-Learning_Theory.txt
+- Is Machine Learning Even Possible?
+- Growth Function
+- The VC Dimension
 
-# #############################################################################
-# lectures_source/Lesson07-Bayesian_statistics_1.txt
-# #############################################################################
-- Quantifying uncertainty
-- Probabilistic reasoning
-- Probabilistic programming
-  - Probability theory
-  - Single-parameter inference
-  - How to choose priors
-  - Communicating a Bayesian analysis
-  - Probabilistic programming
-  - Posterior-based decisions
-  - Gaussians all the way down
-  - Posterior predictive checks
-  - Robust inference
-  - Groups comparison
-  - Hierarchical models
-  - Simple linear model
-  - Variable variance
-  - Hierarchical linear regression
-  - Multiple linear regression
-  - Comparing models
-    - Posterior predictive checks
-  - The balance between simplicity and accuracy
-  - Measures of predictive accuracy
-    - Information criteria
-    - Cross-validation
-  - Model averaging
-  - Bayes factors
-    - Bayes factors and information criteria
-  - Regularizing priors
-  - Mixture models
-  - 7.5, Zero-inflated and hurdle models
-  - 7.6, Mixture models and clustering
-  - 7.7, Non-finite mixture models
-  - 7.8, Continuous mixtures
-  - Inference engines
-  - 10.1, Inference engines
+# Lesson05.2-Overfitting.txt
+- Overfitting
+- Bias Variance Analysis
+- Learning Curves
 
-# #############################################################################
-# lectures_source/Lesson08-Reasoning_over_time.txt
-# #############################################################################
-- Reasoning over time
+# Lesson05.3-Learn_Validation.txt
+- Learn-Validation Approach
+  - Train / Test
+  - Cross-Validation
+
+# Lesson06.1-Bayesian_Networks.txt
+- Logic-Based AI Under Uncertainty
+- Probabilistic Reasoning
+  - Conditional Independence
+  - Bayesian Networks
+
+# Lesson06.2-Using_Bayesian_Networks.txt
+- Semantics of Bayesian Networks
+- Constructing a Bayesian Network
+- Exact Inference in Bayesian Networks
+- Approximate Inference in Bayesian Networks
+
+# Lesson07.1-Intro_to_Probabilistic_Programming.txt
+- Concepts
+- Coin Example
+  - Analytical Approach
+  - Frequentist vs Bayesian
+  - Probabilistic Programming
+
+# Lesson07.2-Posterior_Based_Decisions.txt
+- Posterior-Based Decisions
+  - Chemical Shift: Example
+  - Posterior Predictive Checks
+    - Robust Inference
+  - Groups Comparison
+
+# Lesson07.3-Hierarchical_Models.txt
+- Hierarchical Models
+
+# Lesson07.4-Generalized_Linear_Models.txt
+- Generalized Linear Models
+  - Simple Linear Model
+  - Logistic Regression
+  - Multiple Linear Regression
+
+# Lesson07.5-Bayesian_Model_Comparison.txt
+- Bayesian Model Comparison
+    - Posterior Predictive Checks
+  - The Balance Between Simplicity and Accuracy
+  - Measures of Predictive Accuracy
+    - Information Criteria
+    - Cross-Validation
+  - Bayesian Model Selection and Ensemble
+  - Bayesian Hypothesis Testing
+    - Bayes Factors and Information Criteria
+  - Regularizing Priors
+
+# Lesson08.1-Causal_AI_intro.txt
+- Causal AI
+  - Why Causal AI?
+  - The Ladder of Causation
+  - Correlation vs Causation Models
+
+# Lesson08.2-Causal_Networks.txt
+- Causal Networks
+  - Causal DAGs
+    - Example of ladder of causation
+  - Structural Causal Model
+  - Variables
+  - Type of Variables in Causal AI
+  - Types of Paths in Causal AI
+
+# Lesson08.3-Do_Calculus.txt
+  - Intervention and Counterfactuals
+  - Randomized Controlled Trial
+  - Back-door Adjustment
+  - Front-door Adjustment
+  - Do-Calculus
+
+# Lesson08.4.txt
+
+# Lesson08.5-Causal_AI_In_Business.txt
+- Business Processes Around Data Modeling
+  - Modeling Processes
+  - Roles
+
+# Lesson09.1-Reasoning_over_time.txt
+- Reasoning Over Time
+  - Definitions
+  - Defining Temporal Inference Tasks
+  - Solving Temporal Inference Tasks
+
+# Lesson09.2-Hidden_Markov_Models.txt
 - HMMs
-- Markov random fields
-- Markov logic network
-- State space models and Kalman filter
-  - g-h filter
-  - Discrete Bayes filter
-- Dynamic Bayesian networks
-- State space model
+- Markov Random Fields
+- Markov Logic Network
 - Variational Inference
   - Expectation-Maximization (EM) Algorithm
 
-# #############################################################################
-# lectures_source/Lesson09-Causal_inference.txt
-# #############################################################################
-- Causal AI
-  - Why Causal AI?
-  - Concepts in Causal AI
-  - Variables
-  - Paths
-  - The Ladder of Causation
-  - Correlation vs causation models
-- Business processes around data modeling
-  - Modeling processes
-  - Roles
+# Lesson09.3-Multi_Armed_Bandits.txt
+- Introduction
+- Algorithms
+- Bayesian Approaches
 
-# #############################################################################
-# lectures_source/Lesson10-Timeseries_forecasting.txt
-# #############################################################################
+# Lesson09.4-gh_Filter.txt
+- gh Filter
+
+# Lesson09.5-Kalman_Filter.txt
+- Discrete Bayes Filtering
+- Unidimensional Kalman Filters
+- Multivariate Kalman Filters
+  - Modeling
+  - Non-Linear Filtering
+
+# Lesson09.6-Dynamic_Bayesian_Networks.txt
+- Dynamic Bayesian networks
+
+# Lesson10-Timeseries_forecasting.txt
 - Time Series
   - Basic definition
   - Time series operators
   - Time series decomposition
 - Classical Methods
-  - Simple models for stochastic process
+  - Simple Models for Stochastic Process
   - Autoregressive models
   - Moving average models
   - ARMA(p, q) process
-  - ARIMA model
   - ARCH model
-- Advanced and Modern Approaches
+- Modern Approaches
 - Special techniques for time series modeling
-  - Causal Inference in Time Series
-  - Change Point Detection
-  - Forecast Combination and Model Averaging
-  - Bayesian Time Series Models
-  - Multivariate and High-Dimensional Time Series
-  - Nonlinear and Regime-Switching Models
   - Self-Supervised and Representation Learning for Time Series
-  - Forecasting with Exogenous Variables
   - Hierarchical Bayesian Forecasting
   - Reinforcement Learning for Time Series Decision Making
   - Transformers and Attention Mechanisms for Time Series
@@ -169,17 +226,15 @@
   - Long-Horizon Forecasting Challenges
   - Uncertainty Quantification and Calibration
 
-# #############################################################################
-# lectures_source/Lesson11-Probabilistic_deep_learning.txt
-# #############################################################################
+# Lesson11-Probabilistic_deep_learning.txt
 - Neural networks
   - Biological inspiration
   - Neural networks
 - Advanced Neural Network Architectures
-  - Convolutional networks
-  - Recurrent Neural Networks (RNNs)
+  - Convolutional Neural Networks
+  - Recurrent Neural Networks
   - Deep learning learning algorithms
-  - Deep learning architectures
+  - Deep learning for NLP
 - Fundamentals of Deep Learning
 - Training Deep Neural Networks
 - Interpretability and Explainability
@@ -191,17 +246,15 @@
 - Modern Research Frontiers
 - Bonus Topics
 
-# #############################################################################
-# lectures_source/Lesson12-Reinforcement_learning.txt
-# #############################################################################
-- Sequential decision problems
-  - Utilities over time
+# Lesson12-Reinforcement_learning.txt
+- Sequential Decision Problems
+  - Utilities Over Time
   - Algorithms for MDPs
-- Reinforcement learning
-  - Passive reinforcement learning
-  - Active reinforcement learning
-  - Generalization in reinforcement learning
-  - Policy search
+- Reinforcement Learning
+  - Passive Reinforcement Learning
+  - Active Reinforcement Learning
+  - Generalization in Reinforcement Learning
+  - Policy Search
 - Fundamentals
 - Classical Methods
 - Exploration Strategies
@@ -212,25 +265,7 @@
 - Advanced Topics
 - Applications
 
-# #############################################################################
-# lectures_source/Lesson13-Knowledge_representation.txt
-# #############################################################################
-- Introduction to knowledge representation
-  - Logical agents
-- Ontologies and structured knowledge
-  - Reasoning in ontologies
-- Propositional logic
-  - Syntax of propositional logic
-  - Semantics of propositional logic
-- First-order logic
-- Non-classical Logics
-- Description logics
-- Semantic web
-- Advanced topics
-
-# #############################################################################
-# lectures_source/Lesson91.Refresher_probability.txt
-# #############################################################################
+# Lesson91.Refresher_probability.txt
 - Probability
   - Probability definition
   - Probability measure
@@ -261,27 +296,7 @@
   - Estimating CDF and statistical functional
   - Bootstrap
 
-# #############################################################################
-# lectures_source/Lesson92.Refresher_linear_algebra.txt
-# #############################################################################
-- Linear algebra
-  - Vector and vector spaces
-  - Affine spaces
-  - Vectors and matrices
-  - Linear functions
-  - Connections between Machine Learning and Linear Algebra
-
-# #############################################################################
-# lectures_source/Lesson93.Refresher_information_theory.txt
-# #############################################################################
-- Information theory
-  - Entropy
-    - Kullback-Leibler divergence
-  - Connections between Information Theory and ML
-
-# #############################################################################
-# lectures_source/Lesson94.Refresher_probability_distributions.txt
-# #############################################################################
+# Lesson92.Refresher_probability_distributions.txt
 - Interesting RVs
   - Bernoulli
   - Binomial
@@ -292,18 +307,27 @@
   - Student's t-distribution
 - Probability inequalities
 
-# #############################################################################
-# lectures_source/Lesson95.Refresher_numerical_optimization.txt
-# #############################################################################
-- Optimization / numerical methods
+# Lesson93.Refresher_linear_algebra.txt
+- Linear algebra
+  - Vector and vector spaces
+  - Affine spaces
+  - Linear functions
+  - Linear dependence
+  - Basis
+  - Dimension of a vector space
+  - Direct sum
+  - Connections between Machine Learning and Linear Algebra
 
-# #############################################################################
-# lectures_source/Lesson96.Refresher_stochastic_processes.txt
-# #############################################################################
-- Stochastic processes
+# Lesson94.Refresher_information_theory.txt
+- Information theory
+  - Entropy
 
-# #############################################################################
-# lectures_source/Lesson97.Refresher_game_theory.txt
-# #############################################################################
+# Lesson95.Refresher_game_theory.txt
 - Game theory
   - Connections between Machine Learning and Game Theory
+
+# Lesson96.Refresher_stochastic_processes.txt
+- Stochastic processes
+
+# Lesson97.Refresher_numerical_optimization.txt
+- Optimization / numerical methods

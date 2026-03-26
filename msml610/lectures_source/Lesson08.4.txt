@@ -895,3 +895,179 @@ digraph CausalGraph {
 
 - Two nodes $A$ and $B$ are d-separated (independent) if and only if all the
   paths between them are blocked
+
+// Identification Revisited
+
+* Identification
+
+- It is hard to find the causal effect because treated and untreated are not
+  comparable to each other, which results in bias
+
+- Using causal graphs
+  - You can understand where the bias is coming from and thus how to neutralize
+    it
+  - Thus the identification phase becomes equivalent to "close all undesirable
+    flows of association"
+
+- E.g., in the consultancy graph
+  - There is:
+    - A fork on `profits_next_6m`
+    - A confounder `profits_prev_6m`
+    - A causal path `consultancy` $\to$ `profits_next_6m`
+    - A non-causal path (aka "backdoor path") `profits_prev_6m` $\to$
+      `profits_next_6m`
+  - To close the non-causal flows of association you need to condition on the
+    confounder, i.e., `profits_prev_6m`
+    - Look at a group of companies with similar past performance
+    - Compare the ones that hired consultants (treated) vs the ones who didn't
+      (untreated)
+    - You are assuming conditional independence, i.e., $(Y_0, Y_1) \perp T | X$
+
+// TODO(ai_gp): Highlight the backdoor path and the confounder
+```graphviz
+digraph CausalGraph {
+  rankdir=LR;
+
+  // Exogenous variable: profits_prev_6m
+  profits_prev_6m [
+    shape=ellipse,
+    penwidth=2,
+    color="#408AB0",
+    fillcolor="#EAF3F8",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_prev_6m"
+  ];
+
+  // Endogenous variable: Consultancy
+  Consultancy [
+    shape=box,
+    penwidth=1,
+    color="#62D4A4",
+    fillcolor="#EAF9F3",
+    style="filled,rounded,solid",
+    fontcolor=black,
+    label="Consultancy"
+  ];
+
+  // Target variable: profits_next_6m
+  profits_next_6m [
+    shape=box,
+    penwidth=2,
+    color="#F8D476",
+    fillcolor="#FFF6DA",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_next_6m"
+  ];
+
+  // Causal edges
+  profits_prev_6m -> Consultancy [style=solid, dir=forward, color=black];
+  profits_prev_6m -> profits_next_6m [style=solid, dir=forward, color=black];
+  Consultancy -> profits_next_6m [style=solid, dir=forward, color=black];
+}
+```
+
+* Backdoor Adjustment
+- You are making the "conditional independence assumption", i.e.,
+  $(Y_0, Y_1) \perp T | X$
+
+- I.e., units with the same level of covariates $X$ have potential outcomes
+  that are the same on average (it's as if they were randomized)
+
+- Closing backdoor paths by conditioning on confounders $X$ makes the causal
+  quantity identifiable from observable data (aka "backdoor adjustment")
+  $$
+  ATE
+    = \EE_X[ \EE[Y | T=1] - \EE[Y | T=0 ]
+    = \sum_x (\EE[Y | T=1, X=x] - \EE[Y | T=0, X=x]) \Pr(X=x)
+  $$
+  - ATE is the weighted average of in-group treated-vs-control differences,
+    weighted by group size $\Pr(X=x)$
+
+* Confounding Bias
+
+- Confounding happens when there is an open backdoor path through which
+  association flows non-causally, because treatment and outcome share a common
+  cause
+
+- Example
+  - You work in HR and want to know if your new management training program is
+    increasing employers' engagement
+  - Training is optional
+  - Only managers who are already doing a great job attend the program
+  - The managers that need the training the most, don't attend
+  - When you measure engagement of the teams, engagement under managers who took
+    the training is much higher
+  - There is a common cause between treatment and outcome, so they move together
+    regardless of a causal effect
+
+- You need to close all backdoor paths between treatment $T$ and outcome $Y$,
+  i.e., adjust for the common causes / adjust for confounding bias
+  - E.g., control for manager's quality before taking the training
+
+- Unfortunately you can't adjust for all common causes
+  - Some causes are unknown
+  - Known causes might be difficult to measure
+
+* Surrogate Confounding
+
+- The confounder variable might be not be observable / measurable, but you might
+  have measured variable that can be proxies for confounder
+  - E.g., you can't measure confounder "manager quality"
+  - You can measure
+    - Causes
+      - Manager's tenure
+      - Manager's education level
+    - Effects
+      - Team's attrition
+      - Team's past performance
+
+- In this way you don't eliminate bias, but you can reduce it
+
+- Partial remedies when confounders are unobserved:
+  - Sensitivity analysis: Instead of asking "did I control for everything?", ask
+    "how strong must the unmeasured confounder be to change my conclusion?"
+  - Partial identification: Use observational data to place bounds on the causal
+    quantity rather than point-identify it
+  - Randomization: Intervening on the treatment removes confounding entirely by
+    making randomness the sole cause of $T$
+  
+* 
+- You work for a software company
+- You want to estimate the impact of a new feature
+- You randomize rollout of the feature
+  - Only 10% of the customers are randomly chosen to get the feature
+- You can't measure satisfaction directly so you send a survey to customers
+  in the rollout (treated) and in the control group, asking if you would
+  recommend the product
+
+- Customers with the feature have higher satisfaction than the ones without
+- Is the difference due entirely to causal effect of new feature?
+
+```graphviz
+digraph G {
+    rankdir=LR;
+    node [shape=ellipse, style=filled, fillcolor=white, fontname="Arial"];
+
+    RND [label="RND"];
+    NewFeature [label="New feature"];
+    CustomerSat [label="Customer satisfaction"];
+    SurveyResult [label="Survey result"];
+    Response [label="Response", fillcolor="#add8e6"];
+
+    {rank=same; SurveyResult; Response}
+    {rank=same; RND}
+    {rank=same; NewFeature}
+    {rank=same; CustomerSat}
+
+    RND -> NewFeature;
+    NewFeature -> CustomerSat;
+    NewFeature -> Response;
+    CustomerSat -> SurveyResult;
+    CustomerSat -> Response;
+}
+```
+
+- The issue is that you measure the satisfaction only for the customers who
+  responded to the survey (i.e., conditioning on responding to the survey)

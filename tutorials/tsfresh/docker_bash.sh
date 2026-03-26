@@ -22,7 +22,7 @@ print_docker_vars
 run "docker image ls $FULL_IMAGE_NAME"
 
 CONTAINER_NAME=${IMAGE_NAME}_bash
-PORT=8888
+PORT=
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
 run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"

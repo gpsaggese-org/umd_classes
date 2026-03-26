@@ -1,9 +1,9 @@
 """
-Utility functions for causal inference tutorial (L08_01).
+Utility functions for causal inference tutorial (L08_04_01).
 
 Import as:
 
-import L08_01_causal_inference_utils as mtl0cireout
+import L08_04_01_causal_inference_utils as mtl0cireout
 """
 
 import os
@@ -18,7 +18,7 @@ from sklearn.linear_model import LinearRegression
 
 
 # #############################################################################
-# Data loading functions.
+# Cell 1: Sales Example.
 # #############################################################################
 
 
@@ -32,11 +32,6 @@ def load_xmas_sales_data(data_dir: str) -> pd.DataFrame:
     data = pd.read_csv(os.path.join(data_dir, "xmas_sales.csv"))
     data["is_on_sale"] = data["is_on_sale"].astype(float)
     return data
-
-
-# #############################################################################
-# Plotting functions.
-# #############################################################################
 
 
 def plot_xmas_sales_boxplot(data: pd.DataFrame, *, figsize: tuple = (10, 5)) -> mfigure.Figure:
@@ -58,6 +53,11 @@ def plot_xmas_sales_boxplot(data: pd.DataFrame, *, figsize: tuple = (10, 5)) -> 
     ax.set_ylabel("weekly_amount_sold", fontsize=20)
     ax.tick_params(axis="both", which="major", labelsize=18)
     return fig
+
+
+# #############################################################################
+# Cell 1.2: Visual Analysis of Bias in Sales Example.
+# #############################################################################
 
 
 def plot_sales_bias_analysis(data: pd.DataFrame, marker: str = "o") -> mfigure.Figure:
@@ -236,6 +236,11 @@ def plot_single_vs_separate_trends():
     return fig
 
 
+# #############################################################################
+# Cell 1.3: Simpson's Paradox.
+# #############################################################################
+
+
 def plot_simpsons_paradox():
     """
     Plot Simpson's paradox showing how overall trend can differ from group trends.
@@ -306,6 +311,11 @@ def plot_simpsons_paradox():
     plt.ylabel("y")
     plt.legend(fontsize=10, loc="best")
     return fig
+
+
+# #############################################################################
+# Cell 1.4: University Simpson's Paradox.
+# #############################################################################
 
 
 def plot_university_simpsons_paradox() -> mfigure.Figure:

@@ -3,24 +3,41 @@
 # Utility functions for Docker container management.
 # """
 
-get_docker_bash_command() {
+
+# #############################################################################
+# General utilities
+# #############################################################################
+
+
+run() {
     # """
-    # Return the base docker run command for an interactive bash shell.
+    # Execute a command with echo output.
     #
-    # :return: docker run command string with --rm and -ti flags
+    # :param cmd: Command string to execute
+    # :return: Exit status of the executed command
     # """
-    echo "docker run --rm -ti"
+    cmd="$*"
+    echo "> $cmd"
+    eval "$cmd"
 }
 
 
-get_docker_cmd_command() {
+enable_verbose_mode() {
     # """
-    # Return the base docker run command for executing a non-interactive command.
+    # Enable shell command tracing (set -x) when VERBOSE is set to 1.
     #
-    # :return: docker run command string with --rm and -i flags
+    # Reads the VERBOSE variable set by parse_docker_jupyter_args.
+    # Call this after parsing args to activate tracing for the rest of the script.
     # """
-    echo "docker run --rm -i"
+    if [[ $VERBOSE == 1 ]]; then
+        set -x
+    fi
 }
+
+
+# #############################################################################
+# Argument parsing
+# #############################################################################
 
 
 _print_default_help() {
@@ -68,7 +85,6 @@ _print_docker_jupyter_help() {
     echo "Options:"
     echo "  -h          Print this help message and exit"
     echo "  -p PORT     Host port to forward to Jupyter Lab (default: 8888)"
-    echo "  -d DIR      Directory to mount as /data inside the container (default: git root)"
     echo "  -u          Enable vim keybindings in Jupyter Lab"
     echo "  -v          Enable verbose output (set -x)"
 }
@@ -87,17 +103,15 @@ parse_docker_jupyter_args() {
     # Set defaults.
     JUPYTER_HOST_PORT=8888
     JUPYTER_USE_VIM=0
-    TARGET_DIR=$GIT_ROOT
     VERBOSE=0
     # Save original args to pass through to run_jupyter.sh.
     OLD_CMD_OPTS="$*"
     # Parse options.
-    while getopts "hp:d:uv" flag; do
+    while getopts "hp:uv" flag; do
         case "${flag}" in
             h) _print_docker_jupyter_help; exit 0;;
             p) JUPYTER_HOST_PORT=${OPTARG};;  # Port for Jupyter Lab.
             u) JUPYTER_USE_VIM=1;;            # Enable vim bindings.
-            d) TARGET_DIR=${OPTARG};;         # Directory to mount as /data.
             v) VERBOSE=1;;                    # Enable verbose output.
             *) _print_docker_jupyter_help; exit 1;;
         esac
@@ -107,170 +121,9 @@ parse_docker_jupyter_args() {
 }
 
 
-enable_verbose_mode() {
-    # """
-    # Enable shell command tracing (set -x) when VERBOSE is set to 1.
-    #
-    # Reads the VERBOSE variable set by parse_docker_jupyter_args.
-    # Call this after parsing args to activate tracing for the rest of the script.
-    # """
-    if [[ $VERBOSE == 1 ]]; then
-        set -x
-    fi
-}
-
-
 # #############################################################################
-# Jupyter configuration
+# Docker image management
 # #############################################################################
-
-
-configure_jupyter_vim_keybindings() {
-    # """
-    # Configure JupyterLab vim keybindings based on JUPYTER_USE_VIM env var.
-    #
-    # Reads JUPYTER_USE_VIM; if 1, verifies jupyterlab_vim is installed and
-    # writes enabled settings; otherwise writes disabled settings.
-    # """
-    mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
-    if [[ $JUPYTER_USE_VIM == 1 ]]; then
-        # Check that jupyterlab_vim is installed before trying to enable it.
-        if ! pip show jupyterlab_vim > /dev/null 2>&1; then
-            echo "ERROR: jupyterlab_vim is not installed but vim bindings were requested."
-            echo "Install it with: pip install jupyterlab_vim"
-            exit 1
-        fi
-        echo "Enabling vim."
-        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
-{
-    "enabled": true,
-    "enabledInEditors": true,
-    "extraKeybindings": []
-}
-EOF
-    else
-        echo "Disabling vim."
-        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
-{
-    "enabled": false,
-    "enabledInEditors": false,
-    "extraKeybindings": []
-}
-EOF
-    fi;
-}
-
-
-configure_jupyter_notifications() {
-    # """
-    # Disable JupyterLab news fetching and update checks.
-    # """
-    mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
-    cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/apputils-extension/notification.jupyterlab-settings
-{
-    // Notifications
-    // @jupyterlab/apputils-extension:notification
-    // Notifications settings.
-
-    // Fetch official Jupyter news
-    // Whether to fetch news from the Jupyter news feed. If Always (`true`), it will make a request to a website.
-    "fetchNews": "false",
-    "checkForUpdates": false
-}
-EOF
-}
-
-
-get_jupyter_args() {
-    # """
-    # Print the standard Jupyter Lab command-line arguments.
-    #
-    # :return: space-separated Jupyter Lab args for port 8888 with no browser,
-    #   allow root, and no authentication
-    # """
-    echo "--port=8888 --no-browser --ip=0.0.0.0 --allow-root --ServerApp.token='' --ServerApp.password=''"
-}
-
-
-get_docker_jupyter_command() {
-    # """
-    # Return the base docker run command for running Jupyter Lab interactively.
-    #
-    # :return: docker run command string with --rm and -ti flags
-    # """
-    echo "docker run --rm -ti"
-}
-
-
-get_docker_common_options() {
-    # """
-    # Return docker run options common to all container types.
-    #
-    # Includes volume mounts for the current directory and git root, plus
-    # environment variables for PYTHONPATH and host OS name.
-    #
-    # :return: docker run options string with volume mounts and env vars
-    # """
-    echo "-v $(pwd):/curr_dir \
-    -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
-    -e CSFY_HOST_OS_NAME=$(uname -s) \
-    -e CSFY_HOST_NAME=$(uname -n)"
-}
-
-
-get_docker_jupyter_options() {
-    # """
-    # Return docker run options for a Jupyter Lab container.
-    #
-    # :param container_name: Name for the Docker container
-    # :param host_port: Host port to forward to container port 8888
-    # :param target_dir: Optional directory to mount as /data (empty to skip)
-    # :param jupyter_use_vim: 0 or 1 to enable vim bindings
-    # :return: docker run options string
-    # """
-    local container_name=$1
-    local host_port=$2
-    local target_dir=$3
-    local jupyter_use_vim=$4
-    local target_dir_opt=""
-    if [[ -n $target_dir ]]; then
-        target_dir_opt="-v $target_dir:/data"
-    fi
-    # Run as the current user when user is saggese.
-    if [[ "$(whoami)" == "saggese" ]]; then
-        echo "Overwriting jupyter_use_vim since user='saggese'"
-        jupyter_use_vim=1
-    fi
-    echo "--name $container_name \
-    -p $host_port:8888 \
-    $target_dir_opt \
-    $(get_docker_common_options) \
-    -e JUPYTER_USE_VIM=$jupyter_use_vim"
-}
-
-
-get_docker_bash_options() {
-    # """
-    # Return docker run options for a Docker container.
-    #
-    # :param container_name: Name for the Docker container
-    # :param port: Port number to forward (optional, skipped if empty)
-    # :param extra_opts: Additional docker run options (optional)
-    # :return: docker run options string with name, volume mounts, and env vars
-    # """
-    local container_name=$1
-    local port=$2
-    local extra_opts=$3
-    local port_opt=""
-    if [[ -n $port ]]; then
-        port_opt="-p $port:$port"
-    fi
-    echo "--name $container_name \
-    $port_opt \
-    $extra_opts \
-    $(get_docker_common_options)"
-}
 
 
 get_docker_vars_script() {
@@ -299,19 +152,6 @@ print_docker_vars() {
     echo "REPO_NAME=$REPO_NAME"
     echo "IMAGE_NAME=$IMAGE_NAME"
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-}
-
-
-run() {
-    # """
-    # Execute a command with echo output.
-    #
-    # :param cmd: Command string to execute
-    # :return: Exit status of the executed command
-    # """
-    cmd="$*"
-    echo "> $cmd"
-    eval "$cmd"
 }
 
 
@@ -416,6 +256,11 @@ pull_container_image() {
 }
 
 
+# #############################################################################
+# Docker container management
+# #############################################################################
+
+
 kill_container() {
     # """
     # Kill and remove Docker container(s) matching the current configuration.
@@ -451,4 +296,209 @@ exec_container() {
     echo "CONTAINER_ID=$CONTAINER_ID"
     docker exec -it $CONTAINER_ID bash
     echo "${FUNCNAME[0]} ... done"
+}
+
+
+# #############################################################################
+# Docker common options
+# #############################################################################
+
+
+get_docker_common_options() {
+    # """
+    # Return docker run options common to all container types.
+    #
+    # Includes volume mount for the git root, plus environment variables for
+    # PYTHONPATH and host OS name.
+    #
+    # :return: docker run options string with volume mounts and env vars
+    # """
+    echo "-v $GIT_ROOT:/git_root \
+    -e PYTHONPATH=/git_root:/git_root/helpers_root:/git_root/msml610/tutorials \
+    -e CSFY_GIT_ROOT_PATH=/git_root \
+    -e CSFY_HOST_OS_NAME=$(uname -s) \
+    -e CSFY_HOST_NAME=$(uname -n)"
+}
+
+
+# #############################################################################
+# Docker bash
+# #############################################################################
+
+
+get_docker_bash_command() {
+    # """
+    # Return the base docker run command for an interactive bash shell.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    if [ -t 0 ]; then
+        echo "docker run --rm -ti"
+    else
+        echo "docker run --rm -i"
+    fi
+}
+
+
+get_docker_bash_options() {
+    # """
+    # Return docker run options for a Docker container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param port: Port number to forward (optional, skipped if empty)
+    # :param extra_opts: Additional docker run options (optional)
+    # :return: docker run options string with name, volume mounts, and env vars
+    # """
+    local container_name=$1
+    local port=$2
+    local extra_opts=$3
+    local port_opt=""
+    if [[ -n $port ]]; then
+        port_opt="-p $port:$port"
+    fi
+    echo "--name $container_name \
+    $port_opt \
+    $extra_opts \
+    $(get_docker_common_options)"
+}
+
+
+# #############################################################################
+# Docker cmd
+# #############################################################################
+
+
+get_docker_cmd_command() {
+    # """
+    # Return the base docker run command for executing a non-interactive command.
+    #
+    # :return: docker run command string with --rm and -i flags
+    # """
+    echo "docker run --rm -i"
+}
+
+
+# #############################################################################
+# Docker Jupyter
+# #############################################################################
+
+
+get_docker_jupyter_command() {
+    # """
+    # Return the base docker run command for running Jupyter Lab interactively.
+    #
+    # :return: docker run command string with --rm and -ti flags
+    # """
+    echo "docker run --rm -ti"
+}
+
+
+get_docker_jupyter_options() {
+    # """
+    # Return docker run options for a Jupyter Lab container.
+    #
+    # :param container_name: Name for the Docker container
+    # :param host_port: Host port to forward to container port 8888
+    # :param jupyter_use_vim: 0 or 1 to enable vim bindings
+    # :return: docker run options string
+    # """
+    local container_name=$1
+    local host_port=$2
+    local jupyter_use_vim=$3
+    # Run as the current user when user is saggese.
+    if [[ "$(whoami)" == "saggese" ]]; then
+        echo "Overwriting jupyter_use_vim since user='saggese'"
+        jupyter_use_vim=1
+    fi
+    echo "--name $container_name \
+    -p $host_port:8888 \
+    $(get_docker_common_options) \
+    -e JUPYTER_USE_VIM=$jupyter_use_vim"
+}
+
+
+configure_jupyter_vim_keybindings() {
+    # """
+    # Configure JupyterLab vim keybindings based on JUPYTER_USE_VIM env var.
+    #
+    # Reads JUPYTER_USE_VIM; if 1, verifies jupyterlab_vim is installed and
+    # writes enabled settings; otherwise writes disabled settings.
+    # """
+    mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
+    if [[ $JUPYTER_USE_VIM == 1 ]]; then
+        # Check that jupyterlab_vim is installed before trying to enable it.
+        if ! pip show jupyterlab_vim > /dev/null 2>&1; then
+            echo "ERROR: jupyterlab_vim is not installed but vim bindings were requested."
+            echo "Install it with: pip install jupyterlab_vim"
+            exit 1
+        fi
+        echo "Enabling vim."
+        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": true,
+    "enabledInEditors": true,
+    "extraKeybindings": []
+}
+EOF
+    else
+        echo "Disabling vim."
+        cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
+{
+    "enabled": false,
+    "enabledInEditors": false,
+    "extraKeybindings": []
+}
+EOF
+    fi;
+}
+
+
+configure_jupyter_notifications() {
+    # """
+    # Disable JupyterLab news fetching and update checks.
+    # """
+    mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
+    cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/apputils-extension/notification.jupyterlab-settings
+{
+    // Notifications
+    // @jupyterlab/apputils-extension:notification
+    // Notifications settings.
+
+    // Fetch official Jupyter news
+    // Whether to fetch news from the Jupyter news feed. If Always (`true`), it will make a request to a website.
+    "fetchNews": "false",
+    "checkForUpdates": false
+}
+EOF
+}
+
+
+get_jupyter_args() {
+    # """
+    # Print the standard Jupyter Lab command-line arguments.
+    #
+    # :return: space-separated Jupyter Lab args for port 8888 with no browser,
+    #   allow root, and no authentication
+    # """
+    echo "--port=8888 --no-browser --ip=0.0.0.0 --allow-root --ServerApp.token='' --ServerApp.password=''"
+}
+
+
+get_run_jupyter_cmd() {
+    # """
+    # Return the command to run run_jupyter.sh inside a container.
+    #
+    # Computes the script's path relative to GIT_ROOT and builds the
+    # corresponding /git_root/... path used inside the container.
+    #
+    # :param script_path: path of the calling script (pass ${BASH_SOURCE[0]})
+    # :param cmd_opts: options to forward to run_jupyter.sh
+    # :return: full command string to run run_jupyter.sh
+    # """
+    local script_path=$1
+    local cmd_opts=$2
+    local script_dir
+    script_dir=$(cd "$(dirname "$script_path")" && pwd)
+    local rel_dir="${script_dir#${GIT_ROOT}/}"
+    echo "/git_root/${rel_dir}/run_jupyter.sh $cmd_opts"
 }
