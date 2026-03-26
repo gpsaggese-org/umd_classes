@@ -19,30 +19,12 @@
 # ## Learn LangChain in 60 Minutes — API notebook
 
 # %% [markdown]
-# ## APIs covered (parity with `langchain.example.ipynb`)
-#
 # A mental model before we start:
 #
 # - **LangChain** is the toolkit: prompts, models, tools, and composable building blocks ("runnables").
 # - **LangGraph** is the orchestrator: stateful graphs, routing, checkpointing/memory, and interrupts for human‑in‑the‑loop (HITL).
-# - **Deep Agents (`deepagents`)** is an optional, higher-level layer used later in this tutorial for “agent app” patterns
+# - **Deep Agents** is an optional, higher-level layer used later in this tutorial for “agent app” patterns
 #   (filesystem tools, todos, subagents, sandboxing, and HITL gates).
-#
-# This notebook is a reference for the concrete APIs used in the examples notebook:
-#
-# - Models: `ChatOpenAI`, `ChatAnthropic` (configured via `.env`)
-# - Prompts + LCEL: `ChatPromptTemplate`, `StrOutputParser`, composition with `|`
-# - Runnables: `.invoke()`, `.batch()`, `.stream()`, `RunnableParallel`
-# - Tools: `@tool` / `tool(...)`
-# - Tool execution: `ToolNode`, `AIMessage.tool_calls`, `ToolMessage`
-# - Injection: `InjectedState`, `InjectedStore`, `InMemoryStore`
-# - Agents: `create_agent`, `AgentState`, `ToolRuntime`, `InjectedToolCallId`
-# - LangGraph: `StateGraph`, `START`/`END`, reducers via `Annotated[..., reducer]`
-# - HITL: `interrupt(...)` + `Command(resume=...)`
-# - Deep Agents: `create_deep_agent`, `CompiledSubAgent`, backends, `interrupt_on=InterruptOnConfig(...)`
-# - Notebooks as data: `nbformat`, `nbclient`, `papermill`
-#
-# If any of those names feel mysterious right now — perfect. We’ll introduce them with small examples.
 
 # %% [markdown]
 # # Imports
@@ -62,6 +44,8 @@ import langchain_API_utils as ut
 
 
 # %%
+import logging
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
 )
@@ -84,7 +68,7 @@ print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
 import os
 
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv("langchain.env")
 
 if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
     _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
@@ -101,14 +85,7 @@ llm
 # %% [markdown]
 # ## Local dataset (`data/T1_slice.csv`)
 #
-# We’ll use a tiny local CSV (shipped with this tutorial) so the examples feel concrete.
-#
-# Two small conveniences happen in the next cell:
-# - we load it into a Pandas DataFrame for prompt/context demos
-# - we also copy it under `./workspace/data/` so filesystem tools can refer to it as `/workspace/data/T1_slice.csv`
-#
-# That “workspace” detail will matter once we get to sandboxed filesystem access.
-#
+# We’ll use a local CSV so the examples feel concrete.
 
 # %%
 from pathlib import Path
@@ -116,6 +93,7 @@ import shutil
 
 import pandas as pd
 
+# TODO(ai_gp): Move this to a function in *_utils.py
 DATASET_PATH = Path("data/T1_slice.csv").resolve()
 df = pd.read_csv(DATASET_PATH)
 TIME_COL = "Date/Time"
@@ -131,31 +109,25 @@ WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
 if not WORKSPACE_DATASET_PATH.exists():
     shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
-df.head(5)
+
 
 
 # %%
+df.head(5)
+
+# %%
+# TODO(ai_gp): Add explanation.
 DATASET_META = ut.build_dataset_meta(df)
 DATASET_META
 
 
 # %% [markdown]
-# ## LCEL: prompt | model | parser
+# ## LCEL (LangChain Expression Language)
 #
-# LCEL (LangChain Expression Language) is a **pipe** syntax for composing steps.
-# If you’ve used Unix pipes (`a | b | c`), it’s the same vibe:
-#
+# LCEL is a _pipe_ syntax for composing steps, like a Unix pipe (`a | b | c`):
 # - build a prompt
 # - call a model
 # - parse the result
-#
-# Key pieces in this notebook:
-# - `ChatPromptTemplate` (how we structure instructions + user input)
-# - `StrOutputParser` (turn a chat message into a plain string)
-# - composition with `|` (build a reusable “chain”)
-#
-# As you run the next cell, focus on the *shape* of the pipeline more than the exact prompt wording.
-#
 
 # %%
 from langchain_core.prompts import ChatPromptTemplate
@@ -167,7 +139,6 @@ prompt = ChatPromptTemplate.from_messages(
         ("human", "{question}"),
     ]
 )
-
 chain = prompt | llm | StrOutputParser()
 chain.invoke({"question": "Explain LCEL in one sentence."})
 
@@ -175,7 +146,7 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 # %% [markdown]
 # ## Runnables: invoke / batch / stream / RunnableParallel
 #
-# A “runnable” is anything you can **call**.
+# A “runnable” is anything you can _call_.
 # LangChain standardizes that with a few common methods:
 #
 # - `.invoke(input)` → one input, one output
