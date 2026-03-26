@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -107,21 +107,13 @@ import langchain_API_utils as ut
 
 
 # %%
-import logging
-import platform
-
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
 )
 _LOG = logging.getLogger("learn_langchain.api")
 
-# TODO(ai_gp): Move it to a function in *_utils.py and use print instead of _LOG.info
-_LOG.info("python=%s", sys.version.split()[0])
-_LOG.info("platform=%s", platform.platform())
-_LOG.info("langchain=%s", getattr(langchain, "__version__", "unknown"))
-_LOG.info("langchain_core=%s", getattr(langchain_core, "__version__", "unknown"))
-_LOG.info("langgraph=%s", getattr(langgraph, "__version__", "unknown"))
-_LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
+ut.print_environment_info()
+print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
 
 
 # %% [markdown]

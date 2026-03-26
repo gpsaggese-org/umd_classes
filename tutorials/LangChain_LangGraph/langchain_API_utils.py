@@ -13,14 +13,14 @@ import base64
 import json
 import logging
 import os
+import platform
+import sys
 from dataclasses import dataclass
 from math import sqrt as _sqrt
 from pathlib import Path
 from typing import Annotated, Any, Literal, Sequence, TypedDict
 
 import nbformat
-
-from dotenv import load_dotenv
 from langchain_core.tools import tool
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import InjectedState, InjectedStore
@@ -29,9 +29,29 @@ from nbclient import NotebookClient
 from nbformat import validate
 from typing_extensions import Annotated as TxAnnotated
 
-load_dotenv()
+import helpers.hdbg as hdbg
 
 _LOG = logging.getLogger(__name__)
+
+
+# ##############################################################################
+# Logging utilities
+# ##############################################################################
+
+
+def print_environment_info() -> None:
+    """
+    Print Python version, platform, and library versions.
+    """
+    import langchain
+    import langchain_core
+    import langgraph
+
+    print(f"python={sys.version.split()[0]}")
+    print(f"platform={platform.platform()}")
+    print(f"langchain={getattr(langchain, '__version__', 'unknown')}")
+    print(f"langchain_core={getattr(langchain_core, '__version__', 'unknown')}")
+    print(f"langgraph={getattr(langgraph, '__version__', 'unknown')}")
 
 
 # ##############################################################################
@@ -56,23 +76,12 @@ class LlmConfig:
     temperature: float
 
 
-def _require_env(var_name: str) -> str:
-    """
-    Return the value of `var_name` from environment variables or raise.
-    """
-    value = os.getenv(var_name)
-    if not value:
-        raise RuntimeError(
-            f"Missing required environment variable `{var_name}`. See `.env.example`."
-        )
-    return value
-
-
 def load_llm_config() -> LlmConfig:
     """
     Load `LlmConfig` from environment variables.
     """
-    provider = _require_env("LLM_PROVIDER").lower()
+    hdbg.dassert_in("LLM_PROVIDER", os.environ)
+    provider = os.environ["LLM_PROVIDER"].lower()
     temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
     default_models = {
         "openai": "gpt-4.1-mini",
@@ -95,42 +104,27 @@ def get_chat_model():
     if cfg.provider == "openai":
         from langchain_openai import ChatOpenAI
 
-        _require_env("OPENAI_API_KEY")
+        hdbg.dassert_in("OPENAI_API_KEY", os.environ)
         return ChatOpenAI(
             model=cfg.model,
             temperature=cfg.temperature,
             timeout=60,
             max_retries=2,
         )
-    if cfg.provider == "anthropic":
+    elif cfg.provider == "anthropic":
         from langchain_anthropic import ChatAnthropic
 
-        _require_env("ANTHROPIC_API_KEY")
+        hdbg.dassert_in("ANTHROPIC_API_KEY", os.environ)
         return ChatAnthropic(
             model=cfg.model,
             temperature=cfg.temperature,
             timeout=60,
             max_retries=2,
         )
-    if cfg.provider == "ollama":
-        try:
-            from langchain_ollama import ChatOllama
-        except ModuleNotFoundError as e:
-            raise RuntimeError(
-                "`LLM_PROVIDER=ollama` requires `langchain-ollama`. "
-                "Install it with `pip install langchain-ollama` and retry."
-            ) from e
-        base_url = os.getenv(
-            "OLLAMA_BASE_URL", "http://host.docker.internal:11434"
+    else:
+        raise ValueError(
+            f"Unsupported `LLM_PROVIDER={cfg.provider}`"
         )
-        return ChatOllama(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            base_url=base_url,
-        )
-    raise ValueError(
-        f"Unsupported `LLM_PROVIDER={cfg.provider}`. Use one of: openai, anthropic, ollama."
-    )
 
 
 # ##############################################################################
