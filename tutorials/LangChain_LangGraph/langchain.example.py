@@ -43,42 +43,20 @@
 #
 
 # %%
-# This cell will:
-# - Enable auto-reloading so edits are picked up without restarting the kernel.
 # %load_ext autoreload
 # %autoreload 2
 
 import os
 import sys
-import importlib
 
+import langchain
+import langchain_core
+import langgraph
 
-def _require_import(module_name: str):
-    try:
-        return importlib.import_module(module_name)
-    except ModuleNotFoundError as e:
-        raise RuntimeError(
-            f"""Missing Python package {module_name!r}.
-
-This tutorial is meant to be run from `tutorials/LangChain_LangGraph` with its pinned dependencies.
-
-Quick fixes:
-- Docker (recommended): `cd tutorials/LangChain_LangGraph && docker compose up --build`
-- Local venv: `cd tutorials/LangChain_LangGraph && pip install -r requirements.txt`
-"""
-        ) from e
-
-
-langchain = _require_import("langchain")
-langchain_core = _require_import("langchain_core")
-langgraph = _require_import("langgraph")
-
+import langchain_example_utils as ut
 
 # %%
-# This cell will:
-# - Configure logging and print environment/version info for debugging.
 import logging
-import platform
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
@@ -86,7 +64,7 @@ logging.basicConfig(
 _LOG = logging.getLogger("learn_langchain.examples")
 
 _LOG.info("python=%s", sys.version.split()[0])
-_LOG.info("platform=%s", platform.platform())
+_LOG.info("platform=%s", __import__("platform").platform())
 _LOG.info("langchain=%s", getattr(langchain, "__version__", "unknown"))
 _LOG.info("langchain_core=%s", getattr(langchain_core, "__version__", "unknown"))
 _LOG.info("langgraph=%s", getattr(langgraph, "__version__", "unknown"))
@@ -110,128 +88,15 @@ _LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
 #
 
 # %%
-# This cell will:
-# - Define a small `.env`-driven factory to create the chat model.
 import os
-from dataclasses import dataclass
-
 from dotenv import load_dotenv
-
 load_dotenv()
-
-
-# #############################################################################
-# LlmConfig
-# #############################################################################
-
-
-@dataclass(frozen=True)
-class LlmConfig:
-    """
-    Configuration for selecting an LLM provider + model from environment variables.
-    """
-
-    provider: str
-    model: str
-    temperature: float
-
-
-def _require_env(var_name: str) -> str:
-    """
-    Return the value of `var_name` from environment variables or raise.
-    """
-    value = os.getenv(var_name)
-    if not value:
-        raise RuntimeError(
-            f"Missing required environment variable `{var_name}`. See `.env.example`."
-        )
-    return value
-
-
-def load_llm_config() -> LlmConfig:
-    """
-    Load `LlmConfig` from environment variables.
-    """
-    provider = _require_env("LLM_PROVIDER").lower()
-    temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
-
-    default_models = {
-        "openai": "gpt-4.1-mini",
-        "anthropic": "claude-3-5-sonnet-latest",
-        "ollama": "llama3.1:8b",
-    }
-    model = os.getenv("LLM_MODEL", default_models.get(provider, ""))
-    if not model:
-        raise RuntimeError(
-            f"Missing `LLM_MODEL` for provider={provider!r}. See `.env.example`."
-        )
-
-    cfg = LlmConfig(provider=provider, model=model, temperature=temperature)
-    return cfg
-
-
-def get_chat_model():
-    """
-    Create a tool-calling-capable chat model using env configuration.
-    """
-    cfg = load_llm_config()
-
-    if cfg.provider == "openai":
-        from langchain_openai import ChatOpenAI
-
-        _require_env("OPENAI_API_KEY")
-        model = ChatOpenAI(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            timeout=60,
-            max_retries=2,
-        )
-        return model
-
-    if cfg.provider == "anthropic":
-        from langchain_anthropic import ChatAnthropic
-
-        _require_env("ANTHROPIC_API_KEY")
-        model = ChatAnthropic(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            timeout=60,
-            max_retries=2,
-        )
-        return model
-
-    if cfg.provider == "ollama":
-        try:
-            from langchain_ollama import ChatOllama
-        except ModuleNotFoundError as e:
-            raise RuntimeError(
-                "`LLM_PROVIDER=ollama` requires `langchain-ollama`. "
-                "Install it with `pip install langchain-ollama` and retry."
-            ) from e
-
-        base_url = os.getenv(
-            "OLLAMA_BASE_URL", "http://host.docker.internal:11434"
-        )
-        model = ChatOllama(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            base_url=base_url,
-        )
-        return model
-
-    raise ValueError(
-        f"Unsupported `LLM_PROVIDER={cfg.provider}`. Use one of: openai, anthropic, ollama."
-    )
-
 
 if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
     _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
 
-
 # %%
-# This cell will:
-# - Instantiate the chat model from your `.env` configuration.
-llm = get_chat_model()
+llm = ut.get_chat_model()
 llm
 
 
@@ -271,38 +136,7 @@ df.head(5)
 
 
 # %%
-# This cell will:
-# - Build compact, JSON-serializable metadata and sample rows to pass into prompts.
-def build_dataset_meta(df) -> dict:
-    """
-    Build a compact JSON-serializable dataset metadata dict for demos.
-    """
-    cols = list(df.columns)
-    dtypes = {c: str(df[c].dtype) for c in cols}
-    sample_rows = df.head(3).to_dict(orient="records")
-    freq = None
-    if "Date/Time" in df.columns:
-        ts = df["Date/Time"].dropna().sort_values()
-        if len(ts) >= 3:
-            # Estimate the most common sampling delta.
-            deltas = ts.diff().dropna()
-            freq = str(deltas.value_counts().idxmax())
-    meta = {
-        "path": "data/T1_slice.csv",
-        "workspace_path": "workspace/data/T1_slice.csv",
-        "tool_path": "/workspace/data/T1_slice.csv",
-        "n_rows": int(df.shape[0]),
-        "n_cols": int(df.shape[1]),
-        "columns": cols,
-        "dtypes": dtypes,
-        "sample_rows": sample_rows,
-        "time_col": "Date/Time" if "Date/Time" in df.columns else None,
-        "freq": freq,
-    }
-    return meta
-
-
-DATASET_META = build_dataset_meta(df)
+DATASET_META = ut.build_dataset_meta(df)
 DATASET_META
 
 

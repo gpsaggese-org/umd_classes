@@ -111,9 +111,6 @@ llm
 #
 
 # %%
-# This cell will:
-# - Load the local dataset into a Pandas DataFrame and prepare the time column.
-# - Copy the dataset under `./workspace/data/` so Deep Agents can access it via `/workspace/...`.
 from pathlib import Path
 import shutil
 
@@ -138,9 +135,6 @@ df.head(5)
 
 
 # %%
-# This cell will:
-# - Build compact, JSON-serializable metadata and sample rows to pass into prompts.
-# build_dataset_meta is defined in langchain.API_utils.
 DATASET_META = ut.build_dataset_meta(df)
 DATASET_META
 
@@ -164,8 +158,6 @@ DATASET_META
 #
 
 # %%
-# This cell will:
-# - Demonstrate a small part of the API surface used in the examples notebook.
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
@@ -195,8 +187,6 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 #
 
 # %%
-# This cell will:
-# - Demonstrate a small part of the API surface used in the examples notebook.
 from langchain_core.runnables import RunnableParallel
 
 summary_prompt = ChatPromptTemplate.from_messages(
@@ -223,8 +213,6 @@ parallel.invoke(
 
 
 # %%
-# This cell will:
-# - Use `ToolNode` to execute tool calls inside a graph.
 questions = [
     {"question": "What is a tool in LangChain?"},
     {"question": "What is ToolNode in LangGraph?"},
@@ -234,8 +222,6 @@ chain.batch(questions, return_exceptions=True, config={"max_concurrency": 3})
 
 
 # %%
-# This cell will:
-# - Demonstrate a small part of the API surface used in the examples notebook.
 chunks = []
 for chunk in chain.stream(
     {"question": "Give me a 2-bullet explanation of RunnableParallel."}
@@ -261,10 +247,6 @@ final[:300] + ("..." if len(final) > 300 else "")
 #
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
-# mean, zscore, ToolState are defined in langchain.API_utils.
 from langchain_core.messages import AIMessage
 from langgraph.graph import START, END, StateGraph
 from langgraph.prebuilt import ToolNode
@@ -314,10 +296,6 @@ out = graph.invoke({"messages": [AIMessage(content="", tool_calls=tool_calls)]})
 #
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
-# dataset_brief, InjectedStateState are defined in langchain.API_utils.
 import json
 
 from langchain_core.messages import AIMessage
@@ -364,10 +342,6 @@ json.loads(out["messages"][-1].content)
 #
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
-# save_pref, load_pref, StoreState are defined in langchain.API_utils.
 from langchain_core.messages import AIMessage
 from langgraph.graph import START, END, StateGraph
 from langgraph.prebuilt import ToolNode
@@ -436,9 +410,6 @@ out1["messages"][-1].content, out2["messages"][-1].content
 #
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# utc_now is defined in langchain.API_utils.
 from langchain.agents import create_agent
 from langchain_core.messages import HumanMessage
 
@@ -471,9 +442,6 @@ out = agent.invoke(
 #
 
 # %%
-# This cell will:
-# - Create a tool-calling agent with an explicit output contract.
-# - Ask for UTC time and require a reproducible Python snippet in the final answer.
 contract_agent = create_agent(
     model=llm,
     tools=[ut.utc_now],
@@ -506,9 +474,6 @@ print(getattr(contract_out["messages"][-1], "content", ""))
 #
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# CustomState and extract_facts are built by make_custom_state_and_tool() in langchain.API_utils.
 import json
 
 from langchain.agents import create_agent
@@ -556,10 +521,6 @@ state = supervisor.invoke(
 #
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Demonstrate human-in-the-loop control using `interrupt(...)` and resume.
-# HITLState, propose_delete, do_delete are defined in langchain.API_utils.
 from pathlib import Path
 
 from langgraph.checkpoint.memory import MemorySaver

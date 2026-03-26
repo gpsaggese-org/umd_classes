@@ -1,24 +1,4 @@
 ## Introduction
-- Analytical workflows often require repeating work that deserves structure
-  - Inspect a dataset
-  - Read documentation
-  - Summarize results
-  - Compute values
-  - Decide next steps
-  - Each step is individually simple, but handoffs between them are complex
-
-- LangChain provides value by standardizing these handoffs
-
-- The LangChain API contains `ChatPromptTemplate`, `RunnableParallel`, `@tool`,
-  and `create_agent`, but individual components are easy to understand in
-  isolation and harder to see as a whole pattern
-
-- This post makes the larger pattern visible
-
-- Material derived from `tutorials/LangChain_LangGraph/`, specifically:
-  - `langchain.API.py`
-  - `langchain.example.py`
-  - Focuses on the LangChain layer, excluding Deep Agents for now
 
 ## The Mental Model
 - **Prompts**: decide how work is framed
@@ -27,31 +7,6 @@
 - **Agents**: decide when to think and when to act
 
 Once understood, the syntax becomes functional rather than ornamental
-
-## 1. Start with a Prompt Pipeline
-- The first useful LangChain primitive is not the agent but the pipe
-
-- LCEL (LangChain Expression Language) uses the pattern: `prompt | llm | parser`
-
-- Example:
-  ```python
-  from langchain_core.output_parsers import StrOutputParser
-  from langchain_core.prompts import ChatPromptTemplate
-
-  prompt = ChatPromptTemplate.from_messages(
-      [
-          ("system", "You are a concise tutor. Answer clearly."),
-          ("human", "{question}"),
-      ]
-  )
-
-  chain = prompt | llm | StrOutputParser()
-  chain.invoke({"question": "Explain LCEL in one sentence."})
-  ```
-
-- Benefits for analytical workflows:
-  - Transforms prompt pasting from manual to structured
-  - Prompt logic becomes a reusable object
 
 ## 2. Runnables Make the Workflow Feel Real
 - Common workflow question: Can a pipeline run once, multiple times, as a
