@@ -28,6 +28,10 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Port forwarding for Jupyter or other services
 # - Git root mounted to /git_root inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
+# Kill existing container if --force flag is set.
+if [[ $FORCE == 1 ]]; then
+    kill_container_by_name $CONTAINER_NAME
+fi
 PORT=
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)

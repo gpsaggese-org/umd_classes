@@ -47,6 +47,7 @@ _print_default_help() {
     echo "Usage: $(basename $0) [options]"
     echo ""
     echo "Options:"
+    echo "  -f    Force kill existing container with same name before starting"
     echo "  -h    Print this help message and exit"
     echo "  -v    Enable verbose output (set -x)"
 }
@@ -56,15 +57,17 @@ parse_default_args() {
     # """
     # Parse default command-line arguments for docker scripts.
     #
-    # Sets VERBOSE variable in the caller's scope and enables set -x when -v
-    # is passed.  Prints help and exits when -h is passed.
+    # Sets VERBOSE and FORCE variables in the caller's scope. Enables set -x
+    # when -v is passed. Prints help and exits when -h is passed.
     # Updates OPTIND so the caller can shift away processed arguments.
     #
     # :param @: command-line arguments forwarded from the calling script
     # """
     VERBOSE=0
-    while getopts "hv" flag; do
+    FORCE=0
+    while getopts "fhv" flag; do
         case "${flag}" in
+            f) FORCE=1;;
             h) _print_default_help; exit 0;;
             v) VERBOSE=1;;
             *) _print_default_help; exit 1;;
@@ -83,6 +86,7 @@ _print_docker_jupyter_help() {
     echo "Launch Jupyter Lab inside a Docker container."
     echo ""
     echo "Options:"
+    echo "  -f          Force kill existing container with same name before starting"
     echo "  -h          Print this help message and exit"
     echo "  -p PORT     Host port to forward to Jupyter Lab (default: 8888)"
     echo "  -u          Enable vim keybindings in Jupyter Lab"
@@ -94,7 +98,7 @@ parse_docker_jupyter_args() {
     # """
     # Parse command-line arguments for docker_jupyter.sh.
     #
-    # Sets JUPYTER_HOST_PORT, JUPYTER_USE_VIM, TARGET_DIR, VERBOSE, and
+    # Sets JUPYTER_HOST_PORT, JUPYTER_USE_VIM, TARGET_DIR, VERBOSE, FORCE, and
     # OLD_CMD_OPTS in the caller's scope.  Enables set -x when -v is passed.
     # Prints help and exits when -h is passed.
     #
@@ -104,11 +108,13 @@ parse_docker_jupyter_args() {
     JUPYTER_HOST_PORT=8888
     JUPYTER_USE_VIM=0
     VERBOSE=0
+    FORCE=0
     # Save original args to pass through to run_jupyter.sh.
     OLD_CMD_OPTS="$*"
     # Parse options.
-    while getopts "hp:uv" flag; do
+    while getopts "fhp:uv" flag; do
         case "${flag}" in
+            f) FORCE=1;;
             h) _print_docker_jupyter_help; exit 0;;
             p) JUPYTER_HOST_PORT=${OPTARG};;  # Port for Jupyter Lab.
             u) JUPYTER_USE_VIM=1;;            # Enable vim bindings.
@@ -280,6 +286,26 @@ kill_container() {
 }
 
 
+kill_container_by_name() {
+    # """
+    # Kill and remove a Docker container by its name.
+    #
+    # :param container_name: Name of the container to kill
+    # """
+    local container_name=$1
+    echo "# ${FUNCNAME[0]}: $container_name"
+    # Check if container exists (running or stopped).
+    local container_id=$(docker container ls -a --filter "name=^${container_name}$" --format "{{.ID}}")
+    if [[ -n $container_id ]]; then
+        echo "Killing container: $container_name (ID: $container_id)"
+        docker container rm -f $container_id
+    else
+        echo "Container '$container_name' not found"
+    fi
+    echo "${FUNCNAME[0]} ... done"
+}
+
+
 exec_container() {
     # """
     # Execute bash shell in running Docker container.
@@ -387,9 +413,14 @@ get_docker_jupyter_command() {
     # """
     # Return the base docker run command for running Jupyter Lab interactively.
     #
-    # :return: docker run command string with --rm and -ti flags
+    # :return: docker run command string with --rm and -ti flags (if TTY available)
     # """
-    echo "docker run --rm -ti"
+    local docker_cmd="docker run --rm"
+    # Add interactive and TTY flags only if stdin is a TTY.
+    if [[ -t 0 ]]; then
+        docker_cmd="$docker_cmd -ti"
+    fi
+    echo "$docker_cmd"
 }
 
 
@@ -407,7 +438,7 @@ get_docker_jupyter_options() {
     local jupyter_use_vim=$3
     # Run as the current user when user is saggese.
     if [[ "$(whoami)" == "saggese" ]]; then
-        echo "Overwriting jupyter_use_vim since user='saggese'"
+        echo "Overwriting jupyter_use_vim since user='saggese'" >&2
         jupyter_use_vim=1
     fi
     echo "--name $container_name \

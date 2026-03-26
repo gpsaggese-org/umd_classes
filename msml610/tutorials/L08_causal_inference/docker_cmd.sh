@@ -34,6 +34,10 @@ run "docker image ls $FULL_IMAGE_NAME"
 
 # Configure and run the Docker container with the specified command.
 CONTAINER_NAME=$IMAGE_NAME
+# Kill existing container if --force flag is set.
+if [[ $FORCE == 1 ]]; then
+    kill_container_by_name $CONTAINER_NAME
+fi
 DOCKER_CMD=$(get_docker_cmd_command)
 PORT=""
 DOCKER_RUN_OPTS=""
