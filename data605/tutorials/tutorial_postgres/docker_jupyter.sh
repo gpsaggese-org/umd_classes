@@ -30,10 +30,10 @@ run "docker image ls $FULL_IMAGE_NAME"
 (docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Run the Docker container with Jupyter Lab.
-CMD="/curr_dir/run_jupyter.sh $OLD_CMD_OPTS"
+CMD=$(get_run_jupyter_cmd "${BASH_SOURCE[0]}" "$OLD_CMD_OPTS")
 CONTAINER_NAME=$IMAGE_NAME
 DOCKER_CMD=$(get_docker_jupyter_command)
-DOCKER_CMD_OPTS=$(get_docker_jupyter_options $CONTAINER_NAME $JUPYTER_HOST_PORT "$TARGET_DIR" $JUPYTER_USE_VIM)
+DOCKER_CMD_OPTS=$(get_docker_jupyter_options $CONTAINER_NAME $JUPYTER_HOST_PORT $JUPYTER_USE_VIM)
 # Expose PostgreSQL port.
 DOCKER_CMD_OPTS="$DOCKER_CMD_OPTS \
     -p 5432:5432"

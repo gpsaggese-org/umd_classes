@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -15,10 +15,6 @@
 # %% [markdown]
 # # Causal Analysis of Lifestyle Interventions on Diabetes Risk
 #
-# > **Before you start:** If you haven't already, run through `CausalML.API.ipynb` to familiarise yourself with the `CausalNavigator` interface. This notebook is the full analysis, it dives into methodology, DAGs, and robustness checks in depth.
-#
-# ## Summary
-#
 # This notebook presents a causal analysis of physical activity's effect on diabetes prevalence using the CDC BRFSS dataset and the **X-Learner** meta-learning algorithm. It demonstrates heterogeneous treatment effect (HTE) estimation, validates findings through placebo tests and sensitivity analysis, and compares observational results to randomized controlled trial evidence while addressing key limitations of cross-sectional data.
 #
 # ## 1. Project Objective
@@ -26,7 +22,6 @@
 # This project estimates the **Heterogeneous Treatment Effect (HTE)** of physical activity on diabetes prevalence using observational data. Unlike traditional regression, which gives a single "average" coefficient, we use Causal Machine Learning (X-Learner) to understand **who** benefits most from lifestyle changes.
 #
 # **Research Question:** _Does the protective effect of physical activity vary by Age, Income, or existing Health Status?_
-# ---
 
 # %% [markdown]
 # ## Setup
@@ -40,6 +35,7 @@
 import pandas as pd
 import os
 import seaborn as sns
+from graphviz import Digraph
 import warnings
 
 from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
@@ -96,32 +92,89 @@ except Exception as e:
 #
 # #### DAG 1: Assumed Causal Structure (Ideal / Longitudinal)
 #
-# Physical activity is measured *before* diabetes onset:
-#
-# ```
-# Confounders (Age, Income, GenHlth, BMI)
-#          |              |
-#          v              v
-#   Physical Activity --> Diabetes Risk
-#     (Baseline)           (Follow-up)
-# ```
-#
+# Physical activity is measured *before* diabetes onset. Confounders flow into both treatment and outcome, with no reverse-causality arrow:
+
+# %%
+dag = Digraph(graph_attr={"rankdir": "LR"})
+
+dag.node(
+    "X",
+    "Confounders\nAge, Income,\nGenHlth, BMI",
+    style="dashed,filled",
+    fillcolor="#ff99ff",
+    shape="box",
+)
+dag.node(
+    "T",
+    "Physical Activity\nBaseline",
+    style="filled",
+    fillcolor="#bbbbff",
+    shape="box",
+)
+dag.node(
+    "Y",
+    "Diabetes Risk\nFollow-up",
+    style="filled",
+    fillcolor="#bbffbb",
+    shape="box",
+)
+
+dag.edge("X", "T")
+dag.edge("X", "Y")
+dag.edge("T", "Y")
+
+dag
+
+# %% [markdown]
 # #### DAG 2: Actual Cross-Sectional Reality
 #
-# The actual data acknowledges unmeasured confounding (U) and reverse causality:
+# The actual data acknowledges unmeasured confounding (U) and reverse causality. Both T and Y are measured at the same point in time:
 #
-# ```
-# Unmeasured U (Motivation, Genetics)
-#    |                       |
-#    v                       v
-# Physical Activity -----> Diabetes Risk
-#    ^  (Measured Now)  <--. (Reverse Causality — bias)
-#    |                       ^
-#    Measured X (Age, Income, GenHlth, BMI)
-# ```
-#
-# > ⚠️ **Critical Limitation:** The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously, temporal ordering cannot be established.
-#
+# > ⚠️ **Critical Limitation:** The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously — temporal ordering cannot be established.
+
+# %%
+dag = Digraph(graph_attr={"rankdir": "LR"})
+
+dag.node(
+    "U",
+    "Unmeasured U\nMotivation, Genetics",
+    style="filled",
+    fillcolor="#000000",
+    fontcolor="white",
+    shape="box",
+)
+dag.node(
+    "X",
+    "Measured X\nAge, Income,\nGenHlth, BMI",
+    style="dashed,filled",
+    fillcolor="#ff99ff",
+    shape="box",
+)
+dag.node(
+    "T",
+    "Physical Activity\nMeasured Now",
+    style="filled",
+    fillcolor="#bbbbff",
+    shape="box",
+)
+dag.node(
+    "Y",
+    "Diabetes Risk\nMeasured Now",
+    style="filled",
+    fillcolor="#bbffbb",
+    shape="box",
+)
+
+dag.edge("U", "T")
+dag.edge("U", "Y")
+dag.edge("X", "T")
+dag.edge("X", "Y")
+dag.edge("T", "Y")
+dag.edge("Y", "T", label="Reverse causality (bias)", style="dashed")
+
+dag
+
+# %% [markdown]
 # ### Key Assumptions
 #
 # 1. **Unconfoundedness** — By controlling for 15+ variables, we assume we isolate the effect of activity
@@ -397,6 +450,3 @@ navigator.compare_estimators(X, T, Y)
 # 1. **Unmeasured confounding** — Critical variables like genetics and motivation are absent from the dataset
 # 2. **Cross-sectional design** — Prevents establishing true temporal ordering; the reverse causality bias discussed in the Age Anomaly cannot be fully removed
 # 3. **Self-reported data** — Measurement error in physical activity self-assessment introduces noise into the treatment variable
-#
-# ---
-# *For the API reference and a shorter runnable demo, see `CausalML.API.ipynb`.*

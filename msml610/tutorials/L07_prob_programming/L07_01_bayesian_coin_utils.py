@@ -14,7 +14,7 @@ import ipywidgets
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
-from IPython.display import clear_output
+from IPython.display import clear_output, display
 
 import msml610.tutorials.msml610_utils as mtumsuti
 
@@ -257,7 +257,7 @@ def beta_prior_interactive() -> None:
     index_box = ipywidgets.HBox([play, index_slider])
     #
     ui = ipywidgets.VBox([top_box, trials_box, prior_box, index_box, out])
-    ipywidgets.display(ui)
+    display(ui)
 
 
 def update_prior() -> None:
