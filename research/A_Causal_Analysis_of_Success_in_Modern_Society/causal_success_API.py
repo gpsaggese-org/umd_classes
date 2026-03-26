@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -536,16 +536,16 @@ print(f"Correlation between luck and success is {corr:.3f} (strong!)")
 #
 # Specifically, we covered:
 #
-# 1. Creating individual agents with well-defined talent attributes  
-# 2. Applying lucky and unlucky events using multiplicative dynamics  
-# 3. Generating populations with realistically distributed talents  
-# 4. Running simulations over time with configurable parameters  
-# 5. Measuring inequality using standard metrics such as the Gini coefficient  
-# 6. Converting simulation results into DataFrames for efficient analysis  
-# 7. Producing comprehensive summary statistics in a single step  
-# 8. Validating simulation outputs to ensure internal consistency  
-# 9. Comparing alternative policy-based resource allocation rules  
-# 10. Visualizing talent, capital, and luck to understand distributional patterns  
+# 1. Creating individual agents with well-defined talent attributes
+# 2. Applying lucky and unlucky events using multiplicative dynamics
+# 3. Generating populations with realistically distributed talents
+# 4. Running simulations over time with configurable parameters
+# 5. Measuring inequality using standard metrics such as the Gini coefficient
+# 6. Converting simulation results into DataFrames for efficient analysis
+# 7. Producing comprehensive summary statistics in a single step
+# 8. Validating simulation outputs to ensure internal consistency
+# 9. Comparing alternative policy-based resource allocation rules
+# 10. Visualizing talent, capital, and luck to understand distributional patterns
 #
 # Together, these demos illustrate how simple stochastic mechanisms, when compounded over time, can generate unequal outcomes even from nearly identical starting conditions.
 #

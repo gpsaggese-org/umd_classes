@@ -1,28 +1,16 @@
-FROM ubuntu:24.04
-ENV DEBIAN_FRONTEND noninteractive
+# Use Python 3.12 slim (already has Python and pip).
+FROM python:3.12-slim
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
+# Avoid interactive prompts during apt operations.
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system utilities.
-RUN apt install -y --no-install-recommends \
-    sudo \
-    curl \
-    systemctl \
-    gnupg \
-    git \
-    vim
-
-# Install Python and build deps (venv requires python3-venv on Debian/Ubuntu).
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install CA certificates (needed for HTTPS), basic build tools, and graphviz.
+RUN apt-get update && \
+  apt-get install -y \
+    ca-certificates \
     build-essential \
-    python3 \
-    python3-pip \
-    python3-dev \
-    python3-venv \
-    g++ \
     graphviz \
-    && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment.
 RUN python3 -m venv /opt/venv
@@ -36,7 +24,7 @@ RUN python -m pip install --upgrade pip
 # Install Jupyter.
 RUN pip3 install jupyterlab jupyterlab_vim
 
-RUN mkdir /install
+RUN mkdir -p /install
 
 # Install project specific packages.
 COPY requirements.txt /install/requirements.txt
