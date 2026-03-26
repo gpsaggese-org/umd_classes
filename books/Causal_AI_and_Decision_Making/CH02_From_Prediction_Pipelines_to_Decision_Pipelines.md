@@ -2,14 +2,14 @@
 // Lesson02.2-ML_Paradigms.txt
 
 ## How Production ML Systems Make Decisions Today
-- Most modern machine learning systems are organized as **prediction pipelines**
+- Most production ML systems are **prediction pipelines**
   - Break a complex problem into sub-problems
   - Solve each sub-problem independently with a specialized model
   - Chain solutions together to produce a final output
-  - E.g., an OCR pipeline: text detection -> character segmentation -> character
-    classification -> spelling correction
+  - E.g., an OCR pipeline: text detection → character segmentation → character
+    classification → spelling correction
 
-- The key insight driving pipeline design is **decomposition**:
+- The key idea behind pipeline design is **decomposition**:
 
   $$
   p_{\text{system}} = \sum_i p_i \cdot \alpha_i
@@ -18,15 +18,15 @@
   where $p_i$ is the performance of each stage and $\alpha_i$ is its relative
   importance to the overall system
 
-- In practice, production ML systems follow a structured flow:
-  - **Question**: Precisely define the prediction target
+- Production ML systems follow a structured flow:
+  - **Question**: Define the prediction target precisely
     - Bad: "How can we improve sales?"
     - Good: "What factors most significantly impact sales of product X in region
       Y during season Z?"
   - **Input data**: Collect labeled examples specific to the prediction goal
     - Training distribution should match the deployment distribution
   - **Features**: Engineer high-level representations from raw inputs
-    - Good features compress information, retain relevance, and encode domain
+    - Good features compress information, preserve relevance, and encode domain
       knowledge
   - **Algorithm**: Choose a model that balances accuracy, interpretability,
     speed, and scalability
@@ -35,7 +35,7 @@
 
 - The hierarchy matters:
   - Question $>$ Data $>$ Features $>$ Algorithm
-  - Practitioners commonly over-invest in model selection while under-investing
+  - Teams usually over-invest in model selection while under-investing
     in problem formulation and data quality
 
 - **Production decisions are implicit, not explicit**
@@ -89,8 +89,8 @@
   - Static pipelines assume the world is fixed
   - Real systems are **closed-loop**: the pipeline output affects the input
     distribution
-  - Ignoring this leads to silent model degradation, often undetected until
-    downstream harm occurs
+  - Ignore this and the model degrades silently, often undetected until
+    harm shows up downstream
 
 - Mitigating distribution shift requires:
   - Monitoring input and output distributions continuously
@@ -122,14 +122,14 @@
 
 - **Inference** is what ML models do best
   - Supervised learning estimates $P(Y|X)$ from data
-  - The model does not take actions; it produces probability estimates
-  - Inference does not require specifying what to do with the estimate
+  - The model produces probability estimates; it takes no actions
+  - You don't need to specify what to do with the estimate
 
 - **Optimization** applies a fixed objective to the inference output
   - E.g., pick the action $a$ that maximizes expected reward $\mathbb{E}[R|a]$
   - Requires a well-defined, single objective
   - Brittle when objectives are multi-dimensional or contested
-  - Does not account for long-term consequences or unintended side effects
+  - Ignores long-term consequences and unintended side effects
 
 - **Decision theory** provides a principled framework for action under
   uncertainty
@@ -158,48 +158,47 @@
 - **Spurious correlation** - The model learns associations that do not hold
   under intervention
   - E.g., Google Flu Trends predicted flu prevalence from search queries but
-    failed catastrophically in 2012-2013 because the query-flu correlation broke
-    when search behavior changed independently of flu rates
-  - The model had no causal model of why certain queries correlated with flu; it
-    exploited a fragile association
+    failed in 2012-2013 because the query-flu correlation broke when search
+    behavior changed independently of flu rates
+  - The model exploited a fragile association without understanding why certain
+    queries correlated with flu
 
 - **Feedback-driven bias** - The model's predictions become self-fulfilling
-  - E.g., a recidivism prediction model trained on arrest data learns patterns
-    from policing decisions, not from underlying risk
-  - Arresting more people in certain neighborhoods generates more training
-    labels in those neighborhoods, reinforcing biased patterns
+  - E.g., a recidivism prediction model trained on arrest data learns from
+    policing decisions, not from underlying risk
+  - When you arrest more people in certain neighborhoods, you generate more
+    training labels in those neighborhoods, reinforcing bias
 
 - **Policy failure from observational estimates** - A model trained on
   observational data gives the wrong answer to an intervention question
   - E.g., a model trained on historical ad exposure data shows that users who
     see more ads have higher purchase rates
-  - Naively increasing ad exposure fails because the historical correlation
-    reflects selection: high-intent users both see more ads and buy more, not
+  - If you increase ad exposure, it fails because the historical correlation
+    reflects selection: high-intent users see more ads and buy more, not
     because ads cause purchases
   - The intervention ("show more ads") changes the data-generating process; the
-    observational model provides no valid guidance
+    observational model can't guide you
 
 - **Feature instability under distribution shift** - Features correlated with
   the target in training become uninformative or adversarial at deployment
   - E.g., in the Netflix Prize, ensemble models achieved state-of-the-art
-    accuracy but were too slow and complex to deploy at scale
-  - The pipeline optimized a proxy metric (prediction accuracy) rather than the
-    actual deployment objective (scalable, robust recommendation)
+    accuracy but were too slow to deploy at scale
+  - The pipeline optimized prediction accuracy instead of the actual objective:
+    scalable, robust recommendation
 
 - **Ceiling analysis blindness** - Without causal modeling, pipeline
-  improvements may target the wrong stage
+  improvements target the wrong stage
   - Ceiling analysis (mocking pipeline stages with oracles) identifies which
     stages bound performance
-  - But ceiling analysis on a correlated pipeline can mislead: fixing one stage
-    may not help if the bottleneck is a confounded input
-  - E.g., improving character recognition accuracy in OCR may be irrelevant if
-    text detection is confounded by image quality artifacts
+  - But on a correlated pipeline, ceiling analysis misleads: fixing one stage may
+    not help if the bottleneck is a confounded input
+  - E.g., improving character recognition accuracy in OCR doesn't matter if text
+    detection is confounded by image quality artifacts
 
 - **Silent model failure** - Causally uninformed models fail silently
   - Accuracy metrics on held-out data look fine
   - Downstream business outcomes degrade
-  - The gap between predictive accuracy and decision quality is the cost of
-    ignoring causality
+  - The gap between accuracy and decision quality is the cost of ignoring causality
 
 ### Optimization Vs. Inference Vs. Decision Theory
 - Berger, J. O. _Statistical Decision Theory and Bayesian Analysis_ (2nd
@@ -237,12 +236,12 @@
   - Decision Science requires Level 2 (intervention) and Level 3
     (counterfactual)
 
-- In practice, the gap between Data Science and Decision Science is the gap
-  between **prediction accuracy** and **decision quality**
-  - A model can be highly accurate at predicting churn yet provide no useful
-    guidance on which intervention will reduce churn
+- The gap between Data Science and Decision Science is the gap between
+  **prediction accuracy** and **decision quality**
+  - A model can be highly accurate at predicting churn yet offer no guidance on
+    which intervention will reduce churn
   - A model can correctly identify that ice cream sales correlate with drowning
-    rates without providing any insight into how to reduce drowning
+    rates without telling you how to reduce drowning
 
 - **Decision pipelines** extend prediction pipelines by adding:
   - An explicit action space: "What can we do?"
@@ -250,11 +249,11 @@
   - A utility function: "What outcomes do we value and how much?"
   - An uncertainty model: "How confident are we in our causal estimates?"
 
-- Building decision pipelines requires the discipline of **causal thinking**:
+- Building decision pipelines requires **causal thinking**:
   - Distinguish observational from interventional quantities
   - Identify confounders that bias action-outcome estimates
   - Design experiments when observational data is insufficient
-  - Use counterfactual reasoning to evaluate policies retrospectively
+  - Use counterfactual reasoning to evaluate policies after the fact
 
 ### Data Science Vs. Decision Science
 - Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)

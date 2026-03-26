@@ -30,7 +30,7 @@
 - **Explainability without causality is theater**
   - A model can explain *what* it predicts without understanding *why*
   - Feature importance tells you which variables the model relied on, not whether those relationships are causal
-  - Regulators increasingly demand that organizations justify decisions, not just explain model outputs
+  - Regulators want organizations to justify decisions, not just explain model outputs
 
 **References**
 
@@ -45,7 +45,7 @@
 
 - **Association** is a statistical property: two variables move together
   - Humans naturally observe that X and Y co-occur and infer a relationship
-  - This inference is powerful for prediction but dangerous for decision-making
+  - Association is powerful for prediction but dangerous for decision-making
 
 - **Humans are primed to mistake association for causation**
   - Example: You eat a particular food and get a stomachache several times
@@ -56,8 +56,8 @@
     - Reality: You got lucky, and overconfidence leads to riskier bets that eventually fail
 
 - **Causation** is a mechanism: changing one variable directly influences another
-  - Causation cannot be concluded from correlation alone
-  - Causation requires understanding the mechanism by which one variable influences another
+  - You cannot conclude causation from correlation alone
+  - You must understand the mechanism by which one variable influences another
 
 - **Three reasons variables may correlate without causal connection**:
   - **Reverse causality**: Y causes X (not X causes Y)
@@ -79,7 +79,7 @@
   - Decisions based on spurious correlations fail when conditions change
   - Interventions based on correlation often backfire
   - Example: Google Flu Trends predicted flu prevalence from search query patterns
-    - The model achieved impressive accuracy on historical data
+    - The model was accurate on historical data
     - But when search behavior changed (media hype, algorithm changes), the model collapsed
     - The query-flu correlation was fragile; no causal understanding existed
 
@@ -94,7 +94,7 @@
 
 ## Three kinds of questions: association, intervention, counterfactual (Pearl's ladder)
 
-- Judea Pearl's **Ladder of Causation** provides a framework for understanding three types of questions
+- Judea Pearl's **Ladder of Causation** distinguishes three types of questions
   - Each rung requires stronger reasoning than the one below
   - Most current AI operates only at the bottom rung
 
@@ -137,8 +137,8 @@
 
 - **Why observational data alone is insufficient**:
   - A model trained on historical prices and sales sees: lower prices correlate with higher volume
-  - But this reflects confounding: promotions (X) lower prices and attract price-sensitive customers, both causing higher volume
-  - Naively increasing prices to boost profit (inverting the correlation) fails because the causal direction is reversed
+  - This reflects confounding: promotions lower prices and attract price-sensitive customers, both increasing volume
+  - If you try to boost profit by raising prices (inverting the correlation), you fail because the causal direction runs the other way
 
 ### Rung 3: Counterfactuals (Imagining)
 
@@ -147,8 +147,8 @@
 - **Activity**: Reasoning about alternative scenarios and causal attributions
 
 - Counterfactual reasoning is the highest form of causal reasoning
-  - It requires understanding not just mechanisms, but how they apply to specific individuals
-  - It answers "why?" questions about past events
+  - You must understand not just mechanisms, but how they apply to specific individuals
+  - It lets you answer "why?" about past events
 
 - **Examples of counterfactual questions**:
   - "Was it the marketing campaign that caused the sales increase, or would sales have increased anyway?"

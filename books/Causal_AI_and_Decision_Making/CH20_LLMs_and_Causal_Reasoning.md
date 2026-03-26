@@ -8,96 +8,86 @@
 # LLMs and Causal Reasoning
 
 ## Introduction
-- LLMs transform how we approach language understanding and generation, but
-  their relationship with causality is complex
+- LLMs transform language understanding and generation, but their relationship
+  with causality is complex
 - LLMs excel at pattern recognition and statistical language modeling but lack
   explicit causal mechanisms
-- The fundamental training objective of next-token prediction does not
-  inherently encode causal knowledge
-- Understanding the distinction between correlation-based pattern learning and
-  principled causal reasoning is critical for practitioners
-- Key question: what can LLMs tell us about causality, and how can we augment
-  them with structured reasoning frameworks
+- The fundamental training objective of next-token prediction doesn't encode
+  causal knowledge
+- You need to understand the distinction between correlation-based pattern
+  learning and principled causal reasoning
+- The key question: what can LLMs tell us about causality, and how can we
+  augment them with structured reasoning frameworks
 
 ## What LLMs Get Right and Wrong About Causality
 - LLMs are trained on vast amounts of text data using next-token prediction
   objectives
   - They learn statistical associations between words and concepts
-  - This training paradigm is effective for language understanding and
-    generation
-  - It has fundamental implications for causal reasoning capabilities
-  - This gives them certain strengths and critical limitations when reasoning
-    about causality
+  - This training paradigm works well for language understanding and generation
+  - It has fundamental implications for causal reasoning
+  - The result: certain strengths and critical limitations when reasoning about
+    causality
 
 - Training objective is to maximize: $\mathcal{L} = \sum_i \log P(x_i | x_{<i})$
   - Each token's probability depends only on preceding context
-  - This statistical foundation explains both successes and failures of LLMs in
-    causal reasoning tasks
+  - This explains both successes and failures of LLMs in causal reasoning tasks
 
 ### What LLMs Get Right
 - **Recognizing causal language patterns**: LLMs can identify common causal
   expressions like "because," "caused by," "led to," and "resulted in." They
-  extract causal relationships explicitly stated in text. This stems from
-  abundant causal language patterns in training corpora. However, this
-  recognition is fundamentally linguistic rather than semantic—the model
-  identifies markers of causal claims without understanding the underlying
-  causal mechanisms
+  extract causal relationships explicitly stated in text. But this recognition
+  is fundamentally linguistic—the model identifies markers of causal claims
+  without understanding the underlying mechanisms
 
 - **Reasoning with causal narratives**: When causal relationships are present in
   training data, LLMs can reproduce and extend causal arguments. They understand
   temporal ordering and can connect events in a sequence. This narrative
-  reasoning makes LLMs useful for tasks involving explanatory text generation,
-  where temporal and logical coherence is valued
+  reasoning helps with explanatory text generation where coherence is valued
 
 - **Common sense reasoning**: LLMs capture commonsense knowledge about physical,
-  social, and biological causality. For example, they understand that "rain
-  causes wet ground" and "studying causes better test scores." This commonsense
-  understanding reflects the prevalence of such knowledge patterns in natural
-  language corpora and provides a foundation for practical reasoning tasks
+  social, and biological causality. They understand that "rain causes wet
+  ground" and "studying causes better test scores." This foundation helps with
+  practical reasoning tasks
 
 - **Generating plausible explanations**: LLMs can generate coherent explanations
-  and narratives about why events happen, drawing on patterns in their training
-  data. This generative capability is particularly valuable in domains where
-  multiple valid explanations exist and the goal is to produce interpretable
+  and narratives about why events happen. This generative capability works well
+  in domains where multiple valid explanations exist and you need interpretable
   reasoning
 
 ### What LLMs Get Wrong
-- **No explicit causal mechanism**: LLMs do not have an internal model of
-  causality (like a causal graph). They cannot perform interventional reasoning
+- **No explicit causal mechanism**: LLMs don't have an internal model of
+  causality (like a causal graph). They can't perform interventional reasoning
   (what if we change X?) without explicit guidance. They reason from correlation
-  and association, not from causal mechanisms. LLMs lack the ability to perform
-  the `do-operator` intervention calculus introduced in Pearl's causal
-  framework, which is essential for distinguishing causation from correlation
+  and association, not from causal mechanisms. LLMs lack the `do-operator`
+  intervention calculus from Pearl's causal framework, which is essential for
+  distinguishing causation from correlation
 
-- **Confounding and spurious correlations**: LLMs can be misled by spurious
+- **Confounding and spurious correlations**: LLMs can be fooled by spurious
   correlations in their training data. If two variables are highly correlated in
   text but not causally related, an LLM may confidently claim causation. For
   example, if ice cream sales and shark attacks are frequently mentioned
-  together in summer articles, an LLM might conclude one causes the other. This
-  reflects a fundamental limitation: the model cannot distinguish confounding by
-  season from direct causation
+  together in summer articles, an LLM might conclude one causes the other. The
+  model can't distinguish confounding by season from direct causation
 
-- **No principled counterfactual reasoning**: Generating true counterfactuals
-  ("What if X had been different?") requires understanding causal mechanisms.
-  LLMs generate plausible counterfactuals based on patterns but without causal
-  justification. They may produce grammatically correct but causally
-  inconsistent counterfactuals. When asked "If X had not happened, would Y still
-  occur?", the model cannot reliably account for downstream causal dependencies
-  that would be disrupted by such interventions
+- **No principled counterfactual reasoning**: True counterfactuals ("What if X
+  had been different?") require understanding causal mechanisms. LLMs generate
+  plausible counterfactuals based on patterns but without causal justification.
+  When asked "If X had not happened, would Y still occur?", the model can't
+  reliably account for downstream causal dependencies that the intervention
+  would disrupt
 
 - **Brittleness to distribution shift**: LLMs trained on observed data struggle
-  when asked to reason about interventions or scenarios far from their training
-  distribution. They cannot generalize causal relationships to new contexts in
-  the principled way causal models can. This represents a critical limitation
-  for transfer learning in causal inference tasks, where robustness across
-  different domains is essential
+  when reasoning about interventions or scenarios far from their training
+  distribution. They can't generalize causal relationships to new contexts the
+  way causal models can. For transfer learning in causal inference, where
+  robustness across domains is essential, this is a critical limitation
 
 - **Confusing observation with intervention**: LLMs often treat observational
-  statements and interventional statements identically, leading to errors.
-  Asking "What does X predict about Y?" and "If we change X, what happens to Y?"
-  should yield different answers in most causal settings, but LLMs may conflate
-  them. This conflation violates fundamental principles of causal inference,
-  where $P(Y|X=x)$ differs from $P(Y|do(X=x))$ in the presence of confounding
+  and interventional statements identically, leading to errors. Asking "What
+  does X predict about Y?" and "If we change X, what happens to Y?" should
+  yield different answers in most causal settings. But LLMs may conflate them.
+  This violates a fundamental principle: $P(Y|X=x)$ differs from
+  $P(Y|do(X=x))$ when confounding is present
 
 ## References
 [1] Bommasani, R., Hudson, D. A., Adeli, E., et al. (2021). On the Opportunities
@@ -180,21 +170,19 @@ under Markov Equivalence: Completeness Results. _International Conference on
 Machine Learning (ICML)_. https://arxiv.org/abs/2106.02997
 
 ## Chain-of-Thought, Tree-of-Thought, and Self-Consistency for Causal Tasks
-Recent advances in prompting and reasoning have shown that LLMs can improve
-their causal reasoning through explicit step-by-step reasoning frameworks [21].
-These techniques encourage LLMs to decompose complex problems and explore
-multiple reasoning paths [22]. While these approaches do not fundamentally solve
-the causal reasoning limitations discussed above, they can substantially improve
-performance on causal reasoning tasks by making assumptions explicit and
-reducing reliance on shallow pattern matching.
+Recent advances show that LLMs can improve causal reasoning through explicit
+step-by-step reasoning frameworks [21]. These techniques encourage LLMs to
+decompose complex problems and explore multiple reasoning paths [22]. While
+these approaches don't fundamentally solve the causal reasoning limitations
+discussed above, they substantially improve performance on causal reasoning
+tasks by making assumptions explicit and reducing reliance on shallow pattern
+matching.
 
 ### Chain-of-Thought Prompting
-- **Concept**: Instead of asking an LLM to directly answer a question, you ask
-  it to explain its reasoning step-by-step [23]. This intermediate reasoning
-  often improves accuracy on complex tasks [24]. Chain-of-thought prompting was
-  formalized by Wei et al. (2022) as a method to elicit step-by-step reasoning
-  that is more transparent and, empirically, more accurate than single-pass
-  inference [25].
+- **Concept**: Instead of asking for a direct answer, ask the LLM to explain its
+  reasoning step-by-step [23]. This intermediate reasoning often improves
+  accuracy on complex tasks [24]. Wei et al. (2022) showed that step-by-step
+  reasoning is more transparent and accurate than single-pass inference [25].
 
 - **Example**: Rather than asking "If we increase advertising spend, what
   happens to sales?", ask "Let's think through this step-by-step: (1) How does
@@ -204,56 +192,52 @@ reducing reliance on shallow pattern matching.
   trace causal pathways explicitly.
 
 - **Why it helps**: Chain-of-thought reasoning forces the LLM to make causal
-  assumptions explicit and consider multiple steps in a causal chain [26]. It
-  reduces reliance on shallow pattern matching and forces the model to surface
-  reasoning that can be evaluated and corrected [27]. This increased
-  transparency is particularly valuable for causal reasoning, where intermediate
-  assumptions directly affect the validity of final conclusions.
+  assumptions explicit and trace multiple steps in a causal chain [26]. It
+  reduces reliance on shallow pattern matching and surfaces reasoning you can
+  evaluate and correct [27]. This transparency is particularly valuable for
+  causal reasoning, where intermediate assumptions directly affect the validity
+  of final conclusions.
 
 - **Limitations**: The reasoning quality depends on the LLM's ability to
-  construct valid causal chains [28]. If the LLM lacks knowledge about a domain,
+  construct valid causal chains [28]. If the LLM lacks domain knowledge,
   chain-of-thought may produce plausible-sounding but incorrect reasoning.
-  Additionally, chain-of-thought does not fundamentally enable causal discovery
-  or interventional reasoning—it merely makes the model's (possibly flawed)
-  reasoning more explicit.
+  Chain-of-thought doesn't fundamentally enable causal discovery or
+  interventional reasoning—it just makes the model's (possibly flawed) reasoning
+  more explicit.
 
 ### Tree-of-Thought Reasoning
 - **Concept**: Tree-of-thought extends chain-of-thought by allowing the LLM to
   explore multiple reasoning branches simultaneously [29]. At each step, the LLM
-  generates several possible next thoughts and evaluates them [30]. This
-  approach leverages the fact that complex reasoning often requires exploring
-  multiple potential solution paths, similar to human problem-solving where we
-  consider alternatives before committing to a conclusion.
+  generates several possible next thoughts and evaluates them [30]. Complex
+  reasoning often requires exploring multiple solution paths, similar to how
+  humans consider alternatives before committing to a conclusion.
 
 - **Application to causality**: For causal inference problems, tree-of-thought
-  allows the LLM to consider multiple causal hypotheses simultaneously [31]. For
-  example, when explaining why a correlation exists, the LLM can explore
-  alternative causal mechanisms (X → Y, Y → X, Z → X and Y, measurement error,
-  etc.) and reason about which is most plausible. This parallel exploration of
-  causal hypotheses mirrors the methodological practice in causal inference of
-  explicitly considering alternative explanations before identifying
+  lets the LLM consider multiple causal hypotheses simultaneously [31]. When
+  explaining why a correlation exists, it can explore alternative causal
+  mechanisms (X → Y, Y → X, Z → X and Y, measurement error, etc.) and assess
+  which is most plausible. This parallel exploration mirrors the methodological
+  practice of explicitly considering alternative explanations before identifying
   confounders.
 
-- **Benefits**: By exploring multiple causal paths, tree-of-thought can help
-  LLMs avoid committing to a single spurious explanation too early [32]. It
-  provides a more comprehensive view of possible causal structures and allows
-  the model to assign relative plausibility to competing hypotheses. This is
-  particularly valuable in causal reasoning, where premature commitment to a
-  single mechanism often leads to systematic errors.
+- **Benefits**: By exploring multiple causal paths, tree-of-thought helps LLMs
+  avoid committing to a single spurious explanation too early [32]. It provides
+  a more comprehensive view of possible causal structures and lets the model
+  assign relative plausibility to competing hypotheses. In causal reasoning,
+  premature commitment to a single mechanism often leads to systematic errors.
 
 ### Self-Consistency Approaches
 - **Concept**: Self-consistency generates multiple independent reasoning paths
-  (using temperature or sampling variation) and then aggregates the results via
-  voting or consensus [33]. This approach addresses the observation that LLM
-  outputs exhibit significant stochasticity and that different reasoning paths
-  may arrive at different conclusions even for deterministic questions [34].
+  (using temperature or sampling variation) and aggregates the results via
+  voting or consensus [33]. LLM outputs show significant stochasticity, and
+  different reasoning paths may arrive at different conclusions even for
+  deterministic questions [34].
 
-- **Causal application**: For causal inference, you can prompt the LLM multiple
-  times with different framing or decompositions [35]. If multiple independent
-  reasoning processes agree on a causal relationship, confidence in that
-  reasoning increases [36]. This aggregation approach effectively treats the LLM
-  as an ensemble of weak reasoners whose consensus provides stronger evidence
-  than any single sample.
+- **Causal application**: For causal inference, prompt the LLM multiple times
+  with different framing or decompositions [35]. If multiple reasoning processes
+  agree on a causal relationship, confidence increases [36]. This aggregation
+  treats the LLM as an ensemble of weak reasoners whose consensus provides
+  stronger evidence than any single sample.
 
 - **Example**: Ask the LLM five times "Does X cause Y?" with different phrasings
   or from different angles. If four out of five reasoning paths conclude "yes,"
@@ -261,13 +245,12 @@ reducing reliance on shallow pattern matching.
   Importantly, the agreement itself becomes a measure of confidence in the
   causal claim, similar to ensemble methods in machine learning.
 
-- **Caveat**: This assumes that diverse reasoning paths are truly independent
-  [37]. In reality, an LLM's reasoning is constrained by its training, so
-  multiple samples may be correlated. The degree of correlation between
-  different outputs from the same model depends on factors like temperature,
-  prompt variation, and the inherent redundancy of the training data. While
-  self-consistency provides practical improvements over single-pass reasoning,
-  it should not be interpreted as independent confirmation of a causal claim.
+- **Caveat**: This assumes diverse reasoning paths are truly independent [37].
+  In reality, an LLM's reasoning is constrained by its training, so multiple
+  samples may be correlated. Correlation depends on temperature, prompt
+  variation, and training data redundancy. Self-consistency provides practical
+  improvements over single-pass reasoning, but don't interpret it as independent
+  confirmation of a causal claim.
 
 **References for Chain-of-Thought Section**
 
