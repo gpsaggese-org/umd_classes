@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -30,13 +30,8 @@
 # - HITL gates: `interrupt_on=...` and `Command(resume=...)`
 #
 # For the full DA1–DA8 walkthrough, see `langchain.example.ipynb`.
-#
 
 # %%
-# This cell will:
-# - Enable auto-reloading so edits are picked up without restarting the kernel.
-# - Import the notebook utility library (deep_agents_API_utils.py).
-# - Verify that deepagents is importable.
 # # %load_ext autoreload
 # # %autoreload 2
 
@@ -55,11 +50,8 @@ print("deepagents:", version)
 # Why this matters:
 # - it keeps agent file access *contained* (good for safety)
 # - it makes it easy to inspect what the agent wrote
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem write/read via virtual FilesystemBackend).
 # run_filesystem_demo is defined in deep_agents_API_utils.
 paths, preview = ut.run_filesystem_demo(ut.get_chat_model())
 print("hello.txt paths on disk:", paths)
@@ -75,11 +67,8 @@ print("final message preview:", preview)
 # - you resume with an explicit decision (`approve` / `reject`)
 #
 # The cell below wires the guardrail and runs one tiny approve flow so you can see the interrupt lifecycle end-to-end.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents HITL approve-flow demo.
 # run_hitl_demo is defined in deep_agents_API_utils.
 agent, out, interrupted = ut.run_hitl_demo(ut.get_chat_model())
 print("interrupted:", interrupted)

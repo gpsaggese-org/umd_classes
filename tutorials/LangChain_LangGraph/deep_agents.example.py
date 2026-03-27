@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -32,7 +32,6 @@
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
 #
 # Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # # Imports
@@ -40,7 +39,6 @@
 # This notebook shares the same setup pattern as `langchain.API.ipynb`.
 #
 # Run from `tutorials/LangChain_LangGraph` so local paths and helper utilities resolve exactly as written.
-#
 
 # %%
 # %load_ext autoreload
@@ -73,8 +71,6 @@ langgraph = _require_import("langgraph")
 
 
 # %%
-# This cell will:
-# - Configure logging and print environment/version info for debugging.
 import logging
 import platform
 
@@ -110,11 +106,8 @@ _LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
 # Two safety notes:
 # - filesystem demos write under `workspace/` and `tmp_runs/` in this folder
 # - HITL gates are what prevent “silent” edits when you want a human to approve
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 try:
     import deepagents  # type: ignore
     from deepagents import CompiledSubAgent, create_deep_agent  # type: ignore
@@ -135,8 +128,6 @@ except Exception as e:  # pragma: no cover
 
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 from pathlib import Path
 from typing import Any
 
@@ -265,11 +256,8 @@ DATASET_CONTEXT = build_dataset_context()
 # You’re looking for:
 # - a normal chat response
 # - plus evidence that the agent is *tool-capable* (even if it doesn’t call a tool yet)
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 llm_da = get_chat_model()
 agent = create_deep_agent(model=llm_da)
 out = agent.invoke(
@@ -297,11 +285,8 @@ print(
 # - break a task into steps
 # - keep the steps visible
 # - iterate as you go
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 agent = create_deep_agent(model=get_chat_model())
 prompt = (
     "Before doing anything else, call write_todos with 5 EDA tasks for THIS dataset. "
@@ -321,11 +306,8 @@ print(_as_text(todos)[:800])
 #
 # We’ll keep everything under `/workspace/...` so it maps to `./workspace/...` on disk.
 # That way you can inspect files with your own eyes.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 root = Path(".").resolve()
 Path("workspace").mkdir(parents=True, exist_ok=True)
 agent = create_deep_agent(
@@ -371,11 +353,8 @@ if len(bullets) < 2:
 # - **Store**: structured persistence (facts, preferences)
 #
 # In real projects you usually use a mix.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.store.memory import InMemoryStore
 
@@ -481,11 +460,8 @@ print(
 # - each gets a clear job
 # - each can have its own tools or style
 # - the main agent stays focused on coordination
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 
 ckpt = MemorySaver()
@@ -544,12 +520,8 @@ print(
 # - Deep Agents gives you ergonomic delegation
 #
 # You’ll see how a compiled graph can be slotted in as a worker.
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import MemorySaver
 
@@ -612,11 +584,8 @@ print(
 # Instead of silently writing, the agent run produces an interrupt payload that you approve/reject.
 #
 # If you’re building anything that touches real systems, this pattern is worth memorizing.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import Command
 
@@ -715,11 +684,8 @@ print(read_txt.replace("\\n", "\\\\n")[:200])
 # In practice, this gives you two benefits:
 # - you can safely let an agent work with files without giving it your whole machine
 # - you can review exactly what it wrote
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 
 ckpt = MemorySaver()

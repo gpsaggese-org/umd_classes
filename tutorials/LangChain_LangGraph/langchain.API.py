@@ -44,10 +44,7 @@ import langgraph
 import langchain_API_utils as ut
 
 # Initialize logger.
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
-)
-_LOG = logging.getLogger("learn_langchain.api")
+_LOG = ut.init_logger("learn_langchain.api")
 
 ut.print_environment_info()
 print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
@@ -82,31 +79,7 @@ llm
 
 
 # %% [markdown]
-# ## Local dataset (`data/T1_slice.csv`)
-#
-# We’ll use a local CSV so the examples feel concrete.
-
-# %%
-# Load and prepare the dataset (load CSV, parse datetime, copy to workspace).
-dataset_result = ut.load_and_prepare_dataset()
-df = dataset_result["df"]
-DATASET_PATH = dataset_result["dataset_path"]
-WORKSPACE_DIR = dataset_result["workspace_dir"]
-WORKSPACE_DATA_DIR = dataset_result["workspace_data_dir"]
-WORKSPACE_DATASET_PATH = dataset_result["workspace_dataset_path"]
-
-
-# %%
-df.head(5)
-
-# %%
-# Build metadata about the dataset (columns, types, sample rows, frequency).
-DATASET_META = ut.build_dataset_meta(df)
-DATASET_META
-
-
-# %% [markdown]
-# ## LCEL (LangChain Expression Language)
+# ## LangChain Expression Language (LCEL)
 #
 # LCEL is a _pipe_ syntax for composing steps, like a Unix pipe (`a | b | c`):
 # - build a prompt
@@ -117,12 +90,14 @@ DATASET_META
 import langchain_core.prompts
 import langchain_core.output_parsers
 
+# Create a prompt template with system and human messages.
 prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You are a concise tutor. Answer clearly."),
         ("human", "{question}"),
     ]
 )
+# Create a chain by piping: prompt -> model -> string output parser.
 chain = prompt | llm | langchain_core.output_parsers.StrOutputParser()
 chain.invoke({"question": "Explain LCEL in one sentence."})
 
@@ -131,15 +106,12 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 # ## Runnables: invoke / batch / stream / RunnableParallel
 #
 # A “runnable” is anything you can _call_.
-# LangChain standardizes that with a few common methods:
 #
+# LangChain standardizes that with a few common methods:
 # - `.invoke(input)` → one input, one output
 # - `.batch([inputs])` → many inputs at once (often more efficient)
 # - `.stream(input)` → yield partial outputs as they arrive
 # - `RunnableParallel(...)` → run independent chains side-by-side and combine the results
-#
-# When you’re learning, it helps to treat runnables like functions — except they can be composed and configured.
-#
 
 # %%
 import langchain_core.prompts
@@ -165,33 +137,42 @@ risks_chain = risks_prompt | llm | langchain_core.output_parsers.StrOutputParser
 
 # RunnableParallel runs both chains concurrently and returns both results.
 parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
-parallel.invoke(
+ret = parallel.invoke(
     {"text": "LangChain provides composable building blocks for LLM apps."},
     config={"max_concurrency": 2},
 )
 
+import pprint
+pprint.pprint(ret)
+
 
 # %%
+# Prepare multiple questions to process in a batch.
 questions = [
     {"question": "What is a tool in LangChain?"},
     {"question": "What is ToolNode in LangGraph?"},
     {"question": "What does InjectedState do?"},
 ]
-chain.batch(questions, return_exceptions=True, config={"max_concurrency": 3})
+# Process all questions concurrently (more efficient than invoking one at a time).
+ret = chain.batch(questions, return_exceptions=True, config={"max_concurrency": 3})
+
+pprint.pprint(ret)
 
 
 # %%
+# Stream token-by-token output to receive partial responses in real-time.
 chunks = []
 for chunk in chain.stream(
     {"question": "Give me a 2-bullet explanation of RunnableParallel."}
 ):
     chunks.append(chunk)
+# Combine all chunks into the final response.
 final = "".join(chunks)
 final[:300] + ("..." if len(final) > 300 else "")
 
 
 # %% [markdown]
-# ## Tools: `@tool` + ToolNode execution
+# ## Tools
 #
 # A *tool* is a normal Python function with a schema.
 # The LLM can “ask” to call a tool (with arguments), and your code executes it.
@@ -200,10 +181,35 @@ final[:300] + ("..." if len(final) > 300 else "")
 #
 # 1) **Directly** (call the function yourself)
 # 2) **Inside a graph** via `ToolNode` (LangGraph executes any requested tool calls and feeds results back)
-#
-# If you’re new: don’t worry about the message formats yet. Focus on the story:
-# "model asks for tool" → "we run tool" → "tool returns data" → "model continues".
-#
+
+# %% [markdown]
+# We’ll use a local CSV so the examples feel concrete.
+
+# %%
+# Load and prepare the dataset (load CSV, parse datetime, copy to workspace).
+dataset_result = ut.load_and_prepare_dataset()
+df = dataset_result["df"]
+
+
+# %%
+df.head(5)
+
+# %%
+# Build metadata about the dataset (columns, types, sample rows, frequency).
+dataset_meta = ut.build_dataset_meta(df)
+dataset_meta
+
+
+# %%
+# Demonstrate the mean and zscore tools.
+# The mean of [1, 2, 3, 4] is 2.5.
+mean_result = ut.mean([1, 2, 3, 4])
+print(f"mean([1, 2, 3, 4]) = {mean_result}")
+
+# The z-score measures how many standard deviations a value is from the mean.
+# For xs=[1, 2, 3, 4], std ≈ 1.118, so zscore(xs, x=4) ≈ (4 - 2.5) / 1.118 ≈ 1.34.
+zscore_result = ut.zscore([1, 2, 3, 4], 4)
+print(f"zscore([1, 2, 3, 4], x=4) = {zscore_result}")
 
 # %%
 import langchain_core.messages
@@ -236,6 +242,8 @@ tool_calls = [
     },  # error (std=0)
 ]
 
+
+# %%
 # Invoke the graph with the tool calls; it returns messages with results/errors.
 out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", tool_calls=tool_calls)]})
 [
@@ -243,9 +251,8 @@ out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", t
     for m in out["messages"]
 ]
 
-
 # %% [markdown]
-# ## InjectedState: runtime-only args (system-owned)
+# ## InjectedState.
 #
 # Sometimes a tool needs access to *system-owned* context that the model shouldn’t be allowed to spoof.
 #
@@ -256,7 +263,17 @@ out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", t
 # Think of it like dependency injection:
 # - model controls: normal tool inputs
 # - system controls: injected inputs (state, stores, call IDs)
-#
+
+# %%
+# Demonstrate the dataset_brief tool.
+# This tool answers questions about injected dataset metadata.
+# We'll show how to build a graph and invoke the tool with a question.
+result = ut.dataset_brief(
+    question="How many rows and columns?",
+    dataset_meta=dataset_meta
+)
+import json
+print(json.dumps(json.loads(result), indent=2))
 
 # %%
 import json
@@ -277,7 +294,7 @@ graph = g.compile()
 
 # Prepare state with injected dataset metadata and a tool call request.
 state_in: ut.InjectedStateState = {
-    "dataset_meta": DATASET_META,
+    "dataset_meta": dataset_meta,
     "messages": [
         langchain_core.messages.AIMessage(
             content="",
@@ -299,14 +316,38 @@ json.loads(out["messages"][-1].content)
 
 
 # %% [markdown]
-# ## InjectedStore: injected persistent store handle
+# ## InjectedStore
 #
 # A store is a place to keep small bits of information across calls (like preferences, cached results, or “facts we’ve already extracted”).
 #
 # `InjectedStore` lets a tool receive a store handle **without** the model being able to fabricate it.
 #
 # In this tutorial we use `InMemoryStore` for simplicity, but the pattern generalizes to other persistence layers.
-#
+
+# %%
+# Demonstrate save_pref and load_pref tools.
+# These tools manage user preferences in an injected store.
+# save_pref stores a key/value pair, and load_pref retrieves it.
+import langgraph.store.memory
+
+store_demo = langgraph.store.memory.InMemoryStore()
+
+# Save a preference.
+save_result = ut.save_pref(
+    user_id="alice",
+    key="theme",
+    value="dark",
+    store=store_demo
+)
+print(f"Save: {save_result}")
+
+# Load the preference.
+load_result = ut.load_pref(
+    user_id="alice",
+    key="theme",
+    store=store_demo
+)
+print(f"Load: {load_result}")
 
 # %%
 import langchain_core.messages
@@ -325,6 +366,8 @@ g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile(store=store)
 
+
+# %%
 # First invoke: save a preference to the store.
 out1 = graph.invoke(
     {
@@ -347,7 +390,9 @@ out1 = graph.invoke(
         ]
     }
 )
+print(out1["messages"][-1].content)
 
+# %%
 # Second invoke: load the preference we just saved.
 out2 = graph.invoke(
     {
@@ -366,21 +411,14 @@ out2 = graph.invoke(
         ]
     }
 )
-out1["messages"][-1].content, out2["messages"][-1].content
-
+print(out2["messages"][-1].content)
 
 # %% [markdown]
-# ## Agent APIs used in `langchain.example.ipynb`
+# ## Agent APIs
 #
 # An *agent* is a loop: the model looks at the conversation + available tools, chooses an action, and repeats until it’s done.
 #
 # In this tutorial we use a helper, `create_agent(...)`, to build a tool-calling agent quickly.
-# Later, in the examples notebook, you’ll see the same ideas expressed as explicit LangGraph loops.
-#
-# If you ever feel confused, this heuristic helps:
-# - **LangChain agent helpers** get you started fast.
-# - **LangGraph** is what you reach for when you want full control (state, routing, memory, HITL).
-#
 
 # %%
 import langchain.agents

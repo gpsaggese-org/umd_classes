@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -26,11 +26,8 @@
 # Why include this in a LangChain/LangGraph tutorial?
 # Because “agents that write and run notebooks” is a surprisingly practical workflow for data work.
 # We’ll keep the demos safe: everything writes under `tmp_runs/`.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 from pathlib import Path
 
 import nbformat
@@ -68,11 +65,8 @@ str(out_path)
 # We’ll build a tiny notebook in memory (a title + a code cell), then write it to disk.
 #
 # This is the first building block for “notebook automation” — generating a notebook artifact from a structured spec.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 # write_notebook is defined in langchain.API_utils.
 spec = {
     "cells": [
@@ -93,13 +87,8 @@ ut.write_notebook.invoke({"spec": spec, "out_rel": "demo/tool_hello.ipynb"})
 # - so we often want a *controlled* workspace root
 #
 # You’ll see us use an injected workspace directory so the graph can safely read/write only where we intend.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 # nb_write, nb_run, nb_extract_errors, nb_extract_artifacts, nb_list_files, ToolGraphState
 # are defined in langchain.API_utils.
 from pathlib import Path
@@ -212,11 +201,8 @@ out3 = graph.invoke(
 # - execution errors (if any)
 #
 # This is a friendly way to build “run this notebook and report back” pipelines.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 # extract_errors is defined in langchain.API_utils.
 from pathlib import Path
 
@@ -261,11 +247,8 @@ ut.extract_errors(nb)
 # We’ll show a simple approach to pull a couple useful artifacts out of the executed notebook:
 # - printed output
 # - embedded images
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 import base64
 import json
 
@@ -339,11 +322,8 @@ for i, cell in enumerate(nb2.cells):
 #
 # In the next cell we execute a notebook that writes files into a run directory, then list what it produced.
 # Everything stays under `tmp_runs/`.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 
 run_dir = Path("tmp_runs/writes_files").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
@@ -394,11 +374,8 @@ sorted([p.name for p in run_dir.iterdir() if p.is_file()])
 # - batch runs over multiple inputs
 #
 # We’ll do a tiny demo so you can see the mechanics.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 import papermill as pm
 
 run_dir = Path("tmp_runs/papermill").resolve()

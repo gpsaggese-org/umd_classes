@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -18,11 +18,6 @@
 #
 # ## Learn LangChain in 60 Minutes — examples notebook
 #
-# This is the **end-to-end** companion to `langchain.API.ipynb`.
-#
-# If you’re brand new, it can help to skim the API notebook first so the names feel familiar.
-# Then come back here for the patterns that make things “click” in real apps.
-#
 # What you’ll build (incrementally):
 # - a tool-calling agent loop
 # - LangGraph workflows: state, routing, reducers, and a ReAct loop from scratch
@@ -30,9 +25,6 @@
 # - memory boundaries via checkpointers
 # - human-in-the-loop interrupts + resume
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
-#
-# Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # ## LangGraph: StateGraph (hello)
@@ -45,11 +37,8 @@
 # - What does “state” look like? (a dict / TypedDict)
 # - What are the nodes? (functions that read + return updates)
 # - How do edges determine what runs next?
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 
@@ -95,11 +84,8 @@ graph.invoke({"n": 0, "msg": ""})
 # - a router looks at state and chooses the next node
 #
 # This is the foundation for “if the model asked for a tool, run tools; otherwise, finish.”
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import Literal
 
 
@@ -150,11 +136,8 @@ graph.invoke({"flag": True, "out": ""}), graph.invoke({"flag": False, "out": ""}
 # - append messages rather than overwrite
 #
 # In the next cell, focus on how state updates combine rather than replace.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import Annotated, List
 
 
@@ -236,12 +219,8 @@ graph.invoke({"evidence": []})["evidence"]
 # - routing logic that decides whether to continue looping
 #
 # This is one of the best places to pause and say: “Ah — *this* is what an agent really is.”
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
 from typing import Annotated as Ann
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import ToolNode
@@ -303,11 +282,8 @@ out = graph.invoke(
 # - **workers** do specialized tasks (often via tools)
 #
 # This keeps each piece simpler and makes debugging much easier.
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 from langchain.tools import tool as lc_tool
 
 
@@ -375,11 +351,8 @@ _last_text(out)
 # In LangGraph that’s expressed with `Command(update=...)`.
 #
 # You’ll also see `ToolRuntime`, which gives the tool access to useful runtime context (like the current state).
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 import json
 from typing_extensions import Annotated as TxAnnotated
 
@@ -497,8 +470,6 @@ out2 = supervisor.invoke(
 
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 # E6.2: two subagents (date normalization + email drafting)
 date_agent = create_agent(
     llm,
@@ -567,8 +538,6 @@ b = sup.invoke(
 
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 # E6.3: context isolation (noisy worker, clean supervisor)
 @lc_tool(
     "generate_noise",
@@ -625,9 +594,6 @@ _last_text(out)
 
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 # E6.6: parallel tool calls (one AI turn emits multiple tool calls)
 sum_agent = create_agent(
     llm,
@@ -713,8 +679,6 @@ _last_text(out)
 
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 # #############################################################################
 # SubState
 # #############################################################################
@@ -792,11 +756,8 @@ parent_graph.invoke(
 # - how do you keep different users/sessions isolated?
 #
 # If you’ve ever debugged an agent that “remembered the wrong thing,” this is the antidote.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from langgraph.checkpoint.memory import MemorySaver
 
 
@@ -879,12 +840,8 @@ run_twice("shared"), run_twice("private")
 #
 # If you’re wondering “where does the UI come from?” — great question.
 # LangGraph gives you the **primitive** (interrupt + resume). You can surface that in a notebook, a web app, Slack, etc.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Demonstrate human-in-the-loop control using `interrupt(...)` and resume.
 from pathlib import Path
 from typing import Literal as Lit
 
@@ -949,8 +906,6 @@ pending
 
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 out2 = hitl_graph.invoke(
     Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
 )
