@@ -51,16 +51,10 @@ ut.print_environment_info()
 
 # %% [markdown]
 # ## Model
-#
-# These notebooks are provider-agnostic: you pick a provider in `.env`, and the helper function builds the right chat model.
-#
-# Supported now:
-# - `openai`
-# - `anthropic`
 
 # %%
+# Customize langchain.env to configure model.
 import os
-
 import dotenv
 
 dotenv.load_dotenv("langchain.env")
@@ -112,15 +106,22 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 # %%
 import langchain_core.prompts
 import langchain_core.output_parsers
-import langchain_core.runnables
 
-# Create two parallel chains: one for summary, one for risks.
+# Create a prompt for summarizing text into bullet points.
 summary_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You write crisp summaries."),
         ("human", "Summarize in 3 bullets:\n\n{text}"),
     ]
 )
+
+# Create a chain: prompt -> model -> parser.
+summary_chain = summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+pprint.pprint(summary_chain)
+
+
+# %%
+# Create a prompt for risks and caveats.
 risks_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You list caveats."),
@@ -128,19 +129,25 @@ risks_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     ]
 )
 
-summary_chain = summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+# Create a chain: prompt -> model -> parser.
 risks_chain = risks_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+print("Risks chain created.")
+
+# %%
+import langchain_core.runnables
+import pprint
 
 # RunnableParallel runs both chains concurrently and returns both results.
 parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
+
+# Invoke with shared input and max concurrency limit.
 ret = parallel.invoke(
     {"text": "LangChain provides composable building blocks for LLM apps."},
     config={"max_concurrency": 2},
 )
 
-import pprint
+# Display the structured results.
 pprint.pprint(ret)
-
 
 # %%
 # Prepare multiple questions to process in a batch.
@@ -199,21 +206,24 @@ dataset_meta
 # %%
 # Demonstrate the mean and zscore tools.
 # The mean of [1, 2, 3, 4] is 2.5.
-mean_result = ut.mean([1, 2, 3, 4])
+mean_result = ut.mean.invoke({"xs": [1, 2, 3, 4]})
 print(f"mean([1, 2, 3, 4]) = {mean_result}")
 
 # The z-score measures how many standard deviations a value is from the mean.
 # For xs=[1, 2, 3, 4], std ≈ 1.118, so zscore(xs, x=4) ≈ (4 - 2.5) / 1.118 ≈ 1.34.
-zscore_result = ut.zscore([1, 2, 3, 4], 4)
+zscore_result = ut.zscore.invoke({"xs": [1, 2, 3, 4], "x": 4})
 print(f"zscore([1, 2, 3, 4], x=4) = {zscore_result}")
 
 # %%
-import langchain_core.messages
-import langgraph.graph
 import langgraph.prebuilt
 
 # Create a ToolNode that can execute the mean and zscore tools.
 tool_node = langgraph.prebuilt.ToolNode([ut.mean, ut.zscore])
+print(f"ToolNode created with {len([ut.mean, ut.zscore])} tools.")
+
+
+# %%
+import langgraph.graph
 
 # Build a simple graph that routes all messages to the tool node.
 g = langgraph.graph.StateGraph(ut.ToolState)
@@ -221,7 +231,9 @@ g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
+print("Graph compiled: START -> tools -> END")
 
+# %%
 # Create two tool calls: mean (succeeds) and zscore (fails due to zero std).
 tool_calls = [
     {
@@ -237,7 +249,7 @@ tool_calls = [
         "type": "tool_call",
     },  # error (std=0)
 ]
-
+print(f"Prepared {len(tool_calls)} tool calls: {[tc['name'] for tc in tool_calls]}")
 
 # %%
 # Invoke the graph with the tool calls; it returns messages with results/errors.
@@ -272,14 +284,15 @@ import json
 print(json.dumps(json.loads(result), indent=2))
 
 # %%
-import json
-
-import langchain_core.messages
-import langgraph.graph
 import langgraph.prebuilt
 
 # Create a ToolNode that executes the dataset_brief tool.
 tool_node = langgraph.prebuilt.ToolNode([ut.dataset_brief])
+print("ToolNode created for dataset_brief tool.")
+
+
+# %%
+import langgraph.graph
 
 # Build a graph that injects state (dataset_meta) into the tool at runtime.
 g = langgraph.graph.StateGraph(ut.InjectedStateState)
@@ -287,6 +300,11 @@ g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
+print("Graph compiled: injects dataset_meta into tools at runtime.")
+
+# %%
+import json
+import langchain_core.messages
 
 # Prepare state with injected dataset metadata and a tool call request.
 state_in: ut.InjectedStateState = {
@@ -307,9 +325,12 @@ state_in: ut.InjectedStateState = {
         )
     ],
 }
-out = graph.invoke(state_in)
-json.loads(out["messages"][-1].content)
 
+# Invoke the graph and show the result.
+out = graph.invoke(state_in)
+result = json.loads(out["messages"][-1].content)
+print("Result from dataset_brief tool:")
+print(json.dumps(result, indent=2))
 
 # %% [markdown]
 # ## InjectedStore
@@ -346,14 +367,19 @@ load_result = ut.load_pref(
 print(f"Load: {load_result}")
 
 # %%
-import langchain_core.messages
-import langgraph.graph
-import langgraph.prebuilt
 import langgraph.store.memory
+import langgraph.prebuilt
 
-# Create an in-memory store and a ToolNode that can save/load preferences.
+# Create an in-memory store for persisting preferences.
 store = langgraph.store.memory.InMemoryStore()
+
+# Create a ToolNode that can save/load preferences using the store.
 tool_node = langgraph.prebuilt.ToolNode([ut.save_pref, ut.load_pref])
+print(f"Created InMemoryStore and ToolNode with {len([ut.save_pref, ut.load_pref])} tools.")
+
+
+# %%
+import langgraph.graph
 
 # Build a graph that injects the store handle into the tools.
 g = langgraph.graph.StateGraph(ut.StoreState)
@@ -361,7 +387,7 @@ g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile(store=store)
-
+print("Graph compiled with store: tools can now access store at runtime.")
 
 # %%
 # First invoke: save a preference to the store.
@@ -494,12 +520,13 @@ print(getattr(contract_out["messages"][-1], "content", ""))
 #
 
 # %%
-import json
-
-import langchain.agents
-
 # Create a custom state schema and a tool that uses it.
 CustomState, extract_facts = ut.make_custom_state_and_tool()
+print(f"Custom state created with fields: {CustomState.__annotations__.keys()}")
+
+
+# %%
+import langchain.agents
 
 # Create an agent with a custom state that can call extract_facts.
 supervisor = langchain.agents.create_agent(
@@ -508,7 +535,9 @@ supervisor = langchain.agents.create_agent(
     system_prompt="First call extract_facts, then summarize the returned facts.",
     state_schema=CustomState,
 )
+print(f"Agent created with custom state and extract_facts tool.")
 
+# %%
 # Invoke the agent with initial custom state (user preferences and empty facts list).
 state = supervisor.invoke(
     {
@@ -521,11 +550,10 @@ state = supervisor.invoke(
 )
 
 # Show the extracted facts and the agent's final response.
-{
-    "facts": state.get("facts"),
-    "last": getattr(state["messages"][-1], "content", "")[:160],
-}
-
+print("Extracted facts:")
+print(state.get("facts"))
+print("\nAgent's final response:")
+print(getattr(state["messages"][-1], "content", "")[:160])
 
 # %% [markdown]
 # ## Human-in-the-loop building block: `interrupt(...)` + resume
@@ -546,11 +574,8 @@ state = supervisor.invoke(
 #
 
 # %%
-import pathlib
-
 import langgraph.checkpoint.memory
 import langgraph.graph
-import langgraph.types
 
 # Build a simple HITL graph: propose deletion, then execute if approved.
 builder = langgraph.graph.StateGraph(ut.HITLState)
@@ -559,7 +584,13 @@ builder.add_node("delete", ut.do_delete)
 builder.add_edge(langgraph.graph.START, "propose")
 builder.add_edge("propose", "delete")
 builder.add_edge("delete", langgraph.graph.END)
+
+# Compile with a checkpointer for resuming from interrupts.
 graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
+print("HITL graph compiled: propose -> delete -> END (with checkpointing for interrupts).")
+
+# %%
+import pathlib
 
 # Create a temporary file to demonstrate the HITL pattern.
 tmp_dir = pathlib.Path("tmp_runs/hitl").resolve()
@@ -567,20 +598,34 @@ tmp_dir.mkdir(parents=True, exist_ok=True)
 victim = tmp_dir / "victim.txt"
 victim.write_text("delete me", encoding="utf-8")
 
+print(f"Created temporary file at: {victim}")
+print(f"File exists: {victim.exists()}")
+
+# %%
 # First invoke: propose the deletion (will interrupt and ask for approval).
 thread_id = "HITL_API_DEMO"
 out1 = graph.invoke(
     {"target_path": str(victim), "decision": ""},
     config={"configurable": {"thread_id": thread_id}},
 )
+
+# Extract the pending decision from the interrupt payload.
 pending = (
     out1.get("__interrupt__", [])[0].value if "__interrupt__" in out1 else None
 )
 
+print(f"Graph interrupted with decision pending: {pending}")
+
+# %%
+import langgraph.types
+
 # Second invoke: resume with approval decision.
 out2 = graph.invoke(
-    langgraph.types.Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
+    langgraph.types.Command(resume="approve"),
+    config={"configurable": {"thread_id": thread_id}}
 )
 
-# Show the pending decision and whether the file was deleted.
-{"pending": pending, "victim_exists_after": victim.exists()}
+# Check if the file was deleted after resuming with approval.
+file_deleted = not victim.exists()
+print(f"File deleted after approval: {file_deleted}")
+print(f"Decision was executed: {'approve' in str(out2)}")

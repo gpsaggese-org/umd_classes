@@ -110,27 +110,37 @@ llm
 
 # %%
 from pathlib import Path
-import shutil
 
 import pandas as pd
 
 DATASET_PATH = Path("data/T1_slice.csv").resolve()
 df = pd.read_csv(DATASET_PATH)
+
+# Parse the time column to datetime for proper time-series handling.
 TIME_COL = "Date/Time"
 if TIME_COL in df.columns:
     df[TIME_COL] = pd.to_datetime(
         df[TIME_COL], format="%d %m %Y %H:%M", errors="coerce"
     )
 
+print(f"Loaded dataset from {DATASET_PATH}")
+print(f"Shape: {df.shape}")
+df.head(5)
+
+
+# %%
+import shutil
+
 # Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
 WORKSPACE_DIR = Path("workspace").resolve()
 WORKSPACE_DATA_DIR = WORKSPACE_DIR / "data"
 WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
 WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
 if not WORKSPACE_DATASET_PATH.exists():
     shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
-df.head(5)
 
+print(f"Dataset available to sandbox tools at {WORKSPACE_DATASET_PATH}")
 
 # %%
 DATASET_META = ut.build_dataset_meta(df)
@@ -194,24 +204,42 @@ if "Date/Time" in df.columns and pd.api.types.is_datetime64_any_dtype(
 # %%
 import langchain_utils as tut_utils
 
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
-
+# Define the tutorial documentation files that will be indexed for RAG retrieval.
 docs_paths = [
     Path("README.md"),
     Path("langchain.API.md"),
     Path("langchain.example.md"),
 ]
+
+# Load and parse markdown documents from disk.
 raw_docs = tut_utils.load_markdown_documents(docs_paths)
+
+# Split documents into overlapping chunks for dense retrieval and context window limits.
 chunked_docs = tut_utils.split_documents(
     raw_docs, chunk_size=900, chunk_overlap=120
 )
 
+print(f"Loaded {len(raw_docs)} documents")
+print(f"Split into {len(chunked_docs)} chunks")
+
+
+# %%
+# Initialize embeddings model and build vector store for semantic search.
 embeddings = tut_utils.make_embeddings()
 docs_store = tut_utils.build_vector_store(chunked_docs, embeddings)
+
+# Create a retriever that fetches the top 3 most relevant chunks for each query.
 retriever = docs_store.as_retriever(search_kwargs={"k": 3})
 
+print(f"Vector store built with {len(chunked_docs)} embedded chunks")
+print(f"Retriever ready for semantic search")
+
+# %%
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+
+# Define the RAG system prompt that grounds answers in retrieved documentation.
 rag_prompt = ChatPromptTemplate.from_template(
     """You are answering from retrieved tutorial docs.
 Use only the provided context. If context is insufficient, say so.
@@ -224,6 +252,7 @@ Question:
 """
 )
 
+# Compose the RAG chain: retrieve docs → format context → prompt LLM → parse output.
 rag_chain = (
     {
         "context": retriever | tut_utils.format_docs,
@@ -234,16 +263,26 @@ rag_chain = (
     | StrOutputParser()
 )
 
+print("RAG chain built and ready to invoke")
+
+# %%
+# Invoke the RAG chain with a question about the tutorial content.
 rag_question = "How do HITL interrupts and resume work in this tutorial?"
 rag_answer = rag_chain.invoke(rag_question)
+
+# Print answer and trace which docs were retrieved to support it.
+print("Answer (first 900 chars):")
 print(rag_answer[:900])
-print(
-    "sources:",
-    [d.metadata.get("source") for d in retriever.invoke(rag_question)],
-)
+print("\n" + "=" * 60)
 
+# Show which documentation files were used to answer the question.
+sources = [d.metadata.get("source") for d in retriever.invoke(rag_question)]
+print(f"\nSources used: {sources}")
+
+# %%
+# Take a checksum snapshot of the current docs for change detection in incremental refresh.
 docs_snapshot = tut_utils.snapshot_checksums(docs_paths)
-
+print(f"Snapshot created for {len(docs_paths)} documentation files")
 
 # %% [markdown]
 # ### Incremental docs refresh
