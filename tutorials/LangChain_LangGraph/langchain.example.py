@@ -18,11 +18,6 @@
 #
 # ## Learn LangChain in 60 Minutes — examples notebook
 #
-# This is the **end-to-end** companion to `langchain.API.ipynb`.
-#
-# If you’re brand new, it can help to skim the API notebook first so the names feel familiar.
-# Then come back here for the patterns that make things “click” in real apps.
-#
 # What you’ll build (incrementally):
 # - a tool-calling agent loop
 # - LangGraph workflows: state, routing, reducers, and a ReAct loop from scratch
@@ -30,22 +25,15 @@
 # - memory boundaries via checkpointers
 # - human-in-the-loop interrupts + resume
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
-#
-# Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # # Imports
-#
-# This notebook shares the same setup pattern as `langchain.API.ipynb`.
-#
-# Run from `tutorials/LangChain_LangGraph` so local paths and helper utilities resolve exactly as written.
-#
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 
+import logging
 import os
 import sys
 
@@ -53,60 +41,25 @@ import langchain
 import langchain_core
 import langgraph
 
-import langchain_example_utils as ut
+import langchain_API_utils as ut
+
+# Initialize logger.
+_LOG = ut.init_logger("learn_langchain.api")
+
+ut.print_environment_info()
+
 
 # %%
-import logging
-
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
-)
-_LOG = logging.getLogger("learn_langchain.examples")
-
-_LOG.info("python=%s", sys.version.split()[0])
-_LOG.info("platform=%s", __import__("platform").platform())
-_LOG.info("langchain=%s", getattr(langchain, "__version__", "unknown"))
-_LOG.info("langchain_core=%s", getattr(langchain_core, "__version__", "unknown"))
-_LOG.info("langgraph=%s", getattr(langgraph, "__version__", "unknown"))
-_LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
-
-
-# %% [markdown]
-# ## Model (configured via `.env`)
-#
-# We reuse the same `.env`-driven model factory as the API notebook.
-#
-# Supported now:
-# - `openai`
-# - `anthropic`
-# - optional `ollama` (install `langchain-ollama` first)
-#
-# Optional observability:
-# - set `LANGSMITH_TRACING=true` (+ `LANGSMITH_API_KEY`) to trace runs in LangSmith
-#
-# Tip: start with a smaller/cheaper model while learning, then switch models later.
-#
-
-# %%
+# Customize langchain.env to configure model.
 import os
-from dotenv import load_dotenv
-load_dotenv()
+import dotenv
 
-if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
-    _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
+dotenv.load_dotenv("langchain.env")
 
 # %%
 llm = ut.get_chat_model()
 llm
 
-
-# %% [markdown]
-# ## Local dataset (`data/T1_slice.csv`)
-#
-# We keep the examples grounded by using a small CSV that lives in this folder.
-#
-# Just like in the API notebook, we also copy it into `./workspace/data/` so that sandboxed filesystem tools can refer to it as `/workspace/data/T1_slice.csv`.
-#
 
 # %%
 from pathlib import Path
@@ -406,18 +359,3 @@ final_state = agent.invoke(inputs)
     for m in final_state["messages"]
 ][-4:]
 
-
-# %% [markdown]
-# ## Practical limitations + next hardening steps
-#
-# Current tutorial scope (intentional):
-# - examples favor readability over full production controls
-# - some outputs vary by model/provider
-# - in-memory stores are convenient but not durable across process restarts
-#
-# Production-oriented upgrades:
-# - persistent vector/checkpoint stores and stronger access controls
-# - policy checks for sensitive tools before execution
-# - stricter evals around tool-call correctness + failure recovery
-# - broader observability (LangSmith traces + metrics/logging)
-#
