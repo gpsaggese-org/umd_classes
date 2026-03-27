@@ -112,7 +112,6 @@ ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
 # ax[1, 0].set_yticks([])
 
 # %%
-
 pz.Normal(mu=0, sigma=1).plot_interactive(**params)
 
 # %%
@@ -121,7 +120,7 @@ pdf = pz.Normal(mu=0, sigma=1)
 pdf.rvs(10)
 
 # %%
-# #?plt.hist
+# # ?plt.hist
 
 # %%
 # n = 100
@@ -458,7 +457,7 @@ ax[2, 1].set_xlabel("x")
 ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
 
 # %%
-# #?pz.NegativeBinomial
+# # ?pz.NegativeBinomial
 
 # %%
 pz.NegativeBinomial(n=1.0, p=0.5).plot_interactive(**params)

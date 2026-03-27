@@ -443,7 +443,6 @@ asyncio.run(utils.run_validator_example(validator_agent))
 # - progressive display of responses
 
 # %%
-
 stream_agent = Agent(
     MODEL_ID, instructions="Write one short paragraph about unit tests."
 )
@@ -486,7 +485,6 @@ else:
 #
 
 # %%
-
 explicit_model = None
 try:
     from pydantic_ai.models.openai import OpenAIModel
@@ -544,7 +542,6 @@ except Exception as e:
 # - final output
 
 # %%
-
 meta_agent = Agent(MODEL_ID, instructions="Answer in one sentence.")
 result = await meta_agent.run("What is a unit test?")
 usage = getattr(result, "usage", None)

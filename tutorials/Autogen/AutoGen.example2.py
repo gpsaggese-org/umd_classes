@@ -92,6 +92,7 @@ if ticker_in:
 #
 # It then streams outputs from the agents: displaying clean Markdown for the Analyst's results, confirming chart creation or showing errors from the Runtime agent, and finally printing a mission completion message when the `TERMINATE` keyword is reached.
 
+
 # %%
 async def _run_beautified_mission(ticker_symbol: str):
     task = (

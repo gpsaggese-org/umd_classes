@@ -213,8 +213,6 @@ print("Files:", [p.name for p in DOCS_DIR.glob("*.md")])
 # PydanticAI agents become far more reliable when they can retrieve relevant context via tools instead of guessing.
 
 # %%
-
-
 @dataclass
 class DocChunk:
     doc_id: str
@@ -251,6 +249,7 @@ print("Preview matches:")
 for m in preview:
     print(m.doc_id, "chunk", m.chunk_id, "score=", round(m.score, 4))
 
+
 # %% [markdown]
 # ### Importance
 #
@@ -276,8 +275,6 @@ for m in preview:
 # Structured outputs eliminate brittle parsing and make results usable in real applications.
 
 # %%
-
-
 @dataclass
 class DocDeps:
     chunks: list[DocChunk]
@@ -411,7 +408,6 @@ await utils.stream_demo(stream_agent)
 #
 
 # %%
-
 deps = DocDeps(chunks=chunks)
 first = await agent.run("Where do I enable 2FA?", deps=deps)
 utils.enforce_sources(first.output)

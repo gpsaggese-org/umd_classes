@@ -81,6 +81,7 @@ os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 # - **Tools:** Integration with `yfinance` via `market_tool` and `plot_tool`.
 # - **Visualization:** The Analyst generates and displays a technical trend chart directly in the notebook.
 
+
 # %%
 async def _run_stock_mission(
     ticker: str, days: int, task: str, *, model: str = "gpt-4o"
