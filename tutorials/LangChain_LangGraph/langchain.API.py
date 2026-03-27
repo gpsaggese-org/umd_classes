@@ -47,7 +47,6 @@ import langchain_API_utils as ut
 _LOG = ut.init_logger("learn_langchain.api")
 
 ut.print_environment_info()
-print(f"LLM_PROVIDER={os.getenv('LLM_PROVIDER', '(unset)')}")
 
 
 # %% [markdown]
@@ -65,9 +64,6 @@ import os
 import dotenv
 
 dotenv.load_dotenv("langchain.env")
-
-if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
-    _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
 
 
 # %%

@@ -109,9 +109,6 @@ llm
 #
 
 # %%
-# This cell will:
-# - Load the local dataset into a Pandas DataFrame and prepare the time column.
-# - Copy the dataset under `./workspace/data/` so Deep Agents can access it via `/workspace/...`.
 from pathlib import Path
 import shutil
 
@@ -152,8 +149,6 @@ DATASET_META
 #
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 import matplotlib.pyplot as plt
 
 print("shape:", df.shape)
@@ -197,9 +192,6 @@ if "Date/Time" in df.columns and pd.api.types.is_datetime64_any_dtype(
 #
 
 # %%
-# This cell will:
-# - Build a tiny docs index from this folder's markdown files.
-# - Run a retrieval-grounded QA query over that index.
 import langchain_utils as tut_utils
 
 from langchain_core.output_parsers import StrOutputParser
@@ -263,9 +255,6 @@ docs_snapshot = tut_utils.snapshot_checksums(docs_paths)
 #
 
 # %%
-# This cell will:
-# - Simulate a docs change and detect it via checksum diff.
-# - Incrementally upsert changed chunks into the existing docs store.
 refresh_doc = Path("tmp_runs/docs_refresh_demo.md")
 refresh_doc.parent.mkdir(parents=True, exist_ok=True)
 refresh_doc.write_text(
@@ -308,8 +297,6 @@ print(
 #
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 from datetime import datetime, timezone
 import math
 
@@ -355,8 +342,6 @@ def sqrt(x: float) -> float:
 #
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 from langchain_core.messages import HumanMessage
 from langchain.agents import create_agent
 
