@@ -4,7 +4,7 @@
 #
 # This script runs a specified command inside a new Docker container instance.
 # The container is removed automatically after the command completes. The
-# current directory is mounted to /data inside the container.
+# git root is mounted to /git_root inside the container.
 # """
 
 # Exit immediately if any command exits with a non-zero status.
@@ -34,10 +34,6 @@ run "docker image ls $FULL_IMAGE_NAME"
 
 # Configure and run the Docker container with the specified command.
 CONTAINER_NAME=$IMAGE_NAME
-# Kill existing container if --force flag is set.
-if [[ $FORCE == 1 ]]; then
-    kill_container_by_name $CONTAINER_NAME
-fi
 DOCKER_CMD=$(get_docker_cmd_command)
 PORT=""
 DOCKER_RUN_OPTS=""

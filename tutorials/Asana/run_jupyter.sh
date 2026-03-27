@@ -16,7 +16,7 @@ set -e
 # Print each command to stdout before executing it.
 #set -x
 
-# Import the utility functions from the project template.
+# Import the utility functions from /git_root.
 GIT_ROOT=/git_root
 source $GIT_ROOT/class_project/project_template/utils.sh
 

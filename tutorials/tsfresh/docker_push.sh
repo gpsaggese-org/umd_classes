@@ -1,6 +1,10 @@
 #!/bin/bash
 # """
-# Push the tsfresh Docker container image to Docker Hub.
+# Push Docker container image to Docker Hub or registry.
+#
+# This script authenticates with the Docker registry using credentials from
+# ~/.docker/passwd.$REPO_NAME.txt and pushes the locally built container
+# image to the remote repository.
 # """
 
 # Exit immediately if any command exits with a non-zero status.
@@ -14,9 +18,8 @@ source $GIT_ROOT/class_project/project_template/utils.sh
 parse_default_args "$@"
 
 # Load Docker image naming configuration.
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source $SCRIPT_DIR/docker_name.sh
 
 # Push the container image to the registry.
 push_container_image
