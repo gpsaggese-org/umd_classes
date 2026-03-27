@@ -33,7 +33,7 @@ sns.set_theme(style="whitegrid")
 # #############################################################################
 
 
-def download_cdc_data_if_needed(data_path: str, url: str) -> None:
+def download_cdc_data_if_needed(data_path: str) -> None:
     """
     Download and extract the CDC Diabetes dataset if not already present.
 
@@ -43,18 +43,24 @@ def download_cdc_data_if_needed(data_path: str, url: str) -> None:
     if os.path.exists(data_path):
         _LOG.info("Dataset already present at: %s", data_path)
         return
+    #url = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00519/diabetes_health_indicators_BRFSS2015.csv"
+    #url = "https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv"
     _LOG.info("Downloading dataset from: %s", url)
     hio.create_dir(os.path.dirname(data_path), incremental=True)
-    zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
-    urllib.request.urlretrieve(url, zip_path)
-    filename = os.path.basename(data_path)
-    with zipfile.ZipFile(zip_path, "r") as z:
-        for name in z.namelist():
-            if filename in name:
-                with z.open(name) as src, open(data_path, "wb") as dst:
-                    dst.write(src.read())
-                break
-    hio.delete_file(zip_path)
+    if url.endswith(".zip"):
+        zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
+        urllib.request.urlretrieve(url, zip_path)
+        filename = os.path.basename(data_path)
+        with zipfile.ZipFile(zip_path, "r") as z:
+            for name in z.namelist():
+                if filename in name:
+                    with z.open(name) as src, open(data_path, "wb") as dst:
+                        dst.write(src.read())
+                    break
+        hio.delete_file(zip_path)
+    else:
+        urllib.request.urlretrieve(url, data_path)
     _LOG.info("Dataset saved to: %s", data_path)
 
 
