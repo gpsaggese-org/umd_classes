@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -53,32 +53,35 @@
 # %load_ext autoreload
 # %autoreload 2
 
+import logging
+
+import numpy as np
 import os
 import warnings
 
-import numpy as np
-
-import utils
-
+# Configuration.
 warnings.filterwarnings("ignore")
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## Helper Functions
+#
+# Import the `CausalNavigator` class from `utils.py`.
 #
 # ### `utils.load_cdc_data(filepath)`
 #
 # **Purpose**: Robustly loads the CDC dataset from a local directory.
 #
-# - **Inputs**: `filepath` (str) - relative path to the `.csv` file (e.g.,
-#   `data/unprocessed/file.csv`)
-# - **Behaviour**: Checks for file existence, removes duplicates, and casts all
-#   columns to `float` to ensure compatibility with XGBoost
+# - **Inputs**: `filepath` (str) - relative path to the `.csv` file (e.g., `data/unprocessed/file.csv`)
+# - **Behaviour**: Checks for file existence, removes duplicates, and casts all columns to `float` to ensure compatibility with XGBoost
 # - **Output**: A cleaned `pandas.DataFrame`
 #
 # ### `preprocess_for_causal(df, ...)`
 #
-# **Purpose**: Splits the dataframe into the three required components for
-# `CausalML`:
+# **Purpose**: Splits the dataframe into the three required components for `CausalML`:
 #
 # 1. **X (Covariates)** - features used to control for confounding
 # 2. **T (Treatment)** - the binary intervention vector
@@ -87,10 +90,14 @@ warnings.filterwarnings("ignore")
 # %%
 filename = "diabetes_binary_health_indicators_BRFSS2015.csv"
 DATA_PATH = os.path.join("data", "unprocessed", filename)
+
+# TODO(ai_gp): Move URL in download_cdc_data_if_needed
 # Direct download URL for the CDC Diabetes Health Indicators dataset from UCI.
 URL = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
 # Download and extract the dataset if not already present.
 utils.download_cdc_data_if_needed(DATA_PATH, URL)
+
+# TODO(ai_gp): Move this to a different cell
 df_raw = utils.load_cdc_data(DATA_PATH)
 
 # %%
