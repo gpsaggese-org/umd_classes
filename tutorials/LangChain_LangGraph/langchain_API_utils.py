@@ -20,17 +20,15 @@ from dataclasses import dataclass
 from math import sqrt as _sqrt
 from pathlib import Path
 from typing import Annotated, Any, Literal, Sequence, TypedDict
-
-import nbformat
-from langchain_core.tools import tool
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import InjectedState, InjectedStore
-from langgraph.store.base import BaseStore
-from nbclient import NotebookClient
-from nbformat import validate
 from typing_extensions import Annotated as TxAnnotated
 
+import nbformat
 import helpers.hdbg as hdbg
+import langchain_core.tools
+import langgraph.graph.message
+import langgraph.prebuilt
+import langgraph.store.base
+import nbclient
 
 _LOG = logging.getLogger(__name__)
 
@@ -232,7 +230,7 @@ def build_dataset_meta(df) -> dict:
 
 
 class ToolState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
 
 
 # #############################################################################
@@ -241,7 +239,7 @@ class ToolState(TypedDict):
 
 
 class InjectedStateState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
     dataset_meta: dict
 
 
@@ -251,7 +249,7 @@ class InjectedStateState(TypedDict):
 
 
 class StoreState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
 
 
 # #############################################################################
@@ -260,7 +258,7 @@ class StoreState(TypedDict):
 
 
 class ToolGraphState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
     workspace_dir: str
 
 
@@ -281,7 +279,7 @@ def _as_floats(xs: Sequence[float]) -> list[float]:
     return xs_list
 
 
-@tool
+@langchain_core.tools.tool
 def mean(xs: Sequence[float]) -> float:
     """
     Compute the arithmetic mean of a non-empty list of numbers.
@@ -309,10 +307,10 @@ def zscore(xs: Sequence[float], x: float) -> float:
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def dataset_brief(
     question: str,
-    dataset_meta: TxAnnotated[dict, InjectedState("dataset_meta")],
+    dataset_meta: TxAnnotated[dict, langgraph.prebuilt.InjectedState("dataset_meta")],
 ) -> str:
     """
     Answer a question using injected dataset metadata (InjectedState).
@@ -334,12 +332,12 @@ def dataset_brief(
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def save_pref(
     user_id: str,
     key: str,
     value: str,
-    store: TxAnnotated[BaseStore, InjectedStore()],
+    store: TxAnnotated[langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()],
 ) -> str:
     """
     Save a user preference (key/value) into an injected store.
@@ -349,11 +347,11 @@ def save_pref(
     return f"saved {key}={value} for user_id={user_id}"
 
 
-@tool
+@langchain_core.tools.tool
 def load_pref(
     user_id: str,
     key: str,
-    store: TxAnnotated[BaseStore, InjectedStore()],
+    store: TxAnnotated[langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()],
 ) -> str:
     """
     Load a user preference (key) from an injected store.
@@ -370,7 +368,7 @@ def load_pref(
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def utc_now() -> str:
     """
     Return the current UTC time as an ISO string.
@@ -499,7 +497,7 @@ def _safe_injected_path(workspace_dir: str, rel_path: str) -> Path:
     return p
 
 
-@tool
+@langchain_core.tools.tool
 def write_notebook(spec: dict[str, Any], out_rel: str) -> str:
     """
     Write a notebook from a small spec into a safe workspace path.
@@ -520,16 +518,16 @@ def write_notebook(spec: dict[str, Any], out_rel: str) -> str:
         else:
             raise ValueError(f"Unknown cell type: {t}")
     nb.cells = cells
-    validate(nb)
+    nbformat.validate(nb)
     nbformat.write(nb, str(out_path))
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_write(
     spec: dict[str, Any],
     out_rel: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
 ) -> str:
     """
     Write a notebook under an injected workspace_dir.
@@ -556,12 +554,12 @@ def nb_write(
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_run(
     in_rel: str,
     out_rel: str,
     timeout_s: int,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
 ) -> str:
     """
     Execute a notebook with nbclient and save the executed copy under
@@ -571,7 +569,7 @@ def nb_run(
     out_path = _safe_injected_path(workspace_dir, out_rel)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     nb = nbformat.read(str(in_path), as_version=4)
-    client = NotebookClient(
+    client = nbclient.NotebookClient(
         nb,
         timeout=int(timeout_s),
         resources={"metadata": {"path": str(out_path.parent)}},
@@ -581,10 +579,10 @@ def nb_run(
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_extract_errors(
     executed_rel: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
 ) -> str:
     """
     Extract per-cell error metadata from an executed notebook (JSON string).
@@ -607,11 +605,11 @@ def nb_extract_errors(
     return json.dumps(errs)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_extract_artifacts(
     executed_rel: str,
     artifacts_rel_dir: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
 ) -> str:
     """
     Extract stdout + inline PNGs from an executed notebook into
@@ -649,9 +647,9 @@ def nb_extract_artifacts(
     )
 
 
-@tool
+@langchain_core.tools.tool
 def nb_list_files(
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
 ) -> str:
     """
     List files under workspace_dir (JSON).

@@ -31,8 +31,7 @@
 from pathlib import Path
 
 import nbformat
-from nbformat import validate
-from nbclient import NotebookClient
+import nbclient
 
 run_dir = Path("tmp_runs").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
@@ -43,14 +42,14 @@ nb.cells = [
     nbformat.v4.new_code_cell("x = 2 + 3\nprint(x)"),
     nbformat.v4.new_code_cell("import math\nprint(math.sqrt(81))"),
 ]
-validate(nb)
+nbformat.validate(nb)
 
 in_path = run_dir / "smoke_in.ipynb"
 out_path = run_dir / "smoke_out.ipynb"
 nbformat.write(nb, str(in_path))
 
 nb2 = nbformat.read(str(in_path), as_version=4)
-client = NotebookClient(
+client = nbclient.NotebookClient(
     nb2, resources={"metadata": {"path": str(run_dir)}}, timeout=60
 )
 client.execute()
@@ -91,16 +90,16 @@ ut.write_notebook.invoke({"spec": spec, "out_rel": "demo/tool_hello.ipynb"})
 # %%
 from pathlib import Path
 
-from langchain_core.messages import AIMessage
-from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt import ToolNode
+import langchain_core.messages
+import langgraph.graph
+import langgraph.prebuilt
 
 # Create workspace directory for notebook tool operations.
 workspace = Path("tmp_runs/ipynb_tools_workspace").resolve()
 workspace.mkdir(parents=True, exist_ok=True)
 
 # Assemble ToolNode with all notebook operation tools from utils.
-tool_node = ToolNode(
+tool_node = langgraph.prebuilt.ToolNode(
     [
         ut.nb_write,
         ut.nb_run,
@@ -111,10 +110,10 @@ tool_node = ToolNode(
 )
 
 # Build a simple StateGraph with one tool execution node.
-g = StateGraph(ut.ToolGraphState)
+g = langgraph.graph.StateGraph(ut.ToolGraphState)
 g.add_node("tools", tool_node)
-g.add_edge(START, "tools")
-g.add_edge("tools", END)
+g.add_edge(langgraph.graph.START, "tools")
+g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
 print(f"Graph compiled with workspace: {workspace}")
@@ -134,7 +133,7 @@ out1 = graph.invoke(
     {
         "workspace_dir": str(workspace),
         "messages": [
-            AIMessage(
+            langchain_core.messages.AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -218,7 +217,6 @@ print(out3["messages"][-1].content[:400])
 from pathlib import Path
 
 import nbformat
-from nbformat import validate
 
 # Create directory for notebook execution test.
 run_dir = Path("tmp_runs/execute").resolve()
@@ -232,7 +230,7 @@ nb_err.cells = [
     nbformat.v4.new_code_cell("1/0"),
     nbformat.v4.new_code_cell("print('after')"),
 ]
-validate(nb_err)
+nbformat.validate(nb_err)
 
 # Write notebook to disk.
 in_path = run_dir / "error_in.ipynb"
@@ -242,12 +240,12 @@ print(f"Notebook with error saved to {in_path}")
 
 
 # %%
-from nbclient import NotebookClient
+import nbclient
 
 # Execute the error notebook with error tolerance enabled.
 out_path = run_dir / "error_out.executed.ipynb"
 nb = nbformat.read(str(in_path), as_version=4)
-client = NotebookClient(
+client = nbclient.NotebookClient(
     nb,
     timeout=60,
     allow_errors=True,
@@ -299,10 +297,10 @@ in_nb = run_dir / "artifacts_in.ipynb"
 executed_nb = run_dir / "artifacts.executed.ipynb"
 nbformat.write(nb, str(in_nb))
 
-from nbclient import NotebookClient
+import nbclient
 
 nb2 = nbformat.read(str(in_nb), as_version=4)
-NotebookClient(
+nbclient.NotebookClient(
     nb2, timeout=120, resources={"metadata": {"path": str(run_dir)}}
 ).execute()
 nbformat.write(nb2, str(executed_nb))

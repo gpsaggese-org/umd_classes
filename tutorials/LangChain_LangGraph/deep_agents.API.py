@@ -32,8 +32,8 @@
 # For the full DA1–DA8 walkthrough, see `langchain.example.ipynb`.
 
 # %%
-# # %load_ext autoreload
-# # %autoreload 2
+# %load_ext autoreload
+# %autoreload 2
 
 import deep_agents_API_utils as ut
 

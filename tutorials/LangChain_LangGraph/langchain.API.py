@@ -36,6 +36,7 @@
 import logging
 import os
 import sys
+import dotenv
 
 import langchain
 import langchain_core
@@ -54,9 +55,6 @@ ut.print_environment_info()
 
 # %%
 # Customize langchain.env to configure model.
-import os
-import dotenv
-
 dotenv.load_dotenv("langchain.env")
 
 
@@ -104,6 +102,8 @@ chain.invoke({"question": "Explain LCEL in one sentence."})
 # - `RunnableParallel(...)` → run independent chains side-by-side and combine the results
 
 # %%
+import pprint
+
 import langchain_core.prompts
 import langchain_core.output_parsers
 
@@ -135,7 +135,6 @@ print("Risks chain created.")
 
 # %%
 import langchain_core.runnables
-import pprint
 
 # RunnableParallel runs both chains concurrently and returns both results.
 parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
@@ -234,6 +233,8 @@ graph = g.compile()
 print("Graph compiled: START -> tools -> END")
 
 # %%
+import langchain_core.messages
+
 # Create two tool calls: mean (succeeds) and zscore (fails due to zero std).
 tool_calls = [
     {
@@ -304,7 +305,6 @@ print("Graph compiled: injects dataset_meta into tools at runtime.")
 
 # %%
 import json
-import langchain_core.messages
 
 # Prepare state with injected dataset metadata and a tool call request.
 state_in: ut.InjectedStateState = {

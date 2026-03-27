@@ -188,12 +188,12 @@ print(f"Vector store built with {len(chunked_docs)} embedded chunks")
 print(f"Retriever ready for semantic search")
 
 # %%
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
+import langchain_core.output_parsers
+import langchain_core.prompts
+import langchain_core.runnables
 
 # Define the RAG system prompt that grounds answers in retrieved documentation.
-rag_prompt = ChatPromptTemplate.from_template(
+rag_prompt = langchain_core.prompts.ChatPromptTemplate.from_template(
     """You are answering from retrieved tutorial docs.
 Use only the provided context. If context is insufficient, say so.
 
@@ -209,11 +209,11 @@ Question:
 rag_chain = (
     {
         "context": retriever | tut_utils.format_docs,
-        "question": RunnablePassthrough(),
+        "question": langchain_core.runnables.RunnablePassthrough(),
     }
     | rag_prompt
     | llm
-    | StrOutputParser()
+    | langchain_core.output_parsers.StrOutputParser()
 )
 
 print("RAG chain built and ready to invoke")
@@ -289,16 +289,16 @@ print(
 #
 
 # %%
-from datetime import datetime, timezone
+import datetime
 import math
 
-from langchain_core.tools import tool
+import langchain_core.tools
 
 
-@tool
+@langchain_core.tools.tool
 def utc_now() -> str:
     """Return the current UTC time as an ISO string."""
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
 @tool
@@ -334,10 +334,10 @@ def sqrt(x: float) -> float:
 #
 
 # %%
-from langchain_core.messages import HumanMessage
-from langchain.agents import create_agent
+import langchain_core.messages
+import langchain.agents
 
-agent = create_agent(
+agent = langchain.agents.create_agent(
     model=llm,
     tools=[utc_now, mean, sqrt],
     system_prompt=(
@@ -348,7 +348,7 @@ agent = create_agent(
 
 inputs = {
     "messages": [
-        HumanMessage(
+        langchain_core.messages.HumanMessage(
             content="Compute mean([1,2,3,4,10]) and sqrt(49). Also tell me the current UTC time."
         )
     ]

@@ -40,7 +40,7 @@
 
 # %%
 from typing import TypedDict
-from langgraph.graph import StateGraph, START, END
+import langgraph.graph
 
 
 class S(TypedDict):
@@ -66,12 +66,12 @@ def set_msg(state: S) -> dict:
 print("Node functions defined: inc() and set_msg()")
 
 # %%
-g = StateGraph(S)
+g = langgraph.graph.StateGraph(S)
 g.add_node("inc", inc)
 g.add_node("msg", set_msg)
-g.add_edge(START, "inc")
+g.add_edge(langgraph.graph.START, "inc")
 g.add_edge("inc", "msg")
-g.add_edge("msg", END)
+g.add_edge("msg", langgraph.graph.END)
 graph = g.compile()
 
 print("Graph constructed: START -> inc -> msg -> END")
@@ -131,9 +131,9 @@ print("Node functions defined: a(), b(), and route()")
 g = StateGraph(R)
 g.add_node("a", a)
 g.add_node("b", b)
-g.add_conditional_edges(START, route, {"a": "a", "b": "b"})
-g.add_edge("a", END)
-g.add_edge("b", END)
+g.add_conditional_edges(langgraph.graph.START, route, {"a": "a", "b": "b"})
+g.add_edge("a", langgraph.graph.END)
+g.add_edge("b", langgraph.graph.END)
 graph = g.compile()
 
 print("Graph constructed with conditional routing")
@@ -223,9 +223,9 @@ print("Analysis functions defined: find_missingness() and find_outliers()")
 g = StateGraph(ReducerState)
 g.add_node("missingness", find_missingness)
 g.add_node("outliers", find_outliers)
-g.add_edge(START, "missingness")
+g.add_edge(langgraph.graph.START, "missingness")
 g.add_edge("missingness", "outliers")
-g.add_edge("outliers", END)
+g.add_edge("outliers", langgraph.graph.END)
 graph = g.compile()
 
 print("Graph constructed: START -> missingness -> outliers -> END")
@@ -254,8 +254,8 @@ for item in result["evidence"]:
 
 # %%
 from typing import Annotated as Ann
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import ToolNode
+import langgraph.graph.message
+import langgraph.prebuilt
 
 
 # #############################################################################
@@ -265,7 +265,7 @@ from langgraph.prebuilt import ToolNode
 
 class RS(TypedDict):
     """State with messages accumulated using add_messages reducer."""
-    messages: Ann[list, add_messages]
+    messages: Ann[list, langgraph.graph.message.add_messages]
 
 
 print("State schema RS defined with messages field")
@@ -273,7 +273,7 @@ print("State schema RS defined with messages field")
 
 # %%
 tools = [utc_now, mean, sqrt]
-tool_node = ToolNode(tools)
+tool_node = langgraph.prebuilt.ToolNode(tools)
 
 
 def call_model(state: RS) -> dict:
@@ -295,8 +295,8 @@ print("Tools defined and node functions created: call_model() and needs_tools()"
 g = StateGraph(RS)
 g.add_node("model", call_model)
 g.add_node("tools", tool_node)
-g.add_edge(START, "model")
-g.add_conditional_edges("model", needs_tools, {"tools": "tools", "end": END})
+g.add_edge(langgraph.graph.START, "model")
+g.add_conditional_edges("model", needs_tools, {"tools": "tools", "end": langgraph.graph.END})
 g.add_edge("tools", "model")
 graph = g.compile()
 
@@ -306,7 +306,7 @@ print("Graph constructed with conditional tool execution")
 out = graph.invoke(
     {
         "messages": [
-            HumanMessage(
+            langchain_core.messages.HumanMessage(
                 content="Compute mean([1,2,3,4,10]) and sqrt(49). Also tell me the current UTC time."
             )
         ]
@@ -328,7 +328,7 @@ for msg_type, content in summary:
 # This keeps each piece simpler and makes debugging much easier.
 
 # %%
-from langchain.tools import tool as lc_tool
+import langchain.tools
 
 
 def _last_text(result: dict) -> str:
@@ -358,7 +358,7 @@ print("Worker agent created for summarization tasks")
 
 
 # %%
-@lc_tool(
+@langchain.tools.tool(
     "summarize_text",
     description="Summarize long text into a short summary + 3 bullet points.",
 )
@@ -409,10 +409,10 @@ print(f"Supervisor response:\n{result}")
 import json
 from typing_extensions import Annotated as TxAnnotated
 
-from langchain.agents import AgentState
-from langchain.tools import ToolRuntime, InjectedToolCallId
-from langchain_core.messages import ToolMessage
-from langgraph.types import Command
+import langchain.agents
+import langchain.tools
+import langchain_core.messages
+import langgraph.types
 
 
 # #############################################################################
@@ -420,7 +420,7 @@ from langgraph.types import Command
 # #############################################################################
 
 
-class CustomState(AgentState):
+class CustomState(langchain.agents.AgentState):
     """Extended state with user preferences and facts accumulator."""
     user_prefs: dict
     facts: list[str]
@@ -435,12 +435,12 @@ worker = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "rewrite_with_prefs",
     description="Rewrite text following preferences from supervisor state.",
 )
 def rewrite_with_prefs(
-    text: str, runtime: ToolRuntime[None, CustomState]
+    text: str, runtime: langchain.tools.ToolRuntime[None, CustomState]
 ) -> str:
     """
     Rewrite `text` using supervisor preferences available via `runtime.state`.
@@ -465,13 +465,13 @@ fact_worker = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "extract_facts",
     description="Extract facts and update supervisor state via Command(update=...).",
 )
 def extract_facts(
-    text: str, tool_call_id: TxAnnotated[str, InjectedToolCallId]
-) -> Command:
+    text: str, tool_call_id: TxAnnotated[str, langchain.tools.InjectedToolCallId]
+) -> langgraph.types.Command:
     """
     Extract facts and store them in the supervisor state via `Command(update=...)`.
     """
@@ -482,11 +482,11 @@ def extract_facts(
         facts = list(json.loads(raw).get("facts", []))
     except Exception:
         facts = [raw]
-    return Command(
+    return langgraph.types.Command(
         update={
             "facts": facts,
             "messages": [
-                ToolMessage(
+                langchain_core.messages.ToolMessage(
                     content=f"Stored {len(facts)} facts.",
                     tool_call_id=tool_call_id,
                 )
@@ -548,7 +548,7 @@ date_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "normalize_datetime",
     description="Normalize informal date/time mentions into an explicit format. Returns JSON.",
 )
@@ -571,7 +571,7 @@ email_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "draft_email_body",
     description="Draft a concise professional email body for a user request.",
 )
@@ -623,7 +623,7 @@ print(f"Email draft: {_last_text(b)}")
 # Example: Context isolation (noisy worker, clean supervisor)
 
 # Define a tool that generates noise to simulate intermediate work.
-@lc_tool(
+@langchain.tools.tool(
     "generate_noise",
     description="Generate a long string to simulate noisy intermediate work.",
 )
@@ -647,7 +647,7 @@ noisy_worker_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "noisy_worker",
     description="Do a task in an isolated context and return a concise final answer.",
 )
@@ -713,7 +713,7 @@ print("Three specialized subagents defined: sum_agent, act_agent, reply_agent")
 
 
 # %%
-@lc_tool("sub_summarize", description="Summarize the text in 2 sentences.")
+@langchain.tools.tool("sub_summarize", description="Summarize the text in 2 sentences.")
 def sub_summarize(text: str) -> str:
     """
     Summarize `text` in 2 sentences.
@@ -723,7 +723,7 @@ def sub_summarize(text: str) -> str:
     )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "sub_action_items", description="Extract action items as bullet points."
 )
 def sub_action_items(text: str) -> str:
@@ -735,7 +735,7 @@ def sub_action_items(text: str) -> str:
     )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "sub_draft_reply",
     description="Draft a short email reply addressing the content.",
 )
@@ -826,9 +826,9 @@ print("SubState and node functions defined")
 sub = StateGraph(SubState)
 sub.add_node("parse", parse_node)
 sub.add_node("format", format_node)
-sub.add_edge(START, "parse")
+sub.add_edge(langgraph.graph.START, "parse")
 sub.add_edge("parse", "format")
-sub.add_edge("format", END)
+sub.add_edge("format", langgraph.graph.END)
 subgraph = sub.compile()
 
 print("Subgraph constructed: START -> parse -> format -> END")
@@ -853,8 +853,8 @@ def call_subgraph(state: ParentState) -> dict:
 
 parent = StateGraph(ParentState)
 parent.add_node("worker", call_subgraph)
-parent.add_edge(START, "worker")
-parent.add_edge("worker", END)
+parent.add_edge(langgraph.graph.START, "worker")
+parent.add_edge("worker", langgraph.graph.END)
 parent_graph = parent.compile()
 
 print("Parent graph constructed with subgraph call node")
@@ -905,11 +905,11 @@ def bump(state: CSub) -> dict:
 # Create two instances: shared (stateless) and private (with memory).
 sub_builder = StateGraph(CSub)
 sub_builder.add_node("bump", bump)
-sub_builder.add_edge(START, "bump")
-sub_builder.add_edge("bump", END)
+sub_builder.add_edge(langgraph.graph.START, "bump")
+sub_builder.add_edge("bump", langgraph.graph.END)
 
 sub_shared = sub_builder.compile()
-sub_private = sub_builder.compile(checkpointer=MemorySaver())
+sub_private = sub_builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
 
 print("Subgraph instances created: sub_shared (stateless) and sub_private (with memory)")
 
@@ -942,9 +942,9 @@ print("Parent state P and call_sub node defined")
 # %%
 parent_builder = StateGraph(P)
 parent_builder.add_node("call_sub", call_sub)
-parent_builder.add_edge(START, "call_sub")
-parent_builder.add_edge("call_sub", END)
-parent = parent_builder.compile(checkpointer=MemorySaver())
+parent_builder.add_edge(langgraph.graph.START, "call_sub")
+parent_builder.add_edge("call_sub", langgraph.graph.END)
+parent = parent_builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
 
 print("Parent graph constructed with checkpoint memory")
 
@@ -986,8 +986,8 @@ print(f"Private subgraph (with memory) results: {private_results}")
 from pathlib import Path
 from typing import Literal as Lit
 
-from langgraph.types import Command, interrupt
-from langgraph.checkpoint.memory import MemorySaver
+import langgraph.types
+import langgraph.checkpoint.memory
 
 
 # ##########################################################
@@ -1008,7 +1008,7 @@ def propose_delete(state: HITLState) -> dict:
         "target_path": state["target_path"],
         "message": "Approve deletion?",
     }
-    decision = interrupt(payload)
+    decision = langgraph.types.interrupt(payload)
     return {"decision": decision}
 
 
@@ -1029,11 +1029,11 @@ print("HITL state and node functions defined")
 builder = StateGraph(HITLState)
 builder.add_node("propose", propose_delete)
 builder.add_node("delete", do_delete)
-builder.add_edge(START, "propose")
+builder.add_edge(langgraph.graph.START, "propose")
 builder.add_edge("propose", "delete")
-builder.add_edge("delete", END)
+builder.add_edge("delete", langgraph.graph.END)
 
-hitl_graph = builder.compile(checkpointer=MemorySaver())
+hitl_graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
 
 print("HITL graph constructed with checkpoint memory")
 
@@ -1062,6 +1062,6 @@ print(f"Interrupt triggered with payload: {pending}")
 
 # %%
 out2 = hitl_graph.invoke(
-    Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
+    langgraph.types.Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
 )
 victim.exists()
