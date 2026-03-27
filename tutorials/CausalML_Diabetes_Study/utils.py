@@ -58,8 +58,7 @@ def download_cdc_data_if_needed(data_path: str) -> None:
         return
     #url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00519/diabetes_health_indicators_BRFSS2015.csv"
     #url = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
-    #url = "https://raw.githubusercontent.com/plotly/datasets/master/diabetes.csv"
-    url = "https://github.com/Helmy2/Diabetes-Health-Indicators/blob/main/diabetes_binary_health_indicators_BRFSS2015.csv"
+    url = "https://raw.githubusercontent.com/Helmy2/Diabetes-Health-Indicators/main/diabetes_binary_health_indicators_BRFSS2015.csv"
     _LOG.info("Downloading dataset from: %s", url)
     hio.create_dir(os.path.dirname(data_path), incremental=True)
     if url.endswith(".zip"):

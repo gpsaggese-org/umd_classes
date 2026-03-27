@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -58,6 +58,9 @@ import matplotlib.pyplot as plt
 
 import logging
 import utils
+
+import warnings
+warnings.filterwarnings("ignore")
 
 _LOG = logging.getLogger(__name__)
 utils.init_logger(_LOG)
