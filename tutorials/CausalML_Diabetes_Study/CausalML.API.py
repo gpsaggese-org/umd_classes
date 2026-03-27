@@ -45,11 +45,8 @@
 
 # %% [markdown]
 # ## Setup
-#
-# Import dependencies and the `CausalNavigator` class from `utils.py`.
 
 # %%
-# Enable auto-reloading so edits in utils.py update immediately.
 # %load_ext autoreload
 # %autoreload 2
 

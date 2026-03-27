@@ -24,8 +24,21 @@ import xgboost
 
 _LOG = logging.getLogger(__name__)
 
-# Set generic style for plots.
-sns.set_theme(style="whitegrid")
+
+import helpers.hnotebook as hnotebo
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init utils logging.
+    global _LOG
+    hnotebo.set_logger_to_print(_LOG)
+    # Init module logging.
+    causalml_logger: logging.Logger = logging.getLogger("causalml")
+    hnotebo.set_logger_to_print(causalml_logger)
 
 
 # #############################################################################
@@ -192,7 +205,7 @@ class CausalNavigator:
         )
         ps_model.fit(X, T)
         p_scores = ps_model.predict_proba(X)[:, 1]
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.kdeplot(
             p_scores[T == 0], shade=True, color="red", label=self.control_name
         )
@@ -279,7 +292,7 @@ class CausalNavigator:
         :param bins: number of bins if the column is continuous
         """
         hdbg.dassert_in(col, df_with_cate.columns, "Column not found: %s", col)
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         # Check if column is effectively continuous or categorical.
         unique_vals = df_with_cate[col].nunique()
         is_categorical = unique_vals < 15
@@ -380,7 +393,7 @@ class CausalNavigator:
                 cate_placebo.mean(),
             )
         # Visualization.
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.histplot(
             placebo_ates,
             color="grey",
@@ -458,7 +471,7 @@ class CausalNavigator:
             sensitivity_results, orient="index", columns=["ATE"]
         )
         sens_df = sens_df.sort_values(by="ATE")
-        plt.figure(figsize=(10, 8))
+        plt.figure()
         # Plot bars.
         sns.barplot(x=sens_df["ATE"], y=sens_df.index, palette="viridis")
         # Add baseline reference line.
