@@ -43,11 +43,6 @@ from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
 
 
-# #############################################################################
-# State Schema and Reducer
-# #############################################################################
-
-
 class S(TypedDict):
     """Simple state with counter and message."""
     n: int
