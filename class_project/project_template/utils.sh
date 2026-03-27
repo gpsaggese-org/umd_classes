@@ -506,6 +506,19 @@ EOF
 }
 
 
+configure_jupyter_autosave() {
+    # """
+    # Configure JupyterLab global autosave interval to 6 seconds.
+    # """
+    mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/docmanager-extension
+    cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/docmanager-extension/plugin.jupyterlab-settings
+{
+    "autosaveInterval": 6000
+}
+EOF
+}
+
+
 check_jupytext_installed() {
     # """
     # Verify that jupytext is installed before starting Jupyter Lab.
@@ -528,10 +541,12 @@ setup_jupyter_environment() {
     # Performs all necessary setup steps:
     # - Configure vim keybindings
     # - Disable notifications
+    # - Configure autosave interval
     # - Verify jupytext is installed
     # """
     configure_jupyter_vim_keybindings
     configure_jupyter_notifications
+    configure_jupyter_autosave
     check_jupytext_installed
 }
 

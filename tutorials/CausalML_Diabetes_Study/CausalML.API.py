@@ -76,9 +76,6 @@ from utils import (
     preprocess_for_causal,
 )
 
-# %%
-_LOG.info("Hello")
-
 # %% [markdown]
 # ### Load data set.
 
@@ -89,6 +86,12 @@ data_path = os.path.join("data", "unprocessed", filename)
 download_cdc_data_if_needed(data_path)
 df_raw = load_cdc_data(data_path)
 
+
+# %%
+df_raw.head(3)
+
+# %%
+# TODO(ai_gp): Add a short explanation of the data above, e.g., what are features, what are target vars.
 
 # %% [markdown]
 # ## Prepare data set
