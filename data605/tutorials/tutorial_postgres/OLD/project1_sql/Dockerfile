@@ -5,7 +5,9 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 
 RUN apt install -y python3-pip python3-dev postgresql postgresql-contrib libpq-dev jupyter-notebook
-RUN pip3 install jupyter ipython-sql psycopg2
+COPY requirements.txt requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r requirements.txt
 
 ADD smallRelationsInsertFile.sql largeRelationsInsertFile.sql DDL.sql /datatemp/
 

@@ -1,7 +1,5 @@
 arviz==0.18.0
 econml
-jupyterlab
-jupyterlab-vim
 matplotlib
 numpy
 pandas
