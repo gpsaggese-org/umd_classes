@@ -136,6 +136,7 @@ import json
 
 # Message and tool call extraction utilities.
 
+
 def _all_tool_calls(messages: list[Any]) -> list[dict[str, Any]]:
     """
     Collect tool call dicts emitted by `AIMessage` objects in `messages`.
@@ -162,6 +163,7 @@ def _tool_outputs(messages: list[Any], tool_name: str) -> list[Any]:
 
 # %%
 # Text conversion and formatting utilities.
+
 
 def _as_text(x: Any) -> str:
     """
@@ -228,6 +230,7 @@ def _extract_bullets(text: str) -> list[str]:
 
 # %%
 # Dataset context building utility for prompts.
+
 
 def build_dataset_context() -> str:
     """
@@ -384,6 +387,7 @@ NOTE_STATE = "/workspace/notes.md"
 NOTE_FS = "/workspace/notes.md"
 NOTE_STORE = "/memories/notes.md"
 
+
 # Helper to invoke agent with thread_id for persistence scoping.
 def run(agent, thread_id: str, user_msg: str):
     """
@@ -393,6 +397,7 @@ def run(agent, thread_id: str, user_msg: str):
         {"messages": [{"role": "user", "content": user_msg}]},
         config={"configurable": {"thread_id": thread_id}},
     )
+
 
 # Demo 1: State backend (thread-scoped, in-memory).
 agent_state = create_deep_agent(model=get_chat_model(), checkpointer=ckpt)
@@ -795,6 +800,7 @@ def _print_tool_calls(state: dict, label: str) -> None:
     calls = _all_tool_calls(state.get("messages", []))
     simplified = [{"name": c.get("name"), "args": c.get("args")} for c in calls]
     print(f"{label} tool_calls:", simplified)
+
 
 # Test 1: Safe file write and read inside the sandbox.
 out_ok = agent.invoke(

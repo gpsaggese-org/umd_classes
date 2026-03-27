@@ -14,11 +14,11 @@
 # ---
 
 # %% [markdown]
-# There are many excellent Python and Jupyter/IPython tutorials out there. This Notebook contains a few snippets of code from here and there, but we suggest you go over some in-depth tutorials, especially if you are not familiar with Python. 
+# There are many excellent Python and Jupyter/IPython tutorials out there. This Notebook contains a few snippets of code from here and there, but we suggest you go over some in-depth tutorials, especially if you are not familiar with Python.
 #
 # Here we borrow some material from:
 #
-# - [A Crash Course in Python for Scientists](http://nbviewer.ipython.org/gist/rpmuller/5920182) (which itself contains some nice links to other tutorials), 
+# - [A Crash Course in Python for Scientists](http://nbviewer.ipython.org/gist/rpmuller/5920182) (which itself contains some nice links to other tutorials),
 # - [matplotlib examples](http://matplotlib.org/gallery.html#),
 # - [Chapter 1 from Pandas Cookbook](http://nbviewer.ipython.org/github/jvns/pandas-cookbook/tree/master/cookbook/)
 #
@@ -34,20 +34,25 @@
 
 # %%
 days_of_the_week = [
-    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-    "Saturday"
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
 ]
 for day in days_of_the_week:
     statement = "Today is " + day
     print(statement)
 
 # %% [markdown]
-# The above code uses a List. In case you haven't realized this yet, Python uses "indentation" to decide the scope, so there is no need to enclose code within {} or similar constructs. 
+# The above code uses a List. In case you haven't realized this yet, Python uses "indentation" to decide the scope, so there is no need to enclose code within {} or similar constructs.
 #
 # The other data structures in Python include Tuples and Dictionaries. Tuples are similar to Lists, but are immutable so we can't modify it (say by appending). Dictionaries are similar to Maps.
 
 # %%
-tuple1 = (1, 2, 'hi', 9.0)
+tuple1 = (1, 2, "hi", 9.0)
 tuple1
 
 # %%
@@ -64,6 +69,7 @@ print("Rick's age is ", ages_dictionary["Rick"])
 
 # %% [markdown]
 # ### Functions
+
 
 # %%
 def fibonacci(sequence_length):
@@ -89,7 +95,7 @@ fibonacci(10)
 # The following function shows several interesting features, including the ability to return multiple values as a tuple, and the idea of "tuple assignment", where objects are unpacked into variables (the first line after for).
 
 # %%
-positions = [('Bob', 0.0, 21.0), ('Cat', 2.5, 13.1), ('Dog', 33.0, 1.2)]
+positions = [("Bob", 0.0, 21.0), ("Cat", 2.5, 13.1), ("Dog", 33.0, 1.2)]
 
 
 def minmax(objects):

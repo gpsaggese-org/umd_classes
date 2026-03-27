@@ -14,7 +14,7 @@
 # ---
 
 # %%
-# The following commands load the requiste modules. 
+# The following commands load the requiste modules.
 # **NOTE: If there is a warning, it doesn't seem to affect things.**
 
 # %load_ext sql
@@ -30,7 +30,7 @@
 
 # %% [markdown]
 # # University Database
-# Below we will use the University database from the class textbook. The University Dataset is the same as the one discussed in the book, and contains randomly populated information about students, courses, and instructors in a university. 
+# Below we will use the University database from the class textbook. The University Dataset is the same as the one discussed in the book, and contains randomly populated information about students, courses, and instructors in a university.
 #
 # You should follow the rest of the Notebook along with the appropriate sections in the book.
 # Each section in the notebook is tagged with the corresponding section in the book.
@@ -296,20 +296,20 @@
 # %% language="sql"
 # (SELECT DISTINCT c.course_id
 #      FROM course AS c, section AS s
-#      WHERE s.semester = 'Spring' AND s.year = '2009') 
+#      WHERE s.semester = 'Spring' AND s.year = '2009')
 # UNION
 # (SELECT DISTINCT c.course_id
 #      FROM course AS c, section AS s
-#      WHERE s.semester = 'Fall' AND s.year = '2009') 
+#      WHERE s.semester = 'Fall' AND s.year = '2009')
 
 # %% language="sql"
 # (SELECT DISTINCT c.course_id
 #      FROM course AS c, section AS s
-#      WHERE s.semester = 'Spring' AND s.year = '2009') 
+#      WHERE s.semester = 'Spring' AND s.year = '2009')
 # INTERSECT
 # (SELECT DISTINCT c.course_id
 #      FROM course AS c, section AS s
-#      WHERE s.semester = 'Fall' AND s.year = '2007') 
+#      WHERE s.semester = 'Fall' AND s.year = '2007')
 
 # %% [markdown]
 # ## (3.6) NULL values
@@ -366,7 +366,7 @@
 # %% language="sql"
 # -- Find the average dept in each department.
 # SELECT dept_name, AVG(salary) AS avg_salary
-#     FROM instructor 
+#     FROM instructor
 #     GROUP BY dept_name;
 
 # %% language="sql"
@@ -383,7 +383,7 @@
 # %% language="sql"
 # -- Get the department having instructors with an average salary larger than $42k.
 # SELECT dept_name, AVG(salary) AS avg_salary
-#     FROM instructor 
+#     FROM instructor
 #     GROUP BY dept_name
 #     HAVING AVG(salary) > 42000;
 
@@ -425,7 +425,7 @@
 # -- Find the dept with an average salary per instruction larger than $42k.
 # -- This is an alternative query to the HAVING query.
 # SELECT tmp.dept_name, tmp.avg_salary
-#     FROM 
+#     FROM
 #         (SELECT dept_name, AVG(salary) AS avg_salary
 #           FROM instructor
 #           GROUP BY dept_name) AS tmp
@@ -515,14 +515,14 @@
 # EXPLAIN
 #     -- ANALYZE
 #     SELECT DISTINCT T.name
-#         FROM instructor AS T, instructor AS S  
+#         FROM instructor AS T, instructor AS S
 #         WHERE T.salary > S.salary AND S.dept_name = 'Biology';
 
 # %% [markdown] jupyter={"outputs_hidden": true}
 # **Self-joins** (WHERE two of the relations in the FROM clause are the same) are impossible without using `as`. The following query associates a course with the pre-requisite of one of its pre-requisites. There is no way to disambiguate the columns without some form of renaming.
 
 # %% language="sql"
-# EXPLAIN 
+# EXPLAIN
 #     ANALYZE
 #         SELECT p1.course_id, p2.prereq_id AS pre_prereq_id
 #             FROM prereq p1, prereq p2

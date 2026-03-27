@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -72,7 +72,7 @@ snippets.in_out_to_files(in_outs)
 # # Assistant
 
 # %%
-system = """You are a proficient Python coder and write English very well. 
+system = """You are a proficient Python coder and write English very well.
 Given the Python code passed below, improve or add comments to the code.
 Each comment should be in imperative form, a full English phrase, and end with a period.
 Comments must be for every logical chunk of 4 or 5 lines of Python code.

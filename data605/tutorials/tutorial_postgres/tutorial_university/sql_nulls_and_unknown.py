@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -14,7 +14,7 @@
 # ---
 
 # %% [markdown]
-# This notebook covers how NULLs are handled and the results of different types of queries in presence of NULLs. Recall that NULL is a special value used when we don't know the value of an attribute, which may be because the value is missing, it is inapplicable, or it is hidden. It is usually a bad idea to assign any specific meaning to the NULL value, but you should know how the query answers are affected. 
+# This notebook covers how NULLs are handled and the results of different types of queries in presence of NULLs. Recall that NULL is a special value used when we don't know the value of an attribute, which may be because the value is missing, it is inapplicable, or it is hidden. It is usually a bad idea to assign any specific meaning to the NULL value, but you should know how the query answers are affected.
 #
 # **NOTE:** NULLs are displayed as "None" by Jupyter, whereas `psql` just shows an empty space.
 
@@ -42,7 +42,7 @@
 # Consider a joint predicate: (NULL = 10) or (10 = 10). The first part evaluates to an UNKNOWN, whereas the second part evaluates to a TRUE. In this case, the joint predicate evaluates to a TRUE -- because whichever value UNKNOWN might take (TRUE or FALSE), the result of the joint predicate will always be TRUE.
 
 # %% [markdown]
-# Similarly: UNKNOWN OR FALSE = UNKNOWN, because the result depends on what is the actual value of the first part. 
+# Similarly: UNKNOWN OR FALSE = UNKNOWN, because the result depends on what is the actual value of the first part.
 # UNKNOWN and TRUE = UNKNOWN.
 # UNKNOWN and FALSE = FALSE.
 #
@@ -59,7 +59,7 @@
 # %sql select * from R where j = 10;
 
 # %% [markdown]
-# SQL has constructs: "is null", "is not null", "is unknown", "is not unknown" to handle NULLs more properly. Note that: i = NULL will always be unknown, even if i is NULL. 
+# SQL has constructs: "is null", "is not null", "is unknown", "is not unknown" to handle NULLs more properly. Note that: i = NULL will always be unknown, even if i is NULL.
 
 # %%
 # %sql select * from R where j = NULL;
@@ -123,13 +123,13 @@
 # ### Joins
 # If you think of joins as cross-product followed by a selection, then most of what we discussed so far just applied directly. NULLs in the join columns are basically ignored since any predicate involving them return false.
 #
-# **NOTE**: This is independent of outerjoins, which add tuples with nulls to the output. 
+# **NOTE**: This is independent of outerjoins, which add tuples with nulls to the output.
 
 # %%
 # %sql select * from R, S where R.i = S.i;
 
 # %% [markdown]
-# However, you can use "is null" or "is unknown" if you want to include specific tuples in the output. 
+# However, you can use "is null" or "is unknown" if you want to include specific tuples in the output.
 
 # %%
 # %sql select * from R, S where R.i = S.i or R.i is null or S.i is null;

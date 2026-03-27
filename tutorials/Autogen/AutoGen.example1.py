@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -14,7 +14,6 @@
 # ---
 
 # %%
-
 # CONTENTS:
 # - [AutoGen: An Introduction to Autogen](#autogen:-an-introduction-to-autogen)
 #     - [Workflow Description](#workflow-description)
@@ -42,8 +41,6 @@
 # The 2 cells below import the required libraries and set up the notebook for execution. Please add your API key as required.
 
 # %%
-
-
 get_ipython().run_line_magic("load_ext", "autoreload")
 get_ipython().run_line_magic("autoreload", "2")
 
@@ -72,8 +69,6 @@ _LOG = logging.getLogger(__name__)
 
 
 # %%
-
-
 # Replace "YOUR_OPENAI_API_KEY" with your actual OpenAI API key.
 os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 
@@ -87,8 +82,6 @@ os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 # - **Visualization:** The Analyst generates and displays a technical trend chart directly in the notebook.
 
 # %%
-
-
 async def _run_stock_mission(
     ticker: str, days: int, task: str, *, model: str = "gpt-4o"
 ):
@@ -160,8 +153,6 @@ async def _run_stock_mission(
 # - Maps choice to a task and runs `run_stock_mission`.
 
 # %%
-
-
 # Set user inputs.
 ticker_in = input("Ticker: ").upper().strip()
 days_in = int(input("Days: "))

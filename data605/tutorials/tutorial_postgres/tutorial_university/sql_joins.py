@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -134,11 +134,11 @@
 
 # %% [markdown]
 # ## Outer joins
-# In many cases, there is a need to keep all the tuples from one (or both) of the relations in the output, even if there is no match. Outer joins are used for that purpose. 
+# In many cases, there is a need to keep all the tuples from one (or both) of the relations in the output, even if there is no match. Outer joins are used for that purpose.
 #
 # E.g., if I am doing a join between "department" and "instructor" on dept_name. Even if a department does not have any instructor, I might want the tuple to be present in the result output.
 #
-# There are three types of outerjoins -- left, right, and full. 
+# There are three types of outerjoins -- left, right, and full.
 #
 # The left outer join is shown below: any tuple from the left relation that did not have a corresponding tuple in the right relation, is added to the output with "NULLs" in the columns from the right relation (in this case, the tuple "rho 30" which did not appear in the join results above -- attribute b_1 and c which came from R2 are set to NULL).
 
@@ -169,7 +169,7 @@
 
 # %% [markdown]
 # ## Semi-joins
-# Semi-join is not an explicit SQL keyword, but is a common Relational Algebra Operation (and has its own symbol). R1 semi-join R2 is simply the R1 tuples that have a match in R2. The output does not include any attributes from R2. 
+# Semi-join is not an explicit SQL keyword, but is a common Relational Algebra Operation (and has its own symbol). R1 semi-join R2 is simply the R1 tuples that have a match in R2. The output does not include any attributes from R2.
 #
 # The way to do this in SQL is through a subquery. As you can see, the tuple "rho, 30" does not appear because it does not have a match in R2.
 

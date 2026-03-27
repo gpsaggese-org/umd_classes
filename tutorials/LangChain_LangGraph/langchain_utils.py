@@ -63,7 +63,9 @@ def diff_checksum_snapshots(
     }
 
 
-def load_markdown_documents(paths: Iterable[str | Path]) -> list[langchain_core.documents.Document]:
+def load_markdown_documents(
+    paths: Iterable[str | Path],
+) -> list[langchain_core.documents.Document]:
     """
     Load markdown files into LangChain `Document` objects.
     """
@@ -105,7 +107,11 @@ def split_documents(
             chunk_text = text[start:end]
             metadata = dict(document.metadata)
             metadata["chunk_index"] = chunk_index
-            chunked.append(langchain_core.documents.Document(page_content=chunk_text, metadata=metadata))
+            chunked.append(
+                langchain_core.documents.Document(
+                    page_content=chunk_text, metadata=metadata
+                )
+            )
             if end >= len(text):
                 break
             start = end - chunk_overlap
@@ -145,7 +151,8 @@ def build_vector_store(
 
 
 def add_documents_to_store(
-    store: langchain_core.vectorstores.InMemoryVectorStore, documents: list[langchain_core.documents.Document]
+    store: langchain_core.vectorstores.InMemoryVectorStore,
+    documents: list[langchain_core.documents.Document],
 ) -> None:
     """
     Append chunked documents to an existing vector store.

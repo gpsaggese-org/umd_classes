@@ -144,9 +144,7 @@ def get_chat_model():
             max_retries=2,
         )
     else:
-        raise ValueError(
-            f"Unsupported `LLM_PROVIDER={cfg.provider}`"
-        )
+        raise ValueError(f"Unsupported `LLM_PROVIDER={cfg.provider}`")
 
 
 # ##############################################################################
@@ -311,7 +309,9 @@ def zscore(xs: Sequence[float], x: float) -> float:
 @langchain_core.tools.tool
 def dataset_brief(
     question: str,
-    dataset_meta: TxAnnotated[dict, langgraph.prebuilt.InjectedState("dataset_meta")],
+    dataset_meta: TxAnnotated[
+        dict, langgraph.prebuilt.InjectedState("dataset_meta")
+    ],
 ) -> str:
     """
     Answer a question using injected dataset metadata (InjectedState).
@@ -338,7 +338,9 @@ def save_pref(
     user_id: str,
     key: str,
     value: str,
-    store: TxAnnotated[langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()],
+    store: TxAnnotated[
+        langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()
+    ],
 ) -> str:
     """
     Save a user preference (key/value) into an injected store.
@@ -352,7 +354,9 @@ def save_pref(
 def load_pref(
     user_id: str,
     key: str,
-    store: TxAnnotated[langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()],
+    store: TxAnnotated[
+        langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()
+    ],
 ) -> str:
     """
     Load a user preference (key) from an injected store.
@@ -528,7 +532,9 @@ def write_notebook(spec: dict[str, Any], out_rel: str) -> str:
 def nb_write(
     spec: dict[str, Any],
     out_rel: str,
-    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Write a notebook under an injected workspace_dir.
@@ -560,7 +566,9 @@ def nb_run(
     in_rel: str,
     out_rel: str,
     timeout_s: int,
-    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Execute a notebook with nbclient and save the executed copy under
@@ -583,7 +591,9 @@ def nb_run(
 @langchain_core.tools.tool
 def nb_extract_errors(
     executed_rel: str,
-    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Extract per-cell error metadata from an executed notebook (JSON string).
@@ -610,7 +620,9 @@ def nb_extract_errors(
 def nb_extract_artifacts(
     executed_rel: str,
     artifacts_rel_dir: str,
-    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Extract stdout + inline PNGs from an executed notebook into
@@ -650,7 +662,9 @@ def nb_extract_artifacts(
 
 @langchain_core.tools.tool
 def nb_list_files(
-    workspace_dir: TxAnnotated[str, langgraph.prebuilt.InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     List files under workspace_dir (JSON).

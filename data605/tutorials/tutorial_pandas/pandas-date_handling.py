@@ -24,11 +24,9 @@
 # !conda info --envs
 
 # %% run_control={"marked": false}
-import functools
 import datetime
 
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -38,16 +36,14 @@ import pandas as pd
 import notebook_utils
 
 notebook_utils.notebook_config()
-#matplotlib.rcParams["figure.figsize"] = (15, 6)
+# matplotlib.rcParams["figure.figsize"] = (15, 6)
 
-#assert np.__version__ == "1.13.3"
+# assert np.__version__ == "1.13.3"
 assert pd.__version__ == "0.20.3"
-#assert matplotlib.__version__ == "2.0.2"
+# assert matplotlib.__version__ == "2.0.2"
 
 # %%
-from notebook_utils import display_df
 
-from IPython.display import display
 
 # def display_df(df):
 #     display(df)
@@ -77,7 +73,7 @@ s
 
 # %%
 # From dictionary.
-d = {'a': 0.0, 'b': 1.0, 'c': 2.0}
+d = {"a": 0.0, "b": 1.0, "c": 2.0}
 s = pd.Series(d)
 s
 
@@ -138,19 +134,19 @@ print("\npanel['bar']=\n", panel["bar"])
 # ### Panel from data frame with same index.
 
 # %%
-df1 = pd.DataFrame([["a", "A"],
-                    ["b", "B"], 
-                    ["c", "C"],
-                    ["d", "D"]], 
-                   index=[0, 1, 2, 3], columns=["val1", "val2"])
+df1 = pd.DataFrame(
+    [["a", "A"], ["b", "B"], ["c", "C"], ["d", "D"]],
+    index=[0, 1, 2, 3],
+    columns=["val1", "val2"],
+)
 print(df1)
 
 
-df2 = pd.DataFrame([["e", "E"],
-                    ["f", "F"], 
-                    ["g", "G"],
-                    ["h", "H"]], 
-                   index=[0, 1, 2, 3], columns=["val1", "val2"])
+df2 = pd.DataFrame(
+    [["e", "E"], ["f", "F"], ["g", "G"], ["h", "H"]],
+    index=[0, 1, 2, 3],
+    columns=["val1", "val2"],
+)
 print(df2)
 
 # %%
@@ -172,18 +168,15 @@ print(panel.loc[:, :, ["val1"]])
 # ### Transposing.
 
 # %%
-rng = pd.date_range('1/1/2014', periods=100, freq='D')
-cols = ['A','B','C','D']
+rng = pd.date_range("1/1/2014", periods=100, freq="D")
+cols = ["A", "B", "C", "D"]
 
 np.random.seed(42)
 df1 = pd.DataFrame(np.random.randn(100, len(cols)), rng, cols)
 df2 = pd.DataFrame(np.random.randn(100, len(cols)), rng, cols)
 df3 = pd.DataFrame(np.random.randn(100, len(cols)), rng, cols)
 
-pf = pd.Panel({
-        'df1': df1,
-        'df2': df2,
-        'df3': df3})
+pf = pd.Panel({"df1": df1, "df2": df2, "df3": df3})
 
 print(pf)
 
@@ -259,7 +252,7 @@ print(type(ts.index))
 ts.head()
 
 # %% run_control={"marked": false}
-ts.plot();
+ts.plot()
 
 # %%
 # Change frequency.
@@ -269,18 +262,18 @@ converted.head(10)
 # %% run_control={"marked": false}
 # Change frequency and fill gaps.
 # ffill: fills forward the nans (causal).
-converted = ts.asfreq("45Min", method='ffill')
+converted = ts.asfreq("45Min", method="ffill")
 converted.head(10)
 
 # %% run_control={"marked": false}
 # Resample daily using mean() to aggregate.
-ts.resample('D').mean()
+ts.resample("D").mean()
 
 # %% run_control={"marked": false}
 ts.plot(label="ts")
 converted.plot(label="converted")
-ts.resample('D').mean().plot(label="daily mean")
-plt.legend(loc="best");
+ts.resample("D").mean().plot(label="daily mean")
+plt.legend(loc="best")
 
 # %% [markdown] run_control={"marked": false}
 # ## Time stamps vs time spans
@@ -307,7 +300,7 @@ pd.Timestamp("2012-05-01")
 pd.Timestamp(2012, 5, 1)
 
 # %% run_control={"marked": false}
-pd.Period('2011-01', freq='D')
+pd.Period("2011-01", freq="D")
 
 # %% run_control={"marked": false}
 # Timestamp is coerced to DatetimeIndex when used as index in DataFrame and Series.
@@ -361,14 +354,18 @@ print(pd.to_datetime(["2010-11-12", "2010-11-13", "2010-11-14"]))
 
 # %% run_control={"marked": false}
 # Using Epochs.
-pd.to_datetime([1349720105, 1349806505, 1349892905, 1349979305, 1350065705],
-               unit='s')
+pd.to_datetime(
+    [1349720105, 1349806505, 1349892905, 1349979305, 1350065705], unit="s"
+)
 
 # %% run_control={"marked": false}
 pd.to_datetime(
-    [dt * 1000 for dt in [1349720105, 1349806505, 1349892905,
-                         1349979305, 1350065705]],
-               unit='ms')
+    [
+        dt * 1000
+        for dt in [1349720105, 1349806505, 1349892905, 1349979305, 1350065705]
+    ],
+    unit="ms",
+)
 
 # %% run_control={"marked": false}
 # ??? Not working in 0.19
@@ -453,7 +450,7 @@ ts[::2].index
 
 # %% run_control={"marked": false}
 # Index with string representing a date.
-ts['1/31/2011']
+ts["1/31/2011"]
 
 # %%
 # Index with datetime.
@@ -465,20 +462,20 @@ ts["2011-12-25":]
 
 # %% run_control={"marked": false}
 # Slice with datetime().
-ts[datetime.datetime(2011, 12, 25):]
+ts[datetime.datetime(2011, 12, 25) :]
 
 # %% run_control={"marked": false}
 # Slice with partial string.
-ts['2011']
+ts["2011"]
 
 # %% run_control={"marked": false}
 # Select with partial string.
-ts['2011-06']
+ts["2011-06"]
 
 # %% run_control={"marked": false}
 # Label slicing implies that endpoints are included
 # (different from python convention, but same as np).
-ts['2011-01-31':'2011-03-31']
+ts["2011-01-31":"2011-03-31"]
 
 # %% run_control={"marked": false}
 # truncate() is equivalent to slicing (both endpoints are included in the sliced object).
@@ -537,7 +534,7 @@ print(type(next_d), next_d)
 # %% run_control={"marked": false}
 print("BDay=", d + pd.offsets.BDay())
 print("Week=", d + pd.offsets.Week())
-#print "WeekOfMonth=", d + pd.offsets.WeekOfMonth()
+# print "WeekOfMonth=", d + pd.offsets.WeekOfMonth()
 
 # %% run_control={"marked": false}
 # Use DateOffset() to align to month.
@@ -571,7 +568,7 @@ print(d + pd.offsets.Week(normalize=True))
 
 # %% run_control={"marked": false}
 # Offsets also works with Series / DataFrames (although might be slow since it is not vectorized).
-rng = pd.date_range(start='2012-01-01', end='2012-01-03', freq='1D')
+rng = pd.date_range(start="2012-01-01", end="2012-01-03", freq="1D")
 s = pd.Series(rng)
 print(s)
 
@@ -579,8 +576,12 @@ print(s + pd.offsets.DateOffset(months=1))
 
 # %% run_control={"marked": false}
 # In general string aliases and offset objects are interchangeable.
-print(pd.date_range(start='2012-01-01', end='2012-01-10', freq='3D'))
-print(pd.date_range(start='2012-01-01', end='2012-01-10', freq=3 * pd.offsets.Day()))
+print(pd.date_range(start="2012-01-01", end="2012-01-10", freq="3D"))
+print(
+    pd.date_range(
+        start="2012-01-01", end="2012-01-10", freq=3 * pd.offsets.Day()
+    )
+)
 
 # %% run_control={"marked": false}
 # One can combine day and intraday offsets in string offsets.
@@ -590,7 +591,7 @@ pd.date_range(start, periods=10, freq="2h20min")
 # ## Time series-related operations
 
 # %% run_control={"marked": false}
-idx = pd.date_range(start='2012-01-01', end='2012-01-07', freq='1D')
+idx = pd.date_range(start="2012-01-01", end="2012-01-07", freq="1D")
 ts = pd.Series(list(range(len(idx))), index=idx)
 ts
 
@@ -615,7 +616,7 @@ ts.shift(1, freq=pd.offsets.BDay())
 
 # %% run_control={"marked": false}
 np.random.seed(1000)
-idx = pd.date_range('1/1/2010', periods=3, freq=3 * pd.offsets.BDay())
+idx = pd.date_range("1/1/2010", periods=3, freq=3 * pd.offsets.BDay())
 ts = pd.Series(np.random.randn(len(idx)), index=idx)
 
 ts
@@ -629,7 +630,7 @@ ts.asfreq(pd.offsets.Day())
 ts.asfreq(pd.offsets.BDay())
 
 # %% run_control={"marked": false}
-ts.asfreq(pd.offsets.BDay(), method='ffill')
+ts.asfreq(pd.offsets.BDay(), method="ffill")
 
 # %% [markdown] run_control={"marked": false}
 # ## Time span representation
@@ -641,19 +642,19 @@ ts.asfreq(pd.offsets.BDay(), method='ffill')
 
 # %% run_control={"marked": false}
 # Arithmetic operations on periods.
-p = pd.Period('2012-1-1', freq='D')
+p = pd.Period("2012-1-1", freq="D")
 print(type(p), p)
 print(p + 1)
 print(p - 3)
 
 # %%
-p = pd.Timestamp('2012-1-1', freq='D')
+p = pd.Timestamp("2012-1-1", freq="D")
 print(type(p), p)
 print(p + 1)
 print(p - 3)
 
 # %% run_control={"marked": false}
-prng = pd.period_range('1/1/2011', '1/1/2012', freq='M')
+prng = pd.period_range("1/1/2011", "1/1/2012", freq="M")
 prng
 
 # %% run_control={"marked": false}
@@ -665,13 +666,13 @@ ts = pd.Series(np)
 
 # %%
 # By default pandas objects are time zone unaware.
-rng = pd.date_range('3/6/2012 00:00', periods=15, freq='D')
+rng = pd.date_range("3/6/2012 00:00", periods=15, freq="D")
 print(rng)
 print(rng.tz is None)
 
 # %%
 # Using pandas timezone support.
-rng = pd.date_range('3/6/2012 00:00', periods=10, freq='D', tz='Europe/London')
+rng = pd.date_range("3/6/2012 00:00", periods=10, freq="D", tz="Europe/London")
 print(rng)
 print(rng.tz is None)
 print(rng.tz)
@@ -679,20 +680,21 @@ print(rng.tz)
 # %%
 # Using pytz timezone.
 import pytz
-pytz_ = pytz.timezone('Europe/London')
-rng_pytz = pd.date_range('3/6/2012 00:00', periods=10, freq='D', tz=pytz_)
+
+pytz_ = pytz.timezone("Europe/London")
+rng_pytz = pd.date_range("3/6/2012 00:00", periods=10, freq="D", tz=pytz_)
 print(rng_pytz)
 
 # %%
 # tz_localize() just forces a tz-unaware datetime to become aware of
-# the passed tz. It's up to the caller to know how to interpret the 
+# the passed tz. It's up to the caller to know how to interpret the
 # date time.
 # datetime() doesn't have tz_localize method.
 dt = pd.to_datetime(datetime.date(2000, 2, 1))
 print("dt=", type(dt), dt)
 
 # datetime() doesn't have tz_localize method.
-print("dt=", type(dt), dt.tz_localize('US/Eastern'))
+print("dt=", type(dt), dt.tz_localize("US/Eastern"))
 
 # %%
 # Once a datetime is localized, one can represent the same data with
@@ -700,23 +702,23 @@ print("dt=", type(dt), dt.tz_localize('US/Eastern'))
 dt = pd.to_datetime(datetime.date(2000, 2, 1))
 print("dt=", type(dt), dt)
 
-dt = dt.tz_localize('UTC')
+dt = dt.tz_localize("UTC")
 print("dt=", type(dt), dt)
 
-dt = dt.tz_convert('US/Eastern')
+dt = dt.tz_convert("US/Eastern")
 print("dt=", type(dt), dt)
 
 # %%
 # Localize and convert to timezone aware.
 np.random.seed(1000)
-rng = pd.date_range('3/6/2012 00:00', periods=15, freq='D')
+rng = pd.date_range("3/6/2012 00:00", periods=15, freq="D")
 ts = pd.Series(np.random.randn(len(rng)), rng)
 print(ts.head(3))
 
-ts_utc = ts.tz_localize('UTC')
+ts_utc = ts.tz_localize("UTC")
 print("\n", ts_utc.head(3))
 
-print("\n", ts_utc.tz_convert('US/Eastern').head(3))
+print("\n", ts_utc.tz_convert("US/Eastern").head(3))
 
 # %%
 # To remove localization.

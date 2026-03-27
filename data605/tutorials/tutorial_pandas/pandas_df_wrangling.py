@@ -21,12 +21,9 @@
 # ## Import
 
 # %%
-import functools
 import datetime
 
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
 import pandas as pd
 
 # %load_ext autoreload
@@ -38,7 +35,7 @@ import pandas as pd
 import notebook_utils
 
 notebook_utils.notebook_config()
-#matplotlib.rcParams["figure.figsize"] = (15, 6)
+# matplotlib.rcParams["figure.figsize"] = (15, 6)
 
 # %%
 from notebook_utils import display_df
@@ -52,14 +49,14 @@ from IPython.display import display
 
 # %% run_control={"marked": false}
 np.random.seed(10)
-df = pd.DataFrame({
-    'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
-    'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
-    'C':
-    np.random.randn(8),
-    'D':
-    np.random.randn(8)
-})
+df = pd.DataFrame(
+    {
+        "A": ["foo", "bar", "foo", "bar", "foo", "bar", "foo", "foo"],
+        "B": ["one", "one", "two", "three", "two", "two", "one", "three"],
+        "C": np.random.randn(8),
+        "D": np.random.randn(8),
+    }
+)
 df
 
 # %% run_control={"marked": false}
@@ -90,7 +87,7 @@ print("last=\n", grouped.last())
 # ## Grouping df
 
 # %% run_control={"marked": false}
-df2 = pd.DataFrame({'X': ['B', 'B', 'A', 'A'], 'Y': [1, 2, 3, 4]})
+df2 = pd.DataFrame({"X": ["B", "B", "A", "A"], "Y": [1, 2, 3, 4]})
 df2
 
 # %% run_control={"marked": false}
@@ -125,23 +122,23 @@ for name, group in grouped:
 # ## Groupby + select
 
 # %% run_control={"marked": false}
-df_buyer = pd.DataFrame({
-    'Branch':
-    'A A A A A A A B'.split(),
-    'Buyer':
-    'Carl Mark Carl Carl Joe Joe Joe Carl'.split(),
-    'Quantity': [1, 3, 5, 1, 8, 1, 9, 3],
-    'Date': [
-        datetime.datetime(2013, 1, 1, 13, 0),
-        datetime.datetime(2013, 1, 1, 13, 5),
-        datetime.datetime(2013, 10, 1, 20, 0),
-        datetime.datetime(2013, 10, 2, 10, 0),
-        datetime.datetime(2013, 10, 1, 20, 0),
-        datetime.datetime(2013, 10, 2, 10, 0),
-        datetime.datetime(2013, 12, 2, 12, 0),
-        datetime.datetime(2013, 12, 2, 14, 0),
-    ]
-})
+df_buyer = pd.DataFrame(
+    {
+        "Branch": "A A A A A A A B".split(),
+        "Buyer": "Carl Mark Carl Carl Joe Joe Joe Carl".split(),
+        "Quantity": [1, 3, 5, 1, 8, 1, 9, 3],
+        "Date": [
+            datetime.datetime(2013, 1, 1, 13, 0),
+            datetime.datetime(2013, 1, 1, 13, 5),
+            datetime.datetime(2013, 10, 1, 20, 0),
+            datetime.datetime(2013, 10, 2, 10, 0),
+            datetime.datetime(2013, 10, 1, 20, 0),
+            datetime.datetime(2013, 10, 2, 10, 0),
+            datetime.datetime(2013, 12, 2, 12, 0),
+            datetime.datetime(2013, 12, 2, 14, 0),
+        ],
+    }
+)
 
 df_buyer
 
@@ -168,7 +165,7 @@ _ = df_buyer.groupby("Buyer").boxplot()
 # %% run_control={"marked": false}
 # Group and then aggregate groups with generic function.
 display_df(grouped.aggregate(np.sum))
-#print grouped.agg(np.sum)
+# print grouped.agg(np.sum)
 
 # %% run_control={"marked": false}
 # Use pandas function.
@@ -203,7 +200,7 @@ if False:
 
 # %% run_control={"marked": false}
 np.random.seed(5)
-index = pd.date_range('10/1/1999', periods=1100)
+index = pd.date_range("10/1/1999", periods=1100)
 ts = pd.Series(np.random.normal(0.05, 2, 1100), index)
 ts.cumsum().plot()
 
@@ -236,6 +233,7 @@ df
 
 # %%
 if False:
+
     def print_(x):
         print("\n", x)
 
@@ -248,20 +246,20 @@ if False:
 np.random.seed(0)
 df = pd.DataFrame(np.random.rand(100, 1))
 f = lambda df: df.mean()
-#res = pd.rolling_apply(df, 3, f, min_periods=3)
+# res = pd.rolling_apply(df, 3, f, min_periods=3)
 res = df.rolling(min_periods=3, window=3).apply(f)
 res.head(10)
 
 # %%
 df = pd.DataFrame(np.random.rand(100, 1))
-#f = lambda df: [df.mean(), df.std()]
+# f = lambda df: [df.mean(), df.std()]
 f = lambda df: df.mean()
-#res = pd.rolling_apply(df, 3, f, min_periods=3)
+# res = pd.rolling_apply(df, 3, f, min_periods=3)
 res = df.rolling(min_periods=3, window=3).apply(f)
 res.head(10)
 
 # %%
-# It doesn't seem to work for 
+# It doesn't seem to work for
 
 # %% [markdown] run_control={"marked": false}
 # ## groupby + filter
@@ -283,14 +281,14 @@ sf.groupby(sf).filter(lambda x: x.sum() > 2)
 
 # %%
 np.random.seed(10)
-df = pd.DataFrame({
-    'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
-    'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
-    'C':
-    np.random.randn(8),
-    'D':
-    np.random.randn(8)
-})
+df = pd.DataFrame(
+    {
+        "A": ["foo", "bar", "foo", "bar", "foo", "bar", "foo", "foo"],
+        "B": ["one", "one", "two", "three", "two", "two", "one", "three"],
+        "C": np.random.randn(8),
+        "D": np.random.randn(8),
+    }
+)
 df
 
 # %% run_control={"marked": false}
@@ -306,27 +304,29 @@ df.groupby("A").apply(lambda x: x.describe())
 # - If one needs more control of grouping, an object pd.Grouper can be used.
 
 # %% run_control={"marked": false}
-df_buyer = pd.DataFrame({
-    'Branch' : 'A A A A A A A B'.split(),
-    'Buyer': 'Carl Mark Carl Carl Joe Joe Joe Carl'.split(),
-    'Quantity': [1,3,5,1,8,1,9,3],
-    'Date' : [
-    datetime.datetime(2013,1,1,13,0),
-    datetime.datetime(2013,1,1,13,5),
-    datetime.datetime(2013,10,1,20,0),
-    datetime.datetime(2013,10,2,10,0),
-    datetime.datetime(2013,10,1,20,0),
-    datetime.datetime(2013,10,2,10,0),
-    datetime.datetime(2013,12,2,12,0),
-    datetime.datetime(2013,12,2,14,0),
-    ]
-})
+df_buyer = pd.DataFrame(
+    {
+        "Branch": "A A A A A A A B".split(),
+        "Buyer": "Carl Mark Carl Carl Joe Joe Joe Carl".split(),
+        "Quantity": [1, 3, 5, 1, 8, 1, 9, 3],
+        "Date": [
+            datetime.datetime(2013, 1, 1, 13, 0),
+            datetime.datetime(2013, 1, 1, 13, 5),
+            datetime.datetime(2013, 10, 1, 20, 0),
+            datetime.datetime(2013, 10, 2, 10, 0),
+            datetime.datetime(2013, 10, 1, 20, 0),
+            datetime.datetime(2013, 10, 2, 10, 0),
+            datetime.datetime(2013, 12, 2, 12, 0),
+            datetime.datetime(2013, 12, 2, 14, 0),
+        ],
+    }
+)
 
 df_buyer
 
 # %% run_control={"marked": false}
 # This is like resampling.
-grouper = pd.Grouper(freq='1M', key='Date')
+grouper = pd.Grouper(freq="1M", key="Date")
 
 df_tmp = df_buyer.groupby(grouper).sum().dropna()
 df_tmp
@@ -354,38 +354,38 @@ df_tmp2
 # %% run_control={"marked": false}
 # Build a df with 100 seconds worth of (random) data.
 np.random.seed(1000)
-rng = pd.date_range('1/1/2012', periods=100, freq='S')
+rng = pd.date_range("1/1/2012", periods=100, freq="S")
 ts0 = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
 print(ts0.head())
 print(ts0.tail())
 
 # %% run_control={"marked": false}
 # Summarize in 1 minute intervals.
-ts0.resample('1Min').sum()
+ts0.resample("1Min").sum()
 
 # %% run_control={"marked": false}
-ts0.resample('1Min').max()
+ts0.resample("1Min").max()
 
 # %% run_control={"marked": false}
 # 'label' and 'loffset' can be used to manipulate the labels used to mark the intervals.
-print(ts0.resample('1Min', label='right').mean())
+print(ts0.resample("1Min", label="right").mean())
 
-print(ts0.resample('1Min', label='left').mean())
+print(ts0.resample("1Min", label="left").mean())
 
-print(ts0.resample('1Min', label='left', loffset='1s').mean())
+print(ts0.resample("1Min", label="left", loffset="1s").mean())
 
 # %%
 # Resample without summarizing.
 
 # Build a df with 100 seconds worth of data.
 np.random.seed(1000)
-rng = pd.date_range('1/1/2012', periods=100, freq='2Min')
+rng = pd.date_range("1/1/2012", periods=100, freq="2Min")
 ts0_1 = pd.Series(np.arange(0, len(rng)) ** 2, index=rng)
 ts0_1.plot(style=".-", lw=3)
 
 # pandas 0.14 uses this syntax.
-ts1_1 = ts0_1.resample('1H', how="last", closed='right', label='right')
-ts1_1.plot(kind="line", style='o--')
+ts1_1 = ts0_1.resample("1H", how="last", closed="right", label="right")
+ts1_1.plot(kind="line", style="o--")
 
 # %% [markdown] run_control={"marked": false}
 # ## Upsampling with resample().
@@ -398,22 +398,22 @@ ts[:2]
 # 'closed' can be used to specify which end of the interval is closed.
 
 # By default intervals are [a, b)
-print(ts.resample('1Min').mean().head(10))
-print(ts.resample('1Min', closed='left').mean().head(10))
+print(ts.resample("1Min").mean().head(10))
+print(ts.resample("1Min", closed="left").mean().head(10))
 
 # closed=right => (a, b]
-print(ts.resample('1Min', closed='right').mean().head(10))
+print(ts.resample("1Min", closed="right").mean().head(10))
 
 # %% run_control={"marked": false}
 # Resample from seconds to 250 millisecs.
 # asfreq() is used to expand the resampler.
-ts[:2].resample('250L').asfreq().head(10)
+ts[:2].resample("250L").asfreq().head(10)
 
 # %% run_control={"marked": false}
-ts[:2].resample('250L').ffill().head(10)
+ts[:2].resample("250L").ffill().head(10)
 
 # %% run_control={"marked": false}
-ts[:2].resample('250L').ffill(limit=2).head(10)
+ts[:2].resample("250L").ffill(limit=2).head(10)
 
 # %% [markdown] run_control={"marked": false}
 # ## Sparse resampling
@@ -421,7 +421,7 @@ ts[:2].resample('250L').ffill(limit=2).head(10)
 # sparse timeseries are ones with fewer points relative to the amount of time
 
 # %% run_control={"marked": false}
-rng = pd.date_range('2014-1-1', periods=100, freq='D')
+rng = pd.date_range("2014-1-1", periods=100, freq="D")
 rng += pd.Timedelta("1s")
 print(rng[:5])
 
@@ -431,7 +431,7 @@ ts3.head()
 
 # %% run_control={"marked": false}
 # Upsample the daily ts every 3 mins, getting a very sparse time series.
-ts4 = ts3.resample('3T').sum()
+ts4 = ts3.resample("3T").sum()
 
 # %% run_control={"marked": false}
 ts4.index
@@ -441,21 +441,21 @@ ts4.index
 
 # %% run_control={"marked": false}
 # Get a data frame with 60 hours.
-idx = pd.date_range("2012-01-01-17", freq='H', periods=60)
+idx = pd.date_range("2012-01-01-17", freq="H", periods=60)
 ts5 = pd.Series(data=[1] * 60, index=idx)
 print(ts5.head())
 print(ts5.tail())
 
 # %% run_control={"marked": false}
-ts5.resample('D').sum()
+ts5.resample("D").sum()
 
 # %% run_control={"marked": false}
 # By specifying a period in hours and setting the initial hour, one can shift the sampling intervals.
-ts5.resample('24H', base=17).sum()
+ts5.resample("24H", base=17).sum()
 
 # %% run_control={"marked": false}
 # Resample daily starting from 7:45am (= 60 * 24 + 45 = 465).
-ts5.resample('1440Min', base=465).sum()
+ts5.resample("1440Min", base=465).sum()
 
 # %% [markdown] run_control={"marked": false}
 # ## Resample dataframes.
@@ -465,50 +465,50 @@ ts5.resample('1440Min', base=465).sum()
 # %% run_control={"marked": false}
 # Df with 1000 seconds worth of data and multiple columns.
 np.random.seed(1000)
-df = pd.DataFrame(np.random.randn(1000, 3),
-                  index=pd.date_range('1/1/2012', freq='S', periods=1000),
-                  columns="A B C".split(" "))
+df = pd.DataFrame(
+    np.random.randn(1000, 3),
+    index=pd.date_range("1/1/2012", freq="S", periods=1000),
+    columns="A B C".split(" "),
+)
 print(df.head(2))
 print("...")
 print(df.tail(2))
 
 # %% run_control={"marked": false}
 # Apply the same function to each column.
-df.resample('3T').mean()
+df.resample("3T").mean()
 
 # %% run_control={"marked": false}
 # Specify custom function.
-df.resample('3T').agg(lambda x: x.mean())
+df.resample("3T").agg(lambda x: x.mean())
 
 # %% run_control={"marked": false}
 # Apply function to only certain columns.
 # NOTE: we tell the resampler which columns to resample instead of selecting columns first.
-df.resample('3T')[["A", "B"]].mean()
+df.resample("3T")[["A", "B"]].mean()
 
 # %% run_control={"marked": false}
 # Apply multiple functions to a single column.
-df.resample('3T')["A"].agg([np.sum, np.mean, np.std])
+df.resample("3T")["A"].agg([np.sum, np.mean, np.std])
 
 # %% run_control={"marked": false}
 # Assign names to columns.
-df.resample('3T')["A"].agg({"res1": np.sum,
-                            "res2": np.mean})
+df.resample("3T")["A"].agg({"res1": np.sum, "res2": np.mean})
 
 # %% run_control={"marked": false}
 # Apply multiple functions to each column, returning a hierarchical index.
-df.resample('3T').agg([np.sum, np.mean])
+df.resample("3T").agg([np.sum, np.mean])
 
 # %% run_control={"marked": false}
 # Specify different multiple functions for each column, returning a hierarchical index.
-df.resample('3T').agg({"A": [np.sum, np.mean],
-                       "B": [np.mean]})
+df.resample("3T").agg({"A": [np.sum, np.mean], "B": [np.mean]})
 
 # %% [markdown] run_control={"marked": false}
 # ## Resample with asfreq()
 
 # %% run_control={"marked": false}
 np.random.seed(1000)
-idx = pd.date_range('1/1/2010', periods=10, freq=pd.offsets.BDay())
+idx = pd.date_range("1/1/2010", periods=10, freq=pd.offsets.BDay())
 ts6 = pd.Series(np.random.rand(idx.shape[0]), index=idx)
 ts6
 
@@ -543,8 +543,7 @@ ts6.groupby(grouper).transform(lambda x: x.mean())
 # For each date and each variable there is an observation.
 idx = pd.date_range(start="20010101", end="20010103").tolist() * 4
 np.random.seed(1000)
-df = pd.DataFrame(np.random.rand(len(idx), 1),
-                  columns="value".split())
+df = pd.DataFrame(np.random.rand(len(idx), 1), columns="value".split())
 df.insert(0, "date", idx)
 df.insert(1, "variable", ["A"] * 3 + ["B"] * 3 + ["C"] * 3 + ["D"] * 3)
 df.index.name = "date"
@@ -580,19 +579,24 @@ list(zip("a b c d".split(), "1 2 3 4".split()))
 list(zip("a b c d".split(), "1 2 3 4".split(), "x y z w".split()))
 
 # %%
-tuples = [('a', '1'), ('b', '2'), ('c', '3'), ('d', '4')]
+tuples = [("a", "1"), ("b", "2"), ("c", "3"), ("d", "4")]
 print(list(zip(*tuples))[0])
 print(list(zip(*tuples))[1])
 
 # %%
 tuples = list(
-    zip(*[['bar', 'bar', 'baz', 'baz', 'foo', 'foo', 'qux', 'qux'],
-          ['one', 'two', 'one', 'two', 'one', 'two', 'one', 'two']]))
+    zip(
+        *[
+            ["bar", "bar", "baz", "baz", "foo", "foo", "qux", "qux"],
+            ["one", "two", "one", "two", "one", "two", "one", "two"],
+        ]
+    )
+)
 print(tuples)
-index = pd.MultiIndex.from_tuples(tuples, names=['first', 'second'])
+index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
 
 np.random.seed(1000)
-df = pd.DataFrame(np.random.randn(8, 2), index=index, columns=['A', 'B'])
+df = pd.DataFrame(np.random.randn(8, 2), index=index, columns=["A", "B"])
 
 print(df)
 
@@ -617,7 +621,7 @@ print(stacked)
 stacked.unstack()
 
 # %%
-# 
+#
 stacked.unstack(1)
 
 # %%
@@ -629,12 +633,14 @@ stacked.unstack(0)
 # - melt() massages a df into a format where one or more columns are identifier variables, while all other columns are unpivoted leaving just two columns 'variable' and 'value'.
 
 # %%
-cheese = pd.DataFrame({
-    'first': ['John', 'Mary'],
-    'last': ['Doe', 'Bo'],
-    'height': [5.5, 6.0],
-    'weight': [130, 150]
-})
+cheese = pd.DataFrame(
+    {
+        "first": ["John", "Mary"],
+        "last": ["Doe", "Bo"],
+        "height": [5.5, 6.0],
+        "weight": [130, 150],
+    }
+)
 cheese
 
 # %%
@@ -648,25 +654,37 @@ pd.melt(cheese, id_vars=["first", "last"])
 # ## concat()
 
 # %%
-df1 = pd.DataFrame({'A': ['A0', 'A1', 'A2', 'A3'],
-                    'B': ['B0', 'B1', 'B2', 'B3'],
-                    'C': ['C0', 'C1', 'C2', 'C3'],
-                    'D': ['D0', 'D1', 'D2', 'D3']},
-                    index=[0, 1, 2, 3])
+df1 = pd.DataFrame(
+    {
+        "A": ["A0", "A1", "A2", "A3"],
+        "B": ["B0", "B1", "B2", "B3"],
+        "C": ["C0", "C1", "C2", "C3"],
+        "D": ["D0", "D1", "D2", "D3"],
+    },
+    index=[0, 1, 2, 3],
+)
 
 
-df2 = pd.DataFrame({'A': ['A4', 'A5', 'A6', 'A7'],
-                    'B': ['B4', 'B5', 'B6', 'B7'],
-                    'C': ['C4', 'C5', 'C6', 'C7'],
-                    'D': ['D4', 'D5', 'D6', 'D7']},
-                     index=[4, 5, 6, 7])
+df2 = pd.DataFrame(
+    {
+        "A": ["A4", "A5", "A6", "A7"],
+        "B": ["B4", "B5", "B6", "B7"],
+        "C": ["C4", "C5", "C6", "C7"],
+        "D": ["D4", "D5", "D6", "D7"],
+    },
+    index=[4, 5, 6, 7],
+)
 
 
-df3 = pd.DataFrame({'A': ['A8', 'A9', 'A10', 'A11'],
-                    'B': ['B8', 'B9', 'B10', 'B11'],
-                    'C': ['C8', 'C9', 'C10', 'C11'],
-                    'D': ['D8', 'D9', 'D10', 'D11']},
-                    index=[8, 9, 10, 11])
+df3 = pd.DataFrame(
+    {
+        "A": ["A8", "A9", "A10", "A11"],
+        "B": ["B8", "B9", "B10", "B11"],
+        "C": ["C8", "C9", "C10", "C11"],
+        "D": ["D8", "D9", "D10", "D11"],
+    },
+    index=[8, 9, 10, 11],
+)
 
 result = pd.concat([df1, df2, df3])
 result
@@ -688,11 +706,12 @@ result.loc["1"]
 # Index has some intersectio, but the columns are not exactly the same.
 df4 = pd.DataFrame(
     {
-        'B': ['B2', 'B3', 'B6', 'B7'],
-        'D': ['D2', 'D3', 'D6', 'D7'],
-        'F': ['F2', 'F3', 'F6', 'F7']
+        "B": ["B2", "B3", "B6", "B7"],
+        "D": ["D2", "D3", "D6", "D7"],
+        "F": ["F2", "F3", "F6", "F7"],
     },
-    index=[2, 3, 6, 7])
+    index=[2, 3, 6, 7],
+)
 
 print(df1)
 print(df4)
@@ -735,7 +754,7 @@ display(df)
 
 df.index.name = ""
 df.reset_index(inplace=True)
-df.insert(0, 'datetime', pd.to_datetime("2001-01-1"))
+df.insert(0, "datetime", pd.to_datetime("2001-01-1"))
 df.set_index(["datetime", ""], inplace=True)
 
 display(df)
@@ -750,9 +769,13 @@ isinstance(np.mean, object)
 import helpers.unit_test as hut
 
 # %%
-df1 = hut.get_random_df(2, start="2010-01-01 09:00", end="2010-01-03 09:00", freq="30T")
+df1 = hut.get_random_df(
+    2, start="2010-01-01 09:00", end="2010-01-03 09:00", freq="30T"
+)
 
-df2 = hut.get_random_df(3, start="2010-01-02 09:05", end="2010-01-03 00:00", freq="30T")
+df2 = hut.get_random_df(
+    3, start="2010-01-02 09:05", end="2010-01-03 00:00", freq="30T"
+)
 
 # %%
 display(df1.head())

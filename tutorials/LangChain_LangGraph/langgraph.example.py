@@ -45,6 +45,7 @@ import langgraph.graph
 
 class S(TypedDict):
     """Simple state with counter and message."""
+
     n: int
     msg: str
 
@@ -102,6 +103,7 @@ from typing import Literal
 
 class R(TypedDict):
     """State for routing example."""
+
     flag: bool
     out: str
 
@@ -172,10 +174,13 @@ def add_list(old: List[str], new: List[str]) -> List[str]:
 
 class ReducerState(TypedDict):
     """State with reducer for accumulating evidence."""
+
     evidence: Annotated[List[str], add_list]
 
 
-print("State schema ReducerState defined with evidence field using add_list reducer")
+print(
+    "State schema ReducerState defined with evidence field using add_list reducer"
+)
 
 
 # %%
@@ -265,6 +270,7 @@ import langgraph.prebuilt
 
 class RS(TypedDict):
     """State with messages accumulated using add_messages reducer."""
+
     messages: Ann[list, langgraph.graph.message.add_messages]
 
 
@@ -296,7 +302,9 @@ g = StateGraph(RS)
 g.add_node("model", call_model)
 g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "model")
-g.add_conditional_edges("model", needs_tools, {"tools": "tools", "end": langgraph.graph.END})
+g.add_conditional_edges(
+    "model", needs_tools, {"tools": "tools", "end": langgraph.graph.END}
+)
 g.add_edge("tools", "model")
 graph = g.compile()
 
@@ -314,7 +322,9 @@ out = graph.invoke(
 )
 
 # Display message summary.
-summary = [(type(m).__name__, getattr(m, "content", "")[:120]) for m in out["messages"]][-4:]
+summary = [
+    (type(m).__name__, getattr(m, "content", "")[:120]) for m in out["messages"]
+][-4:]
 for msg_type, content in summary:
     print(f"{msg_type}: {content}")
 
@@ -422,6 +432,7 @@ import langgraph.types
 
 class CustomState(langchain.agents.AgentState):
     """Extended state with user preferences and facts accumulator."""
+
     user_prefs: dict
     facts: list[str]
 
@@ -622,6 +633,7 @@ print(f"Email draft: {_last_text(b)}")
 # %%
 # Example: Context isolation (noisy worker, clean supervisor)
 
+
 # Define a tool that generates noise to simulate intermediate work.
 @langchain.tools.tool(
     "generate_noise",
@@ -713,7 +725,9 @@ print("Three specialized subagents defined: sum_agent, act_agent, reply_agent")
 
 
 # %%
-@langchain.tools.tool("sub_summarize", description="Summarize the text in 2 sentences.")
+@langchain.tools.tool(
+    "sub_summarize", description="Summarize the text in 2 sentences."
+)
 def sub_summarize(text: str) -> str:
     """
     Summarize `text` in 2 sentences.
@@ -796,6 +810,7 @@ print(f"Supervisor response with parallel tool results:\n{result}")
 
 class SubState(TypedDict):
     """State for subgraph: raw text -> parsed dict -> formatted output."""
+
     raw: str
     parsed: dict
     formatted: str
@@ -841,6 +856,7 @@ print("Subgraph constructed: START -> parse -> format -> END")
 
 class ParentState(TypedDict):
     """Parent state that calls subgraph and receives formatted output."""
+
     user_text: str
     result: str
 
@@ -884,7 +900,6 @@ print(result["result"])
 # If you’ve ever debugged an agent that “remembered the wrong thing,” this is the antidote.
 
 # %%
-from langgraph.checkpoint.memory import MemorySaver
 
 
 # ##########################################################
@@ -894,6 +909,7 @@ from langgraph.checkpoint.memory import MemorySaver
 
 class CSub(TypedDict):
     """Simple counter state for subgraph."""
+
     n: int
 
 
@@ -909,9 +925,13 @@ sub_builder.add_edge(langgraph.graph.START, "bump")
 sub_builder.add_edge("bump", langgraph.graph.END)
 
 sub_shared = sub_builder.compile()
-sub_private = sub_builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
+sub_private = sub_builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
 
-print("Subgraph instances created: sub_shared (stateless) and sub_private (with memory)")
+print(
+    "Subgraph instances created: sub_shared (stateless) and sub_private (with memory)"
+)
 
 
 # %%
@@ -922,6 +942,7 @@ print("Subgraph instances created: sub_shared (stateless) and sub_private (with 
 
 class P(TypedDict):
     """Parent state for switching between shared/private subgraphs."""
+
     mode: str
     sub_n: int
 
@@ -944,7 +965,9 @@ parent_builder = StateGraph(P)
 parent_builder.add_node("call_sub", call_sub)
 parent_builder.add_edge(langgraph.graph.START, "call_sub")
 parent_builder.add_edge("call_sub", langgraph.graph.END)
-parent = parent_builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
+parent = parent_builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
 
 print("Parent graph constructed with checkpoint memory")
 
@@ -997,6 +1020,7 @@ import langgraph.checkpoint.memory
 
 class HITLState(TypedDict):
     """State for human-in-the-loop file deletion workflow."""
+
     target_path: str
     decision: Lit["approve", "reject", ""]
 
@@ -1033,7 +1057,9 @@ builder.add_edge(langgraph.graph.START, "propose")
 builder.add_edge("propose", "delete")
 builder.add_edge("delete", langgraph.graph.END)
 
-hitl_graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
+hitl_graph = builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
 
 print("HITL graph constructed with checkpoint memory")
 
@@ -1062,6 +1088,7 @@ print(f"Interrupt triggered with payload: {pending}")
 
 # %%
 out2 = hitl_graph.invoke(
-    langgraph.types.Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
+    langgraph.types.Command(resume="approve"),
+    config={"configurable": {"thread_id": thread_id}},
 )
 victim.exists()

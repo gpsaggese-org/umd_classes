@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -36,10 +36,10 @@
 # %% [markdown]
 # The notebook uses **two public functions**:
 #
-# - `default_cfg()`  
+# - `default_cfg()`
 #   Returns a configuration object with sane defaults.
 #
-# - `train_wrapper(cfg)`  
+# - `train_wrapper(cfg)`
 #   Runs the full training loop and produces:
 #   - training curves (loss, return, entropy),
 #   - checkpointing (saved automatically after training).

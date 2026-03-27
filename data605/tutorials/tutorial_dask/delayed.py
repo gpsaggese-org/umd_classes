@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -75,7 +75,7 @@ results = get(dsk, outputs)
 results
 
 # %%
-dsk = 
+dsk =
 
 # %%
 _VALID_ACTIONS_META = [
@@ -151,12 +151,12 @@ for a in actions:
     if not _IS_WRITE[a]:
         out_nodes.append(out_dep)
     dep += 1
-    
+
 print(("out_nodes=%s" % str(out_nodes)))
 
 for k, v in dsk.items():
     print((str(k), str(v)))
-         
+
 #print(pprint.pformat(dsk))
 
 from dask.threaded import get

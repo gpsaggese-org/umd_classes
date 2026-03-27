@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -183,7 +183,7 @@
 
 # %% language="sql"
 # INSERT INTO events (title, starts, ends, venue_id)
-#     VALUES 
+#     VALUES
 #     ('Fight club', '2018-02-15 17:30:00', '2018-02-15 19:30:00', 2),
 #     ('April Fools day', '2018-04-01 00:00:00', '2018-04-01 23:59:00', NULL),
 #     ('Christmas day', '2018-02-15 19:30:00', '2018-12-25 23:59:00', NULL)
@@ -214,25 +214,36 @@
 #
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %%
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#
 
 # %% language="sql"
+#

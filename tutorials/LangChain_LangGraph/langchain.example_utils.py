@@ -383,7 +383,10 @@ def _tool_outputs(messages: list[Any], tool_name: str) -> list[Any]:
 
     outs: list[Any] = []
     for m in messages:
-        if isinstance(m, langchain_core.messages.ToolMessage) and getattr(m, "name", None) == tool_name:
+        if (
+            isinstance(m, langchain_core.messages.ToolMessage)
+            and getattr(m, "name", None) == tool_name
+        ):
             outs.append(m.content)
     return outs
 

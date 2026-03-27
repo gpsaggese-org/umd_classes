@@ -14,7 +14,6 @@
 # ---
 
 # %%
-import sys
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import count
 
@@ -22,7 +21,7 @@ from pyspark.sql.functions import count
 # Build a SparkSession using the SparkSession APIs.
 # If one does not exist, then create an instance. There
 # can only be one SparkSession per JVM.
-spark = (SparkSession.builder.appName("PythonMnMCount").getOrCreate())
+spark = SparkSession.builder.appName("PythonMnMCount").getOrCreate()
 
 # %%
 mnm_file = "./mnm_dataset.csv"
@@ -35,8 +34,12 @@ mnm_file = "./mnm_dataset.csv"
 # format by inferring the schema and specifying that the
 # file contains a header, which provides column names for comma-
 # separated fields.
-mnm_df = (spark.read.format("csv").option("header", "true").option(
-    "inferSchema", "true").load(mnm_file))
+mnm_df = (
+    spark.read.format("csv")
+    .option("header", "true")
+    .option("inferSchema", "true")
+    .load(mnm_file)
+)
 print(mnm_df)
 
 # %%
@@ -47,12 +50,14 @@ print(mnm_df)
 # 2. Since we want to group each state and its M&M color count, we use groupBy()
 # 3.  Aggregate counts of all colors and groupBy() State and Color
 # 4 orderBy() in descending order
-count_mnm_df = (mnm_df.select("State", "Color", "Count").groupBy(
-    "State",
-    "Color").agg(count("Count").alias("Total")).orderBy("Total",
-                                                        ascending=False))
+count_mnm_df = (
+    mnm_df.select("State", "Color", "Count")
+    .groupBy("State", "Color")
+    .agg(count("Count").alias("Total"))
+    .orderBy("Total", ascending=False)
+)
 # Show the resulting aggregations for all the states and colors; # a total count of each color per state.
 # Note show() is an action, which will trigger the above
 # query to be executed.
-#count_mnm_df.show(n=60, truncate=False)
+# count_mnm_df.show(n=60, truncate=False)
 print("Total Rows = %d" % (count_mnm_df.count()))

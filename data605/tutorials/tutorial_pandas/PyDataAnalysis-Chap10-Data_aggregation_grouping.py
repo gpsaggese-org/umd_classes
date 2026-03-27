@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -26,21 +26,21 @@ import pandas as pd
 #
 # - After loading, merging, cleaning a dataset
 #     - compute group statistics
-#     
+#
 # - pandas (like SQL) has flexible operations for joining, filtering, aggregating data
 
 # %% [markdown]
 # ## GroupBy mechanics
 #
 # - Group operations are also called `split-apply-combine`
-#     
+#
 #     1. split data (from DataFrame or Series) into groups:
 #         - based on certain keys
 #         - along rows or columns
 #     2. apply a function to each group producing a new value
 #         - E.g., sum()
 #     3. combine the results into a series / df object
-#     
+#
 # - Grouping can happen in many ways:
 #     - list or array with values encoding the groups (same length as
 #       the axis being grouped)
@@ -373,7 +373,7 @@ display(tips.groupby('smoker')["tip_pct"].describe())
 
 df2 = tips.groupby('smoker')["tip_pct"].apply(lambda x: x.describe())
 display(df2)
-    
+
 
 # %% [markdown]
 # ### Suppressing the group keys
@@ -494,7 +494,7 @@ assert len(card_val) == len(base_names)
 cards = []
 for suit in suits:
     cards.extend(str(num) + suit for num in base_names)
-    
+
 deck = pd.Series(card_val * 4, index=cards)
 assert len(deck) == 52
 deck.head()

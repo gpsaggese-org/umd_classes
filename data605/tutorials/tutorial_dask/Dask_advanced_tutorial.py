@@ -27,7 +27,7 @@ def print_obj(obj, tag=None):
         print(tag)
     print("type=", type(obj))
     display(obj)
-    
+
 
 def print_dask(obj, visualize_graph=True, compute=True):
     """
@@ -56,11 +56,13 @@ def print_dask(obj, visualize_graph=True, compute=True):
 # %%
 # https://stackoverflow.com/questions/59070260/dask-client-detect-local-default-cluster-already-running
 import os
-os.environ['DASK_SCHEDULER_ADDRESS'] = 'tcp://localhost:8787'
+
+os.environ["DASK_SCHEDULER_ADDRESS"] = "tcp://localhost:8787"
 
 if not ("cluster" in globals() and "client" in globals()):
     from dask.distributed import Client, LocalCluster
-    cluster = LocalCluster(dashboard_address=':8787')
+
+    cluster = LocalCluster(dashboard_address=":8787")
     client = Client(cluster)
     print(client, client.dashboard_link)
 
@@ -76,7 +78,7 @@ x
 # %%
 import dask.array as da
 
-x = da.ones(15, chunks=(5, ))
+x = da.ones(15, chunks=(5,))
 x
 
 # %%
@@ -139,6 +141,7 @@ df_orig.to_csv("data")
 # %%
 # Load one chunk.
 import pandas as pd
+
 df = pd.read_csv("data/00.part", parse_dates=["timestamp"])
 df
 
@@ -149,10 +152,9 @@ df.x.mean()
 df.groupby("name").x.std()
 
 # %%
-import dask.dataframe as dd
 
 # Read one partition with Dask.
-#df = dd.read_csv("data/00.part", parse_dates=["timestamp"])
+# df = dd.read_csv("data/00.part", parse_dates=["timestamp"])
 
 # Read all partitions with Dask.
 df = dd.read_csv("data/*.part", parse_dates=["timestamp"])
@@ -197,7 +199,7 @@ print_obj(obj)
 
 # %%
 # Apply a function across all the partitions.
-#df.map_partitions(type).compute()
+# df.map_partitions(type).compute()
 df.map_partitions(len).compute()
 
 # %%
@@ -237,7 +239,7 @@ print_obj(b)
 
 # %%
 # This produces a new bag.
-obj = b.map(lambda x: x ** 2)
+obj = b.map(lambda x: x**2)
 
 print_obj(b)
 
@@ -247,7 +249,7 @@ obj.compute()
 
 # %%
 # One can chain computations: e.g., filter, square and sum.
-obj = b.filter(lambda x : x % 2 == 0).map(lambda x: x ** 2).sum()
+obj = b.filter(lambda x: x % 2 == 0).map(lambda x: x**2).sum()
 print_obj(obj)
 
 # %%
@@ -269,20 +271,20 @@ obj.compute()
 import os
 import requests
 
-#os.system("rm -rf data_json")
+# os.system("rm -rf data_json")
 os.system("mkdir data_json")
 
 for month in range(6, 7):
     for day in range(1, 30):
         file = "events-2019-%02d-%02d.jsonl" % (month, day)
-        dst_file = f'data_json/{file}'
+        dst_file = f"data_json/{file}"
         print(dst_file)
         if os.path.exists(dst_file):
             continue
         url = "https://archive.analytics.mybinder.org/%s" % file
         print(url)
         r = requests.get(url, allow_redirects=True)
-        open(dst_file, 'wb').write(r.content)
+        open(dst_file, "wb").write(r.content)
 
 
 # %%
@@ -298,7 +300,7 @@ for month in range(6, 7):
 import dask.bag as db
 
 # Read a single file.
-#lines = db.read_text("data_json/events-2019-06-14.jsonl")
+# lines = db.read_text("data_json/events-2019-06-14.jsonl")
 
 # Read all files.
 lines = db.read_text("data_json/events-*.jsonl")
@@ -353,6 +355,7 @@ df.spec.value_counts().nlargest(20).to_frame().compute()
 # %%
 import time
 
+
 def inc(x):
     """
     Take some time to compute and do a small computation.
@@ -369,8 +372,8 @@ results = []
 for x in inputs:
     result = inc(x)
     results.append(result)
-    
-    
+
+
 # This should take 10 secs since everything is executed serially.
 
 # %% [markdown]
@@ -378,7 +381,7 @@ for x in inputs:
 
 # %%
 # Dask Futures has the same interface as concurrent.futures.
-#if True:
+# if True:
 if False:
     from concurrent.futures import ThreadPoolExecutor
 
@@ -387,7 +390,7 @@ else:
     from concurrent.futures import ProcessPoolExecutor
 
     e = ProcessPoolExecutor(4)
-    
+
 # Threads and processes have the same interface but different performance characteristics.
 e
 
@@ -415,7 +418,7 @@ futures = []
 for x in inputs:
     future = e.submit(inc, x)
     futures.append(future)
-    
+
 results = [future.result() for future in futures]
 print(results)
 
@@ -436,7 +439,7 @@ for x in inputs:
     # Dask Client has the same interface as futures.concurrent and can be used as an Executor.
     future = client.submit(inc, x)
     futures.append(future)
-    
+
 results = [future.result() for future in futures]
 print(results)
 
@@ -462,8 +465,7 @@ client.submit(np.sum, [1, 2, 3]).result()
 client.submit(np.sum, future).result()
 
 # %%
-## 
-import time
+##
 import numpy as np
 
 
@@ -478,8 +480,8 @@ def load(x):
 def process(x):
     time.sleep(0.1)
     return x + 1
-    
-    
+
+
 def save(x):
     time.sleep(0.4)
 
@@ -493,7 +495,7 @@ for i in inputs:
     x = load(i)
     y = process(x)
     save(y)
-    
+
 # It takes (0.2 + 0.1 + 0.4) * 50 = 0.7 * 50 = 35s
 
 # %%
@@ -507,7 +509,7 @@ for i in inputs:
     y = client.submit(process, x)
     z = client.submit(save, y)
     futures.append(z)
-    
+
 result = [future.result() for future in futures]
 
 # %%

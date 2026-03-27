@@ -21,6 +21,14 @@
 
 import pprint
 
+
+# %% [markdown]
+# # Connect to DB
+
+# %%
+import pymongo
+
+
 def print_(cursor, mode="pprint", tag=""):
     """
     Print collection.
@@ -48,11 +56,6 @@ def print_(cursor, mode="pprint", tag=""):
         raise ValueError(f"Invalid mode='{mode}'")
 
 
-# %% [markdown]
-# # Connect to DB
-
-# %%
-import pymongo
 from bson.objectid import ObjectId
 
 # Connect to MongoDB instance.
@@ -179,7 +182,9 @@ print_(db.towns.find({"name": {"$regex": r"^P"}, "population": {"$lt": 100000}})
 
 # %%
 # Projection.
-print_(db.towns.find({"famousFor": "food"}, {"_id": 0, "name": 1, "famousFor": 1}))
+print_(
+    db.towns.find({"famousFor": "food"}, {"_id": 0, "name": 1, "famousFor": 1})
+)
 
 # Note that the equality with an array is interpreted as "in".
 
@@ -187,7 +192,8 @@ print_(db.towns.find({"famousFor": "food"}, {"_id": 0, "name": 1, "famousFor": 1
 # Query for matching values.
 print_(
     db.towns.find(
-        {"famousFor": {"$all": ["food", "beer"]}}, {"_id": 0, "name": 1, "famousFor": 1}
+        {"famousFor": {"$all": ["food", "beer"]}},
+        {"_id": 0, "name": 1, "famousFor": 1},
     )
 )
 
@@ -195,7 +201,8 @@ print_(
 # Query for lack of matching values.
 print_(
     db.towns.find(
-        {"famousFor": {"$nin": ["food", "beer"]}}, {"_id": 0, "name": 1, "famousFor": 1}
+        {"famousFor": {"$nin": ["food", "beer"]}},
+        {"_id": 0, "name": 1, "famousFor": 1},
     )
 )
 
@@ -215,7 +222,7 @@ object_id_for_Portland = str(db.towns.find_one({"name": "Portland"})["_id"])
 print("object_id_for_Portland=", object_id_for_Portland)
 
 # Note that types matter, so searching for an _id as string doesn't work.
-#print_(db.towns.find_one({"_id": object_id_for_Portland}))
+# print_(db.towns.find_one({"_id": object_id_for_Portland}))
 print_(db.towns.find_one({"_id": ObjectId(object_id_for_Portland)}))
 
 # %%
@@ -253,47 +260,38 @@ db.countries.drop()
 # Note that:
 # 1) we define the _id directly
 # 2) the schema is not strict
-db.countries.insert_one({
-    "_id": "us",
-    "name": "United States",
-    "exports": {
-        "foods": [{
-            "name": "bacon",
-            "tasty": True
-        }, {
-            "name": "burgers"
-        }]
-    },
-})
+db.countries.insert_one(
+    {
+        "_id": "us",
+        "name": "United States",
+        "exports": {
+            "foods": [{"name": "bacon", "tasty": True}, {"name": "burgers"}]
+        },
+    }
+)
 
-db.countries.insert_one({
-    "_id": "ca",
-    "name": "Canada",
-    "exports": {
-        "foods": [
-            {
-                "name": "bacon",
-                "tasty": False
-            },
-            {
-                "name": "syrup",
-                "tasty": True
-            },
-        ]
-    },
-})
+db.countries.insert_one(
+    {
+        "_id": "ca",
+        "name": "Canada",
+        "exports": {
+            "foods": [
+                {"name": "bacon", "tasty": False},
+                {"name": "syrup", "tasty": True},
+            ]
+        },
+    }
+)
 
-db.countries.insert_one({
-    "_id": "mx",
-    "name": "Mexico",
-    "exports": {
-        "foods": [{
-            "name": "salsa",
-            "tasty": True,
-            "condiment": True
-        }]
-    },
-})
+db.countries.insert_one(
+    {
+        "_id": "mx",
+        "name": "Mexico",
+        "exports": {
+            "foods": [{"name": "salsa", "tasty": True, "condiment": True}]
+        },
+    }
+)
 
 assert db.countries.count_documents({}) == 3
 
@@ -340,14 +338,18 @@ print_(db.countries.find({"_id": "mx", "name": "United States"}))
 
 # This performs an OR.
 print_(
-    db.countries.find({"$or": [{"_id": "mx"}, {"name": "United States"}]}, {"_id": 1})
+    db.countries.find(
+        {"$or": [{"_id": "mx"}, {"name": "United States"}]}, {"_id": 1}
+    )
 )
 
 # %% [markdown]
 # ## References
 
 # %%
-object_id_for_Pun = ObjectId(str(db.towns.find_one({"name": "Punxsutawney"})["_id"]))
+object_id_for_Pun = ObjectId(
+    str(db.towns.find_one({"name": "Punxsutawney"})["_id"])
+)
 print("object_id_for_Pun=", object_id_for_Pun)
 
 # %%
@@ -451,7 +453,9 @@ db.phones.find({"display": "+4 800-5550000"}).explain()["executionStats"][
 
 # %%
 # Create an indesx on `display`.
-db.phones.create_index([("display", pymongo.ASCENDING)], unique=True, dropDups=True)
+db.phones.create_index(
+    [("display", pymongo.ASCENDING)], unique=True, dropDups=True
+)
 
 print_(db["phones"].index_information())
 
@@ -470,4 +474,6 @@ print_(
 db.phones.count_documents({"components.number": {"$gt": 5599999}})
 
 # %%
-db.phones.distinct('components.number', {"components.number": {"$gt": 5599999}})[:10]
+db.phones.distinct("components.number", {"components.number": {"$gt": 5599999}})[
+    :10
+]

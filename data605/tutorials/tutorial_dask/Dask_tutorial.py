@@ -27,7 +27,7 @@ def print_obj(obj, tag=None):
         print(tag)
     print("type=", type(obj))
     display(obj)
-    
+
 
 def print_dask(obj):
     """
@@ -68,11 +68,9 @@ import dask.bag as db
 # %%
 # Create a df with 2400 rows indexed in datetimes.
 index = pd.date_range("2021-09-01", periods=2400, freq="1H")
-df = pd.DataFrame({
-    "a": np.arange(2400),
-    "b": list("abcaddbe" * 300)
-    },
-    index=index)
+df = pd.DataFrame(
+    {"a": np.arange(2400), "b": list("abcaddbe" * 300)}, index=index
+)
 
 # Print the df as Pandas and Dask df.
 print_obj(df, "# Pandas df")
@@ -89,7 +87,7 @@ print_obj(obj)
 
 # %%
 # Print one partition.
-obj =  ddf.partitions[1]
+obj = ddf.partitions[1]
 print_obj(obj)
 
 # %% [markdown]
@@ -101,7 +99,7 @@ print_dask(obj)
 
 # %%
 # This doesn't force to execute.
-obj = ddf["2021-10-01": "2021-10-09 5:00"]
+obj = ddf["2021-10-01":"2021-10-09 5:00"]
 print_obj(obj)
 
 # %%
@@ -112,7 +110,7 @@ print_dask(obj)
 
 # %%
 # Force to read, in fact the output is a Pandas DataFrame.
-obj = ddf["2021-10-01": "2021-10-09 5:00"].compute()
+obj = ddf["2021-10-01":"2021-10-09 5:00"].compute()
 print_obj(obj)
 
 # %% [markdown]
@@ -136,7 +134,7 @@ print_obj(obj)
 
 # %%
 # Methods can be chained together like in Pandas.
-result = ddf["2021-10-01": "2021-10-09 5:00"].a.cumsum() - 100
+result = ddf["2021-10-01":"2021-10-09 5:00"].a.cumsum() - 100
 print_obj(result)
 
 # %%
@@ -157,7 +155,6 @@ print_dask(result)
 
 # %%
 import numpy as np
-import dask.array as da
 
 # Create a 200 x 500 array.
 data = np.arange(100_000).reshape(200, 500)
@@ -227,7 +224,7 @@ b.dask
 b.visualize()
 
 # %% [markdown]
-# ## Bag 
+# ## Bag
 
 # %% [markdown]
 # ### Creating a Dask object
@@ -280,14 +277,18 @@ print_dask(obj)
 # In the following example there is parallelism to exploit, but it doesn't fit one of
 # the native Dask data structures.
 
+
 def inc(x):
     return x + 1
+
 
 def double(x):
     return x * 2
 
+
 def add(x, y):
     return x + y
+
 
 data = [1, 2, 3, 4, 5]
 
@@ -309,7 +310,7 @@ total = sum(output)
 print(total)
 
 # %%
-# Decorate 
+# Decorate
 
 import dask
 
@@ -348,11 +349,13 @@ total.compute()
 # %%
 # https://stackoverflow.com/questions/59070260/dask-client-detect-local-default-cluster-already-running
 import os
-os.environ['DASK_SCHEDULER_ADDRESS'] = 'tcp://localhost:8786'
+
+os.environ["DASK_SCHEDULER_ADDRESS"] = "tcp://localhost:8786"
 
 if not ("cluster" in globals() and "client" in globals()):
     from dask.distributed import Client, LocalCluster
-    cluster = LocalCluster(dashboard_address=':8787')
+
+    cluster = LocalCluster(dashboard_address=":8787")
     client = Client(cluster)
     print(client, client.dashboard_link)
 
@@ -369,6 +372,7 @@ if not ("cluster" in globals() and "client" in globals()):
 
 # %%
 from dask.distributed import Client, LocalCluster
+
 
 def inc(x):
     return x + 1

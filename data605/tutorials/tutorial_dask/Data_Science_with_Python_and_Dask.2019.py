@@ -38,17 +38,14 @@
 # %%
 import dask.dataframe as dd
 from dask.diagnostics import ProgressBar
-from matplotlib import pyplot as plt
 
-#file_name = "Parking_Violations_Issued_-_Fiscal_Year_2017.csv"
+# file_name = "Parking_Violations_Issued_-_Fiscal_Year_2017.csv"
 file_name = "Parking_Violations_Issued_-_Fiscal_Year_2017.small.csv"
 
-df = dd.read_csv(file_name,
-                 dtype={
-                     'House Number': 'object',
-                     'Time First Observed': 'object'
-                 },
-                )
+df = dd.read_csv(
+    file_name,
+    dtype={"House Number": "object", "Time First Observed": "object"},
+)
 df
 
 # %%
@@ -56,7 +53,7 @@ missing_values = df.isnull().sum()
 missing_values
 
 # %%
-missing_count = ((missing_values / df.index.size) * 100)
+missing_count = (missing_values / df.index.size) * 100
 missing_count
 
 # %%
@@ -70,7 +67,7 @@ columns_to_drop = missing_count_pct[missing_count_pct > 60].index
 print(columns_to_drop)
 with ProgressBar():
     df_dropped = df.drop(columns_to_drop, axis=1).persist()
-    
+
 # df_dropped is a Dask object.
 df_dropped
 
@@ -101,6 +98,7 @@ z.visualize()
 
 # %%
 data = [1, 5, 8, 10]
+
 
 def add_two(x):
     return x + 2
@@ -178,27 +176,52 @@ import dask.dataframe as dd
 # Creating all the data as lists
 person_IDs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 person_last_names = [
-    'Smith', 'Williams', 'Williams', 'Jackson', 'Johnson', 'Smith', 'Anderson',
-    'Christiansen', 'Carter', 'Davidson'
+    "Smith",
+    "Williams",
+    "Williams",
+    "Jackson",
+    "Johnson",
+    "Smith",
+    "Anderson",
+    "Christiansen",
+    "Carter",
+    "Davidson",
 ]
 person_first_names = [
-    'John', 'Bill', 'Jane', 'Cathy', 'Stuart', 'James', 'Felicity', 'Liam',
-    'Nancy', 'Christina'
+    "John",
+    "Bill",
+    "Jane",
+    "Cathy",
+    "Stuart",
+    "James",
+    "Felicity",
+    "Liam",
+    "Nancy",
+    "Christina",
 ]
 person_DOBs = [
-    '1982-10-06', '1990-07-04', '1989-05-06', '1974-01-24', '1995-06-05',
-    '1984-04-16', '1976-09-15', '1992-10-02', '1986-02-05', '1993-08-11'
+    "1982-10-06",
+    "1990-07-04",
+    "1989-05-06",
+    "1974-01-24",
+    "1995-06-05",
+    "1984-04-16",
+    "1976-09-15",
+    "1992-10-02",
+    "1986-02-05",
+    "1993-08-11",
 ]
 
 # Storing the data in a Pandas DataFrame
 people_pandas_df = pd.DataFrame(
     {
-        'Person ID': person_IDs,
-        'Last Name': person_last_names,
-        'First Name': person_first_names,
-        'Date of Birth': person_DOBs
+        "Person ID": person_IDs,
+        "Last Name": person_last_names,
+        "First Name": person_first_names,
+        "Date of Birth": person_DOBs,
     },
-    columns=['Person ID', 'Last Name', 'First Name', 'Date of Birth'])
+    columns=["Person ID", "Last Name", "First Name", "Date of Birth"],
+)
 display(people_pandas_df)
 
 
@@ -210,18 +233,26 @@ print("# divisions=", people_dask_df.divisions)
 print("# npartitions=", people_dask_df.npartitions)
 
 # map_partitions() applies a function to each partition.
-print("# elements per partition=\n%s" %
-    people_dask_df.map_partitions(len).compute())
+print(
+    "# elements per partition=\n%s"
+    % people_dask_df.map_partitions(len).compute()
+)
 
 # %%
 # Filter.
-people_filtered = people_dask_df[people_dask_df['Last Name'] != 'Williams']
-print("# partitions before=\n%s" % people_filtered.map_partitions(lambda x: len(x)).compute())
+people_filtered = people_dask_df[people_dask_df["Last Name"] != "Williams"]
+print(
+    "# partitions before=\n%s"
+    % people_filtered.map_partitions(lambda x: len(x)).compute()
+)
 display(people_filtered.compute())
 
 # Repartitioning.
 people_filtered_reduced = people_filtered.repartition(npartitions=1)
-print("# partitions after=\n%s" % people_filtered_reduced.map_partitions(lambda x: len(x)).compute())
+print(
+    "# partitions after=\n%s"
+    % people_filtered_reduced.map_partitions(lambda x: len(x)).compute()
+)
 
 # %% [markdown]
 # # Reading data from text files
@@ -234,26 +265,29 @@ import dask.dataframe as dd
 from dask.diagnostics import ProgressBar
 
 data_types = {
-    "House Number": 'object',
-    "Time First Observed": 'object',
+    "House Number": "object",
+    "Time First Observed": "object",
 }
 
 fy14 = dd.read_csv(
-    'Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv',
+    "Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv",
     dtype=data_types,
 )
-fy15 = dd.read_csv('Parking_Violations_Issued_-_Fiscal_Year_2015.csv',
-                  dtype=data_types)
-fy16 = dd.read_csv('Parking_Violations_Issued_-_Fiscal_Year_2016.csv',
-                  dtype=data_types)
-fy17 = dd.read_csv('Parking_Violations_Issued_-_Fiscal_Year_2017.csv',
-                  dtype=data_types)
+fy15 = dd.read_csv(
+    "Parking_Violations_Issued_-_Fiscal_Year_2015.csv", dtype=data_types
+)
+fy16 = dd.read_csv(
+    "Parking_Violations_Issued_-_Fiscal_Year_2016.csv", dtype=data_types
+)
+fy17 = dd.read_csv(
+    "Parking_Violations_Issued_-_Fiscal_Year_2017.csv", dtype=data_types
+)
 fy17
 
 # %%
-df = pd.read_csv('Parking_Violations_Issued_-_Fiscal_Year_2017.csv', nrows=10)
+df = pd.read_csv("Parking_Violations_Issued_-_Fiscal_Year_2017.csv", nrows=10)
 df.columns
-#re
+# re
 
 # %%
 # Problems with the column types.
@@ -273,7 +307,7 @@ columns = [
     set(fy14.columns),
     set(fy15.columns),
     set(fy16.columns),
-    set(fy17.columns)
+    set(fy17.columns),
 ]
 common_columns = list(reduce(lambda a, i: a.intersection(i), columns))
 common_columns
@@ -288,7 +322,7 @@ fy17[common_columns].head()
 # Violation Description
 # Violation Legal Code
 # Violation Post Code
-#fy14[common_columns].head()
+# fy14[common_columns].head()
 
 # %%
 import numpy as np
@@ -296,11 +330,11 @@ import pandas as pd
 import pprint
 
 dtype_dict = dict([x, str] for x in common_columns)
-#print("dtype_dict=", pprint.pformat(dtype_dict))
+# print("dtype_dict=", pprint.pformat(dtype_dict))
 
 # Read data with no schema.
 fy14 = dd.read_csv(
-    'Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv',
+    "Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv",
     dtype=dtype_dict,
 )
 fy14_df = fy14[common_columns].head(10000)
@@ -318,54 +352,54 @@ with ProgressBar():
 # %%
 # Correct schema.
 dtypes = {
-    'Date First Observed': str,
-    'Days Parking In Effect    ': str,
-    'Double Parking Violation': str,
-    'Feet From Curb': np.float32,
-    'From Hours In Effect': str,
-    'House Number': str,
-    'Hydrant Violation': str,
-    'Intersecting Street': str,
-    'Issue Date': str,
-    'Issuer Code': np.float32,
-    'Issuer Command': str,
-    'Issuer Precinct': np.float32,
-    'Issuer Squad': str,
-    'Issuing Agency': str,
-    'Law Section': np.float32,
-    'Meter Number': str,
-    'No Standing or Stopping Violation': str,
-    'Plate ID': str,
-    'Plate Type': str,
-    'Registration State': str,
-    'Street Code1': np.uint32,
-    'Street Code2': np.uint32,
-    'Street Code3': np.uint32,
-    'Street Name': str,
-    'Sub Division': str,
-    'Summons Number': np.uint32,
-    'Time First Observed': str,
-    'To Hours In Effect': str,
-    'Unregistered Vehicle?': str,
-    'Vehicle Body Type': str,
-    'Vehicle Color': str,
-    'Vehicle Expiration Date': str,
-    'Vehicle Make': str,
-    'Vehicle Year': np.float32,
-    'Violation Code': np.uint16,
-    'Violation County': str,
-    'Violation Description': str,
-    'Violation In Front Of Or Opposite': str,
-    'Violation Legal Code': str,
-    'Violation Location': str,
-    'Violation Post Code': str,
-    'Violation Precinct': np.float32,
-    'Violation Time': str
+    "Date First Observed": str,
+    "Days Parking In Effect    ": str,
+    "Double Parking Violation": str,
+    "Feet From Curb": np.float32,
+    "From Hours In Effect": str,
+    "House Number": str,
+    "Hydrant Violation": str,
+    "Intersecting Street": str,
+    "Issue Date": str,
+    "Issuer Code": np.float32,
+    "Issuer Command": str,
+    "Issuer Precinct": np.float32,
+    "Issuer Squad": str,
+    "Issuing Agency": str,
+    "Law Section": np.float32,
+    "Meter Number": str,
+    "No Standing or Stopping Violation": str,
+    "Plate ID": str,
+    "Plate Type": str,
+    "Registration State": str,
+    "Street Code1": np.uint32,
+    "Street Code2": np.uint32,
+    "Street Code3": np.uint32,
+    "Street Name": str,
+    "Sub Division": str,
+    "Summons Number": np.uint32,
+    "Time First Observed": str,
+    "To Hours In Effect": str,
+    "Unregistered Vehicle?": str,
+    "Vehicle Body Type": str,
+    "Vehicle Color": str,
+    "Vehicle Expiration Date": str,
+    "Vehicle Make": str,
+    "Vehicle Year": np.float32,
+    "Violation Code": np.uint16,
+    "Violation County": str,
+    "Violation Description": str,
+    "Violation In Front Of Or Opposite": str,
+    "Violation Legal Code": str,
+    "Violation Location": str,
+    "Violation Post Code": str,
+    "Violation Precinct": np.float32,
+    "Violation Time": str,
 }
 
 # Read data with no schema.
 fy14 = dd.read_csv(
-    'Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv',
+    "Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv",
     dtype=dtypes,
     usecols=common_columns,
 )
@@ -382,11 +416,11 @@ fy14 = dd.read_csv(
 # !ls
 
 # %%
-#nyc_data_raw = fy14
+# nyc_data_raw = fy14
 # Read data with no schema.
 nyc_data_raw = dd.read_csv(
     #'Parking_Violations_Issued_-_Fiscal_Year_2014__August_2013___June_2014_.csv',
-    'Parking_Violations_Issued_-_Fiscal_Year_2017.small.csv',
+    "Parking_Violations_Issued_-_Fiscal_Year_2017.small.csv",
     dtype=dtypes,
     usecols=common_columns,
 )
@@ -411,7 +445,7 @@ display(nyc_data_raw.drop("Violation Code", axis=1).head())
 # %%
 # Renaming columns.
 display(nyc_data_raw)
-nyc_data_renamed = nyc_data_raw.rename(columns={'Plate ID': 'License Plate'})
+nyc_data_renamed = nyc_data_raw.rename(columns={"Plate ID": "License Plate"})
 display(nyc_data_renamed)
 
 # %%
@@ -424,7 +458,7 @@ with ProgressBar():
 
 # %%
 # When we apply head(1000) we materialize a DataFrame.
-#missing_values = nyc_data_raw.head(1000).isnull().sum()
+# missing_values = nyc_data_raw.head(1000).isnull().sum()
 
 # When we do .loc we keep the data in Dask.
 missing_values = nyc_data_raw.loc[:1000].isnull().sum()
@@ -433,12 +467,12 @@ num_rows = nyc_data_raw.loc[:1000].index.size
 with ProgressBar():
     pct_missing = (missing_values / num_rows) * 100
     pct_missing = pct_missing.compute()
-    
+
 pct_missing
 
 # %%
-#missing_values.index.size.compute()
-#nyc_data_raw.loc[:1000].isnull().compute()
+# missing_values.index.size.compute()
+# nyc_data_raw.loc[:1000].isnull().compute()
 
 # %%
 # All partitions are read and filtered.
@@ -455,17 +489,20 @@ nyc_data_clean_stage1 = nyc_data_raw.drop(columns_to_drop, axis=1)
 # %%
 # Impute missing values to the most common.
 with ProgressBar():
-    count_of_vehicle_colors = nyc_data_clean_stage1[
-        "Vehicle Color"].value_counts().compute()
+    count_of_vehicle_colors = (
+        nyc_data_clean_stage1["Vehicle Color"].value_counts().compute()
+    )
     print("count_of_vehicle_colors\n%s" % count_of_vehicle_colors)
     most_common_color = count_of_vehicle_colors.sort_values(
-        ascending=False).index[0]
+        ascending=False
+    ).index[0]
     print("most_common_color=", most_common_color)
 
 # %%
 # Fill nans.
 nyc_data_clean_stage2 = nyc_data_clean_stage1.fillna(
-    {'Vehicle Color': most_common_color})
+    {"Vehicle Color": most_common_color}
+)
 print(nyc_data_clean_stage2)
 
 # %%
@@ -479,13 +516,15 @@ nyc_data_clean_stage3 = nyc_data_clean_stage2.dropna(subset=rows_to_drop)
 
 # %%
 # Imputing multiple columns with missing values.
-remaining_cols_to_clean = list(pct_missing[(pct_missing >= 5) & (pct_missing < 50)].index)
+remaining_cols_to_clean = list(
+    pct_missing[(pct_missing >= 5) & (pct_missing < 50)].index
+)
 print("remaining_cols_to_clean=", remaining_cols_to_clean)
 
 # %%
 unknown_default_dict = dict(
-    map(lambda columnName: (columnName, 'Unknown'),
-        remaining_cols_to_clean))
+    map(lambda columnName: (columnName, "Unknown"), remaining_cols_to_clean)
+)
 pprint.pprint(unknown_default_dict)
 
 # %%
@@ -493,7 +532,7 @@ nyc_data_clean_stage4 = nyc_data_clean_stage3.fillna(unknown_default_dict)
 
 with ProgressBar():
     print(nyc_data_clean_stage4.isnull().sum().compute())
-    
+
 nyc_data_clean_stage4.persist()
 
 # %% [markdown]
@@ -501,22 +540,25 @@ nyc_data_clean_stage4.persist()
 
 # %%
 with ProgressBar():
-    license_plate_types = nyc_data_clean_stage4["Plate Type"].value_counts().compute()
-    
+    license_plate_types = (
+        nyc_data_clean_stage4["Plate Type"].value_counts().compute()
+    )
+
 license_plate_types
 
 # %%
 # Replace the values not in PAS and COM with Other.
-condition = nyc_data_clean_stage4['Plate Type'].isin(['PAS', 'COM'])
+condition = nyc_data_clean_stage4["Plate Type"].isin(["PAS", "COM"])
 # New series.
-plate_type_masked = nyc_data_clean_stage4['Plate Type'].where(
-    condition, 'Other')
+plate_type_masked = nyc_data_clean_stage4["Plate Type"].where(condition, "Other")
 # Put the new series in the DataFrame.
-nyc_data_recode_stage1 = nyc_data_clean_stage4.drop('Plate Type', axis=1)
+nyc_data_recode_stage1 = nyc_data_clean_stage4.drop("Plate Type", axis=1)
 nyc_data_recode_stage2 = nyc_data_recode_stage1.assign(
-    PlateType=plate_type_masked)
+    PlateType=plate_type_masked
+)
 nyc_data_recode_stage3 = nyc_data_recode_stage2.rename(
-    columns={'PlateType': 'Plate Type'})
+    columns={"PlateType": "Plate Type"}
+)
 
 # %%
 with ProgressBar():
@@ -524,19 +566,21 @@ with ProgressBar():
 
 # %%
 # Put all the unique color in Other.
-single_color = list(
-    count_of_vehicle_colors[count_of_vehicle_colors == 1].index)
+single_color = list(count_of_vehicle_colors[count_of_vehicle_colors == 1].index)
 print("single_color=", single_color)
 # Create Series.
-condition = nyc_data_clean_stage4['Vehicle Color'].isin(single_color)
-vehicle_color_masked = nyc_data_clean_stage4['Vehicle Color'].mask(
-    condition, 'Other')
+condition = nyc_data_clean_stage4["Vehicle Color"].isin(single_color)
+vehicle_color_masked = nyc_data_clean_stage4["Vehicle Color"].mask(
+    condition, "Other"
+)
 # Update data frame.
-nyc_data_recode_stage4 = nyc_data_recode_stage3.drop('Vehicle Color', axis=1)
+nyc_data_recode_stage4 = nyc_data_recode_stage3.drop("Vehicle Color", axis=1)
 nyc_data_recode_stage5 = nyc_data_recode_stage4.assign(
-    VehicleColor=vehicle_color_masked)
+    VehicleColor=vehicle_color_masked
+)
 nyc_data_recode_stage6 = nyc_data_recode_stage5.rename(
-    columns={'VehicleColor': 'Vehicle Color'})
+    columns={"VehicleColor": "Vehicle Color"}
+)
 
 with ProgressBar():
     display(nyc_data_recode_stage6.compute())
@@ -548,36 +592,42 @@ with ProgressBar():
 from datetime import datetime
 
 # Create derived columns by applying functions.
-issue_date_parsed = nyc_data_recode_stage6['Issue Date'].apply(
-    lambda x: datetime.strptime(x, "%m/%d/%Y"), meta=datetime)
-nyc_data_derived_stage1 = nyc_data_recode_stage6.drop('Issue Date', axis=1)
+issue_date_parsed = nyc_data_recode_stage6["Issue Date"].apply(
+    lambda x: datetime.strptime(x, "%m/%d/%Y"), meta=datetime
+)
+nyc_data_derived_stage1 = nyc_data_recode_stage6.drop("Issue Date", axis=1)
 nyc_data_derived_stage2 = nyc_data_derived_stage1.assign(
-    IssueDate=issue_date_parsed)
+    IssueDate=issue_date_parsed
+)
 nyc_data_derived_stage3 = nyc_data_derived_stage2.rename(
-    columns={'IssueDate': 'Issue Date'})
+    columns={"IssueDate": "Issue Date"}
+)
 
 with ProgressBar():
-    display(nyc_data_derived_stage3['Issue Date'].head())
+    display(nyc_data_derived_stage3["Issue Date"].head())
 
 # %%
 # Create a column with year + month.
-issue_date_month_year = nyc_data_derived_stage3['Issue Date'].apply(
-    lambda dt: dt.strftime("%Y%m"), meta=str)
+issue_date_month_year = nyc_data_derived_stage3["Issue Date"].apply(
+    lambda dt: dt.strftime("%Y%m"), meta=str
+)
 nyc_data_derived_stage4 = nyc_data_derived_stage3.assign(
-    IssueMonthYear=issue_date_month_year)
+    IssueMonthYear=issue_date_month_year
+)
 nyc_data_derived_stage5 = nyc_data_derived_stage4.rename(
-    columns={'IssueMonthYear': 'Citation Issued Month Year'})
+    columns={"IssueMonthYear": "Citation Issued Month Year"}
+)
 
 with ProgressBar():
-    display(nyc_data_derived_stage5['Citation Issued Month Year'].head())
+    display(nyc_data_derived_stage5["Citation Issued Month Year"].head())
 
 # %% [markdown]
 # ## Filtering and reindexing DataFrames.
 
 # %%
 # Find citations in a certain month (i.e., October).
-months = ['201310', '201410', '201510', '201610', '201710']
-condition = nyc_data_derived_stage5['Citation Issued Month Year'].isin(months)
+months = ["201310", "201410", "201510", "201610", "201710"]
+condition = nyc_data_derived_stage5["Citation Issued Month Year"].isin(months)
 october_citations = nyc_data_derived_stage5[condition]
 
 with ProgressBar():
@@ -585,8 +635,8 @@ with ProgressBar():
 
 # %%
 # Find all the citations after a specific data.
-bound_date = '2016-4-25'
-condition = nyc_data_derived_stage5['Issue Date'] > bound_date
+bound_date = "2016-4-25"
+condition = nyc_data_derived_stage5["Issue Date"] > bound_date
 citations_after_bound = nyc_data_derived_stage5[condition]
 
 with ProgressBar():
@@ -598,13 +648,15 @@ with ProgressBar():
 # %%
 with ProgressBar():
     # Find a subset of the data.
-    condition = (nyc_data_derived_stage5['Issue Date'] > '2014-01-01') & (
-        nyc_data_derived_stage5['Issue Date'] <= '2017-12-31')
+    condition = (nyc_data_derived_stage5["Issue Date"] > "2014-01-01") & (
+        nyc_data_derived_stage5["Issue Date"] <= "2017-12-31"
+    )
     nyc_data_filtered = nyc_data_derived_stage5[condition]
     # Reindex based on the month / year.
     nyc_data_new_index = nyc_data_filtered.set_index(
-        'Citation Issued Month Year')
-    
+        "Citation Issued Month Year"
+    )
+
 display(nyc_data_new_index.head(10))
 
 # %%
@@ -615,22 +667,20 @@ nyc_data_new_index
 
 # %%
 # Repartition on the new index.
-#years = ['2014', '2015', '2016', '2017']
-years = ['2014']
-months = [
-    '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'
-]
+# years = ['2014', '2015', '2016', '2017']
+years = ["2014"]
+months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
 divisions = [year + month for year in years for month in months]
-divisions= ['201401', '201406']
+divisions = ["201401", "201406"]
 print("divisions=", divisions)
 
 with ProgressBar():
     # ValueError: left side of old and new divisions are different
-    #nyc_data_new_index.repartition(divisions=divisions)
+    # nyc_data_new_index.repartition(divisions=divisions)
     nyc_data_new_index.repartition(npartitions=2)
-    #.to_parquet('nyc_data_date_index')#, compression='snappy')
+    # .to_parquet('nyc_data_date_index')#, compression='snappy')
 
-#nyc_data_new_index = dd.read_parquet('nyc_data_date_index')
+# nyc_data_new_index = dd.read_parquet('nyc_data_date_index')
 
 # %% [markdown]
 # # Summarizing and analyzing df
@@ -642,7 +692,7 @@ with ProgressBar():
 # # Working with Bags and Array
 
 # %% [markdown]
-# The format is 
+# The format is
 #
 # ```
 # product/productId: B001E4KFG0
@@ -660,7 +710,8 @@ with ProgressBar():
 
 # %%
 import dask.bag as bag
-raw_data = bag.read_text('/data/finefoods.txt')
+
+raw_data = bag.read_text("/data/finefoods.txt")
 raw_data
 
 # %%
@@ -670,37 +721,38 @@ raw_data.take(10)
 
 # %%
 # Error since there are chars that can't be decoded with utf-8.
-#raw_data.count().compute()
+# raw_data.count().compute()
 
 # %%
-raw_data = bag.read_text('/data/finefoods.txt', encoding='cp1252')
+raw_data = bag.read_text("/data/finefoods.txt", encoding="cp1252")
 raw_data.count().compute()
 
 # %%
 from dask.delayed import delayed
 
+
 def get_next_part(file, start_index, span_index=0, blocksize=1000):
     # Read the next chunk.
     file.seek(start_index)
-    buffer = file.read(blocksize + span_index).decode('cp1252')
+    buffer = file.read(blocksize + span_index).decode("cp1252")
     # Look for the end of the record.
-    delimiter_position = buffer.find('\n\n')
+    delimiter_position = buffer.find("\n\n")
     if delimiter_position == -1:
         # The delimiter is not found: try to read more data recursively.
         return get_next_part(file, start_index, span_index + blocksize)
     else:
         file.seek(start_index)
         return start_index, delimiter_position
-    
-    
-with open('/data/finefoods.txt', 'rb') as fh:
+
+
+with open("/data/finefoods.txt", "rb") as fh:
     # Get size of the file in bytes.
     size = fh.seek(0, 2) - 1
     more_data = True
     output = []
     curr_pos = next_pos = 0
     while more_data:
-        #print(curr_pos, next_pos)
+        # print(curr_pos, next_pos)
         if curr_pos >= size:
             # We have reached the end fo the file.
             more_data = False

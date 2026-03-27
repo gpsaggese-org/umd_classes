@@ -21,12 +21,8 @@
 # ## Imports
 
 # %% run_control={"marked": false}
-import functools
-import datetime
 
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
 import pandas as pd
 
 # %matplotlib inline
@@ -45,7 +41,7 @@ from notebook_utils import display_df, delete_file_name
 # ## Multiply df by series
 
 # %%
-index = pd.date_range('2010-01-01', '2010-01-10')
+index = pd.date_range("2010-01-01", "2010-01-10")
 
 np.random.seed(42)
 
@@ -62,7 +58,7 @@ df.multiply(srs, axis=0)
 # ## Index minute and hour
 
 # %%
-index = pd.date_range('2010-01-01', '2010-01-02', freq='2H')
+index = pd.date_range("2010-01-01", "2010-01-02", freq="2H")
 
 np.random.seed(42)
 
@@ -84,7 +80,7 @@ panel = notebook_utils.get_random_panel()
 print(panel)
 
 # %%
-index_rets = pd.date_range('2001-01-01', '2001-01-7')
+index_rets = pd.date_range("2001-01-01", "2001-01-7")
 columns = ["c"]
 rets = notebook_utils.get_random_dataframe(index=index_rets, columns=columns)
 print(rets)
@@ -112,7 +108,7 @@ pd.concat([rets, panel_tmp], join="outer")
 # ## Write / read h5 objects
 
 # %%
-file_name = 'store.h5'
+file_name = "store.h5"
 
 store = pd.HDFStore(file_name)
 
@@ -121,7 +117,7 @@ print(store)
 # %%
 np.random.seed(1234)
 
-index = pd.date_range('1/1/2000', periods=8)
+index = pd.date_range("1/1/2000", periods=8)
 s = pd.Series(randn(5), index="a b c d e".split())
 print("# s=\n", s)
 
@@ -129,9 +125,12 @@ df = pd.DataFrame(randn(8, 3), index=index, columns="A B C".split())
 print()
 print("# df=\n", df)
 
-wp = pd.Panel(rand(2, 5, 4), items="Item1 Item2".split(),
-              major_axis=pd.date_range('1/1/2000', periods=5),
-              minor_axis="A B C D".split())
+wp = pd.Panel(
+    rand(2, 5, 4),
+    items="Item1 Item2".split(),
+    major_axis=pd.date_range("1/1/2000", periods=5),
+    minor_axis="A B C D".split(),
+)
 print()
 print("# wp=\n", wp)
 
@@ -157,26 +156,24 @@ delete_file_name(file_name)
 # ## Read / write objects
 
 # %%
-file_name = 'store_t1.h5'
+file_name = "store_t1.h5"
 delete_file_name(file_name)
 
 # Write.
-df_tl = pd.DataFrame(
-    dict(
-        A=list(range(5)),
-        B=list(range(5))))
+df_tl = pd.DataFrame(dict(A=list(range(5)), B=list(range(5))))
 display(df_tl)
-df_tl.to_hdf(file_name, 'table', append=True)
+df_tl.to_hdf(file_name, "table", append=True)
 
 # Read with filtering.
-pd.read_hdf(file_name, 'table', where=['index>2'])
+pd.read_hdf(file_name, "table", where=["index>2"])
 
 # %%
 df_with_missing = pd.DataFrame(
-{
-    'col1': [0, np.nan, 2],
-    'col2': [1, np.nan, np.nan],
-})
+    {
+        "col1": [0, np.nan, 2],
+        "col2": [1, np.nan, np.nan],
+    }
+)
 
 display_df(df_with_missing)
 
@@ -184,11 +181,13 @@ df_with_missing.to_hdf(
     # File.
     file_name,
     # Name of dict key.
-    'df_with_missing',
+    "df_with_missing",
     #
-    format='table', mode='w')
+    format="table",
+    mode="w",
+)
 
-df = pd.read_hdf(file_name, 'df_with_missing')
+df = pd.read_hdf(file_name, "df_with_missing")
 display_df(df)
 
 # %%
@@ -213,27 +212,26 @@ def _convert_bytes(nbytes, unit="B"):
 
 
 def pd_size(df, unit="B"):
-    #nbytes obj.values.nbytes + obj.index.nbytes + obj.columns.nbytes
+    # nbytes obj.values.nbytes + obj.index.nbytes + obj.columns.nbytes
     nbytes = df.memory_usage().sum()
     res = _convert_bytes(nbytes, unit=unit)
     return res
-        
+
 
 def file_size(file_name, unit="B"):
     nbytes = os.stat(file_name).st_size
     res = _convert_bytes(nbytes, unit=unit)
     return res
 
-        
-class timer():
-    
+
+class timer:
     def __init__(self):
         pass
-    
+
     def __enter__(self):
         self.start = default_timer()
         return self
-        
+
     def __exit__(self, *args):
         self.end = default_timer()
         self.elapsed = self.end - self.start
@@ -243,7 +241,7 @@ class timer():
 with timer() as timer_:
     print("test")
     time.sleep(0.1)
-    
+
 
 print(timer_)
 
@@ -252,10 +250,11 @@ exps = []
 
 # %%
 with timer() as timer_:
-    idx = pd.date_range('1/1/2010', '1/1/2017', freq="1Min")
+    idx = pd.date_range("1/1/2010", "1/1/2017", freq="1Min")
     cols = ["bid", "ask"]
     df = pd.DataFrame(
-        np.random.randn(len(idx), len(cols)), index=idx, columns=cols)
+        np.random.randn(len(idx), len(cols)), index=idx, columns=cols
+    )
     df["start.dt"] = df.index
     df["end.dt"] = df.index.shift(1)
 
@@ -266,7 +265,7 @@ display(df.head())
 with timer() as timer_:
     mem = pd_size(df, unit="MB")
     print("memory=%.1f MB" % mem)
-    
+
 exps.append(["create_df", timer_.elapsed, mem])
 
 orig_df = df.copy()
@@ -289,7 +288,7 @@ print("#", exp)
 
 # Write all data.
 with timer() as timer_:
-    df.to_hdf(file_name, 'df', format='fixed')
+    df.to_hdf(file_name, "df", format="fixed")
 
 mem = file_size(file_name, unit="MB")
 print("size=%.1f MB" % mem)
@@ -303,9 +302,9 @@ exp = "read_all_data.fixed"
 print("#", exp)
 
 with timer() as timer_:
-    df = pd.read_hdf(file_name, 'df')
+    df = pd.read_hdf(file_name, "df")
     _ = df.head(), df.tail()
-    
+
 mem = pd_size(df, unit="MB")
 print("memory=%.1f MB" % mem)
 
@@ -323,7 +322,7 @@ exp = "write_all_data.table"
 # Write all data.
 print("# ", exp)
 with timer() as timer_:
-    df.to_hdf(file_name, 'df', format='table')
+    df.to_hdf(file_name, "df", format="table")
 
 mem = file_size(file_name, unit="MB")
 print("size=%.1f MB" % mem)
@@ -336,9 +335,9 @@ exp = "read_all_data.table"
 print("#", exp)
 
 with timer() as timer_:
-    df = pd.read_hdf(file_name, 'df')
+    df = pd.read_hdf(file_name, "df")
     _ = df.head(), df.tail()
-    
+
 mem = pd_size(df, unit="MB")
 print("memory=%.1f MB" % mem)
 
@@ -350,9 +349,9 @@ exp = "read_all_data_with_index.table"
 print("#", exp)
 
 with timer() as timer_:
-    df = pd.read_hdf(file_name, 'df', where="index > pd.Timestamp('2010-01-01')")
+    df = pd.read_hdf(file_name, "df", where="index > pd.Timestamp('2010-01-01')")
     _ = df.head(), df.tail()
-    
+
 mem = pd_size(df, unit="MB")
 print("memory=%.1f MB" % mem)
 
@@ -364,7 +363,7 @@ exp = "read_1/2_data_with_index.table"
 print("#", exp)
 
 with timer() as timer_:
-    df = pd.read_hdf(file_name, 'df', where="index > pd.Timestamp('2013-06-01')")
+    df = pd.read_hdf(file_name, "df", where="index > pd.Timestamp('2013-06-01')")
     _ = df.head(), df.tail()
 
 mem = pd_size(df, unit="MB")
@@ -380,6 +379,7 @@ display(exps_df)
 col = exps_df[["exp", "time [s]"]]
 col.set_index("exp", inplace=True)
 
+
 def print_stats(c1, c2):
     speedup = (float(col.loc[c1]) / col.loc[c2]).values[0]
     tag = "slower"
@@ -387,7 +387,8 @@ def print_stats(c1, c2):
         speedup = 1.0 / speedup
         tag = "faster"
     print("%s / %s = %.1fx %s" % (c1, c2, speedup, tag))
-    
+
+
 print_stats("write_all_data.fixed", "read_all_data.fixed")
 print_stats("write_all_data.table", "read_all_data.table")
 
@@ -405,22 +406,22 @@ print_stats("read_all_data.table", "read_all_data_with_index.table")
 # - one can add, delete and query
 
 # %%
-file_name = 'store.h5'
+file_name = "store.h5"
 delete_file_name(file_name)
 
 store = pd.HDFStore(file_name)
 
-df = pd.DataFrame(randn(8, 3), index=index, columns=['A', 'B', 'C'])
+df = pd.DataFrame(randn(8, 3), index=index, columns=["A", "B", "C"])
 
 # Append to a df.
 df1 = df[0:4]
-store.append('df', df1)
+store.append("df", df1)
 
 df2 = df[4:]
-store.append('df', df2)
+store.append("df", df2)
 
 print(store)
-print(store.select('df'))
+print(store.select("df"))
 
 # %% [markdown]
 # ### Hierarchical keys
@@ -428,15 +429,15 @@ print(store.select('df'))
 # - keys are string that can be path-name like format
 
 # %%
-store.put('foo/bar/bah', df)
-store.append('food/orange', df)
-store.append('food/apple', df)
+store.put("foo/bar/bah", df)
+store.append("food/orange", df)
+store.append("food/apple", df)
 
 print("store=\n", store)
 print("\nstore.keys=", list(store.keys()))
 
 # Remove everything under the hierarchy 'food'.
-store.remove('food')
+store.remove("food")
 
 print("\nstore=\n", store)
 
@@ -450,19 +451,21 @@ store = pd.HDFStore(file_name)
 print("store=\n", store)
 
 # %%
-df_tmp = store.select('df', "index > pd.Timestamp('2013-06-01')")
+df_tmp = store.select("df", "index > pd.Timestamp('2013-06-01')")
 
 print(df_tmp.shape)
 display_df(df_tmp.head())
 
 # %%
-df_tmp = store.select('df', "index == pd.Timestamp('2013-06-01')")
+df_tmp = store.select("df", "index == pd.Timestamp('2013-06-01')")
 
 print(df_tmp.shape)
 display_df(df_tmp.head())
 
 # %%
-df_tmp = store.select('df', "index > pd.Timestamp('2013-06-01') & columns == ['bid']")
+df_tmp = store.select(
+    "df", "index > pd.Timestamp('2013-06-01') & columns == ['bid']"
+)
 
 print(df_tmp.shape)
 display_df(df_tmp.head())

@@ -32,7 +32,7 @@ import pandas as pd
 # reduction in memory
 
 # %%
-values = pd.Series(['apple', 'orange', 'apple', 'apple'] * 2)
+values = pd.Series(["apple", "orange", "apple", "apple"] * 2)
 values
 
 # %%
@@ -47,14 +47,14 @@ pd.value_counts(values)
 
 # categories = levels
 values = pd.Series([0, 1, 0, 0] * 2)
-dim = pd.Series(['apple', 'orange'])
+dim = pd.Series(["apple", "orange"])
 dim.take(values)
 
 # %% [markdown]
 # ## Categorical type in pandas
 
 # %%
-fruits = ['apple', 'orange', 'apple', 'apple'] * 2
+fruits = ["apple", "orange", "apple", "apple"] * 2
 
 N = len(fruits)
 
@@ -62,29 +62,30 @@ N = len(fruits)
 # by sorted key.
 df = pd.DataFrame(
     {
-        'fruit': fruits,
-        'basket_id': np.arange(N),
-        'count': np.random.randint(3, 15, size=N),
-        'weight': np.random.uniform(0, 4, size=N)
+        "fruit": fruits,
+        "basket_id": np.arange(N),
+        "count": np.random.randint(3, 15, size=N),
+        "weight": np.random.uniform(0, 4, size=N),
     },
-    columns='basket_id fruit count weight'.split())
+    columns="basket_id fruit count weight".split(),
+)
 
 df
 
 # %%
 # The columns is an array of string objects.
-df['fruit']
+df["fruit"]
 
 # %%
-fruit_col = df['fruit']
+fruit_col = df["fruit"]
 
 print("fruit_col.values=", fruit_col.values)
 print("type(fruit_col.values)=", type(fruit_col.values))
-print("fruit_col.values[0]=",type(fruit_col.values[0]), fruit_col.values[0])
+print("fruit_col.values[0]=", type(fruit_col.values[0]), fruit_col.values[0])
 
 # %%
 # Convert into a category.
-fruit_cat = df['fruit'].astype('category')
+fruit_cat = df["fruit"].astype("category")
 fruit_cat
 
 # %%
@@ -92,7 +93,7 @@ fruit_col = fruit_cat
 
 print("fruit_col.values=", fruit_col.values)
 print("type(fruit_col.values)=", type(fruit_col.values))
-print("fruit_col.values[0]=",type(fruit_col.values[0]), fruit_col.values[0])
+print("fruit_col.values[0]=", type(fruit_col.values[0]), fruit_col.values[0])
 
 # %%
 # Show the encoding.
@@ -104,14 +105,14 @@ print(c.codes)
 # %%
 # Create categorical data from other sequences.
 
-my_categories = pd.Categorical('foo bar baz foo bar'.split())
+my_categories = pd.Categorical("foo bar baz foo bar".split())
 
 my_categories
 
 # %%
 # Create categorical data from categories and codes.
 
-categories = 'foo bar baz'.split()
+categories = "foo bar baz".split()
 codes = [0, 1, 2, 0, 0, 1]
 my_cats_2 = pd.Categorical.from_codes(codes, categories)
 
@@ -162,21 +163,21 @@ srs.head()
 
 # %%
 # We can use the bins to groupby.
-results = pd.Series(srs).groupby(bins).agg(['count', 'min', max]).reset_index()
+results = pd.Series(srs).groupby(bins).agg(["count", "min", max]).reset_index()
 
 results
 
 # %%
 # The column retains categorical information.
-results['index']
+results["index"]
 
 # %% [markdown]
 # ## Categorical methods
 
 # %%
-s = pd.Series('a b c d'.split() * 2)
+s = pd.Series("a b c d".split() * 2)
 
-cat_s = s.astype('category')
+cat_s = s.astype("category")
 cat_s
 
 # %%
@@ -197,7 +198,7 @@ cat_s.cat.categories
 #   aka one-hot encoding
 
 # %%
-cat_s = pd.Series('a b c d'.split() * 2, dtype='category')
+cat_s = pd.Series("a b c d".split() * 2, dtype="category")
 
 cat_s
 
@@ -217,13 +218,12 @@ pd.get_dummies(cat_s)
 #   3) it must not mutate its input
 
 # %%
-df = pd.DataFrame({'key': 'a b c'.split() * 4,
-                   'value': np.arange(12.0)})
+df = pd.DataFrame({"key": "a b c".split() * 4, "value": np.arange(12.0)})
 
 df
 
 # %%
-g = df.groupby('key').value
+g = df.groupby("key").value
 
 g.mean()
 
@@ -248,31 +248,30 @@ g.transform(normalize)
 
 # %%
 n = 15
-times = pd.date_range('2017-05-20 00:00', freq='1min', periods=n)
+times = pd.date_range("2017-05-20 00:00", freq="1min", periods=n)
 
-df = pd.DataFrame({'time': times,
-                  'value': np.arange(n)})
+df = pd.DataFrame({"time": times, "value": np.arange(n)})
 
 df
 
 # %%
-df.set_index('time').resample('5min').count()
+df.set_index("time").resample("5min").count()
 
 # %%
-df2 = pd.DataFrame({
-    'time': times.repeat(3),
-    'key': np.tile('a b c'.split(), n),
-    'value': np.arange(n * 3.0)
-})
+df2 = pd.DataFrame(
+    {
+        "time": times.repeat(3),
+        "key": np.tile("a b c".split(), n),
+        "value": np.arange(n * 3.0),
+    }
+)
 
 df2[:7]
 
 # %%
-time_key = pd.TimeGrouper('5min')
+time_key = pd.TimeGrouper("5min")
 
-resampled = (df2.set_index('time')
-             .groupby(['key', time_key])
-             .sum())
+resampled = df2.set_index("time").groupby(["key", time_key]).sum()
 
 resampled
 

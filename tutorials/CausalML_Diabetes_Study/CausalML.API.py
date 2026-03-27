@@ -92,14 +92,10 @@ warnings.filterwarnings("ignore")
 # %%
 filename = "diabetes_binary_health_indicators_BRFSS2015.csv"
 DATA_PATH = os.path.join("data", "unprocessed", filename)
-
-# TODO(ai_gp): Move URL in download_cdc_data_if_needed
 # Direct download URL for the CDC Diabetes Health Indicators dataset from UCI.
 URL = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
 # Download and extract the dataset if not already present.
 download_cdc_data_if_needed(DATA_PATH, URL)
-
-# TODO(ai_gp): Move this to a different cell
 df_raw = load_cdc_data(DATA_PATH)
 
 # %%

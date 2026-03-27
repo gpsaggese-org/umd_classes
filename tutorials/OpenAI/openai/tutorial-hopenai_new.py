@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -34,13 +34,13 @@ from typing import List
 os.environ["OPENAI_API_KEY"] = "<your_openai_api_key>"
 
 # %% [markdown]
-# ## 1. Travel Agent chat assistant: 
+# ## 1. Travel Agent chat assistant:
 # #### Goal: Cretae a chat agent that will help the user to create an itinary to visit New York Trip considering all the constraints.
 
 # %%
 # Define the prompt for the travel assistant
 user_prompt = """
-I am visiting New York City for 3 days. Please create a detailed itinerary, 
+I am visiting New York City for 3 days. Please create a detailed itinerary,
 including popular attractions, food recommendations, and some evening activities.
 I already booked flight tickets and hotel near Newark penn station.
 Constraints:
@@ -112,6 +112,7 @@ for message in response_messages:
 # %% [markdown]
 # ## 3. Managing Uploaded Files
 # #### Goal: List, view, and delete files in the OpenAI API.
+
 
 # %%
 def print_file_info(files_list: List[str]) -> None:
@@ -213,6 +214,7 @@ for message in response_messages:
 # %% [markdown]
 # ## 6. Manage assistants.
 # #### Goal: List and delete existing assistants.
+
 
 # %%
 def print_assistant_info(assistants_list: List[str]) -> None:

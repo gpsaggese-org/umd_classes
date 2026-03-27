@@ -1,3 +1,42 @@
+# %%
+## Transformations
+
+# %%
+## Actions
+
+# %%
+## Shuffle operation
+
+# %%
+## RDD persistence
+
+# %%
+## Shared variables
+
+# %%
+# Spark SQL
+
+# %%
+# Structured Streaming
+
+# %%
+# MLlib
+
+# %%
+# GraphX
+
+# %% [markdown]
+# # pyspark
+#
+# https://spark.apache.org/docs/latest/api/python/getting_started/index.html
+
+# %%
+# !pip install pandas
+
+# %%
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder.getOrCreate()
 # ---
 # jupyter:
 #   jupytext:
@@ -68,7 +107,11 @@ df.agg(max(col("numWords"))).collect()
 
 # %%
 # Implement map-reduce in one line.
-wordCounts = textFile.select(explode(split(textFile.value, "\s+")).alias("word")).groupBy("word").count()
+wordCounts = (
+    textFile.select(explode(split(textFile.value, "\s+")).alias("word"))
+    .groupBy("word")
+    .count()
+)
 wordCounts.show()
 
 # %%
@@ -79,25 +122,33 @@ map_.show()
 # %%
 result = map_.groupBy("word").count()
 
-#result.show()
+# result.show()
 result.collect()
 
 
 # %% [markdown]
 # # RDD Programming guide
 
+
 # %%
 class DisplayRDD:
-        def __init__(self, rdd):
-                self.rdd = rdd
+    def __init__(self, rdd):
+        self.rdd = rdd
 
-        def _repr_html_(self):                                  
-                x = self.rdd.mapPartitionsWithIndex(lambda i, x: [(i, [y for y in x])])
-                l = x.collect()
-                s = "<table><tr>{}</tr><tr><td>".format("".join(["<th>Partition {}".format(str(j)) for (j, r) in l]))
-                s += '</td><td valign="bottom" halignt="left">'.join(["<ul><li>{}</ul>".format("<li>".join([str(rr) for rr in r])) for (j, r) in l])
-                s += "</td></table>"
-                return s
+    def _repr_html_(self):
+        x = self.rdd.mapPartitionsWithIndex(lambda i, x: [(i, [y for y in x])])
+        l = x.collect()
+        s = "<table><tr>{}</tr><tr><td>".format(
+            "".join(["<th>Partition {}".format(str(j)) for (j, r) in l])
+        )
+        s += '</td><td valign="bottom" halignt="left">'.join(
+            [
+                "<ul><li>{}</ul>".format("<li>".join([str(rr) for rr in r]))
+                for (j, r) in l
+            ]
+        )
+        s += "</td></table>"
+        return s
 
 
 # %%
@@ -118,7 +169,7 @@ DisplayRDD(data_rdd)
 
 # %%
 # Return one record per line.
-states_rdd = sc.textFile('states.txt', 10)
+states_rdd = sc.textFile("states.txt", 10)
 print(states_rdd)
 DisplayRDD(states_rdd)
 
@@ -137,6 +188,7 @@ print(totalLength)
 # %% [markdown]
 # ## Passing functions.
 
+
 # %%
 def myFunc(s):
     words = s.split(" ")
@@ -154,10 +206,13 @@ counter = 0
 print(data)
 rdd = sc.parallelize(data)
 
+
 # Wrong: Don't do this!!
 def increment_counter(x):
     global counter
     counter += x
+
+
 rdd.foreach(increment_counter)
 
 # The output is zero since the executors are updating the copy.
@@ -179,18 +234,21 @@ print(counts.collect())
 # The fraction should be π / 4.
 
 import random
+
 random.seed(314)
+
 
 def sample(p):
     x, y = random.random(), random.random()
-    in_unit_circle = 1 if x*x + y*y < 1 else 0
+    in_unit_circle = 1 if x * x + y * y < 1 else 0
     return in_unit_circle
+
 
 # “parallelize” method creates an RDD.
 NUM_SAMPLES = int(1e6)
-count = sc.parallelize(range(0, NUM_SAMPLES)) \
-           .map(sample) \
-           .reduce(lambda a, b: a + b)
+count = (
+    sc.parallelize(range(0, NUM_SAMPLES)).map(sample).reduce(lambda a, b: a + b)
+)
 approx_pi = 4.0 * count / NUM_SAMPLES
 print("pi is roughly %f" % approx_pi)
 
@@ -208,74 +266,43 @@ result = counts.collect()
 print(result)
 
 # %%
-result = sc.textFile("data.txt").\
-    flatMap(lambda line: line.split(" ")).\
-    map(lambda s: (s, 1))\
-    .reduceByKey(lambda a, b: a + b)\
+result = (
+    sc.textFile("data.txt")
+    .flatMap(lambda line: line.split(" "))
+    .map(lambda s: (s, 1))
+    .reduceByKey(lambda a, b: a + b)
+)
 #     .collect()
 print(result)
-
-# %%
-## Transformations
-
-# %%
-## Actions
-
-# %%
-## Shuffle operation
-
-# %%
-## RDD persistence
-
-# %%
-## Shared variables
-
-# %%
-# Spark SQL
-
-# %%
-# Structured Streaming
-
-# %%
-# MLlib
-
-# %%
-# GraphX
-
-# %% [markdown]
-# # pyspark
-#
-# https://spark.apache.org/docs/latest/api/python/getting_started/index.html
-
-# %%
-# !pip install pandas
-
-# %%
-from pyspark.sql import SparkSession
-
-spark = SparkSession.builder.getOrCreate()
 print(spark)
 
 # %%
 from datetime import datetime, date
-import pandas as pd
 from pyspark.sql import Row
 
-df = spark.createDataFrame([
-    Row(a=1,
-        b=2.,
-        c='string1',
-        d=date(2000, 1, 1),
-        e=datetime(2000, 1, 1, 12, 0)),
-    Row(a=2,
-        b=3.,
-        c='string2',
-        d=date(2000, 2, 1),
-        e=datetime(2000, 1, 2, 12, 0)),
-    Row(a=4,
-        b=5.,
-        c='string3',
-        d=date(2000, 3, 1),
-        e=datetime(2000, 1, 3, 12, 0))
-])
+df = spark.createDataFrame(
+    [
+        Row(
+            a=1,
+            b=2.0,
+            c="string1",
+            d=date(2000, 1, 1),
+            e=datetime(2000, 1, 1, 12, 0),
+        ),
+        Row(
+            a=2,
+            b=3.0,
+            c="string2",
+            d=date(2000, 2, 1),
+            e=datetime(2000, 1, 2, 12, 0),
+        ),
+        Row(
+            a=4,
+            b=5.0,
+            c="string3",
+            d=date(2000, 3, 1),
+            e=datetime(2000, 1, 3, 12, 0),
+        ),
+    ]
+)
 df

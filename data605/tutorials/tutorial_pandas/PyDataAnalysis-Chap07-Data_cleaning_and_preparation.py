@@ -15,13 +15,13 @@
 
 # %%
 import pandas as pd
-#import pandas_datareader.data as web
+
+# import pandas_datareader.data as web
 print(pd.__version__)
 
 from numpy import nan as NA
 import numpy as np
 
-import pprint  
 
 # %% [markdown]
 # # Data cleaning and preparation
@@ -92,10 +92,9 @@ df.fillna(method="ffill", limit=2)
 # #### pd.obj.duplicated()
 
 # %%
-data = pd.DataFrame({
-    'k1': ['one', 'two'] * 3 + ['two'],
-    'k2': [1, 1, 2, 3, 3, 4, 4]
-})
+data = pd.DataFrame(
+    {"k1": ["one", "two"] * 3 + ["two"], "k2": [1, 1, 2, 3, 3, 4, 4]}
+)
 
 data
 
@@ -114,10 +113,10 @@ data.drop_duplicates()
 # By default the method considers all the columns.
 # One can specify a subset of duplicates.
 
-data.duplicated(['k1'])
+data.duplicated(["k1"])
 
 # %%
-data.duplicated(['k1'], keep="last")
+data.duplicated(["k1"], keep="last")
 
 # %%
 print(data)
@@ -132,38 +131,47 @@ print("\n", data.drop_duplicates(keep="last"))
 # ### Transforming data using function or mapping
 
 # %%
-data = pd.DataFrame({
-    'food': [
-        'bacon', 'pulled pork', 'bacon', 'Pastrami', 'corned beef', 'Bacon',
-        'pastrami', 'honey ham', 'nova lox'
-    ],
-    'ounces': [4, 3, 12, 6, 7.5, 8, 3, 5, 6]
-})
+data = pd.DataFrame(
+    {
+        "food": [
+            "bacon",
+            "pulled pork",
+            "bacon",
+            "Pastrami",
+            "corned beef",
+            "Bacon",
+            "pastrami",
+            "honey ham",
+            "nova lox",
+        ],
+        "ounces": [4, 3, 12, 6, 7.5, 8, 3, 5, 6],
+    }
+)
 data
 
 # %%
 # Suppose you want to add a column indicating the animal each food came from.
 
 meat_to_animal = {
-      'bacon': 'pig',
-      'pulled pork': 'pig',
-      'pastrami': 'cow',
-      'corned beef': 'cow',
-      'honey ham': 'pig',
-      'nova lox': 'salmon'
+    "bacon": "pig",
+    "pulled pork": "pig",
+    "pastrami": "cow",
+    "corned beef": "cow",
+    "honey ham": "pig",
+    "nova lox": "salmon",
 }
 
 # %%
-data['food'].str
+data["food"].str
 
 # %%
 # Get the lower case of one column.
 # ".str" and ".dt" allow to select a column the algos for a given type.
-lowercased = data['food'].str.lower()
+lowercased = data["food"].str.lower()
 
 print(lowercased)
 
-data['animal'] = lowercased.map(meat_to_animal)
+data["animal"] = lowercased.map(meat_to_animal)
 
 data
 
@@ -175,7 +183,7 @@ data
 
 # map() is called on each element of the obj.
 # MEM: It's like python map()
-data['food'].map(lambda x: meat_to_animal[x.lower()])
+data["food"].map(lambda x: meat_to_animal[x.lower()])
 
 # %% [markdown]
 # ### Replacing values
@@ -185,7 +193,7 @@ data['food'].map(lambda x: meat_to_animal[x.lower()])
 # #### pd.obj.replace()
 
 # %%
-data = pd.Series([1., -999., 2., -999., -1000., 3.])
+data = pd.Series([1.0, -999.0, 2.0, -999.0, -1000.0, 3.0])
 data
 
 # %%
@@ -238,7 +246,7 @@ cats
 
 # %%
 # Using custom labels for the categorical variables.
-group_names = ['Youth', 'YoungAdult', 'MiddleAged', 'Senior']
+group_names = ["Youth", "YoungAdult", "MiddleAged", "Senior"]
 cats = pd.cut(ages, bins, labels=group_names)
 
 cats
@@ -280,7 +288,7 @@ pd.value_counts(cats)
 
 # %%
 # Passing custom quantiles.
-cats = pd.qcut(data, [0, 0.1, 0.5, 0.9, 1.])
+cats = pd.qcut(data, [0, 0.1, 0.5, 0.9, 1.0])
 cats
 
 # %%
@@ -324,19 +332,18 @@ data[(np.abs(data) > 2.9).any(axis=1)]
 # #### pd.get_dummies()
 
 # %%
-df = pd.DataFrame({
-    'key': ['b', 'b', 'a', 'c', 'a', 'b'],
-    'data1': list(range(6))
-})
+df = pd.DataFrame(
+    {"key": ["b", "b", "a", "c", "a", "b"], "data1": list(range(6))}
+)
 
 df
 
 # %%
-pd.get_dummies(df['key'])
+pd.get_dummies(df["key"])
 
 # %%
 # One can add a prefix with "prefix".
-pd.get_dummies(df['key'], prefix="key")
+pd.get_dummies(df["key"], prefix="key")
 
 # %%
 # One can combine pd.cut() to discretize with a pd.get_dummies() to compute indicator vars.
@@ -362,23 +369,23 @@ pd.get_dummies(pd.cut(values, bins))
 
 # %%
 string = "hello my name is guido"
-'guido' in string
+"guido" in string
 
 # %%
 # Find the index of a substring.
-print(string.index('guido'))
+print(string.index("guido"))
 
-print(string.find('guido'))
+print(string.find("guido"))
 
 # %%
 # Raises "ValueError: substring not found"
-#string.index('Guido')
+# string.index('Guido')
 
-string.find('Guido')
+string.find("Guido")
 
 # %%
 # Strip removes spaces on both sides.
-' Guido    '.strip()
+" Guido    ".strip()
 
 # %% [markdown]
 # ### Regex
@@ -388,26 +395,26 @@ import re
 
 text = "foo bar\t baz \tqux"
 # Split using 1 or more spaces as separator.
-re.split('\s+', text)
+re.split("\s+", text)
 
 # %%
 # If you want to call a regex several times, re.compile() speeds up things.
-regex = re.compile('\s+')
+regex = re.compile("\s+")
 regex.split(text)
 regex.split(text)
 
 # %%
 # re.findall() finds all the matching substrings.
-print(re.findall('\s', text))
+print(re.findall("\s", text))
 
 # %%
 # re.finditer() returns an iterator to the regex matches.
-print(re.finditer('\s', text))
-print(list(re.finditer('\s', text)))
+print(re.finditer("\s", text))
+print(list(re.finditer("\s", text)))
 
 # %%
 # re.search() finds only the first.
-m = re.search('\s', text)
+m = re.search("\s", text)
 m
 
 # %%
@@ -415,7 +422,7 @@ print(m.start(), m.end())
 
 # %%
 # Extract the match.
-text[m.start():m.end()]
+text[m.start() : m.end()]
 
 # %%
 # re.match() finds only the first, starting from the beginning of the string.
@@ -425,10 +432,10 @@ text[m.start():m.end()]
 # - alphanumerical chars . _ % + -
 # - alphanumerical interspersed with .
 # - capture the groups
-pattern = r'([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})'
+pattern = r"([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})"
 
 regex = re.compile(pattern, flags=re.IGNORECASE)
-m = regex.match('saggese@gmail.com')
+m = regex.match("saggese@gmail.com")
 
 m.groups()
 
@@ -447,10 +454,10 @@ regex.findall(text)
 
 # %%
 data = {
-    'Dave': 'dave@google.com',
-    'Steve': 'steve@gmail.com',
-    'Rob': 'rob@gmail.com',
-    'Wes': np.nan
+    "Dave": "dave@google.com",
+    "Steve": "steve@gmail.com",
+    "Rob": "rob@gmail.com",
+    "Wes": np.nan,
 }
 data = pd.Series(data)
 
@@ -465,7 +472,7 @@ data.isnull()
 data.map(lambda x: x.lower() if isinstance(x, str) else "")
 
 # %%
-data.str.contains('gmail')
+data.str.contains("gmail")
 
 # %%
 # Lots of string function have a wrapper.

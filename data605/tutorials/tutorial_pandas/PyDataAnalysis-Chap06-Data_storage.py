@@ -24,26 +24,26 @@
 
 # %%
 import pandas as pd
-#import pandas_datareader.data as web
+
+# import pandas_datareader.data as web
 print(pd.__version__)
 
-import pprint
 
 # %% [markdown]
 # - Indexing
 #     - which columns are index
 #     - how to get column names
-#     
+#
 # - Type inference and data conversion
 #     - user-defined value conversions
 #     - custom missing values
-#     
+#
 # - Datetime parsing
 #     - combine multiple columns into a single datetime info
-#     
+#
 # - Iterating
 #     - support for iterating over chunks of very large files
-#     
+#
 # - Unclean data issues
 #     - skip rows, footer, comments, thounsands separated by commas
 #
@@ -111,7 +111,7 @@ import pprint
 import requests
 
 # Get last 30 GitHub issues from pandas.
-url = 'https://api.github.com/repos/pandas-dev/pandas/issues'
+url = "https://api.github.com/repos/pandas-dev/pandas/issues"
 
 resp = requests.get(url)
 

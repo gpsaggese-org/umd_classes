@@ -25,7 +25,6 @@
 # %%
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
 # %% [markdown]
 # # Assigning directly
@@ -68,7 +67,7 @@ print("display.max_columns=", pd.get_option("display.max_columns"))
 with pd.option_context("display.max_rows", 10, "display.max_columns", 5):
     print("\ndisplay.max_rows=", pd.get_option("display.max_rows"))
     print("display.max_columns=", pd.get_option("display.max_columns"))
-    
+
 print("\ndisplay.max_rows=", pd.get_option("display.max_rows"))
 print("display.max_columns=", pd.get_option("display.max_columns"))
 
@@ -76,9 +75,9 @@ print("display.max_columns=", pd.get_option("display.max_columns"))
 # # Typical settings
 
 # %%
-pd.set_option('display.max_rows', 500)
-pd.set_option('display.max_columns', 500)
-pd.set_option('display.width', 1000)
+pd.set_option("display.max_rows", 500)
+pd.set_option("display.max_columns", 500)
+pd.set_option("display.width", 1000)
 
 # %% [markdown]
 # # Plot
@@ -91,10 +90,9 @@ pd.Series(np.random.randn(1000)).plot()
 
 # %%
 # Passing matplotlib / pd options.
-pd_params = {
-        "fontsize": 20, "rot": 0}
+pd_params = {"fontsize": 20, "rot": 0}
 
 pd.Series(np.random.randn(1000)).plot(**pd_params)
 
 # %%
-#pd.describe_option("fontsize")
+# pd.describe_option("fontsize")

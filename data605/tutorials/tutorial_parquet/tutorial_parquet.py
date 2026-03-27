@@ -44,9 +44,7 @@ def get_df(num_days: int = 15) -> pd.DataFrame:
     instruments = "A B C D E".split()
     start_idx = pd.Timestamp("2000-01-01")
     end_idx = start_idx + pd.Timedelta(days=num_days - 1)
-    df_idx = pd.date_range(
-        start_idx, end_idx, freq="1D"
-    )
+    df_idx = pd.date_range(start_idx, end_idx, freq="1D")
     # print(df_idx)
     random.seed(1000)
     df = []
@@ -64,6 +62,7 @@ def get_df(num_days: int = 15) -> pd.DataFrame:
         df.append(df_tmp)
     df = pd.concat(df)
     return df
+
 
 get_df()
 
@@ -138,7 +137,7 @@ for num_rows in (15, 100, 1000, 10000):
 # %%
 # Load only two columns.
 df2 = pq.read_table(file_name, columns=["idx", "val1"])
-#print(df2)
+# print(df2)
 
 df2 = df2.to_pandas()
 print(df_to_str(df2))
@@ -153,7 +152,7 @@ print(df_to_str(df2))
 
 # %%
 df = get_df()
-#display(df)
+# display(df)
 print(df_to_str(df))
 
 # %%
@@ -204,7 +203,7 @@ print(df_to_str(df))
 # %%
 # Convert to Pyarrow.
 table = pa.Table.from_pandas(df)
-#print("table=\n%s" % table)
+# print("table=\n%s" % table)
 
 # Clean up dir.
 base = "."
@@ -267,7 +266,7 @@ for idx, df_tmp in group_by_idx:
             #             pq.write_to_dataset(table,
             #                     subdir_name, schema=schema)
             file_name = os.path.join(subdir_name, "df_out.pq")
-            #hio.create_enclosing_dir(file_name)
+            # hio.create_enclosing_dir(file_name)
             os.makedirs(os.path.dirname(file_name), exist_ok=True)
             pq.write_table(table, file_name)
 

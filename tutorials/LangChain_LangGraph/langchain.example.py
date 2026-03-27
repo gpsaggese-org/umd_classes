@@ -33,13 +33,9 @@
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
-import os
-import sys
 
 import langchain
 import langchain_core
-import langgraph
 
 import langchain_API_utils as ut
 
@@ -51,7 +47,6 @@ ut.print_environment_info()
 
 # %%
 # Customize langchain.env to configure model.
-import os
 import dotenv
 
 dotenv.load_dotenv("langchain.env")
@@ -185,7 +180,7 @@ docs_store = tut_utils.build_vector_store(chunked_docs, embeddings)
 retriever = docs_store.as_retriever(search_kwargs={"k": 3})
 
 print(f"Vector store built with {len(chunked_docs)} embedded chunks")
-print(f"Retriever ready for semantic search")
+print("Retriever ready for semantic search")
 
 # %%
 import langchain_core.output_parsers
@@ -358,4 +353,3 @@ final_state = agent.invoke(inputs)
     (type(m).__name__, getattr(m, "content", "")[:120])
     for m in final_state["messages"]
 ][-4:]
-

@@ -19,13 +19,12 @@
 
 # %%
 import pandas as pd
-#import pandas_datareader.data as web
+
+# import pandas_datareader.data as web
 print(pd.__version__)
 
 import numpy as np
-from numpy import nan as NA
 
-import pprint  
 
 # %% [markdown]
 # # Data wrangling: join, combine, reshape
@@ -37,12 +36,12 @@ import pprint
 #
 # - Two or more index levels on an axis
 #   - Allows to work with high dimensional data using a lower dimensional form
-#   
+#
 # - Used in:
 #     - group based operations
 #     - pivot tables
 #     - reshaping
-#     
+#
 # - INV: A hierarchical index comes when a list of lists is used (instead of a simple list)
 # - INV: Indexing in a hierarchical index is like indexing in a np array
 
@@ -53,9 +52,13 @@ import pprint
 # Create a hierarchical index.
 np.random.seed(10)
 
-data = pd.Series(np.random.randn(9),
-                 index=[['a', 'a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'],
-                        [1, 2, 3, 1, 3, 1, 2, 2, 3]])
+data = pd.Series(
+    np.random.randn(9),
+    index=[
+        ["a", "a", "a", "b", "b", "c", "c", "d", "d"],
+        [1, 2, 3, 1, 3, 1, 2, 2, 3],
+    ],
+)
 
 data
 
@@ -77,15 +80,15 @@ data.index
 # Partial indexing.
 
 # Extract the values for the first level.
-data['b']
+data["b"]
 
 # %%
 # Range of one level of an index.
-data['b':'c']
+data["b":"c"]
 
 # %%
 # Select some indices with .loc[list].
-data.loc[['b', 'd']]
+data.loc[["b", "d"]]
 
 # %%
 # Select all the first level and part of the second.
@@ -114,10 +117,9 @@ frame
 # %%
 frame = pd.DataFrame(
     np.arange(12).reshape((4, 3)),
-    index=['a a b b'.split(),
-           list(map(int, '1 2 1 2'.split()))],
-    columns=['Ohio Ohio Colorado'.split(),
-             'Green Red Green'.split()])
+    index=["a a b b".split(), list(map(int, "1 2 1 2".split()))],
+    columns=["Ohio Ohio Colorado".split(), "Green Red Green".split()],
+)
 frame
 
 # %%
@@ -133,8 +135,8 @@ print(frame.columns.names)
 
 # %%
 # Assign names to hierarchical levels.
-frame.index.names = ['key1', 'key2']
-frame.columns.names = ['state', 'color']
+frame.index.names = ["key1", "key2"]
+frame.columns.names = ["state", "color"]
 
 frame
 
@@ -146,8 +148,9 @@ print(frame.columns)
 
 # %%
 pd.MultiIndex.from_arrays(
-    ['Ohio Ohio Colorado'.split(), 'Green Red Green'.split()],
-    names=['state', 'color'])
+    ["Ohio Ohio Colorado".split(), "Green Red Green".split()],
+    names=["state", "color"],
+)
 
 # %% [markdown]
 # ### Reordering and sorting levels
@@ -158,7 +161,7 @@ pd.MultiIndex.from_arrays(
 # %%
 # Swap (or reorder) the order of the levels on an axis.
 display(frame)
-frame.swaplevel('key1', 'key2')
+frame.swaplevel("key1", "key2")
 
 # %% [markdown]
 # #### sort_index
@@ -168,15 +171,17 @@ frame.swaplevel('key1', 'key2')
 display(frame)
 frame2 = frame.sort_index(
     # level=1 is key2
-    #level="key2")
-    level=1)
+    # level="key2")
+    level=1
+)
 
 frame2
 
 # %%
 frame2.sort_index(
     # level=0 is key1
-    level=0)
+    level=0
+)
 
 # %% [markdown]
 # ### Summary statistics by level
@@ -185,11 +190,11 @@ frame2.sort_index(
 frame
 
 # %%
-#frame.sum(level='key2')
+# frame.sum(level='key2')
 frame.sum(level=1)
 
 # %%
-frame.sum(level='color', axis=1)
+frame.sum(level="color", axis=1)
 
 # %% [markdown]
 # ### Indexing with df columns
@@ -202,18 +207,20 @@ frame.sum(level='color', axis=1)
 # %%
 # Build from dictionary: each (key, value) becomes a column.
 # A new index is added.
-frame = pd.DataFrame({
-    'a': list(range(7)),
-    'b': list(range(7, 0, -1)),
-    'c': ['one', 'one', 'one', 'two', 'two', 'two', 'two'],
-    'd': [0, 1, 2, 0, 1, 2, 3]
-})
+frame = pd.DataFrame(
+    {
+        "a": list(range(7)),
+        "b": list(range(7, 0, -1)),
+        "c": ["one", "one", "one", "two", "two", "two", "two"],
+        "d": [0, 1, 2, 0, 1, 2, 3],
+    }
+)
 
 frame
 
 # %%
 # Use two columns as index.
-frame2 = frame.set_index(['c', 'd'])
+frame2 = frame.set_index(["c", "d"])
 
 frame2
 
@@ -235,13 +242,10 @@ frame2.reset_index().reset_index()
 # ### Db-style df joins
 
 # %%
-df1 = pd.DataFrame({
-    'key': ['b', 'b', 'a', 'c', 'a', 'a', 'b'],
-    'data1': list(range(7))
-})
-df2 = pd.DataFrame({
-    'key': ['a', 'b', 'd'],
-    'data2': list(range(3))})
+df1 = pd.DataFrame(
+    {"key": ["b", "b", "a", "c", "a", "a", "b"], "data1": list(range(7))}
+)
+df2 = pd.DataFrame({"key": ["a", "b", "d"], "data2": list(range(3))})
 
 print("df1=")
 display(df1)
@@ -307,19 +311,19 @@ np.concatenate([arr, arr], axis=0)
 # %% [markdown]
 # #### Concat in pandas Series
 #
-# - Since pandas objects (e.g., Series and DataFrame) have labeled axis 
+# - Since pandas objects (e.g., Series and DataFrame) have labeled axis
 #     - If indexes are different, should do union or intersection of labels?
 #     - Should we preserve the labels or discard it after concatenation?
 
 # %%
-s1 = pd.Series([0, 1], index='a b'.split())
+s1 = pd.Series([0, 1], index="a b".split())
 print("s1=\n%s" % s1)
 
-s2 = pd.Series([2, 3, 4], index='c d e'.split())
+s2 = pd.Series([2, 3, 4], index="c d e".split())
 print("\ns2=\n%s" % s2)
 
-s3 = pd.Series([5, 6], index='f g'.split())
-print("\ns3=\n%s"% s3)
+s3 = pd.Series([5, 6], index="f g".split())
+print("\ns3=\n%s" % s3)
 
 # %%
 # Concat series along axis=0 producing another Series with index and values glued together.
@@ -349,16 +353,16 @@ result.unstack()
 # #### Concat in pandas DataFrame
 
 # %%
-df1 = pd.DataFrame(np.arange(6).reshape(3, 2),
-                   index=['a', 'b', 'c'],
-                   columns=['one', 'two'])
+df1 = pd.DataFrame(
+    np.arange(6).reshape(3, 2), index=["a", "b", "c"], columns=["one", "two"]
+)
 
 print("df1=")
 display(df1)
 
-df2 = pd.DataFrame(5 + np.arange(4).reshape(2, 2),
-                   index=['a', 'c'],
-                   columns=['three', 'four'])
+df2 = pd.DataFrame(
+    5 + np.arange(4).reshape(2, 2), index=["a", "c"], columns=["three", "four"]
+)
 
 print("\ndf2=")
 display(df2)
@@ -366,7 +370,7 @@ display(df2)
 # %%
 # Merge using hierarchical columns to track where the data is coming from.
 # axis=1 means (columns)
-pd.concat([df1, df2], axis=1, keys=['level1', 'level2'])
+pd.concat([df1, df2], axis=1, keys=["level1", "level2"])
 
 # %%
 # "ignore_index=True" is used to ignore the indices and create a new
@@ -378,7 +382,7 @@ pd.concat([df1, df2], axis=0, ignore_index=True, sort=True)
 
 # %%
 # Check if there are duplicated indices.
-#pd.concat([df1, df2], axis=0, verify_integrity=True)
+# pd.concat([df1, df2], axis=0, verify_integrity=True)
 
 # %% [markdown]
 # ### Combining data with overlap
@@ -386,13 +390,13 @@ pd.concat([df1, df2], axis=0, ignore_index=True, sort=True)
 # %%
 # np.where() performs a vectorized if-then-else operation.
 
-a = pd.Series([np.nan, 2.5, np.nan, 3.5, 4.5, np.nan],
-             index="f e d c b a".split())
+a = pd.Series(
+    [np.nan, 2.5, np.nan, 3.5, 4.5, np.nan], index="f e d c b a".split()
+)
 print(a)
 
 # %% run_control={"marked": false}
-b = pd.Series(np.arange(len(a), dtype=np.float64),
-              index="f e d c b a".split())
+b = pd.Series(np.arange(len(a), dtype=np.float64), index="f e d c b a".split())
 b[-1] = np.nan
 
 display(b)
@@ -401,7 +405,7 @@ display(b)
 # We can combine the two series by using the values from a and
 # using values from b to fill the nan.
 
-# Compute the null values 
+# Compute the null values
 np.where(pd.isnull(a), b, a)
 
 # %%
@@ -419,8 +423,9 @@ a.combine_first(b)
 # %%
 data = pd.DataFrame(
     np.arange(6).reshape((2, 3)),
-    index=pd.Index(['Ohio', 'Colorado'], name='state'),
-    columns=pd.Index(['one', 'two', 'three'], name='number'))
+    index=pd.Index(["Ohio", "Colorado"], name="state"),
+    columns=pd.Index(["one", "two", "three"], name="number"),
+)
 
 data
 
@@ -442,10 +447,10 @@ result.unstack(0)
 
 # %%
 # unstack() can produce nan if there are missing values.
-s1 = pd.Series([0, 1, 2, 3], index=['a', 'b', 'c', 'd'])
-s2 = pd.Series([4, 5, 6], index=['c', 'd', 'e'])
+s1 = pd.Series([0, 1, 2, 3], index=["a", "b", "c", "d"])
+s2 = pd.Series([4, 5, 6], index=["c", "d", "e"])
 # Concat vertically the series.
-data2 = pd.concat([s1, s2], keys=['one', 'two'])
+data2 = pd.concat([s1, s2], keys=["one", "two"])
 
 print("data2=")
 print(type(data2))
@@ -471,11 +476,11 @@ display(data.tail())
 
 # %%
 # Combine year and quarter to create a kind of time interval type.
-periods = pd.PeriodIndex(year=data.year, quarter=data.quarter, name='date')
+periods = pd.PeriodIndex(year=data.year, quarter=data.quarter, name="date")
 print(periods)
 
 data2 = data.copy()
-data2.index = periods.to_timestamp('D', 'end')
+data2.index = periods.to_timestamp("D", "end")
 
 # The data is in "wide" format.
 data2.head()
@@ -483,7 +488,7 @@ data2.head()
 # %%
 # We need to assign a name to the column otherwise when we "melt"
 # the column is not going to have a name.
-columns = pd.Index(['realgdp', 'infl', 'unemp'], name='item')
+columns = pd.Index(["realgdp", "infl", "unemp"], name="item")
 # Use reindex to extract columns.
 data2 = data2.reindex(columns=columns)
 print("columns=", columns)
@@ -494,25 +499,25 @@ data2.head()
 # Put data in "long" format by moving the three columns into one.
 ldata = data2.stack().reset_index()
 # Rename column to value.
-ldata = ldata.rename(columns={0: 'value'})
+ldata = ldata.rename(columns={0: "value"})
 ldata.head()
 
 # %%
 # pivot() allows to transform from long format to wide format.
-pivoted = ldata.pivot('date', 'item', 'value')
+pivoted = ldata.pivot("date", "item", "value")
 pivoted.head()
 
 # %%
 # Add another row: now we have an item and 2 values for each.
 ldata2 = ldata.copy()
-ldata2['value2'] = np.random.randn(len(ldata)) 
+ldata2["value2"] = np.random.randn(len(ldata))
 
 display(ldata2.head())
 
 # %%
 # Pivoting when there are multiple values creates a hierarchical
 # data frame.
-pivoted = ldata2.pivot('date', 'item')
+pivoted = ldata2.pivot("date", "item")
 
 pivoted.head()
 
@@ -522,12 +527,14 @@ pivoted.head()
 # %%
 # The inverse operation to "pivot" is "melt".
 
-df = pd.DataFrame({
-    'key': ['foo', 'bar', 'baz'],
-    'A': [1, 2, 3],
-    'B': [4, 5, 6],
-    'C': [7, 8, 9]
-})
+df = pd.DataFrame(
+    {
+        "key": ["foo", "bar", "baz"],
+        "A": [1, 2, 3],
+        "B": [4, 5, 6],
+        "C": [7, 8, 9],
+    }
+)
 
 df
 

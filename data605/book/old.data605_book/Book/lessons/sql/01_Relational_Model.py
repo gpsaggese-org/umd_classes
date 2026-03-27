@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3
 #     name: python3
@@ -25,7 +25,6 @@
 # %load_ext sql
 # Create a local sqlite database file so the data persists within the Colab session
 # %sql sqlite:///relational_db.sqlite
-
 
 # %% [markdown] id="20c56244"
 # ## Relational Model: Overview

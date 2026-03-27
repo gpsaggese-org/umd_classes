@@ -33,9 +33,6 @@
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
-import os
-import sys
 import dotenv
 
 import langchain
@@ -116,7 +113,9 @@ summary_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
 )
 
 # Create a chain: prompt -> model -> parser.
-summary_chain = summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+summary_chain = (
+    summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+)
 pprint.pprint(summary_chain)
 
 
@@ -130,14 +129,18 @@ risks_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
 )
 
 # Create a chain: prompt -> model -> parser.
-risks_chain = risks_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+risks_chain = (
+    risks_prompt | llm | langchain_core.output_parsers.StrOutputParser()
+)
 print("Risks chain created.")
 
 # %%
 import langchain_core.runnables
 
 # RunnableParallel runs both chains concurrently and returns both results.
-parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
+parallel = langchain_core.runnables.RunnableParallel(
+    summary=summary_chain, risks=risks_chain
+)
 
 # Invoke with shared input and max concurrency limit.
 ret = parallel.invoke(
@@ -156,7 +159,9 @@ questions = [
     {"question": "What does InjectedState do?"},
 ]
 # Process all questions concurrently (more efficient than invoking one at a time).
-ret = chain.batch(questions, return_exceptions=True, config={"max_concurrency": 3})
+ret = chain.batch(
+    questions, return_exceptions=True, config={"max_concurrency": 3}
+)
 
 pprint.pprint(ret)
 
@@ -250,11 +255,19 @@ tool_calls = [
         "type": "tool_call",
     },  # error (std=0)
 ]
-print(f"Prepared {len(tool_calls)} tool calls: {[tc['name'] for tc in tool_calls]}")
+print(
+    f"Prepared {len(tool_calls)} tool calls: {[tc['name'] for tc in tool_calls]}"
+)
 
 # %%
 # Invoke the graph with the tool calls; it returns messages with results/errors.
-out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", tool_calls=tool_calls)]})
+out = graph.invoke(
+    {
+        "messages": [
+            langchain_core.messages.AIMessage(content="", tool_calls=tool_calls)
+        ]
+    }
+)
 [
     type(m).__name__ + ":" + (getattr(m, "content", "")[:80])
     for m in out["messages"]
@@ -278,10 +291,10 @@ out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", t
 # This tool answers questions about injected dataset metadata.
 # We'll show how to build a graph and invoke the tool with a question.
 result = ut.dataset_brief(
-    question="How many rows and columns?",
-    dataset_meta=dataset_meta
+    question="How many rows and columns?", dataset_meta=dataset_meta
 )
 import json
+
 print(json.dumps(json.loads(result), indent=2))
 
 # %%
@@ -351,19 +364,12 @@ store_demo = langgraph.store.memory.InMemoryStore()
 
 # Save a preference.
 save_result = ut.save_pref(
-    user_id="alice",
-    key="theme",
-    value="dark",
-    store=store_demo
+    user_id="alice", key="theme", value="dark", store=store_demo
 )
 print(f"Save: {save_result}")
 
 # Load the preference.
-load_result = ut.load_pref(
-    user_id="alice",
-    key="theme",
-    store=store_demo
-)
+load_result = ut.load_pref(user_id="alice", key="theme", store=store_demo)
 print(f"Load: {load_result}")
 
 # %%
@@ -375,7 +381,9 @@ store = langgraph.store.memory.InMemoryStore()
 
 # Create a ToolNode that can save/load preferences using the store.
 tool_node = langgraph.prebuilt.ToolNode([ut.save_pref, ut.load_pref])
-print(f"Created InMemoryStore and ToolNode with {len([ut.save_pref, ut.load_pref])} tools.")
+print(
+    f"Created InMemoryStore and ToolNode with {len([ut.save_pref, ut.load_pref])} tools."
+)
 
 
 # %%
@@ -457,7 +465,9 @@ agent = langchain.agents.create_agent(
 out = agent.invoke(
     {
         "messages": [
-            langchain_core.messages.HumanMessage(content="Call utc_now and return the exact value.")
+            langchain_core.messages.HumanMessage(
+                content="Call utc_now and return the exact value."
+            )
         ]
     }
 )
@@ -497,7 +507,9 @@ contract_agent = langchain.agents.create_agent(
 contract_out = contract_agent.invoke(
     {
         "messages": [
-            langchain_core.messages.HumanMessage(content="What is the current UTC time? Use your tool.")
+            langchain_core.messages.HumanMessage(
+                content="What is the current UTC time? Use your tool."
+            )
         ]
     }
 )
@@ -535,7 +547,7 @@ supervisor = langchain.agents.create_agent(
     system_prompt="First call extract_facts, then summarize the returned facts.",
     state_schema=CustomState,
 )
-print(f"Agent created with custom state and extract_facts tool.")
+print("Agent created with custom state and extract_facts tool.")
 
 # %%
 # Invoke the agent with initial custom state (user preferences and empty facts list).
@@ -587,7 +599,9 @@ builder.add_edge("delete", langgraph.graph.END)
 
 # Compile with a checkpointer for resuming from interrupts.
 graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
-print("HITL graph compiled: propose -> delete -> END (with checkpointing for interrupts).")
+print(
+    "HITL graph compiled: propose -> delete -> END (with checkpointing for interrupts)."
+)
 
 # %%
 import pathlib
@@ -622,7 +636,7 @@ import langgraph.types
 # Second invoke: resume with approval decision.
 out2 = graph.invoke(
     langgraph.types.Command(resume="approve"),
-    config={"configurable": {"thread_id": thread_id}}
+    config={"configurable": {"thread_id": thread_id}},
 )
 
 # Check if the file was deleted after resuming with approval.

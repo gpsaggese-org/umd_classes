@@ -17,32 +17,28 @@
 # !sudo /bin/bash -c "(source /venv/bin/activate; pip install --quiet pymc-bart)"
 
 import pymc_bart as pmb
+
 print(pmb.__version__)
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
 
 import arviz as az
 import pandas as pd
-import xarray as xr
 import pymc as pm
-import numpy as np
-import seaborn as sns
-import scipy.stats as stats
-import matplotlib.pyplot as plt
-import preliz as pz
 
 # %%
 dir_name = "/app/code/book.2018.Martin.Bayesian_Analysis_with_Python.2e"
 # #!ls $dir_name/data2
-data = pd.read_csv(dir_name + '/data2/penguins.csv')
+data = pd.read_csv(dir_name + "/data2/penguins.csv")
 data.head()
 
 # %%
-data_tmp = data[["flipper_length", "bill_depth", "bill_length", "body_mass"]].dropna()
+data_tmp = data[
+    ["flipper_length", "bill_depth", "bill_length", "body_mass"]
+].dropna()
 X = data_tmp[["flipper_length", "bill_depth", "bill_length"]]
 Y = data_tmp["body_mass"]
 
@@ -67,10 +63,10 @@ with pm.Model() as model_pen:
 az.plot_ppc(idata_pen)
 
 # %%
-pmb.plot_pdp(mu, X, Y);
+pmb.plot_pdp(mu, X, Y)
 
 # %%
-pmb.plot_ice(mu, X, Y);
+pmb.plot_ice(mu, X, Y)
 
 # %%
-pmb.plot_variable_importance(idata_pen, mu, X);
+pmb.plot_variable_importance(idata_pen, mu, X)

@@ -122,7 +122,7 @@ print(float_arr)
 print(float_arr.dtype)
 
 # %%
-str_arr = np.array(['1.25', '-9.6', '42'], dtype=np.string_)
+str_arr = np.array(["1.25", "-9.6", "42"], dtype=np.string_)
 print(str_arr)
 print(str_arr.dtype)
 
@@ -134,13 +134,13 @@ print(str_arr.astype(float))
 # - One can express operations on data without for loops
 
 # %%
-arr = np.array([[1., 2., 3.], [4., 5., 6.]])
+arr = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
 
 print(arr + arr)
 # Broadcast.
 print(1 / arr)
 print(arr * arr)
-print(arr ** 0.5)
+print(arr**0.5)
 
 # %% [markdown]
 # ## Basic index and slicing
@@ -155,7 +155,7 @@ print(arr[5:8])
 
 # %%
 # Broadcasting write.
-arr[5:8]= 12
+arr[5:8] = 12
 print(arr)
 
 # %%
@@ -230,7 +230,7 @@ arr2d[:, :1]
 # ## Boolean indexing
 
 # %%
-names = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+names = np.array(["Bob", "Joe", "Will", "Bob", "Will", "Joe", "Joe"])
 
 print(str(names))
 print(repr(names))
@@ -359,15 +359,13 @@ np.greater(x, y)
 np.not_equal(x, y)
 
 # %%
-np.logical_xor(
-    np.not_equal(x, y),
-    np.greater(x, y))
+np.logical_xor(np.not_equal(x, y), np.greater(x, y))
 
 # %% [markdown]
 # # Data processing using arrays
 
 # %%
-# Evaluate 
+# Evaluate
 
 # - Pick 1000 equi-spaced points between [-5, 5].
 points = np.arange(-5, 5, 0.01)
@@ -379,7 +377,7 @@ print("xs=\n", xs)
 print("ys=\n", ys)
 
 # - Evaluate function on a grid.
-z = np.sqrt(xs ** 2 + ys ** 2)
+z = np.sqrt(xs**2 + ys**2)
 
 # %%
 import matplotlib.pyplot as plt
@@ -473,7 +471,7 @@ print(arr)
 # ## Unique and set logic
 
 # %%
-names = np.array(['Bob', 'Joe', 'Will', 'Bob', 'Will', 'Joe', 'Joe'])
+names = np.array(["Bob", "Joe", "Will", "Bob", "Will", "Joe", "Joe"])
 
 print(np.unique(names))
 
@@ -518,9 +516,9 @@ np.savez("some_array_lazy.npz", arr2)
 # # Linear algebra
 
 # %%
-x = np.array([[1., 2., 3.], [4., 5., 6.]])
+x = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0]])
 print("x=\n", x)
-y = np.array([[6., 23.], [-1, 7], [8, 9]])
+y = np.array([[6.0, 23.0], [-1, 7], [8, 9]])
 print("y=\n", y)
 
 # %%
@@ -552,10 +550,10 @@ print(np.diag(mat))
 print(np.trace(mat))
 
 # %%
-#print(np.eig(mat))
+# print(np.eig(mat))
 
 # %%
-#print(np.svd(mat))
+# print(np.svd(mat))
 
 # %% [markdown]
 # # **Random number generator**

@@ -37,12 +37,13 @@
 #     - Merge operation like in SQL dbs
 
 # %%
-#from pandas import Series, DataFrame
+# from pandas import Series, DataFrame
 
 import pandas as pd
 import pandas_datareader.data as web
 
 import numpy as np
+
 print(pd.__version__)
 
 import pprint
@@ -103,12 +104,7 @@ print("e" in obj2)
 
 # %%
 # Build from dict.
-sdata = {
-    "Ohio": 35000,
-    "Texas": 71000,
-    "Oregon": 16000,
-    "Utah": 5000
-}
+sdata = {"Ohio": 35000, "Texas": 71000, "Oregon": 16000, "Utah": 5000}
 
 obj3 = pd.Series(sdata)
 
@@ -117,7 +113,7 @@ print(obj3)
 # %%
 # Build from dict with explicit index.
 
-states = ['California', 'Ohio', 'Oregon', 'Texas']
+states = ["California", "Ohio", "Oregon", "Texas"]
 # Note that since data for California doesn't exist.
 obj4 = pd.Series(sdata, index=states)
 
@@ -137,11 +133,11 @@ obj3 + obj4
 print(obj4)
 
 # Set name of the series.
-obj4.name = 'population'
+obj4.name = "population"
 print("\n", obj4)
 
 # Set name of the index.
-obj4.index.name = 'state'
+obj4.index.name = "state"
 print("\n", obj4)
 
 # %% [markdown]
@@ -150,7 +146,7 @@ print("\n", obj4)
 # - Tabular data structure with ordered collection of columns and indexes.
 #     - Index and columns are rather symmetric
 #     - One can represent higher dimensional data using multi-indexing
-#     
+#
 # - Df can be built from:
 #     - 2d ndarray
 #     - dict of arrays / lists / tuples
@@ -162,9 +158,9 @@ print("\n", obj4)
 # %%
 # Build from dict of arrays.
 data = {
-    'state': ['Ohio', 'Ohio', 'Ohio', 'Nevada', 'Nevada'],
-    'year': [2000, 2001, 2002, 2001, 2002],
-    'pop': [1.5, 1.7, 3.6, 2.4, 2.9]
+    "state": ["Ohio", "Ohio", "Ohio", "Nevada", "Nevada"],
+    "year": [2000, 2001, 2002, 2001, 2002],
+    "pop": [1.5, 1.7, 3.6, 2.4, 2.9],
 }
 frame = pd.DataFrame(data)
 
@@ -175,7 +171,8 @@ print(frame)
 frame2 = pd.DataFrame(
     data,
     columns="year state pop test".split(),
-    index="one two three four five".split())
+    index="one two three four five".split(),
+)
 
 print(frame2)
 
@@ -197,7 +194,7 @@ print(frame2)
 
 # %%
 # Assign a series.
-val = pd.Series([-1.2, -1.5, -1.7], index=['two', 'four', 'five'])
+val = pd.Series([-1.2, -1.5, -1.7], index=["two", "four", "five"])
 
 frame2["debt"] = val
 
@@ -205,7 +202,7 @@ print(frame2)
 
 # %%
 # One can use the dot notation besides the index notation.
-#print frame2["debt"]
+# print frame2["debt"]
 print(frame2.debt)
 
 # %%
@@ -227,15 +224,8 @@ frame2.columns
 # Build a df from a dictionary of dicts.
 # Rows are unioned and sorted.
 pop = {
-    "Nevada": {
-        2001: 2.4,
-        2002: 2.9
-    },
-    "Ohio": {
-        2000: 1.5,
-        2001: 1.7,
-        2002: 3.6
-    }
+    "Nevada": {2001: 2.4, 2002: 2.9},
+    "Ohio": {2000: 1.5, 2001: 1.7, 2002: 3.6},
 }
 print("pop=", pprint.pformat(pop))
 
@@ -261,10 +251,12 @@ print(Nevada_srs)
 
 # %%
 # Build df from a dict of Series.
-frame4 = pd.DataFrame({
-    "Ohio": Ohio_srs,
-    "Nevada": Nevada_srs,
-})
+frame4 = pd.DataFrame(
+    {
+        "Ohio": Ohio_srs,
+        "Nevada": Nevada_srs,
+    }
+)
 
 display(frame4)
 
@@ -295,7 +287,7 @@ index
 # raise
 #   TypeError: Index does not support mutable operations
 
-#index[1] = 'd'
+# index[1] = 'd'
 
 # %%
 index = pd.Index(np.arange(3))
@@ -357,11 +349,11 @@ print(obj4)
 # ## Dropping entries
 
 # %%
-obj = pd.Series(np.arange(5.), index="a b c d e".split())
+obj = pd.Series(np.arange(5.0), index="a b c d e".split())
 print(obj)
 
 # Drop element by label.
-new_obj = obj.drop('c')
+new_obj = obj.drop("c")
 print(new_obj)
 
 new_obj = obj.drop("c d".split())
@@ -376,12 +368,12 @@ print(new_obj)
 # ### Series
 
 # %%
-obj = pd.Series(np.arange(4.), index="a b c d".split())
+obj = pd.Series(np.arange(4.0), index="a b c d".split())
 print(obj)
 
 # %%
 # Index by label or index.
-print(obj['b'])
+print(obj["b"])
 print(obj[1])
 
 # %%
@@ -407,7 +399,8 @@ obj2
 data = pd.DataFrame(
     np.arange(16).reshape((4, 4)),
     index=["Ohio", "Colorado", "Utah", "New York"],
-    columns=["one", "two", "three", "four"])
+    columns=["one", "two", "three", "four"],
+)
 
 print(data)
 
@@ -454,13 +447,13 @@ data.loc[:"Utah", "two"]
 # - obj[val]:
 #     - select column by value
 #     - select rows by bool array / data frame
-#     
+#
 # - obj.loc[val], obj.iloc[val]
 #     - select row by label / index
-#     
+#
 # - obj.loc[:, val], obj.iloc[:, val]
 #     - select column by label / index
-#     
+#
 # - obj.loc[val1, val2]
 #     - select element
 
@@ -475,7 +468,8 @@ data.loc[:"Utah", "two"]
 df = pd.DataFrame(
     np.arange(12).reshape(4, 3),
     columns=list("bde"),
-    index="Utah Ohio Texas Oregon".split())
+    index="Utah Ohio Texas Oregon".split(),
+)
 
 df
 
@@ -496,8 +490,9 @@ np.random.seed(42)
 
 frame = pd.DataFrame(
     np.random.randn(4, 3),
-    columns=list('bde'),
-    index=['Utah', 'Ohio', 'Texas', 'Oregon'])
+    columns=list("bde"),
+    index=["Utah", "Ohio", "Texas", "Oregon"],
+)
 
 frame
 
@@ -526,6 +521,7 @@ frame.apply(f, axis=1)
 # DataFrame.
 def f(x):
     return pd.Series([x.min(), x.max()], index="min max".split())
+
 
 print(frame.apply(f))
 
@@ -564,8 +560,9 @@ obj.sort_values()
 # %%
 frame = pd.DataFrame(
     np.arange(8).reshape((2, 4)),
-    index=['three', 'one'],
-    columns=['d', 'a', 'b', 'c'])
+    index=["three", "one"],
+    columns=["d", "a", "b", "c"],
+)
 
 frame
 
@@ -577,7 +574,7 @@ display(frame.sort_index())
 display(frame.sort_index(axis=1))
 
 # %%
-frame = pd.DataFrame({'b': [4, 7, -3, 2], 'a': [0, 1, 0, 1]})
+frame = pd.DataFrame({"b": [4, 7, -3, 2], "a": [0, 1, 0, 1]})
 
 frame
 
@@ -593,7 +590,7 @@ frame.rank(axis=1)
 # ## Axis indexes with duplicate values.
 
 # %%
-obj = pd.Series(list(range(5)), index=['a', 'a', 'b', 'b', 'c'])
+obj = pd.Series(list(range(5)), index=["a", "a", "b", "b", "c"])
 
 obj
 
@@ -620,7 +617,8 @@ obj["c"]
 df = pd.DataFrame(
     [[1.4, np.nan], [7.1, -4.5], [np.nan, np.nan], [0.75, -1.3]],
     index="a b c d".split(),
-    columns="one two".split())
+    columns="one two".split(),
+)
 
 df
 
@@ -630,8 +628,8 @@ df.sum()
 # %%
 # NAs are skipped automatically.
 
-#df.sum(axis=1)
-df.sum(axis='columns')
+# df.sum(axis=1)
+df.sum(axis="columns")
 
 # %%
 # skipna gives a np behavior.
@@ -641,7 +639,7 @@ df.sum(axis=1, skipna=False)
 df.max()
 
 # %%
-#df.argmax()
+# df.argmax()
 
 # %%
 # Max value per column.
@@ -660,7 +658,7 @@ print(df.describe())
 # %%
 all_data = {
     ticker: web.get_data_yahoo(ticker)
-    for ticker in ['AAPL', 'IBM', 'MSFT', 'GOOG']
+    for ticker in ["AAPL", "IBM", "MSFT", "GOOG"]
 }
 
 print(list(all_data.keys()))
@@ -669,13 +667,13 @@ print(all_data["GOOG"].head())
 
 # %%
 price = pd.DataFrame(
-    {ticker: data['Adj Close']
-     for ticker, data in list(all_data.items())})
+    {ticker: data["Adj Close"] for ticker, data in list(all_data.items())}
+)
 print(price.head())
 
 volume = pd.DataFrame(
-    {ticker: data['Volume']
-     for ticker, data in list(all_data.items())})
+    {ticker: data["Volume"] for ticker, data in list(all_data.items())}
+)
 print(volume.head())
 
 # %%
@@ -713,7 +711,7 @@ pd.value_counts(srs.values, sort=False)
 
 # %%
 # isin() vectorized set membership applied to each element of the series.
-srs.isin(['b', 'c'])
+srs.isin(["b", "c"])
 
 # %%
 # Index.get_indexer() allows to establish mapping between them.

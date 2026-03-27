@@ -25,10 +25,8 @@
 
 # %% run_control={"marked": false}
 import functools
-import datetime
 
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -38,11 +36,11 @@ import pandas as pd
 import notebook_utils
 
 notebook_utils.notebook_config()
-#matplotlib.rcParams["figure.figsize"] = (15, 6)
+# matplotlib.rcParams["figure.figsize"] = (15, 6)
 
-#assert np.__version__ == "1.33.3"
+# assert np.__version__ == "1.33.3"
 assert pd.__version__ == "0.20.3"
-#assert matplotlib.__version__ == "2.0.2"
+# assert matplotlib.__version__ == "2.0.2"
 
 # %%
 from notebook_utils import display_df
@@ -80,7 +78,11 @@ from IPython.display import display
 # %%
 
 # %%
-df = pd.DataFrame([[1, 2, 0], [3, 4, 0], [5, 6, 0]], index="a b c".split(), columns="A B C".split())
+df = pd.DataFrame(
+    [[1, 2, 0], [3, 4, 0], [5, 6, 0]],
+    index="a b c".split(),
+    columns="A B C".split(),
+)
 df
 
 # %%
@@ -109,7 +111,9 @@ df.iloc[0]
 # ## Selecting rows
 
 # %%
-df_orig = pd.DataFrame({'AAA' : [4,5,6,7], 'BBB' : [10,20,30,40],'CCC' : [100,50,-30,-50]})
+df_orig = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
 
 # %%
 # These are equivalent syntax.
@@ -124,23 +128,25 @@ df
 # %% run_control={"marked": false}
 # Select a piece of the df and overwrite part of it.
 # .ix[] is the same as .loc[]
-df.ix[df.AAA >= 5, 'BBB'] = -1
+df.ix[df.AAA >= 5, "BBB"] = -1
 df
 
 # %%
 # Select a piece of the df and overwrite part of it.
-df.loc[df.AAA >= 5, 'BBB'] = -1
+df.loc[df.AAA >= 5, "BBB"] = -1
 df
 
 # %% run_control={"marked": false}
 # Select a piece of df and overwrite it.
-df.ix[df.AAA >= 5, ['BBB', 'CCC']] = 555
+df.ix[df.AAA >= 5, ["BBB", "CCC"]] = 555
 df
 
 # %% run_control={"marked": false}
 # Selecting a df through a mask.
 df = df_orig.copy()
-mask = pd.DataFrame({'AAA' : [True] * 4, 'BBB' : [False] * 4,'CCC' : [True,False] * 2})
+mask = pd.DataFrame(
+    {"AAA": [True] * 4, "BBB": [False] * 4, "CCC": [True, False] * 2}
+)
 mask
 
 # %% run_control={"marked": false}
@@ -157,7 +163,7 @@ df.where(mask, other="high")
 # Use np.where().
 
 column = df.AAA
-np.where(column, 'high', 'low')
+np.where(column, "high", "low")
 
 # %% run_control={"marked": false}
 # Select rows based on certain criteria.
@@ -171,10 +177,10 @@ print(dfhigh)
 
 # %% run_control={"marked": false}
 mask = (df.BBB < 25) & (df.CCC >= -40)
-df.loc[mask, 'AAA']
+df.loc[mask, "AAA"]
 
 # %% run_control={"marked": false}
-df.loc[mask, 'AAA':'BBB']
+df.loc[mask, "AAA":"BBB"]
 
 # %% run_control={"marked": false}
 df[mask][["AAA", "BBB"]]
@@ -198,7 +204,9 @@ df.index.isin([0, 2, 4])
 
 # %% run_control={"marked": false}
 df = df_orig.copy()
-df = pd.DataFrame(df.values, index=['foo','bar','boo','kar'], columns=df.columns)
+df = pd.DataFrame(
+    df.values, index=["foo", "bar", "boo", "kar"], columns=df.columns
+)
 df
 
 # %% run_control={"marked": false}
@@ -227,10 +235,9 @@ df.loc[:, col_mask]
 # ## Find minimum
 
 # %% run_control={"marked": false}
-df = pd.DataFrame({
-    'AAA': [1, 1, 1, 2, 2, 2, 3, 3],
-    'BBB': [2, 1, 3, 4, 5, 1, 2, 3]
-})
+df = pd.DataFrame(
+    {"AAA": [1, 1, 1, 2, 2, 2, 3, 3], "BBB": [2, 1, 3, 4, 5, 1, 2, 3]}
+)
 
 df
 
@@ -244,11 +251,9 @@ mask = df["BBB"] == np.min(df["BBB"])
 df[mask]
 
 # %% run_control={"marked": false}
-df = pd.DataFrame({
-    'AAA': [1, 2, 1, 3],
-    'BBB': [1, 1, 2, 2],
-    'CCC': [2, 1, 3, 1]
-})
+df = pd.DataFrame(
+    {"AAA": [1, 2, 1, 3], "BBB": [1, 1, 2, 2], "CCC": [2, 1, 3, 1]}
+)
 
 # %% run_control={"marked": false}
 df["CCC"].idxmin()
@@ -274,16 +279,14 @@ df[mask]
 
 # %% run_control={"marked": false}
 # Add new cols converting numbers into greek letters.
-df = pd.DataFrame({
-    'AAA': [1, 2, 1, 3],
-    'BBB': [1, 1, 2, 2],
-    'CCC': [2, 1, 3, 1]
-})
+df = pd.DataFrame(
+    {"AAA": [1, 2, 1, 3], "BBB": [1, 1, 2, 2], "CCC": [2, 1, 3, 1]}
+)
 print("before=\n", df.to_string())
 
 source_cols = df.columns
 new_cols = [str(x) + "_cat" for x in source_cols]
-categories = {1: 'Alpha', 2: 'Beta', 3: 'Charlie'}
+categories = {1: "Alpha", 2: "Beta", 3: "Charlie"}
 df[new_cols] = df[source_cols].applymap(lambda x: categories[x])
 print("after=\n", df.to_string())
 
@@ -298,18 +301,20 @@ print("after=\n", df.to_string())
 # %% run_control={"marked": false}
 # This df uses a _ to separate and encode conceptually the multi-index.
 # Construct the df by columns.
-df = pd.DataFrame({
-    'row': [0, 1, 2],
-    'One_X': [1.1, 1.1, 1.1],
-    'One_Y': [1.2, 1.2, 1.2],
-    'Two_X': [1.11, 1.11, 1.11],
-    'Two_Y': [1.22, 1.22, 1.22]
-})
-df = df.set_index('row')
+df = pd.DataFrame(
+    {
+        "row": [0, 1, 2],
+        "One_X": [1.1, 1.1, 1.1],
+        "One_Y": [1.2, 1.2, 1.2],
+        "Two_X": [1.11, 1.11, 1.11],
+        "Two_Y": [1.22, 1.22, 1.22],
+    }
+)
+df = df.set_index("row")
 display_df(df)
 
-#print "columns=", df.columns
-#print "index=", df.index
+# print "columns=", df.columns
+# print "index=", df.index
 
 # %% run_control={"marked": false}
 # Split the columns into tuples.
@@ -332,8 +337,8 @@ display_df(df2)
 # %% run_control={"marked": false}
 # stack() moves a level of column multi-indexing to the index (i.e., pivot)
 df3 = df2.stack(0)
-#print "columns=", df3.columns
-#print "index=", df3.index
+# print "columns=", df3.columns
+# print "index=", df3.index
 df3.head()
 
 # %% run_control={"marked": false}
@@ -355,7 +360,7 @@ df5
 #   a DataFrame or Series having a hierarchical index with a new inner-most level
 
 # %%
-#help(pd.DataFrame.stack)
+# help(pd.DataFrame.stack)
 
 # %%
 df = pd.DataFrame([[1, 2], [3, 4]], index=["one", "two"], columns=["a", "b"])
@@ -392,9 +397,8 @@ cols.get_values()
 # Build a df with the given multi-index as columns.
 np.random.seed(1000)
 df = pd.DataFrame(
-    np.random.randn(2, len(cols.get_values())),
-    index="n m".split(),
-    columns=cols)
+    np.random.randn(2, len(cols.get_values())), index="n m".split(), columns=cols
+)
 df
 
 # %% run_control={"marked": false}
@@ -405,7 +409,13 @@ df.div(df["C"], level=1)
 # ## Slicing using xs
 
 # %% run_control={"marked": false}
-coords = [('AA','one'), ('AA','six'), ('BB','one'), ('BB','two'), ('BB','six')]
+coords = [
+    ("AA", "one"),
+    ("AA", "six"),
+    ("BB", "one"),
+    ("BB", "two"),
+    ("BB", "six"),
+]
 
 # Use multi-index index.
 index = pd.MultiIndex.from_tuples(coords)
@@ -435,7 +445,8 @@ import itertools
 
 # Build multi-index for index (using Cartesian product).
 index = list(
-    itertools.product(['Ada', 'Quinn', 'Violet'], ['Comp', 'Math', 'Sci']))
+    itertools.product(["Ada", "Quinn", "Violet"], ["Comp", "Math", "Sci"])
+)
 print("index=", index)
 
 index = pd.MultiIndex.from_tuples(index, names=["Student", "Course"])
@@ -443,7 +454,7 @@ print("midx=", index)
 
 # %% run_control={"marked": false}
 # Build another multi-index for columns.
-columns = list(itertools.product(['Exams', 'Labs'], ['I', 'II']))
+columns = list(itertools.product(["Exams", "Labs"], ["I", "II"]))
 print("columns=", columns)
 
 # Cols are not named.
@@ -452,14 +463,16 @@ print("midx=", cols)
 
 # %% run_control={"marked": false}
 # Build df.
-data = [[70 + x + y + (x * y) % 3 for x in range(len(cols))]
-        for y in range(len(index))]
+data = [
+    [70 + x + y + (x * y) % 3 for x in range(len(cols))]
+    for y in range(len(index))
+]
 df = pd.DataFrame(data, index, cols)
 df
 
 # %% run_control={"marked": false}
 # Select one row.
-df.loc['Violet']
+df.loc["Violet"]
 
 # %% run_control={"marked": false}
 # Select various cubes.
@@ -493,11 +506,13 @@ df.sort_values(by=("Labs", "II"), ascending=False)
 
 # %% run_control={"marked": false}
 np.random.seed(1000)
-df = pd.DataFrame({
-        'A': "a1 a1 a2 a3".split(),
-        'B': "b1 b2 b3 b4".split(),
-        'Vals': np.random.rand(4)
-    })
+df = pd.DataFrame(
+    {
+        "A": "a1 a1 a2 a3".split(),
+        "B": "b1 b2 b3 b4".split(),
+        "Vals": np.random.rand(4),
+    }
+)
 df
 
 # %% run_control={"marked": false}
@@ -527,17 +542,17 @@ df2.reorder_levels(["firstLevel", "A", "B"])
 # ## apply(), applymap()
 
 # %%
-df = pd.DataFrame(
-    [[5, 6, 7], [0, 1, 2]], columns=list("abc"), index=list("12"))
+df = pd.DataFrame([[5, 6, 7], [0, 1, 2]], columns=list("abc"), index=list("12"))
 df
 
 # %%
-df.applymap(lambda x : x + 1)
+df.applymap(lambda x: x + 1)
 
 
 # %%
 def reduce_(x):
     return sum(x)
+
 
 display_df(df)
 print(df.apply(reduce_, axis=0))
@@ -555,9 +570,7 @@ print("index", index)
 columns = "one two three".split()
 print("cols", columns)
 
-df = pd.DataFrame(np.random.randn(5, 3),
-                 index=index,
-                 columns=columns)
+df = pd.DataFrame(np.random.randn(5, 3), index=index, columns=columns)
 display_df(df)
 
 # %% run_control={"marked": false}
@@ -697,18 +710,18 @@ df
 
 # %% run_control={"marked": false}
 # Fill forward.
-df.fillna(method='pad')
+df.fillna(method="pad")
 
 # %% run_control={"marked": false}
 # Limit number of fills.
-df.fillna(method='pad', limit=1)
+df.fillna(method="pad", limit=1)
 
 # %%
 list("ABC")
 
 # %% run_control={"marked": false}
 np.random.seed(10)
-df = pd.DataFrame(np.random.randn(10, 3), columns=list('ABC'))
+df = pd.DataFrame(np.random.randn(10, 3), columns=list("ABC"))
 df
 
 # %% run_control={"marked": false}
@@ -772,7 +785,7 @@ df.dropna(how="any", axis="columns")
 
 # %% run_control={"marked": false}
 np.random.seed(1000)
-idx = pd.date_range('2000-01-01', periods=30)
+idx = pd.date_range("2000-01-01", periods=30)
 ts = pd.Series(np.random.rand(len(idx)) * 2 - 1.0, index=idx)
 ts.cumsum().plot(label="without nans")
 
@@ -787,25 +800,25 @@ ts.count()
 ts.notnull().sum()
 
 # %% run_control={"marked": false}
-ts.cumsum().fillna(method='ffill').plot()
+ts.cumsum().fillna(method="ffill").plot()
 
 # %% run_control={"marked": false}
-ts.cumsum().fillna(method='ffill', limit=3).plot()
+ts.cumsum().fillna(method="ffill", limit=3).plot()
 
 # %% run_control={"marked": false}
 # Anti-causal fill!
-ts.cumsum().fillna(method='bfill', limit=3).plot()
+ts.cumsum().fillna(method="bfill", limit=3).plot()
 
 # %% run_control={"marked": false}
 # Before cumsum.
 ts.plot()
 
 # %% run_control={"marked": false}
-ts.interpolate(method='linear').plot()
+ts.interpolate(method="linear").plot()
 
 # %% run_control={"marked": false}
 np.random.seed(2)
-ser = pd.Series(np.arange(1, 10.1, .25) ** 2 + np.random.randn(37))
+ser = pd.Series(np.arange(1, 10.1, 0.25) ** 2 + np.random.randn(37))
 bad = np.array([4, 13, 14, 15, 16, 17, 18, 20, 29])
 ser[bad] = np.nan
 ser.plot()
