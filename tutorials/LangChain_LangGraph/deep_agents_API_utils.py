@@ -12,7 +12,7 @@ import tutorials.LangChain_LangGraph.deep_agents_API_utils as tlldaaput
 import logging
 from pathlib import Path
 
-import langchain_API_utils
+import tutorials.LangChain_LangGraph.langchain_API_utils as langchain_API_utils
 
 _LOG = logging.getLogger(__name__)
 

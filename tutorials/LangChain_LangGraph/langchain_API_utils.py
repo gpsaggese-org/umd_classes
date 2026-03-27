@@ -25,6 +25,7 @@ from typing_extensions import Annotated as TxAnnotated
 import nbformat
 import helpers.hdbg as hdbg
 import langchain_core.tools
+from langchain_core.tools import tool
 import langgraph.graph.message
 import langgraph.prebuilt
 import langgraph.store.base
