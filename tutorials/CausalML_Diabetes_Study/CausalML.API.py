@@ -53,18 +53,20 @@
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
+import os
 
 import numpy as np
-import os
 import warnings
+
+from utils import (
+    CausalNavigator,
+    download_cdc_data_if_needed,
+    load_cdc_data,
+    preprocess_for_causal,
+)
 
 # Configuration.
 warnings.filterwarnings("ignore")
-
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## Helper Functions
@@ -95,10 +97,10 @@ DATA_PATH = os.path.join("data", "unprocessed", filename)
 # Direct download URL for the CDC Diabetes Health Indicators dataset from UCI.
 URL = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
 # Download and extract the dataset if not already present.
-utils.download_cdc_data_if_needed(DATA_PATH, URL)
+download_cdc_data_if_needed(DATA_PATH, URL)
 
 # TODO(ai_gp): Move this to a different cell
-df_raw = utils.load_cdc_data(DATA_PATH)
+df_raw = load_cdc_data(DATA_PATH)
 
 # %%
 # Use a subset of columns for the API demo.
@@ -113,7 +115,7 @@ covariate_cols = [
     "GenHlth",
     "BMI",
 ]
-df_clean, X, T, Y = utils.preprocess_for_causal(
+df_clean, X, T, Y = preprocess_for_causal(
     df_raw,
     treatment_col=treatment_col,
     outcome_col=outcome_col,
@@ -127,7 +129,7 @@ X_demo = X.loc[sample_indices]
 T_demo = T.loc[sample_indices]
 Y_demo = Y.loc[sample_indices]
 print(f"API Demo Data Loaded. Shape: {X_demo.shape}")
-display(X_demo.head())
+print(X_demo.head())
 
 # %% [markdown]
 # ## Class Reference: `CausalNavigator`
@@ -150,7 +152,7 @@ display(X_demo.head())
 
 # %%
 # Initialize the CausalNavigator.
-navigator = utils.CausalNavigator(
+navigator = CausalNavigator(
     learner_type="X", control_name="Sedentary", treatment_name="Active"
 )
 
