@@ -50,24 +50,22 @@
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
 
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-import helpers.hnotebook as hnotebo
-hnotebo.config_notebook()
+import logging
+import utils
 
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
+utils.init_logger(_LOG)
 
 # %%
 import os
-import warnings
 
+# TODO(gp): Use import X.
 from utils import (
     CausalNavigator,
     download_cdc_data_if_needed,
@@ -75,24 +73,11 @@ from utils import (
     preprocess_for_causal,
 )
 
-# Configuration.
-warnings.filterwarnings("ignore")
+# %%
+_LOG.info("Hello")
 
 # %% [markdown]
-# ### Load and Preprocess Data
-#
-# **Function**: `load_cdc_data(filepath)`
-#
-# - **Purpose**: Robustly loads the CDC dataset from a local directory
-# - **Behavior**: Checks for file existence, removes duplicates, and casts all columns to `float`
-# - **Output**: A cleaned `pandas.DataFrame`
-#
-# **Function**: `preprocess_for_causal(df, ...)`
-#
-# - **Purpose**: Splits the dataframe into components for causal analysis:
-#   - **X (Covariates)** - features used to control for confounding
-#   - **T (Treatment)** - the binary intervention vector
-#   - **Y (Outcome)** - the target variable
+# ### Load data set.
 
 # %%
 # Download and load the dataset.
@@ -101,6 +86,19 @@ data_path = os.path.join("data", "unprocessed", filename)
 download_cdc_data_if_needed(data_path)
 df_raw = load_cdc_data(data_path)
 
+
+# %% [markdown]
+# ## Prepare data set
+
+# %% [markdown]
+# **Function**: `preprocess_for_causal(df, ...)`
+#
+# - **Purpose**: Splits the dataframe into components for causal analysis:
+#   - **X (Covariates)** - features used to control for confounding
+#   - **T (Treatment)** - the binary intervention vector
+#   - **Y (Outcome)** - the target variable
+
+# %%
 # Prepare data for causal analysis.
 treatment_col = "PhysActivity"
 outcome_col = "Diabetes_binary"
@@ -113,6 +111,7 @@ covariate_cols = [
     "GenHlth",
     "BMI",
 ]
+
 
 df_clean, X, T, Y = preprocess_for_causal(
     df_raw,
