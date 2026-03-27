@@ -506,6 +506,36 @@ EOF
 }
 
 
+check_jupytext_installed() {
+    # """
+    # Verify that jupytext is installed before starting Jupyter Lab.
+    #
+    # Jupytext is required for pair notebook/Python file functionality.
+    # Exits with error if jupytext is not installed.
+    # """
+    if ! pip show jupytext > /dev/null 2>&1; then
+        echo "ERROR: jupytext is not installed but is required to run Jupyter Lab."
+        echo "Install it with: pip install jupytext"
+        exit 1
+    fi
+}
+
+
+setup_jupyter_environment() {
+    # """
+    # Configure Jupyter Lab environment before launching.
+    #
+    # Performs all necessary setup steps:
+    # - Configure vim keybindings
+    # - Disable notifications
+    # - Verify jupytext is installed
+    # """
+    configure_jupyter_vim_keybindings
+    configure_jupyter_notifications
+    check_jupytext_installed
+}
+
+
 get_jupyter_args() {
     # """
     # Print the standard Jupyter Lab command-line arguments.

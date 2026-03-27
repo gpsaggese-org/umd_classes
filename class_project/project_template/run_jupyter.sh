@@ -25,9 +25,8 @@ get_docker_vars_script ${BASH_SOURCE[0]}
 source $DOCKER_NAME
 print_docker_vars
 
-# Configure vim keybindings and notifications.
-configure_jupyter_vim_keybindings
-configure_jupyter_notifications
+# Setup Jupyter Lab environment.
+setup_jupyter_environment
 
 # Initialize Jupyter Lab command with base configuration.
 JUPYTER_ARGS=$(get_jupyter_args)
