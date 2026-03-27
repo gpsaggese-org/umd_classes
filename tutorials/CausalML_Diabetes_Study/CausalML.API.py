@@ -36,11 +36,11 @@
 #
 # The core pipeline has three layers:
 #
-# 1. **Diagnostic Layer** - Verifies causal assumptions (specifically Common
+# 1. **Diagnostic Layer**: Verifies causal assumptions (specifically Common
 #    Support) before estimation
-# 2. **Estimation Layer** - Wraps `causalml.inference.meta` classes
+# 2. **Estimation Layer**: Wraps `causalml.inference.meta` classes
 #    (`BaseXRegressor`, etc.) and injects XGBoost as the standard base learner
-# 3. **Interpretation Layer** - Provides built-in methods to visualise
+# 3. **Interpretation Layer**: Provides built-in methods to visualise
 #    heterogeneity, abstracting away `matplotlib` complexity
 
 # %% [markdown]
