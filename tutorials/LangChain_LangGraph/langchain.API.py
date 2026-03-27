@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -33,6 +33,7 @@
 # %load_ext autoreload
 # %autoreload 2
 
+import logging
 import os
 import sys
 
@@ -42,10 +43,7 @@ import langgraph
 
 import langchain_API_utils as ut
 
-
-# %%
-import logging
-
+# Initialize logger.
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
 )
@@ -89,34 +87,20 @@ llm
 # We’ll use a local CSV so the examples feel concrete.
 
 # %%
-import pathlib
-import shutil
-
-import pandas as pd
-
-# TODO(ai_gp): Move this to a function in *_utils.py
-DATASET_PATH = pathlib.Path("data/T1_slice.csv").resolve()
-df = pd.read_csv(DATASET_PATH)
-TIME_COL = "Date/Time"
-if TIME_COL in df.columns:
-    df[TIME_COL] = pd.to_datetime(
-        df[TIME_COL], format="%d %m %Y %H:%M", errors="coerce"
-    )
-
-# Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
-WORKSPACE_DIR = pathlib.Path("workspace").resolve()
-WORKSPACE_DATA_DIR = WORKSPACE_DIR / "data"
-WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
-WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
-if not WORKSPACE_DATASET_PATH.exists():
-    shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
+# Load and prepare the dataset (load CSV, parse datetime, copy to workspace).
+dataset_result = ut.load_and_prepare_dataset()
+df = dataset_result["df"]
+DATASET_PATH = dataset_result["dataset_path"]
+WORKSPACE_DIR = dataset_result["workspace_dir"]
+WORKSPACE_DATA_DIR = dataset_result["workspace_data_dir"]
+WORKSPACE_DATASET_PATH = dataset_result["workspace_dataset_path"]
 
 
 # %%
 df.head(5)
 
 # %%
-# TODO(ai_gp): Add explanation.
+# Build metadata about the dataset (columns, types, sample rows, frequency).
 DATASET_META = ut.build_dataset_meta(df)
 DATASET_META
 
@@ -162,6 +146,7 @@ import langchain_core.prompts
 import langchain_core.output_parsers
 import langchain_core.runnables
 
+# Create two parallel chains: one for summary, one for risks.
 summary_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
     [
         ("system", "You write crisp summaries."),
@@ -178,6 +163,7 @@ risks_prompt = langchain_core.prompts.ChatPromptTemplate.from_messages(
 summary_chain = summary_prompt | llm | langchain_core.output_parsers.StrOutputParser()
 risks_chain = risks_prompt | llm | langchain_core.output_parsers.StrOutputParser()
 
+# RunnableParallel runs both chains concurrently and returns both results.
 parallel = langchain_core.runnables.RunnableParallel(summary=summary_chain, risks=risks_chain)
 parallel.invoke(
     {"text": "LangChain provides composable building blocks for LLM apps."},
@@ -224,14 +210,17 @@ import langchain_core.messages
 import langgraph.graph
 import langgraph.prebuilt
 
+# Create a ToolNode that can execute the mean and zscore tools.
 tool_node = langgraph.prebuilt.ToolNode([ut.mean, ut.zscore])
 
+# Build a simple graph that routes all messages to the tool node.
 g = langgraph.graph.StateGraph(ut.ToolState)
 g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
+# Create two tool calls: mean (succeeds) and zscore (fails due to zero std).
 tool_calls = [
     {
         "name": "mean",
@@ -247,6 +236,7 @@ tool_calls = [
     },  # error (std=0)
 ]
 
+# Invoke the graph with the tool calls; it returns messages with results/errors.
 out = graph.invoke({"messages": [langchain_core.messages.AIMessage(content="", tool_calls=tool_calls)]})
 [
     type(m).__name__ + ":" + (getattr(m, "content", "")[:80])
@@ -275,13 +265,17 @@ import langchain_core.messages
 import langgraph.graph
 import langgraph.prebuilt
 
+# Create a ToolNode that executes the dataset_brief tool.
 tool_node = langgraph.prebuilt.ToolNode([ut.dataset_brief])
+
+# Build a graph that injects state (dataset_meta) into the tool at runtime.
 g = langgraph.graph.StateGraph(ut.InjectedStateState)
 g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
+# Prepare state with injected dataset metadata and a tool call request.
 state_in: ut.InjectedStateState = {
     "dataset_meta": DATASET_META,
     "messages": [
@@ -320,14 +314,18 @@ import langgraph.graph
 import langgraph.prebuilt
 import langgraph.store.memory
 
+# Create an in-memory store and a ToolNode that can save/load preferences.
 store = langgraph.store.memory.InMemoryStore()
 tool_node = langgraph.prebuilt.ToolNode([ut.save_pref, ut.load_pref])
+
+# Build a graph that injects the store handle into the tools.
 g = langgraph.graph.StateGraph(ut.StoreState)
 g.add_node("tools", tool_node)
 g.add_edge(langgraph.graph.START, "tools")
 g.add_edge("tools", langgraph.graph.END)
 graph = g.compile(store=store)
 
+# First invoke: save a preference to the store.
 out1 = graph.invoke(
     {
         "messages": [
@@ -349,6 +347,8 @@ out1 = graph.invoke(
         ]
     }
 )
+
+# Second invoke: load the preference we just saved.
 out2 = graph.invoke(
     {
         "messages": [
@@ -386,11 +386,14 @@ out1["messages"][-1].content, out2["messages"][-1].content
 import langchain.agents
 import langchain_core.messages
 
+# Create an agent that can use the utc_now tool when needed.
 agent = langchain.agents.create_agent(
     model=llm,
     tools=[ut.utc_now],
     system_prompt="Use tools when a tool can answer the question more reliably than guessing.",
 )
+
+# Ask the agent to call the tool and return the exact value.
 out = agent.invoke(
     {
         "messages": [
@@ -398,6 +401,8 @@ out = agent.invoke(
         ]
     }
 )
+
+# Show the agent's message history, formatted as type:content pairs.
 [(type(m).__name__, getattr(m, "content", "")[:120]) for m in out["messages"]][
     -4:
 ]
@@ -418,6 +423,7 @@ out = agent.invoke(
 import langchain.agents
 import langchain_core.messages
 
+# Create an agent with a system prompt that asks it to return a reproducible call snippet.
 contract_agent = langchain.agents.create_agent(
     model=llm,
     tools=[ut.utc_now],
@@ -426,6 +432,8 @@ contract_agent = langchain.agents.create_agent(
         "In your final answer, include a fenced python block with the exact tool call used."
     ),
 )
+
+# Invoke the agent with a request that requires the tool.
 contract_out = contract_agent.invoke(
     {
         "messages": [
@@ -433,6 +441,8 @@ contract_out = contract_agent.invoke(
         ]
     }
 )
+
+# Print the agent's final response (should include a fenced python code block).
 print(getattr(contract_out["messages"][-1], "content", ""))
 
 
@@ -454,8 +464,10 @@ import json
 
 import langchain.agents
 
+# Create a custom state schema and a tool that uses it.
 CustomState, extract_facts = ut.make_custom_state_and_tool()
 
+# Create an agent with a custom state that can call extract_facts.
 supervisor = langchain.agents.create_agent(
     llm,
     tools=[extract_facts],
@@ -463,6 +475,7 @@ supervisor = langchain.agents.create_agent(
     state_schema=CustomState,
 )
 
+# Invoke the agent with initial custom state (user preferences and empty facts list).
 state = supervisor.invoke(
     {
         "messages": [
@@ -472,6 +485,8 @@ state = supervisor.invoke(
         "facts": [],
     }
 )
+
+# Show the extracted facts and the agent's final response.
 {
     "facts": state.get("facts"),
     "last": getattr(state["messages"][-1], "content", "")[:160],
@@ -503,6 +518,7 @@ import langgraph.checkpoint.memory
 import langgraph.graph
 import langgraph.types
 
+# Build a simple HITL graph: propose deletion, then execute if approved.
 builder = langgraph.graph.StateGraph(ut.HITLState)
 builder.add_node("propose", ut.propose_delete)
 builder.add_node("delete", ut.do_delete)
@@ -511,11 +527,13 @@ builder.add_edge("propose", "delete")
 builder.add_edge("delete", langgraph.graph.END)
 graph = builder.compile(checkpointer=langgraph.checkpoint.memory.MemorySaver())
 
+# Create a temporary file to demonstrate the HITL pattern.
 tmp_dir = pathlib.Path("tmp_runs/hitl").resolve()
 tmp_dir.mkdir(parents=True, exist_ok=True)
 victim = tmp_dir / "victim.txt"
 victim.write_text("delete me", encoding="utf-8")
 
+# First invoke: propose the deletion (will interrupt and ask for approval).
 thread_id = "HITL_API_DEMO"
 out1 = graph.invoke(
     {"target_path": str(victim), "decision": ""},
@@ -524,7 +542,11 @@ out1 = graph.invoke(
 pending = (
     out1.get("__interrupt__", [])[0].value if "__interrupt__" in out1 else None
 )
+
+# Second invoke: resume with approval decision.
 out2 = graph.invoke(
     langgraph.types.Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
 )
+
+# Show the pending decision and whether the file was deleted.
 {"pending": pending, "victim_exists_after": victim.exists()}

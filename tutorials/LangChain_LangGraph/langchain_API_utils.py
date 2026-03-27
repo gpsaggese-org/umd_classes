@@ -14,6 +14,7 @@ import json
 import logging
 import os
 import platform
+import shutil
 import sys
 from dataclasses import dataclass
 from math import sqrt as _sqrt
@@ -52,6 +53,28 @@ def print_environment_info() -> None:
     print(f"langchain={getattr(langchain, '__version__', 'unknown')}")
     print(f"langchain_core={getattr(langchain_core, '__version__', 'unknown')}")
     print(f"langgraph={getattr(langgraph, '__version__', 'unknown')}")
+
+
+def init_logger(
+    name: str,
+    *,
+    level: int = logging.INFO,
+    format_str: str = "%(asctime)s %(levelname)s %(name)s - %(message)s",
+) -> logging.Logger:
+    """
+    Initialize and configure a logger for the tutorial notebooks.
+
+    :param name: the name of the logger (typically __name__)
+    :param level: the logging level (default: logging.INFO)
+    :param format_str: the format string for log messages
+    :return: the configured logger instance
+    """
+    logging.basicConfig(level=level, format=format_str)
+    logger = logging.getLogger(name)
+    # Suppress verbose logs from external libraries.
+    logging.getLogger("openai").setLevel(logging.WARNING)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    return logger
 
 
 # //////////////////////////////////////////////////////////////////////////////
@@ -130,6 +153,44 @@ def get_chat_model():
 # ##############################################################################
 # Dataset utilities
 # ##############################################################################
+
+
+def load_and_prepare_dataset(
+    dataset_path: str = "data/T1_slice.csv",
+    *,
+    workspace_dir: str = "workspace",
+) -> dict:
+    """
+    Load a CSV dataset, parse datetime columns, and prepare workspace copy.
+
+    :param dataset_path: path to the CSV file to load
+    :param workspace_dir: base directory for workspace data
+    :return: dict with keys: df, dataset_path, workspace_dataset_path
+    """
+    import pandas as pd
+
+    # Load dataset and parse the date/time column.
+    dataset_path_obj = Path(dataset_path).resolve()
+    df = pd.read_csv(dataset_path_obj)
+    time_col = "Date/Time"
+    if time_col in df.columns:
+        df[time_col] = pd.to_datetime(
+            df[time_col], format="%d %m %Y %H:%M", errors="coerce"
+        )
+    # Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
+    workspace_dir_obj = Path(workspace_dir).resolve()
+    workspace_data_dir = workspace_dir_obj / "data"
+    workspace_data_dir.mkdir(parents=True, exist_ok=True)
+    workspace_dataset_path = workspace_data_dir / dataset_path_obj.name
+    if not workspace_dataset_path.exists():
+        shutil.copyfile(str(dataset_path_obj), str(workspace_dataset_path))
+    return {
+        "df": df,
+        "dataset_path": dataset_path_obj,
+        "workspace_dir": workspace_dir_obj,
+        "workspace_data_dir": workspace_data_dir,
+        "workspace_dataset_path": workspace_dataset_path,
+    }
 
 
 def build_dataset_meta(df) -> dict:
