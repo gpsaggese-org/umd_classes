@@ -533,3 +533,28 @@ get_run_jupyter_cmd() {
     local rel_dir="${script_dir#${GIT_ROOT}/}"
     echo "/git_root/${rel_dir}/run_jupyter.sh $cmd_opts"
 }
+
+
+list_and_inspect_docker_image() {
+    # """
+    # List available Docker images and inspect their architecture.
+    #
+    # Lists all images matching FULL_IMAGE_NAME and attempts to inspect
+    # their architecture using docker manifest inspect.
+    # """
+    run "docker image ls $FULL_IMAGE_NAME"
+    (docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
+}
+
+
+kill_existing_container_if_forced() {
+    # """
+    # Kill existing container if FORCE flag is set.
+    #
+    # If FORCE is set to 1, kills and removes the container with name
+    # CONTAINER_NAME. This is typically set by the -f flag.
+    # """
+    if [[ $FORCE == 1 ]]; then
+        kill_container_by_name $CONTAINER_NAME
+    fi
+}
