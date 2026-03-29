@@ -1,145 +1,94 @@
 ---
-title: "Unified Markdown Manager: One Command to Rule All Your Content"
+title: "Unified Markdown Manager: Streamline Content Workflow with mdm"
 authors:
   - gpsaggese
 date: 2026-03-29
-description: "Simplify managing markdown files across your projects with a single command"
+description:
 categories:
   - Productivity
   - Developer Tools
 ---
 
-TL;DR: Manage all your markdown files (blogs, skills, research) from one unified
-command instead of juggling multiple directories.
+TL;DR: `mdm` unifies management of research ideas, blog posts, and Claude Code
+skills across multiple repositories into one powerful command-line tool.
 
 <!-- more -->
 
 ## The Problem: Scattered Content
-Different types of markdown (e.g., blog posts, agent skill documentation, and
-research notes) live in separate directories with distinct commands and
-workflows. Searching across content types means knowing each directory's
-location.
+- Different types of markdown content live in separate directories
+  - Blog posts in one location
+  - Claude Code skills in another
+  - Research ideas in a third
+- Each content type requires knowing:
+  - Its directory location
+  - Its specific command prefix
+  - Its unique workflow
+- Searching across content types means context switching and remembering
+  multiple commands
+- `mdm` solves this by unifying everything into a single interface
 
-`mdm` was built to solve this.
+## What Is Mdm?
+- A unified markdown file manager that consolidates four separate bash script
+  families into one tool
+  - Replaces `skill*`, `blog*`, `res*`, and `story*` command families
+  - Provides consistent interface for all content types
+  - Supports prefix matching to reduce typing
+- Enables you to manage all markdown content from anywhere
+  - No need to navigate to specific directories
+  - One command for all operations
 
-## The Solution: A Unified Interface
-The `mdm` (Markdown Manager) script provides a consistent interface for managing
-different types of markdown content across your projects:
-
-- **skill**: `.claude/skills/` directory—Claude Code skill documentation
-- **blog**: `blog/posts/` directory—blog posts and articles
-- **research**: `research/ideas/` directory—research notes and conceptual ideas
-- **story**: `short_stories/` directory—creative writing and short story content
-
-One command works for all four types. Same interface, same predictable behavior,
-whether you're managing blog posts or research notes. The script merges what
-were separate bash families (`skill*`, `blog*`, `res*`, `story*`) into a single
-tool.
+## Content Types Managed
+- `mdm` organizes content into four types, each stored separately:
+  - **research**: Research ideas in `<umd_classes1>/research/ideas/`
+  - **blog**: Blog posts in `<blog_repo>/blog/posts/`
+  - **story**: Short stories in `<notes1>/short_stories/`
+  - **skill**: Claude Code skills in `<helpers_root>/.claude/skills/`
+- Each type maintains its own directory structure and conventions
 
 ## Core Actions
-- **list**: Display files (skill names for skills, full paths for others).
-  Supports pattern filtering
-- **full_list**: Display all files with complete paths
-- **edit**: Open file in editor, or create new with template
-- **directory**: Print the directory path
-
-## Usage Examples
-
-### Discovering Your Content
-View all available skills in your system (displaying skill names only):
-```bash
-> mdm skill list
-> mdm sk l
-```
-
-Shows all skills by name (e.g., `blog.add_figures`,
-`notebook.format_rules`)—useful for auditing what you have or finding something
-you half-remember.
-
-### Full Path Listing
-Display all files with their complete filesystem paths:
-```bash
-> mdm skill full_list
-> mdm res f
-```
-
-Useful when you need the absolute path for scripting or batch operations.
-
-### Creating and Editing Content
-Create a new blog post or edit an existing one:
-```bash
-> mdm blog edit My_New_Post
-```
-
-The editor opens directly to the file, whether it exists or not. If the file
-doesn't exist, `mdm` automatically creates it with an appropriate template—blog
-posts receive YAML frontmatter with title, author, date fields, and skill files
-receive a summary section header.
-
-### Pattern-Based Searching
-Find all research notes related to causality:
-```bash
-> mdm research list causal
-> mdm res l causal
-```
-
-Pattern matching works across all content types, enabling quick discovery
-without manually browsing directories.
-
-### Accessing Directories
-Retrieve the full path to a content type's directory:
-```bash
-> mdm sk dir
-```
-
-Useful when you need direct filesystem access or want to perform batch
-operations on multiple files.
+- **list**: List markdown files with optional filtering
+  - Shows skill names only for skills (e.g., `blog.add_figures`)
+  - Shows full file paths for other content types
+  - Supports optional name filters to narrow results
+- **full_list**: Display all markdown files with complete paths
+  - Useful for seeing directory structure
+  - Supports optional name filtering
+- **describe**: Show descriptions of markdown files
+  - Primarily works with skills containing metadata
+- **edit**: Open file in vim with automatic template generation
+  - Creates new files with appropriate templates if they don't exist
+  - Blog posts get YAML frontmatter with title, author, date, and TL;DR
+  - Skills get summary section headers
+  - Research items get headers with idea names
+- **directory**: Print the directory path for given type
+  - Useful for scripting and automation
+- **types**: Print unique prefixes before first dot
 
 ## Smart Prefix Matching
-Both content types and actions support intelligent prefix matching, allowing you
-to type only the first letters of a command and let the system resolve the
-complete term:
+- Both type and action arguments support prefix matching where first match wins
+- Type prefixes:
+  - `sk` -> `skill`
+  - `bl` -> `blog`
+  - `res` -> `research`
+  - `st` -> `story`
+- Action prefixes:
+  - `l` -> `list`
+  - `f` -> `full_list`
+  - `d` -> `describe` or `directory` (first match)
+  - `e` -> `edit`
+  - `t` -> `types`
+- Allows shortcuts like `mdm bl l` instead of `mdm blog list`
 
-- Content type shortcuts: `sk` → `skill`, `bl` → `blog`, `res` → `research`,
-  `st` → `story`
-- Action shortcuts: `l` → `list`, `f` → `full_list`, `e` → `edit`, `d` →
-  `directory`
-
-So `mdm sk l` works the same as
-`mdm skill list`.
-
-## Batch Operations
-When refactoring or coordinating updates across related documentation, the
-`edit` action supports simultaneous editing of multiple files:
-```bash
-> mdm skill edit notebook.utils_library notebook.split_cells
-```
-
-Both files open at once, so you can sync changes across related documentation
-without constant context-switching.
-
-## Why This Works
-Muscle memory transfers instantly. Learn the patterns once with blog posts, and
-they work the same way with skills or research notes. No context-switching tax.
-No decision fatigue.
-
-Automatic template generation means you never stare at a blank file—each new
-post or skill gets initialized with the right structure already in place.
-
-## Getting Started
-Run these three commands and you'll have the idea:
-```bash
-> mdm skill list      # View all available skills
-> mdm blog edit My_First_Post  # Create and open a new blog post
-> mdm research list   # List all research items
-```
-
-For more, `--help` has the full details.
-
-## Scaling to New Content Types
-Add a fifth content type tomorrow and the same patterns apply. No new command
-structures to learn. No friction.
-
-Teams benefit immediately—when someone new joins and needs to manage
-documentation, they're productive from day one because the interface is already
-predictable.
+## Practical Usage Examples
+- List all skills to inventory what you have available:
+  - `mdm skill list` shows skill names only
+- See full paths for all skills:
+  - `mdm skill full_list` includes directory paths
+- Filter research items by pattern:
+  - `mdm research list causal` finds items containing "causal"
+- Create or edit a new blog post:
+  - `mdm blog edit My_New_Post` opens vim with template
+- Get the directory path for a content type:
+  - `mdm research directory` prints path to research folder
+- See unique content types in skills:
+  - `mdm skill types` shows unique prefixes
