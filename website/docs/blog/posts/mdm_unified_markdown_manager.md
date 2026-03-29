@@ -9,119 +9,137 @@ categories:
   - Developer Tools
 ---
 
-TL;DR: Manage all your markdown files (blogs, skills, research, stories) from one unified command instead of juggling multiple directories.
+TL;DR: Manage all your markdown files (blogs, skills, research) from one unified
+command instead of juggling multiple directories.
 
 <!-- more -->
 
 ## The Problem: Scattered Content
+Different types of markdown (e.g., blog posts, agent skill documentation, and
+research notes) live in separate directories with distinct commands and
+workflows. Searching across content types means knowing each directory's
+location.
 
-If you maintain multiple types of markdown content—blog posts, skill documentation, research notes, and stories—you know the pain. Each lives in a different directory structure, requires different workflows, and forces you to remember which command goes where.
+`mdm` was built to solve this.
 
-Writing `md skill edit notebook.utils_library` works fine until you need to switch to a different directory for a blog post. Finding research ideas means typing long paths instead of simple commands. You can't quickly list all your content types without constant context switching.
-
-The friction adds up. What if you could manage everything from one place?
-
-## Enter the `md` Command
-The `md` command is a unified interface for managing four types of markdown
-content:
+## The Solution: A Unified Interface
+The `mdm` (Markdown Manager) script provides a consistent interface for managing
+different types of markdown content across your projects:
 
 - **skill**: `.claude/skills/` directory—Claude Code skill documentation
-- **blog**: `blog/posts/` directory—blog posts
-- **research**: `research/ideas/` directory—research notes and ideas
-- **story**: `short_stories/` directory—short story content
+- **blog**: `blog/posts/` directory—blog posts and articles
+- **research**: `research/ideas/` directory—research notes and conceptual ideas
+- **story**: `short_stories/` directory—creative writing and short story content
 
-Instead of remembering different directory paths and commands, you get a
-consistent interface that works the same way regardless of content type.
+One command works for all four types. Same interface, same predictable behavior,
+whether you're managing blog posts or research notes. The script merges what
+were separate bash families (`skill*`, `blog*`, `res*`, `story*`) into a single
+tool.
 
 ## Core Actions
-The `md` command supports four main actions:
-
-- **list**: Show files matching a pattern (supports prefix matching)
-- **edit**: Create or edit files in your preferred editor
-- **describe**: List files with their descriptions
-- **directory**: Print the directory path for a content type
+- **list**: Display files (skill names for skills, full paths for others).
+  Supports pattern filtering
+- **full_list**: Display all files with complete paths
+- **edit**: Open file in editor, or create new with template
+- **directory**: Print the directory path
 
 ## Usage Examples
-List all your skills:
+
+### Discovering Your Content
+View all available skills in your system (displaying skill names only):
 ```bash
-> md skill list
-> md sk l
+> dev_scripts_helpers/mdm skill list
+> dev_scripts_helpers/mdm sk l
 ```
 
-Edit or create a blog post:
+Shows all skills by name (e.g., `blog.add_figures`,
+`notebook.format_rules`)—useful for auditing what you have or finding something
+you half-remember.
+
+### Full Path Listing
+Display all files with their complete filesystem paths:
 ```bash
-> md blog edit My_New_Post
+> dev_scripts_helpers/mdm skill full_list
+> dev_scripts_helpers/mdm res f
 ```
 
-Find research items about causality:
+Useful when you need the absolute path for scripting or batch operations.
+
+### Creating and Editing Content
+Create a new blog post or edit an existing one:
 ```bash
-> md research list causal
-> md res l causal
+> dev_scripts_helpers/mdm blog edit My_New_Post
 ```
 
-Show descriptions of all stories:
+The editor opens directly to the file, whether it exists or not. If the file
+doesn't exist, `mdm` automatically creates it with an appropriate template—blog
+posts receive YAML frontmatter with title, author, date fields, and skill files
+receive a summary section header.
+
+### Pattern-Based Searching
+Find all research notes related to causality:
 ```bash
-> md story describe
-> md story de
+> dev_scripts_helpers/mdm research list causal
+> dev_scripts_helpers/mdm res l causal
 ```
 
-Print the skill directory path:
+Pattern matching works across all content types, enabling quick discovery
+without manually browsing directories.
+
+### Accessing Directories
+Retrieve the full path to a content type's directory:
 ```bash
-> md sk dir
+> dev_scripts_helpers/mdm sk dir
 ```
+
+Useful when you need direct filesystem access or want to perform batch
+operations on multiple files.
 
 ## Smart Prefix Matching
-Both content types and actions support prefix matching—type only the first
-letters and the command figures out the rest:
+Both content types and actions support intelligent prefix matching, allowing you
+to type only the first letters of a command and let the system resolve the
+complete term:
 
-- `sk` → `skill`, `bl` → `blog`, `res` → `research`, `st` → `story`
-- `l` → `list`, `e` → `edit`, `de` → `describe`, `dir` → `directory`
+- Content type shortcuts: `sk` → `skill`, `bl` → `blog`, `res` → `research`,
+  `st` → `story`
+- Action shortcuts: `l` → `list`, `f` → `full_list`, `e` → `edit`, `d` →
+  `directory`
 
-This means fewer keystrokes and faster content management.
+So `dev_scripts_helpers/mdm sk l` works the same as
+`dev_scripts_helpers/mdm skill list`.
 
-## Multiple Edits
-Need to update multiple skills at once? The `edit` action supports editing
-multiple files in a single command:
+## Batch Operations
+When refactoring or coordinating updates across related documentation, the
+`edit` action supports simultaneous editing of multiple files:
 ```bash
-> md skill edit notebook.utils_library notebook.split_cells
+> dev_scripts_helpers/mdm skill edit notebook.utils_library notebook.split_cells
 ```
 
-Both files open in your editor, and you can edit them together. Perfect for
-refactoring related content.
+Both files open at once, so you can sync changes across related documentation
+without constant context-switching.
 
-## Pattern Matching for Discovery
-When listing, you can filter by pattern. This makes discovery fast:
-```bash
-> md research list causal        # Find research about causality
-> md blog list optimization      # Find posts about optimization
-> md skill list notebook         # Find notebook-related skills
-```
+## Why This Works
+Muscle memory transfers instantly. Learn the patterns once with blog posts, and
+they work the same way with skills or research notes. No context-switching tax.
+No decision fatigue.
 
-The pattern is case-insensitive and matches any part of the filename.
-
-## Why This Matters
-Single, consistent interface reduces cognitive load. You don't need to remember
-directory paths, different command syntaxes, or whether you're editing in the
-skills directory or the blog directory.
-
-The `md` command treats all your content equally—whether it's a blog post,
-research note, skill documentation, or story, the workflow is the same.
+Automatic template generation means you never stare at a blank file—each new
+post or skill gets initialized with the right structure already in place.
 
 ## Getting Started
-The `md` command is part of the development tools in the helpers repository. To
-use it:
+Run these three commands and you'll have the idea:
 ```bash
-> md skill list                           # See what you can manage
-> md blog edit My_First_Post             # Create your first blog post
-> md research describe                    # Explore your research ideas
+> dev_scripts_helpers/mdm skill list      # View all available skills
+> dev_scripts_helpers/mdm blog edit My_First_Post  # Create and open a new blog post
+> dev_scripts_helpers/mdm research list   # List all research items
 ```
 
-Start with `md --help` to see the full documentation built into the command
-itself.
+For more, `--help` has the full details.
 
-## The Pattern Extends
-This unified approach to content management is powerful because it's extensible.
-As you add new content types or directories, the same pattern applies—consistent
-actions, consistent naming, consistent behavior.
+## Scaling to New Content Types
+Add a fifth content type tomorrow and the same patterns apply. No new command
+structures to learn. No friction.
 
-One command to manage them all.
+Teams benefit immediately—when someone new joins and needs to manage
+documentation, they're productive from day one because the interface is already
+predictable.
