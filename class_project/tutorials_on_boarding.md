@@ -1,54 +1,83 @@
-- Go through the tutorials and create an issue called "Clean up XYZ" for your
-  tutorials
+# Tutorial Onboarding
 
-- The issue should have the following steps:
+## Goal
+
+Complete this onboarding to understand the tutorial codebase structure, code
+style, and quality standards. 
+
+## Quality Principles
+
+Before starting, understand these non-negotiable principles:
+
+- **Avoid AI slop at any cost**
+  - Humans can instantly detect low-quality AI-generated content
+  - Once detected, everything else sounds equally horrible
+  - A tutorial cannot be "throw a prompt into Claude Code and copy-paste the result"
+
+- **Use a professional tone**
+  - Write as if explaining to a peer, not a student or a buddy
+
+- **Focus only on examples without repeating content**
+  - Everything should be stated only once and in the right place
+  - Eliminate redundancy between sections
+
+- **Maintain high quality standards**
+  - Every sentence should serve a purpose
+  - Each example should illustrate a concept clearly
+
+## Onboarding Checklist
+
+Create an issue called "Clean up XYZ tutorial" summarizing your findings and
+recommendations.
+
+### 1. Understand the Core Documentation
+
+- [ ] Read `class_project/README.md`
+  - Is there anything unclear, incorrect, or that can be improved?
 
 - [ ] Read `class_project/project_template/README.md`
   - Is there anything unclear, incorrect, or that can be improved?
-- [ ] Carefully look at all the code `class_project/project_template`
-  - Make sure that you understand everything perfectly
-- [ ] Read `class_project/README.md`
-  - Is there anything unclear, incorrect, or that can be improved?
+
+### 2. Study Code Examples
+
+- [ ] Carefully examine all code in `class_project/project_template`
+  - Make sure you understand every file and module perfectly
+  - Note the structure, naming conventions, and patterns used
+
+### 3. Learn the Claude Skills
+
 - [ ] Become familiar with the Claude Skills in `helpers_root/.claude/skills`
-  we use to maintain the code base
-  - The Skills are a living documentation of how we do things
-    ```
-    > md skill X_in_60_m
-    ...
+  - Skills are living documentation of how we maintain and create code
 
-    > md skill describe coding
+- [ ] Explore the available skills using these commands:
+  ```bash
+  > md skill describe coding
+  > md skill describe notebooks
+  > md skill describe testing
+  > md skill X_in_60_minutes
+  ```
 
-    coding.factor_common_code ....... Identify and refactor duplicated code blocks into shared functions across Python files
-    coding.find_doc ................. Find documentation files for a given dir, file, class, or function and summarize in 3 bullet points
-    coding.fix_bloated_imports ...... Fix Python imports of large packages needed only for few functions in a module
-    ...
+- [ ] Review key skills relevant to tutorials:
+  - `coding.format_rules`: Python code conventions
+  - `testing.format_rules`: Unit test patterns
+  - `notebook.format_rules`: Jupyter notebook structure
+  - `markdown.format_rules`: Documentation style
 
-    > md skill describe notebooks
-    ...
-    ```
-  - Make sure that you understand everything perfectly
-  - Is there anything unclear, incorrect, or that can be improved?
+- [ ] Is there anything unclear or that could be improved in the skills?
 
+### 4. Study Reference Tutorials
 
-- [ ] Read very carefully the reference tutorial, i.e., the one that is closest
-  to the "perfect" style
-  - Currently is XYZ
-- [ ] Read 2-3 tutorials built by other people to make sure that you see and
-  internalize the patters
+- [ ] Read the reference tutorial (the one closest to "perfect" style)
+  - Currently: [Specify the reference tutorial name/path]
+  - Internalize its structure, style, and approach
 
-- [ ] Read 
+- [ ] Read 2-3 additional tutorials from other authors
+  - Note patterns, structure, and what makes them effective
+  - Identify what works well and what could be improved
 
-- Use a professional tone
+### 5. Verify Code Quality
 
-- Focus only on the examples without repeating content
-  - Everything should be said only once and in the right place
-
-- Each tutorial need to have
-  - [ ] Add unit tests for the dir such as
-    `class_project/project_template/test/test_docker_all.py`
-
-- Avoid AI slop at any cost
-  - Humans can sense it and once it's detected everything else sounds horrible
-  - We will not put out low quality content
-  - A tutorial / blog can't be "throw a prompt in Claude Code and copy-paste
-    the result"
+- [ ] Review the test structure, specifically
+  `class_project/project_template/test/test_docker_all.py`
+  - Understand what tests each tutorial should include
+  - Ensure your tutorial will have comprehensive test coverage
