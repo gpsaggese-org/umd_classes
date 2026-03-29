@@ -1,4 +1,4 @@
-# Tutorial Onboarding
+# Tutorial Checklist
 
 ## Goal
 
@@ -10,9 +10,15 @@ style, and quality standards.
 Before starting, understand these non-negotiable principles:
 
 - **Avoid AI slop at any cost**
-  - Humans can instantly detect low-quality AI-generated content
-  - Once detected, everything else sounds equally horrible
-  - A tutorial cannot be "throw a prompt into Claude Code and copy-paste the result"
+  - Humans can instantly detect low-quality AI-slop
+    - Once detected, everything else sounds equally horrible
+  - A tutorial cannot be "throw a prompt into Claude Code and copy-paste the
+    result"
+    - It's ok to use AI, but the output needs to be higher than using
+      only AI or using only human
+  - Your goal is to read information and synthesize that for somebody else
+    to reduce the time it takes for them to learn by 10x
+    - If it takes 5 mins to generate and 60 mins to generate
 
 - **Use a professional tone**
   - Write as if explaining to a peer, not a student or a buddy
@@ -25,15 +31,11 @@ Before starting, understand these non-negotiable principles:
   - Every sentence should serve a purpose
   - Each example should illustrate a concept clearly
 
-## Onboarding Checklist
+## Tutorial Checklist
 
-Create an issue called "Clean up XYZ tutorial" summarizing your findings and
-recommendations.
+Create an issue called "Clean up tutorial XYZ" with the following action items.
 
 ### 1. Understand the Core Documentation
-
-- [ ] Read `class_project/README.md`
-  - Is there anything unclear, incorrect, or that can be improved?
 
 - [ ] Read `class_project/project_template/README.md`
   - Is there anything unclear, incorrect, or that can be improved?
@@ -54,7 +56,7 @@ recommendations.
   > md skill describe coding
   > md skill describe notebooks
   > md skill describe testing
-  > md skill X_in_60_minutes
+  > md skill describe X_in_60_minutes
   ```
 
 - [ ] Review key skills relevant to tutorials:
@@ -62,16 +64,19 @@ recommendations.
   - `testing.format_rules`: Unit test patterns
   - `notebook.format_rules`: Jupyter notebook structure
   - `markdown.format_rules`: Documentation style
+  - E.g.,
+    ```bash
+    > md skill edit coding.format_rules
+    ```
 
 - [ ] Is there anything unclear or that could be improved in the skills?
 
 ### 4. Study Reference Tutorials
 
-- [ ] Read the reference tutorial (the one closest to "perfect" style)
-  - Currently: [Specify the reference tutorial name/path]
+- [ ] Read 2-3 tutorials
+  - Tutorials that are closer to the standards are:
+    - Autogen
   - Internalize its structure, style, and approach
-
-- [ ] Read 2-3 additional tutorials from other authors
   - Note patterns, structure, and what makes them effective
   - Identify what works well and what could be improved
 
