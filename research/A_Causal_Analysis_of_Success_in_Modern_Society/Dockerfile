@@ -31,12 +31,10 @@ ENV PATH="/venv/bin:$PATH"
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip
 
-# Install Jupyter.
-RUN pip3 install jupyterlab
-
 # Install project specific packages.
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r requirements.txt
 
 RUN mkdir /install
 

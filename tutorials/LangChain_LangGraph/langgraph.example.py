@@ -18,11 +18,6 @@
 #
 # ## Learn LangChain in 60 Minutes — examples notebook
 #
-# This is the **end-to-end** companion to `langchain.API.ipynb`.
-#
-# If you’re brand new, it can help to skim the API notebook first so the names feel familiar.
-# Then come back here for the patterns that make things “click” in real apps.
-#
 # What you’ll build (incrementally):
 # - a tool-calling agent loop
 # - LangGraph workflows: state, routing, reducers, and a ReAct loop from scratch
@@ -30,9 +25,6 @@
 # - memory boundaries via checkpointers
 # - human-in-the-loop interrupts + resume
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
-#
-# Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # ## LangGraph: StateGraph (hello)
@@ -45,25 +37,23 @@
 # - What does “state” look like? (a dict / TypedDict)
 # - What are the nodes? (functions that read + return updates)
 # - How do edges determine what runs next?
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import TypedDict
-from langgraph.graph import StateGraph, START, END
-
-
-# #############################################################################
-# S
-# #############################################################################
+import langgraph.graph
 
 
 class S(TypedDict):
+    """Simple state with counter and message."""
+
     n: int
     msg: str
 
 
+print("State schema S defined with fields 'n' (int) and 'msg' (str)")
+
+
+# %%
 def inc(state: S) -> dict:
     """Increment `state['n']` by 1."""
     return {"n": state.get("n", 0) + 1}
@@ -74,16 +64,22 @@ def set_msg(state: S) -> dict:
     return {"msg": f"n={state.get('n', 0)}"}
 
 
-g = StateGraph(S)
+print("Node functions defined: inc() and set_msg()")
+
+# %%
+g = langgraph.graph.StateGraph(S)
 g.add_node("inc", inc)
 g.add_node("msg", set_msg)
-g.add_edge(START, "inc")
+g.add_edge(langgraph.graph.START, "inc")
 g.add_edge("inc", "msg")
-g.add_edge("msg", END)
+g.add_edge("msg", langgraph.graph.END)
 graph = g.compile()
 
-graph.invoke({"n": 0, "msg": ""})
+print("Graph constructed: START -> inc -> msg -> END")
 
+# Test invocation.
+result = graph.invoke({"n": 0, "msg": ""})
+print(f"Invocation result: {result}")
 
 # %% [markdown]
 # ## LangGraph: conditional routing
@@ -95,24 +91,27 @@ graph.invoke({"n": 0, "msg": ""})
 # - a router looks at state and chooses the next node
 #
 # This is the foundation for “if the model asked for a tool, run tools; otherwise, finish.”
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import Literal
 
 
 # #############################################################################
-# R
+# State Schema with Routing
 # #############################################################################
 
 
 class R(TypedDict):
+    """State for routing example."""
+
     flag: bool
     out: str
 
 
+print("State schema R defined with fields 'flag' (bool) and 'out' (str)")
+
+
+# %%
 def a(state: R) -> dict:
     """Write a marker output for the `A` branch."""
     return {"out": "path=A"}
@@ -128,16 +127,24 @@ def route(state: R) -> Literal["a", "b"]:
     return "a" if state.get("flag") else "b"
 
 
+print("Node functions defined: a(), b(), and route()")
+
+# %%
 g = StateGraph(R)
 g.add_node("a", a)
 g.add_node("b", b)
-g.add_conditional_edges(START, route, {"a": "a", "b": "b"})
-g.add_edge("a", END)
-g.add_edge("b", END)
+g.add_conditional_edges(langgraph.graph.START, route, {"a": "a", "b": "b"})
+g.add_edge("a", langgraph.graph.END)
+g.add_edge("b", langgraph.graph.END)
 graph = g.compile()
 
-graph.invoke({"flag": True, "out": ""}), graph.invoke({"flag": False, "out": ""})
+print("Graph constructed with conditional routing")
 
+# Test both branches.
+result_true = graph.invoke({"flag": True, "out": ""})
+result_false = graph.invoke({"flag": False, "out": ""})
+print(f"Path A (flag=True): {result_true}")
+print(f"Path B (flag=False): {result_false}")
 
 # %% [markdown]
 # ## LangGraph: reducers (accumulate evidence)
@@ -150,11 +157,8 @@ graph.invoke({"flag": True, "out": ""}), graph.invoke({"flag": False, "out": ""}
 # - append messages rather than overwrite
 #
 # In the next cell, focus on how state updates combine rather than replace.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
 from typing import Annotated, List
 
 
@@ -169,9 +173,17 @@ def add_list(old: List[str], new: List[str]) -> List[str]:
 
 
 class ReducerState(TypedDict):
+    """State with reducer for accumulating evidence."""
+
     evidence: Annotated[List[str], add_list]
 
 
+print(
+    "State schema ReducerState defined with evidence field using add_list reducer"
+)
+
+
+# %%
 def find_missingness(_: ReducerState) -> dict:
     """Compute missingness findings from the local dataset."""
     miss = (df.isna().mean() * 100).sort_values(ascending=False)
@@ -210,16 +222,24 @@ def find_outliers(_: ReducerState) -> dict:
     return {"evidence": evidence}
 
 
+print("Analysis functions defined: find_missingness() and find_outliers()")
+
+# %%
 g = StateGraph(ReducerState)
 g.add_node("missingness", find_missingness)
 g.add_node("outliers", find_outliers)
-g.add_edge(START, "missingness")
+g.add_edge(langgraph.graph.START, "missingness")
 g.add_edge("missingness", "outliers")
-g.add_edge("outliers", END)
+g.add_edge("outliers", langgraph.graph.END)
 graph = g.compile()
 
-graph.invoke({"evidence": []})["evidence"]
+print("Graph constructed: START -> missingness -> outliers -> END")
 
+# Test invocation and display results.
+result = graph.invoke({"evidence": []})
+print("Evidence collected:")
+for item in result["evidence"]:
+    print(f"  - {item}")
 
 # %% [markdown]
 # ## ReAct loop from scratch: model node + ToolNode
@@ -236,28 +256,30 @@ graph.invoke({"evidence": []})["evidence"]
 # - routing logic that decides whether to continue looping
 #
 # This is one of the best places to pause and say: “Ah — *this* is what an agent really is.”
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
 from typing import Annotated as Ann
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import ToolNode
+import langgraph.graph.message
+import langgraph.prebuilt
 
 
 # #############################################################################
-# RS
+# State Schema with Message History
 # #############################################################################
 
 
 class RS(TypedDict):
-    messages: Ann[list, add_messages]
+    """State with messages accumulated using add_messages reducer."""
+
+    messages: Ann[list, langgraph.graph.message.add_messages]
 
 
+print("State schema RS defined with messages field")
+
+
+# %%
 tools = [utc_now, mean, sqrt]
-tool_node = ToolNode(tools)
+tool_node = langgraph.prebuilt.ToolNode(tools)
 
 
 def call_model(state: RS) -> dict:
@@ -273,27 +295,38 @@ def needs_tools(state: RS) -> str:
     return "tools" if getattr(last, "tool_calls", None) else "end"
 
 
+print("Tools defined and node functions created: call_model() and needs_tools()")
+
+# %%
 g = StateGraph(RS)
 g.add_node("model", call_model)
 g.add_node("tools", tool_node)
-g.add_edge(START, "model")
-g.add_conditional_edges("model", needs_tools, {"tools": "tools", "end": END})
+g.add_edge(langgraph.graph.START, "model")
+g.add_conditional_edges(
+    "model", needs_tools, {"tools": "tools", "end": langgraph.graph.END}
+)
 g.add_edge("tools", "model")
 graph = g.compile()
 
+print("Graph constructed with conditional tool execution")
+
+# Test invocation with multiple tool requests.
 out = graph.invoke(
     {
         "messages": [
-            HumanMessage(
+            langchain_core.messages.HumanMessage(
                 content="Compute mean([1,2,3,4,10]) and sqrt(49). Also tell me the current UTC time."
             )
         ]
     }
 )
-[(type(m).__name__, getattr(m, "content", "")[:120]) for m in out["messages"]][
-    -4:
-]
 
+# Display message summary.
+summary = [
+    (type(m).__name__, getattr(m, "content", "")[:120]) for m in out["messages"]
+][-4:]
+for msg_type, content in summary:
+    print(f"{msg_type}: {content}")
 
 # %% [markdown]
 # ## Subagents: supervisor + worker tools
@@ -303,12 +336,9 @@ out = graph.invoke(
 # - **workers** do specialized tasks (often via tools)
 #
 # This keeps each piece simpler and makes debugging much easier.
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-from langchain.tools import tool as lc_tool
+import langchain.tools
 
 
 def _last_text(result: dict) -> str:
@@ -321,7 +351,7 @@ def _last_text(result: dict) -> str:
     )
 
 
-# E6.1: supervisor calls a worker wrapped as a tool
+# Create worker agent specialized in summarization.
 worker_agent = create_agent(
     llm,
     tools=[],
@@ -334,8 +364,11 @@ worker_agent = create_agent(
     ),
 )
 
+print("Worker agent created for summarization tasks")
 
-@lc_tool(
+
+# %%
+@langchain.tools.tool(
     "summarize_text",
     description="Summarize long text into a short summary + 3 bullet points.",
 )
@@ -348,12 +381,18 @@ def summarize_text(text: str) -> str:
     )
 
 
+print("Tool defined: summarize_text wraps worker agent")
+
+# %%
 supervisor = create_agent(
     llm,
     tools=[summarize_text],
     system_prompt="If asked to summarize, call summarize_text and return the tool output.",
 )
 
+print("Supervisor agent created with summarize_text tool")
+
+# Test invocation.
 out = supervisor.invoke(
     {
         "messages": [
@@ -364,8 +403,8 @@ out = supervisor.invoke(
         ]
     }
 )
-_last_text(out)
-
+result = _last_text(out)
+print(f"Supervisor response:\n{result}")
 
 # %% [markdown]
 # ## Subagents: ToolRuntime state + Command(update=...)
@@ -375,41 +414,44 @@ _last_text(out)
 # In LangGraph that’s expressed with `Command(update=...)`.
 #
 # You’ll also see `ToolRuntime`, which gives the tool access to useful runtime context (like the current state).
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
 import json
 from typing_extensions import Annotated as TxAnnotated
 
-from langchain.agents import AgentState
-from langchain.tools import ToolRuntime, InjectedToolCallId
-from langchain_core.messages import ToolMessage
-from langgraph.types import Command
+import langchain.agents
+import langchain.tools
+import langchain_core.messages
+import langgraph.types
 
 
 # #############################################################################
-# CustomState
+# CustomState with Runtime-Aware Tools
 # #############################################################################
 
 
-class CustomState(AgentState):
+class CustomState(langchain.agents.AgentState):
+    """Extended state with user preferences and facts accumulator."""
+
     user_prefs: dict
     facts: list[str]
 
 
+print("CustomState defined with user_prefs and facts fields")
+
+
+# %%
 worker = create_agent(
     llm, tools=[], system_prompt="Rewrite text. Return only rewritten text."
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "rewrite_with_prefs",
     description="Rewrite text following preferences from supervisor state.",
 )
 def rewrite_with_prefs(
-    text: str, runtime: ToolRuntime[None, CustomState]
+    text: str, runtime: langchain.tools.ToolRuntime[None, CustomState]
 ) -> str:
     """
     Rewrite `text` using supervisor preferences available via `runtime.state`.
@@ -426,18 +468,21 @@ def rewrite_with_prefs(
     return _last_text(result)
 
 
+print("Rewrite worker and rewrite_with_prefs tool defined")
+
+# %%
 fact_worker = create_agent(
     llm, tools=[], system_prompt='Return ONLY JSON: {"facts": ["..."]}'
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "extract_facts",
     description="Extract facts and update supervisor state via Command(update=...).",
 )
 def extract_facts(
-    text: str, tool_call_id: TxAnnotated[str, InjectedToolCallId]
-) -> Command:
+    text: str, tool_call_id: TxAnnotated[str, langchain.tools.InjectedToolCallId]
+) -> langgraph.types.Command:
     """
     Extract facts and store them in the supervisor state via `Command(update=...)`.
     """
@@ -448,11 +493,11 @@ def extract_facts(
         facts = list(json.loads(raw).get("facts", []))
     except Exception:
         facts = [raw]
-    return Command(
+    return langgraph.types.Command(
         update={
             "facts": facts,
             "messages": [
-                ToolMessage(
+                langchain_core.messages.ToolMessage(
                     content=f"Stored {len(facts)} facts.",
                     tool_call_id=tool_call_id,
                 )
@@ -461,6 +506,9 @@ def extract_facts(
     )
 
 
+print("Fact worker and extract_facts tool defined with Command return")
+
+# %%
 supervisor = create_agent(
     llm,
     tools=[rewrite_with_prefs, extract_facts],
@@ -468,6 +516,9 @@ supervisor = create_agent(
     state_schema=CustomState,
 )
 
+print("Supervisor agent created with both tools")
+
+# Test rewrite with preferences.
 out1 = supervisor.invoke(
     {
         "messages": [
@@ -480,6 +531,9 @@ out1 = supervisor.invoke(
         "facts": [],
     }
 )
+print(f"Rewrite result (formal tone): {_last_text(out1)}")
+
+# Test fact extraction.
 out2 = supervisor.invoke(
     {
         "messages": [
@@ -492,14 +546,12 @@ out2 = supervisor.invoke(
         "facts": [],
     }
 )
-
-{"rewrite": _last_text(out1), "facts_updated": out2.get("facts")}
-
+print(f"Facts extracted: {out2.get('facts')}")
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# E6.2: two subagents (date normalization + email drafting)
+# Example: Two subagents (date normalization + email drafting)
+
+# Define specialized subagent for date normalization.
 date_agent = create_agent(
     llm,
     tools=[],
@@ -507,7 +559,7 @@ date_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "normalize_datetime",
     description="Normalize informal date/time mentions into an explicit format. Returns JSON.",
 )
@@ -520,6 +572,9 @@ def normalize_datetime(request: str) -> str:
     )
 
 
+print("Date normalization agent and tool defined")
+
+# Define specialized subagent for email drafting.
 email_agent = create_agent(
     llm,
     tools=[],
@@ -527,7 +582,7 @@ email_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "draft_email_body",
     description="Draft a concise professional email body for a user request.",
 )
@@ -540,12 +595,18 @@ def draft_email_body(request: str) -> str:
     )
 
 
+print("Email drafting agent and tool defined")
+
+# %%
 sup = create_agent(
     llm,
     tools=[normalize_datetime, draft_email_body],
     system_prompt="Pick the right tool for the user's intent.",
 )
 
+print("Supervisor agent created with both tools")
+
+# Test date normalization.
 a = sup.invoke(
     {
         "messages": [
@@ -553,6 +614,9 @@ a = sup.invoke(
         ]
     }
 )
+print(f"Date normalization: {_last_text(a)}")
+
+# Test email drafting.
 b = sup.invoke(
     {
         "messages": [
@@ -563,14 +627,15 @@ b = sup.invoke(
         ]
     }
 )
-{"normalize_datetime": _last_text(a), "draft_email_body": _last_text(b)}
+print(f"Email draft: {_last_text(b)}")
 
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# E6.3: context isolation (noisy worker, clean supervisor)
-@lc_tool(
+# Example: Context isolation (noisy worker, clean supervisor)
+
+
+# Define a tool that generates noise to simulate intermediate work.
+@langchain.tools.tool(
     "generate_noise",
     description="Generate a long string to simulate noisy intermediate work.",
 )
@@ -581,6 +646,9 @@ def generate_noise(n_chars: int) -> str:
     return "X" * int(n_chars)
 
 
+print("Noise generation tool defined")
+
+# Create a noisy worker agent that produces intermediate noise.
 noisy_worker_agent = create_agent(
     llm,
     tools=[generate_noise],
@@ -591,7 +659,7 @@ noisy_worker_agent = create_agent(
 )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "noisy_worker",
     description="Do a task in an isolated context and return a concise final answer.",
 )
@@ -606,11 +674,19 @@ def noisy_worker(task: str) -> str:
     )
 
 
+print("Noisy worker agent and tool defined")
+
+
+# %%
 sup = create_agent(
     llm,
     tools=[noisy_worker],
     system_prompt="Call noisy_worker for the user's request.",
 )
+
+print("Supervisor agent created with noisy_worker tool")
+
+# Invoke supervisor with a request.
 out = sup.invoke(
     {
         "messages": [
@@ -621,14 +697,14 @@ out = sup.invoke(
         ]
     }
 )
-_last_text(out)
 
+result = _last_text(out)
+print(f"Final answer (noisy intermediate work isolated):\n{result}")
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-# E6.6: parallel tool calls (one AI turn emits multiple tool calls)
+# Example: Parallel tool calls (one AI turn emits multiple tool calls)
+
+# Create three specialized subagents.
 sum_agent = create_agent(
     llm,
     tools=[],
@@ -645,8 +721,13 @@ reply_agent = create_agent(
     system_prompt="Draft a short reply email. Return only the email body.",
 )
 
+print("Three specialized subagents defined: sum_agent, act_agent, reply_agent")
 
-@lc_tool("sub_summarize", description="Summarize the text in 2 sentences.")
+
+# %%
+@langchain.tools.tool(
+    "sub_summarize", description="Summarize the text in 2 sentences."
+)
 def sub_summarize(text: str) -> str:
     """
     Summarize `text` in 2 sentences.
@@ -656,7 +737,7 @@ def sub_summarize(text: str) -> str:
     )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "sub_action_items", description="Extract action items as bullet points."
 )
 def sub_action_items(text: str) -> str:
@@ -668,7 +749,7 @@ def sub_action_items(text: str) -> str:
     )
 
 
-@lc_tool(
+@langchain.tools.tool(
     "sub_draft_reply",
     description="Draft a short email reply addressing the content.",
 )
@@ -681,19 +762,26 @@ def sub_draft_reply(text: str) -> str:
     )
 
 
+print("Three tools defined: sub_summarize, sub_action_items, sub_draft_reply")
+
+# %%
 sup = create_agent(
     llm,
     tools=[sub_summarize, sub_action_items, sub_draft_reply],
     system_prompt="Use tools as needed and return a clean final response.",
 )
 
+print("Supervisor agent created with three parallel tools")
+
+# Test with email thread that triggers all three tools.
 email_thread = (
     "Call ALL THREE tools (sub_summarize, sub_action_items, sub_draft_reply). "
     "Text: We need to ship the notebook execution feature by Friday. Please confirm papermill works."
 )
 out = sup.invoke({"messages": [{"role": "user", "content": email_thread}]})
-_last_text(out)
 
+result = _last_text(out)
+print(f"Supervisor response with parallel tool results:\n{result}")
 
 # %% [markdown]
 # ## Subgraphs (graph-as-node composition)
@@ -705,20 +793,24 @@ _last_text(out)
 # - small graph for “summarize”
 # - parent graph that composes them
 #
-
-
+#
+#
 # #############################################################################
 # SubState
 # #############################################################################
 
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# #############################################################################
-# SubState
-# #############################################################################
+# Example: Subgraph Composition
+
+# ##########################################################
+# Define SubState and subgraph for parsing and formatting.
+# ##########################################################
+
+
 class SubState(TypedDict):
+    """State for subgraph: raw text -> parsed dict -> formatted output."""
+
     raw: str
     parsed: dict
     formatted: str
@@ -742,21 +834,29 @@ def format_node(state: SubState) -> dict:
     return {"formatted": "Parsed fields:\n" + "\n".join(lines)}
 
 
+print("SubState and node functions defined")
+
+
+# %%
 sub = StateGraph(SubState)
 sub.add_node("parse", parse_node)
 sub.add_node("format", format_node)
-sub.add_edge(START, "parse")
+sub.add_edge(langgraph.graph.START, "parse")
 sub.add_edge("parse", "format")
-sub.add_edge("format", END)
+sub.add_edge("format", langgraph.graph.END)
 subgraph = sub.compile()
 
+print("Subgraph constructed: START -> parse -> format -> END")
 
-# #############################################################################
-# ParentState
-# #############################################################################
+# %%
+# ##########################################################
+# Define ParentState and parent graph that calls subgraph.
+# ##########################################################
 
 
 class ParentState(TypedDict):
+    """Parent state that calls subgraph and receives formatted output."""
+
     user_text: str
     result: str
 
@@ -769,17 +869,23 @@ def call_subgraph(state: ParentState) -> dict:
 
 parent = StateGraph(ParentState)
 parent.add_node("worker", call_subgraph)
-parent.add_edge(START, "worker")
-parent.add_edge("worker", END)
+parent.add_edge(langgraph.graph.START, "worker")
+parent.add_edge("worker", langgraph.graph.END)
 parent_graph = parent.compile()
 
-parent_graph.invoke(
+print("Parent graph constructed with subgraph call node")
+
+# %%
+# Test the parent graph with sample input.
+result = parent_graph.invoke(
     {
         "user_text": "name: Indro\nrole: ML engineer\nlocation: Kolkata",
         "result": "",
     }
-)["result"]
+)
 
+print("Parent graph result:")
+print(result["result"])
 
 # %% [markdown]
 # ## Shared vs private memory boundaries (checkpointers)
@@ -792,20 +898,18 @@ parent_graph.invoke(
 # - how do you keep different users/sessions isolated?
 #
 # If you’ve ever debugged an agent that “remembered the wrong thing,” this is the antidote.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-from langgraph.checkpoint.memory import MemorySaver
 
 
-# #############################################################################
-# CSub
-# #############################################################################
+# ##########################################################
+# Setup: Subgraph state and shared vs private instances.
+# ##########################################################
 
 
 class CSub(TypedDict):
+    """Simple counter state for subgraph."""
+
     n: int
 
 
@@ -814,21 +918,31 @@ def bump(state: CSub) -> dict:
     return {"n": state.get("n", 0) + 1}
 
 
+# Create two instances: shared (stateless) and private (with memory).
 sub_builder = StateGraph(CSub)
 sub_builder.add_node("bump", bump)
-sub_builder.add_edge(START, "bump")
-sub_builder.add_edge("bump", END)
+sub_builder.add_edge(langgraph.graph.START, "bump")
+sub_builder.add_edge("bump", langgraph.graph.END)
 
 sub_shared = sub_builder.compile()
-sub_private = sub_builder.compile(checkpointer=MemorySaver())
+sub_private = sub_builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
+
+print(
+    "Subgraph instances created: sub_shared (stateless) and sub_private (with memory)"
+)
 
 
-# #############################################################################
-# P
-# #############################################################################
+# %%
+# ##########################################################
+# Parent state and node that calls shared vs private.
+# ##########################################################
 
 
 class P(TypedDict):
+    """Parent state for switching between shared/private subgraphs."""
+
     mode: str
     sub_n: int
 
@@ -844,11 +958,18 @@ def call_sub(state: P) -> dict:
     return {"sub_n": out["n"]}
 
 
+print("Parent state P and call_sub node defined")
+
+# %%
 parent_builder = StateGraph(P)
 parent_builder.add_node("call_sub", call_sub)
-parent_builder.add_edge(START, "call_sub")
-parent_builder.add_edge("call_sub", END)
-parent = parent_builder.compile(checkpointer=MemorySaver())
+parent_builder.add_edge(langgraph.graph.START, "call_sub")
+parent_builder.add_edge("call_sub", langgraph.graph.END)
+parent = parent_builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
+
+print("Parent graph constructed with checkpoint memory")
 
 
 def run_twice(mode: str):
@@ -864,8 +985,12 @@ def run_twice(mode: str):
     return out1["sub_n"], out2["sub_n"]
 
 
-run_twice("shared"), run_twice("private")
+# Test both shared and private modes.
+shared_results = run_twice("shared")
+private_results = run_twice("private")
 
+print(f"Shared subgraph (stateless) results: {shared_results}")
+print(f"Private subgraph (with memory) results: {private_results}")
 
 # %% [markdown]
 # ## Human-in-the-loop gate (interrupt + resume)
@@ -879,25 +1004,23 @@ run_twice("shared"), run_twice("private")
 #
 # If you’re wondering “where does the UI come from?” — great question.
 # LangGraph gives you the **primitive** (interrupt + resume). You can surface that in a notebook, a web app, Slack, etc.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Demonstrate human-in-the-loop control using `interrupt(...)` and resume.
 from pathlib import Path
 from typing import Literal as Lit
 
-from langgraph.types import Command, interrupt
-from langgraph.checkpoint.memory import MemorySaver
+import langgraph.types
+import langgraph.checkpoint.memory
 
 
-# #############################################################################
-# HITLState
-# #############################################################################
+# ##########################################################
+# HITL (Human-In-The-Loop) State and Nodes
+# ##########################################################
 
 
 class HITLState(TypedDict):
+    """State for human-in-the-loop file deletion workflow."""
+
     target_path: str
     decision: Lit["approve", "reject", ""]
 
@@ -909,7 +1032,7 @@ def propose_delete(state: HITLState) -> dict:
         "target_path": state["target_path"],
         "message": "Approve deletion?",
     }
-    decision = interrupt(payload)
+    decision = langgraph.types.interrupt(payload)
     return {"decision": decision}
 
 
@@ -923,35 +1046,49 @@ def do_delete(state: HITLState) -> dict:
     return {}
 
 
+print("HITL state and node functions defined")
+
+
+# %%
 builder = StateGraph(HITLState)
 builder.add_node("propose", propose_delete)
 builder.add_node("delete", do_delete)
-builder.add_edge(START, "propose")
+builder.add_edge(langgraph.graph.START, "propose")
 builder.add_edge("propose", "delete")
-builder.add_edge("delete", END)
+builder.add_edge("delete", langgraph.graph.END)
 
-hitl_graph = builder.compile(checkpointer=MemorySaver())
+hitl_graph = builder.compile(
+    checkpointer=langgraph.checkpoint.memory.MemorySaver()
+)
 
+print("HITL graph constructed with checkpoint memory")
+
+# %%
+# Setup test file and invoke with interrupt.
 tmp_dir = Path("tmp_runs").resolve()
 tmp_dir.mkdir(parents=True, exist_ok=True)
 victim = tmp_dir / "victim.txt"
 victim.write_text("delete me", encoding="utf-8")
 
+print(f"Test file created at: {victim}")
+
 thread_id = "HITL_NOTEBOOK_DEMO"
+
+# First invocation: propose deletion (will hit interrupt).
 out1 = hitl_graph.invoke(
     {"target_path": str(victim), "decision": ""},
     config={"configurable": {"thread_id": thread_id}},
 )
+
+# Extract the interrupt payload.
 pending = (
     out1.get("__interrupt__", [])[0].value if "__interrupt__" in out1 else None
 )
-pending
-
+print(f"Interrupt triggered with payload: {pending}")
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 out2 = hitl_graph.invoke(
-    Command(resume="approve"), config={"configurable": {"thread_id": thread_id}}
+    langgraph.types.Command(resume="approve"),
+    config={"configurable": {"thread_id": thread_id}},
 )
 victim.exists()

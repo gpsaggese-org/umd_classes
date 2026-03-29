@@ -1,11 +1,11 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py:light
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
+#       format_name: percent
+#       format_version: '1.3'
 #       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
@@ -13,6 +13,7 @@
 #     name: python3
 # ---
 
+# %% [markdown]
 # # Introduction to Neo4j
 #
 # What is `Neo4j`?
@@ -35,20 +36,21 @@
 #
 #
 
-# +
+# %%
 # # !sudo /venv/bin/pip install pyvis --quiet
 # # !sudo /venv/bin/pip install neo4j --quiet
 # # !sudo /venv/bin/pip install py2neo --quiet
 # # !sudo /venv/bin/pip install networkx --quiet
-# -
 
+# %%
 # %load_ext autoreload
 # %autoreload 2
 # %matplotlib inline
 
+# %% [markdown]
 # # Import libraries
 
-# +
+# %%
 import logging
 
 import helpers.hdbg as hdbg
@@ -56,15 +58,15 @@ import helpers.hnotebook as hnotebo
 import neo4j as nj
 import py2neo as pyneo
 
-# +
+# %%
 # Setup notebook.
 hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
 hnotebo.config_notebook()
-# -
 
+# %% [markdown]
 # # Setting up Neo4j
 #
 # Default Ports
@@ -75,11 +77,12 @@ hnotebo.config_notebook()
 #
 # These default ports cannot be changed dynamically. If we need to change, we have to do it through neo4j.conf
 
+# %% [markdown]
 # ## Start Neo4j Server
 #
 # As discussed earlier, the default port for the `HTTP`, i.e, the database server is assigned to 7474
 
-# +
+# %%
 # Install Neo4j.
 # #!wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
 # #!echo 'deb https://debian.neo4j.com stable latest' | sudo tee /etc/apt/sources.list.d/neo4j.list
@@ -88,13 +91,13 @@ hnotebo.config_notebook()
 # #!sudo apt install neo4j -y
 
 # !sudo neo4j start
-# -
 
+# %% [markdown]
 # ## Connect to Neo4j Server
 #
 # Now, we have attempt to connect to the database server and query on it. For this, by default, the port that is exposed for such operations is 7687. Therefore, we have to connect to this port for all the query related operations.
 
-# +
+# %%
 # URI and authentication details.
 URI = "neo4j://localhost:7687"
 USER = "neo4j"
@@ -105,15 +108,13 @@ driver = nj.GraphDatabase.driver(URI, auth=(USER, PASSWORD))
 driver.verify_connectivity()
 _LOG.info("Connection established.")
 
-
-# -
-
+# %% [markdown]
 # ## Update Password of Neo4j database
 #
 # This is a mandatory step. The default credentials will be accepted as authentication while pushing changes to the database. Remeber that once changed, the updates are permanent and will only be reset in a clean reinstallation.
 
 
-# +
+# %%
 def change_password(tx, current_password, new_password):
     tx.run(
         "ALTER CURRENT USER SET PASSWORD FROM $current_password TO $new_password",
@@ -130,11 +131,11 @@ with driver.session(database="system") as session:
 driver = nj.GraphDatabase.driver(URI, auth=("neo4j", "new_password"))
 driver.verify_connectivity()
 _LOG.info("Connection established.")
-# -
 
+# %% [markdown]
 # # Check the Neo4j graph
 
-# +
+# %%
 # Connect to the graph database.
 graph = pyneo.Graph(URI, auth=(USER, "new_password"))
 
@@ -150,8 +151,7 @@ def view_graph(graph):
         _LOG.info(relationship)
 
 
-# -
-
+# %% [markdown]
 # # Basic Concepts
 #
 # In Neo4j, data is stored as nodes, relationships, and properties.
@@ -160,10 +160,11 @@ def view_graph(graph):
 # - **Relationships**: Connections between nodes, such as "KNOWS" or "LIKES".
 # - **Properties**: Key-value pairs that store information about nodes and relationships.
 
+# %% [markdown]
 # ## Creating Nodes
 
 
-# +
+# %%
 def create_person(tx, name):
     # The CREATE statement is used to create a new node in the database.
     # In this example, we create a node with the label 'Person' and a property 'name'.
@@ -219,13 +220,11 @@ _LOG.info("Nodes created and returned node:", created_node)
 
 view_graph(graph)
 
-
-# -
-
+# %% [markdown]
 # ## Clearing the database
 
 
-# +
+# %%
 def clear_database(tx):
     tx.run("MATCH (n) DETACH DELETE n")
 
@@ -234,13 +233,11 @@ with driver.session() as session:
     # Clear the database
     session.execute_write(clear_database)
 
-
-# -
-
+# %% [markdown]
 # # Create Relations between Nodes
 
 
-# +
+# %%
 def create_relationship(
     tx, node1_label, node1_name, relationship_type, node2_label, node2_name
 ):
@@ -293,13 +290,11 @@ with driver.session() as session:
 _LOG.info("Relationships created.")
 view_graph(graph)
 
-
-# -
-
+# %% [markdown]
 # ## Write Clauses
 
 
-# +
+# %%
 def merge_node(tx, label, properties):
     # MERGE clause is used to create a node if it does not exist, or match it if it does.
     props_str = ", ".join([f"{key}: ${key}" for key in properties.keys()])
@@ -380,13 +375,11 @@ with driver.session() as session:
     _LOG.info("\n Graph After Deletion:")
     view_graph(graph)
 
-
-# -
-
+# %% [markdown]
 # ## Read Clauses
 
 
-# +
+# %%
 def find_all_nodes(tx):
     # Use MATCH to find all nodes.
     result = tx.run("MATCH (n) RETURN n")
@@ -442,7 +435,7 @@ with driver.session() as session:
     session.execute_read(count_function)
 
 
-# + vscode={"languageId": "ruby"}
+# %% vscode={"languageId": "ruby"}
 def plot_graph(results):
     # Create a directed graph
     G = nx.DiGraph()

@@ -24,8 +24,21 @@ import xgboost
 
 _LOG = logging.getLogger(__name__)
 
-# Set generic style for plots.
-sns.set_theme(style="whitegrid")
+
+import helpers.hnotebook as hnotebo
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init utils logging.
+    global _LOG
+    hnotebo.set_logger_to_print(_LOG)
+    # Init module logging.
+    causalml_logger: logging.Logger = logging.getLogger("causalml")
+    hnotebo.set_logger_to_print(causalml_logger)
 
 
 # #############################################################################
@@ -33,7 +46,7 @@ sns.set_theme(style="whitegrid")
 # #############################################################################
 
 
-def download_cdc_data_if_needed(data_path: str, url: str) -> None:
+def download_cdc_data_if_needed(data_path: str) -> None:
     """
     Download and extract the CDC Diabetes dataset if not already present.
 
@@ -43,18 +56,24 @@ def download_cdc_data_if_needed(data_path: str, url: str) -> None:
     if os.path.exists(data_path):
         _LOG.info("Dataset already present at: %s", data_path)
         return
+    #url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00519/diabetes_health_indicators_BRFSS2015.csv"
+    #url = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
+    url = "https://raw.githubusercontent.com/Helmy2/Diabetes-Health-Indicators/main/diabetes_binary_health_indicators_BRFSS2015.csv"
     _LOG.info("Downloading dataset from: %s", url)
     hio.create_dir(os.path.dirname(data_path), incremental=True)
-    zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
-    urllib.request.urlretrieve(url, zip_path)
-    filename = os.path.basename(data_path)
-    with zipfile.ZipFile(zip_path, "r") as z:
-        for name in z.namelist():
-            if filename in name:
-                with z.open(name) as src, open(data_path, "wb") as dst:
-                    dst.write(src.read())
-                break
-    hio.delete_file(zip_path)
+    if url.endswith(".zip"):
+        zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
+        urllib.request.urlretrieve(url, zip_path)
+        filename = os.path.basename(data_path)
+        with zipfile.ZipFile(zip_path, "r") as z:
+            for name in z.namelist():
+                if filename in name:
+                    with z.open(name) as src, open(data_path, "wb") as dst:
+                        dst.write(src.read())
+                    break
+        hio.delete_file(zip_path)
+    else:
+        urllib.request.urlretrieve(url, data_path)
     _LOG.info("Dataset saved to: %s", data_path)
 
 
@@ -185,7 +204,7 @@ class CausalNavigator:
         )
         ps_model.fit(X, T)
         p_scores = ps_model.predict_proba(X)[:, 1]
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.kdeplot(
             p_scores[T == 0], shade=True, color="red", label=self.control_name
         )
@@ -272,7 +291,7 @@ class CausalNavigator:
         :param bins: number of bins if the column is continuous
         """
         hdbg.dassert_in(col, df_with_cate.columns, "Column not found: %s", col)
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         # Check if column is effectively continuous or categorical.
         unique_vals = df_with_cate[col].nunique()
         is_categorical = unique_vals < 15
@@ -373,7 +392,7 @@ class CausalNavigator:
                 cate_placebo.mean(),
             )
         # Visualization.
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.histplot(
             placebo_ates,
             color="grey",
@@ -451,7 +470,7 @@ class CausalNavigator:
             sensitivity_results, orient="index", columns=["ATE"]
         )
         sens_df = sens_df.sort_values(by="ATE")
-        plt.figure(figsize=(10, 8))
+        plt.figure()
         # Plot bars.
         sns.barplot(x=sens_df["ATE"], y=sens_df.index, palette="viridis")
         # Add baseline reference line.

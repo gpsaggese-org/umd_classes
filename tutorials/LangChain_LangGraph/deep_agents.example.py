@@ -32,7 +32,6 @@
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
 #
 # Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # # Imports
@@ -40,7 +39,6 @@
 # This notebook shares the same setup pattern as `langchain.API.ipynb`.
 #
 # Run from `tutorials/LangChain_LangGraph` so local paths and helper utilities resolve exactly as written.
-#
 
 # %%
 # %load_ext autoreload
@@ -73,8 +71,6 @@ langgraph = _require_import("langgraph")
 
 
 # %%
-# This cell will:
-# - Configure logging and print environment/version info for debugging.
 import logging
 import platform
 
@@ -110,11 +106,8 @@ _LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
 # Two safety notes:
 # - filesystem demos write under `workspace/` and `tmp_runs/` in this folder
 # - HITL gates are what prevent “silent” edits when you want a human to approve
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 try:
     import deepagents  # type: ignore
     from deepagents import CompiledSubAgent, create_deep_agent  # type: ignore
@@ -135,12 +128,13 @@ except Exception as e:  # pragma: no cover
 
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 from pathlib import Path
 from typing import Any
 
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, ToolMessage
+import json
+
+# Message and tool call extraction utilities.
 
 
 def _all_tool_calls(messages: list[Any]) -> list[dict[str, Any]]:
@@ -165,6 +159,10 @@ def _tool_outputs(messages: list[Any], tool_name: str) -> list[Any]:
         if isinstance(m, ToolMessage) and getattr(m, "name", None) == tool_name:
             outs.append(m.content)
     return outs
+
+
+# %%
+# Text conversion and formatting utilities.
 
 
 def _as_text(x: Any) -> str:
@@ -230,6 +228,10 @@ def _extract_bullets(text: str) -> list[str]:
     return lines
 
 
+# %%
+# Dataset context building utility for prompts.
+
+
 def build_dataset_context() -> str:
     """
     Build a compact dataset context string for prompts, if `DATASET_META` exists.
@@ -251,11 +253,12 @@ def build_dataset_context() -> str:
         f"columns={cols}",
         f"sample_rows={sample_rows}",
     ]
-    return "Dataset context:\\n" + "\\n".join(parts)
+    return "Dataset context:\n" + "\n".join(parts)
 
 
+# Build dataset context string for use in agent prompts.
 DATASET_CONTEXT = build_dataset_context()
-
+print("Utilities loaded and DATASET_CONTEXT ready")
 
 # %% [markdown]
 # ### DA1 — Hello, deep agent
@@ -265,11 +268,8 @@ DATASET_CONTEXT = build_dataset_context()
 # You’re looking for:
 # - a normal chat response
 # - plus evidence that the agent is *tool-capable* (even if it doesn’t call a tool yet)
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 llm_da = get_chat_model()
 agent = create_deep_agent(model=llm_da)
 out = agent.invoke(
@@ -297,11 +297,8 @@ print(
 # - break a task into steps
 # - keep the steps visible
 # - iterate as you go
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 agent = create_deep_agent(model=get_chat_model())
 prompt = (
     "Before doing anything else, call write_todos with 5 EDA tasks for THIS dataset. "
@@ -321,17 +318,21 @@ print(_as_text(todos)[:800])
 #
 # We’ll keep everything under `/workspace/...` so it maps to `./workspace/...` on disk.
 # That way you can inspect files with your own eyes.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 root = Path(".").resolve()
 Path("workspace").mkdir(parents=True, exist_ok=True)
+
+# Create an agent with filesystem backend for tool interaction.
 agent = create_deep_agent(
     model=get_chat_model(),
     backend=FilesystemBackend(root_dir=str(root), virtual_mode=True),
 )
+print("Agent created with FilesystemBackend")
+
+
+# %%
+# Invoke agent with filesystem tools: write, read, and summarize.
 prompt = (
     "Use filesystem tools:\n"
     "1) write_file /workspace/notes.md with EXACTLY 6 lines, each starting with '- ', of EDA checks for THIS dataset\n"
@@ -341,6 +342,8 @@ prompt = (
     f"{DATASET_CONTEXT}\n\nIf you need raw rows, use read_file {DATASET_META.get('tool_path')}."
 )
 out = agent.invoke({"messages": [{"role": "user", "content": prompt}]})
+
+# Extract outputs and verify file was created.
 reads = _tool_outputs(out["messages"], "read_file")
 print("n read_file tool outputs:", len(reads))
 paths = sorted([str(p) for p in Path("workspace").rglob("notes.md")])
@@ -355,11 +358,11 @@ else:
         else _as_text(getattr(out["messages"][-1], "content", "(missing)"))
     )
 
+# Extract and display key bullets from the response.
 bullets = _extract_bullets(read_txt)
 print("two bullets:", bullets[:2])
 if len(bullets) < 2:
     print("raw preview:", read_txt[:400])
-
 
 # %% [markdown]
 # ### DA4 — Backends matrix: State vs Filesystem vs Store
@@ -371,21 +374,21 @@ if len(bullets) < 2:
 # - **Store**: structured persistence (facts, preferences)
 #
 # In real projects you usually use a mix.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.store.memory import InMemoryStore
 
+# Set up checkpointer for persistent, thread-scoped agent state.
 ckpt = MemorySaver()
 
+# Define note paths for different backends.
 NOTE_STATE = "/workspace/notes.md"
 NOTE_FS = "/workspace/notes.md"
 NOTE_STORE = "/memories/notes.md"
 
 
+# Helper to invoke agent with thread_id for persistence scoping.
 def run(agent, thread_id: str, user_msg: str):
     """
     Invoke `agent` with `thread_id` for persistence/scoping tests.
@@ -396,8 +399,10 @@ def run(agent, thread_id: str, user_msg: str):
     )
 
 
-# 1) State backend (thread-scoped)
+# Demo 1: State backend (thread-scoped, in-memory).
 agent_state = create_deep_agent(model=get_chat_model(), checkpointer=ckpt)
+
+# Write file in thread A and read from both threads.
 run(
     agent_state,
     "STATE_A",
@@ -407,6 +412,8 @@ outA = run(agent_state, "STATE_A", f"read_file {NOTE_STATE}")
 outB = run(
     agent_state, "STATE_B", f"read_file {NOTE_STATE} (if missing, say so)"
 )
+
+# Extract and display reads from each thread.
 state_reads_a = _tool_outputs(outA["messages"], "read_file")
 state_reads_b = _tool_outputs(outB["messages"], "read_file")
 print(
@@ -418,17 +425,25 @@ print(
     _as_text(state_reads_b[-1])[:120] if state_reads_b else "(no tool output)",
 )
 
-# 2) Filesystem backend (disk, cross-thread)
+
+# %%
+# Demo 2: Filesystem backend (disk-backed, cross-thread).
 root = Path("tmp_runs/deepagents/fs_root").resolve()
 root.mkdir(parents=True, exist_ok=True)
+
+# Create agent with filesystem backend for persistent, cross-thread access.
 agent_fs = create_deep_agent(
     model=get_chat_model(),
     checkpointer=ckpt,
     backend=FilesystemBackend(root_dir=str(root), virtual_mode=True),
 )
+
+# Write file in thread A, read from both threads.
 run(agent_fs, "FS_A", f"write_file {NOTE_FS} with 'hello from FS thread A'")
 outA = run(agent_fs, "FS_A", f"read_file {NOTE_FS}")
 outB = run(agent_fs, "FS_B", f"read_file {NOTE_FS}")
+
+# Extract and display reads from each thread (both should see the file).
 fs_reads_a = _tool_outputs(outA["messages"], "read_file")
 fs_reads_b = _tool_outputs(outB["messages"], "read_file")
 print(
@@ -441,18 +456,25 @@ print(
 )
 print("fs root_dir:", root)
 
-# 3) Store backend via CompositeBackend (cross-thread under /memories/)
+# %%
+# Demo 3: Store backend via CompositeBackend (cross-thread under /memories/).
 store = InMemoryStore()
+
+# Define composite backend that routes /memories/* to StoreBackend, else to StateBackend.
 composite_backend = lambda rt: CompositeBackend(
     default=StateBackend(rt),
     routes={"/memories/": StoreBackend(rt)},
 )
+
+# Create agent with store backend for cross-thread memory access.
 agent_store = create_deep_agent(
     model=get_chat_model(),
     checkpointer=ckpt,
     backend=composite_backend,
     store=store,
 )
+
+# Write file to /memories/ in thread A, read from both threads.
 run(
     agent_store,
     "STORE_A",
@@ -460,6 +482,8 @@ run(
 )
 outA = run(agent_store, "STORE_A", f"read_file {NOTE_STORE}")
 outB = run(agent_store, "STORE_B", f"read_file {NOTE_STORE}")
+
+# Extract and display reads from each thread (both should see the file in /memories/).
 store_reads_a = _tool_outputs(outA["messages"], "read_file")
 store_reads_b = _tool_outputs(outB["messages"], "read_file")
 print(
@@ -471,7 +495,6 @@ print(
     _as_text(store_reads_b[-1])[:120] if store_reads_b else "(no tool output)",
 )
 
-
 # %% [markdown]
 # ### DA5 — Dict subagents: delegate via `task`
 #
@@ -481,14 +504,14 @@ print(
 # - each gets a clear job
 # - each can have its own tools or style
 # - the main agent stays focused on coordination
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 
+# Set up checkpointer for stateful agent execution.
 ckpt = MemorySaver()
+
+# Define a subagent that produces executive EDA profiles.
 profiler_subagent = {
     "name": "profile-agent",
     "description": "Produces an executive EDA profile: summary + next analyses.",
@@ -503,6 +526,8 @@ profiler_subagent = {
     ),
     "tools": [],
 }
+
+# Set up workspace and create agent with subagent delegation.
 root = Path(".").resolve()
 Path("workspace").mkdir(parents=True, exist_ok=True)
 dataset_on_disk = Path("workspace/data/T1_slice.csv")
@@ -517,6 +542,11 @@ agent = create_deep_agent(
     subagents=[profiler_subagent],  # type: ignore[list-item]
     name="main-agent",
 )
+print("Agent created with profiler subagent")
+
+
+# %%
+# Invoke agent with task() delegation to the subagent.
 prompt = (
     "Delegate to the profile-agent using task(), then present the final result.\n"
     "Important: delegate / subagent."
@@ -527,12 +557,13 @@ out = agent.invoke(
     {"messages": [{"role": "user", "content": prompt}]},
     config={"configurable": {"thread_id": "DA5"}},
 )
+
+# Verify tool calls were made and display final response.
 calls = _all_tool_calls(out["messages"])
 print("tool calls:", [c.get("name") for c in calls])
 print(
     "final message preview:", getattr(out["messages"][-1], "content", "")[:240]
 )
-
 
 # %% [markdown]
 # ### DA6 — `CompiledSubAgent`: delegate to a compiled runnable
@@ -544,16 +575,15 @@ print(
 # - Deep Agents gives you ergonomic delegation
 #
 # You’ll see how a compiled graph can be slotted in as a worker.
-#
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import MemorySaver
 
+# Set up checkpointer for stateful agent execution.
 ckpt = MemorySaver()
+
+# Define system prompt for hypothesis generation.
 specialized_prompt = (
     "You are a strict hypothesis generator for EDA.\n"
     "Use only the dataset context provided in the task message.\n"
@@ -563,15 +593,20 @@ specialized_prompt = (
     "- For each: 1 concrete test/plot\n"
     "Be concise."
 )
+
+# Create compiled agent using the specialized prompt.
 compiled_worker = create_agent(
     model=get_chat_model(), tools=[], system_prompt=specialized_prompt
 )
 
+# Wrap compiled agent as a CompiledSubAgent for task delegation.
 hypothesis_agent = CompiledSubAgent(
     name="hypothesis-agent",
     description="Generates hypotheses and concrete tests/plots for EDA.",
     runnable=compiled_worker,
 )
+
+# Set up workspace and create main agent with hypothesis subagent.
 root = Path(".").resolve()
 Path("workspace").mkdir(parents=True, exist_ok=True)
 dataset_on_disk = Path("workspace/data/T1_slice.csv")
@@ -586,6 +621,11 @@ agent = create_deep_agent(
     subagents=[hypothesis_agent],
     name="main-agent",
 )
+print("Agent created with hypothesis subagent")
+
+
+# %%
+# Invoke agent with task() delegation to hypothesis subagent.
 prompt = (
     "Delegate to the hypothesis-agent using task(), then summarize results.\n"
     "Important: delegate / hypothesis."
@@ -596,12 +636,13 @@ out = agent.invoke(
     {"messages": [{"role": "user", "content": prompt}]},
     config={"configurable": {"thread_id": "DA6"}},
 )
+
+# Verify tool calls and display final response.
 calls = _all_tool_calls(out["messages"])
 print("tool calls:", [c.get("name") for c in calls])
 print(
     "final message preview:", getattr(out["messages"][-1], "content", "")[:240]
 )
-
 
 # %% [markdown]
 # ### DA7 — HITL gates: `interrupt_on` + `Command(resume=...)`
@@ -612,14 +653,12 @@ print(
 # Instead of silently writing, the agent run produces an interrupt payload that you approve/reject.
 #
 # If you’re building anything that touches real systems, this pattern is worth memorizing.
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.types import Command
 
+# Import HITL (human-in-the-loop) interrupt configuration.
 try:
     from langchain.agents.middleware.human_in_the_loop import InterruptOnConfig
 except ModuleNotFoundError as e:  # pragma: no cover
@@ -630,12 +669,13 @@ Run it from `tutorials/LangChain_LangGraph` with `requirements.txt` installed (o
 """
     ) from e
 
+# Set up checkpointer and workspace for HITL demo.
 ckpt = MemorySaver()
 thread_id = "DA7_NOTEBOOK"
-
 root = Path(".").resolve()
 Path("workspace").mkdir(parents=True, exist_ok=True)
 
+# Create agent with HITL interrupts on edit_file operations.
 agent = create_deep_agent(
     model=get_chat_model(),
     checkpointer=ckpt,
@@ -644,9 +684,12 @@ agent = create_deep_agent(
         "edit_file": InterruptOnConfig(allowed_decisions=["approve", "reject"])
     },
 )
+print("Agent created with HITL interrupt on edit_file")
 
-# Step 1: create a file (no interrupt)
-agent.invoke(
+
+# %%
+# Step 1: Create a file (no interrupt expected).
+out_step1 = agent.invoke(
     {
         "messages": [
             {
@@ -657,9 +700,11 @@ agent.invoke(
     },
     config={"configurable": {"thread_id": thread_id}},
 )
+print("Step 1 completed: file created")
 
-# Step 2: attempt an edit (expect interrupt), then resume programmatically
-out = agent.invoke(
+# %%
+# Step 2: Attempt file edit (expect HITL interrupt), then resume with approval.
+out_step2 = agent.invoke(
     {
         "messages": [
             {
@@ -670,25 +715,32 @@ out = agent.invoke(
     },
     config={"configurable": {"thread_id": thread_id}},
 )
-has_intr = "__interrupt__" in out
+
+# Check if interrupt occurred and inspect its payload.
+has_intr = "__interrupt__" in out_step2
 print("interrupted:", has_intr)
 if has_intr:
-    intr0 = out["__interrupt__"][0]
+    intr0 = out_step2["__interrupt__"][0]
     print(
         "interrupt payload preview:",
         _as_text(getattr(intr0, "value", intr0))[:240],
     )
-    out = agent.invoke(
+    # Resume execution by approving the edit.
+    out_step2 = agent.invoke(
         Command(resume={"decisions": [{"type": "approve"}]}),
         config={"configurable": {"thread_id": thread_id}},
     )
+    print("Step 2 resumed with approval")
 
-# Confirm edited content via a fresh read
-out2 = agent.invoke(
+# %%
+# Step 3: Verify edited file content via fresh read.
+out_step3 = agent.invoke(
     {"messages": [{"role": "user", "content": "read_file /workspace/notes.md"}]},
     config={"configurable": {"thread_id": thread_id}},
 )
-read_outs = _tool_outputs(out2["messages"], "read_file")
+
+# Extract and display the final file content.
+read_outs = _tool_outputs(out_step3["messages"], "read_file")
 paths = sorted([str(p) for p in Path("workspace").rglob("notes.md")])
 print("notes.md paths on disk:", paths)
 
@@ -698,11 +750,11 @@ else:
     read_txt = (
         _read_file_text(read_outs[-1])
         if read_outs
-        else _as_text(getattr(out2["messages"][-1], "content", ""))
+        else _as_text(getattr(out_step3["messages"][-1], "content", ""))
     )
 
+print("final file content:")
 print(read_txt.replace("\\n", "\\\\n")[:200])
-
 
 # %% [markdown]
 # ### DA8 — Sandboxing: `FilesystemBackend(virtual_mode=True)`
@@ -715,31 +767,32 @@ print(read_txt.replace("\\n", "\\\\n")[:200])
 # In practice, this gives you two benefits:
 # - you can safely let an agent work with files without giving it your whole machine
 # - you can review exactly what it wrote
-#
 
 # %%
-# This cell will:
-# - Run a Deep Agents demo (filesystem/todos/subagents/HITL).
 from langgraph.checkpoint.memory import MemorySaver
 
+# Set up checkpointer for persistent agent state during sandbox tests.
 ckpt = MemorySaver()
 thread_id = "DA8_NOTEBOOK"
+
+# Create sandbox root directory and a secret outside of it (for path traversal test).
 root = Path("tmp_runs/deepagents/sandbox_root").resolve()
 root.mkdir(parents=True, exist_ok=True)
 
-# Create a secret outside the sandbox root_dir (in the notebook workdir).
 outside_secret = Path("tmp_runs/deepagents/secret_outside_sandbox.txt")
 outside_secret.parent.mkdir(parents=True, exist_ok=True)
 outside_secret.write_text("SUPER_SECRET=do_not_leak\\n", encoding="utf-8")
 
+# Create agent with filesystem backend constrained to sandbox_root.
 backend = FilesystemBackend(root_dir=str(root), virtual_mode=True)
 agent = create_deep_agent(
     model=get_chat_model(), checkpointer=ckpt, backend=backend
 )
+print("Agent created with sandboxed filesystem backend")
 
 
-# Note: filesystem tool calls are chosen by the model. For debugging, print the actual
-# tool call args the agent produced, since it may choose a different path than requested.
+# %%
+# Helper function to debug actual tool calls made by the model.
 def _print_tool_calls(state: dict, label: str) -> None:
     """
     Print tool call names and args emitted by the model.
@@ -749,7 +802,7 @@ def _print_tool_calls(state: dict, label: str) -> None:
     print(f"{label} tool_calls:", simplified)
 
 
-# Safe file inside the sandbox.
+# Test 1: Safe file write and read inside the sandbox.
 out_ok = agent.invoke(
     {
         "messages": [
@@ -761,6 +814,8 @@ out_ok = agent.invoke(
     },
     config={"configurable": {"thread_id": thread_id}},
 )
+
+# Extract and display the safe read result.
 ok_reads = _tool_outputs(out_ok["messages"], "read_file")
 ok_txt = (
     _read_file_text(ok_reads[-1])
@@ -770,7 +825,8 @@ ok_txt = (
 print("ok read preview:", ok_txt[:80])
 _print_tool_calls(out_ok, "ok")
 
-# Attempt path traversal escape.
+# %%
+# Test 2: Attempt path traversal escape outside sandbox.
 out_env = agent.invoke(
     {
         "messages": [
@@ -782,6 +838,8 @@ out_env = agent.invoke(
     },
     config={"configurable": {"thread_id": thread_id}},
 )
+
+# Check if path traversal was blocked.
 escape_reads = _tool_outputs(out_env["messages"], "read_file")
 print(
     "escape attempt output preview:",
@@ -789,7 +847,8 @@ print(
 )
 _print_tool_calls(out_env, "escape")
 
-# Attempt to read a host path.
+# %%
+# Test 3: Attempt to read a host system file.
 out_hosts = agent.invoke(
     {
         "messages": [
@@ -801,6 +860,8 @@ out_hosts = agent.invoke(
     },
     config={"configurable": {"thread_id": thread_id}},
 )
+
+# Check if host system file access was blocked.
 hosts_reads = _tool_outputs(out_hosts["messages"], "read_file")
 print(
     "/etc/hosts attempt output preview:",
@@ -808,6 +869,7 @@ print(
 )
 _print_tool_calls(out_hosts, "hosts")
 
+# Display final sandbox state.
 print("sandbox root_dir:", root)
 print(
     "sandbox files:",
