@@ -673,7 +673,8 @@ class Test_generate_summary_statistics(hunitest.TestCase):
         """
         # Prepare inputs.
         agents = [
-            racaosimscsu.Agent(i, 0.5, 0.5, 0.5, initial_capital=1.0) for i in range(10)
+            racaosimscsu.Agent(i, 0.5, 0.5, 0.5, initial_capital=1.0)
+            for i in range(10)
         ]
         # Run test.
         stats = racaosimscsu.generate_summary_statistics(agents)
@@ -867,7 +868,9 @@ class Test_run_simulation(hunitest.TestCase):
         """
         # Prepare inputs.
         # Create agent with high IQ to capitalize on lucky events.
-        agent_high_iq = racaosimscsu.Agent(0, 0.5, 0.99, 0.5, initial_capital=1.0)
+        agent_high_iq = racaosimscsu.Agent(
+            0, 0.5, 0.99, 0.5, initial_capital=1.0
+        )
         # Create agent with low IQ to fail capitalizing.
         agent_low_iq = racaosimscsu.Agent(1, 0.5, 0.01, 0.5, initial_capital=1.0)
         # Run test.
@@ -1139,7 +1142,9 @@ class Test_fit_bayesian_luck_model(hunitest.TestCase):
         df = pd.DataFrame({"capital": [1.0, 2.0, 3.0]})
         # Run test and check output.
         with self.assertRaises(AssertionError):
-            racaosimscsu.fit_bayesian_luck_model(df, draws=10, tune=10, random_seed=42)
+            racaosimscsu.fit_bayesian_luck_model(
+                df, draws=10, tune=10, random_seed=42
+            )
 
     def test3(self) -> None:
         """
@@ -1222,7 +1227,9 @@ class Test_summarize_bayesian_fit(hunitest.TestCase):
             df, draws=100, tune=100, random_seed=42
         )
         # Run test.
-        summary = racaosimscsu.summarize_bayesian_fit(idata, var_names=["alpha", "sigma"])
+        summary = racaosimscsu.summarize_bayesian_fit(
+            idata, var_names=["alpha", "sigma"]
+        )
         # Check outputs.
         self.assertIn("alpha", summary.index)
         self.assertIn("sigma", summary.index)
@@ -1251,7 +1258,9 @@ class Test_posterior_predictive_check(hunitest.TestCase):
             df, draws=100, tune=100, random_seed=42
         )
         # Run test.
-        ppc = racaosimscsu.posterior_predictive_check(model, idata, df, random_seed=123)
+        ppc = racaosimscsu.posterior_predictive_check(
+            model, idata, df, random_seed=123
+        )
         # Check outputs.
         expected_keys = ["y_obs", "y_pred_mean", "y_pred_std"]
         self.assertEqual(sorted(ppc.keys()), sorted(expected_keys))
@@ -1268,7 +1277,9 @@ class Test_posterior_predictive_check(hunitest.TestCase):
             df, draws=100, tune=100, random_seed=42
         )
         # Run test.
-        ppc = racaosimscsu.posterior_predictive_check(model, idata, df, random_seed=123)
+        ppc = racaosimscsu.posterior_predictive_check(
+            model, idata, df, random_seed=123
+        )
         # Check outputs.
         n_obs = len(df)
         self.assertEqual(len(ppc["y_obs"]), n_obs)

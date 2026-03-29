@@ -78,6 +78,7 @@ def obj_to_str(var_name: str, val: Any, *, top_n: int = 3) -> str:
     :return: String representation of the object
     """
     import numpy as np
+
     txt = []
     txt_tmp = "var_name=%s (type=%s)" % (var_name, str(type(val)))
     txt.append(txt_tmp)
@@ -174,6 +175,7 @@ def _create_slider_widget(
     :return: Tuple of (slider, text, minus_button, plus_button)
     """
     import ipywidgets
+
     _ = description
     # Create widgets based on type.
     if is_float:
@@ -273,6 +275,7 @@ def _create_widget_box(
     :return: HBox containing all widgets in proper order
     """
     import ipywidgets
+
     return ipywidgets.HBox([slider, minus_button, text, plus_button])
 
 
@@ -285,7 +288,9 @@ def build_widget_control(
     initial_value: float,
     *,
     is_float: bool = True,
-) -> Tuple[Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"], "ipywidgets.HBox"]:
+) -> Tuple[
+    Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"], "ipywidgets.HBox"
+]:
     """
     Build a complete widget control with slider, text field, and +/- buttons.
 
@@ -345,6 +350,7 @@ def build_log_widget_control(
         is the HBox layout containing all components
     """
     import ipywidgets
+
     # Create slider that operates on exponents.
     exp_slider = ipywidgets.IntSlider(
         min=min_exp,
@@ -497,6 +503,7 @@ def generate_animation_values(
     :return: List of values.
     """
     import numpy as np
+
     if mode == "linear":
         sweep_values = np.linspace(sweep_min, sweep_max, n_steps)
     else:

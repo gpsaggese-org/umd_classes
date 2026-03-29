@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -32,18 +33,21 @@
 # %load_ext autoreload
 # %autoreload 2
 
+import logging
+
 import pandas as pd
-import os
 import seaborn as sns
 from graphviz import Digraph
 import warnings
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
-
-# Configuration
+# Configuration.
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
 pd.set_option("display.max_columns", None)
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## 2. Data Source
@@ -64,9 +68,8 @@ pd.set_option("display.max_columns", None)
 # | `GenHlth` | Covariate (X) | Self-reported health (1=Excellent, 5=Poor) |
 # | `BMI` | Covariate (X / M) | Body mass index (used as confounder in estimation) |
 #
-# > **Download the data first:**
-# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
-# > Place the CSV in `data/unprocessed/` before running the next cell.
+# Download the data first: https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+# Place the CSV in `data/unprocessed/` before running the next cell.
 
 # %%
 # Download the dataset and place it in the data/unprocessed/ folder before running this cell.
@@ -130,7 +133,7 @@ dag
 #
 # The actual data acknowledges unmeasured confounding (U) and reverse causality. Both T and Y are measured at the same point in time:
 #
-# > ⚠️ **Critical Limitation:** The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously — temporal ordering cannot be established.
+# Critical Limitation: The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously — temporal ordering cannot be established.
 
 # %%
 dag = Digraph(graph_attr={"rankdir": "LR"})

@@ -1,6 +1,7 @@
 #!/bin/bash
 # """
-# Launch an interactive bash shell inside the tsfresh Docker container.
+# This script launches a Docker container with an interactive bash shell for
+# development.
 # """
 
 # Exit immediately if any command exits with a non-zero status.
@@ -21,6 +22,11 @@ print_docker_vars
 # List the available Docker images matching the expected image name.
 run "docker image ls $FULL_IMAGE_NAME"
 
+# Configure and run the Docker container with interactive bash shell.
+# - Container is removed automatically on exit (--rm)
+# - Interactive mode with TTY allocation (-ti)
+# - Port forwarding for Jupyter or other services
+# - Git root mounted to /git_root inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=
 DOCKER_CMD=$(get_docker_bash_command)

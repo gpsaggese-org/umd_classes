@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -19,10 +19,6 @@
 
 import logging
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
 
 import helpers.hnotebook as ut
 
@@ -131,6 +127,7 @@ import pydanticai_API_utils as utils
 import os
 from dotenv import load_dotenv, find_dotenv
 import nest_asyncio
+
 nest_asyncio.apply()
 
 
@@ -163,15 +160,14 @@ print("OPENAI_API_KEY:", utils._mask(os.getenv("OPENAI_API_KEY")))
 from pydantic import BaseModel
 from pydantic_ai import Agent
 
+
 class City(BaseModel):
     name: str
     country: str
     population: int
 
-agent = Agent(
-    "openai:gpt-4o-mini",
-    output_type=City
-)
+
+agent = Agent("openai:gpt-4o-mini", output_type=City)
 
 result = agent.run_sync("Tell me about Paris")
 
@@ -221,15 +217,14 @@ result.output
 # %%
 from pydantic import BaseModel
 
+
 class Product(BaseModel):
     name: str
     price: float
     category: str
 
-agent = Agent(
-    "openai:gpt-4o-mini",
-    output_type=Product
-)
+
+agent = Agent("openai:gpt-4o-mini", output_type=Product)
 
 agent.run_sync("Describe the Apple AirPods Pro").output
 
@@ -244,7 +239,7 @@ agent.run_sync("Describe the Apple AirPods Pro").output
 #   - fields exist with the right types
 #   - the structure matches exactly
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # This turns LLM responses into structured data you can store in databases, feed into analytics, or pass downstream in an application without brittle string parsing.
 
 # %% [markdown]
@@ -254,16 +249,14 @@ agent.run_sync("Describe the Apple AirPods Pro").output
 #
 # This greatly improves reliability.
 
+
 # %%
 class Person(BaseModel):
     name: str
     age: int
 
-agent = Agent(
-    "openai:gpt-4o-mini",
-    output_type=Person,
-    retries=2
-)
+
+agent = Agent("openai:gpt-4o-mini", output_type=Person, retries=2)
 
 agent.run_sync("Tell me about Albert Einstein")
 
@@ -275,7 +268,7 @@ agent.run_sync("Tell me about Albert Einstein")
 # - We set `retries=2` on the agent.
 # - If the model output fails schema validation (missing fields, wrong types), PydanticAI automatically retries the model call to get a valid output.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Real LLM outputs are inconsistent. Automatic schema validation + retry gives you reliability without writing custom parsing and retry logic for every prompt.
 
 # %% [markdown]
@@ -284,10 +277,7 @@ agent.run_sync("Tell me about Albert Einstein")
 # Agents can call Python functions as tools.
 
 # %%
-agent = Agent(
-    "openai:gpt-4o-mini",
-    tools=[utils.get_weather]
-)
+agent = Agent("openai:gpt-4o-mini", tools=[utils.get_weather])
 
 agent.run_sync("What is the weather in Tokyo?")
 
@@ -298,7 +288,7 @@ agent.run_sync("What is the weather in Tokyo?")
 # - We passed it into the agent via `tools=[get_weather]`.
 # - When the user asks about weather, the agent can choose to call the tool to get the answer instead of hallucinating.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Tools let the model interact with real functions and external systems. This is how you build agents that do real work (APIs, databases, calculations) rather than confidently inventing facts.
 
 # %% [markdown]
@@ -310,13 +300,17 @@ agent.run_sync("What is the weather in Tokyo?")
 from dataclasses import dataclass
 from pydantic_ai import Agent
 
+
 @dataclass
 class Config:
     company: str
 
+
 agent = Agent("openai:gpt-4o-mini", deps_type=Config, tools=[utils.company_name])
 
-result = agent.run_sync("What company is configured?", deps=Config(company="OpenAI"))
+result = agent.run_sync(
+    "What company is configured?", deps=Config(company="OpenAI")
+)
 print(result.output)
 
 # %% [markdown]
@@ -326,7 +320,7 @@ print(result.output)
 # - At run time, we pass an instance like `Config(company="OpenAI")`.
 # - Tools (or other agent logic) can access this via `RunContext.deps`, so the agent can use configuration/state without hardcoding it into prompts.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Dependencies are a clean way to inject runtime configuration (tenant ID, API clients, feature flags, environment context) into agents and tools without relying on global variables or string formatting prompts.
 
 # %% [markdown]
@@ -346,7 +340,7 @@ asyncio.run(utils.run_agent(agent))
 # - Async execution is helpful for applications that need concurrency (web servers, batch pipelines, background jobs).
 # - `asyncio.run(...)` runs the coroutine in a notebook-safe way.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Most real systems are async. PydanticAI supports async natively, so you can run many agent calls concurrently without blocking your app.
 
 # %% [markdown]
@@ -405,10 +399,7 @@ validator_agent.output_validator(utils.validate_sources)
 # %%
 try:
     utils.validate_sources(
-        AnswerWithSources(
-            answer="According to the documents...",
-            sources=[]
-        )
+        AnswerWithSources(answer="According to the documents...", sources=[])
     )
 except Exception as e:
     print("Validator failure example:", e)
@@ -425,7 +416,7 @@ except Exception as e:
 #   - no duplicate sources
 # - If rules fail, we raise `ModelRetry`, which tells PydanticAI to retry the model call.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Schemas catch structural mistakes. Validators catch logical mistakes. Together, they make LLM outputs production-grade by enforcing business rules automatically.
 
 # %% [markdown]
@@ -452,8 +443,9 @@ asyncio.run(utils.run_validator_example(validator_agent))
 # - progressive display of responses
 
 # %%
-
-stream_agent = Agent(MODEL_ID, instructions="Write one short paragraph about unit tests.")
+stream_agent = Agent(
+    MODEL_ID, instructions="Write one short paragraph about unit tests."
+)
 
 if not hasattr(stream_agent, "run_stream"):
     print("Streaming API not available; falling back to run().")
@@ -481,7 +473,7 @@ else:
 # - With streaming, tokens are yielded as the model generates them instead of waiting for the full response.
 # - This improves perceived responsiveness for chat apps and UIs.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Streaming helps build better user experiences. You can display partial output instantly while the model continues generating, which is critical for interactive assistants.
 
 # %% [markdown]
@@ -493,19 +485,20 @@ else:
 #
 
 # %%
-
 explicit_model = None
 try:
     from pydantic_ai.models.openai import OpenAIModel
+
     explicit_model = OpenAIModel(
         model=MODEL_ID.split(":", 1)[-1],
         api_key=os.getenv("OPENAI_API_KEY"),
         base_url=os.getenv("OPENAI_BASE_URL"),
     )
     print("Using explicit OpenAIModel.")
-except Exception as e1:
+except Exception:
     try:
         from pydantic_ai.models.openai import OpenAIChatModel
+
         explicit_model = OpenAIChatModel(
             model=MODEL_ID.split(":", 1)[-1],
             api_key=os.getenv("OPENAI_API_KEY"),
@@ -533,7 +526,7 @@ except Exception as e:
 #   - proxy settings
 # - If explicit model classes aren't available in the installed version, we fall back to using the string model ID.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # Explicit provider configuration is what you use in real deployments: enterprise gateways, self-hosted endpoints, proxies, and custom routing.
 
 # %% [markdown]
@@ -549,7 +542,6 @@ except Exception as e:
 # - final output
 
 # %%
-
 meta_agent = Agent(MODEL_ID, instructions="Answer in one sentence.")
 result = await meta_agent.run("What is a unit test?")
 usage = getattr(result, "usage", None)
@@ -568,7 +560,7 @@ print("Usage:", usage)
 #   - message history (debugging)
 #   - tool calls (auditing agent behavior)
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # When agents behave unexpectedly, metadata is how you debug and control them. This is essential for observability, cost tracking, and governance.
 
 # %% [markdown]
@@ -584,7 +576,6 @@ print("Usage:", usage)
 from pydantic_ai import Agent
 
 
-
 # Version-tolerant imports for ModelSettings + UsageLimits
 try:
     # common in newer versions
@@ -592,7 +583,7 @@ try:
 except Exception:
     # fallback seen in some versions
     from pydantic_ai.models import ModelSettings  # type: ignore
-    from pydantic_ai.usage import UsageLimits     # type: ignore
+    from pydantic_ai.usage import UsageLimits  # type: ignore
 
 
 settings_agent = Agent(
@@ -618,7 +609,7 @@ print(result.output)
 #   - helps prevent runaway retries or excessive calls
 # - We ran the agent with these settings applied.
 #
-# **Why PydanticAI is useful here:**  
+# **Why PydanticAI is useful here:**
 # PydanticAI makes it easy to add safety and cost controls to LLM systems. These controls matter in production where reliability and spend both need limits.
 
 # %% [markdown]

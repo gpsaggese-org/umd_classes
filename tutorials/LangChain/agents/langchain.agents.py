@@ -1,11 +1,12 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.2
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -41,8 +42,8 @@
 # Install Python packages (uncomment to run if needed):
 #
 # ```bash
-# # !pip install -U langchain langchain-community langchain-ollama faiss-cpu tiktoken
-# # !pip install -U langchain-text-splitters pydantic requests
+# !pip install -U langchain langchain-community langchain-ollama faiss-cpu tiktoken
+# !pip install -U langchain-text-splitters pydantic requests
 # ```
 #
 # Install **Ollama** from https://ollama.com/download and ensure the service is running.

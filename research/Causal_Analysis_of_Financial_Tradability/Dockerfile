@@ -34,7 +34,7 @@ RUN mkdir -p /install
 # Install project specific packages using uv.
 RUN uv venv /opt/venv
 COPY requirements.txt /install/requirements.txt
-RUN uv pip install --system --no-cache -r /install/requirements.txt jupyterlab
+RUN uv pip install --system --no-cache jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
 
 # Copy project files.
 COPY . /app

@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /install
 COPY requirements.txt /install/requirements.txt
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim -r /install/requirements.txt
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
 
 # Config.
 COPY etc_sudoers /install/

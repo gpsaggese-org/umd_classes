@@ -1034,13 +1034,14 @@ digraph CausalGraph {
     making randomness the sole cause of $T$
   
 * 
-- You work for a software company
-- You want to estimate the impact of a new feature
-- You randomize rollout of the feature
-  - Only 10% of the customers are randomly chosen to get the feature
-- You can't measure satisfaction directly so you send a survey to customers
-  in the rollout (treated) and in the control group, asking if you would
-  recommend the product
+- Set up
+  - You work for a software company
+  - You want to estimate the impact of a new feature
+  - You randomize rollout of the feature
+    - Only 10% of the customers are randomly chosen to get the feature
+  - You can't measure satisfaction directly so you send a survey to customers in
+    the rollout (treated) and in the control group, asking if you would recommend
+    the product
 
 - Customers with the feature have higher satisfaction than the ones without
 - Is the difference due entirely to causal effect of new feature?

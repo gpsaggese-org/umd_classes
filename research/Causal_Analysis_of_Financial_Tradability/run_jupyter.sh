@@ -1,4 +1,4 @@
-#!/bin/bash -xe
+#!/bin/bash
 # """
 # Launch Jupyter Lab server.
 #
@@ -10,60 +10,26 @@
 # - Vim keybindings can be enabled via JUPYTER_USE_VIM environment variable
 # """
 
-mkdir -p ~/.jupyter/lab/user-settings/@axlair/jupyterlab_vim
-if [[ $JUPYTER_USE_VIM == 1 ]]; then
-    echo "Enabling vim."
-    cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
-{
-    "enabled": true,
-    "enabledInEditors": true,
-    "extraKeybindings": []
-}
-EOF
-else
-    echo "Disabling vim."
-    cat <<EOF > ~/.jupyter/lab/user-settings/\@axlair/jupyterlab_vim/plugin.jupyterlab-settings
-{
-    "enabled": false,
-    "enabledInEditors": false,
-    "extraKeybindings": []
-}
-EOF
-fi;
+# Exit immediately if any command exits with a non-zero status.
+set -e
 
-mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/apputils-extension
-cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/apputils-extension/notification.jupyterlab-settings
-{
-    // Notifications
-    // @jupyterlab/apputils-extension:notification
-    // Notifications settings.
+# Print each command to stdout before executing it.
+#set -x
 
-    // Fetch official Jupyter news
-    // Whether to fetch news from the Jupyter news feed. If Always (`true`), it will make a request to a website.
-    "fetchNews": "false",
-    "checkForUpdates": false
-}
-EOF
+# Import the utility functions from /git_root.
+GIT_ROOT=/git_root
+source $GIT_ROOT/class_project/project_template/utils.sh
+
+# Load Docker configuration variables for this script.
+get_docker_vars_script ${BASH_SOURCE[0]}
+source $DOCKER_NAME
+print_docker_vars
+
+# Setup Jupyter Lab environment.
+setup_jupyter_environment
 
 # Initialize Jupyter Lab command with base configuration.
-JUPYTER_ARGS=(
-    "--port=8888"
-    "--no-browser"
-    "--ip=0.0.0.0"
-    "--allow-root"
-    "--ServerApp.token=''"
-    "--ServerApp.password=''"
-)
-
-# Note: jupyterlab-vim extension can be disabled via JupyterLab settings if needed.
+JUPYTER_ARGS=$(get_jupyter_args)
 
 # Start Jupyter Lab with development-friendly settings.
-jupyter lab "${JUPYTER_ARGS[@]}"
-
-# Alternative: Use classic Jupyter Notebook instead of Jupyter Lab.
-#jupyter-notebook \
-#    --port=8888 \
-#    --no-browser --ip=0.0.0.0 \
-#    --allow-root \
-#    --NotebookApp.token='' \
-#    --NotebookApp.password=''
+run "jupyter lab $JUPYTER_ARGS"

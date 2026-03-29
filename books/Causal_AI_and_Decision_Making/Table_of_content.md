@@ -3,7 +3,8 @@
 ## Part I — The Practitioner's Case for Causal AI
 
 ### 1: The Limits of Prediction
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+[Slides: Lesson08.1-Causal_AI_intro](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
+
 - What ML systems can and cannot tell you
 - Correlation, association, and the illusion of understanding
 - Three kinds of questions: association, intervention, counterfactual (Pearl's ladder)
@@ -11,7 +12,8 @@
 - TUTORIAL: DoWhy (end-to-end causal reasoning from observational data)
 
 ### 2: From Prediction Pipelines to Decision Pipelines
-// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
+[Slides: Lesson02.2-ML_Paradigms](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf)
+
 - How production ML systems make decisions today
 - Feedback loops and distribution shift
 - Optimization vs. inference vs. decision theory
@@ -22,8 +24,8 @@
 ## Part II — Foundations of Causal Inference
 
 ### 3: Causality vs. Correlation
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt
+[Slides: Lesson08.1-Causal_AI_intro](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf) | [Lesson08.2-Causal_Networks](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf)
+
 - Spurious correlations and Simpson's paradox
 - Confounding variables and colliders
 - Causal questions vs. predictive questions
@@ -32,8 +34,8 @@
 - TUTORIAL: CausalImpact (detecting causal impact of interventions vs. spurious trends)
 
 ### 4: Structural Causal Models
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+[Slides: Lesson08.2-Causal_Networks](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf) | [Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - Causal graphs (DAGs) as a reasoning formalism
 - Structural equations and functional causal models
 - Interventions and the do-operator
@@ -44,8 +46,8 @@
 - TUTORIAL: Dagitty (DAG creation and causal effect identification)
 
 ### 5: Counterfactual Reasoning
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+[Slides: Lesson08.1-Causal_AI_intro](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf) | [Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - What is a counterfactual
 - Counterfactuals vs. interventions: the three rungs of the ladder of causation
 - Computing counterfactuals from structural causal models
@@ -55,7 +57,8 @@
 - TUTORIAL: DiCE (diverse counterfactual explanations for ML models)
 
 ### 6: Causal Identification
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+[Slides: Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - The identification problem: when can we estimate causal effects from data?
 - Backdoor and frontdoor criteria
 - Instrumental variables and natural experiments
@@ -85,7 +88,8 @@
 - TUTORIAL: IBM Causal Inference 360 (sensitivity analysis for observational studies)
 
 ### 9: A/B Testing, Experimentation, and Causal Inference in Practice
-// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+[Slides: Lesson09.3-Multi_Armed_Bandits](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+
 - Randomization and its relationship to causal identification
 - A/B testing, switchback experiments, and their limits
 - When to use observational methods vs. experiments
@@ -98,7 +102,8 @@
 ## Part III — Causal Methods in Practice
 
 ### 10: Causal Inference for Time Series
-// msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
+[Slides: Lesson10-Timeseries_forecasting](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
+
 - Time series vs. cross-sectional causal inference
 - Granger causality: definition, assumptions, and limitations
 - Interrupted time series (ITS) and regression discontinuity
@@ -141,7 +146,8 @@
 ## Part IV — Explainability
 
 ### 14: Explainability Methods: What They Do and Do Not Tell You
-// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
+[Slides: Lesson11-Probabilistic_deep_learning](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+
 - Why practitioners reach for explainability first
 - Black box models, regulation, and trust
 - Model-specific interpretability: linear models, decision trees, GAMs
@@ -156,8 +162,8 @@
 - TUTORIAL: LIME (local interpretable model-agnostic explanations)
 
 ### 15: Causal Explainability and Algorithmic Recourse
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
-// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
+[Slides: Lesson08.1-Causal_AI_intro](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf) | [Lesson11-Probabilistic_deep_learning](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+
 - Causal SHAP and causal attribution methods
 - Counterfactual explanations and actionable recourse
 - Why explainability methods must be interpreted through a causal lens
@@ -168,10 +174,8 @@
 ## Part V — Decision-Making Under Uncertainty
 
 ### 16: Decision Theory and Bayesian Decision Making
-// msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
-// msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
-// msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
-// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+[Slides: Lesson07.1-Intro_to_Probabilistic_Programming](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.1-Intro_to_Probabilistic_Programming.pdf) | [Lesson07.2-Posterior_Based_Decisions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.2-Posterior_Based_Decisions.pdf) | [Lesson07.5-Bayesian_Model_Comparison](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.5-Bayesian_Model_Comparison.pdf) | [Lesson09.3-Multi_Armed_Bandits](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+
 - Utility theory, loss functions, and expected utility
 - Risk preferences and risk-aware decisions
 - Multi-criteria decisions and trade-offs
@@ -185,7 +189,8 @@
 - TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
 
 ### 17: Probabilistic Forecasting and Uncertainty Quantification
-// msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
+[Slides: Lesson10-Timeseries_forecasting](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
+
 - Time series decomposition: trend, seasonality, residuals
 - Classical models: ARIMA, SARIMA, exponential smoothing
 - Machine learning models: XGBoost, LightGBM on time features
@@ -198,7 +203,8 @@
 - TUTORIAL: NeuralForecast (deep learning models for probabilistic time series)
 
 ### 18: Reinforcement Learning and Sequential Decisions
-// msml610/lectures_source/Lesson12-Reinforcement_learning.txt
+[Slides: Lesson12-Reinforcement_learning](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
+
 - Markov decision processes
 - Partially observable MDPs (POMDPs) and belief states
 - Exploration vs. exploitation
@@ -209,7 +215,8 @@
 - TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
 
 ### 19: Causal Decision Making
-// msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt
+[Slides: Lesson08.5-Causal_AI_In_Business](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
+
 - Why causal models are required for interventional decisions
 - Decision diagrams and influence diagrams
 - Policy interventions, uplift, and treatment policies
@@ -250,20 +257,26 @@
 
 ## Appendix (online)
 
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt, msml610/lectures_source/Lesson08.2-Causal_Networks.txt, msml610/lectures_source/Lesson08.3-Do_Calculus.txt
 - A: Mathematical foundations of causal inference
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt
+  [Slides: Lesson08.1-Causal_AI_intro](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf) | [Lesson08.2-Causal_Networks](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf) | [Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - B: DAG notation, d-separation rules, and identification algorithms
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt, msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+  [Slides: Lesson08.2-Causal_Networks](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf) | [Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - C: Potential outcomes framework reference
-// msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt, msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt, msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt, msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt, msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
+  [Slides: Lesson08.2-Causal_Networks](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf) | [Lesson08.3-Do_Calculus](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - D: Bayesian statistics refresher
-// msml610/lectures_source/Lesson97.Refresher_numerical_optimization.txt
+  [Slides: Lesson07.1-Intro_to_Probabilistic_Programming](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.1-Intro_to_Probabilistic_Programming.pdf) | [Lesson07.2-Posterior_Based_Decisions](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.2-Posterior_Based_Decisions.pdf) | [Lesson07.3-Hierarchical_Models](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.3-Hierarchical_Models.pdf) | [Lesson07.4-Generalized_Linear_Models](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.4-Generalized_Linear_Models.pdf) | [Lesson07.5-Bayesian_Model_Comparison](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.5-Bayesian_Model_Comparison.pdf)
+
 - E: Optimization methods
-// msml610/lectures_source/Lesson12-Reinforcement_learning.txt
+  [Slides: Lesson97.Refresher_numerical_optimization](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson97.Refresher_numerical_optimization.pdf)
+
 - F: Reinforcement learning math
-// msml610/lectures_source/Lesson10-Timeseries_forecasting.txt, msml610/lectures_source/Lesson96.Refresher_stochastic_processes.txt
+  [Slides: Lesson12-Reinforcement_learning](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
+
 - G: Time series math: stationarity, spectral analysis, state space representations
+  [Slides: Lesson10-Timeseries_forecasting](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf) | [Lesson96.Refresher_stochastic_processes](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson96.Refresher_stochastic_processes.pdf)
 // Not covered
 - H: Python ecosystem guide (tools, libraries, comparison table)
 // Not covered
