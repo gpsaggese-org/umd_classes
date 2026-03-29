@@ -48,8 +48,8 @@ tool.
 ### Discovering Your Content
 View all available skills in your system (displaying skill names only):
 ```bash
-> dev_scripts_helpers/mdm skill list
-> dev_scripts_helpers/mdm sk l
+> mdm skill list
+> mdm sk l
 ```
 
 Shows all skills by name (e.g., `blog.add_figures`,
@@ -59,8 +59,8 @@ you half-remember.
 ### Full Path Listing
 Display all files with their complete filesystem paths:
 ```bash
-> dev_scripts_helpers/mdm skill full_list
-> dev_scripts_helpers/mdm res f
+> mdm skill full_list
+> mdm res f
 ```
 
 Useful when you need the absolute path for scripting or batch operations.
@@ -68,7 +68,7 @@ Useful when you need the absolute path for scripting or batch operations.
 ### Creating and Editing Content
 Create a new blog post or edit an existing one:
 ```bash
-> dev_scripts_helpers/mdm blog edit My_New_Post
+> mdm blog edit My_New_Post
 ```
 
 The editor opens directly to the file, whether it exists or not. If the file
@@ -79,8 +79,8 @@ receive a summary section header.
 ### Pattern-Based Searching
 Find all research notes related to causality:
 ```bash
-> dev_scripts_helpers/mdm research list causal
-> dev_scripts_helpers/mdm res l causal
+> mdm research list causal
+> mdm res l causal
 ```
 
 Pattern matching works across all content types, enabling quick discovery
@@ -89,7 +89,7 @@ without manually browsing directories.
 ### Accessing Directories
 Retrieve the full path to a content type's directory:
 ```bash
-> dev_scripts_helpers/mdm sk dir
+> mdm sk dir
 ```
 
 Useful when you need direct filesystem access or want to perform batch
@@ -105,14 +105,14 @@ complete term:
 - Action shortcuts: `l` → `list`, `f` → `full_list`, `e` → `edit`, `d` →
   `directory`
 
-So `dev_scripts_helpers/mdm sk l` works the same as
-`dev_scripts_helpers/mdm skill list`.
+So `mdm sk l` works the same as
+`mdm skill list`.
 
 ## Batch Operations
 When refactoring or coordinating updates across related documentation, the
 `edit` action supports simultaneous editing of multiple files:
 ```bash
-> dev_scripts_helpers/mdm skill edit notebook.utils_library notebook.split_cells
+> mdm skill edit notebook.utils_library notebook.split_cells
 ```
 
 Both files open at once, so you can sync changes across related documentation
@@ -129,9 +129,9 @@ post or skill gets initialized with the right structure already in place.
 ## Getting Started
 Run these three commands and you'll have the idea:
 ```bash
-> dev_scripts_helpers/mdm skill list      # View all available skills
-> dev_scripts_helpers/mdm blog edit My_First_Post  # Create and open a new blog post
-> dev_scripts_helpers/mdm research list   # List all research items
+> mdm skill list      # View all available skills
+> mdm blog edit My_First_Post  # Create and open a new blog post
+> mdm research list   # List all research items
 ```
 
 For more, `--help` has the full details.
