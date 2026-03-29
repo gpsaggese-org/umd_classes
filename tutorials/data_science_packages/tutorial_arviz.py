@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -92,7 +93,7 @@ print("vals.shape=", vals.shape)
 print("vals=", vals)
 
 # Plot PDF.
-az.plot_posterior(vals);
+az.plot_posterior(vals)
 
 # %%
 # `arviz` interprets a 2d array as "chain x draws".
@@ -101,7 +102,7 @@ size = (10, 50)
 vals = np.random.randn(*size)
 
 # When plotting all the samples are flattened.
-az.plot_posterior(vals);
+az.plot_posterior(vals)
 
 # %%
 # /venv/lib/python3.9/site-packages/arviz/plots/backends/matplotlib/forestplot.py:545: UserWarning: The `squeeze` kwarg to GroupBy is being
@@ -119,16 +120,16 @@ data = {
     # "student t": np.random.standard_t(df=6, size=size),
     # "exponential": np.random.exponential(size=size),
 }
-az.plot_forest(data);
+az.plot_forest(data)
 # There are several RVs, each with 5 realizations, each realization with 50 samples.
 
 # %%
 az.plot_posterior(data["normal"][0])
-az.plot_posterior(data["normal"][1]);
+az.plot_posterior(data["normal"][1])
 
 # %%
 # data["normal"] is a 10 chains x 50 samples, but when plotting all the data is concat.
-az.plot_posterior(data["normal"]);
+az.plot_posterior(data["normal"])
 
 # %% [markdown]
 # ### PyMC integration

@@ -18,11 +18,6 @@
 #
 # ## Learn LangChain in 60 Minutes — examples notebook
 #
-# This is the **end-to-end** companion to `langchain.API.ipynb`.
-#
-# If you’re brand new, it can help to skim the API notebook first so the names feel familiar.
-# Then come back here for the patterns that make things “click” in real apps.
-#
 # What you’ll build (incrementally):
 # - a tool-calling agent loop
 # - LangGraph workflows: state, routing, reducers, and a ReAct loop from scratch
@@ -30,279 +25,73 @@
 # - memory boundaries via checkpointers
 # - human-in-the-loop interrupts + resume
 # - Deep Agents demos (todos/filesystem/subagents/HITL/sandboxing)
-#
-# Same note as the API notebook: some cells call an LLM (cost). It’s always okay to pause, read, and only run what you’re comfortable with.
-#
 
 # %% [markdown]
 # # Imports
-#
-# This notebook shares the same setup pattern as `langchain.API.ipynb`.
-#
-# Run from `tutorials/LangChain_LangGraph` so local paths and helper utilities resolve exactly as written.
-#
 
 # %%
-# This cell will:
-# - Enable auto-reloading so edits are picked up without restarting the kernel.
 # %load_ext autoreload
 # %autoreload 2
 
-import os
-import sys
-import importlib
 
+import langchain
+import langchain_core
 
-def _require_import(module_name: str):
-    try:
-        return importlib.import_module(module_name)
-    except ModuleNotFoundError as e:
-        raise RuntimeError(
-            f"""Missing Python package {module_name!r}.
+import langchain_API_utils as ut
 
-This tutorial is meant to be run from `tutorials/LangChain_LangGraph` with its pinned dependencies.
+# Initialize logger.
+_LOG = ut.init_logger("learn_langchain.api")
 
-Quick fixes:
-- Docker (recommended): `cd tutorials/LangChain_LangGraph && docker compose up --build`
-- Local venv: `cd tutorials/LangChain_LangGraph && pip install -r requirements.txt`
-"""
-        ) from e
-
-
-langchain = _require_import("langchain")
-langchain_core = _require_import("langchain_core")
-langgraph = _require_import("langgraph")
+ut.print_environment_info()
 
 
 # %%
-# This cell will:
-# - Configure logging and print environment/version info for debugging.
-import logging
-import platform
+# Customize langchain.env to configure model.
+import dotenv
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s - %(message)s"
-)
-_LOG = logging.getLogger("learn_langchain.examples")
-
-_LOG.info("python=%s", sys.version.split()[0])
-_LOG.info("platform=%s", platform.platform())
-_LOG.info("langchain=%s", getattr(langchain, "__version__", "unknown"))
-_LOG.info("langchain_core=%s", getattr(langchain_core, "__version__", "unknown"))
-_LOG.info("langgraph=%s", getattr(langgraph, "__version__", "unknown"))
-_LOG.info("LLM_PROVIDER=%s", os.getenv("LLM_PROVIDER", "(unset)"))
-
-
-# %% [markdown]
-# ## Model (configured via `.env`)
-#
-# We reuse the same `.env`-driven model factory as the API notebook.
-#
-# Supported now:
-# - `openai`
-# - `anthropic`
-# - optional `ollama` (install `langchain-ollama` first)
-#
-# Optional observability:
-# - set `LANGSMITH_TRACING=true` (+ `LANGSMITH_API_KEY`) to trace runs in LangSmith
-#
-# Tip: start with a smaller/cheaper model while learning, then switch models later.
-#
+dotenv.load_dotenv("langchain.env")
 
 # %%
-# This cell will:
-# - Define a small `.env`-driven factory to create the chat model.
-import os
-from dataclasses import dataclass
-
-from dotenv import load_dotenv
-
-load_dotenv()
-
-
-# #############################################################################
-# LlmConfig
-# #############################################################################
-
-
-@dataclass(frozen=True)
-class LlmConfig:
-    """
-    Configuration for selecting an LLM provider + model from environment variables.
-    """
-
-    provider: str
-    model: str
-    temperature: float
-
-
-def _require_env(var_name: str) -> str:
-    """
-    Return the value of `var_name` from environment variables or raise.
-    """
-    value = os.getenv(var_name)
-    if not value:
-        raise RuntimeError(
-            f"Missing required environment variable `{var_name}`. See `.env.example`."
-        )
-    return value
-
-
-def load_llm_config() -> LlmConfig:
-    """
-    Load `LlmConfig` from environment variables.
-    """
-    provider = _require_env("LLM_PROVIDER").lower()
-    temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
-
-    default_models = {
-        "openai": "gpt-4.1-mini",
-        "anthropic": "claude-3-5-sonnet-latest",
-        "ollama": "llama3.1:8b",
-    }
-    model = os.getenv("LLM_MODEL", default_models.get(provider, ""))
-    if not model:
-        raise RuntimeError(
-            f"Missing `LLM_MODEL` for provider={provider!r}. See `.env.example`."
-        )
-
-    cfg = LlmConfig(provider=provider, model=model, temperature=temperature)
-    return cfg
-
-
-def get_chat_model():
-    """
-    Create a tool-calling-capable chat model using env configuration.
-    """
-    cfg = load_llm_config()
-
-    if cfg.provider == "openai":
-        from langchain_openai import ChatOpenAI
-
-        _require_env("OPENAI_API_KEY")
-        model = ChatOpenAI(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            timeout=60,
-            max_retries=2,
-        )
-        return model
-
-    if cfg.provider == "anthropic":
-        from langchain_anthropic import ChatAnthropic
-
-        _require_env("ANTHROPIC_API_KEY")
-        model = ChatAnthropic(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            timeout=60,
-            max_retries=2,
-        )
-        return model
-
-    if cfg.provider == "ollama":
-        try:
-            from langchain_ollama import ChatOllama
-        except ModuleNotFoundError as e:
-            raise RuntimeError(
-                "`LLM_PROVIDER=ollama` requires `langchain-ollama`. "
-                "Install it with `pip install langchain-ollama` and retry."
-            ) from e
-
-        base_url = os.getenv(
-            "OLLAMA_BASE_URL", "http://host.docker.internal:11434"
-        )
-        model = ChatOllama(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            base_url=base_url,
-        )
-        return model
-
-    raise ValueError(
-        f"Unsupported `LLM_PROVIDER={cfg.provider}`. Use one of: openai, anthropic, ollama."
-    )
-
-
-if os.getenv("LANGSMITH_TRACING", "").strip().lower() in {"1", "true", "yes"}:
-    _LOG.info("LangSmith tracing requested (LANGSMITH_TRACING=true).")
-
-
-# %%
-# This cell will:
-# - Instantiate the chat model from your `.env` configuration.
-llm = get_chat_model()
+llm = ut.get_chat_model()
 llm
 
 
-# %% [markdown]
-# ## Local dataset (`data/T1_slice.csv`)
-#
-# We keep the examples grounded by using a small CSV that lives in this folder.
-#
-# Just like in the API notebook, we also copy it into `./workspace/data/` so that sandboxed filesystem tools can refer to it as `/workspace/data/T1_slice.csv`.
-#
-
 # %%
-# This cell will:
-# - Load the local dataset into a Pandas DataFrame and prepare the time column.
-# - Copy the dataset under `./workspace/data/` so Deep Agents can access it via `/workspace/...`.
 from pathlib import Path
-import shutil
 
 import pandas as pd
 
 DATASET_PATH = Path("data/T1_slice.csv").resolve()
 df = pd.read_csv(DATASET_PATH)
+
+# Parse the time column to datetime for proper time-series handling.
 TIME_COL = "Date/Time"
 if TIME_COL in df.columns:
     df[TIME_COL] = pd.to_datetime(
         df[TIME_COL], format="%d %m %Y %H:%M", errors="coerce"
     )
 
-# Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
-WORKSPACE_DIR = Path("workspace").resolve()
-WORKSPACE_DATA_DIR = WORKSPACE_DIR / "data"
-WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
-WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
-if not WORKSPACE_DATASET_PATH.exists():
-    shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
+print(f"Loaded dataset from {DATASET_PATH}")
+print(f"Shape: {df.shape}")
 df.head(5)
 
 
 # %%
-# This cell will:
-# - Build compact, JSON-serializable metadata and sample rows to pass into prompts.
-def build_dataset_meta(df) -> dict:
-    """
-    Build a compact JSON-serializable dataset metadata dict for demos.
-    """
-    cols = list(df.columns)
-    dtypes = {c: str(df[c].dtype) for c in cols}
-    sample_rows = df.head(3).to_dict(orient="records")
-    freq = None
-    if "Date/Time" in df.columns:
-        ts = df["Date/Time"].dropna().sort_values()
-        if len(ts) >= 3:
-            # Estimate the most common sampling delta.
-            deltas = ts.diff().dropna()
-            freq = str(deltas.value_counts().idxmax())
-    meta = {
-        "path": "data/T1_slice.csv",
-        "workspace_path": "workspace/data/T1_slice.csv",
-        "tool_path": "/workspace/data/T1_slice.csv",
-        "n_rows": int(df.shape[0]),
-        "n_cols": int(df.shape[1]),
-        "columns": cols,
-        "dtypes": dtypes,
-        "sample_rows": sample_rows,
-        "time_col": "Date/Time" if "Date/Time" in df.columns else None,
-        "freq": freq,
-    }
-    return meta
+import shutil
 
+# Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
+WORKSPACE_DIR = Path("workspace").resolve()
+WORKSPACE_DATA_DIR = WORKSPACE_DIR / "data"
+WORKSPACE_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-DATASET_META = build_dataset_meta(df)
+WORKSPACE_DATASET_PATH = WORKSPACE_DATA_DIR / "T1_slice.csv"
+if not WORKSPACE_DATASET_PATH.exists():
+    shutil.copyfile(str(DATASET_PATH), str(WORKSPACE_DATASET_PATH))
+
+print(f"Dataset available to sandbox tools at {WORKSPACE_DATASET_PATH}")
+
+# %%
+DATASET_META = ut.build_dataset_meta(df)
 DATASET_META
 
 
@@ -318,8 +107,6 @@ DATASET_META
 #
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
 import matplotlib.pyplot as plt
 
 print("shape:", df.shape)
@@ -363,30 +150,45 @@ if "Date/Time" in df.columns and pd.api.types.is_datetime64_any_dtype(
 #
 
 # %%
-# This cell will:
-# - Build a tiny docs index from this folder's markdown files.
-# - Run a retrieval-grounded QA query over that index.
 import langchain_utils as tut_utils
 
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnablePassthrough
-
+# Define the tutorial documentation files that will be indexed for RAG retrieval.
 docs_paths = [
     Path("README.md"),
     Path("langchain.API.md"),
     Path("langchain.example.md"),
 ]
+
+# Load and parse markdown documents from disk.
 raw_docs = tut_utils.load_markdown_documents(docs_paths)
+
+# Split documents into overlapping chunks for dense retrieval and context window limits.
 chunked_docs = tut_utils.split_documents(
     raw_docs, chunk_size=900, chunk_overlap=120
 )
 
+print(f"Loaded {len(raw_docs)} documents")
+print(f"Split into {len(chunked_docs)} chunks")
+
+
+# %%
+# Initialize embeddings model and build vector store for semantic search.
 embeddings = tut_utils.make_embeddings()
 docs_store = tut_utils.build_vector_store(chunked_docs, embeddings)
+
+# Create a retriever that fetches the top 3 most relevant chunks for each query.
 retriever = docs_store.as_retriever(search_kwargs={"k": 3})
 
-rag_prompt = ChatPromptTemplate.from_template(
+print(f"Vector store built with {len(chunked_docs)} embedded chunks")
+print("Retriever ready for semantic search")
+
+# %%
+import langchain_core.output_parsers
+import langchain_core.prompts
+import langchain_core.runnables
+
+# Define the RAG system prompt that grounds answers in retrieved documentation.
+rag_prompt = langchain_core.prompts.ChatPromptTemplate.from_template(
     """You are answering from retrieved tutorial docs.
 Use only the provided context. If context is insufficient, say so.
 
@@ -398,26 +200,37 @@ Question:
 """
 )
 
+# Compose the RAG chain: retrieve docs → format context → prompt LLM → parse output.
 rag_chain = (
     {
         "context": retriever | tut_utils.format_docs,
-        "question": RunnablePassthrough(),
+        "question": langchain_core.runnables.RunnablePassthrough(),
     }
     | rag_prompt
     | llm
-    | StrOutputParser()
+    | langchain_core.output_parsers.StrOutputParser()
 )
 
+print("RAG chain built and ready to invoke")
+
+# %%
+# Invoke the RAG chain with a question about the tutorial content.
 rag_question = "How do HITL interrupts and resume work in this tutorial?"
 rag_answer = rag_chain.invoke(rag_question)
+
+# Print answer and trace which docs were retrieved to support it.
+print("Answer (first 900 chars):")
 print(rag_answer[:900])
-print(
-    "sources:",
-    [d.metadata.get("source") for d in retriever.invoke(rag_question)],
-)
+print("\n" + "=" * 60)
 
+# Show which documentation files were used to answer the question.
+sources = [d.metadata.get("source") for d in retriever.invoke(rag_question)]
+print(f"\nSources used: {sources}")
+
+# %%
+# Take a checksum snapshot of the current docs for change detection in incremental refresh.
 docs_snapshot = tut_utils.snapshot_checksums(docs_paths)
-
+print(f"Snapshot created for {len(docs_paths)} documentation files")
 
 # %% [markdown]
 # ### Incremental docs refresh
@@ -429,9 +242,6 @@ docs_snapshot = tut_utils.snapshot_checksums(docs_paths)
 #
 
 # %%
-# This cell will:
-# - Simulate a docs change and detect it via checksum diff.
-# - Incrementally upsert changed chunks into the existing docs store.
 refresh_doc = Path("tmp_runs/docs_refresh_demo.md")
 refresh_doc.parent.mkdir(parents=True, exist_ok=True)
 refresh_doc.write_text(
@@ -474,18 +284,16 @@ print(
 #
 
 # %%
-# This cell will:
-# - Run the next step of the end-to-end example.
-from datetime import datetime, timezone
+import datetime
 import math
 
-from langchain_core.tools import tool
+import langchain_core.tools
 
 
-@tool
+@langchain_core.tools.tool
 def utc_now() -> str:
     """Return the current UTC time as an ISO string."""
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.datetime.now(datetime.timezone.utc).isoformat()
 
 
 @tool
@@ -521,12 +329,10 @@ def sqrt(x: float) -> float:
 #
 
 # %%
-# This cell will:
-# - Create a tool-calling agent using `create_agent(...)`.
-from langchain_core.messages import HumanMessage
-from langchain.agents import create_agent
+import langchain_core.messages
+import langchain.agents
 
-agent = create_agent(
+agent = langchain.agents.create_agent(
     model=llm,
     tools=[utc_now, mean, sqrt],
     system_prompt=(
@@ -537,7 +343,7 @@ agent = create_agent(
 
 inputs = {
     "messages": [
-        HumanMessage(
+        langchain_core.messages.HumanMessage(
             content="Compute mean([1,2,3,4,10]) and sqrt(49). Also tell me the current UTC time."
         )
     ]
@@ -547,19 +353,3 @@ final_state = agent.invoke(inputs)
     (type(m).__name__, getattr(m, "content", "")[:120])
     for m in final_state["messages"]
 ][-4:]
-
-
-# %% [markdown]
-# ## Practical limitations + next hardening steps
-#
-# Current tutorial scope (intentional):
-# - examples favor readability over full production controls
-# - some outputs vary by model/provider
-# - in-memory stores are convenient but not durable across process restarts
-#
-# Production-oriented upgrades:
-# - persistent vector/checkpoint stores and stronger access controls
-# - policy checks for sensitive tools before execution
-# - stricter evals around tool-call correctness + failure recovery
-# - broader observability (LangSmith traces + metrics/logging)
-#

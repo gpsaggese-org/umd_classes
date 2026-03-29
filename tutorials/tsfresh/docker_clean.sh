@@ -1,6 +1,10 @@
 #!/bin/bash
 # """
-# Remove the Docker container image for the tsfresh tutorial.
+# Remove Docker container image for the project.
+#
+# This script cleans up Docker images by removing the container image
+# matching the project configuration. Useful for freeing disk space or
+# ensuring a fresh build.
 # """
 
 # Exit immediately if any command exits with a non-zero status.

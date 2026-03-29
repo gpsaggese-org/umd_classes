@@ -37,12 +37,10 @@ RUN python -m pip install --upgrade pip
 #COPY pyproject.toml uv.lock /app/
 #RUN uv sync
 
-# Install Jupyter.
-RUN pip3 install jupyterlab jupyterlab_vim
-
 # Install project specific packages.
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r requirements.txt
 
 RUN mkdir /install
 

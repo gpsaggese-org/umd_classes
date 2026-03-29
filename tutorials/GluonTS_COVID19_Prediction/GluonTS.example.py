@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -61,7 +62,7 @@ print("Setup complete. Ready to forecast COVID-19 cases.")
 #
 # Our data pipeline loads and merges:
 # - **Cases**: Daily confirmed COVID-19 cases
-# - **Deaths**: Daily COVID-19 deaths 
+# - **Deaths**: Daily COVID-19 deaths
 # - **Mobility**: Google mobility data (6 metrics showing how people moved during the pandemic)
 #
 # All data is aggregated to the **national (US) level** for this example.
@@ -125,7 +126,7 @@ gluonts.plot_data_exploration(data["merged_df"])
 #
 # 1. **Daily_Cases_MA7**: 7-day moving average of cases (smooths noisy daily data)
 # 2. **Daily_Deaths**: Raw daily death counts
-# 3. **Daily_Deaths_MA7**: 7-day moving average of deaths 
+# 3. **Daily_Deaths_MA7**: 7-day moving average of deaths
 # 4. **Cumulative_Deaths**: Total deaths up to each date
 # 5. **CFR (Case Fatality Ratio)**: Deaths / Cases ratio (severity indicator)
 # 6. **Mobility Metrics**: 6 Google mobility indicators
@@ -296,7 +297,7 @@ gluonts.plot_model_comparison_3panel(
 #
 # ## 6. Scenario Analysis: Simulating Interventions
 #
-# One of the most powerful applications of forecasting is **scenario analysis** - 
+# One of the most powerful applications of forecasting is **scenario analysis** -
 # answering "what if?" questions about public health interventions.
 #
 # ### Why Scenario Analysis Matters
@@ -306,7 +307,7 @@ gluonts.plot_model_comparison_3panel(
 # - "What happens if we reopen schools and businesses?"
 # - "How does hospital capacity affect outcomes?"
 #
-# Our models can help answer these questions by **modifying the input features** 
+# Our models can help answer these questions by **modifying the input features**
 # (mobility, CFR) and re-running forecasts under different assumptions.
 #
 # ### The Five Scenarios
@@ -451,7 +452,7 @@ print_policy_insights(scenario_results)
 # - Perform scenario analysis for decision support
 # - Generate actionable insights from forecasts
 #
-# **Ready to apply these skills to your own forecasting problems?** 
+# **Ready to apply these skills to your own forecasting problems?**
 
 # %% [markdown]
 # ---
