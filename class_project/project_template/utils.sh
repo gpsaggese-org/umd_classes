@@ -513,7 +513,7 @@ configure_jupyter_autosave() {
     mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/docmanager-extension
     cat <<EOF > ~/.jupyter/lab/user-settings/\@jupyterlab/docmanager-extension/plugin.jupyterlab-settings
 {
-    "autosaveInterval": 6000
+    "autosaveInterval": 6
 }
 EOF
 }
