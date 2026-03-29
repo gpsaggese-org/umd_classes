@@ -1,6 +1,9 @@
-#!/bin/bash -e
+#!/bin/bash
 # """
-# Execute a bash shell in a running tsfresh Docker container.
+# Execute a bash shell in a running Docker container.
+#
+# This script connects to an already running Docker container and opens an
+# interactive bash session for debugging or inspection purposes.
 # """
 
 # Exit immediately if any command exits with a non-zero status.

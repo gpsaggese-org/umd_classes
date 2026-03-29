@@ -26,7 +26,7 @@ run "docker image ls $FULL_IMAGE_NAME"
 # - Container is removed automatically on exit (--rm)
 # - Interactive mode with TTY allocation (-ti)
 # - Port forwarding for Jupyter and PostgreSQL services
-# - Current directory mounted to /data inside container
+# - Git root mounted to /git_root inside container
 CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=""
 DOCKER_CMD=$(get_docker_bash_command)

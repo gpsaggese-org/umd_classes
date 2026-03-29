@@ -26,16 +26,12 @@
 # Why include this in a LangChain/LangGraph tutorial?
 # Because “agents that write and run notebooks” is a surprisingly practical workflow for data work.
 # We’ll keep the demos safe: everything writes under `tmp_runs/`.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 from pathlib import Path
 
 import nbformat
-from nbformat import validate
-from nbclient import NotebookClient
+import nbclient
 
 run_dir = Path("tmp_runs").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
@@ -46,14 +42,14 @@ nb.cells = [
     nbformat.v4.new_code_cell("x = 2 + 3\nprint(x)"),
     nbformat.v4.new_code_cell("import math\nprint(math.sqrt(81))"),
 ]
-validate(nb)
+nbformat.validate(nb)
 
 in_path = run_dir / "smoke_in.ipynb"
 out_path = run_dir / "smoke_out.ipynb"
 nbformat.write(nb, str(in_path))
 
 nb2 = nbformat.read(str(in_path), as_version=4)
-client = NotebookClient(
+client = nbclient.NotebookClient(
     nb2, resources={"metadata": {"path": str(run_dir)}}, timeout=60
 )
 client.execute()
@@ -68,11 +64,8 @@ str(out_path)
 # We’ll build a tiny notebook in memory (a title + a code cell), then write it to disk.
 #
 # This is the first building block for “notebook automation” — generating a notebook artifact from a structured spec.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
 # write_notebook is defined in langchain.API_utils.
 spec = {
     "cells": [
@@ -93,25 +86,20 @@ ut.write_notebook.invoke({"spec": spec, "out_rel": "demo/tool_hello.ipynb"})
 # - so we often want a *controlled* workspace root
 #
 # You’ll see us use an injected workspace directory so the graph can safely read/write only where we intend.
-#
 
 # %%
-# This cell will:
-# - Build and compile a `StateGraph` (a small LangGraph workflow).
-# - Use `ToolNode` to execute tool calls inside a graph.
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-# nb_write, nb_run, nb_extract_errors, nb_extract_artifacts, nb_list_files, ToolGraphState
-# are defined in langchain.API_utils.
 from pathlib import Path
 
-from langchain_core.messages import AIMessage
-from langgraph.graph import START, END, StateGraph
-from langgraph.prebuilt import ToolNode
+import langchain_core.messages
+import langgraph.graph
+import langgraph.prebuilt
 
+# Create workspace directory for notebook tool operations.
 workspace = Path("tmp_runs/ipynb_tools_workspace").resolve()
 workspace.mkdir(parents=True, exist_ok=True)
 
-tool_node = ToolNode(
+# Assemble ToolNode with all notebook operation tools from utils.
+tool_node = langgraph.prebuilt.ToolNode(
     [
         ut.nb_write,
         ut.nb_run,
@@ -120,12 +108,19 @@ tool_node = ToolNode(
         ut.nb_list_files,
     ]
 )
-g = StateGraph(ut.ToolGraphState)
+
+# Build a simple StateGraph with one tool execution node.
+g = langgraph.graph.StateGraph(ut.ToolGraphState)
 g.add_node("tools", tool_node)
-g.add_edge(START, "tools")
-g.add_edge("tools", END)
+g.add_edge(langgraph.graph.START, "tools")
+g.add_edge("tools", langgraph.graph.END)
 graph = g.compile()
 
+print(f"Graph compiled with workspace: {workspace}")
+
+
+# %%
+# Define the notebook spec: a simple markdown cell and code cell.
 spec = {
     "cells": [
         {"type": "markdown", "source": "# Tool-made notebook"},
@@ -133,14 +128,12 @@ spec = {
     ]
 }
 
-# IMPORTANT: Tool calls in a single ToolNode are not a dependency graph.
-# Execute dependent operations in separate invocations for deterministic behavior.
-
+# Invoke the tool to write the notebook to disk.
 out1 = graph.invoke(
     {
         "workspace_dir": str(workspace),
         "messages": [
-            AIMessage(
+            langchain_core.messages.AIMessage(
                 content="",
                 tool_calls=[
                     {
@@ -155,6 +148,11 @@ out1 = graph.invoke(
     }
 )
 
+print("Notebook written:")
+print(out1["messages"][-1].content)
+
+# %%
+# Execute the written notebook and capture the executed version.
 out2 = graph.invoke(
     {
         "workspace_dir": str(workspace),
@@ -178,6 +176,11 @@ out2 = graph.invoke(
     }
 )
 
+print("Notebook executed:")
+print(out2["messages"][-1].content)
+
+# %%
+# List all files created in the workspace to show what the tools produced.
 out3 = graph.invoke(
     {
         "workspace_dir": str(workspace),
@@ -197,12 +200,9 @@ out3 = graph.invoke(
     }
 )
 
-(
-    out1["messages"][-1].content,
-    out2["messages"][-1].content,
-    out3["messages"][-1].content[:200],
-)
-
+# Display summary of tool results.
+print("Files in workspace:")
+print(out3["messages"][-1].content[:400])
 
 # %% [markdown]
 # ### Execute notebooks + collect errors
@@ -212,22 +212,17 @@ out3 = graph.invoke(
 # - execution errors (if any)
 #
 # This is a friendly way to build “run this notebook and report back” pipelines.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-# extract_errors is defined in langchain.API_utils.
 from pathlib import Path
 
 import nbformat
-from nbformat import validate
-from nbclient import NotebookClient
 
+# Create directory for notebook execution test.
 run_dir = Path("tmp_runs/execute").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
 
-# Notebook that errors.
+# Build a notebook that intentionally errors to demonstrate error handling.
 nb_err = nbformat.v4.new_notebook()
 nb_err.cells = [
     nbformat.v4.new_markdown_cell("# Intentional error"),
@@ -235,13 +230,22 @@ nb_err.cells = [
     nbformat.v4.new_code_cell("1/0"),
     nbformat.v4.new_code_cell("print('after')"),
 ]
-validate(nb_err)
+nbformat.validate(nb_err)
+
+# Write notebook to disk.
 in_path = run_dir / "error_in.ipynb"
-out_path = run_dir / "error_out.executed.ipynb"
 nbformat.write(nb_err, str(in_path))
 
+print(f"Notebook with error saved to {in_path}")
+
+
+# %%
+import nbclient
+
+# Execute the error notebook with error tolerance enabled.
+out_path = run_dir / "error_out.executed.ipynb"
 nb = nbformat.read(str(in_path), as_version=4)
-client = NotebookClient(
+client = nbclient.NotebookClient(
     nb,
     timeout=60,
     allow_errors=True,
@@ -250,8 +254,13 @@ client = NotebookClient(
 client.execute()
 nbformat.write(nb, str(out_path))
 
-ut.extract_errors(nb)
+print(f"Executed notebook saved to {out_path}")
 
+# Extract and display errors from the executed notebook.
+errors = ut.extract_errors(nb)
+print(f"\nExtracted {len(errors)} errors:")
+for err in errors:
+    print(f"  - {err}")
 
 # %% [markdown]
 # ### Extract artifacts from executed notebooks (stdout + inline images)
@@ -261,14 +270,13 @@ ut.extract_errors(nb)
 # We’ll show a simple approach to pull a couple useful artifacts out of the executed notebook:
 # - printed output
 # - embedded images
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-import base64
-import json
+from pathlib import Path
 
+import nbformat
+
+# Create notebook with code that produces stdout and inline plot output.
 run_dir = Path("tmp_runs/artifacts").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -283,31 +291,47 @@ nb.cells = [
         "plt.show()\n"
     ),
 ]
+
+# Write and execute the notebook to generate outputs.
 in_nb = run_dir / "artifacts_in.ipynb"
 executed_nb = run_dir / "artifacts.executed.ipynb"
 nbformat.write(nb, str(in_nb))
 
+import nbclient
+
 nb2 = nbformat.read(str(in_nb), as_version=4)
-NotebookClient(
+nbclient.NotebookClient(
     nb2, timeout=120, resources={"metadata": {"path": str(run_dir)}}
 ).execute()
 nbformat.write(nb2, str(executed_nb))
 
+print(f"Executed notebook: {executed_nb}")
+
+
+# %%
+import base64
+import json
+
+# Extract all output artifacts (stdout, images, text results) from executed notebook.
 out_dir = run_dir / "out"
 out_dir.mkdir(parents=True, exist_ok=True)
 manifest = []
 
+# Iterate over code cells and their outputs to extract artifacts.
 for i, cell in enumerate(nb2.cells):
     if cell.get("cell_type") != "code":
         continue
     for j, out in enumerate(cell.get("outputs", [])):
+        # Extract stdout/stderr streams.
         if out.get("output_type") == "stream":
             txt = out.get("text", "")
             p = out_dir / f"cell_{i}_stream_{j}.txt"
             p.write_text(txt if isinstance(txt, str) else "".join(txt))
             manifest.append({"cell": i, "kind": "stream", "path": str(p)})
+        # Extract display and execution result data (text, images, etc).
         if out.get("output_type") in ("display_data", "execute_result"):
             data = out.get("data", {})
+            # Extract plain text representation.
             if "text/plain" in data:
                 t = data["text/plain"]
                 p = out_dir / f"cell_{i}_text_{j}.txt"
@@ -315,6 +339,7 @@ for i, cell in enumerate(nb2.cells):
                 manifest.append(
                     {"cell": i, "kind": "text/plain", "path": str(p)}
                 )
+            # Extract embedded PNG images.
             if "image/png" in data:
                 b64 = data["image/png"]
                 b = base64.b64decode(
@@ -324,13 +349,20 @@ for i, cell in enumerate(nb2.cells):
                 p.write_bytes(b)
                 manifest.append({"cell": i, "kind": "image/png", "path": str(p)})
 
+print(f"Extracted {len(manifest)} artifacts from {len(nb2.cells)} cells")
+
+# %%
+# Write manifest JSON file cataloging all extracted artifacts.
 (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
-{
+
+# Display summary of artifact extraction results.
+result = {
     "executed_nb": str(executed_nb),
     "n_artifacts": len(manifest),
     "manifest": str(out_dir / "manifest.json"),
 }
-
+print(f"Artifact summary: {len(manifest)} items extracted")
+print(f"Manifest written to: {out_dir / 'manifest.json'}")
 
 # %% [markdown]
 # ### Filesystem artifacts (notebooks that write files)
@@ -339,12 +371,9 @@ for i, cell in enumerate(nb2.cells):
 #
 # In the next cell we execute a notebook that writes files into a run directory, then list what it produced.
 # Everything stays under `tmp_runs/`.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-
+# Create a notebook that generates file outputs (CSV and PNG).
 run_dir = Path("tmp_runs/writes_files").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -371,17 +400,23 @@ nb.cells = [
 ]
 
 in_nb = run_dir / "writes_files.ipynb"
-out_nb = run_dir / "writes_files.executed.ipynb"
 nbformat.write(nb, str(in_nb))
 
+print(f"Notebook created at {in_nb}")
+
+
+# %%
+# Execute the notebook to generate file outputs.
+out_nb = run_dir / "writes_files.executed.ipynb"
 nb2 = nbformat.read(str(in_nb), as_version=4)
 NotebookClient(
     nb2, timeout=120, resources={"metadata": {"path": str(run_dir)}}
 ).execute()
 nbformat.write(nb2, str(out_nb))
 
-sorted([p.name for p in run_dir.iterdir() if p.is_file()])
-
+# List all files produced by the notebook execution.
+files = sorted([p.name for p in run_dir.iterdir() if p.is_file()])
+print(f"Executed notebook, generated files: {files}")
 
 # %% [markdown]
 # ### Parameterized runs (Papermill)
@@ -394,19 +429,16 @@ sorted([p.name for p in run_dir.iterdir() if p.is_file()])
 # - batch runs over multiple inputs
 #
 # We’ll do a tiny demo so you can see the mechanics.
-#
 
 # %%
-# This cell will:
-# - Demonstrate notebook operations (write/execute/parameterize notebooks).
-import papermill as pm
-
+# Create a notebook with a parameters cell for Papermill execution.
 run_dir = Path("tmp_runs/papermill").resolve()
 run_dir.mkdir(parents=True, exist_ok=True)
 
 nb = nbformat.v4.new_notebook()
 nb.cells = [
     nbformat.v4.new_markdown_cell("# Papermill demo"),
+    # Tag this cell as "parameters" so Papermill can inject values.
     nbformat.v4.new_code_cell(
         "# Parameters\nx = 1\ny = 2", metadata={"tags": ["parameters"]}
     ),
@@ -419,9 +451,15 @@ nb.metadata["kernelspec"] = {
 }
 
 in_nb = run_dir / "pm_in.ipynb"
-out_nb = run_dir / "pm_out.ipynb"
 nbformat.write(nb, str(in_nb))
 
+print(f"Parametrized notebook created at {in_nb}")
+
+# %%
+import papermill as pm
+
+# Execute the notebook with parameter injection: x=10, y=32.
+out_nb = run_dir / "pm_out.ipynb"
 pm.execute_notebook(
     str(in_nb),
     str(out_nb),
@@ -429,4 +467,5 @@ pm.execute_notebook(
     cwd=str(run_dir),
     kernel_name="python3",
 )
-str(out_nb)
+
+print(f"Papermill execution complete: {out_nb}")

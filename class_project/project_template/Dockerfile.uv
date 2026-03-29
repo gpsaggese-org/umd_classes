@@ -17,9 +17,6 @@ RUN apt-get update && \
     g++ \
   && rm -rf /var/lib/apt/lists/*
 
-# Install Jupyter.
-RUN pip3 install jupyterlab jupyterlab_vim
-
 # Install uv for package management.
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
@@ -29,6 +26,10 @@ COPY pyproject.toml uv.lock /app/
 WORKDIR /app
 RUN uv sync
 ENV PATH="/app/.venv/bin:$PATH"
+
+# Install Jupyter.
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext
 
 # Copy project files.
 COPY . /app

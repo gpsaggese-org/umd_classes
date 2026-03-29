@@ -38,12 +38,8 @@ except ModuleNotFoundError:
 # %load_ext autoreload
 # %autoreload 2
 
-import logging
 
-import arviz as az
-import pymc as pm
 import numpy as np
-import seaborn as sns
 import scipy.stats as stats
 import matplotlib.pyplot as plt
 import preliz as pz
@@ -55,12 +51,12 @@ ut.config_notebook()
 
 # %%
 params = {
-    #"kind": "cdf",
+    # "kind": "cdf",
     "kind": "pdf",
     "pointinterval": False,
-    "interval": "hdi",   # Highest density interval.
-    #"interval": "eti",  # Equal tailed interval.
-    #"xy_lim": "auto"
+    "interval": "hdi",  # Highest density interval.
+    # "interval": "eti",  # Equal tailed interval.
+    # "xy_lim": "auto"
 }
 
 # %% [markdown] heading_collapsed=true
@@ -88,14 +84,16 @@ mu_params = [-1, 0, 1]
 sd_params = [0.5, 1, 1.5]
 x = np.linspace(-7, 7, 200)
 # Create a 3x3 plot.
-_, ax = plt.subplots(len(mu_params),
-                     len(sd_params),
-                     sharex=True,
-                     sharey=True,
-                     figsize=(9, 7),
-                     # Fit plots into the figure cleanly.
-                     constrained_layout=True)
-                     #constrained_layout=False)
+_, ax = plt.subplots(
+    len(mu_params),
+    len(sd_params),
+    sharex=True,
+    sharey=True,
+    figsize=(9, 7),
+    # Fit plots into the figure cleanly.
+    constrained_layout=True,
+)
+# constrained_layout=False)
 for i in range(3):
     for j in range(3):
         mu = mu_params[i]
@@ -105,14 +103,15 @@ for i in range(3):
         # Plot the PDF.
         ax[i, j].plot(x, y)
         # Add the legend.
-        ax[i, j].plot([], label="mu={:3.2f}\nsigma={:3.2f}".format(mu, sd), alpha=0)
+        ax[i, j].plot(
+            [], label="mu={:3.2f}\nsigma={:3.2f}".format(mu, sd), alpha=0
+        )
         ax[i, j].legend(loc=1)
-ax[2, 1].set_xlabel('x')
-ax[1, 0].set_ylabel('p(x)', rotation=0, labelpad=20)
-#ax[1, 0].set_yticks([])
+ax[2, 1].set_xlabel("x")
+ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
+# ax[1, 0].set_yticks([])
 
 # %%
-
 pz.Normal(mu=0, sigma=1).plot_interactive(**params)
 
 # %%
@@ -121,14 +120,14 @@ pdf = pz.Normal(mu=0, sigma=1)
 pdf.rvs(10)
 
 # %%
-# #?plt.hist
+# # ?plt.hist
 
 # %%
-#n = 100
-#n = 1000
+# n = 100
+# n = 1000
 n = 100_000_000
 plt.hist(pdf.rvs(1000), density=True)
-pdf.plot_pdf();
+pdf.plot_pdf()
 
 # %% [markdown]
 # ## Binomial
@@ -138,12 +137,12 @@ help(pz.Binomial.plot_interactive)
 
 # %%
 params = {
-    #"kind": "cdf",
+    # "kind": "cdf",
     "kind": "pdf",
     "pointinterval": False,
-    "interval": "hdi",   # Highest density interval.
-    #"interval": "eti",  # Equal tailed interval.
-    "xy_lim": "auto"
+    "interval": "hdi",  # Highest density interval.
+    # "interval": "eti",  # Equal tailed interval.
+    "xy_lim": "auto",
 }
 
 # Probability of k successes on N trial flipping a coin with p success
@@ -163,12 +162,12 @@ pz.Binomial(p=0.5, n=5).plot_interactive(**params)
 
 # %%
 params = {
-    #"kind": "cdf",
+    # "kind": "cdf",
     "kind": "pdf",
     "pointinterval": False,
-    "interval": "hdi",   # Highest density interval.
-    #"interval": "eti",  # Equal tailed interval.
-    "xy_lim": "auto"
+    "interval": "hdi",  # Highest density interval.
+    # "interval": "eti",  # Equal tailed interval.
+    "xy_lim": "auto",
 }
 
 alpha = 3.0
@@ -192,14 +191,16 @@ params1 = [0.8, 1.0, 2.0, 4.0]
 params2 = [0.8, 1.0, 2.0, 4.0]
 x = np.linspace(0, 1, 200)
 # Create a plot.
-_, ax = plt.subplots(len(params1),
-                     len(params2),
-                     sharex=True,
-                     sharey=True,
-                     figsize=(9, 7),
-                     # Fit plots into the figure cleanly.
-                     constrained_layout=True)
-                     #constrained_layout=False)
+_, ax = plt.subplots(
+    len(params1),
+    len(params2),
+    sharex=True,
+    sharey=True,
+    figsize=(9, 7),
+    # Fit plots into the figure cleanly.
+    constrained_layout=True,
+)
+# constrained_layout=False)
 for i in range(len(params1)):
     for j in range(len(params2)):
         param1 = params1[i]
@@ -209,26 +210,28 @@ for i in range(len(params1)):
         # Plot the PDF.
         ax[i, j].plot(x, y)
         # Add the legend.
-        ax[i, j].plot([], label="a={:3.2f}\nb={:3.2f}".format(param1, param2), alpha=0)
+        ax[i, j].plot(
+            [], label="a={:3.2f}\nb={:3.2f}".format(param1, param2), alpha=0
+        )
         ax[i, j].legend(loc=1)
-ax[2, 1].set_xlabel('x')
-ax[1, 0].set_ylabel('p(x)', rotation=0, labelpad=20);
-#ax[1, 0].set_yticks([])
+ax[2, 1].set_xlabel("x")
+ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
+# ax[1, 0].set_yticks([])
 
 # %% [markdown]
 # ### Beta in function of mean and concentration.
 
 # %%
-#help(stats.beta)
+# help(stats.beta)
 
 # %%
 params = {
-    #"kind": "cdf",
+    # "kind": "cdf",
     "kind": "pdf",
     "pointinterval": False,
-    "interval": "hdi",   # Highest density interval.
-    #"interval": "eti",  # Equal tailed interval.
-    "xy_lim": "auto"
+    "interval": "hdi",  # Highest density interval.
+    # "interval": "eti",  # Equal tailed interval.
+    "xy_lim": "auto",
 }
 
 mu = 1.0
@@ -262,7 +265,7 @@ pz.BetaBinomial(alpha=10, beta=10, n=60).rvs(100)
 # %%
 # Generate samples.
 plt.hist(pz.BetaBinomial(alpha=2, beta=5, n=5).rvs(1000))
-pz.BetaBinomial(alpha=2, beta=5, n=5).plot_pdf();
+pz.BetaBinomial(alpha=2, beta=5, n=5).plot_pdf()
 
 # %% [markdown]
 # ## BetaScaled
@@ -314,7 +317,7 @@ pz.Exponential(beta=1.0).plot_interactive(**params)
 # ## Gamma
 
 # %%
-#help(pz.Gamma)
+# help(pz.Gamma)
 help(pz.Gamma.__init__)
 
 # Represents the sum of alpha exponentially distributed random variables,
@@ -322,7 +325,7 @@ help(pz.Gamma.__init__)
 
 # %% [markdown]
 # - Model the time until an event occurs a certain number of times, assuming that the event follows a Poisson
-#   process (where events occur independently at a constant average rate). 
+#   process (where events occur independently at a constant average rate).
 
 # %%
 pz.Gamma(alpha=1.0, beta=1.0).plot_interactive(**params)
@@ -361,35 +364,35 @@ print(dist.rvs(10))
 lambda_ = 1
 x = list(range(0, 10))
 y = stats.poisson(lambda_).pmf(x)
-plt.plot(x, y, marker=".");
+plt.plot(x, y, marker=".")
 
 # %%
-lambda_params = [0.1, 0.2, 0.4,
-                 0.8, 1, 2,
-                 4, 6, 10]
+lambda_params = [0.1, 0.2, 0.4, 0.8, 1, 2, 4, 6, 10]
 x = list(range(0, 10))
 # Create a 3x3 plot.
-_, ax = plt.subplots(3, 
-                     3,
-                     sharex=True,
-                     sharey=True,
-                     figsize=(9, 7),
-                     # Fit plots into the figure cleanly.
-                     constrained_layout=True)
-                     #constrained_layout=False)
+_, ax = plt.subplots(
+    3,
+    3,
+    sharex=True,
+    sharey=True,
+    figsize=(9, 7),
+    # Fit plots into the figure cleanly.
+    constrained_layout=True,
+)
+# constrained_layout=False)
 for i in range(3):
     for j in range(3):
         lambda_ = lambda_params[i * 3 + j]
         # Evaluate the PDF in several points.
         y = stats.poisson(lambda_).pmf(x)
         # Plot the PDF.
-        #ax[i, j].plot(x, y, marker=".")
+        # ax[i, j].plot(x, y, marker=".")
         ax[i, j].bar(x, y)
         # Add the legend.
         ax[i, j].plot([], label="lambda={:3.2f}".format(lambda_), alpha=0)
         ax[i, j].legend(loc=1)
-ax[2, 1].set_xlabel('x')
-ax[1, 0].set_ylabel('p(x)', rotation=0, labelpad=20);
+ax[2, 1].set_xlabel("x")
+ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
 
 # %%
 pz.Poisson(mu=1.0).plot_interactive(**params)
@@ -421,21 +424,23 @@ print(dist.rvs(10))
 # %%
 x = list(range(0, 10))
 y = dist.pmf(x)
-plt.plot(x, y, marker=".");
+plt.plot(x, y, marker=".")
 
 # %%
 r_params = [1, 2, 5]
 p_params = [0.25, 0.5, 0.75]
 x = list(range(0, 10))
 # Create a 3x3 plot.
-_, ax = plt.subplots(len(r_params),
-                     len(p_params),
-                     sharex=True,
-                     sharey=True,
-                     figsize=(9, 7),
-                     # Fit plots into the figure cleanly.
-                     constrained_layout=True)
-                     #constrained_layout=False)
+_, ax = plt.subplots(
+    len(r_params),
+    len(p_params),
+    sharex=True,
+    sharey=True,
+    figsize=(9, 7),
+    # Fit plots into the figure cleanly.
+    constrained_layout=True,
+)
+# constrained_layout=False)
 for i in range(len(r_params)):
     for j in range(len(p_params)):
         r = r_params[i]
@@ -443,16 +448,16 @@ for i in range(len(r_params)):
         # Evaluate the PDF in several points.
         y = stats.nbinom(n=r, p=p).pmf(x)
         # Plot the PDF.
-        #ax[i, j].plot(x, y, marker=".")
+        # ax[i, j].plot(x, y, marker=".")
         ax[i, j].bar(x, y)
         # Add the legend.
         ax[i, j].plot([], label=f"r={r}, p={p}", alpha=0)
         ax[i, j].legend(loc=1)
-ax[2, 1].set_xlabel('x')
-ax[1, 0].set_ylabel('p(x)', rotation=0, labelpad=20);
+ax[2, 1].set_xlabel("x")
+ax[1, 0].set_ylabel("p(x)", rotation=0, labelpad=20)
 
 # %%
-# #?pz.NegativeBinomial
+# # ?pz.NegativeBinomial
 
 # %%
 pz.NegativeBinomial(n=1.0, p=0.5).plot_interactive(**params)

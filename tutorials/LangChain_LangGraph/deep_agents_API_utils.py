@@ -12,9 +12,12 @@ import tutorials.LangChain_LangGraph.deep_agents_API_utils as tlldaaput
 import logging
 from pathlib import Path
 
-from langchain_API_utils import get_chat_model  # noqa: F401
+import tutorials.LangChain_LangGraph.langchain_API_utils as langchain_API_utils
 
 _LOG = logging.getLogger(__name__)
+
+# Re-export get_chat_model for backward compatibility.
+get_chat_model = langchain_API_utils.get_chat_model
 
 
 # ##############################################################################

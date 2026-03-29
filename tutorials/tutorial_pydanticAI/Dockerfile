@@ -20,7 +20,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN python -m pip install --upgrade pip
 
 # Install Jupyter.
-RUN pip3 install jupyterlab jupyterlab_vim
+RUN pip3 install jupyterlab jupyterlab_vim jupytext
 
 # Install project specific packages.
 COPY requirements.txt /install/requirements.txt

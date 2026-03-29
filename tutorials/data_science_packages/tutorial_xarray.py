@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -242,7 +243,7 @@ a + b
 
 # %%
 # The plot uses the attributes.
-data.plot();
+data.plot()
 
 # %% [markdown]
 # ### Pandas interaction
