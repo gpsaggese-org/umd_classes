@@ -11,12 +11,12 @@ import sys
 import typing
 
 import dotenv
-import langchain_core.output_parsers as lcop  
-import langchain_core.prompts as lcpr  
-import langchain_openai as lco  
-import openai  
+import langchain_core.output_parsers as lcop
+import langchain_core.prompts as lcpr
+import langchain_openai as lco
+import openai
 import pandas as pd
-import pydantic  
+import pydantic
 
 import helpers.hllm_cli as hllmcli
 import helpers.hlogging as hloggin
@@ -36,7 +36,7 @@ _LOG = hloggin.getLogger(__name__)
 _LOG.setLevel(logging.DEBUG)
 
 console_handler = logging.StreamHandler(sys.stdout)
-hloggin.set_v2_formatter(  
+hloggin.set_v2_formatter(
     ch=console_handler,
     root_logger=_LOG,
     force_no_warning=False,
@@ -48,11 +48,10 @@ hloggin.set_v2_formatter(
 
 
 # #############################################################################
-# ColumnInsight
+# ColumnInsight Schema
 # #############################################################################
 
 
-# --- Schemas ---
 class ColumnInsight(pydantic.BaseModel):
     semantic_meaning: str = pydantic.Field(
         description="Brief description of what the data represents"
@@ -70,7 +69,7 @@ class ColumnInsight(pydantic.BaseModel):
 
 
 # #############################################################################
-# DatasetInsights
+# DatasetInsights Schema
 # #############################################################################
 
 
@@ -79,6 +78,8 @@ class DatasetInsights(pydantic.BaseModel):
 
 
 # --- Core Logic ---
+
+
 def load_employee_data(csv_path: str) -> pd.DataFrame:
     """
     Load employee data from CSV with error handling for missing files.
@@ -155,9 +156,7 @@ def compute_llm_agent_stats(
     for tag, df in tag_to_df.items():
         numeric_df = df.select_dtypes(include="number")
         if not numeric_df.empty:
-            summary = numeric_df.describe().T[
-                ["mean", "std", "min", "50%", "max"]
-            ]
+            summary = numeric_df.describe().T[["mean", "std", "min", "50%", "max"]]
             summary.rename(columns={"50%": "median"}, inplace=True)
             dataframe_stats["numeric_summary"][tag] = summary
             print(f"\n=== Numeric Summary: {tag} ===\n", summary.to_string())
@@ -167,8 +166,7 @@ def compute_llm_agent_stats(
 
 def build_llm_prompt(stats: typing.Dict[str, typing.Any]) -> str:
     """
-    Serialize statistical data into a structured prompt for hypothesis
-    generation.
+    Serialize statistical data into a structured string prompt for LLM consumption.
     """
     prompt_segments = [
         "You are a Senior Data Scientist and Domain Expert.",
@@ -177,17 +175,28 @@ def build_llm_prompt(stats: typing.Dict[str, typing.Any]) -> str:
         "Example: 'Higher discount rates correlate with higher volume but lower margins.'",
         "\n--- DATASET STATISTICS ---",
     ]
+
+    # Append datetime column metadata if available
+    if "datetime_columns" in stats and stats["datetime_columns"]:
+        prompt_segments.append(
+            f"\nDetected Datetime Columns:\n{json.dumps(stats['datetime_columns'], indent=2)}"
+        )
+
+    # Append numeric summaries if available
     if "numeric_summary" in stats:
         for tag, summary in stats["numeric_summary"].items():
             prompt_segments.append(
                 f"\nDataset [{tag}] Numeric Summary:\n{summary.to_string()}"
             )
+
+    # Append categorical distributions if available
     if "categorical_distributions" in stats:
         for tag, cols in stats["categorical_distributions"].items():
             for col_name, dist in cols.items():
                 prompt_segments.append(
                     f"\nDistribution for [{col_name}]:\n{dist.to_string()}"
                 )
+
     return "\n".join(prompt_segments)
 
 
@@ -195,12 +204,13 @@ def get_llm_semantic_insights_langchain(
     prompt_text: str, model: str = "gpt-4o"
 ) -> typing.Dict[str, typing.Any]:
     """
-    Process dataset metadata via LangChain to extract structured semantic
-    insights.
+    Process dataset metadata via LangChain to extract structured semantic insights.
+    Uses LangChain's JsonOutputParser alongside the Pydantic schema.
     """
     _LOG.info("Querying LLM via LangChain (%s)...", model)
     llm = lco.ChatOpenAI(model=model, temperature=0)
     parser = lcop.JsonOutputParser(pydantic_object=DatasetInsights)
+
     prompt = lcpr.ChatPromptTemplate.from_messages(
         [
             (
@@ -211,6 +221,7 @@ def get_llm_semantic_insights_langchain(
             ("user", "{metadata_stats}"),
         ]
     ).partial(format_instructions=parser.get_format_instructions())
+
     chain = prompt | llm | parser
     try:
         result = chain.invoke({"metadata_stats": prompt_text})
@@ -227,21 +238,32 @@ def merge_and_export_results(
 ) -> None:
     """
     Merge pandas statistics with LLM insights and export to a JSON report.
+    Converts DataFrame objects into dictionaries to ensure JSON serialization.
     """
     _LOG.info("Merging technical stats with LLM insights...")
 
     serializable_stats = {}
+
     for key, value in stats.items():
         if isinstance(value, pd.DataFrame):
             serializable_stats[key] = value.to_dict(orient="index")
         elif isinstance(value, dict):
             inner_dict = {}
             for k, v in value.items():
-                inner_dict[k] = (
-                    v.to_dict(orient="index")
-                    if isinstance(v, pd.DataFrame)
-                    else v
-                )
+                if isinstance(v, pd.DataFrame):
+                    inner_dict[k] = v.to_dict(orient="index")
+                elif isinstance(v, dict):
+                    # Handle nested dicts (e.g. categorical_distributions[tag][col])
+                    inner_inner = {}
+                    for kk, vv in v.items():
+                        inner_inner[kk] = (
+                            vv.to_dict(orient="index")
+                            if isinstance(vv, pd.DataFrame)
+                            else vv
+                        )
+                    inner_dict[k] = inner_inner
+                else:
+                    inner_dict[k] = v
             serializable_stats[key] = inner_dict
         else:
             serializable_stats[key] = value
@@ -285,6 +307,7 @@ def generate_hypotheses_via_cli(
         )
 
         _LOG.info("LLM Call successful. Cost: $%.6f", cost)
+
         cleaned_response = (
             response_text.strip()
             .removeprefix("```json")
@@ -294,26 +317,142 @@ def generate_hypotheses_via_cli(
         parsed = json.loads(cleaned_response)
         return typing.cast(typing.Dict[str, typing.Any], parsed)
 
-    except Exception as e:  
+    except Exception as e:  # pylint: disable=broad-exception-caught
         _LOG.error("hllmcli call failed: %s", e)
         return {"error": str(e)}
+
+
+def infer_and_convert_datetime_columns(
+    df: pd.DataFrame,
+    sample_size: int = 100,
+    threshold: float = 0.8,
+) -> typing.Tuple[pd.DataFrame, typing.Dict[str, typing.Any]]:
+    """
+    Detect and convert date/datetime columns in a DataFrame.
+    Uses sampling to improve performance when checking format compliance.
+
+    Returns:
+        - Updated DataFrame with converted columns
+        - Metadata dict with inference details per column
+    """
+    from datetime import datetime
+
+    COMMON_FORMATS = [
+        "%Y-%m-%d",
+        "%d-%m-%Y",
+        "%m-%d-%Y",
+        "%Y/%m/%d",
+        "%d/%m/%Y",
+        "%m/%d/%Y",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%d-%m-%Y %H:%M:%S",
+        "%m/%d/%Y %H:%M:%S",
+    ]
+
+    metadata: typing.Dict[str, typing.Any] = {}
+    df_out = df.copy()
+
+    for col in df.columns:
+        if not pd.api.types.is_object_dtype(
+            df[col]
+        ) and not pd.api.types.is_string_dtype(df[col]):
+            continue
+
+        series = df[col].dropna().astype(str)
+
+        if series.empty:
+            continue
+
+        sample = series.head(sample_size)
+
+        best_format = None
+        best_score = 0.0
+
+        for fmt in COMMON_FORMATS:
+            success = 0
+            for val in sample:
+                try:
+                    datetime.strptime(val, fmt)
+                    success += 1
+                except Exception:
+                    continue
+
+            score = success / len(sample)
+
+            if score > best_score:
+                best_score = score
+                best_format = fmt
+
+        if best_score >= threshold:
+            parsed = pd.to_datetime(df[col], format=best_format, errors="coerce")
+            used_format = best_format
+        else:
+            parsed = pd.to_datetime(df[col], errors="coerce")
+            used_format = None
+
+        confidence = parsed.notna().mean()
+
+        if confidence < threshold:
+            continue
+
+        has_time = (parsed.dt.time != pd.Timestamp("00:00:00").time()).any()
+        col_type = "datetime" if has_time else "date"
+
+        df_out[col] = parsed
+
+        metadata[col] = {
+            "semantic_type": "temporal",
+            "granularity": col_type,
+            "format": used_format,
+            "confidence": float(confidence),
+        }
+
+        _LOG.info(
+            "Column '%s' detected as %s (format=%s, confidence=%.2f)",
+            col,
+            col_type,
+            used_format,
+            confidence,
+        )
+
+    return df_out, metadata
 
 
 def main() -> typing.Tuple[pd.DataFrame, typing.Dict[str, typing.Any]]:
     """
     Execute entry point for the data profiling pipeline.
+    Flow: Load Data -> Clean Types -> Infer Dates -> Compute Stats -> Request LLM Insights -> Export.
     """
     df = hpanio.read_csv_to_df("global_ecommerce_forecasting.csv")
     df_typed = hpanconv.convert_df(df)
+
+    # Process temporal inference
+    df_typed, datetime_meta = infer_and_convert_datetime_columns(df_typed)
+
+    # Identify categorical columns to calculate their distributions
     cat_cols = df_typed.select_dtypes(
         include=["object", "category", "string"]
     ).columns.tolist()
+
+    # Compute base statistics
     stats = compute_llm_agent_stats(
         {"ecommerce_data": df_typed},
         categorical_cols_map={"ecommerce_data": cat_cols},
     )
+
+    # FIX: Inject datetime metadata into stats so it's written to JSON and fed to LLM
+    stats["datetime_columns"] = datetime_meta
+
+    print(df_typed.dtypes)
+    print(datetime_meta)
+
+    # Send stats to LLM to generate testable hypotheses
     semantic_insights = generate_hypotheses_via_cli(stats)
+
+    # Save the combined numerical stats and semantic insights to disk
     merge_and_export_results(stats, semantic_insights)
+
     return df_typed, stats
 
 
