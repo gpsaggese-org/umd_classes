@@ -1,0 +1,29 @@
+# txtai Market Research Platform - Dependencies
+
+# Core txtai with all extras (includes sentence-transformers, transformers, torch)
+txtai[all]>=7.0.0
+
+# Streamlit for UI
+streamlit>=1.28.0
+
+# FastAPI and uvicorn (for potential API deployment)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# HTTP client for API calls
+httpx>=0.25.0
+
+# Web scraping
+beautifulsoup4>=4.12.0
+
+# Reddit API (optional, for social media fetching)
+praw>=7.7.0
+
+# Charting library
+plotly>=5.18.0
+
+# Environment variable management
+python-dotenv>=1.0.0
+
+# OpenAI API client (txtai wrapper handles actual calls)
+openai>=1.3.0
