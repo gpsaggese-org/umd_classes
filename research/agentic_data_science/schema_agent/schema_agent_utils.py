@@ -1,9 +1,10 @@
 """
 Import as:
 
-import research.agentic_data_science.schema_agent.schema_agent_utils as radsasau
+import research.agentic_data_science.schema_agent.schema_agent_utils as radssasau
 """
 
+import datetime
 import json
 import logging
 import os
@@ -48,7 +49,7 @@ hloggin.set_v2_formatter(
 
 
 # #############################################################################
-# ColumnInsight Schema
+# ColumnInsight
 # #############################################################################
 
 
@@ -69,7 +70,7 @@ class ColumnInsight(pydantic.BaseModel):
 
 
 # #############################################################################
-# DatasetInsights Schema
+# DatasetInsights
 # #############################################################################
 
 
@@ -156,7 +157,9 @@ def compute_llm_agent_stats(
     for tag, df in tag_to_df.items():
         numeric_df = df.select_dtypes(include="number")
         if not numeric_df.empty:
-            summary = numeric_df.describe().T[["mean", "std", "min", "50%", "max"]]
+            summary = numeric_df.describe().T[
+                ["mean", "std", "min", "50%", "max"]
+            ]
             summary.rename(columns={"50%": "median"}, inplace=True)
             dataframe_stats["numeric_summary"][tag] = summary
             print(f"\n=== Numeric Summary: {tag} ===\n", summary.to_string())
@@ -166,7 +169,8 @@ def compute_llm_agent_stats(
 
 def build_llm_prompt(stats: typing.Dict[str, typing.Any]) -> str:
     """
-    Serialize statistical data into a structured string prompt for LLM consumption.
+    Serialize statistical data into a structured string prompt for LLM
+    consumption.
     """
     prompt_segments = [
         "You are a Senior Data Scientist and Domain Expert.",
@@ -175,20 +179,17 @@ def build_llm_prompt(stats: typing.Dict[str, typing.Any]) -> str:
         "Example: 'Higher discount rates correlate with higher volume but lower margins.'",
         "\n--- DATASET STATISTICS ---",
     ]
-
     # Append datetime column metadata if available
     if "datetime_columns" in stats and stats["datetime_columns"]:
         prompt_segments.append(
             f"\nDetected Datetime Columns:\n{json.dumps(stats['datetime_columns'], indent=2)}"
         )
-
     # Append numeric summaries if available
     if "numeric_summary" in stats:
         for tag, summary in stats["numeric_summary"].items():
             prompt_segments.append(
                 f"\nDataset [{tag}] Numeric Summary:\n{summary.to_string()}"
             )
-
     # Append categorical distributions if available
     if "categorical_distributions" in stats:
         for tag, cols in stats["categorical_distributions"].items():
@@ -196,7 +197,6 @@ def build_llm_prompt(stats: typing.Dict[str, typing.Any]) -> str:
                 prompt_segments.append(
                     f"\nDistribution for [{col_name}]:\n{dist.to_string()}"
                 )
-
     return "\n".join(prompt_segments)
 
 
@@ -204,7 +204,9 @@ def get_llm_semantic_insights_langchain(
     prompt_text: str, model: str = "gpt-4o"
 ) -> typing.Dict[str, typing.Any]:
     """
-    Process dataset metadata via LangChain to extract structured semantic insights.
+    Process dataset metadata via LangChain to extract structured semantic
+    insights.
+
     Uses LangChain's JsonOutputParser alongside the Pydantic schema.
     """
     _LOG.info("Querying LLM via LangChain (%s)...", model)
@@ -238,7 +240,9 @@ def merge_and_export_results(
 ) -> None:
     """
     Merge pandas statistics with LLM insights and export to a JSON report.
-    Converts DataFrame objects into dictionaries to ensure JSON serialization.
+
+    Converts DataFrame objects into dictionaries to ensure JSON
+    serialization.
     """
     _LOG.info("Merging technical stats with LLM insights...")
 
@@ -328,14 +332,13 @@ def infer_and_convert_datetime_columns(
     threshold: float = 0.8,
 ) -> typing.Tuple[pd.DataFrame, typing.Dict[str, typing.Any]]:
     """
-    Detect and convert date/datetime columns in a DataFrame.
-    Uses sampling to improve performance when checking format compliance.
+    Detect and convert date/datetime columns in a DataFrame. Uses sampling to
+    improve performance when checking format compliance.
 
     Returns:
         - Updated DataFrame with converted columns
         - Metadata dict with inference details per column
     """
-    from datetime import datetime
 
     COMMON_FORMATS = [
         "%Y-%m-%d",
@@ -373,7 +376,7 @@ def infer_and_convert_datetime_columns(
             success = 0
             for val in sample:
                 try:
-                    datetime.strptime(val, fmt)
+                    datetime.datetime.strptime(val, fmt)
                     success += 1
                 except Exception:
                     continue
@@ -422,37 +425,30 @@ def infer_and_convert_datetime_columns(
 def main() -> typing.Tuple[pd.DataFrame, typing.Dict[str, typing.Any]]:
     """
     Execute entry point for the data profiling pipeline.
+
     Flow: Load Data -> Clean Types -> Infer Dates -> Compute Stats -> Request LLM Insights -> Export.
     """
     df = hpanio.read_csv_to_df("global_ecommerce_forecasting.csv")
     df_typed = hpanconv.convert_df(df)
-
     # Process temporal inference
     df_typed, datetime_meta = infer_and_convert_datetime_columns(df_typed)
-
     # Identify categorical columns to calculate their distributions
     cat_cols = df_typed.select_dtypes(
         include=["object", "category", "string"]
     ).columns.tolist()
-
     # Compute base statistics
     stats = compute_llm_agent_stats(
         {"ecommerce_data": df_typed},
         categorical_cols_map={"ecommerce_data": cat_cols},
     )
-
     # FIX: Inject datetime metadata into stats so it's written to JSON and fed to LLM
     stats["datetime_columns"] = datetime_meta
-
     print(df_typed.dtypes)
     print(datetime_meta)
-
     # Send stats to LLM to generate testable hypotheses
     semantic_insights = generate_hypotheses_via_cli(stats)
-
     # Save the combined numerical stats and semantic insights to disk
     merge_and_export_results(stats, semantic_insights)
-
     return df_typed, stats
 
 
