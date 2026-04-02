@@ -1,8 +1,0 @@
-.git
-.venv/
-__pycache__/
-.ipynb_checkpoints/
-*.log
-data/raw/
-data/processed/
-data/artifacts/

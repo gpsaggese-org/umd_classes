@@ -1,6 +1,0 @@
-ipywidgets
-matplotlib
-numpy
-pandas
-seaborn
-tqdm

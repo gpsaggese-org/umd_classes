@@ -1,9 +1,0 @@
-torch
-torchvision
-lime
-ipykernel
-matplotlib
-tensorboard
-scikit-image
-notebook
-Pillow

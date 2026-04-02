@@ -1,5 +1,0 @@
-filterpy
-matplotlib
-numpy
-pandas
-seaborn

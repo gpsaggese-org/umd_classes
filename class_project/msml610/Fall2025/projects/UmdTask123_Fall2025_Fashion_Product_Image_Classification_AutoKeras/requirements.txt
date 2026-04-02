@@ -1,8 +1,0 @@
-tensorflow
-autokeras
-pandas
-numpy
-matplotlib
-scikit-learn
-jupyterlab
-kaggle

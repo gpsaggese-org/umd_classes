@@ -1,1 +1,0 @@
-/home/haochen/documents/610/umd_classes/dev_scripts_umd_classes/thin_client/setenv.sh

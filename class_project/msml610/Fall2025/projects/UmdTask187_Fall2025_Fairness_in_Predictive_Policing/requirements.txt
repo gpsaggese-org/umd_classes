@@ -1,8 +1,0 @@
-pandas
-numpy
-scikit-learn
-fairlearn
-matplotlib
-seaborn
-jupyter
-requests

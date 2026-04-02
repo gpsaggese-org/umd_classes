@@ -1,7 +1,0 @@
-filterpy
-ipywidgets
-matplotlib
-numpy
-pandas
-scipy
-seaborn
