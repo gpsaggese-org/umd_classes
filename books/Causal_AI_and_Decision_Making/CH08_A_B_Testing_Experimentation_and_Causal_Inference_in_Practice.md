@@ -1,11 +1,19 @@
 # A/B Testing, Experimentation, and Causal Inference in Practice
-// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
-// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf
-## Randomization and its relationship to causal identification
-## A/B testing, switchback experiments, and their limits
-## When to use observational methods vs. experiments
-## Uplift modeling and targeted interventions
-## Policy evaluation
-## Application: marketing uplift, targeted customer interventions, and campaign analysis
-## TUTORIAL: CausalML (uplift modeling and A/B test analysis)
-## TUTORIAL: CausalPy (causal effect estimation with Bayesian models)
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt //
+https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf
+
+## Randomization and Its Relationship to Causal Identification
+
+## A/B Testing, Switchback Experiments, and Their Limits
+
+## When to Use Observational Methods Vs. Experiments
+
+## Uplift Modeling and Targeted Interventions
+
+## Policy Evaluation
+
+## Application: Marketing Uplift, Targeted Customer Interventions, and Campaign Analysis
+
+## TUTORIAL: CausalML (uplift Modeling and A/B Test Analysis)
+
+## TUTORIAL: CausalPy (causal Effect Estimation with Bayesian Models)

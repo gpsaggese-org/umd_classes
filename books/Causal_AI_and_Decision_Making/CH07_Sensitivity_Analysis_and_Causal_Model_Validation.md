@@ -1,9 +1,16 @@
 # Sensitivity Analysis and Causal Model Validation
 // Not covered
-## Why causal estimates can be fragile
-## Unmeasured confounding and its consequences
-## Rosenbaum bounds and E-values
-## Refutation methods: random common cause, data subset, placebo treatment
-## How to know if your causal model is wrong
-## TUTORIAL: DoWhy (built-in refutation tests and sensitivity analysis)
-## TUTORIAL: IBM Causal Inference 360 (sensitivity analysis for observational studies)
+
+## Why Causal Estimates Can Be Fragile
+
+## Unmeasured Confounding and Its Consequences
+
+## Rosenbaum Bounds and E-values
+
+## Refutation Methods: Random Common Cause, Data Subset, Placebo Treatment
+
+## How to Know If Your Causal Model Is Wrong
+
+## TUTORIAL: DoWhy (built-in Refutation Tests and Sensitivity Analysis)
+
+## TUTORIAL: IBM Causal Inference 360 (sensitivity Analysis for Observational Studies)

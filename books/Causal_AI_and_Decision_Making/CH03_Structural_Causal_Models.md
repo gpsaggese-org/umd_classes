@@ -95,13 +95,11 @@ A causal DAG draws the skeleton of causal assumptions. Structural Causal Models
 flesh by specifying the precise mechanism by which each variable is determined.
 
 - **Definition of an SCM**
-  - An SCM consists of:
-    - A set of _endogenous_ variables $X_1, \ldots, X_n$ (determined within the
-      model)
-    - A set of _exogenous_ variables $\varepsilon_1, \ldots, \varepsilon_n$
-      (background noise, independent of each other and of other causes)
-    - A structural equation for each endogenous variable:
-      $$
+  - An SCM consists of: - A set of _endogenous_ variables $X_1, \ldots, X_n$
+    (determined within the model) - A set of _exogenous_ variables
+    $\varepsilon_1, \ldots, \varepsilon_n$ (background noise, independent of
+    each other and of other causes) - A structural equation for each endogenous
+    variable: $$
       X_i := f_i(\text{Parents}(X_i), \varepsilon_i)
       $$
   - The exogenous variables $\varepsilon_i$ represent everything that influences
@@ -126,8 +124,7 @@ flesh by specifying the precise mechanism by which each variable is determined.
 - **The Sprinkler SCM: a worked example**
   - Variables: $C$ (Cloudy), $R$ (Rain), $S$ (Sprinkler), $W$ (Wet Grass), $G$
     (Greener Grass)
-  - Structural equations:
-    $$
+  - Structural equations: $$
     \begin{aligned}
     C &:= f_C(\varepsilon_C) \\
     R &:= f_R(C, \varepsilon_R) \\
@@ -138,8 +135,7 @@ flesh by specifying the precise mechanism by which each variable is determined.
     $$
   - $\varepsilon_W$ might represent morning dew — a source of wet grass beyond
     sprinkler and rain
-  - The joint distribution factorizes as:
-    $$
+  - The joint distribution factorizes as: $$
     \Pr(C, R, S, W, G) = \Pr(C)\Pr(R|C)\Pr(S|C)\Pr(W|R,S)\Pr(G|W)
     $$
 
@@ -177,8 +173,7 @@ system, distinguishing it from merely _observing_ the system.
     provides information about other variables via the joint distribution
   - _Intervening_ $do(X = x)$: we externally force $X$ to take value $x$,
     overriding its natural causal mechanism
-  - These are fundamentally different:
-    $$
+  - These are fundamentally different: $$
     \Pr(Y \mid X = x) \ne \Pr(Y \mid do(X = x))
     $$
   - The left side is conditioned on observing $X = x$; the right side describes
@@ -256,37 +251,31 @@ can eliminate $do()$ from any identifiable causal query.
   Let $G$ be the causal DAG, $G_{\overline{X}}$ the graph with incoming edges to
   $X$ removed, and $G_{\underline{Z}}$ the graph with outgoing edges from $Z$
   removed.
-  - **Rule 1 — Insertion/Deletion of Observations**
-    - If $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}}$, then:
-      $$
+  - **Rule 1 — Insertion/Deletion of Observations** - If
+    $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}}$, then:
+    $$
       \Pr(Y \mid do(X), Z, W) = \Pr(Y \mid do(X), W)
-      $$
-    - Intuition: if $Z$ is irrelevant to $Y$ given $X$ and $W$ (after removing
-      arrows into $X$), we can ignore $Z$
-  - **Rule 2 — Action/Observation Exchange**
-    - If $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$,
-      then:
-      $$
+      $$ - Intuition: if $Z$ is irrelevant to $Y$
+    given $X$ and $W$ (after removing arrows into $X$), we can ignore $Z$
+  - **Rule 2 — Action/Observation Exchange** - If
+    $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}, \underline{Z}}$, then:
+    $$
       \Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), Z, W)
-      $$
-    - Intuition: if $Z$ has no back-door path to $Y$ (after removing incoming
-      arrows to $X$ and outgoing from $Z$), intervention on $Z$ equals
-      observation of $Z$
-  - **Rule 3 — Insertion/Deletion of Actions**
-    - If $Y \perp\!\!\!\perp Z \mid X, W$ in
-      $G_{\overline{X}, \overline{Z(W)}}$, then:
-      $$
+      $$ - Intuition: if $Z$ has no back-door path
+    to $Y$ (after removing incoming arrows to $X$ and outgoing from $Z$),
+    intervention on $Z$ equals observation of $Z$
+  - **Rule 3 — Insertion/Deletion of Actions** - If
+    $Y \perp\!\!\!\perp Z \mid X, W$ in $G_{\overline{X}, \overline{Z(W)}}$,
+    then: $$
       \Pr(Y \mid do(X), do(Z), W) = \Pr(Y \mid do(X), W)
-      $$
-    - Intuition: if $Z$ has no causal effect on $Y$ in a modified graph, the
-      intervention $do(Z)$ can be dropped
+      $$ - Intuition: if $Z$ has no causal
+    effect on $Y$ in a modified graph, the intervention $do(Z)$ can be dropped
 
 - **Back-door adjustment as a special case**
   - A set $Z$ satisfies the _back-door criterion_ relative to $X \to Y$ if:
     - No variable in $Z$ is a descendant of $X$
     - $Z$ blocks every path from $X$ to $Y$ that has an arrow entering $X$
-  - When satisfied:
-    $$
+  - When satisfied: $$
     \Pr(Y \mid do(X)) = \sum_z \Pr(Y \mid X, Z = z)\Pr(Z = z)
     $$
   - This formula allows computing causal effects from observational data by
@@ -324,8 +313,7 @@ can eliminate $do()$ from any identifiable causal query.
     1. All paths from $X$ to $Y$ go through $M$
     2. No unobserved confounder affects $X$ and $M$
     3. All back-door paths from $M$ to $Y$ are blocked by $X$
-  - Front-door formula:
-    $$
+  - Front-door formula: $$
     \Pr(Y \mid do(X)) = \sum_m \Pr(M = m \mid X)
     \sum_{x'} \Pr(Y \mid M = m, X = x') \Pr(X = x')
     $$
@@ -391,8 +379,7 @@ distribution (a quantitative object).
 - **d-Separation and the Markov condition**
   - A distribution $P$ is _Markov compatible_ with a DAG $G$ if every
     d-separation in $G$ implies conditional independence in $P$
-  - The Markov factorization:
-    $$
+  - The Markov factorization: $$
     \Pr(X_1, \ldots, X_n) = \prod_{i=1}^n \Pr(X_i \mid \text{Parents}(X_i))
     $$
   - This factorization is the basis for efficient inference in Bayesian networks
@@ -427,8 +414,7 @@ two frameworks are mathematically equivalent for many classes of problems.
     $Y_i(1)$ or $Y_i(0)$ for any given unit — the other is counterfactual
 
 - **Key estimands**
-  - **Average Treatment Effect (ATE)**:
-    $$
+  - **Average Treatment Effect (ATE)**: $$
     \text{ATE} = \mathbb{E}[Y(1) - Y(0)]
     $$
   - **Average Treatment Effect on the Treated (ATT)**:
@@ -448,21 +434,19 @@ two frameworks are mathematically equivalent for many classes of problems.
   - **Ignorability** (unconfoundedness, no unmeasured confounders):
     $$
     (Y(0), Y(1)) \perp\!\!\!\perp X \mid Z
-    $$
-    - After conditioning on $Z$, treatment assignment is as good as random
-  - **Overlap** (positivity):
-    $$
+    $$ - After conditioning on $Z$, treatment
+    assignment is as good as random
+  - **Overlap** (positivity): $$
     0 < \Pr(X = 1 \mid Z = z) < 1 \text{ for all } z
-    $$
-    - Every unit has a non-zero probability of receiving either treatment
+    $$ - Every unit has
+    a non-zero probability of receiving either treatment
 
 - **Equivalence to the SCM / graphical framework**
   - In Pearl's framework: $\Pr(Y \mid do(X = x))$ — the interventional
     distribution
   - In the RCM: $\mathbb{E}[Y(x)]$ — the expected potential outcome under
     treatment $x$
-  - These are mathematically equivalent:
-    $$
+  - These are mathematically equivalent: $$
     \mathbb{E}[Y(x)] = \mathbb{E}[Y \mid do(X = x)]
     $$
   - Ignorability in the RCM corresponds to the back-door criterion in DAGs

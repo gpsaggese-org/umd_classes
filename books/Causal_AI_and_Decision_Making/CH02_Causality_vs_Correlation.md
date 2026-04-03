@@ -354,8 +354,7 @@ and the concept of **d-separation** provide exactly this.
     - $S := f_S(C, \varepsilon_S)$
     - $W := f_W(R, S, \varepsilon_W)$
     - $G := f_G(W, \varepsilon_G)$
-  - The joint distribution factorizes as:
-    $$
+  - The joint distribution factorizes as: $$
     \Pr(C, R, S, W, G) = \Pr(C)\,\Pr(R|C)\,\Pr(S|C)\,\Pr(W|R,S)\,\Pr(G|W)
     $$
 

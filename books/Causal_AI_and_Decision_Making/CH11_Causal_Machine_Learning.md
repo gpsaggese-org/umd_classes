@@ -1,9 +1,16 @@
 # Causal Machine Learning
 // Not covered
-## Why standard ML fails at causal questions
-## Double machine learning
+
+## Why Standard ML Fails at Causal Questions
+
+## Double Machine Learning
+
 ## Meta-learners: S-learner, T-learner, X-learner, R-learner
-## Causal forests and nonparametric methods
-## Heterogeneous treatment effects in practice
-## TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
-## TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
+
+## Causal Forests and Nonparametric Methods
+
+## Heterogeneous Treatment Effects in Practice
+
+## TUTORIAL: EconML (double ML, Causal Forests, S/T/X-learners, HTE Estimation)
+
+## TUTORIAL: CausalML (meta-learners and Heterogeneous Treatment Effect Estimation)

@@ -84,10 +84,10 @@
 
 - **Confusing observation with intervention**: LLMs often treat observational
   and interventional statements identically, leading to errors. Asking "What
-  does X predict about Y?" and "If we change X, what happens to Y?" should
-  yield different answers in most causal settings. But LLMs may conflate them.
-  This violates a fundamental principle: $P(Y|X=x)$ differs from
-  $P(Y|do(X=x))$ when confounding is present
+  does X predict about Y?" and "If we change X, what happens to Y?" should yield
+  different answers in most causal settings. But LLMs may conflate them. This
+  violates a fundamental principle: $P(Y|X=x)$ differs from $P(Y|do(X=x))$ when
+  confounding is present
 
 ## References
 [1] Bommasani, R., Hudson, D. A., Adeli, E., et al. (2021). On the Opportunities

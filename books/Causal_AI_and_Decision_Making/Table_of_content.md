@@ -4,13 +4,16 @@
 
 ### 1: From Prediction Pipelines to Decision Pipelines
 [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
+
 - What ML systems can and cannot tell you
 - Correlation, association, and the illusion of understanding
-- Three kinds of questions: association, intervention, counterfactual (Pearl's ladder)
+- Three kinds of questions: association, intervention, counterfactual (Pearl's
+  ladder)
 - A roadmap: from prediction to causal reasoning to decision intelligence
 - TUTORIAL: DoWhy (end-to-end causal reasoning from observational data)
 
 [msml610/lectures_source/Lesson02.2-ML_Paradigms.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf)
+
 - How production ML systems make decisions today
 - Feedback loops and distribution shift
 - Optimization vs. inference vs. decision theory
@@ -18,24 +21,28 @@
 - Data Science vs. Decision Science
 - TUTORIAL: pgmpy (Bayesian decision networks and decision pipeline modeling)
 
-### 2: Causality vs. Correlation
+### 2: Causality Vs. Correlation
 [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
 [msml610/lectures_source/Lesson08.2-Causal_Networks.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf)
+
 - Spurious correlations and Simpson's paradox
 - Confounding variables and colliders
 - Causal questions vs. predictive questions
 - DAGs and d-separation: the language of causal reasoning
-- TUTORIAL: DoWhy (illustrating the difference between correlation and causal effect)
-- TUTORIAL: CausalImpact (detecting causal impact of interventions vs. spurious trends)
+- TUTORIAL: DoWhy (illustrating the difference between correlation and causal
+  effect)
+- TUTORIAL: CausalImpact (detecting causal impact of interventions vs. spurious
+  trends)
 
 ### 3: Structural Causal Models
 [msml610/lectures_source/Lesson08.2-Causal_Networks.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.2-Causal_Networks.pdf)
 [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - Causal graphs (DAGs) as a reasoning formalism
 - Structural equations and functional causal models
 - Interventions and the do-operator
 - The do-calculus: rules for interventional reasoning
-- d-separation and conditional independence
+- D-separation and conditional independence
 - Potential outcomes framework (Rubin causal model) and its equivalence to SCMs
 - TUTORIAL: pgmpy (building and querying Bayesian networks and DAGs)
 - TUTORIAL: Dagitty (DAG creation and causal effect identification)
@@ -43,6 +50,7 @@
 ### 4: Counterfactual Reasoning
 [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
 [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - What is a counterfactual
 - Counterfactuals vs. interventions: the three rungs of the ladder of causation
 - Computing counterfactuals from structural causal models
@@ -53,25 +61,30 @@
 
 ### 5: Causal Identification
 [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+
 - The identification problem: when can we estimate causal effects from data?
 - Backdoor and frontdoor criteria
 - Instrumental variables and natural experiments
 - Regression discontinuity and difference-in-differences
 - Selection bias
-- TUTORIAL: DoWhy (applying backdoor/frontdoor/IV criteria for causal identification)
+- TUTORIAL: DoWhy (applying backdoor/frontdoor/IV criteria for causal
+  identification)
 
 ### 6: Estimating Causal Effects
 // Not covered
+
 - Average treatment effect (ATE) and conditional ATE (CATE)
 - Matching methods and propensity scores
 - Regression adjustment and doubly robust methods
 - Uplift modeling and heterogeneous treatment effects
 - Application: healthcare observational studies and treatment effect estimation
-- TUTORIAL: EconML (double ML, causal forests, and meta-learners for ATE/CATE estimation)
+- TUTORIAL: EconML (double ML, causal forests, and meta-learners for ATE/CATE
+  estimation)
 - TUTORIAL: CausalML (propensity scoring, matching, and uplift estimation)
 
 ### 7: Sensitivity Analysis and Causal Model Validation
 // Not covered
+
 - Why causal estimates can be fragile
 - Unmeasured confounding and its consequences
 - Rosenbaum bounds and E-values
@@ -81,12 +94,14 @@
 
 ### 8: A/B Testing, Experimentation, and Causal Inference in Practice
 [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+
 - Randomization and its relationship to causal identification
 - A/B testing, switchback experiments, and their limits
 - When to use observational methods vs. experiments
 - Uplift modeling and targeted interventions
 - Policy evaluation
-- Application: marketing uplift, targeted customer interventions, and campaign analysis
+- Application: marketing uplift, targeted customer interventions, and campaign
+  analysis
 - TUTORIAL: CausalML (uplift modeling and A/B test analysis)
 - TUTORIAL: CausalPy (causal effect estimation with Bayesian models)
 
@@ -94,6 +109,7 @@
 
 ### 9: Causal Inference for Time Series
 [msml610/lectures_source/Lesson10-Timeseries_forecasting.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
+
 - Time series vs. cross-sectional causal inference
 - Granger causality: definition, assumptions, and limitations
 - Interrupted time series (ITS) and regression discontinuity
@@ -103,8 +119,9 @@
 - TUTORIAL: CausalImpact (Bayesian interrupted time series for causal inference)
 - TUTORIAL: CausalPy (DiD and synthetic control with Bayesian models)
 
-### 10: Causal Discovery: Learning Structure from Data
+### 10: Causal Discovery: Learning Structure From Data
 // Not covered
+
 - Constraint-based methods: PC algorithm and FCI
 - Score-based methods: GES, NOTEARS
 - LiNGAM and non-Gaussian methods
@@ -115,16 +132,19 @@
 
 ### 11: Causal Machine Learning
 // Not covered
+
 - Why standard ML fails at causal questions
 - Double machine learning
 - Meta-learners: S-learner, T-learner, X-learner, R-learner
 - Causal forests and nonparametric methods
 - Heterogeneous treatment effects in practice
 - TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
-- TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
+- TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect
+  estimation)
 
 ### 12: Causal Fairness and Algorithmic Accountability
 // Not covered
+
 - Limitations of statistical fairness (demographic parity, equalized odds)
 - Causal definitions of fairness
 - Path-specific effects and direct vs. indirect discrimination
@@ -135,6 +155,7 @@
 
 ### 13: Explainability Methods: What They Do and Do Not Tell You
 [msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+
 - Why practitioners reach for explainability first
 - Black box models, regulation, and trust
 - Model-specific interpretability: linear models, decision trees, GAMs
@@ -151,6 +172,7 @@
 ### 14: Causal Explainability and Algorithmic Recourse
 [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
 [msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+
 - Causal SHAP and causal attribution methods
 - Counterfactual explanations and actionable recourse
 - Why explainability methods must be interpreted through a causal lens
@@ -165,6 +187,7 @@
 [msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.2-Posterior_Based_Decisions.pdf)
 [msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.5-Bayesian_Model_Comparison.pdf)
 [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+
 - Utility theory, loss functions, and expected utility
 - Risk preferences and risk-aware decisions
 - Multi-criteria decisions and trade-offs
@@ -174,11 +197,13 @@
 - Bayesian hypothesis testing for practitioners
 - Aleatoric vs. epistemic uncertainty
 - Confidence intervals and prediction intervals
-- TUTORIAL: PyMC (Bayesian inference, uncertainty quantification, and posterior-based decisions)
+- TUTORIAL: PyMC (Bayesian inference, uncertainty quantification, and
+  posterior-based decisions)
 - TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
 
 ### 16: Reinforcement Learning and Sequential Decisions
 [msml610/lectures_source/Lesson12-Reinforcement_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
+
 - Markov decision processes
 - Partially observable MDPs (POMDPs) and belief states
 - Exploration vs. exploitation
@@ -190,6 +215,7 @@
 
 ### 17: Probabilistic Forecasting and Uncertainty Quantification
 // Not covered
+
 - Aleatoric vs. epistemic uncertainty
 - Predictive distributions and Bayesian prediction
 - Conformal prediction and distribution-free methods
@@ -200,6 +226,7 @@
 
 ### 18: Causal Decision Making
 [msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
+
 - Why causal models are required for interventional decisions
 - Decision diagrams and influence diagrams
 - Policy interventions, uplift, and treatment policies
@@ -209,6 +236,7 @@
 
 ### 19: LLMs and Causal Reasoning
 // Not covered
+
 - What LLMs get right and wrong about causality
 - Chain-of-thought, tree-of-thought, and self-consistency for causal tasks
 - Reflection and self-correction: Reflexion and iterative refinement
