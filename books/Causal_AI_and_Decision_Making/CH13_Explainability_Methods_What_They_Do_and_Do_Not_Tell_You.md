@@ -1,5 +1,6 @@
 # Explainability Methods: What They Do and Do Not Tell You
-// Lesson11-Probabilistic_deep_learning.txt
+// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf
 ## Why practitioners reach for explainability first
 ## Black box models, regulation, and trust
 ## Model-specific interpretability: linear models, decision trees, GAMs

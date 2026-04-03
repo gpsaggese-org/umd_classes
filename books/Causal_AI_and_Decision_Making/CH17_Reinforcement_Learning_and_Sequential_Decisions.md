@@ -1,5 +1,6 @@
 # Reinforcement Learning and Sequential Decisions
-// Lesson12-Reinforcement_learning.txt
+// msml610/lectures_source/Lesson12-Reinforcement_learning.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf
 ## Markov decision processes
 ## Partially observable MDPs (POMDPs) and belief states
 ## Exploration vs. exploitation

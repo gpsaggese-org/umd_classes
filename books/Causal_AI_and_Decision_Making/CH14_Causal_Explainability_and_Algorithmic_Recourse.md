@@ -1,6 +1,8 @@
 # Causal Explainability and Algorithmic Recourse
-// Lesson08.1-Causal_AI_intro.txt
-// Lesson11-Probabilistic_deep_learning.txt
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf
 ## Causal SHAP and causal attribution methods
 ## Counterfactual explanations and actionable recourse
 ## Why explainability methods must be interpreted through a causal lens

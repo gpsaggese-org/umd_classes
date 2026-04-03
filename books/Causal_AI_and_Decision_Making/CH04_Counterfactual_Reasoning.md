@@ -1,6 +1,8 @@
 # Counterfactual Reasoning
-// Lesson08.1-Causal_AI_intro.txt
-// Lesson08.3-Do_Calculus.txt
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf
 ## What is a counterfactual
 ## Counterfactuals vs. interventions: the three rungs of the ladder of causation
 ## Computing counterfactuals from structural causal models

@@ -1,5 +1,6 @@
 # A/B Testing, Experimentation, and Causal Inference in Practice
-// Lesson09.3-Multi_Armed_Bandits.txt
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf
 ## Randomization and its relationship to causal identification
 ## A/B testing, switchback experiments, and their limits
 ## When to use observational methods vs. experiments

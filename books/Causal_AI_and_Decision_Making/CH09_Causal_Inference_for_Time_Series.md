@@ -1,5 +1,6 @@
 # Causal Inference for Time Series
-// Lesson10-Timeseries_forecasting.txt
+// msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf
 ## Time series vs. cross-sectional causal inference
 ## Granger causality: definition, assumptions, and limitations
 ## Interrupted time series (ITS) and regression discontinuity
