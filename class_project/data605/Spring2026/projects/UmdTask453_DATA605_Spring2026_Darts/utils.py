@@ -11,8 +11,10 @@ import logging
 import os
 
 import fredapi
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import tqdm
 import yfinance as yf
 
@@ -238,6 +240,32 @@ def save_data(
     # Save the DataFrame to CSV with the date index included.
     df.to_csv(file_path, index=True)
     _LOG.info("Saved %d rows to %s.", len(df), file_path)
+
+def load_data(
+    file_name: str,
+    data_dir: str,
+) -> pd.DataFrame:
+    """
+    Load a DataFrame from a CSV file in the specified data directory.
+
+    The date column is parsed as a DatetimeIndex automatically. This
+    function is used to load previously downloaded or processed data
+    instead of re-downloading from external APIs on every notebook run.
+    Using saved CSV files makes the notebook idempotent and eliminates
+    unnecessary API calls on every kernel restart.
+
+    :param file_name: name of the CSV file including `.csv` extension
+    :param data_dir: path to the directory where the file is saved
+    :return: DataFrame with DatetimeIndex loaded from CSV file
+    """
+    # Build the full file path from the directory and file name.
+    file_path = os.path.join(data_dir, file_name)
+    # Load the CSV file with the Date column parsed as DatetimeIndex.
+    df = pd.read_csv(file_path, index_col="Date", parse_dates=True)
+    # Convert index to DatetimeIndex for Darts compatibility.
+    df.index = pd.DatetimeIndex(df.index)
+    _LOG.info("Loaded %d rows from %s.", len(df), file_path)
+    return df
 
 def preserve_month_start_values(
     df: pd.DataFrame,
@@ -539,3 +567,456 @@ def reconstruct_xlc(
             correlation_threshold,
         )
     return result_df
+
+def plot_sp500_history(
+    sp500: pd.DataFrame,
+    ax: plt.Axes = None,
+) -> plt.Figure:
+    """
+    Plot S&P 500 price history and daily returns in a single figure.
+
+    Two subplots are created — the top panel shows the closing price
+    over time and the bottom panel shows the daily percentage returns.
+    This gives a clear picture of both the price trend and the
+    volatility pattern over the analysis period.
+
+    :param sp500: DataFrame with S&P 500 OHLCV data indexed by date
+    :param ax: optional matplotlib Axes object for embedding in a
+        larger figure — if None a new figure is created
+    :return: matplotlib Figure object with both subplots
+    """
+    # Calculate daily percentage returns from closing prices.
+    returns = sp500["Close"].pct_change().dropna() * 100
+    # Create a figure with two vertically stacked subplots.
+    fig, axes = plt.subplots(2, 1, figsize=(14, 8))
+    # Plot closing price on the top subplot.
+    axes[0].plot(
+        sp500.index,
+        sp500["Close"],
+        color="steelblue",
+        linewidth=1.2,
+        label="S&P 500 Close",
+    )
+    axes[0].set_title(
+        "S&P 500 Closing Price 2018-2024",
+        fontsize=13,
+        fontweight="bold",
+    )
+    axes[0].set_ylabel("Price (USD)")
+    axes[0].set_xlabel("")
+    axes[0].legend(loc="upper left", fontsize=9)
+    # Plot daily returns on the bottom subplot.
+    axes[1].bar(
+        returns.index,
+        returns.values,
+        color=["crimson" if r < 0 else "steelblue" for r in returns],
+        width=1.0,
+        alpha=0.7,
+        label="Daily Return %",
+    )
+    axes[1].axhline(0, color="black", linewidth=0.8, linestyle="--")
+    axes[1].set_title(
+        "S&P 500 Daily Returns 2018-2024",
+        fontsize=13,
+        fontweight="bold",
+    )
+    axes[1].set_ylabel("Return (%)")
+    axes[1].set_xlabel("Date")
+    axes[1].legend(loc="upper left", fontsize=9)
+    fig.tight_layout()
+    return fig
+
+def plot_sector_performance(
+    sectors: pd.DataFrame,
+    sector_names: dict,
+    ax: plt.Axes = None,
+) -> plt.Figure:
+    """
+    Plot sector ETF performance using a heatmap and bar chart.
+
+    Two visualizations are created — a heatmap showing annual returns
+    per sector per year and a horizontal bar chart showing total
+    return over the full period ranked from best to worst. This
+    layout clearly shows which sectors led and lagged each year
+    and over the full analysis period.
+
+    :param sectors: DataFrame with sector ETF closing prices indexed
+        by date with one column per sector ticker
+    :param sector_names: dictionary mapping ticker symbols to full
+        sector names e.g. `{'XLK': 'Technology'}`
+    :param ax: optional matplotlib Axes object for embedding in a
+        larger figure — if None a new figure is created
+    :return: matplotlib Figure object with heatmap and bar chart
+    """
+    # Calculate annual returns for each sector.
+    annual_returns = sectors.resample("YE").last().pct_change() * 100
+    # Drop the first row which is NaN after pct_change.
+    annual_returns = annual_returns.dropna()
+    # Rename columns to full sector names for readability.
+    annual_returns.columns = [
+        sector_names.get(col, col) for col in annual_returns.columns
+    ]
+    # Format index to show year only.
+    annual_returns.index = annual_returns.index.year
+    # Calculate total return over full period for bar chart.
+    total_returns = (
+        (sectors.iloc[-1] / sectors.iloc[0] - 1) * 100
+    )
+    # Rename total returns index to full sector names.
+    total_returns.index = [
+        sector_names.get(col, col) for col in total_returns.index
+    ]
+    # Sort total returns from highest to lowest.
+    total_returns = total_returns.sort_values(ascending=True)
+    # Create figure with two subplots side by side.
+    fig, axes = plt.subplots(1, 2, figsize=(20, 7))
+    # Plot annual returns heatmap on the left subplot.
+    sns.heatmap(
+        annual_returns.T,
+        annot=True,
+        fmt=".1f",
+        cmap="RdYlGn",
+        center=0,
+        linewidths=0.5,
+        linecolor="white",
+        ax=axes[0],
+        cbar_kws={"label": "Annual Return (%)"},
+    )
+    axes[0].set_title(
+        "Sector Annual Returns by Year (%)",
+        fontsize=13,
+        fontweight="bold",
+    )
+    axes[0].set_xlabel("Year")
+    axes[0].set_ylabel("Sector")
+    # Plot total returns horizontal bar chart on right subplot.
+    colors = [
+        "crimson" if r < 0 else "steelblue"
+        for r in total_returns.values
+    ]
+    axes[1].barh(
+        total_returns.index,
+        total_returns.values,
+        color=colors,
+        edgecolor="white",
+        height=0.6,
+    )
+    axes[1].axvline(0, color="black", linewidth=0.8, linestyle="--")
+    # Add value labels on each bar.
+    for idx, val in enumerate(total_returns.values):
+        axes[1].text(
+            val + (2 if val >= 0 else -2),
+            idx,
+            f"{val:.1f}%",
+            va="center",
+            ha="left" if val >= 0 else "right",
+            fontsize=9,
+            fontweight="bold",
+        )
+    axes[1].set_title(
+        "Total Return by Sector 2018-2024 (%)",
+        fontsize=13,
+        fontweight="bold",
+    )
+    axes[1].set_xlabel("Total Return (%)")
+    axes[1].set_ylabel("")
+    fig.tight_layout()
+    return fig
+
+def plot_macro_trends(
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+) -> plt.Figure:
+    """
+    Plot key macroeconomic indicator trends over the analysis period.
+
+    Two separate figures are created — one for daily indicators and
+    one for monthly indicators. Each figure uses subplots to show
+    each indicator individually with its own scale so trends are
+    clearly visible without compression from different value ranges.
+
+    :param macro_daily: DataFrame with daily macro indicators indexed
+        by date including VIX, yields, oil, gold, and DXY
+    :param macro_monthly: DataFrame with monthly macro indicators
+        indexed by date including CPI, Fed rate, and unemployment
+    :return: matplotlib Figure object with all macro trend subplots
+    """
+    # Define which daily indicators to plot with their display names.
+    daily_indicators = {
+        "VIX"       : "VIX (Fear Index)",
+        "TNX"       : "10Y Treasury Yield (%)",
+        "IRX"       : "2Y Treasury Yield (%)",
+        "OIL"       : "Oil Price WTI (USD)",
+        "GOLD"      : "Gold Price (USD)",
+        "DXY"       : "Dollar Index (DXY)",
+    }
+    # Define which monthly indicators to plot with display names.
+    monthly_indicators = {
+        "CPI"           : "CPI Inflation",
+        "FED_RATE"      : "Fed Funds Rate (%)",
+        "UNEMPLOYMENT"  : "Unemployment Rate (%)",
+        "NFP"           : "Non-Farm Payrolls (K)",
+    }
+    # Create figure for daily macro indicators with 6 subplots.
+    fig, axes = plt.subplots(3, 2, figsize=(16, 12))
+    axes = axes.flatten()
+    # Plot each daily indicator in its own subplot.
+    for idx, (col, title) in enumerate(daily_indicators.items()):
+        axes[idx].plot(
+            macro_daily.index,
+            macro_daily[col],
+            color="steelblue",
+            linewidth=1.2,
+        )
+        axes[idx].set_title(title, fontsize=11, fontweight="bold")
+        axes[idx].set_ylabel("Value")
+        axes[idx].set_xlabel("Date")
+        # Add shaded region for COVID crash period.
+        axes[idx].axvspan(
+            pd.Timestamp("2020-02-01"),
+            pd.Timestamp("2020-06-01"),
+            alpha=0.1,
+            color="red",
+            label="COVID crash",
+        )
+        # Add shaded region for rate hiking cycle.
+        axes[idx].axvspan(
+            pd.Timestamp("2022-03-01"),
+            pd.Timestamp("2023-07-01"),
+            alpha=0.1,
+            color="orange",
+            label="Rate hike cycle",
+        )
+        axes[idx].legend(fontsize=7, loc="upper left")
+    fig.suptitle(
+        "Daily Macroeconomic Indicators 2018-2024",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
+
+def plot_macro_correlation(
+    sp500: pd.DataFrame,
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+) -> plt.Figure:
+    """
+    Plot correlation heatmap between macro indicators and S&P 500 returns.
+
+    Daily S&P 500 returns are calculated and correlated against all
+    macro indicators. The heatmap shows which indicators have the
+    strongest positive or negative relationship with market returns
+    providing insight into which features will be most valuable
+    for our forecasting models.
+
+    :param sp500: DataFrame with S&P 500 OHLCV data indexed by date
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+        excluding binary release flag columns
+    :return: matplotlib Figure object with correlation heatmap
+    """
+    # Calculate daily S&P 500 returns as the target variable.
+    sp500_returns = sp500["Close"].pct_change().dropna()
+    # Combine all macro indicators into a single DataFrame.
+    macro_combined = pd.concat(
+        [macro_daily, macro_monthly], axis=1
+    )
+    # Exclude binary release flag columns from correlation analysis
+    # since they are event markers not continuous indicators.
+    non_flag_cols = [
+        col for col in macro_combined.columns
+        if not col.endswith("_released")
+    ]
+    macro_combined = macro_combined[non_flag_cols]
+    # Align macro data with S&P 500 returns on common dates.
+    combined = pd.concat(
+        [sp500_returns.rename("SP500_Return"), macro_combined],
+        axis=1,
+    ).dropna()
+    # Calculate correlation matrix.
+    corr_matrix = combined.corr()
+    # Extract only correlations with S&P 500 returns.
+    sp500_corr = corr_matrix["SP500_Return"].drop("SP500_Return")
+    # Sort by absolute correlation value for better readability.
+    sp500_corr = sp500_corr.reindex(
+        sp500_corr.abs().sort_values(ascending=False).index
+    )
+    # Create figure with a single heatmap.
+    fig, ax = plt.subplots(figsize=(10, 8))
+    # Plot horizontal heatmap of correlations with S&P 500.
+    sns.heatmap(
+        sp500_corr.to_frame(),
+        annot=True,
+        fmt=".3f",
+        cmap="RdYlGn",
+        center=0,
+        vmin=-0.3,
+        vmax=0.3,
+        linewidths=0.5,
+        linecolor="white",
+        ax=ax,
+        cbar_kws={"label": "Correlation with S&P 500 Returns"},
+    )
+    ax.set_title(
+        "Macro Indicator Correlation with S&P 500 Daily Returns",
+        fontsize=13,
+        fontweight="bold",
+    )
+    ax.set_xlabel("Correlation")
+    ax.set_ylabel("Macro Indicator")
+    fig.tight_layout()
+    return fig
+
+def plot_rolling_correlations(
+    sp500: pd.DataFrame,
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+    window: int = 63,
+) -> plt.Figure:
+    """
+    Plot rolling correlations between key macro indicators and S&P 500.
+
+    Rolling correlations reveal how the relationship between macro
+    indicators and market returns changes across different market
+    regimes. A static correlation hides these dynamic relationships
+    which are critical for understanding regime dependent behavior.
+    Daily indicators use daily returns with a 63 day window (3 months)
+    and monthly indicators use monthly returns with a 6 month window.
+
+    :param sp500: DataFrame with S&P 500 OHLCV data indexed by date
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+    :param window: rolling window size in trading days for daily
+        indicators default is 63 trading days (3 months)
+    :return: matplotlib Figure object with rolling correlation subplots
+    """
+    # Calculate daily S&P 500 returns for daily indicator correlation.
+    sp500_daily_returns = sp500["Close"].pct_change().dropna()
+    # Calculate monthly S&P 500 returns for monthly indicator correlation.
+    sp500_monthly = sp500["Close"].resample("ME").last()
+    sp500_monthly_returns = sp500_monthly.pct_change().dropna()
+    # Calculate yield curve as difference between 10Y and 2Y yields.
+    yield_curve = macro_daily["TNX"] - macro_daily["IRX"]
+    # Define daily indicators to show rolling correlations for.
+    daily_indicators = {
+        "VIX"        : ("VIX (Fear Index)", macro_daily["VIX"]),
+        "Yield Curve": ("Yield Curve (10Y-2Y)", yield_curve),
+        "OIL"        : ("Oil Price WTI", macro_daily["OIL"]),
+    }
+    # Define monthly indicators to show rolling correlations for.
+    monthly_indicators = {
+        "CPI"         : ("CPI Inflation", macro_monthly["CPI"]),
+        "FED_RATE"    : ("Fed Funds Rate", macro_monthly["FED_RATE"]),
+        "UNEMPLOYMENT": ("Unemployment Rate", macro_monthly["UNEMPLOYMENT"]),
+    }
+    # Create figure with 2 rows and 3 columns — 6 subplots total.
+    fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+    # Plot rolling correlations for daily indicators on top row.
+    for idx, (key, (title, series)) in enumerate(
+        daily_indicators.items()
+    ):
+        # Align series with S&P 500 returns on common dates.
+        aligned = pd.concat(
+            [sp500_daily_returns, series], axis=1
+        ).dropna()
+        aligned.columns = ["returns", "indicator"]
+        # Calculate rolling correlation over the window period.
+        rolling_corr = aligned["returns"].rolling(window).corr(
+            aligned["indicator"]
+        )
+        # Plot rolling correlation line.
+        axes[0, idx].plot(
+            rolling_corr.index,
+            rolling_corr.values,
+            color="steelblue",
+            linewidth=1.2,
+            label=f"{window}d rolling correlation",
+        )
+        # Add horizontal reference line at zero.
+        axes[0, idx].axhline(
+            0, color="black", linewidth=0.8, linestyle="--"
+        )
+        # Add shaded regions for key market events.
+        axes[0, idx].axvspan(
+            pd.Timestamp("2020-02-01"),
+            pd.Timestamp("2020-06-01"),
+            alpha=0.1,
+            color="red",
+            label="COVID crash",
+        )
+        axes[0, idx].axvspan(
+            pd.Timestamp("2022-03-01"),
+            pd.Timestamp("2023-07-01"),
+            alpha=0.1,
+            color="orange",
+            label="Rate hike cycle",
+        )
+        axes[0, idx].set_title(
+            f"Rolling Correlation: {title} vs S&P 500",
+            fontsize=10,
+            fontweight="bold",
+        )
+        axes[0, idx].set_ylabel("Correlation")
+        axes[0, idx].set_xlabel("Date")
+        axes[0, idx].set_ylim(-1, 1)
+        axes[0, idx].legend(fontsize=7, loc="upper left")
+    # Plot rolling correlations for monthly indicators on bottom row.
+    monthly_window = 6
+    for idx, (key, (title, series)) in enumerate(
+        monthly_indicators.items()
+    ):
+        # Resample indicator to monthly frequency.
+        series_monthly = series.resample("ME").last()
+        # Align with monthly S&P 500 returns on common dates.
+        aligned = pd.concat(
+            [sp500_monthly_returns, series_monthly], axis=1
+        ).dropna()
+        aligned.columns = ["returns", "indicator"]
+        # Calculate rolling correlation over 6 month window.
+        rolling_corr = aligned["returns"].rolling(
+            monthly_window
+        ).corr(aligned["indicator"])
+        # Plot rolling correlation line.
+        axes[1, idx].plot(
+            rolling_corr.index,
+            rolling_corr.values,
+            color="darkorange",
+            linewidth=1.5,
+            label=f"{monthly_window}m rolling correlation",
+        )
+        # Add horizontal reference line at zero.
+        axes[1, idx].axhline(
+            0, color="black", linewidth=0.8, linestyle="--"
+        )
+        # Add shaded regions for key market events.
+        axes[1, idx].axvspan(
+            pd.Timestamp("2020-02-01"),
+            pd.Timestamp("2020-06-01"),
+            alpha=0.1,
+            color="red",
+            label="COVID crash",
+        )
+        axes[1, idx].axvspan(
+            pd.Timestamp("2022-03-01"),
+            pd.Timestamp("2023-07-01"),
+            alpha=0.1,
+            color="orange",
+            label="Rate hike cycle",
+        )
+        axes[1, idx].set_title(
+            f"Rolling Correlation: {title} vs S&P 500",
+            fontsize=10,
+            fontweight="bold",
+        )
+        axes[1, idx].set_ylabel("Correlation")
+        axes[1, idx].set_xlabel("Date")
+        axes[1, idx].set_ylim(-1, 1)
+        axes[1, idx].legend(fontsize=7, loc="upper left")
+    fig.suptitle(
+        "Rolling Macro Correlations with S&P 500 Returns 2018-2024",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
