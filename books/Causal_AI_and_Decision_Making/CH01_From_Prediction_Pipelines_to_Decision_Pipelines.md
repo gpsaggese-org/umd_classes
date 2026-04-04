@@ -1,5 +1,5 @@
-// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
 
 ## What ML Systems Can and Cannot Tell You
 - Traditional machine learning excels at **finding patterns** in historical data

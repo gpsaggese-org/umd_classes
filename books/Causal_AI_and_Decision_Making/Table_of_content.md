@@ -241,12 +241,11 @@
 - Chain-of-thought, tree-of-thought, and self-consistency for causal tasks
 - Reflection and self-correction: Reflexion and iterative refinement
 - Connecting LLM reasoning to causal and probabilistic reasoning
-
 - Agent architectures: reactive, deliberative, causal
 - Integrating causal models into agent action selection
 - Planning under causal uncertainty
 - Multi-agent systems and human-in-the-loop
 - TUTORIAL: ReAct (reasoning and acting framework for LLM agents)
-- TUTORIAL: LangChain + DoWhy (causal model integrated into agent reasoning)
 - TUTORIAL: LangChain (CoT and tool-augmented reasoning pipelines)
+- TUTORIAL: LangChain + DoWhy (causal model integrated into agent reasoning)
 - TUTORIAL: LlamaIndex (knowledge-grounded reasoning over structured data)
