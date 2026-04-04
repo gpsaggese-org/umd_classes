@@ -1,6 +1,6 @@
 # Explainability Methods: What They Do and Do Not Tell You
-// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf
+// msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf
 
 ## Why Practitioners Reach for Explainability First
 

@@ -9,8 +9,8 @@ relationships using the language of causal graphs.
 We begin with spurious correlations and the famous Simpson's paradox — cases
 where the data actively misleads you. We then introduce the key structural
 elements of causal reasoning: confounders, colliders, and the do-calculus. By
-the end of the chapter, you will have the vocabulary and the tools to ask — and
-answer — causal questions with the same rigor you bring to predictive modeling.
+the end of the chapter, you will have the vocabulary and the tools to ask and
+answer causal questions with the same rigor you bring to predictive modeling.
 
 ## Spurious Correlations and Simpson's Paradox
 

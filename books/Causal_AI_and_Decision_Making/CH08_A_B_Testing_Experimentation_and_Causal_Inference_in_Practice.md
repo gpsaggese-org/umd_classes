@@ -1,6 +1,6 @@
 # A/B Testing, Experimentation, and Causal Inference in Practice
-// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf
+// msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf
 
 ## Randomization and Its Relationship to Causal Identification
 

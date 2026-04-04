@@ -1,6 +1,6 @@
 # Causal Identification
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf
 
 ## The Identification Problem: When Can We Estimate Causal Effects From Data?
 
