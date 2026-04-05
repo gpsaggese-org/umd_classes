@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import shap
+import sklearn.ensemble
 import tqdm
 import yfinance as yf
 
@@ -1648,51 +1650,32 @@ def train_ml_models(
     """
     Train all machine learning forecasting models on the training series.
 
-    ML models use the full 46 feature set including macro indicators
-    technical indicators calendar features and event flags. They learn
-    complex non-linear relationships between features and S&P 500
-    returns that statistical models cannot capture. Future covariates
-    for the full period are needed at prediction time since models
-    forecast beyond the training period end date.
+    ML models use the full 41 feature set including macro indicators
+    technical indicators calendar features and event flags. NaN values
+    from holiday gaps are filled using Darts MissingValuesFiller
+    which preserves the TimeSeries frequency attribute unlike
+    DataFrame conversion approaches.
 
     :param target_train: scaled target TimeSeries for training
-        containing S&P 500 closing prices
+        containing 30 day forward S&P 500 returns
     :param past_cov_train: scaled past covariates TimeSeries
         containing macro and technical features
     :param future_cov_train: scaled future covariates TimeSeries
-        containing calendar and event features for training period
+        containing calendar and event features
     :param future_cov_full: scaled future covariates TimeSeries
         containing calendar and event features for full period
-        including validation and test dates needed for prediction
     :param forecast_horizon: number of trading days to forecast
         ahead e.g. `30` for a 30 day forecast
     :return: dictionary mapping model names to their predictions
         as Darts TimeSeries objects
     """
-    # Fill holiday gap NaN values in all TimeSeries before training
-    # since ML models cannot handle missing values natively.
-    target_df = target_train.to_dataframe().ffill().bfill()
-    target_df.index.freq = "B"
-    target_clean = darts.timeseries.TimeSeries.from_dataframe(
-        target_df, fill_missing_dates=True, freq="B"
-    )
-    past_df = past_cov_train.to_dataframe().ffill().bfill()
-    past_df.index.freq = "B"
-    past_clean = darts.timeseries.TimeSeries.from_dataframe(
-        past_df, fill_missing_dates=True, freq="B"
-    )
-    # Clean training future covariates for fitting.
-    future_df = future_cov_train.to_dataframe().ffill().bfill()
-    future_df.index.freq = "B"
-    future_clean = darts.timeseries.TimeSeries.from_dataframe(
-        future_df, fill_missing_dates=True, freq="B"
-    )
-    # Clean full future covariates for prediction beyond training end.
-    future_full_df = future_cov_full.to_dataframe().ffill().bfill()
-    future_full_df.index.freq = "B"
-    future_full_clean = darts.timeseries.TimeSeries.from_dataframe(
-        future_full_df, fill_missing_dates=True, freq="B"
-    )
+    # Fill NaN values using Darts MissingValuesFiller which
+    # preserves TimeSeries frequency unlike DataFrame conversion.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_clean = filler.transform(target_train)
+    past_clean = filler.transform(past_cov_train)
+    future_clean = filler.transform(future_cov_train)
+    future_full_clean = filler.transform(future_cov_full)
     # Initialize dictionary to store model predictions.
     predictions = {}
     # Define all ML models with their configurations.
@@ -1745,7 +1728,7 @@ def train_ml_models(
             verbose=False,
         ),
     }
-    # Train each ML model and predict using full future covariates.
+    # Train each ML model with cleaned past and future covariates.
     for name, model in models.items():
         try:
             _LOG.info("Training %s model.", name)
@@ -1754,8 +1737,6 @@ def train_ml_models(
                 past_covariates=past_clean,
                 future_covariates=future_clean,
             )
-            # Use full future covariates for prediction so model
-            # has access to calendar features beyond training end.
             predictions[name] = model.predict(
                 forecast_horizon,
                 past_covariates=past_clean,
@@ -1846,11 +1827,12 @@ def evaluate_models(
     Evaluate all model predictions against the validation target series.
 
     Predictions are aligned with validation data by date before computing
-    metrics. This handles models that predict different date ranges by
-    finding the intersection of prediction and validation dates. All
-    predictions are inverse transformed from scaled space back to original
-    price space before computing metrics. Five metrics are calculated —
-    MAE RMSE MAPE sMAPE and R squared. Results are sorted by RMSE.
+    metrics. All predictions are inverse transformed from scaled space
+    back to original price space before computing metrics. Six metrics
+    are calculated — MAE RMSE MAPE Direction Accuracy and R squared.
+    Direction accuracy measures whether the model correctly predicted
+    the implied 30 day return direction — the most business relevant
+    metric. Results are sorted by MAPE ascending.
 
     :param predictions: dictionary mapping model names to their
         Darts TimeSeries predictions in scaled space
@@ -1859,93 +1841,584 @@ def evaluate_models(
     :param target_scaler: fitted Darts Scaler used to inverse transform
         predictions back to original price space
     :return: DataFrame with evaluation metrics for each model sorted
-        by RMSE from lowest to highest
+        by MAPE from lowest to highest
     """
     # Initialize list to collect metric rows for each model.
     results = []
-    # Clean validation target and convert to DataFrame for date alignment.
-    val_df = target_val.to_dataframe().ffill().bfill()
-    val_df.index.freq = "B"
-    target_val_clean = darts.timeseries.TimeSeries.from_dataframe(
-        val_df, fill_missing_dates=True, freq="B"
-    )
+    # Fill NaN values in validation target using Darts filler.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_val_clean = filler.transform(target_val)
     # Inverse transform validation to original price space.
     actual_df = target_scaler.inverse_transform(
         target_val_clean
-    ).to_dataframe()
-    # Remove NaN rows from actual values.
-    actual_df = actual_df.dropna()
+    ).to_dataframe().dropna()
     # Evaluate each model prediction against actual values.
     for name, prediction in predictions.items():
         try:
-            # Clean prediction and convert to DataFrame for date alignment.
-            pred_df = prediction.to_dataframe().ffill().bfill()
-            pred_df.index.freq = "B"
-            pred_clean = darts.timeseries.TimeSeries.from_dataframe(
-                pred_df, fill_missing_dates=True, freq="B"
-            )
+            # Fill NaN values in prediction.
+            pred_clean = filler.transform(prediction)
             # Inverse transform prediction to original price space.
             pred_inverse_df = target_scaler.inverse_transform(
                 pred_clean
-            ).to_dataframe()
-            # Remove NaN rows from prediction.
-            pred_inverse_df = pred_inverse_df.dropna()
-            # Align prediction and actual by finding common dates.
+            ).to_dataframe().dropna()
+            # Align prediction and actual by common dates.
             common_dates = actual_df.index.intersection(
                 pred_inverse_df.index
             )
-            # Skip model if no common dates found.
+            # Skip model if insufficient common dates.
             if len(common_dates) < 5:
                 _LOG.warning(
-                    "%s has fewer than 5 common dates with "
-                    "validation set — skipping.",
+                    "%s has fewer than 5 common dates — skipping.",
                     name,
                 )
                 continue
             # Extract aligned values for metric computation.
             actual = actual_df.loc[common_dates].values.flatten()
-            predicted = pred_inverse_df.loc[common_dates].values.flatten()
-            # Calculate MAE — mean absolute error in price units.
+            predicted = pred_inverse_df.loc[
+                common_dates
+            ].values.flatten()
+            # Calculate MAE in price units.
             mae = float(np.mean(np.abs(actual - predicted)))
-            # Calculate RMSE — root mean squared error in price units.
+            # Calculate RMSE in price units.
             rmse = float(
                 np.sqrt(np.mean((actual - predicted) ** 2))
             )
-            # Calculate MAPE — mean absolute percentage error.
+            # Calculate MAPE as percentage of actual price.
             mape = float(
                 np.mean(np.abs((actual - predicted) / actual)) * 100
             )
-            # Calculate sMAPE — symmetric mean absolute percentage error.
+            # Calculate sMAPE.
             smape = float(
                 np.mean(
                     2 * np.abs(actual - predicted)
-                    / (np.abs(actual) + np.abs(predicted))
+                    / (np.abs(actual) + np.abs(predicted) + 1e-8)
                 ) * 100
             )
-            # Calculate R squared — proportion of variance explained.
+            # Calculate direction accuracy across all prediction days.
+            # Each day check if predicted price is above or below
+            # starting price in same direction as actual price.
+            reference_price = actual[0]
+            actual_directions = np.sign(actual - reference_price)
+            predicted_directions = np.sign(predicted - reference_price)
+            # Only evaluate days where market actually moved.
+            valid_mask = actual_directions != 0
+            if valid_mask.sum() > 0:
+                direction_accuracy = float(
+                    np.mean(
+                        actual_directions[valid_mask]
+                        == predicted_directions[valid_mask]
+                    ) * 100
+                )
+            else:
+                direction_accuracy = 0.0
+    
+            # Calculate R squared.
             ss_res = np.sum((actual - predicted) ** 2)
             ss_tot = np.sum((actual - np.mean(actual)) ** 2)
             r2 = float(1 - ss_res / ss_tot)
             results.append({
-                "Model" : name,
-                "MAE"   : round(mae, 2),
-                "RMSE"  : round(rmse, 2),
-                "MAPE"  : round(mape, 2),
-                "sMAPE" : round(smape, 2),
-                "R2"    : round(r2, 4),
-                "Days"  : len(common_dates),
+                "Model"     : name,
+                "MAE"       : round(mae, 2),
+                "RMSE"      : round(rmse, 2),
+                "MAPE"      : round(mape, 2),
+                "sMAPE"     : round(smape, 2),
+                "Direction" : round(direction_accuracy, 1),
+                "R2"        : round(r2, 4),
+                "Days"      : len(common_dates),
             })
             _LOG.info(
-                "%s → RMSE: %.2f | MAPE: %.2f%% | R2: %.4f | Days: %d",
-                name, rmse, mape, r2, len(common_dates),
+                "%s → MAPE: %.2f%% | Direction: %.1f%% | R2: %.4f",
+                name, mape, direction_accuracy, r2,
             )
         except Exception as e:
             _LOG.warning(
                 "Could not evaluate %s: %s — skipping.",
                 name, str(e),
             )
-    # Convert results to DataFrame and sort by RMSE ascending.
-    results_df = pd.DataFrame(results).sort_values(
-        "RMSE", ascending=True
+    # Return empty DataFrame if no results.
+    if not results:
+        _LOG.warning("No models evaluated successfully.")
+        return pd.DataFrame(
+            columns=[
+                "Model", "MAE", "RMSE", "MAPE",
+                "sMAPE", "Direction", "R2", "Days"
+            ]
+        )
+    # Sort by MAPE ascending.
+    return pd.DataFrame(results).sort_values(
+        "MAPE", ascending=True
     ).reset_index(drop=True)
-    return results_df
+
+def plot_predictions_vs_actual(
+    predictions: dict,
+    target_val: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+    n_models: int = 6,
+) -> plt.Figure:
+    """
+    Plot model predictions against actual S&P 500 prices.
+
+    Only the prediction period is shown for clarity. The top n
+    models by MAE are selected and their predictions plotted
+    alongside actual prices. The actual price series is shown
+    in black and each model prediction in a distinct color.
+    A shaded confidence band shows the MAE range around the
+    best model prediction.
+
+    :param predictions: dictionary mapping model names to their
+        Darts TimeSeries predictions in scaled space
+    :param target_val: scaled validation target TimeSeries
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :param n_models: number of top models to plot default is 6
+    :return: matplotlib Figure object with clean prediction chart
+    """
+    # Fill NaN values in validation target.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_val_clean = filler.transform(target_val)
+    # Inverse transform validation to original price space.
+    actual_df = target_scaler.inverse_transform(
+        target_val_clean
+    ).to_dataframe().dropna()
+    # Collect all model predictions in original price space.
+    model_predictions = {}
+    model_errors = {}
+    for name, prediction in predictions.items():
+        try:
+            pred_clean = filler.transform(prediction)
+            pred_df = target_scaler.inverse_transform(
+                pred_clean
+            ).to_dataframe().dropna()
+            # Find common dates with actual values.
+            common_dates = actual_df.index.intersection(
+                pred_df.index
+            )
+            if len(common_dates) >= 5:
+                aligned_actual = actual_df.loc[common_dates].values.flatten()
+                aligned_pred = pred_df.loc[common_dates].values.flatten()
+                mae = float(np.mean(np.abs(aligned_actual - aligned_pred)))
+                model_predictions[name] = pred_df.loc[common_dates]
+                model_errors[name] = mae
+        except Exception as e:
+            _LOG.warning(
+                "Could not process %s for plotting: %s", name, str(e)
+            )
+    # Sort by MAE and take top n models.
+    top_models = sorted(
+        model_errors.keys(), key=lambda x: model_errors[x]
+    )[:n_models]
+    # Get prediction date range.
+    pred_start = min(
+        model_predictions[name].index[0] for name in top_models
+    )
+    pred_end = max(
+        model_predictions[name].index[-1] for name in top_models
+    )
+    # Add 3 day buffer on each side for context.
+    buffer = pd.tseries.offsets.BusinessDay(3)
+    # Filter actual prices to prediction period only.
+    actual_in_range = actual_df.loc[
+        (actual_df.index >= pred_start - buffer) &
+        (actual_df.index <= pred_end + buffer)
+    ]
+    # Define distinct colors for each model.
+    colors = [
+        "steelblue", "crimson", "forestgreen",
+        "darkorange", "purple", "brown",
+    ]
+    # Create single clean figure.
+    fig, ax = plt.subplots(figsize=(16, 7))
+    # Plot actual prices in thick black line.
+    ax.plot(
+        actual_in_range.index,
+        actual_in_range.values.flatten(),
+        color="black",
+        linewidth=2.5,
+        label="Actual S&P 500",
+        zorder=5,
+    )
+    # Add shaded confidence band around best model prediction.
+    best_model = top_models[0]
+    best_pred = model_predictions[best_model]
+    best_mae = model_errors[best_model]
+    ax.fill_between(
+        best_pred.index,
+        best_pred.values.flatten() - best_mae,
+        best_pred.values.flatten() + best_mae,
+        alpha=0.15,
+        color=colors[0],
+        label=f"±MAE ${best_mae:.0f} confidence band",
+    )
+    # Plot each top model prediction as dashed line.
+    for idx, name in enumerate(top_models):
+        pred_df = model_predictions[name]
+        mae = model_errors[name]
+        ax.plot(
+            pred_df.index,
+            pred_df.values.flatten(),
+            color=colors[idx % len(colors)],
+            linewidth=1.8,
+            linestyle="--",
+            label=f"{name} (MAE=${mae:.0f} | MAPE={mae/actual_in_range.values.mean()*100:.2f}%)",
+            alpha=0.85,
+        )
+    # Add vertical line showing prediction start.
+    ax.axvline(
+        pred_start,
+        color="gray",
+        linewidth=1.0,
+        linestyle=":",
+        alpha=0.7,
+        label="Prediction start",
+    )
+    # Configure axes and labels.
+    ax.set_xlim(pred_start - buffer, pred_end + buffer)
+    # Set y axis to prediction price range with padding.
+    all_values = np.concatenate([
+        model_predictions[name].values.flatten()
+        for name in top_models
+    ] + [actual_in_range.values.flatten()])
+    y_min = all_values.min() * 0.992
+    y_max = all_values.max() * 1.008
+    ax.set_ylim(y_min, y_max)
+    ax.set_title(
+        f"Model Predictions vs Actual S&P 500 | "
+        f"{pred_start.date()} to {pred_end.date()}",
+        fontsize=14,
+        fontweight="bold",
+    )
+    ax.set_ylabel("S&P 500 Price (USD)", fontsize=11)
+    ax.set_xlabel("Date", fontsize=11)
+    ax.legend(
+        loc="upper left",
+        fontsize=8,
+        ncol=2,
+        framealpha=0.9,
+    )
+    fig.tight_layout()
+    return fig
+
+def select_features_shap(
+    master: pd.DataFrame,
+    target_col: str,
+    past_cov_cols: list,
+    correlation_threshold: float,
+    shap_importance_threshold: float,
+) -> list:
+    """
+    Select optimal features using correlation filtering and SHAP values.
+
+    Two step feature selection is applied. First features with
+    correlation above the threshold are identified and the less
+    important one from each correlated pair is removed. Second
+    a LightGBM model is trained on remaining features and SHAP
+    values identify the features contributing the most predictive
+    power. Features explaining the top fraction of total SHAP
+    importance are retained.
+
+    :param master: master DataFrame containing target and all features
+    :param target_col: name of the target column e.g. `'Close'`
+    :param past_cov_cols: list of past covariate column names to
+        evaluate for selection
+    :param correlation_threshold: remove one feature from pairs with
+        absolute correlation above this threshold e.g. `0.95`
+    :param shap_importance_threshold: retain features explaining at
+        least this fraction of total SHAP importance e.g. `0.90`
+    :return: list of selected feature column names after both
+        correlation filtering and SHAP selection
+    """
+    # Extract feature matrix from master DataFrame.
+    features = master[past_cov_cols].copy()
+    target = master[target_col].copy()
+    # Step 1 — Remove highly correlated features.
+    _LOG.info(
+        "Step 1: Removing features with correlation above %.2f.",
+        correlation_threshold,
+    )
+    # Calculate absolute correlation matrix between all features.
+    corr_matrix = features.corr().abs()
+    # Find upper triangle of correlation matrix to avoid duplicates.
+    upper_triangle = corr_matrix.where(
+        np.triu(np.ones(corr_matrix.shape), k=1).astype(bool)
+    )
+    # Identify features with correlation above threshold.
+    to_drop = [
+        col for col in upper_triangle.columns
+        if any(upper_triangle[col] > correlation_threshold)
+    ]
+    # Remove highly correlated features from feature set.
+    features_filtered = features.drop(columns=to_drop)
+    _LOG.info(
+        "Removed %d highly correlated features — %d remaining.",
+        len(to_drop),
+        len(features_filtered.columns),
+    )
+    _LOG.info("Dropped correlated features: %s", to_drop)
+    # Step 2 — SHAP feature importance on remaining features.
+    _LOG.info("Step 2: Calculating SHAP values using LightGBM.")
+    # Calculate daily returns as target for SHAP analysis since
+    # returns are more stationary than price levels.
+    returns = target.pct_change().dropna()
+    features_aligned = features_filtered.loc[returns.index]
+    # Train LightGBM on returns with all remaining features.
+    lgbm = sklearn.ensemble.GradientBoostingRegressor(
+        n_estimators=100,
+        learning_rate=0.05,
+        max_depth=4,
+        random_state=42,
+    )
+    lgbm.fit(features_aligned.ffill().bfill(), returns)
+    # Calculate SHAP values using TreeExplainer.
+    explainer = shap.TreeExplainer(lgbm)
+    shap_values = explainer.shap_values(
+        features_aligned.ffill().bfill()
+    )
+    # Calculate mean absolute SHAP value per feature.
+    mean_shap = np.abs(shap_values).mean(axis=0)
+    shap_df = pd.DataFrame({
+        "Feature"    : features_aligned.columns,
+        "SHAP_Value" : mean_shap,
+    }).sort_values("SHAP_Value", ascending=False).reset_index(
+        drop=True
+    )
+    # Calculate cumulative importance as percentage of total.
+    total_shap = shap_df["SHAP_Value"].sum()
+    shap_df["SHAP_Pct"] = shap_df["SHAP_Value"] / total_shap * 100
+    shap_df["Cumulative_Pct"] = shap_df["SHAP_Pct"].cumsum()
+    _LOG.info(
+        "SHAP importance calculated for %d features.",
+        len(shap_df),
+    )
+    # Select features explaining top fraction of total importance.
+    selected = shap_df[
+        shap_df["Cumulative_Pct"] <= shap_importance_threshold * 100
+    ]["Feature"].tolist()
+    # Always include at least the top 5 features.
+    if len(selected) < 5:
+        selected = shap_df["Feature"].head(5).tolist()
+    _LOG.info(
+        "Selected %d features explaining %.0f%% of predictions.",
+        len(selected),
+        shap_importance_threshold * 100,
+    )
+    _LOG.info("Selected features: %s", selected)
+    return selected, shap_df
+
+def compare_feature_versions(
+    target_train: darts.timeseries.TimeSeries,
+    target_val: darts.timeseries.TimeSeries,
+    past_cov_train: darts.timeseries.TimeSeries,
+    future_cov_train: darts.timeseries.TimeSeries,
+    future_cov_full: darts.timeseries.TimeSeries,
+    train: pd.DataFrame,
+    val: pd.DataFrame,
+    test: pd.DataFrame,
+    target_col: str,
+    future_cov_cols: list,
+    past_cov_cols: list,
+    shap_df: pd.DataFrame,
+    forecast_horizon: int,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+) -> pd.DataFrame:
+    """
+    Compare ML model performance across different feature set sizes.
+
+    Four versions are trained and evaluated — all features as baseline
+    and three SHAP selected subsets at 90 95 and 98 percent cumulative
+    importance thresholds. LightGBM is used as the representative ML
+    model for comparison since it is the fastest to train. Pre-built
+    Darts TimeSeries objects are used directly to avoid frequency
+    inference issues with irregular stock market calendars.
+
+    :param target_train: scaled target TimeSeries for training
+    :param target_val: scaled target TimeSeries for validation
+    :param past_cov_train: scaled past covariates TimeSeries
+    :param future_cov_train: scaled future covariates TimeSeries
+    :param future_cov_full: scaled full period future covariates
+    :param train: training DataFrame for extracting feature subsets
+    :param val: validation DataFrame for extracting feature subsets
+    :param test: test DataFrame for extracting feature subsets
+    :param target_col: name of the target column e.g. `'Close'`
+    :param future_cov_cols: list of future covariate column names
+    :param past_cov_cols: list of all past covariate column names
+    :param shap_df: DataFrame with SHAP importance values
+    :param forecast_horizon: number of trading days to forecast ahead
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :return: DataFrame comparing validation metrics across all four
+        feature versions sorted by MAPE ascending
+    """
+    # Ensure all selected features exist in past covariate columns.
+    valid_past_cols = set(past_cov_cols)
+    # Define the four feature versions to compare.
+    versions = {
+        "All_40_Features": past_cov_cols,
+        "SHAP_90pct_Features": [
+            f for f in shap_df[
+                shap_df["Cumulative_Pct"] <= 90
+            ]["Feature"].tolist()
+            if f in valid_past_cols
+        ],
+        "SHAP_95pct_Features": [
+            f for f in shap_df[
+                shap_df["Cumulative_Pct"] <= 95
+            ]["Feature"].tolist()
+            if f in valid_past_cols
+        ],
+        "SHAP_98pct_Features": [
+            f for f in shap_df[
+                shap_df["Cumulative_Pct"] <= 98
+            ]["Feature"].tolist()
+            if f in valid_past_cols
+        ],
+    }
+    # Log the number of features per version.
+    for name, cols in versions.items():
+        _LOG.info("%s → %d features", name, len(cols))
+    # Get column names from existing past covariates TimeSeries.
+    all_past_cols = past_cov_train.components.tolist()
+    # Initialize results list.
+    results = []
+    # Train and evaluate LightGBM for each feature version.
+    for version_name, feature_cols in versions.items():
+        try:
+            _LOG.info(
+                "Training LightGBM with %s (%d features).",
+                version_name, len(feature_cols),
+            )
+            # Find indices of selected features in past covariates.
+            feature_indices = [
+                all_past_cols.index(f)
+                for f in feature_cols
+                if f in all_past_cols
+            ]
+            if not feature_indices:
+                _LOG.warning(
+                    "%s has no valid feature indices — skipping.",
+                    version_name,
+                )
+                continue
+            # Extract feature subset from existing TimeSeries.
+            past_subset = past_cov_train.univariate_component(
+                feature_indices[0]
+            )
+            for idx in feature_indices[1:]:
+                past_subset = past_subset.stack(
+                    past_cov_train.univariate_component(idx)
+                )
+            # Clean NaN values from target and covariates.
+            target_df = target_train.to_dataframe().ffill().bfill()
+            target_df.index.freq = "B"
+            target_clean = darts.timeseries.TimeSeries.from_dataframe(
+                target_df, fill_missing_dates=True, freq="B"
+            )
+            past_df = past_subset.to_dataframe().ffill().bfill()
+            past_df.index.freq = "B"
+            past_clean = darts.timeseries.TimeSeries.from_dataframe(
+                past_df, fill_missing_dates=True, freq="B"
+            )
+            future_df = future_cov_train.to_dataframe().ffill().bfill()
+            future_df.index.freq = "B"
+            future_clean = darts.timeseries.TimeSeries.from_dataframe(
+                future_df, fill_missing_dates=True, freq="B"
+            )
+            future_full_df = future_cov_full.to_dataframe().ffill().bfill()
+            future_full_df.index.freq = "B"
+            future_full_clean = darts.timeseries.TimeSeries.from_dataframe(
+                future_full_df, fill_missing_dates=True, freq="B"
+            )
+            # Train LightGBM with this feature subset.
+            model = darts.models.LightGBMModel(
+                lags=30,
+                lags_past_covariates=30,
+                lags_future_covariates=[0],
+                output_chunk_length=forecast_horizon,
+                n_estimators=200,
+                num_leaves=31,
+                learning_rate=0.05,
+                random_state=42,
+                verbose=-1,
+            )
+            model.fit(
+                target_clean,
+                past_covariates=past_clean,
+                future_covariates=future_clean,
+            )
+            prediction = model.predict(
+                forecast_horizon,
+                past_covariates=past_clean,
+                future_covariates=future_full_clean,
+            )
+            # Evaluate prediction against validation set.
+            val_df = target_val.to_dataframe().ffill().bfill()
+            val_df.index.freq = "B"
+            val_clean = darts.timeseries.TimeSeries.from_dataframe(
+                val_df, fill_missing_dates=True, freq="B"
+            )
+            actual_df = target_scaler.inverse_transform(
+                val_clean
+            ).to_dataframe().dropna()
+            pred_df = prediction.to_dataframe().ffill().bfill()
+            pred_df.index.freq = "B"
+            pred_clean_ts = darts.timeseries.TimeSeries.from_dataframe(
+                pred_df, fill_missing_dates=True, freq="B"
+            )
+            pred_inverse_df = target_scaler.inverse_transform(
+                pred_clean_ts
+            ).to_dataframe().dropna()
+            # Align by common dates.
+            common_dates = actual_df.index.intersection(
+                pred_inverse_df.index
+            )
+            if len(common_dates) < 5:
+                _LOG.warning(
+                    "%s insufficient common dates — skipping.",
+                    version_name,
+                )
+                continue
+            actual = actual_df.loc[common_dates].values.flatten()
+            predicted = pred_inverse_df.loc[
+                common_dates
+            ].values.flatten()
+            # Calculate evaluation metrics.
+            mae = float(np.mean(np.abs(actual - predicted)))
+            rmse = float(
+                np.sqrt(np.mean((actual - predicted) ** 2))
+            )
+            mape = float(
+                np.mean(
+                    np.abs((actual - predicted) / actual)
+                ) * 100
+            )
+            r2 = float(
+                1 - np.sum((actual - predicted) ** 2)
+                / np.sum((actual - np.mean(actual)) ** 2)
+            )
+            results.append({
+                "Version"  : version_name,
+                "Features" : len(feature_cols),
+                "MAE"      : round(mae, 2),
+                "RMSE"     : round(rmse, 2),
+                "MAPE"     : round(mape, 2),
+                "R2"       : round(r2, 4),
+                "Days"     : len(common_dates),
+            })
+            _LOG.info(
+                "%s → MAPE: %.2f%% | RMSE: %.2f | R2: %.4f",
+                version_name, mape, rmse, r2,
+            )
+        except Exception as e:
+            _LOG.warning(
+                "%s failed: %s — skipping.", version_name, str(e)
+            )
+    # Return empty DataFrame if no results.
+    if not results:
+        _LOG.warning("No feature versions completed successfully.")
+        return pd.DataFrame(
+            columns=[
+                "Version", "Features", "MAE",
+                "RMSE", "MAPE", "R2", "Days"
+            ]
+        )
+    # Sort by MAPE ascending.
+    return pd.DataFrame(results).sort_values(
+        "MAPE", ascending=True
+    ).reset_index(drop=True)
