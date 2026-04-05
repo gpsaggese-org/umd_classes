@@ -2694,3 +2694,233 @@ def tune_ml_models(
     return pd.DataFrame(results).sort_values(
         "Val_MAPE", ascending=True
     ).reset_index(drop=True)
+
+def train_ensemble_models(
+    target_train: darts.timeseries.TimeSeries,
+    target_val: darts.timeseries.TimeSeries,
+    past_cov_train: darts.timeseries.TimeSeries,
+    future_cov_train: darts.timeseries.TimeSeries,
+    future_cov_full: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+    forecast_horizon: int,
+    tuning_results: pd.DataFrame,
+) -> tuple:
+    """
+    Train ensemble models combining top performing ML models.
+
+    Three ensemble strategies are implemented — simple average
+    weighted average by inverse MAPE and stacking with a linear
+    meta model. The top three models from hyperparameter tuning
+    are used as base models. Each ensemble strategy is evaluated
+    on the validation set and compared against the best individual
+    model.
+
+    :param target_train: scaled target TimeSeries for training
+    :param target_val: scaled target TimeSeries for validation
+    :param past_cov_train: scaled past covariates TimeSeries
+    :param future_cov_train: scaled future covariates TimeSeries
+    :param future_cov_full: full period future covariates TimeSeries
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :param forecast_horizon: number of trading days to forecast ahead
+    :param tuning_results: DataFrame from Phase 7 tuning containing
+        best parameters for each model
+    :return: tuple of (ensemble_predictions dict, results DataFrame)
+    """
+    # Fill NaN values using Darts MissingValuesFiller.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_clean = filler.transform(target_train)
+    target_val_clean = filler.transform(target_val)
+    past_clean = filler.transform(past_cov_train)
+    future_clean = filler.transform(future_cov_train)
+    future_full_clean = filler.transform(future_cov_full)
+    # Extract top 3 models from tuning results.
+    top_3 = tuning_results.head(3)
+    _LOG.info(
+        "Building ensemble from top 3 models:\n%s",
+        top_3[["Model", "Feature_Set", "Val_MAPE"]].to_string(),
+    )
+    # Train each base model with its best parameters.
+    base_predictions = {}
+    base_mapes = {}
+    for _, row in top_3.iterrows():
+        model_name = row["Model"]
+        feature_set = row["Feature_Set"]
+        params = eval(row["Best_Params"])
+        model_key = f"{model_name}_{feature_set}"
+        try:
+            _LOG.info("Training base model %s.", model_key)
+            lags = params["lags"]
+            n_estimators = params["n_estimators"]
+            if model_name == "LightGBM":
+                model = darts.models.LightGBMModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    num_leaves=params["num_leaves"],
+                    learning_rate=params["learning_rate"],
+                    random_state=42,
+                    verbose=-1,
+                )
+            elif model_name == "XGBoost":
+                model = darts.models.XGBModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=params["max_depth"],
+                    learning_rate=params["learning_rate"],
+                    random_state=42,
+                    verbosity=0,
+                )
+            elif model_name == "RandomForest":
+                model = darts.models.RandomForestModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=params["max_depth"],
+                    random_state=42,
+                )
+            # Train model and generate prediction.
+            model.fit(
+                target_clean,
+                past_covariates=past_clean,
+                future_covariates=future_clean,
+            )
+            prediction = model.predict(
+                forecast_horizon,
+                past_covariates=past_clean,
+                future_covariates=future_full_clean,
+            )
+            # Inverse transform prediction for evaluation.
+            pred_df = target_scaler.inverse_transform(
+                filler.transform(prediction)
+            ).to_dataframe().dropna()
+            # Get actual validation values.
+            val_df = target_val_clean.to_dataframe().ffill().bfill()
+            val_df.index.freq = "B"
+            val_ts = darts.timeseries.TimeSeries.from_dataframe(
+                val_df, fill_missing_dates=True, freq="B"
+            )
+            actual_df = target_scaler.inverse_transform(
+                val_ts
+            ).to_dataframe().dropna()
+            # Calculate MAPE on common dates.
+            common_dates = actual_df.index.intersection(pred_df.index)
+            if len(common_dates) >= 5:
+                actual = actual_df.loc[common_dates].values.flatten()
+                predicted = pred_df.loc[common_dates].values.flatten()
+                mape = float(
+                    np.mean(
+                        np.abs((actual - predicted) / actual)
+                    ) * 100
+                )
+                base_predictions[model_key] = pred_df
+                base_mapes[model_key] = mape
+                _LOG.info(
+                    "%s → Val MAPE: %.4f%%", model_key, mape
+                )
+        except Exception as e:
+            _LOG.warning(
+                "Base model %s failed: %s — skipping.",
+                model_key,
+                str(e),
+            )
+    if len(base_predictions) < 2:
+        _LOG.warning("Insufficient base models for ensemble.")
+        return {}, pd.DataFrame()
+    # Get common dates across all base model predictions.
+    common_dates = None
+    for pred_df in base_predictions.values():
+        if common_dates is None:
+            common_dates = pred_df.index
+        else:
+            common_dates = common_dates.intersection(pred_df.index)
+    # Stack predictions into matrix for ensemble calculation.
+    pred_matrix = np.column_stack([
+        base_predictions[key].loc[common_dates].values.flatten()
+        for key in base_predictions.keys()
+    ])
+    # Get actual values for ensemble evaluation.
+    val_df = target_val_clean.to_dataframe().ffill().bfill()
+    val_df.index.freq = "B"
+    val_ts = darts.timeseries.TimeSeries.from_dataframe(
+        val_df, fill_missing_dates=True, freq="B"
+    )
+    actual_df = target_scaler.inverse_transform(
+        val_ts
+    ).to_dataframe().dropna()
+    actual_common = actual_df.loc[
+        actual_df.index.intersection(common_dates)
+    ].values.flatten()
+    # Strategy 1 — Simple average ensemble.
+    simple_avg = pred_matrix.mean(axis=1)
+    simple_mape = float(
+        np.mean(np.abs((actual_common - simple_avg) / actual_common)) * 100
+    )
+    _LOG.info("Simple average ensemble → MAPE: %.4f%%", simple_mape)
+    # Strategy 2 — Weighted average by inverse MAPE.
+    # Models with lower MAPE get higher weight.
+    inv_mapes = np.array([
+        1 / base_mapes[key] for key in base_predictions.keys()
+    ])
+    weights = inv_mapes / inv_mapes.sum()
+    weighted_avg = (pred_matrix * weights).sum(axis=1)
+    weighted_mape = float(
+        np.mean(
+            np.abs((actual_common - weighted_avg) / actual_common)
+        ) * 100
+    )
+    _LOG.info(
+        "Weighted average ensemble → MAPE: %.4f%% | Weights: %s",
+        weighted_mape,
+        {k: round(w, 3) for k, w in zip(base_predictions.keys(), weights)},
+    )
+    # Strategy 3 — Stacking with linear meta model.
+    # Meta model learns optimal combination weights from validation data.
+    meta_model = sklearn.linear_model.Ridge(alpha=1.0)
+    meta_model.fit(pred_matrix, actual_common)
+    stacked_avg = meta_model.predict(pred_matrix)
+    stacked_mape = float(
+        np.mean(
+            np.abs((actual_common - stacked_avg) / actual_common)
+        ) * 100
+    )
+    _LOG.info(
+        "Stacking ensemble → MAPE: %.4f%% | Coefficients: %s",
+        stacked_mape,
+        dict(zip(base_predictions.keys(), meta_model.coef_.round(3))),
+    )
+    # Collect ensemble results.
+    ensemble_predictions = {
+        "Simple_Average"   : simple_avg,
+        "Weighted_Average" : weighted_avg,
+        "Stacking"         : stacked_avg,
+    }
+    results = []
+    best_individual_mape = min(base_mapes.values())
+    best_individual_name = min(base_mapes, key=base_mapes.get)
+    for strategy, pred_vals in ensemble_predictions.items():
+        mape = float(
+            np.mean(
+                np.abs((actual_common - pred_vals) / actual_common)
+            ) * 100
+        )
+        improvement = (
+            (best_individual_mape - mape) / best_individual_mape * 100
+        )
+        results.append({
+            "Strategy"          : strategy,
+            "Val_MAPE"          : round(mape, 4),
+            "Best_Individual"   : best_individual_name,
+            "Best_Individual_MAPE": round(best_individual_mape, 4),
+            "Improvement_Pct"   : round(improvement, 2),
+        })
+    results_df = pd.DataFrame(results).sort_values(
+        "Val_MAPE", ascending=True
+    ).reset_index(drop=True)
+    return ensemble_predictions, results_df
