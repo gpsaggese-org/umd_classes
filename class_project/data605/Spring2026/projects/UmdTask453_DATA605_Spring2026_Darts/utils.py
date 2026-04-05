@@ -2924,3 +2924,348 @@ def train_ensemble_models(
         "Val_MAPE", ascending=True
     ).reset_index(drop=True)
     return ensemble_predictions, results_df
+
+def detect_market_regimes(
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+    macro_features: pd.DataFrame,
+    sp500: pd.DataFrame,
+    n_regimes: int = None,
+    random_state: int = 42,
+) -> tuple:
+    """
+    Detect market regimes using K-Means clustering on macro features.
+
+    The optimal number of regimes is automatically determined using
+    silhouette score as primary criterion and elbow method as secondary
+    validation. Silhouette score directly measures cluster separation
+    quality making it more reliable than inertia alone. Regimes are
+    sorted by average S&P 500 return so Regime 0 is always the worst
+    performing and Regime n-1 is always the best performing.
+
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+    :param macro_features: DataFrame with calculated macro features
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param n_regimes: number of regimes to use — if None the
+        silhouette score automatically selects the optimal number
+    :param random_state: random seed for reproducibility default 42
+    :return: tuple of (regime_labels Series regime_stats DataFrame
+        confidence_scores Series kmeans_model scaler optimal_k)
+    """
+    # Select macro features for regime detection.
+    regime_features = pd.concat([
+        macro_daily[["VIX", "TNX", "IRX", "OIL", "DXY"]],
+        macro_features[[
+            "YIELD_CURVE", "YIELD_CURVE_INVERTED",
+            "VIX_MA20", "OIL_MOM30",
+        ]],
+        macro_monthly[["CPI", "FED_RATE", "UNEMPLOYMENT"]],
+    ], axis=1).ffill().bfill()
+    # Standardize features so all have equal influence on clustering.
+    feature_scaler = sklearn.preprocessing.StandardScaler()
+    features_scaled = feature_scaler.fit_transform(regime_features)
+    # Automatically detect optimal number of regimes using both
+    # silhouette score and elbow method for robust selection.
+    inertias = []
+    silhouette_scores = []
+    k_range = range(2, 8)
+    for k in k_range:
+        km = sklearn.cluster.KMeans(
+            n_clusters=k,
+            random_state=random_state,
+            n_init=10,
+        )
+        labels_k = km.fit_predict(features_scaled)
+        inertias.append(km.inertia_)
+        # Calculate silhouette score for this k.
+        sil_score = sklearn.metrics.silhouette_score(
+            features_scaled, labels_k
+        )
+        silhouette_scores.append(sil_score)
+        _LOG.info(
+            "k=%d → Inertia: %.0f | Silhouette: %.4f",
+            k, km.inertia_, sil_score,
+        )
+    # Use silhouette score as primary selection criterion.
+    optimal_k_silhouette = int(
+        k_range[np.argmax(silhouette_scores)]
+    )
+    # Use elbow method as secondary validation.
+    inertia_diffs = np.diff(inertias)
+    inertia_diffs2 = np.diff(inertia_diffs)
+    optimal_k_elbow = int(
+        k_range[np.argmax(inertia_diffs2) + 2]
+    )
+    _LOG.info(
+        "Silhouette selected k=%d | Elbow selected k=%d",
+        optimal_k_silhouette,
+        optimal_k_elbow,
+    )
+    # Use silhouette as primary — override with manual if provided.
+    if n_regimes is not None:
+        optimal_k = n_regimes
+        _LOG.info("Using manually specified k=%d.", optimal_k)
+    else:
+        optimal_k = optimal_k_silhouette
+        _LOG.info("Using silhouette optimal k=%d.", optimal_k)
+    # Fit K-Means with optimal number of regimes.
+    kmeans = sklearn.cluster.KMeans(
+        n_clusters=optimal_k,
+        random_state=random_state,
+        n_init=10,
+    )
+    raw_labels = kmeans.fit_predict(features_scaled)
+    # Calculate S&P 500 daily returns for regime sorting.
+    sp500_returns = sp500["Close"].pct_change().fillna(0)
+    # Sort regimes by average S&P 500 return.
+    regime_returns = {}
+    for regime in range(optimal_k):
+        mask = raw_labels == regime
+        regime_returns[regime] = sp500_returns[mask].mean()
+    # Create mapping from raw label to sorted label.
+    sorted_regimes = sorted(
+        regime_returns.keys(),
+        key=lambda x: regime_returns[x],
+    )
+    label_mapping = {
+        old: new for new, old in enumerate(sorted_regimes)
+    }
+    regime_labels = pd.Series(
+        [label_mapping[r] for r in raw_labels],
+        index=regime_features.index,
+        name="Regime",
+    )
+    # Calculate confidence scores.
+    distances = kmeans.transform(features_scaled)
+    assigned_distances = distances[
+        np.arange(len(distances)), raw_labels,
+    ]
+    total_distances = distances.sum(axis=1)
+    confidence_scores = pd.Series(
+        1 - (assigned_distances / total_distances),
+        index=regime_features.index,
+        name="Confidence",
+    )
+    # Dynamic regime names based on sorted returns.
+    regime_name_templates = [
+        "Bear Market",
+        "High Volatility",
+        "Moderate Growth",
+        "Recovery",
+        "Bull Market",
+        "Strong Bull",
+    ]
+    regime_names = {
+        i: regime_name_templates[i]
+        for i in range(optimal_k)
+    }
+    # Calculate regime statistics.
+    regime_stats = []
+    for regime in range(optimal_k):
+        mask = regime_labels == regime
+        stats = {
+            "Regime"        : regime,
+            "Name"          : regime_names[regime],
+            "Count"         : int(mask.sum()),
+            "Pct_Days"      : round(mask.mean() * 100, 1),
+            "Avg_Return"    : round(
+                sp500_returns[mask].mean() * 100, 4
+            ),
+            "Avg_VIX"       : round(
+                macro_daily.loc[mask, "VIX"].mean(), 2
+            ),
+            "Avg_FedRate"   : round(
+                macro_monthly.loc[mask, "FED_RATE"].mean(), 2
+            ),
+            "Avg_YieldCurve": round(
+                macro_features.loc[mask, "YIELD_CURVE"].mean(), 4
+            ),
+        }
+        regime_stats.append(stats)
+        _LOG.info(
+            "Regime %d (%s): %d days (%.1f%%) | "
+            "Avg Return: %.4f%% | Avg VIX: %.2f",
+            regime,
+            stats["Name"],
+            stats["Count"],
+            stats["Pct_Days"],
+            stats["Avg_Return"],
+            stats["Avg_VIX"],
+        )
+    regime_stats_df = pd.DataFrame(regime_stats)
+    return (
+        regime_labels,
+        regime_stats_df,
+        confidence_scores,
+        kmeans,
+        feature_scaler,
+        optimal_k,
+    )
+
+def plot_regime_analysis(
+    regime_labels: pd.Series,
+    regime_stats: pd.DataFrame,
+    confidence_scores: pd.Series,
+    sp500: pd.DataFrame,
+    macro_daily: pd.DataFrame,
+    macro_features: pd.DataFrame,
+    sectors: pd.DataFrame,
+    optimal_k: int,
+) -> plt.Figure:
+    """
+    Plot comprehensive market regime analysis with four panels.
+
+    Four panels are shown — S&P 500 price colored by regime
+    average sector returns per regime as a heatmap showing
+    which sectors perform best in each environment average
+    macro conditions per regime as a grouped bar chart and
+    VIX over time colored by regime showing the fear signal
+    that defines each market environment.
+
+    :param regime_labels: Series with regime label per trading day
+    :param regime_stats: DataFrame with regime statistics
+    :param confidence_scores: Series with confidence score per day
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_features: DataFrame with calculated macro features
+    :param sectors: DataFrame with sector ETF prices
+    :param optimal_k: number of regimes detected
+    :return: matplotlib Figure object with four panel analysis
+    """
+    # Define colors and names for each regime.
+    regime_colors = [
+        "#D32F2F",  # deep red — Bear Market
+        "#FF6F00",  # deep orange — High Volatility
+        "#1565C0",  # deep blue — Moderate Growth
+        "#2E7D32",  # deep green — Recovery
+        "#F9A825",  # deep yellow — Bull Market
+        "#6A1B9A",  # deep purple — Strong Bull
+    ]
+    # Create figure with 2x2 grid of subplots.
+    fig, axes = plt.subplots(2, 2, figsize=(20, 14))
+    # Panel 1 (top left) — S&P 500 price colored by regime.
+    for regime in range(optimal_k):
+        mask = regime_labels == regime
+        name = regime_stats.loc[
+            regime_stats["Regime"] == regime, "Name"
+        ].values[0]
+        axes[0, 0].scatter(
+            sp500.index[mask],
+            sp500.loc[mask, "Close"],
+            c=regime_colors[regime],
+            s=2,
+            label=f"Regime {regime}: {name}",
+            alpha=0.7,
+        )
+    axes[0, 0].set_title(
+        "S&P 500 Price by Market Regime",
+        fontsize=11,
+        fontweight="bold",
+    )
+    axes[0, 0].set_ylabel("S&P 500 Price (USD)")
+    axes[0, 0].set_xlabel("Date")
+    axes[0, 0].legend(loc="upper left", fontsize=7, markerscale=5)
+    # Panel 2 (top right) — Average sector returns per regime heatmap.
+    # Calculate average daily return per sector per regime.
+    sector_returns = sectors.pct_change().dropna() * 100
+    sector_regime_returns = pd.DataFrame()
+    for regime in range(optimal_k):
+        mask = regime_labels.reindex(sector_returns.index) == regime
+        regime_name = regime_stats.loc[
+            regime_stats["Regime"] == regime, "Name"
+        ].values[0]
+        avg_returns = sector_returns.loc[mask].mean()
+        sector_regime_returns[regime_name] = avg_returns
+    # Plot heatmap of sector returns by regime.
+    sns.heatmap(
+        sector_regime_returns,
+        annot=True,
+        fmt=".3f",
+        cmap="RdYlGn",
+        center=0,
+        linewidths=0.5,
+        linecolor="white",
+        ax=axes[0, 1],
+        cbar_kws={"label": "Avg Daily Return (%)"},
+    )
+    axes[0, 1].set_title(
+        "Average Sector Daily Returns by Regime (%)",
+        fontsize=11,
+        fontweight="bold",
+    )
+    axes[0, 1].set_xlabel("Market Regime")
+    axes[0, 1].set_ylabel("Sector ETF")
+    # Panel 3 (bottom left) — Average macro conditions per regime.
+    metrics = ["Avg_VIX", "Avg_FedRate", "Avg_Return"]
+    metric_labels = ["VIX (Fear)", "Fed Rate (%)", "Daily Return (%)"]
+    x = np.arange(len(metrics))
+    width = 0.8 / optimal_k
+    for regime in range(optimal_k):
+        row = regime_stats[
+            regime_stats["Regime"] == regime
+        ].iloc[0]
+        values = [
+            row["Avg_VIX"],
+            row["Avg_FedRate"],
+            row["Avg_Return"] * 100,
+        ]
+        offset = (regime - optimal_k / 2 + 0.5) * width
+        axes[1, 0].bar(
+            x + offset,
+            values,
+            width=width,
+            color=regime_colors[regime],
+            alpha=0.8,
+            label=row["Name"],
+        )
+    axes[1, 0].set_title(
+        "Average Macro Conditions by Regime",
+        fontsize=11,
+        fontweight="bold",
+    )
+    axes[1, 0].set_ylabel("Value")
+    axes[1, 0].set_xlabel("Metric")
+    axes[1, 0].set_xticks(x)
+    axes[1, 0].set_xticklabels(metric_labels, fontsize=9)
+    axes[1, 0].legend(fontsize=7, loc="upper right")
+    axes[1, 0].axhline(
+        0, color="black", linewidth=0.8, linestyle="--"
+    )
+    # Panel 4 (bottom right) — VIX over time colored by regime.
+    for regime in range(optimal_k):
+        mask = regime_labels == regime
+        name = regime_stats.loc[
+            regime_stats["Regime"] == regime, "Name"
+        ].values[0]
+        axes[1, 1].scatter(
+            macro_daily.index[mask],
+            macro_daily.loc[mask, "VIX"],
+            c=regime_colors[regime],
+            s=2,
+            label=name,
+            alpha=0.7,
+        )
+    axes[1, 1].axhline(
+        30,
+        color="black",
+        linewidth=1.0,
+        linestyle="--",
+        alpha=0.5,
+        label="VIX=30 (high fear)",
+    )
+    axes[1, 1].set_title(
+        "VIX (Fear Index) Colored by Market Regime",
+        fontsize=11,
+        fontweight="bold",
+    )
+    axes[1, 1].set_ylabel("VIX")
+    axes[1, 1].set_xlabel("Date")
+    axes[1, 1].legend(loc="upper right", fontsize=7, markerscale=5)
+    fig.suptitle(
+        "Market Regime Analysis 2018-2024 — K-Means Clustering",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
