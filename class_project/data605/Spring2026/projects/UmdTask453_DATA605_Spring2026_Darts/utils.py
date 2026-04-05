@@ -16,6 +16,7 @@ import fredapi
 import holidays
 import matplotlib.pyplot as plt
 import numpy as np
+import optuna
 import pandas as pd
 import seaborn as sns
 import shap
@@ -2421,4 +2422,275 @@ def compare_feature_versions(
     # Sort by MAPE ascending.
     return pd.DataFrame(results).sort_values(
         "MAPE", ascending=True
+    ).reset_index(drop=True)
+
+def tune_ml_models(
+    target_train: darts.timeseries.TimeSeries,
+    target_val: darts.timeseries.TimeSeries,
+    past_cov_train: darts.timeseries.TimeSeries,
+    future_cov_train: darts.timeseries.TimeSeries,
+    future_cov_full: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+    forecast_horizon: int,
+    feature_set_name: str,
+    n_trials: int = 20,
+) -> pd.DataFrame:
+    """
+    Tune hyperparameters for LightGBM XGBoost and RandomForest
+    using Optuna Bayesian optimization.
+
+    Optuna intelligently searches the hyperparameter space by
+    learning from previous trial results — finding better parameters
+    in fewer iterations than grid or random search. For each model
+    both validation MAPE and the train versus validation gap are
+    recorded to detect overfitting. Results are sorted by validation
+    MAPE ascending.
+
+    :param target_train: scaled target TimeSeries for training
+    :param target_val: scaled target TimeSeries for validation
+    :param past_cov_train: scaled past covariates TimeSeries
+    :param future_cov_train: scaled future covariates TimeSeries
+    :param future_cov_full: full period future covariates TimeSeries
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :param forecast_horizon: number of trading days to forecast ahead
+    :param feature_set_name: name of feature set for logging
+        e.g. `'7_features'` or `'10_features'`
+    :param n_trials: number of Optuna trials per model default is 20
+    :return: DataFrame with tuning results sorted by val MAPE
+    """
+    # Fill NaN values using Darts MissingValuesFiller.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_clean = filler.transform(target_train)
+    target_val_clean = filler.transform(target_val)
+    past_clean = filler.transform(past_cov_train)
+    future_clean = filler.transform(future_cov_train)
+    future_full_clean = filler.transform(future_cov_full)
+    # Initialize results list.
+    results = []
+
+    def _evaluate_prediction(
+        prediction: darts.timeseries.TimeSeries,
+        actual_df: pd.DataFrame,
+    ) -> float:
+        """
+        Evaluate a prediction against actual values returning MAPE.
+
+        :param prediction: Darts TimeSeries prediction
+        :param actual_df: DataFrame with actual values
+        :return: MAPE as float or infinity if evaluation fails
+        """
+        try:
+            pred_df = target_scaler.inverse_transform(
+                filler.transform(prediction)
+            ).to_dataframe().dropna()
+            common_dates = actual_df.index.intersection(pred_df.index)
+            if len(common_dates) < 5:
+                return float("inf")
+            actual = actual_df.loc[common_dates].values.flatten()
+            predicted = pred_df.loc[common_dates].values.flatten()
+            return float(
+                np.mean(np.abs((actual - predicted) / actual)) * 100
+            )
+        except Exception:
+            return float("inf")
+
+    # Pre-compute actual validation values once for efficiency.
+    val_df = target_val_clean.to_dataframe().ffill().bfill()
+    val_df.index.freq = "B"
+    val_ts = darts.timeseries.TimeSeries.from_dataframe(
+        val_df, fill_missing_dates=True, freq="B"
+    )
+    actual_val_df = target_scaler.inverse_transform(
+        val_ts
+    ).to_dataframe().dropna()
+    # Pre-compute actual training values for overfitting check.
+    train_df = target_clean.to_dataframe().ffill().bfill()
+    train_df.index.freq = "B"
+    train_ts = darts.timeseries.TimeSeries.from_dataframe(
+        train_df, fill_missing_dates=True, freq="B"
+    )
+    actual_train_df = target_scaler.inverse_transform(
+        train_ts
+    ).to_dataframe().dropna()
+
+    def _make_objective(model_name: str):
+        """
+        Create Optuna objective function for a specific model.
+
+        :param model_name: name of the model to tune
+        :return: objective function for Optuna to minimize
+        """
+        def objective(trial: optuna.Trial) -> float:
+            """
+            Objective function minimizing validation MAPE.
+
+            :param trial: Optuna trial object for parameter suggestion
+            :return: validation MAPE to minimize
+            """
+            # Define hyperparameter search space per model.
+            lags = trial.suggest_int("lags", 10, 60)
+            n_estimators = trial.suggest_int("n_estimators", 50, 400)
+            if model_name == "LightGBM":
+                num_leaves = trial.suggest_int("num_leaves", 10, 80)
+                learning_rate = trial.suggest_float(
+                    "learning_rate", 0.005, 0.1, log=True
+                )
+                model = darts.models.LightGBMModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    num_leaves=num_leaves,
+                    learning_rate=learning_rate,
+                    random_state=42,
+                    verbose=-1,
+                )
+            elif model_name == "XGBoost":
+                max_depth = trial.suggest_int("max_depth", 3, 10)
+                learning_rate = trial.suggest_float(
+                    "learning_rate", 0.005, 0.1, log=True
+                )
+                model = darts.models.XGBModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=max_depth,
+                    learning_rate=learning_rate,
+                    random_state=42,
+                    verbosity=0,
+                )
+            elif model_name == "RandomForest":
+                max_depth = trial.suggest_int("max_depth", 5, 30)
+                model = darts.models.RandomForestModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=max_depth,
+                    random_state=42,
+                )
+            # Train model and generate predictions.
+            model.fit(
+                target_clean,
+                past_covariates=past_clean,
+                future_covariates=future_clean,
+            )
+            val_pred = model.predict(
+                forecast_horizon,
+                past_covariates=past_clean,
+                future_covariates=future_full_clean,
+            )
+            return _evaluate_prediction(val_pred, actual_val_df)
+        return objective
+
+    # Run Optuna optimization for each model.
+    for model_name in ["LightGBM", "XGBoost", "RandomForest"]:
+        _LOG.info(
+            "Tuning %s on %s with %d trials.",
+            model_name,
+            feature_set_name,
+            n_trials,
+        )
+        # Create Optuna study minimizing validation MAPE.
+        # Suppress Optuna logging to keep output clean.
+        optuna.logging.set_verbosity(optuna.logging.WARNING)
+        study = optuna.create_study(
+            direction="minimize",
+            sampler=optuna.samplers.TPESampler(seed=42),
+        )
+        study.optimize(
+            _make_objective(model_name),
+            n_trials=n_trials,
+            show_progress_bar=True,
+        )
+        # Get best parameters from study.
+        best_params = study.best_params
+        best_val_mape = study.best_value
+        _LOG.info(
+            "%s best params: %s → Val MAPE: %.4f%%",
+            model_name,
+            best_params,
+            best_val_mape,
+        )
+        # Retrain best model to get train MAPE for overfitting check.
+        lags = best_params["lags"]
+        n_estimators = best_params["n_estimators"]
+        try:
+            if model_name == "LightGBM":
+                best_model = darts.models.LightGBMModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    num_leaves=best_params["num_leaves"],
+                    learning_rate=best_params["learning_rate"],
+                    random_state=42,
+                    verbose=-1,
+                )
+            elif model_name == "XGBoost":
+                best_model = darts.models.XGBModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=best_params["max_depth"],
+                    learning_rate=best_params["learning_rate"],
+                    random_state=42,
+                    verbosity=0,
+                )
+            elif model_name == "RandomForest":
+                best_model = darts.models.RandomForestModel(
+                    lags=lags,
+                    lags_past_covariates=lags,
+                    lags_future_covariates=[0],
+                    output_chunk_length=forecast_horizon,
+                    n_estimators=n_estimators,
+                    max_depth=best_params["max_depth"],
+                    random_state=42,
+                )
+            # Retrain best model.
+            best_model.fit(
+                target_clean,
+                past_covariates=past_clean,
+                future_covariates=future_clean,
+            )
+            # Get train prediction for overfitting check.
+            train_pred = best_model.predict(
+                forecast_horizon,
+                past_covariates=past_clean,
+                future_covariates=future_full_clean,
+            )
+            train_mape = _evaluate_prediction(
+                train_pred, actual_train_df
+            )
+            overfit_gap = best_val_mape - train_mape
+        except Exception as e:
+            _LOG.warning(
+                "Could not compute train MAPE for %s: %s",
+                model_name,
+                str(e),
+            )
+            train_mape = float("nan")
+            overfit_gap = float("nan")
+        results.append({
+            "Model"        : model_name,
+            "Feature_Set"  : feature_set_name,
+            "Best_Params"  : str(best_params),
+            "Val_MAPE"     : round(best_val_mape, 4),
+            "Train_MAPE"   : round(train_mape, 4),
+            "Overfit_Gap"  : round(overfit_gap, 4),
+            "N_Trials"     : n_trials,
+        })
+    # Sort by validation MAPE ascending.
+    if not results:
+        _LOG.warning("No tuning results produced.")
+        return pd.DataFrame()
+    return pd.DataFrame(results).sort_values(
+        "Val_MAPE", ascending=True
     ).reset_index(drop=True)
