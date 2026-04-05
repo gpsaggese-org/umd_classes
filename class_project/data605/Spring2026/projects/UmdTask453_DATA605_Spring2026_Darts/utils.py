@@ -1464,3 +1464,488 @@ def build_timeseries(
         target_scaler,
         cov_scaler,
     )
+
+def train_baseline_models(
+    target_train: darts.timeseries.TimeSeries,
+    forecast_horizon: int,
+) -> dict:
+    """
+    Train all baseline forecasting models on the training series.
+
+    Baseline models make simple predictions without learning complex
+    patterns. They serve as benchmarks that all other models must
+    outperform to demonstrate genuine predictive value. Holiday gap
+    NaN values are filled before training since baseline models
+    cannot handle missing values in the target series.
+
+    :param target_train: scaled target TimeSeries for training
+        containing S&P 500 closing prices
+    :param forecast_horizon: number of trading days to forecast
+        ahead e.g. `30` for a 30 day forecast
+    :return: dictionary mapping model names to their predictions
+        as Darts TimeSeries objects
+    """
+    # Fill holiday gap NaN values before training since baseline
+    # models cannot handle missing values in the target series.
+    target_df = target_train.to_dataframe().ffill().bfill()
+    target_df.index.freq = "B"
+    target_clean = darts.timeseries.TimeSeries.from_dataframe(
+        target_df, fill_missing_dates=True, freq="B"
+    )
+    # Initialize dictionary to store model predictions.
+    predictions = {}
+    # Train NaiveSeasonal model — repeats value from K periods ago.
+    _LOG.info("Training NaiveSeasonal model.")
+    naive_seasonal = darts.models.NaiveSeasonal(K=5)
+    naive_seasonal.fit(target_clean)
+    predictions["NaiveSeasonal"] = naive_seasonal.predict(
+        forecast_horizon
+    )
+    # Train NaiveDrift model — extrapolates the linear trend.
+    _LOG.info("Training NaiveDrift model.")
+    naive_drift = darts.models.NaiveDrift()
+    naive_drift.fit(target_clean)
+    predictions["NaiveDrift"] = naive_drift.predict(forecast_horizon)
+    # Train NaiveMean model — always predicts the training mean.
+    _LOG.info("Training NaiveMean model.")
+    naive_mean = darts.models.NaiveMean()
+    naive_mean.fit(target_clean)
+    predictions["NaiveMean"] = naive_mean.predict(forecast_horizon)
+    # Train NaiveMovingAverage — predicts average of last N values.
+    _LOG.info("Training NaiveMovingAverage model.")
+    naive_ma = darts.models.NaiveMovingAverage(input_chunk_length=5)
+    naive_ma.fit(target_clean)
+    predictions["NaiveMovingAverage"] = naive_ma.predict(
+        forecast_horizon
+    )
+    _LOG.info(
+        "Baseline models trained successfully — %d models.",
+        len(predictions),
+    )
+    return predictions
+
+def train_statistical_models(
+    target_train: darts.timeseries.TimeSeries,
+    forecast_horizon: int,
+) -> dict:
+    """
+    Train all classical statistical forecasting models on the training series.
+
+    Statistical models capture linear time series patterns using
+    mathematical formulations. They operate on price history only
+    and cannot accept external covariates. Holiday gap NaN values
+    are filled before training since statistical models cannot
+    handle missing values in the target series.
+
+    :param target_train: scaled target TimeSeries for training
+        containing S&P 500 closing prices
+    :param forecast_horizon: number of trading days to forecast
+        ahead e.g. `30` for a 30 day forecast
+    :return: dictionary mapping model names to their predictions
+        as Darts TimeSeries objects
+    """
+    # Fill holiday gap NaN values before training since statistical
+    # models cannot handle missing values in the target series.
+    target_df = target_train.to_dataframe().ffill().bfill()
+    target_df.index.freq = "B"
+    target_clean = darts.timeseries.TimeSeries.from_dataframe(
+        target_df, fill_missing_dates=True, freq="B"
+    )
+    # Initialize dictionary to store model predictions.
+    predictions = {}
+    # Define all statistical models with their configurations.
+    models = {
+        "ARIMA": darts.models.ARIMA(p=5, d=1, q=0),
+        "AutoARIMA": darts.models.AutoARIMA(
+            start_p=1, max_p=5, max_q=3, d=1,
+        ),
+        "ExponentialSmoothing": darts.models.ExponentialSmoothing(),
+        "Theta": darts.models.Theta(),
+        "FourTheta": darts.models.FourTheta(),
+        "FFT": darts.models.FFT(nr_freqs_to_keep=10),
+        "TBATS": darts.models.TBATS(
+            season_length=5,
+            use_boxcox=True,
+            use_trend=True,
+            use_damped_trend=True,
+            use_arma_errors=True,
+        ),
+    }
+    # Train each statistical model and store predictions.
+    for name, model in models.items():
+        try:
+            _LOG.info("Training %s model.", name)
+            model.fit(target_clean)
+            predictions[name] = model.predict(forecast_horizon)
+            _LOG.info("%s trained successfully.", name)
+        except Exception as e:
+            _LOG.warning(
+                "%s failed to train: %s — skipping.", name, str(e)
+            )
+    _LOG.info(
+        "Statistical models trained successfully — %d models.",
+        len(predictions),
+    )
+    return predictions
+
+
+def train_probabilistic_models(
+    target_train: darts.timeseries.TimeSeries,
+    forecast_horizon: int,
+) -> dict:
+    """
+    Train probabilistic forecasting models on the training series.
+
+    Probabilistic models estimate a distribution over future values
+    rather than a single point forecast. KalmanForecaster uses a
+    state space model to track the latent state of the S&P 500 and
+    naturally quantifies prediction uncertainty. It handles irregular
+    frequencies and missing observations natively making it well
+    suited for stock market data.
+
+    :param target_train: scaled target TimeSeries for training
+        containing S&P 500 closing prices
+    :param forecast_horizon: number of trading days to forecast
+        ahead e.g. `30` for a 30 day forecast
+    :return: dictionary mapping model names to their predictions
+        as Darts TimeSeries objects
+    """
+    # Initialize dictionary to store model predictions.
+    predictions = {}
+    try:
+        # Fill any NaN values from holiday gaps before training
+        # since KalmanForecaster cannot handle null values.
+        target_df = target_train.to_dataframe().ffill().bfill()
+        target_df.index.freq = "B"
+        target_clean = darts.timeseries.TimeSeries.from_dataframe(
+            target_df, fill_missing_dates=True, freq="B"
+        )
+        # Train KalmanForecaster with 4 dimensional state space.
+        # dim_x=4 models position velocity acceleration and jerk
+        # of the price series capturing different orders of price
+        # change dynamics simultaneously.
+        _LOG.info("Training KalmanForecaster model.")
+        kalman = darts.models.KalmanForecaster(dim_x=4)
+        kalman.fit(target_clean)
+        predictions["KalmanForecaster"] = kalman.predict(
+            forecast_horizon
+        )
+        _LOG.info("KalmanForecaster trained successfully.")
+    except Exception as e:
+        _LOG.warning(
+            "KalmanForecaster failed to train: %s — skipping.",
+            str(e),
+        )
+    return predictions
+
+def train_ml_models(
+    target_train: darts.timeseries.TimeSeries,
+    past_cov_train: darts.timeseries.TimeSeries,
+    future_cov_train: darts.timeseries.TimeSeries,
+    future_cov_full: darts.timeseries.TimeSeries,
+    forecast_horizon: int,
+) -> dict:
+    """
+    Train all machine learning forecasting models on the training series.
+
+    ML models use the full 46 feature set including macro indicators
+    technical indicators calendar features and event flags. They learn
+    complex non-linear relationships between features and S&P 500
+    returns that statistical models cannot capture. Future covariates
+    for the full period are needed at prediction time since models
+    forecast beyond the training period end date.
+
+    :param target_train: scaled target TimeSeries for training
+        containing S&P 500 closing prices
+    :param past_cov_train: scaled past covariates TimeSeries
+        containing macro and technical features
+    :param future_cov_train: scaled future covariates TimeSeries
+        containing calendar and event features for training period
+    :param future_cov_full: scaled future covariates TimeSeries
+        containing calendar and event features for full period
+        including validation and test dates needed for prediction
+    :param forecast_horizon: number of trading days to forecast
+        ahead e.g. `30` for a 30 day forecast
+    :return: dictionary mapping model names to their predictions
+        as Darts TimeSeries objects
+    """
+    # Fill holiday gap NaN values in all TimeSeries before training
+    # since ML models cannot handle missing values natively.
+    target_df = target_train.to_dataframe().ffill().bfill()
+    target_df.index.freq = "B"
+    target_clean = darts.timeseries.TimeSeries.from_dataframe(
+        target_df, fill_missing_dates=True, freq="B"
+    )
+    past_df = past_cov_train.to_dataframe().ffill().bfill()
+    past_df.index.freq = "B"
+    past_clean = darts.timeseries.TimeSeries.from_dataframe(
+        past_df, fill_missing_dates=True, freq="B"
+    )
+    # Clean training future covariates for fitting.
+    future_df = future_cov_train.to_dataframe().ffill().bfill()
+    future_df.index.freq = "B"
+    future_clean = darts.timeseries.TimeSeries.from_dataframe(
+        future_df, fill_missing_dates=True, freq="B"
+    )
+    # Clean full future covariates for prediction beyond training end.
+    future_full_df = future_cov_full.to_dataframe().ffill().bfill()
+    future_full_df.index.freq = "B"
+    future_full_clean = darts.timeseries.TimeSeries.from_dataframe(
+        future_full_df, fill_missing_dates=True, freq="B"
+    )
+    # Initialize dictionary to store model predictions.
+    predictions = {}
+    # Define all ML models with their configurations.
+    models = {
+        "LinearRegression": darts.models.LinearRegressionModel(
+            lags=30,
+            lags_past_covariates=30,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+        ),
+        "RandomForest": darts.models.RandomForestModel(
+            lags=30,
+            lags_past_covariates=30,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=100,
+            random_state=42,
+        ),
+        "LightGBM": darts.models.LightGBMModel(
+            lags=30,
+            lags_past_covariates=30,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=200,
+            num_leaves=31,
+            learning_rate=0.05,
+            random_state=42,
+            verbose=-1,
+        ),
+        "XGBoost": darts.models.XGBModel(
+            lags=30,
+            lags_past_covariates=30,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=200,
+            learning_rate=0.05,
+            max_depth=6,
+            random_state=42,
+            verbosity=0,
+        ),
+        "CatBoost": darts.models.CatBoostModel(
+            lags=30,
+            lags_past_covariates=30,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            iterations=200,
+            learning_rate=0.05,
+            depth=6,
+            random_seed=42,
+            verbose=False,
+        ),
+    }
+    # Train each ML model and predict using full future covariates.
+    for name, model in models.items():
+        try:
+            _LOG.info("Training %s model.", name)
+            model.fit(
+                target_clean,
+                past_covariates=past_clean,
+                future_covariates=future_clean,
+            )
+            # Use full future covariates for prediction so model
+            # has access to calendar features beyond training end.
+            predictions[name] = model.predict(
+                forecast_horizon,
+                past_covariates=past_clean,
+                future_covariates=future_full_clean,
+            )
+            _LOG.info("%s trained successfully.", name)
+        except Exception as e:
+            _LOG.warning(
+                "%s failed to train: %s — skipping.", name, str(e)
+            )
+    _LOG.info(
+        "ML models trained successfully — %d models.",
+        len(predictions),
+    )
+    return predictions
+
+def train_prophet_model(
+    target_train: darts.timeseries.TimeSeries,
+    future_cov_full: darts.timeseries.TimeSeries,
+    forecast_horizon: int,
+) -> dict:
+    """
+    Train Prophet model with event flags as additional regressors.
+
+    Prophet is designed for time series with strong seasonal patterns
+    and known holiday effects. Event flags for FOMC meetings CPI
+    release dates and US holidays are passed as future covariates
+    allowing Prophet to model the systematic impact of these known
+    market moving events on S&P 500 returns.
+
+    :param target_train: scaled target TimeSeries for training
+        containing S&P 500 closing prices
+    :param future_cov_full: scaled future covariates TimeSeries
+        containing calendar and event features for the full period
+        including dates beyond the training end for prediction
+    :param forecast_horizon: number of trading days to forecast
+        ahead e.g. `30` for a 30 day forecast
+    :return: dictionary mapping model name to its prediction
+        as a Darts TimeSeries object
+    """
+    # Initialize dictionary to store model predictions.
+    predictions = {}
+    try:
+        # Clean target series to remove holiday gap NaN values.
+        target_df = target_train.to_dataframe().ffill().bfill()
+        target_df.index.freq = "B"
+        target_clean = darts.timeseries.TimeSeries.from_dataframe(
+            target_df, fill_missing_dates=True, freq="B"
+        )
+        # Clean full future covariates for Prophet regressors.
+        future_df = future_cov_full.to_dataframe().ffill().bfill()
+        future_df.index.freq = "B"
+        future_clean = darts.timeseries.TimeSeries.from_dataframe(
+            future_df, fill_missing_dates=True, freq="B"
+        )
+        # Train Prophet with future covariates as additional regressors.
+        # add_encoders encodes future covariate columns as regressors
+        # that Prophet uses alongside its built in seasonality components.
+        _LOG.info("Training Prophet model.")
+        prophet_model = darts.models.Prophet(
+            add_seasonalities={
+                "name"            : "monthly",
+                "seasonal_periods": 21,
+                "fourier_order"   : 5,
+            },
+        )
+        prophet_model.fit(
+            target_clean,
+            future_covariates=future_clean,
+        )
+        predictions["Prophet"] = prophet_model.predict(
+            forecast_horizon,
+            future_covariates=future_clean,
+        )
+        _LOG.info("Prophet trained successfully.")
+    except Exception as e:
+        _LOG.warning(
+            "Prophet failed to train: %s — skipping.", str(e)
+        )
+    return predictions
+
+def evaluate_models(
+    predictions: dict,
+    target_val: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+) -> pd.DataFrame:
+    """
+    Evaluate all model predictions against the validation target series.
+
+    Predictions are aligned with validation data by date before computing
+    metrics. This handles models that predict different date ranges by
+    finding the intersection of prediction and validation dates. All
+    predictions are inverse transformed from scaled space back to original
+    price space before computing metrics. Five metrics are calculated —
+    MAE RMSE MAPE sMAPE and R squared. Results are sorted by RMSE.
+
+    :param predictions: dictionary mapping model names to their
+        Darts TimeSeries predictions in scaled space
+    :param target_val: scaled validation target TimeSeries containing
+        actual S&P 500 closing prices for the validation period
+    :param target_scaler: fitted Darts Scaler used to inverse transform
+        predictions back to original price space
+    :return: DataFrame with evaluation metrics for each model sorted
+        by RMSE from lowest to highest
+    """
+    # Initialize list to collect metric rows for each model.
+    results = []
+    # Clean validation target and convert to DataFrame for date alignment.
+    val_df = target_val.to_dataframe().ffill().bfill()
+    val_df.index.freq = "B"
+    target_val_clean = darts.timeseries.TimeSeries.from_dataframe(
+        val_df, fill_missing_dates=True, freq="B"
+    )
+    # Inverse transform validation to original price space.
+    actual_df = target_scaler.inverse_transform(
+        target_val_clean
+    ).to_dataframe()
+    # Remove NaN rows from actual values.
+    actual_df = actual_df.dropna()
+    # Evaluate each model prediction against actual values.
+    for name, prediction in predictions.items():
+        try:
+            # Clean prediction and convert to DataFrame for date alignment.
+            pred_df = prediction.to_dataframe().ffill().bfill()
+            pred_df.index.freq = "B"
+            pred_clean = darts.timeseries.TimeSeries.from_dataframe(
+                pred_df, fill_missing_dates=True, freq="B"
+            )
+            # Inverse transform prediction to original price space.
+            pred_inverse_df = target_scaler.inverse_transform(
+                pred_clean
+            ).to_dataframe()
+            # Remove NaN rows from prediction.
+            pred_inverse_df = pred_inverse_df.dropna()
+            # Align prediction and actual by finding common dates.
+            common_dates = actual_df.index.intersection(
+                pred_inverse_df.index
+            )
+            # Skip model if no common dates found.
+            if len(common_dates) < 5:
+                _LOG.warning(
+                    "%s has fewer than 5 common dates with "
+                    "validation set — skipping.",
+                    name,
+                )
+                continue
+            # Extract aligned values for metric computation.
+            actual = actual_df.loc[common_dates].values.flatten()
+            predicted = pred_inverse_df.loc[common_dates].values.flatten()
+            # Calculate MAE — mean absolute error in price units.
+            mae = float(np.mean(np.abs(actual - predicted)))
+            # Calculate RMSE — root mean squared error in price units.
+            rmse = float(
+                np.sqrt(np.mean((actual - predicted) ** 2))
+            )
+            # Calculate MAPE — mean absolute percentage error.
+            mape = float(
+                np.mean(np.abs((actual - predicted) / actual)) * 100
+            )
+            # Calculate sMAPE — symmetric mean absolute percentage error.
+            smape = float(
+                np.mean(
+                    2 * np.abs(actual - predicted)
+                    / (np.abs(actual) + np.abs(predicted))
+                ) * 100
+            )
+            # Calculate R squared — proportion of variance explained.
+            ss_res = np.sum((actual - predicted) ** 2)
+            ss_tot = np.sum((actual - np.mean(actual)) ** 2)
+            r2 = float(1 - ss_res / ss_tot)
+            results.append({
+                "Model" : name,
+                "MAE"   : round(mae, 2),
+                "RMSE"  : round(rmse, 2),
+                "MAPE"  : round(mape, 2),
+                "sMAPE" : round(smape, 2),
+                "R2"    : round(r2, 4),
+                "Days"  : len(common_dates),
+            })
+            _LOG.info(
+                "%s → RMSE: %.2f | MAPE: %.2f%% | R2: %.4f | Days: %d",
+                name, rmse, mape, r2, len(common_dates),
+            )
+        except Exception as e:
+            _LOG.warning(
+                "Could not evaluate %s: %s — skipping.",
+                name, str(e),
+            )
+    # Convert results to DataFrame and sort by RMSE ascending.
+    results_df = pd.DataFrame(results).sort_values(
+        "RMSE", ascending=True
+    ).reset_index(drop=True)
+    return results_df
