@@ -10,7 +10,10 @@ visualization. Functions are imported and called from `darts.example.ipynb`.
 import logging
 import os
 
+import darts.dataprocessing.transformers
+import darts.timeseries
 import fredapi
+import holidays
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -1020,3 +1023,444 @@ def plot_rolling_correlations(
     )
     fig.tight_layout()
     return fig
+
+def calculate_macro_features(
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Calculate derived macro features from downloaded indicators.
+
+    Six new features are calculated from existing macro indicators.
+    The yield curve is calculated as the spread between 10Y and 2Y
+    treasury yields. A binary inversion flag marks periods where the
+    curve is inverted — a historically reliable recession signal.
+    Month over month changes capture acceleration or deceleration
+    in key indicators rather than just their absolute levels.
+    Moving averages and momentum smooth out noise in volatile series.
+
+    :param macro_daily: DataFrame with daily macro indicators
+        including `TNX`, `IRX`, `VIX`, and `OIL` columns
+    :param macro_monthly: DataFrame with monthly macro indicators
+        including `CPI` and `NFP` columns
+    :return: DataFrame containing all six calculated macro features
+        indexed by the same business day dates as the input data
+    """
+    # Initialize output DataFrame with same index as daily macro data.
+    features = pd.DataFrame(index=macro_daily.index)
+    # Calculate yield curve as spread between 10Y and 2Y yields.
+    features["YIELD_CURVE"] = macro_daily["TNX"] - macro_daily["IRX"]
+    # Flag yield curve inversion as binary signal where 2Y exceeds 10Y.
+    features["YIELD_CURVE_INVERTED"] = (
+        features["YIELD_CURVE"] < 0
+    ).astype(int)
+    # Calculate CPI month over month change to capture inflation trend.
+    features["CPI_MOM"] = macro_monthly["CPI"].pct_change() * 100
+    # Calculate VIX 20 day moving average to smooth daily fear spikes.
+    features["VIX_MA20"] = macro_daily["VIX"].rolling(20).mean()
+    # Calculate oil 30 day momentum to capture energy price trends.
+    features["OIL_MOM30"] = macro_daily["OIL"].pct_change(30) * 100
+    # Calculate NFP month over month change to capture jobs acceleration.
+    features["NFP_MOM"] = macro_monthly["NFP"].diff()
+    # Forward fill any NaN values created by rolling calculations.
+    features = features.ffill().bfill()
+    return features
+
+def calculate_technical_indicators(
+    sp500: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Calculate technical indicators from S&P 500 closing prices.
+
+    Nine technical indicators are calculated covering trend direction,
+    momentum, and volatility. Moving averages capture the price trend
+    at different time horizons. RSI measures overbought and oversold
+    conditions. MACD captures momentum shifts. Bollinger Bands measure
+    volatility and price extremes relative to recent history.
+
+    :param sp500: DataFrame with S&P 500 OHLCV data indexed by date
+        containing a `Close` column with daily closing prices
+    :return: DataFrame containing all nine technical indicators
+        indexed by the same business day dates as the input data
+    """
+    # Initialize output DataFrame with same index as S&P 500 data.
+    features = pd.DataFrame(index=sp500.index)
+    # Extract closing prices for all calculations.
+    close = sp500["Close"]
+    # Calculate simple moving averages at three time horizons.
+    features["MA5"]  = close.rolling(5).mean()
+    features["MA20"] = close.rolling(20).mean()
+    features["MA50"] = close.rolling(50).mean()
+    # Calculate exponential moving averages for MACD calculation.
+    features["EMA12"] = close.ewm(span=12, adjust=False).mean()
+    features["EMA26"] = close.ewm(span=26, adjust=False).mean()
+    # Calculate MACD as difference between fast and slow EMAs.
+    features["MACD"] = features["EMA12"] - features["EMA26"]
+    # Calculate RSI using average gains and losses over 14 days.
+    delta = close.diff()
+    # Separate positive and negative price changes.
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+    # Calculate average gain and loss over 14 day window.
+    avg_gain = gain.rolling(14).mean()
+    avg_loss = loss.rolling(14).mean()
+    # Calculate relative strength and convert to RSI scale.
+    rs = avg_gain / avg_loss
+    features["RSI"] = 100 - (100 / (1 + rs))
+    # Calculate Bollinger Bands using 20 day rolling statistics.
+    bb_mid = close.rolling(20).mean()
+    bb_std = close.rolling(20).std()
+    features["BB_UPPER"] = bb_mid + (2 * bb_std)
+    features["BB_LOWER"] = bb_mid - (2 * bb_std)
+    # Forward fill then backward fill NaN values from rolling windows.
+    features = features.ffill().bfill()
+    return features
+
+def calculate_calendar_features(
+    index: pd.DatetimeIndex,
+) -> pd.DataFrame:
+    """
+    Calculate calendar based features from a DatetimeIndex.
+
+    Three calendar features are extracted from the date index.
+    Day of week captures weekly seasonality — Mondays and Fridays
+    historically show different return patterns than midweek days.
+    Month captures monthly seasonality — the January effect and
+    September weakness are well documented market patterns.
+    Quarter captures quarterly seasonality driven by earnings seasons
+    and institutional rebalancing at quarter end.
+
+    :param index: DatetimeIndex from any of our aligned DataFrames
+        containing business day dates for the analysis period
+    :return: DataFrame with three calendar feature columns indexed
+        by the same DatetimeIndex as the input
+    """
+    # Initialize output DataFrame with same index as input.
+    features = pd.DataFrame(index=index)
+    # Extract day of week where Monday is 0 and Friday is 4.
+    features["DAY_OF_WEEK"] = index.dayofweek
+    # Extract month of year where January is 1 and December is 12.
+    features["MONTH"] = index.month
+    # Extract quarter where Q1 is 1 and Q4 is 4.
+    features["QUARTER"] = index.quarter
+    return features
+
+def calculate_event_flags(
+    index: pd.DatetimeIndex,
+    fred_api_key: str,
+) -> pd.DataFrame:
+    """
+    Calculate binary event flags for known market moving dates.
+
+    Three event flags are created — US federal holidays, FOMC meeting
+    dates, and CPI release dates. These flags help models learn that
+    market behavior around these events differs systematically from
+    normal trading days. FOMC and CPI dates are fetched from FRED
+    to ensure accuracy. Holiday flags use the `holidays` library.
+
+    :param index: DatetimeIndex from any of our aligned DataFrames
+        containing business day dates for the analysis period
+    :param fred_api_key: FRED API key for fetching FOMC and CPI
+        release dates
+    :return: DataFrame with three binary event flag columns indexed
+        by the same DatetimeIndex as the input
+    """
+    # Initialize output DataFrame with same index as input.
+    features = pd.DataFrame(index=index)
+    # Get the start and end years from the index for holiday generation.
+    start_year = index.year.min()
+    end_year = index.year.max()
+    # Generate US federal holiday dates for the full analysis period.
+    us_holidays = holidays.US(
+        years=range(start_year, end_year + 1)
+    )
+    # Create binary flag for trading days adjacent to US holidays.
+    features["IS_HOLIDAY_ADJACENT"] = index.map(
+        lambda d: 1 if (
+            d in us_holidays
+            or (d - pd.Timedelta(days=1)) in us_holidays
+            or (d + pd.Timedelta(days=1)) in us_holidays
+        ) else 0
+    )
+    # Fetch FOMC meeting dates from FRED using the federal funds
+    # rate vintage dates as a proxy for meeting announcement dates.
+    fred = fredapi.Fred(api_key=fred_api_key)
+    try:
+        # Use Fed Funds Rate vintage dates as FOMC meeting proxy.
+        fomc_dates = pd.DatetimeIndex(
+            fred.get_series_vintage_dates("FEDFUNDS")
+        )
+        # Filter to our analysis period only.
+        fomc_dates = fomc_dates[
+            (fomc_dates >= index[0]) & (fomc_dates <= index[-1])
+        ]
+        # Create binary flag for FOMC meeting dates.
+        features["IS_FOMC_DATE"] = index.isin(fomc_dates).astype(int)
+    except Exception as e:
+        _LOG.warning(
+            "Could not fetch FOMC dates: %s — setting flag to zero.",
+            str(e),
+        )
+        features["IS_FOMC_DATE"] = 0
+    # Fetch CPI release dates from FRED using CPI vintage dates.
+    try:
+        cpi_dates = pd.DatetimeIndex(
+            fred.get_series_vintage_dates("CPIAUCSL")
+        )
+        # Filter to our analysis period only.
+        cpi_dates = cpi_dates[
+            (cpi_dates >= index[0]) & (cpi_dates <= index[-1])
+        ]
+        # Create binary flag for CPI release dates.
+        features["IS_CPI_RELEASE"] = index.isin(cpi_dates).astype(int)
+    except Exception as e:
+        _LOG.warning(
+            "Could not fetch CPI release dates: %s — setting flag to zero.",
+            str(e),
+        )
+        features["IS_CPI_RELEASE"] = 0
+    # Log summary of event flags created.
+    _LOG.info(
+        "Holiday adjacent days: %d",
+        features["IS_HOLIDAY_ADJACENT"].sum(),
+    )
+    _LOG.info(
+        "FOMC meeting dates: %d",
+        features["IS_FOMC_DATE"].sum(),
+    )
+    _LOG.info(
+        "CPI release dates: %d",
+        features["IS_CPI_RELEASE"].sum(),
+    )
+    return features
+
+def build_master_dataframe(
+    sp500: pd.DataFrame,
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+    macro_features: pd.DataFrame,
+    technical_features: pd.DataFrame,
+    calendar_features: pd.DataFrame,
+    event_flags: pd.DataFrame,
+) -> pd.DataFrame:
+    """
+    Combine all feature groups into a single master DataFrame.
+
+    All feature DataFrames are concatenated column wise into one
+    master DataFrame containing the S&P 500 target variable and
+    all 46 features. The target variable `Close` is kept as the
+    first column for clarity. All DataFrames must share the same
+    DatetimeIndex before calling this function.
+
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+        and binary release flags
+    :param macro_features: DataFrame with calculated macro features
+    :param technical_features: DataFrame with technical indicators
+    :param calendar_features: DataFrame with calendar features
+    :param event_flags: DataFrame with binary event flags
+    :return: master DataFrame with target variable and all features
+        combined into a single structure indexed by business day dates
+    """
+    # Extract only the closing price as the target variable.
+    target = sp500[["Close"]].copy()
+    # Combine all feature groups column wise into master DataFrame.
+    master = pd.concat(
+        [
+            target,
+            macro_daily,
+            macro_monthly,
+            macro_features,
+            technical_features,
+            calendar_features,
+            event_flags,
+        ],
+        axis=1,
+    )
+    # Verify no NaN values exist in the master DataFrame.
+    nan_count = master.isnull().sum().sum()
+    if nan_count > 0:
+        _LOG.warning(
+            "Master DataFrame has %d NaN values — forward filling.",
+            nan_count,
+        )
+        master = master.ffill().bfill()
+    _LOG.info(
+        "Master DataFrame shape: %s", master.shape
+    )
+    _LOG.info(
+        "Total features: %d (excluding target variable)",
+        master.shape[1] - 1,
+    )
+    return master
+
+def split_data(
+    master: pd.DataFrame,
+    test_size: int,
+    val_size: int,
+) -> tuple:
+    """
+    Split master DataFrame into train, validation, and test sets.
+
+    A strict time based split is used where training data comes first,
+    validation data comes next, and test data comes last. This prevents
+    any form of data leakage where future information influences the
+    model during training. The test set is never used during training
+    or hyperparameter tuning — only for final evaluation.
+
+    :param master: master DataFrame with target variable and all
+        features indexed by business day dates
+    :param test_size: number of trading days to hold out for testing
+        — these days are never seen during training or tuning
+    :param val_size: number of trading days to hold out for validation
+        — used for hyperparameter tuning and early stopping
+    :return: tuple of (train, validation, test) DataFrames in
+        chronological order with no overlap between splits
+    """
+    # Calculate split indices from the end of the DataFrame.
+    total_rows = len(master)
+    test_start = total_rows - test_size
+    val_start = test_start - val_size
+    # Split into train, validation, and test sets.
+    train = master.iloc[:val_start]
+    val = master.iloc[val_start:test_start]
+    test = master.iloc[test_start:]
+    # Log split details for verification.
+    _LOG.info(
+        "Train: %d rows | %s to %s",
+        len(train),
+        train.index[0].date(),
+        train.index[-1].date(),
+    )
+    _LOG.info(
+        "Validation: %d rows | %s to %s",
+        len(val),
+        val.index[0].date(),
+        val.index[-1].date(),
+    )
+    _LOG.info(
+        "Test: %d rows | %s to %s",
+        len(test),
+        test.index[0].date(),
+        test.index[-1].date(),
+    )
+    _LOG.info(
+        "Train: %.1f%% | Val: %.1f%% | Test: %.1f%%",
+        len(train) / total_rows * 100,
+        len(val) / total_rows * 100,
+        len(test) / total_rows * 100,
+    )
+    return train, val, test
+
+def build_timeseries(
+    train: pd.DataFrame,
+    val: pd.DataFrame,
+    test: pd.DataFrame,
+    target_col: str,
+    future_cov_cols: list,
+    past_cov_cols: list,
+) -> tuple:
+    """
+    Build Darts TimeSeries objects from train, validation, and test sets.
+
+    Three types of TimeSeries are created for each split — the target
+    series containing S&P 500 closing prices, future covariates
+    containing features known in advance like calendar and event flags,
+    and past covariates containing features only known historically
+    like technical indicators and macro values. All series are scaled
+    using Darts Scaler to normalize values for better model performance.
+
+    :param train: training DataFrame with target and all features
+    :param val: validation DataFrame with target and all features
+    :param test: test DataFrame with target and all features
+    :param target_col: name of the target column e.g. `'Close'`
+    :param future_cov_cols: list of column names for future covariates
+        — features whose future values are known at prediction time
+    :param past_cov_cols: list of column names for past covariates
+        — features whose future values are unknown at prediction time
+    :return: tuple of scaled TimeSeries objects in order:
+        (target_train, target_val, target_test,
+         future_cov_train, future_cov_val, future_cov_test,
+         past_cov_train, past_cov_val, past_cov_test,
+         target_scaler, cov_scaler)
+    """
+    # Concatenate all splits for building full covariates series.
+    full_data = pd.concat([train, val, test])
+    # Build target TimeSeries for each split.
+    target_train = darts.timeseries.TimeSeries.from_dataframe(
+        train, value_cols=target_col,
+        fill_missing_dates=True, freq="B"
+    )
+    target_val = darts.timeseries.TimeSeries.from_dataframe(
+        val, value_cols=target_col,
+        fill_missing_dates=True, freq="B"
+    )
+    target_test = darts.timeseries.TimeSeries.from_dataframe(
+        test, value_cols=target_col,
+        fill_missing_dates=True, freq="B"
+    )
+    # Build future covariates TimeSeries for each split.
+    future_cov_train = darts.timeseries.TimeSeries.from_dataframe(
+        train, value_cols=future_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    future_cov_val = darts.timeseries.TimeSeries.from_dataframe(
+        val, value_cols=future_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    future_cov_test = darts.timeseries.TimeSeries.from_dataframe(
+        test, value_cols=future_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    # Build past covariates TimeSeries for each split.
+    past_cov_train = darts.timeseries.TimeSeries.from_dataframe(
+        train, value_cols=past_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    past_cov_val = darts.timeseries.TimeSeries.from_dataframe(
+        val, value_cols=past_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    past_cov_test = darts.timeseries.TimeSeries.from_dataframe(
+        test, value_cols=past_cov_cols,
+        fill_missing_dates=True, freq="B"
+    )
+    # Scale target series using Darts Scaler.
+    target_scaler = darts.dataprocessing.transformers.Scaler()
+    target_train_scaled = target_scaler.fit_transform(target_train)
+    target_val_scaled = target_scaler.transform(target_val)
+    target_test_scaled = target_scaler.transform(target_test)
+    # Scale covariate series using a separate Scaler.
+    cov_scaler = darts.dataprocessing.transformers.Scaler()
+    future_cov_train_scaled = cov_scaler.fit_transform(
+        future_cov_train
+    )
+    future_cov_val_scaled = cov_scaler.transform(future_cov_val)
+    future_cov_test_scaled = cov_scaler.transform(future_cov_test)
+    past_cov_train_scaled = cov_scaler.fit_transform(past_cov_train)
+    past_cov_val_scaled = cov_scaler.transform(past_cov_val)
+    past_cov_test_scaled = cov_scaler.transform(past_cov_test)
+    # Log summary of TimeSeries objects created.
+    _LOG.info(
+        "Target train length: %d", len(target_train_scaled)
+    )
+    _LOG.info(
+        "Future covariates: %d columns", len(future_cov_cols)
+    )
+    _LOG.info(
+        "Past covariates: %d columns", len(past_cov_cols)
+    )
+    return (
+        target_train_scaled,
+        target_val_scaled,
+        target_test_scaled,
+        future_cov_train_scaled,
+        future_cov_val_scaled,
+        future_cov_test_scaled,
+        past_cov_train_scaled,
+        past_cov_val_scaled,
+        past_cov_test_scaled,
+        target_scaler,
+        cov_scaler,
+    )
