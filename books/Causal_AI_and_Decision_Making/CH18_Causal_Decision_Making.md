@@ -1,6 +1,6 @@
 # Causal Decision Making
-// msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf
+// msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf
 
 ## Why Causal Models Are Required for Interventional Decisions
 

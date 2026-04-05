@@ -1,6 +1,6 @@
 # Reinforcement Learning and Sequential Decisions
-// msml610/lectures_source/Lesson12-Reinforcement_learning.txt //
-https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf
+// msml610/lectures_source/Lesson12-Reinforcement_learning.txt
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf
 
 ## Markov Decision Processes
 
