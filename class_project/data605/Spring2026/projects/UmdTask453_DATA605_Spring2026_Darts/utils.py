@@ -14,10 +14,12 @@ import darts.dataprocessing.transformers
 import darts.timeseries
 import fredapi
 import holidays
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import optuna
 import pandas as pd
+import prophet
 import seaborn as sns
 import shap
 import sklearn.ensemble
@@ -3936,6 +3938,333 @@ def plot_regime_attribution(
     axes[2].set_ylabel("Sector")
     fig.suptitle(
         f"Regime Attribution Analysis — {regime_name}",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
+
+def compare_libraries(
+    train: pd.DataFrame,
+    val: pd.DataFrame,
+    target_col: str,
+    forecast_horizon: int,
+) -> pd.DataFrame:
+    """
+    Compare forecasting performance across three time series libraries.
+
+    Darts NaiveSeasonal ARIMA and ExponentialSmoothing are compared
+    against standalone Prophet and Statsmodels ARIMA. All models are
+    trained on the same training data and evaluated on the same
+    validation data using MAPE RMSE and training time as metrics.
+    This validates the choice of Darts as the primary library.
+
+    :param train: training DataFrame with target column
+    :param val: validation DataFrame with target column
+    :param target_col: name of the target column e.g. `'Close'`
+    :param forecast_horizon: number of days to forecast ahead
+    :return: DataFrame with comparison metrics for each library
+        and model sorted by MAPE ascending
+    """
+    import time
+    import statsmodels.tsa.arima.model
+    import statsmodels.tsa.holtwinters
+    # Extract training and validation price series.
+    train_series = train[target_col].ffill().bfill()
+    val_series = val[target_col].ffill().bfill()
+    # Get actual validation values for evaluation.
+    actual = val_series.values[:forecast_horizon]
+    # Initialize results list.
+    results = []
+
+    def _calculate_metrics(
+        actual: np.ndarray,
+        predicted: np.ndarray,
+        model_name: str,
+        library: str,
+        train_time: float,
+    ) -> dict:
+        """
+        Calculate MAPE RMSE and training time metrics.
+
+        :param actual: array of actual values
+        :param predicted: array of predicted values
+        :param model_name: name of the model
+        :param library: name of the library
+        :param train_time: training time in seconds
+        :return: dictionary of metrics
+        """
+        min_len = min(len(actual), len(predicted))
+        actual_aligned = actual[:min_len]
+        predicted_aligned = predicted[:min_len]
+        mape = float(
+            np.mean(
+                np.abs(
+                    (actual_aligned - predicted_aligned)
+                    / actual_aligned
+                )
+            ) * 100
+        )
+        rmse = float(
+            np.sqrt(
+                np.mean(
+                    (actual_aligned - predicted_aligned) ** 2
+                )
+            )
+        )
+        return {
+            "Library"    : library,
+            "Model"      : model_name,
+            "MAPE"       : round(mape, 4),
+            "RMSE"       : round(rmse, 2),
+            "Train_Time" : round(train_time, 2),
+        }
+
+    # Library 1 — Darts models.
+    _LOG.info("Evaluating Darts models.")
+    # Build Darts TimeSeries using MissingValuesFiller approach.
+    train_ts = darts.timeseries.TimeSeries.from_series(
+        train_series,
+        fill_missing_dates=True,
+        freq="B",
+    )
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    train_ts_clean = filler.transform(train_ts)
+    # Darts NaiveSeasonal.
+    start = time.time()
+    naive = darts.models.NaiveSeasonal(K=5)
+    naive.fit(train_ts_clean)
+    pred = naive.predict(forecast_horizon)
+    train_time = time.time() - start
+    results.append(_calculate_metrics(
+        actual,
+        pred.values().flatten(),
+        "NaiveSeasonal",
+        "Darts",
+        train_time,
+    ))
+    # Darts ARIMA.
+    start = time.time()
+    arima_darts = darts.models.ARIMA(p=5, d=1, q=0)
+    arima_darts.fit(train_ts_clean)
+    pred = arima_darts.predict(forecast_horizon)
+    train_time = time.time() - start
+    results.append(_calculate_metrics(
+        actual,
+        pred.values().flatten(),
+        "ARIMA",
+        "Darts",
+        train_time,
+    ))
+    # Darts ExponentialSmoothing.
+    start = time.time()
+    es_darts = darts.models.ExponentialSmoothing()
+    es_darts.fit(train_ts_clean)
+    pred = es_darts.predict(forecast_horizon)
+    train_time = time.time() - start
+    results.append(_calculate_metrics(
+        actual,
+        pred.values().flatten(),
+        "ExponentialSmoothing",
+        "Darts",
+        train_time,
+    ))
+    # Library 2 — Statsmodels.
+    _LOG.info("Evaluating Statsmodels models.")
+    # Statsmodels ARIMA.
+    try:
+        start = time.time()
+        sm_arima = statsmodels.tsa.arima.model.ARIMA(
+            train_series.values,
+            order=(5, 1, 0),
+        )
+        sm_arima_fit = sm_arima.fit()
+        pred = sm_arima_fit.forecast(steps=forecast_horizon)
+        train_time = time.time() - start
+        results.append(_calculate_metrics(
+            actual,
+            pred,
+            "ARIMA",
+            "Statsmodels",
+            train_time,
+        ))
+    except Exception as e:
+        _LOG.warning("Statsmodels ARIMA failed: %s", str(e))
+    # Statsmodels ExponentialSmoothing.
+    try:
+        start = time.time()
+        sm_es = statsmodels.tsa.holtwinters.ExponentialSmoothing(
+            train_series.values,
+            trend="add",
+        )
+        sm_es_fit = sm_es.fit()
+        pred = sm_es_fit.forecast(steps=forecast_horizon)
+        train_time = time.time() - start
+        results.append(_calculate_metrics(
+            actual,
+            pred,
+            "ExponentialSmoothing",
+            "Statsmodels",
+            train_time,
+        ))
+    except Exception as e:
+        _LOG.warning(
+            "Statsmodels ExponentialSmoothing failed: %s", str(e)
+        )
+    # Library 3 — Prophet.
+    _LOG.info("Evaluating Prophet.")
+    try:
+        start = time.time()
+        # Prepare Prophet format — requires ds and y columns.
+        prophet_train = pd.DataFrame({
+            "ds": train_series.index,
+            "y" : train_series.values,
+        })
+        prophet_model = prophet.Prophet(
+            daily_seasonality=False,
+            weekly_seasonality=True,
+            yearly_seasonality=True,
+        )
+        # Suppress Prophet output.
+        import logging as logging_module
+        logging_module.getLogger("prophet").setLevel(
+            logging_module.WARNING
+        )
+        logging_module.getLogger("cmdstanpy").setLevel(
+            logging_module.WARNING
+        )
+        prophet_model.fit(prophet_train)
+        # Create future DataFrame for prediction.
+        future = prophet_model.make_future_dataframe(
+            periods=forecast_horizon,
+            freq="B",
+        )
+        forecast = prophet_model.predict(future)
+        pred = forecast["yhat"].tail(
+            forecast_horizon
+        ).values
+        train_time = time.time() - start
+        results.append(_calculate_metrics(
+            actual,
+            pred,
+            "Prophet",
+            "Prophet",
+            train_time,
+        ))
+    except Exception as e:
+        _LOG.warning("Prophet failed: %s", str(e))
+    # Convert to DataFrame and sort by MAPE.
+    results_df = pd.DataFrame(results).sort_values(
+        "MAPE", ascending=True
+    ).reset_index(drop=True)
+    _LOG.info(
+        "Library comparison complete — %d models evaluated.",
+        len(results_df),
+    )
+    return results_df
+
+def plot_library_comparison(
+    library_comparison: pd.DataFrame,
+) -> plt.Figure:
+    """
+    Plot library comparison results showing MAPE and training time.
+
+    Two panels are shown — MAPE comparison and training time
+    comparison for all models across all libraries. Colors
+    distinguish between Darts Statsmodels and Prophet.
+
+    :param library_comparison: DataFrame from `compare_libraries`
+        containing MAPE RMSE and Train_Time for each model
+    :return: matplotlib Figure object with comparison charts
+    """
+    # Define colors per library.
+    library_colors = {
+        "Darts"       : "#1565C0",
+        "Statsmodels" : "#2E7D32",
+        "Prophet"     : "#D32F2F",
+    }
+    # Create labels combining library and model name.
+    labels = [
+        f"{row['Library']}\n{row['Model']}"
+        for _, row in library_comparison.iterrows()
+    ]
+    colors = [
+        library_colors[row["Library"]]
+        for _, row in library_comparison.iterrows()
+    ]
+    # Create figure with two panels.
+    fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+    # Panel 1 — MAPE comparison.
+    bars = axes[0].barh(
+        labels,
+        library_comparison["MAPE"],
+        color=colors,
+        alpha=0.8,
+        edgecolor="white",
+    )
+    # Add value labels on bars.
+    for bar, val in zip(bars, library_comparison["MAPE"]):
+        axes[0].text(
+            val + 0.02,
+            bar.get_y() + bar.get_height() / 2,
+            f"{val:.2f}%",
+            va="center",
+            fontsize=9,
+            fontweight="bold",
+        )
+    axes[0].set_title(
+        "MAPE Comparison by Library and Model",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[0].set_xlabel("MAPE (%) — Lower is Better")
+    axes[0].set_ylabel("Library / Model")
+    # Panel 2 — Training time comparison.
+    bars2 = axes[1].barh(
+        labels,
+        library_comparison["Train_Time"],
+        color=colors,
+        alpha=0.8,
+        edgecolor="white",
+    )
+    # Add value labels on bars.
+    for bar, val in zip(bars2, library_comparison["Train_Time"]):
+        axes[1].text(
+            val + 0.005,
+            bar.get_y() + bar.get_height() / 2,
+            f"{val:.2f}s",
+            va="center",
+            fontsize=9,
+            fontweight="bold",
+        )
+    axes[1].set_title(
+        "Training Time Comparison by Library and Model",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[1].set_xlabel("Training Time (seconds) — Lower is Better")
+    axes[1].set_ylabel("Library / Model")
+    # Add legend for libraries.
+    legend_elements = [
+        matplotlib.patches.Patch(
+            facecolor="#1565C0", label="Darts"
+        ),
+        matplotlib.patches.Patch(
+            facecolor="#2E7D32", label="Statsmodels"
+        ),
+        matplotlib.patches.Patch(
+            facecolor="#D32F2F", label="Prophet"
+        ),
+    ]
+    fig.legend(
+        handles=legend_elements,
+        loc="lower center",
+        ncol=3,
+        fontsize=10,
+        bbox_to_anchor=(0.5, -0.05),
+    )
+    fig.suptitle(
+        "Time Series Library Comparison — MAPE and Training Time",
         fontsize=14,
         fontweight="bold",
     )
