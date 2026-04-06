@@ -4479,3 +4479,330 @@ def plot_external_factor_impact(
     )
     fig.tight_layout()
     return fig
+
+def walk_forward_validation(
+    target_train: darts.timeseries.TimeSeries,
+    target_val: darts.timeseries.TimeSeries,
+    target_test: darts.timeseries.TimeSeries,
+    past_cov_train: darts.timeseries.TimeSeries,
+    past_cov_val: darts.timeseries.TimeSeries,
+    past_cov_test: darts.timeseries.TimeSeries,
+    future_cov_train: darts.timeseries.TimeSeries,
+    future_cov_val: darts.timeseries.TimeSeries,
+    future_cov_test: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+    forecast_horizon: int,
+    tuning_results: pd.DataFrame,
+    stride: int = 30,
+) -> pd.DataFrame:
+    """
+    Perform walk forward validation across rolling forecast windows.
+
+    The best model from Phase 7 tuning is trained once on the
+    training data and then evaluated on rolling stride-sized windows
+    across the validation and test periods. For each window the model
+    predicts forecast_horizon days ahead using the same trained model
+    simulating real time deployment. Results show MAPE MAE and
+    direction accuracy per window and as averages.
+
+    :param target_train: scaled target TimeSeries for training
+    :param target_val: scaled target TimeSeries for validation
+    :param target_test: scaled target TimeSeries for test
+    :param past_cov_train: scaled past covariates for training
+    :param past_cov_val: scaled past covariates for validation
+    :param past_cov_test: scaled past covariates for test period
+    :param future_cov_train: scaled future covariates for training
+    :param future_cov_val: scaled future covariates for validation
+    :param future_cov_test: scaled future covariates for test
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :param forecast_horizon: number of days to forecast ahead
+    :param tuning_results: DataFrame from Phase 7 with best params
+    :param stride: number of days between each forecast window
+    :return: DataFrame with walk forward metrics per window
+    """
+    # Fill NaN values using MissingValuesFiller.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_train_c = filler.transform(target_train)
+    past_train_c = filler.transform(past_cov_train)
+    future_train_c = filler.transform(future_cov_train)
+    # Concatenate val and test for full evaluation period.
+    val_test_target = darts.timeseries.concatenate(
+        [
+            filler.transform(target_val),
+            filler.transform(target_test),
+        ],
+        axis=0,
+        ignore_time_axis=True,
+    )
+    # Concatenate all past covariates including test period.
+    past_full = darts.timeseries.concatenate(
+        [
+            past_train_c,
+            filler.transform(past_cov_val),
+            filler.transform(past_cov_test),
+        ],
+        axis=0,
+        ignore_time_axis=True,
+    )
+    # Concatenate all future covariates.
+    future_full = darts.timeseries.concatenate(
+        [
+            future_train_c,
+            filler.transform(future_cov_val),
+            filler.transform(future_cov_test),
+        ],
+        axis=0,
+        ignore_time_axis=True,
+    )
+    # Get actual values in original price space.
+    actual_df = target_scaler.inverse_transform(
+        val_test_target
+    ).to_dataframe().dropna()
+    actual_vals = actual_df.values.flatten()
+    # Get best model parameters from tuning results.
+    best_row = tuning_results.iloc[0]
+    best_params = eval(best_row["Best_Params"])
+    model_name = best_row["Model"]
+    lags = best_params["lags"]
+    n_estimators = best_params["n_estimators"]
+    _LOG.info(
+        "Walk forward validation with %s — params: %s",
+        model_name,
+        best_params,
+    )
+    # Build best model with tuned parameters.
+    if model_name == "XGBoost":
+        model = darts.models.XGBModel(
+            lags=lags,
+            lags_past_covariates=lags,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=n_estimators,
+            max_depth=best_params["max_depth"],
+            learning_rate=best_params["learning_rate"],
+            random_state=42,
+            verbosity=0,
+        )
+    elif model_name == "LightGBM":
+        model = darts.models.LightGBMModel(
+            lags=lags,
+            lags_past_covariates=lags,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=n_estimators,
+            num_leaves=best_params["num_leaves"],
+            learning_rate=best_params["learning_rate"],
+            random_state=42,
+            verbose=-1,
+        )
+    else:
+        model = darts.models.RandomForestModel(
+            lags=lags,
+            lags_past_covariates=lags,
+            lags_future_covariates=[0],
+            output_chunk_length=forecast_horizon,
+            n_estimators=n_estimators,
+            max_depth=best_params["max_depth"],
+            random_state=42,
+        )
+    # Train model on training data only.
+    _LOG.info("Training model on training data.")
+    model.fit(
+        target_train_c,
+        past_covariates=past_train_c,
+        future_covariates=future_train_c,
+    )
+    # Generate prediction covering full val and test period.
+    _LOG.info(
+        "Generating predictions for %d days.",
+        len(actual_vals),
+    )
+    prediction = model.predict(
+        len(actual_vals),
+        past_covariates=past_full,
+        future_covariates=future_full,
+    )
+    # Inverse transform predictions.
+    pred_df = target_scaler.inverse_transform(
+        filler.transform(prediction)
+    ).to_dataframe().dropna()
+    pred_vals = pred_df.values.flatten()
+    # Calculate metrics for each stride-sized window.
+    window_results = []
+    n_windows = len(actual_vals) // stride
+    _LOG.info(
+        "Evaluating %d windows of %d days each.",
+        n_windows,
+        stride,
+    )
+    for w in tqdm.tqdm(
+        range(n_windows), desc="Walk forward windows"
+    ):
+        start_idx = w * stride
+        end_idx = min(
+            start_idx + forecast_horizon, len(actual_vals)
+        )
+        if start_idx >= len(actual_vals):
+            break
+        w_actual = actual_vals[start_idx:end_idx]
+        w_pred = (
+            pred_vals[start_idx:end_idx]
+            if end_idx <= len(pred_vals)
+            else w_actual
+        )
+        w_dates = actual_df.index[start_idx:end_idx]
+        if len(w_actual) < 5:
+            continue
+        # Calculate MAPE.
+        w_mape = float(
+            np.mean(
+                np.abs((w_actual - w_pred) / w_actual)
+            ) * 100
+        )
+        # Calculate MAE.
+        w_mae = float(np.mean(np.abs(w_actual - w_pred)))
+        # Calculate direction accuracy.
+        ref = w_actual[0]
+        a_dir = np.sign(w_actual - ref)
+        p_dir = np.sign(w_pred - ref)
+        mask = a_dir != 0
+        w_dir = float(
+            np.mean(a_dir[mask] == p_dir[mask]) * 100
+        ) if mask.sum() > 0 else float("nan")
+        window_results.append({
+            "Window"       : w + 1,
+            "Start_Date"   : w_dates[0].date(),
+            "End_Date"     : w_dates[-1].date(),
+            "Window_MAPE"  : round(w_mape, 4),
+            "Window_MAE"   : round(w_mae, 2),
+            "Direction_Acc": round(w_dir, 1),
+        })
+    results_df = pd.DataFrame(window_results)
+    _LOG.info(
+        "Walk forward complete — %d windows | "
+        "Avg MAPE: %.4f%% | Avg MAE: $%.2f | "
+        "Avg Direction: %.1f%%",
+        len(results_df),
+        results_df["Window_MAPE"].mean(),
+        results_df["Window_MAE"].mean(),
+        results_df["Direction_Acc"].mean(),
+    )
+    return results_df
+
+def plot_walk_forward_results(
+    walk_forward_results: pd.DataFrame,
+    model_name: str = "Best Model",
+) -> plt.Figure:
+    """
+    Plot walk forward validation results showing MAPE and direction
+    accuracy per window over the evaluation period.
+
+    Two panels are shown — MAPE per window colored by performance
+    tier and direction accuracy per window with random baseline
+    reference line. Green bars indicate good performance orange
+    indicates moderate and red indicates poor performance.
+
+    :param walk_forward_results: DataFrame from `walk_forward_validation`
+        containing Window_MAPE Direction_Acc and date columns
+    :param model_name: name of the model for chart title
+    :return: matplotlib Figure object with two panel results chart
+    """
+    # Create figure with two panels.
+    fig, axes = plt.subplots(2, 1, figsize=(16, 10))
+    # Color windows by MAPE performance tier.
+    mape_colors = [
+        "#2E7D32" if m < 5
+        else "#FF6F00" if m < 15
+        else "#D32F2F"
+        for m in walk_forward_results["Window_MAPE"]
+    ]
+    # Panel 1 — MAPE per window.
+    axes[0].bar(
+        walk_forward_results["Window"],
+        walk_forward_results["Window_MAPE"],
+        color=mape_colors,
+        alpha=0.8,
+        edgecolor="white",
+    )
+    axes[0].axhline(
+        walk_forward_results["Window_MAPE"].mean(),
+        color="black",
+        linewidth=1.5,
+        linestyle="--",
+        label=f"Avg MAPE: {walk_forward_results['Window_MAPE'].mean():.2f}%",
+    )
+    axes[0].set_title(
+        "Walk Forward Validation — MAPE per Window",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[0].set_ylabel("MAPE (%)")
+    axes[0].set_xlabel("Window")
+    axes[0].set_xticks(walk_forward_results["Window"])
+    axes[0].set_xticklabels(
+        [
+            str(r["Start_Date"])
+            for _, r in walk_forward_results.iterrows()
+        ],
+        rotation=45,
+        ha="right",
+        fontsize=7,
+    )
+    axes[0].legend()
+    # Color windows by direction accuracy tier.
+    dir_colors = [
+        "#2E7D32" if d >= 60
+        else "#FF6F00" if d >= 40
+        else "#D32F2F"
+        for d in walk_forward_results["Direction_Acc"]
+    ]
+    # Panel 2 — Direction accuracy per window.
+    axes[1].bar(
+        walk_forward_results["Window"],
+        walk_forward_results["Direction_Acc"],
+        color=dir_colors,
+        alpha=0.8,
+        edgecolor="white",
+    )
+    # Add random baseline reference line at 50%.
+    axes[1].axhline(
+        50,
+        color="black",
+        linewidth=1.0,
+        linestyle="--",
+        label="Random baseline (50%)",
+    )
+    # Add average direction accuracy line.
+    axes[1].axhline(
+        walk_forward_results["Direction_Acc"].mean(),
+        color="#1565C0",
+        linewidth=1.5,
+        linestyle="--",
+        label=f"Avg Direction: {walk_forward_results['Direction_Acc'].mean():.1f}%",
+    )
+    axes[1].set_title(
+        "Walk Forward Validation — Direction Accuracy per Window",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[1].set_ylabel("Direction Accuracy (%)")
+    axes[1].set_xlabel("Window")
+    axes[1].set_xticks(walk_forward_results["Window"])
+    axes[1].set_xticklabels(
+        [
+            str(r["Start_Date"])
+            for _, r in walk_forward_results.iterrows()
+        ],
+        rotation=45,
+        ha="right",
+        fontsize=7,
+    )
+    axes[1].set_ylim(0, 110)
+    axes[1].legend()
+    fig.suptitle(
+        f"Walk Forward Validation — {model_name} 2023-2024",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
