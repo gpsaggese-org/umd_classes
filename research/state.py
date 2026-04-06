@@ -1,3 +1,9 @@
+"""
+Import as:
+
+import research.state as restate
+"""
+
 from __future__ import annotations
 
 import json
@@ -5,7 +11,13 @@ from datetime import datetime
 from typing import List, Dict, Optional, Tuple
 from pydantic import BaseModel, Field
 
-#Supporting Schemas
+# Supporting Schemas
+
+
+# #############################################################################
+# DataFrameInfo
+# #############################################################################
+
 
 class DataFrameInfo(BaseModel):
     shape: Tuple[int, int]
@@ -16,11 +28,21 @@ class DataFrameInfo(BaseModel):
     detected_time_column: Optional[str] = None
 
 
+# #############################################################################
+# ColumnInfo
+# #############################################################################
+
+
 class ColumnInfo(BaseModel):
     name: str
     dtype: str
     statistics: Dict[str, float] = Field(default_factory=dict)
     detected_issues: List[str] = Field(default_factory=list)
+
+
+# #############################################################################
+# NotebookCell
+# #############################################################################
 
 
 class NotebookCell(BaseModel):
@@ -36,39 +58,45 @@ class NotebookCell(BaseModel):
     executed_at: Optional[datetime] = None
 
 
-#Core Agent State Tracking
+# Core Agent State Tracking
+
+
+# #############################################################################
+# AgentState
+# #############################################################################
+
 
 class AgentState(BaseModel):
-    #Metadata
+    # Metadata
     version: str = "1.0.0"
     created_at: datetime = Field(default_factory=datetime.utcnow)
     last_updated: datetime = Field(default_factory=datetime.utcnow)
 
-    #Conversation
+    # Conversation
     conversation_history: List[Dict[str, str]] = Field(default_factory=list)
 
-    #Dataset Understanding
+    # Dataset Understanding
     dataset_info: Optional[DataFrameInfo] = None
     columns: List[ColumnInfo] = Field(default_factory=list)
 
-    #Notebook Tracking
+    # Notebook Tracking
     notebook_path: Optional[str] = None
     executed_cells: List[NotebookCell] = Field(default_factory=list)
 
-    #Analysis Progress
+    # Analysis Progress
     current_phase: str = "INITIALIZATION"
     phase_progress: Dict[str, str] = Field(default_factory=dict)
 
-    #Process Control
+    # Process Control
     retry_count: int = 0
     max_retries: int = 3
     should_continue: bool = True
 
-    #Error tracking
+    # Error tracking
     errors: List[str] = Field(default_factory=list)
     warnings: List[str] = Field(default_factory=list)
 
-#Utility Methods
+    # Utility Methods
 
     def update_timestamp(self):
         self.last_updated = datetime.utcnow()
@@ -97,22 +125,17 @@ class AgentState(BaseModel):
         self.should_continue = False
         self.update_timestamp()
 
-#Serialization Utilities
+
+# Serialization Utilities
+
 
 def save_state(state: AgentState, path: str):
     with open(path, "w") as f:
         f.write(state.model_dump_json(indent=2))
 
 
-def load_state(path: str) -> AgentState:
-    with open(path, "r") as f:
-        raw = json.load(f)
+# Migration Strategy
 
-    raw = migrate_state(raw)
-    return AgentState.model_validate(raw)
-
-
-#Migration Strategy
 
 def migrate_state(data: dict) -> dict:
     version = data.get("version", "0.0.0")
@@ -123,3 +146,11 @@ def migrate_state(data: dict) -> dict:
         data.setdefault("max_retries", 3)
 
     return data
+
+
+def load_state(path: str) -> AgentState:
+    with open(path, "r") as f:
+        raw = json.load(f)
+
+    raw = migrate_state(raw)
+    return AgentState.model_validate(raw)

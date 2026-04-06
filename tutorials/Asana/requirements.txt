@@ -1,6 +1,5 @@
 # Jupyter
 jupyter==1.1.1
-jupyterlab==4.3.3
 notebook==7.3.1
 ipykernel==6.29.5
 jupytext==1.16.4

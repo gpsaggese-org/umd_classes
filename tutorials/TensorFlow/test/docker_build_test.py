@@ -53,10 +53,10 @@ def run_notebooks_in_container():
         DOCKER_IMAGE,
         "bash",
         "-c",
-        f"for nb in /curr_dir/*.ipynb; do "
-        f"echo 'Running $nb...'; "
-        f'jupyter nbconvert --to notebook --execute --inplace "$nb" || exit 1; '
-        f"done",
+        "for nb in /curr_dir/*.ipynb; do "
+        "echo 'Running $nb...'; "
+        'jupyter nbconvert --to notebook --execute --inplace "$nb" || exit 1; '
+        "done",
     ]
     result = subprocess.run(cmd, text=True)
     if result.returncode != 0:

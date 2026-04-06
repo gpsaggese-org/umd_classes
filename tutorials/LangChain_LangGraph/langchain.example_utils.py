@@ -19,8 +19,8 @@ import math
 import pathlib
 from typing import Annotated, Any, List, TypedDict
 
-from langchain_core.tools import tool
-from langgraph.graph.message import add_messages
+import langchain_core.tools
+import langgraph.graph.message
 
 _LOG = logging.getLogger(__name__)
 
@@ -77,7 +77,7 @@ Quick fixes:
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def sqrt(x: float) -> float:
     """
     Return sqrt(x); raises ValueError for negative input.
@@ -174,7 +174,7 @@ def make_dataset_nodes(df):
 
 
 class RS(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
 
 
 def make_call_model(llm, tools):
@@ -364,11 +364,11 @@ def _all_tool_calls(messages: list[Any]) -> list[dict[str, Any]]:
     """
     Collect tool call dicts emitted by `AIMessage` objects in `messages`.
     """
-    from langchain_core.messages import AIMessage
+    import langchain_core.messages
 
     calls: list[dict[str, Any]] = []
     for m in messages:
-        if isinstance(m, AIMessage):
+        if isinstance(m, langchain_core.messages.AIMessage):
             for tc in m.tool_calls or []:
                 if isinstance(tc, dict):
                     calls.append(tc)
@@ -379,11 +379,14 @@ def _tool_outputs(messages: list[Any], tool_name: str) -> list[Any]:
     """
     Return tool message contents for `tool_name`.
     """
-    from langchain_core.messages import ToolMessage
+    import langchain_core.messages
 
     outs: list[Any] = []
     for m in messages:
-        if isinstance(m, ToolMessage) and getattr(m, "name", None) == tool_name:
+        if (
+            isinstance(m, langchain_core.messages.ToolMessage)
+            and getattr(m, "name", None) == tool_name
+        ):
             outs.append(m.content)
     return outs
 

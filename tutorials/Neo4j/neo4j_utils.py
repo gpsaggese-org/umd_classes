@@ -3,7 +3,7 @@ Utility functions for Neo4j-based graph database workflows.
 
 Import as:
 
-import tutorials.tutorial_neo4j.neo4j_utils as ttneouti
+import tutorials.Neo4j.neo4j_utils as tneneuti
 """
 
 import logging
@@ -24,9 +24,7 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-def change_password(
-    driver, current_password: str, new_password: str
-) -> None:
+def change_password(driver, current_password: str, new_password: str) -> None:
     """
     Change the Neo4j database password.
 
@@ -121,9 +119,7 @@ def return_created_node(tx, label: str, name: str):
     :param name: the name property value
     :return: the created Neo4j node object
     """
-    result = tx.run(
-        f"CREATE (a:{label} {{name: $name}}) RETURN a", name=name
-    )
+    result = tx.run(f"CREATE (a:{label} {{name: $name}}) RETURN a", name=name)
     return result.single()[0]
 
 
@@ -243,9 +239,7 @@ def merge_relationship(
     )
 
 
-def set_properties(
-    tx, label: str, name: str, properties: dict
-) -> None:
+def set_properties(tx, label: str, name: str, properties: dict) -> None:
     """
     Update properties of an existing node.
 
@@ -339,8 +333,7 @@ def optional_match(tx) -> None:
     :param tx: active Neo4j transaction
     """
     result = tx.run(
-        "OPTIONAL MATCH (a:Person)-[r:KNOWS]->(b:Person) "
-        "RETURN a.name, b.name"
+        "OPTIONAL MATCH (a:Person)-[r:KNOWS]->(b:Person) RETURN a.name, b.name"
     )
     for record in result:
         _LOG.info("%s knows %s", record["a.name"], record["b.name"])
@@ -352,9 +345,7 @@ def where_clause(tx) -> None:
 
     :param tx: active Neo4j transaction
     """
-    result = tx.run(
-        "MATCH (a:Person) WHERE a.age > 25 RETURN a.name, a.age"
-    )
+    result = tx.run("MATCH (a:Person) WHERE a.age > 25 RETURN a.name, a.age")
     for record in result:
         _LOG.info("%s is %s years old", record["a.name"], record["a.age"])
 
@@ -407,7 +398,7 @@ def plot_graph(results) -> None:
 
 
 # #############################################################################
-# Neo4jAPI class
+# Neo4jAPI
 # #############################################################################
 
 

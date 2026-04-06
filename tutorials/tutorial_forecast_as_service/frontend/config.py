@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.frontend.config as tfasfrco
+import tutorials.tutorial_forecast_as_service.frontend.config as ttfasfrco
 """
 
 # FastAPI service configuration.

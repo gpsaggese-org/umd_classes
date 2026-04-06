@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -42,12 +42,12 @@ import neo4j as nj
 import py2neo as pyneo
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebo
 import tutorials.tutorial_neo4j.neo4j_utils as ttneouti
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hprint.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## 1. Starting the Neo4j Server
@@ -231,7 +231,12 @@ with driver.session() as session:
     )
     # MERGE: add Alice-Charlie relationship.
     session.execute_write(
-        ttneouti.merge_relationship, "Person", "Alice", "KNOWS", "Person", "Charlie"
+        ttneouti.merge_relationship,
+        "Person",
+        "Alice",
+        "KNOWS",
+        "Person",
+        "Charlie",
     )
     # SET: update Alice's age and add city.
     session.execute_write(

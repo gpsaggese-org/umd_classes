@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -67,6 +67,32 @@ _LOG = logging.getLogger(__name__)
 # Replace "YOUR_OPENAI_API_KEY" with your actual OpenAI API key.
 os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 
+
+# %% [markdown]
+# ### User Input and Mission
+# The cell below:
+# - Collects ticker and days for analysis.
+# - Lets user pick mission type: standard, bear-case, or peer comparison.
+# - Maps choice to a task and runs `run_stock_mission`.
+
+# %%
+# Set user inputs.
+ticker_in = input("Ticker: ").upper().strip()
+
+# %% [markdown]
+# ## Part 2: SEC Filings & Quantitative RAG
+# **Objective:** Perform a deep-dive analysis into official company filings using Retrieval-Augmented Generation.
+#
+# - **Data Pipeline:** A manual process to fetch 10-K filings from SEC EDGAR, clean HTML/PDF noise, and embed chunks into **ChromaDB**.
+# - **Agentic RAG:** The **Senior Quant Analyst** queries the vector database to find specific geographic revenue splits and risk factors.
+# - **Code Execution:** The **Quant Runtime** agent writes and executes Python code locally to transform raw 10-K tables into formatted visualizations.
+#
+# The cell below retrieves the SEC annual reports for the user-specified stocks and embeds them into the Chroma database.
+
+# %%
+# Get the ticker from the user.
+ticker_in = input("Enter the stock ticker: ").strip().upper()
+
 # %% [markdown]
 # ## Part 1: Dynamic Market Debate & Live Data
 # **Objective:** Leverage real-time market data to facilitate a debate between opposing investment perspectives.
@@ -75,8 +101,11 @@ os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 # - **Tools:** Integration with `yfinance` via `market_tool` and `plot_tool`.
 # - **Visualization:** The Analyst generates and displays a technical trend chart directly in the notebook.
 
+
 # %%
-async def _run_stock_mission(ticker: str, days: int, task: str, *, model: str = "gpt-4o"):
+async def _run_stock_mission(
+    ticker: str, days: int, task: str, *, model: str = "gpt-4o"
+):
     model_client = OpenAIChatCompletionClient(model=model)
     # Set up agents.
     analyst = AssistantAgent(
@@ -137,16 +166,6 @@ async def _run_stock_mission(ticker: str, days: int, task: str, *, model: str = 
     return history
 
 
-# %% [markdown]
-# ### User Input and Mission
-# The cell below:
-# - Collects ticker and days for analysis.
-# - Lets user pick mission type: standard, bear-case, or peer comparison.
-# - Maps choice to a task and runs `run_stock_mission`.
-
-# %%
-# Set user inputs.
-ticker_in = input("Ticker: ").upper().strip()
 days_in = int(input("Days: "))
 print("\n--- Mission Options ---")
 print("1. Standard Debate (Press Enter)")
@@ -156,27 +175,17 @@ user_choice = input("Select 1, 2, or 3: ").strip()
 # Map numbers to task instructions.
 tasks = {
     "1": f"Analyst: Provide data for {ticker_in} ({days_in} days). Bull and Bear: Debate the value.",
-    "2": f"Analyst: Provide data. Bear_Strategist: Give a deep dive on every risk you find.",
+    "2": "Analyst: Provide data. Bear_Strategist: Give a deep dive on every risk you find.",
     "3": f"Analyst: Provide data. Bull and Bear: Debate how {ticker_in} stacks up against its main competitors.",
 }
 # Default task if the user enters an invalid option.
-final_task = tasks.get(user_choice, f"Debate {ticker_in} based on {days_in} days of data.")
+final_task = tasks.get(
+    user_choice, f"Debate {ticker_in} based on {days_in} days of data."
+)
 # Execute the mission.
-history = await _run_stock_mission(ticker=ticker_in, days=days_in, task=final_task)
-
-# %% [markdown]
-# ## Part 2: SEC Filings & Quantitative RAG
-# **Objective:** Perform a deep-dive analysis into official company filings using Retrieval-Augmented Generation.
-#
-# - **Data Pipeline:** A manual process to fetch 10-K filings from SEC EDGAR, clean HTML/PDF noise, and embed chunks into **ChromaDB**.
-# - **Agentic RAG:** The **Senior Quant Analyst** queries the vector database to find specific geographic revenue splits and risk factors.
-# - **Code Execution:** The **Quant Runtime** agent writes and executes Python code locally to transform raw 10-K tables into formatted visualizations.
-#
-# The cell below retrieves the SEC annual reports for the user-specified stocks and embeds them into the Chroma database.
-
-# %%
-# Get the ticker from the user.
-ticker_in = input("Enter the stock ticker: ").strip().upper()
+history = await _run_stock_mission(
+    ticker=ticker_in, days=days_in, task=final_task
+)
 if ticker_in:
     print(f"Starting process for {ticker_in}...")
     # Fetch and clean the 10-K filing.
@@ -187,74 +196,6 @@ if ticker_in:
         print(f"Ready for RAG! Collection ID: {collection_id}")
     else:
         print(f"{clean_path}")
-
-# %% [markdown]
-# The cell below defines an asynchronous function `run_beautified_mission` that generates a comprehensive financial brief for a given stock ticker. It orchestrates a team of agents to:
-#
-# 1. **Revenue Breakdown** - Extract revenue data from the 10-K by geography, or fallback to product/segment revenue if geographic data is missing.
-# 2. **Pie Chart** - Automatically generate a pie chart of the revenue breakdown using actual dollar figures and save it as `analysis_output.png`.
-# 3. **Financial Ratios** - Retrieve key metrics like Trailing P/E, Forward P/E, Profit Margin, Revenue Growth (YoY), and Debt-to-Equity, and display them as a clean Markdown table.
-# 4. **Top 3 Risks** - Identify the top three material risks from the 10-K.
-# 5. **In-Depth Analysis** - Summarize the company's financials and suggest a buy/sell recommendation.
-#
-# It then streams outputs from the agents: displaying clean Markdown for the Analyst's results, confirming chart creation or showing errors from the Runtime agent, and finally printing a mission completion message when the `TERMINATE` keyword is reached.
-
-# %%
-async def _run_beautified_mission(ticker_symbol: str):
-    task = (
-        f"Generate a financial brief for {ticker_symbol}.\n\n"
-        f"STEP 1 - REVENUE BREAKDOWN:\n"
-        f"Search the 10-K for revenue broken down by geography (country/region). "
-        f"If no geographic breakdown exists, fall back to revenue by product line "
-        f"or business segment. Use whatever revenue table IS available -- do not "
-        f"leave this section empty.\n\n"
-        f"STEP 2 - PIE CHART:\n"
-        f"Write Python code to visualize the revenue breakdown from Step 1 as a "
-        f"pie chart. Use ONLY actual revenue dollar figures -- not ratios or percentages. "
-        f"Save as 'analysis_output.png'.\n\n"
-        f"STEP 3 - FINANCIAL RATIOS:\n"
-        f"Use the financial tool to retrieve: Trailing P/E, Forward P/E, "
-        f"Profit Margin, Revenue Growth (YoY), and Debt to Equity. "
-        f"Display as a clean Markdown table.\n\n"
-        f"STEP 4 - TOP 3 RISKS:\n"
-        f"Search the 10-K for the top 3 material risks facing the company.\n"
-        f"STEP 5 - Give an in-depth analysis of the financials of the company and suggest if it is a buy or a sell for the stock.\n"
-        f"Search the 10-K for all the information necessary.\n"
-    )
-    print(f"Mission started for {ticker_symbol}...\n")
-    async for message in team.run_stream(task=task):
-        if hasattr(message, "source"):
-            # Handle analyst output.
-            if message.source == "Analyst" and isinstance(message.content, str):
-                content = message.content
-                # Block raw tool bleed-through.
-                if any(skip in content for skip in [
-                    "Evidence from",
-                    "### Evidence",
-                    "Financials for",
-                    "exitcode:",
-                ]):
-                    continue
-                display_text = autogen_utils.clean_markdown(content)
-                if display_text:
-                    display(Markdown(display_text))
-            # Handle runtime output.
-            if message.source == "Quant_Runtime":
-                content_str = str(message.content)
-                if "exitcode: 0" in content_str:
-                    print("[System]: Chart generated successfully.\n")
-                elif "exitcode: 1" in content_str:
-                    print("[System]: Code execution failed:")
-                    # Extract just the error, not the whole blob.
-                    error_match = re.search(
-                        r'(Traceback.*?)(?=\n\n|\Z)', content_str, re.DOTALL
-                    )
-                    if error_match:
-                        print(error_match.group(1))
-                    else:
-                        print(content_str)
-        elif hasattr(message, "stop_reason"):
-            print(f"Mission complete: {message.stop_reason}\n")
 
 
 # %% [markdown]
@@ -268,7 +209,6 @@ async def _run_beautified_mission(ticker_symbol: str):
 
 # %%
 model_client = OpenAIChatCompletionClient(model="gpt-4o")
-os.makedirs("quant_sandbox", exist_ok=True)
 local_executor = LocalCommandLineCodeExecutor(work_dir="quant_sandbox")
 # Define the agents.
 analyst = AssistantAgent(
@@ -321,6 +261,81 @@ team = SelectorGroupChat(
     model_client=model_client,
     termination_condition=termination,
 )
+
+# %% [markdown]
+# The cell below defines an asynchronous function `run_beautified_mission` that generates a comprehensive financial brief for a given stock ticker. It orchestrates a team of agents to:
+#
+# 1. **Revenue Breakdown** - Extract revenue data from the 10-K by geography, or fallback to product/segment revenue if geographic data is missing.
+# 2. **Pie Chart** - Automatically generate a pie chart of the revenue breakdown using actual dollar figures and save it as `analysis_output.png`.
+# 3. **Financial Ratios** - Retrieve key metrics like Trailing P/E, Forward P/E, Profit Margin, Revenue Growth (YoY), and Debt-to-Equity, and display them as a clean Markdown table.
+# 4. **Top 3 Risks** - Identify the top three material risks from the 10-K.
+# 5. **In-Depth Analysis** - Summarize the company's financials and suggest a buy/sell recommendation.
+#
+# It then streams outputs from the agents: displaying clean Markdown for the Analyst's results, confirming chart creation or showing errors from the Runtime agent, and finally printing a mission completion message when the `TERMINATE` keyword is reached.
+
+
+# %%
+async def _run_beautified_mission(ticker_symbol: str):
+    task = (
+        f"Generate a financial brief for {ticker_symbol}.\n\n"
+        f"STEP 1 - REVENUE BREAKDOWN:\n"
+        f"Search the 10-K for revenue broken down by geography (country/region). "
+        f"If no geographic breakdown exists, fall back to revenue by product line "
+        f"or business segment. Use whatever revenue table IS available -- do not "
+        f"leave this section empty.\n\n"
+        f"STEP 2 - PIE CHART:\n"
+        f"Write Python code to visualize the revenue breakdown from Step 1 as a "
+        f"pie chart. Use ONLY actual revenue dollar figures -- not ratios or percentages. "
+        f"Save as 'analysis_output.png'.\n\n"
+        f"STEP 3 - FINANCIAL RATIOS:\n"
+        f"Use the financial tool to retrieve: Trailing P/E, Forward P/E, "
+        f"Profit Margin, Revenue Growth (YoY), and Debt to Equity. "
+        f"Display as a clean Markdown table.\n\n"
+        f"STEP 4 - TOP 3 RISKS:\n"
+        f"Search the 10-K for the top 3 material risks facing the company.\n"
+        f"STEP 5 - Give an in-depth analysis of the financials of the company and suggest if it is a buy or a sell for the stock.\n"
+        f"Search the 10-K for all the information necessary.\n"
+    )
+    print(f"Mission started for {ticker_symbol}...\n")
+    async for message in team.run_stream(task=task):
+        if hasattr(message, "source"):
+            # Handle analyst output.
+            if message.source == "Analyst" and isinstance(message.content, str):
+                content = message.content
+                # Block raw tool bleed-through.
+                if any(
+                    skip in content
+                    for skip in [
+                        "Evidence from",
+                        "### Evidence",
+                        "Financials for",
+                        "exitcode:",
+                    ]
+                ):
+                    continue
+                display_text = autogen_utils.clean_markdown(content)
+                if display_text:
+                    display(Markdown(display_text))
+            # Handle runtime output.
+            if message.source == "Quant_Runtime":
+                content_str = str(message.content)
+                if "exitcode: 0" in content_str:
+                    print("[System]: Chart generated successfully.\n")
+                elif "exitcode: 1" in content_str:
+                    print("[System]: Code execution failed:")
+                    # Extract just the error, not the whole blob.
+                    error_match = re.search(
+                        r"(Traceback.*?)(?=\n\n|\Z)", content_str, re.DOTALL
+                    )
+                    if error_match:
+                        print(error_match.group(1))
+                    else:
+                        print(content_str)
+        elif hasattr(message, "stop_reason"):
+            print(f"Mission complete: {message.stop_reason}\n")
+
+
+os.makedirs("quant_sandbox", exist_ok=True)
 # Run the mission.
 user_ticker = input("Enter Ticker for Quant Analysis: ").strip().upper()
 if user_ticker:

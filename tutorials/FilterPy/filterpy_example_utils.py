@@ -13,7 +13,7 @@ Utility functions for the FilterPy example notebook - financial applications.
 
 Import as:
 
-import tutorials.FilterPy.filterpy_example_utils as utils
+import tutorials.FilterPy.filterpy_example_utils as tffiexut
 """
 
 import logging
@@ -72,11 +72,7 @@ def _simulate_price_trend(
     rng = np.random.default_rng(seed)
     days = np.arange(n_days, dtype=float)
     # True latent trend: linear drift + sinusoidal variation.
-    true_trend = (
-        100.0
-        + drift * days
-        + 5.0 * np.sin(2.0 * np.pi * days / 50.0)
-    )
+    true_trend = 100.0 + drift * days + 5.0 * np.sin(2.0 * np.pi * days / 50.0)
     # Cumulative process noise makes it look like a realistic price path.
     process_noise = np.cumsum(rng.normal(0, 0.1, size=n_days))
     true_trend = true_trend + process_noise
@@ -128,9 +124,7 @@ def plot_intro_signal_vs_noise(n_days: int = 100, seed: int = 42) -> None:
     ax.set_ylim(80, 140)
     ax.set_xlabel("Trading Day")
     ax.set_ylabel("Price ($)")
-    ax.set_title(
-        "What We See (Noisy Prices) vs What We Want (True Value)"
-    )
+    ax.set_title("What We See (Noisy Prices) vs What We Want (True Value)")
     ax.legend(fontsize=9)
     # ------------------------------------------------------------------
     # Panel 2: Kalman flow diagram with financial annotations.
@@ -205,7 +199,6 @@ def plot_intro_signal_vs_noise(n_days: int = 100, seed: int = 42) -> None:
         lw=1.5,
         connectionstyle="arc3,rad=0",
     )
-    from matplotlib.patches import FancyArrowPatch  # noqa: PLC0415
     for (x1, y1, _), (x2, y2, _) in zip(nodes[:-1], nodes[1:]):
         ax.annotate(
             "",
@@ -234,8 +227,16 @@ def plot_intro_signal_vs_noise(n_days: int = 100, seed: int = 42) -> None:
         arrowprops=dict(arrowstyle="->", color="red", lw=1.2),
     )
     # Kalman gain label on update arrow.
-    ax.text(6.75, 3.0, "K", ha="center", va="center", fontsize=10,
-            color="darkgreen", fontweight="bold")
+    ax.text(
+        6.75,
+        3.0,
+        "K",
+        ha="center",
+        va="center",
+        fontsize=10,
+        color="darkgreen",
+        fontweight="bold",
+    )
     plt.tight_layout()
     plt.show()
     # ------------------------------------------------------------------
@@ -439,9 +440,7 @@ def _run_kf_uncertainty(
     return pos_var, vel_var, k_gain
 
 
-def plot_kf_uncertainty(
-    P0_val: float = 1000.0, R_val: float = 5.0
-) -> None:
+def plot_kf_uncertainty(P0_val: float = 1000.0, R_val: float = 5.0) -> None:
     """
     Plot covariance P and Kalman gain K convergence over trading days.
 
@@ -455,7 +454,11 @@ def plot_kf_uncertainty(
     ax = axes[0]
     ax.plot(days, pos_var, "b-", lw=2, label="Position variance P[0,0]")
     ax.plot(
-        days, vel_var, "-", color="orange", lw=2,
+        days,
+        vel_var,
+        "-",
+        color="orange",
+        lw=2,
         label="Velocity variance P[1,1]",
     )
     ax.set_xlim(0, 99)
@@ -527,9 +530,7 @@ def _simulate_pairs(
     sigma_beta: float = 0.05,
     R_val: float = 1.0,
     seed: int = 42,
-) -> tuple[
-    np.ndarray, np.ndarray, np.ndarray, np.ndarray
-]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Simulate two cointegrated stocks with a time-varying hedge ratio.
 
@@ -587,7 +588,7 @@ def _run_ekf_pairs(
     ekf.F = np.array([[1.0]])
     ekf.P = np.array([[1.0]])
     ekf.R = np.array([[R_val]])
-    ekf.Q = np.array([[sigma_beta ** 2]])
+    ekf.Q = np.array([[sigma_beta**2]])
     ekf_beta = np.zeros(n)
     ekf_std = np.zeros(n)
     for t in range(n):
@@ -622,16 +623,14 @@ def _run_rolling_ols(
     n = len(stock_a)
     beta = np.full(n, np.nan)
     for t in range(window - 1, n):
-        x = stock_b[t - window + 1: t + 1]
-        y = stock_a[t - window + 1: t + 1]
+        x = stock_b[t - window + 1 : t + 1]
+        y = stock_a[t - window + 1 : t + 1]
         # Simple OLS through origin: beta = sum(x*y) / sum(x^2).
         beta[t] = np.dot(x, y) / np.dot(x, x)
     return beta
 
 
-def plot_ekf_pairs_trading(
-    sigma_beta: float = 0.05, R_val: float = 1.0
-) -> None:
+def plot_ekf_pairs_trading(sigma_beta: float = 0.05, R_val: float = 1.0) -> None:
     """
     Plot EKF pairs trading with time-varying beta tracking.
 
@@ -659,7 +658,15 @@ def plot_ekf_pairs_trading(
     # Panel 1: Stock prices.
     ax = axes[0]
     ax.plot(days, stock_a, "b-", lw=1.5, alpha=0.8, label="Stock A (e.g. XOM)")
-    ax.plot(days, stock_b, "-", color="orange", lw=1.5, alpha=0.8, label="Stock B (e.g. CVX)")
+    ax.plot(
+        days,
+        stock_b,
+        "-",
+        color="orange",
+        lw=1.5,
+        alpha=0.8,
+        label="Stock B (e.g. CVX)",
+    )
     ax.set_xlim(0, n_days - 1)
     ax.set_ylim(80, 160)
     ax.set_ylabel("Price ($)")
@@ -668,7 +675,9 @@ def plot_ekf_pairs_trading(
     # Panel 2: Beta estimation.
     ax = axes[1]
     ax.plot(days, true_beta, "b-", lw=2, label="True beta")
-    ax.plot(days, ekf_beta, "g--", lw=1.8, label=f"EKF beta (RMSE={rmse_ekf:.3f})")
+    ax.plot(
+        days, ekf_beta, "g--", lw=1.8, label=f"EKF beta (RMSE={rmse_ekf:.3f})"
+    )
     ax.plot(
         days,
         rolling_beta,
@@ -683,15 +692,14 @@ def plot_ekf_pairs_trading(
     ax.legend(fontsize=9)
     # Panel 3: Spread.
     ax = axes[2]
-    ax.plot(
-        days, ekf_spread, "g-", lw=1.5, alpha=0.8, label="Spread (EKF beta)"
-    )
-    ax.plot(
-        days, ols_spread, "r-", lw=1.2, alpha=0.6, label="Spread (OLS beta)"
-    )
+    ax.plot(days, ekf_spread, "g-", lw=1.5, alpha=0.8, label="Spread (EKF beta)")
+    ax.plot(days, ols_spread, "r-", lw=1.2, alpha=0.6, label="Spread (OLS beta)")
     ax.axhline(
-        2 * ekf_spread_std, color="gray", linestyle="--", lw=1.2,
-        label="+/- 2 sigma signal"
+        2 * ekf_spread_std,
+        color="gray",
+        linestyle="--",
+        lw=1.2,
+        label="+/- 2 sigma signal",
     )
     ax.axhline(-2 * ekf_spread_std, color="gray", linestyle="--", lw=1.2)
     ax.set_xlim(0, n_days - 1)
@@ -740,9 +748,7 @@ def show_ekf_pairs_trading_interactive() -> None:
 # #############################################################################
 
 
-def plot_ekf_linearization(
-    x0: float = 1.0, sigma: float = 0.3
-) -> None:
+def plot_ekf_linearization(x0: float = 1.0, sigma: float = 0.3) -> None:
     """
     Show how EKF linearizes h(x)=log(x) and where the approximation breaks.
 
@@ -904,9 +910,7 @@ def _simulate_stochastic_vol(
     for t in range(1, n_days):
         # Mean reversion to log(0.15) with volatility kappa.
         log_vol[t] = (
-            0.9 * log_vol[t - 1]
-            + 0.1 * np.log(0.15)
-            + kappa * rng.normal()
+            0.9 * log_vol[t - 1] + 0.1 * np.log(0.15) + kappa * rng.normal()
         )
     true_vol = np.exp(log_vol)
     log_returns = true_vol * rng.normal(size=n_days)
@@ -981,9 +985,10 @@ def _run_ekf_volatility(
     ekf.F = np.array([[0.9]])
     ekf.P = np.array([[1.0]])
     ekf.R = np.array([[0.01]])
-    ekf.Q = np.array([[kappa_param ** 2 + 0.001]])
+    ekf.Q = np.array([[kappa_param**2 + 0.001]])
     ekf_vol = np.zeros(n)
     for t in range(n):
+
         def hx(x: np.ndarray) -> np.ndarray:
             return np.array([[np.exp(x[0, 0]) * np.sqrt(2.0 / np.pi)]])
 
@@ -1029,7 +1034,7 @@ def _compute_sigma_points_2d(
     """
     n = 2
     kappa = 0.0
-    lam = alpha ** 2 * (n + kappa) - n
+    lam = alpha**2 * (n + kappa) - n
     scale = np.sqrt(n + lam)
     L = np.linalg.cholesky(cov)
     pts = np.zeros((2 * n + 1, 2))
@@ -1056,21 +1061,29 @@ def plot_ukf_volatility(
     days, log_returns, true_vol = _simulate_stochastic_vol(
         n_days=n_days, kappa=kappa_param
     )
-    ukf_vol, _ukf_std = _run_ukf_volatility(log_returns, alpha_param, kappa_param)
+    ukf_vol, _ukf_std = _run_ukf_volatility(
+        log_returns, alpha_param, kappa_param
+    )
     ekf_vol = _run_ekf_volatility(log_returns, kappa_param)
     garch_vol = _run_garch_volatility(log_returns)
     # Sigma points illustration around a representative 2D state.
-    state_mean = np.array([np.log(0.15), np.log(0.15) * 0.9 + 0.1 * np.log(0.15)])
+    state_mean = np.array(
+        [np.log(0.15), np.log(0.15) * 0.9 + 0.1 * np.log(0.15)]
+    )
     state_cov = np.array([[0.5, 0.1], [0.1, 0.5]])
     rng = np.random.default_rng(0)
     mc_samples = rng.multivariate_normal(state_mean, state_cov, size=300)
     sigma_pts = _compute_sigma_points_2d(state_mean, state_cov, alpha_param)
+
     # Propagated sigma points via log-vol transition.
     def _prop(pt: np.ndarray) -> np.ndarray:
-        return np.array([
-            0.9 * pt[0] + 0.1 * np.log(0.15),
-            0.9 * pt[1] + 0.1 * np.log(0.15),
-        ])
+        return np.array(
+            [
+                0.9 * pt[0] + 0.1 * np.log(0.15),
+                0.9 * pt[1] + 0.1 * np.log(0.15),
+            ]
+        )
+
     sigma_pts_prop = np.array([_prop(p) for p in sigma_pts])
     mc_prop = np.array([_prop(p) for p in mc_samples])
     fig, axes = plt.subplots(1, 3, figsize=(16, 4))
@@ -1133,8 +1146,14 @@ def plot_ukf_volatility(
     ax.plot(days, true_vol, "b-", lw=2, label="True latent volatility")
     ax.plot(days, ukf_vol, "g--", lw=1.8, label=f"UKF vol (RMSE={rmse_ukf:.4f})")
     ax.plot(days, ekf_vol, "r:", lw=1.8, label=f"EKF vol (RMSE={rmse_ekf:.4f})")
-    ax.plot(days, garch_vol, color="gray", linestyle="--", lw=1.4,
-            label=f"GARCH(1,1) (RMSE={rmse_garch:.4f})")
+    ax.plot(
+        days,
+        garch_vol,
+        color="gray",
+        linestyle="--",
+        lw=1.4,
+        label=f"GARCH(1,1) (RMSE={rmse_garch:.4f})",
+    )
     ax.set_xlim(0, n_days - 1)
     ax.set_ylim(0, 0.6)
     ax.set_xlabel("Trading Day")
@@ -1254,16 +1273,24 @@ def plot_ukf_vs_ekf_stress(
     )
     alpha_param = 0.1
     kappa_param = 0.1
-    ukf_vol, _ukf_std = _run_ukf_volatility(log_returns, alpha_param, kappa_param)
+    ukf_vol, _ukf_std = _run_ukf_volatility(
+        log_returns, alpha_param, kappa_param
+    )
     ekf_vol = _run_ekf_volatility(log_returns, kappa_param)
     rmse_ukf = _rmse(ukf_vol, true_vol)
     rmse_ekf = _rmse(ekf_vol, true_vol)
     fig, axes = plt.subplots(1, 3, figsize=(16, 4))
+
     # Shared stress region shading helper.
     def _shade(ax: plt.Axes) -> None:
         ax.axvspan(
-            spike_start, spike_end, alpha=0.15, color="red", label="Stress period"
+            spike_start,
+            spike_end,
+            alpha=0.15,
+            color="red",
+            label="Stress period",
         )
+
     # Panel 1: Returns.
     ax = axes[0]
     ax.plot(days, log_returns, "b-", lw=0.8, alpha=0.8, label="Log returns")
@@ -1415,18 +1442,16 @@ def _run_enkf_portfolio(
     for i, z in enumerate(noisy_prices):
         enkf.predict()
         enkf.update(np.array([z]))
-        enc_mean[i] = np.mean(enkf.ensemble[:, 0])
-        enc_std[i] = np.std(enkf.ensemble[:, 0])
+        enc_mean[i] = np.mean(enkf.sigmas[:, 0])
+        enc_std[i] = np.std(enkf.sigmas[:, 0])
         if i % 5 == 0:
-            all_particles.append((i, enkf.ensemble[:, 0].copy()))
+            all_particles.append((i, enkf.sigmas[:, 0].copy()))
     # Final ensemble.
-    particles_final = enkf.ensemble[:, 0].copy()
+    particles_final = enkf.sigmas[:, 0].copy()
     return days, true_trend, enc_mean, enc_std, particles_final, all_particles
 
 
-def plot_enkf_portfolio(
-    n_ensemble: int = 100, Q_val: float = 0.1
-) -> None:
+def plot_enkf_portfolio(n_ensemble: int = 100, Q_val: float = 0.1) -> None:
     """
     Plot EnKF portfolio risk scenario analysis.
 
@@ -1527,9 +1552,7 @@ def plot_enkf_portfolio(
         label=f"95th pct = {var_95:.1f}",
     )
     # Shade the left tail.
-    x_tail = np.linspace(
-        float(particles_final.min()), var_5, 100
-    )
+    x_tail = np.linspace(float(particles_final.min()), var_5, 100)
     ax.fill_between(
         x_tail,
         0,
@@ -1540,9 +1563,7 @@ def plot_enkf_portfolio(
     )
     ax.set_xlabel("Final Price ($)")
     ax.set_ylabel("Density")
-    ax.set_title(
-        f"Final Portfolio Price Distribution (5th pct VaR={var_5:.1f})"
-    )
+    ax.set_title(f"Final Portfolio Price Distribution (5th pct VaR={var_5:.1f})")
     ax.legend(fontsize=8)
     plt.tight_layout()
     plt.show()
@@ -1624,6 +1645,7 @@ def _run_all_filters_financial(
     ekf_est = np.zeros(n_days)
     ekf_std = np.zeros(n_days)
     for i, z in enumerate(noisy_prices):
+
         def hx_ekf(x: np.ndarray) -> np.ndarray:
             return np.array([[x[0, 0]]])
 
@@ -1663,8 +1685,9 @@ def _run_all_filters_financial(
     rng = np.random.default_rng(seed)
 
     def fx_enkf(x: np.ndarray, dt: float) -> np.ndarray:
-        return np.array([x[0] + x[1] + rng.normal(0, 0.05),
-                         x[1] + rng.normal(0, 0.05)])
+        return np.array(
+            [x[0] + x[1] + rng.normal(0, 0.05), x[1] + rng.normal(0, 0.05)]
+        )
 
     def hx_enkf(x: np.ndarray) -> np.ndarray:
         return np.array([x[0]])
@@ -1684,8 +1707,8 @@ def _run_all_filters_financial(
     for i, z in enumerate(noisy_prices):
         enkf2.predict()
         enkf2.update(np.array([z]))
-        enkf_est[i] = np.mean(enkf2.ensemble[:, 0])
-        enkf_std[i] = np.std(enkf2.ensemble[:, 0])
+        enkf_est[i] = np.mean(enkf2.sigmas[:, 0])
+        enkf_std[i] = np.std(enkf2.sigmas[:, 0])
     results["EnKF"] = (enkf_est, enkf_std)
     return days, true_trend, noisy_prices, results
 
@@ -1710,16 +1733,17 @@ def plot_all_filters_financial_comparison() -> None:
         c = colors[name]
         ax.plot(days, true_trend, "b-", lw=1.8, label="True trend")
         ax.scatter(
-            days, noisy_prices, s=8, alpha=0.4, color="orange",
-            label="Observed"
+            days, noisy_prices, s=8, alpha=0.4, color="orange", label="Observed"
         )
         ax.plot(
-            days, ests, "-", color=c, lw=2,
+            days,
+            ests,
+            "-",
+            color=c,
+            lw=2,
             label=f"{name} (RMSE={rmse_vals[name]:.2f})",
         )
-        ax.fill_between(
-            days, ests - stds, ests + stds, alpha=0.2, color=c
-        )
+        ax.fill_between(days, ests - stds, ests + stds, alpha=0.2, color=c)
         ax.set_xlim(0, 99)
         ax.set_ylim(80, 140)
         ax.set_xlabel("Trading Day")
@@ -1736,8 +1760,13 @@ def plot_all_filters_financial_comparison() -> None:
     # RMSE bar chart.
     fig2, ax2 = plt.subplots(figsize=(6, 3))
     bar_colors = [colors[n] for n in filter_names]
-    bars = ax2.bar(filter_names, [rmse_vals[n] for n in filter_names],
-                   color=bar_colors, alpha=0.8, edgecolor="black")
+    bars = ax2.bar(
+        filter_names,
+        [rmse_vals[n] for n in filter_names],
+        color=bar_colors,
+        alpha=0.8,
+        edgecolor="black",
+    )
     for bar, name in zip(bars, filter_names):
         ax2.text(
             bar.get_x() + bar.get_width() / 2,
@@ -1780,8 +1809,6 @@ def plot_all_filters_financial_comparison() -> None:
             edgecolor="gray",
         ),
     )
-    ax3.set_title(
-        "Filter Selection Guide", fontsize=11, fontweight="bold"
-    )
+    ax3.set_title("Filter Selection Guide", fontsize=11, fontweight="bold")
     plt.tight_layout()
     plt.show()

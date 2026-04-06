@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -42,7 +42,7 @@ import logging
 
 import helpers.hdbg as hdbg
 import helpers.hpandas as hpandas
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebo
 import utils
 
 # %%
@@ -50,7 +50,7 @@ hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hprint.config_notebook()
+hnotebo.config_notebook()
 
 # %% [markdown]
 # ## Define Config
@@ -100,7 +100,8 @@ tasks_df = utils.fetch_tasks(
 )
 # Fetch tasks completed in the given period.
 _LOG.info(
-    "Created_taaks_df = \n%s", hpandas.df_to_str(tasks_df, log_level=logging.INFO)
+    "Created_taaks_df = \n%s",
+    hpandas.df_to_str(tasks_df, log_level=logging.INFO),
 )
 
 # %% [markdown]
@@ -112,9 +113,7 @@ _LOG.info(
 #
 
 # %%
-task_ids = (
-    tasks_df["task_id"].tolist() if not tasks_df.empty else []
-)
+task_ids = tasks_df["task_id"].tolist() if not tasks_df.empty else []
 tasks_comments_df = utils.fetch_comments(client, task_ids)
 _LOG.info(
     "Comments df = \n %s",

@@ -39,8 +39,6 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-
-
 ## Intervention and Counterfactuals
 
 * Interventions in Causal Networks

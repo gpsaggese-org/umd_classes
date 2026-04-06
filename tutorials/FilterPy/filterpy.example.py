@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -56,7 +56,7 @@ for _path in [_git_root, _helpers_root]:
 import logging
 
 import helpers.hdbg as hdbg
-import helpers.hprint as hprint
+import helpers.hnotebook as hnotebo
 
 # %% [markdown]
 # ## Configuration
@@ -66,10 +66,10 @@ hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
-hprint.config_notebook()
+hnotebo.config_notebook()
 
 # %%
-import tutorials.FilterPy.filterpy_example_utils as utils
+import tutorials.FilterPy.filterpy_example_utils as tffiexut
 
 # %% [markdown]
 # ## Cell 1: Introduction - Signal vs Noise in Financial Markets
@@ -82,7 +82,7 @@ import tutorials.FilterPy.filterpy_example_utils as utils
 
 # %%
 # Show noisy price vs true underlying value and Kalman flow diagram.
-utils.plot_intro_signal_vs_noise()
+tffiexut.plot_intro_signal_vs_noise()
 
 # %% [markdown]
 # ## Cell 2: Linear Kalman Filter - Extracting Price Trend from Noise
@@ -95,7 +95,7 @@ utils.plot_intro_signal_vs_noise()
 
 # %%
 # Display interactive linear KF trend extraction with R and Q sliders.
-utils.show_linear_kf_trend_interactive()
+tffiexut.show_linear_kf_trend_interactive()
 
 # %% [markdown]
 # ## Cell 3: Linear Kalman Filter - Kalman Gain and Uncertainty Convergence
@@ -107,7 +107,7 @@ utils.show_linear_kf_trend_interactive()
 
 # %%
 # Display interactive covariance P and Kalman gain K convergence.
-utils.show_kf_uncertainty_interactive()
+tffiexut.show_kf_uncertainty_interactive()
 
 # %% [markdown]
 # ## Cell 4: Extended Kalman Filter - Time-Varying Beta in Pairs Trading
@@ -120,7 +120,7 @@ utils.show_kf_uncertainty_interactive()
 
 # %%
 # Display interactive EKF pairs trading beta estimation.
-utils.show_ekf_pairs_trading_interactive()
+tffiexut.show_ekf_pairs_trading_interactive()
 
 # %% [markdown]
 # ## Cell 5: Extended Kalman Filter - Linearization in Log-Return Space
@@ -132,7 +132,7 @@ utils.show_ekf_pairs_trading_interactive()
 
 # %%
 # Display interactive EKF linearization visualization.
-utils.show_ekf_linearization_interactive()
+tffiexut.show_ekf_linearization_interactive()
 
 # %% [markdown]
 # ## Cell 6: Unscented Kalman Filter - Stochastic Volatility Estimation
@@ -144,7 +144,7 @@ utils.show_ekf_linearization_interactive()
 
 # %%
 # Display interactive UKF stochastic volatility estimation.
-utils.show_ukf_volatility_interactive()
+tffiexut.show_ukf_volatility_interactive()
 
 # %% [markdown]
 # ## Cell 7: UKF vs EKF - Volatility Estimation Under Market Stress
@@ -156,7 +156,7 @@ utils.show_ukf_volatility_interactive()
 
 # %%
 # Display interactive UKF vs EKF comparison under market stress.
-utils.show_ukf_vs_ekf_stress_interactive()
+tffiexut.show_ukf_vs_ekf_stress_interactive()
 
 # %% [markdown]
 # ## Cell 8: Ensemble Kalman Filter - Portfolio Risk Scenario Analysis
@@ -168,7 +168,7 @@ utils.show_ukf_vs_ekf_stress_interactive()
 
 # %%
 # Display interactive EnKF portfolio risk scenario analysis.
-utils.show_enkf_portfolio_interactive()
+tffiexut.show_enkf_portfolio_interactive()
 
 # %% [markdown]
 # ## Cell 9: All Four Filters - Financial State Estimation Comparison
@@ -180,4 +180,4 @@ utils.show_enkf_portfolio_interactive()
 
 # %%
 # Run and display all four filters side by side with RMSE comparison.
-utils.plot_all_filters_financial_comparison()
+tffiexut.plot_all_filters_financial_comparison()

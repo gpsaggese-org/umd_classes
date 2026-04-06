@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -24,40 +25,6 @@
 # includes the `CausalNavigator` class for heterogeneous treatment effect
 # estimation, diagnostic methods for assumption validation, and helper
 # functions for data preprocessing and visualisation.
-#
-# > Coming from the blog? Run cells top-to-bottom, no other setup needed (see
-# > Docker instructions below).
-
-# %% [markdown]
-# ## Installation and Docker Setup
-#
-# To ensure reproducibility, this project is containerised. Follow these steps
-# to build and run the analysis.
-#
-# ### 1. Build the Image
-#
-# Run this command in the project root (where the `Dockerfile` is located):
-#
-# ```bash
-# ./docker_build.sh
-# ```
-#
-# ### 2. Run the Container
-#
-# Start the Jupyter environment with volume mounting (to save your notebook
-# changes):
-#
-# ```bash
-# # Mac/Linux/WSL
-# ./docker_jupyter.sh
-# ```
-#
-# ### 3. Access the Project
-#
-# - Click the `http://127.0.0.1:8888...` link in your terminal to open
-#   JupyterLab
-# - Open `CausalML.API.ipynb` to test the API (this file)
-# - Open `CausalML.example.ipynb` to see the full diabetes analysis
 
 # %% [markdown]
 # ## Architecture
@@ -69,112 +36,117 @@
 #
 # The core pipeline has three layers:
 #
-# 1. **Diagnostic Layer** - Verifies causal assumptions (specifically Common
+# 1. **Diagnostic Layer**: Verifies causal assumptions (specifically Common
 #    Support) before estimation
-# 2. **Estimation Layer** - Wraps `causalml.inference.meta` classes
+# 2. **Estimation Layer**: Wraps `causalml.inference.meta` classes
 #    (`BaseXRegressor`, etc.) and injects XGBoost as the standard base learner
-# 3. **Interpretation Layer** - Provides built-in methods to visualise
+# 3. **Interpretation Layer**: Provides built-in methods to visualise
 #    heterogeneity, abstracting away `matplotlib` complexity
 
 # %% [markdown]
 # ## Setup
-#
-# Import dependencies and the `CausalNavigator` class from `utils.py`.
 
 # %%
-# Enable auto-reloading so edits in utils.py update immediately.
 # %load_ext autoreload
 # %autoreload 2
 
-import os
-import warnings
 
 import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
+import logging
+import utils
 
+import warnings
 warnings.filterwarnings("ignore")
 
-# %% [markdown]
-# ## Helper Functions
-#
-# ### `load_cdc_data(filepath)`
-#
-# **Purpose**: Robustly loads the CDC dataset from a local directory.
-#
-# - **Inputs**: `filepath` (str) - relative path to the `.csv` file (e.g.,
-#   `data/unprocessed/file.csv`)
-# - **Behaviour**: Checks for file existence, removes duplicates, and casts all
-#   columns to `float` to ensure compatibility with XGBoost
-# - **Output**: A cleaned `pandas.DataFrame`
-#
-# ### `preprocess_for_causal(df, ...)`
-#
-# **Purpose**: Splits the dataframe into the three required components for
-# `CausalML`:
-#
-# 1. **X (Covariates)** - features used to control for confounding
-# 2. **T (Treatment)** - the binary intervention vector
-# 3. **Y (Outcome)** - the target variable
-#
-# > **Download the data first:**
-# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
-# > Place the CSV in `data/unprocessed/` before running the next cell.
+_LOG = logging.getLogger(__name__)
+utils.init_logger(_LOG)
 
 # %%
-# Download the dataset and place it in data/unprocessed/ before running.
-# Download link: https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+import os
+
+# TODO(gp): Use import X.
+from utils import (
+    CausalNavigator,
+    download_cdc_data_if_needed,
+    load_cdc_data,
+    preprocess_for_causal,
+)
+
+# %% [markdown]
+# ### Load data set.
+
+# %%
+# Download and load the dataset.
 filename = "diabetes_binary_health_indicators_BRFSS2015.csv"
-DATA_PATH = os.path.join("data", "unprocessed", filename)
-try:
-    df_raw = load_cdc_data(DATA_PATH)
-    # Use a subset of columns for the API demo.
-    df_clean, X, T, Y = preprocess_for_causal(
-        df_raw,
-        treatment_col="PhysActivity",
-        outcome_col="Diabetes_binary",
-        covariate_cols=[
-            "HighBP",
-            "HighChol",
-            "Age",
-            "Income",
-            "Sex",
-            "GenHlth",
-            "BMI",
-        ],
-    )
-    # Subsample 10k rows for speed.
-    sample_indices = np.random.choice(X.index, size=10000, replace=False)
-    X_demo, T_demo, Y_demo = (
-        X.loc[sample_indices],
-        T.loc[sample_indices],
-        Y.loc[sample_indices],
-    )
-    print(f"API Demo Data Loaded. Shape: {X_demo.shape}")
-    display(X_demo.head())
-except Exception as e:
-    print(f"Error: {e}")
+data_path = os.path.join("data", "unprocessed", filename)
+download_cdc_data_if_needed(data_path)
+df_raw = load_cdc_data(data_path)
 
-# %% [markdown]
-# ## Class Reference: `CausalNavigator`
-#
-# ### Initialization
-#
-# ```python
-# navigator = CausalNavigator(
-#     learner_type='X',       # Options: 'S', 'T', 'X'
-#     control_name='Control',
-#     treatment_name='Treatment'
-# )
-# ```
-#
-# | Parameter | Description |
-# |-----------|-------------|
-# | `learner_type` | Meta-learner to use: `'S'`, `'T'`, or `'X'` |
-# | `control_name` | Label for the untreated group (used in plots) |
-# | `treatment_name` | Label for the treated group (used in plots) |
 
 # %%
+df_raw.head(3)
+
+# %%
+# TODO(ai_gp): Add a short explanation of the data above, e.g., what are features, what are target vars.
+
+# %% [markdown]
+# ## Prepare data set
+
+# %% [markdown]
+# **Function**: `preprocess_for_causal(df, ...)`
+#
+# - **Purpose**: Splits the dataframe into components for causal analysis:
+#   - **X (Covariates)** - features used to control for confounding
+#   - **T (Treatment)** - the binary intervention vector
+#   - **Y (Outcome)** - the target variable
+
+# %%
+# Prepare data for causal analysis.
+treatment_col = "PhysActivity"
+outcome_col = "Diabetes_binary"
+covariate_cols = [
+    "HighBP",
+    "HighChol",
+    "Age",
+    "Income",
+    "Sex",
+    "GenHlth",
+    "BMI",
+]
+
+
+df_clean, X, T, Y = preprocess_for_causal(
+    df_raw,
+    treatment_col=treatment_col,
+    outcome_col=outcome_col,
+    covariate_cols=covariate_cols,
+)
+
+# %% [markdown]
+# ## Prepare Demo Data
+#
+# Set seed for reproducibility and subsample for speed.
+#
+# **Parameters**:
+#
+# - `learner_type`: Meta-learner to use: `'S'`, `'T'`, or `'X'`
+# - `control_name`: Label for the untreated group (used in plots)
+# - `treatment_name`: Label for the treated group (used in plots)
+
+# %%
+# Set seed for reproducibility and subsample for speed.
+np.random.seed(42)
+sample_indices = np.random.choice(X.index, size=10000, replace=False)
+X_demo = X.loc[sample_indices]
+T_demo = T.loc[sample_indices]
+Y_demo = Y.loc[sample_indices]
+print(f"API Demo Data Loaded. Shape: {X_demo.shape}")
+print(X_demo.head())
+
 # Initialize the CausalNavigator.
 navigator = CausalNavigator(
     learner_type="X", control_name="Sedentary", treatment_name="Active"
