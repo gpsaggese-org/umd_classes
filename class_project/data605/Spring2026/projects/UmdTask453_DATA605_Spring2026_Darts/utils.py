@@ -3269,3 +3269,675 @@ def plot_regime_analysis(
     )
     fig.tight_layout()
     return fig
+
+def calculate_sector_scores(
+    sectors: pd.DataFrame,
+    sp500: pd.DataFrame,
+    regime_labels: pd.Series,
+    macro_daily: pd.DataFrame,
+    macro_features: pd.DataFrame,
+    current_regime: int,
+    forecast_return: float,
+) -> pd.DataFrame:
+    """
+    Calculate composite sector scores for rotation recommendations.
+
+    Five factors are combined into a composite score for each sector.
+    Historical regime return captures average sector performance in
+    the current regime. Momentum captures recent price trend.
+    Volatility adjusted return is the Sharpe-like ratio. Macro
+    correlation measures alignment with key macro signals. Forecast
+    alignment measures consistency with the S&P 500 forecast direction.
+    Ridge Regression learns optimal factor weights from historical data.
+
+    :param sectors: DataFrame with sector ETF closing prices
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param regime_labels: Series with regime label per trading day
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_features: DataFrame with calculated macro features
+    :param current_regime: integer label of the current market regime
+    :param forecast_return: predicted S&P 500 return over next 30 days
+        as a percentage e.g. 2.3 for 2.3 percent
+    :return: DataFrame with composite scores and factor scores for
+        each sector sorted from highest to lowest score
+    """
+    # Calculate daily returns for all sectors.
+    sector_returns = sectors.pct_change().dropna() * 100
+    # Factor 1 — Historical regime return.
+    # Average daily return of each sector in the current regime.
+    regime_mask = regime_labels.reindex(sector_returns.index) == current_regime
+    if regime_mask.sum() > 5:
+        regime_returns = sector_returns.loc[regime_mask].mean()
+    else:
+        # Fall back to overall average if regime has too few days.
+        regime_returns = sector_returns.mean()
+        _LOG.warning(
+            "Current regime has fewer than 5 days — "
+            "using overall average returns."
+        )
+    # Factor 2 — Momentum score (last 30 days return).
+    momentum = sectors.iloc[-1] / sectors.iloc[-30] - 1
+    momentum = momentum * 100
+    # Factor 3 — Volatility adjusted return (Sharpe-like ratio).
+    # Use last 60 days for stability.
+    recent_returns = sector_returns.iloc[-60:]
+    sharpe_like = recent_returns.mean() / (
+        recent_returns.std() + 1e-8
+    )
+    # Factor 4 — VIX correlation alignment.
+    # Sectors negatively correlated with VIX are defensive.
+    # Sectors positively correlated with VIX benefit from fear.
+    vix_series = macro_daily["VIX"].reindex(
+        sector_returns.index
+    ).ffill()
+    vix_correlation = sector_returns.corrwith(vix_series)
+    # In bear regime high VIX correlation is good.
+    # In bull regime low VIX correlation is good.
+    if current_regime <= 1:
+        # Bear or high volatility — prefer sectors that
+        # move WITH VIX (benefit from fear).
+        vix_alignment = vix_correlation
+    else:
+        # Growth regimes — prefer sectors that move
+        # AGAINST VIX (benefit from calm markets).
+        vix_alignment = -vix_correlation
+    # Factor 5 — Forecast alignment.
+    # If forecast is bullish prefer high beta sectors.
+    # If forecast is bearish prefer low beta sectors.
+    sp500_returns = sp500["Close"].pct_change().dropna() * 100
+    beta = sector_returns.corrwith(
+        sp500_returns.reindex(sector_returns.index)
+    )
+    if forecast_return > 0:
+        # Bullish forecast — prefer high beta sectors.
+        forecast_alignment = beta
+    else:
+        # Bearish forecast — prefer low beta sectors.
+        forecast_alignment = -beta
+    # Combine all factors into a feature matrix.
+    factor_matrix = pd.DataFrame({
+        "Regime_Return"      : regime_returns,
+        "Momentum"           : momentum,
+        "Sharpe_Like"        : sharpe_like,
+        "VIX_Alignment"      : vix_alignment,
+        "Forecast_Alignment" : forecast_alignment,
+    })
+    # Normalize each factor to 0-1 scale for fair combination.
+    factor_normalized = (
+        factor_matrix - factor_matrix.min()
+    ) / (factor_matrix.max() - factor_matrix.min() + 1e-8)
+    # Train Ridge Regression to learn optimal factor weights.
+    # Target is the next 30 day sector return (forward return).
+    forward_returns = (
+        sectors.shift(-30).iloc[-1] / sectors.iloc[-1] - 1
+    ) * 100
+    # Use historical forward returns as training target.
+    historical_forward = (
+        sectors.pct_change(30).shift(-30).dropna() * 100
+    )
+    # Build training dataset from historical factor values.
+    train_factors = []
+    train_targets = []
+    for date in historical_forward.index[-120:]:
+        if date not in regime_labels.index:
+            continue
+        regime_at_date = regime_labels.loc[date]
+        mask_date = regime_labels.reindex(
+            sector_returns.index
+        ) == regime_at_date
+        if mask_date.sum() < 5:
+            continue
+        # Calculate factors at this historical date.
+        idx = sectors.index.get_loc(date)
+        if idx < 60:
+            continue
+        hist_returns = sector_returns.iloc[max(0, idx-60):idx]
+        hist_regime_mask = regime_labels.reindex(
+            hist_returns.index
+        ) == regime_at_date
+        if hist_regime_mask.sum() > 0:
+            hist_regime_ret = hist_returns.loc[
+                hist_regime_mask
+            ].mean()
+        else:
+            hist_regime_ret = hist_returns.mean()
+        hist_momentum = (
+            sectors.iloc[idx] / sectors.iloc[max(0, idx-30)] - 1
+        ) * 100
+        hist_sharpe = hist_returns.mean() / (
+            hist_returns.std() + 1e-8
+        )
+        hist_factors = pd.DataFrame({
+            "Regime_Return" : hist_regime_ret,
+            "Momentum"      : hist_momentum,
+            "Sharpe_Like"   : hist_sharpe,
+        })
+        hist_factors_norm = (
+            hist_factors - hist_factors.min()
+        ) / (hist_factors.max() - hist_factors.min() + 1e-8)
+        train_factors.append(
+            hist_factors_norm.values.flatten()
+        )
+        train_targets.append(
+            historical_forward.loc[date].values
+        )
+    # Train Ridge Regression if sufficient training data exists.
+    if len(train_factors) > 10:
+        X_train = np.array(train_factors)
+        y_train = np.array(train_targets).mean(axis=1)
+        ridge = sklearn.linear_model.Ridge(alpha=1.0)
+        ridge.fit(X_train, y_train)
+        # Use learned weights for final scoring.
+        learned_weights = np.abs(ridge.coef_)
+        learned_weights = learned_weights / learned_weights.sum()
+        _LOG.info(
+            "Ridge weights — Regime: %.3f | Momentum: %.3f | "
+            "Sharpe: %.3f",
+            learned_weights[0],
+            learned_weights[1],
+            learned_weights[2],
+        )
+        # Calculate composite score using learned weights
+        # plus equal weights for VIX and forecast alignment.
+        composite_score = (
+            learned_weights[0] * factor_normalized["Regime_Return"]
+            + learned_weights[1] * factor_normalized["Momentum"]
+            + learned_weights[2] * factor_normalized["Sharpe_Like"]
+            + 0.1 * factor_normalized["VIX_Alignment"]
+            + 0.1 * factor_normalized["Forecast_Alignment"]
+        )
+    else:
+        # Equal weights fallback if insufficient training data.
+        _LOG.warning(
+            "Insufficient training data — using equal weights."
+        )
+        composite_score = factor_normalized.mean(axis=1)
+    # Build results DataFrame.
+    results = pd.DataFrame({
+        "Sector"             : sectors.columns,
+        "Composite_Score"    : composite_score.values,
+        "Regime_Return"      : regime_returns.values,
+        "Momentum"           : momentum.values,
+        "Sharpe_Like"        : sharpe_like.values,
+        "VIX_Alignment"      : vix_alignment.values,
+        "Forecast_Alignment" : forecast_alignment.values,
+    })
+    # Sort by composite score descending.
+    results = results.sort_values(
+        "Composite_Score", ascending=False
+    ).reset_index(drop=True)
+    # Add rotation recommendation.
+    results["Recommendation"] = "NEUTRAL"
+    results.loc[:2, "Recommendation"] = "BUY"
+    results.loc[8:, "Recommendation"] = "AVOID"
+    _LOG.info(
+        "Sector rotation recommendations:\n%s",
+        results[["Sector", "Composite_Score", "Recommendation"]
+        ].to_string(),
+    )
+    return results
+
+def precompute_weekly_recommendations(
+    sectors: pd.DataFrame,
+    sp500: pd.DataFrame,
+    regime_labels: pd.Series,
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+    macro_features: pd.DataFrame,
+    regime_stats: pd.DataFrame,
+    kmeans_model: sklearn.cluster.KMeans,
+    regime_scaler: sklearn.preprocessing.StandardScaler,
+    forecast_series: dict,
+) -> pd.DataFrame:
+    """
+    Pre-compute weekly sector recommendations for entire history.
+
+    For each Friday in the dataset sector scores are calculated
+    using only data available up to that date simulating real
+    time deployment with no look-ahead bias. The current regime
+    is detected using the trained K-Means model and sector scores
+    are calculated using the five factor composite model.
+    Logging is suppressed during computation to avoid cluttering
+    notebook output — only the final summary is logged.
+
+    :param sectors: DataFrame with sector ETF closing prices
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param regime_labels: Series with regime label per trading day
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+    :param macro_features: DataFrame with calculated macro features
+    :param regime_stats: DataFrame with regime statistics
+    :param kmeans_model: trained K-Means model for regime detection
+    :param regime_scaler: fitted StandardScaler for regime features
+    :param forecast_series: dictionary mapping dates to forecast
+        returns e.g. from walk forward validation results
+    :return: DataFrame with weekly sector scores and recommendations
+        for the entire analysis period
+    """
+    # Suppress per-week logging to avoid cluttering notebook output.
+    previous_level = _LOG.level
+    _LOG.setLevel(logging.WARNING)
+    # Get all Fridays in the dataset as weekly rebalancing dates.
+    all_fridays = sp500.index[sp500.index.dayofweek == 4]
+    # Initialize results list.
+    results = []
+    # Compute scores for each Friday with progress bar.
+    for friday in tqdm.tqdm(
+        all_fridays,
+        desc="Computing weekly recommendations",
+    ):
+        # Skip if Friday not in sectors index.
+        if friday not in sectors.index:
+            continue
+        friday_idx = sectors.index.get_loc(friday)
+        # Skip if insufficient history for calculations.
+        if friday_idx < 60:
+            continue
+        # Use only data up to this Friday — no look-ahead bias.
+        sectors_to_date = sectors.iloc[:friday_idx + 1]
+        sp500_to_date = sp500.iloc[:friday_idx + 1]
+        macro_daily_to_date = macro_daily.loc[
+            macro_daily.index <= friday
+        ]
+        macro_monthly_to_date = macro_monthly.loc[
+            macro_monthly.index <= friday
+        ]
+        macro_features_to_date = macro_features.loc[
+            macro_features.index <= friday
+        ]
+        regime_labels_to_date = regime_labels.loc[
+            regime_labels.index <= friday
+        ]
+        # Get current regime for this date.
+        current_regime = int(regime_labels_to_date.iloc[-1])
+        # Get forecast return — use pre-computed if available.
+        forecast_return = forecast_series.get(friday, 0.0)
+        try:
+            # Calculate sector scores using data up to this date.
+            scores = calculate_sector_scores(
+                sectors=sectors_to_date,
+                sp500=sp500_to_date,
+                regime_labels=regime_labels_to_date,
+                macro_daily=macro_daily_to_date,
+                macro_features=macro_features_to_date,
+                current_regime=current_regime,
+                forecast_return=forecast_return,
+            )
+            # Build weekly result row.
+            week_result = {
+                "Date"           : friday,
+                "Regime"         : current_regime,
+                "Regime_Name"    : regime_stats.loc[
+                    regime_stats["Regime"] == current_regime,
+                    "Name"
+                ].values[0],
+                "Forecast_Return": forecast_return,
+            }
+            # Add sector scores and recommendations.
+            for _, row in scores.iterrows():
+                sector = row["Sector"]
+                week_result[f"{sector}_Score"] = round(
+                    row["Composite_Score"], 4
+                )
+                week_result[f"{sector}_Rec"] = row["Recommendation"]
+            results.append(week_result)
+        except Exception:
+            # Silently skip weeks that fail.
+            pass
+    # Build results DataFrame.
+    results_df = pd.DataFrame(results).set_index("Date")
+    # Restore logging level.
+    _LOG.setLevel(previous_level)
+    _LOG.info(
+        "Pre-computed %d weekly recommendations.",
+        len(results_df),
+    )
+    return results_df
+
+def find_regime_periods(
+    regime_labels: pd.Series,
+) -> pd.DataFrame:
+    """
+    Find all consecutive periods for each market regime.
+
+    Groups consecutive trading days with the same regime label
+    into distinct periods. Each period has a start date end date
+    duration and regime label. This allows analysis of how sector
+    performance differed across multiple occurrences of the same
+    regime.
+
+    :param regime_labels: Series with regime label per trading day
+    :return: DataFrame with one row per regime period containing
+        start date end date duration and regime label
+    """
+    # Initialize list to collect regime periods.
+    periods = []
+    # Track current period.
+    current_regime = regime_labels.iloc[0]
+    period_start = regime_labels.index[0]
+    # Loop through all regime labels finding transitions.
+    for date, regime in regime_labels.items():
+        if regime != current_regime:
+            # Regime changed — save completed period.
+            periods.append({
+                "Regime"  : current_regime,
+                "Start"   : period_start,
+                "End"     : date,
+                "Duration": (date - period_start).days,
+            })
+            # Start new period.
+            current_regime = regime
+            period_start = date
+    # Save the final period.
+    periods.append({
+        "Regime"  : current_regime,
+        "Start"   : period_start,
+        "End"     : regime_labels.index[-1],
+        "Duration": (
+            regime_labels.index[-1] - period_start
+        ).days,
+    })
+    return pd.DataFrame(periods).sort_values(
+        "Start"
+    ).reset_index(drop=True)
+
+
+def calculate_period_attribution(
+    regime_periods: pd.DataFrame,
+    sectors: pd.DataFrame,
+    sp500: pd.DataFrame,
+    macro_daily: pd.DataFrame,
+    macro_monthly: pd.DataFrame,
+    regime_stats: pd.DataFrame,
+    min_duration_days: int = 20,
+) -> pd.DataFrame:
+    """
+    Calculate actual sector returns for each regime period.
+
+    For each regime occurrence calculates the actual sector ETF
+    returns during that period alongside key macro conditions.
+    Only periods longer than min_duration_days are included to
+    ensure statistically meaningful results. This enables comparison
+    of sector performance across multiple occurrences of the same
+    regime revealing how macro context within a regime drives
+    different sector outcomes.
+
+    :param regime_periods: DataFrame from `find_regime_periods`
+    :param sectors: DataFrame with sector ETF closing prices
+    :param sp500: DataFrame with S&P 500 OHLCV data
+    :param macro_daily: DataFrame with daily macro indicators
+    :param macro_monthly: DataFrame with monthly macro indicators
+    :param regime_stats: DataFrame with regime statistics
+    :param min_duration_days: minimum period length to include
+    :return: DataFrame with sector returns and macro context
+        for each qualifying regime period
+    """
+    # Initialize results list.
+    results = []
+    # Calculate attribution for each regime period.
+    for _, row in regime_periods.iterrows():
+        start = row["Start"]
+        end = row["End"]
+        regime = row["Regime"]
+        duration = row["Duration"]
+        # Skip periods that are too short.
+        if duration < min_duration_days:
+            continue
+        # Get sector returns during this period.
+        period_sectors = sectors.loc[
+            (sectors.index >= start) &
+            (sectors.index <= end)
+        ]
+        if len(period_sectors) < 5:
+            continue
+        # Calculate total return for each sector.
+        sector_returns = (
+            period_sectors.iloc[-1] / period_sectors.iloc[0] - 1
+        ) * 100
+        # Get S&P 500 return for this period.
+        period_sp500 = sp500.loc[
+            (sp500.index >= start) &
+            (sp500.index <= end),
+            "Close"
+        ]
+        sp500_return = float(
+            (period_sp500.iloc[-1] / period_sp500.iloc[0] - 1) * 100
+        )
+        # Get average macro conditions during this period.
+        period_macro = macro_daily.loc[
+            (macro_daily.index >= start) &
+            (macro_daily.index <= end)
+        ]
+        period_monthly = macro_monthly.loc[
+            (macro_monthly.index >= start) &
+            (macro_monthly.index <= end)
+        ]
+        avg_vix = float(period_macro["VIX"].mean())
+        avg_oil_change = float(
+            (period_macro["OIL"].iloc[-1] /
+             period_macro["OIL"].iloc[0] - 1) * 100
+        )
+        avg_fed_rate = float(period_monthly["FED_RATE"].mean())
+        avg_tnx = float(period_macro["TNX"].mean())
+        # Get regime name.
+        regime_name = regime_stats.loc[
+            regime_stats["Regime"] == regime, "Name"
+        ].values[0]
+        # Build result row.
+        result = {
+            "Regime"        : regime,
+            "Regime_Name"   : regime_name,
+            "Start"         : start.date(),
+            "End"           : end.date(),
+            "Duration_Days" : duration,
+            "SP500_Return"  : round(sp500_return, 2),
+            "Avg_VIX"       : round(avg_vix, 2),
+            "Oil_Change_Pct": round(avg_oil_change, 2),
+            "Avg_FedRate"   : round(avg_fed_rate, 2),
+            "Avg_TNX"       : round(avg_tnx, 2),
+        }
+        # Add individual sector returns.
+        for sector in sectors.columns:
+            result[f"{sector}_Return"] = round(
+                float(sector_returns[sector]), 2
+            )
+        results.append(result)
+    return pd.DataFrame(results).reset_index(drop=True)
+
+
+def plot_regime_attribution(
+    attribution_df: pd.DataFrame,
+    sectors: pd.DataFrame,
+    regime_stats: pd.DataFrame,
+    selected_regime: int = 0,
+) -> plt.Figure:
+    """
+    Plot sector performance attribution across regime occurrences.
+
+    Three panels are shown — grouped bar chart of sector returns
+    for each occurrence of the selected regime macro context
+    comparison across occurrences and average sector performance
+    ranked from best to worst. Full sector names are used instead
+    of ticker symbols for readability.
+
+    :param attribution_df: DataFrame from `calculate_period_attribution`
+    :param sectors: DataFrame with sector ETF closing prices
+    :param regime_stats: DataFrame with regime statistics
+    :param selected_regime: regime number to analyze default 0
+    :return: matplotlib Figure object with attribution analysis
+    """
+    # Map sector tickers to full names for readability.
+    sector_name_map = {
+        "XLK" : "Technology",
+        "XLV" : "Healthcare",
+        "XLF" : "Financials",
+        "XLE" : "Energy",
+        "XLY" : "Consumer Disc",
+        "XLP" : "Consumer Staples",
+        "XLI" : "Industrials",
+        "XLU" : "Utilities",
+        "XLB" : "Materials",
+        "XLRE": "Real Estate",
+        "XLC" : "Communication",
+    }
+    # Filter to selected regime.
+    regime_data = attribution_df[
+        attribution_df["Regime"] == selected_regime
+    ].reset_index(drop=True)
+    if len(regime_data) == 0:
+        _LOG.warning(
+            "No periods found for regime %d.", selected_regime
+        )
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.text(
+            0.5, 0.5,
+            f"No periods found for Regime {selected_regime}",
+            ha="center", va="center",
+        )
+        return fig
+    # Get regime name.
+    regime_name = regime_stats.loc[
+        regime_stats["Regime"] == selected_regime, "Name"
+    ].values[0]
+    # Get sector return columns.
+    sector_cols = [
+        col for col in attribution_df.columns
+        if col.endswith("_Return") and col != "SP500_Return"
+    ]
+    # Use full sector names for readability.
+    sector_names = [
+        sector_name_map.get(
+            col.replace("_Return", ""),
+            col.replace("_Return", ""),
+        )
+        for col in sector_cols
+    ]
+    # Create period labels.
+    period_labels = [
+        f"{row['Start']} to {row['End']}\n({row['Duration_Days']}d)"
+        for _, row in regime_data.iterrows()
+    ]
+    # Create figure with 3 panels.
+    fig, axes = plt.subplots(3, 1, figsize=(18, 18))
+    # Define colors for each period.
+    colors = [
+        "#1565C0", "#2E7D32", "#D32F2F",
+        "#FF6F00", "#6A1B9A", "#00838F",
+    ]
+    n_periods = len(regime_data)
+    n_sectors = len(sector_names)
+    x = np.arange(n_sectors)
+    width = 0.8 / n_periods
+    # Panel 1 — Grouped bar chart of sector returns per period.
+    for p_idx, (_, period_row) in enumerate(regime_data.iterrows()):
+        returns = [period_row[col] for col in sector_cols]
+        offset = (p_idx - n_periods / 2 + 0.5) * width
+        axes[0].bar(
+            x + offset,
+            returns,
+            width=width,
+            color=colors[p_idx % len(colors)],
+            alpha=0.8,
+            label=period_labels[p_idx],
+        )
+    axes[0].axhline(
+        0, color="black", linewidth=0.8, linestyle="--"
+    )
+    axes[0].set_title(
+        f"Sector Returns During {regime_name} Regime — "
+        f"All Historical Occurrences",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[0].set_ylabel("Total Return (%)")
+    axes[0].set_xlabel("Sector")
+    axes[0].set_xticks(x)
+    axes[0].set_xticklabels(sector_names, rotation=45, ha="right")
+    axes[0].legend(
+        loc="upper right", fontsize=7, ncol=n_periods
+    )
+    # Panel 2 — Macro context comparison across periods.
+    macro_metrics = [
+        "Avg_VIX", "Oil_Change_Pct",
+        "Avg_FedRate", "Avg_TNX", "SP500_Return",
+    ]
+    macro_labels = [
+        "Avg VIX", "Oil Change %",
+        "Fed Rate %", "10Y Yield %", "S&P 500 Return %",
+    ]
+    x_macro = np.arange(len(macro_metrics))
+    width_macro = 0.8 / n_periods
+    for p_idx, (_, period_row) in enumerate(regime_data.iterrows()):
+        values = [period_row[m] for m in macro_metrics]
+        offset = (p_idx - n_periods / 2 + 0.5) * width_macro
+        axes[1].bar(
+            x_macro + offset,
+            values,
+            width=width_macro,
+            color=colors[p_idx % len(colors)],
+            alpha=0.8,
+            label=period_labels[p_idx],
+        )
+    axes[1].axhline(
+        0, color="black", linewidth=0.8, linestyle="--"
+    )
+    axes[1].set_title(
+        f"Macro Context Comparison — {regime_name} Occurrences",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[1].set_ylabel("Value")
+    axes[1].set_xlabel("Macro Metric")
+    axes[1].set_xticks(x_macro)
+    axes[1].set_xticklabels(macro_labels, rotation=45, ha="right")
+    axes[1].legend(
+        loc="upper right", fontsize=7, ncol=n_periods
+    )
+    # Panel 3 — Average sector returns across all occurrences.
+    avg_returns = pd.Series({
+        sector_name_map.get(
+            col.replace("_Return", ""),
+            col.replace("_Return", ""),
+        ): regime_data[col].mean()
+        for col in sector_cols
+    }).sort_values(ascending=True)
+    bar_colors = [
+        "#D32F2F" if r < 0 else "#2E7D32"
+        for r in avg_returns.values
+    ]
+    axes[2].barh(
+        avg_returns.index,
+        avg_returns.values,
+        color=bar_colors,
+        alpha=0.8,
+        edgecolor="white",
+    )
+    axes[2].axvline(
+        0, color="black", linewidth=0.8, linestyle="--"
+    )
+    # Add value labels on bars.
+    for idx, val in enumerate(avg_returns.values):
+        axes[2].text(
+            val + (0.3 if val >= 0 else -0.3),
+            idx,
+            f"{val:.1f}%",
+            va="center",
+            ha="left" if val >= 0 else "right",
+            fontsize=9,
+            fontweight="bold",
+        )
+    axes[2].set_title(
+        f"Average Sector Return Across All {regime_name} "
+        f"Occurrences — Ranked Best to Worst",
+        fontsize=12,
+        fontweight="bold",
+    )
+    axes[2].set_xlabel("Average Total Return (%)")
+    axes[2].set_ylabel("Sector")
+    fig.suptitle(
+        f"Regime Attribution Analysis — {regime_name}",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
