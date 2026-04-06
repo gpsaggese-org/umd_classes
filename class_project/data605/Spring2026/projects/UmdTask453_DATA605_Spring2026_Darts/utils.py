@@ -4270,3 +4270,212 @@ def plot_library_comparison(
     )
     fig.tight_layout()
     return fig
+
+def analyze_external_factor_impact(
+    all_predictions: dict,
+    target_val: darts.timeseries.TimeSeries,
+    target_scaler: darts.dataprocessing.transformers.Scaler,
+    event_flags: pd.DataFrame,
+    top_n_models: int = 5,
+) -> pd.DataFrame:
+    """
+    Analyze how external events affect model prediction accuracy.
+
+    For each event type prediction errors on event days are compared
+    against errors on normal trading days. A higher error on event
+    days indicates the model struggles to predict market behavior
+    around those events. Results show mean absolute error and error
+    ratio for each model and event type combination.
+
+    :param all_predictions: dictionary of model predictions from
+        Phase 5 training
+    :param target_val: scaled validation target TimeSeries
+    :param target_scaler: fitted Darts Scaler for inverse transform
+    :param event_flags: DataFrame with binary event flag columns
+        IS_FOMC_DATE IS_CPI_RELEASE IS_HOLIDAY_ADJACENT
+    :param top_n_models: number of top models to analyze default 5
+    :return: DataFrame with error analysis per model and event type
+    """
+    # Fill NaN values in validation target.
+    filler = darts.dataprocessing.transformers.MissingValuesFiller()
+    target_val_clean = filler.transform(target_val)
+    # Inverse transform validation to original price space.
+    actual_df = target_scaler.inverse_transform(
+        target_val_clean
+    ).to_dataframe().dropna()
+    # Select top n models by lowest MAE for focused analysis.
+    model_maes = {}
+    model_pred_dfs = {}
+    for name, prediction in all_predictions.items():
+        try:
+            pred_clean = filler.transform(prediction)
+            pred_df = target_scaler.inverse_transform(
+                pred_clean
+            ).to_dataframe().dropna()
+            common_dates = actual_df.index.intersection(
+                pred_df.index
+            )
+            if len(common_dates) < 5:
+                continue
+            actual = actual_df.loc[common_dates].values.flatten()
+            predicted = pred_df.loc[common_dates].values.flatten()
+            mae = float(np.mean(np.abs(actual - predicted)))
+            model_maes[name] = mae
+            model_pred_dfs[name] = pred_df
+        except Exception:
+            continue
+    # Select top n models by lowest MAE.
+    top_models = sorted(
+        model_maes.keys(), key=lambda x: model_maes[x]
+    )[:top_n_models]
+    # Define event types to analyze.
+    event_types = {
+        "FOMC_Date"       : "IS_FOMC_DATE",
+        "CPI_Release"     : "IS_CPI_RELEASE",
+        "Holiday_Adjacent": "IS_HOLIDAY_ADJACENT",
+    }
+    # Initialize results list.
+    results = []
+    for model_name in top_models:
+        pred_df = model_pred_dfs[model_name]
+        common_dates = actual_df.index.intersection(pred_df.index)
+        actual = actual_df.loc[common_dates].values.flatten()
+        predicted = pred_df.loc[common_dates].values.flatten()
+        # Calculate daily absolute errors.
+        daily_errors = np.abs(actual - predicted)
+        error_series = pd.Series(
+            daily_errors, index=common_dates
+        )
+        # Calculate baseline error on normal days.
+        # Normal days have no event flags.
+        event_flags_aligned = event_flags.reindex(
+            common_dates
+        ).fillna(0)
+        any_event = event_flags_aligned[
+            list(event_types.values())
+        ].any(axis=1)
+        normal_mask = ~any_event
+        normal_mae = float(
+            error_series[normal_mask].mean()
+        ) if normal_mask.sum() > 0 else float("nan")
+        # Calculate error for each event type.
+        for event_name, flag_col in event_types.items():
+            if flag_col not in event_flags_aligned.columns:
+                continue
+            event_mask = event_flags_aligned[flag_col] == 1
+            if event_mask.sum() == 0:
+                continue
+            event_mae = float(
+                error_series[event_mask].mean()
+            )
+            # Error ratio — how much worse on event days.
+            error_ratio = event_mae / normal_mae if normal_mae > 0 else float("nan")
+            results.append({
+                "Model"      : model_name,
+                "Event_Type" : event_name,
+                "Event_Days" : int(event_mask.sum()),
+                "Event_MAE"  : round(event_mae, 2),
+                "Normal_MAE" : round(normal_mae, 2),
+                "Error_Ratio": round(error_ratio, 3),
+            })
+            _LOG.info(
+                "%s on %s days → MAE: %.2f vs normal: %.2f "
+                "(ratio: %.3f)",
+                model_name,
+                event_name,
+                event_mae,
+                normal_mae,
+                error_ratio,
+            )
+    return pd.DataFrame(results).sort_values(
+        ["Model", "Error_Ratio"], ascending=[True, False]
+    ).reset_index(drop=True)
+
+def plot_external_factor_impact(
+    event_impact: pd.DataFrame,
+) -> plt.Figure:
+    """
+    Plot external event impact on model prediction accuracy.
+
+    Three panels show error ratios for FOMC dates CPI release
+    dates and holiday adjacent days. Error ratio above 1.0 means
+    the model performs worse on event days. Error ratio below 1.0
+    means the model performs better on event days. The reference
+    line at 1.0 represents no impact from the event.
+
+    :param event_impact: DataFrame from `analyze_external_factor_impact`
+        containing Error_Ratio per model and event type
+    :return: matplotlib Figure object with three panel comparison
+    """
+    # Define event types and display titles.
+    event_types = [
+        "FOMC_Date",
+        "CPI_Release",
+        "Holiday_Adjacent",
+    ]
+    event_titles = [
+        "FOMC Meeting Days",
+        "CPI Release Days",
+        "Holiday Adjacent Days",
+    ]
+    # Create figure with three panels.
+    fig, axes = plt.subplots(1, 3, figsize=(18, 7))
+    for idx, (event_type, title) in enumerate(
+        zip(event_types, event_titles)
+    ):
+        event_data = event_impact[
+            event_impact["Event_Type"] == event_type
+        ].sort_values("Error_Ratio", ascending=False)
+        if len(event_data) == 0:
+            axes[idx].text(
+                0.5, 0.5,
+                f"No data for {event_type}",
+                ha="center", va="center",
+            )
+            continue
+        # Red for worse than normal green for better than normal.
+        colors = [
+            "#D32F2F" if r > 1.0 else "#2E7D32"
+            for r in event_data["Error_Ratio"]
+        ]
+        bars = axes[idx].barh(
+            event_data["Model"],
+            event_data["Error_Ratio"],
+            color=colors,
+            alpha=0.8,
+            edgecolor="white",
+        )
+        # Add value labels on bars.
+        for bar, val in zip(bars, event_data["Error_Ratio"]):
+            axes[idx].text(
+                val + 0.02,
+                bar.get_y() + bar.get_height() / 2,
+                f"{val:.3f}",
+                va="center",
+                fontsize=9,
+                fontweight="bold",
+            )
+        # Add reference line at 1.0 — no impact threshold.
+        axes[idx].axvline(
+            1.0,
+            color="black",
+            linewidth=1.5,
+            linestyle="--",
+            label="No impact (ratio=1.0)",
+        )
+        axes[idx].set_title(
+            f"Error Ratio on {title}\n"
+            f"(>1.0 = worse | <1.0 = better)",
+            fontsize=10,
+            fontweight="bold",
+        )
+        axes[idx].set_xlabel("Error Ratio")
+        axes[idx].set_ylabel("Model")
+        axes[idx].legend(fontsize=8)
+    fig.suptitle(
+        "External Event Impact on Model Prediction Accuracy",
+        fontsize=14,
+        fontweight="bold",
+    )
+    fig.tight_layout()
+    return fig
