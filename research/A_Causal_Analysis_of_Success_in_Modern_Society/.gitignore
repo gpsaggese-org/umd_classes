@@ -58,3 +58,4 @@ dist/
 # ---- Cache ----
 .cache/
 *.tmp
+.claude/
