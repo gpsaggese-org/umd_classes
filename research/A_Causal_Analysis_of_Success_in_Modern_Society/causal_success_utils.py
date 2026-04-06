@@ -3,70 +3,56 @@ Causal Success Analysis - Simulation and Inference Utilities.
 
 Import as:
 
-import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as csu
+import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as racaosimscsu
 """
 
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 
 import numpy as np
 import pandas as pd
 
 import helpers.hdbg as hdbg
 
-# Optional Bayesian dependencies (simulation works without these).
-# try:
 import pymc as pm  # type: ignore
 import arviz as az  # type: ignore
-# except Exception:  # pragma: no cover - optional import.
-#     pm = None
-#     az = None
 
-# __all__ = [
-#     "Agent",
-#     "create_population",
-#     "calculate_gini",
-#     "get_results_dataframe",
-#     "generate_summary_statistics",
-#     "validate_simulation_results",
-#     "run_simulation",
-#     "run_policy_simulation",
-#     "fit_bayesian_luck_model",
-#     "summarize_bayesian_fit",
-#     "posterior_predictive_check",
-# ]
+from sklearn.ensemble import RandomForestRegressor
+from econml.dml import LinearDML, CausalForestDML
+
 
 # #############################################################################
 # Agent
 # #############################################################################
 
+
 class Agent:
     """
     Agent representing an individual in the simulation.
 
-    Each agent has four characteristics that define their position in the system:
+    Each agent has four characteristics that define their position in the system.
 
-    1. Intensity (0-1): Activity level and effort.
-       - How active the agent is in seeking opportunities and experiences.
-       - Higher intensity → higher probability of encountering events (both good and bad).
-       - Think of it as "surface area for luck": more active people encounter more events.
-       - Influences event exposure probability via sigmoid function.
+    1. **Intensity** (0-1) captures activity level and effort. It controls how
+       active the agent is in seeking opportunities and experiences. Higher
+       intensity leads to a higher probability of encountering events, both good
+       and bad. Think of it as "surface area for luck." The event exposure
+       probability is computed from intensity via a sigmoid function.
 
-    2. IQ (0-1): Ability to capitalize on opportunities.
-       - When a lucky event occurs, IQ determines if the agent successfully exploits it.
-       - Does NOT create opportunities, only gates whether they can be converted to gains.
-       - Unlucky events always apply (no IQ gate).
-       - Used as probability of capitalizing on beneficial events.
+    2. **IQ** (0-1) measures the ability to capitalize on opportunities. When a
+       lucky event occurs, IQ determines whether the agent successfully exploits
+       it. IQ does not create opportunities on its own; it only gates whether
+       they can be converted into gains. Unlucky events always apply regardless
+       of IQ.
 
-    3. Networking (0-1): Social connectivity and spillover.
-       - Represents social connections and access to network effects.
-       - When an agent benefits from a lucky event, there's a chance (10%) that
-         a connected agent also benefits (at reduced impact: 50% of original).
-       - Spillover amount weighted by networking score.
+    3. **Networking** (0-1) represents social connectivity and spillover. It
+       measures social connections and access to network effects. When an agent
+       benefits from a lucky event there is a 10% chance that a connected agent
+       also benefits at 50% of the original impact, weighted by the networking
+       score.
 
-    4. Initial Capital: Starting wealth.
-       - Set to 1.0 for all agents in baseline simulation.
-       - This ensures inequality EMERGES from dynamics, not inherited advantages.
-       - Minimum enforced: 0.01 (prevent collapse to zero).
+    4. **Initial Capital** is the starting wealth level. It is set to 1.0 for
+       all agents in the baseline simulation so that inequality emerges from
+       dynamics rather than inherited advantages. A minimum of 0.01 is enforced
+       to prevent collapse to zero.
     """
 
     def __init__(
@@ -150,6 +136,9 @@ class Agent:
             raise ValueError(f"Unknown event type: {event_type}")
         self.capital_history.append(self.capital)
 
+
+# #############################################################################
+# Population and metrics
 # #############################################################################
 
 
@@ -182,7 +171,9 @@ def calculate_gini(values: np.ndarray) -> float:
     :return: Gini coefficient in [0, 1]
     """
     x = np.asarray(values, dtype=float)
-    hdbg.dassert_lt(0, x.size, "Cannot calculate Gini coefficient for empty array")
+    hdbg.dassert_lt(
+        0, x.size, "Cannot calculate Gini coefficient for empty array"
+    )
     hdbg.dassert(
         not np.any(x < 0),
         "Gini coefficient requires non-negative values",
@@ -298,9 +289,7 @@ def validate_simulation_results(agents: List[Agent]) -> bool:
     """
     df = get_results_dataframe(agents)
     hdbg.dassert(not df.empty, "No agents provided to validate")
-    hdbg.dassert(
-        not (df["capital"] < 0).any(), "Negative capital detected"
-    )
+    hdbg.dassert(not (df["capital"] < 0).any(), "Negative capital detected")
     hdbg.dassert(not df.isnull().any().any(), "NaN values detected")
     hdbg.dassert(
         not ((df["lucky_events"] < 0).any() or (df["unlucky_events"] < 0).any()),
@@ -428,36 +417,19 @@ def run_policy_simulation(
     """
     Allocate initial resources under a policy, then run the standard simulation.
 
-    1. "egalitarian"
-       - Every agent gets: resource_amount / n_agents
-       - Rationale: Reduce initial inequality, give everyone equal chance
-       - Typical outcome: Lowest final Gini (most equitable)
-       - Typical outcome: Moderate total welfare
-
-    2. "meritocratic"
-       - Allocation ∝ talent_norm (total ability)
-       - Rationale: Reward potentially capable people
-       - Typical outcome: Moderate final Gini
-       - Typical outcome: High total welfare (resources go to productive people)
-
-    3. "performance"
-       - Allocation ∝ current capital (rich get richer)
-       - Rationale: Compound success (controversial, tested for comparison)
-       - Typical outcome: Highest final Gini (most unequal)
-       - Typical outcome: Lowest total welfare (resources wasted on already-rich)
-
-    4. "random"
-       - One randomly chosen agent gets ALL resources
-       - Rationale: Extreme luck-based allocation
-       - Typical outcome: Very high Gini
-       - Typical outcome: Highest possible total welfare (concentrated resources)
-
-    5. "cate_optimal"
-       - Allocation ∝ CATE estimates (heterogeneous treatment effects)
-       - Rationale: Give resources to agents who benefit most from them
-       - Requires: cate_values array with one value per agent
-       - Typical outcome: High total welfare, moderate Gini
-       - Note: Only allocates to agents with non-negative CATE
+    Five policies are supported. **"egalitarian"** gives every agent an equal
+    share of resource_amount / n_agents, aiming to reduce initial inequality.
+    It typically produces the lowest final Gini and moderate total welfare.
+    **"meritocratic"** allocates proportionally to talent_norm (total ability),
+    rewarding potentially capable agents. This tends to yield moderate Gini and
+    high total welfare. **"performance"** allocates proportionally to current
+    capital (rich get richer). It is included for comparison and typically
+    produces the highest Gini and lowest total welfare. **"random"** gives all
+    resources to one randomly chosen agent, representing extreme luck-based
+    allocation with very high Gini. **"cate_optimal"** allocates proportionally
+    to CATE estimates so that resources go to agents who benefit most. It
+    requires a cate_values array with one value per agent and only allocates to
+    agents with non-negative CATE.
 
     :param agents: List of Agent objects (capital modified in-place)
     :param policy: Allocation rule: "egalitarian", "meritocratic", "performance",
@@ -491,7 +463,9 @@ def run_policy_simulation(
         weights = np.array([a.capital for a in agents], dtype=float)
     elif policy == "cate_optimal":
         hdbg.dassert_is_not(
-            cate_values, None, "cate_values must be provided when policy='cate_optimal'."
+            cate_values,
+            None,
+            "cate_values must be provided when policy='cate_optimal'.",
         )
         cate_array = np.asarray(cate_values, dtype=float)
         hdbg.dassert_eq(
@@ -522,10 +496,57 @@ def run_policy_simulation(
     return run_simulation(agents, **simulation_kwargs)
 
 
+def run_policy_and_measure(
+    policy_name: str,
+    *,
+    n_agents: int = 20,
+    resource_amount: float = 20.0,
+    n_periods: int = 10,
+    seed: int = 123,
+    cate_values: Optional[np.ndarray] = None,
+) -> Tuple[pd.DataFrame, float]:
+    """
+    Create a population, allocate resources under a policy, simulate, and
+    return the results DataFrame together with the Gini coefficient.
+
+    This is a convenience wrapper that combines create_population,
+    run_policy_simulation, get_results_dataframe, and calculate_gini into a
+    single call.
+
+    :param policy_name: allocation rule (see run_policy_simulation for options)
+    :param n_agents: number of agents to create (default 20)
+    :param resource_amount: total budget to distribute at t=0 (default 20.0)
+    :param n_periods: simulation time periods (default 10)
+    :param seed: RNG seed for both population creation and simulation
+    :param cate_values: CATE array, required when policy_name="cate_optimal"
+    :return: Tuple (df, gini) where df is the DataFrame with agent attributes
+        and final outcomes and gini is the Gini coefficient of the final
+        capital distribution
+    """
+    agents = create_population(n_agents=n_agents, seed=seed)
+    kwargs: Dict[str, Any] = dict(
+        agents=agents,
+        policy=policy_name,
+        resource_amount=resource_amount,
+        n_periods=n_periods,
+        seed=seed,
+    )
+    if policy_name == "cate_optimal":
+        hdbg.dassert_is_not(
+            cate_values,
+            None,
+            "cate_values must be provided for 'cate_optimal'.",
+        )
+        kwargs["cate_values"] = cate_values
+    agents = run_policy_simulation(**kwargs)
+    df = get_results_dataframe(agents)
+    gini = calculate_gini(df["capital"].values)
+    return df, gini
+
+
 # #############################################################################
 # Bayesian model
 # #############################################################################
-# -------------------------------------------------------------------
 
 
 def fit_bayesian_luck_model(
@@ -549,10 +570,10 @@ def fit_bayesian_luck_model(
                  Valid range: (0.5, 1.0), higher = slower but more stable
     :param random_seed: RNG seed for reproducibility (default 42)
 
-    :return: Tuple (model, idata):
-        - model: PyMC Model object (for diagnostics, re-sampling, etc.)
-        - idata: ArviZ InferenceData object containing posterior samples
-                Use with summarize_bayesian_fit() or posterior_predictive_check()
+    :return: Tuple (model, idata) where model is the PyMC Model object (for
+        diagnostics and re-sampling) and idata is the ArviZ InferenceData
+        object containing posterior samples, suitable for use with
+        summarize_bayesian_fit() or posterior_predictive_check()
     """
     required_cols = [
         "capital",
@@ -594,7 +615,7 @@ def fit_bayesian_luck_model(
     # PRIORS
     # ======
     # All coefficients use weakly informative N(0, 1) priors (centered at 0).
-    #This allows the data to dominate the inference without strong prior beliefs.
+    # This allows the data to dominate the inference without strong prior beliefs.
     with pm.Model() as model:
         # Priors: fairly weakly informative, centered at 0.
         alpha = pm.Normal("alpha", mu=0.0, sigma=1.0)
@@ -665,10 +686,9 @@ def posterior_predictive_check(
     :param idata: ArviZ InferenceData with posterior draws
     :param df: same DataFrame used for fitting
     :param random_seed: RNG seed for reproducibility
-    :return: dict with:
-        - "y_obs": observed log-capital
-        - "y_pred_mean": posterior predictive mean log-capital per agent
-        - "y_pred_std": posterior predictive std-dev per agent
+    :return: dict with keys "y_obs" (observed log-capital), "y_pred_mean"
+        (posterior predictive mean log-capital per agent), and "y_pred_std"
+        (posterior predictive standard deviation per agent)
     """
     capital = df["capital"].to_numpy(dtype=float)
     y_obs = np.log(capital)
@@ -696,3 +716,176 @@ def posterior_predictive_check(
         "y_pred_mean": y_pred_mean,
         "y_pred_std": y_pred_std,
     }
+
+
+# #############################################################################
+# Causal inference
+# #############################################################################
+
+
+def fit_dml_model(
+    df: pd.DataFrame,
+    *,
+    n_estimators: int = 100,
+    max_depth: int = 10,
+    random_state: int = 42,
+) -> Tuple[Any, np.ndarray, float, float]:
+    """
+    Fit a Double Machine Learning model to estimate the causal effect of luck.
+
+    Uses LinearDML from EconML with Random Forest nuisance models to estimate
+    the average treatment effect of beneficial events on log-capital, controlling
+    for talent confounders.
+
+    :param df: DataFrame from get_results_dataframe(agents), must have:
+               'capital', 'lucky_events', 'talent_intensity', 'talent_iq',
+               'talent_networking'
+    :param n_estimators: number of trees in RF nuisance models (default 100)
+    :param max_depth: max depth of RF nuisance models (default 10)
+    :param random_state: RNG seed for reproducibility (default 42)
+    :return: Tuple (dml_model, ate_estimates, ate_mean, ate_std) where
+        dml_model is the fitted LinearDML model object, ate_estimates is a
+        1D array of per-agent ATE estimates, ate_mean is the mean ATE across
+        agents, and ate_std is the standard deviation of ATE across agents
+    """
+    Y = np.log(df["capital"].values + 1)
+    T = df["lucky_events"].values
+    X = df[["talent_intensity", "talent_iq", "talent_networking"]].values
+    dml_model = LinearDML(
+        model_y=RandomForestRegressor(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=random_state,
+        ),
+        model_t=RandomForestRegressor(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=random_state,
+        ),
+        discrete_treatment=False,
+        random_state=random_state,
+    )
+    dml_model.fit(Y, T, X=X)
+    ate_estimates = dml_model.const_marginal_effect(X)
+    ate_mean = float(ate_estimates.mean())
+    ate_std = float(ate_estimates.std())
+    return dml_model, ate_estimates, ate_mean, ate_std
+
+
+def fit_causal_forest(
+    df: pd.DataFrame,
+    *,
+    n_estimators: int = 100,
+    max_depth: int = 10,
+    random_state: int = 42,
+) -> Tuple[Any, np.ndarray]:
+    """
+    Fit a Causal Forest to estimate heterogeneous treatment effects (CATE).
+
+    Uses CausalForestDML from EconML to estimate per-agent conditional average
+    treatment effects of beneficial events on log-capital.
+
+    :param df: DataFrame from get_results_dataframe(agents), must have:
+               'capital', 'lucky_events', 'talent_intensity', 'talent_iq',
+               'talent_networking'
+    :param n_estimators: number of trees (default 100)
+    :param max_depth: max depth of trees (default 10)
+    :param random_state: RNG seed for reproducibility (default 42)
+    :return: Tuple (cf_model, cate_estimates) where cf_model is the fitted
+        CausalForestDML model object and cate_estimates is a 1D array of
+        per-agent CATE estimates
+    """
+    Y = np.log(df["capital"].values + 1)
+    T = df["lucky_events"].values
+    X = df[["talent_intensity", "talent_iq", "talent_networking"]].values
+    cf_model = CausalForestDML(
+        model_y=RandomForestRegressor(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=random_state,
+        ),
+        model_t=RandomForestRegressor(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            random_state=random_state,
+        ),
+        discrete_treatment=False,
+        n_estimators=n_estimators,
+        max_depth=max_depth,
+        random_state=random_state,
+    )
+    cf_model.fit(Y, T, X=X)
+    cate_estimates = cf_model.effect(X)
+    return cf_model, cate_estimates
+
+
+def compare_allocation_policies(
+    df: pd.DataFrame,
+    *,
+    budget_per_agent: float = 1.0,
+) -> pd.DataFrame:
+    """
+    Evaluate multiple resource allocation strategies and compare outcomes.
+
+    Given a population with existing capital and CATE estimates, distributes a
+    fixed budget under five policies and measures resulting welfare and inequality.
+
+    Policies:
+    1. Egalitarian: equal allocation to all agents.
+    2. Meritocratic: proportional to sum of talent dimensions.
+    3. Random: random weights.
+    4. Winner-Take-More: proportional to current capital.
+    5. CATE-Optimal: proportional to estimated treatment effects.
+
+    :param df: DataFrame with columns 'capital', 'talent_intensity', 'talent_iq',
+               'talent_networking', and 'cate'
+    :param budget_per_agent: budget per agent to allocate (default 1.0)
+    :return: DataFrame with one row per policy and columns for welfare/inequality
+             metrics (Total Capital, Mean Capital, Median Capital,
+             Gini Coefficient, Top 10% Share, Bottom 50% Share)
+    """
+    n_agents = len(df)
+    budget = n_agents * budget_per_agent
+    baseline_capital = df["capital"].values
+    policies: Dict[str, np.ndarray] = {}
+    # Policy 1: Egalitarian.
+    policies["Egalitarian"] = np.ones(n_agents) * (budget / n_agents)
+    # Policy 2: Meritocratic (proportional to talent).
+    talent_scores = (
+        df[["talent_intensity", "talent_iq", "talent_networking"]]
+        .sum(axis=1)
+        .values
+    )
+    talent_scores = np.maximum(talent_scores, 0.01)
+    policies["Meritocratic"] = budget * (talent_scores / talent_scores.sum())
+    # Policy 3: Random.
+    random_weights = np.random.random(n_agents)
+    policies["Random"] = budget * (random_weights / random_weights.sum())
+    # Policy 4: Success-based (proportional to current capital).
+    policies["Winner-Take-More"] = budget * (
+        baseline_capital / baseline_capital.sum()
+    )
+    # Policy 5: CATE-optimal (proportional to treatment effect estimates).
+    cate_positive = np.maximum(df["cate"].values, 0.01)
+    policies["CATE-Optimal"] = budget * (cate_positive / cate_positive.sum())
+    results: List[Dict[str, Any]] = []
+    for policy_name, allocation in policies.items():
+        returns = np.sqrt(allocation)
+        new_capital = baseline_capital + returns
+        gini_coef = calculate_gini(new_capital)
+        results.append(
+            {
+                "Policy": policy_name,
+                "Total Capital": new_capital.sum(),
+                "Mean Capital": new_capital.mean(),
+                "Median Capital": float(np.median(new_capital)),
+                "Gini Coefficient": gini_coef,
+                "Top 10% Share": new_capital[np.argsort(new_capital)[-10:]].sum()
+                / new_capital.sum(),
+                "Bottom 50% Share": new_capital[
+                    np.argsort(new_capital)[:50]
+                ].sum()
+                / new_capital.sum(),
+            }
+        )
+    return pd.DataFrame(results)

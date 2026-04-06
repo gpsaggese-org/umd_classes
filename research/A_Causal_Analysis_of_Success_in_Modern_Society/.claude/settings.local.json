@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -lh /c/Users/kisho/gpsaggese.github.io/tutorials/Autogen/*.ipynb)",
+      "Bash(xargs grep:*)",
+      "Bash(python -c 'import json; f=open\\('\\\\''causal_success.API.ipynb'\\\\'','\\\\''r'\\\\'',encoding='\\\\''utf-8'\\\\''\\); nb=json.load\\(f\\); f.close\\(\\); changed=False:*)",
+      "Bash(python _fix_refs.py)",
+      "Bash(rm _fix_refs.py)",
+      "Bash(ls *.ipynb *.py)"
+    ]
+  }
+}

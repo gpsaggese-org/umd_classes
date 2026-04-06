@@ -12,6 +12,7 @@ env/
 
 # ---- Jupyter Notebooks ----
 .ipynb_checkpoints/
+Untitled*.ipynb
 
 # ---- Logs and Text Output ----
 *.log

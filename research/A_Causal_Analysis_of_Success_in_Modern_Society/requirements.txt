@@ -1,13 +1,22 @@
-arviz==0.18.0
-econml
-jupyterlab
-jupyterlab-vim
-matplotlib
-numpy
-pandas
+# Core scientific computing.
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.14.1
+
+# Visualization.
+matplotlib==3.9.3
+seaborn==0.13.2
+
+# Machine learning.
+scikit-learn==1.6.0
+statsmodels==0.14.4
+
+# Causal inference.
+econml==0.16.0
+
+# Bayesian inference.
 pymc==5.16.2
-scikit-learn
-scipy
-seaborn
-statsmodels
-tqdm
+arviz==0.18.0
+
+# Utilities.
+tqdm==4.67.1
