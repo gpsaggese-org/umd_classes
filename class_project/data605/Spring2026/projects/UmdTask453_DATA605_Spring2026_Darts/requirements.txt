@@ -27,3 +27,4 @@ plotly==5.18.0
 
 # Holidays
 holidays==0.46
+optuna==3.6.1
