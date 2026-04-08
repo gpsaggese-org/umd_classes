@@ -1,0 +1,7 @@
+ipywidgets
+jupyterlab
+jupyterlab-vim
+matplotlib
+numpy
+pandas
+seaborn
