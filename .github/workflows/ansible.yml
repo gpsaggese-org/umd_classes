@@ -1,0 +1,14 @@
+# .github/workflows/hello.yml
+
+name: Hello World
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo hello world
+        run: echo "Hello, World!"
