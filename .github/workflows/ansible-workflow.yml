@@ -19,7 +19,7 @@ jobs:
         run: pip install ansible ansible-lint
 
       - name: Run ansible-lint
-        run: ansible-lint class_project/data_605/Spring2026/projects/UmdTask405_-Data605_Spring2026_Ansible_Deployment/playbook.yml
+        run: ansible-lint ./class_project/data_605/Spring2026/projects/UmdTask405_-Data605_Spring2026_Ansible_Deployment/playbook.yml
 
       - name: Echo hello world
         run: echo "Hello, World!"
