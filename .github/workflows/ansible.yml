@@ -10,5 +10,8 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
+      - name: Install Ansible & lint
+        run: pip install ansible ansible-lint
+        
       - name: Echo hello world
         run: echo "Hello, World!"
