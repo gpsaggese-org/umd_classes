@@ -16,7 +16,7 @@ jobs:
         run: tree
 
       - name: Checking ls
-        run: ls -la
+        run: ls class_project
 
       - name: Install Ansible & lint
         run: pip install ansible ansible-lint
