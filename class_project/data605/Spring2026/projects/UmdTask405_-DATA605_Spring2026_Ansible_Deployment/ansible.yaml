@@ -1,1 +1,4 @@
 ---
+- name: Create a simple HTML webpage
+  hosts: localhost
+  connection: local
