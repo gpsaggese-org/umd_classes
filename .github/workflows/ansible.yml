@@ -8,10 +8,10 @@ on:
 
 jobs:
   hello:
-    runs-on: alpine/ansible:2.20.0
+    runs-on: ubuntu-latest
     steps:
-      # - name: Install Ansible & lint
-      #   run: pip install ansible ansible-lint
+      - name: Install Ansible & lint
+        run: pip install ansible ansible-lint
 
       - name: Run ansible-lint
         run: ansible-lint playbook.yml
