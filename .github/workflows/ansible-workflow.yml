@@ -13,6 +13,9 @@ jobs:
       - name: Install Ansible & lint
         run: pip install ansible ansible-lint
 
+      - name: Checking ls
+        run: ls -la
+
       - name: Run ansible-lint
         run: ansible-lint class_project/data_605/Spring2026/projects/UmdTask405_-Data605_Spring2026_Ansible_Deployment/playbook.yml
 
