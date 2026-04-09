@@ -16,7 +16,7 @@ jobs:
         run: tree
 
       - name: Checking ls
-        run: ls class_project
+        run: ls class_project/data_605/Spring2026/projects/UmdTask405_-Data605_Spring2026_Ansible_Deployment/
 
       - name: Install Ansible & lint
         run: pip install ansible ansible-lint
