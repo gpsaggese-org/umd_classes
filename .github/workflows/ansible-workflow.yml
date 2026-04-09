@@ -10,7 +10,10 @@ jobs:
   hello:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4z
+
+      - name: Checking ls
+        run: tree
 
       - name: Install Ansible & lint
         run: pip install ansible ansible-lint
