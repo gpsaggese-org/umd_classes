@@ -12,8 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Checking ls
+      - name: Checking tree
         run: tree
+
+      - name: Checking ls
+        run: ls -la
 
       - name: Install Ansible & lint
         run: pip install ansible ansible-lint
