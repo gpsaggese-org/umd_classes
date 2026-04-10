@@ -27,3 +27,12 @@ python-dotenv>=1.0.0
 
 # OpenAI API client (txtai wrapper handles actual calls)
 openai>=1.3.0
+
+# Redis client for KeyDB (hot tier cache)
+redis>=5.0.0
+
+# PostgreSQL client with connection pooling (warm tier)
+psycopg2-binary>=2.9.9
+
+# MinIO client for cold tier object storage
+minio>=7.2.0
