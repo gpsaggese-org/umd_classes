@@ -1267,11 +1267,183 @@ digraph CausalGraph {
   3. Regress outcome residuals $\tilde{Y}$ on treatment residuals $\tilde{T}$ to
      obtain estimate of causal effect of $T$ on $Y$
 
-*
+* Non-linear
 - You want to estimate the causal effect of credit limit on credit card spend,
   using wage as only confounder
   - It can be that the relationship is not linear
     - E.g., the effect of credit lines on spend diminishes as you increase credit
       lines
 
-- You can apply some transform to $X$ (e.g., square root)
+- You can apply some transform to $X$ (e.g., square root, log)
+
+- Then you can apply the usual flow (adding confounders, FWL theorem)
+
+* Regression
+- You need to assume that treatment looks randomly assigned once certain
+  covariates are accounted for
+  - You can't know if all confounders have been included in the model
+  - Only a randomized controlled experiment can confirm it
+  - E.g., giving random credit lines (including very high) to risky customers
+    who will likely default and cause huge loss
+
+- The best next thing to a randomized controlled trial is a "stratified random
+  experiments"
+  - Create multiple local experiments, drawing from different distributions,
+    depending on covariates
+  - E.g., instead of randomizing credit lines completely, you use features (e.g.,
+    credit score, which is a proxy for customer risk) to create groups of customers
+    (e.g., high-risk, neutral, low-risk)
+  - Then for the high-risk, you randomize credit lines from a distribution with
+    low average
+  - For the low-risk, you randomize credit lines from a distribution with higher
+    average
+
+- Stratified random experiments are:
+  - cheaper 
+  - more complex
+  than completely random experiments
+
+- Things are simpler as
+  - Lower number of groups
+  - Bigger overlap in the treatment distributions across groups (to avoid relying
+    on extrapolations)
+
+- One extreme is the completely random experiment (easier to interpret, more
+  expensive)
+
+* Dummy Variables
+
+- Problem: Simple regression of outcome on treatment yields biased estimates
+  with confounders
+  - E.g., estimating `default ~ credit_limit` gives negative coefficient
+    (counterintuitive)
+  - Occurs due to imbalanced treatment assignment across confounding
+    groups—lower-risk customers got higher credit lines
+
+- Solution: Dummy Variables (One-Hot Encoding):
+  - Create binary columns for each categorical group (1 if in group, 0
+    otherwise)
+  - Drop first dummy to avoid multicollinearity
+  - Include dummy controls in model:
+    `default ~ credit_limit + C(credit_score1_buckets)`
+
+- Result after adding dummies:
+  - Model estimates one intercept per group, shared slope across all groups
+  - Shared slope is variance-weighted average of regression slopes within each
+    group
+
+* Saturated Regression Model
+
+- Definition: A saturated regression model includes interaction terms between
+  treatment and dummy variables to estimate separate effects for each group
+  - Created by interacting treatment with categorical variables:
+    `treatment * C(categorical_var)`
+  - Each group gets its own intercept and slope
+
+- Running a saturated model produces identical results to:
+  - Segmenting data by groups manually
+  - Estimating treatment effect separately in each group
+  - Computing a weighted average (weights = group size)
+  - E.g., both approaches yield the same Average Treatment Effect (ATE)
+
+- Model interpretation:
+  - Treatment coefficient represents effect in the omitted (reference) group
+  - Interaction parameters show how effects differ from the reference group
+  - Sum interaction term + treatment coefficient to get effect for that specific
+    group
+
+- Trade-off: More parameters $\rightarrow$ more variance
+  - Results can be noisy for small subgroups
+  - Non-significant slopes in small groups are likely just noise
+
+* Omitted Variable Bias and Regression
+- The bias due to omitting a variable is equal to tA
+
+* Neutral Controls: Controlling Variance Without Changing Bias
+
+- **Problem**: Should we include every available variable in our regression
+  model?
+  - Some variables are confounders (must include to eliminate bias)
+  - Some variables don't cause either treatment or outcome
+  - Question: Which additional variables help or hurt precision?
+
+::: columns
+:::: {.column width=50%}
+**Noise-Reducing Controls**
+
+Variables that **predict the outcome well** but aren't confounders
+
+- **Example**: Credit score bucket $\to$ credit limit $\to$ default
+  - `credit_score1_buckets`: confounder (must include)
+  - `credit_score2`: predicts default but not treatment
+- **Effect**: Reduces variance in $\varepsilon_i$ by FWL denoising step
+- **Result**: Same $\hat{\beta}_{\text{treatment}}$, much tighter confidence
+  intervals
+  - Standard error shrinks substantially
+  - More statistical power
+- **Strategy**: Always include strong outcome predictors
+
+::::
+:::: {.column width=50%}
+**Noise-Inducing Controls**
+
+Variables that **predict the treatment well** but not the outcome
+
+- **Example**: Conditionally random spend experiment
+  - `credit_score1`: drives treatment assignment but $\perp$ outcome
+  - Incorrectly including it increases variance
+- **Effect**: Reduces treatment variance by explaining away $\text{Var}(T)$
+- **Result**: Same $\hat{\beta}_{\text{treatment}}$, but standard error
+  **increases**
+  - Wider confidence intervals
+  - Less statistical power
+- **Strategy**: Avoid including strong treatment predictors
+
+::::
+:::
+
+## Feature Selection Dilemma
+
+- **Reality**: Most variables are imperfect confounders
+  - Strong cause of $T$, weak cause of $Y$ (like noise-inducing)
+  - Strong cause of $Y$, weak cause of $T$ (like noise-reducing)
+  - Varying importance across both dimensions
+
+- **The Trade-off**: Including all confounders eliminates bias but increases
+  variance $$\text{MSE} = \text{Bias}^2 + \text{Variance}$$
+
+- **Practical Question**: Is a small amount of bias worth a large reduction in
+  variance?
+  - No universal answer—depends on context, sample size, and precision needs
+  - Research shows it's often worth accepting small bias for large variance
+    reduction
+
+
+// TODO: Finish
+
+// Chap 5
+
+# Propensity score
+
+// Chap 6
+
+# Effect heterogeneity
+
+// Chap 7
+
+# Metalerners
+
+// Chap 8
+# Difference-in-differences
+
+// Chap 9
+# Synthetic control
+
+// Chap 10
+# Geo and switchback experiments
+
+// Chap 11
+# Non-compliance and instruments
+
+// Chap 12
+# Next steps
