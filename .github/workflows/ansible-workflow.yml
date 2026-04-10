@@ -26,7 +26,3 @@ jobs:
 
       - name: Echo hello world
         run: echo "Hello, World!"
-
-      - name: Confirm file was created
-        debug:
-          msg: "Webpage saved to {{ output_path }}"
