@@ -5,7 +5,7 @@
 
   vars:
     page_title: "My Simple Webpage"
-    output_path: "simple_webpage.html"
+    output_path: "index.html"
     author: "Likhon Gomes"
 
   tasks:

@@ -27,6 +27,12 @@ jobs:
       - name: Run ansible-lint
         run: ansible-playbook class_project/data605/Spring2026/projects/UmdTask405_-DATA605_Spring2026_Ansible_Deployment/playbook.yaml
 
+      - name: Upload HTML as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: webpage
+          path: index.html
+
       - name: Echo hello world
         run: echo "Hello, World!"
 
