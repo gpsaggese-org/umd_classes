@@ -3,6 +3,10 @@
   hosts: localhost
   connection: local
 
+  vars:
+    page_title: "My Simple Webpage"
+    output_path: "simple_webpage.html"
+
   tasks:
     - name: Create the HTML file
       ansible.builtin.copy:

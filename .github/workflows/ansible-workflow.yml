@@ -26,3 +26,6 @@ jobs:
 
       - name: Echo hello world
         run: echo "Hello, World!"
+
+      - name: Checking tree
+        run: tree
