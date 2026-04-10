@@ -6,6 +6,7 @@
   vars:
     page_title: "My Simple Webpage"
     output_path: "simple_webpage.html"
+    author: "Likhon Gomes"
 
   tasks:
     - name: Create the HTML file
