@@ -14,6 +14,9 @@ answer causal questions with the same rigor you bring to predictive modeling.
 
 ## Spurious Correlations and Simpson's Paradox
 
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:91 "Problem 1: Association vs Correlation"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:103 "Correlation is Not Causation!"
+
 ### The Danger of Pattern-Matching
 - Modern machine learning is exceptionally good at finding patterns in data —
   but patterns are not causes
@@ -80,17 +83,11 @@ answer causal questions with the same rigor you bring to predictive modeling.
 - This is why Judea Pearl argues that statistics alone is insufficient — you
   need a causal model to decide which associations to trust
 
-**Resources**
-
-- Judea Pearl and Dana Mackenzie, _The Book of Why: The New Science of Cause and
-  Effect_ (2018), Chapter 6
-- C.R. Blyth, "On Simpson's Paradox and the Sure-Thing Principle," _Journal of
-  the American Statistical Association_ (1972)
-- Tyler Vigen, _Spurious Correlations_ (2015)
-- Bernhard Scholkopf et al., "Toward Causal Representation Learning," _PNAS_
-  (2021)
-
 ## Confounding Variables and Colliders
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:961 "Confounder Variable"
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:1144 "Collider"
+
 Understanding what can distort a causal analysis is just as important as knowing
 how to estimate a causal effect. Two structural patterns in causal graphs are
 responsible for most of the common errors in causal inference: **confounders**
@@ -139,6 +136,9 @@ and **colliders**.
     confounders are observed — if important ones are hidden, bias remains
 
 ### Mediators Vs. Confounders
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:818 "Mediator Variable"
+
 - A **mediator** lies on the causal pathway from treatment to outcome:
   $X \rightarrow M \rightarrow Y$
 - Confounders and mediators have opposite implications for analysis:
@@ -191,6 +191,10 @@ and **colliders**.
     correlated in the general population
 
 ### The Path Taxonomy
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:1257 "Fork Structure"
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:1320 "Inverted Fork"
+
 - Understanding causal graphs requires categorizing the types of paths:
   - **Fork** ($D \leftarrow X \rightarrow C$): a common cause creates spurious
     association; conditioning on the fork blocks the path
@@ -202,17 +206,10 @@ and **colliders**.
 - This taxonomy is the basis for **d-separation**, the formal criterion for
   reading conditional independencies from a DAG (covered in the next section)
 
-**Resources**
-
-- Judea Pearl, _Causality: Models, Reasoning, and Inference_, 2nd ed. (2009),
-  Chapter 2
-- Miguel Hernan and James Robins, _Causal Inference: What If_ (2020) — freely
-  available at hsph.harvard.edu/miguel-hernan/causal-inference-book
-- Elias Bareinboim and Judea Pearl, "Causal Inference and the Data-Fusion
-  Problem," _PNAS_ (2016)
-- Sander Greenland, "Quantifying Biases in Causal Models," _Epidemiology_ (2003)
-
 ## Causal Questions Vs. Predictive Questions
+
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:228 "The Ladder of Causation"
+
 A central theme in causal AI is the distinction between two fundamentally
 different types of questions that look superficially similar but require
 completely different tools to answer.
@@ -237,6 +234,11 @@ completely different tools to answer.
   $\Pr(Y | X = x) \neq \Pr(Y | \text{do}(X = x))$
 
 ### Pearl's Ladder of Causation
+
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:230 "Rung 1: Association"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:261 "Rung 2: Intervention"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:278 "Rung 3: Counterfactuals"
+
 - Judea Pearl organizes causal reasoning into three levels, each requiring
   progressively richer reasoning:
 
@@ -299,17 +301,11 @@ completely different tools to answer.
 - Answering them requires explicitly choosing the right level of the ladder and
   the right modeling tools
 
-**Resources**
-
-- Judea Pearl, "The Seven Tools of Causal Inference with Reflections on
-  Education," _Communications of the ACM_ (2019)
-- Robert Lucas, "Econometric Policy Evaluation: A Critique," in _The Phillips
-  Curve and Labor Markets_ (1976) — the original statement of the Lucas critique
-- Elias Bareinboim, "Causal Reinforcement Learning," tutorial at NeurIPS (2020)
-- Bernhard Scholkopf, "Causality for Machine Learning," in _Probabilistic and
-  Causal Inference: The Works of Judea Pearl_ (2022)
-
 ## DAGs and D-Separation: the Language of Causal Reasoning
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:129 "Causal DAG"
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:43 "Causal DAGs"
+
 To reason systematically about causality, we need a formal language that can
 represent causal structure, make assumptions explicit, and allow us to derive
 what can and cannot be estimated from data. **Directed Acyclic Graphs** (DAGs)
@@ -334,6 +330,9 @@ and the concept of **d-separation** provide exactly this.
   - These assumptions come from domain knowledge, not from data
 
 ### Structural Causal Models
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:411 "Structural Causal Model"
+
 - A **Structural Causal Model** (SCM) makes a causal DAG quantitative
 - Each variable $X_i$ is defined by a structural equation:
   $$
@@ -386,6 +385,10 @@ and the concept of **d-separation** provide exactly this.
   (the **Markov condition**)
 
 ### Observed, Unobserved, Endogenous, and Exogenous Variables
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:499 "Observed Vs. Unobserved Variables"
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:575 "Endogenous Vs. Exogenous Variables"
+
 - **Observed variables**: directly measured in the data (e.g., income,
   education, blood pressure)
 - **Unobserved (latent) variables**: exist in the causal system but are not
@@ -399,6 +402,9 @@ and the concept of **d-separation** provide exactly this.
   representing background conditions or external interventions
 
 ### The Do-Operator and Graph Surgery
+
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:261 "Rung 2: Intervention"
+
 - Pearl's **do-operator** $\text{do}(X = x)$ formalizes what an intervention
   means in a causal model
 - An intervention on $X$ corresponds to **graph surgery**: remove all incoming
@@ -417,6 +423,9 @@ and the concept of **d-separation** provide exactly this.
     confounders)
 
 ### Building a Causal DAG in Practice
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:729 "Building a Causal DAG"
+
 - Constructing a causal DAG is an iterative, domain-driven process:
   - Start with the treatment and outcome of interest
   - Add variables that causally affect either the treatment or the outcome
@@ -427,16 +436,32 @@ and the concept of **d-separation** provide exactly this.
 - The DAG is a communication tool as much as a technical one — it makes
   assumptions explicit and forces alignment between domain experts and analysts
 
-**Resources**
+## References
 
-- Judea Pearl, _Causality: Models, Reasoning, and Inference_, 2nd ed. (2009)
+- Judea Pearl and Dana Mackenzie, _The Book of Why: The New Science of Cause and
+  Effect_ (2018), Chapter 6
+- C.R. Blyth, "On Simpson's Paradox and the Sure-Thing Principle," _Journal of
+  the American Statistical Association_ (1972)
+- Tyler Vigen, _Spurious Correlations_ (2015)
+- Bernhard Scholkopf et al., "Toward Causal Representation Learning," _PNAS_
+  (2021)
+- Judea Pearl, _Causality: Models, Reasoning, and Inference_, 2nd ed. (2009),
+  Chapter 2
+- Miguel Hernan and James Robins, _Causal Inference: What If_ (2020) — freely
+  available at hsph.harvard.edu/miguel-hernan/causal-inference-book
+- Elias Bareinboim and Judea Pearl, "Causal Inference and the Data-Fusion
+  Problem," _PNAS_ (2016)
+- Sander Greenland, "Quantifying Biases in Causal Models," _Epidemiology_ (2003)
+- Judea Pearl, "The Seven Tools of Causal Inference with Reflections on
+  Education," _Communications of the ACM_ (2019)
+- Robert Lucas, "Econometric Policy Evaluation: A Critique," in _The Phillips
+  Curve and Labor Markets_ (1976) — the original statement of the Lucas critique
+- Elias Bareinboim, "Causal Reinforcement Learning," tutorial at NeurIPS (2020)
+- Bernhard Scholkopf, "Causality for Machine Learning," in _Probabilistic and
+  Causal Inference: The Works of Judea Pearl_ (2022)
 - Jonas Peters, Dominik Janzing, and Bernhard Scholkopf, _Elements of Causal
   Inference_ (2017) — open access at mitpress.mit.edu
 - Miguel Hernan, "A Second Chance to Get Causal Inference Right: A
   Classification of Data Science Tasks," _Chance_ (2019)
 - Ilya Shpitser and Judea Pearl, "Identification of Joint Interventional
   Distributions in Recursive Semi-Markovian Causal Models," AAAI (2006)
-
-## TUTORIAL: DoWhy (illustrating the Difference Between Correlation and Causal Effect)
-
-## TUTORIAL: CausalImpact (detecting Causal Impact of Interventions Vs. Spurious Trends)

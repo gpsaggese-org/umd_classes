@@ -450,6 +450,7 @@
   | **Association**    | What correlates with Y?      | "Users who buy X also buy Y"                             |
   | **Intervention**   | What happens if we do X?     | "What if we lower the price?"                            |
   | **Counterfactual** | What would have happened if? | "Would this customer have churned without the discount?" |
+
   - Data Science mostly operates at Level 1 (association)
   - Decision Science requires Level 2 (intervention) and Level 3
     (counterfactual)
