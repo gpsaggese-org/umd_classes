@@ -1,5 +1,10 @@
 // msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+// msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+
 // msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
+// msml610/lectures/Lesson02.2-ML_Paradigms.pdf
+// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf
 
 # From Prediction Pipelines to Decision Pipelines
 
@@ -32,11 +37,11 @@
   - The process treats all correlations equally
   - Bias in the data propagates directly into the model
 
-- **Explainability without causality is theater**
+- **Explainability is incomplete without causal insight**
   - A model can explain _what_ it predicts without understanding _why_
   - Feature importance tells you which variables the model relied on, not
     whether those relationships are causal
-  - Regulators want organizations to justify decisions, not just explain model
+  - Regulators want organizations to justify decisions, not just produce model
     outputs
 
 ## Correlation, Association, and the Illusion of Understanding
@@ -44,7 +49,6 @@
 // msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:123  "Correlation is Not Causation: Examples"
 
 - **Association** is a statistical property: two variables move together
-  - Humans naturally observe that X and Y co-occur and infer a relationship
   - Association is powerful for prediction but dangerous for decision-making
 
 - **Humans are primed to mistake association for causation**
@@ -444,13 +448,6 @@
   - Explicitly models the analyst as an agent intervening in the world
 
 - The distinction maps directly onto Pearl's Ladder of Causation:
-
-  | Level              | Question                     | Examples                                                 |
-  | :----------------- | :--------------------------- | :------------------------------------------------------- |
-  | **Association**    | What correlates with Y?      | "Users who buy X also buy Y"                             |
-  | **Intervention**   | What happens if we do X?     | "What if we lower the price?"                            |
-  | **Counterfactual** | What would have happened if? | "Would this customer have churned without the discount?" |
-
   - Data Science mostly operates at Level 1 (association)
   - Decision Science requires Level 2 (intervention) and Level 3
     (counterfactual)

@@ -1,6 +1,10 @@
 # Structural Causal Models
 
 ## Causal Graphs (DAGs) as a Reasoning Formalism
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:43 Causal DAGs
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:129 Causal DAG
+
 A Directed Acyclic Graph (DAG) is the lingua franca of modern causal inference.
 Before we can estimate causal effects or reason about interventions, we need a
 language for expressing _who causes whom_. DAGs provide exactly that — a visual
@@ -56,6 +60,12 @@ testable, and communicable.
     extensions exist)
 
 - **A worked example: Tornado Warning**
+
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:204 Example: Tornado Warning
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:253 Tornado Warning: Level 1 (Association)
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:301 Tornado Warning: Level 2 (Intervention)
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:357 Tornado Warning: Level 3 (Counterfactual)
+
   - Variables: $T$ (tornado forms), $W$ (warning issued), $A$ (radio
     broadcasts), $B$ (TV broadcasts), $R$ (residents warned)
   - Graph: $T \to W \to A \to R$, $W \to B \to R$
@@ -80,16 +90,12 @@ testable, and communicable.
   - If you cannot encode your causal assumptions as a DAG before looking at
     data, you are not ready to make causal claims from that data
 
-### References
-- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapter 1
-- Daphne Koller and Nir Friedman, _Probabilistic Graphical Models_ (MIT
-  Press, 2009)
-- Jonas Peters, Dominik Janzing, and Bernhard Scholkopf, _Elements of Causal
-  Inference_ (MIT Press, 2017), Chapter 6
-- Russell and Norvig, _Artificial Intelligence: A Modern Approach_, 4th ed.,
-  Chapter 13
 
 ## Structural Equations and Functional Causal Models
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:409 Structural Causal Model
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:434 Structural Causal Model: Sprinkler Example
+
 A causal DAG draws the skeleton of causal assumptions. Structural Causal Models
 (SCMs) — also called Functional Causal Models — give that skeleton quantitative
 flesh by specifying the precise mechanism by which each variable is determined.
@@ -106,6 +112,9 @@ flesh by specifying the precise mechanism by which each variable is determined.
     $X_i$ that is not explicitly modeled
 
 - **Endogenous vs. exogenous variables**
+
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:575 Endogenous Vs. Exogenous Variables
+
   - _Endogenous_: values determined by other variables in the model (e.g.,
     education level, income)
   - _Exogenous_: values determined outside the model — they are the "root
@@ -113,6 +122,9 @@ flesh by specifying the precise mechanism by which each variable is determined.
   - Exogenous variables have no parents in the DAG
 
 - **Observed vs. unobserved variables**
+
+  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:499 Observed Vs. Unobserved Variables
+
   - _Observed_ (measured, visible): variables directly available in the dataset
     (e.g., education, income, economic policy)
   - _Unobserved_ (latent, hidden): variables that exist but are not measured
@@ -154,16 +166,12 @@ flesh by specifying the precise mechanism by which each variable is determined.
     articulate _why_ variables are related — often a valuable discipline in
     itself
 
-### References
-- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapter 7
-- Jonas Peters et al., _Elements of Causal Inference_ (MIT Press, 2017),
-  Chapters 2–3
-- Bernhard Scholkopf et al., "Toward Causal Representation Learning," _PNAS_
-  (2021)
-- Wright, S., "Correlation and Causation," _Journal of Agricultural Research_
-  (1921) — the origin of path analysis / structural equations
 
 ## Interventions and the Do-Operator
+
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt:42 Intervention and Counterfactuals
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt:114 The do-operator
+
 The $do$-operator is the mathematical device that separates causal reasoning
 from associational reasoning. It formalizes what it means to _intervene_ on a
 system, distinguishing it from merely _observing_ the system.
@@ -214,6 +222,9 @@ system, distinguishing it from merely _observing_ the system.
     levers we can pull
 
 - **Randomized Controlled Trials (RCTs) as physical $do$-operators**
+
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:207 Randomized Controlled Trial
+
   - An RCT physically implements $do(X = x)$ by randomly assigning units to
     treatment, breaking all incoming edges to $X$ in the natural world
   - This is why RCTs are the gold standard: they make
@@ -226,12 +237,6 @@ system, distinguishing it from merely _observing_ the system.
   - The $do$-calculus provides an alternative path: recovering
     $\Pr(Y \mid do(X))$ from observational data under certain conditions
 
-### References
-- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapter 3
-- Judea Pearl and Dana Mackenzie, _The Book of Why_ (Basic Books, 2018),
-  Chapters 4–5
-- Miguel Hernan and James Robins, _Causal Inference: What If_ (CRC Press, 2020),
-  Chapter 2
 
 ## The Do-Calculus: Rules for Interventional Reasoning
 The $do$-calculus is a complete formal system developed by Judea Pearl for
@@ -272,6 +277,9 @@ can eliminate $do()$ from any identifiable causal query.
     effect on $Y$ in a modified graph, the intervention $do(Z)$ can be dropped
 
 - **Back-door adjustment as a special case**
+
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:267 Back-door Adjustment
+
   - A set $Z$ satisfies the _back-door criterion_ relative to $X \to Y$ if:
     - No variable in $Z$ is a descendant of $X$
     - $Z$ blocks every path from $X$ to $Y$ that has an arrow entering $X$
@@ -282,6 +290,9 @@ can eliminate $do()$ from any identifiable causal query.
     adjusting for the confounders in $Z$
 
 - **Chains, forks, and colliders — the three path motifs**
+
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:353 Chains, Forks, and Colliders
+
   - **Chain** $X \to M \to Y$
     - $M$ is a _mediator_; it transmits the causal effect of $X$ to $Y$
     - Conditioning on $M$ blocks the causal path — do _not_ control for
@@ -307,6 +318,9 @@ can eliminate $do()$ from any identifiable causal query.
   - Using variables on the causal path as controls (blocks the mediator)
 
 - **Front-door adjustment: when back-door fails**
+
+  // msml610/lectures_source/Lesson08.3-Do_Calculus.txt:477 Front-door Adjustment
+
   - When an unobserved confounder $U$ exists (no set of observables blocks all
     back-door paths), the front-door criterion may apply
   - Requires a mediator $M$ such that:
@@ -326,13 +340,6 @@ can eliminate $do()$ from any identifiable causal query.
   - If do-calculus cannot reduce a $do$-expression to observational quantities,
     the effect is not identifiable without additional assumptions or experiments
 
-### References
-- Judea Pearl, "Causal Diagrams for Empirical Research," _Biometrika_ (1995)
-- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapters 3–4
-- Ilya Shpitser and Judea Pearl, "Identification of Joint Interventional
-  Distributions in Recursive Semi-Markovian Causal Models," _AAAI_ (2006)
-- Brady Neal, "Introduction to Causal Inference," lecture notes (2020) — Chapter
-  4 (free online)
 
 ## d-Separation and Conditional Independence
 d-Separation is the graphical criterion that tells us which variables are
@@ -391,12 +398,6 @@ distribution (a quantitative object).
   - To detect collider bias: verify that you are not conditioning on common
     effects of $X$ and $Y$ or their descendants
 
-### References
-- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapter 1.2
-- Geiger, D., Verma, T., and Pearl, J., "d-Separation: From Theorems to
-  Algorithms," _Uncertainty in Artificial Intelligence_ (1990)
-- Cinelli, C., Forney, A., and Pearl, J., "A Crash Course in Good and Bad
-  Controls," _Sociological Methods and Research_ (2022)
 
 ## Potential Outcomes Framework (Rubin Causal Model) and Its Equivalence to SCMs
 The potential outcomes framework, also known as the Rubin Causal Model (RCM), is
@@ -468,15 +469,65 @@ two frameworks are mathematically equivalent for many classes of problems.
   - Use the graphical SCM when you need to reason about multiple interventions,
     mediation, selection bias, or when assumptions need to be made explicit
 
-### References
+## References
+
+### Books and Foundational Works
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt Pearl et al., The Book of Why
+- Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapters 1, 3,
+  3–4, 7
+- Judea Pearl and Dana Mackenzie, _The Book of Why_ (Basic Books, 2018),
+  Chapters 4–5
+- Russell and Norvig, _Artificial Intelligence: A Modern Approach_, 4th ed.,
+  Chapter 13
+
+### Elements of Causal Inference
+
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt Structural Causal Models
+- Jonas Peters, Dominik Janzing, and Bernhard Scholkopf, _Elements of Causal
+  Inference_ (MIT Press, 2017), Chapters 2–3, 6
+- Daphne Koller and Nir Friedman, _Probabilistic Graphical Models_ (MIT Press,
+  2009)
+
+### Potential Outcomes and Statistical Methods
+
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt Back-door Adjustment
 - Donald Rubin, "Estimating Causal Effects of Treatments in Randomized and
   Nonrandomized Studies," _Journal of Educational Psychology_ (1974)
 - Paul Rosenbaum and Donald Rubin, "The Central Role of the Propensity Score in
   Observational Studies," _Biometrika_ (1983)
-- Judea Pearl, "Potential Outcomes, Counterfactuals and Graphical Models,"
-  _Statistical Science_ (2009)
+- Miguel Hernan and James Robins, _Causal Inference: What If_ (CRC Press, 2020),
+  Chapter 2
 - Guido Imbens and Donald Rubin, _Causal Inference for Statistics, Social, and
   Biomedical Sciences_ (Cambridge University Press, 2015)
 - Guido Imbens, "Potential Outcome and Directed Acyclic Graph Approaches to
   Causality: Relevance for Empirical Practice in Economics," _Journal of
   Economic Literature_ (2020)
+- Judea Pearl, "Potential Outcomes, Counterfactuals and Graphical Models,"
+  _Statistical Science_ (2009)
+
+### Do-Calculus and Graphical Methods
+
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt Do-Calculus
+- Judea Pearl, "Causal Diagrams for Empirical Research," _Biometrika_ (1995)
+- Ilya Shpitser and Judea Pearl, "Identification of Joint Interventional
+  Distributions in Recursive Semi-Markovian Causal Models," _AAAI_ (2006)
+
+### Path Analysis and Structural Equations
+
+- Wright, S., "Correlation and Causation," _Journal of Agricultural Research_
+  (1921) — the origin of path analysis / structural equations
+- Bernhard Scholkopf et al., "Toward Causal Representation Learning," _PNAS_
+  (2021)
+
+### d-Separation and Variable Selection
+
+- Geiger, D., Verma, T., and Pearl, J., "d-Separation: From Theorems to
+  Algorithms," _Uncertainty in Artificial Intelligence_ (1990)
+- Cinelli, C., Forney, A., and Pearl, J., "A Crash Course in Good and Bad
+  Controls," _Sociological Methods and Research_ (2022)
+
+### Educational Resources
+
+- Brady Neal, "Introduction to Causal Inference," lecture notes (2020) — Chapter
+  4 (free online)
