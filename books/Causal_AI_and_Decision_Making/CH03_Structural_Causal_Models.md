@@ -480,5 +480,3 @@ two frameworks are mathematically equivalent for many classes of problems.
 - Guido Imbens, "Potential Outcome and Directed Acyclic Graph Approaches to
   Causality: Relevance for Empirical Practice in Economics," _Journal of
   Economic Literature_ (2020)
-
-## Tutorial: Pgmpy (Building and Querying Bayesian Networks and DAGs)

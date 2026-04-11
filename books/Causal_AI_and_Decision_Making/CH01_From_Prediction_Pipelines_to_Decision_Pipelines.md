@@ -34,18 +34,6 @@
   - Regulators want organizations to justify decisions, not just explain model
     outputs
 
-**References**
-
-- Pearl, J. and Mackenzie, D. _The Book of Why_ (2018)
-  - Exposition of why machine learning's pattern-matching cannot substitute for
-    causal reasoning
-- Hurwitz, J. and Thompson, M. _Causal Artificial Intelligence_ (2024)
-  - Discussion of limitations of correlation-based AI for decision-making
-- Scholkopf, B. et al. "Toward Causal Representation Learning" _Journal of
-  Machine Learning Research_ (2021)
-  - Formal treatment of why current ML architectures are insufficient for causal
-    inference
-
 ## Correlation, Association, and the Illusion of Understanding
 - **Association** is a statistical property: two variables move together
   - Humans naturally observe that X and Y co-occur and infer a relationship
@@ -95,17 +83,6 @@
     - But when search behavior changed (media hype, algorithm changes), the
       model collapsed
     - The query-flu correlation was fragile; no causal understanding existed
-
-**References**
-
-- Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)
-  - Formal definitions of association, causation, and confounding
-- Angrist, J. D. and Pischke, J.-S. _Mostly Harmless Econometrics_ (2009)
-  - Practical treatment of confounding and how to identify causal relationships
-    from data
-- Lazar, D. et al. "The Parable of Google Flu: Traps in Big Data Analysis"
-  _Science_ (2014)
-  - Case study of spurious correlation and distribution shift at scale
 
 ## Three Kinds of Questions: Association, Intervention, Counterfactual (Pearl's Ladder)
 - Judea Pearl's **Ladder of Causation** distinguishes three types of questions
@@ -189,17 +166,6 @@
     anyway?"
   - Without counterfactuals, you cannot learn from experience
 
-**References**
-
-- Pearl, J. _The Book of Why_ (2018)
-  - Accessible exposition of the Ladder of Causation with examples
-- Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)
-  - Formal mathematical treatment of association, intervention, and
-    counterfactuals
-- Hernán, M. A. and Robins, J. M. _Causal Inference: What If_ (2020)
-  - Rigorous treatment of intervention and counterfactual reasoning in
-    epidemiology and beyond
-
 ## A Roadmap: From Prediction to Causal Reasoning to Decision Intelligence
 - The evolution of data and AI reflects increasing sophistication in answering
   business questions
@@ -270,21 +236,6 @@
   - Use causal graphs for reasoning (understanding mechanisms)
   - Use decision theory to choose actions (optimizing under uncertainty)
 
-**References**
-
-- Hurwitz, J. and Thompson, M. _Causal Artificial Intelligence_ (2024)
-  - Overview of the evolution from analytics to causal AI
-- Russell, S. and Norvig, P. _Artificial Intelligence: A Modern Approach_ (4th
-  ed., 2020)
-  - Chapter on learning agents and the limitations of purely associational
-    systems
-- Pearl, J. _The Book of Why_ (2018)
-  - Why the next revolution in AI must be causal
-- Pearl, J. and Mackenzie, D. _The Book of Why_ (2018)
-  - The "three-table" representation of cause, effect, and confounding
-
-## TUTORIAL: DoWhy (end-to-end Causal Reasoning From Observational Data)
-
 # From Prediction Pipelines to Decision Pipelines
 // msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
 // https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf
@@ -333,18 +284,6 @@
   - The pipeline predicts; the decision layer acts - but the decision layer is
     rarely modeled as rigorously as the prediction layer
 
-### How Production ML Systems Make Decisions Today
-- Burkov, A. _The Hundred-Page Machine Learning Book_ (2019)
-  - Accessible overview of supervised, unsupervised, and reinforcement learning
-    paradigms with emphasis on practical pipeline organization
-- Russell, S. and Norvig, P. _Artificial Intelligence: A Modern Approach_ (4th
-  ed., 2020)
-  - Chapter 18-19 on learning agents and building ML pipelines
-- Hastie, T., Tibshirani, R., and Friedman, J. _The Elements of Statistical
-  Learning_ (2nd ed., 2009)
-  - Chapter 7 on model assessment and selection, foundational for understanding
-    pipeline evaluation
-
 ## Feedback Loops and Distribution Shift
 - Production ML systems do not operate in a static world
   - The data-generating process changes over time
@@ -385,17 +324,6 @@
   - Designing retraining schedules that account for concept drift
   - Building causal models that separate stable relationships from unstable
     correlations
-
-### Feedback Loops and Distribution Shift
-- Quionero-Candela, J. et al. _Dataset Shift in Machine Learning_ (2009)
-  - Comprehensive treatment of covariate shift, label shift, and concept drift
-- Sculley, D. et al. "Hidden Technical Debt in Machine Learning Systems"
-  (NeurIPS 2015)
-  - Production ML failures including feedback loop and distribution shift
-    failure modes
-- Lazer, D. et al. "The Parable of Google Flu: Traps in Big Data Analysis"
-  _Science_ (2014)
-  - Case study of distribution shift and spurious correlation at scale
 
 ## Optimization Vs. Inference Vs. Decision Theory
 - Production ML conflates three conceptually distinct tasks:
@@ -489,18 +417,6 @@
   - The gap between accuracy and decision quality is the cost of ignoring
     causality
 
-### Optimization Vs. Inference Vs. Decision Theory
-- Berger, J. O. _Statistical Decision Theory and Bayesian Analysis_ (2nd
-  ed., 1985)
-  - Foundational treatment of decision theory, expected utility, and Bayesian
-    decision-making
-- Sutton, R. S. and Barto, A. G. _Reinforcement Learning: An Introduction_ (2nd
-  ed., 2018)
-  - Definitive text on RL as a framework for sequential decision-making under
-    uncertainty
-- Manski, C. F. _Identification Problems in the Social Sciences_ (1995)
-  - The gap between what inference can establish and what decisions require
-
 ## Data Science Vs. Decision Science
 - **Data Science** focuses on extracting patterns from data
   - Core questions: "What happened?", "What is likely to happen?"
@@ -544,16 +460,28 @@
   - Design experiments when observational data is insufficient
   - Use counterfactual reasoning to evaluate policies after the fact
 
-### Data Science Vs. Decision Science
-- Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)
-  - Formal treatment of Pearl's Ladder of Causation and the distinction between
-    associational and interventional reasoning
+## References
+
+- Angrist, J. D. and Pischke, J.-S. _Mostly Harmless Econometrics_ (2009)
+- Berger, J. O. _Statistical Decision Theory and Bayesian Analysis_ (2nd ed., 1985)
+- Burkov, A. _The Hundred-Page Machine Learning Book_ (2019)
+- Hastie, T., Tibshirani, R., and Friedman, J. _The Elements of Statistical
+  Learning_ (2nd ed., 2009)
 - Hernán, M. A. and Robins, J. M. _Causal Inference: What If_ (2020)
-  - Rigorous treatment of the gap between observational data and causal
-    decision-making in epidemiology and beyond
+- Hurwitz, J. and Thompson, M. _Causal Artificial Intelligence_ (2024)
+- Lazer, D. et al. "The Parable of Google Flu: Traps in Big Data Analysis"
+  _Science_ (2014)
+- Manski, C. F. _Identification Problems in the Social Sciences_ (1995)
+- Pearl, J. and Mackenzie, D. _The Book of Why_ (2018)
+- Pearl, J. _Causality: Models, Reasoning, and Inference_ (2nd ed., 2009)
+- Quionero-Candela, J. et al. _Dataset Shift in Machine Learning_ (2009)
+- Russell, S. and Norvig, P. _Artificial Intelligence: A Modern Approach_ (4th
+  ed., 2020)
+- Scholkopf, B. et al. "Toward Causal Representation Learning" _Journal of
+  Machine Learning Research_ (2021)
+- Sculley, D. et al. "Hidden Technical Debt in Machine Learning Systems"
+  (NeurIPS 2015)
 - Spirtes, P., Glymour, C., and Scheines, R. _Causation, Prediction, and Search_
   (2nd ed., 2000)
-  - Foundational text on causal discovery and the role of causal structure in
-    building decision-relevant models
-
-## TUTORIAL: Pgmpy (Bayesian Decision Networks and Decision Pipeline Modeling)
+- Sutton, R. S. and Barto, A. G. _Reinforcement Learning: An Introduction_ (2nd
+  ed., 2018)
