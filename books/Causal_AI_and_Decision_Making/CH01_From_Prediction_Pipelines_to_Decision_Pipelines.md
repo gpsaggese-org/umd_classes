@@ -1,7 +1,12 @@
 // msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
-// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
+// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
+
+# From Prediction Pipelines to Decision Pipelines
 
 ## What ML Systems Can and Cannot Tell You
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:45  "Why Causal AI?"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:91  "Problem 1: Association vs Correlation"
+
 - Traditional machine learning excels at **finding patterns** in historical data
   - Models learn statistical associations: "when X occurs, Y tends to follow"
   - This works well for prediction tasks where the future resembles the past
@@ -35,6 +40,9 @@
     outputs
 
 ## Correlation, Association, and the Illusion of Understanding
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:103  "Correlation is Not Causation!"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:123  "Correlation is Not Causation: Examples"
+
 - **Association** is a statistical property: two variables move together
   - Humans naturally observe that X and Y co-occur and infer a relationship
   - Association is powerful for prediction but dangerous for decision-making
@@ -85,11 +93,15 @@
     - The query-flu correlation was fragile; no causal understanding existed
 
 ## Three Kinds of Questions: Association, Intervention, Counterfactual (Pearl's Ladder)
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:228  "The Ladder of Causation"
+
 - Judea Pearl's **Ladder of Causation** distinguishes three types of questions
   - Each rung requires stronger reasoning than the one below
   - Most current AI operates only at the bottom rung
 
 ### Rung 1: Association (Observing)
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:245  "Rung 1: Association"
+
 - **Question**: "How would seeing X change our belief in Y?"
 - **Mathematical notation**: $\Pr(Y|X)$ (the conditional probability of Y given
   X)
@@ -111,6 +123,8 @@
     for action
 
 ### Rung 2: Intervention (Doing)
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:261  "Rung 2: Intervention"
+
 - **Question**: "What happens to Y if you do X?" or "What if we intervened on
   X?"
 - **Mathematical notation**: $\Pr(Y | do(X), Z)$ (the probability of Y if we
@@ -139,6 +153,8 @@
     you fail because the causal direction runs the other way
 
 ### Rung 3: Counterfactuals (Imagining)
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:278  "Rung 3: Counterfactuals"
+
 - **Question**: "Was X the reason Y occurred?" or "What would have happened if
   we had done differently?"
 - **Mathematical notation**: $\Pr(Y_{X=x'} | X=x, Y=y')$ (the probability Y
@@ -167,6 +183,9 @@
   - Without counterfactuals, you cannot learn from experience
 
 ## A Roadmap: From Prediction to Causal Reasoning to Decision Intelligence
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:72  "Data Analytics Sophistication"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:299  "Correlation vs Causation Model"
+
 - The evolution of data and AI reflects increasing sophistication in answering
   business questions
 
@@ -213,7 +232,9 @@
     distribution shift
   - Weaknesses: Requires domain expertise, more complex, less data-hungry
 
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:329  "Causation-based Model Process"
 - **Causal AI process**:
+
   1. What is the intended outcome we want to achieve?
   2. What interventions are possible (which variables can we change)?
   3. What are the confounding factors (hidden causes that affect both outcomes
@@ -236,26 +257,8 @@
   - Use causal graphs for reasoning (understanding mechanisms)
   - Use decision theory to choose actions (optimizing under uncertainty)
 
-# From Prediction Pipelines to Decision Pipelines
-// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
-// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf
-
 ## How Production ML Systems Make Decisions Today
-- Most production ML systems are **prediction pipelines**
-  - Break a complex problem into sub-problems
-  - Solve each sub-problem independently with a specialized model
-  - Chain solutions together to produce a final output
-  - E.g., an OCR pipeline: text detection → character segmentation → character
-    classification → spelling correction
-
-- The key idea behind pipeline design is **decomposition**:
-
-  $$
-  p_{\text{system}} = \sum_i p_i \cdot \alpha_i
-  $$
-
-  where $p_i$ is the performance of each stage and $\alpha_i$ is its relative
-  importance to the overall system
+// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt:230  "Machine Learning Flow (1/2)"
 
 - Production ML systems follow a structured flow:
   - **Question**: Define the prediction target precisely
@@ -272,6 +275,8 @@
   - **Evaluation**: Measure performance on held-out data using task-appropriate
     metrics
 
+// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt:244  "Machine Learning Flow (2/2)"
+
 - The hierarchy matters:
   - Question $>$ Data $>$ Features $>$ Algorithm
   - Teams usually over-invest in model selection while under-investing in
@@ -281,7 +286,7 @@
   - A fraud detection model outputs a probability score
   - A business rule (threshold, policy) converts the score into an action
   - This separation is often unexamined and poorly audited
-  - The pipeline predicts; the decision layer acts - but the decision layer is
+  - The pipeline predicts; the decision layer acts, but the decision layer is
     rarely modeled as rigorously as the prediction layer
 
 ## Feedback Loops and Distribution Shift
@@ -326,6 +331,8 @@
     correlations
 
 ## Optimization Vs. Inference Vs. Decision Theory
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:220  "Machine Learning and Decision Making"
+
 - Production ML conflates three conceptually distinct tasks:
   1. **Inference**: estimating a quantity from data
      - E.g., "What is the probability this customer churns?"
@@ -371,6 +378,9 @@
     healthcare
 
 ## The Cost of Ignoring Causality: Concrete Failure Modes
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:145  "Problem 2: Decision Making"
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:158  "Problem 3: ML Explainability"
+
 - **Spurious correlation** - The model learns associations that do not hold
   under intervention
   - E.g., Google Flu Trends predicted flu prevalence from search queries but
@@ -418,6 +428,9 @@
     causality
 
 ## Data Science Vs. Decision Science
+// msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt:299  "Correlation vs Causation Model"
+// msml610/lectures_source/Lesson02.2-ML_Paradigms.txt:278  "Question"
+
 - **Data Science** focuses on extracting patterns from data
   - Core questions: "What happened?", "What is likely to happen?"
   - Tools: statistics, ML, visualization, data engineering
