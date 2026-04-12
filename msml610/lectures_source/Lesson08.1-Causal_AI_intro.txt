@@ -35,11 +35,11 @@ MSML610: Advanced Machine Learning
 :::
 
 # ##############################################################################
-# Causal AI
+# Introduction and Motivation
 # ##############################################################################
 
 ## #############################################################################
-## Why Causal AI?
+## Background
 ## #############################################################################
 
 * Big Data and Traditional AI
@@ -86,6 +86,14 @@ MSML610: Advanced Machine Learning
 // ![](msml610/lectures_source/figures/L08.1_Lesson09-Dashboard.png)
 
 // TODO: Improve the following
+
+# ##############################################################################
+# Why Causal AI Matters
+# ##############################################################################
+
+## #############################################################################
+## Problems with Traditional AI
+## #############################################################################
 
 * Problem 1: Association vs Correlation
 - Easy to overfit
@@ -224,7 +232,13 @@ MSML610: Advanced Machine Learning
 - ML is terrible for decision making when there are interventions
   - ML models can be useless or harmful
 
+# ##############################################################################
+# Causal AI Fundamentals
+# ##############################################################################
+
+## #############################################################################
 ## The Ladder of Causation
+## #############################################################################
 
 * The Ladder of Causation
 
@@ -343,7 +357,7 @@ MSML610: Advanced Machine Learning
 # ##############################################################################
 
 ## #############################################################################
-## Modeling Processes
+## Business Context and Motivation
 ## #############################################################################
 
 * Digital Transformation in Business
@@ -369,6 +383,54 @@ MSML610: Advanced Machine Learning
   - **Data-driven decision making**
     - Leverage big data, machine learning, and real-time analytics to make
       smarter, faster, and more strategic decisions
+
+* Why ML / AI Projects Fail?
+- **AI projects fail** because they approach problems only from a ML perspective
+  - Data scientists:
+    - Focus on model accuracy and technical metrics
+    - Work in isolation from domain experts, business users, and data engineers
+  - Lack of understanding of problem context leads to irrelevant solutions
+
+- **Misalignment with business goals**
+  - Models solve the wrong problem or answer irrelevant questions
+
+- **Black-box models** fail to solve real-world problems
+  - Models are difficult to interpret or explain to stakeholders
+  - Lack of transparency reduces trust and adoption
+
+- **Data issues** undermine model performance
+  - Poor quality, missing, or biased data
+
+- **Deployment and integration challenges**
+  - Models not easily integrated into production systems
+  - Real-time constraints or infrastructure limitations
+
+- **Lack of feedback loops**
+  - No process for monitoring model performance post-deployment
+
+* How to Make ML / AI Project Succeed
+
+1. **Create a hybrid team**
+   - Organizations are complex
+   - Single group lacks skills for difficult problems
+   - Hybrid team:
+     - Represents all business aspects
+     - Uses collaborative framework
+     - Communicates with a single language (e.g., DAGs)
+     - Team size varies by company and project complexity
+
+2. **Meet regularly to ensure continuity**
+
+3. **Find an executive sponsor**
+   - Understands project's goals and potential
+
+4. **Initial pilot**
+   - Small team for targeted problem
+   - Demonstrate AI approach merit
+
+## #############################################################################
+## The Causal AI Workflow
+## #############################################################################
 
 * AI in Business
 
@@ -559,52 +621,8 @@ digraph CausalFlowGrid {
 - **Goal**: Deliver measurable business value
 
 ## #############################################################################
-## Roles
+## Roles and Explainability
 ## #############################################################################
-
-* Why ML / AI Projects Fail?
-- **AI projects fail** because they approach problems only from a ML perspective
-  - Data scientists:
-    - Focus on model accuracy and technical metrics
-    - Work in isolation from domain experts, business users, and data engineers
-  - Lack of understanding of problem context leads to irrelevant solutions
-
-- **Misalignment with business goals**
-  - Models solve the wrong problem or answer irrelevant questions
-
-- **Black-box models** fail to solve real-world problems
-  - Models are difficult to interpret or explain to stakeholders
-  - Lack of transparency reduces trust and adoption
-
-- **Data issues** undermine model performance
-  - Poor quality, missing, or biased data
-
-- **Deployment and integration challenges**
-  - Models not easily integrated into production systems
-  - Real-time constraints or infrastructure limitations
-
-- **Lack of feedback loops**
-  - No process for monitoring model performance post-deployment
-
-* How to Make ML / AI Project Succeed
-
-1. **Create a hybrid team**
-   - Organizations are complex
-   - Single group lacks skills for difficult problems
-   - Hybrid team:
-     - Represents all business aspects
-     - Uses collaborative framework
-     - Communicates with a single language (e.g., DAGs)
-     - Team size varies by company and project complexity
-
-2. **Meet regularly to ensure continuity**
-
-3. **Find an executive sponsor**
-   - Understands project's goals and potential
-
-4. **Initial pilot**
-   - Small team for targeted problem
-   - Demonstrate AI approach merit
 
 * Roles in Hybrid Teams
 
