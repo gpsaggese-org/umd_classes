@@ -302,8 +302,6 @@ No subdirectories.
   > process_lessons.py --lectures 0*:1* --class data605 --action generate_pdf
   ```
 
-# DATA605 / To reorg
-
 ## Check correctness of all the slides
 
 - Check one lecture from inside the container (advanced)
@@ -324,7 +322,6 @@ No subdirectories.
   This uses AI to improve the content and formatting of the slides.
 
 ## Reduce all slides
-
 
 - Reduce from inside the container (advanced)
   ```bash
@@ -369,114 +366,6 @@ No subdirectories.
   ```
   This generates a script for slides 1-5, grouping 3 slides at a time.
 
-## Count pages
-
-- Count pages for all PDFs (simple method - recommended)
-  ```bash
-  > count_pages.sh
-  ```
-  This displays the page count for all lecture PDFs.
-
-- Count pages and copy to clipboard
-  ```bash
-  > count_pages.sh | pbcopy
-  ```
-  This counts pages and copies the results to your clipboard.
-
-- Example output:
-  ```
-  data605/lectures/Lesson01.1-Intro.pdf   10
-  data605/lectures/Lesson01.2-Big_Data.pdf        17
-  data605/lectures/Lesson01.3-Is_Data_Science_Just_Hype.pdf       14
-  ```
-
-- Manual count with find (alternative method)
-  ```bash
-  > find data605/lectures/Lesson0*.pdf -type f -name "*.pdf" -print -exec mdls -name kMDItemNumberOfPages {} \;
-  ```
-
-- Manual count with formatting (advanced)
-  ```bash
-  > find data605/lectures/Lesson0*.pdf -type f -name "*.pdf" -print0 | while IFS= read -r -d '' file; do     pages=$(mdls -name kMDItemNumberOfPages "$file" | awk -F'= ' '{print $2}');     echo -e "${file}\t${pages}"; done | tee tmp.txt
-  ```
-  This creates a formatted table and saves it to tmp.txt.
-
-## Count words
-
-- Count words in all scripts (simple method - recommended)
-  ```bash
-  > ./count_words.sh
-  ```
-  This counts the number of words in each lecture script file.
-
-- Manual word count (alternative method)
-  ```bash
-  > dir="data605/lectures_script/"; for f in "$dir"/*; do [ -f "$f" ] && printf "%s\t%s\n" "$(basename "$f")" "$(wc -w < "$f")"; done
-  ```
-  This loops through all script files and counts words for each.
-
-## Review scripts
-
-- Generate and edit script for a specific lesson
-  ```bash
-  > TAG=10.1; gen_data605.sh $TAG; vi $(ls data605/lectures_script/*${TAG}*)
-  ```
-  This generates the script for Lesson 10.1 and opens it in vi for editing.
-
-- Open PDF and edit script side-by-side
-  ```bash
-  > TAG=08.3; open data605/lectures/Lesson${TAG}*.pdf; vi $(ls data605/lectures_script/*${TAG}*)
-  ```
-  This opens the PDF slides and the script file for Lesson 08.3 for comparison/editing.
-
-## Format figures in slides
-
-- Format figures in a specific lecture
-  ```bash
-  > FILE=data605/lectures_source/Lesson02-Git_Data_Pipelines.txt
-  > process_slides.py --in_file $FILE --action slide_format_figures --out_file $FILE --use_llm_transform
-  ```
-  This reformats figure references in the slides using LLM assistance.
-
-# MSML610 / To Reorg
-
-## Quick commands
-
-- Navigate to project root
-  ```bash
-  > cd $GIT_ROOT
-  ```
-
-- Generate slides for DATA605 lesson
-  ```bash
-  > gen_data605.sh 01
-  ```
-  This generates all materials for DATA605 Lesson 01.
-
-- Generate slides for MSML610 lesson
-  ```bash
-  > gen_msml610.sh 02
-  ```
-  This generates all materials for MSML610 Lesson 02.
-
-## Process MSML610 slides
-
-- Format figures and check slides
-  ```bash
-  > FILE=msml610/lectures_source/Lesson05*
-  > process_slides.py --in_file $FILE --action slide_format_figures --out_file $FILE --use_llm_transform
-  > process_slides.py --in_file $FILE --action slide_check --out_file ${FILE}.check --use_llm_transform --limit None:10
-  ```
-  This formats figures in Lesson 05 and checks the first 10 slides.
-
-## Sync and open lectures
-
-- Sync lectures from remote server and open
-  ```bash
-  > rsync -avz -e "ssh -i ~/.ssh/ck/saggese-cryptomatic.pem" saggese@$DEV1:/data/saggese/src/umd_classes1/msml610/lectures/ msml610/lectures/; open msml610/lectures/*07.1* -a "skim"
-  ```
-  This downloads Lesson 07.1 from the remote server and opens it in Skim.
-
 ## Convert markdown to PDF
 
 - Convert markdown notes to PDF slides
@@ -510,7 +399,6 @@ No subdirectories.
   This uses GPT-4o to fix and improve the slides based on the prompt template.
 
 # process_lessons.py
-
 ## Goal
 
 This script generates PDF slides and/or reading scripts for lecture materials, and
