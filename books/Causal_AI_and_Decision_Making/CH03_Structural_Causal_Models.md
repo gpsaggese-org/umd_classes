@@ -1,3 +1,9 @@
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt
+// msml610/lectures/Lesson08.2-Causal_Networks.pdf
+
+// msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+// msml610/lectures/Lesson08.3-Do_Calculus.pdf
+
 # Structural Causal Models
 
 ## Causal Graphs (DAGs) as a Reasoning Formalism
@@ -5,19 +11,20 @@
 // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:43 Causal DAGs
 // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:129 Causal DAG
 
-A Directed Acyclic Graph (DAG) is the lingua franca of modern causal inference.
-Before we can estimate causal effects or reason about interventions, we need a
-language for expressing _who causes whom_. DAGs provide exactly that — a visual
-and mathematical representation of causal assumptions that makes them explicit,
-testable, and communicable.
+- Before we can estimate causal effects or reason about interventions, we need a
+  language for expressing _who causes whom_
+
+- A Directed Acyclic Graph (DAG) provides exactly that: a visual and
+  mathematical representation of causal assumptions that makes them explicit,
+  testable, and communicable.
 
 - **What is a DAG?**
   - **Directed**: every edge has an arrow indicating the direction of causation
     ($X \to Y$ means "$X$ causes $Y$")
   - **Acyclic**: no variable can be both a cause and a downstream effect of
-    itself — causality respects temporal order
-  - Nodes represent random variables; edges represent direct causal
-    relationships
+    itself: causality needs to respect temporal order
+  - Nodes represent random variables
+  - Edges represent direct causal relationships
 
 - **Bayesian networks vs. causal networks**
   - An ordinary Bayesian network represents a joint probability distribution
@@ -59,13 +66,12 @@ testable, and communicable.
   - Acyclicity rules out feedback loops and simultaneous causation (though
     extensions exist)
 
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:204 Example: Tornado Warning
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:253 Tornado Warning: Level 1 (Association)
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:301 Tornado Warning: Level 2 (Intervention)
+// msml610/lectures_source/Lesson08.2-Causal_Networks.txt:357 Tornado Warning: Level 3 (Counterfactual)
+
 - **A worked example: Tornado Warning**
-
-  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:204 Example: Tornado Warning
-  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:253 Tornado Warning: Level 1 (Association)
-  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:301 Tornado Warning: Level 2 (Intervention)
-  // msml610/lectures_source/Lesson08.2-Causal_Networks.txt:357 Tornado Warning: Level 3 (Counterfactual)
-
   - Variables: $T$ (tornado forms), $W$ (warning issued), $A$ (radio
     broadcasts), $B$ (TV broadcasts), $R$ (residents warned)
   - Graph: $T \to W \to A \to R$, $W \to B \to R$
@@ -473,7 +479,6 @@ two frameworks are mathematically equivalent for many classes of problems.
 
 ### Books and Foundational Works
 
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt Pearl et al., The Book of Why
 - Judea Pearl, _Causality_ (Cambridge University Press, 2009), Chapters 1, 3,
   3–4, 7
 - Judea Pearl and Dana Mackenzie, _The Book of Why_ (Basic Books, 2018),
@@ -483,7 +488,6 @@ two frameworks are mathematically equivalent for many classes of problems.
 
 ### Elements of Causal Inference
 
-// msml610/lectures_source/Lesson08.2-Causal_Networks.txt Structural Causal Models
 - Jonas Peters, Dominik Janzing, and Bernhard Scholkopf, _Elements of Causal
   Inference_ (MIT Press, 2017), Chapters 2–3, 6
 - Daphne Koller and Nir Friedman, _Probabilistic Graphical Models_ (MIT Press,
@@ -491,7 +495,6 @@ two frameworks are mathematically equivalent for many classes of problems.
 
 ### Potential Outcomes and Statistical Methods
 
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt Back-door Adjustment
 - Donald Rubin, "Estimating Causal Effects of Treatments in Randomized and
   Nonrandomized Studies," _Journal of Educational Psychology_ (1974)
 - Paul Rosenbaum and Donald Rubin, "The Central Role of the Propensity Score in
@@ -508,7 +511,6 @@ two frameworks are mathematically equivalent for many classes of problems.
 
 ### Do-Calculus and Graphical Methods
 
-// msml610/lectures_source/Lesson08.3-Do_Calculus.txt Do-Calculus
 - Judea Pearl, "Causal Diagrams for Empirical Research," _Biometrika_ (1995)
 - Ilya Shpitser and Judea Pearl, "Identification of Joint Interventional
   Distributions in Recursive Semi-Markovian Causal Models," _AAAI_ (2006)

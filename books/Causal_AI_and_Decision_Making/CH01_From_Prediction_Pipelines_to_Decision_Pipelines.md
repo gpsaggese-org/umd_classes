@@ -1,10 +1,8 @@
 // msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
 // msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
-// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf
 
 // msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
 // msml610/lectures/Lesson02.2-ML_Paradigms.pdf
-// https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf
 
 # From Prediction Pipelines to Decision Pipelines
 
