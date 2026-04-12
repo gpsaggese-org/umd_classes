@@ -8,11 +8,11 @@
   - What is Machine Learning?
 
 # msml610/lectures_source/Lesson01.2-The_Foundations_of_AI.txt
-  - The Foundations of AI
+- The Foundations of AI
 
 # msml610/lectures_source/Lesson01.3-Brief_History_of_AI.txt
-  - Brief History of AI
-  - Risks and Benefits of AI
+- Brief History of AI
+- Risks and Benefits of AI
 
 # msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.txt
 - A Map of Machine Learning
@@ -25,26 +25,26 @@
   - Pipeline Organization
 
 # msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt
-  - Input Processing
+- Input Processing
 
 # msml610/lectures_source/Lesson02.4-ML_Techniques_Model_Learning.txt
-  - Learning Algorithms
-    - Gradient Descent
-    - Stochastic Gradient Descent
+- Learning Algorithms
+  - Gradient Descent
+  - Stochastic Gradient Descent
 
 # msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt
-  - Performance Metrics
-    - Precision and Recall
-  - Model Selection
-  - Aggregation
-    - Bagging
-    - Boosting
-    - Stacking
+- Performance Metrics
+  - Precision and Recall
+- Model Selection
+- Aggregation
+  - Bagging
+  - Boosting
+  - Stacking
 
 # msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt
-  - How to Do Research
-    - Simple Is Better
-    - Research Methodology
+- How to Do Research
+  - Simple Is Better
+  - Research Methodology
 
 # msml610/lectures_source/Lesson03-Knowledge_representation.txt
 - Knowledge Representation
@@ -65,22 +65,22 @@
   - Semantic Web
 
 # msml610/lectures_source/Lesson04.1-Models.txt
-  - Naive Bayes Model
-  - Decision Trees
-  - Random Forests
-  - Linear Models
-  - Perceptron
+- Naive Bayes Model
+- Decision Trees
+- Random Forests
+- Linear Models
+- Perceptron
 
 # msml610/lectures_source/Lesson04.2-Models.txt
-  - Logistic Regression
-  - LDA, QDA
-  - Kernel Methods
-  - Support Vector Machines (Optional)
+- Logistic Regression
+- LDA, QDA
+- Kernel Methods
+- Support Vector Machines (Optional)
 
 # msml610/lectures_source/Lesson04.3-Models.txt
-  - Similarity-Based Models
-  - Clustering
-  - Anomaly Detection
+- Similarity-Based Models
+- Clustering
+- Anomaly Detection
 
 # msml610/lectures_source/Lesson05.1-Learning_Theory.txt
 - Is Machine Learning Even Possible?
@@ -160,13 +160,14 @@
   - Types of Paths in Causal AI
 
 # msml610/lectures_source/Lesson08.3-Do_Calculus.txt
-  - Intervention and Counterfactuals
-  - Randomized Controlled Trial
-  - Back-door Adjustment
-  - Front-door Adjustment
-  - Do-Calculus
+- Intervention and Counterfactuals
+- Randomized Controlled Trial
+- Back-door Adjustment
+- Front-door Adjustment
+- Do-Calculus
 
 # msml610/lectures_source/Lesson08.4.txt
+- TODO
 
 # msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt
 - Business Processes Around Data Modeling

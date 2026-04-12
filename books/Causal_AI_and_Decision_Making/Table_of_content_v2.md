@@ -12,8 +12,6 @@
 - A roadmap: from prediction to causal reasoning to decision intelligence
 - TUTORIAL: DoWhy (end-to-end causal reasoning from observational data)
 
-[msml610/lectures_source/Lesson02.2-ML_Paradigms.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson02.2-ML_Paradigms.pdf)
-
 - How production ML systems make decisions today
 - Feedback loops and distribution shift
 - Optimization vs. inference vs. decision theory
@@ -28,7 +26,6 @@
 - Spurious correlations and Simpson's paradox
 - Confounding variables and colliders
 - Causal questions vs. predictive questions
-- DAGs and d-separation: the language of causal reasoning
 - TUTORIAL: DoWhy (illustrating the difference between correlation and causal
   effect)
 - TUTORIAL: CausalImpact (detecting causal impact of interventions vs. spurious

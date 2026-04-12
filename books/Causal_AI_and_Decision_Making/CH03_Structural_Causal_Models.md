@@ -23,22 +23,25 @@
     ($X \to Y$ means "$X$ causes $Y$")
   - **Acyclic**: no variable can be both a cause and a downstream effect of
     itself: causality needs to respect temporal order
-  - Nodes represent random variables
-  - Edges represent direct causal relationships
+  - **Nodes** represent random variables
+  - **Edges** represent direct causal relationships
+
+// TODO(gp): Add Bayesian networks
 
 - **Bayesian networks vs. causal networks**
   - An ordinary Bayesian network represents a joint probability distribution
     using conditional independence structure
   - The same joint distribution can often be represented by multiple graphs with
     different edge directions
-  - E.g., both $Fire \to Smoke$ and $Smoke \to Fire$ can encode the same
-    statistical relationship
+    - E.g., both $Fire \to Smoke$ and $Smoke \to Fire$ can encode the same
+      statistical relationship
   - A **causal** network uses only edges that reflect true cause-and-effect
     relationships grounded in domain knowledge and the laws of nature
-  - The direction of edges now has a physical meaning: $Fire \to Smoke$ is
-    correct; $Smoke \to Fire$ is not
-  - The asymmetry matters for interventions: extinguishing fire stops smoke;
-    removing smoke does not extinguish fire
+  - The direction of edges now has a physical meaning
+    - E.g., $Fire \to Smoke$ is correct; $Smoke \to Fire$ is not
+  - The asymmetry matters for interventions
+    - E.g., extinguishing fire stops smoke; removing smoke does not extinguish
+      fire
 
 - **Structural equations as assignments**
   - Causal relationships are better understood as _assignments_ than as
