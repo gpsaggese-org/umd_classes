@@ -43,37 +43,30 @@ slide quality through automated LLM-powered transformations.
 # Available Scripts Reference
 
 ## Counting and Analysis Scripts
+**`count_book_pages.py`**
 
-### `count_book_pages.py`
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
-
-**Usage:**
-
 - Count pages for a specific class:
   ```bash
   > ./count_book_pages.py data605
   > ./count_book_pages.py msml610
   ```
 
-### `count_lecture_pages.py`
+**`count_lecture_pages.py`**
+
 - Counts pages in all PDF files in the `{DIR}/lectures/` directory and displays
   page counts for each lecture PDF file
-
-**Usage:**
-
 - Count pages for lecture PDFs:
   ```bash
   > ./count_lecture_pages.py data605
   > ./count_lecture_pages.py msml610
   ```
 
-### `count_words.py`
+**`count_words.py`**
+
 - Counts words in all files in the `{DIR}/lectures_script/` directory to help
   track lecture length and content volume
-
-**Usage:**
-
 - Count words in lecture scripts:
   ```bash
   > ./count_words.py data605
@@ -81,55 +74,47 @@ slide quality through automated LLM-powered transformations.
   ```
 
 ## Generation Scripts
+**`gen_slides.py`**
 
-### `gen_slides.py`
 - Generates lecture slide PDFs from source files using `notes_to_pdf.py` to
   convert markdown to PDF
 - Accepts additional options to pass through to `notes_to_pdf.py`
-
-**Usage:**
-
 - Generate slides with default settings:
   ```bash
   > ./gen_slides.py data605 01.1
   ```
-
 - Generate slides with custom theme:
   ```bash
   > ./gen_slides.py msml610 02.3 --theme dark
   ```
 
-### `gen_lecture_script.py`
+**`gen_lecture_script.py`**
+
 - Generates complete lecture scripts from slides using LLM
 - Automatically creates intro and outro sections, combines all sections, and
   lints the final output
-
-**Usage:**
-
 - Generate lecture script:
   ```bash
   > ./gen_lecture_script.py data605 01.1
   ```
-
 - Generate script with forced regeneration:
   ```bash
   > ./gen_lecture_script.py msml610 02.3 --force
   ```
 
-### `gen_book_chapter.py`
+**`gen_book_chapter.py`**
+
 - Generates a book chapter from lecture source material
 - Performs PDF generation, chapter creation, and pandoc conversion, then opens
   the final PDF in Skim viewer
-
-**Usage:**
-
 - Generate book chapter:
   ```bash
   > ./gen_book_chapter.py data605 01.1
   > ./gen_book_chapter.py msml610 02.3
   ```
 
-### `gen_quizzes.py`
+**`gen_quizzes.py`**
+
 - Generates questions from lecture content using LLM
 - Supports two modes:
   - **Multiple choice quizzes**: 20 questions with 5 answers each →
@@ -138,91 +123,72 @@ slide quality through automated LLM-powered transformations.
     `{DIR}/lectures_recap/<lesson>.recap.md`
 - Automatically formats output using `lint_txt.py` with prettier (use
   `--no_lint` to skip)
-
-**Usage:**
-
 - Generate multiple choice quiz:
   ```bash
   > ./gen_quizzes.py --for_class_quizzes data605 01.1
   ```
-
 - Generate discussion questions:
   ```bash
   > ./gen_quizzes.py --for_class_recap msml610 02.3
   ```
-
 - Generate without linting:
   ```bash
   > ./gen_quizzes.py --for_class_recap data605 01.2 --no_lint
   ```
-
 - Generate with specific model:
   ```bash
   > ./gen_quizzes.py --for_class_quizzes data605 01.1 --model gpt-4
   ```
 
 ## Slide Improvement Scripts
+**`slide_check.py`**
 
-### `slide_check.py`
 - Checks and fixes text in lecture slides using LLM
 - Corrects spelling, grammar, and formatting issues using `process_slides.py`
   with `text_check_fix` action
-
-**Usage:**
-
 - Check and fix slides:
   ```bash
   > ./slide_check.py data605 01.1
   ```
-
 - Preview changes without executing:
   ```bash
   > ./slide_check.py msml610 02.3 --dry-run
   ```
 
-### `slide_improve.py`
+**`slide_improve.py`**
+
 - Improves lecture slides using LLM suggestions
 - Enhances clarity, structure, and pedagogical effectiveness using
   `process_slides.py` with `slide_improve` action
-
-**Usage:**
-
 - Improve slides:
   ```bash
   > ./slide_improve.py data605 01.1
   ```
-
 - Limit suggestions:
   ```bash
   > ./slide_improve.py msml610 02.3 --max-suggestions 5
   ```
 
-### `slide_reduce.py`
+**`slide_reduce.py`**
+
 - Reduces and simplifies lecture slides using LLM
 - Removes redundancy and condenses content using `process_slides.py` with
   `slide_reduce` action
-
-**Usage:**
-
 - Reduce slide content:
   ```bash
   > ./slide_reduce.py data605 01.1
   ```
-
 - Set target length:
   ```bash
   > ./slide_reduce.py msml610 02.3 --target-length 50
   ```
 
 ## Utility Scripts
+**`get_lecture_file.py`**
 
-### `get_lecture_file.py`
 - Finds and prints the path to a lecture source file matching
   `{DIR}/lectures_source/Lesson{LESSON}*`
 - Validates that exactly one matching file exists
-
-**Usage:**
-
 - Find lecture file:
   ```bash
   > ./get_lecture_file.py data605 01.1
@@ -230,8 +196,8 @@ slide quality through automated LLM-powered transformations.
   ```
 
 ## Orchestration Scripts
+**`process_lessons.py`**
 
-### `process_lessons.py`
 - Main orchestration script for generating PDF slides and/or reading scripts
   from lecture materials
 - Supports multiple actions, pattern matching, and dry-run mode
@@ -314,29 +280,31 @@ slide quality through automated LLM-powered transformations.
 # Common Workflows
 
 ## Generating Course Materials
+**Generate PDF Slides for All Lessons in a Course**
 
-### Generate PDF Slides for All Lessons in a Course
 - Generates PDF files for all lessons starting with 0 or 1 (e.g., 01.1, 01.2,
   10.1, etc.) in `data605/lectures/`:
   ```bash
   > process_lessons.py --lectures "0*:1*" --class data605 --action generate_pdf
   ```
 
-### Generate Both PDF Slides and Reading Scripts
+**Generate Both PDF Slides and Reading Scripts**
+
 - Generates PDFs in `lectures/` and scripts in `lectures_script/`:
   ```bash
   > process_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
   ```
 
-### Generate PDF and Book Chapter for a Single Lesson
+**Generate PDF and Book Chapter for a Single Lesson**
+
 - Creates slide PDF and corresponding book chapter with pandoc conversion:
   ```bash
   > process_lessons.py --lectures 01.1 --class data605 --action generate_pdf --action book_chapter
   ```
 
 ## Assessment Generation
+**Generate Multiple Choice Quizzes**
 
-### Generate Multiple Choice Quizzes
 - Creates 20-question quizzes saved to `lectures_quizzes/<lesson>.quizzes.md`:
   ```bash
   > process_lessons.py --lectures 01* --class data605 --action generate_class_quizzes
@@ -347,7 +315,8 @@ slide quality through automated LLM-powered transformations.
   > ./gen_quizzes.py --for_class_quizzes data605 01.1
   ```
 
-### Generate Discussion/review Questions
+**Generate Discussion/review Questions**
+
 - Creates 3-6 open-ended discussion questions saved to
   `lectures_recap/<lesson>.recap.md`:
   ```bash
@@ -360,8 +329,8 @@ slide quality through automated LLM-powered transformations.
   ```
 
 ## Slide Quality Improvement
+**Check and Fix Spelling/grammar in Slides**
 
-### Check and Fix Spelling/grammar in Slides
 - Use process_lessons.py:
   ```bash
   > process_lessons.py --lectures 01.1 --class data605 --action check_slide
@@ -381,7 +350,8 @@ slide quality through automated LLM-powered transformations.
   > ./slide_check.py data605 01.1
   ```
 
-### Improve Slide Clarity and Structure
+**Improve Slide Clarity and Structure**
+
 - Use process_lessons.py:
   ```bash
   > process_lessons.py --lectures 01.1 --class data605 --action improve_slide
@@ -397,7 +367,8 @@ slide quality through automated LLM-powered transformations.
   > llm_transform.py -i data605/lectures_source/Lesson07.2-Data_Wrangling.txt -p slide_improve -v DEBUG
   ```
 
-### Reduce Slide Length and Remove Redundancy
+**Reduce Slide Length and Remove Redundancy**
+
 - Use process_lessons.py:
   ```bash
   > process_lessons.py --lectures 01.1 --class data605 --action reduce_slide
@@ -414,7 +385,8 @@ slide quality through automated LLM-powered transformations.
   > ./slide_reduce.py data605 01.1
   ```
 
-### Fix Slides with Custom LLM Prompt
+**Fix Slides with Custom LLM Prompt**
+
 - Uses GPT-4o to fix and improve slides based on a prompt template:
   ```bash
   > FILE=data605/lectures_source/Lesson09.2-Spark_Primitives.txt
@@ -422,8 +394,8 @@ slide quality through automated LLM-powered transformations.
   ```
 
 ## Lecture Script Generation
+**Generate Complete Lecture Script with Intro/outro**
 
-### Generate Complete Lecture Script with Intro/outro
 - Use the direct script:
   ```bash
   > ./gen_lecture_script.py data605 01.1
@@ -434,19 +406,22 @@ slide quality through automated LLM-powered transformations.
   > process_lessons.py --lectures 01.1 --class data605 --action generate_script
   ```
 
-### Generate Just the Intro for a Lecture
+**Generate Just the Intro for a Lecture**
+
 - Creates a 50-word introduction for Lesson 08.3:
   ```bash
   > TAG=08.3; llm_cli.py -i data605/lectures_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to do an introduction in 50 word the content of the slides starting with In this lesson" -o -
   ```
 
-### Generate Just the Outro/summary for a Lecture
+**Generate Just the Outro/summary for a Lecture**
+
 - Creates a 50-word summary/conclusion for Lesson 08.3:
   ```bash
   > TAG=08.3; llm_cli.py -i data605/lectures_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to summarize what was discussed in less than 50 word in the slides like In this lesson we have discussed" -o -
   ```
 
-### Generate Scripts From Inside a Container (advanced)
+**Generate Scripts From Inside a Container (advanced)**
+
 - Generates a script for slides 1-5, grouping 3 slides at a time:
   ```bash
   > i docker_bash --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp --skip-pull
@@ -459,55 +434,57 @@ slide quality through automated LLM-powered transformations.
   ```
 
 ## Format Conversion
+**Convert Markdown Notes to PDF Slides**
 
-### Convert Markdown Notes to PDF Slides
 - Converts markdown lecture notes to PDF format (slides 1-4 only):
   ```bash
   > notes_to_pdf.py --input data605/lectures_md/final_enhanced_markdown_lecture_2.txt --output tmp.pdf --type slides --skip_action cleanup_after --debug_on_error --toc_type navigation --filter_by_slides 1:4
   ```
 
 ## Analysis and Reporting
-
-### Count Pages in All Book PDFs
+**Count Pages in All Book PDFs**
 ```bash
 > ./count_book_pages.py data605
 ```
 
-### Count Pages in All Lecture PDFs
+**Count Pages in All Lecture PDFs**
 ```bash
 > ./count_lecture_pages.py data605
 ```
 
-### Count Words in All Lecture Scripts
+**Count Words in All Lecture Scripts**
+
 - Helps track lecture length and content volume:
   ```bash
   > ./count_words.py data605
   ```
 
 ## Partial Processing
+**Generate Specific Slides From a Lecture (slides 1-3 Only)**
 
-### Generate Specific Slides From a Lecture (slides 1-3 Only)
 - Only applies to `generate_pdf` action when a single lecture file matches:
   ```bash
   > process_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
   ```
 
-### Preview Commands Without Executing (dry-run)
+**Preview Commands Without Executing (dry-run)**
+
 - Prints all commands that would be executed without running them:
   ```bash
   > process_lessons.py --lectures 01* --class data605 --action generate_pdf --dry_run
   ```
 
 ## Running Interactive Tutorials
+**Start Jupyter Lab in Docker**
 
-### Start Jupyter Lab in Docker
 - Starts a Jupyter Lab server in a Docker container:
   ```bash
   > cd msml610/tutorials
   > i docker_jupyter --skip-pull --stage local --version 1.0.0
   ```
 
-### Open a Specific Notebook in Chrome
+**Open a Specific Notebook in Chrome**
+
 - Opens the Bayesian Coin tutorial in Chrome:
   ```bash
   > open -a "Chrome" http://127.0.0.1:5011/lab/tree/notebooks/Bayesian_Coin.ipynb
