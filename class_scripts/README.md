@@ -11,8 +11,6 @@ No subdirectories.
 - `common_utils.py`
   - Shared utility functions for argument validation, file finding, directory management, and PDF page counting
 
-## Executables Summary Table
-
 | Script | Status | Description |
 | :------- | :------- | :------- |
 | `concatenate_pdfs.py` | `helpers_root/dev_scripts_helpers/documentation/` | Combines multiple PDF files into a single PDF (used for creating full book from chapters) |
@@ -308,24 +306,6 @@ No subdirectories.
 
 ## Check correctness of all the slides
 
-- Check one lecture (simple method - recommended)
-  ```bash
-  > slide_check.sh 01.2
-  ```
-  This checks Lesson 01.2 for formatting and content issues.
-
-- Check multiple lectures
-  ```bash
-  > slide_check.sh 01.*
-  ```
-  This checks all lessons in section 01.
-
-- Check several lessons with limits (for testing)
-  ```bash
-  > process_lessons.py --lectures 01.1* --class data605 --action check_slide --limit 0:2
-  ```
-  This checks only the first 2 slides of matching lessons.
-
 - Check one lecture from inside the container (advanced)
   ```bash
   > SRC_NAME=$(ls $DIR/lectures_source/Lesson02*); echo $SRC_NAME
@@ -345,17 +325,6 @@ No subdirectories.
 
 ## Reduce all slides
 
-- Reduce one lecture (simple method - recommended)
-  ```bash
-  > slide_reduce.sh 01.1
-  ```
-  This reduces the content of Lesson 01.1 to make it more concise.
-
-- Reduce multiple lectures
-  ```bash
-  > slide_reduce.sh 01.1*
-  ```
-  This reduces all lessons matching the pattern (e.g., 01.1, 01.2, 01.3).
 
 - Reduce from inside the container (advanced)
   ```bash
@@ -373,12 +342,6 @@ No subdirectories.
   This generates PDF files for all lessons starting with 0 or 1 (e.g., 01.1, 01.2, 10.1, etc.).
 
 ## Generate the lecture script
-
-- Generate script for one lecture (simple method - recommended)
-  ```bash
-  > gen_data605_script.sh 04.3
-  ```
-  This generates a lecture script for Lesson 04.3.
 
 - Generate the intro for a lecture
   ```bash
@@ -545,20 +508,6 @@ No subdirectories.
   > llm_cli.py --input $FILE -pf "fix_slides.prompt.md" -o improved.md --model "gpt-4o" -b
   ```
   This uses GPT-4o to fix and improve the slides based on the prompt template.
-
-## Generate book
-
-- Generate a book chapter for a specific lesson
-  ```bash
-  > gen_book_chapter.sh data605 03.2
-  ```
-  This generates a book chapter PDF for DATA605 Lesson 03.2.
-
-- Concatenate all chapters into a single book
-  ```bash
-  > concatenate_pdfs.py --input_files 'data605/book/Lesson*.pdf' --output_file data605/book/book.pdf
-  ```
-  This combines all lesson PDFs into a single book.pdf file.
 
 # process_lessons.py
 
