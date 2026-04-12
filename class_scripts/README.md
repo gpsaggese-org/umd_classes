@@ -11,17 +11,41 @@ No subdirectories.
 - `common_utils.py`
   - Shared utility functions for argument validation, file finding, directory management, and PDF page counting
 
+## Executables Summary Table
+
+| Script | Status | Description |
+| :------- | :------- | :------- |
+| `concatenate_pdfs.py` | `helpers_root/dev_scripts_helpers/documentation/` | Combines multiple PDF files into a single PDF (used for creating full book from chapters) |
+| `count_book_pages.py` | `class_scripts/` | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command |
+| `count_lecture_pages.py` | `class_scripts/` | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command |
+| `count_words.py` | `class_scripts/` | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length |
+| `gen_book_chapter.py` | `class_scripts/` | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion |
+| `gen_lecture_script.py` | `class_scripts/` | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically |
+| `gen_quizzes.py` | `class_scripts/` | Generates multiple choice quizzes (20 questions) or discussion/review questions (3-6 questions) from lecture content |
+| `gen_slides.py` | `class_scripts/` | Generates lecture slide PDFs from source files using `notes_to_pdf.py` for markdown-to-PDF conversion |
+| `generate_slide_script.py` | `helpers_root/dev_scripts_helpers/slides/` | Generates lecture scripts from slide content; groups slides and lints output |
+| `get_lecture_file.py` | `class_scripts/` | Finds and prints the path to a lecture source file matching `{DIR}/lectures_source/Lesson{LESSON}*` |
+| `lint_txt.py` | `helpers_root/dev_scripts_helpers/documentation/` | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting |
+| `llm_cli.py` | `helpers_root/dev_scripts_helpers/llms/` | LLM command-line interface for AI-powered text transformations and content generation |
+| `llm_transform.py` | `helpers_root/dev_scripts_helpers/llms/` | Applies LLM transformations to content with various prompts (slide_improve, etc.) |
+| `notes_to_pdf.py` | `helpers_root/dev_scripts_helpers/documentation/` | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py` |
+| `process_lessons.py` | `helpers_root/dev_scripts_helpers/slides/` | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
+| `process_slides.py` | `helpers_root/dev_scripts_helpers/slides/` | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
+| `slide_check.py` | `class_scripts/` | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting |
+| `slide_improve.py` | `class_scripts/` | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness |
+| `slide_reduce.py` | `class_scripts/` | Reduces and simplifies lecture slides using LLM; removes redundancy and condenses content |
+
 ## Description of Executables
 
 ### `count_book_pages.py`
 
-#### What It Does
+**What It Does**
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory
 - Uses macOS `mdls` command to extract PDF metadata
 - Displays page counts for each book PDF file
 
-#### Examples
+**Examples**
 
 - Count pages in all book PDFs for data605:
   ```bash
@@ -35,13 +59,13 @@ No subdirectories.
 
 ### `count_lecture_pages.py`
 
-#### What It Does
+**What It Does**
 
 - Counts pages in all PDF files in the `{DIR}/lectures/` directory
 - Uses macOS `mdls` command to extract PDF metadata
 - Displays page counts for each lecture PDF file
 
-#### Examples
+**Examples**
 
 - Count pages in all lecture PDFs for data605:
   ```bash
@@ -55,13 +79,13 @@ No subdirectories.
 
 ### `count_words.py`
 
-#### What It Does
+**What It Does**
 
 - Counts words in all files in the `{DIR}/lectures_script/` directory
 - Displays word counts for each lecture script file
 - Helps track lecture length and content volume
 
-#### Examples
+**Examples**
 
 - Count words in all lecture scripts for data605:
   ```bash
@@ -75,13 +99,13 @@ No subdirectories.
 
 ### `gen_book_chapter.py`
 
-#### What It Does
+**What It Does**
 
 - Generates a book chapter from lecture source material
 - Performs multiple steps: PDF generation, chapter creation, pandoc conversion
 - Opens the final PDF in Skim viewer
 
-#### Examples
+**Examples**
 
 - Generate book chapter for data605 lesson 01.1:
   ```bash
@@ -95,13 +119,13 @@ No subdirectories.
 
 ### `gen_lecture_script.py`
 
-#### What It Does
+**What It Does**
 
 - Generates a complete lecture script from slides using LLM
 - Creates intro and outro sections automatically
 - Combines all sections and lints the final output
 
-#### Examples
+**Examples**
 
 - Generate lecture script for data605 lesson 01.1:
   ```bash
@@ -115,7 +139,7 @@ No subdirectories.
 
 ### `gen_quizzes.py`
 
-#### What It Does
+**What It Does**
 
 - Generates questions from lecture content using LLM via llm_cli.py
 - Two modes:
@@ -125,7 +149,7 @@ No subdirectories.
     - Saved to: `{DIR}/lectures_recap/<lesson>.recap.md`
 - Automatically formats output using lint_txt.py with prettier (use `--no_lint` to skip)
 
-#### Examples
+**Examples**
 
 - Generate multiple choice quizzes for data605 lesson 01.1:
   ```bash
@@ -149,13 +173,13 @@ No subdirectories.
 
 ### `gen_slides.py`
 
-#### What It Does
+**What It Does**
 
 - Generates lecture slide PDFs from source files
 - Uses notes_to_pdf.py to convert markdown to PDF
 - Accepts additional options to pass through to notes_to_pdf.py
 
-#### Examples
+**Examples**
 
 - Generate slides for data605 lesson 01.1:
   ```bash
@@ -169,13 +193,13 @@ No subdirectories.
 
 ### `get_lecture_file.py`
 
-#### What It Does
+**What It Does**
 
 - Finds and prints the path to a lecture source file
 - Searches for files matching `{DIR}/lectures_source/Lesson{LESSON}*`
 - Validates that exactly one matching file exists
 
-#### Examples
+**Examples**
 
 - Find lecture file for data605 lesson 01.1:
   ```bash
@@ -189,13 +213,13 @@ No subdirectories.
 
 ### `slide_check.py`
 
-#### What It Does
+**What It Does**
 
 - Checks and fixes text in lecture slides using LLM
 - Uses process_slides.py with text_check_fix action
 - Corrects spelling, grammar, and formatting issues
 
-#### Examples
+**Examples**
 
 - Check and fix slides for data605 lesson 01.1:
   ```bash
@@ -209,13 +233,13 @@ No subdirectories.
 
 ### `slide_improve.py`
 
-#### What It Does
+**What It Does**
 
 - Improves lecture slides using LLM suggestions
 - Uses process_slides.py with slide_improve action
 - Enhances clarity, structure, and pedagogical effectiveness
 
-#### Examples
+**Examples**
 
 - Improve slides for data605 lesson 01.1:
   ```bash
@@ -229,13 +253,13 @@ No subdirectories.
 
 ### `slide_reduce.py`
 
-#### What It Does
+**What It Does**
 
 - Reduces and simplifies lecture slides using LLM
 - Uses process_slides.py with slide_reduce action
 - Removes redundancy and condenses content
 
-#### Examples
+**Examples**
 
 - Reduce slides for data605 lesson 01.1:
   ```bash
@@ -249,7 +273,7 @@ No subdirectories.
 
 ### `process_lessons.py`
 
-#### What It Does
+**What It Does**
 
 - Main script for generating PDF slides and reading scripts from lecture source
   files
@@ -258,7 +282,7 @@ No subdirectories.
 - Can process single or multiple lectures using pattern matching
 - Provides dry-run mode to preview commands without execution
 
-#### Examples
+**Examples**
 
 - Generate PDF slides for a specific lecture:
   ```bash
