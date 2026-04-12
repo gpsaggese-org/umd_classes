@@ -10,13 +10,12 @@
 - Three kinds of questions: association, intervention, counterfactual (Pearl's
   ladder)
 - A roadmap: from prediction to causal reasoning to decision intelligence
-- TUTORIAL: DoWhy (end-to-end causal reasoning from observational data)
-
 - How production ML systems make decisions today
 - Feedback loops and distribution shift
 - Optimization vs. inference vs. decision theory
 - The cost of ignoring causality: concrete failure modes
 - Data Science vs. Decision Science
+- Causal questions vs. predictive questions
 - TUTORIAL: pgmpy (Bayesian decision networks and decision pipeline modeling)
 
 ### 2: Causality Vs. Correlation

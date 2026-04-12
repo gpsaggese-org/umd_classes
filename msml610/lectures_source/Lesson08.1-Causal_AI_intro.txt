@@ -384,7 +384,7 @@ MSML610: Advanced Machine Learning
     - Leverage big data, machine learning, and real-time analytics to make
       smarter, faster, and more strategic decisions
 
-* Why ML / AI Projects Fail?
+* Why AI Projects Fail?
 - **AI projects fail** because they approach problems only from a ML perspective
   - Data scientists:
     - Focus on model accuracy and technical metrics
@@ -408,7 +408,7 @@ MSML610: Advanced Machine Learning
 - **Lack of feedback loops**
   - No process for monitoring model performance post-deployment
 
-* How to Make ML / AI Project Succeed
+* How to Make AI Project Succeed
 
 1. **Create a hybrid team**
    - Organizations are complex
@@ -651,7 +651,7 @@ digraph CausalFlowGrid {
 |                        | Ensure alignment with strategic goals  |
 \endgroup
 
-* Steps for a Hybrid Team Project
+* Executing Together: Steps for a Hybrid Team Project
 
 - **Establish a phased / collaborative approach**
   - Align strategic goals with technical efforts
