@@ -43,30 +43,30 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 * Big Data and Traditional AI
-- For the past 10 years, **focus** on:
-  - Collect and organize massive amount of data
-  - Run analytics (e.g., dashboards, models, reports) on data
+- **Focus** for past 10 years:
+  - Collect and organize massive data volumes
+  - Run analytics (dashboards, models, reports) on data
 
 * What Are Data Analytics?
 - **Collections of data**
-  - Aggregated, organized data sets for analysis
-  - E.g., customer purchase histories in a CRM system
+  - Organized datasets for analysis
+  - E.g., customer purchase histories in CRM
 
 - **Descriptive statistics**
-  - Summary metrics: mean, median, mode, standard deviation
-  - E.g., average sales per quarter to understand trends
+  - Key metrics: mean, median, mode, standard deviation
+  - E.g., average quarterly sales to track trends
 
 - **Historical reports**
-  - Examination of _past performance_
-  - E.g., monthly sales reports for past fiscal year
+  - Review of _past performance_
+  - E.g., monthly sales reports from last year
 
 - **Dashboards**
-  - Visual displays of key metrics for insights
-  - E.g., dashboard showing quarterly revenue, expenses
+  - Visuals of key metrics for quick insights
+  - E.g., quarterly revenue and expense dashboard
 
 - **Models**
-  - Statistical representations to _forecast, explain phenomena_
-  - E.g., model to anticipate customer churn based on behavioral data
+  - Statistical tools to _forecast, explain_
+  - E.g., churn prediction from customer behavior
 
 * Data Analytics Sophistication
 
@@ -91,40 +91,33 @@ MSML610: Advanced Machine Learning
 
 * The Illusion of Understanding
 - **High accuracy $\neq$ Understanding causation**
-  - A model that predicts customer churn with 95% accuracy still can't tell you
-    what _causes_ churn
-  - A system that forecasts sales accurately can't predict what happens if you
-    _change your pricing strategy_
+  - 95% churn prediction accuracy won't tell you what _causes_ churn
+  - Accurate sales forecasts can't predict effects of _pricing changes_
 
 - **Prediction vs. Explanation**
-  - Predictive models are excellent at finding patterns in historical data
-  - They fail to explain the mechanisms behind those patterns
-  - They cannot answer "what if" questions about interventions
+  - Models find patterns in historical data
+  - Can't explain mechanisms or answer "what if" scenarios
 
 - **The Real Problem**
-  - When you don't understand causation, you can only react to what happened
-  - You cannot proactively _change the world_ to get better outcomes
+  - Without causation, you react to past events
+  - You can't proactively _change outcomes_
 
 * Association, Correlation, and Causation
-- Three distinct concepts that are often confused
-  - **Association** (weakest claim)
-    - Two variables co-occur or are statistically dependent
-    - E.g., _"People who buy diapers also buy beer"_
-    - Says nothing about direction or mechanism
-  - **Correlation** (quantified, but still not causal)
-    - Linear statistical relationship between two variables
-    - E.g., _"Ice cream sales and drowning deaths are positively correlated"_
-    - Both are caused by a confounder: hot weather
-  - **Causation** (strongest claim)
-    - Changing one variable _directly_ changes another
-    - E.g., _"Asbestos causes cancer"_
-    - Requires more than data: needs a causal model or experiment
-
 ::: columns
 :::: {.column width=60%}
-- **The illusion**: high correlation _feels like_ understanding
-  - A model with high $R^2$ gives a false sense of knowledge
-  - True understanding means knowing what happens when you _intervene_
+- **Association**
+  - Variables co-occur or are statistically dependent
+  - E.g., _"People who buy diapers also buy beer"_
+  - No info on direction or mechanism
+
+- **Correlation**
+  - Linear relationship between variables
+  - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
+
+- **Causation**
+  - Changing one variable _directly_ changes another
+  - E.g., _"Asbestos causes cancer"_
+  - Requires causal model or experiment
 ::::
 :::: {.column width=35%}
 ```latex
@@ -162,6 +155,9 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
+- **The illusion**: high correlation _feels like_ understanding
+  - Real understanding means knowing what happens when you _intervene_
+
 * What ML Systems Can Tell You
 - **Pattern recognition**
   - Find correlations in data
@@ -169,34 +165,34 @@ MSML610: Advanced Machine Learning
   - Forecast based on past trends
 
 - **Predictive accuracy on held-out test data**
-  - If conditions remain stable, future predictions may be accurate
-  - Only works when training data and future data come from the same distribution
+  - Accurate prediction if conditions remain stable
+  - Only works when training and future data match
 
 - **Feature importance** (with caveats)
-  - Which variables have the strongest statistical associations with outcomes
-  - Still doesn't distinguish correlation from causation
+  - Find variables with strongest statistical associations
+  - Doesn't distinguish correlation from causation
 
 * What ML Systems Cannot Tell You
 - **Causation from observational data alone**
   - Correlation $\neq$ causation
-  - Even strong correlations can be due to confounding, reverse causation, or
+  - Strong correlations can arise from confounding, reverse causation, or
     coincidence
 
 - **Effects of interventions**
   - _"If we change X, what happens to Y?"_
-  - E.g., _"If we lower prices by 10%, will revenue increase or decrease?"_
-  - Observational data cannot answer this without causal assumptions
+  - E.g., _"If we lower prices by 10%, will revenue increase?"_
+  - Observational data can't answer without causal assumptions
 
 - **Counterfactuals**
-  - _"What would have happened if we made a different decision?"_
-  - E.g., _"Would this customer have churned if we offered them a discount?"_
+  - _"What would have happened with a different decision?"_
+  - E.g., _"Would customer churn if we offered a discount?"_
 
-- **Fairness or bias in the causal sense**
-  - A model might be "unbiased" statistically but causally biased
-  - E.g., using variables correlated with race to make decisions
+- **Fairness or causal bias**
+  - A model can be statistically unbiased but causally biased
+  - E.g., using race-correlated variables in decisions
 
 - **Optimal decisions**
-  - ML models optimize for accuracy, not for business outcomes
+  - ML optimizes for accuracy, not business outcomes
   - A 90% accurate model might lead to worse decisions than an 85% accurate one,
     depending on the consequences of different errors
 
@@ -209,35 +205,29 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 * Problem 1: Correlation is Not Causation!
-- **Correlation** is a statistical method for understanding relationships
-  between data
-  - Pros
-    - Use past outcomes to predict future outcomes by finding patterns and
-      anomalies
-  - Cons
-    - Doesn't explain the cause
-    - Variables may move together due to coincidence or a hidden factor
+- **Correlation**: statistical relationships between variables
+  - Pros: Find patterns in past data to predict future
+  - Cons:
+    - Doesn't explain cause
+    - Variables move together by coincidence or hidden factors
 
-- **Causation** explains how changing one variable influences the other
+- **Causation**: explains how changing one variable influences another
   - Cannot be concluded from correlation alone
 
-- **Data does not understand causes and effects**
-  - Only humans can identify variables and relationships based on context
+- **Data doesn't understand causes and effects**
+  - Only humans identify variables and relationships from context
   - Without causation, you can't make intelligent decisions
 
 * Correlation is Not Causation: Examples
 - Intuitively you know that association is not causation
 
-- Humans are primed to take association for causation
-  - _"You eat X that gives a stomachaches several times"_
-      - You infer that _"X is bad for you"_
-  - _"You put money in a stock right before a steep increase in prices"_
-      - You infer _"you can time the market"_
-      - It might lead to riskier and riskier bets
+- Humans confuse association with causation
+  - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
+  - _"Buy stock before price spike"_ $\to$ infer _"you can time markets"_
+    - Leads to riskier bets
 
-- E.g., "top-notch consulting improve businesses"
-  - Does top-notch consulting really improve business?
-  - Or flourishing businesses have the budget to hire top-notch consulting?
+- E.g., "top-notch consulting improves businesses"
+  - Or do thriving businesses hire top consultants?
 
 * Correlation is Not Causation: Examples
 - E.g., in hotel industry
@@ -256,106 +246,95 @@ MSML610: Advanced Machine Learning
     - The timing (e.g., before Christmas)
 
 * Problem 2: Decision Making
-- Businesses care about decisions not only prediction
+- Businesses need decisions, not just predictions
 
 - E.g., _"What happens if a product price is reduced by 10%?"_
   - Will more customers buy?
-  - If revenue decreases, what to do?
+  - Will revenue decrease? What to do then?
   - Why are customers leaving? Quality issue? Emerging competitor?
 
-- **Examples**
-  - _"What would happen if you change the price of a merchandise?"_
-  - _"What happens if you switch from low-sugar diet to low-fat diet?"_
-  - _"What happens to bank's margin if a bank increases customer's credit line?"_
-  - _"Is it better to build a library or give tables to kids to boost test
-    score?"_
+- **Key questions**
+  - _"What happens if we change product price?"_
+  - _"Low-sugar vs low-fat diet: which works?"_
+  - _"If we increase credit lines, how does bank margin change?"_
+  - _"Build a library or give tablets to boost test scores?"_
 
 * Problem 3: ML Explainability
-- **Regulators** require you to defend ML/AI decision results
+- **Regulators require defense** of ML/AI decisions
   - E.g., hiring decisions, policy setup
 
-  - Many machine learning systems (e.g., neural networks) are "black boxes"
-  - Lack of explainability
-    - Humans can't understand input-to-conclusion process (easily or at all)
-    - Can't explain decisions to shareholders
-  - Bias
-    - E.g., using age, race, sex as features can introduce bias
+- Many ML systems (e.g., neural networks) are "black boxes"
+  - Humans can't understand input-to-output process
+  - Can't explain decisions to shareholders
+  - Features like age, race, sex introduce bias
 
-- **Drawbacks**: organizations can:
-  - Be fined by authorities
-  - Face backlash from customers and activists
+- **Drawbacks**:
+  - Fines, customer backlash, activist pressure
 
 - **Solution**:
-  - Explainable AI allows users to:
+  - Explainable AI lets users:
     - Comprehend
     - Explain
     - Trust machine results
 
 * Problem 4: How ML Systems Make Decisions Today
-- **Typical workflow in industry**
-  - Collect data
-  - Train model
-  - Make predictions
-  - Deploy with decision rule: _"If model predicts X, take action Y"_
+- **Typical workflow**
+  - Collect data $\to$ Train model $\to$ Make predictions
+  - Deploy: _"If model predicts X, take action Y"_
   - Optimize for model accuracy, not decision quality
 
 - **Critical limitation**
-  - These systems optimize for prediction accuracy
-  - They do not optimize for decision quality or business outcomes
-  - A 95% accurate fraud detector that blocks 50% of legitimate transactions is a
-    poor decision-making system
+  - Systems optimize for prediction accuracy
+  - Not for decision quality or business outcomes
+  - 95% accurate fraud detector that blocks 50% legitimate transactions is a poor
+    system
 
 * Data Science for Decisions: Examples
-- **Recommendation systems**
-  - E.g., Netflix, Amazon, TikTok
-  - Model predicts what user will click
+- **Recommendation systems** (Netflix, Amazon, TikTok)
+  - Model predicts user clicks
   - System recommends the top-N items
-  - _Problem_: Doesn't know what interventions (e.g., showing diverse content)
-    would improve long-term satisfaction
+  - Problem: Can't test interventions (e.g., diverse content for long-term satisfaction)
 
-- **Credit scoring and loan approval**
-  - Model predicts likelihood of default
+- **Credit scoring**
+  - Model predicts default likelihood
   - Loan officer uses score to approve/deny
-  - _Problem_: Can't distinguish between variables that _predict_ default vs those
-    that _cause_ default
+  - Problem: Can't distinguish variables that predict vs cause default
 
 - **Hiring pipelines**
   - Model scores candidates
   - HR uses scores to rank applicants
-  - _Problem_: Past bias in hiring is encoded in training data
+  - Problem: Training data encodes historical hiring bias
 
 - **Fraud detection**
   - Model flags suspicious transactions
   - System blocks transactions automatically
-  - _Problem_: May block legitimate transactions (high false positive rate) without
-    knowing how to improve detection
+  - Problem: High false positive rate without knowing how to improve
 
 * Problem 5: Feedback Loops
-- Feedback loops when predictions change the world
+- Predictions change the world through feedback loops
 
 - **Recommendation systems**
-  - Model recommends sensational content to users
-  - Users click on sensational content more
+  - Model recommends sensational content
+  - Users click more
   - Future training data has more clicks on sensational content
-  - Model learns to recommend even more sensational content
-  - Outcome: Radicalization, echo chambers, mental health issues
+  - Model recommends even more sensational content
+  - Problem: Radicalization, echo chambers, mental health issues
 
-- **Relapse prediction in criminal justice**
-  - Model trained on historical arrest data (biased against minorities)
-  - Judges use model to set bail / sentencing
-  - Minorities are policed more heavily, arrested more
-  - Future training data is more biased
-  - Model becomes increasingly biased over time
+- **Criminal justice relapse prediction**
+  - Model trained on arrest data (biased against minorities)
+  - Judges use models for bail/sentencing
+  - Minorities policed more $\to$ arrested more $\to$ data more biased
+  - Problem: Model becomes increasingly biased over time
 
 - **College admissions**
-  - Model trained on acceptance decisions
-  - Model learned biases from past (historical racism, sexism)
+  - Model trained on past acceptance decisions (which encode historical racism,
+    sexism)
   - Model used to screen applications
-  - Biased applicants are filtered out
-  - Historical biases are perpetuated
+  - Filters out biased applicants
+  - Problem: Historical biases are perpetuated
 
 * Problem 6: Distribution Shift
-- **Distribution shift, i.e., the world changes**
+- The world is always changing
 
   - **Concept drift**
     - Customer preferences change over time
@@ -373,38 +352,35 @@ MSML610: Advanced Machine Learning
     - Model trained on old fraud rate is less effective
 
 - **Why causal models help**
-  - Causal models encode mechanisms, not just observed patterns
-  - Mechanisms are more stable across distribution shifts
-  - If you understand _why_ something happens, you can predict it in new contexts
+  - Encode mechanisms, not just patterns
+  - Mechanisms more stable across distribution shifts
+  - Understand "why" $\to$ predict in new contexts
 
 ## #############################################################################
 ## Optimization vs. Inference vs. Decision Theory
 ## #############################################################################
 
 * Optimization vs. Inference vs. Decision Theory
-- Three fundamental paradigms that ML conflates
+- Three paradigms that ML conflates
 
-- **Optimization**: find the best action given a _known_ objective function
-  - Assumes you already know how the world works
-  - E.g., minimize cost, maximize throughput, tune hyperparameters
+- **Optimization**: find best action given _known_ objective
+  - Assumes world behavior is known
+  - E.g., minimize cost, maximize throughput, tune parameters
   - Tools: gradient descent, linear programming, evolutionary algorithms
 
-- **Statistical inference**: estimate parameters or relationships from data
-  - Assumes a model structure and learns from observations
-  - E.g., estimate treatment effect, compute confidence intervals
+- **Statistical inference**: estimate parameters from data
+  - Learns from observations given model structure
+  - E.g., estimate treatment effects, compute confidence intervals
   - Tools: regression, Bayesian estimation, hypothesis testing
 
-- **Decision theory**: choose actions under _uncertainty_ by combining beliefs,
-  preferences, and consequences
-  - E.g., _"Should we launch this product given uncertain demand?"_
-  - Requires reasoning about interventions and their outcomes
+- **Decision theory**: choose actions under _uncertainty_
+  - E.g., _"Launch product with uncertain demand?"_
+  - Requires reasoning about interventions and outcomes
   - Tools: utility functions, expected value of information, causal models
 
 * Where ML Falls Short
-- **ML focuses on inference** (learn a model from data) and **optimization**
-  (tune that model's parameters)
-- Real business problems require **decision theory**: act under uncertainty with
-  knowledge of cause and effect
+- **ML focuses on inference and optimization**
+- **Real problems need decision theory**: act under uncertainty with causal knowledge
 
 \begingroup \footnotesize
 | **Paradigm**    | **Question**              | **Assumes**          | **Output**            |
@@ -415,41 +391,40 @@ MSML610: Advanced Machine Learning
 \endgroup
 
 - **Causal AI bridges inference and decision theory**
-  - Inference tells you what the world looks like
-  - Causal models tell you what happens when you _act_
-  - Decision theory tells you which action to choose
+  - Inference: what the world looks like
+  - Causal models: what happens when you _act_
+  - Decision theory: which action to choose
 
 ## #############################################################################
 ## The Cost of Ignoring Causality
 ## #############################################################################
 
 * The Cost of Ignoring Causality: Concrete Failure Modes
-- When organizations ignore causality, specific and predictable failures occur
+- When organizations ignore causality, failures occur
 
 - **Simpson's Paradox**
-  - Aggregate data shows the _opposite_ trend from subgroup data
-  - E.g., Berkeley admissions: overall data suggested gender bias, but
-    department-level data showed no bias
-  - Causal fix: condition on the right variables using a DAG
+  - Aggregate data shows opposite trend from subgroups
+  - E.g., Berkeley admissions: overall bias shown, but no bias within departments
+  - Causal fix: condition on the right variables using DAG
 
 - **Confounding bias**
-  - A hidden variable drives both treatment and outcome
+  - Hidden variable drives both treatment and outcome
   - E.g., ice cream sales and drowning deaths both rise in summer
   - Causal fix: identify and control for confounders
 
 - **Collider bias**
-  - Conditioning on a common effect creates false associations
-  - E.g., among hospitalized patients, two unrelated diseases appear correlated
-    (both cause hospitalization)
-  - Causal fix: do _not_ condition on colliders
+  - Conditioning on common effect creates false associations
+  - E.g., hospitalized patients: unrelated diseases appear correlated (both cause
+    hospitalization)
+  - Causal fix: don't condition on colliders
 
 * The Cost of Ignoring Causality: More Failure Modes
 
 - **Feedback loop amplification**
   - Biased predictions reinforce bias in future training data
-  - E.g., predictive policing: model sends more police to minority neighborhoods
-    $\to$ more arrests $\to$ model learns those neighborhoods are more dangerous
-  - Causal fix: model the feedback mechanism explicitly
+  - E.g., predictive policing: more police to minority neighborhoods $\to$ more
+    arrests $\to$ model learns neighborhoods are more dangerous
+  - Causal fix: model feedback explicitly
 
 - **Intervention backfire**
   - Acting on correlation leads to wrong actions
@@ -459,30 +434,29 @@ MSML610: Advanced Machine Learning
     catastrophic
   - Causal fix: distinguish correlation from causal effect before acting
 
-- **Key takeaway**: every failure mode above is _preventable_ with causal
-  reasoning
-  - The cost of ignoring causality is not theoretical
-  - It leads to wrong decisions, wasted resources, and real harm
+- **Key takeaway**: all failures above are preventable with causal reasoning
+  - Cost of ignoring causality: wrong decisions, wasted resources, real harm
 
 * Causal AI
 - **Understands the why**
   - Determines cause-and-effect between variables
-  - E.g., whether a marketing campaign increased sales
+  - E.g., did marketing campaign increase sales?
 
 - **Identify interventions**
   - Identifies variables and interventions to change outcomes
-  - E.g., which lifestyle changes reduce blood pressure
+  - E.g., which lifestyle changes reduce blood pressure?
 
-- **Predicting counterfactuals**
-  - Hypothesizes outcomes under different circumstances
+- **Predict counterfactuals**
+  - Hypothesize outcomes under different circumstances
   - E.g., student grades if they attended a different school
 
-- **Avoiding bias**
-  - Traditional AI biased by training data and ignored variables
-  - Ensure fairness by accounting for confounding variables
+- **Avoid bias**
+  - Account for confounding variables
+  - Ensure fairness beyond training data biases by accounting for confounding
+    variables
 
-- **Improving decision-making**
-  - Provides understanding of relationships for better decisions
+- **Improve decisions**
+  - Understand relationships for better choices
   - E.g., improve supply chain by understanding impact of decisions on logistics
 
 * Causal AI vs Traditional AI
@@ -491,30 +465,29 @@ MSML610: Advanced Machine Learning
   - Identify patterns
   - Make predictions
 
-- **Models depend on data quality**
-  - Biased or unclean data $\implies$ poor model
+- **Model quality depends on data quality**
+  - Biased or unclean data $\to$ poor model
 
 - _"The next revolution of data science is the science of interpreting reality,
   not of summarizing data"_ (Judea Pearl, 2021)
 
 - Causal inference is the science of:
   - Inferring causation from association
-  - Understand when and why causation and association differ
+  - Understanding when and why causation and association differ
 
 - Causal inference is normative
-  - If you understand cause-and-effect relationships, then you can intervene on the
-    cause to bring the desired effect
+  - Understand cause-and-effect relationships to intervene on the cause for
+    desired effect
 
 ## #############################################################################
 ## Data Science vs. Decision Science
 ## #############################################################################
 
 * From Data Science to Decision Science
-- ML is very good at prediction and very bad at "what-if" questions
-- ML using association is great to predict one var from another, without
-  intervention
-- ML is terrible for decision making when there are interventions
-  - ML models can be useless or harmful
+- ML excels at prediction, fails at "what-if" questions
+- Association works for predicting without intervention
+- ML fails for decisions involving interventions
+  - Models can be useless or harmful
 
 - **Two different paradigms**
 
@@ -525,19 +498,18 @@ MSML610: Advanced Machine Learning
 | Core question     | _"What will happen?"_         | _"What should we do?"_          |
 | Method            | Statistical models, ML        | Causal models, decision theory  |
 | Output            | Score, forecast, cluster      | Recommended action + expected outcome |
-| Success metric    | Accuracy, AUC, RMSE          | Business outcome, ROI, impact   |
+| Success metric    | Accuracy, AUC, RMSE           | Business outcome, ROI, impact   |
 | Data requirement  | Historical observations       | Observations + causal structure |
 \endgroup
 
-- **Key insight**: most organizations have data science teams doing prediction
-  - But business stakeholders need decision science
-  - The gap between "what will happen" and "what should we do" is _causal
-    reasoning_
+- **Key insight**:
+  - Organizations have data science teams doing prediction
+  - Business stakeholders need decision science
+  - Gap between "what will happen" and "what should we do" is _causal reasoning_
 
 * Causal Questions vs. Predictive Questions
-- Not all questions are created equal
-- Predictive questions ask about _what will happen_
-- Causal questions ask about _what to do_ or _why something happened_
+- Predictive question: _what will happen?_
+- Causal question: _what to do?_, _why it happened?_, _what will happen_?
 
 \begingroup \footnotesize
 | **Predictive Question**                  | **Causal Question**                          |
@@ -549,44 +521,35 @@ MSML610: Advanced Machine Learning
 | Which transactions are fraudulent?       | What policy changes reduce fraud?            |
 \endgroup
 
-- **Predictive questions**
-  - Can be answered with standard ML
-  - Require only observational data
+- **Predictive questions**:
+  - Standard ML, observational data only
   - Useful for _monitoring_ and _alerting_
 
-- **Causal questions**
-  - Require causal models or experiments
-  - Answer "what if" and "why" questions
-  - Useful for _decision making_ and _policy design_
+- **Causal questions**:
+  - Causal models or experiments
+  - Answer "what if" and "why"
+  - Useful for _decisions_ and _policy design_
 
-- **The test**: if your question involves _changing_ something, it is causal
-  - _"What happens if..."_ $\to$ causal
-  - _"What will happen..."_ $\to$ predictive
+* A Roadmap From Prediction to Decision Intelligence
 
-* A Roadmap: From Prediction to Decision Intelligence
-- Organizations progress through levels of analytical sophistication
+- **Level 0: Descriptive**
+  - _"What happened?"_
+  - Dashboards, reports, statistics (backward-looking)
 
-- **Level 0: Descriptive analytics** -- _"What happened?"_
-  - Dashboards, reports, summary statistics
-  - Backward-looking, no prediction
+- **Level 1: Predictive**
+  - _"What will happen?"_
+  - ML models, forecasting (assumes stable world)
 
-- **Level 1: Predictive analytics** -- _"What will happen?"_
-  - ML models, forecasting, classification
-  - Forward-looking, but assumes the world stays the same
+- **Level 2: Causal**
+  - _"Why?"_ and _"What if we intervene?"_
+  - DAGs, do-calculus (understand mechanisms)
 
-- **Level 2: Causal reasoning** -- _"Why did it happen?"_ and _"What if we
-  intervene?"_
-  - Causal inference, DAGs, do-calculus
-  - Understands mechanisms, not just patterns
+- **Level 3: Decision**
+  - _"What should we do?"_
+  - Causal models + decision theory + business goals
 
-- **Level 3: Decision intelligence** -- _"What should we do?"_
-  - Combines causal models + decision theory + business objectives
-  - Optimizes actions, not predictions
-
-- **Key message**
-  - Most organizations are stuck at Level 1
-  - Causal AI enables the jump from Level 1 to Levels 2 and 3
-  - This course teaches the tools and thinking needed for that jump
+- **Most organizations stuck at Level 1**
+  - Causal AI enables jump to Levels 2 and 3
 
 # ##############################################################################
 # Causal AI Fundamentals
@@ -614,35 +577,32 @@ MSML610: Advanced Machine Learning
 * Rung 1: Association
 - **Question**: _"How would seeing $X$ change our belief in $Y$?"_
 
-- **In math terms**: $\Pr(Y|X)$
+- **Math**: $\Pr(Y|X)$
 
-- **Activity**
-  - It is just "passive observation" to determine if $X, Y$ are related
-  - Traditional AI and ML is based on this
-  - In the best case, it's Bayesian update
-  - In the worst case, it's some hacked up overfitted model
+- **Activity**:
+  - Passive observation to determine if $X, Y$ relate
+  - Traditional AI/ML based on this
+  - Best case: Bayesian update; worst case: overfitted model
 
-- **Example**
-  - _"The tree has green leaves during spring"_
-  - _"What does a symptom tell you about a disease?"_
-  - _"What does a survey tell you about the election results?"_
+- **Examples**
+  - _"Tree has green leaves in spring"_
+  - _"What does a symptom tell about disease?"_
+  - _"What does a survey tell about elections?"_
 
 * Rung 2: Intervention
 - **Question**: _"What happens to $Y$ if you do $X$?"_
 
-- **In math terms**: $\Pr(Y | do(X), Z)$
+- **Math**: $\Pr(Y | do(X), Z)$
 
-- **Activity**
-  - Understand the impact of an action $X$ on $Y$ under conditions $Z$
-  - Association is just about observations
-  - Interventions involve "doing something" and need a causal model
+- **Activity**:
+  - Understand impact of action $X$ on $Y$ under conditions $Z$
+  - Requires causal model, not just observations
 
-- **Example**
-  - _"Spring makes tree leaves turn green"_ (vs _"tree has green leaves"_)
-  - _"Why did the headache go away?"_
-    - "Because the pain reliever" or "Because you ate food after skipping lunch"
-  - _"If you take aspirin, will your headache be cured?"_
-  - _"What if you ban sodas?"_
+- **Examples**
+  - _"Spring makes leaves turn green"_
+  - _"Did headache disappear from pain reliever or food?"_
+  - _"If I take aspirin, will headache cure?"_
+  - _"If we ban sodas, what happens?"_
 
 * Rung 3: Counterfactuals
 - **Question**: _"Was $X$ that caused $Y$?"_
@@ -650,14 +610,13 @@ MSML610: Advanced Machine Learning
 - **Symbol**: $\Pr(Y_X | x', y')$
 
 - **Activity**:
-  - Imagine what will happen if facts were different
-  - Predicting an outcome is the highest form of reasoning
-    - It requires to understand relationships between cause and effect
+  - Imagine what would happen if facts were different
+  - Highest form of reasoning—requires understanding cause-and-effect
 
-- **Example**
-  - Scientific experiments: _"What if we give a child an adult dose of a drug?"_
-  - Litigation: _"What would the jury conclude?"_
-  - Marketing: _"Why did my marketing campaign fail to generate sales?"_
+- **Examples**
+  - _"What if child received adult drug dose?"_
+  - _"What would jury conclude?"_
+  - _"Why did marketing campaign fail?"_
 
 // # Chap 3: Elements of Causal AI (Causal_AI_in_business.Hurwitz.2023.txt)
 
@@ -666,22 +625,18 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 * Correlation vs Causation Model
-- **Correlation** = identify how variables are related to each other
-- **Causality** = determine whether one variable causes another variable
+- **Correlation**: how variables relate
+- **Causality**: whether one variable causes another
 
-  - Both:
-    - Accept inputs and transform them to compute predictions
-    - Identify how variables are related to each other
-
-  - Correlation-based AI works well when there is abundant historical and
-    observational data
-  - Causal-based AI first creates a business-focused model before integrating data
+- Both accept inputs, transform, compute predictions
+- **Correlation-based AI**: works with abundant historical data
+- **Causal-based AI**: build business model first, then integrate data
 
 * Correlation-Based Model Process
-- **Correlation-based AI is "data first"**
-  - The more data collected the better
+- **"Data first" approach**
+  - More data = better
 
-- **Modeling process**
+- **Process**:
   - Acquire data
   - Integrate and clean data
   - Exploratory data analysis (EDA)
@@ -689,22 +644,21 @@ MSML610: Advanced Machine Learning
   - Build and test models
   - Deploy models in production
 
-- **Many AI projects fail because**
-  - Cultural and organizational issues
-  - Models are opaque and lack explainability
+- **Common failures of correlation-based AI**
+  - Organizational issues
+  - Opaque models, lack explainability
   - Spurious correlations
-  - Missing articulating _"what's the goal of doing ML?"_
+  - Never articulate "what's the business goal?"
 
 * Causation-based Model Process
-- **Causal AI is "model first"**
-  - Understand business question before ingest and transform the data
+- **"Model first" approach**
+  - Understand business question before data
 
-- **Modeling process**
+- **Process**
   - What is the intended outcome?
   - What is the proposed intervention?
-  - What are the confounding factors?
-  - What are the effecting factors?
-  - Create a model graph or diagram
+  - What are confounding and effecting factors?
+  - Create model diagram/graph
   - Data acquisition
   - ...
 
@@ -718,30 +672,27 @@ MSML610: Advanced Machine Learning
 
 * Digital Transformation in Business
 
-- **Digital transformation** is the process of using digital technologies to:
+- **Digital transformation** uses digital technologies to:
   - Reduce costs
   - Improve revenues
 
 - How?
   - **Integration of digital technology**
-    - Embed digital tools (AI, cloud, IoT, automation) into all business areas
-
+    - Embed digital tools (AI, cloud, IoT, automation) into business areas
   - **Cultural and organizational change**
-    - Encourage innovation, agility, and a data-driven mindset
-
+    - Encourage innovation, agility, data-driven mindset
   - **Customer-centric approach**
     - Use digital solutions (personalized experiences, AI-driven insights) to
-      enhance customer engagement and satisfaction
-
+      enhance customer engagement, satisfaction
   - **Process automation and optimization**
-    - Streamline operations through AI, robots, and analytics
-
+    - Streamline operations through AI, robots, analytics
   - **Data-driven decision making**
-    - Leverage big data, machine learning, and real-time analytics to make
-      smarter, faster, and more strategic decisions
+    - Leverage big data, machine learning, real-time analytics for smarter,
+      faster, strategic decisions
 
 * Why AI Projects Fail?
-- **AI projects fail** because they approach problems only from a ML perspective
+- **AI projects fail** because they approach problems only from an ML
+  perspective
   - Data scientists:
     - Focus on model accuracy and technical metrics
     - Work in isolation from domain experts, business users, and data engineers
@@ -765,15 +716,11 @@ MSML610: Advanced Machine Learning
   - No process for monitoring model performance post-deployment
 
 * How to Make AI Project Succeed
-
 1. **Create a hybrid team**
-   - Organizations are complex
-   - Single group lacks skills for difficult problems
-   - Hybrid team:
-     - Represents all business aspects
-     - Uses collaborative framework
-     - Communicates with a single language (e.g., DAGs)
-     - Team size varies by company and project complexity
+   - Represents all business aspects
+   - Uses collaborative framework
+   - Communicates with a single language (e.g., DAGs)
+   - Team size varies by company and project complexity
 
 2. **Meet regularly to ensure continuity**
 
@@ -790,9 +737,7 @@ MSML610: Advanced Machine Learning
 
 * AI in Business
 
-- You have learned that correlation- and causal-based AI are different
-
-- How do you use (Causal) AI in Business?
+- How do you use Causal AI in Business?
 
 \centering
 
@@ -827,59 +772,61 @@ digraph CausalFlowGrid {
 ```
 
 * Step 1: What Are the Intended Outcomes?
-- **90% of AI projects fail** because the project and the business goals are not
-  aligned
-  - What is the _process_ we are interested in analyzing?
-  - What will happen if a _course of action_ is (or not) taken?
-    - What outcomes are positive, negative, unacceptable, optimal?
-  - What _related data_ can be combined / leveraged?
-  - What are the possible / feasible _interventions_?
-    - What confounding factors might be correlated with outcomes and treatments?
-    - What factors exist but we cannot accurately measure?
+- Most AI projects (even 90%) fail
+  - Misalignment between business goals and project
+
+- **Questions**
+  - What process are you analyzing?
+  - What happens if a course of action is taken or not?
+  - Outcomes: positive, negative, unacceptable, optimal?
+  - What related data can be combined and leveraged?
+  - What are possible and feasible interventions?
+    - Confounding factors correlated with outcomes and treatments?
+    - Factors exist but cannot be accurately measured?
+  - ...
 
 * Step 2: What Are the Proposed Interventions?
-- What are **the levers** we can use to get a certain business outcome?
+- What are **levers** to achieve a business outcome?
 
 - E.g., customer marketing for a product
-  - Should we introduce a _new product_?
-  - Does _bundling multiple products_ ...
+  - Introduce a new product?
+  - Does bundling multiple products
     - Improve sales?
     - Inhibit long-term sales?
-  - Should _advertisement focus_ on quality of our product vs other options?
-  - Should we add _more variations_ of the same product?
-  - Should we _discontinue the product_?
+  - Should advertisement focus on product quality vs other options?
+  - Add more variations of the same product?
+  - Discontinue the product?
+  - Divest the product line?
   - ...
-  - Should we _divest the product line_?
 
 * Step 3: What Factors Create Changes?
 - **Identify confounders**
-  - Make it difficult to understand the relationship between variables
-  - Mute or inflate a relationship
+  - Obscure relationship between variables
+  - Mute or inflate relationship
 
 - **Direct effect**
-  - Effect introduced through intervention
+  - Effect through intervention
 
 - **Indirect effect**
-  - Effect introduced by environment or as a byproduct of intervention
+  - Effect by environment or intervention byproduct
 
 - **Total causal effect**
-  - Effect of all factors in environment or model modifying outcome
+  - Effect of all factors modifying outcome
 
 * Step 4: Build Causal DAG
 - **Causal models**
-  - Simplify complex systems without losing key relationships
+  - Simplify systems without losing key relationships
   - Focus on essential variables and interactions
 
 - **Visual models**
   - Abstract complexity into interpretable formats
-  - Highlight direction and strength of influence between variables
+  - Highlight direction and strength of influence
 
 - **Simplicity**
-  - Aids communication between technical and non-technical stakeholders
-  - Reduces cognitive overload by excluding irrelevant details
-  - Guides data collection by identifying impactful variables
-  - Supports hypothesis testing through counterfactual and intervention
-    scenarios
+  - Aid communication between stakeholders
+  - Reduce cognitive overload by excluding irrelevant details
+  - Guide data collection by identifying impactful variables
+  - Support hypothesis testing through counterfactual and intervention scenarios
 
 - **Balance is key**
   - Too much simplicity loses insight
@@ -887,10 +834,10 @@ digraph CausalFlowGrid {
 
 * Marketing Example: Price Intervention
 - Assume **price is intervention** and you want to **maximize revenue**
-  - Should we increase the price and how much?
-  - Should we decrease the price and how much?
-  - Should price change in one-time or over time?
-  - Should we develop individual pricing model for each customer?
+  - Increase price? By how much?
+  - Decrease price? By how much?
+  - Change price one-time or over time?
+  - Develop individual pricing model for each customer?
 
 - The causal DAG is:
   ```graphviz[height=50%]
@@ -976,10 +923,6 @@ digraph CausalFlowGrid {
 
 - **Goal**: Deliver measurable business value
 
-## #############################################################################
-## Roles and Explainability
-## #############################################################################
-
 * Roles in Hybrid Teams
 
 \begingroup \scriptsize
@@ -1007,9 +950,8 @@ digraph CausalFlowGrid {
 |                        | Ensure alignment with strategic goals  |
 \endgroup
 
-* Executing Together: Steps for a Hybrid Team Project
-
-- **Establish a phased / collaborative approach**
+* Executing for a Hybrid Team Project
+- **Establish a collaborative approach**
   - Align strategic goals with technical efforts
   - Emphasize early stakeholder engagement and shared ownership
 
@@ -1027,9 +969,12 @@ digraph CausalFlowGrid {
   - Build the model in small stages
   - Iterate with regular feedback
 
-* The Importance of Explainability
+## #############################################################################
+## Explainability and Interpretability
+## #############################################################################
 
-- **Understanding AI-based models** is growing in importance
+* The Importance of Explainability
+- **Understanding AI-based models**
   - How do ML models make decisions?
   - Can they be trusted?
   - Are they biased?
@@ -1045,34 +990,38 @@ digraph CausalFlowGrid {
 
 * Techniques for Interpretability
 - **Local Interpretable Model-agnostic Explanations** (LIME)
-  - Focus on a single prediction
-  - Approximate the model locally with an interpretable model
-  - Perturb input data and observe changes in predictions
+  - Focus on single prediction
+  - Approximate model locally with interpretable model
+  - Perturb input data, observe prediction changes
 
 - **Partial Dependence Plots** (PDP)
-  - Show marginal effect of one or two features on predicted outcome
-  - Vary value of one feature while keeping others constant
+  - Show marginal effect of features on predicted outcome
+  - Vary one feature, keep others constant
 
 - **Individual Conditional Expectation** (ICE)
-  - Show relationship between a feature and prediction for individual instances
+  - Show feature-prediction relationship for individual instances
 
 - **SHapley Additive exPlanations** (SHAP)
-  - Quantify the contribution of each feature to a specific prediction
+  - Quantify feature contribution to specific prediction
 
 * Causal AI in Interpretable AI
-- Causal AI helps understand causes, effects, and solutions
-  - Causal DAGs present variables, relationships, strengths
-  - Counterfactual analysis predicts outcomes of actions
-  - Model output is understandable to humans, non-experts
-  - Hybrid teams (technical + domain experts) enhance context awareness, reduce
-    blind spots
-  - Removing confounding variables prevents skewed causal estimates
+- **Understand causes, effects, and solutions**
+  - DAGs present variables, relationships, strengths
+  - Counterfactuals predict action outcomes
+  - Remove confounders to prevent skewed estimates
+  - Humans understand output (experts and non-experts)
+  - Hybrid teams enhance context, reduce blind spots
 
 * The Future of Causal AI
-
 - **Causal AI**:
   - Moves from academia to commercial use
-  - Departs from purely data-driven AI systems
-  - Reflects human thinking, analysis, decision-making
+  - Departs from purely data-driven systems
+  - Reflects human thinking and decision-making
 
-- Causal, traditional AI, deep learning, and generative techniques will merge
+// TODO: Add a diagram
+
+- **Convergence**:
+  - Causal AI
+  - Traditional AI
+  - Deep learning
+  - Generative techniques
