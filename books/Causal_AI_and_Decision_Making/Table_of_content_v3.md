@@ -69,7 +69,7 @@ msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
   - TUTORIAL: Building causal DAGs with domain experts
   - TUTORIAL: Visualizing and validating causal structures
 
-### 4: Probabilistic Programming in Practice
+### 4: From Causal Models to Code
 msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
 msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
 msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
@@ -116,6 +116,7 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
 
 ### 6: Causal Identification and Estimation
 [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+msml610/lectures_source/Lesson08.4.txt
 
 - The Identification Problem
   - When can we estimate causal effects from observational data?
@@ -221,7 +222,6 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
   - TUTORIAL: CausalPy (Bayesian experiment design)
 
 ### 10: Causal Discovery
-
 - The Discovery Problem: When and Why It Works
   - Inferring causal structure from observational data
   - Identifiability and causal sufficiency: what assumptions are required?
