@@ -1,6 +1,6 @@
 # From Prediction to Decision: Causal AI for Machine Learning Practitioners
 
-## Part I — Foundations of Causal Inference
+## Part I — Understanding Causality
 
 ### 1: From Prediction Pipelines to Decision Pipelines
 [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
@@ -36,26 +36,7 @@ msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
 - Semantics of Bayesian Networks
 - Constructing a Bayesian Network
 
-### 3: Probabilistic Programming
-msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
-msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
-msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
-msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
-msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
-
-- From Theory to Implementation
-  - Exact Inference in Bayesian Networks
-  - Approximate Inference in Bayesian Networks
-- Probabilistic Models in Practice
-  - Generalized Linear Models
-  - Hierarchical Models
-- Decision Making with Posteriors
-  - Posterior-Based Decisions
-  - Bayesian Model Comparison
-- Tools and Tutorials
-  - TUTORIAL: PyMC (inference, diagnostics, and posterior workflows)
-
-### 4: Causal DAGs and Structural Models
+### 3: Causal DAGs and Structural Models
 [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
 
 - From Bayesian to Causal Networks
@@ -85,7 +66,26 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
   - Fork Structure
   - Inverted Fork
 
-## Part II — Causal Methods in Practice
+### 4: Probabilistic Programming in Practice
+msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
+msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
+msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
+msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
+msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
+
+- From Theory to Implementation
+  - Exact Inference in Bayesian Networks
+  - Approximate Inference in Bayesian Networks
+- Probabilistic Models in Practice
+  - Generalized Linear Models
+  - Hierarchical Models
+- Decision Making with Posteriors
+  - Posterior-Based Decisions
+  - Bayesian Model Comparison
+- Tools and Tutorials
+  - TUTORIAL: PyMC (inference, diagnostics, and posterior workflows)
+
+## Part II — Estimating Causal Effects
 
 ### 5: Interventions, Experiments, and Adjustments
 // Ref: TBD
@@ -115,50 +115,65 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
   - When Do-Calculus Tells You Estimation Is Impossible
 
 ### 6: Causal Identification and Estimation
-[msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
 
 - The Identification Problem
-  - When can we estimate causal effects from data?
-  - Identifiable vs. Unidentifiable Causal Effects
+  - When can we estimate causal effects from observational data?
+  - Identifiable vs. unidentifiable causal effects
+- Foundational Assumptions
+  - Causal sufficiency: no unmeasured confounders
+  - Positivity (overlap) and common support
+  - Consistency and SUTVA
 - Classical Identification Strategies
   - Instrumental variables and natural experiments
-  - Regression discontinuity design
-  - Difference-in-differences approach
-- Selection Bias and Its Consequences
-  - Selection bias mechanisms
-  - Why standard estimates fail under selection
+  - Regression discontinuity design (RDD)
+  - Difference-in-differences (DiD)
+- Selection Bias and Confounding
+  - Why observational data is biased
+  - Omitted variable bias and Simpson's paradox
+- Estimation Methods
+  - Matching and propensity score methods
+  - Regression adjustment and doubly robust estimation
+  - Causal forests and meta-learners (S/T/X/R-learners)
+  - TUTORIAL: EconML, CausalML
+- Heterogeneous Treatment Effects
+  - Average treatment effect (ATE) vs. conditional ATE (CATE)
+  - Uplift modeling and targeting strategies
+- Robustness and Sensitivity
+  - Unmeasured confounding: Rosenbaum bounds and E-values
+  - Refutation methods: placebo tests, data subset, causal model validation
+  - TUTORIAL: DoWhy
+- Case Study: Healthcare Treatment Effect Estimation
+  - Workflow: DAG → method selection → robustness checks
+  - When estimates differ across methods and why
 
-- Average treatment effect (ATE) and conditional ATE (CATE)
-- Matching methods and propensity scores
-- Regression adjustment and doubly robust methods
-- Uplift modeling and heterogeneous treatment effects
-- Application: healthcare observational studies and treatment effect estimation
-- TUTORIAL: EconML (double ML, causal forests, and meta-learners for ATE/CATE estimation)
-- TUTORIAL: CausalML (propensity scoring, matching, and uplift estimation)
-- Why causal estimates can be fragile
-- Unmeasured confounding and its consequences
-- Rosenbaum bounds and E-values
-- Refutation methods: random common cause, data subset, placebo treatment
-- How to know if your causal model is wrong
-- TUTORIAL: DoWhy (built-in refutation tests and sensitivity analysis)
+### 7: Explainability and Causal Attribution
+[msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
 
-### 7: Causal Discovery and Machine Learning
-// Ref: TBD
-
-- Constraint-based methods: PC algorithm and FCI
-- Score-based methods: GES, NOTEARS
-- LiNGAM and non-Gaussian methods
-- Granger causality and state space representations
-- Practical limitations and when discovery fails
-- TUTORIAL: causal-learn (PC algorithm, GES, and constraint-based discovery)
-- TUTORIAL: LiNGAM (linear non-Gaussian causal model discovery)
-- Why standard ML fails at causal questions
-- Double machine learning: combining ML with causal inference
-- Meta-learners: S-learner, T-learner, X-learner, R-learner
-- Causal forests and nonparametric methods
-- Heterogeneous treatment effects in practice
-- TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
-- TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
+- The Core Problem: Explanation vs. Causality
+  - Why practitioners reach for explainability first
+  - The promise and pitfalls of post-hoc interpretation
+  - When explainability is sufficient and when you need causality
+- Explanation Methods (Overview)
+  - Model-specific interpretability: linear models, trees, GAMs
+  - Model-agnostic methods: PDP, ALE, ICE, feature importance
+  - SHAP: Shapley values and correct interpretation
+  - LIME: local linear approximations and their limits
+  - TUTORIAL: SHAP, LIME
+- The Critical Gap
+  - Feature importance is not causality
+  - Correlation masquerades as contribution
+  - Why post-hoc explanations can mislead decision-makers
+  - Common mistakes: confusing which features matter for prediction vs. intervention
+- Causal Attribution Methods
+  - Counterfactual explanations: "what if" reasoning
+  - Causal SHAP: extending Shapley values with causal structure
+  - Contrasting causal effects with feature importance
+  - Actionable recourse: guiding changes that actually matter
+  - TUTORIAL: DiCE, DoWhy (causal attribution)
+- Decision Support Through Causal Lens
+  - Using explainability to identify potential causal relationships
+  - From "what does the model rely on?" to "what should we intervene on?"
+  - Case study: credit decision (why explaining rejection isn't the same as fixing bias)
 
 ### 8: Causal Inference for Time Series
 [msml610/lectures_source/Lesson10-Timeseries_forecasting.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
@@ -187,186 +202,187 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
   - TUTORIAL: CausalImpact (Bayesian interrupted time series for causal inference)
   - TUTORIAL: CausalPy (DiD and synthetic control with Bayesian models)
 
-
-### 9: Explainability Methods: What They Do and Do Not Tell You
-[msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
-
-- Why Practitioners Reach for Explainability First
-  - Black box models, regulation, and trust
-  - The promise and pitfalls of interpretation
-- Model-Specific Interpretability
-  - Linear models: coefficients as explanations
-  - Decision trees and rule-based models
-  - Generalized additive models (GAMs)
-- Model-Agnostic Explanation Methods
-  - Partial dependence plots (PDP) and accumulated local effects (ALE)
-  - Individual conditional expectation (ICE)
-  - Feature importance: Gini, permutation, and others
-  - Local vs. global explanations
-- SHAP: Shapley Values in Machine Learning
-  - Shapley values: from game theory to ML
-  - TreeSHAP, KernelSHAP, DeepSHAP implementations
-  - Interpreting SHAP values correctly
-  - When SHAP is causal and when it is not
-  - TUTORIAL: SHAP (explaining black-box model predictions with Shapley values)
-- LIME: Local Linear Approximations
-  - How LIME works
-  - When to trust local explanations
-  - TUTORIAL: LIME (local interpretable model-agnostic explanations)
-- The Gap Between Explanation and Causation
-  - Feature importance is not causality
-  - Why post-hoc explanations can mislead
-  - When explainability is sufficient and when causal reasoning is needed
-- Causal SHAP and causal attribution methods
-- Counterfactual explanations and actionable recourse
-- Why explainability methods must be interpreted through a causal lens
-- Contrasting causal effects with feature importance
-- TUTORIAL: DiCE (diverse counterfactual explanations and algorithmic recourse)
-- TUTORIAL: DoWhy (contrasting causal effect with feature importance)
-
-### 10: A/B Testing and Experimentation
+### 9: A/B Testing and Experimentation
 [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
 
 - Randomization as Causal Identification
   - Why randomization breaks confounding
-  - Randomization and its relationship to causal identification
   - Causal graphs of randomized experiments
 - A/B Testing in Practice
   - Classic A/B test design and power analysis
   - Switchback experiments and temporal structures
-  - Multi-armed bandits and exploration vs. exploitation
+  - Multi-armed bandits: balancing exploration vs. exploitation
   - The limits of standard A/B testing
-- Observational vs. Experimental Methods
-  - When experiments are feasible
-  - When to use observational causal methods
-  - Hybrid approaches
-- Heterogeneous Treatment Effects and Uplift
-  - Uplift modeling: finding who benefits most
-  - Conditional average treatment effects (CATE)
-  - Targeted interventions: matching effects to populations
-  - Applications: marketing uplift, customer interventions, campaign analysis
-- Policy Evaluation
-  - Off-policy evaluation from experiments
-  - Offline policy learning
+- When to Experiment vs. Observe
+  - Feasibility constraints: cost, time, ethics
+  - When observational methods are necessary
+  - Hybrid approaches: experiments + causal methods
 - Tools and Tutorials
-  - TUTORIAL: CausalML (uplift modeling and A/B test analysis)
-  - TUTORIAL: CausalPy (causal effect estimation with Bayesian models)
+  - TUTORIAL: CausalML (A/B test analysis)
+  - TUTORIAL: CausalPy (Bayesian experiment design)
 
-## Part III — Decision-Making Under Uncertainty
+### 10: Causal Discovery
 
-### 11: Decision Theory and Bayesian Decision Making
+- The Discovery Problem: When and Why It Works
+  - Inferring causal structure from observational data
+  - Identifiability and causal sufficiency: what assumptions are required?
+  - Practical limitations of automated discovery
+- When to Use Discovery vs. Domain Knowledge
+  - Discovery as hypothesis generation, not conclusion
+  - Using partial domain information to constrain the search
+  - Combining automated discovery with expert judgment
+- Discovery Algorithm Families
+  - Constraint-based methods: PC algorithm, FCI
+  - Score-based methods: GES, NOTEARS
+  - Non-Gaussian methods: LiNGAM (exploiting non-Gaussianity)
+  - TUTORIAL: causal-learn, LiNGAM
+- Why Standard ML Fails at Causal Discovery
+  - Multiple models produce identical predictions
+  - Distinguishing different causal structures requires assumptions
+  - The role of assumptions and their validity
+- Validating Discovered Structures
+  - Domain expert review and feedback
+  - Refutation and sensitivity testing
+  - When discovery should change (and not change) your DAG
+
+## Part III — Making Decisions with Causality
+
+### 11: Decision-Making with Causal Models
 [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
 
+- Why Prediction Is Not Enough
+  - Prediction pipelines vs. decision pipelines
+  - When prediction fails: Simpson's paradox, confounding, and policy reversal
+  - Causal models as the foundation for decisions
 - Foundations of Decision Theory
-  - Utility theory and loss functions
-  - Expected utility maximization
-  - Risk preferences and risk-aware decisions
-  - Multi-criteria decisions and trade-offs
-- Bayesian Approach to Decision Making
-  - Statistical decision theory
-  - Bayes optimal decisions
-  - Bayesian inference and posterior-based decisions
-  - Prior elicitation and specification
-- Sequential Decision Making Under Uncertainty
-  - Thompson sampling: intuition and implementation
-  - Bayesian optimization for expensive functions
-  - Multi-armed bandits and adaptive allocation
-- Uncertainty Quantification for ML Practitioners
-  - Aleatoric vs. epistemic uncertainty
-  - Confidence intervals vs. prediction intervals
-  - Calibration and coverage
+  - Utility functions and expected utility
+  - Causal interventions and their expected outcomes
+  - Risk preferences and multi-criteria trade-offs
+- Decision Support with Causal Models
+  - Influence diagrams: adding decisions and utility nodes to causal DAGs
+  - Bayesian decision-making: posteriors to optimal actions
+  - Prior elicitation: specifying beliefs about causal effects
+- Sequential Decision-Making and Active Learning
+  - Value of information: when to gather more data before deciding
+  - Exploration vs. exploitation with causal learning
+  - Thompson sampling and Bayesian optimization for experimentation
+- Uncertainty in Causal Decisions
+  - Aleatoric uncertainty: irreducible randomness
+  - Epistemic uncertainty: model misspecification
   - Communicating uncertainty to stakeholders
-- Bayesian Hypothesis Testing
-  - Bayesian testing vs. frequentist testing
-  - Bayes factors and evidence
-  - Sequential testing and adaptive designs
 - Tools and Tutorials
-  - TUTORIAL: PyMC (Bayesian inference, uncertainty quantification, and posterior-based decisions)
-  - TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
+  - TUTORIAL: PyMC (causal inference and posterior-based decisions)
+  - TUTORIAL: BoTorch (Bayesian optimization for sequential decisions)
 
-### 12: Reinforcement Learning and Sequential Decisions
-[msml610/lectures_source/Lesson12-Reinforcement_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
+### 12: Causal Reinforcement Learning
 
-- Markov Decision Processes (MDPs)
-  - States, actions, and rewards
-  - Transition models and value functions
-  - Optimal policies and Bellman equations
-- Solving MDPs
-  - Value iteration
-  - Policy iteration
-  - Dynamic programming approaches
-- Dealing with Partial Observability
-  - Partially observable MDPs (POMDPs)
-  - Belief states and information states
-  - Approximate solutions for POMDPs
-- Learning from Experience
-  - Model-based RL: learning the dynamics
-  - Model-free RL: learning values directly
-  - Q-learning, SARSA, and temporal difference learning
-  - Exploration vs. exploitation trade-offs
-- Offline and Batch Settings
-  - Offline reinforcement learning
-  - Batch policy evaluation
-  - When to learn and when to evaluate
+- Why Standard RL Fails
+  - MDPs assume no confounding and stable environments
+  - When RL produces brittle, non-generalizable policies
+  - Distribution shift and out-of-distribution failures
+  - How causal structure improves robustness and transfer
+
+- Causal Dynamics Models
+  - Learning causal transition models instead of black-box predictors
+  - Model-based RL: building environment models that generalize
+  - Integrating domain knowledge about causal structure
+
+- Offline RL and Causal Corrections
+  - Learning from logged data without experiments
+  - Addressing confounding in offline settings
+  - Off-policy evaluation with causal adjustments
+
+- Policy Learning with Causal Effects
+  - Learning policies from causal effect estimates
+  - Heterogeneous treatment effects in policy optimization
+  - Counterfactual policy evaluation before deployment
+
 - Tools and Tutorials
-  - TUTORIAL: gymnasium (standard RL environments for MDP experimentation)
-  - TUTORIAL: Stable Baselines3 (reliable RL algorithm implementations)
-  - TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
+  - TUTORIAL: gymnasium (RL environments)
+  - TUTORIAL: d3rlpy (offline RL with causal considerations)
 
-### 13: Probabilistic Forecasting and Uncertainty Quantification
-// Ref: TBD
+### 13: Forecasting Under Causal Intervention
 
-- Predictive distributions and Bayesian prediction
-- Conformal prediction and distribution-free methods
-- Quantile regression and interval forecasts
-- Uncertainty calibration and coverage
-- TUTORIAL: PyMC (posterior predictive checks and uncertainty quantification)
-- TUTORIAL: Hugging Face Transformers (uncertainty in pretrained models)
+- Why Standard Forecasting Breaks
+  - Standard methods assume stationarity
+  - Structural breaks and regime changes under intervention
+  - When past patterns don't predict future outcomes
 
-- Aleatoric vs. epistemic uncertainty (see Chapter 11)
-- Bayesian approaches to uncertainty (Chapter 11, 12)
-- Calibration and coverage in decision contexts (Chapter 11)
+- Causal Constraints on Forecasts
+  - Using causal models to validate forecasts
+  - Forecasting demand under new pricing policies
+  - Causal models as constraints on valid predictions
+
+- Bayesian Forecasting with Causal Models
+  - Generating forecasts from posterior causal models
+  - Propagating causal uncertainty into prediction intervals
+  - Posterior predictive checks: validating model assumptions
+
+- Forecasting Spillover Effects
+  - Joint distributions of multiple outcomes under intervention
+  - Indirect consequences and second-order effects
+  - Validating multivariate causal forecasts
+
+- Tools and Tutorials
+  - TUTORIAL: PyMC (posterior predictive validation)
+  - TUTORIAL: Prophet (structural time series with interventions)
 
 ### 14: Causal Decision Making in Practice
 [msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
 
-- Why Causal Models Are Required for Interventions
-  - Causal vs. predictive thinking in decision making
+- From Learning to Deployment
+  - Bridging causal inference and business decisions
   - When prediction fails: Simpson's paradox and policy reversal
   - Causal models as decision support tools
-- Decision Diagrams and Influence Diagrams
-  - Graphical representations of decision problems
-  - Adding decision nodes to causal DAGs
-  - Value of information and optimal decisions
-- Policy Interventions and Optimization
-  - Policy interventions: atomic and compound actions
-  - Treatment policies and heterogeneous effects
-  - Policy learning from data
+
+- Policy Learning and Optimization
+  - Learning optimal policies from causal effects
+  - Heterogeneous effects: matching interventions to individuals
   - Uplift and targeting strategies
-- Causal Reinforcement Learning
-  - Integrating causal models with RL
-  - When RL is insufficient and causality helps
-  - Model-based causal RL
+  - Adapting policies to different populations
+
 - Real-World Applications
-  - Marketing and customer interventions
-  - Recommendation systems with causal constraints
-  - Healthcare policy evaluation
+  - **Marketing**: targeting customers with causal uplift models
+  - **Healthcare**: treatment guidelines from observational data
+  - **Operations**: resource allocation with causal constraints
+  - **Pricing**: demand models informed by causal dynamics
+  - **HR**: hiring and retention driven by causal insights
+
+- Validation and Continuous Learning
+  - A/B testing policy recommendations
+  - Off-policy evaluation before full deployment
+  - Monitoring assumptions and adapting when they break
+  - Iterative improvement of decision systems
+
 - Tools and Tutorials
-  - TUTORIAL: DoWhy (counterfactual reasoning and policy evaluation)
-  - TUTORIAL: EconML (treatment policy optimization and uplift)
+  - TUTORIAL: DoWhy (policy evaluation and decision support)
+  - TUTORIAL: EconML (policy optimization and uplift)
 
 ### 15: Causal Reasoning in AI Systems
-// Ref: TBD
 
-- What LLMs get right and wrong about causality
-- Chain-of-thought, tree-of-thought, and self-consistency for causal tasks
-- Reflection and self-correction: Reflexion and iterative refinement
-- Connecting LLM reasoning to causal and probabilistic reasoning
-- Agent architectures: reactive, deliberative, and causal
-- Integrating causal models into agent action selection
-- Planning under causal uncertainty
-- Multi-agent systems and human-in-the-loop
-- TUTORIAL: ReAct (reasoning and acting framework for LLM agents)
-- TUTORIAL: LangChain (CoT and tool-augmented reasoning pipelines)
-- TUTORIAL: LangChain + DoWhy (causal model integrated into agent reasoning)
-- TUTORIAL: LlamaIndex (knowledge-grounded reasoning over structured data)
+- LLMs and Causal Reasoning
+  - Where LLMs excel: pattern matching at scale
+  - Where they fail: explicit causal reasoning and counterfactuals
+  - Limitations of pattern-based reasoning for intervention
+  - Robustness: when causal misunderstanding leads to bad decisions
+
+- Enhancing LLM Reasoning
+  - Chain-of-thought prompting for structured causal reasoning
+  - Connecting LLMs to causal and probabilistic frameworks
+  - Tool use: integrating causal inference tools into agent workflows
+
+- Causal Agent Architectures
+  - Agents with explicit causal models in their reasoning
+  - Integrating causal inference into planning and action selection
+  - Planning under causal uncertainty: generating robust policies
+
+- Trustworthy AI Through Causality
+  - Transparency: making reasoning explicit and interpretable
+  - Robustness: using causal structure to find brittle decisions
+  - Fairness: causal approaches to bias and discrimination
+  - Safety: causal constraints on harmful outcomes
+
+- Tools and Tutorials
+  - TUTORIAL: LangChain + DoWhy (causal reasoning in agents)
+  - TUTORIAL: ReAct (reasoning and acting with causal structure)
+  - TUTORIAL: LlamaIndex (knowledge-grounded reasoning)
