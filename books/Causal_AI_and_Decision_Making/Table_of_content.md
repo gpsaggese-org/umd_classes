@@ -130,111 +130,102 @@
 - TUTORIAL: causal-learn (PC algorithm, GES, and constraint-based discovery)
 - TUTORIAL: LiNGAM (linear non-Gaussian causal model discovery)
 
-### 11: Causal Machine Learning
-// Not covered
+### 11: Static Decision-Making
+[msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.1-Intro_to_Probabilistic_Programming.pdf)
+[msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.2-Posterior_Based_Decisions.pdf)
 
-- Why standard ML fails at causal questions
-- Double machine learning
-- Meta-learners: S-learner, T-learner, X-learner, R-learner
-- Causal forests and nonparametric methods
-- Heterogeneous treatment effects in practice
-- TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
-- TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect
-  estimation)
+- Utility theory and expected utility
+- Risk preferences and risk-aware decisions
+- Multi-criteria decisions and trade-offs
+- Statistical decision theory and Bayes optimal decisions
+- Bayesian inference and posterior-based decisions
+- Uncertainty quantification for decision-making
+- Confidence intervals and prediction intervals
+- TUTORIAL: PyMC (Bayesian inference, uncertainty quantification, and
+  posterior-based decisions)
 
-### 12: Causal Fairness and Algorithmic Accountability
-// Not covered
+### 12: Sequential Decision-Making
+[msml610/lectures_source/Lesson12-Reinforcement_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
+[msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
 
-- Limitations of statistical fairness (demographic parity, equalized odds)
-- Causal definitions of fairness
+- Markov decision processes and optimal policies
+- Exploration vs. exploitation trade-off
+- Model-based vs. model-free reinforcement learning
+- Offline reinforcement learning and batch policy evaluation
+- Causal reinforcement learning: integrating causal models into sequential decisions
+- Heterogeneous treatment effects and personalization
+- Policy interventions and treatment policies
+- TUTORIAL: gymnasium (standard RL environments for MDP experimentation)
+- TUTORIAL: Stable Baselines3 (reliable RL algorithm implementations)
+- TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
+- TUTORIAL: EconML (causal RL and treatment policy optimization)
+
+### 13: Decisions Under Uncertainty
+[msml610/lectures_source/Lesson10-Timeseries_forecasting.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
+
+- Aleatoric vs. epistemic uncertainty
+- Probabilistic forecasting and predictive distributions
+- Bayesian prediction and calibration
+- Conformal prediction and distribution-free methods
+- Quantile regression and interval forecasts
+- Sensitivity analysis and robustness
+- Worst-case analysis and robust optimization
+- TUTORIAL: PyMC (posterior predictive checks and uncertainty quantification)
+- TUTORIAL: Hugging Face Transformers (uncertainty in pretrained models)
+
+### 14: From Insights to Outcomes
+[msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
+[msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+
+- A/B testing and experimental design
+- Causal decision-making in practice
+- Business applications and uplift modeling
+- Policy evaluation and continuous learning
+- Communicating causal insights to stakeholders
+- Causal fairness and algorithmic accountability
 - Path-specific effects and direct vs. indirect discrimination
 - Counterfactual fairness and interventional fairness
-- Applications: credit scoring, hiring, criminal justice
-- TUTORIAL: AI Fairness 360 (causal fairness metrics and auditing)
-- TUTORIAL: DoWhy (counterfactual fairness analysis)
+- Applications: credit scoring, hiring, criminal justice, marketing
+- TUTORIAL: CausalML (uplift modeling and A/B test analysis)
+- TUTORIAL: DoWhy (counterfactual reasoning and policy evaluation)
+- TUTORIAL: EconML (treatment policy optimization and business analytics)
 
-### 13: Explainability Methods: What They Do and Do Not Tell You
+## Part III — Advanced Topics and Extensions
+
+**Note**: The core decision-making curriculum is covered in Chapters 11–14. The following chapters provide advanced extensions and specialized applications.
+
+### 15: Explainability and Interpretability
 [msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
 
 - Why practitioners reach for explainability first
 - Black box models, regulation, and trust
 - Model-specific interpretability: linear models, decision trees, GAMs
 - Model-agnostic methods: PDP, ICE, feature importance
-- Local vs. global explanations
-- SHAP: Shapley values from game theory to ML; TreeSHAP, KernelSHAP, DeepSHAP
+- SHAP: Shapley values and when they are causal
 - LIME: local linear approximations
-- When SHAP is causal and when it is not
-- The gap between explanation and causation: feature importance is not causality
+- The gap between explanation and causation
 - When explainability is sufficient and when causal reasoning is needed
+- Causal SHAP and causal attribution methods
+- Counterfactual explanations and algorithmic recourse
 - TUTORIAL: SHAP (explaining black-box model predictions with Shapley values)
 - TUTORIAL: LIME (local interpretable model-agnostic explanations)
-
-### 14: Causal Explainability and Algorithmic Recourse
-[msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
-[msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
-
-- Causal SHAP and causal attribution methods
-- Counterfactual explanations and actionable recourse
-- Why explainability methods must be interpreted through a causal lens
-- Contrasting causal effects with feature importance
 - TUTORIAL: DiCE (diverse counterfactual explanations and algorithmic recourse)
-- TUTORIAL: DoWhy (contrasting causal effect with feature importance)
 
-## Part III — Decision-Making Under Uncertainty
-
-### 15: Decision Theory and Bayesian Decision Making
-[msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.1-Intro_to_Probabilistic_Programming.pdf)
-[msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.2-Posterior_Based_Decisions.pdf)
-[msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson07.5-Bayesian_Model_Comparison.pdf)
-[msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
-
-- Utility theory, loss functions, and expected utility
-- Risk preferences and risk-aware decisions
-- Multi-criteria decisions and trade-offs
-- Statistical decision theory and Bayes optimal decisions
-- Bayesian inference and posterior-based decisions
-- Thompson sampling and Bayesian optimization
-- Bayesian hypothesis testing for practitioners
-- Aleatoric vs. epistemic uncertainty
-- Confidence intervals and prediction intervals
-- TUTORIAL: PyMC (Bayesian inference, uncertainty quantification, and
-  posterior-based decisions)
-- TUTORIAL: BoTorch (Bayesian optimization for sequential decision making)
-
-### 16: Reinforcement Learning and Sequential Decisions
-[msml610/lectures_source/Lesson12-Reinforcement_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson12-Reinforcement_learning.pdf)
-
-- Markov decision processes
-- Partially observable MDPs (POMDPs) and belief states
-- Exploration vs. exploitation
-- Model-based vs. model-free RL
-- Offline reinforcement learning and batch policy evaluation
-- TUTORIAL: gymnasium (standard RL environments for MDP experimentation)
-- TUTORIAL: Stable Baselines3 (reliable RL algorithm implementations)
-- TUTORIAL: d3rlpy (offline reinforcement learning algorithms)
-
-### 17: Probabilistic Forecasting and Uncertainty Quantification
+### 16: Advanced Causal Methods
 // Not covered
 
-- Aleatoric vs. epistemic uncertainty
-- Predictive distributions and Bayesian prediction
-- Conformal prediction and distribution-free methods
-- Quantile regression and interval forecasts
-- Uncertainty calibration and coverage
-- TUTORIAL: PyMC (posterior predictive checks and uncertainty quantification)
-- TUTORIAL: Hugging Face Transformers (uncertainty in pretrained models)
+- Why standard ML fails at causal questions
+- Double machine learning
+- Meta-learners: S-learner, T-learner, X-learner, R-learner
+- Causal forests and nonparametric methods
+- Heterogeneous treatment effects estimation
+- Sensitivity analysis and causal model validation
+- Unmeasured confounding and robustness
+- TUTORIAL: EconML (double ML, causal forests, S/T/X-learners, HTE estimation)
+- TUTORIAL: CausalML (meta-learners and heterogeneous treatment effect estimation)
+- TUTORIAL: DoWhy (refutation tests and sensitivity analysis)
 
-### 18: Causal Decision Making
-[msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
-
-- Why causal models are required for interventional decisions
-- Decision diagrams and influence diagrams
-- Policy interventions, uplift, and treatment policies
-- Causal RL: integrating causal models into sequential decision making
-- TUTORIAL: DoWhy (counterfactual reasoning and policy evaluation)
-- TUTORIAL: EconML (treatment policy optimization and uplift)
-
-### 19: LLMs and Causal Reasoning
+### 17: LLMs and Causal Reasoning
 // Not covered
 
 - What LLMs get right and wrong about causality
