@@ -3,7 +3,7 @@
 ## Part I — Understanding Causality
 
 ### 1: From Prediction Pipelines to Decision Pipelines
-[msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
+// [msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.1-Causal_AI_intro.pdf)
 
 - Introduction and Motivation
   - Background
@@ -24,8 +24,8 @@
   - TUTORIAL: Introduction to causal modeling frameworks
 
 ### 2: Bayesian Networks
-msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
-msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
+// msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
+// msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
 
 - Logic-Based AI Under Uncertainty
   - Problem
@@ -45,7 +45,7 @@ msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
   - TUTORIAL: Implementing Bayesian Networks in PyMC
 
 ### 3: Causal DAGs and Structural Models
-[msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+// [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
 
 - From Bayesian to Causal Networks
   - (Non-Causal) Bayesian Networks
@@ -70,11 +70,11 @@ msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
   - TUTORIAL: Visualizing and validating causal structures
 
 ### 4: From Causal Models to Code
-msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
-msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
-msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
-msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
-msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
+// msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
+// msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
+// msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
+// msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
+// msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
 
 - From Theory to Implementation
   - Exact Inference in Bayesian Networks
@@ -115,8 +115,8 @@ msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
   - TUTORIAL: DoWhy (do-calculus and adjustment methods)
 
 ### 6: Causal Identification and Estimation
-[msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
-msml610/lectures_source/Lesson08.4.txt
+// [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+// msml610/lectures_source/Lesson08.4.txt
 
 - The Identification Problem
   - When can we estimate causal effects from observational data?
@@ -146,7 +146,7 @@ msml610/lectures_source/Lesson08.4.txt
   - TUTORIAL: DoWhy (end-to-end causal analysis)
 
 ### 7: Explainability and Causal Attribution
-[msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+// [msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
 
 - The Core Problem: Explanation vs. Causality
   - Why practitioners reach for explainability first
@@ -176,7 +176,7 @@ msml610/lectures_source/Lesson08.4.txt
   - TUTORIAL: DiCE and DoWhy (causal attribution)
 
 ### 8: Causal Inference for Time Series
-[msml610/lectures_source/Lesson10-Timeseries_forecasting.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
+// [msml610/lectures_source/Lesson10-Timeseries_forecasting.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson10-Timeseries_forecasting.pdf)
 
 - Time Series vs. Cross-Sectional Causality
   - Temporal causal structures
@@ -203,7 +203,7 @@ msml610/lectures_source/Lesson08.4.txt
   - TUTORIAL: CausalPy (DiD and synthetic control)
 
 ### 9: A/B Testing and Experimentation
-[msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+// [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
 
 - Randomization as Causal Identification
   - Why randomization breaks confounding
@@ -247,7 +247,7 @@ msml610/lectures_source/Lesson08.4.txt
 ## Part III — Making Decisions with Causality
 
 ### 11: Decision-Making with Causal Models
-[msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+// [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
 
 - Why Prediction Is Not Enough
   - Prediction pipelines vs. decision pipelines
@@ -319,7 +319,7 @@ msml610/lectures_source/Lesson08.4.txt
   - TUTORIAL: Prophet (structural time series with interventions)
 
 ### 14: Causal Decision Making in Practice
-[msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
+// [msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
 
 - From Learning to Deployment
   - Bridging causal inference and business decisions
