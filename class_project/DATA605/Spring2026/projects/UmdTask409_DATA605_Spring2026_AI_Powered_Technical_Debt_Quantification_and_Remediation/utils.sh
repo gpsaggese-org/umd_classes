@@ -70,7 +70,7 @@ build_container_image() {
     if [[ $DOCKER_BUILD_MULTI_ARCH != 1 ]]; then
         # Build for a single architecture.
         echo "Building for current architecture..."
-        OPTS="--progress plain $@"
+        OPTS="$@"
         (cd $DIR; docker build $OPTS -t $FULL_IMAGE_NAME . 2>&1 | tee ../docker_build.log; exit ${PIPESTATUS[0]})
     else
         # Build for multiple architectures.

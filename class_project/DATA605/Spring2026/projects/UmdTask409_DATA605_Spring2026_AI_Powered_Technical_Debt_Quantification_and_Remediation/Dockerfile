@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN python3 -m venv /venv
 
 # Make the venv the default Python.
-ENV PATH="/opt/bin:$PATH"
+ENV PATH="/venv/bin:$PATH"
 
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip

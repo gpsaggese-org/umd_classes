@@ -26,7 +26,7 @@ print_docker_vars
 
 # Configure Docker build settings.
 # Enable BuildKit for improved build performance and features.
-export DOCKER_BUILDKIT=1
+export DOCKER_BUILDKIT=0
 #export DOCKER_BUILDKIT=0
 
 # Configure single-architecture build (set to 1 for multi-arch build).
