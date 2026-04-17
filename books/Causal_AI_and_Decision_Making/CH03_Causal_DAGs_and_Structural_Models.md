@@ -1,6 +1,8 @@
+// Refs
+//
 // msml610/lectures_source/Lesson08.2-Causal_Networks.txt
 // msml610/lectures/Lesson08.2-Causal_Networks.pdf
-
+//
 // msml610/lectures_source/Lesson08.3-Do_Calculus.txt
 // msml610/lectures/Lesson08.3-Do_Calculus.pdf
 
