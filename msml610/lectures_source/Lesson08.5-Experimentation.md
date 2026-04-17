@@ -1,3 +1,5 @@
+// TODO: Improve the bold
+
 ::: columns
 :::: {.column width=15%}
 ![](msml610/lectures_source/figures/UMD_Logo.png)
@@ -33,7 +35,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::: {.column width=40%}
 
-![](msml610/lectures_source/figures/book_covers/Book_cover_image.jpg){ height=20% }
+![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){ height=20% }
 
 ::::
 :::
@@ -60,48 +62,11 @@ MSML610: Advanced Machine Learning
 - **Example**: Google reports running >10,000 experiments per year to validate
   ranking changes before launch
 
-* Where This Fits in the Course
-
-- So far we studied **observational** methods:
-  - Back-door / front-door adjustment (Ch. 5)
-  - Instrumental variables, DiD, RDD (Ch. 6)
-  - Time-series methods (Ch. 8)
-
-- These require strong assumptions (no unmeasured confounders, parallel trends)
-
-- **Experiments** sidestep these assumptions by _designing_ randomization
-  into the data-generating process
-
-- This lecture covers:
-  1. Why randomization is the cleanest causal identification strategy
-  2. How to design and analyze standard A/B tests
-  3. Switchback experiments and multi-armed bandits
-  4. When experiments fail, and what to do instead
-
-* Lecture Roadmap
-
-```mermaid
-mindmap
-  root((**A/B Testing and Experimentation**))
-    (**Randomization**)
-      Breaks confounding
-      Causal graphs of RCTs
-    (**A/B Testing**)
-      Design
-      Power analysis
-      Pitfalls
-    (**Advanced Designs**)
-      Switchback
-      Multi-armed bandits
-    (**When to Experiment**)
-      Feasibility
-      Ethics
-      Hybrid methods
-```
-
 # ##############################################################################
 # Randomization as Causal Identification
 # ##############################################################################
+
+// TODO(gp): Repeated with Lesson08.4
 
 ## #############################################################################
 ## Why Randomization Breaks Confounding
@@ -139,6 +104,7 @@ mindmap
 
 - **No back-door adjustment needed** — the design closes all back-door paths
 
+// TODO(gp): Merge the graphs in the same slide
 * Causal Graph of an Observational Study
 
 ```graphviz
@@ -312,6 +278,7 @@ digraph RCT {
 
 - **Example**: Halving the detectable effect **quadruples** required users
 
+// TODO(gp): Move to notebook. Is there a Python package for this?
 * Power Analysis: Worked Example
 
 - **Example**: Test a checkout redesign
@@ -691,18 +658,3 @@ digraph EE {
   5. Hold out a control slice to validate incremental lift
 
 - Turns a predictive-ranking problem into a **causal** one
-
-* Key Takeaways
-
-- **Randomization** is the cleanest path to causal identification
-  - It physically implements Pearl's $do$-operator
-
-- **A/B testing** is the practical workhorse
-  - But power analysis, SRM checks, and SUTVA must be taken seriously
-
-- **Advanced designs** (switchbacks, MAB, cluster randomization) extend the
-  toolbox when standard A/B fails
-
-- **Experiments are not always feasible**
-  - Observational methods and hybrid approaches remain essential
-  - Match the tool to the problem, not the other way around
