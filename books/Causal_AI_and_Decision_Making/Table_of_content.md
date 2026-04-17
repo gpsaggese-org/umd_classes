@@ -91,7 +91,8 @@
 ## Part II — Estimating Causal Effects
 
 ### 5: Interventions, Experiments, and Adjustments
-// Ref: TBD
+// [msml610/lectures_source/Lesson08.3-Do_Calculus.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.3-Do_Calculus.pdf)
+// ?
 
 - From Observation to Intervention
   - Interventions in Causal Networks
@@ -146,7 +147,7 @@
   - TUTORIAL: DoWhy (end-to-end causal analysis)
 
 ### 7: Explainability and Causal Attribution
-// [msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson11-Probabilistic_deep_learning.pdf)
+// ?
 
 - The Core Problem: Explanation vs. Causality
   - Why practitioners reach for explainability first
@@ -222,6 +223,8 @@
   - TUTORIAL: CausalPy (Bayesian experiment design)
 
 ### 10: Causal Discovery
+// ?
+
 - The Discovery Problem: When and Why It Works
   - Inferring causal structure from observational data
   - Identifiability and causal sufficiency: what assumptions are required?
@@ -247,7 +250,7 @@
 ## Part III — Making Decisions with Causality
 
 ### 11: Decision-Making with Causal Models
-// [msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson09.3-Multi_Armed_Bandits.pdf)
+// ?
 
 - Why Prediction Is Not Enough
   - Prediction pipelines vs. decision pipelines
@@ -274,6 +277,7 @@
   - TUTORIAL: BoTorch (Bayesian optimization for sequential decisions)
 
 ### 12: Causal Reinforcement Learning
+// ?
 
 - Why Standard RL Fails
   - MDPs assume no confounding and stable environments
@@ -319,7 +323,7 @@
   - TUTORIAL: Prophet (structural time series with interventions)
 
 ### 14: Causal Decision Making in Practice
-// [msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/msml610/lectures/Lesson08.5-Causal_AI_In_Business.pdf)
+// ?
 
 - From Learning to Deployment
   - Bridging causal inference and business decisions
@@ -346,6 +350,7 @@
   - TUTORIAL: EconML (policy optimization and uplift)
 
 ### 15: Causal Reasoning in AI Systems
+// ?
 
 - LLMs and Causal Reasoning
   - Where LLMs excel: pattern matching at scale
