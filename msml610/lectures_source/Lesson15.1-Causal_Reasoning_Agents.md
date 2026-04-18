@@ -43,31 +43,27 @@ MSML610: Advanced Machine Learning
 # ##############################################################################
 
 // Books:
-// - Pearl, J. (2009). "Causality: Models, Reasoning, and Inference" (2nd ed.)
-//   https://bayes.cs.ucla.edu/BOOK-2K
-// - Pearl, J., Glymour, M., & Jewell, N. P. (2016). "Causal Inference in Statistics: A Primer"
+// - 2016, Pearl et al., "Causal Inference in Statistics: A Primer"
 //   https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference" (2nd ed.)
+//   https://bayes.cs.ucla.edu/BOOK-2K
 
-// Papers:
-// - Spirtes, P., Glymour, C., & Scheines, R. (2000). "Causation, Prediction, and Search" (2nd ed.)
+// Articles:
+// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
 //   https://doi.org/10.7551/mitpress/1754.001.0001
-// - Rubin, D. B. (1974). "Estimating causal effects of treatments in randomized and nonrandomized studies"
-//   Journal of Educational Psychology, 66(5), 688-701
+// - 1974, Rubin, "Estimating causal effects of treatments in randomized and nonrandomized studies"
 //   https://doi.org/10.1037/h0037350
 
 ## ##############################################################################
 ## LLMs: Strengths and Limitations
 ## ##############################################################################
 
-// Papers:
-// - Brown, T. B., Mann, B., Ryder, N., Subbiah, M., Kaplan, J., Dhariwal, P., ... & Amodei, D. (2020). 
-//   "Language Models are Few-Shot Learners"
-//   https://arxiv.org/abs/2005.14165
-// - Hoffmann, J., Borgeaud, S., Mensch, A., Perez, E., Ramesh, A., Huang, Y., ... & Sifre, L. (2022).
-//   "Training Compute-Optimal Large Language Models"
+// Articles:
+// - 2022, Hoffmann et al., "Training Compute-Optimal Large Language Models"
 //   https://arxiv.org/abs/2203.15556
-// - Kaplan, J., McCandlish, S., Henighan, T., Brown, T. B., Chess, B., Child, R., ... & Amodei, D. (2020).
-//   "Scaling Laws for Neural Language Models"
+// - 2020, Brown et al., "Language Models are Few-Shot Learners"
+//   https://arxiv.org/abs/2005.14165
+// - 2020, Kaplan et al., "Scaling Laws for Neural Language Models"
 //   https://arxiv.org/abs/2001.08361
 
 * LLMs: Where They Excel
@@ -106,18 +102,17 @@ MSML610: Advanced Machine Learning
 ## Pattern-Based Reasoning vs. Causal Reasoning
 ## ##############################################################################
 
-// Papers:
-// - Peters, J., Janzing, D., & Schölkopf, B. (2017). "Elements of Causal Inference: Foundations and Learning Algorithms"
+// Books:
+// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
 //   https://mitpress.mit.edu/books/elements-causal-inference
-// - Rotnitzky, A., & Robins, J. M. (2005). "Semiparametric regression adjustment to estimate policy effects"
-//   Journal of the American Statistical Association, 100(469), 319-331
-//   https://doi.org/10.1198/016214504000001646
-// - Angrist, J. D., & Pischke, J. S. (2008). "Mostly Harmless Econometrics: An Empiricist's Companion"
+// - 2008, Angrist et al., "Mostly Harmless Econometrics: An Empiricist's Companion"
 //   https://economics.mit.edu/files/11869
-// - Bottou, L., Peters, J., Quiñonero-Candela, J., Charles, X., Chickering, M., Garcez, A. D. D., ... & Zhang, K. (2013).
-//   "Counterfactual reasoning and learning systems: The example of computational advertising"
-//   Journal of Machine Learning Research, 14(11), 3207-3260
+
+// Articles:
+// - 2013, Bottou et al., "Counterfactual reasoning and learning systems: The example of computational advertising"
 //   https://arxiv.org/abs/1209.0467
+// - 2005, Rotnitzky et al., "Semiparametric regression adjustment to estimate policy effects"
+//   https://doi.org/10.1198/016214504000001646
 
 * Pattern Recognition and Its Limits
 
@@ -188,25 +183,21 @@ MSML610: Advanced Machine Learning
 # Enhancing LLM Reasoning with Causality
 # ##############################################################################
 
-// Papers:
-// - Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichien, B., Xia, F., ... & Zhou, D. (2022).
-//   "Emergent Abilities of Large Language Models"
+// Articles:
+// - 2022, Wei et al., "Emergent Abilities of Large Language Models"
 //   https://arxiv.org/abs/2206.07682
 
 ## ##############################################################################
 ## Chain-of-Thought Prompting for Causal Reasoning
 ## ##############################################################################
 
-// Papers:
-// - Wei, J., Wang, X., Schuurmans, D., Bosma, M., Ichien, B., Xia, F., ... & Zhou, D. (2022).
-//   "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
-//   https://arxiv.org/abs/2201.11903
-// - Kojima, T., Gu, S. S., Reid, M., Matsuo, Y., & Iwasawa, Y. (2022).
-//   "Large Language Models are Zero-Shot Reasoners"
-//   https://arxiv.org/abs/2205.11916
-// - Yao, S., Yu, D., Zhao, J., Shafran, I., Griffiths, T. L., Cao, Y., & Narasimhan, K. (2023).
-//   "Tree of Thoughts: Deliberate Problem Solving with Large Language Models"
+// Articles:
+// - 2023, Yao et al., "Tree of Thoughts: Deliberate Problem Solving with Large Language Models"
 //   https://arxiv.org/abs/2305.10601
+// - 2022, Wei et al., "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
+//   https://arxiv.org/abs/2201.11903
+// - 2022, Kojima et al., "Large Language Models are Zero-Shot Reasoners"
+//   https://arxiv.org/abs/2205.11916
 
 * Chain-of-Thought Prompting: Structured Reasoning
 
@@ -270,21 +261,16 @@ MSML610: Advanced Machine Learning
 ## ##############################################################################
 
 // Books:
-// - Pearl, J. (1988). "Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference"
-//   https://doi.org/10.1016/B978-0-08-051489-5.50008-4
-// - Koller, D., & Friedman, N. (2009). "Probabilistic Graphical Models: Principles and Techniques"
+// - 2009, Koller et al., "Probabilistic Graphical Models: Principles and Techniques"
 //   https://mitpress.mit.edu/books/probabilistic-graphical-models
+// - 1988, Pearl, "Probabilistic Reasoning in Intelligent Systems: Networks of Plausible Inference"
+//   https://doi.org/10.1016/B978-0-08-051489-5.50008-4
 
-// Papers:
-// - Janzing, D., & Schölkopf, B. (2010). "Causal inference using invariant prediction: identification and outlook"
-//   Journal of The Royal Statistical Society Series B, 77(5), 1015-1048
-//   https://arxiv.org/abs/1304.4877
-// - Nowak-Brzezińska, A., & Xięski, T. (2020). "Causal Bayesian Networks"
-//   In: Yin, H., et al. IDEAL 2017. IDEAL 2017. Lecture Notes in Computer Science, vol 10585.
-// - Richards, B. A., Lillicrap, T. P., Beaudoin, P., Bengio, Y., Bogacz, R., Christensen, A., ... & Zambaldi, V. (2019).
-//   "A deep learning framework for neuroscience"
-//   Nature Neuroscience, 22(11), 1761-1770
+// Articles:
+// - 2019, Richards et al., "A deep learning framework for neuroscience"
 //   https://doi.org/10.1038/s41593-019-0520-2
+// - 2010, Janzing et al., "Causal inference using invariant prediction: identification and outlook"
+//   https://arxiv.org/abs/1304.4877
 
 * Connecting LLMs to Formal Causal Models
 
@@ -377,28 +363,21 @@ MSML610: Advanced Machine Learning
 # Causal Agent Architectures
 # ##############################################################################
 
-// Papers:
-// - Schaal, S., Ijspeert, A., & Billard, A. (2003). "Computational approaches to motor learning by imitation"
-//   Philosophical Transactions of the Royal Society B: Biological Sciences, 358(1431), 537-547
-//   https://doi.org/10.1098/rstb.2003.1257
-// - Precup, D., Teh, Y. W., & Welling, M. (2017). "Reinforcement learning with unsupervised auxiliary tasks"
-//   In: International Conference on Learning Representations (ICLR)
+// Articles:
+// - 2017, Precup et al., "Reinforcement learning with unsupervised auxiliary tasks"
 //   https://arxiv.org/abs/1611.05397
+// - 2003, Schaal et al., "Computational approaches to motor learning by imitation"
+//   https://doi.org/10.1098/rstb.2003.1257
 
 ## ##############################################################################
 ## Agents with Explicit Causal Models
 ## ##############################################################################
 
-// Papers:
-// - Pearl, J. (2019). "The Book of Why: The New Science of Cause and Effect"
-// - Dasgupta, I., Wang, S. A., Chiappa, S., Ortega, J., Raposo, D., Hughes, E., ... & Leibo, J. Z. (2019).
-//   "Causal reasoning from meta-reinforcement learning"
-//   In: International Conference on Learning Representations (ICLR)
-//   https://arxiv.org/abs/1901.08162
-// - Mnih, V., Kavukcuoglu, K., & Silver, D. (2013). "Learning play representations from match graphs"
-//   In: International Conference on Machine Learning (ICML)
-// - Hafner, D., Dreyer, T., & Ba, J. (2023). "Mastering Atari, Go, Chess and Shogi by Planning with a Learned World Model"
+// Articles:
+// - 2023, Hafner et al., "Mastering Atari, Go, Chess and Shogi by Planning with a Learned World Model"
 //   https://arxiv.org/abs/2104.06294
+// - 2019, Dasgupta et al., "Causal reasoning from meta-reinforcement learning"
+//   https://arxiv.org/abs/1901.08162
 
 * Causal Reasoning Agents: Design
 
@@ -469,19 +448,17 @@ digraph CausalAgent {
 ## Integrating Causal Inference into Planning
 ## ##############################################################################
 
-// Papers:
-// - Puterman, M. L. (1994). "Markov Decision Processes: Discrete Stochastic Dynamic Programming"
+// Books:
+// - 1994, Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic Programming"
 //   https://doi.org/10.1002/9780470316887
-// - Bareinboim, E., & Pearl, J. (2016). "Causal inference and the data-fusion problem"
-//   Proceedings of the National Academy of Sciences, 113(27), 7345-7352
-//   https://arxiv.org/abs/1412.3608
-// - Buesing, L., Weber, T., Racanière, S., Eslami, S. M. A., Pfaff, T., Czarnecki, J. M., & Pascanu, R. (2018).
-//   "Learning and Policy Search in Stochastic Dynamical Systems with Bayesian Neural Networks"
-//   In: International Conference on Learning Representations (ICLR)
-//   https://arxiv.org/abs/1805.12114
-// - Ivgi, S., Berant, J., & Globerson, A. (2022). "Causal Effect Inference with Deep Latent-Variable Models"
-//   In: Neural Information Processing Systems (NeurIPS)
+
+// Articles:
+// - 2022, Ivgi et al., "Causal Effect Inference with Deep Latent-Variable Models"
 //   https://arxiv.org/abs/2205.06934
+// - 2018, Buesing et al., "Learning and Policy Search in Stochastic Dynamical Systems with Bayesian Neural Networks"
+//   https://arxiv.org/abs/1805.12114
+// - 2016, Bareinboim et al., "Causal inference and the data-fusion problem"
+//   https://arxiv.org/abs/1412.3608
 
 * Planning Under Causal Uncertainty
 
@@ -550,29 +527,23 @@ digraph CausalAgent {
 # Trustworthy AI Through Causality
 # ##############################################################################
 
-// Papers:
-// - Molnar, C. (2019). "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable"
+// Articles:
+// - 2019, Molnar, "Interpretable Machine Learning: A Guide for Making Black Box Models Explainable"
 //   https://christophm.github.io/interpretable-ml-book/
-// - Lipton, Z. C. (2018). "The Mythos of Model Interpretability"
-//   Communications of the ACM, 61(10), 35-43
+// - 2018, Lipton, "The Mythos of Model Interpretability"
 //   https://arxiv.org/abs/1606.03490
 
 ## ##############################################################################
 ## Transparency and Interpretability
 ## ##############################################################################
 
-// Papers:
-// - Ribeiro, M. T., Singh, S., & Guestrin, C. (2016). "Why Should I Trust You?: Explaining the Predictions of Any Classifier"
-//   In: ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)
-//   https://arxiv.org/abs/1602.04938
-// - Sundararajan, M., & Najmi, A. (2020). "The many Shapley values for model explanation"
-//   In: International Conference on Machine Learning (ICML)
+// Articles:
+// - 2020, Sundararajan et al., "The many Shapley values for model explanation"
 //   https://arxiv.org/abs/1908.08474
-// - Miller, T. (2019). "Explanation in artificial intelligence: Insights from the social sciences"
-//   Journal of Artificial Intelligence Research, 67, 181-200
+// - 2019, Miller, "Explanation in artificial intelligence: Insights from the social sciences"
 //   https://arxiv.org/abs/1706.07269
-// - Caswell, I., & Liang, B. (2020). "Recent Advances and Clinical Applications of Deep Learning in Medical Image Analysis"
-//   IEEE Reviews in Biomedical Engineering, 14, 194-217
+// - 2016, Ribeiro et al., "Why Should I Trust You?: Explaining the Predictions of Any Classifier"
+//   https://arxiv.org/abs/1602.04938
 
 * Making Reasoning Explicit and Interpretable
 
@@ -611,20 +582,15 @@ digraph CausalAgent {
 ## Robustness Through Causal Constraints
 ## ##############################################################################
 
-// Papers:
-// - Goodfellow, I. J., Shlens, J., & Szegedy, C. (2014). "Explaining and Harnessing Adversarial Examples"
-//   https://arxiv.org/abs/1412.6572
-// - Papernot, N., McDaniel, P., Goodfellow, I., Jha, S., Celik, Z. B., & Swami, A. (2016).
-//   "Practical Black-Box Attacks against Machine Learning"
-//   In: ACM Asia Conference on Computer and Communications Security (ASIACCS)
-//   https://arxiv.org/abs/1602.02697
-// - Schott, L., Rauber, J., Bethge, M., & Brendel, W. (2019). "Towards the first adversarially robust neural network model on MNIST"
-//   In: International Conference on Learning Representations (ICLR)
-//   https://arxiv.org/abs/1805.09190
-// - Scholkopf, B., Janzing, D., Peters, J., Sgarbossa, E., Zech, K., & Muandet, K. (2021).
-//   "Toward Causal Representation Learning"
-//   Proceedings of the IEEE, 109(5), 612-633
+// Articles:
+// - 2021, Scholkopf et al., "Toward Causal Representation Learning"
 //   https://arxiv.org/abs/2102.11107
+// - 2019, Schott et al., "Towards the first adversarially robust neural network model on MNIST"
+//   https://arxiv.org/abs/1805.09190
+// - 2016, Papernot et al., "Practical Black-Box Attacks against Machine Learning"
+//   https://arxiv.org/abs/1602.02697
+// - 2014, Goodfellow et al., "Explaining and Harnessing Adversarial Examples"
+//   https://arxiv.org/abs/1412.6572
 
 * Finding Brittle Decisions Through Causal Analysis
 
@@ -673,21 +639,19 @@ digraph CausalAgent {
 ## Fairness Through Causal Reasoning
 ## ##############################################################################
 
-// Papers:
-// - Kusner, M. J., Loftus, J., Russell, C., & Silva, R. (2017). "Counterfactual Fairness"
-//   In: Advances in Neural Information Processing Systems (NeurIPS)
-//   https://arxiv.org/abs/1705.10264
-// - Hardt, M., Price, E., & Srebro, N. (2016). "Equality of Opportunity in Supervised Learning"
-//   In: Advances in Neural Information Processing Systems (NeurIPS)
-//   https://arxiv.org/abs/1610.02413
-// - Nabi, R., & Shpitser, I. (2018). "Fair inference through semiparametric-efficient estimation over constraint-specific paths"
-//   In: Advances in Neural Information Processing Systems (NeurIPS)
-//   https://arxiv.org/abs/1806.09055
-// - Zhang, B. H., Lemoine, B., & Mitchell, M. (2018). "Mitigating Unwanted Biases with Adversarial Learning"
-//   In: AIES '18: Conference on AI Ethics and Society
-//   https://arxiv.org/abs/1801.07593
-// - Barocas, S., Hardt, M., & Narayanan, A. (2019). "Fairness and Machine Learning"
+// Books:
+// - 2019, Barocas et al., "Fairness and Machine Learning"
 //   https://fairmlbook.org
+
+// Articles:
+// - 2018, Nabi et al., "Fair inference through semiparametric-efficient estimation over constraint-specific paths"
+//   https://arxiv.org/abs/1806.09055
+// - 2018, Zhang et al., "Mitigating Unwanted Biases with Adversarial Learning"
+//   https://arxiv.org/abs/1801.07593
+// - 2017, Kusner et al., "Counterfactual Fairness"
+//   https://arxiv.org/abs/1705.10264
+// - 2016, Hardt et al., "Equality of Opportunity in Supervised Learning"
+//   https://arxiv.org/abs/1610.02413
 
 * Causal Approaches to Bias and Discrimination
 
@@ -741,20 +705,15 @@ digraph CausalAgent {
 ## Safety Through Causal Reasoning
 ## ##############################################################################
 
-// Papers:
-// - Amodei, D., Olah, C., Steinhardt, J., Christiano, P., Schulman, J., & Mané, D. (2016).
-//   "Concrete Problems in AI Safety"
-//   https://arxiv.org/abs/1606.06565
-// - Soares, N., & Fallenstein, B. (2017). "Agent Foundations for Artificial General Intelligence"
-//   In: The Technological Singularity
-//   https://intelligence.org/files/Foundations.pdf
-// - Everitt, T., Leike, J., & Hutter, M. (2018). "Sequential Extensions of Causal Models"
-//   In: International Conference on Machine Learning (ICML)
+// Articles:
+// - 2023, Hendrycks, "Natural and Artificial Intelligence"
+//   https://arxiv.org/abs/2307.04187
+// - 2018, Everitt et al., "Sequential Extensions of Causal Models"
 //   https://arxiv.org/abs/1807.10470
-// - Taylor, J., Levin, E., & Krebs, G. B. (2016). "The AI Alignment Problem"
-//   In: The Technological Singularity
-// - Hendrycks, D. (2023). "Natural and Artificial Intelligence"
-//   Accessed at: https://arxiv.org/abs/2307.04187
+// - 2017, Soares et al., "Agent Foundations for Artificial General Intelligence"
+//   https://intelligence.org/files/Foundations.pdf
+// - 2016, Amodei et al., "Concrete Problems in AI Safety"
+//   https://arxiv.org/abs/1606.06565
 
 * Causal Constraints on Harmful Outcomes
 
@@ -817,18 +776,15 @@ digraph CausalAgent {
 # ##############################################################################
 
 // Books:
-// - Pearl, J., & Mackenzie, D. (2018). "The Book of Why: The New Science of Cause and Effect"
-//   Basic Books. ISBN: 978-0465097609
-// - Peters, J., Janzing, D., & Schölkopf, B. (2017). "Elements of Causal Inference: Foundations and Learning Algorithms" (2nd ed.)
-//   MIT Press. https://mitpress.mit.edu/books/elements-causal-inference
+// - 2018, Pearl et al., "The Book of Why: The New Science of Cause and Effect"
+//   https://www.basicbooks.com/titles/judea-pearl/the-book-of-why/9780465097609/
+// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms" (2nd ed.)
+//   https://mitpress.mit.edu/books/elements-causal-inference
 
-// Papers:
-// - Schölkopf, B., Locatello, F., Bauer, S., Ke, N. R., Kalchbrenner, N., Goyal, A., & Bengio, Y. (2021).
-//   "Toward Causal Representation Learning"
-//   Proceedings of the IEEE, 109(5), 612-633
+// Articles:
+// - 2021, Schölkopf et al., "Toward Causal Representation Learning"
 //   https://arxiv.org/abs/2102.11107
-// - Brendel, W., Rauber, J., & Bethge, M. (2018). "Decision-based adversarial attacks: reliable attacks against machine learning models"
-//   In: International Conference on Learning Representations (ICLR)
+// - 2018, Brendel et al., "Decision-based adversarial attacks: reliable attacks against machine learning models"
 //   https://arxiv.org/abs/1712.04248
 
 * Causal Reasoning for Trustworthy AI
