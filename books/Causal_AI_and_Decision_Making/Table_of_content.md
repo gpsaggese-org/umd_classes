@@ -249,6 +249,7 @@
 
 ## Part III — Making Decisions with Causality
 
+* Integrating Causal Inference into LLM Workflows
 ### 11: Decision-Making with Causal Models
 // ?
 

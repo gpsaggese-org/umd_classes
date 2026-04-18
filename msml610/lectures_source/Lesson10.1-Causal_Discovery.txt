@@ -334,7 +334,7 @@ digraph Chain2 {
 
 * Discovery as Hypothesis Generation
 
-- **Discovery algorithms output _candidate_ DAGs, not truth**
+- **Discovery algorithms output *candidate* DAGs, not truth**
   - Output depends on assumptions that may not hold
   - Multiple DAGs in the equivalence class are equally compatible
 
@@ -811,7 +811,7 @@ digraph C3 {
 
 * Validating a Discovered DAG
 
-- **A recovered DAG is a _hypothesis_** until validated
+- **A recovered DAG is a *hypothesis*** until validated
 
 - **Validation strategies**:
   1. **Expert review**: do edges match known mechanisms?
@@ -860,7 +860,7 @@ digraph C3 {
   - Refutation tests fail your current DAG
   - Interventional experiments confirm the discovered structure
 
-- **Do _not_ update your DAG when**:
+- **Do *not* update your DAG when**:
   - Edge contradicts well-established mechanism (e.g., time order, physics)
   - Result hinges on weak faithfulness near independence boundary
   - Sample size is too small for reliable CI tests
