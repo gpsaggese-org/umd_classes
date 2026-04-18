@@ -169,6 +169,7 @@ digraph Discovery {
 // - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
 // - 2010, Kalisch et al., "Causal inference using invariant prediction"
 // - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
+//   https://arxiv.org/pdf/1205.2599
 
 * Key Assumptions for Causal Discovery
 
@@ -269,6 +270,7 @@ digraph Chain2 {
 // Papers:
 // - 2018, Loh et al., "Causal discovery with identifiable nonlinear models"
 // - 2017, Uhler et al., "Geometries of faithfulness in graphical models"
+//   https://arxiv.org/abs/1608.00191
 
 * Practical Limitations
 
@@ -313,6 +315,7 @@ digraph Chain2 {
 
 // Papers:
 // - 2021, Gamella et al., "Active learning of linear causal models"
+//   https://arxiv.org/abs/2006.05690
 // - 2019, Wang et al., "RL-based structural equation modeling"
 // - 2013, Mani et al., "Learning the structure of causal models with experimental and observational data"
 
@@ -364,6 +367,7 @@ digraph Chain2 {
 // Papers:
 // - 2019, Solus et al., "Causal discovery with unknown interventions"
 // - 2018, Squires et al., "Active structure learning of causal DAGs"
+//   https://arxiv.org/abs/2011.00641
 // - 2015, Sachs et al., "Causal protein-signaling networks derived from multiparameter single-cell data"
 
 * Using Domain Knowledge as Constraints
@@ -555,8 +559,11 @@ digraph PCExample {
 
 // Papers:
 // - 2023, Ke et al., "Learning sparse causal models is not NP-hard"
+//   https://arxiv.org/abs/1309.6824
 // - 2018, Zheng et al., "DAGs with NO TEARS: continuous optimization for learning Bayesian networks"
+//   https://arxiv.org/abs/1803.01422
 // - 2006, Chickering, "Learning equivalence classes of Bayesian network structures"
+//   https://arxiv.org/abs/1302.3566
 
 * Score-Based Approach: Idea
 
@@ -622,8 +629,10 @@ digraph PCExample {
 
 // Papers:
 // - 2006, Shimizu et al., "A linear non-Gaussian acyclic model for causal discovery"
+//   https://www.jmlr.org/papers/volume7/shimizu06a/shimizu06a.pdf
 // - 2011, Hyvarinen et al., LiNGAM extensions
 // - 2021, Reisach et al., "Beware of the Simulated DAG!"
+//   https://arxiv.org/abs/2102.13647
 
 * LiNGAM: Linear Non-Gaussian Acyclic Model
 
@@ -675,7 +684,9 @@ digraph PCExample {
 
 // Papers:
 // - 2019, Scholkopf, "Causality for Machine Learning"
+//   https://arxiv.org/abs/1911.10500
 // - 2011, Peters et al., "Causal discovery with continuous additive noise models"
+//   https://arxiv.org/abs/1309.6779
 
 * Why Standard ML Fails at Causal Discovery
 
@@ -811,7 +822,9 @@ digraph C3 {
 
 // Papers:
 // - 2021, Gamella et al., "Active learning of linear causal models"
+//   https://arxiv.org/abs/2006.05690
 // - 2018, Squires et al., "Active structure learning of causal DAGs"
+//   https://arxiv.org/abs/2011.00641
 // - 2008, Castelo et al., "Structural, syntactic, and statistical issues in learning Bayesian networks from data"
 
 * Validating a Discovered DAG
