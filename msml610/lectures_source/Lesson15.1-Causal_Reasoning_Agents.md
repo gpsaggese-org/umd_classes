@@ -385,18 +385,18 @@ MSML610: Advanced Machine Learning
 
 * Causal Reasoning Agents: Design
 
-- **Goal**: Build agents that can reason causally about the world and act robustly
-  - Maintain an explicit causal model of the environment
-  - Use causal inference to evaluate proposed actions
-  - Update causal beliefs as new evidence arrives
-  - Adapt behavior when causal assumptions are violated
+- **Goal**: Build agents for causal reasoning and robust action
+  - Maintain explicit causal model of the environment
+  - Use causal inference for action evaluation
+  - Update causal beliefs with new evidence
+  - Adapt when causal assumptions are violated
 
 - **Agent components**:
-  - **Causal model**: formal representation of how actions affect outcomes
-  - **Observational data**: what the agent observes in the environment
-  - **Inference engine**: computes causal effects and counterfactuals
-  - **Planning module**: selects actions to achieve goals
-  - **Learning module**: updates causal model from experience
+  - Causal model: represents action-outcome effects
+  - Observational data: agent's environmental observations
+  - Inference engine: computes causal effects, counterfactuals
+  - Planning module: selects goal-achieving actions
+  - Learning module: updates model from experience
 
 * Causal Agent Architecture (1/2)
 
@@ -431,19 +431,19 @@ digraph CausalAgent {
 - **Causal model** represents assumptions about mechanisms
   - Structural Causal Model (SCM): $Y := f_Y(PA_Y, U_Y)$ for each variable
   - Parameters: effect sizes, functional forms
-  - Uncertainty: distributions over possible models or parameters
+  - Uncertainty: distributions over models or parameters
 
 - **Inference module** answers causal queries
   - $\Pr(Y | do(X = x))$ : effect of intervention X on Y
   - $Y_{x'} = f_Y(x', U_Y)$ : counterfactual outcomes
-  - Effect heterogeneity: how effects differ across populations
+  - Effect heterogeneity: effects differ across populations
 
-- **Planning module** optimizes over actions
-  - Evaluate action $a$ by computing: $\EE[U | do(a)]$ where U is utility
-  - Consider robustness: What if my causal model is wrong?
+- **Planning module** optimizes actions
+  - Evaluate action $a$: $\EE[U | do(a)]$ where U is utility
+  - Consider robustness: What if causal model is wrong?
   - Explore vs. exploit: Balance testing assumptions vs. maximizing reward
 
-- **Learning module** updates the model
+- **Learning module** updates model
   - Fit parameters to observed data
   - Test causal assumptions (Markov, faithfulness)
   - Detect model misspecification
@@ -458,7 +458,6 @@ digraph CausalAgent {
 
 // Articles:
 // - 2022, Ivgi et al., "Causal Effect Inference with Deep Latent-Variable Models"
-//   https://arxiv.org/abs/2205.06934
 // - 2018, Buesing et al., "Learning and Policy Search in Stochastic Dynamical Systems with Bayesian Neural Networks"
 //   https://arxiv.org/abs/1805.12114
 // - 2016, Bareinboim et al., "Causal inference and the data-fusion problem"
@@ -472,12 +471,12 @@ digraph CausalAgent {
   - Need policies that work well even under model misspecification
 
 - **Robust planning approaches**:
-  - **Conservatism**: prefer actions with robust effects across models
-  - **Exploration**: test uncertain causal assumptions through action
-  - **Adaptation**: update causal model as new evidence arrives
-  - **Sensitivity analysis**: quantify robustness to assumption violations
+  - Conservatism: prefer actions with robust effects across models
+  - Exploration: test uncertain causal assumptions through action
+  - Adaptation: update causal model as new evidence arrives
+  - Sensitivity analysis: quantify robustness to assumption violations
 
-* Markov Decision Processes (MDPs) with Causal Structure
+* Causal Markov Decision Processes (MDPs)
 
 - **Standard MDP**: $M = \langle \mathcal{S}, \mathcal{A}, P, R \rangle$
   - State space, action space, transition dynamics, reward function
@@ -487,7 +486,7 @@ digraph CausalAgent {
   - Variables $X = (X_1, \ldots, X_n)$ that evolve over time
   - Actions intervene on specific variables
   - Rewards depend on achievable states
-  - Transition: $X_t' := f(X_t, A_t, \varepsilon_t)$ (causal functions)
+  - Transition (causal functions): $X_t' := f(X_t, A_t, \varepsilon_t)$
 
 - **Example**: Medical treatment sequential decision
   - Variables: $(Patient\_Severity, Treatment, Patient\_Outcome)$
@@ -507,14 +506,18 @@ digraph CausalAgent {
 - **Q-function with causal effects**:
   $$Q(s, a) = \Pr(\text{Reward} | do(A = a), S = s)$$
 
-  - Standard RL assumes: $\Pr(\text{next state} | a, s) = P(s' | a, s)$ (known transition)
+  - Standard RL assumes known transition:
+    $$\Pr(\text{next state} | a, s) = \Pr(s' | a, s)$$
   - Causal RL must infer: Does $a$ actually cause $s'$, or is $s$ a confounder?
 
 * Policy Robustness: Worst-Case Planning
 
 - **Robust planning**: find policy that performs well under model uncertainty
   - Let $\Theta$ be set of possible causal models
-  - Robust value: $V_{\text{robust}}(s) = \max_a \min_{\theta \in \Theta} Q_\theta(s, a)$
+  - Robust value:
+    $$
+    V_{\text{robust}}(s) = \max_a \min_{\theta \in \Theta} Q_\theta(s, a)
+    $$
   - Guarantees: policy works even if true model is worst-case
 
 - **Uncertainty sets**:
@@ -551,32 +554,35 @@ digraph CausalAgent {
 
 * Making Reasoning Explicit and Interpretable
 
-- **Opacity problem**: Black-box AI systems are hard to trust and debug
+- **Opacity problem**: Black-box AI systems hard to trust and debug
   - Neural networks: uninterpretable high-dimensional feature spaces
-  - LLMs: billions of parameters, unclear what's being reasoned
+  - LLMs: billions of parameters, unclear reasoning
   - Consequences: hard to catch failures before deployment
 
 - **Causal transparency**: explicit mechanisms make reasoning visible
-  - Causal graph: clear representation of assumed relationships
+  - Causal graph: clear representation of relationships
   - Causal effects: quantify impact of each decision
   - Counterfactuals: explain decisions by contrasting what-ifs
 
 - **Example**: Loan approval decision
-  - Black-box: Model says _"Loan denied"_ (opaque)
-  - Causal: Model says _"Loan denied because credit score drops effect on default rate by 15%, controlling for income and employment"_ (transparent)
+  - Black-box: Model says _"Loan denied"_
+  - Causal: Model says _"Loan denied because credit score drops effect on
+    default rate by 15%, controlling for income and employment"_
 
 * Causal Explanations for Decisions
 
-- **Contrastive explanations**: Why A rather than B?
-  - Not just why A happened, but what would need to change for B instead
+- **Contrastive explanations**: Why $A$ rather than $B$?
+  - Not just why $A$ happened, but what would need to change for $B$ instead
 
 - **Recourse**: How can someone affected by decision change the outcome?
   - Requires causal model: what actions lead to decision reversal?
-  - Fairness concern: recourse may be impossible if requirements are correlated with protected attributes
+  - Fairness concern: recourse may be impossible if requirements are correlated
+    with protected attributes
 
 - **Example**: Hiring decision
   - Denial reason (non-causal): _"You have fewer years of experience"_
-  - Causal recourse: _"Adding 2 years of experience would likely change decision, but experience is correlated with age, raising fairness concerns"_
+  - Causal recourse: _"Adding 2 years of experience would likely change decision,
+    but experience is correlated with age, raising fairness concerns"_
 
 - **Feature importance from causality**:
   - Not correlation (feature co-varies with outcome) $\to$ confounding
@@ -775,10 +781,6 @@ digraph CausalAgent {
   - Causal monitoring: heterogeneous effect analysis reveals drug less effective for elderly
   - Adaptation: patient stratification in treatment recommendations
 
-# ##############################################################################
-# Summary and Key Takeaways
-# ##############################################################################
-
 // Books:
 // - 2018, Pearl et al., "The Book of Why: The New Science of Cause and Effect"
 //   https://www.basicbooks.com/titles/judea-pearl/the-book-of-why/9780465097609/
@@ -826,4 +828,5 @@ digraph CausalAgent {
   - Balancing transparency with complexity
   - Scaling causal inference to high-dimensional problems
 
-- Key message: _"AI systems that reason causally are fundamentally more trustworthy, transparent, and robust than pure pattern-matching approaches."_
+- Key message: _"AI systems that reason causally are fundamentally more
+  trustworthy, transparent, and robust than pure pattern-matching approaches."_
