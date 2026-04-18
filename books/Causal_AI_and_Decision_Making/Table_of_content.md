@@ -223,7 +223,7 @@
   - TUTORIAL: CausalPy (Bayesian experiment design)
 
 ### 10: Causal Discovery
-// ?
+// Lesson10.1-Causal_Discovery.txt
 
 - The Discovery Problem: When and Why It Works
   - Inferring causal structure from observational data
@@ -301,6 +301,7 @@
   - TUTORIAL: d3rlpy (offline RL with causal considerations)
 
 ### 13: Forecasting Under Causal Intervention
+// ?
 
 - Why Standard Forecasting Breaks
   - Standard methods assume stationarity
@@ -350,7 +351,7 @@
   - TUTORIAL: EconML (policy optimization and uplift)
 
 ### 15: Causal Reasoning in AI Systems
-// ?
+// Lesson15.1-Causal_Reasoning_Agents
 
 - LLMs and Causal Reasoning
   - Where LLMs excel: pattern matching at scale

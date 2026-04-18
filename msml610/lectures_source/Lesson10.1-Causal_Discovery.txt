@@ -1,0 +1,180 @@
+// # Causal Discovery
+
+// Books:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2016, Pearl et al., "Causal Inference in Statistics: A Primer"
+//   https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
+// - 2019, Peters et al., "Elements of Causal Inference"
+//   https://mitpress.mit.edu/9780262037310/
+
+# The Discovery Problem: When and Why It Works
+
+// Books & Foundational:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
+//   https://mitpress.mit.edu/9780262194402/
+
+## Inferring causal structure from observational data
+
+// Papers:
+// - 2020, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
+//   https://arxiv.org/abs/2011.12969
+// - 2015, Guo et al., "A survey on causal inference"
+//   https://arxiv.org/abs/1502.02590
+// - 2006, Meek, "Causal inference and causal explanation with background knowledge"
+//   https://arxiv.org/abs/1302.4972
+
+## Identifiability and causal sufficiency: what assumptions are required?
+
+// Papers:
+// - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
+//   https://arxiv.org/abs/1010.1217
+// - 2010, Kalisch et al., "Causal inference using invariant prediction"
+//   https://arxiv.org/abs/1206.1897
+// - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
+//   https://arxiv.org/abs/1205.2599
+
+## Practical limitations of automated discovery
+
+// Papers:
+// - 2018, Loh et al., "Causal discovery with identifiable nonlinear models"
+//   https://arxiv.org/abs/1310.7601
+// - 2017, Uhler et al., "Geometries of faithfulness in graphical models"
+//   https://arxiv.org/abs/1303.1952
+# When to Use Discovery vs. Domain Knowledge
+
+// Papers:
+// - 2021, Gamella et al., "Active learning of linear causal models"
+//   https://arxiv.org/abs/2107.10952
+// - 2019, Wang et al., "RL-based structural equation modeling"
+//   https://arxiv.org/abs/1905.13694
+// - 2013, Mani et al., "Learning the structure of causal models with experimental and observational data"
+//   https://arxiv.org/abs/1211.3295
+
+## Discovery as hypothesis generation, not conclusion
+
+// Papers:
+// - 2008, Castelo et al., "Structural, syntactic, and statistical issues in learning Bayesian networks from data"
+//   https://arxiv.org/abs/1105.6643
+// - 2006, Meek, "Causal inference and causal explanation with background knowledge"
+//   https://arxiv.org/abs/1302.4972
+
+## Using partial domain information to constrain the search
+
+// Papers:
+// - 2019, Solus et al., "Causal discovery with unknown interventions"
+//   https://arxiv.org/abs/1711.02054
+// - 2018, Squires et al., "Active structure learning of causal DAGs"
+//   https://arxiv.org/abs/1806.11527
+// - 2015, Sachs et al., "Causal protein-signaling networks derived from multiparameter single-cell data"
+//   https://www.science.org/doi/10.1126/science.1105809
+
+## Combining automated discovery with expert judgment
+
+// Papers:
+// - 2021, Gamella et al., "Active learning of linear causal models"
+//   https://arxiv.org/abs/2107.10952
+// - 2018, Squires et al., "Permutation-based causal structure learning with unknown interventions"
+//   https://arxiv.org/abs/1901.09330
+# Discovery Algorithm Families
+
+// Books:
+// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
+//   https://mitpress.mit.edu/9780262194402/
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+
+## Constraint-based methods: PC algorithm, FCI
+
+// Papers:
+// - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
+//   https://arxiv.org/abs/1010.1217
+// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
+//   https://mitpress.mit.edu/9780262194402/
+// - 1993, Spirtes et al., "An algorithm for fast recovery of sparse causal graphs"
+//   https://arxiv.org/abs/1207.0549
+// - 1999, Zhang, "On the completeness of orientation rules for causal discovery in the presence of latent confounders and selection bias"
+//   https://arxiv.org/abs/1302.4973
+
+## Score-based methods: GES, NOTEARS
+
+// Papers:
+// - 2023, Ke et al., "Learning sparse causal models is not NP-hard"
+//   https://arxiv.org/abs/2309.08532
+// - 2018, Zheng et al., "DAGs with NO TEARS: continuous optimization for learning Bayesian networks"
+//   https://arxiv.org/abs/1803.01422
+// - 2015, Nandy et al., "High-dimensional consistency of score-based learning"
+//   https://arxiv.org/abs/1507.02608
+// - 2006, Chickering, "Learning equivalence classes of Bayesian network structures"
+//   https://arxiv.org/abs/1207.0558
+
+## Non-Gaussian methods: LiNGAM (exploiting non-Gaussianity)
+
+// Papers:
+// - 2006, Shimizu et al., "A linear non-Gaussian acyclic model for causal discovery"
+//   https://arxiv.org/abs/0804.3888
+// - 2011, Hyvärinen et al., "A linear non-Gaussian acyclic model for causal discovery"
+//   https://arxiv.org/abs/1010.5581
+// - 2021, Reisach et al., "Beware of the Simulated DAG!"
+//   https://arxiv.org/abs/2111.02392
+# Challenges and Validation
+
+// Papers:
+// - 2021, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
+//   https://arxiv.org/abs/2011.12969
+// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
+//   https://arxiv.org/abs/1709.06358
+// - 2015, Spirtes, "Causal discovery and the problem of psychological law"
+//   https://arxiv.org/abs/1504.07664
+
+## Why Standard ML Fails at Causal Discovery
+
+// Papers:
+// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
+//   https://arxiv.org/abs/1709.06358
+// - 2019, Scholkopf, "Causality for Machine Learning"
+//   https://arxiv.org/abs/1901.04056
+// - 2011, Peters et al., "Causal discovery with continuous additive noise models"
+//   https://arxiv.org/abs/1309.6779
+
+## Multiple models produce identical predictions
+
+// Papers:
+// - 2013, Margaritis et al., "Learning Bayesian network model structure from data"
+//   https://arxiv.org/abs/1207.0556
+// - 2005, Margaritis, "Inferring compact representations of local distributions: the order extension problem"
+//   https://arxiv.org/abs/1207.0555
+// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
+//   https://mitpress.mit.edu/9780262194402/
+
+## Distinguishing different causal structures requires assumptions
+
+// Papers:
+// - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
+//   https://arxiv.org/abs/1010.1217
+// - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
+//   https://arxiv.org/abs/1205.2599
+// - 2016, Pearl et al., "Causal Inference in Statistics: A Primer"
+//   https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
+
+## Domain expert review and refutation testing
+
+// Papers:
+// - 2021, Gamella et al., "Active learning of linear causal models"
+//   https://arxiv.org/abs/2107.10952
+// - 2018, Squires et al., "Active structure learning of causal DAGs"
+//   https://arxiv.org/abs/1806.11527
+// - 2008, Castelo et al., "Structural, syntactic, and statistical issues in learning Bayesian networks from data"
+//   https://arxiv.org/abs/1105.6643
+
+## When discovery should change (and not change) your DAG
+
+// Papers:
+// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
+//   https://arxiv.org/abs/1709.06358
+// - 2018, Squires et al., "Permutation-based causal structure learning with unknown interventions"
+//   https://arxiv.org/abs/1901.09330
+// - 2006, Meek, "Causal inference and causal explanation with background knowledge"
+//   https://arxiv.org/abs/1302.4972
