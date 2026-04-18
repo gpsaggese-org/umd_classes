@@ -56,9 +56,14 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 // Papers:
+// - 2023, Zanga et al., "A Survey on Causal Discovery: Theory and Practice"
+//   https://arxiv.org/pdf/2305.10032
 // - 2020, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
+//   https://par.nsf.gov/servlets/purl/10125762
 // - 2015, Guo et al., "A survey on causal inference"
+//   https://qiniu.pattern.swarma.org/attachment/A%20Survey%20on%20Causal%20Inference.pdf
 // - 2006, Meek, "Causal inference and causal explanation with background knowledge"
+//   https://arxiv.org/pdf/1302.4972
 
 * Causal Discovery: Motivation
 
