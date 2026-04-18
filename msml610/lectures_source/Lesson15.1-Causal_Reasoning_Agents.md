@@ -24,11 +24,7 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-- Pearl, J.: _"The Book of Why"_ (2018)
-
-- Pearl, J. & Mackenzie, D.: _"The Seven Pillars of Causal Reasoning"_ (2018)
-
-- Bottou, L. et al.: _"From Machine Learning to Machine Reasoning"_ (2013)
+// TODO(gp): Fix this
 
 ::::
 :::: {.column width=40%}
@@ -66,37 +62,40 @@ MSML610: Advanced Machine Learning
 // - 2020, Kaplan et al., "Scaling Laws for Neural Language Models"
 //   https://arxiv.org/abs/2001.08361
 
-* LLMs: Where They Excel
+* Where LLMs They Excel
 
-- Large Language Models excel at **pattern matching at scale**
+- **LLMs excel at pattern matching at scale**
   - Trained on massive text corpora to capture statistical regularities
-  - Exceptional for prediction: $\Pr(\text{next token} | \text{history})$
+  - Exceptional for prediction of the next word
+    $$\Pr(\text{next token} | \text{history})$$
   - Strong performance on language understanding, summarization, generation
-  - World knowledge encoded through pretraining
+  - World knowledge encoded through pre-training
+    - E.g., the next word in _"The capital of France"_ is ...
 
-- **Example**: Predicting the next word in _"The capital of France is ___"_ → easy
-
-- Strengths:
+- **Strengths**:
   - Massive scale enables capturing complex statistical patterns
-  - Transfer learning from pretraining to diverse downstream tasks
+  - Transfer learning from pre-training to diverse downstream tasks
   - Few-shot learning through in-context examples
 
-* LLMs: Critical Limitations
+* Critical LLMs Limitations
 
-- LLMs fundamentally struggle with **explicit causal reasoning**
+- **LLMs struggle with explicit causal reasoning**
   - Pattern matching cannot distinguish correlation from causation
   - No built-in mechanism to reason about counterfactuals (what-if scenarios)
   - Cannot reliably predict interventions vs. observational data
   - Confounding variables not explicitly handled
 
-- **Example**: Given _"Ice cream sales and drowning deaths both spike in summer"_, 
-  an LLM may infer a causal link rather than recognizing temperature as a confounder
+- **Example**:
+  - Given _"Ice cream sales and drowning deaths both spike in summer"_, 
+  - Current LLMs infer a causal link rather than recognizing temperature as a
+    confounder
 
-- Critical gaps:
-  - **Intervention reasoning**: _"What if we increase X? How does Y change?"_
-  - **Counterfactual reasoning**: _"What would have happened if the past were different?"_
-  - **Causal discovery**: Learning causal structure from data
-  - **Robustness to distribution shift**: Generalizing under causal changes
+- **Critical gaps**:
+  - Intervention reasoning: _"What if we increase X? How does Y change?"_
+  - Counterfactual reasoning: _"What would have happened if the past were
+    different?"_
+  - Causal discovery: Learning causal structure from data
+  - Robustness to distribution shift: Generalizing under causal changes
 
 ## ##############################################################################
 ## Pattern-Based Reasoning vs. Causal Reasoning
@@ -119,19 +118,23 @@ MSML610: Advanced Machine Learning
 - **Pattern-based reasoning**: Learn $f: X \to Y$ from observed associations
   - Extract statistical regularities: what features predict outcomes
   - No understanding of _why_ these associations exist
-  - Works perfectly in stationary environments
+  - Works very well in stationary environments
 
-- **Causal reasoning**: Learn mechanisms—the underlying data-generating process
-  - Understand _why_ X causes Y through explicit models
+- **Causal reasoning**: Learn mechanisms, i.e., the underlying data-generating
+  process
+  - Understand _why_ $X$ causes $Y$ through explicit models
   - Transfer knowledge to new interventions and environments
   - Explain and debug failures
 
+// TODO(ai_gp): Reorder so that the points are aligned
+// TODO(gp): Think about a better representation
+
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=40%}
 **Pattern Matching**
 
 - Pros
-  - Scales with data quantity
+  - Quality scales with data quantity
   - Captures complex associations
   - Practical for stable settings
 
@@ -141,7 +144,7 @@ MSML610: Advanced Machine Learning
   - Vulnerable to confounding
   - Opaque causal mechanisms
 ::::
-:::: {.column width=50%}
+:::: {.column width=40%}
 **Causal Reasoning**
 
 - Pros
@@ -159,25 +162,26 @@ MSML610: Advanced Machine Learning
 
 * Robustness: When Pattern Matching Fails
 
-- **Distribution shift**: When test data differs from training data
-  - Spurious correlations learned during training don't hold in deployment
+- **Distribution shift**: Test data differs from training data
+  - Spurious correlations don't hold in deployment
   - LLMs confidently make wrong predictions due to pattern reliance
 
 - **Example**: Medical diagnosis
-  - Training data: Hospital A diagnoses condition X using test Y
-  - Hospital A had a faulty calibration: test Y strongly predicts diagnosis but not disease
-  - Pattern-based model learns: high Y $\to$ condition X
-  - New hospital with correct calibration: model fails spectacularly
+  - Training: `Hospital A` uses test $Y$ for condition $X$
+  - Faulty calibration: test $Y$ predicts diagnosis, not disease
+  - Model learns: high Y $\to$ condition X
+  - New `Hospital B`: model fails with correct calibration
 
-- **Intervention robustness**: Actions that change the world
-  - Feedback loops: recommending product A increases demand, changing patterns
-  - Reward hacking: optimizing a proxy metric instead of true objective
-  - Policy change: changing business rules invalidates historical patterns
+- **Intervention robustness**: Actions change the world
+  - Feedback loops: recommending product $A$ increases demand, alters patterns
+  - Reward hacking: optimizing proxy metric, not true objective
+  - Policy change: new rules invalidate historical patterns
 
 - **Example**: Content recommendation
-  - Pattern: users who engage with trending topics get recommended more trending
+  - Pattern: users engaging with trending topics get more recommendations
   - Intervention: change algorithm to reduce trending bias
-  - Unintended consequence: recommendation patterns shift, breaking past associations
+  - Unintended consequence: recommendation patterns shift, breaking past
+    associations
 
 # ##############################################################################
 # Enhancing LLM Reasoning with Causality
@@ -199,44 +203,35 @@ MSML610: Advanced Machine Learning
 // - 2022, Kojima et al., "Large Language Models are Zero-Shot Reasoners"
 //   https://arxiv.org/abs/2205.11916
 
-* Chain-of-Thought Prompting: Structured Reasoning
+* Chain-of-Thought Prompting
 
-- **Chain-of-thought (CoT)** encourages the model to break down complex reasoning
-  - Instead of: _"Q: Does X cause Y?"_ → Direct answer
-  - CoT: _"Let me think step by step..."_ → Intermediate reasoning steps
+- **Chain-of-thought (CoT)** encourages model to break down complex reasoning
+  - Instead of: _"Does X cause Y?"_ $\to$ Direct answer
+  - CoT: _"Let me think step by step..."_ $\to$ Intermediate reasoning steps
 
 - How it helps with causal reasoning:
   - Forces explicit consideration of mechanisms
-  - Enables backtracking and correction of errors
+  - Enables backtracking and error correction
   - Makes assumptions and reasoning transparent
   - Allows verification of causal logic
 
 - **Example**: CoT for causal inference
-  ```
   Q: "If we increase advertising budget, will sales increase?"
-  
   CoT: "Let me think about this:
   1. Advertising increases brand awareness (mechanism)
   2. Brand awareness increases purchase intent (mechanism)
   3. Purchase intent leads to sales (mechanism)
-  4. But we should also check for confounders...
-     (Are we only increasing budget in growing markets?)
-  5. And feedback loops: Does higher sales justify more spending?"
-  ```
+  4. Check for confounders (Are we only increasing budget in growing markets?)
+  5. Feedback loops: Does higher sales justify more spending?"
 
-- Limitations of plain CoT:
-  - Still pattern-based, not mechanistic
+- **Limitations of plain CoT**:
+  - Pattern-based, not mechanistic
   - Can rationalize incorrect causal claims
   - Doesn't ground reasoning in data or formal causal models
 
 * Causal Prompting Frameworks
 
 - **Structured causal prompts** guide explicit causal reasoning
-  - What are the variables involved?
-  - What are the causal relationships? (DAG or causal graph)
-  - What are the confounders?
-  - What are the identifying assumptions?
-
 - **Example**: Structured causal prompt template
   ```
   Problem: [description]
@@ -269,29 +264,34 @@ MSML610: Advanced Machine Learning
 // Articles:
 // - 2019, Richards et al., "A deep learning framework for neuroscience"
 //   https://doi.org/10.1038/s41593-019-0520-2
-// - 2010, Janzing et al., "Causal inference using invariant prediction: identification and outlook"
-//   https://arxiv.org/abs/1304.4877
+// - 2015, Peters et al., "Causal inference using invariant prediction: identification and outlook"
+//   https://arxiv.org/abs/1501.01332
 
 * Connecting LLMs to Formal Causal Models
 
 - **Gap between LLMs and causal inference**:
   - LLMs: black-box functions trained on text
-  - Causal inference: formal models with explicit assumptions and identifiability
+  - Causal inference: formal models with explicit assumptions and
+    identifiability
 
 - **Integration strategy**: Use LLM for reasoning, ground in causal frameworks
+// TODO(ai_gp): Convert into table
   - LLM as semantic engine: interpret domain knowledge, generate hypotheses
   - Causal model as reasoning engine: formal inference, constraint checking
   - Probabilistic framework as uncertainty quantifier: propagate uncertainty
 
 - **Example**: Causal reasoning for policy evaluation
-  - LLM input: _"We're considering a new hiring policy. What are potential causal effects?"_
-  - LLM output: Proposes causal graph with treatment (policy), outcome (hiring equity)
-  - Causal inference: Estimates causal effects using observed data under identifying assumptions
+  - LLM input: _"Considering a new hiring policy. What are potential causal
+    effects?"_
+  - LLM output: Proposes causal graph with treatment (policy), outcome (hiring
+    equity)
+  - Causal inference: Estimates causal effects using observed data under
+    identifying assumptions
   - Uncertainty quantification: Confidence intervals accounting for assumptions
 
 * Bayesian Networks and Causal DAGs
 
-- **Causal DAG** (Directed Acyclic Graph): represents causal relationships
+- **Causal DAG** represents causal relationships
   - Nodes: variables (treatments, outcomes, confounders, mediators)
   - Directed edges: causal influences
   - Absence of edge: no direct causal effect
@@ -324,12 +324,13 @@ MSML610: Advanced Machine Learning
   }
   ```
 
+// TODO(gp): Use colors and improve slide layout
 - Key concepts:
   - **Confounder**: variable with arrows to both treatment and outcome
   - **Mediator**: variable on causal path from treatment to outcome
   - **Collider**: variable with incoming arrows from multiple causes
 
-* Tool Use: Integrating Causal Inference into LLM Workflows
+* Integrating Causal Inference into LLM Workflows (1/2)
 
 - **Tool use paradigm**: LLM as reasoner, external tools as executors
   - LLM decides what reasoning to perform
@@ -342,6 +343,9 @@ MSML610: Advanced Machine Learning
   - Counterfactual simulation: what-if predictions under assumed causal model
   - Sensitivity analysis: robustness to assumption violations
 
+* Integrating Causal Inference into LLM Workflows (2/2)
+
+// TODO(gp): Convert into a table?
 - **Example**: LLM-guided causal analysis workflow
   ```
   1. LLM reads domain knowledge and data description
@@ -353,7 +357,7 @@ MSML610: Advanced Machine Learning
   7. LLM explains: what are the key assumptions and their plausibility?
   ```
 
-- Benefits:
+- **Benefits**:
   - Explicit reasoning is interpretable and verifiable
   - Formal guarantees and assumptions are transparent
   - Tool outputs ground LLM claims in data
