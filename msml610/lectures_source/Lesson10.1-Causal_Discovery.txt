@@ -62,83 +62,74 @@ MSML610: Advanced Machine Learning
 
 * Causal Discovery: Motivation
 
-- So far we have **assumed** a causal DAG was given
-  - Drawn by a domain expert
-  - Used to compute $do$-interventions and counterfactuals
+- So far we have **assumed** a causal DAG was given (e.g., drawn by a domain
+  expert)
 
-- **Q**: What if we _do not_ know the DAG?
+- **Question**
+  - What if we _do not_ know the DAG?
   - Can we learn causal structure directly from data?
 
-- **Causal discovery** (a.k.a. _structure learning_) aims to recover the DAG
-  from observational (and optionally interventional) data
+- **Causal discovery** (a.k.a. _structure learning_)
+  - Recover the causal DAG from observational and optionally interventional data
 
 - **Why it matters**
   - Experiments are expensive, slow, or unethical
-    - E.g., cannot randomize smoking in humans
+    - E.g., cannot randomize exposing humans to asbestos
   - Observational data is plentiful but _ambiguous_
   - Goal: extract causal hypotheses that can be tested later
 
 * Causal Discovery: Definition
 
-- **Causal discovery** is the process of inferring a causal graph $G$ from a
-  dataset $\mathcal{D}$ sampled from an unknown data-generating process
-  - Input: observational data over variables $X_1, \dots, X_n$
-  - Output: a DAG (or equivalence class) describing causal relations among them
-
-- Formally, given $\mathcal{D} \sim \Pr(X_1, \dots, X_n)$, find $G$ such that:
+- **Causal discovery** is the process of inferring from a dataset sampled from an
+  unknown data-generating process:
+  $$
+  \mathcal{D} \sim \Pr(X_1, \dots, X_n)
+  $$
+  a graph $G$ (or equivalence class) describing causal relations among
+  $X_1, ..., X_n$
+  such that:
   $$
   \Pr(X_1, \dots, X_n) = \prod_{i=1}^n \Pr(X_i \mid Pa_G(X_i))
   $$
   where $Pa_G(X_i)$ are the parents of $X_i$ in $G$
 
-- **Example**: from gene expression measurements, recover which genes regulate
-  which other genes without performing knockout experiments
+- **Example**: 
+  - Macroeconomic drivers
+    - From time-series data, infer causal links between inflation, unemployment,
+      and interest rates
+  - Education $\to$ income
+    - From observational survey data, estimate whether education causally affects
+      earnings (vs confounding)
+  - Peer influence in social networks
+    - From user behavior data, infer whether friends influence each other's
+      purchases or opinions
 
 * Observational vs. Interventional Data
 
-::: columns
-:::: {.column width=50%}
-**Observational data**
-
-- Data collected by _watching_ the system
-- No variable is manipulated
-- E.g., hospital records of patients
-
-- **Pros**
-  - Abundant and cheap
-  - No ethical constraints
-
-- **Cons**
-  - Cannot always distinguish cause from correlation
-  - Confounders may be hidden
-::::
-:::: {.column width=50%}
-**Interventional data**
-
-- Data collected under _do_-interventions
-- E.g., randomized controlled trial (RCT)
-
-- **Pros**
-  - Directly identifies causal direction
-  - Breaks spurious correlations
-
-- **Cons**
-  - Expensive, slow, often infeasible
-  - Ethical issues (e.g., smoking trials)
-::::
-:::
+\begingroup
+\footnotesize
+|                  | **Observational Data**                   | **Interventional Data**                 |
+|------------------|------------------------------------------|-----------------------------------------|
+| **Definition**   | Data collected by *watching* the system  | Data collected under *do*-interventions |
+| **Manipulation** | No variable is manipulated               | Variables are actively manipulated      |
+| **Example**      | Hospital records of patients             | Randomized Controlled Trial (RCT)       |
+| **Pros**         | Abundant and cheap                       | Identifies causal direction             |
+|                  | No ethical constraints                   | Breaks spurious correlations            |
+| **Cons**         | Cannot distinguish cause vs correlation  | Expensive, slow, often infeasible       |
+|                  | Hidden confounders                       | Ethical issues (e.g., smoking trials)   |
+\endgroup
 
 - Discovery algorithms combine both when possible
 
 * The Discovery Problem in One Picture
 
 ::: columns
-:::: {.column width=40%}
+:::: {.column width=45%}
 - We observe a table of measurements
 - We do not know the DAG
-- Goal: recover arrows among variables
+- **Goal**: recover arrows among variables
 ::::
-:::: {.column width=60%}
+:::: {.column width=50%}
 ```graphviz
 digraph Discovery {
     splines=true;
@@ -146,12 +137,14 @@ digraph Discovery {
     ranksep=0.6;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Data [label="Observational\ndataset D", fillcolor="#FFD1A6"];
+    Data1 [label="Observational\ndataset D1", fillcolor="#FFD1A6"];
+    Data2 [label="Interventional\ndataset D2", fillcolor="#FFD1A6"];
     Algo [label="Discovery\nalgorithm", fillcolor="#A0D6D1"];
     DAG [label="Causal DAG G", fillcolor="#A6C8F4"];
     Assump [label="Assumptions\n(faithfulness, sufficiency, ...)", fillcolor="#A6E7F4"];
 
-    Data -> Algo;
+    Data1 -> Algo;
+    Data2 -> Algo;
     Assump -> Algo;
     Algo -> DAG;
 }
@@ -159,8 +152,9 @@ digraph Discovery {
 ::::
 :::
 
-- **Key insight**: discovery is always _assumption-laden_; no algorithm recovers
-  structure from data alone without some prior axiom
+- **Key insight**
+  - Discovery is always based on _assumptions_
+  - No algorithm recovers structure from data alone without some prior axiom
 
 ## #############################################################################
 ## Identifiability and Causal Sufficiency
@@ -188,9 +182,9 @@ digraph Discovery {
 
 * Markov Equivalence Classes
 
-- **Q**: Can observational data distinguish every DAG?
-
-- **No.** Different DAGs may encode the same conditional independencies
+- Can observational data distinguish every DAG?
+  - **No**
+  - Different DAGs may encode the same conditional independencies
 
 - **Markov equivalent DAGs** share the same:
   - Skeleton (undirected edges)
@@ -199,6 +193,8 @@ digraph Discovery {
 - The best an observational-only algorithm can return is a **CPDAG**
   (Completed Partially Directed Acyclic Graph) that represents the equivalence
   class
+
+// TODO(gp): Improve layout
 
 ::: columns
 :::: {.column width=50%}
@@ -246,7 +242,9 @@ digraph Chain2 {
 - **Faithfulness**: the observed distribution has _no extra_ independencies
   beyond those implied by the DAG
 
-- **Example of violation** (path cancellation):
+// TODO(gp): Add diagram
+- **Example of violation**
+  - Path cancellation
   - Suppose $X \to Y$ and $X \to Z \to Y$
   - If the two paths' effects are equal in magnitude and opposite in sign,
     $X \perp Y$ in the data even though $X$ causes $Y$
@@ -255,8 +253,9 @@ digraph Chain2 {
 - In practice, exact cancellations are _measure zero_, but near-cancellations
   in finite samples cause errors
 
-- **Implication**: discovery is _statistically_ correct in the limit but
-  fragile with small data
+- Discovery is:
+  - Statistically correct in the limit
+  - Fragile with small data
 
 ## #############################################################################
 ## Practical Limitations of Automated Discovery
@@ -318,9 +317,10 @@ digraph Chain2 {
 
 * Discovery vs. Domain Knowledge
 
-- **Q**: When should we _run an algorithm_ vs. _ask an expert_?
+- When should we _run an algorithm_ vs _ask an expert_?
 
-\begingroup \scriptsize
+\begingroup
+\footnotesize
 | **Situation**                          | **Recommended approach**                    |
 | -------------------------------------- | ------------------------------------------- |
 | Well-studied domain (physics, biology) | Expert-drawn DAG, verified by data          |
