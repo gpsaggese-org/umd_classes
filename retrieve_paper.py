@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env -S uv run
+
+# /// script
+# dependencies = ["arxiv", "requests", "pyyaml", "pandas", "numpy", "tqdm"]
+# ///
 
 """
 Fetch and download academic papers from arXiv, Unpaywall (via DOI), and optionally LibGen.
