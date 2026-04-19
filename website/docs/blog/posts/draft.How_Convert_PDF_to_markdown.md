@@ -29,24 +29,30 @@ and practical examples.
 - Automation: batch convert documents, integrate with pipelines
 
 ## Quick Comparison
-| Library       | Speed  | Accuracy  | Best For                   | Learning Curve |
-| :------------ | :----- | :-------- | :------------------------- | :------------- |
-| `pymupdf4llm` | Fast   | Good      | Simple docs, speed         | Easy           |
-| `marker-pdf`  | Medium | Excellent | Academic, structured       | Medium         |
-| `markitdown`  | Medium | Good      | Multi-format pipelines     | Easy           |
-| `pdfplumber`  | Slow   | Manual    | Custom logic, full control | Hard           |
+| Library       | Speed                                    | Accuracy                                   | Learning Curve                           | Best For                   |
+| :------------ | :--------------------------------------- | :----------------------------------------- | :--------------------------------------- | :------------------------- |
+| `pymupdf4llm` | <span style="color:green">Fast</span>    | <span style="color:green">Good</span>      | <span style="color:green">Easy</span>    | Simple docs, speed         |
+| `marker-pdf`  | <span style="color:yellow">Medium</span> | <span style="color:green">Excellent</span> | <span style="color:yellow">Medium</span> | Academic, structured       |
+| `markitdown`  | <span style="color:yellow">Medium</span> | <span style="color:green">Good</span>      | <span style="color:green">Easy</span>    | Multi-format pipelines     |
+| `pdfplumber`  | <span style="color:red">Slow</span>      | <span style="color:red">Manual</span>      | <span style="color:red">Hard</span>      | Custom logic, full control |
 
 ## Installation
+**Quick start without installing:**
+
+- You can use `uvx` to run any of these tools without installation
+- Ideal for one-off conversions or testing different libraries
+- Trade cold-start time (package download) for zero disk footprint
+- See each library's "Using uvx" subsection for examples
 
 ### Pymupdf4llm
 - Install package:
   ```bash
   > pip install pymupdf4llm
   ```
-- Verify installation:
+- Verify installation (via CLI):
   ```bash
-  > python -c "import pymupdf4llm; print(pymupdf4llm.__version__)"
-  0.4.16
+  # Run help to verify command is available.
+  > pymupdf4llm --help
   ```
 
 ### Marker-pdf
@@ -54,10 +60,10 @@ and practical examples.
   ```bash
   > pip install marker-pdf
   ```
-- Verify installation:
+- Verify installation (via CLI):
   ```bash
-  > python -c "import marker; print(marker.__version__)"
-  0.2.5
+  # Run help to verify command is available.
+  > marker --help
   ```
 
 ### Markitdown
@@ -65,10 +71,10 @@ and practical examples.
   ```bash
   > pip install markitdown
   ```
-- Verify installation:
+- Verify installation (via CLI):
   ```bash
-  > python -c "from markitdown import MarkItDown; print('markitdown installed')"
-  markitdown installed
+  # Run help to verify command is available.
+  > markitdown --help
   ```
 
 ### Pdfplumber
@@ -76,11 +82,14 @@ and practical examples.
   ```bash
   > pip install pdfplumber
   ```
-- Verify installation:
+- Verify installation (via Python):
   ```bash
   > python -c "import pdfplumber; print(pdfplumber.__version__)"
   0.10.3
   ```
+- Note: `pdfplumber` is primarily a library without a CLI
+  - Use Python import verification above
+  - Always accessed via Python scripts, not command-line directly
 
 ## Basic Usage
 
@@ -375,69 +384,6 @@ image extraction and heading detection.
 | Debugging output   | Verbose logging        | No          | Limited    |
 | Use case           | Production docs        | LLM input   | Academic   |
 
-## Practical Examples
-
-### Convert Academic Paper to Summary
-- Extract key sections from PDF:
-  ```python
-  from pymupdf4llm import to_markdown
-  from anthropic import Anthropic
-
-  # Convert PDF to Markdown.
-  md = to_markdown("research_paper.pdf")
-
-  # Extract abstract and conclusions.
-  client = Anthropic()
-  response = client.messages.create(
-      model="claude-3-5-sonnet-20241022",
-      max_tokens=2048,
-      messages=[
-          {
-              "role": "user",
-              "content": f"Extract abstract and key findings:\n{md}"
-          }
-      ],
-  )
-  print(response.content[0].text)
-  ```
-
-### Batch Convert with Progress Tracking
-- Convert directory of PDFs:
-  ```python
-  from pathlib import Path
-  from pymupdf4llm import to_markdown
-  from tqdm import tqdm
-
-  pdf_dir = Path("documents")
-  output_dir = Path("converted")
-  output_dir.mkdir(exist_ok=True)
-
-  pdfs = list(pdf_dir.glob("*.pdf"))
-  for pdf_file in tqdm(pdfs, desc="Converting PDFs"):
-      try:
-          md = to_markdown(str(pdf_file))
-          output_file = output_dir / f"{pdf_file.stem}.md"
-          output_file.write_text(md)
-      except Exception as e:
-          print(f"Error converting {pdf_file.name}: {e}")
-  ```
-
-### Extract Tables and Convert to CSV
-- Convert tables from PDF:
-  ```python
-  import pdfplumber
-  import csv
-
-  with pdfplumber.open("data.pdf") as pdf:
-      for page_num, page in enumerate(pdf.pages):
-          tables = page.extract_tables()
-          for table_num, table in enumerate(tables):
-              # Write table to CSV.
-              output_file = f"table_p{page_num}_t{table_num}.csv"
-              with open(output_file, "w", newline="") as f:
-                  writer = csv.writer(f)
-                  writer.writerows(table)
-  ```
 
 ## Common Gotchas
 **Scanned PDFs (images, not text)**
@@ -448,101 +394,7 @@ image extraction and heading detection.
   # Install Tesseract OCR.
   > pip install pytesseract pillow pdf2image
   ```
-- Convert scanned PDF to text-based PDF:
-  ```python
-  from pdf2image import convert_from_path
-  import pytesseract
-  from PIL import Image
-
-  images = convert_from_path("scanned.pdf")
-  text_lines = []
-  for image in images:
-      text = pytesseract.image_to_string(image)
-      text_lines.append(text)
-  
-  with open("extracted.txt", "w") as f:
-      f.write("\n\n".join(text_lines))
-  ```
-
-**Encoding and Special Characters**
-
-- Problem: Non-ASCII characters may be corrupted
-- Solution: Write with UTF-8 encoding
-  ```python
-  with open("output.md", "w", encoding="utf-8") as f:
-      f.write(md)
-  ```
-
-**Large PDFs**
-
-- Problem: Memory usage grows with PDF size
-- Solution: Process page-by-page with pdfplumber
-  ```python
-  import pdfplumber
-
-  with pdfplumber.open("large.pdf") as pdf:
-      for page in pdf.pages:
-          text = page.extract_text()
-          # Process immediately, don't accumulate.
-  ```
-
-**Formatting Loss**
-
-- Problem: Markdown output loses complex formatting
-- Solution: Preserve structure with Markdown formatting
-  ```python
-  from pymupdf4llm import to_markdown
-
-  md = to_markdown("input.pdf")
-  # Add manual formatting as needed.
-  md = md.replace("SECTION", "## SECTION")
-  ```
-
-## Tips and Tricks
-**Get Table Extraction from PDFs**
-
-- Use pdfplumber for precise table extraction:
-  ```python
-  import pdfplumber
-  import pandas as pd
-
-  with pdfplumber.open("data.pdf") as pdf:
-      tables = pdf.pages[0].extract_tables()
-      # Convert to DataFrame.
-      df = pd.DataFrame(tables[0][1:], columns=tables[0][0])
-      print(df)
-  ```
-
-**Preserve Headings and Hierarchy**
-
-- Marker-pdf automatically detects headings:
-  ```bash
-  # Output includes proper Markdown headers.
-  > marker input.pdf --output output.md
-  ```
-
-**Test with Small PDF First**
-
-- Always test conversion with sample PDF:
-  ```bash
-  > pymupdf4llm sample.pdf > test_output.md
-  ```
-
-**Combine Multiple Libraries**
-
-- Use fastest library first, then refine with marker-pdf:
-  ```python
-  from pymupdf4llm import to_markdown
-  from marker.convert import convert_single_pdf
-
-  # Quick extraction.
-  md_quick = to_markdown("input.pdf")
-
-  # High-quality extraction for specific pages.
-  result = convert_single_pdf("input.pdf", max_pages=10)
-  md_quality = result.markdown
-  ```
-
+- Convert scanned PDF to text-based PDF
 ## When to Use Each Library
 - **Use `pymupdf4llm`** for:
   - Speed is priority
