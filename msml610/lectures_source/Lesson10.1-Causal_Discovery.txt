@@ -35,6 +35,30 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
+// Packages:
+// - gCastle (causal-learn)
+//   - Implements constraint-based (PC, FCI), score-based (GES), and functional
+//     (LiNGAM) algorithms
+//   - Supports both observational and interventional data discovery
+//   - Includes evaluation metrics and algorithm comparisons
+// - CausalNex
+//   - Build and visualize causal graphs programmatically
+//   - Define domain constraints (forbidden/required edges, temporal ordering)
+//   - Structural causal model inference and visualization
+// - DoWhy
+//   - Causal inference and effect estimation from discovered graphs
+//   - Refutation testing (placebo, random treatment, confounder sensitivity)
+//   - Validation and assumption checking for discovered structures
+
+// Tutorial outline:
+// - Load real-world observational data (e.g., UCI datasets)
+// - Run multiple discovery algorithms (PC, GES, LiNGAM) and compare outputs
+// - Encode domain knowledge as constraints and measure impact on discovery
+// - Validate discovered DAGs using conditional independence tests
+// - Perform refutation tests to check robustness
+// - Analyze Markov equivalence classes and ambiguous edge directions
+// - Visualize discovered graphs and confidence scores for edges
+
 # ##############################################################################
 # The Discovery Problem: When and Why It Works
 # ##############################################################################
@@ -152,6 +176,15 @@ digraph Discovery {
 - **Key insight**
   - Discovery is always based on _assumptions_
   - No algorithm recovers structure from data alone without some prior axiom
+
+// Tutorial:
+// - Load a real dataset (e.g., stock returns, health metrics)
+// - Test conditional independence using `gCastle.pc()` and `CausalNex` graph
+//   operations
+// - Compare PC output across different CI test statistics (correlation, partial
+//   correlation, G²)
+// - Visualize the discovered CPDAG and highlight ambiguous edges
+// - Save outputs as images showing skeleton vs. directed edges
 
 ## #############################################################################
 ## Identifiability and Causal Sufficiency
@@ -379,11 +412,13 @@ digraph Chain2 {
 - **Pros**: faster, more accurate, more interpretable
 - **Cons**: wrong priors inject wrong edges
 
-// - **Implementation**:
-// - Use `CausalNex` to build domain knowledge graphs and define constraints
-// - Enforce temporal ordering by restricting edges between time layers
-// - Mark forbidden/required edges in algorithm parameters
-// - Compare discovery with vs. without constraints to measure impact
+// Tutorial:
+// - Use `CausalNex` to define domain knowledge as a constraint graph
+// - Encode temporal ordering: create layers and forbid backward edges
+// - Mark forbidden edges (e.g., "outcome cannot cause treatment") and required edges
+// - Run discovery algorithm (PC, GES) with and without constraints
+// - Quantify impact: compare edge count, equivalence class size, computation time
+// - Visualize constraint graphs and discovered CPDAGs side-by-side
 
 * Combining Automated Discovery with Expert Judgment
 
@@ -537,6 +572,13 @@ digraph PCExample {
 - Directions of edges $S - T - C$ remain **undirected** without extra
   assumptions
 
+// Tutorial:
+// - Implement PC algorithm step-by-step using `gCastle.pc()`
+// - Load dataset and specify CI test (e.g., partial correlation for continuous data)
+// - Compare runtime and edge recovery with different CI test thresholds
+// - Inspect the separating sets returned by PC to understand orientation rules
+// - Validate output by checking implied conditional independencies hold in data
+
 * FCI: Dealing with Latent Confounders
 
 - **PC fails** under hidden confounders (causal sufficiency violated)
@@ -604,10 +646,12 @@ digraph PCExample {
 - **Complexity**: polynomial per step, but many steps; practical up to
   $n \approx 100$ variables
 
-// - **Implementation**:
-// - Use `gCastle.ges()` to run score-based search with BIC or other scores
-// - Compare results from GES with PC algorithm to identify robust edges
-// - Implement different scoring functions (BIC, BDeu) to assess robustness
+// Tutorial:
+// - Use `gCastle.ges()` to run score-based search with BIC scoring
+// - Compare GES results directly with PC/FCI outputs on same dataset
+// - Analyze which edges are consistently discovered across algorithms (robust edges)
+// - Implement GES with alternative scoring functions (BDeu) and compare stability
+// - Visualize the forward and backward search phases to understand the optimization process
 
 * NOTEARS: Continuous Optimization
 
@@ -661,10 +705,12 @@ digraph PCExample {
 - **Example**: in a stock-returns panel, non-Gaussian "fat tails" allow LiNGAM
   to orient edges that Gaussian methods cannot
 
-// - **Implementation**:
-// - Use `gCastle.lingam()` to recover full DAG from non-Gaussian data
-// - Test for non-Gaussianity with statistical tests before applying LiNGAM
-// - Compare results with PC/GES to assess when functional assumptions help
+// Tutorial:
+// - Test data for non-Gaussianity using statistical tests (Jarque-Bera, skewness)
+// - Use `gCastle.lingam()` to recover the full directed DAG
+// - Compare LiNGAM-recovered DAG with PC and GES outputs
+// - Visualize the adjacency matrix $B$ showing edge coefficients and directions
+// - Assess recovery performance on synthetic data with known ground truth
 
 * Discovery Algorithm Families: Summary
 
@@ -875,11 +921,16 @@ digraph C3 {
   - **Answer**: it is _consistent_, not _proven_. Causality is never
     established by data alone; always requires domain-informed interpretation
 
-// - **Implementation**:
-// - Use `DoWhy.refute_estimate()` to validate discovered causal structures
-// - Run placebo tests: randomly permute treatment, verify effect disappears
-// - Test sensitivity to unobserved confounders using benchmarks
-// - Implement d-separation queries with `CausalNex` to enumerate implied independencies
+// Tutorial:
+// - Use `CausalNex` to extract all conditional independence statements from
+//   discovered DAG
+// - Implement a refutation pipeline: for each CI statement, run statistical test
+//   on data
+// - Count violations; compute p-values for each implied independence
+// - Run placebo tests using `DoWhy`: replace target variable with random noise
+// - Check robustness via sensitivity analysis: add unobserved confounder,
+//   recompute effects
+// - Report validation summary: percentage of implied independencies confirmed
 
 ## #############################################################################
 ## When Discovery Should Change Your DAG
@@ -906,6 +957,14 @@ digraph C3 {
 - **Rule of thumb**: discovery shifts the _prior probability_ of an edge; it
   does not provide a _posterior certainty_
 
+// Tutorial:
+// - Start with an expert-specified DAG as baseline (prior knowledge)
+// - Run discovery algorithms to generate candidate structures
+// - For each new discovered edge: check algorithm agreement (multi-algorithm voting)
+// - Validate using refutation tests and domain plausibility
+// - Incrementally update the DAG as evidence accumulates
+// - Document the reasoning for each edge addition/removal in a decision log
+
 * Causal Discovery: Key Takeaways
 
 - **Causal discovery** infers DAG structure from data, but only under strong
@@ -927,3 +986,37 @@ digraph C3 {
 
 - **Bottom line**: automated discovery is a powerful exploratory tool, not a
   replacement for scientific reasoning
+
+// Complete workflow integrating all techniques:
+
+// **Data Preparation & Exploration**
+// - Load observational dataset; inspect missingness, distributions
+// - Test for non-Gaussianity (statistical tests)
+// - Identify temporal ordering and natural variable tiers
+
+// **Domain Knowledge Integration**
+// - Create expert-specified prior knowledge graph using `CausalNex`
+// - Define forbidden edges (causality reversals), required edges (known mechanisms)
+// - Encode temporal constraints (past → future)
+
+// **Algorithm Comparison**
+// - Run PC (constraint-based) with multiple CI tests
+// - Run GES (score-based) with BIC and alternative scores
+// - Run LiNGAM (functional) if non-Gaussianity confirmed
+// - Compare CPDAGs: skeleton overlap, ambiguous edge directions
+
+// **Robustness & Validation**
+// - Extract consensus edges found by multiple algorithms
+// - Enumerate conditional independencies from discovered DAG
+// - Run refutation tests: placebo, random treatment, confounder sensitivity
+// - Report validation score (% of implied independencies confirmed)
+
+// **Expert Review & Iteration**
+// - Present discovered structure to domain expert
+// - Refute edges contradicting known mechanisms
+// - Suggest next interventional experiment using active learning criteria
+
+// **Visualization & Documentation**
+// - Create comparison plots: PC vs. GES vs. LiNGAM outputs
+// - Highlight consensus edges (thick) vs. algorithm-specific edges (thin)
+// - Document assumptions, limitations, and sensitivity to parameter choices

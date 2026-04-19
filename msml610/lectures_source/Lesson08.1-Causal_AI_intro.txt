@@ -42,6 +42,11 @@ MSML610: Advanced Machine Learning
 ## Background
 ## #############################################################################
 
+// Books and Articles:
+// - 2024, Hurwitz & Thompson, "Causal Artificial Intelligence"
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+
 * Big Data and Traditional AI
 - **Focus** for past 10 years:
   - Collect and organize massive data volumes
@@ -88,6 +93,14 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 ## What ML Systems Can and Cannot Tell You
 ## #############################################################################
+
+// Books and Articles:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2016, Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier"
+//   https://arxiv.org/pdf/1602.04938.pdf
+// - 2017, Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions"
+//   https://arxiv.org/pdf/1705.07874.pdf
 
 * The Illusion of Understanding
 - **High accuracy $\neq$ Understanding causation**
@@ -203,6 +216,14 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 ## Problems with Traditional AI
 ## #############################################################################
+
+// Books and Articles:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2008, Angrist & Pischke, "Mostly Harmless Econometrics"
+//   https://economics.mit.edu/files/11869
+// - 2020, Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases"
+//   https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
 
 * Problem 1: Correlation is Not Causation!
 - **Correlation**: statistical relationships between variables
@@ -360,6 +381,14 @@ MSML610: Advanced Machine Learning
 ## Optimization vs. Inference vs. Decision Theory
 ## #############################################################################
 
+// Books and Articles:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2008, Angrist & Pischke, "Mostly Harmless Econometrics"
+//   https://economics.mit.edu/files/11869
+// - 2018, Imbens & Wooldridge, "Recent Developments in the Econometrics of Program Evaluation"
+//   https://www.nber.org/papers/w24318
+
 * Optimization vs. Inference vs. Decision Theory
 - Three paradigms that ML conflates
 
@@ -398,6 +427,14 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 ## The Cost of Ignoring Causality
 ## #############################################################################
+
+// Books and Articles:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 1999, Pearl, "Simpson's Paradox, Confounding, and Collapsibility"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2023, Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms"
+//   https://www.nature.com/articles/s41598-020-59669-x
 
 * The Cost of Ignoring Causality: Concrete Failure Modes
 - When organizations ignore causality, failures occur
@@ -483,6 +520,14 @@ MSML610: Advanced Machine Learning
 ## Data Science vs. Decision Science
 ## #############################################################################
 
+// Books and Articles:
+// - 2021, Pearl, "The Seven Pillars of Causal Reasoning with Reflections on Machine Learning"
+//   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2020, Angrist & Pischke, "Probability, Statistics, and Causal Inference"
+//   https://economics.mit.edu/research/
+
 * From Data Science to Decision Science
 - ML excels at prediction, fails at "what-if" questions
 - Association works for predicting without intervention
@@ -559,6 +604,14 @@ MSML610: Advanced Machine Learning
 ## The Ladder of Causation
 ## #############################################################################
 
+// Books and Articles:
+// - 2018, Pearl & Mackenzie, "The Book of Why: The New Science of Cause and Effect"
+//   https://bayes.cs.ucla.edu/WHY/
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2020, Zhang et al., "A Survey on Causal Inference"
+//   https://arxiv.org/pdf/2002.05209.pdf
+
 * The Ladder of Causation
 
 - Pearl provided a 3-level framework for understanding causality
@@ -624,6 +677,14 @@ MSML610: Advanced Machine Learning
 ## Correlation vs Causation Models
 ## #############################################################################
 
+// Books and Articles:
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2008, Angrist & Pischke, "Mostly Harmless Econometrics"
+//   https://economics.mit.edu/files/11869
+// - 2023, Peters et al., "Causality: Models, Learning, and Inference"
+//   https://arxiv.org/pdf/2012.13993.pdf
+
 * Correlation vs Causation Model
 - **Correlation**: how variables relate
 - **Causality**: whether one variable causes another
@@ -669,6 +730,13 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 ## Business Context and Motivation
 ## #############################################################################
+
+// Books and Articles:
+// - 2024, Hurwitz & Thompson, "Causal Artificial Intelligence"
+// - 2021, Brynjolfsson & McAfee, "Machine, Platform, Crowd"
+//   https://www.wired.com/insights/2014/07/the-rise-of-data-capital/
+// - 2020, Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases"
+//   https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
 
 * Digital Transformation in Business
 
@@ -734,6 +802,15 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 ## The Causal AI Workflow
 ## #############################################################################
+
+// Books and Articles:
+// - 2024, Hurwitz & Thompson, "Causal Artificial Intelligence"
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - 2023, Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms"
+//   https://www.nature.com/articles/s41598-020-59669-x
+// - 2020, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
+//   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
 * AI in Business
 
@@ -972,6 +1049,16 @@ digraph CausalFlowGrid {
 ## #############################################################################
 ## Explainability and Interpretability
 ## #############################################################################
+
+// Books and Articles:
+// - 2016, Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier"
+//   https://arxiv.org/pdf/1602.04938.pdf
+// - 2017, Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions"
+//   https://arxiv.org/pdf/1705.07874.pdf
+// - 2019, Joshi et al., "Towards Realistic Counterfactual Explanations with Contrastive Pertinent Features"
+//   https://arxiv.org/pdf/1906.04957.pdf
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+//   https://bayes.cs.ucla.edu/BOOK-2K
 
 * The Importance of Explainability
 - **Understanding AI-based models**

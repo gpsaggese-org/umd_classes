@@ -278,7 +278,7 @@
   - TUTORIAL: BoTorch (Bayesian optimization for sequential decisions)
 
 ### 12: Causal Reinforcement Learning
-// ?
+// Lesson12-Reinforcement_learning.txt
 
 - Why Standard RL Fails
   - MDPs assume no confounding and stable environments
