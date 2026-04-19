@@ -27,8 +27,8 @@ reads a markdown file --input file.md
 - Looks for a `# Summary` section in file.md and replaces it or adds it with the
   summary of the file
 
-- For all the code you must follow the instructions in
-  `docs/ai_prompts/coding.format_rules.md`
+- For all the code you must follow the conventions and instructions in
+  `@.claude/skills/coding.rules.md`
 
 2) Update the documentation in dev_scripts_helpers/documentation/README.md using
    the instructions in `docs/ai_coding/ai.md_instructions.md`

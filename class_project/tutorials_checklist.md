@@ -53,10 +53,10 @@ Create an issue called "Clean up tutorial XYZ" with the following action items.
 
 - [ ] Explore the available skills using these commands:
   ```bash
-  > md skill describe coding
-  > md skill describe notebooks
-  > md skill describe testing
-  > md skill describe X_in_60_minutes
+  > mdm skill describe coding
+  > mdm skill describe notebooks
+  > mdm skill describe testing
+  > mdm skill describe X_in_60_minutes
   ```
 
 - [ ] Review key skills relevant to tutorials:
@@ -66,7 +66,7 @@ Create an issue called "Clean up tutorial XYZ" with the following action items.
   - `markdown.format_rules`: Documentation style
   - E.g.,
     ```bash
-    > md skill edit coding.format_rules
+    > mdm skill edit coding.rules
     ```
 
 - [ ] Is there anything unclear or that could be improved in the skills?

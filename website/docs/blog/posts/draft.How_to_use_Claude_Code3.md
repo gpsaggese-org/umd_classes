@@ -161,7 +161,7 @@ This documentation provides comprehensive guidelines for:
   Claude Code working with the `helpers` repository
 - `docs/ai_templates/ai.instruction_template.md`: Workflow template for creating
   Python scripts with tests, documentation, planning steps, and AI todos
-- `docs/ai_prompts/coding.format_rules.md`: Python coding standards including
+- `.claude/skills/coding.rules.md`: Python coding standards including
   hdbg assertions, hsystem usage, logging patterns, and script templates
 - `docs/ai_prompts/testing.format_rules.md`: Unit testing conventions
   including test structure, naming patterns, and golden file testing
@@ -177,7 +177,7 @@ This documentation provides comprehensive guidelines for:
 When creating a Python script:
 
 1. **Write a Python script** following the instructions in
-   `docs/ai_prompts/coding.format_rules.md`
+   `.claude/skills/coding.rules.md`
 
 2. **Generate unit tests** for the code following the instructions in
    `docs/ai_prompts/testing.format_rules.md`
