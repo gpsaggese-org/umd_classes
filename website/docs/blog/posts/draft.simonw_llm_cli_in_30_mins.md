@@ -31,7 +31,7 @@ composable Unix tool you can pipe, script, and template from the terminal.
   > uv tool install llm
 
 
-  # Make sure that 
+  # Make sure that
   > export PATH="$HOME/.local/bin:$PATH"
   ```
 
@@ -111,6 +111,42 @@ composable Unix tool you can pipe, script, and template from the terminal.
     options  Manage default options for models
   ```
 
+## Managing API Keys
+
+### Using environment variables
+
+- You can pass the API key through environment keys, such as:
+  - `OPENAI_API_KEY`
+  - `ANTHROPIC_KEY`
+  - `OPENROUTER_KEY` (note that usually this is called `OPENROUTER_API_KEY`)
+
+### Using `keys` command
+- API keys are stored securely and required for cloud-based models (OpenAI,
+  Anthropic, etc.). The `keys` command manages them:
+  ```bash
+  > llm keys set openai
+  Password: [paste your OpenAI API key]
+  > llm keys list
+  openai
+  ```
+
+- Set a key for any provider:
+  ```bash
+  > llm keys set anthropic
+  Password: [paste your Anthropic API key]
+
+  > llm keys set openrouter
+  Password: [paste your OpenRouter API key]
+  ```
+
+- Keys are stored in the LLM database (with location varying by OS) and are never
+  logged or cached insecurely
+- Once set, models from that provider will work automatically:
+  ```bash
+  # Uses Anthropic key.
+  > llm -m claude-3-5-sonnet "Hello"
+  ```
+
 ## Working with Models
 - List available models grouped by provider:
   ```bash
@@ -143,6 +179,119 @@ composable Unix tool you can pipe, script, and template from the terminal.
   - `-s <system>`: Provide a system prompt
   - `-c`: Continue the previous conversation
   - `--no-stream`: Disable token streaming, print all at once
+  - `-o <key>=<value>`: Pass model-specific options (temperature, max_tokens, etc.)
+  - `--json`: Output response as JSON for programmatic parsing
+
+## Chat Mode: Multi-turn Conversations
+- For back-and-forth dialogue, use `llm chat` instead of one-off prompts:
+  ```bash
+  > llm chat
+  Chatting with gpt-4o-mini
+  Type 'exit' to quit, '/help' for help
+  You: What is entropy?
+  Model: Entropy is a measure of disorder or randomness in a system...
+
+  You: Give me a Python example.
+  Model: Here's a simple example...
+  ```
+- Chat maintains conversation history across turns, so context carries forward
+  automatically
+
+- Use `-m` to pick a model, or `-s` to set a system prompt for the conversation:
+  ```bash
+  > llm chat -m 4o -s "You are a Python expert."
+  ```
+
+- Chat sessions are logged to the database, so you can review them later:
+  ```bash
+  # Show last 10 logged conversations.
+  > llm logs -n 10
+  ```
+
+## Plugins to Unlock More Models
+- Plugins expand `llm` with support for additional model providers. View
+  installed plugins:
+  ```bash
+  > llm plugins
+  [
+    {
+      "name": "llm-ollama",
+      "hooks": [
+        "register_commands",
+        "register_embedding_models",
+        "register_models",
+        "register_tools"
+      ],
+      "version": "0.15.1"
+    },
+    {
+      "name": "llm-openrouter",
+      "hooks": [
+        "register_commands",
+        "register_models"
+      ],
+      "version": "0.5"
+    }
+  ]
+  ```
+
+- Install plugins for other providers:
+  ```bash
+  # Anthropic Claude models.
+  > llm install llm-anthropic
+  # OpenRouter models.
+  > llm install llm-openrouter
+  # Google Gemini.
+  > llm install llm-gemini
+  ```
+
+- After installation, new models appear in `llm models`:
+  ```bash
+  > llm install llm-anthropic
+  > llm models
+  OpenAI Chat: gpt-4o (aliases: 4o)
+  ...
+  Anthropic Chat: claude-3-5-sonnet (aliases: claude)
+  Anthropic Chat: claude-3-5-haiku
+  ```
+
+- Use plugin models like any other:
+  ```bash
+  > llm -m claude "Summarize this PDF"
+  > llm chat -m claude-3-opus -s "You are a security expert"
+  ```
+
+## Local Models with Ollama
+- Run open-source models locally without API keys or costs using Ollama:
+  ```bash
+  # First, install and start Ollama.
+  ...
+  # Download a model from `ollama.ai`.
+  > ollama pull mistral
+  # Serve the models.
+  > ollama serve
+  ...
+  ```
+
+- In another terminal, use the model via `llm`:
+  ```bash
+  # Show models.
+  > llm models
+  Ollama (via Ollama): mistral
+
+  # Run `mistral` model.
+  > llm -m mistral "What is Rust?"
+  ```
+
+- Benefits of local models:
+  - **No API costs**: Run as many times as you want for free
+  - **No rate limits**: Process large batches without hitting API ceilings
+  - **Privacy**: Your prompts never leave your machine
+  - **Offline**: Works without internet connectivity
+
+- Drawback of local models:
+  - Generally less capable than GPT-4o or Claude (but improving rapidly)
+  - Slower than models served by providers
 
 ## Fragments: Reusable Prompt Pieces
 - Fragments are named chunks of text loaded from files, useful for giving the
@@ -192,6 +341,35 @@ composable Unix tool you can pipe, script, and template from the terminal.
   - Reduce repetition in scripts and automation
   - Share template definitions with team members
 
+## Logging and History
+- Every prompt and response is logged automatically to a local database for
+  reproducibility and auditing:
+  ```bash
+  > llm logs
+  41  2026-04-19 10:22:34  gpt-4o-mini  "What is entropy?"
+  40  2026-04-19 10:21:15  gpt-4o-mini  "Summarize this article..."
+  39  2026-04-19 10:20:02  claude       "Help debug this Python error"
+  ```
+
+- Retrieve a specific logged response:
+  ```bash
+  > llm logs 41
+  Model: gpt-4o-mini
+  Prompt: What is entropy?
+  Response: Entropy is a measure of disorder or randomness...
+  ```
+
+- View responses in JSON format for parsing:
+  ```bash
+  > llm logs --json | jq '.[] | select(.model == "claude")'
+  ```
+
+- This is valuable for:
+  - **Auditing**: Track what models were asked and when
+  - **Cost analysis**: See which models consume tokens
+  - **Reproducibility**: Retrieve exact prompts later
+  - **Learning**: Review patterns in what works well
+
 ## Practical Recipes
 - **Explain a diff before committing**:
   ```bash
@@ -215,6 +393,75 @@ composable Unix tool you can pipe, script, and template from the terminal.
   ```bash
   > llm "What is entropy in information theory?"
   > llm -c "Give me a Python example."
+  ```
+
+- **Batch process multiple items**:
+  ```bash
+  > cat urls.txt | while read url; do \
+      echo "Processing: $url"
+      curl -s "$url" | llm "Summarize the main point"
+    done
+  ```
+
+## Advanced Piping Patterns
+- Combine `llm` with `jq` to extract structured data:
+  ```bash
+  > llm --json "List 3 Python libraries for data science" | jq -r '.[0].content'
+  Pandas: A library for data manipulation and analysis
+  ```
+
+- Parse CSV and enrich it with LLM analysis:
+  ```bash
+  > cat customers.csv | while IFS=, read id name; do
+  >   echo "Classifying customer: $name"
+  >   echo "$name" | llm "Assign one industry category" >> results.txt
+  > done
+  ```
+
+- Chain multiple models and compare outputs:
+  ```bash
+  > PROMPT="Explain quantum entanglement simply"
+  > echo "OpenAI:" && echo "$PROMPT" | llm -m 4o
+  > echo "Anthropic:" && echo "$PROMPT" | llm -m claude
+  > echo "Ollama:" && echo "$PROMPT" | llm -m mistral
+  ```
+
+- Extract structured output and feed downstream:
+  ```bash
+  > git log --oneline -10 | llm "Group these by feature/fix/refactor" --json | \
+    jq '.content' | tee git_summary.txt
+  ```
+
+- Monitor logs in real-time and trigger actions:
+  ```bash
+  > tail -f app.log | while read line; do
+  >   if echo "$line" | grep -q ERROR; then
+  >     echo "$line" | llm "Is this a critical error?"
+  >   fi
+  > done
+  ```
+
+## Cost Awareness
+- Cloud models charge per token. Monitor your usage:
+  ```bash
+  > llm logs --json | jq '[.[].model] | group_by(.) | map({model: .[0], count: length})'
+  [
+    {"model": "gpt-4o-mini", "count": 42},
+    {"model": "claude-3-5-haiku", "count": 15}
+  ]
+  ```
+
+- Cheaper alternatives for common tasks:
+  - **Summarization**: Use `gpt-4o-mini` or Haiku instead of more capable model
+    as GPT-4o
+  - **Simple questions**: Local Ollama models cost $0
+  - **Batch processing**: Use cheaper models, save GPT-4o for complex reasoning
+  - **Prototyping**: Test with OpenRouter's cheaper provider options
+
+- Track spending by setting limits or monitoring regularly:
+  ```bash
+  > llm logs --json | jq '[.[].model] | length'
+  3
   ```
 
 ## Why This Matters
