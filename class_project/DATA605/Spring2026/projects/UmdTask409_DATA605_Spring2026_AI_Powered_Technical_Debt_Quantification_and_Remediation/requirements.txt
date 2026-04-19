@@ -33,3 +33,4 @@ sqlalchemy
 
 # Utilities.
 tqdm
+accelerate

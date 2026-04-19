@@ -71,3 +71,5 @@ tensorboard/
 # Secrets
 .env
 .env.*
+tmp.build/
+docker_build.log
