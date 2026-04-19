@@ -24,9 +24,14 @@ composable Unix tool you can pipe, script, and template from the terminal.
   - **Documentation**: [llm.datasette.io](https://llm.datasette.io/en/stable/)
 
 ## Installation
-- Install with `uv` (recommended):
+- `llm` is a Python package so it is typically installed in a virtual environment
+
+- Install with `uv` in the current virtual environment:
   ```bash
   > uv tool install llm
+
+
+  # Make sure that 
   > export PATH="$HOME/.local/bin:$PATH"
   ```
 
@@ -48,16 +53,62 @@ composable Unix tool you can pipe, script, and template from the terminal.
   ```
   - Convenient for testing, but trades cold-start time for zero setup overhead
 
+- **Quick test**
+  ```bash
+  > llm "Hi"
+  Hello! How can I assist you today?
+  ```
+
 ## Getting Help
 - Every subcommand has a built-in help page:
   ```bash
   > llm --help
+  Usage: llm [OPTIONS] COMMAND [ARGS]...
+
+  Access Large Language Models from the command-line
+
+  Options:
+    --version   Show the version and exit.
+    -h, --help  Show this message and exit.
+
+  Commands:
+    prompt*       Execute a prompt
+    aliases       Manage model aliases
+    chat          Hold an ongoing chat with a model.
+    collections   View and manage collections of embeddings
+    embed         Embed text and store or return the result
+    embed-models  Manage available embedding models
+    embed-multi   Store embeddings for multiple strings at once in the...
+    fragments     Manage fragments that are stored in the database
+    install       Install packages from PyPI into the same environment as LLM
+    keys          Manage stored API keys for different models
+    logs          Tools for exploring logged prompts and responses
+    models        Manage available models
+    ollama        Commands for working with models hosted on Ollama server.
+    openai        Commands for working directly with the OpenAI API
+    openrouter    Commands relating to the llm-openrouter plugin
+    plugins       List installed plugins
+    schemas       Manage stored schemas
+    similar       Return top N similar IDs from a collection using cosine...
+    templates     Manage stored prompt templates
+    tools         Manage tools that can be made available to LLMs
+    uninstall     Uninstall Python packages from the LLM environment
   ```
 
 - Subcommands support `--help` for detailed information:
   ```bash
   > llm models --help
-  > llm templates --help
+  Usage: llm models [OPTIONS] COMMAND [ARGS]...
+
+  Manage available models
+
+  Options:
+    -h, --help  Show this message and exit.
+
+  Commands:
+    list*    List available models
+    default  Show or set the default model
+    options  Manage default options for models
   ```
 
 ## Working with Models
@@ -67,7 +118,7 @@ composable Unix tool you can pipe, script, and template from the terminal.
   OpenAI Chat: gpt-4o (aliases: 4o)
   OpenAI Chat: chatgpt-4o-latest (aliases: chatgpt-4o)
   OpenAI Chat: gpt-4o-mini (aliases: 4o-mini)
-  ...truncated output...
+  ...
   OpenAI Chat: gpt-5
   OpenAI Chat: gpt-5-mini
   OpenAI Chat: gpt-5-nano
@@ -105,16 +156,15 @@ composable Unix tool you can pipe, script, and template from the terminal.
 - Fragments support multiple sources:
   - **Local files**: Load text directly from the filesystem
   - **URLs**: Reference remote content without copying locally:
-    `bash     > llm -f https://raw.githubusercontent.com/simonw/llm/main/README.md \
+    ```bash
+    > llm -f https://raw.githubusercontent.com/simonw/llm/main/README.md \
         "What are the top three features mentioned here?"     `
-  - **GitHub blob references**: Easy access to specific repository files
+    ```
   - **Multiple fragments**: Stack `-f` flags to compare documents or provide
     multiple context pieces at once
 
 ## Piping, Files, and Templates
-**Unix-style piping**
-
-- Because `llm` reads from stdin, you can pipe anything into it:
+- Because `llm` reads from stdin, you can Unix-style pipe anything into it:
   ```bash
   > cat prompt.txt | llm | tee output.txt
   ```
@@ -122,15 +172,13 @@ composable Unix tool you can pipe, script, and template from the terminal.
 - The `tee` step keeps the response on the terminal and also writes it to disk,
   preventing long output from being lost to scrollback
 
-**Templates for reusable configurations**
-
+## Templates
 - Templates bundle a system prompt, default model, and parameters into a single
   reusable YAML file:
   ```yaml
   system: |
-    You are a careful technical editor. Rewrite the user's text as clean
-    Markdown with headings, bullet lists, and fenced code blocks where
-    appropriate.
+    You are a careful technical editor. Rewrite the user's text as clean Markdown
+    with headings, bullet lists, and fenced code blocks where appropriate.
   model: 4o
   ```
 
@@ -152,7 +200,7 @@ composable Unix tool you can pipe, script, and template from the terminal.
 
 - **Summarize a long log file**:
   ```bash
-  > tail -n 500 server.log | llm -s "You are an SRE on call." "What went wrong?"
+  > tail -n 500 server.log | llm -s "You are an SRE on call. What went wrong?"
   ```
 
 - **Run the same prompt against several models and compare**:
