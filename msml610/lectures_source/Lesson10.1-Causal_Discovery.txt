@@ -387,6 +387,12 @@ digraph Chain2 {
 - **Pros**: faster, more accurate, more interpretable
 - **Cons**: wrong priors inject wrong edges
 
+// - **Implementation**:
+// - Use `CausalNex` to build domain knowledge graphs and define constraints
+// - Enforce temporal ordering by restricting edges between time layers
+// - Mark forbidden/required edges in algorithm parameters
+// - Compare discovery with vs. without constraints to measure impact
+
 * Combining Automated Discovery with Expert Judgment
 
 - **Typical workflow**:
@@ -477,6 +483,11 @@ mindmap
   - Causal sufficiency (no hidden confounders)
   - Faithfulness
   - Correct CI tests
+
+// - **Implementation**:
+// - Use `gCastle.pc()` to run PC algorithm on your data
+// - Use `DoWhy` to test conditional independence and refute discovered edges
+// - Visualize output DAGs using `CausalNex` for graph operations
 
 * PC Algorithm: Steps
 
@@ -601,6 +612,11 @@ digraph PCExample {
 - **Complexity**: polynomial per step, but many steps; practical up to
   $n \approx 100$ variables
 
+// - **Implementation**:
+// - Use `gCastle.ges()` to run score-based search with BIC or other scores
+// - Compare results from GES with PC algorithm to identify robust edges
+// - Implement different scoring functions (BIC, BDeu) to assess robustness
+
 * NOTEARS: Continuous Optimization
 
 - **Key idea** (Zheng et al., 2018): turn discrete DAG search into a
@@ -652,6 +668,11 @@ digraph PCExample {
 
 - **Example**: in a stock-returns panel, non-Gaussian "fat tails" allow LiNGAM
   to orient edges that Gaussian methods cannot
+
+// - **Implementation**:
+// - Use `gCastle.lingam()` to recover full DAG from non-Gaussian data
+// - Test for non-Gaussianity with statistical tests before applying LiNGAM
+// - Compare results with PC/GES to assess when functional assumptions help
 
 * Discovery Algorithm Families: Summary
 
@@ -861,6 +882,12 @@ digraph C3 {
 - **Q**: what if the DAG passes all refutation tests?
   - **Answer**: it is _consistent_, not _proven_. Causality is never
     established by data alone; always requires domain-informed interpretation
+
+// - **Implementation**:
+// - Use `DoWhy.refute_estimate()` to validate discovered causal structures
+// - Run placebo tests: randomly permute treatment, verify effect disappears
+// - Test sensitivity to unobserved confounders using benchmarks
+// - Implement d-separation queries with `CausalNex` to enumerate implied independencies
 
 ## #############################################################################
 ## When Discovery Should Change Your DAG
