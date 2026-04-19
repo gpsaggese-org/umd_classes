@@ -16,144 +16,134 @@ composable Unix tool you can pipe, script, and template from the terminal.
 <!-- more -->
 
 ## Summary
+- `llm` CLI brings large language models to the terminal, eliminating context
+  switches and enabling integration with Unix tools.
 
-The terminal is where most developers already live, and large language models
-deserve to be there too. Opening a browser tab to ask a quick question is slow,
-breaks flow, and makes it almost impossible to integrate the model's output
-with the rest of a workflow. Simon Willison's `llm` CLI solves this by wrapping
-OpenAI, Anthropic, Gemini, local Ollama models, and many others behind a single
-command-line interface.
+- This post covers:
+  - **What it is**: A command-line wrapper for OpenAI, Anthropic, Gemini, Ollama,
+    and other models
+  - **Why it matters**: Reads stdin, writes stdout, composes with `grep`, `jq`,
+    `sed`, and shell scripts
+  - **What you'll learn**: Installation, core features (models, fragments,
+    templates), and practical recipes
 
-What makes `llm` stand out is not just that it exists, but that it feels like a
-proper Unix tool. It reads from stdin, writes to stdout, supports templates and
-fragments, and can be composed with `grep`, `jq`, `tee`, and friends. This post
-walks through installation, the core concepts, and a handful of recipes that
-make `llm` genuinely useful in day-to-day work.
+- Official resources:
 
-The official project lives at
-[github.com/simonw/llm](https://github.com/simonw/llm) with documentation at
-[llm.datasette.io](https://llm.datasette.io/en/stable/).
+  - **Project**: [github.com/simonw/llm](https://github.com/simonw/llm)
+  - **Documentation**: [llm.datasette.io](https://llm.datasette.io/en/stable/)
 
 ## Installation
+- Install with `uv` (recommended):
+  ```bash
+  > uv tool install llm
+  > export PATH="$HOME/.local/bin:$PATH"
+  ```
 
-The cleanest way to install `llm` is with `uv`, the fast Python package manager
-from Astral. The `uv tool install` command sets up an isolated environment for
-each tool, so `llm` and its plugins do not pollute your global Python
-environment:
+Benefits of using `uv tool install`:
 
+- Isolated environments for each tool
+- No pollution of global Python packages
+- Clean uninstall and updates
+
+Verify installation:
 ```bash
-> uv tool install llm
-> export PATH="$HOME/.local/bin:$PATH"
-```
-
-Confirm the install by checking the version:
-
-```bash
-> uvx llm --version
+> llm --version
 llm version 0.27.1
 ```
 
-If you prefer not to manage an install at all, `uvx llm ...` will fetch and run
-`llm` on demand. That is convenient for trying it out without committing, at
-the cost of a short cold-start each invocation.
+**Alternative: Run without installing**
 
-## Getting Help
-
-Every subcommand has a built-in help page, and the top-level help is a good
-starting map of the tool:
-
+Use `uvx` to fetch and run `llm` on demand without managing an installation:
 ```bash
-> llm --help
+> uvx llm --version
 ```
 
-Every subcommand supports `--help` as well, so `llm models --help` or
-`llm templates --help` will tell you everything you need to know without
-leaving the terminal.
+Convenient for testing, but trades cold-start time for zero setup overhead.
 
-## Working With Models
+## Getting Help
+- Every subcommand has a built-in help page:
+  ```bash
+  > llm --help
+  ```
+- Subcommands support `--help` for detailed information:
+  ```bash
+  > llm models --help
+  > llm templates --help
+  ```
 
-The `models` subcommand lists every model `llm` can currently reach, grouped
-by provider:
-
+## Working with Models
+List available models grouped by provider:
 ```bash
 > llm models
 OpenAI Chat: gpt-4o (aliases: 4o)
 OpenAI Chat: chatgpt-4o-latest (aliases: chatgpt-4o)
 OpenAI Chat: gpt-4o-mini (aliases: 4o-mini)
-…
+...truncated output...
 OpenAI Chat: gpt-5
 OpenAI Chat: gpt-5-mini
 OpenAI Chat: gpt-5-nano
 Default: gpt-4o-mini
 ```
 
-A few things to notice:
+Key features to notice:
 
-- **Aliases**: A model like `gpt-4o` can be called as `4o`, which keeps the
-  command line short
-- **Default model**: The last line shows which model runs when you do not
-  specify one
-- **Plugin-provided models**: Anthropic, Gemini, Ollama, and other providers
-  show up once their plugin is installed (e.g., `llm install llm-anthropic`)
+- **Aliases**: Model names like `gpt-4o` can be called as `4o` for shorter
+  commands
+- **Default model**: The last line shows which model runs when not specified
+- **Plugin-provided models**: Anthropic, Gemini, Ollama, and others available
+  after installing their plugins (e.g., `llm install llm-anthropic`)
 
-To change the default model for the session use `llm models default <name>`, or
-pass `-m <name>` on any single invocation:
-
+Change the default model for the session or per invocation:
 ```bash
+> llm models default 4o
 > llm -m 4o "Summarize the theory of relativity in two sentences."
 ```
 
-| Flag            | Purpose                                      |
-| :-------------- | :------------------------------------------- |
-| `-m <model>`    | Select the model for this invocation         |
-| `-s <system>`   | Provide a system prompt                      |
-| `-c`            | Continue the previous conversation           |
-| `--no-stream`   | Disable token streaming, print all at once   |
+Common flags:
+
+| Flag          | Purpose                                    |
+| :------------ | :----------------------------------------- |
+| `-m <model>`  | Select the model for this invocation       |
+| `-s <system>` | Provide a system prompt                    |
+| `-c`          | Continue the previous conversation         |
+| `--no-stream` | Disable token streaming, print all at once |
 
 ## Fragments: Reusable Prompt Pieces
-
-A common pattern is to feed the model a block of reference text and then ask
-questions against it. Rather than pasting the text into every prompt, `llm`
-supports **fragments**, which are named chunks of text loaded from files:
-
+Fragments are named chunks of text loaded from files, useful for giving the
+model reference context:
 ```bash
 > cat my_fragment.txt
 The solar eclipse will occur on April 8, 2024, visible across North America.
 > llm -f my_fragment.txt "Summarize the above in one sentence."
 ```
 
-Fragments can also be URLs or GitHub blob references, which is handy when you
-want the model to reason about a specific file without copying it locally:
+Fragments support multiple sources:
 
-```bash
-> llm -f https://raw.githubusercontent.com/simonw/llm/main/README.md \
-    "What are the top three features mentioned here?"
-```
-
-Multiple `-f` flags can be stacked, which is useful for comparing documents or
-giving the model several pieces of context at once.
+- **Local files**: Load text directly from the filesystem
+- **URLs**: Reference remote content without copying locally
+  ```bash
+  > llm -f https://raw.githubusercontent.com/simonw/llm/main/README.md \
+      "What are the top three features mentioned here?"
+  ```
+- **GitHub blob references**: Easy access to specific repository files
+- **Multiple fragments**: Stack `-f` flags to compare documents or provide
+  multiple context pieces at once
 
 ## Piping, Files, and Templates
+**Unix-style piping**
 
-Because `llm` reads from stdin, you can pipe anything into it. The simplest
-recipe sends a prompt from a file and saves the response:
-
+Because `llm` reads from stdin, you can pipe anything into it:
 ```bash
 > cat prompt.txt | llm | tee output.txt
 ```
 
 The `tee` step keeps the response on the terminal and also writes it to disk,
-which is useful when the response is long enough that scrollback might lose it.
+preventing long output from being lost to scrollback.
 
-**Templates** let you bundle a system prompt, default model, and parameters
-into a reusable unit stored in a YAML file:
+**Templates for reusable configurations**
 
-```bash
-> cat prompt.txt | llm -t llm-markdown.yaml | tee output.txt
-```
-
-A template typically looks like:
-
+Templates bundle a system prompt, default model, and parameters into a single
+reusable YAML file:
 ```yaml
 system: |
   You are a careful technical editor. Rewrite the user's text as clean
@@ -162,31 +152,29 @@ system: |
 model: 4o
 ```
 
-With the template defined, the same command can be dropped into any shell
-script or Makefile without repeating the prompt configuration.
-
-To use the template:
-
+Use the template in any command, shell script, or Makefile:
 ```bash
 > cat prompt.txt | llm -t llm-markdown.yaml | tee output.txt
 ```
 
+Benefits:
+
+- Standardize configurations across projects
+- Reduce repetition in scripts and automation
+- Share template definitions with team members
+
 ## Practical Recipes
-
-**Explain a diff before committing:**
-
+**Explain a diff before committing**
 ```bash
 > git diff --staged | llm "Write a short, precise commit message for this diff."
 ```
 
-**Summarize a long log file:**
-
+**Summarize a long log file**
 ```bash
 > tail -n 500 server.log | llm -s "You are an SRE on call." "What went wrong?"
 ```
 
-**Run the same prompt against several models and compare:**
-
+**Run the same prompt against several models and compare**
 ```bash
 > for m in 4o 4o-mini gpt-5-mini; do
 >     echo "=== $m ==="
@@ -194,22 +182,25 @@ To use the template:
 > done
 ```
 
-**Start a continuing conversation:**
-
+**Start a continuing conversation**
 ```bash
 > llm "What is entropy in information theory?"
 > llm -c "Give me a Python example."
 ```
 
 ## Why This Matters
+The power of `llm` lies in its Unix philosophy: it behaves like every other
+command-line tool. Rather than a chat interface, `llm` becomes infrastructure
+that composes with `grep`, `sed`, `jq`, and custom scripts.
 
-The real power of `llm` is not any single feature but the fact that it behaves
-like every other tool on the command line. Once a model is a pipe you can
-compose with `grep`, `sed`, `jq`, and your own scripts, it stops being a chat
-companion and starts being a piece of infrastructure. That shift opens the door
-to automated code review, log triage, document summarization, and dozens of
-small personal tools that would be too tedious to build against a raw HTTP
-API.
+This shift unlocks:
 
-If you already live in the terminal, `llm` is the shortest path from "I wish a
-model could do this" to "here is a one-liner that does it".
+- **Automated workflows**: Code review, log triage, document summarization
+- **Personal tools**: Custom scripts that would be too tedious to build against
+  an HTTP API
+- **Faster iteration**: Go from "I wish a model could do this" to a working
+  one-liner in minutes
+- **Integration ease**: Pipe model output into your existing Unix toolchain
+
+For developers living in the terminal, `llm` is the shortest path from idea to
+implementation.
