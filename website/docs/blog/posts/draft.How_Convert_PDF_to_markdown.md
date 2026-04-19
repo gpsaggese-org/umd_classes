@@ -418,3 +418,30 @@ image extraction and heading detection.
   - Full programmatic control
   - Complex pipelines
   - When you need to build your own Markdown conversion
+
+
+<!--
+
+  	•	Nougat (best for arXiv papers)
+      - https://github.com/facebookresearch/nougat
+	•	GROBID (best for structured extraction)
+
+  marker has a REPL interface
+  cat >config.yml
+  inputs:
+  - /Users/saggese/Downloads/2011.00641v1.pdf
+
+  output: output
+  rm -rf output; printf "run\nexit\n"  | uvx --python 3.11 marker --config config.yml
+
+https://github.com/timf34/arxiv2md
+
+https://github.com/docling-project/docling
+
+https://github.com/tonydavis629/markxiv
+
+uvx markitdown[pdf] ~/Downloads/2011.00641v1.pdf -o output.md
+Decent job
+
+Convert a latex to markdown using pandoc
+-->

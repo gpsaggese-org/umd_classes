@@ -25,14 +25,6 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-- Pearl: _"Causality: Models, Reasoning, and Inference"_ (2009)
-
-- Peters et al.: _"Elements of Causal Inference"_ (2017)
-
-- Spirtes et al.: _"Causation, Prediction, and Search"_ (2000)
-
-- Glymour et al.: _"Review of Causal Discovery Methods Based on Graphical Models"_ (2020)
-
 ::::
 :::: {.column width=20%}
 
