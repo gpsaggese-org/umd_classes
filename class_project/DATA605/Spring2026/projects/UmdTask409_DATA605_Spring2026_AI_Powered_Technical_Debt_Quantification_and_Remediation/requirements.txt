@@ -36,3 +36,6 @@ tqdm
 accelerate
 pmdarima
 statsmodels
+javalang
+sacrebleu
+datasets

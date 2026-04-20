@@ -24,6 +24,7 @@ from typing import Optional
 import numpy as np
 import pandas as pd
 
+
 # =============================================================================
 # Logging
 # =============================================================================
@@ -1903,4 +1904,495 @@ def forecast_debt_arima(
         "order_used": order_used,
         "metrics": {"mape": mape, "rmse": rmse, "mae": mae},
         "train_fraction": train_fraction,
+    }
+
+
+
+# =============================================================================
+# SECTION 6: JAVA REFACTORING AGENT
+# =============================================================================
+#
+# A model-agnostic refactoring agent for Java code. Takes a method as input,
+# generates a refactored version using a local LLM, validates the output,
+# and returns a confidence-scored result.
+#
+# Design based on benchmark results: Qwen-Coder-0.5B + few-shot retrieval is
+# the recommended default (BLEU 67.78 on CodeXGLUE small test split), chosen
+# for CPU-capable inference time (~100 sec/call on MacBook Air).
+#
+# The agent is language-agnostic in structure but uses Java-specific tools
+# (javalang for parsing, CodeXGLUE as the retrieval corpus).
+
+
+AGENT_DEFAULT_MODEL = "Qwen/Qwen2.5-Coder-0.5B-Instruct"
+AGENT_DEFAULT_MAX_NEW_TOKENS = 512
+AGENT_DEFAULT_SEED = 42
+AGENT_DEFAULT_N_RETRIEVAL_EXAMPLES = 3
+AGENT_CONFIDENCE_HIGH_BLEU_THRESHOLD = 50.0
+
+
+def validate_java_syntax(code: str) -> dict:
+    """
+    Check whether a string parses as valid Java.
+
+    CodeXGLUE methods are wrapped in a synthetic class for parsing since
+    isolated methods are not valid top-level Java syntax.
+
+    Returns
+    -------
+    dict with keys ``is_valid`` (bool) and ``error`` (str or None).
+    """
+    import javalang
+
+    wrapped = f"class _AgentWrapper {{ {code} }}"
+    try:
+        javalang.parse.parse(wrapped)
+        return {"is_valid": True, "error": None}
+    except Exception as e:
+        return {"is_valid": False, "error": str(e)[:200]}
+
+
+def compute_bleu_against_reference(candidate: str, reference: str) -> float:
+    """
+    Compute sentence-level BLEU of the candidate against one reference.
+
+    Uses sacrebleu, matching CodeXGLUE's evaluation convention. Returns a
+    score in [0, 100].
+    """
+    import sacrebleu
+
+    if not candidate or not reference:
+        return 0.0
+    try:
+        bleu = sacrebleu.sentence_bleu(candidate, [reference])
+        return float(bleu.score)
+    except Exception:
+        return 0.0
+
+
+def is_exact_match(candidate: str, reference: str) -> bool:
+    """
+    Whitespace-normalized exact match between candidate and reference.
+
+    This is the convention used by CodeXGLUE and the benchmark scripts.
+    """
+    if not candidate or not reference:
+        return False
+    # Collapse all whitespace runs to a single space before comparing.
+    norm_c = " ".join(candidate.split())
+    norm_r = " ".join(reference.split())
+    return norm_c == norm_r
+
+
+def compute_confidence_score(
+    is_valid: bool,
+    exact_match: bool,
+    bleu_score: float,
+    bleu_threshold: float = AGENT_CONFIDENCE_HIGH_BLEU_THRESHOLD,
+) -> dict:
+    """
+    Derive a confidence score and label from validation results.
+
+    Confidence tiers:
+      - HIGH: valid Java AND (exact match OR BLEU >= threshold)
+      - MEDIUM: valid Java AND BLEU in [threshold/2, threshold)
+      - LOW: valid Java AND BLEU < threshold/2
+      - FAILED: invalid Java
+
+    Returns
+    -------
+    dict with ``level`` (str) and ``score`` (float in [0, 1]).
+    """
+    if not is_valid:
+        return {"level": "FAILED", "score": 0.0}
+
+    if exact_match or bleu_score >= bleu_threshold:
+        return {"level": "HIGH", "score": 0.9 + 0.1 * min(bleu_score / 100, 1)}
+    if bleu_score >= bleu_threshold / 2:
+        return {"level": "MEDIUM", "score": 0.5 + 0.3 * (bleu_score - bleu_threshold / 2) / (bleu_threshold / 2)}
+    return {"level": "LOW", "score": 0.2 + 0.3 * (bleu_score / (bleu_threshold / 2))}
+
+
+# -----------------------------------------------------------------------------
+# CodeXGLUE retrieval index: build, cache, query
+# -----------------------------------------------------------------------------
+
+AGENT_RETRIEVAL_CACHE_DIRNAME = "retrieval_cache"
+AGENT_RETRIEVAL_SUBSET = "small"  # matches the benchmark run
+
+
+def _retrieval_cache_paths(cache_dir: str) -> dict:
+    """Return the paths where the retrieval index is cached on disk."""
+    p = Path(cache_dir)
+    return {
+        "root": p,
+        "vectorizer": p / "tfidf_vectorizer.pkl",
+        "train_data": p / "train_data.pkl",
+    }
+
+
+def build_retrieval_index(
+    cache_dir: str = AGENT_RETRIEVAL_CACHE_DIRNAME,
+    subset: str = AGENT_RETRIEVAL_SUBSET,
+    force_rebuild: bool = False,
+) -> dict:
+    """
+    Build a TF-IDF retrieval index over the CodeXGLUE code_refinement
+    training split, or load a previously cached one.
+
+    On first run, downloads the training split (~50K Java method pairs
+    for ``subset='small'``), fits a TF-IDF vectorizer on the buggy halves,
+    and caches both the vectorizer and the training pairs to disk.
+
+    Parameters
+    ----------
+    cache_dir : str
+        Directory to hold cached pickles. Created if missing.
+    subset : str
+        "small" (methods up to 50 tokens) or "medium" (up to 100).
+        Match the subset used at inference time.
+    force_rebuild : bool
+        If True, ignore any cached files and rebuild from scratch.
+
+    Returns
+    -------
+    dict with keys:
+        - vectorizer: fitted TfidfVectorizer
+        - train_pairs: list of {"buggy": str, "fixed": str, "vec": sparse row}
+    """
+    import pickle
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    paths = _retrieval_cache_paths(cache_dir)
+    paths["root"].mkdir(parents=True, exist_ok=True)
+
+    if (
+        not force_rebuild
+        and paths["vectorizer"].exists()
+        and paths["train_data"].exists()
+    ):
+        logger.info("Loading cached retrieval index from %s", paths["root"])
+        with open(paths["vectorizer"], "rb") as f:
+            vectorizer = pickle.load(f)
+        with open(paths["train_data"], "rb") as f:
+            train_pairs = pickle.load(f)
+        logger.info(
+            "Retrieval index loaded: %d training pairs, %d features",
+            len(train_pairs),
+            len(vectorizer.get_feature_names_out()),
+        )
+        from scipy import sparse
+        train_matrix = sparse.vstack([p["vec"] for p in train_pairs])
+        return {
+            "vectorizer": vectorizer,
+            "train_pairs": train_pairs,
+            "train_matrix": train_matrix,
+        }
+
+    logger.info(
+        "Building retrieval index from CodeXGLUE (subset=%s). "
+        "This runs once and caches to disk.",
+        subset,
+    )
+    from datasets import load_dataset
+
+    ds = load_dataset(
+        "google/code_x_glue_cc_code_refinement", subset, split="train"
+    )
+    buggy_texts = [row["buggy"] for row in ds]
+    fixed_texts = [row["fixed"] for row in ds]
+    logger.info("Loaded %d CodeXGLUE training pairs", len(buggy_texts))
+
+    vectorizer = TfidfVectorizer(
+        analyzer="char",
+        ngram_range=(3, 5),
+        max_features=20000,
+        min_df=2,
+    )
+    matrix = vectorizer.fit_transform(buggy_texts)
+    logger.info(
+        "Fitted TF-IDF: %d documents x %d features",
+        matrix.shape[0],
+        matrix.shape[1],
+    )
+
+    # Store each row's sparse vector alongside the pair so retrieval at
+    # query time is a single vectorize + cosine op.
+    train_pairs = [
+        {"buggy": buggy_texts[i], "fixed": fixed_texts[i], "vec": matrix[i]}
+        for i in range(len(buggy_texts))
+    ]
+
+    with open(paths["vectorizer"], "wb") as f:
+        pickle.dump(vectorizer, f)
+    with open(paths["train_data"], "wb") as f:
+        pickle.dump(train_pairs, f)
+    logger.info("Cached retrieval index to %s", paths["root"])
+
+    from scipy import sparse
+    train_matrix = sparse.vstack([p["vec"] for p in train_pairs])
+
+    return {
+        "vectorizer": vectorizer,
+        "train_pairs": train_pairs,
+        "train_matrix": train_matrix,
+    }
+
+
+def retrieve_similar_examples(
+    query_code: str,
+    index: dict,
+    k: int = AGENT_DEFAULT_N_RETRIEVAL_EXAMPLES,
+) -> list[dict]:
+    """
+    Return the top-k training pairs most similar to the query by
+    TF-IDF cosine similarity.
+
+    Parameters
+    ----------
+    query_code : str
+        Java method the agent is being asked to refactor.
+    index : dict
+        Output of ``build_retrieval_index``.
+    k : int
+        Number of examples to return.
+
+    Returns
+    -------
+    list of {"buggy": str, "fixed": str, "similarity": float}
+        Sorted by similarity descending.
+    """
+    from sklearn.metrics.pairwise import cosine_similarity
+    import numpy as np
+    from scipy import sparse
+
+    vectorizer = index["vectorizer"]
+    train_pairs = index["train_pairs"]
+    train_matrix = index["train_matrix"]
+
+
+    query_vec = vectorizer.transform([query_code])
+
+    # Stack all training vectors vertically (one-time cost per query).
+    # For very large indices we'd do this once outside the function, but
+    # for 50K pairs it's fine.
+    sims = cosine_similarity(query_vec, train_matrix)[0]
+
+    top_idx = np.argsort(sims)[::-1][:k]
+
+    return [
+        {
+            "buggy": train_pairs[i]["buggy"],
+            "fixed": train_pairs[i]["fixed"],
+            "similarity": float(sims[i]),
+        }
+        for i in top_idx
+    ]
+
+
+# -----------------------------------------------------------------------------
+# The refactoring agent
+# -----------------------------------------------------------------------------
+
+AGENT_SYSTEM_PROMPT = (
+    "You are a Java code refactoring assistant. "
+    "Given a buggy Java method, produce the fixed version. "
+    "Output only the corrected Java method, no explanations, "
+    "no markdown fences, no surrounding commentary."
+)
+
+
+def _build_few_shot_messages(
+    buggy_code: str,
+    retrieved_examples: list[dict],
+) -> list[dict]:
+    """
+    Build the chat-format message list for a few-shot-retrieval prompt.
+
+    Matches the benchmark's prompt structure so agent results are
+    comparable to the Section 7 leaderboard.
+    """
+    messages = [{"role": "system", "content": AGENT_SYSTEM_PROMPT}]
+
+    for ex in retrieved_examples:
+        messages.append({
+            "role": "user",
+            "content": f"Fix this Java method:\n\n{ex['buggy']}",
+        })
+        messages.append({
+            "role": "assistant",
+            "content": ex["fixed"],
+        })
+
+    messages.append({
+        "role": "user",
+        "content": f"Fix this Java method:\n\n{buggy_code}",
+    })
+
+    return messages
+
+
+def _extract_java_from_response(response: str) -> str:
+    """
+    Strip markdown fences and extraneous prose from the model's output.
+
+    Models sometimes wrap code in ```java ... ``` blocks or add commentary
+    even when instructed not to. Pull out the longest code-like segment.
+    """
+    text = response.strip()
+
+    # Markdown java fence.
+    if "```java" in text:
+        after = text.split("```java", 1)[1]
+        if "```" in after:
+            return after.split("```", 1)[0].strip()
+        return after.strip()
+
+    # Plain markdown fence.
+    if "```" in text:
+        parts = text.split("```")
+        if len(parts) >= 3:
+            return parts[1].strip()
+        return parts[1].strip() if len(parts) == 2 else text
+
+    return text
+
+
+def refactor_java_method(
+    buggy_code: str,
+    model,
+    tokenizer,
+    retrieval_index: Optional[dict] = None,
+    reference_code: Optional[str] = None,
+    n_retrieval_examples: int = AGENT_DEFAULT_N_RETRIEVAL_EXAMPLES,
+    max_new_tokens: int = AGENT_DEFAULT_MAX_NEW_TOKENS,
+    seed: int = AGENT_DEFAULT_SEED,
+) -> dict:
+    """
+    Run one refactoring pass: generate a fixed version of the buggy
+    Java method, validate it, and return a confidence-scored result.
+
+    Parameters
+    ----------
+    buggy_code : str
+        The Java method to refactor. Can be a CodeXGLUE-normalized method
+        (with VAR_1, METHOD_1 tokens) or any Java method.
+    model, tokenizer : transformers model + tokenizer pair
+        The LLM used for generation. Any HuggingFace causal-LM model works.
+    retrieval_index : dict, optional
+        Output of ``build_retrieval_index``. If provided, the agent uses
+        few-shot retrieval. If None, the agent runs zero-shot.
+    reference_code : str, optional
+        Ground-truth fix, used for BLEU and exact-match metrics. If None,
+        metrics against a reference are skipped and confidence is based on
+        validity alone.
+    n_retrieval_examples : int
+        Number of similar examples to retrieve. Ignored if
+        retrieval_index is None.
+    max_new_tokens : int
+        Generation cap. 512 matches the benchmark.
+    seed : int
+        Fixed for deterministic output (do_sample=False + torch seed).
+
+    Returns
+    -------
+    dict with keys:
+        buggy, generated_raw, generated_clean, reference,
+        is_valid, exact_match, bleu,
+        confidence (dict: level + score),
+        elapsed_s, strategy_used, retrieved_examples (if any).
+    """
+    import time
+    import torch
+
+    t_start = time.time()
+
+    # Select strategy and build prompt.
+    if retrieval_index is not None:
+        retrieved = retrieve_similar_examples(
+            buggy_code, retrieval_index, k=n_retrieval_examples
+        )
+        messages = _build_few_shot_messages(buggy_code, retrieved)
+        strategy_used = "few_shot_retrieval"
+    else:
+        retrieved = []
+        messages = [
+            {"role": "system", "content": AGENT_SYSTEM_PROMPT},
+            {"role": "user", "content": f"Fix this Java method:\n\n{buggy_code}"},
+        ]
+        strategy_used = "zero_shot"
+
+    # Apply chat template and tokenize.
+    prompt_text = tokenizer.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
+    inputs = tokenizer([prompt_text], return_tensors="pt").to(model.device)
+
+    torch.manual_seed(seed)
+    with torch.no_grad():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=False,
+            pad_token_id=tokenizer.eos_token_id,
+        )
+
+    generated_ids = output_ids[0][len(inputs.input_ids[0]):]
+    generated_raw = tokenizer.decode(generated_ids, skip_special_tokens=True)
+    generated_clean = _extract_java_from_response(generated_raw)
+
+    # Validate and score.
+    syntax = validate_java_syntax(generated_clean)
+    is_valid = syntax["is_valid"]
+
+    if reference_code:
+        exact_match = is_exact_match(generated_clean, reference_code)
+        bleu = compute_bleu_against_reference(generated_clean, reference_code)
+    else:
+        exact_match = False
+        bleu = 0.0
+
+    confidence = compute_confidence_score(
+        is_valid=is_valid,
+        exact_match=exact_match,
+        bleu_score=bleu,
+    )
+
+    elapsed = time.time() - t_start
+
+    logger.info(
+        "Refactored via %s: valid=%s exact=%s BLEU=%.1f confidence=%s (%.1fs)",
+        strategy_used,
+        is_valid,
+        exact_match,
+        bleu,
+        confidence["level"],
+        elapsed,
+    )
+
+    elapsed = time.time() - t_start
+
+    # Free memory between calls. In tight-memory environments (CPU-only
+    # Docker on a laptop), PyTorch holds on to activation and cache memory
+    # by default. Clearing them after generation lets subsequent calls
+    # reuse the space instead of accumulating.
+    import gc
+    del inputs, output_ids, generated_ids
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
+    return {
+        "buggy": buggy_code,
+        "generated_raw": generated_raw,
+        "generated_clean": generated_clean,
+        "reference": reference_code,
+        "is_valid": is_valid,
+        "exact_match": exact_match,
+        "bleu": bleu,
+        "confidence": confidence,
+        "elapsed_s": elapsed,
+        "strategy_used": strategy_used,
+        "retrieved_examples": retrieved,
+        "syntax_error": syntax["error"],
     }
