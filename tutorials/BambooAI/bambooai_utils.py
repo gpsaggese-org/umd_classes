@@ -67,11 +67,14 @@ def init_logger(notebook_log: logging.Logger) -> None:
     """
     hnotebo.config_notebook()
     hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    
     # Init notebook logging.
     hnotebo.set_logger_to_print(notebook_log)
+    
     # Init utils logging.
     global _LOG
-    _LOG = hnotebo.set_logger_to_print(_LOG)
+    hnotebo.set_logger_to_print(_LOG)
+    
     # Init BambooAI logging.
     bamboo_logger = logging.getLogger("bambooai")
     hnotebo.set_logger_to_print(bamboo_logger)

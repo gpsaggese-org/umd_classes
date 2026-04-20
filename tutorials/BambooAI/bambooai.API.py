@@ -26,6 +26,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 # %%
 import json
 import os
@@ -34,6 +35,7 @@ from pathlib import Path
 
 import plotly.io as pio
 from dotenv import load_dotenv
+
 
 # %%
 import logging
@@ -44,12 +46,12 @@ import bambooai_utils as utils
 _LOG = logging.getLogger(__name__)
 utils.init_logger(_LOG)
 
-# %% [markdown]
-# # BambooAI API Tutorial
 
 # %% [markdown]
-# # BambooAI API Tour
+# # BambooAI API Tutorial
 #
+
+# %% [markdown]
 # A runnable, focused guide to BambooAI: what it is, how to configure it, and how to launch the conversation loop.
 #
 # How to use this notebook
@@ -58,6 +60,7 @@ utils.init_logger(_LOG)
 #
 # Related notebooks
 # - `bambooai.example.ipynb` is a narrative, end-to-end walkthrough with more feature demos.
+#
 
 # %% [markdown]
 # ## What BambooAI is
@@ -78,15 +81,7 @@ utils.init_logger(_LOG)
 # Model support
 # - API providers: OpenAI, Google (Gemini), Anthropic, Groq, Mistral.
 # - Local providers: Ollama and a selection of local models.
-
-# %% [markdown]
-# ## How BambooAI works (short form)
-# 1. Initiation: start with a user question or prompt for one.
-# 2. Task routing: decide between pure text responses or code generation.
-# 3. User feedback: ask clarifying questions when ambiguity is detected.
-# 4. Dynamic prompt build: assemble context, plan, and similar-task recall.
-# 5. Debugging and execution: run generated code and auto-correct errors.
-# 6. Results and knowledge base: rank answers and optionally store them in a vector DB.
+#
 
 # %% [markdown]
 # ## Setup and dependencies
@@ -99,6 +94,7 @@ utils.init_logger(_LOG)
 #
 # Plot rendering (optional)
 # - If interactive plots fail, set `PLOTLY_RENDERER=json` in your environment before running the imports cell.
+#
 
 # %%
 # Configure environment, plotting, and helper import paths.
@@ -130,6 +126,8 @@ print(f"Plotly renderer: {pio.renderers.default}")
 print(f"Helpers root on path: {str(_HELPERS_ROOT) in sys.path}")
 # Environment and path setup is now ready for downstream cells.
 
+
+
 # %% [markdown]
 # ## Installation and configuration
 #
@@ -138,6 +136,7 @@ print(f"Helpers root on path: {str(_HELPERS_ROOT) in sys.path}")
 # - API keys in `.env` for the LLM provider you choose.
 #
 # BambooAI reads its agent model settings from `LLM_CONFIG` (env var) or `LLM_CONFIG.json` in the working directory. If neither is present, it falls back to its package defaults. Prompt templates can be customized by creating `PROMPT_TEMPLATES.json` from the provided sample file.
+#
 
 # %%
 # Inspect the active LLM configuration source and summarize configured agents.
@@ -166,6 +165,8 @@ else:
     )
 # The output confirms whether configuration is sourced from env, file, or defaults.
 
+
+
 # %% [markdown]
 # ## Config reference (files)
 # - `LLM_CONFIG.json` maps agents to models, providers, and parameters. Use `LLM_CONFIG.json` as a starting point, or set `LLM_CONFIG` in `.env` to inline the JSON.
@@ -173,6 +174,7 @@ else:
 # - Prompt templates can be overridden by providing `PROMPT_TEMPLATES.json` (created from `PROMPT_TEMPLATES_sample.json`) in the working directory.
 #
 # - Each run records a JSON log file (for example `logs/bambooai_run_log.json`) plus a consolidated log that tracks multiple runs.
+#
 
 # %% [markdown]
 # ## Key parameters
@@ -189,21 +191,24 @@ else:
 # | `exploratory` | `bool` | `True` | Enables expert selection for query handling. |
 # | `custom_prompt_file` | `str` | `None` | YAML file with custom prompt templates. |
 #
-# Vector DB and ontology notes
+# Few important clarifications:
+#
 # - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from.
 #
-# - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
+#     - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
 #
-# - Qdrant example env vars: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...` (optional for local, required for cloud).
+#     - Qdrant example env vars: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...` (optional for local, required for cloud).
 #
-# - Pinecone embeddings are supported with `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (HF).
+#     - Pinecone embeddings are supported with `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (HF).
 #
 # - `df_ontology` expects a `.ttl` ontology file (RDF/OWL) that defines classes, properties, and relationships.
+#
 
 # %% [markdown]
 # ### API helper functions
 #
 # The BambooAI helpers are defined in `bambooai_utils.py`.
+#
 
 # %%
 # Print helper docstrings to document the API wrapper functions used in this notebook.
@@ -235,6 +240,8 @@ for name, doc in api_docs.items():
 print(f"Default CSV path: {_DEFAULT_CSV}")
 # The printed docstrings provide a quick API reference for the helper layer.
 
+
+
 # %% [markdown]
 # ## EXECUTION_MODE and configuration requirements
 #
@@ -242,6 +249,7 @@ print(f"Default CSV path: {_DEFAULT_CSV}")
 #
 #
 # Our wrapper resolves `EXECUTION_MODE` as `args.execution_mode` or the environment variable `EXECUTION_MODE`. If both are empty, `_resolve_execution_mode` raises an assertion.
+#
 
 # %%
 # Set the execution mode expected by the wrapper and verify the resolved value.
@@ -249,6 +257,8 @@ os.environ["EXECUTION_MODE"] = "local"  # Update as needed.
 # Use print() so users can confirm the setting inline.
 print("EXECUTION_MODE from env:", os.getenv("EXECUTION_MODE"))
 # A non-empty value confirms the execution mode precondition is satisfied.
+
+
 
 # %% [markdown]
 # ## Sanity check (environment + data)
@@ -288,6 +298,11 @@ def _get_artifacts_dir() -> Path:
 
 # The helper functions are ready for the setup and feature cells below.
 
+
+
+# %%
+os.environ['OPENAI_API_KEY']=''
+
 # %%
 # Display masked environment settings used by BambooAI.
 keys = [
@@ -310,6 +325,7 @@ for key in keys:
     print(f"- {key}: {display_value}")
 # Masked environment output confirms which settings are available.
 
+
 # %%
 # Load the dataset and show a small preview.
 args = _parse().parse_args([])
@@ -323,13 +339,13 @@ print(f"\nDataframe shape: {df.shape}")
 display(df.head())
 # Successful output confirms dataset readiness before agent runs.
 
+
 # %% [markdown]
-# ## Hello world (single prompt)
+# ## Minimal Agent
 #
 # This is the smallest interactive run. It builds an minimal agent with minimal flags and starts the loop.
 # When prompted, paste one simple question, then type `exit` or press Ctrl+D to stop.
 #
-# Cost note: the run cell calls an LLM and may incur cost.
 
 # %%
 # Build a minimal BambooAI agent for one interactive run.
@@ -344,15 +360,18 @@ print(
 )
 # The bamboo_quick object is ready for the next run cell.
 
+
 # %%
 # Run the minimal BambooAI conversation loop.
 _run_agent(bamboo_quick)
 # The conversation loop uses the agent configured in the previous cell.
 
+
 # %% [markdown]
 # ## Feature focus: parameters
 #
 # This section walks through each BambooAI parameter (except `df` and `webui`, which are covered elsewhere) with a short prompt and expected behavior.
+#
 
 # %% [markdown]
 # ### 1. auxiliary_datasets 
@@ -360,6 +379,7 @@ _run_agent(bamboo_quick)
 # Use auxiliary datasets when the primary dataframe needs enrichment (lookups, joins, mapping tables).
 #
 # Custom prompt example - Join the auxiliary dataset on `country` and summarize average `monthly_spend_usd` by region.
+#
 
 # %%
 # Prepare a small auxiliary dataset artifact for join-style prompts.
@@ -378,6 +398,7 @@ aux_df.to_csv(aux_path, index=False)
 print("Wrote auxiliary dataset:", aux_path)
 # The artifact is now available for auxiliary dataset experiments.
 
+
 # %%
 # Build an agent with auxiliary datasets enabled.
 bamboo_aux = _build_bamboo_agent(
@@ -391,10 +412,12 @@ bamboo_aux = _build_bamboo_agent(
 print("Auxiliary datasets agent ready.")
 # The bamboo_aux object is ready for the next run cell.
 
+
 # %%
 # Run the auxiliary-datasets BambooAI conversation loop.
 _run_agent(bamboo_aux)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 2. max_conversations
@@ -419,17 +442,19 @@ bamboo_short_memory = _build_bamboo_agent(
 print("Agent ready with max_conversations=1.")
 # The bamboo_short_memory object is ready for the next run cell.
 
+
 # %%
 # Run the short-memory BambooAI conversation loop.
 _run_agent(bamboo_short_memory)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 3. search_tool
 #
 # Enable this when you want BambooAI to pull in external context from the web.
 #
-# Custom prompt - Find a short definition of `customer churn` and explain how it might map to our dataset.
+# Example prompt - Find a short definition of `customer churn` and explain how it might map to our dataset.
 #
 # If the search tool is configured, the agent should fetch external context and cite or summarize it. If not configured, you may see a tool error or a warning.
 
@@ -447,21 +472,24 @@ bamboo_search = _build_bamboo_agent(
 print("Search tool enabled agent ready.")
 # The bamboo_search object is ready for the next run cell.
 
+
 # %%
 # Run the search-enabled BambooAI conversation loop.
 _run_agent(bamboo_search)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 4. planning
 #
 # Planning helps BambooAI solve multi-step or ambiguous tasks by outlining a plan before executing code.
 #
-# Custom prompt - Compare revenue trends by region, identify the top 3 outliers, and explain possible causes.
+# Example prompt - Compare revenue trends by region, identify the top 3 outliers, and explain possible causes.
 #
 # What to expect
 # - The agent should produce a plan, then execute steps to answer.
 # - For simple prompts, planning add unnecessary latency without changing results.
+#
 
 # %%
 # Demonstrate planning-enabled execution for multi-step prompts.
@@ -477,10 +505,12 @@ bamboo_planning = _build_bamboo_agent(
 print("Planning-enabled agent ready.")
 # The bamboo_planning object is ready for the next run cell.
 
+
 # %%
 # Run the planning-enabled BambooAI conversation loop.
 _run_agent(bamboo_planning)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 5. vector_db
@@ -493,6 +523,7 @@ _run_agent(bamboo_planning)
 # What to expect
 # - With a configured vector DB, the agent can retrieve past context instead of re-deriving it.
 # - Without proper credentials, initialization will fail.
+#
 
 # %%
 # Demonstrate vector-database backed memory retrieval.
@@ -508,10 +539,12 @@ bamboo_vector = _build_bamboo_agent(
 print("Vector DB enabled agent ready.")
 # The bamboo_vector object is ready for the next run cell.
 
+
 # %%
 # Run the vector-db BambooAI conversation loop.
 _run_agent(bamboo_vector)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 6. df_ontology
@@ -524,6 +557,7 @@ _run_agent(bamboo_vector)
 # What to expect
 # - The agent should reference ontology definitions and perform value checks.
 # - If the ontology file is invalid, initialization may fail.
+#
 
 # %%
 # Create a minimal ontology artifact used for grounding checks.
@@ -555,6 +589,7 @@ ex:monthly_spend_usd a rdfs:Property ;
 print("Wrote ontology:", ontology_path)
 # The ontology file is now available for df_ontology initialization.
 
+
 # %%
 # Build an ontology-grounded agent.
 bamboo_ontology = _build_bamboo_agent(
@@ -567,10 +602,12 @@ bamboo_ontology = _build_bamboo_agent(
 print("Ontology grounded agent ready.")
 # The bamboo_ontology object is ready for the next run cell.
 
+
 # %%
 # Run the ontology-grounded BambooAI conversation loop.
 _run_agent(bamboo_ontology)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 7. exploratory
@@ -583,6 +620,7 @@ _run_agent(bamboo_ontology)
 # What to expect
 # - The agent may ask clarifying questions or choose a specialist persona before executing.
 # - With `exploratory=False`, it should behave more directly without extra routing.
+#
 
 # %%
 # Demonstrate exploratory mode with expert routing enabled.
@@ -597,10 +635,12 @@ bamboo_exploratory = _build_bamboo_agent(
 print("Exploratory mode agent ready.")
 # The bamboo_exploratory object is ready for the next run cell.
 
+
 # %%
 # Run the exploratory-mode BambooAI conversation loop.
 _run_agent(bamboo_exploratory)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ### 8. custom_prompt_file
@@ -612,6 +652,7 @@ _run_agent(bamboo_exploratory)
 # What to expect
 # - The agent should follow the style and structure defined in your prompt templates.
 # - If the YAML file is missing or malformed, initialization may fail.
+#
 
 # %%
 # Create a minimal custom prompt file artifact for style control.
@@ -628,6 +669,7 @@ custom_prompt_path.write_text(
 print("Wrote custom prompts:", custom_prompt_path)
 # Prompt template artifact is now available for agent initialization.
 
+
 # %%
 # Build an agent that consumes custom prompt templates.
 bamboo_custom = _build_bamboo_agent(
@@ -640,10 +682,12 @@ bamboo_custom = _build_bamboo_agent(
 print("Custom prompt agent ready.")
 # The bamboo_custom object is ready for the next run cell.
 
+
 # %%
 # Run the custom-prompt BambooAI conversation loop.
 _run_agent(bamboo_custom)
 # The conversation loop uses the agent configured in the previous cell.
+
 
 # %% [markdown]
 # ## Prompt cookbook (short)
@@ -659,3 +703,4 @@ _run_agent(bamboo_custom)
 #
 # Advanced
 # - "Detect anomalies in daily `monthly_spend_usd` using a 7-day rolling z-score; return flagged dates."
+#
