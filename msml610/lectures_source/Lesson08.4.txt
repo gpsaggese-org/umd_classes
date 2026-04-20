@@ -40,13 +40,16 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf
+// open "/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books/Math - Bayesian methods/2023 - Facure - Causal Inference in Python_ Applying Causal Inference in the Tech Industry.pdf"
 // https://matheusfacure.github.io/python-causality-handbook/landing-page.html
-// GitHub: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
+
+// Notebooks: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
 
 // /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
 
 // Chap 1: Introduction to Causal Inference
+
+# Introduction to Causal Inference
 
 * Sales example
 - There are stores that put product on sales for Christmas
@@ -555,7 +558,7 @@ digraph SalesModelExtended {
   - The bias term vanishes $bias = 0$
   - Association is causation
   - The measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
-  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
+  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$
 
 - **Sales Example**
   - If businesses that do and don't cut prices are similar to each other (i.e.,
@@ -620,6 +623,8 @@ digraph SalesModelExtended {
 - Treatment becomes independent from potential outcomes
 
 // Chap 2: Randomized Experiments and Stats Review
+
+# Randomized Experiments and Stats Review
 
 * A/B Testing Example
 - A common strategy among companies is to
@@ -709,6 +714,8 @@ digraph SalesModelExtended {
 ![](msml610/lectures_source/figures/L08.4.School_score_by_number_students.png)
 
 // Chap 3: Graphical Causal Models
+
+# Graphical Causal Models
 
 *
 - Estimate the impact of emails on conversion
@@ -1072,3 +1079,371 @@ digraph G {
 
 - The issue is that you measure the satisfaction only for the customers who
   responded to the survey (i.e., conditioning on responding to the survey)
+
+// TODO: Finish
+
+// Chap 4
+
+# The Unreasonable Effectiveness of Linear Regression
+
+*
+- Problem in banking and lending industry: understand the impact of loan amount /
+  credit card limits on default rate
+- Increasing credit card limit should increase the odds of defaulting on the
+  credit card bill
+  - People tend to spend more when limits increase
+  - Higher balances → more interest → harder to repay
+
+- Looking at banking data there is a negative correlation between credit lines
+  and default rate
+  - Banks offer more credit to customers who have a lower chance of defaulting
+    (according to their model)
+
+- In reality
+
+```graphviz
+digraph CausalGraph {
+    rankdir=LR;
+    bgcolor=white;
+    fontname="Helvetica";
+    node [fontname="Helvetica", fontsize=12];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Exogenous variable (no causal parents).
+    Risk [
+        shape=ellipse,
+        penwidth=2,
+        style="filled,solid",
+        color="#408AB0",
+        fillcolor="#EAF3F8",
+        fontcolor=black,
+        label="Risk"
+    ];
+
+    // Endogenous variable (has parent: Risk).
+    X [
+        shape="box",
+        style="filled,solid,rounded",
+        penwidth=1,
+        color="#62D4A4",
+        fillcolor="#EAF9F3",
+        fontcolor=black,
+        label="X"
+    ];
+
+    // Endogenous variable (has parent: X).
+    CreditLimit [
+        shape="box",
+        style="filled,solid,rounded",
+        penwidth=1,
+        color="#62D4A4",
+        fillcolor="#EAF9F3",
+        fontcolor=black,
+        label="Credit limit"
+    ];
+
+    // Target variable (no descendants, under study).
+    Default [
+        shape=box,
+        penwidth=2,
+        style="filled,solid",
+        color="#F8D476",
+        fillcolor="#FFF6DA",
+        fontcolor=black,
+        label="Default"
+    ];
+
+    // Causal edges.
+    Risk -> X [style=solid, color=black];
+    X -> CreditLimit [style=solid, color=black];
+    X -> Default [style=solid, color=black];
+    CreditLimit -> Default [style=solid, color=black];
+}
+```
+
+- The risk of default is difficult to estimate so income or credit scores
+  can be used as proxy variable `X`
+
+- Assuming conditional independence $(Y_0, Y_1) \perp T | X$ you can use the
+  adjustment formula
+  $$
+  ATE = \EE_X [
+    \EE[Y \mid T=1, X=x] - \EE[Y \mid T=0, X=x]
+  ]
+  $$
+- The problem is that you need to partition data into segments defined by
+  the feature $X$
+  - If $X$ has lots of value (i.e., a vector of 10 variables, each with 3
+    values), then you need to have massive amount of data to overcome
+    the curse of dimensionality (i.e., issues of sparsity)
+    - E.g., you need to find data points with the same 10 characteristics
+      and different treatments
+  - You can model potential outcome $Y$ as linear regression on $X$
+    - Instead of requiring exact matches on every variable, you just need the
+      line to account for differences, making treatment and control comparable "on
+      average"
+    - Like a dimensionality reduction algorithm
+
+* Regression in A/B tests
+- You are building a recommender system
+- Goal: increase the watch time of the streaming service
+- A/B test
+  - 1/3 but representative fraction of your customer base gets the new system
+  - The rest gets the old version
+  - Collect data
+  - Because of the randomization you can assign a causal meaning to the use of
+    treatment
+  - Compute the average watch time per day + std err
+- You can compute all at once with a regression
+  $$
+  WatchTime_i = \beta_0 + \beta_1 I(new)_i + \varepsilon_i
+  $$
+  where
+  - $\hat{\beta}_1$ is the increase in watching time, i.e., ATE
+
+- This is exactly equivalent to mean and std dev of $WatchTime$
+
+* Adjusting with Regression
+- Effect of credit lines on default risk
+- Data has:
+  - Binary variable representing if a customer has defaulted or not
+  - Customers' features to indicate credit worthiness (e.g., monthly wage, credit
+    scores, tenure current company)
+
+- Model the problem as regression
+  $$
+  Default_i = \beta_0 + \beta_1 limit_i + \varepsilon_i
+  $$
+  where
+  - $\hat{\beta_1}$ is the amount of risk increase given 1 USD increase in limit
+
+- Computing the regression you see that the coefficient is negative
+  - There is confounding (since banks give higher rate to trustworthy customer)
+  - Doesn't have a causal interpretation
+
+- Instead of adjusting manually for each confounder, you can add the confounders
+  to the regression
+  $$
+  Default_i
+  = \beta_0 + \beta_1 limit_i + \sum_i \theta_j X_{ji} + \varepsilon_i
+  $$
+  - E.g., $X$ params can be wage, credit scores, etc
+
+- Once you regress, you get that credit limit has a small, statistically
+  significant coefficient
+  - The other regressors are negative
+
+- FWL (Frisch-Waugh-Lovell) theorem allows to separate debiasing step from
+  the impact estimation step
+
+* Regression theory
+- The vector of $\beta^*$ minimizes the mean squared error
+  $$
+  \beta^* = \argmin_{\beta} \EE[(Y_i - X_i^T \beta)^2]
+  $$
+  which can be estimated as $\hat{\beta} = (X^T X)^{-1} X^T Y$
+
+- In case of a single variable, regression estimates how treatment and outcome
+  move together (covariance), scaling this by the variance of units of treatment
+
+- In case of multivariate regression, each coefficient is the coefficient of the
+  regressor (bivariate regression), after accounting for the effect of other
+  variables in the model
+  - You can regress against all the confounders and extract the residual
+
+- You can extrapolate the model outside the region where you have data
+  - It is risky since you never know what happens in region where you don't have
+    data points
+
+* FWL Theorem
+- Make non-experimental data look as if the treatment was randomized (de-biasing)
+
+- Estimating a multi-variate regression is equivalent to the 3 steps:
+  1. Denoising: Regress outcome $Y$ on the confounder variables to obtain the
+     outcome residuals $\tilde{Y}$
+  2. Debiasing: Regress the treatment $T$ on confounders $X$ to obtain the
+     treatment residuals $\tilde{T}$
+     - Version of the treatment that is uncorrelated with the variables used in
+       debiasing the model
+  3. Regress outcome residuals $\tilde{Y}$ on treatment residuals $\tilde{T}$ to
+     obtain estimate of causal effect of $T$ on $Y$
+
+* Non-linear
+- You want to estimate the causal effect of credit limit on credit card spend,
+  using wage as only confounder
+  - It can be that the relationship is not linear
+    - E.g., the effect of credit lines on spend diminishes as you increase credit
+      lines
+
+- You can apply some transform to $X$ (e.g., square root, log)
+
+- Then you can apply the usual flow (adding confounders, FWL theorem)
+
+* Regression
+- You need to assume that treatment looks randomly assigned once certain
+  covariates are accounted for
+  - You can't know if all confounders have been included in the model
+  - Only a randomized controlled experiment can confirm it
+  - E.g., giving random credit lines (including very high) to risky customers
+    who will likely default and cause huge loss
+
+- The best next thing to a randomized controlled trial is a "stratified random
+  experiments"
+  - Create multiple local experiments, drawing from different distributions,
+    depending on covariates
+  - E.g., instead of randomizing credit lines completely, you use features (e.g.,
+    credit score, which is a proxy for customer risk) to create groups of customers
+    (e.g., high-risk, neutral, low-risk)
+  - Then for the high-risk, you randomize credit lines from a distribution with
+    low average
+  - For the low-risk, you randomize credit lines from a distribution with higher
+    average
+
+- Stratified random experiments are:
+  - cheaper 
+  - more complex
+  than completely random experiments
+
+- Things are simpler as
+  - Lower number of groups
+  - Bigger overlap in the treatment distributions across groups (to avoid relying
+    on extrapolations)
+
+- One extreme is the completely random experiment (easier to interpret, more
+  expensive)
+
+* Dummy Variables
+
+- Problem: Simple regression of outcome on treatment yields biased estimates
+  with confounders
+  - E.g., estimating `default ~ credit_limit` gives negative coefficient
+    (counterintuitive)
+  - Occurs due to imbalanced treatment assignment across confounding
+    groups—lower-risk customers got higher credit lines
+
+- Solution: Dummy Variables (One-Hot Encoding):
+  - Create binary columns for each categorical group (1 if in group, 0
+    otherwise)
+  - Drop first dummy to avoid multicollinearity
+  - Include dummy controls in model:
+    `default ~ credit_limit + C(credit_score1_buckets)`
+
+- Result after adding dummies:
+  - Model estimates one intercept per group, shared slope across all groups
+  - Shared slope is variance-weighted average of regression slopes within each
+    group
+
+* Saturated Regression Model
+
+- Definition: A saturated regression model includes interaction terms between
+  treatment and dummy variables to estimate separate effects for each group
+  - Created by interacting treatment with categorical variables:
+    `treatment * C(categorical_var)`
+  - Each group gets its own intercept and slope
+
+- Running a saturated model produces identical results to:
+  - Segmenting data by groups manually
+  - Estimating treatment effect separately in each group
+  - Computing a weighted average (weights = group size)
+  - E.g., both approaches yield the same Average Treatment Effect (ATE)
+
+- Model interpretation:
+  - Treatment coefficient represents effect in the omitted (reference) group
+  - Interaction parameters show how effects differ from the reference group
+  - Sum interaction term + treatment coefficient to get effect for that specific
+    group
+
+- Trade-off: More parameters $\rightarrow$ more variance
+  - Results can be noisy for small subgroups
+  - Non-significant slopes in small groups are likely just noise
+
+* Omitted Variable Bias and Regression
+- The bias due to omitting a variable is equal to tA
+
+* Neutral Controls: Controlling Variance Without Changing Bias
+
+- **Problem**: Should we include every available variable in our regression
+  model?
+  - Some variables are confounders (must include to eliminate bias)
+  - Some variables don't cause either treatment or outcome
+  - Question: Which additional variables help or hurt precision?
+
+::: columns
+:::: {.column width=50%}
+**Noise-Reducing Controls**
+
+Variables that _predict the outcome well_ but aren't confounders
+
+- **Example**: Credit score bucket $\to$ credit limit $\to$ default
+  - `credit_score1_buckets`: confounder (must include)
+  - `credit_score2`: predicts default but not treatment
+- **Effect**: Reduces variance in $\varepsilon_i$ by FWL denoising step
+- **Result**: Same $\hat{\beta}_{\text{treatment}}$, much tighter confidence
+  intervals
+  - Standard error shrinks substantially
+  - More statistical power
+- **Strategy**: Always include strong outcome predictors
+
+::::
+:::: {.column width=50%}
+**Noise-Inducing Controls**
+
+Variables that _predict the treatment well_ but not the outcome
+
+- **Example**: Conditionally random spend experiment
+  - `credit_score1`: drives treatment assignment but $\perp$ outcome
+  - Incorrectly including it increases variance
+- **Effect**: Reduces treatment variance by explaining away $\text{Var}(T)$
+- **Result**: Same $\hat{\beta}_{\text{treatment}}$, but standard error
+  **increases**
+  - Wider confidence intervals
+  - Less statistical power
+- **Strategy**: Avoid including strong treatment predictors
+
+::::
+:::
+
+## Feature Selection Dilemma
+
+- **Reality**: Most variables are imperfect confounders
+  - Strong cause of $T$, weak cause of $Y$ (like noise-inducing)
+  - Strong cause of $Y$, weak cause of $T$ (like noise-reducing)
+  - Varying importance across both dimensions
+
+- **The Trade-off**: Including all confounders eliminates bias but increases
+  variance $$\text{MSE} = \text{Bias}^2 + \text{Variance}$$
+
+- **Practical Question**: Is a small amount of bias worth a large reduction in
+  variance?
+  - No universal answer—depends on context, sample size, and precision needs
+  - Research shows it's often worth accepting small bias for large variance
+    reduction
+
+// TODO: Finish
+
+// Chap 5
+
+# Propensity score
+
+// Chap 6
+
+# Effect heterogeneity
+
+// Chap 7
+
+# Metalerners
+
+// Chap 8
+# Difference-in-differences
+
+// Chap 9
+# Synthetic control
+
+// Chap 10
+# Geo and switchback experiments
+
+// Chap 11
+# Non-compliance and instruments
+
+// Chap 12
+# Next steps

@@ -1,52 +1,52 @@
-# Lesson00-Class.txt
+# msml610/lectures_source/Lesson00-Class.txt
 - MSML610
 - Class Map
 
-# Lesson01.1-AI_and_Machine_Learning.txt
+# msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt
 - AI and Machine Learning
   - What is AI?
   - What is Machine Learning?
 
-# Lesson01.2-The_Foundations_of_AI.txt
-  - The Foundations of AI
+# msml610/lectures_source/Lesson01.2-The_Foundations_of_AI.txt
+- The Foundations of AI
 
-# Lesson01.3-Brief_History_of_AI.txt
-  - Brief History of AI
-  - Risks and Benefits of AI
+# msml610/lectures_source/Lesson01.3-Brief_History_of_AI.txt
+- Brief History of AI
+- Risks and Benefits of AI
 
-# Lesson02.1-A_Map_of_Machine_Learning.txt
+# msml610/lectures_source/Lesson02.1-A_Map_of_Machine_Learning.txt
 - A Map of Machine Learning
 
-# Lesson02.2-ML_Paradigms.txt
+# msml610/lectures_source/Lesson02.2-ML_Paradigms.txt
 - Machine Learning Paradigms
   - Major Paradigms
   - Some Examples
   - Machine Learning in Practice
   - Pipeline Organization
 
-# Lesson02.3-ML_Techniques_Input_Processing.txt
-  - Input Processing
+# msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt
+- Input Processing
 
-# Lesson02.4-ML_Techniques_Model_Learning.txt
-  - Learning Algorithms
-    - Gradient Descent
-    - Stochastic Gradient Descent
+# msml610/lectures_source/Lesson02.4-ML_Techniques_Model_Learning.txt
+- Learning Algorithms
+  - Gradient Descent
+  - Stochastic Gradient Descent
 
-# Lesson02.5-ML_Techniques_Model_Evaluation.txt
-  - Performance Metrics
-    - Precision and Recall
-  - Model Selection
-  - Aggregation
-    - Bagging
-    - Boosting
-    - Stacking
+# msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt
+- Performance Metrics
+  - Precision and Recall
+- Model Selection
+- Aggregation
+  - Bagging
+  - Boosting
+  - Stacking
 
-# Lesson02.6-ML_Techniques_How_To_Do_Research.txt
-  - How to Do Research
-    - Simple Is Better
-    - Research Methodology
+# msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt
+- How to Do Research
+  - Simple Is Better
+  - Research Methodology
 
-# Lesson03-Knowledge_representation.txt
+# msml610/lectures_source/Lesson03-Knowledge_representation.txt
 - Knowledge Representation
   - Basics of Knowledge Representation
   - Examples of Logic
@@ -64,75 +64,75 @@
   - Description Logics
   - Semantic Web
 
-# Lesson04.1-Models.txt
-  - Naive Bayes Model
-  - Decision Trees
-  - Random Forests
-  - Linear Models
-  - Perceptron
+# msml610/lectures_source/Lesson04.1-Models.txt
+- Naive Bayes Model
+- Decision Trees
+- Random Forests
+- Linear Models
+- Perceptron
 
-# Lesson04.2-Models.txt
-  - Logistic Regression
-  - LDA, QDA
-  - Kernel Methods
-  - Support Vector Machines (Optional)
+# msml610/lectures_source/Lesson04.2-Models.txt
+- Logistic Regression
+- LDA, QDA
+- Kernel Methods
+- Support Vector Machines (Optional)
 
-# Lesson04.3-Models.txt
-  - Similarity-Based Models
-  - Clustering
-  - Anomaly Detection
+# msml610/lectures_source/Lesson04.3-Models.txt
+- Similarity-Based Models
+- Clustering
+- Anomaly Detection
 
-# Lesson05.1-Learning_Theory.txt
+# msml610/lectures_source/Lesson05.1-Learning_Theory.txt
 - Is Machine Learning Even Possible?
 - Growth Function
 - The VC Dimension
 
-# Lesson05.2-Overfitting.txt
+# msml610/lectures_source/Lesson05.2-Overfitting.txt
 - Overfitting
 - Bias Variance Analysis
 - Learning Curves
 
-# Lesson05.3-Learn_Validation.txt
+# msml610/lectures_source/Lesson05.3-Learn_Validation.txt
 - Learn-Validation Approach
   - Train / Test
   - Cross-Validation
 
-# Lesson06.1-Bayesian_Networks.txt
+# msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
 - Logic-Based AI Under Uncertainty
 - Probabilistic Reasoning
   - Conditional Independence
   - Bayesian Networks
 
-# Lesson06.2-Using_Bayesian_Networks.txt
+# msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
 - Semantics of Bayesian Networks
 - Constructing a Bayesian Network
 - Exact Inference in Bayesian Networks
 - Approximate Inference in Bayesian Networks
 
-# Lesson07.1-Intro_to_Probabilistic_Programming.txt
+# msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
 - Concepts
 - Coin Example
   - Analytical Approach
   - Frequentist vs Bayesian
   - Probabilistic Programming
 
-# Lesson07.2-Posterior_Based_Decisions.txt
+# msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
 - Posterior-Based Decisions
   - Chemical Shift: Example
   - Posterior Predictive Checks
     - Robust Inference
   - Groups Comparison
 
-# Lesson07.3-Hierarchical_Models.txt
+# msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
 - Hierarchical Models
 
-# Lesson07.4-Generalized_Linear_Models.txt
+# msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
 - Generalized Linear Models
   - Simple Linear Model
   - Logistic Regression
   - Multiple Linear Regression
 
-# Lesson07.5-Bayesian_Model_Comparison.txt
+# msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
 - Bayesian Model Comparison
     - Posterior Predictive Checks
   - The Balance Between Simplicity and Accuracy
@@ -144,13 +144,13 @@
     - Bayes Factors and Information Criteria
   - Regularizing Priors
 
-# Lesson08.1-Causal_AI_intro.txt
+# msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
 - Causal AI
   - Why Causal AI?
   - The Ladder of Causation
   - Correlation vs Causation Models
 
-# Lesson08.2-Causal_Networks.txt
+# msml610/lectures_source/Lesson08.2-Causal_Networks.txt
 - Causal Networks
   - Causal DAGs
     - Example of ladder of causation
@@ -159,52 +159,53 @@
   - Type of Variables in Causal AI
   - Types of Paths in Causal AI
 
-# Lesson08.3-Do_Calculus.txt
-  - Intervention and Counterfactuals
-  - Randomized Controlled Trial
-  - Back-door Adjustment
-  - Front-door Adjustment
-  - Do-Calculus
+# msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+- Intervention and Counterfactuals
+- Randomized Controlled Trial
+- Back-door Adjustment
+- Front-door Adjustment
+- Do-Calculus
 
-# Lesson08.4.txt
+# msml610/lectures_source/Lesson08.4.txt
+- TODO
 
-# Lesson08.5-Causal_AI_In_Business.txt
+# msml610/lectures_source/Lesson08.5-Causal_AI_In_Business.txt
 - Business Processes Around Data Modeling
   - Modeling Processes
   - Roles
 
-# Lesson09.1-Reasoning_over_time.txt
+# msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt
 - Reasoning Over Time
   - Definitions
   - Defining Temporal Inference Tasks
   - Solving Temporal Inference Tasks
 
-# Lesson09.2-Hidden_Markov_Models.txt
+# msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt
 - HMMs
 - Markov Random Fields
 - Markov Logic Network
 - Variational Inference
   - Expectation-Maximization (EM) Algorithm
 
-# Lesson09.3-Multi_Armed_Bandits.txt
+# msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
 - Introduction
 - Algorithms
 - Bayesian Approaches
 
-# Lesson09.4-gh_Filter.txt
+# msml610/lectures_source/Lesson09.4-gh_Filter.txt
 - gh Filter
 
-# Lesson09.5-Kalman_Filter.txt
+# msml610/lectures_source/Lesson09.5-Kalman_Filter.txt
 - Discrete Bayes Filtering
 - Unidimensional Kalman Filters
 - Multivariate Kalman Filters
   - Modeling
   - Non-Linear Filtering
 
-# Lesson09.6-Dynamic_Bayesian_Networks.txt
+# msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt
 - Dynamic Bayesian networks
 
-# Lesson10-Timeseries_forecasting.txt
+# msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
 - Time Series
   - Basic definition
   - Time series operators
@@ -226,7 +227,7 @@
   - Long-Horizon Forecasting Challenges
   - Uncertainty Quantification and Calibration
 
-# Lesson11-Probabilistic_deep_learning.txt
+# msml610/lectures_source/Lesson11-Probabilistic_deep_learning.txt
 - Neural networks
   - Biological inspiration
   - Neural networks
@@ -246,7 +247,7 @@
 - Modern Research Frontiers
 - Bonus Topics
 
-# Lesson12-Reinforcement_learning.txt
+# msml610/lectures_source/Lesson12-Reinforcement_learning.txt
 - Sequential Decision Problems
   - Utilities Over Time
   - Algorithms for MDPs
@@ -265,7 +266,7 @@
 - Advanced Topics
 - Applications
 
-# Lesson91.Refresher_probability.txt
+# msml610/lectures_source/Lesson91.Refresher_probability.txt
 - Probability
   - Probability definition
   - Probability measure
@@ -296,7 +297,7 @@
   - Estimating CDF and statistical functional
   - Bootstrap
 
-# Lesson92.Refresher_probability_distributions.txt
+# msml610/lectures_source/Lesson92.Refresher_probability_distributions.txt
 - Interesting RVs
   - Bernoulli
   - Binomial
@@ -307,7 +308,7 @@
   - Student's t-distribution
 - Probability inequalities
 
-# Lesson93.Refresher_linear_algebra.txt
+# msml610/lectures_source/Lesson93.Refresher_linear_algebra.txt
 - Linear algebra
   - Vector and vector spaces
   - Affine spaces
@@ -318,16 +319,16 @@
   - Direct sum
   - Connections between Machine Learning and Linear Algebra
 
-# Lesson94.Refresher_information_theory.txt
+# msml610/lectures_source/Lesson94.Refresher_information_theory.txt
 - Information theory
   - Entropy
 
-# Lesson95.Refresher_game_theory.txt
+# msml610/lectures_source/Lesson95.Refresher_game_theory.txt
 - Game theory
   - Connections between Machine Learning and Game Theory
 
-# Lesson96.Refresher_stochastic_processes.txt
+# msml610/lectures_source/Lesson96.Refresher_stochastic_processes.txt
 - Stochastic processes
 
-# Lesson97.Refresher_numerical_optimization.txt
+# msml610/lectures_source/Lesson97.Refresher_numerical_optimization.txt
 - Optimization / numerical methods
