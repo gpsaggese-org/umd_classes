@@ -40,9 +40,10 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf
+// open "/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books/Math - Bayesian methods/2023 - Facure - Causal Inference in Python_ Applying Causal Inference in the Tech Industry.pdf"
 // https://matheusfacure.github.io/python-causality-handbook/landing-page.html
-// GitHub: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
+
+// Notebooks: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
 
 // /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
 
@@ -557,7 +558,7 @@ digraph SalesModelExtended {
   - The bias term vanishes $bias = 0$
   - Association is causation
   - The measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
-  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
+  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$
 
 - **Sales Example**
   - If businesses that do and don't cut prices are similar to each other (i.e.,
@@ -1371,7 +1372,7 @@ digraph CausalGraph {
 :::: {.column width=50%}
 **Noise-Reducing Controls**
 
-Variables that **predict the outcome well** but aren't confounders
+Variables that _predict the outcome well_ but aren't confounders
 
 - **Example**: Credit score bucket $\to$ credit limit $\to$ default
   - `credit_score1_buckets`: confounder (must include)
@@ -1387,7 +1388,7 @@ Variables that **predict the outcome well** but aren't confounders
 :::: {.column width=50%}
 **Noise-Inducing Controls**
 
-Variables that **predict the treatment well** but not the outcome
+Variables that _predict the treatment well_ but not the outcome
 
 - **Example**: Conditionally random spend experiment
   - `credit_score1`: drives treatment assignment but $\perp$ outcome
@@ -1417,7 +1418,6 @@ Variables that **predict the treatment well** but not the outcome
   - No universal answer—depends on context, sample size, and precision needs
   - Research shows it's often worth accepting small bias for large variance
     reduction
-
 
 // TODO: Finish
 
