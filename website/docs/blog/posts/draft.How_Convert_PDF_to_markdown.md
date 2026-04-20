@@ -443,5 +443,7 @@ https://github.com/tonydavis629/markxiv
 uvx markitdown[pdf] ~/Downloads/2011.00641v1.pdf -o output.md
 Decent job
 
+pandoc /Users/saggese/papers/2016_Ribeiro_et_al_Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf -t gfm --wrap=none --markdown-headings=atx -o paper_md.md
+
 Convert a latex to markdown using pandoc
 -->
