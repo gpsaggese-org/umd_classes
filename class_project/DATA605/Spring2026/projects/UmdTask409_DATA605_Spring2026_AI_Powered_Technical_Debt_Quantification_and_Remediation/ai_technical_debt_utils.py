@@ -1507,3 +1507,191 @@ def compute_pareto_front(
     )
 
     return pareto_df
+
+
+# =============================================================================
+# SECTION 7: BENCHMARK RESULTS LOADING
+# =============================================================================
+#
+# Loads the JSON outputs from the Nexus sweep (5 models x 3 strategies x
+# 1000 CodeXGLUE pairs) and organizes them into a leaderboard dataframe.
+# Used by the Example notebook to present the model comparison that
+# justifies the agent's model choice.
+
+BENCHMARK_STRATEGIES = ["zero_shot", "few_shot_static", "few_shot_retrieval"]
+
+
+def load_benchmark_results(results_dir: str) -> pd.DataFrame:
+    """
+    Load all 1000-pair benchmark JSONs from a directory and return them
+    as a dataframe with one row per (model, strategy) configuration.
+
+    Filename convention: ``<org>__<model>__<strategy>__1000pairs.json``
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns: model, model_short, strategy, bleu, exact_match_rate,
+        java_valid_rate, sec_per_pair, n_pairs, n_successful_runs.
+    """
+    import json
+
+    path = Path(results_dir)
+    if not path.exists():
+        raise FileNotFoundError(f"Benchmark results directory not found: {path}")
+
+    rows = []
+    for fp in sorted(path.glob("*1000pairs*.json")):
+        with open(fp) as f:
+            data = json.load(f)
+        cfg = data["config"]
+        agg = data["aggregate"]
+        rows.append({
+            "model": cfg["model"],
+            "model_short": cfg["model"].split("/")[-1],
+            "strategy": cfg["strategy"],
+            "bleu": agg["mean_bleu"],
+            "exact_match_rate": agg["exact_match_rate"],
+            "java_valid_rate": agg["java_valid_rate"],
+            "sec_per_pair": agg["mean_elapsed_per_pair_s"],
+            "n_pairs": agg["n_pairs"],
+            "n_successful_runs": agg["n_successful_runs"],
+        })
+
+    if not rows:
+        raise ValueError(f"No 1000-pair JSON files found in {path}")
+
+    df = pd.DataFrame(rows)
+    logger.info(
+        "Loaded %d benchmark configurations from %s",
+        len(df),
+        results_dir,
+    )
+    return df
+
+
+def build_leaderboard_table(benchmark_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Reshape the flat benchmark dataframe into a model-by-strategy grid
+    of BLEU scores, with columns for each strategy and a rank column.
+
+    Returns
+    -------
+    pd.DataFrame
+        One row per model. Columns: zero_shot, few_shot_static,
+        few_shot_retrieval (each containing BLEU), best_strategy,
+        best_bleu, rank_by_best.
+    """
+    pivot = benchmark_df.pivot_table(
+        index="model_short",
+        columns="strategy",
+        values="bleu",
+    )
+
+    # Reorder columns to the canonical strategy order.
+    pivot = pivot[BENCHMARK_STRATEGIES]
+
+    pivot["best_strategy"] = pivot[BENCHMARK_STRATEGIES].idxmax(axis=1)
+    pivot["best_bleu"] = pivot[BENCHMARK_STRATEGIES].max(axis=1)
+    pivot["rank_by_best"] = (
+        pivot["best_bleu"].rank(ascending=False, method="min").astype(int)
+    )
+
+    pivot = pivot.sort_values("best_bleu", ascending=False)
+
+    logger.info(
+        "Leaderboard top config: %s with BLEU %.2f",
+        pivot.index[0] + " + " + pivot.iloc[0]["best_strategy"],
+        pivot.iloc[0]["best_bleu"],
+    )
+
+    return pivot
+
+
+def summarize_benchmark_insights(benchmark_df: pd.DataFrame) -> dict:
+    """
+    Compute the headline findings from the benchmark.
+
+    Returns
+    -------
+    dict
+        Keys:
+        - overall_winner: (model_short, strategy, bleu)
+        - retrieval_beats_static: bool, True if retrieval > static for all models
+        - static_beats_zeroshot: bool, True if static > zero-shot for all models
+        - best_cpu_capable: (model_short, strategy, bleu) for the 0.5B model
+        - worst_config: (model_short, strategy, bleu)
+        - validity_outlier: model whose java_valid_rate is noticeably lower
+    """
+    df = benchmark_df.copy()
+
+    # Overall winner by BLEU.
+    best_row = df.loc[df["bleu"].idxmax()]
+    overall_winner = (
+        best_row["model_short"],
+        best_row["strategy"],
+        float(best_row["bleu"]),
+    )
+
+    # Retrieval vs static vs zero-shot, per model.
+    retrieval_beats_static = True
+    static_beats_zeroshot = True
+    for model, group in df.groupby("model_short"):
+        by_strat = group.set_index("strategy")["bleu"].to_dict()
+        z = by_strat.get("zero_shot", float("nan"))
+        s = by_strat.get("few_shot_static", float("nan"))
+        r = by_strat.get("few_shot_retrieval", float("nan"))
+        if not (r > s):
+            retrieval_beats_static = False
+        if not (s > z):
+            static_beats_zeroshot = False
+
+    # Best CPU-capable config (0.5B model).
+    cpu_rows = df[df["model_short"].str.contains("0.5B", case=False)]
+    if len(cpu_rows) > 0:
+        cpu_best = cpu_rows.loc[cpu_rows["bleu"].idxmax()]
+        best_cpu_capable = (
+            cpu_best["model_short"],
+            cpu_best["strategy"],
+            float(cpu_best["bleu"]),
+        )
+    else:
+        best_cpu_capable = None
+
+    # Worst config.
+    worst_row = df.loc[df["bleu"].idxmin()]
+    worst_config = (
+        worst_row["model_short"],
+        worst_row["strategy"],
+        float(worst_row["bleu"]),
+    )
+
+    # Validity outlier: any model whose mean validity is more than
+    # 10 points below the others.
+    validity_by_model = df.groupby("model_short")["java_valid_rate"].mean()
+    median_validity = validity_by_model.median()
+    validity_outlier = None
+    for model, val in validity_by_model.items():
+        if val < median_validity - 0.10:
+            validity_outlier = (model, float(val))
+            break
+
+    insights = {
+        "overall_winner": overall_winner,
+        "retrieval_beats_static": retrieval_beats_static,
+        "static_beats_zeroshot": static_beats_zeroshot,
+        "best_cpu_capable": best_cpu_capable,
+        "worst_config": worst_config,
+        "validity_outlier": validity_outlier,
+    }
+
+    logger.info(
+        "Benchmark insights: winner=%s, retrieval_dominates=%s, "
+        "static_dominates=%s, cpu_best=%s",
+        overall_winner,
+        retrieval_beats_static,
+        static_beats_zeroshot,
+        best_cpu_capable,
+    )
+
+    return insights
