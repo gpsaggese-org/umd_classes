@@ -35,15 +35,21 @@ import argparse
 import os
 import sys
 from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
 
 _ROOT_DIR = Path.cwd()
+for _candidate in [_ROOT_DIR, *_ROOT_DIR.parents]:
+    if (_candidate / "helpers_root").exists():
+        _ROOT_DIR = _candidate
+        break
 _HELPERS_ROOT = _ROOT_DIR / "helpers_root"
 if str(_HELPERS_ROOT) not in sys.path:
     sys.path.insert(0, str(_HELPERS_ROOT))
 
 import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebo
 import helpers.hparser as hparser
 
 load_dotenv()
@@ -53,6 +59,22 @@ _LOG = logging.getLogger(__name__)
 
 # %%
 _DEFAULT_CSV = Path("testdata.csv")
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    """
+    Configure notebook and module loggers for Jupyter output.
+    """
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init utils logging.
+    global _LOG
+    _LOG = hnotebo.set_logger_to_print(_LOG)
+    # Init BambooAI logging.
+    bamboo_logger = logging.getLogger("bambooai")
+    hnotebo.set_logger_to_print(bamboo_logger)
 
 
 def _setup_env() -> None:
@@ -110,18 +132,25 @@ def _build_bamboo_agent(
     planning: bool = True,
     vector_db: bool = False,
     search_tool: bool = False,
+    **kwargs: Any,
 ) -> BambooAI:
     """
     Construct and configure the BambooAI agent instance.
     """
-    bamboo_ai = BambooAI(
-        df=df, planning=planning, vector_db=vector_db, search_tool=search_tool
-    )
+    agent_kwargs = {
+        "df": df,
+        "planning": planning,
+        "vector_db": vector_db,
+        "search_tool": search_tool,
+    }
+    agent_kwargs.update(kwargs)
+    bamboo_ai = BambooAI(**agent_kwargs)
     _LOG.debug(
-        "BambooAI agent initialized with planning=%s, vector_db=%s, search_tool=%s.",
+        "BambooAI agent initialized with planning=%s, vector_db=%s, search_tool=%s, extra_args=%s.",
         planning,
         vector_db,
         search_tool,
+        sorted(kwargs),
     )
     return bamboo_ai
 

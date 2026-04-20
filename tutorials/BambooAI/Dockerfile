@@ -1,40 +1,28 @@
+# Use Python 3.12 slim (already has Python and pip).
 FROM python:3.12-slim
 
-# Set working directory
-WORKDIR /app
+# Avoid interactive prompts during apt operations.
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies required for bambooai
+# Install CA certificates (needed for HTTPS).
 RUN apt-get update && apt-get install -y \
-    build-essential \
-    libffi-dev \
-    git \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements.txt first to leverage Docker cache
-COPY requirements.txt .
+# Install project specific packages.
+RUN mkdir -p /install
+COPY requirements.txt /install/requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
 
-# Install additional dependencies
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Config.
+COPY etc_sudoers /install/
+COPY etc_sudoers /etc/sudoers
+COPY bashrc /root/.bashrc
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Report package versions.
+COPY version.sh /install/
+RUN /install/version.sh 2>&1 | tee version.log
 
-
-
-# Copy the application code
-COPY . .
-
-# Create necessary directories
-RUN mkdir -p web_app/storage/favourites web_app/storage/threads web_app/temp web_app/logs
-
-# Expose the port
-EXPOSE 5000
-
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-
-# Set the working directory to web_app
-WORKDIR /app/web_app
-
-# Start the Flask application
-CMD ["python", "app.py"]
+# Jupyter.
+EXPOSE 8888
