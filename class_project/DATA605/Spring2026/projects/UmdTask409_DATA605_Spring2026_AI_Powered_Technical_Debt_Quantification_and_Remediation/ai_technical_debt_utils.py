@@ -1005,7 +1005,7 @@ def build_multi_project_fault_prediction_data(
            AND sm.PROJECT_ID = szz.PROJECT_ID
         WHERE sm.PROJECT_ID = ?
         """
-        
+
         project_df = pd.read_sql(query, conn, params=(project_id,))
 
         if project_df.empty:
@@ -1287,3 +1287,223 @@ def score_commits_for_fault_risk(
     )
 
     return result
+
+
+# =============================================================================
+# SECTION 5: PRIORITIZATION
+# =============================================================================
+#
+# Given the open issues in a target project and a trained fault predictor,
+# score each issue by its host commit's fault probability, combine with
+# SonarQube's remediation effort estimate, and rank by impact/effort.
+# Also compute the Pareto front for multi-objective reporting.
+
+
+def build_open_issues_for_prioritization(
+    conn: sqlite3.Connection,
+    project_id: str,
+) -> pd.DataFrame:
+    """
+    Load open issues from the target project joined to their host commit's
+    code metrics and churn features. One row per open issue.
+
+    Only issues with STATUS = 'OPEN' are returned, since closed issues
+    don't need prioritization.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns: ISSUE_KEY, PROJECT_ID, COMMIT_HASH, TYPE, SEVERITY, EFFORT,
+        DEBT, RULE, COMPONENT, START_LINE, plus all metric and churn
+        features from Section 4b.
+    """
+    metric_cols_sql = ", ".join(
+        [f"sm.{c} AS {c}" for c in DEBT_CLASSIFIER_METRIC_COLUMNS]
+    )
+
+    query = f"""
+    SELECT
+        si.ISSUE_KEY AS ISSUE_KEY,
+        si.PROJECT_ID AS PROJECT_ID,
+        sa.REVISION AS COMMIT_HASH,
+        si.TYPE AS TYPE,
+        si.SEVERITY AS SEVERITY,
+        si.EFFORT AS EFFORT,
+        si.DEBT AS DEBT,
+        si.RULE AS RULE,
+        si.COMPONENT AS COMPONENT,
+        si.START_LINE AS START_LINE,
+        si.MESSAGE AS MESSAGE,
+        {metric_cols_sql},
+        COALESCE(churn.files_changed, 0) AS files_changed,
+        COALESCE(churn.lines_added, 0) AS lines_added,
+        COALESCE(churn.lines_removed, 0) AS lines_removed
+    FROM SONAR_ISSUES si
+    JOIN SONAR_ANALYSIS sa
+        ON si.CREATION_ANALYSIS_KEY = sa.ANALYSIS_KEY
+       AND si.PROJECT_ID = sa.PROJECT_ID
+    JOIN SONAR_MEASURES sm
+        ON si.CREATION_ANALYSIS_KEY = sm.ANALYSIS_KEY
+       AND si.PROJECT_ID = sm.PROJECT_ID
+    LEFT JOIN (
+        SELECT
+            PROJECT_ID,
+            COMMIT_HASH,
+            COUNT(*) AS files_changed,
+            SUM(CAST(LINES_ADDED AS INTEGER)) AS lines_added,
+            SUM(CAST(LINES_REMOVED AS INTEGER)) AS lines_removed
+        FROM GIT_COMMITS_CHANGES
+        GROUP BY PROJECT_ID, COMMIT_HASH
+    ) churn
+        ON sa.REVISION = churn.COMMIT_HASH
+       AND si.PROJECT_ID = churn.PROJECT_ID
+    WHERE si.PROJECT_ID = ?
+      AND si.STATUS = 'OPEN'
+      AND si.TYPE IN ('BUG', 'CODE_SMELL', 'VULNERABILITY')
+    """
+    df = pd.read_sql(query, conn, params=(project_id,))
+
+    # Derived churn features to match Section 4b's feature set.
+    df["churn_total"] = df["lines_added"] + df["lines_removed"]
+    df["churn_ratio"] = df["lines_added"] / (df["churn_total"] + 1)
+
+    # Force numeric types on metric columns.
+    non_numeric = {
+        "ISSUE_KEY", "PROJECT_ID", "COMMIT_HASH", "TYPE",
+        "SEVERITY", "RULE", "COMPONENT", "MESSAGE",
+    }
+    for c in df.columns:
+        if c not in non_numeric:
+            df[c] = pd.to_numeric(df[c], errors="coerce").fillna(0)
+
+    logger.info(
+        "Loaded %d open issues for prioritization from %s",
+        len(df),
+        project_id,
+    )
+
+    return df
+
+
+def prioritize_issues(
+    open_issues: pd.DataFrame,
+    fault_model,
+    fault_feature_names: list[str],
+    min_effort_minutes: float = 1.0,
+) -> pd.DataFrame:
+    """
+    Score and rank open issues by impact-over-effort ratio.
+
+    Impact is the fault probability of the issue's host commit (from the
+    trained predictor). Effort is SonarQube's remediation estimate, with
+    a floor to prevent zero-effort issues from exploding the ratio.
+
+    Returns
+    -------
+    pd.DataFrame
+        Input frame with added columns: impact, effort_minutes,
+        impact_over_effort, priority_rank.
+        Sorted by priority_rank ascending (rank 1 = top priority).
+    """
+    missing = [c for c in fault_feature_names if c not in open_issues.columns]
+    if missing:
+        raise ValueError(
+            f"open_issues missing features the model needs: {missing}"
+        )
+
+    probs = fault_model.predict_proba(open_issues[fault_feature_names])[:, 1]
+
+    result = open_issues.copy()
+
+    # Weight the host-commit fault probability by both the issue's severity
+    # and its type. Severity uses an exponential scale (BLOCKER counts much
+    # more than INFO, not just linearly). Type weights recognize that bugs
+    # and vulnerabilities are functional/security concerns while code smells
+    # are maintainability concerns.
+    severity_weight_map = {
+        "BLOCKER": 16.0,
+        "CRITICAL": 8.0,
+        "MAJOR": 4.0,
+        "MINOR": 2.0,
+        "INFO": 1.0,
+    }
+    type_weight_map = {
+        "BUG": 1.5,
+        "VULNERABILITY": 1.5,
+        "CODE_SMELL": 1.0,
+    }
+    severity_weight = (
+        result["SEVERITY"].map(severity_weight_map).fillna(1.0) / 16.0
+    )
+    type_weight = result["TYPE"].map(type_weight_map).fillna(1.0)
+
+    result["impact"] = probs * severity_weight * type_weight
+    result["effort_minutes"] = result["EFFORT"].clip(lower=min_effort_minutes)
+    result["impact_over_effort"] = (
+        result["impact"] / result["effort_minutes"]
+    )
+    # Short hash for readability in printouts; full hash stays in COMMIT_HASH.
+    result["COMMIT_SHORT"] = result["COMMIT_HASH"].str[:8]
+
+    result = result.sort_values(
+        "impact_over_effort", ascending=False
+    ).reset_index(drop=True)
+    result["priority_rank"] = result["impact_over_effort"].rank(
+        method="min", ascending=False
+    ).astype(int)
+
+    logger.info(
+        "Ranked %d issues. Top issue: impact=%.3f effort=%.1f min ratio=%.4f",
+        len(result),
+        result.iloc[0]["impact"],
+        result.iloc[0]["effort_minutes"],
+        result.iloc[0]["impact_over_effort"],
+    )
+
+    return result
+
+
+def compute_pareto_front(
+    ranked_issues: pd.DataFrame,
+    impact_col: str = "impact",
+    effort_col: str = "effort_minutes",
+) -> pd.DataFrame:
+    """
+    Compute the Pareto front on (high impact, low effort).
+
+    An issue is on the Pareto front if no other issue has both higher
+    impact AND lower-or-equal effort (or higher-or-equal impact AND
+    strictly lower effort).
+
+    Returns
+    -------
+    pd.DataFrame
+        Subset of ranked_issues that lies on the Pareto front, sorted
+        by effort ascending so the trade-off curve reads left-to-right.
+    """
+    if ranked_issues.empty:
+        return ranked_issues.copy()
+
+    # Sort by effort ascending, then impact descending. Walk through and
+    # keep only issues whose impact exceeds the running maximum.
+    sorted_df = ranked_issues.sort_values(
+        by=[effort_col, impact_col],
+        ascending=[True, False],
+    ).reset_index(drop=True)
+
+    pareto_rows = []
+    max_impact_seen = -float("inf")
+    for _, row in sorted_df.iterrows():
+        if row[impact_col] > max_impact_seen:
+            pareto_rows.append(row)
+            max_impact_seen = row[impact_col]
+
+    pareto_df = pd.DataFrame(pareto_rows).reset_index(drop=True)
+
+    logger.info(
+        "Pareto front: %d of %d issues are non-dominated",
+        len(pareto_df),
+        len(ranked_issues),
+    )
+
+    return pareto_df
