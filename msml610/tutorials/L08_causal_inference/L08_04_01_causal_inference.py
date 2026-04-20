@@ -64,7 +64,7 @@ dir_name = "L08_data"
 
 out_dir_name = "figures/"
 
-markdown_path_prefix="msml610/lectures_source"
+markdown_path_prefix = "msml610/lectures_source"
 # # cp msml610/lectures_source/figures/L08*.png msml610/lectures_source/figures
 
 # %%
