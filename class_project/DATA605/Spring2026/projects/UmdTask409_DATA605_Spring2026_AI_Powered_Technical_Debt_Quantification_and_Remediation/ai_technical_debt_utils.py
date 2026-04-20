@@ -1695,3 +1695,212 @@ def summarize_benchmark_insights(benchmark_df: pd.DataFrame) -> dict:
     )
 
     return insights
+
+
+# =============================================================================
+# SECTION 4c: TECHNICAL DEBT FORECASTING (Time Series)
+# =============================================================================
+#
+# Predicts the evolution of accumulated technical debt using ARIMA(0,1,1),
+# following Tsoukalas et al. (2020) "Technical debt forecasting: An empirical
+# study on open-source repositories" (Journal of Systems and Software).
+#
+# Target: cumulative remediation effort over time (SonarQube SQALE analog).
+# Cumulative curves are smoother than raw weekly counts and are what the
+# TD forecasting literature consistently uses.
+
+
+def build_debt_timeseries(
+    conn: sqlite3.Connection,
+    project_id: str,
+    frequency: str = "W",
+) -> pd.DataFrame:
+    """
+    Build a cumulative-effort time series for one project.
+
+    Parameters
+    ----------
+    conn : sqlite3.Connection
+    project_id : str
+    frequency : str
+        "W" for weekly (default, matches Tsoukalas et al.) or "M" for monthly.
+
+    Returns
+    -------
+    pd.DataFrame
+        Columns: period_start (datetime), period_effort, cumulative_effort,
+        n_issues, n_active_commits.
+        Indexed by period_start.
+    """
+    if frequency not in ("W", "M"):
+        raise ValueError(f"frequency must be 'W' or 'M', got {frequency!r}")
+
+    # Pull raw per-issue data with creation date.
+    q = """
+    SELECT
+        sa.DATE AS creation_date,
+        CAST(si.EFFORT AS REAL) AS effort,
+        sa.REVISION AS commit_hash
+    FROM SONAR_ISSUES si
+    JOIN SONAR_ANALYSIS sa
+        ON si.CREATION_ANALYSIS_KEY = sa.ANALYSIS_KEY
+       AND si.PROJECT_ID = sa.PROJECT_ID
+    WHERE si.PROJECT_ID = ?
+      AND si.EFFORT IS NOT NULL
+    """
+    raw = pd.read_sql(q, conn, params=(project_id,))
+    if raw.empty:
+        raise ValueError(f"No issues with effort data for {project_id}")
+
+    raw["creation_date"] = pd.to_datetime(
+        raw["creation_date"], errors="coerce"
+    )
+    raw = raw.dropna(subset=["creation_date"])
+    raw["effort"] = raw["effort"].fillna(0)
+
+    # Resample to the chosen frequency.
+    raw = raw.set_index("creation_date").sort_index()
+    period_effort = raw["effort"].resample(frequency).sum()
+    n_issues = raw["effort"].resample(frequency).count()
+    n_active_commits = (
+        raw["commit_hash"].resample(frequency).nunique()
+    )
+
+    # Fill any completely missing periods with zero so the series is regular.
+    full_index = pd.date_range(
+        start=period_effort.index.min(),
+        end=period_effort.index.max(),
+        freq=frequency,
+    )
+    period_effort = period_effort.reindex(full_index, fill_value=0)
+    n_issues = n_issues.reindex(full_index, fill_value=0)
+    n_active_commits = n_active_commits.reindex(full_index, fill_value=0)
+
+    df = pd.DataFrame({
+        "period_effort": period_effort,
+        "cumulative_effort": period_effort.cumsum(),
+        "n_issues": n_issues.astype(int),
+        "n_active_commits": n_active_commits.astype(int),
+    })
+    df.index.name = "period_start"
+
+    logger.info(
+        "Built %s time series for %s: %d periods, cumulative effort %.0f min",
+        "weekly" if frequency == "W" else "monthly",
+        project_id,
+        len(df),
+        df["cumulative_effort"].iloc[-1],
+    )
+
+    return df
+
+
+def forecast_debt_arima(
+    timeseries: pd.DataFrame,
+    target_col: str = "cumulative_effort",
+    train_fraction: float = 0.8,
+    order: tuple = (0, 1, 1),
+    auto_search: bool = False,
+) -> dict:
+    """
+    Forecast technical debt evolution using ARIMA.
+
+    Splits the series temporally (first ``train_fraction`` for training,
+    remainder for evaluation), fits an ARIMA model on the train portion,
+    forecasts the test portion, reports accuracy.
+
+    Parameters
+    ----------
+    timeseries : pd.DataFrame
+        Output of ``build_debt_timeseries``. Must have ``target_col``.
+    target_col : str
+        Which column to forecast. Defaults to ``cumulative_effort``.
+    train_fraction : float
+        Fraction of series used for training. Default 0.8.
+    order : tuple
+        ARIMA (p, d, q). Default (0, 1, 1) per Tsoukalas et al.
+    auto_search : bool
+        If True, use pmdarima.auto_arima to search for best parameters.
+        Slower but often finds better fits. Default False.
+
+    Returns
+    -------
+    dict
+        Keys: train, test, predictions (pd.Series indexed by date),
+        model, order_used, metrics (mape, rmse, mae), train_fraction.
+    """
+    import numpy as np
+    from sklearn.metrics import mean_absolute_error, mean_squared_error
+
+    if target_col not in timeseries.columns:
+        raise ValueError(
+            f"target_col {target_col!r} not in timeseries columns"
+        )
+    if len(timeseries) < 20:
+        raise ValueError(
+            f"Need at least 20 periods for reliable forecasting, "
+            f"got {len(timeseries)}"
+        )
+
+    y = timeseries[target_col].astype(float)
+    split_idx = int(len(y) * train_fraction)
+    y_train = y.iloc[:split_idx]
+    y_test = y.iloc[split_idx:]
+
+    if auto_search:
+        import pmdarima as pm
+        model = pm.auto_arima(
+            y_train,
+            seasonal=False,
+            suppress_warnings=True,
+            error_action="ignore",
+        )
+        order_used = model.order
+        forecast = model.predict(n_periods=len(y_test))
+        predictions = pd.Series(forecast, index=y_test.index)
+    else:
+        from statsmodels.tsa.arima.model import ARIMA
+        model = ARIMA(y_train, order=order).fit()
+        order_used = order
+        forecast = model.forecast(steps=len(y_test))
+        predictions = pd.Series(forecast.values, index=y_test.index)
+
+    # Metrics.
+    mae = float(mean_absolute_error(y_test, predictions))
+    rmse = float(np.sqrt(mean_squared_error(y_test, predictions)))
+    # MAPE guards against zeros in the denominator.
+    nonzero_mask = y_test != 0
+    if nonzero_mask.any():
+        mape = float(
+            np.mean(
+                np.abs(
+                    (y_test[nonzero_mask] - predictions[nonzero_mask])
+                    / y_test[nonzero_mask]
+                )
+            )
+            * 100
+        )
+    else:
+        mape = float("nan")
+
+    logger.info(
+        "Forecasted %s: train=%d test=%d periods. Order %s. "
+        "MAPE=%.2f%% RMSE=%.1f MAE=%.1f",
+        target_col,
+        len(y_train),
+        len(y_test),
+        order_used,
+        mape,
+        rmse,
+        mae,
+    )
+
+    return {
+        "train": y_train,
+        "test": y_test,
+        "predictions": predictions,
+        "model": model,
+        "order_used": order_used,
+        "metrics": {"mape": mape, "rmse": rmse, "mae": mae},
+        "train_fraction": train_fraction,
+    }

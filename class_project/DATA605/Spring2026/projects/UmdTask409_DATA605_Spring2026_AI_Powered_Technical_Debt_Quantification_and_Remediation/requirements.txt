@@ -34,3 +34,5 @@ sqlalchemy
 # Utilities.
 tqdm
 accelerate
+pmdarima
+statsmodels
