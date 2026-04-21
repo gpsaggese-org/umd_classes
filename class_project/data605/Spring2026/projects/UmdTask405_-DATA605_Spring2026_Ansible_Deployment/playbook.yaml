@@ -52,7 +52,6 @@
           BucketName: umdtask405-bucket
           EnableVersioning: "false"
           EnableReplication: "false"
-          EnableReplication: "false"
           LogRetentionDays: 90
           NoncurrentVersionExpirationDays: 30
         tags:
