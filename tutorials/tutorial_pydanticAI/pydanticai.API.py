@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.1
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -21,20 +21,25 @@
 import logging
 
 # Third party libraries.
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Common plotting and dataframe libraries are loaded for notebook exploration.
 
 # %%
 # System libraries.
 import asyncio
-import dataclasses
 import os
 
 # Third party libraries.
-import dotenv
+from dataclasses import dataclass
+
 import nest_asyncio
-import pydantic
-import pydantic_ai
+from dotenv import find_dotenv, load_dotenv
+from pydantic import BaseModel
+from pydantic_ai import Agent
 
 # Local utilities.
 import pydanticai_API_utils as utils
@@ -43,6 +48,11 @@ import pydanticai_API_utils as utils
 
 # %%
 # Configure notebook logging.
+import logging
+
+# Local utility.
+import pydanticai_API_utils as utils
+
 _LOG = logging.getLogger(__name__)
 utils.init_logger(_LOG)
 _LOG.info("Notebook logger initialized.")
@@ -115,8 +125,8 @@ _LOG.info("Notebook logger initialized.")
 
 # %%
 # Load environment variables from a local dotenv file if one exists.
-env_path = dotenv.find_dotenv(usecwd=True)
-dotenv.load_dotenv(env_path, override=True)
+env_path = find_dotenv(usecwd=True)
+load_dotenv(env_path, override=True)
 _LOG.info("dotenv path: %s", env_path or "<not found>")
 env_path or "<not found>"
 # Environment variables are available to the model configuration cells.
@@ -164,16 +174,10 @@ utils.log_environment(env_path, MODEL_ID)
 # The quickest way to understand PydanticAI is through a small example.
 #
 # We define a schema using Pydantic and instruct the agent to produce that structured output.
-#
-#
-# #############################################################################
-# City
-# #############################################################################
-
 
 # %%
 # Define the output schema for the minimal example.
-class City(pydantic.BaseModel):
+class City(BaseModel):
     name: str
     country: str
     population: int
@@ -185,7 +189,7 @@ City
 
 # %%
 # Create an agent that must return `City`.
-agent = pydantic_ai.Agent(MODEL_ID, output_type=City)
+agent = Agent(MODEL_ID, output_type=City)
 agent
 # The agent is configured to validate model output against class `City`.
 
@@ -223,16 +227,10 @@ _LOG.info("Nested event loop support enabled.")
 # - Store validated outputs in databases
 # - Feed typed objects into analytics
 # - Pass structured data downstream without brittle string parsing
-#
-#
-# #############################################################################
-# Product
-# #############################################################################
-
 
 # %%
 # Define a product schema for structured extraction.
-class Product(pydantic.BaseModel):
+class Product(BaseModel):
     name: str
     price: float
     category: str
@@ -244,7 +242,7 @@ Product
 
 # %%
 # Create an agent that must return `Product`.
-agent = pydantic_ai.Agent(MODEL_ID, output_type=Product)
+agent = Agent(MODEL_ID, output_type=Product)
 agent
 # The agent is configured to return product data with typed fields.
 
@@ -261,17 +259,10 @@ agent.run_sync("Describe the Apple AirPods Pro").output
 # - Schema validation checks the generated structure
 # - Retries let `PydanticAI` ask the model to repair invalid output
 # - The notebook avoids custom parsing and retry logic in each prompt
-#
-#
-#
-# #############################################################################
-# Person
-# #############################################################################
-
 
 # %%
 # Define a schema that requires an integer age.
-class Person(pydantic.BaseModel):
+class Person(BaseModel):
     name: str
     age: int
 
@@ -282,7 +273,7 @@ Person
 
 # %%
 # Configure retries so schema validation failures can be corrected.
-agent = pydantic_ai.Agent(MODEL_ID, output_type=Person, retries=2)
+agent = Agent(MODEL_ID, output_type=Person, retries=2)
 agent
 # The agent can retry when model output does not match `Person`.
 
@@ -302,7 +293,7 @@ agent.run_sync("Tell me about Albert Einstein")
 
 # %%
 # Create an agent with a deterministic weather tool.
-agent = pydantic_ai.Agent(MODEL_ID, tools=[utils.get_weather])
+agent = Agent(MODEL_ID, tools=[utils.get_weather])
 agent
 # The agent can call `utils.get_weather()` while answering.
 
@@ -318,16 +309,10 @@ agent.run_sync("What is the weather in Tokyo?")
 #
 # - Example values: tenant IDs, API clients, feature flags, and environment context
 # - Benefit: tools can access context without global variables or prompt string formatting
-#
-#
-# #############################################################################
-# Config
-# #############################################################################
-
 
 # %%
 # Define the dependency object passed into the agent at run time.
-@dataclasses.dataclass
+@dataclass
 class Config:
     company: str
 
@@ -339,7 +324,7 @@ Config
 # %%
 # Create an agent that receives `Config` dependencies.
 # `deps_type=Config` declares the shape of runtime context the agent can receive.
-agent = pydantic_ai.Agent(MODEL_ID, deps_type=Config, tools=[utils.company_name])
+agent = Agent(MODEL_ID, deps_type=Config, tools=[utils.company_name])
 agent
 # Tools can access `Config` through the PydanticAI run context.
 
@@ -390,26 +375,15 @@ result.output
 # ```text
 # model output -> Pydantic schema validation -> output_validator -> final result
 # ```
-#
-#
-# #############################################################################
-# SourceRef
-# #############################################################################
-
 
 # %%
 # Define source citation schemas for validator examples.
-class SourceRef(pydantic.BaseModel):
+class SourceRef(BaseModel):
     doc_id: str
     quote: str
 
 
-# #############################################################################
-# AnswerWithSources
-# #############################################################################
-
-
-class AnswerWithSources(pydantic.BaseModel):
+class AnswerWithSources(BaseModel):
     answer: str
     sources: list[SourceRef]
 
@@ -433,7 +407,7 @@ validator_instructions = (
 
 # %%
 # Create an agent that returns answers with source references.
-validator_agent = pydantic_ai.Agent(
+validator_agent = Agent(
     MODEL_ID,
     output_type=AnswerWithSources,
     instructions=validator_instructions,
@@ -521,7 +495,7 @@ asyncio.run(utils.run_validator_example(validator_agent))
 
 # %%
 # Create an agent for the streaming example.
-stream_agent = pydantic_ai.Agent(
+stream_agent = Agent(
     MODEL_ID, instructions="Write one short paragraph about unit tests."
 )
 stream_agent
@@ -552,7 +526,7 @@ else:
 
 # %%
 # Run an agent with the explicit provider model when available.
-agent = pydantic_ai.Agent(explicit_model or MODEL_ID, instructions="Be concise.")
+agent = Agent(explicit_model or MODEL_ID, instructions="Be concise.")
 result = asyncio.run(agent.run("Say hello in one sentence."))
 result
 # The result confirms that the provider configuration can execute a request.
@@ -578,7 +552,7 @@ result
 
 # %%
 # Run an agent and collect execution metadata.
-meta_agent = pydantic_ai.Agent(MODEL_ID, instructions="Answer in one sentence.")
+meta_agent = Agent(MODEL_ID, instructions="Answer in one sentence.")
 result = asyncio.run(meta_agent.run("What is a unit test?"))
 usage = getattr(result, "usage", None)
 message_count = len(result.new_messages())
@@ -615,7 +589,7 @@ _LOG.info("Loaded ModelSettings and UsageLimits classes.")
 
 # %%
 # Create an agent with deterministic model settings.
-settings_agent = pydantic_ai.Agent(
+settings_agent = Agent(
     MODEL_ID,
     instructions="Answer in a single sentence.",
     model_settings=ModelSettings(temperature=0.2),
