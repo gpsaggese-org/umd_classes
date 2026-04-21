@@ -46,7 +46,7 @@
         state: present
         region: us-east-1
         disable_rollback: true
-        template_body: cf_templates/s3_bucket.yaml
+        template: cf_templates/s3_bucket.yaml
         template_parameters:
           Environment: dev
           BucketName: umdtask405-bucket
