@@ -1,0 +1,301 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: S3 bucket with versioning, encryption, lifecycle, and access controls
+
+# ─────────────────────────────────────────
+# PARAMETERS
+# ─────────────────────────────────────────
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+    Description: Deployment environment
+
+  BucketName:
+    Type: String
+    Default: ""
+    Description: Optional custom bucket name (leave blank to auto-generate)
+
+  EnableVersioning:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+
+  EnableReplication:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+
+  ReplicationDestinationBucketArn:
+    Type: String
+    Default: ""
+    Description: ARN of destination bucket for replication (if enabled)
+
+  LogRetentionDays:
+    Type: Number
+    Default: 90
+    Description: Days to retain access logs
+
+  NoncurrentVersionExpirationDays:
+    Type: Number
+    Default: 30
+    Description: Days before noncurrent versions are deleted
+
+# ─────────────────────────────────────────
+# CONDITIONS
+# ─────────────────────────────────────────
+Conditions:
+  HasCustomBucketName: !Not [!Equals [!Ref BucketName, ""]]
+  VersioningEnabled: !Equals [!Ref EnableVersioning, "true"]
+  ReplicationEnabled: !And
+    - !Equals [!Ref EnableReplication, "true"]
+    - !Not [!Equals [!Ref ReplicationDestinationBucketArn, ""]]
+  IsProd: !Equals [!Ref Environment, "prod"]
+
+# ─────────────────────────────────────────
+# RESOURCES
+# ─────────────────────────────────────────
+Resources:
+
+  # --- Access Logs Bucket ---
+  AccessLogsBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !If
+        - HasCustomBucketName
+        - !Sub "${BucketName}-access-logs"
+        - !Ref AWS::NoValue
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireLogs
+            Status: Enabled
+            ExpirationInDays: !Ref LogRetentionDays
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+  AccessLogsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref AccessLogsBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: S3ServerAccessLogsPolicy
+            Effect: Allow
+            Principal:
+              Service: logging.s3.amazonaws.com
+            Action: s3:PutObject
+            Resource: !Sub "${AccessLogsBucket.Arn}/logs/*"
+            Condition:
+              ArnLike:
+                aws:SourceArn: !GetAtt MainBucket.Arn
+
+  # --- KMS Key for encryption (prod only) ---
+  BucketKMSKey:
+    Type: AWS::KMS::Key
+    Condition: IsProd
+    Properties:
+      Description: !Sub "KMS key for ${Environment} S3 bucket"
+      EnableKeyRotation: true
+      KeyPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: AllowRootAccess
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::${AWS::AccountId}:root"
+            Action: "kms:*"
+            Resource: "*"
+
+  BucketKMSKeyAlias:
+    Type: AWS::KMS::Alias
+    Condition: IsProd
+    Properties:
+      AliasName: !Sub "alias/${Environment}-s3-bucket-key"
+      TargetKeyId: !Ref BucketKMSKey
+
+  # --- Replication IAM Role ---
+  ReplicationRole:
+    Type: AWS::IAM::Role
+    Condition: ReplicationEnabled
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: s3.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: S3ReplicationPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetReplicationConfiguration
+                  - s3:ListBucket
+                Resource: !GetAtt MainBucket.Arn
+              - Effect: Allow
+                Action:
+                  - s3:GetObjectVersionForReplication
+                  - s3:GetObjectVersionAcl
+                  - s3:GetObjectVersionTagging
+                Resource: !Sub "${MainBucket.Arn}/*"
+              - Effect: Allow
+                Action:
+                  - s3:ReplicateObject
+                  - s3:ReplicateDelete
+                  - s3:ReplicateTags
+                Resource: !Sub "${ReplicationDestinationBucketArn}/*"
+
+  # --- Main Bucket ---
+  MainBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: !If [IsProd, Retain, Delete]
+    Properties:
+      BucketName: !If
+        - HasCustomBucketName
+        - !Ref BucketName
+        - !Ref AWS::NoValue
+
+      # Versioning
+      VersioningConfiguration:
+        Status: !If [VersioningEnabled, Enabled, Suspended]
+
+      # Encryption (KMS for prod, AES256 otherwise)
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: !If [IsProd, aws:kms, AES256]
+              KMSMasterKeyID: !If [IsProd, !Ref BucketKMSKey, !Ref AWS::NoValue]
+            BucketKeyEnabled: !If [IsProd, true, false]
+
+      # Block all public access
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+      # Server access logging
+      LoggingConfiguration:
+        DestinationBucketName: !Ref AccessLogsBucket
+        LogFilePrefix: logs/
+
+      # Lifecycle rules
+      LifecycleConfiguration:
+        Rules:
+          - Id: TransitionToIA
+            Status: Enabled
+            Transitions:
+              - TransitionInDays: 30
+                StorageClass: STANDARD_IA
+              - TransitionInDays: 90
+                StorageClass: GLACIER
+            NoncurrentVersionExpiration:
+              NoncurrentDays: !Ref NoncurrentVersionExpirationDays
+
+          - Id: AbortIncompleteMultipartUploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+
+      # Cross-region replication
+      ReplicationConfiguration: !If
+        - ReplicationEnabled
+        - Role: !GetAtt ReplicationRole.Arn
+          Rules:
+            - Id: ReplicateAll
+              Status: Enabled
+              Destination:
+                Bucket: !Ref ReplicationDestinationBucketArn
+                StorageClass: STANDARD
+              Filter:
+                Prefix: ""
+        - !Ref AWS::NoValue
+
+      # CORS (adjust origins as needed)
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: [GET, PUT, POST, DELETE, HEAD]
+            AllowedOrigins: ["*"]  # Lock this down per environment
+            MaxAge: 3600
+
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+
+  # --- Bucket Policy ---
+  MainBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MainBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          # Deny non-HTTPS requests
+          - Sid: DenyNonHTTPS
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource:
+              - !GetAtt MainBucket.Arn
+              - !Sub "${MainBucket.Arn}/*"
+            Condition:
+              Bool:
+                aws:SecureTransport: false
+
+          # Deny unencrypted object uploads (prod only)
+          - Sid: DenyUnencryptedUploads
+            Effect: Deny
+            Principal: "*"
+            Action: s3:PutObject
+            Resource: !Sub "${MainBucket.Arn}/*"
+            Condition:
+              StringNotEquals:
+                s3:x-amz-server-side-encryption: !If [IsProd, aws:kms, AES256]
+
+# ─────────────────────────────────────────
+# OUTPUTS
+# ─────────────────────────────────────────
+Outputs:
+  BucketName:
+    Description: Main S3 bucket name
+    Value: !Ref MainBucket
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketName"
+
+  BucketArn:
+    Description: Main S3 bucket ARN
+    Value: !GetAtt MainBucket.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketArn"
+
+  BucketDomainName:
+    Description: Bucket regional domain name
+    Value: !GetAtt MainBucket.RegionalDomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-BucketDomainName"
+
+  AccessLogsBucketName:
+    Description: Access logs bucket name
+    Value: !Ref AccessLogsBucket
+
+  KMSKeyArn:
+    Condition: IsProd
+    Description: KMS key ARN used for bucket encryption
+    Value: !GetAtt BucketKMSKey.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-KMSKeyArn"
