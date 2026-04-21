@@ -70,7 +70,10 @@ hpanddis.display_df(df)
 # %%
 import helpers.hpandas_stats as hpanstat
 
-hpanstat.explore_dataframe(df)
+show_distributions = True
+show_correlations = True
+
+hpanstat.explore_dataframe(df, show_distributions=show_distributions, show_correlations=show_correlations)
 
 # %%
 import statsmodels.formula.api as smf
