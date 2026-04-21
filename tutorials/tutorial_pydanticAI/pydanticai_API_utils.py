@@ -11,10 +11,10 @@ import importlib.util
 import inspect
 import logging
 import os
-import pathlib
+from pathlib import Path
 from typing import Any
 
-import pydantic_ai  # type: ignore[import-not-found]
+from pydantic_ai import ModelRetry, RunContext
 
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
@@ -32,10 +32,11 @@ def init_logger(notebook_log: logging.Logger) -> None:
 
     :param notebook_log: logger from the paired notebook
     """
+    global _LOG
     hnotebo.config_notebook()
     hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
     hnotebo.set_logger_to_print(notebook_log)
-    hnotebo.set_logger_to_print(_LOG)
+    _LOG = hnotebo.set_logger_to_print(_LOG)
 
 
 def _mask(value: str | None) -> str:
@@ -78,14 +79,14 @@ def get_weather(city: str) -> str:
     return weather
 
 
-def company_name(ctx: pydantic_ai.RunContext[Any]) -> str:
+def company_name(ctx: RunContext[Any]) -> str:
     """
     Get the configured company from an agent run context.
 
     :param ctx: PydanticAI run context
     :return: configured company name
     """
-    company = str(ctx.deps.company)
+    company = ctx.deps.company
     return company
 
 
@@ -101,7 +102,7 @@ def load_example_documents() -> dict[str, str]:
     global _DOCUMENTS_CACHE
     if _DOCUMENTS_CACHE is not None:
         return _DOCUMENTS_CACHE
-    dataset_dir = pathlib.Path(__file__).resolve().parent / "example_dataset"
+    dataset_dir = Path(__file__).resolve().parent / "example_dataset"
     documents = {}
     for path in sorted(dataset_dir.glob("*.md")):
         documents[path.stem] = path.read_text()
@@ -175,16 +176,14 @@ def validate_sources(result: Any) -> Any:
         token in answer_l for token in ["doc", "document", "according", "source"]
     )
     if mentions_docs and not result.sources:
-        raise pydantic_ai.ModelRetry(
-            "Answer references documents but sources are empty."
-        )
+        raise ModelRetry("Answer references documents but sources are empty.")
     if len(result.sources) > 3:
-        raise pydantic_ai.ModelRetry("Too many sources. Maximum allowed is 3.")
+        raise ModelRetry("Too many sources. Maximum allowed is 3.")
     seen: set[tuple[str, str]] = set()
     for source in result.sources:
         key = (source.doc_id, source.quote)
         if key in seen:
-            raise pydantic_ai.ModelRetry("Duplicate sources found.")
+            raise ModelRetry("Duplicate sources found.")
         seen.add(key)
     return result
 
@@ -200,27 +199,25 @@ def validate_document_sources(result: Any) -> Any:
     documents = load_example_documents()
     for source in result.sources:
         if source.doc_id not in documents:
-            raise pydantic_ai.ModelRetry(
+            raise ModelRetry(
                 f"Unknown doc_id '{source.doc_id}'. Use ids from example_dataset."
             )
         doc_text = " ".join(documents[source.doc_id].lower().split())
         quote_text = " ".join(source.quote.lower().split())
         if quote_text not in doc_text:
-            raise pydantic_ai.ModelRetry(
+            raise ModelRetry(
                 f"Quote not found in cited document '{source.doc_id}'."
             )
     return result
 
 
-def build_missing_sources_retry() -> pydantic_ai.ModelRetry:
+def build_missing_sources_retry() -> ModelRetry:
     """
     Build the retry exception used by the missing-sources demo.
 
     :return: retry exception
     """
-    retry = pydantic_ai.ModelRetry(
-        "Answer references documents but sources are empty."
-    )
+    retry = ModelRetry("Answer references documents but sources are empty.")
     return retry
 
 
@@ -310,8 +307,8 @@ def build_explicit_openai_model(model_id: str) -> Any | None:
         "api_key": os.getenv("OPENAI_API_KEY"),
         "base_url": os.getenv("OPENAI_BASE_URL"),
     }
-    args: list[Any] = []
-    kwargs: dict[str, Any] = {}
+    args = []
+    kwargs = {}
     if "model_name" in parameters:
         kwargs["model_name"] = model_name
     elif "model" in parameters:
