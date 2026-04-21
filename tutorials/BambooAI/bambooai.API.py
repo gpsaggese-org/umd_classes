@@ -261,7 +261,7 @@ print("EXECUTION_MODE from env:", os.getenv("EXECUTION_MODE"))
 
 
 # %% [markdown]
-# ## Sanity check (environment + data)
+# ## Sanity check
 #
 # Use this quick check to confirm environment configuration and dataset readiness before running the agent.
 
@@ -301,6 +301,7 @@ def _get_artifacts_dir() -> Path:
 
 
 # %%
+#Set your OPENAI API KEY here if not already set in .env file
 os.environ['OPENAI_API_KEY']=''
 
 # %%
@@ -354,7 +355,6 @@ df = _get_dataframe()
 bamboo_quick = _build_bamboo_agent(
     df, planning=False, vector_db=False, search_tool=False
 )
-# Use print() so users see instructions before the interactive loop starts.
 print(
     "BambooAI ready. When the loop starts, paste one prompt, then type 'exit' or press Ctrl+D to stop."
 )
@@ -368,15 +368,15 @@ _run_agent(bamboo_quick)
 
 
 # %% [markdown]
-# ## Feature focus: parameters
+# ## Parameter Deep Dive
 #
-# This section walks through each BambooAI parameter (except `df` and `webui`, which are covered elsewhere) with a short prompt and expected behavior.
+# This section walks through the most crucial and commonly used BambooAI parameters to understand their use, examples to show usage and expected behavior.
 #
 
 # %% [markdown]
 # ### 1. auxiliary_datasets 
 #
-# Use auxiliary datasets when the primary dataframe needs enrichment (lookups, joins, mapping tables).
+# **Use auxiliary datasets when the primary dataframe needs supporting information (lookups, joins, mapping tables).**
 #
 # Custom prompt example - Join the auxiliary dataset on `country` and summarize average `monthly_spend_usd` by region.
 #
@@ -422,7 +422,7 @@ _run_agent(bamboo_aux)
 # %% [markdown]
 # ### 2. max_conversations
 #
-# This limits how much recent chat history BambooAI keeps in memory.
+# **This limits how much recent chat history BambooAI keeps in memory.**
 #
 #
 # What to expect
@@ -452,7 +452,7 @@ _run_agent(bamboo_short_memory)
 # %% [markdown]
 # ### 3. search_tool
 #
-# Enable this when you want BambooAI to pull in external context from the web.
+# **Enable this when you want BambooAI to pull in external context from the web.**
 #
 # Example prompt - Find a short definition of `customer churn` and explain how it might map to our dataset.
 #
@@ -482,7 +482,7 @@ _run_agent(bamboo_search)
 # %% [markdown]
 # ### 4. planning
 #
-# Planning helps BambooAI solve multi-step or ambiguous tasks by outlining a plan before executing code.
+# **Planning helps BambooAI solve multi-step or ambiguous tasks by outlining a plan before executing code.**
 #
 # Example prompt - Compare revenue trends by region, identify the top 3 outliers, and explain possible causes.
 #
@@ -515,7 +515,7 @@ _run_agent(bamboo_planning)
 # %% [markdown]
 # ### 5. vector_db
 #
-# This parameter enables memory and retrieval over prior conversations and documents.
+# **This parameter enables memory and retrieval over prior conversations and documents.**
 #
 # Custom prompt
 # - "Using what you learned earlier, summarize the top 2 churn drivers."
@@ -549,7 +549,7 @@ _run_agent(bamboo_vector)
 # %% [markdown]
 # ### 6. df_ontology
 #
-# This parameter focuses on the Ontology of the dataset and provides grounding in the form of schema-level meaning and constraints for columns and values.
+# **This parameter focuses on the ontology of the dataset and provides grounding in the form of schema-level meaning and constraints for columns and values.**
 #
 # Custom prompt
 # - Validate that `churned` and `has_premium` values match the ontology. Flag any invalid values.
@@ -612,7 +612,7 @@ _run_agent(bamboo_ontology)
 # %% [markdown]
 # ### 7. exploratory
 #
-# Exploratory mode enables expert selection for query handling (e.g., routing to a specialist).
+# **Exploratory mode enables expert selection for query handling (e.g., routing to a specialist).**
 #
 # Custom prompt
 # - Analyze this dataset for churn drivers and suggest follow-up questions.
@@ -645,7 +645,7 @@ _run_agent(bamboo_exploratory)
 # %% [markdown]
 # ### 8. custom_prompt_file
 #
-# Custom prompts let you control response structure and tone.
+# **Custom prompts let you control response structure and tone.**
 #
 # Example - Return a 3-bullet summary and a numbered action plan.
 #
