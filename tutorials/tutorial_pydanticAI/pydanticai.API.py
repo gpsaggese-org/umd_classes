@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.17.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -17,88 +17,89 @@
 # %load_ext autoreload
 # %autoreload 2
 
+# System libraries.
 import logging
 
+# Third party libraries.
 
-import helpers.hnotebook as ut
-
-ut.config_notebook()
-
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
+# Common plotting and dataframe libraries are loaded for notebook exploration.
 
 # %%
+# System libraries.
+import asyncio
+import dataclasses
+import os
+
+# Third party libraries.
+import dotenv
+import nest_asyncio
+import pydantic
+import pydantic_ai
+
+# Local utilities.
 import pydanticai_API_utils as utils
 
-# %% [markdown]
-# ## PydanticAI API Tutorial Introduction
-#
-# PydanticAI is a lightweight framework for building LLM-powered applications with **structured outputs using Pydantic models**.
-#
-# Unlike traditional LLM APIs that return unstructured text, PydanticAI ensures responses conform to a predefined schema.
-#
-# This notebook covers:
-#
-# - Core concepts
-# - Agent API
-# - Structured outputs
-# - Tool usage
-# - Validation and retries
-# - Async execution
-#
-# By the end, you will understand how to build reliable LLM pipelines using structured outputs.
+# Notebook-specific imports are ready for tutorial examples.
+
+# %%
+# Configure notebook logging.
+_LOG = logging.getLogger(__name__)
+utils.init_logger(_LOG)
+_LOG.info("Notebook logger initialized.")
+# Notebook and utility logs now print in Jupyter.
 
 # %% [markdown]
-# # Table of Contents
+# # Summary
 #
-# 1. Introduction
-# 2. Why PydanticAI exists
-# 3. Installation
-# 4. Minimal Example
-# 5. Core Concepts
-# 6. Structured Outputs
-# 7. Validation
-# 8. Tools
-# 9. Dependencies
-# 10. Async Execution
-# 11. Advanced Features
-# 12. Best Practices
-# 13. Summary
+# This notebook introduces `PydanticAI` APIs for building LLM workflows.
+#
+# Topics include structured outputs, tools, dependencies, validators, streaming,
+# provider configuration, run metadata, and usage limits.
 
 # %% [markdown]
-# ### Why PydanticAI Exists
+# # PydanticAI API Tutorial Introduction
 #
-# LLMs typically return unstructured text.
+# `PydanticAI` is a lightweight framework for building LLM-powered applications
+# with structured outputs using `Pydantic` models.
 #
-# Example:
+# Unlike traditional LLM APIs that return unstructured text, `PydanticAI`
+# ensures responses conform to a predefined schema.
+
+# %% [markdown]
+# ## Why PydanticAI Exists
 #
-# User prompt:
+# Key problem: LLMs typically return unstructured text.
+#
+# Example prompt:
+#
 # "Extract product information from this description"
 #
-# LLM output:
+# Example LLM output:
+#
 # "The product is an iPhone 15 priced at $999."
 #
 # This output is difficult to use programmatically.
 #
-# What we want instead:
+# Desired structured output:
 #
+# ```json
 # {
 #   "product_name": "iPhone 15",
 #   "price": 999
 # }
+# ```
 #
-# PydanticAI solves this problem by:
+# `PydanticAI` solves this problem by:
 #
-# - Defining schemas using **Pydantic models**
+# - Defining schemas using Pydantic models
 # - Enforcing structured outputs
 # - Automatically retrying when validation fails
 # - Providing a simple agent abstraction for LLM interaction
 
 # %% [markdown]
-# ### Mental Model
+# ## Mental Model
 #
-# ```
+# ```text
 # User Prompt
 #      v
 # PydanticAI Agent
@@ -112,81 +113,27 @@ import pydanticai_API_utils as utils
 # Structured Output
 # ```
 
-# %% [markdown]
-# ## Installation
-#
-# We install a minimal set of packages to keep the notebook self-contained and reproducible.
-#
-# This notebook uses `pydantic-ai`, `pydantic`, and `python-dotenv`.
-#
+# %%
+# Load environment variables from a local dotenv file if one exists.
+env_path = dotenv.find_dotenv(usecwd=True)
+dotenv.load_dotenv(env_path, override=True)
+_LOG.info("dotenv path: %s", env_path or "<not found>")
+env_path or "<not found>"
+# Environment variables are available to the model configuration cells.
 
 # %%
-# !pip install -q pydantic-ai
-
-# %%
-import os
-from dotenv import load_dotenv, find_dotenv
-import nest_asyncio
-
-nest_asyncio.apply()
-
-
-env_path = find_dotenv(usecwd=True)
-load_dotenv(env_path, override=True)
-
-MODEL_ID = os.getenv("PYDANTIC_AI_MODEL", "openai:gpt-4.1-mini")
-print("dotenv path:", env_path or "<not found>")
-print("PYDANTIC_AI_MODEL:", MODEL_ID)
-print("OPENAI_API_KEY:", utils._mask(os.getenv("OPENAI_API_KEY")))
+# Read the model identifier from the environment.
+MODEL_ID = os.getenv("PYDANTIC_AI_MODEL")
+utils.log_environment(env_path, MODEL_ID)
+{"model_id": MODEL_ID}
+# The tutorial examples will use the configured model identifier.
 
 # %% [markdown]
-# ### Running the Notebook
-#
-# To run the examples you must set your API key.
-#
-# Example:
-# ```
-# export OPENAI_API_KEY="your_key_here"
-# ```
-
-# %% [markdown]
-# ## Minimal Example
-#
-# The quickest way to understand PydanticAI is through a small example.
-#
-# We define a schema using Pydantic and instruct the agent to produce that structured output.
-
-# %%
-from pydantic import BaseModel
-from pydantic_ai import Agent
-
-
-class City(BaseModel):
-    name: str
-    country: str
-    population: int
-
-
-agent = Agent("openai:gpt-4o-mini", output_type=City)
-
-result = agent.run_sync("Tell me about Paris")
-
-result.output
-
-# %% [markdown]
-# ### What Happened?
-#
-# 1. A Pydantic schema (`City`) defines the expected output structure.
-# 2. The `Agent` sends the prompt to the LLM.
-# 3. The LLM response is validated against the schema.
-# 4. If validation succeeds, the structured result is returned.
-
-# %% [markdown]
-# ## Core Concepts
+# # Core Concepts
 #
 # PydanticAI revolves around a few important abstractions.
 #
-# ### Agent
+# ## Agent
 #
 # The `Agent` is the main interface for interacting with the model.
 #
@@ -197,13 +144,13 @@ result.output
 # - retries
 # - tool usage
 #
-# ### output_type
+# ## output_type
 #
 # Defines the expected structured output.
 #
 # This must be a Pydantic model.
 #
-# ### Tools
+# ## Tools
 #
 # Functions that the agent can call during reasoning.
 #
@@ -212,139 +159,200 @@ result.output
 #
 
 # %% [markdown]
-# ## Structured Outputs with Pydantic
+# # Minimal Example
+#
+# The quickest way to understand PydanticAI is through a small example.
+#
+# We define a schema using Pydantic and instruct the agent to produce that structured output.
+#
+#
+# #############################################################################
+# City
+# #############################################################################
+
 
 # %%
-from pydantic import BaseModel
+# Define the output schema for the minimal example.
+class City(pydantic.BaseModel):
+    name: str
+    country: str
+    population: int
 
 
-class Product(BaseModel):
+City
+# The schema defines the exact output shape expected from the model.
+
+
+# %%
+# Create an agent that must return `City`.
+agent = pydantic_ai.Agent(MODEL_ID, output_type=City)
+agent
+# The agent is configured to validate model output against class `City`.
+
+# %%
+# Run the minimal example agent.
+result = agent.run_sync("Tell me about Paris")
+
+result.output
+# The result is a validated `City` object.
+
+# %% [markdown]
+# # Resolving the RuntimeError in Jupyter
+
+# %% [markdown]
+# Key thing to remember: Jupyter already runs an active event loop.
+#
+# - `agent.run_sync()` can raise a `RuntimeError` in notebook environments
+# - `nest_asyncio` patches the notebook event loop so nested async execution can work
+# - After applying `nest_asyncio`, the async `PydanticAI` examples can run inside cells
+
+# %%
+# Enable nested event loops for notebook execution.
+nest_asyncio.apply()
+_LOG.info("Nested event loop support enabled.")
+# Async PydanticAI examples can now run from notebook cells.
+
+# %% [markdown]
+# Now try running the previous cell that had the error.
+
+# %% [markdown]
+# # Structured Outputs with Pydantic
+#
+# `PydanticAI` turns LLM responses into structured data.
+#
+# - Store validated outputs in databases
+# - Feed typed objects into analytics
+# - Pass structured data downstream without brittle string parsing
+#
+#
+# #############################################################################
+# Product
+# #############################################################################
+
+
+# %%
+# Define a product schema for structured extraction.
+class Product(pydantic.BaseModel):
     name: str
     price: float
     category: str
 
 
-agent = Agent("openai:gpt-4o-mini", output_type=Product)
-
-agent.run_sync("Describe the Apple AirPods Pro").output
-
-
-# %% [markdown]
-# ### What happened in the code
-#
-# - We defined a `Product` schema (name, price, category).
-# - The agent is configured to produce outputs that conform to this schema.
-# - When the model answers, PydanticAI validates that:
-#   - `price` is a number
-#   - fields exist with the right types
-#   - the structure matches exactly
-#
-# **Why PydanticAI is useful here:**
-# This turns LLM responses into structured data you can store in databases, feed into analytics, or pass downstream in an application without brittle string parsing.
-
-# %% [markdown]
-# ## Validation and Retries
-#
-# If the LLM produces an output that does not match the schema, PydanticAI automatically retries.
-#
-# This greatly improves reliability.
+Product
+# The schema captures the product fields we want to extract.
 
 
 # %%
-class Person(BaseModel):
+# Create an agent that must return `Product`.
+agent = pydantic_ai.Agent(MODEL_ID, output_type=Product)
+agent
+# The agent is configured to return product data with typed fields.
+
+# %%
+# Ask the model for structured product information.
+agent.run_sync("Describe the Apple AirPods Pro").output
+# The response is validated as a `Product` class object.
+
+# %% [markdown]
+# # Validation and Retries
+#
+# Real LLM outputs are inconsistent.
+#
+# - Schema validation checks the generated structure
+# - Retries let `PydanticAI` ask the model to repair invalid output
+# - The notebook avoids custom parsing and retry logic in each prompt
+#
+#
+#
+# #############################################################################
+# Person
+# #############################################################################
+
+
+# %%
+# Define a schema that requires an integer age.
+class Person(pydantic.BaseModel):
     name: str
     age: int
 
 
-agent = Agent("openai:gpt-4o-mini", output_type=Person, retries=2)
+Person
+# The schema enforces integer typing for age values.
 
+
+# %%
+# Configure retries so schema validation failures can be corrected.
+agent = pydantic_ai.Agent(MODEL_ID, output_type=Person, retries=2)
+agent
+# The agent can retry when model output does not match `Person`.
+
+# %%
+# Run the retry-enabled agent.
 agent.run_sync("Tell me about Albert Einstein")
-
-
-# %% [markdown]
-# ### What happened in the code
-#
-# - We defined a `Person` schema with `name` and `age`.
-# - We set `retries=2` on the agent.
-# - If the model output fails schema validation (missing fields, wrong types), PydanticAI automatically retries the model call to get a valid output.
-#
-# **Why PydanticAI is useful here:**
-# Real LLM outputs are inconsistent. Automatic schema validation + retry gives you reliability without writing custom parsing and retry logic for every prompt.
+# The result is a validated `Person` run result.
 
 # %% [markdown]
-# ## Tools
+# # Tools
 #
 # Agents can call Python functions as tools.
+#
+# - Tools let the model interact with real functions and external systems
+# - Tools are useful for APIs, databases, calculations, and deterministic helpers
+# - Tool calls reduce the chance that the model invents facts
 
 # %%
-agent = Agent("openai:gpt-4o-mini", tools=[utils.get_weather])
+# Create an agent with a deterministic weather tool.
+agent = pydantic_ai.Agent(MODEL_ID, tools=[utils.get_weather])
+agent
+# The agent can call `utils.get_weather()` while answering.
 
+# %%
+# Ask a question that should use the weather tool.
 agent.run_sync("What is the weather in Tokyo?")
+# The run result includes the tool-backed weather answer.
 
 # %% [markdown]
-# ### What happened in the code
+# # Dependencies
 #
-# - We defined a Python function `get_weather(city)` that returns a deterministic string.
-# - We passed it into the agent via `tools=[get_weather]`.
-# - When the user asks about weather, the agent can choose to call the tool to get the answer instead of hallucinating.
+# Dependencies inject runtime context into agents and tools.
 #
-# **Why PydanticAI is useful here:**
-# Tools let the model interact with real functions and external systems. This is how you build agents that do real work (APIs, databases, calculations) rather than confidently inventing facts.
+# - Example values: tenant IDs, API clients, feature flags, and environment context
+# - Benefit: tools can access context without global variables or prompt string formatting
+#
+#
+# #############################################################################
+# Config
+# #############################################################################
 
-# %% [markdown]
-# ## Dependencies
-#
-# Dependencies allow agents to access external resources or shared state.
 
 # %%
-from dataclasses import dataclass
-from pydantic_ai import Agent
-
-
-@dataclass
+# Define the dependency object passed into the agent at run time.
+@dataclasses.dataclass
 class Config:
     company: str
 
 
-agent = Agent("openai:gpt-4o-mini", deps_type=Config, tools=[utils.company_name])
+Config
+# The dependency schema describes runtime context available to tools.
 
+
+# %%
+# Create an agent that receives `Config` dependencies.
+# `deps_type=Config` declares the shape of runtime context the agent can receive.
+agent = pydantic_ai.Agent(MODEL_ID, deps_type=Config, tools=[utils.company_name])
+agent
+# Tools can access `Config` through the PydanticAI run context.
+
+# %%
+# Run the dependency-aware agent with a concrete configuration.
 result = agent.run_sync(
     "What company is configured?", deps=Config(company="OpenAI")
 )
-print(result.output)
+result.output
+# The answer reflects the runtime dependency value.
 
 # %% [markdown]
-# ### What happened in the code
-#
-# - `deps_type=Config` declares the *shape* of runtime context the agent can receive.
-# - At run time, we pass an instance like `Config(company="OpenAI")`.
-# - Tools (or other agent logic) can access this via `RunContext.deps`, so the agent can use configuration/state without hardcoding it into prompts.
-#
-# **Why PydanticAI is useful here:**
-# Dependencies are a clean way to inject runtime configuration (tenant ID, API clients, feature flags, environment context) into agents and tools without relying on global variables or string formatting prompts.
-
-# %% [markdown]
-# ## Async Execution
-#
-# PydanticAI supports asynchronous execution for scalable applications.
-
-# %%
-import asyncio
-
-asyncio.run(utils.run_agent(agent))
-
-# %% [markdown]
-# ### What happened in the code
-#
-# - We defined an async function that calls `await agent.run(...)`.
-# - Async execution is helpful for applications that need concurrency (web servers, batch pipelines, background jobs).
-# - `asyncio.run(...)` runs the coroutine in a notebook-safe way.
-#
-# **Why PydanticAI is useful here:**
-# Most real systems are async. PydanticAI supports async natively, so you can run many agent calls concurrently without blocking your app.
-
-# %% [markdown]
-# ## Advanced API Features
+# # Advanced API Features
 #
 # The following sections demonstrate more advanced capabilities of PydanticAI.
 #
@@ -359,7 +367,7 @@ asyncio.run(utils.run_agent(agent))
 # Beginners can safely skip this section on a first read.
 
 # %% [markdown]
-# ## Result Validators
+# # Result Validators
 #
 # Result validators allow you to enforce additional rules on model outputs.
 #
@@ -368,73 +376,142 @@ asyncio.run(utils.run_agent(agent))
 #
 # Example: if an answer claims to use documents, it must include at least one source.
 
+# %% [markdown]
+# ## Validation Flow
+#
+# In this section, validation happens in two stages:
+#
+# 1. `Schema validation`: the model output must match `AnswerWithSources`.
+# 2. `Business-rule validation`: the registered `output_validator` enforces
+#    citation quality rules that schema alone cannot enforce.
+#
+# Execution order:
+#
+# ```text
+# model output -> Pydantic schema validation -> output_validator -> final result
+# ```
+#
+#
+# #############################################################################
+# SourceRef
+# #############################################################################
+
+
 # %%
-from pydantic import BaseModel
-from pydantic_ai import Agent
-
-MODEL_ID = "openai:gpt-4o-mini"
-
-
-class SourceRef(BaseModel):
+# Define source citation schemas for validator examples.
+class SourceRef(pydantic.BaseModel):
     doc_id: str
     quote: str
 
 
-class AnswerWithSources(BaseModel):
+# #############################################################################
+# AnswerWithSources
+# #############################################################################
+
+
+class AnswerWithSources(pydantic.BaseModel):
     answer: str
     sources: list[SourceRef]
 
 
-validator_agent = Agent(
+AnswerWithSources
+# The schemas describe answers that include source citations.
+
+# %%
+# Build validator instructions from local document ids.
+available_doc_ids = utils.get_available_document_ids()
+validator_instructions = (
+    "Use the search_documents tool to retrieve evidence from local documents. "
+    f"Cite only these doc ids: {available_doc_ids}. "
+    "For each source, copy the quote text exactly from tool output."
+)
+{
+    "available_doc_ids": available_doc_ids,
+    "validator_instruction_length": len(validator_instructions),
+}
+# The instructions constrain citations to the local document ids.
+
+# %%
+# Create an agent that returns answers with source references.
+validator_agent = pydantic_ai.Agent(
     MODEL_ID,
     output_type=AnswerWithSources,
-    instructions=(
-        "Answer with short factual statements. "
-        "If you reference documents, include sources."
-    ),
+    instructions=validator_instructions,
+    tools=[utils.search_documents],
 )
-validator_agent.output_validator(utils.validate_sources)
+validator_agent
+# The validator agent can retrieve documents and return cited answers.
 
 
 # %%
-try:
-    utils.validate_sources(
-        AnswerWithSources(answer="According to the documents...", sources=[])
-    )
-except Exception as e:
-    print("Validator failure example:", e)
+# Register a result validator that checks citations against local documents.
+@validator_agent.output_validator
+def validate_output(
+    result: AnswerWithSources,
+) -> AnswerWithSources:
+    result = utils.validate_document_sources(result)
+    return result
+
+
+{"validator_registered": True}
+# The validator agent now enforces schema and source-reference rules.
+
 
 # %% [markdown]
-# ### What happened in the code
+# ## What `@validator_agent.output_validator` Does
 #
-# - We defined a schema `AnswerWithSources` where the model must return:
-#   - `answer` (string)
-#   - `sources` (list of `{doc_id, quote}`)
-# - We attached an `output_validator` that enforces *logical rules* beyond the schema:
-#   - if the answer mentions docs, sources must not be empty
-#   - max 3 sources
-#   - no duplicate sources
-# - If rules fail, we raise `ModelRetry`, which tells PydanticAI to retry the model call.
+# The `@validator_agent.output_validator` decorator registers a post-processing
+# validator for this specific agent.
 #
-# **Why PydanticAI is useful here:**
-# Schemas catch structural mistakes. Validators catch logical mistakes. Together, they make LLM outputs production-grade by enforcing business rules automatically.
+# The validator receives the already schema-validated `AnswerWithSources` object.
+# Then the validator calls `utils.validate_document_sources(...)` to enforce:
+#
+# - Source list required when answer claims document-backed statements
+# - Maximum number of sources
+# - No duplicate `(doc_id, quote)` pairs
+# - Each `doc_id` must exist in the local dataset
+# - Each `quote` must appear in the cited document
 
 # %% [markdown]
-# ### Validator Failure Example
+# ## Why `ModelRetry` Is Important
 #
-# The validator can also be tested manually.
+# When a rule is violated, the validator raises `ModelRetry`.
 #
-# If the validation rule fails, the validator raises `ModelRetry`, which instructs the agent to retry the LLM call with improved instructions.
+# `ModelRetry` tells `PydanticAI` to ask the model for another attempt instead
+# of accepting bad output.
+#
+# ## Why `available_doc_ids` Is Included in Instructions
+#
+# `available_doc_ids` constrains citations to known local documents.
+#
+# - Reduces hallucinated references
+# - Gives the model a concrete allowed set of document identifiers
+
+# %% [markdown]
+# ## Purpose of the Manual Failure Cell
+#
+# The manual failure example builds the same retry object used by the validator path.
+#
+# - Bypasses the model call
+# - Shows the retry message used when citation requirements are not met
+# - Keeps the notebook executable without intentionally raising an exception
 
 # %%
-import asyncio
+# Build the retry exception used by the missing-sources validator path.
+retry = utils.build_missing_sources_retry()
+_LOG.info("Validator failure example: %s", retry)
+retry
+# The retry object shows the message returned when sources are missing.
 
+# %%
+# Run the validator example through the async API helper.
 asyncio.run(utils.run_validator_example(validator_agent))
+# The output has passed both Pydantic schema validation and custom validation.
 
 # %% [markdown]
-# ## Streaming
+# # Streaming
 #
-# Streaming allows tokens to be returned as they are generated.
+# Streaming returns tokens as the model generates them.
 #
 # Benefits:
 #
@@ -443,94 +520,46 @@ asyncio.run(utils.run_validator_example(validator_agent))
 # - progressive display of responses
 
 # %%
-stream_agent = Agent(
+# Create an agent for the streaming example.
+stream_agent = pydantic_ai.Agent(
     MODEL_ID, instructions="Write one short paragraph about unit tests."
 )
+stream_agent
+# The streaming agent is ready to produce incremental text.
 
-if not hasattr(stream_agent, "run_stream"):
-    print("Streaming API not available; falling back to run().")
-    result = await stream_agent.run("What are unit tests?")
-    _print_result("Non-streamed:", result)
-else:
-    try:
-        async with stream_agent.run_stream("What are unit tests?") as stream:
-            print("Streaming:")
-            async for chunk in stream.stream_text():
-                print(chunk, end="", flush=True)
-            print("---")
-            result = await stream.get_final_result()
-            print("\n\nFinal result:", result)
-    except Exception as e:
-        print("Streaming failed; falling back to run().", e)
-        result = await stream_agent.run("What are unit tests?")
-        print("\n\nNon-streamed:", result)
-
+# %%
+# Run the streaming helper and return the final result.
+asyncio.run(utils.run_streaming_demo(stream_agent))
+# The helper logs streamed text and returns the final result.
 
 # %% [markdown]
-# ### What happened in the code
+# # Provider Configuration
 #
-# - We created an agent and attempted to call the model using streaming mode.
-# - With streaming, tokens are yielded as the model generates them instead of waiting for the full response.
-# - This improves perceived responsiveness for chat apps and UIs.
+# Model objects let you configure providers directly, such as base URLs.
 #
-# **Why PydanticAI is useful here:**
-# Streaming helps build better user experiences. You can display partial output instantly while the model continues generating, which is critical for interactive assistants.
-
-# %% [markdown]
-# ## Provider Configuration
-#
-# Model objects let you configure providers directly (e.g., base URLs).
-#
-# You can supply an explicit model object instead of a string ID. This is where you would set provider-specific options (e.g., `base_url`).
+# Use an explicit model object when provider-specific options, such as `base_url`, are needed.
 #
 
 # %%
-explicit_model = None
-try:
-    from pydantic_ai.models.openai import OpenAIModel
+# Build an explicit provider model object when the installed API supports it.
+explicit_model = utils.build_explicit_openai_model(MODEL_ID)
+if explicit_model is None:
+    _LOG.info("Explicit model unavailable; using string model ID.")
+else:
+    _LOG.info("Using explicit model object.")
+{"explicit_model_available": explicit_model is not None}
+# Provider configuration is either explicit or falls back to `MODEL_ID`.
 
-    explicit_model = OpenAIModel(
-        model=MODEL_ID.split(":", 1)[-1],
-        api_key=os.getenv("OPENAI_API_KEY"),
-        base_url=os.getenv("OPENAI_BASE_URL"),
-    )
-    print("Using explicit OpenAIModel.")
-except Exception:
-    try:
-        from pydantic_ai.models.openai import OpenAIChatModel
-
-        explicit_model = OpenAIChatModel(
-            model=MODEL_ID.split(":", 1)[-1],
-            api_key=os.getenv("OPENAI_API_KEY"),
-            base_url=os.getenv("OPENAI_BASE_URL"),
-        )
-        print("Using explicit OpenAIChatModel.")
-    except Exception as e2:
-        print("Explicit model unavailable; using string model ID.", e2)
-
-agent = Agent(explicit_model or MODEL_ID, instructions="Be concise.")
-try:
-    result = await agent.run("Say hello in one sentence.")
-    print("Explicit model (or fallback):", result)
-except Exception as e:
-    print("Error: ", e)
+# %%
+# Run an agent with the explicit provider model when available.
+agent = pydantic_ai.Agent(explicit_model or MODEL_ID, instructions="Be concise.")
+result = asyncio.run(agent.run("Say hello in one sentence."))
+result
+# The result confirms that the provider configuration can execute a request.
 
 
 # %% [markdown]
-# ### What happened in the code
-#
-# - Instead of using a string model ID, we attempted to create an explicit provider model object.
-# - This allows provider-specific configuration such as:
-#   - custom base URLs
-#   - custom API keys
-#   - proxy settings
-# - If explicit model classes aren't available in the installed version, we fall back to using the string model ID.
-#
-# **Why PydanticAI is useful here:**
-# Explicit provider configuration is what you use in real deployments: enterprise gateways, self-hosted endpoints, proxies, and custom routing.
-
-# %% [markdown]
-# ## 11) AgentRun
+# # AgentRun
 #
 # AgentRun objects contain metadata about an agent execution.
 #
@@ -540,89 +569,74 @@ except Exception as e:
 # - message history
 # - tool calls
 # - final output
+#
+# Run metadata helps debug and control agents.
+#
+# - Observability: inspect messages and tool calls
+# - Cost tracking: inspect token usage
+# - Governance: keep execution details available for review
 
 # %%
-meta_agent = Agent(MODEL_ID, instructions="Answer in one sentence.")
-result = await meta_agent.run("What is a unit test?")
+# Run an agent and collect execution metadata.
+meta_agent = pydantic_ai.Agent(MODEL_ID, instructions="Answer in one sentence.")
+result = asyncio.run(meta_agent.run("What is a unit test?"))
 usage = getattr(result, "usage", None)
 message_count = len(result.new_messages())
-print("Output:", result.output)
-print("Messages (new):", message_count)
-print("Usage:", usage)
+run_metadata = {
+    "output": result.output,
+    "messages_new": message_count,
+    "usage": usage,
+}
+run_metadata
+# The metadata summarizes output, message count, and usage details.
 
 
 # %% [markdown]
-# ### What happened in the code
-#
-# - We ran an agent and inspected the returned result object.
-# - The result object can include metadata such as:
-#   - token usage (cost visibility)
-#   - message history (debugging)
-#   - tool calls (auditing agent behavior)
-#
-# **Why PydanticAI is useful here:**
-# When agents behave unexpectedly, metadata is how you debug and control them. This is essential for observability, cost tracking, and governance.
-
-# %% [markdown]
-# ## 12) Usage limits and model settings
+# # Usage Limits and Model Settings
 #
 # Usage limits help control:
 #
 # - API cost
 # - runaway loops
 # - excessive token usage
+#
+# `PydanticAI` supports safety and cost controls for production LLM systems.
 
 # %%
-from pydantic_ai import Agent
+# Load version-tolerant classes for model settings and usage limits.
+ModelSettings, UsageLimits = utils.get_settings_classes()
+_LOG.info("Loaded ModelSettings and UsageLimits classes.")
+{
+    "model_settings_class": ModelSettings.__name__,
+    "usage_limits_class": UsageLimits.__name__,
+}
+# The installed PydanticAI version determines where these classes come from.
 
 
-# Version-tolerant imports for ModelSettings + UsageLimits
-try:
-    # common in newer versions
-    from pydantic_ai import ModelSettings, UsageLimits
-except Exception:
-    # fallback seen in some versions
-    from pydantic_ai.models import ModelSettings  # type: ignore
-    from pydantic_ai.usage import UsageLimits  # type: ignore
-
-
-settings_agent = Agent(
+# %%
+# Create an agent with deterministic model settings.
+settings_agent = pydantic_ai.Agent(
     MODEL_ID,
     instructions="Answer in a single sentence.",
     model_settings=ModelSettings(temperature=0.2),
 )
+settings_agent
+# The agent has a low-temperature model setting.
 
-result = await settings_agent.run(
-    "Explain what unit tests are.",
-    usage_limits=UsageLimits(request_limit=3),
+# %%
+# Run the settings example with a request limit.
+result = asyncio.run(
+    settings_agent.run(
+        "Explain what unit tests are.",
+        usage_limits=UsageLimits(request_limit=3),
+    )
 )
 
-print("Model settings + usage limits:")
-print(result.output)
+result.output
+# The response was generated with model settings and usage limits applied.
 
 # %% [markdown]
-# ### What happened in the code
-#
-# - `ModelSettings(temperature=0.2)` controls response randomness:
-#   - lower temperature = more deterministic outputs
-# - `UsageLimits(request_limit=3)` sets guardrails on usage:
-#   - helps prevent runaway retries or excessive calls
-# - We ran the agent with these settings applied.
-#
-# **Why PydanticAI is useful here:**
-# PydanticAI makes it easy to add safety and cost controls to LLM systems. These controls matter in production where reliability and spend both need limits.
-
-# %% [markdown]
-# ## Best Practices
-#
-# 1. Always define clear schemas using Pydantic models.
-# 2. Keep schemas simple and explicit.
-# 3. Use retries for robustness.
-# 4. Add tools for external integrations.
-# 5. Use async execution for production systems.
-
-# %% [markdown]
-# ## Troubleshooting
+# # Troubleshooting
 # - Missing API key: set `OPENAI_API_KEY` (or your provider-specific key).
 # - Event loop errors in notebooks: use `await agent.run(...)` instead of `run_sync`.
 # - Validation errors: revise `output_type` or the validator to match expected output.
