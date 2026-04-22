@@ -162,16 +162,23 @@ def llm_stream(
             )
 
         else:
-            return openai_client.chat.completions.create(
-                model=model,
-                messages=messages,
-                temperature=temperature,
-                max_tokens=max_tokens,
-                tools=tools,
-                stream=True,
-                stream_options={"include_usage": True},
-                response_format=response_format,
-            )
+            kwargs = {
+                    "model": model,
+                    "messages": messages,
+                    "temperature": temperature,
+                    "tools": tools,
+                    "stream": True,
+                    "stream_options": {"include_usage": True},
+                    "response_format": response_format,
+                }
+
+            # Handle token parameter compatibility
+            if "gpt-5" in model or model.startswith("o"):
+                kwargs["max_completion_tokens"] = max_tokens
+            else:
+                kwargs["max_tokens"] = max_tokens
+            
+            return openai_client.chat.completions.create(**kwargs)
 
     try:
         combined_prompt_tokens_used = 0
