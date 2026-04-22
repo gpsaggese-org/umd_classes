@@ -1521,14 +1521,18 @@ Variables that _predict the treatment well_ but not the outcome
   - Re-weight data by inverse probability of observed treatment
   - Create pseudo-population where treatment appears randomly assigned
 
-- For treated: up-weight those unlikely to be treated (low $e(x)$)
+- For treated units:
+  - Up-weight those unlikely to be treated (low $e(x)$)
   - They're informative, they look like untreated units but got treatment anyway,
     so they reveal what would happen to
-- For control: up-weight those likely to be treated (high $e(x)$)
+- For control units:
+  - Up-weight those likely to be treated (high $e(x)$)
   - Down-weights common treatment cases: Treated units with high propensity
     (likely to be treated) get lower weight, since they're less informative.
 
   $$E[Y_t] = \EE[ \frac{\mathbf{1}(T=t)Y}{P(T=t|X)}]$$
+
+- The same scaling can be applied to recover the ATE:
 
 // Chap 6
 

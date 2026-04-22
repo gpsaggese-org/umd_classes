@@ -12,6 +12,10 @@ import pandas as pd
 import seaborn as sns
 from sklearn.linear_model import LinearRegression
 
+# Standard figure sizes
+_FIGSIZE_SINGLE = (8, 3)
+_FIGSIZE_PER_SUBPLOT = (4, 3)
+
 
 # #############################################################################
 # Cell 1: Engagement Score Regression Analysis.
@@ -21,7 +25,7 @@ from sklearn.linear_model import LinearRegression
 def plot_engagement_vs_intervention(
     data: pd.DataFrame,
     *,
-    figsize: tuple = (10, 6),
+    figsize: tuple = _FIGSIZE_SINGLE,
     jitter_strength: float = 0.03,
 ) -> None:
     """
@@ -96,7 +100,7 @@ def plot_engagement_vs_intervention(
 def plot_engagement_density_by_intervention(
     data: pd.DataFrame,
     *,
-    figsize: tuple = (10, 6),
+    figsize: tuple = _FIGSIZE_SINGLE,
     jitter_strength: float = 0.02,
 ) -> None:
     """
@@ -186,7 +190,7 @@ def plot_engagement_density_by_intervention(
 def plot_engagement_vs_intervention_by_department(
     data: pd.DataFrame,
     *,
-    figsize: tuple = (12, 6),
+    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
     max_departments: int = 6,
     jitter_strength: float = 0.03,
 ) -> None:
@@ -200,7 +204,7 @@ def plot_engagement_vs_intervention_by_department(
 
     :param data: DataFrame with columns 'intervention', 'engagement_score',
                  'departament_id' (or 'department_id')
-    :param figsize: Figure size as (width, height)
+    :param figsize_per_plot: Size per subplot as (width, height)
     :param max_departments: Maximum number of departments to plot
     :param jitter_strength: Amount of horizontal jitter to add
     """
@@ -215,6 +219,7 @@ def plot_engagement_vs_intervention_by_department(
     # Calculate grid dimensions.
     n_cols = 3
     n_rows = (n_depts + n_cols - 1) // n_cols
+    figsize = (figsize_per_plot[0] * n_cols, figsize_per_plot[1] * n_rows)
 
     fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
     axes_flat = axes.flatten() if n_depts > 1 else [axes]
@@ -295,7 +300,7 @@ def plot_all_correlations_to_intervention(
     data: pd.DataFrame,
     *,
     numeric_cols: list | None = None,
-    figsize: tuple = (10, 6),
+    figsize: tuple = _FIGSIZE_SINGLE,
 ) -> None:
     """
     Regress all numeric columns on intervention and plot treatment effects.
@@ -355,7 +360,7 @@ def plot_all_variables_vs_intervention(
     data: pd.DataFrame,
     *,
     numeric_cols: list | None = None,
-    figsize_per_plot: tuple = (5, 4),
+    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
 ) -> None:
     """
     Plot scatter with jitter and means for each numeric variable vs intervention.
@@ -456,7 +461,7 @@ def plot_all_variables_density_by_intervention(
     data: pd.DataFrame,
     *,
     numeric_cols: list | None = None,
-    figsize_per_plot: tuple = (5, 4),
+    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
 ) -> None:
     """
     Plot density curves for each numeric variable by intervention group.
@@ -637,7 +642,7 @@ def plot_iptw(
     ps_col: str = "propensity_score",
     outcome_col: str = "engagement_score",
     treatment_col: str = "intervention",
-    figsize: tuple = (10, 4),
+    figsize: tuple = _FIGSIZE_SINGLE,
 ) -> None:
     """
     Plot Inverse Probability of Treatment Weighting (IPTW) results.
