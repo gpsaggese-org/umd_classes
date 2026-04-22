@@ -23,8 +23,6 @@
 import logging
 import os
 
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 # %%
 # import helpers.hmodule as hmodule
@@ -60,12 +58,11 @@ out_dir_name = "figures/"
 
 # %%
 import pandas as pd
-import numpy as np
 
 df = pd.read_csv(os.path.join(dir_name, "management_training.csv"))
-import helpers.hpandas_display as hpanddis
+import helpers.hpandas_display as hpandisp
 
-hpanddis.display_df(df)
+hpandisp.display_df(df)
 
 # %% [markdown]
 # The dataset contains information on managers with the following variables:
@@ -89,19 +86,21 @@ import helpers.hpandas_stats as hpanstat
 show_distributions = True
 show_correlations = True
 
-hpanstat.explore_dataframe(df, show_distributions=show_distributions, show_correlations=show_correlations)
-
-# %%
-model = smf.ols("engagement_score ~ intervention",
-        data=df).fit()
-print("ATE:", model.params["intervention"])
-print("95% CI:", model.conf_int().loc["intervention", :].values.T)
+hpanstat.explore_dataframe(
+    df,
+    show_distributions=show_distributions,
+    show_correlations=show_correlations,
+)
 
 # %%
 import statsmodels.formula.api as smf
 
-smf.ols("engagement_score ~ intervention",
-        data=df).fit().summary().tables[1]
+# %%
+model = smf.ols("engagement_score ~ intervention", data=df).fit()
+print("ATE:", model.params["intervention"])
+print("95% CI:", model.conf_int().loc["intervention", :].values.T)
+
+smf.ols("engagement_score ~ intervention", data=df).fit().summary().tables[1]
 
 # %%
 mtl0cire05.plot_engagement_vs_intervention(df)
@@ -115,24 +114,26 @@ mtl0cire05.plot_engagement_density_by_intervention(df)
 mtl0cire05.plot_engagement_vs_intervention_by_department(df)
 
 # %%
-#mtl0cire05.plot_all_variables_vs_intervention(df)
+# mtl0cire05.plot_all_variables_vs_intervention(df)
 
 # %%
 mtl0cire05.plot_all_variables_density_by_intervention(df)
 
 # %%
 # To reduce this bias, you can adjust for the covariates you have in your data.
-model = smf.ols("""
+model = smf.ols(
+    """
 engagement_score ~ intervention
     + tenure + last_engagement_score + department_score
-    + n_of_reports + C(gender) + C(role)""", data=df).fit()
+    + n_of_reports + C(gender) + C(role)""",
+    data=df,
+).fit()
 
 print("ATE:", model.params["intervention"])
 print("95% CI:", model.conf_int().loc["intervention", :].values.T)
 
 # %%
-model = smf.ols("engagement_score ~ intervention",
-        data=df).fit()
+model = smf.ols("engagement_score ~ intervention", data=df).fit()
 print("ATE:", model.params["intervention"])
 print("95% CI:", model.conf_int().loc["intervention", :].values.T)
 
@@ -146,10 +147,13 @@ print("95% CI:", model.conf_int().loc["intervention", :].values.T)
 # ## Propensity score
 
 # %%
-ps_model = smf.logit("""
-intervention ~ 
+ps_model = smf.logit(
+    """
+intervention ~
     tenure + last_engagement_score + department_score
-    + C(n_of_reports) + C(gender) + C(role)""", data=df).fit(disp=0)
+    + C(n_of_reports) + C(gender) + C(role)""",
+    data=df,
+).fit(disp=0)
 
 data_ps = df.copy()
 data_ps["propensity_score"] = ps_model.predict(df)
@@ -158,9 +162,12 @@ data_ps[["intervention", "engagement_score", "propensity_score"]].head()
 
 # %%
 # Estimate using propensity score as confounder / covariate.
-model = smf.ols("""
+model = smf.ols(
+    """
     engagement_score ~ intervention + propensity_score
-    """, data=data_ps).fit()
+    """,
+    data=data_ps,
+).fit()
 print(model.params["intervention"])
 
 # %% [markdown]

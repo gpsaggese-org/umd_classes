@@ -3,7 +3,7 @@ Utility functions for causal inference tutorial (L08_04_05).
 
 Import as:
 
-import L08_04_05_causal_inference_utils as mtl0cire05
+import msml610.tutorials.L08_causal_inference.L08_04_05_causal_inference_utils as mtlcil00ciu
 """
 
 import numpy as np
@@ -206,9 +206,7 @@ def plot_engagement_vs_intervention_by_department(
     """
     # Handle both spelling variants.
     dept_col = (
-        "departament_id"
-        if "departament_id" in data.columns
-        else "department_id"
+        "departament_id" if "departament_id" in data.columns else "department_id"
     )
 
     departments = sorted(data[dept_col].unique())[:max_departments]
@@ -541,7 +539,9 @@ def plot_all_variables_density_by_intervention(
     for idx in range(len(numeric_cols), len(axes_flat)):
         axes_flat[idx].set_visible(False)
 
-    plt.suptitle("Distribution of All Variables by Intervention", fontsize=14, y=0.995)
+    plt.suptitle(
+        "Distribution of All Variables by Intervention", fontsize=14, y=0.995
+    )
     plt.tight_layout()
 
 
@@ -663,9 +663,7 @@ def plot_iptw(
 
     # Aggregate by propensity score and treatment.
     grouped = (
-        iptw_data.groupby(["ps_rounded", treatment_col])[
-            ["weight", outcome_col]
-        ]
+        iptw_data.groupby(["ps_rounded", treatment_col])[["weight", outcome_col]]
         .mean()
         .reset_index()
     )
@@ -681,7 +679,7 @@ def plot_iptw(
             s=subset["weight"] * 100,
             color=color,
             alpha=0.6,
-            label=f"Control" if t == 0 else "Treated",
+            label="Control" if t == 0 else "Treated",
             edgecolors="black",
             linewidth=0.5,
         )

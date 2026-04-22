@@ -3,14 +3,14 @@ Shared utility functions for class scripts.
 
 Import as:
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 """
 
 import glob
 import logging
 import os
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -152,7 +152,9 @@ def count_pdf_pages(pdf_path: str) -> int:
     return page_count
 
 
-def get_pdf_page_counts(directory: str, pattern: str = "Lesson*.pdf") -> Dict[str, int]:
+def get_pdf_page_counts(
+    directory: str, pattern: str = "Lesson*.pdf"
+) -> Dict[str, int]:
     """
     Get page counts for all PDF files matching a pattern in a directory.
 
