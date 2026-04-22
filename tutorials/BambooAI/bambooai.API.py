@@ -30,7 +30,6 @@ import matplotlib.pyplot as plt
 # %%
 import json
 import os
-import sys
 from pathlib import Path
 
 import plotly.io as pio
@@ -48,54 +47,49 @@ utils.init_logger(_LOG)
 
 
 # %% [markdown]
+# # Summary
+# - This notebook explains how to configure BambooAI and run the API workflow in Jupyter.
+# - This notebook covers environment setup, key parameters, and prompt examples.
+#
+
+# %% [markdown]
 # # BambooAI API Tutorial
+# - **Usage**: Run cells top-to-bottom when possible.
+# - **Cost note**: Cells that call an LLM can incur cost.
+# - **Read-only mode**: You can read markdown cells safely without running code.
+# - **Related notebook**: `bambooai.example.ipynb`: End-to-end walkthrough with additional feature demos.
 #
 
 # %% [markdown]
-# A runnable, focused guide to BambooAI: what it is, how to configure it, and how to launch the conversation loop.
-#
-# How to use this notebook
-# - Run top-to-bottom if you can.
-# - Some cells call an LLM and may incur cost. You can still read the markdown safely without running.
-#
-# Related notebooks
-# - `bambooai.example.ipynb` is a narrative, end-to-end walkthrough with more feature demos.
-#
-
-# %% [markdown]
-# ## What BambooAI is
-# BambooAI is an open-source, LLM-powered data analysis agent for pandas workflows. You ask questions in natural language, BambooAI plans the steps, generates or executes code, and returns tables or charts, depending on what you ask for.
-#
-# When to use it
-# - You want an interactive, conversational way to explore a DataFrame.
-# - You need automated code generation with error correction and iterative feedback loops.
-# - You want analysis memory via a vector DB or semantic grounding via an ontology.
-#
-# Feature highlights
-# - Natural language interface for data analysis with automatic Python generation.
-# - Multi-step planning, error correction, and code editing loops.
-# - Vector database integration for knowledge storage and semantic recall.
-# - Ontology grounding via `.ttl` files for domain-specific semantics.
-# - Web UI (Flask) and Jupyter notebook support.
-#
-# Model support
-# - API providers: OpenAI, Google (Gemini), Anthropic, Groq, Mistral.
-# - Local providers: Ollama and a selection of local models.
-#
+# ## What BambooAI Is
+# - **Definition**: BambooAI is an open-source, LLM-powered data analysis agent for pandas workflows.
+# - **Workflow**: BambooAI interprets natural-language prompts, plans steps, executes code, and returns tables or charts.
+# - **Interactive data exploration**: Conversational DataFrame exploration through natural-language prompts.
+# - **Automated code generation**: Code generation with error correction and iterative feedback loops.
+# - **Semantic grounding and memory**: Analysis memory through vector DB integration or ontology-based grounding.
+# - **Natural-language interface**: Data analysis through prompts with automatic Python generation.
+# - **Adaptive execution loop**: Multi-step planning, error correction, and iterative code refinement.
+# - **Vector memory support**: Vector database integration for knowledge storage and semantic recall.
+# - **Ontology grounding**: `.ttl`-based domain grounding for context-aware analysis.
+# - **Notebook and web support**: Flask web UI and Jupyter notebook integration.
+# - **API providers**: OpenAI, Google (Gemini), Anthropic, Groq, Mistral.
+# - **Local providers**: Ollama and selected local models.
 
 # %% [markdown]
 # ## Setup and dependencies
 #
-# Make sure the dataset lives here and that your `.env` file defines `EXECUTION_MODE` before you execute the notebook.  The EXECUTION_MODE param controls where BambooAI executes generated code, based on your setup. Common values are `local` (run in-process) and `api` (run via a configured executor). If you are unsure, it is recommended to start with `local`.
-#
-# The default dataset path is `_DEFAULT_CSV = Path("testdata.csv")` in `bambooai_utils.py`. Override it with `--csv-path` (parser in `bambooai_utils.py`) or update `_DEFAULT_CSV` directly.
-#
-# **At minimum you need:**
-# - Dependencies installed through Docker and `requirements.txt`.
-# - API keys in `.env` for the LLM provider you choose.
-# - `LLM_CONFIG.json` - This file maps agents to models, providers, and parameters. Use `LLM_CONFIG.json` as a starting point, or set `LLM_CONFIG` in `.env` to inline the JSON. 
-#
-# BambooAI reads its agent model settings from `LLM_CONFIG` (env var) or `LLM_CONFIG.json` in the working directory. If neither is present, it falls back to its package defaults. Prompt templates can be customized by creating `PROMPT_TEMPLATES.json` from the provided sample file.
+# - **Precondition**: Keep dataset files available in this tutorial directory.
+# - **Precondition**: Set `EXECUTION_MODE` in `.env` before running notebook cells.
+# - **`EXECUTION_MODE` values**: `local` for in-process execution; `api` for external executor mode.
+# - **Recommendation**: Start with `local` if execution mode is unknown.
+# - **Default dataset path**: `_DEFAULT_CSV = Path("testdata.csv")` in `bambooai_utils.py`.
+# - **Dataset override**: Use `--csv-path` in `bambooai_utils.py` parser, or edit `_DEFAULT_CSV`.
+# - **Minimum requirement**: Install dependencies through Docker and `requirements.txt`.
+# - **Minimum requirement**: Set provider API keys in `.env`.
+# - **`LLM_CONFIG.json`**: Maps agents to providers, models, and parameters.
+# - **`LLM_CONFIG.json` setup**: Use the file directly or set `LLM_CONFIG` in `.env` with inline JSON.
+# - **Configuration resolution**: BambooAI loads `LLM_CONFIG` env var first, then `LLM_CONFIG.json`, then package defaults.
+# - **Prompt templates**: Create `PROMPT_TEMPLATES.json` from the sample file to customize prompts.
 
 # %%
 # Configure environment, plotting, and helper import paths.
@@ -227,6 +221,8 @@ def _get_artifacts_dir() -> Path:
     hio.create_dir(str(artifacts_dir), incremental=True)
     return artifacts_dir
 
+# Use print() so helper readiness is visible in notebook output.
+print("Helpers ready: _mask, _get_dataframe, _get_artifacts_dir")
 # The helper functions are ready for the setup and feature cells below.
 
 
@@ -269,17 +265,15 @@ for key in keys:
 # | `exploratory` | `bool` | `True` | Enables expert selection for query handling. |
 # | `custom_prompt_file` | `str` | `None` | YAML file with custom prompt templates. |
 #
-# Few important clarifications:
+# Important clarifications:
 #
-# - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from.
-#
-#     - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
-#
-#     - Qdrant example env vars: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...` (optional for local, required for cloud).
-#
-#     - Pinecone embeddings are supported with `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (HF).
-#
-# - `df_ontology` expects a `.ttl` ontology file (RDF/OWL) that defines classes, properties, and relationships.
+# - **`vector_db=True` behavior**: Enables episodic memory and retrieval from prior conversations.
+# - **`vector_db=True` flow**: BambooAI searches vector memory first, then falls back to model reasoning when no hit exists.
+# - **Feedback loop**: BambooAI asks for a 1-10 score; high scores can influence future retrieval.
+# - **Pinecone env example**: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` and sometimes `PINECONE_ENV`.
+# - **Qdrant env example**: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...`.
+# - **Pinecone embedding options**: `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (Hugging Face).
+# - **`df_ontology` expectation**: Provide a `.ttl` ontology file with classes, properties, and relationships.
 #
 
 # %%
@@ -299,8 +293,9 @@ display(df.head())
 # %% [markdown]
 # ## Minimal Agent
 #
-# This is the smallest interactive run. It builds an minimal agent with minimal flags and starts the loop.
-# When prompted, paste one simple question, then type `exit` or press Ctrl+D to stop.
+# - **Goal**: Run the smallest interactive BambooAI loop.
+# - **Setup**: Build a minimal agent with minimal flags.
+# - **Interaction**: Paste one prompt, then type `exit` or press `Ctrl+D` to stop.
 #
 
 # %%
@@ -325,15 +320,14 @@ _run_agent(bamboo_quick)
 # %% [markdown]
 # ## Parameter Deep Dive
 #
-# This section walks through the most crucial and commonly used BambooAI parameters to understand their use, examples to show usage and expected behavior.
+# - **Goal**: Review key BambooAI parameters with examples and expected behavior.
 #
 
 # %% [markdown]
 # ### 1. auxiliary_datasets 
 #
-# **Use auxiliary datasets when the primary dataframe needs supporting information (lookups, joins, mapping tables).**
-#
-# Custom prompt example - Join the auxiliary dataset on `country` and summarize average `monthly_spend_usd` by region.
+# - **Use case**: Use `auxiliary_datasets` when the primary DataFrame needs lookup or join context.
+# - **Example prompt**: Join auxiliary data on `country` and summarize average `monthly_spend_usd` by region.
 #
 
 # %%
@@ -377,12 +371,9 @@ _run_agent(bamboo_aux)
 # %% [markdown]
 # ### 2. max_conversations
 #
-# **This limits how much recent chat history BambooAI keeps in memory.**
-#
-#
-# What to expect
-# - With a low value (e.g., 1), the agent may forget older context and ask you to restate details.
-# - With higher values, it should retain more prior turns.
+# - **Definition**: `max_conversations` limits recent chat history retained in memory.
+# - **Expected behavior**: Low values (for example, `1`) can drop older context.
+# - **Expected behavior**: Higher values retain more prior turns.
 
 # %%
 # Demonstrate short conversational memory with max_conversations set to 1.
@@ -407,11 +398,10 @@ _run_agent(bamboo_short_memory)
 # %% [markdown]
 # ### 3. search_tool
 #
-# **Enable this when you want BambooAI to pull in external context from the web.**
-#
-# Example prompt - Find a short definition of `customer churn` and explain how it might map to our dataset.
-#
-# If the search tool is configured, the agent should fetch external context and cite or summarize it. If not configured, you may see a tool error or a warning.
+# - **Use case**: Enable `search_tool` to pull external web context.
+# - **Example prompt**: Find a short definition of `customer churn` and map it to this dataset.
+# - **Expected behavior**: With tool configuration, BambooAI fetches and summarizes external context.
+# - **Failure mode**: Without tool configuration, BambooAI can return tool errors or warnings.
 
 # %%
 # Demonstrate an agent configured to use external search when available.
@@ -437,13 +427,10 @@ _run_agent(bamboo_search)
 # %% [markdown]
 # ### 4. planning
 #
-# **Planning helps BambooAI solve multi-step or ambiguous tasks by outlining a plan before executing code.**
-#
-# Example prompt - Compare revenue trends by region, identify the top 3 outliers, and explain possible causes.
-#
-# What to expect
-# - The agent should produce a plan, then execute steps to answer.
-# - For simple prompts, planning add unnecessary latency without changing results.
+# - **Use case**: Enable `planning` for multi-step or ambiguous tasks.
+# - **Example prompt**: Compare revenue trends by region, identify top outliers, and explain possible causes.
+# - **Expected behavior**: BambooAI outlines a plan, then executes steps.
+# - **Trade-off**: For simple prompts, planning can add latency without improving outcomes.
 #
 
 # %%
@@ -470,14 +457,10 @@ _run_agent(bamboo_planning)
 # %% [markdown]
 # ### 5. vector_db
 #
-# **This parameter enables memory and retrieval over prior conversations and documents.**
-#
-# Custom prompt
-# - "Using what you learned earlier, summarize the top 2 churn drivers."
-#
-# What to expect
-# - With a configured vector DB, the agent can retrieve past context instead of re-deriving it.
-# - Without proper credentials, initialization will fail.
+# - **Definition**: `vector_db` enables retrieval over prior conversations and documents.
+# - **Example prompt**: "Using what you learned earlier, summarize the top 2 churn drivers."
+# - **Expected behavior**: With valid vector DB configuration, BambooAI retrieves past context.
+# - **Failure mode**: Without credentials or DB configuration, initialization can fail.
 #
 
 # %%
@@ -504,14 +487,10 @@ _run_agent(bamboo_vector)
 # %% [markdown]
 # ### 6. df_ontology
 #
-# **This parameter focuses on the ontology of the dataset and provides grounding in the form of schema-level meaning and constraints for columns and values.**
-#
-# Custom prompt
-# - Validate that `churned` and `has_premium` values match the ontology. Flag any invalid values.
-#
-# What to expect
-# - The agent should reference ontology definitions and perform value checks.
-# - If the ontology file is invalid, initialization may fail.
+# - **Definition**: `df_ontology` provides ontology grounding for schema meaning and value constraints.
+# - **Example prompt**: Validate that `churned` and `has_premium` values match ontology constraints.
+# - **Expected behavior**: BambooAI references ontology definitions and performs value checks.
+# - **Failure mode**: Invalid ontology files can cause initialization failures.
 #
 
 # %%
@@ -567,14 +546,10 @@ _run_agent(bamboo_ontology)
 # %% [markdown]
 # ### 7. exploratory
 #
-# **Exploratory mode enables expert selection for query handling (e.g., routing to a specialist).**
-#
-# Custom prompt
-# - Analyze this dataset for churn drivers and suggest follow-up questions.
-#
-# What to expect
-# - The agent may ask clarifying questions or choose a specialist persona before executing.
-# - With `exploratory=False`, it should behave more directly without extra routing.
+# - **Definition**: `exploratory` enables expert routing for query handling.
+# - **Example prompt**: Analyze churn drivers and suggest follow-up questions.
+# - **Expected behavior**: BambooAI can ask clarifying questions or route to a specialist persona.
+# - **Expected behavior**: With `exploratory=False`, behavior is more direct with less routing.
 #
 
 # %%
@@ -600,13 +575,10 @@ _run_agent(bamboo_exploratory)
 # %% [markdown]
 # ### 8. custom_prompt_file
 #
-# **Custom prompts let you control response structure and tone.**
-#
-# Example - Return a 3-bullet summary and a numbered action plan.
-#
-# What to expect
-# - The agent should follow the style and structure defined in your prompt templates.
-# - If the YAML file is missing or malformed, initialization may fail.
+# - **Definition**: `custom_prompt_file` controls response structure and tone.
+# - **Example prompt**: Return a 3-bullet summary and a numbered action plan.
+# - **Expected behavior**: BambooAI follows structure defined in custom prompt templates.
+# - **Failure mode**: Missing or malformed YAML can cause initialization failures.
 #
 
 # %%
@@ -647,15 +619,10 @@ _run_agent(bamboo_custom)
 # %% [markdown]
 # ## Prompt cookbook (short)
 #
-# Use these examples to get quick wins. For a larger cookbook and narrative flow, see `bambooai.example.ipynb`.
-#
-# Basic EDA
-# - "List the columns and their data types."
-# - "Show summary stats for numeric columns and note any missing values."
-#
-# Visualization
-# - "Plot a histogram of `monthly_spend_usd` with 30 bins and label axes."
-#
-# Advanced
-# - "Detect anomalies in daily `monthly_spend_usd` using a 7-day rolling z-score; return flagged dates."
+# - **Goal**: Use these prompts for quick wins.
+# - **Extended cookbook**: See `bambooai.example.ipynb` for a broader narrative flow.
+# - **Basic EDA prompt**: "List the columns and their data types."
+# - **Basic EDA prompt**: "Show summary stats for numeric columns and note any missing values."
+# - **Visualization prompt**: "Plot a histogram of `monthly_spend_usd` with 30 bins and label axes."
+# - **Advanced prompt**: "Detect anomalies in daily `monthly_spend_usd` using a 7-day rolling z-score; return flagged dates."
 #
