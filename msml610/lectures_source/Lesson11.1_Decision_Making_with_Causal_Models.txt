@@ -283,7 +283,7 @@ digraph DecisionLoop {
 
 * Utility Functions
 
-- A **utility function** $U: \mathcal{Y} \to \RR$ maps each outcome $y$ to a
+- A **utility function** $U: \mathcal{Y} \to \bbR$ maps each outcome $y$ to a
   real-valued preference score
   - Higher is better
   - Encodes the decision-maker's goals on a single scale
