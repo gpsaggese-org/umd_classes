@@ -46,6 +46,7 @@ MSML610: Advanced Machine Learning
 ## Prediction Pipelines vs. Decision Pipelines
 ## #############################################################################
 
+// TODO(gp): Explain
 * From Predictions to Decisions
 
 - **Prediction** answers: _"What will happen?"_
@@ -58,9 +59,9 @@ MSML610: Advanced Machine Learning
   - Output: action $a^* \in \mathcal{A}$ that maximizes expected utility
   - Requires reasoning about **what would change** under each action
 
-- **Q**: If we already have a highly accurate predictor, isn't the decision
-  obvious?
-  - **No** — a good predictor tells us what correlates with good outcomes,
+- **Question**: If we already have a highly accurate predictor, isn't the
+  decision obvious?
+  - **No**, a good predictor tells us what correlates with good outcomes,
     not what _causes_ them
 
 * Prediction Pipeline: Standard Supervised Learning
@@ -75,7 +76,8 @@ MSML610: Advanced Machine Learning
   - No intervention changes how $X$ is generated
   - No agent _acts_ on the prediction
 
-- **Example**: a spam filter trained on past emails to predict $\Pr(\text{spam} | X)$
+- **Example**: a spam filter trained on past emails to predict
+  $\Pr(\text{spam} | X)$
   - Accurate predictor $\to$ useful as long as spammers do not adapt
 
 * Decision Pipeline: What Changes
@@ -83,10 +85,12 @@ MSML610: Advanced Machine Learning
 - A **decision pipeline** explicitly represents:
   - The set of available actions $\mathcal{A}$
   - A utility function $U(y, a)$ over outcomes and actions
-  - A **causal** model $\Pr(Y | \operatorname{do}(a))$ of how actions affect outcomes
+  - A **causal** model $\Pr(Y | \operatorname{do}(a))$ of how actions affect
+    outcomes
 
-- **Key distinction**: $\Pr(Y | X = x)$ is observational; $\Pr(Y | \operatorname{do}(X = x))$
-  is interventional
+- **Key distinction**:
+  - $\Pr(Y | X = x)$ is observational
+  - $\Pr(Y | \operatorname{do}(X = x))$ is interventional
   - These can differ drastically when confounders are present
   - Decisions depend on the **interventional** quantity
 
@@ -97,31 +101,17 @@ MSML610: Advanced Machine Learning
 
 * Prediction vs. Decision: Side-by-Side
 
-::: columns
-:::: {.column width=50%}
-**Prediction**
+- Prediction and decision-making live in different mathematical settings
+  - Collapsing them is a common source of costly errors
 
-- Target: $\EE[Y | X]$
-- Data: observational only
-- Metric: accuracy, AUC, MSE
-- Assumes i.i.d. and stable world
-- Loss if wrong: miscalibration
-- No feedback with the world
-::::
-:::: {.column width=50%}
-**Decision**
-
-- Target: $\arg\max_a \EE[U(Y) | \operatorname{do}(a)]$
-- Data: obs. $+$ experimental
-- Metric: regret, expected utility
-- Models the intervention itself
-- Loss if wrong: policy harm
-- Actions _change_ the world
-::::
-:::
-
-- **Key takeaway**: prediction and decision-making live in different
-  mathematical settings; collapsing them is a common source of costly errors
+| Aspect               | Prediction                 | Decision                                                |
+|----------------------|-----------------------------|--------------------------------------------------------|
+| Target               | $\mathbb{E}[Y | X]$         | $\arg\max_a \mathbb{E}[U(Y) | \operatorname{do}(a)]$   |
+| Data                 | Observational only          | Observational + experimental                           |
+| Metric               | Accuracy, AUC, MSE          | Regret, expected utility                               |
+| Modeling assumption  | i.i.d. and stable world     | Models the intervention itself                         |
+| Loss if wrong        | Miscalibration              | Policy harm                                            |
+| Interaction w/ world | No feedback with the world  | Actions change the world                               |
 
 ## #############################################################################
 ## When Prediction Fails
@@ -135,13 +125,14 @@ MSML610: Advanced Machine Learning
   - Naive aggregation $\to$ wrong decision
 
 - **Example**: drug recovery rates
-  \begingroup \scriptsize
-  | **Group**       | **Drug** (recovery) | **No Drug** (recovery) |
-  | --------------- | ------------------- | ---------------------- |
-  | Men             | 81 / 87 = 93%       | 234 / 270 = 87%        |
-  | Women           | 192 / 263 = 73%     | 55 / 80 = 69%          |
-  | **Combined**    | 273 / 350 = 78%     | 289 / 350 = 83%        |
-  \endgroup
+
+\begingroup \scriptsize
+| **Group**       | **Drug** (recovery) | **No Drug** (recovery) |
+| --------------- | ------------------- | ---------------------- |
+| Men             | 81 / 87 = 93%       | 234 / 270 = 87%        |
+| Women           | 192 / 263 = 73%     | 55 / 80 = 69%          |
+| **Combined**    | 273 / 350 = 78%     | 289 / 350 = 83%        |
+\endgroup
 
 - Within each subgroup, the drug helps; pooled, it appears to hurt
   - Sex is a confounder correlated with both treatment assignment and
@@ -200,26 +191,26 @@ digraph SimpsonCaseA {
   - Decision: _"ban ice cream to reduce drownings"_ (disastrous)
   - Confounder: hot weather causes both
 
-- **Q**: Can we avoid this by collecting more features?
+- **Question**: Can we avoid this by collecting more features?
   - Only if the missing confounder is among them _and_ properly adjusted for
 
-* Policy Reversal: When Predictions Misguide Action
+* Policy Reversal
 
-- A **policy reversal** is when an optimal-looking decision based on
-  predictions becomes harmful once enacted
+- A **policy reversal** is when an optimal-looking decision based on predictions
+  becomes harmful once enacted
   - Common in medicine, economics, operations research
 
 - **Mechanism**: acting on $X$ breaks the correlation with the unobserved
   confounder $Z$, so the observed association no longer holds
 
 - **Example**: emergency room triage
-  - Predictor: patients with asthma + pneumonia have _lower_ mortality
-  - Naive policy: send them home first (they're low-risk)
+  - Predictor: patients with asthma + pneumonia have lower mortality
+  - Naive policy: send them home first since they're low-risk
   - Reality: they had lower mortality _because_ they received aggressive care
     - Removing the care removes the protection
 
-- **Lesson**: predictive patterns in historical data reflect the **policy that
-  generated the data**, not what happens when we change it
+- Predictive patterns in historical data reflect the **policy that generated the
+  data**, not what happens when we change it
 
 ## #############################################################################
 ## Causal Models as the Foundation for Decisions
@@ -238,8 +229,9 @@ digraph SimpsonCaseA {
 
 - For decision-making we primarily need the **interventional** layer
 
-- **Example**: a marketing team can observe that users who open an email buy
-  more; only a causal model can say whether _sending_ the email causes purchases
+- **Example**:
+  - A marketing team can observe that users who open an email buy more
+  - Only a causal model can say whether _sending_ the email causes purchases
 
 * Decision Loop with Causal Models
 
@@ -344,8 +336,8 @@ digraph DecisionLoop {
 
 * From Observational to Interventional Expectation
 
-- Classical decision theory uses $\Pr(Y | a)$ — treated as the distribution of
-  $Y$ given action $a$
+- Classical decision theory uses $\Pr(Y | a)$, treated as the distribution of $Y$
+  given action $a$
   - If the data is observational, $\Pr(Y | a)$ includes confounding bias
   - Plugging it into expected utility yields a **biased** action ranking
 

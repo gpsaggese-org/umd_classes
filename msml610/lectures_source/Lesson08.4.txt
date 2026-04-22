@@ -1374,15 +1374,15 @@ digraph CausalGraph {
 
 Variables that _predict the outcome well_ but aren't confounders
 
-- **Example**: Credit score bucket $\to$ credit limit $\to$ default
+- _Example_: Credit score bucket $\to$ credit limit $\to$ default
   - `credit_score1_buckets`: confounder (must include)
   - `credit_score2`: predicts default but not treatment
-- **Effect**: Reduces variance in $\varepsilon_i$ by FWL denoising step
-- **Result**: Same $\hat{\beta}_{\text{treatment}}$, much tighter confidence
+- _Effect_: Reduces variance in $\varepsilon_i$ by FWL denoising step
+- _Result_: Same $\hat{\beta}_{\text{treatment}}$, much tighter confidence
   intervals
   - Standard error shrinks substantially
   - More statistical power
-- **Strategy**: Always include strong outcome predictors
+- _Strategy_: Always include strong outcome predictors
 
 ::::
 :::: {.column width=50%}
@@ -1390,15 +1390,15 @@ Variables that _predict the outcome well_ but aren't confounders
 
 Variables that _predict the treatment well_ but not the outcome
 
-- **Example**: Conditionally random spend experiment
+- _Example_: Conditionally random spend experiment
   - `credit_score1`: drives treatment assignment but $\perp$ outcome
   - Incorrectly including it increases variance
-- **Effect**: Reduces treatment variance by explaining away $\text{Var}(T)$
-- **Result**: Same $\hat{\beta}_{\text{treatment}}$, but standard error
-  **increases**
+- _Effect_: Reduces treatment variance by explaining away $\text{Var}(T)$
+- _Result_: Same $\hat{\beta}_{\text{treatment}}$, but standard error
+  _increases_
   - Wider confidence intervals
   - Less statistical power
-- **Strategy**: Avoid including strong treatment predictors
+- _Strategy_: Avoid including strong treatment predictors
 
 ::::
 :::
@@ -1517,11 +1517,18 @@ Variables that _predict the treatment well_ but not the outcome
   - Difficult to derive variance
 
 * Inverse Propensity Weighting (IPW)
-- Core Principle
-  - Reweight data by inverse probability of observed treatment
+- **Core Principle**
+  - Re-weight data by inverse probability of observed treatment
   - Create pseudo-population where treatment appears randomly assigned
-  - For treated: upweight those unlikely to be treated (low $e(x)$)
-  - For control: upweight those likely to be treated (high $e(x)$)
+
+- For treated: up-weight those unlikely to be treated (low $e(x)$)
+  - They're informative, they look like untreated units but got treatment anyway,
+    so they reveal what would happen to
+- For control: up-weight those likely to be treated (high $e(x)$)
+  - Down-weights common treatment cases: Treated units with high propensity
+    (likely to be treated) get lower weight, since they're less informative.
+
+  $$E[Y_t] = \EE[ \frac{\mathbf{1}(T=t)Y}{P(T=t|X)}]$$
 
 // Chap 6
 

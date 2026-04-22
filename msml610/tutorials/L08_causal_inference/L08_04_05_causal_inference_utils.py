@@ -71,13 +71,16 @@ def plot_engagement_vs_intervention(
     model = LinearRegression().fit(X, y)
     x_range = np.array([0, 1]).reshape(-1, 1)
     y_pred = model.predict(x_range)
+    intercept = model.intercept_
+    coef = model.coef_[0]
+    label = f"Regression: y={intercept:.3f}+{coef:.3f}*x"
     ax.plot(
         [0, 1],
         y_pred,
         color="black",
         linewidth=2,
         linestyle="--",
-        label=f"Regression: y={model.intercept_:.3f}+{model.coef_[0]:.3f}*x",
+        label=label,
     )
 
     ax.set_xlabel("Intervention", fontsize=11)
@@ -336,7 +339,12 @@ def plot_all_correlations_to_intervention(
     # Plot coefficients.
     fig, ax = plt.subplots(figsize=figsize)
     colors = ["blue" if x < 0 else "red" for x in results_df["coefficient"]]
-    ax.barh(results_df["variable"], results_df["coefficient"], color=colors, alpha=0.7)
+    ax.barh(
+        results_df["variable"],
+        results_df["coefficient"],
+        color=colors,
+        alpha=0.7,
+    )
     ax.axvline(x=0, color="black", linestyle="-", linewidth=0.8)
     ax.set_xlabel("Treatment Effect Coefficient", fontsize=11)
     ax.set_ylabel("Variable", fontsize=11)
@@ -534,4 +542,153 @@ def plot_all_variables_density_by_intervention(
         axes_flat[idx].set_visible(False)
 
     plt.suptitle("Distribution of All Variables by Intervention", fontsize=14, y=0.995)
+    plt.tight_layout()
+
+
+# #############################################################################
+# Cell 2: Propensity Score Matching Methods.
+# #############################################################################
+
+
+def propensity_score_matching(
+    data: pd.DataFrame,
+    *,
+    treatment_col: str = "intervention",
+    ps_col: str = "propensity_score",
+    outcome_col: str = "engagement_score",
+) -> pd.DataFrame:
+    """
+    Perform 1-nearest neighbor propensity score matching.
+
+    For each treated unit, finds the nearest control unit (and vice versa)
+    based on propensity score distance. Uses KNeighborsRegressor with
+    n_neighbors=1 to fit outcome models for each group.
+
+    :param data: DataFrame with treatment, propensity score, and outcome columns
+    :param treatment_col: Name of binary treatment column
+    :param ps_col: Name of propensity score column
+    :param outcome_col: Name of outcome column
+    :return: DataFrame with original data plus 'match' column with matched outcomes
+    """
+    from sklearn.neighbors import KNeighborsRegressor
+
+    # Separate treated and control groups.
+    treated = data.query(f"{treatment_col}==1")
+    untreated = data.query(f"{treatment_col}==0")
+
+    # Fit KNN regressors on outcomes for each group.
+    # Control model predicts outcomes for treated units.
+    knn_control = KNeighborsRegressor(n_neighbors=1).fit(
+        untreated[[ps_col]], untreated[outcome_col]
+    )
+    # Treated model predicts outcomes for control units.
+    knn_treated = KNeighborsRegressor(n_neighbors=1).fit(
+        treated[[ps_col]], treated[outcome_col]
+    )
+
+    # Get matched outcomes for treated: what they would have gotten as control.
+    treated_with_match = treated.assign(
+        match=knn_control.predict(treated[[ps_col]])
+    )
+    # Get matched outcomes for control: what they would have gotten as treated.
+    untreated_with_match = untreated.assign(
+        match=knn_treated.predict(untreated[[ps_col]])
+    )
+
+    # Combine and return.
+    return pd.concat([treated_with_match, untreated_with_match])
+
+
+def calculate_psm_ate(
+    data: pd.DataFrame,
+    *,
+    treatment_col: str = "intervention",
+    outcome_col: str = "engagement_score",
+) -> float:
+    """
+    Calculate Average Treatment Effect from propensity score matching.
+
+    Computes ATE as the average difference between observed and matched outcomes,
+    weighted by treatment assignment:
+    - For treated: (Y_obs - Y_matched)
+    - For control: (Y_matched - Y_obs)
+
+    :param data: DataFrame from propensity_score_matching with 'match' column
+    :param treatment_col: Name of binary treatment column
+    :param outcome_col: Name of outcome column
+    :return: Estimated average treatment effect
+    """
+    treatment = data[treatment_col].values
+    outcome = data[outcome_col].values
+    matched = data["match"].values
+
+    # Compute difference: observed - matched outcome.
+    diff = outcome - matched
+
+    # Weight by treatment: treated units contribute positively, control negatively.
+    ate = np.mean(treatment * diff - (1 - treatment) * diff)
+
+    return float(ate)
+
+
+def plot_iptw(
+    data: pd.DataFrame,
+    *,
+    ps_col: str = "propensity_score",
+    outcome_col: str = "engagement_score",
+    treatment_col: str = "intervention",
+    figsize: tuple = (10, 4),
+) -> None:
+    """
+    Plot Inverse Probability of Treatment Weighting (IPTW) results.
+
+    Visualizes the relationship between propensity score and outcome, with
+    point sizes representing IPTW weights. Blue dots represent control units,
+    red dots represent treated units.
+
+    :param data: DataFrame with treatment, propensity score, and outcome columns
+    :param ps_col: Name of propensity score column
+    :param outcome_col: Name of outcome column
+    :param treatment_col: Name of binary treatment column
+    :param figsize: Figure size as (width, height)
+    """
+    # Calculate IPTW weights.
+    iptw_data = data.assign(
+        weight=(
+            data[treatment_col] / data[ps_col]
+            + (1 - data[treatment_col]) / (1 - data[ps_col])
+        ),
+        ps_rounded=data[ps_col].round(2),
+    )
+
+    # Aggregate by propensity score and treatment.
+    grouped = (
+        iptw_data.groupby(["ps_rounded", treatment_col])[
+            ["weight", outcome_col]
+        ]
+        .mean()
+        .reset_index()
+    )
+
+    # Plot with blue for control, red for treated.
+    fig, ax = plt.subplots(figsize=figsize)
+    for t, color in [(0, "blue"), (1, "red")]:
+        subset = grouped.query(f"{treatment_col}=={t}")
+        ax.scatter(
+            data=subset,
+            x="ps_rounded",
+            y=outcome_col,
+            s=subset["weight"] * 100,
+            color=color,
+            alpha=0.6,
+            label=f"Control" if t == 0 else "Treated",
+            edgecolors="black",
+            linewidth=0.5,
+        )
+
+    ax.set_xlabel("Propensity Score", fontsize=11)
+    ax.set_ylabel("Engagement Score", fontsize=11)
+    ax.set_title("Inverse Probability of Treatment Weighting", fontsize=12)
+    ax.legend(fontsize=10, loc="best")
+    ax.grid(True, alpha=0.3)
     plt.tight_layout()

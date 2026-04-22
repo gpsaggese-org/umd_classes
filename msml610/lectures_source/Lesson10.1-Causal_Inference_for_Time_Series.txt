@@ -25,14 +25,6 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-- Hurwitz, Thompson: _"Causal Artificial Intelligence"_ (2024)
-
-- Pearl, Glymour, Jewell: _"Causal Inference in Statistics: A Primer"_ (2016)
-
-- Angrist, Pischke: _"Mostly Harmless Econometrics"_ (2009)
-
-- Hyndman, Athanasopoulos: _"Forecasting: Principles and Practice"_ (2021)
-
 ::::
 :::: {.column width=40%}
 

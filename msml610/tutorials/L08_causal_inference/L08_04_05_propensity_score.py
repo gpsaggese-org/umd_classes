@@ -136,14 +136,14 @@ model = smf.ols("engagement_score ~ intervention",
 print("ATE:", model.params["intervention"])
 print("95% CI:", model.conf_int().loc["intervention", :].values.T)
 
-# %%
-- The effect estimate here is considerably smaller than the one you got earlier.
-- This is some indication of positive bias, which means that managers whose
-  employees were already more engaged are more likely to have participated in the
-  manager training program
+# %% [markdown]
+# - The effect estimate here is considerably smaller than the one you got earlier.
+# - This is some indication of positive bias, which means that managers whose
+#   employees were already more engaged are more likely to have participated in the
+#   manager training program
 
-# %%
-## Propensity score
+# %% [markdown]
+# ## Propensity score
 
 # %%
 ps_model = smf.logit("""
@@ -163,31 +163,21 @@ model = smf.ols("""
     """, data=data_ps).fit()
 print(model.params["intervention"])
 
-# %%
-## Propensity score matching
+# %% [markdown]
+# ## Propensity score matching
 
 # %%
-from sklearn.neighbors import KNeighborsRegressor
-
-T = "intervention"
-X = "propensity_score"
-Y = "engagement_score"
-treated = data_ps.query(f"{T}==1")
-untreated = data_ps.query(f"{T}==0")
-mt0 = KNeighborsRegressor(n_neighbors=1).fit(untreated[[X]],
-untreated[Y])
-mt1 = KNeighborsRegressor(n_neighbors=1).fit(treated[[X]], treated[Y])
-predicted = pd.concat([
-# find matches for the treated looking at the untreated knn model
-treated.assign(match=mt0.predict(treated[[X]])),
-# find matches for the untreated looking at the treated knn model
-untreated.assign(match=mt1.predict(untreated[[X]]))
-])
+# Perform 1-nearest neighbor propensity score matching.
+predicted = mtl0cire05.propensity_score_matching(data_ps)
 predicted.head()
 
 # %%
-hat_ATE = np.mean((predicted[Y] - predicted["match"])*predicted[T] 
-        + (predicted["match"] - predicted[Y])*(1-predicted[T]))
-print(hat_ATE)
+# Calculate average treatment effect from propensity score matching.
+hat_ATE = mtl0cire05.calculate_psm_ate(predicted)
+print(f"ATE (Propensity Score Matching): {hat_ATE:.4f}")
+
+# %%
+# Plot inverse probability of treatment weighting results.
+mtl0cire05.plot_iptw(data_ps)
 
 # %%
