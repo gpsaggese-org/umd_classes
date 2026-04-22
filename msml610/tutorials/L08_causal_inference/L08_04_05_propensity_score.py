@@ -107,10 +107,9 @@ mtl0cire05.plot_engagement_vs_intervention(df)
 
 # %%
 # Density curves comparing distributions
-mtl0cire05.plot_engagement_density_by_intervention(df)
+mtl0cire05.plot_engagement_vs_intervention(df)
 
 # %%
-# TODO(gp): Switch to pdfs
 mtl0cire05.plot_engagement_vs_intervention_by_department(df)
 
 # %%
@@ -123,9 +122,9 @@ mtl0cire05.plot_all_variables_density_by_intervention(df)
 # To reduce this bias, you can adjust for the covariates you have in your data.
 model = smf.ols(
     """
-engagement_score ~ intervention
-    + tenure + last_engagement_score + department_score
-    + n_of_reports + C(gender) + C(role)""",
+    engagement_score ~ intervention
+        + tenure + last_engagement_score + department_score
+        + n_of_reports + C(gender) + C(role)""",
     data=df,
 ).fit()
 
