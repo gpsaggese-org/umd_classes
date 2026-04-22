@@ -1,25 +1,18 @@
-import pandas as pd
-from ydata_profiling import ProfileReport
-from pathlib import Path
+import ydata_profiling_utils as ydputi
 
-project_root = Path(__file__).resolve().parents[1]
-data_path = project_root / "data" / "baltim.csv"
-output_path = project_root / "outputs" / "baltim_profile_report.html"
 
-df = pd.read_csv(data_path)
+def main() -> None:
+    """
+    Run YData-profiling on the Baltimore housing dataset.
 
-print("Data shape:", df.shape)
-print("\nColumns:")
-print(df.columns.tolist())
-print("\nFirst 5 rows:")
-print(df.head())
+    :return: None.
+    """
+    df = ydputi.load_baltimore_data()
+    ydputi.print_basic_info(df)
+    profile = ydputi.create_profile_report(df)
+    output_path = ydputi.save_profile_report(profile)
+    print(f"\nReport saved to: {output_path}")
 
-profile = ProfileReport(
-    df,
-    title="Baltimore Housing Data Profiling Report",
-    explorative=True
-)
 
-profile.to_file(output_path)
-
-print(f"\nReport saved to: {output_path}")
+if __name__ == "__main__":
+    main()
