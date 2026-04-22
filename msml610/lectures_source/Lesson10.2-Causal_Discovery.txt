@@ -14,7 +14,7 @@ MSML610: Advanced Machine Learning
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\blue{Lesson 10.1: Causal Discovery}}$$**
+**$$\text{\blue{Lesson 10.2: Causal Discovery}}$$**
 \endgroup
 
 \vspace{1cm}
