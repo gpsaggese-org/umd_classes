@@ -1533,6 +1533,43 @@ Variables that _predict the treatment well_ but not the outcome
   $$E[Y_t] = \EE[ \frac{\mathbf{1}(T=t)Y}{P(T=t|X)}]$$
 
 - The same scaling can be applied to recover the ATE:
+  $$
+  ATE
+  = \EE\left[
+      \frac{\mathbb{1}(T=1)Y}{\Pr(T=1|X)}
+    \right]
+    - \EE\left[
+      \frac{\mathbb{1}(T=0)Y}{\Pr(T=0|X)}
+      \right]
+  $$
+
+- IPW is similar to importance weighting
+
+- To estimate the variance use bootstrap method (resample with replacement
+  multiple times)
+  - Fit IPW estimator on each sample
+  - Calculate 2.5th and 97.5th percentiles for 95% CI
+
+* Stabilized Propensity Weights
+
+- **Problems**
+  - Raw inverse propensity weights can be very large
+  - Treatment with low probability $\Pr(T | X)$ creates extreme weights
+  - Computational stability issue
+
+- **Solution**: Stabilized propensity weights
+  $$
+  w = \frac{\Pr(T = t)}{\Pr(T = t | X)}
+  $$
+  - Balances small denominator with also small numerator
+  - Produces more stable weights without changing balancing properties
+  - Sum of weights in each group matches original group sizes
+
+- Visual Understanding
+  - Plot propensity score distributions by treatment status
+  - Before weighting: distributions shifted (confounding)
+  - After weighting: distributions overlap (treatment appears random)
+  - Overlapping distributions essential for IPW validity
 
 // Chap 6
 

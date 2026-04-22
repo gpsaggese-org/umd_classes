@@ -23,6 +23,9 @@
 import logging
 import os
 
+import numpy as np
+import pandas as pd
+
 
 # %%
 # import helpers.hmodule as hmodule
@@ -148,9 +151,9 @@ print("95% CI:", model.conf_int().loc["intervention", :].values.T)
 # %%
 ps_model = smf.logit(
     """
-intervention ~
-    tenure + last_engagement_score + department_score
-    + C(n_of_reports) + C(gender) + C(role)""",
+    intervention ~
+        tenure + last_engagement_score + department_score
+        + C(n_of_reports) + C(gender) + C(role)""",
     data=df,
 ).fit(disp=0)
 
@@ -187,3 +190,122 @@ print(f"ATE (Propensity Score Matching): {hat_ATE:.4f}")
 mtl0cire05.plot_iptw(data_ps)
 
 # %%
+# TODO(ai_gp): Simplify and comment code and move to utility.
+weight_t = 1/data_ps.query("intervention==1")["propensity_score"]
+weight_nt = 1/(1-data_ps.query("intervention==0")["propensity_score"])
+t1 = data_ps.query("intervention==1")["engagement_score"] 
+t0 = data_ps.query("intervention==0")["engagement_score"] 
+
+y1 = sum(t1*weight_t)/len(data_ps)
+y0 = sum(t0*weight_nt)/len(data_ps)
+
+print("E[Y1]:", y1)
+print("E[Y0]:", y0)
+print("ATE", y1 - y0)
+
+# %% [markdown]
+# # Variance
+
+# %%
+from sklearn.linear_model import LogisticRegression
+from patsy import dmatrix
+
+# TODO(ai_gp): Simplify and comment code and move to utility.
+
+# define function that computes the IPW estimator
+def est_ate_with_ps(df, ps_formula, T, Y):
+    
+    X = dmatrix(ps_formula, df)
+    ps_model = LogisticRegression(
+                                  max_iter=1000).fit(X, df[T])
+    ps = ps_model.predict_proba(X)[:, 1]
+    
+    # compute the ATE
+    return np.mean((df[T]-ps) / (ps*(1-ps)) * df[Y]) 
+
+
+# %%
+formula = """tenure + last_engagement_score + department_score
++ C(n_of_reports) + C(gender) + C(role)"""
+T = "intervention"
+Y = "engagement_score"
+
+est_ate_with_ps(df, formula, T, Y)
+
+# %%
+from joblib import Parallel, delayed # for parallel processing
+
+def bootstrap(data, est_fn, rounds=200, seed=123, pcts=[2.5, 97.5]):
+    np.random.seed(seed)
+    
+    stats = Parallel(n_jobs=4)(
+        delayed(est_fn)(data.sample(frac=1, replace=True))
+        for _ in range(rounds)
+    )
+    
+    return np.percentile(stats, pcts)
+
+
+# %%
+print(f"ATE: {est_ate_with_ps(df, formula, T, Y)}")
+
+est_fn = lambda data: est_ate_with_ps(data, ps_formula=formula, T=T, Y=Y)
+
+print("95% C.I.: ", bootstrap(df, est_fn))
+
+# %% [markdown]
+# # Stabilized Propensity Weights
+
+# %%
+print("Original Sample Size:", data_ps.shape[0])
+print("Treated Pseudo-Population Sample Size:", sum(weight_t))
+print("Untreated Pseudo-Population Sample Size:", sum(weight_nt))
+
+# %%
+# TODO(ai_gp): Simplify and comment code and move to utility.
+
+p_of_t = data_ps["intervention"].mean()
+
+t1 = data_ps.query("intervention==1")
+t0 = data_ps.query("intervention==0")
+
+weight_t_stable = p_of_t/t1["propensity_score"]
+weight_nt_stable = (1-p_of_t)/(1-t0["propensity_score"])
+
+print("Treat size:", len(t1))
+print("W treat", sum(weight_t_stable))
+
+print("Control size:", len(t0))
+print("W treat", sum(weight_nt_stable))
+
+# %%
+nt = len(t1)
+nc = len(t0)
+
+y1 = sum(t1["engagement_score"]*weight_t_stable)/nt
+y0 = sum(t0["engagement_score"]*weight_nt_stable)/nc
+
+print("ATE: ", y1 - y0)
+
+# %%
+# TODO(ai_gp): Simplify and comment code and move to utility.
+
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,5), sharex=True, sharey=True)
+
+sns.histplot(data_ps.query("intervention==0")["propensity_score"], stat="probability",
+             label="Not Treated", color="C0", bins=30, ax=ax1, alpha=0.5)
+sns.histplot(data_ps.query("intervention==1")["propensity_score"], stat="probability",
+             label="Treated", color="C2", alpha=0.5, bins=30, ax=ax1)
+ax1.set_title("Propensity Distribution")
+
+sns.histplot(data_ps.query("intervention==0").assign(w=weight_nt_stable),
+             x="propensity_score", stat="probability",
+             color="C0", weights="w", label="Non Treated", bins=30, ax=ax2,  alpha=0.5)
+
+sns.histplot(data_ps.query("intervention==1").assign(w=weight_t_stable),
+             x="propensity_score", stat="probability",
+             color="C2", weights="w", label="Treated", bins=30, alpha=0.5, ax=ax2)
+ax2.set_title("Weighted Propensity Distribution")
+plt.legend()
+
+plt.tight_layout()
