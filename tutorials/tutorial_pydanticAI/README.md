@@ -1,70 +1,56 @@
-<!-- toc -->
+# PydanticAI Tutorial
 
-- [Project files](#project-files)
-- [Setup and Dependencies](#setup-and-dependencies)
-  * [Building and Running the Docker Container](#building-and-running-the-docker-container)
-    + [Environment Setup](#environment-setup)
+This folder contains the setup for running PydanticAI tutorials within a
+containerized environment.
 
-<!-- tocstop -->
+## Quick Start
 
-# Project files
+From the root of the repository, change your directory to the PydanticAI
+tutorial folder:
 
-This project contains the following files.
-
-- `README.md`: This file
-- `pydanticai.API.ipynb`: notebook describing core PydanticAI APIs
-- `pydanticai.example.ipynb`: notebook with applied, end-to-end examples
-- `requirements.txt`: Python dependencies used by this tutorial
-- `example_dataset/`: supporting markdown files used in examples
-  - `api.md`
-  - `billing.md`
-  - `integrations.md`
-  - `limits.md`
-  - `overview.md`
-  - `security.md`
-  - `support.md`
-  - `troubleshooting.md`
-- Docker/dev runtime files
-  - `Dockerfile`
-  - `docker_build.sh`
-  - `docker_bash.sh`
-  - `docker_jupyter.sh`
-  - `docker_exec.sh`
-  - `docker_cmd.sh`
-  - `docker_clean.sh`
-  - `docker_push.sh`
-  - `docker_name.sh`
-  - `version.sh`
-  - `run_jupyter.sh`
-  - `etc_sudoers`
-
-# Setup and Dependencies
-
-## Building and Running the Docker Container
-
-- Go to the project directory:
-  ```bash
-  > cd tutorials/tutorial_pydanticAI
-  ```
-- Build Docker image:
-  ```bash
-  > ./docker_build.sh
-  ```
-- Run container shell:
-  ```bash
-  > ./docker_bash.sh
-  ```
-- Launch Jupyter Notebook:
-  ```bash
-  > ./docker_jupyter.sh
-  ```
-
-### Environment Setup
-
-Set the `OPENAI_API_KEY` environment variable for API access:
-
-```python
-import os
-os.environ["OPENAI_API_KEY"] = "<your_openai_api_key>"
+```bash
+> cd tutorials/tutorial_pydanticAI
 ```
 
+Once the location has been changed to the repo run the command to build the
+image to run dockers:
+
+```bash
+> ./docker_build.sh
+```
+
+Once the docker has been built you can then go ahead and run the container and
+launch jupyter notebook using the created image using the command:
+
+```bash
+> ./docker_jupyter.sh
+```
+
+Once the `./docker_jupyter.sh` script is running, work through the following
+notebooks in order.
+
+For more information on the Docker build system refer to [Project template
+README](/class_project/project_template/README.md)
+
+## Tutorial Notebooks
+
+Work through the following notebooks in order:
+
+- [`pydanticai.API.ipynb`](pydanticai.API.ipynb): Core PydanticAI fundamentals
+  - Understanding the PydanticAI framework architecture
+  - Working with PydanticAI classes and methods
+  - Building basic agent configurations
+  - Integration with language models
+
+- [`pydanticai.example.ipynb`](pydanticai.example.ipynb): Real-world application
+  workflow
+  - End-to-end agentic application example
+  - Practical problem-solving with PydanticAI
+  - Advanced agent interactions and workflows
+  - Best practices and patterns
+
+- [`pydanticai_API_utils.py`](pydanticai_API_utils.py): Utility functions
+  supporting the API tutorial notebook
+
+- [`pydanticai_example_utils.py`](pydanticai_example_utils.py): Utility
+  functions supporting the example tutorial notebook
