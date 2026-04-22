@@ -1,0 +1,23 @@
+// Causal Inference for Time Series
+
+# Time Series vs. Cross-Sectional Causality
+## Temporal causal structures
+## Challenges specific to time series
+## When temporal structure helps and when it misleads
+# Granger Causality
+## Definition and intuition
+## Assumptions and limitations
+## Practical examples
+# Interrupted Time Series (ITS)
+## Design and estimation
+## ITS and regression discontinuity
+## Applications in causal inference
+# Difference-in-Differences (DiD)
+## Parallel trends assumption
+## Estimation and robustness
+## Extensions: multiple time periods
+# Synthetic Control Methods
+## Constructing a counterfactual from donor series
+## Weighted combinations and optimal weights
+## When synthetic control succeeds and fails
+
