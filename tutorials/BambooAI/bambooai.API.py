@@ -86,33 +86,16 @@ utils.init_logger(_LOG)
 # %% [markdown]
 # ## Setup and dependencies
 #
-# The BambooAI API relies on standard data science libraries plus `bambooai`, `plotly`, `pandas`, and `python-dotenv`. Make sure the dataset lives here and that your `.env` file defines `EXECUTION_MODE` before you execute the notebook.
+# Make sure the dataset lives here and that your `.env` file defines `EXECUTION_MODE` before you execute the notebook.
 #
 # Data location
-# - The default dataset path is `_DEFAULT_CSV = Path("testdata.csv")` in `Bambooai-blog/bambooai_utils.py`.
+# - The default dataset path is `_DEFAULT_CSV = Path("testdata.csv")` in `bambooai_utils.py`.
 # - Override it with `--csv-path` (parser in `bambooai_utils.py`) or update `_DEFAULT_CSV` directly.
-#
-# Plot rendering (optional)
-# - If interactive plots fail, set `PLOTLY_RENDERER=json` in your environment before running the imports cell.
 #
 
 # %%
 # Configure environment, plotting, and helper import paths.
 load_dotenv()
-
-_ROOT_DIR = Path.cwd()
-for candidate in [_ROOT_DIR, *_ROOT_DIR.parents]:
-    if (candidate / "helpers_root").exists():
-        _ROOT_DIR = candidate
-        break
-_HELPERS_ROOT = _ROOT_DIR / "helpers_root"
-_DOCKER_TUTORIAL_DIR = Path("/app/tutorials-Bambooai-blog")
-if _DOCKER_TUTORIAL_DIR.exists():
-    sys.path.insert(0, str(_DOCKER_TUTORIAL_DIR))
-if str(_ROOT_DIR) not in sys.path:
-    sys.path.insert(0, str(_ROOT_DIR))
-if str(_HELPERS_ROOT) not in sys.path:
-    sys.path.insert(0, str(_HELPERS_ROOT))
 
 import helpers.hio as hio
 
@@ -123,7 +106,7 @@ np.set_printoptions(suppress=True, precision=6)
 
 # Use print() so setup diagnostics are visible in notebook output.
 print(f"Plotly renderer: {pio.renderers.default}")
-print(f"Helpers root on path: {str(_HELPERS_ROOT) in sys.path}")
+# print(f"Helpers root on path: {str(_HELPERS_ROOT) in sys.path}")
 # Environment and path setup is now ready for downstream cells.
 
 
@@ -301,18 +284,19 @@ def _get_artifacts_dir() -> Path:
 
 
 # %%
-#Set your OPENAI API KEY here if not already set in .env file
-os.environ['OPENAI_API_KEY']=''
+#Set your OPENAI API KEY and GEMINI API KEY here if not already set in .env file
+# os.environ['OPENAI_API_KEY']=''
+# os.environ['GEMINI_API_KEY']=''
 
 # %%
 # Display masked environment settings used by BambooAI.
 keys = [
     "EXECUTION_MODE",
-    "LLM_CONFIG",
     "OPENAI_API_KEY",
     "ANTHROPIC_API_KEY",
     "AZURE_OPENAI_API_KEY",
     "PINECONE_API_KEY",
+    'GEMINI_API_KEY'
 ]
 
 # Use print() so environment checks are visible inline.
