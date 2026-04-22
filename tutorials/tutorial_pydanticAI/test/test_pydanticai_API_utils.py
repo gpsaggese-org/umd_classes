@@ -7,8 +7,8 @@ import importlib.util
 import logging
 import sys
 import types
-import typing
-import unittest.mock
+from types import SimpleNamespace
+from unittest import mock
 
 import helpers.hunit_test as hunitest
 
@@ -24,22 +24,22 @@ if importlib.util.find_spec("pydantic_ai") is None:
         Minimal stub for pydantic_ai.RunContext.
         """
 
-        def __class_getitem__(cls, _item: object) -> type["RunContext"]:
+        def __class_getitem__(cls, item: object) -> type["RunContext"]:
             """
             Support type annotations that use RunContext[Any].
 
-            :param _item: type argument
+            :param item: type argument
             :return: RunContext class
             """
             return cls
 
-    pydantic_ai_stub: typing.Any = types.ModuleType("pydantic_ai")
+    pydantic_ai_stub = types.ModuleType("pydantic_ai")
     pydantic_ai_stub.ModelRetry = ModelRetry
     pydantic_ai_stub.RunContext = RunContext
     sys.modules["pydantic_ai"] = pydantic_ai_stub
 
-import pydantic_ai  # type: ignore[import-not-found] # pylint: disable=wrong-import-position
-import pydanticai_API_utils as put  # type: ignore[import-not-found] # pylint: disable=wrong-import-position
+import pydanticai_API_utils as put
+from pydantic_ai import ModelRetry
 
 _LOG = logging.getLogger(__name__)
 
@@ -168,14 +168,14 @@ class Test_build_missing_sources_retry(hunitest.TestCase):
 
     def test1(self) -> None:
         """
-        Test that the helper builds a pydantic_ai.ModelRetry instance.
+        Test that the helper builds a ModelRetry instance.
         """
         # Prepare outputs.
         expected = "Answer references documents but sources are empty."
         # Run test.
         actual = put.build_missing_sources_retry()
         # Check outputs.
-        self.assertIsInstance(actual, pydantic_ai.ModelRetry)
+        self.assertIsInstance(actual, ModelRetry)
         self.assert_equal(str(actual), expected)
 
 
@@ -214,7 +214,7 @@ class Test_validate_sources(hunitest.TestCase):
 
     def test3(self) -> None:
         """
-        Test that duplicate sources raise pydantic_ai.ModelRetry.
+        Test that duplicate sources raise ModelRetry.
         """
         # Prepare inputs.
         sources = [
@@ -223,7 +223,7 @@ class Test_validate_sources(hunitest.TestCase):
         ]
         result = self._build_result("Standalone answer.", sources)
         # Run test and check output.
-        with self.assertRaises(pydantic_ai.ModelRetry) as cm:
+        with self.assertRaises(ModelRetry) as cm:
             put.validate_sources(result)
         actual = str(cm.exception)
         expected = "Duplicate sources found."
@@ -231,7 +231,7 @@ class Test_validate_sources(hunitest.TestCase):
 
     def test4(self) -> None:
         """
-        Test that too many sources raise pydantic_ai.ModelRetry.
+        Test that too many sources raise ModelRetry.
         """
         # Prepare inputs.
         sources = [
@@ -242,7 +242,7 @@ class Test_validate_sources(hunitest.TestCase):
         ]
         result = self._build_result("Standalone answer.", sources)
         # Run test and check output.
-        with self.assertRaises(pydantic_ai.ModelRetry) as cm:
+        with self.assertRaises(ModelRetry) as cm:
             put.validate_sources(result)
         actual = str(cm.exception)
         expected = "Too many sources. Maximum allowed is 3."
@@ -250,12 +250,12 @@ class Test_validate_sources(hunitest.TestCase):
 
     def test5(self) -> None:
         """
-        Test that document claims without sources raise pydantic_ai.ModelRetry.
+        Test that document claims without sources raise ModelRetry.
         """
         # Prepare inputs.
         result = self._build_result("According to the documents.", [])
         # Run test and check output.
-        with self.assertRaises(pydantic_ai.ModelRetry) as cm:
+        with self.assertRaises(ModelRetry) as cm:
             put.validate_sources(result)
         actual = str(cm.exception)
         expected = "Answer references documents but sources are empty."
@@ -263,8 +263,8 @@ class Test_validate_sources(hunitest.TestCase):
 
     @staticmethod
     def _build_result(
-        answer: str, sources: list[types.SimpleNamespace]
-    ) -> types.SimpleNamespace:
+        answer: str, sources: list[SimpleNamespace]
+    ) -> SimpleNamespace:
         """
         Build a validator input object.
 
@@ -272,11 +272,11 @@ class Test_validate_sources(hunitest.TestCase):
         :param sources: source references
         :return: validator input
         """
-        result = types.SimpleNamespace(answer=answer, sources=sources)
+        result = SimpleNamespace(answer=answer, sources=sources)
         return result
 
     @staticmethod
-    def _build_source(doc_id: str, quote: str) -> types.SimpleNamespace:
+    def _build_source(doc_id: str, quote: str) -> SimpleNamespace:
         """
         Build a source reference object.
 
@@ -284,7 +284,7 @@ class Test_validate_sources(hunitest.TestCase):
         :param quote: source quote
         :return: source reference
         """
-        source = types.SimpleNamespace(doc_id=doc_id, quote=quote)
+        source = SimpleNamespace(doc_id=doc_id, quote=quote)
         return source
 
 
@@ -303,7 +303,7 @@ class Test_company_name(hunitest.TestCase):
         Test reading the company from a run context.
         """
         # Prepare inputs.
-        ctx = types.SimpleNamespace(deps=types.SimpleNamespace(company="OpenAI"))
+        ctx = SimpleNamespace(deps=SimpleNamespace(company="OpenAI"))
         # Prepare outputs.
         expected = "OpenAI"
         # Run test.
@@ -422,13 +422,13 @@ class Test_validate_document_sources(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test that an unknown document id raises pydantic_ai.ModelRetry.
+        Test that an unknown document id raises ModelRetry.
         """
         # Prepare inputs.
         sources = [self._build_source("missing", "quoted text")]
         result = self._build_result("According to the documents.", sources)
         # Run test and check output.
-        with self.assertRaises(pydantic_ai.ModelRetry) as cm:
+        with self.assertRaises(ModelRetry) as cm:
             put.validate_document_sources(result)
         actual = str(cm.exception)
         expected = "Unknown doc_id 'missing'. Use ids from example_dataset."
@@ -436,13 +436,13 @@ class Test_validate_document_sources(hunitest.TestCase):
 
     def test3(self) -> None:
         """
-        Test that a quote mismatch raises pydantic_ai.ModelRetry.
+        Test that a quote mismatch raises ModelRetry.
         """
         # Prepare inputs.
         sources = [self._build_source("billing", "not present in billing")]
         result = self._build_result("According to the documents.", sources)
         # Run test and check output.
-        with self.assertRaises(pydantic_ai.ModelRetry) as cm:
+        with self.assertRaises(ModelRetry) as cm:
             put.validate_document_sources(result)
         actual = str(cm.exception)
         expected = "Quote not found in cited document 'billing'."
@@ -450,8 +450,8 @@ class Test_validate_document_sources(hunitest.TestCase):
 
     @staticmethod
     def _build_result(
-        answer: str, sources: list[types.SimpleNamespace]
-    ) -> types.SimpleNamespace:
+        answer: str, sources: list[SimpleNamespace]
+    ) -> SimpleNamespace:
         """
         Build a validator input object.
 
@@ -459,11 +459,11 @@ class Test_validate_document_sources(hunitest.TestCase):
         :param sources: source references
         :return: validator input
         """
-        result = types.SimpleNamespace(answer=answer, sources=sources)
+        result = SimpleNamespace(answer=answer, sources=sources)
         return result
 
     @staticmethod
-    def _build_source(doc_id: str, quote: str) -> types.SimpleNamespace:
+    def _build_source(doc_id: str, quote: str) -> SimpleNamespace:
         """
         Build a source reference object.
 
@@ -471,7 +471,7 @@ class Test_validate_document_sources(hunitest.TestCase):
         :param quote: source quote
         :return: source reference
         """
-        source = types.SimpleNamespace(doc_id=doc_id, quote=quote)
+        source = SimpleNamespace(doc_id=doc_id, quote=quote)
         return source
 
 
@@ -490,14 +490,14 @@ class Test_run_agent(hunitest.TestCase):
         Minimal async agent used by tests.
         """
 
-        async def run(self, prompt: str) -> types.SimpleNamespace:
+        async def run(self, prompt: str) -> SimpleNamespace:
             """
             Return a fake run result.
 
             :param prompt: prompt sent to the agent
             :return: fake run result
             """
-            result = types.SimpleNamespace(output=f"answer: {prompt}")
+            result = SimpleNamespace(output=f"answer: {prompt}")
             return result
 
     def test1(self) -> None:
@@ -530,14 +530,14 @@ class Test_run_validator_example(hunitest.TestCase):
         Minimal async validator agent used by tests.
         """
 
-        async def run(self, prompt: str) -> types.SimpleNamespace:
+        async def run(self, prompt: str) -> SimpleNamespace:
             """
             Return a fake validator run result.
 
             :param prompt: prompt sent to the agent
             :return: fake run result
             """
-            result = types.SimpleNamespace(output={"prompt": prompt})
+            result = SimpleNamespace(output={"prompt": prompt})
             return result
 
     def test1(self) -> None:
@@ -570,14 +570,14 @@ class Test_run_streaming_demo(hunitest.TestCase):
         Minimal agent without streaming support.
         """
 
-        async def run(self, prompt: str) -> types.SimpleNamespace:
+        async def run(self, prompt: str) -> SimpleNamespace:
             """
             Return a fake fallback run result.
 
             :param prompt: prompt sent to the agent
             :return: fake run result
             """
-            result = types.SimpleNamespace(output=f"fallback: {prompt}")
+            result = SimpleNamespace(output=f"fallback: {prompt}")
             return result
 
     def test1(self) -> None:
@@ -607,7 +607,7 @@ class Test_get_openai_model_class(hunitest.TestCase):
         Test missing OpenAI model module.
         """
         # Run test.
-        with unittest.mock.patch.object(
+        with mock.patch.object(
             put.importlib.util, "find_spec", return_value=None
         ):
             actual = put._get_openai_model_class()
@@ -632,7 +632,7 @@ class Test_build_explicit_openai_model(hunitest.TestCase):
         # Prepare inputs.
         model_id = "openai:gpt-5-nano"
         # Run test.
-        with unittest.mock.patch.object(
+        with mock.patch.object(
             put, "_get_openai_model_class", return_value=None
         ):
             actual = put.build_explicit_openai_model(model_id)
@@ -665,7 +665,7 @@ class Test_get_settings_classes(hunitest.TestCase):
         Test direct class discovery from the pydantic_ai module.
         """
         # Prepare inputs.
-        pydantic_ai_module: typing.Any = sys.modules["pydantic_ai"]
+        pydantic_ai_module = sys.modules["pydantic_ai"]
         pydantic_ai_module.ModelSettings = self._ModelSettings
         pydantic_ai_module.UsageLimits = self._UsageLimits
         # Prepare outputs.

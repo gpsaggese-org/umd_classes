@@ -2,9 +2,8 @@ ipykernel==6.30.1
 jupyterlab==4.4.6
 nbclient==0.10.2
 nbformat==5.10.4
-python-dotenv==1.1.1
-typing_extensions==4.14.1
-nest_asyncio
+python-dotenv
+pydantic-ai
 matplotlib
 numpy
 pandas
