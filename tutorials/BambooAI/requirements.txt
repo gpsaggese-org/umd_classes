@@ -1,2 +1,6 @@
 bambooai
 qdrant-client
+numpy
+pandas
+scikit-learn
+python-dotenv
