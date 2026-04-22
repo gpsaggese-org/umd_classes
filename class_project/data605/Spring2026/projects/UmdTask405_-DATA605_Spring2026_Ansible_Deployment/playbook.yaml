@@ -40,9 +40,9 @@
         dest: "{{ output_path }}"
         mode: "0644"
 
-    - name: create a stack, pass in the template via an URL
+    - name: Create a stack, pass in the template via an URL
       amazon.aws.cloudformation:
-        stack_name: "umd-stack-ansible-cloudformation"
+        stack_name: "Umd-stack-ansible-cloudformation"
         state: "present"
         region: "us-east-1"
         template: "cf_templates/s3_bucket.yaml"
