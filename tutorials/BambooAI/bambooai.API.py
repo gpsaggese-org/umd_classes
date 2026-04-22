@@ -86,12 +86,16 @@ utils.init_logger(_LOG)
 # %% [markdown]
 # ## Setup and dependencies
 #
-# Make sure the dataset lives here and that your `.env` file defines `EXECUTION_MODE` before you execute the notebook.
+# Make sure the dataset lives here and that your `.env` file defines `EXECUTION_MODE` before you execute the notebook.  The EXECUTION_MODE param controls where BambooAI executes generated code, based on your setup. Common values are `local` (run in-process) and `api` (run via a configured executor). If you are unsure, it is recommended to start with `local`.
 #
-# Data location
-# - The default dataset path is `_DEFAULT_CSV = Path("testdata.csv")` in `bambooai_utils.py`.
-# - Override it with `--csv-path` (parser in `bambooai_utils.py`) or update `_DEFAULT_CSV` directly.
+# The default dataset path is `_DEFAULT_CSV = Path("testdata.csv")` in `bambooai_utils.py`. Override it with `--csv-path` (parser in `bambooai_utils.py`) or update `_DEFAULT_CSV` directly.
 #
+# **At minimum you need:**
+# - Dependencies installed through Docker and `requirements.txt`.
+# - API keys in `.env` for the LLM provider you choose.
+# - `LLM_CONFIG.json` - This file maps agents to models, providers, and parameters. Use `LLM_CONFIG.json` as a starting point, or set `LLM_CONFIG` in `.env` to inline the JSON. 
+#
+# BambooAI reads its agent model settings from `LLM_CONFIG` (env var) or `LLM_CONFIG.json` in the working directory. If neither is present, it falls back to its package defaults. Prompt templates can be customized by creating `PROMPT_TEMPLATES.json` from the provided sample file.
 
 # %%
 # Configure environment, plotting, and helper import paths.
@@ -110,16 +114,6 @@ print(f"Plotly renderer: {pio.renderers.default}")
 # Environment and path setup is now ready for downstream cells.
 
 
-
-# %% [markdown]
-# ## Installation and configuration
-#
-# At minimum you need:
-# - Dependencies installed through Docker and `requirements.txt`.
-# - API keys in `.env` for the LLM provider you choose.
-#
-# BambooAI reads its agent model settings from `LLM_CONFIG` (env var) or `LLM_CONFIG.json` in the working directory. If neither is present, it falls back to its package defaults. Prompt templates can be customized by creating `PROMPT_TEMPLATES.json` from the provided sample file.
-#
 
 # %%
 # Inspect the active LLM configuration source and summarize configured agents.
@@ -149,43 +143,6 @@ else:
 # The output confirms whether configuration is sourced from env, file, or defaults.
 
 
-
-# %% [markdown]
-# ## Config reference (files)
-# - `LLM_CONFIG.json` maps agents to models, providers, and parameters. Use `LLM_CONFIG.json` as a starting point, or set `LLM_CONFIG` in `.env` to inline the JSON.
-#
-# - Prompt templates can be overridden by providing `PROMPT_TEMPLATES.json` (created from `PROMPT_TEMPLATES_sample.json`) in the working directory.
-#
-# - Each run records a JSON log file (for example `logs/bambooai_run_log.json`) plus a consolidated log that tracks multiple runs.
-#
-
-# %% [markdown]
-# ## Key parameters
-# | Parameter | Type | Default | Impact |
-# | --- | --- | --- | --- |
-# | `df` | `pd.DataFrame` | `None` | Primary dataset for analysis. If not provided, BambooAI may attempt to source data from the internet or auxiliary datasets. |
-# | `auxiliary_datasets` | `list[str]` | `None` | Additional datasets available during code execution. |
-# | `max_conversations` | `int` | `4` | Number of user/assistant pairs retained in memory. |
-# | `search_tool` | `bool` | `False` | Enables external search capability when needed. |
-# | `planning` | `bool` | `False` | Enables multi-step planning for complex requests. |
-# | `webui` | `bool` | `False` | Runs BambooAI as a Flask-based web app. |
-# | `vector_db` | `bool` | `False` | Enables vector memory for recall or retrieval. |
-# | `df_ontology` | `str` | `None` | Path to a `.ttl` ontology file for semantic grounding. |
-# | `exploratory` | `bool` | `True` | Enables expert selection for query handling. |
-# | `custom_prompt_file` | `str` | `None` | YAML file with custom prompt templates. |
-#
-# Few important clarifications:
-#
-# - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from.
-#
-#     - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
-#
-#     - Qdrant example env vars: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...` (optional for local, required for cloud).
-#
-#     - Pinecone embeddings are supported with `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (HF).
-#
-# - `df_ontology` expects a `.ttl` ontology file (RDF/OWL) that defines classes, properties, and relationships.
-#
 
 # %% [markdown]
 # ### API helper functions
@@ -224,15 +181,6 @@ print(f"Default CSV path: {_DEFAULT_CSV}")
 # The printed docstrings provide a quick API reference for the helper layer.
 
 
-
-# %% [markdown]
-# ## EXECUTION_MODE and configuration requirements
-#
-# EXECUTION_MODE controls where BambooAI executes generated code, based on your BambooAI setup. Common values are `local` (run in-process) and `api` (run via a configured executor). If you are unsure, it is recommended to start with `local`.
-#
-#
-# Our wrapper resolves `EXECUTION_MODE` as `args.execution_mode` or the environment variable `EXECUTION_MODE`. If both are empty, `_resolve_execution_mode` raises an assertion.
-#
 
 # %%
 # Set the execution mode expected by the wrapper and verify the resolved value.
@@ -284,11 +232,6 @@ def _get_artifacts_dir() -> Path:
 
 
 # %%
-#Set your OPENAI API KEY and GEMINI API KEY here if not already set in .env file
-# os.environ['OPENAI_API_KEY']=''
-# os.environ['GEMINI_API_KEY']=''
-
-# %%
 # Display masked environment settings used by BambooAI.
 keys = [
     "EXECUTION_MODE",
@@ -310,6 +253,34 @@ for key in keys:
     print(f"- {key}: {display_value}")
 # Masked environment output confirms which settings are available.
 
+
+# %% [markdown]
+# ## Key parameters
+# | Parameter | Type | Default | Impact |
+# | --- | --- | --- | --- |
+# | `df` | `pd.DataFrame` | `None` | Primary dataset for analysis. If not provided, BambooAI may attempt to source data from the internet or auxiliary datasets. |
+# | `auxiliary_datasets` | `list[str]` | `None` | Additional datasets available during code execution. |
+# | `max_conversations` | `int` | `4` | Number of user/assistant pairs retained in memory. |
+# | `search_tool` | `bool` | `False` | Enables external search capability when needed. |
+# | `planning` | `bool` | `False` | Enables multi-step planning for complex requests. |
+# | `webui` | `bool` | `False` | Runs BambooAI as a Flask-based web app. |
+# | `vector_db` | `bool` | `False` | Enables vector memory for recall or retrieval. |
+# | `df_ontology` | `str` | `None` | Path to a `.ttl` ontology file for semantic grounding. |
+# | `exploratory` | `bool` | `True` | Enables expert selection for query handling. |
+# | `custom_prompt_file` | `str` | `None` | YAML file with custom prompt templates. |
+#
+# Few important clarifications:
+#
+# - `vector_db=True` enables episodic memory. Pinecone and Qdrant are supported via `.env` configuration. When set to True, the model will first attempt to search its vector DB for previous conversation for clues to answer questions. If nothing is found, it attempts to reason on its own and answer. At the end of each output, BambooAI asks users to rank the solution it provided on a scale of 1-10 (10 being awesome and 1 being really bad). If you rank it pretty high (>6), the model will try to reference it for future conversations to learn from.
+#
+#     - Pinecone example env vars: `VECTOR_DB_TYPE=pinecone`, `PINECONE_API_KEY=...` (some versions also use `PINECONE_ENV`).
+#
+#     - Qdrant example env vars: `VECTOR_DB_TYPE=qdrant`, `QDRANT_URL=...`, `QDRANT_API_KEY=...` (optional for local, required for cloud).
+#
+#     - Pinecone embeddings are supported with `text-embedding-3-small` (OpenAI) or `all-MiniLM-L6-v2` (HF).
+#
+# - `df_ontology` expects a `.ttl` ontology file (RDF/OWL) that defines classes, properties, and relationships.
+#
 
 # %%
 # Load the dataset and show a small preview.
