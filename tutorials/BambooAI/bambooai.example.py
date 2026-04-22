@@ -13,24 +13,6 @@
 #     name: python3
 # ---
 
-# %% [markdown]
-# # BambooAI Example Notebook
-#
-# This notebook is a guided, end-to-end tour of BambooAI for analysis workflows.
-#
-# **Note:** Cells that run the agent call an LLM and may incur cost. For parameter-by-parameter explanations and focused demos, see `bambooai.API.ipynb`.
-
-# %% [markdown]
-# ## Setup
-#
-# Expected working directory
-# - Run this notebook from the repo root where `bambooai_utils.py` and `testdata.csv` live.
-#
-# Required vs optional
-# - `EXECUTION_MODE` is required by the wrapper.
-# - `LLM_CONFIG` is optional if `LLM_CONFIG.json` exists in the working directory.
-# - Provider keys depend on your LLM backend.
-
 # %%
 # %load_ext autoreload
 # %autoreload 2
@@ -40,6 +22,7 @@ import logging
 import os
 import random
 import sys
+import textwrap
 from pathlib import Path
 
 # Third party libraries.
@@ -49,423 +32,505 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from IPython.display import display
-
-# Configure notebook plotting defaults.
-# sns.set_style("whitegrid")
-# plt.rcParams["figure.figsize"] = (12, 6)
-# np.set_printoptions(suppress=True, precision=6)
-# print("Notebook bootstrap complete.")
+# The common notebook libraries are loaded.
 
 # %%
-# Add local helper paths and import the notebook utilities.
-# helpers_root_docker = Path("/app/helpers_root")
-# helpers_root_local = Path.cwd() / "helpers_root"
-# for candidate in [helpers_root_docker, helpers_root_local]:
-#     if candidate.exists() and str(candidate) not in sys.path:
-#         sys.path.insert(0, str(candidate))
-
-# import bambooai
+# Import notebook-specific modules.
 from bambooai import BambooAI
 
 import bambooai_utils as butils
 import helpers.hio as hio
 
-ARTIFACTS_DIR = Path("artifacts")
-print("Working directory:", Path.cwd())
-print("bambooai version:", md.version("bambooai"))
-# The project modules are now importable from the notebook.
+display(["BambooAI", "bambooai_utils", "hio"])
+# The BambooAI and local helper modules are available.
 
 # %%
-# Initialize notebook logging through the shared utility module.
+# Configure notebook logging.
 _LOG = logging.getLogger(__name__)
 butils.init_logger(_LOG)
+_LOG.info("Notebook logging is configured.")
+# Notebook logging is configured.
+
+# %% [markdown]
+# # BambooAI End-to-End Demo: Conversational Data Analysis
+#
+# # Summary
+#
+# This notebook demonstrates an end-to-end BambooAI workflow for customer churn analysis using natural-language questions, supporting context files, ontology grounding, custom prompts, and interactive agents.
+#
+# ## Workflow Goals
+#
+# - **Customer churn behavior**: Analyze churn behavior in a synthetic customer dataset.
+# - **Premium comparison**: Compare premium and non-premium users.
+# - **External context**: Enrich analysis with region and market-tier context.
+# - **Domain semantics**: Apply ontology grounding to customer churn fields.
+# - **Business insights**: Generate actionable business recommendations.
+
+# %% [markdown]
+# ## Setup
+#
+# - **Expected working directory**: Run this notebook from the repo root where `bambooai_utils.py` and `testdata.csv` live.
+# - **Required configuration**: `EXECUTION_MODE` is required by the wrapper.
+# - **Optional configuration**: `LLM_CONFIG` is optional if `LLM_CONFIG.json` exists in the working directory.
+# - **Provider keys**: Provider keys depend on the selected LLM backend.
+
+# %%
+# Initialize notebook environment through the shared utility module.
 butils._setup_env()
-print("Notebook logging initialized.")
-# Logger output from the notebook and utility module now prints inline.
+ARTIFACTS_DIR = Path("artifacts")
+_LOG.info("Working directory: %s", Path.cwd())
+_LOG.info("bambooai version: %s", md.version("bambooai"))
+_LOG.info("Notebook logging initialized.")
+# The notebook runtime context is visible in the output.
 
 # %% [markdown]
 # ## Sanity Check
 #
-# Confirm the runtime configuration before starting any agent session.
-
-# %%
-os.environ['OPENAI_API_KEY']='sk-proj'
-os.environ['GEMINI_API_KEY']=''
+# - **Goal**: Confirm the runtime configuration before starting any agent session.
 
 # %%
 # Display the current execution and credential configuration.
 execution_mode_env = os.getenv("EXECUTION_MODE", "<not set>")
 llm_config_env = os.getenv("LLM_CONFIG", "<not set>")
 llm_config_exists = Path("LLM_CONFIG.json").exists()
-key_vars = ["OPENAI_API_KEY", "AZURE_OPENAI_API_KEY", "ANTHROPIC_API_KEY","GEMINI_API_KEY"]
+key_vars = ["OPENAI_API_KEY", "AZURE_OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY"]
 present_keys = [key for key in key_vars if os.getenv(key)]
 
-print("EXECUTION_MODE:", execution_mode_env)
-print("LLM_CONFIG env:", llm_config_env)
-print("LLM_CONFIG.json exists:", llm_config_exists)
-print("Provider keys set for:", ", ".join(present_keys) or "<none>")
-# This confirms whether the notebook has enough configuration to start BambooAI.
+_LOG.info("EXECUTION_MODE: %s", execution_mode_env)
+_LOG.info("LLM_CONFIG env: %s", llm_config_env)
+_LOG.info("LLM_CONFIG.json exists: %s", llm_config_exists)
+_LOG.info("Provider keys set for: %s", ", ".join(present_keys) or "<none>")
+# The output confirms whether the notebook has enough configuration to start BambooAI.
 
 # %% [markdown]
-# ## Data and Scenario
+# ## 2. Create a Sample Business Dataset
 #
-# `testdata.csv` is a small synthetic customer dataset for demo analysis. It includes demographics, engagement metrics, and churn indicators.
+# - **Goal**: Generate a synthetic customer churn dataset that keeps the notebook self-contained.
 #
-# Data dictionary
-# - user_id: Unique user identifier.
-# - age: User age.
-# - gender: User gender.
-# - country: Country code.
-# - device_type: Device type.
-# - signup_days_ago: Days since signup.
-# - sessions_last_30d: Sessions in the last 30 days.
-# - avg_session_duration_min: Average session duration in minutes.
-# - pages_per_session: Average pages per session.
-# - has_premium: Premium subscription indicator.
-# - monthly_spend_usd: Monthly spend in USD.
-# - support_tickets_90d: Support tickets in last 90 days.
-# - churned: Churn label.
+#     - **`customer_id`**: Unique user ID.
+#     - **`country`**: Customer country.
+#     - **`age`**: Customer age.
+#     - **`tenure_months`**: Customer tenure with the company.
+#     - **`monthly_spend`**: Monthly spend amount.
+#     - **`support_tickets_last_90d`**: Support interactions in the last 90 days.
+#     - **`has_premium`**: Premium subscription flag.
+#     - **`engagement_score`**: Synthetic product engagement score.
+#     - **`churned`**: Customer churn outcome.
+#
+# ## Business Framing
+#
+# - **Premium impact**: Check whether premium membership reduces churn.
+# - **Regional risk**: Check whether some regions have higher churn risk.
+# - **Customer characteristics**: Identify characteristics associated with churn.
+# - **Business actions**: Identify actions that could reduce churn.
 
 # %%
-# Create a small synthetic dataset if the demo CSV is missing.
-def _create_testdata_if_missing(*, path: str = "testdata.csv") -> Path:
-    """
-    Create synthetic test data if the CSV is missing.
+# Define reproducible sample dataset parameters.
+np.random.seed(42)
 
-    :param path: output CSV path
-    :return: path to the CSV file
-    """
-    csv_path = Path(path)
-    if csv_path.exists():
-        return csv_path
-    random.seed(42)
-    rows = []
-    for idx in range(20):
-        rows.append(
-            {
-                "user_id": 1001 + idx,
-                "age": random.randint(18, 70),
-                "gender": random.choice(["female", "male"]),
-                "country": random.choice(["US", "CA", "DE", "IN"]),
-                "device_type": random.choice(["mobile", "desktop", "tablet"]),
-                "signup_days_ago": random.randint(1, 400),
-                "sessions_last_30d": round(random.uniform(1, 30), 1),
-                "avg_session_duration_min": round(random.uniform(1, 15), 2),
-                "pages_per_session": round(random.uniform(1, 8), 2),
-                "has_premium": random.choice([0, 1]),
-                "monthly_spend_usd": round(random.uniform(5, 400), 2),
-                "support_tickets_90d": random.randint(0, 5),
-                "churned": random.choice([0, 1]),
-            }
-        )
-    pd.DataFrame(rows).to_csv(csv_path, index=False)
-    return csv_path
+n = 500
+countries = ["United States", "India", "Germany", "Brazil", "Canada", "UK"]
+country_probs = [0.22, 0.18, 0.15, 0.15, 0.12, 0.18]
 
-
-csv_path = _create_testdata_if_missing(path="testdata.csv")
-print("Dataset path:", csv_path)
-# The demo dataset is available for the rest of the notebook.
-
-# %% [markdown]
-# ## Quick EDA
-#
-# Take a quick look at the dataset before asking BambooAI questions about it.
+_LOG.info("Synthetic customer count: %s", n)
+# The dataset size and country sampling inputs are ready.
 
 # %%
-# Load the dataframe and show the dataset dimensions.
-df = butils._load_dataframe(butils._DEFAULT_CSV)
-print("Shape:", df.shape)
-display(df.dtypes.rename("dtype").to_frame())
-# The dataframe loaded successfully and the schema is visible.
+# Create the synthetic customer feature dataframe.
+df = pd.DataFrame({
+    "customer_id": np.arange(10001, 10001 + n),
+    "country": np.random.choice(countries, size=n, p=country_probs),
+    "age": np.random.randint(18, 66, size=n),
+    "tenure_months": np.random.randint(1, 61, size=n),
+    "monthly_spend": np.round(np.random.normal(58, 18, size=n).clip(10, 150), 2),
+    "support_tickets_last_90d": np.random.poisson(lam=1.8, size=n),
+    "has_premium": np.random.choice([0, 1], size=n, p=[0.58, 0.42]),
+    "engagement_score": np.round(np.random.normal(62, 15, size=n).clip(5, 100), 1),
+})
 
-# %%
-# Summarize missing values and preview the first rows.
-display(df.isna().sum().rename("missing_values").to_frame())
 display(df.head())
-# The dataset appears ready for interactive analysis.
-
-# %% [markdown]
-# ## Conversation Loop
-#
-# `butils._run_agent(...)` an interactive chat loop.
-# Type `exit` or `quit` when you are done, or interrupt the kernel to stop.
-
-# %% [markdown]
-# Try these prompts and what to expect
-# - Summarize columns, types, and missing values. Expect a schema summary.
-# - Show top 5 rows and a brief dataset description. Expect a quick preview.
-# - Plot distribution of monthly_spend_usd. Expect a histogram.
-# - Compare churn rate by has_premium. Expect a grouped summary.
-# - Identify outliers in avg_session_duration_min. Expect a potential outlier list.
+# The dataframe contains the base customer attributes.
 
 # %%
-# Resolve the execution mode for the notebook session.
-args = butils._parse().parse_args([])
-execution_mode = butils._resolve_execution_mode(
-    args.execution_mode or os.getenv("EXECUTION_MODE", "local")
+# Build a churn logit from customer risk signals.
+logit = (
+    -1.0
+    + 0.55 * (df["has_premium"] == 0).astype(int)
+    + 0.04 * (3 - df["support_tickets_last_90d"].clip(upper=3))
+    + 0.03 * (24 - df["tenure_months"].clip(upper=24))
+    + 0.025 * (55 - df["engagement_score"]).clip(lower=0)
 )
-os.environ["EXECUTION_MODE"] = execution_mode
-print("Execution mode:", execution_mode)
-# The notebook session now has an explicit execution mode.
+
+_LOG.info("Churn logit values: %s", len(logit))
+# The churn logit captures base customer-level churn risk.
 
 # %%
-# Build the minimal BambooAI configuration.
-minimal_config = {
-    "planning": False, #No planning enabled
-    "vector_db": False, #No vector DB searches 
-    "search_tool": False, #No web searche enabled
+# Add the country-level churn risk adjustment.
+country_risk = {
+    "United States": 0.10,
+    "India": 0.18,
+    "Germany": 0.08,
+    "Brazil": 0.20,
+    "Canada": 0.07,
+    "UK": 0.12,
 }
-display(pd.Series(minimal_config, name="enabled").to_frame())
-# This is the smallest configuration that still exercises the core workflow.
+logit += df["country"].map(country_risk)
+
+display(pd.Series(country_risk, name="risk").to_frame())
+# The country risk mapping has been applied to the churn logit.
 
 # %%
-# Construct the minimal BambooAI agent and show its type.
-bamboo_agent = butils._build_bamboo_agent(df, **minimal_config)
-print("Constructed agent type:", type(bamboo_agent).__name__)
-# The minimal BambooAI agent is ready for interaction.
+# Convert the logit to a binary churn outcome.
+prob = 1 / (1 + np.exp(-(logit - 1.8)))
+df["churned"] = (np.random.rand(n) < prob).astype(int)
+
+display(df.head())
+_LOG.info("Dataframe shape: %s", df.shape)
+# The dataset is ready for BambooAI analysis.
+
+# %% [markdown]
+# ## 3. Quick Data Sanity Check
+#
+# - **Goal**: Review the generated dataset before using BambooAI.
 
 # %%
-# Start the minimal config conversation loop.
-butils._run_agent(bamboo_agent)
-# The minimal config agent interactive session is now running.
+# Show a compact sanity check of the generated dataset.
+display(df.info())
+display(df.describe(include="all").T)
+_LOG.info("Churn rate: %s", round(df["churned"].mean(), 3))
+_LOG.info("Premium rate: %s", round(df["has_premium"].mean(), 3))
+# The output summarizes schema, distributions, and headline rates.
+
+# %% [markdown]
+# ## 4. Prepare Supporting Context Files
+#
+# - **Goal**: Add supporting context that BambooAI can optionally use later for richer analysis.
+#     - **Auxiliary dataset**: Country-to-region mapping.
+#     - **Ontology file**: Domain semantics.
+#     - **Custom prompt YAML**: Business-oriented response style.
+
+# %%
+# Define the asset directory and supporting file paths.
+assets_dir = Path("bambooai_e2e_assets")
+hio.create_dir(str(assets_dir))
+
+aux_path = assets_dir / "country_region_reference.csv"
+ontology_path = assets_dir / "customer_churn_ontology.ttl"
+custom_prompt_path = assets_dir / "business_summary_prompt.yml"
+
+_LOG.info("Asset directory: %s", assets_dir)
+# The supporting file paths are ready.
+
+# %%
+# Create the auxiliary country-to-region reference dataset.
+region_df = pd.DataFrame({
+    "country": ["United States", "India", "Germany", "Brazil", "Canada", "UK"],
+    "region": ["North America", "Asia", "Europe", "South America", "North America", "Europe"],
+    "market_tier": ["Mature", "Growth", "Mature", "Growth", "Mature", "Mature"],
+})
+region_df.to_csv(aux_path, index=False)
+
+display(region_df)
+# The auxiliary dataset is written for later semantic-context analysis.
+
+# %%
+# Write the ontology file that describes churn-domain semantics.
+ontology_text = textwrap.dedent("""
+@prefix ex: <http://example.com/churn#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ex:Customer a rdfs:Class .
+ex:PremiumCustomer a rdfs:Class ;
+    rdfs:subClassOf ex:Customer .
+
+ex:churned a rdfs:Property ;
+    rdfs:label "customer churn outcome" .
+
+ex:has_premium a rdfs:Property ;
+    rdfs:label "premium subscription flag" .
+
+ex:engagement_score a rdfs:Property ;
+    rdfs:label "customer engagement score" .
+
+ex:tenure_months a rdfs:Property ;
+    rdfs:label "customer tenure in months" .
+
+ex:support_tickets_last_90d a rdfs:Property ;
+    rdfs:label "support burden in recent period" .
+""").strip()
+
+ontology_path.write_text(ontology_text, encoding="utf-8")
+_LOG.info("Ontology file: %s", ontology_path)
+# The ontology file is available for domain-grounded analysis.
+
+# %%
+# Write the custom prompt file for business-oriented responses.
+custom_prompt_text = textwrap.dedent("""
+planner_system_prompt: |
+  You are assisting with customer churn analysis.
+  When planning, prefer concise multi-step plans that focus on:
+  1. identifying churn drivers,
+  2. segmenting important customer groups,
+  3. producing business-oriented takeaways.
+
+analyst_system_prompt: |
+  You are a business analyst working on churn reduction.
+  Keep outputs concise, structured, and action-oriented.
+  When appropriate, end with 2-4 practical recommendations.
+""").strip()
+
+custom_prompt_path.write_text(custom_prompt_text, encoding="utf-8")
+_LOG.info("Custom prompt file: %s", custom_prompt_path)
+# The custom prompt file is available for output style control.
+
+# %% [markdown]
+# ## 5. Baseline: Minimal BambooAI Workflow
+#
+# - **Goal**: Start with the simplest setup and keep most parameters disabled.
+#
+# ### Suggested Prompts
+#
+# - `Compare churn rates for premium vs non-premium users`
+# - `Analyze churn by country`
+# - `Does engagement score appear related to churn?`
+# - `Compare churn across tenure groups`
+# - `Summarize the main basic patterns in this dataset`
+
+# %%
+# Configure the minimal BambooAI workflow.
+minimal_config = {
+    "df": df,
+    "planning": False,
+}
+
+display(pd.Series(minimal_config, name="value").to_frame())
+# The minimal configuration is ready for agent construction.
+
+# %%
+# Construct the minimal BambooAI agent.
+bamboo_minimal = BambooAI(**minimal_config)
+_LOG.info(
+    "Constructed minimal BambooAI agent: %s",
+    type(bamboo_minimal).__name__,
+)
+# The minimal BambooAI agent is ready for interactive use.
+
+# %%
+# Start the minimal interactive conversation.
+butils._run_agent(bamboo_minimal)
+_LOG.info("Minimal workflow completed or exited by the user.")
+# The minimal workflow is available for direct dataframe questions.
+
+# %% [markdown]
+# ## 6. Add Planning for Multi-step Reasoning
+#
+# - **Goal**: Enable `planning` for decomposition, structured reasoning, and stronger multi-step solutions.
+# - **Churn drivers**: Identify variables associated with churn.
+# - **Segments**: Compare customer groups.
+# - **Findings**: Summarize analysis results.
+# - **Recommendations**: Generate actions for churn reduction.
+#
+# ### Suggested Prompts
+#
+# - `Identify the main churn drivers and summarize the highest-risk customer groups`
+# - `Compare churn by premium status, engagement, and tenure, then explain the biggest risk factors`
+# - `Segment customers into meaningful groups and summarize which groups look most at risk`
+# - `Analyze churn patterns and provide a short executive summary`
+
+# %%
+# Configure the planning-enabled BambooAI workflow.
+planning_config = {
+    "df": df,
+    "planning": True,
+}
+
+display(pd.Series(planning_config, name="value").to_frame())
+# The planning configuration is ready for agent construction.
 
 # %%
 # Construct the planning-enabled BambooAI agent.
-bamboo_planning = butils._build_bamboo_agent(
-    df,
-    planning=True,
-    vector_db=False,
-    search_tool=False,
+bamboo_planning = BambooAI(**planning_config)
+_LOG.info(
+    "Constructed planning BambooAI agent: %s",
+    type(bamboo_planning).__name__,
 )
-print("Constructed planning agent type:", type(bamboo_planning).__name__)
-# The planning-enabled agent is ready for interaction.
+# The planning-enabled BambooAI agent is ready for interactive use.
 
 # %%
-# Start the planning-enabled conversation loop.
+# Start the planning-enabled interactive conversation.
 butils._run_agent(bamboo_planning)
-# The planning-enabled interactive session is now running.
+_LOG.info("Planning workflow completed or exited by the user.")
+# The planning workflow is available for multi-step analysis questions.
 
 # %% [markdown]
-# ## Semantic Search Demo
+# ## 7. Add Auxiliary Context for Richer Analysis
 #
-# Create an auxiliary dataset and run BambooAI with semantic search features enabled.
+# - **Goal**: Add reference files, metadata, mapping tables, or supplementary datasets for richer analysis.
+# - **Auxiliary dataset**: Additional data file that provides extra context for the primary dataset.
+# - **Expected effect**: Enable richer analysis and interpretation.
+#
+# ### Suggested Prompts
+#
+# - `Use the auxiliary dataset to analyze churn by region`
+# - `Compare churn across market tiers`
+# - `Summarize whether growth markets show different churn behavior than mature markets`
+# - `Use the supporting context to provide a geography-based churn summary`
 
 # %%
-# Create the auxiliary dataset used by the semantic-search configuration.
-hio.create_dir(str(ARTIFACTS_DIR), incremental=True)
-aux_path = ARTIFACTS_DIR / "auxiliary_demo.csv"
-aux_df = pd.DataFrame(
-    {
-        "country": ["US", "CA", "DE"],
-        "region_label": ["North America", "North America", "Europe"],
-    }
-)
-aux_df.to_csv(aux_path, index=False)
-display(aux_df)
-print("Wrote auxiliary dataset:", aux_path)
-# The semantic-search demo now has an auxiliary dataset to join against.
-
-# %%
-# Build the semantic-search BambooAI agent.
+# Configure the auxiliary-context BambooAI workflow.
 semantic_config = {
+    "df": df,
     "planning": True,
     "vector_db": True,
     "search_tool": True,
     "auxiliary_datasets": [str(aux_path)],
 }
+
 display(pd.Series(semantic_config, name="value").to_frame())
-bamboo_semantic = BambooAI(df=df, **semantic_config)
-print("Constructed semantic agent type:", type(bamboo_semantic).__name__)
-# The semantic-search configuration is ready for interaction.
+# The auxiliary-context configuration is ready for agent construction.
 
 # %%
-# Start the semantic-search conversation loop.
+# Construct the auxiliary-context BambooAI agent.
+bamboo_semantic = BambooAI(**semantic_config)
+_LOG.info(
+    "Constructed semantic-context BambooAI agent: %s",
+    type(bamboo_semantic).__name__,
+)
+# The auxiliary-context BambooAI agent is ready for interactive use.
+
+# %%
+# Start the auxiliary-context interactive conversation.
 butils._run_agent(bamboo_semantic)
-# The semantic-search interactive session is now running.
+_LOG.info("Auxiliary-context workflow completed or exited by the user.")
+# The auxiliary-context workflow is available for region and market-tier questions.
 
 # %% [markdown]
-# ## Ontology Demo
+# ## 8. Add Ontology for Domain Grounding
 #
-# Create a small ontology file and run BambooAI with ontology grounding enabled.
+# - **Goal**: Use ontology grounding to clarify column meaning and business concepts.
+# - **Domain-aware interpretation**: Explain churn fields in business terms.
+# - **Grounded analysis**: Connect raw columns to domain semantics.
+# - **Business framing**: Improve explanations of churn profiles and lifecycle factors.
+#
+# ### Suggested Prompts
+#
+# - `Interpret churn using the business meaning of premium status, engagement, and support load`
+# - `Explain how the ontology changes the interpretation of churn-related fields`
+# - `Summarize the customer lifecycle factors associated with churn`
+# - `Use domain semantics to describe high-risk customer profiles`
 
 # %%
-# Write a minimal ontology file for the dataframe fields.
-hio.create_dir(str(ARTIFACTS_DIR), incremental=True)
-ontology_path = ARTIFACTS_DIR / "mini_ontology.ttl"
-ontology_path.write_text(
-    "@prefix ex: <http://example.com/> .\n"
-    "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n"
-    "@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n"
-    "ex:Customer a rdfs:Class .\n"
-    "ex:churned a rdfs:Property ;\n"
-    "  rdfs:domain ex:Customer ;\n"
-    "  rdfs:range xsd:boolean ;\n"
-    '  rdfs:label "churned" .\n'
-    "ex:monthly_spend_usd a rdfs:Property ;\n"
-    "  rdfs:domain ex:Customer ;\n"
-    "  rdfs:range xsd:decimal ;\n"
-    '  rdfs:label "monthly_spend_usd" .\n'
-    "ex:has_premium a rdfs:Property ;\n"
-    "  rdfs:domain ex:Customer ;\n"
-    "  rdfs:range xsd:boolean ;\n"
-    '  rdfs:label "has_premium" .\n'
-)
-print(ontology_path.read_text())
-# The ontology file is now available for grounding dataframe questions.
-
-# %%
-# Build the ontology-grounded BambooAI agent.
+# Configure the ontology-grounded BambooAI workflow.
 ontology_config = {
+    "df": df,
     "planning": True,
     "exploratory": True,
     "df_ontology": str(ontology_path),
 }
+
 display(pd.Series(ontology_config, name="value").to_frame())
-bamboo_ontology = BambooAI(df=df, **ontology_config)
-print("Constructed ontology agent type:", type(bamboo_ontology).__name__)
-# The ontology-grounded configuration is ready for interaction.
+# The ontology configuration is ready for agent construction.
 
 # %%
-# Start the ontology-grounded conversation loop.
+# Construct the ontology-grounded BambooAI agent.
+bamboo_ontology = BambooAI(**ontology_config)
+_LOG.info(
+    "Constructed ontology-grounded BambooAI agent: %s",
+    type(bamboo_ontology).__name__,
+)
+# The ontology-grounded BambooAI agent is ready for interactive use.
+
+# %%
+# Start the ontology-grounded interactive conversation.
 butils._run_agent(bamboo_ontology)
-# The ontology-grounded interactive session is now running.
+_LOG.info("Ontology-grounded workflow completed or exited by the user.")
+# The ontology workflow is available for domain-semantics questions.
 
 # %% [markdown]
-# ## Custom Prompt Demo
+# ## 9. Add Custom Prompts for Output Style Control
 #
-# Create a custom prompt file and run BambooAI with custom prompts enabled.
+# - **Goal**: Present the same analysis differently for different audiences.
+# - **Audiences**: Data scientists, analysts, executives, and product managers.
+# - **Custom prompt style**: Concise outputs, business-oriented language, and practical recommendations.
+#
+# ### Suggested Prompts
+#
+# - `Summarize the churn problem for a business stakeholder`
+# - `Provide three practical recommendations to reduce churn`
+# - `Create an executive-style summary of churn patterns`
+# - `Explain the main churn insights concisely and actionably`
 
 # %%
-# Write a small custom prompt file for the demo run.
-hio.create_dir(str(ARTIFACTS_DIR), incremental=True)
-custom_prompt_path = ARTIFACTS_DIR / "custom_prompts.yaml"
-custom_prompt_path.write_text(
-    "# Placeholder prompts for BambooAI\n"
-    'planner_prompt: "You are a careful planner."\n'
-    'code_prompt: "Write concise pandas code."\n'
-)
-print(custom_prompt_path.read_text())
-# The custom prompt file is available for the next BambooAI run.
-
-# %%
-# Build the custom-prompt BambooAI agent.
+# Configure the custom-prompt BambooAI workflow.
 custom_prompt_config = {
-    "planning": False,
+    "df": df,
+    "planning": True,
     "exploratory": True,
     "custom_prompt_file": str(custom_prompt_path),
 }
+
 display(pd.Series(custom_prompt_config, name="value").to_frame())
-bamboo_custom = BambooAI(df=df, **custom_prompt_config)
-print("Constructed custom prompt agent type:", type(bamboo_custom).__name__)
-# The custom-prompt configuration is ready for interaction.
+# The custom-prompt configuration is ready for agent construction.
 
 # %%
-# Start the custom-prompt conversation loop.
+# Construct the custom-prompt BambooAI agent.
+bamboo_custom = BambooAI(**custom_prompt_config)
+_LOG.info(
+    "Constructed custom-prompt BambooAI agent: %s",
+    type(bamboo_custom).__name__,
+)
+# The custom-prompt BambooAI agent is ready for interactive use.
+
+# %%
+# Start the custom-prompt interactive conversation.
 butils._run_agent(bamboo_custom)
-# The custom-prompt interactive session is now running.
+_LOG.info("Custom-prompt workflow completed or exited by the user.")
+# The custom-prompt workflow is available for business-stakeholder summaries.
 
 # %% [markdown]
-# ## Full Featured Run
+# ## 10. Final Full E2E Workflow
 #
-# This run combines planning, semantic search, ontology grounding, and custom prompts.
-# It expects the artifacts created in the feature sections above.
+# - **Goal**: Combine the earlier capabilities into a single workflow, combining:
+#     - **Planning**: Multi-step reasoning.
+#     - **Auxiliary context**: Business context.
+#     - **Vector and semantic support**: Semantic enrichment.
+#     - **Ontology grounding**: Domain grounding.
+#     - **Custom prompt control**: Action-oriented outputs.
 #
-# Curated prompts and expected behavior
-# - Summarize columns, types, missing percent, and show `df.head()`.
-# - What factors correlate most with churn.
-# - Add region labels to country and summarize churn by region.
-# - Explain valid values for `churned` and `has_premium`.
-# - Provide a concise bullet summary with 3 takeaways.
+# ### Suggested Prompts
+#
+# - `Analyze churn drivers, compare premium vs non-premium users, and provide an executive summary`
+# - `Use all available context to identify the highest-risk customer segments and recommend actions`
+# - `Combine region context, ontology semantics, and churn analysis to produce a business report`
+# - `Create a concise stakeholder summary of churn risk patterns and recommended next steps`
 
 # %%
-# Locate the optional artifacts that enrich the full BambooAI run.
-aux_path = ARTIFACTS_DIR / "auxiliary_demo.csv"
-ontology_path = ARTIFACTS_DIR / "mini_ontology.ttl"
-custom_prompt_path = ARTIFACTS_DIR / "custom_prompts.yaml"
-artifact_status = pd.Series(
-    {
-        "auxiliary_demo.csv": aux_path.exists(),
-        "mini_ontology.ttl": ontology_path.exists(),
-        "custom_prompts.yaml": custom_prompt_path.exists(),
-    },
-    name="exists",
-)
-display(artifact_status.to_frame())
-# This shows which optional artifacts are available for the combined run.
-
-# %%
-# Assemble the full-feature BambooAI configuration from the available artifacts.
+# Configure the full end-to-end BambooAI workflow.
 full_config = {
+    "df": df,
     "planning": True,
     "vector_db": True,
     "search_tool": True,
+    "auxiliary_datasets": [str(aux_path)],
+    "df_ontology": str(ontology_path),
+    "custom_prompt_file": str(custom_prompt_path),
     "exploratory": True,
 }
-if aux_path.exists():
-    full_config["auxiliary_datasets"] = [str(aux_path)]
-if ontology_path.exists():
-    full_config["df_ontology"] = str(ontology_path)
-if custom_prompt_path.exists():
-    full_config["custom_prompt_file"] = str(custom_prompt_path)
 
 display(pd.Series(full_config, name="value").to_frame())
-# The combined configuration is ready to instantiate.
+# The full end-to-end configuration is ready for agent construction.
 
 # %%
-# Build the full-feature BambooAI agent.
-bamboo_full = BambooAI(df=df, **full_config)
-print("Constructed full agent type:", type(bamboo_full).__name__)
-# The full-feature BambooAI agent is ready for interaction.
+# Construct the full-feature BambooAI agent.
+bamboo_full = BambooAI(**full_config)
+_LOG.info(
+    "Constructed full-feature BambooAI agent: %s",
+    type(bamboo_full).__name__,
+)
+# The full-feature BambooAI agent is ready for interactive use.
 
 # %%
-# Start the full-feature conversation loop.
+# Start the full end-to-end interactive conversation.
 butils._run_agent(bamboo_full)
-# The full-feature interactive session is now running.
-
-# %% [markdown]
-# ## Troubleshooting
-#
-# Missing env vars
-# - Ensure `EXECUTION_MODE` is set in `.env` or environment.
-# - Ensure provider keys are set for your LLM backend.
-#
-# Missing files or wrong working directory
-# - Run the notebook from the repo root.
-# - Re-run the data creation cell to regenerate missing files.
-#
-# Import errors
-# - Verify BambooAI and pandas are installed in this environment.
-# - Restart the kernel after changing your environment.
-#
-# Agent hangs or no output
-# - Confirm network access to your LLM backend.
-# - Check logs for rate limits or authentication errors.
-# - Try the minimal quickstart run to isolate failures.
-
-# %% [markdown]
-# ## Cleanup
-#
-# Remove the generated artifacts if you want to reset the demo state.
-
-# %%
-# Delete the generated artifacts from the notebook run.
-for path in [
-    ARTIFACTS_DIR / "auxiliary_demo.csv",
-    ARTIFACTS_DIR / "mini_ontology.ttl",
-    ARTIFACTS_DIR / "custom_prompts.yaml",
-]:
-    if path.exists():
-        path.unlink()
-        print("Deleted:", path)
-    else:
-        print("Not found:", path)
-# The generated files have been removed if they existed.
-
-# %%
-# Remove the artifact directory if it is now empty.
-if ARTIFACTS_DIR.exists() and not any(ARTIFACTS_DIR.iterdir()):
-    ARTIFACTS_DIR.rmdir()
-    print("Removed empty directory:", ARTIFACTS_DIR)
-else:
-    print("Artifact directory still contains files:", ARTIFACTS_DIR)
-# The artifact directory state is now explicit.
+_LOG.info("Full workflow completed or exited by the user.")
+# The full workflow is available for combined context, ontology, and prompt-control questions.

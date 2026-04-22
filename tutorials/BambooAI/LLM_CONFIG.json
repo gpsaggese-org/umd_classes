@@ -1,14 +1,14 @@
 {
   "agent_configs": [
-    {"agent": "Expert Selector", "details": {"model": "gpt-5-nano-2025-08-07", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Expert Selector", "details": {"model": "gpt-5-nano-2025-08-07", "provider":"openai","max_completion_tokens": 2000, "temperature": 1}},
     {"agent": "Analyst Selector", "details": {"model": "gemini-2.5-flash", "provider":"gemini","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Theorist", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Dataframe Inspector", "details": {"model": "gpt-5-2025-08-07", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Planner", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Code Generator", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Error Corrector", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Reviewer", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
-    {"agent": "Solution Summarizer", "details": {"model": "gpt-4o-mini", "provider":"openai","max_tokens": 2000, "temperature": 0}},
+    {"agent": "Theorist", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Dataframe Inspector", "details": {"model": "gpt-5-2025-08-07", "provider":"openai","max_completion_tokens": 2000, "temperature": 1}},
+    {"agent": "Planner", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Code Generator", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Error Corrector", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Reviewer", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
+    {"agent": "Solution Summarizer", "details": {"model": "gpt-4o-mini", "provider":"openai","max_completion_tokens": 2000, "temperature": 0}},
     {"agent": "Google Search Executor", "details": {"model": "gemini-2.5-flash", "provider":"gemini","max_tokens": 2000, "temperature": 0}},
     {"agent": "Google Search Summarizer", "details": {"model": "gemini-2.5-flash", "provider":"gemini","max_tokens": 2000, "temperature": 0}}
   ],
