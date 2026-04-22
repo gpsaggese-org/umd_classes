@@ -10,7 +10,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression
+from patsy import dmatrix
 
 # Standard figure sizes
 _FIGSIZE_SINGLE = (8, 3)
@@ -695,3 +696,288 @@ def plot_iptw(
     ax.legend(fontsize=10, loc="best")
     ax.grid(True, alpha=0.3)
     plt.tight_layout()
+
+
+def estimate_ate_iptw(
+    data: pd.DataFrame,
+    *,
+    ps_col: str = "propensity_score",
+    outcome_col: str = "engagement_score",
+    treatment_col: str = "intervention",
+) -> tuple[float, float, float]:
+    """
+    Estimate Average Treatment Effect using Inverse Probability weighting.
+
+    Computes IPTW weights as 1/PS for treated and 1/(1-PS) for control,
+    then calculates weighted averages of outcomes in each group.
+
+    :param data: DataFrame with treatment, propensity score, and outcome columns
+    :param ps_col: Name of propensity score column
+    :param outcome_col: Name of outcome column
+    :param treatment_col: Name of binary treatment column
+    :return: Tuple of (weighted_E_Y1, weighted_E_Y0, ATE)
+    """
+    # Separate treated and control groups.
+    treated = data.query(f"{treatment_col}==1")
+    control = data.query(f"{treatment_col}==0")
+
+    # Compute IPTW weights: 1/PS for treated, 1/(1-PS) for control.
+    weight_treated = 1 / treated[ps_col]
+    weight_control = 1 / (1 - control[ps_col])
+
+    # Compute weighted averages of outcomes.
+    # E[Y|T=1] and E[Y|T=0] in the pseudo-population.
+    weighted_e_y1 = np.sum(
+        treated[outcome_col] * weight_treated
+    ) / len(data)
+    weighted_e_y0 = np.sum(
+        control[outcome_col] * weight_control
+    ) / len(data)
+
+    # ATE is the difference.
+    ate = weighted_e_y1 - weighted_e_y0
+
+    return weighted_e_y1, weighted_e_y0, ate
+
+
+def estimate_ate_with_ps(
+    data: pd.DataFrame,
+    ps_formula: str,
+    *,
+    treatment_col: str = "intervention",
+    outcome_col: str = "engagement_score",
+) -> float:
+    """
+    Estimate ATE using IPW estimator with logistic regression propensity score.
+
+    Fits a logistic regression to estimate propensity scores from the provided
+    formula, then computes the IPW estimator:
+    ATE = E[(T - PS) / (PS * (1 - PS)) * Y]
+
+    :param data: DataFrame with treatment and outcome columns
+    :param ps_formula: Patsy formula for propensity score model
+    :param treatment_col: Name of binary treatment column
+    :param outcome_col: Name of outcome column
+    :return: Estimated average treatment effect
+    """
+    # Create design matrix from formula.
+    X = dmatrix(ps_formula, data)
+
+    # Fit logistic regression to estimate propensity scores.
+    ps_model = LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
+    ps = ps_model.predict_proba(X)[:, 1]
+
+    # Compute IPW estimator: E[(T - PS) / (PS * (1 - PS)) * Y].
+    return np.mean((data[treatment_col] - ps) / (ps * (1 - ps)) * data[outcome_col])
+
+
+def estimate_ate_stabilized_weights(
+    data: pd.DataFrame,
+    *,
+    ps_col: str = "propensity_score",
+    outcome_col: str = "engagement_score",
+    treatment_col: str = "intervention",
+) -> float:
+    """
+    Estimate ATE using stabilized propensity weights.
+
+    Computes stabilized weights: PS_weight = P(T=1) / PS for treated,
+    and (1 - P(T=1)) / (1 - PS) for control. This reduces the influence
+    of extreme propensity scores compared to standard IPTW.
+
+    :param data: DataFrame with treatment, propensity score, and outcome columns
+    :param ps_col: Name of propensity score column
+    :param outcome_col: Name of outcome column
+    :param treatment_col: Name of binary treatment column
+    :return: Estimated average treatment effect
+    """
+    # Compute marginal probability of treatment.
+    p_treatment = data[treatment_col].mean()
+
+    # Separate treated and control groups.
+    treated = data.query(f"{treatment_col}==1")
+    control = data.query(f"{treatment_col}==0")
+
+    # Compute stabilized weights.
+    # Stabilized weight for treated: P(T=1) / PS.
+    weight_treated_stable = p_treatment / treated[ps_col]
+    # Stabilized weight for control: (1 - P(T=1)) / (1 - PS).
+    weight_control_stable = (1 - p_treatment) / (1 - control[ps_col])
+
+    # Compute weighted averages.
+    n_treated = len(treated)
+    n_control = len(control)
+
+    weighted_mean_y1 = np.sum(
+        treated[outcome_col] * weight_treated_stable
+    ) / n_treated
+    weighted_mean_y0 = np.sum(
+        control[outcome_col] * weight_control_stable
+    ) / n_control
+
+    # ATE is the difference.
+    ate = weighted_mean_y1 - weighted_mean_y0
+
+    return ate
+
+
+def plot_propensity_distributions(
+    data: pd.DataFrame,
+    *,
+    ps_col: str = "propensity_score",
+    treatment_col: str = "intervention",
+    figsize: tuple = (12, 5),
+) -> None:
+    """
+    Plot propensity score distributions before and after weighting.
+
+    Creates side-by-side histograms showing the unweighted propensity
+    distribution and the propensity distribution after applying stabilized
+    weights. This illustrates how weighting improves covariate balance.
+
+    :param data: DataFrame with treatment, propensity score columns, and optional weights
+    :param ps_col: Name of propensity score column
+    :param treatment_col: Name of binary treatment column
+    :param figsize: Figure size as (width, height)
+    """
+    # Compute marginal probability of treatment and stabilized weights.
+    p_treatment = data[treatment_col].mean()
+
+    treated = data.query(f"{treatment_col}==1")
+    control = data.query(f"{treatment_col}==0")
+
+    weight_treated = p_treatment / treated[ps_col]
+    weight_control = (1 - p_treatment) / (1 - control[ps_col])
+
+    # Create side-by-side subplots.
+    fig, (ax1, ax2) = plt.subplots(
+        1, 2, figsize=figsize, sharex=True, sharey=True
+    )
+
+    # Plot 1: Unweighted propensity score distributions.
+    sns.histplot(
+        control[ps_col],
+        stat="probability",
+        label="Control",
+        color="C0",
+        bins=30,
+        ax=ax1,
+        alpha=0.5,
+    )
+    sns.histplot(
+        treated[ps_col],
+        stat="probability",
+        label="Treated",
+        color="C2",
+        alpha=0.5,
+        bins=30,
+        ax=ax1,
+    )
+    ax1.set_title("Unweighted Propensity Distribution")
+    ax1.legend()
+
+    # Plot 2: Weighted propensity score distributions.
+    sns.histplot(
+        control.assign(w=weight_control),
+        x=ps_col,
+        stat="probability",
+        color="C0",
+        weights="w",
+        label="Control",
+        bins=30,
+        ax=ax2,
+        alpha=0.5,
+    )
+    sns.histplot(
+        treated.assign(w=weight_treated),
+        x=ps_col,
+        stat="probability",
+        color="C2",
+        weights="w",
+        label="Treated",
+        bins=30,
+        alpha=0.5,
+        ax=ax2,
+    )
+    ax2.set_title("Weighted Propensity Distribution (Stabilized Weights)")
+    ax2.legend()
+
+    plt.tight_layout()
+
+
+# #############################################################################
+# Cell 3: Bootstrap Methods for Confidence Intervals.
+# #############################################################################
+
+
+def bootstrap(
+    data: pd.DataFrame,
+    est_fn,
+    *,
+    rounds: int = 200,
+    seed: int = 123,
+    pcts: list | None = None,
+) -> np.ndarray:
+    """
+    Bootstrap helper function for estimating confidence intervals.
+
+    Resamples data with replacement and applies estimation function to each
+    sample to estimate parameter distribution.
+
+    :param data: DataFrame to resample
+    :param est_fn: Estimation function to apply to each sample
+    :param rounds: Number of bootstrap resamples
+    :param seed: Random seed for reproducibility
+    :param pcts: Percentiles to compute (default: [2.5, 97.5])
+    :return: Percentile values from bootstrap distribution
+    """
+    from joblib import Parallel, delayed
+
+    if pcts is None:
+        pcts = [2.5, 97.5]
+
+    np.random.seed(seed)
+
+    stats = Parallel(n_jobs=4)(
+        delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+    )
+
+    return np.percentile(stats, pcts)
+
+
+def estimate_confidence_interval_bootstrap(
+    data: pd.DataFrame,
+    est_fn,
+    *,
+    rounds: int = 200,
+    seed: int = 123,
+    n_jobs: int = 4,
+    pcts: list | None = None,
+) -> np.ndarray:
+    """
+    Estimate confidence interval using bootstrap resampling.
+
+    Resamples data with replacement and applies estimation function to each
+    sample to estimate parameter distribution. Computes percentiles from
+    the bootstrap distribution to form a confidence interval.
+
+    :param data: DataFrame to resample
+    :param est_fn: Estimation function to apply to each sample
+    :param rounds: Number of bootstrap resamples
+    :param seed: Random seed for reproducibility
+    :param n_jobs: Number of parallel jobs for computation
+    :param pcts: Percentiles to compute (default: [2.5, 97.5])
+    :return: Array of percentile values forming confidence interval
+    """
+    from joblib import Parallel, delayed
+
+    if pcts is None:
+        pcts = [2.5, 97.5]
+
+    np.random.seed(seed)
+
+    stats = Parallel(n_jobs=n_jobs)(
+        delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+    )
+
+    return np.percentile(stats, pcts)

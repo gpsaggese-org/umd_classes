@@ -190,122 +190,84 @@ print(f"ATE (Propensity Score Matching): {hat_ATE:.4f}")
 mtl0cire05.plot_iptw(data_ps)
 
 # %%
-# TODO(ai_gp): Simplify and comment code and move to utility.
-weight_t = 1/data_ps.query("intervention==1")["propensity_score"]
-weight_nt = 1/(1-data_ps.query("intervention==0")["propensity_score"])
-t1 = data_ps.query("intervention==1")["engagement_score"] 
-t0 = data_ps.query("intervention==0")["engagement_score"] 
+# Estimate ATE using IPTW.
+weighted_e_y1, weighted_e_y0, hat_ATE = mtl0cire05.estimate_ate_iptw(data_ps)
 
-y1 = sum(t1*weight_t)/len(data_ps)
-y0 = sum(t0*weight_nt)/len(data_ps)
-
-print("E[Y1]:", y1)
-print("E[Y0]:", y0)
-print("ATE", y1 - y0)
+print("E[Y1]:", weighted_e_y1)
+print("E[Y0]:", weighted_e_y0)
+print("ATE:", hat_ATE)
 
 # %% [markdown]
 # # Variance
 
 # %%
-from sklearn.linear_model import LogisticRegression
-from patsy import dmatrix
-
-# TODO(ai_gp): Simplify and comment code and move to utility.
-
-# define function that computes the IPW estimator
-def est_ate_with_ps(df, ps_formula, T, Y):
-    
-    X = dmatrix(ps_formula, df)
-    ps_model = LogisticRegression(
-                                  max_iter=1000).fit(X, df[T])
-    ps = ps_model.predict_proba(X)[:, 1]
-    
-    # compute the ATE
-    return np.mean((df[T]-ps) / (ps*(1-ps)) * df[Y]) 
-
-
-# %%
+# Prepare formula and variables for IPW estimation.
 formula = """tenure + last_engagement_score + department_score
 + C(n_of_reports) + C(gender) + C(role)"""
 T = "intervention"
 Y = "engagement_score"
 
-est_ate_with_ps(df, formula, T, Y)
+# %%
+# Estimate ATE using IPW estimator.
+ate_ipw = mtl0cire05.estimate_ate_with_ps(df, formula, treatment_col=T, outcome_col=Y)
+print(f"ATE (IPW): {ate_ipw:.4f}")
 
 # %%
-from joblib import Parallel, delayed # for parallel processing
+# Compute bootstrap 95% confidence interval for ATE using IPW.
+print(f"ATE: {ate_ipw:.4f}")
 
-def bootstrap(data, est_fn, rounds=200, seed=123, pcts=[2.5, 97.5]):
-    np.random.seed(seed)
-    
-    stats = Parallel(n_jobs=4)(
-        delayed(est_fn)(data.sample(frac=1, replace=True))
-        for _ in range(rounds)
-    )
-    
-    return np.percentile(stats, pcts)
+# Define bootstrap function that resamples data and computes ATE.
+est_fn = lambda data: mtl0cire05.estimate_ate_with_ps(
+    data, ps_formula=formula, treatment_col=T, outcome_col=Y
+)
 
-
-# %%
-print(f"ATE: {est_ate_with_ps(df, formula, T, Y)}")
-
-est_fn = lambda data: est_ate_with_ps(data, ps_formula=formula, T=T, Y=Y)
-
-print("95% C.I.: ", bootstrap(df, est_fn))
+# Estimate confidence interval using bootstrap resampling.
+ci = mtl0cire05.estimate_confidence_interval_bootstrap(
+    df, est_fn, rounds=200, seed=123, n_jobs=4, pcts=[2.5, 97.5]
+)
+print(f"95% C.I.: {ci}")
 
 # %% [markdown]
 # # Stabilized Propensity Weights
 
 # %%
+# Show sample sizes for original and pseudo-population.
 print("Original Sample Size:", data_ps.shape[0])
+
+# Compute sample sizes after IPTW weighting.
+treated = data_ps.query("intervention==1")
+control = data_ps.query("intervention==0")
+
+weight_t = 1 / treated["propensity_score"]
+weight_nt = 1 / (1 - control["propensity_score"])
+
 print("Treated Pseudo-Population Sample Size:", sum(weight_t))
 print("Untreated Pseudo-Population Sample Size:", sum(weight_nt))
 
 # %%
-# TODO(ai_gp): Simplify and comment code and move to utility.
+# Estimate ATE using stabilized propensity weights.
+ate_stabilized = mtl0cire05.estimate_ate_stabilized_weights(data_ps)
 
-p_of_t = data_ps["intervention"].mean()
+print(f"ATE (Stabilized Weights): {ate_stabilized:.4f}")
+
+# %%
+# Verify ATE computation with stabilized weights manually.
+p_treatment = data_ps["intervention"].mean()
 
 t1 = data_ps.query("intervention==1")
 t0 = data_ps.query("intervention==0")
 
-weight_t_stable = p_of_t/t1["propensity_score"]
-weight_nt_stable = (1-p_of_t)/(1-t0["propensity_score"])
+weight_t_stable = p_treatment / t1["propensity_score"]
+weight_nt_stable = (1 - p_treatment) / (1 - t0["propensity_score"])
 
-print("Treat size:", len(t1))
-print("W treat", sum(weight_t_stable))
-
-print("Control size:", len(t0))
-print("W treat", sum(weight_nt_stable))
-
-# %%
 nt = len(t1)
 nc = len(t0)
 
-y1 = sum(t1["engagement_score"]*weight_t_stable)/nt
-y0 = sum(t0["engagement_score"]*weight_nt_stable)/nc
+y1 = sum(t1["engagement_score"] * weight_t_stable) / nt
+y0 = sum(t0["engagement_score"] * weight_nt_stable) / nc
 
-print("ATE: ", y1 - y0)
+print(f"ATE (Manual Calculation): {y1 - y0:.4f}")
 
 # %%
-# TODO(ai_gp): Simplify and comment code and move to utility.
-
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12,5), sharex=True, sharey=True)
-
-sns.histplot(data_ps.query("intervention==0")["propensity_score"], stat="probability",
-             label="Not Treated", color="C0", bins=30, ax=ax1, alpha=0.5)
-sns.histplot(data_ps.query("intervention==1")["propensity_score"], stat="probability",
-             label="Treated", color="C2", alpha=0.5, bins=30, ax=ax1)
-ax1.set_title("Propensity Distribution")
-
-sns.histplot(data_ps.query("intervention==0").assign(w=weight_nt_stable),
-             x="propensity_score", stat="probability",
-             color="C0", weights="w", label="Non Treated", bins=30, ax=ax2,  alpha=0.5)
-
-sns.histplot(data_ps.query("intervention==1").assign(w=weight_t_stable),
-             x="propensity_score", stat="probability",
-             color="C2", weights="w", label="Treated", bins=30, alpha=0.5, ax=ax2)
-ax2.set_title("Weighted Propensity Distribution")
-plt.legend()
-
-plt.tight_layout()
+# Plot propensity score distributions before and after weighting.
+mtl0cire05.plot_propensity_distributions(data_ps)
