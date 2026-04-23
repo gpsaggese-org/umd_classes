@@ -33,8 +33,8 @@ def plot_engagement_vs_intervention(
     Plot regression of engagement_score against intervention treatment.
 
     Visualizes the relationship between intervention (treatment) and
-    engagement_score with a scatter plot and regression line. Horizontal jitter
-    is applied to reveal overlapping points.
+    engagement_score with a scatter plot and regression line. Horizontal
+    jitter is applied to reveal overlapping points.
 
     :param data: DataFrame with columns 'intervention' and 'engagement_score'
     :param figsize: Figure size as (width, height)
@@ -217,7 +217,7 @@ def plot_engagement_vs_intervention_by_department(
         x_jittered = np.array(dept_data["intervention"]) + jitter
         # Plot control group.
         df_control = dept_data[dept_data["intervention"] == 0]
-        control_pos = df_control.index.values
+        control_pos = df_control.index.tolist()
         ax.scatter(
             x=x_jittered[control_pos],
             y=df_control["engagement_score"].values,
@@ -228,7 +228,7 @@ def plot_engagement_vs_intervention_by_department(
         )
         # Plot treated group.
         df_treated = dept_data[dept_data["intervention"] == 1]
-        treated_pos = df_treated.index.values
+        treated_pos = df_treated.index.tolist()
         ax.scatter(
             x=x_jittered[treated_pos],
             y=df_treated["engagement_score"].values,
@@ -860,7 +860,7 @@ def bootstrap(
     stats = Parallel(n_jobs=4)(
         delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
-    return np.percentile(stats, pcts)
+    return np.percentile(np.array(list(stats)), pcts)
 
 
 def estimate_confidence_interval_bootstrap(
@@ -894,4 +894,4 @@ def estimate_confidence_interval_bootstrap(
     stats = Parallel(n_jobs=n_jobs)(
         delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
-    return np.percentile(stats, pcts)
+    return np.percentile(np.array(list(stats)), pcts)
