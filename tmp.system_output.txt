@@ -1,0 +1,138 @@
+[0m12:32:26 - [36mINFO [0m hdbg.py init_logger:1078                               Saving log to file '/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py.log'
+12:32:26 - [36mINFO [0m hdbg.py init_logger:1086                               > cmd='/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py --input msml610/lectures_source/Lesson08.4.txt --output msml610/lectures/Lesson08.4.pdf --type slides --toc_type navigation --debug_on_error --skip_action cleanup_before --skip_action cleanup_after'
+12:32:26 - [36mINFO [0m notes_to_pdf.py _main:789                              cmd line=/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py --input msml610/lectures_source/Lesson08.4.txt --output msml610/lectures/Lesson08.4.pdf --type slides --toc_type navigation --debug_on_error --skip_action cleanup_before --skip_action cleanup_after
+12:32:26 - [41mWARN [0m hparser.py select_actions:384                          Skipping action 'cleanup_before' since it's already not in actions='['preprocess_notes', 'render_images', 'run_pandoc', 'open']'
+12:32:26 - [41mWARN [0m hparser.py select_actions:384                          Skipping action 'cleanup_after' since it's already not in actions='['preprocess_notes', 'render_images', 'run_pandoc', 'open']'
+12:32:26 - [36mINFO [0m notes_to_pdf.py _run_all:573                           
+################################################################################
+# Action selected:
+################################################################################
+      cleanup_before: -
+    preprocess_notes: Yes
+       render_images: Yes
+          run_pandoc: Yes
+        compress_pdf: -
+      copy_to_gdrive: -
+                open: Yes
+       cleanup_after: -
+12:32:26 - [36mINFO [0m notes_to_pdf.py _run_all:581                           Logging the actions into a script
+[94m# cleanup_before[0m
+12:32:26 - [41mWARN [0m hparser.py mark_action:422                             Skip action='cleanup_before'
+[94m# preprocess_notes[0m
+> /Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py --input msml610/lectures_source/Lesson08.4.txt --output /Users/saggese/src/umd_classes1/msml610/lectures/tmp.notes_to_pdf.preprocess_notes.txt --type slides --toc_type navigation
+  ... [0m12:32:27 - [36mINFO [0m hdbg.py init_logger:1078                               Saving log to file '/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py.log'
+  ... 12:32:27 - [36mINFO [0m hdbg.py init_logger:1086                               > cmd='/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py --input msml610/lectures_source/Lesson08.4.txt --output /Users/saggese/src/umd_classes1/msml610/lectures/tmp.notes_to_pdf.preprocess_notes.txt --type slides --toc_type navigation'
+  ... 12:32:27 - [36mINFO [0m preprocess_notes.py _main:535                          cmd line=/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py --input msml610/lectures_source/Lesson08.4.txt --output /Users/saggese/src/umd_classes1/msml610/lectures/tmp.notes_to_pdf.preprocess_notes.txt --type slides --toc_type navigation
+  ... 12:32:27 - [36mINFO [0m preprocess_notes.py _main:538                          Selected actions: ['process_links', 'colorize_bullets']
+  ... Traceback (most recent call last):
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 334, in _colorize_bullets
+  ...     text_out = hmarkdo.colorize_bullet_points_in_slide(
+  ...                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hmarkdown_coloring.py", line 246, in colorize_bullet_points_in_slide
+  ...     hdbg.dassert_lte(num_bolds, len(colors),
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hdbg.py", line 229, in dassert_lte
+  ...     _dfatal(txt, msg, *args, only_warning=only_warning)
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hdbg.py", line 142, in _dfatal
+  ...     dfatal(dfatal_txt)
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hdbg.py", line 71, in dfatal
+  ...     raise assertion_type(ret)
+  ... AssertionError: 
+  ... ################################################################################
+  ... * Failed assertion *
+  ... 15 <= 13
+  ... Number of bold items exceeds available colors
+  ... ################################################################################
+  ... 
+  ... 
+  ... The above exception was the direct cause of the following exception:
+  ... 
+  ... Traceback (most recent call last):
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 552, in <module>
+  ...     _main(_parse())
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 543, in _main
+  ...     out = _preprocess_lines(
+  ...           ^^^^^^^^^^^^^^^^^^
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 477, in _preprocess_lines
+  ...     out = _transform_lines(lines, type_, is_qa=is_qa, actions=actions)
+  ...           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 352, in _transform_lines
+  ...     out = hmarkdo.process_slides(out, _colorize_bullets)
+  ...           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hmarkdown_slides.py", line 107, in process_slides
+  ...     transformed_slide = transform(
+  ...                         ^^^^^^^^^^
+  ...   File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 343, in _colorize_bullets
+  ...     raise AssertionError(str(e) + context) from e
+  ... AssertionError: 
+  ... ################################################################################
+  ... * Failed assertion *
+  ... 15 <= 13
+  ... Number of bold items exceeds available colors
+  ... ################################################################################
+  ... 
+  ... Error occurred while processing slide:
+  ...   Title: #### Neutral Controls: Controlling Variance Without Changing Bias
+  ...   Line: 1310
+Traceback (most recent call last):
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py", line 794, in <module>
+    _main(_parse())
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py", line 790, in _main
+    _run_all(args)
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py", line 623, in _run_all
+    file_name = _preprocess_notes(
+                ^^^^^^^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py", line 124, in _preprocess_notes
+    _ = _system(cmd)
+        ^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.py", line 66, in _system
+    rc = hsystem.system(
+         ^^^^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hsystem.py", line 329, in system
+    rc, _ = _system(
+            ^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hsystem.py", line 283, in _system
+    raise RuntimeError(msg)
+RuntimeError: 
+################################################################################
+################################################################################
+_system() failed
+################################################################################
+################################################################################
+# _system: cmd='(/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py --input msml610/lectures_source/Lesson08.4.txt --output /Users/saggese/src/umd_classes1/msml610/lectures/tmp.notes_to_pdf.preprocess_notes.txt --type slides --toc_type navigation) 2>&1', abort_on_error=True, suppress_error=None, suppress_output=False, blocking=True, wrapper=None, output_file=None, num_error_lines=30, tee=False, dry_run=False, log_level=10
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+cmd='(/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py --input msml610/lectures_source/Lesson08.4.txt --output /Users/saggese/src/umd_classes1/msml610/lectures/tmp.notes_to_pdf.preprocess_notes.txt --type slides --toc_type navigation) 2>&1'
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+- rc='1'
+- output='
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 552, in <module>
+    _main(_parse())
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 543, in _main
+    out = _preprocess_lines(
+          ^^^^^^^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 477, in _preprocess_lines
+    out = _transform_lines(lines, type_, is_qa=is_qa, actions=actions)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 352, in _transform_lines
+    out = hmarkdo.process_slides(out, _colorize_bullets)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/helpers/hmarkdown_slides.py", line 107, in process_slides
+    transformed_slide = transform(
+                        ^^^^^^^^^^
+  File "/Users/saggese/src/umd_classes1/helpers_root/dev_scripts_helpers/documentation/preprocess_notes.py", line 343, in _colorize_bullets
+    raise AssertionError(str(e) + context) from e
+AssertionError: 
+################################################################################
+* Failed assertion *
+15 <= 13
+Number of bold items exceeds available colors
+################################################################################
+
+Error occurred while processing slide:
+  Title: #### Neutral Controls: Controlling Variance Without Changing Bias
+  Line: 1310
+'
+- Output saved in 'tmp.system_output.txt'
+- Command saved in 'tmp.system_cmd.sh'

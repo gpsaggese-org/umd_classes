@@ -1,0 +1,1 @@
+(notes_to_pdf.py --input msml610/lectures_source/Lesson08.4.txt --output msml610/lectures/Lesson08.4.pdf --type slides --toc_type navigation --debug_on_error --skip_action cleanup_before --skip_action cleanup_after) 2>&1

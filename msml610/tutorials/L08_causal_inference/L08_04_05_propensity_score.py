@@ -202,8 +202,10 @@ print("ATE:", hat_ATE)
 
 # %%
 # Prepare formula and variables for IPW estimation.
-formula = """tenure + last_engagement_score + department_score
-+ C(n_of_reports) + C(gender) + C(role)"""
+formula = """
+tenure + last_engagement_score + department_score
+    + C(n_of_reports) + C(gender) + C(role)
+"""
 T = "intervention"
 Y = "engagement_score"
 
@@ -225,7 +227,7 @@ est_fn = lambda data: mtl0cire05.estimate_ate_with_ps(
 ci = mtl0cire05.estimate_confidence_interval_bootstrap(
     df, est_fn, rounds=200, seed=123, n_jobs=4, pcts=[2.5, 97.5]
 )
-print(f"95% C.I.: {ci}")
+print(f"95% Confidence interval: {ci}")
 
 # %% [markdown]
 # # Stabilized Propensity Weights
@@ -251,23 +253,7 @@ ate_stabilized = mtl0cire05.estimate_ate_stabilized_weights(data_ps)
 print(f"ATE (Stabilized Weights): {ate_stabilized:.4f}")
 
 # %%
-# Verify ATE computation with stabilized weights manually.
-p_treatment = data_ps["intervention"].mean()
-
-t1 = data_ps.query("intervention==1")
-t0 = data_ps.query("intervention==0")
-
-weight_t_stable = p_treatment / t1["propensity_score"]
-weight_nt_stable = (1 - p_treatment) / (1 - t0["propensity_score"])
-
-nt = len(t1)
-nc = len(t0)
-
-y1 = sum(t1["engagement_score"] * weight_t_stable) / nt
-y0 = sum(t0["engagement_score"] * weight_nt_stable) / nc
-
-print(f"ATE (Manual Calculation): {y1 - y0:.4f}")
-
-# %%
 # Plot propensity score distributions before and after weighting.
 mtl0cire05.plot_propensity_distributions(data_ps)
+
+# %%

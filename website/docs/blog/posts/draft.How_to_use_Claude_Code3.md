@@ -163,10 +163,10 @@ This documentation provides comprehensive guidelines for:
   Python scripts with tests, documentation, planning steps, and AI todos
 - `.claude/skills/coding.rules.md`: Python coding standards including
   hdbg assertions, hsystem usage, logging patterns, and script templates
-- `docs/ai_prompts/testing.format_rules.md`: Unit testing conventions
+- `docs/ai_prompts/testing.format.md`: Unit testing conventions
   including test structure, naming patterns, and golden file testing
 
-- `docs/ai_prompts/blog.format_rules.md`: Markdown formatting guidelines for
+- `docs/ai_prompts/blog.format.md`: Markdown formatting guidelines for
   writing blog posts with proper structure, code blocks, and metadata
 
 - `docs/ai_coding/ai.md_instructions.md`: Style guide for writing structured
@@ -180,7 +180,7 @@ When creating a Python script:
    `.claude/skills/coding.rules.md`
 
 2. **Generate unit tests** for the code following the instructions in
-   `docs/ai_prompts/testing.format_rules.md`
+   `docs/ai_prompts/testing.format.md`
 
 3. **Generate a short description** of how to use the script in a file close to
    the script with extension `.md`

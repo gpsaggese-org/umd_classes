@@ -60,10 +60,10 @@ Create an issue called "Clean up tutorial XYZ" with the following action items.
   ```
 
 - [ ] Review key skills relevant to tutorials:
-  - `coding.format_rules`: Python code conventions
-  - `testing.format_rules`: Unit test patterns
-  - `notebook.format_rules`: Jupyter notebook structure
-  - `markdown.format_rules`: Documentation style
+  - `coding.format`: Python code conventions
+  - `testing.format`: Unit test patterns
+  - `notebook.format`: Jupyter notebook structure
+  - `markdown.format`: Documentation style
   - E.g.,
     ```bash
     > mdm skill edit coding.rules

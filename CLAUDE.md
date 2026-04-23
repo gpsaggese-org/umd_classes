@@ -70,7 +70,7 @@ Key development commands are documented in `helpers_root/CLAUDE.md`.
 
 #### Jupyter Notebooks and Scripts
 
-- Follow `helpers_root/.claude/skills/notebook.format_rules/SKILL.md` for notebook structure
+- Follow `helpers_root/.claude/skills/notebook.format/SKILL.md` for notebook structure
 - Pair notebooks with Python scripts using jupytext (`*.py:percent` format)
 - Create utility modules (`*_utils.py`) for shared code in tutorials
 - Use standard initialization cells with logging setup
@@ -87,7 +87,7 @@ Each tutorial should include:
 
 #### Documentation
 
-- Use Markdown following `helpers_root/.claude/skills/markdown.format_rules/SKILL.md`
+- Use Markdown following `helpers_root/.claude/skills/markdown.format/SKILL.md`
 - Include clear examples and expected outputs
 - Add references to external resources
 - Keep content up-to-date with latest library versions
