@@ -41,11 +41,9 @@ def plot_engagement_vs_intervention(
     :param jitter_strength: Amount of horizontal jitter to add
     """
     fig, ax = plt.subplots(1, 1, figsize=figsize)
-
     # Add jitter to intervention values.
     jitter = np.random.normal(0, jitter_strength, size=len(data))
     x_jittered = np.array(data["intervention"]) + jitter
-
     # Scatter plot for control group (intervention=0).
     df_control = data[data["intervention"] == 0]
     control_indices = df_control.index
@@ -57,7 +55,6 @@ def plot_engagement_vs_intervention(
         color="blue",
         label="Control",
     )
-
     # Scatter plot for treated group (intervention=1).
     df_treated = data[data["intervention"] == 1]
     treated_indices = df_treated.index
@@ -69,7 +66,6 @@ def plot_engagement_vs_intervention(
         color="red",
         label="Treated",
     )
-
     # Fit and plot regression line.
     X = np.array(data["intervention"]).reshape(-1, 1)
     y = np.array(data["engagement_score"])
@@ -87,7 +83,6 @@ def plot_engagement_vs_intervention(
         linestyle="--",
         label=label,
     )
-
     ax.set_xlabel("Intervention", fontsize=11)
     ax.set_ylabel("Engagement Score", fontsize=11)
     ax.set_xticks([0, 1])
@@ -117,7 +112,6 @@ def plot_engagement_density_by_intervention(
     :param jitter_strength: Amount of jitter for scatter points
     """
     fig, ax = plt.subplots(1, 1, figsize=figsize)
-
     # Plot density for control group.
     df_control = data[data["intervention"] == 0]
     sns.kdeplot(
@@ -128,7 +122,6 @@ def plot_engagement_density_by_intervention(
         linewidth=2,
         label=f"Control (n={len(df_control)})",
     )
-
     # Add scatter with jitter for control.
     control_jitter = np.random.normal(0, jitter_strength, size=len(df_control))
     ax.scatter(
@@ -138,7 +131,6 @@ def plot_engagement_density_by_intervention(
         s=30,
         color="blue",
     )
-
     # Add mean line for control.
     control_mean = float(df_control["engagement_score"].mean())
     ax.axvline(
@@ -148,7 +140,6 @@ def plot_engagement_density_by_intervention(
         linewidth=2,
         alpha=0.7,
     )
-
     # Plot density for treated group.
     df_treated = data[data["intervention"] == 1]
     sns.kdeplot(
@@ -159,7 +150,6 @@ def plot_engagement_density_by_intervention(
         linewidth=2,
         label=f"Treated (n={len(df_treated)})",
     )
-
     # Add scatter with jitter for treated.
     treated_jitter = np.random.normal(0, jitter_strength, size=len(df_treated))
     ax.scatter(
@@ -169,7 +159,6 @@ def plot_engagement_density_by_intervention(
         s=30,
         color="red",
     )
-
     # Add mean line for treated.
     treated_mean = float(df_treated["engagement_score"].mean())
     ax.axvline(
@@ -179,7 +168,6 @@ def plot_engagement_density_by_intervention(
         linewidth=2,
         alpha=0.7,
     )
-
     ax.set_xlabel("Engagement Score", fontsize=11)
     ax.set_ylabel("Density", fontsize=11)
     ax.tick_params(axis="both", which="major", labelsize=10)
@@ -213,26 +201,20 @@ def plot_engagement_vs_intervention_by_department(
     dept_col = (
         "departament_id" if "departament_id" in data.columns else "department_id"
     )
-
     departments = sorted(data[dept_col].unique())[:max_departments]
     n_depts = len(departments)
-
     # Calculate grid dimensions.
     n_cols = 3
     n_rows = (n_depts + n_cols - 1) // n_cols
     figsize = (figsize_per_plot[0] * n_cols, figsize_per_plot[1] * n_rows)
-
     fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
     axes_flat = axes.flatten() if n_depts > 1 else [axes]
-
     for idx, dept_id in enumerate(departments):
         ax = axes_flat[idx]
         dept_data = data[data[dept_col] == dept_id].reset_index(drop=True)
-
         # Add jitter to intervention values.
         jitter = np.random.normal(0, jitter_strength, size=len(dept_data))
         x_jittered = np.array(dept_data["intervention"]) + jitter
-
         # Plot control group.
         df_control = dept_data[dept_data["intervention"] == 0]
         control_pos = df_control.index.values
@@ -244,7 +226,6 @@ def plot_engagement_vs_intervention_by_department(
             color="blue",
             label="Control",
         )
-
         # Plot treated group.
         df_treated = dept_data[dept_data["intervention"] == 1]
         treated_pos = df_treated.index.values
@@ -256,7 +237,6 @@ def plot_engagement_vs_intervention_by_department(
             color="red",
             label="Treated",
         )
-
         # Add mean lines.
         if len(df_control) > 0:
             control_mean = float(df_control["engagement_score"].mean())
@@ -280,7 +260,6 @@ def plot_engagement_vs_intervention_by_department(
                 linewidth=2,
                 alpha=0.7,
             )
-
         ax.set_xlabel("Intervention", fontsize=11)
         ax.set_ylabel("Engagement Score", fontsize=11)
         ax.set_xticks([0, 1])
@@ -289,11 +268,9 @@ def plot_engagement_vs_intervention_by_department(
         ax.grid(True, alpha=0.3)
         if idx == 0:
             ax.legend(fontsize=10, loc="best")
-
     # Hide unused subplots.
     for idx in range(n_depts, len(axes_flat)):
         axes_flat[idx].set_visible(False)
-
     plt.tight_layout()
 
 
@@ -319,27 +296,21 @@ def plot_all_correlations_to_intervention(
         numeric_cols = data.select_dtypes(include=[np.number]).columns.tolist()
         if "intervention" in numeric_cols:
             numeric_cols.remove("intervention")
-
     # Fit regressions for each column.
     results = []
     X = np.array(data["intervention"]).reshape(-1, 1)
-
     for col in numeric_cols:
         y = np.array(data[col])
         # Skip columns with NaN values.
         valid_mask = ~(np.isnan(X.flatten()) | np.isnan(y))
         if valid_mask.sum() < 2:
             continue
-
         X_valid = X[valid_mask]
         y_valid = y[valid_mask]
-
         model = LinearRegression().fit(X_valid, y_valid)
         coef = model.coef_[0]
         results.append({"variable": col, "coefficient": coef})
-
     results_df = pd.DataFrame(results).sort_values("coefficient")
-
     # Plot coefficients.
     fig, ax = plt.subplots(figsize=figsize)
     colors = ["blue" if x < 0 else "red" for x in results_df["coefficient"]]
@@ -379,27 +350,21 @@ def plot_all_variables_vs_intervention(
         numeric_cols = data.select_dtypes(include=[np.number]).columns.tolist()
         if "intervention" in numeric_cols:
             numeric_cols.remove("intervention")
-
     n_cols = 3
     n_rows = (len(numeric_cols) + n_cols - 1) // n_cols
     figsize = (figsize_per_plot[0] * n_cols, figsize_per_plot[1] * n_rows)
-
     fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
     axes_flat = axes.flatten() if len(numeric_cols) > 1 else [axes]
-
     # Add jitter to intervention values once for all subplots.
     jitter = np.random.normal(0, 0.03, size=len(data))
     x_jittered = np.array(data["intervention"]) + jitter
-
     for idx, col in enumerate(numeric_cols):
         ax = axes_flat[idx]
-
         # Get control and treated data.
         df_control = data[data["intervention"] == 0]
         df_treated = data[data["intervention"] == 1]
         control_indices = df_control.index
         treated_indices = df_treated.index
-
         # Plot control group.
         ax.scatter(
             x=x_jittered[control_indices],
@@ -409,7 +374,6 @@ def plot_all_variables_vs_intervention(
             color="blue",
             label="Control",
         )
-
         # Plot treated group.
         ax.scatter(
             x=x_jittered[treated_indices],
@@ -419,7 +383,6 @@ def plot_all_variables_vs_intervention(
             color="red",
             label="Treated",
         )
-
         # Add mean lines.
         control_mean = df_control[col].mean()
         treated_mean = df_treated[col].mean()
@@ -441,7 +404,6 @@ def plot_all_variables_vs_intervention(
             linewidth=2,
             alpha=0.7,
         )
-
         ax.set_xlabel("Intervention", fontsize=10)
         ax.set_ylabel(col, fontsize=10)
         ax.set_xticks([0, 1])
@@ -449,11 +411,9 @@ def plot_all_variables_vs_intervention(
         ax.grid(True, alpha=0.3)
         if idx == 0:
             ax.legend(fontsize=9, loc="best")
-
     # Hide unused subplots.
     for idx in range(len(numeric_cols), len(axes_flat)):
         axes_flat[idx].set_visible(False)
-
     plt.suptitle("All Variables vs Intervention", fontsize=14, y=0.995)
     plt.tight_layout()
 
@@ -480,21 +440,16 @@ def plot_all_variables_density_by_intervention(
         numeric_cols = data.select_dtypes(include=[np.number]).columns.tolist()
         if "intervention" in numeric_cols:
             numeric_cols.remove("intervention")
-
     n_cols = 3
     n_rows = (len(numeric_cols) + n_cols - 1) // n_cols
     figsize = (figsize_per_plot[0] * n_cols, figsize_per_plot[1] * n_rows)
-
     fig, axes = plt.subplots(n_rows, n_cols, figsize=figsize)
     axes_flat = axes.flatten() if len(numeric_cols) > 1 else [axes]
-
     for idx, col in enumerate(numeric_cols):
         ax = axes_flat[idx]
-
         # Get control and treated data.
         df_control = data[data["intervention"] == 0]
         df_treated = data[data["intervention"] == 1]
-
         # Plot density for control group.
         sns.kdeplot(
             data=df_control,
@@ -505,7 +460,6 @@ def plot_all_variables_density_by_intervention(
             label=f"Control (n={len(df_control)})",
             fill=False,
         )
-
         # Plot density for treated group.
         sns.kdeplot(
             data=df_treated,
@@ -516,7 +470,6 @@ def plot_all_variables_density_by_intervention(
             label=f"Treated (n={len(df_treated)})",
             fill=False,
         )
-
         # Add mean lines.
         control_mean = float(df_control[col].mean())
         treated_mean = float(df_treated[col].mean())
@@ -534,17 +487,14 @@ def plot_all_variables_density_by_intervention(
             linewidth=2,
             alpha=0.7,
         )
-
         ax.set_xlabel(col, fontsize=10)
         ax.set_ylabel("Density", fontsize=10)
         ax.grid(True, alpha=0.3)
         if idx == 0:
             ax.legend(fontsize=9, loc="best")
-
     # Hide unused subplots.
     for idx in range(len(numeric_cols), len(axes_flat)):
         axes_flat[idx].set_visible(False)
-
     plt.suptitle(
         "Distribution of All Variables by Intervention", fontsize=14, y=0.995
     )
@@ -577,11 +527,9 @@ def propensity_score_matching(
     :return: DataFrame with original data plus 'match' column with matched outcomes
     """
     from sklearn.neighbors import KNeighborsRegressor
-
     # Separate treated and control groups.
     treated = data.query(f"{treatment_col}==1")
     untreated = data.query(f"{treatment_col}==0")
-
     # Fit KNN regressors on outcomes for each group.
     # Control model predicts outcomes for treated units.
     knn_control = KNeighborsRegressor(n_neighbors=1).fit(
@@ -591,7 +539,6 @@ def propensity_score_matching(
     knn_treated = KNeighborsRegressor(n_neighbors=1).fit(
         treated[[ps_col]], treated[outcome_col]
     )
-
     # Get matched outcomes for treated: what they would have gotten as control.
     treated_with_match = treated.assign(
         match=knn_control.predict(treated[[ps_col]])
@@ -600,7 +547,6 @@ def propensity_score_matching(
     untreated_with_match = untreated.assign(
         match=knn_treated.predict(untreated[[ps_col]])
     )
-
     # Combine and return.
     return pd.concat([treated_with_match, untreated_with_match])
 
@@ -627,13 +573,10 @@ def calculate_psm_ate(
     treatment = data[treatment_col].values
     outcome = data[outcome_col].values
     matched = data["match"].values
-
     # Compute difference: observed - matched outcome.
     diff = outcome - matched
-
     # Weight by treatment: treated units contribute positively, control negatively.
     ate = np.mean(treatment * diff - (1 - treatment) * diff)
-
     return float(ate)
 
 
@@ -666,14 +609,12 @@ def plot_iptw(
         ),
         ps_rounded=data[ps_col].round(2),
     )
-
     # Aggregate by propensity score and treatment.
     grouped = (
         iptw_data.groupby(["ps_rounded", treatment_col])[["weight", outcome_col]]
         .mean()
         .reset_index()
     )
-
     # Plot with blue for control, red for treated.
     fig, ax = plt.subplots(figsize=figsize)
     for t, color in [(0, "blue"), (1, "red")]:
@@ -689,7 +630,6 @@ def plot_iptw(
             edgecolors="black",
             linewidth=0.5,
         )
-
     ax.set_xlabel("Propensity Score", fontsize=11)
     ax.set_ylabel("Engagement Score", fontsize=11)
     ax.set_title("Inverse Probability of Treatment Weighting", fontsize=12)
@@ -720,11 +660,9 @@ def estimate_ate_iptw(
     # Separate treated and control groups.
     treated = data.query(f"{treatment_col}==1")
     control = data.query(f"{treatment_col}==0")
-
     # Compute IPTW weights: 1/PS for treated, 1/(1-PS) for control.
     weight_treated = 1 / treated[ps_col]
     weight_control = 1 / (1 - control[ps_col])
-
     # Compute weighted averages of outcomes.
     # E[Y|T=1] and E[Y|T=0] in the pseudo-population.
     weighted_e_y1 = np.sum(
@@ -733,10 +671,8 @@ def estimate_ate_iptw(
     weighted_e_y0 = np.sum(
         control[outcome_col] * weight_control
     ) / len(data)
-
     # ATE is the difference.
     ate = weighted_e_y1 - weighted_e_y0
-
     return weighted_e_y1, weighted_e_y0, ate
 
 
@@ -762,11 +698,9 @@ def estimate_ate_with_ps(
     """
     # Create design matrix from formula.
     X = dmatrix(ps_formula, data)
-
     # Fit logistic regression to estimate propensity scores.
     ps_model = LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
     ps = ps_model.predict_proba(X)[:, 1]
-
     # Compute IPW estimator: E[(T - PS) / (PS * (1 - PS)) * Y].
     return np.mean((data[treatment_col] - ps) / (ps * (1 - ps)) * data[outcome_col])
 
@@ -793,31 +727,25 @@ def estimate_ate_stabilized_weights(
     """
     # Compute marginal probability of treatment.
     p_treatment = data[treatment_col].mean()
-
     # Separate treated and control groups.
     treated = data.query(f"{treatment_col}==1")
     control = data.query(f"{treatment_col}==0")
-
     # Compute stabilized weights.
     # Stabilized weight for treated: P(T=1) / PS.
     weight_treated_stable = p_treatment / treated[ps_col]
     # Stabilized weight for control: (1 - P(T=1)) / (1 - PS).
     weight_control_stable = (1 - p_treatment) / (1 - control[ps_col])
-
     # Compute weighted averages.
     n_treated = len(treated)
     n_control = len(control)
-
     weighted_mean_y1 = np.sum(
         treated[outcome_col] * weight_treated_stable
     ) / n_treated
     weighted_mean_y0 = np.sum(
         control[outcome_col] * weight_control_stable
     ) / n_control
-
     # ATE is the difference.
     ate = weighted_mean_y1 - weighted_mean_y0
-
     return ate
 
 
@@ -842,18 +770,14 @@ def plot_propensity_distributions(
     """
     # Compute marginal probability of treatment and stabilized weights.
     p_treatment = data[treatment_col].mean()
-
     treated = data.query(f"{treatment_col}==1")
     control = data.query(f"{treatment_col}==0")
-
     weight_treated = p_treatment / treated[ps_col]
     weight_control = (1 - p_treatment) / (1 - control[ps_col])
-
     # Create side-by-side subplots.
     fig, (ax1, ax2) = plt.subplots(
         1, 2, figsize=figsize, sharex=True, sharey=True
     )
-
     # Plot 1: Unweighted propensity score distributions.
     sns.histplot(
         control[ps_col],
@@ -875,7 +799,6 @@ def plot_propensity_distributions(
     )
     ax1.set_title("Unweighted Propensity Distribution")
     ax1.legend()
-
     # Plot 2: Weighted propensity score distributions.
     sns.histplot(
         control.assign(w=weight_control),
@@ -901,7 +824,6 @@ def plot_propensity_distributions(
     )
     ax2.set_title("Weighted Propensity Distribution (Stabilized Weights)")
     ax2.legend()
-
     plt.tight_layout()
 
 
@@ -932,16 +854,12 @@ def bootstrap(
     :return: Percentile values from bootstrap distribution
     """
     from joblib import Parallel, delayed
-
     if pcts is None:
         pcts = [2.5, 97.5]
-
     np.random.seed(seed)
-
     stats = Parallel(n_jobs=4)(
         delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
-
     return np.percentile(stats, pcts)
 
 
@@ -970,14 +888,10 @@ def estimate_confidence_interval_bootstrap(
     :return: Array of percentile values forming confidence interval
     """
     from joblib import Parallel, delayed
-
     if pcts is None:
         pcts = [2.5, 97.5]
-
     np.random.seed(seed)
-
     stats = Parallel(n_jobs=n_jobs)(
         delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
-
     return np.percentile(stats, pcts)
