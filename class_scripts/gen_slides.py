@@ -17,8 +17,8 @@ import class_scripts.gen_slides as clgeslio
 
 import argparse
 import logging
+import os
 import re
-from pathlib import Path
 
 import class_scripts.common_utils as clcomuut
 import helpers.hdbg as hdbg
@@ -37,27 +37,24 @@ def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
     Parses filenames like "Lesson10.2-Causal_Discovery.txt" to extract "10.2".
     Also extracts the course directory (data605 or msml610) from the path.
 
-    :param file_path_str: file path like "msml610/lectures_source/Lesson10.2-Name.txt"
-    :return: tuple of (dir, lesson) e.g., ("msml610", "10.2")
+    :param file_path_str: File path like "msml610/lectures_source/Lesson10.2-Name.txt"
+    :return: Tuple of (dir, lesson) e.g., ("msml610", "10.2")
     """
-    # TODO(ai_gp): use os functions and not Path.
-    file_path = Path(file_path_str)
-    filename = file_path.name
-    # Extract lesson number from filename (e.g., "Lesson10.2-...")
+    filename = os.path.basename(file_path_str)
     match = re.match(r"Lesson(\d+(?:\.\d+)?)", filename)
-    hdbg.dassert(
+    hdbg.dassert_is_not(
         match,
-        f"Could not extract lesson number from filename: {filename}",
+        None,
+        "Could not extract lesson number from filename: %s",
+        filename,
     )
-    # TODO(ai_gp): Use dbg.dassert_is_not(
-    assert match is not None
-    lesson = match.group(1)
-    # Extract directory (should be first part of the path)
-    dir_name = file_path.parts[0]
+    lesson = match.group(1)  # type: ignore[union-attr]
+    dir_name = file_path_str.split(os.sep)[0]
     hdbg.dassert_in(
         dir_name,
         clcomuut.VALID_DIRS,
-        f"Directory specified from %s is invalid", file_path_str
+        "Directory extracted from %s is invalid",
+        file_path_str,
     )
     _LOG.debug(
         "Extracted lesson='%s', dir='%s' from path='%s'",
@@ -76,8 +73,8 @@ def _parse() -> argparse.ArgumentParser:
     parser.add_argument(
         "dir",
         type=str,
-        help="Course directory (e.g., data605, msml610) or file path (e.g.,"
-            " msml610/lectures_source/Lesson10.2-Name.txt)",
+        help="Course directory (e.g., data605, msml610) or file path "
+             "(e.g., msml610/lectures_source/Lesson10.2-Name.txt)",
     )
     parser.add_argument(
         "lesson",
@@ -98,9 +95,7 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    # Handle two cases:
-    # - file path or
-    # - dir + lesson, e.g., `msml610/lectures_source/Lesson10.2-Name.txt)"
+    # Handle two cases: file path or dir + lesson.
     if args.lesson is None:
         # First argument is a file path.
         dir_arg, lesson_arg = _extract_lesson_from_file(args.dir)

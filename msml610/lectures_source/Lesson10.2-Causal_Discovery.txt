@@ -83,8 +83,8 @@ MSML610: Advanced Machine Learning
 
 * Causal Discovery: Motivation
 
-- So far we have **assumed** a causal DAG was given (e.g., drawn by a domain
-  expert)
+- So far we have **assumed a causal DAG was given**
+  - E.g., drawn by a domain expert
 
 - **Question**
   - What if we _do not_ know the DAG?
@@ -94,10 +94,10 @@ MSML610: Advanced Machine Learning
   - Recover the causal DAG from observational and optionally interventional data
 
 - **Why it matters**
-  - Experiments are expensive, slow, or unethical
+  - _Observational data_ is plentiful but ambiguous
+  - _Experiments_ are expensive, slow, or unethical
     - E.g., cannot randomize exposing humans to asbestos
-  - Observational data is plentiful but _ambiguous_
-  - Goal: extract causal hypotheses that can be tested later
+  - **Goal**: extract causal hypotheses that can be tested later
 
 * Causal Discovery: Definition
 
