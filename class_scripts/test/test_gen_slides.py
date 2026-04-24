@@ -11,9 +11,14 @@ import logging
 
 import helpers.hunit_test as hunitest
 
-import class_scripts.gen_slides as clgeslio
+import class_scripts.gen_slides as cscgesli
 
 _LOG = logging.getLogger(__name__)
+
+
+# #############################################################################
+# Test_extract_lesson_from_file
+# #############################################################################
 
 
 class Test_extract_lesson_from_file(hunitest.TestCase):
@@ -32,7 +37,7 @@ class Test_extract_lesson_from_file(hunitest.TestCase):
         :param expected_lesson: Expected lesson number from extraction
         """
         # Run test.
-        actual_dir, actual_lesson = clgeslio._extract_lesson_from_file(file_path)
+        actual_dir, actual_lesson = cscgesli._extract_lesson_from_file(file_path)
         # Check outputs.
         self.assertEqual(actual_dir, expected_dir)
         self.assertEqual(actual_lesson, expected_lesson)
@@ -48,7 +53,7 @@ class Test_extract_lesson_from_file(hunitest.TestCase):
         """
         # Run test and check output.
         with self.assertRaises(AssertionError) as cm:
-            clgeslio._extract_lesson_from_file(file_path)
+            cscgesli._extract_lesson_from_file(file_path)
         self.assertIn(expected_error_msg, str(cm.exception))
 
     def test1(self) -> None:
@@ -110,6 +115,11 @@ class Test_extract_lesson_from_file(hunitest.TestCase):
         self._assert_extract_lesson_raises(file_path, expected_error_msg)
 
 
+# #############################################################################
+# Test_parse
+# #############################################################################
+
+
 class Test_parse(hunitest.TestCase):
     """
     Test _parse() function.
@@ -123,7 +133,7 @@ class Test_parse(hunitest.TestCase):
         :param expected_values: Dictionary of expected argument values
         """
         # Run test.
-        parser = clgeslio._parse()
+        parser = cscgesli._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
         for key, value in expected_values.items():
@@ -138,7 +148,7 @@ class Test_parse(hunitest.TestCase):
         # Prepare outputs.
         expected_values = {"dir": "data605", "lesson": "01.1"}
         # Run test.
-        parser = clgeslio._parse()
+        parser = cscgesli._parse()
         self.assertIsInstance(parser, argparse.ArgumentParser)
         self._assert_parse_args(arg_list, expected_values)
 
@@ -176,7 +186,7 @@ class Test_parse(hunitest.TestCase):
         Test parser has expected description and help.
         """
         # Run test.
-        parser = clgeslio._parse()
+        parser = cscgesli._parse()
         # Check outputs.
         self.assertIsNotNone(parser.description)
         self.assertIn("Generate lecture slides", parser.description)

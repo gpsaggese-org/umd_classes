@@ -10,7 +10,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+from joblib import Parallel, delayed
 from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.neighbors import KNeighborsRegressor
 from patsy import dmatrix
 
 # Standard figure sizes
@@ -526,7 +528,7 @@ def propensity_score_matching(
     :param outcome_col: Name of outcome column
     :return: DataFrame with original data plus 'match' column with matched outcomes
     """
-    from sklearn.neighbors import KNeighborsRegressor
+
     # Separate treated and control groups.
     treated = data.query(f"{treatment_col}==1")
     untreated = data.query(f"{treatment_col}==0")
@@ -665,12 +667,8 @@ def estimate_ate_iptw(
     weight_control = 1 / (1 - control[ps_col])
     # Compute weighted averages of outcomes.
     # E[Y|T=1] and E[Y|T=0] in the pseudo-population.
-    weighted_e_y1 = np.sum(
-        treated[outcome_col] * weight_treated
-    ) / len(data)
-    weighted_e_y0 = np.sum(
-        control[outcome_col] * weight_control
-    ) / len(data)
+    weighted_e_y1 = np.sum(treated[outcome_col] * weight_treated) / len(data)
+    weighted_e_y0 = np.sum(control[outcome_col] * weight_control) / len(data)
     # ATE is the difference.
     ate = weighted_e_y1 - weighted_e_y0
     return weighted_e_y1, weighted_e_y0, ate
@@ -702,7 +700,9 @@ def estimate_ate_with_ps(
     ps_model = LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
     ps = ps_model.predict_proba(X)[:, 1]
     # Compute IPW estimator: E[(T - PS) / (PS * (1 - PS)) * Y].
-    return np.mean((data[treatment_col] - ps) / (ps * (1 - ps)) * data[outcome_col])
+    return np.mean(
+        (data[treatment_col] - ps) / (ps * (1 - ps)) * data[outcome_col]
+    )
 
 
 def estimate_ate_stabilized_weights(
@@ -738,12 +738,12 @@ def estimate_ate_stabilized_weights(
     # Compute weighted averages.
     n_treated = len(treated)
     n_control = len(control)
-    weighted_mean_y1 = np.sum(
-        treated[outcome_col] * weight_treated_stable
-    ) / n_treated
-    weighted_mean_y0 = np.sum(
-        control[outcome_col] * weight_control_stable
-    ) / n_control
+    weighted_mean_y1 = (
+        np.sum(treated[outcome_col] * weight_treated_stable) / n_treated
+    )
+    weighted_mean_y0 = (
+        np.sum(control[outcome_col] * weight_control_stable) / n_control
+    )
     # ATE is the difference.
     ate = weighted_mean_y1 - weighted_mean_y0
     return ate
@@ -853,7 +853,6 @@ def bootstrap(
     :param pcts: Percentiles to compute (default: [2.5, 97.5])
     :return: Percentile values from bootstrap distribution
     """
-    from joblib import Parallel, delayed
     if pcts is None:
         pcts = [2.5, 97.5]
     np.random.seed(seed)
@@ -887,7 +886,6 @@ def estimate_confidence_interval_bootstrap(
     :param pcts: Percentiles to compute (default: [2.5, 97.5])
     :return: Array of percentile values forming confidence interval
     """
-    from joblib import Parallel, delayed
     if pcts is None:
         pcts = [2.5, 97.5]
     np.random.seed(seed)

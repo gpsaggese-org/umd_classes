@@ -20,7 +20,7 @@ import logging
 import os
 import re
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
 import helpers.hsystem as hsystem
@@ -52,7 +52,7 @@ def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
     dir_name = file_path_str.split(os.sep)[0]
     hdbg.dassert_in(
         dir_name,
-        clcomuut.VALID_DIRS,
+        csccouti.VALID_DIRS,
         "Directory extracted from %s is invalid",
         file_path_str,
     )
@@ -74,7 +74,7 @@ def _parse() -> argparse.ArgumentParser:
         "dir",
         type=str,
         help="Course directory (e.g., data605, msml610) or file path "
-             "(e.g., msml610/lectures_source/Lesson10.2-Name.txt)",
+        "(e.g., msml610/lectures_source/Lesson10.2-Name.txt)",
     )
     parser.add_argument(
         "lesson",
@@ -104,15 +104,15 @@ def _main(parser: argparse.ArgumentParser) -> None:
         dir_arg = args.dir
         lesson_arg = args.lesson
     # Validate arguments.
-    clcomuut.validate_dir_lesson_args(dir_arg, lesson_arg)
+    csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Get source and destination names.
-    src_name = clcomuut.get_source_name(dir_arg, lesson_arg)
-    dst_name = clcomuut.get_output_name(src_name, ".pdf")
+    src_name = csccouti.get_source_name(dir_arg, lesson_arg)
+    dst_name = csccouti.get_output_name(src_name, ".pdf")
     # Build paths.
     input_file = f"{dir_arg}/lectures_source/{src_name}"
     output_file = f"{dir_arg}/lectures/{dst_name}"
     # Ensure output directory exists.
-    clcomuut.ensure_dir_exists(f"{dir_arg}/lectures")
+    csccouti.ensure_dir_exists(f"{dir_arg}/lectures")
     # Build the command with debug options.
     opts_debug = "--skip_action cleanup_before --skip_action cleanup_after"
     cmd_parts = [

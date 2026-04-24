@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -23,7 +23,6 @@
 import logging
 import os
 
-import numpy as np
 import pandas as pd
 
 
@@ -60,8 +59,6 @@ dir_name = "L08_data"
 out_dir_name = "figures/"
 
 # %%
-import pandas as pd
-
 df = pd.read_csv(os.path.join(dir_name, "management_training.csv"))
 import helpers.hpandas_display as hpandisp
 
@@ -211,7 +208,9 @@ Y = "engagement_score"
 
 # %%
 # Estimate ATE using IPW estimator.
-ate_ipw = mtl0cire05.estimate_ate_with_ps(df, formula, treatment_col=T, outcome_col=Y)
+ate_ipw = mtl0cire05.estimate_ate_with_ps(
+    df, formula, treatment_col=T, outcome_col=Y
+)
 print(f"ATE (IPW): {ate_ipw:.4f}")
 
 # %%
