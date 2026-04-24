@@ -10,10 +10,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from joblib import Parallel, delayed
-from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.neighbors import KNeighborsRegressor
-from patsy import dmatrix
+import joblib
+import sklearn.linear_model
+import sklearn.neighbors
+import patsy
 
 # Standard figure sizes
 _FIGSIZE_SINGLE = (8, 3)
@@ -71,7 +71,7 @@ def plot_engagement_vs_intervention(
     # Fit and plot regression line.
     X = np.array(data["intervention"]).reshape(-1, 1)
     y = np.array(data["engagement_score"])
-    model = LinearRegression().fit(X, y)
+    model = sklearn.linear_model.LinearRegression().fit(X, y)
     x_range = np.array([0, 1]).reshape(-1, 1)
     y_pred = model.predict(x_range)
     intercept = model.intercept_
@@ -309,7 +309,7 @@ def plot_all_correlations_to_intervention(
             continue
         X_valid = X[valid_mask]
         y_valid = y[valid_mask]
-        model = LinearRegression().fit(X_valid, y_valid)
+        model = sklearn.linear_model.LinearRegression().fit(X_valid, y_valid)
         coef = model.coef_[0]
         results.append({"variable": col, "coefficient": coef})
     results_df = pd.DataFrame(results).sort_values("coefficient")
@@ -534,11 +534,11 @@ def propensity_score_matching(
     untreated = data.query(f"{treatment_col}==0")
     # Fit KNN regressors on outcomes for each group.
     # Control model predicts outcomes for treated units.
-    knn_control = KNeighborsRegressor(n_neighbors=1).fit(
+    knn_control = sklearn.neighbors.KNeighborsRegressor(n_neighbors=1).fit(
         untreated[[ps_col]], untreated[outcome_col]
     )
     # Treated model predicts outcomes for control units.
-    knn_treated = KNeighborsRegressor(n_neighbors=1).fit(
+    knn_treated = sklearn.neighbors.KNeighborsRegressor(n_neighbors=1).fit(
         treated[[ps_col]], treated[outcome_col]
     )
     # Get matched outcomes for treated: what they would have gotten as control.
@@ -695,9 +695,9 @@ def estimate_ate_with_ps(
     :return: Estimated average treatment effect
     """
     # Create design matrix from formula.
-    X = dmatrix(ps_formula, data)
+    X = patsy.dmatrix(ps_formula, data)
     # Fit logistic regression to estimate propensity scores.
-    ps_model = LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
+    ps_model = sklearn.linear_model.LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
     ps = ps_model.predict_proba(X)[:, 1]
     # Compute IPW estimator: E[(T - PS) / (PS * (1 - PS)) * Y].
     return np.mean(
@@ -856,8 +856,8 @@ def bootstrap(
     if pcts is None:
         pcts = [2.5, 97.5]
     np.random.seed(seed)
-    stats = Parallel(n_jobs=4)(
-        delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+    stats = joblib.Parallel(n_jobs=4)(
+        joblib.delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
     return np.percentile(np.array(list(stats)), pcts)
 
@@ -889,7 +889,7 @@ def estimate_confidence_interval_bootstrap(
     if pcts is None:
         pcts = [2.5, 97.5]
     np.random.seed(seed)
-    stats = Parallel(n_jobs=n_jobs)(
-        delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+    stats = joblib.Parallel(n_jobs=n_jobs)(
+        joblib.delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
     )
     return np.percentile(np.array(list(stats)), pcts)
