@@ -29,7 +29,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::: {.column width=20%}
 
-![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){width=1.5cm}
+//![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){width=1.5cm}
 
 ::::
 :::
@@ -52,26 +52,26 @@ MSML610: Advanced Machine Learning
   - Collect and organize massive data volumes
   - Run analytics (dashboards, models, reports) on data
 
-* What Are Data Analytics?
-- **Collections of data**
-  - Organized datasets for analysis
-  - E.g., customer purchase histories in CRM
+- **What Are Data Analytics?**
+  - **Collections of data**
+    - Organized datasets for analysis
+    - E.g., customer purchase histories in CRM
 
-- **Descriptive statistics**
-  - Key metrics: mean, median, mode, standard deviation
-  - E.g., average quarterly sales to track trends
+  - **Descriptive statistics**
+    - Key metrics: mean, median, mode, standard deviation
+    - E.g., average quarterly sales to track trends
 
-- **Historical reports**
-  - Review of _past performance_
-  - E.g., monthly sales reports from last year
+  - **Historical reports**
+    - Review of _past performance_
+    - E.g., monthly sales reports from last year
 
-- **Dashboards**
-  - Visuals of key metrics for quick insights
-  - E.g., quarterly revenue and expense dashboard
+  - **Dashboards**
+    - Visuals of key metrics for quick insights
+    - E.g., quarterly revenue and expense dashboard
 
-- **Models**
-  - Statistical tools to _forecast, explain_
-  - E.g., churn prediction from customer behavior
+  - **Models**
+    - Statistical tools to _forecast, explain_
+    - E.g., churn prediction from customer behavior
 
 * Data Analytics Sophistication
 
