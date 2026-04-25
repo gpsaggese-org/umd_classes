@@ -1565,7 +1565,11 @@ Variables that _predict the treatment well_ but not the outcome
   - Produces more stable weights without changing balancing properties
   - Sum of weights in each group matches original group sizes
 
-- Visual intuition
+- Trim propensity scores to avoid extreme weights
+  - E.g., keep between 1% and 99%
+  - Trade-off: slight bias increase for substantial variance reduction
+
+- **Visual intuition**
   - Plot propensity score distributions by treatment status
   - Before weighting: distributions shifted (confounding)
   - After weighting: distributions overlap (treatment appears random)
@@ -1595,6 +1599,55 @@ Variables that _predict the treatment well_ but not the outcome
     \hat{\Pr}(R = 1 | X)\hat{\Pr}(T = t | X)
   }
   $$
+
+// TODO: Bias-Variance Trade-off
+
+* Positivity
+- **Positivity** means that every unit has non-zero probability of receiving each
+  treatment level
+  $$
+  \Pr(T = t | X) > 0 \text{ for all } t, X
+  $$
+- Essential for IPW validity
+
+- **Problems**
+  - Some subgroups have almost no treated or control units
+  - Cannot estimate counterfactual outcomes in those regions
+  - IPW fails when positivity violated: cannot reweight units that don't exist
+
+### IPW Sensitivity
+- Propensity score distribution easy to visualize
+- Can directly check if treatment groups overlap
+
+### Comparison with Regression
+- Regression can extrapolate beyond region with data
+- Assumes linear (or specified) functional form for $E[Y \mid T, X]$
+- Can recover ATE even with positivity violation if model specification correct
+- IPW makes no functional form assumptions → fails without positivity
+
+### Positivity-Bias Trade-Off
+  ⎿  # Bias-Variance Trade-off in Causal Inference
+
+     ## The Core Trade-off Between Two Key Assumptions
+     When building a causal model, you face a tension between two critical
+     assumptions:
+
+     - Adding more variables to your model (conditioning on more confounders) makes
+       the Conditional Independence Assumption (CIA) more plausible. CIA says that
+       once you account for observed confounders, treatment assignment is independent
+       of the outcome
+
+     - However, adding more variables creates a practical problem: you reduce the
+       number of data points in regions where treatments and controls overlap, making
+       the Positivity assumption harder to satisfy
+
+- More covariates in propensity model $\to$
+  - Stronger unconfoundedness / conditional independence assumption
+  - Weaker positivity
+- Fewer covariates
+  - Better positivity
+  - More potential confounding bias
+- Balance is contextual and requires judgment
 
 // Chap 6
 

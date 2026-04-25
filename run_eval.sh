@@ -12,17 +12,17 @@ START=$(date +%s)
 MODEL=openrouter/google/gemini-2.5-flash-lite
 
 # Nitro.
-#MODEL=openrouter/openai/gpt-oss-20b
+MODEL=openrouter/openai/gpt-oss-20b
 
 OPTS="-o provider '{\"sort\": \"throughput\"}'"
 
 echo $MODEL
 
 #llm -m $MODEL "Explain recursion in 100 words" | tee output.txt
-#llm -m $MODEL -o provider '{"sort": "throughput"}' "Explain recursion in 1000 words" | tee output.txt
+llm -m $MODEL -o provider '{"sort": "throughput"}' "Explain recursion in 1000 words" | tee output.txt
 
 #llm -f summ.txt -m $MODEL -o provider '{"sort": "throughput"}' "Summarize the content in 100 words" | tee output.txt
-llm -f summ.txt -m $MODEL "Summarize the content in 100 words" | tee output.txt
+#llm -f summ.txt -m $MODEL "Summarize the content in 100 words" | tee output.txt
 
 # Needed for small models.
 #llm -f summ.txt -o provider '{"sort": "throughput"}' -m $MODEL " You are a precise summarization system. Task: Summarize the file in EXACTLY 100 words. Constraints: - No more, no less than 100 words - No opinions or extra commentary - Use clear, concise language Verify: - Count words before answering " | tee output.txt
