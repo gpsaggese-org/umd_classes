@@ -66,6 +66,7 @@ temp/
 tmp.pytest.log
 tmp.system_output.txt
 tmp.system_cmd.sh
+.codex
 
 # Data / local artifacts
 data/
