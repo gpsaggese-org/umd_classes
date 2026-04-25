@@ -1,0 +1,92 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+.venv/
+ENV/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Node / JavaScript
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Logs
+*.log
+logs/
+
+# Build outputs
+out/
+target/
+bin/
+obj/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.old
+tmp.pytest.log
+tmp.system_output.txt
+tmp.system_cmd.sh
+
+# Data / local artifacts
+data/
+datasets/
+artifacts/
+outputs/
+models/
+checkpoints/
+
+# Docker / local config
+docker-compose.override.yml
+
+# ML / experiment tracking
+mlruns/
+wandb/
+lightning_logs/
+
+# Secrets / credentials
+*.pem
+*.key
+*.crt
+credentials.json
+token.json
+secrets.json
