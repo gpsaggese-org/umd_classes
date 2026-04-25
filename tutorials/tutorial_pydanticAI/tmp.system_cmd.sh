@@ -1,1 +1,0 @@
-(cd /home/aver23/src/umd_classes1/tutorials/tutorial_pydanticAI && bash /home/aver23/src/umd_classes1/tutorials/tutorial_pydanticAI/docker_cmd.sh 'jupyter nbconvert --execute --to html --ExecutePreprocessor.timeout=-1 /git_root/tutorials/tutorial_pydanticAI/pydanticai.example.ipynb') 2>&1
