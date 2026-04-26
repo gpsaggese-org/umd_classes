@@ -119,10 +119,6 @@ MSML610: Advanced Machine Learning
   - E.g., _"People who buy diapers also buy beer"_
   - No info on direction or mechanism
 
-- **Correlation**
-  - Linear relationship between variables
-  - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
-
 ::::
 :::: {.column width=35%}
 ```latex
@@ -159,6 +155,10 @@ MSML610: Advanced Machine Learning
 ```
 ::::
 :::
+- **Correlation**
+  - Linear relationship between variables
+  - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
+
 - **Causation**
   - Changing one variable _directly_ changes another
   - E.g., _"Asbestos causes cancer"_
@@ -170,14 +170,14 @@ MSML610: Advanced Machine Learning
 * What ML Systems Can Tell You
 - **Pattern recognition**
   - Find correlations in data
-  - Identify similar items (clustering, classification)
+  - Identify similar items (e.g., through clustering, classification)
   - Forecast based on past trends
 
 - **Predictive accuracy on held-out test data**
   - Accurate prediction if conditions remain stable
-  - Only works when training and future data match
+    - Only works when training and future data match
 
-- **Feature importance** (with caveats)
+- **Feature importance**
   - Find variables with strongest statistical associations
   - Doesn't distinguish correlation from causation
 
@@ -189,16 +189,20 @@ MSML610: Advanced Machine Learning
 
 - **Effects of interventions**
   - _"If we change X, what happens to Y?"_
-  - E.g., _"If we lower prices by 10%, will revenue increase?"_
+    - E.g., _"If we lower prices by 10%, will revenue increase?"_
   - Observational data can't answer without causal assumptions
 
 - **Counterfactuals**
   - _"What would have happened with a different decision?"_
-  - E.g., _"Would customer churn if we offered a discount?"_
+    - E.g., _"Would customer churn if we offered them a discount?"_
 
-- **Fairness or causal bias**
-  - A model can be statistically unbiased but causally biased
-  - E.g., using race-correlated variables in decisions
+- **Fairness**
+  - A model can be _statistically_ unbiased but _causally_ biased
+  - _Statistically unbiased_: the expected prediction equals the expected true
+    value: $\EE[Prediction] = \EE[True Value]$
+  - _Causally biased_: model uses variables that are proxies for protected
+    attributes, even if those variables aren't explicitly protected
+    - E.g., using variables correlated to race, gender in decisions
 
 - **Optimal decisions**
   - ML optimizes for accuracy, not business outcomes
