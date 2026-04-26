@@ -83,7 +83,8 @@ MSML610: Advanced Machine Learning
 
 * Test
 
-// include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 2"
+// include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 1"
+// //include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 2"
 
 ## #############################################################################
 ## What ML Systems Can and Cannot Tell You

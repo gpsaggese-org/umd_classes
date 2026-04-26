@@ -118,8 +118,7 @@
 
 # Analytical Sophistication 2
 
-```
-\documentclass[tikz,border=10pt]{standalone}
+```latex
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning}
 
