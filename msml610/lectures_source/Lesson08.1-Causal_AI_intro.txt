@@ -183,7 +183,6 @@ MSML610: Advanced Machine Learning
 
 * What ML Systems Cannot Tell You
 - **Causation from observational data alone**
-  - Correlation $\neq$ causation
   - Strong correlations can arise from confounding, reverse causation, or
     coincidence
 
@@ -198,16 +197,15 @@ MSML610: Advanced Machine Learning
 
 - **Fairness**
   - A model can be _statistically_ unbiased but _causally_ biased
-  - _Statistically unbiased_: the expected prediction equals the expected true
-    value: $\EE[Prediction] = \EE[True Value]$
+  - _Statistically unbiased_: $\EE[Prediction] = \EE[True Value]$
   - _Causally biased_: model uses variables that are proxies for protected
     attributes, even if those variables aren't explicitly protected
     - E.g., using variables correlated to race, gender in decisions
 
 - **Optimal decisions**
   - ML optimizes for accuracy, not business outcomes
-  - A 90% accurate model might lead to worse decisions than an 85% accurate one,
-    depending on the consequences of different errors
+    - E.g., a 90% accurate model might lead to worse decisions than an 85%
+      accurate one, depending on the consequences of different errors
 
 # ##############################################################################
 # Why Causal AI Matters
