@@ -6,19 +6,17 @@ Generate lecture slides PDF.
 This script generates a PDF from lecture source files using notes_to_pdf.py.
 
 Usage:
-> gen_slides.py data605 01.1
-> gen_slides.py msml610 02.3
+> gen_slides.py msml610/08.1
+> gen_slides.py data605/01.1
+> gen_slides.py msml610/08.1 --skip_action cleanup_before
 > gen_slides.py msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
-
-Import as:
-
-import class_scripts.gen_slides as clgeslio
 """
 
 import argparse
 import logging
 import os
 import re
+import shlex
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
@@ -65,27 +63,53 @@ def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
     return dir_name, lesson
 
 
+def _parse_first_arg(arg: str) -> tuple[str, str]:
+    """
+    Parse the first argument to extract directory and lesson.
+
+    Handles:
+    - "data605/08.1" or "msml610/08.1" -> ("data605", "08.1")
+    - "data605/lectures_source/Lesson10.2-Name.txt" -> extracted via file parsing
+
+    :param arg: first argument from command line
+    :return: tuple of (directory, lesson)
+    """
+    if "lectures_source" in arg or arg.endswith(".txt"):
+        return _extract_lesson_from_file(arg)
+    hdbg.dassert(
+        "/" in arg,
+        f"Invalid input '{arg}'. Use 'data605/08.1' or "
+        "'data605/lectures_source/Lesson08.1-Name.txt'",
+    )
+    parts = arg.split("/")
+    hdbg.dassert_eq(
+        len(parts),
+        2,
+        f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
+    )
+    dir_input, lesson = parts
+    hdbg.dassert_in(
+        dir_input,
+        csccouti.VALID_DIRS,
+        f"Invalid directory '{dir_input}'. Must be one of: {csccouti.VALID_DIRS}",
+    )
+    return dir_input, lesson
+
+
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(
-        "dir",
+        "input",
         type=str,
-        help="Course directory (e.g., data605, msml610) or file path "
-        "(e.g., msml610/lectures_source/Lesson10.2-Name.txt)",
-    )
-    parser.add_argument(
-        "lesson",
-        type=str,
-        nargs="?",
-        default=None,
-        help="Lesson number (e.g., 01.1, 02.3). Optional if dir is a file path.",
+        help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
+        "or file path 'msml610/lectures_source/Lesson10.2-Name.txt'",
     )
     parser.add_argument(
         "extra_opts",
-        nargs="*",
+        nargs=argparse.REMAINDER,
         help="Additional options to pass to notes_to_pdf.py",
     )
     hparser.add_verbosity_arg(parser)
@@ -95,15 +119,7 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    # Handle two cases: file path or dir + lesson.
-    if args.lesson is None:
-        # First argument is a file path.
-        dir_arg, lesson_arg = _extract_lesson_from_file(args.dir)
-    else:
-        # Dir and lesson are separate arguments.
-        dir_arg = args.dir
-        lesson_arg = args.lesson
-    # Validate arguments.
+    dir_arg, lesson_arg = _parse_first_arg(args.input)
     csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Get source and destination names.
     src_name = csccouti.get_source_name(dir_arg, lesson_arg)
@@ -114,20 +130,27 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Ensure output directory exists.
     csccouti.ensure_dir_exists(f"{dir_arg}/lectures")
     # Build the command with debug options.
-    opts_debug = "--skip_action cleanup_before --skip_action cleanup_after"
     cmd_parts = [
         "notes_to_pdf.py",
-        f"--input {input_file}",
-        f"--output {output_file}",
-        "--type slides",
-        "--toc_type navigation",
+        "--input",
+        input_file,
+        "--output",
+        output_file,
+        "--type",
+        "slides",
+        "--toc_type",
+        "navigation",
         "--debug_on_error",
-        opts_debug,
+        "--skip_action",
+        "cleanup_before",
+        "--skip_action",
+        "cleanup_after",
     ]
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
-    cmd = " ".join(cmd_parts)
+    # Properly quote all arguments to preserve special characters.
+    cmd = " ".join(shlex.quote(part) for part in cmd_parts)
     _LOG.info("Running command: %s", cmd)
     # Execute the command.
     hsystem.system(cmd)

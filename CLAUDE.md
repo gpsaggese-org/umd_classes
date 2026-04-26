@@ -48,7 +48,7 @@ the **helpers** subsystem.
 - **`helpers_root/config_root/`**: Configuration management system
 - **`helpers_root/dev_scripts_helpers/`**: Development automation scripts
 
-## Development Guidelines
+# Development Guidelines
 
 ### For Code Development
 
@@ -66,7 +66,7 @@ This includes:
 
 Key development commands are documented in `helpers_root/CLAUDE.md`.
 
-### Working with Symlinks
+## Working with Symlinks
 
 The repository uses symlinks from root to `helpers_root/` for centralized
 configuration:
@@ -82,7 +82,7 @@ conftest.py → helpers_root/conftest.py
 This enables shared configuration while maintaining directory separation. When
 working with symlinked files, the actual content lives in `helpers_root/`.
 
-### Key Files and Configuration
+## Key Files and Configuration
 
 - **`helpers_root/repo_config.yaml`**: Repository metadata, Docker config, S3
   buckets
@@ -92,24 +92,6 @@ working with symlinked files, the actual content lives in `helpers_root/`.
 - **`how_to_contribute.md`**: Contribution guidelines for this repository
 - **`.gitignore`**: Standard Python/Docker ignore patterns
 
-# IMPORTANT
+# Important
 
-## Code Conventions
-
-- For writing any Python code you MUST follow instructions in
-  `@.claude/skills/coding.rules.md` and 
-  `@docs/ai_templates/code_template.py`
-- For writing unit tests you MUST follow instructions in
-  `@.claude/skills/testing.format/SKILL.md` and
-  `@docs/ai_templates/unit_test_template.py`
-- For writing a notebook you MUST follow instructions in
-  `@.claude/skills/notebook.format/SKILL.md` and
-  `@docs/ai_templates/notebook_template.ipynb`
-- For writing a blog you MUST follow instructions in
-  `@.claude/skills/blog.format/SKILL.md`
-- For writing markdown text you MUST follow instructions in
-  `@.claude/skills/markdown.format/SKILL.md`
-
-## Do not commit code
-
-- NEVER commit code to git without being explicitly asked to do it
+- You MUST read and strictly follow `.claude/convention_rules.md`

@@ -6,14 +6,10 @@ Import as:
 import class_scripts.test.test_gen_slides as cltetegsl
 """
 
-import logging
-
 import pytest
 
 import helpers.hsystem as hsystem
 import helpers.hunit_test as hunitest
-
-_LOG = logging.getLogger(__name__)
 
 
 # #############################################################################

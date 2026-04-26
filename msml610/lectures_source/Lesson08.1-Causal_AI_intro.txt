@@ -48,30 +48,21 @@ MSML610: Advanced Machine Learning
 //   https://bayes.cs.ucla.edu/BOOK-2K
 
 * Big Data and Traditional AI
-- **Focus** for past 10 years:
+- **Focus for past 10 years**:
   - Collect and organize massive data volumes
   - Run analytics (dashboards, models, reports) on data
 
 - **What Are Data Analytics?**
-  - **Collections of data**
-    - Organized datasets for analysis
-    - E.g., customer purchase histories in CRM
 
-  - **Descriptive statistics**
-    - Key metrics: mean, median, mode, standard deviation
-    - E.g., average quarterly sales to track trends
-
-  - **Historical reports**
-    - Review of _past performance_
-    - E.g., monthly sales reports from last year
-
-  - **Dashboards**
-    - Visuals of key metrics for quick insights
-    - E.g., quarterly revenue and expense dashboard
-
-  - **Models**
-    - Statistical tools to _forecast, explain_
-    - E.g., churn prediction from customer behavior
+\begingroup \footnotesize
+| **Category**               | **Description**                               | **Example**                              |
+|----------------------------|-----------------------------------------------|------------------------------------------|
+| **Collections of data**    | Organized datasets for analysis               | Customer purchase histories in CRM       |
+| **Descriptive statistics** | Key metrics: mean, median, standard deviation | Average quarterly sales to track trends  |
+| **Historical reports**     | Review of past performance                    | Monthly sales reports from last year     |
+| **Dashboards**             | Visuals of key metrics for quick insights     | Quarterly revenue and expense dashboard  |
+| **Models**                 | Statistical tools to forecast, explain        | Churn prediction from customer behavior  |
+\endgroup
 
 * Data Analytics Sophistication
 
@@ -90,6 +81,10 @@ MSML610: Advanced Machine Learning
 
 // ![](msml610/lectures_source/figures/L08.1_Lesson09-Dashboard.png)
 
+* Test
+
+// include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 2"
+
 ## #############################################################################
 ## What ML Systems Can and Cannot Tell You
 ## #############################################################################
@@ -103,13 +98,13 @@ MSML610: Advanced Machine Learning
 //   https://arxiv.org/pdf/1705.07874.pdf
 
 * The Illusion of Understanding
-- **High accuracy $\neq$ Understanding causation**
-  - 95% churn prediction accuracy won't tell you what _causes_ churn
-  - Accurate sales forecasts can't predict effects of _pricing changes_
-
 - **Prediction vs. Explanation**
   - Models find patterns in historical data
   - Can't explain mechanisms or answer "what if" scenarios
+
+- **High accuracy $\neq$ Understanding causation**
+  - A model with 95% churn prediction accuracy won't tell you what _causes_ churn
+  - Accurate sales forecasts can't predict effects of _pricing changes_
 
 - **The Real Problem**
   - Without causation, you react to past events
@@ -127,10 +122,6 @@ MSML610: Advanced Machine Learning
   - Linear relationship between variables
   - E.g., _"Ice cream sales and drowning deaths correlate"_ (both seasonal)
 
-- **Causation**
-  - Changing one variable _directly_ changes another
-  - E.g., _"Asbestos causes cancer"_
-  - Requires causal model or experiment
 ::::
 :::: {.column width=35%}
 ```latex
@@ -167,6 +158,10 @@ MSML610: Advanced Machine Learning
 ```
 ::::
 :::
+- **Causation**
+  - Changing one variable _directly_ changes another
+  - E.g., _"Asbestos causes cancer"_
+  - Requires causal model or experiment
 
 - **The illusion**: high correlation _feels like_ understanding
   - Real understanding means knowing what happens when you _intervene_
