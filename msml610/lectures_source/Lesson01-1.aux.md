@@ -1,3 +1,4 @@
+// #############################################################################
 # Analytical Sophistication 1
 
 ```tikz
@@ -116,6 +117,7 @@
 \end{tikzpicture}
 ```
 
+// #############################################################################
 # Analytical Sophistication 2
 
 ```latex
@@ -191,5 +193,216 @@
 
 \end{tikzpicture}
 
+\end{document}
+```
+
+// #############################################################################
+# Hotel Pricing Paradox
+
+```raw_latex
+\documentclass[border=1pt]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric, fit, backgrounds}
+
+% -- Colour palette ------------------------------------------------------------------
+\definecolor{Purple600}{RGB}{83,74,183}
+\definecolor{Purple100}{RGB}{206,203,246}
+\definecolor{Purple50} {RGB}{238,237,254}
+\definecolor{Teal600}  {RGB}{15,110,86}
+\definecolor{Teal100}  {RGB}{159,225,203}
+\definecolor{Teal50}   {RGB}{225,245,238}
+\definecolor{Coral600} {RGB}{153,60,29}
+\definecolor{Coral100} {RGB}{245,196,179}
+\definecolor{Coral50}  {RGB}{250,236,231}
+\definecolor{Red600}   {RGB}{163,45,45}
+\definecolor{Red400}   {RGB}{226,75,74}
+\definecolor{Gray200}  {RGB}{180,178,169}
+\definecolor{Gray500}  {RGB}{95,94,90}
+\definecolor{PanelBg}  {RGB}{245,244,240}
+
+% -- Common styles -------------------------------------------------------------------
+\tikzset{
+  %% Rounded-rect nodes
+  purplenode/.style={
+    rectangle, rounded corners=6pt,
+    fill=Purple50, draw=Purple600, line width=0.5pt,
+    text=Purple600, font=\bfseries\small,
+    minimum width=2.8cm, minimum height=0.85cm,
+    align=center
+  },
+  tealnode/.style={
+    rectangle, rounded corners=6pt,
+    fill=Teal50, draw=Teal600, line width=0.5pt,
+    text=Teal600, font=\bfseries\small,
+    minimum width=2.8cm, minimum height=0.85cm,
+    align=center
+  },
+  coralnode/.style={
+    rectangle, rounded corners=6pt,
+    fill=Coral50, draw=Coral600, line width=0.5pt,
+    text=Coral600, font=\bfseries\small,
+    minimum width=2.8cm, minimum height=0.85cm,
+    align=center
+  },
+  %% Arrows
+  causal/.style={
+    -{Stealth[length=5pt, width=4pt]},
+    line width=1.2pt, color=Purple600
+  },
+  wrongarrow/.style={
+    -{Stealth[length=5pt, width=4pt]},
+    line width=1.4pt, color=Red400
+  },
+  correlarrow/.style={
+    <->, dashed, line width=0.8pt, color=Gray500
+  },
+  %% Panel boxes
+  panel/.style={
+    rectangle, rounded corners=8pt,
+    draw=Gray200, line width=0.5pt,
+    inner sep=14pt
+  },
+  errorpanel/.style={
+    rectangle, rounded corners=8pt,
+    draw=Red400, line width=0.5pt,
+    inner sep=14pt
+  },
+  %% Insight box
+  insightbox/.style={
+    rectangle, rounded corners=6pt,
+    fill=PanelBg, draw=Gray200, line width=0.5pt,
+    text width=14cm, align=center,
+    inner sep=10pt
+  },
+}
+
+\begin{document}
+\begin{tikzpicture}[node distance=1.4cm]
+
+  %% ===================================================================
+  %%  LEFT PANEL - Reality
+  %% ===================================================================
+
+  %% Nodes
+  \node[purplenode] (demand) {Demand $\uparrow$};
+
+  \node[tealnode, below left=1.3cm and 0.6cm of demand]  (price)     {Price $\uparrow$};
+  \node[tealnode, below right=1.3cm and 0.6cm of demand] (occupancy) {Occupancy $\uparrow$};
+
+  %% Causal arrows from demand
+  \draw[causal] (demand) -- (price);
+  \draw[causal] (demand) -- (occupancy);
+
+  %% Correlation brace between price and occupancy
+  \draw[correlarrow] (price) -- node[below, font=\footnotesize\itshape, color=Gray500,
+        yshift=-2pt] {correlated (both caused\\[-2pt] by demand)} (occupancy);
+
+  %% Mini trend chart (demand drives price & occ together)
+  \begin{scope}[shift={($(price)!0.5!(occupancy) + (0,-2.0cm)$)}]
+    % Axes
+    \draw[line width=0.6pt, color=Gray500, -{Stealth[length=3pt]}]
+      (-1.7,0) -- (1.8,0) node[right, font=\tiny, color=Gray500] {demand};
+    \draw[line width=0.6pt, color=Gray500, -{Stealth[length=3pt]}]
+      (-1.7,0) -- (-1.7,1.0) node[above, font=\tiny, color=Gray500] {};
+    % Price line (teal)
+    \draw[line width=1.2pt, color=Teal600]
+      (-1.5,0.05) .. controls (-0.5,0.35) .. (1.5,0.85);
+    % Occupancy line (purple, dashed)
+    \draw[line width=1.2pt, color=Purple600, dashed]
+      (-1.5,0.05) .. controls (-0.5,0.33) .. (1.5,0.82);
+    % Mini legend
+    \draw[line width=1.2pt, color=Teal600]   (-1.5,-0.25) -- (-1.0,-0.25)
+      node[right, font=\tiny, color=Teal600] {price};
+    \draw[line width=1.2pt, color=Purple600, dashed] (0.0,-0.25) -- (0.5,-0.25)
+      node[right, font=\tiny, color=Purple600] {occupancy};
+  \end{scope}
+
+  %% Panel label
+  \node[font=\small\bfseries, color=Gray500,
+        above=0.3cm of demand] (leftlabel) {Reality};
+
+  %% Panel frame (drawn last so it fits around everything)
+  \begin{pgfonlayer}{background}
+    \node[panel,
+          fit=(leftlabel)(demand)(price)(occupancy)
+               ($(price)!0.5!(occupancy) + (0,-2.9cm)$),
+          label={[font=\footnotesize, color=Gray500, anchor=north west,
+                  inner sep=4pt]north west:{}}
+         ] (leftpanel) {};
+  \end{pgfonlayer}
+
+  %% ===================================================================
+  %%  RIGHT PANEL - Naive prediction
+  %% ===================================================================
+
+  \begin{scope}[xshift=8.5cm]
+
+    %% Nodes
+    \node[coralnode] (raise)   {Raise price};
+    \node[coralnode, below=1.4cm of raise] (sell) {Sell more rooms?};
+
+    %% Wrong causal arrow
+    \draw[wrongarrow] (raise) -- (sell);
+
+    %% Cross mark
+    \node[below=0.4cm of sell, font=\large\bfseries, color=Red400] (cross) {$\times$};
+    \node[below=0.05cm of cross, align=center,
+          font=\footnotesize, color=Red600] (explanation)
+      {Demand didn't change —\\occupancy will fall};
+
+    %% Observer note
+    \node[above=0.5cm of raise, align=center,
+          font=\footnotesize\itshape, color=Gray500] (obs)
+      {Observes: high price $\Rightarrow$ full hotel};
+
+    %% Mini trend chart (price up, occupancy down)
+    \begin{scope}[shift={($(sell) + (0,-2.8cm)$)}]
+      \draw[line width=0.6pt, color=Gray500, -{Stealth[length=3pt]}]
+        (-1.7,0) -- (1.8,0) node[right, font=\tiny, color=Gray500] {price};
+      \draw[line width=0.6pt, color=Gray500, -{Stealth[length=3pt]}]
+        (-1.7,0) -- (-1.7,1.0);
+      % Price goes up (coral)
+      \draw[line width=1.2pt, color=Coral600]
+        (-1.5,0.05) .. controls (-0.5,0.3) .. (1.5,0.85);
+      % Occupancy goes down (red, dashed)
+      \draw[line width=1.2pt, color=Red400, dashed]
+        (-1.5,0.80) .. controls (-0.5,0.55) .. (1.5,0.10);
+      \draw[line width=1.2pt, color=Coral600]  (-1.5,-0.25) -- (-1.0,-0.25)
+        node[right, font=\tiny, color=Coral600] {price};
+      \draw[line width=1.2pt, color=Red400, dashed] (0.0,-0.25) -- (0.5,-0.25)
+        node[right, font=\tiny, color=Red400] {occupancy};
+    \end{scope}
+
+    %% Panel label
+    \node[font=\small\bfseries, color=Red600, above=0.3cm of obs] (rightlabel)
+      {Naive prediction (wrong)};
+
+    %% Panel frame
+    \begin{pgfonlayer}{background}
+      \node[errorpanel,
+            fit=(rightlabel)(obs)(raise)(sell)(cross)(explanation)
+                 ($(sell) + (0,-3.7cm)$)
+           ] (rightpanel) {};
+    \end{pgfonlayer}
+
+  \end{scope}
+
+  %% ===================================================================
+  %%  INSIGHT BOX
+  %% ===================================================================
+
+  \node[insightbox,
+        below=0.8cm of leftpanel.south east,
+        anchor=north east,
+        xshift=4.85cm
+       ] (insight)
+  {%
+    \textbf{Key insight:} Price and occupancy are both \emph{effects} of demand.
+    Raising price without increasing demand reduces quantity sold —
+    the classic downward-sloping demand curve applies.
+  };
+
+\end{tikzpicture}
 \end{document}
 ```

@@ -183,8 +183,7 @@ MSML610: Advanced Machine Learning
 
 * What ML Systems Cannot Tell You
 - **Causation from observational data alone**
-  - Strong correlations can arise from confounding, reverse causation, or
-    coincidence
+  - Strong correlations $\leftarrow$ confounding, reverse causation, or coincidence
 
 - **Effects of interventions**
   - _"If we change X, what happens to Y?"_
@@ -225,12 +224,13 @@ MSML610: Advanced Machine Learning
 
 * Problem 1: Correlation is Not Causation!
 - **Correlation**: statistical relationships between variables
-  - Pros: Find patterns in past data to predict future
+  - Pros:
+    - Find patterns in past data to predict future
   - Cons:
     - Doesn't explain cause
     - Variables move together by coincidence or hidden factors
 
-- **Causation**: explains how changing one variable influences another
+- **Causation** explains how changing one variable influences another
   - Cannot be concluded from correlation alone
 
 - **Data doesn't understand causes and effects**
@@ -238,42 +238,46 @@ MSML610: Advanced Machine Learning
   - Without causation, you can't make intelligent decisions
 
 * Correlation is Not Causation: Examples
-- Intuitively you know that association is not causation
+- **Intuitively**
+  - You know that association is not causation
+  - Humans confuse association with causation, e.g.,
+    - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
+    - _"Buy stock before price spikes"_ $\to$ infer _"you can time markets"_
 
-- Humans confuse association with causation
-  - _"You eat X, get stomachaches"_ $\to$ infer _"X is bad for you"_
-  - _"Buy stock before price spike"_ $\to$ infer _"you can time markets"_
-    - Leads to riskier bets
-
-- E.g., "top-notch consulting improves businesses"
-  - Or do thriving businesses hire top consultants?
+- Sometimes both directions are possible, e.g.,
+  - _"Top-notch consulting improves businesses"_ or
+  - _"Do successful businesses hire top consultants?"_
 
 * Correlation is Not Causation: Examples
-- E.g., in hotel industry
-  - Prices are low outside tourist season
+::::
+:::: {.column width=35%}
+- **In hotel industry**
+  - Prices are low when hotel is empty
   - Prices are high when demand is high and hotel full
   - A naive prediction suggests to increase prices to sell more rooms
+::::
+:::: {.column width=35%}
+// include:msml610/lectures_source/Lesson01-1.aux.md "Hotel Pricing Paradox"
+::::
+:::
 
-- E.g., online marketplace company
+- **Online marketplace company**
   - Decide how to set prices and when to have sales
-  - What is the impact of lowering prices on units sold?
+  - Causal question: _"What is the impact of lowering prices on units sold?"_
   - Gains from selling more need to compensate for the loss of selling cheaper
-  - This is a causal question: "what would happen if we lower prices vs doing
-    nothing"
-  - Price cuts can have different impacts depending on
-    - The type of business (e.g., clothing vs dog food)
-    - The timing (e.g., before Christmas)
+  - Price cuts can have different impacts depending on:
+    - The _type_ of business (e.g., clothing vs drugs)
+    - The _timing_ (e.g., before Christmas)
 
 * Problem 2: Decision Making
-- Businesses need decisions, not just predictions
+- Businesses need **decisions, not just predictions**
 
 - E.g., _"What happens if a product price is reduced by 10%?"_
   - Will more customers buy?
   - Will revenue decrease? What to do then?
   - Why are customers leaving? Quality issue? Emerging competitor?
 
-- **Key questions**
-  - _"What happens if we change product price?"_
+- **Example of policy questions**
   - _"Low-sugar vs low-fat diet: which works?"_
   - _"If we increase credit lines, how does bank margin change?"_
   - _"Build a library or give tablets to boost test scores?"_
