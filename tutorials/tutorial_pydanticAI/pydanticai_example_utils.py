@@ -1,18 +1,34 @@
 """Utility functions for tutorials/tutorial_pydanticAI/pydanticai.example notebook."""
 
+import logging
 import hashlib
 import math
 import re
 from pathlib import Path
 from typing import Any
 
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebo
 from pydantic_ai import ModelRetry
 
+_LOG = logging.getLogger(__name__)
 
 # #########################################################################
 # Code for chunking and embeddings.
 # #########################################################################
 _DIM = 256
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    global _LOG
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init utils logging.
+    configured_log = _LOG or logging.getLogger(__name__)
+    hnotebo.set_logger_to_print(configured_log)
+    _LOG = configured_log
 
 
 def _stable_index(token: str, dim: int = _DIM) -> int:

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -17,99 +17,127 @@
 # %load_ext autoreload
 # %autoreload 2
 
+# System libraries.
 import logging
 
+# Third party libraries.
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from dotenv import find_dotenv, load_dotenv
 
-import helpers.hnotebook as ut
-
-ut.config_notebook()
-
-# Initialize logger.
-logging.basicConfig(level=logging.INFO)
-_LOG = logging.getLogger(__name__)
 
 # %%
+# Import notebook-specific libraries.
+import asyncio
+import os
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
+
+from IPython.display import Markdown, display
+import nest_asyncio
+from pydantic import BaseModel, Field
+from pydantic_ai import Agent, RunContext
+
+import helpers.hio as hio
+
+
+# %%
+import logging
+
+# Local utility.
 import pydanticai_example_utils as utils
 
+_LOG = logging.getLogger(__name__)
+utils.init_logger(_LOG)
+
+display("Notebook logging initialized.")
+# Notebook and utility logging are now configured.
+
+
 # %% [markdown]
+# # Summary
+#
+# - This notebook shows how to build a grounded Atlas support assistant with retrieval, structured outputs, validation, guardrails, and personalization
+#
 # # PydanticAI Example Notebook: Atlas Support Assistant (E2E)
 #
-# This notebook builds a small "support assistant" for a synthetic product called **Atlas**.
+# - Goal: build a small support assistant for the synthetic product **Atlas**
+# - Workflow:
+#   - Generate a synthetic knowledge base
+#   - Load and chunk the docs
+#   - Build a local embedding index
+#   - Add retrieval as a **PydanticAI** tool
+#   - Use structured outputs with citations
+#   - Add validators, guardrails, and personalization
 #
-# We will:
-# 1. Generate a synthetic knowledge base (Markdown docs)
-# 2. Load + chunk the docs
-# 3. Build a simple local embedding index (no external embedding service required)
-# 4. Add retrieval as a **PydanticAI tool**
-# 5. Use **structured outputs** (Pydantic schema) with **citations**
-# 6. Add **validators** to enforce rules like "citations required"
-# 7. Add optional **guardrails** and **personalization**
+# - Outcome: an end-to-end pattern you can reuse for real retrieval-augmented assistants
 #
-# The result is an end-to-end pattern you can reuse for real RAG assistants.
 
 # %% [markdown]
 # ## Setup
 #
-# This cell initializes the environment and imports all required libraries.
-#
-# PydanticAI agents need:
-# - a model identifier (for example `openai:gpt-4o-mini`)
-# - a provider API key (for example `OPENAI_API_KEY`)
-#
-# Everything else in this notebook is local and self-contained.
+# - `PydanticAI` agents need:
+#   - A model identifier, such as `openai:gpt-4o-mini`
+#   - A provider API key, such as `OPENAI_API_KEY`
+# - Create a ```.env``` file containing these variables to be called in the notebook
+# - Everything else in this notebook is local and self-contained
 #
 
 # %%
-# !pip install -q pydantic-ai
-
-# %%
-import os
-import functools
-from pathlib import Path
-from dataclasses import dataclass
-from typing import Optional
-
-import nest_asyncio
-
+# Enable nested event loops so async agent calls run inside the notebook.
 nest_asyncio.apply()
 
-from pydantic import BaseModel, Field
-from pydantic_ai import Agent
+display("Nested event loop support enabled.")
+# Async notebook execution is now configured.
 
-MODEL_ID = os.getenv("PYDANTIC_AI_MODEL", "openai:gpt-4o-mini")
-print("MODEL_ID:", MODEL_ID)
-print("OPENAI_API_KEY set:", bool(os.getenv("OPENAI_API_KEY")))
 
+# %%
+# Run notebook coroutines through the current event loop so the paired Python file compiles.
+def _run_async(awaitable):
+    return asyncio.get_event_loop().run_until_complete(awaitable)
+
+
+display(_run_async)
+# Notebook async calls can now run without top-level await statements.
+
+
+# %%
+# Load environment variables from a local dotenv file if one exists.
+env_path = find_dotenv(usecwd=True)
+load_dotenv(env_path, override=True)
+_LOG.info("dotenv path: %s", env_path or "<not found>")
+env_path or "<not found>"
+# Environment variables are available to the model configuration cells.
 
 # %% [markdown]
 # ## Data and Scenario
 #
-# We build a tiny product docs corpus to keep the tutorial self-contained.
-#
-# We will build a tiny documentation set for an imaginary product called **Atlas**.
+# - This notebook uses a small product-docs corpus to stay self-contained
+# - The corpus describes an imaginary product called **Atlas**
 #
 
 # %% [markdown]
 # ### What this cell does
 #
-# - Creates a local folder `example_dataset/` and writes a small set of **synthetic product/support documents** as Markdown files.
-# - Each file represents a support knowledge-base article (billing, troubleshooting, security, limits, etc.).
-# - The dataset is intentionally small but diverse so retrieval can return the *right* document depending on the question.
+# - Creates a local folder `example_dataset/` and writes a small set of synthetic support documents
+# - Uses one file per support knowledge-base article
+# - Keeps the dataset small so retrieval behavior stays easy to inspect
 #
-# ### Importance
-#
-# PydanticAI becomes most useful when the agent is grounded in external context (RAG-style).
-# These documents act as that context. In the next steps, we will:
-#
-# 1. Load these Markdown files into memory
-# 2. Retrieve relevant chunks for a user query
-# 3. Use a PydanticAI agent + tools to answer using retrieved text
-# 4. Return a structured output with citations
 
 # %%
+# Create the local directory that stores the synthetic support documents.
 DOCS_DIR = Path("example_dataset/")
-DOCS_DIR.mkdir(parents=True, exist_ok=True)
+hio.create_dir(str(DOCS_DIR), incremental=True)
 
+display(DOCS_DIR)
+# The example dataset directory is now available.
+
+
+# %%
+# Define the synthetic Atlas support documents used throughout the notebook.
 DOCS = {
     "overview.md": """
 # Atlas Overview
@@ -179,40 +207,42 @@ Escalations
 """,
 }
 
+display(sorted(DOCS))
+# The notebook now has a compact synthetic document corpus.
+
+
+# %%
+# Materialize the synthetic documents on disk if they do not already exist.
 for name, text in DOCS.items():
     path = DOCS_DIR / name
     if not path.exists():
-        path.write_text(text.strip() + "\n")
+        path.write_text(text.strip() + "\n", encoding="utf-8")
 
-print("Docs directory:", DOCS_DIR)
-print("Files:", [p.name for p in DOCS_DIR.glob("*.md")])
+display(sorted(p.name for p in DOCS_DIR.glob("*.md")))
+# The synthetic knowledge-base files are now stored on disk.
 
 
 # %% [markdown]
-# We load all Markdown files into a standard in-memory format:
+# - We load Markdown files into a standard in-memory format:
 #
-# - `doc_id`: stable identifier for citations
-# - `title`: human-readable name
-# - `text`: document content
+#   - `doc_id`: stable identifier for citations
+#   - `title`: human-readable name
+#   - `text`: document content
 #
-# A consistent document schema makes it easy to:
-# - pass documents into dependencies (`deps`)
-# - build retrieval tools
-# - return structured citations in the agent output
+# - A consistent document schema makes it easier to build retrieval tools and return structured citations
+#
 
 # %% [markdown]
 # ## Chunking and Local Embeddings
 #
-# We split each document into chunks and compute a deterministic vector for each chunk.
+# - We split each document into chunks and computes a deterministic vector for each chunk
+# - This helps:
+#   - Ensure it is fully local and reproducible
+#   - Ensure it is good enough to demonstrate retrieval and grounding
 #
-# ### Why this approach
-# - It is fully local and reproducible (no external embedding API required)
-# - It is good enough to demonstrate retrieval and grounding
-#
-# ### Importance
-# PydanticAI agents become far more reliable when they can retrieve relevant context via tools instead of guessing.
 
 # %%
+# Define the chunk schema used for retrieval and citations.
 @dataclass
 class DocChunk:
     doc_id: str
@@ -221,20 +251,33 @@ class DocChunk:
     vector: list[float]
 
 
+display(DocChunk)
+# The notebook now has a typed schema for retrieved chunks.
+
+
+# %%
+# Load the markdown documents and convert them into embedded chunks.
 docs = utils.load_docs(DOCS_DIR)
 chunks = utils.chunk_docs(docs, DocChunk, max_chars=700)
-print("Chunks:", len(chunks))
-print("Example:", chunks[0].doc_id, chunks[0].chunk_id)
+
+display(
+    {
+        "num_docs": len(docs),
+        "num_chunks": len(chunks),
+        "first_chunk": (chunks[0].doc_id, chunks[0].chunk_id),
+    }
+)
+# The raw documents are now available as retrieval-ready chunks.
 
 
 # %% [markdown]
 # ## Build a lightweight search index / Retrieval
 #
-# We search the chunk index for the most relevant pieces of text for a query.
+# - We then searche the chunk index for the most relevant pieces of text for a query
 #
 
-
 # %%
+# Define the schema for previewing ranked retrieval matches.
 class DocMatch(BaseModel):
     doc_id: str
     chunk_id: int
@@ -242,43 +285,36 @@ class DocMatch(BaseModel):
     text: str
 
 
+display(DocMatch.model_json_schema())
+# Retrieval results will now have a structured schema.
+
+
+# %%
+# Search the chunk index with a realistic support question.
 preview = utils.search_chunks(
-    chunks, "How do I download invoices?", DocMatch, top_k=3
+    chunks,
+    "How do I download invoices?",
+    DocMatch,
+    top_k=3,
 )
-print("Preview matches:")
-for m in preview:
-    print(m.doc_id, "chunk", m.chunk_id, "score=", round(m.score, 4))
 
+display(pd.DataFrame([match.model_dump() for match in preview]))
+# The preview shows which document chunks rank highest for the query.
 
-# %% [markdown]
-# ### Importance
-#
-# - We represent each document chunk as a vector and compute similarity with a query vector using dot product.
-# - `search_chunks(...)` ranks chunks by similarity and returns the top matches.
-#
 
 # %% [markdown]
 # ## Dependencies and Output Schema
 #
-# ### Dependencies (`DocDeps`)
-# Dependencies are runtime context passed into the agent at execution time. Here we store:
-# - the chunk index
-# - an optional user profile (for personalization)
+# - Dependencies are runtime context passed into the agent at execution time
+# - The output schema keeps answers and citations in a predictable format
 #
-# ### Output schema (`AnswerWithSources`)
-# The agent output is forced into a structured format:
-# - `answer`: the response text
-# - `sources`: citations with `doc_id`, `chunk_id`, and a short quote
-# - `follow_up_questions`: optional list to support guardrails
-#
-#
-# Structured outputs eliminate brittle parsing and make results usable in real applications.
 
 # %%
+# Define the dependency and output schemas used by the agent.
 @dataclass
 class DocDeps:
     chunks: list[DocChunk]
-    user: Optional["UserProfile"] = None  # optional personalization
+    user: Optional["UserProfile"] = None  # Optional personalization.
 
 
 class SourceRef(BaseModel):
@@ -292,7 +328,7 @@ class AnswerWithSources(BaseModel):
     sources: list[SourceRef] = Field(default_factory=list)
     follow_up_questions: list[str] = Field(
         default_factory=list
-    )  # enables guardrails section later
+    )  # Optional prompts for follow-up guidance.
 
 
 @dataclass
@@ -301,31 +337,41 @@ class UserProfile:
     region: str
 
 
+display(AnswerWithSources.model_json_schema())
+# The agent interface is now defined with structured dependencies and output.
+
+
 # %% [markdown]
 # ## Retrieval Tool
 #
-# We wrap retrieval into a tool so the agent can call it during reasoning.
-# Tools are the bridge between an LLM and real functionality. Here the tool provides grounded context for RAG-style answers.
+# - We then wrap the retrieval into a tool so the agent can call it during reasoning
+# - Tools connect the model to real functionality
+#
 
 # %%
-search_docs_tool = functools.partial(
-    utils.search_docs,
-    doc_match_cls=DocMatch,
-)
+# Bind the retrieval helper into a tool the agent can invoke.
+def search_docs_tool(
+    ctx: RunContext[DocDeps], query: str, top_k: int = 3
+):
+    return utils.search_docs(
+        ctx,
+        query,
+        top_k=top_k,
+        doc_match_cls=DocMatch,
+    )
+
+display(search_docs_tool)
+# The retrieval function is now packaged as a callable tool.
 
 
 # %% [markdown]
 # ## Agent Configuration and Validation
 #
-# This agent has:
-# - tools: retrieval
-# - deps: chunk store and optional user profile
-# - structured output: answer plus citations
-# - validator: enforces citation rules and triggers retry
+# - This agent combines retrieval tools, structured outputs, and a validator that enforces citation rules
 #
-# The schema ensures output structure, and the validator ensures output quality. Together they turn a chatty model into a reliable system component.
 
 # %%
+# Configure the Atlas support agent with retrieval and structured output.
 agent = Agent(
     MODEL_ID,
     deps_type=DocDeps,
@@ -334,122 +380,175 @@ agent = Agent(
     instructions=(
         "You are Atlas Support. "
         "Use the `search_docs` tool to find relevant text. "
-        "Answer briefly. If you use document info, include 1-3 sources with doc_id, chunk_id, and short quotes."
+        "Answer briefly. If you use document info, include 1-3 sources with "
+        "doc_id, chunk_id, and short quotes."
     ),
 )
 agent.output_validator(utils.enforce_sources)
 
+display(agent)
+# The support agent is now ready to answer grounded questions.
+
+
+# %% [markdown]
+# - The validator runs after the model produces a schema-valid `AnswerWithSources` object
+#
+# - The schema checks structure
+# - The validator checks reliability rules such as source coverage
+#
 
 # %% [markdown]
 # ## End-to-End Query
 #
-# We run the agent asynchronously using `await` (notebook-safe).
+# - Here we run the agent asynchronously
+# - Key pattern:
+#   - Retrieval grounding
+#   - Structured outputs
+#   - Reliability checks
 #
-# ### What happened
-# - The agent can call `search_docs` to retrieve relevant text
-# - The model generates a structured response
-# - The validator ensures citations exist if docs were referenced
-#
-# This is the full pattern: RAG grounding plus structured outputs plus reliability checks.
 
 # %%
+# Ask an end-to-end support question using the retrieval-augmented agent.
 deps = DocDeps(chunks=chunks)
-out = await utils.ask("How do I download invoices?", deps, agent)
-out
+out = _run_async(utils.ask("How do I download invoices?", deps, agent))
+
+display(out)
+# The agent returned a structured answer object.
+
 
 # %%
-print("Answer:\n", out.answer)
-print("\nSources:")
-for s in out.sources:
-    print(
-        f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n', ' ')}"
-    )
-if out.follow_up_questions:
-    print("\nFollow-ups:")
-    for q in out.follow_up_questions:
-        print("-", q)
+# Render the answer and citations in a notebook-friendly format.
+source_lines = [
+    f"- `{source.doc_id}` chunk {source.chunk_id}: "
+    f"{source.quote[:120].replace(chr(10), ' ')}"
+    for source in out.sources
+]
+follow_up_lines = [f"- {question}" for question in out.follow_up_questions]
+answer_sections = [
+    "### Answer",
+    out.answer,
+    "",
+    "### Sources",
+    *source_lines,
+]
+if follow_up_lines:
+    answer_sections.extend(["", "### Follow-up questions", *follow_up_lines])
+
+display(Markdown("\n".join(answer_sections)))
+# The notebook now displays the answer alongside its citations.
+
 
 # %% [markdown]
 # ## Consuming Structured Output
 #
-# We print the answer and citations from the structured result object. Downstream systems can store citations, audit answers, and render sources cleanly without parsing raw text.
+# - Structured results help downstream systems store citations and audit answers without parsing raw text
+#
 
 # %%
-try:
-    utils.enforce_sources(
-        AnswerWithSources(answer="According to the policy...", sources=[])
-    )
-except Exception as e:
-    print("Validator failure example:", e)
+# Build an intentionally invalid answer object for validator inspection.
+invalid_answer = AnswerWithSources(
+    answer="According to the policy...",
+    sources=[],
+)
+
+display(invalid_answer)
+# This object is missing sources even though the answer claims to reference policy text.
+
+
+# %%
+# Run the validator to show how it rejects unsupported document-backed claims.
+utils.enforce_sources(invalid_answer)
+
 
 # %% [markdown]
-# ### What happened (and why PydanticAI helps)
+# ### What happened
 #
-# This shows the validator catching an invalid output.
-# In a real run, `ModelRetry` tells PydanticAI to retry until the output meets the citation rules.
+# - The validator raises `ModelRetry` when an answer cites documentation without including sources
+#
 
 # %% [markdown]
 # ## Streaming Output
 #
-# Streaming returns tokens progressively, which improves perceived latency in chat interfaces.
+# - Streaming returns tokens progressively
+# - Progressive output improves perceived latency in chat interfaces
 #
-# Streaming is useful for UI experiences and interactive assistants, especially when responses are longer.
 
 # %%
+# Create a small streaming agent for a short demonstration.
 stream_agent = Agent(
-    MODEL_ID, instructions="Write one short paragraph about unit tests."
+    MODEL_ID,
+    instructions="Write one short paragraph about unit tests.",
 )
-await utils.stream_demo(stream_agent)
+
+display(stream_agent)
+# The streaming demonstration agent is now configured.
+
+
+# %%
+# Stream a short response into the notebook output area.
+_run_async(utils.stream_demo(stream_agent))
+
 
 # %% [markdown]
 # ## Conversation memory (multi-turn)
 #
-# Reuse message history to keep context across turns.
+# - Reuse message history to keep context across turns
 #
 
 # %%
+# Ask an initial question and validate the grounded response.
 deps = DocDeps(chunks=chunks)
-first = await agent.run("Where do I enable 2FA?", deps=deps)
+first = _run_async(agent.run("Where do I enable 2FA?", deps=deps))
 utils.enforce_sources(first.output)
-follow_up = await agent.run(
-    "Does that work on the Starter plan?",
-    deps=deps,
-    message_history=first.new_messages(),
+
+display(first.output)
+# The first turn establishes grounded context for the next question.
+
+
+# %%
+# Reuse the first turn's message history in a follow-up question.
+follow_up = _run_async(
+    agent.run(
+        "Does that work on the Starter plan?",
+        deps=deps,
+        message_history=first.new_messages(),
+    )
 )
 utils.enforce_sources(follow_up.output)
-print(follow_up.output)
+
+display(follow_up.output)
+# The follow-up answer reuses prior context through message history.
 
 
 # %% [markdown]
 # ## Guardrails (lightweight)
 #
-# Reject out-of-scope questions without calling the model.
+# - Reject out-of-scope questions without calling the model
 #
 
 # %%
-guarded = await utils.run_guarded(
-    "Write me a poem about the ocean.",
-    DocDeps(chunks=chunks),
-    agent,
-    AnswerWithSources,
+# Run a guardrail check against an out-of-scope prompt.
+guarded = _run_async(
+    utils.run_guarded(
+        "Write me a poem about the ocean.",
+        DocDeps(chunks=chunks),
+        agent,
+        AnswerWithSources,
+    )
 )
-print(guarded)
+
+display(guarded)
+# The guardrail returns a bounded response without invoking the main workflow.
 
 
 # %% [markdown]
 # ## Dynamic updates
 #
-# Add new docs, rebuild the index, and query again.
+# - Add new docs, rebuild the index, and query again
 #
 
 # %%
-from pathlib import Path
-
-
-# %%
-from pathlib import Path
-
-# 1) Add the new doc
+# Add a new support document to the local knowledge base.
 new_doc = DOCS_DIR / "integrations.md"
 new_doc.write_text(
     """
@@ -462,51 +561,66 @@ SFTP sources are available on Enterprise plans.
     encoding="utf-8",
 )
 
-# 2) Reload docs in the expected dict format
-docs = utils.load_docs(DOCS_DIR)  # must return list[dict] with doc_id/title/text
+display(new_doc)
+# The knowledge base now includes an integrations document.
+
+
+# %%
+# Reload the documents and rebuild the retrieval chunks.
+docs = utils.load_docs(DOCS_DIR)
 chunks = utils.chunk_docs(docs, DocChunk, max_chars=700)
 
-# 3) Run the agent (notebook-safe)
-deps = DocDeps(chunks=chunks)
+display({"num_docs": len(docs), "num_chunks": len(chunks)})
+# The retrieval index now includes the newly added document.
 
-res = await agent.run("Do you support S3?", deps=deps)
+
+# %%
+# Query the updated knowledge base about integrations support.
+deps = DocDeps(chunks=chunks)
+res = _run_async(agent.run("Do you support S3?", deps=deps))
 out = res.output
 
-print("Answer:\n", out.answer)
-print("\nSources:")
-for s in out.sources:
-    print(
-        f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n', ' ')}"
-    )
+display(out)
+# The updated index returns a grounded answer about S3 support.
+
 
 # %% [markdown]
 # ## Personalization via Dependencies
 #
-# We pass a `UserProfile` through dependencies so the agent can tailor answers. Dependencies are the clean way to inject user context, tenant context, and configuration into tools and agent behavior without global state or prompt hacks.
+# - Here we pass a `UserProfile` through dependencies so the agent can tailor answers
+# - Dependencies are a clean way to inject user context, tenant context, and configuration into tools
+#
 
 # %%
+# Create personalized dependencies for a Starter-plan user.
 personalized_deps = DocDeps(
     chunks=chunks,
     user=UserProfile(plan="Starter", region="US"),
 )
 
-personalized = await utils.ask(
-    "What are my rate limits and storage limits?",
-    personalized_deps,
-    agent,
+display(
+    {
+        "user": personalized_deps.user,
+        "num_chunks": len(personalized_deps.chunks),
+        "sample_chunk": (
+            personalized_deps.chunks[0].doc_id,
+            personalized_deps.chunks[0].chunk_id,
+        ),
+    }
+)
+# The personalized dependency summary is easier to inspect than the full chunk payload.
+
+
+# %%
+# Ask a question that depends on the supplied user profile.
+personalized = _run_async(
+    utils.ask(
+        "What are my rate limits and storage limits?",
+        personalized_deps,
+        agent,
+    )
 )
 
-personalized
+display(personalized)
+# The final answer can now reflect user-specific context.
 
-# %% [markdown]
-# # Summary
-#
-# You built a grounded support assistant using:
-# - a synthetic knowledge base
-# - deterministic local embeddings for retrieval
-# - PydanticAI tools to fetch context
-# - structured outputs with citations
-# - validators to enforce reliability
-# - optional guardrails and personalization
-#
-# This is the core E2E pattern for building production-grade assistants with PydanticAI.
