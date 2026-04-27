@@ -140,6 +140,11 @@ The document is intentionally explicit so that graders, TAs, and future team mem
 
 **What we concede in the notebook.** Fault prediction is a conditional model, not a universal one.
 
+### 12. Java Parser Limitation
+Stage 4 metric computation uses javalang, which does not handle some Java 8+ features such as array constructor references (e.g., boolean[]::new). On commons-lang3, this causes 3 of 259 files to be skipped during metric aggregation. Fix: migrate metric computation to tree-sitter-java, which supports modern Java syntax fully. Verified that tree-sitter installs cleanly in the container; the migration is approximately 100-150 lines in production/lib/metrics.py. Deferred until after end-to-end pipeline is working.
+
+
+
 ---
 
 ## Part 2: Future Improvements
