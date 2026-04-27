@@ -36,7 +36,9 @@ def init_logger(notebook_log: logging.Logger) -> None:
     hnotebo.config_notebook()
     hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
     hnotebo.set_logger_to_print(notebook_log)
-    _LOG = hnotebo.set_logger_to_print(_LOG)
+    configured_log = _LOG
+    hnotebo.set_logger_to_print(configured_log)
+    _LOG = configured_log
 
 
 def _mask(value: str | None) -> str:
