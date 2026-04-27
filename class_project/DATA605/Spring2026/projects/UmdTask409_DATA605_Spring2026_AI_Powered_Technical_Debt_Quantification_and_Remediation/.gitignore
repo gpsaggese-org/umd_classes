@@ -4,3 +4,4 @@ retrieval_cache/
 # Option B: spike folders with external clones and generated outputs
 production/spikes/q1_agent_on_real_code/commons-lang/
 production/spikes/q1_agent_on_real_code/outputs/
+production/data/feedback.sqlite
