@@ -143,6 +143,48 @@ The document is intentionally explicit so that graders, TAs, and future team mem
 ### 12. Java Parser Limitation
 Stage 4 metric computation uses javalang, which does not handle some Java 8+ features such as array constructor references (e.g., boolean[]::new). On commons-lang3, this causes 3 of 259 files to be skipped during metric aggregation. Fix: migrate metric computation to tree-sitter-java, which supports modern Java syntax fully. Verified that tree-sitter installs cleanly in the container; the migration is approximately 100-150 lines in production/lib/metrics.py. Deferred until after end-to-end pipeline is working.
 
+### 13. Stage 6: Refactoring Agent
+
+**Model selection: 0.5B for live runs, 3B for demo.** Stage 6 uses Qwen2.5-Coder-0.5B-Instruct
+for live laptop runs because larger models are infeasible on CPU. A smoke test of
+Qwen2.5-Coder-3B-Instruct on the same hardware took 25 minutes per generation; a typical
+Stage 6 invocation (5 issues, 2 strategies) would exceed 4 hours. The 3B model produces
+qualitatively richer outputs (it correctly refactors `return null` to `return new String[0]`
+for ReturnEmptyCollectionRatherThanNull, where 0.5B leaves the bug in place), so the demo
+notebook ships pre-computed outputs from a Nexus GPU run with the 3B model. Future
+improvement: int8 quantization of the 3B model could make CPU inference tractable. Live
+mode also remains available for reproducibility on machines without a GPU.
+
+**Method size threshold capped at 40 lines.** Refactoring is skipped for any method or
+class scope larger than 40 lines. This bound is set by the 0.5B model's 512-token output
+budget; longer methods cause the model to truncate mid-generation and produce invalid
+Java. The 3B model handles longer methods cleanly, but the live laptop pipeline must
+respect the 0.5B constraint. Improvement path: increase max_new_tokens when running on
+GPU, or switch to streaming generation with end-of-method detection.
+
+**Some PMD rules are not refactorable by a method-only agent.** Rules whose fix requires
+changes outside the local method (renames that affect callsites, class-level structural
+changes, constructor/instantiation modifications) cannot be safely handled by an agent
+that sees only one method at a time. The current pipeline skips these rules at issue
+selection time. The skip list is: MethodNamingConventions, TypeParameterNamingConventions,
+LocalVariableNamingConventions, ClassWithOnlyPrivateConstructorsShouldBeFinal,
+UseUtilityClass, UnnecessaryConstructor, UncommentedEmptyConstructor,
+FieldNamingConventions. Improvement path: add a multi-file context window so the agent
+can see and update callers when renaming, and a class-context mode for structural changes.
+
+**Signature gating in confidence scoring.** A refactoring that changes the method
+signature is never selected as the best strategy, even if it produces syntactically
+valid Java. Signature changes silently break callers and are not safe refactorings.
+The strategy-level confidence may still be HIGH (because the Java parses), but
+best_strategy is set to None if no candidate preserves the signature.
+
+**Local fixes to MVP utility code.** Stage 6 includes a local copy of
+`_extract_java_from_response` rather than reusing the MVP's version, because the MVP's
+function had two bugs surfaced during the Q1 spike: it strips everything before a lone
+closing fence (producing empty output), and it cannot handle outputs with leading
+imports (which break the wrap-then-parse validation). The local version handles both
+cases. Improvement path: upstream the fixes to the MVP util
+
 
 
 ---
