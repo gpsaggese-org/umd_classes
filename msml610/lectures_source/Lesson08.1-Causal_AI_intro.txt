@@ -257,7 +257,7 @@ MSML610: Advanced Machine Learning
   - A naive prediction suggests to increase prices to sell more rooms
 ::::
 :::: {.column width=35%}
-// include:msml610/lectures_source/Lesson01-1.aux.md "Hotel Pricing Paradox"
+// // include:msml610/lectures_source/Lesson01-1.aux.md "Hotel Pricing Paradox"
 ::::
 :::
 
@@ -283,78 +283,76 @@ MSML610: Advanced Machine Learning
   - _"Build a library or give tablets to boost test scores?"_
 
 * Problem 3: ML Explainability
-- **Regulators require defense** of ML/AI decisions
+- **Regulators require defense of ML/AI decisions**
   - E.g., hiring decisions, policy setup
 
-- Many ML systems (e.g., neural networks) are "black boxes"
+- **Many ML systems are black boxes**
+  - E.g., neural networks
   - Humans can't understand input-to-output process
   - Can't explain decisions to shareholders
   - Features like age, race, sex introduce bias
 
-- **Drawbacks**:
-  - Fines, customer backlash, activist pressure
+- **Drawbacks**
+  - Fines
+  - Customer backlash
+  - Activist pressure
 
-- **Solution**:
-  - Explainable AI lets users:
-    - Comprehend
-    - Explain
-    - Trust machine results
+- **Solution**
+  - Explainable AI lets users comprehend, explain, trust machine results
 
 * Problem 4: How ML Systems Make Decisions Today
 - **Typical workflow**
   - Collect data $\to$ Train model $\to$ Make predictions
   - Deploy: _"If model predicts X, take action Y"_
-  - Optimize for model accuracy, not decision quality
 
 - **Critical limitation**
-  - Systems optimize for prediction accuracy
-  - Not for decision quality or business outcomes
-  - 95% accurate fraud detector that blocks 50% legitimate transactions is a poor
-    system
+  - Systems optimize
+    - For prediction accuracy
+    - Not for decision quality or business outcomes
+  - E.g., fraud detector with 95% accuracy that blocks 50% legitimate
+    transactions is a poor system
 
 * Data Science for Decisions: Examples
-- **Recommendation systems** (Netflix, Amazon, TikTok)
-  - Model predicts user clicks
-  - System recommends the top-N items
-  - Problem: Can't test interventions (e.g., diverse content for long-term satisfaction)
-
-- **Credit scoring**
-  - Model predicts default likelihood
-  - Loan officer uses score to approve/deny
-  - Problem: Can't distinguish variables that predict vs cause default
+- **Recommendation systems** (e.g., Netflix, Amazon, TikTok)
+  - Model predicts which items users will click based on historical clicks
+  - System recommends top-N items based on predicted clicks
+  - _Problem_: Can't run counterfactual experiments offline
+    - Recommending novel items has no historical data to learn from
+    - Optimizing purely for clicks may harm long-term engagement (users get
+      bored, echo chambers, filter bubbles)
 
 - **Hiring pipelines**
   - Model scores candidates
   - HR uses scores to rank applicants
-  - Problem: Training data encodes historical hiring bias
+  - _Problem_: Training data encodes historical hiring bias
 
 - **Fraud detection**
   - Model flags suspicious transactions
   - System blocks transactions automatically
-  - Problem: High false positive rate without knowing how to improve
+  - _Problem_: High false positive rate without knowing how to improve
 
-* Problem 5: Feedback Loops
-- Predictions change the world through feedback loops
+* _Problem_ 5: Feedback Loops
+- Prediction systems can change the world through **feedback loops**
 
 - **Recommendation systems**
   - Model recommends sensational content
   - Users click more
   - Future training data has more clicks on sensational content
   - Model recommends even more sensational content
-  - Problem: Radicalization, echo chambers, mental health issues
+  - _Problem_: Radicalization, echo chambers, mental health issues
 
 - **Criminal justice relapse prediction**
+  - Minorities policed more $\to$ arrested more $\to$ data more biased
   - Model trained on arrest data (biased against minorities)
   - Judges use models for bail/sentencing
-  - Minorities policed more $\to$ arrested more $\to$ data more biased
-  - Problem: Model becomes increasingly biased over time
+  - _Problem_: Model becomes increasingly biased over time
 
 - **College admissions**
   - Model trained on past acceptance decisions (which encode historical racism,
     sexism)
   - Model used to screen applications
-  - Filters out biased applicants
-  - Problem: Historical biases are perpetuated
+  - Filter for applicants is biased
+  - _Problem_: Historical biases are perpetuated
 
 * Problem 6: Distribution Shift
 - The world is always changing

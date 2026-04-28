@@ -56,7 +56,7 @@ Create an issue called "Clean up tutorial XYZ" with the following action items.
   > mdm skill describe coding
   > mdm skill describe notebooks
   > mdm skill describe testing
-  > mdm skill describe X_in_60_minutes
+  > mdm skill describe tool_X_in_60_mins
   ```
 
 - [ ] Review key skills relevant to tutorials:

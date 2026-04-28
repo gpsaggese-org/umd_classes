@@ -3,15 +3,16 @@
 """
 Generate quizzes for a lecture using LLM.
 
-This script generates questions from lecture content using llm_cli.py.
-Two modes are available:
-- Multiple choice quizzes (--for_class_quizzes): 20 questions with 5 answers each
-  - Saved to: <class_dir>/lectures_quizzes/<lesson>.quizzes.md
-- Discussion/review questions (--for_class_recap): 3-6 open-ended questions
-  - Saved to: <class_dir>/lectures_recap/<lesson>.recap.md
+This script generates questions from lecture content using `llm_cli.py`.
 
-By default, the output file is automatically formatted using lint_txt.py with
-prettier. Use --no_lint to skip formatting.
+- Two modes are available:
+  - Multiple choice quizzes (--for_class_quizzes): 20 questions with 5 answers each
+    - Saved to: `<class_dir>/lectures_quizzes/<lesson>.quizzes.md`
+  - Discussion/review questions (--for_class_recap): 3-6 open-ended questions
+    - Saved to: `<class_dir>/lectures_recap/<lesson>.recap.md`
+
+- By default, the output file is automatically formatted using `lint_txt.py`
+  with prettier. Use --no_lint to skip formatting.
 
 Usage:
 > gen_quizzes.py --for_class_quizzes data605 01.1
