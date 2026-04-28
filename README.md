@@ -1,33 +1,38 @@
 # GP's University of Maryland Machine Learning Classes
 <img src="https://1000logos.net/wp-content/uploads/2022/07/University-of-Maryland-Logo.png" alt="University of Maryland Logo" width="200"/>
 
+## Classes
+
 This repository contains course materials, tutorials, and projects for two
 graduate-level courses taught at the University of Maryland:
 
-- **DATA605: Big Data Systems** — covers scalable data engineering, distributed
+- **DATA605: Big Data Systems**: covers scalable data engineering, distributed
   systems, and big data tools
-- **MSML610: Advanced Machine Learning** — covers advanced ML techniques,
+  - [data605/README.md](data605/README.md)
+- **MSML610: Advanced Machine Learning**: covers advanced ML techniques,
   research methods, and applied projects
+  - [data605/README.md](msml610/README.md)
+- Class project
+  ```markdown
+  - [ ] [class_project/README.md](class_project/README.md)
+  - [ ] [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md)
+  - [ ] [class_project/X_in_60_mins.format_rules.md](class_project/X_in_60_mins.format_rules.md)
+  ```
 
-## Prerequisites
-Before you begin, make sure you have the following installed and configured:
+## Research Team
 
-- [Git](https://git-scm.com/) with an SSH key added to your GitHub account
-- Python 3.11+
-- Docker (required for some tutorials and assignments)
-
-## Getting Started
-1. Clone the repository:
-   ```bash
-   > git clone git@github.com:gpsaggese/umd_classes.git
-   > cd umd_classes
-   ```
-
-2. Navigate to your course folder:
-   - For DATA605: `cd data605/`
-   - For MSML610: `cd msml610/`
-
-3. Read the course-specific README for setup and assignment instructions.
+- Open an issue called "On-boarding <your_name>" to track going through the
+  documentation
+  - Post the following checklist and go through the documents carefully and mark
+    them as done, when you have internalized the content (it might require
+    multiple read-through)
+  ```markdown
+  - [ ] [policies/*.md](policies/*.md)
+  - [ ] [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md)
+  - [ ] [class_project/X_in_60_mins.format_rules.md](class_project/X_in_60_mins.format_rules.md)
+  - [ ] [class_project/how_to_contribute.md](class_project/how_to_contribute.md)
+    for guidelines on submitting fixes, improvements, and new content.
+  ```
 
 ## Repository Structure
 | Directory                          | Description                                                               |
@@ -39,10 +44,6 @@ Before you begin, make sure you have the following installed and configured:
 | [`papers/`](papers/)               | Research papers and reading lists                                         |
 | [`research/`](research/)           | Research projects and experimental work                                   |
 | [`helpers_root/`](helpers_root/)   | Shared utility libraries and infrastructure                               |
-
-## How to Contribute
-See [how_to_contribute.md](how_to_contribute.md) for guidelines on submitting
-fixes, improvements, and new content.
 
 ## Office Hours
 - **Email:** gsaggese@umd.edu
