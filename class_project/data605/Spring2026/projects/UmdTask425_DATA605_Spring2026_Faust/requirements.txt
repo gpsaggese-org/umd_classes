@@ -2,3 +2,9 @@ matplotlib
 numpy
 pandas
 seaborn
+faust-streaming
+kafka-python
+transformers
+torch
+streamlit
+confluent-kafka
