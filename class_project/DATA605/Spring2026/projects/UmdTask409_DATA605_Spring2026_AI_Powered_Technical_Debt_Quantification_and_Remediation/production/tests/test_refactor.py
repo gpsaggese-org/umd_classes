@@ -396,5 +396,87 @@ class TestSaveAndLoadRecords(unittest.TestCase):
             with self.assertRaises(ValueError):
                 load_refactor_records(path)
 
+class TestSaveAndLoadIssues(unittest.TestCase):
+    def _sample_issues(self):
+        return [
+            {
+                "issue_id": "abc",
+                "rule": "TestRule",
+                "ruleset": "Best Practices",
+                "priority": 3,
+                "file_path": "/origin/path/Foo.java",
+                "file_relative": "Foo.java",
+                "begin_line": 42,
+                "fault_probability": 0.5,
+                "host_commit": "deadbeef",
+                "score": 0.02,
+                "priority_rank": 1,
+                "_extraction": "should be stripped",
+            }
+        ]
+
+    def test_save_and_load_round_trip(self):
+        from production.stages.refactor import (
+            save_ranked_issues, load_ranked_issues,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "issues.json")
+            save_ranked_issues(
+                self._sample_issues(),
+                output_path=path,
+                repo_root="/some/repo",
+                java_source_root="/some/repo/src/main/java",
+                repo_name="test-repo",
+            )
+            envelope = load_ranked_issues(path)
+            self.assertEqual(len(envelope["issues"]), 1)
+            self.assertEqual(envelope["repo_name"], "test-repo")
+            self.assertEqual(
+                envelope["repo_root_on_origin"], "/some/repo"
+            )
+            self.assertEqual(
+                envelope["java_source_root_on_origin"],
+                "/some/repo/src/main/java",
+            )
+
+    def test_extraction_field_stripped(self):
+        from production.stages.refactor import (
+            save_ranked_issues, load_ranked_issues,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "issues.json")
+            save_ranked_issues(
+                self._sample_issues(),
+                output_path=path,
+                repo_root="/some/repo",
+                java_source_root="/some/repo/src",
+            )
+            envelope = load_ranked_issues(path)
+            self.assertNotIn("_extraction", envelope["issues"][0])
+
+    def test_derived_fields_preserved(self):
+        from production.stages.refactor import (
+            save_ranked_issues, load_ranked_issues,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            path = os.path.join(tmpdir, "issues.json")
+            save_ranked_issues(
+                self._sample_issues(),
+                output_path=path,
+                repo_root="/some/repo",
+                java_source_root="/some/repo/src",
+            )
+            envelope = load_ranked_issues(path)
+            issue = envelope["issues"][0]
+            self.assertEqual(issue["fault_probability"], 0.5)
+            self.assertEqual(issue["score"], 0.02)
+            self.assertEqual(issue["priority_rank"], 1)
+            self.assertEqual(issue["host_commit"], "deadbeef")
+
+    def test_load_missing_file_raises(self):
+        from production.stages.refactor import load_ranked_issues
+        with self.assertRaises(FileNotFoundError):
+            load_ranked_issues("/nonexistent/issues.json")
+            
 if __name__ == "__main__":
     unittest.main()

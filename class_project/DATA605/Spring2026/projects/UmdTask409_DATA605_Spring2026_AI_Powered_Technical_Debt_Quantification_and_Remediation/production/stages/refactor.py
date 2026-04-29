@@ -837,3 +837,81 @@ def load_refactor_records(input_path: str) -> dict:
         envelope.get("generated_at", "<unknown>"),
     )
     return envelope
+
+def save_ranked_issues(
+    ranked_issues: list,
+    output_path: str,
+    repo_root: str,
+    java_source_root: str,
+    repo_name: Optional[str] = None,
+) -> None:
+    """Save Stage 5's ranked issues to JSON for cross-machine handoff.
+
+    Used to ship the issue list from a CPU machine (where Stages 1-5
+    ran) to a GPU machine (where Stage 6 runs). Includes repo metadata
+    so the GPU machine knows where the repo lives in its own filesystem.
+    """
+    from datetime import datetime, timezone
+
+    cleaned = []
+    for issue in ranked_issues:
+        # Strip internal cache fields. Keep all derived fields from
+        # earlier stages (fault_probability, score, priority_rank, etc.).
+        clean = {k: v for k, v in issue.items() if not k.startswith("_")}
+        cleaned.append(clean)
+
+    envelope = {
+        "schema_version": SCHEMA_VERSION,
+        "saved_at": datetime.now(timezone.utc).isoformat(),
+        "repo_name": repo_name,
+        "repo_root_on_origin": repo_root,
+        "java_source_root_on_origin": java_source_root,
+        "n_issues": len(cleaned),
+        "issues": cleaned,
+    }
+
+    output_dir = os.path.dirname(output_path)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(envelope, f, indent=2)
+
+    logger.info(
+        "Saved %d ranked issues to %s",
+        len(cleaned), output_path,
+    )
+
+
+def load_ranked_issues(input_path: str) -> dict:
+    """Load Stage 5 issues from a JSON envelope.
+
+    Returns the full envelope. Issues are at envelope["issues"];
+    repo metadata is at top level. The caller is responsible for
+    overriding repo_root and java_source_root if the repo lives at
+    a different absolute path on this machine.
+    """
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(
+            f"Issues file not found: {input_path}"
+        )
+
+    with open(input_path, "r", encoding="utf-8") as f:
+        envelope = json.load(f)
+
+    if "issues" not in envelope:
+        raise ValueError(
+            f"{input_path} is not a ranked-issues file: missing 'issues'"
+        )
+    if "schema_version" not in envelope:
+        raise ValueError(
+            f"{input_path} is missing schema_version"
+        )
+
+    logger.info(
+        "Loaded %d ranked issues from %s (saved_at=%s)",
+        len(envelope["issues"]),
+        input_path,
+        envelope.get("saved_at", "<unknown>"),
+    )
+    return envelope
