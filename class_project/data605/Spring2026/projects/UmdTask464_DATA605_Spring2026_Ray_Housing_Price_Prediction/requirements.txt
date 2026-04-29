@@ -1,0 +1,6 @@
+ray[default]
+scikit-learn
+pandas
+matplotlib
+fastapi
+uvicorn
