@@ -1,4 +1,0 @@
-+ cd ../tmp.build
-++ pwd
-+ docker run --rm -it -v /Users/saggese/src/umd_classes2/tutorials/tmp.build:/data gpsaggese/umd_tutorial_filterpy bash -c /data/version.sh
-the input device is not a TTY

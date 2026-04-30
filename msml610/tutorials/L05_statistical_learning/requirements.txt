@@ -1,7 +1,0 @@
-ipywidgets
-matplotlib
-numpy
-scikit-learn
-scipy
-seaborn
-tqdm

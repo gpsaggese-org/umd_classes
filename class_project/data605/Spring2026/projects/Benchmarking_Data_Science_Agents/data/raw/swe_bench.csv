@@ -1,0 +1,11 @@
+rank,agent,score,variant,resolved_count,total_count,date_submitted
+1,SWE-agent (GPT-4o),38.85,SWE-bench Verified,194,499,2024-06-01
+2,Agentless (Claude 3.5),34.40,SWE-bench Verified,172,499,2024-09-01
+3,AutoCodeRover (GPT-4o),30.67,SWE-bench Lite,92,300,2024-06-01
+4,Claude 3.5 Sonnet,28.32,SWE-bench Verified,141,499,2024-10-01
+5,GPT-4o (direct),23.31,SWE-bench Lite,70,300,2024-06-01
+6,SWE-agent (GPT-4),18.00,SWE-bench Full,41,2294,2024-04-01
+7,Gemini 1.5 Pro,15.78,SWE-bench Lite,47,300,2024-08-01
+8,Claude 3 Opus,13.00,SWE-bench Full,30,2294,2024-06-01
+9,Llama 3.1 405B,9.67,SWE-bench Lite,29,300,2024-08-01
+10,Mixtral 8x22B,5.33,SWE-bench Lite,16,300,2024-05-01

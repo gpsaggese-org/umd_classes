@@ -1,1 +1,0 @@
-../../../../../project_template/install_jupyter_extensions.sh
