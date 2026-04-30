@@ -1,0 +1,512 @@
+{
+  "schema_version": 1,
+  "model_name": "Qwen/Qwen2.5-Coder-3B-Instruct",
+  "generated_at": "2026-04-29T21:35:39.212717+00:00",
+  "repo_name": "commons-lang",
+  "strategies": [
+    "zero_shot"
+  ],
+  "n_records": 10,
+  "records": [
+    {
+      "issue": {
+        "issue_id": "84d3e4d535fbe011",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/time/CalendarUtils.java",
+        "file_relative": "org/apache/commons/lang3/time/CalendarUtils.java",
+        "rule": "ReturnEmptyCollectionRatherThanNull",
+        "ruleset": "Error Prone",
+        "begin_line": 167,
+        "end_line": 167,
+        "begin_column": 20,
+        "end_column": 24,
+        "priority": 1,
+        "description": "Return an empty collection rather than null.",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#returnemptycollectionratherthannull",
+        "host_commit": "48d6e758f79255da5a1e307a2bbcfa60726ad8a0",
+        "fault_probability": 0.41529563069343567,
+        "severity_weight": 1.0,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 20,
+        "impact": 0.41529563069343567,
+        "score": 0.020764781534671782,
+        "priority_rank": 29
+      },
+      "method_source": "    String[] getMonthDisplayNames(final int style) {\n        // Unfortunately standalone month names are not available in DateFormatSymbols,\n        // so we have to extract them.\n        final Map<String, Integer> displayNames = calendar.getDisplayNames(Calendar.MONTH, style, locale);\n        if (displayNames == null) {\n            return null;\n        }\n        final String[] monthNames = new String[displayNames.size()];\n        displayNames.forEach((k, v) -> monthNames[v] = k);\n        return monthNames;\n    }",
+      "method_start_line": 162,
+      "method_end_line": 172,
+      "method_name": "getMonthDisplayNames",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\nString[] getMonthDisplayNames(final int style) {\n    // Unfortunately standalone month names are not available in DateFormatSymbols,\n    // so we have to extract them.\n    final Map<String, Integer> displayNames = calendar.getDisplayNames(Calendar.MONTH, style, locale);\n    if (displayNames == null) {\n        return new String[0];\n    }\n    final String[] monthNames = new String[displayNames.size()];\n    displayNames.forEach((k, v) -> monthNames[v] = k);\n    return monthNames;\n}\n```",
+          "generated_clean": "String[] getMonthDisplayNames(final int style) {\n    // Unfortunately standalone month names are not available in DateFormatSymbols,\n    // so we have to extract them.\n    final Map<String, Integer> displayNames = calendar.getDisplayNames(Calendar.MONTH, style, locale);\n    if (displayNames == null) {\n        return new String[0];\n    }\n    final String[] monthNames = new String[displayNames.size()];\n    displayNames.forEach((k, v) -> monthNames[v] = k);\n    return monthNames;\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 93.87840611593859,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "HIGH",
+            "score": 0.9938784061159386
+          },
+          "diff": "--- a/org/apache/commons/lang3/time/CalendarUtils.java (original)\n+++ b/org/apache/commons/lang3/time/CalendarUtils.java (refactored)\n@@ -1,11 +1,11 @@\n-    String[] getMonthDisplayNames(final int style) {\n\n-        // Unfortunately standalone month names are not available in DateFormatSymbols,\n\n-        // so we have to extract them.\n\n-        final Map<String, Integer> displayNames = calendar.getDisplayNames(Calendar.MONTH, style, locale);\n\n-        if (displayNames == null) {\n\n-            return null;\n\n-        }\n\n-        final String[] monthNames = new String[displayNames.size()];\n\n-        displayNames.forEach((k, v) -> monthNames[v] = k);\n\n-        return monthNames;\n\n-    }\n+String[] getMonthDisplayNames(final int style) {\n\n+    // Unfortunately standalone month names are not available in DateFormatSymbols,\n\n+    // so we have to extract them.\n\n+    final Map<String, Integer> displayNames = calendar.getDisplayNames(Calendar.MONTH, style, locale);\n\n+    if (displayNames == null) {\n\n+        return new String[0];\n\n+    }\n\n+    final String[] monthNames = new String[displayNames.size()];\n\n+    displayNames.forEach((k, v) -> monthNames[v] = k);\n\n+    return monthNames;\n\n+}",
+          "elapsed_s": 64.52714395523071,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "7cf16daa34e10a31",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/ThreadUtils.java",
+        "file_relative": "org/apache/commons/lang3/ThreadUtils.java",
+        "rule": "AvoidThreadGroup",
+        "ruleset": "Multithreading",
+        "begin_line": 208,
+        "end_line": 208,
+        "begin_column": 31,
+        "end_column": 54,
+        "priority": 3,
+        "description": "Avoid using java.lang.ThreadGroup; it is not thread safe",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_multithreading.html#avoidthreadgroup",
+        "host_commit": "e1ffb6ea0b9e21ea71c4540b0fca4db8e4c1dd93",
+        "fault_probability": 0.5993398427963257,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.2,
+        "effort_minutes": 10,
+        "impact": 0.1798019528388977,
+        "score": 0.01798019528388977,
+        "priority_rank": 34
+      },
+      "method_source": "    public static Thread findThreadById(final long threadId, final String threadGroupName) {\n        Objects.requireNonNull(threadGroupName, \"threadGroupName\");\n        final Thread thread = findThreadById(threadId);\n        if (thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {\n            return thread;\n        }\n        return null;\n    }",
+      "method_start_line": 205,
+      "method_end_line": 212,
+      "method_name": "findThreadById",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic static Thread findThreadById(final long threadId, final String threadGroupName) {\n    Objects.requireNonNull(threadGroupName, \"threadGroupName\");\n    final Thread thread = findThreadById(threadId);\n    if (thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {\n        return thread;\n    }\n    return null;\n}\n```",
+          "generated_clean": "public static Thread findThreadById(final long threadId, final String threadGroupName) {\n    Objects.requireNonNull(threadGroupName, \"threadGroupName\");\n    final Thread thread = findThreadById(threadId);\n    if (thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {\n        return thread;\n    }\n    return null;\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 100.00000000000004,
+          "exact_match_vs_input": true,
+          "confidence": {
+            "level": "HIGH",
+            "score": 1.0
+          },
+          "diff": "--- a/org/apache/commons/lang3/ThreadUtils.java (original)\n+++ b/org/apache/commons/lang3/ThreadUtils.java (refactored)\n@@ -1,8 +1,8 @@\n-    public static Thread findThreadById(final long threadId, final String threadGroupName) {\n\n-        Objects.requireNonNull(threadGroupName, \"threadGroupName\");\n\n-        final Thread thread = findThreadById(threadId);\n\n-        if (thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {\n\n-            return thread;\n\n-        }\n\n-        return null;\n\n-    }\n+public static Thread findThreadById(final long threadId, final String threadGroupName) {\n\n+    Objects.requireNonNull(threadGroupName, \"threadGroupName\");\n\n+    final Thread thread = findThreadById(threadId);\n\n+    if (thread != null && thread.getThreadGroup() != null && thread.getThreadGroup().getName().equals(threadGroupName)) {\n\n+        return thread;\n\n+    }\n\n+    return null;\n\n+}",
+          "elapsed_s": 50.64632701873779,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "61ab79e7f55950fa",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/exception/ExceptionUtils.java",
+        "file_relative": "org/apache/commons/lang3/exception/ExceptionUtils.java",
+        "rule": "InefficientEmptyStringCheck",
+        "ruleset": "Performance",
+        "begin_line": 412,
+        "end_line": 412,
+        "begin_column": 36,
+        "end_column": 75,
+        "priority": 3,
+        "description": "String.trim().length() == 0 / String.trim().isEmpty() is an inefficient way to validate a blank String.",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_performance.html#inefficientemptystringcheck",
+        "host_commit": "90762e08cfb35f236adbe4cda28af19e54872890",
+        "fault_probability": 0.5535223484039307,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.2,
+        "effort_minutes": 10,
+        "impact": 0.16605670452117918,
+        "score": 0.01660567045211792,
+        "priority_rank": 41
+      },
+      "method_source": "    static List<String> getStackFrameList(final Throwable throwable) {\n        final String stackTrace = getStackTrace(throwable);\n        final String linebreak = System.lineSeparator();\n        final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);\n        final List<String> list = new ArrayList<>();\n        boolean traceStarted = false;\n        while (frames.hasMoreTokens()) {\n            final String token = frames.nextToken();\n            // Determine if the line starts with \"<whitespace>at\"\n            final int at = token.indexOf(\"at\");\n            if (at != NOT_FOUND && token.substring(0, at).trim().isEmpty()) {\n                traceStarted = true;\n                list.add(token);\n            } else if (traceStarted) {\n                break;\n            }\n        }\n        return list;\n    }",
+      "method_start_line": 402,
+      "method_end_line": 420,
+      "method_name": "getStackFrameList",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\nstatic List<String> getStackFrameList(final Throwable throwable) {\n    final String stackTrace = getStackTrace(throwable);\n    final String linebreak = System.lineSeparator();\n    final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);\n    final List<String> list = new ArrayList<>();\n    boolean traceStarted = false;\n    while (frames.hasMoreTokens()) {\n        final String token = frames.nextToken();\n        // Determine if the line starts with \"<whitespace>at\"\n        final int at = token.indexOf(\"at\");\n        if (at != NOT_FOUND && token.substring(0, at).trim().isEmpty()) {\n            traceStarted = true;\n            list.add(token);\n        } else if (traceStarted) {\n            break;\n        }\n    }\n    return list;\n}\n```",
+          "generated_clean": "static List<String> getStackFrameList(final Throwable throwable) {\n    final String stackTrace = getStackTrace(throwable);\n    final String linebreak = System.lineSeparator();\n    final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);\n    final List<String> list = new ArrayList<>();\n    boolean traceStarted = false;\n    while (frames.hasMoreTokens()) {\n        final String token = frames.nextToken();\n        // Determine if the line starts with \"<whitespace>at\"\n        final int at = token.indexOf(\"at\");\n        if (at != NOT_FOUND && token.substring(0, at).trim().isEmpty()) {\n            traceStarted = true;\n            list.add(token);\n        } else if (traceStarted) {\n            break;\n        }\n    }\n    return list;\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 100.00000000000004,
+          "exact_match_vs_input": true,
+          "confidence": {
+            "level": "HIGH",
+            "score": 1.0
+          },
+          "diff": "--- a/org/apache/commons/lang3/exception/ExceptionUtils.java (original)\n+++ b/org/apache/commons/lang3/exception/ExceptionUtils.java (refactored)\n@@ -1,19 +1,19 @@\n-    static List<String> getStackFrameList(final Throwable throwable) {\n\n-        final String stackTrace = getStackTrace(throwable);\n\n-        final String linebreak = System.lineSeparator();\n\n-        final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);\n\n-        final List<String> list = new ArrayList<>();\n\n-        boolean traceStarted = false;\n\n-        while (frames.hasMoreTokens()) {\n\n-            final String token = frames.nextToken();\n\n-            // Determine if the line starts with \"<whitespace>at\"\n\n-            final int at = token.indexOf(\"at\");\n\n-            if (at != NOT_FOUND && token.substring(0, at).trim().isEmpty()) {\n\n-                traceStarted = true;\n\n-                list.add(token);\n\n-            } else if (traceStarted) {\n\n-                break;\n\n-            }\n\n+static List<String> getStackFrameList(final Throwable throwable) {\n\n+    final String stackTrace = getStackTrace(throwable);\n\n+    final String linebreak = System.lineSeparator();\n\n+    final StringTokenizer frames = new StringTokenizer(stackTrace, linebreak);\n\n+    final List<String> list = new ArrayList<>();\n\n+    boolean traceStarted = false;\n\n+    while (frames.hasMoreTokens()) {\n\n+        final String token = frames.nextToken();\n\n+        // Determine if the line starts with \"<whitespace>at\"\n\n+        final int at = token.indexOf(\"at\");\n\n+        if (at != NOT_FOUND && token.substring(0, at).trim().isEmpty()) {\n\n+            traceStarted = true;\n\n+            list.add(token);\n\n+        } else if (traceStarted) {\n\n+            break;\n\n         }\n\n-        return list;\n\n-    }\n+    }\n\n+    return list;\n\n+}",
+          "elapsed_s": 89.2106523513794,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "246594d88e00400f",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/concurrent/AtomicSafeInitializer.java",
+        "file_relative": "org/apache/commons/lang3/concurrent/AtomicSafeInitializer.java",
+        "rule": "AvoidInstantiatingObjectsInLoops",
+        "ruleset": "Performance",
+        "begin_line": 138,
+        "end_line": 138,
+        "begin_column": 100,
+        "end_column": 132,
+        "priority": 3,
+        "description": "Avoid instantiating new objects inside loops",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_performance.html#avoidinstantiatingobjectsinloops",
+        "host_commit": "0f211efaf1228c3371b2a81de095661a94907f5e",
+        "fault_probability": 0.5243324637413025,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.2,
+        "effort_minutes": 10,
+        "impact": 0.15729973912239073,
+        "score": 0.015729973912239074,
+        "priority_rank": 50
+      },
+      "method_source": "    public final T get() throws ConcurrentException {\n        T result;\n        while ((result = reference.get()) == getNoInit()) {\n            if (factory.compareAndSet(null, this)) {\n                try {\n                    reference.set(initialize());\n                } catch (final Throwable t) {\n                    // Allow retry on failure; otherwise callers spin forever.\n                    factory.set(null);\n                    // Rethrow preserving original semantics: unchecked as-is, checked wrapped.\n                    final Throwable checked = ExceptionUtils.throwUnchecked(t);\n                    throw checked instanceof ConcurrentException ? (ConcurrentException) checked : new ConcurrentException(checked);\n                }\n            }\n        }\n        return result;\n    }",
+      "method_start_line": 127,
+      "method_end_line": 143,
+      "method_name": "get",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic final T get() throws ConcurrentException {\n    T result;\n    while ((result = reference.get()) == getNoInit()) {\n        if (factory.compareAndSet(null, this)) {\n            try {\n                reference.set(initialize());\n            } catch (final Throwable t) {\n                // Allow retry on failure; otherwise callers spin forever.\n                factory.set(null);\n                // Rethrow preserving original semantics: unchecked as-is, checked wrapped.\n                final Throwable checked = ExceptionUtils.throwUnchecked(t);\n                throw checked instanceof ConcurrentException ? (ConcurrentException) checked : new ConcurrentException(checked);\n            }\n        }\n    }\n    return result;\n}\n```",
+          "generated_clean": "public final T get() throws ConcurrentException {\n    T result;\n    while ((result = reference.get()) == getNoInit()) {\n        if (factory.compareAndSet(null, this)) {\n            try {\n                reference.set(initialize());\n            } catch (final Throwable t) {\n                // Allow retry on failure; otherwise callers spin forever.\n                factory.set(null);\n                // Rethrow preserving original semantics: unchecked as-is, checked wrapped.\n                final Throwable checked = ExceptionUtils.throwUnchecked(t);\n                throw checked instanceof ConcurrentException ? (ConcurrentException) checked : new ConcurrentException(checked);\n            }\n        }\n    }\n    return result;\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 100.00000000000004,
+          "exact_match_vs_input": true,
+          "confidence": {
+            "level": "HIGH",
+            "score": 1.0
+          },
+          "diff": "--- a/org/apache/commons/lang3/concurrent/AtomicSafeInitializer.java (original)\n+++ b/org/apache/commons/lang3/concurrent/AtomicSafeInitializer.java (refactored)\n@@ -1,17 +1,17 @@\n-    public final T get() throws ConcurrentException {\n\n-        T result;\n\n-        while ((result = reference.get()) == getNoInit()) {\n\n-            if (factory.compareAndSet(null, this)) {\n\n-                try {\n\n-                    reference.set(initialize());\n\n-                } catch (final Throwable t) {\n\n-                    // Allow retry on failure; otherwise callers spin forever.\n\n-                    factory.set(null);\n\n-                    // Rethrow preserving original semantics: unchecked as-is, checked wrapped.\n\n-                    final Throwable checked = ExceptionUtils.throwUnchecked(t);\n\n-                    throw checked instanceof ConcurrentException ? (ConcurrentException) checked : new ConcurrentException(checked);\n\n-                }\n\n+public final T get() throws ConcurrentException {\n\n+    T result;\n\n+    while ((result = reference.get()) == getNoInit()) {\n\n+        if (factory.compareAndSet(null, this)) {\n\n+            try {\n\n+                reference.set(initialize());\n\n+            } catch (final Throwable t) {\n\n+                // Allow retry on failure; otherwise callers spin forever.\n\n+                factory.set(null);\n\n+                // Rethrow preserving original semantics: unchecked as-is, checked wrapped.\n\n+                final Throwable checked = ExceptionUtils.throwUnchecked(t);\n\n+                throw checked instanceof ConcurrentException ? (ConcurrentException) checked : new ConcurrentException(checked);\n\n             }\n\n         }\n\n-        return result;\n\n-    }\n+    }\n\n+    return result;\n\n+}",
+          "elapsed_s": 75.44675707817078,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "0325f1192d3b2b74",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/compare/ObjectToStringComparator.java",
+        "file_relative": "org/apache/commons/lang3/compare/ObjectToStringComparator.java",
+        "rule": "CompareObjectsWithEquals",
+        "ruleset": "Error Prone",
+        "begin_line": 56,
+        "end_line": 56,
+        "begin_column": 13,
+        "end_column": 21,
+        "priority": 3,
+        "description": "Use equals() to compare object references.",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#compareobjectswithequals",
+        "host_commit": "71c905200de7d1d260a2a40a29d96c7e8a976a6e",
+        "fault_probability": 0.5993398427963257,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 10,
+        "impact": 0.14983496069908142,
+        "score": 0.014983496069908142,
+        "priority_rank": 54
+      },
+      "method_source": "    public int compare(final Object o1, final Object o2) {\n        if (o1 == o2) {\n            return 0;\n        }\n        if (o1 == null) {\n            return 1;\n        }\n        if (o2 == null) {\n            return -1;\n        }\n        final String string1 = o1.toString();\n        final String string2 = o2.toString();\n        // No guarantee that toString() returns a non-null value, despite what Spotbugs thinks.\n        if (string1 == string2) {\n            return 0;\n        }\n        if (string1 == null) {\n            return 1;\n        }\n        if (string2 == null) {\n            return -1;\n        }\n        return string1.compareTo(string2);\n    }",
+      "method_start_line": 55,
+      "method_end_line": 78,
+      "method_name": "compare",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic int compare(final Object o1, final Object o2) {\n    if (o1 == o2) {\n        return 0;\n    }\n    if (o1 == null) {\n        return 1;\n    }\n    if (o2 == null) {\n        return -1;\n    }\n    return o1.equals(o2) ? 0 : Integer.compare(o1.hashCode(), o2.hashCode());\n}\n```",
+          "generated_clean": "public int compare(final Object o1, final Object o2) {\n    if (o1 == o2) {\n        return 0;\n    }\n    if (o1 == null) {\n        return 1;\n    }\n    if (o2 == null) {\n        return -1;\n    }\n    return o1.equals(o2) ? 0 : Integer.compare(o1.hashCode(), o2.hashCode());\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 35.13028844524737,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "MEDIUM",
+            "score": 0.6215634613429685
+          },
+          "diff": "--- a/org/apache/commons/lang3/compare/ObjectToStringComparator.java (original)\n+++ b/org/apache/commons/lang3/compare/ObjectToStringComparator.java (refactored)\n@@ -1,24 +1,12 @@\n-    public int compare(final Object o1, final Object o2) {\n\n-        if (o1 == o2) {\n\n-            return 0;\n\n-        }\n\n-        if (o1 == null) {\n\n-            return 1;\n\n-        }\n\n-        if (o2 == null) {\n\n-            return -1;\n\n-        }\n\n-        final String string1 = o1.toString();\n\n-        final String string2 = o2.toString();\n\n-        // No guarantee that toString() returns a non-null value, despite what Spotbugs thinks.\n\n-        if (string1 == string2) {\n\n-            return 0;\n\n-        }\n\n-        if (string1 == null) {\n\n-            return 1;\n\n-        }\n\n-        if (string2 == null) {\n\n-            return -1;\n\n-        }\n\n-        return string1.compareTo(string2);\n\n-    }\n+public int compare(final Object o1, final Object o2) {\n\n+    if (o1 == o2) {\n\n+        return 0;\n\n+    }\n\n+    if (o1 == null) {\n\n+        return 1;\n\n+    }\n\n+    if (o2 == null) {\n\n+        return -1;\n\n+    }\n\n+    return o1.equals(o2) ? 0 : Integer.compare(o1.hashCode(), o2.hashCode());\n\n+}",
+          "elapsed_s": 67.66021704673767,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "56f133a36cbd6152",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/ClassUtils.java",
+        "file_relative": "org/apache/commons/lang3/ClassUtils.java",
+        "rule": "ReturnEmptyCollectionRatherThanNull",
+        "ruleset": "Error Prone",
+        "begin_line": 225,
+        "end_line": 225,
+        "begin_column": 20,
+        "end_column": 24,
+        "priority": 1,
+        "description": "Return an empty collection rather than null.",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#returnemptycollectionratherthannull",
+        "host_commit": "f9861c09eb3d2af3e79e2fa0c523e5e616b94af5",
+        "fault_probability": 0.27973708510398865,
+        "severity_weight": 1.0,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 20,
+        "impact": 0.27973708510398865,
+        "score": 0.013986854255199433,
+        "priority_rank": 60
+      },
+      "method_source": "    public static List<Class<?>> convertClassNamesToClasses(final List<String> classNames) {\n        if (classNames == null) {\n            return null;\n        }\n        final List<Class<?>> classes = new ArrayList<>(classNames.size());\n        classNames.forEach(className -> {\n            try {\n                classes.add(Class.forName(className));\n            } catch (final Exception ex) {\n                classes.add(null);\n            }\n        });\n        return classes;\n    }",
+      "method_start_line": 223,
+      "method_end_line": 236,
+      "method_name": "convertClassNamesToClasses",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic static List<Class<?>> convertClassNamesToClasses(final List<String> classNames) {\n    if (classNames == null) {\n        return Collections.emptyList();\n    }\n    final List<Class<?>> classes = new ArrayList<>(classNames.size());\n    classNames.forEach(className -> {\n        try {\n            classes.add(Class.forName(className));\n        } catch (final Exception ex) {\n            classes.add(null);\n        }\n    });\n    return classes;\n}\n```",
+          "generated_clean": "public static List<Class<?>> convertClassNamesToClasses(final List<String> classNames) {\n    if (classNames == null) {\n        return Collections.emptyList();\n    }\n    final List<Class<?>> classes = new ArrayList<>(classNames.size());\n    classNames.forEach(className -> {\n        try {\n            classes.add(Class.forName(className));\n        } catch (final Exception ex) {\n            classes.add(null);\n        }\n    });\n    return classes;\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 93.51165321738294,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "HIGH",
+            "score": 0.993511653217383
+          },
+          "diff": "--- a/org/apache/commons/lang3/ClassUtils.java (original)\n+++ b/org/apache/commons/lang3/ClassUtils.java (refactored)\n@@ -1,14 +1,14 @@\n-    public static List<Class<?>> convertClassNamesToClasses(final List<String> classNames) {\n\n-        if (classNames == null) {\n\n-            return null;\n\n+public static List<Class<?>> convertClassNamesToClasses(final List<String> classNames) {\n\n+    if (classNames == null) {\n\n+        return Collections.emptyList();\n\n+    }\n\n+    final List<Class<?>> classes = new ArrayList<>(classNames.size());\n\n+    classNames.forEach(className -> {\n\n+        try {\n\n+            classes.add(Class.forName(className));\n\n+        } catch (final Exception ex) {\n\n+            classes.add(null);\n\n         }\n\n-        final List<Class<?>> classes = new ArrayList<>(classNames.size());\n\n-        classNames.forEach(className -> {\n\n-            try {\n\n-                classes.add(Class.forName(className));\n\n-            } catch (final Exception ex) {\n\n-                classes.add(null);\n\n-            }\n\n-        });\n\n-        return classes;\n\n-    }\n+    });\n\n+    return classes;\n\n+}",
+          "elapsed_s": 53.40800881385803,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "403239a68495d206",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/Functions.java",
+        "file_relative": "org/apache/commons/lang3/Functions.java",
+        "rule": "AvoidCatchingGenericException",
+        "ruleset": "Error Prone",
+        "begin_line": 480,
+        "end_line": 480,
+        "begin_column": 24,
+        "end_column": 33,
+        "priority": 3,
+        "description": "Avoid catching Throwable in try-catch block",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#avoidcatchinggenericexception",
+        "host_commit": "90762e08cfb35f236adbe4cda28af19e54872890",
+        "fault_probability": 0.5535223484039307,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 10,
+        "impact": 0.13838058710098267,
+        "score": 0.013838058710098267,
+        "priority_rank": 92
+      },
+      "method_source": "    public static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) {\n        try {\n            return supplier.get();\n        } catch (final Throwable t) {\n            throw rethrow(t);\n        }\n    }",
+      "method_start_line": 477,
+      "method_end_line": 483,
+      "method_name": "get",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) throws T {\n    return supplier.get();\n}\n```",
+          "generated_clean": "public static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) throws T {\n    return supplier.get();\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 55.24369251776406,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "HIGH",
+            "score": 0.9552436925177641
+          },
+          "diff": "--- a/org/apache/commons/lang3/Functions.java (original)\n+++ b/org/apache/commons/lang3/Functions.java (refactored)\n@@ -1,7 +1,3 @@\n-    public static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) {\n\n-        try {\n\n-            return supplier.get();\n\n-        } catch (final Throwable t) {\n\n-            throw rethrow(t);\n\n-        }\n\n-    }\n+public static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) throws T {\n\n+    return supplier.get();\n\n+}",
+          "elapsed_s": 32.909040212631226,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "0b1680428128f6d9",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/SerializationUtils.java",
+        "file_relative": "org/apache/commons/lang3/SerializationUtils.java",
+        "rule": "PreserveStackTrace",
+        "ruleset": "Best Practices",
+        "begin_line": 107,
+        "end_line": 107,
+        "begin_column": 27,
+        "end_column": 31,
+        "priority": 3,
+        "description": "Thrown exception does not preserve the stack trace of exception 'ex' on all code paths",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_bestpractices.html#preservestacktrace",
+        "host_commit": "90762e08cfb35f236adbe4cda28af19e54872890",
+        "fault_probability": 0.5535223484039307,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 10,
+        "impact": 0.13838058710098267,
+        "score": 0.013838058710098267,
+        "priority_rank": 99
+      },
+      "method_source": "        protected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {\n            final String name = desc.getName();\n            try {\n                return Class.forName(name, false, classLoader);\n            } catch (final ClassNotFoundException ex) {\n                try {\n                    return Class.forName(name, false, Thread.currentThread().getContextClassLoader());\n                } catch (final ClassNotFoundException cnfe) {\n                    final Class<?> cls = ClassUtils.getPrimitiveClass(name);\n                    if (cls != null) {\n                        return cls;\n                    }\n                    throw cnfe;\n                }\n            }\n        }",
+      "method_start_line": 95,
+      "method_end_line": 110,
+      "method_name": "resolveClass",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\nprotected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {\n    final String name = desc.getName();\n    try {\n        return Class.forName(name, false, classLoader);\n    } catch (final ClassNotFoundException ex) {\n        try {\n            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());\n        } catch (final ClassNotFoundException cnfe) {\n            final Class<?> cls = ClassUtils.getPrimitiveClass(name);\n            if (cls != null) {\n                return cls;\n            }\n            throw cnfe;\n        }\n    }\n}\n```",
+          "generated_clean": "protected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {\n    final String name = desc.getName();\n    try {\n        return Class.forName(name, false, classLoader);\n    } catch (final ClassNotFoundException ex) {\n        try {\n            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());\n        } catch (final ClassNotFoundException cnfe) {\n            final Class<?> cls = ClassUtils.getPrimitiveClass(name);\n            if (cls != null) {\n                return cls;\n            }\n            throw cnfe;\n        }\n    }\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 100.00000000000004,
+          "exact_match_vs_input": true,
+          "confidence": {
+            "level": "HIGH",
+            "score": 1.0
+          },
+          "diff": "--- a/org/apache/commons/lang3/SerializationUtils.java (original)\n+++ b/org/apache/commons/lang3/SerializationUtils.java (refactored)\n@@ -1,16 +1,16 @@\n-        protected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {\n\n-            final String name = desc.getName();\n\n-            try {\n\n-                return Class.forName(name, false, classLoader);\n\n-            } catch (final ClassNotFoundException ex) {\n\n-                try {\n\n-                    return Class.forName(name, false, Thread.currentThread().getContextClassLoader());\n\n-                } catch (final ClassNotFoundException cnfe) {\n\n-                    final Class<?> cls = ClassUtils.getPrimitiveClass(name);\n\n-                    if (cls != null) {\n\n-                        return cls;\n\n-                    }\n\n-                    throw cnfe;\n\n-                }\n\n+protected Class<?> resolveClass(final ObjectStreamClass desc) throws IOException, ClassNotFoundException {\n\n+    final String name = desc.getName();\n\n+    try {\n\n+        return Class.forName(name, false, classLoader);\n\n+    } catch (final ClassNotFoundException ex) {\n\n+        try {\n\n+            return Class.forName(name, false, Thread.currentThread().getContextClassLoader());\n\n+        } catch (final ClassNotFoundException cnfe) {\n\n+            final Class<?> cls = ClassUtils.getPrimitiveClass(name);\n\n+            if (cls != null) {\n\n+                return cls;\n\n             }\n\n-        }\n+            throw cnfe;\n\n+        }\n\n+    }\n\n+}",
+          "elapsed_s": 67.0412106513977,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "82412e7858e8d545",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/builder/EqualsBuilder.java",
+        "file_relative": "org/apache/commons/lang3/builder/EqualsBuilder.java",
+        "rule": "CompareObjectsWithEquals",
+        "ruleset": "Error Prone",
+        "begin_line": 220,
+        "end_line": 220,
+        "begin_column": 13,
+        "end_column": 23,
+        "priority": 3,
+        "description": "Use equals() to compare object references.",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#compareobjectswithequals",
+        "host_commit": "90762e08cfb35f236adbe4cda28af19e54872890",
+        "fault_probability": 0.5535223484039307,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 10,
+        "impact": 0.13838058710098267,
+        "score": 0.013838058710098267,
+        "priority_rank": 102
+      },
+      "method_source": "    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,\n            final boolean testRecursive, final String... excludeFields) {\n        if (lhs == rhs) {\n            return true;\n        }\n        if (lhs == null || rhs == null) {\n            return false;\n        }\n        // @formatter:off\n        return new EqualsBuilder()\n            .setExcludeFields(excludeFields)\n            .setReflectUpToClass(reflectUpToClass)\n            .setTestTransients(testTransients)\n            .setTestRecursive(testRecursive)\n            .reflectionAppend(lhs, rhs)\n            .isEquals();\n        // @formatter:on\n    }",
+      "method_start_line": 218,
+      "method_end_line": 235,
+      "method_name": "reflectionEquals",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\npublic static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,\n        final boolean testRecursive, final String... excludeFields) {\n    if (lhs == rhs) {\n        return true;\n    }\n    if (lhs == null || rhs == null) {\n        return false;\n    }\n    // @formatter:off\n    return new EqualsBuilder()\n        .setExcludeFields(excludeFields)\n        .setReflectUpToClass(reflectUpToClass)\n        .setTestTransients(testTransients)\n        .setTestRecursive(testRecursive)\n        .append(lhs, rhs)\n        .isEquals();\n    // @formatter:on\n}\n```",
+          "generated_clean": "public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,\n        final boolean testRecursive, final String... excludeFields) {\n    if (lhs == rhs) {\n        return true;\n    }\n    if (lhs == null || rhs == null) {\n        return false;\n    }\n    // @formatter:off\n    return new EqualsBuilder()\n        .setExcludeFields(excludeFields)\n        .setReflectUpToClass(reflectUpToClass)\n        .setTestTransients(testTransients)\n        .setTestRecursive(testRecursive)\n        .append(lhs, rhs)\n        .isEquals();\n    // @formatter:on\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 97.80175747763184,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "HIGH",
+            "score": 0.9978017574776319
+          },
+          "diff": "--- a/org/apache/commons/lang3/builder/EqualsBuilder.java (original)\n+++ b/org/apache/commons/lang3/builder/EqualsBuilder.java (refactored)\n@@ -1,18 +1,18 @@\n-    public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,\n\n-            final boolean testRecursive, final String... excludeFields) {\n\n-        if (lhs == rhs) {\n\n-            return true;\n\n-        }\n\n-        if (lhs == null || rhs == null) {\n\n-            return false;\n\n-        }\n\n-        // @formatter:off\n\n-        return new EqualsBuilder()\n\n-            .setExcludeFields(excludeFields)\n\n-            .setReflectUpToClass(reflectUpToClass)\n\n-            .setTestTransients(testTransients)\n\n-            .setTestRecursive(testRecursive)\n\n-            .reflectionAppend(lhs, rhs)\n\n-            .isEquals();\n\n-        // @formatter:on\n\n-    }\n+public static boolean reflectionEquals(final Object lhs, final Object rhs, final boolean testTransients, final Class<?> reflectUpToClass,\n\n+        final boolean testRecursive, final String... excludeFields) {\n\n+    if (lhs == rhs) {\n\n+        return true;\n\n+    }\n\n+    if (lhs == null || rhs == null) {\n\n+        return false;\n\n+    }\n\n+    // @formatter:off\n\n+    return new EqualsBuilder()\n\n+        .setExcludeFields(excludeFields)\n\n+        .setReflectUpToClass(reflectUpToClass)\n\n+        .setTestTransients(testTransients)\n\n+        .setTestRecursive(testRecursive)\n\n+        .append(lhs, rhs)\n\n+        .isEquals();\n\n+    // @formatter:on\n\n+}",
+          "elapsed_s": 80.20949006080627,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    },
+    {
+      "issue": {
+        "issue_id": "8b1bf3deff677318",
+        "file_path": "/fs/nexus-scratch/kakhil/td_pipeline/run_2026_04_29/commons-lang/src/main/java/org/apache/commons/lang3/text/WordUtils.java",
+        "file_relative": "org/apache/commons/lang3/text/WordUtils.java",
+        "rule": "UseLocaleWithCaseConversions",
+        "ruleset": "Error Prone",
+        "begin_line": 168,
+        "end_line": 168,
+        "begin_column": 27,
+        "end_column": 44,
+        "priority": 3,
+        "description": "When doing a String.toLowerCase()/toUpperCase() call, use a Locale",
+        "external_info_url": "https://docs.pmd-code.org/snapshot/pmd_rules_java_errorprone.html#uselocalewithcaseconversions",
+        "host_commit": "90762e08cfb35f236adbe4cda28af19e54872890",
+        "fault_probability": 0.5535223484039307,
+        "severity_weight": 0.25,
+        "ruleset_weight": 1.0,
+        "effort_minutes": 10,
+        "impact": 0.13838058710098267,
+        "score": 0.013838058710098267,
+        "priority_rank": 119
+      },
+      "method_source": "    public static String capitalizeFully(final String str, final char... delimiters) {\n        final int delimLen = delimiters == null ? -1 : delimiters.length;\n        if (StringUtils.isEmpty(str) || delimLen == 0) {\n            return str;\n        }\n        return capitalize(str.toLowerCase(), delimiters);\n    }",
+      "method_start_line": 163,
+      "method_end_line": 169,
+      "method_name": "capitalizeFully",
+      "strategies": [
+        {
+          "strategy_name": "zero_shot",
+          "generated_raw": "```java\nimport org.apache.commons.lang3.StringUtils;\n\npublic class StringUtils {\n\n    public static String capitalizeFully(final String str, final char... delimiters) {\n        final int delimLen = delimiters == null ? -1 : delimiters.length;\n        if (StringUtils.isEmpty(str) || delimLen == 0) {\n            return str;\n        }\n        return capitalize(str.toLowerCase(Locale.getDefault()), delimiters);\n    }\n\n    private static String capitalize(String str, char[] delimiters) {\n        if (str == null || str.isEmpty()) {\n            return str;\n        }\n        StringBuilder result = new StringBuilder();\n        boolean capitalizeNext = true;\n        for (char c : str.toCharArray()) {\n            if (delimiters != null && Arrays.asList(delimiters).contains(c)) {\n                capitalizeNext = true;\n            } else {\n                if (capitalizeNext) {\n                    result.append(Character.toUpperCase(c));\n                    capitalizeNext = false;\n                } else {\n                    result.append(c);\n                }\n            }\n        }\n        return result.toString();\n    }\n}\n```\n\nIn this refactored version, I've added a `Locale.getDefault()` call to the `toLowerCase()` method to ensure that the case conversion is done using the default locale. Additionally, I've introduced a helper method `capitalize()` to handle the capitalization logic, which is now called with the default locale. This approach maintains the original functionality while addressing the static-analysis issue.",
+          "generated_clean": "public class StringUtils {\n\n    public static String capitalizeFully(final String str, final char... delimiters) {\n        final int delimLen = delimiters == null ? -1 : delimiters.length;\n        if (StringUtils.isEmpty(str) || delimLen == 0) {\n            return str;\n        }\n        return capitalize(str.toLowerCase(Locale.getDefault()), delimiters);\n    }\n\n    private static String capitalize(String str, char[] delimiters) {\n        if (str == null || str.isEmpty()) {\n            return str;\n        }\n        StringBuilder result = new StringBuilder();\n        boolean capitalizeNext = true;\n        for (char c : str.toCharArray()) {\n            if (delimiters != null && Arrays.asList(delimiters).contains(c)) {\n                capitalizeNext = true;\n            } else {\n                if (capitalizeNext) {\n                    result.append(Character.toUpperCase(c));\n                    capitalizeNext = false;\n                } else {\n                    result.append(c);\n                }\n            }\n        }\n        return result.toString();\n    }\n}",
+          "is_valid_java": true,
+          "syntax_error": null,
+          "signature_preserved": true,
+          "bleu_vs_input": 30.870980911225846,
+          "exact_match_vs_input": false,
+          "confidence": {
+            "level": "MEDIUM",
+            "score": 0.5704517709347101
+          },
+          "diff": "--- a/org/apache/commons/lang3/text/WordUtils.java (original)\n+++ b/org/apache/commons/lang3/text/WordUtils.java (refactored)\n@@ -1,7 +1,31 @@\n+public class StringUtils {\n\n+\n\n     public static String capitalizeFully(final String str, final char... delimiters) {\n\n         final int delimLen = delimiters == null ? -1 : delimiters.length;\n\n         if (StringUtils.isEmpty(str) || delimLen == 0) {\n\n             return str;\n\n         }\n\n-        return capitalize(str.toLowerCase(), delimiters);\n\n-    }\n+        return capitalize(str.toLowerCase(Locale.getDefault()), delimiters);\n\n+    }\n\n+\n\n+    private static String capitalize(String str, char[] delimiters) {\n\n+        if (str == null || str.isEmpty()) {\n\n+            return str;\n\n+        }\n\n+        StringBuilder result = new StringBuilder();\n\n+        boolean capitalizeNext = true;\n\n+        for (char c : str.toCharArray()) {\n\n+            if (delimiters != null && Arrays.asList(delimiters).contains(c)) {\n\n+                capitalizeNext = true;\n\n+            } else {\n\n+                if (capitalizeNext) {\n\n+                    result.append(Character.toUpperCase(c));\n\n+                    capitalizeNext = false;\n\n+                } else {\n\n+                    result.append(c);\n\n+                }\n\n+            }\n\n+        }\n\n+        return result.toString();\n\n+    }\n\n+}",
+          "elapsed_s": 103.74451184272766,
+          "retrieved_count": 0,
+          "retrieved_similarities": []
+        }
+      ],
+      "best_strategy": "zero_shot",
+      "error": null
+    }
+  ]
+}
