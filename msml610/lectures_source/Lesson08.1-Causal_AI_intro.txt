@@ -354,27 +354,30 @@ MSML610: Advanced Machine Learning
   - Filter for applicants is biased
   - _Problem_: Historical biases are perpetuated
 
+// TODO(gp): Add a plot
 * Problem 6: Distribution Shift
-- The world is always changing
+- **The world is always changing**
 
   - **Concept drift**
+    - I.e., $\Pr(Y | X)$, the link between inputs and predictions changes over
+      time, the "rules"
     - Customer preferences change over time
     - Model trained on 2020 data becomes less accurate by 2023
     - Market conditions shift (e.g., pandemic effects)
 
   - **Covariate shift**
-    - Input distribution changes but relationship stays the same
+    - I.e., $\Pr(X)$, input distribution changes but relationship stays the same
     - E.g., more young customers join platform
     - Model trained on older customer base performs worse
 
   - **Label shift**
-    - Outcome distribution changes
+    - I.e., $\Pr(Y)$, outcome distribution changes
     - E.g., fraud rate increases due to new fraud tactics
     - Model trained on old fraud rate is less effective
 
 - **Why causal models help**
   - Encode mechanisms, not just patterns
-  - Mechanisms more stable across distribution shifts
+    - Mechanisms more stable across distribution shifts
   - Understand "why" $\to$ predict in new contexts
 
 ## #############################################################################
@@ -394,22 +397,23 @@ MSML610: Advanced Machine Learning
 
 - **Optimization**: find best action given _known_ objective
   - Assumes world behavior is known
-  - E.g., minimize cost, maximize throughput, tune parameters
-  - Tools: gradient descent, linear programming, evolutionary algorithms
+    - E.g., minimize cost, maximize throughput, tune parameters
+  - _Tools_: gradient descent, linear programming, evolutionary algorithms
 
 - **Statistical inference**: estimate parameters from data
   - Learns from observations given model structure
-  - E.g., estimate treatment effects, compute confidence intervals
-  - Tools: regression, Bayesian estimation, hypothesis testing
+    - E.g., estimate treatment effects, compute confidence intervals
+  - _Tools_: regression, Bayesian estimation, hypothesis testing
 
 - **Decision theory**: choose actions under _uncertainty_
   - E.g., _"Launch product with uncertain demand?"_
-  - Requires reasoning about interventions and outcomes
-  - Tools: utility functions, expected value of information, causal models
+    - Requires reasoning about interventions and outcomes
+  - _Tools_: utility functions, expected value of information, causal models
 
 * Where ML Falls Short
-- **ML focuses on inference and optimization**
-- **Real problems need decision theory**: act under uncertainty with causal knowledge
+- ML focuses on **inference and optimization**
+- **Real problems need decision theory**: act under uncertainty with causal
+  knowledge
 
 \begingroup \footnotesize
 | **Paradigm**    | **Question**              | **Assumes**          | **Output**            |
@@ -419,6 +423,7 @@ MSML610: Advanced Machine Learning
 | Decision theory | What should we _do_?      | Uncertainty + values | Recommended action    |
 \endgroup
 
+// TODO(gp): Add plot
 - **Causal AI bridges inference and decision theory**
   - Inference: what the world looks like
   - Causal models: what happens when you _act_
@@ -436,32 +441,32 @@ MSML610: Advanced Machine Learning
 // - 2023, Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms"
 //   https://www.nature.com/articles/s41598-020-59669-x
 
-* The Cost of Ignoring Causality: Concrete Failure Modes
-- When organizations ignore causality, failures occur
+* The Cost of Ignoring Causality (1/2)
+- Wrong decisions, wasted resources occur when organizations ignore causality
 
 - **Simpson's Paradox**
   - Aggregate data shows opposite trend from subgroups
   - E.g., Berkeley admissions: overall bias shown, but no bias within departments
-  - Causal fix: condition on the right variables using DAG
+  - _Causal fix_: condition on the right variables using DAG
 
 - **Confounding bias**
   - Hidden variable drives both treatment and outcome
   - E.g., ice cream sales and drowning deaths both rise in summer
-  - Causal fix: identify and control for confounders
+  - _Causal fix_: identify and control for confounders
 
 - **Collider bias**
   - Conditioning on common effect creates false associations
-  - E.g., hospitalized patients: unrelated diseases appear correlated (both cause
-    hospitalization)
-  - Causal fix: don't condition on colliders
+  - E.g., in hospitalized patients unrelated diseases appear correlated (since
+    they both cause hospitalization)
+  - _Causal fix_: don't condition on colliders
 
-* The Cost of Ignoring Causality: More Failure Modes
+* The Cost of Ignoring Causality (2/2)
 
 - **Feedback loop amplification**
   - Biased predictions reinforce bias in future training data
-  - E.g., predictive policing: more police to minority neighborhoods $\to$ more
-    arrests $\to$ model learns neighborhoods are more dangerous
-  - Causal fix: model feedback explicitly
+  - E.g., more police to minority neighborhoods $\to$ more arrests $\to$ model
+    learns neighborhoods are more dangerous $\to$ send more police
+  - _Causal fix_: model feedback explicitly
 
 - **Intervention backfire**
   - Acting on correlation leads to wrong actions
@@ -469,10 +474,7 @@ MSML610: Advanced Machine Learning
     - Confounded by patient severity: sicker patients need more staff
   - A naive intervention (_"reduce staff to lower mortality"_) would be
     catastrophic
-  - Causal fix: distinguish correlation from causal effect before acting
-
-- **Key takeaway**: all failures above are preventable with causal reasoning
-  - Cost of ignoring causality: wrong decisions, wasted resources, real harm
+  - _Causal fix_: distinguish correlation from causal effect before acting
 
 * Causal AI
 - **Understands the why**
