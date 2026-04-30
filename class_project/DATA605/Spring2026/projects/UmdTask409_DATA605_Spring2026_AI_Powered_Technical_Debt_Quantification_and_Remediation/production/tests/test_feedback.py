@@ -180,6 +180,135 @@ class TestPayloadJSON(unittest.TestCase):
             events = get_events_for_issue("p", db_path=db_path)
             self.assertEqual(events[0]["payload"], payload)
 
+class TestSummaryMetrics(unittest.TestCase):
+    def test_empty_db(self):
+        from production.stages.feedback import get_summary_metrics
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "empty.sqlite")
+            metrics = get_summary_metrics(db)
+            self.assertEqual(metrics["total_events"], 0)
+            self.assertEqual(metrics["events_by_type"], {})
+            self.assertEqual(metrics["unique_issues"], 0)
+
+    def test_populated_db(self):
+        from production.stages.feedback import (
+            log_event, get_summary_metrics,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "feedback.sqlite")
+            log_event("predicted",
+                      make_issue("a"), repo_name="r1",
+                      payload={}, db_path=db)
+            log_event("predicted",
+                      make_issue("b"), repo_name="r1",
+                      payload={}, db_path=db)
+            log_event("refactored",
+                      make_issue("a"), repo_name="r1",
+                      payload={}, db_path=db)
+            log_event("predicted",
+                      make_issue("c"), repo_name="r2",
+                      payload={}, db_path=db)
+
+            metrics = get_summary_metrics(db)
+            self.assertEqual(metrics["total_events"], 4)
+            self.assertEqual(metrics["events_by_type"]["predicted"], 3)
+            self.assertEqual(metrics["events_by_type"]["refactored"], 1)
+            self.assertEqual(metrics["unique_issues"], 3)
+            self.assertEqual(metrics["unique_repos"], 2)
+
+
+class TestSuccessRateByRule(unittest.TestCase):
+    def test_refactored_event_type(self):
+        from production.stages.feedback import (
+            log_event, get_success_rate_by_rule,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "feedback.sqlite")
+            log_event("refactored",
+                      make_issue("a", rule="RuleX"),
+                      payload={"best_strategy": "zero_shot"},
+                      db_path=db)
+            log_event("refactored",
+                      make_issue("b", rule="RuleX"),
+                      payload={"best_strategy": None},
+                      db_path=db)
+            log_event("refactored",
+                      make_issue("c", rule="RuleY"),
+                      payload={"best_strategy": "zero_shot"},
+                      db_path=db)
+
+            rates = get_success_rate_by_rule("refactored", db)
+            self.assertEqual(rates["RuleX"]["total"], 2)
+            self.assertEqual(rates["RuleX"]["succeeded"], 1)
+            self.assertAlmostEqual(rates["RuleX"]["rate"], 0.5)
+            self.assertEqual(rates["RuleY"]["total"], 1)
+            self.assertEqual(rates["RuleY"]["succeeded"], 1)
+            self.assertAlmostEqual(rates["RuleY"]["rate"], 1.0)
+
+    def test_validated_event_type(self):
+        from production.stages.feedback import (
+            log_event, get_success_rate_by_rule,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "feedback.sqlite")
+            log_event("validated",
+                      make_issue("a", rule="RuleX"),
+                      payload={"succeeded": True},
+                      db_path=db)
+            log_event("validated",
+                      make_issue("b", rule="RuleX"),
+                      payload={"succeeded": False},
+                      db_path=db)
+
+            rates = get_success_rate_by_rule("validated", db)
+            self.assertEqual(rates["RuleX"]["total"], 2)
+            self.assertEqual(rates["RuleX"]["succeeded"], 1)
+            self.assertAlmostEqual(rates["RuleX"]["rate"], 0.5)
+
+    def test_invalid_event_type_raises(self):
+        from production.stages.feedback import get_success_rate_by_rule
+        with self.assertRaises(ValueError):
+            get_success_rate_by_rule("predicted")
+
+    def test_empty_db(self):
+        from production.stages.feedback import get_success_rate_by_rule
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "empty.sqlite")
+            self.assertEqual(get_success_rate_by_rule("refactored", db), {})
+
+
+class TestPerRepoSummary(unittest.TestCase):
+    def test_per_repo_grouping(self):
+        from production.stages.feedback import (
+            log_event, get_per_repo_summary,
+        )
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "feedback.sqlite")
+            log_event("predicted",
+                      make_issue("a"), repo_name="r1",
+                      db_path=db)
+            log_event("refactored",
+                      make_issue("a"), repo_name="r1",
+                      db_path=db)
+            log_event("predicted",
+                      make_issue("b"), repo_name="r2",
+                      db_path=db)
+
+            summary = get_per_repo_summary(db)
+            self.assertIn("r1", summary)
+            self.assertIn("r2", summary)
+            self.assertEqual(summary["r1"]["events_by_type"]["predicted"], 1)
+            self.assertEqual(summary["r1"]["events_by_type"]["refactored"], 1)
+            self.assertEqual(summary["r1"]["unique_issues"], 1)
+            self.assertEqual(summary["r2"]["events_by_type"]["predicted"], 1)
+            self.assertEqual(summary["r2"]["unique_issues"], 1)
+
+    def test_empty_db(self):
+        from production.stages.feedback import get_per_repo_summary
+        with tempfile.TemporaryDirectory() as tmpdir:
+            db = os.path.join(tmpdir, "empty.sqlite")
+            self.assertEqual(get_per_repo_summary(db), {})
+
 
 if __name__ == "__main__":
     unittest.main()

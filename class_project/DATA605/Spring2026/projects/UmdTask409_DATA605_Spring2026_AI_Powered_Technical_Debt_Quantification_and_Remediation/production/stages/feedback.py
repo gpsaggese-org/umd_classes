@@ -248,3 +248,162 @@ def _row_to_dict(row: sqlite3.Row) -> dict:
     except (json.JSONDecodeError, TypeError):
         d["payload"] = {}
     return d
+
+def get_summary_metrics(db_path: str = DEFAULT_DB_PATH) -> dict:
+    """Return overall pipeline health metrics from the feedback DB.
+
+    Returns a dict with:
+        total_events: total rows in the feedback table
+        events_by_type: count per event_type
+        unique_issues: number of distinct issue_ids
+        unique_repos: number of distinct repo_names
+        first_event: earliest timestamp seen
+        last_event: latest timestamp seen
+    """
+    if not os.path.exists(db_path):
+        return {
+            "total_events": 0,
+            "events_by_type": {},
+            "unique_issues": 0,
+            "unique_repos": 0,
+            "first_event": None,
+            "last_event": None,
+        }
+
+    with sqlite3.connect(db_path) as conn:
+        total = conn.execute(
+            "SELECT COUNT(*) FROM feedback"
+        ).fetchone()[0]
+
+        events_by_type = dict(
+            conn.execute(
+                "SELECT event_type, COUNT(*) FROM feedback "
+                "GROUP BY event_type"
+            ).fetchall()
+        )
+
+        unique_issues = conn.execute(
+            "SELECT COUNT(DISTINCT issue_id) FROM feedback"
+        ).fetchone()[0]
+
+        unique_repos = conn.execute(
+            "SELECT COUNT(DISTINCT repo_name) FROM feedback "
+            "WHERE repo_name IS NOT NULL"
+        ).fetchone()[0]
+
+        first_event, last_event = conn.execute(
+            "SELECT MIN(timestamp), MAX(timestamp) FROM feedback"
+        ).fetchone()
+
+    return {
+        "total_events": total,
+        "events_by_type": events_by_type,
+        "unique_issues": unique_issues,
+        "unique_repos": unique_repos,
+        "first_event": first_event,
+        "last_event": last_event,
+    }
+
+
+def get_success_rate_by_rule(
+    event_type: str,
+    db_path: str = DEFAULT_DB_PATH,
+) -> dict:
+    """Compute per-rule success rates for a given event type.
+
+    For event_type='refactored', success means best_strategy is not None.
+    For event_type='validated', success means succeeded is True.
+
+    Returns:
+        dict mapping rule -> {"total": int, "succeeded": int,
+                              "rate": float}
+    """
+    if event_type not in {"refactored", "validated"}:
+        raise ValueError(
+            f"Success rate is only defined for 'refactored' or "
+            f"'validated' events, got {event_type!r}"
+        )
+    if not os.path.exists(db_path):
+        return {}
+
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute(
+            """
+            SELECT rule, payload
+            FROM feedback
+            WHERE event_type = ? AND rule IS NOT NULL
+            """,
+            (event_type,),
+        ).fetchall()
+
+    by_rule: dict = {}
+    for rule, payload_text in rows:
+        try:
+            payload = json.loads(payload_text)
+        except (json.JSONDecodeError, TypeError):
+            continue
+
+        if event_type == "refactored":
+            succeeded = payload.get("best_strategy") is not None
+        else:
+            succeeded = bool(payload.get("succeeded"))
+
+        bucket = by_rule.setdefault(
+            rule, {"total": 0, "succeeded": 0, "rate": 0.0}
+        )
+        bucket["total"] += 1
+        if succeeded:
+            bucket["succeeded"] += 1
+
+    for bucket in by_rule.values():
+        if bucket["total"] > 0:
+            bucket["rate"] = bucket["succeeded"] / bucket["total"]
+
+    return by_rule
+
+
+def get_per_repo_summary(db_path: str = DEFAULT_DB_PATH) -> dict:
+    """Per-repo summary of event activity.
+
+    Returns:
+        dict mapping repo_name -> {"events_by_type": {...},
+                                   "unique_issues": int,
+                                   "first_event": str,
+                                   "last_event": str}
+    """
+    if not os.path.exists(db_path):
+        return {}
+
+    with sqlite3.connect(db_path) as conn:
+        repo_rows = conn.execute(
+            "SELECT DISTINCT repo_name FROM feedback "
+            "WHERE repo_name IS NOT NULL"
+        ).fetchall()
+
+        result: dict = {}
+        for (repo,) in repo_rows:
+            events_by_type = dict(
+                conn.execute(
+                    "SELECT event_type, COUNT(*) FROM feedback "
+                    "WHERE repo_name = ? GROUP BY event_type",
+                    (repo,),
+                ).fetchall()
+            )
+            unique_issues = conn.execute(
+                "SELECT COUNT(DISTINCT issue_id) FROM feedback "
+                "WHERE repo_name = ?",
+                (repo,),
+            ).fetchone()[0]
+            first_event, last_event = conn.execute(
+                "SELECT MIN(timestamp), MAX(timestamp) FROM feedback "
+                "WHERE repo_name = ?",
+                (repo,),
+            ).fetchone()
+            result[repo] = {
+                "events_by_type": events_by_type,
+                "unique_issues": unique_issues,
+                "first_event": first_event,
+                "last_event": last_event,
+            }
+
+    return result
