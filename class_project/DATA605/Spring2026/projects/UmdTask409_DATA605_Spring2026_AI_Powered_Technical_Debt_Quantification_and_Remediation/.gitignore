@@ -5,3 +5,4 @@ retrieval_cache/
 production/spikes/q1_agent_on_real_code/commons-lang/
 production/spikes/q1_agent_on_real_code/outputs/
 production/data/feedback.sqlite
+production/data/ranked_issues_commons_lang.json
