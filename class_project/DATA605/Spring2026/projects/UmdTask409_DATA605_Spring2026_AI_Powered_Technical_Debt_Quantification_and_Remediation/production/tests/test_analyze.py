@@ -1,13 +1,11 @@
 """Tests for production.stages.analyze."""
 
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.stages.analyze import (
     analyze_repository,

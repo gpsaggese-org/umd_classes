@@ -70,6 +70,6 @@ run "docker run \
     $DOCKER_RUN_OPTS \
     -v $(pwd):/curr_dir \
     -v $GIT_ROOT:/git_root \
-    -e PYTHONPATH=/git_root:/git_root/helpers_root \
+    -e PYTHONPATH=/curr_dir:/git_root:/git_root/helpers_root \
     $FULL_IMAGE_NAME \
     $CMD"

@@ -1,11 +1,9 @@
 """Tests for production.scripts.run_pipeline."""
 
-import sys
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 
 class TestRunPipelineImports(unittest.TestCase):

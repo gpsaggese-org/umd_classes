@@ -1,11 +1,9 @@
 """Tests for production.stages.prioritize."""
 
-import sys
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.stages.prioritize import (
     prioritize_issues,

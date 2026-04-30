@@ -2,13 +2,11 @@
 
 import os
 import subprocess
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.lib.metrics import (
     compute_repo_metrics,

@@ -1,13 +1,11 @@
 """Tests for production.stages.refactor."""
 
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.stages.refactor import (
     _select_top_issues,

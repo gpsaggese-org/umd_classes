@@ -1,13 +1,11 @@
 """Tests for production.stages.predict."""
 
 import os
-import sys
 import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.stages.predict import (
     predict_fault_probability,

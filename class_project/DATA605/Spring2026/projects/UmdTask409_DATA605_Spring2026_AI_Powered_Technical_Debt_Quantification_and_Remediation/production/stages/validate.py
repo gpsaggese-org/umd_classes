@@ -37,12 +37,10 @@ import logging
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 import time
 from typing import Optional
 
-sys.path.insert(0, "/data")
 
 from production.stages.feedback import log_event
 

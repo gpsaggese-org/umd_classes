@@ -1,12 +1,10 @@
 """Tests for production.stages.validate."""
 
 import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
 
-sys.path.insert(0, "/data")
 
 from production.stages.validate import (
     _splice_method,

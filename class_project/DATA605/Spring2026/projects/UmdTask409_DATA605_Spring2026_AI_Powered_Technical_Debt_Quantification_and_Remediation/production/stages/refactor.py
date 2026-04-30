@@ -31,7 +31,6 @@ Usage:
 import difflib
 import logging
 import re
-import sys
 import time
 from typing import Optional
 import json
@@ -40,7 +39,6 @@ import os
 import javalang
 
 # Make MVP utils importable.
-sys.path.insert(0, "/data")
 import ai_technical_debt_utils as utils
 
 from production.stages.feedback import log_event

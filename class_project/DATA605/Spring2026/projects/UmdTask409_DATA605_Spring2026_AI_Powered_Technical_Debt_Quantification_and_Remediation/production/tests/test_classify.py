@@ -1,11 +1,9 @@
 """Tests for production.stages.classify."""
 
-import sys
 import unittest
 from pathlib import Path
 
 # Make production package importable.
-sys.path.insert(0, "/data")
 
 from production.stages.classify import (
     aggregate_to_readme_view,
