@@ -9,6 +9,16 @@
     author: "Likhon Gomes"
 
   tasks:
+    - name: Fetch current time from a more stable API
+      ansible.builtin.uri:
+        url: "http://ip-api.com"
+        method: GET
+      register: time_response
+
+    - name: Debug API response
+      ansible.builtin.debug:
+        var: time_response
+
     - name: Create the HTML file
       ansible.builtin.copy:
         content: |
@@ -40,34 +50,3 @@
         dest: "{{ output_path }}"
         mode: "0644"
 
-    - name: Create a stack, pass in the template via an URL
-      amazon.aws.cloudformation:
-        stack_name: "Umd-stack-ansible-cloudformation"
-        state: "present"
-        region: "us-east-1"
-        template: "cf_templates/s3_bucket.yaml"
-        template_parameters:
-          Environment: dev
-          BucketName: umdtask405-bucket
-          EnableVersioning: "false"
-          EnableReplication: "false"
-          LogRetentionDays: 90
-          NoncurrentVersionExpirationDays: 30
-        tags:
-          Stack: "ansible-cloudformation"
-
-      # amazon.aws.cloudformation:
-      #   stack_name: "umd-stack-ansible-cloudformation"
-      #   state: present
-      #   region: us-east-1
-      #   disable_rollback: true
-      #   template_body: "{{ lookup('template', 'cf_templates/s3_bucket.yaml') }}"
-      #   template_parameters:
-      #     Environment: dev
-      #     BucketName: umdtask405-bucket
-      #     EnableVersioning: "false"
-      #     EnableReplication: "false"
-      #     LogRetentionDays: 90
-      #     NoncurrentVersionExpirationDays: 30
-      #   tags:
-      #     Stack: ansible-cloudformation
