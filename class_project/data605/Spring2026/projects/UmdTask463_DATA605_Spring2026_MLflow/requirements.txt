@@ -1,4 +1,10 @@
+# Standard DS stack
 matplotlib
 numpy
 pandas
 seaborn
+
+# MLflow and tracking dependencies
+mlflow
+scikit-learn
+pyyaml

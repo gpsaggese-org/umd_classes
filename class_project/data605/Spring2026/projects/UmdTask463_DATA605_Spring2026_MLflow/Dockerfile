@@ -1,30 +1,36 @@
-# Use Python 3.12 slim (already has Python and pip).
+# Use Python 3.12 slim
 FROM python:3.12-slim
 
-# Avoid interactive prompts during apt operations.
+# Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
+# Set MLflow tracking URI to a local folder in the container
+ENV MLFLOW_TRACKING_URI=file:///project/mlruns
 
-# Install CA certificates (needed for HTTPS).
+# Install basic system tools
 RUN apt-get update && apt-get install -y \
     ca-certificates \
+    curl \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
-# Install project specific packages.
-RUN mkdir -p /install
+# Setup directory structure
+RUN mkdir -p /install /project
+WORKDIR /project
+
+# Install Python packages
 COPY requirements.txt /install/requirements.txt
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
 
-# Config.
-COPY etc_sudoers /install/
+# Config files
 COPY etc_sudoers /etc/sudoers
 COPY bashrc /root/.bashrc
 
-# Report package versions.
+# Reporting
 COPY version.sh /install/
-RUN /install/version.sh 2>&1 | tee version.log
+RUN /install/version.sh 2>&1 | tee /install/version.log
 
-# Jupyter.
-EXPOSE 8888
+# Jupyter and MLflow UI ports
+EXPOSE 8888 5000
 
 CMD ["/bin/bash"]
