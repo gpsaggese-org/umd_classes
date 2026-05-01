@@ -1,52 +1,35 @@
 ---
-- name: Create a simple HTML webpage
+- name: Run Python Page
   hosts: localhost
   connection: local
 
   vars:
-    page_title: "My Simple Webpage"
+    page_title: "ML Model Training and Evaluation"
     output_path: "index.html"
     author: "Likhon Gomes"
 
   tasks:
-    - name: Fetch current time from a more stable API
-      ansible.builtin.uri:
-        url: "http://ip-api.com"
-        method: GET
-      register: time_response
+    - name: Clone ML Model from Github
+      ansible.builtin.git:
+        repo: https://github.com/likhongomes/Comparative-Analysis-of-RNN-Architectures-for-Sentiment-Classification.git
+        dest: ml_model
 
-    - name: Debug API response
+    # - name: Install Python dependencies
+    #   ansible.builtin.pip:
+    #     requirements: ml_model/requirements.txt
+
+    - name: Run Python Code to train model
+      ansible.builtin.command: python ml_model/train.py --architecture rnn --activation relu --optimizer adam --seq_len 50 --epochs 5 --grad_clip_enable --data_dir ml_model/data
+      register: python_train_output
+
+    - name: Python train output
       ansible.builtin.debug:
-        var: time_response
+        msg: "{{ python_train_output }}"
 
-    - name: Create the HTML file
-      ansible.builtin.copy:
-        content: |
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>{{ page_title }}</title>
-              <style>
-                  body {
-                      font-family: Arial, sans-serif;
-                      max-width: 800px;
-                      margin: 40px auto;
-                      padding: 0 20px;
-                      background: #f5f5f5;
-                      color: #333;
-                  }
-                  h1 { color: #2c3e50; }
-                  p  { line-height: 1.6; }
-              </style>
-          </head>
-          <body>
-              <h1>{{ page_title }}</h1>
-              <p>Created by {{ author }}</p>
-              <p>Generated on {{ ansible_date_time.date }}</p>
-          </body>
-          </html>
-        dest: "{{ output_path }}"
-        mode: "0644"
+    - name: Run Python Code to evaluate model
+      ansible.builtin.command: python ml_model/evaluate.py
+      register: python_evaluate_output
 
+    - name: Python evaluate output
+      ansible.builtin.debug:
+        msg: "{{ python_evaluate_output }}"

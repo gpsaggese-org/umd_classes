@@ -1,0 +1,2 @@
+Model,Activation,Optimizer,Seq Length,Grad Clipping,Accuracy,F1,Epoch Time (s)
+RNN,relu,adam,50,Yes,0.7541,0.7536,7.07

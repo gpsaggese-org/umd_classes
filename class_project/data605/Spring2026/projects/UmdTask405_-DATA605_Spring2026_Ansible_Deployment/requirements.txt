@@ -2,3 +2,9 @@ matplotlib
 numpy
 pandas
 seaborn
+tqdm
+boto3
+requests
+regex
+sentencepiece
+sacremoses
