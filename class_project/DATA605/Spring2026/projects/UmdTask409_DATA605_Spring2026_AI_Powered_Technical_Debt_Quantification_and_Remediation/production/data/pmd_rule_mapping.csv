@@ -1,0 +1,302 @@
+rule_id,pmd_native_category,our_category,reasoning
+AbstractClassWithoutAbstractMethod,Best Practices,code_smells,Abstract class with no abstract methods is confusing and hard to maintain.
+AbstractClassWithoutAnyMethod,Best Practices,code_smells,An abstract class with no methods at all serves no purpose.
+AccessorClassGeneration,Best Practices,code_smells,Generating accessor classes adds unnecessary complexity.
+AccessorMethodGeneration,Best Practices,code_smells,Unnecessary accessor method generation clutters code.
+ArrayIsStoredDirectly,Best Practices,code_smells,Storing array references directly can cause unintended mutations.
+AvoidMessageDigestField,Best Practices,code_smells,MessageDigest fields are not thread-safe and lead to subtle bugs.
+AvoidPrintStackTrace,Best Practices,code_smells,Using printStackTrace is poor error handling practice.
+AvoidReassigningCatchVariables,Best Practices,code_smells,Reassigning catch variables makes exception handling confusing.
+AvoidReassigningLoopVariables,Best Practices,code_smells,Reassigning loop variables makes loops harder to reason about.
+AvoidReassigningParameters,Best Practices,code_smells,Reassigning method parameters is confusing and error-prone.
+AvoidStringBufferField,Best Practices,code_smells,StringBuffer fields are not thread-safe and are a design smell.
+AvoidUsingHardCodedIP,Best Practices,code_smells,Hard-coded IP addresses are a maintainability and portability issue.
+CheckResultSet,Best Practices,code_smells,Ignoring ResultSet.next() return value leads to silent errors.
+ConstantsInInterface,Best Practices,architectural_violations,Using interfaces purely for constants violates interface purpose and creates tight coupling.
+DefaultLabelNotLastInSwitchStmt,Best Practices,code_smells,Default label not last in switch reduces readability.
+DoubleBraceInitialization,Best Practices,code_smells,Double brace initialization creates anonymous subclasses unnecessarily.
+ForLoopVariableCount,Best Practices,code_smells,Too many variables in a for loop hurts readability.
+GuardLogStatement,Best Practices,performance_issues,Unguarded log statements evaluate arguments even when logging is disabled wasting CPU.
+JUnit4SuitesShouldUseSuiteAnnotation,Best Practices,outdated_patterns,JUnit 3 style suite() method is obsolete since JUnit 4 introduced @Suite.
+JUnit4TestShouldUseAfterAnnotation,Best Practices,outdated_patterns,JUnit 3 style tearDown() is obsolete; use @After annotation instead.
+JUnit4TestShouldUseBeforeAnnotation,Best Practices,outdated_patterns,JUnit 3 style setUp() is obsolete; use @Before annotation instead.
+JUnit4TestShouldUseTestAnnotation,Best Practices,outdated_patterns,JUnit 3 style test naming convention is obsolete; use @Test annotation.
+JUnit5TestShouldBePackagePrivate,Best Practices,code_smells,JUnit 5 test methods should not be public; package-private is sufficient.
+JUnitAssertionsShouldIncludeMessage,Best Practices,code_smells,Assertions without messages make failures hard to diagnose.
+JUnitTestContainsTooManyAsserts,Best Practices,code_smells,Too many assertions in one test makes it hard to identify what failed.
+JUnitTestsShouldIncludeAssert,Best Practices,code_smells,Tests without assertions do not verify any behavior.
+JUnitUseExpected,Best Practices,code_smells,Using try/catch in tests instead of @Test(expected) is verbose and error-prone.
+LooseCoupling,Best Practices,architectural_violations,Using concrete types instead of interfaces increases coupling between components.
+MissingOverride,Best Practices,code_smells,Missing @Override annotation makes intent unclear and can hide bugs.
+OneDeclarationPerLine,Best Practices,code_smells,Multiple declarations per line reduce readability.
+PositionLiteralsFirstInCaseInsensitiveComparisons,Best Practices,code_smells,Reversing comparison order prevents NullPointerException.
+PositionLiteralsFirstInComparisons,Best Practices,code_smells,Reversing comparison order prevents NullPointerException.
+PreserveStackTrace,Best Practices,code_smells,Losing the original stack trace makes debugging harder.
+PrimitiveWrapperInstantiation,Best Practices,outdated_patterns,Using new Integer() etc is deprecated since Java 9; use valueOf() instead.
+ReplaceEnumerationWithIterator,Best Practices,outdated_patterns,Enumeration is a legacy interface replaced by Iterator since Java 2.
+ReplaceHashtableWithHashMap,Best Practices,outdated_patterns,Hashtable is a legacy synchronized class; use HashMap or ConcurrentHashMap.
+ReplaceVectorWithArrayList,Best Practices,outdated_patterns,Vector is a legacy synchronized class; use ArrayList instead.
+SimplifiableTestAssertion,Best Practices,code_smells,Overly verbose assertions can be replaced with simpler forms.
+SwitchStmtsShouldHaveDefault,Best Practices,code_smells,Switch without default case may silently ignore unhandled values.
+SystemPrintln,Best Practices,code_smells,Using System.out/err for logging is not suitable for production code.
+UnusedFormalParameter,Best Practices,code_smells,Unused parameters clutter method signatures.
+UnusedImports,Best Practices,code_smells,Unused imports add noise and confusion.
+UnusedLocalVariable,Best Practices,code_smells,Unused local variables indicate dead code or incomplete logic.
+UnusedPrivateField,Best Practices,code_smells,Unused private fields are dead code.
+UnusedPrivateMethod,Best Practices,code_smells,Unused private methods are dead code.
+UseCollectionIsEmpty,Best Practices,code_smells,Using size()==0 instead of isEmpty() is less readable.
+UseEnumCollections,Best Practices,performance_issues,EnumSet/EnumMap are more efficient than HashMap/HashSet for enum keys.
+UseStandardCharsets,Best Practices,outdated_patterns,StandardCharsets constants should be used instead of string literals since Java 7.
+UseTryWithResources,Best Practices,outdated_patterns,Try-with-resources (Java 7) should replace manual finally-based cleanup.
+UseVarargs,Best Practices,outdated_patterns,Varargs (Java 5) should replace array parameters where appropriate.
+WhileLoopWithLiteralBoolean,Best Practices,code_smells,while(true) or while(false) with literal booleans is confusing.
+AbstractNaming,Code Style,code_smells,Abstract classes should follow naming conventions.
+AtLeastOneConstructor,Code Style,code_smells,Classes should explicitly declare a constructor for clarity.
+AvoidDollarSigns,Code Style,code_smells,Dollar signs in identifiers are unconventional in Java.
+AvoidFinalLocalVariable,Code Style,code_smells,Final local variables can add clutter without benefit.
+AvoidPrefixingMethodParameters,Code Style,code_smells,Prefixing method parameters with 'a' or similar is a dated convention.
+AvoidProtectedFieldInFinalClass,Code Style,code_smells,Protected fields in final classes serve no inheritance purpose.
+AvoidProtectedMethodInFinalClassNotExtending,Code Style,code_smells,Protected methods in non-extended final classes are pointless.
+AvoidUsingNativeCode,Code Style,architectural_violations,JNI calls reduce portability and create tight platform coupling.
+BooleanGetMethodName,Code Style,code_smells,Boolean getters should be named isXxx or hasXxx by convention.
+CallSuperInConstructor,Code Style,code_smells,Explicit super() call improves clarity in constructors.
+ClassNamingConventions,Code Style,code_smells,Class names should follow Java naming conventions.
+CommentDefaultAccessModifier,Code Style,code_smells,Default access modifier should be commented for clarity.
+ConfusingTernary,Code Style,code_smells,Negated ternary expressions are harder to read.
+ControlStatementBraces,Code Style,code_smells,Control statements without braces are error-prone.
+DontImportJavaLang,Code Style,code_smells,java.lang is imported automatically; explicit imports are redundant.
+DuplicateImports,Code Style,code_smells,Duplicate imports are redundant noise.
+EmptyControlStatement,Code Style,code_smells,Empty control statements (if/for/while with no body) are likely bugs or dead code.
+ExtendsObject,Code Style,code_smells,Explicitly extending Object is redundant in Java.
+FieldDeclarationsShouldBeAtStartOfClass,Code Style,code_smells,Field declarations not at start of class reduce readability.
+FieldNamingConventions,Code Style,code_smells,Fields should follow Java naming conventions.
+FinalParameterInAbstractMethod,Code Style,code_smells,Final parameters in abstract methods are meaningless since they can't be enforced.
+ForLoopShouldBeWhileLoop,Code Style,code_smells,A for loop with no init/update should be a while loop for clarity.
+ForLoopsMustUseBraces,Code Style,code_smells,Braceless for loops are error-prone.
+FormalParameterNamingConventions,Code Style,code_smells,Parameters should follow Java naming conventions.
+GenericsNaming,Code Style,code_smells,Generic type parameters should follow single-letter uppercase convention.
+IdenticalCatchBranches,Code Style,code_smells,Duplicate catch blocks should be merged.
+IfElseStmtsMustUseBraces,Code Style,code_smells,Braceless if-else is error-prone.
+IfStmtsMustUseBraces,Code Style,code_smells,Braceless if statements are error-prone.
+LinguisticNaming,Code Style,code_smells,Method names should reflect what they do (e.g. getters should return values).
+LocalHomeNamingConvention,Code Style,code_smells,EJB local home interfaces should follow naming conventions.
+LocalInterfaceSessionNamingConvention,Code Style,code_smells,EJB local session interfaces should follow naming conventions.
+LocalVariableCouldBeFinal,Code Style,code_smells,Variables that are never reassigned should be final.
+LocalVariableNamingConventions,Code Style,code_smells,Local variables should follow Java naming conventions.
+LongVariable,Code Style,code_smells,Excessively long variable names reduce readability.
+MethodArgumentCouldBeFinal,Code Style,code_smells,Method arguments that are never reassigned should be final.
+MethodNamingConventions,Code Style,code_smells,Methods should follow Java naming conventions.
+MDBAndSessionBeanNamingConvention,Code Style,code_smells,EJB beans should follow naming conventions.
+NoPackage,Code Style,architectural_violations,Classes without a package are not organized and violate structure conventions.
+PackageCase,Code Style,code_smells,Package names should be lowercase.
+PrematureDeclaration,Code Style,code_smells,Declaring variables too early from their use reduces readability.
+RemoteInterfaceNamingConvention,Code Style,code_smells,EJB remote interfaces should follow naming conventions.
+RemoteSessionInterfaceNamingConvention,Code Style,code_smells,EJB remote session interfaces should follow naming conventions.
+ShortClassName,Code Style,code_smells,Very short class names are not descriptive.
+ShortMethodName,Code Style,code_smells,Very short method names are not descriptive.
+ShortVariable,Code Style,code_smells,Very short variable names (except loop counters) are not descriptive.
+SuspiciousConstantFieldName,Code Style,code_smells,Non-final fields with constant-style names are misleading.
+TooManyStaticImports,Code Style,architectural_violations,Excessive static imports make it unclear where methods come from.
+UnnecessaryAnnotationValueElement,Code Style,code_smells,Explicit 'value' element in annotations is redundant when it's the only element.
+UnnecessaryCast,Code Style,code_smells,Unnecessary casts clutter code.
+UnnecessaryConstructor,Code Style,code_smells,A no-arg public constructor that does nothing is redundant.
+UnnecessaryFullyQualifiedName,Code Style,code_smells,Fully qualified names are unnecessary when imports exist.
+UnnecessaryImport,Code Style,code_smells,Unused or redundant imports add noise.
+UnnecessaryLocalBeforeReturn,Code Style,code_smells,Creating a local variable only to immediately return it is verbose.
+UnnecessaryModifier,Code Style,code_smells,Redundant modifiers (e.g. public on interface methods) add noise.
+UnnecessaryReturn,Code Style,code_smells,A return statement at the end of a void method is redundant.
+UnnecessarySemicolon,Code Style,code_smells,Empty statements and unnecessary semicolons are noise.
+UseShortArrayInitializer,Code Style,code_smells,Verbose array initializer syntax should use the shorter form.
+UselessParentheses,Code Style,code_smells,Redundant parentheses reduce readability.
+UselessQualifiedThis,Code Style,code_smells,Qualified this references are unnecessary in non-nested contexts.
+WhileLoopsMustUseBraces,Code Style,code_smells,Braceless while loops are error-prone.
+AvoidCatchingGenericException,Design,code_smells,Catching Exception or RuntimeException is too broad and hides specific error handling.
+AvoidDeeplyNestedIfStmts,Design,code_smells,Deeply nested if statements are hard to read and test.
+AvoidRethrowingException,Design,code_smells,Rethrowing the same exception type adds no value.
+AvoidThrowingNewInstanceOfSameException,Design,code_smells,Wrapping an exception in the same type only adds overhead.
+AvoidThrowingNullPointerException,Design,code_smells,Throwing NullPointerException manually is misleading.
+AvoidThrowingRawExceptionTypes,Design,code_smells,Throwing raw Exception/Error types loses specificity.
+ClassWithOnlyPrivateConstructorsShouldBeFinal,Design,code_smells,A class with only private constructors cannot be subclassed and should be final.
+CognitiveComplexity,Design,code_smells,High cognitive complexity makes methods hard to understand.
+CollapsibleIfStatements,Design,code_smells,Nested if statements that can be collapsed with && reduce nesting.
+CouplingBetweenObjects,Design,architectural_violations,High coupling between objects makes the system rigid and hard to change.
+CyclomaticComplexity,Design,code_smells,Overly complex methods are hard to read and maintain.
+DataClass,Design,code_smells,Classes that only hold data with no behavior are a design smell.
+DoNotExtendJavaLangError,Design,code_smells,Extending Error is inappropriate for application-level exceptions.
+ExceptionAsFlowControl,Design,code_smells,Using exceptions for control flow is inefficient and misleading.
+ExcessiveClassLength,Design,code_smells,Excessively long classes do too much and should be split.
+ExcessiveImports,Design,architectural_violations,Too many imports suggests a class is coupled to too many other components.
+ExcessiveMethodLength,Design,code_smells,Very long methods are hard to understand and test.
+ExcessiveParameterList,Design,code_smells,Too many method parameters is a sign of poor design.
+ExcessivePublicCount,Design,architectural_violations,Too many public methods/fields exposes too much of the class internals.
+FinalFieldCouldBeStatic,Design,code_smells,A final field that doesn't depend on instance state should be static.
+GodClass,Design,architectural_violations,A class doing too much violates single-responsibility; it is a structural problem.
+ImmutableField,Design,code_smells,Fields that are only assigned in constructor should be final.
+InsufficientStringBufferDeclaration,Design,performance_issues,Under-sized StringBuffer initial capacity causes unnecessary resizing.
+LawOfDemeter,Design,architectural_violations,Violating Law of Demeter increases coupling between unrelated components.
+LogicInversion,Design,code_smells,Inverted logic conditions reduce readability.
+LoosePackageCoupling,Design,architectural_violations,Coupling to specific packages instead of interfaces violates layering.
+MutableStaticState,Design,code_smells,Mutable static fields are shared global state and hard to reason about.
+NPathComplexity,Design,code_smells,Too many execution paths in a method makes it hard to test.
+NcssCount,Design,code_smells,High non-commenting source statement count indicates overly complex code.
+SignatureDeclareThrowsException,Design,code_smells,Declaring throws Exception is too broad.
+SimplifiedTernary,Design,code_smells,Ternary expressions that can be simplified should be.
+SimplifyBooleanAssertion,Design,code_smells,Overly verbose boolean assertions can be simplified.
+SimplifyBooleanExpressions,Design,code_smells,Complex boolean expressions should be simplified.
+SimplifyBooleanReturns,Design,code_smells,Returning true/false from an if/else can be replaced with the boolean expression.
+SimplifyConditional,Design,code_smells,Null checks before instanceof are redundant since instanceof handles null.
+SingularField,Design,code_smells,A field used by only one method should be a local variable.
+SwitchDensity,Design,code_smells,High density of statements in switch cases indicates the logic should be refactored.
+TooFewBranchesForASwitchStatement,Design,code_smells,A switch with too few cases should be an if/else.
+TooManyFields,Design,code_smells,A class with too many fields is likely doing too much.
+TooManyMethods,Design,code_smells,A class with too many methods is likely doing too much.
+UseObjectForClearerAPI,Design,code_smells,Multiple boolean parameters should be replaced with an object for clarity.
+UseUtilityClass,Design,architectural_violations,A class with only static methods should be a utility class (private constructor).
+CommentContent,Documentation,code_smells,Comments should not contain suspicious words like TODO left unresolved.
+CommentRequired,Documentation,code_smells,Public APIs should have Javadoc comments.
+CommentSize,Documentation,code_smells,Overly long comments may contain outdated or excessive information.
+UncommentedEmptyConstructor,Documentation,code_smells,Empty constructors should have a comment explaining why they are empty.
+UncommentedEmptyMethodBody,Documentation,code_smells,Empty method bodies should have a comment explaining the intent.
+AvoidAccessibilityAlteration,Error Prone,code_smells,Changing field accessibility via reflection is fragile and bypasses encapsulation.
+AvoidAssertAsIdentifier,Error Prone,outdated_patterns,assert was a keyword added in Java 1.4; using it as identifier breaks in modern Java.
+AvoidBranchingStatementAsLastInLoop,Error Prone,code_smells,Break/continue/return as last statement in a loop is confusing.
+AvoidCallingFinalize,Error Prone,code_smells,Manually calling finalize() is unreliable and deprecated.
+AvoidCatchingNPE,Error Prone,code_smells,Catching NullPointerException masks bugs that should be fixed.
+AvoidCatchingThrowable,Error Prone,code_smells,Catching Throwable also catches Errors which should not be caught by applications.
+AvoidDecimalLiteralsInBigDecimalConstructor,Error Prone,code_smells,BigDecimal(double) loses precision; use BigDecimal(String) instead.
+AvoidDuplicateLiterals,Error Prone,code_smells,Duplicate string literals should be constants.
+AvoidEnumAsIdentifier,Error Prone,outdated_patterns,enum became a keyword in Java 5; using it as identifier breaks in modern Java.
+AvoidFieldNameMatchingMethodName,Error Prone,code_smells,Fields with same name as methods are confusing.
+AvoidFieldNameMatchingTypeName,Error Prone,code_smells,Fields named the same as their type are confusing.
+AvoidInstanceofChecksInCatchClause,Error Prone,code_smells,Instanceof in catch blocks is a sign of poor exception hierarchy design.
+AvoidLiteralsInIfCondition,Error Prone,code_smells,Magic numbers in conditions should be named constants.
+AvoidLosingExceptionInformation,Error Prone,code_smells,Swallowing exception information makes debugging impossible.
+AvoidMultipleUnaryOperators,Error Prone,code_smells,Multiple unary operators like !!x are confusing.
+AvoidUsingOctalValues,Error Prone,code_smells,Octal literals (starting with 0) are easily confused with decimal.
+BadComparison,Error Prone,code_smells,Comparing floating point values with == is unreliable.
+BrokenNullCheck,Error Prone,code_smells,Incorrect null checks that are logically flawed.
+CheckSkipResult,Error Prone,code_smells,Ignoring InputStream.skip() return value can cause partial skips.
+ClassCastExceptionWithToArray,Error Prone,code_smells,Incorrect use of toArray() causes ClassCastException at runtime.
+CloneMethodMustBePublic,Error Prone,code_smells,clone() must be public to be useful via the Cloneable interface.
+CloneMethodMustImplementCloneable,Error Prone,code_smells,Classes overriding clone() should implement Cloneable.
+CloneMethodReturnTypeMustMatchClassName,Error Prone,code_smells,clone() return type should be the class type for usability.
+CloneThrowsCloneNotSupportedException,Error Prone,code_smells,clone() should throw CloneNotSupportedException for proper contract.
+CloseResource,Error Prone,code_smells,Resources like streams must be closed to avoid resource leaks.
+CompareObjectsWithEquals,Error Prone,code_smells,Comparing objects with == instead of equals() checks reference not value.
+ComparisonWithNaN,Error Prone,code_smells,Comparing with NaN using == always returns false; use Double.isNaN().
+ConstructorCallsOverridableMethod,Error Prone,code_smells,Calling overridable methods in constructors can lead to unexpected behavior.
+DataflowAnomalyAnalysis,Error Prone,code_smells,Detects use-before-assign and similar dataflow anomalies.
+DoNotCallGarbageCollectionExplicitly,Error Prone,performance_issues,Explicit GC calls are unreliable and can degrade performance.
+DoNotCallSystemExit,Error Prone,code_smells,Calling System.exit() in libraries is dangerous.
+DoNotExtendJavaLangThrowable,Error Prone,code_smells,Extending Throwable directly is unconventional; extend Exception instead.
+DoNotHardCodeSDCard,Error Prone,code_smells,Hard-coded SD card paths are not portable.
+DoNotTerminateVM,Error Prone,code_smells,Methods that terminate the JVM should not be called in library code.
+DoNotThrowExceptionInFinally,Error Prone,code_smells,Throwing in finally blocks masks the original exception.
+DontImportSun,Error Prone,outdated_patterns,sun.* packages are internal/unstable APIs that should not be used.
+DontUseFloatTypeForLoopIndices,Error Prone,code_smells,Float loop indices lose precision due to floating-point representation.
+EmptyCatchBlock,Error Prone,code_smells,Empty catch blocks silently swallow exceptions.
+EmptyFinalizer,Error Prone,code_smells,Empty finalizers waste overhead with no benefit.
+EmptyFinallyBlock,Error Prone,code_smells,Empty finally blocks add no value.
+EmptyIfStmt,Error Prone,code_smells,Empty if statements are likely incomplete logic.
+EmptyInitializer,Error Prone,code_smells,Empty initializer blocks serve no purpose.
+EmptyStatementBlock,Error Prone,code_smells,Empty statement blocks are dead code.
+EmptyStatementNotInLoop,Error Prone,code_smells,An empty statement (lone semicolon) outside a loop is likely a typo.
+EmptySwitchStatements,Error Prone,code_smells,Empty switch statements serve no purpose.
+EmptySynchronizedBlock,Error Prone,code_smells,Empty synchronized blocks provide no useful synchronization.
+EmptyTryBlock,Error Prone,code_smells,Empty try blocks are likely incomplete code.
+EmptyWhileStmt,Error Prone,code_smells,Empty while statements are likely bugs.
+EqualsNull,Error Prone,code_smells,Calling equals(null) always returns false; use == null instead.
+FinalizeDoesNotCallSuperFinalize,Error Prone,code_smells,finalize() should call super.finalize() to ensure proper cleanup.
+FinalizeOnlyCallsSuperFinalize,Error Prone,code_smells,finalize() that only calls super is redundant.
+FinalizeOverloaded,Error Prone,code_smells,Overloading finalize() with arguments is confusing and not called by the JVM.
+FinalizeShouldBeProtected,Error Prone,code_smells,finalize() should be protected not public.
+IdempotentOperations,Error Prone,code_smells,Idempotent operations like x = x; are dead code.
+ImportFromSamePackage,Error Prone,code_smells,Importing from the same package is redundant.
+InstantiationToGetClass,Error Prone,code_smells,Creating an instance just to call getClass() is inefficient; use .class literal.
+InvalidLogMessageFormat,Error Prone,code_smells,Incorrect number of arguments in SLF4J/Log4j2 log messages.
+JumbledIncrementer,Error Prone,code_smells,Using the wrong loop variable to increment in nested loops.
+JUnitSpelling,Error Prone,code_smells,Misspelled JUnit lifecycle method names won't be called by the framework.
+JUnitStaticSuite,Error Prone,code_smells,The JUnit suite() method must be static.
+LoggerIsNotStaticFinal,Error Prone,code_smells,Loggers should be private static final.
+MethodWithSameNameAsEnclosingClass,Error Prone,code_smells,A method with the same name as its class looks like a constructor but isn't.
+MisplacedNullCheck,Error Prone,code_smells,Null check on wrong side of && or || is always evaluated even when it shouldn't be.
+MissingBreakInSwitch,Error Prone,code_smells,Missing break in switch cases causes unintended fall-through.
+MissingSerialVersionUID,Error Prone,code_smells,Serializable classes should define serialVersionUID for version control.
+MissingStaticMethodInNonInstantiatableClass,Error Prone,code_smells,Non-instantiatable class with no static methods serves no purpose.
+MoreThanOneLogger,Error Prone,code_smells,Having more than one logger in a class is unusual and likely a mistake.
+NonCaseLabelInSwitchStatement,Error Prone,code_smells,Non-case labels inside switch statements are confusing.
+NonStaticInitializer,Error Prone,code_smells,Non-static initializers are obscure and error-prone.
+NullAssignment,Error Prone,code_smells,Assigning null outside declaration is often a sign of design issues.
+OnlyOneReturn,Error Prone,code_smells,Multiple return points increase complexity.
+OverrideBothEqualsAndHashcode,Error Prone,code_smells,Overriding only equals or only hashCode violates the contract between them.
+ProperCloneImplementation,Error Prone,code_smells,clone() should call super.clone() not new constructor to respect inheritance.
+ProperLogger,Error Prone,code_smells,Logger should be named consistently (e.g. log or logger).
+ReturnEmptyCollectionRatherThanNull,Error Prone,code_smells,Returning null instead of empty collection forces null checks on callers.
+ReturnFromFinallyBlock,Error Prone,code_smells,Returning from finally discards exceptions.
+SimpleDateFormatNeedsLocale,Error Prone,code_smells,SimpleDateFormat without locale produces locale-dependent results.
+SingleMethodSingleton,Error Prone,architectural_violations,Singleton pattern with single accessor method may not be thread-safe.
+SingletonClassReturningNewInstance,Error Prone,architectural_violations,Singleton that returns new instances defeats the pattern entirely.
+StaticEJBFieldShouldBeFinal,Error Prone,code_smells,Static fields in EJBs shared across instances should be final.
+StringBufferInstantiationWithChar,Error Prone,code_smells,StringBuffer(char) is not a valid constructor; it creates a buffer with given capacity.
+SuspiciousEqualsMethodName,Error Prone,code_smells,Method named equals but not overriding Object.equals is suspicious.
+SuspiciousHashcodeMethodName,Error Prone,code_smells,Method named hashcode (lowercase) does not override Object.hashCode().
+SuspiciousOctalEscape,Error Prone,code_smells,Octal escape sequences in strings can be confused with decimal.
+TestClassWithoutTestCases,Error Prone,code_smells,A class named Test with no test methods is likely incomplete.
+UnconditionalIfStatement,Error Prone,code_smells,An if statement with a constant condition is dead code.
+UnnecessaryBooleanAssertion,Error Prone,code_smells,assertTrue(true) and similar trivial assertions test nothing.
+UnnecessaryCaseChange,Error Prone,code_smells,Converting case for comparison when equalsIgnoreCase exists is unnecessary.
+UnnecessaryConversionTemporary,Error Prone,code_smells,Creating temporary objects for conversion is inefficient.
+UnusedNullCheckInEquals,Error Prone,code_smells,Null check before calling equals is redundant since equals handles null.
+UseCorrectExceptionLogging,Error Prone,code_smells,Exception should be passed to logger not just its message.
+UseEqualsToCompareStrings,Error Prone,code_smells,Strings compared with == check reference not value.
+UselessOperationOnImmutable,Error Prone,code_smells,Operations on immutable objects like String that ignore the result are bugs.
+UseLocaleWithCaseConversions,Error Prone,code_smells,String case conversions without locale produce inconsistent results.
+UseProperClassLoader,Error Prone,code_smells,Wrong ClassLoader usage in J2EE contexts can cause ClassNotFoundException.
+AvoidThreadGroup,Multithreading,code_smells,ThreadGroup is largely obsolete and has broken thread handling methods.
+AvoidUsingVolatileField,Multithreading,code_smells,Volatile fields alone don't guarantee atomicity for compound operations.
+DoNotUseThreads,Multithreading,architectural_violations,In J2EE environments direct thread creation violates container management rules.
+DontCallThreadRun,Multithreading,code_smells,Calling thread.run() directly executes in current thread not a new one.
+DoubleCheckedLocking,Multithreading,code_smells,Double-checked locking is broken in Java without volatile keyword.
+NonThreadSafeSingleton,Multithreading,architectural_violations,Singleton implementation that is not thread-safe causes race conditions.
+UnsynchronizedStaticFormatter,Multithreading,code_smells,Static formatters like SimpleDateFormat are not thread-safe.
+UseNotifyAllInsteadOfNotify,Multithreading,code_smells,notify() may not wake the right thread; notifyAll() is safer.
+AddEmptyString,Performance,performance_issues,Adding empty string to convert to String creates unnecessary objects.
+AppendCharacterWithChar,Performance,performance_issues,Appending a single-character string should use char literal for efficiency.
+AvoidArrayLoops,Performance,performance_issues,Manual array copy loops should use System.arraycopy() for performance.
+AvoidCalendarDateCreation,Performance,performance_issues,Creating Calendar/Date objects is expensive; reuse or use newer APIs.
+AvoidFileStream,Performance,performance_issues,FileInputStream/FileOutputStream are less efficient than channel-based alternatives.
+AvoidInstantiatingObjectsJustToGetClass,Performance,performance_issues,Instantiating an object just to call getClass() wastes memory; use .class.
+AvoidUsingShortType,Performance,performance_issues,Short arithmetic promotes to int causing unnecessary conversions.
+BigIntegerInstantiation,Performance,outdated_patterns,"Use BigInteger.ZERO/ONE/TEN constants instead of new BigInteger(""0"") etc."
+BooleanInstantiation,Performance,outdated_patterns,Use Boolean.TRUE/FALSE instead of new Boolean() which is deprecated.
+ByteInstantiation,Performance,outdated_patterns,Use Byte.valueOf() instead of new Byte() which is deprecated.
+ConsecutiveAppendsShouldReuse,Performance,performance_issues,Consecutive appends should reuse the same StringBuilder reference.
+ConsecutiveLiteralAppends,Performance,performance_issues,Consecutive string literal appends should be combined into one.
+InefficientEmptyStringCheck,Performance,performance_issues,Trimming then checking isEmpty is inefficient; use isBlank() in Java 11+.
+InefficientStringBuffering,Performance,performance_issues,Concatenating strings before appending to StringBuilder defeats its purpose.
+InsufficientStringBufferDeclaration,Performance,performance_issues,Under-sized initial capacity causes multiple internal resizes.
+IntegerInstantiation,Performance,outdated_patterns,Use Integer.valueOf() instead of new Integer() which is deprecated.
+LongInstantiation,Performance,outdated_patterns,Use Long.valueOf() instead of new Long() which is deprecated.
+OptimizableToArrayCall,Performance,performance_issues,toArray(new T[list.size()]) is slower than toArray(new T[0]) in modern JVMs.
+RedundantFieldInitializer,Performance,performance_issues,Initializing fields to their default values (null/0/false) wastes space.
+ShortInstantiation,Performance,outdated_patterns,Use Short.valueOf() instead of new Short() which is deprecated.
+SimplifyStartsWith,Performance,performance_issues,startsWith with single char can use charAt(0) for performance.
+StringInstantiation,Performance,performance_issues,"new String(""literal"") creates an unnecessary duplicate object."
+StringToString,Performance,performance_issues,Calling toString() on a String is redundant.
+UseArrayListInsteadOfVector,Performance,outdated_patterns,Vector is synchronized legacy class; ArrayList is preferred.
+UseArraysAsList,Performance,performance_issues,Manual array-to-list conversion should use Arrays.asList().
+UseIndexOfChar,Performance,performance_issues,indexOf with single char string should use char version for performance.
+UselessStringValueOf,Performance,performance_issues,String.valueOf() is redundant when concatenating with string.
+UseStringBufferForStringAppends,Performance,performance_issues,String concatenation in loops creates many temporary objects; use StringBuilder.
+UseStringBufferLength,Performance,performance_issues,Converting StringBuffer to String just to check length is inefficient.
+HardCodedCryptoKey,Security,code_smells,Hard-coded cryptographic keys are a security vulnerability.
+InsecureCryptoIv,Security,code_smells,Hard-coded initialization vectors in crypto operations are insecure.
+AssignmentInOperand,Error Prone,code_smells,Assignments inside conditional expressions are easy to misread as equality checks.
+AvoidInstantiatingObjectsInLoops,Performance,performance_issues,Allocating objects inside loops causes unnecessary memory pressure and GC churn.
+AvoidUsingVolatile,Multithreading,concurrency_issues,Volatile semantics are subtle and often misused instead of proper synchronization.
+DanglingJavadoc,Documentation,code_smells,Javadoc comments not attached to a code element indicate incomplete or stale documentation.
+ForLoopCanBeForeach,Best Practices,code_smells,Manual index-based loops where foreach is clearer and less error-prone.
+LambdaCanBeMethodReference,Best Practices,code_smells,Lambdas that just call a single method should be replaced with method references for clarity.
+LiteralsFirstInComparisons,Best Practices,code_smells,Calling equals on a variable before checking null risks NullPointerException.
+NonExhaustiveSwitch,Best Practices,code_smells,Switch without a default branch may silently ignore unhandled values.
+TypeParameterNamingConventions,Code Style,code_smells,Type parameter names should follow Java conventions for readability.
