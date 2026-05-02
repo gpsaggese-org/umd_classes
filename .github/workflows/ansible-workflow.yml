@@ -1,43 +1,189 @@
-# .github/workflows/hello.yml
-
-name: Hello World
+name: House Price Prediction CI/CD
 
 on:
   push:
-  workflow_dispatch:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:   # allow manual trigger from GitHub UI
 
 jobs:
-  hello:
+  # ────────────────────────────────────────────────────────────
+  # JOB 1 – Train the model and run the example script
+  # ────────────────────────────────────────────────────────────
+  train:
+    name: Train Model
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Checking tree
-        run: tree
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
 
-      - name: Checking ls
-        run: ls class_project/data605/Spring2026/projects/UmdTask405_-DATA605_Spring2026_Ansible_Deployment/
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
-      - name: Install Ansible & lint
-        run: pip install ansible ansible-lint
+      - name: Train model via template.example.py
+        run: python template.example.py
 
-      - name: Install Ansible AWS collection
-        run: ansible-galaxy collection install amazon.aws
+      - name: Confirm model file was saved
+        run: |
+          ls -lh ml_model/house_price_model.pkl
+          echo "Model trained successfully."
 
-      - name: Run ansible-lint
-        run: ansible-lint class_project/data605/Spring2026/projects/UmdTask405_-DATA605_Spring2026_Ansible_Deployment/playbook.yaml
-
-      - name: Run ansible-lint
-        run: ansible-playbook class_project/data605/Spring2026/projects/UmdTask405_-DATA605_Spring2026_Ansible_Deployment/playbook.yaml
-
-      - name: Upload HTML as artifact
+      - name: Upload trained model as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: webpage
-          path: index.html
+          name: house-price-model
+          path: ml_model/house_price_model.pkl
+          retention-days: 7
 
-      - name: Echo hello world
-        run: echo "Hello, World!"
+      - name: Upload results plots as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: results
+          path: results/
+          retention-days: 7
 
-      - name: Checking tree
-        run: tree
+  # ────────────────────────────────────────────────────────────
+  # JOB 2 – Build Docker image and run Flask API tests
+  # ────────────────────────────────────────────────────────────
+  build-and-test:
+    name: Build Docker & Test API
+    runs-on: ubuntu-latest
+    needs: train   # wait for model to be trained first
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download trained model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: house-price-model
+          path: ml_model/
+
+      - name: Confirm model file is present
+        run: ls -lh ml_model/house_price_model.pkl
+
+      - name: Build Docker image
+        run: docker build -t house-price-project .
+
+      - name: Start container
+        run: |
+          docker run -d \
+            --name house-price \
+            -p 5001:5000 \
+            -v ${{ github.workspace }}:/project \
+            -e PORT=5000 \
+            house-price-project \
+            bash -c "PORT=5000 python /project/app.py"
+
+      - name: Wait for API to be healthy
+        run: |
+          echo "Waiting for API to start..."
+          for i in $(seq 1 20); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5001/health || echo "000")
+            echo "Attempt $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then
+              echo "API is up!"
+              break
+            fi
+            sleep 5
+          done
+          # Final check – fail the job if API never came up.
+          curl -sf http://localhost:5001/health
+
+      - name: "Test – GET /health"
+        run: |
+          RESPONSE=$(curl -sf http://localhost:5001/health)
+          echo "Response: $RESPONSE"
+          echo $RESPONSE | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          assert data['status'] == 'ok', f'Expected ok, got {data}'
+          print('✅ /health passed')
+          "
+
+      - name: "Test – POST /predict (single house)"
+        run: |
+          RESPONSE=$(curl -sf -X POST http://localhost:5001/predict \
+            -H "Content-Type: application/json" \
+            -d '{"OverallQual": 7, "GrLivArea": 1800, "GarageCars": 2}')
+          echo "Response: $RESPONSE"
+          echo $RESPONSE | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          price = data['predicted_price']
+          assert price > 0, f'Expected positive price, got {price}'
+          print(f'✅ /predict passed → \${price:,.0f}')
+          "
+
+      - name: "Test – POST /predict/batch"
+        run: |
+          RESPONSE=$(curl -sf -X POST http://localhost:5001/predict/batch \
+            -H "Content-Type: application/json" \
+            -d '{"instances": [{"OverallQual": 3, "GrLivArea": 800}, {"OverallQual": 9, "GrLivArea": 3000}]}')
+          echo "Response: $RESPONSE"
+          echo $RESPONSE | python3 -c "
+          import sys, json
+          data = json.load(sys.stdin)
+          preds = data['predictions']
+          assert data['count'] == 2, f'Expected 2 predictions, got {data[\"count\"]}'
+          assert preds[1] > preds[0], f'Expected higher quality = higher price: {preds}'
+          print(f'✅ /predict/batch passed → {[\"\${p:,.0f}\" for p in preds]}')
+          "
+
+      - name: "Test – POST /predict with invalid payload returns 400"
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST http://localhost:5001/predict \
+            -H "Content-Type: application/json" \
+            -d '{"OverallQual": 99, "GrLivArea": -1}')
+          echo "HTTP status: $STATUS"
+          [ "$STATUS" = "400" ] && echo "✅ Validation test passed" || (echo "❌ Expected 400, got $STATUS" && exit 1)
+
+      - name: Print container logs (always, for debugging)
+        if: always()
+        run: docker logs house-price
+
+  # ────────────────────────────────────────────────────────────
+  # JOB 3 – Run Ansible playbook (deploy + test)
+  # ────────────────────────────────────────────────────────────
+  ansible:
+    name: Ansible Deploy & Test
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download trained model artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: house-price-model
+          path: ml_model/
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Build Docker image for Ansible deploy
+        run: docker build -t house-price-project .
+
+      - name: Run Ansible playbook (deploy + test)
+        run: ansible-playbook playbook.yaml
+
+      - name: Print Ansible summary
+        if: always()
+        run: docker logs house-price 2>/dev/null || true
