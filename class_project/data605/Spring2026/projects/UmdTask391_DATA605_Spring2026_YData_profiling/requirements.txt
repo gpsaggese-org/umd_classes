@@ -8,3 +8,4 @@ seaborn
 ydata-profiling
 scikit-learn
 setuptools<82
+jupytext

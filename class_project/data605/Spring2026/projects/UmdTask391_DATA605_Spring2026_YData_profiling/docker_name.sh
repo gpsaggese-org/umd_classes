@@ -7,6 +7,5 @@
 # """
 
 REPO_NAME=gpsaggese
-# The file should be all lower case.
-IMAGE_NAME=umd_{project_name}
-FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
+IMAGE_NAME=umd_ydata_profiling
+FULL_IMAGE_NAME=gpsaggese/umd_ydata_profiling

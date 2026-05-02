@@ -1,32 +1,82 @@
-# YData-profiling Project
+# YData-profiling Tutorial
 
-## Project Title
-YData Profiling for Exploratory Data Analysis and Regression Modeling
+This project demonstrates how to use YData-profiling for automated exploratory
+data analysis and how profiling results can support a regression modeling
+workflow.
 
-## Project Description
-This project explores the Python library YData-profiling for automated exploratory data analysis (EDA). The goal is to generate comprehensive data profile reports, identify data quality issues, understand variable distributions, and prepare the dataset for predictive modeling.
+The tutorial uses the Baltimore housing dataset. It shows how to generate data
+profile reports, inspect data quality issues, clean the dataset, train a
+regression model, and evaluate the model with RMSE and R-squared.
 
-## Objectives
-- Load and inspect a dataset using Pandas
-- Generate an automated profiling report with YData-profiling
-- Identify missing values, outliers, and data quality issues
-- Perform data cleaning and feature engineering
-- Build a regression model for prediction
-- Evaluate model performance using appropriate metrics
+## Quick Start
 
-## Tool
-- Python
-- Pandas
-- YData-profiling
-- Scikit-learn
-- Jupyter Notebook
+From the project directory, build the Docker image:
 
-## Dataset
-A public dataset will be selected for profiling and regression analysis.
+```bash
+./docker_build.sh
+```
 
-## Expected Output
-- Automated profiling report
-- Cleaned dataset
-- Regression model
-- Evaluation results
-- Documentation showing how YData-profiling supports the workflow
+Start Jupyter Lab:
+
+```bash
+./docker_jupyter.sh
+```
+
+Then open Jupyter Lab in a browser and run the notebooks in this order:
+
+1. `ydata_profiling.API.ipynb`
+   - Introduces the basic YData-profiling API.
+   - Shows how to create and export HTML profile reports.
+   - Demonstrates the project wrapper functions.
+
+2. `ydata_profiling.example.ipynb`
+   - Loads the Baltimore housing dataset.
+   - Generates an automated profiling report.
+   - Cleans and prepares the dataset.
+   - Trains a regression model.
+   - Evaluates the model using RMSE and R-squared.
+
+## Project Structure
+
+```text
+.
+├── data/
+│   └── baltim.csv
+├── outputs/
+│   ├── simple_demo_profile.html
+│   ├── simple_demo_profile_from_wrapper.html
+│   └── baltim_example_profile.html
+├── src/
+│   ├── run_profiling.py
+│   └── ydata_profiling_utils.py
+├── ydata_profiling.API.ipynb
+├── ydata_profiling.example.ipynb
+├── requirements.txt
+├── Dockerfile
+└── README.md
+```
+
+## Expected Outputs
+
+Running the notebooks generates HTML profiling reports in the `outputs/`
+directory.
+
+The example notebook also trains a regression model to predict `PRICE` in the
+Baltimore housing dataset and reports:
+
+- RMSE
+- R-squared
+
+In the current run, the example model produced approximately:
+
+```text
+RMSE: 12.6307
+R2: 0.6915
+```
+
+## Notes
+
+YData-profiling is used before modeling to quickly inspect variable types,
+missing values, distributions, correlations, and other data quality issues.
+These insights guide the cleaning and feature preparation steps before model
+training.
