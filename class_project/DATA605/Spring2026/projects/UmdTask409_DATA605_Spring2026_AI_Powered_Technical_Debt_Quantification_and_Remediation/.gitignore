@@ -1,4 +1,4 @@
-data/td_V2.db
+production/data/td_V2.db
 retrieval_cache/
 
 # Option B: spike folders with external clones and generated outputs
@@ -6,3 +6,4 @@ production/spikes/q1_agent_on_real_code/commons-lang/
 production/spikes/q1_agent_on_real_code/outputs/
 production/data/feedback.sqlite
 production/data/ranked_issues_commons_lang.json
+production/scripts/build_api_notebook.py
