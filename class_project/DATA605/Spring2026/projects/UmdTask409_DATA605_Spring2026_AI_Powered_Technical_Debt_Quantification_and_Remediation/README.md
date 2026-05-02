@@ -60,8 +60,6 @@ The MVP (the original starter code we inherited) put everything in `ai_technical
 
 But our project extended the MVP with a full 8-stage production pipeline, and putting all of that into one file would have made it 3000+ lines of unrelated functionality. So we organized the new pipeline code into a `production/` package with one file per stage, plus shared lib code, plus tests, plus runnable scripts.
 
-We discussed this with Prof. Saggese before deciding. He approved keeping the package as long as nothing breaks.
-
 Here is how the two pieces relate:
 
 - `ai_technical_debt_utils.py` is the MVP's home. The functions there are *imported by* our production code (`production/stages/refactor.py` calls `validate_java_syntax`, `compute_bleu_against_reference`, `compute_confidence_score` from the utils file) and *demonstrated by* the API notebook.
@@ -69,7 +67,7 @@ Here is how the two pieces relate:
 
 You can think of `ai_technical_debt_utils.py` as the "library of low-level helpers we built during the MVP phase" and `production/` as "the pipeline we built on top." Both are required; neither is redundant.
 
-If this organization is a problem for grading, the rubric requirement is "all code in `*_utils.py`," which is technically only met by the utils file. We argue (and Prof. Saggese accepted) that an 8-stage pipeline genuinely cannot live in one file without becoming unreadable, and the structure under `production/` is what an open-source maintainer would actually do.
+We felt that an 8-stage pipeline structure under `production/` is more organized so we proceeded in that direction.
 
 ## Step-by-step: how to run this
 
