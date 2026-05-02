@@ -9,3 +9,9 @@
 - Successfully added Kaggle House Prices dataset (train.csv, test.csv).
 - Developed `data_loader.py` utilizing `helpers.hdbg` for file validation.
 - Verified data integrity (1460 rows, 81 columns).
+
+## [2026-05-01]
+- Fixed docker working directory.
+- Removed outliers where GrLivArea > 4000.
+- Applied log transformation to SalePrice to address skewness.
+- Created df_no_outliers and saved progress to train_clean.csv.
