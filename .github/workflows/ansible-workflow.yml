@@ -1,11 +1,11 @@
 name: House Price Prediction CI/CD
 
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-  workflow_dispatch:   # allow manual trigger from GitHub UI
+# on:
+#   push:
+#     branches: [main, develop]
+#   pull_request:
+#     branches: [main]
+#   workflow_dispatch:   # allow manual trigger from GitHub UI
 
 jobs:
   # ────────────────────────────────────────────────────────────
