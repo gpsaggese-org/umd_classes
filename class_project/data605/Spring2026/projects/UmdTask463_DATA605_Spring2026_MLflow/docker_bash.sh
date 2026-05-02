@@ -31,4 +31,5 @@ CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=
 DOCKER_CMD=$(get_docker_bash_command)
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT)
+DOCKER_CMD_OPTS="$DOCKER_CMD_OPTS -w /git_root/class_project/data605/Spring2026/projects/UmdTask463_DATA605_Spring2026_MLflow"
 run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"
