@@ -1,35 +1,199 @@
 ---
-- name: Run Python Page
+# ──────────────────────────────────────────────────────────────
+# playbook.yaml
+# Ansible playbook – train, deploy, and test the House Price
+# Prediction API running in Docker.
+#
+# Usage (from your Mac, inside the project folder):
+#   ansible-playbook playbook.yaml
+#   ansible-playbook playbook.yaml --tags testing
+#   ansible-playbook playbook.yaml --tags deploy
+# ──────────────────────────────────────────────────────────────
+
+- name: Deploy House Price Prediction API
   hosts: localhost
   connection: local
+  gather_facts: false
 
   vars:
-    page_title: "ML Model Training and Evaluation"
-    output_path: "index.html"
-    author: "Likhon Gomes"
+    # ── Container settings ────────────────────────────────────
+    container_name:  house-price
+    image_name:      house-price-project
+    host_port:       5001        # port on your Mac
+    container_port:  5000        # port inside the container
 
+    # ── Paths ─────────────────────────────────────────────────
+    project_root:    "{{ playbook_dir }}"
+    model_pkl:       "{{ project_root }}/ml_model/house_price_model.pkl"
+
+    # ── Health check ──────────────────────────────────────────
+    api_base:            "http://localhost:{{ host_port }}"
+    healthcheck_retries: 12
+    healthcheck_delay:   5
+
+  # ──────────────────────────────────────────────────────────
   tasks:
-    - name: Clone ML Model from Github
-      ansible.builtin.git:
-        repo: https://github.com/likhongomes/Comparative-Analysis-of-RNN-Architectures-for-Sentiment-Classification.git
-        dest: ml_model
 
-    # - name: Install Python dependencies
-    #   ansible.builtin.pip:
-    #     requirements: ml_model/requirements.txt
+    # ── SETUP ─────────────────────────────────────────────────
+    - name: "Setup – verify Docker is installed"
+      ansible.builtin.command: docker --version
+      changed_when: false
+      tags: [setup]
 
-    - name: Run Python Code to train model
-      ansible.builtin.command: python ml_model/train.py --architecture rnn --activation relu --optimizer adam --seq_len 50 --epochs 5 --grad_clip_enable --data_dir ml_model/data
-      register: python_train_output
+    - name: "Setup – verify Docker daemon is running"
+      ansible.builtin.command: docker info
+      changed_when: false
+      tags: [setup]
 
-    - name: Python train output
+    - name: "Setup – display deployment config"
       ansible.builtin.debug:
-        msg: "{{ python_train_output }}"
+        msg:
+          - "Project  : {{ project_root }}"
+          - "Image    : {{ image_name }}"
+          - "Container: {{ container_name }}"
+          - "API URL  : {{ api_base }}"
+      tags: [setup]
 
-    - name: Run Python Code to evaluate model
-      ansible.builtin.command: python ml_model/evaluate.py
-      register: python_evaluate_output
+    # ── TRAIN MODEL ───────────────────────────────────────────
+    - name: "Train – check if model already exists"
+      ansible.builtin.stat:
+        path: "{{ model_pkl }}"
+      register: model_stat
+      tags: [train]
 
-    - name: Python evaluate output
+    - name: "Train – run template.example.py to train and save model"
+      ansible.builtin.command:
+        cmd: python3 template.example.py
+        chdir: "{{ project_root }}"
+      when: not model_stat.stat.exists
+      register: train_out
+      tags: [train]
+
+    - name: "Train – show output"
       ansible.builtin.debug:
-        msg: "{{ python_evaluate_output }}"
+        var: train_out.stdout_lines
+      when:
+        - not model_stat.stat.exists
+        - train_out is defined
+      tags: [train]
+
+    - name: "Train – confirm model file exists"
+      ansible.builtin.stat:
+        path: "{{ model_pkl }}"
+      register: model_check
+      failed_when: not model_check.stat.exists
+      tags: [train]
+
+    # ── DEPLOY ────────────────────────────────────────────────
+    - name: "Deploy – stop existing container (if running)"
+      ansible.builtin.command: docker stop {{ container_name }}
+      ignore_errors: true
+      changed_when: false
+      tags: [deploy]
+
+    - name: "Deploy – remove existing container (if any)"
+      ansible.builtin.command: docker rm {{ container_name }}
+      ignore_errors: true
+      changed_when: false
+      tags: [deploy]
+
+    - name: "Deploy – start container with Flask API"
+      ansible.builtin.command: >
+        docker run -d
+        --name {{ container_name }}
+        -p {{ host_port }}:{{ container_port }}
+        -v {{ project_root }}:/project
+        -e PORT={{ container_port }}
+        -e FLASK_DEBUG=false
+        {{ image_name }}
+        bash -c "PORT={{ container_port }} python /project/app.py"
+      tags: [deploy]
+
+    - name: "Deploy – wait for API to become healthy"
+      ansible.builtin.uri:
+        url:         "{{ api_base }}/health"
+        method:      GET
+        status_code: 200
+      register: health_resp
+      retries:  "{{ healthcheck_retries }}"
+      delay:    "{{ healthcheck_delay }}"
+      until:    health_resp.status == 200
+      tags: [deploy]
+
+    - name: "Deploy – confirm API is up"
+      ansible.builtin.debug:
+        msg: "API is live at {{ api_base }}  status={{ health_resp.json.status }}"
+      tags: [deploy]
+
+    # ── TESTING ───────────────────────────────────────────────
+    - name: "Test 1 – GET /health returns ok"
+      ansible.builtin.uri:
+        url:         "{{ api_base }}/health"
+        method:      GET
+        status_code: 200
+      register: t_health
+      tags: [testing]
+
+    - name: "Test 1 – assert status is ok"
+      ansible.builtin.assert:
+        that: t_health.json.status == "ok"
+        success_msg: "✅ /health → ok"
+        fail_msg:    "❌ /health returned {{ t_health.json }}"
+      tags: [testing]
+
+    - name: "Test 2 – POST /predict returns a price"
+      ansible.builtin.uri:
+        url:         "{{ api_base }}/predict"
+        method:      POST
+        body_format: json
+        body:
+          OverallQual:  7
+          GrLivArea:    1800
+          GarageCars:   2
+          YearBuilt:    2005
+          Neighborhood: "CollgCr"
+        status_code: 200
+      register: t_predict
+      tags: [testing]
+
+    - name: "Test 2 – assert predicted_price is positive"
+      ansible.builtin.assert:
+        that:
+          - t_predict.json.predicted_price is defined
+          - t_predict.json.predicted_price | float > 0
+        success_msg: "✅ /predict → ${{ t_predict.json.predicted_price }}"
+        fail_msg:    "❌ /predict returned {{ t_predict.json }}"
+      tags: [testing]
+
+    - name: "Test 3 – POST /predict/batch returns two prices"
+      ansible.builtin.uri:
+        url:         "{{ api_base }}/predict/batch"
+        method:      POST
+        body_format: json
+        body:
+          instances:
+            - { OverallQual: 3, GrLivArea: 800 }
+            - { OverallQual: 9, GrLivArea: 3000 }
+        status_code: 200
+      register: t_batch
+      tags: [testing]
+
+    - name: "Test 3 – assert batch count and ordering"
+      ansible.builtin.assert:
+        that:
+          - t_batch.json.count == 2
+          - t_batch.json.predictions[1] > t_batch.json.predictions[0]
+        success_msg: "✅ /predict/batch → {{ t_batch.json.predictions }}"
+        fail_msg:    "❌ /predict/batch returned {{ t_batch.json }}"
+      tags: [testing]
+
+    # ── SUMMARY ───────────────────────────────────────────────
+    - name: "Summary"
+      ansible.builtin.debug:
+        msg:
+          - "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          - "  ✅  Deployment complete!"
+          - "  Health  →  {{ api_base }}/health"
+          - "  Predict →  {{ api_base }}/predict"
+          - "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      tags: [always]

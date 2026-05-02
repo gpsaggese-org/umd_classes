@@ -14,21 +14,19 @@
 # ---
 
 # %% [markdown]
-# # Template API Notebook
+# # House Price Prediction API
 #
-# This is a template notebook. The first heading should be the title of what notebook is about. For example, if it is a neo4j tutorial the heading should be `Neo4j API`.
+# This notebook demonstrates how to interact with the Flask REST API that
+# serves predictions from a scikit-learn regression model trained on the
+# Kaggle House Prices dataset.
 #
-# - Add description of what the notebook does.
-# - Point to references, e.g. (neo4j.API.md)
-# - Add citations.
-# - Keep the notebook flow clear.
-# - Comments should be imperative and have a period at the end.
-# - Your code should be well commented.
+# - Covers the `/health`, `/features`, `/predict`, and `/predict/batch` endpoints.
+# - Uses `template_utils` helpers to keep API calls clean and reusable.
+# - Requires the API server to be running: `python app.py`
+# - Reference: (house_price.API.md)
 #
-# The name of this notebook should in the following format:
-# - if the notebook is exploring `pycaret API`, then it is `pycaret.API.ipynb`
-#
-# Follow the reference to write notebooks in a clear manner: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
+# Follow the reference to write notebooks in a clear manner:
+# https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
 
 # %%
 # %load_ext autoreload
@@ -40,90 +38,117 @@
 
 # %%
 import logging
-# Import libraries in this section.
-# Avoid imports like import *, from ... import ..., from ... import *, etc.
+import sys
+import os
 
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebo
+sys.path.insert(0, "/project")
+
+import requests
+import template_utils as cpptteut
 
 # %% [markdown]
 # ## Configuration
 
 # %%
-hdbg.init_logger(verbosity=logging.INFO)
-
 _LOG = logging.getLogger(__name__)
-
-hnotebo.config_notebook()
-
+logging.basicConfig(level=logging.INFO)
 
 # %% [markdown]
-# ## Make the notebook flow clear
-# Each notebook needs to follow a clear and logical flow, e.g:
-# - Load data
-# - Compute stats
-# - Clean data
-# - Compute stats
-# - Do analysis
-# - Show results
+# ## Check API health
 #
-#
-#
-#
-
-
-# #############################################################################
-# Template
-# #############################################################################
-
+# Verify the server is running and the model is loaded before making
+# prediction requests.
 
 # %%
-class Template:
-    """
-    Brief imperative description of what the class does in one line, if needed.
-    """
-
-    def __init__(self):
-        pass
-
-    def method1(self, arg1: int) -> None:
-        """
-        Brief imperative description of what the method does in one line.
-
-        You can elaborate more in the method docstring in this section, for e.g. explaining
-        the formula/algorithm. Every method/function should have a docstring, typehints and include the
-        parameters and return as follows:
-
-        :param arg1: description of arg1
-        :return: description of return
-        """
-        # Code bloks go here.
-        # Make sure to include comments to explain what the code is doing.
-        # No empty lines between code blocks.
-        pass
-
-
-def template_function(arg1: int) -> None:
-    """
-    Brief imperative description of what the function does in one line.
-
-    You can elaborate more in the function docstring in this section, for e.g. explaining
-    the formula/algorithm. Every function should have a docstring, typehints and include the
-    parameters and return as follows:
-
-    :param arg1: description of arg1
-    :return: description of return
-    """
-    # Code bloks go here.
-    # Make sure to include comments to explain what the code is doing.
-    # No empty lines between code blocks.
-    pass
-
+# Call the health endpoint and display the server status.
+health = cpptteut.api_health()
+_LOG.info("API health: %s", health)
+print(health)
 
 # %% [markdown]
-# ## The flow should be highlighted using headings in markdown
-# ```
-# # Level 1
-# ## Level 2
-# ### Level 3
-# ```
+# ## Inspect available features
+#
+# Retrieve the full feature catalogue and default values so we know what
+# fields we can pass to /predict.
+
+# %%
+# Fetch the feature catalogue from the API.
+resp = requests.get(f"{cpptteut.DEFAULT_API_URL}/features")
+features = resp.json()
+# Display numeric and categorical feature names with their defaults.
+print("Numeric features:")
+for f in features["numeric_features"]:
+    print(f"  {f:<20s}  default={features['defaults'].get(f)}")
+print("\nCategorical features:")
+for f in features["categorical_features"]:
+    print(f"  {f:<20s}  default={features['defaults'].get(f)}")
+
+# %% [markdown]
+# ## Single prediction
+#
+# Send one house's features to /predict and display the result.
+
+# %%
+# Build the request payload with a subset of features.
+# Missing fields will be filled with server-side defaults.
+payload = {
+    "OverallQual":  7,
+    "GrLivArea":    1800,
+    "GarageCars":   2,
+    "YearBuilt":    2005,
+    "Neighborhood": "CollgCr",
+    "ExterQual":    "Gd",
+    "KitchenQual":  "Gd",
+}
+# Post the payload and display the predicted sale price.
+result = cpptteut.api_predict(payload)
+_LOG.info("Predicted price: %s", result["predicted_price"])
+print(f"Predicted sale price: ${result['predicted_price']:,.0f}")
+
+# %% [markdown]
+# ## Batch prediction
+#
+# Send multiple houses in one request to /predict/batch and compare
+# predicted prices across different quality and size combinations.
+
+# %%
+# Define a batch of houses varying quality and living area.
+instances = [
+    {"OverallQual": 3, "GrLivArea":  800},
+    {"OverallQual": 5, "GrLivArea": 1200},
+    {"OverallQual": 7, "GrLivArea": 1800},
+    {"OverallQual": 9, "GrLivArea": 3000},
+]
+# Post the batch request and display a comparison table.
+batch = cpptteut.api_predict_batch(instances)
+print(f"{'Quality':>10}  {'Area (sqft)':>12}  {'Predicted Price':>16}")
+print("-" * 44)
+for inst, price in zip(instances, batch["predictions"]):
+    print(f"{inst['OverallQual']:>10}  {inst['GrLivArea']:>12,}  ${price:>15,.0f}")
+
+# %% [markdown]
+# ## Price sensitivity analysis
+#
+# Hold all features at their default values and vary OverallQual from 1
+# to 10 to visualise how quality drives price.
+
+# %%
+import matplotlib.pyplot as plt
+
+# Build instances across the full quality range.
+qual_range = list(range(1, 11))
+instances  = [{"OverallQual": q, "GrLivArea": 1500} for q in qual_range]
+# Fetch batch predictions for all quality levels.
+prices = cpptteut.api_predict_batch(instances)["predictions"]
+# Plot price vs quality.
+os.makedirs("results", exist_ok=True)
+plt.figure(figsize=(8, 4))
+plt.plot(qual_range, [p / 1000 for p in prices], marker="o", linewidth=2)
+plt.xlabel("Overall Quality (1–10)")
+plt.ylabel("Predicted Price ($k)")
+plt.title("Predicted Sale Price vs. Overall Quality  (GrLivArea = 1 500 sqft)")
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.savefig("results/price_vs_quality.png", dpi=120)
+plt.show()
+_LOG.info("Plot saved to results/price_vs_quality.png.")

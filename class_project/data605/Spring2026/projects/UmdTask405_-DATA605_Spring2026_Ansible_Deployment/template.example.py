@@ -14,112 +14,170 @@
 # ---
 
 # %% [markdown]
-# # Template Example Notebook
+# # House Price Prediction Example
 #
-# This is a template notebook. The first heading should be the title of what notebook is about. For example, if it is a project on neo4j tutorial the heading should be `Project Title`.
+# This notebook demonstrates the end-to-end machine learning workflow for
+# the Kaggle House Prices regression task without requiring a running server.
 #
-# - Add description of what the notebook does.
-# - Point to references, e.g. (neo4j.example.md)
-# - Add citations.
-# - Keep the notebook flow clear.
-# - Comments should be imperative and have a period at the end.
-# - Your code should be well commented.
+# - Loads (or generates) the dataset via `template_utils`.
+# - Compares multiple sklearn regression models using cross-validation.
+# - Trains the best model on the full dataset and saves it to `ml_model/`.
+# - Runs direct in-process predictions using the saved model.
+# - Produces a neighbourhood price comparison chart saved to `results/`.
+# - Reference: (house_price.example.md)
 #
-# The name of this notebook should in the following format:
-# - if the notebook is exploring `pycaret API`, then it is `pycaret.example.ipynb`
-#
-# Follow the reference to write notebooks in a clear manner: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
+# Follow the reference to write notebooks in a clear manner:
+# https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 # %matplotlib inline
 
+# %% [markdown]
+# ## Imports
+
 # %%
 import logging
-# Import libraries in this section.
-# Avoid imports like import *, from ... import ..., from ... import *, etc.
+import sys
+import os
 
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebo
+sys.path.insert(0, "/project")
+
+import template_utils as cpptteut
+
+# %% [markdown]
+# ## Configuration
 
 # %%
-hdbg.init_logger(verbosity=logging.INFO)
-
 _LOG = logging.getLogger(__name__)
-
-hnotebo.config_notebook()
-
+logging.basicConfig(level=logging.INFO)
 
 # %% [markdown]
-# ## Make the notebook flow clear
-# Each notebook needs to follow a clear and logical flow, e.g:
-# - Load data
-# - Compute stats
-# - Clean data
-# - Compute stats
-# - Do analysis
-# - Show results
+# ## Load data
 #
-#
-#
-#
-
-
-# #############################################################################
-# Template
-# #############################################################################
-
+# Attempt to load the Kaggle CSV; fall back to a synthetic dataset if the
+# file is absent so the notebook runs without Kaggle credentials.
 
 # %%
-class Template:
-    """
-    Brief imperative description of what the class does in one line, if needed.
-    """
-
-    def __init__(self):
-        pass
-
-    def method1(self, arg1: int) -> None:
-        """
-        Brief imperative description of what the method does in one line.
-
-        You can elaborate more in the method docstring in this section, for e.g. explaining
-        the formula/algorithm. Every method/function should have a docstring, typehints and include the
-        parameters and return as follows:
-
-        :param arg1: description of arg1
-        :return: description of return
-        """
-        # Code bloks go here.
-        # Make sure to include comments to explain what the code is doing.
-        # No empty lines between code blocks.
-        pass
-
-
-def template_function(arg1: int) -> None:
-    """
-    Brief imperative description of what the function does in one line.
-
-    You can elaborate more in the function docstring in this section, for e.g. explaining
-    the formula/algorithm. Every function should have a docstring, typehints and include the
-    parameters and return as follows:
-
-    :param arg1: description of arg1
-    :return: description of return
-    """
-    # Code bloks go here.
-    # Make sure to include comments to explain what the code is doing.
-    # No empty lines between code blocks.
-    pass
-
+# Load or generate the House Prices dataset.
+DATA_PATH = "ml_model/train.csv"
+df = cpptteut.load_data(DATA_PATH)
+_LOG.info("Dataset shape: %s", df.shape)
+df.head()
 
 # %% [markdown]
-# ## The flow should be highlighted using headings in markdown
-# ```
-# # Level 1
-# ## Level 2
-# ### Level 3
-# ```
+# ## Compute stats
+#
+# Inspect the raw data before any cleaning to understand distributions and
+# identify potential issues.
 
 # %%
+# Display summary statistics for the target and key numeric features.
+print("Target column statistics:")
+print(df[cpptteut.TARGET_COLUMN].describe())
+print(f"\nMissing values per column:\n{df.isnull().sum()[df.isnull().sum() > 0]}")
+
+# %% [markdown]
+# ## Split data
+
+# %%
+# Split into train and test sets for offline evaluation.
+X_train, X_test, y_train, y_test = cpptteut.split_data(df)
+_LOG.info("Train: %d rows  |  Test: %d rows", len(X_train), len(X_test))
+
+# %% [markdown]
+# ## Compare models
+#
+# Cross-validate GradientBoosting, RandomForest, and Ridge and display the
+# leaderboard sorted by RMSE.
+
+# %%
+# Compare all candidate models using 5-fold cross-validation.
+leaderboard = cpptteut.compare_models(df, fold=5)
+leaderboard
+
+# %% [markdown]
+# ## Train best model
+
+# %%
+# Train the top-ranked model (GradientBoosting) on the full dataset.
+best_model_name = leaderboard.iloc[0]["Model"]
+_LOG.info("Best model: %s", best_model_name)
+pipeline = cpptteut.train_best_model(df, model_name=best_model_name)
+
+# %% [markdown]
+# ## Evaluate model
+
+# %%
+# Evaluate the fitted pipeline on the held-out test set.
+metrics = cpptteut.evaluate_model(pipeline, X_test, y_test)
+print(f"Test RMSE : ${metrics['RMSE']:,.0f}")
+print(f"Test MAE  : ${metrics['MAE']:,.0f}")
+print(f"Test R²   : {metrics['R2']:.4f}")
+
+# %% [markdown]
+# ## Save model
+
+# %%
+# Persist the trained pipeline to disk for the Flask API to load.
+cpptteut.finalize_and_save(pipeline)
+_LOG.info("Model saved.")
+
+# %% [markdown]
+# ## Run in-process predictions
+
+# %%
+# Load the saved artifact and run a single in-process prediction.
+model = cpptteut.load_model_artifact()
+house = {
+    "OverallQual": 7,
+    "GrLivArea":   1800,
+    "GarageCars":  2,
+    "YearBuilt":   2005,
+    "Neighborhood": "CollgCr",
+}
+price = cpptteut.predict_price(house, model=model)
+_LOG.info("Predicted price: $%.0f", price)
+print(f"Predicted sale price: ${price:,.0f}")
+
+# %% [markdown]
+# ## Validate features
+
+# %%
+# Demonstrate validation with an intentionally bad payload.
+bad_payload = {"OverallQual": 15, "GrLivArea": -50, "ExterQual": "ZZ"}
+errors = cpptteut.validate_features(bad_payload)
+print("Validation errors:")
+for e in errors:
+    print(f"  ✗ {e}")
+
+# %% [markdown]
+# ## Show results
+#
+# Compare predicted prices across neighbourhoods and save the chart.
+
+# %%
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Build one instance per neighbourhood using default feature values.
+neighborhoods = ["OldTown", "BrkSide", "CollgCr", "NWAmes", "NoRidge"]
+instances = [{**cpptteut.FEATURE_DEFAULTS, "Neighborhood": n} for n in neighborhoods]
+# Predict prices for all neighbourhoods.
+prices = [cpptteut.predict_price(inst, model=model) for inst in instances]
+result_df = (
+    pd.DataFrame({"Neighborhood": neighborhoods, "PredictedPrice": prices})
+    .sort_values("PredictedPrice")
+)
+# Plot and save the neighbourhood comparison chart.
+os.makedirs("results", exist_ok=True)
+plt.figure(figsize=(8, 4))
+plt.barh(result_df["Neighborhood"], result_df["PredictedPrice"] / 1000)
+plt.xlabel("Predicted Price ($k)")
+plt.title("Predicted Price by Neighbourhood (median feature house)")
+plt.tight_layout()
+plt.savefig("results/price_by_neighborhood.png", dpi=120)
+plt.show()
+_LOG.info("Plot saved to results/price_by_neighborhood.png.")
+print(result_df.to_string(index=False))
