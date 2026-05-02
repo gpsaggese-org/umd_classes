@@ -2,10 +2,14 @@ name: House Price Prediction CI/CD
 
 on:
   push:
-    branches: ["**"]
+    branches: ["**"]       # run on every branch
   pull_request:
-    branches: ["**"]
-  workflow_dispatch:   # allow manual trigger from GitHub UI
+    branches: ["**"]       # run on PRs targeting any branch
+  workflow_dispatch:       # allow manual trigger from GitHub UI
+
+# All jobs cd into the project subfolder before running anything.
+env:
+  PROJECT_DIR: class_project/data605/Spring2026/projects/UmdTask405_-DATA605_Spring2026_Ansible_Deployment
 
 jobs:
   # ────────────────────────────────────────────────────────────
@@ -26,12 +30,15 @@ jobs:
           cache: pip
 
       - name: Install Python dependencies
+        working-directory: ${{ env.PROJECT_DIR }}
         run: pip install -r requirements.txt
 
       - name: Train model via template.example.py
+        working-directory: ${{ env.PROJECT_DIR }}
         run: python template.example.py
 
       - name: Confirm model file was saved
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
           ls -lh ml_model/house_price_model.pkl
           echo "Model trained successfully."
@@ -40,14 +47,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: house-price-model
-          path: ml_model/house_price_model.pkl
+          path: ${{ env.PROJECT_DIR }}/ml_model/house_price_model.pkl
           retention-days: 7
 
       - name: Upload results plots as artifact
         uses: actions/upload-artifact@v4
         with:
           name: results
-          path: results/
+          path: ${{ env.PROJECT_DIR }}/results/
           retention-days: 7
 
   # ────────────────────────────────────────────────────────────
@@ -56,7 +63,7 @@ jobs:
   build-and-test:
     name: Build Docker & Test API
     runs-on: ubuntu-latest
-    needs: train   # wait for model to be trained first
+    needs: train
 
     steps:
       - name: Checkout repository
@@ -66,20 +73,23 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: house-price-model
-          path: ml_model/
+          path: ${{ env.PROJECT_DIR }}/ml_model/
 
       - name: Confirm model file is present
+        working-directory: ${{ env.PROJECT_DIR }}
         run: ls -lh ml_model/house_price_model.pkl
 
       - name: Build Docker image
+        working-directory: ${{ env.PROJECT_DIR }}
         run: docker build -t house-price-project .
 
       - name: Start container
+        working-directory: ${{ env.PROJECT_DIR }}
         run: |
           docker run -d \
             --name house-price \
             -p 5001:5000 \
-            -v ${{ github.workspace }}:/project \
+            -v ${{ github.workspace }}/${{ env.PROJECT_DIR }}:/project \
             -e PORT=5000 \
             house-price-project \
             bash -c "PORT=5000 python /project/app.py"
@@ -96,7 +106,6 @@ jobs:
             fi
             sleep 5
           done
-          # Final check – fail the job if API never came up.
           curl -sf http://localhost:5001/health
 
       - name: "Test – GET /health"
@@ -136,7 +145,7 @@ jobs:
           preds = data['predictions']
           assert data['count'] == 2, f'Expected 2 predictions, got {data[\"count\"]}'
           assert preds[1] > preds[0], f'Expected higher quality = higher price: {preds}'
-          print(f'✅ /predict/batch passed → {[\"\${p:,.0f}\" for p in preds]}')
+          print(f'✅ /predict/batch passed')
           "
 
       - name: "Test – POST /predict with invalid payload returns 400"
@@ -167,7 +176,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: house-price-model
-          path: ml_model/
+          path: ${{ env.PROJECT_DIR }}/ml_model/
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
@@ -179,11 +188,13 @@ jobs:
         run: pip install ansible
 
       - name: Build Docker image for Ansible deploy
+        working-directory: ${{ env.PROJECT_DIR }}
         run: docker build -t house-price-project .
 
       - name: Run Ansible playbook (deploy + test)
+        working-directory: ${{ env.PROJECT_DIR }}
         run: ansible-playbook playbook.yaml
 
-      - name: Print Ansible summary
+      - name: Print container logs
         if: always()
         run: docker logs house-price 2>/dev/null || true
