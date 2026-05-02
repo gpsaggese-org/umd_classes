@@ -19,8 +19,8 @@
     # ── Container settings ────────────────────────────────────
     container_name:  house-price
     image_name:      house-price-project
-    host_port:       5001        # port on your Mac
-    container_port:  5000        # port inside the container
+    host_port:       5001
+    container_port:  5000
 
     # ── Paths ─────────────────────────────────────────────────
     project_root:    "{{ playbook_dir }}"
