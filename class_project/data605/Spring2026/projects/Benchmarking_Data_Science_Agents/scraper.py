@@ -194,15 +194,22 @@ def scrape_mle_bench() -> pd.DataFrame:
 # ── 4. DataSciBench ───────────────────────────────────────────────────────────
 
 def scrape_datasci_bench() -> pd.DataFrame:
-    """
-    Download DataSciBench from HuggingFace.
-    No token needed — public dataset.
-    """
     print("\n── DATASCIBENCH ──")
     try:
         from datasets import load_dataset
+        from huggingface_hub import login
+        token = os.getenv("HF_TOKEN")
+        if token:
+            login(token=token)
         print("  ↓ Downloading DataSciBench...")
-        ds = load_dataset("zd21/DataSciBench", split="train")
+        # Use ignore_verifications to handle inconsistent columns
+        ds = load_dataset(
+            "zd21/DataSciBench",
+            split="train",
+            token=token,
+            ignore_verifications=True,
+            trust_remote_code=True,
+        )
         df = ds.to_pandas()
         df["benchmark"] = "datasci_bench"
         path = RAW_DIR / "datasci_bench.csv"
