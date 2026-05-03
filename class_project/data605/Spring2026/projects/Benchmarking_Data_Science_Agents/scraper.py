@@ -195,65 +195,24 @@ def scrape_mle_bench() -> pd.DataFrame:
 
 def scrape_datasci_bench() -> pd.DataFrame:
     print("\n── DATASCIBENCH ──")
-    try:
-        import json
-        print("  ↓ Downloading DataSciBench from GitHub...")
-        # Get the list of prompts from the GitHub repo
-        url = "https://raw.githubusercontent.com/THUDM/DataSciBench/main/data/prompts.json"
-        resp = requests.get(url, timeout=30)
-        resp.raise_for_status()
-        data = resp.json()
-        if isinstance(data, list):
-            df = pd.DataFrame(data)
-        else:
-            df = pd.DataFrame([data])
-        df["benchmark"] = "datasci_bench"
-        path = RAW_DIR / "datasci_bench.csv"
-        df.to_csv(path, index=False)
-        print(f"  ✓ {len(df)} rows → {path}")
-        return df
-    except Exception as e:
-        print(f"  ✗ DataSciBench failed: {e}")
-        return pd.DataFrame()
+    print("  ⚠ Skipping - dataset has schema issues, will add manually later")
+    return pd.DataFrame()
 
 
 # ── 5. DSBench ────────────────────────────────────────────────────────────────
 
-DSBENCH_URLS = [
-    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data_analysis/tasks.json",
-    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data_modeling/tasks.json",
-]
-
 def scrape_dsbench() -> pd.DataFrame:
-    """
-    Download DSBench task data directly from GitHub raw files.
-    No token needed — public repo.
-    """
     print("\n── DSBENCH ──")
     try:
-        import json
-        frames = []
-        for url in DSBENCH_URLS:
-            print(f"  ↓ {url.split('/')[-1]}...")
-            resp = requests.get(url, timeout=15)
-            resp.raise_for_status()
-            data = resp.json()
-            if isinstance(data, list):
-                df = pd.DataFrame(data)
-            else:
-                df = pd.DataFrame([data])
-            task_type = "data_analysis" if "da_tasks" in url else "model_prediction"
-            df["task_type"] = task_type
-            frames.append(df)
-            print(f"  ✓ {task_type}: {len(df)} rows")
-
-        result = pd.concat(frames, ignore_index=True)
-        result["benchmark"] = "dsbench"
+        from datasets import load_dataset
+        print("  ↓ Downloading DSBench from HuggingFace...")
+        ds = load_dataset("liqiang888/DSBench", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "dsbench"
         path = RAW_DIR / "dsbench.csv"
-        result.to_csv(path, index=False)
-        print(f"  💾 Saved {len(result)} rows → {path}")
-        return result
-
+        df.to_csv(path, index=False)
+        print(f"  ✓ {len(df)} rows → {path}")
+        return df
     except Exception as e:
         print(f"  ✗ DSBench failed: {e}")
         return pd.DataFrame()
