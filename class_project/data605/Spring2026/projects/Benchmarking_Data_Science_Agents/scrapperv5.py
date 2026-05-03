@@ -55,91 +55,46 @@ def scrape_swe_bench():
 
 
 def scrape_mle_bench():
-    print("\n-- MLE-BENCH (75 competitions) --")
+    print("\n-- MLE-BENCH --")
     try:
         import kaggle
         kaggle.api.authenticate()
-
         comps = [
-            "titanic",
-            "digit-recognizer",
+            "titanic", "digit-recognizer",
             "house-prices-advanced-regression-techniques",
-            "spaceship-titanic",
-            "nlp-getting-started",
-            "store-sales-time-series-forecasting",
-            "dogs-vs-cats",
-            "facial-keypoints-detection",
-            "leaf-classification",
-            "forest-cover-type-prediction",
-            "bike-sharing-demand",
-            "porto-seguro-safe-driver-prediction",
-            "allstate-claims-severity",
-            "shelter-animal-outcomes",
-            "quora-question-pairs",
-            "march-machine-learning-mania-2017",
-            "contradictory-my-dear-watson",
-            "tabular-playground-series-jan-2021",
-            "tabular-playground-series-feb-2021",
-            "tabular-playground-series-mar-2021",
-            "tabular-playground-series-apr-2021",
-            "tabular-playground-series-may-2021",
-            "tabular-playground-series-jun-2021",
-            "tabular-playground-series-jul-2021",
-            "tabular-playground-series-aug-2021",
-            "tabular-playground-series-sep-2021",
-            "tabular-playground-series-oct-2021",
-            "tabular-playground-series-nov-2021",
-            "tabular-playground-series-dec-2021",
-            "tabular-playground-series-jan-2022",
-            "tabular-playground-series-feb-2022",
-            "tabular-playground-series-mar-2022",
-            "tabular-playground-series-apr-2022",
-            "tabular-playground-series-may-2022",
-            "tabular-playground-series-jun-2022",
-            "tabular-playground-series-jul-2022",
-            "tabular-playground-series-aug-2022",
-            "tabular-playground-series-sep-2022",
-            "tabular-playground-series-oct-2022",
-            "tabular-playground-series-nov-2022",
-            "tabular-playground-series-dec-2022",
-            "playground-series-s3e1",
-            "playground-series-s3e2",
-            "playground-series-s3e3",
-            "playground-series-s3e4",
-            "playground-series-s3e5",
-            "playground-series-s3e6",
-            "playground-series-s3e7",
-            "playground-series-s3e8",
-            "playground-series-s3e9",
-            "playground-series-s3e10",
-            "playground-series-s3e11",
-            "playground-series-s3e12",
-            "playground-series-s3e13",
-            "playground-series-s3e14",
-            "playground-series-s3e15",
-            "playground-series-s3e16",
-            "playground-series-s3e17",
-            "playground-series-s3e18",
-            "playground-series-s3e19",
-            "playground-series-s3e20",
-            "playground-series-s3e21",
-            "playground-series-s3e22",
-            "playground-series-s3e23",
-            "playground-series-s3e24",
-            "playground-series-s3e25",
-            "playground-series-s3e26",
-            "playground-series-s4e1",
-            "playground-series-s4e2",
-            "playground-series-s4e3",
-            "playground-series-s4e4",
-            "playground-series-s4e5",
-            "playground-series-s4e6",
-            "playground-series-s4e7",
-            "playground-series-s4e8",
-            "playground-series-s4e9",
+            "spaceship-titanic", "nlp-getting-started",
+            "store-sales-time-series-forecasting", "dogs-vs-cats",
+            "facial-keypoints-detection", "leaf-classification",
+            "forest-cover-type-prediction", "bike-sharing-demand",
+            "porto-seguro-safe-driver-prediction", "allstate-claims-severity",
+            "shelter-animal-outcomes", "quora-question-pairs",
+            "march-machine-learning-mania-2017", "contradictory-my-dear-watson",
+            "tabular-playground-series-jan-2021", "tabular-playground-series-feb-2021",
+            "tabular-playground-series-mar-2021", "tabular-playground-series-apr-2021",
+            "tabular-playground-series-may-2021", "tabular-playground-series-jun-2021",
+            "tabular-playground-series-jul-2021", "tabular-playground-series-aug-2021",
+            "tabular-playground-series-sep-2021", "tabular-playground-series-oct-2021",
+            "tabular-playground-series-nov-2021", "tabular-playground-series-dec-2021",
+            "tabular-playground-series-jan-2022", "tabular-playground-series-feb-2022",
+            "tabular-playground-series-mar-2022", "tabular-playground-series-apr-2022",
+            "tabular-playground-series-may-2022", "tabular-playground-series-jun-2022",
+            "tabular-playground-series-jul-2022", "tabular-playground-series-aug-2022",
+            "tabular-playground-series-sep-2022", "tabular-playground-series-oct-2022",
+            "tabular-playground-series-nov-2022", "tabular-playground-series-dec-2022",
+            "playground-series-s3e1", "playground-series-s3e2", "playground-series-s3e3",
+            "playground-series-s3e4", "playground-series-s3e5", "playground-series-s3e6",
+            "playground-series-s3e7", "playground-series-s3e8", "playground-series-s3e9",
+            "playground-series-s3e10", "playground-series-s3e11", "playground-series-s3e12",
+            "playground-series-s3e13", "playground-series-s3e14", "playground-series-s3e15",
+            "playground-series-s3e16", "playground-series-s3e17", "playground-series-s3e18",
+            "playground-series-s3e19", "playground-series-s3e20", "playground-series-s3e21",
+            "playground-series-s3e22", "playground-series-s3e23", "playground-series-s3e24",
+            "playground-series-s3e25", "playground-series-s3e26",
+            "playground-series-s4e1", "playground-series-s4e2", "playground-series-s4e3",
+            "playground-series-s4e4", "playground-series-s4e5", "playground-series-s4e6",
+            "playground-series-s4e7", "playground-series-s4e8", "playground-series-s4e9",
             "playground-series-s4e10",
         ]
-
         frames = []
         for comp in comps:
             try:
@@ -158,7 +113,6 @@ def scrape_mle_bench():
                 time.sleep(0.3)
             except Exception as e:
                 print(f"  SKIP {comp}: {e}")
-
         if not frames:
             raise RuntimeError("no data")
         result = pd.concat(frames, ignore_index=True)
@@ -171,16 +125,55 @@ def scrape_mle_bench():
         return pd.DataFrame()
 
 
-def scrape_datasci_bench():
-    print("\n-- DATASCIBENCH --")
-    print("  SKIP - broken schema in source dataset")
-    return pd.DataFrame()
+def scrape_chatbot_arena():
+    print("\n-- CHATBOT ARENA --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading chatbot arena conversations...")
+        ds = load_dataset("lmsys/chatbot_arena_conversations", split="train")
+        df = ds.to_pandas()
+        keep = ["question_id", "model_a", "model_b", "winner",
+                "judge", "turn", "language"]
+        df = df[[c for c in keep if c in df.columns]]
+        df["benchmark"] = "chatbot_arena"
+        df.to_csv(RAW_DIR / "chatbot_arena.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
 
 
-def scrape_dsbench():
-    print("\n-- DSBENCH --")
-    print("  SKIP - broken dataset")
-    return pd.DataFrame()
+def scrape_lm_eval():
+    print("\n-- LM EVALUATION HARNESS --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading LM eval results...")
+        ds = load_dataset("EleutherAI/lm-evaluation-harness-results", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "lm_eval"
+        df.to_csv(RAW_DIR / "lm_eval.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
+
+
+def scrape_open_llm_leaderboard():
+    print("\n-- OPEN LLM LEADERBOARD --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading Open LLM Leaderboard results...")
+        ds = load_dataset("open-llm-leaderboard/results", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "open_llm_leaderboard"
+        df.to_csv(RAW_DIR / "open_llm_leaderboard.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
 
 
 def scrape_all():
@@ -192,14 +185,17 @@ def scrape_all():
         ("gaia", scrape_gaia),
         ("swe_bench", scrape_swe_bench),
         ("mle_bench", scrape_mle_bench),
-        ("datasci_bench", scrape_datasci_bench),
-        ("dsbench", scrape_dsbench),
+        ("chatbot_arena", scrape_chatbot_arena),
+        ("lm_eval", scrape_lm_eval),
+        ("open_llm_leaderboard", scrape_open_llm_leaderboard),
     ]:
         df = fn()
         if not df.empty:
             results[name] = df
-    print("\nDONE:", len(results), "/5")
+    print("\nDONE:", len(results), "/6")
     print("TOTAL ROWS:", sum(len(v) for v in results.values()))
+    for name, df in results.items():
+        print(f"  {name}: {len(df):,} rows")
     return results
 
 
