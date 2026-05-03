@@ -142,7 +142,7 @@ def scrape_mle_bench():
         ]
 
         for comp in comps:
-    try:
+             try:
         all_rows = []
         for page in range(1, 51):  # up to 50 pages x 20 rows = 1000 per competition
             lb = kaggle.api.competition_leaderboard_view(comp, page=page)
@@ -164,6 +164,8 @@ def scrape_mle_bench():
         time.sleep(0.3)
     except Exception as e:
         print(f"  SKIP {comp}: {e}")
+            
+   
 
         if not frames:
             raise RuntimeError("no data")
