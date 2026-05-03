@@ -19,3 +19,6 @@
 ## [2026-05-02]
 - Finalized EDA by imputing missing values and one-hot encoding categorical values.
 - Saved final model-ready data to train_clean.csv.
+- Updated mlflow_utils.py to handle experiment lifecycle, metrics logging, and model artifact serialization.
+- Implemented mlflow.API.ipynb and tested by logging test parameters and metrics.
+- Configured Jupytext pairing for all notebooks.
