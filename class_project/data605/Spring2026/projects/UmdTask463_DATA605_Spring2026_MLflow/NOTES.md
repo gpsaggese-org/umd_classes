@@ -15,3 +15,7 @@
 - Removed outliers where GrLivArea > 4000.
 - Applied log transformation to SalePrice to address skewness.
 - Created df_no_outliers and saved progress to train_clean.csv.
+
+## [2026-05-02]
+- Finalized EDA by imputing missing values and one-hot encoding categorical values.
+- Saved final model-ready data to train_clean.csv.
