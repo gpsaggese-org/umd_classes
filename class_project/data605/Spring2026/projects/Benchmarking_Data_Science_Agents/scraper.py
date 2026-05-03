@@ -196,21 +196,17 @@ def scrape_mle_bench() -> pd.DataFrame:
 def scrape_datasci_bench() -> pd.DataFrame:
     print("\n── DATASCIBENCH ──")
     try:
-        from datasets import load_dataset
-        from huggingface_hub import login
-        token = os.getenv("HF_TOKEN")
-        if token:
-            login(token=token)
-        print("  ↓ Downloading DataSciBench...")
-        # Use ignore_verifications to handle inconsistent columns
-        ds = load_dataset(
-            "zd21/DataSciBench",
-            split="train",
-            token=token,
-            ignore_verifications=True,
-            trust_remote_code=True,
-        )
-        df = ds.to_pandas()
+        import json
+        print("  ↓ Downloading DataSciBench from GitHub...")
+        # Get the list of prompts from the GitHub repo
+        url = "https://raw.githubusercontent.com/THUDM/DataSciBench/main/data/prompts.json"
+        resp = requests.get(url, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+        if isinstance(data, list):
+            df = pd.DataFrame(data)
+        else:
+            df = pd.DataFrame([data])
         df["benchmark"] = "datasci_bench"
         path = RAW_DIR / "datasci_bench.csv"
         df.to_csv(path, index=False)
