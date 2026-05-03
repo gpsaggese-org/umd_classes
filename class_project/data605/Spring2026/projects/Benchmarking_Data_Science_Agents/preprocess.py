@@ -1,217 +1,211 @@
 """
 preprocess.py
 -------------
-Stage 2: clean, normalise, and build the unified agent x benchmark matrix.
+Stage 2: Clean and standardise the 4 benchmark datasets using DuckDB SQL.
 
-What changed from v1
---------------------
-All pandas groupby / merge / pivot logic is replaced with DuckDB SQL.
-DuckDB reads the Parquet files written by collect.py directly — no
-loading into memory, no type conversions, no intermediate DataFrames.
+Each benchmark has a different schema:
+  - chatbot_arena : model_a, model_b, winner, language, turn, toxic
+  - swe_bench     : instance_id, repo, problem_statement, created_at
+  - mle_bench     : competition, team, score, benchmark
+  - gaia          : question, level, final_answer, annotator_metadata
 
-The SQL queries are intentionally verbose and commented so they read
-as documentation of the transformation logic.
-
-Output
-------
-  data/processed/unified_scores.parquet   -- agent x benchmark score matrix
-  data/processed/benchmark_metadata.parquet
+This script:
+  1. Reads all bench_*.parquet files via DuckDB
+  2. Extracts a common schema: benchmark, model/agent, score (where available)
+  3. Builds per-benchmark summary tables
+  4. Saves unified_scores.parquet and benchmark_metadata.parquet
 """
 
 import pyarrow as pa
 import pandas as pd
 from pathlib import Path
 
-from db      import get_conn, query_arrow, query_df, execute
-from storage import write_table, raw_parquet_glob, parquet_path
+from db      import get_conn, query_arrow, query_df
+from storage import write_table, raw_parquet_glob, parquet_path, read_as_pandas
 
-PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
+ROOT          = Path(__file__).resolve().parent
+PROCESSED_DIR = ROOT / "data" / "processed"
 
 
-# ── Step 1: Clean and standardise column names via DuckDB ─────────────────────
+def process_mle_bench() -> pd.DataFrame:
+    """
+    MLE-bench: competition leaderboard scores.
+    Schema: competition, team, score
+    We treat each team's score as their performance metric.
+    """
+    path = parquet_path("bench_mle_bench")
+    df = query_df(f"""
+        SELECT
+            team                    AS agent,
+            competition             AS task,
+            CAST(score AS DOUBLE)   AS score,
+            'mle_bench'             AS benchmark
+        FROM read_parquet('{path}')
+        WHERE score IS NOT NULL
+          AND team IS NOT NULL
+    """)
+    print(f"  ✓ mle_bench: {len(df)} rows")
+    return df
 
-CLEAN_SQL = """
--- Standardise every benchmark file to: agent, score, benchmark
--- We use COALESCE to handle the many column name variants found in
--- different leaderboard CSVs (accuracy, resolved, pass_rate, etc.)
 
-SELECT
-    TRIM(COALESCE(agent, model, name, agent_name, system, submission))   AS agent,
-    CAST(
-        REPLACE(REPLACE(
-            COALESCE(
-                TRY_CAST(score      AS VARCHAR),
-                TRY_CAST(accuracy   AS VARCHAR),
-                TRY_CAST(resolved   AS VARCHAR),
-                TRY_CAST(pass_rate  AS VARCHAR),
-                TRY_CAST(overall    AS VARCHAR),
-                TRY_CAST(total      AS VARCHAR)
-            ),
-        '%', ''), ',', '')
-    AS DOUBLE)                                                            AS score,
-    benchmark
-FROM read_parquet('{glob}')
-WHERE agent IS NOT NULL
-  AND score  IS NOT NULL
-"""
+def process_swe_bench() -> pd.DataFrame:
+    """
+    SWE-bench: GitHub issue resolution tasks.
+    Schema: instance_id, repo, problem_statement, created_at
+    No score column — we treat repo as the grouping variable.
+    """
+    path = parquet_path("bench_swe_bench")
+    df = query_df(f"""
+        SELECT
+            repo                    AS agent,
+            instance_id             AS task,
+            0.0                     AS score,
+            'swe_bench'             AS benchmark
+        FROM read_parquet('{path}')
+        WHERE instance_id IS NOT NULL
+    """)
+    print(f"  ✓ swe_bench: {len(df)} rows")
+    return df
 
-# ── Step 2: Normalise scores to 0-100 within each benchmark ───────────────────
-# Min-max normalisation using DuckDB window functions.
-# No Python loops, no pandas apply — one SQL pass over all benchmarks.
 
-NORMALISE_SQL = """
-WITH cleaned AS (
-    SELECT
-        agent,
-        score,
-        benchmark,
-        MIN(score) OVER (PARTITION BY benchmark) AS bench_min,
-        MAX(score) OVER (PARTITION BY benchmark) AS bench_max
-    FROM cleaned_scores
-),
-normalised AS (
-    SELECT
-        agent,
-        benchmark,
-        score                                                    AS score_raw,
-        CASE
-            WHEN bench_max = bench_min THEN 50.0
-            ELSE ROUND(
-                ((score - bench_min) / (bench_max - bench_min)) * 100,
-                2
-            )
-        END                                                      AS score_norm
-    FROM cleaned
-)
-SELECT * FROM normalised
-"""
+def process_gaia() -> pd.DataFrame:
+    """
+    GAIA: Multi-step reasoning tasks with difficulty levels.
+    Schema: Question, Level, Final answer, Annotator Metadata
+    """
+    path = parquet_path("bench_gaia")
+    df = query_df(f"""
+        SELECT
+            CAST(level AS VARCHAR)  AS agent,
+            task_id                 AS task,
+            CAST(level AS DOUBLE)   AS score,
+            'gaia'                  AS benchmark
+        FROM read_parquet('{path}')
+        WHERE level IS NOT NULL
+    """)
+    print(f"  ✓ gaia: {len(df)} rows")
+    return df
 
-# ── Step 3: Pivot into agent x benchmark matrix ───────────────────────────────
-# PIVOT is a DuckDB built-in — does the full wide-format transform in SQL.
 
-PIVOT_SQL = """
--- Keep only agents that appear in at least 2 benchmarks so we can compare them.
--- Agents seen on only 1 benchmark are analytically useless for cross-comparison.
+def process_chatbot_arena() -> pd.DataFrame:
+    """
+    Chatbot Arena: Human preference votes between LLMs.
+    Schema: model_a, model_b, winner, language, turn, toxic
+    We create one row per model per conversation showing if they won.
+    """
+    path = parquet_path("bench_chatbot_arena")
 
-WITH ranked AS (
-    -- If an agent appears twice on the same benchmark (different versions),
-    -- keep only their best score.
-    SELECT agent, benchmark, MAX(score_norm) AS score_norm
-    FROM normalised_scores
-    GROUP BY agent, benchmark
-),
-multi_bench_agents AS (
-    SELECT agent
-    FROM ranked
-    GROUP BY agent
-    HAVING COUNT(DISTINCT benchmark) >= 2
-)
-PIVOT (
-    SELECT r.agent, r.benchmark, r.score_norm
-    FROM ranked r
-    INNER JOIN multi_bench_agents m ON r.agent = m.agent
-)
-ON benchmark
-USING MAX(score_norm)
-ORDER BY agent
-"""
+    # Model A rows
+    df_a = query_df(f"""
+        SELECT
+            model_a                                     AS agent,
+            conversation_id                             AS task,
+            CASE WHEN winner = 'model_a' THEN 1.0
+                 WHEN winner = 'tie' THEN 0.5
+                 ELSE 0.0 END                           AS score,
+            language,
+            turn,
+            'chatbot_arena'                             AS benchmark
+        FROM read_parquet('{path}')
+        WHERE model_a IS NOT NULL
+    """)
+
+    # Model B rows
+    df_b = query_df(f"""
+        SELECT
+            model_b                                     AS agent,
+            conversation_id                             AS task,
+            CASE WHEN winner = 'model_b' THEN 1.0
+                 WHEN winner = 'tie' THEN 0.5
+                 ELSE 0.0 END                           AS score,
+            language,
+            turn,
+            'chatbot_arena'                             AS benchmark
+        FROM read_parquet('{path}')
+        WHERE model_b IS NOT NULL
+    """)
+
+    df = pd.concat([df_a, df_b], ignore_index=True)
+    print(f"  ✓ chatbot_arena: {len(df)} rows")
+    return df
+
+
+def build_agent_benchmark_matrix(frames: list) -> pd.DataFrame:
+    """
+    Build agent x benchmark win rate matrix.
+    For each agent x benchmark, compute their mean score.
+    Only include agents appearing in 2+ benchmarks.
+    """
+    combined = pd.concat(frames, ignore_index=True)
+
+    matrix = combined.groupby(["agent", "benchmark"])["score"].mean().reset_index()
+    matrix = matrix.pivot(index="agent", columns="benchmark", values="score")
+    matrix.columns.name = None
+
+    # Keep agents in 2+ benchmarks
+    valid = matrix.notna().sum(axis=1) >= 2
+    matrix = matrix[valid]
+    print(f"  ✓ Matrix: {len(matrix)} agents x {len(matrix.columns)} benchmarks")
+    return matrix
 
 
 def build_benchmark_metadata() -> pa.Table:
-    """
-    Static design-comparison table for all five benchmarks.
-    Returned as an Arrow Table and written to Parquet.
-    """
     records = [
-        {"benchmark": "datasci_bench", "full_name": "DataSciBench",
-         "task_types": "Data analysis, code generation, ML modelling",
-         "primary_metric": "Accuracy / pass rate", "difficulty_levels": 3,
-         "n_tasks": 500, "domain_focus": "Data science",
-         "evaluation_mode": "Automated", "open_source": True},
-
-        {"benchmark": "dsbench", "full_name": "DSBench",
-         "task_types": "Data understanding, model training, debugging",
-         "primary_metric": "Accuracy", "difficulty_levels": 3,
-         "n_tasks": 74, "domain_focus": "Data science + ML engineering",
-         "evaluation_mode": "Automated", "open_source": True},
-
-        {"benchmark": "mle_bench", "full_name": "MLE-Bench",
-         "task_types": "Kaggle competition ML pipelines",
-         "primary_metric": "Percentile vs human Kaggle submissions",
-         "difficulty_levels": 5, "n_tasks": 75,
-         "domain_focus": "ML engineering",
-         "evaluation_mode": "Competition scoring", "open_source": True},
-
+        {"benchmark": "chatbot_arena", "full_name": "Chatbot Arena",
+         "source": "lmsys/HuggingFace", "rows": 33000,
+         "task_type": "Human preference voting",
+         "metric": "Win rate", "domain": "General LLM evaluation"},
+        {"benchmark": "swe_bench", "full_name": "SWE-bench Verified",
+         "source": "princeton-nlp/HuggingFace", "rows": 500,
+         "task_type": "GitHub issue resolution",
+         "metric": "% issues resolved", "domain": "Software engineering"},
+        {"benchmark": "mle_bench", "full_name": "MLE-bench",
+         "source": "Kaggle API", "rows": 1520,
+         "task_type": "ML competition tasks",
+         "metric": "Competition score", "domain": "ML engineering"},
         {"benchmark": "gaia", "full_name": "GAIA",
-         "task_types": "Multi-step reasoning, tool use, web search",
-         "primary_metric": "Exact match accuracy", "difficulty_levels": 3,
-         "n_tasks": 450, "domain_focus": "General AI reasoning",
-         "evaluation_mode": "Human-validated", "open_source": True},
-
-        {"benchmark": "swe_bench", "full_name": "SWE-bench",
-         "task_types": "GitHub issue resolution, code repair",
-         "primary_metric": "% issues resolved", "difficulty_levels": 2,
-         "n_tasks": 2294, "domain_focus": "Software engineering",
-         "evaluation_mode": "Automated test suite", "open_source": True},
+         "source": "gaia-benchmark/HuggingFace", "rows": 165,
+         "task_type": "Multi-step reasoning",
+         "metric": "Exact match accuracy", "domain": "General AI reasoning"},
     ]
     return pa.Table.from_pylist(records)
 
 
-def run_preprocessing() -> dict[str, pa.Table]:
-    """
-    Full preprocessing pipeline using DuckDB SQL throughout.
+def run_preprocessing():
+    print("=" * 50)
+    print("PREPROCESS: Clean + Normalise + Build Matrix")
+    print("=" * 50)
 
-    Steps
-    -----
-    1. Read all bench_*.parquet files with a single DuckDB scan
-    2. Clean and standardise column names (SQL COALESCE)
-    3. Normalise scores 0-100 using SQL window functions
-    4. Pivot to agent x benchmark matrix using DuckDB PIVOT
-    5. Write all outputs as Parquet
+    print("\n── PROCESSING EACH BENCHMARK ──")
+    frames = []
+    for fn in [process_mle_bench, process_swe_bench, process_gaia, process_chatbot_arena]:
+        try:
+            df = fn()
+            frames.append(df)
+        except Exception as e:
+            print(f"  ⚠ {fn.__name__} failed: {e}")
 
-    Returns
-    -------
-    dict with keys: cleaned, normalised, matrix, metadata
-    """
-    conn = get_conn()
-    glob = raw_parquet_glob()
+    if not frames:
+        raise RuntimeError("No data processed. Run collect.py first.")
 
-    print("── STEP 1: CLEAN ──")
-    cleaned = query_arrow(CLEAN_SQL.format(glob=glob))
-    conn.register("cleaned_scores", cleaned)
-    print(f"  ✓ {cleaned.num_rows} rows after cleaning")
+    print("\n── BUILDING UNIFIED DATASET ──")
+    combined = pd.concat(frames, ignore_index=True)
+    write_table(pa.Table.from_pandas(combined), "unified_data")
+    print(f"  ✓ unified_data.parquet: {len(combined)} rows")
 
-    print("\n── STEP 2: NORMALISE ──")
-    normalised = query_arrow(NORMALISE_SQL)
-    conn.register("normalised_scores", normalised)
-    print(f"  ✓ {normalised.num_rows} rows normalised")
+    print("\n── BUILDING AGENT x BENCHMARK MATRIX ──")
+    try:
+        matrix = build_agent_benchmark_matrix(frames)
+        write_table(pa.Table.from_pandas(matrix.reset_index()), "unified_scores")
+    except Exception as e:
+        print(f"  ⚠ Matrix failed: {e}")
 
-    print("\n── STEP 3: PIVOT MATRIX ──")
-    # DuckDB PIVOT returns a wide DataFrame — convert to Arrow
-    matrix_df = conn.execute(PIVOT_SQL).df()
-    matrix_df = matrix_df.set_index("agent")
-    dropped = normalised.to_pandas()["agent"].nunique() - len(matrix_df)
-    if dropped > 0:
-        print(f"  ⚠ Dropped {dropped} agents present on fewer than 2 benchmarks")
-    print(f"  ✓ Matrix: {len(matrix_df)} agents x {len(matrix_df.columns)} benchmarks")
-    matrix_arrow = pa.Table.from_pandas(matrix_df.reset_index())
-
-    print("\n── STEP 4: BENCHMARK METADATA ──")
+    print("\n── BENCHMARK METADATA ──")
     metadata = build_benchmark_metadata()
-
-    print("\n── SAVING PARQUET ──")
-    write_table(cleaned,      "cleaned_scores")
-    write_table(normalised,   "normalised_scores")
-    write_table(matrix_arrow, "unified_scores")
-    write_table(metadata,     "benchmark_metadata")
+    write_table(metadata, "benchmark_metadata")
 
     print("\n✅ Preprocessing complete")
-    return {
-        "cleaned":    cleaned,
-        "normalised": normalised,
-        "matrix":     matrix_arrow,
-        "metadata":   metadata,
-    }
+    return combined
 
 
 if __name__ == "__main__":
