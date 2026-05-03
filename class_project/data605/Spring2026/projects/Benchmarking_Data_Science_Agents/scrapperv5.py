@@ -144,7 +144,7 @@ def scrape_mle_bench():
         frames = []
         for comp in comps:
             try:
-                lb = kaggle.api.competition_leaderboard_view(comp, page_size=1000)                
+                lb = kaggle.api.competition_leaderboard_view(comp)                
                 rows = []
                 for e in lb:
                     row = {"competition": comp, "score": e.score}
