@@ -180,7 +180,23 @@ def scrape_open_llm_leaderboard():
         return pd.DataFrame()
 
 
-
+def scrape_wildchat():
+    print("\n-- WILDCHAT 1M --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading WildChat-1M...")
+        ds = load_dataset("allenai/WildChat-1M", split="train")
+        df = ds.to_pandas()
+        keep = ["conversation_id", "model", "language", "country",
+                "hashed_ip", "turn", "toxic", "redacted"]
+        df = df[[c for c in keep if c in df.columns]]
+        df["benchmark"] = "wildchat"
+        df.to_csv(RAW_DIR / "wildchat.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
 
 
 def scrape_all():
