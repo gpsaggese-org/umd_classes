@@ -129,14 +129,50 @@ def scrape_chatbot_arena():
     print("\n-- CHATBOT ARENA --")
     try:
         from datasets import load_dataset
-        print("  Downloading chatbot arena conversations...")
-        ds = load_dataset("lmsys/chatbot_arena_conversations", split="train")
+        from huggingface_hub import login
+        token = os.getenv("HF_TOKEN")
+        if token:
+            login(token=token)
+        print("  Downloading chatbot arena...")
+        ds = load_dataset("lmsys/chatbot_arena_conversations",
+                          split="train", token=token)
         df = ds.to_pandas()
-        keep = ["question_id", "model_a", "model_b", "winner",
-                "judge", "turn", "language"]
+        keep = ["question_id", "model_a", "model_b", "winner", "judge", "turn", "language"]
         df = df[[c for c in keep if c in df.columns]]
         df["benchmark"] = "chatbot_arena"
         df.to_csv(RAW_DIR / "chatbot_arena.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
+
+
+def scrape_lm_eval():
+    print("\n-- OPEN LLM LEADERBOARD V1 --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading Open LLM Leaderboard v1 results...")
+        ds = load_dataset("open-llm-leaderboard-old/results", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "open_llm_leaderboard_v1"
+        df.to_csv(RAW_DIR / "open_llm_leaderboard_v1.csv", index=False)
+        print(f"  SAVED {len(df)} rows")
+        return df
+    except Exception as e:
+        print(f"  FAIL: {e}")
+        return pd.DataFrame()
+
+
+def scrape_open_llm_leaderboard():
+    print("\n-- OPEN LLM LEADERBOARD V2 --")
+    try:
+        from datasets import load_dataset
+        print("  Downloading Open LLM Leaderboard v2 results...")
+        ds = load_dataset("open-llm-leaderboard/results", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "open_llm_leaderboard_v2"
+        df.to_csv(RAW_DIR / "open_llm_leaderboard_v2.csv", index=False)
         print(f"  SAVED {len(df)} rows")
         return df
     except Exception as e:
