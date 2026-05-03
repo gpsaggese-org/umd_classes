@@ -58,12 +58,7 @@ def scrape_swe_bench():
 def scrape_mle_bench():
     print("\n-- MLE-BENCH --")
     try:
-        from kaggle.api.kaggle_api_extended import KaggleApiClient as KaggleApiExtended
-        os.environ["KAGGLE_USERNAME"] = os.getenv("KAGGLE_USERNAME", "")
-        os.environ["KAGGLE_KEY"] = os.getenv("KAGGLE_KEY", "")
-        api = KaggleApiExtended()
-        api.authenticate()
-        api.authenticate()
+        import kaggle
         comps = [
             "titanic",
             "digit-recognizer",
@@ -83,7 +78,7 @@ def scrape_mle_bench():
         frames = []
         for comp in comps:
             try:
-                lb = api.competition_leaderboard_view(comp)
+                lb = kaggle.api.competition_leaderboard_view(comp)
                 rows = [{"competition": comp, "team": e.teamName,
                          "rank": e.rank, "score": e.score} for e in lb]
                 frames.append(pd.DataFrame(rows))
@@ -101,7 +96,6 @@ def scrape_mle_bench():
     except Exception as e:
         print(f"  FAIL: {e}")
         return pd.DataFrame()
-
 
 def scrape_datasci_bench():
     print("\n-- DATASCIBENCH --")
