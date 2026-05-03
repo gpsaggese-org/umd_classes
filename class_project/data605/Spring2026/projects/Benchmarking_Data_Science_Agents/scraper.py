@@ -7,7 +7,7 @@ Sources:
   - GAIA        : HuggingFace datasets API (gated, needs HF token)
   - SWE-bench   : HuggingFace datasets API (princeton-nlp/SWE-bench)
   - MLE-bench   : Kaggle API (75 competitions x all submissions)
-  - DataSciBench: HuggingFace datasets API (AIatMD/DataSciBench)
+  - DataSciBench: HuggingFace datasets API (zd21/DataSciBench)
   - DSBench     : GitHub raw files
 
 Output:
@@ -202,7 +202,7 @@ def scrape_datasci_bench() -> pd.DataFrame:
     try:
         from datasets import load_dataset
         print("  ↓ Downloading DataSciBench...")
-        ds = load_dataset("AIatMD/DataSciBench", split="train")
+        ds = load_dataset("zd21/DataSciBench", split="train")
         df = ds.to_pandas()
         df["benchmark"] = "datasci_bench"
         path = RAW_DIR / "datasci_bench.csv"
@@ -217,8 +217,8 @@ def scrape_datasci_bench() -> pd.DataFrame:
 # ── 5. DSBench ────────────────────────────────────────────────────────────────
 
 DSBENCH_URLS = [
-    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data/data_analysis/tasks.json",
-    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data/model_prediction/tasks.json",
+    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data_analysis/tasks.json",
+    "https://raw.githubusercontent.com/LiqiangJing/DSBench/main/data_modeling/tasks.json",
 ]
 
 def scrape_dsbench() -> pd.DataFrame:
