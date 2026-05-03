@@ -180,36 +180,7 @@ def scrape_open_llm_leaderboard():
         return pd.DataFrame()
 
 
-def scrape_lm_eval():
-    print("\n-- LM EVALUATION HARNESS --")
-    try:
-        from datasets import load_dataset
-        print("  Downloading LM eval results...")
-        ds = load_dataset("EleutherAI/lm-evaluation-harness-results", split="train")
-        df = ds.to_pandas()
-        df["benchmark"] = "lm_eval"
-        df.to_csv(RAW_DIR / "lm_eval.csv", index=False)
-        print(f"  SAVED {len(df)} rows")
-        return df
-    except Exception as e:
-        print(f"  FAIL: {e}")
-        return pd.DataFrame()
 
-
-def scrape_open_llm_leaderboard():
-    print("\n-- OPEN LLM LEADERBOARD --")
-    try:
-        from datasets import load_dataset
-        print("  Downloading Open LLM Leaderboard results...")
-        ds = load_dataset("open-llm-leaderboard/results", split="train")
-        df = ds.to_pandas()
-        df["benchmark"] = "open_llm_leaderboard"
-        df.to_csv(RAW_DIR / "open_llm_leaderboard.csv", index=False)
-        print(f"  SAVED {len(df)} rows")
-        return df
-    except Exception as e:
-        print(f"  FAIL: {e}")
-        return pd.DataFrame()
 
 
 def scrape_all():
