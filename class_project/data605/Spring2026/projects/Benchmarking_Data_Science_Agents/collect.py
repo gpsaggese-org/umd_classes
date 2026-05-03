@@ -1,119 +1,101 @@
 """
 collect.py
 ----------
-Stage 1: load raw leaderboard CSVs and convert each one to Parquet.
+Stage 1: Load the 4 real scraped CSVs and convert each to Parquet.
 
-What changed from v1
---------------------
-- Every CSV is immediately converted to Parquet via PyArrow after loading.
-  All downstream stages (preprocess, analyze, visualize) read Parquet only.
-- PyArrow's CSV reader handles type inference and null normalisation,
-  replacing manual pandas string-cleaning.
-- HuggingFace datasets are also written to Parquet so all downstream
-  code sees a single uniform format regardless of source.
+Benchmarks:
+  - chatbot_arena  : 33,000 rows - HuggingFace lmsys
+  - swe_bench      : 500 rows    - HuggingFace princeton-nlp
+  - mle_bench      : 1,520 rows  - Kaggle API
+  - gaia           : 165 rows    - HuggingFace gaia-benchmark
 
-Output
-------
-  data/processed/bench_<name>.parquet  for each benchmark
+All CSVs live in data/raw/ and were created by scrapperv5.py.
+This script converts them to Parquet for DuckDB querying.
 """
 
-import time
-import requests
 import pyarrow as pa
 import pyarrow.csv as pa_csv
+import pyarrow.parquet as pq
 from pathlib import Path
 
-from storage import csv_to_parquet, write_table
+ROOT          = Path(__file__).resolve().parent
+RAW_DIR       = ROOT / "data" / "raw"
+PROCESSED_DIR = ROOT / "data" / "processed"
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
-RAW_DIR       = Path(__file__).resolve().parents[1] / "data" / "raw"
-PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
-
+# The 4 benchmarks we actually have
 BENCHMARKS = {
-    "datasci_bench": {"method": "csv"},
-    "dsbench":       {"method": "csv"},
-    "mle_bench":     {"method": "csv"},
-    "gaia":          {"method": "csv"},
-    "swe_bench":     {"method": "csv"},
+    "chatbot_arena": {
+        "csv": "chatbot_arena.csv",
+        "description": "33k human preference votes between LLMs",
+    },
+    "swe_bench": {
+        "csv": "swe_bench.csv",
+        "description": "500 GitHub issue resolution tasks",
+    },
+    "mle_bench": {
+        "csv": "mle_bench.csv",
+        "description": "1520 Kaggle competition leaderboard entries",
+    },
+    "gaia": {
+        "csv": "gaia.csv",
+        "description": "165 multi-step reasoning tasks",
+    },
 }
 
 
-def load_csv(name: str) -> pa.Table:
-    """Load a raw CSV as an Arrow Table using PyArrow's vectorised reader."""
-    path = RAW_DIR / f"{name}.csv"
-    if not path.exists():
-        raise FileNotFoundError(
-            f"Raw CSV not found: {path}\n"
-            "Place the leaderboard CSV here before running collect.py"
-        )
+def csv_to_parquet(name: str, csv_path: Path) -> Path:
+    """Convert a raw CSV to Snappy-compressed Parquet using PyArrow."""
+    parquet_path = PROCESSED_DIR / f"bench_{name}.parquet"
+
     convert_opts = pa_csv.ConvertOptions(
         null_values=["", "NA", "N/A", "null", "None", "-"],
         strings_can_be_null=True,
     )
-    table = pa_csv.read_csv(path, convert_options=convert_opts)
+    table = pa_csv.read_csv(csv_path, convert_options=convert_opts)
+
     # Normalise column names
     table = table.rename_columns(
         [c.strip().lower().replace(" ", "_") for c in table.schema.names]
     )
-    # Tag every row with its benchmark name so we know the source after merging
-    table = table.append_column(
-        "benchmark",
-        pa.array([name] * table.num_rows, type=pa.string())
-    )
-    print(f"  ✓ Loaded {table.num_rows} rows from {path.name}")
-    return table
+
+    # Tag every row with benchmark name
+    if "benchmark" not in table.schema.names:
+        table = table.append_column(
+            "benchmark",
+            pa.array([name] * table.num_rows, type=pa.string())
+        )
+
+    pq.write_table(table, parquet_path, compression="snappy", write_statistics=True)
+    size_kb = parquet_path.stat().st_size / 1024
+    print(f"  ✓ {csv_path.name} → bench_{name}.parquet ({table.num_rows} rows, {size_kb:.1f} KB)")
+    return parquet_path
 
 
-def load_from_huggingface(dataset_name: str, split: str = "validation") -> pa.Table:
-    """Download a HuggingFace dataset and return it as an Arrow Table."""
-    try:
-        from datasets import load_dataset
-    except ImportError:
-        raise ImportError("Run: pip install datasets huggingface-hub")
+def collect_all() -> dict:
+    """Convert all 4 benchmark CSVs to Parquet."""
+    print("=" * 50)
+    print("COLLECT: CSV → Parquet")
+    print("=" * 50)
 
-    print(f"  ↓ Downloading {dataset_name} [{split}] from HuggingFace...")
-    ds = load_dataset(dataset_name, split=split)
-    table = ds.data.table   # returns pyarrow.Table directly — no pandas needed
-    print(f"  ✓ Loaded {table.num_rows} rows from HuggingFace")
-    return table
-
-
-def collect_all(save: bool = True) -> dict[str, pa.Table]:
-    """
-    Collect all benchmark leaderboards and write each to Parquet.
-
-    Returns
-    -------
-    dict mapping benchmark name → Arrow Table
-    """
-    results: dict[str, pa.Table] = {}
-
+    results = {}
     for name, cfg in BENCHMARKS.items():
         print(f"\n── {name.upper()} ──")
+        csv_path = RAW_DIR / cfg["csv"]
+        if not csv_path.exists():
+            print(f"  ⚠ Not found: {csv_path}")
+            print(f"  → Run scrapperv5.py first")
+            continue
         try:
-            if cfg["method"] == "csv":
-                table = load_csv(name)
-            elif cfg["method"] == "huggingface":
-                table = load_from_huggingface(cfg["dataset"], cfg.get("split", "validation"))
-                table = table.append_column(
-                    "benchmark",
-                    pa.array([name] * table.num_rows, type=pa.string())
-                )
-            else:
-                raise ValueError(f"Unknown method: {cfg['method']}")
+            parquet_path = csv_to_parquet(name, csv_path)
+            results[name] = parquet_path
+        except Exception as e:
+            print(f"  ✗ Failed: {e}")
 
-            results[name] = table
-
-            if save:
-                # Save as bench_<name>.parquet so the glob bench_*.parquet
-                # picks up all benchmark files and nothing else
-                write_table(table, f"bench_{name}")
-
-        except Exception as exc:
-            print(f"  ⚠ Skipped {name}: {exc}")
-
-    print(f"\n✅ Collection complete — {len(results)}/{len(BENCHMARKS)} benchmarks loaded")
+    print(f"\n✅ {len(results)}/{len(BENCHMARKS)} benchmarks converted to Parquet")
     return results
 
 
 if __name__ == "__main__":
-    collect_all(save=True)
+    collect_all()
+
