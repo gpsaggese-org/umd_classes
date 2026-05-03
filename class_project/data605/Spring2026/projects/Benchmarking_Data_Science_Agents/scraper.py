@@ -299,3 +299,20 @@ def scrape_all() -> dict[str, pd.DataFrame]:
 
 if __name__ == "__main__":
     scrape_all()
+
+# ── OVERRIDE: Fixed DSBench using HuggingFace ─────────────────────────────────
+def scrape_dsbench():
+    print("\n── DSBENCH ──")
+    try:
+        from datasets import load_dataset
+        print("  ↓ Downloading DSBench from HuggingFace...")
+        ds = load_dataset("liqiang888/DSBench", split="train")
+        df = ds.to_pandas()
+        df["benchmark"] = "dsbench"
+        path = RAW_DIR / "dsbench.csv"
+        df.to_csv(path, index=False)
+        print(f"  ✓ {len(df)} rows → {path}")
+        return df
+    except Exception as e:
+        print(f"  ✗ DSBench failed: {e}")
+        return pd.DataFrame()
