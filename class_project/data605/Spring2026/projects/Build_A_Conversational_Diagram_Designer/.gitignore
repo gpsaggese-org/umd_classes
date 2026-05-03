@@ -1,0 +1,38 @@
+# Environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+
+# Jupyter checkpoints (but DO commit the .ipynb files themselves — GP's template needs them)
+.ipynb_checkpoints/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated outputs (eval results may be committed manually if curated)
+*.png
+*.svg
+!docs/**/*.png
+!docs/**/*.svg
+!test/fixtures/**/*
+
+# Build artifacts
+build/
+dist/

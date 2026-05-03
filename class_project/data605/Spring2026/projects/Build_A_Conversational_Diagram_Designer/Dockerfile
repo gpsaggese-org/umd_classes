@@ -1,30 +1,51 @@
-# Use Python 3.12 slim (already has Python and pip).
-FROM python:3.12-slim
+# ============================================================
+# CDD Project Dockerfile
+# Single container: Python + Jupyter + FastAPI + React (built)
+# Two ways to run after build:
+#   ./docker_jupyter.sh  -> Jupyter at :8888 (GP's grading flow)
+#   ./docker_app.sh      -> FastAPI + React UI at :8000
+# ============================================================
 
-# Avoid interactive prompts during apt operations.
-ENV DEBIAN_FRONTEND=noninteractive
+# --- Stage 1: Build React frontend ---
+FROM node:20-slim AS frontend-build
+WORKDIR /frontend
 
-# Install CA certificates (needed for HTTPS).
-RUN apt-get update && apt-get install -y \
+# Copy manifest first for layer caching. The wildcard tolerates an absent
+# package-lock.json; npm will create one on first build.
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+
+COPY frontend/ .
+RUN npm run build
+
+# --- Stage 2: Python runtime ---
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# System deps:
+#   graphviz: needed by the cdd_renderer.py local Graphviz path
+#   ca-certificates, curl: useful for diagnostics + outbound HTTPS to
+#                          kroki.io (Mermaid) and plantuml.com
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    graphviz \
     ca-certificates \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install project specific packages.
-RUN mkdir -p /install
-COPY requirements.txt /install/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+# Python deps
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Config.
-COPY etc_sudoers /install/
-COPY etc_sudoers /etc/sudoers
-COPY bashrc /root/.bashrc
+# Project source
+COPY . .
 
-# Report package versions.
-COPY version.sh /install/
-RUN /install/version.sh 2>&1 | tee version.log
+# Built React app from stage 1
+COPY --from=frontend-build /frontend/dist /app/frontend/dist
 
-# Jupyter.
-EXPOSE 8888
+# Expose ports: 8888 Jupyter, 8000 FastAPI
+EXPOSE 8888 8000
 
-CMD ["/bin/bash"]
+# Default: Jupyter (GP's grading flow)
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", \
+     "--no-browser", "--allow-root", "--NotebookApp.token=''"]
