@@ -141,23 +141,29 @@ def scrape_mle_bench():
             "playground-series-s4e10",
         ]
 
-        frames = []
         for comp in comps:
-            try:
-                lb = kaggle.api.competition_leaderboard_view(comp)                
-                rows = []
-                for e in lb:
-                    row = {"competition": comp, "score": e.score}
-                    for attr in ["team_name", "teamName", "team"]:
-                        if hasattr(e, attr):
-                            row["team"] = getattr(e, attr)
-                            break
-                    rows.append(row)
-                frames.append(pd.DataFrame(rows))
-                print(f"  OK {comp}: {len(rows)} rows")
-                time.sleep(0.3)
-            except Exception as e:
-                print(f"  SKIP {comp}: {e}")
+    try:
+        all_rows = []
+        for page in range(1, 51):  # up to 50 pages x 20 rows = 1000 per competition
+            lb = kaggle.api.competition_leaderboard_view(comp, page=page)
+            if not lb:
+                break
+            for e in lb:
+                row = {"competition": comp, "score": e.score, "page": page}
+                for attr in ["team_name", "teamName", "team"]:
+                    if hasattr(e, attr):
+                        row["team"] = getattr(e, attr)
+                        break
+                all_rows.append(row)
+            if len(lb) < 20:
+                break
+            time.sleep(0.2)
+        if all_rows:
+            frames.append(pd.DataFrame(all_rows))
+            print(f"  OK {comp}: {len(all_rows)} rows")
+        time.sleep(0.3)
+    except Exception as e:
+        print(f"  SKIP {comp}: {e}")
 
         if not frames:
             raise RuntimeError("no data")
