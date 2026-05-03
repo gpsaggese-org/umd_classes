@@ -58,10 +58,11 @@ def scrape_swe_bench():
 def scrape_mle_bench():
     print("\n-- MLE-BENCH --")
     try:
-        from kaggle.api.kaggle_api_extended import KaggleApiExtended
+        from kaggle.api.kaggle_api_extended import KaggleApiClient as KaggleApiExtended
         os.environ["KAGGLE_USERNAME"] = os.getenv("KAGGLE_USERNAME", "")
         os.environ["KAGGLE_KEY"] = os.getenv("KAGGLE_KEY", "")
         api = KaggleApiExtended()
+        api.authenticate()
         api.authenticate()
         comps = [
             "titanic",
