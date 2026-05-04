@@ -33,7 +33,7 @@ from storage import parquet_path, write_table, read_as_pandas
 
 ROOT        = Path(__file__).resolve().parent
 TABLES_DIR  = ROOT / "outputs" / "tables"
-TABLES_DIR.mkdir(parents=True, exist_ok=True
+TABLES_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # ── 1. Per-benchmark statistics ───────────────────────────────────────────────
