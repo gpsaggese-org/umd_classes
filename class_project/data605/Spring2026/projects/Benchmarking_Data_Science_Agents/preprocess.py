@@ -70,17 +70,16 @@ def process_swe_bench() -> pd.DataFrame:
 
 def process_gaia() -> pd.DataFrame:
     path = parquet_path("bench_gaia")
-    df = query_df(f"""
-        SELECT
-            CAST(level AS VARCHAR)  AS agent,
-            task_id                 AS task,
-            CAST(level AS DOUBLE)   AS score,
-            'gaia'                  AS benchmark
-        FROM (
-            SELECT task_id, level FROM read_parquet('{path}')
-        )
-        WHERE level IS NOT NULL
-    """)
+    # Read with pandas to avoid duplicate column issue
+    df_raw = pd.read_parquet(path)
+    # Drop duplicate columns by keeping first occurrence
+    df_raw = df_raw.loc[:, ~df_raw.columns.duplicated()]
+    df = pd.DataFrame({
+        "agent":     df_raw["level"].astype(str),
+        "task":      df_raw["task_id"].astype(str),
+        "score":     pd.to_numeric(df_raw["level"], errors="coerce"),
+        "benchmark": "gaia",
+    }).dropna(subset=["score"])
     print(f"  ✓ gaia: {len(df)} rows")
     return df
 
@@ -89,23 +88,23 @@ def process_chatbot_arena() -> pd.DataFrame:
     path = parquet_path("bench_chatbot_arena")
     df_a = query_df(f"""
         SELECT
-            model_a                                     AS agent,
-            question_id                                 AS task,
+            model_a         AS agent,
+            question_id     AS task,
             CASE WHEN winner = 'model_a' THEN 1.0
                  WHEN winner = 'tie' THEN 0.5
-                 ELSE 0.0 END                           AS score,
-            'chatbot_arena'                             AS benchmark
+                 ELSE 0.0 END AS score,
+            'chatbot_arena'  AS benchmark
         FROM read_parquet('{path}')
         WHERE model_a IS NOT NULL
     """)
     df_b = query_df(f"""
         SELECT
-            model_b                                     AS agent,
-            question_id                                 AS task,
+            model_b         AS agent,
+            question_id     AS task,
             CASE WHEN winner = 'model_b' THEN 1.0
                  WHEN winner = 'tie' THEN 0.5
-                 ELSE 0.0 END                           AS score,
-            'chatbot_arena'                             AS benchmark
+                 ELSE 0.0 END AS score,
+            'chatbot_arena'  AS benchmark
         FROM read_parquet('{path}')
         WHERE model_b IS NOT NULL
     """)
