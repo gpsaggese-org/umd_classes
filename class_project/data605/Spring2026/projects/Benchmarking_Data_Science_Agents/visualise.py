@@ -166,19 +166,19 @@ def plot_gaia_difficulty() -> str:
     print(f"  💾 gaia_difficulty.png")
     return path_out
 def plot_dendrogram() -> str:
-    """Hierarchical clustering dendrogram of agents."""
     linkage_path = TABLES_DIR / "linkage_matrix.npy"
     if not linkage_path.exists():
-        print("  ⚠ linkage_matrix.npy not found — skipping dendrogram")
+        print("  SKIP - linkage_matrix.npy not found")
         return ""
-    lm     = np.load(str(linkage_path))
+    lm = np.load(str(linkage_path))
     matrix = read_as_pandas("unified_scores")
     agents = matrix["agent"].tolist()
 
-    fig, ax = plt.subplots(figsize=(14, max(5, len(agents[:50]) * 0.3)))
-    dendrogram(lm, labels=agents[:50], orientation="right", ax=ax,
-               leaf_font_size=7,
-               color_threshold=0.7 * max(lm[:, 2]))
+    fig, ax = plt.subplots(figsize=(14, 8))
+    dendrogram(lm, labels=agents, orientation="right", ax=ax,
+               leaf_font_size=4,
+               color_threshold=0.7 * max(lm[:, 2]),
+               truncate_mode="lastp", p=50)
     ax.set_title("Agent Clustering Dendrogram (Ward Linkage)", fontsize=13)
     ax.set_xlabel("Distance")
     fig.tight_layout()
