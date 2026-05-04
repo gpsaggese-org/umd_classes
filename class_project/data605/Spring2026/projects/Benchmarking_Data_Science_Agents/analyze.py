@@ -162,7 +162,7 @@ def benchmark_correlation(matrix_df: pd.DataFrame) -> pd.DataFrame:
             both = matrix_df[[b1, b2]].dropna()
             if len(both) >= 3:
                 rho, _ = spearmanr(both[b1], both[b2])
-                corr_mat[i, j] = round(rho, 4)
+                corr_mat[i, j] = round(float(rho), 4)
     corr_df = pd.DataFrame(corr_mat, index=benchmarks, columns=benchmarks)
     print(f"  ✓ Spearman correlation matrix computed")
     return corr_df
