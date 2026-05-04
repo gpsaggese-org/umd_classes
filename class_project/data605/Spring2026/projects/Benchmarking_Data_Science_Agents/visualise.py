@@ -149,30 +149,22 @@ def plot_agent_clusters() -> str:
 
 
 def plot_gaia_difficulty() -> str:
-    """Bar chart of GAIA task difficulty distribution."""
-    path = parquet_path("bench_gaia")
-    df = query_df(f"""
-        SELECT Level, COUNT(*) AS count
-        FROM read_parquet('{path}')
-        WHERE Level IS NOT NULL
-        GROUP BY Level
-        ORDER BY Level
-    """)
+    df = pd.read_parquet(parquet_path("bench_gaia"))
+    df = df.loc[:, ~df.columns.duplicated()]
+    level_counts = df["Level"].value_counts().sort_index()
     fig, ax = plt.subplots(figsize=(7, 5))
-    ax.bar(df["Level"].astype(str), df["count"],
+    ax.bar(level_counts.index.astype(str), level_counts.values,
            color=PALETTE["gaia"], alpha=0.85, edgecolor="white")
     ax.set_title("GAIA Task Difficulty Distribution", fontsize=13)
     ax.set_xlabel("Difficulty Level")
     ax.set_ylabel("Number of Tasks")
-    for i, (_, row) in enumerate(df.iterrows()):
-        ax.text(i, row["count"] + 1, str(row["count"]), ha="center", fontsize=10)
+    for i, (idx, val) in enumerate(level_counts.items()):
+        ax.text(i, val + 1, str(val), ha="center", fontsize=10)
     path_out = str(FIGURES_DIR / "gaia_difficulty.png")
     fig.savefig(path_out)
     plt.close(fig)
     print(f"  💾 gaia_difficulty.png")
     return path_out
-
-
 def plot_dendrogram() -> str:
     """Hierarchical clustering dendrogram of agents."""
     linkage_path = TABLES_DIR / "linkage_matrix.npy"
