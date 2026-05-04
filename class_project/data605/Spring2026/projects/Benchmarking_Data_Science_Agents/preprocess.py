@@ -70,14 +70,11 @@ def process_swe_bench() -> pd.DataFrame:
 
 def process_gaia() -> pd.DataFrame:
     path = parquet_path("bench_gaia")
-    # Read with pandas to avoid duplicate column issue
     df_raw = pd.read_parquet(path)
-    # Drop duplicate columns by keeping first occurrence
-    df_raw = df_raw.loc[:, ~df_raw.columns.duplicated()]
     df = pd.DataFrame({
-        "agent":     df_raw["level"].astype(str),
+        "agent":     df_raw["Level"].astype(str),
         "task":      df_raw["task_id"].astype(str),
-        "score":     pd.to_numeric(df_raw["level"], errors="coerce"),
+        "score":     pd.to_numeric(df_raw["Level"], errors="coerce"),
         "benchmark": "gaia",
     }).dropna(subset=["score"])
     print(f"  ✓ gaia: {len(df)} rows")
