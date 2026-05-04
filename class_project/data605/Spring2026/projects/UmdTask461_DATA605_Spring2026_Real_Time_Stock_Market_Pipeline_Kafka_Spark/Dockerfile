@@ -1,30 +1,25 @@
-# Use Python 3.12 slim (already has Python and pip).
-FROM python:3.12-slim
+FROM python:3.11-slim
 
-# Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install CA certificates (needed for HTTPS).
 RUN apt-get update && apt-get install -y \
-    ca-certificates \
+    default-jdk \
+    curl \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
-# Install project specific packages.
-RUN mkdir -p /install
+ENV JAVA_HOME=/usr/lib/jvm/default-java
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+RUN pip install --upgrade pip
+RUN pip install jupyterlab jupyterlab_vim
+
 COPY requirements.txt /install/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+RUN pip install --no-cache-dir -r /install/requirements.txt
 
-# Config.
-COPY etc_sudoers /install/
-COPY etc_sudoers /etc/sudoers
-COPY bashrc /root/.bashrc
+WORKDIR /app
+COPY . /app
 
-# Report package versions.
-COPY version.sh /install/
-RUN /install/version.sh 2>&1 | tee version.log
-
-# Jupyter.
 EXPOSE 8888
 
-CMD ["/bin/bash"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''", "--NotebookApp.password=''"]
