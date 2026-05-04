@@ -150,23 +150,6 @@ def mle_bench_analysis() -> pd.DataFrame:
     return df
 
 
-# ── 5. Spearman correlation ───────────────────────────────────────────────────
-
-def benchmark_correlation(matrix_df: pd.DataFrame) -> pd.DataFrame:
-    """Spearman rank correlation between benchmarks."""
-    benchmarks = [c for c in matrix_df.columns if c != "agent"]
-    n = len(benchmarks)
-    corr_mat = np.full((n, n), np.nan)
-    for i, b1 in enumerate(benchmarks):
-        for j, b2 in enumerate(benchmarks):
-            both = matrix_df[[b1, b2]].dropna()
-            if len(both) >= 3:
-                rho, _ = spearmanr(both[b1], both[b2])
-                corr_mat[i, j] = round(float(rho), 4)
-    corr_df = pd.DataFrame(corr_mat, index=benchmarks, columns=benchmarks)
-    print(f"  ✓ Spearman correlation matrix computed")
-    return corr_df
-
 
 # ── 6. K-Means clustering ────────────────────────────────────────────────────
 
