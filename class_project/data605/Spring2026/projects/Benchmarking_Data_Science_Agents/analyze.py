@@ -260,10 +260,7 @@ def run_analysis() -> dict:
     mle = mle_bench_analysis()
     write_table(pa.Table.from_pandas(mle), "mle_bench_stats")
 
-    print("\n── CORRELATION ──")
-    matrix_df = read_as_pandas("unified_scores")
-    corr = benchmark_correlation(matrix_df)
-    write_table(pa.Table.from_pandas(corr.reset_index().rename(columns={"index": "benchmark"})), "benchmark_correlation")
+    
 
     print("\n── CLUSTERING ──")
     clustering = cluster_agents(matrix_df)
@@ -288,7 +285,7 @@ def run_analysis() -> dict:
         "top_agents": top,
         "arena":      arena,
         "mle":        mle,
-        "corr":       corr,
+        
         "clustering": clustering,
         "gaps":       gaps,
     }
