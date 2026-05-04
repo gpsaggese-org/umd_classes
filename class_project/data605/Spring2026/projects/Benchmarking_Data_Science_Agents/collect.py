@@ -52,7 +52,19 @@ def csv_to_parquet(name: str, csv_path: Path) -> Path:
         null_values=["", "NA", "N/A", "null", "None", "-"],
         strings_can_be_null=True,
     )
-    table = pa_csv.read_csv(csv_path, convert_options=convert_opts)
+    parse_opts = pa_csv.ParseOptions(
+        quote_char='"',
+        double_quote=True,
+    )
+    try:
+        table = pa_csv.read_csv(csv_path,
+                                parse_options=parse_opts,
+                                convert_options=convert_opts)
+    except Exception:
+        # Fallback: use pandas which handles messy CSVs better
+        import pandas as pd
+        df = pd.read_csv(csv_path, on_bad_lines='skip', low_memory=False)
+        table = pa.Table.from_pandas(df)
 
     # Normalise column names
     table = table.rename_columns(
