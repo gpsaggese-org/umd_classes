@@ -1,22 +1,19 @@
 """
 analyze.py
 ----------
-Stage 3: statistical analysis on the unified score matrix.
+Stage 3: Statistical analysis on the 4 real benchmarks.
 
-What changed from v1
---------------------
-- Spearman correlation and gap analysis run as DuckDB SQL queries.
-  DuckDB has built-in CORR(), STDDEV_POP(), AVG() window functions —
-  no scipy pairwise loops, no pandas groupby.
-- Clustering (K-Means, hierarchical) still uses scikit-learn because
-  these are iterative algorithms that genuinely need Python — DuckDB
-  is not a substitute for ML training. But the *input data* comes
-  from a DuckDB query, not from pandas.read_csv().
-- All outputs are written as Parquet via storage.write_table().
+Benchmarks: chatbot_arena, swe_bench, mle_bench, gaia
+Data: 68,185 rows in unified_data.parquet
+      1,274 agents x 4 benchmarks in unified_scores.parquet
 
-Usage
------
-    python src/analyze.py
+Analysis:
+  1. Per-benchmark statistics via DuckDB SQL
+  2. Agent win rate analysis (chatbot_arena)
+  3. Competition score distribution (mle_bench)
+  4. Spearman correlation between benchmarks
+  5. K-Means clustering of agents
+  6. Capability gap analysis
 """
 
 import json
@@ -24,210 +21,293 @@ import numpy as np
 import pandas as pd
 import pyarrow as pa
 from pathlib import Path
+from scipy.stats import spearmanr
 from sklearn.cluster import KMeans
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import linkage, fcluster
 
-from db      import get_conn, query_df, query_arrow, register_view
-from storage import read_as_pandas, parquet_path, write_table
+from db      import query_df, query_arrow, get_conn
+from storage import parquet_path, write_table, read_as_pandas
 
-OUTPUTS_DIR = Path(__file__).resolve().parents[1] / "outputs" / "tables"
-OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
-
-
-# ── 1. Spearman Correlation via DuckDB ────────────────────────────────────────
-# DuckDB's CORR() function computes Pearson correlation natively.
-# For Spearman we rank-transform first (also in SQL), then CORR().
-
-RANK_TRANSFORM_SQL = """
--- Rank each agent's score within each benchmark (dense rank, nulls ignored).
--- This converts raw normalised scores into rank positions, which is the
--- input needed for Spearman correlation.
-SELECT
-    agent,
-    benchmark,
-    score_norm,
-    DENSE_RANK() OVER (
-        PARTITION BY benchmark
-        ORDER BY score_norm DESC NULLS LAST
-    ) AS rank_in_bench
-FROM read_parquet('{path}')
-WHERE score_norm IS NOT NULL
-"""
-
-CORRELATION_SQL = """
--- Pivot ranks to wide format then compute pairwise Pearson correlation
--- on the rank columns (= Spearman correlation on original scores).
--- One row per agent, one column per benchmark containing that agent's rank.
-PIVOT (
-    SELECT agent, benchmark, rank_in_bench
-    FROM ranked_scores
-)
-ON benchmark
-USING MAX(rank_in_bench)
-ORDER BY agent
-"""
-
-GAP_ANALYSIS_SQL = """
--- For each agent x benchmark, compute a z-score relative to that
--- agent's own mean across all benchmarks.
--- z > 1  → 'strength' (standout benchmark for this agent)
--- z < -1 → 'gap'      (weak benchmark for this agent)
-
-WITH agent_stats AS (
-    SELECT
-        agent,
-        AVG(score_norm)     AS agent_mean,
-        STDDEV_POP(score_norm) AS agent_std
-    FROM read_parquet('{path}')
-    WHERE score_norm IS NOT NULL
-    GROUP BY agent
-)
-SELECT
-    n.agent,
-    n.benchmark,
-    n.score_norm,
-    ROUND(
-        CASE
-            WHEN s.agent_std = 0 THEN 0
-            ELSE (n.score_norm - s.agent_mean) / s.agent_std
-        END,
-    3) AS z_score,
-    CASE
-        WHEN s.agent_std = 0                                          THEN 'average'
-        WHEN (n.score_norm - s.agent_mean) / s.agent_std >=  1.0     THEN 'strength'
-        WHEN (n.score_norm - s.agent_mean) / s.agent_std <= -1.0     THEN 'gap'
-        ELSE 'average'
-    END AS flag
-FROM read_parquet('{path}') n
-JOIN agent_stats s ON n.agent = s.agent
-WHERE n.score_norm IS NOT NULL
-ORDER BY n.agent, n.benchmark
-"""
-
-TOP_AGENTS_SQL = """
-SELECT
-    benchmark,
-    agent,
-    score_norm,
-    DENSE_RANK() OVER (PARTITION BY benchmark ORDER BY score_norm DESC) AS rank
-FROM read_parquet('{path}')
-WHERE score_norm IS NOT NULL
-QUALIFY rank <= {top_n}
-ORDER BY benchmark, rank
-"""
+ROOT        = Path(__file__).resolve().parent
+TABLES_DIR  = ROOT / "outputs" / "tables"
+TABLES_DIR.mkdir(parents=True, exist_ok=True
 
 
-def spearman_correlation(matrix_df: pd.DataFrame) -> pd.DataFrame:
+# ── 1. Per-benchmark statistics ───────────────────────────────────────────────
+
+def benchmark_stats() -> pd.DataFrame:
+    """Compute summary statistics for each benchmark using DuckDB."""
+    path = parquet_path("unified_data")
+    df = query_df(f"""
+        SELECT
+            benchmark,
+            COUNT(*)                    AS total_rows,
+            COUNT(DISTINCT agent)       AS unique_agents,
+            COUNT(DISTINCT task)        AS unique_tasks,
+            ROUND(AVG(score), 4)        AS mean_score,
+            ROUND(STDDEV(score), 4)     AS std_score,
+            ROUND(MIN(score), 4)        AS min_score,
+            ROUND(MAX(score), 4)        AS max_score
+        FROM read_parquet('{path}')
+        GROUP BY benchmark
+        ORDER BY benchmark
+    """)
+    print("  ✓ Benchmark statistics computed")
+    return df
+
+
+# ── 2. Top agents per benchmark ───────────────────────────────────────────────
+
+def top_agents_per_benchmark(top_n: int = 20) -> pd.DataFrame:
+    """Find top performing agents in each benchmark."""
+    path = parquet_path("unified_data")
+    df = query_df(f"""
+        WITH ranked AS (
+            SELECT
+                benchmark,
+                agent,
+                ROUND(AVG(score), 4)    AS mean_score,
+                COUNT(*)                AS n_tasks,
+                DENSE_RANK() OVER (
+                    PARTITION BY benchmark
+                    ORDER BY AVG(score) DESC
+                )                       AS rank
+            FROM read_parquet('{path}')
+            WHERE agent IS NOT NULL
+            GROUP BY benchmark, agent
+        )
+        SELECT * FROM ranked
+        WHERE rank <= {top_n}
+        ORDER BY benchmark, rank
+    """)
+    print(f"  ✓ Top {top_n} agents per benchmark computed")
+    return df
+
+
+# ── 3. Chatbot Arena win rate analysis ────────────────────────────────────────
+
+def chatbot_arena_analysis() -> pd.DataFrame:
     """
-    Compute pairwise Spearman rank correlation between benchmarks.
-    Uses scipy since it handles NaN-aware pairwise correlation cleanly.
-    Input matrix_df comes from DuckDB (not from pandas.read_csv).
+    Analyse win rates per model in Chatbot Arena.
+    Uses DuckDB window functions for efficiency.
     """
-    from scipy.stats import spearmanr
+    path = parquet_path("bench_chatbot_arena")
+    df = query_df(f"""
+        WITH model_scores AS (
+            SELECT
+                model_a AS model,
+                CASE WHEN winner = 'model_a' THEN 1.0
+                     WHEN winner = 'tie' THEN 0.5
+                     ELSE 0.0 END AS won
+            FROM read_parquet('{path}')
+            WHERE model_a IS NOT NULL
+            UNION ALL
+            SELECT
+                model_b AS model,
+                CASE WHEN winner = 'model_b' THEN 1.0
+                     WHEN winner = 'tie' THEN 0.5
+                     ELSE 0.0 END AS won
+            FROM read_parquet('{path}')
+            WHERE model_b IS NOT NULL
+        )
+        SELECT
+            model,
+            COUNT(*)                        AS total_battles,
+            ROUND(SUM(won), 0)              AS wins,
+            ROUND(AVG(won) * 100, 2)        AS win_rate_pct
+        FROM model_scores
+        GROUP BY model
+        HAVING COUNT(*) >= 10
+        ORDER BY win_rate_pct DESC
+        LIMIT 50
+    """)
+    print(f"  ✓ Chatbot Arena win rates: {len(df)} models")
+    return df
+
+
+# ── 4. MLE-bench competition analysis ────────────────────────────────────────
+
+def mle_bench_analysis() -> pd.DataFrame:
+    """Analyse score distributions across Kaggle competitions."""
+    path = parquet_path("bench_mle_bench")
+    df = query_df(f"""
+        SELECT
+            competition,
+            COUNT(*)                    AS n_teams,
+            ROUND(AVG(score), 4)        AS mean_score,
+            ROUND(STDDEV(score), 4)     AS std_score,
+            ROUND(MIN(score), 4)        AS min_score,
+            ROUND(MAX(score), 4)        AS max_score
+        FROM read_parquet('{path}')
+        WHERE score IS NOT NULL
+        GROUP BY competition
+        ORDER BY n_teams DESC
+    """)
+    print(f"  ✓ MLE-bench competition stats: {len(df)} competitions")
+    return df
+
+
+# ── 5. Spearman correlation ───────────────────────────────────────────────────
+
+def benchmark_correlation(matrix_df: pd.DataFrame) -> pd.DataFrame:
+    """Spearman rank correlation between benchmarks."""
     benchmarks = [c for c in matrix_df.columns if c != "agent"]
     n = len(benchmarks)
     corr_mat = np.full((n, n), np.nan)
-
     for i, b1 in enumerate(benchmarks):
         for j, b2 in enumerate(benchmarks):
             both = matrix_df[[b1, b2]].dropna()
             if len(both) >= 3:
                 rho, _ = spearmanr(both[b1], both[b2])
                 corr_mat[i, j] = round(rho, 4)
+    corr_df = pd.DataFrame(corr_mat, index=benchmarks, columns=benchmarks)
+    print(f"  ✓ Spearman correlation matrix computed")
+    return corr_df
 
-    return pd.DataFrame(corr_mat, index=benchmarks, columns=benchmarks)
 
+# ── 6. K-Means clustering ────────────────────────────────────────────────────
 
 def cluster_agents(matrix_df: pd.DataFrame, k_range: tuple = (2, 6)) -> dict:
-    """
-    K-Means and hierarchical clustering on the agent x benchmark matrix.
-    Data comes from DuckDB; clustering runs in scikit-learn (appropriate
-    tool for iterative ML algorithms).
-    """
+    """Cluster agents by benchmark performance profile."""
     agents = matrix_df["agent"].tolist() if "agent" in matrix_df.columns else matrix_df.index.tolist()
     score_cols = [c for c in matrix_df.columns if c != "agent"]
     X_raw = matrix_df[score_cols].values
 
-    # Impute missing scores with column mean
     X = SimpleImputer(strategy="mean").fit_transform(X_raw)
     X_scaled = StandardScaler().fit_transform(X)
 
-    # K-Means: pick best k by silhouette
-    sil_scores: dict[int, float] = {}
+    sil_scores = {}
     for k in range(k_range[0], k_range[1] + 1):
         km = KMeans(n_clusters=k, random_state=42, n_init=10)
         labels = km.fit_predict(X_scaled)
-        sil_scores[k] = round(silhouette_score(X_scaled, labels), 4)
-        print(f"  K={k}  silhouette={sil_scores[k]:.4f}")
+        if len(set(labels)) > 1:
+            sil_scores[k] = round(silhouette_score(X_scaled, labels), 4)
+            print(f"  K={k} silhouette={sil_scores[k]:.4f}")
 
-    best_k = max(sil_scores, key=sil_scores.get)
+    best_k = max(sil_scores, key=sil_scores.get) if sil_scores else 2
     km_best = KMeans(n_clusters=best_k, random_state=42, n_init=10)
     km_labels = km_best.fit_predict(X_scaled)
-    print(f"  ✓ Best k={best_k} (silhouette={sil_scores[best_k]})")
-
-    # Hierarchical clustering
     linkage_matrix = linkage(X_scaled, method="ward")
     hier_labels = fcluster(linkage_matrix, best_k, criterion="maxclust")
 
+    print(f"  ✓ Best k={best_k} (silhouette={sil_scores.get(best_k, 'N/A')})")
     return {
-        "agents":          agents,
-        "km_labels":       km_labels.tolist(),
-        "hier_labels":     hier_labels.tolist(),
-        "best_k":          best_k,
-        "sil_scores":      sil_scores,
-        "linkage_matrix":  linkage_matrix,
+        "agents":         agents,
+        "km_labels":      km_labels.tolist(),
+        "hier_labels":    hier_labels.tolist(),
+        "best_k":         best_k,
+        "sil_scores":     sil_scores,
+        "linkage_matrix": linkage_matrix,
     }
 
 
-def run_analysis() -> dict:
+# ── 7. Capability gap analysis ───────────────────────────────────────────────
+
+def capability_gap_analysis() -> pd.DataFrame:
     """
-    Full analysis pipeline: correlation → clustering → gap analysis.
-    All heavy aggregation runs in DuckDB; clustering runs in scikit-learn.
+    Z-score based gap analysis using DuckDB.
+    Identifies where each agent over/underperforms vs their own average.
     """
     path = parquet_path("unified_scores")
-    norm_path = parquet_path("normalised_scores")
+    benchmarks = [c for c in pd.read_parquet(path).columns if c != "agent"]
 
-    print("── CORRELATION ──")
-    matrix_df = query_df(f"SELECT * FROM read_parquet('{path}')")
-    corr = spearman_correlation(matrix_df)
-    corr_arrow = pa.Table.from_pandas(corr.reset_index().rename(columns={"index": "benchmark"}))
-    write_table(corr_arrow, "benchmark_correlation")
-    print(f"  ✓ Correlation matrix saved")
+    frames = []
+    for bench in benchmarks:
+        try:
+            df = query_df(f"""
+                WITH stats AS (
+                    SELECT
+                        AVG("{bench}")      AS mean_score,
+                        STDDEV("{bench}")   AS std_score
+                    FROM read_parquet('{path}')
+                    WHERE "{bench}" IS NOT NULL
+                )
+                SELECT
+                    agent,
+                    '{bench}'                           AS benchmark,
+                    "{bench}"                           AS score_norm,
+                    CASE
+                        WHEN s.std_score = 0 THEN 0
+                        ELSE ROUND(("{bench}" - s.mean_score) / s.std_score, 3)
+                    END                                 AS z_score,
+                    CASE
+                        WHEN s.std_score = 0 THEN 'average'
+                        WHEN ("{bench}" - s.mean_score) / s.std_score >= 1 THEN 'strength'
+                        WHEN ("{bench}" - s.mean_score) / s.std_score <= -1 THEN 'gap'
+                        ELSE 'average'
+                    END                                 AS flag
+                FROM read_parquet('{path}'), stats s
+                WHERE "{bench}" IS NOT NULL
+            """)
+            frames.append(df)
+        except Exception as e:
+            print(f"  ⚠ Gap analysis failed for {bench}: {e}")
+
+    if not frames:
+        return pd.DataFrame()
+    result = pd.concat(frames, ignore_index=True)
+    print(f"  ✓ Gap analysis: {len(result)} rows")
+    return result
+
+
+# ── Orchestrator ──────────────────────────────────────────────────────────────
+
+def run_analysis() -> dict:
+    print("=" * 50)
+    print("ANALYZE: Statistics + Clustering + Gaps")
+    print("=" * 50)
+
+    print("\n── BENCHMARK STATS ──")
+    stats = benchmark_stats()
+    write_table(pa.Table.from_pandas(stats), "benchmark_stats")
+    print(stats.to_string())
+
+    print("\n── TOP AGENTS ──")
+    top = top_agents_per_benchmark()
+    write_table(pa.Table.from_pandas(top), "top_agents")
+
+    print("\n── CHATBOT ARENA WIN RATES ──")
+    arena = chatbot_arena_analysis()
+    write_table(pa.Table.from_pandas(arena), "chatbot_arena_winrates")
+
+    print("\n── MLE-BENCH COMPETITIONS ──")
+    mle = mle_bench_analysis()
+    write_table(pa.Table.from_pandas(mle), "mle_bench_stats")
+
+    print("\n── CORRELATION ──")
+    matrix_df = read_as_pandas("unified_scores")
+    corr = benchmark_correlation(matrix_df)
+    write_table(pa.Table.from_pandas(corr.reset_index().rename(columns={"index": "benchmark"})), "benchmark_correlation")
 
     print("\n── CLUSTERING ──")
     clustering = cluster_agents(matrix_df)
     cluster_df = pd.DataFrame({
-        "agent":         clustering["agents"],
-        "kmeans_cluster":  clustering["km_labels"],
-        "hier_cluster":    clustering["hier_labels"],
+        "agent":          clustering["agents"],
+        "kmeans_cluster": clustering["km_labels"],
+        "hier_cluster":   clustering["hier_labels"],
     })
     write_table(pa.Table.from_pandas(cluster_df), "cluster_labels")
-    np.save(OUTPUTS_DIR / "linkage_matrix.npy", clustering["linkage_matrix"])
-    with open(OUTPUTS_DIR / "silhouette_scores.json", "w") as f:
+    np.save(str(TABLES_DIR / "linkage_matrix.npy"), clustering["linkage_matrix"])
+    with open(TABLES_DIR / "silhouette_scores.json", "w") as f:
         json.dump({str(k): v for k, v in clustering["sil_scores"].items()}, f, indent=2)
-    print(f"  ✓ Cluster labels saved")
 
-    print("\n── GAP ANALYSIS (DuckDB) ──")
-    gaps = query_df(GAP_ANALYSIS_SQL.format(path=norm_path))
-    write_table(pa.Table.from_pandas(gaps), "capability_gaps")
-    strengths = (gaps["flag"] == "strength").sum()
-    gap_count  = (gaps["flag"] == "gap").sum()
-    print(f"  ✓ {strengths} strengths, {gap_count} gaps identified")
-
-    print("\n── TOP AGENTS (DuckDB) ──")
-    top_agents = query_df(TOP_AGENTS_SQL.format(path=norm_path, top_n=10))
-    write_table(pa.Table.from_pandas(top_agents), "top_agents")
-    print(f"  ✓ Top agents table saved")
+    print("\n── CAPABILITY GAPS ──")
+    gaps = capability_gap_analysis()
+    if not gaps.empty:
+        write_table(pa.Table.from_pandas(gaps), "capability_gaps")
 
     print("\n✅ Analysis complete")
     return {
-        "correlation":    corr,
-        "clustering":     clustering,
-        "gaps":           gaps,
-        "top_agents":     top_agents,
+        "stats":      stats,
+        "top_agents": top,
+        "arena":      arena,
+        "mle":        mle,
+        "corr":       corr,
+        "clustering": clustering,
+        "gaps":       gaps,
     }
 
 
