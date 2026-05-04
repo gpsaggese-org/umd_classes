@@ -121,7 +121,7 @@ def build_agent_benchmark_matrix(frames: list) -> pd.DataFrame:
     matrix.columns.name = None
 
     # Keep agents in 2+ benchmarks
-    valid = matrix.notna().sum(axis=1) >= 2
+    valid = matrix.notna().sum(axis=1) >= 1
     matrix = matrix[valid]
     print(f"  ✓ Matrix: {len(matrix)} agents x {len(matrix.columns)} benchmarks")
     return matrix
