@@ -49,18 +49,13 @@ def process_mle_bench() -> pd.DataFrame:
 
 
 def process_swe_bench() -> pd.DataFrame:
-    """
-    SWE-bench: GitHub issue resolution tasks.
-    Schema: instance_id, repo, problem_statement, created_at
-    No score column — we treat repo as the grouping variable.
-    """
     path = parquet_path("bench_swe_bench")
     df = query_df(f"""
         SELECT
-            repo                    AS agent,
-            instance_id             AS task,
-            0.0                     AS score,
-            'swe_bench'             AS benchmark
+            repo AS agent,
+            instance_id AS task,
+            LENGTH(problem_statement) AS score,
+            'swe_bench' AS benchmark
         FROM read_parquet('{path}')
         WHERE instance_id IS NOT NULL
     """)
