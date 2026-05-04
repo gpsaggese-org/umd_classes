@@ -69,10 +69,6 @@ def process_swe_bench() -> pd.DataFrame:
 
 
 def process_gaia() -> pd.DataFrame:
-    """
-    GAIA: Multi-step reasoning tasks with difficulty levels.
-    Schema: Question, Level, Final answer, Annotator Metadata
-    """
     path = parquet_path("bench_gaia")
     df = query_df(f"""
         SELECT
@@ -80,7 +76,9 @@ def process_gaia() -> pd.DataFrame:
             task_id                 AS task,
             CAST(level AS DOUBLE)   AS score,
             'gaia'                  AS benchmark
-        FROM read_parquet('{path}')
+        FROM (
+            SELECT task_id, level FROM read_parquet('{path}')
+        )
         WHERE level IS NOT NULL
     """)
     print(f"  ✓ gaia: {len(df)} rows")
@@ -88,48 +86,32 @@ def process_gaia() -> pd.DataFrame:
 
 
 def process_chatbot_arena() -> pd.DataFrame:
-    """
-    Chatbot Arena: Human preference votes between LLMs.
-    Schema: model_a, model_b, winner, language, turn, toxic
-    We create one row per model per conversation showing if they won.
-    """
     path = parquet_path("bench_chatbot_arena")
-
-    # Model A rows
     df_a = query_df(f"""
         SELECT
             model_a                                     AS agent,
-            conversation_id                             AS task,
+            question_id                                 AS task,
             CASE WHEN winner = 'model_a' THEN 1.0
                  WHEN winner = 'tie' THEN 0.5
                  ELSE 0.0 END                           AS score,
-            language,
-            turn,
             'chatbot_arena'                             AS benchmark
         FROM read_parquet('{path}')
         WHERE model_a IS NOT NULL
     """)
-
-    # Model B rows
     df_b = query_df(f"""
         SELECT
             model_b                                     AS agent,
-            conversation_id                             AS task,
+            question_id                                 AS task,
             CASE WHEN winner = 'model_b' THEN 1.0
                  WHEN winner = 'tie' THEN 0.5
                  ELSE 0.0 END                           AS score,
-            language,
-            turn,
             'chatbot_arena'                             AS benchmark
         FROM read_parquet('{path}')
         WHERE model_b IS NOT NULL
     """)
-
     df = pd.concat([df_a, df_b], ignore_index=True)
     print(f"  ✓ chatbot_arena: {len(df)} rows")
     return df
-
-
 def build_agent_benchmark_matrix(frames: list) -> pd.DataFrame:
     """
     Build agent x benchmark win rate matrix.
