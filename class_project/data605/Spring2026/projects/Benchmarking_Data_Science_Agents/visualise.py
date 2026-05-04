@@ -114,26 +114,7 @@ def plot_mle_bench_scores() -> str:
     return path_out
 
 
-def plot_correlation_heatmap() -> str:
-    """Benchmark correlation heatmap."""
-    corr = read_as_pandas("benchmark_correlation")
-    if "benchmark" in corr.columns:
-        corr = corr.set_index("benchmark")
-    corr.index   = [LABELS.get(c, c) for c in corr.index]
-    corr.columns = [LABELS.get(c, c) for c in corr.columns]
 
-    fig, ax = plt.subplots(figsize=(7, 6))
-    mask = np.triu(np.ones_like(corr, dtype=bool), k=1)
-    sns.heatmap(corr, ax=ax, mask=mask, cmap="coolwarm", center=0,
-                vmin=-1, vmax=1, annot=True, fmt=".2f", square=True,
-                linewidths=0.5, cbar_kws={"label": "Spearman rho"})
-    ax.set_title("Benchmark Rank Correlation", fontsize=13)
-    ax.tick_params(axis="x", rotation=30)
-    path = str(FIGURES_DIR / "correlation_heatmap.png")
-    fig.savefig(path)
-    plt.close(fig)
-    print(f"  💾 correlation_heatmap.png")
-    return path
 
 
 def plot_agent_clusters() -> str:
@@ -231,8 +212,8 @@ def generate_all_figures() -> list:
     print("\n── MLE-BENCH SCORES ──")
     saved.append(plot_mle_bench_scores())
 
-    print("\n── CORRELATION HEATMAP ──")
-    saved.append(plot_correlation_heatmap())
+    
+    
 
     print("\n── AGENT CLUSTERS ──")
     saved.append(plot_agent_clusters())
