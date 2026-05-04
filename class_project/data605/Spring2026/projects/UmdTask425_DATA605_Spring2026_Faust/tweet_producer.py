@@ -27,8 +27,8 @@ def read_tweets(file_path):
             print(f"Sent tweet {i}: {tweet['text'][:50]}")
             # simulate real-time stream by waiting 0.1 seconds
             time.sleep(0.1)
-            # stop after 1000 tweets for testing
-            if i >= 1000:
+            # stop after 200 tweets for testing
+            if i >= 200:
                 break
 
 if __name__ == '__main__':
