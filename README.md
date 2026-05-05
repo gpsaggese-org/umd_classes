@@ -1,38 +1,37 @@
 # GP's University of Maryland Machine Learning Classes
 <img src="https://1000logos.net/wp-content/uploads/2022/07/University-of-Maryland-Logo.png" alt="University of Maryland Logo" width="200"/>
 
-## Classes
+## Courses
 
 This repository contains course materials, tutorials, and projects for two
 graduate-level courses taught at the University of Maryland:
 
-- **DATA605: Big Data Systems**: covers scalable data engineering, distributed
-  systems, and big data tools
-  - [data605/README.md](data605/README.md)
-- **MSML610: Advanced Machine Learning**: covers advanced ML techniques,
-  research methods, and applied projects
-  - [data605/README.md](msml610/README.md)
-- Class project
-  ```markdown
-  - [ ] [class_project/README.md](class_project/README.md)
-  - [ ] [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md)
-  - [ ] [class_project/X_in_60_mins.format_rules.md](class_project/X_in_60_mins.format_rules.md)
-  ```
+- **DATA605: Big Data Systems** — scalable data engineering, distributed systems,
+  and big data tools ([data605/README.md](data605/README.md))
+- **MSML610: Advanced Machine Learning** — advanced ML techniques, research methods,
+  and applied projects ([msml610/README.md](msml610/README.md))
 
-## Research Team
+## Class Projects
 
-- Open an issue called "On-boarding <your_name>" to track going through the
-  documentation
-  - Post the following checklist and go through the documents carefully and mark
-    them as done, when you have internalized the content (it might require
-    multiple read-through)
-  ```markdown
-  - [ ] [policies/*.md](policies/*.md)
-  - [ ] [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md)
-  - [ ] [class_project/X_in_60_mins.format_rules.md](class_project/X_in_60_mins.format_rules.md)
-  - [ ] [class_project/how_to_contribute.md](class_project/how_to_contribute.md)
-    for guidelines on submitting fixes, improvements, and new content.
-  ```
+Course-specific project templates, guidelines, and student project resources are
+in the [class_project/](class_project/) directory. See:
+- [class_project/README.md](class_project/README.md) — project overview
+- [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md) —
+  required learning materials
+- [class_project/how_to_contribute.md](class_project/how_to_contribute.md) —
+  contribution guidelines
+
+## Research Team Onboarding
+
+New team members should open an issue "On-boarding <your_name>" to track progress
+through essential documentation:
+- [policies/](policies/) — team policies and standards
+- [class_project/tutorials_checklist.md](class_project/tutorials_checklist.md) —
+  required tutorials
+- [class_project/X_in_60_mins.format_rules.md](class_project/X_in_60_mins.format_rules.md) —
+  content format requirements
+- [class_project/how_to_contribute.md](class_project/how_to_contribute.md) —
+  contribution guidelines
 
 ## Repository Structure
 | Directory                          | Description                                                               |
