@@ -14,11 +14,17 @@
 - Fixed docker working directory.
 - Removed outliers where GrLivArea > 4000.
 - Applied log transformation to SalePrice to address skewness.
-- Created df_no_outliers and saved progress to train_clean.csv.
+- Created df_no_outliers and saved progress to `train_clean.csv`.
 
 ## [2026-05-02]
 - Finalized EDA by imputing missing values and one-hot encoding categorical values.
-- Saved final model-ready data to train_clean.csv.
-- Updated mlflow_utils.py to handle experiment lifecycle, metrics logging, and model artifact serialization.
-- Implemented mlflow.API.ipynb and tested by logging test parameters and metrics.
+- Saved final model-ready data to `train_clean.csv`.
+- Updated `mlflow_utils.py` to handle experiment lifecycle, metrics logging, and model artifact serialization.
+- Implemented `mlflow.API.ipynb` and tested by logging test parameters and metrics.
 - Configured Jupytext pairing for all notebooks.
+
+## [2026-05-04]
+- Created `run_mlflow.sh` to standardize MLflow UI launch with specific host/port permissions.
+- Updated `mlflow_utils.py` to use a Python context manager.
+- Performed linear and Ridge regression runs on an 80/20 split of `train_clean.csv`.
+- Performed an Alpha hyperparameter sweep to determine optimal hyperparamter tuning.
