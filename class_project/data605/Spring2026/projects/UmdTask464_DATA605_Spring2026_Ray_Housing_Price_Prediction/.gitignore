@@ -1,0 +1,16 @@
+# Jupyter
+.ipynb_checkpoints/
+.jupyter/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Docker build artifacts
+docker_build.version.log
+version.log
+
+# OS
+.DS_Store
+Thumbs.db
