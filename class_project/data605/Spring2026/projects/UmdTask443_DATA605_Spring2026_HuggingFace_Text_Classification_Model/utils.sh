@@ -1,21 +1,7 @@
 #!/bin/bash
-# """
-# Utility functions for Docker container management.
-# """
 
-
-# #############################################################################
 # General utilities
-# #############################################################################
-
-
 run() {
-    # """
-    # Execute a command with echo output.
-    #
-    # :param cmd: Command string to execute
-    # :return: Exit status of the executed command
-    # """
     cmd="$*"
     echo "> $cmd"
     eval "$cmd"
@@ -23,27 +9,14 @@ run() {
 
 
 enable_verbose_mode() {
-    # """
-    # Enable shell command tracing (set -x) when VERBOSE is set to 1.
-    #
-    # Reads the VERBOSE variable set by parse_docker_jupyter_args.
-    # Call this after parsing args to activate tracing for the rest of the script.
-    # """
     if [[ $VERBOSE == 1 ]]; then
         set -x
     fi
 }
 
 
-# #############################################################################
 # Argument parsing
-# #############################################################################
-
-
 _print_default_help() {
-    # """
-    # Print usage information and available default options for docker scripts.
-    # """
     echo "Usage: $(basename $0) [options]"
     echo ""
     echo "Options:"
@@ -54,15 +27,6 @@ _print_default_help() {
 
 
 parse_default_args() {
-    # """
-    # Parse default command-line arguments for docker scripts.
-    #
-    # Sets VERBOSE and FORCE variables in the caller's scope. Enables set -x
-    # when -v is passed. Prints help and exits when -h is passed.
-    # Updates OPTIND so the caller can shift away processed arguments.
-    #
-    # :param @: command-line arguments forwarded from the calling script
-    # """
     VERBOSE=0
     FORCE=0
     while getopts "fhv" flag; do

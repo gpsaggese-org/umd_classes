@@ -1,28 +1,29 @@
 #!/bin/bash
-# """
-# Display versions of installed tools and packages.
-#
-# This script prints version information for Python, pip, Jupyter, and all
-# installed Python packages. Used for debugging and documentation purposes
-# to verify the Docker container environment setup.
-# """
+# Report key package versions baked into this image.
 
-# Display Python 3 version.
-echo "# Python3"
-python3 --version
+echo "============================================================"
+echo " Image version report — $(date -u '+%Y-%m-%d %H:%M UTC')"
+echo "============================================================"
+echo "Python   : $(python --version 2>&1)"
+echo "pip      : $(pip --version 2>&1)"
+echo "------------------------------------------------------------"
 
-# Display pip version.
-echo "# pip3"
-pip3 --version
+packages=(
+    torch
+    transformers
+    datasets
+    accelerate
+    evaluate
+    scikit-learn
+    pandas
+    numpy
+    optuna
+    jupyterlab
+)
 
-# Display Jupyter version.
-echo "# jupyter"
-jupyter --version
+for pkg in "${packages[@]}"; do
+    version=$(python -c "import importlib.metadata; print(importlib.metadata.version('$pkg'))" 2>/dev/null || echo "not installed")
+    printf "%-20s %s\n" "$pkg" "$version"
+done
 
-# List all installed Python packages and their versions.
-echo "# Python packages"
-pip3 list
-
-# Template for adding additional tool versions.
-# echo "# mongo"
-# mongod --version
+echo "============================================================"

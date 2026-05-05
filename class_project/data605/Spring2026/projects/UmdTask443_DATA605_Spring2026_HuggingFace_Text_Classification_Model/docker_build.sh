@@ -1,40 +1,22 @@
 #!/bin/bash
-# """
-# Build a Docker container image for the project.
-#
-# This script sets up the build environment with error handling and command
-# tracing, loads Docker configuration from docker_name.sh, and builds the
-# Docker image using the build_container_image utility function. It supports
-# both single-architecture and multi-architecture builds via the
-# DOCKER_BUILD_MULTI_ARCH environment variable.
-# """
+#   ./docker_build.sh --no-cache  # force full rebuild (re-installs all deps)
 
-# Exit immediately if any command exits with a non-zero status.
 set -e
 
-# Import the utility functions.
-GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/docker_utils.sh"
+load_docker_vars
 
-# Parse default args (-h, -v) and enable set -x if -v is passed.
-# Shift processed option flags so remaining args are passed to the build.
-parse_default_args "$@"
-shift $((OPTIND-1))
-
-# Load Docker configuration variables (REPO_NAME, IMAGE_NAME, FULL_IMAGE_NAME).
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
-
-# Configure Docker build settings.
-# Enable BuildKit for improved build performance and features.
+# Enable BuildKit for faster, cached layer builds.
 export DOCKER_BUILDKIT=1
-#export DOCKER_BUILDKIT=0
 
-# Configure single-architecture build (set to 1 for multi-arch build).
-#export DOCKER_BUILD_MULTI_ARCH=1
-export DOCKER_BUILD_MULTI_ARCH=0
+# Pass any extra args (e.g. --no-cache) straight through to docker build.
+EXTRA_ARGS="$*"
 
-# Build the container image.
-# Pass extra arguments (e.g., --no-cache) via command line after -v.
-build_container_image "$@"
+run "docker build $EXTRA_ARGS -t $FULL_IMAGE_NAME $SCRIPT_DIR"
+
+echo ""
+echo "✅  Image built: $FULL_IMAGE_NAME"
+echo "    Run './docker_bash.sh'    to open an interactive shell."
+echo "    Run './docker_train.sh'   to start fine-tuning."
+echo "    Run './docker_jupyter.sh' to launch Jupyter Lab."

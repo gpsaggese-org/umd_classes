@@ -1,26 +1,19 @@
 #!/bin/bash
-# """
-# Remove Docker container image for the project.
-#
-# This script cleans up Docker images by removing the container image
-# matching the project configuration. Useful for freeing disk space or
-# ensuring a fresh build.
-# """
-
-# Exit immediately if any command exits with a non-zero status.
+# Remove the project Docker image
+#   ./docker_clean.sh --volumes # also removes the HF cache named volume
 set -e
 
-# Import the utility functions.
-GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/docker_utils.sh"
+load_docker_vars
 
-# Parse default args (-h, -v) and enable set -x if -v is passed.
-parse_default_args "$@"
+run "docker image rm -f $FULL_IMAGE_NAME" || true
 
-# Load Docker configuration variables for this script.
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
+if [[ "$1" == "--volumes" ]]; then
+    echo "Also removing named volume: $HF_CACHE_VOLUME"
+    run "docker volume rm $HF_CACHE_VOLUME" || true
+fi
 
-# Remove the container image.
-remove_container_image
+echo ""
+run "docker ps -a"
+echo "✅  Cleanup complete. Run './docker_build.sh' to rebuild."

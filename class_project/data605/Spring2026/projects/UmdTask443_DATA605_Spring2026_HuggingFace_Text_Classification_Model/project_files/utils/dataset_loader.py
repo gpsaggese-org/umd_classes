@@ -13,18 +13,14 @@ from config import (
     TRAIN_SUBSET, EVAL_SUBSET, SEED
 )
 
-
 def load_ag_news():
-
-    #Load the AG News dataset from HuggingFace hub
-    #Each split has columns: 'text', 'label'
-
-    print(f"Loading '{DATASET_NAME}' from HuggingFace")
     dataset = load_dataset(DATASET_NAME)
-    print(f"Train size : {len(dataset['train']):,}")
-    print(f"Test size  : {len(dataset['test']):,}")
+    # Split train into train + validation (90/10)
+    split = dataset["train"].train_test_split(test_size=0.1, seed=SEED)
+    dataset["train"] = split["train"]
+    dataset["validation"] = split["test"]
+    # Keep the original test set completely untouched
     return dataset
-
 
 def get_subsets(dataset):
     if TRAIN_SUBSET:

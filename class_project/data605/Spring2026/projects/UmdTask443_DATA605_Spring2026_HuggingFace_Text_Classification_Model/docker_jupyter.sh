@@ -1,39 +1,24 @@
 #!/bin/bash
-# """
-# Execute Jupyter Lab in a Docker container.
-#
-# This script launches a Docker container running Jupyter Lab with
-# configurable port, directory mounting, and vim bindings. It passes
-# command-line options to the run_jupyter.sh script inside the container.
-#
-# Usage:
-# > docker_jupyter.sh [options]
-# """
 
-# Exit immediately if any command exits with a non-zero status.
+#   JUPYTER_PORT=8889 ./docker_jupyter.sh
+# http://localhost:8888/lab
 set -e
 
-# Import the utility functions.
-GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/docker_utils.sh"
+load_docker_vars
 
-# Parse command-line options and set Jupyter configuration variables.
-parse_docker_jupyter_args "$@"
+CONTAINER_NAME="${IMAGE_NAME}_jupyter"
 
-# Load Docker configuration variables for this script.
-get_docker_vars_script ${BASH_SOURCE[0]}
-source $DOCKER_NAME
-print_docker_vars
+# -p maps host:container port; -d runs detached so the terminal stays free.
+OPTS=$(base_run_opts "$CONTAINER_NAME" "-d -p ${JUPYTER_PORT}:8888")
 
-# List available Docker images and inspect architecture.
-list_and_inspect_docker_image
+echo "🔬  Starting Jupyter Lab on http://localhost:${JUPYTER_PORT}/lab"
+echo "    (container: $CONTAINER_NAME)"
+echo ""
 
-# Run the Docker container with Jupyter Lab.
-CMD=$(get_run_jupyter_cmd "${BASH_SOURCE[0]}" "$OLD_CMD_OPTS")
-CONTAINER_NAME=$IMAGE_NAME
-# Kill existing container if -f flag is set.
-kill_existing_container_if_forced
+run "docker run $OPTS $FULL_IMAGE_NAME /bin/bash run_jupyter.sh"
 
-DOCKER_CMD=$(get_docker_jupyter_command)
-DOCKER_CMD_OPTS=$(get_docker_jupyter_options $CONTAINER_NAME $JUPYTER_HOST_PORT $JUPYTER_USE_VIM)
-run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME $CMD"
+echo ""
+echo "✅  Jupyter is running. Open: http://localhost:${JUPYTER_PORT}/lab"
+echo "    Stop with: docker stop $CONTAINER_NAME"
