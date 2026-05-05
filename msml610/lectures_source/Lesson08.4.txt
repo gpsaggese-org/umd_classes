@@ -25,9 +25,6 @@ MSML610: Advanced Machine Learning
 
 **References**:
 
-- AIMA (Artificial Intelligence: a Modern Approach)
-
-- Pearl et al., The Book of Why, 2017
 - Facure, Causal Inference in Python, 2023
 
 ::::
@@ -113,8 +110,8 @@ digraph CausalDiagram {
 :::
 
 * The Fundamental Problem of Causal Inference
-- **The Fundamental Problem of Causal Inference**
-  - _"You can never observe the same unit with and without treatment"_
+- _"You can never observe the same unit with and without treatment"_
+  - One potential outcome is real, the other remains counterfactual
 
 ::: columns
 :::: {.column width=50%}
