@@ -1,6 +1,18 @@
-ray[default]
-scikit-learn
-pandas
-matplotlib
-fastapi
-uvicorn
+# Ray and its components for distributed compute
+# Note: ray[default] already includes core ray; tune and serve add their extras
+ray[default,tune,serve]==2.49.0
+
+# ML stack
+scikit-learn==1.5.2
+pandas==2.2.3
+numpy==1.26.4
+matplotlib==3.9.2
+
+# Web API stack (Ray Serve dependencies)
+fastapi==0.115.0
+uvicorn==0.31.0
+
+# Misc
+requests==2.32.3
+joblib==1.4.2
+pyarrow==17.0.0
