@@ -607,26 +607,33 @@ digraph SalesModelExtended {
   each other (i.e., exchangeable), then the difference in amount sold be entirely
   attributed to the price cut
 
-* Exchangeability Property
-- The exchangeability property is equivalent to having _potential outcomes_ being
+* Independence Property (Aka Unconfoundedness)
+- **Definition**: the independence property means that _potential outcomes_ are
   independent of the treatment:
   $$
   (Y_0, Y_1) \perp T
   $$
-  i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
-  potential outcomes (i.e., $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$)
 
-- **Note**
+- It's usually stated conditional on covariates: $(Y_0, Y_1) \perp T | X$
+  - Without $X$ it implies complete randomization (like a perfect experiment)
+  - In observational settings, we almost always need conditioning
+
+- **Implication**
+  - $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about potential
+    outcomes
+  - $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$: both groups have the same $Y_0$ in average
+    (exchangeable)
+
+* Independence Property (Aka Unconfoundedness)
+- In $(Y_0, Y_1) \perp T$
   - We are not asking for _observed outcome_ $Y$ and treatment $T$ to be
-    independent
-    - This means that treatment has no effect
-  - We are asking for the potential outcome to be independent of the treatment
-    - The outcome observed if the subjects received the treatment is independent
-      if it received the treatment or not
-  - "Knowing whether someone received the treatment tells you nothing about what
-    their outcome would have been without it"
-  - The treatment is the only thing that causes difference in outcome between
-    treatment and control
+    independent (i.e., the treatment has no effect)
+  - We are asking for each _potential outcome_ $Y_0$ and $Y_1$ to be independent
+    of the treatment
+  - _"Knowing whether someone received the treatment tells you nothing about what
+    their outcome would have been without it"_
+  - Treatment assignment is as good as random, so differences in outcomes can be
+    attributed to the treatment
 
 - **Sales Example**
   - We can't tell apart businesses that chose to engage in sales from those that
@@ -634,34 +641,40 @@ digraph SalesModelExtended {
 
 * Phases of Causal Inference
 - A causal inference problem is often broken down into two steps:
-  - **Identification**
+  1. **Identification**
      - Express the causal quantity of interest in terms of observable data
      - Remove the bias, making treated and untreated comparable, so that all
        the difference can be attributed to the treatment effect
        $$\EE[Y_0 | T=0] = \EE[Y_0 | T=1]$$
      - You need to know how the treatment was distributed or assigned
      - This is why data alone (observational) cannot answer causal questions
-  - **Estimation**
+  2. **Estimation**
      - Use data to estimate the causal quantity of interest:
-       $$te = \EE[Y | T=1] - \EE[Y | T=0]$$
+       $$\EE[Y | T=1] - \EE[Y | T=0]$$
 
 * Randomization Removes Bias
 - Randomization of treatment forces independence to hold $\implies$ removes bias
+  $$\EE[Y | T = 1] - \EE[Y | T = 0] = \EE[Y_1 - Y_0]$$
+  - The measured difference of means is the true ATE (Average Treatment Effect)
 
-- Assume you can randomize the treatment (e.g., you can force a business to cut
-  prices)
-  $$
-  \left\{
-  \begin{aligned}
-  & IsOnSales \leftarrow rand(t) \\
-  & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
-  \end{aligned}
-  \right.
-  $$
-- The dependency from $u_t$ disappears since the assignment mechanism is:
-  - Tied to a coin flip (unrelated to other factors in causal mechanism)
-  - Fully known
-- Treatment becomes independent from potential outcomes
+- **Sales Example**
+  - Randomize the treatment, i.e., by forcing a business to cut prices
+    $$
+    \left\{
+    \begin{aligned}
+    & IsOnSales \leftarrow rand(t) \\
+    & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
+    \end{aligned}
+    \right.
+    $$
+  - The dependency from $u_t$ is replaced by assignment mechanism that is:
+    - Tied to a coin flip (unrelated to other factors in causal mechanism)
+    - Fully known
+
+- **Caveat**
+  - Randomizing eligibility doesn't mean randomizing participation
+  - E.g., online retailer randomly offered membership program
+  - But only engaged customers opted in, so self-selection remained
 
 // Chap 2: Randomized Experiments and Stats Review
 
