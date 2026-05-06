@@ -1,14 +1,6 @@
 # scripts/predict.py
 """
-COMMIT 2 — Inference
-======================
-Run the fine-tuned model on custom text input.
-
-Usage
------
-    python scripts/predict.py --text "Apple reports record iPhone sales"
-    python scripts/predict.py --file articles.txt    # one article per line
-    python scripts/predict.py                        # interactive mode
+This script is to run the fine-tuned model on custom text input.
 """
 
 import argparse
@@ -26,14 +18,13 @@ from utils.preprocessing import clean_text
 
 def load_model(model_dir: str):
     """
-    Load a fine-tuned model and tokenizer from disk.
-    Falls back to the HuggingFace hub if local path not found.
+    Load a fine-tuned model and tokenizer(best model that we got from train.py)
     """
     best_path = os.path.join(model_dir, "best")
     load_path = best_path if os.path.isdir(best_path) else model_dir
 
     if not os.path.isdir(load_path):
-        print(f"[predict] ⚠️  Model not found at '{load_path}'.")
+        print(f"[predict] Model not found at '{load_path}'.")
         print("[predict] Please run `python scripts/train.py` first.")
         sys.exit(1)
 
@@ -47,11 +38,6 @@ def load_model(model_dir: str):
 def predict(texts, tokenizer, model, device="cpu"):
     """
     Predict category labels for a list of texts.
-
-    Returns
-    -------
-    results : list of dict
-        Each dict has 'text', 'label', 'confidence', 'all_scores'
     """
     cleaned = [clean_text(t) for t in texts]
     inputs = tokenizer(
@@ -111,7 +97,7 @@ def main():
         texts = []
         while True:
             try:
-                t = input("\n📰 Article: ").strip()
+                t = input("\n Article: ").strip()
                 if t:
                     results = predict([t], tokenizer, model, device)
                     display_results(results)

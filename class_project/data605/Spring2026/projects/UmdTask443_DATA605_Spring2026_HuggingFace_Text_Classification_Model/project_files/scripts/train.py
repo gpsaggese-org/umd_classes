@@ -1,31 +1,11 @@
-# scripts/train.py
 """
-COMMIT 2 — Model Selection & Fine-Tuning
-==========================================
 What this script does
----------------------
-1. Loads AG News dataset and applies the preprocessing pipeline from Commit 1.
+
+1. Loads AG News dataset and applies the preprocessing pipeline.
 2. Instantiates a pre-trained DistilBERT model with a classification head
    (AutoModelForSequenceClassification).
 3. Configures HuggingFace Trainer with TrainingArguments.
-4. Fine-tunes the model for `EPOCHS` epochs.
-5. Saves the best checkpoint to OUTPUT_DIR.
-
-Why DistilBERT as default?
-  - 40% smaller and 60% faster than BERT-base with ~97% of its accuracy.
-  - Great baseline for a 4-class news classification task.
-  - Can swap in BERT or RoBERTa via config.py for Commit 4 comparisons.
-
-Fine-tuning strategy
-  - All transformer layers are trainable (full fine-tune, not frozen).
-  - Linear learning rate warmup for 500 steps avoids large early gradient updates.
-  - WeightDecay regularization prevents overfitting on a relatively small task.
-  - evaluation_strategy="epoch" saves checkpoints every epoch and picks the best.
-
-Usage
------
-    python scripts/train.py                         # default DistilBERT
-    python scripts/train.py --model bert-base-uncased
+4. Saves the best checkpoint(model)
 """
 
 import argparse
@@ -80,12 +60,6 @@ def parse_args():
 def build_model(model_name: str):
     """
     Load a pre-trained transformer model with a sequence classification head.
-
-    AutoModelForSequenceClassification adds:
-      - A dropout layer
-      - A linear projection: hidden_size → num_labels
-    on top of the transformer backbone. Only the classification head is randomly
-    initialized; the transformer weights come from the pre-trained checkpoint.
     """
     print(f"\n[train] Loading model: {model_name}")
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -105,12 +79,9 @@ def build_training_args(output_dir: str, epochs: int, batch_size: int, lr: float
     """
     Configure HuggingFace TrainingArguments.
 
-    Key decisions
-    -------------
     - evaluation_strategy = "epoch"  → evaluate on val set after every epoch
     - load_best_model_at_end = True  → restore best checkpoint after training
-    - metric_for_best_model = "f1_macro"  → choose checkpoints by macro-F1
-    - fp16 = auto-detected based on CUDA availability  → faster on GPU
+    - metric_for_best_model = "f1_macro"
     """
     use_fp16 = torch.cuda.is_available()
     return TrainingArguments(
@@ -130,7 +101,7 @@ def build_training_args(output_dir: str, epochs: int, batch_size: int, lr: float
         logging_steps=100,
         seed=SEED,
         fp16=use_fp16,
-        report_to="none",   # disable W&B / MLflow unless you want them
+        report_to="none",
     )
 
 
@@ -140,7 +111,7 @@ def main():
     out_dir    = args.output_dir or OUTPUT_DIR
     os.makedirs(out_dir, exist_ok=True)
 
-    # ── Step 1: Load & preprocess data ─────────────────────────────────────────
+    #Load & preprocess data
     dataset   = load_ag_news()
     dataset   = get_subsets(dataset)
     tokenizer = get_tokenizer(model_name)
@@ -149,17 +120,17 @@ def main():
     train_ds = tokenized["train"]
     eval_ds  = tokenized["validation"]
 
-    # ── Step 2: Build model ─────────────────────────────────────────────────────
+    #Build model
     model = build_model(model_name)
 
-    # ── Step 3: Configure training ──────────────────────────────────────────────
+    #Configure training
     training_args = build_training_args(out_dir, args.epochs, args.batch_size, args.lr)
 
     # DataCollatorWithPadding pads each batch to its longest sequence
     # (more efficient than global max_length padding)
     data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
-    # ── Step 4: Train ───────────────────────────────────────────────────────────
+    #Train
     trainer = Trainer(
     model=model,
     args=training_args,
@@ -177,7 +148,7 @@ def main():
     best_path = os.path.join(out_dir, "best")
     trainer.save_model(best_path)
     tokenizer.save_pretrained(best_path)
-    print(f"\n[train] ✅ Best model saved to: {best_path}")
+    print(f"\n[train] Best model saved to: {best_path}")
 
     # Save training metrics summary
     metrics_path = os.path.join(out_dir, "train_results.txt")
