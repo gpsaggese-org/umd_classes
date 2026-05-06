@@ -2,7 +2,7 @@
 Data ingestion pipeline for txtai market research platform.
 
 This module orchestrates the full ingestion pipeline using collectors:
-1. Fetch data from all sources (news, SEC, web, social)
+1. Fetch data from all sources (sec, news)
 2. Store raw documents in MinIO cold storage
 3. Store structured data in PostgreSQL warm storage
 4. Chunk documents to <= 512 tokens
@@ -21,7 +21,7 @@ Or use collectors directly:
 
 import logging
 
-from app.collectors import SECCollector, NewsCollector, WebCollector, SocialCollector
+from app.collectors import SECCollector, NewsCollector
 
 _LOG = logging.getLogger(__name__)
 
@@ -50,8 +50,6 @@ def ingest_all(
     collectors = [
         ("news", NewsCollector(), {}),
         ("sec", SECCollector(), {"filing_types": ["10-K", "8-K", "DEF 14A"]}),
-        ("web", WebCollector(), {}),
-        ("social", SocialCollector(), {"subreddits": ["investing", "stocks"]}),
     ]
 
     _LOG.info("Starting ingestion pipeline for %s...", ticker)
@@ -105,7 +103,7 @@ def ingest_source(
 
     Args:
         ticker: Stock ticker symbol
-        source: Source name (news, sec, web, social)
+        source: Source name (news, sec)
         store_cold: Store in MinIO
         store_warm: Store in PostgreSQL
         store_search: Index in txtai
@@ -117,8 +115,6 @@ def ingest_source(
     collectors = {
         "news": NewsCollector(),
         "sec": SECCollector(),
-        "web": WebCollector(),
-        "social": SocialCollector(),
     }
 
     if source not in collectors:
@@ -139,7 +135,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Ingest market research data")
     parser.add_argument("--ticker", default="AAPL", help="Stock ticker symbol")
-    parser.add_argument("--source", choices=["news", "sec", "web", "social", "all"], default="all",
+    parser.add_argument("--source", choices=["news", "sec", "all"], default="all",
                         help="Data source to ingest (default: all)")
     parser.add_argument("--no-cold", action="store_true", help="Skip cold storage (MinIO)")
     parser.add_argument("--no-warm", action="store_true", help="Skip warm storage (PostgreSQL)")

@@ -56,8 +56,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "-l", "--limit",
         type=int,
-        default=20,
-        help="Maximum number of filings to fetch per type (default: 20)"
+        default=5000,
+        help="Maximum number of filings to fetch (default: 5000, supports up to 10000+)"
+    )
+    parser.add_argument(
+        "--max-filings",
+        type=int,
+        default=10000,
+        help="Maximum filings to fetch from SEC API (default: 10000)"
     )
     parser.add_argument(
         "--no-cold",
@@ -90,8 +96,8 @@ def parse_args() -> argparse.Namespace:
 
 def validate_environment() -> bool:
     """Validate required environment variables."""
+    # Required for all deployments
     required = [
-        "OPENAI_API_KEY",
         "POSTGRES_HOST",
         "POSTGRES_DB",
         "POSTGRES_USER",
@@ -101,10 +107,17 @@ def validate_environment() -> bool:
         "MINIO_SECRET_KEY",
     ]
 
+    # Check for embedding provider (either OpenAI or Ollama)
+    has_openai = bool(os.getenv("OPENAI_API_KEY"))
+    has_ollama = bool(os.getenv("OLLAMA_HOST"))
+
     missing = []
     for var in required:
         if not os.getenv(var):
             missing.append(var)
+
+    if not has_openai and not has_ollama:
+        missing.append("OPENAI_API_KEY or OLLAMA_HOST (need one for embeddings)")
 
     if missing:
         _LOG.error("Missing required environment variables: %s", ", ".join(missing))
@@ -136,14 +149,18 @@ def main() -> int:
     filing_types = [ft.strip() for ft in args.filing_types.split(",")]
 
     _LOG.info("Configuration:")
-    _LOG.info("  Ticker:        %s", args.ticker)
-    _LOG.info("  Filing Types:  %s", ", ".join(filing_types))
-    _LOG.info("  Limit:         %d per type", args.limit)
-    _LOG.info("  Cold Storage:  %s", "disabled" if args.no_cold else "enabled")
-    _LOG.info("  Warm Storage:  %s", "disabled" if args.no_warm else "enabled")
-    _LOG.info("  Search Index:  %s", "disabled" if args.no_search else "enabled")
-    _LOG.info("  Use Cache:     %s", "yes" if args.use_cache else "no")
+    _LOG.info("  Ticker:         %s", args.ticker)
+    _LOG.info("  Filing Types:   %s", ", ".join(filing_types))
+    _LOG.info("  Limit:          %d total filings", args.limit)
+    _LOG.info("  Max Filings:    %d from SEC API", args.max_filings)
+    _LOG.info("  Cold Storage:   %s", "disabled" if args.no_cold else "enabled")
+    _LOG.info("  Warm Storage:   %s", "disabled" if args.no_warm else "enabled")
+    _LOG.info("  Search Index:   %s", "disabled" if args.no_search else "enabled")
+    _LOG.info("  Use Cache:      %s", "yes" if args.use_cache else "no")
     _LOG.info("=" * 60)
+
+    if args.limit > 1000:
+        _LOG.info("LARGE-SCALE COLLECTION: Fetching %d filings - this may take 5-15 minutes", args.limit)
 
     # Initialize collector
     _LOG.info("Initializing SEC collector...")

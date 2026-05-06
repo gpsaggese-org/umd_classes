@@ -17,13 +17,9 @@ Usage:
 from app.collectors.base_collector import BaseCollector
 from app.collectors.sec_collector import SECCollector
 from app.collectors.news_collector import NewsCollector
-from app.collectors.web_collector import WebCollector
-from app.collectors.social_collector import SocialCollector
 
 __all__ = [
     "BaseCollector",
     "SECCollector",
     "NewsCollector",
-    "WebCollector",
-    "SocialCollector",
 ]

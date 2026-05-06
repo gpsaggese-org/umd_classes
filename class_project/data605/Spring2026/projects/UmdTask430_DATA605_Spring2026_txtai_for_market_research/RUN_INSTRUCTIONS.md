@@ -1,3 +1,85 @@
+# Running the txtai Market Research Platform
+
+End-to-end this project does three things:
+
+1. **Collect** SEC filings (EDGAR) and news articles (NewsAPI + Alpha Vantage)
+   into a four-tier store: KeyDB (hot cache), MinIO (cold archive),
+   PostgreSQL + pgvector (warm structured store), and a txtai embeddings
+   index (search).
+2. **Search** the index through an agentic pipeline — a router picks
+   sub-agents (`sec`, `news`), each retrieves the top-k chunks, and a
+   synthesizer writes a cited answer.
+3. **Serve** the pipeline as a FastAPI service with a Streamlit UI on top.
+
+## Quickstart for new users
+
+```bash
+# 1. Clone and enter the repo
+git clone <repo-url>
+cd class_project/data605/Spring2026/projects/UmdTask430_DATA605_Spring2026_txtai_for_market_research
+
+# 2. Configure secrets
+cp .env.example .env
+# Edit .env to add NEWSAPI_KEY (https://newsapi.org/register)
+# and ALPHAVANTAGE_API_KEY (https://www.alphavantage.co/support/#api-key)
+# Replace SEC_USER_AGENT email with yours
+
+# 3. Bring up storage tiers (KeyDB, MinIO, Postgres + pgvector)
+docker-compose up -d
+
+# 4. Install Python deps (Python 3.11+)
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# 5. Collect data (one-time; ~50 min for the full ticker set)
+python -m scripts.run_sec_bulk --group all --skip-existing --limit 10
+python -m scripts.run_all_collectors --tickers AAPL,MSFT,NVDA --skip-sec --no-search
+python -m scripts.backfill_txtai_from_chunks --from-scratch
+
+# 6. Start the API + UI
+uvicorn app.api.server:app --host 127.0.0.1 --port 8000 &
+streamlit run app/ui/research.py --server.port 8501
+# Browse to http://localhost:8501
+```
+
+## Agent / API / UI
+
+- **Agent core**: `app/agents/research_agent.py` — `run_research(query)`
+  yields streaming events; `run_research_sync(query)` returns a single dict.
+- **FastAPI**: `app/api/server.py`
+  - `GET /` — health probe
+  - `POST /research` — sync request, returns JSON (answer + sources + timings)
+  - `POST /research/stream` — Server-Sent Events, one event per pipeline
+    step (route → retrieve → synthesize → done)
+- **Streamlit UI**: `app/ui/research.py` — shows the agent's live trace
+  while it runs, then collapses it into an expander and renders the clean
+  answer + sources.
+
+### Optional: enable LLM-backed answer synthesis
+
+The synthesizer falls back to an extractive template (first 1-2 sentences
+of the top three chunks). Set these env vars on the API server to use any
+OpenAI-compatible endpoint:
+
+```bash
+export LLM_BASE_URL=http://localhost:11434/v1   # or https://api.openai.com/v1
+export LLM_API_KEY=sk-...                        # any value for local Ollama
+export LLM_MODEL=qwen2.5:3b                      # or gpt-4o-mini
+uvicorn app.api.server:app --host 127.0.0.1 --port 8000
+```
+
+## Eval harness
+
+```bash
+python -m scripts.eval_research --warmup
+python -m scripts.eval_research --repeats 5 --json logs/eval.json
+```
+
+Prints p50/p95/p99 latency per pipeline stage, routing accuracy on a
+benchmark set, and retrieval health metrics.
+
+---
+
 # Running the SEC EDGAR Collector
 
 This guide explains how to run the SEC EDGAR collector to fetch and store filings.

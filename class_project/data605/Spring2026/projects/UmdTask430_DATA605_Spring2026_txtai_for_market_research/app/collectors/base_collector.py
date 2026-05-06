@@ -14,7 +14,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Any, Optional
 
-from txtai.pipeline import Pipeline as TxtAIChunking
+from txtai import Textractor
 
 from app.storage import (
     get_minio_client,
@@ -30,59 +30,36 @@ _LOG = logging.getLogger(__name__)
 
 
 class BaseCollector(ABC):
-    """
-    Abstract base class for all data collectors.
 
-    Subclasses must implement:
-    - _fetch_data(): Fetch raw data from the source
-    - _get_source_tag(): Return source identifier (e.g., "sec", "news")
-    """
-
-    # Chunking configuration
     MAX_TOKENS_PER_CHUNK = 512
-    CHUNKING_PIPELINE: Optional[TxtAIChunking] = None
+    chunker: Optional[Textractor] = None
 
     def __init__(self):
-        """Initialize collector with storage clients."""
         self.minio: MinIOClient = get_minio_client()
         self.postgres: PostgresClient = get_postgres_client()
         self.cache: CacheManager = get_cache_manager()
         self.embeddings = get_embeddings()
 
-    def _get_chunking_pipeline(self) -> TxtAIChunking:
-        """Get or create the chunking pipeline (lazy initialization)."""
-        if self.CHUNKING_PIPELINE is None:
-            self.CHUNKING_PIPELINE = TxtAIChunking("chunking", sentences=True)
-        return self.CHUNKING_PIPELINE
+    def _get_chunker(self) -> Textractor:
+        if self.chunker is None:
+            self.chunker = Textractor(sentences=True)
+        return self.chunker
 
     def _generate_doc_id(self, source: str, content: str, ticker: str) -> str:
-        """
-        Generate a deterministic document ID for deduplication.
-
-        Uses SHA256 hash to ensure:
-        - Same document always gets same ID (idempotent)
-        - Different sources/tickers get different IDs
-        """
         key = f"{source}:{ticker}:{content[:500]}"
         return hashlib.sha256(key.encode()).hexdigest()[:32]
 
+    def _generate_filing_id(self, ticker: str, accession: str, form_type: str) -> str:
+        """Deterministic filing ID from accession number."""
+        key = f"{ticker}:{accession}:{form_type}"
+        return hashlib.sha256(key.encode()).hexdigest()[:32]
+
     def _chunk_text(self, text: str) -> list[str]:
-        """
-        Split text into chunks respecting sentence boundaries.
-
-        Args:
-            text: The text to chunk
-
-        Returns:
-            List of text chunks
-        """
-        chunker = self._get_chunking_pipeline()
+        chunker = self._get_chunker()
         chunks = chunker(text)
-
-        # Group chunks to maximize token budget
         result = []
         current_chunk = ""
-        chunk_chars = self.MAX_TOKENS_PER_CHUNK * 4  # ~4 chars per token
+        chunk_chars = self.MAX_TOKENS_PER_CHUNK * 4
 
         for chunk in chunks:
             if len(current_chunk) + len(chunk) <= chunk_chars:
@@ -103,17 +80,6 @@ class BaseCollector(ABC):
         content: str,
         metadata: dict[str, Any],
     ) -> Optional[str]:
-        """
-        Store raw document in MinIO cold storage.
-
-        Args:
-            ticker: Stock ticker symbol
-            content: Raw document content
-            metadata: Document metadata
-
-        Returns:
-            Object path in MinIO, or None on failure
-        """
         source = self._get_source_tag()
         url = metadata.get("url", "")
 
@@ -127,29 +93,48 @@ class BaseCollector(ABC):
             )
         elif source == "news":
             return self.minio.store_news_article(
-                ticker=ticker,
-                url=url,
-                content=content,
-                metadata=metadata,
-            )
-        elif source == "web":
-            return self.minio.store_web_content(
-                ticker=ticker,
-                url=url,
-                content=content,
-                metadata=metadata,
-            )
-        elif source == "social":
-            return self.minio.store_social_post(
-                platform=metadata.get("platform", "unknown"),
-                ticker=ticker,
-                post_id=metadata.get("post_id", ""),
-                content={**metadata, "content": content},
+                ticker=ticker, url=url, content=content, metadata=metadata,
             )
         else:
-            # Generic storage
             object_name = f"generic/{source}/{ticker}/{self._generate_doc_id(source, content, ticker)}.txt"
             return self.minio.put_object("raw_docs", object_name, content)
+
+    def _build_filing_row(
+        self,
+        ticker: str,
+        filing_id: str,
+        metadata: dict[str, Any],
+        file_size: int,
+    ) -> dict[str, Any]:
+        """
+        Map sec_collector metadata keys → filings table columns.
+
+        sec_collector returns:
+            form_type, filing_date, report_date, accession_number,
+            cik, url, company_name, description
+        """
+        def parse_date(val: Any) -> Optional[str]:
+            """Return ISO date string or None."""
+            if not val:
+                return None
+            if isinstance(val, str) and len(val) >= 10:
+                return val[:10]
+            return None
+
+        return {
+            "id":               filing_id,
+            "ticker":           ticker,
+            "company_name":     metadata.get("company_name", ""),
+            # sec_collector uses "form_type"; filings table calls it "filing_type"
+            "filing_type":      metadata.get("form_type", "unknown"),
+            "cik":              metadata.get("cik", ""),
+            "accession_number": metadata.get("accession_number", ""),
+            "filing_date":      parse_date(metadata.get("filing_date")),
+            # sec_collector uses "report_date"; filings table calls it "period_of_report"
+            "period_of_report": parse_date(metadata.get("report_date")),
+            "document_url":     metadata.get("url", ""),
+            "file_size_bytes":  file_size,
+        }
 
     def _store_to_warm_tier(
         self,
@@ -158,59 +143,101 @@ class BaseCollector(ABC):
         filing_metadata: Optional[dict[str, Any]] = None,
     ) -> int:
         """
-        Store structured data in PostgreSQL.
+        Store structured data in PostgreSQL in the correct order:
+          1. INSERT INTO filings       (one row per document)
+          2. INSERT INTO chunks        (many rows, FK → filings.id)
+          3. INSERT INTO document_metadata (key/value pairs, FK → chunks.id)
 
-        Args:
-            ticker: Stock ticker symbol
-            chunks: List of chunk dicts with text and metadata
-            filing_metadata: Optional filing-level metadata
-
-        Returns:
-            Number of chunks inserted
+        Previously this method only called insert_chunks(), skipping filings
+        and document_metadata entirely, leaving filing_id = NULL on all chunks.
         """
         if not chunks:
             return 0
 
-        # Convert chunks to database format
+        # ── 1. Insert filing row (once per unique filing_id) ──────────────────
+        seen_filing_ids: set[str] = set()
+        filing_rows: list[dict[str, Any]] = []
+
+        for chunk in chunks:
+            fid = chunk.get("filing_id")
+            if fid and fid not in seen_filing_ids:
+                seen_filing_ids.add(fid)
+                filing_rows.append(chunk["filing_row"])
+
+        if filing_rows:
+            try:
+                self.postgres.insert_filings(filing_rows)
+                _LOG.info("Inserted %d filing rows", len(filing_rows))
+            except Exception as e:
+                _LOG.error("Failed to insert filings: %s", e)
+                # Don't continue — chunks FK-depend on filings existing
+                return 0
+
+        # ── 2. Insert chunks with embeddings ──────────────────────────────────
         db_chunks = []
         for chunk in chunks:
-            # Generate embedding for this chunk
-            embedding_result = self.embeddings.embed([chunk["text"]])
-            embedding = embedding_result[0] if embedding_result else None
+            try:
+                embedding_result = self.embeddings.batchtransform([chunk["text"]])
+                embedding = (
+                    embedding_result[0].tolist()
+                    if embedding_result is not None and len(embedding_result) > 0
+                    else None
+                )
+            except Exception as e:
+                _LOG.warning("Embedding failed for chunk %s: %s", chunk["id"], e)
+                embedding = None
 
             db_chunks.append({
-                "id": chunk["id"],
-                "filing_id": chunk.get("filing_id"),
+                "id":          chunk["id"],
+                "filing_id":   chunk.get("filing_id"),   # FK → filings.id ✓
                 "chunk_index": chunk.get("chunk_index", 0),
-                "text": chunk["text"],
-                "section": chunk.get("section", ""),
-                "embedding": embedding,
+                "text":        chunk["text"],
+                "section":     chunk.get("section", ""),
+                "embedding":   embedding,
             })
 
-        return self.postgres.insert_chunks(db_chunks)
+        try:
+            inserted = self.postgres.insert_chunks(db_chunks)
+            _LOG.info("Inserted %d chunks", inserted)
+        except Exception as e:
+            _LOG.error("Failed to insert chunks: %s", e)
+            return 0
+
+        # ── 3. Insert document_metadata (key/value pairs per chunk) ───────────
+        metadata_rows = []
+        for chunk in chunks:
+            chunk_meta = chunk.get("metadata", {})
+            chunk_id   = chunk["id"]
+            for key, value in chunk_meta.items():
+                if value is None:
+                    continue
+                metadata_rows.append({
+                    "id":       self._generate_doc_id("meta", f"{chunk_id}:{key}", ticker),
+                    "chunk_id": chunk_id,
+                    "key":      key,
+                    "value":    str(value),
+                })
+
+        if metadata_rows:
+            try:
+                self.postgres.insert_document_metadata(metadata_rows)
+                _LOG.info("Inserted %d document_metadata rows", len(metadata_rows))
+            except Exception as e:
+                # Non-fatal — metadata is supplementary
+                _LOG.warning("Failed to insert document_metadata: %s", e)
+
+        return inserted
 
     def _store_to_search_index(
         self,
         ticker: str,
         chunks: list[dict[str, Any]],
     ) -> list[str]:
-        """
-        Store chunks in txtai EmbeddingsIndex for semantic search.
-
-        Args:
-            ticker: Stock ticker symbol
-            chunks: List of chunk dicts
-
-        Returns:
-            List of indexed document IDs
-        """
         source = self._get_source_tag()
-
-        # Transform to txtai format
         documents = []
         for chunk in chunks:
             documents.append({
-                "id": chunk["id"],
+                "id":   chunk["id"],
                 "text": chunk["text"],
                 "tags": source,
                 "metadata": {
@@ -219,66 +246,22 @@ class BaseCollector(ABC):
                     **chunk.get("metadata", {}),
                 },
             })
-
         return self.embeddings.upsert(documents)
 
-    def _cache_results(
-        self,
-        ticker: str,
-        query_key: str,
-        results: Any,
-        ttl: int = 3600,
-    ) -> bool:
-        """
-        Cache fetch results in KeyDB.
-
-        Args:
-            ticker: Stock ticker symbol
-            query_key: Cache key for the query
-            results: Results to cache
-            ttl: Time-to-live in seconds
-
-        Returns:
-            True if cached successfully
-        """
+    def _cache_results(self, ticker, query_key, results, ttl=3600):
         cache_key = f"fetch:{self._get_source_tag()}:{ticker}:{query_key}"
         return self.cache.set(cache_key, results, ttl=ttl)
 
-    def _get_cached_results(
-        self,
-        ticker: str,
-        query_key: str,
-    ) -> Optional[Any]:
-        """
-        Get cached fetch results from KeyDB.
-
-        Args:
-            ticker: Stock ticker symbol
-            query_key: Cache key for the query
-
-        Returns:
-            Cached results or None
-        """
+    def _get_cached_results(self, ticker, query_key):
         cache_key = f"fetch:{self._get_source_tag()}:{ticker}:{query_key}"
         return self.cache.get(cache_key)
 
     @abstractmethod
     def _fetch_data(self, ticker: str, **kwargs) -> list[dict[str, Any]]:
-        """
-        Fetch raw data from the source.
-
-        Args:
-            ticker: Stock ticker symbol
-            **kwargs: Source-specific parameters
-
-        Returns:
-            List of documents with 'text' and 'metadata' keys
-        """
         pass
 
     @abstractmethod
     def _get_source_tag(self) -> str:
-        """Return the source identifier (e.g., 'sec', 'news', 'web', 'social')."""
         pass
 
     def collect(
@@ -290,37 +273,11 @@ class BaseCollector(ABC):
         use_cache: bool = False,
         **kwargs,
     ) -> dict[str, int]:
-        """
-        Run the full collection pipeline.
 
-        This is the main entry point that:
-        1. Fetches data from the source
-        2. Stores raw documents in cold tier (MinIO)
-        3. Stores structured data in warm tier (PostgreSQL)
-        4. Generates embeddings and stores in search index
-        5. Caches results in hot tier (KeyDB)
-
-        Args:
-            ticker: Stock ticker symbol
-            store_cold: Whether to store in cold tier (default: True)
-            store_warm: Whether to store in warm tier (default: True)
-            store_search: Whether to store in search index (default: True)
-            use_cache: Whether to use cached results (default: False)
-            **kwargs: Source-specific parameters
-
-        Returns:
-            Dict with counts: {'fetched', 'stored_cold', 'stored_warm', 'indexed'}
-        """
         _LOG.info("Starting collection for %s ticker=%s", self._get_source_tag(), ticker)
 
-        results = {
-            "fetched": 0,
-            "stored_cold": 0,
-            "stored_warm": 0,
-            "indexed": 0,
-        }
+        results = {"fetched": 0, "stored_cold": 0, "stored_warm": 0, "indexed": 0}
 
-        # Check cache first
         if use_cache:
             cache_key = str(sorted(kwargs.items()))
             cached = self._get_cached_results(ticker, cache_key)
@@ -334,59 +291,75 @@ class BaseCollector(ABC):
             raw_docs = self._fetch_data(ticker, **kwargs)
 
         results["fetched"] = len(raw_docs)
-        _LOG.info("Fetched %d documents from %s", len(raw_docs), self._get_source_tag())
+        _LOG.info("Fetched %d documents", len(raw_docs))
 
-        # Prepare chunks for all documents
         all_chunks = []
+
         for doc in raw_docs:
             text = doc.get("text", "")
             if not text or len(text) < 10:
                 continue
 
-            # Chunk the document
-            chunks = self._chunk_text(text)
+            metadata   = doc.get("metadata", {})
+            source     = self._get_source_tag()
 
-            for i, chunk in enumerate(chunks):
-                chunk_data = {
-                    "id": self._generate_doc_id(self._get_source_tag(), chunk, ticker),
-                    "text": chunk,
-                    "chunk_index": i,
-                    "total_chunks": len(chunks),
-                    "metadata": {
-                        **doc.get("metadata", {}),
-                        "source": self._get_source_tag(),
-                        "ticker": ticker,
-                    },
-                }
-                all_chunks.append(chunk_data)
+            # ── Generate a stable filing_id for this document ────────────────
+            filing_id = self._generate_filing_id(
+                ticker,
+                metadata.get("accession_number", text[:100]),
+                metadata.get("form_type", source),
+            )
 
-            # Store raw document in cold tier
+            # ── Build the filings table row for this document ────────────────
+            filing_row = self._build_filing_row(
+                ticker=ticker,
+                filing_id=filing_id,
+                metadata=metadata,
+                file_size=len(text.encode("utf-8")),
+            )
+
+            # ── Cold storage ─────────────────────────────────────────────────
             if store_cold:
-                object_path = self._store_to_cold_tier(ticker, text, doc.get("metadata", {}))
+                object_path = self._store_to_cold_tier(ticker, text, metadata)
                 if object_path:
                     results["stored_cold"] += 1
 
-        # Store chunks in warm tier (PostgreSQL)
+            # ── Chunk the document ───────────────────────────────────────────
+            chunks = self._chunk_text(text)
+            for i, chunk_text in enumerate(chunks):
+                all_chunks.append({
+                    "id":          self._generate_doc_id(source, chunk_text, ticker),
+                    "filing_id":   filing_id,    # ← FK to filings.id now set ✓
+                    "filing_row":  filing_row,   # ← carried for warm tier insert
+                    "chunk_index": i,
+                    "total_chunks": len(chunks),
+                    "text":        chunk_text,
+                    "section":     "",
+                    "metadata": {
+                        **metadata,
+                        "source": source,
+                        "ticker": ticker,
+                    },
+                })
+
+        # ── Warm tier (filings → chunks → document_metadata) ─────────────────
         if store_warm and all_chunks:
             inserted = self._store_to_warm_tier(ticker, all_chunks)
             results["stored_warm"] = inserted
 
-        # Store in search index
+        # ── Search index ──────────────────────────────────────────────────────
         if store_search and all_chunks:
             indexed_ids = self._store_to_search_index(ticker, all_chunks)
-            results["indexed"] = len(indexed_ids)
+            results["indexed"] = len(indexed_ids) if indexed_ids else 0
 
-        # Save embeddings to disk
         if store_search:
-            self.embeddings.save()
+            from app.pipeline.embeddings import get_data_dir
+            db_path = get_data_dir() / "index.db"
+            self.embeddings.save(str(db_path))
 
         _LOG.info(
-            "Collection complete for %s: fetched=%d, cold=%d, warm=%d, indexed=%d",
-            self._get_source_tag(),
-            results["fetched"],
-            results["stored_cold"],
-            results["stored_warm"],
-            results["indexed"],
+            "Collection complete: fetched=%d cold=%d warm=%d indexed=%d",
+            results["fetched"], results["stored_cold"],
+            results["stored_warm"], results["indexed"],
         )
-
         return results

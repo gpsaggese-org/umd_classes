@@ -23,6 +23,9 @@ from app.storage.warm_storage import (
 # Cold tier - MinIO
 from app.storage.cold_storage import MinIOClient, get_minio_client
 
+# Embeddings
+from app.pipeline.embeddings import get_embeddings
+
 __all__ = [
     # Hot tier
     "KeyDBClient",
@@ -37,4 +40,6 @@ __all__ = [
     # Cold tier
     "MinIOClient",
     "get_minio_client",
+    # Embeddings
+    "get_embeddings",
 ]

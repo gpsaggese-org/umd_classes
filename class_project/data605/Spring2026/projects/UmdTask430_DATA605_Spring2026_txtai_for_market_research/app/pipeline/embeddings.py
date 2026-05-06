@@ -2,7 +2,7 @@
 Shared EmbeddingsIndex configuration for txtai.
 
 This module configures a single txtai.Embeddings instance backed by SQLite.
-All agents share this index but filter by metadata tags (source: news|sec|web|social|earnings).
+All agents share this index but filter by metadata tags (source: news|sec).
 """
 
 import os
@@ -22,29 +22,28 @@ def create_embeddings() -> Embeddings:
     """
     Create and return a configured txtai Embeddings instance.
 
-    Configuration:
-    - Path: SQLite database at data/index.db
-    - Embedding model: Ollama nomic-embed-text (fast, good quality for semantic search)
-    - Content format: text with metadata for filtering
+    If a saved index exists in the data directory (config + documents +
+    embeddings files), load it. Otherwise create a fresh index.
 
-    The 'content=True' setting stores the original text in the index,
-    which allows us to retrieve full snippets without a separate database.
+    - Embedding model: sentence-transformers/all-mpnet-base-v2 (768-dim,
+      matches pgvector schema)
+    - content=True stores original text in SQLite alongside the ANN index
     """
-    db_path = get_data_dir() / "index.db"
-
-    # Get Ollama embedding model from environment
-    ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
-    embed_model = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
-
+    data_dir = get_data_dir()
+    config_file = data_dir / "config.json"
+    if config_file.exists():
+        # Load persisted index from disk.
+        embeddings = Embeddings()
+        embeddings.load(str(data_dir))
+        return embeddings
+    # No saved index: create a new one.
     embeddings = Embeddings(
         {
-            "path": str(db_path),
-            "method": f"ollama:{embed_model}@{ollama_host}",
-            "content": True,  # Store original text in index
-            "chunksize": 100,  # Batch size for embedding operations
+            "path": "sentence-transformers/all-mpnet-base-v2",
+            "content": True,
+            "chunksize": 100,
         }
     )
-
     return embeddings
 
 
@@ -70,32 +69,46 @@ def search(query: str, source_filter: str | None = None, limit: int = 5) -> list
     """
     Search the embeddings index with optional source filtering.
 
-    Args:
-        query: The search query text
-        source_filter: Optional metadata filter (news|sec|web|social|earnings)
-        limit: Maximum number of results to return
-
-    Returns:
-        List of dicts with keys: id, text, score, metadata
-
-    Note: Uses txtai's SQL-like filtering syntax for metadata filtering.
+    :param query: the search query text
+    :param source_filter: optional source tag filter (e.g. ``"news"`` or
+                          ``"sec"``); ``None`` searches across everything
+    :param limit: maximum number of results to return
+    :return: list of dicts with keys ``id``, ``text``, ``score``, ``tags``,
+             ``metadata`` (decoded from the on-disk JSON ``data`` column)
     """
+    import json
+
     embeddings = get_embeddings()
-
+    # Use a SQL-style query so we can pull the full ``data`` JSON column.
+    # Without this, txtai only returns id/text/score/tags and our custom
+    # per-chunk metadata (ticker, filing_type, filing_date, etc.) is hidden.
+    where_clauses = []
     if source_filter:
-        # txtai supports SQL-like WHERE clauses for metadata filtering
-        # The 'tags' field contains the source metadata
-        results = embeddings.search(
-            f"{query} WHERE tags = '{source_filter}'",
-            limit=limit
-        )
-    else:
-        results = embeddings.search(query, limit=limit)
+        where_clauses.append(f"tags = '{source_filter}'")
+    where_clauses.append(f"similar('{query.replace(chr(39), chr(39)*2)}')")
+    where_sql = " AND ".join(where_clauses)
+    sql = f"SELECT id, text, score, tags, data FROM txtai WHERE {where_sql} LIMIT {int(limit)}"
+    raw = embeddings.search(sql, limit=limit)
+    # Decode the ``data`` blob and lift the inner ``metadata`` dict to top
+    # level so callers don't have to know about txtai's internal layout.
+    out = []
+    for row in raw:
+        data_str = row.get("data") or "{}"
+        try:
+            data = json.loads(data_str) if isinstance(data_str, str) else data_str
+        except Exception:
+            data = {}
+        out.append({
+            "id": row.get("id"),
+            "text": row.get("text") or data.get("text", ""),
+            "score": row.get("score"),
+            "tags": row.get("tags") or data.get("tags"),
+            "metadata": data.get("metadata") or {},
+        })
+    return out
 
-    return results
 
-
-def upsert(documents: list[dict]) -> list[str]:
+def upsert(documents: list[dict], *, save: bool = True) -> list[str]:
     """
     Index documents into the embeddings database.
 
@@ -103,17 +116,20 @@ def upsert(documents: list[dict]) -> list[str]:
         documents: List of dicts with keys:
             - id: Unique document identifier
             - text: The text content to embed
-            - tags: Source tag (news|sec|web|social|earnings)
+            - tags: Source tag (news|sec)
+        save: If True, persist the ANN index files after upsert.
+              Set False during batched backfills, then call
+              get_embeddings().save(get_data_dir()) once at the end.
 
     Returns:
-        List of document IDs that were indexed
+        List of document IDs that were indexed.
 
-    Note: txtai's 'upsert' will insert new documents or update existing ones
-    with the same ID.
+    Note: txtai's 'upsert' inserts new documents or updates existing ones
+    with the same ID. The content (text + metadata) is stored in the
+    SQLite database at index_path; the ANN index is persisted via save().
     """
     embeddings = get_embeddings()
-
-    # Transform to txtai's expected format: (id, text, tags)
+    # Transform to txtai's expected dict format.
     index_documents = []
     for doc in documents:
         index_documents.append({
@@ -122,8 +138,8 @@ def upsert(documents: list[dict]) -> list[str]:
             "tags": doc.get("tags", "unknown"),
             "metadata": doc.get("metadata", {})
         })
-
-    ids = embeddings.upsert(index_documents)
-    embeddings.save()  # Persist to SQLite
-
-    return ids
+    embeddings.upsert(index_documents)
+    if save:
+        # Persist ANN index files to the data directory.
+        embeddings.save(str(get_data_dir()))
+    return [doc["id"] for doc in index_documents]

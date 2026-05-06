@@ -29,7 +29,7 @@ load_dotenv()
 
 _LOG = logging.getLogger(__name__)
 
-# Default embedding dimensions for nomic-embed-text
+# Default embedding dimensions for sentence-transformers/all-mpnet-base-v2
 DEFAULT_EMBEDDING_DIM = 768
 
 
@@ -461,6 +461,45 @@ class PostgresClient:
             conn.commit()
         return count
 
+    def insert_filings(self, rows: list[dict]) -> int:
+        """INSERT INTO filings ON CONFLICT (id) DO NOTHING."""
+        if not rows:
+            return 0
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.executemany(
+                    """
+                    INSERT INTO filings
+                    (id, ticker, company_name, filing_type, cik,
+                    accession_number, filing_date, period_of_report,
+                    document_url, file_size_bytes)
+                    VALUES
+                    (%(id)s, %(ticker)s, %(company_name)s, %(filing_type)s,
+                    %(cik)s, %(accession_number)s, %(filing_date)s,
+                    %(period_of_report)s, %(document_url)s, %(file_size_bytes)s)
+                    ON CONFLICT (id) DO NOTHING
+                    """,
+                    rows,
+                )
+            conn.commit()
+        return len(rows)
+
+    def insert_document_metadata(self, rows: list[dict]) -> int:
+        """INSERT INTO document_metadata ON CONFLICT (id) DO NOTHING."""
+        if not rows:
+            return 0
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.executemany(
+                    """
+                    INSERT INTO document_metadata (id, chunk_id, key, value)
+                    VALUES (%(id)s, %(chunk_id)s, %(key)s, %(value)s)
+                    ON CONFLICT (id) DO NOTHING
+                    """,
+                    rows,
+                )
+            conn.commit()
+        return len(rows)
     def get_chunks_by_filing(
         self,
         filing_id: str,

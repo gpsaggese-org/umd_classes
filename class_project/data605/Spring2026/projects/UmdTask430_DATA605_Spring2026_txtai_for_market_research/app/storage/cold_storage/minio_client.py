@@ -4,8 +4,6 @@ MinIO client for cold tier storage.
 Provides object storage operations for archiving raw documents:
 - SEC filings (original HTML/XML)
 - News articles (HTML snapshots)
-- Web scraped content
-- Social media snapshots
 
 Environment Variables:
     MINIO_ENDPOINT: MinIO server endpoint (default: localhost:9000)
@@ -16,8 +14,6 @@ Environment Variables:
 Bucket Structure:
     sec/{ticker}/{filing_type}/{accession_number}.html
     news/{ticker}/{date}/{article_id}.html
-    web/{ticker}/{domain}/{url_hash}.html
-    social/{platform}/{ticker}/{post_id}.json
 """
 
 import hashlib
@@ -346,9 +342,13 @@ class MinIOClient:
         Returns:
             Object path if successful
         """
-        # Normalize accession number (remove dashes for filename)
-        filename = accession_number.replace("-", "")
-        object_name = f"sec/{ticker}/{filing_type}/{filename}.html"
+        # Normalize accession number (remove dashes and colons — both are invalid in S3 object names)
+        filename = accession_number.replace("-", "").replace(":", "_")
+        # Build path, skipping empty filing_type to avoid double slashes
+        if filing_type:
+            object_name = f"sec/{ticker}/{filing_type}/{filename}.html"
+        else:
+            object_name = f"sec/{ticker}/{filename}.html"
 
         etag = self.put_object(
             "filings",
@@ -358,8 +358,11 @@ class MinIOClient:
         )
 
         if etag and metadata:
-            # Store metadata as separate JSON
-            metadata_path = f"sec/{ticker}/{filing_type}/{filename}.meta.json"
+            # Store metadata as separate JSON (skip if filing_type is empty to avoid double slashes)
+            if filing_type:
+                metadata_path = f"sec/{ticker}/{filing_type}/{filename}.meta.json"
+            else:
+                metadata_path = f"sec/{ticker}/{filename}.meta.json"
             self.put_json("filings", metadata_path, metadata)
 
         return object_name if etag else None
@@ -400,65 +403,6 @@ class MinIOClient:
             metadata_path = f"news/{ticker}/{date}/{url_hash}.meta.json"
             self.put_json("articles", metadata_path, metadata)
 
-        return object_name if etag else None
-
-    def store_web_content(
-        self,
-        ticker: str,
-        url: str,
-        content: str | bytes,
-        metadata: Optional[dict[str, Any]] = None,
-    ) -> Optional[str]:
-        """
-        Store scraped web content in cold storage.
-
-        Args:
-            ticker: Stock ticker symbol
-            url: Source URL
-            content: Scraped content
-            metadata: Optional metadata
-
-        Returns:
-            Object path if successful
-        """
-        url_hash = hashlib.md5(url.encode()).hexdigest()[:12]
-        object_name = f"web/{ticker}/{url_hash}.html"
-
-        etag = self.put_object(
-            "web_scrapes",
-            object_name,
-            content,
-            content_type="text/html",
-        )
-
-        if etag and metadata:
-            metadata_path = f"web/{ticker}/{url_hash}.meta.json"
-            self.put_json("web_scrapes", metadata_path, metadata)
-
-        return object_name if etag else None
-
-    def store_social_post(
-        self,
-        platform: str,
-        ticker: str,
-        post_id: str,
-        content: dict[str, Any],
-    ) -> Optional[str]:
-        """
-        Store a social media post in cold storage.
-
-        Args:
-            platform: Platform name (reddit, stocktwits, twitter)
-            ticker: Stock ticker symbol
-            post_id: Platform-specific post ID
-            content: Full post data as dict
-
-        Returns:
-            Object path if successful
-        """
-        object_name = f"social/{platform}/{ticker}/{post_id}.json"
-
-        etag = self.put_json("social", object_name, content)
         return object_name if etag else None
 
     def close(self) -> None:

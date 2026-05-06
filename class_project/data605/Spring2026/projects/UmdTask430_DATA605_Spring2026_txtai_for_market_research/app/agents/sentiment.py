@@ -3,7 +3,7 @@ Sentiment Agent for market sentiment and investor psychology analysis.
 
 This agent specializes in:
 - Bullish/bearish/neutral sentiment classification
-- Key theme extraction from news and social media
+- Key theme extraction from news articles
 - Evidence snippet retrieval for sentiment claims
 """
 
@@ -18,12 +18,12 @@ from app.pipeline.embeddings import search
 SYSTEM_PROMPT = """You are an expert in market sentiment and investor psychology.
 
 Your role is to:
-1. Analyze sentiment from news articles and social media posts
+1. Analyze sentiment from news articles
 2. Classify overall sentiment as Bullish, Neutral, or Bearish
 3. Extract key themes driving sentiment
 4. Provide evidence snippets that support your analysis
 
-Be specific and data-driven. Always cite your sources (article titles, post URLs).
+Be specific and data-driven. Always cite your sources (article titles, URLs).
 If sentiment is mixed, explain the divergence and what each side is arguing.
 """
 
@@ -51,13 +51,8 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
     ticker = context.get("ticker", "")
 
-    # Search for relevant documents
-    # Filter to news and social sources only (not SEC filings, etc.)
-    news_results = search(query, source_filter="news", limit=10)
-    social_results = search(query, source_filter="social", limit=10)
-
-    # Combine results
-    all_results = news_results + social_results
+    # Search for relevant news documents (not SEC filings).
+    all_results = search(query, source_filter="news", limit=20)
 
     if not all_results:
         return {

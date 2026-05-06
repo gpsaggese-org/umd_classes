@@ -1,7 +1,13 @@
-cat > sql/init.sql << 'EOF'
+-- txtai Market Research Platform - Database Schema
+-- Tiers: Warm (PostgreSQL + pgvector), Graph (Kuzu - planned)
+-- Note: Cold tier (MinIO) and Hot tier (KeyDB) are separate
+
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- #############################################################################
+-- Companies Table
+-- #############################################################################
 CREATE TABLE IF NOT EXISTS companies (
     cik           VARCHAR(10)  PRIMARY KEY,
     ticker        VARCHAR(10)  UNIQUE,
@@ -10,79 +16,97 @@ CREATE TABLE IF NOT EXISTS companies (
     sector        TEXT,
     sub_industry  TEXT,
     exchange      VARCHAR(10),
-    created_at    TIMESTAMPTZ  DEFAULT NOW()
+    created_at    TIMESTAMPTZ  DEFAULT NOW(),
+    updated_at    TIMESTAMPTZ  DEFAULT NOW()
 );
+CREATE INDEX IF NOT EXISTS idx_companies_ticker ON companies(ticker);
 
+-- #############################################################################
+-- Filings Table - Stores SEC filing metadata
+-- #############################################################################
 CREATE TABLE IF NOT EXISTS filings (
-    id                UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
-    cik               VARCHAR(10) REFERENCES companies(cik),
-    form_type         VARCHAR(20) NOT NULL,
-    filing_date       DATE        NOT NULL,
+    id                VARCHAR(64) PRIMARY KEY,  -- SHA256 hash of ticker:accession:form_type
+    ticker            VARCHAR(10) NOT NULL,
+    company_name      TEXT,
+    filing_type       VARCHAR(20) NOT NULL,     -- e.g., "10-K", "8-K", "DEF 14A"
+    cik               VARCHAR(10),
+    accession_number  VARCHAR(25) UNIQUE NOT NULL,
+    filing_date       DATE,
     period_of_report  DATE,
-    accession         VARCHAR(25) UNIQUE NOT NULL,
-    primary_doc       TEXT,
-    s3_raw_path       TEXT,
-    processed_at      TIMESTAMPTZ,
-    chunk_count       INT DEFAULT 0
+    document_url      TEXT,
+    file_size_bytes   INTEGER,
+    created_at        TIMESTAMPTZ DEFAULT NOW(),
+    updated_at        TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX IF NOT EXISTS idx_filings_cik_form ON filings(cik, form_type);
+CREATE INDEX IF NOT EXISTS idx_filings_ticker ON filings(ticker);
+CREATE INDEX IF NOT EXISTS idx_filings_type ON filings(filing_type);
 CREATE INDEX IF NOT EXISTS idx_filings_date ON filings(filing_date DESC);
+CREATE INDEX IF NOT EXISTS idx_filings_cik ON filings(cik);
 
+-- #############################################################################
+-- Chunks Table - Document chunks with embeddings for semantic search
+-- #############################################################################
 CREATE TABLE IF NOT EXISTS chunks (
-    id           UUID    PRIMARY KEY DEFAULT uuid_generate_v4(),
-    filing_id    UUID    REFERENCES filings(id) ON DELETE CASCADE,
+    id           VARCHAR(64) PRIMARY KEY,  -- SHA256 hash of source:ticker:chunk_text[:100]
+    filing_id    VARCHAR(64) REFERENCES filings(id) ON DELETE CASCADE,
+    chunk_index  INTEGER NOT NULL,
+    text         TEXT NOT NULL,
     section      TEXT,
-    chunk_index  INT,
-    text         TEXT    NOT NULL,
-    token_count  INT,
-    embedding    vector(768),
-    metadata     JSONB   DEFAULT '{}'
+    embedding    vector(768),  -- sentence-transformers/all-mpnet-base-v2
+    created_at   TIMESTAMPTZ DEFAULT NOW(),
+    updated_at   TIMESTAMPTZ DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_chunks_embedding
     ON chunks USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
-CREATE INDEX IF NOT EXISTS idx_chunks_filing  ON chunks(filing_id);
+CREATE INDEX IF NOT EXISTS idx_chunks_filing ON chunks(filing_id);
 CREATE INDEX IF NOT EXISTS idx_chunks_section ON chunks(section);
 
-CREATE TABLE IF NOT EXISTS xbrl_facts (
-    id            UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
-    cik           VARCHAR(10) REFERENCES companies(cik),
-    taxonomy      VARCHAR(20) DEFAULT 'us-gaap',
-    concept       VARCHAR(100) NOT NULL,
-    period_type   VARCHAR(10),
-    period_start  DATE,
-    period_end    DATE        NOT NULL,
-    value         NUMERIC,
-    unit          VARCHAR(20),
-    form_type     VARCHAR(20),
-    accession     VARCHAR(25),
-    UNIQUE (cik, concept, period_end, unit, form_type)
+-- #############################################################################
+-- Document Metadata Table - Key/value metadata for chunks
+-- #############################################################################
+CREATE TABLE IF NOT EXISTS document_metadata (
+    id        VARCHAR(64) PRIMARY KEY,  -- SHA256 hash of chunk_id:key
+    chunk_id  VARCHAR(64) REFERENCES chunks(id) ON DELETE CASCADE,
+    key       VARCHAR(255) NOT NULL,
+    value     TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX IF NOT EXISTS idx_xbrl_cik_concept ON xbrl_facts(cik, concept);
+CREATE INDEX IF NOT EXISTS idx_document_metadata_chunk ON document_metadata(chunk_id);
+CREATE INDEX IF NOT EXISTS idx_document_metadata_key ON document_metadata(key);
+
+-- #############################################################################
+-- XBRL Facts Table - Structured financial data from SEC filings
+-- #############################################################################
+CREATE TABLE IF NOT EXISTS xbrl_facts (
+    id            VARCHAR(64) PRIMARY KEY,
+    filing_id     VARCHAR(64) REFERENCES filings(id) ON DELETE CASCADE,
+    concept_name  VARCHAR(100) NOT NULL,
+    value         TEXT,
+    value_numeric NUMERIC,
+    unit          VARCHAR(20),
+    period_start  DATE,
+    period_end    DATE,
+    instant_date  DATE,
+    axis          VARCHAR(100),
+    member        TEXT,
+    created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_xbrl_facts_filing ON xbrl_facts(filing_id);
+CREATE INDEX IF NOT EXISTS idx_xbrl_concept ON xbrl_facts(concept_name);
 CREATE INDEX IF NOT EXISTS idx_xbrl_period ON xbrl_facts(period_end DESC);
 
-CREATE TABLE IF NOT EXISTS articles (
-    id                 UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
-    source             VARCHAR(50),
-    url                TEXT        UNIQUE,
-    title              TEXT,
-    published_at       TIMESTAMPTZ,
-    body_text          TEXT,
-    sentiment          VARCHAR(10),
-    tickers_mentioned  TEXT[],
-    s3_raw_path        TEXT,
-    ingested_at        TIMESTAMPTZ DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS idx_articles_published ON articles(published_at DESC);
-CREATE INDEX IF NOT EXISTS idx_articles_tickers
-    ON articles USING GIN(tickers_mentioned);
-
+-- #############################################################################
+-- Collection Runs Table - Track data collection job history
+-- #############################################################################
 CREATE TABLE IF NOT EXISTS collection_runs (
-    id               UUID        PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     collector        VARCHAR(50) NOT NULL,
+    ticker           VARCHAR(10),
     started_at       TIMESTAMPTZ DEFAULT NOW(),
     finished_at      TIMESTAMPTZ,
-    records_written  INT         DEFAULT 0,
+    records_written  INTEGER DEFAULT 0,
     status           VARCHAR(20) DEFAULT 'running',
     error_msg        TEXT
 );
-EOF
+CREATE INDEX IF NOT EXISTS idx_collection_runs_collector ON collection_runs(collector);
+CREATE INDEX IF NOT EXISTS idx_collection_runs_ticker ON collection_runs(ticker);
