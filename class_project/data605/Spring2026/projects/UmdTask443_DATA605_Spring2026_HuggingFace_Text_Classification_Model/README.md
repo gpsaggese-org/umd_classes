@@ -1,18 +1,72 @@
-# HuggingFace Text Classification Model
+# HuggingFace News Article Classification
 
 ## Description
 
-HuggingFace is an open-source platform that provides ready-to-use, state-of-the-art language models along with the tools needed to fine-tune, evaluate, and deploy them for any natural language task, without needing to build models from scratch.
+This project builds an end-to-end News Article Classification Pipeline using HuggingFace Transformers. Given a raw news article, the system fine-tunes transformer models (DistilBERT, BERT, RoBERTa) on the AG News dataset for 4-class topic classification and serves predictions through a command-line inference interface.
 
-This project builds a News Article Classification Pipeline on top of HuggingFace. Given a raw news article, the system ingests data from public news datasets (AG News, BBC News), fine-tunes transformer models, covering BERT, DistilBERT, and RoBERTa for multi-class topic classification, and serves predictions through a live inference endpoint and dashboard.
-
-The full stack uses HuggingFace Transformers and Datasets for tokenization and fine-tuning, PyTorch as the training backend, Scikit-learn for evaluation metrics, FastAPI for inference serving, and Streamlit for the prediction dashboard.
-
-## Project Specs: 
-https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/data605/Spring2026/projects_descriptions/HuggingFace_Project_Description.md
+The entire pipeline — data loading, preprocessing, training, evaluation, and inference — runs inside Docker, requiring no local Python environment setup beyond Docker Desktop.
 
 **Authors**: @riyaapuri @stupatel17
 **Assigned to**: @riyaapuri @stupatel17 @protocorn @gpsaggese
+
+**Project Specs**: https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/data605/Spring2026/projects_descriptions/HuggingFace_Project_Description.md
+
+---
+
+## Table of Contents
+
+- [Architecture](#architecture)
+- [Stack](#stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Pipeline Steps](#pipeline-steps)
+- [Outputs](#outputs)
+- [Release Notes](#release-notes)
+
+---
+
+## Architecture
+
+```
+Raw News Article
+       │
+       ▼
+┌─────────────────┐
+│  dataset_loader │  Loads AG News from HuggingFace Hub
+│                 │  Splits into train / validation / test
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│  preprocessing  │  Cleans text (HTML, URLs, whitespace)
+│                 │  Tokenizes with AutoTokenizer (max 128 tokens)
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│    train.py     │  Fine-tunes DistilBERT / BERT / RoBERTa
+│                 │  Saves best checkpoint by macro-F1
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│   evaluate.py   │  Batch inference on test set
+│                 │  Outputs report, confusion matrix, CSV
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│   predict.py    │  Single article / file / interactive inference
+│                 │  Returns label + per-class confidence scores
+└─────────────────┘
+```
+
+**Docker layer**: All steps above run inside a single container. The project directory is volume-mounted at `/app` so code edits are reflected immediately without rebuilding. HuggingFace model downloads are persisted in a named Docker volume (`hf_cache`) so models are not re-downloaded across runs.
+
+---
 
 ## Stack
 
@@ -20,159 +74,345 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/data6
 |---|---|
 | Modeling & Tokenization | HuggingFace Transformers, Datasets |
 | Training Backend | PyTorch, Accelerate |
-| Evaluation | Scikit-learn, HuggingFace Evaluate |
+| Evaluation | Scikit-learn |
 | Hyperparameter Tuning | Optuna |
-| Serving | FastAPI |
-| Dashboard | Streamlit |
+| Serving | FastAPI *(upcoming)* |
+| Dashboard | Streamlit *(upcoming)* |
+| Containerization | Docker |
 
 ---
 
-## Release v1.0 
+## Project Structure
 
-### `config.py`
-Central config for all constants — dataset name, label mappings, model checkpoints, training hyperparameters, and paths. Imported by every other module to avoid hardcoded values.
-
-### `dataset_loader.py`
-Loads AG News from the HuggingFace hub. Optionally subsets train/test splits for faster iteration. Includes `summarize_dataset()` for label-distribution stats and `get_sample_articles()` for spot-checking raw examples.
-
-### `preprocessing.py`
-Three-stage pipeline: **clean → tokenize → format**.
-- `clean_text()` strips HTML entities, URLs, and excess whitespace. Punctuation and casing are intentionally preserved for the tokenizer.
-- `get_tokenizer()` loads an `AutoTokenizer` for any HF checkpoint.
-- `make_tokenize_fn()` returns a closure for use with `dataset.map()`, applying cleaning + tokenization with `padding="max_length"` and `truncation=True` at `MAX_LENGTH=128`.
-- `tokenize_dataset()` runs batched tokenization over the full `DatasetDict` and sets torch format on the output columns (`input_ids`, `attention_mask`, `label`).
-
-### `metrics.py`
-Two evaluation utilities:
-- `compute_metrics()` — Trainer callback returning `accuracy` and `f1_macro` after each eval step.
-- `full_report()` — generates a detailed sklearn classification report and confusion matrix, used during final model evaluation.
-
-### `requirements.txt`
-Pins all dependencies. Key versions: `transformers>=4.35`, `torch>=2.0`, `datasets>=2.14`, `scikit-learn>=1.3`, `optuna>=3.3`.
+```
+project_root/
+│
+├── project_files/
+│   ├── config.py                  # All constants and hyperparameters
+│   ├── requirements.txt           # Python dependencies
+│   │
+│   ├── scripts/
+│   │   ├── train.py               # Fine-tuning script
+│   │   ├── evaluate.py            # Evaluation + result export
+│   │   └── predict.py             # Inference script
+│   │
+│   └── utils/
+│       ├── dataset_loader.py      # Data loading and inspection
+│       ├── preprocessing.py       # Text cleaning and tokenization
+│       └── metrics.py             # Metric callbacks and report utilities
+│
+├── models/                        # Saved model checkpoints (generated)
+│   └── distilbert-ag-news/
+│       └── best/                  # Best checkpoint by macro-F1
+│
+├── results/                       # Evaluation outputs (generated)
+│   ├── classification_report.txt
+│   ├── confusion_matrix.png
+│   ├── per_class_metrics.png
+│   └── predictions.csv
+│
+├── Dockerfile                     # ML-ready container image
+├── docker_name.sh                 # Image name configuration
+├── docker_utils.sh                # Shared helper functions
+├── run.sh                         # Unified pipeline wrapper
+├── docker_build.sh                # Build the Docker image
+├── docker_dataloader.sh           # Run dataset_loader.py
+├── docker_train.sh                # Run train.py
+├── docker_evaluate.sh             # Run evaluate.py
+├── docker_predict.sh              # Run predict.py
+├── docker_bash.sh                 # Open interactive shell
+├── docker_jupyter.sh              # Launch Jupyter Lab
+├── docker_clean.sh                # Remove image and cache
+├── run_jupyter.sh                 # Jupyter startup (runs inside container)
+├── version.sh                     # Package version logger (runs at build)
+├── bashrc                         # Shell config copied into image
+└── etc_sudoers                    # Sudo config copied into image
+```
 
 ---
- 
-## Release v2.0
 
-### How to run (this will be cleaned up before the final commit)
+## Prerequisites
 
-**Prerequisites:** Docker Desktop installed and running. No other local dependencies needed from this commit onwards.
+**Docker Desktop** is the only requirement. No local Python installation is needed.
+
+| OS | Instructions |
+|---|---|
+| macOS | Download from https://www.docker.com/products/docker-desktop and install |
+| Windows | Install Docker Desktop; WSL2 will be enabled automatically |
+| Linux | Install Docker Engine via your package manager (`apt`, `dnf`, etc.) |
+
+Verify Docker is working before proceeding:
 
 ```bash
-# Full pipeline — build, load data, train, predict
-./run.sh
- 
-# With a custom model and prediction text
-./run.sh --model roberta-base --epochs 5 --text "Fed raises interest rates again"
- 
-# Skip rebuild if image already exists
-./run.sh --skip-build --text "Apple reports record iPhone sales"
- 
-# Run individual steps
-./docker_build.sh                                             # build image
-./docker_dataloader.sh                                        # inspect dataset
-./docker_train.sh --model bert-base-uncased --epochs 3        # fine-tune
-./docker_predict.sh --text "NASA launches new satellite"      # single prediction
-./docker_predict.sh                                           # interactive mode
-./docker_jupyter.sh                                           # open Jupyter Lab
+docker --version
+docker run hello-world
 ```
- 
----
- 
-### New Files
- 
-#### `scripts/train.py`
-Fine-tunes a transformer model on AG News end-to-end. Orchestrates the full training pipeline in five steps:
-1. Loads and preprocesses the dataset via the `dataset_loader` and `preprocessing` utilities.
-2. Instantiates `AutoModelForSequenceClassification` with a classification head (dropout + linear projection to 4 labels) on top of the pre-trained transformer backbone.
-3. Configures HuggingFace `Trainer` with: linear LR warmup over 500 steps, weight decay regularization, per-epoch evaluation, and macro-F1 as the checkpoint selection metric.
-4. Runs training with optional `fp16` on CUDA for speed.
-5. Saves the best checkpoint to `models/<model-name>/best/` and writes a training log to `train_results.txt`.
-Accepts CLI flags `--model`, `--epochs`, `--batch_size`, `--lr` so any backbone (DistilBERT, BERT, RoBERTa) can be swapped without touching code.
- 
-#### `scripts/predict.py`
-Loads a fine-tuned checkpoint and runs inference in three modes:
-- `--text` — classify a single article passed as a string.
-- `--file` — classify all articles in a text file (one per line).
-- Interactive — prompts for articles in a loop until `Ctrl+C`.
-Outputs the predicted label, confidence percentage, and a score bar for all four classes. Falls back gracefully with a clear error if the model checkpoint is not found.
- 
-#### `run.sh`
-Unified pipeline wrapper that runs the entire workflow in a single command. Executes four steps in order: build image → load dataset → train model → run prediction. Accepts `--skip-build` to avoid rebuilding when the image already exists, `--text` to set a custom prediction article, and all `train.py` flags (`--model`, `--epochs`, `--batch_size`, `--lr`) which are forwarded directly to the training step.
- 
-#### `docker_utils.sh`
-Shared helper library sourced by every `docker_*.sh` script. Provides three functions: `run()` to echo and execute commands, `load_docker_vars()` to source `docker_name.sh` and print resolved image names, and `base_run_opts()` to build the standard `docker run` flags including the code volume mount and HuggingFace cache volume.
- 
-#### `docker_train.sh`
-Runs `scripts/train.py` inside the container. Forwards all CLI arguments directly to the script, so any combination of `--model`, `--epochs`, `--batch_size`, and `--lr` works without modifying the script. The trained model is saved to `./models/` on the host via the volume mount.
- 
-#### `docker_predict.sh`
-Runs `scripts/predict.py` inside the container. Allocates a TTY only when called with no arguments (interactive mode), allowing it to also be called non-interactively from `run.sh` without a "not a TTY" error.
- 
-#### `docker_dataloader.sh`
-Runs `utils/dataset_loader.py` inside the container. Prints dataset size, per-label distribution, and sample articles so the data can be inspected before committing to a full training run.
- 
-#### `version.sh`
-Executed inside the container at image build time. Prints and logs the versions of all key packages (torch, transformers, datasets, etc.) to `/install/version.log`, making the image reproducible and debuggable.
- 
----
- 
-### Modified Files
- 
-#### `config.py`
-Added `BERT_MODEL` and `ROBERTA_MODEL` checkpoint constants alongside the existing `DEFAULT_MODEL` (DistilBERT) so alternative backbones can be referenced by name across the codebase without hardcoding strings. `RESULTS_DIR` path added for evaluation outputs in future commits.
- 
-#### `utils/dataset_loader.py`
-Added a validation split to test and find the best fit model before saving it. Since AGNews does not have a default validation split to ensure the final evaluation is done on unseen test data. This split (90/10 train, validation) helps us achieve that.
- 
-#### `utils/metrics.py`
-Updated import paths to reflect the new `project_files/` directory structure. No logic changes — `compute_metrics()` and `full_report()` behave identically to v1.0.
- 
-#### `utils/preprocessing.py`
-Fixed the `sys.path` insert to correctly locate `config.py` when the script is called from inside the `utils/` subdirectory as part of the restructured project layout.
- 
-#### `Dockerfile`
-Updated from the bare template to a full ML image:
-- Base stays `python:3.12-slim`; added system packages `git`, `build-essential`, `g++`, `libgomp1`
-- `COPY` path for `requirements.txt` changed to `project_files/requirements.txt`.
-- Added `ENV HF_HOME=/hf_cache` and `ENV TRANSFORMERS_CACHE=/hf_cache` so all HuggingFace model downloads survive container restarts.
-- Project code is not copied into the image — it is volume-mounted at runtime, so code edits require no rebuild.
-#### `docker_build.sh`
-Rewritten to be fully standalone — removed the dependency on the monorepo `utils.sh` via `git rev-parse`. Sources `docker_utils.sh` instead. Enables `DOCKER_BUILDKIT=1` for faster cached layer builds. Extra args (e.g. `--no-cache`) are passed through to `docker build`.
- 
-#### `docker_bash.sh`
-Rewritten standalone. Opens an interactive bash shell inside the container with the project directory live-mounted at `/app`. Used for manual debugging and exploration.
- 
-#### `docker_jupyter.sh`
-Rewritten standalone. Launches Jupyter Lab in a detached container with port-forwarding (`host:8888 → container:8888`). Port can be overridden via `JUPYTER_PORT` env var.
- 
-#### `docker_clean.sh`
-Rewritten standalone. Gains a `--volumes` flag that additionally removes the `hf_cache` named volume, wiping downloaded model weights for a full clean slate.
- 
-#### `run_jupyter.sh`
-Simplified — removed monorepo framework calls. Retains the same Jupyter flags: `--no-browser`, `--ip=0.0.0.0`, `--allow-root`, no token/password.
-
 
 ---
 
-## Release v3.0
- 
-### New Files
+## Installation
 
-#### `scripts/evaluate.py`
-Runs full batch evaluation of the fine-tuned model on the AG News test set and saves four outputs to `results/`:
-- `classification_report.txt` — per-class precision, recall, F1, and support via sklearn.
-- `confusion_matrix.png` — heatmap of true vs predicted labels across all four classes.
-- `per_class_metrics.png` — grouped bar chart of precision, recall, and F1 per category.
-- `predictions.csv` — row-level predictions with true label, predicted label, and a correct/incorrect flag for manual inspection.
-Accepts `--model_dir` to evaluate any saved checkpoint, defaulting to `models/distilbert-ag-news`. Uses `matplotlib.use("Agg")` so plots render correctly inside Docker without a display.
- 
-#### `docker_evaluate.sh`
-Runs `scripts/evaluate.py` inside the container non-interactively. All four result files are written to `./results/` on the host via the volume mount. Accepts `--model_dir` which is forwarded directly to the script.
+```bash
+# 1. Clone the repository
+git clone <repository-url>
+cd <repository-root>
 
---- 
+# 2. Build the Docker image (one-time, ~5 minutes)
+./docker_build.sh
+```
 
-### Modified Files
- 
-#### `run.sh`
-Added evaluate as step 4, shifting predict to step 5. Pipeline order is now: **build → dataloader → train → evaluate → predict**. Step counter in all headers updated from `/4` to `/5`.
+The build installs all Python dependencies from `project_files/requirements.txt` into the image. You only need to rebuild if `requirements.txt` or the `Dockerfile` changes.
+
+To force a clean rebuild (re-downloads all packages):
+
+```bash
+./docker_build.sh --no-cache
+```
+
+---
+
+## Usage
+
+### Full Pipeline
+
+Run the entire pipeline — data loading, training, evaluation, and prediction — in a single command:
+
+```bash
+./run.sh
+```
+
+With options:
+
+```bash
+# Swap the model backbone
+./run.sh --model bert-base-uncased
+
+# Override training hyperparameters
+./run.sh --model roberta-base --epochs 5 --batch_size 32 --lr 3e-5
+
+# Set a custom prediction article
+./run.sh --text "Federal Reserve raises interest rates for the third time this year"
+
+# Skip the Docker build step if the image already exists
+./run.sh --skip-build --text "Apple reports record iPhone sales"
+```
+
+### Individual Steps
+
+Each pipeline step can also be run independently:
+
+```bash
+# Inspect the dataset (label distribution, sample articles)
+./docker_dataloader.sh
+
+# Fine-tune the model
+./docker_train.sh
+./docker_train.sh --model bert-base-uncased --epochs 3
+
+# Evaluate the trained model
+./docker_evaluate.sh
+./docker_evaluate.sh --model_dir models/bert-ag-news
+
+# Run inference
+./docker_predict.sh --text "NASA launches a new satellite into orbit"
+./docker_predict.sh --file /app/project_files/articles.txt
+./docker_predict.sh                                           # interactive mode
+
+# Open a shell inside the container for debugging
+./docker_bash.sh
+
+# Launch Jupyter Lab at http://localhost:8888/lab
+./docker_jupyter.sh
+JUPYTER_PORT=8889 ./docker_jupyter.sh                         # custom port
+
+# Remove the Docker image
+./docker_clean.sh
+./docker_clean.sh --volumes                                   # also clears HF model cache
+```
+
+---
+
+## Configuration
+
+All tunable parameters live in `project_files/config.py`. Edit this file to change any default without modifying the scripts.
+
+| Parameter | Default | Description |
+|---|---|---|
+| `DEFAULT_MODEL` | `distilbert-base-uncased` | Backbone used when no `--model` flag is passed |
+| `BERT_MODEL` | `bert-base-uncased` | BERT checkpoint name for reference |
+| `ROBERTA_MODEL` | `roberta-base` | RoBERTa checkpoint name for reference |
+| `EPOCHS` | `3` | Number of training epochs |
+| `BATCH_SIZE` | `16` | Per-device training batch size |
+| `LEARNING_RATE` | `2e-5` | Peak learning rate |
+| `WEIGHT_DECAY` | `0.01` | L2 regularization strength |
+| `WARMUP_STEPS` | `500` | Linear LR warmup steps |
+| `MAX_LENGTH` | `128` | Max tokens per article |
+| `TRAIN_SUBSET` | `None` | Set to an integer to use a smaller training slice |
+| `EVAL_SUBSET` | `None` | Set to an integer to use a smaller test slice |
+| `OUTPUT_DIR` | `models/distilbert-ag-news` | Where the trained checkpoint is saved |
+| `RESULTS_DIR` | `results` | Where evaluation outputs are saved |
+| `SEED` | `42` | Random seed for reproducibility |
+
+---
+
+## Pipeline Steps
+
+### Step 1 — Dataset Loading (`utils/dataset_loader.py`)
+
+Loads the [AG News](https://huggingface.co/datasets/ag_news) dataset from the HuggingFace Hub. AG News contains 120,000 training and 7,600 test articles across four categories:
+
+| ID | Category |
+|---|---|
+| 0 | World |
+| 1 | Sports |
+| 2 | Business |
+| 3 | Sci/Tech |
+
+Key functions:
+
+- `load_ag_news()` — downloads the dataset from the HuggingFace Hub.
+- `get_subsets()` — optionally samples a smaller slice for faster iteration, controlled by `TRAIN_SUBSET` and `EVAL_SUBSET` in `config.py`.
+- `summarize_dataset()` — prints per-label counts to the terminal.
+- `get_sample_articles()` — prints random raw examples for spot-checking before training.
+
+A validation split (90/10 from train) is created at load time since AG News does not provide one by default. This ensures the test set remains fully unseen during model selection.
+
+---
+
+### Step 2 — Preprocessing (`utils/preprocessing.py`)
+
+Three-stage pipeline applied before tokenization:
+
+**Clean** (`clean_text()`): Removes HTML entities (`&amp;`, `&#34;`), URLs, and collapses excess whitespace. Punctuation and casing are preserved for the tokenizer.
+
+**Tokenize** (`make_tokenize_fn()`): Returns a closure for use with `dataset.map()`. Applies `padding="max_length"` and `truncation=True` at `MAX_LENGTH=128` tokens using `AutoTokenizer`.
+
+**Format** (`tokenize_dataset()`): Runs batched tokenization across the full `DatasetDict` and sets PyTorch tensor format on `input_ids`, `attention_mask`, and `label`.
+
+---
+
+### Step 3 — Training (`scripts/train.py`)
+
+Fine-tunes a transformer model on the preprocessed dataset using HuggingFace `Trainer`.
+
+**Model**: `AutoModelForSequenceClassification` adds a dropout layer and a linear projection (`hidden_size → 4 labels`) on top of the pre-trained backbone. Only the classification head is randomly initialized; transformer weights come from the HuggingFace checkpoint.
+
+**Training decisions**:
+- All transformer layers are trainable (full fine-tune, not frozen).
+- Linear learning rate warmup over 500 steps avoids large early gradient updates.
+- Weight decay regularization prevents overfitting.
+- Evaluation runs after every epoch; the best checkpoint is selected by macro-F1.
+- `fp16` mixed-precision is enabled automatically when CUDA is available.
+
+**CLI flags**:
+
+```bash
+python scripts/train.py --model bert-base-uncased --epochs 5 --batch_size 32 --lr 3e-5
+```
+
+**Outputs** (written to `models/<model-name>/`):
+- `best/` — best checkpoint (model weights + tokenizer).
+- `train_results.txt` — per-epoch training log.
+
+---
+
+### Step 4 — Evaluation (`scripts/evaluate.py`)
+
+Runs batch inference on the full test set and saves four outputs to `results/`:
+
+| Output file | Contents |
+|---|---|
+| `classification_report.txt` | Per-class precision, recall, F1, and support |
+| `confusion_matrix.png` | Heatmap of true vs predicted labels |
+| `per_class_metrics.png` | Grouped bar chart of precision, recall, and F1 per category |
+| `predictions.csv` | Row-level predictions with true label, predicted label, and a correct/incorrect flag |
+
+Uses `matplotlib.use("Agg")` so plots render inside Docker without a display.
+
+**CLI flags**:
+
+```bash
+python scripts/evaluate.py --model_dir models/bert-ag-news
+```
+
+---
+
+### Step 5 — Inference (`scripts/predict.py`)
+
+Loads a saved checkpoint and classifies articles in three modes:
+
+**Single article**:
+```bash
+./docker_predict.sh --text "Apple reports record iPhone sales in Q3"
+```
+
+**File** (one article per line):
+```bash
+./docker_predict.sh --file /app/project_files/articles.txt
+```
+
+**Interactive** (type articles one at a time, `Ctrl+C` to quit):
+```bash
+./docker_predict.sh
+```
+
+Example output:
+```
+── Result 1 ─────────────────────────────────────────────
+  Text       : Apple reports record iPhone sales in Q3...
+  Prediction : Business  (94.21% confidence)
+  All scores :
+    Business      94.21%  ██████████████████
+    Sci/Tech       3.87%
+    World          1.12%
+    Sports         0.80%
+```
+
+---
+
+## Outputs
+
+All outputs are written to the host machine via the Docker volume mount and persist after the container exits.
+
+| Path | Contents | Generated by |
+|---|---|---|
+| `models/<name>/best/` | Fine-tuned model weights and tokenizer | `train.py` |
+| `models/<name>/train_results.txt` | Per-epoch training log | `train.py` |
+| `results/classification_report.txt` | Full sklearn classification report | `evaluate.py` |
+| `results/confusion_matrix.png` | Confusion matrix heatmap | `evaluate.py` |
+| `results/per_class_metrics.png` | Per-class metric bar chart | `evaluate.py` |
+| `results/predictions.csv` | Row-level test set predictions | `evaluate.py` |
+
+---
+
+## Release Notes
+
+### Release v1.0
+Initial data and preprocessing pipeline.
+
+- `config.py` — central configuration for all constants and hyperparameters.
+- `utils/dataset_loader.py` — AG News loading, subsetting, and dataset inspection.
+- `utils/preprocessing.py` — text cleaning, tokenization, and dataset formatting.
+- `utils/metrics.py` — Trainer callback (`compute_metrics`) and sklearn report utility (`full_report`).
+- `requirements.txt` — full dependency list.
+
+### Release v2.0
+Model training, inference, and Docker integration.
+
+- **New**: `scripts/train.py` — end-to-end fine-tuning with HuggingFace Trainer.
+- **New**: `scripts/predict.py` — three-mode inference (single article, file, interactive).
+- **New**: `run.sh` — unified pipeline wrapper with CLI flags forwarded to each step.
+- **New**: `Dockerfile`, `docker_utils.sh`, `docker_name.sh`, `docker_build.sh`, `docker_train.sh`, `docker_predict.sh`, `docker_dataloader.sh`, `docker_bash.sh`, `docker_jupyter.sh`, `docker_clean.sh`, `run_jupyter.sh`, `version.sh` — full standalone Docker integration.
+- **Modified**: `config.py` — added `BERT_MODEL`, `ROBERTA_MODEL`, and `RESULTS_DIR`.
+- **Modified**: `utils/dataset_loader.py` — added 90/10 validation split from the training set since AG News has no default validation split.
+- **Modified**: `utils/preprocessing.py` — fixed `sys.path` insert for subdirectory execution.
+- **Modified**: `requirements.txt` — moved from project root into `project_files/`; root-level duplicate removed.
+- **Modified**: `Dockerfile` — upgraded from bare template to full ML image; added system packages required by PyTorch and scikit-learn; configured HuggingFace cache volume.
+
+### Release v3.0
+Model evaluation and result export.
+
+- **New**: `scripts/evaluate.py` — batch inference on the test set, exports classification report, confusion matrix, per-class metric chart, and predictions CSV.
+- **New**: `docker_evaluate.sh` — runs `evaluate.py` inside the container; results written to `./results/` on the host.
+- **Modified**: `run.sh` — evaluation added as step 4; prediction moved to step 5; step counters updated.
+- **Modified**: `utils/metrics.py` — removed `import evaluate` (HuggingFace library) to resolve a circular import. When running `scripts/evaluate.py`, Python adds `scripts/` to `sys.path` automatically, causing `import evaluate` inside `metrics.py` to resolve to `scripts/evaluate.py` instead of the HuggingFace package. Fixed by replacing the single usage with `accuracy_score` from sklearn, which produces identical results with no behaviour change.
