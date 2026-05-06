@@ -73,3 +73,4 @@ tensorboard/
 .env.*
 tmp.build/
 docker_build.log
+tutorials/tutorial_llamaindex/data/gutenberg/

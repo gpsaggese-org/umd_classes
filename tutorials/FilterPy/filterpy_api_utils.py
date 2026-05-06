@@ -10,7 +10,7 @@ Utility functions for the FilterPy API tutorial notebook.
 
 Import as:
 
-import tutorials.FilterPy.filterpy_api_utils as utils
+import tutorials.FilterPy.filterpy_api_utils as tffiaput
 """
 
 import logging
@@ -27,7 +27,6 @@ from filterpy.kalman import (
     UnscentedKalmanFilter,
 )
 from IPython.display import display
-from matplotlib.patches import FancyArrowPatch
 
 _LOG = logging.getLogger(__name__)
 
@@ -105,7 +104,11 @@ def plot_predict_update_diagram() -> None:
     boxes = {
         "prior": (1.0, 2.5, "Prior State\nx(t-1), P(t-1)"),
         "predict": (3.5, 2.5, "PREDICT\nx- = F x\nP- = F P F.T + Q"),
-        "update": (6.5, 2.5, "UPDATE\nK = P- H.T inv(S)\nx = x- + K(z - Hx-)\nP = (I-KH)P-"),
+        "update": (
+            6.5,
+            2.5,
+            "UPDATE\nK = P- H.T inv(S)\nx = x- + K(z - Hx-)\nP = (I-KH)P-",
+        ),
         "posterior": (9.0, 2.5, "Posterior\nx(t), P(t)"),
     }
     for key, (cx, cy, label) in boxes.items():
@@ -141,14 +144,23 @@ def plot_predict_update_diagram() -> None:
         xytext=(3.5, 4.5),
         arrowprops=dict(arrowstyle="->", color="darkorange", lw=2),
     )
-    ax.text(3.5, 4.7, "Process noise Q", ha="center", color="darkorange", fontsize=9)
+    ax.text(
+        3.5, 4.7, "Process noise Q", ha="center", color="darkorange", fontsize=9
+    )
     ax.annotate(
         "",
         xy=(6.5, 3.5),
         xytext=(6.5, 4.5),
         arrowprops=dict(arrowstyle="->", color="darkgreen", lw=2),
     )
-    ax.text(6.5, 4.7, "Measurement z\n(noise R)", ha="center", color="darkgreen", fontsize=9)
+    ax.text(
+        6.5,
+        4.7,
+        "Measurement z\n(noise R)",
+        ha="center",
+        color="darkgreen",
+        fontsize=9,
+    )
     ax.set_title(
         "Kalman Filter: Predict-Update Cycle",
         fontsize=14,
@@ -166,11 +178,27 @@ def show_matrix_table() -> None:
     ax.axis("off")
     headers = ["Matrix", "Shape", "Description"]
     rows = [
-        ["F", "(dim_x, dim_x)", "State transition: propagates state forward in time"],
-        ["H", "(dim_z, dim_x)", "Measurement function: maps state to measurement space"],
+        [
+            "F",
+            "(dim_x, dim_x)",
+            "State transition: propagates state forward in time",
+        ],
+        [
+            "H",
+            "(dim_z, dim_x)",
+            "Measurement function: maps state to measurement space",
+        ],
         ["Q", "(dim_x, dim_x)", "Process noise covariance: model uncertainty"],
-        ["R", "(dim_z, dim_z)", "Measurement noise covariance: sensor uncertainty"],
-        ["P", "(dim_x, dim_x)", "State covariance: current estimate uncertainty"],
+        [
+            "R",
+            "(dim_z, dim_z)",
+            "Measurement noise covariance: sensor uncertainty",
+        ],
+        [
+            "P",
+            "(dim_x, dim_x)",
+            "State covariance: current estimate uncertainty",
+        ],
         ["x", "(dim_x, 1)", "State vector: current best estimate"],
     ]
     table = ax.table(
@@ -248,8 +276,16 @@ def plot_linear_kf_tracking(r_val: float = 5.0, q_val: float = 0.1) -> None:
     estimates, stds = _run_linear_kf_1d(true_pos, measurements, r_val, q_val)
     fig, ax = plt.subplots(figsize=(10, 4))
     ax.plot(t, true_pos, "b-", lw=2, label="True position")
-    ax.scatter(t, measurements, c="orange", s=20, alpha=0.7, label="Measurements")
-    ax.plot(t, estimates, "g-", lw=2, label=f"KF estimate (RMSE={_rmse(estimates, true_pos):.2f})")
+    ax.scatter(
+        t, measurements, c="orange", s=20, alpha=0.7, label="Measurements"
+    )
+    ax.plot(
+        t,
+        estimates,
+        "g-",
+        lw=2,
+        label=f"KF estimate (RMSE={_rmse(estimates, true_pos):.2f})",
+    )
     ax.fill_between(
         t,
         estimates - stds,
@@ -262,7 +298,9 @@ def plot_linear_kf_tracking(r_val: float = 5.0, q_val: float = 0.1) -> None:
     ax.set_ylim(-5, 35)
     ax.set_xlabel("Time step")
     ax.set_ylabel("Position")
-    ax.set_title(f"Linear Kalman Filter 1D Tracking  (R={r_val:.1f}, Q={q_val:.3f})")
+    ax.set_title(
+        f"Linear Kalman Filter 1D Tracking  (R={r_val:.1f}, Q={q_val:.3f})"
+    )
     ax.legend(loc="upper left", fontsize=9)
     plt.tight_layout()
     plt.show()
@@ -471,9 +509,7 @@ def _run_ekf_radar(
     )
     # Process noise.
     q_block = Q_discrete_white_noise(dim=2, dt=dt, var=0.1)
-    ekf.Q = np.block(
-        [[q_block, np.zeros((2, 2))], [np.zeros((2, 2)), q_block]]
-    )
+    ekf.Q = np.block([[q_block, np.zeros((2, 2))], [np.zeros((2, 2)), q_block]])
     # Measurement noise.
     ekf.R = np.diag([sigma_r**2, sigma_b**2])
     ekf.P = np.eye(4) * 10.0
@@ -540,9 +576,20 @@ def plot_ekf_radar_tracking(
     )
     fig, ax = plt.subplots(figsize=(7, 7))
     ax.plot(x_true, y_true, "b-", lw=2, label="True path")
-    ax.scatter(meas_x, meas_y, c="orange", s=25, alpha=0.7, label="Measurements (polar->Cartesian)")
-    ax.plot(x_est, y_est, "g--", lw=2, label=f"EKF estimate (RMSE={pos_rmse:.2f})")
-    ax.scatter([x_true[0]], [y_true[0]], c="black", s=80, zorder=5, label="Start")
+    ax.scatter(
+        meas_x,
+        meas_y,
+        c="orange",
+        s=25,
+        alpha=0.7,
+        label="Measurements (polar->Cartesian)",
+    )
+    ax.plot(
+        x_est, y_est, "g--", lw=2, label=f"EKF estimate (RMSE={pos_rmse:.2f})"
+    )
+    ax.scatter(
+        [x_true[0]], [y_true[0]], c="black", s=80, zorder=5, label="Start"
+    )
     ax.set_xlim(-15, 15)
     ax.set_ylim(-15, 15)
     ax.set_aspect("equal")
@@ -597,6 +644,7 @@ def _plot_linearization(x0: float, sigma: float) -> None:
     :param x0: operating point for linearization
     :param sigma: input Gaussian standard deviation
     """
+
     # Nonlinear function: y = atan(x).
     def h_func(x: np.ndarray) -> np.ndarray:
         return np.arctan(x)
@@ -630,8 +678,16 @@ def _plot_linearization(x0: float, sigma: float) -> None:
     ax1.legend(fontsize=8)
     # Panel 2: input distribution.
     x_pdf = np.linspace(x0 - 4 * sigma, x0 + 4 * sigma, 300)
-    y_pdf = np.exp(-0.5 * ((x_pdf - x0) / sigma) ** 2) / (sigma * np.sqrt(2 * np.pi))
-    ax2.fill_between(x_pdf, y_pdf, alpha=0.4, color="blue", label=f"Input N({x0:.2f}, {sigma:.2f}^2)")
+    y_pdf = np.exp(-0.5 * ((x_pdf - x0) / sigma) ** 2) / (
+        sigma * np.sqrt(2 * np.pi)
+    )
+    ax2.fill_between(
+        x_pdf,
+        y_pdf,
+        alpha=0.4,
+        color="blue",
+        label=f"Input N({x0:.2f}, {sigma:.2f}^2)",
+    )
     ax2.set_xlim(-4, 4)
     ax2.set_ylim(0, None)
     ax2.set_xlabel("x")
@@ -642,13 +698,25 @@ def _plot_linearization(x0: float, sigma: float) -> None:
     y_min = min(y_samples.min(), ekf_mean - 4 * ekf_std)
     y_max = max(y_samples.max(), ekf_mean + 4 * ekf_std)
     bins = np.linspace(-np.pi / 2, np.pi / 2, 50)
-    ax3.hist(y_samples, bins=bins, density=True, alpha=0.5, color="blue", label="True (MC)")
-    y_ekf_range = np.linspace(-np.pi / 2, np.pi / 2, 300)
-    y_ekf_pdf = (
-        np.exp(-0.5 * ((y_ekf_range - ekf_mean) / ekf_std) ** 2)
-        / (ekf_std * np.sqrt(2 * np.pi))
+    ax3.hist(
+        y_samples,
+        bins=bins,
+        density=True,
+        alpha=0.5,
+        color="blue",
+        label="True (MC)",
     )
-    ax3.plot(y_ekf_range, y_ekf_pdf, "r--", lw=2, label=f"EKF approx N({ekf_mean:.2f}, {ekf_std:.2f}^2)")
+    y_ekf_range = np.linspace(-np.pi / 2, np.pi / 2, 300)
+    y_ekf_pdf = np.exp(-0.5 * ((y_ekf_range - ekf_mean) / ekf_std) ** 2) / (
+        ekf_std * np.sqrt(2 * np.pi)
+    )
+    ax3.plot(
+        y_ekf_range,
+        y_ekf_pdf,
+        "r--",
+        lw=2,
+        label=f"EKF approx N({ekf_mean:.2f}, {ekf_std:.2f}^2)",
+    )
     ax3.set_xlim(-np.pi / 2, np.pi / 2)
     ax3.set_xlabel("h(x)")
     ax3.set_ylabel("Density")
@@ -736,24 +804,54 @@ def _plot_sigma_points(alpha: float, sigma_x: float) -> None:
     wc = sp.Wc
     ut_mean = np.dot(wm, sigmas_out)
     diff = sigmas_out - ut_mean
-    ut_cov = sum(
-        wc[i] * np.outer(diff[i], diff[i]) for i in range(len(wm))
-    )
+    ut_cov = sum(wc[i] * np.outer(diff[i], diff[i]) for i in range(len(wm)))
     mc_mean = mc_out.mean(axis=0)
     mc_cov = np.cov(mc_out.T)
     fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(14, 5))
     # Panel 1: input sigma points.
     mc_in_subset = mc_samples[:500]
-    ax1.scatter(mc_in_subset[:, 0], mc_in_subset[:, 1], c="lightblue", s=5, alpha=0.5, label="Input samples")
-    ax1.scatter(sigmas[:, 0], sigmas[:, 1], c="red", s=80, marker="x", zorder=5, linewidths=2, label="Sigma points")
+    ax1.scatter(
+        mc_in_subset[:, 0],
+        mc_in_subset[:, 1],
+        c="lightblue",
+        s=5,
+        alpha=0.5,
+        label="Input samples",
+    )
+    ax1.scatter(
+        sigmas[:, 0],
+        sigmas[:, 1],
+        c="red",
+        s=80,
+        marker="x",
+        zorder=5,
+        linewidths=2,
+        label="Sigma points",
+    )
     ax1.set_xlim(-4, 4)
     ax1.set_ylim(-4, 4)
     ax1.set_aspect("equal")
     ax1.set_title("Input: Sigma Points")
     ax1.legend(fontsize=8)
     # Panel 2: transformed sigma points vs MC.
-    ax2.scatter(mc_out[:, 0], mc_out[:, 1], c="lightblue", s=5, alpha=0.3, label="MC output")
-    ax2.scatter(sigmas_out[:, 0], sigmas_out[:, 1], c="red", s=80, marker="x", zorder=5, linewidths=2, label="Transformed sigma pts")
+    ax2.scatter(
+        mc_out[:, 0],
+        mc_out[:, 1],
+        c="lightblue",
+        s=5,
+        alpha=0.3,
+        label="MC output",
+    )
+    ax2.scatter(
+        sigmas_out[:, 0],
+        sigmas_out[:, 1],
+        c="red",
+        s=80,
+        marker="x",
+        zorder=5,
+        linewidths=2,
+        label="Transformed sigma pts",
+    )
     ax2.set_xlim(-4, 4)
     ax2.set_ylim(-4, 4)
     ax2.set_aspect("equal")
@@ -767,8 +865,8 @@ def _plot_sigma_points(alpha: float, sigma_x: float) -> None:
         f"Input mean:  [{mean_in[0]:.2f}, {mean_in[1]:.2f}]\n\n"
         f"True MC output mean:\n  [{mc_mean[0]:.3f}, {mc_mean[1]:.3f}]\n\n"
         f"UKF output mean:\n  [{ut_mean[0]:.3f}, {ut_mean[1]:.3f}]\n\n"
-        f"True MC output cov[0,0]: {mc_cov[0,0]:.3f}\n"
-        f"UKF output cov[0,0]:     {ut_cov[0,0]:.3f}\n\n"
+        f"True MC output cov[0,0]: {mc_cov[0, 0]:.3f}\n"
+        f"UKF output cov[0,0]:     {ut_cov[0, 0]:.3f}\n\n"
         f"Sigma points: {len(sigmas)} = 2n+1\n"
         f"MC samples: {n_mc}"
     )
@@ -971,7 +1069,9 @@ def plot_ekf_vs_ukf(curvature: float = 0.5, r_val: float = 1.0) -> None:
         ax.set_ylim(-15, 15)
         ax.set_aspect("equal")
     ax1.plot(x_true, y_true, "b-", lw=2, label="True path")
-    ax1.scatter(meas_x, meas_y, c="orange", s=15, alpha=0.7, label="Measurements")
+    ax1.scatter(
+        meas_x, meas_y, c="orange", s=15, alpha=0.7, label="Measurements"
+    )
     ax1.set_title("True Path + Measurements")
     ax1.legend(fontsize=8)
     ax2.plot(x_true, y_true, "b-", lw=1, alpha=0.4)
@@ -1078,9 +1178,7 @@ def _run_enkf_1d(
     return means, stds, particles
 
 
-def plot_enkf_visualization(
-    n_ensemble: int = 100, q_val: float = 0.1
-) -> None:
+def plot_enkf_visualization(n_ensemble: int = 100, q_val: float = 0.1) -> None:
     """
     Plot EnKF ensemble particles and ensemble mean vs true state.
 
@@ -1114,8 +1212,16 @@ def plot_enkf_visualization(
     ax1.legend(fontsize=9)
     # Panel 2: mean with std band.
     ax2.plot(t, true_pos, "b-", lw=2, label="True position")
-    ax2.scatter(t, measurements, c="orange", s=15, alpha=0.7, label="Measurements")
-    ax2.plot(t, means, "g-", lw=2, label=f"EnKF mean (RMSE={_rmse(means, true_pos):.2f})")
+    ax2.scatter(
+        t, measurements, c="orange", s=15, alpha=0.7, label="Measurements"
+    )
+    ax2.plot(
+        t,
+        means,
+        "g-",
+        lw=2,
+        label=f"EnKF mean (RMSE={_rmse(means, true_pos):.2f})",
+    )
     ax2.fill_between(
         t,
         means - stds,

@@ -6,32 +6,75 @@ import tutorials.CausalML_Diabetes_Study.utils as tcdistut
 
 import logging
 import os
+import urllib.request
+import zipfile
 from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from causalml.inference.meta import (
-    BaseDRRegressor,
-    BaseRRegressor,
-    BaseSRegressor,
-    BaseTRegressor,
-    BaseXRegressor,
-)
-from causalml.metrics import auuc_score, plot_gain
-from sklearn.model_selection import train_test_split
-from xgboost import XGBClassifier, XGBRegressor
+
+import helpers.hdbg as hdbg
+import helpers.hio as hio
+import causalml.inference.meta
+import causalml.metrics
+import sklearn.model_selection
+import xgboost
 
 _LOG = logging.getLogger(__name__)
 
-# Set generic style for plots.
-sns.set_theme(style="whitegrid")
+
+import helpers.hnotebook as hnotebo
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init utils logging.
+    global _LOG
+    hnotebo.set_logger_to_print(_LOG)
+    # Init module logging.
+    causalml_logger: logging.Logger = logging.getLogger("causalml")
+    hnotebo.set_logger_to_print(causalml_logger)
 
 
 # #############################################################################
 # Data Loading & Specific Preprocessing
 # #############################################################################
+
+
+def download_cdc_data_if_needed(data_path: str) -> None:
+    """
+    Download and extract the CDC Diabetes dataset if not already present.
+
+    :param data_path: local path where the CSV file should be saved
+    :param url: direct download URL for the zipped dataset
+    """
+    if os.path.exists(data_path):
+        _LOG.info("Dataset already present at: %s", data_path)
+        return
+    #url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00519/diabetes_health_indicators_BRFSS2015.csv"
+    #url = "https://archive.ics.uci.edu/static/public/891/cdc+diabetes+health+indicators.zip"
+    url = "https://raw.githubusercontent.com/Helmy2/Diabetes-Health-Indicators/main/diabetes_binary_health_indicators_BRFSS2015.csv"
+    _LOG.info("Downloading dataset from: %s", url)
+    hio.create_dir(os.path.dirname(data_path), incremental=True)
+    if url.endswith(".zip"):
+        zip_path = os.path.join(os.path.dirname(data_path), "tmp.download.zip")
+        urllib.request.urlretrieve(url, zip_path)
+        filename = os.path.basename(data_path)
+        with zipfile.ZipFile(zip_path, "r") as z:
+            for name in z.namelist():
+                if filename in name:
+                    with z.open(name) as src, open(data_path, "wb") as dst:
+                        dst.write(src.read())
+                    break
+        hio.delete_file(zip_path)
+    else:
+        urllib.request.urlretrieve(url, data_path)
+    _LOG.info("Dataset saved to: %s", data_path)
 
 
 def load_cdc_data(filepath: str) -> pd.DataFrame:
@@ -43,8 +86,7 @@ def load_cdc_data(filepath: str) -> pd.DataFrame:
     :param filepath: relative path to the CSV file
     :return: cleaned dataframe ready for processing
     """
-    if not os.path.exists(filepath):
-        raise FileNotFoundError(f"File not found: {filepath}")
+    hdbg.dassert_file_exists(filepath)
     _LOG.info("Loading data from: %s", filepath)
     df = pd.read_csv(filepath)
     # Drop duplicates.
@@ -73,10 +115,15 @@ def preprocess_for_causal(
     :return: tuple of (df_filtered, X, T, Y)
     """
     # Basic validation.
-    if treatment_col not in df.columns:
-        raise ValueError(f"Treatment column not found: {treatment_col}")
-    if outcome_col not in df.columns:
-        raise ValueError(f"Outcome column not found: {outcome_col}")
+    hdbg.dassert_in(
+        treatment_col,
+        df.columns,
+        "Treatment column not found: %s",
+        treatment_col,
+    )
+    hdbg.dassert_in(
+        outcome_col, df.columns, "Outcome column not found: %s", outcome_col
+    )
     # Filter data to ensure columns exist and drop NAs.
     keep_cols = covariate_cols + [treatment_col, outcome_col]
     df_clean = df[keep_cols].dropna().copy()
@@ -112,28 +159,31 @@ class CausalNavigator:
         :param treatment_name: label for T=1
         """
         self.learner_type = learner_type.upper()
-        if self.learner_type not in ["S", "T", "X"]:
-            raise ValueError("learner_type must be 'S', 'T', or 'X'")
+        hdbg.dassert_in(
+            self.learner_type,
+            ["S", "T", "X"],
+            "learner_type must be 'S', 'T', or 'X'",
+        )
         self.control_name = control_name
         self.treatment_name = treatment_name
         # Define base learners (using XGBoost for speed and performance).
-        self.model_t = XGBClassifier(
+        self.model_t = xgboost.XGBClassifier(
             n_estimators=100, max_depth=4, random_state=42, eval_metric="logloss"
         )
-        self.model_y = XGBRegressor(
+        self.model_y = xgboost.XGBRegressor(
             n_estimators=100, max_depth=4, random_state=42
         )
         # Initialize the CausalML meta-learner.
         if self.learner_type == "X":
-            self.learner = BaseXRegressor(
+            self.learner = causalml.inference.meta.BaseXRegressor(
                 learner=self.model_y, control_name=control_name
             )
         elif self.learner_type == "T":
-            self.learner = BaseTRegressor(
+            self.learner = causalml.inference.meta.BaseTRegressor(
                 learner=self.model_y, control_name=control_name
             )
         elif self.learner_type == "S":
-            self.learner = BaseSRegressor(
+            self.learner = causalml.inference.meta.BaseSRegressor(
                 learner=self.model_y, control_name=control_name
             )
         self.cate_estimates = None
@@ -149,12 +199,12 @@ class CausalNavigator:
         :param T: treatment vector
         """
         _LOG.info("Calculating Propensity Scores for Overlap Check")
-        ps_model = XGBClassifier(
+        ps_model = xgboost.XGBClassifier(
             n_estimators=50, max_depth=3, eval_metric="logloss", random_state=42
         )
         ps_model.fit(X, T)
         p_scores = ps_model.predict_proba(X)[:, 1]
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.kdeplot(
             p_scores[T == 0], shade=True, color="red", label=self.control_name
         )
@@ -221,8 +271,9 @@ class CausalNavigator:
         :param df_original: original dataframe
         :return: dataframe with CATE column added
         """
-        if self.cate_estimates is None:
-            raise ValueError("Model not fitted. Run fit_estimate first")
+        hdbg.dassert_is_not(
+            self.cate_estimates, None, "Model not fitted. Run fit_estimate first"
+        )
         df_out = df_original.copy()
         df_out["cate"] = self.cate_estimates
         return df_out
@@ -239,9 +290,8 @@ class CausalNavigator:
         :param col: the column to group by (e.g., 'Age', 'Income')
         :param bins: number of bins if the column is continuous
         """
-        if col not in df_with_cate.columns:
-            raise ValueError(f"Column not found: {col}")
-        plt.figure(figsize=(10, 6))
+        hdbg.dassert_in(col, df_with_cate.columns, "Column not found: %s", col)
+        plt.figure()
         # Check if column is effectively continuous or categorical.
         unique_vals = df_with_cate[col].nunique()
         is_categorical = unique_vals < 15
@@ -293,8 +343,11 @@ class CausalNavigator:
         :param n_simulations: how many times to shuffle and retrain (keep low, e.g. 5-10)
         """
         _LOG.info("Running Placebo Test (%s permutations)", n_simulations)
-        if self.cate_estimates is None:
-            raise ValueError("Run fit_estimate() first to establish a baseline")
+        hdbg.dassert_is_not(
+            self.cate_estimates,
+            None,
+            "Run fit_estimate() first to establish a baseline",
+        )
         original_ate = self.cate_estimates.mean()
         placebo_ates = []
         # Handle label mapping once for consistency.
@@ -314,15 +367,15 @@ class CausalNavigator:
             T_shuffled.index = X.index  # Align indices.
             # We create a fresh instance to avoid side effects.
             if self.learner_type == "X":
-                temp_learner = BaseXRegressor(
+                temp_learner = causalml.inference.meta.BaseXRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             elif self.learner_type == "T":
-                temp_learner = BaseTRegressor(
+                temp_learner = causalml.inference.meta.BaseTRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
-                temp_learner = BaseSRegressor(
+                temp_learner = causalml.inference.meta.BaseSRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             # Estimate pseudo-effect.
@@ -339,7 +392,7 @@ class CausalNavigator:
                 cate_placebo.mean(),
             )
         # Visualization.
-        plt.figure(figsize=(10, 6))
+        plt.figure()
         sns.histplot(
             placebo_ates,
             color="grey",
@@ -395,15 +448,15 @@ class CausalNavigator:
             X_drop = X.drop(columns=[feature])
             # Re-initialize learner (same type as original).
             if self.learner_type == "X":
-                temp_learner = BaseXRegressor(
+                temp_learner = causalml.inference.meta.BaseXRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             elif self.learner_type == "T":
-                temp_learner = BaseTRegressor(
+                temp_learner = causalml.inference.meta.BaseTRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             else:
-                temp_learner = BaseSRegressor(
+                temp_learner = causalml.inference.meta.BaseSRegressor(
                     learner=self.model_y, control_name=self.control_name
                 )
             # Estimate.
@@ -417,7 +470,7 @@ class CausalNavigator:
             sensitivity_results, orient="index", columns=["ATE"]
         )
         sens_df = sens_df.sort_values(by="ATE")
-        plt.figure(figsize=(10, 8))
+        plt.figure()
         # Plot bars.
         sns.barplot(x=sens_df["ATE"], y=sens_df.index, palette="viridis")
         # Add baseline reference line.
@@ -455,17 +508,29 @@ class CausalNavigator:
         """
         _LOG.info("Starting Estimator Tournament")
         # Split data.
-        X_train, X_test, T_train, T_test, y_train, y_test = train_test_split(
-            X, T, Y, test_size=0.3, random_state=42
+        X_train, X_test, T_train, T_test, y_train, y_test = (
+            sklearn.model_selection.train_test_split(
+                X, T, Y, test_size=0.3, random_state=42
+            )
         )
         # Define candidates (using XGBoost for consistency).
         # Note: R and DR learners are more sensitive to hyperparams, but we use defaults.
         learners = {
-            "S-Learner": BaseSRegressor(learner=self.model_y),
-            "T-Learner": BaseTRegressor(learner=self.model_y),
-            "X-Learner": BaseXRegressor(learner=self.model_y),
-            "R-Learner": BaseRRegressor(learner=self.model_y),
-            "DR-Learner": BaseDRRegressor(learner=self.model_y),
+            "S-Learner": causalml.inference.meta.BaseSRegressor(
+                learner=self.model_y
+            ),
+            "T-Learner": causalml.inference.meta.BaseTRegressor(
+                learner=self.model_y
+            ),
+            "X-Learner": causalml.inference.meta.BaseXRegressor(
+                learner=self.model_y
+            ),
+            "R-Learner": causalml.inference.meta.BaseRRegressor(
+                learner=self.model_y
+            ),
+            "DR-Learner": causalml.inference.meta.BaseDRRegressor(
+                learner=self.model_y
+            ),
         }
         pred_results = pd.DataFrame()
         # Train and predict loop.
@@ -485,18 +550,18 @@ class CausalNavigator:
                 _LOG.error("%s failed: %s", name, str(e))
         # Evaluate using Cumulative Gain (Qini Curve).
         _LOG.info("Generating Uplift Curves (Metrics on Test Set)")
-        # plot_gain expects a DataFrame containing the predictions, outcome, and treatment.
+        # causalml.metrics.plot_gain expects a DataFrame containing the predictions, outcome, and treatment.
         df_preds = pred_results.copy()
         df_preds["y"] = y_test.values
         df_preds["t"] = T_test.values
         # Calculate AUUC score.
-        auuc = auuc_score(
+        auuc = causalml.metrics.auuc_score(
             df_preds, outcome_col="y", treatment_col="t", normalize=True
         )
         # Display table.
         _LOG.info("--- Qini / AUUC Scores (Higher is Better) ---")
         _LOG.info("\n%s", str(auuc.sort_values(ascending=False)))
-        plot_gain(
+        causalml.metrics.plot_gain(
             df_preds,
             outcome_col="y",
             treatment_col="t",

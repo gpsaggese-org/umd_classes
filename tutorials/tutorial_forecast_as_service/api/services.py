@@ -1,7 +1,7 @@
 """
 Import as:
 
-import tutorial_forecast_as_service.api.services as tfasapse
+import tutorials.tutorial_forecast_as_service.api.services as ttfasapse
 """
 
 import io
@@ -44,7 +44,9 @@ def handle_forecast() -> Dict[str, List[Dict[str, Any]]]:
     :return: forecast results
     """
     if not os.path.exists(_UPLOAD_PATH):
-        raise RuntimeError("No data uploaded. Please POST to /upload_data first.")
+        raise RuntimeError(
+            "No data uploaded. Please POST to /upload_data first."
+        )
     df = hpickle.from_pickle(_UPLOAD_PATH)
     config = {"daily_seasonality": True}
     forecaster = tpsrprmo.ProphetForecastModel(config)

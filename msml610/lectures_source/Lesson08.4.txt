@@ -1,0 +1,1074 @@
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Lesson 08.4: }}$$**
+\endgroup
+
+\vspace{1cm}
+
+::: columns
+:::: {.column width=75%}
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+**References**:
+
+- AIMA (Artificial Intelligence: a Modern Approach)
+
+- Pearl et al., The Book of Why, 2017
+- Facure, Causal Inference in Python, 2023
+
+::::
+:::: {.column width=20%}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){width=1.5cm}
+
+![](msml610/lectures_source/figures/book_covers/Book_cover_Book_of_why.jpg){width=1.5cm}
+
+::::
+:::
+
+// /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My\ Drive/books/Math\ -\ Bayesian\ methods/2023\ -\ Facure\ -\ Causal\ Inference\ in\ Python_\ Applying\ Causal\ Inference\ in\ the\ Tech\ Industry.pdf
+// https://matheusfacure.github.io/python-causality-handbook/landing-page.html
+// GitHub: https://github.com/matheusfacure/causal-inference-in-python-code/tree/main/causal-inference-in-python
+
+// /Users/saggese/src/notes1/books/2023.Facure.Causal_Inference.md
+
+// Chap 1: Introduction to Causal Inference
+
+* Sales example
+- There are stores that put product on sales for Christmas
+
+  \begingroup
+  \centering
+  ![](msml610/lectures_source/figures/L08.4.xmas_sales_df.png){width=60%}
+  \endgroup
+
+  where
+  - `store`: id of the store
+  - `weeks_to_xmas`: how many weeks before Christmas the measurement was done
+  - `avg_week_sales`: how much they sold in average
+  - `is_on_sale`: if store puts product on sale
+  - `weekly_amount_on_sale`: how much that store has sold in that week
+
+- Causal inference question: _"what is the impact of $T$ on $Y$?"_
+  - E.g., what is the impact of `is_on_sale` on `weekly_amount_sold`?
+  - E.g., when is the best moment to have sales (i.e., `weeks_to_xmas`)?
+
+* Definition
+::: columns
+:::: {.column width=80%}
+- **Treatment $T$**
+  - $T_i = 1$ if unit $i$ has received the treatment
+  - Sometimes $T$ is denoted with $D$
+  - E.g., `is_on_sale` at `weeks_to_xmas`, `is_on_sale`, `received_discount`,
+    `saw_ad`
+- **Outcome $Y$**
+  - The variable one wants to influence, $Y_i$
+  - E.g., `weekly_amount_sold`
+- **Unit of analysis**
+  - The entity for which outcomes are measured
+
+\begingroup \small
+| **Study**          | **Unit of analysis** |
+|--------------------|------------------|
+| Drug experiment    | Patient          |
+| Marketing experiment | Customer       |
+| Sales promotion    | Store or product |
+| Education policy   | Student          |
+\endgroup
+
+::::
+:::: {.column width=15%}
+```graphviz
+digraph CausalDiagram {
+  rankdir=TB;
+  splines=true;
+  nodesep=0.5;
+  ranksep=0.5;
+  node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+  // Node styles
+  T   [label="T", fillcolor="#A6E7F4"];
+  Y   [label="Y", fillcolor="#A6C8F4"];
+  // Edges
+  T   -> Y;
+}
+```
+::::
+:::
+
+* The Fundamental Problem of Causal Inference
+- **The Fundamental Problem of Causal Inference**
+  - _"You can never observe the same unit with and without treatment"_
+
+::: columns
+:::: {.column width=50%}
+- **Example**
+  - Plot outcome `weekly_amount_sold` conditioned on treatment `is_on_sale`
+  - Stores with price drops sell more (from 50 to 150)
+  - Matches intuition: _"people buy more when prices are low due to sales"_
+::::
+:::: {.column width=45%}
+![](msml610/lectures_source/figures/L08.4.xmas_boxplot.png)
+::::
+:::
+- **Is it true?**
+  - Maybe only larger businesses afford aggressive price drops?
+  - Maybe customers buy close to Christmas anyway?
+
+- Observing both counterfactual situations would reveal the effect of price
+  drops (this is **impossible**)
+
+* Causal Model
+- A **causal model** is a series of assignments $\leftarrow$
+  - Causality is non-reversible: you can't rearrange the equation
+
+::: columns
+:::: {.column width=60%}
+- **Example**
+  $$
+  \left\{
+  \begin{aligned}
+  & T \leftarrow f_t(u_t) \\
+  & Y \leftarrow f_y(T, u_y) \\
+  \end{aligned}
+  \right.
+  $$
+  where:
+  - $u_t, u_y$ are _exogenous_ variables (outside the model)
+    - Account for everything not covered by model variables
+  - Treatment $T$ and $u_y$ cause outcome $Y$
+  - $T$ and $Y$ are _endogenous_ variables (inside the model)
+
+::::
+:::: {.column width=35%}
+  ```graphviz[width=80%]
+  digraph CausalDiagram {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.5;
+    ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    // Node styles
+    T   [label="T", fillcolor="#A6E7F4"];
+    Y   [label="Y", fillcolor="#A6C8F4"];
+    u_t [label="u_t", fillcolor="#FFD1A6"];
+    u_y [label="u_y", fillcolor="#FFD1A6"];
+    // Edges
+    u_t -> T;
+    T   -> Y;
+    u_y -> Y;
+  }
+  ```
+::::
+:::
+
+* Causal Model: Sales Example
+::: columns
+:::: {.column width=60%}
+
+- Causal model for sales example:
+  $$
+  \small
+  \left\{
+  \begin{aligned}
+  & BusinessSize \leftarrow f_s(u_s) \\
+  & IsOnSales \leftarrow f_t(BusinessSize, u_t) \\
+  & AmountSold \leftarrow f_y(IsOnSales, BusinessSize, u_y) \\
+  \end{aligned}
+  \right.
+  $$
+
+::::
+:::: {.column width=35%}
+
+```graphviz
+digraph SalesModelExtended {
+  rankdir=TB;
+  splines=true;
+  nodesep=0.5;
+  ranksep=0.5;
+
+  node [
+    shape=box,
+    style="rounded,filled",
+    fontname="Helvetica",
+    fontsize=12,
+    penwidth=1.4
+  ];
+
+  // Node styles
+  BusinessSize [label="BusinessSize", fillcolor="#A6E7F4"];
+  IsOnSales [label="IsOnSales", fillcolor="#A6E7F4"];
+  AmountSold [label="AmountSold", fillcolor="#A6C8F4"];
+  u_s [label="u_s", fillcolor="#FFD1A6"];
+  u_t [label="u_t", fillcolor="#FFD1A6"];
+  u_y [label="u_y", fillcolor="#FFD1A6"];
+
+  // Edges
+  u_s -> BusinessSize;
+  BusinessSize -> IsOnSales;
+  u_t -> IsOnSales;
+  BusinessSize -> AmountSold;
+  IsOnSales -> AmountSold;
+  u_y -> AmountSold;
+}
+```
+
+::::
+::::
+
+\vspace{0.5cm}
+
+- One can make an assumption of linear model for $f_y(.)$ and say
+  $$AmountSold = \alpha + \beta_1 IsOnSales + \beta_2 BusinessSize + \varepsilon$$
+
+* Applying a Treatment to Sales Example
+- Assume the **causal model** is:
+  $$
+  \small
+  \left\{
+  \begin{aligned}
+  & T \leftarrow f_t(u_t) \\
+  & Y \leftarrow f_y(T, u_y) \\
+  \end{aligned}
+  \right.
+  $$
+  - Ask _"what would happen to the outcome $Y$ if I were to set the treatment to
+    $t_0$?"_
+    $$
+    \small
+    \left\{
+    \begin{aligned}
+    & T \leftarrow t_0 \\
+    & Y \leftarrow f_y(T, u_y) \\
+    \end{aligned}
+    \right.
+    $$
+  - The intervention is represented by the $do()$ operator, e.g., $do(T = t_0)$
+
+- Note that **conditioning** and **intervention** are different:
+  $$
+  \small
+  \EE[AmountSold | isOnSales = 1] \ne \EE[AmountSold | do(IsOnSales = 1)]
+  $$
+  - The **first** is what happens to businesses that make a price cut
+    - Some business (e.g., big businesses) are "self-selecting" to cut prices
+  - The **second** is what happens if you force every business to engage in sales
+
+* Individual Treatment Effect
+- Express the impact of the treatment $T$ on the outcome $Y$ for an individual
+  unit $i$
+  $$\tau_i = Y_i|do(T=t_1) - Y_i|do(T=t_0)$$
+  - The effect $\tau_i$ of going from treatment $t_0$ to $t_1$ for unit $i$ is
+    the difference in the outcome of that unit under $t_1$ compared to $t_0$
+  - E.g., $AmountSold_i|do(IsOnSales=1) - AmountSold_i|do(IsOnSales=0)$
+
+- You can only observe one term due to the fundamental problem of causal
+  inference
+  - Represent it in theory, but can't recover it from data
+
+* Potential Outcomes
+- Aka "counterfactuals"
+
+- The $do()$ operator represents _"unit $i$ outcome is $Y$ if treatment is set to
+  $t$"_
+  $$Y_{t,i} \triangleq Y_i | do(T_i = t)$$
+  - The first is "Rubin's notation", the second is "Pearl's notation"
+
+- For binary treatment use $Y_{0i}$ (without treatment) vs $Y_{1i}$ (with
+  treatment)
+  - One is "factual" (i.e., observable)
+  - The other is "counterfactual" (i.e., theoretical, not observable)
+
+- There is a slight difference
+  - $Y_t = Y|do(T=t)$ is "what a business would sell if it cut prices"
+  - $Y|T=t$ is "what a business that cut the prices sold"
+
+* Consistency of the Treatment
+- There is a single version of the treatment
+  - I.e., $T = T_i$ means only one thing
+
+- E.g.,
+  - A drug can come in multiple dosages: only one is used
+  - Giving a discount coupon is treated as the value of the coupon is the same,
+    it's given only once, in a way that is always equivalent
+  - In "help from a financial planner", is "help" a one-time consultation or
+    regular advice?
+
+* No Interference
+- Aka "Stable Unit of Treatment Value (SUTVA)"
+- The effect of one unit is not influenced by the treatment of other units
+  - E.g., there are no spillovers or network effects
+
+- E.g., vaccinating one person makes other close people less likely to catch the
+  illness even if they don't get the treatment
+
+* Average Treatment Effects
+- Assume you can see both potential outcomes $Y_{1i}$ and $Y_{0i}$ at the same
+  time (which is impossible)
+
+- **Average Treatment Effect (ATE)**
+  - The impact that the treatment $T$ would have on the average:
+    $$
+    \small
+    ATE = \EE[Y_{1i} - Y_{0i}] = \EE[Y | do(T=1)] - \EE[Y | do(T=0)]
+    $$
+- E.g., average impact of price cuts on amount sold:
+  $$
+  \small
+  ATE = \EE[AmountSold_{1i} - AmountSold_{0i}]
+  $$
+
+* Conditional Average Treatment Effects (CATE)
+- The impact of the treatment on the units in a group defined by $X=x$
+  $$
+  \small
+  CATE = \EE[(Y_{1i} - Y_{0i}) | X=x]
+  $$
+- E.g., the impact of having sales during the week of Christmas:
+  $$
+  \small
+  CATE = \EE[AmountSold_{1i} - AmountSold_{0i} | weeksToXmas = 0]
+  $$
+- Like $ATE$ but on a subgroup with a certain characteristics
+
+* Average Treatment effect on the Treated (ATT)
+- The impact of the treatment on the units that got the treatment:
+  $$
+  \small
+  ATT = \EE[(Y_{1i} - Y_{0i}) | T=1]
+  $$
+- E.g., how much sales increase for the business engaged in price cuts:
+  $$
+  \small
+  ATT = \EE[(AmountSold_{1i} - AmountSold_{0i}) | IsOnSales=1]
+  $$
+
+- We can define these quantities $ATE$, $CATE$, $ATT$, but not **measure them**
+  directly
+  - Because we can't observe both potential outcomes $Y_{1i}$ and $Y_{0i}$ at the
+    same time
+
+* Bias
+- **Bias** is what makes association different from causation
+
+- The claim _"cutting prices increases the amount sold by a business"_ can be
+  questioned with:
+  - _"Those businesses that cut prices could probably have sold more anyway, even
+    with no price cuts"_
+
+- More formally the argument refers to potential outcomes
+  - We are trying to estimate $\EE[Y_{it}] \triangleq \EE[Y_i | do(T=t)]$ using
+    $\EE[Y_i | T=t]$ but this is a "biased estimator" (i.e., an incorrect one)
+
+* The Bias Equation
+- **Causal inference** is interested in:
+  \begingroup
+  \small
+  $$\EE[Y_1 - Y_0] = \EE[Y | do(T = 1)] - \EE[Y | do(T = 0)]$$
+  \endgroup
+- **What is measured** is:
+  \begingroup
+  \small
+  $$\EE[Y | T = 1] - \EE[Y | T = 0]$$
+  \endgroup
+
+- Let's express one in terms of the other
+  - Replacing the observed outcomes (each unit has two potential outcomes but
+    only one can be observed and the other is 0)
+    $$Y | T=1 = (Y_1 | T=1) + \cancel{(Y_0 | T=1)} = Y_1 | T=1$$
+  - Adding and subtracting $\EE[Y_0 | T=1]$, reordering and merging expectations
+    \begingroup
+    \small
+    $$
+    \EE[Y | T = 1] - E[Y | T = 0] =
+    \EE[Y_1 - Y_0 | T = 1] +
+    \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+    $$
+    \endgroup
+  - Association = causation + a bias term
+
+//* Decomposing Observed Difference into Treatment Effect and Bias
+//
+//- Observed Outcomes
+//  - Each unit has two potential outcomes but only one is observed:
+//
+//$$Y | T=1 = Y_1 | T=1 \quad \text{(only treated potential outcome observed)}$$
+//
+//$$Y | T=0 = Y_0 | T=0 \quad \text{(only control potential outcome observed)}$$
+//
+//- Step 2: Difference in Means
+//
+//The observed difference between treated and untreated groups:
+//
+//$$\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Step 3: Add and Subtract the Counterfactual
+//
+//To decompose this into effect and bias, add and subtract $\mathbb{E}[Y_0 | T=1]$:
+//
+//$$\mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] = \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=0] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=1]$$
+//
+//- Step 4: Regroup Terms
+//
+//Rearrange to group the treatment effect and bias separately:
+//
+//$$= \mathbb{E}[Y_1 | T=1] - \mathbb{E}[Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Step 5: Merge Expectations
+//
+//Combine the first two terms using linearity of expectation:
+//
+//$$= \mathbb{E}[Y_1 - Y_0 | T=1] + \mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]$$
+//
+//- Final Decomposition
+//
+//$$\boxed{\mathbb{E}[Y | T=1] - \mathbb{E}[Y | T=0] = \underbrace{\mathbb{E}[Y_1 - Y_0 | T=1]}_{\text{ATT}} + \underbrace{\mathbb{E}[Y_0 | T=1] - \mathbb{E}[Y_0 | T=0]}_{\text{Bias}}}$$
+//
+//- Interpretation
+//  - **ATT** (Average Treatment Effect on the Treated): The causal effect—what we want to estimate
+//  - **Bias**: The difference in control potential outcomes between treated and untreated groups
+//    - If bias = 0, then observed difference = causal effect
+//    - If bias not 0, observed difference is misleading (confounded)
+
+* The Bias Equation: Remarks
+- Association = causation + a bias term
+  \begingroup
+  \small
+  $$
+  \EE[Y | T = 1] - E[Y | T = 0] =
+  \EE[Y_1 - Y_0 | T = 1] +
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+  \endgroup
+
+- Bias arises from differences between treated and control groups
+  (besides the treatment)
+  - Unobservable factors change together with treatment
+    - E.g., there are confounders
+  - E.g., treated and untreated businesses differ beyond price cuts
+    - E.g., differ in size, location, day of the week on which they have a sale,
+      cities they are located in
+
+- For association to be causation, treated and control units must be
+  **exchangeable**
+
+* The Bias Equation: Visual Example
+::: columns
+:::: {.column width=40%}
+- Plot `weekly_amount_sold` by business size (`avg_week_sales`)
+  - Color points: treatment (red) / control (blue)
+  - Treated units concentrated on the right
+::::
+:::: {.column width=55%}
+![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias0.png)
+::::
+:::
+
+\vspace{0.5cm}
+
+::: columns
+:::: {.column width=50%}
+- Difference in amount sold between groups has two causes
+  - _Treatment effect_: Price cut increases amount sold
+  - _Business size_: Bigger businesses sell more, can do more price cuts
+
+- The challenge for causal inference is to untangle the two effects
+::::
+:::: {.column width=45%}
+![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias1.png)
+![](msml610/lectures_source/figures/L08.4.Association_Causation_Bias2.png)
+::::
+:::
+
+* Simpson's Paradox
+::: columns
+:::: {.column width=50%}
+- Trend appears in different data groups but reverses when combined
+  - Relationship within subgroups can disappear or flip when aggregated
+- Paradox occurs due to a confounder influencing the relationship
+  - Aggregated data distorts results due to hidden variable
+::::
+:::: {.column width=45%}
+![](msml610/lectures_source/figures/L08.4.Simpson_Paradox.png)
+::::
+:::
+
+* Simpson's Paradox: Admission bias in University
+
+- A university has
+  - Two departments: Engineering and English
+  - Male overall acceptance rate: $\frac{81}{120}$ = 67.5%
+  - Female overall acceptance rate: $\frac{58}{120}$ = 48.3%
+
+- Is a bias against females, due to lower acceptance rate?
+
+- Break down data by Engineering and English
+
+\begingroup \scriptsize
+| **Department** | **Male** |  |  | **Female** |  |  |
+|:-----------|---------:|--:|--:|-----------:|--:|--:|
+|            | Applicants | Accepted | Rate | Applicants | Accepted | Rate |
+| **University** | 120 | 81 | 67.5% | 120 | 58 | 48.3% |
+| **Engineering** | 100 | 80 | 80% | 20 | 18 | 90% |
+| **English** | 20 | 1 | 5% | 100 | 40 | 40% |
+\endgroup
+
+- At the department level:
+  - Women have higher acceptance in Engineering (90% vs 80%)
+  - Women have higher acceptance in English (40% vs 5%)
+
+- Paradox reason:
+  - Engineering has high acceptance; English has low acceptance
+  - More men apply to Engineering; more women apply to English
+  - Women apply more to harder department, making their overall acceptance rate
+    appear lower, despite higher acceptance in each department
+
+// Identifying the Treatment Effect
+
+* Identifying the Treatment Effect
+- We can't observe $\EE[Y_{1i} - Y_{0i}]$ since we can only observe one of the
+  potential outcomes $Y_{1i}$ or $Y_{0i}$, but _not both_
+  - How can we recover causal quantities from observable data?
+
+- The bias equation says that:
+  $$
+  \EE[Y | T = 1] - \EE[Y | T = 0] =
+  \EE[(Y_1 - Y_0) | T = 1] +
+  \underbrace{\EE[Y_0 | T = 1] - \EE[Y_0 | T = 0]}_{\text{Bias}}
+  $$
+- If $\EE[Y_0|T=0] = \EE[Y_0|T=1]$, i.e., the treatment and the control
+  group are comparable (exchangeable) regardless of the treatment, then:
+  - The bias term vanishes $bias = 0$
+  - Association is causation
+  - The measured difference in means equals $ATE = \EE[Y_1 - Y_0]$
+  - The measured difference in means equals $ATT = \EE[(Y_1 - Y_0) | T = 1]$$
+
+- **Sales Example**
+  - If businesses that do and don't cut prices are similar to each other (i.e.,
+    interchangeable), then
+  - The difference in amount sold between the ones that cut prices and the ones
+    that don't, can be entirely attributed to the price cut
+
+* Exchangeability Property
+- The exchangeability property is equivalent to having _potential outcomes_ being
+  independent of the treatment:
+  $$
+  (Y_0, Y_1) \perp T
+  $$
+  i.e., $\EE[Y_0 | T] = \EE[Y_0]$: the treatment gives no information about the
+  potential outcomes (i.e., $\EE[Y_0 | T=1] = \EE[Y_0 | T=0]$)
+
+- **Note**
+  - We are not asking for _observed outcome_ $Y$ and treatment $T$ to be
+    independent
+    - This means that treatment has no effect
+  - We are asking for the potential outcome to be independent of the treatment
+    - The outcome observed if the subjects received the treatment is independent
+      if it received the treatment or not
+  - "Knowing whether someone received the treatment tells you nothing about what
+    their outcome would have been without it"
+  - The treatment is the only thing that causes difference in outcome between
+    treatment and control
+
+- **Sales Example**
+  - We can't tell apart businesses that chose to engage in sales from those that
+    didn't
+
+* Phases of Causal Inference
+- A causal inference problem is often broken down into two steps:
+  - **Identification**
+     - Express the causal quantity of interest in terms of observable data
+     - Remove the bias, making treated and untreated comparable, so that all
+       the difference can be attributed to the treatment effect
+       $$\EE[Y_0 | T=0] = \EE[Y_0 | T=1]$$
+     - You need to know how the treatment was distributed or assigned
+     - This is why data alone (observational) cannot answer causal questions
+  - **Estimation**
+     - Use data to estimate the causal quantity of interest:
+       $$te = \EE[Y | T=1] - \EE[Y | T=0]$$
+
+* Randomization Removes Bias
+- Randomization of treatment forces independence to hold $\implies$ removes bias
+
+- Assume you can randomize the treatment (e.g., you can force a business to cut
+  prices)
+  $$
+  \left\{
+  \begin{aligned}
+  & IsOnSales \leftarrow rand(t) \\
+  & AmountSold \leftarrow f_y(IsOnSales, u_y) \\
+  \end{aligned}
+  \right.
+  $$
+- The dependency from $u_t$ disappears since the assignment mechanism is:
+  - Tied to a coin flip (unrelated to other factors in causal mechanism)
+  - Fully known
+- Treatment becomes independent from potential outcomes
+
+// Chap 2: Randomized Experiments and Stats Review
+
+* A/B Testing Example
+- A common strategy among companies is to
+  - have a cheap / free product that serves to attract customers
+  - Cross-sell other products that are more profitable
+    - Use email campaigns to sell premium product
+    - When a customer get an email and buys the premium product, they are
+      "converted"
+
+- Non-randomized data, you see that:
+  $$
+  \EE[ Conversion | Email = 1] > \EE[ Conversion | Email = 0]
+  $$
+  - Problem: marketing team tends to send emails for customers who they think
+    they will convert (e.g., using a survey, customers who visited the website
+    the most)
+  $$
+  \EE[ Conversion_0 | Email = 1] > \EE[ Conversion_0 | Email = 0]
+  $$
+  - I.e., customers would have converted even if the email was not sent
+
+- You need to make the treated and untreated comparable
+  - E.g., you can randomize who gets the email
+
+- Imagine that you have 3 emails
+  - No email (`no_email`)
+  - Long and beautiful email (`long`)
+  - Short and to-the-point email (`short`)
+
+- Once you collect the data you get data like:
+  ```
+  id  gender  cross_sell_email   age    conversion
+  --------------
+  0
+  ```
+  - Compute the mean by group in `cross_sell_email`
+    ```
+    cross_sell_email    conversion
+    ------------------------------
+    no_email            0.042
+    long                0.055
+    short               0.125
+    ```
+  - Compute the ATE, i.e., difference between each treated group and control
+    $$ATE = \EE[Y | T=t] - \EE[Y | T=0]$$
+    - Sending the short and to-the-point email is best
+
+- You should still do a sanity check that randomization was done right
+  - E.g., you can check if `gender` and `age` are balanced in the groups (using a
+    statistical test)
+  - If not, it might be that the effect is due to sending the email to a specific
+    demographic
+  - Biases sampling has large effect on small data
+
+* Randomized Controlled Trials
+- RCTs are the most reliable way to measure causal effects
+
+- The problem is
+  - Very expensive (in time and money)
+  - Potentially unethical
+  - Sometimes impossible
+
+- You can use an RCT as a benchmark
+  - What is the best experiment to answer your question (even if it's not) feasible?
+  - Can help discover the causal effect
+
+*
+- Standard error of the mean is related to the sample size $n$
+  $$
+  SE = \frac{\sigma}{n}
+  $$
+
+- Imagine you have data about schools in terms of number of students and average
+  SAT score
+  - An frequent effect is that the top-performing schools have a small number of
+    students
+    - An explanation is that "fewer students allows teachers to give focused
+      attention to each student"
+
+  - In reality
+    - Also bottom 1% of schools have few students
+    - The effect is due to standard error of the mean: more students means more
+      precise estimate and less variation due to chance
+    - This is shown by a "triangular" shape of `avg_score` vs
+      `number_of_students`
+
+![](msml610/lectures_source/figures/L08.4.School_score_by_number_students.png)
+
+// Chap 3: Graphical Causal Models
+
+*
+- Estimate the impact of emails on conversion
+  - Cross-sell email = treatment $T$
+  - Customer converted to a new product (or not) = outcome $Y$
+
+- $T$ was randomized, so
+  - The treatment is independent from the potential outcomes
+    $$
+    (Y_0, Y_1) \perp T
+    $$
+  - Thus association equals causation 
+    $$
+    \EE[Y_1 - Y_0] = \EE[Y | T=1] - \EE[Y | T=0]
+    $$
+
+- You can't infer the independence assumption from the data
+  - You need to have information to the treatment assignment mechanism (e.g.,
+    "emails were randomized")
+
+- Imagine that you believe that `age`, `gender` also cause conversion
+  - There are also other variables $U$ (i.e., unobserved) that we didn't measure
+    (e.g., customer income, city we are operating in)
+
+```graphviz
+digraph CausalKG {
+  rankdir=LR;
+
+  u [shape=ellipse, style="filled,dashed", color="#183B4A", fillcolor="#E6EEF1", fontcolor="#183B4A", label="u"];
+
+  age [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="age"];
+  gender [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="gender"];
+
+  rnd [shape=ellipse, penwidth=2, style="filled,solid", color="#408AB0", fillcolor="#EAF3F8", fontcolor="black", label="rnd"];
+
+  cross_sell_email [shape=box, style="rounded,filled", color="#62D4A4", fillcolor="#EAF9F3", fontcolor="black", label="cross_sell_email"];
+
+  conversion [shape=box, penwidth=2, style="filled,solid", color="#F8D476", fillcolor="#FFF6DA", fontcolor="black", label="conversion"];
+
+  u -> age [style=solid, color=black];
+  u -> gender [style=solid, color=black];
+  age -> conversion [style=solid, color=black];
+  gender -> conversion [style=solid, color=black];
+  rnd -> cross_sell_email [style=solid, color=black];
+  cross_sell_email -> conversion [style=solid, color=black];
+  u -> conversion [style=solid, color=black];
+}
+```
+
+* Are Consultants Worth It?
+
+- You are a manager and you need to decide whether to hire expensive consultants
+
+- Which one is true?
+  - Do expensive consultants improve business?
+  - Only very profitable businesses can afford consultants?
+
+- Setting up a randomized trial is difficult
+  - You need to untangle causation from association
+
+```graphviz
+digraph CausalGraph {
+  rankdir=LR;
+
+  // Exogenous variable: profits_prev_6m
+  profits_prev_6m [
+    shape=ellipse,
+    penwidth=2,
+    color="#408AB0",
+    fillcolor="#EAF3F8",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_prev_6m"
+  ];
+
+  // Endogenous variable: Consultancy
+  Consultancy [
+    shape=box,
+    penwidth=1,
+    color="#62D4A4",
+    fillcolor="#EAF9F3",
+    style="filled,rounded,solid",
+    fontcolor=black,
+    label="Consultancy"
+  ];
+
+  // Target variable: profits_next_6m
+  profits_next_6m [
+    shape=box,
+    penwidth=2,
+    color="#F8D476",
+    fillcolor="#FFF6DA",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_next_6m"
+  ];
+
+  // Causal edges
+  profits_prev_6m -> Consultancy [style=solid, dir=forward, color=black];
+  profits_prev_6m -> profits_next_6m [style=solid, dir=forward, color=black];
+  Consultancy -> profits_next_6m [style=solid, dir=forward, color=black];
+}
+```
+
+// TODO(gp): Merge in Lesson08.2
+
+* Chains
+- In case of $T \to M \to Y$:
+  - $M$ is "mediator" since it mediates the relationship between $T$ and $Y$
+  - Causation flows only in the direction of the arrows
+  - Association flows both ways
+
+- E.g., $Study \to SolveProblems \to JobPromotion$
+  - Job promotion is causally dependent on studying
+  - The association goes both ways
+    - The more you study, the more likely to get a promotion
+    - The greater the chances of promotion, the greater your chance of having
+      studied (otherwise it would be difficult to get a promotion)
+  - So $Study$ and $JobPromotion$ are
+    - Dependent or
+    - Not independent $Study \cancel \perp JobPromotion$
+
+- If you hold the intermediary variable fixed (i.e., conditioning on $M$, looking
+  for only people with the same skills at problem solving), the dependency is
+  blocked
+  - $T$ and $Y$ are independent given $M$, i.e., $(T \perp Y) | M$
+  - $\EE[Y | T, M] = \EE[Y | M]$ and also the inverse $\EE[T | Y, M] = \EE[T | M]$
+
+* Forks
+// TODO(gp): Add graphs
+- In a fork $T \leftarrow X \rightarrow Y$:
+  - $X$ is a "confounder" (common cause of $T$ and $Y$)
+  - Association flows backward through the arrows
+  - $T$ and $Y$ are dependent even though neither causes the other: $T \not\perp Y$
+
+- E.g., $CausalKnowledge \leftarrow Statistics \rightarrow MachineLearning$
+  - Assume that causal inference doesn't help with machine learning, and vice
+    versa, so there is no edge between the 2
+  - Knowing causal inference signals statistics knowledge, which predicts ML skill
+
+- E.g., $AnswerQuestion \leftarrow GoodProgrammer \rightarrow GoodEmployee$
+  - For this reason in tech interviews you are asked to solve problems that might
+    you never find in the job you apply for (e.g., "invert a binary tree")
+
+- Conditioning on the common cause blocks the association:
+  $$T \cancel \perp Y, (T \perp Y) | X$$
+  - E.g., if you know that you are a good programmer (e.g., you have an
+    impressive resume), asking you a tech question won't give new information
+    about if you are a good employee or not
+
+* Collider
+- In a collider $T \rightarrow X \leftarrow Y$:
+  - $X$ is a "collider" (two arrows collide at it)
+  - $T$ and $Y$ are independent: $T \perp Y$
+  - Conditioning on $X$ opens the path, making $T$ and $Y$ dependent:
+    $T \cancel \perp Y | X$
+
+- E.g., $Statistics \rightarrow Promotion \leftarrow FlatteringBoss$
+  - There are two ways to get a job promotion
+    - You can be good at statistics
+    - You can flatter your boss
+  - If I don't know if you get or not the promotion (i.e., I don't condition on
+    $Promotion$) your level of statistics and flattering are independent
+  - If I know you got promoted, and I know you are bad at statistics, then you
+    must be good at flattering your boss
+    - "Explaining away" since one cause explains the effect, making the other
+      cause less likely
+
+- Conditioning on any _descendant_ of the collider opens the path, making the
+  variables dependent
+  - E.g.,
+    $Statistics \rightarrow Promotion \rightarrow Salary \leftarrow FlatteringBoss$:
+    conditioning on $Salary$ opens the
+    $Statistics \perp FlatteringBoss$ path
+
+* D-separation
+- A path is **blocked** given a conditioning set $Z$ if and only if either
+  condition holds:
+  1. It contains a non-collider that has been conditioned on
+  2. It contains a collider that has not been conditioned on and has no descendants
+     that have been conditioned on
+
+- Otherwise the path is **open** (nodes can be dependent)
+
+- Two nodes $A$ and $B$ are d-separated (independent) if and only if all the
+  paths between them are blocked
+
+// Identification Revisited
+
+* Identification
+
+- It is hard to find the causal effect because treated and untreated are not
+  comparable to each other, which results in bias
+
+- Using causal graphs
+  - You can understand where the bias is coming from and thus how to neutralize
+    it
+  - Thus the identification phase becomes equivalent to "close all undesirable
+    flows of association"
+
+- E.g., in the consultancy graph
+  - There is:
+    - A fork on `profits_next_6m`
+    - A confounder `profits_prev_6m`
+    - A causal path `consultancy` $\to$ `profits_next_6m`
+    - A non-causal path (aka "backdoor path") `profits_prev_6m` $\to$
+      `profits_next_6m`
+  - To close the non-causal flows of association you need to condition on the
+    confounder, i.e., `profits_prev_6m`
+    - Look at a group of companies with similar past performance
+    - Compare the ones that hired consultants (treated) vs the ones who didn't
+      (untreated)
+    - You are assuming conditional independence, i.e., $(Y_0, Y_1) \perp T | X$
+
+// TODO(ai_gp): Highlight the backdoor path and the confounder
+```graphviz
+digraph CausalGraph {
+  rankdir=LR;
+
+  // Exogenous variable: profits_prev_6m
+  profits_prev_6m [
+    shape=ellipse,
+    penwidth=2,
+    color="#408AB0",
+    fillcolor="#EAF3F8",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_prev_6m"
+  ];
+
+  // Endogenous variable: Consultancy
+  Consultancy [
+    shape=box,
+    penwidth=1,
+    color="#62D4A4",
+    fillcolor="#EAF9F3",
+    style="filled,rounded,solid",
+    fontcolor=black,
+    label="Consultancy"
+  ];
+
+  // Target variable: profits_next_6m
+  profits_next_6m [
+    shape=box,
+    penwidth=2,
+    color="#F8D476",
+    fillcolor="#FFF6DA",
+    style="filled,solid",
+    fontcolor=black,
+    label="profits_next_6m"
+  ];
+
+  // Causal edges
+  profits_prev_6m -> Consultancy [style=solid, dir=forward, color=black];
+  profits_prev_6m -> profits_next_6m [style=solid, dir=forward, color=black];
+  Consultancy -> profits_next_6m [style=solid, dir=forward, color=black];
+}
+```
+
+* Backdoor Adjustment
+- You are making the "conditional independence assumption", i.e.,
+  $(Y_0, Y_1) \perp T | X$
+
+- I.e., units with the same level of covariates $X$ have potential outcomes
+  that are the same on average (it's as if they were randomized)
+
+- Closing backdoor paths by conditioning on confounders $X$ makes the causal
+  quantity identifiable from observable data (aka "backdoor adjustment")
+  $$
+  ATE
+    = \EE_X[ \EE[Y | T=1] - \EE[Y | T=0 ]
+    = \sum_x (\EE[Y | T=1, X=x] - \EE[Y | T=0, X=x]) \Pr(X=x)
+  $$
+  - ATE is the weighted average of in-group treated-vs-control differences,
+    weighted by group size $\Pr(X=x)$
+
+* Confounding Bias
+
+- Confounding happens when there is an open backdoor path through which
+  association flows non-causally, because treatment and outcome share a common
+  cause
+
+- Example
+  - You work in HR and want to know if your new management training program is
+    increasing employers' engagement
+  - Training is optional
+  - Only managers who are already doing a great job attend the program
+  - The managers that need the training the most, don't attend
+  - When you measure engagement of the teams, engagement under managers who took
+    the training is much higher
+  - There is a common cause between treatment and outcome, so they move together
+    regardless of a causal effect
+
+- You need to close all backdoor paths between treatment $T$ and outcome $Y$,
+  i.e., adjust for the common causes / adjust for confounding bias
+  - E.g., control for manager's quality before taking the training
+
+- Unfortunately you can't adjust for all common causes
+  - Some causes are unknown
+  - Known causes might be difficult to measure
+
+* Surrogate Confounding
+
+- The confounder variable might be not be observable / measurable, but you might
+  have measured variable that can be proxies for confounder
+  - E.g., you can't measure confounder "manager quality"
+  - You can measure
+    - Causes
+      - Manager's tenure
+      - Manager's education level
+    - Effects
+      - Team's attrition
+      - Team's past performance
+
+- In this way you don't eliminate bias, but you can reduce it
+
+- Partial remedies when confounders are unobserved:
+  - Sensitivity analysis: Instead of asking "did I control for everything?", ask
+    "how strong must the unmeasured confounder be to change my conclusion?"
+  - Partial identification: Use observational data to place bounds on the causal
+    quantity rather than point-identify it
+  - Randomization: Intervening on the treatment removes confounding entirely by
+    making randomness the sole cause of $T$
+  
+* 
+- Set up
+  - You work for a software company
+  - You want to estimate the impact of a new feature
+  - You randomize rollout of the feature
+    - Only 10% of the customers are randomly chosen to get the feature
+  - You can't measure satisfaction directly so you send a survey to customers in
+    the rollout (treated) and in the control group, asking if you would recommend
+    the product
+
+- Customers with the feature have higher satisfaction than the ones without
+- Is the difference due entirely to causal effect of new feature?
+
+```graphviz
+digraph G {
+    rankdir=LR;
+    node [shape=ellipse, style=filled, fillcolor=white, fontname="Arial"];
+
+    RND [label="RND"];
+    NewFeature [label="New feature"];
+    CustomerSat [label="Customer satisfaction"];
+    SurveyResult [label="Survey result"];
+    Response [label="Response", fillcolor="#add8e6"];
+
+    {rank=same; SurveyResult; Response}
+    {rank=same; RND}
+    {rank=same; NewFeature}
+    {rank=same; CustomerSat}
+
+    RND -> NewFeature;
+    NewFeature -> CustomerSat;
+    NewFeature -> Response;
+    CustomerSat -> SurveyResult;
+    CustomerSat -> Response;
+}
+```
+
+- The issue is that you measure the satisfaction only for the customers who
+  responded to the survey (i.e., conditioning on responding to the survey)

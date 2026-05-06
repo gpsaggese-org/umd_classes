@@ -1,0 +1,11 @@
+ray==2.10.0
+pandas
+requests
+plotly
+yfinance
+scikit-learn
+statsmodels
+jupyterlab
+matplotlib
+ipywidgets
+tensorflow

@@ -1,5 +1,4 @@
 filterpy
-ipywidgets
 matplotlib
 numpy
 pandas

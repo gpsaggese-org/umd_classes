@@ -1,11 +1,12 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -15,10 +16,6 @@
 # %% [markdown]
 # # Causal Analysis of Lifestyle Interventions on Diabetes Risk
 #
-# > **Before you start:** If you haven't already, run through `CausalML.API.ipynb` to familiarise yourself with the `CausalNavigator` interface. This notebook is the full analysis, it dives into methodology, DAGs, and robustness checks in depth.
-#
-# ## Summary
-#
 # This notebook presents a causal analysis of physical activity's effect on diabetes prevalence using the CDC BRFSS dataset and the **X-Learner** meta-learning algorithm. It demonstrates heterogeneous treatment effect (HTE) estimation, validates findings through placebo tests and sensitivity analysis, and compares observational results to randomized controlled trial evidence while addressing key limitations of cross-sectional data.
 #
 # ## 1. Project Objective
@@ -26,7 +23,6 @@
 # This project estimates the **Heterogeneous Treatment Effect (HTE)** of physical activity on diabetes prevalence using observational data. Unlike traditional regression, which gives a single "average" coefficient, we use Causal Machine Learning (X-Learner) to understand **who** benefits most from lifestyle changes.
 #
 # **Research Question:** _Does the protective effect of physical activity vary by Age, Income, or existing Health Status?_
-# ---
 
 # %% [markdown]
 # ## Setup
@@ -37,17 +33,21 @@
 # %load_ext autoreload
 # %autoreload 2
 
+import logging
+
 import pandas as pd
-import os
 import seaborn as sns
+from graphviz import Digraph
 import warnings
 
-from utils import CausalNavigator, load_cdc_data, preprocess_for_causal
-
-# Configuration
+# Configuration.
 warnings.filterwarnings("ignore")
 sns.set_theme(style="whitegrid")
 pd.set_option("display.max_columns", None)
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
+_LOG = logging.getLogger(__name__)
 
 # %% [markdown]
 # ## 2. Data Source
@@ -68,9 +68,8 @@ pd.set_option("display.max_columns", None)
 # | `GenHlth` | Covariate (X) | Self-reported health (1=Excellent, 5=Poor) |
 # | `BMI` | Covariate (X / M) | Body mass index (used as confounder in estimation) |
 #
-# > **Download the data first:**  
-# > https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators  
-# > Place the CSV in `data/unprocessed/` before running the next cell.
+# Download the data first: https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+# Place the CSV in `data/unprocessed/` before running the next cell.
 
 # %%
 # Download the dataset and place it in the data/unprocessed/ folder before running this cell.
@@ -96,32 +95,89 @@ except Exception as e:
 #
 # #### DAG 1: Assumed Causal Structure (Ideal / Longitudinal)
 #
-# Physical activity is measured *before* diabetes onset:
-#
-# ```
-# Confounders (Age, Income, GenHlth, BMI)
-#          |              |
-#          v              v
-#   Physical Activity --> Diabetes Risk
-#     (Baseline)           (Follow-up)
-# ```
-#
+# Physical activity is measured *before* diabetes onset. Confounders flow into both treatment and outcome, with no reverse-causality arrow:
+
+# %%
+dag = Digraph(graph_attr={"rankdir": "LR"})
+
+dag.node(
+    "X",
+    "Confounders\nAge, Income,\nGenHlth, BMI",
+    style="dashed,filled",
+    fillcolor="#ff99ff",
+    shape="box",
+)
+dag.node(
+    "T",
+    "Physical Activity\nBaseline",
+    style="filled",
+    fillcolor="#bbbbff",
+    shape="box",
+)
+dag.node(
+    "Y",
+    "Diabetes Risk\nFollow-up",
+    style="filled",
+    fillcolor="#bbffbb",
+    shape="box",
+)
+
+dag.edge("X", "T")
+dag.edge("X", "Y")
+dag.edge("T", "Y")
+
+dag
+
+# %% [markdown]
 # #### DAG 2: Actual Cross-Sectional Reality
 #
-# The actual data acknowledges unmeasured confounding (U) and reverse causality:
+# The actual data acknowledges unmeasured confounding (U) and reverse causality. Both T and Y are measured at the same point in time:
 #
-# ```
-# Unmeasured U (Motivation, Genetics)
-#    |                       |
-#    v                       v
-# Physical Activity -----> Diabetes Risk
-#    ^  (Measured Now)  <--. (Reverse Causality — bias)
-#    |                       ^
-#    Measured X (Age, Income, GenHlth, BMI)
-# ```
-#
-# > ⚠️ **Critical Limitation:** The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously, temporal ordering cannot be established.
-#
+# Critical Limitation: The reverse causality arrow represents a key identification challenge. Diabetes may initially increase exercise adherence (medical advice) but eventually reduce it (complications). Cross-sectional data captures both patterns simultaneously — temporal ordering cannot be established.
+
+# %%
+dag = Digraph(graph_attr={"rankdir": "LR"})
+
+dag.node(
+    "U",
+    "Unmeasured U\nMotivation, Genetics",
+    style="filled",
+    fillcolor="#000000",
+    fontcolor="white",
+    shape="box",
+)
+dag.node(
+    "X",
+    "Measured X\nAge, Income,\nGenHlth, BMI",
+    style="dashed,filled",
+    fillcolor="#ff99ff",
+    shape="box",
+)
+dag.node(
+    "T",
+    "Physical Activity\nMeasured Now",
+    style="filled",
+    fillcolor="#bbbbff",
+    shape="box",
+)
+dag.node(
+    "Y",
+    "Diabetes Risk\nMeasured Now",
+    style="filled",
+    fillcolor="#bbffbb",
+    shape="box",
+)
+
+dag.edge("U", "T")
+dag.edge("U", "Y")
+dag.edge("X", "T")
+dag.edge("X", "Y")
+dag.edge("T", "Y")
+dag.edge("Y", "T", label="Reverse causality (bias)", style="dashed")
+
+dag
+
+# %% [markdown]
 # ### Key Assumptions
 #
 # 1. **Unconfoundedness** — By controlling for 15+ variables, we assume we isolate the effect of activity
@@ -279,10 +335,10 @@ navigator.plot_heterogeneity(df_results, col="GenHlth")
 navigator.run_placebo_test(X, T, Y, n_simulations=5)
 
 # %% [markdown]
-# The actual estimate (-0.002) falls outside the placebo distribution, 
-# indicating the result is not attributable to random chance. However, 
-# the placebo distribution's slight positive bias (~+0.001) suggests 
-# residual confounding or model instability, consistent with our 
+# The actual estimate (-0.002) falls outside the placebo distribution,
+# indicating the result is not attributable to random chance. However,
+# the placebo distribution's slight positive bias (~+0.001) suggests
+# residual confounding or model instability, consistent with our
 # cross-sectional design limitations.
 
 # %% [markdown]
@@ -343,41 +399,41 @@ navigator.run_sensitivity_analysis(X, T, Y)
 navigator.compare_estimators(X, T, Y)
 
 # %% [markdown]
-# The comparative evaluation of meta-learners reveals three distinct 
+# The comparative evaluation of meta-learners reveals three distinct
 # performance tiers based on Qini coefficients and uplift curves.
 #
 # **Top-performing estimators (Qini: -0.468 to -0.481):**
-# The T-Learner, X-Learner, and R-Learner exhibit statistically similar 
-# performance, with Qini scores varying by less than 3%. The T-Learner 
-# achieves the highest score (-0.481), followed closely by X-Learner 
-# (-0.469) and R-Learner (-0.468). These methods share a common 
-# theoretical foundation: separate modeling of treatment and control 
-# response surfaces, which enables flexible estimation of heterogeneous 
+# The T-Learner, X-Learner, and R-Learner exhibit statistically similar
+# performance, with Qini scores varying by less than 3%. The T-Learner
+# achieves the highest score (-0.481), followed closely by X-Learner
+# (-0.469) and R-Learner (-0.468). These methods share a common
+# theoretical foundation: separate modeling of treatment and control
+# response surfaces, which enables flexible estimation of heterogeneous
 # treatment effects.
 #
 # **Moderate performance (Qini: -0.449):**
-# The DR-Learner demonstrates approximately 7% lower performance relative 
-# to top-tier methods. While doubly robust estimators offer theoretical 
-# protection against misspecification of either the propensity or outcome 
-# model, this advantage requires at least one model to be correctly 
-# specified. In observational settings with violated identification 
-# assumptions, the dual-model dependency may amplify rather than mitigate 
+# The DR-Learner demonstrates approximately 7% lower performance relative
+# to top-tier methods. While doubly robust estimators offer theoretical
+# protection against misspecification of either the propensity or outcome
+# model, this advantage requires at least one model to be correctly
+# specified. In observational settings with violated identification
+# assumptions, the dual-model dependency may amplify rather than mitigate
 # estimation error.
 #
 # **Poor performance (Qini: -0.362):**
-# The S-Learner substantially underperforms, achieving 25% lower scores 
-# than top methods. This result is consistent with known limitations of 
-# single-model approaches: when treatment effects are small relative to 
-# main effects of confounders, regularization techniques prioritize 
-# fitting dominant predictors at the expense of subtle treatment 
+# The S-Learner substantially underperforms, achieving 25% lower scores
+# than top methods. This result is consistent with known limitations of
+# single-model approaches: when treatment effects are small relative to
+# main effects of confounders, regularization techniques prioritize
+# fitting dominant predictors at the expense of subtle treatment
 # heterogeneity.
 #
 # **Model selection justification:**
-# The X-Learner is retained as the primary estimator for this analysis. 
-# While the T-Learner achieves marginally superior performance (ΔQini = 
-# 0.012), the X-Learner's explicit propensity score weighting provides 
-# more stable estimates under treatment imbalance, a key characteristic 
-# of our data (74% treatment prevalence). The negligible performance 
+# The X-Learner is retained as the primary estimator for this analysis.
+# While the T-Learner achieves marginally superior performance (ΔQini =
+# 0.012), the X-Learner's explicit propensity score weighting provides
+# more stable estimates under treatment imbalance, a key characteristic
+# of our data (74% treatment prevalence). The negligible performance
 # difference validates this methodological choice.
 
 # %% [markdown]
@@ -397,6 +453,3 @@ navigator.compare_estimators(X, T, Y)
 # 1. **Unmeasured confounding** — Critical variables like genetics and motivation are absent from the dataset
 # 2. **Cross-sectional design** — Prevents establishing true temporal ordering; the reverse causality bias discussed in the Age Anomaly cannot be fully removed
 # 3. **Self-reported data** — Measurement error in physical activity self-assessment introduces noise into the treatment variable
-#
-# ---
-# *For the API reference and a shorter runnable demo, see `CausalML.API.ipynb`.*
