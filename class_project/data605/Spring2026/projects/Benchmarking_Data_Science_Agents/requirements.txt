@@ -11,7 +11,7 @@ duckdb==0.10.3                 # In-process OLAP SQL on Parquet files
 # ── Agent Orchestration ───────────────────────────────────────────────────────
 langgraph==0.1.5               # Linear pipeline state machine
 langchain-core==0.2.5          # Shared LangChain primitives
-langchain-anthropic==0.1.13    # Claude API (drop-in for langchain-openai)
+langchain-google-genai==1.0.6
 
 # ── HTTP / Scraping ────────────────────────────────────────────────────────────
 requests==2.31.0
