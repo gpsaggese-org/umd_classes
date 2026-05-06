@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -181,3 +181,5 @@ plt.savefig("results/price_by_neighborhood.png", dpi=120)
 plt.show()
 _LOG.info("Plot saved to results/price_by_neighborhood.png.")
 print(result_df.to_string(index=False))
+
+# %%

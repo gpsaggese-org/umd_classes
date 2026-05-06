@@ -1,4 +1,0 @@
-Model,Activation,Optimizer,Seq Length,Grad Clipping,Accuracy,F1,Epoch Time (s),Epochs,Hardware
-RNN,relu,adam,50,Yes,0.7541,0.7536,6.39,5,CPU
-RNN,relu,adam,50,Yes,0.7541,0.7536,6.36,5,CPU
-RNN,relu,adam,50,Yes,0.7541,0.7536,6.28,5,CPU

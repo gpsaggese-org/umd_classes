@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -152,3 +152,5 @@ plt.tight_layout()
 plt.savefig("results/price_vs_quality.png", dpi=120)
 plt.show()
 _LOG.info("Plot saved to results/price_vs_quality.png.")
+
+# %%

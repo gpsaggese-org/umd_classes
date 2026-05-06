@@ -15,6 +15,81 @@
   playbook multiple times will not change the system beyond the initial
   application, ensuring stability and predictability.
 
+## How to run the project
+## 🚀 Step-by-Step Execution
+
+
+### Step 1 — Build the Docker image
+
+```bash
+docker build -t house-price-project .
+```
+
+> This installs all dependencies from `requirements.txt` and sets up
+> JupyterLab inside the container. Takes ~3–5 minutes on first build.
+
+### Step 2 — Start the container
+
+```bash
+docker run -it -p 5001:5000 -p 8888:8888 \
+  --name house-price \
+  -v $(pwd):/project \
+  house-price-project
+```
+| Flag | Meaning |
+|------|---------|
+| `-it` | Interactive shell |
+| `-p 5001:5000` | Mac port 5001 → container port 5000 (Flask API) |
+| `-p 8888:8888` | Mac port 8888 → container port 8888 (JupyterLab) |
+| `--name house-price` | Give the container a fixed name |
+| `-v $(pwd):/project` | Mount project folder so files persist |
+
+You will land inside the container at `root@container:/project#`.
+
+### Step 3 — Train the model
+
+Inside the container:
+
+If you want to run the JupyterLab interface, execute:
+```bash
+PORT=5000 jupyter lab --ip=0.0.0.0 --no-browser --allow-root
+```
+
+ if you want to run the training script, execute:
+```bash
+python template.example.py
+```
+
+Expected output:
+WARNING: File 'ml_model/train.csv' not found – generating synthetic dataset.
+INFO: Dataset shape: (1460, 16)
+INFO: Cross-validating GradientBoosting (5 folds)…
+INFO: Cross-validating RandomForest (5 folds)…
+INFO: Cross-validating Ridge (5 folds)…
+INFO: Best model: GradientBoosting
+INFO: Test R²: 0.9822
+INFO: Model saved to '/project/ml_model/house_price_model.pkl'.
+
+> If you have the Kaggle dataset, place `train.csv` in `ml_model/` before
+> running this step to train on real data instead of synthetic data.
+
+### Step 4 — Start the Flask API
+
+Inside the container (keep this terminal open):
+
+```bash
+PORT=5000 python app.py
+```
+
+then in Jupyter Notebook run template.API.py inside the notebook and run the cells
+
+Once everything is done, you can run the whole process using Ansible. Make sure you have ansible installed and configured properly. Then, execute the following command in your terminal:
+
+```bash
+ansible-playbook playbook.yml
+```
+
+
 ## Project Objective
 The goal of the project is to automate the deployment of a machine learning
 model using Ansible. Students will create a playbook that provisions a virtual

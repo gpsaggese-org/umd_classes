@@ -208,6 +208,56 @@ def split_data(
     return train_test_split(X, y, test_size=test_size, random_state=42)
 
 
+def load_test_data(test_data_path: str) -> Tuple[pd.DataFrame, pd.Series]:
+    """
+    Load test data from a CSV file and separate features from target.
+
+    If the file does not exist, generate synthetic test data.
+
+    :param test_data_path: path to test.csv (Kaggle House Prices test data)
+    :return: (X_test, y_test) tuple with features and target values
+    """
+    if os.path.exists(test_data_path):
+        logger.info("Loading test dataset from '%s'.", test_data_path)
+        df = pd.read_csv(test_data_path)
+        # Keep only the columns required for this project.
+        available = [c for c in ALL_FEATURES + [TARGET_COLUMN] if c in df.columns]
+        df = df[available]
+    else:
+        logger.warning("File '%s' not found – generating synthetic test data.", test_data_path)
+        df = _generate_synthetic_data(n=500)
+    
+    X_test = df.drop(columns=[TARGET_COLUMN])
+    y_test = df[TARGET_COLUMN]
+    logger.info("Test set: %d rows", len(X_test))
+    return X_test, y_test
+
+
+# -----------------------------------------------------------------------------
+# Example 2: PyCaret classification pipeline
+# -----------------------------------------------------------------------------
+
+
+def run_pycaret_classification(
+    df: pd.DataFrame, target_column: str
+) -> pd.DataFrame:
+    """
+    Run a basic PyCaret classification experiment.
+
+    :param df: dataset containing features and target
+    :param target_column: name of the target column
+
+    :return: comparison of top-performing models
+    """
+    logger.info("Initializing PyCaret classification setup")
+    ...
+
+    logger.info("Comparing models")
+    results = compare_models()
+    ...
+
+    return results
+
 # -----------------------------------------------------------------------------
 # Sklearn pipeline builder
 # -----------------------------------------------------------------------------
@@ -286,6 +336,56 @@ def compare_models(
     )
     logger.info("Leaderboard:\n%s", leaderboard.to_string(index=False))
     return leaderboard
+
+
+def run_pycaret_regression(
+    df: pd.DataFrame,
+    n_select: int = 3,
+    fold: int = 5,
+    target_column: str = TARGET_COLUMN,
+) -> Pipeline:
+    """
+    Run a PyCaret-style regression experiment: compare models and train the best.
+
+    This is a convenience wrapper that:
+    1. Runs cross-validation on all candidate models (compare_models)
+    2. Selects the top performer by RMSE
+    3. Trains the best model on the full dataset
+    4. Stores the leaderboard for later retrieval via get_model_results()
+
+    :param df: dataset containing features and target column
+    :param n_select: (unused, for PyCaret compatibility) number of top models
+    :param fold: number of cross-validation folds
+    :param target_column: name of the target column
+    :return: fitted sklearn Pipeline for the best model
+    """
+    global _model_leaderboard, _best_model_pipeline
+
+    # Run comparison and get leaderboard
+    leaderboard = compare_models(df, target_column=target_column, fold=fold)
+    _model_leaderboard = leaderboard
+
+    # Train the best model (top row after sorting by RMSE)
+    best_model_name = leaderboard.iloc[0]["Model"]
+    logger.info("Training best model: %s", best_model_name)
+    best_pipeline = train_best_model(df, target_column=target_column, model_name=best_model_name)
+    _best_model_pipeline = best_pipeline
+
+    return best_pipeline
+
+
+def get_model_results() -> pd.DataFrame:
+    """
+    Retrieve the leaderboard from the last run_pycaret_regression() call.
+
+    :return: DataFrame with columns Model, RMSE, MAE, R2 sorted by RMSE
+    :raises RuntimeError: if run_pycaret_regression() has not been called yet
+    """
+    if _model_leaderboard is None:
+        raise RuntimeError(
+            "No model results available. Call run_pycaret_regression() first."
+        )
+    return _model_leaderboard
 
 
 def train_best_model(

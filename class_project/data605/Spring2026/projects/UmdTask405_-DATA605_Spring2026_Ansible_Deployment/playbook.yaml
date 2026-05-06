@@ -1,7 +1,7 @@
 ---
 # ──────────────────────────────────────────────────────────────
 # playbook.yaml
-# Ansible playbook – train, deploy, and test the House Price
+# Ansible playbook - train, deploy, and test the House Price
 # Prediction API running in Docker.
 #
 # Usage (from your Mac, inside the project folder):
@@ -19,7 +19,7 @@
     # ── Container settings ────────────────────────────────────
     container_name:  house-price
     image_name:      house-price-project
-    host_port:       5001
+    host_port:       5000
     container_port:  5000
 
     # ── Paths ─────────────────────────────────────────────────
@@ -35,17 +35,17 @@
   tasks:
 
     # ── SETUP ─────────────────────────────────────────────────
-    - name: "Setup – verify Docker is installed"
+    - name: "Setup - verify Docker is installed"
       ansible.builtin.command: docker --version
       changed_when: false
       tags: [setup]
 
-    - name: "Setup – verify Docker daemon is running"
+    - name: "Setup - verify Docker daemon is running"
       ansible.builtin.command: docker info
       changed_when: false
       tags: [setup]
 
-    - name: "Setup – display deployment config"
+    - name: "Setup - display deployment config"
       ansible.builtin.debug:
         msg:
           - "Project  : {{ project_root }}"
@@ -55,21 +55,32 @@
       tags: [setup]
 
     # ── TRAIN MODEL ───────────────────────────────────────────
-    - name: "Train – check if model already exists"
+    - name: "Train - check if model already exists"
       ansible.builtin.stat:
         path: "{{ model_pkl }}"
       register: model_stat
       tags: [train]
 
-    - name: "Train – run template.example.py to train and save model"
-      ansible.builtin.command:
-        cmd: python3 template.example.py
-        chdir: "{{ project_root }}"
+    - name: "Train – run template.example.py inside Docker container"
+      ansible.builtin.command: >
+        docker run --rm
+        --name {{ container_name }}-train
+        -v {{ project_root }}:/project
+        {{ image_name }}
+        bash -c "cd /project && python template.example.py"
       when: not model_stat.stat.exists
       register: train_out
       tags: [train]
 
-    - name: "Train – show output"
+    # - name: "Train - run template.example.py to train and save model"
+    #   ansible.builtin.command:
+    #     cmd: python3 template.example.py
+    #     chdir: "{{ project_root }}"
+    #   when: not model_stat.stat.exists
+    #   register: train_out
+    #   tags: [train]
+
+    - name: "Train - show output"
       ansible.builtin.debug:
         var: train_out.stdout_lines
       when:
@@ -77,7 +88,7 @@
         - train_out is defined
       tags: [train]
 
-    - name: "Train – confirm model file exists"
+    - name: "Train - confirm model file exists"
       ansible.builtin.stat:
         path: "{{ model_pkl }}"
       register: model_check
@@ -85,19 +96,19 @@
       tags: [train]
 
     # ── DEPLOY ────────────────────────────────────────────────
-    - name: "Deploy – stop existing container (if running)"
+    - name: "Deploy - stop existing container (if running)"
       ansible.builtin.command: docker stop {{ container_name }}
       ignore_errors: true
       changed_when: false
       tags: [deploy]
 
-    - name: "Deploy – remove existing container (if any)"
+    - name: "Deploy - remove existing container (if any)"
       ansible.builtin.command: docker rm {{ container_name }}
       ignore_errors: true
       changed_when: false
       tags: [deploy]
 
-    - name: "Deploy – start container with Flask API"
+    - name: "Deploy - start container with Flask API"
       ansible.builtin.command: >
         docker run -d
         --name {{ container_name }}
@@ -109,7 +120,7 @@
         bash -c "PORT={{ container_port }} python /project/app.py"
       tags: [deploy]
 
-    - name: "Deploy – wait for API to become healthy"
+    - name: "Deploy - wait for API to become healthy"
       ansible.builtin.uri:
         url:         "{{ api_base }}/health"
         method:      GET
@@ -120,13 +131,13 @@
       until:    health_resp.status == 200
       tags: [deploy]
 
-    - name: "Deploy – confirm API is up"
+    - name: "Deploy - confirm API is up"
       ansible.builtin.debug:
         msg: "API is live at {{ api_base }}  status={{ health_resp.json.status }}"
       tags: [deploy]
 
     # ── TESTING ───────────────────────────────────────────────
-    - name: "Test 1 – GET /health returns ok"
+    - name: "Test 1 - GET /health returns ok"
       ansible.builtin.uri:
         url:         "{{ api_base }}/health"
         method:      GET
@@ -134,14 +145,14 @@
       register: t_health
       tags: [testing]
 
-    - name: "Test 1 – assert status is ok"
+    - name: "Test 1 - assert status is ok"
       ansible.builtin.assert:
         that: t_health.json.status == "ok"
         success_msg: "✅ /health → ok"
         fail_msg:    "❌ /health returned {{ t_health.json }}"
       tags: [testing]
 
-    - name: "Test 2 – POST /predict returns a price"
+    - name: "Test 2 - POST /predict returns a price"
       ansible.builtin.uri:
         url:         "{{ api_base }}/predict"
         method:      POST
@@ -156,7 +167,7 @@
       register: t_predict
       tags: [testing]
 
-    - name: "Test 2 – assert predicted_price is positive"
+    - name: "Test 2 - assert predicted_price is positive"
       ansible.builtin.assert:
         that:
           - t_predict.json.predicted_price is defined
@@ -165,7 +176,7 @@
         fail_msg:    "❌ /predict returned {{ t_predict.json }}"
       tags: [testing]
 
-    - name: "Test 3 – POST /predict/batch returns two prices"
+    - name: "Test 3 - POST /predict/batch returns two prices"
       ansible.builtin.uri:
         url:         "{{ api_base }}/predict/batch"
         method:      POST
@@ -178,7 +189,7 @@
       register: t_batch
       tags: [testing]
 
-    - name: "Test 3 – assert batch count and ordering"
+    - name: "Test 3 - assert batch count and ordering"
       ansible.builtin.assert:
         that:
           - t_batch.json.count == 2
