@@ -16,12 +16,13 @@ querying using a local large language model (LLM).
 3. [Dataset](#dataset)
 4. [Graph Schema](#graph-schema)
 5. [Prerequisites](#prerequisites)
-6. [Setup](#setup)
-7. [Running the Project](#running-the-project)
-8. [Notebooks](#notebooks)
-9. [Key Design Decisions](#key-design-decisions)
-10. [Results](#results)
-11. [References](#references)
+6. [Quick Start](#quick-start)
+7. [Setup](#setup)
+8. [Running the Project](#running-the-project)
+9. [Notebooks](#notebooks)
+10. [Key Design Decisions](#key-design-decisions)
+11. [Results](#results)
+12. [References](#references)
 
 ---
 
@@ -81,9 +82,10 @@ User Question
  Natural Language Answer
 ```
 
-The Jupyter container and Neo4j container run separately via Docker. Ollama runs
-natively on the host machine. Inside Docker, `host.docker.internal` is used to
-reach the host's Ollama server.
+Three processes run in parallel: a **Neo4j container** (graph database),
+a **Jupyter container** (notebooks + Python), and **Ollama** (LLM, runs
+natively on the host). Both containers reach Ollama and each other via
+`host.docker.internal`.
 
 ---
 
@@ -137,21 +139,32 @@ The knowledge graph contains three node types and two relationship types:
 
 - [Docker](https://www.docker.com/) installed and running
 - [Ollama](https://ollama.com/) installed on your host machine
-- `llama3.2:1b` model pulled in Ollama
-- MovieLens dataset downloaded and placed in `movielens/`
+- MovieLens CSV files placed in the `movielens/` directory (see [Dataset](#dataset))
 
-Pull the required Ollama model:
+One-time Ollama setup:
 ```bash
 ollama pull llama3.2:1b
 ```
 
 ---
 
+## Quick Start
+
+```bash
+ollama serve          # start the local LLM (skip if already running)
+./docker_neo4j.sh     # start Neo4j
+./docker_build.sh     # build the Jupyter image (first time only)
+./docker_jupyter.sh   # launch Jupyter at http://localhost:8888
+```
+
+Then open `http://localhost:8888`, navigate to `curr_dir/`, and run the
+notebooks in order.
+
+---
+
 ## Setup
 
 ### 1. Start Ollama
-
-Ollama must be running on your host machine before starting Jupyter:
 
 ```bash
 ollama serve
@@ -161,44 +174,34 @@ If you see `address already in use`, Ollama is already running — no action nee
 
 ### 2. Start Neo4j
 
-Run Neo4j in a Docker container:
-
 ```bash
-docker run -d \
-  --name neo4j \
-  -p 7474:7474 -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/password \
-  neo4j:5.26.24
+./docker_neo4j.sh
 ```
 
-If the container already exists from a previous run:
+This script is idempotent — it creates the container on the first run and
+simply restarts it on subsequent runs. Verify Neo4j is up by visiting
+`http://localhost:7474` (~20 seconds after running).
 
-```bash
-docker start neo4j
-```
-
-Verify Neo4j is running by visiting `http://localhost:7474` in your browser.
-
-> **Linux users:** Docker on Linux does not support `host.docker.internal` by
-> default. Add `--add-host=host.docker.internal:host-gateway` to the
-> `docker run` command above and to `docker_jupyter.sh` so the Jupyter
-> container can reach Neo4j on the host network.
+> **Linux users:** Docker on Linux does not support `host.docker.internal`
+> by default. Add `--add-host=host.docker.internal:host-gateway` to the
+> `docker run` command inside `docker_neo4j.sh` and to `docker_jupyter.sh`
+> so the two containers can reach the host network.
 
 ### 3. Build the Jupyter Docker Image
 
-From your project directory:
+Only needed once (or after changing `requirements.txt` or `Dockerfile`):
 
 ```bash
 ./docker_build.sh
 ```
 
-### 4. Start Jupyter
+### 4. Launch Jupyter
 
 ```bash
 ./docker_jupyter.sh
 ```
 
-Then open `http://localhost:8888` in your browser and navigate to `curr_dir/`.
+Open `http://localhost:8888` and navigate to `curr_dir/`.
 
 ---
 
@@ -206,12 +209,13 @@ Then open `http://localhost:8888` in your browser and navigate to `curr_dir/`.
 
 Run the notebooks in this order:
 
-1. **`langchain_neo4j.API.ipynb`** — learn the individual APIs
-2. **`langchain_neo4j.example.ipynb`** — run the full end-to-end project
+1. **`langchain_neo4j.API.ipynb`** — reference guide for each API used
+2. **`langchain_neo4j.example.ipynb`** — full end-to-end project walkthrough
 
 > **Note:** The first time you run the example notebook, data ingestion
-> (movies + ratings) will take a few minutes. Subsequent runs skip ingestion
-> automatically since `MERGE` prevents duplicate nodes.
+> (movies + ratings) will take a few minutes since it writes 27,000 movie
+> nodes and 100,000 rating relationships. Subsequent runs skip ingestion
+> automatically — `MERGE` prevents duplicate nodes.
 
 ---
 
