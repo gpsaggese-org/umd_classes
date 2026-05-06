@@ -3,14 +3,13 @@ FROM python:3.12-slim
 
 # Avoid interactive prompts
 ENV DEBIAN_FRONTEND=noninteractive
-# Set MLflow tracking URI to a local folder in the container
-ENV MLFLOW_TRACKING_URI=file:///project/mlruns
 
 # Install basic system tools
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     curl \
     git \
+    sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Setup directory structure
@@ -20,7 +19,7 @@ WORKDIR /project
 # Install Python packages
 COPY requirements.txt /install/requirements.txt
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext mlflow -r /install/requirements.txt
 
 # Config files
 COPY etc_sudoers /etc/sudoers

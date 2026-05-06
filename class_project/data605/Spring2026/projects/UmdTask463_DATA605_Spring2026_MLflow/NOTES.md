@@ -28,3 +28,8 @@
 - Updated `mlflow_utils.py` to use a Python context manager.
 - Performed linear and Ridge regression runs on an 80/20 split of `train_clean.csv`.
 - Performed an Alpha hyperparameter sweep to determine optimal hyperparamter tuning.
+
+## [2026-05-05]
+- Changed `run_mlflow.sh` to operate on a clean state by deleting old files every run and operate off of 0.0.0.0.
+- Changed `Dockerfile` to install MLflow and Jupytext.
+- Changed `mlflow.example.ipynb` to write runs to a single folder.

@@ -1,7 +1,11 @@
 #!/bin/bash
-# Start MLflow UI with the correct paths and permissions
+# Wipe temporary folder to ensure a clean slate
+rm -rf /tmp/mlflow_data
+mkdir -p /tmp/mlflow_data
+
+# Start MLflow UI
 mlflow ui \
   --host 0.0.0.0 \
-  --backend-store-uri file:///project/mlruns \
+  --backend-store-uri file:///tmp/mlflow_data \
   --allowed-hosts "*" \
   --cors-allowed-origins "*"

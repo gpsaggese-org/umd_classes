@@ -16,8 +16,14 @@ set -e
 # Print each command to stdout before executing it.
 #set -x
 
-# Import the utility functions from /git_root.
-GIT_ROOT=/git_root
+# Detect the actual path to repository
+GIT_ROOT=$(pwd | grep -o '.*gpsaggese.github.io')
+
+# Fallback: If detection fails, use the absolute path
+if [ -z "$GIT_ROOT" ]; then
+    GIT_ROOT=/home/dzxu/repos/data_science/DATA605/gpsaggese.github.io
+fi
+
 source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Load Docker configuration variables for this script.
@@ -26,10 +32,10 @@ source $DOCKER_NAME
 print_docker_vars
 
 # Setup Jupyter Lab environment.
-setup_jupyter_environment
+# setup_jupyter_environment
 
-# Initialize Jupyter Lab command with base configuration.
-JUPYTER_ARGS=$(get_jupyter_args)
+# Initialize Jupyter Lab command
+JUPYTER_ARGS="--ip=0.0.0.0 --port=8888 --no-browser --allow-root"
 
 # Start Jupyter Lab with development-friendly settings.
 run "jupyter lab $JUPYTER_ARGS"
