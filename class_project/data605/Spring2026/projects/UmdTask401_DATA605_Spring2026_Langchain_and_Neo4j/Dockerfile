@@ -26,8 +26,6 @@ RUN pip3 install jupyterlab jupyterlab_vim
 COPY requirements.txt /install/requirements.txt
 RUN pip3 install --no-cache-dir -r /install/requirements.txt
 
-RUN mkdir -p /install
-
 # Config.
 ADD etc_sudoers /install/
 COPY etc_sudoers /etc/sudoers

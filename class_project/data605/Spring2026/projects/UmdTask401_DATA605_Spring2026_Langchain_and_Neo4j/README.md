@@ -1,802 +1,324 @@
-# Summary
-This directory contains a Docker-based development environment template with:
+# LangChain + Neo4j: Knowledge Graph Question Answering
 
-- Utility scripts for Docker operations (build, run, clean, push)
-- Configuration files for Dockerfile and environment setup
-- Jupyter notebook templates for standardized project development
-- Shell utilities and Python helpers for container-based workflows
+## Overview
 
-A guide to set up Docker-based projects using the template, customize it for
-your needs, and maintain it over time.
+This project builds a **knowledge graph-based question-answering system** using
+LangChain and Neo4j. It demonstrates how to load a real-world dataset into a
+graph database, model relationships between entities, and enable natural language
+querying using a local large language model (LLM).
 
-## Description of Files
-- `bashrc`
-  - Bash configuration file enabling `vi` mode for command-line editing
+---
 
-- `copy_docker_files.py`
-  - Python script for copying Docker configuration files to destination
-    directories
+## Table of Contents
 
-- `docker_build.version.log`
-  - Log file containing Python, `pip`, Jupyter, and package version information
-    from Docker build
+1. [Background](#background)
+2. [Architecture](#architecture)
+3. [Dataset](#dataset)
+4. [Graph Schema](#graph-schema)
+5. [Prerequisites](#prerequisites)
+6. [Setup](#setup)
+7. [Running the Project](#running-the-project)
+8. [Notebooks](#notebooks)
+9. [Key Design Decisions](#key-design-decisions)
+10. [Results](#results)
+11. [References](#references)
 
-- `docker_cmd.sh`
-  - Shell script for executing arbitrary commands inside Docker containers with
-    volume mounting
+---
 
-- `docker_jupyter.sh`
-  - Shell script for launching Jupyter Lab server inside Docker containers
+## Background
 
-- `docker_name.sh`
-  - Configuration file defining Docker repository and image naming variables
+### What is Neo4j?
 
-- `Dockerfile`
-  - Docker image build configuration with Ubuntu, Python, Jupyter, and project
-    dependencies
+Neo4j is a **graph database** that stores data as nodes and relationships rather
+than rows and columns. This makes it ideal for data with complex, interconnected
+relationships — such as movies, genres, and user ratings.
 
-- `etc_sudoers`
-  - Sudoers configuration file granting passwordless sudo access for postgres
-    user
+In a relational database, finding "all Action movies rated above 4 stars by users
+who also liked Inception" would require multiple JOIN operations across several
+tables. In Neo4j, this is a natural graph traversal expressed in **Cypher**, Neo4j's
+declarative query language.
 
-- `README.md`
-  - Documentation file describing directory contents, files, and executable
-    scripts
+### What is LangChain?
 
-- `template_utils.py`
-  - Python utility functions supporting tutorial notebooks with data processing
-    and modeling helpers
+LangChain is a framework for building applications powered by large language models
+(LLMs). It provides abstractions for chaining together components like prompts,
+models, and data sources. In this project we use LangChain's `GraphCypherQAChain`,
+which:
 
-- `template.API.ipynb`
-  - Jupyter notebook template for API exploration and library usage examples
+1. Takes a natural language question as input
+2. Uses an LLM to generate a Cypher query
+3. Runs the query against Neo4j
+4. Uses the LLM again to summarize the results in plain English
 
-- `template.example.ipynb`
-  - Jupyter notebook template for project examples and demonstrations
+### What is Ollama?
 
-- `utils.sh`
-  - Bash utility library with reusable functions for Docker operations
-  - Provides centralized argument parsing (`parse_default_args`) for `-h` and
-    `-v` flags used by all `docker_*.sh` scripts
-  - Provides Jupyter configuration logic: vim keybindings, notification
-    settings, and Docker run option builders
-  - All `docker_*.sh`, `docker_jupyter.sh`, and `run_jupyter.sh` scripts across
-    the repo source this file from `class_project/project_template/utils.sh`
+Ollama is a tool for running open-source LLMs locally on your machine. This project
+uses `llama3.2:1b` — a 1.3GB model that runs on CPU — so no cloud API or GPU is
+required.
 
-## Workflows
-- All commands should be run from inside the project directory
-  ```bash
-  > cd tutorials/FilterPy
-  ```
+---
 
-- To build the container for a project
-  ```bash
-  > cd $PROJECT
-  # Build the container.
-  > docker_build.sh
-  # Build without cache (pass extra args after -v).
-  > docker_build.sh --no-cache
-  # Test the container.
-  > docker_bash.sh ls
-  ```
+## Architecture
 
-- Enable verbose (trace) output with `-v`
-  ```bash
-  > docker_build.sh -v
-  > docker_bash.sh -v
-  ```
+```
+User Question
+      │
+      ▼
+ PromptTemplate  ──►  ChatOllama (llama3.2:1b)
+      │                       │
+      │              Generated Cypher Query
+      │                       │
+      ▼                       ▼
+ Neo4jGraph  ◄──────  GraphCypherQAChain
+      │
+      ▼
+ Query Results
+      │
+      ▼
+ ChatOllama (llama3.2:1b)
+      │
+      ▼
+ Natural Language Answer
+```
 
-- Get help for any docker script
-  ```bash
-  > docker_build.sh -h
-  > docker_jupyter.sh -h
-  ```
+The Jupyter container and Neo4j container run separately via Docker. Ollama runs
+natively on the host machine. Inside Docker, `host.docker.internal` is used to
+reach the host's Ollama server.
 
-- Start Jupyter
-  ```bash
-  > docker_jupyter.sh
-  # Go to localhost:8888
-  ```
+---
 
-- Start Jupyter on a specific port with vim support
-  ```bash
-  > docker_jupyter.sh -p 8890 -u
-  # Go to localhost:8890
-  ```
+## Dataset
 
-## How to Customize a Project Template
-- Copy the template
-  ```bash
-  > cp -r class_project/project_template $TARGET
-  ```
+**MovieLens 20M Dataset** — GroupLens Research
 
-## Description of Executables
+- Source: [Kaggle](https://www.kaggle.com/datasets/grouplens/movielens-20m-dataset)
+- 27,278 movies with titles and genres
+- 20 million ratings from 138,000 users (we sample 100,000)
+- Files used: `movie.csv`, `rating.csv`
 
-### `copy_docker_files.py`
-- **What It Does**
-  - Copies Docker configuration and utility files from project_template to a
-    destination directory
-  - Preserves all file permissions and attributes during copying
-  - Creates destination directory if it doesn't exist
+Download the dataset and place the CSV files in the `movielens/` directory:
 
-- Copy all Docker files to a target directory:
-  ```bash
-  > ./copy_docker_files.py --dst_dir /path/to/destination
-  ```
+```
+movielens/
+├── movie.csv
+└── rating.csv
+```
 
-- Copy with verbose logging:
-  ```bash
-  > ./copy_docker_files.py --dst_dir /path/to/destination -v DEBUG
-  ```
+---
 
-### `docker_bash.sh`
-- **What It Does**
-  - Launches an interactive bash shell inside a Docker container
-  - Mounts the current working directory as `/data` inside the container
-  - Exposes port 8888 for potential services running in the container
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
+## Graph Schema
 
-- Launch bash shell in the container:
-  ```bash
-  > ./docker_bash.sh
-  ```
+The knowledge graph contains three node types and two relationship types:
 
-- Launch with verbose output (prints each command):
-  ```bash
-  > ./docker_bash.sh -v
-  ```
+```
+(User)-[:RATED {rating: FLOAT}]->(Movie)-[:IN_GENRE]->(Genre)
+```
 
-### `docker_build.sh`
-- **What It Does**
-  - Builds Docker container images using Docker BuildKit
-  - Supports single-architecture builds (default) or multi-architecture builds
-    (`linux/arm64`, `linux/amd64`)
-  - Copies project files to temporary build directory and generates build logs
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags; any extra arguments
-    after flags are forwarded to `docker build`
+| Element | Type | Properties |
+|---|---|---|
+| Movie | Node | movieId (INT), title (STRING) |
+| Genre | Node | name (STRING) |
+| User | Node | userId (INT) |
+| RATED | Relationship | rating (FLOAT, 0.5–5.0) |
+| IN_GENRE | Relationship | none |
 
-- Build container image for current architecture:
-  ```bash
-  > ./docker_build.sh
-  ```
+**Example nodes:**
+- `(:Movie {movieId: 1, title: "Toy Story (1995)"})`
+- `(:Genre {name: "Animation"})`
+- `(:User {userId: 42})`
 
-- Build without Docker layer cache:
-  ```bash
-  > ./docker_build.sh --no-cache
-  ```
+**Example relationships:**
+- `(User {userId: 42})-[:RATED {rating: 4.5}]->(Movie {title: "Toy Story (1995)"})`
+- `(Movie {title: "Toy Story (1995)"})-[:IN_GENRE]->(Genre {name: "Comedy"})`
 
-- Build multi-architecture image (requires setting `DOCKER_BUILD_MULTI_ARCH=1`
-  in the script):
-  ```bash
-  > # Edit docker_build.sh to set DOCKER_BUILD_MULTI_ARCH=1
-  > ./docker_build.sh
-  ```
+---
 
-### `docker_clean.sh`
-- **What It Does**
+## Prerequisites
 
-- Removes all Docker images matching the project's full image name
-- Lists images before and after removal for verification
-- Uses force removal to ensure cleanup completes
+- [Docker](https://www.docker.com/) installed and running
+- [Ollama](https://ollama.com/) installed on your host machine
+- `llama3.2:1b` model pulled in Ollama
+- MovieLens dataset downloaded and placed in `movielens/`
 
-- Remove project's Docker images:
-  ```bash
-  > ./docker_clean.sh
-  ```
-
-### `docker_cmd.sh`
-- **What It Does**
-  - Executes arbitrary commands inside a Docker container
-  - Mounts current directory as `/data` for accessing project files
-  - Automatically removes container after command execution completes
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags; remaining arguments
-    form the command to execute
-
-- Run Python script inside container:
-  ```bash
-  > ./docker_cmd.sh python script.py --arg value
-  ```
-
-- List files in the container:
-  ```bash
-  > ./docker_cmd.sh ls -la /data
-  ```
-
-- Run tests inside container:
-  ```bash
-  > ./docker_cmd.sh pytest tests/
-  ```
-
-### `docker_exec.sh`
-- **What It Does**
-  - Attaches to an already running Docker container with an interactive bash
-    shell
-  - Finds the container ID automatically based on the image name
-  - Useful for debugging or inspecting running containers
-  - Accepts `-h` (help) and `-v` (verbose/trace) flags via `parse_default_args`
-
-- Attach to running container:
-  ```bash
-  > ./docker_exec.sh
-  ```
-
-### `docker_jupyter.sh`
-- **What It Does**
-  - Launches Jupyter Lab server inside a Docker container
-  - Supports custom port configuration (default 8888), vim keybindings, and
-    custom directory mounting
-  - Runs `run_jupyter.sh` script inside the container with specified options
-
-- Start Jupyter on default port 8888:
-  ```bash
-  > ./docker_jupyter.sh
-  ```
-
-- Start Jupyter on custom port with vim bindings:
-  ```bash
-  > ./docker_jupyter.sh -p 8889 -u
-  ```
-
-- Start Jupyter with external directory mounted:
-  ```bash
-  > ./docker_jupyter.sh -d /path/to/notebooks -p 8889
-  ```
-
-- Start Jupyter in verbose mode:
-  ```bash
-  > ./docker_jupyter.sh -v -p 8890
-  ```
-
-### `docker_push.sh`
-- **What It Does**
-  - Authenticates to Docker registry using credentials from
-    `~/.docker/passwd.$REPO_NAME.txt`
-  - Pushes the project's Docker image to the remote repository
-  - Lists images before pushing for verification
-
-- Push container image to registry:
-  ```bash
-  > ./docker_push.sh
-  ```
-
-### `run_jupyter.sh`
-- **What It Does**
-  - Launches Jupyter Lab server with no authentication (token and password
-    disabled)
-  - Binds to all network interfaces (0.0.0.0) on port 8888
-  - Allows root access for container environments
-  - When `JUPYTER_USE_VIM=1`, verifies that `jupyterlab_vim` is installed
-    before enabling vim keybindings; exits with an error if not found
-
-- Start Jupyter Lab server (typically called from docker_jupyter.sh):
-  ```bash
-  > ./run_jupyter.sh
-  ```
-
-- Start with vim keybindings (requires `jupyterlab_vim` installed in the
-  container):
-  ```bash
-  > JUPYTER_USE_VIM=1 ./run_jupyter.sh
-  ```
-
-### `utils.sh`
-- **What It Does**
-  - Central Bash library sourced by all `docker_*.sh` and `run_jupyter.sh`
-    scripts across the repository
-  - Provides `parse_default_args` which adds `-h` (help) and `-v`
-    (verbose/`set -x`) flags to every docker script
-  - Provides `build_container_image`, `push_container_image`,
-    `remove_container_image`, `kill_container`, `exec_container` utilities
-  - Provides Jupyter configuration helpers: vim keybindings, notification
-    suppression, and Docker run option builders
-
-### `version.sh`
-- **What It Does**
-  - Reports version information for Python3, pip3, and Jupyter
-  - Lists all installed Python packages with versions
-  - Used during Docker image builds to log environment configuration
-
-- Display version information:
-  ```bash
-  > ./version.sh
-  ```
-
-- Save version information to a log file:
-  ```bash
-  > ./version.sh 2>&1 | tee version.log
-  ```
-
-# Template Customization and Maintenance
-
-## Quick Start for New Projects
-
-### Step 1: Copy the Template
+Pull the required Ollama model:
 ```bash
-> cd class_project/project_template
-> cp -r . /path/to/your/new/project
-> cd /path/to/your/new/project
+ollama pull llama3.2:1b
 ```
 
-### Step 2: Choose a Base Image
-The template includes three Dockerfile options. Choose the one that best fits
-your project:
+---
 
-| Option                     | File                     | Best For                                                         |
-| -------------------------- | ------------------------ | ---------------------------------------------------------------- |
-| **Standard**               | `Dockerfile.ubuntu`      | Full Ubuntu environment with system tools                        |
-| **Lightweight**            | `Dockerfile.python_slim` | Minimal Python environment; reduced image size                   |
-| **Modern Package Manager** | `Dockerfile.uv`          | Fast dependency resolution with [uv](https://docs.astral.sh/uv/) |
+## Setup
 
-**How to choose:**
+### 1. Start Ollama
 
-- **Use Standard** if you need system-level tools (git, curl, graphviz, etc.)
-- **Use Python Slim** to minimize image size and build time
-- **Use uv** if you want faster, more reliable dependency management
+Ollama must be running on your host machine before starting Jupyter:
 
-### Step 3: Set Up Your Dockerfile
-- Delete unused reference files
-  ```bash
-  > rm Dockerfile.ubuntu Dockerfile.python_slim Dockerfile.uv
-  ```
-
-- Create your working Dockerfile
-  ```bash
-  > cp Dockerfile.ubuntu Dockerfile
-  ```
-
-- Add your dependencies
-  ```bash
-  > echo "numpy\npandas\nscikit-learn" > requirements.in
-  > pip-compile requirements.in > requirements.txt
-  ```
-
-### Step 4: Keep Customization Minimal
-- Only modify what's necessary for your project
-- Use `requirements.txt` for all Python packages (don't edit Dockerfile for
-  this)
-- Keep `bashrc` and `etc_sudoers` as-is unless you need custom shell setup
-- Keep base image and Python version unless you have specific requirements
-
-## Understanding the Dockerfile Flow
-Each Dockerfile follows the same structure. Here are the key stages:
-
-### Stage 1: Base Image and System Setup
-```dockerfile
-FROM ubuntu:24.04  # or python:3.12-slim, depending on your requirement
-ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get -y update && apt-get -y upgrade
+```bash
+ollama serve
 ```
 
-- **Purpose**: Start with a clean base image and disable interactive
-  installation prompts
+If you see `address already in use`, Ollama is already running — no action needed.
 
-- **When to customize**: Only change the base image or version if your project
-  has specific requirements (different Ubuntu version, specific Python version,
-  etc.)
+### 2. Start Neo4j
 
-### Stage 2: System Utilities (Ubuntu-based Dockerfiles Only)
-```dockerfile
-RUN apt install -y --no-install-recommends \
-    sudo \
-    curl \
-    systemctl \
-    gnupg \
-    git \
-    vim
+Run Neo4j in a Docker container:
+
+```bash
+docker run -d \
+  --name neo4j \
+  -p 7474:7474 -p 7687:7687 \
+  -e NEO4J_AUTH=neo4j/password \
+  neo4j:5.26.24
 ```
 
-- **Purpose**: Install essential system tools for development and container
-  management
+If the container already exists from a previous run:
 
-- **When to customize**: Add only if needed for your project
-  - `postgresql-client`: for database connections
-  - `graphviz`: for graph visualizations
-  - `ffmpeg`: for media processing
-
-- **Best practice**: Use `--no-install-recommends` to keep the image small
-
-### Stage 3: Python and Build Tools (Ubuntu-based Dockerfiles Only)
-```dockerfile
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    python3 \
-    python3-pip \
-    python3-dev \
-    python3-venv \
-    && rm -rf /var/lib/apt/lists/*
+```bash
+docker start neo4j
 ```
 
-- **Purpose**: Install Python 3, pip, and build tools needed for compiled
-  packages
+Verify Neo4j is running by visiting `http://localhost:7474` in your browser.
 
-- **Why venv**: Creates an isolated Python environment separate from system
-  Python
+> **Linux users:** Docker on Linux does not support `host.docker.internal` by
+> default. Add `--add-host=host.docker.internal:host-gateway` to the
+> `docker run` command above and to `docker_jupyter.sh` so the Jupyter
+> container can reach Neo4j on the host network.
 
-- **When to customize**: Rarely. Only change if you need a specific Python
-  version (e.g., `python3.11` instead of `python3`)
+### 3. Build the Jupyter Docker Image
 
-### Stage 4: Virtual Environment Setup
-```dockerfile
-RUN python3 -m venv /opt/venv
-ENV PATH="/opt/venv/bin:$PATH"
-RUN python -m pip install --upgrade pip
+From your project directory:
+
+```bash
+./docker_build.sh
 ```
 
-- **Purpose**: Create and activate an isolated virtual environment for your
-  project
+### 4. Start Jupyter
 
-- **Why this matters**: Ensures reproducibility and prevents dependency
-  conflicts across projects
-
-- **When to customize**: Never. This is a standard best practice
-
-### Stage 5: Jupyter Installation
-```dockerfile
-RUN pip install jupyterlab jupyterlab_vim
+```bash
+./docker_jupyter.sh
 ```
 
-- **Purpose**: Install JupyterLab and the Vim keybinding extension for
-  interactive development
-  - `jupyterlab`: the main IDE for running notebooks in the browser
-  - `jupyterlab_vim`: adds Vim-style navigation to notebook cells
-
-- **Why in Dockerfile, not requirements.txt**: These are infrastructure
-  packages (the IDE itself), not project-specific dependencies
-  - Do NOT add `jupyterlab`, `jupyterlab-vim`, or `ipywidgets` to
-    `requirements.txt`; they are already installed here
-
-- **When to customize**:
-  - **Remove** this line if your project doesn't use Jupyter
-  - **Add more extensions** if needed (e.g., `jupyterlab-git`,
-    `jupyterlab-variableinspector`)
-
-### Stage 6: Project Dependencies
-```dockerfile
-COPY requirements.txt /install/requirements.txt
-RUN pip install --no-cache-dir -r /install/requirements.txt
-```
-
-- **Purpose**: Install your project-specific Python packages
-
-- **When to customize**: This is the primary place to customize. Define all your
-  dependencies in `requirements.txt`
-
-- **Best practice**:
-  - **Pin all versions**: `numpy==1.24.0` (not `numpy>=1.20.0`)
-  - **Use `--no-cache-dir`**: Reduces image size by skipping pip cache
-  - **For complex dependencies**: Use `requirements.in` with `pip-tools` or
-    `pip-compile`
-
-- **Example requirements.txt**:
-  ```text
-  numpy==1.24.0
-  pandas==2.0.0
-  scikit-learn==1.2.2
-  tensorflow==2.13.0
-  ```
-
-### Stage 7: Configuration
-```dockerfile
-COPY etc_sudoers /etc/sudoers
-COPY bashrc /root/.bashrc
-```
-
-- **Purpose**: Apply custom bash configuration and sudo permissions
-
-- **When to customize**:
-  - **Edit `bashrc`**: to add aliases, environment variables, or custom prompt
-  - **Edit `etc_sudoers`**: if additional users need passwordless sudo access
-
-### Stage 8: Version Logging
-```dockerfile
-ADD version.sh /install/
-RUN /install/version.sh 2>&1 | tee version.log
-```
-
-- **Purpose**: Document the exact versions of Python, pip, Jupyter, and all
-  installed packages
-
-- **What it logs**:
-  - Python 3 version
-  - Pip version
-  - Jupyter version
-  - Complete list of all installed Python packages
-
-- **Why it matters**: Creates a detailed record of your container's environment
-  for troubleshooting and reproducibility
-
-- **How to use**: After building, review `version.log` to verify all
-  dependencies installed correctly
-  ```bash
-  > docker build -t my-project .
-  > cat version.log
-  ```
-
-- **Extending it**: If you need to log additional tools (MongoDB, Node.js,
-  etc.), add them to `version.sh`:
-  ```bash
-  > echo "# mongo"
-  > mongod --version
-  ```
-
-### Stage 9: Port Declaration
-```dockerfile
-EXPOSE 8888
-```
-
-- **Purpose**: Declare that the container uses port 8888 (informational for
-  Docker)
-
-- **When to customize**: Add additional ports if your application needs them
-  (e.g., `EXPOSE 8888 5432 3000`)
-
-## Best Practices: Keep It Simple
-
-### The Core Principle
-Only change what's necessary for your project. Everything else should inherit
-from the template.
-
-This approach:
-
-- Makes Dockerfiles easier to understand and maintain
-- Keeps images smaller and faster to build
-- Simplifies future updates from the template
-- Ensures consistency across similar projects
-
-### How to Do It Right
-| What                         | Where                        | Example                         |
-| :--------------------------- | :--------------------------- | :------------------------------ |
-| Project Python packages      | `requirements.txt`           | `numpy==1.24.0`                 |
-| Jupyter + Vim (always there) | Dockerfile Stage 5           | `jupyterlab jupyterlab_vim`     |
-| System tools                 | Dockerfile `apt-get` section | `postgresql-client`             |
-| Shell aliases                | `bashrc`                     | `alias jlab="jupyter lab"`      |
-| Custom scripts               | `scripts/` directory         | Setup or initialization scripts |
-| User permissions             | `etc_sudoers`                | Grant passwordless sudo         |
-
-- **Do NOT add to `requirements.txt`**: `jupyterlab`, `jupyterlab-vim`,
-  `jupyterlab_vim`, or `ipywidgets` — these are Jupyter infrastructure packages
-  and are already installed in Stage 5 of the Dockerfile
-
-### Wrong Vs. Right Approach
-- **Wrong**: Embed everything in the Dockerfile
-  ```dockerfile
-  RUN pip install my-package && python my_setup.py && npm install
-  ```
-
-- **Right**: Use separate files and keep Dockerfile clean
-  ```dockerfile
-  COPY requirements.txt /install/
-  RUN pip install -r /install/requirements.txt
-  COPY scripts/setup.sh /install/
-  RUN /install/setup.sh
-  ```
-
-## .Dockerignore Policy
-
-### Why It Matters
-The `.dockerignore` file prevents unnecessary files from being added to the
-Docker build context:
-
-- **Reduces build time**: Fewer files to transfer to Docker daemon
-- **Reduces image size**: Only necessary files are included
-- **Improves security**: Prevents leaking sensitive data
-
-### What to Exclude: Category Breakdown
-- Python Artifacts (Always Exclude)
-  ```verbatim
-  __pycache__/
-  *.pyc
-  *.pyo
-  *.pyd
-  ```
-  - Why: Compiled bytecode generated at runtime. Regenerated in container, adds
-    bloat
-
-- Virtual Environments (Always Exclude)
-  ```verbatim
-  venv/
-  .venv/
-  env/
-  .env/
-  ```
-  - Why: Local venvs aren't portable to containers. The Dockerfile creates its
-    own
-
-- Jupyter Checkpoints (Always Exclude)
-  ```verbatim
-  .ipynb_checkpoints/
-  ```
-  - Why: Auto-generated by Jupyter, not needed in the image
-
-- Git and Version Control (Always Exclude)
-  ```verbatim
-  .git/
-  .gitignore
-  .gitattributes
-  ```
-  - Why: Repository history not needed at runtime
-
-- Docker Build Scripts (Always Exclude)
-  ```verbatim
-  docker_build.sh
-  docker_push.sh
-  docker_clean.sh
-  docker_exec.sh
-  docker_cmd.sh
-  docker_bash.sh
-  docker_jupyter.sh
-  docker_name.sh
-  Dockerfile.*
-  ```
-  - Why: Local development scripts don't run inside the container
-
-- Large Data Files (Recommended)
-  ```verbatim
-  data/
-  *.csv
-  *.pkl
-  *.h5
-  *.parquet
-  ```
-  - Why: Don't ship large training and test data in the image. Mount via volume
-    instead
-  - Best practice: `bash     > docker run -v /path/to/data:/data my-image     `
-
-- Test Files (Project-Dependent)
-  ```verbatim
-  tests/
-  tutorials/
-  ```
-  - Why: Exclude if tests don't run in the container
-  - When to include: If CI and CD runs tests inside the container
-
-- Documentation (Recommended)
-  ```verbatim
-  README.md
-  docs/
-  *.md
-  ```
-  - Why: Not needed at runtime
-  - Exception: Only keep if your app reads these files at runtime
-
-- Generated Files (Always Exclude)
-  ```verbatim
-  *.log
-  *.tmp
-  *.cache
-  build/
-  dist/
-  ```
-  - Why: Generated at runtime, not needed in the image
-
-## Workflow: From Template to Your Project
-
-### Complete Setup Checklist
-- Copy the template
-  ```bash
-  > cp -r project_template my-new-project
-  > cd my-new-project
-  ```
-
-- Keep all reference Dockerfiles
-  ```verbatim
-  Dockerfile.ubuntu_24_04
-  Dockerfile.python_slim
-  Dockerfile.uv
-  ```
-
-- Create your working Dockerfile
-  ```bash
-  > cp Dockerfile.ubuntu_24_04 Dockerfile
-  ```
-
-- Add your dependencies
-  ```bash
-  > pip freeze > requirements.txt
-  ```
-
-- Configure `.dockerignore`: Review the template `.dockerignore` and add your
-  project-specific exclusions (e.g., data directories)
-
-- Test the build
-  ```bash
-  > docker build -t my-project:latest .
-  > docker run -it my-project:latest bash
-  ```
-
-- Test Jupyter (if using)
-  ```bash
-  > ./docker_jupyter.sh -p 8888
-  ```
-
-- Document customizations in your project README:
-  - Base image chosen and why
-  - Key dependencies
-  - Any Dockerfile modifications
-  - How to build and run
-
-## Maintaining Your Setup
-
-### Document Any Changes
-- If you modify the Dockerfile, add explanatory comments:
-  ```dockerfile
-  # Custom: PostgreSQL client for database access
-  postgresql-client \
-
-  # Custom: Node.js for frontend builds
-  nodejs \
-  ```
-
-### Monitor Package Versions
-- After each build, review `version.log`:
-  ```bash
-  > docker build -t my-project .
-  > cat version.log
-  ```
-
-### Keep `.dockerignore` Updated
-- If you add new directories or files, update `.dockerignore`. Add to
-  `.dockerignore` if the directory shouldn't be in the image:
-  ```verbatim
-  data/
-  cache/
-  .temp/
-  ```
-
-### Contribute Improvements Back
-When you improve your project's Docker setup:
-
-- Test thoroughly in your project
-- Document the improvement clearly
-- Submit back to `project_template`
-- Other projects can adopt it when they update
-
-Example improvements:
-
-- Better way to install TensorFlow with GPU support
-- Optimized `.dockerignore` for data science projects
-- Security hardening (non-root user setup)
-
-## Troubleshooting
-
-### Build Is Slow
-- Check `.dockerignore`: Ensure large directories (data/, .git/) are excluded
-- Check Docker daemon: Verify Docker is running properly
-- Check layer caching: Docker reuses cached layers; avoid changing early layers
-
-### Image Is Too Large
-- Check layer sizes:
-  ```bash
-  > docker history my-project:latest
-  ```
-
-- Remove unnecessary packages or use `python_slim` base image
-
-### Package Not Found Error
-- Verify package name in PyPI (packages are case-sensitive)
-- Check Python version compatibility
-- Pin specific version if needed
-
-### Permission Issues in Container
-- Check `etc_sudoers`: Ensure user has appropriate permissions
-- Check file ownership: Ensure COPY doesn't create root-only files
-
-### Jupyter Won't Connect
-- Run Jupyter
-  ```bash
-  > ./docker_jupyter.sh -p 8888
-  ```
-
-- Verify http://localhost:8888 (not https). Check firewall if remote access
-  needed
-
-### Vim Keybindings Not Working
-- If `run_jupyter.sh` exits with `ERROR: jupyterlab_vim is not installed`, it
-  means `jupyterlab_vim` is missing from the container image
-- Make sure `jupyterlab_vim` is installed in the Dockerfile:
-  ```dockerfile
-  RUN pip install jupyterlab jupyterlab_vim
-  ```
-- Rebuild the image after adding the package:
-  ```bash
-  > ./docker_build.sh
-  ```
+Then open `http://localhost:8888` in your browser and navigate to `curr_dir/`.
+
+---
+
+## Running the Project
+
+Run the notebooks in this order:
+
+1. **`langchain_neo4j.API.ipynb`** — learn the individual APIs
+2. **`langchain_neo4j.example.ipynb`** — run the full end-to-end project
+
+> **Note:** The first time you run the example notebook, data ingestion
+> (movies + ratings) will take a few minutes. Subsequent runs skip ingestion
+> automatically since `MERGE` prevents duplicate nodes.
+
+---
+
+## Notebooks
+
+### `langchain_neo4j.API.ipynb`
+
+A reference guide covering each API used in this project:
+
+- **Neo4j Python Driver** — `GraphDatabase.driver()`, sessions, transactions
+- **Cypher queries** — MATCH, MERGE, parameterized queries
+- **Neo4jGraph** — LangChain's graph wrapper, schema configuration
+- **ChatOllama** — initializing and invoking a local LLM
+- **PromptTemplate** — building reusable prompt templates
+- **GraphCypherQAChain** — combining LLM + graph for natural language QA
+
+### `langchain_neo4j.example.ipynb`
+
+The full project walkthrough:
+
+1. Connect to Neo4j
+2. Load MovieLens CSV files
+3. Ingest movies and genres as graph nodes
+4. Explore the graph with direct Cypher queries
+5. Visualize genre distribution
+6. Ingest user ratings
+7. Query top-rated movies
+8. Build the LangChain QA chain with few-shot prompt engineering
+9. Ask natural language questions about movies
+
+### `langchain_neo4j_utils.py`
+
+Utility functions used by both notebooks:
+
+| Function | Description |
+|---|---|
+| `get_driver()` | Connect to Neo4j and verify connectivity |
+| `get_neo4j_graph()` | Create LangChain Neo4jGraph with schema |
+| `load_movielens()` | Load movie and rating CSVs into DataFrames |
+| `ingest_movies()` | Write Movie and Genre nodes to Neo4j |
+| `ingest_ratings()` | Write User nodes and RATED relationships |
+| `get_cypher_prompt()` | Build few-shot PromptTemplate for Cypher generation |
+| `get_qa_chain()` | Assemble the full GraphCypherQAChain |
+
+---
+
+## Key Design Decisions
+
+### Why a graph database instead of SQL?
+
+Movie-genre-user relationships are naturally graph-shaped. In Neo4j, traversing
+"find all users who rated Action movies above 4 stars" is a single pattern match.
+In SQL this would require joining movies, ratings, and a genre mapping table.
+
+### Why manual schema instead of `refresh_schema=True`?
+
+LangChain's auto-generated schema was too verbose for the small `llama3.2:1b` model
+and caused it to generate incorrect Cypher. A hand-crafted, minimal schema with
+explicit relationship directions improved accuracy significantly.
+
+### Why few-shot prompting?
+
+The `llama3.2:1b` model (1.3GB) is too small to reliably generate correct Cypher
+from schema descriptions alone. Adding concrete Q&A examples directly in the prompt
+guides the model toward the correct pattern. This is a practical demonstration of
+how **prompt engineering compensates for model size limitations**.
+
+---
+
+## Results
+
+Sample natural language queries and results:
+
+**Q: List movies in the Action genre.**
+> Returns 10 Action movies including Kill Bill: Vol. 1 and Sucker Punch.
+
+**Q: What genres does Toy Story belong to?**
+> Adventure, Animation, Children, Comedy, Fantasy
+
+**Q: How many movies are in the Drama genre?**
+> 13,344 movies
+
+**Q: What are the top rated movies?**
+> Returns movies with highest average ratings from the sampled ratings data.
+
+---
+
+## Package Versions
+
+| Package | Version |
+|---|---|
+| neo4j | 6.1.0 |
+| langchain-neo4j | 0.9.0 |
+| langchain-ollama | 1.1.0 |
+| langchain-core | 1.3.2 |
+| pandas | 3.0.2 |
+| matplotlib | 3.10.9 |
+| Neo4j (Docker) | 5.26.24 |
+| Ollama model | llama3.2:1b |
+
+---
+
+## References
+
+- [LangChain Documentation](https://python.langchain.com/docs/)
+- [Neo4j Documentation](https://neo4j.com/docs/)
+- [Neo4j Python Driver](https://neo4j.com/docs/api/python-driver/current/)
+- [Ollama](https://ollama.com/)
+- [MovieLens Dataset](https://www.kaggle.com/datasets/grouplens/movielens-20m-dataset)
+- [LangChain Neo4j Integration](https://python.langchain.com/docs/integrations/graphs/neo4j_cypher/)

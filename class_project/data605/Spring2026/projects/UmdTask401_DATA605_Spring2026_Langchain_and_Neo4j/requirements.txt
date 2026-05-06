@@ -1,4 +1,6 @@
-matplotlib
-numpy
-pandas
-seaborn
+neo4j==6.1.0
+langchain-neo4j==0.9.0
+langchain-ollama==1.1.0
+langchain-core==1.3.2
+pandas==3.0.2
+matplotlib==3.10.9
