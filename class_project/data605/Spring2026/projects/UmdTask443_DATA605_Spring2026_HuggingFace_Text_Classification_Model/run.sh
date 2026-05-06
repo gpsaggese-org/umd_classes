@@ -52,16 +52,20 @@ else
 fi
 
 # Step 2: Train
-step "Step 3/4 — Training model"
+step "Step 2/4 — Training model"
 bash "$SCRIPT_DIR/docker_train.sh" $TRAIN_ARGS
 
 # Step 3: Predict
-step "Step 4/4 — Running inference"
+step "Step 3/4 — Running inference"
 if [[ -n "$PREDICT_TEXT" ]]; then
     bash "$SCRIPT_DIR/docker_predict.sh" --text "$PREDICT_TEXT"
 else
     bash "$SCRIPT_DIR/docker_predict.sh" --text "Apple reports record iPhone sales in Q3"
 fi
+
+# Step 4: Evaluate
+step "Step 4/4 — Evaluating model"
+bash "$SCRIPT_DIR/docker_evaluate.sh"
 
 echo ""
 echo "Pipeline complete!!!!"

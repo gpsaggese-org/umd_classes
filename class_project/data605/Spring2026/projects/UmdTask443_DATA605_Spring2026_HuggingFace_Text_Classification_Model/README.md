@@ -151,3 +151,28 @@ Rewritten standalone. Gains a `--volumes` flag that additionally removes the `hf
  
 #### `run_jupyter.sh`
 Simplified — removed monorepo framework calls. Retains the same Jupyter flags: `--no-browser`, `--ip=0.0.0.0`, `--allow-root`, no token/password.
+
+
+---
+
+## Release v3.0
+ 
+### New Files
+
+#### `scripts/evaluate.py`
+Runs full batch evaluation of the fine-tuned model on the AG News test set and saves four outputs to `results/`:
+- `classification_report.txt` — per-class precision, recall, F1, and support via sklearn.
+- `confusion_matrix.png` — heatmap of true vs predicted labels across all four classes.
+- `per_class_metrics.png` — grouped bar chart of precision, recall, and F1 per category.
+- `predictions.csv` — row-level predictions with true label, predicted label, and a correct/incorrect flag for manual inspection.
+Accepts `--model_dir` to evaluate any saved checkpoint, defaulting to `models/distilbert-ag-news`. Uses `matplotlib.use("Agg")` so plots render correctly inside Docker without a display.
+ 
+#### `docker_evaluate.sh`
+Runs `scripts/evaluate.py` inside the container non-interactively. All four result files are written to `./results/` on the host via the volume mount. Accepts `--model_dir` which is forwarded directly to the script.
+
+--- 
+
+### Modified Files
+ 
+#### `run.sh`
+Added evaluate as step 4, shifting predict to step 5. Pipeline order is now: **build → dataloader → train → evaluate → predict**. Step counter in all headers updated from `/4` to `/5`.
