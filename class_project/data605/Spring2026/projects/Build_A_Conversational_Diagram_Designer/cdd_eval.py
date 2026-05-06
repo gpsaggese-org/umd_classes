@@ -20,11 +20,13 @@
 #    (single-shot), once with it enabled (up to 3 iterations). Compare metrics
 #    and optionally use an LLM-as-judge to score quality.
 #
-# This is the empirical contribution that anchors the project report.
+# The harness includes per-case throttling so it runs cleanly on Gemini's
+# free tier (5 req/min). For paid tiers, set THROTTLE_SECONDS=0.
 
 # %%
 import json
 import re
+import time
 from dataclasses import dataclass, field
 from typing import Optional
 
@@ -32,6 +34,18 @@ import cdd_config as config
 import cdd_llm as llm
 import cdd_renderer as renderer
 from cdd_orchestrator import CDDOrchestrator
+
+
+# %% [markdown]
+# ## Throttle configuration
+#
+# Free tier Gemini allows 5 requests per minute. With vision feedback enabled,
+# each case can fire up to 3 generations + 3 vision critiques = 6 calls.
+# A 15-second wait between cases keeps us well within budget on free tier.
+
+# %%
+# Set to 0 if running on paid tier. The notebook can also override at runtime.
+THROTTLE_SECONDS = 15
 
 
 # %% [markdown]
@@ -54,8 +68,8 @@ class EvalResult:
     iterations_used: int = 1
     llm_judge_score: Optional[float] = None
     llm_judge_feedback: Optional[str] = None
+    error: Optional[str] = None  # set when the case threw
 
-    # Backwards-compat: expose dot_source attribute for old tests
     @property
     def dot_source(self) -> str:
         return self.diagram_source
@@ -74,14 +88,12 @@ class EvalResult:
             "iterations_used": self.iterations_used,
             "llm_judge_score": self.llm_judge_score,
             "llm_judge_feedback": self.llm_judge_feedback,
+            "error": self.error,
         }
 
 
 # %% [markdown]
 # ## Lightweight automatic metrics
-#
-# These work on text alone. They are heuristics, not perfect parsers, but
-# they're fast and provide a useful comparison signal across runs.
 
 # %%
 def count_nodes(source: str, format: str = "graphviz") -> int:
@@ -105,18 +117,13 @@ def _count_nodes_dot(source: str) -> int:
             continue
         if line.startswith(("digraph", "graph", "subgraph", "}", "{")):
             continue
-        # A node line is either "name [attrs];" or just "name;"
         if "[" in line or re.match(r"^\w+\s*;?\s*$", line):
             count += 1
     return count
 
 
 def _count_nodes_mermaid(source: str) -> int:
-    """Mermaid heuristic: count distinct node identifiers in the source."""
-    # Pull tokens that look like node IDs: word chars optionally followed by
-    # [...], (...), or {...} for shape syntax.
     tokens = re.findall(r"\b([A-Za-z_]\w*)\s*[\[\(\{]?", source)
-    # Filter out reserved words / type declarations
     reserved = {
         "graph", "flowchart", "TD", "TB", "BT", "LR", "RL",
         "sequenceDiagram", "classDiagram", "stateDiagram",
@@ -128,19 +135,16 @@ def _count_nodes_mermaid(source: str) -> int:
 
 
 def _count_nodes_plantuml(source: str) -> int:
-    """PlantUML heuristic: count actor/participant/class/state/component declarations."""
     pattern = r"\b(?:actor|participant|class|state|component|node|database|interface|entity)\b\s+(\w+)"
     matches = re.findall(pattern, source, re.IGNORECASE)
     if matches:
         return len(set(matches))
-    # Fallback: any -> arrow targets
     arrows = re.findall(r"\b(\w+)\s*-+>", source)
     targets = re.findall(r"-+>\s*(\w+)", source)
     return len(set(arrows + targets))
 
 
 def count_edges(source: str, format: str = "graphviz") -> int:
-    """Heuristic edge count for the given format."""
     if format == "graphviz":
         return len(re.findall(r"(->|--)", source))
     if format == "mermaid":
@@ -151,20 +155,16 @@ def count_edges(source: str, format: str = "graphviz") -> int:
 
 
 def has_labels(source: str, format: str = "graphviz") -> bool:
-    """Does the diagram have any human-readable labels?"""
     if format == "graphviz":
         return bool(re.search(r"label\s*=", source))
     if format == "mermaid":
-        # Mermaid uses [Label] (Label) {Label} for shapes containing labels
         return bool(re.search(r"[\[\(\{]\s*[A-Za-z]", source))
     if format == "plantuml":
-        # PlantUML labels appear as : "text" or after participant/class
         return ':"' in source or '"' in source
     return False
 
 
 def has_styles(source: str, format: str = "graphviz") -> bool:
-    """Does the diagram apply any styling?"""
     if format == "graphviz":
         attrs = ["color", "fillcolor", "shape", "style", "fontcolor"]
         return any(a in source.lower() for a in attrs)
@@ -233,8 +233,6 @@ Generated code:
 Score on completeness, accuracy, readability, and style.
 Respond with ONLY a JSON object: {{"score": <float 1-5>, "feedback": "<brief reason>"}}"""
     try:
-        # Call generate against the same provider; we treat the response as
-        # plain text and pull the JSON out.
         raw = llm.generate(judge_prompt, format=format)
         match = re.search(r"\{.*\}", raw, re.DOTALL)
         if match:
@@ -247,13 +245,9 @@ Respond with ONLY a JSON object: {{"score": <float 1-5>, "feedback": "<brief rea
 
 # %% [markdown]
 # ## Benchmark prompt set
-#
-# Curated across all three formats and complexity tiers. These are the
-# prompts the eval suite runs through. Expand as needed for the report.
 
 # %%
 EVAL_TEST_CASES = [
-    # Graphviz cases (preserved from the original eval)
     {"prompt": "Draw a simple flowchart for making coffee: start, boil water, add grounds, pour water, serve",
      "format": "graphviz", "expected_min_nodes": 5, "expected_min_edges": 4},
     {"prompt": "Create a class diagram with three classes: User (name, email), Order (id, total), Product (name, price). User has many Orders, Order has many Products.",
@@ -264,16 +258,12 @@ EVAL_TEST_CASES = [
      "format": "graphviz", "expected_min_nodes": 3, "expected_min_edges": 3},
     {"prompt": "Draw a mind map about Machine Learning with branches: Supervised (Classification, Regression), Unsupervised (Clustering, Dimensionality Reduction), Reinforcement",
      "format": "graphviz", "expected_min_nodes": 7, "expected_min_edges": 6},
-
-    # Mermaid cases
     {"prompt": "Create a flowchart for a user signup flow: form, validate email, save to database, send welcome email, redirect to dashboard",
      "format": "mermaid", "expected_min_nodes": 5, "expected_min_edges": 4},
     {"prompt": "Sequence diagram: User clicks login, browser sends credentials to server, server checks database, returns session token",
      "format": "mermaid", "expected_min_nodes": 3, "expected_min_edges": 4},
     {"prompt": "State machine for an order: Draft, Submitted, Approved, Rejected, Fulfilled. Show transitions.",
      "format": "mermaid", "expected_min_nodes": 5, "expected_min_edges": 4},
-
-    # PlantUML cases
     {"prompt": "Sequence diagram: A user logs into a web app. Client sends credentials to server, server queries the database, returns a session token.",
      "format": "plantuml", "expected_min_nodes": 3, "expected_min_edges": 4},
     {"prompt": "Class diagram: Animal (name, age), Dog extends Animal (breed), Cat extends Animal (indoor). Kennel has many Dogs.",
@@ -286,8 +276,9 @@ EVAL_TEST_CASES = [
 #
 # Two entry points:
 #   - `run_eval_suite`: runs all benchmark prompts in a single condition
-#   - `run_vision_comparison`: runs each prompt in BOTH conditions (vision off
-#     vs vision on) so the report can compare them directly.
+#   - `run_vision_comparison`: runs each prompt in BOTH conditions
+#
+# Both throttle between cases to avoid free-tier rate limits.
 
 # %%
 def run_eval_suite(
@@ -295,12 +286,22 @@ def run_eval_suite(
     use_llm_judge: bool = False,
     condition: str = "vision_off",
     test_cases: Optional[list] = None,
+    throttle_seconds: Optional[int] = None,
+    verbose: bool = True,
 ) -> list:
-    """Run all benchmark prompts in one condition."""
+    """Run all benchmark prompts in one condition.
+
+    Throttles between cases to respect free-tier rate limits.
+    Pass throttle_seconds=0 if you're on a paid tier.
+    """
     cases = test_cases if test_cases is not None else EVAL_TEST_CASES
+    delay = THROTTLE_SECONDS if throttle_seconds is None else throttle_seconds
     results = []
-    for tc in cases:
+
+    for i, tc in enumerate(cases):
         fmt = tc.get("format", "graphviz")
+        if verbose:
+            print(f"  [{i+1}/{len(cases)}] {fmt} | {tc['prompt'][:60]}...")
         try:
             orch = CDDOrchestrator(
                 provider=provider,
@@ -315,13 +316,28 @@ def run_eval_suite(
                 use_llm_judge=use_llm_judge,
             )
             results.append(result)
-        except Exception:
+            if verbose:
+                ok = "✓" if result.render_success else "✗"
+                print(f"      {ok} syntax={result.syntax_valid} render={result.render_success} "
+                      f"nodes={result.node_count} edges={result.edge_count}")
+        except Exception as e:
+            err_msg = str(e)[:200]
+            if verbose:
+                print(f"      ✗ ERROR: {err_msg}")
             results.append(EvalResult(
                 prompt=tc["prompt"], format=fmt, condition=condition,
                 diagram_source="", syntax_valid=False,
                 node_count=0, edge_count=0, has_labels=False,
                 has_styles=False, render_success=False,
+                error=err_msg,
             ))
+
+        # Throttle between cases (skip after the last one)
+        if delay > 0 and i < len(cases) - 1:
+            if verbose:
+                print(f"      [throttle] waiting {delay}s before next case...")
+            time.sleep(delay)
+
     return results
 
 
@@ -329,22 +345,27 @@ def run_vision_comparison(
     provider: Optional[str] = None,
     use_llm_judge: bool = False,
     test_cases: Optional[list] = None,
+    throttle_seconds: Optional[int] = None,
 ) -> dict:
-    """Run each benchmark prompt in BOTH vision-off and vision-on conditions.
-
-    Returns a dict with two keys: "vision_off" and "vision_on", each a list
-    of EvalResults aligned by prompt order. Suitable for paired analysis.
-    """
-    return {
-        "vision_off": run_eval_suite(
-            provider=provider, use_llm_judge=use_llm_judge,
-            condition="vision_off", test_cases=test_cases,
-        ),
-        "vision_on": run_eval_suite(
-            provider=provider, use_llm_judge=use_llm_judge,
-            condition="vision_on", test_cases=test_cases,
-        ),
-    }
+    """Run each benchmark prompt in BOTH vision-off and vision-on conditions."""
+    print("=" * 60)
+    print("Running vision-OFF baseline...")
+    print("=" * 60)
+    off = run_eval_suite(
+        provider=provider, use_llm_judge=use_llm_judge,
+        condition="vision_off", test_cases=test_cases,
+        throttle_seconds=throttle_seconds,
+    )
+    print()
+    print("=" * 60)
+    print("Running vision-ON...")
+    print("=" * 60)
+    on = run_eval_suite(
+        provider=provider, use_llm_judge=use_llm_judge,
+        condition="vision_on", test_cases=test_cases,
+        throttle_seconds=throttle_seconds,
+    )
+    return {"vision_off": off, "vision_on": on}
 
 
 # %% [markdown]
@@ -352,7 +373,6 @@ def run_vision_comparison(
 
 # %%
 def summarize_eval(results: list) -> dict:
-    """Aggregate metrics across a list of EvalResults."""
     n = len(results)
     if n == 0:
         return {}
@@ -373,7 +393,6 @@ def summarize_eval(results: list) -> dict:
 
 
 def summarize_comparison(comparison: dict) -> dict:
-    """Summarize a vision-off vs vision-on comparison."""
     return {
         "vision_off": summarize_eval(comparison["vision_off"]),
         "vision_on": summarize_eval(comparison["vision_on"]),
