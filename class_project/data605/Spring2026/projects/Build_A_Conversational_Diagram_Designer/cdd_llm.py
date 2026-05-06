@@ -12,13 +12,52 @@
 # Unified interface to text-only and multimodal LLM calls.
 # Default provider: Gemini 2.5 Flash (multimodal in a single model).
 # Alternates: OpenAI (gpt-4o family), Anthropic (claude family).
+#
+# Includes automatic retry-and-backoff on 429 rate-limit errors so the
+# eval harness can run safely on Gemini's free tier (5 req/min).
 
 # %%
 import json
 import re
+import time
 from typing import Optional
 
 import cdd_config as config
+
+
+# %% [markdown]
+# ## Rate-limit retry helper
+#
+# Gemini's free tier limits to 5 requests/minute. When we hit the limit, the
+# API returns a 429 with a retry-after hint. We catch that, wait the suggested
+# delay (capped to 90 seconds), and retry up to 3 times. After that we let the
+# error propagate so the caller can record the failure honestly.
+
+# %%
+def _retry_on_rate_limit(fn, max_attempts=3):
+    """Run `fn`, retrying on Gemini 429s with exponential backoff."""
+    for attempt in range(max_attempts):
+        try:
+            return fn()
+        except Exception as e:
+            err_text = str(e)
+            is_rate_limit = (
+                "429" in err_text
+                or "RESOURCE_EXHAUSTED" in err_text
+                or "rate" in err_text.lower()
+            )
+            if not is_rate_limit or attempt == max_attempts - 1:
+                raise
+            # Try to parse the suggested retry delay; default to 30s, cap at 90s.
+            wait = 30
+            m = re.search(r"retry in (\d+(?:\.\d+)?)", err_text)
+            if m:
+                wait = min(int(float(m.group(1))) + 2, 90)
+            else:
+                wait = min(30 * (2 ** attempt), 90)
+            print(f"[rate-limit] hit on attempt {attempt + 1}, waiting {wait}s...")
+            time.sleep(wait)
+    return None
 
 
 # %% [markdown]
@@ -30,7 +69,6 @@ import cdd_config as config
 # %%
 def _extract_code(response_text: str, format: str) -> str:
     """Extract diagram code from LLM response, handling markdown fences."""
-    # Try fenced blocks for the specific format
     fence_patterns = {
         "graphviz": r"```(?:dot|graphviz)?\s*\n?(.*?)```",
         "mermaid": r"```(?:mermaid)?\s*\n?(.*?)```",
@@ -41,12 +79,10 @@ def _extract_code(response_text: str, format: str) -> str:
     if match:
         return match.group(1).strip()
 
-    # No fence: strip and check for known starts
     stripped = response_text.strip()
     if format == "graphviz" and stripped.startswith(("digraph", "graph", "strict")):
         return stripped
     if format == "mermaid":
-        # Mermaid diagrams start with a type keyword
         first_line = stripped.split("\n", 1)[0]
         mermaid_starts = (
             "graph", "flowchart", "sequenceDiagram", "classDiagram",
@@ -56,7 +92,6 @@ def _extract_code(response_text: str, format: str) -> str:
         if any(first_line.startswith(s) for s in mermaid_starts):
             return stripped
     if format == "plantuml" and "@startuml" in stripped:
-        # Trim to just the @startuml ... @enduml block
         m = re.search(r"@startuml.*?@enduml", stripped, re.DOTALL)
         if m:
             return m.group(0)
@@ -64,12 +99,9 @@ def _extract_code(response_text: str, format: str) -> str:
     return stripped
 
 
-# %% [markdown]
-# ## Backwards-compatible alias for the original tests
-
-# %%
+# Backwards-compatible alias for the original tests
 def _extract_dot_code(response_text: str) -> str:
-    """Legacy alias — extracts DOT code. Kept for test compatibility."""
+    """Legacy alias - extracts DOT code. Kept for test compatibility."""
     return _extract_code(response_text, "graphviz")
 
 
@@ -77,8 +109,11 @@ def _extract_dot_code(response_text: str) -> str:
 # ## Provider implementations
 #
 # Each provider implements two methods: generate (text-only) and critique
-# (multimodal — image + text). All return a string response; the caller
+# (multimodal - image + text). All return a string response; the caller
 # decides what to do with it.
+#
+# Gemini calls are wrapped in _retry_on_rate_limit so free-tier users get
+# automatic backoff on 429s instead of cascading failures.
 
 # %%
 def _call_gemini(
@@ -86,34 +121,33 @@ def _call_gemini(
     system_prompt: str,
     conversation_history: Optional[list] = None,
 ) -> str:
-    """Call Gemini for text generation."""
+    """Call Gemini for text generation, with rate-limit retry."""
     from google import genai
     from google.genai import types
 
-    client = genai.Client(api_key=config.GEMINI_API_KEY)
+    def _do_call():
+        client = genai.Client(api_key=config.GEMINI_API_KEY)
+        contents = []
+        if conversation_history:
+            for msg in conversation_history:
+                role = "user" if msg["role"] == "user" else "model"
+                contents.append(types.Content(
+                    role=role, parts=[types.Part.from_text(text=msg["content"])]
+                ))
+        contents.append(types.Content(
+            role="user", parts=[types.Part.from_text(text=user_message)]
+        ))
+        response = client.models.generate_content(
+            model=config.GEMINI_MODEL,
+            contents=contents,
+            config=types.GenerateContentConfig(
+                system_instruction=system_prompt,
+                temperature=0.3,
+            ),
+        )
+        return response.text or ""
 
-    # Gemini takes a list of Content objects. We map our history (which uses
-    # OpenAI's role/content shape) into Gemini's parts format.
-    contents = []
-    if conversation_history:
-        for msg in conversation_history:
-            role = "user" if msg["role"] == "user" else "model"
-            contents.append(types.Content(
-                role=role, parts=[types.Part.from_text(text=msg["content"])]
-            ))
-    contents.append(types.Content(
-        role="user", parts=[types.Part.from_text(text=user_message)]
-    ))
-
-    response = client.models.generate_content(
-        model=config.GEMINI_MODEL,
-        contents=contents,
-        config=types.GenerateContentConfig(
-            system_instruction=system_prompt,
-            temperature=0.3,
-        ),
-    )
-    return response.text or ""
+    return _retry_on_rate_limit(_do_call)
 
 
 def _call_gemini_vision(
@@ -125,16 +159,19 @@ def _call_gemini_vision(
     from google import genai
     from google.genai import types
 
-    client = genai.Client(api_key=config.GEMINI_API_KEY)
-    response = client.models.generate_content(
-        model=config.GEMINI_MODEL,
-        contents=[
-            types.Part.from_bytes(data=image_bytes, mime_type=image_mime),
-            prompt,
-        ],
-        config=types.GenerateContentConfig(temperature=0.2),
-    )
-    return response.text or ""
+    def _do_call():
+        client = genai.Client(api_key=config.GEMINI_API_KEY)
+        response = client.models.generate_content(
+            model=config.GEMINI_MODEL,
+            contents=[
+                types.Part.from_bytes(data=image_bytes, mime_type=image_mime),
+                prompt,
+            ],
+            config=types.GenerateContentConfig(temperature=0.2),
+        )
+        return response.text or ""
+
+    return _retry_on_rate_limit(_do_call)
 
 
 # %%
@@ -299,9 +336,7 @@ def critique_image(
 
 def _parse_critique(text: str) -> dict:
     """Parse a critique JSON response. Defensive against fences and prose."""
-    # Strip markdown fences if the model added them
     cleaned = re.sub(r"```(?:json)?\s*", "", text).replace("```", "").strip()
-    # Find the first { ... } block
     match = re.search(r"\{.*\}", cleaned, re.DOTALL)
     if match:
         try:
@@ -313,7 +348,6 @@ def _parse_critique(text: str) -> dict:
             }
         except (json.JSONDecodeError, ValueError):
             pass
-    # Fallback: treat as acceptable so the loop terminates safely
     return {
         "is_acceptable": True,
         "issues": [],
@@ -322,122 +356,7 @@ def _parse_critique(text: str) -> dict:
 
 
 # %% [markdown]
-# ## Describe-and-suggest
-#
-# After the final render, send the image to a multimodal LLM and ask for a
-# plain-English description plus concrete suggestions for further changes.
-# This is shown in the chat alongside the diagram. Failures are non-fatal:
-# if the call or parse fails we return empty fields and the UI just shows
-# the diagram as before.
-
-# %%
-def describe_and_suggest(
-    image_bytes: bytes,
-    user_intent: str,
-    diagram_code: str,
-    diagram_format: str = "graphviz",
-    provider: Optional[str] = None,
-) -> dict:
-    """Generate a description of the rendered diagram plus suggestions for
-    further changes.
-
-    Returns: {"description": str, "suggestions": list[str]}.
-    On any failure returns empty fields so the caller can render gracefully.
-    """
-    provider = provider or config.LLM_PROVIDER
-    prompt = config.DESCRIBE_SUGGEST_PROMPT.format(
-        intent=user_intent or "(no specific intent recorded)",
-        code=diagram_code,
-        format=diagram_format,
-    )
-
-    try:
-        if provider == "gemini":
-            raw = _call_gemini_vision(image_bytes, prompt)
-        elif provider == "openai":
-            raw = _call_openai_vision(image_bytes, prompt)
-        elif provider == "anthropic":
-            raw = _call_anthropic_vision(image_bytes, prompt)
-        else:
-            raise ValueError(f"Unknown provider: {provider}")
-    except Exception as e:
-        # Log to stderr so you can spot failed calls in the server log.
-        # The user-facing path stays graceful: empty fields, no crash.
-        import sys
-        print(
-            f"[describe_and_suggest] LLM call failed: {e}",
-            file=sys.stderr,
-        )
-        return {"description": "", "suggestions": []}
-
-    parsed = _parse_describe_suggest(raw)
-
-    # If parsing yielded nothing, log the raw response so we can diagnose
-    # why Gemini's output isn't producing chat bubbles. Truncate to keep
-    # logs readable.
-    if not parsed["description"] and not parsed["suggestions"]:
-        import sys
-        snippet = (raw or "")[:500].replace("\n", " ")
-        print(
-            f"[describe_and_suggest] Empty parse. Raw response: {snippet!r}",
-            file=sys.stderr,
-        )
-
-    return parsed
-
-
-def _parse_describe_suggest(text: str) -> dict:
-    """Parse the describe+suggest JSON response. Defensive against fences,
-    smart quotes, trailing commas, and stray prose."""
-    if not text:
-        return {"description": "", "suggestions": []}
-
-    # 1. Strip markdown fences (```json ... ``` or just ``` ... ```).
-    cleaned = re.sub(r"```(?:json)?\s*", "", text).replace("```", "").strip()
-
-    # 2. Replace common smart-quote characters with regular quotes — Gemini
-    #    occasionally returns curly quotes, which json.loads can't parse.
-    cleaned = (
-        cleaned.replace("\u201c", '"').replace("\u201d", '"')
-               .replace("\u2018", "'").replace("\u2019", "'")
-    )
-
-    # 3. Find the outermost {...} block.
-    match = re.search(r"\{.*\}", cleaned, re.DOTALL)
-    if not match:
-        return {"description": "", "suggestions": []}
-
-    candidate = match.group()
-
-    # 4. Try parsing as-is first; if that fails, strip trailing commas
-    #    inside arrays/objects (a common LLM mistake) and retry.
-    for attempt in (candidate, re.sub(r",(\s*[}\]])", r"\1", candidate)):
-        try:
-            data = json.loads(attempt)
-            description = str(data.get("description", "")).strip()
-            raw_sugs = data.get("suggestions", [])
-            # Coerce to list[str], drop empties, strip whitespace
-            if isinstance(raw_sugs, str):
-                raw_sugs = [raw_sugs]
-            suggestions = [
-                str(s).strip() for s in raw_sugs if str(s).strip()
-            ]
-            return {
-                "description": description,
-                "suggestions": suggestions,
-            }
-        except (json.JSONDecodeError, ValueError):
-            continue
-
-    # All parse attempts failed.
-    return {"description": "", "suggestions": []}
-
-
-# %% [markdown]
 # ## Backwards-compatible wrappers
-#
-# The original tests and notebooks call `generate_dot`. Keep that name
-# as a thin alias so existing code keeps working.
 
 # %%
 def generate_dot(
@@ -445,7 +364,7 @@ def generate_dot(
     conversation_history: Optional[list] = None,
     provider: Optional[str] = None,
 ) -> str:
-    """Legacy wrapper — generates Graphviz DOT specifically."""
+    """Legacy wrapper - generates Graphviz DOT specifically."""
     return generate(
         user_message,
         format="graphviz",
