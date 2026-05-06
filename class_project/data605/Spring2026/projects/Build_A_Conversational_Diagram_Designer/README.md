@@ -29,7 +29,14 @@ The Mermaid and PlantUML choices are documented as deliberate trade-offs. Both f
 
 ## Architecture
 
-```
+The diagram below shows the full request lifecycle — from user message through LLM code generation, rendering, and the optional vision-feedback loop, down to the evaluation harness that benchmarks the pipeline in both vision-on and vision-off modes.
+
+
+<img width="1175" height="1600" alt="image" src="https://github.com/user-attachments/assets/0ce06fca-0a72-42bf-8d96-49cbfa0220a3" />
+
+
+
+Pipeline walkthrough
 user message
   -> cdd_llm.generate(prompt, format)            text -> diagram code
   -> cdd_renderer.render(code, format)           code -> PNG / SVG
@@ -39,7 +46,7 @@ user message
             regenerate with critique appended
             loop
   -> return final code, image, and trace
-```
+  
 
 The entire pipeline lives behind a single `CDDOrchestrator` class. The frontend talks to the orchestrator through a small FastAPI surface (`/api/chat`, `/api/export`, `/api/reset`, `/api/config`). The orchestrator records every step of the pipeline so the report can show what happened during a turn: which mode ran, how many iterations the vision loop used, what each iteration produced.
 
