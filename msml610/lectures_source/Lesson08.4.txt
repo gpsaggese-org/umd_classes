@@ -680,119 +680,128 @@ digraph SalesModelExtended {
 
 # Randomized Experiments and Stats Review
 
-* A/B Testing Example
-- A common strategy among companies is to
-  - have a cheap / free product that serves to attract customers
+* A/B Testing: Example
+- **Fact**: a common strategy among companies is to:
+  - Have a cheap / free product to attract customers
   - Cross-sell other products that are more profitable
     - Use email campaigns to sell premium product
     - When a customer get an email and buys the premium product, they are
       "converted"
 
-- Non-randomized data, you see that:
+- Non-randomized data show that customers receiving emails convert more
   $$
   \EE[ Conversion | Email = 1] > \EE[ Conversion | Email = 0]
   $$
-  - Problem: marketing team tends to send emails for customers who they think
+  - **Problem**: marketing team tends to send emails for customers who they think
     they will convert (e.g., using a survey, customers who visited the website
     the most)
-  $$
-  \EE[ Conversion_0 | Email = 1] > \EE[ Conversion_0 | Email = 0]
-  $$
-  - I.e., customers would have converted even if the email was not sent
+    $$
+    \EE[ Conversion_0 | Email = 1] > \EE[ Conversion_0 | Email = 0]
+    $$
+  - Customers would have converted even if the email was not sent
 
-- You need to make the treated and untreated comparable
-  - E.g., you can randomize who gets the email
+- **Solution**: make the treated and untreated comparable with A/B testing
+  - E.g., randomize who gets the email
 
-- Imagine that you have 3 emails
+* A/B Testing: Example
+- You have 3 emails:
   - No email (`no_email`)
   - Long and beautiful email (`long`)
   - Short and to-the-point email (`short`)
 
-- Once you collect the data you get data like:
-  ```
-  id  gender  cross_sell_email   age    conversion
-  --------------
-  0
-  ```
-  - Compute the mean by group in `cross_sell_email`
-    ```
-    cross_sell_email    conversion
-    ------------------------------
-    no_email            0.042
-    long                0.055
-    short               0.125
-    ```
-  - Compute the ATE, i.e., difference between each treated group and control
-    $$ATE = \EE[Y | T=t] - \EE[Y | T=0]$$
-    - Sending the short and to-the-point email is best
+- Collect the data (`id`, `gender`, `age`, `cross_sell_email`, `conversion`)
+- Compute the mean by group in `cross_sell_email`
 
-- You should still do a sanity check that randomization was done right
-  - E.g., you can check if `gender` and `age` are balanced in the groups (using a
+  \begingroup
+  \small
+  | cross_sell_email | conversion |
+  |------------------|------------|
+  | no_email         | 0.042      |
+  | long             | 0.055      |
+  | short            | 0.125      |
+  \endgroup
+
+- Compute the ATE, i.e., difference between each treated group and control
+  $$ATE = \EE[Y | T=t] - \EE[Y | T=0]$$
+  - Sending the short and to-the-point email is best
+
+- **Caveat**: sanity check that randomization was done right
+  - E.g., check if `gender` and `age` are balanced in the groups (using a
     statistical test)
-  - If not, it might be that the effect is due to sending the email to a specific
+  - If not, might be effect is due to sending the email to a specific
     demographic
   - Biases sampling has large effect on small data
 
-* Randomized Controlled Trials
-- RCTs are the most reliable way to measure causal effects
+* Randomized Controlled Trials (RCTs)
+- **Fact**: RCTs are the most reliable way to measure causal effects (gold
+  standard)
 
-- The problem is
+- **Problems**
   - Very expensive (in time and money)
   - Potentially unethical
-  - Sometimes impossible
+  - Sometimes impossible (e.g., selection bias)
 
 - You can use an RCT as a benchmark
   - What is the best experiment to answer your question (even if it's not) feasible?
   - Can help discover the causal effect
 
-*
-- Standard error of the mean is related to the sample size $n$
-  $$
-  SE = \frac{\sigma}{n}
-  $$
+* Small Size effect
+- Standard error of the mean $SE = \frac{\sigma}{n}$ is related to the sample
+  size $n$
 
-- Imagine you have data about schools in terms of number of students and average
-  SAT score
-  - An frequent effect is that the top-performing schools have a small number of
+- **Example**
+  - Imagine you have data about schools in terms of number of students and average
+    SAT score
+  - A frequent effect is that the top-performing schools have a small number of
     students
-    - An explanation is that "fewer students allows teachers to give focused
-      attention to each student"
-
-  - In reality
+    - An explanation is that _"fewer students allows teachers to give focused
+      attention to each student"_
+  - **Counterpoint**
     - Also bottom 1% of schools have few students
     - The effect is due to standard error of the mean: more students means more
       precise estimate and less variation due to chance
     - This is shown by a "triangular" shape of `avg_score` vs
       `number_of_students`
 
+// TODO: Fix layout
 ![](msml610/lectures_source/figures/L08.4.School_score_by_number_students.png)
 
 // Chap 3: Graphical Causal Models
 
 # Graphical Causal Models
 
-*
-- Estimate the impact of emails on conversion
+* Graphical Models
+- **Graphical Causal Models** are DAGs
+  - Arrows show causal direction
+    - Causality is non-reversible
+  - Missing edges means no direct causal link
+
+- **Pros**
+  - Make causal assumptions explicit (and visual)
+  - Enable communication of causal thinking
+  - Clarify complex relationships
+
+- **Structural Causal Models** (SCMs) use both graphs and causal equations
+
+* Email Conversion Example
+- Estimate impact of emails on conversion
   - Cross-sell email = treatment $T$
   - Customer converted to a new product (or not) = outcome $Y$
-
-- $T$ was randomized, so
+- $T$ was randomized, so:
   - The treatment is independent from the potential outcomes
-    $$
-    (Y_0, Y_1) \perp T
-    $$
-  - Thus association equals causation 
-    $$
-    \EE[Y_1 - Y_0] = \EE[Y | T=1] - \EE[Y | T=0]
-    $$
-
+    $(Y_0, Y_1) \perp T$
+  - Association equals causation
+    $\EE[Y | T=1] - \EE[Y | T=0] = \EE[Y_1 - Y_0] = ATE$
+::: columns
+:::: {.column width=50%}
 - You can't infer the independence assumption from the data
-  - You need to have information to the treatment assignment mechanism (e.g.,
-    "emails were randomized")
-
+  - Need information about treatment assignment mechanism (e.g., "emails were
+    randomized")
 - Imagine that you believe that `age`, `gender` also cause conversion
-  - There are also other variables $U$ (i.e., unobserved) that we didn't measure
-    (e.g., customer income, city we are operating in)
+  - Other unobserved variables $U$ (e.g., customer income, city we are operating
+    in) are important
+::::
+:::: {.column width=45%}
 
 ```graphviz
 digraph CausalKG {
@@ -818,6 +827,8 @@ digraph CausalKG {
   u -> conversion [style=solid, color=black];
 }
 ```
+::::
+:::
 
 * Are Consultants Worth It?
 
