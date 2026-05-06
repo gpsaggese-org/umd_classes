@@ -37,7 +37,7 @@ from langgraph.graph import StateGraph, END
 import collect     as _collect
 import preprocess  as _preprocess
 import analyze     as _analyze
-import visualize   as _visualize
+import visualise as _visualise
 from storage    import read_as_pandas, parquet_path
 from db         import query_df
 from llm_tools  import (
@@ -176,7 +176,7 @@ def node_visualize(state: PipelineState) -> PipelineState:
     print("NODE: visualize")
     print("="*50)
     try:
-        saved = _visualize.generate_all_figures()
+        saved = _visualise.generate_all_figures()
         return {**state, "figures_saved": saved}
     except Exception as e:
         err = f"visualize failed: {e}"
