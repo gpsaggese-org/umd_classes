@@ -1,4 +1,6 @@
+fasttext-wheel
 matplotlib
-numpy
+numpy<2.0
 pandas
+scikit-learn
 seaborn
