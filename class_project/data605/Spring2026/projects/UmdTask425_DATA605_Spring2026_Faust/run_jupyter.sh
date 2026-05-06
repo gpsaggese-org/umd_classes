@@ -18,7 +18,7 @@ set -e
 
 # Import the utility functions from /git_root.
 GIT_ROOT=/git_root
-source $GIT_ROOT/class_project/project_template/utils.sh
+source $GIT_ROOT/class_project/data605/Spring2026/projects/UmdTask425_DATA605_Spring2026_Faust/utils.sh
 
 # Load Docker configuration variables for this script.
 get_docker_vars_script ${BASH_SOURCE[0]}

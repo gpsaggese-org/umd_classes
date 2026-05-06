@@ -15,7 +15,7 @@ set -e
 
 # Import the utility functions.
 GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
+source $GIT_ROOT/class_project/data605/Spring2026/projects/UmdTask425_DATA605_Spring2026_Faust/utils.sh
 
 # Parse command-line options and set Jupyter configuration variables.
 parse_docker_jupyter_args "$@"

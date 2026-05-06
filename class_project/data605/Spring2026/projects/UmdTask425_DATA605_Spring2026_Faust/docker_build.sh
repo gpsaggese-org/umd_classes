@@ -14,7 +14,7 @@ set -e
 
 # Import the utility functions.
 GIT_ROOT=$(git rev-parse --show-toplevel)
-source $GIT_ROOT/class_project/project_template/utils.sh
+source $GIT_ROOT/class_project/data605/Spring2026/projects/UmdTask425_DATA605_Spring2026_Faust/utils.sh
 
 # Parse default args (-h, -v) and enable set -x if -v is passed.
 # Shift processed option flags so remaining args are passed to the build.
