@@ -40,7 +40,7 @@ jobs:
       - name: Confirm model file was saved
         working-directory: ${{ env.PROJECT_DIR }}
         run: |
-          ls -lh ml_model/house_price_model.pkl
+          ls -lh ml/house_price_model.pkl
           echo "Model trained successfully."
 
       - name: Upload trained model as artifact
