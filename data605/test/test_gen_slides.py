@@ -1,9 +1,9 @@
 """
-Test gen_slides.py script for msml610 course.
+Test gen_slides.py script for data605 course.
 
 Import as:
 
-import msml610.test.test_gen_slides as m6ttestgs
+import data605.test.test_gen_slides as d6ttestgs
 """
 
 import logging
@@ -28,16 +28,16 @@ _LOG = logging.getLogger(__name__)
 
 class Test_gen_slides_sample(hunitest.TestCase):
     """
-    Test gen_slides.py script for msml610 sample lessons.
+    Test gen_slides.py script for data605 sample lessons.
     """
 
     @pytest.mark.slow
     def test1(self) -> None:
         """
-        Test running gen_slides.py for msml610 lesson 01.1.
+        Test running gen_slides.py for data605 lesson 01.1.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         lesson = "01.1"
         cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
         # Run test.
@@ -47,11 +47,11 @@ class Test_gen_slides_sample(hunitest.TestCase):
     @pytest.mark.slow
     def test2(self) -> None:
         """
-        Test running gen_slides.py for msml610 lesson 08.1.
+        Test running gen_slides.py for data605 lesson 08.2.
         """
         # Prepare inputs.
-        course_dir = "msml610"
-        lesson = "08.1"
+        course_dir = "data605"
+        lesson = "08.2"
         cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
         # Run test.
         hsystem.system(cmd)
@@ -59,34 +59,34 @@ class Test_gen_slides_sample(hunitest.TestCase):
 
 
 # #############################################################################
-# Test_msml610_lesson_discovery
+# Test_data605_lesson_discovery
 # #############################################################################
 
 
-class Test_msml610_lesson_discovery(hunitest.TestCase):
+class Test_data605_lesson_discovery(hunitest.TestCase):
     """
-    Test discovery of msml610 lessons.
+    Test discovery of data605 lessons.
     """
 
     def test1(self) -> None:
         """
-        Test that msml610 lessons can be discovered.
+        Test that data605 lessons can be discovered.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         # Run test.
         lesson_files = csgentuit.get_lesson_files(course_dir)
         # Check outputs.
         self.assertGreater(len(lesson_files), 0)
         basenames = [os.path.basename(f) for f in lesson_files]
-        self.assertIn("Lesson01.1-AI_and_Machine_Learning.txt", basenames)
+        self.assertIn("Lesson01.1-Intro.txt", basenames)
 
     def test2(self) -> None:
         """
-        Test that msml610 has expected number of lessons.
+        Test that data605 has expected number of lessons.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         min_expected_lessons = 35
         # Run test.
         lessons = csgentuit.get_lesson_numbers(course_dir)
@@ -94,17 +94,17 @@ class Test_msml610_lesson_discovery(hunitest.TestCase):
         self.assertGreaterEqual(
             len(lessons),
             min_expected_lessons,
-            f"msml610 should have at least {min_expected_lessons} "
+            f"data605 should have at least {min_expected_lessons} "
             f"lessons, found {len(lessons)}"
         )
-        _LOG.info("msml610 has %d lessons", len(lessons))
+        _LOG.info("data605 has %d lessons", len(lessons))
 
     def test3(self) -> None:
         """
-        Test that msml610 lesson numbers are well-formed.
+        Test that data605 lesson numbers are well-formed.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         valid_lesson_pattern = r"^\d+(\.\d+)?$"
         # Run test.
         lessons = csgentuit.get_lesson_numbers(course_dir)
@@ -118,22 +118,27 @@ class Test_msml610_lesson_discovery(hunitest.TestCase):
 
 
 # #############################################################################
-# Test_msml610_gen_slides_integration
+# Test_data605_gen_slides_integration
 # #############################################################################
 
 
-class Test_msml610_gen_slides_integration(hunitest.TestCase):
+# TODO(ai_gp): Have a fast test checking only a couple of lessons and
+# a super slow test checking all of them.
+# Factor out the code so that code across classes in these files and
+# across data605/test/test_gen_slides.py and msml610/test/test_gen_slides.py
+# don't repeat code.
+class Test_data605_gen_slides_integration(hunitest.TestCase):
     """
-    Integration tests for msml610 slide generation.
+    Integration tests for data605 slide generation.
     """
 
     @pytest.mark.superslow
     def test1(self) -> None:
         """
-        Test that all msml610 lessons can be rendered as PDF.
+        Test that all data605 lessons can be rendered as PDF.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         # Run test.
         lessons = csgentuit.get_lesson_numbers(course_dir)
         # Check outputs.
@@ -149,13 +154,15 @@ class Test_msml610_gen_slides_integration(hunitest.TestCase):
     @pytest.mark.superslow
     def test2(self) -> None:
         """
-        Test MD output after preprocessing stage for msml610 sample lessons.
+        Test MD output after preprocessing stage for data605 sample lessons.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         output_dir = self.get_output_dir()
-        sample_lessons = ["01.1", "08.1"]
+        # TODO(ai_gp): Check all of them and do a git add for all the relevant files.
+        sample_lessons = ["01.1", "08.2"]
         # Run test.
+        # TODO(ai_gp): Add a tqdm progress bar
         for lesson in sample_lessons:
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
@@ -176,6 +183,7 @@ class Test_msml610_gen_slides_integration(hunitest.TestCase):
             hsystem.system(cmd)
             # Extract and check MD output after preprocessing.
             md_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt")
+            # TODO(ai_gp): This needs to be a dassert_file_exists.
             if os.path.exists(md_file):
                 md_content = hio.from_file(md_file)
                 actual = md_content
@@ -185,13 +193,15 @@ class Test_msml610_gen_slides_integration(hunitest.TestCase):
     @pytest.mark.superslow
     def test3(self) -> None:
         """
-        Test TeX output before rendering stage for msml610 sample lessons.
+        Test TeX output before rendering stage for data605 sample lessons.
         """
         # Prepare inputs.
-        course_dir = "msml610"
+        course_dir = "data605"
         output_dir = self.get_output_dir()
-        sample_lessons = ["01.1", "08.1"]
+        # TODO(ai_gp): Check all of them and do a git add for all the relevant files.
+        sample_lessons = ["01.1", "08.2"]
         # Run test.
+        # TODO(ai_gp): Add a tqdm progress bar
         for lesson in sample_lessons:
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
@@ -212,9 +222,9 @@ class Test_msml610_gen_slides_integration(hunitest.TestCase):
             hsystem.system(cmd)
             # Extract and check TeX output before rendering.
             tex_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
+            # TODO(ai_gp): This needs to be a dassert_file_exists.
             if os.path.exists(tex_file):
                 tex_content = hio.from_file(tex_file)
                 actual = tex_content
                 self.check_string(actual, fuzzy_match=True)
                 _LOG.info("Verified TeX output for lesson %s", lesson)
-

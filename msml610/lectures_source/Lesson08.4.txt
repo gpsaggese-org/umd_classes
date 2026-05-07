@@ -1209,21 +1209,24 @@ digraph G {
 
 # The Unreasonable Effectiveness of Linear Regression
 
-*
-- Problem in banking and lending industry: understand the impact of loan amount /
-  credit card limits on default rate
-- Increasing credit card limit should increase the odds of defaulting on the
-  credit card bill
+* Lending Industry: Example
+- **Example**: banking and lending industry
+  - Offer more credit to customers who have a lower chance of defaulting
+  - Understand the impact of loan amount / credit card limits on default rate
+
+- **Intuition**:
+  - Increasing credit card limit should increase the odds of defaulting on the
+    credit card bill
   - People tend to spend more when limits increase
-  - Higher balances → more interest → harder to repay
+  - Higher balances $\implies$ more interest $\implies$ harder to repay
 
-- Looking at banking data there is a negative correlation between credit lines
-  and default rate
-  - Banks offer more credit to customers who have a lower chance of defaulting
-    (according to their model)
+- **Data**:
+  - Looking at banking data there is a negative correlation between credit lines
+    and default rate
+  - The underwriting model would recommend to give more money to risky customers
 
-- In reality
-
+* Lending Industry: Example
+- **Reality**
 ```graphviz
 digraph CausalGraph {
     rankdir=LR;
@@ -1287,6 +1290,7 @@ digraph CausalGraph {
 - The risk of default is difficult to estimate so income or credit scores
   can be used as proxy variable `X`
 
+* Bank Loan Risk: Adjustment Formula
 - Assuming conditional independence $(Y_0, Y_1) \perp T | X$ you can use the
   adjustment formula
   $$
