@@ -177,6 +177,28 @@ plt.show()
 # ```
 
 # %%
+# %% [markdown]
+# ## Part 6: Live Dashboard
+#
+# While the pipeline is running, you can also visualize the sentiment results
+# in real time using the Streamlit dashboard.
+#
+# Open a new terminal in the project folder and run:
+#
+# ```bash
+# python3 -m streamlit run dashboard.py
+# ```
+#
+# The dashboard will open automatically in your browser and update every 2
+# seconds with:
+# - **Live sentiment counts** — total tweets processed, broken down by positive, negative, and neutral
+# - **Bar chart** — sentiment distribution updated in real time
+# - **Recent tweets table** — the last 50 processed tweets with predicted sentiment and confidence score
+#
+# The dashboard reads directly from the `sentiment_results` Kafka topic,
+# the same topic the notebook reads from in Part 5.
+
+# %%
 try:
     consumer = fauuti.create_kafka_consumer(
         topic="sentiment_results",
