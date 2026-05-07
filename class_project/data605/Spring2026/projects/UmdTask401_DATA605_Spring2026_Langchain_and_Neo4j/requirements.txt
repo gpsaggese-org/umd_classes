@@ -4,3 +4,4 @@ langchain-ollama==1.1.0
 langchain-core==1.3.2
 pandas==3.0.2
 matplotlib==3.10.9
+pyvis==0.3.2

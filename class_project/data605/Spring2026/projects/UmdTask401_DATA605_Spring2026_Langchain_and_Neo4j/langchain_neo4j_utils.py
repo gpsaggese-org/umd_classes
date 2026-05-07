@@ -100,23 +100,27 @@ def ingest_movies(tx, movies: list) -> None:
     """, movies=movies)
 
 
-def ingest_ratings(tx, ratings: list) -> None:
-    """
-    Ingest rating records into Neo4j as User-RATED-Movie relationships.
-
-    Creates User nodes and RATED relationships with a rating property.
-    Uses MERGE to avoid duplicates on repeated runs.
-
-    :param tx: Neo4j transaction object
-    :param ratings: list of dicts with keys userId, movieId, rating
-    :return: None
-    """
+def ingest_ratings_batch(tx, ratings: list) -> None:
+    """Internal: write one batch inside a transaction."""
     tx.run("""
         UNWIND $ratings AS r
         MERGE (u:User {userId: r.userId})
         MERGE (m:Movie {movieId: r.movieId})
         MERGE (u)-[:RATED {rating: r.rating}]->(m)
     """, ratings=ratings)
+
+
+def ingest_ratings(driver, ratings: list, batch_size: int = 5000) -> None:
+    """
+    Ingest ratings in batches of 5000 for faster Neo4j writes.
+    Takes driver directly instead of a transaction object.
+    """
+    total = len(ratings)
+    for i in range(0, total, batch_size):
+        batch = ratings[i: i + batch_size]
+        with driver.session() as session:
+            session.execute_write(ingest_ratings_batch, batch)
+        logger.info("Ingested ratings %d / %d", min(i + batch_size, total), total)
 
 
 def load_movielens(movies_path: str, ratings_path: str, ratings_sample: int = 100000):
