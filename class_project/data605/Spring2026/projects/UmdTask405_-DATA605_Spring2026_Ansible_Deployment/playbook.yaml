@@ -24,7 +24,7 @@
 
     # ── Paths ─────────────────────────────────────────────────
     project_root:    "{{ playbook_dir }}"
-    model_pkl:       "{{ project_root }}/ml_model/house_price_model.pkl"
+    model_pkl:       "{{ project_root }}/ml/house_price_model.pkl"
 
     # ── Health check ──────────────────────────────────────────
     api_base:            "http://localhost:{{ host_port }}"

@@ -89,7 +89,7 @@ VALID_QUALITY_CODES: set = {"Ex", "Gd", "TA", "Fa", "Po"}
 
 # Default path to the saved model artifact.
 DEFAULT_MODEL_PATH: str = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "ml_model", "house_price_model.pkl"
+    os.path.dirname(os.path.abspath(__file__)), "ml", "house_price_model.pkl"
 )
 
 # Default API base URL.

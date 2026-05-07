@@ -61,7 +61,7 @@ logging.basicConfig(level=logging.INFO)
 
 # %%
 # Load or generate the House Prices dataset.
-DATA_PATH = "ml_model/train.csv"
+DATA_PATH = "ml/train.csv"
 df = cpptteut.load_data(DATA_PATH)
 _LOG.info("Dataset shape: %s", df.shape)
 df.head()
