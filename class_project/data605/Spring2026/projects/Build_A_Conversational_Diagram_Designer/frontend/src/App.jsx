@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { sendMessage, exportDiagram, resetSession, getConfig } from './api.js';
 
+/* ─── Small utilities ─── */
 
 // Convert a base64 string into a Blob of a given MIME type. Used when the
 // user exports a past revision: the image is already in memory as base64,
@@ -25,7 +26,7 @@ function triggerDownload(blob, filename) {
   URL.revokeObjectURL(url);
 }
 
-// Zoom-and-pan image viewer with zoom % indicator 
+/* ─── Zoom-and-pan image viewer with zoom % indicator ─── */
 
 function ZoomImage({ src }) {
   const [zoom, setZoom] = useState(1);
@@ -99,6 +100,8 @@ const zoomBtn = {
   display: 'flex', alignItems: 'center', justifyContent: 'center',
 };
 
+/* ─── Style tokens ─── */
+
 const palette = {
   bg: '#0d0f11',
   surface: '#161a1e',
@@ -121,7 +124,7 @@ const font = {
   mono: "'JetBrains Mono', 'Fira Code', monospace",
 };
 
-// Chat bubble
+/* ─── Chat bubble ─── */
 
 function ChatBubble({ role, content, meta, isError, kind, onSuggestionClick }) {
   const isUser = role === 'user';
@@ -255,7 +258,7 @@ function ChatBubble({ role, content, meta, isError, kind, onSuggestionClick }) {
   );
 }
 
-// copy button
+/* ─── Code block with copy button ─── */
 
 function DotCodeBlock({ code, height }) {
   const [copied, setCopied] = useState(false);
@@ -329,7 +332,7 @@ function LoadingDots() {
   );
 }
 
-// Resizable vertical split bar
+/* ─── Resizable vertical split bar ─── */
 
 function SplitBar({ onDrag }) {
   const onMouseDown = (e) => {
@@ -365,12 +368,11 @@ function SplitBar({ onDrag }) {
   );
 }
 
-// Revision history strip
+/* ─── Revision history strip ─── */
 
 // Horizontal scroll of revision thumbnails. Clicking one pins the preview
-// to that older revision; clicking the "live" badge unpins it. 
-
-// Each thumbnail shows the revision number and a snippet of the user message
+// to that older revision; clicking the "live" badge unpins it. Each
+// thumbnail shows the revision number and a snippet of the user message
 // that produced it, so users can recognise the one they want.
 function HistoryStrip({ history, viewingRevision, latestRevision, onSelect, onSelectLatest }) {
   if (!history || history.length === 0) return null;
@@ -481,7 +483,7 @@ function HistoryStrip({ history, viewingRevision, latestRevision, onSelect, onSe
   );
 }
 
-// Main App 
+/* ─── Main App ─── */
 
 export default function App() {
   const [messages, setMessages] = useState([]);
@@ -512,7 +514,7 @@ export default function App() {
   // Toggle the history strip on/off.
   const [showHistory, setShowHistory] = useState(false);
 
-  // Resizable split: ratio of diagram area (0..1) Code area gets the rest.
+  // Resizable split: ratio of diagram area (0..1). Code area gets the rest.
   const [splitRatio, setSplitRatio] = useState(0.65);
   const rightPaneRef = useRef(null);
 
@@ -532,7 +534,7 @@ export default function App() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
 
-  // Auto-grow the textarea up to 5 rows.
+  // Auto-grow the textarea up to ~5 rows.
   useEffect(() => {
     if (!inputRef.current) return;
     inputRef.current.style.height = 'auto';
@@ -544,7 +546,7 @@ export default function App() {
     if (!rightPaneRef.current) return;
     const rect = rightPaneRef.current.getBoundingClientRect();
     const offset = clientY - rect.top;
-    // Account for the toolbar (50px). Keep both panes at least 80px tall.
+    // Account for the toolbar (~50px). Keep both panes at least 80px tall.
     const ratio = Math.max(0.15, Math.min(0.9, (offset - 50) / (rect.height - 50)));
     setSplitRatio(ratio);
   }, []);
@@ -669,7 +671,7 @@ export default function App() {
         triggerDownload(blob, filename);
         return;
       }
-      // svg of a past revision isn't cached, fall through to live export
+      // svg of a past revision isn't cached; fall through to live export
       // and warn in the console so the user understands.
       console.warn('SVG export of a past revision is not cached; exporting live diagram instead.');
     }
@@ -721,7 +723,7 @@ export default function App() {
         overflow: 'hidden',
       }}>
 
-        {/*  LEFT: Chat Panel */}
+        {/* ─── LEFT: Chat Panel ─── */}
         <div style={{
           flex: sidebarOpen ? '0 0 460px' : '1 1 auto',
           display: 'flex',
@@ -945,7 +947,7 @@ export default function App() {
           </div>
         </div>
 
-        {/*  RIGHT: Diagram + Code Panel (resizable) */}
+        {/* ─── RIGHT: Diagram + Code Panel (resizable) ─── */}
         {sidebarOpen && (
           <div ref={rightPaneRef} style={{
             flex: 1,
