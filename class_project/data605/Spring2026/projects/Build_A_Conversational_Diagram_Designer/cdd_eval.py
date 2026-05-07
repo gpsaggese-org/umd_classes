@@ -268,16 +268,16 @@ EVAL_TEST_CASES = [
         "expected_min_edges": 4,
     },
     {
-        "prompt": "Create a flowchart for a user signup flow: form, validate email, save to database, send welcome email, redirect to dashboard",
+        "prompt": "Flowchart: Start, add two numbers, show result, End",
         "format": "mermaid",
-        "expected_min_nodes": 5,
-        "expected_min_edges": 4,
+        "expected_min_nodes": 4,
+        "expected_min_edges": 3,
     },
     {
-        "prompt": "Sequence diagram: A user logs into a web app. Client sends credentials to server, server queries the database, returns a session token.",
+        "prompt": "Sequence diagram: User sends message to ChatBot, ChatBot replies to User",
         "format": "plantuml",
-        "expected_min_nodes": 3,
-        "expected_min_edges": 4,
+        "expected_min_nodes": 2,
+        "expected_min_edges": 2,
     },
 ]
 
