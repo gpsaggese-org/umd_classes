@@ -6,9 +6,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -54,25 +54,39 @@
 # Once you're comfortable with the mechanics here, move to `GluonTS.example.ipynb` to see these models applied to real COVID-19 data.
 
 # %% [markdown]
-# ---
-#
 # ## Setup
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
+
+# System libraries.
+import logging
 import warnings
 
 warnings.filterwarnings("ignore")
 
-# Core GluonTS components for the API tutorial
+# Third party libraries.
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+# %% [markdown]
+# ## GluonTS imports and utilities
+
+# %%
+from gluonts.evaluation import make_evaluation_predictions
+from gluonts.torch.model.deep_npts import DeepNPTSEstimator
 from gluonts.torch.model.deepar import DeepAREstimator
 from gluonts.torch.model.simple_feedforward import SimpleFeedForwardEstimator
-from gluonts.torch.model.deep_npts import DeepNPTSEstimator
-from gluonts.evaluation import make_evaluation_predictions
 
-# All our utilities are in one place - much cleaner!
 import GluonTS_utils as gluonts
 
-print("Setup complete. Ready to explore GluonTS.")
+# %%
+_LOG = logging.getLogger(__name__)
+gluonts.init_logger(_LOG)
+_LOG.info("Setup complete. Ready to explore GluonTS.")
 
 # %% [markdown]
 # ## The GluonTS Workflow
@@ -90,8 +104,6 @@ print("Setup complete. Ready to explore GluonTS.")
 # Let's see this in action, starting with the simplest possible time series.
 
 # %% [markdown]
-# ---
-#
 # # Level 1: Sinusoid — The Simplest Pattern
 #
 # We begin with a pure sine wave plus a small amount of Gaussian noise. This is the easiest pattern a model can encounter: perfectly periodic, no trend, no regime changes.
@@ -245,8 +257,6 @@ gluonts.print_metrics(deepar_sin_metrics, model_name="DeepAR on Sinusoid")
 # %% [markdown]
 # > **Checkpoint:** You just completed the full GluonTS workflow — configure, train, forecast, visualize, evaluate. This is the same 5-step pattern for *every* GluonTS model. From here on we'll move faster since you know the drill. What changes is the **data** (increasing complexity) and the **model** (different architectures), not the workflow itself.
 #
-# ---
-#
 # # Level 2: Multi-Frequency — Adding Realism
 #
 # Real time series rarely consist of a single clean cycle. This synthetic series combines four components you'll encounter in real data:
@@ -372,8 +382,6 @@ gluonts.print_metrics(
 )
 
 # %% [markdown]
-# ---
-#
 # # Level 3: Regime Change — The Hard Problem
 #
 # This is where things get interesting. The series behaves one way for the first half, then **abruptly shifts** to a different baseline, amplitude, and frequency.
@@ -506,15 +514,11 @@ print(f"  RMSE: {deepar_regime_metrics['rmse']:.2f}")
 print(f"  MAPE: {deepar_regime_metrics['mape']:.2f}%")
 
 # %% [markdown]
-# ---
-#
 # # Model Comparison
 #
 # Let's bring all results together. Each model was tested on the data type that best highlights its strengths and weaknesses.
 
 # %%
-import pandas as pd
-
 comparison = pd.DataFrame(
     {
         "Model": [
@@ -551,8 +555,6 @@ comparison = pd.DataFrame(
 print(comparison.to_string(index=False, float_format="%.2f"))
 
 # %% [markdown]
-# ---
-#
 # # Summary
 #
 # ## What You Learned
@@ -563,8 +565,6 @@ print(comparison.to_string(index=False, float_format="%.2f"))
 # 4. **Probabilistic output** — every forecast gives you means, medians, quantiles, and raw samples
 # 5. **Model choice matters** — the right model depends on your data's characteristics
 #
-# ---
-#
 # ## Which Model Should You Choose?
 #
 # | If your data has... | Try this model | Why |
@@ -573,8 +573,6 @@ print(comparison.to_string(index=False, float_format="%.2f"))
 # | Stable trends, need fast results | **SimpleFeedForward** | Trains in seconds, good baseline |
 # | Regime shifts, unusual distributions | **DeepNPTS** | Non-parametric — adapts to changing behavior |
 # | No idea yet | **Start with SimpleFeedForward** | Fast to test, then try DeepAR for more accuracy |
-#
-# ---
 #
 # ## Quick Reference
 #
@@ -585,8 +583,6 @@ print(comparison.to_string(index=False, float_format="%.2f"))
 # | 80% confidence interval | `forecast.quantile(0.1)` to `forecast.quantile(0.9)` |
 # | Raw sample paths | `forecast.samples` (shape: `num_samples × prediction_length`) |
 #
-# ---
-#
 # ## Tips for Better Results
 #
 # | Area | Tip |
@@ -595,8 +591,6 @@ print(comparison.to_string(index=False, float_format="%.2f"))
 # | **Epochs** | 5–10 for experiments, 20–30 for final models |
 # | **Features** | More isn't always better — test with and without |
 # | **Data quality** | Handle missing values and normalize if needed |
-#
-# ---
 #
 # ## Troubleshooting
 #
@@ -607,13 +601,9 @@ print(comparison.to_string(index=False, float_format="%.2f"))
 # | *Poor forecast quality* | Increase `context_length`, train longer, or try DeepNPTS for regime changes |
 # | *"Unexpected keyword argument"* | DeepAR: `trainer_kwargs={"max_epochs": N}`. DeepNPTS: `epochs=N`. SimpleFeedForward: no `freq` parameter |
 #
-# ---
-#
 # ## Resources
 #
 # - [GluonTS Documentation](https://ts.gluon.ai/) · [GitHub](https://github.com/awslabs/gluonts) · [PyTorch Lightning](https://lightning.ai/docs/pytorch/stable/)
-#
-# ---
 #
 # ## What's Next?
 #

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -25,21 +25,31 @@
 # **Models:** We compare DeepAR (complex patterns), SimpleFeedForward (fast baseline), and DeepNPTS (regime changes).
 
 # %% [markdown]
-# ---
-#
-# ## 1. Setup and Imports
+# ## 1. Setup and imports
 #
 # Let's get everything set up for our COVID-19 forecasting analysis.
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
+
+# System libraries.
+import logging
 import warnings
 
 warnings.filterwarnings("ignore")
 
-# All our utilities in one place - much cleaner!
-import GluonTS_utils as gluonts
+# Third party libraries.
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 
-# Explicit imports for functions called without gluonts. prefix
+# %% [markdown]
+# ## GluonTS utilities
+
+# %%
+import GluonTS_utils as gluonts
 from GluonTS_utils import (
     train_deepar_covid,
     train_feedforward_covid,
@@ -51,11 +61,12 @@ from GluonTS_utils import (
     print_policy_insights,
 )
 
-print("Setup complete. Ready to forecast COVID-19 cases.")
+# %%
+_LOG = logging.getLogger(__name__)
+gluonts.init_logger(_LOG)
+_LOG.info("Setup complete. Ready to forecast COVID-19 cases.")
 
 # %% [markdown]
-# ---
-#
 # ## 2. Load and Explore COVID-19 Data
 #
 # Let's load our real COVID-19 data and take a look at what we're working with.
@@ -116,8 +127,6 @@ gluonts.plot_data_exploration(data["merged_df"])
 # **Why these features?** Target (7-day MA) smooths reporting; deaths lag cases and correlate with outcomes; CFR indicates strain; mobility captures lockdown effects.
 
 # %% [markdown]
-# ---
-#
 # ## 3. Feature Engineering
 #
 # Our data pipeline has already engineered several features to improve model performance:
@@ -148,8 +157,6 @@ correlations = gluonts.analyze_feature_correlation(
 )
 
 # %% [markdown]
-# ---
-#
 # ## 4. Train All Three Models
 #
 # **Model choice:** DeepAR for complex wave patterns; SimpleFeedForward for a fast baseline; DeepNPTS for regime shifts across COVID variants.
@@ -230,8 +237,6 @@ deepnpts_results = train_deepnpts_covid(
 )
 
 # %% [markdown]
-# ---
-#
 # ## 5. Compare Models
 #
 # Now that we've trained all three models, let's compare their performance!
@@ -293,8 +298,6 @@ gluonts.plot_model_comparison_3panel(
 )
 
 # %% [markdown]
-# ---
-#
 # ## 6. Scenario Analysis: Simulating Interventions
 #
 # One of the most powerful applications of forecasting is **scenario analysis** -
@@ -372,8 +375,6 @@ gluonts.plot_scenario_comparison(scenario_results, prediction_length=14)
 print_policy_insights(scenario_results)
 
 # %% [markdown]
-# ---
-#
 # ## 7. Conclusions and Recommendations
 #
 # ### Key Takeaways
@@ -438,8 +439,6 @@ print_policy_insights(scenario_results)
 # 4. **Scalability**: Use GPU acceleration for faster training
 # 5. **Interpretability**: Provide explanations alongside forecasts
 #
-# ---
-#
 # ## Congratulations!
 #
 # You've completed a full end-to-end COVID-19 forecasting application!
@@ -455,8 +454,6 @@ print_policy_insights(scenario_results)
 # **Ready to apply these skills to your own forecasting problems?**
 
 # %% [markdown]
-# ---
-#
 # ## Additional Resources
 #
 # **GluonTS Documentation**

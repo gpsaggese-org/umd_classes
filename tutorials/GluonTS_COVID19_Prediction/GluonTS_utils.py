@@ -70,6 +70,33 @@ if not _LOG.handlers:
 warnings.filterwarnings("ignore")
 
 
+def init_logger(notebook_log: logging.Logger) -> None:
+    """
+    Configure notebook display and route loggers to print for Jupyter output.
+
+    Standalone tutorial images do not include the helpers package, so this
+    mirrors the essentials of helpers.hnotebook.config_notebook locally.
+    """
+    import seaborn as sns
+
+    plt.rcParams["figure.figsize"] = (12, 6)
+    plt.rcParams["legend.fontsize"] = 12
+    plt.rcParams["font.size"] = 12
+    pd.set_option("display.max_rows", 500)
+    pd.set_option("display.max_columns", 500)
+    pd.set_option("display.width", 1000)
+    sns.set()
+
+    def _info_print(msg: str, *args, **kwargs) -> None:
+        if args:
+            msg = msg % args
+        print(msg)
+
+    notebook_log.info = _info_print  # type: ignore[method-assign]
+    global _LOG
+    _LOG.info = _info_print  # type: ignore[method-assign]
+
+
 # #############################################################################
 # Analysis
 # #############################################################################
