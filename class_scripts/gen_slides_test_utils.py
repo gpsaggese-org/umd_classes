@@ -10,7 +10,7 @@ import logging
 import os
 import re
 import shlex
-from typing import List
+from typing import Dict, List
 
 from tqdm import tqdm
 
@@ -23,7 +23,7 @@ import helpers.hunit_test as hunitest
 _LOG = logging.getLogger(__name__)
 
 
-def get_lesson_files(course_dir: str) -> list[str]:
+def get_lesson_files(course_dir: str) -> List[str]:
     """
     Discover all lesson files in a course directory.
 
@@ -40,7 +40,7 @@ def get_lesson_files(course_dir: str) -> list[str]:
     return sorted(lesson_files)
 
 
-def get_lesson_numbers(course_dir: str) -> list[str]:
+def get_lesson_numbers(course_dir: str) -> List[str]:
     """
     Get all lesson numbers in a course.
 
@@ -58,7 +58,7 @@ def get_lesson_numbers(course_dir: str) -> list[str]:
     return sorted(set(lessons))
 
 
-def collect_all_lessons() -> dict[str, list[str]]:
+def collect_all_lessons() -> Dict[str, List[str]]:
     """
     Collect all lessons organized by course.
 
@@ -194,17 +194,41 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
     """
 
     def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
-        """Render all lessons to PDF."""
+        """
+        Render all lessons in a course to PDF.
+
+        Discovers all lesson numbers in the course directory and renders each
+        one as a PDF using `gen_slides.py`. Progress is displayed via a progress
+        bar. The rendered PDF is opened by default.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
         test_render_all_lessons_to_pdf(course_dir)
 
     def _test_md_preprocessing(self, course_dir: str) -> None:
-        """Test MD output after preprocessing stage for all lessons."""
+        """
+        Test Markdown output after preprocessing stage for all lessons.
+
+        Verifies that the Markdown preprocessing output is correct for all
+        lessons in a course. Results are saved to the output directory and
+        compared using fuzzy matching.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
         test_lessons_preprocessing(self, course_dir, output_dir, lessons, "md")
 
     def _test_tex_preprocessing(self, course_dir: str) -> None:
-        """Test TeX output before rendering stage for all lessons."""
+        """
+        Test TeX output before rendering stage for all lessons.
+
+        Verifies that the LaTeX preprocessing output is correct for all lessons
+        in a course. Results are saved to the output directory and compared using
+        fuzzy matching.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
         test_lessons_preprocessing(self, course_dir, output_dir, lessons, "tex")
