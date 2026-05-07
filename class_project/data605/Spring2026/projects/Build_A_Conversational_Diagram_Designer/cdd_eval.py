@@ -20,8 +20,10 @@
 #    (single-shot), once with it enabled (up to 3 iterations). Compare metrics
 #    and optionally use an LLM-as-judge to score quality.
 #
-# The harness includes per-case throttling so it runs cleanly on Gemini's
-# free tier (5 req/min). For paid tiers, set THROTTLE_SECONDS=0.
+# The benchmark is intentionally small: three prompts, one per supported
+# format. This keeps the run inside Gemini's free-tier rate limit (5
+# requests per minute) and finishes in roughly 6 to 8 minutes end to end.
+# Larger sweeps are easy to add by passing a custom `test_cases` list.
 
 # %%
 import json
@@ -39,13 +41,14 @@ from cdd_orchestrator import CDDOrchestrator
 # %% [markdown]
 # ## Throttle configuration
 #
-# Free tier Gemini allows 5 requests per minute. With vision feedback enabled,
+# Free-tier Gemini allows 5 requests/minute. With vision feedback enabled,
 # each case can fire up to 3 generations + 3 vision critiques = 6 calls.
-# A 15-second wait between cases keeps us well within budget on free tier.
+# A 20-second wait between cases keeps us well within budget on free tier.
+# Set throttle_seconds=0 explicitly when calling the runner if you're on
+# a paid tier.
 
 # %%
-# Set to 0 if running on paid tier. The notebook can also override at runtime.
-THROTTLE_SECONDS = 15
+THROTTLE_SECONDS = 20
 
 
 # %% [markdown]
@@ -245,29 +248,37 @@ Respond with ONLY a JSON object: {{"score": <float 1-5>, "feedback": "<brief rea
 
 # %% [markdown]
 # ## Benchmark prompt set
+#
+# Three prompts, one per supported format. Mid-complexity targets that
+# exercise the orchestrator across all rendering paths (local Graphviz,
+# Kroki for Mermaid, PlantUML server for PlantUML) without burning
+# Gemini free-tier quota.
+#
+# To run a larger sweep, pass a custom `test_cases` list to the runners:
+#
+#     extra = [{"prompt": "...", "format": "graphviz"}, ...]
+#     evaluation.run_eval_suite(test_cases=EVAL_TEST_CASES + extra)
 
 # %%
 EVAL_TEST_CASES = [
-    {"prompt": "Draw a simple flowchart for making coffee: start, boil water, add grounds, pour water, serve",
-     "format": "graphviz", "expected_min_nodes": 5, "expected_min_edges": 4},
-    {"prompt": "Create a class diagram with three classes: User (name, email), Order (id, total), Product (name, price). User has many Orders, Order has many Products.",
-     "format": "graphviz", "expected_min_nodes": 3, "expected_min_edges": 2},
-    {"prompt": "Draw an entity-relationship diagram for a library: Book (title, isbn), Author (name), Member (id, name). Author writes Book. Member borrows Book.",
-     "format": "graphviz", "expected_min_nodes": 3, "expected_min_edges": 2},
-    {"prompt": "Create a state machine for a traffic light: Red -> Green -> Yellow -> Red",
-     "format": "graphviz", "expected_min_nodes": 3, "expected_min_edges": 3},
-    {"prompt": "Draw a mind map about Machine Learning with branches: Supervised (Classification, Regression), Unsupervised (Clustering, Dimensionality Reduction), Reinforcement",
-     "format": "graphviz", "expected_min_nodes": 7, "expected_min_edges": 6},
-    {"prompt": "Create a flowchart for a user signup flow: form, validate email, save to database, send welcome email, redirect to dashboard",
-     "format": "mermaid", "expected_min_nodes": 5, "expected_min_edges": 4},
-    {"prompt": "Sequence diagram: User clicks login, browser sends credentials to server, server checks database, returns session token",
-     "format": "mermaid", "expected_min_nodes": 3, "expected_min_edges": 4},
-    {"prompt": "State machine for an order: Draft, Submitted, Approved, Rejected, Fulfilled. Show transitions.",
-     "format": "mermaid", "expected_min_nodes": 5, "expected_min_edges": 4},
-    {"prompt": "Sequence diagram: A user logs into a web app. Client sends credentials to server, server queries the database, returns a session token.",
-     "format": "plantuml", "expected_min_nodes": 3, "expected_min_edges": 4},
-    {"prompt": "Class diagram: Animal (name, age), Dog extends Animal (breed), Cat extends Animal (indoor). Kennel has many Dogs.",
-     "format": "plantuml", "expected_min_nodes": 4, "expected_min_edges": 2},
+    {
+        "prompt": "Draw a simple flowchart for making coffee: start, boil water, add grounds, pour water, serve",
+        "format": "graphviz",
+        "expected_min_nodes": 5,
+        "expected_min_edges": 4,
+    },
+    {
+        "prompt": "Create a flowchart for a user signup flow: form, validate email, save to database, send welcome email, redirect to dashboard",
+        "format": "mermaid",
+        "expected_min_nodes": 5,
+        "expected_min_edges": 4,
+    },
+    {
+        "prompt": "Sequence diagram: A user logs into a web app. Client sends credentials to server, server queries the database, returns a session token.",
+        "format": "plantuml",
+        "expected_min_nodes": 3,
+        "expected_min_edges": 4,
+    },
 ]
 
 
@@ -317,13 +328,13 @@ def run_eval_suite(
             )
             results.append(result)
             if verbose:
-                ok = "✓" if result.render_success else "✗"
+                ok = "OK" if result.render_success else "FAIL"
                 print(f"      {ok} syntax={result.syntax_valid} render={result.render_success} "
                       f"nodes={result.node_count} edges={result.edge_count}")
         except Exception as e:
             err_msg = str(e)[:200]
             if verbose:
-                print(f"      ✗ ERROR: {err_msg}")
+                print(f"      FAIL ERROR: {err_msg}")
             results.append(EvalResult(
                 prompt=tc["prompt"], format=fmt, condition=condition,
                 diagram_source="", syntax_valid=False,
