@@ -1,4 +1,8 @@
-matplotlib
 numpy
-pandas
-seaborn
+torch
+open-clip-torch
+faiss-cpu
+Pillow
+tqdm
+turboquant
+jupyter
