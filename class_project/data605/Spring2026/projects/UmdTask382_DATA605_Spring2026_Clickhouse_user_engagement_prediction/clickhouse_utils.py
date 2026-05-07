@@ -1,6 +1,6 @@
 import os
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Optional, Sequence
 
 import pandas as pd
 from clickhouse_driver import Client
@@ -33,7 +33,11 @@ def get_client(cfg: Optional[ClickHouseConfig] = None) -> Client:
     return client
 
 
-def ch_df(client: Client, query: str, columns: Sequence[str]) -> pd.DataFrame:
+def ch_df(client: Client, query: str, columns: Optional[Sequence[str]] = None) -> pd.DataFrame:
+    if columns is None or len(columns) == 0 or (len(columns) == 1 and columns[0] == "*"):
+        rows, col_types = client.execute(query, with_column_types=True)
+        inferred_cols = [c for c, _t in col_types]
+        return pd.DataFrame(rows, columns=inferred_cols)
     rows = client.execute(query)
     return pd.DataFrame(rows, columns=list(columns))
 

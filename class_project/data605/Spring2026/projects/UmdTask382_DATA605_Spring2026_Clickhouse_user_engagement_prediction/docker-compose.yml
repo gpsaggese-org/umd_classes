@@ -46,6 +46,8 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./artifacts/datasources/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:ro
+      - ./artifacts/provisioning/dashboards.yaml:/etc/grafana/provisioning/dashboards/dashboards.yaml:ro
+      - ./artifacts/dashboards:/etc/grafana/dashboards:ro
 
 volumes:
   clickhouse_data:
