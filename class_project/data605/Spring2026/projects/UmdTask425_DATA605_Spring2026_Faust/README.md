@@ -46,6 +46,19 @@ python3 tweet_producer.py
 python3 -m streamlit run dashboard.py
 ```
 
+## Live Dashboard
+
+While the pipeline is running, launch the Streamlit dashboard in a new terminal:
+
+```bash
+python3 -m streamlit run dashboard.py
+```
+
+The dashboard opens automatically in your browser and updates every 2 seconds with:
+- **Sentiment counts** — total tweets processed, broken down by positive, negative, and neutral
+- **Bar chart** — live sentiment distribution
+- **Recent tweets table** — the last 50 processed tweets with predicted sentiment and confidence score
+
 ## Project Files
 
 ### Files and their Purpose
