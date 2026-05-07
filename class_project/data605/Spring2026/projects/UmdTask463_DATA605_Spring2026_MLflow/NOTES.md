@@ -33,3 +33,6 @@
 - Changed `run_mlflow.sh` to operate on a clean state by deleting old files every run and operate off of 0.0.0.0.
 - Changed `Dockerfile` to install MLflow and Jupytext.
 - Changed `mlflow.example.ipynb` to write runs to a single folder.
+
+## [2026-05-06]
+- Modified `run.jupyter.sh` to resolve `grep` on the current working directory.

@@ -583,16 +583,8 @@ get_run_jupyter_cmd() {
 
 
 list_and_inspect_docker_image() {
-    # """
-    # List available Docker images and inspect their architecture.
-    #
-    # Lists all images matching FULL_IMAGE_NAME and attempts to inspect
-    # their architecture using docker manifest inspect.
-    # """
     run "docker image ls $FULL_IMAGE_NAME"
-    (docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 }
-
 
 kill_existing_container_if_forced() {
     # """

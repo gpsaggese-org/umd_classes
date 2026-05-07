@@ -16,12 +16,10 @@ set -e
 # Print each command to stdout before executing it.
 #set -x
 
-# Detect the actual path to repository
-GIT_ROOT=$(pwd | grep -o '.*gpsaggese.github.io')
+GIT_ROOT=$(pwd | grep -o '.*gpsaggese.github.io' || true)
 
-# Fallback: If detection fails, use the absolute path
 if [ -z "$GIT_ROOT" ]; then
-    GIT_ROOT=/home/dzxu/repos/data_science/DATA605/gpsaggese.github.io
+    GIT_ROOT=/git_root
 fi
 
 source $GIT_ROOT/class_project/project_template/utils.sh

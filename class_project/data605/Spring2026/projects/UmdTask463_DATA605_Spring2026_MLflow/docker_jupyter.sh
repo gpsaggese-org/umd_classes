@@ -37,4 +37,4 @@ kill_existing_container_if_forced
 DOCKER_CMD=$(get_docker_jupyter_command)
 DOCKER_CMD_OPTS=$(get_docker_jupyter_options $CONTAINER_NAME $JUPYTER_HOST_PORT $JUPYTER_USE_VIM)
 DOCKER_CMD_OPTS="$DOCKER_CMD_OPTS -w /git_root/class_project/data605/Spring2026/projects/UmdTask463_DATA605_Spring2026_MLflow"
-run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME $CMD"
+run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME $CMD"  
