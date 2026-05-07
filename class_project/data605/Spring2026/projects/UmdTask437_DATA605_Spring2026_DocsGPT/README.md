@@ -42,5 +42,5 @@ Open **http://localhost:8888** and work through the notebooks in order:
 | `requirements.txt` | Pinned Python dependencies |
 | `.env.example` | Template for API key configuration |
 
-See [project template README](../project_template_README.md) for full
+See [project template README](project_template_README.md) for full
 Docker usage details.
