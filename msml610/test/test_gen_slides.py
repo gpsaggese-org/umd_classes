@@ -6,19 +6,9 @@ Import as:
 import msml610.test.test_gen_slides as m6ttestgs
 """
 
-import logging
-import os
-import shlex
-
 import pytest
 
-import class_scripts.common_utils as csccouti
 import class_scripts.gen_slides_test_utils as csgentuit
-import helpers.hio as hio
-import helpers.hsystem as hsystem
-import helpers.hunit_test as hunitest
-
-_LOG = logging.getLogger(__name__)
 
 
 # #############################################################################
@@ -26,36 +16,18 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-class Test_gen_slides_sample(hunitest.TestCase):
+class Test_gen_slides_sample(csgentuit.GenSlidesSample_TestCase):
     """
     Test gen_slides.py script for msml610 sample lessons.
     """
 
     @pytest.mark.slow
     def test1(self) -> None:
-        """
-        Test running gen_slides.py for msml610 lesson 01.1.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        lesson = "01.1"
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
-        # Run test.
-        hsystem.system(cmd)
-        # Check outputs - if no exception, test passed.
+        self._run_gen_slides("msml610", "01.1")
 
     @pytest.mark.slow
     def test2(self) -> None:
-        """
-        Test running gen_slides.py for msml610 lesson 08.1.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        lesson = "08.1"
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
-        # Run test.
-        hsystem.system(cmd)
-        # Check outputs - if no exception, test passed.
+        self._run_gen_slides("msml610", "08.1")
 
 
 # #############################################################################
@@ -63,58 +35,19 @@ class Test_gen_slides_sample(hunitest.TestCase):
 # #############################################################################
 
 
-class Test_msml610_lesson_discovery(hunitest.TestCase):
+class Test_msml610_lesson_discovery(csgentuit.LessonDiscovery_TestCase):
     """
     Test discovery of msml610 lessons.
     """
 
     def test1(self) -> None:
-        """
-        Test that msml610 lessons can be discovered.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        # Run test.
-        lesson_files = csgentuit.get_lesson_files(course_dir)
-        # Check outputs.
-        self.assertGreater(len(lesson_files), 0)
-        basenames = [os.path.basename(f) for f in lesson_files]
-        self.assertIn("Lesson01.1-AI_and_Machine_Learning.txt", basenames)
+        self._check_lesson_discovery("msml610", "Lesson01.1-AI_and_Machine_Learning.txt")
 
     def test2(self) -> None:
-        """
-        Test that msml610 has expected number of lessons.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        min_expected_lessons = 35
-        # Run test.
-        lessons = csgentuit.get_lesson_numbers(course_dir)
-        # Check outputs.
-        self.assertGreaterEqual(
-            len(lessons),
-            min_expected_lessons,
-            f"msml610 should have at least {min_expected_lessons} "
-            f"lessons, found {len(lessons)}"
-        )
-        _LOG.info("msml610 has %d lessons", len(lessons))
+        self._check_lesson_count("msml610")
 
     def test3(self) -> None:
-        """
-        Test that msml610 lesson numbers are well-formed.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        valid_lesson_pattern = r"^\d+(\.\d+)?$"
-        # Run test.
-        lessons = csgentuit.get_lesson_numbers(course_dir)
-        # Check outputs.
-        for lesson in lessons:
-            self.assertRegex(
-                lesson,
-                valid_lesson_pattern,
-                f"Invalid lesson format '{lesson}' in {course_dir}"
-            )
+        self._check_lesson_format("msml610")
 
 
 # #############################################################################
@@ -122,99 +55,20 @@ class Test_msml610_lesson_discovery(hunitest.TestCase):
 # #############################################################################
 
 
-class Test_msml610_gen_slides_integration(hunitest.TestCase):
+class Test_msml610_gen_slides_integration(csgentuit.GenSlidesIntegration_TestCase):
     """
     Integration tests for msml610 slide generation.
     """
 
     @pytest.mark.superslow
     def test1(self) -> None:
-        """
-        Test that all msml610 lessons can be rendered as PDF.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        # Run test.
-        lessons = csgentuit.get_lesson_numbers(course_dir)
-        # Check outputs.
-        for lesson in lessons:
-            cmd = (
-                f"gen_slides.py {course_dir}/{lesson} "
-                "--skip_action open"
-            )
-            hsystem.system(cmd)
-            _LOG.info("Successfully rendered %s lesson %s as PDF",
-                     course_dir, lesson)
+        self._render_all_lessons_to_pdf("msml610")
 
     @pytest.mark.superslow
     def test2(self) -> None:
-        """
-        Test MD output after preprocessing stage for msml610 sample lessons.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        output_dir = self.get_output_dir()
-        sample_lessons = ["01.1", "08.1"]
-        # Run test.
-        for lesson in sample_lessons:
-            # Get source file.
-            src_name = csccouti.get_source_name(course_dir, lesson)
-            input_file = os.path.join(course_dir, "lectures_source", src_name)
-            # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
-            hio.create_dir(lesson_dir, incremental=True)
-            cmd_parts = [
-                "notes_to_pdf.py",
-                "--input", input_file,
-                "--output", os.path.join(lesson_dir, "output.pdf"),
-                "--type", "slides",
-                "--toc_type", "navigation",
-                "--skip_action", "cleanup_after",
-                "--skip_action", "open",
-            ]
-            cmd = " ".join(shlex.quote(part) for part in cmd_parts)
-            hsystem.system(cmd)
-            # Extract and check MD output after preprocessing.
-            md_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt")
-            if os.path.exists(md_file):
-                md_content = hio.from_file(md_file)
-                actual = md_content
-                self.check_string(actual, fuzzy_match=True)
-                _LOG.info("Verified MD output for lesson %s", lesson)
+        self._test_md_preprocessing("msml610")
 
     @pytest.mark.superslow
     def test3(self) -> None:
-        """
-        Test TeX output before rendering stage for msml610 sample lessons.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        output_dir = self.get_output_dir()
-        sample_lessons = ["01.1", "08.1"]
-        # Run test.
-        for lesson in sample_lessons:
-            # Get source file.
-            src_name = csccouti.get_source_name(course_dir, lesson)
-            input_file = os.path.join(course_dir, "lectures_source", src_name)
-            # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
-            hio.create_dir(lesson_dir, incremental=True)
-            cmd_parts = [
-                "notes_to_pdf.py",
-                "--input", input_file,
-                "--output", os.path.join(lesson_dir, "output.tex"),
-                "--type", "slides",
-                "--toc_type", "navigation",
-                "--skip_action", "cleanup_after",
-                "--skip_action", "open",
-            ]
-            cmd = " ".join(shlex.quote(part) for part in cmd_parts)
-            hsystem.system(cmd)
-            # Extract and check TeX output before rendering.
-            tex_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
-            if os.path.exists(tex_file):
-                tex_content = hio.from_file(tex_file)
-                actual = tex_content
-                self.check_string(actual, fuzzy_match=True)
-                _LOG.info("Verified TeX output for lesson %s", lesson)
+        self._test_tex_preprocessing("msml610")
 

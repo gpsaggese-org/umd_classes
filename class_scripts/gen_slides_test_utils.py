@@ -9,9 +9,16 @@ import class_scripts.gen_slides_test_utils as csgentuit
 import logging
 import os
 import re
+import shlex
+from typing import List
+
+from tqdm import tqdm
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
+import helpers.hio as hio
+import helpers.hsystem as hsystem
+import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
 
@@ -61,3 +68,143 @@ def collect_all_lessons() -> dict[str, list[str]]:
     for course_dir in csccouti.VALID_DIRS:
         all_lessons[course_dir] = get_lesson_numbers(course_dir)
     return all_lessons
+
+
+def test_render_all_lessons_to_pdf(course_dir: str) -> None:
+    """
+    Test that all lessons in a course can be rendered as PDF.
+
+    :param course_dir: Course directory (e.g., "data605" or "msml610")
+    """
+    lessons = get_lesson_numbers(course_dir)
+    for lesson in tqdm(lessons, desc="Rendering lessons to PDF"):
+        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
+        hsystem.system(cmd)
+        _LOG.info("Successfully rendered %s lesson %s as PDF", course_dir, lesson)
+
+
+def test_lessons_preprocessing(
+    test_case: hunitest.TestCase,
+    course_dir: str,
+    output_dir: str,
+    lessons: List[str],
+    output_type: str,
+) -> None:
+    """
+    Test preprocessing output (MD or TeX) for a set of lessons.
+
+    :param test_case: TestCase instance for assertions
+    :param course_dir: Course directory (e.g., "data605")
+    :param output_dir: Output directory for test results
+    :param lessons: List of lesson numbers to test
+    :param output_type: Either "md" for markdown or "tex" for LaTeX output
+    """
+    for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
+        # Get source file.
+        src_name = csccouti.get_source_name(course_dir, lesson)
+        input_file = os.path.join(course_dir, "lectures_source", src_name)
+        # Use lesson-specific output directory to avoid file conflicts.
+        lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+        hio.create_dir(lesson_dir, incremental=True)
+
+        if output_type == "md":
+            output_file = os.path.join(lesson_dir, "output.pdf")
+            temp_file = os.path.join(
+                lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt"
+            )
+        elif output_type == "tex":
+            output_file = os.path.join(lesson_dir, "output.tex")
+            temp_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
+        else:
+            raise ValueError(f"Unknown output_type: {output_type}")
+
+        cmd_parts = [
+            "notes_to_pdf.py",
+            "--input", input_file,
+            "--output", output_file,
+            "--type", "slides",
+            "--toc_type", "navigation",
+            "--skip_action", "cleanup_after",
+            "--skip_action", "open",
+        ]
+        cmd = " ".join(shlex.quote(part) for part in cmd_parts)
+        hsystem.system(cmd)
+        # Extract and check output after preprocessing.
+        hdbg.dassert_file_exists(temp_file)
+        content = hio.from_file(temp_file)
+        test_case.check_string(content, fuzzy_match=True)
+        _LOG.info("Verified %s output for lesson %s", output_type.upper(), lesson)
+
+
+# #############################################################################
+# Base test classes for parameterized course-specific tests
+# #############################################################################
+
+
+class GenSlidesSample_TestCase(hunitest.TestCase):
+    """
+    Base class for testing gen_slides.py script with course-specific lessons.
+    """
+
+    def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
+        """Run gen_slides for a lesson."""
+        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
+        hsystem.system(cmd)
+
+
+class LessonDiscovery_TestCase(hunitest.TestCase):
+    """
+    Base class for testing lesson discovery in a course.
+    """
+
+    def _check_lesson_discovery(self, course_dir: str, expected_first_lesson_filename: str) -> None:
+        """Check that lessons can be discovered."""
+        lesson_files = get_lesson_files(course_dir)
+        self.assertGreater(len(lesson_files), 0)
+        basenames = [os.path.basename(f) for f in lesson_files]
+        self.assertIn(expected_first_lesson_filename, basenames)
+
+    def _check_lesson_count(self, course_dir: str) -> None:
+        """Check that course has expected number of lessons."""
+        min_expected_lessons = 35
+        lessons = get_lesson_numbers(course_dir)
+        self.assertGreaterEqual(
+            len(lessons),
+            min_expected_lessons,
+            f"{course_dir} should have at least {min_expected_lessons} "
+            f"lessons, found {len(lessons)}"
+        )
+        _LOG.info("%s has %d lessons", course_dir, len(lessons))
+
+    def _check_lesson_format(self, course_dir: str) -> None:
+        """Check that lesson numbers are well-formed."""
+        valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        lessons = get_lesson_numbers(course_dir)
+        for lesson in lessons:
+            self.assertRegex(
+                lesson,
+                valid_lesson_pattern,
+                f"Invalid lesson format '{lesson}' in {course_dir}"
+            )
+
+
+class GenSlidesIntegration_TestCase(hunitest.TestCase):
+    """
+    Base class for integration tests for slide generation.
+    """
+
+    def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
+        """Render all lessons to PDF."""
+        test_render_all_lessons_to_pdf(course_dir)
+
+    def _test_md_preprocessing(self, course_dir: str) -> None:
+        """Test MD output after preprocessing stage for all lessons."""
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        test_lessons_preprocessing(self, course_dir, output_dir, lessons, "md")
+
+    def _test_tex_preprocessing(self, course_dir: str) -> None:
+        """Test TeX output before rendering stage for all lessons."""
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        test_lessons_preprocessing(self, course_dir, output_dir, lessons, "tex")
