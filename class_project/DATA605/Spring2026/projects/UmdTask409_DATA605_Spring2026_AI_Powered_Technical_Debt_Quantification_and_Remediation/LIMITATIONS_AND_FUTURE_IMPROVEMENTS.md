@@ -116,6 +116,29 @@ commons-lang3), but absolute probabilities are squashed. We saw a range of
 fine; for confidence-thresholding (e.g., "only refactor issues above 0.8")
 the absolute values would mislead.
 
+The project description also asks for prediction of "the emergence of technical
+debt in future code to enable proactive prevention rather than reactive
+remediation." Our pipeline does not do this.
+ 
+What we have is a reactive fault predictor (Stage 4): for issues that already
+exist in the code, we predict the probability that the host commit was
+fault-inducing. The model looks backward at what has already been written. It
+does not look forward at what is about to be written.
+ 
+A genuinely proactive system would intercept code changes before they are
+merged. Two natural shapes:
+ 
+1. A pre-commit hook that runs the pipeline on the diff and warns the
+   developer about issues their change is about to introduce. This is closer
+   to a tool like SonarLint's IDE integration than to anything we built.
+2. A predictive model that takes a partial change (a function being written,
+   for example) and forecasts the debt it is likely to introduce based on
+   the developer's history, the file's complexity, and similar contextual
+   features. This would need labeled examples of "code as it was being
+   written" plus "debt that emerged later," which no public dataset
+   provides at scale.
+Both are reasonable directions. Neither was in scope for this project.
+
 ### 2.4 Stage 5 (Prioritize)
 
 Three weighting decisions are heuristic, not learned:
