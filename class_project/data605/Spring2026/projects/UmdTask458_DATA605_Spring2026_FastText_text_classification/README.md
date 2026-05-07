@@ -82,7 +82,7 @@ Demonstrates the FastText API including:
 
 | Model | F1 Score | Training Time |
 |---|---|---|
-| FastText Baseline (e=10, lr=0.1, ng=1) | 0.32 | ~2s |
+| FastText Baseline (e=25, lr=0.5, ng=2) | 0.60 | ~5s |
 | FastText Best (e=75, lr=0.5, ng=2) | 0.62 | ~8s |
 | Logistic Regression + TF-IDF | 0.66 | ~19s |
 
@@ -92,8 +92,9 @@ becomes significantly more pronounced.
 
 ## Key Findings
 
-1. Hyperparameter tuning doubled model performance from 31% to 62% F1.
-
+1. Hyperparameter tuning improved F1 from 0.60 (baseline) to 0.62 (best
+   configuration). Poor configuration choices such as low epoch count and
+   learning rate can drop performance as low as 0.31.
 2. The most common misclassifications occur between semantically similar
    categories such as talk.politics.misc and talk.politics.guns.
 3. Logistic Regression + TF-IDF slightly outperforms FastText on this
