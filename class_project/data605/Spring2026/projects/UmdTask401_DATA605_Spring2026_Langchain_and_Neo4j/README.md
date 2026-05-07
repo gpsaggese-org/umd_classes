@@ -301,12 +301,18 @@ Sample natural language queries and results:
 **Q: What are the top rated movies?**
 > Returns movies with highest average ratings from the sampled ratings data.
 
-## Actual Results due to small model
+## Actual Results (due to small model)
+**Q: List movies in the Action genre.**
 > Based on the provided list of movies, here are some Action movies:\n\n1. Dragon Ball: The Curse Of The Blood Rubies (Doragon bôru: Shenron no densetsu)\n2. Dragon Ball Z: Bio-Broly\n3. Bionicle: The Legend Reborn
-> Toy Story belongs to the animation and children's film genres.
-> I don't know the answer to this question as no information is provided about the ratings or preferences of specific individuals or groups.
->  I don't have enough information to provide an accurate answer. Can I help you with anything else?
 
+**Q: What genres does Toy Story belong to?**
+> Toy Story belongs to the animation and children's film genres.
+
+**Q: How many movies are in the Drama genre?**
+> I don't have enough information to provide an accurate answer. Can I help you with anything else?
+
+**Q: What are the top rated movies?**
+> I don't know the answer to this question as no information is provided about the ratings or preferences of specific individuals or groups.
 ---
 
 ## Package Versions
