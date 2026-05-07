@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingester
+  namespace: turboquant
+spec:
+  completionMode: Indexed
+  completions: 4
+  parallelism: 4
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: ingester
+        image: tq-ingester:latest
+        imagePullPolicy: Never
+        env:
+        - name: N_SHARDS
+          value: "4"
+        - name: EMBEDDER_URL
+          value: "http://embedder:8000/embed"
+        - name: BATCH_SIZE
+          value: "32"
+        - name: CONCURRENCY
+          value: "2"
+        - name: DATASET_URL
+          value: "https://huggingface.co/datasets/twood1/turboquant-art-1k/resolve/main/images_1k.tar"
+        - name: OUTPUT_DIR
+          value: "/data/embeddings"
+        - name: LIMIT
+          value: "0"
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        hostPath:
+          path: /data
+          type: Directory

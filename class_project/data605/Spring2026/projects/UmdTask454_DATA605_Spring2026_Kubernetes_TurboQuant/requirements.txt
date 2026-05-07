@@ -1,8 +1,5 @@
-numpy
-torch
+numpy<2
 open-clip-torch
-faiss-cpu
-Pillow
-tqdm
 turboquant
-jupyter
+huggingface_hub
+matplotlib
