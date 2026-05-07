@@ -10,7 +10,7 @@ import class_scripts.test.test_gen_slides_validation as cstestgsval
 
 import logging
 
-import class_scripts.gen_slides_test_utils as csgentuit
+import class_scripts.gen_slides_test_utils as csgsteut
 import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         """
         # Prepare inputs.
         # Run test.
-        all_lessons = csgentuit.collect_all_lessons()
+        all_lessons = csgsteut.collect_all_lessons()
         # Check outputs.
         self.assertIn("msml610", all_lessons)
         self.assertIn("data605", all_lessons)
@@ -47,14 +47,14 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         course_dir = "msml610"
         min_expected_lessons = 35
         # Run test.
-        all_lessons = csgentuit.collect_all_lessons()
+        all_lessons = csgsteut.collect_all_lessons()
         lesson_count = len(all_lessons[course_dir])
         # Check outputs.
         self.assertGreaterEqual(
             lesson_count,
             min_expected_lessons,
             f"msml610 should have at least {min_expected_lessons} "
-            f"lessons, found {lesson_count}"
+            f"lessons, found {lesson_count}",
         )
         _LOG.info("msml610 has %d lessons", lesson_count)
 
@@ -66,14 +66,14 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         course_dir = "data605"
         min_expected_lessons = 35
         # Run test.
-        all_lessons = csgentuit.collect_all_lessons()
+        all_lessons = csgsteut.collect_all_lessons()
         lesson_count = len(all_lessons[course_dir])
         # Check outputs.
         self.assertGreaterEqual(
             lesson_count,
             min_expected_lessons,
             f"data605 should have at least {min_expected_lessons} "
-            f"lessons, found {lesson_count}"
+            f"lessons, found {lesson_count}",
         )
         _LOG.info("data605 has %d lessons", lesson_count)
 
@@ -84,12 +84,12 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         # Prepare inputs.
         valid_lesson_pattern = r"^\d+(\.\d+)?$"
         # Run test.
-        all_lessons = csgentuit.collect_all_lessons()
+        all_lessons = csgsteut.collect_all_lessons()
         # Check outputs.
         for course_dir, lessons in all_lessons.items():
             for lesson in lessons:
                 self.assertRegex(
                     lesson,
                     valid_lesson_pattern,
-                    f"Invalid lesson format '{lesson}' in {course_dir}"
+                    f"Invalid lesson format '{lesson}' in {course_dir}",
                 )

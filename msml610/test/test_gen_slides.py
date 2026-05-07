@@ -8,7 +8,7 @@ import msml610.test.test_gen_slides as m6ttestgs
 
 import pytest
 
-import class_scripts.gen_slides_test_utils as csgentuit
+import class_scripts.gen_slides_test_utils as csgsteut
 
 
 # #############################################################################
@@ -16,7 +16,7 @@ import class_scripts.gen_slides_test_utils as csgentuit
 # #############################################################################
 
 
-class Test_gen_slides_sample(csgentuit.GenSlidesSample_TestCase):
+class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
     """
     Test gen_slides.py script for msml610 sample lessons.
     """
@@ -35,13 +35,15 @@ class Test_gen_slides_sample(csgentuit.GenSlidesSample_TestCase):
 # #############################################################################
 
 
-class Test_msml610_lesson_discovery(csgentuit.LessonDiscovery_TestCase):
+class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
     """
     Test discovery of msml610 lessons.
     """
 
     def test1(self) -> None:
-        self._check_lesson_discovery("msml610", "Lesson01.1-AI_and_Machine_Learning.txt")
+        self._check_lesson_discovery(
+            "msml610", "Lesson01.1-AI_and_Machine_Learning.txt"
+        )
 
     def test2(self) -> None:
         self._check_lesson_count("msml610")
@@ -55,7 +57,9 @@ class Test_msml610_lesson_discovery(csgentuit.LessonDiscovery_TestCase):
 # #############################################################################
 
 
-class Test_msml610_gen_slides_integration(csgentuit.GenSlidesIntegration_TestCase):
+class Test_msml610_gen_slides_integration(
+    csgsteut.GenSlidesIntegration_TestCase
+):
     """
     Integration tests for msml610 slide generation.
     """
@@ -71,4 +75,3 @@ class Test_msml610_gen_slides_integration(csgentuit.GenSlidesIntegration_TestCas
     @pytest.mark.superslow
     def test3(self) -> None:
         self._test_tex_preprocessing("msml610")
-

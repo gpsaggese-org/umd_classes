@@ -109,7 +109,10 @@ try:
         run_cross_dataset_qa_notebook,
         run_single_dataset_qa_notebook,
     )
-    from reconciliation.lib_tasks_run_model_experiment_notebooks import run_notebooks, publish_master_trading_notebook
+    from reconciliation.lib_tasks_run_model_experiment_notebooks import (
+        run_notebooks,
+        publish_master_trading_notebook,
+    )
 except ImportError:
     # print(e)
     pass

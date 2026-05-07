@@ -697,7 +697,9 @@ def estimate_ate_with_ps(
     # Create design matrix from formula.
     X = patsy.dmatrix(ps_formula, data)
     # Fit logistic regression to estimate propensity scores.
-    ps_model = sklearn.linear_model.LogisticRegression(max_iter=1000).fit(X, data[treatment_col])
+    ps_model = sklearn.linear_model.LogisticRegression(max_iter=1000).fit(
+        X, data[treatment_col]
+    )
     ps = ps_model.predict_proba(X)[:, 1]
     # Compute IPW estimator: E[(T - PS) / (PS * (1 - PS)) * Y].
     return np.mean(
@@ -857,7 +859,8 @@ def bootstrap(
         pcts = [2.5, 97.5]
     np.random.seed(seed)
     stats = joblib.Parallel(n_jobs=4)(
-        joblib.delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+        joblib.delayed(est_fn)(data.sample(frac=1, replace=True))
+        for _ in range(rounds)
     )
     return np.percentile(np.array(list(stats)), pcts)
 
@@ -890,6 +893,7 @@ def estimate_confidence_interval_bootstrap(
         pcts = [2.5, 97.5]
     np.random.seed(seed)
     stats = joblib.Parallel(n_jobs=n_jobs)(
-        joblib.delayed(est_fn)(data.sample(frac=1, replace=True)) for _ in range(rounds)
+        joblib.delayed(est_fn)(data.sample(frac=1, replace=True))
+        for _ in range(rounds)
     )
     return np.percentile(np.array(list(stats)), pcts)

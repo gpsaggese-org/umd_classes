@@ -3,7 +3,7 @@ Shared utilities for slide generation testing.
 
 Import as:
 
-import class_scripts.gen_slides_test_utils as csgentuit
+import class_scripts.gen_slides_test_utils as csgsteut
 """
 
 import logging
@@ -80,7 +80,9 @@ def test_render_all_lessons_to_pdf(course_dir: str) -> None:
     for lesson in tqdm(lessons, desc="Rendering lessons to PDF"):
         cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
         hsystem.system(cmd)
-        _LOG.info("Successfully rendered %s lesson %s as PDF", course_dir, lesson)
+        _LOG.info(
+            "Successfully rendered %s lesson %s as PDF", course_dir, lesson
+        )
 
 
 def test_lessons_preprocessing(
@@ -106,7 +108,7 @@ def test_lessons_preprocessing(
         # Use lesson-specific output directory to avoid file conflicts.
         lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
         hio.create_dir(lesson_dir, incremental=True)
-
+        #
         if output_type == "md":
             output_file = os.path.join(lesson_dir, "output.pdf")
             temp_file = os.path.join(
@@ -114,30 +116,33 @@ def test_lessons_preprocessing(
             )
         elif output_type == "tex":
             output_file = os.path.join(lesson_dir, "output.tex")
-            temp_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
+            temp_file = os.path.join(
+                lesson_dir, "tmp.notes_to_pdf.render_image2.tex"
+            )
         else:
             raise ValueError(f"Unknown output_type: {output_type}")
-
-        cmd_parts = [
-            "notes_to_pdf.py",
-            "--input", input_file,
-            "--output", output_file,
-            "--type", "slides",
-            "--toc_type", "navigation",
-            "--skip_action", "cleanup_after",
-            "--skip_action", "open",
-        ]
-        cmd = " ".join(shlex.quote(part) for part in cmd_parts)
+        #
+        cmd = (
+            f"notes_to_pdf.py "
+            f"--input={shlex.quote(input_file)} "
+            f"--output={shlex.quote(output_file)} "
+            f"--type=slides "
+            f"--toc_type=navigation "
+            f"--skip_action=cleanup_after "
+            f"--skip_action=open"
+        )
         hsystem.system(cmd)
         # Extract and check output after preprocessing.
         hdbg.dassert_file_exists(temp_file)
         content = hio.from_file(temp_file)
         test_case.check_string(content, fuzzy_match=True)
-        _LOG.info("Verified %s output for lesson %s", output_type.upper(), lesson)
+        _LOG.info(
+            "Verified %s output for lesson %s", output_type.upper(), lesson
+        )
 
 
 # #############################################################################
-# Base test classes for parameterized course-specific tests
+# GenSlidesSample_TestCase
 # #############################################################################
 
 
@@ -152,12 +157,19 @@ class GenSlidesSample_TestCase(hunitest.TestCase):
         hsystem.system(cmd)
 
 
+# #############################################################################
+# LessonDiscovery_TestCase
+# #############################################################################
+
+
 class LessonDiscovery_TestCase(hunitest.TestCase):
     """
     Base class for testing lesson discovery in a course.
     """
 
-    def _check_lesson_discovery(self, course_dir: str, expected_first_lesson_filename: str) -> None:
+    def _check_lesson_discovery(
+        self, course_dir: str, expected_first_lesson_filename: str
+    ) -> None:
         """Check that lessons can be discovered."""
         lesson_files = get_lesson_files(course_dir)
         self.assertGreater(len(lesson_files), 0)
@@ -172,7 +184,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
             len(lessons),
             min_expected_lessons,
             f"{course_dir} should have at least {min_expected_lessons} "
-            f"lessons, found {len(lessons)}"
+            f"lessons, found {len(lessons)}",
         )
         _LOG.info("%s has %d lessons", course_dir, len(lessons))
 
@@ -184,8 +196,13 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
             self.assertRegex(
                 lesson,
                 valid_lesson_pattern,
-                f"Invalid lesson format '{lesson}' in {course_dir}"
+                f"Invalid lesson format '{lesson}' in {course_dir}",
             )
+
+
+# #############################################################################
+# GenSlidesIntegration_TestCase
+# #############################################################################
 
 
 class GenSlidesIntegration_TestCase(hunitest.TestCase):
