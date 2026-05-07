@@ -9,11 +9,14 @@ import data605.test.test_gen_slides as d6ttestgs
 import logging
 import os
 import shlex
+from typing import List
 
 import pytest
+from tqdm import tqdm
 
 import class_scripts.common_utils as csccouti
 import class_scripts.gen_slides_test_utils as csgentuit
+import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hsystem as hsystem
 import helpers.hunit_test as hunitest
@@ -118,15 +121,68 @@ class Test_data605_lesson_discovery(hunitest.TestCase):
 
 
 # #############################################################################
+# Helper functions
+# #############################################################################
+
+
+def _test_lessons_preprocessing(
+    test_case: hunitest.TestCase,
+    course_dir: str,
+    output_dir: str,
+    lessons: List[str],
+    output_type: str,
+) -> None:
+    """
+    Test preprocessing output (MD or TeX) for a set of lessons.
+
+    :param test_case: TestCase instance for assertions
+    :param course_dir: Course directory (e.g., "data605")
+    :param output_dir: Output directory for test results
+    :param lessons: List of lesson numbers to test
+    :param output_type: Either "md" for markdown or "tex" for LaTeX output
+    """
+    for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
+        # Get source file.
+        src_name = csccouti.get_source_name(course_dir, lesson)
+        input_file = os.path.join(course_dir, "lectures_source", src_name)
+        # Use lesson-specific output directory to avoid file conflicts.
+        lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+        hio.create_dir(lesson_dir, incremental=True)
+
+        if output_type == "md":
+            output_file = os.path.join(lesson_dir, "output.pdf")
+            temp_file = os.path.join(
+                lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt"
+            )
+        elif output_type == "tex":
+            output_file = os.path.join(lesson_dir, "output.tex")
+            temp_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
+        else:
+            raise ValueError(f"Unknown output_type: {output_type}")
+
+        cmd_parts = [
+            "notes_to_pdf.py",
+            "--input", input_file,
+            "--output", output_file,
+            "--type", "slides",
+            "--toc_type", "navigation",
+            "--skip_action", "cleanup_after",
+            "--skip_action", "open",
+        ]
+        cmd = " ".join(shlex.quote(part) for part in cmd_parts)
+        hsystem.system(cmd)
+        # Extract and check output after preprocessing.
+        hdbg.dassert_file_exists(temp_file)
+        content = hio.from_file(temp_file)
+        test_case.check_string(content, fuzzy_match=True)
+        _LOG.info("Verified %s output for lesson %s", output_type.upper(), lesson)
+
+
+# #############################################################################
 # Test_data605_gen_slides_integration
 # #############################################################################
 
 
-# TODO(ai_gp): Have a fast test checking only a couple of lessons and
-# a super slow test checking all of them.
-# Factor out the code so that code across classes in these files and
-# across data605/test/test_gen_slides.py and msml610/test/test_gen_slides.py
-# don't repeat code.
 class Test_data605_gen_slides_integration(hunitest.TestCase):
     """
     Integration tests for data605 slide generation.
@@ -154,77 +210,23 @@ class Test_data605_gen_slides_integration(hunitest.TestCase):
     @pytest.mark.superslow
     def test2(self) -> None:
         """
-        Test MD output after preprocessing stage for data605 sample lessons.
+        Test MD output after preprocessing stage for all data605 lessons.
         """
         # Prepare inputs.
         course_dir = "data605"
         output_dir = self.get_output_dir()
-        # TODO(ai_gp): Check all of them and do a git add for all the relevant files.
-        sample_lessons = ["01.1", "08.2"]
+        lessons = csgentuit.get_lesson_numbers(course_dir)
         # Run test.
-        # TODO(ai_gp): Add a tqdm progress bar
-        for lesson in sample_lessons:
-            # Get source file.
-            src_name = csccouti.get_source_name(course_dir, lesson)
-            input_file = os.path.join(course_dir, "lectures_source", src_name)
-            # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
-            hio.create_dir(lesson_dir, incremental=True)
-            cmd_parts = [
-                "notes_to_pdf.py",
-                "--input", input_file,
-                "--output", os.path.join(lesson_dir, "output.pdf"),
-                "--type", "slides",
-                "--toc_type", "navigation",
-                "--skip_action", "cleanup_after",
-                "--skip_action", "open",
-            ]
-            cmd = " ".join(shlex.quote(part) for part in cmd_parts)
-            hsystem.system(cmd)
-            # Extract and check MD output after preprocessing.
-            md_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt")
-            # TODO(ai_gp): This needs to be a dassert_file_exists.
-            if os.path.exists(md_file):
-                md_content = hio.from_file(md_file)
-                actual = md_content
-                self.check_string(actual, fuzzy_match=True)
-                _LOG.info("Verified MD output for lesson %s", lesson)
+        _test_lessons_preprocessing(self, course_dir, output_dir, lessons, "md")
 
     @pytest.mark.superslow
     def test3(self) -> None:
         """
-        Test TeX output before rendering stage for data605 sample lessons.
+        Test TeX output before rendering stage for all data605 lessons.
         """
         # Prepare inputs.
         course_dir = "data605"
         output_dir = self.get_output_dir()
-        # TODO(ai_gp): Check all of them and do a git add for all the relevant files.
-        sample_lessons = ["01.1", "08.2"]
+        lessons = csgentuit.get_lesson_numbers(course_dir)
         # Run test.
-        # TODO(ai_gp): Add a tqdm progress bar
-        for lesson in sample_lessons:
-            # Get source file.
-            src_name = csccouti.get_source_name(course_dir, lesson)
-            input_file = os.path.join(course_dir, "lectures_source", src_name)
-            # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
-            hio.create_dir(lesson_dir, incremental=True)
-            cmd_parts = [
-                "notes_to_pdf.py",
-                "--input", input_file,
-                "--output", os.path.join(lesson_dir, "output.tex"),
-                "--type", "slides",
-                "--toc_type", "navigation",
-                "--skip_action", "cleanup_after",
-                "--skip_action", "open",
-            ]
-            cmd = " ".join(shlex.quote(part) for part in cmd_parts)
-            hsystem.system(cmd)
-            # Extract and check TeX output before rendering.
-            tex_file = os.path.join(lesson_dir, "tmp.notes_to_pdf.render_image2.tex")
-            # TODO(ai_gp): This needs to be a dassert_file_exists.
-            if os.path.exists(tex_file):
-                tex_content = hio.from_file(tex_file)
-                actual = tex_content
-                self.check_string(actual, fuzzy_match=True)
-                _LOG.info("Verified TeX output for lesson %s", lesson)
+        _test_lessons_preprocessing(self, course_dir, output_dir, lessons, "tex")
