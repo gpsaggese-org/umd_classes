@@ -50,6 +50,12 @@ user message
 
 The entire pipeline lives behind a single `CDDOrchestrator` class. The frontend talks to the orchestrator through a small FastAPI surface (`/api/chat`, `/api/export`, `/api/reset`, `/api/config`). The orchestrator records every step of the pipeline so the report can show what happened during a turn: which mode ran, how many iterations the vision loop used, what each iteration produced.
 
+## Web APP Screenshot
+The screenshot below shows the CDD web interface after a user requested a User Authentication Flowchart. The left panel displays the diagram description and LLM-generated suggestions for improvement (e.g., combining redundant steps, adjusting node shapes for terminal states). The center panel renders the live Graphviz diagram, and the bottom strip shows the revision history — two iterations are visible, reflecting the vision-feedback loop refining the diagram from the initial generation to a corrected revision. Export controls for .png, .svg, and .dot source are available in the top-right corner.
+
+<img width="1917" height="870" alt="Screenshot 2026-05-07 124657" src="https://github.com/user-attachments/assets/ffd10f41-bdb2-47d9-a27d-13f77c726176" />
+
+
 ## Layout
 
 ```
