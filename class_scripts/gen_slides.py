@@ -129,28 +129,41 @@ def _main(parser: argparse.ArgumentParser) -> None:
     output_file = f"{dir_arg}/lectures/{dst_name}"
     # Ensure output directory exists.
     csccouti.ensure_dir_exists(f"{dir_arg}/lectures")
+    # Prepare command arguments.
+    script_name = "notes_to_pdf.py"
+    input_flag = "--input"
+    output_flag = "--output"
+    type_flag = "--type"
+    output_type = "slides"
+    toc_type_flag = "--toc_type"
+    toc_type = "navigation"
+    debug_flag = "--debug_on_error"
+    skip_action_flag = "--skip_action"
+    cleanup_before = "cleanup_before"
+    cleanup_after = "cleanup_after"
     # Build the command with debug options.
     cmd_parts = [
-        "notes_to_pdf.py",
-        "--input",
+        script_name,
+        input_flag,
         input_file,
-        "--output",
+        output_flag,
         output_file,
-        "--type",
-        "slides",
-        "--toc_type",
-        "navigation",
-        "--debug_on_error",
-        "--skip_action",
-        "cleanup_before",
-        "--skip_action",
-        "cleanup_after",
+        type_flag,
+        output_type,
+        toc_type_flag,
+        toc_type,
+        debug_flag,
+        skip_action_flag,
+        cleanup_before,
+        skip_action_flag,
+        cleanup_after,
     ]
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
-    # Properly quote all arguments to preserve special characters.
-    cmd = " ".join(shlex.quote(part) for part in cmd_parts)
+    # Prepare command by quoting all arguments to preserve special characters.
+    quoted_parts = [shlex.quote(part) for part in cmd_parts]
+    cmd = " ".join(quoted_parts)
     _LOG.info("Running command: %s", cmd)
     # Execute the command.
     hsystem.system(cmd)

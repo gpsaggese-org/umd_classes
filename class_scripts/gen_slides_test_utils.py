@@ -121,15 +121,22 @@ def test_lessons_preprocessing(
             )
         else:
             raise ValueError(f"Unknown output_type: {output_type}")
-        #
+        # Prepare command arguments.
+        input_arg = shlex.quote(input_file)
+        output_arg = shlex.quote(output_file)
+        output_type_arg = "slides"
+        toc_type_arg = "navigation"
+        cleanup_action = "cleanup_after"
+        open_action = "open"
+        # Build and execute command.
         cmd = (
             f"notes_to_pdf.py "
-            f"--input={shlex.quote(input_file)} "
-            f"--output={shlex.quote(output_file)} "
-            f"--type=slides "
-            f"--toc_type=navigation "
-            f"--skip_action=cleanup_after "
-            f"--skip_action=open"
+            f"--input={input_arg} "
+            f"--output={output_arg} "
+            f"--type={output_type_arg} "
+            f"--toc_type={toc_type_arg} "
+            f"--skip_action={cleanup_action} "
+            f"--skip_action={open_action}"
         )
         hsystem.system(cmd)
         # Extract and check output after preprocessing.

@@ -196,12 +196,17 @@ def _main(parser: argparse.ArgumentParser) -> None:
     prompt_file = "tmp.gen_quizzes_prompt.txt"
     hio.to_file(prompt_file, prompt)
     _LOG.debug("Saved prompt to: %s", prompt_file)
+    # Prepare command arguments.
+    script_name = "llm_cli.py"
+    input_arg = f"--input {input_file}"
+    output_arg = f"--output {output_file}"
+    prompt_file_arg = f"--system_prompt_file {prompt_file}"
     # Build the command.
     cmd_parts = [
-        "llm_cli.py",
-        f"--input {input_file}",
-        f"--output {output_file}",
-        f"--system_prompt_file {prompt_file}",
+        script_name,
+        input_arg,
+        output_arg,
+        prompt_file_arg,
     ]
     # Add extra options if provided.
     if args.extra_opts:
@@ -213,7 +218,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Run linting if requested.
     if args.lint:
         _LOG.info("Running lint_txt.py on output file: %s", output_file)
-        lint_cmd = f"lint_txt.py -i {output_file} --action prettier"
+        # Prepare linting command.
+        lint_action = "prettier"
+        lint_cmd = f"lint_txt.py -i {output_file} --action {lint_action}"
         _LOG.info("Executing: %s", lint_cmd)
         hsystem.system(lint_cmd)
 

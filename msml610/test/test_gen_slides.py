@@ -1,11 +1,3 @@
-"""
-Test gen_slides.py script for msml610 course.
-
-Import as:
-
-import msml610.test.test_gen_slides as m6ttestgs
-"""
-
 import pytest
 
 import class_scripts.gen_slides_test_utils as csgsteut
@@ -23,11 +15,19 @@ class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
 
     @pytest.mark.slow
     def test1(self) -> None:
-        self._run_gen_slides("msml610", "01.1")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        lesson = "01.1"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
 
     @pytest.mark.slow
     def test2(self) -> None:
-        self._run_gen_slides("msml610", "08.1")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        lesson = "08.1"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
 
 
 # #############################################################################
@@ -41,15 +41,23 @@ class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
     """
 
     def test1(self) -> None:
-        self._check_lesson_discovery(
-            "msml610", "Lesson01.1-AI_and_Machine_Learning.txt"
-        )
+        # Prepare test inputs.
+        course_dir = "msml610"
+        expected_filename = "Lesson01.1-AI_and_Machine_Learning.txt"
+        # Run test.
+        self._check_lesson_discovery(course_dir, expected_filename)
 
     def test2(self) -> None:
-        self._check_lesson_count("msml610")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._check_lesson_count(course_dir)
 
     def test3(self) -> None:
-        self._check_lesson_format("msml610")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._check_lesson_format(course_dir)
 
 
 # #############################################################################
@@ -66,12 +74,21 @@ class Test_msml610_gen_slides_integration(
 
     @pytest.mark.superslow
     def test1(self) -> None:
-        self._render_all_lessons_to_pdf("msml610")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._render_all_lessons_to_pdf(course_dir)
 
     @pytest.mark.superslow
     def test2(self) -> None:
-        self._test_md_preprocessing("msml610")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._test_md_preprocessing(course_dir)
 
     @pytest.mark.superslow
     def test3(self) -> None:
-        self._test_tex_preprocessing("msml610")
+        # Prepare test inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._test_tex_preprocessing(course_dir)

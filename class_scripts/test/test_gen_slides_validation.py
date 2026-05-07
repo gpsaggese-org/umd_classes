@@ -31,13 +31,13 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         Test that both courses have lessons.
         """
         # Prepare inputs.
+        expected_courses = ["msml610", "data605"]
         # Run test.
         all_lessons = csgsteut.collect_all_lessons()
         # Check outputs.
-        self.assertIn("msml610", all_lessons)
-        self.assertIn("data605", all_lessons)
-        self.assertGreater(len(all_lessons["msml610"]), 0)
-        self.assertGreater(len(all_lessons["data605"]), 0)
+        for course in expected_courses:
+            self.assertIn(course, all_lessons)
+            self.assertGreater(len(all_lessons[course]), 0)
 
     def test2(self) -> None:
         """
@@ -83,13 +83,15 @@ class Test_gen_slides_batch_validation(hunitest.TestCase):
         """
         # Prepare inputs.
         valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        error_msg_template = "Invalid lesson format '{lesson}' in {course}"
         # Run test.
         all_lessons = csgsteut.collect_all_lessons()
         # Check outputs.
         for course_dir, lessons in all_lessons.items():
             for lesson in lessons:
+                error_msg = error_msg_template.format(lesson=lesson, course=course_dir)
                 self.assertRegex(
                     lesson,
                     valid_lesson_pattern,
-                    f"Invalid lesson format '{lesson}' in {course_dir}",
+                    error_msg,
                 )

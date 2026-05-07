@@ -23,11 +23,19 @@ class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
 
     @pytest.mark.slow
     def test1(self) -> None:
-        self._run_gen_slides("data605", "01.1")
+        # Prepare test inputs.
+        course_dir = "data605"
+        lesson = "01.1"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
 
     @pytest.mark.slow
     def test2(self) -> None:
-        self._run_gen_slides("data605", "08.2")
+        # Prepare test inputs.
+        course_dir = "data605"
+        lesson = "08.2"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
 
 
 # #############################################################################
@@ -41,13 +49,23 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
     """
 
     def test1(self) -> None:
-        self._check_lesson_discovery("data605", "Lesson01.1-Intro.txt")
+        # Prepare test inputs.
+        course_dir = "data605"
+        expected_filename = "Lesson01.1-Intro.txt"
+        # Run test.
+        self._check_lesson_discovery(course_dir, expected_filename)
 
     def test2(self) -> None:
-        self._check_lesson_count("data605")
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._check_lesson_count(course_dir)
 
     def test3(self) -> None:
-        self._check_lesson_format("data605")
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._check_lesson_format(course_dir)
 
 
 # #############################################################################
@@ -64,12 +82,21 @@ class Test_data605_gen_slides_integration(
 
     @pytest.mark.superslow
     def test1(self) -> None:
-        self._render_all_lessons_to_pdf("data605")
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._render_all_lessons_to_pdf(course_dir)
 
     @pytest.mark.superslow
     def test2(self) -> None:
-        self._test_md_preprocessing("data605")
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._test_md_preprocessing(course_dir)
 
     @pytest.mark.superslow
     def test3(self) -> None:
-        self._test_tex_preprocessing("data605")
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._test_tex_preprocessing(course_dir)
