@@ -1,0 +1,57 @@
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 824B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/python:3.12-slim
+#2 DONE 0.5s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [ 1/10] FROM docker.io/library/python:3.12-slim@sha256:46cb7cc2877e60fbd5e21a9ae6115c30ace7a077b9f8772da879e4590c18c2e3
+#4 resolve docker.io/library/python:3.12-slim@sha256:46cb7cc2877e60fbd5e21a9ae6115c30ace7a077b9f8772da879e4590c18c2e3 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 3.43kB done
+#5 DONE 0.0s
+
+#6 [ 7/10] COPY etc_sudoers /etc/sudoers
+#6 CACHED
+
+#7 [ 8/10] COPY bashrc /root/.bashrc
+#7 CACHED
+
+#8 [ 2/10] RUN apt-get update && apt-get install -y     ca-certificates     && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [ 9/10] COPY version.sh /install/
+#9 CACHED
+
+#10 [ 3/10] RUN mkdir -p /install
+#10 CACHED
+
+#11 [ 4/10] COPY requirements.txt /install/requirements.txt
+#11 CACHED
+
+#12 [ 5/10] RUN pip install --upgrade pip &&     pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+#12 CACHED
+
+#13 [ 6/10] COPY etc_sudoers /install/
+#13 CACHED
+
+#14 [10/10] RUN /install/version.sh 2>&1 | tee version.log
+#14 CACHED
+
+#15 exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:6fae8d4c58c30cbd9584b94792553aa81521c8cbd226325402317c19d23ec8bd done
+#15 exporting config sha256:17f23757e76f3e39a67cf04cec38373be2f88bd0e9850e89d7c6b7b064e83865 done
+#15 exporting attestation manifest sha256:c7ad33749cac1ef153bec7acff5e155270f57bda47539d7dab7851761cef1263 done
+#15 exporting manifest list sha256:599c534f595871d36583d5361614985c263b7624d583fa13ac2b75f715dfecde done
+#15 naming to docker.io/kshitideshpande/docsgpt_project:latest done
+#15 unpacking to docker.io/kshitideshpande/docsgpt_project:latest done
+#15 DONE 0.0s

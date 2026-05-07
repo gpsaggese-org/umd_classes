@@ -26,7 +26,8 @@ source $DOCKER_NAME
 print_docker_vars
 
 # List available Docker images and inspect architecture.
-list_and_inspect_docker_image
+run "docker image ls $FULL_IMAGE_NAME"
+(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Run the Docker container with Jupyter Lab.
 CMD=$(get_run_jupyter_cmd "${BASH_SOURCE[0]}" "$OLD_CMD_OPTS")
