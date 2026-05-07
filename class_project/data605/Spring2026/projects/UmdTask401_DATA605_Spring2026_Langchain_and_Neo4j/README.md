@@ -178,7 +178,7 @@ If you see `address already in use`, Ollama is already running — no action nee
 ./docker_neo4j.sh
 ```
 
-This script is idempotent — it creates the container on the first run and
+This script creates the container on the first run and
 simply restarts it on subsequent runs. Verify Neo4j is up by visiting
 `http://localhost:7474` (~20 seconds after running).
 
@@ -285,21 +285,27 @@ how **prompt engineering compensates for model size limitations**.
 
 ---
 
-## Results
+## Expected Results
 
 Sample natural language queries and results:
 
 **Q: List movies in the Action genre.**
-> Returns 10 Action movies including Kill Bill: Vol. 1 and Sucker Punch.
+> Returns 10 Action movies
 
 **Q: What genres does Toy Story belong to?**
-> Adventure, Animation, Children, Comedy, Fantasy
+> Animation, Children, etc.
 
 **Q: How many movies are in the Drama genre?**
 > 13,344 movies
 
 **Q: What are the top rated movies?**
 > Returns movies with highest average ratings from the sampled ratings data.
+
+## Actual Results due to small model
+> Based on the provided list of movies, here are some Action movies:\n\n1. Dragon Ball: The Curse Of The Blood Rubies (Doragon bôru: Shenron no densetsu)\n2. Dragon Ball Z: Bio-Broly\n3. Bionicle: The Legend Reborn
+> Toy Story belongs to the animation and children's film genres.
+> I don't know the answer to this question as no information is provided about the ratings or preferences of specific individuals or groups.
+>  I don't have enough information to provide an accurate answer. Can I help you with anything else?
 
 ---
 
