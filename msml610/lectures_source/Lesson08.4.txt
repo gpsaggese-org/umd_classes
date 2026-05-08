@@ -1696,6 +1696,76 @@ Variables that _predict the treatment well_ but not the outcome
 
 # Effect heterogeneity
 
+* From ATE to CATE
+- Average Treatment Effect (ATE) $\EE[Y_1 - Y_0]$ answers:
+  - _"Should we roll out a treatment to entire population?"_
+- Conditional Average Treatment Effect (CATE) $\EE[Y_1 - Y_0 | X]$ answers
+  - _"Which units should we treat?"_
+  - _"What's the optimal treatment for each unit?"_
+  - Enables personalization, since each unit is different in terms of its
+    covariate $X$
+
+* 
+- You have customers and a treatment
+  - $Y$ = outcome (purchase amount, satisfaction, churn probability, etc.)
+  - $T$ = treatment (discount, advertisement exposure, recommendation, pricing
+    change, etc.)
+- You want to personalize the treatment (e.g., different discounts to different
+  customers)
+
+- It's like customer segmentation: create groups of customers based on how they
+  respond to your treatment
+  - E.g., some customers reacts well to discounts, others poorly
+
+- We want to measure "customer’s response to a treatment" (aka treatment effect or
+  marginal effect):
+  $$\frac{\delta Y}{\delta T}\Big|_{X=x}$$
+  how the outcome Y changes when the treatment T changes slightly,
+  holding other factors fixed
+
+- High / medium / low treatment effect (group with high slope)
+- 
+
+* Why Prediction Is Not the Answer
+- Predictive models estimate outcome $Y = f(X, T)$, not treatment sensitivity
+  $$\frac{\delta Y}{\delta T}\Big|_{X=x}$$
+  - Partitioning units by $Y$ does not partition by treatment effect
+  - Example: high sales prediction does not guarantee high discount sensitivity
+- Treatment slopes are non-observable at unit level
+  - Fundamental problem: cannot observe same unit under multiple treatment
+    conditions
+  - Therefore cannot directly compute treatment sensitivity and ML can't predict
+    it
+
+* Restaurant Discount: Example
+- A chain of restaurants that operate across the country. A key component of this
+  business is 
+- Understanding when it should give discounts to its customers
+- The company ran a nationwide experiment that lasted three years, where it
+  randomized discounts in six different restaurants in the chain
+  - The unit of treatment is (day, restaurant)
+
+- Linear regression with treatment-covariate interactions estimates CATE
+  - Model:
+    $$
+    y_i = \beta_0 + \beta_1 t_i + \beta_2 X_i + \beta_3 t_i X_i + e_i
+    $$
+  - Slope prediction:
+    $$
+    \frac{\partial y_i}{\partial t_i} = \beta_1 + \beta_3 X_i
+    $$
+
+- The interaction term $t_i \cdot X_i$ (treatment × covariate) is the simplest
+  way to make the slope depend on the covariate
+  - Each unit with different $X_i$ gets a different slope prediction despite
+    unobservable slopes.
+
+- You can estimate the fit and then use the coefficients to compute the
+  CATE
+
+- If the treatment was not randomized, then you will need to do identification
+  removing confounding
+
 // Chap 7
 
 # Metalerners
