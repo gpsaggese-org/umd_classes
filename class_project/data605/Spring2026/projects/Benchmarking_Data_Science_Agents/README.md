@@ -46,7 +46,7 @@ what AI capabilities are measured and how agents are ranked.
 4. Statistical analysis and correlation analysis      
 5. Clustering benchmarks and agent performance
 6. Visualization and interpretation of results
-7. Final report and documentation
+7. Final analysis.
 
 ## Expected Outcome
 The project aims to identify differences between data science benchmarks and determine which benchmarks better represent real-world data science tasks. We expect to find capability gaps where some agents perform well on coding tasks but struggle with multi-step reasoning and workflow-based tasks.
