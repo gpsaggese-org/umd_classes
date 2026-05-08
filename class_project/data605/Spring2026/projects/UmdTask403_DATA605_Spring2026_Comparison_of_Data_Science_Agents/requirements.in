@@ -16,8 +16,8 @@ pandasai
 pandasai-openai         # pandasai v3 unbundled LLMs; this routes through OPENAI_API_KEY
 pycaret
 autogluon               # AutoML baseline; used by agents/autogluon
-numpy<2                 # pycaret 3.3.2 binary ABI requires numpy 1.x
-scipy<=1.11.4           # pycaret 3.3.2 imports scipy.interp (removed in 1.12+)
+numpy<2                 
+scipy<=1.11.4           
 pandas<2.3              # autogluon-features cap; also keeps pycaret happy
 tabulate
 tiktoken
@@ -27,7 +27,7 @@ pyarrow
 requests
 codecarbon                # D5 carbon footprint measurement for local agents
 pylint                    # D2 code quality scoring (subprocess call from evaluator.py)
-jupyterlab                # interactive notebook UI for prismbench.{API,example}.ipynb
-ipykernel                 # kernel registration for the notebooks
-nbclient                  # programmatic notebook execution (used by tools/_docker_smoke.py)
-pytest                    # unit + integration test runner (tests/)
+jupyterlab                
+ipykernel                 
+nbclient                  
+pytest                    
