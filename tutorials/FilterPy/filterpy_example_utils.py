@@ -1608,7 +1608,9 @@ def show_enkf_portfolio_interactive() -> None:
 
 def _run_all_filters_financial(
     n_days: int = 100, seed: int = 42
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Dict[str, Tuple[np.ndarray, np.ndarray]]]:
+) -> Tuple[
+    np.ndarray, np.ndarray, np.ndarray, Dict[str, Tuple[np.ndarray, np.ndarray]]
+]:
     """
     Run all four filters on the same financial state estimation problem.
 
