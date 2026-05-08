@@ -10,7 +10,8 @@ import logging
 import os
 import re
 import shlex
-from typing import Dict, List
+import sys
+from typing import Dict, List, Optional
 
 from tqdm import tqdm
 
@@ -91,6 +92,7 @@ def test_lessons_preprocessing(
     output_dir: str,
     lessons: List[str],
     output_type: str,
+    skip_actions: Optional[List[str]] = None,
 ) -> None:
     """
     Test preprocessing output (MD or TeX) for a set of lessons.
@@ -100,7 +102,10 @@ def test_lessons_preprocessing(
     :param output_dir: Output directory for test results
     :param lessons: List of lesson numbers to test
     :param output_type: Either "md" for markdown or "tex" for LaTeX output
+    :param skip_actions: Additional actions to skip (in addition to cleanup_after and open)
     """
+    if skip_actions is None:
+        skip_actions = []
     for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
         # Get source file.
         src_name = csccouti.get_source_name(course_dir, lesson)
@@ -128,6 +133,11 @@ def test_lessons_preprocessing(
         toc_type_arg = "navigation"
         cleanup_action = "cleanup_after"
         open_action = "open"
+        # Build skip_action arguments.
+        all_skip_actions = [cleanup_action, open_action] + skip_actions
+        skip_action_args = " ".join(
+            f"--skip_action={action}" for action in all_skip_actions
+        )
         # Build and execute command.
         cmd = (
             f"notes_to_pdf.py "
@@ -135,14 +145,16 @@ def test_lessons_preprocessing(
             f"--output={output_arg} "
             f"--type={output_type_arg} "
             f"--toc_type={toc_type_arg} "
-            f"--skip_action={cleanup_action} "
-            f"--skip_action={open_action}"
+            f"{skip_action_args}"
         )
+        _LOG.info(f"Running command: {cmd}")
         hsystem.system(cmd)
+        sys.stdout.flush()
         # Extract and check output after preprocessing.
         hdbg.dassert_file_exists(temp_file)
         content = hio.from_file(temp_file)
         test_case.check_string(content, fuzzy_match=True)
+        sys.stdout.flush()
         _LOG.info(
             "Verified %s output for lesson %s", output_type.upper(), lesson
         )
@@ -229,7 +241,9 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         """
         test_render_all_lessons_to_pdf(course_dir)
 
-    def _test_md_preprocessing(self, course_dir: str) -> None:
+    def _test_md_preprocessing(
+        self, course_dir: str, skip_actions: Optional[List[str]] = None
+    ) -> None:
         """
         Test Markdown output after preprocessing stage for all lessons.
 
@@ -238,10 +252,13 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         compared using fuzzy matching.
 
         :param course_dir: Course directory (e.g., "data605" or "msml610")
+        :param skip_actions: Additional actions to skip during preprocessing
         """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
-        test_lessons_preprocessing(self, course_dir, output_dir, lessons, "md")
+        test_lessons_preprocessing(
+            self, course_dir, output_dir, lessons, "md", skip_actions
+        )
 
     def _test_tex_preprocessing(self, course_dir: str) -> None:
         """
