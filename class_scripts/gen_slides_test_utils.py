@@ -82,11 +82,6 @@ def collect_all_lessons() -> Dict[str, List[str]]:
 
 
 # #############################################################################
-# Script Execution Functions
-# #############################################################################
-
-
-# #############################################################################
 # LessonDiscovery_TestCase
 # #############################################################################
 
@@ -134,113 +129,84 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
 # #############################################################################
 
 
-def run_gen_slides_py(course_dir: str) -> None:
-    """
-    Test that all lessons in a course can be rendered as PDF.
-
-    :param course_dir: Course directory (e.g., "data605" or "msml610")
-    """
-    lessons = get_lesson_numbers(course_dir)
-    for lesson in tqdm(lessons, desc="Rendering lessons to PDF"):
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
-        hsystem.system(cmd)
-        _LOG.info(
-            "Successfully rendered %s lesson %s as PDF", course_dir, lesson
-        )
-
-
-def run_notes_to_pdf_py(
-    test_case: hunitest.TestCase,
-    course_dir: str,
-    output_dir: str,
-    lessons: List[str],
-    output_type: str,
-    skip_actions: Optional[List[str]] = None,
-) -> None:
-    """
-    Test preprocessing output (MD or TeX) for a set of lessons.
-
-    :param test_case: TestCase instance for assertions
-    :param course_dir: Course directory (e.g., "data605")
-    :param output_dir: Output directory for test results
-    :param lessons: List of lesson numbers to test
-    :param output_type: Either "md" for markdown or "tex" for LaTeX output
-    :param skip_actions: Additional actions to skip (in addition to cleanup_after and open)
-    """
-    if skip_actions is None:
-        skip_actions = []
-    for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
-        # Get source file.
-        src_name = csccouti.get_source_name(course_dir, lesson)
-        input_file = os.path.join(course_dir, "lectures_source", src_name)
-        # Use lesson-specific output directory to avoid file conflicts.
-        lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
-        hio.create_dir(lesson_dir, incremental=True)
-        #
-        if output_type == "md":
-            output_file = os.path.join(lesson_dir, "output.pdf")
-            temp_file = os.path.join(
-                lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt"
-            )
-        elif output_type == "tex":
-            output_file = os.path.join(lesson_dir, "output.tex")
-            temp_file = os.path.join(
-                lesson_dir, "tmp.notes_to_pdf.render_image2.tex"
-            )
-        else:
-            raise ValueError(f"Unknown output_type: {output_type}")
-        # Prepare command arguments.
-        input_arg = shlex.quote(input_file)
-        output_arg = shlex.quote(output_file)
-        output_type_arg = "slides"
-        toc_type_arg = "navigation"
-        cleanup_action = "cleanup_after"
-        open_action = "open"
-        # Build skip_action arguments.
-        all_skip_actions = [cleanup_action, open_action] + skip_actions
-        skip_action_args = " ".join(
-            f"--skip_action={action}" for action in all_skip_actions
-        )
-        # Build and execute command.
-        cmd = (
-            f"notes_to_pdf.py "
-            f"--input={input_arg} "
-            f"--output={output_arg} "
-            f"--type={output_type_arg} "
-            f"--toc_type={toc_type_arg} "
-            f"{skip_action_args}"
-        )
-        _LOG.info(f"Running command: {cmd}")
-        hsystem.system(cmd)
-        sys.stdout.flush()
-        # Extract and check output after preprocessing.
-        hdbg.dassert_file_exists(temp_file)
-        content = hio.from_file(temp_file)
-        test_case.check_string(content, fuzzy_match=True)
-        sys.stdout.flush()
-        _LOG.info(
-            "Verified %s output for lesson %s", output_type.upper(), lesson
-        )
-
-
-
 class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation.
     """
 
-    # TODO(gp): Move this method to a class Run_gen_slides_py_TestCase
-    def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
+    @staticmethod
+    def _run_notes_to_pdf_py(
+        test_case: hunitest.TestCase,
+        course_dir: str,
+        output_dir: str,
+        lessons: List[str],
+        output_type: str,
+        skip_actions: Optional[List[str]] = None,
+    ) -> None:
         """
-        Render all lessons in a course to PDF.
+        Test preprocessing output (MD or TeX) for a set of lessons.
 
-        Discovers all lesson numbers in the course directory and renders each
-        one as a PDF using `gen_slides.py`. Progress is displayed via a progress
-        bar. The rendered PDF is opened by default.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        :param test_case: TestCase instance for assertions
+        :param course_dir: Course directory (e.g., "data605")
+        :param output_dir: Output directory for test results
+        :param lessons: List of lesson numbers to test
+        :param output_type: Either "md" for markdown or "tex" for LaTeX output
+        :param skip_actions: Additional actions to skip (in addition to cleanup_after and open)
         """
-        run_gen_slides_py(course_dir)
+        if skip_actions is None:
+            skip_actions = []
+        for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
+            # Get source file.
+            src_name = csccouti.get_source_name(course_dir, lesson)
+            input_file = os.path.join(course_dir, "lectures_source", src_name)
+            # Use lesson-specific output directory to avoid file conflicts.
+            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+            hio.create_dir(lesson_dir, incremental=True)
+            #
+            if output_type == "md":
+                output_file = os.path.join(lesson_dir, "output.pdf")
+                temp_file = os.path.join(
+                    lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt"
+                )
+            elif output_type == "tex":
+                output_file = os.path.join(lesson_dir, "output.tex")
+                temp_file = os.path.join(
+                    lesson_dir, "tmp.notes_to_pdf.render_image2.tex"
+                )
+            else:
+                raise ValueError(f"Unknown output_type: {output_type}")
+            # Prepare command arguments.
+            input_arg = shlex.quote(input_file)
+            output_arg = shlex.quote(output_file)
+            output_type_arg = "slides"
+            toc_type_arg = "navigation"
+            cleanup_action = "cleanup_after"
+            open_action = "open"
+            # Build skip_action arguments.
+            all_skip_actions = [cleanup_action, open_action] + skip_actions
+            skip_action_args = " ".join(
+                f"--skip_action={action}" for action in all_skip_actions
+            )
+            # Build and execute command.
+            cmd = (
+                f"notes_to_pdf.py "
+                f"--input={input_arg} "
+                f"--output={output_arg} "
+                f"--type={output_type_arg} "
+                f"--toc_type={toc_type_arg} "
+                f"{skip_action_args}"
+            )
+            _LOG.info(f"Running command: {cmd}")
+            hsystem.system(cmd)
+            sys.stdout.flush()
+            # Extract and check output after preprocessing.
+            hdbg.dassert_file_exists(temp_file)
+            content = hio.from_file(temp_file)
+            test_case.check_string(content, fuzzy_match=True)
+            sys.stdout.flush()
+            _LOG.info(
+                "Verified %s output for lesson %s", output_type.upper(), lesson
+            )
 
     def _run_notes_to_pdf_md_py(self, course_dir: str) -> None:
         """
@@ -256,7 +222,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
         skip_actions = ["run_pandoc"]
-        run_notes_to_pdf_py(
+        self._run_notes_to_pdf_py(
             self, course_dir, output_dir, lessons, "md", skip_actions
         )
 
@@ -272,7 +238,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
-        run_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")
+        self._run_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")
 
 
 # #############################################################################
@@ -285,7 +251,36 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
     Base class for testing gen_slides.py script with course-specific lessons.
     """
 
+    @staticmethod
+    def _run_gen_slides_py(course_dir: str) -> None:
+        """
+        Test that all lessons in a course can be rendered as PDF.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        lessons = get_lesson_numbers(course_dir)
+        for lesson in tqdm(lessons, desc="Rendering lessons to PDF"):
+            cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
+            hsystem.system(cmd)
+            _LOG.info(
+                "Successfully rendered %s lesson %s as PDF", course_dir, lesson
+            )
+
     def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
-        """Run gen_slides for a lesson."""
+        """
+        Run gen_slides for a lesson.
+        """
         cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
         hsystem.system(cmd)
+
+    def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
+        """
+        Render all lessons in a course to PDF.
+
+        Discovers all lesson numbers in the course directory and renders each
+        one as a PDF using `gen_slides.py`. Progress is displayed via a progress
+        bar. The rendered PDF is opened by default.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        self._run_gen_slides_py(course_dir)

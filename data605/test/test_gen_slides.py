@@ -121,7 +121,7 @@ class Test_data605_gen_slides_py_sample(csgsteut.Run_gen_slides_py_TestCase):
 # #############################################################################
 
 
-class Test_data605_gen_slides_py(csgsteut.Run_notes_to_pdf_py_TestCase):
+class Test_data605_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
     """
     Integration tests for data605 slide generation (PDF rendering).
     """

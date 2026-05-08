@@ -70,7 +70,10 @@ class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
 # #############################################################################
 
 
-class Test_msml610_gen_slides_integration(csgsteut.Run_notes_to_pdf_py_TestCase):
+class Test_msml610_gen_slides_integration(
+    csgsteut.Run_gen_slides_py_TestCase,
+    csgsteut.Run_notes_to_pdf_py_TestCase,
+):
     """
     Integration tests for msml610 slide generation.
     """
