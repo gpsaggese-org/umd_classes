@@ -74,7 +74,6 @@ from helpers.lib_tasks import (  # isort: skip # noqa: F401  # pylint: disable=u
     git_clean,
     git_fetch_master,
     git_files,
-    git_last_commit_files,
     git_merge_master,
     git_patch_create,
     git_pull,
