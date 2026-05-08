@@ -8,7 +8,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.19.1
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: .venv
 #     language: python
 #     name: python3
 # ---
@@ -35,6 +35,9 @@ import matplotlib.pyplot as plt
 
 # %% [markdown]
 # # Data loading and cleaning
+#
+# Dataset used for this project is the BBC news data taken from Kaggle 
+# https://www.kaggle.com/datasets/hgultekin/bbcnewsarchive 
 
 # %%
 # Loading BBC news dataset into a pandas dataframe 
@@ -59,17 +62,26 @@ df.info()
 (df['content'] == "").sum()
 
 # %%
-# Plotting news category counts 
+# Plotting news category distribution
 
-plt.figure(figsize=(10,5))
-plt.bar(df['category'].value_counts().index, df['category'].value_counts(), color="#A7D7F7")
-plt.xlabel("News categories")
-plt.ylabel("Count")
-plt.title("News Category Counts")
+fig, ax = plt.subplots(figsize=(5, 5))
+counts = df['category'].value_counts()
+ax.pie(
+    counts,
+    labels    = counts.index,
+    autopct   = '%1.1f%%',
+    colors    = plt.cm.Pastel1.colors,
+    startangle= 140,
+    wedgeprops= dict(edgecolor='white', linewidth=1.5)
+)
+ax.set_title("News Category Distribution", fontsize=13, fontweight='bold', pad=15)
+plt.tight_layout()
 plt.show()
 
 # %% [markdown]
 # # Data Pre-processing
+#
+# Processing the data first as LDA cannot be implemented on raw data. This step involves cleaning and tokenizing texts followed by lemmatization and stop word removal. These tokens can then be processed by Gensim.
 
 # %%
 # Importing NLTK library along with stopwords, tokenzier and lemmatizer 
@@ -87,6 +99,8 @@ df.head()
 
 # %% [markdown]
 # # Topic Modeling
+#
+# The processed documents are used to create a dictionary and corpus which are needed for LDA to map each word to an integer as LDA cannot operate on strings.
 
 # %%
 # Creating word dictionary out of cleaned tokens 
