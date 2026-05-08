@@ -1383,87 +1383,34 @@ digraph CausalGraph {
 - Then you can apply the usual flow (adding confounders, FWL theorem)
 
 * Conditionally Random Experiments
-- In fully randomized experiments (RCTs), you need to assume that treatment looks
-  randomly assigned once certain covariates are accounted for
-  - You can't know if all confounders have been included in the model
-  - Only a randomized controlled experiment can confirm it
-  - E.g., giving random credit lines (including very high) to risky customers
-    who will likely default and cause huge loss
-
-- The best next thing to a randomized controlled trial is a "stratified random
+- Best alternative to a randomized controlled trial is "stratified random
   experiments"
-  - Create multiple local experiments, drawing from different distributions,
-    depending on covariates
-  - E.g., instead of randomizing credit lines completely, you use features (e.g.,
-    credit score, which is a proxy for customer risk) to create groups of customers
-    (e.g., high-risk, neutral, low-risk)
-  - Then for the high-risk, you randomize credit lines from a distribution with
-    low average
-  - For the low-risk, you randomize credit lines from a distribution with higher
-    average
+  - Create local experiments from different distributions based on covariates
+  - E.g., use features like credit score to create customer groups (high-risk,
+    neutral, low-risk)
+  - Randomize credit lines for high-risk from a low average distribution
+  - Randomize credit lines for low-risk from a higher average distribution
 
 - Stratified random experiments are:
-  - cheaper 
-  - more complex
-  than completely random experiments
+  - Cheaper
+  - More complex than completely random experiments
 
-- Things are simpler as
+- Simplify by:
   - Lower number of groups
-  - Bigger overlap in the treatment distributions across groups (to avoid relying
-    on extrapolations)
+  - Bigger overlap in treatment distributions across groups
 
-- One extreme is the completely random experiment (easier to interpret, more
-  expensive)
-
-* Dummy Variables
-
-- Problem: Simple regression of outcome on treatment yields biased estimates
-  with confounders
-  - E.g., estimating `default ~ credit_limit` gives negative coefficient
-    (counterintuitive)
-  - Occurs due to imbalanced treatment assignment across confounding
-    groups—lower-risk customers got higher credit lines
-
-- Solution: Dummy Variables (One-Hot Encoding):
-  - Create binary columns for each categorical group (1 if in group, 0
-    otherwise)
-  - Drop first dummy to avoid multicollinearity
-  - Include dummy controls in model:
-    `default ~ credit_limit + C(credit_score1_buckets)`
-
-- Result after adding dummies:
+- Use dummy variables (One-Hot Encoding):
   - Model estimates one intercept per group, shared slope across all groups
   - Shared slope is variance-weighted average of regression slopes within each
     group
 
-* Saturated Regression Model
-
-- Definition: A saturated regression model includes interaction terms between
-  treatment and dummy variables to estimate separate effects for each group
-  - Created by interacting treatment with categorical variables:
-    `treatment * C(categorical_var)`
-  - Each group gets its own intercept and slope
-
-- Running a saturated model produces identical results to:
-  - Segmenting data by groups manually
-  - Estimating treatment effect separately in each group
-  - Computing a weighted average (weights = group size)
-  - E.g., both approaches yield the same Average Treatment Effect (ATE)
-
-- Model interpretation:
-  - Treatment coefficient represents effect in the omitted (reference) group
-  - Interaction parameters show how effects differ from the reference group
-  - Sum interaction term + treatment coefficient to get effect for that specific
-    group
-
-- Trade-off: More parameters $\rightarrow$ more variance
-  - Results can be noisy for small subgroups
-  - Non-significant slopes in small groups are likely just noise
+- Saturated regression model includes interaction terms between treatment and
+  dummy variables to estimate separate effects for each group
 
 * Omitted Variable Bias and Regression
 - The bias due to omitting a variable is equal to tA
 
-* Neutral Controls: Controlling Variance Without Changing Bias
+* Noise-Reducing vs Noise-Inducing Controls
 
 - **Problem**: Should we include every available variable in our regression
   model?
@@ -1518,11 +1465,9 @@ Variables that _predict the treatment well_ but not the outcome
 
 - **Practical Question**: Is a small amount of bias worth a large reduction in
   variance?
-  - No universal answer—depends on context, sample size, and precision needs
+  - No universal answer, it depends on context, sample size, and precision needs
   - Research shows it's often worth accepting small bias for large variance
     reduction
-
-// TODO: Finish
 
 // Chap 5
 
