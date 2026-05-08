@@ -143,6 +143,50 @@ Synthesizes the final journey — documenting results, errors caught, correction
 
 ---
 
+## Trade-offs: Multi-Agent System vs Single Agent
+
+Every architectural decision has trade-offs. Here is an honest assessment of where LangGraph wins and where it costs more.
+
+### Where LangGraph Wins
+
+**Reliability on messy data**
+Single-agent systems report whatever result they get — even if the data has leakage, impossible values, or severe imbalance. The cyclic reviewer loop catches these issues before they reach the final report. The adversarial test results prove this — up to 16.6% F1 improvement under corrupted conditions.
+
+**Explainability**
+The system documents every decision — what risks the Planner identified, what the EDA Analyst cleaned, how many loops the reviewer triggered, and what errors were caught. A single-agent system gives you a result. This system gives you a result plus a full audit trail.
+
+**Error recovery**
+When the ML Architect produces a model with low recall, the reviewer routes back for a retry with resampling applied. A single agent has no mechanism for this — it reports the bad result and moves on.
+
+---
+
+### Where LangGraph Costs More
+
+**Time**
+A single-agent system runs once. LangGraph can loop up to 3 times per dataset. On clean data this means 3x the processing time for modest performance gains. On messy data the extra time is justified. On clean data it may not be.
+
+**Complexity**
+Building and maintaining a StateGraph with conditional edges is significantly more complex than a linear pipeline. The state schema must be carefully designed. Node functions must read and write to state correctly. Debugging a cyclic graph is harder than debugging a sequential script.
+
+**Local LLM dependency**
+This system requires Ollama and Llama 3.2 running locally. That means a machine with enough RAM to run a 2GB model in the background while also training scikit-learn models. On low-resource machines this causes kernel crashes — which I experienced during development.
+
+**No guaranteed improvement on clean data**
+On clean, well-structured data the single agent and LangGraph perform almost identically. The overhead of the reviewer loop adds time without adding value when the data is already good.
+
+---
+
+### When To Use Each
+
+| Situation | Recommended System |
+|---|---|
+| Quick exploratory analysis on clean data | Single Agent |
+| Production system with real-world messy data | LangGraph |
+| Medical or safety-critical application | LangGraph |
+| Limited compute resources | Single Agent or AutoGluon |
+| Need full audit trail and explainability | LangGraph |
+| Time-sensitive one-off analysis | AutoGluon |
+
 ## Project Structure
 
 notebooks/
