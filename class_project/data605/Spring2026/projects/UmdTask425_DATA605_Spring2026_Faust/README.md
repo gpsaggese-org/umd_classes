@@ -1,27 +1,43 @@
-# Faust Kafka Tweet Sentiment Analysis Tutorial
+# Real-time tweet sentiment analysis pipeline built using Apache Kafka, Faust stream processing, and transformer-based sentiment analysis
 
-Real-time tweet sentiment analysis using Faust stream processing and Apache Kafka.
+The goal of this project is to simulate a real-time streaming system where tweets are continuously ingested, processed, classified into sentiment categories, and visualized live on a dashboard.
 
 ## Project Pipeline
-CSV / Twitter API  
-→ `tweet_producer.py`  
-→ Kafka topic: `tweets`  
-→ Faust consumer / stream processor  
-→ Sentiment model  
-→ Output: positive / negative / neutral  
-→ Dashboard
+CSV → `tweet_producer.py` → Kafka topic: `tweets` → Faust stream processor → Sentiment model → Output: positive/negative/neutral → Dashboard
+
+The tweets are first sent into a Kafka topic using a Kafka producer script. Faust then consumes the streaming data from Kafka and performs sentiment analysis using a Hugging Face transformer model. Finally, the processed results are displayed through a live dashboard.
+
+## Pre-requisites
+Before running this project, make sure the following tools are available:
+
+### Software Requirements
+- Mac or Linux OS (assumed)
+- Python 3.12+
+- Docker and Docker Compose
+- Git
+- pip or conda package manager
+- Jupyter Notebook or JupyterLab
+
+### Python Libraries
+Python dependencies can be installed with:
+```bash
+pip install -r requirements.txt
+```
+
+### Architecture Used
+1. Kafka
+2. Faust
+3. Transformers
+4. Streamlit
 
 ## Quick Start
 
-- `cd` into the project folder
+- Launch Docker
+- From the repo root, navigate to the project folder with: `cd class_project/data605/Spring2026/projects/UmdTask425_DATA605_Spring2026_Faust/`
 - Start Kafka: `docker compose up -d`
 - Install dependencies: `pip install -r requirements.txt`
-
-### Launch Jupyter Notebook
-- `python -m pip install ipykernel`
-- `python -m ipykernel install --user --name faust-venv --display-name "Python (.venv Faust)"`
 - Launch Jupyter: `./docker_jupyter.sh` (or `jupyter notebook` locally)
-- In the notebook choose: Kernel → Change Kernel → Python (.venv Faust)
+- In the notebook choose: Kernel → Change Kernel → Python if not already chosen by default.
 
 Open the notebooks in this order:
 
@@ -42,15 +58,7 @@ python3 -m faust -A faust_app worker -l info
 # Terminal 3 — Tweet producer
 python3 tweet_producer.py
 
-# Terminal 4 (optional) — Live dashboard
-python3 -m streamlit run dashboard.py
-```
-
-## Live Dashboard
-
-While the pipeline is running, launch the Streamlit dashboard in a new terminal:
-
-```bash
+# Terminal 4 — Live dashboard for visualization
 python3 -m streamlit run dashboard.py
 ```
 
@@ -65,15 +73,16 @@ The dashboard opens automatically in your browser and updates every 2 seconds wi
 
 | File | Purpose |
 |---|---|
-| `faust_utils.py` | Reusable helper functions for all notebooks |
+| `faust_utils.py` | Core reusable utility module containing Kafka, Faust, sentiment analysis, data loading, and visualization helper functions |
 | `faust.API.ipynb` | Faust API walkthrough |
 | `faust.example.ipynb` | End-to-end sentiment analysis demo |
 | `faust_app.py` | Faust stream processing worker |
 | `tweet_producer.py` | Kafka producer that streams CSV tweets |
 | `dashboard.py` | Streamlit live sentiment dashboard |
 | `docker-compose.yml` | Kafka + Zookeeper setup |
+| `requirements.txt` | Python dependencies for the project |
 
-### File Explanations
+### Core File Explanations
 #### Setting up Kafka Tweet Streaming:
 1. `docker-compose.yml`: This file starts Kafka using Docker.
 - Zookeeper manages Kafka broker metadata. Older Kafka setups use it to coordinate brokers.
@@ -88,6 +97,7 @@ The dashboard opens automatically in your browser and updates every 2 seconds wi
 - transformers, torch: Used for Hugging Face sentiment analysis models.
 - streamlit: (could be used) for building the dashboard.
 - pandas, numpy, matplotlib, seaborn: (could be used) for batch analysis, evaluation, and visualization.
+
 3. `tweet_producer.py`
 - reads tweets from a CSV file and sends them one-by-one into Kafka.
 - value_serializer convets each Python dictionary into JSON bytes because Kafka messages are sent as bytes.
@@ -142,20 +152,35 @@ docker exec -it <kafka_container_name> kafka-console-consumer \
 ``` 
 
 #### Run the Faust App
-** Note: Kafka is installed on Python3.11, and the latest stable Python release is 3.14 as of April 2026. 
-In a new terminal, run the following:
-1. Create Python3.11 conda environment: `conda create -n faust311 python=3.11 -y`
-2. Activate the conda environment: `conda activate faust311`
-3. Upgrade pip: `pip install --upgrade pip`
-4. Install Faust and sentiment analysis dependencies: `pip install faust-streaming kafka-python transformers torch "aiokafka<0.11"`
-5. Run the Faust App: `faust -A faust_app worker -l info`
+Run the Faust App: `faust -A faust_app worker -l info`
 
 #### Produce tweets and verify with Kafka
-In a new terminal, navigate to the project root directory, and run the following:
-1. Create a new Python virtual environment: `python3 -m venv .venv`
-2. Activate the virtual environment: `source .venv/bin/activate`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Run the tweets producer script: `python tweet_producer.py`
+In a new terminal, run the tweets producer script: `python tweet_producer.py`
+
+#### Sentiment Analysis
+1. `faust_utils.py`
+This module centralizes reusable helper functions used throughout the project.
+
+| Function                   | Purpose                                                          |
+| -------------------------- | ---------------------------------------------------------------- |
+| `create_faust_app()`       | Create and configure a Faust stream processing application       |
+| `load_tweets()`            | Load tweet data from the Sentiment140 CSV dataset                |
+| `tweets_to_dataframe()`    | Convert tweet dictionaries into Pandas DataFrames                |
+| `create_kafka_producer()`  | Create a Kafka producer for sending JSON messages                |
+| `send_tweets_to_kafka()`   | Stream tweets into a Kafka topic with simulated real-time delays |
+| `create_kafka_consumer()`  | Create a Kafka consumer for reading Kafka messages               |
+| `poll_sentiment_results()` | Read processed sentiment messages from Kafka into a DataFrame    |
+| `load_sentiment_model()`   | Load the Hugging Face transformer sentiment analysis model       |
+| `analyze_sentiment()`      | Predict sentiment and confidence for a single text input         |
+| `analyze_tweets_batch()`   | Run sentiment analysis across a batch of tweets                  |
+| `sentiment_summary()`      | Compute counts of sentiment labels                               |
+| `accuracy_score()`         | Calculate prediction accuracy against original labels            |
+
+
+The sentiment model used is: `cardiffnlp/twitter-roberta-base-sentiment-latest` which predicts sentiments with the following tags:
+- negative
+- neutral
+- positive
 
 #### Observe Output
 1. The docker container will show the produced tweets with simulated streaming.
