@@ -396,3 +396,190 @@ aggregate, but not yet credibly quantified at a global level.
 13. Roese, Neal. "Counterfactual thinking and decision making." Psychonomic
     Bulletin & Review, 2000.
     https://www.researchgate.net/publication/12633695_Counterfactual_thinking_and_decision_making
+
+
+# Datasets to Quantify Human Decision-Making Ability
+
+This document lists key datasets used in psychology, behavioral economics, and AI research to quantify human decision-making ability, along with references and metrics.
+
+---
+
+## 1. Iowa Gambling Task (IGT) Datasets
+
+**Description**  
+The Iowa Gambling Task (IGT) is one of the most widely used paradigms for measuring decision-making under uncertainty.
+
+**What it measures**
+- Risk vs reward decisions  
+- Learning from feedback  
+- Long-term vs short-term optimization  
+- Executive function  
+
+Participants choose cards from decks with varying reward/loss structures. Effective decision-makers learn to favor advantageous decks over time.
+
+**Public datasets**
+- OpenPsychology IGT dataset (~617 participants)  
+- IGT-Open dataset  
+- Figshare clinical datasets  
+
+**Key references**
+- Bechara et al. (1994) — Original task  
+- Steingroever et al. (2015) — Pooled dataset  
+- Ligneul et al. (2019) — Exploration behavior  
+
+**Why useful**
+You can compute:
+- Net score  
+- Learning rate  
+- Risk preference  
+- Exploration vs exploitation  
+- Strategy optimality  
+
+---
+
+## 2. Balloon Analogue Risk Task (BART)
+
+**Description**  
+Measures risk-taking behavior through a simulated balloon inflation task.
+
+**What it measures**
+- Risk tolerance  
+- Expected value decision-making  
+- Impulsivity  
+
+Participants inflate a balloon for rewards, balancing gains against the risk of losing everything.
+
+---
+
+## 3. Iterated Prisoner’s Dilemma Datasets
+
+**Description**  
+Datasets of repeated cooperation vs defection decisions.
+
+**Example**
+- ~168,000 human decisions from experimental studies  
+
+**What it measures**
+- Cooperation strategy  
+- Strategic reasoning  
+- Game-theoretic rationality  
+- Long-term payoff optimization  
+
+---
+
+## 4. Large-Scale Human Decision Dataset (13k Problems)
+
+**Description**
+- ~240,000 human judgments  
+- ~13,000 decision problems  
+
+**Applications**
+- Prospect theory modeling  
+- Cognitive bias analysis  
+- Rational vs irrational decision-making  
+
+---
+
+## 5. 100K Real-Life Choice Dilemmas Dataset
+
+**Description**
+- ~100,000 real-world decision dilemmas  
+- Derived from surveys and social data  
+
+**Applications**
+- Ethical decision-making  
+- Judgment under ambiguity  
+- NLP-based decision modeling  
+
+---
+
+## 6. Team Management Decision Dataset
+
+**Description**
+- 1,144 participants  
+- Includes decision scenarios, strategies, outcomes, and emotions  
+
+**Applications**
+- Organizational decision-making  
+- Strategic effectiveness  
+- Leadership behavior  
+
+---
+
+## 7. Atari-HEAD Human Decision Dataset
+
+**Description**
+- Human gameplay data  
+- Includes eye tracking, actions, and scores  
+
+**Applications**
+- Sequential decision-making  
+- Attention modeling  
+- Human vs AI comparisons  
+
+---
+
+## Summary Table
+
+| Dataset | Measures | Field |
+|--------|---------|------|
+| Iowa Gambling Task | Risk, learning, strategy | Psychology |
+| BART | Risk tolerance | Psychology |
+| Prisoner’s Dilemma | Cooperation, strategy | Game theory |
+| 13k Decision Dataset | Uncertainty decisions | Cognitive science |
+| 100k Dilemmas | Real-world judgment | Behavioral science |
+| Team Management | Strategic decisions | Management |
+| Atari-HEAD | Sequential decisions | AI / RL |
+
+---
+
+## Metrics to Quantify Decision-Making Ability
+
+Common quantitative metrics include:
+
+- Expected value of decisions  
+- Regret  
+- Risk-adjusted reward  
+- Learning rate  
+- Exploration vs exploitation  
+- Consistency  
+- Time to optimal strategy  
+- Bayesian rationality score  
+- Prospect theory parameters  
+- Utility maximization gap  
+
+---
+
+## Key Academic References
+
+1. Bechara et al. (1994) — Iowa Gambling Task  
+2. Steingroever et al. (2015) — IGT pooled dataset  
+3. Bourgin et al. (2019) — Large human decision dataset  
+4. Bhatia et al. (2025) — 100k decision dilemmas dataset  
+5. Zhang et al. (2019) — Atari-HEAD dataset  
+6. Lin et al. (2020) — Prisoner’s Dilemma human dataset  
+
+---
+
+## Recommended Dataset Combination
+
+For a comprehensive benchmark, combine:
+
+1. Iowa Gambling Task  
+2. Balloon Analogue Risk Task  
+3. Prisoner’s Dilemma dataset  
+4. 13k decision problems dataset  
+5. Atari-HEAD dataset  
+
+This covers:
+- Risk decisions  
+- Strategic decisions  
+- Sequential decisions  
+- Ethical decisions  
+- Learning dynamics  
+
+---
+
+Use deal-or-no-deal
+
+https://www.kaggle.com/datasets/parrotypoisson/deal-or-no-deal-games/code
