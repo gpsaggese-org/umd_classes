@@ -36,3 +36,8 @@
 
 ## [2026-05-06]
 - Modified `run.jupyter.sh` to resolve `grep` on the current working directory.
+
+## [2026-05-07]
+- Modified `README.md` template to relate to this project.
+- Added markdown cells to `mlflow.API.ipynb` to better explain as a tutorial.
+- Modified `requirements.txt` to include version numbers for required software.
