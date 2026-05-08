@@ -1,7 +1,5 @@
 # scripts/predict.py
-"""
-This script is to run the fine-tuned model on custom text input.
-"""
+#This script is to run the fine-tuned model on custom text input.
 
 import argparse
 import os
@@ -17,9 +15,7 @@ from utils.preprocessing import clean_text
 
 
 def load_model(model_dir: str):
-    """
-    Load a fine-tuned model and tokenizer(best model that we got from train.py)
-    """
+    #Load a fine-tuned model and tokenizer(best model that we got from train.py)
     best_path = os.path.join(model_dir, "best")
     load_path = best_path if os.path.isdir(best_path) else model_dir
 
@@ -36,9 +32,7 @@ def load_model(model_dir: str):
 
 
 def predict(texts, tokenizer, model, device="cpu"):
-    """
-    Predict category labels for a list of texts.
-    """
+    #Predict category labels for a list of texts.
     cleaned = [clean_text(t) for t in texts]
     inputs = tokenizer(
         cleaned,

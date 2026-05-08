@@ -25,16 +25,9 @@ def clean_text(text: str) -> str:
 
 def get_tokenizer(model_name: str = DEFAULT_MODEL):
     """
-    Load a HuggingFace AutoTokenizer for the given model checkpoint.
-
-    Parameters
-    ----------
-    model_name : str
-        HuggingFace model hub ID (e.g. 'distilbert-base-uncased')
-
-    Returns
-    -------
-    tokenizer : PreTrainedTokenizer
+    Load a HuggingFace AutoTokenizer
+    Parameters: model_name [HuggingFace model hub ID (like 'distilbert-base-uncased')]
+    Returns: PreTrainedTokenizer
     """
     print(f"[preprocessing] Loading tokenizer: {model_name}")
     tokenizer = AutoTokenizer.from_pretrained(model_name)

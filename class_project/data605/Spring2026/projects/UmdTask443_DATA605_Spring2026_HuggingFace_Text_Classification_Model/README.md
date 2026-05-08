@@ -2,12 +2,11 @@
 
 ## Description
 
-This project builds an end-to-end News Article Classification Pipeline using HuggingFace Transformers. Given a raw news article, the system fine-tunes transformer models (DistilBERT, BERT, RoBERTa) on the AG News dataset for 4-class topic classification and serves predictions through a command-line inference interface.
+In this project, an end-to-end pipeline will be implemented for News Article Classification with Huggingface Transformers. The system trains a DistilBERT transformer using the AG News dataset for classifying articles into four classes using transfer learning.
 
-The entire pipeline — data loading, preprocessing, training, evaluation, and inference — runs inside Docker, requiring no local Python environment setup beyond Docker Desktop.
+The entire pipeline - data loading, preprocessing, training, evaluation, and inference — runs inside Docker, requiring no local Python environment setup beyond Docker Desktop.
 
 **Authors**: @riyaapuri @stupatel17
-**Assigned to**: @riyaapuri @stupatel17 @protocorn @gpsaggese
 
 **Project Specs**: https://github.com/gpsaggese/gpsaggese.github.io/blob/master/class_project/data605/Spring2026/projects_descriptions/HuggingFace_Project_Description.md
 
@@ -47,8 +46,8 @@ Raw News Article
          │
          ▼
 ┌─────────────────┐
-│    train.py     │  Fine-tunes DistilBERT / BERT / RoBERTa
-│                 │  Saves best checkpoint by macro-F1
+│    train.py     │  Fine-tunes DistilBERT
+│                 │  Saves best checkpoint under models by macro-F1
 └────────┬────────┘
          │
          ▼
@@ -59,8 +58,8 @@ Raw News Article
          │
          ▼
 ┌─────────────────┐
-│   predict.py    │  Single article / file / interactive inference
-│                 │  Returns label + per-class confidence scores
+│   predict.py    │  Takes in a single user input
+│                 │  Returns label, per-class confidence scores
 └─────────────────┘
 ```
 
@@ -76,8 +75,6 @@ Raw News Article
 | Training Backend | PyTorch, Accelerate |
 | Evaluation | Scikit-learn |
 | Hyperparameter Tuning | Optuna |
-| Serving | FastAPI *(upcoming)* |
-| Dashboard | Streamlit *(upcoming)* |
 | Containerization | Docker |
 
 ---
@@ -94,14 +91,15 @@ project_root/
 │   ├── scripts/
 │   │   ├── train.py               # Fine-tuning script
 │   │   ├── evaluate.py            # Evaluation + result export
-│   │   └── predict.py             # Inference script
+│   │   └── predict.py             # Interactive script
 │   │
 │   └── utils/
 │       ├── dataset_loader.py      # Data loading and inspection
 │       ├── preprocessing.py       # Text cleaning and tokenization
 │       └── metrics.py             # Metric callbacks and report utilities
 │
-├── models/                        # Saved model checkpoints (generated)
+├── models/                        # Saved model checkpoints 
+│                                    (generated)
 │   └── distilbert-ag-news/
 │       └── best/                  # Best checkpoint by macro-F1
 │
@@ -123,8 +121,10 @@ project_root/
 ├── docker_bash.sh                 # Open interactive shell
 ├── docker_jupyter.sh              # Launch Jupyter Lab
 ├── docker_clean.sh                # Remove image and cache
-├── run_jupyter.sh                 # Jupyter startup (runs inside container)
-├── version.sh                     # Package version logger (runs at build)
+├── run_jupyter.sh                 # Jupyter startup 
+│                                    (runs inside container)
+├── version.sh                     # Package version logger 
+│                                    (runs at build)
 ├── bashrc                         # Shell config copied into image
 └── etc_sudoers                    # Sudo config copied into image
 ```
@@ -197,7 +197,7 @@ With options:
 ./run.sh --skip-build --text "Apple reports record iPhone sales"
 ```
 
-### Individual Steps
+### Individual Steps (Used when you only want to run part of the process)
 
 Each pipeline step can also be run independently:
 

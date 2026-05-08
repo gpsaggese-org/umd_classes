@@ -1,16 +1,11 @@
 #!/bin/bash
-# ─────────────────────────────────────────────────────────────────────────────
 # Run inference with the fine-tuned model inside Docker.
-#
-# All CLI flags are forwarded directly to predict.py:
-#
-# Usage:
 #   ./docker_predict.sh --text "Apple reports record iPhone sales"
 #   ./docker_predict.sh --file /app/articles.txt   # file must be inside ./
 #   ./docker_predict.sh                            # interactive mode
 #
 # Note: run ./docker_train.sh first so the model checkpoint exists.
-# ─────────────────────────────────────────────────────────────────────────────
+
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -20,7 +15,7 @@ load_docker_vars
 CONTAINER_NAME="${IMAGE_NAME}_predict"
 
 # Only allocate a TTY for interactive mode (no args).
-# When --text or --file is passed it runs non-interactively (e.g. from run.sh).
+# When --text or --file is passed it runs non-interactively
 if [[ $# -eq 0 ]]; then
     EXTRA="-it"
 else

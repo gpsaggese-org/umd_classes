@@ -16,4 +16,4 @@ fi
 
 echo ""
 run "docker ps -a"
-echo "✅  Cleanup complete. Run './docker_build.sh' to rebuild."
+echo "  Cleanup complete. Run './docker_build.sh' to rebuild."

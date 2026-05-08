@@ -1,6 +1,4 @@
 """
-What this script does
-
 1. Loads AG News dataset and applies the preprocessing pipeline.
 2. Instantiates a pre-trained DistilBERT model with a classification head
    (AutoModelForSequenceClassification).
@@ -58,9 +56,7 @@ def parse_args():
 
 
 def build_model(model_name: str):
-    """
-    Load a pre-trained transformer model with a sequence classification head.
-    """
+    #Load a pre-trained transformer model with a sequence classification head.
     print(f"\n[train] Loading model: {model_name}")
     model = AutoModelForSequenceClassification.from_pretrained(
         model_name,
@@ -77,11 +73,9 @@ def build_model(model_name: str):
 
 def build_training_args(output_dir: str, epochs: int, batch_size: int, lr: float):
     """
-    Configure HuggingFace TrainingArguments.
-
-    - evaluation_strategy = "epoch"  → evaluate on val set after every epoch
-    - load_best_model_at_end = True  → restore best checkpoint after training
-    - metric_for_best_model = "f1_macro"
+    Configure HuggingFace training arguments.
+    - load_best_model_at_end restores best checkpoint after training
+    - metric_for_best_model: f1_macro chosen over accuracy to account for class imbalance
     """
     use_fp16 = torch.cuda.is_available()
     return TrainingArguments(
@@ -144,7 +138,7 @@ def main():
     print(f"\n[train] Starting fine-tuning — {args.epochs} epoch(s)...")
     trainer.train()
 
-    # ── Step 5: Save best model ─────────────────────────────────────────────────
+    #Step 5: Save best model
     best_path = os.path.join(out_dir, "best")
     trainer.save_model(best_path)
     tokenizer.save_pretrained(best_path)

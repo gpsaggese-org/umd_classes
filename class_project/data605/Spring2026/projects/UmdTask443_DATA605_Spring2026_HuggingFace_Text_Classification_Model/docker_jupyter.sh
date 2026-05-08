@@ -13,12 +13,12 @@ CONTAINER_NAME="${IMAGE_NAME}_jupyter"
 # -p maps host:container port; -d runs detached so the terminal stays free.
 OPTS=$(base_run_opts "$CONTAINER_NAME" "-d -p ${JUPYTER_PORT}:8888")
 
-echo "🔬  Starting Jupyter Lab on http://localhost:${JUPYTER_PORT}/lab"
+echo "  Starting Jupyter Lab on http://localhost:${JUPYTER_PORT}/lab"
 echo "    (container: $CONTAINER_NAME)"
 echo ""
 
 run "docker run $OPTS $FULL_IMAGE_NAME /bin/bash run_jupyter.sh"
 
 echo ""
-echo "✅  Jupyter is running. Open: http://localhost:${JUPYTER_PORT}/lab"
+echo "  Jupyter is running. Open: http://localhost:${JUPYTER_PORT}/lab"
 echo "    Stop with: docker stop $CONTAINER_NAME"

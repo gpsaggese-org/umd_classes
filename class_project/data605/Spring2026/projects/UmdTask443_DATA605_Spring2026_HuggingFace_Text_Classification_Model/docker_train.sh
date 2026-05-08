@@ -15,11 +15,11 @@ CONTAINER_NAME="${IMAGE_NAME}_train"
 # No -it so it can be run non-interactively (e.g. in CI or nohup).
 OPTS=$(base_run_opts "$CONTAINER_NAME")
 
-echo "🚀  Starting training — args: $*"
+echo "  Starting training — args: $*"
 echo "    Fine-tuned model will be saved to ./models/ on your host."
 echo ""
 
 run "docker run $OPTS $FULL_IMAGE_NAME python project_files/scripts/train.py $*"
 
 echo ""
-echo "✅  Training complete. Check ./models/ for the saved checkpoint."
+echo "  Training complete. Check ./models/ for the saved checkpoint."
