@@ -8,12 +8,15 @@ This project teaches how to manage the machine learning lifecycle using MLflow. 
 *   `./docker_jupyter.sh`
 
 ## Notebooks
-1.  **mlflow.API.ipynb**
+1.  **mlflow.eda.ipynb**
+    *   Prepares the raw housing data.
+    *   Handles outliers, missing values, and saves the cleaned dataset to `artifacts/`.
+2.  **mlflow.API.ipynb**
     *   A walkthrough of the core MLflow API.
-    *   Covers experiment creation, starting runs, and basic logging of parameters and metrics.
-2.  **mlflow.example.ipynb**
-    *   An end-to-end application predicting housing prices.
-    *   Demonstrates hyperparameter tuning, model comparison, and saving models to the MLflow Registry.
+    *   Covers experiment creation and basic logging of parameters and metrics.
+3.  **mlflow.example.ipynb**
+    *   An end-to-end application predicting housing prices using the cleaned data.
+    *   Demonstrates hyperparameter tuning (Ridge Alpha) and model comparison.
 
 ## Implementation Details
 *   `mlflow_utils.py`: Contains helper functions for lifecycle management and logging metrics.

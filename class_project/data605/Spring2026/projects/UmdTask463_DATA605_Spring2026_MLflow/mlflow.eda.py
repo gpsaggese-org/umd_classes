@@ -35,7 +35,7 @@ top_correlations = corr_matrix['SalePrice'].sort_values(ascending=False)
 
 # Display the top 10 most influential features
 print("Top 10 Features most correlated with SalePrice:")
-print(top_correlations.head(11))
+print(top_correlations.head(12))
 
 # %%
 # Check and remove outliers per Dean De Cock's suggestion
@@ -122,6 +122,4 @@ df_final = pd.get_dummies(df_no_outliers)
 df_final.to_csv('train_clean.csv', index=False)
 
 print(f"Final shape after encoding: {df_final.shape}")
-print("Data saved to train_clean.csv.")
-
-# %%
+print("Cleaned data has been saved to artifacts/train_clean.csv. You are now ready to run mlflow.example.ipynb.")

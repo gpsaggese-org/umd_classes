@@ -22,11 +22,11 @@ RUN pip install --upgrade pip && \
     pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext mlflow -r /install/requirements.txt
 
 # Config files
-COPY etc_sudoers /etc/sudoers
-COPY bashrc /root/.bashrc
+# COPY etc_sudoers /etc/sudoers
+# COPY bashrc /root/.bashrc
 
 # Reporting
-COPY version.sh /install/
+COPY scripts/version.sh /install/
 RUN /install/version.sh 2>&1 | tee /install/version.log
 
 # Jupyter and MLflow UI ports

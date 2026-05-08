@@ -51,19 +51,22 @@ def start_mlflow_run(experiment_name: str, run_name: str = None):
 ###########################################################################
 
 def log_regression_metrics(y_true: np.ndarray, y_pred: np.ndarray):
-    """Calculates and logs RMSE and MSE to the active MLflow run.
+    """Calculates and logs RMSE and R2 to the active MLflow run.
 
     :param y_true: Ground truth (correct) target values
     :param y_pred: Estimated target values from the model
     :return: None
     """
+    from sklearn.metrics import mean_squared_error, r2_score
+    
     mse = mean_squared_error(y_true, y_pred)
     rmse = np.sqrt(mse)
+    r2 = r2_score(y_true, y_pred)
     
-    mlflow.log_metric("mse", mse)
     mlflow.log_metric("rmse", rmse)
+    mlflow.log_metric("r2", r2)
     
-    _LOG.info("Logged metrics - RMSE: %.4f, MSE: %.4f", rmse, mse)
+    _LOG.info("Logged metrics - RMSE: %.4f, R2: %.4f", rmse, r2)
 
 def save_model(model, artifact_path: str = "model"):
     """Serializes and logs a scikit-learn model to MLflow.
