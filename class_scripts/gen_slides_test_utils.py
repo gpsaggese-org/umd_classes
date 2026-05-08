@@ -99,15 +99,33 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     def test_check_lesson_discovery(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
         hdbg.dassert_ne(self.FIRST_LESSON_FILENAME, "")
-        self._check_lesson_discovery(self.COURSE_DIR, self.FIRST_LESSON_FILENAME)
+        lesson_files = get_lesson_files(self.COURSE_DIR)
+        self.assertGreater(len(lesson_files), 0)
+        basenames = [os.path.basename(f) for f in lesson_files]
+        self.assertIn(self.FIRST_LESSON_FILENAME, basenames)
 
     def test_check_lesson_count(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._check_lesson_count(self.COURSE_DIR)
+        min_expected_lessons = 35
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self.assertGreaterEqual(
+            len(lessons),
+            min_expected_lessons,
+            f"{self.COURSE_DIR} should have at least {min_expected_lessons} "
+            f"lessons, found {len(lessons)}",
+        )
+        _LOG.info("%s has %d lessons", self.COURSE_DIR, len(lessons))
 
     def test_check_lesson_format(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._check_lesson_format(self.COURSE_DIR)
+        valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        for lesson in lessons:
+            self.assertRegex(
+                lesson,
+                valid_lesson_pattern,
+                f"Invalid lesson format '{lesson}' in {self.COURSE_DIR}",
+            )
 
     def test_get_lesson_files(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
@@ -126,37 +144,6 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         all_lessons = collect_all_lessons()
         self.assertIn(self.COURSE_DIR, all_lessons)
 
-    def _check_lesson_discovery(
-        self, course_dir: str, expected_first_lesson_filename: str
-    ) -> None:
-        """Check that lessons can be discovered."""
-        lesson_files = get_lesson_files(course_dir)
-        self.assertGreater(len(lesson_files), 0)
-        basenames = [os.path.basename(f) for f in lesson_files]
-        self.assertIn(expected_first_lesson_filename, basenames)
-
-    def _check_lesson_count(self, course_dir: str) -> None:
-        """Check that course has expected number of lessons."""
-        min_expected_lessons = 35
-        lessons = get_lesson_numbers(course_dir)
-        self.assertGreaterEqual(
-            len(lessons),
-            min_expected_lessons,
-            f"{course_dir} should have at least {min_expected_lessons} "
-            f"lessons, found {len(lessons)}",
-        )
-        _LOG.info("%s has %d lessons", course_dir, len(lessons))
-
-    def _check_lesson_format(self, course_dir: str) -> None:
-        """Check that lesson numbers are well-formed."""
-        valid_lesson_pattern = r"^\d+(\.\d+)?$"
-        lessons = get_lesson_numbers(course_dir)
-        for lesson in lessons:
-            self.assertRegex(
-                lesson,
-                valid_lesson_pattern,
-                f"Invalid lesson format '{lesson}' in {course_dir}",
-            )
 
 
 # #############################################################################
@@ -174,21 +161,32 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     @pytest.mark.slow
     def test_preprocess_notes_pdf(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._run_preprocess_notes_pdf(self.COURSE_DIR)
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "pdf"
+        )
 
     @pytest.mark.slow
     def test_preprocess_notes_html(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._run_preprocess_notes_html(self.COURSE_DIR)
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "html"
+        )
 
     @pytest.mark.slow
     def test_preprocess_notes_slides(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._run_preprocess_notes_slides(self.COURSE_DIR)
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "slides"
+        )
 
-    @staticmethod
     def _run_preprocess_notes_py(
-        test_case: hunitest.TestCase,
+        self,
         course_dir: str,
         output_dir: str,
         lessons: List[str],
@@ -198,7 +196,6 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         """
         Test preprocessing output for a set of lessons.
 
-        :param test_case: TestCase instance for assertions
         :param course_dir: Course directory (e.g., "data605")
         :param output_dir: Output directory for test results
         :param lessons: List of lesson numbers to test
@@ -232,57 +229,13 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(output_file)
             content = hio.from_file(output_file)
-            test_case.check_string(content, fuzzy_match=True)
+            self.check_string(content, fuzzy_match=True)
             sys.stdout.flush()
             _LOG.info(
                 "Verified %s preprocessing for lesson %s", output_type.upper(),
                 lesson
             )
 
-    def _run_preprocess_notes_pdf(self, course_dir: str) -> None:
-        """
-        Test PDF preprocessing for all lessons.
-
-        Verifies that the preprocessing output is correct for all lessons
-        in a course when targeting PDF output.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(course_dir)
-        self._run_preprocess_notes_py(
-            self, course_dir, output_dir, lessons, "pdf"
-        )
-
-    def _run_preprocess_notes_html(self, course_dir: str) -> None:
-        """
-        Test HTML preprocessing for all lessons.
-
-        Verifies that the preprocessing output is correct for all lessons
-        in a course when targeting HTML output.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(course_dir)
-        self._run_preprocess_notes_py(
-            self, course_dir, output_dir, lessons, "html"
-        )
-
-    def _run_preprocess_notes_slides(self, course_dir: str) -> None:
-        """
-        Test slides preprocessing for all lessons.
-
-        Verifies that the preprocessing output is correct for all lessons
-        in a course when targeting slides output.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(course_dir)
-        self._run_preprocess_notes_py(
-            self, course_dir, output_dir, lessons, "slides"
-        )
 
 # #############################################################################
 # Run_notes_to_pdf_py_TestCase
@@ -299,16 +252,24 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     @pytest.mark.superslow
     def test_notes_to_pdf_md(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._run_notes_to_pdf_md_py(self.COURSE_DIR)
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        skip_actions = ["run_pandoc"]
+        self._run_notes_to_pdf_py(
+            self, self.COURSE_DIR, output_dir, lessons, "md", skip_actions
+        )
 
     @pytest.mark.superslow
     def test_notes_to_pdf_tex(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._run_notes_to_pdf_tex_py(self.COURSE_DIR)
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_notes_to_pdf_py(
+            self, self.COURSE_DIR, output_dir, lessons, "tex"
+        )
 
-    @staticmethod
     def _run_notes_to_pdf_py(
-        test_case: hunitest.TestCase,
+        self,
         course_dir: str,
         output_dir: str,
         lessons: List[str],
@@ -318,7 +279,6 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         """
         Test preprocessing output (MD or TeX) for a set of lessons.
 
-        :param test_case: TestCase instance for assertions
         :param course_dir: Course directory (e.g., "data605")
         :param output_dir: Output directory for test results
         :param lessons: List of lesson numbers to test
@@ -377,43 +337,12 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(temp_file)
             content = hio.from_file(temp_file)
-            test_case.check_string(content, fuzzy_match=True, tag=lesson)
+            self.check_string(content, fuzzy_match=True, tag=lesson)
             sys.stdout.flush()
             _LOG.info(
                 "Verified %s output for lesson %s", output_type.upper(), lesson
             )
 
-    def _run_notes_to_pdf_md_py(self, course_dir: str) -> None:
-        """
-        Test Markdown output after preprocessing stage for all lessons.
-
-        Verifies that the Markdown preprocessing output is correct for all
-        lessons in a course. Results are saved to the output directory and
-        compared using fuzzy matching.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        :param skip_actions: Additional actions to skip during preprocessing
-        """
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(course_dir)
-        skip_actions = ["run_pandoc"]
-        self._run_notes_to_pdf_py(
-            self, course_dir, output_dir, lessons, "md", skip_actions
-        )
-
-    def _run_notes_to_pdf_tex_py(self, course_dir: str) -> None:
-        """
-        Test TeX output before rendering stage for all lessons.
-
-        Verifies that the LaTeX preprocessing output is correct for all lessons
-        in a course. Results are saved to the output directory and compared using
-        fuzzy matching.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(course_dir)
-        self._run_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")
 
 
 # #############################################################################
@@ -444,38 +373,18 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
     @pytest.mark.superslow
     def test_render_all_lessons(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        self._render_all_lessons_to_pdf(self.COURSE_DIR)
-
-    @staticmethod
-    def _run_gen_slides_py(course_dir: str) -> None:
-        """
-        Test that all lessons in a course can be rendered as PDF.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        lessons = get_lesson_numbers(course_dir)
-        for lesson in tqdm(lessons, desc="Rendering lessons to PDF"):
-            cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        for lesson in tqdm(lessons, desc="Rendering lessons to TeX"):
+            cmd = f"gen_slides.py {self.COURSE_DIR}/{lesson} --skip_action open --tex_only"
             hsystem.system(cmd)
             _LOG.info(
-                "Successfully rendered %s lesson %s as PDF", course_dir, lesson
+                "Successfully rendered %s lesson %s as TeX", self.COURSE_DIR, lesson
             )
 
+    # TODO(ai_gp): Make it static
     def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
         """
-        Run gen_slides for a lesson.
+        Run gen_slides for a lesson, generating only TeX output.
         """
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
+        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open --tex_only"
         hsystem.system(cmd)
-
-    def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
-        """
-        Render all lessons in a course to PDF.
-
-        Discovers all lesson numbers in the course directory and renders each
-        one as a PDF using `gen_slides.py`. Progress is displayed via a progress
-        bar. The rendered PDF is opened by default.
-
-        :param course_dir: Course directory (e.g., "data605" or "msml610")
-        """
-        self._run_gen_slides_py(course_dir)
