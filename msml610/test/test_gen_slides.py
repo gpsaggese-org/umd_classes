@@ -8,7 +8,7 @@ import class_scripts.gen_slides_test_utils as csgsteut
 # #############################################################################
 
 
-class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
+class Test_gen_slides_sample(csgsteut.Run_gen_slides_py_TestCase):
     """
     Test gen_slides.py script for msml610 sample lessons.
     """
@@ -70,9 +70,7 @@ class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
 # #############################################################################
 
 
-class Test_msml610_gen_slides_integration(
-    csgsteut.GenSlidesIntegration_TestCase
-):
+class Test_msml610_gen_slides_integration(csgsteut.Run_notes_to_pdf_py_TestCase):
     """
     Integration tests for msml610 slide generation.
     """

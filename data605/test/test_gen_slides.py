@@ -56,7 +56,7 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
 
 
 class Test_data605_preprocess_notes_py_integration(
-    csgsteut.GenSlidesIntegration_TestCase
+    csgsteut.Run_notes_to_pdf_py_TestCase
 ):
     """
     Integration tests for data605 preprocessing (preprocess_notes action).
@@ -88,7 +88,7 @@ class Test_data605_preprocess_notes_py_integration(
 # #############################################################################
 
 
-class Test_data605_gen_slides_py_sample(csgsteut.GenSlidesSample_TestCase):
+class Test_data605_gen_slides_py_sample(csgsteut.Run_gen_slides_py_TestCase):
     """
     Test gen_slides.py script for data605 sample lessons.
     """
@@ -121,9 +121,7 @@ class Test_data605_gen_slides_py_sample(csgsteut.GenSlidesSample_TestCase):
 # #############################################################################
 
 
-class Test_data605_gen_slides_py(
-    csgsteut.GenSlidesIntegration_TestCase
-):
+class Test_data605_gen_slides_py(csgsteut.Run_notes_to_pdf_py_TestCase):
     """
     Integration tests for data605 slide generation (PDF rendering).
     """

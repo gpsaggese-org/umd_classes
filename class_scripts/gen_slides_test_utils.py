@@ -160,7 +160,6 @@ def run_notes_to_pdf_py(
         )
 
 
-
 # #############################################################################
 # LessonDiscovery_TestCase
 # #############################################################################
@@ -202,13 +201,14 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
                 valid_lesson_pattern,
                 f"Invalid lesson format '{lesson}' in {course_dir}",
             )
+
+
 # #############################################################################
-# GenSlidesIntegration_TestCase
+# Run_notes_to_pdf_py_TestCase
 # #############################################################################
 
 
-# TODO(gp): Run_notes_to_pdf_py_TestCase
-class GenSlidesIntegration_TestCase(hunitest.TestCase):
+class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation.
     """
@@ -226,9 +226,7 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         """
         run_gen_slides_py(course_dir)
 
-    def _run_notes_to_pdf_md_py(
-        self, course_dir: str
-    ) -> None:
+    def _run_notes_to_pdf_md_py(self, course_dir: str) -> None:
         """
         Test Markdown output after preprocessing stage for all lessons.
 
@@ -261,15 +259,12 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         run_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")
 
 
-
-
 # #############################################################################
-# GenSlidesSample_TestCase
+# Run_gen_slides_py_TestCase
 # #############################################################################
 
 
-# TODO(gp): -> Run_gen_slides_py_TestCase
-class GenSlidesSample_TestCase(hunitest.TestCase):
+class Run_gen_slides_py_TestCase(hunitest.TestCase):
     """
     Base class for testing gen_slides.py script with course-specific lessons.
     """
