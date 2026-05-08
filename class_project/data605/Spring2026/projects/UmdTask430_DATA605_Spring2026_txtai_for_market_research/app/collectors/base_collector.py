@@ -13,8 +13,6 @@ import logging
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from txtai import Textractor
-
 from app.storage import (
     get_minio_client,
     get_postgres_client,
@@ -28,20 +26,90 @@ from app.storage.cache_manager import CacheManager
 _LOG = logging.getLogger(__name__)
 
 
+_DEFAULT_SEPARATORS = ["\n\n", "\n", ". ", "? ", "! ", " ", ""]
+
+
+def _split_keep_separator(text: str, separator: str) -> list[str]:
+    """
+    Split ``text`` on ``separator`` while keeping the separator attached to
+    the preceding piece. Empty separator returns one-character splits.
+    """
+    if separator == "":
+        return list(text)
+    parts = text.split(separator)
+    out: list[str] = []
+    for i, part in enumerate(parts):
+        # Re-attach the separator to every piece except the last so that
+        # joining the chunks back yields the original text.
+        if i < len(parts) - 1:
+            out.append(part + separator)
+        elif part:
+            out.append(part)
+    return out
+
+
+def _recursive_split(
+    text: str, separators: list[str], chunk_size: int
+) -> list[str]:
+    """
+    Recursively split ``text`` so that no piece exceeds ``chunk_size`` chars.
+
+    Walks ``separators`` from coarse to fine. For each piece still over the
+    budget, recurse with the remaining (finer) separators. The final ``""``
+    separator guarantees termination by falling back to a per-character split.
+    """
+    if len(text) <= chunk_size or not separators:
+        return [text] if text else []
+    separator, rest = separators[0], separators[1:]
+    pieces = _split_keep_separator(text, separator)
+    out: list[str] = []
+    for piece in pieces:
+        if len(piece) <= chunk_size:
+            out.append(piece)
+        else:
+            out.extend(_recursive_split(piece, rest, chunk_size))
+    return out
+
+
+def _merge_with_overlap(
+    pieces: list[str], chunk_size: int, overlap: int
+) -> list[str]:
+    """
+    Greedily concatenate ``pieces`` up to ``chunk_size``, carrying the trailing
+    ``overlap`` chars from each emitted chunk into the next one.
+    """
+    chunks: list[str] = []
+    current = ""
+    for piece in pieces:
+        if not piece:
+            continue
+        if len(current) + len(piece) <= chunk_size:
+            current += piece
+            continue
+        if current:
+            chunks.append(current.strip())
+            tail = current[-overlap:] if overlap > 0 else ""
+            current = tail + piece
+        else:
+            # Single piece exceeds the budget on its own — keep as-is.
+            chunks.append(piece.strip())
+            current = ""
+    if current.strip():
+        chunks.append(current.strip())
+    return chunks
+
+
 class BaseCollector(ABC):
+    # Soft target: ~512 tokens × ~4 chars/token ≈ 2048 chars per chunk.
     MAX_TOKENS_PER_CHUNK = 512
-    chunker: Optional[Textractor] = None
+    CHUNK_SIZE_CHARS = MAX_TOKENS_PER_CHUNK * 4
+    CHUNK_OVERLAP_CHARS = 200
 
     def __init__(self):
         self.minio: MinIOClient = get_minio_client()
         self.postgres: PostgresClient = get_postgres_client()
         self.cache: CacheManager = get_cache_manager()
         self.embeddings = get_embeddings()
-
-    def _get_chunker(self) -> Textractor:
-        if self.chunker is None:
-            self.chunker = Textractor(sentences=True)
-        return self.chunker
 
     def _generate_doc_id(self, source: str, content: str, ticker: str) -> str:
         key = f"{source}:{ticker}:{content[:500]}"
@@ -53,24 +121,29 @@ class BaseCollector(ABC):
         return hashlib.sha256(key.encode()).hexdigest()[:32]
 
     def _chunk_text(self, text: str) -> list[str]:
-        chunker = self._get_chunker()
-        chunks = chunker(text)
-        result = []
-        current_chunk = ""
-        chunk_chars = self.MAX_TOKENS_PER_CHUNK * 4
+        """
+        Split ``text`` into chunks using a recursive character-based strategy.
 
-        for chunk in chunks:
-            if len(current_chunk) + len(chunk) <= chunk_chars:
-                current_chunk += " " + chunk if current_chunk else chunk
-            else:
-                if current_chunk:
-                    result.append(current_chunk.strip())
-                current_chunk = chunk
+        Tries separators from coarse to fine (paragraph → line → sentence →
+        word → char). Any segment that is still larger than ``CHUNK_SIZE_CHARS``
+        after splitting on the current separator is recursively split with the
+        next one. Adjacent segments are then greedily merged back up to the
+        size budget, with ``CHUNK_OVERLAP_CHARS`` of trailing context carried
+        into the next chunk to preserve continuity across boundaries.
 
-        if current_chunk:
-            result.append(current_chunk.strip())
-
-        return result if result else [text]
+        :param text: raw document text
+        :return: list of chunk strings, each ``<= CHUNK_SIZE_CHARS`` chars
+            (best effort — a single token longer than the budget is kept whole)
+        """
+        if not text:
+            return [text]
+        pieces = _recursive_split(
+            text, _DEFAULT_SEPARATORS, self.CHUNK_SIZE_CHARS
+        )
+        merged = _merge_with_overlap(
+            pieces, self.CHUNK_SIZE_CHARS, self.CHUNK_OVERLAP_CHARS
+        )
+        return merged if merged else [text]
 
     def _store_to_cold_tier(
         self,
@@ -182,7 +255,30 @@ class BaseCollector(ABC):
                 # Don't continue — chunks FK-depend on filings existing
                 return 0
 
-        # ── 2. Insert chunks with embeddings ──────────────────────────────────
+        # ── 2. Wipe old chunks for these filings ─────────────────────────────
+        # Chunk IDs are content-hashed, but the chunks table also has a
+        # UNIQUE (filing_id, chunk_index) constraint. On re-ingest with even
+        # slightly different text the new chunk gets a new id while the
+        # (filing_id, chunk_index) slot is still held by the old row, so a
+        # plain ``ON CONFLICT (id) DO UPDATE`` upsert can't reach it. Delete
+        # the old chunks for these filings (cascades to document_metadata)
+        # so the next INSERT gets a clean slate.
+        if seen_filing_ids:
+            try:
+                deleted = self.postgres.delete_chunks_by_filing_ids(
+                    list(seen_filing_ids)
+                )
+                if deleted:
+                    _LOG.info(
+                        "Deleted %d existing chunks for %d filings before re-ingest",
+                        deleted,
+                        len(seen_filing_ids),
+                    )
+            except Exception as e:
+                _LOG.error("Failed to delete prior chunks: %s", e)
+                return 0
+
+        # ── 3. Insert chunks with embeddings ──────────────────────────────────
         db_chunks = []
         for chunk in chunks:
             try:
@@ -214,7 +310,7 @@ class BaseCollector(ABC):
             _LOG.error("Failed to insert chunks: %s", e)
             return 0
 
-        # ── 3. Insert document_metadata (key/value pairs per chunk) ───────────
+        # ── 4. Insert document_metadata (key/value pairs per chunk) ───────────
         metadata_rows = []
         for chunk in chunks:
             chunk_meta = chunk.get("metadata", {})
@@ -376,8 +472,12 @@ class BaseCollector(ABC):
         if store_search:
             from app.pipeline.embeddings import get_data_dir
 
-            db_path = get_data_dir() / "index.db"
-            self.embeddings.save(str(db_path))
+            # txtai's Embeddings.save() takes a *directory* and writes
+            # ``config.json``, ``documents`` (SQLite), and ``embeddings``
+            # (ANN index) into it. Passing a sub-path like
+            # ``data/index.db`` made txtai create that as a directory and
+            # left the live state in ``data/`` un-persisted.
+            self.embeddings.save(str(get_data_dir()))
 
         _LOG.info(
             "Collection complete: fetched=%d cold=%d warm=%d indexed=%d",

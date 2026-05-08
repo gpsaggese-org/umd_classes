@@ -460,11 +460,42 @@ class PostgresClient:
         with self.get_connection() as conn:
             with conn.cursor() as cur:
                 for chunk in chunks:
+                    # Use a per-row SAVEPOINT so that a single failed insert
+                    # does not abort the whole transaction. Without this,
+                    # psycopg2 leaves the transaction in an aborted state and
+                    # every subsequent execute() raises "current transaction
+                    # is aborted, commands ignored until end of transaction
+                    # block".
+                    cur.execute("SAVEPOINT chunk_sp")
                     try:
                         cur.execute(query, chunk)
-                        count += 1
                     except psycopg2.Error as e:
-                        _LOG.error("Failed to insert chunk %s: %s", chunk.get("id"), e)
+                        cur.execute("ROLLBACK TO SAVEPOINT chunk_sp")
+                        _LOG.error(
+                            "Failed to insert chunk %s: %s", chunk.get("id"), e
+                        )
+                        continue
+                    cur.execute("RELEASE SAVEPOINT chunk_sp")
+                    count += 1
+            conn.commit()
+        return count
+
+    def delete_chunks_by_filing_ids(self, filing_ids: List[str]) -> int:
+        """
+        Delete all chunks for the given ``filing_ids``.
+
+        Cascades to ``document_metadata`` via the FK ``ON DELETE CASCADE``.
+
+        :param filing_ids: filing IDs whose chunks should be removed
+        :return: number of chunk rows deleted
+        """
+        if not filing_ids:
+            return 0
+        query = "DELETE FROM chunks WHERE filing_id = ANY(%s)"
+        with self.get_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(query, [filing_ids])
+                count = cur.rowcount
             conn.commit()
         return count
 

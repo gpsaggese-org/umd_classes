@@ -229,14 +229,11 @@ def check_search_tier_txtai() -> dict:
     try:
         embeddings = get_embeddings()
 
-        # Check if index exists and get count.
+        # Use txtai's public count() API. Note: ``embeddings.index`` is a
+        # method that builds the index, not the loaded index object, so
+        # introspecting it gives a misleading 0.
         try:
-            # Use the public count attribute when txtai exposes it.
-            if hasattr(embeddings, "index") and embeddings.index is not None:
-                if hasattr(embeddings.index, "count"):
-                    result["index_count"] = embeddings.index.count
-                elif hasattr(embeddings.index, "__len__"):
-                    result["index_count"] = len(embeddings.index)
+            result["index_count"] = embeddings.count()
         except Exception:
             pass
 
