@@ -26,4 +26,5 @@ class Test_Data605_Run_notes_to_pdf_py(csgsteut.Run_notes_to_pdf_py_TestCase):
 
 class Test_Data605_Run_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
     COURSE_DIR = "data605"
+    FIRST_LESSON = "01.1"
     SECOND_LESSON = "08.2"
