@@ -70,7 +70,7 @@ class Test_data605_preprocess_notes_py_integration(
         # Prepare test inputs.
         course_dir = "data605"
         # Run test.
-        self._test_md_preprocessing(course_dir)
+        self._run_notes_to_pdf_md_py(course_dir)
 
     @pytest.mark.superslow
     def test2(self) -> None:
@@ -80,7 +80,7 @@ class Test_data605_preprocess_notes_py_integration(
         # Prepare test inputs.
         course_dir = "data605"
         # Run test.
-        self._test_tex_preprocessing(course_dir)
+        self._run_notes_to_pdf_tex_py(course_dir)
 
 
 # #############################################################################

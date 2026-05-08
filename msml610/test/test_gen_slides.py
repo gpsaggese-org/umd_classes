@@ -91,7 +91,7 @@ class Test_msml610_gen_slides_integration(
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
-        self._test_md_preprocessing(course_dir)
+        self._run_notes_to_pdf_md_py(course_dir)
 
     @pytest.mark.superslow
     def test3(self) -> None:
@@ -99,4 +99,4 @@ class Test_msml610_gen_slides_integration(
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
-        self._test_tex_preprocessing(course_dir)
+        self._run_notes_to_pdf_tex_py(course_dir)

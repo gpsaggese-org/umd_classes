@@ -71,8 +71,7 @@ def collect_all_lessons() -> Dict[str, List[str]]:
     return all_lessons
 
 
-# TODO(ai_gp): -> run_gen_slides_py
-def test_render_all_lessons_to_pdf(course_dir: str) -> None:
+def run_gen_slides_py(course_dir: str) -> None:
     """
     Test that all lessons in a course can be rendered as PDF.
 
@@ -87,8 +86,7 @@ def test_render_all_lessons_to_pdf(course_dir: str) -> None:
         )
 
 
-# TODO(ai_gp): -> run_notes_to_pdf_py
-def test_lessons_preprocessing(
+def run_notes_to_pdf_py(
     test_case: hunitest.TestCase,
     course_dir: str,
     output_dir: str,
@@ -226,10 +224,9 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
 
         :param course_dir: Course directory (e.g., "data605" or "msml610")
         """
-        test_render_all_lessons_to_pdf(course_dir)
+        run_gen_slides_py(course_dir)
 
-    # TODO(ai_gp): -> _run_notes_to_pdf_md_py
-    def _test_md_preprocessing(
+    def _run_notes_to_pdf_md_py(
         self, course_dir: str
     ) -> None:
         """
@@ -245,12 +242,11 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
         skip_actions = ["run_pandoc"]
-        test_lessons_preprocessing(
+        run_notes_to_pdf_py(
             self, course_dir, output_dir, lessons, "md", skip_actions
         )
 
-    # TODO(ai_gp): -> _run_notes_to_pdf_tex_py
-    def _test_tex_preprocessing(self, course_dir: str) -> None:
+    def _run_notes_to_pdf_tex_py(self, course_dir: str) -> None:
         """
         Test TeX output before rendering stage for all lessons.
 
@@ -262,7 +258,7 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
-        test_lessons_preprocessing(self, course_dir, output_dir, lessons, "tex")
+        run_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")
 
 
 
