@@ -8,11 +8,14 @@ This agent specializes in:
 - Compliance monitoring
 """
 
+import logging
 from typing import Any
 
 from txtai import LLM
 
 from app.pipeline.embeddings import search
+
+_LOG = logging.getLogger(__name__)
 
 
 # System prompt for the regulatory agent
@@ -71,7 +74,9 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
             "enforcement_signals": [],
             "disclosure_changes": [],
             "risk_assessment": "No data available",
-            "summary": f"No regulatory data available for {ticker}" if ticker else "No data available.",
+            "summary": f"No regulatory data available for {ticker}"
+            if ticker
+            else "No data available.",
         }
 
     # Build context for LLM
@@ -84,7 +89,7 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
 Query: {query}
 Company: {ticker}
-Filing Type Focus: {filing_type if filing_type else 'All types'}
+Filing Type Focus: {filing_type if filing_type else "All types"}
 
 Relevant SEC filings:
 {context_text}
@@ -188,12 +193,13 @@ def _parse_response(response: str, results: list[dict]) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Test the agent
+    # Test the agent.
     from dotenv import load_dotenv
-    load_dotenv()
 
+    load_dotenv()
+    logging.basicConfig(level=logging.INFO)
     result = run("Any regulatory issues for AAPL?", context={"ticker": "AAPL"})
-    print(f"Flagged filings: {len(result['flagged_filings'])}")
-    print(f"Enforcement signals: {len(result['enforcement_signals'])}")
-    print(f"Risk assessment: {result['risk_assessment']}")
-    print(f"\nSummary: {result['summary']}")
+    _LOG.info("Flagged filings: %d", len(result["flagged_filings"]))
+    _LOG.info("Enforcement signals: %d", len(result["enforcement_signals"]))
+    _LOG.info("Risk assessment: %s", result["risk_assessment"])
+    _LOG.info("Summary: %s", result["summary"])

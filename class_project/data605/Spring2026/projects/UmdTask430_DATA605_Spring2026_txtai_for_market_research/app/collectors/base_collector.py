@@ -11,7 +11,6 @@ All collectors inherit from this base class which provides:
 import hashlib
 import logging
 from abc import ABC, abstractmethod
-from datetime import datetime
 from typing import Any, Optional
 
 from txtai import Textractor
@@ -30,7 +29,6 @@ _LOG = logging.getLogger(__name__)
 
 
 class BaseCollector(ABC):
-
     MAX_TOKENS_PER_CHUNK = 512
     chunker: Optional[Textractor] = None
 
@@ -93,7 +91,17 @@ class BaseCollector(ABC):
             )
         elif source == "news":
             return self.minio.store_news_article(
-                ticker=ticker, url=url, content=content, metadata=metadata,
+                ticker=ticker,
+                url=url,
+                content=content,
+                metadata=metadata,
+            )
+        elif source == "earnings":
+            return self.minio.store_earnings_transcript(
+                ticker=ticker,
+                quarter_code=metadata.get("quarter", "unknown"),
+                content=content,
+                metadata=metadata,
             )
         else:
             object_name = f"generic/{source}/{ticker}/{self._generate_doc_id(source, content, ticker)}.txt"
@@ -113,6 +121,7 @@ class BaseCollector(ABC):
             form_type, filing_date, report_date, accession_number,
             cik, url, company_name, description
         """
+
         def parse_date(val: Any) -> Optional[str]:
             """Return ISO date string or None."""
             if not val:
@@ -122,18 +131,18 @@ class BaseCollector(ABC):
             return None
 
         return {
-            "id":               filing_id,
-            "ticker":           ticker,
-            "company_name":     metadata.get("company_name", ""),
+            "id": filing_id,
+            "ticker": ticker,
+            "company_name": metadata.get("company_name", ""),
             # sec_collector uses "form_type"; filings table calls it "filing_type"
-            "filing_type":      metadata.get("form_type", "unknown"),
-            "cik":              metadata.get("cik", ""),
+            "filing_type": metadata.get("form_type", "unknown"),
+            "cik": metadata.get("cik", ""),
             "accession_number": metadata.get("accession_number", ""),
-            "filing_date":      parse_date(metadata.get("filing_date")),
+            "filing_date": parse_date(metadata.get("filing_date")),
             # sec_collector uses "report_date"; filings table calls it "period_of_report"
             "period_of_report": parse_date(metadata.get("report_date")),
-            "document_url":     metadata.get("url", ""),
-            "file_size_bytes":  file_size,
+            "document_url": metadata.get("url", ""),
+            "file_size_bytes": file_size,
         }
 
     def _store_to_warm_tier(
@@ -187,14 +196,16 @@ class BaseCollector(ABC):
                 _LOG.warning("Embedding failed for chunk %s: %s", chunk["id"], e)
                 embedding = None
 
-            db_chunks.append({
-                "id":          chunk["id"],
-                "filing_id":   chunk.get("filing_id"),   # FK → filings.id ✓
-                "chunk_index": chunk.get("chunk_index", 0),
-                "text":        chunk["text"],
-                "section":     chunk.get("section", ""),
-                "embedding":   embedding,
-            })
+            db_chunks.append(
+                {
+                    "id": chunk["id"],
+                    "filing_id": chunk.get("filing_id"),  # FK → filings.id ✓
+                    "chunk_index": chunk.get("chunk_index", 0),
+                    "text": chunk["text"],
+                    "section": chunk.get("section", ""),
+                    "embedding": embedding,
+                }
+            )
 
         try:
             inserted = self.postgres.insert_chunks(db_chunks)
@@ -207,16 +218,20 @@ class BaseCollector(ABC):
         metadata_rows = []
         for chunk in chunks:
             chunk_meta = chunk.get("metadata", {})
-            chunk_id   = chunk["id"]
+            chunk_id = chunk["id"]
             for key, value in chunk_meta.items():
                 if value is None:
                     continue
-                metadata_rows.append({
-                    "id":       self._generate_doc_id("meta", f"{chunk_id}:{key}", ticker),
-                    "chunk_id": chunk_id,
-                    "key":      key,
-                    "value":    str(value),
-                })
+                metadata_rows.append(
+                    {
+                        "id": self._generate_doc_id(
+                            "meta", f"{chunk_id}:{key}", ticker
+                        ),
+                        "chunk_id": chunk_id,
+                        "key": key,
+                        "value": str(value),
+                    }
+                )
 
         if metadata_rows:
             try:
@@ -236,16 +251,18 @@ class BaseCollector(ABC):
         source = self._get_source_tag()
         documents = []
         for chunk in chunks:
-            documents.append({
-                "id":   chunk["id"],
-                "text": chunk["text"],
-                "tags": source,
-                "metadata": {
-                    "ticker": ticker,
-                    "source": source,
-                    **chunk.get("metadata", {}),
-                },
-            })
+            documents.append(
+                {
+                    "id": chunk["id"],
+                    "text": chunk["text"],
+                    "tags": source,
+                    "metadata": {
+                        "ticker": ticker,
+                        "source": source,
+                        **chunk.get("metadata", {}),
+                    },
+                }
+            )
         return self.embeddings.upsert(documents)
 
     def _cache_results(self, ticker, query_key, results, ttl=3600):
@@ -274,7 +291,9 @@ class BaseCollector(ABC):
         **kwargs,
     ) -> dict[str, int]:
 
-        _LOG.info("Starting collection for %s ticker=%s", self._get_source_tag(), ticker)
+        _LOG.info(
+            "Starting collection for %s ticker=%s", self._get_source_tag(), ticker
+        )
 
         results = {"fetched": 0, "stored_cold": 0, "stored_warm": 0, "indexed": 0}
 
@@ -300,8 +319,8 @@ class BaseCollector(ABC):
             if not text or len(text) < 10:
                 continue
 
-            metadata   = doc.get("metadata", {})
-            source     = self._get_source_tag()
+            metadata = doc.get("metadata", {})
+            source = self._get_source_tag()
 
             # ── Generate a stable filing_id for this document ────────────────
             filing_id = self._generate_filing_id(
@@ -327,20 +346,22 @@ class BaseCollector(ABC):
             # ── Chunk the document ───────────────────────────────────────────
             chunks = self._chunk_text(text)
             for i, chunk_text in enumerate(chunks):
-                all_chunks.append({
-                    "id":          self._generate_doc_id(source, chunk_text, ticker),
-                    "filing_id":   filing_id,    # ← FK to filings.id now set ✓
-                    "filing_row":  filing_row,   # ← carried for warm tier insert
-                    "chunk_index": i,
-                    "total_chunks": len(chunks),
-                    "text":        chunk_text,
-                    "section":     "",
-                    "metadata": {
-                        **metadata,
-                        "source": source,
-                        "ticker": ticker,
-                    },
-                })
+                all_chunks.append(
+                    {
+                        "id": self._generate_doc_id(source, chunk_text, ticker),
+                        "filing_id": filing_id,  # ← FK to filings.id now set ✓
+                        "filing_row": filing_row,  # ← carried for warm tier insert
+                        "chunk_index": i,
+                        "total_chunks": len(chunks),
+                        "text": chunk_text,
+                        "section": "",
+                        "metadata": {
+                            **metadata,
+                            "source": source,
+                            "ticker": ticker,
+                        },
+                    }
+                )
 
         # ── Warm tier (filings → chunks → document_metadata) ─────────────────
         if store_warm and all_chunks:
@@ -354,12 +375,15 @@ class BaseCollector(ABC):
 
         if store_search:
             from app.pipeline.embeddings import get_data_dir
+
             db_path = get_data_dir() / "index.db"
             self.embeddings.save(str(db_path))
 
         _LOG.info(
             "Collection complete: fetched=%d cold=%d warm=%d indexed=%d",
-            results["fetched"], results["stored_cold"],
-            results["stored_warm"], results["indexed"],
+            results["fetched"],
+            results["stored_cold"],
+            results["stored_warm"],
+            results["indexed"],
         )
         return results

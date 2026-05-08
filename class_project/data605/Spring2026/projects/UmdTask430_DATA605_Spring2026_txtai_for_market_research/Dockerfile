@@ -10,9 +10,10 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PIP_NO_CACHE_DIR=1
 
-# Install system dependencies
+# Install system dependencies (curl for healthchecks).
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
@@ -27,15 +28,12 @@ COPY . .
 # Create data directory for txtai index
 RUN mkdir -p /app/data
 
-# Expose Streamlit port
-EXPOSE 8501
+# Expose API and Streamlit ports.
+EXPOSE 8000 8501
 
-# Set environment variable for data directory
+# Set environment variable for data directory.
 ENV TXTAI_DATA_DIR=/app/data
 
-# Health check for Streamlit
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8501/_stcore/health || exit 1
-
-# Run Streamlit
-CMD ["streamlit", "run", "app/main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Default command runs the FastAPI server; docker-compose overrides this for
+# the Streamlit UI service.
+CMD ["uvicorn", "app.api.server:app", "--host", "0.0.0.0", "--port", "8000"]

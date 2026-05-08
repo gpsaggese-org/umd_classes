@@ -12,8 +12,7 @@ This is the warm tier storage - data persists beyond the hot KeyDB cache.
 
 import hashlib
 import logging
-import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -35,6 +34,7 @@ _LOG = logging.getLogger(__name__)
 @dataclass
 class FilingData:
     """SEC filing metadata."""
+
     id: str
     ticker: str
     company_name: str
@@ -56,7 +56,9 @@ class FilingData:
             "cik": self.cik,
             "accession_number": self.accession_number,
             "filing_date": self.filing_date.date() if self.filing_date else None,
-            "period_of_report": self.period_of_report.date() if self.period_of_report else None,
+            "period_of_report": self.period_of_report.date()
+            if self.period_of_report
+            else None,
             "document_url": self.document_url,
             "file_size_bytes": self.file_size_bytes,
         }
@@ -65,6 +67,7 @@ class FilingData:
 @dataclass
 class ChunkData:
     """Document chunk with embedding."""
+
     id: str
     filing_id: str
     chunk_index: int
@@ -89,6 +92,7 @@ class ChunkData:
 @dataclass
 class XBRLFact:
     """XBRL fact from SEC filing."""
+
     id: str
     filing_id: str
     concept_name: str
@@ -121,6 +125,7 @@ class XBRLFact:
 @dataclass
 class SearchResults:
     """Semantic search results."""
+
     chunk_id: str
     filing_id: str
     text: str
@@ -240,18 +245,20 @@ class FilingsManager:
         result = []
 
         for f in filings:
-            result.append(FilingData(
-                id=f["id"],
-                ticker=f["ticker"],
-                company_name=f.get("company_name"),
-                filing_type=f["filing_type"],
-                cik=f.get("cik"),
-                accession_number=f.get("accession_number"),
-                filing_date=f["filing_date"],
-                period_of_report=f.get("period_of_report"),
-                document_url=f.get("document_url"),
-                file_size_bytes=f.get("file_size_bytes"),
-            ))
+            result.append(
+                FilingData(
+                    id=f["id"],
+                    ticker=f["ticker"],
+                    company_name=f.get("company_name"),
+                    filing_type=f["filing_type"],
+                    cik=f.get("cik"),
+                    accession_number=f.get("accession_number"),
+                    filing_date=f["filing_date"],
+                    period_of_report=f.get("period_of_report"),
+                    document_url=f.get("document_url"),
+                    file_size_bytes=f.get("file_size_bytes"),
+                )
+            )
 
         return result
 
@@ -305,15 +312,17 @@ class FilingsManager:
         result = []
 
         for c in chunks:
-            result.append(ChunkData(
-                id=c["id"],
-                filing_id=c["filing_id"],
-                chunk_index=c["chunk_index"],
-                text=c["text"],
-                section=c.get("section"),
-                embedding=c.get("embedding"),
-                token_count=c.get("token_count"),
-            ))
+            result.append(
+                ChunkData(
+                    id=c["id"],
+                    filing_id=c["filing_id"],
+                    chunk_index=c["chunk_index"],
+                    text=c["text"],
+                    section=c.get("section"),
+                    embedding=c.get("embedding"),
+                    token_count=c.get("token_count"),
+                )
+            )
 
         return result
 
@@ -362,19 +371,21 @@ class FilingsManager:
 
         result = []
         for f in facts:
-            result.append(XBRLFact(
-                id=f["id"],
-                filing_id=f["filing_id"],
-                concept_name=f["concept_name"],
-                value=f["value"],
-                value_numeric=f.get("value_numeric"),
-                unit=f.get("unit"),
-                period_start=f.get("period_start"),
-                period_end=f.get("period_end"),
-                instant_date=f.get("instant_date"),
-                axis=f.get("axis"),
-                member=f.get("member"),
-            ))
+            result.append(
+                XBRLFact(
+                    id=f["id"],
+                    filing_id=f["filing_id"],
+                    concept_name=f["concept_name"],
+                    value=f["value"],
+                    value_numeric=f.get("value_numeric"),
+                    unit=f.get("unit"),
+                    period_start=f.get("period_start"),
+                    period_end=f.get("period_end"),
+                    instant_date=f.get("instant_date"),
+                    axis=f.get("axis"),
+                    member=f.get("member"),
+                )
+            )
 
         return result
 
@@ -550,7 +561,9 @@ def generate_chunk_id(filing_id: str, chunk_index: int) -> str:
     return hashlib.sha256(key.encode()).hexdigest()[:32]
 
 
-def generate_xbrl_fact_id(filing_id: str, concept_name: str, period_end: datetime) -> str:
+def generate_xbrl_fact_id(
+    filing_id: str, concept_name: str, period_end: datetime
+) -> str:
     """
     Generate a deterministic XBRL fact ID.
 

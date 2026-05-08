@@ -8,11 +8,14 @@ This agent specializes in:
 - Earnings beat/miss analysis
 """
 
+import logging
 from typing import Any
 
 from txtai import LLM
 
 from app.pipeline.embeddings import search
+
+_LOG = logging.getLogger(__name__)
 
 
 # System prompt for the earnings agent
@@ -75,7 +78,9 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
             "guidance_changes": [],
             "management_tone": "No data available",
             "earnings_summary": "No earnings data available",
-            "summary": f"No earnings data available for {ticker}" if ticker else "No data available.",
+            "summary": f"No earnings data available for {ticker}"
+            if ticker
+            else "No data available.",
         }
 
     # Build context for LLM
@@ -88,7 +93,7 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
 Query: {query}
 Company: {ticker}
-Quarter: {quarter if quarter else 'Most recent'}
+Quarter: {quarter if quarter else "Most recent"}
 
 Relevant documents from earnings transcripts and news:
 {context_text}
@@ -184,11 +189,12 @@ def _parse_response(response: str, results: list[dict]) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Test the agent
+    # Test the agent.
     from dotenv import load_dotenv
-    load_dotenv()
 
+    load_dotenv()
+    logging.basicConfig(level=logging.INFO)
     result = run("How did AAPL's latest earnings go?", context={"ticker": "AAPL"})
-    print(f"Earnings summary: {result['earnings_summary']}")
-    print(f"KPI trends: {len(result['kpi_trends'])}")
-    print(f"\nSummary: {result['summary']}")
+    _LOG.info("Earnings summary: %s", result["earnings_summary"])
+    _LOG.info("KPI trends: %d", len(result["kpi_trends"]))
+    _LOG.info("Summary: %s", result["summary"])

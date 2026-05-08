@@ -14,7 +14,6 @@ Usage:
 import argparse
 import json
 import logging
-import os
 import sys
 import time
 from datetime import datetime
@@ -29,8 +28,7 @@ sys.path.insert(0, str(project_root))
 from app.collectors import SECCollector, NewsCollector
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 _LOG = logging.getLogger(__name__)
 
@@ -59,13 +57,13 @@ def parse_args() -> argparse.Namespace:
         "--tickers",
         type=str,
         default="AAPL",
-        help="Comma-separated tickers (default: AAPL)"
+        help="Comma-separated tickers (default: AAPL)",
     )
     group.add_argument(
         "--sector",
         type=str,
         choices=list(SECTORS.keys()),
-        help="Collect all tickers from a sector"
+        help="Collect all tickers from a sector",
     )
 
     # Collection limits
@@ -73,53 +71,34 @@ def parse_args() -> argparse.Namespace:
         "--sec-limit",
         type=int,
         default=500,
-        help="Max SEC filings per ticker (default: 500)"
+        help="Max SEC filings per ticker (default: 500)",
     )
     parser.add_argument(
         "--news-limit",
         type=int,
         default=50,
-        help="Max news articles per ticker (default: 50)"
+        help="Max news articles per ticker (default: 50)",
     )
     parser.add_argument(
-        "--days-back",
-        type=int,
-        default=30,
-        help="Days back for news (default: 30)"
+        "--days-back", type=int, default=30, help="Days back for news (default: 30)"
     )
 
     # Selective collection
     parser.add_argument(
-        "--sec-only",
-        action="store_true",
-        help="Only run SEC collector"
+        "--sec-only", action="store_true", help="Only run SEC collector"
     )
-    parser.add_argument(
-        "--skip-sec",
-        action="store_true",
-        help="Skip SEC collector"
-    )
-    parser.add_argument(
-        "--skip-news",
-        action="store_true",
-        help="Skip news collector"
-    )
+    parser.add_argument("--skip-sec", action="store_true", help="Skip SEC collector")
+    parser.add_argument("--skip-news", action="store_true", help="Skip news collector")
 
     # Storage options
     parser.add_argument(
-        "--no-cold",
-        action="store_true",
-        help="Skip cold storage (MinIO)"
+        "--no-cold", action="store_true", help="Skip cold storage (MinIO)"
     )
     parser.add_argument(
-        "--no-warm",
-        action="store_true",
-        help="Skip warm storage (PostgreSQL)"
+        "--no-warm", action="store_true", help="Skip warm storage (PostgreSQL)"
     )
     parser.add_argument(
-        "--no-search",
-        action="store_true",
-        help="Skip search index (txtai)"
+        "--no-search", action="store_true", help="Skip search index (txtai)"
     )
 
     # Output
@@ -127,12 +106,10 @@ def parse_args() -> argparse.Namespace:
         "--output-stats",
         type=str,
         default="collection_stats.json",
-        help="Output file for collection statistics"
+        help="Output file for collection statistics",
     )
     parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Enable debug logging"
+        "-v", "--verbose", action="store_true", help="Enable debug logging"
     )
 
     return parser.parse_args()
@@ -209,7 +186,11 @@ def main() -> int:
     _LOG.info("=" * 70)
     _LOG.info("COMPREHENSIVE MARKET RESEARCH DATA COLLECTION")
     _LOG.info("=" * 70)
-    _LOG.info("Tickers: %d (%s)", len(tickers), ", ".join(tickers[:5]) + ("..." if len(tickers) > 5 else ""))
+    _LOG.info(
+        "Tickers: %d (%s)",
+        len(tickers),
+        ", ".join(tickers[:5]) + ("..." if len(tickers) > 5 else ""),
+    )
     _LOG.info("SEC Limit: %d filings/ticker", args.sec_limit)
     _LOG.info("News Limit: %d articles/ticker", args.news_limit)
     _LOG.info("Days Back: %d", args.days_back)
@@ -223,8 +204,10 @@ def main() -> int:
         _LOG.info("Running: SEC ONLY")
     else:
         collectors = []
-        if run_sec: collectors.append("SEC")
-        if run_news: collectors.append("News")
+        if run_sec:
+            collectors.append("SEC")
+        if run_news:
+            collectors.append("News")
         _LOG.info("Running collectors: %s", ", ".join(collectors))
 
     _LOG.info("=" * 70)
@@ -244,13 +227,17 @@ def main() -> int:
             if run_sec:
                 stats = run_sec_collector(ticker, args)
                 ticker_stats["sec"] = stats
-                _LOG.info(f"  -> SEC: {stats['fetched']} fetched, {stats['stored_warm']} stored warm")
+                _LOG.info(
+                    f"  -> SEC: {stats['fetched']} fetched, {stats['stored_warm']} stored warm"
+                )
 
             # News Collector
             if run_news:
                 stats = run_news_collector(ticker, args)
                 ticker_stats["news"] = stats
-                _LOG.info(f"  -> News: {stats['fetched']} fetched, {stats['stored_warm']} stored warm")
+                _LOG.info(
+                    f"  -> News: {stats['fetched']} fetched, {stats['stored_warm']} stored warm"
+                )
 
         except Exception as e:
             _LOG.error(f"Error collecting for {ticker}: {e}")
@@ -278,18 +265,24 @@ def main() -> int:
             if source == "error":
                 continue
             if source not in totals_by_source:
-                totals_by_source[source] = {"fetched": 0, "stored_warm": 0, "indexed": 0}
+                totals_by_source[source] = {
+                    "fetched": 0,
+                    "stored_warm": 0,
+                    "indexed": 0,
+                }
             for key in ["fetched", "stored_warm", "indexed"]:
                 totals_by_source[source][key] += source_stats.get(key, 0)
 
     _LOG.info("\nTotals by Source:")
     grand_total = 0
     for source, totals in totals_by_source.items():
-        _LOG.info(f"  {source.upper()}: {totals['fetched']} fetched, {totals['stored_warm']} stored warm, {totals['indexed']} indexed")
-        grand_total += totals['fetched']
+        _LOG.info(
+            f"  {source.upper()}: {totals['fetched']} fetched, {totals['stored_warm']} stored warm, {totals['indexed']} indexed"
+        )
+        grand_total += totals["fetched"]
 
     _LOG.info(f"\nGrand Total: {grand_total} documents collected")
-    _LOG.info(f"Total Time: {elapsed:.1f} seconds ({elapsed/60:.1f} minutes)")
+    _LOG.info(f"Total Time: {elapsed:.1f} seconds ({elapsed / 60:.1f} minutes)")
     _LOG.info("=" * 70)
 
     # Save statistics

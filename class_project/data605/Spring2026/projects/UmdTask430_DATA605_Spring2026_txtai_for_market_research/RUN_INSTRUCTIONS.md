@@ -234,10 +234,16 @@ docker-compose exec postgres psql -U fin -d financial_kb -c "SELECT ticker, fili
 
 ### Check Search Index
 
-Run the demo notebook to verify search functionality:
+Run the example notebook to verify search functionality end-to-end:
 
 ```bash
-jupyter notebook notebooks/demo.ipynb
+jupyter lab notebooks/txtai.example.ipynb
+```
+
+Or do an isolated txtai-API tour without the storage tiers:
+
+```bash
+jupyter lab notebooks/txtai.API.ipynb
 ```
 
 ## Troubleshooting

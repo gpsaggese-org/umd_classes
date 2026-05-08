@@ -10,7 +10,6 @@ Hot Tier Keys:
 - session:{id}          - Agent memory/sessions (TTL 1800s)
 """
 
-import hashlib
 import json
 import logging
 import os
@@ -251,7 +250,13 @@ class KeyDBClient:
             _LOG.error("KeyDB incr error for key='%s': %s", key, e)
             return None
 
-    def hset(self, name: str, key: Optional[str] = None, value: Any = None, mapping: Optional[dict] = None) -> int:
+    def hset(
+        self,
+        name: str,
+        key: Optional[str] = None,
+        value: Any = None,
+        mapping: Optional[dict] = None,
+    ) -> int:
         """
         Set hash field(s).
 
@@ -383,7 +388,9 @@ def get_keydb_client() -> KeyDBClient:
     if _keydb_client is None:
         _keydb_client = KeyDBClient()
         if _keydb_client.ping():
-            _LOG.info("Connected to KeyDB at %s:%d", _keydb_client.host, _keydb_client.port)
+            _LOG.info(
+                "Connected to KeyDB at %s:%d", _keydb_client.host, _keydb_client.port
+            )
         else:
             _LOG.warning("KeyDB connection test failed")
     return _keydb_client

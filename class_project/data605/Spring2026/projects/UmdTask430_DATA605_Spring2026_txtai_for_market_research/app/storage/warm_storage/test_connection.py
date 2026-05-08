@@ -38,8 +38,12 @@ def test_connection() -> bool:
     client = get_postgres_client()
 
     if client.ping():
-        _LOG.info("✓ Connected to PostgreSQL at %s:%d/%s",
-                  client.host, client.port, client.database)
+        _LOG.info(
+            "✓ Connected to PostgreSQL at %s:%d/%s",
+            client.host,
+            client.port,
+            client.database,
+        )
         return True
     else:
         _LOG.error("✗ Failed to connect to PostgreSQL")
@@ -142,8 +146,9 @@ def demo_store_filing() -> None:
         # Retrieve and verify
         retrieved = manager.get_filing(filing_id)
         if retrieved:
-            _LOG.info("✓ Retrieved filing: %s - %s",
-                      retrieved.ticker, retrieved.filing_type)
+            _LOG.info(
+                "✓ Retrieved filing: %s - %s", retrieved.ticker, retrieved.filing_type
+            )
 
         # Get chunks
         chunk_list = manager.get_chunks_for_filing(filing_id)

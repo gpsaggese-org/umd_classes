@@ -2,7 +2,7 @@
 Data ingestion pipeline for txtai market research platform.
 
 This module orchestrates the full ingestion pipeline using collectors:
-1. Fetch data from all sources (sec, news)
+1. Fetch data from all sources (sec, news, earnings)
 2. Store raw documents in MinIO cold storage
 3. Store structured data in PostgreSQL warm storage
 4. Chunk documents to <= 512 tokens
@@ -13,7 +13,7 @@ Usage:
     python -m app.pipeline.ingest --ticker AAPL
 
 Or use collectors directly:
-    from app.collectors import SECCollector, NewsCollector
+    from app.collectors import SECCollector, NewsCollector, EarningsCollector
 
     sec = SECCollector()
     sec.collect("AAPL", filing_types=["10-K", "8-K"])
@@ -21,7 +21,7 @@ Or use collectors directly:
 
 import logging
 
-from app.collectors import SECCollector, NewsCollector
+from app.collectors import SECCollector, NewsCollector, EarningsCollector
 
 _LOG = logging.getLogger(__name__)
 
@@ -50,6 +50,7 @@ def ingest_all(
     collectors = [
         ("news", NewsCollector(), {}),
         ("sec", SECCollector(), {"filing_types": ["10-K", "8-K", "DEF 14A"]}),
+        ("earnings", EarningsCollector(), {"quarters": 4}),
     ]
 
     _LOG.info("Starting ingestion pipeline for %s...", ticker)
@@ -103,7 +104,7 @@ def ingest_source(
 
     Args:
         ticker: Stock ticker symbol
-        source: Source name (news, sec)
+        source: Source name (news, sec, earnings)
         store_cold: Store in MinIO
         store_warm: Store in PostgreSQL
         store_search: Index in txtai
@@ -115,6 +116,7 @@ def ingest_source(
     collectors = {
         "news": NewsCollector(),
         "sec": SECCollector(),
+        "earnings": EarningsCollector(),
     }
 
     if source not in collectors:
@@ -135,21 +137,32 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Ingest market research data")
     parser.add_argument("--ticker", default="AAPL", help="Stock ticker symbol")
-    parser.add_argument("--source", choices=["news", "sec", "all"], default="all",
-                        help="Data source to ingest (default: all)")
-    parser.add_argument("--no-cold", action="store_true", help="Skip cold storage (MinIO)")
-    parser.add_argument("--no-warm", action="store_true", help="Skip warm storage (PostgreSQL)")
-    parser.add_argument("--no-search", action="store_true", help="Skip search index (txtai)")
+    parser.add_argument(
+        "--source",
+        choices=["news", "sec", "earnings", "all"],
+        default="all",
+        help="Data source to ingest (default: all)",
+    )
+    parser.add_argument(
+        "--no-cold", action="store_true", help="Skip cold storage (MinIO)"
+    )
+    parser.add_argument(
+        "--no-warm", action="store_true", help="Skip warm storage (PostgreSQL)"
+    )
+    parser.add_argument(
+        "--no-search", action="store_true", help="Skip search index (txtai)"
+    )
     args = parser.parse_args()
 
     # Load environment variables for API keys
     from dotenv import load_dotenv
+
     load_dotenv()
 
     # Configure logging
     logging.basicConfig(
         level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
     if args.source == "all":
@@ -159,10 +172,16 @@ if __name__ == "__main__":
             store_warm=not args.no_warm,
             store_search=not args.no_search,
         )
-        print("\nSummary by source:")
+        _LOG.info("Summary by source:")
         for source, counts in results.items():
-            print(f"  {source}: fetched={counts['fetched']}, cold={counts['stored_cold']}, "
-                  f"warm={counts['stored_warm']}, indexed={counts['indexed']}")
+            _LOG.info(
+                "  %s: fetched=%s, cold=%s, warm=%s, indexed=%s",
+                source,
+                counts["fetched"],
+                counts["stored_cold"],
+                counts["stored_warm"],
+                counts["indexed"],
+            )
     else:
         result = ingest_source(
             args.ticker,
@@ -171,5 +190,11 @@ if __name__ == "__main__":
             store_warm=not args.no_warm,
             store_search=not args.no_search,
         )
-        print(f"\n{args.source}: fetched={result['fetched']}, cold={result['stored_cold']}, "
-              f"warm={result['stored_warm']}, indexed={result['indexed']}")
+        _LOG.info(
+            "%s: fetched=%s, cold=%s, warm=%s, indexed=%s",
+            args.source,
+            result["fetched"],
+            result["stored_cold"],
+            result["stored_warm"],
+            result["indexed"],
+        )

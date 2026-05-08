@@ -13,9 +13,7 @@ Key Patterns:
 """
 
 import hashlib
-import json
 import logging
-import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Optional
@@ -26,14 +24,15 @@ _LOG = logging.getLogger(__name__)
 
 
 # TTL constants (in seconds)
-TTL_PRICES = 60       # 1 minute for live price feeds
-TTL_CACHE = 3600      # 1 hour for semantic cache
-TTL_SESSION = 1800    # 30 minutes for agent sessions
+TTL_PRICES = 60  # 1 minute for live price feeds
+TTL_CACHE = 3600  # 1 hour for semantic cache
+TTL_SESSION = 1800  # 30 minutes for agent sessions
 
 
 @dataclass
 class PriceData:
     """Live price data for a ticker."""
+
     ticker: str
     price: float
     change: float
@@ -228,7 +227,9 @@ class CacheManager:
     # Session Memory (TTL: 1800s)
     # -------------------------------------------------------------------------
 
-    def create_session(self, session_id: str, initial_data: Optional[dict] = None) -> bool:
+    def create_session(
+        self, session_id: str, initial_data: Optional[dict] = None
+    ) -> bool:
         """
         Create a new session.
 
@@ -313,11 +314,13 @@ class CacheManager:
         if "history" not in data:
             data["history"] = []
 
-        data["history"].append({
-            "role": role,
-            "content": content,
-            "timestamp": datetime.utcnow().isoformat(),
-        })
+        data["history"].append(
+            {
+                "role": role,
+                "content": content,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+        )
 
         # Trim history if needed
         if len(data["history"]) > max_history:

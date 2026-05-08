@@ -23,12 +23,11 @@ from dotenv import load_dotenv
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-from app.storage import get_keydb_client, get_postgres_client, get_minio_client, get_cache_manager
+from app.storage import get_keydb_client, get_postgres_client, get_minio_client
 from app.pipeline.embeddings import get_embeddings
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 _LOG = logging.getLogger(__name__)
 
@@ -209,7 +208,7 @@ def check_cold_tier_minio() -> dict:
             max_bucket = max(
                 [(k, v.get("objects", 0)) for k, v in result["buckets"].items()],
                 key=lambda x: x[1],
-                default=(None, 0)
+                default=(None, 0),
             )
             result["largest_bucket"] = max_bucket[0]
             result["largest_bucket_count"] = max_bucket[1]
@@ -230,11 +229,9 @@ def check_search_tier_txtai() -> dict:
     try:
         embeddings = get_embeddings()
 
-        # Check if index exists and get count
+        # Check if index exists and get count.
         try:
-            # Search for everything to get count
-            results = embeddings.search("SELECT count FROM txtai")
-            # Alternative: try to count via internal index
+            # Use the public count attribute when txtai exposes it.
             if hasattr(embeddings, "index") and embeddings.index is not None:
                 if hasattr(embeddings.index, "count"):
                     result["index_count"] = embeddings.index.count
@@ -245,12 +242,15 @@ def check_search_tier_txtai() -> dict:
 
         # Check data directory
         from app.pipeline.embeddings import get_data_dir
+
         data_dir = get_data_dir()
         index_file = data_dir / "index.db"
 
         result["data_dir"] = str(data_dir)
         result["index_file_exists"] = index_file.exists()
-        result["index_file_size"] = index_file.stat().st_size if index_file.exists() else 0
+        result["index_file_size"] = (
+            index_file.stat().st_size if index_file.exists() else 0
+        )
 
         result["status"] = "connected"
 
@@ -292,7 +292,9 @@ def print_summary(hot, warm, cold, search) -> None:
         if warm.get("recent_runs"):
             print("\n   Recent Collection Runs:")
             for run in warm["recent_runs"]:
-                print(f"   - {run['collector']} ({run['ticker']}): {run['status']} - {run['records']} records")
+                print(
+                    f"   - {run['collector']} ({run['ticker']}): {run['status']} - {run['records']} records"
+                )
 
     # Cold Tier
     print("\n❄️ COLD TIER (MinIO)")
@@ -311,7 +313,9 @@ def print_summary(hot, warm, cold, search) -> None:
     if search["status"] == "connected":
         print(f"   Index Count: {search['index_count']}")
         print(f"   Data Dir: {search['data_dir']}")
-        print(f"   Index File: {search['index_file_exists']} ({search['index_file_size']} bytes)")
+        print(
+            f"   Index File: {search['index_file_exists']} ({search['index_file_size']} bytes)"
+        )
 
     print("\n" + "=" * 70)
 

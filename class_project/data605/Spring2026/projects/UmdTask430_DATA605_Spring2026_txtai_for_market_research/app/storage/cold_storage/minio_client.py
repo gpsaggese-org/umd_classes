@@ -314,7 +314,9 @@ class MinIOClient:
             try:
                 return json.loads(json_str)
             except json.JSONDecodeError as e:
-                _LOG.error("Failed to parse JSON from '%s/%s': %s", bucket, object_name, e)
+                _LOG.error(
+                    "Failed to parse JSON from '%s/%s': %s", bucket, object_name, e
+                )
         return None
 
     # -------------------------------------------------------------------------
@@ -365,6 +367,34 @@ class MinIOClient:
                 metadata_path = f"sec/{ticker}/{filename}.meta.json"
             self.put_json("filings", metadata_path, metadata)
 
+        return object_name if etag else None
+
+    def store_earnings_transcript(
+        self,
+        ticker: str,
+        quarter_code: str,
+        content: str | bytes,
+        metadata: dict[str, Any],
+    ) -> Optional[str]:
+        """
+        Store a raw earnings call transcript JSON in cold storage.
+
+        :param ticker: stock ticker symbol
+        :param quarter_code: ``YYYYQN`` quarter identifier (e.g. ``2024Q1``)
+        :param content: full transcript text (joined speaker turns)
+        :param metadata: transcript metadata (speakers, fiscal period, etc.)
+        :return: object path if stored, ``None`` otherwise
+        """
+        object_name = f"earnings/{ticker}/{quarter_code}.txt"
+        etag = self.put_object(
+            "transcripts",
+            object_name,
+            content,
+            content_type="text/plain",
+        )
+        if etag:
+            metadata_path = f"earnings/{ticker}/{quarter_code}.meta.json"
+            self.put_json("transcripts", metadata_path, metadata)
         return object_name if etag else None
 
     def store_news_article(

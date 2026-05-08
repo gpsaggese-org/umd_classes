@@ -7,13 +7,11 @@ Usage:
 """
 
 import logging
-from datetime import datetime
 
-from app.storage.cold_storage.minio_client import MinIOClient, get_minio_client
+from app.storage.cold_storage.minio_client import get_minio_client
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 _LOG = logging.getLogger(__name__)
 
@@ -70,13 +68,13 @@ def test_minio_client():
     if retrieved and retrieved.decode("utf-8") == test_content:
         print(f"   [OK] Object retrieved: '{retrieved.decode('utf-8')}'")
     else:
-        print(f"   [FAIL] Retrieved content mismatch")
+        print("   [FAIL] Retrieved content mismatch")
 
     # Test get_object_as_string
     print("\n6. Testing get_object_as_string...")
     retrieved_str = client.get_object_as_string(test_bucket, test_object)
     if retrieved_str == test_content:
-        print(f"   [OK] String retrieval works")
+        print("   [OK] String retrieval works")
     else:
         print("   [FAIL] String retrieval failed")
 
@@ -84,7 +82,7 @@ def test_minio_client():
     print("\n7. Testing object_exists...")
     exists = client.object_exists(test_bucket, test_object)
     if exists:
-        print(f"   [OK] Object exists check works")
+        print("   [OK] Object exists check works")
     else:
         print("   [FAIL] Object exists check failed")
 
@@ -106,7 +104,7 @@ def test_minio_client():
         "metrics": {
             "revenue": 383285000000,
             "net_income": 96995000000,
-        }
+        },
     }
     json_etag = client.put_json(test_bucket, "test/data/filing.json", test_json)
     if json_etag:
@@ -148,7 +146,7 @@ def test_minio_client():
         # Verify we can retrieve it
         retrieved_sec = client.get_object_as_string("filings", sec_path)
         if retrieved_sec and "Apple Inc." in retrieved_sec:
-            print(f"   [OK] SEC filing retrieval works")
+            print("   [OK] SEC filing retrieval works")
         else:
             print("   [FAIL] SEC filing retrieval failed")
     else:
@@ -178,11 +176,11 @@ def test_minio_client():
     print("\n12. Testing delete_object...")
     deleted = client.delete_object(test_bucket, test_object)
     if deleted:
-        print(f"   [OK] Object deleted")
+        print("   [OK] Object deleted")
         # Verify deletion
         exists_after = client.object_exists(test_bucket, test_object)
         if not exists_after:
-            print(f"   [OK] Object confirmed deleted")
+            print("   [OK] Object confirmed deleted")
         else:
             print("   [FAIL] Object still exists after deletion")
     else:

@@ -11,7 +11,6 @@ Stores across all storage tiers.
 import logging
 import os
 from datetime import datetime, timedelta
-from typing import Optional
 
 import httpx
 
@@ -115,16 +114,18 @@ class NewsCollector(BaseCollector):
                 text = " ".join(filter(None, text_parts))
 
                 if text:
-                    articles.append({
-                        "text": text,
-                        "metadata": {
-                            "title": item.get("title", ""),
-                            "source": item.get("source", {}).get("name", ""),
-                            "url": item.get("url", ""),
-                            "published_at": item.get("publishedAt", ""),
-                            "author": item.get("author", ""),
-                        },
-                    })
+                    articles.append(
+                        {
+                            "text": text,
+                            "metadata": {
+                                "title": item.get("title", ""),
+                                "source": item.get("source", {}).get("name", ""),
+                                "url": item.get("url", ""),
+                                "published_at": item.get("publishedAt", ""),
+                                "author": item.get("author", ""),
+                            },
+                        }
+                    )
 
             return articles
 
@@ -165,16 +166,18 @@ class NewsCollector(BaseCollector):
                 text = " ".join(filter(None, text_parts))
 
                 if text:
-                    articles.append({
-                        "text": text,
-                        "metadata": {
-                            "title": item.get("title", ""),
-                            "source": item.get("source", ""),
-                            "url": item.get("url", ""),
-                            "published_at": item.get("time_published", ""),
-                            "sentiment_score": item.get("overall_sentiment_score"),
-                        },
-                    })
+                    articles.append(
+                        {
+                            "text": text,
+                            "metadata": {
+                                "title": item.get("title", ""),
+                                "source": item.get("source", ""),
+                                "url": item.get("url", ""),
+                                "published_at": item.get("time_published", ""),
+                                "sentiment_score": item.get("overall_sentiment_score"),
+                            },
+                        }
+                    )
 
             return articles
 

@@ -3,21 +3,22 @@ Orchestrator Agent for txtai market research platform.
 
 This is the main routing agent that:
 1. Receives user queries
-2. Classifies intent (sentiment / diligence / web research / earnings / regulatory)
+2. Classifies intent (diligence / earnings / regulatory)
 3. Calls relevant sub-agents via txtai Agent tool calling
 4. Merges and ranks results before returning to UI
 """
 
+import logging
 import os
 from typing import Any
 
 from txtai import Agent, LLM
 
-from app.agents.sentiment import run as run_sentiment
 from app.agents.diligence import run as run_diligence
-from app.agents.web_research import run as run_web_research
 from app.agents.earnings import run as run_earnings
 from app.agents.regulatory import run as run_regulatory
+
+_LOG = logging.getLogger(__name__)
 
 
 # System prompt for the orchestrator
@@ -26,9 +27,7 @@ SYSTEM_PROMPT = """You are the Orchestrator for a market research platform.
 Your role is to:
 1. Analyze the user's query to determine their intent
 2. Route to the appropriate specialist agent(s):
-   - SENTIMENT: Market sentiment, investor psychology, bullish/bearish analysis
    - DILIGENCE: M&A due diligence, risk identification, synergy assessment
-   - WEB_RESEARCH: Competitive intelligence, product launches, market positioning
    - EARNINGS: Earnings call analysis, KPI trends, guidance changes, management tone
    - REGULATORY: SEC filings, regulatory risk, compliance issues, enforcement signals
 
@@ -55,25 +54,28 @@ def create_agent() -> Agent:
     # Define tools for each sub-agent
     # txtai Agent tools are functions that the LLM can call
     tools = {
-        "sentiment_analysis": {
-            "function": run_sentiment,
-            "description": "Analyze market sentiment and investor psychology. Use for questions about bullish/bearish trends, market mood, or investor sentiment.",
-        },
         "due_diligence": {
             "function": run_diligence,
-            "description": "Perform M&A due diligence analysis. Use for questions about risks, synergies, deal assessment, or acquisition targets.",
-        },
-        "web_research": {
-            "function": run_web_research,
-            "description": "Research competitive intelligence from public web sources. Use for questions about competitors, product launches, or market positioning.",
+            "description": (
+                "Perform M&A due diligence analysis. Use for questions about "
+                "risks, synergies, deal assessment, or acquisition targets."
+            ),
         },
         "earnings_analysis": {
             "function": run_earnings,
-            "description": "Analyze earnings calls and KPIs. Use for questions about earnings results, guidance changes, management tone, or financial metrics.",
+            "description": (
+                "Analyze earnings calls and KPIs. Use for questions about "
+                "earnings results, guidance changes, management tone, or "
+                "financial metrics."
+            ),
         },
         "regulatory_analysis": {
             "function": run_regulatory,
-            "description": "Analyze SEC filings and regulatory risk. Use for questions about compliance, enforcement, regulatory issues, or filing disclosures.",
+            "description": (
+                "Analyze SEC filings and regulatory risk. Use for questions "
+                "about compliance, enforcement, regulatory issues, or filing "
+                "disclosures."
+            ),
         },
     }
 
@@ -185,9 +187,7 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
     # Detect which agents were used based on response content
     agent_indicators = {
-        "sentiment": ["sentiment", "bullish", "bearish", "neutral"],
         "diligence": ["risk", "synergy", "due diligence", "M&A"],
-        "web_research": ["competitor", "product launch", "market position"],
         "earnings": ["earnings", "KPI", "guidance", "revenue"],
         "regulatory": ["SEC", "filing", "regulatory", "compliance"],
     }
@@ -201,11 +201,12 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Test the orchestrator
+    # Test the orchestrator.
     from dotenv import load_dotenv
-    load_dotenv()
 
-    result = run("What is the sentiment around AAPL?", context={"ticker": "AAPL"})
-    print(f"Response: {result['response']}")
-    print(f"Agents used: {result['agents_used']}")
-    print(f"Sources: {result['sources']}")
+    load_dotenv()
+    logging.basicConfig(level=logging.INFO)
+    result = run("What are the key risks for AAPL?", context={"ticker": "AAPL"})
+    _LOG.info("Response: %s", result["response"])
+    _LOG.info("Agents used: %s", result["agents_used"])
+    _LOG.info("Sources: %s", result["sources"])

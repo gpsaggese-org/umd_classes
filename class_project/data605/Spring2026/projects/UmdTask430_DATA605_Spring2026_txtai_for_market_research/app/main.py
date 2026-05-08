@@ -3,7 +3,7 @@ txtai Market Research Platform - Streamlit Entry Point
 
 This is the main entry point for the Streamlit application.
 It provides two tabs:
-1. Dashboard: Company ticker input with sentiment gauge, risk flags, KPIs, and news
+1. Dashboard: Company ticker input with risk flags and earnings KPIs
 2. Research Chat: Free-text Q&A routed through the orchestrator agent
 
 Usage:
@@ -58,7 +58,7 @@ def main():
             "OpenAI API Key",
             type="password",
             value=os.getenv("OPENAI_API_KEY", ""),
-            help="Enter your OpenAI API key for LLM inference"
+            help="Enter your OpenAI API key for LLM inference",
         )
 
         if api_key:
@@ -72,7 +72,7 @@ def main():
             "Ticker Symbol",
             placeholder="AAPL",
             max_chars=5,
-            help="Enter a stock ticker symbol"
+            help="Enter a stock ticker symbol",
         ).upper()
 
         # Store ticker in session state for dashboard to use

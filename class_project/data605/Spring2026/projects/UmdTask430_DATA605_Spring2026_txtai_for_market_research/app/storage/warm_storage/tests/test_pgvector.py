@@ -14,6 +14,7 @@ pytestmark = pytest.mark.skipif(
 @pytest.fixture(scope="module")
 def pg():
     from app.storage.warm_storage.pgvector_client import get_postgres_client
+
     client = get_postgres_client()
     yield client
     client.close()
@@ -21,11 +22,13 @@ def pg():
 
 # ── connection ────────────────────────────────────────────────────────────────
 
+
 def test_ping(pg):
     assert pg.ping() is True
 
 
 # ── companies ─────────────────────────────────────────────────────────────────
+
 
 def test_upsert_and_get_company(pg):
     pg.upsert_company(
@@ -43,6 +46,7 @@ def test_upsert_and_get_company(pg):
 
 
 # ── filings ───────────────────────────────────────────────────────────────────
+
 
 def test_upsert_and_get_filing(pg):
     pg.upsert_company(
@@ -67,6 +71,7 @@ def test_upsert_and_get_filing(pg):
 
 
 # ── chunks + embeddings ───────────────────────────────────────────────────────
+
 
 def test_insert_chunk_single(pg):
     filings = pg.get_filings("0000320193", form_type="10-K")
@@ -93,22 +98,22 @@ def test_insert_chunks_batch(pg):
 
     chunks = [
         {
-            "filing_id":   filing_id,
-            "section":     "MD&A",
+            "filing_id": filing_id,
+            "section": "MD&A",
             "chunk_index": 1,
-            "text":        "Revenue increased 8 percent year over year.",
+            "text": "Revenue increased 8 percent year over year.",
             "token_count": 9,
-            "embedding":   dummy_embedding,
-            "metadata":    {"cik": "0000320193"},
+            "embedding": dummy_embedding,
+            "metadata": {"cik": "0000320193"},
         },
         {
-            "filing_id":   filing_id,
-            "section":     "MD&A",
+            "filing_id": filing_id,
+            "section": "MD&A",
             "chunk_index": 2,
-            "text":        "Gross margin expanded to 44 percent driven by services growth.",
+            "text": "Gross margin expanded to 44 percent driven by services growth.",
             "token_count": 11,
-            "embedding":   dummy_embedding,
-            "metadata":    {"cik": "0000320193"},
+            "embedding": dummy_embedding,
+            "metadata": {"cik": "0000320193"},
         },
     ]
     count = pg.insert_chunks_batch(chunks)
@@ -150,27 +155,30 @@ def test_semantic_search_with_section_filter(pg):
 
 # ── xbrl facts ────────────────────────────────────────────────────────────────
 
+
 def test_upsert_xbrl_facts(pg):
-    count = pg.upsert_xbrl_facts([
-        {
-            "cik":        "0000320193",
-            "concept":    "Revenues",
-            "period_end": "2023-09-30",
-            "value":      383285000000,
-            "unit":       "USD",
-            "form_type":  "10-K",
-            "accession":  "0000320193-24-000001",
-        },
-        {
-            "cik":        "0000320193",
-            "concept":    "Assets",
-            "period_end": "2023-09-30",
-            "value":      352583000000,
-            "unit":       "USD",
-            "form_type":  "10-K",
-            "accession":  "0000320193-24-000001",
-        },
-    ])
+    count = pg.upsert_xbrl_facts(
+        [
+            {
+                "cik": "0000320193",
+                "concept": "Revenues",
+                "period_end": "2023-09-30",
+                "value": 383285000000,
+                "unit": "USD",
+                "form_type": "10-K",
+                "accession": "0000320193-24-000001",
+            },
+            {
+                "cik": "0000320193",
+                "concept": "Assets",
+                "period_end": "2023-09-30",
+                "value": 352583000000,
+                "unit": "USD",
+                "form_type": "10-K",
+                "accession": "0000320193-24-000001",
+            },
+        ]
+    )
     assert count == 2
 
 
@@ -190,6 +198,7 @@ def test_get_all_xbrl_facts_for_company(pg):
 
 
 # ── articles ──────────────────────────────────────────────────────────────────
+
 
 def test_upsert_article(pg):
     article_id = pg.upsert_article(
@@ -217,6 +226,7 @@ def test_upsert_article_duplicate(pg):
 
 
 # ── audit log ─────────────────────────────────────────────────────────────────
+
 
 def test_collection_run_lifecycle(pg):
     run_id = pg.start_collection_run("test_pgvector_collector")

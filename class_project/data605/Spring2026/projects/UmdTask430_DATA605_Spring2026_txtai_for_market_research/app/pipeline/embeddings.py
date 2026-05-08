@@ -13,7 +13,9 @@ from txtai.embeddings import Embeddings
 def get_data_dir() -> Path:
     """Get the data directory path, creating it if necessary."""
     # Support both local and deployed environments
-    base = Path(os.getenv("TXTAI_DATA_DIR", Path(__file__).parent.parent.parent / "data"))
+    base = Path(
+        os.getenv("TXTAI_DATA_DIR", Path(__file__).parent.parent.parent / "data")
+    )
     base.mkdir(parents=True, exist_ok=True)
     return base
 
@@ -79,16 +81,21 @@ def search(query: str, source_filter: str | None = None, limit: int = 5) -> list
     import json
 
     embeddings = get_embeddings()
-    # Use a SQL-style query so we can pull the full ``data`` JSON column.
-    # Without this, txtai only returns id/text/score/tags and our custom
-    # per-chunk metadata (ticker, filing_type, filing_date, etc.) is hidden.
-    where_clauses = []
+    # Use parameterized SQL so apostrophes / quotes / colons in the user's
+    # query don't break txtai's SQL parser. Pulling the ``data`` column
+    # surfaces our custom per-chunk metadata (ticker, filing_type,
+    # filing_date) which txtai does not expose by default.
+    params: dict[str, str] = {"q": query}
+    where_clauses = ["similar(:q)"]
     if source_filter:
-        where_clauses.append(f"tags = '{source_filter}'")
-    where_clauses.append(f"similar('{query.replace(chr(39), chr(39)*2)}')")
+        where_clauses.append("tags = :src")
+        params["src"] = source_filter
     where_sql = " AND ".join(where_clauses)
-    sql = f"SELECT id, text, score, tags, data FROM txtai WHERE {where_sql} LIMIT {int(limit)}"
-    raw = embeddings.search(sql, limit=limit)
+    sql = (
+        "SELECT id, text, score, tags, data FROM txtai "
+        f"WHERE {where_sql} LIMIT {int(limit)}"
+    )
+    raw = embeddings.search(sql, parameters=params, limit=limit)
     # Decode the ``data`` blob and lift the inner ``metadata`` dict to top
     # level so callers don't have to know about txtai's internal layout.
     out = []
@@ -98,13 +105,15 @@ def search(query: str, source_filter: str | None = None, limit: int = 5) -> list
             data = json.loads(data_str) if isinstance(data_str, str) else data_str
         except Exception:
             data = {}
-        out.append({
-            "id": row.get("id"),
-            "text": row.get("text") or data.get("text", ""),
-            "score": row.get("score"),
-            "tags": row.get("tags") or data.get("tags"),
-            "metadata": data.get("metadata") or {},
-        })
+        out.append(
+            {
+                "id": row.get("id"),
+                "text": row.get("text") or data.get("text", ""),
+                "score": row.get("score"),
+                "tags": row.get("tags") or data.get("tags"),
+                "metadata": data.get("metadata") or {},
+            }
+        )
     return out
 
 
@@ -132,12 +141,14 @@ def upsert(documents: list[dict], *, save: bool = True) -> list[str]:
     # Transform to txtai's expected dict format.
     index_documents = []
     for doc in documents:
-        index_documents.append({
-            "id": doc["id"],
-            "text": doc["text"],
-            "tags": doc.get("tags", "unknown"),
-            "metadata": doc.get("metadata", {})
-        })
+        index_documents.append(
+            {
+                "id": doc["id"],
+                "text": doc["text"],
+                "tags": doc.get("tags", "unknown"),
+                "metadata": doc.get("metadata", {}),
+            }
+        )
     embeddings.upsert(index_documents)
     if save:
         # Persist ANN index files to the data directory.

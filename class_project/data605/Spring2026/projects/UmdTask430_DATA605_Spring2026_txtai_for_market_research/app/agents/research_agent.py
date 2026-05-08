@@ -30,30 +30,88 @@ _LOG = logging.getLogger(__name__)
 # Map of common tickers we track so the router can recognise them in plain
 # English (e.g. "Apple" -> "AAPL").
 _COMPANY_TO_TICKER = {
-    "apple": "AAPL", "microsoft": "MSFT", "google": "GOOGL", "alphabet": "GOOGL",
-    "amazon": "AMZN", "meta": "META", "facebook": "META", "tesla": "TSLA",
-    "nvidia": "NVDA", "netflix": "NFLX", "oracle": "ORCL", "intel": "INTC",
-    "ibm": "IBM", "jpmorgan": "JPM", "bank of america": "BAC", "wells fargo": "WFC",
-    "goldman sachs": "GS", "morgan stanley": "MS", "citi": "C", "citigroup": "C",
-    "visa": "V", "mastercard": "MA", "berkshire": "BRK-B", "walmart": "WMT",
-    "costco": "COST", "home depot": "HD", "johnson & johnson": "JNJ",
-    "pfizer": "PFE", "merck": "MRK", "eli lilly": "LLY", "abbvie": "ABBV",
-    "exxon": "XOM", "chevron": "CVX", "amd": "AMD", "qualcomm": "QCOM",
-    "broadcom": "AVGO", "ford": "F", "general motors": "GM",
+    "apple": "AAPL",
+    "microsoft": "MSFT",
+    "google": "GOOGL",
+    "alphabet": "GOOGL",
+    "amazon": "AMZN",
+    "meta": "META",
+    "facebook": "META",
+    "tesla": "TSLA",
+    "nvidia": "NVDA",
+    "netflix": "NFLX",
+    "oracle": "ORCL",
+    "intel": "INTC",
+    "ibm": "IBM",
+    "jpmorgan": "JPM",
+    "bank of america": "BAC",
+    "wells fargo": "WFC",
+    "goldman sachs": "GS",
+    "morgan stanley": "MS",
+    "citi": "C",
+    "citigroup": "C",
+    "visa": "V",
+    "mastercard": "MA",
+    "berkshire": "BRK-B",
+    "walmart": "WMT",
+    "costco": "COST",
+    "home depot": "HD",
+    "johnson & johnson": "JNJ",
+    "pfizer": "PFE",
+    "merck": "MRK",
+    "eli lilly": "LLY",
+    "abbvie": "ABBV",
+    "exxon": "XOM",
+    "chevron": "CVX",
+    "amd": "AMD",
+    "qualcomm": "QCOM",
+    "broadcom": "AVGO",
+    "ford": "F",
+    "general motors": "GM",
 }
 
 # Keyword -> sub-agent.  Used when the LLM router is offline.  Multiple agents
 # can match a single query.
 _SEC_KEYWORDS = {
-    "10-k", "10k", "10-q", "10q", "8-k", "8k", "filing", "filings", "proxy",
-    "def 14a", "annual report", "quarterly report", "risk factor", "sec",
-    "edgar", "form", "regulator", "compliance", "audit", "auditor",
+    "10-k",
+    "10k",
+    "10-q",
+    "10q",
+    "8-k",
+    "8k",
+    "filing",
+    "filings",
+    "proxy",
+    "def 14a",
+    "annual report",
+    "quarterly report",
+    "risk factor",
+    "sec",
+    "edgar",
+    "form",
+    "regulator",
+    "compliance",
+    "audit",
+    "auditor",
 }
 
 _NEWS_KEYWORDS = {
-    "news", "headline", "article", "sentiment", "bullish", "bearish",
-    "analyst", "upgrade", "downgrade", "rumor", "rumour", "press",
-    "announcement", "outlook", "forecast", "target price",
+    "news",
+    "headline",
+    "article",
+    "sentiment",
+    "bullish",
+    "bearish",
+    "analyst",
+    "upgrade",
+    "downgrade",
+    "rumor",
+    "rumour",
+    "press",
+    "announcement",
+    "outlook",
+    "forecast",
+    "target price",
 }
 
 # Maximum chunks per sub-agent fed into the synthesizer.
@@ -131,7 +189,9 @@ def _route(query: str) -> dict[str, Any]:
         reason = "Question mentions SEC / filings keywords; routing to SEC agent only."
     elif news_hit and not sec_hit:
         agents = ["news"]
-        reason = "Question mentions news / sentiment keywords; routing to News agent only."
+        reason = (
+            "Question mentions news / sentiment keywords; routing to News agent only."
+        )
     else:
         agents = ["sec", "news"]
         reason = "Generic question; routing to both SEC and News agents for coverage."
@@ -162,6 +222,7 @@ def _filter_by_ticker(results: list[dict], ticker: Optional[str]) -> list[dict]:
         if isinstance(md, str):
             try:
                 import json
+
                 md = json.loads(md)
             except Exception:
                 md = {}
@@ -230,6 +291,7 @@ def _format_citation(idx: int, chunk: dict) -> str:
     if isinstance(md, str):
         try:
             import json
+
             md = json.loads(md)
         except Exception:
             md = {}
@@ -268,9 +330,7 @@ def _first_sentences(text: str, n: int = 2) -> str:
     return " ".join(real[:n])
 
 
-def _synthesize_template(
-    query: str, route_info: dict, all_chunks: list[dict]
-) -> str:
+def _synthesize_template(query: str, route_info: dict, all_chunks: list[dict]) -> str:
     """
     Build a clean natural-language answer from retrieved chunks.
 
@@ -343,6 +403,7 @@ def _synthesize_with_llm(
         md = chunk.get("metadata") or {}
         if isinstance(md, str):
             import json
+
             try:
                 md = json.loads(md)
             except Exception:
@@ -351,9 +412,7 @@ def _synthesize_with_llm(
         src = md.get("source") or chunk.get("tags") or "?"
         date = md.get("filing_date") or md.get("published_at", "")
         snippet = (chunk.get("text") or "").strip()[:600]
-        context_lines.append(
-            f"[{i}] ({ticker} | {src} | {date})\n{snippet}"
-        )
+        context_lines.append(f"[{i}] ({ticker} | {src} | {date})\n{snippet}")
     context_text = "\n\n".join(context_lines)
     system = (
         "You are a financial research assistant. Answer the user's question using "
@@ -410,6 +469,7 @@ def _chunk_to_source(idx: int, chunk: dict) -> dict[str, Any]:
     if isinstance(md, str):
         try:
             import json
+
             md = json.loads(md)
         except Exception:
             md = {}
@@ -443,8 +503,10 @@ def run_research(query: str) -> Iterator[ResearchEvent]:
         - ``done``        : terminal marker with the full timing breakdown
     """
     t_start = time.perf_counter()
+
     def _now_ms() -> float:
         return (time.perf_counter() - t_start) * 1000.0
+
     timings: dict[str, float] = {}
     # 1. Route.
     t0 = time.perf_counter()

@@ -9,9 +9,8 @@ Usage:
 import logging
 from datetime import datetime
 
-from app.storage.keydb_client import KeyDBClient, get_keydb_client
+from app.storage.keydb_client import get_keydb_client
 from app.storage.cache_manager import (
-    CacheManager,
     get_cache_manager,
     PriceData,
     TTL_PRICES,
@@ -20,8 +19,7 @@ from app.storage.cache_manager import (
 )
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 _LOG = logging.getLogger(__name__)
 
@@ -61,7 +59,7 @@ def test_keydb_client():
     if result == test_dict:
         print(f"   [OK] JSON set/get: {result}")
     else:
-        print(f"   [FAIL] JSON mismatch")
+        print("   [FAIL] JSON mismatch")
 
     # Test hash operations
     print("\n4. Testing hash operations...")
@@ -108,21 +106,26 @@ def test_cache_manager():
     cache.set_price("AAPL", price_data)
     cached_price = cache.get_price("AAPL")
     if cached_price and cached_price.ticker == "AAPL":
-        print(f"   [OK] Price cached: ${cached_price.price} ({cached_price.change_percent}%)")
+        print(
+            f"   [OK] Price cached: ${cached_price.price} ({cached_price.change_percent}%)"
+        )
     else:
         print("   [FAIL] Price not cached correctly")
 
     # Test batch price retrieval
     print("\n2. Testing batch price retrieval...")
     for ticker in ["GOOGL", "MSFT", "AMZN"]:
-        cache.set_price(ticker, PriceData(
-            ticker=ticker,
-            price=100.0,
-            change=1.0,
-            change_percent=1.0,
-            volume=1000000,
-            timestamp=datetime.utcnow(),
-        ))
+        cache.set_price(
+            ticker,
+            PriceData(
+                ticker=ticker,
+                price=100.0,
+                change=1.0,
+                change_percent=1.0,
+                volume=1000000,
+                timestamp=datetime.utcnow(),
+            ),
+        )
     batch = cache.get_prices_batch(["AAPL", "GOOGL", "MSFT", "INVALID"])
     print(f"   [OK] Retrieved {len(batch)} prices: {list(batch.keys())}")
 
@@ -201,7 +204,7 @@ def main():
     print("\n" + "=" * 60)
     print("KeyDB Hot Tier Infrastructure Tests")
     print("=" * 60)
-    print(f"\nTTL Configuration:")
+    print("\nTTL Configuration:")
     print(f"  - Prices:   {TTL_PRICES}s (1 minute)")
     print(f"  - Semantic: {TTL_CACHE}s (1 hour)")
     print(f"  - Sessions: {TTL_SESSION}s (30 minutes)")

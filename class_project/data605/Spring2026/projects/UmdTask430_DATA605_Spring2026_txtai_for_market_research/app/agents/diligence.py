@@ -7,11 +7,14 @@ This agent specializes in:
 - Red-flag language pattern detection vs historical deal failures
 """
 
+import logging
 from typing import Any
 
 from txtai import LLM
 
 from app.pipeline.embeddings import search
+
+_LOG = logging.getLogger(__name__)
 
 
 # System prompt for the diligence agent
@@ -60,7 +63,9 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
 
     # Search SEC filings and earnings transcripts
     sec_results = search(query, source_filter="sec", limit=15)
-    earnings_results = search("earnings call transcript", source_filter="earnings", limit=10)
+    earnings_results = search(
+        "earnings call transcript", source_filter="earnings", limit=10
+    )
 
     all_results = sec_results + earnings_results
 
@@ -70,7 +75,9 @@ def run(query: str, context: dict | None = None) -> dict[str, Any]:
             "synergies": [],
             "red_flags": [],
             "financial_health": "No data available",
-            "summary": f"No due diligence data available for {ticker}" if ticker else "No data available.",
+            "summary": f"No due diligence data available for {ticker}"
+            if ticker
+            else "No data available.",
         }
 
     # Build context for LLM
@@ -174,7 +181,12 @@ def _parse_response(response: str, results: list[dict]) -> dict[str, Any]:
     # Fallback: return basic structure
     return {
         "risk_flags": [
-            {"category": "unknown", "severity": "medium", "description": "Analysis unavailable", "evidence": "LLM parsing failed"}
+            {
+                "category": "unknown",
+                "severity": "medium",
+                "description": "Analysis unavailable",
+                "evidence": "LLM parsing failed",
+            }
         ],
         "synergies": [],
         "red_flags": [],
@@ -184,12 +196,18 @@ def _parse_response(response: str, results: list[dict]) -> dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # Test the agent
+    # Test the agent.
     from dotenv import load_dotenv
-    load_dotenv()
 
+    load_dotenv()
+    logging.basicConfig(level=logging.INFO)
     result = run("What are the key risks for AAPL?", context={"ticker": "AAPL"})
-    print(f"Risk flags: {len(result['risk_flags'])}")
-    for risk in result['risk_flags'][:3]:
-        print(f"  - [{risk['severity']}] {risk['category']}: {risk['description'][:100]}")
-    print(f"\nSummary: {result['summary']}")
+    _LOG.info("Risk flags: %d", len(result["risk_flags"]))
+    for risk in result["risk_flags"][:3]:
+        _LOG.info(
+            "  - [%s] %s: %s",
+            risk["severity"],
+            risk["category"],
+            risk["description"][:100],
+        )
+    _LOG.info("Summary: %s", result["summary"])

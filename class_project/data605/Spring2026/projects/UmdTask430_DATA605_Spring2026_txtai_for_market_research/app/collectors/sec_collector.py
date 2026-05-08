@@ -14,11 +14,12 @@ Concurrency: 8 parallel fetches (safely under limit with per-request delay)
 """
 
 import asyncio
+import concurrent.futures
 import logging
 import os
 import re
 import time
-from typing import Optional
+from typing import Any, Coroutine, Optional
 
 import httpx
 
@@ -34,26 +35,49 @@ DEFAULT_USER_AGENT = os.getenv(
 )
 
 # SEC allows max 10 req/s; stay safely under with 8 workers + 110ms delay
-SEC_RATE_LIMIT_DELAY = 0.11          # 110ms proactive throttle per request
-SEC_MAX_RETRIES      = 4
-SEC_CONCURRENCY      = 8             # semaphore cap
+SEC_RATE_LIMIT_DELAY = 0.11  # 110ms proactive throttle per request
+SEC_MAX_RETRIES = 4
+SEC_CONCURRENCY = 8  # semaphore cap
 
 # Default limits for large-scale collection
 DEFAULT_FILING_TYPES = ["10-K", "10-Q", "8-K", "DEF 14A", "S-1", "10-K/A", "10-Q/A"]
-DEFAULT_LARGE_SCALE_LIMIT = 5000     # Default for large-scale collection
+DEFAULT_LARGE_SCALE_LIMIT = 5000  # Default for large-scale collection
 
 # Official API base URLs (data.sec.gov — documented public REST API)
-DATA_API_BASE        = "https://data.sec.gov"
-SEC_BASE             = "https://www.sec.gov"
-SUBMISSIONS_URL      = f"{DATA_API_BASE}/submissions/CIK{{cik}}.json"
-COMPANY_TICKERS_URL  = f"{SEC_BASE}/files/company_tickers.json"
+DATA_API_BASE = "https://data.sec.gov"
+SEC_BASE = "https://www.sec.gov"
+SUBMISSIONS_URL = f"{DATA_API_BASE}/submissions/CIK{{cik}}.json"
+COMPANY_TICKERS_URL = f"{SEC_BASE}/files/company_tickers.json"
 
 # Required headers per SEC developer FAQ
 BASE_HEADERS = {
-    "User-Agent":      DEFAULT_USER_AGENT,
+    "User-Agent": DEFAULT_USER_AGENT,
     "Accept-Encoding": "gzip, deflate",
-    "Host":            "data.sec.gov",       # overridden per-request where needed
+    "Host": "data.sec.gov",  # overridden per-request where needed
 }
+
+
+def _run_async(coro: Coroutine[Any, Any, Any]) -> Any:
+    """
+    Run an async coroutine from sync code, regardless of caller context.
+
+    ``asyncio.run`` raises if a loop is already running (Jupyter, FastAPI
+    handlers, async test harnesses). This helper transparently dispatches
+    such calls to a worker thread that owns its own loop, leaving the
+    parent loop untouched.
+
+    :param coro: coroutine to execute to completion
+    :return: whatever the coroutine returns
+    """
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        # No loop running — typical CLI / script case.
+        return asyncio.run(coro)
+    # A loop is already running. Spin up a worker thread that owns its own
+    # loop so the running loop stays untouched.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+        return executor.submit(asyncio.run, coro).result()
 
 
 class SECCollector(BaseCollector):
@@ -131,7 +155,8 @@ class SECCollector(BaseCollector):
                 extra_files = data.get("filings", {}).get("files", [])
                 _LOG.info(
                     "CIK %s: found %d extra submission files, fetching all...",
-                    cik, len(extra_files)
+                    cik,
+                    len(extra_files),
                 )
                 for file_info in extra_files:
                     fname = file_info.get("name", "")
@@ -146,16 +171,24 @@ class SECCollector(BaseCollector):
                         for key, values in extra.items():
                             if isinstance(values, list) and key in recent:
                                 recent[key].extend(values)
-                        _LOG.debug("Merged extra file %s (%d items)", fname, len(extra.get(key, [])))
+                        _LOG.debug(
+                            "Merged extra file %s (%d items)",
+                            fname,
+                            len(extra.get(key, [])),
+                        )
                     except httpx.HTTPError as e:
-                        _LOG.warning("Failed to fetch extra submissions file %s: %s", fname, e)
+                        _LOG.warning(
+                            "Failed to fetch extra submissions file %s: %s", fname, e
+                        )
 
                 # Cap results if we have more than requested
                 total_filings = len(recent.get("form", []))
                 if total_filings > max_filings:
                     _LOG.info(
                         "CIK %s: capping %d filings to %d (max_filings)",
-                        cik, total_filings, max_filings
+                        cik,
+                        total_filings,
+                        max_filings,
                     )
                     for key in recent:
                         if isinstance(recent[key], list):
@@ -184,12 +217,12 @@ class SECCollector(BaseCollector):
 
         Returns list of dicts, newest first, up to `limit`.
         """
-        forms           = recent.get("form", [])
-        accessions      = recent.get("accessionNumber", [])
-        filing_dates    = recent.get("filingDate", [])
-        primary_docs    = recent.get("primaryDocument", [])
-        descriptions    = recent.get("primaryDocDescription", [])
-        report_dates    = recent.get("reportDate", [])
+        forms = recent.get("form", [])
+        accessions = recent.get("accessionNumber", [])
+        filing_dates = recent.get("filingDate", [])
+        primary_docs = recent.get("primaryDocument", [])
+        descriptions = recent.get("primaryDocDescription", [])
+        report_dates = recent.get("reportDate", [])
 
         matched = []
         for i, form in enumerate(forms):
@@ -197,17 +230,19 @@ class SECCollector(BaseCollector):
             if not (form == filing_type or form.startswith(f"{filing_type}/")):
                 continue
 
-            matched.append({
-                "form":            form,
-                "accession":       accessions[i] if i < len(accessions) else "",
-                "filing_date":     filing_dates[i] if i < len(filing_dates) else "",
-                "primary_doc":     primary_docs[i] if i < len(primary_docs) else "",
-                "description":     descriptions[i] if i < len(descriptions) else "",
-                "report_date":     report_dates[i] if i < len(report_dates) else "",
-            })
+            matched.append(
+                {
+                    "form": form,
+                    "accession": accessions[i] if i < len(accessions) else "",
+                    "filing_date": filing_dates[i] if i < len(filing_dates) else "",
+                    "primary_doc": primary_docs[i] if i < len(primary_docs) else "",
+                    "description": descriptions[i] if i < len(descriptions) else "",
+                    "report_date": report_dates[i] if i < len(report_dates) else "",
+                }
+            )
 
             if len(matched) >= limit:
-                break   # submissions are already newest-first
+                break  # submissions are already newest-first
 
         return matched
 
@@ -231,10 +266,14 @@ class SECCollector(BaseCollector):
                     headers={**BASE_HEADERS, "Host": host_header},
                 )
                 if r.status_code in (429, 503):
-                    wait = (attempt + 1) * 2   # 2s, 4s, 6s, 8s
+                    wait = (attempt + 1) * 2  # 2s, 4s, 6s, 8s
                     _LOG.warning(
                         "HTTP %s on %s — retrying in %ds (attempt %d/%d)",
-                        r.status_code, url, wait, attempt + 1, SEC_MAX_RETRIES,
+                        r.status_code,
+                        url,
+                        wait,
+                        attempt + 1,
+                        SEC_MAX_RETRIES,
                     )
                     await asyncio.sleep(wait)
                     continue
@@ -242,10 +281,14 @@ class SECCollector(BaseCollector):
                 return r
             except httpx.HTTPError as e:
                 if attempt == SEC_MAX_RETRIES - 1:
-                    _LOG.error("Request failed after %d attempts: %s — %s",
-                               SEC_MAX_RETRIES, url, e)
+                    _LOG.error(
+                        "Request failed after %d attempts: %s — %s",
+                        SEC_MAX_RETRIES,
+                        url,
+                        e,
+                    )
                     return None
-                await asyncio.sleep(2 ** attempt)
+                await asyncio.sleep(2**attempt)
         return None
 
     async def _fetch_document(
@@ -264,10 +307,10 @@ class SECCollector(BaseCollector):
           2. Fall back to parsing the filing index page if primary_doc is missing.
         """
         async with semaphore:
-            accession      = filing["accession"]
+            accession = filing["accession"]
             accession_clean = accession.replace("-", "")
-            cik_int        = int(cik)   # SEC URLs use integer CIK (no leading zeros)
-            base_archive   = f"{SEC_BASE}/Archives/edgar/data/{cik_int}/{accession_clean}"
+            cik_int = int(cik)  # SEC URLs use integer CIK (no leading zeros)
+            base_archive = f"{SEC_BASE}/Archives/edgar/data/{cik_int}/{accession_clean}"
 
             # Path 1: primary document filename is in the submissions JSON
             primary_doc = filing.get("primary_doc", "")
@@ -294,7 +337,9 @@ class SECCollector(BaseCollector):
 
             return filing, self._strip_html(doc_resp.text)
 
-    def _find_primary_doc_in_index(self, index_html: str, base_url: str) -> Optional[str]:
+    def _find_primary_doc_in_index(
+        self, index_html: str, base_url: str
+    ) -> Optional[str]:
         """
         Parse the EDGAR filing index page to find the primary document.
         Prefers .htm/.html files; skips exhibits and the index page itself.
@@ -318,16 +363,16 @@ class SECCollector(BaseCollector):
         """Clean HTML filing to plain text. Handles inline XBRL."""
         # Remove non-content blocks
         for pat in (
-            r'<script[^>]*>.*?</script>',
-            r'<style[^>]*>.*?</style>',
-            r'<ix:[^>]*/>',                    # self-closing inline XBRL tags
-            r'</?ix:[a-z]+[^>]*>',             # opening/closing XBRL wrappers
-            r'<!--.*?-->',                     # HTML comments
+            r"<script[^>]*>.*?</script>",
+            r"<style[^>]*>.*?</style>",
+            r"<ix:[^>]*/>",  # self-closing inline XBRL tags
+            r"</?ix:[a-z]+[^>]*>",  # opening/closing XBRL wrappers
+            r"<!--.*?-->",  # HTML comments
         ):
-            html = re.sub(pat, ' ', html, flags=re.DOTALL | re.IGNORECASE)
-        text = re.sub(r'<[^>]+>', ' ', html)   # strip remaining tags
-        text = re.sub(r'[ \t]+', ' ', text)    # collapse horizontal whitespace
-        text = re.sub(r'\n{3,}', '\n\n', text) # max 2 consecutive newlines
+            html = re.sub(pat, " ", html, flags=re.DOTALL | re.IGNORECASE)
+        text = re.sub(r"<[^>]+>", " ", html)  # strip remaining tags
+        text = re.sub(r"[ \t]+", " ", text)  # collapse horizontal whitespace
+        text = re.sub(r"\n{3,}", "\n\n", text)  # max 2 consecutive newlines
         return text.strip()
 
     # ── Main async pipeline ───────────────────────────────────────────────────
@@ -346,8 +391,7 @@ class SECCollector(BaseCollector):
             follow_redirects=True,
         ) as client:
             tasks = [
-                self._fetch_document(client, semaphore, cik, f)
-                for f in filings_meta
+                self._fetch_document(client, semaphore, cik, f) for f in filings_meta
             ]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -359,22 +403,24 @@ class SECCollector(BaseCollector):
             filing_meta, text = result
             if not text or len(text) < 100:
                 continue
-            output.append({
-                "text": text,
-                "metadata": {
-                    "form_type":        filing_meta["form"],
-                    "filing_date":      filing_meta["filing_date"],
-                    "report_date":      filing_meta["report_date"],
-                    "accession_number": filing_meta["accession"],
-                    "description":      filing_meta["description"],
-                    "cik":              cik,
-                    "url": (
-                        f"{SEC_BASE}/Archives/edgar/data/{int(cik)}/"
-                        f"{filing_meta['accession'].replace('-', '')}/"
-                        f"{filing_meta['accession'].replace('-', '')}-index.htm"
-                    ),
-                },
-            })
+            output.append(
+                {
+                    "text": text,
+                    "metadata": {
+                        "form_type": filing_meta["form"],
+                        "filing_date": filing_meta["filing_date"],
+                        "report_date": filing_meta["report_date"],
+                        "accession_number": filing_meta["accession"],
+                        "description": filing_meta["description"],
+                        "cik": cik,
+                        "url": (
+                            f"{SEC_BASE}/Archives/edgar/data/{int(cik)}/"
+                            f"{filing_meta['accession'].replace('-', '')}/"
+                            f"{filing_meta['accession'].replace('-', '')}-index.htm"
+                        ),
+                    },
+                }
+            )
         return output
 
     # ── Public interface ──────────────────────────────────────────────────────
@@ -415,7 +461,9 @@ class SECCollector(BaseCollector):
         # ── Step 1: fetch full submission history (single API call) ──
         _LOG.info(
             "Fetching submission history for %s (CIK %s), max_filings=%d…",
-            ticker, cik, max_filings
+            ticker,
+            cik,
+            max_filings,
         )
         recent = self._fetch_submissions(cik, max_filings=max_filings)
         if not recent:
@@ -431,16 +479,21 @@ class SECCollector(BaseCollector):
         all_meta: list[dict] = []
         for ft in filing_types:
             matched = self._filter_submissions_by_type(recent, ft, per_type)
-            _LOG.info("  [%s] matched %d filings (requested %d)", ft, len(matched), per_type)
+            _LOG.info(
+                "  [%s] matched %d filings (requested %d)", ft, len(matched), per_type
+            )
             all_meta.extend(matched)
 
         if not all_meta:
-            _LOG.warning("No matching filings found for %s with types %s", ticker, filing_types)
+            _LOG.warning(
+                "No matching filings found for %s with types %s", ticker, filing_types
+            )
             return []
 
         _LOG.info(
             "Total filings to fetch: %d (types: %s)",
-            len(all_meta), ", ".join(filing_types)
+            len(all_meta),
+            ", ".join(filing_types),
         )
 
         # ── Step 3: concurrently fetch document content ──
@@ -454,17 +507,20 @@ class SECCollector(BaseCollector):
 
             _LOG.info(
                 "Fetching batch %d-%d of %d filings (concurrency=%d)…",
-                batch_start + 1, batch_end, len(all_meta), SEC_CONCURRENCY
+                batch_start + 1,
+                batch_end,
+                len(all_meta),
+                SEC_CONCURRENCY,
             )
 
-            batch_results = asyncio.run(
-                self._fetch_all_types(cik, batch_meta)
-            )
+            batch_results = _run_async(self._fetch_all_types(cik, batch_meta))
             all_filings.extend(batch_results)
 
             # Progress update
             if (batch_end // BATCH_SIZE) % 10 == 0:
-                _LOG.info("Progress: %d/%d filings processed", len(all_filings), len(all_meta))
+                _LOG.info(
+                    "Progress: %d/%d filings processed", len(all_filings), len(all_meta)
+                )
 
         # Sort newest-first and cap at limit
         all_filings.sort(
@@ -476,7 +532,9 @@ class SECCollector(BaseCollector):
         elapsed = time.perf_counter() - t0
         _LOG.info(
             "Done: %d filings fetched in %.1fs (%.2fs avg/filing)",
-            len(all_filings), elapsed, elapsed / max(len(all_filings), 1),
+            len(all_filings),
+            elapsed,
+            elapsed / max(len(all_filings), 1),
         )
         return all_filings
 
@@ -487,10 +545,7 @@ class SECCollector(BaseCollector):
             timeout=30.0,
             follow_redirects=True,
         ) as client:
-            tasks = [
-                self._fetch_document(client, semaphore, cik, f)
-                for f in all_meta
-            ]
+            tasks = [self._fetch_document(client, semaphore, cik, f) for f in all_meta]
             results = await asyncio.gather(*tasks, return_exceptions=True)
 
         output = []
@@ -501,22 +556,24 @@ class SECCollector(BaseCollector):
             filing_meta, text = result
             if not text or len(text) < 100:
                 continue
-            output.append({
-                "text": text,
-                "metadata": {
-                    "form_type":        filing_meta["form"],
-                    "filing_date":      filing_meta["filing_date"],
-                    "report_date":      filing_meta["report_date"],
-                    "accession_number": filing_meta["accession"],
-                    "description":      filing_meta["description"],
-                    "cik":              cik,
-                    "url": (
-                        f"{SEC_BASE}/Archives/edgar/data/{int(cik)}/"
-                        f"{filing_meta['accession'].replace('-', '')}/"
-                        f"{filing_meta['accession'].replace('-', '')}-index.htm"
-                    ),
-                },
-            })
+            output.append(
+                {
+                    "text": text,
+                    "metadata": {
+                        "form_type": filing_meta["form"],
+                        "filing_date": filing_meta["filing_date"],
+                        "report_date": filing_meta["report_date"],
+                        "accession_number": filing_meta["accession"],
+                        "description": filing_meta["description"],
+                        "cik": cik,
+                        "url": (
+                            f"{SEC_BASE}/Archives/edgar/data/{int(cik)}/"
+                            f"{filing_meta['accession'].replace('-', '')}/"
+                            f"{filing_meta['accession'].replace('-', '')}-index.htm"
+                        ),
+                    },
+                }
+            )
         return output
 
     def collect(

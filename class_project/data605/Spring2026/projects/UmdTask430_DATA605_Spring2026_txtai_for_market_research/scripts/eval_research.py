@@ -48,43 +48,53 @@ _LOG = logging.getLogger(__name__)
 _BENCHMARK = [
     (
         "What does Apple disclose as risk factors in its 10-K?",
-        "AAPL", {"sec"},
+        "AAPL",
+        {"sec"},
     ),
     (
         "What is the recent NVDA news sentiment?",
-        "NVDA", {"news"},
+        "NVDA",
+        {"news"},
     ),
     (
         "How does JPMorgan describe regulatory risk?",
-        "JPM", {"sec"},
+        "JPM",
+        {"sec"},
     ),
     (
         "What are analysts saying about Tesla?",
-        "TSLA", {"news"},
+        "TSLA",
+        {"news"},
     ),
     (
         "Summarize Microsoft 8-K disclosures",
-        "MSFT", {"sec"},
+        "MSFT",
+        {"sec"},
     ),
     (
         "Tell me about NVIDIA",
-        "NVDA", {"sec", "news"},
+        "NVDA",
+        {"sec", "news"},
     ),
     (
         "Recent news around $AMD",
-        "AMD", {"news"},
+        "AMD",
+        {"news"},
     ),
     (
         "What does Goldman Sachs say in its filings about market risk?",
-        "GS", {"sec"},
+        "GS",
+        {"sec"},
     ),
     (
         "Wells Fargo earnings outlook",
-        "WFC", {"news"},
+        "WFC",
+        {"news"},
     ),
     (
         "Pfizer 10-K risk factors",
-        "PFE", {"sec"},
+        "PFE",
+        {"sec"},
     ),
 ]
 
@@ -145,9 +155,7 @@ def _parse_args() -> argparse.Namespace:
     """
     Parse CLI args.
     """
-    parser = argparse.ArgumentParser(
-        description="Eval the agentic research pipeline."
-    )
+    parser = argparse.ArgumentParser(description="Eval the agentic research pipeline.")
     parser.add_argument(
         "--repeats",
         type=int,
@@ -196,25 +204,25 @@ def _main() -> int:
             actual_agents = set(route.get("agents", []))
             ticker_ok = actual_ticker == expected_ticker
             agents_ok = expected_agents.issubset(actual_agents)
-            top_score = (
-                result["sources"][0]["score"] if result.get("sources") else 0.0
+            top_score = result["sources"][0]["score"] if result.get("sources") else 0.0
+            runs.append(
+                {
+                    "query": query,
+                    "repeat": r,
+                    "wall_ms": wall_ms,
+                    "timings": timings,
+                    "expected_ticker": expected_ticker,
+                    "actual_ticker": actual_ticker,
+                    "ticker_ok": ticker_ok,
+                    "expected_agents": sorted(expected_agents),
+                    "actual_agents": sorted(actual_agents),
+                    "agents_ok": agents_ok,
+                    "chunk_count": result.get("chunk_count", 0),
+                    "top_score": top_score,
+                    "answer_len": len(result.get("answer", "")),
+                    "used_llm": result.get("used_llm", False),
+                }
             )
-            runs.append({
-                "query": query,
-                "repeat": r,
-                "wall_ms": wall_ms,
-                "timings": timings,
-                "expected_ticker": expected_ticker,
-                "actual_ticker": actual_ticker,
-                "ticker_ok": ticker_ok,
-                "expected_agents": sorted(expected_agents),
-                "actual_agents": sorted(actual_agents),
-                "agents_ok": agents_ok,
-                "chunk_count": result.get("chunk_count", 0),
-                "top_score": top_score,
-                "answer_len": len(result.get("answer", "")),
-                "used_llm": result.get("used_llm", False),
-            })
             ok = "✓" if (ticker_ok and agents_ok) else "✗"
             print(
                 f"  [{r + 1}/{args.repeats}] {ok} ticker={actual_ticker} "

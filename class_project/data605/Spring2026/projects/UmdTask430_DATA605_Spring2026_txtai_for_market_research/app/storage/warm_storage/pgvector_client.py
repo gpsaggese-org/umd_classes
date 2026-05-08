@@ -154,7 +154,7 @@ class PostgresClient:
     def execute_many(
         self,
         query: str,
-        arams_list: List[Tuple],
+        params_list: List[Tuple],
         batch_size: int = 100,
     ) -> int:
         """
@@ -172,7 +172,7 @@ class PostgresClient:
         with self.get_connection() as conn:
             with conn.cursor() as cur:
                 for i in range(0, len(params_list), batch_size):
-                    batch = params_list[i:i + batch_size]
+                    batch = params_list[i : i + batch_size]
                     execute_batch(cur, query, batch)
                     count += len(batch)
             conn.commit()
@@ -272,7 +272,14 @@ class PostgresClient:
                 ORDER BY c.embedding <=> %s::vector
                 LIMIT %s
             """
-            params = [embedding_sql, embedding_sql, threshold, ticker_filter, embedding_sql, limit]
+            params = [
+                embedding_sql,
+                embedding_sql,
+                threshold,
+                ticker_filter,
+                embedding_sql,
+                limit,
+            ]
         else:
             query = f"""
                 SELECT
@@ -441,9 +448,9 @@ class PostgresClient:
         # Convert embeddings to pgvector format (strip ARRAY prefix)
         for chunk in chunks:
             if "embedding" in chunk and isinstance(chunk["embedding"], list):
-                embedding_str = psycopg2.extensions.adapt(
-                    chunk["embedding"]
-                ).getquoted().decode()
+                embedding_str = (
+                    psycopg2.extensions.adapt(chunk["embedding"]).getquoted().decode()
+                )
                 # pgvector expects '[...]' not 'ARRAY[...]'.
                 if embedding_str.startswith("ARRAY["):
                     embedding_str = embedding_str[5:]  # Remove "ARRAY" prefix
@@ -500,6 +507,7 @@ class PostgresClient:
                 )
             conn.commit()
         return len(rows)
+
     def get_chunks_by_filing(
         self,
         filing_id: str,
@@ -573,7 +581,9 @@ class PostgresClient:
                         cur.execute(query, fact)
                         count += 1
                     except psycopg2.Error as e:
-                        _LOG.error("Failed to insert XBRL fact %s: %s", fact.get("id"), e)
+                        _LOG.error(
+                            "Failed to insert XBRL fact %s: %s", fact.get("id"), e
+                        )
             conn.commit()
         return count
 

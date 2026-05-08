@@ -5,8 +5,6 @@ Provides a Q&A interface backed by the orchestrator agent.
 Supports streaming responses with source citations.
 """
 
-from typing import Generator
-
 import streamlit as st
 
 from app.agents.orchestrator import run as run_orchestrator
@@ -62,10 +60,7 @@ def _generate_response(prompt: str) -> dict:
     ticker = _extract_ticker(prompt)
 
     # Run orchestrator
-    result = run_orchestrator(
-        prompt,
-        context={"ticker": ticker} if ticker else {}
-    )
+    result = run_orchestrator(prompt, context={"ticker": ticker} if ticker else {})
 
     return {
         "role": "assistant",
@@ -85,8 +80,8 @@ def _extract_ticker(prompt: str) -> str | None:
 
     # Common ticker patterns
     patterns = [
-        r'\$([A-Z]{1,5})\b',  # $AAPL
-        r'\b([A-Z]{1,5})\b',  # AAPL (standalone uppercase)
+        r"\$([A-Z]{1,5})\b",  # $AAPL
+        r"\b([A-Z]{1,5})\b",  # AAPL (standalone uppercase)
     ]
 
     for pattern in patterns:
