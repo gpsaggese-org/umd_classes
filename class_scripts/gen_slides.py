@@ -17,6 +17,7 @@ import logging
 import os
 import re
 import shlex
+from typing import Tuple
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
@@ -28,7 +29,7 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
+def _extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
     """
     Extract lesson number and directory from a file path.
 
@@ -63,7 +64,7 @@ def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
     return dir_name, lesson
 
 
-def _parse_first_arg(arg: str) -> tuple[str, str]:
+def _parse_first_arg(arg: str) -> Tuple[str, str]:
     """
     Parse the first argument to extract directory and lesson.
 
