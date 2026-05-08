@@ -1,15 +1,27 @@
 # FastText Text Classification
 
-## Overview
+## What is FastText?
+
+- FastText is an open-source library developed by Facebook AI Research for
+  efficient text classification and representation.
+- It allows users to create word embeddings and perform supervised learning
+  tasks such as text classification with high accuracy and speed.
+- FastText can handle large datasets and provides pre-trained models for various
+  languages, making it accessible for multilingual applications.
+- The tool supports subword information, which allows it to generate embeddings
+  for out-of-vocabulary words, improving its robustness in natural language
+  processing tasks.
+- FastText is designed to be easy to use, with a command-line interface and
+  Python bindings, making it suitable for both beginners and advanced users.
+
+
+## Project Overview
 
 This project demonstrates text classification using FastText, an open-source
 library developed by Facebook AI Research. We train a model to classify news
 articles from the 20 Newsgroups dataset into 20 categories, covering topics
 such as politics, religion, sports, science, and technology.
 
-The project covers the full machine learning pipeline: data preprocessing,
-model training, hyperparameter tuning, evaluation, and comparison with a
-traditional baseline model.
 
 ## Dataset
 
@@ -45,19 +57,22 @@ more realistic and challenging.
 - Docker Desktop installed and running
 - Git
 
+Note: docker_build.sh has Windows path issues. Use docker build directly instead.
+FastText is incompatible with NumPy 2.0, so numpy<2.0 is pinned in requirements.txt.
+
 ### Build the Docker Container
 
     docker build -t gpsaggese/umd_data605_fasttext .
 
 ### Run the Container
 
-    docker run -it --rm -p 8888:8888 -v "$(pwd):/home/user" gpsaggese/umd_data605_fasttext bash
+    docker run -it --rm -p 8888:8888 -v "C:/Users/Vaibhav Devarapalli/src/gpsaggese.github.io/class_project/data605/Spring2026/projects/UmdTask458_DATA605_Spring2026_FastText_text_classification:/home/user" gpsaggese/umd_data605_fasttext bash
 
 ### Start Jupyter
 
-    jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --notebook-dir=/home/user
+    pip install "numpy<2.0" -q && jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --notebook-dir=/home/user
 
-Then open http://127.0.0.1:8888 in your browser.
+Then open the token URL shown in the terminal in your browser.
 
 ## Notebooks
 
