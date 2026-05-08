@@ -68,8 +68,8 @@ Node properties:
 - Genre {name: STRING}
 - User {userId: INTEGER}
 
-Relationships:
-- (:Movie)-[:IN_GENRE]->(:Genre)
+Relationships (use EXACTLY these relationship types, spelling and underscores matter):
+- (:Movie)-[:IN_GENRE]->(:Genre)    # Note: IN_GENRE not "IN GENRE"
 - (:User)-[:RATED {rating: FLOAT}]->(:Movie)
 """
     return graph
