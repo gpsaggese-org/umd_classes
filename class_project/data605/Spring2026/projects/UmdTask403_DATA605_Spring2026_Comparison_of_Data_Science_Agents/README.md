@@ -133,6 +133,9 @@ src/                           Core engine
   router.py                    MCDM (WSM, TOPSIS, PROMETHEE-II), sensitivity, Pareto
   stats.py                     Friedman, Nemenyi, Wilcoxon
   protocol_analysis.py         Procrustes, two-way ANOVA, Kendall tau across protocols
+  protocol_b_pandasai.py       Protocol B: PandasAI native-paradigm sub-experiment
+  protocol_b_langgraph.py      Protocol B: LangGraph ReAct-style sub-experiment
+  protocol_b_smolagents.py     Protocol B: smolagents code-iterative sub-experiment
   smoke_test.py                Verify each agent loads and runs
   run_benchmark.py             Batch driver with --pilot mode
   utils.py                     Config loading, paths, timing, I/O
