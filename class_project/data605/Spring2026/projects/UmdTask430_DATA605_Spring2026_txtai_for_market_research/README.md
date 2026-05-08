@@ -1,4 +1,4 @@
-# Summary
+# txtai for Multi-Agentic Market Research
 
 - A `txtai`-based market research platform that ingests SEC EDGAR filings
   and financial news, stores them across a four-tier storage architecture,
@@ -13,12 +13,6 @@
 - Project: `UmdTask430` for DATA605 Spring 2026
 
 # System Architecture
-
-- Interactive design (Claude design artifact):
-  [System Architecture.html](https://api.anthropic.com/v1/design/h/z0U9LxIEpHnxfMWnLqd_CQ?open_file=System+Architecture.html)
-- Editable Excalidraw source: [`docs/architecture.excalidraw`](docs/architecture.excalidraw)
-  (open in https://excalidraw.com or any IDE Excalidraw plugin)
-- Inline diagram for GitHub viewers (Mermaid):
 
 ```mermaid
 flowchart TD
