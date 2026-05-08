@@ -1291,96 +1291,72 @@ digraph CausalGraph {
   can be used as proxy variable `X`
 
 * Bank Loan Risk: Adjustment Formula
-- Assuming conditional independence $(Y_0, Y_1) \perp T | X$ you can use the
-  adjustment formula
+- **Assumption**: assuming conditional independence $(Y_0, Y_1) \perp T | X$, use
+  the adjustment formula
   $$
   ATE = \EE_X [
-    \EE[Y \mid T=1, X=x] - \EE[Y \mid T=0, X=x]
+    \EE[Y | T=1, X=x] - \EE[Y | T=0, X=x]
   ]
   $$
-- The problem is that you need to partition data into segments defined by
-  the feature $X$
-  - If $X$ has lots of value (i.e., a vector of 10 variables, each with 3
-    values), then you need to have massive amount of data to overcome
-    the curse of dimensionality (i.e., issues of sparsity)
-    - E.g., you need to find data points with the same 10 characteristics
-      and different treatments
-  - You can model potential outcome $Y$ as linear regression on $X$
-    - Instead of requiring exact matches on every variable, you just need the
-      line to account for differences, making treatment and control comparable "on
-      average"
-    - Like a dimensionality reduction algorithm
 
-* Regression in A/B tests
-- You are building a recommender system
-- Goal: increase the watch time of the streaming service
-- A/B test
-  - 1/3 but representative fraction of your customer base gets the new system
-  - The rest gets the old version
-  - Collect data
-  - Because of the randomization you can assign a causal meaning to the use of
-    treatment
-  - Compute the average watch time per day + std err
-- You can compute all at once with a regression
-  $$
-  WatchTime_i = \beta_0 + \beta_1 I(new)_i + \varepsilon_i
-  $$
-  where
-  - $\hat{\beta}_1$ is the increase in watching time, i.e., ATE
+- **Problem**
+  - Need partition data into segments defined by feature $X$
+  - If $X$ has many values (e.g., a vector of 10 variables, each with 3 values),
+    face curse of dimensionality (sparsity issues)
+    - Need data points with same 10 characteristics and different treatments
 
-- This is exactly equivalent to mean and std dev of $WatchTime$
+- **Solution**
+  - Model potential outcome $Y$ as linear regression on $X$
+    - Require treatment and control to be comparable "on average"
+    - Functions as dimensionality reduction algorithm
 
-* Adjusting with Regression
-- Effect of credit lines on default risk
-- Data has:
-  - Binary variable representing if a customer has defaulted or not
-  - Customers' features to indicate credit worthiness (e.g., monthly wage, credit
-    scores, tenure current company)
+* Using Regression to Estimate Causal Effects
 
-- Model the problem as regression
-  $$
-  Default_i = \beta_0 + \beta_1 limit_i + \varepsilon_i
-  $$
-  where
-  - $\hat{\beta_1}$ is the amount of risk increase given 1 USD increase in limit
+- Under appropriate hypotheses (e.g., randomization, known confounders),
+  regression:
+  - Estimates treatment effects (ATE)
+    - Intercept: control group mean
+    - Treatment coefficient: average difference
+  - Has causal interpretation
+  - Computes statistics (confidence intervals, p-values)
+  - Matches manual group average computation
 
-- Computing the regression you see that the coefficient is negative
-  - There is confounding (since banks give higher rate to trustworthy customer)
-  - Doesn't have a causal interpretation
-
-- Instead of adjusting manually for each confounder, you can add the confounders
-  to the regression
-  $$
-  Default_i
-  = \beta_0 + \beta_1 limit_i + \sum_i \theta_j X_{ji} + \varepsilon_i
-  $$
-  - E.g., $X$ params can be wage, credit scores, etc
-
-- Once you regress, you get that credit limit has a small, statistically
-  significant coefficient
-  - The other regressors are negative
-
-- FWL (Frisch-Waugh-Lovell) theorem allows to separate debiasing step from
-  the impact estimation step
+- When confounders are observed, include them as regressors to adjust
+- In a randomized experiment, no adjustment is required
 
 * Regression theory
-- The vector of $\beta^*$ minimizes the mean squared error
+- The vector of $\beta^*$ minimizes mean squared error
   $$
-  \beta^* = \argmin_{\beta} \EE[(Y_i - X_i^T \beta)^2]
+  \beta^* = \argmin_{\beta} \EE[(Y_i - \beta^T X_i)^2]
   $$
-  which can be estimated as $\hat{\beta} = (X^T X)^{-1} X^T Y$
+- It is estimated as $\hat{\beta} = (X^T X)^{-1} X^T Y$
 
-- In case of a single variable, regression estimates how treatment and outcome
-  move together (covariance), scaling this by the variance of units of treatment
+- Single variable regression estimates how treatment and outcome move together,
+  scaling by variance of treatment
 
-- In case of multivariate regression, each coefficient is the coefficient of the
-  regressor (bivariate regression), after accounting for the effect of other
-  variables in the model
-  - You can regress against all the confounders and extract the residual
+- Multivariate regression: each coefficient is the regressor's coefficient
+  accounting for other variables
+  - Regress against confounders and extract residual
 
-- You can extrapolate the model outside the region where you have data
-  - It is risky since you never know what happens in region where you don't have
-    data points
+- Extrapolate model outside data region
+  - Risky since you don't know what happens without data points
+
+* FWL Theorem
+- The Frisch–Waugh–Lovell (FWL) theorem explains how to interpret coefficients in
+  a multiple regression by "partialling out" other variables
+
+- **Example**
+  - Consider $y = X_1 \beta_1 + X_2 \beta_2 + \varepsilon$
+  - The coefficient $\hat{\beta}_1$ from the full regression is equal to the
+    coefficient obtained by:
+    1. Regressing $y$ on $X_2$, getting residuals $r_y$ (remove part of $y$
+       explained by $X_2$)
+    2. Regressing each column of $X_1$ on $X_2$, getting residuals $r_{X_1}$
+       (remove part of $X_1$ explained by $X_2$)
+    3. Regressing $r_y$ on $r_{X_1}$
+
+- **Intuition**
+  - $\beta_1$ measures the effect of $X_1$ on $y$, holding $X_2$ constant
 
 * FWL Theorem
 - Make non-experimental data look as if the treatment was randomized (de-biasing)
