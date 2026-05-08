@@ -15,9 +15,6 @@ class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
 
     @pytest.mark.slow
     def test1(self) -> None:
-        """
-        Generate slides for msml610 lesson 01.1.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         lesson = "01.1"
@@ -26,9 +23,6 @@ class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
 
     @pytest.mark.slow
     def test2(self) -> None:
-        """
-        Generate slides for msml610 lesson 08.1.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         lesson = "08.1"
@@ -47,9 +41,6 @@ class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
     """
 
     def test1(self) -> None:
-        """
-        Check discovery of expected lesson file.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         expected_filename = "Lesson01.1-AI_and_Machine_Learning.txt"
@@ -57,18 +48,12 @@ class Test_msml610_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
         self._check_lesson_discovery(course_dir, expected_filename)
 
     def test2(self) -> None:
-        """
-        Check lesson count for msml610 course.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
         self._check_lesson_count(course_dir)
 
     def test3(self) -> None:
-        """
-        Check lesson file format for msml610 course.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
@@ -89,9 +74,6 @@ class Test_msml610_gen_slides_integration(
 
     @pytest.mark.superslow
     def test1(self) -> None:
-        """
-        Render all msml610 lessons to PDF.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
@@ -99,9 +81,6 @@ class Test_msml610_gen_slides_integration(
 
     @pytest.mark.superslow
     def test2(self) -> None:
-        """
-        Test markdown preprocessing for msml610 lessons.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
@@ -109,9 +88,6 @@ class Test_msml610_gen_slides_integration(
 
     @pytest.mark.superslow
     def test3(self) -> None:
-        """
-        Test LaTeX preprocessing for msml610 lessons.
-        """
         # Prepare test inputs.
         course_dir = "msml610"
         # Run test.
