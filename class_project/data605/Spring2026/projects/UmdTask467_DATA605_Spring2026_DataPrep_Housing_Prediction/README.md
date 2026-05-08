@@ -1,7 +1,8 @@
 # DataPrep Tutorial
 This project demonstrates how to use DataPrep (Python) for data analysis, specifically to predict the California Housing Dataset target variable (MedHouseVal)
 
-Quick Start
+# Workflow
+
 From the directory, build the docker image 
 ```bash
   > ./docker_build.sh
