@@ -16,39 +16,6 @@ _LOG = logging.getLogger(__name__)
 
 
 # #############################################################################
-# Test_Msml610_Run_gen_slides_py_Sample
-# #############################################################################
-
-
-class Test_Msml610_Run_gen_slides_py_Sample(csgsteut.Run_gen_slides_py_TestCase):
-    """
-    Test gen_slides.py script for msml610 sample lessons.
-    """
-
-    @pytest.mark.slow
-    def test1(self) -> None:
-        """
-        Generate slides for msml610 lesson 01.1.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        lesson = "01.1"
-        # Run test.
-        self._run_gen_slides(course_dir, lesson)
-
-    @pytest.mark.slow
-    def test2(self) -> None:
-        """
-        Generate slides for msml610 lesson 08.1.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        lesson = "08.1"
-        # Run test.
-        self._run_gen_slides(course_dir, lesson)
-
-
-# #############################################################################
 # Test_Msml610_LessonDiscovery
 # #############################################################################
 
@@ -110,18 +77,7 @@ class Test_Msml610_LessonDiscovery(csgsteut.LessonDiscovery_TestCase):
             "Found %d lesson numbers in %s", len(lesson_numbers), course_dir
         )
 
-
-# #############################################################################
-# Test_Msml610_AllLessonsCollection
-# #############################################################################
-
-
-class Test_Msml610_AllLessonsCollection(csgsteut.LessonDiscovery_TestCase):
-    """
-    Test collection of all lessons across courses.
-    """
-
-    def test1(self) -> None:
+    def test6(self) -> None:
         """
         Check collect_all_lessons() utility function.
         """
@@ -139,32 +95,21 @@ class Test_Msml610_AllLessonsCollection(csgsteut.LessonDiscovery_TestCase):
 
 
 # #############################################################################
-# Test_Msml610_Integration
+# Test_Msml610_Run_notes_to_pdf_py
 # #############################################################################
 
 
-class Test_Msml610_Integration(
-    csgsteut.Run_gen_slides_py_TestCase,
-    csgsteut.Run_notes_to_pdf_py_TestCase,
+class Test_Msml610_Run_notes_to_pdf_py(
+    csgsteut.Run_notes_to_pdf_py_TestCase
 ):
     """
-    Integration tests for msml610 slide generation and preprocessing.
+    Integration tests for msml610 preprocessing (preprocess_notes action).
     """
 
     @pytest.mark.superslow
     def test1(self) -> None:
         """
-        Render all msml610 lessons to PDF.
-        """
-        # Prepare inputs.
-        course_dir = "msml610"
-        # Run test.
-        self._render_all_lessons_to_pdf(course_dir)
-
-    @pytest.mark.superslow
-    def test2(self) -> None:
-        """
-        Test markdown preprocessing for msml610 lessons.
+        Test markdown preprocessing for msml610 lessons (skip run_pandoc).
         """
         # Prepare inputs.
         course_dir = "msml610"
@@ -172,7 +117,7 @@ class Test_Msml610_Integration(
         self._run_notes_to_pdf_md_py(course_dir)
 
     @pytest.mark.superslow
-    def test3(self) -> None:
+    def test2(self) -> None:
         """
         Test LaTeX preprocessing for msml610 lessons.
         """
@@ -180,3 +125,46 @@ class Test_Msml610_Integration(
         course_dir = "msml610"
         # Run test.
         self._run_notes_to_pdf_tex_py(course_dir)
+
+
+# #############################################################################
+# Test_Msml610_Run_gen_slides_py
+# #############################################################################
+
+
+class Test_Msml610_Run_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
+    """
+    Integration tests for msml610 slide generation (PDF rendering).
+    """
+
+    @pytest.mark.slow
+    def test1(self) -> None:
+        """
+        Generate slides for msml610 lesson 01.1.
+        """
+        # Prepare inputs.
+        course_dir = "msml610"
+        lesson = "01.1"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
+
+    @pytest.mark.slow
+    def test2(self) -> None:
+        """
+        Generate slides for msml610 lesson 08.1.
+        """
+        # Prepare inputs.
+        course_dir = "msml610"
+        lesson = "08.1"
+        # Run test.
+        self._run_gen_slides(course_dir, lesson)
+
+    @pytest.mark.superslow
+    def test3(self) -> None:
+        """
+        Render all msml610 lessons to PDF.
+        """
+        # Prepare inputs.
+        course_dir = "msml610"
+        # Run test.
+        self._render_all_lessons_to_pdf(course_dir)

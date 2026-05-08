@@ -125,6 +125,14 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
 
 
 # #############################################################################
+# Run_preprocess_notes_py_TestCase
+# #############################################################################
+
+# TODO(ai_gp): Create a class Run_preprocess_notes_py_TestCase similar to
+# Run_notes_to_pdf_py_TestCase but testing preprocess_notes.py
+# Then call the functions in data605/test/test_gen_slides.py
+
+# #############################################################################
 # Run_notes_to_pdf_py_TestCase
 # #############################################################################
 
