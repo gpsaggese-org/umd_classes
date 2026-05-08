@@ -67,13 +67,16 @@ paired runs).
 | Heart Disease UCI | Kaggle / UCI | Tabular | Binary classification | Used |
 | NYC Yellow Taxi | NYC TLC | Tabular | Regression | Used |
 | Amazon Product Reviews | HuggingFace | NLP / Text | Sentiment classification | Used |
-| Air Quality | OpenAQ API | Time series | Forecasting | Loader implemented |
+| Air Quality | OpenAQ API | Time series | Forecasting | Configured, not run |
 | CIFAR-10 | HuggingFace | Image | Classification | Configured, not run |
 | UrbanSound8K | Zenodo | Audio | Classification | Configured, not run |
 
 The three "Used" datasets back the 81 main-benchmark cells. The
-remaining datasets are configured for the cross-modal extension
-described in Section 8.2 of the report.
+remaining three are staged for future work: Air Quality for a
+time-series extension (loader and adversarial generator already
+implemented, no AQ tasks executed in the current benchmark);
+CIFAR-10 and UrbanSound8K for the cross-modal extension described
+in Section 8.2 of the report.
 
 ## Six evaluation dimensions
 
