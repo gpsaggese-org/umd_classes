@@ -13,6 +13,7 @@ import shlex
 import sys
 from typing import Dict, List, Optional
 
+import pytest
 from tqdm import tqdm
 
 import class_scripts.common_utils as csccouti
@@ -91,6 +92,40 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     Base class for testing lesson discovery in a course.
     """
 
+    # Subclasses must override these.
+    COURSE_DIR: str = ""
+    FIRST_LESSON_FILENAME: str = ""
+
+    def test_check_lesson_discovery(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        hdbg.dassert_ne(self.FIRST_LESSON_FILENAME, "")
+        self._check_lesson_discovery(self.COURSE_DIR, self.FIRST_LESSON_FILENAME)
+
+    def test_check_lesson_count(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._check_lesson_count(self.COURSE_DIR)
+
+    def test_check_lesson_format(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._check_lesson_format(self.COURSE_DIR)
+
+    def test_get_lesson_files(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        files = get_lesson_files(self.COURSE_DIR)
+        self.assertGreater(len(files), 0)
+        _LOG.debug("Found %d lesson files", len(files))
+
+    def test_get_lesson_numbers(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        numbers = get_lesson_numbers(self.COURSE_DIR)
+        self.assertGreater(len(numbers), 0)
+        _LOG.debug("Found %d lesson numbers", len(numbers))
+
+    def test_collect_all_lessons(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        all_lessons = collect_all_lessons()
+        self.assertIn(self.COURSE_DIR, all_lessons)
+
     def _check_lesson_discovery(
         self, course_dir: str, expected_first_lesson_filename: str
     ) -> None:
@@ -133,6 +168,23 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for preprocess_notes.py script.
     """
+
+    COURSE_DIR: str = ""
+
+    @pytest.mark.slow
+    def test_preprocess_notes_pdf(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_preprocess_notes_pdf(self.COURSE_DIR)
+
+    @pytest.mark.slow
+    def test_preprocess_notes_html(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_preprocess_notes_html(self.COURSE_DIR)
+
+    @pytest.mark.slow
+    def test_preprocess_notes_slides(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_preprocess_notes_slides(self.COURSE_DIR)
 
     @staticmethod
     def _run_preprocess_notes_py(
@@ -241,6 +293,18 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation.
     """
+
+    COURSE_DIR: str = ""
+
+    @pytest.mark.superslow
+    def test_notes_to_pdf_md(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_notes_to_pdf_md_py(self.COURSE_DIR)
+
+    @pytest.mark.superslow
+    def test_notes_to_pdf_tex(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_notes_to_pdf_tex_py(self.COURSE_DIR)
 
     @staticmethod
     def _run_notes_to_pdf_py(
@@ -358,6 +422,26 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
     """
     Base class for testing gen_slides.py script with course-specific lessons.
     """
+
+    COURSE_DIR: str = ""
+    FIRST_LESSON: str = ""
+    SECOND_LESSON: str = ""
+
+    @pytest.mark.slow
+    def test_gen_slides_first_lesson(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._run_gen_slides(self.COURSE_DIR, self.FIRST_LESSON)
+
+    @pytest.mark.slow
+    def test_gen_slides_second_lesson(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        hdbg.dassert_ne(self.SECOND_LESSON, "")
+        self._run_gen_slides(self.COURSE_DIR, self.SECOND_LESSON)
+
+    @pytest.mark.superslow
+    def test_render_all_lessons(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        self._render_all_lessons_to_pdf(self.COURSE_DIR)
 
     @staticmethod
     def _run_gen_slides_py(course_dir: str) -> None:
