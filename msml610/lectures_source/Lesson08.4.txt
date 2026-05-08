@@ -1342,8 +1342,8 @@ digraph CausalGraph {
   - Risky since you don't know what happens without data points
 
 * FWL Theorem
-- The Frisch–Waugh–Lovell (FWL) theorem explains how to interpret coefficients in
-  a multiple regression by "partialling out" other variables
+- **Theorem**: the Frisch–Waugh–Lovell (FWL) theorem explains how to interpret
+  coefficients in a multiple regression by "partialling out" other variables
 
 - **Example**
   - Consider $y = X_1 \beta_1 + X_2 \beta_2 + \varepsilon$
@@ -1358,29 +1358,39 @@ digraph CausalGraph {
 - **Intuition**
   - $\beta_1$ measures the effect of $X_1$ on $y$, holding $X_2$ constant
 
-* FWL Theorem
-- Make non-experimental data look as if the treatment was randomized (de-biasing)
+* FWL Theorem for Causality
+- Make non-experimental data look as if the treatment was randomized
 
-- Estimating a multi-variate regression is equivalent to the 3 steps:
+- Estimating a multi-variate regression $Y \sim T, X$ is equivalent to the 3
+  steps:
   1. Denoising: Regress outcome $Y$ on the confounder variables to obtain the
-     outcome residuals $\tilde{Y}$
+     outcome residuals $\tilde{Y}$:
+     $\widetilde{Y} = Y - \hat{Y}$
   2. Debiasing: Regress the treatment $T$ on confounders $X$ to obtain the
-     treatment residuals $\tilde{T}$
+     treatment residuals $\tilde{T}$:
+     $\widetilde{Y} = Y - \hat{Y}$
      - Version of the treatment that is uncorrelated with the variables used in
        debiasing the model
   3. Regress outcome residuals $\tilde{Y}$ on treatment residuals $\tilde{T}$ to
      obtain estimate of causal effect of $T$ on $Y$
 
-* Non-linear
-- You want to estimate the causal effect of credit limit on credit card spend,
+- Debiasing + denoising (i.e., regress $\widetilde{Y}$ on $\widetilde{T}$)
+  yields coefficient identical to full model
+  - Same estimate, same standard error, same p-value
+  - Equivalent to single-step regression with all variables included
+
+- **Pros**: separates debiasing from impact estimation, enabling pre-processing
+  for multiple stakeholders
+
+* Non-linear Regression
+- **Example**: estimate the causal effect of credit limit on credit card spend,
   using wage as only confounder
   - It can be that the relationship is not linear
     - E.g., the effect of credit lines on spend diminishes as you increase credit
       lines
 
 - You can apply some transform to $X$ (e.g., square root, log)
-
-- Then you can apply the usual flow (adding confounders, FWL theorem)
+  - Then you can apply the usual flow (adding confounders, FWL theorem)
 
 * Regression
 - You need to assume that treatment looks randomly assigned once certain

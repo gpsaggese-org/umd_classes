@@ -16,6 +16,7 @@ import class_scripts.gen_slides_test_utils as csgsteut
 # #############################################################################
 
 
+# TODO(ai_gp): Test_data605_gen_slides_sample
 class Test_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
     """
     Test gen_slides.py script for data605 sample lessons.

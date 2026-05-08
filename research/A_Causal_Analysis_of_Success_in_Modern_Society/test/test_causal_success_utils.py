@@ -9,8 +9,16 @@ import research.A_Causal_Analysis_of_Success_in_Modern_Society.test_causal_succe
 import logging
 
 import numpy as np
+import pytest
 
 import helpers.hunit_test as hunitest
+
+pytest.importorskip(
+    "pymc",
+    minversion=None,
+    reason="PyMC not available or incompatible with current numpy version",
+)
+
 import research.A_Causal_Analysis_of_Success_in_Modern_Society.causal_success_utils as racaosimscsu
 
 _LOG = logging.getLogger(__name__)
