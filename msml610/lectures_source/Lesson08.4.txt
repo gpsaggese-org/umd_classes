@@ -1477,74 +1477,69 @@ Variables that _predict the treatment well_ but not the outcome
 - A common phenomenon in tech companies is talented individual contributors
   (ICs) transitioning to management tracks
   - This transition often requires very different skill sets and comes at high
-    personal cost for the new managers and their teams
+    cost for the new managers and their teams
   - Multinational tech company invest in manager training programs for new
     managers to ease this transition
 
 * The problem of non-compliance
-- The company
+- A company:
   - Selects managers randomly for the training program to measure its
     effectiveness
   - Compares employee engagement scores between teams whose managers received
     training vs those who didn't
-  - Estimates an unbiased average treatment effect (ATE)
+  - Estimates the average treatment effect (ATE)
 
-- **Non-compliance**, i.e., people not receiving the treatment as assigned
+- **Problem**: _non compliance_ is when people not receiving the treatment as
+  assigned
   - Some assigned managers didn't show up for training
   - Other managers obtained the training without being assigned to it
 
-- **Result**: the randomized study became observational in nature
-- This introduced bias into the causal estimates, requiring adjustment for
-  confounders
+- **Result**:
+  - The randomized study became observational in nature
+  - This introduced bias into the causal estimates
+    - Likely biased upward because managers with already-engaged teams are more
+      likely to self-select into training
+  - Requires adjustment for confounders
 
 // msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb
 
-* Naive Comparison
-- Comparing treated vs control without adjustment shows ATE $\approx$ 0.44
-  - This is likely biased upward because managers with already-engaged teams are
-    more likely to self-select into training
-- Controlling for all available confounders via regression reduces the estimate
-  to ATE $\approx$ 0.27
-  - **Positive confounding bias**: managers whose employees were already more
-    engaged were more likely to have participated in the training program
-
 * Propensity score
-- **Propensity score**: Conditional probability of receiving treatment given
-  covariates
+- **Definition**: _propensity score_ is the conditional probability of receiving
+  treatment given covariates:
   $$
-  e(x) = \Pr(T | X)
-  $$
-- Acts as dimensionality reduction
-  - Instead of conditioning on high-dimensional $X$, condition on single
-    propensity score
-- Blocks backdoor paths through confounders and balance
-  $$
-  ( Y_{1},Y_{0} ) \perp T | \Pr(x)
+  e(x) = \Pr(T=1 | X)
   $$
 
 - **Intuition**
+  - Propensity score acts as dimensionality reduction technique
+  - Instead of conditioning on high-dimensional $X$, condition on single
+    propensity score
+
+- **Claim**
   - If two managers have same propensity score but different treatment status,
     difference is due to chance
-  - Treatment becomes "as good as random" after controlling for propensity score
+  - Treatment should become "as good as random" after controlling for propensity
+    score
 
 * Propensity Score Estimation
 - Can use ML models to estimate propensity score
-  - Out-of-fold predictions to avoid overfitting bias
+  - Need out-of-fold predictions to avoid overfitting bias
 
-- Binary treatment makes
-  - Use logistic regression to estimate $e(x)$ from covariates
+- **Example**: binary treatment
+  - Use logistic regression to estimate $e(x)$ from covariates $X$
   - Replace true (unknown) propensity score with estimated version
   - Apply in observational data where assignment mechanism unknown
 
-* Propensity Score and Linear Regression
-- Freilich-Wooldridge-Newey (FWL) theorem: linear regression models
-  $$\EE[T | X]$$
-  in debiasing step
-- Propensity score estimation achieves similar
-  orthogonalization
-- Can use estimated propensity score $\hat{e}(X)$ in regression:
-  - E.g., `engagement_score ~ intervention + propensity_score`
-- Both approaches orthogonalize treatment but use different models for $T$
+* FWL Orthogonalization and Propensity Score
+- Both FWL approach and propensity score orthogonalize treatment but use
+  different models for $T$
+  - FWL theorem: linear regression models $$\EE[T | X]$$ in debiasing step
+    - Residualize both $T$ and $X$
+    - Low-dim $X$, linear T-X relationship
+  - Propensity score estimation achieves similar orthogonalization
+    - Include propensity score $\hat{e}(X)$ as control in regression
+    - E.g., `engagement_score ~ intervention + propensity_score`
+    - High-dim $X$, flexible T-X relationship
 
 * Propensity score matching
 - Matches treated and control units based on propensity score similarity
@@ -1560,7 +1555,7 @@ Variables that _predict the treatment well_ but not the outcome
   )
   $$
 
-- Cons
+- **Cons**
   - KNN inefficient in high dimensions
   - Difficult to derive variance
 
