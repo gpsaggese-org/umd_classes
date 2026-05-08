@@ -359,6 +359,8 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             skip_action_args = " ".join(
                 f"--skip_action={action}" for action in all_skip_actions
             )
+            # Build tex_only argument for tex tests.
+            tex_only_arg = "--tex_only" if output_type == "tex" else ""
             # Build and execute command.
             cmd = (
                 f"notes_to_pdf.py "
@@ -366,7 +368,8 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 f"--output={output_arg} "
                 f"--type={output_type_arg} "
                 f"--toc_type={toc_type_arg} "
-                f"{skip_action_args}"
+                f"{skip_action_args} "
+                f"{tex_only_arg}"
             )
             _LOG.info(f"Running command: {cmd}")
             hsystem.system(cmd)
@@ -374,7 +377,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(temp_file)
             content = hio.from_file(temp_file)
-            test_case.check_string(content, fuzzy_match=True)
+            test_case.check_string(content, fuzzy_match=True, tag=lesson)
             sys.stdout.flush()
             _LOG.info(
                 "Verified %s output for lesson %s", output_type.upper(), lesson
