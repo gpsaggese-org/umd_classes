@@ -13,7 +13,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /install
 COPY requirements.txt /install/requirements.txt
 RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim -r /install/requirements.txt
+    pip install --no-cache-dir jupyterlab jupyterlab_vim -r /install/requirements.txt 
+
+RUN python -m nltk.downloader punkt stopwords wordnet \
+    vader_lexicon punkt_tab omw-1.4
+
+RUN python -c "from transformers import pipeline; \
+    pipeline('sentiment-analysis', \
+    model='cardiffnlp/twitter-roberta-base-sentiment-latest')"
 
 # Config.
 COPY etc_sudoers /install/
