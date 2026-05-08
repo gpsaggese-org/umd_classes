@@ -157,6 +157,11 @@ def get_cypher_prompt() -> PromptTemplate:
         input_variables=["schema", "question"],
         template="""You are a Neo4j Cypher expert. Output ONLY a valid Cypher query, nothing else. No explanation.
 
+CRITICAL RULES:
+- The relationship type is IN_GENRE with an underscore. Never write IN GENRE with a space.
+- The relationship type is RATED. Never modify these names.
+- Output only the Cypher query, no commentary.
+
 Graph schema:
 {schema}
 
@@ -173,14 +178,14 @@ A: MATCH (m:Movie {{title: "Toy Story (1995)"}})-[:IN_GENRE]->(g:Genre) RETURN g
 Q: What genres does Jumanji belong to?
 A: MATCH (m:Movie {{title: "Jumanji (1995)"}})-[:IN_GENRE]->(g:Genre) RETURN g.name
 
-Q: What are the top rated movies?
-A: MATCH (u:User)-[r:RATED]->(m:Movie) WITH m, avg(r.rating) AS avg_rating RETURN m.title, avg_rating ORDER BY avg_rating DESC LIMIT 10
-
 Q: How many movies are in the Drama genre?
 A: MATCH (m:Movie)-[:IN_GENRE]->(g:Genre {{name: "Drama"}}) RETURN count(m) AS total
 
 Q: How many movies are in the Action genre?
 A: MATCH (m:Movie)-[:IN_GENRE]->(g:Genre {{name: "Action"}}) RETURN count(m) AS total
+
+Q: List movies in the Horror genre.
+A: MATCH (m:Movie)-[:IN_GENRE]->(g:Genre {{name: "Horror"}}) RETURN m.title LIMIT 10
 
 Now answer this:
 Q: {question}
