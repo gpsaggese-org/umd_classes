@@ -31,20 +31,29 @@ Queries stay FP32 (rotated the same way as the DB). So, how do we calculate dist
 ### Worked example
 
 ```
-codebook   c    = [−0.5, +0.5]
-DB stored       : indices = [1, 0, 1, 1],  norm = 2.0
-query      q    = [+0.3, +0.2, +0.4, −0.1]
+codebook    : c = [−0.5, +0.5]
+DB stored   : indices = [1, 0, 1, 1],  norm = 2.0
+query       : q = [+0.3, +0.2, +0.4, −0.1]
 
-# build LUT once (per query)
+# what x̂ would be IF we decompressed (we won't):
+x̂ = norm · [c[i] for i in indices]
+  = 2.0 · [+0.5, −0.5, +0.5, +0.5]
+  = [+1, −1, +1, +1]
+
+# naive path — decompress, then dot
+⟨q, x̂⟩ = 0.3·(+1) + 0.2·(−1) + 0.4·(+1) + (−0.1)·(+1)
+       = 0.40
+
+# ADC path — build LUT once per query
 LUT[0] = q · (−0.5) = [−0.15, −0.10, −0.20, +0.05]
 LUT[1] = q · (+0.5) = [+0.15, +0.10, +0.20, −0.05]
 
-# score this DB vector — d=4 lookups, d-1 adds, 1 mul
+# score this DB vector — d=4 lookups, d−1 adds, 1 mul
 partial = LUT[1,0] + LUT[0,1] + LUT[1,2] + LUT[1,3]
         = +0.15    + (−0.10)  + +0.20    + (−0.05)
         = +0.20
 
-⟨q, x̂⟩  ≈  norm · partial  =  2.0 · 0.20  =  0.40
-```
+⟨q, x̂⟩ ≈ norm · partial = 2.0 · 0.20 = 0.40
 
-`x̂` was never reconstructed.
+# both paths → 0.40   ✓   (ADC never built x̂)
+```
