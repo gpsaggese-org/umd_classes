@@ -25,7 +25,10 @@ def load_ag_news():
 def get_subsets(dataset):
     if TRAIN_SUBSET:
         dataset["train"] = dataset["train"].shuffle(seed=SEED).select(range(TRAIN_SUBSET))
+        val_size = max(1, TRAIN_SUBSET // 10)
+        dataset["validation"] = dataset["validation"].shuffle(seed=SEED).select(range(val_size))
         print(f"Using train subset: {TRAIN_SUBSET}")
+        print(f"Using validation subset: {val_size}")
     if EVAL_SUBSET:
         dataset["test"] = dataset["test"].shuffle(seed=SEED).select(range(EVAL_SUBSET))
         print(f"Using test subset: {EVAL_SUBSET}")
