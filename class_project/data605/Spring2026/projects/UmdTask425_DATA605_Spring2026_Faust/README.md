@@ -131,6 +131,15 @@ docker exec -it <kafka_container_name> kafka-topics \
 --list \
 --bootstrap-server localhost:9092
 ```
+#### Run Producer and Verify Kafka is Receiving the Messages
+1. Run tweet producer: `python tweet_producer.py`
+2. 
+```
+docker exec -it <kafka_container_name> kafka-console-consumer \
+--bootstrap-server localhost:9092 \
+--topic tweets \
+--from-beginning
+``` 
 
 #### Run the Faust App
 ** Note: Kafka is installed on Python3.11, and the latest stable Python release is 3.14 as of April 2026. 
@@ -147,13 +156,6 @@ In a new terminal, navigate to the project root directory, and run the following
 2. Activate the virtual environment: `source .venv/bin/activate`
 3. Install dependencies: `pip install -r requirements.txt`
 4. Run the tweets producer script: `python tweet_producer.py`
-5. verify Kafka is recieving the messages
-```
-    docker exec -it <kafka_container_name> kafka-console-consumer \
-    --bootstrap-server localhost:9092 \
-    --topic tweets \
-    --from-beginning
-    ``` 
 
 #### Observe Output
 1. The docker container will show the produced tweets with simulated streaming.
