@@ -209,7 +209,12 @@ TAXI-PRESC-01:
     and a supporting visualization as 'strategy_chart.png'.
 
 # =============================================================================
-# AIR QUALITY — Time Series, Forecasting
+# AIR QUALITY  Time Series, Forecasting
+#
+# Future tasks: defined but not executed in the current benchmark. Loader
+# is implemented in src/data_loader.py and a sample CSV is staged on disk,
+# but no AQ-* cells appear in results/master_scorecard.csv. Staged for the
+# cross-modal / time-series extension described in Section 8.2 of the report.
 # =============================================================================
 
 AQ-EDA-01:
