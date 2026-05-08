@@ -111,7 +111,7 @@ tutorials/XYZ/
 - Introduction markdown describing the full application and workflow
 - Top-of-notebook setup cell with:
   ```python
-    %load_ext autoreload
+  %load_ext autoreload
   %autoreload 2
 
   import logging
