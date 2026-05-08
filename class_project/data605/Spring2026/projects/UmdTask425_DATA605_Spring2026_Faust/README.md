@@ -159,7 +159,7 @@ In a new terminal, navigate to the project root directory, and run the following
 1. The docker container will show the produced tweets with simulated streaming.
 2. The faust app terminal will show the Sentiment Result including the start of the tweet content, original sentiment, predicted sentiment, and confidence.
 
-## Optional: Running Inside Docker
+#### Optional: Running Inside Docker
 
 ### Step 1: Build Docker Image
 ```bash
