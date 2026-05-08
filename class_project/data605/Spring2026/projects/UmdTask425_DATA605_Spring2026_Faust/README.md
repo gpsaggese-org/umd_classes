@@ -132,14 +132,6 @@ docker exec -it <kafka_container_name> kafka-topics \
 --bootstrap-server localhost:9092
 ```
 
-#### Run the producer and verify Kafka is receiving messages
-1. python tweet_producer.py
-2.  ```
-    docker exec -it <kafka_container_name> kafka-console-consumer \
-    --bootstrap-server localhost:9092 \
-    --topic tweets \
-    --from-beginning
-    ```
 #### Run the Faust App
 ** Note: Kafka is installed on Python3.11, and the latest stable Python release is 3.14 as of April 2026. 
 In a new terminal, run the following:
@@ -149,13 +141,46 @@ In a new terminal, run the following:
 4. Install Faust and sentiment analysis dependencies: `pip install faust-streaming kafka-python transformers torch "aiokafka<0.11"`
 5. Run the Faust App: `faust -A faust_app worker -l info`
 
-#### Produce tweets
+#### Produce tweets and verify with Kafka
 In a new terminal, navigate to the project root directory, and run the following:
 1. Create a new Python virtual environment: `python3 -m venv .venv`
 2. Activate the virtual environment: `source .venv/bin/activate`
 3. Install dependencies: `pip install -r requirements.txt`
-4. Run the tweets producer script: `python tweet_producer.py` 
+4. Run the tweets producer script: `python tweet_producer.py`
+5. verify Kafka is recieving the messages
+```
+    docker exec -it <kafka_container_name> kafka-console-consumer \
+    --bootstrap-server localhost:9092 \
+    --topic tweets \
+    --from-beginning
+    ``` 
 
 #### Observe Output
 1. The docker container will show the produced tweets with simulated streaming.
 2. The faust app terminal will show the Sentiment Result including the start of the tweet content, original sentiment, predicted sentiment, and confidence.
+
+## Optional: Running Inside Docker
+
+### Step 1: Build Docker Image
+```bash
+docker build -t gpsaggese/umd_project_template .
+```
+Expected output: 
+```
+Successfully built <image_id>
+Successfully tagged gpsaggese/umd_project_template:latest
+```
+
+### Step 2: Launch Jupyter Notebook  via Docker
+```bash
+bash docker_jupyter.sh
+```
+Then open: http://localhost:8888/lab
+
+**Note:** When running notebooks inside Docker, Kafka cannot be reached via 
+`localhost`. Change `localhost` to `host.docker.internal` in `faust_utils.py`:
+```python
+# Change this:
+bootstrap_servers: str = "localhost:9092"
+# To this:
+bootstrap_servers: str = "host.docker.internal:9092"
