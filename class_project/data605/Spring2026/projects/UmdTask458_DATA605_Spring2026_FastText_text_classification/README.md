@@ -66,7 +66,7 @@ FastText is incompatible with NumPy 2.0, so numpy<2.0 is pinned in requirements.
 
 ### Run the Container
 
-    docker run -it --rm -p 8888:8888 -v "C:/Users/Vaibhav Devarapalli/src/gpsaggese.github.io/class_project/data605/Spring2026/projects/UmdTask458_DATA605_Spring2026_FastText_text_classification:/home/user" gpsaggese/umd_data605_fasttext bash
+    docker run -it --rm -p 8888:8888 -v "$(pwd):/home/user" gpsaggese/umd_data605_fasttext bash
 
 ### Start Jupyter
 
