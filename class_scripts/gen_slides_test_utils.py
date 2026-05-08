@@ -128,9 +128,109 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
 # Run_preprocess_notes_py_TestCase
 # #############################################################################
 
-# TODO(ai_gp): Create a class Run_preprocess_notes_py_TestCase similar to
-# Run_notes_to_pdf_py_TestCase but testing preprocess_notes.py
-# Then call the functions in data605/test/test_gen_slides.py
+
+class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
+    """
+    Base class for integration tests for preprocess_notes.py script.
+    """
+
+    @staticmethod
+    def _run_preprocess_notes_py(
+        test_case: hunitest.TestCase,
+        course_dir: str,
+        output_dir: str,
+        lessons: List[str],
+        output_type: str,
+        toc_type: str = "none",
+    ) -> None:
+        """
+        Test preprocessing output for a set of lessons.
+
+        :param test_case: TestCase instance for assertions
+        :param course_dir: Course directory (e.g., "data605")
+        :param output_dir: Output directory for test results
+        :param lessons: List of lesson numbers to test
+        :param output_type: Either "pdf", "html", or "slides"
+        :param toc_type: Type of table of contents ("none", "pandoc_native",
+            "navigation", "remove_headers")
+        """
+        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type.upper()}"):
+            # Get source file.
+            src_name = csccouti.get_source_name(course_dir, lesson)
+            input_file = os.path.join(course_dir, "lectures_source", src_name)
+            # Use lesson-specific output directory to avoid file conflicts.
+            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+            hio.create_dir(lesson_dir, incremental=True)
+            # Prepare output file path.
+            output_file = os.path.join(lesson_dir, "preprocessed.md")
+            # Prepare command arguments.
+            input_arg = shlex.quote(input_file)
+            output_arg = shlex.quote(output_file)
+            # Build and execute command.
+            cmd = (
+                f"preprocess_notes.py "
+                f"--input={input_arg} "
+                f"--output={output_arg} "
+                f"--type={output_type} "
+                f"--toc_type={toc_type}"
+            )
+            _LOG.info("Running command: %s", cmd)
+            hsystem.system(cmd)
+            sys.stdout.flush()
+            # Extract and check output after preprocessing.
+            hdbg.dassert_file_exists(output_file)
+            content = hio.from_file(output_file)
+            test_case.check_string(content, fuzzy_match=True)
+            sys.stdout.flush()
+            _LOG.info(
+                "Verified %s preprocessing for lesson %s", output_type.upper(),
+                lesson
+            )
+
+    def _run_preprocess_notes_pdf(self, course_dir: str) -> None:
+        """
+        Test PDF preprocessing for all lessons.
+
+        Verifies that the preprocessing output is correct for all lessons
+        in a course when targeting PDF output.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        self._run_preprocess_notes_py(
+            self, course_dir, output_dir, lessons, "pdf"
+        )
+
+    def _run_preprocess_notes_html(self, course_dir: str) -> None:
+        """
+        Test HTML preprocessing for all lessons.
+
+        Verifies that the preprocessing output is correct for all lessons
+        in a course when targeting HTML output.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        self._run_preprocess_notes_py(
+            self, course_dir, output_dir, lessons, "html"
+        )
+
+    def _run_preprocess_notes_slides(self, course_dir: str) -> None:
+        """
+        Test slides preprocessing for all lessons.
+
+        Verifies that the preprocessing output is correct for all lessons
+        in a course when targeting slides output.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        self._run_preprocess_notes_py(
+            self, course_dir, output_dir, lessons, "slides"
+        )
 
 # #############################################################################
 # Run_notes_to_pdf_py_TestCase

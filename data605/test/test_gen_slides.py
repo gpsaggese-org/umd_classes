@@ -95,6 +95,49 @@ class Test_Data605_LessonDiscovery(csgsteut.LessonDiscovery_TestCase):
 
 
 # #############################################################################
+# Test_Data605_Run_preprocess_notes_py
+# #############################################################################
+
+
+class Test_Data605_Run_preprocess_notes_py(
+    csgsteut.Run_preprocess_notes_py_TestCase
+):
+    """
+    Integration tests for data605 preprocessing (preprocess_notes action).
+    """
+
+    @pytest.mark.slow
+    def test1(self) -> None:
+        """
+        Test PDF preprocessing for data605 lessons.
+        """
+        # Prepare inputs.
+        course_dir = "data605"
+        # Run test.
+        self._run_preprocess_notes_pdf(course_dir)
+
+    @pytest.mark.slow
+    def test2(self) -> None:
+        """
+        Test HTML preprocessing for data605 lessons.
+        """
+        # Prepare inputs.
+        course_dir = "data605"
+        # Run test.
+        self._run_preprocess_notes_html(course_dir)
+
+    @pytest.mark.slow
+    def test3(self) -> None:
+        """
+        Test slides preprocessing for data605 lessons.
+        """
+        # Prepare inputs.
+        course_dir = "data605"
+        # Run test.
+        self._run_preprocess_notes_slides(course_dir)
+
+
+# #############################################################################
 # Test_Data605_Run_notes_to_pdf_py
 # #############################################################################
 
@@ -103,7 +146,7 @@ class Test_Data605_Run_notes_to_pdf_py(
     csgsteut.Run_notes_to_pdf_py_TestCase
 ):
     """
-    Integration tests for data605 preprocessing (preprocess_notes action).
+    Integration tests for data605 preprocessing (notes_to_pdf action).
     """
 
     @pytest.mark.superslow
