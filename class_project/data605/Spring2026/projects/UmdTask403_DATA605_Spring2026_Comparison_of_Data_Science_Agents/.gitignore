@@ -39,3 +39,6 @@ tools/build_notebooks.py
 /predictions.csv
 /powermetrics_log.txt
 results/
+
+
+/environment
