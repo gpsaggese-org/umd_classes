@@ -1,0 +1,1095 @@
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Lesson 11.1: Decision-Making with Causal Models}}$$**
+\endgroup
+
+\vspace{1cm}
+
+::: columns
+:::: {.column width=65%}
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+**References**:
+
+::::
+:::: {.column width=40%}
+
+//![](msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg){ height=20% }
+
+::::
+:::
+
+# ##############################################################################
+# Why Prediction Is Not Enough
+# ##############################################################################
+
+// Books and Articles:
+// - 2024, Hurwitz & Thompson, "Causal Artificial Intelligence"
+// - 2018, Pearl & Mackenzie, "The Book of Why"
+// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
+
+## #############################################################################
+## Prediction Pipelines vs. Decision Pipelines
+## #############################################################################
+
+// TODO(gp): Explain
+* From Predictions to Decisions
+
+- **Prediction** answers: _"What will happen?"_
+  - Input: features $X$
+  - Output: estimate $\hat{y} = \EE[Y | X]$
+  - Optimized for accuracy on a fixed distribution
+
+- **Decision** answers: _"What should I do?"_
+  - Input: current state, set of possible actions $\mathcal{A}$
+  - Output: action $a^* \in \mathcal{A}$ that maximizes expected utility
+  - Requires reasoning about **what would change** under each action
+
+- **Question**: If we already have a highly accurate predictor, isn't the
+  decision obvious?
+  - **No**, a good predictor tells us what correlates with good outcomes,
+    not what _causes_ them
+
+* Prediction Pipeline: Standard Supervised Learning
+
+- Typical ML system is optimized _end-to-end_ for prediction:
+  1. Collect observational data $(X_i, Y_i)$
+  2. Fit a model $\hat{f}(X) \approx \EE[Y | X]$
+  3. Deploy to score new units
+
+- **Crucial assumption**: the joint distribution $\Pr(X, Y)$ at deployment is
+  the same as at training
+  - No intervention changes how $X$ is generated
+  - No agent _acts_ on the prediction
+
+- **Example**: a spam filter trained on past emails to predict
+  $\Pr(\text{spam} | X)$
+  - Accurate predictor $\to$ useful as long as spammers do not adapt
+
+* Decision Pipeline: What Changes
+
+- A **decision pipeline** explicitly represents:
+  - The set of available actions $\mathcal{A}$
+  - A utility function $U(y, a)$ over outcomes and actions
+  - A **causal** model $\Pr(Y | \operatorname{do}(a))$ of how actions affect
+    outcomes
+
+- **Key distinction**:
+  - $\Pr(Y | X = x)$ is observational
+  - $\Pr(Y | \operatorname{do}(X = x))$ is interventional
+  - These can differ drastically when confounders are present
+  - Decisions depend on the **interventional** quantity
+
+- **Example**: a hospital wants to decide _whether to prescribe drug A_
+  - Observational: $\Pr(\text{recovery} | \text{took drug A})$
+  - Interventional: $\Pr(\text{recovery} | \operatorname{do}(\text{give drug A}))$
+  - The first is biased by who chose to take the drug
+
+* Prediction vs. Decision: Side-by-Side
+
+- Prediction and decision-making live in different mathematical settings
+  - Collapsing them is a common source of costly errors
+
+| Aspect               | Prediction                 | Decision                                                |
+|----------------------|-----------------------------|--------------------------------------------------------|
+| Target               | $\mathbb{E}[Y | X]$         | $\arg\max_a \mathbb{E}[U(Y) | \operatorname{do}(a)]$   |
+| Data                 | Observational only          | Observational + experimental                           |
+| Metric               | Accuracy, AUC, MSE          | Regret, expected utility                               |
+| Modeling assumption  | i.i.d. and stable world     | Models the intervention itself                         |
+| Loss if wrong        | Miscalibration              | Policy harm                                            |
+| Interaction w/ world | No feedback with the world  | Actions change the world                               |
+
+## #############################################################################
+## When Prediction Fails
+## #############################################################################
+
+* Simpson's Paradox
+
+- **Simpson's paradox**: a trend in subgroups reverses when groups are
+  aggregated
+  - Cause: a **confounder** is unevenly distributed across groups
+  - Naive aggregation $\to$ wrong decision
+
+- **Example**: drug recovery rates
+
+\begingroup \scriptsize
+| **Group**       | **Drug** (recovery) | **No Drug** (recovery) |
+| --------------- | ------------------- | ---------------------- |
+| Men             | 81 / 87 = 93%       | 234 / 270 = 87%        |
+| Women           | 192 / 263 = 73%     | 55 / 80 = 69%          |
+| **Combined**    | 273 / 350 = 78%     | 289 / 350 = 83%        |
+\endgroup
+
+- Within each subgroup, the drug helps; pooled, it appears to hurt
+  - Sex is a confounder correlated with both treatment assignment and
+    recovery baseline
+  - The right decision depends on what we _do_ with the drug, not what we _see_
+
+* Simpson's Paradox: Causal Resolution
+
+- The numbers alone cannot tell us whether to prescribe the drug — we need a
+  **causal graph**
+
+::: columns
+:::: {.column width=55%}
+- **Case A**: Sex $\to$ Drug, Sex $\to$ Recovery
+  - Sex confounds treatment choice
+  - Correct answer: look at the **subgroup** table
+  - The drug helps
+
+- **Case B**: Drug $\to$ Sex (post-treatment), Sex $\to$ Recovery
+  - Sex is a mediator
+  - Correct answer: look at the **aggregate** table
+  - The drug hurts
+
+- _Same data, opposite decisions_ depending on the causal graph
+::::
+:::: {.column width=45%}
+```graphviz
+digraph SimpsonCaseA {
+    splines=true; nodesep=0.6; ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Sex [label="Sex", fillcolor="#A6E7F4"];
+    Drug [label="Drug", fillcolor="#F4A6A6"];
+    Rec [label="Recovery", fillcolor="#A6C8F4"];
+
+    Sex -> Drug;
+    Sex -> Rec;
+    Drug -> Rec;
+}
+```
+::::
+:::
+
+* Confounding: The Root Cause
+
+- A **confounder** $Z$ is a common cause of both the proposed action $X$ and
+  the outcome $Y$
+  - Induces a non-causal association $X \leftrightarrow Y$ through $Z$
+  - Observational $\Pr(Y | X) \neq \Pr(Y | \operatorname{do}(X))$
+
+- Without adjusting for $Z$, any purely predictive model will encode the
+  spurious association
+
+- **Example**: ice cream sales and drowning deaths are highly correlated
+  - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
+  - Decision: _"ban ice cream to reduce drownings"_ (disastrous)
+  - Confounder: hot weather causes both
+
+- **Question**: Can we avoid this by collecting more features?
+  - Only if the missing confounder is among them _and_ properly adjusted for
+
+* Policy Reversal
+
+- A **policy reversal** is when an optimal-looking decision based on predictions
+  becomes harmful once enacted
+  - Common in medicine, economics, operations research
+
+- **Mechanism**: acting on $X$ breaks the correlation with the unobserved
+  confounder $Z$, so the observed association no longer holds
+
+- **Example**: emergency room triage
+  - Predictor: patients with asthma + pneumonia have lower mortality
+  - Naive policy: send them home first since they're low-risk
+  - Reality: they had lower mortality _because_ they received aggressive care
+    - Removing the care removes the protection
+
+- Predictive patterns in historical data reflect the **policy that generated the
+  data**, not what happens when we change it
+
+## #############################################################################
+## Causal Models as the Foundation for Decisions
+## #############################################################################
+
+* Causal Models for Decisions
+
+- A **causal model** specifies, for each variable $X_i$:
+  - Its direct causes (parents) $\text{Pa}(X_i)$
+  - A structural mechanism $X_i = f_i(\text{Pa}(X_i), U_i)$ with noise $U_i$
+
+- Enables reasoning about:
+  - **Observation**: $\Pr(Y | X = x)$ (seeing $x$)
+  - **Intervention**: $\Pr(Y | \operatorname{do}(X = x))$ (setting $x$)
+  - **Counterfactual**: $\Pr(Y_{X=x} | X = x', Y = y')$ (had $x$ been different)
+
+- For decision-making we primarily need the **interventional** layer
+
+- **Example**:
+  - A marketing team can observe that users who open an email buy more
+  - Only a causal model can say whether _sending_ the email causes purchases
+
+* Decision Loop with Causal Models
+
+```graphviz
+digraph DecisionLoop {
+    splines=true; nodesep=0.7; ranksep=0.6;
+    rankdir=LR;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    World [label="World / Data", fillcolor="#FFD1A6"];
+    Model [label="Causal\nModel", fillcolor="#A0D6D1"];
+    Post [label="Posterior\nEffects", fillcolor="#A6E7F4"];
+    Util [label="Utility\nU(y, a)", fillcolor="#B2E2B2"];
+    Action [label="Action a*", fillcolor="#F4A6A6"];
+
+    World -> Model [label="  infer"];
+    Model -> Post [label="  do(a)"];
+    Post -> Action [label="  argmax EU"];
+    Util -> Action;
+    Action -> World [label="  intervene"];
+}
+```
+
+- **Key insight**: the causal model sits between data and decisions
+  - Pure prediction skips the middle step
+  - New data from interventions updates the model, closing the loop
+
+# ##############################################################################
+# Foundations of Decision Theory
+# ##############################################################################
+
+// Books and Articles:
+// - 1944, von Neumann & Morgenstern, "Theory of Games and Economic Behavior"
+// - 1954, Savage, "The Foundations of Statistics"
+// - 2020, Russell & Norvig, "AIMA", Chap. 16
+
+## #############################################################################
+## Utility Functions and Expected Utility
+## #############################################################################
+
+* Utility Functions
+
+- A **utility function** $U: \mathcal{Y} \to \bbR$ maps each outcome $y$ to a
+  real-valued preference score
+  - Higher is better
+  - Encodes the decision-maker's goals on a single scale
+
+- **Properties**:
+  - Utilities are _ordinal_: rank is what matters, not absolute values
+  - Utilities are _subjective_: different stakeholders can have different $U$
+  - Defined up to positive affine transformations $U \to a U + b$, $a > 0$
+
+- **Example**: a hospital utility
+  - Full recovery: $U = 1.0$
+  - Recovery with complications: $U = 0.7$
+  - Death: $U = 0.0$
+  - A $10\%$ complication reduction is worth $0.03$ in utility on average
+
+* Expected Utility Principle
+
+- Under uncertainty, a rational agent chooses the action $a$ that maximizes
+  **expected utility**:
+  $$
+  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(\cdot | a)}[U(Y)]
+  $$
+
+- **Von Neumann-Morgenstern theorem (1944)**: if preferences over lotteries
+  satisfy 4 axioms (completeness, transitivity, continuity, independence),
+  there exists a utility function $U$ such that the agent acts _as if_
+  maximizing expected utility
+
+- **Example**: buying insurance
+  - Premium $c$ for certain
+  - Uninsured loss $L$ with probability $p$
+  - Insure if $U(W - c) > p \cdot U(W - L) + (1 - p) \cdot U(W)$
+  - Risk-averse utilities make this inequality easier to satisfy
+
+* Expected Utility: A Simple Example
+
+- **Setup**: a doctor chooses between two treatments
+  - Treatment 1: cures with probability $0.9$, no side effect
+  - Treatment 2: cures with probability $0.95$, mild side effect ($U = 0.8$)
+
+- **Utility**:
+  - Cure with no side effect: $1.0$
+  - Cure with side effect: $0.8$
+  - No cure: $0.0$
+
+- **Computation**:
+  \begin{align*}
+  \EE[U | T_1] &= 0.9 \cdot 1.0 + 0.1 \cdot 0.0 = 0.90 \\
+  \EE[U | T_2] &= 0.95 \cdot 0.8 + 0.05 \cdot 0.0 = 0.76
+  \end{align*}
+
+- **Decision**: choose $T_1$
+  - Even though $T_2$ is more effective, its side-effect penalty outweighs the gain
+
+## #############################################################################
+## Causal Interventions and Expected Outcomes
+## #############################################################################
+
+* From Observational to Interventional Expectation
+
+- Classical decision theory uses $\Pr(Y | a)$, treated as the distribution of $Y$
+  given action $a$
+  - If the data is observational, $\Pr(Y | a)$ includes confounding bias
+  - Plugging it into expected utility yields a **biased** action ranking
+
+- Causal decision theory replaces it with the **interventional distribution**:
+  $$
+  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | \operatorname{do}(a))}[U(Y)]
+  $$
+
+- **Equivalent under**:
+  - Randomized experiments (no confounders)
+  - Successful back-door or front-door adjustment
+  - Complete knowledge of the causal graph + sufficient data
+
+* Intervention in an Influence Graph
+
+::: columns
+:::: {.column width=55%}
+- **Do-operator** $\operatorname{do}(X = x)$ mutates the causal graph:
+  - Remove all edges _into_ $X$
+  - Fix $X$ to the value $x$
+  - Propagate through the remaining structural equations
+
+- Turns a _passive_ question into an _active_ one
+
+- **Example**: $\operatorname{do}(\text{Drug} = 1)$
+  - Drug is no longer chosen by the physician
+  - All causal arrows from Sex, Age, etc. _into_ Drug are cut
+  - Resulting distribution reflects a policy, not the observed world
+::::
+:::: {.column width=45%}
+```graphviz
+digraph DoMutation {
+    splines=true; nodesep=0.5; ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Z [label="Z (Sex)", fillcolor="#A6E7F4"];
+    X [label="do(X)", fillcolor="#F4A6A6"];
+    Y [label="Y", fillcolor="#A6C8F4"];
+
+    Z -> Y;
+    X -> Y;
+    // Note: Z -> X edge removed by intervention
+}
+```
+
+\scriptsize
+_Edge $Z \to X$ is cut under_ $\operatorname{do}(X)$
+::::
+:::
+
+* Expected Outcome of an Intervention
+
+- Given a causal graph and estimated mechanisms, compute the expected outcome
+  under each candidate action:
+  $$
+  \EE[Y | \operatorname{do}(a)] = \sum_{y} y \cdot \Pr(Y = y | \operatorname{do}(A = a))
+  $$
+
+- **Adjustment formula** (back-door):
+  $$
+  \Pr(Y | \operatorname{do}(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
+  $$
+  where $Z$ is a back-door adjustment set
+
+- **Example**: drug decision
+  - Observational: $\Pr(\text{recovery} | \text{drug}) = 0.78$
+  - Adjusted: $\sum_z \Pr(\text{rec} | \text{drug}, z) \Pr(z) = 0.83$
+  - The adjusted value is what plugs into expected utility
+
+## #############################################################################
+## Risk Preferences and Multi-Criteria Trade-offs
+## #############################################################################
+
+* Risk Preferences
+
+- Expected utility handles risk through the _shape_ of $U$:
+  - **Risk-neutral**: $U$ is linear, $U(y) = y$ — care only about the mean
+  - **Risk-averse**: $U$ is concave — penalize variance
+  - **Risk-seeking**: $U$ is convex — reward variance
+
+- **Certainty equivalent** $y_{CE}$: the sure outcome the agent values as
+  much as a risky prospect
+  - Risk-averse: $y_{CE} < \EE[Y]$
+  - Gap $\EE[Y] - y_{CE}$ is the **risk premium**
+
+- **Example**: $U(y) = \log(y)$
+  - A 50/50 bet between \$100 and \$400 has mean \$250
+  - $y_{CE} = \exp(0.5 \log 100 + 0.5 \log 400) = \$200 < \$250$
+
+* Visualizing Risk Aversion
+
+```graphviz
+digraph RiskAversion {
+    splines=curved;
+    rankdir=LR;
+    nodesep=0.7; ranksep=0.9;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Low [label="Outcome $100\nU=4.6", fillcolor="#FFD1A6"];
+    High [label="Outcome $400\nU=6.0", fillcolor="#FFD1A6"];
+    EU [label="E[U] = 5.3", fillcolor="#A0D6D1"];
+    CE [label="CE = $200\n(U = 5.3)", fillcolor="#B2E2B2"];
+    Mean [label="E[Y] = $250", fillcolor="#A6C8F4"];
+
+    Low -> EU;
+    High -> EU;
+    EU -> CE [label="  invert U"];
+    Mean -> CE [label="  premium $50", style=dashed];
+}
+```
+
+- **Key takeaway**: a concave $U$ trades expected return for reduced variance
+  - Choose actions whose outcome distribution is _both_ high in mean and
+    narrow in spread
+
+* Multi-Criteria Trade-offs
+
+- Real decisions weigh **multiple objectives** that pull in different
+  directions
+  - Clinical: efficacy, side effects, cost, patient burden
+  - Business: revenue, churn, brand, regulatory risk
+
+- **Scalarization**: collapse into a single utility
+  $$
+  U(y) = \sum_{k} w_k \cdot u_k(y_k)
+  $$
+  - Weights $w_k$ elicited from stakeholders
+  - Works when trade-offs are approximately linear
+
+- **Pareto frontier**: keep only non-dominated actions
+  - Avoid picking a single $U$ until preferences are clear
+  - Present trade-offs to the decision-maker visually
+
+- **Example**: recommending a cancer therapy
+  - Objectives: 5-year survival, quality of life, cost
+  - Elicit weights; or present the Pareto front of treatments
+
+* Risk and Trade-offs: Practical Advice
+
+- **Pros**
+  - Expected utility unifies risk, uncertainty, and multi-criteria reasoning
+  - Calibrated utilities make implicit trade-offs explicit
+  - Maps cleanly onto Bayesian posteriors
+
+- **Cons**
+  - Utility elicitation is hard — stakeholders struggle to quantify preferences
+  - Sensitivity: small changes in $U$ can flip the optimal action
+  - Behavioral humans _systematically_ violate the axioms (Kahneman \& Tversky)
+
+- **Rule of thumb**: perform a **sensitivity analysis** over $U$ — if the
+  optimal action is stable across a plausible range of utilities, the decision
+  is robust
+
+# ##############################################################################
+# Decision Support with Causal Models
+# ##############################################################################
+
+// Books and Articles:
+// - 2009, Koller & Friedman, "Probabilistic Graphical Models", Chap. 23
+// - 2005, Howard & Matheson, "Influence Diagrams"
+// - 2004, O'Hagan et al., "Uncertain Judgements: Eliciting Experts' Probabilities"
+
+## #############################################################################
+## Influence Diagrams
+## #############################################################################
+
+* Influence Diagrams: Motivation
+
+- Bayesian networks model _uncertainty_; we need to also represent _decisions_
+  and _preferences_
+
+- An **influence diagram** extends a causal DAG with three kinds of nodes:
+  - **Chance nodes** (ovals): random variables, same as in a Bayesian network
+  - **Decision nodes** (rectangles): variables set by the decision-maker
+  - **Utility nodes** (diamonds): deterministic functions yielding utility
+
+- **Purpose**: a compact, graphical specification of a decision problem that
+  can be solved by message passing
+
+- **Example**: whether to run a diagnostic test before treating a patient
+  - Chance: disease status, test result, outcome
+  - Decision: order test?, choose therapy?
+  - Utility: cost of test, value of outcome
+
+* Influence Diagram: Anatomy
+
+```graphviz
+digraph ID {
+    splines=true; nodesep=0.9; ranksep=0.8;
+    node [fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Disease [shape=ellipse, style="filled", label="Disease", fillcolor="#A6E7F4"];
+    Test [shape=box, style="rounded,filled", label="Order Test?", fillcolor="#F4A6A6"];
+    Result [shape=ellipse, style="filled", label="Test Result", fillcolor="#A6E7F4"];
+    Therapy [shape=box, style="rounded,filled", label="Therapy", fillcolor="#F4A6A6"];
+    Outcome [shape=ellipse, style="filled", label="Outcome", fillcolor="#A6C8F4"];
+    U [shape=diamond, style="filled", label="U", fillcolor="#B2E2B2"];
+
+    Disease -> Result;
+    Test -> Result;
+    Test -> U;
+    Result -> Therapy;
+    Disease -> Outcome;
+    Therapy -> Outcome;
+    Outcome -> U;
+}
+```
+
+- Arrows into decision nodes denote **information available** at decision time
+  (no causal meaning)
+- Arrows into chance and utility nodes retain their **causal** interpretation
+
+* Solving an Influence Diagram
+
+- **Input**: influence diagram with CPTs for chance nodes and a utility table
+- **Output**: optimal policy $\pi^*$ = function from information to actions
+
+- **Steps** (variable elimination):
+  1. Eliminate chance nodes by summing them out
+  2. Eliminate decision nodes by **maximizing** over their domain
+  3. Process in reverse topological order
+  4. Record the arg-max at each decision node as the optimal policy
+
+- **Complexity**:
+  - Time: $O(|\mathcal{A}|^d \cdot \prod_i |X_i|)$ in the worst case
+  - Tractable when the graph has low treewidth
+
+- **Key insight**: the same graphical machinery used for Bayesian inference
+  also supports optimal decision-making
+
+* Influence Diagrams: Pros and Cons
+
+- **Pros**
+  - Explicit separation of beliefs, choices, and preferences
+  - Easy to communicate to non-technical stakeholders
+  - Supports value of information analysis out of the box
+
+- **Cons**
+  - Requires fully specified CPTs and utilities — often heroic
+  - Exact solution is intractable for large continuous problems
+  - Assumes a single rational decision-maker with stable utilities
+
+- **Example**: the oil wildcatter problem (classic)
+  - Decide whether to drill, after optionally running a seismic test
+  - Closed-form optimal policy using a 4-node influence diagram
+
+## #############################################################################
+## Bayesian Decision-Making
+## #############################################################################
+
+* Posteriors to Optimal Actions
+
+- Bayesian decision-making composes two steps:
+  1. **Inference**: compute the posterior $\Pr(\theta | \mathcal{D})$ from data
+  2. **Decision**: choose the action that maximizes _posterior_ expected
+     utility
+  $$
+  a^* = \arg\max_{a \in \mathcal{A}} \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
+        \left[ \EE_{Y \sim \Pr(Y | \operatorname{do}(a), \theta)}[U(Y)] \right]
+  $$
+
+- The **inner expectation** is over outcome uncertainty given $\theta$ (aleatoric)
+- The **outer expectation** is over parameter uncertainty (epistemic)
+
+- **Key property**: Bayesian decision rule is _admissible_ — no other rule
+  dominates it under all priors
+
+* Bayesian Decision Rule: Example
+
+- **Scenario**: A/B test of a new checkout flow
+  - Parameter $\theta$: conversion rate lift of variant B over A
+  - Prior: $\theta \sim \mathcal{N}(0, 0.02^2)$
+  - Data $\mathcal{D}$: $n = 5000$ users per arm; observed lift $0.01$
+
+- **Posterior**: $\theta | \mathcal{D} \sim \mathcal{N}(0.008, 0.004^2)$
+  - $\Pr(\theta > 0 | \mathcal{D}) \approx 0.977$
+
+- **Utility of launching** $U(\theta) = \theta - c$, where $c = 0.002$
+  represents the cost of maintaining the new code
+
+- **Expected utility**:
+  - $\EE[U | \text{launch}] = 0.008 - 0.002 = 0.006 > 0$
+  - $\EE[U | \text{keep A}] = 0$
+  - **Decision**: launch B
+
+* Bayesian vs. Frequentist Decisions
+
+::: columns
+:::: {.column width=50%}
+**Bayesian**
+
+- Posterior $\Pr(\theta | \mathcal{D})$
+- Acts on full distribution
+- Incorporates prior beliefs
+- Natural for sequential updating
+- Connects directly to utility
+
+- **Pros**
+  - Coherent under uncertainty
+  - Works for small samples
+
+- **Cons**
+  - Requires priors
+  - Computationally heavier
+::::
+:::: {.column width=50%}
+**Frequentist**
+
+- Point estimate $\hat{\theta}$ + CI
+- Acts on test outcomes
+- No priors
+- Decision via hypothesis test
+- Utility often implicit
+
+- **Pros**
+  - Fewer subjective inputs
+  - Standardized in many fields
+
+- **Cons**
+  - Thresholds (e.g., $p < 0.05$) are
+    not utility-optimal
+  - Harder to combine with new data
+::::
+:::
+
+- **Bottom line**: Bayesian framing slots naturally into causal decision-making
+  because both use joint distributions end-to-end
+
+## #############################################################################
+## Prior Elicitation
+## #############################################################################
+
+* Prior Elicitation: What and Why
+
+- In causal decision problems, the prior encodes beliefs about the **causal
+  effect** $\theta$ before seeing data
+  - Size, sign, and uncertainty of $\theta$
+
+- Prior elicitation is especially important when:
+  - Data is scarce or expensive (medicine, policy)
+  - Experiments are unethical or impossible
+  - Stakeholders disagree
+
+- **Q**: Where do priors come from?
+  - Literature meta-analyses
+  - Expert judgment
+  - Past experiments or pilot studies
+  - Regulatory or legal constraints
+
+* Methods for Eliciting Priors
+
+- **Quantile elicitation**: ask experts for 10/50/90 percentiles of $\theta$,
+  then fit a distribution
+  - E.g., "10% chance lift is below $0.5\%$, 50% below $1\%$, 90% below $3\%$"
+
+- **Pairwise judgments**: elicit relative probabilities of outcomes, combine
+  via a log-linear model
+
+- **Historical calibration**: compare past predictions against actuals to
+  adjust for bias and overconfidence
+
+- **Reference priors**: use weakly informative priors (Jeffreys, unit
+  information) when knowledge is vague
+  - Avoid flat priors in high dimensions — they are not uninformative
+
+- **Example**: a clinical trial team estimates a 20% prior probability that a
+  new drug is at least as effective as standard of care, based on meta-analysis
+  of 14 similar compounds
+
+* Pitfalls and Best Practices
+
+- **Pitfalls**
+  - **Anchoring**: experts cling to a first-mentioned number
+  - **Overconfidence**: intervals are consistently too narrow
+  - **Framing effects**: elicit the _same_ quantity two ways — answers differ
+  - **Confusing** aleatoric vs. epistemic uncertainty — see later section
+
+- **Best practices**
+  - Elicit from multiple experts independently, then aggregate
+  - Cross-validate with subsets of historical data
+  - Perform **prior sensitivity analysis**: does the decision change under
+    plausible alternative priors?
+  - Document the elicitation process — decisions may need defending
+
+# ##############################################################################
+# Sequential Decision-Making and Active Learning
+# ##############################################################################
+
+// Books and Articles:
+// - 1966, Howard, "Information Value Theory"
+// - 2020, Sutton & Barto, "Reinforcement Learning: An Introduction"
+// - 2018, Frazier, "A Tutorial on Bayesian Optimization"
+
+## #############################################################################
+## Value of Information
+## #############################################################################
+
+* Value of Information: Motivation
+
+- Before committing to a costly action, a decision-maker may gather more data
+  - Diagnostic test, survey, pilot experiment, additional A/B arm
+
+- **Q**: Is the extra information worth its cost?
+
+- **Value of information (VOI)** quantifies the _expected_ gain in utility
+  from obtaining new evidence _before_ making a decision
+  - A central concept in decision analysis
+
+- **Example**: a company considers an expensive market survey before a
+  \$10M product launch
+  - Launch without: expected utility $\EE[U]$
+  - Launch with survey outcome $E$: $\EE_E[\max_a \EE[U(Y) | \operatorname{do}(a), E]]$
+  - Run the survey only if the difference exceeds its cost
+
+* Expected Value of Perfect Information (EVPI)
+
+- **EVPI** is the upper bound on what any information-gathering activity
+  could be worth:
+  $$
+  \text{EVPI} = \EE_{\theta} \left[ \max_a U(a, \theta) \right] -
+                \max_a \EE_\theta[U(a, \theta)]
+  $$
+
+- Interpret the two terms:
+  - First: utility if we could learn $\theta$ _perfectly_ before deciding
+  - Second: utility of the best action under current uncertainty
+
+- **Key properties**:
+  - $\text{EVPI} \geq 0$ always
+  - $\text{EVPI} = 0$ iff the current best action is optimal for _every_
+    $\theta$
+  - Any test costing more than EVPI is not worth running, under any accuracy
+
+* Expected Value of Sample Information (EVSI)
+
+- Real information sources are **imperfect**
+  - EVSI relaxes EVPI to consider noisy evidence $E$
+  - $\text{EVSI}(E) = \EE_E[\max_a \EE[U | a, E]] - \max_a \EE[U | a]$
+
+- $0 \leq \text{EVSI}(E) \leq \text{EVPI}$
+  - Noisier evidence $\to$ smaller EVSI
+  - Tighter prior $\to$ smaller EVSI (less to learn)
+
+- **Example**: diagnostic test with sensitivity $0.9$ and specificity $0.85$
+  - Compute EVSI by integrating over all possible $(E = +, E = -)$ outcomes
+  - Run the test if $\text{EVSI} - \text{cost} > 0$
+
+- **Practical tip**: run a quick EVPI screen first — if EVPI is tiny, skip the
+  EVSI computation entirely
+
+## #############################################################################
+## Exploration vs. Exploitation
+## #############################################################################
+
+* Exploration vs. Exploitation
+
+- A sequential decision-maker faces a tension:
+  - **Exploit**: pick the action that _currently looks best_
+  - **Explore**: try other actions to _reduce uncertainty_ about their effects
+
+- Pure exploitation can lock in a suboptimal choice based on early noise
+  - Pure exploration wastes samples on clearly bad options
+
+- **Example**: a doctor who always prescribes the first drug that worked
+  early in her career will never learn about newer, better options
+
+- Causal models add richness: exploration can target _structural_ uncertainty,
+  not just parameter uncertainty
+
+* Causal Multi-Armed Bandits
+
+- Classic multi-armed bandit: $K$ arms with unknown reward distributions
+  - At each step, pull one arm, observe reward, update beliefs
+  - Objective: minimize **regret** relative to the best arm
+
+- **Causal bandit**: arms are _interventions_ $\operatorname{do}(a)$ on a
+  known (or partly known) causal graph
+  - Observing one arm provides information about _other_ arms via the graph
+  - Much lower regret than a standard bandit in many settings
+
+- **Example**: advertising
+  - Arms: combinations of channel, audience, creative
+  - Causal structure: audience and creative _interact_, channel has additive
+    effect
+  - Exploiting this structure cuts samples needed to find the best combination
+
+* Thompson Sampling
+
+- **Thompson sampling**: a Bayesian exploration strategy
+  - Maintain a posterior over each arm's mean reward
+  - At each step, sample a parameter from each posterior and pull the arm with
+    the highest sampled mean
+
+- **Algorithm**:
+  1. Start with prior $\Pr(\theta_a)$ for each arm $a$
+  2. Sample $\tilde\theta_a \sim \Pr(\theta_a | \mathcal{D})$ for each $a$
+  3. Pull $a^* = \arg\max_a \tilde\theta_a$
+  4. Observe reward, update posterior, repeat
+
+- **Properties**:
+  - Naturally balances exploration and exploitation
+  - Near-optimal regret bounds $O(\sqrt{T K \log T})$
+  - Easy to adapt to causal structure by sampling from posteriors over
+    causal effects
+
+## #############################################################################
+## Bayesian Optimization for Experimentation
+## #############################################################################
+
+* Bayesian Optimization: The Setup
+
+- **Bayesian optimization (BO)** targets problems where:
+  - The objective $f(x)$ is **expensive** to evaluate (one experiment per
+    evaluation)
+  - No gradients available
+  - $x$ lies in a low- to moderate-dimensional space
+
+- **Recipe**:
+  1. Place a prior over $f$, typically a **Gaussian process**
+  2. At each round, fit the GP posterior on observed $(x_i, f(x_i))$
+  3. Select $x_{next}$ maximizing an **acquisition function**
+  4. Query $f(x_{next})$, update, repeat
+
+- **Example use cases**:
+  - Hyperparameter tuning for a deep model
+  - Tuning web page layout
+  - Picking reagent concentrations in a chemistry lab
+
+* Acquisition Functions
+
+- The acquisition function trades off exploration and exploitation:
+  - **Expected improvement (EI)**:
+    $\alpha_{EI}(x) = \EE[\max(f(x) - f^*, 0)]$
+  - **Upper confidence bound (UCB)**:
+    $\alpha_{UCB}(x) = \mu(x) + \kappa \sigma(x)$
+  - **Thompson sampling**: sample $\tilde f \sim \Pr(f | \mathcal{D})$,
+    maximize $\tilde f$
+  - **Entropy search**: pick $x$ that most reduces entropy of $\arg\max f$
+
+- **Example**: tuning a learning rate
+  - Posterior mean peaks at $10^{-3}$, variance is largest at $10^{-5}$
+  - EI may query $10^{-5}$ if improvement potential > current best
+  - UCB with high $\kappa$ behaves similarly
+
+- **Key takeaway**: the acquisition function _is_ the policy, derived from the
+  posterior and a utility for information
+
+* BO in Causal Experimentation
+
+- Causal BO combines BO with causal graphs:
+  - Decision variable $x$ is an **intervention** $\operatorname{do}(X = x)$
+  - Surrogate model is a **structural causal model**, not just a GP on $y$
+  - Leverages the graph to share information across interventions
+
+- **Example**: drug dose optimization
+  - Standard BO models $y = f(\text{dose})$ directly
+  - Causal BO models intermediate biomarkers that mediate dose $\to$ outcome
+  - Fewer trials needed when the causal mechanism is partly known
+
+- **Pros**: sample efficient, principled exploration, uncertainty-aware
+- **Cons**: requires accurate causal structure; misspecification can hurt more
+  than help
+
+# ##############################################################################
+# Uncertainty in Causal Decisions
+# ##############################################################################
+
+// Books and Articles:
+// - 2009, Der Kiureghian & Ditlevsen, "Aleatory or Epistemic? Does it Matter?"
+// - 2020, Hullermeier & Waegeman, "Aleatoric and Epistemic Uncertainty in ML"
+// - 2011, Spiegelhalter et al., "Visualizing Uncertainty About the Future"
+
+## #############################################################################
+## Aleatoric Uncertainty
+## #############################################################################
+
+* Aleatoric Uncertainty: Irreducible Randomness
+
+- **Aleatoric uncertainty** comes from the _inherent_ randomness in the
+  outcome
+  - Also called _statistical_ or _risk_ uncertainty
+  - Cannot be reduced by collecting more data
+  - Captured by $\Pr(Y | \operatorname{do}(a), \theta)$ given known $\theta$
+
+- **Example**: flipping a known-fair coin
+  - $\Pr(\text{heads}) = 0.5$ exactly
+  - More flips don't sharpen the single-flip outcome
+
+- **Example**: medical treatment with a known response distribution
+  - Even if we knew the drug's exact mechanism, individual patient outcomes
+    would vary due to biological stochasticity
+
+- **Decision implication**: aleatoric uncertainty sets the _floor_ on risk —
+  no amount of learning removes it
+
+* Representing Aleatoric Uncertainty
+
+- In a structural causal model:
+  $$
+  Y = f(\text{Pa}(Y), U_Y), \quad U_Y \sim \Pr(U_Y)
+  $$
+  - $U_Y$ is the exogenous noise capturing aleatoric variability
+
+- Common distributional assumptions:
+  - Gaussian: $U_Y \sim \mathcal{N}(0, \sigma^2)$ for continuous $Y$
+  - Bernoulli / categorical for discrete outcomes
+  - Heavy-tailed (Student-$t$, Laplace) for robust modeling
+
+- **Q**: How do we tell the agent apart from the noise when we only see $Y$?
+  - We can't, unless $U_Y$ has a tractable parametric form and we exploit the
+    causal structure
+
+- **Example**: a recommender's click-through rate varies user-to-user; even
+  with perfect knowledge of $\Pr(\text{click} | \text{user, item})$, specific
+  clicks are random
+
+## #############################################################################
+## Epistemic Uncertainty
+## #############################################################################
+
+* Epistemic Uncertainty: Model Misspecification
+
+- **Epistemic uncertainty** stems from _lack of knowledge_
+  - Also called _systematic_ or _knowledge_ uncertainty
+  - Reducible in principle by collecting more/better data or improving the model
+  - Captured by the posterior $\Pr(\theta | \mathcal{D})$
+
+- **Sources**:
+  - Limited or biased data
+  - Wrong functional form
+  - Missing variables or wrong causal graph
+  - Confounders not adjusted for
+
+- **Example**: a small clinical trial with $n = 40$ patients
+  - Wide posterior on treatment effect $\theta$
+  - Gathering more data shrinks this posterior
+
+* Aleatoric vs. Epistemic: Side-by-Side
+
+::: columns
+:::: {.column width=50%}
+**Aleatoric**
+
+- Source: inherent randomness
+- Reducible: **No**
+- Represented: noise $U$
+- Grows with: complexity of $Y$
+- Managed by: risk preferences
+- Example: coin flip, weather
+
+- **Implication**: influences
+  utility function shape
+::::
+:::: {.column width=50%}
+**Epistemic**
+
+- Source: model \& data limits
+- Reducible: **Yes**, via evidence
+- Represented: posterior on $\theta$
+- Shrinks with: data, experiments
+- Managed by: learning, VOI
+- Example: effect of a new drug
+
+- **Implication**: motivates
+  sequential decision-making
+::::
+:::
+
+- **Key takeaway**: good decision systems _separate_ the two — combining
+  them collapses information that matters for action
+
+* Distinguishing in Practice
+
+- A Bayesian predictive distribution decomposes as:
+  $$
+  \Pr(Y | \operatorname{do}(a), \mathcal{D}) =
+  \int \Pr(Y | \operatorname{do}(a), \theta) \, \Pr(\theta | \mathcal{D}) \, d\theta
+  $$
+
+- **Variance decomposition**:
+  $$
+  \VV[Y | \operatorname{do}(a), \mathcal{D}] =
+  \underbrace{\EE_\theta[\VV[Y | a, \theta]]}_{\text{aleatoric}} +
+  \underbrace{\VV_\theta[\EE[Y | a, \theta]]}_{\text{epistemic}}
+  $$
+
+- **Example**: deep ensemble for sales forecasting
+  - Within-model variance $\approx$ aleatoric
+  - Between-model variance $\approx$ epistemic
+  - Report both to the decision-maker
+
+- **Warning**: most off-the-shelf ML models report only a point prediction —
+  neither kind of uncertainty is visible
+
+## #############################################################################
+## Communicating Uncertainty
+## #############################################################################
+
+* Communicating Uncertainty to Stakeholders
+
+- Stakeholders often prefer a single number; giving one is a disservice
+
+- **Best practices**:
+  - Report **intervals** (90% posterior credible intervals) alongside point estimates
+  - Distinguish aleatoric from epistemic in words and visuals
+  - Frame probabilities in natural frequencies: _"about 2 in 100"_
+  - Use **visual aids**: fan charts, violin plots, calibration plots
+  - Link uncertainty to **actions**: _"if we get 200 more samples, the interval
+    shrinks from \$5M to \$1M"_
+
+- **Anti-patterns**:
+  - Reporting only point predictions
+  - Combining aleatoric and epistemic into one opaque bar
+  - Hiding priors in appendices
+
+* Communicating Uncertainty: A Worked Example
+
+- **Setting**: pricing team evaluating a new fee structure
+
+- **Bad communication**:
+  - _"The model predicts \$2.3M in additional revenue."_
+
+- **Better communication**:
+  - _"Our best estimate is \$2.3M. 90% of the uncertainty sits between
+    \$0.8M and \$3.7M._
+  - _Of this, about \$1.5M of the width is intrinsic customer variability
+    (aleatoric) — a pilot won't narrow that much._
+  - _The remaining \$1.4M is parameter uncertainty (epistemic) and would
+    shrink by roughly 60% if we ran the proposed 4-week pilot."_
+
+- **Decision impact**: the pilot discussion now has a clear expected value,
+  not a gut feeling
+
+* Summary: Decision-Making with Causal Models
+
+- **Prediction alone is insufficient** for choosing actions — Simpson's
+  paradox, confounding, and policy reversal all require causal reasoning
+
+- **Expected utility** under interventional distributions is the right target
+  $$
+  a^* = \arg\max_a \EE_{Y \sim \Pr(Y | \operatorname{do}(a))}[U(Y)]
+  $$
+
+- **Influence diagrams** extend causal DAGs with decisions and utilities,
+  giving a graphical, solvable decision problem
+
+- **Sequential decisions** need exploration: VOI tells us when to gather
+  information; Thompson sampling and Bayesian optimization tell us _how_
+
+- **Uncertainty** decomposes into aleatoric (irreducible) and epistemic
+  (reducible) — both must be modeled and communicated
+
+- **Key takeaway**: causal reasoning, decision theory, and Bayesian inference
+  are three sides of the same coin — and together they turn predictions into
+  _robust_ actions
