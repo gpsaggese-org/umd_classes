@@ -53,20 +53,20 @@ Create an issue called "Clean up tutorial XYZ" with the following action items.
 
 - [ ] Explore the available skills using these commands:
   ```bash
-  > md skill describe coding
-  > md skill describe notebooks
-  > md skill describe testing
-  > md skill describe X_in_60_minutes
+  > mdm skill describe coding
+  > mdm skill describe notebooks
+  > mdm skill describe testing
+  > mdm skill describe tool_X_in_60_mins
   ```
 
 - [ ] Review key skills relevant to tutorials:
-  - `coding.format_rules`: Python code conventions
-  - `testing.format_rules`: Unit test patterns
-  - `notebook.format_rules`: Jupyter notebook structure
-  - `markdown.format_rules`: Documentation style
+  - `coding.format`: Python code conventions
+  - `testing.format`: Unit test patterns
+  - `notebook.format`: Jupyter notebook structure
+  - `markdown.format`: Documentation style
   - E.g.,
     ```bash
-    > md skill edit coding.format_rules
+    > mdm skill edit coding.rules
     ```
 
 - [ ] Is there anything unclear or that could be improved in the skills?

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -48,8 +48,8 @@ _LOG = logging.getLogger(__name__)
 
 # %%
 hmodule.install_module_if_not_present(
-  "dataframe_image",
-  use_activate=True,
+    "dataframe_image",
+    use_activate=True,
 )
 
 # %% [markdown]
@@ -64,7 +64,7 @@ dir_name = "L08_data"
 
 out_dir_name = "figures/"
 
-markdown_path_prefix="msml610/lectures_source"
+markdown_path_prefix = "msml610/lectures_source"
 # # cp msml610/lectures_source/figures/L08*.png msml610/lectures_source/figures
 
 # %%
@@ -73,13 +73,13 @@ print(data.shape)
 data.head(6)
 
 # %%
-xmas_sales_df_png = os.path.join(out_dir_name, 'L08.4.xmas_sales_df.png')
+xmas_sales_df_png = os.path.join(out_dir_name, "L08.4.xmas_sales_df.png")
 hpandisp.convert_df_to_png(
     data.head(6),
     xmas_sales_df_png,
     index=True,
     print_markdown=True,
-    markdown_path_prefix=markdown_path_prefix
+    markdown_path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -91,10 +91,7 @@ hpandisp.convert_df_to_png(
 fig = mtl0cireout.plot_xmas_sales_boxplot(data)
 xmas_boxplot_png = os.path.join(out_dir_name, "L08.4.xmas_boxplot.png")
 hmatplo.save_fig(
-    fig,
-    xmas_boxplot_png,
-    print_markdown=True,
-    path_prefix=markdown_path_prefix
+    fig, xmas_boxplot_png, print_markdown=True, path_prefix=markdown_path_prefix
 )
 
 # %% [markdown]
@@ -167,12 +164,14 @@ hmatplo.save_fig(
 
 # %%
 fig = mtl0cireout.plot_sales_bias_analysis(data)
-bias_analysis0_png = os.path.join(out_dir_name, "L08.4.Association_Causation_Bias0.png")
+bias_analysis0_png = os.path.join(
+    out_dir_name, "L08.4.Association_Causation_Bias0.png"
+)
 hmatplo.save_fig(
     fig,
     bias_analysis0_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -182,12 +181,14 @@ hmatplo.save_fig(
 
 # %%
 fig = mtl0cireout.plot_single_vs_separate_trends()
-bias_analysis1_png = os.path.join(out_dir_name, "L08.4.Association_Causation_Bias1.png")
+bias_analysis1_png = os.path.join(
+    out_dir_name, "L08.4.Association_Causation_Bias1.png"
+)
 hmatplo.save_fig(
     fig,
     bias_analysis1_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -204,7 +205,7 @@ hmatplo.save_fig(
     fig,
     simpsons_paradox_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -236,8 +237,7 @@ data.groupby(["cross_sell_email"]).mean()
 X = ["gender", "age"]
 mu = data.groupby("cross_sell_email")[X].mean()
 var = data.groupby("cross_sell_email")[X].var()
-norm_diff = ((mu - mu.loc["no_email"])/
-    np.sqrt((var + var.loc["no_email"])/2))
+norm_diff = (mu - mu.loc["no_email"]) / np.sqrt((var + var.loc["no_email"]) / 2)
 norm_diff
 
 # %% [markdown]
@@ -264,7 +264,7 @@ plot_data = plot_data[plot_data["number_of_students"] < threshold_students][
     ["top_school", "number_of_students"]
 ]
 
-plt.figure(figsize=(8,4))
+plt.figure(figsize=(8, 4))
 ax = sns.boxplot(x="top_school", y="number_of_students", data=plot_data)
 
 plt.title("Number of Students of 1% Top Schools (Right)")
@@ -275,18 +275,31 @@ q_01 = np.quantile(df["avg_score"], 0.01)
 plot_data = df.sample(10000).copy()
 is_extreme = (plot_data["avg_score"] > q_99) | (plot_data["avg_score"] < q_01)
 plot_data["Group"] = np.where(is_extreme, "Top and Bottom", "Middle")
-plt.figure(figsize=(10,5))
-sns.scatterplot(y="avg_score", x="number_of_students", data=plot_data.query("Group=='Middle'"), label="Middle")
-ax = sns.scatterplot(y="avg_score", x="number_of_students", data=plot_data.query("Group!='Middle'"), color="0.7", label="Top and Bottom")
+plt.figure(figsize=(10, 5))
+sns.scatterplot(
+    y="avg_score",
+    x="number_of_students",
+    data=plot_data.query("Group=='Middle'"),
+    label="Middle",
+)
+ax = sns.scatterplot(
+    y="avg_score",
+    x="number_of_students",
+    data=plot_data.query("Group!='Middle'"),
+    color="0.7",
+    label="Top and Bottom",
+)
 
 plt.title("School Score by Number of Students in the School")
 
-bias_analysis0_png = os.path.join(out_dir_name, "L08.4.School_score_by_number_students.png")
+bias_analysis0_png = os.path.join(
+    out_dir_name, "L08.4.School_score_by_number_students.png"
+)
 hmatplo.save_fig(
     fig,
     bias_analysis0_png,
     print_markdown=True,
-    path_prefix=markdown_path_prefix
+    path_prefix=markdown_path_prefix,
 )
 
 # %% [markdown]
@@ -311,6 +324,7 @@ data.groupby("cross_sell_email").size()
 def se(y: pd.Series):
     return y.std() / np.sqrt(len(y))
 
+
 print("SE for Long Email:", se(long_email))
 print("SE for Short Email:", se(short_email))
 
@@ -331,17 +345,28 @@ print("SE for Short Email:", se(short_email))
 n = 100
 conv_rate = 0.08
 
+
 def run_experiment():
     return np.random.binomial(1, conv_rate, size=n)
+
 
 np.random.seed(42)
 
 experiments = [run_experiment().mean() for _ in range(10000)]
 
-plt.figure(figsize=(10,4))
-freq, bins, img = plt.hist(experiments, bins=20, label="Experiment Means", color="0.6")
-plt.vlines(conv_rate, ymin=0, ymax=freq.max(), linestyles="dashed", label="True Mean", color="0.3")
-plt.legend();
+plt.figure(figsize=(10, 4))
+freq, bins, img = plt.hist(
+    experiments, bins=20, label="Experiment Means", color="0.6"
+)
+plt.vlines(
+    conv_rate,
+    ymin=0,
+    ymax=freq.max(),
+    linestyles="dashed",
+    label="True Mean",
+    color="0.3",
+)
+plt.legend()
 
 # %% [markdown]
 # - With the SEM you can create an interval that contains the true mean 95% of the experiments
@@ -359,8 +384,8 @@ from scipy import stats
 
 # 99%
 conf = 0.95
-#conf = 0.99
-z = np.abs(stats.norm.ppf((1-conf)/2))
+# conf = 0.99
+z = np.abs(stats.norm.ppf((1 - conf) / 2))
 print(z)
 ci = (exp_mu - z * exp_se, exp_mu + z * exp_se)
 ci
@@ -370,29 +395,48 @@ ci
 def ci(y: pd.Series):
     return (y.mean() - 2 * y.sem(), y.mean() + 2 * y.sem())
 
+
 print("95% CI for Short Email:", ci(short_email))
 print("95% CI for Long Email:", ci(long_email))
 print("95% CI for No Email:", ci(no_email))
 
 # %%
-plt.figure(figsize=(10,4))
-linestyle=['-', '--', ':', '-.']
+plt.figure(figsize=(10, 4))
+linestyle = ["-", "--", ":", "-."]
 
-x = np.linspace(-0.05, .25, 100)
+x = np.linspace(-0.05, 0.25, 100)
 short_dist = stats.norm.pdf(x, short_email.mean(), short_email.sem())
 plt.plot(x, short_dist, lw=2, label="Short", linestyle=linestyle[0])
-plt.fill_between(x.clip(ci(short_email)[0], ci(short_email)[1]), 0, short_dist, alpha=0.2, color="0.0")
+plt.fill_between(
+    x.clip(ci(short_email)[0], ci(short_email)[1]),
+    0,
+    short_dist,
+    alpha=0.2,
+    color="0.0",
+)
 
 long_dist = stats.norm.pdf(x, long_email.mean(), long_email.sem())
 plt.plot(x, long_dist, lw=2, label="Long", linestyle=linestyle[1])
-plt.fill_between(x.clip(ci(long_email)[0], ci(long_email)[1]), 0, long_dist, alpha=0.2, color="0.4")
+plt.fill_between(
+    x.clip(ci(long_email)[0], ci(long_email)[1]),
+    0,
+    long_dist,
+    alpha=0.2,
+    color="0.4",
+)
 
 no_email_dist = stats.norm.pdf(x, no_email.mean(), no_email.sem())
 plt.plot(x, no_email_dist, lw=2, label="No email", linestyle=linestyle[2])
-plt.fill_between(x.clip(ci(no_email)[0], ci(no_email)[1]), 0, no_email_dist, alpha=0.2, color="0.8")
+plt.fill_between(
+    x.clip(ci(no_email)[0], ci(no_email)[1]),
+    0,
+    no_email_dist,
+    alpha=0.2,
+    color="0.8",
+)
 
 plt.xlabel("Conversion")
-plt.legend();
+plt.legend()
 
 # %% [markdown]
 # ## Cell 2.4: Hypothesis Testing.
@@ -401,9 +445,9 @@ plt.legend();
 
 # %%
 diff_mu = short_email.mean() - no_email.mean()
-diff_se = np.sqrt(no_email.sem()**2 + short_email.sem()**2)
+diff_se = np.sqrt(no_email.sem() ** 2 + short_email.sem() ** 2)
 
-ci = (diff_mu - 1.96*diff_se, diff_mu + 1.96*diff_se)
+ci = (diff_mu - 1.96 * diff_se, diff_mu + 1.96 * diff_se)
 print(f"95% CI for the differece (short email - no email):\n{ci}")
 
 # %% [markdown]
@@ -414,10 +458,10 @@ print(f"95% CI for the differece (short email - no email):\n{ci}")
 
 # %%
 # Shifting the CI.
-diff_mu_shifted =  short_email.mean() - no_email.mean() - 0.01
-diff_se = np.sqrt(no_email.sem()**2 + short_email.sem()**2)
+diff_mu_shifted = short_email.mean() - no_email.mean() - 0.01
+diff_se = np.sqrt(no_email.sem() ** 2 + short_email.sem() ** 2)
 
-ci = (diff_mu_shifted - 1.96*diff_se, diff_mu_shifted + 1.96*diff_se)
+ci = (diff_mu_shifted - 1.96 * diff_se, diff_mu_shifted + 1.96 * diff_se)
 print(f"95% CI 1% difference between (short email - no email):\n{ci}")
 
 # %% [markdown]
@@ -436,7 +480,7 @@ t_stat
 # - Measure how likely it is to see an extreme value under $H_0$, i.e., $P(\text{data} | H_0)$
 
 # %%
-print("p-value:", (1 - stats.norm.cdf(t_stat))*2)
+print("p-value:", (1 - stats.norm.cdf(t_stat)) * 2)
 
 # %% [markdown]
 # ## Cell 2.7: Power.

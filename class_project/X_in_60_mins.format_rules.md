@@ -173,7 +173,7 @@ Before submission, verify:
 
 ## Tools of the Trade
 - Format markdown: `lint_txt.py -i ...`
-- Clean up Python code: Use the `coding.format_rules` skill
+- Clean up Python code: Use the `/coding.format` skill
 - Render locally: `website/test.sh`
 - Reference tutorials: See
   [`DATA605`](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials)
