@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -72,9 +73,19 @@ else:
 #
 # Let's start with a simple version that just displays messages.
 
+
 # %%
 class BasicChatUI:
     """A simple chat UI using ipywidgets."""
+
+    def _on_send(self, button):
+        """Handle send button click."""
+        message = self.input_box.value.strip()
+        if message:
+            with self.output:
+                print(f"You: {message}")
+                print("AI: [Response would go here]\n")
+            self.input_box.value = ""  # Clear input
 
     def __init__(self):
         # Create widgets
@@ -97,15 +108,6 @@ class BasicChatUI:
         self.send_button.on_click(self._on_send, remove=True)
         self.send_button.on_click(self._on_send)
 
-    def _on_send(self, button):
-        """Handle send button click."""
-        message = self.input_box.value.strip()
-        if message:
-            with self.output:
-                print(f"You: {message}")
-                print("AI: [Response would go here]\n")
-            self.input_box.value = ""  # Clear input
-
     def display(self):
         """Display the chat interface."""
         input_row = HBox([self.input_box, self.send_button])
@@ -118,7 +120,7 @@ basic_chat.display()
 
 
 # %% [markdown]
-# Try typing a message and clicking Send. You'll see it appear in the output area. 
+# Try typing a message and clicking Send. You'll see it appear in the output area.
 #
 # Now let's add the AI part!
 
@@ -127,9 +129,42 @@ basic_chat.display()
 #
 # Now we'll connect to LangChain to get real AI responses.
 
+
 # %%
 class ChatInterface:
     """A chat interface with modern LangChain (RunnableWithMessageHistory)."""
+
+    def _on_send(self, button):
+        """Handle send button click."""
+        user_message = self.input_box.value.strip()
+        if not user_message:
+            return
+
+        # Clear input and display user message
+        self.input_box.value = ""
+        with self.output:
+            print(f"You: {user_message}")
+
+        # Disable button while processing
+        self.send_button.disabled = True
+        self.send_button.description = "Thinking..."
+
+        # Get response synchronously
+        try:
+            response = self.chain.invoke(
+                [HumanMessage(content=user_message)],
+                config={"configurable": {"session_id": self.session_id}},
+            )
+
+            with self.output:
+                print(f"AI: {response.content}\n")
+
+        except Exception as e:
+            with self.output:
+                print(f"Error: {str(e)}\n")
+        finally:
+            self.send_button.disabled = False
+            self.send_button.description = "Send"
 
     def __init__(
         self, model="gpt-4o-mini", temperature=0.7, session_id="default"
@@ -173,38 +208,6 @@ class ChatInterface:
         with self.output:
             print("AI Assistant ready! Ask me anything.\n")
 
-    def _on_send(self, button):
-        """Handle send button click."""
-        user_message = self.input_box.value.strip()
-        if not user_message:
-            return
-
-        # Clear input and display user message
-        self.input_box.value = ""
-        with self.output:
-            print(f"You: {user_message}")
-
-        # Disable button while processing
-        self.send_button.disabled = True
-        self.send_button.description = "Thinking..."
-
-        # Get response synchronously
-        try:
-            response = self.chain.invoke(
-                [HumanMessage(content=user_message)],
-                config={"configurable": {"session_id": self.session_id}},
-            )
-
-            with self.output:
-                print(f"AI: {response.content}\n")
-
-        except Exception as e:
-            with self.output:
-                print(f"Error: {str(e)}\n")
-        finally:
-            self.send_button.disabled = False
-            self.send_button.description = "Send"
-
     def display(self):
         """Display the chat interface."""
         input_row = HBox([self.input_box, self.send_button])
@@ -214,6 +217,8 @@ class ChatInterface:
 # Clear old output and create fresh chat instance
 clear_output(wait=True)
 
+chat = ChatInterface()
+
 # Close old instance if it exists
 try:
     if "chat" in globals():
@@ -222,8 +227,6 @@ try:
         chat.send_button.close()
 except:
     pass
-
-chat = ChatInterface()
 chat.display()
 
 
@@ -241,6 +244,7 @@ chat.display()
 # ## Step 5: Add Context Awareness
 #
 # Let's make the chat aware of variables in your notebook.
+
 
 # %%
 class ContextAwareChatInterface(ChatInterface):
@@ -376,6 +380,8 @@ from IPython.display import clear_output
 
 clear_output(wait=True)
 
+context_chat = ContextAwareChatInterface()
+
 # Close old instance if it exists
 try:
     if "context_chat" in globals():
@@ -384,8 +390,6 @@ try:
         context_chat.send_button.close()
 except:
     pass
-
-context_chat = ContextAwareChatInterface()
 context_chat.display()
 
 # %% [markdown]

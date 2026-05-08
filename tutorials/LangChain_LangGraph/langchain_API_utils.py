@@ -13,30 +13,72 @@ import base64
 import json
 import logging
 import os
+import platform
+import shutil
+import sys
 from dataclasses import dataclass
 from math import sqrt as _sqrt
 from pathlib import Path
 from typing import Annotated, Any, Literal, Sequence, TypedDict
-
-import nbformat
-
-from dotenv import load_dotenv
-from langchain_core.tools import tool
-from langgraph.graph.message import add_messages
-from langgraph.prebuilt import InjectedState, InjectedStore
-from langgraph.store.base import BaseStore
-from nbclient import NotebookClient
-from nbformat import validate
 from typing_extensions import Annotated as TxAnnotated
 
-load_dotenv()
+import nbformat
+import helpers.hdbg as hdbg
+import langchain_core.tools
+from langchain_core.tools import tool
+import langgraph.graph.message
+import langgraph.prebuilt
+import langgraph.store.base
+import nbclient
 
 _LOG = logging.getLogger(__name__)
 
 
 # ##############################################################################
-# LLM Configuration
+# Logging utilities
 # ##############################################################################
+
+
+def print_environment_info() -> None:
+    """
+    Print Python version, platform, and library versions.
+    """
+    import langchain
+    import langchain_core
+    import langgraph
+
+    print(f"python={sys.version.split()[0]}")
+    print(f"platform={platform.platform()}")
+    print(f"langchain={getattr(langchain, '__version__', 'unknown')}")
+    print(f"langchain_core={getattr(langchain_core, '__version__', 'unknown')}")
+    print(f"langgraph={getattr(langgraph, '__version__', 'unknown')}")
+
+
+def init_logger(
+    name: str,
+    *,
+    level: int = logging.INFO,
+    format_str: str = "%(asctime)s %(levelname)s %(name)s - %(message)s",
+) -> logging.Logger:
+    """
+    Initialize and configure a logger for the tutorial notebooks.
+
+    :param name: the name of the logger (typically __name__)
+    :param level: the logging level (default: logging.INFO)
+    :param format_str: the format string for log messages
+    :return: the configured logger instance
+    """
+    logging.basicConfig(level=level, format=format_str)
+    logger = logging.getLogger(name)
+    # Suppress verbose logs from external libraries.
+    logging.getLogger("openai").setLevel(logging.WARNING)
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    return logger
+
+
+# //////////////////////////////////////////////////////////////////////////////
+# LLM Configuration
+# //////////////////////////////////////////////////////////////////////////////
 
 
 # #############################################################################
@@ -56,23 +98,12 @@ class LlmConfig:
     temperature: float
 
 
-def _require_env(var_name: str) -> str:
-    """
-    Return the value of `var_name` from environment variables or raise.
-    """
-    value = os.getenv(var_name)
-    if not value:
-        raise RuntimeError(
-            f"Missing required environment variable `{var_name}`. See `.env.example`."
-        )
-    return value
-
-
 def load_llm_config() -> LlmConfig:
     """
     Load `LlmConfig` from environment variables.
     """
-    provider = _require_env("LLM_PROVIDER").lower()
+    hdbg.dassert_in("LLM_PROVIDER", os.environ)
+    provider = os.environ["LLM_PROVIDER"].lower()
     temperature = float(os.getenv("LLM_TEMPERATURE", "0"))
     default_models = {
         "openai": "gpt-4.1-mini",
@@ -95,47 +126,68 @@ def get_chat_model():
     if cfg.provider == "openai":
         from langchain_openai import ChatOpenAI
 
-        _require_env("OPENAI_API_KEY")
+        hdbg.dassert_in("OPENAI_API_KEY", os.environ)
         return ChatOpenAI(
             model=cfg.model,
             temperature=cfg.temperature,
             timeout=60,
             max_retries=2,
         )
-    if cfg.provider == "anthropic":
+    elif cfg.provider == "anthropic":
         from langchain_anthropic import ChatAnthropic
 
-        _require_env("ANTHROPIC_API_KEY")
+        hdbg.dassert_in("ANTHROPIC_API_KEY", os.environ)
         return ChatAnthropic(
             model=cfg.model,
             temperature=cfg.temperature,
             timeout=60,
             max_retries=2,
         )
-    if cfg.provider == "ollama":
-        try:
-            from langchain_ollama import ChatOllama
-        except ModuleNotFoundError as e:
-            raise RuntimeError(
-                "`LLM_PROVIDER=ollama` requires `langchain-ollama`. "
-                "Install it with `pip install langchain-ollama` and retry."
-            ) from e
-        base_url = os.getenv(
-            "OLLAMA_BASE_URL", "http://host.docker.internal:11434"
-        )
-        return ChatOllama(
-            model=cfg.model,
-            temperature=cfg.temperature,
-            base_url=base_url,
-        )
-    raise ValueError(
-        f"Unsupported `LLM_PROVIDER={cfg.provider}`. Use one of: openai, anthropic, ollama."
-    )
+    else:
+        raise ValueError(f"Unsupported `LLM_PROVIDER={cfg.provider}`")
 
 
 # ##############################################################################
 # Dataset utilities
 # ##############################################################################
+
+
+def load_and_prepare_dataset(
+    dataset_path: str = "data/T1_slice.csv",
+    *,
+    workspace_dir: str = "workspace",
+) -> dict:
+    """
+    Load a CSV dataset, parse datetime columns, and prepare workspace copy.
+
+    :param dataset_path: path to the CSV file to load
+    :param workspace_dir: base directory for workspace data
+    :return: dict with keys: df, dataset_path, workspace_dataset_path
+    """
+    import pandas as pd
+
+    # Load dataset and parse the date/time column.
+    dataset_path_obj = Path(dataset_path).resolve()
+    df = pd.read_csv(dataset_path_obj)
+    time_col = "Date/Time"
+    if time_col in df.columns:
+        df[time_col] = pd.to_datetime(
+            df[time_col], format="%d %m %Y %H:%M", errors="coerce"
+        )
+    # Make the dataset visible to Deep Agents filesystem tools under `/workspace/...`.
+    workspace_dir_obj = Path(workspace_dir).resolve()
+    workspace_data_dir = workspace_dir_obj / "data"
+    workspace_data_dir.mkdir(parents=True, exist_ok=True)
+    workspace_dataset_path = workspace_data_dir / dataset_path_obj.name
+    if not workspace_dataset_path.exists():
+        shutil.copyfile(str(dataset_path_obj), str(workspace_dataset_path))
+    return {
+        "df": df,
+        "dataset_path": dataset_path_obj,
+        "workspace_dir": workspace_dir_obj,
+        "workspace_data_dir": workspace_data_dir,
+        "workspace_dataset_path": workspace_dataset_path,
+    }
 
 
 def build_dataset_meta(df) -> dict:
@@ -166,9 +218,9 @@ def build_dataset_meta(df) -> dict:
     }
 
 
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 # Graph states
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 
 
 # #############################################################################
@@ -177,7 +229,7 @@ def build_dataset_meta(df) -> dict:
 
 
 class ToolState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
 
 
 # #############################################################################
@@ -186,7 +238,7 @@ class ToolState(TypedDict):
 
 
 class InjectedStateState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
     dataset_meta: dict
 
 
@@ -196,7 +248,7 @@ class InjectedStateState(TypedDict):
 
 
 class StoreState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
 
 
 # #############################################################################
@@ -205,13 +257,13 @@ class StoreState(TypedDict):
 
 
 class ToolGraphState(TypedDict):
-    messages: Annotated[list, add_messages]
+    messages: Annotated[list, langgraph.graph.message.add_messages]
     workspace_dir: str
 
 
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 # Tools: math (mean, zscore)
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 
 
 def _as_floats(xs: Sequence[float]) -> list[float]:
@@ -226,7 +278,7 @@ def _as_floats(xs: Sequence[float]) -> list[float]:
     return xs_list
 
 
-@tool
+@langchain_core.tools.tool
 def mean(xs: Sequence[float]) -> float:
     """
     Compute the arithmetic mean of a non-empty list of numbers.
@@ -254,10 +306,12 @@ def zscore(xs: Sequence[float], x: float) -> float:
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def dataset_brief(
     question: str,
-    dataset_meta: TxAnnotated[dict, InjectedState("dataset_meta")],
+    dataset_meta: TxAnnotated[
+        dict, langgraph.prebuilt.InjectedState("dataset_meta")
+    ],
 ) -> str:
     """
     Answer a question using injected dataset metadata (InjectedState).
@@ -279,12 +333,14 @@ def dataset_brief(
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def save_pref(
     user_id: str,
     key: str,
     value: str,
-    store: TxAnnotated[BaseStore, InjectedStore()],
+    store: TxAnnotated[
+        langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()
+    ],
 ) -> str:
     """
     Save a user preference (key/value) into an injected store.
@@ -294,11 +350,13 @@ def save_pref(
     return f"saved {key}={value} for user_id={user_id}"
 
 
-@tool
+@langchain_core.tools.tool
 def load_pref(
     user_id: str,
     key: str,
-    store: TxAnnotated[BaseStore, InjectedStore()],
+    store: TxAnnotated[
+        langgraph.store.base.BaseStore, langgraph.prebuilt.InjectedStore()
+    ],
 ) -> str:
     """
     Load a user preference (key) from an injected store.
@@ -315,7 +373,7 @@ def load_pref(
 # ##############################################################################
 
 
-@tool
+@langchain_core.tools.tool
 def utc_now() -> str:
     """
     Return the current UTC time as an ISO string.
@@ -325,9 +383,9 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 # Advanced agent state and tools
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 
 
 def make_custom_state_and_tool():
@@ -376,9 +434,9 @@ def make_custom_state_and_tool():
     return CustomState, extract_facts
 
 
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 # Human-in-the-loop (HITL)
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 
 
 # #############################################################################
@@ -418,9 +476,9 @@ def do_delete(state: HITLState) -> dict:
     return {}
 
 
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 # Notebook operations
-# ##############################################################################
+# //////////////////////////////////////////////////////////////////////////////
 
 
 def _safe_path(workspace: Path, rel_path: str) -> Path:
@@ -444,7 +502,7 @@ def _safe_injected_path(workspace_dir: str, rel_path: str) -> Path:
     return p
 
 
-@tool
+@langchain_core.tools.tool
 def write_notebook(spec: dict[str, Any], out_rel: str) -> str:
     """
     Write a notebook from a small spec into a safe workspace path.
@@ -465,16 +523,18 @@ def write_notebook(spec: dict[str, Any], out_rel: str) -> str:
         else:
             raise ValueError(f"Unknown cell type: {t}")
     nb.cells = cells
-    validate(nb)
+    nbformat.validate(nb)
     nbformat.write(nb, str(out_path))
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_write(
     spec: dict[str, Any],
     out_rel: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Write a notebook under an injected workspace_dir.
@@ -501,12 +561,14 @@ def nb_write(
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_run(
     in_rel: str,
     out_rel: str,
     timeout_s: int,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Execute a notebook with nbclient and save the executed copy under
@@ -516,7 +578,7 @@ def nb_run(
     out_path = _safe_injected_path(workspace_dir, out_rel)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     nb = nbformat.read(str(in_path), as_version=4)
-    client = NotebookClient(
+    client = nbclient.NotebookClient(
         nb,
         timeout=int(timeout_s),
         resources={"metadata": {"path": str(out_path.parent)}},
@@ -526,10 +588,12 @@ def nb_run(
     return str(out_path)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_extract_errors(
     executed_rel: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Extract per-cell error metadata from an executed notebook (JSON string).
@@ -552,11 +616,13 @@ def nb_extract_errors(
     return json.dumps(errs)
 
 
-@tool
+@langchain_core.tools.tool
 def nb_extract_artifacts(
     executed_rel: str,
     artifacts_rel_dir: str,
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     Extract stdout + inline PNGs from an executed notebook into
@@ -594,9 +660,11 @@ def nb_extract_artifacts(
     )
 
 
-@tool
+@langchain_core.tools.tool
 def nb_list_files(
-    workspace_dir: TxAnnotated[str, InjectedState("workspace_dir")],
+    workspace_dir: TxAnnotated[
+        str, langgraph.prebuilt.InjectedState("workspace_dir")
+    ],
 ) -> str:
     """
     List files under workspace_dir (JSON).

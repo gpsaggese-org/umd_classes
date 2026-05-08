@@ -1,11 +1,11 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py:light
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
+#       format_name: percent
+#       format_version: '1.3'
 #       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
@@ -13,22 +13,24 @@
 #     name: python3
 # ---
 
+# %% [markdown]
 # # Neo4j Example
 
-# +
+# %%
 # #!sudo /venv/bin/pip install pyvis --quiet
 # #!sudo /venv/bin/pip install neo4j --quiet
 # #!sudo /venv/bin/pip install py2neo --quiet
 # #!sudo /venv/bin/pip install networkx --quiet
-# -
 
+# %%
 # %load_ext autoreload
 # %autoreload 2
 # %matplotlib inline
 
+# %% [markdown]
 # ## Import Packages
 
-# +
+# %%
 import logging
 from typing import Optional
 
@@ -40,16 +42,17 @@ import pandas as pd
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
 
-# +
+# %%
 hdbg.init_logger(verbosity=logging.INFO)
 
 _LOG = logging.getLogger(__name__)
 
 hnotebo.config_notebook()
-# -
 
+# %% [markdown]
 # ## Start Neo4j server
 
+# %%
 # Install Neo4j.
 # #!wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
 # #!echo 'deb https://debian.neo4j.com stable latest' | sudo tee /etc/apt/sources.list.d/neo4j.list
@@ -57,7 +60,7 @@ hnotebo.config_notebook()
 # #!sudo apt install neo4j -y
 # !sudo neo4j start
 
-# +
+# %%
 # URI and authentication details.
 # URI = "neo4j://localhost:7687"
 # USER = "neo4j"
@@ -84,17 +87,20 @@ hnotebo.config_notebook()
 # driver = nj.GraphDatabase.driver(URI, auth=("neo4j", "new_password"))
 # driver.verify_connectivity()
 # _LOG.info("Connection established.")
-# -
 
+# %% [markdown]
 # ## Load the dataset
 
+# %%
 # Load the dataset into a Pandas DataFrame for initial processing.
 csv_file = "data/netflix.csv"
 data = pd.read_csv(csv_file)
 data.head()
 
+# %% [markdown]
 # ## Clean the dataset
 
+# %%
 # Replace missing values and ensure data consistency.
 data["cast"] = data["cast"].fillna("")
 data = data.dropna(subset=["director", "country"])
@@ -103,14 +109,17 @@ data["title"] = data["title"].str.strip()
 data.head()
 
 
+# %% [markdown]
 # ## Define a custom class
 
 
+# %% [markdown]
 # #############################################################################
 # Neo4jAPI
 # #############################################################################
 
 
+# %%
 class Neo4jAPI:
     """
     A wrapper class for interacting with the Neo4j database.
@@ -236,24 +245,32 @@ class Neo4jAPI:
         plt.show()
 
 
+# %% [markdown]
 # ## Initialize Neo4j API
 
+# %%
 # Create an instance of the Neo4jAPI class.
 neo4j_api = Neo4jAPI(
     uri="neo4j://localhost:7687", user="neo4j", password="new_password"
 )
 
+# %% [markdown]
 # ## Load Data Into Neo4j
 
+# %%
 # Load the dataset into the Neo4j database.
 neo4j_api.load_data(data[:40])
 
+# %% [markdown]
 # ## Visualize the Graph
 
+# %%
 # Generate an interactive visualization of the Neo4j graph.
 neo4j_api.visualize_graph()
 
+# %% [markdown]
 # ## Close the Neo4j Connection
 
+# %%
 # Clean up by closing the connection to the database
 neo4j_api.close()

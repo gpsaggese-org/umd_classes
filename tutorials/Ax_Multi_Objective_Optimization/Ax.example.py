@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -1054,7 +1055,7 @@ plt.show()
 #
 # ## 3.1. A/B Testing
 #
-# In A/B Testing, we have a set of arms $A_1, A_2, ..., A_n$ and we want to find the best arm. 
+# In A/B Testing, we have a set of arms $A_1, A_2, ..., A_n$ and we want to find the best arm.
 #
 # The arms are the different versions of the product or feature that we want to test. The outcome is the success of the arm.
 #
@@ -1115,7 +1116,7 @@ plt.show()
 #
 # **Regret:** The difference between the best arm and the arm we chose.
 #
-# In other words, how much we would have won if we used the best arm instead of the one we tried. 
+# In other words, how much we would have won if we used the best arm instead of the one we tried.
 #
 # ### 3.5.1. Traditional Exploration-Exploitation Algorithms
 #
@@ -1196,7 +1197,7 @@ plt.show()
 #
 # We start with a Multi-Armed Bandit problem, and define a hypothesis. Then we'll run a simulation to test this hypothesis.
 #
-# **Scenario** 
+# **Scenario**
 #
 # - We have $n$ Arms $A_1, A_2, ..., A_n$
 # - Each arm has an unknown reward $f(A_i)$ (E.g.: Click-through rate)

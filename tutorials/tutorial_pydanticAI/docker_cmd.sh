@@ -4,7 +4,7 @@
 #
 # This script runs a specified command inside a new Docker container instance.
 # The container is removed automatically after the command completes. The
-# current directory is mounted to /data inside the container.
+# git root is mounted to /git_root inside the container.
 # """
 
 # Exit immediately if any command exits with a non-zero status.

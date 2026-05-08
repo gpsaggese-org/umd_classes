@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -35,10 +36,10 @@
 # %% [markdown]
 # The notebook uses **two public functions**:
 #
-# - `default_cfg()`  
+# - `default_cfg()`
 #   Returns a configuration object with sane defaults.
 #
-# - `train_wrapper(cfg)`  
+# - `train_wrapper(cfg)`
 #   Runs the full training loop and produces:
 #   - training curves (loss, return, entropy),
 #   - checkpointing (saved automatically after training).

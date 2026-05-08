@@ -1,0 +1,8 @@
+dask[complete]
+fastparquet
+ipython
+jupyter-client==7.3.2
+matplotlib
+pandas
+seaborn
+yapf

@@ -1,9 +1,21 @@
-#!/usr/bin/env python
-# coding: utf-8
+# ---
+# jupyter:
+#   jupytext:
+#     formats: ipynb,py:percent
+#     text_representation:
+#       extension: .py
+#       format_name: percent
+#       format_version: '1.3'
+#       jupytext_version: 1.19.0
+#   kernelspec:
+#     display_name: Python 3 (ipykernel)
+#     language: python
+#     name: python3
+# ---
 
-# In[16]:
+# %%
 
-
+# %%
 get_ipython().run_line_magic("load_ext", "autoreload")
 get_ipython().run_line_magic("autoreload", "2")
 
@@ -34,16 +46,12 @@ logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 
 
-# In[ ]:
-
-
+# %%
 # Replace "YOUR_OPENAI_API_KEY" with your actual OpenAI API key.
 os.environ["OPENAI_API_KEY"] = "YOUR_OPENAI_API_KEY"
 
 
-# In[18]:
-
-
+# %%
 warnings.filterwarnings("ignore")
 
 # Silence all loggers (or specific ones)
@@ -59,9 +67,7 @@ logging.getLogger().setLevel(logging.ERROR)
 #
 # The cell below retrieves the SEC annual reports for the user-specified stocks and embeds them into the Chroma database.
 
-# In[20]:
-
-
+# %%
 # Get the ticker from the user.
 ticker_in = input("Enter the stock ticker: ").strip().upper()
 if ticker_in:
@@ -86,9 +92,8 @@ if ticker_in:
 #
 # It then streams outputs from the agents: displaying clean Markdown for the Analyst's results, confirming chart creation or showing errors from the Runtime agent, and finally printing a mission completion message when the `TERMINATE` keyword is reached.
 
-# In[10]:
 
-
+# %%
 async def _run_beautified_mission(ticker_symbol: str):
     task = (
         f"Generate a financial brief for {ticker_symbol}.\n\n"
@@ -157,9 +162,7 @@ async def _run_beautified_mission(ticker_symbol: str):
 # - Configures a **team** of Analyst + Runtime with termination on `TERMINATE`.
 # - Prompts for a stock ticker and starts `run_beautified_mission`, streaming results and charts.
 
-# In[14]:
-
-
+# %%
 model_client = OpenAIChatCompletionClient(model="gpt-4o")
 os.makedirs("quant_sandbox", exist_ok=True)
 local_executor = LocalCommandLineCodeExecutor(work_dir="quant_sandbox")
@@ -224,9 +227,7 @@ if user_ticker:
 # ### Generated Code Output
 # - The results produced by the code above are displayed below.
 
-# In[15]:
-
-
+# %%
 # Data for the pie chart
 labels = ["United States", "Taiwan", "China (including Hong Kong)", "Other"]
 sizes = [149617, 42345, 19677, 4299]  # Revenue figures in millions

@@ -24,7 +24,7 @@ ENV PATH="/root/.local/bin:$PATH"
 # Create virtual environment and install dependencies via uv
 RUN uv venv /opt/venv
 COPY requirements.txt /install/requirements.txt
-RUN uv pip install --python /opt/venv/bin/python --no-cache -r /install/requirements.txt jupyterlab jupyterlab_vim
+RUN uv pip install --python /opt/venv/bin/python --no-cache -r /install/requirements.txt jupyterlab jupyterlab_vim jupytext
 
 # Copy workspace and configs
 COPY . /workspace/

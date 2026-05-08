@@ -9,9 +9,9 @@ import os
 from pathlib import Path
 from typing import Iterable
 
-from langchain_core.documents import Document
-from langchain_core.embeddings import DeterministicFakeEmbedding, Embeddings
-from langchain_core.vectorstores import InMemoryVectorStore
+import langchain_core.documents
+import langchain_core.embeddings
+import langchain_core.vectorstores
 
 
 def list_markdown_files(root_dir: str | Path) -> list[Path]:
@@ -63,7 +63,9 @@ def diff_checksum_snapshots(
     }
 
 
-def load_markdown_documents(paths: Iterable[str | Path]) -> list[Document]:
+def load_markdown_documents(
+    paths: Iterable[str | Path],
+) -> list[langchain_core.documents.Document]:
     """
     Load markdown files into LangChain `Document` objects.
     """
@@ -72,7 +74,7 @@ def load_markdown_documents(paths: Iterable[str | Path]) -> list[Document]:
         resolved = Path(path).resolve()
         text = resolved.read_text(encoding="utf-8")
         documents.append(
-            Document(
+            langchain_core.documents.Document(
                 page_content=text,
                 metadata={
                     "source": str(resolved),
@@ -84,18 +86,18 @@ def load_markdown_documents(paths: Iterable[str | Path]) -> list[Document]:
 
 
 def split_documents(
-    documents: list[Document],
+    documents: list[langchain_core.documents.Document],
     *,
     chunk_size: int = 900,
     chunk_overlap: int = 120,
-) -> list[Document]:
+) -> list[langchain_core.documents.Document]:
     """
     Split documents into overlapping character chunks.
     """
     chunk_size = max(200, int(chunk_size))
     chunk_overlap = max(0, min(int(chunk_overlap), chunk_size - 1))
 
-    chunked: list[Document] = []
+    chunked: list[langchain_core.documents.Document] = []
     for document in documents:
         text = document.page_content
         start = 0
@@ -105,7 +107,11 @@ def split_documents(
             chunk_text = text[start:end]
             metadata = dict(document.metadata)
             metadata["chunk_index"] = chunk_index
-            chunked.append(Document(page_content=chunk_text, metadata=metadata))
+            chunked.append(
+                langchain_core.documents.Document(
+                    page_content=chunk_text, metadata=metadata
+                )
+            )
             if end >= len(text):
                 break
             start = end - chunk_overlap
@@ -113,7 +119,7 @@ def split_documents(
     return chunked
 
 
-def make_embeddings() -> Embeddings:
+def make_embeddings() -> langchain_core.embeddings.Embeddings:
     """
     Build embeddings from env config.
 
@@ -123,29 +129,30 @@ def make_embeddings() -> Embeddings:
     """
     provider = os.getenv("EMBEDDING_PROVIDER", "auto").strip().lower()
     if provider in {"openai", "auto"} and os.getenv("OPENAI_API_KEY"):
-        from langchain_openai import OpenAIEmbeddings
+        import langchain_openai
 
         model = os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
-        return OpenAIEmbeddings(model=model)
+        return langchain_openai.OpenAIEmbeddings(model=model)
     size = int(os.getenv("FAKE_EMBED_DIM", "256"))
-    return DeterministicFakeEmbedding(size=size)
+    return langchain_core.embeddings.DeterministicFakeEmbedding(size=size)
 
 
 def build_vector_store(
-    documents: list[Document],
-    embeddings: Embeddings,
-) -> InMemoryVectorStore:
+    documents: list[langchain_core.documents.Document],
+    embeddings: langchain_core.embeddings.Embeddings,
+) -> langchain_core.vectorstores.InMemoryVectorStore:
     """
     Build an in-memory vector store from chunked documents.
     """
-    store = InMemoryVectorStore(embedding=embeddings)
+    store = langchain_core.vectorstores.InMemoryVectorStore(embedding=embeddings)
     if documents:
         store.add_documents(documents)
     return store
 
 
 def add_documents_to_store(
-    store: InMemoryVectorStore, documents: list[Document]
+    store: langchain_core.vectorstores.InMemoryVectorStore,
+    documents: list[langchain_core.documents.Document],
 ) -> None:
     """
     Append chunked documents to an existing vector store.
@@ -154,7 +161,7 @@ def add_documents_to_store(
         store.add_documents(documents)
 
 
-def format_docs(documents: list[Document]) -> str:
+def format_docs(documents: list[langchain_core.documents.Document]) -> str:
     """
     Render retrieved documents as a compact context string.
     """

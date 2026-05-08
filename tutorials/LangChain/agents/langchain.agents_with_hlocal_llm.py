@@ -1,6 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
+#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
@@ -61,6 +62,7 @@ import helpers.hlocal_llm as hlocal_llm
 # ## 2) Tool registry
 #
 # Define **small, deterministic** tools with JSON-serializable inputs/outputs. Keep docstrings precise, `hlocal_llm` will pass your prompts to the model, which reads these descriptions to choose and format calls.
+
 
 # %%
 def tool_calc(expression: str) -> str:

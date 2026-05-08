@@ -30,6 +30,7 @@ run "docker image ls $FULL_IMAGE_NAME"
 CONTAINER_NAME=${IMAGE_NAME}_bash
 PORT=
 DOCKER_CMD=$(get_docker_bash_command)
+# Expose a port for MongoDB.
 DOCKER_RUN_OPTS="-p 5432:5432"
 DOCKER_CMD_OPTS=$(get_docker_bash_options $CONTAINER_NAME $PORT "$DOCKER_RUN_OPTS")
 run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME"

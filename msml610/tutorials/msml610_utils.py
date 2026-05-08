@@ -78,6 +78,7 @@ def obj_to_str(var_name: str, val: Any, *, top_n: int = 3) -> str:
     :return: String representation of the object
     """
     import numpy as np
+
     txt = []
     txt_tmp = "var_name=%s (type=%s)" % (var_name, str(type(val)))
     txt.append(txt_tmp)
@@ -174,6 +175,7 @@ def _create_slider_widget(
     :return: Tuple of (slider, text, minus_button, plus_button)
     """
     import ipywidgets
+
     _ = description
     # Create widgets based on type.
     if is_float:
@@ -256,26 +258,6 @@ def _link_slider_widgets(
     plus_button.on_click(plus_clicked)
 
 
-# TODO(ai_gp): Inline
-def _create_widget_box(
-    slider: Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"],
-    minus_button: "ipywidgets.Button",
-    text: Union["ipywidgets.FloatText", "ipywidgets.IntText"],
-    plus_button: "ipywidgets.Button",
-) -> "ipywidgets.HBox":
-    """
-    Create horizontal box layout for widget controls.
-
-    :param slider: The slider widget
-    :param minus_button: The decrement button
-    :param text: The text input widget
-    :param plus_button: The increment button
-    :return: HBox containing all widgets in proper order
-    """
-    import ipywidgets
-    return ipywidgets.HBox([slider, minus_button, text, plus_button])
-
-
 def build_widget_control(
     name: str,
     description: str,
@@ -285,7 +267,9 @@ def build_widget_control(
     initial_value: float,
     *,
     is_float: bool = True,
-) -> Tuple[Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"], "ipywidgets.HBox"]:
+) -> Tuple[
+    Union["ipywidgets.FloatSlider", "ipywidgets.IntSlider"], "ipywidgets.HBox"
+]:
     """
     Build a complete widget control with slider, text field, and +/- buttons.
 
@@ -302,6 +286,8 @@ def build_widget_control(
     :return: Tuple of (slider, box) where slider is the control widget and box
         is the HBox layout containing all components
     """
+    import ipywidgets
+
     # Create widgets with sliders, text fields, and +/- buttons.
     slider, text, minus_button, plus_button = _create_slider_widget(
         name=name,
@@ -315,7 +301,7 @@ def build_widget_control(
     # Link sliders and text fields.
     _link_slider_widgets(slider, text, minus_button, plus_button)
     # Create layout.
-    box = _create_widget_box(slider, minus_button, text, plus_button)
+    box = ipywidgets.HBox([slider, minus_button, text, plus_button])
     return slider, box
 
 
@@ -345,6 +331,7 @@ def build_log_widget_control(
         is the HBox layout containing all components
     """
     import ipywidgets
+
     # Create slider that operates on exponents.
     exp_slider = ipywidgets.IntSlider(
         min=min_exp,
@@ -399,7 +386,7 @@ def build_log_widget_control(
     minus_button.on_click(minus_clicked)
     plus_button.on_click(plus_clicked)
     # Create layout.
-    box = _create_widget_box(exp_slider, minus_button, value_text, plus_button)
+    box = ipywidgets.HBox([exp_slider, minus_button, value_text, plus_button])
     return exp_slider, box
 
 
@@ -497,6 +484,7 @@ def generate_animation_values(
     :return: List of values.
     """
     import numpy as np
+
     if mode == "linear":
         sweep_values = np.linspace(sweep_min, sweep_max, n_steps)
     else:

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.16.4
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -19,10 +19,6 @@
 
 import logging
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
 
 import helpers.hnotebook as ut
 
@@ -71,18 +67,18 @@ import os
 import functools
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 
 import nest_asyncio
+
 nest_asyncio.apply()
 
 from pydantic import BaseModel, Field
-from pydantic_ai import Agent, RunContext
+from pydantic_ai import Agent
 
 MODEL_ID = os.getenv("PYDANTIC_AI_MODEL", "openai:gpt-4o-mini")
 print("MODEL_ID:", MODEL_ID)
 print("OPENAI_API_KEY set:", bool(os.getenv("OPENAI_API_KEY")))
-
 
 
 # %% [markdown]
@@ -102,7 +98,7 @@ print("OPENAI_API_KEY set:", bool(os.getenv("OPENAI_API_KEY")))
 #
 # ### Importance
 #
-# PydanticAI becomes most useful when the agent is grounded in external context (RAG-style).  
+# PydanticAI becomes most useful when the agent is grounded in external context (RAG-style).
 # These documents act as that context. In the next steps, we will:
 #
 # 1. Load these Markdown files into memory
@@ -115,7 +111,7 @@ DOCS_DIR = Path("example_dataset/")
 DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
 DOCS = {
-    "overview.md": '''
+    "overview.md": """
 # Atlas Overview
 
 Atlas is a data sync service for small teams. It connects to CSV files and cloud buckets and keeps datasets up to date.
@@ -128,8 +124,8 @@ Getting started
 Limits
 - File uploads up to 50 MB.
 - Up to 5 data sources on the Starter plan.
-''',
-    "billing.md": '''
+""",
+    "billing.md": """
 # Billing and Plans
 
 Plans
@@ -140,16 +136,16 @@ Plans
 Invoices
 - Invoices are issued on the first of each month.
 - You can download invoices from Settings > Billing.
-''',
-    "troubleshooting.md": '''
+""",
+    "troubleshooting.md": """
 # Troubleshooting
 
 Common issues
 - Sync stuck at 0%: check your source credentials and try again.
 - CSV upload fails: ensure the file is under 50 MB and encoded in UTF-8.
 - Duplicate rows: enable the "deduplicate" toggle on the source.
-''',
-    "security.md": '''
+""",
+    "security.md": """
 # Security
 
 Authentication
@@ -158,8 +154,8 @@ Authentication
 
 Data retention
 - Deleted sources are retained for 30 days.
-''',
-    "limits.md": '''
+""",
+    "limits.md": """
 # Usage Limits
 
 Rate limits
@@ -169,8 +165,8 @@ Rate limits
 Storage
 - Starter: 10 GB total storage.
 - Team: 200 GB total storage.
-''',
-    "support.md": '''
+""",
+    "support.md": """
 # Support
 
 Support channels
@@ -180,7 +176,7 @@ Support channels
 
 Escalations
 - Use the support portal to open a ticket.
-''',
+""",
 }
 
 for name, text in DOCS.items():
@@ -217,13 +213,13 @@ print("Files:", [p.name for p in DOCS_DIR.glob("*.md")])
 # PydanticAI agents become far more reliable when they can retrieve relevant context via tools instead of guessing.
 
 # %%
-
 @dataclass
 class DocChunk:
     doc_id: str
     chunk_id: int
     text: str
     vector: list[float]
+
 
 docs = utils.load_docs(DOCS_DIR)
 chunks = utils.chunk_docs(docs, DocChunk, max_chars=700)
@@ -237,6 +233,7 @@ print("Example:", chunks[0].doc_id, chunks[0].chunk_id)
 # We search the chunk index for the most relevant pieces of text for a query.
 #
 
+
 # %%
 class DocMatch(BaseModel):
     doc_id: str
@@ -244,10 +241,14 @@ class DocMatch(BaseModel):
     score: float
     text: str
 
-preview = utils.search_chunks(chunks, "How do I download invoices?", DocMatch, top_k=3)
+
+preview = utils.search_chunks(
+    chunks, "How do I download invoices?", DocMatch, top_k=3
+)
 print("Preview matches:")
 for m in preview:
     print(m.doc_id, "chunk", m.chunk_id, "score=", round(m.score, 4))
+
 
 # %% [markdown]
 # ### Importance
@@ -274,22 +275,25 @@ for m in preview:
 # Structured outputs eliminate brittle parsing and make results usable in real applications.
 
 # %%
-from typing import Optional
-
 @dataclass
 class DocDeps:
     chunks: list[DocChunk]
     user: Optional["UserProfile"] = None  # optional personalization
+
 
 class SourceRef(BaseModel):
     doc_id: str
     chunk_id: int
     quote: str
 
+
 class AnswerWithSources(BaseModel):
     answer: str
     sources: list[SourceRef] = Field(default_factory=list)
-    follow_up_questions: list[str] = Field(default_factory=list)  # enables guardrails section later
+    follow_up_questions: list[str] = Field(
+        default_factory=list
+    )  # enables guardrails section later
+
 
 @dataclass
 class UserProfile:
@@ -357,7 +361,9 @@ out
 print("Answer:\n", out.answer)
 print("\nSources:")
 for s in out.sources:
-    print(f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n',' ')}")
+    print(
+        f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n', ' ')}"
+    )
 if out.follow_up_questions:
     print("\nFollow-ups:")
     for q in out.follow_up_questions:
@@ -390,7 +396,9 @@ except Exception as e:
 # Streaming is useful for UI experiences and interactive assistants, especially when responses are longer.
 
 # %%
-stream_agent = Agent(MODEL_ID, instructions="Write one short paragraph about unit tests.")
+stream_agent = Agent(
+    MODEL_ID, instructions="Write one short paragraph about unit tests."
+)
 await utils.stream_demo(stream_agent)
 
 # %% [markdown]
@@ -400,7 +408,6 @@ await utils.stream_demo(stream_agent)
 #
 
 # %%
-
 deps = DocDeps(chunks=chunks)
 first = await agent.run("Where do I enable 2FA?", deps=deps)
 utils.enforce_sources(first.output)
@@ -450,8 +457,9 @@ new_doc.write_text(
 
 Atlas supports S3 and Google Cloud Storage as data sources.
 SFTP sources are available on Enterprise plans.
-""".strip() + "\n",
-    encoding="utf-8"
+""".strip()
+    + "\n",
+    encoding="utf-8",
 )
 
 # 2) Reload docs in the expected dict format
@@ -467,7 +475,9 @@ out = res.output
 print("Answer:\n", out.answer)
 print("\nSources:")
 for s in out.sources:
-    print(f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n',' ')}")
+    print(
+        f"- {s.doc_id} (chunk {s.chunk_id}): {s.quote[:120].replace('\\n', ' ')}"
+    )
 
 # %% [markdown]
 # ## Personalization via Dependencies
