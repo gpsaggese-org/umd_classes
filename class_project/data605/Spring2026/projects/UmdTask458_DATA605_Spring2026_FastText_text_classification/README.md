@@ -104,12 +104,6 @@ The core FastText API used in this project:
 - `model.get_word_vector()` — returns the vector representation of a word
 - `model.get_nearest_neighbors()` — returns words most similar to a given word
 
-## Running Tests
-
-To verify both notebooks run without errors inside Docker:
-
-    pytest test/test_docker_all.py
-
 ## Results
 
 | Model | F1 Score | Training Time |
