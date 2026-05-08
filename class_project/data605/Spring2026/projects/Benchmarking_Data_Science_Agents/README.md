@@ -5,9 +5,22 @@
 - Amulya Grace Bandlamudi
 
 ## Project Overview
-This project studies and compares publicly available data science benchmarks for AI agents, including DataSciBench, DSBench, MLE-Bench, GAIA, and SWE-bench. The goal is to understand how different benchmarks evaluate data science capabilities such as data analysis, machine learning engineering, and multi-step reasoning.
+This project builds a reproducible big data pipeline to collect, process, and 
+compare publicly available AI benchmark datasets, including Chatbot Arena, 
+MLE-Bench, SWE-bench, and GAIA. The goal is to understand how different 
+benchmarks evaluate AI capabilities across dimensions such as human preference, 
+ML engineering, code repair, and multi-step reasoning.
 
-We will collect leaderboard data from these benchmarks, analyze benchmark design (task type, evaluation metric, and difficulty), and compare agent performance across benchmarks. The project will produce a reproducible data analysis pipeline, visualizations, and a comparative research report.
+We collected 35,000+ rows of real benchmark data via the HuggingFace Datasets 
+API and Kaggle API, processed 68,000+ rows using a DuckDB-powered analytical 
+pipeline, and performed clustering, win rate analysis, and capability gap 
+analysis across 1,274 agents. The project uses PyArrow for columnar storage, 
+DuckDB for zero-copy SQL analytics, LangGraph for pipeline orchestration, and 
+a Gemini/Claude LLM for automated interpretation of results.
+
+The pipeline produces a unified agent × benchmark matrix, 6 visualizations, 
+and a comparative research report examining how benchmark design choices affect 
+what AI capabilities are measured and how agents are ranked.
 
 ## Objectives
 - Collect benchmark leaderboard data
