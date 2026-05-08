@@ -69,9 +69,8 @@ class Test_data605_preprocess_notes_py_integration(
         """
         # Prepare test inputs.
         course_dir = "data605"
-        skip_actions = ["run_pandoc"]
         # Run test.
-        self._test_md_preprocessing(course_dir, skip_actions)
+        self._test_md_preprocessing(course_dir)
 
     @pytest.mark.superslow
     def test2(self) -> None:
@@ -85,35 +84,11 @@ class Test_data605_preprocess_notes_py_integration(
 
 
 # #############################################################################
-# Test_data605_gen_slides_py_integration
+# Test_data605_gen_slides_py_sample
 # #############################################################################
 
 
-class Test_data605_gen_slides_py_integration(
-    csgsteut.GenSlidesIntegration_TestCase
-):
-    """
-    Integration tests for data605 slide generation (PDF rendering).
-    """
-
-    @pytest.mark.superslow
-    def test1(self) -> None:
-        """
-        Render all data605 lessons to PDF.
-        """
-        # Prepare test inputs.
-        course_dir = "data605"
-        # Run test.
-        self._render_all_lessons_to_pdf(course_dir)
-
-
-# #############################################################################
-# Test_data605_gen_slides_sample
-# #############################################################################
-
-
-# TODO(ai_gp): -> Test_data605_gen_slides_py_sample
-class Test_data605_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
+class Test_data605_gen_slides_py_sample(csgsteut.GenSlidesSample_TestCase):
     """
     Test gen_slides.py script for data605 sample lessons.
     """
@@ -139,3 +114,26 @@ class Test_data605_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
         lesson = "08.2"
         # Run test.
         self._run_gen_slides(course_dir, lesson)
+
+
+# #############################################################################
+# Test_data605_gen_slides_py
+# #############################################################################
+
+
+class Test_data605_gen_slides_py(
+    csgsteut.GenSlidesIntegration_TestCase
+):
+    """
+    Integration tests for data605 slide generation (PDF rendering).
+    """
+
+    @pytest.mark.superslow
+    def test1(self) -> None:
+        """
+        Render all data605 lessons to PDF.
+        """
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._render_all_lessons_to_pdf(course_dir)
