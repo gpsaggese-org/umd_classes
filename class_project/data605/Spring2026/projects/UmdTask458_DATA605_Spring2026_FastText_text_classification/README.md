@@ -93,6 +93,23 @@ Demonstrates the FastText API including:
 - Saving and loading models
 - Accessing word vectors and nearest neighbors
 
+## FastText API Reference
+
+The core FastText API used in this project:
+
+- `fasttext.train_supervised()` — trains a supervised classification model
+- `model.predict()` — predicts the category of a text input
+- `model.test()` — evaluates model performance on a labeled dataset
+- `model.save_model()` / `fasttext.load_model()` — saves and loads a trained model
+- `model.get_word_vector()` — returns the vector representation of a word
+- `model.get_nearest_neighbors()` — returns words most similar to a given word
+
+## Running Tests
+
+To verify both notebooks run without errors inside Docker:
+
+    pytest test/test_docker_all.py
+
 ## Results
 
 | Model | F1 Score | Training Time |
