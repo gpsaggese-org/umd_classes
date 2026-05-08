@@ -23,6 +23,10 @@ import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
 
+# #############################################################################
+# Lesson Discovery Utilities
+# #############################################################################
+
 
 def get_lesson_files(course_dir: str) -> List[str]:
     """
@@ -71,7 +75,13 @@ def collect_all_lessons() -> Dict[str, List[str]]:
     return all_lessons
 
 
-def test_render_all_lessons_to_pdf(course_dir: str) -> None:
+# #############################################################################
+# Test Helper Functions
+# #############################################################################
+
+
+# TODO(ai_gp): -> test_gen_slides_py
+def _test_render_all_lessons_to_pdf(course_dir: str) -> None:
     """
     Test that all lessons in a course can be rendered as PDF.
 
@@ -86,7 +96,53 @@ def test_render_all_lessons_to_pdf(course_dir: str) -> None:
         )
 
 
-def test_lessons_preprocessing(
+def _test_preprocess_notes_py(
+    test_case: hunitest.TestCase,
+    course_dir: str,
+    output_dir: str,
+    lessons: List[str],
+) -> None:
+    """
+    Test preprocess_notes.py script on a set of lessons.
+
+    :param test_case: TestCase instance for assertions
+    :param course_dir: Course directory (e.g., "data605")
+    :param output_dir: Output directory for test results
+    :param lessons: List of lesson numbers to test
+    """
+    for lesson in tqdm(lessons, desc="Testing preprocess_notes"):
+        # Get source file.
+        src_name = csccouti.get_source_name(course_dir, lesson)
+        input_file = os.path.join(course_dir, "lectures_source", src_name)
+        # Create lesson-specific output directory.
+        lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+        hio.create_dir(lesson_dir, incremental=True)
+        # Set output file for preprocess_notes.
+        output_file = os.path.join(lesson_dir, "preprocess_notes_output.txt")
+        # Build command.
+        input_arg = shlex.quote(input_file)
+        output_arg = shlex.quote(output_file)
+        cmd = (
+            f"preprocess_notes.py "
+            f"--input={input_arg} "
+            f"--output={output_arg} "
+            f"--type=slides "
+            f"--toc_type=navigation"
+        )
+        # Run command.
+        _LOG.info("Running command: %s", cmd)
+        hsystem.system(cmd)
+        # Check output.
+        hdbg.dassert_file_exists(output_file)
+        content = hio.from_file(output_file)
+        test_case.check_string(content, fuzzy_match=True)
+        sys.stdout.flush()
+        _LOG.info(
+            "Verified preprocess_notes output for lesson %s", lesson
+        )
+
+
+def _test_notes_to_pdf_py(
     test_case: hunitest.TestCase,
     course_dir: str,
     output_dir: str,
@@ -147,7 +203,7 @@ def test_lessons_preprocessing(
             f"--toc_type={toc_type_arg} "
             f"{skip_action_args}"
         )
-        _LOG.info(f"Running command: {cmd}")
+        _LOG.info("Running command: %s", cmd)
         hsystem.system(cmd)
         sys.stdout.flush()
         # Extract and check output after preprocessing.
@@ -171,7 +227,9 @@ class GenSlidesSample_TestCase(hunitest.TestCase):
     """
 
     def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
-        """Run gen_slides for a lesson."""
+        """
+        Run gen_slides for a lesson.
+        """
         cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open"
         hsystem.system(cmd)
 
@@ -189,14 +247,18 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     def _check_lesson_discovery(
         self, course_dir: str, expected_first_lesson_filename: str
     ) -> None:
-        """Check that lessons can be discovered."""
+        """
+        Check that lessons can be discovered.
+        """
         lesson_files = get_lesson_files(course_dir)
         self.assertGreater(len(lesson_files), 0)
         basenames = [os.path.basename(f) for f in lesson_files]
         self.assertIn(expected_first_lesson_filename, basenames)
 
     def _check_lesson_count(self, course_dir: str) -> None:
-        """Check that course has expected number of lessons."""
+        """
+        Check that course has expected number of lessons.
+        """
         min_expected_lessons = 35
         lessons = get_lesson_numbers(course_dir)
         self.assertGreaterEqual(
@@ -208,7 +270,9 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         _LOG.info("%s has %d lessons", course_dir, len(lessons))
 
     def _check_lesson_format(self, course_dir: str) -> None:
-        """Check that lesson numbers are well-formed."""
+        """
+        Check that lesson numbers are well-formed.
+        """
         valid_lesson_pattern = r"^\d+(\.\d+)?$"
         lessons = get_lesson_numbers(course_dir)
         for lesson in lessons:
@@ -239,7 +303,21 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
 
         :param course_dir: Course directory (e.g., "data605" or "msml610")
         """
-        test_render_all_lessons_to_pdf(course_dir)
+        _test_render_all_lessons_to_pdf(course_dir)
+
+    def _test_preprocess_notes(self, course_dir: str) -> None:
+        """
+        Test preprocess_notes.py script on all lessons.
+
+        Verifies that the preprocess_notes.py script can process all lessons
+        in a course. Results are saved to the output directory and compared using
+        fuzzy matching.
+
+        :param course_dir: Course directory (e.g., "data605" or "msml610")
+        """
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(course_dir)
+        _test_preprocess_notes_py(self, course_dir, output_dir, lessons)
 
     def _test_md_preprocessing(
         self, course_dir: str, skip_actions: Optional[List[str]] = None
@@ -256,7 +334,7 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
-        test_lessons_preprocessing(
+        _test_notes_to_pdf_py(
             self, course_dir, output_dir, lessons, "md", skip_actions
         )
 
@@ -272,4 +350,4 @@ class GenSlidesIntegration_TestCase(hunitest.TestCase):
         """
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(course_dir)
-        test_lessons_preprocessing(self, course_dir, output_dir, lessons, "tex")
+        _test_notes_to_pdf_py(self, course_dir, output_dir, lessons, "tex")

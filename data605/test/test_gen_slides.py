@@ -55,7 +55,7 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
 # #############################################################################
 
 
-class Test_data605_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
+class Test_data605_gen_slides_py_sample(csgsteut.GenSlidesSample_TestCase):
     """
     Test gen_slides.py script for data605 sample lessons.
     """
@@ -88,7 +88,7 @@ class Test_data605_gen_slides_sample(csgsteut.GenSlidesSample_TestCase):
 # #############################################################################
 
 
-class Test_data605_gen_slides_integration(
+class Test_data605_gen_slides_py_integration(
     csgsteut.GenSlidesIntegration_TestCase
 ):
     """
@@ -111,7 +111,30 @@ class Test_data605_gen_slides_integration(
 # #############################################################################
 
 
-class Test_data605_preprocess_notes_integration(
+class Test_data605_preprocess_notes_py_integration(
+    csgsteut.GenSlidesIntegration_TestCase
+):
+    """
+    Integration tests for data605 preprocessing (preprocess_notes action).
+    """
+
+    @pytest.mark.superslow
+    def test1(self) -> None:
+        """
+        Test preprocess_notes.py script on all data605 lessons.
+        """
+        # Prepare test inputs.
+        course_dir = "data605"
+        # Run test.
+        self._test_preprocess_notes(course_dir)
+
+
+# #############################################################################
+# Test_data605_notes_to_pdf_integration
+# #############################################################################
+
+
+class Test_data605_notes_to_pdf_py_integration(
     csgsteut.GenSlidesIntegration_TestCase
 ):
     """
