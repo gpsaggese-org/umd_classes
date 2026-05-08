@@ -7,13 +7,13 @@ fontsize: 10pt
 
 ::: columns
 :::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
+![](data605/lectures_source/images/UMD_Logo.png)
 ::::
 :::: {.column width=75%}
 
 \vspace{0.4cm}
 \begingroup \large
-UMD DATA605: Big Data Systems
+UMD DATA605 - Big Data Systems
 \endgroup
 ::::
 :::
@@ -21,354 +21,199 @@ UMD DATA605: Big Data Systems
 \vspace{1cm}
 
 \begingroup \Large
-**$$\text{\textcolor{blue}{\text{01.4: Data Models}}}$$**
+**$$\text{\textcolor{blue}{\text{12.3: Graph Data Processing}}}$$**
 \endgroup
 
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
-
-#### Data Models
-- **\textcolor{red}{Data modeling}**
-  - Represents and captures structure and properties of real-world entities
-  - Abstraction: real-world $\to$ **\textcolor{darkgreen}{representation}**
-
-- **\textcolor{blue}{Data model}**
-  - Describes how data is _represented_ (e.g., relational, key-value) and _accessed_ (e.g., insert operations, query)
-  - Schema in a DB describes a specific data collection using a data model
-
-- **\textcolor{violet}{Why need data model?}**
-  - Know data structure to write general-purpose code
-  - Share data across programs, organizations, systems
-  - Integrate information from multiple sources
-  - Preprocess data for efficient access (e.g., building an index)
-
-#### Multiple Layers of Data Modeling
 ::: columns
-:::: {.column width=50%}
-
-- **\textcolor{red}{Physical layer}**
-  - How is the data physically stored
-  - How to represent complex data structures (e.g., B-trees for indexing)
-- **\textcolor{darkgreen}{Logical layer}**
-  - Entities
-  - Attributes
-  - Type of information stored
-  - Relationships among the above
-- **\textcolor{blue}{Views}**
-  - Restrict information flow
-  - Security and/or ease-of-use
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
 
 ::::
-:::: {.column width=45%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_43_image_1.png)
-
+:::: {.column width=20%}
 ::::
 :::
 
-#### Data Models: Logical Layer
+## Typical graph analysis tasks
 
-::: columns
-:::: {.column width=50%}
+#### Queries vs Analysis Tasks
+- **\textcolor{red}{Queries}**
+  - Explore data
+  - Result is small graph portion (often a node)
+  - Challenges
+    - Minimize explored graph portion
+    - Use indexes (auxiliary data structures)
 
-- **\textcolor{red}{Modeling constructs}**
-  - Concepts to represent data structure
-  - E.g.,
-    - Entity types
-    - Entity attributes
-    - Relationships between entities
-    - Relationships between attributes
-- **\textcolor{darkgreen}{Integrity constraints}**
-  - Ensure data integrity
-    - Avoid errors and inconsistencies
-    - E.g., field can't be empty, must be an integer
-- **\textcolor{blue}{Manipulation constructs}**
-  - E.g., insert, update, delete data
+- **\textcolor{blue}{Analysis tasks}**
+  - Process entire graph
+  - Challenges
+    - Handle large data efficiently
+    - Parallelize if data doesn't fit in memory/disk
 
+#### Graph Algorithms
+- **\textcolor{red}{Graph algorithms}** are general algorithms applicable to various graph types
+  - Network flows (e.g., max flow, min cut)
+  - Spanning trees (e.g., minimal connectivity)
+  - ...
+
+- **\textcolor{blue}{Applications}**
+  - Logistics and supply chain optimization
+  - Electric grid design
+  - Telecommunications (e.g., bandwidth allocation)
+
+#### Subgraph Matching
+- **\textcolor{red}{Subgraph Matching}** = find matching instances of a small pattern in a larger
+  graph
+  - Patterns are typically small and fixed
+  - Matching can be _approximate_
+
+- **\textcolor{blue}{Applications}**
+  - Fraud detection (e.g., detecting fraudulent transaction patterns)
+  - Bioinformatics (e.g., finding protein interaction motifs)
+  - Social network analysis (e.g., community pattern detection)
+
+\center
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_1.png){width=60%}
+
+#### Shortest Path Queries
+- **\textcolor{red}{Shortest Path Queries}** = find the shortest or optimal path between two nodes
+  - May consider edge weights (e.g., distance, cost)
+
+- **\textcolor{blue}{Applications}**
+  - GPS navigation (e.g., Google Maps)
+  - Network routing (e.g., Internet traffic routing)
+  - Robotics (e.g., path planning)
+
+\center
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_2.png){width=70%}
+
+#### Reachability
+- **\textcolor{red}{Reachability}** = determine if a path exists between two nodes
+  - May include constraints (e.g., edge types, direction)
+
+- **\textcolor{blue}{Applications}**
+  - Access control (e.g., "can user X reach resource Y?")
+  - Dependency analysis (e.g., package installation)
+  - Workflow engines (e.g., task progression)
+
+#### Keyword Search
+:::columns
+::::{.column width=45%}
+- **\textcolor{red}{Keyword Search}** = find smallest subgraph containing all specified keywords
+
+- **\textcolor{blue}{Applications}**
+  - Knowledge graphs (e.g., question answering)
+  - Enterprise search (e.g., documents linked by shared entities)
+  - Academic citation networks
 ::::
-:::: {.column width=45%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_44_image_1.png)
-
+::::{.column width=50%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_3.png)
 ::::
 :::
 
-#### Data Independence
-- **\textcolor{red}{Logical data independence}**
-  - Change data representation without altering programs
-  - E.g., API abstracting backend
+#### Historical Queries
+- **\textcolor{red}{Historical Queries}** = find nodes with similar evolution or temporal behavior
+  - Typically on dynamic or time-stamped graphs
 
-- **\textcolor{blue}{Physical data independence}**
-  - Change data layout on disk without altering programs
-    - Index data
-    - Partition/distribute/replicate data
-    - Compress data
-    - Sort data
+- **\textcolor{blue}{Applications}**
+  - Stock market analysis (e.g., similar price movement)
+  - Social media trends (e.g., user behavior over time)
+  - Epidemiology (e.g., disease spread patterns)
 
-#### Examples of Data Models
-- **\textcolor{red}{Some examples of data models}**
-  - Relational model (SQL)
-  - Entity-relationship (ER) model
-  - XML
-  - Object-oriented (OO)
-  - Object-relational
-  - RDF
-  - Property graph
-- **\textcolor{blue}{Serialization formats}** as data models
-  - CSV
-  - Parquet
-  - JSON
-  - Protocol Buffer
-  - Avro/Thrift
-  - Python Pickle
+## Graph Data Processing Systems
 
-#### Good Data Models
-- **\textcolor{red}{Good data model}** should be:
-  - Expressive
-    - Capture real-world data
-  - Easy to use
-  - Perform well
+#### Bulk Synchronous Parallel Model
+- BSP is a model for parallel computation using synchronized steps
 
-- **\textcolor{darkgreen}{Trade-off between characteristics}**
-  - E.g., more powerful models
-    - Represent more datasets
-    - Harder to use/query
-    - Less efficient (e.g., more memory, time)
+::: columns
+:::: {.column width=60%}
 
-- **\textcolor{blue}{Evolution of data models}** captures data structure
-  - Structured data $\to$ Relational DBs
-  - Semi-structured web data $\to$ XML, JSON
-  - Unstructured data $\to$ NoSQL DBs
+- **\textcolor{red}{Computation is organized into supersteps}**
+  - _Local computation_
+  - _Message passing_
+    - Parallel processors to exchange data
+    - Messages are sent during a superstep but delivered in the next
+  - _Synchronization barriers_
+    - Ensure all processors complete a superstep before moving on
+::::
+:::: {.column width=35%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_4.png)
+::::
+:::
 
-#### A Brief History of Databases (Early 1960s)
-- **\textcolor{red}{1960s: Early beginning}**
-  - Computers become attractive technology
-  - Enterprises adopt computers
-  - Applications use own data stores
-    - Each application has its own format
-    - Data unavailable to other programs
-
-- **\textcolor{darkgreen}{Database}**: term for "shared data banks" by multiple applications
-  - Define data format
-  - Store as "data dictionary" (schema)
-  - Implement "database management" software to access data
-
-- **\textcolor{blue}{Issues}**
-  - How to write data dictionaries?
-  - How to access data?
-  - Who controls the data?
-    - E.g., integrity, security, privacy concerns
-
-#### A Brief History of Databases (1960s)
-- **\textcolor{red}{1960s, Hierarchical and Network Model}**
-  - Connect records of different types
-  - Example: connect accounts with customers
-  - Network model aimed for generality and flexibility
-
-- IBM's IMS Hierarchical Database (1966)
-  - Designed for Apollo space program
-  - Predates hard disks
-  - Used by over 95% of top Fortune 1000 companies
-  - Processes 50 billion transactions daily, manages 15 million GBs of data
-
+- **\textcolor{darkgreen}{Pros}**
+  - Deterministic and predictable behavior
+  - Simple abstraction for reasoning about parallelism
+  - Suitable for graph computations with regular communication patterns
 - **\textcolor{blue}{Cons}**
-  - Exposed too much internal data (structures/pointers)
-  - Leaky abstraction
+  - Global synchronization can cause idle time (stragglers)
+  - Inefficient for highly irregular workloads or dynamic computation patterns
 
-#### Relational, Hierarchical, Network Model
+#### Pregel
+- **\textcolor{red}{Pregel}** is a graph processing framework inspired by the BSP model
+  - Pregel = Parallel + Graph + Google
+  - Designed for large-scale distributed graph computations
+  - Uses a vertex-centric programming model
+    - Each vertex performs computation independently in supersteps
+    - Motto: _"Think like a vertex"_
+  - Vertices
+    - Send messages to neighbors
+    - Update state based on received messages
+    - Can vote to halt; computation ends when all are inactive
 
+- **\textcolor{darkgreen}{PageRank example}**
+  - Each vertex divides its rank among neighbors
+  - In each superstep, vertices update rank from incoming messages
+
+- **\textcolor{blue}{Connected components example}**
+  - Each vertex propagates smallest ID seen to neighbors
+  - Repeats until no changes occur
+
+#### Apache Giraph
 ::: columns
-:::: {.column width=50%}
-- **\textcolor{red}{Relational model}**
-  - Data as tuples in relations
-  - SQL
+:::: {.column width=70%}
+- **\textcolor{red}{Apache Giraph}** is an open-source implementation of Pregel
+  - Written in Java for high scalability
 
-\vspace{1cm}
+- Suitable for batch-processing large graphs
 
-- **\textcolor{darkgreen}{Hierarchical model}**
-  - Tree-like structure
-    - One parent, many children
-    - Connected through links
-  - XML DBs resurgence in 1990s
-
-\vspace{1cm}
-
-- **\textcolor{blue}{Network model}**
-  - Graph organization
-    - Multiple parents and children
-  - Graph DBs resurgence in 2010s
+- **\textcolor{darkgreen}{Integrates with Hadoop ecosystem}**
+  - Runs on Hadoop MapReduce
+  - Uses HDFS for storage and YARN for resource management
 ::::
-:::: {.column width=45%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_2.png)
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_3.png)
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_1.png)
+:::: {.column width=25%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_5.png)
 ::::
 :::
 
-#### A Brief History of Databases (1970s)
-- **\textcolor{red}{1970s: Relational model}**
-  - Set theory, first-order predicate logic
-    - Ted Codd developed the Relational Model
-  - Elegant, formal model
-    - Provided data independence
-    - Users didn't worry about data storage, processing
-  - High-level query language
-    - SQL based on relational algebra
-  - Notion of normal forms
-    - Reason about data and relations
-    - Remove redundancies
+- **\textcolor{blue}{Example use cases}**:
+  - Social network analysis (e.g., friend recommendation)
+  - Web graph analysis (e.g., PageRank)
+  - Biological network exploration (e.g., gene interaction)
 
-- **\textcolor{darkgreen}{Influential projects}**
-  - INGRES (UC Berkeley), System R (IBM)
-  - Ignored IMS compatibility
-
-- **\textcolor{blue}{Debates}**:
-  - Relational Model vs Network Model proponents
-
-#### Entity-Relationship Model
-
+#### Apache Spark GraphX
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=70%}
+- **\textcolor{red}{GraphX}** is Spark's API for graph-parallel computation
 
-- **\textcolor{red}{Entity-Relationship Model}**
-  - Proposed in 1976 by Peter Chen
+- Seamless integration with Spark ecosystem and pipelines
 
-- Describes knowledge as:
-  - **\textcolor{darkgreen}{Entities}**: Physical or logical objects, "Nouns"
-  - **\textcolor{blue}{Relationships}**: Connections between entities, "Verbs"
+- Graphs represented using RDDs
+  - Vertices and edges as distributed collections
 
-- Map ER model to relational DB
-  - Entities, relationships $\to$ tables
 ::::
-:::: {.column width=45%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_2.png)
-
-\vspace{0.5cm}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_3.png)
-
+:::: {.column width=25%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_6.png)
 ::::
 :::
 
-#### A Brief History of Databases (1980s)
-- **\textcolor{red}{1980s: Relational model acceptance}**
-  - SQL standard due to IBM's backing
-  - Enhanced relational model
-    - Set-valued attributes, aggregation
+- Includes a Pregel API
+  - Enables iterative message-passing computations
+  - Preserves immutability and functional programming style
 
-- **\textcolor{blue}{Late 80's}**
-  - Object-oriented DBs
-    - Store objects, not tables
-    - Overcome _impedance mismatch_ between languages and databases
-  - Object-relational DBs
-    - User-defined types
-    - Combine object-oriented benefits with relational model
-  - No expressive difference from pure relational model
+- **\textcolor{darkgreen}{Strengths vs traditional graph DBs}**
+  - Scalable to very large graphs
+  - Efficient for batch analytics and machine learning workflows
 
-#### Object-Oriented
-- OOP is a data model
-  - Object behavior described through data (fields) and code (methods)
-
-- **\textcolor{red}{Composition}**
-  - \textcolor{blue}{\texttt{has-a}} relationships
-  - E.g., \textcolor{blue}{\texttt{Employee}} class has an \textcolor{blue}{\texttt{Address}} class
-- **\textcolor{darkgreen}{Inheritance}**
-  - \textcolor{blue}{\texttt{is-a}} relationships
-  - E.g., \textcolor{blue}{\texttt{Employee}} class derives from \textcolor{blue}{\texttt{Person}} class
-
-- **\textcolor{blue}{Polymorphism}**
-  - Code executed depends on the class of the object
-  - One interface, many implementations
-  - E.g., \textcolor{blue}{\texttt{draw()}} method on a \textcolor{blue}{\texttt{Circle}} vs \textcolor{blue}{\texttt{Square}} object, both descending from
-    \textcolor{blue}{\texttt{Shape}} class
-
-- **\textcolor{violet}{Encapsulation}**
-  - E.g., private vs public fields/members
-  - Prevents external code from accessing inner workings of an object
-
-#### A Brief History of Databases (1990s)
-::: columns
-:::: {.column width=50%}
-- **\textcolor{red}{Late 90's-today}**
-- Web/Internet emerges
-- XML: eXtensible Markup Language
-  - For _semi-structured_ data
-  - Tree-like structure
-  - Flexible schema
-
-::::
-:::: {.column width=45%}
-
-\scriptsize
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-  <CATALOG>
-    <CD>
-      <TITLE>Empire Burlesque</TITLE>
-      <ARTIST>Bob Dylan</ARTIST>
-      <COUNTRY>USA</COUNTRY>
-      <COMPANY>Columbia</COMPANY>
-      <PRICE>10.90</PRICE>
-      <YEAR>1985</YEAR>
-    </CD>
-    <CD>
-      <TITLE>Hide your heart</TITLE>
-      <ARTIST>Bonnie Tyler</ARTIST>
-      <COUNTRY>UK</COUNTRY>
-      <COMPANY>CBS Records</COMPANY>
-      <PRICE>9.90</PRICE>
-      <YEAR>1988</YEAR>
-    </CD>
-    ...
-```
-::::
-:::
-
-#### Resource Description Framework
-::: columns
-:::: {.column width=40%}
-- Aka RDF
-- **\textcolor{red}{(subject, predicate, object) triple}**
-
-- Example of RDF triple
-  - \textcolor{blue}{\texttt{Subject}}=sky
-  - \textcolor{blue}{\texttt{Predicate}}=has-the-color
-  - \textcolor{blue}{\texttt{Object}}=blue
-
-- Maps to a labeled, directed multi-graph
-  - More general than a tree
-
-- **\textcolor{blue}{Stored in}**:
-  - Relational DBs
-  - Dedicated "triple-stores" DBs
-::::
-:::: {.column width=55%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_56_image_1.png)
-::::
-:::
-
-#### Property Graph Model
-
-::: columns
-:::: {.column width=40%}
-- **\textcolor{red}{Graph}**:
-  - Vertices and edges
-  - Properties for each edge and vertex
-
-- **\textcolor{blue}{Stored in}**:
-  - Relational DBs
-  - Graph DBs
-::::
-:::: {.column width=55%}
-
-![](data605/lectures_source/images/lecture_1/lec_1_slide_57_image_1.jpeg)
-
-::::
-:::
+- **\textcolor{blue}{Limitations}**
+  - Less suitable for real-time queries and transactional workloads
+  - Requires understanding of Spark internals for tuning performance
