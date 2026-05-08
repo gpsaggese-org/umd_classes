@@ -24,6 +24,11 @@ import helpers.hunit_test as hunitest
 _LOG = logging.getLogger(__name__)
 
 
+# #############################################################################
+# Lesson Discovery Utilities
+# #############################################################################
+
+
 def get_lesson_files(course_dir: str) -> List[str]:
     """
     Discover all lesson files in a course directory.
@@ -59,6 +64,11 @@ def get_lesson_numbers(course_dir: str) -> List[str]:
     return sorted(set(lessons))
 
 
+# #############################################################################
+# Lesson Collection Utilities
+# #############################################################################
+
+
 def collect_all_lessons() -> Dict[str, List[str]]:
     """
     Collect all lessons organized by course.
@@ -69,6 +79,59 @@ def collect_all_lessons() -> Dict[str, List[str]]:
     for course_dir in csccouti.VALID_DIRS:
         all_lessons[course_dir] = get_lesson_numbers(course_dir)
     return all_lessons
+
+
+# #############################################################################
+# Script Execution Functions
+# #############################################################################
+
+
+# #############################################################################
+# LessonDiscovery_TestCase
+# #############################################################################
+
+
+class LessonDiscovery_TestCase(hunitest.TestCase):
+    """
+    Base class for testing lesson discovery in a course.
+    """
+
+    def _check_lesson_discovery(
+        self, course_dir: str, expected_first_lesson_filename: str
+    ) -> None:
+        """Check that lessons can be discovered."""
+        lesson_files = get_lesson_files(course_dir)
+        self.assertGreater(len(lesson_files), 0)
+        basenames = [os.path.basename(f) for f in lesson_files]
+        self.assertIn(expected_first_lesson_filename, basenames)
+
+    def _check_lesson_count(self, course_dir: str) -> None:
+        """Check that course has expected number of lessons."""
+        min_expected_lessons = 35
+        lessons = get_lesson_numbers(course_dir)
+        self.assertGreaterEqual(
+            len(lessons),
+            min_expected_lessons,
+            f"{course_dir} should have at least {min_expected_lessons} "
+            f"lessons, found {len(lessons)}",
+        )
+        _LOG.info("%s has %d lessons", course_dir, len(lessons))
+
+    def _check_lesson_format(self, course_dir: str) -> None:
+        """Check that lesson numbers are well-formed."""
+        valid_lesson_pattern = r"^\d+(\.\d+)?$"
+        lessons = get_lesson_numbers(course_dir)
+        for lesson in lessons:
+            self.assertRegex(
+                lesson,
+                valid_lesson_pattern,
+                f"Invalid lesson format '{lesson}' in {course_dir}",
+            )
+
+
+# #############################################################################
+# Run_notes_to_pdf_py_TestCase
+# #############################################################################
 
 
 def run_gen_slides_py(course_dir: str) -> None:
@@ -160,60 +223,13 @@ def run_notes_to_pdf_py(
         )
 
 
-# #############################################################################
-# LessonDiscovery_TestCase
-# #############################################################################
-
-
-class LessonDiscovery_TestCase(hunitest.TestCase):
-    """
-    Base class for testing lesson discovery in a course.
-    """
-
-    def _check_lesson_discovery(
-        self, course_dir: str, expected_first_lesson_filename: str
-    ) -> None:
-        """Check that lessons can be discovered."""
-        lesson_files = get_lesson_files(course_dir)
-        self.assertGreater(len(lesson_files), 0)
-        basenames = [os.path.basename(f) for f in lesson_files]
-        self.assertIn(expected_first_lesson_filename, basenames)
-
-    def _check_lesson_count(self, course_dir: str) -> None:
-        """Check that course has expected number of lessons."""
-        min_expected_lessons = 35
-        lessons = get_lesson_numbers(course_dir)
-        self.assertGreaterEqual(
-            len(lessons),
-            min_expected_lessons,
-            f"{course_dir} should have at least {min_expected_lessons} "
-            f"lessons, found {len(lessons)}",
-        )
-        _LOG.info("%s has %d lessons", course_dir, len(lessons))
-
-    def _check_lesson_format(self, course_dir: str) -> None:
-        """Check that lesson numbers are well-formed."""
-        valid_lesson_pattern = r"^\d+(\.\d+)?$"
-        lessons = get_lesson_numbers(course_dir)
-        for lesson in lessons:
-            self.assertRegex(
-                lesson,
-                valid_lesson_pattern,
-                f"Invalid lesson format '{lesson}' in {course_dir}",
-            )
-
-
-# #############################################################################
-# Run_notes_to_pdf_py_TestCase
-# #############################################################################
-
 
 class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation.
     """
 
-    # TODO(gp): This should be a different class.
+    # TODO(gp): Move this method to a class Run_gen_slides_py_TestCase
     def _render_all_lessons_to_pdf(self, course_dir: str) -> None:
         """
         Render all lessons in a course to PDF.
