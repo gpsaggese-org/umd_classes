@@ -1392,9 +1392,9 @@ digraph CausalGraph {
 - You can apply some transform to $X$ (e.g., square root, log)
   - Then you can apply the usual flow (adding confounders, FWL theorem)
 
-* Regression
-- You need to assume that treatment looks randomly assigned once certain
-  covariates are accounted for
+* Conditionally Random Experiments
+- In fully randomized experiments (RCTs), you need to assume that treatment looks
+  randomly assigned once certain covariates are accounted for
   - You can't know if all confounders have been included in the model
   - Only a randomized controlled experiment can confirm it
   - E.g., giving random credit lines (including very high) to risky customers
