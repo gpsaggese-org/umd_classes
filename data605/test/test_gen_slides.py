@@ -6,17 +6,21 @@ Import as:
 import data605.test.test_gen_slides as d6ttestgs
 """
 
+import logging
+
 import pytest
 
 import class_scripts.gen_slides_test_utils as csgsteut
 
+_LOG = logging.getLogger(__name__)
+
 
 # #############################################################################
-# Test_data605_lesson_discovery
+# Test_Data605_LessonDiscovery
 # #############################################################################
 
 
-class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
+class Test_Data605_LessonDiscovery(csgsteut.LessonDiscovery_TestCase):
     """
     Test discovery of data605 lessons.
     """
@@ -25,7 +29,7 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
         """
         Check discovery of expected lesson file.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         expected_filename = "Lesson01.1-Intro.txt"
         # Run test.
@@ -35,7 +39,7 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
         """
         Check lesson count for data605 course.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         # Run test.
         self._check_lesson_count(course_dir)
@@ -44,18 +48,58 @@ class Test_data605_lesson_discovery(csgsteut.LessonDiscovery_TestCase):
         """
         Check lesson file format for data605 course.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         # Run test.
         self._check_lesson_format(course_dir)
 
+    def test4(self) -> None:
+        """
+        Check get_lesson_files() utility function.
+        """
+        # Prepare inputs.
+        course_dir = "data605"
+        # Run test.
+        lesson_files = csgsteut.get_lesson_files(course_dir)
+        self.assertGreater(len(lesson_files), 0)
+        _LOG.info("Found %d lesson files in %s", len(lesson_files), course_dir)
+
+    def test5(self) -> None:
+        """
+        Check get_lesson_numbers() utility function.
+        """
+        # Prepare inputs.
+        course_dir = "data605"
+        # Run test.
+        lesson_numbers = csgsteut.get_lesson_numbers(course_dir)
+        self.assertGreater(len(lesson_numbers), 0)
+        _LOG.info(
+            "Found %d lesson numbers in %s", len(lesson_numbers), course_dir
+        )
+
+    def test6(self) -> None:
+        """
+        Check collect_all_lessons() utility function.
+        """
+        # Run test.
+        all_lessons = csgsteut.collect_all_lessons()
+        self.assertGreater(len(all_lessons), 0)
+        self.assertIn("data605", all_lessons)
+        data605_lessons = all_lessons["data605"]
+        self.assertGreater(len(data605_lessons), 0)
+        _LOG.info(
+            "Collected %d courses with %d data605 lessons",
+            len(all_lessons),
+            len(data605_lessons),
+        )
+
 
 # #############################################################################
-# Test_data605_preprocess_notes_py_integration
+# Test_Data605_Run_notes_to_pdf_py
 # #############################################################################
 
 
-class Test_data605_preprocess_notes_py_integration(
+class Test_Data605_Run_notes_to_pdf_py(
     csgsteut.Run_notes_to_pdf_py_TestCase
 ):
     """
@@ -67,7 +111,7 @@ class Test_data605_preprocess_notes_py_integration(
         """
         Test markdown preprocessing for data605 lessons (skip run_pandoc).
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         # Run test.
         self._run_notes_to_pdf_md_py(course_dir)
@@ -77,20 +121,20 @@ class Test_data605_preprocess_notes_py_integration(
         """
         Test LaTeX preprocessing for data605 lessons.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         # Run test.
         self._run_notes_to_pdf_tex_py(course_dir)
 
 
 # #############################################################################
-# Test_data605_gen_slides_py_sample
+# Test_Data605_Run_gen_slides_py
 # #############################################################################
 
 
-class Test_data605_gen_slides_py_sample(csgsteut.Run_gen_slides_py_TestCase):
+class Test_Data605_Run_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
     """
-    Test gen_slides.py script for data605 sample lessons.
+    Integration tests for data605 slide generation (PDF rendering).
     """
 
     @pytest.mark.slow
@@ -98,7 +142,7 @@ class Test_data605_gen_slides_py_sample(csgsteut.Run_gen_slides_py_TestCase):
         """
         Generate slides for data605 lesson 01.1.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         lesson = "01.1"
         # Run test.
@@ -109,29 +153,18 @@ class Test_data605_gen_slides_py_sample(csgsteut.Run_gen_slides_py_TestCase):
         """
         Generate slides for data605 lesson 08.2.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         lesson = "08.2"
         # Run test.
         self._run_gen_slides(course_dir, lesson)
 
-
-# #############################################################################
-# Test_data605_gen_slides_py
-# #############################################################################
-
-
-class Test_data605_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
-    """
-    Integration tests for data605 slide generation (PDF rendering).
-    """
-
     @pytest.mark.superslow
-    def test1(self) -> None:
+    def test3(self) -> None:
         """
         Render all data605 lessons to PDF.
         """
-        # Prepare test inputs.
+        # Prepare inputs.
         course_dir = "data605"
         # Run test.
         self._render_all_lessons_to_pdf(course_dir)
