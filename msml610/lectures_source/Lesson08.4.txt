@@ -1371,7 +1371,7 @@ digraph CausalGraph {
   3. Regress outcome residuals $\tilde{Y}$ on treatment residuals $\tilde{T}$ to
      obtain estimate of causal effect of $T$ on $Y$
 
-* Non-linear
+* Non-linear Estimate
 - You want to estimate the causal effect of credit limit on credit card spend,
   using wage as only confounder
   - It can be that the relationship is not linear
@@ -1407,11 +1407,7 @@ digraph CausalGraph {
 - Saturated regression model includes interaction terms between treatment and
   dummy variables to estimate separate effects for each group
 
-* Omitted Variable Bias and Regression
-- The bias due to omitting a variable is equal to tA
-
 * Noise-Reducing vs Noise-Inducing Controls
-
 - **Problem**: Should we include every available variable in our regression
   model?
   - Some variables are confounders (must include to eliminate bias)
@@ -1822,21 +1818,58 @@ Variables that _predict the treatment well_ but not the outcome
 - Well-ordered model curve shape: starts high, gradually converges to ATE
   - Bad model: quickly converges to ATE or fluctuates around it
 
-<start>
 * Cumulative Gain
-- Multiply cumulative effect by cumulative sample proportion:
-  (N_cumulative / N_total) × (effect - ATE)
-  - Downscales high-uncertainty beginning of curve where sample size is small
-  - Normalizing by ATE creates relative scale
+- **Definition**: cumulative gain measures how much value a CATE model captures
+  by sequentially treating units with highest predicted effects
 
-- Area Under Curve (AUC) summarizes model quality into single number
-  - Larger AUC indicates better CATE ordering
-  - Enables automated model selection and hyperparameter tuning
-<end>
+- Multiply cumulative effect by cumulative sample proportion:
+  $$
+  \text{Gain} = \frac{N_{\text{cumulative}}}{N_{\text{total}}} \times (\text{effect} - ATE)
+  $$
+  - Downscales early portion where sample size (and confidence) is small
+  - Centers around zero, with gains relative to population average effect
+
+- **Interpretation**
+  - Well-ordered model: steep initial climb, then plateaus near ATE
+  - Random model: flat line (no gain above ATE anywhere)
+  - Enables visual model comparison on a single plot
+
+* Area Under Curve (AUC)
+
+- **Definition**: area under the cumulative gain curve aggregates CATE model quality
+  into a single summary metric
+
+- **Intuition**
+  - Larger AUC = better CATE ordering
+  - AUC = 0 if model predicts constant effect (equivalent to random assignment)
+  - AUC > 0 indicates true heterogeneity in treatment response
+
+- **Application**
+  - Automates model selection among competing CATE approaches
+  - Enables hyperparameter tuning via grid search or Bayesian optimization
+
+// TODO(finish)
 
 // Chap 7
 
 # Metalerners
+
+* Metalearners
+- **Goal**: Estimate conditional average treatment effect (CATE) to identify how
+  units respond differently to treatment
+  $$\tau_i(x) = \EE[Y_i(1) - Y_i(0) | X] = \EE[\tau_i | X]$$
+
+- **Definition**: metalearners leverage off-the-shelf machine learning algorithms
+  for treatment effect estimation
+  - Can estimate ATE but mainly used for CATE estimation
+  - Work well with high-dimensional data
+
+* Marketing Email: Example
+- Marketing team at an online retailer
+- Determine which customers are receptive to a marketing email
+  - The email has potential to increase customer spending
+  - However, some customers don't like receiving marketing emails
+  - Avoid sending to unreceptive customers to maintain relationship quality
 
 // Chap 8
 # Difference-in-differences
