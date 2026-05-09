@@ -87,6 +87,13 @@ data/
 *.npy
 *.npz
 
+# Benchmark run outputs and ML framework caches (gitignored, not needed in image)
+results/
+AutogluonModels/
+catboost_info/
+mlruns/
+pandasai.log
+
 # Generated images
 *.png
 *.jpg

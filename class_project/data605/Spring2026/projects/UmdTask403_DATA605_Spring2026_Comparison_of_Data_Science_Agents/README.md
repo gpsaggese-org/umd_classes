@@ -273,13 +273,49 @@ Implemented in `src/stats.py` and `src/protocol_analysis.py`:
   callers.
 - `tests/`: pytest suite covering math, scoring, and headline claims.
 
+### Docker image
+
+What lives in the built image, and the customizations relative to the
+course's `class_project/project_template`:
+
+- **Base image**: `ubuntu:24.04` (LTS, inherited from the template). Python
+  3.11 is installed on top because it is the newest interpreter for which
+  every ML library in the stack (AutoGluon, PyCaret, PyTorch via AutoGluon,
+  smolagents, PandasAI) ships pre-built wheels. Newer Python versions still
+  hit source builds for one or more of these.
+- **Key dependencies** (canonical list: `requirements.in`, fully resolved in
+  `requirements.txt`): the nine agent SDKs (`anthropic`, `openai`,
+  `autogen`, `langgraph`, `smolagents`, `pandasai`, `pycaret`, `autogluon`,
+  plus `langchain-anthropic` / `langchain-openai` for tool calling), the
+  classical ML stack (`scikit-learn`, `xgboost`, `catboost`, `torch` via
+  AutoGluon), `pylint` for D2 code-quality scoring, `shap` for D3
+  explainability, `codecarbon` for D5 carbon-footprint measurement,
+  `pyyaml` + `python-dotenv` for config, and `jupyterlab` + `nbclient` for
+  the demo notebooks.
+- **Dockerfile customizations from the template**:
+  1. Package install uses `uv pip install` against a pinned
+     `requirements.txt`, not raw `pip` against `pyproject.toml`. Roughly
+     10x faster and reproducible.
+  2. Dependencies land in a project-local virtualenv at `/app/.venv`, not
+     the system interpreter; the venv is on `PATH`.
+  3. System packages added for compiled-wheel ML deps:
+     `build-essential`, `g++`, `python3-dev`, `libgomp1`.
+  4. `.dockerignore` excludes the gitignored heavy directories
+     (`results/`, `AutogluonModels/`, `catboost_info/`, `mlruns/`,
+     `data/raw/`, `.venv/`) so the build context stays under 3 MB rather
+     than 13 GB and the resulting image content is about 1.2 GB.
+  5. `docker_build.sh` overrides the template's pre-build `cp -Lr
+     ../tmp.build` staging (legacy from before BuildKit honored
+     `.dockerignore`) and runs `docker build .` in place. Trims roughly
+     20 minutes off a cold build on this project.
+
 ### Docker template files
 
 - `Dockerfile`: Ubuntu base, Python 3.11, project dependencies via
   `uv pip install -r requirements.txt`.
 - `docker_build.sh`: build the image with Docker BuildKit.
 - `docker_bash.sh`: launch an interactive shell inside the container,
-  with the project mounted at `/data`.
+  with the host monorepo mounted at `/git_root`.
 - `docker_jupyter.sh`: launch JupyterLab on port 8888.
 - `docker_cmd.sh`: run an arbitrary command inside the container.
 - `docker_clean.sh`, `docker_exec.sh`, `docker_push.sh`: image
