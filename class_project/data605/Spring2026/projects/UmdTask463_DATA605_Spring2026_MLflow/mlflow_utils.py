@@ -1,7 +1,8 @@
-"""Utility functions for MLflow-based workflows.
+"""
+Utility functions for MLflow-based workflows.
 
 Import as:
-import class_project.DATA605.Spring2026.projects.UmdTask463_DATA605_Spring2026_MLflow.mlflow_utils as mltuti
+import mlflow_utils as mltuti
 """
 
 import logging

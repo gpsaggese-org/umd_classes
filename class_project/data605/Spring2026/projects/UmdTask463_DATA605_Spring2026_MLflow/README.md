@@ -2,6 +2,13 @@
 
 This project teaches how to manage the machine learning lifecycle using MLflow. It demonstrates how to track experiments, log metrics, and package models using a housing price prediction dataset.
 
+## Reader Experience
+The 60-minute tutorial follows this breakdown:
+*   **Setup (5 min):** Build the Docker environment and verify the MLflow tracking server.
+*   **Introduction (10 min):** Understand the core components (Tracking, Models, Projects).
+*   **API Exploration (20 min):** Work through `mlflow.API.ipynb` to learn native logging.
+*   **Complete Example (25 min):** Run `mlflow.example.ipynb` to predict housing prices using Ridge Regression.
+
 ## Quick Start
 *   `cd class_project/DATA605/Spring2026/projects/UmdTask463_DATA605_Spring2026_MLflow`
 *   `./docker_build.sh`

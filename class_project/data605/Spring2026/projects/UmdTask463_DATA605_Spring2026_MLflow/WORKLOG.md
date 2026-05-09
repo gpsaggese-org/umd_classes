@@ -44,3 +44,4 @@
 
 ## [2026-05-08]
 - Modified `mlflow.API.ipynb` to store in the same temp folder as `mlflow.example.ipynb`.
+- Modified various files to better match ideal project folder template.
