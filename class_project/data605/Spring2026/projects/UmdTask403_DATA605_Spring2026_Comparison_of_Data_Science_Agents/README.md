@@ -4,6 +4,9 @@ Course: DATA 605 Big Data Systems, Spring 2026
 Instructor: Dr. GP Saggese
 Authors: Jay Guwalani (UID 121479709), Anupama Sharma (UID 122241220)
 
+Project video: https://drive.google.com/file/d/10fAEgpPF0YYt8CbIdVKsMNvK4JpFsqTy/view?usp=sharing
+Project report: [UmdTask403_DATA605_Spring2026_Comparison_of_Data_Science_Agents.pdf](./UmdTask403_DATA605_Spring2026_Comparison_of_Data_Science_Agents.pdf)
+
 ## Overview
 
 PrismBench is an empirical study benchmarking nine data science agents
