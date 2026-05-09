@@ -111,7 +111,7 @@ tutorials/XYZ/
 - Introduction markdown describing the full application and workflow
 - Top-of-notebook setup cell with:
   ```python
-    %load_ext autoreload
+  %load_ext autoreload
   %autoreload 2
 
   import logging
@@ -173,7 +173,7 @@ Before submission, verify:
 
 ## Tools of the Trade
 - Format markdown: `lint_txt.py -i ...`
-- Clean up Python code: Use the `coding.format_rules` skill
+- Clean up Python code: Use the `/coding.format` skill
 - Render locally: `website/test.sh`
 - Reference tutorials: See
   [`DATA605`](https://github.com/gpsaggese/umd_classes/blob/master/data605/tutorials)

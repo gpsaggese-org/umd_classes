@@ -3,13 +3,14 @@ Shared utility functions for class scripts.
 
 Import as:
 
-import class_scripts.common_utils as clcomuut
+import class_scripts.common_utils as csccouti
 """
 
 import glob
 import logging
+import os
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -78,6 +79,10 @@ def get_source_name(dir_path: str, lesson: str) -> str:
     """
     Get the source file name for a lesson.
 
+    Example:
+    - Input: dir_path="msml610", lesson="01"
+    - Output: "Lesson01-Introduction.md" (if file exists)
+
     :param dir_path: course directory
     :param lesson: lesson number
     :return: source file name without directory path
@@ -92,12 +97,17 @@ def get_output_name(source_name: str, extension: str) -> str:
     """
     Generate output file name by replacing the extension.
 
+    Example:
+    - Input: source_name="Lesson01-Introduction.md", extension=".pdf"
+    - Output: "Lesson01-Introduction.pdf"
+
     :param source_name: source file name
     :param extension: new extension
     :return: output file name
     """
-    # Remove .txt extension and add new extension.
-    output_name = source_name.replace(".txt", extension)
+    # Remove file extension and add new extension.
+    base_name = os.path.splitext(source_name)[0]
+    output_name = base_name + extension
     _LOG.debug(
         "Generated output name='%s' from source='%s'", output_name, source_name
     )
@@ -128,7 +138,7 @@ def count_pdf_pages(pdf_path: str) -> int:
     :param pdf_path: path to the PDF file
     :return: number of pages in the PDF
     """
-    hdbg.dassert(Path(pdf_path).exists(), "PDF file does not exist:", pdf_path)
+    hdbg.dassert_file_exists(pdf_path)
     # Use mdls to get page count.
     cmd = f"mdls -name kMDItemNumberOfPages '{pdf_path}'"
     _LOG.debug("Running command: %s", cmd)
@@ -142,17 +152,20 @@ def count_pdf_pages(pdf_path: str) -> int:
     return page_count
 
 
-def get_pdf_page_counts(directory: str, pattern: str = "Lesson*.pdf") -> Dict[str, int]:
+def get_pdf_page_counts(
+    directory: str, pattern: str = "Lesson*.pdf"
+) -> Dict[str, int]:
     """
     Get page counts for all PDF files matching a pattern in a directory.
+
+    Example:
+    - Output: {"Lesson01.pdf": 45, "Lesson02.pdf": 38, "Lesson03.pdf": 52}
 
     :param directory: directory to search
     :param pattern: glob pattern for PDF files
     :return: dictionary mapping file names to page counts
     """
-    hdbg.dassert(
-        Path(directory).exists(), "Directory does not exist:", directory
-    )
+    hdbg.dassert_dir_exists(directory)
     # Find all matching PDF files.
     dir_path = Path(directory)
     pdf_files = sorted(dir_path.glob(pattern))

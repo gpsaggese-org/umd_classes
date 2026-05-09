@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -31,16 +31,16 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
-import helpers.hmodule as hmodule
+# import helpers.hmodule as hmodule
 
-hmodule.install_module_if_not_present(
-    "networkx",
-    use_activate=True,
-)
-hmodule.install_module_if_not_present(
-    "pgmpy",
-    use_activate=True,
-)
+# hmodule.install_module_if_not_present(
+#     "networkx",
+#     use_activate=True,
+# )
+# hmodule.install_module_if_not_present(
+#     "pgmpy",
+#     use_activate=True,
+# )
 
 # %%
 import msml610_utils as ut
