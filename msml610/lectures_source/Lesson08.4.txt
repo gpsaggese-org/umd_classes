@@ -1688,7 +1688,9 @@ Variables that _predict the treatment well_ but not the outcome
   - More potential confounding bias
 - Balance is contextual and requires judgment
 
-// Chap 6
+// #############################################################################
+// Chap 6: Effect Heterogeneity
+// #############################################################################
 
 # Effect heterogeneity
 
@@ -1850,14 +1852,16 @@ Variables that _predict the treatment well_ but not the outcome
 
 // TODO(finish)
 
-// Chap 7
+// #############################################################################
+// Chap 7: Metalearners
+// #############################################################################
 
-# Metalerners
+# Metalearners
 
 * Metalearners
 - **Goal**: Estimate conditional average treatment effect (CATE) to identify how
-  units respond differently to treatment
-  $$\tau_i(x) = \EE[Y_i(1) - Y_i(0) | X] = \EE[\tau_i | X]$$
+  unit $i$ responds differently to treatment
+  $$\tau_i(x) \triangleq \EE[Y_i(1) - Y_i(0) | X] = \EE[\tau_i | X]$$
 
 - **Definition**: metalearners leverage off-the-shelf machine learning algorithms
   for treatment effect estimation
@@ -1866,10 +1870,76 @@ Variables that _predict the treatment well_ but not the outcome
 
 * Marketing Email: Example
 - Marketing team at an online retailer
-- Determine which customers are receptive to a marketing email
+
+- **Goal**: Determine which customers are receptive to a marketing email
   - The email has potential to increase customer spending
-  - However, some customers don't like receiving marketing emails
-  - Avoid sending to unreceptive customers to maintain relationship quality
+
+- **Problem**:
+  - Your budget of discount is limited 
+  - Some customers don't like receiving marketing emails
+    - Avoid sending to unreceptive customers to maintain relationship quality
+
+- **Solution**: 
+- Estimate CATE of email on customers' future purchase volume
+
+- Data
+  - Historical data about sending emails to fit CATE model
+  - Data from experiments where emails were randomized (use for evaluation)
+
+- The treatment variable is `mkt_email`
+- The outcome variable is `next_mnth_pv` (purchase volume one month after sending
+  the email)
+- Covariates (e.g., age, time since first purchase, how much bought on each
+  category)
+
+* T-Learner
+- **Approach**: Fit separate outcome models for each treatment level
+  - For binary treatment: estimate
+    $\mu_0(x) = \EE[Y | T=0, X]$ and 
+    $\mu_1(x) = \EE[Y | T=1, X]$
+  - CATE estimate:
+    $$\tau(x)_i = \mu_1(X_i) - \mu_0(X_i)$$
+
+- **Advantages**: Simple and straightforward implementation
+
+- **Disadvantage**: Prone to regularization bias when treatment and control groups
+  have unequal sample sizes
+  - Issue: If treated data is sparse, mu_1 becomes overly regularized and simple
+  - If untreated data is abundant, mu_0 can fit nonlinearity
+  - Result: Bias in CATE estimation (nonlinear difference minus linear
+    difference)
+  - Example: Model with nonlinear outcome but constant treatment effect produces
+    wrong nonlinear CATE
+
+* Regularization Bias
+- **Problem**: In T-learner you need to fit two models at the same time
+  - If treated data is sparse, $mu_1$ becomes overly regularized and simple
+    (e.g., a constant)
+  - If untreated data is abundant, $mu_0$ can fit nonlinearity
+
+- **Result**: bias in CATE estimation
+  // TODO: add picture
+
+* X-Learner
+- **Idea**
+  - Address regularization bias of T-learner
+  - Two-stage approach with propensity score weighting
+  - Performs better when one treatment group is much larger than the other
+
+- **Stage 1**: Fit initial outcome models (same as T-learner)
+  - $\mu_0(X)$ and $\mu_1(X)$ for control and treated groups
+
+- **Stage 2**: Estimate imputed treatment effects and fit second-stage models
+  - For control group: $\tau(X, T=0) = \mu_1(X, T=0) - Y_{T=0}$
+  - For treated group: $\tau(X, T=1) = Y_{T=1} - \mu_0(X, T=1)$
+  - Fit models $\mu_{\tau,0}$ and $\mu_{\tau,1}$ to predict these estimated
+    effects
+
+- **Combining predictions using propensity score**:
+  - Problem: $\mu_{\tau,0}$ is wrong because $\mu_1$ was trained on small sample
+  - Effect: Downweights the wrong estimate from sparse treatment data
+  - Final CATE:
+    $\tau(x) = \mu_{\tau,0} \cdot e(x) + \mu_{\tau,1} \cdot (1 - e(x))$
 
 // Chap 8
 # Difference-in-differences
