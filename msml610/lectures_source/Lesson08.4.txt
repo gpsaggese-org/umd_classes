@@ -1762,9 +1762,77 @@ Variables that _predict the treatment well_ but not the outcome
 
 - You can estimate the fit and then use the coefficients to compute the
   CATE
+  - A shortcut is to use 
+    CATE = prediction(t+1) - prediction(t)
 
 - If the treatment was not randomized, then you will need to do identification
   removing confounding
+
+* Evaluating CATE Predictions
+- This is similar to a ML problem, but you don't have the actual outcomes (since
+  they are not observable)
+
+- Fundamental problem: $Y_{1i}$ and $Y_{0i}$ are never observed for the same
+  unit
+- Cannot compute standard ML metrics (e.g., MSE on $\tau_i$)
+  $$
+  \tau(x) \defeq \EE[Y_1 - Y_0 | X = x]
+  $$
+
+1) Ground truth is non-observable at unit level, so evaluation must use
+   group-level metrics
+   - Instead: partition data by model predictions and estimate effects in each
+     partition
+2) Use train/test split for unbiased evaluation of CATE model on held-out data
+
+* Process:
+1. Fit the CATE model on training data
+   ```
+   regr_model = smf.ols("sales ~ discounts*(month + weekday + ...)",
+                        data=train).fit()
+   ```
+2. Predict CATE values on test data
+   ```
+   test_pred = regr_model.predict(test.assign(discounts=test["discounts"]+1)) \
+              - regr_model.predict(test)
+   ```
+3. Partition test data (by quantiles of those predictions)
+   ```
+   # Divide test data into 10 groups based on predicted CATE values
+   quantiles = pd.qcut(test_pred, q=10)
+   # Low quantile: days with low predicted CATE
+   # High quantile: days with high predicted CATE
+   ```
+4. Estimate group effects (regression within each group)
+   ```
+   effect = regress(sales ~ discounts)
+   ```
+5. Evaluate (do the effects match the predictions?)
+   - If your CATE predictions are good:
+     - Quantile 1 (low prediction) → low actual effect
+     - Quantile 10 (high prediction) → high actual effect
+     - Monotonic staircase pattern = good model
+   - Random model produces flat curve (same effect in all quantiles = ATE)
+
+* Cumulative Effect
+- Sort data by CATE score, accumulate groups sequentially
+  - Estimate effect on top 1%, then top 2%, then top 3%, etc
+  - Result: curve showing effect by cumulative sample percentage
+
+- Well-ordered model curve shape: starts high, gradually converges to ATE
+  - Bad model: quickly converges to ATE or fluctuates around it
+
+<start>
+* Cumulative Gain
+- Multiply cumulative effect by cumulative sample proportion:
+  (N_cumulative / N_total) × (effect - ATE)
+  - Downscales high-uncertainty beginning of curve where sample size is small
+  - Normalizing by ATE creates relative scale
+
+- Area Under Curve (AUC) summarizes model quality into single number
+  - Larger AUC indicates better CATE ordering
+  - Enables automated model selection and hyperparameter tuning
+<end>
 
 // Chap 7
 
