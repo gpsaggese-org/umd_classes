@@ -17,7 +17,9 @@ set -e
 #set -x
 
 # Import the utility functions from the project template.
-GIT_ROOT=/data
+# The host monorepo is mounted at /git_root by get_docker_common_options
+# in the parent template's utils.sh; that's where the project lives at runtime.
+GIT_ROOT=/git_root
 source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Load Docker configuration variables for this script.
@@ -40,6 +42,13 @@ configure_jupyter_notifications
 
 # Initialize Jupyter Lab command with base configuration.
 JUPYTER_ARGS=$(get_jupyter_args)
+
+# Serve from the host-mounted project tree (set by get_docker_vars_script as
+# SCRIPT_DIR), not from /app. The image's /app copy of the project does not
+# contain `results/` (it's gitignored and excluded by .dockerignore), so
+# notebooks that read master_scorecard.csv only work when JupyterLab serves
+# the host-mounted directory.
+cd "$SCRIPT_DIR"
 
 # Start Jupyter Lab with development-friendly settings.
 run "jupyter lab $JUPYTER_ARGS"
