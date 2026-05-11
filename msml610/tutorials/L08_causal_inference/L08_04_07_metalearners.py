@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -57,6 +57,11 @@ import fklearn.causal.validation.curves
 import fklearn.causal.validation.auc
 
 warnings.filterwarnings("ignore", category=UserWarning, module="lightgbm")
+warnings.filterwarnings(
+    "ignore",
+    message="X does not have valid feature names",
+    category=UserWarning,
+)
 logging.getLogger("lightgbm").setLevel(logging.ERROR)
 
 hmodule.install_module_if_not_present(
@@ -108,14 +113,14 @@ np.random.seed(123)
 m0 = LGBMRegressor()
 m1 = LGBMRegressor()
 
-m0.fit(train.query(f"{T}==0")[X], train.query(f"{T}==0")[y])
-m1.fit(train.query(f"{T}==1")[X], train.query(f"{T}==1")[y]);
+m0.fit(train.query(f"{T}==0")[X].values, train.query(f"{T}==0")[y].values)
+m1.fit(train.query(f"{T}==1")[X].values, train.query(f"{T}==1")[y].values);
 
 # %%
 m0
 
 # %%
-t_learner_cate_test = test.assign(cate=m1.predict(test[X]) - m0.predict(test[X]))
+t_learner_cate_test = test.assign(cate=m1.predict(test[X].values) - m0.predict(test[X].values))
 
 # %%
 _ = mtl.plot_gain_curve_analysis(t_learner_cate_test, T, y, title="T-Learner")
@@ -202,7 +207,6 @@ days = ["2018-12-25", "2018-01-01", "2018-06-01", "2018-06-18"]
 
 plt.figure(figsize=(10, 4))
 sns.lineplot(data=test_cf.query("day.isin(@days)").query("rest_id==2"),
-             palette="gray",
              y="sales_hat",
              x="discounts",
              style="day");

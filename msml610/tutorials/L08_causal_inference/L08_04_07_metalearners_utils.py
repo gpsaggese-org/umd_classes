@@ -7,6 +7,7 @@ import msml610.tutorials.L08_causal_inference.L08_04_07_metalearners_utils as mt
 """
 
 from typing import List, Tuple
+import warnings
 
 import numpy as np
 import pandas as pd
@@ -18,6 +19,12 @@ import fklearn.causal.validation.curves
 import fklearn.causal.validation.auc
 
 import helpers.hdbg as hdbg
+
+warnings.filterwarnings(
+    "ignore",
+    message="X does not have valid feature names",
+    category=UserWarning,
+)
 
 # Plot styling constants.
 MARKER = ["o", "s"]  # Circle for T=0, Square for T=1.
@@ -451,8 +458,8 @@ def fit_propensity_score_and_weighted_outcome_models(
     train_t0 = train.query(f"{T}==0")
     w_t0 = 1 / ps_model.predict_proba(train_t0[X])[:, 0]
     m0.fit(
-        train_t0[X],
-        train_t0[y],
+        train_t0[X].values,
+        train_t0[y].values,
         sample_weight=w_t0,
     )
     # Outcome models for treated group.
@@ -460,8 +467,8 @@ def fit_propensity_score_and_weighted_outcome_models(
     train_t1 = train.query(f"{T}==1")
     w_t1 = 1 / ps_model.predict_proba(train_t1[X])[:, 1]
     m1.fit(
-        train_t1[X],
-        train_t1[y],
+        train_t1[X].values,
+        train_t1[y].values,
         sample_weight=w_t1,
     )
     return ps_model, m0, m1
@@ -496,13 +503,13 @@ def fit_xlearner_second_stage_models(
     # Second-stage model for control group effects.
     m_tau_0 = lightgbm.LGBMRegressor()
     train_t0 = train.query(f"{T}==0")
-    tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
-    m_tau_0.fit(train_t0[X], tau_hat_0)
+    tau_hat_0 = m1.predict(train_t0[X].values) - train_t0[y].values
+    m_tau_0.fit(train_t0[X].values, tau_hat_0)
     # Second-stage model for treated group effects.
     m_tau_1 = lightgbm.LGBMRegressor()
     train_t1 = train.query(f"{T}==1")
-    tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
-    m_tau_1.fit(train_t1[X], tau_hat_1)
+    tau_hat_1 = train_t1[y].values - m0.predict(train_t1[X].values)
+    m_tau_1.fit(train_t1[X].values, tau_hat_1)
     return m_tau_0, m_tau_1
 
 
@@ -529,8 +536,8 @@ def estimate_xlearner_cate(
     # Estimate propensity scores for the test set.
     ps_test = ps_model.predict_proba(test[X])[:, 1]
     # Compute treatment effect predictions for each learner.
-    tau_0_pred = m_tau_0.predict(test[X])
-    tau_1_pred = m_tau_1.predict(test[X])
+    tau_0_pred = m_tau_0.predict(test[X].values)
+    tau_1_pred = m_tau_1.predict(test[X].values)
     # Compute CATE as propensity-weighted average of control and treatment effects.
     cate = ps_test * tau_0_pred + (1 - ps_test) * tau_1_pred
     # Add CATE estimates to test set.
