@@ -540,11 +540,10 @@ def plot_gain_curve_analysis(
             cate_test, treatment_col, outcome_col, prediction="cate"
         )
     )
-
+    # Plot gain curve and AUC baseline.
     plt.figure(figsize=(8, 3))
     plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
     plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
-
     plt.legend()
     plt.title(title)
     return auc
