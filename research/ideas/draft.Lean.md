@@ -26,20 +26,10 @@ Python-Lean
 ROI
 Product roadmap
 \#
-Everybody should have 2-3 agents going at very single time
-**Outline method** (main points \+ indented subpoints)
-	•	**Mind map** (visual, branching ideas)
-	•	**Table/chart** (good for comparisons)
-**Highlight structure** – Use headings, bullet points, and numbering to show relationships between ideas.
-	7\.	**Use symbols and abbreviations** – E.g., "→" for leads to, "↑" for increase, "w/" for with.
-	8\.	**Mark confusing points** – Use a star or "?" so you know to ask later.
-The **outline method** is a note-taking style where you organize information in a **hierarchical, bullet-point format** — starting with the main topic, then indenting subtopics and details underneath.
-[https://chatgpt.com/share/6897526e-5db4-8013-b189-3c7a73c6e6a5](https://chatgpt.com/share/6897526e-5db4-8013-b189-3c7a73c6e6a5)
 livestream here: https://youtube.com/live/2Auc57lxgeU
 repo here: https://github.com/pymc-labs/ai\_decision\_workshop
 Tutorials for class
 
-* over fitting
 * Write notes and then do videos
 *
 

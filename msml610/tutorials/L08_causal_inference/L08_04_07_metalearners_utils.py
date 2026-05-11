@@ -698,3 +698,123 @@ def estimate_slearner_cate(
     # Join CATE estimates back to the original test set.
     result = test.set_index(groupby_cols).join(cate).reset_index()
     return result
+
+
+# #############################################################################
+# Cell 6: Double ML / R-Learner
+# #############################################################################
+
+
+def fit_rlearner_models(
+    train: pd.DataFrame,
+    X: List[str],
+    T: str,
+    y: str,
+    *,
+    seed: int = 123,
+) -> Tuple[lightgbm.LGBMRegressor, lightgbm.LGBMRegressor]:
+    """
+    Fit debiasing and denoising models for R-Learner.
+
+    Trains two models for residualization:
+    - Debiasing model: predicts treatment T from features X
+    - Denoising model: predicts outcome y from features X
+
+    :param train: Training DataFrame with features X, treatment T, and outcome y.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param seed: Random seed for reproducibility.
+    :return: Tuple of (debias_m, denoise_m) models.
+    """
+    np.random.seed(seed)
+    debias_m = lightgbm.LGBMRegressor()
+    denoise_m = lightgbm.LGBMRegressor()
+    return debias_m, denoise_m
+
+
+def _calculate_rlearner_residuals(
+    train: pd.DataFrame,
+    X: List[str],
+    T: str,
+    y: str,
+    debias_m: lightgbm.LGBMRegressor,
+    denoise_m: lightgbm.LGBMRegressor,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Calculate residuals for R-Learner using cross-validated predictions.
+
+    Computes:
+    - Treatment residuals: T - predicted_T
+    - Outcome residuals: y - predicted_y
+
+    :param train: Training DataFrame.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param debias_m: Model for treatment prediction.
+    :param denoise_m: Model for outcome prediction.
+    :return: Tuple of (treatment_residuals, outcome_residuals).
+    """
+    from sklearn.model_selection import cross_val_predict
+
+    t_res = train[T] - cross_val_predict(debias_m, train[X], train[T], cv=5)
+    y_res = train[y] - cross_val_predict(denoise_m, train[X], train[y], cv=5)
+    return t_res, y_res
+
+
+def fit_rlearner_cate_model(
+    train: pd.DataFrame,
+    X: List[str],
+    T: str,
+    y: str,
+    debias_m: lightgbm.LGBMRegressor,
+    denoise_m: lightgbm.LGBMRegressor,
+    *,
+    seed: int = 123,
+) -> Tuple[lightgbm.LGBMRegressor, np.ndarray, np.ndarray]:
+    """
+    Fit R-Learner CATE model using residuals.
+
+    Computes treatment and outcome residuals, then fits a CATE model
+    on residual-scaled outcomes weighted by treatment residuals.
+
+    :param train: Training DataFrame with features X, treatment T, and outcome y.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param debias_m: Model for treatment prediction.
+    :param denoise_m: Model for outcome prediction.
+    :param seed: Random seed for reproducibility.
+    :return: Tuple of (cate_model, treatment_residuals, outcome_residuals).
+    """
+    np.random.seed(seed)
+    # Calculate residuals.
+    t_res, y_res = _calculate_rlearner_residuals(
+        train, X, T, y, debias_m, denoise_m
+    )
+    # Compute weighted outcome and weights for CATE fitting.
+    y_star = y_res / t_res
+    w = t_res ** 2
+    # Fit CATE model with weighted regression.
+    cate_model = lightgbm.LGBMRegressor()
+    cate_model.fit(train[X], y_star, sample_weight=w)
+    return cate_model, t_res, y_res
+
+
+def estimate_rlearner_cate(
+    test: pd.DataFrame,
+    X: List[str],
+    cate_model: lightgbm.LGBMRegressor,
+) -> pd.DataFrame:
+    """
+    Estimate CATE for R-Learner on test data.
+
+    Generates CATE predictions from the fitted R-Learner model.
+
+    :param test: Test DataFrame with features X.
+    :param X: List of feature column names.
+    :param cate_model: Fitted R-Learner CATE model.
+    :return: DataFrame with CATE predictions in 'cate' column.
+    """
+    return test.assign(cate=cate_model.predict(test[X]))
