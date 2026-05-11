@@ -11,6 +11,7 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+# TODO(ai_gp): use an import
 from lightgbm import LGBMRegressor
 from sklearn.linear_model import LogisticRegression
 
@@ -60,14 +61,14 @@ def generate_synthetic_treatment_data(
     :return: DataFrame with columns 'x', 'y', 't'.
 
     Example:
-        >>> df = generate_synthetic_treatment_data(n0=500, n1=50, seed=123)
-        >>> df.head()
+        ```
                x         y  t
         0 -0.977578  0.271234  0
         1 -0.968858  0.289456  0
         2 -0.965465  0.303221  0
         3 -0.960224  0.315678  0
         4 -0.958736  0.321890  0
+        ```
     """
     np.random.seed(seed)
     # Control group follows a Gaussian kernel-based model.
@@ -139,6 +140,7 @@ def plot_tlearner_treatment_effect_analysis(
     :param m0_hat: Predictions from m0 on full dataset.
     :param m1_hat: Predictions from m1 on full dataset.
     """
+    # TODO(ai_gp): Add more comments.
     _ = plt.subplots(2, 1, figsize=(8, 6))
     ax1, ax2 = plt.gcf().axes[:2]
     # Extract data for sorting fitted models across both subplots.
@@ -247,6 +249,7 @@ def calculate_xlearner_heterogeneous_treatment_effects(
     x0_full = np.asarray(df.query("t==0")[["x"]])
     y0_full = np.asarray(df.query("t==0")["y"])
     tau_0 = m1.predict(x0_full) - y0_full
+    #
     x1_full = np.asarray(df.query("t==1")[["x"]])
     y1_full = np.asarray(df.query("t==1")["y"])
     tau_1 = y1_full - m0.predict(x1_full)
@@ -370,12 +373,13 @@ def plot_xlearner_with_propensity_scores(
     # Control group effects with propensity-based weighting.
     x0 = np.asarray(df.query("t==0")[["x"]])
     ps_0 = ps[df["t"] == 0]
+    # TODO(ai_gp): Assign to intermediate variables in all file.
     plt.scatter(
         x0,
         tau_0,
         label=r"$\hat{\tau}_0$",
         alpha=0.5,
-        s=100 * (ps_0),
+        s=100 * ps_0,
         marker=MARKER[0],
         color=COLOR[1],
     )
@@ -393,6 +397,7 @@ def plot_xlearner_with_propensity_scores(
     )
     # Compute and plot CATE as propensity-score-weighted average.
     X_full = np.asarray(df[["x"]])
+    # TODO(ai_gp): Explain.
     cate = (1 - ps) * mu_tau1.predict(X_full) + ps * mu_tau0.predict(X_full)
     plt.plot(df[["x"]], cate, label="x-learner", color="black")
     plt.ylabel("Estimated Effect")
@@ -445,6 +450,7 @@ def fit_propensity_score_and_weighted_outcome_models(
     m1.fit(
         train_t1[X],
         train_t1[y],
+        # TODO(ai_gp): Assign this outside.
         sample_weight=1 / ps_model.predict_proba(train_t1[X])[:, 1],
     )
     return ps_model, m0, m1
@@ -579,6 +585,7 @@ def fit_slearner_model(
     :param seed: Random seed for reproducibility.
     :return: Fitted LGBMRegressor model.
     """
+    # TODO(ai_gp): move up
     import helpers.hdbg as hdbg
     hdbg.dassert_in(T, train.columns)
     hdbg.dassert_in(y, train.columns)
@@ -616,6 +623,7 @@ def generate_slearner_counterfactual_predictions(
         dict(key=1, **{T: treatment_values})
     )
     y_hat_col = f"{y}_hat"
+    # TODO(ai_gp): Split this in different lines and explain each of them.
     test_cf = (
         test
         .drop(columns=[T])
@@ -662,11 +670,12 @@ def estimate_slearner_cate(
     """
     y_hat_col = f"{y}_hat"
     groupby_cols = list(test_cf.columns.difference([T, y_hat_col, "key"]))
+    # TODO(ai_gp): Split this in different lines and explain each of them.
     cate = (
         test_cf
         .groupby(groupby_cols)
         .apply(lambda df: _calculate_linear_effect(df, y_hat_col, T), include_groups=False)
         .rename("cate")
     )
-    result = test.set_index(groupby_cols).join(cate)
+    result = test.set_index(groupby_cols).join(cate).reset_index()
     return result
