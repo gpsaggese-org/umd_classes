@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.2
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -128,33 +128,84 @@ warnings.filterwarnings('ignore', category=UserWarning, module='lightgbm')
 logging.getLogger("lightgbm").setLevel(logging.ERROR)
 
 # %%
-# TODO(ai_gp): Make the plots smaller.
-
-# Generate synthetic data with treatment heterogeneity.
-df = mtl.generate_synthetic_treatment_data(n0=500, n1=50, seed=123)
-
-# Fit separate outcome models for control and treatment groups.
-m0, m1, m0_hat, m1_hat = mtl.fit_tlearner_models(df, min_child_samples=25)
-
-# Visualize outcome models and heterogeneous treatment effects.
-mtl.plot_tlearner_treatment_effect_analysis(df, m0, m1, m0_hat, m1_hat)
+# TODO(ai_gp): Make the plots smaller.# Generate synthetic data with treatment heterogeneity.df = mtl.generate_synthetic_treatment_data(n0=500, n1=50, seed=123)# Fit separate outcome models for control and treatment groups.m0, m1, m0_hat, m1_hat = mtl.fit_tlearner_models(df, min_child_samples=25)# Visualize outcome models and heterogeneous treatment effects.mtl.plot_tlearner_treatment_effect_analysis(df, m0, m1, m0_hat, m1_hat)
 
 # %% [markdown]
 # # X-Learner
 
 # %%
 # Calculate heterogeneous treatment effects.
-np.random.seed(1)
+#np.random.seed(1)
+
 tau_0, tau_1 = mtl.calculate_xlearner_heterogeneous_treatment_effects(df, m0, m1)
 
 # Fit X-Learner models.
-mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat = mtl.fit_xlearner_models(
-    df, tau_0, tau_1, min_child_samples=25
-)
 
+mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat = mtl.fit_xlearner_models(    
+    df, tau_0, tau_1, min_child_samples=25)
 # Plot heterogeneous treatment effect estimates.
 mtl.plot_xlearner_effect_estimates(df, tau_0, tau_1, mu_tau0_hat, mu_tau1_hat)
 
 # %%
 # Plot X-Learner CATE with propensity score weighting.
 mtl.plot_xlearner_with_propensity_scores(df, mu_tau0, mu_tau1, tau_0, tau_1)
+
+# %%
+# TODO(ai_gp): Move to utils.
+from sklearn.linear_model import LogisticRegression
+from lightgbm import LGBMRegressor
+
+# propensity score model
+ps_model = LogisticRegression(penalty=None)
+ps_model.fit(train[X], train[T])
+
+# first stage models
+train_t0 = train.query(f"{T}==0")
+train_t1 = train.query(f"{T}==1")
+
+m0 = LGBMRegressor()
+m1 = LGBMRegressor()
+
+np.random.seed(123)
+
+m0.fit(train_t0[X], train_t0[y],
+       sample_weight=1/ps_model.predict_proba(train_t0[X])[:, 0])
+
+m1.fit(train_t1[X], train_t1[y],
+       sample_weight=1/ps_model.predict_proba(train_t1[X])[:, 1]);
+
+# %%
+# second stage
+tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
+tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
+
+m_tau_0 = LGBMRegressor()
+m_tau_1 = LGBMRegressor()
+
+np.random.seed(123)
+
+m_tau_0.fit(train_t0[X], tau_hat_0)
+m_tau_1.fit(train_t1[X], tau_hat_1);
+
+# %%
+# estimate the CATE
+ps_test = ps_model.predict_proba(test[X])[:, 1]
+
+x_cate_test = test.assign(
+    cate=(ps_test*m_tau_0.predict(test[X]) +
+          (1-ps_test)*m_tau_1.predict(test[X])
+         )
+)
+
+# %%
+gain_curve_test = fklearn.causal.validation.curves.relative_cumulative_gain_curve(x_cate_test, T, y, prediction="cate")
+auc = fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(x_cate_test, T, y, prediction="cate")
+
+plt.figure(figsize=(10, 4))
+plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
+plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
+
+plt.legend();
+plt.title("X-Learner")
+
+# %%

@@ -349,7 +349,7 @@ def plot_xlearner_with_propensity_scores(
     """
     plt.figure(figsize=(10, 4))
     # Fit propensity score model and extract treatment probabilities.
-    ps_model = LogisticRegression(penalty="none")
+    ps_model = LogisticRegression(penalty=None)
     ps_model.fit(df[["x"]], df["t"])
     ps = ps_model.predict_proba(df[["x"]])[:, 1]
     # Compute CATE as propensity-score-weighted average of treatment effects.
