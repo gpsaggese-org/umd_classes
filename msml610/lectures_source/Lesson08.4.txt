@@ -1978,30 +1978,101 @@ Variables that _predict the treatment well_ but not the outcome
 - **Solution**: S-learner and Double-ML
 
 * S-Learner
-- **Approach**: Single machine learning model that includes treatment $T$ as a
-  feature (together with covariate $X$) to predict outcome $Y$
-  - Goal is to estimate $\mu(x) = \EE[Y | T, X]$
+- **Approach**: Single machine learning model that includes treatment $T$ and
+  covariates $X$ to predict outcome $Y$
+  - Goal is to estimate $\mu_s(x, t) = E[Y | T, X]$
   - "S-Learner" since it's "single"
+  - This model doesn't output treatment effect, rather it outputs counterfactual
+    predictions (i.e., predictions under different treatment regimes)
 
-- **For binary treatment**: CATE = $M_s(X_i, T=1) - M_s(X_i, T=0)$
+- **For binary treatment**: CATE = $\mu_s(X_i, T=1) - \mu_s(X_i, T=0)$
 
 - **For continuous treatment**: Extended procedure needed
   - Create grid of treatment values (e.g., [0, 10, 20, 30, 40] for discounts)
-  - Cross-join data with treatment grid to get counterfactual predictions
-  - Fit linear regression on expanded data and extract slope as CATE estimate
+  - Compute predictions for all treatment level
+  - Summarize as slope via simple linear regression to extract CATE
   - Formula: $\beta = \text{Cov}(t, y) / \text{Var}(t)$
 
-- **Advantages**: Simple, supports both binary and continuous treatments,
-  performs reasonably well
+- **Pros**:
+  - Simple
+  - Supports both binary and continuous treatments
+  - Performs reasonably well
 
-- **Main disadvantage**: Biases treatment effect toward zero
-  - Cause: Regularization in ML model restricts estimated treatment effect
-  - Extreme case: Treatment variable can be completely discarded if weak
-    relative to other covariates
-  - Evidence: Simulation shows distribution of estimated ATEs concentrated left
-    of true ATE
+- **Cons**:
+  - Biases treatment effect toward zero
+  - Treatment variable can be completely discarded if weak relative to other
+    covariates
 
-- **Solution**: Use Double/Debiased Machine Learning (R-learner) to address bias
+- **Solution**:
+  - Use Double/Debiased Machine Learning (R-learner) to address bias
+
+* S-Learner: Implementation Steps
+
+- **Step 1**: Train single model on all data
+  - `s_learner.fit(X + [T], y)` where T is treatment feature
+
+- **Step 2**: Create counterfactual grid
+  - Define treatment grid: e.g., $[0, 10, 20, 30, 40]$
+  - Cross-join with test set: each test unit at each treatment level
+  - Makes predictions on expanded grid
+
+- **Step 3**: Extract slopes
+  - Group by unit, apply linear regression
+  - Extract slope coefficient as unit-level CATE
+  - Can also use slope formula directly:
+    $\hat{\beta} = \text{Cov}(t,y) / \text{Var}(t)$
+
+- **Result**: CATE prediction for each unit
+
+* S-Learner: The Bias Problem
+
+- **Problem**
+  - ML models are regularized by default
+  - Regularization can suppress treatment effect unless treatment signal is very
+    strong
+  - ML model may discard treatment feature entirely
+  - Distribution of estimated ATE is shifted toward zero compared to true effect
+
+- **Solution**
+  - Use orthogonalization techniques
+
+* R-learner (Double/Debiased Machine Learning)
+
+- **The principle**: Frisch-Waugh-Lovell meets Machine Learning
+  - Use ML to model confounding relationships
+  - Orthogonalize treatment and outcome from confounders
+  - Extract treatment effect from residuals
+
+- **The equation**
+  - $\widetilde{Y}_i = Y_i - \hat{\mu}_y(X_i)$ (outcome residual)
+  - $\widetilde{T}_i = T_i - \hat{\mu}_t(X_i)$ (treatment residual)
+  - Regress residuals: $\widetilde{Y}_i = \tau \widetilde{T}_i + \varepsilon_i$
+
+- **Why it works**
+  - $\hat{\mu}_y$ captures confounding effects on outcome
+  - $\hat{\mu}_t$ captures confounding effects on treatment
+  - Residuals are "as if" treatment was randomized
+
+- **Key requirement**: no unobserved confounders
+
+* Double-ML: The Overfitting Problem
+
+- **Challenge with flexible ML models**
+  - If $\hat{\mu}_y$ overfits: residuals become too small, underestimates
+    treatment effect
+  - If $\hat{\mu}_t$ overfits: residuals lose variance, inflates uncertainty
+
+- **The solution: out-of-fold predictions**
+  - Split data into $K$ folds
+  - Estimate model on $K-1$ folds, predict on held-out fold
+  - Repeat $K$ times to get predictions for entire dataset
+
+- **Why cross-validation helps**
+  - Prevents model from "stealing" treatment signal for itself
+  - Residuals stay realistic and large
+  - Overfitting on one fold doesn't affect held-out predictions
+
+- **Implementation**: use `sklearn.model_selection.cross_val_predict`
 
 
 // Chap 8

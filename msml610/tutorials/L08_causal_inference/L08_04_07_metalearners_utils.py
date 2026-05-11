@@ -6,7 +6,7 @@ Import as:
 import msml610.tutorials.L08_causal_inference.L08_04_07_metalearners_utils as mtlcil00mu
 """
 
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -404,7 +404,7 @@ def plot_xlearner_with_propensity_scores(
 
 def fit_propensity_score_and_weighted_outcome_models(
     train: pd.DataFrame,
-    X: list,
+    X: List[str],
     T: str,
     y: str,
 ) -> Tuple[LogisticRegression, LGBMRegressor, LGBMRegressor]:
@@ -422,13 +422,14 @@ def fit_propensity_score_and_weighted_outcome_models(
     :return: Tuple of (ps_model, m0, m1) where ps_model is the fitted propensity
              score model and m0, m1 are the weighted outcome models.
     """
+    # TODO(ai_gp): Pass this
+    np.random.seed(123)
     ps_model = LogisticRegression(penalty=None)
     ps_model.fit(train[X], train[T])
     train_t0 = train.query(f"{T}==0")
     train_t1 = train.query(f"{T}==1")
     m0 = LGBMRegressor()
     m1 = LGBMRegressor()
-    np.random.seed(123)
     m0.fit(
         train_t0[X],
         train_t0[y],
@@ -444,7 +445,7 @@ def fit_propensity_score_and_weighted_outcome_models(
 
 def fit_xlearner_second_stage_models(
     train: pd.DataFrame,
-    X: list,
+    X: List[str],
     T: str,
     y: str,
     m0: LGBMRegressor,
@@ -470,6 +471,7 @@ def fit_xlearner_second_stage_models(
     tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
     m_tau_0 = LGBMRegressor()
     m_tau_1 = LGBMRegressor()
+    # TODO(ai_gp): Pass this
     np.random.seed(123)
     m_tau_0.fit(train_t0[X], tau_hat_0)
     m_tau_1.fit(train_t1[X], tau_hat_1)
@@ -478,7 +480,7 @@ def fit_xlearner_second_stage_models(
 
 def estimate_xlearner_cate(
     test: pd.DataFrame,
-    X: list,
+    X: List[str],
     ps_model: LogisticRegression,
     m_tau_0: LGBMRegressor,
     m_tau_1: LGBMRegressor,
