@@ -11,12 +11,13 @@ from typing import List, Tuple
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-# TODO(ai_gp): use an import
-from lightgbm import LGBMRegressor
-from sklearn.linear_model import LogisticRegression
+import lightgbm
+import sklearn.linear_model
 
 import fklearn.causal.validation.curves
 import fklearn.causal.validation.auc
+
+import helpers.hdbg as hdbg
 
 # Plot styling constants.
 MARKER = ["o", "s"]  # Circle for T=0, Square for T=1.
@@ -90,12 +91,12 @@ def generate_synthetic_treatment_data(
 def fit_tlearner_models(
     df: pd.DataFrame,
     min_child_samples: int = 25,
-) -> Tuple[LGBMRegressor, LGBMRegressor, np.ndarray, np.ndarray]:
+) -> Tuple[lightgbm.LGBMRegressor, lightgbm.LGBMRegressor, np.ndarray, np.ndarray]:
     """
     Fit outcome models for each treatment group.
 
-    Trains separate `LGBMRegressor` models for control (T=0) and treated (T=1)
-    groups to estimate conditional outcome expectations.
+    Train separate `lightgbm.LGBMRegressor` models for control (T=0) and
+    treated (T=1) groups to estimate conditional outcome expectations.
 
     :param df: DataFrame with columns 'x', 'y', 't'.
     :param min_child_samples: LightGBM min_child_samples parameter.
@@ -106,12 +107,12 @@ def fit_tlearner_models(
     # Control group outcome model.
     x0 = np.asarray(df.query("t==0")["x"]).reshape(-1, 1)
     y0 = np.asarray(df.query("t==0")["y"])
-    m0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    m0 = lightgbm.LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     m0.fit(x0, y0)
     # Treated group outcome model.
     x1 = np.asarray(df.query("t==1")["x"]).reshape(-1, 1)
     y1 = np.asarray(df.query("t==1")["y"])
-    m1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    m1 = lightgbm.LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     m1.fit(x1, y1)
     # Generate predictions across the full dataset.
     X_full = np.asarray(df[["x"]])
@@ -122,8 +123,8 @@ def fit_tlearner_models(
 
 def plot_tlearner_treatment_effect_analysis(
     df: pd.DataFrame,
-    m0: LGBMRegressor,
-    m1: LGBMRegressor,
+    m0: lightgbm.LGBMRegressor,
+    m1: lightgbm.LGBMRegressor,
     m0_hat: np.ndarray,
     m1_hat: np.ndarray,
 ) -> None:
@@ -140,14 +141,13 @@ def plot_tlearner_treatment_effect_analysis(
     :param m0_hat: Predictions from m0 on full dataset.
     :param m1_hat: Predictions from m1 on full dataset.
     """
-    # TODO(ai_gp): Add more comments.
     _ = plt.subplots(2, 1, figsize=(8, 6))
     ax1, ax2 = plt.gcf().axes[:2]
-    # Extract data for sorting fitted models across both subplots.
+    # Extract and sort x values for consistent plotting across both subplots.
     x_vals = np.asarray(df["x"])
     x_sort_idx = np.argsort(x_vals)
     x_sorted = x_vals[x_sort_idx]
-    # Top subplot: Outcome data and fitted models.
+    # Top subplot: Scatter plots of control (T=0) and treated (T=1) outcomes.
     x0 = np.asarray(df.query("t==0")["x"])
     y0 = np.asarray(df.query("t==0")["y"])
     ax1.scatter(
@@ -168,6 +168,7 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
+    # Overlay fitted outcome models on the scatter plots.
     m0_hat_sorted = m0_hat[x_sort_idx]
     m1_hat_sorted = m1_hat[x_sort_idx]
     ax1.plot(
@@ -187,7 +188,8 @@ def plot_tlearner_treatment_effect_analysis(
     ax1.set_ylabel("Y", fontsize=12)
     ax1.set_xlabel("X", fontsize=12)
     ax1.legend(fontsize=14)
-    # Bottom subplot: Heterogeneous treatment effects.
+    # Bottom subplot: Heterogeneous treatment effects for each group.
+    # For control units: estimated effect = treated prediction - actual outcome.
     x0_full = np.asarray(df.query("t==0")[["x"]])
     y0_full = np.asarray(df.query("t==0")["y"])
     tau_0 = m1.predict(x0_full) - y0_full
@@ -199,6 +201,7 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[0],
         color=COLOR[1],
     )
+    # For treated units: estimated effect = actual outcome - control prediction.
     x1_full = np.asarray(df.query("t==1")[["x"]])
     y1_full = np.asarray(df.query("t==1")["y"])
     tau_1 = y1_full - m0.predict(x1_full)
@@ -210,6 +213,7 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
+    # Plot CATE: difference in predicted outcomes between treatment groups.
     X_full = np.asarray(df[["x"]])
     cate = m1.predict(X_full) - m0.predict(X_full)
     ax2.plot(
@@ -231,8 +235,8 @@ def plot_tlearner_treatment_effect_analysis(
 
 def calculate_xlearner_heterogeneous_treatment_effects(
     df: pd.DataFrame,
-    m0: LGBMRegressor,
-    m1: LGBMRegressor,
+    m0: lightgbm.LGBMRegressor,
+    m1: lightgbm.LGBMRegressor,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Calculate heterogeneous treatment effects for X-Learner.
@@ -261,7 +265,7 @@ def fit_xlearner_models(
     tau_0: np.ndarray,
     tau_1: np.ndarray,
     min_child_samples: int = 25,
-) -> Tuple[LGBMRegressor, LGBMRegressor, np.ndarray, np.ndarray]:
+) -> Tuple[lightgbm.LGBMRegressor, lightgbm.LGBMRegressor, np.ndarray, np.ndarray]:
     """
     Fit X-Learner models on heterogeneous treatment effects.
 
@@ -276,12 +280,12 @@ def fit_xlearner_models(
     """
     # Control group effect model.
     x0 = np.asarray(df.query("t==0")[["x"]])
-    mu_tau0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    mu_tau0 = lightgbm.LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     mu_tau0.fit(x0, tau_0)
     mu_tau0_hat = mu_tau0.predict(x0)
     # Treated group effect model.
     x1 = np.asarray(df.query("t==1")[["x"]])
-    mu_tau1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    mu_tau1 = lightgbm.LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     mu_tau1.fit(x1, tau_1)
     mu_tau1_hat = mu_tau1.predict(x1)
     return mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat
@@ -347,8 +351,8 @@ def plot_xlearner_effect_estimates(
 
 def plot_xlearner_with_propensity_scores(
     df: pd.DataFrame,
-    mu_tau0: LGBMRegressor,
-    mu_tau1: LGBMRegressor,
+    mu_tau0: lightgbm.LGBMRegressor,
+    mu_tau1: lightgbm.LGBMRegressor,
     tau_0: np.ndarray,
     tau_1: np.ndarray,
 ) -> None:
@@ -367,37 +371,41 @@ def plot_xlearner_with_propensity_scores(
     """
     plt.figure(figsize=(8, 3))
     # Fit propensity score model.
-    ps_model = LogisticRegression(penalty=None)
+    ps_model = sklearn.linear_model.LogisticRegression(penalty=None)
     ps_model.fit(df[["x"]], df["t"])
     ps = ps_model.predict_proba(df[["x"]])[:, 1]
     # Control group effects with propensity-based weighting.
     x0 = np.asarray(df.query("t==0")[["x"]])
     ps_0 = ps[df["t"] == 0]
-    # TODO(ai_gp): Assign to intermediate variables in all file.
+    s_0 = 100 * ps_0
     plt.scatter(
         x0,
         tau_0,
         label=r"$\hat{\tau}_0$",
         alpha=0.5,
-        s=100 * ps_0,
+        s=s_0,
         marker=MARKER[0],
         color=COLOR[1],
     )
     # Treated group effects with propensity-based weighting.
     x1 = np.asarray(df.query("t==1")[["x"]])
     ps_1 = ps[df["t"] == 1]
+    s_1 = 100 * (1 - ps_1)
     plt.scatter(
         x1,
         tau_1,
         label=r"$\hat{\tau}_1$",
         alpha=0.5,
-        s=100 * (1 - ps_1),
+        s=s_1,
         marker=MARKER[1],
         color=COLOR[0],
     )
     # Compute and plot CATE as propensity-score-weighted average.
     X_full = np.asarray(df[["x"]])
-    # TODO(ai_gp): Explain.
+    # Weight treatment effect estimates by propensity scores:
+    # - untreated units weighted by PS (towards tau1 estimates)
+    # - treated units weighted by (1-PS) (towards tau0 estimates)
+    # to balance estimates toward the target.
     cate = (1 - ps) * mu_tau1.predict(X_full) + ps * mu_tau0.predict(X_full)
     plt.plot(df[["x"]], cate, label="x-learner", color="black")
     plt.ylabel("Estimated Effect")
@@ -417,7 +425,7 @@ def fit_propensity_score_and_weighted_outcome_models(
     y: str,
     *,
     seed: int = 123,
-) -> Tuple[LogisticRegression, LGBMRegressor, LGBMRegressor]:
+) -> Tuple[sklearn.linear_model.LogisticRegression, lightgbm.LGBMRegressor, lightgbm.LGBMRegressor]:
     """
     Fit propensity score and weighted first-stage outcome models for X-Learner.
 
@@ -434,24 +442,25 @@ def fit_propensity_score_and_weighted_outcome_models(
              score model and m0, m1 are the weighted outcome models.
     """
     np.random.seed(seed)
-    ps_model = LogisticRegression(penalty=None)
+    ps_model = sklearn.linear_model.LogisticRegression(penalty=None)
     ps_model.fit(train[X], train[T])
     # Outcome models for control group.
-    m0 = LGBMRegressor()
+    m0 = lightgbm.LGBMRegressor()
     train_t0 = train.query(f"{T}==0")
+    w_t0 = 1 / ps_model.predict_proba(train_t0[X])[:, 0]
     m0.fit(
         train_t0[X],
         train_t0[y],
-        sample_weight=1 / ps_model.predict_proba(train_t0[X])[:, 0],
+        sample_weight=w_t0,
     )
     # Outcome models for treated group.
-    m1 = LGBMRegressor()
+    m1 = lightgbm.LGBMRegressor()
     train_t1 = train.query(f"{T}==1")
+    w_t1 = 1 / ps_model.predict_proba(train_t1[X])[:, 1]
     m1.fit(
         train_t1[X],
         train_t1[y],
-        # TODO(ai_gp): Assign this outside.
-        sample_weight=1 / ps_model.predict_proba(train_t1[X])[:, 1],
+        sample_weight=w_t1,
     )
     return ps_model, m0, m1
 
@@ -461,11 +470,11 @@ def fit_xlearner_second_stage_models(
     X: List[str],
     T: str,
     y: str,
-    m0: LGBMRegressor,
-    m1: LGBMRegressor,
+    m0: lightgbm.LGBMRegressor,
+    m1: lightgbm.LGBMRegressor,
     *,
     seed: int = 123,
-) -> Tuple[LGBMRegressor, LGBMRegressor]:
+) -> Tuple[lightgbm.LGBMRegressor, lightgbm.LGBMRegressor]:
     """
     Fit second-stage X-Learner models on residual treatment effects.
 
@@ -483,12 +492,12 @@ def fit_xlearner_second_stage_models(
     """
     np.random.seed(seed)
     # Second-stage model for control group effects.
-    m_tau_0 = LGBMRegressor()
+    m_tau_0 = lightgbm.LGBMRegressor()
     train_t0 = train.query(f"{T}==0")
     tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
     m_tau_0.fit(train_t0[X], tau_hat_0)
     # Second-stage model for treated group effects.
-    m_tau_1 = LGBMRegressor()
+    m_tau_1 = lightgbm.LGBMRegressor()
     train_t1 = train.query(f"{T}==1")
     tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
     m_tau_1.fit(train_t1[X], tau_hat_1)
@@ -498,9 +507,9 @@ def fit_xlearner_second_stage_models(
 def estimate_xlearner_cate(
     test: pd.DataFrame,
     X: List[str],
-    ps_model: LogisticRegression,
-    m_tau_0: LGBMRegressor,
-    m_tau_1: LGBMRegressor,
+    ps_model: sklearn.linear_model.LogisticRegression,
+    m_tau_0: lightgbm.LGBMRegressor,
+    m_tau_1: lightgbm.LGBMRegressor,
 ) -> pd.DataFrame:
     """
     Estimate CATE using propensity-score-weighted X-Learner effects.
@@ -571,7 +580,7 @@ def fit_slearner_model(
     y: str,
     *,
     seed: int = 123,
-) -> LGBMRegressor:
+) -> lightgbm.LGBMRegressor:
     """
     Fit an S-Learner model on the training data.
 
@@ -583,16 +592,14 @@ def fit_slearner_model(
     :param T: Treatment column name.
     :param y: Outcome column name.
     :param seed: Random seed for reproducibility.
-    :return: Fitted LGBMRegressor model.
+    :return: Fitted lightgbm.LGBMRegressor model.
     """
-    # TODO(ai_gp): move up
-    import helpers.hdbg as hdbg
     hdbg.dassert_in(T, train.columns)
     hdbg.dassert_in(y, train.columns)
     for col in X:
         hdbg.dassert_in(col, train.columns)
     np.random.seed(seed)
-    s_learner = LGBMRegressor()
+    s_learner = lightgbm.LGBMRegressor()
     s_learner.fit(train[X + [T]], train[y])
     return s_learner
 
@@ -602,7 +609,7 @@ def generate_slearner_counterfactual_predictions(
     X: List[str],
     T: str,
     y: str,
-    s_learner: LGBMRegressor,
+    s_learner: lightgbm.LGBMRegressor,
     treatment_values: np.ndarray,
 ) -> pd.DataFrame:
     """
@@ -619,18 +626,20 @@ def generate_slearner_counterfactual_predictions(
     :param treatment_values: Array of treatment values to predict for.
     :return: DataFrame with counterfactual predictions appended.
     """
+    # Create a grid of treatment values for counterfactual predictions.
     t_grid = pd.DataFrame(
         dict(key=1, **{T: treatment_values})
     )
     y_hat_col = f"{y}_hat"
-    # TODO(ai_gp): Split this in different lines and explain each of them.
-    test_cf = (
-        test
-        .drop(columns=[T])
-        .assign(key=1)
-        .merge(t_grid)
-        .assign(**{y_hat_col: lambda d: s_learner.predict(d[X + [T]])})
-    )
+    # Remove original treatment values to create a clean base for counterfactuals.
+    test_cf = test.drop(columns=[T])
+    # Add merge key to enable cross-product with treatment grid.
+    test_cf = test_cf.assign(key=1)
+    # Create counterfactual dataset by merging each test row with all treatment
+    # values.
+    test_cf = test_cf.merge(t_grid)
+    # Generate predictions for each (features, treatment) combination.
+    test_cf = test_cf.assign(**{y_hat_col: lambda d: s_learner.predict(d[X + [T]])})
     return test_cf
 
 
@@ -669,13 +678,16 @@ def estimate_slearner_cate(
     :return: DataFrame with CATE predictions.
     """
     y_hat_col = f"{y}_hat"
+    # Identify columns to group by (exclude treatment, prediction, and merge key).
     groupby_cols = list(test_cf.columns.difference([T, y_hat_col, "key"]))
-    # TODO(ai_gp): Split this in different lines and explain each of them.
+    # Group counterfactual predictions by feature combinations and compute linear
+    # treatment effect (slope) within each group.
     cate = (
         test_cf
         .groupby(groupby_cols)
         .apply(lambda df: _calculate_linear_effect(df, y_hat_col, T), include_groups=False)
         .rename("cate")
     )
+    # Join CATE estimates back to the original test set.
     result = test.set_index(groupby_cols).join(cate).reset_index()
     return result
