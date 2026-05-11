@@ -2055,57 +2055,40 @@ Variables that _predict the treatment well_ but not the outcome
 
 - **Key requirement**: no unobserved confounders
 
-* Double-ML: The Overfitting Problem
+* Double-ML: the Overfitting Problem
 
 - **Stage 1**: Estimate nuisance parameters
-  - What we care about is the treatment effect $\tau$ (or CATE $\tau(X)$)
-  - Nuisance parameters is what needs to be estimated to get your parameter of
-    interest, but you don't actually care about them intrinsically
-
-  - Step 1: Estimate the outcome model $\hat{\mu}_y(X)$
-    - Fit a flexible ML regression model to predict outcome $Y$ from features $X$
+  - Focus on treatment effect $\tau$ (or CATE $\tau(X)$)
+  - Estimate nuisance parameters (what we are not interested in) to obtain
+    parameter of interest
+  - _Step 1_: Estimate outcome model $\hat{\mu}_y(X)$
+    - Fit ML regression model to predict outcome $Y$ from features $X$
     - E.g., capture nonlinear confounding relationships between $X$ and $Y$
     - Use cross-validation predictions to prevent overfitting
-
-  - Step 2: Estimate the treatment model $\hat{\mu}_t(X)$
-    - Same process
-    - Fit a flexible ML regression model to predict treatment $T$ from features $X$
+  - _Step 2_: Estimate treatment model $\hat{\mu}_t(X)$
+    - Fit ML regression model to predict treatment $T$ from features $X$
 
 - **Stage 2**: Compute residuals
-
-  - Step 3: Residualize the outcome $\widetilde{Y} = Y - \hat{\mu}_y(X)$
-
-  - Step 4: Residualize the treatment $\widetilde{T} = T - \hat{\mu}_t(X)$
-
-  - The residuals represent the part of $Y$ and $T$ that is independent of $X$
-  - Confounding is removed because any variation in $T$ and $Y$ that came from
-    $X$ has been partial-ed out
-  - The treatment effect can now be estimated without bias from confounders
+  - _Step 3_: Residualize outcome $\widetilde{Y} = Y - \hat{\mu}_y(X)$
+  - _Step 4_: Residualize treatment $\widetilde{T} = T - \hat{\mu}_t(X)$
+    - Residuals represent part of $Y$ and $T$ independent of $X$
+    - Confounding is removed and can estimate treatment effect without bias
 
 - **Stage 3**: Construct the causal target
-
-  - Step 5: Create the transformed outcome
-    $$Y^* = \frac{\widetilde{Y}}{\widetilde{T}}$$
-
-  - Since both residuals are centered around zero (and mean $\approx$ 0),
-    dividing gives the "slope" of the relationship between treatment and outcome
-    residuals for each unit, i.e., estimate of $\tau(X_i)$ (the treatment effect
-    conditional on that unit's features)
-
-  - Step 6: Create weights $$w_i = \widetilde{T}_i^2$$
-
-  - Dividing by $\widetilde{T}$ (which is close to zero) introduces
-    noise
-  - The squared weights down-weight noisy estimates and up-weight units with
-    large treatment residual variance (where estimation is most stable)
+  - _Step 5_: Create transformed outcome
+    $Y^* = \frac{\widetilde{Y}}{\widetilde{T}}$
+    - Dividing gives "slope" of relationship between treatment and outcome
+      residuals, i.e., estimate of $\tau(X_i)$
+  - _Step 6_: Create weights $w_i = \widetilde{T}_i^2$
+  - Dividing by $\widetilde{T}$ introduces noise
+  - Squared weights down-weight noisy estimates, up-weight stable estimates
 
 - **Stage 4**: Estimate the CATE Model
-
-  - Step 7: Fit a final ML model to predict $Y^*$ from $X$, using weights $w_i$
-  - Train a flexible ML regression model with $(X, Y^*)$ as input-output pairs
-  - Use the weights $w_i$ so the model focuses on stable, low-noise predictions
-  - Learn how the treatment effect varies as a function of features $X$
-  - Predictions from this model give you heterogeneous treatment effects
+  - _Step 7_: Fit final ML model to predict $Y^*$ from $X$, using weights $w_i$
+    - Train ML regression model on $(Y^*, X)$
+    - Use weights $w_i$ for stable, low-noise predictions
+    - Learn how treatment effect varies with features $X$
+    - Model predictions give heterogeneous treatment effects
 
 // Chap 8
 # Difference-in-differences
