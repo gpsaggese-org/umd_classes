@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -151,51 +151,21 @@ mtl.plot_xlearner_effect_estimates(df, tau_0, tau_1, mu_tau0_hat, mu_tau1_hat)
 mtl.plot_xlearner_with_propensity_scores(df, mu_tau0, mu_tau1, tau_0, tau_1)
 
 # %%
-# TODO(ai_gp): Move to utils.
-from sklearn.linear_model import LogisticRegression
-from lightgbm import LGBMRegressor
-
-# propensity score model
-ps_model = LogisticRegression(penalty=None)
-ps_model.fit(train[X], train[T])
-
-# first stage models
-train_t0 = train.query(f"{T}==0")
-train_t1 = train.query(f"{T}==1")
-
-m0 = LGBMRegressor()
-m1 = LGBMRegressor()
-
-np.random.seed(123)
-
-m0.fit(train_t0[X], train_t0[y],
-       sample_weight=1/ps_model.predict_proba(train_t0[X])[:, 0])
-
-m1.fit(train_t1[X], train_t1[y],
-       sample_weight=1/ps_model.predict_proba(train_t1[X])[:, 1]);
-
-# %%
-# second stage
-tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
-tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
-
-m_tau_0 = LGBMRegressor()
-m_tau_1 = LGBMRegressor()
-
-np.random.seed(123)
-
-m_tau_0.fit(train_t0[X], tau_hat_0)
-m_tau_1.fit(train_t1[X], tau_hat_1);
-
-# %%
-# estimate the CATE
-ps_test = ps_model.predict_proba(test[X])[:, 1]
-
-x_cate_test = test.assign(
-    cate=(ps_test*m_tau_0.predict(test[X]) +
-          (1-ps_test)*m_tau_1.predict(test[X])
-         )
+# Fit propensity score model and first-stage outcome models with inverse
+# probability weighting.
+ps_model, m0, m1 = mtl.fit_propensity_score_and_weighted_outcome_models(
+    train, X, T, y
 )
+
+# %%
+# Fit second-stage models on residual treatment effects.
+m_tau_0, m_tau_1 = mtl.fit_xlearner_second_stage_models(
+    train, X, T, y, m0, m1
+)
+
+# %%
+# Estimate the CATE using propensity-score-weighted X-Learner effects.
+x_cate_test = mtl.estimate_xlearner_cate(test, X, ps_model, m_tau_0, m_tau_1)
 
 # %%
 gain_curve_test = fklearn.causal.validation.curves.relative_cumulative_gain_curve(x_cate_test, T, y, prediction="cate")

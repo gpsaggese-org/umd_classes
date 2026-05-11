@@ -372,3 +372,107 @@ def plot_xlearner_with_propensity_scores(
     plt.ylabel("Estimated Effect")
     plt.xlabel("X")
     plt.legend(fontsize=14)
+
+
+# #############################################################################
+# Cell 4: X-Learner with Real Data and Propensity Score Weighting
+# #############################################################################
+
+
+def fit_propensity_score_and_weighted_outcome_models(
+    train: pd.DataFrame,
+    X: list,
+    T: str,
+    y: str,
+) -> Tuple[LogisticRegression, LGBMRegressor, LGBMRegressor]:
+    """
+    Fit propensity score and weighted first-stage outcome models for X-Learner.
+
+    Fits a propensity score model to estimate treatment probability, then fits
+    separate outcome models for control and treated groups using inverse
+    probability weighting.
+
+    :param train: Training DataFrame with features X, treatment T, and outcome y.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :return: Tuple of (ps_model, m0, m1) where ps_model is the fitted propensity
+             score model and m0, m1 are the weighted outcome models.
+    """
+    ps_model = LogisticRegression(penalty=None)
+    ps_model.fit(train[X], train[T])
+    train_t0 = train.query(f"{T}==0")
+    train_t1 = train.query(f"{T}==1")
+    m0 = LGBMRegressor()
+    m1 = LGBMRegressor()
+    np.random.seed(123)
+    m0.fit(
+        train_t0[X],
+        train_t0[y],
+        sample_weight=1 / ps_model.predict_proba(train_t0[X])[:, 0]
+    )
+    m1.fit(
+        train_t1[X],
+        train_t1[y],
+        sample_weight=1 / ps_model.predict_proba(train_t1[X])[:, 1]
+    )
+    return ps_model, m0, m1
+
+
+def fit_xlearner_second_stage_models(
+    train: pd.DataFrame,
+    X: list,
+    T: str,
+    y: str,
+    m0: LGBMRegressor,
+    m1: LGBMRegressor,
+) -> Tuple[LGBMRegressor, LGBMRegressor]:
+    """
+    Fit second-stage X-Learner models on residual treatment effects.
+
+    Computes residual treatment effects (tau_hat) for each group and fits
+    separate models to predict these effects.
+
+    :param train: Training DataFrame with features X, treatment T, and outcome y.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param m0: Fitted outcome model for control group.
+    :param m1: Fitted outcome model for treated group.
+    :return: Tuple of (m_tau_0, m_tau_1) models for predicting treatment effects.
+    """
+    train_t0 = train.query(f"{T}==0")
+    train_t1 = train.query(f"{T}==1")
+    tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
+    tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
+    m_tau_0 = LGBMRegressor()
+    m_tau_1 = LGBMRegressor()
+    np.random.seed(123)
+    m_tau_0.fit(train_t0[X], tau_hat_0)
+    m_tau_1.fit(train_t1[X], tau_hat_1)
+    return m_tau_0, m_tau_1
+
+
+def estimate_xlearner_cate(
+    test: pd.DataFrame,
+    X: list,
+    ps_model: LogisticRegression,
+    m_tau_0: LGBMRegressor,
+    m_tau_1: LGBMRegressor,
+) -> pd.DataFrame:
+    """
+    Estimate CATE using propensity-score-weighted X-Learner effects.
+
+    Combines the second-stage treatment effect models with propensity score
+    weighting to produce final CATE estimates.
+
+    :param test: Test DataFrame with features X.
+    :param X: List of feature column names.
+    :param ps_model: Fitted propensity score model.
+    :param m_tau_0: Fitted effect model for control group.
+    :param m_tau_1: Fitted effect model for treated group.
+    :return: DataFrame with CATE predictions in 'cate' column.
+    """
+    ps_test = ps_model.predict_proba(test[X])[:, 1]
+    cate = ps_test * m_tau_0.predict(test[X]) + (1 - ps_test) * m_tau_1.predict(test[X])
+    return test.assign(cate=cate)
