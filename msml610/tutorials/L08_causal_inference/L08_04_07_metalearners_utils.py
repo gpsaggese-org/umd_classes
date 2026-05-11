@@ -410,6 +410,8 @@ def fit_propensity_score_and_weighted_outcome_models(
     X: List[str],
     T: str,
     y: str,
+    *,
+    seed: int = 123,
 ) -> Tuple[LogisticRegression, LGBMRegressor, LGBMRegressor]:
     """
     Fit propensity score and weighted first-stage outcome models for X-Learner.
@@ -422,11 +424,11 @@ def fit_propensity_score_and_weighted_outcome_models(
     :param X: List of feature column names.
     :param T: Treatment column name.
     :param y: Outcome column name.
+    :param seed: Random seed for reproducibility.
     :return: Tuple of (ps_model, m0, m1) where ps_model is the fitted propensity
              score model and m0, m1 are the weighted outcome models.
     """
-    # TODO(ai_gp): Pass this
-    np.random.seed(123)
+    np.random.seed(seed)
     ps_model = LogisticRegression(penalty=None)
     ps_model.fit(train[X], train[T])
     # Outcome models for control group.
@@ -455,6 +457,8 @@ def fit_xlearner_second_stage_models(
     y: str,
     m0: LGBMRegressor,
     m1: LGBMRegressor,
+    *,
+    seed: int = 123,
 ) -> Tuple[LGBMRegressor, LGBMRegressor]:
     """
     Fit second-stage X-Learner models on residual treatment effects.
@@ -468,10 +472,10 @@ def fit_xlearner_second_stage_models(
     :param y: Outcome column name.
     :param m0: Fitted outcome model for control group.
     :param m1: Fitted outcome model for treated group.
+    :param seed: Random seed for reproducibility.
     :return: Tuple of (m_tau_0, m_tau_1) models for predicting treatment effects.
     """
-    # TODO(ai_gp): Pass this
-    np.random.seed(123)
+    np.random.seed(seed)
     # Second-stage model for control group effects.
     m_tau_0 = LGBMRegressor()
     train_t0 = train.query(f"{T}==0")
