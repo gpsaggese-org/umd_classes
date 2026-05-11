@@ -25,6 +25,7 @@ import logging
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+import seaborn as sns
 
 
 # %%
@@ -117,8 +118,10 @@ _ = mtl.plot_gain_curve_analysis(t_learner_cate_test, T, y, title="T-Learner")
 # %%
 # Generate synthetic data with treatment heterogeneity.
 df = mtl.generate_synthetic_treatment_data(n0=500, n1=50, seed=123)
+
 # Fit separate outcome models for control and treatment groups.
 m0, m1, m0_hat, m1_hat = mtl.fit_tlearner_models(df, min_child_samples=25)
+
 # Visualize outcome models and heterogeneous treatment effects.
 mtl.plot_tlearner_treatment_effect_analysis(df, m0, m1, m0_hat, m1_hat)
 
@@ -161,4 +164,48 @@ x_cate_test = mtl.estimate_xlearner_cate(test, X, ps_model, m_tau_0, m_tau_1)
 # %%
 _ = mtl.plot_gain_curve_analysis(x_cate_test, T, y, title="X-Learner")
 
+# %% [markdown]
+# # S-Learner
+
 # %%
+data_cont = pd.read_csv(f"{dir_name}/discount_data.csv")
+print(data_cont.shape[0])
+data_cont.head()
+
+# %%
+train = data_cont.query("day<'2018-01-01'")
+print(train.shape[0])
+test = data_cont.query("day>='2018-01-01'")
+print(test.shape[0])
+
+# %%
+X = ["month", "weekday", "is_holiday", "competitors_price"]
+T = "discounts"
+y = "sales"
+
+s_learner = mtl.fit_slearner_model(train, X, T, y)
+
+# %%
+test_cf = mtl.generate_slearner_counterfactual_predictions(
+    test, X, T, y, s_learner, np.array([0, 10, 20, 30, 40])
+)
+
+test_cf.head(8)
+
+# %%
+days = ["2018-12-25", "2018-01-01", "2018-06-01", "2018-06-18"]
+
+plt.figure(figsize=(10, 4))
+sns.lineplot(data=test_cf.query("day.isin(@days)").query("rest_id==2"),
+             palette="gray",
+             y="sales_hat",
+             x="discounts",
+             style="day");
+
+# %%
+test_s_learner_pred = mtl.estimate_slearner_cate(test_cf, test, T, y)
+
+test_s_learner_pred.head()
+
+# %%
+_ = mtl.plot_gain_curve_analysis(test_s_learner_pred, T, y, title="S-Learner")

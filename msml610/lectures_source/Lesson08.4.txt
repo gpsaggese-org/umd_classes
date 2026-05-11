@@ -2074,6 +2074,18 @@ Variables that _predict the treatment well_ but not the outcome
     - Learn how treatment effect varies with features $X$
     - Model predictions give heterogeneous treatment effects
 
+* Double-ML for CATE Estimation
+
+- Allow causal parameter to vary with covariates $\tau(X_i)$
+  - Outcome model:
+    $$Y_i = \hat{\mu}_y(X_i) + \tau(X_i) \cdot \widetilde{T}_i + \varepsilon_i$$
+
+- You can isolate the error, which is called "R-loss" and can be used as a causal
+  objective function
+  $$\hat{L}_n(\tau(x)) = \frac{1}{n} \sum_{i=1}^{n} (\widetilde{Y}_i - \tau(X_i)
+  \widetilde{T}_i)^2$$
+  - Minimizing this loss directly estimates CATE
+
 // Chap 8
 # Difference-in-differences
 

@@ -551,3 +551,122 @@ def plot_gain_curve_analysis(
     plt.legend()
     plt.title(title)
     return auc
+
+
+# #############################################################################
+# Cell 5: S-Learner
+# #############################################################################
+
+
+def fit_slearner_model(
+    train: pd.DataFrame,
+    X: List[str],
+    T: str,
+    y: str,
+    *,
+    seed: int = 123,
+) -> LGBMRegressor:
+    """
+    Fit an S-Learner model on the training data.
+
+    Trains a single regressor on the combined feature set (X) and treatment (T)
+    to predict the outcome (y).
+
+    :param train: Training DataFrame with features X, treatment T, and outcome y.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param seed: Random seed for reproducibility.
+    :return: Fitted LGBMRegressor model.
+    """
+    import helpers.hdbg as hdbg
+    hdbg.dassert_in(T, train.columns)
+    hdbg.dassert_in(y, train.columns)
+    for col in X:
+        hdbg.dassert_in(col, train.columns)
+    np.random.seed(seed)
+    s_learner = LGBMRegressor()
+    s_learner.fit(train[X + [T]], train[y])
+    return s_learner
+
+
+def generate_slearner_counterfactual_predictions(
+    test: pd.DataFrame,
+    X: List[str],
+    T: str,
+    y: str,
+    s_learner: LGBMRegressor,
+    treatment_values: np.ndarray,
+) -> pd.DataFrame:
+    """
+    Generate counterfactual predictions for S-Learner across treatment values.
+
+    Creates a dataset where each row in test is expanded to have predictions
+    under multiple treatment values.
+
+    :param test: Test DataFrame with features X.
+    :param X: List of feature column names.
+    :param T: Treatment column name.
+    :param y: Outcome column name.
+    :param s_learner: Fitted S-Learner model.
+    :param treatment_values: Array of treatment values to predict for.
+    :return: DataFrame with counterfactual predictions appended.
+    """
+    t_grid = pd.DataFrame(
+        dict(key=1, **{T: treatment_values})
+    )
+    y_hat_col = f"{y}_hat"
+    test_cf = (
+        test
+        .drop(columns=[T])
+        .assign(key=1)
+        .merge(t_grid)
+        .assign(**{y_hat_col: lambda d: s_learner.predict(d[X + [T]])})
+    )
+    return test_cf
+
+
+def _calculate_linear_effect(df: pd.DataFrame, y: str, t: str) -> float:
+    """
+    Calculate linear treatment effect as a slope coefficient.
+
+    Computes the linear regression slope: Cov(y, t) / Var(t), which
+    represents the expected change in y per unit change in t.
+
+    :param df: DataFrame with columns y and t.
+    :param y: Outcome column name.
+    :param t: Treatment column name.
+    :return: Linear effect coefficient (regression slope).
+    """
+    return np.cov(df[y], df[t])[0, 1] / df[t].var()
+
+
+def estimate_slearner_cate(
+    test_cf: pd.DataFrame,
+    test: pd.DataFrame,
+    T: str,
+    y: str,
+) -> pd.DataFrame:
+    """
+    Estimate CATE for S-Learner using linear treatment effects.
+
+    Groups the counterfactual predictions by grouping keys and computes
+    the linear treatment effect within each group as the slope of predicted
+    outcomes against treatment T.
+
+    :param test_cf: Counterfactual DataFrame with predictions and group keys.
+    :param test: Original test DataFrame.
+    :param T: Treatment column name.
+    :param y: Outcome column name (used to compute y_hat column name).
+    :return: DataFrame with CATE predictions.
+    """
+    y_hat_col = f"{y}_hat"
+    groupby_cols = list(test_cf.columns.difference([T, y_hat_col, "key"]))
+    cate = (
+        test_cf
+        .groupby(groupby_cols)
+        .apply(lambda df: _calculate_linear_effect(df, y_hat_col, T), include_groups=False)
+        .rename("cate")
+    )
+    result = test.set_index(groupby_cols).join(cate)
+    return result
