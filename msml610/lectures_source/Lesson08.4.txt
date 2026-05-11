@@ -1861,12 +1861,17 @@ Variables that _predict the treatment well_ but not the outcome
 * Metalearners
 - **Goal**: Estimate conditional average treatment effect (CATE) to identify how
   unit $i$ responds differently to treatment
-  $$\tau_i(x) \triangleq \EE[Y_i(1) - Y_i(0) | X] = \EE[\tau_i | X]$$
+  $$\tau_i(x) \triangleq \EE[Y_i(1) - Y_i(0) | X]$$
 
-- **Definition**: metalearners leverage off-the-shelf machine learning algorithms
-  for treatment effect estimation
+- **Definition**: metalearners leverage / recycle off-the-shelf machine learning
+  algorithms for treatment effect estimation
   - Can estimate ATE but mainly used for CATE estimation
   - Work well with high-dimensional data
+
+- Often this is a _ranking problem_: correctly order units by treatment
+  sensitivity
+  - Discrete treatments: binary or categorical
+  - Continuous treatments: dose, price, discount level
 
 * Marketing Email: Example
 - Marketing team at an online retailer
@@ -1877,7 +1882,8 @@ Variables that _predict the treatment well_ but not the outcome
 - **Problem**:
   - Your budget of discount is limited 
   - Some customers don't like receiving marketing emails
-    - Avoid sending to unreceptive customers to maintain relationship quality
+    - Avoid sending email to unreceptive customers to maintain relationship
+      quality
 
 - **Solution**: 
 - Estimate CATE of email on customers' future purchase volume
@@ -1897,31 +1903,28 @@ Variables that _predict the treatment well_ but not the outcome
   - For binary treatment: estimate
     $\mu_0(x) = \EE[Y | T=0, X]$ and 
     $\mu_1(x) = \EE[Y | T=1, X]$
-  - CATE estimate:
-    $$\tau(x)_i = \mu_1(X_i) - \mu_0(X_i)$$
+  - Predict both potential outcomes for each unit and then estimate CATE as:
+    $$\hat{\tau}(x)_i = \hat{\mu}_1(X_i) - \hat{\mu}_0(X_i)$$
 
 - **Advantages**: Simple and straightforward implementation
 
-- **Disadvantage**: Prone to regularization bias when treatment and control groups
-  have unequal sample sizes
-  - Issue: If treated data is sparse, mu_1 becomes overly regularized and simple
-  - If untreated data is abundant, mu_0 can fit nonlinearity
-  - Result: Bias in CATE estimation (nonlinear difference minus linear
-    difference)
-  - Example: Model with nonlinear outcome but constant treatment effect produces
-    wrong nonlinear CATE
+- **Disadvantage**: Prone to regularization bias
 
 * Regularization Bias
 - **Problem**: In T-learner you need to fit two models at the same time
   - If treated data is sparse, $mu_1$ becomes overly regularized and simple
     (e.g., a constant)
-  - If untreated data is abundant, $mu_0$ can fit nonlinearity
+  - If untreated data is abundant, $mu_0$ can fit a non-linearity
 
-- **Result**: bias in CATE estimation
+- **Result**:
+  - Bias in CATE estimation (nonlinear difference minus linear difference)
+  - E.g., model with nonlinear outcome but constant treatment effect produces
+    wrong nonlinear CATE
+  - In imbalanced data, regularization creates artificial heterogeneity
   // TODO: add picture
 
 * X-Learner
-- **Idea**
+- **Approach**
   - Address regularization bias of T-learner
   - Two-stage approach with propensity score weighting
   - Performs better when one treatment group is much larger than the other
@@ -1929,17 +1932,77 @@ Variables that _predict the treatment well_ but not the outcome
 - **Stage 1**: Fit initial outcome models (same as T-learner)
   - $\mu_0(X)$ and $\mu_1(X)$ for control and treated groups
 
-- **Stage 2**: Estimate imputed treatment effects and fit second-stage models
-  - For control group: $\tau(X, T=0) = \mu_1(X, T=0) - Y_{T=0}$
-  - For treated group: $\tau(X, T=1) = Y_{T=1} - \mu_0(X, T=1)$
-  - Fit models $\mu_{\tau,0}$ and $\mu_{\tau,1}$ to predict these estimated
-    effects
+- **Stage 2**: Estimate imputed treatment effects
+  - For control units: estimate missing treatment outcome:
+    $$\hat{\tau}(X, T=0) = \hat{\mu}_1(X, T=0) - Y_{T=0}$$
+  - For treated units: estimate missing control outcome:
+    $$\hat{\tau}(X, T=1) = Y_{T=1} - \hat{\mu}_0(X, T=1)$$
 
-- **Combining predictions using propensity score**:
-  - Problem: $\mu_{\tau,0}$ is wrong because $\mu_1$ was trained on small sample
-  - Effect: Downweights the wrong estimate from sparse treatment data
-  - Final CATE:
-    $\tau(x) = \mu_{\tau,0} \cdot e(x) + \mu_{\tau,1} \cdot (1 - e(x))$
+- **Stage 3**: Fit effect models
+  - Fit $\hat{\mu}_{\tau 0}(x)$ to predict $\hat{\tau}(X, T=0)$
+  - Fit $\hat{\mu}_{\tau 1}(x)$ to predict $\hat{\tau}(X, T=1)$
+
+- **Pros**
+  - X-learner shines when large imbalance between treatment and control groups
+
+* X-Learner With Weighting Scheme
+- Combine second-stage models using propensity score $\hat{e}(x) = \Pr(T=1|X)$
+  $$\hat{\tau}(x) 
+  = \hat{\mu}_{\tau 0}(x) \cdot \hat{e}(x) + 
+    \hat{\mu}_{\tau 1}(x) \cdot (1 - \hat{e}(x))$$
+
+- **Intuition**
+  - When treatment is rare: $\hat{e}(x)$ is small, down-weights flawed
+    $\hat{\mu}_{\tau 0}$
+  - When treatment is common: $1 - \hat{e}(x)$ is large, up-weights correct
+    $\hat{\mu}_{\tau 1}$
+  - Automatically emphasizes the model trained on larger sub-sample
+
+* Metalearners for Continuous Treatments
+- **Problem**: Randomized discount experiment at restaurant chain
+  - Goal: which days should discounts be highest?
+  - Treatment: discount amount (continuous, 0-40%)
+  - Outcome: sales volume one day later
+
+- **Insight**
+  - Customers more sensitive to prices on some days (e.g., holidays)
+  - CATE tells us how much demand increases per unit discount
+  - High CATE days $\Rightarrow$ use more discounts
+  - Low CATE days $\Rightarrow$ use fewer
+
+- **Problem**
+- Discrete approaches fail because they
+  - Can't fit separate models for each discount level (infinite treatments)
+  - Need methods that handle continuous treatment as a feature or component
+
+- **Solution**: S-learner and Double-ML
+
+* S-Learner
+- **Approach**: Single machine learning model that includes treatment $T$ as a
+  feature (together with covariate $X$) to predict outcome $Y$
+  - Goal is to estimate $\mu(x) = \EE[Y | T, X]$
+  - "S-Learner" since it's "single"
+
+- **For binary treatment**: CATE = $M_s(X_i, T=1) - M_s(X_i, T=0)$
+
+- **For continuous treatment**: Extended procedure needed
+  - Create grid of treatment values (e.g., [0, 10, 20, 30, 40] for discounts)
+  - Cross-join data with treatment grid to get counterfactual predictions
+  - Fit linear regression on expanded data and extract slope as CATE estimate
+  - Formula: $\beta = \text{Cov}(t, y) / \text{Var}(t)$
+
+- **Advantages**: Simple, supports both binary and continuous treatments,
+  performs reasonably well
+
+- **Main disadvantage**: Biases treatment effect toward zero
+  - Cause: Regularization in ML model restricts estimated treatment effect
+  - Extreme case: Treatment variable can be completely discarded if weak
+    relative to other covariates
+  - Evidence: Simulation shows distribution of estimated ATEs concentrated left
+    of true ATE
+
+- **Solution**: Use Double/Debiased Machine Learning (R-learner) to address bias
+
 
 // Chap 8
 # Difference-in-differences
