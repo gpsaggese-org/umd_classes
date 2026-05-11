@@ -78,13 +78,15 @@ def generate_synthetic_treatment_data(
     # Treated group has the same functional form but shifted up by 1.
     x1 = np.random.uniform(-1, 1, n1)
     y1 = np.random.normal(0.3 * _g_kernel(x1), 0.1, n1) + 1
-    # Combine groups and sort for consistent visualization and analysis.
+    # Combine groups into single dataframe.
     df = pd.concat(
         [
             pd.DataFrame(dict(x=x0, y=y0, t=0)),
             pd.DataFrame(dict(x=x1, y=y1, t=1)),
         ]
-    ).sort_values(by="x")
+    )
+    # Sort for consistent visualization and analysis.
+    df = df.sort_values(by="x")
     return df
 
 
@@ -524,10 +526,14 @@ def estimate_xlearner_cate(
     :param m_tau_1: Fitted effect model for treated group.
     :return: DataFrame with CATE predictions in 'cate' column.
     """
+    # Estimate propensity scores for the test set.
     ps_test = ps_model.predict_proba(test[X])[:, 1]
-    cate = ps_test * m_tau_0.predict(test[X]) + (1 - ps_test) * m_tau_1.predict(
-        test[X]
-    )
+    # Compute treatment effect predictions for each learner.
+    tau_0_pred = m_tau_0.predict(test[X])
+    tau_1_pred = m_tau_1.predict(test[X])
+    # Compute CATE as propensity-weighted average of control and treatment effects.
+    cate = ps_test * tau_0_pred + (1 - ps_test) * tau_1_pred
+    # Add CATE estimates to test set.
     return test.assign(cate=cate)
 
 
@@ -680,14 +686,15 @@ def estimate_slearner_cate(
     y_hat_col = f"{y}_hat"
     # Identify columns to group by (exclude treatment, prediction, and merge key).
     groupby_cols = list(test_cf.columns.difference([T, y_hat_col, "key"]))
-    # Group counterfactual predictions by feature combinations and compute linear
-    # treatment effect (slope) within each group.
-    cate = (
-        test_cf
-        .groupby(groupby_cols)
-        .apply(lambda df: _calculate_linear_effect(df, y_hat_col, T), include_groups=False)
-        .rename("cate")
+    # Group counterfactual predictions by feature combinations.
+    grouped = test_cf.groupby(groupby_cols)
+    # Compute linear treatment effect (slope) within each group.
+    cate_values = grouped.apply(
+        lambda df: _calculate_linear_effect(df, y_hat_col, T), include_groups=False
     )
+    # Set series name to indicate CATE column.
+    cate_values.name = "cate"
+    cate = cate_values
     # Join CATE estimates back to the original test set.
     result = test.set_index(groupby_cols).join(cate).reset_index()
     return result
