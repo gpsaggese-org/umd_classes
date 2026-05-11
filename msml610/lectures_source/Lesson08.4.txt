@@ -2038,7 +2038,7 @@ Variables that _predict the treatment well_ but not the outcome
 
 * R-learner (Double/Debiased Machine Learning)
 
-- **The principle**: Frisch-Waugh-Lovell meets Machine Learning
+- **The principle**:
   - Use ML to model confounding relationships
   - Orthogonalize treatment and outcome from confounders
   - Extract treatment effect from residuals

@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 from lightgbm import LGBMRegressor
 from sklearn.linear_model import LogisticRegression
 
+import fklearn.causal.validation.curves
+import fklearn.causal.validation.auc
+
 # Plot styling constants.
 MARKER = ["o", "s"]  # Circle for T=0, Square for T=1.
 COLOR = ["#FF6B6B", "#4ECDC4"]  # Red for T=1, Teal for T=0.
@@ -99,16 +102,17 @@ def fit_tlearner_models(
              m0 and m1 are fitted regressors and predictions are on the
              full dataset.
     """
+    # Control group outcome model.
     x0 = np.asarray(df.query("t==0")["x"]).reshape(-1, 1)
     y0 = np.asarray(df.query("t==0")["y"])
+    m0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    m0.fit(x0, y0)
+    # Treated group outcome model.
     x1 = np.asarray(df.query("t==1")["x"]).reshape(-1, 1)
     y1 = np.asarray(df.query("t==1")["y"])
-    # Train separate outcome models for each treatment group.
-    m0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     m1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
-    m0.fit(x0, y0)
     m1.fit(x1, y1)
-    # Generate predictions across the full dataset for both models.
+    # Generate predictions across the full dataset.
     X_full = np.asarray(df[["x"]])
     m0_hat = m0.predict(X_full)
     m1_hat = m1.predict(X_full)
@@ -135,14 +139,15 @@ def plot_tlearner_treatment_effect_analysis(
     :param m0_hat: Predictions from m0 on full dataset.
     :param m1_hat: Predictions from m1 on full dataset.
     """
-    _ = plt.subplots(2, 1, figsize=(10, 10))
+    _ = plt.subplots(2, 1, figsize=(8, 6))
     ax1, ax2 = plt.gcf().axes[:2]
+    # Extract data for sorting fitted models across both subplots.
+    x_vals = np.asarray(df["x"])
+    x_sort_idx = np.argsort(x_vals)
+    x_sorted = x_vals[x_sort_idx]
     # Top subplot: Outcome data and fitted models.
     x0 = np.asarray(df.query("t==0")["x"])
     y0 = np.asarray(df.query("t==0")["y"])
-    x1 = np.asarray(df.query("t==1")["x"])
-    y1 = np.asarray(df.query("t==1")["y"])
-    # Plot observed outcomes by treatment group for visual comparison.
     ax1.scatter(
         x0,
         y0,
@@ -151,6 +156,8 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[0],
         color=COLOR[1],
     )
+    x1 = np.asarray(df.query("t==1")["x"])
+    y1 = np.asarray(df.query("t==1")["y"])
     ax1.scatter(
         x1,
         y1,
@@ -159,10 +166,6 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
-    # Overlay fitted conditional expectation functions for each treatment group.
-    x_vals = np.asarray(df["x"])
-    x_sort_idx = np.argsort(x_vals)
-    x_sorted = x_vals[x_sort_idx]
     m0_hat_sorted = m0_hat[x_sort_idx]
     m1_hat_sorted = m1_hat[x_sort_idx]
     ax1.plot(
@@ -183,15 +186,9 @@ def plot_tlearner_treatment_effect_analysis(
     ax1.set_xlabel("X", fontsize=12)
     ax1.legend(fontsize=14)
     # Bottom subplot: Heterogeneous treatment effects.
-    # Effect for control units: prediction gap between models.
     x0_full = np.asarray(df.query("t==0")[["x"]])
     y0_full = np.asarray(df.query("t==0")["y"])
     tau_0 = m1.predict(x0_full) - y0_full
-    # Effect for treated units: actual outcome gap.
-    x1_full = np.asarray(df.query("t==1")[["x"]])
-    y1_full = np.asarray(df.query("t==1")["y"])
-    tau_1 = y1_full - m0.predict(x1_full)
-    # Plot heterogeneous effects.
     ax2.scatter(
         x0,
         tau_0,
@@ -200,6 +197,9 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[0],
         color=COLOR[1],
     )
+    x1_full = np.asarray(df.query("t==1")[["x"]])
+    y1_full = np.asarray(df.query("t==1")["y"])
+    tau_1 = y1_full - m0.predict(x1_full)
     ax2.scatter(
         x1,
         tau_1,
@@ -208,7 +208,6 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
-    # Compute CATE as the difference between fitted models across the feature space.
     X_full = np.asarray(df[["x"]])
     cate = m1.predict(X_full) - m0.predict(X_full)
     ax2.plot(
@@ -272,13 +271,15 @@ def fit_xlearner_models(
     :param min_child_samples: LightGBM min_child_samples parameter.
     :return: Tuple of (mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat).
     """
+    # Control group effect model.
     x0 = np.asarray(df.query("t==0")[["x"]])
-    x1 = np.asarray(df.query("t==1")[["x"]])
     mu_tau0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
-    mu_tau1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     mu_tau0.fit(x0, tau_0)
-    mu_tau1.fit(x1, tau_1)
     mu_tau0_hat = mu_tau0.predict(x0)
+    # Treated group effect model.
+    x1 = np.asarray(df.query("t==1")[["x"]])
+    mu_tau1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
+    mu_tau1.fit(x1, tau_1)
     mu_tau1_hat = mu_tau1.predict(x1)
     return mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat
 
@@ -301,10 +302,9 @@ def plot_xlearner_effect_estimates(
     :param mu_tau0_hat: Fitted effect predictions for control group.
     :param mu_tau1_hat: Fitted effect predictions for treated group.
     """
-    plt.figure(figsize=(10, 4))
+    plt.figure(figsize=(8, 3))
+    # Control group effects and fitted model.
     x0 = np.asarray(df.query("t==0")[["x"]])
-    x1 = np.asarray(df.query("t==1")[["x"]])
-    # Plot heterogeneous effect estimates for each treatment group.
     plt.scatter(
         x0,
         tau_0,
@@ -313,6 +313,15 @@ def plot_xlearner_effect_estimates(
         marker=MARKER[0],
         color=COLOR[1],
     )
+    plt.plot(
+        x0,
+        mu_tau0_hat,
+        color="black",
+        linestyle="solid",
+        label=r"$\hat{\mu}_{\tau_0}$",
+    )
+    # Treated group effects and fitted model.
+    x1 = np.asarray(df.query("t==1")[["x"]])
     plt.scatter(
         x1,
         tau_1,
@@ -320,14 +329,6 @@ def plot_xlearner_effect_estimates(
         alpha=0.8,
         marker=MARKER[1],
         color=COLOR[0],
-    )
-    # Overlay fitted X-Learner models showing estimated treatment effects.
-    plt.plot(
-        x0,
-        mu_tau0_hat,
-        color="black",
-        linestyle="solid",
-        label=r"$\hat{\mu}_{\tau_0}$",
     )
     plt.plot(
         x1,
@@ -361,18 +362,14 @@ def plot_xlearner_with_propensity_scores(
     :param tau_0: Heterogeneous effects for control units.
     :param tau_1: Heterogeneous effects for treated units.
     """
-    plt.figure(figsize=(10, 4))
-    # Fit propensity score model and extract treatment probabilities.
+    plt.figure(figsize=(8, 3))
+    # Fit propensity score model.
     ps_model = LogisticRegression(penalty=None)
     ps_model.fit(df[["x"]], df["t"])
     ps = ps_model.predict_proba(df[["x"]])[:, 1]
-    # Compute CATE as propensity-score-weighted average of treatment effects.
-    X_full = np.asarray(df[["x"]])
-    cate = (1 - ps) * mu_tau1.predict(X_full) + ps * mu_tau0.predict(X_full)
+    # Control group effects with propensity-based weighting.
     x0 = np.asarray(df.query("t==0")[["x"]])
-    x1 = np.asarray(df.query("t==1")[["x"]])
     ps_0 = ps[df["t"] == 0]
-    ps_1 = ps[df["t"] == 1]
     plt.scatter(
         x0,
         tau_0,
@@ -382,6 +379,9 @@ def plot_xlearner_with_propensity_scores(
         marker=MARKER[0],
         color=COLOR[1],
     )
+    # Treated group effects with propensity-based weighting.
+    x1 = np.asarray(df.query("t==1")[["x"]])
+    ps_1 = ps[df["t"] == 1]
     plt.scatter(
         x1,
         tau_1,
@@ -391,6 +391,9 @@ def plot_xlearner_with_propensity_scores(
         marker=MARKER[1],
         color=COLOR[0],
     )
+    # Compute and plot CATE as propensity-score-weighted average.
+    X_full = np.asarray(df[["x"]])
+    cate = (1 - ps) * mu_tau1.predict(X_full) + ps * mu_tau0.predict(X_full)
     plt.plot(df[["x"]], cate, label="x-learner", color="black")
     plt.ylabel("Estimated Effect")
     plt.xlabel("X")
@@ -426,15 +429,17 @@ def fit_propensity_score_and_weighted_outcome_models(
     np.random.seed(123)
     ps_model = LogisticRegression(penalty=None)
     ps_model.fit(train[X], train[T])
-    train_t0 = train.query(f"{T}==0")
-    train_t1 = train.query(f"{T}==1")
+    # Outcome models for control group.
     m0 = LGBMRegressor()
-    m1 = LGBMRegressor()
+    train_t0 = train.query(f"{T}==0")
     m0.fit(
         train_t0[X],
         train_t0[y],
         sample_weight=1 / ps_model.predict_proba(train_t0[X])[:, 0],
     )
+    # Outcome models for treated group.
+    m1 = LGBMRegressor()
+    train_t1 = train.query(f"{T}==1")
     m1.fit(
         train_t1[X],
         train_t1[y],
@@ -465,15 +470,17 @@ def fit_xlearner_second_stage_models(
     :param m1: Fitted outcome model for treated group.
     :return: Tuple of (m_tau_0, m_tau_1) models for predicting treatment effects.
     """
-    train_t0 = train.query(f"{T}==0")
-    train_t1 = train.query(f"{T}==1")
-    tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
-    tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
-    m_tau_0 = LGBMRegressor()
-    m_tau_1 = LGBMRegressor()
     # TODO(ai_gp): Pass this
     np.random.seed(123)
+    # Second-stage model for control group effects.
+    m_tau_0 = LGBMRegressor()
+    train_t0 = train.query(f"{T}==0")
+    tau_hat_0 = m1.predict(train_t0[X]) - train_t0[y]
     m_tau_0.fit(train_t0[X], tau_hat_0)
+    # Second-stage model for treated group effects.
+    m_tau_1 = LGBMRegressor()
+    train_t1 = train.query(f"{T}==1")
+    tau_hat_1 = train_t1[y] - m0.predict(train_t1[X])
     m_tau_1.fit(train_t1[X], tau_hat_1)
     return m_tau_0, m_tau_1
 
@@ -503,3 +510,41 @@ def estimate_xlearner_cate(
         test[X]
     )
     return test.assign(cate=cate)
+
+
+def plot_gain_curve_analysis(
+    cate_test: pd.DataFrame,
+    treatment_col: str,
+    outcome_col: str,
+    title: str = "Model",
+) -> float:
+    """
+    Plot and calculate gain curve analysis for CATE evaluation.
+
+    Computes the relative cumulative gain curve and AUC metric, displaying
+    the results in a plot.
+
+    :param cate_test: DataFrame with treatment, outcome, and CATE predictions.
+    :param treatment_col: Name of the treatment column.
+    :param outcome_col: Name of the outcome column.
+    :param title: Title for the plot.
+    :return: AUC value for the gain curve.
+    """
+    gain_curve_test = (
+        fklearn.causal.validation.curves.relative_cumulative_gain_curve(
+            cate_test, treatment_col, outcome_col, prediction="cate"
+        )
+    )
+    auc = (
+        fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(
+            cate_test, treatment_col, outcome_col, prediction="cate"
+        )
+    )
+
+    plt.figure(figsize=(8, 3))
+    plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
+    plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
+
+    plt.legend()
+    plt.title(title)
+    return auc
