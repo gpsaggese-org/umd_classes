@@ -1665,21 +1665,6 @@ Variables that _predict the treatment well_ but not the outcome
 - IPW makes no functional form assumptions → fails without positivity
 
 ### Positivity-Bias Trade-Off
-  ⎿  # Bias-Variance Trade-off in Causal Inference
-
-     ## The Core Trade-off Between Two Key Assumptions
-     When building a causal model, you face a tension between two critical
-     assumptions:
-
-     - Adding more variables to your model (conditioning on more confounders) makes
-       the Conditional Independence Assumption (CIA) more plausible. CIA says that
-       once you account for observed confounders, treatment assignment is independent
-       of the outcome
-
-     - However, adding more variables creates a practical problem: you reduce the
-       number of data points in regions where treatments and controls overlap, making
-       the Positivity assumption harder to satisfy
-
 - More covariates in propensity model $\to$
   - Stronger unconfoundedness / conditional independence assumption
   - Weaker positivity
@@ -1703,7 +1688,7 @@ Variables that _predict the treatment well_ but not the outcome
   - Enables personalization, since each unit is different in terms of its
     covariate $X$
 
-* 
+* CATE
 - You have customers and a treatment
   - $Y$ = outcome (purchase amount, satisfaction, churn probability, etc.)
   - $T$ = treatment (discount, advertisement exposure, recommendation, pricing
@@ -1722,7 +1707,6 @@ Variables that _predict the treatment well_ but not the outcome
   holding other factors fixed
 
 - High / medium / low treatment effect (group with high slope)
-- 
 
 * Why Prediction Is Not the Answer
 - Predictive models estimate outcome $Y = f(X, T)$, not treatment sensitivity
