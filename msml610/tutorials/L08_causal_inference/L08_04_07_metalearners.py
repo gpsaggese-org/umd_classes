@@ -209,3 +209,43 @@ test_s_learner_pred.head()
 
 # %%
 _ = mtl.plot_gain_curve_analysis(test_s_learner_pred, T, y, title="S-Learner")
+
+# %% [markdown]
+# # Double ML
+
+# %%
+from sklearn.model_selection import cross_val_predict
+
+X = ["month", "weekday", "is_holiday", "competitors_price"]
+T = "discounts"
+y = "sales"
+
+debias_m = LGBMRegressor()
+denoise_m = LGBMRegressor()
+
+t_res =  train[T] - cross_val_predict(debias_m,train[X],train[T],cv=5)
+y_res =  train[y] - cross_val_predict(denoise_m,train[X],train[y],cv=5)
+
+# %%
+import statsmodels.api as sm
+
+sm.OLS(y_res, t_res).fit().summary().tables[1]
+
+# %%
+y_star = y_res/t_res
+w = t_res**2
+
+cate_model = LGBMRegressor().fit(train[X], y_star, sample_weight=w)
+
+test_r_learner_pred = test.assign(cate = cate_model.predict(test[X]))
+
+# %%
+gain_curve_test = relative_cumulative_gain_curve(test_r_learner_pred, T, y, prediction="cate")
+auc = area_under_the_relative_cumulative_gain_curve(test_r_learner_pred, T, y, prediction="cate")
+
+plt.figure(figsize=(10, 4))
+plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
+plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
+
+plt.legend();
+plt.title("R-Learner")
