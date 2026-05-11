@@ -145,7 +145,6 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         self.assertIn(self.COURSE_DIR, all_lessons)
 
 
-
 # #############################################################################
 # Run_preprocess_notes_py_TestCase
 # #############################################################################
@@ -157,33 +156,6 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     """
 
     COURSE_DIR: str = ""
-
-    @pytest.mark.slow
-    def test_preprocess_notes_pdf(self) -> None:
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(self.COURSE_DIR)
-        self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "pdf"
-        )
-
-    @pytest.mark.slow
-    def test_preprocess_notes_html(self) -> None:
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(self.COURSE_DIR)
-        self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "html"
-        )
-
-    @pytest.mark.slow
-    def test_preprocess_notes_slides(self) -> None:
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(self.COURSE_DIR)
-        self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "slides"
-        )
 
     def _run_preprocess_notes_py(
         self,
@@ -232,9 +204,37 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             self.check_string(content, fuzzy_match=True)
             sys.stdout.flush()
             _LOG.info(
-                "Verified %s preprocessing for lesson %s", output_type.upper(),
-                lesson
+                "Verified %s preprocessing for lesson %s",
+                output_type.upper(),
+                lesson,
             )
+
+    @pytest.mark.slow
+    def test_preprocess_notes_pdf(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "pdf"
+        )
+
+    @pytest.mark.slow
+    def test_preprocess_notes_html(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "html"
+        )
+
+    @pytest.mark.slow
+    def test_preprocess_notes_slides(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_preprocess_notes_py(
+            self, self.COURSE_DIR, output_dir, lessons, "slides"
+        )
 
 
 # #############################################################################
@@ -248,25 +248,6 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
 
     COURSE_DIR: str = ""
-
-    @pytest.mark.superslow
-    def test_notes_to_pdf_md(self) -> None:
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(self.COURSE_DIR)
-        skip_actions = ["run_pandoc"]
-        self._run_notes_to_pdf_py(
-            self, self.COURSE_DIR, output_dir, lessons, "md", skip_actions
-        )
-
-    @pytest.mark.superslow
-    def test_notes_to_pdf_tex(self) -> None:
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = get_lesson_numbers(self.COURSE_DIR)
-        self._run_notes_to_pdf_py(
-            self, self.COURSE_DIR, output_dir, lessons, "tex"
-        )
 
     def _run_notes_to_pdf_py(
         self,
@@ -287,7 +268,9 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         """
         if skip_actions is None:
             skip_actions = []
-        for lesson in tqdm(lessons, desc=f"Testing {output_type.upper()} output"):
+        for lesson in tqdm(
+            lessons, desc=f"Testing {output_type.upper()} output"
+        ):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
@@ -343,6 +326,24 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 "Verified %s output for lesson %s", output_type.upper(), lesson
             )
 
+    @pytest.mark.superslow
+    def test_notes_to_pdf_md(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        skip_actions = ["run_pandoc"]
+        self._run_notes_to_pdf_py(
+            self, self.COURSE_DIR, output_dir, lessons, "md", skip_actions
+        )
+
+    @pytest.mark.superslow
+    def test_notes_to_pdf_tex(self) -> None:
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        output_dir = self.get_output_dir()
+        lessons = get_lesson_numbers(self.COURSE_DIR)
+        self._run_notes_to_pdf_py(
+            self, self.COURSE_DIR, output_dir, lessons, "tex"
+        )
 
 
 # #############################################################################
@@ -358,6 +359,16 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
     COURSE_DIR: str = ""
     FIRST_LESSON: str = ""
     SECOND_LESSON: str = ""
+
+    # TODO(ai_gp): Make it static
+    def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
+        """
+        Run gen_slides for a lesson, generating only TeX output.
+        """
+        cmd = (
+            f"gen_slides.py {course_dir}/{lesson} --skip_action open --tex_only"
+        )
+        hsystem.system(cmd)
 
     @pytest.mark.slow
     def test_gen_slides_first_lesson(self) -> None:
@@ -378,13 +389,7 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
             cmd = f"gen_slides.py {self.COURSE_DIR}/{lesson} --skip_action open --tex_only"
             hsystem.system(cmd)
             _LOG.info(
-                "Successfully rendered %s lesson %s as TeX", self.COURSE_DIR, lesson
+                "Successfully rendered %s lesson %s as TeX",
+                self.COURSE_DIR,
+                lesson,
             )
-
-    # TODO(ai_gp): Make it static
-    def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
-        """
-        Run gen_slides for a lesson, generating only TeX output.
-        """
-        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open --tex_only"
-        hsystem.system(cmd)

@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.2
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -49,7 +49,7 @@ hmodule.install_module_if_not_present(
     ["lightgbm", "fklearn"],
     use_activate=True,
     use_sudo=False,
-    venv_path="/opt/venv"
+    venv_path="/opt/venv",
 )
 
 # %% [markdown]
@@ -103,27 +103,35 @@ m1.fit(train.query(f"{T}==1")[X], train.query(f"{T}==1")[y]);
 m0
 
 # %%
-t_learner_cate_test = test.assign(
-    cate=m1.predict(test[X]) - m0.predict(test[X])
-)
+t_learner_cate_test = test.assign(cate=m1.predict(test[X]) - m0.predict(test[X]))
 
 # %%
 import fklearn.causal.validation.curves
 import fklearn.causal.validation.auc
 
-gain_curve_test = fklearn.causal.validation.curves.relative_cumulative_gain_curve(t_learner_cate_test, T, y, prediction="cate")
-auc = fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(t_learner_cate_test, T, y, prediction="cate")
+gain_curve_test = (
+    fklearn.causal.validation.curves.relative_cumulative_gain_curve(
+        t_learner_cate_test, T, y, prediction="cate"
+    )
+)
+auc = (
+    fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(
+        t_learner_cate_test, T, y, prediction="cate"
+    )
+)
 
-plt.figure(figsize=(10,4))
+plt.figure(figsize=(10, 4))
 plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
 plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
 
-plt.legend();
+plt.legend()
 _ = plt.title("T-Learner")
 
 # %%
-import warnings, logging
-warnings.filterwarnings('ignore', category=UserWarning, module='lightgbm')
+import warnings
+import logging
+
+warnings.filterwarnings("ignore", category=UserWarning, module="lightgbm")
 
 logging.getLogger("lightgbm").setLevel(logging.ERROR)
 
@@ -135,14 +143,15 @@ logging.getLogger("lightgbm").setLevel(logging.ERROR)
 
 # %%
 # Calculate heterogeneous treatment effects.
-#np.random.seed(1)
+# np.random.seed(1)
 
 tau_0, tau_1 = mtl.calculate_xlearner_heterogeneous_treatment_effects(df, m0, m1)
 
 # Fit X-Learner models.
 
-mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat = mtl.fit_xlearner_models(    
-    df, tau_0, tau_1, min_child_samples=25)
+mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat = mtl.fit_xlearner_models(
+    df, tau_0, tau_1, min_child_samples=25
+)
 # Plot heterogeneous treatment effect estimates.
 mtl.plot_xlearner_effect_estimates(df, tau_0, tau_1, mu_tau0_hat, mu_tau1_hat)
 
@@ -159,23 +168,29 @@ ps_model, m0, m1 = mtl.fit_propensity_score_and_weighted_outcome_models(
 
 # %%
 # Fit second-stage models on residual treatment effects.
-m_tau_0, m_tau_1 = mtl.fit_xlearner_second_stage_models(
-    train, X, T, y, m0, m1
-)
+m_tau_0, m_tau_1 = mtl.fit_xlearner_second_stage_models(train, X, T, y, m0, m1)
 
 # %%
 # Estimate the CATE using propensity-score-weighted X-Learner effects.
 x_cate_test = mtl.estimate_xlearner_cate(test, X, ps_model, m_tau_0, m_tau_1)
 
 # %%
-gain_curve_test = fklearn.causal.validation.curves.relative_cumulative_gain_curve(x_cate_test, T, y, prediction="cate")
-auc = fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(x_cate_test, T, y, prediction="cate")
+gain_curve_test = (
+    fklearn.causal.validation.curves.relative_cumulative_gain_curve(
+        x_cate_test, T, y, prediction="cate"
+    )
+)
+auc = (
+    fklearn.causal.validation.auc.area_under_the_relative_cumulative_gain_curve(
+        x_cate_test, T, y, prediction="cate"
+    )
+)
 
 plt.figure(figsize=(10, 4))
 plt.plot(gain_curve_test, color="C0", label=f"AUC: {auc:.2f}")
 plt.hlines(0, 0, 100, linestyle="--", color="black", label="Baseline")
 
-plt.legend();
+plt.legend()
 plt.title("X-Learner")
 
 # %%

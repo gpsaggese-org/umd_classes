@@ -3,7 +3,7 @@ Utility functions for metalearners tutorial (L08_04_07).
 
 Import as:
 
-import msml610.tutorials.L08_causal_inference.L08_04_07_metalearners_utils as ml
+import msml610.tutorials.L08_causal_inference.L08_04_07_metalearners_utils as mtlcil00mu
 """
 
 from typing import Tuple
@@ -35,7 +35,7 @@ def _g_kernel(x: np.ndarray, *, c: float = 0, s: float = 0.05) -> np.ndarray:
     :param s: Scale parameter (smaller s = sharper kernel).
     :return: Kernel values.
     """
-    return np.exp((-(x - c) ** 2) / s)
+    return np.exp((-((x - c) ** 2)) / s)
 
 
 def generate_synthetic_treatment_data(
@@ -306,21 +306,35 @@ def plot_xlearner_effect_estimates(
     x1 = np.asarray(df.query("t==1")[["x"]])
     # Plot heterogeneous effect estimates for each treatment group.
     plt.scatter(
-        x0, tau_0, label=r"$\hat{\tau}_0$", alpha=0.5,
-        marker=MARKER[0], color=COLOR[1]
+        x0,
+        tau_0,
+        label=r"$\hat{\tau}_0$",
+        alpha=0.5,
+        marker=MARKER[0],
+        color=COLOR[1],
     )
     plt.scatter(
-        x1, tau_1, label=r"$\hat{\tau}_1$", alpha=0.8,
-        marker=MARKER[1], color=COLOR[0]
+        x1,
+        tau_1,
+        label=r"$\hat{\tau}_1$",
+        alpha=0.8,
+        marker=MARKER[1],
+        color=COLOR[0],
     )
     # Overlay fitted X-Learner models showing estimated treatment effects.
     plt.plot(
-        x0, mu_tau0_hat, color="black", linestyle="solid",
-        label=r"$\hat{\mu}_{\tau_0}$"
+        x0,
+        mu_tau0_hat,
+        color="black",
+        linestyle="solid",
+        label=r"$\hat{\mu}_{\tau_0}$",
     )
     plt.plot(
-        x1, mu_tau1_hat, color="black", linestyle="dashed",
-        label=r"$\hat{\mu}_{\tau_1}$"
+        x1,
+        mu_tau1_hat,
+        color="black",
+        linestyle="dashed",
+        label=r"$\hat{\mu}_{\tau_1}$",
     )
     plt.ylabel("Estimated Effect")
     plt.xlabel("X")
@@ -354,19 +368,28 @@ def plot_xlearner_with_propensity_scores(
     ps = ps_model.predict_proba(df[["x"]])[:, 1]
     # Compute CATE as propensity-score-weighted average of treatment effects.
     X_full = np.asarray(df[["x"]])
-    cate = ((1 - ps) * mu_tau1.predict(X_full) +
-            ps * mu_tau0.predict(X_full))
+    cate = (1 - ps) * mu_tau1.predict(X_full) + ps * mu_tau0.predict(X_full)
     x0 = np.asarray(df.query("t==0")[["x"]])
     x1 = np.asarray(df.query("t==1")[["x"]])
     ps_0 = ps[df["t"] == 0]
     ps_1 = ps[df["t"] == 1]
     plt.scatter(
-        x0, tau_0, label=r"$\hat{\tau}_0$", alpha=0.5,
-        s=100 * (ps_0), marker=MARKER[0], color=COLOR[1]
+        x0,
+        tau_0,
+        label=r"$\hat{\tau}_0$",
+        alpha=0.5,
+        s=100 * (ps_0),
+        marker=MARKER[0],
+        color=COLOR[1],
     )
     plt.scatter(
-        x1, tau_1, label=r"$\hat{\tau}_1$", alpha=0.5,
-        s=100 * (1 - ps_1), marker=MARKER[1], color=COLOR[0]
+        x1,
+        tau_1,
+        label=r"$\hat{\tau}_1$",
+        alpha=0.5,
+        s=100 * (1 - ps_1),
+        marker=MARKER[1],
+        color=COLOR[0],
     )
     plt.plot(df[["x"]], cate, label="x-learner", color="black")
     plt.ylabel("Estimated Effect")
@@ -409,12 +432,12 @@ def fit_propensity_score_and_weighted_outcome_models(
     m0.fit(
         train_t0[X],
         train_t0[y],
-        sample_weight=1 / ps_model.predict_proba(train_t0[X])[:, 0]
+        sample_weight=1 / ps_model.predict_proba(train_t0[X])[:, 0],
     )
     m1.fit(
         train_t1[X],
         train_t1[y],
-        sample_weight=1 / ps_model.predict_proba(train_t1[X])[:, 1]
+        sample_weight=1 / ps_model.predict_proba(train_t1[X])[:, 1],
     )
     return ps_model, m0, m1
 
@@ -474,5 +497,7 @@ def estimate_xlearner_cate(
     :return: DataFrame with CATE predictions in 'cate' column.
     """
     ps_test = ps_model.predict_proba(test[X])[:, 1]
-    cate = ps_test * m_tau_0.predict(test[X]) + (1 - ps_test) * m_tau_1.predict(test[X])
+    cate = ps_test * m_tau_0.predict(test[X]) + (1 - ps_test) * m_tau_1.predict(
+        test[X]
+    )
     return test.assign(cate=cate)
