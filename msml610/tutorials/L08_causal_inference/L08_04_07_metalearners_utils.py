@@ -67,13 +67,13 @@ def generate_synthetic_treatment_data(
         4 -0.958736  0.321890  0
     """
     np.random.seed(seed)
-    # Generate control group data.
+    # Control group follows a Gaussian kernel-based model.
     x0 = np.random.uniform(-1, 1, n0)
     y0 = np.random.normal(0.3 * _g_kernel(x0), 0.1, n0)
-    # Generate treated group data with shifted mean.
+    # Treated group has the same functional form but shifted up by 1.
     x1 = np.random.uniform(-1, 1, n1)
     y1 = np.random.normal(0.3 * _g_kernel(x1), 0.1, n1) + 1
-    # Combine and sort by x.
+    # Combine groups and sort for consistent visualization and analysis.
     df = pd.concat(
         [
             pd.DataFrame(dict(x=x0, y=y0, t=0)),
@@ -103,12 +103,12 @@ def fit_tlearner_models(
     y0 = np.asarray(df.query("t==0")["y"])
     x1 = np.asarray(df.query("t==1")["x"]).reshape(-1, 1)
     y1 = np.asarray(df.query("t==1")["y"])
-    # Fit models.
+    # Train separate outcome models for each treatment group.
     m0 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     m1 = LGBMRegressor(min_child_samples=min_child_samples, verbosity=-1)
     m0.fit(x0, y0)
     m1.fit(x1, y1)
-    # Get predictions on the full dataset.
+    # Generate predictions across the full dataset for both models.
     X_full = np.asarray(df[["x"]])
     m0_hat = m0.predict(X_full)
     m1_hat = m1.predict(X_full)
@@ -142,7 +142,7 @@ def plot_tlearner_treatment_effect_analysis(
     y0 = np.asarray(df.query("t==0")["y"])
     x1 = np.asarray(df.query("t==1")["x"])
     y1 = np.asarray(df.query("t==1")["y"])
-    # Scatter plots for each treatment group.
+    # Plot observed outcomes by treatment group for visual comparison.
     ax1.scatter(
         x0,
         y0,
@@ -159,7 +159,7 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
-    # Fitted outcome models.
+    # Overlay fitted conditional expectation functions for each treatment group.
     x_vals = np.asarray(df["x"])
     x_sort_idx = np.argsort(x_vals)
     x_sorted = x_vals[x_sort_idx]
@@ -208,7 +208,7 @@ def plot_tlearner_treatment_effect_analysis(
         marker=MARKER[1],
         color=COLOR[0],
     )
-    # Conditional Average Treatment Effect (CATE).
+    # Compute CATE as the difference between fitted models across the feature space.
     X_full = np.asarray(df[["x"]])
     cate = m1.predict(X_full) - m0.predict(X_full)
     ax2.plot(
@@ -304,6 +304,7 @@ def plot_xlearner_effect_estimates(
     plt.figure(figsize=(10, 4))
     x0 = np.asarray(df.query("t==0")[["x"]])
     x1 = np.asarray(df.query("t==1")[["x"]])
+    # Plot heterogeneous effect estimates for each treatment group.
     plt.scatter(
         x0, tau_0, label=r"$\hat{\tau}_0$", alpha=0.5,
         marker=MARKER[0], color=COLOR[1]
@@ -312,7 +313,7 @@ def plot_xlearner_effect_estimates(
         x1, tau_1, label=r"$\hat{\tau}_1$", alpha=0.8,
         marker=MARKER[1], color=COLOR[0]
     )
-    # Fitted effect models for each treatment group.
+    # Overlay fitted X-Learner models showing estimated treatment effects.
     plt.plot(
         x0, mu_tau0_hat, color="black", linestyle="solid",
         label=r"$\hat{\mu}_{\tau_0}$"
