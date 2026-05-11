@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.2
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -134,56 +134,27 @@ logging.getLogger("lightgbm").setLevel(logging.ERROR)
 df = mtl.generate_synthetic_treatment_data(n0=500, n1=50, seed=123)
 
 # Fit separate outcome models for control and treatment groups.
-m0, m1, m0_hat, m1_hat = mtl.fit_outcome_models(df, min_child_samples=25)
+m0, m1, m0_hat, m1_hat = mtl.fit_tlearner_models(df, min_child_samples=25)
 
 # Visualize outcome models and heterogeneous treatment effects.
-mtl.plot_treatment_effect_analysis(df, m0, m1, m0_hat, m1_hat)
+mtl.plot_tlearner_treatment_effect_analysis(df, m0, m1, m0_hat, m1_hat)
 
 # %% [markdown]
 # # X-Learner
 
 # %%
-# TODO(ai_gp): Move to utils and add comments.
-
-from sklearn.linear_model import LogisticRegression
-
+# Calculate heterogeneous treatment effects.
 np.random.seed(1)
+tau_0, tau_1 = mtl.calculate_xlearner_heterogeneous_treatment_effects(df, m0, m1)
 
-mu_tau0 = LGBMRegressor(min_child_samples=25)
-mu_tau1 = LGBMRegressor(min_child_samples=25)
+# Fit X-Learner models.
+mu_tau0, mu_tau1, mu_tau0_hat, mu_tau1_hat = mtl.fit_xlearner_models(
+    df, tau_0, tau_1, min_child_samples=25
+)
 
-mu_tau0.fit(df.query("t==0")[["x"]], tau_0)
-mu_tau1.fit(df.query("t==1")[["x"]], tau_1)
-
-mu_tau0_hat = mu_tau0.predict(df.query("t==0")[["x"]])
-mu_tau1_hat = mu_tau1.predict(df.query("t==1")[["x"]])
-
-plt.figure(figsize=(10, 4))
-plt.scatter(df.query("t==0")[["x"]], tau_0, label="$\hat{\\tau_0}$", alpha=0.5, marker=marker[0], color=color[1])
-plt.scatter(df.query("t==1")[["x"]], tau_1, label="$\hat{\\tau_1}$", alpha=0.8, marker=marker[1], color=color[0])
-plt.plot(df.query("t==0")[["x"]], mu_tau0_hat, color="black", linestyle="solid", label="$\hat{\mu}\\tau 0$")
-plt.plot(df.query("t==1")[["x"]], mu_tau1_hat, color="black", linestyle="dashed", label="$\hat{\mu}\\tau_1$")
-plt.ylabel("Estimated Effect")
-plt.xlabel("X")
-plt.legend(fontsize=14)
+# Plot heterogeneous treatment effect estimates.
+mtl.plot_xlearner_effect_estimates(df, tau_0, tau_1, mu_tau0_hat, mu_tau1_hat)
 
 # %%
-# TODO(ai_gp): Move to utils and add comments.
-
-plt.figure(figsize=(10, 4))
-
-ps_model = LogisticRegression(penalty="none")
-ps_model.fit(df[["x"]], df["t"])
-
-ps = ps_model.predict_proba(df[["x"]])[:, 1]
-
-cate = ((1-ps)*mu_tau1.predict(df[["x"]]) +
-        ps*mu_tau0.predict(df[["x"]]))
-
-plt.scatter(df.query("t==0")[["x"]], tau_0, label="$\hat{\\tau_0}$", alpha=0.5, s=100*(ps[df["t"]==0]),   marker=marker[0], color=color[1])
-plt.scatter(df.query("t==1")[["x"]], tau_1, label="$\hat{\\tau_1}$", alpha=0.5, s=100*(1-ps[df["t"]==1]), marker=marker[1], color=color[0])
-
-plt.plot(df[["x"]], cate, label="x-learner", color="black")
-plt.ylabel("Estimated Effect")
-plt.xlabel("X")
-plt.legend(fontsize=14)
+# Plot X-Learner CATE with propensity score weighting.
+mtl.plot_xlearner_with_propensity_scores(df, mu_tau0, mu_tau1, tau_0, tau_1)
