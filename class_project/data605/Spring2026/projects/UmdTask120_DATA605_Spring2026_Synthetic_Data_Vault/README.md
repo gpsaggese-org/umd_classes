@@ -302,6 +302,28 @@ The Docker scripts can be used to verify that the project files and outputs are 
 
 ---
 
+
+## References
+
+This project used the following resources and documentation:
+
+- Synthetic Data Vault. “Welcome to the SDV!” SDV Documentation.  
+  https://docs.sdv.dev/sdv
+
+- SDMetrics. “Synthetic Data Metrics.” SDMetrics Documentation.  
+  https://docs.sdv.dev/sdmetrics
+
+- UCI Machine Learning Repository. “Adult Dataset.”  
+  https://archive.ics.uci.edu/dataset/2/adult
+
+- Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., Blondel, M., Prettenhofer, P., Weiss, R., Dubourg, V., Vanderplas, J., Passos, A., Cournapeau, D., Brucher, M., Perrot, M., & Duchesnay, É. “Scikit-learn: Machine Learning in Python.” *Journal of Machine Learning Research*, 12, 2825–2830, 2011.  
+  https://www.jmlr.org/papers/v12/pedregosa11a.html
+
+- SDV Developers. “Synthetic Data Vault.” GitHub Repository.  
+  https://github.com/sdv-dev/SDV
+
+---
+
 ## Conclusion
 
 This project shows that SDV can be used to generate synthetic tabular data for privacy-preserving machine learning experiments.
