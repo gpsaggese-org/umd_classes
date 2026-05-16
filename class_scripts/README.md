@@ -43,10 +43,8 @@ slide quality through automated LLM-powered transformations.
 | `slide_reduce.py`          | `class_scripts/`                                  | Reduces and simplifies lecture slides using LLM; removes redundancy and condenses content                               |
 | `slides_utils.py`          | `class_scripts/`                                  | Utility functions for extracting and processing slide content                                                           |
 
-# Available Scripts Reference
-
-## Counting and Analysis Scripts
-**`count_book_pages.py`**
+# Counting and Analysis Scripts
+## `count_book_pages.py`
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
@@ -56,7 +54,7 @@ slide quality through automated LLM-powered transformations.
   > count_book_pages.py msml610
   ```
 
-**`count_pdf_pages.py`**
+## `count_pdf_pages.py`
 
 - Counts pages in all PDF files in the `{DIR}/lectures/` directory and displays
   page counts for each lecture PDF file
@@ -66,7 +64,7 @@ slide quality through automated LLM-powered transformations.
   > count_pdf_pages.py msml610
   ```
 
-**`count_words.py`**
+## `count_words.py`
 
 - Counts words in all files in the `{DIR}/lectures_script/` directory to help
   track lecture length and content volume
@@ -76,8 +74,8 @@ slide quality through automated LLM-powered transformations.
   > count_words.py msml610
   ```
 
-## Generation Scripts
-**`gen_slides.py`**
+# Generation Scripts
+## `gen_slides.py`
 
 - Generates lecture slide PDFs from source files using `notes_to_pdf.py` to
   convert markdown to PDF
@@ -91,7 +89,7 @@ slide quality through automated LLM-powered transformations.
   > gen_slides.py msml610 02.3 --theme dark
   ```
 
-**`gen_lecture_script.py`**
+## `gen_lecture_script.py`
 
 - Generates complete lecture scripts from slides using LLM
 - Automatically creates intro and outro sections, combines all sections, and
@@ -105,7 +103,7 @@ slide quality through automated LLM-powered transformations.
   > gen_lecture_script.py msml610 02.3 --force
   ```
 
-**`generate_slide_script.py`**
+## `generate_slide_script.py`
 
 - Processes markdown slides and generates presentation scripts using LLM
 - Groups slides for batch processing to optimize LLM API calls
@@ -127,7 +125,7 @@ slide quality through automated LLM-powered transformations.
   > generate_slide_script.py --in_file slides.md --out_file script.md --log_level DEBUG
   ```
 
-**`generate_book_chapter.py`**
+## `generate_book_chapter.py`
 
 - Processes markdown slides with PNG images or PDF file to create book chapter
   format
@@ -171,7 +169,7 @@ custom header styling:
 > pandoc test/Lesson01.1-Intro.book_chapter.txt -o output.pdf --include-in-header=header-style.tex
 ```
 
-**`gen_quizzes.py`**
+## `gen_quizzes.py`
 
 - Generates questions from lecture content using LLM
 - Supports two modes:
@@ -198,8 +196,31 @@ custom header styling:
   > gen_quizzes.py --for_class_quizzes data605 01.1 --model gpt-4
   ```
 
-## Slide Improvement Scripts
-**`slide_check.py`**
+## `process_slides.py`
+
+- Extracts individual slides from markdown files and processes each with LLM
+  prompts
+- Supports various actions like slide reduction, text checking, and improvement
+- Provides parallel processing with incremental execution and error recovery
+- Process slides with LLM transformation:
+  ```bash
+  > process_slides.py --in_file lecture.txt --action slide_reduce --out_file output.txt --use_llm_transform
+  ```
+- Check slide quality and generate report:
+  ```bash
+  > process_slides.py --in_file lecture.txt --action text_check --out_file check_report.txt --use_llm_transform
+  ```
+- Process specific slide range with parallel execution:
+  ```bash
+  > process_slides.py --in_file lecture.txt --action slide_reduce --out_file output.txt --limit "1:5" --num_threads 4
+  ```
+- Continue processing on errors with multiple attempts:
+  ```bash
+  > process_slides.py --in_file lecture.txt --action slide_reduce --out_file output.txt --no_abort_on_error --num_attempts 3 --skip_on_error
+  ```
+
+# Slide Improvement Scripts
+## `slide_check.py`
 
 - Checks and fixes text in lecture slides using LLM
 - Corrects spelling, grammar, and formatting issues using `process_slides.py`
@@ -213,7 +234,7 @@ custom header styling:
   > slide_check.py msml610 02.3 --dry-run
   ```
 
-**`slide_improve.py`**
+## `slide_improve.py`
 
 - Improves lecture slides using LLM suggestions
 - Enhances clarity, structure, and pedagogical effectiveness using
@@ -227,7 +248,7 @@ custom header styling:
   > slide_improve.py msml610 02.3 --max-suggestions 5
   ```
 
-**`slide_reduce.py`**
+## `slide_reduce.py`
 
 - Reduces and simplifies lecture slides using LLM
 - Removes redundancy and condenses content using `process_slides.py` with
@@ -241,8 +262,8 @@ custom header styling:
   > slide_reduce.py msml610 02.3 --target-length 50
   ```
 
-## Image and PDF Processing Scripts
-**`extract_png_from_pdf.py`**
+# Image and PDF Processing Scripts
+## `extract_png_from_pdf.py`
 
 - Extracts each page of a PDF file as a separate PNG image
 - Numbers output files sequentially (slides001.png, slides002.png, etc.)
@@ -261,7 +282,7 @@ custom header styling:
   > extract_png_from_pdf.py --input_file presentation.pdf --output_dir ./images/ --from_scratch
   ```
 
-**`generate_class_images.py`**
+## `generate_class_images.py`
 
 - Generates multiple images using OpenAI's DALL-E 3 API from text prompts
 - Supports both standard and HD quality image generation in 1024x1024 resolution
@@ -280,8 +301,8 @@ custom header styling:
   > generate_class_images.py --dst_dir ./course_images --workload MSML610
   ```
 
-## Utility Scripts
-**`get_lecture_file.py`**
+# Utility Scripts
+## `get_lecture_file.py`
 
 - Finds and prints the path to a lecture source file matching
   `{DIR}/lectures_source/Lesson{LESSON}*`
@@ -292,33 +313,57 @@ custom header styling:
   > get_lecture_file.py msml610 02.3
   ```
 
-## Orchestration Scripts
-**`process_lessons.py`**
+# Orchestration Scripts
+## `process_lessons.py`
 
-- Main orchestration script for generating PDF slides and/or reading scripts
-  from lecture materials
-- Supports multiple actions, pattern matching, and dry-run mode
+Orchestrates the generation of multiple outputs from lecture source files for
+educational materials. This is the main entry point for processing lecture
+content into various formats.
+
+**Key features:**
+
+- Converts lecture text source files to PDF slides using `notes_to_pdf.py`
+- Generates reading scripts from lecture materials with transition text
+- Applies LLM-based transformations for slide reduction and quality checking
+- Generates book chapters from lecture content
+- Supports batch processing of multiple lectures using pattern matching
+- Provides slide range limiting for focused processing
+- Includes dry-run mode for previewing commands
 
 **Available Actions:**
 
-- `generate_pdf`: Generate PDF slides
-- `generate_script`: Generate reading scripts
-- `reduce_slide`: Reduce slides using LLM transformation (modifies source in
-  place)
-- `check_slide`: Check slides using LLM transformation (creates separate report
-  file)
-- `improve_slide`: Improve slides using LLM transformation
+- `generate_pdf`: Generate presentation slides from text source files
+- `generate_script`: Generate instructor reading scripts with commentary
+- `reduce_slide`: Apply LLM transformation to reduce slide content
+- `check_slide`: Apply LLM validation to check slide quality
+- `improve_slide`: Apply LLM transformation to improve slide content
 - `book_chapter`: Generate book chapter PDF from lecture content
 - `generate_class_quizzes`: Generate multiple choice quizzes from lecture
-  content
+  content using LLM
 - `generate_class_recap`: Generate open-ended discussion/review questions from
-  lecture content
+  lecture content using LLM
 
 **Lecture Pattern Examples:**
 
 - Single lecture: `01.1`
 - Wildcard pattern: `01*`
 - Multiple patterns: `01*:02*:03.1` (separated by colons)
+- Continuous range: `01.1-03.2` (inclusive)
+
+**Command Line Arguments:**
+
+- `--lectures`: Lecture(s) to process (required)
+  - Single pattern: '01.1' or '01\*'
+  - Union of patterns (colon-separated): '01*:02*:03.1'
+  - Continuous range (hyphen-separated): '01.1-03.2' (inclusive)
+  - Note: Range and union syntax cannot be mixed
+- `--class`: Class directory name (required, choices: data605, msml610)
+- `--action`: Actions to perform (default: generate_pdf)
+  - Can specify multiple: `--action generate_pdf --action generate_script`
+- `--limit`: Optional slide range to process (e.g., '1:3')
+  - Only works when processing a single lecture file
+- `--dry_run`: Print commands without executing them
+- `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
 
 **Usage Examples:**
 
@@ -337,42 +382,43 @@ custom header styling:
   > process_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
   ```
 
-- Default action (generate_pdf):
-  ```bash
-  > process_lessons.py --lectures 01* --class msml610
-  ```
-
-- Execute all available actions:
-  ```bash
-  > process_lessons.py --lectures 01* --class data605 --all
-  ```
-
-- Skip specific actions:
-  ```bash
-  > process_lessons.py --lectures 01* --class data605 --skip_action generate_script
-  ```
-
 - Partial slide processing:
   ```bash
   > process_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
   ```
 
-- With pattern matching:
+- Process a continuous range of lessons:
   ```bash
-  > process_lessons.py --lectures "0*" --class data605 --action generate_pdf --action generate_script
+  > process_lessons.py --lectures "01.1-03.2" --class data605 --action generate_pdf
   ```
 
-**Command Line Arguments:**
+- Reduce slide content using LLM for a single lecture:
+  ```bash
+  > process_lessons.py --lectures "01.1" --class data605 --action reduce_slide
+  ```
 
-- `--lectures`: Lecture pattern(s) to process
-- `--class`: Class directory name (`data605` or `msml610`)
-- `--action`: Actions to execute (can be specified multiple times)
-- `--skip_action`: Actions to skip (mutually exclusive with `--action`)
-- `--all`: Execute all available actions (mutually exclusive with `--action`)
-- `--limit`: Slide range to process (e.g., `1:3`). Only valid when a single
-  lecture file matches the pattern. Only applies to `generate_pdf` action
-- `--dry_run`: Print commands without executing them
-- `--log_level`: Logging verbosity (optional)
+- Generate multiple choice quizzes from lecture content:
+  ```bash
+  > process_lessons.py --lectures "01.1" --class data605 --action generate_class_quizzes
+  ```
+
+- Process with verbose logging for debugging:
+  ```bash
+  > process_lessons.py --lectures "01.1" --class data605 --action generate_pdf -v DEBUG
+  ```
+
+**Workflow:**
+
+1. Parse lecture patterns or ranges from command line arguments (e.g., '01*',
+   '01.1', '01*:03\*', '01.1-03.2')
+2. Find matching lecture source files in `<class>/lectures_source/` directory
+3. For each matching file, execute specified actions in sequence
+4. Output generated files to appropriate directories:
+   - PDF slides → `<class>/lectures/`
+   - Scripts → `<class>/lectures_script/`
+   - Book chapters → `<class>/book/`
+   - Multiple choice quizzes → `<class>/lectures_quizzes/`
+   - Discussion/recap questions → `<class>/lectures_recap/`
 
 # Common Workflows
 

@@ -1,4 +1,3 @@
-import logging
 import os
 from typing import List, Optional
 from unittest import mock
@@ -6,9 +5,7 @@ from unittest import mock
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
 
-import dev_scripts_helpers.slides.process_lessons as dshsprle
-
-_LOG = logging.getLogger(__name__)
+import class_scripts.process_lessons as dshsprle
 
 # #############################################################################
 # Test_parse_lecture_patterns
