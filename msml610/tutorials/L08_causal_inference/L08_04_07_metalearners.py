@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -53,8 +53,6 @@ import warnings
 
 import helpers.hmodule as hmodule
 from lightgbm import LGBMRegressor
-import fklearn.causal.validation.curves
-import fklearn.causal.validation.auc
 
 warnings.filterwarnings("ignore", category=UserWarning, module="lightgbm")
 warnings.filterwarnings(
@@ -120,7 +118,9 @@ m1.fit(train.query(f"{T}==1")[X].values, train.query(f"{T}==1")[y].values);
 m0
 
 # %%
-t_learner_cate_test = test.assign(cate=m1.predict(test[X].values) - m0.predict(test[X].values))
+t_learner_cate_test = test.assign(
+    cate=m1.predict(test[X].values) - m0.predict(test[X].values)
+)
 
 # %%
 _ = mtl.plot_gain_curve_analysis(t_learner_cate_test, T, y, title="T-Learner")
@@ -206,10 +206,12 @@ test_cf.head(8)
 days = ["2018-12-25", "2018-01-01", "2018-06-01", "2018-06-18"]
 
 plt.figure(figsize=(10, 4))
-sns.lineplot(data=test_cf.query("day.isin(@days)").query("rest_id==2"),
-             y="sales_hat",
-             x="discounts",
-             style="day");
+sns.lineplot(
+    data=test_cf.query("day.isin(@days)").query("rest_id==2"),
+    y="sales_hat",
+    x="discounts",
+    style="day",
+);
 
 # %%
 test_s_learner_pred = mtl.estimate_slearner_cate(test_cf, test, T, y)
@@ -248,6 +250,4 @@ test_r_learner_pred = mtl.estimate_rlearner_cate(test, X, cate_model)
 
 # %%
 # Plot gain curve analysis for R-Learner.
-_ = mtl.plot_gain_curve_analysis(
-    test_r_learner_pred, T, y, title="R-Learner"
-)
+_ = mtl.plot_gain_curve_analysis(test_r_learner_pred, T, y, title="R-Learner")

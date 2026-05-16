@@ -22,7 +22,6 @@ import os
 import re
 from typing import List, Optional, Tuple
 
-from tqdm import tqdm
 
 import helpers.hdbg as hdbg
 import helpers.hlint as hlint
@@ -40,7 +39,7 @@ _VALID_ACTIONS = [
     "generate_pdf",
     "generate_script",
     "generate_tex",
-    "generate_tocs",
+    "generate_toc",
     "improve_slide",
     "reduce_slide",
 ]
@@ -466,18 +465,20 @@ def _generate_class_recap(
 
 
 def _generate_toc(
-) -> None:
+    source_path: str,
+    source_name: str,
+) -> str:
     """
-    Generate a consolidated file with TOCs from all lecture files.
+    Extract TOC from a single lecture source file.
 
-    Calls extract_toc_from_txt.py for each lecture file and combines
-    the results into a single file in the class directory.
+    Calls extract_toc_from_txt.py to extract the table of contents
+    from the lecture source file.
 
-    :param class_dir: class directory (data605 or msml610)
-    :param files: list of tuples (source_path, source_name)
+    :param source_path: path to source .txt file
+    :param source_name: name of source file
+    :return: extracted TOC content with lesson header
     """
     _LOG.debug("Extracting TOC from %s", source_name)
-    # Build command to extract TOC.
     cmd = [
         "extract_toc_from_txt.py",
         f"-i {source_path}",
@@ -486,12 +487,8 @@ def _generate_toc(
     ]
     cmd_str = " ".join(cmd)
     _LOG.debug("Executing: %s", cmd_str)
-
-    # Capture output from extract_toc_from_txt.py.
     _, output = hsystem.system_to_string(cmd_str, suppress_output=True)
     output = output.strip()
-
-    # Add lesson header and TOC content.
     output = f"# {source_name}\n" + output
     return output
 
@@ -503,7 +500,7 @@ def _process_lecture_file(
     actions: List[str],
     *,
     limit: Optional[str] = None,
-) -> None:
+) -> str:
     """
     Process a single lecture file for specified actions.
 
@@ -511,14 +508,13 @@ def _process_lecture_file(
     :param source_path: path to source .txt file
     :param source_name: name of source file
     :param actions: list of actions to execute ('generate_pdf', 'generate_script',
-        'reduce_slide', 'check_slide', 'improve_slide', 'book_chapter',
-        'generate_class_quizzes', 'generate_class_recap')
+        'reduce_slide', 'check_slide', 'improve_slide', 'generate_book_chapter',
+        'generate_class_quizzes', 'generate_class_recap', 'generate_toc')
     :param limit: optional slide range to process
+    :return: TOC content if action is 'generate_toc', else None
     """
     _LOG.info("Processing file: %s", source_path)
-
-    results = []
-    # Process each action.
+    res = ""
     for action in actions:
         if action == "generate_pdf":
             _generate_pdf(class_dir, source_path, source_name, limit=limit)
@@ -540,18 +536,10 @@ def _process_lecture_file(
         elif action == "generate_class_recap":
             _generate_class_recap(class_dir, source_path, source_name)
         elif action == "generate_toc":
-            result = _generate_toc(class_dir, source_path, source_name)
-            results.append(result)
+            res = _generate_toc(source_path, source_name)
         else:
             hdbg.dfatal("Unknown action:", action)
-    if action == "generate_toc":
-        output_path = os.path.join(class_dir, "all_tocs.md")
-        _LOG.info("Generating consolidated TOCs to %s", output_path)
-
-        # Write consolidated TOCs to file.
-        final_content = "\n".join(results)
-        hio.to_file(output_path, final_content)
-        _LOG.info("Consolidated TOCs written to %s", output_path)
+    return res
 
 
 # #############################################################################
@@ -611,6 +599,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     1. Parse and validate arguments
     2. Find matching lecture files
     3. Process each file for specified actions
+    4. Consolidate TOCs if generate_toc action is specified
 
     :param parser: configured argument parser
     """
@@ -647,11 +636,19 @@ def _main(parser: argparse.ArgumentParser) -> None:
         for source_path, source_name in files:
             _LOG.info("Processing file: %s", source_path)
         return
-    # Process each file.
+    toc_results = []
     for source_path, source_name in files:
-        _process_lecture_file(
+        result = _process_lecture_file(
             args.class_name, source_path, source_name, actions, limit=args.limit
         )
+        if "generate_toc" in actions and result is not None:
+            toc_results.append(result)
+    if "generate_toc" in actions:
+        output_path = os.path.join(args.class_name, "all_tocs.md")
+        _LOG.info("Generating consolidated TOCs to %s", output_path)
+        final_content = "\n".join(toc_results)
+        hio.to_file(output_path, final_content)
+        _LOG.info("Consolidated TOCs written to %s", output_path)
     _LOG.info("All files processed successfully")
 
 

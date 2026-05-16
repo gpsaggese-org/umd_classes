@@ -547,94 +547,73 @@ class Test_generate_pdf(hunitest.TestCase):
             self.assertIn("notes_to_pdf.py", cmd_str)
 
 # #############################################################################
-# Test_generate_tocs
+# Test_generate_toc
 # #############################################################################
 
-class Test_generate_tocs(hunitest.TestCase):
+class Test_generate_toc(hunitest.TestCase):
     """
-    Test _generate_tocs function for generating consolidated TOCs.
+    Test _generate_toc function for extracting TOC from a single lecture file.
     """
 
     def test1(self) -> None:
         """
-        Test _generate_tocs with multiple lecture files.
+        Test _generate_toc extracts TOC and adds lesson header.
 
         Input:
-        - class_dir: test class directory
-        - files: list of (path, name) tuples for 2 lecture files
+        - source_path: path to a lecture file
+        - source_name: name of the source file
 
         Expected:
-        - all_tocs.md file created in class_dir
-        - File contains headers and TOC content for both lessons
+        - Returns string with lesson header and TOC content
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
-        class_dir = os.path.join(scratch_dir, "msml610")
-        os.makedirs(class_dir, exist_ok=True)
-        files = [
-            (
-                os.path.join(scratch_dir, "Lesson01.1-Intro.txt"),
-                "Lesson01.1-Intro.txt",
-            ),
-            (
-                os.path.join(scratch_dir, "Lesson01.2-BigData.txt"),
-                "Lesson01.2-BigData.txt",
-            ),
-        ]
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        hio.to_file(source_path, "# Main\n## Section 1\n### Subsection")
         # Mock system_to_string to return TOC content.
         with mock.patch(
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
-            mock_system_to_string.side_effect = [
-                (0, "## Introduction\n## Background"),
-                (0, "## Big Data Concepts\n## Distributed Systems"),
-            ]
-            dshsprle._generate_tocs(class_dir, files)
+            mock_system_to_string.return_value = (
+                0,
+                "## Section 1\n### Subsection",
+            )
+            result = dshsprle._generate_toc(source_path, source_name)
         # Check outputs.
-        output_path = os.path.join(class_dir, "all_tocs.md")
-        self.assertTrue(os.path.exists(output_path))
-        content = hio.from_file(output_path)
-        # Verify headers are present.
-        self.assertIn("# Lesson01.1-Intro.txt", content)
-        self.assertIn("# Lesson01.2-BigData.txt", content)
-        # Verify TOC content is present.
-        self.assertIn("## Introduction", content)
-        self.assertIn("## Big Data Concepts", content)
+        self.assertIsNotNone(result)
+        self.assertIn("# Lesson01.1-Intro.txt", result)
+        self.assertIn("## Section 1", result)
 
     def test2(self) -> None:
         """
-        Test _generate_tocs calls extract_toc_from_txt.py correctly.
+        Test _generate_toc calls extract_toc_from_txt.py with correct parameters.
 
         Input:
-        - class_dir: test class directory
-        - files: list with 1 lecture file
+        - source_path: path to a lecture file
+        - source_name: name of the source file
 
         Expected:
-        - extract_toc_from_txt.py is called with correct parameters
+        - extract_toc_from_txt.py is called with --max_level 5 and source path
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
-        class_dir = os.path.join(scratch_dir, "msml610")
-        os.makedirs(class_dir, exist_ok=True)
-        files = [
-            (
-                os.path.join(scratch_dir, "Lesson01.1-Intro.txt"),
-                "Lesson01.1-Intro.txt",
-            ),
-        ]
+        source_path = os.path.join(scratch_dir, "Lesson02.1-Advanced.txt")
+        source_name = "Lesson02.1-Advanced.txt"
+        hio.to_file(source_path, "# Title\n## Content")
         # Mock system_to_string.
         with mock.patch(
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
-            mock_system_to_string.return_value = (0, "## Section1")
-            dshsprle._generate_tocs(class_dir, files)
+            mock_system_to_string.return_value = (0, "## Content")
+            dshsprle._generate_toc(source_path, source_name)
             # Check outputs.
             mock_system_to_string.assert_called_once()
             cmd_str = mock_system_to_string.call_args[0][0]
             self.assertIn("extract_toc_from_txt.py", cmd_str)
             self.assertIn("--max_level 5", cmd_str)
             self.assertIn("--warn_on_malformed", cmd_str)
-            self.assertIn(files[0][0], cmd_str)
+            self.assertIn(source_path, cmd_str)
 
 # #############################################################################
 # End-to-End Tests
@@ -650,16 +629,15 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
 
     def test1(self) -> None:
         """
-        Test _generate_pdf executes successfully with a valid source file.
+        Fast test: _generate_pdf executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory with lectures subdirectory
-        - source_path: path to a source file with basic slide content
+        - source_path: path to minimal source file
         - source_name: name of the source file
 
         Expected:
-        - Command executes without error
-        - Output directory is created
+        - Command executes without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -672,32 +650,25 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         # Lesson 01.1: Introduction
 
         ## Slide 1
-        This is an introductory slide.
-
-        ## Slide 2
-        This is another slide.
+        Content.
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test.
+        # Run test - only verify it completes without exception.
         dshsprle._generate_pdf(class_dir, source_path, source_name)
-        # Check outputs.
-        expected_output = os.path.join(lectures_dir, "Lesson01.1-Intro.pdf")
-        self.assertTrue(os.path.exists(expected_output) or True)
 
     def test2(self) -> None:
         """
-        Test _generate_pdf with limit parameter restricts slide range.
+        Fast test: _generate_pdf with limit parameter completes successfully.
 
         Input:
         - class_dir: test class directory
-        - source_path: path to source file
+        - source_path: path to minimal source file
         - source_name: name of source file
         - limit: slide range to process (e.g., '1:1')
 
         Expected:
-        - Command executes with limit parameter
-        - Output directory is created
+        - Command executes with limit parameter without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -710,24 +681,18 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         # Lesson 02.1: Advanced Topics
 
         ## Slide 1
-        Content for slide 1.
+        Content.
 
         ## Slide 2
-        Content for slide 2.
-
-        ## Slide 3
-        Content for slide 3.
+        More content.
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
         limit = "1:1"
-        # Run test.
+        # Run test - only verify it completes without exception.
         dshsprle._generate_pdf(
             class_dir, source_path, source_name, limit=limit
         )
-        # Check outputs.
-        expected_output = os.path.join(lectures_dir, "Lesson02.1-Advanced.pdf")
-        self.assertTrue(os.path.exists(expected_output) or True)
 
 
 class Test_generate_tex_e2e(hunitest.TestCase):
@@ -736,20 +701,20 @@ class Test_generate_tex_e2e(hunitest.TestCase):
 
     These tests execute the actual command line using hsystem.system
     to verify TeX file generation.
+    No output verification - only checks that the command completes.
     """
 
     def test1(self) -> None:
         """
-        Test _generate_tex executes successfully with a valid source file.
+        Fast test: _generate_tex executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory with lectures_tex subdirectory
-        - source_path: path to a source file
+        - source_path: path to minimal source file
         - source_name: name of the source file
 
         Expected:
-        - Command executes without error
-        - Output directory is created
+        - Command executes without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -762,20 +727,12 @@ class Test_generate_tex_e2e(hunitest.TestCase):
         # Lesson 03.1: Distributed Systems
 
         ## Introduction
-        Overview of distributed systems.
-
-        ## Architecture
-        Common patterns and architectures.
+        Overview.
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test.
+        # Run test - only verify it completes without exception.
         dshsprle._generate_tex(class_dir, source_path, source_name)
-        # Check outputs.
-        expected_output = os.path.join(
-            lectures_tex_dir, "Lesson03.1-Distributed.tex"
-        )
-        self.assertTrue(os.path.exists(expected_output) or True)
 
 
 class Test_generate_script_e2e(hunitest.TestCase):
@@ -784,21 +741,20 @@ class Test_generate_script_e2e(hunitest.TestCase):
 
     These tests execute the actual command line using hsystem.system
     to verify script file generation.
+    No output verification - only checks that the command completes.
     """
 
     def test1(self) -> None:
         """
-        Test _generate_script executes successfully with a valid source file.
+        Fast test: _generate_script executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory
-        - source_path: path to a source file
+        - source_path: path to minimal source file
         - source_name: name of the source file
 
         Expected:
-        - Command executes without error
-        - Output directory is created
-        - Output file is generated
+        - Command executes without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -808,169 +764,231 @@ class Test_generate_script_e2e(hunitest.TestCase):
         source_path = os.path.join(scratch_dir, "Lesson04.1-Scripts.txt")
         source_name = "Lesson04.1-Scripts.txt"
         source_content = """
-        # Lesson 04.1: Scripts and Automation
+        # Lesson 04.1: Scripts
 
-        ## Transition: Getting Started
-        Welcome to the lesson.
+        ## Transition: Start
+        Beginning.
 
-        ## Content 1
-        First topic.
-
-        ## Transition: Moving On
-        Now we continue.
-
-        ## Content 2
-        Second topic.
+        ## Content
+        Body.
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test.
+        # Run test - only verify it completes without exception.
         dshsprle._generate_script(class_dir, source_path, source_name)
-        # Check outputs.
-        expected_output = os.path.join(
-            lectures_script_dir, "Lesson04.1-Scripts.script.txt"
-        )
-        self.assertTrue(os.path.exists(expected_output) or True)
 
-# #############################################################################
-# Test Progress Bar Integration
-# #############################################################################
 
-class Test_generate_tocs_progress_bar(hunitest.TestCase):
+class Test_process_lecture_file_e2e(hunitest.TestCase):
     """
-    Test progress bar integration in _generate_tocs function.
+    End-to-end integration tests for _process_lecture_file function.
 
-    Verifies that tqdm is used correctly to show progress when extracting TOCs.
+    These tests execute actual command pipelines via hsystem.system.
+    No output verification - only checks that execution completes.
     """
 
     def test1(self) -> None:
         """
-        Test that _generate_tocs uses tqdm with correct description.
+        Fast test: Process single file with generate_pdf action.
 
         Input:
         - class_dir: test class directory
-        - files: list of 2 lecture file tuples
+        - source_path, source_name: lecture file
+        - actions: ['generate_pdf']
 
         Expected:
-        - tqdm is called with desc="Extracting TOCs"
-        - All files are processed through the progress bar
+        - Command pipeline executes without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
-        os.makedirs(class_dir, exist_ok=True)
-        files = [
-            (
-                os.path.join(scratch_dir, "Lesson01.1-Intro.txt"),
-                "Lesson01.1-Intro.txt",
-            ),
-            (
-                os.path.join(scratch_dir, "Lesson01.2-BigData.txt"),
-                "Lesson01.2-BigData.txt",
-            ),
-        ]
-        # Mock tqdm and system_to_string.
-        with mock.patch("class_scripts.for_loop_lessons.tqdm") as mock_tqdm:
-            with mock.patch(
-                "helpers.hsystem.system_to_string"
-            ) as mock_system_to_string:
-                mock_tqdm.return_value = files
-                mock_system_to_string.return_value = (0, "## Section")
-                dshsprle._generate_tocs(class_dir, files)
-                # Check outputs.
-                mock_tqdm.assert_called_once()
-                tqdm_call_args = mock_tqdm.call_args
-                self.assertEqual(tqdm_call_args[0][0], files)
-                self.assertEqual(tqdm_call_args[1]["desc"], "Extracting TOCs")
+        os.makedirs(os.path.join(class_dir, "lectures"), exist_ok=True)
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Test.txt")
+        source_name = "Lesson01.1-Test.txt"
+        source_content = """
+        # Lesson 01.1: Test
+
+        ## Slide
+        Content.
+        """
+        source_content = hprint.dedent(source_content)
+        hio.to_file(source_path, source_content)
+        actions = ["generate_pdf"]
+        # Run test - only verify it completes without exception.
+        dshsprle._process_lecture_file(
+            class_dir, source_path, source_name, actions
+        )
 
     def test2(self) -> None:
         """
-        Test that _generate_tocs processes all files despite tqdm wrapper.
+        Fast test: Process single file with multiple actions.
 
         Input:
         - class_dir: test class directory
-        - files: list of 3 lecture files
+        - source_path, source_name: lecture file
+        - actions: ['generate_pdf', 'generate_tex']
 
         Expected:
-        - All 3 files are processed and included in all_tocs.md
-        - TOC consolidation works correctly with progress bar
+        - Command pipeline executes all actions without raising an exception
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
-        class_dir = os.path.join(scratch_dir, "msml610")
-        os.makedirs(class_dir, exist_ok=True)
-        files = [
-            (
-                os.path.join(scratch_dir, "Lesson01.1-Intro.txt"),
-                "Lesson01.1-Intro.txt",
-            ),
-            (
-                os.path.join(scratch_dir, "Lesson01.2-BigData.txt"),
-                "Lesson01.2-BigData.txt",
-            ),
-            (
-                os.path.join(scratch_dir, "Lesson02.1-Advanced.txt"),
-                "Lesson02.1-Advanced.txt",
-            ),
-        ]
-        # Mock system_to_string to return different TOC content for each file.
-        with mock.patch(
-            "helpers.hsystem.system_to_string"
-        ) as mock_system_to_string:
-            mock_system_to_string.side_effect = [
-                (0, "## Introduction"),
-                (0, "## Big Data"),
-                (0, "## Advanced Topics"),
-            ]
-            dshsprle._generate_tocs(class_dir, files)
-        # Check outputs.
-        output_path = os.path.join(class_dir, "all_tocs.md")
-        self.assertTrue(os.path.exists(output_path))
-        content = hio.from_file(output_path)
-        # Verify all files are included.
-        self.assertIn("# Lesson01.1-Intro.txt", content)
-        self.assertIn("# Lesson01.2-BigData.txt", content)
-        self.assertIn("# Lesson02.1-Advanced.txt", content)
-        # Verify all TOC content is included.
-        self.assertIn("## Introduction", content)
-        self.assertIn("## Big Data", content)
-        self.assertIn("## Advanced Topics", content)
+        class_dir = os.path.join(scratch_dir, "data605")
+        os.makedirs(os.path.join(class_dir, "lectures"), exist_ok=True)
+        os.makedirs(os.path.join(class_dir, "lectures_tex"), exist_ok=True)
+        source_path = os.path.join(scratch_dir, "Lesson02.1-Multi.txt")
+        source_name = "Lesson02.1-Multi.txt"
+        source_content = """
+        # Lesson 02.1: Multi Action
 
-class Test_process_lecture_files_progress_bar(hunitest.TestCase):
+        ## Slide 1
+        Content 1.
+
+        ## Slide 2
+        Content 2.
+        """
+        source_content = hprint.dedent(source_content)
+        hio.to_file(source_path, source_content)
+        actions = ["generate_pdf", "generate_tex"]
+        # Run test - only verify it completes without exception.
+        dshsprle._process_lecture_file(
+            class_dir, source_path, source_name, actions
+        )
+
+    def test3(self) -> None:
+        """
+        Fast test: Process file with generate_script action.
+
+        Input:
+        - class_dir: test class directory
+        - source_path, source_name: lecture file
+        - actions: ['generate_script']
+
+        Expected:
+        - Command pipeline executes without raising an exception
+        """
+        # Prepare inputs.
+        scratch_dir = self.get_scratch_space()
+        class_dir = os.path.join(scratch_dir, "data605")
+        os.makedirs(os.path.join(class_dir, "lectures_script"), exist_ok=True)
+        source_path = os.path.join(scratch_dir, "Lesson03.1-Script.txt")
+        source_name = "Lesson03.1-Script.txt"
+        source_content = """
+        # Lesson 03.1: Script Test
+
+        ## Transition: Start
+        Begin.
+
+        ## Content
+        Body text.
+        """
+        source_content = hprint.dedent(source_content)
+        hio.to_file(source_path, source_content)
+        actions = ["generate_script"]
+        # Run test - only verify it completes without exception.
+        dshsprle._process_lecture_file(
+            class_dir, source_path, source_name, actions
+        )
+
+
+# #############################################################################
+# Test_process_lecture_file and generate_toc action
+# #############################################################################
+
+class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
     """
-    Test progress bar integration in main file processing loop.
+    Test _process_lecture_file function with generate_toc action.
 
-    Verifies that tqdm is used correctly to show progress when processing files.
+    Verifies that the function returns TOC content when generate_toc is specified.
     """
 
     def test1(self) -> None:
         """
-        Test that main loop in _main uses tqdm with correct description.
+        Test _process_lecture_file returns TOC content for generate_toc action.
 
         Input:
-        - files: list of 2 lecture files
-        - actions: list of actions to process
+        - class_dir: test class directory
+        - source_path: path to source file
+        - source_name: name of source file
+        - actions: ['generate_toc']
 
         Expected:
-        - tqdm is called with desc="Processing lectures"
-        - All files are iterated through the progress bar
+        - Returns string with TOC content
         """
         # Prepare inputs.
-        files = [
-            ("/path/to/Lesson01.1-Intro.txt", "Lesson01.1-Intro.txt"),
-            ("/path/to/Lesson01.2-BigData.txt", "Lesson01.2-BigData.txt"),
-        ]
-        # Mock tqdm to track calls.
-        with mock.patch("class_scripts.for_loop_lessons.tqdm") as mock_tqdm:
-            with mock.patch(
-                "class_scripts.for_loop_lessons._process_lecture_file"
-            ):
-                mock_tqdm.return_value = files
-                # Simulate the main loop with tqdm.
-                for source_path, source_name in mock_tqdm(files, desc="Processing lectures"):
-                    pass
-                # Check outputs.
-                mock_tqdm.assert_called_once()
-                tqdm_call_args = mock_tqdm.call_args
-                self.assertEqual(tqdm_call_args[0][0], files)
-                self.assertEqual(tqdm_call_args[1]["desc"], "Processing lectures")
+        scratch_dir = self.get_scratch_space()
+        class_dir = os.path.join(scratch_dir, "msml610")
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        hio.to_file(source_path, "# Title\n## Section 1")
+        actions = ["generate_toc"]
+        # Mock system_to_string.
+        with mock.patch(
+            "helpers.hsystem.system_to_string"
+        ) as mock_system_to_string:
+            mock_system_to_string.return_value = (0, "## Section 1")
+            result = dshsprle._process_lecture_file(
+                class_dir, source_path, source_name, actions
+            )
+        # Check outputs.
+        self.assertIsNotNone(result)
+        self.assertIn("# Lesson01.1-Intro.txt", result)
+        self.assertIn("## Section 1", result)
+
+    def test2(self) -> None:
+        """
+        Test _process_lecture_file returns None for non-generate_toc actions.
+
+        Input:
+        - class_dir: test class directory
+        - source_path: path to source file
+        - source_name: name of source file
+        - actions: ['generate_pdf']
+
+        Expected:
+        - Returns None
+        """
+        # Prepare inputs.
+        scratch_dir = self.get_scratch_space()
+        class_dir = os.path.join(scratch_dir, "msml610")
+        source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
+        source_name = "Lesson01.1-Intro.txt"
+        lectures_dir = os.path.join(class_dir, "lectures")
+        os.makedirs(lectures_dir, exist_ok=True)
+        hio.to_file(source_path, "# Title")
+        actions = ["generate_pdf"]
+        # Mock hsystem.system.
+        with mock.patch("helpers.hsystem.system"):
+            result = dshsprle._process_lecture_file(
+                class_dir, source_path, source_name, actions
+            )
+        # Check outputs.
+        self.assertIsNone(result)
+
+
+class Test_valid_actions_contains_generate_toc(hunitest.TestCase):
+    """
+    Test that generate_toc action is properly configured.
+    """
+
+    def test1(self) -> None:
+        """
+        Test that generate_toc is in _VALID_ACTIONS list.
+        """
+        # Run test.
+        self.assertIn("generate_toc", dshsprle._VALID_ACTIONS)
+
+    def test2(self) -> None:
+        """
+        Test that generate_toc is not duplicated in _VALID_ACTIONS.
+        """
+        # Run test.
+        count = dshsprle._VALID_ACTIONS.count("generate_toc")
+        # Check outputs.
+        self.assertEqual(count, 1)
+
+    def test3(self) -> None:
+        """
+        Test that generate_tocs (plural) is not in _VALID_ACTIONS.
+        """
+        # Run test.
+        self.assertNotIn("generate_tocs", dshsprle._VALID_ACTIONS)
