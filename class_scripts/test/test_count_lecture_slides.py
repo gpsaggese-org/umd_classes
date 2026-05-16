@@ -7,9 +7,11 @@ import class_scripts.test.test_count_lecture_slides as cstestcls
 """
 
 import os
+import pprint
 from typing import List
 
 import helpers.hio as hio
+import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
 
 import class_scripts.count_lecture_slides as clcoulsl
@@ -33,7 +35,16 @@ class Test__count_slides(hunitest.TestCase):
         Expected: 3
         """
         # Prepare inputs.
-        content = "# Header\n* Slide 1\nSome text\n* Slide 2\n* Slide 3\nMore text"
+        content = """
+        # Header
+        * Slide 1
+        Some text
+        * Slide 2
+        * Slide 3
+        More text
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
         expected = 3
         # Run test.
         actual = clcoulsl._count_slides(content)
@@ -48,7 +59,14 @@ class Test__count_slides(hunitest.TestCase):
         Expected: 0
         """
         # Prepare inputs.
-        content = "# Header\nSome text\nMore text\n*No space after asterisk"
+        content = """
+        # Header
+        Some text
+        More text
+        *No space after asterisk
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
         expected = 0
         # Run test.
         actual = clcoulsl._count_slides(content)
@@ -63,7 +81,12 @@ class Test__count_slides(hunitest.TestCase):
         Expected: 0
         """
         # Prepare inputs.
-        content = "This is text with * in the middle\nNot * at start"
+        content = """
+        This is text with * in the middle
+        Not * at start
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
         expected = 0
         # Run test.
         actual = clcoulsl._count_slides(content)
@@ -89,12 +112,22 @@ class Test__count_headers(hunitest.TestCase):
         Expected: (1, 2, 1)
         """
         # Prepare inputs.
-        content = "# Main Title\nSome text\n## Section 1\nText\n## Section 2\nText\n### Subsection\n"
-        expected = (1, 2, 1)
+        content = """
+        # Main Title
+        Some text
+        ## Section 1
+        Text
+        ## Section 2
+        Text
+        ### Subsection
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
+        expected = "(1, 2, 1)"
         # Run test.
         actual = clcoulsl._count_headers(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
     def test2(self) -> None:
         """
@@ -104,12 +137,18 @@ class Test__count_headers(hunitest.TestCase):
         Expected: (0, 0, 0)
         """
         # Prepare inputs.
-        content = "This is just text\nNo headers here\nText with # in middle"
-        expected = (0, 0, 0)
+        content = """
+        This is just text
+        No headers here
+        Text with # in middle
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
+        expected = "(0, 0, 0)"
         # Run test.
         actual = clcoulsl._count_headers(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
     def test3(self) -> None:
         """
@@ -119,12 +158,18 @@ class Test__count_headers(hunitest.TestCase):
         Expected: correct count at each level (0, 1, 0)
         """
         # Prepare inputs.
-        content = "## Level 2\nNot a header: ## in text\n####Too many hashes"
-        expected = (0, 1, 0)
+        content = """
+        ## Level 2
+        Not a header: ## in text
+        ####Too many hashes
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
+        expected = "(0, 1, 0)"
         # Run test.
         actual = clcoulsl._count_headers(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
 
 # #############################################################################
@@ -145,12 +190,18 @@ class Test__count_text_stats(hunitest.TestCase):
         Expected: (3, 7, 36)
         """
         # Prepare inputs.
-        content = "Hello world\nLine two here\nFinal line"
-        expected = (3, 7, 36)
+        content = """
+        Hello world
+        Line two here
+        Final line
+        """
+        content = hprint.dedent(content)
+        # Prepare outputs.
+        expected = "(3, 7, 36)"
         # Run test.
         actual = clcoulsl._count_text_stats(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
     def test2(self) -> None:
         """
@@ -161,11 +212,12 @@ class Test__count_text_stats(hunitest.TestCase):
         """
         # Prepare inputs.
         content = ""
-        expected = (1, 0, 0)
+        # Prepare outputs.
+        expected = "(1, 0, 0)"
         # Run test.
         actual = clcoulsl._count_text_stats(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
     def test3(self) -> None:
         """
@@ -176,11 +228,12 @@ class Test__count_text_stats(hunitest.TestCase):
         """
         # Prepare inputs.
         content = "word"
-        expected = (1, 1, 4)
+        # Prepare outputs.
+        expected = "(1, 1, 4)"
         # Run test.
         actual = clcoulsl._count_text_stats(content)
         # Check outputs.
-        self.assertEqual(actual, expected)
+        self.assert_equal(str(actual), expected)
 
 
 # #############################################################################
@@ -213,19 +266,28 @@ class Test__collect_stats(hunitest.TestCase):
             os.path.join(lectures_source, "Lesson02-Chapter.txt"),
             lesson2_content,
         )
+        # Prepare outputs.
+        expected = """[{'Chars': 48,
+  'File': 'Lesson01-Intro.txt',
+  'H1': 1,
+  'H2': 1,
+  'H3': 0,
+  'Lines': 5,
+  'Slides': 2,
+  'Words': 12},
+ {'Chars': 47,
+  'File': 'Lesson02-Chapter.txt',
+  'H1': 1,
+  'H2': 1,
+  'H3': 1,
+  'Lines': 5,
+  'Slides': 1,
+  'Words': 12}]"""
         # Run test.
-        rows = clcoulsl._collect_stats(course_dir)
+        actual = clcoulsl._collect_stats(course_dir)
         # Check outputs.
-        self.assertEqual(len(rows), 2)
-        self.assertEqual(rows[0]["File"], "Lesson01-Intro.txt")
-        self.assertEqual(rows[0]["Slides"], 2)
-        self.assertEqual(rows[0]["H1"], 1)
-        self.assertEqual(rows[0]["H2"], 1)
-        self.assertEqual(rows[1]["File"], "Lesson02-Chapter.txt")
-        self.assertEqual(rows[1]["Slides"], 1)
-        self.assertEqual(rows[1]["H1"], 1)
-        self.assertEqual(rows[1]["H2"], 1)
-        self.assertEqual(rows[1]["H3"], 1)
+        actual_str = pprint.pformat(actual)
+        self.assert_equal(actual_str, expected)
 
 
 # #############################################################################
@@ -262,12 +324,14 @@ class Test__format_table(hunitest.TestCase):
         """
         # Prepare inputs.
         rows = self._make_test_rows()
+        # Prepare outputs.
+        expected = r"""| File         |   Slides |   H1 |   H2 |   H3 |   Lines |   Words |   Chars |
+|--------------|----------|------|------|------|---------|---------|---------|
+| Lesson01.txt |        5 |    1 |    2 |    1 |      50 |     300 |    2000 |"""
         # Run test.
         actual = clcoulsl._format_table(rows, format_type="markdown")
         # Check outputs.
-        self.assertIn("|", actual)
-        self.assertIn("File", actual)
-        self.assertIn("Lesson01.txt", actual)
+        self.assert_equal(actual.strip(), expected)
 
     def test2(self) -> None:
         """
@@ -278,13 +342,13 @@ class Test__format_table(hunitest.TestCase):
         """
         # Prepare inputs.
         rows = self._make_test_rows()
+        # Prepare outputs.
+        expected = r"""File        	  Slides	  H1	  H2	  H3	  Lines	  Words	  Chars
+Lesson01.txt	       5	   1	   2	   1	     50	    300	   2000"""
         # Run test.
         actual = clcoulsl._format_table(rows, format_type="tsv")
         # Check outputs.
-        lines = actual.strip().split("\n")
-        self.assertEqual(len(lines), 2)
-        self.assertIn("File", lines[0])
-        self.assertIn("Lesson01.txt", lines[1])
+        self.assert_equal(actual.strip(), expected)
 
     def test3(self) -> None:
         """
@@ -295,10 +359,10 @@ class Test__format_table(hunitest.TestCase):
         """
         # Prepare inputs.
         rows = self._make_test_rows()
+        # Prepare outputs.
+        expected = """File,Slides,H1,H2,H3,Lines,Words,Chars
+Lesson01.txt,5,1,2,1,50,300,2000"""
         # Run test.
         actual = clcoulsl._format_table(rows, format_type="csv")
         # Check outputs.
-        lines = actual.strip().split("\n")
-        self.assertEqual(len(lines), 2)
-        self.assertIn("File", lines[0])
-        self.assertIn("Lesson01.txt", lines[1])
+        self.assert_equal(actual.strip(), expected)
