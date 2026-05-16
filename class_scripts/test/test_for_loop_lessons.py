@@ -4,6 +4,7 @@ from unittest import mock
 
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
+import helpers.hunit_test_utils as hunteuti
 import helpers.hprint as hprint
 
 import class_scripts.for_loop_lessons as csfolole
@@ -14,6 +15,7 @@ import class_scripts.for_loop_lessons as csfolole
 # #############################################################################
 
 
+# TODO(ai_gp): Accept a self and get scratch_dir = self.get_scratch_space()
 def _create_test_structure(
     scratch_dir: str,
     test_files: List[str],
@@ -291,6 +293,7 @@ class Test_find_lecture_files(hunitest.TestCase):
         Test that invalid range length raises `AssertionError`.
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         lectures_source_dir = os.path.join(class_dir, "lectures_source")
@@ -330,13 +333,13 @@ class Test_generate_tex(hunitest.TestCase):
         :param limit: optional limit parameter
         """
         # Run test.
-        with mock.patch("helpers.hsystem.system") as mock_system:
+        with hunteuti.capture_system_calls() as invocations:
             csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
-            mock_system.assert_called_once()
-            cmd_str = mock_system.call_args[0][0]
+            self.assertEqual(len(invocations), 1)
+            cmd_str = invocations[0]['args'][0]
             self.check_string(cmd_str, purify_text=True)
 
     def test1(self) -> None:
@@ -344,6 +347,7 @@ class Test_generate_tex(hunitest.TestCase):
         Test `_generate_tex()` with basic inputs generates correct command.
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         lectures_tex_dir = os.path.join(class_dir, "lectures_tex")
@@ -359,6 +363,7 @@ class Test_generate_tex(hunitest.TestCase):
         Test `_generate_tex()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         lectures_tex_dir = os.path.join(class_dir, "lectures_tex")
@@ -368,13 +373,13 @@ class Test_generate_tex(hunitest.TestCase):
         hio.to_file(source_path, "Test content")
         limit = "1:3"
         # Run test.
-        with mock.patch("helpers.hsystem.system") as mock_system:
+        with hunteuti.capture_system_calls() as invocations:
             csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
-            mock_system.assert_called_once()
-            cmd_str = mock_system.call_args[0][0]
+            self.assertEqual(len(invocations), 1)
+            cmd_str = invocations[0]['args'][0]
             self.assertIn(f"--limit {limit}", cmd_str)
 
 
@@ -393,6 +398,7 @@ class Test_generate_pdf(hunitest.TestCase):
         Test `_generate_pdf()` with basic inputs generates correct command.
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         lectures_dir = os.path.join(class_dir, "lectures")
@@ -401,13 +407,13 @@ class Test_generate_pdf(hunitest.TestCase):
         source_name = "Lesson01.1-Intro.txt"
         hio.to_file(source_path, "Test content")
         # Run test.
-        with mock.patch("helpers.hsystem.system") as mock_system:
+        with hunteuti.capture_system_calls() as invocations:
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, skip_action="open"
             )
             # Check outputs.
-            mock_system.assert_called_once()
-            cmd_str = mock_system.call_args[0][0]
+            self.assertEqual(len(invocations), 1)
+            cmd_str = invocations[0]['args'][0]
             self.assertIn("notes_to_pdf.py", cmd_str)
             self.assertIn(source_path, cmd_str)
             self.assertIn("--type slides", cmd_str)
@@ -417,6 +423,7 @@ class Test_generate_pdf(hunitest.TestCase):
         Test `_generate_pdf()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         lectures_dir = os.path.join(class_dir, "lectures")
@@ -426,13 +433,13 @@ class Test_generate_pdf(hunitest.TestCase):
         hio.to_file(source_path, "Test content")
         limit = "1:5"
         # Run test.
-        with mock.patch("helpers.hsystem.system") as mock_system:
+        with hunteuti.capture_system_calls() as invocations:
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
-            mock_system.assert_called_once()
-            cmd_str = mock_system.call_args[0][0]
+            self.assertEqual(len(invocations), 1)
+            cmd_str = invocations[0]['args'][0]
             self.assertIn(f"--limit {limit}", cmd_str)
             self.assertIn("notes_to_pdf.py", cmd_str)
 
@@ -450,15 +457,9 @@ class Test_generate_toc(hunitest.TestCase):
     def test1(self) -> None:
         """
         Test _generate_toc extracts TOC and adds lesson header.
-
-        Input:
-        - source_path: path to a lecture file
-        - source_name: name of the source file
-
-        Expected:
-        - Returns string with lesson header and TOC content
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -480,15 +481,9 @@ class Test_generate_toc(hunitest.TestCase):
     def test2(self) -> None:
         """
         Test `_generate_toc()` calls `extract_toc_from_txt.py` with correct parameters.
-
-        Input:
-        - source_path: path to a lecture file
-        - source_name: name of the source file
-
-        Expected:
-        - `extract_toc_from_txt.py` is called with --max_level 5 and source path
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         source_path = os.path.join(scratch_dir, "Lesson02.1-Advanced.txt")
         source_name = "Lesson02.1-Advanced.txt"
@@ -524,16 +519,9 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
     def test1(self) -> None:
         """
         Fast test: `_generate_pdf()` executes successfully with minimal source file.
-
-        Input:
-        - class_dir: test class directory with lectures subdirectory
-        - source_path: path to minimal source file
-        - source_name: name of the source file
-
-        Expected:
-        - Command executes without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         lectures_dir = os.path.join(class_dir, "lectures")
@@ -553,17 +541,9 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
     def test2(self) -> None:
         """
         Fast test: `_generate_pdf()` with limit parameter completes successfully.
-
-        Input:
-        - class_dir: test class directory
-        - source_path: path to minimal source file
-        - source_name: name of source file
-        - limit: slide range to process (e.g., '1:1')
-
-        Expected:
-        - Command executes with limit parameter without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         lectures_dir = os.path.join(class_dir, "lectures")
@@ -602,16 +582,9 @@ class Test_generate_tex_e2e(hunitest.TestCase):
     def test1(self) -> None:
         """
         Fast test: `_generate_tex()` executes successfully with minimal source file.
-
-        Input:
-        - class_dir: test class directory with lectures_tex subdirectory
-        - source_path: path to minimal source file
-        - source_name: name of the source file
-
-        Expected:
-        - Command executes without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         lectures_tex_dir = os.path.join(class_dir, "lectures_tex")
@@ -646,16 +619,9 @@ class Test_generate_script_e2e(hunitest.TestCase):
     def test1(self) -> None:
         """
         Fast test: `_generate_script()` executes successfully with minimal source file.
-
-        Input:
-        - class_dir: test class directory
-        - source_path: path to minimal source file
-        - source_name: name of the source file
-
-        Expected:
-        - Command executes without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         lectures_script_dir = os.path.join(class_dir, "lectures_script")
@@ -692,16 +658,9 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
     def test1(self) -> None:
         """
         Fast test: Process single file with `generate_pdf` action.
-
-        Input:
-        - class_dir: test class directory
-        - source_path, source_name: lecture file
-        - actions: ['generate_pdf']
-
-        Expected:
-        - Command pipeline executes without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         os.makedirs(os.path.join(class_dir, "lectures"), exist_ok=True)
@@ -724,16 +683,9 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
     def test2(self) -> None:
         """
         Fast test: Process single file with multiple actions.
-
-        Input:
-        - class_dir: test class directory
-        - source_path, source_name: lecture file
-        - actions: ['generate_pdf', 'generate_tex']
-
-        Expected:
-        - Command pipeline executes all actions without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         os.makedirs(os.path.join(class_dir, "lectures"), exist_ok=True)
@@ -760,16 +712,9 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
     def test3(self) -> None:
         """
         Fast test: Process file with `generate_script` action.
-
-        Input:
-        - class_dir: test class directory
-        - source_path, source_name: lecture file
-        - actions: ['generate_script']
-
-        Expected:
-        - Command pipeline executes without raising an exception
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "data605")
         os.makedirs(os.path.join(class_dir, "lectures_script"), exist_ok=True)
@@ -808,17 +753,9 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
     def test1(self) -> None:
         """
         Test `_process_lecture_file()` returns TOC content for `generate_toc` action.
-
-        Input:
-        - class_dir: test class directory
-        - source_path: path to source file
-        - source_name: name of source file
-        - actions: ['generate_toc']
-
-        Expected:
-        - Returns string with TOC content
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
@@ -852,6 +789,7 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
         - Returns None
         """
         # Prepare inputs.
+        # TODO(ai_gp): Use _create_test_structure
         scratch_dir = self.get_scratch_space()
         class_dir = os.path.join(scratch_dir, "msml610")
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
