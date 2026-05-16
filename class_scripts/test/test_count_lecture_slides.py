@@ -328,9 +328,12 @@ class Test__format_table(hunitest.TestCase):
         # Prepare inputs.
         rows = self._make_test_rows()
         # Prepare outputs.
-        expected = r"""| File         |   Slides |   H1 |   H2 |   H3 |   Lines |   Words |   Chars |
-|--------------|----------|------|------|------|---------|---------|---------|
-| Lesson01.txt |        5 |    1 |    2 |    1 |      50 |     300 |    2000 |"""
+        expected = r"""
+        | File         |   Slides |   H1 |   H2 |   H3 |   Lines |   Words |   Chars |
+        |--------------|----------|------|------|------|---------|---------|---------|
+        | Lesson01.txt |        5 |    1 |    2 |    1 |      50 |     300 |    2000 |
+        """
+        expected = hprint.dedent(expected)
         # Run test.
         actual = cscolesl._format_table(rows, format_type="markdown")
         # Check outputs.
@@ -346,8 +349,11 @@ class Test__format_table(hunitest.TestCase):
         # Prepare inputs.
         rows = self._make_test_rows()
         # Prepare outputs.
-        expected = r"""File        	  Slides	  H1	  H2	  H3	  Lines	  Words	  Chars
-Lesson01.txt	       5	   1	   2	   1	     50	    300	   2000"""
+        expected = r"""
+        File        	  Slides	  H1	  H2	  H3	  Lines	  Words	  Chars
+        Lesson01.txt	       5	   1	   2	   1	     50	    300	   2000
+        """
+        expected = hprint.dedent(expected)
         # Run test.
         actual = cscolesl._format_table(rows, format_type="tsv")
         # Check outputs.
@@ -363,8 +369,11 @@ Lesson01.txt	       5	   1	   2	   1	     50	    300	   2000"""
         # Prepare inputs.
         rows = self._make_test_rows()
         # Prepare outputs.
-        expected = """File,Slides,H1,H2,H3,Lines,Words,Chars
-Lesson01.txt,5,1,2,1,50,300,2000"""
+        expected = """
+        File,Slides,H1,H2,H3,Lines,Words,Chars
+        Lesson01.txt,5,1,2,1,50,300,2000
+        """
+        expected = hprint.dedent(expected)
         # Run test.
         actual = cscolesl._format_table(rows, format_type="csv")
         # Check outputs.

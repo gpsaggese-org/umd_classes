@@ -10,13 +10,40 @@ import class_scripts.for_loop_lessons as csfolole
 
 
 # #############################################################################
+# Helper Functions
+# #############################################################################
+
+
+def _create_test_structure(
+    scratch_dir: str,
+    test_files: List[str],
+) -> str:
+    """
+    Create test directory structure with lecture files.
+
+    :param scratch_dir: Base directory for test structure
+    :param test_files: List of lecture filenames to create
+    :return: Path to `class_dir`
+    """
+    class_dir = os.path.join(scratch_dir, "data605")
+    lectures_source_dir = os.path.join(class_dir, "lectures_source")
+    os.makedirs(lectures_source_dir)
+    for filename in test_files:
+        filepath = os.path.join(lectures_source_dir, filename)
+        with open(filepath, "w") as f:
+            f.write(f"Content of {filename}")
+    return class_dir
+
+
+# #############################################################################
 # Test_parse_lecture_patterns
 # #############################################################################
 
 
 class Test_parse_lecture_patterns(hunitest.TestCase):
     """
-    Test _parse_lecture_patterns function for parsing lecture patterns and ranges.
+    Test `_parse_lecture_patterns()` function for parsing lecture patterns and
+    ranges.
     """
 
     def _helper(
@@ -26,7 +53,7 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
         expected_patterns: List[str],
     ) -> None:
         """
-        Helper to test _parse_lecture_patterns and assert results.
+        Helper to test `_parse_lecture_patterns()` and assert results.
         """
         # Run test.
         actual_is_range, actual_patterns = csfolole._parse_lecture_patterns(
@@ -39,9 +66,6 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
     def test1(self) -> None:
         """
         Test parsing a single lecture pattern.
-
-        Input: '01.1'
-        Expected output: (False, ['01.1'])
         """
         # Prepare inputs.
         lectures_arg = "01.1"
@@ -53,9 +77,6 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
     def test2(self) -> None:
         """
         Test parsing a wildcard pattern.
-
-        Input: '01*'
-        Expected output: (False, ['01*'])
         """
         # Prepare inputs.
         lectures_arg = "01*"
@@ -67,9 +88,6 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
     def test3(self) -> None:
         """
         Test parsing multiple patterns separated by colons (union syntax).
-
-        Input: '01*:02*:03.1'
-        Expected output: (False, ['01*', '02*', '03.1'])
         """
         # Prepare inputs.
         lectures_arg = "01*:02*:03.1"
@@ -81,9 +99,6 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
     def test4(self) -> None:
         """
         Test parsing a range pattern with hyphen separator.
-
-        Input: '01.1-03.2'
-        Expected output: (True, ['01.1', '03.2'])
         """
         # Prepare inputs.
         lectures_arg = "01.1-03.2"
@@ -94,10 +109,7 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
 
     def test5(self) -> None:
         """
-        Test that mixing range and union syntax raises AssertionError.
-
-        Input: '01.1-03.2:04*'
-        Expected: AssertionError with message about mixing syntaxes
+        Test that mixing range and union syntax raises `AssertionError`.
         """
         # Prepare inputs.
         lectures_arg = "01.1-03.2:04*"
@@ -111,10 +123,7 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
 
     def test6(self) -> None:
         """
-        Test that invalid range format raises AssertionError.
-
-        Input: '01.1-03.2-05.1'
-        Expected: AssertionError with message about exactly two parts
+        Test that invalid range format raises `AssertionError`.
         """
         # Prepare inputs.
         lectures_arg = "01.1-03.2-05.1"
@@ -132,47 +141,14 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
 
 class Test_expand_lecture_range(hunitest.TestCase):
     """
-    Test _expand_lecture_range function for finding files in a lesson range.
+    Test `_expand_lecture_range()` function for finding files in a lesson range.
 
     Note: These tests require a mock directory structure with lecture files.
     """
 
-    def _create_test_structure(
-        self,
-        test_files: List[str],
-    ) -> str:
-        """
-        Create test directory structure with lecture files.
-
-        :param test_files: List of lecture filenames to create
-        :return: class_dir path
-        """
-        scratch_dir = self.get_scratch_space()
-        class_dir = os.path.join(scratch_dir, "data605")
-        lectures_source_dir = os.path.join(class_dir, "lectures_source")
-        os.makedirs(lectures_source_dir)
-        # Create mock lecture files.
-        for filename in test_files:
-            filepath = os.path.join(lectures_source_dir, filename)
-            with open(filepath, "w") as f:
-                f.write(f"Content of {filename}")
-        return class_dir
-
     def test1(self) -> None:
         """
         Test expanding a range that includes multiple lecture files.
-
-        Input:
-        - class_dir: 'data605' (with mock files Lesson01.1, Lesson01.2, Lesson02.1)
-        - start_lesson: '01.1'
-        - end_lesson: '02.1'
-
-        Expected output:
-        [
-            ('.../Lesson01.1-Intro.txt', 'Lesson01.1-Intro.txt'),
-            ('.../Lesson01.2-BigData.txt', 'Lesson01.2-BigData.txt'),
-            ('.../Lesson02.1-Git.txt', 'Lesson02.1-Git.txt'),
-        ]
         """
         # Prepare inputs.
         test_files = [
@@ -180,62 +156,44 @@ class Test_expand_lecture_range(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         start_lesson = "01.1"
         end_lesson = "02.1"
-        expected_count = 3
-        expected_first_file = "Lesson01.1-Intro.txt"
-        expected_last_file = "Lesson02.1-Git.txt"
         # Run test.
         actual_files = csfolole._expand_lecture_range(
             class_dir, start_lesson, end_lesson
         )
         # Check outputs.
-        self.assertEqual(len(actual_files), expected_count)
-        self.assertEqual(actual_files[0][1], expected_first_file)
-        self.assertEqual(actual_files[-1][1], expected_last_file)
+        actual = str([(path.replace(scratch_dir, ""), fname) for path, fname in actual_files])
+        self.check_string(actual)
 
     def test2(self) -> None:
         """
         Test expanding a range that includes only one lecture file.
-
-        Input:
-        - class_dir: 'data605' (with mock file Lesson01.1)
-        - start_lesson: '01.1'
-        - end_lesson: '01.1'
-
-        Expected output:
-        [('.../Lesson01.1-Intro.txt', 'Lesson01.1-Intro.txt')]
         """
         # Prepare inputs.
         test_files = ["Lesson01.1-Intro.txt"]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         start_lesson = "01.1"
         end_lesson = "01.1"
-        expected_count = 1
-        expected_file = "Lesson01.1-Intro.txt"
         # Run test.
         actual_files = csfolole._expand_lecture_range(
             class_dir, start_lesson, end_lesson
         )
         # Check outputs.
-        self.assertEqual(len(actual_files), expected_count)
-        self.assertEqual(actual_files[0][1], expected_file)
+        actual = str([(path.replace(scratch_dir, ""), fname) for path, fname in actual_files])
+        self.check_string(actual)
 
     def test3(self) -> None:
         """
-        Test that an empty range raises AssertionError.
-
-        Input:
-        - class_dir: 'data605' (with no matching files in range)
-        - start_lesson: '99.1'
-        - end_lesson: '99.9'
-
-        Expected: AssertionError with message about no files found
+        Test that an empty range raises `AssertionError`.
         """
         # Prepare inputs.
         test_files = ["Lesson01.1-Intro.txt"]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         start_lesson = "99.1"
         end_lesson = "99.9"
         # Run test and check output.
@@ -252,31 +210,10 @@ class Test_expand_lecture_range(hunitest.TestCase):
 
 class Test_find_lecture_files(hunitest.TestCase):
     """
-    Test _find_lecture_files function for finding lecture files by patterns or range.
+    Test `_find_lecture_files()` function for finding lecture files by patterns or range.
 
     Note: These tests require a mock directory structure with lecture files.
     """
-
-    def _create_test_structure(
-        self,
-        test_files: List[str],
-    ) -> str:
-        """
-        Create test directory structure with lecture files.
-
-        :param test_files: List of lecture filenames to create
-        :return: class_dir path
-        """
-        scratch_dir = self.get_scratch_space()
-        class_dir = os.path.join(scratch_dir, "data605")
-        lectures_source_dir = os.path.join(class_dir, "lectures_source")
-        os.makedirs(lectures_source_dir)
-        # Create mock lecture files.
-        for filename in test_files:
-            filepath = os.path.join(lectures_source_dir, filename)
-            with open(filepath, "w") as f:
-                f.write(f"Content of {filename}")
-        return class_dir
 
     def _helper(
         self,
@@ -286,7 +223,7 @@ class Test_find_lecture_files(hunitest.TestCase):
         expected_count: int,
     ) -> None:
         """
-        Helper to test _find_lecture_files and assert result count.
+        Helper to test `_find_lecture_files()` and assert result count.
         """
         # Run test.
         actual_files = csfolole._find_lecture_files(
@@ -298,13 +235,6 @@ class Test_find_lecture_files(hunitest.TestCase):
     def test1(self) -> None:
         """
         Test finding files using range mode.
-
-        Input:
-        - class_dir: 'data605'
-        - is_range: True
-        - patterns_or_range: ['01.1', '02.1']
-
-        Expected output: List of tuples for files from Lesson01.1 to Lesson02.1
         """
         # Prepare inputs.
         test_files = [
@@ -312,7 +242,8 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         is_range = True
         patterns_or_range = ["01.1", "02.1"]
         expected_count = 3
@@ -322,13 +253,6 @@ class Test_find_lecture_files(hunitest.TestCase):
     def test2(self) -> None:
         """
         Test finding files using single pattern mode.
-
-        Input:
-        - class_dir: 'data605'
-        - is_range: False
-        - patterns_or_range: ['01*']
-
-        Expected output: List of tuples for all files matching Lesson01*
         """
         # Prepare inputs.
         test_files = [
@@ -336,23 +260,17 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         is_range = False
         patterns_or_range = ["01*"]
-        expected_count = 2  # Lesson01.1 and Lesson01.2
+        expected_count = 2
         # Run test.
         self._helper(class_dir, is_range, patterns_or_range, expected_count)
 
     def test3(self) -> None:
         """
         Test finding files using multiple patterns (union syntax).
-
-        Input:
-        - class_dir: 'data605'
-        - is_range: False
-        - patterns_or_range: ['01*', '02*']
-
-        Expected output: List of tuples for all files matching Lesson01* and Lesson02*
         """
         # Prepare inputs.
         test_files = [
@@ -360,23 +278,17 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = self._create_test_structure(test_files)
+        scratch_dir = self.get_scratch_space()
+        class_dir = _create_test_structure(scratch_dir, test_files)
         is_range = False
         patterns_or_range = ["01*", "02*"]
-        expected_count = 3  # All files match
+        expected_count = 3
         # Run test.
         self._helper(class_dir, is_range, patterns_or_range, expected_count)
 
     def test4(self) -> None:
         """
-        Test that invalid range length raises AssertionError.
-
-        Input:
-        - class_dir: 'data605'
-        - is_range: True
-        - patterns_or_range: ['01.1', '02.1', '03.1']  # Too many elements
-
-        Expected: AssertionError with message about exactly two elements
+        Test that invalid range length raises `AssertionError`.
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -399,7 +311,7 @@ class Test_find_lecture_files(hunitest.TestCase):
 
 class Test_generate_tex(hunitest.TestCase):
     """
-    Test _generate_tex function for generating TeX files.
+    Test `_generate_tex()` function for generating TeX files.
     """
 
     def _helper(
@@ -410,7 +322,7 @@ class Test_generate_tex(hunitest.TestCase):
         limit: Optional[str] = None,
     ) -> None:
         """
-        Helper to test _generate_tex function.
+        Helper to test `_generate_tex()` function.
 
         :param class_dir: class directory
         :param source_path: path to source file
@@ -425,20 +337,11 @@ class Test_generate_tex(hunitest.TestCase):
             # Check outputs.
             mock_system.assert_called_once()
             cmd_str = mock_system.call_args[0][0]
-            self.assertIn("notes_to_pdf.py", cmd_str)
-            self.assertIn("--tex_only", cmd_str)
-            self.assertIn(source_path, cmd_str)
+            self.check_string(cmd_str, purify_text=True)
 
     def test1(self) -> None:
         """
-        Test _generate_tex with basic inputs generates correct command.
-
-        Input:
-        - class_dir: 'data605'
-        - source_path: '.../Lesson01.1-Intro.txt'
-        - source_name: 'Lesson01.1-Intro.txt'
-
-        Expected: Command includes notes_to_pdf.py, --tex_only, and source path.
+        Test `_generate_tex()` with basic inputs generates correct command.
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -453,15 +356,7 @@ class Test_generate_tex(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test _generate_tex with limit parameter includes limit in command.
-
-        Input:
-        - class_dir: 'data605'
-        - source_path: '.../Lesson01.1-Intro.txt'
-        - source_name: 'Lesson01.1-Intro.txt'
-        - limit: '1:3'
-
-        Expected: Command includes limit parameter.
+        Test `_generate_tex()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -490,19 +385,12 @@ class Test_generate_tex(hunitest.TestCase):
 
 class Test_generate_pdf(hunitest.TestCase):
     """
-    Test _generate_pdf function for generating PDF slides.
+    Test `_generate_pdf()` function for generating PDF slides.
     """
 
     def test1(self) -> None:
         """
-        Test _generate_pdf with basic inputs generates correct command.
-
-        Input:
-        - class_dir: 'msml610'
-        - source_path: '.../Lesson01.1-Intro.txt'
-        - source_name: 'Lesson01.1-Intro.txt'
-
-        Expected: Command includes notes_to_pdf.py and completes successfully.
+        Test `_generate_pdf()` with basic inputs generates correct command.
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -526,15 +414,7 @@ class Test_generate_pdf(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test _generate_pdf with limit parameter includes limit in command.
-
-        Input:
-        - class_dir: 'msml610'
-        - source_path: '.../Lesson01.1-Intro.txt'
-        - source_name: 'Lesson01.1-Intro.txt'
-        - limit: '1:5'
-
-        Expected: Command includes limit parameter and completes successfully.
+        Test `_generate_pdf()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -564,7 +444,7 @@ class Test_generate_pdf(hunitest.TestCase):
 
 class Test_generate_toc(hunitest.TestCase):
     """
-    Test _generate_toc function for extracting TOC from a single lecture file.
+    Test `_generate_toc()` function for extracting TOC from a single lecture file.
     """
 
     def test1(self) -> None:
@@ -583,7 +463,7 @@ class Test_generate_toc(hunitest.TestCase):
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
         hio.to_file(source_path, "# Main\n## Section 1\n### Subsection")
-        # Mock system_to_string to return TOC content.
+        # Mock `system_to_string()` to return TOC content.
         with mock.patch(
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
@@ -599,14 +479,14 @@ class Test_generate_toc(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test _generate_toc calls extract_toc_from_txt.py with correct parameters.
+        Test `_generate_toc()` calls `extract_toc_from_txt.py` with correct parameters.
 
         Input:
         - source_path: path to a lecture file
         - source_name: name of the source file
 
         Expected:
-        - extract_toc_from_txt.py is called with --max_level 5 and source path
+        - `extract_toc_from_txt.py` is called with --max_level 5 and source path
         """
         # Prepare inputs.
         scratch_dir = self.get_scratch_space()
@@ -635,15 +515,15 @@ class Test_generate_toc(hunitest.TestCase):
 
 class Test_generate_pdf_e2e(hunitest.TestCase):
     """
-    End-to-end tests for _generate_pdf function.
+    End-to-end tests for `_generate_pdf()` function.
 
-    These tests execute the actual command line using hsystem.system
+    These tests execute the actual command line using `hsystem.system()`
     to verify the complete integration of the PDF generation pipeline.
     """
 
     def test1(self) -> None:
         """
-        Fast test: _generate_pdf executes successfully with minimal source file.
+        Fast test: `_generate_pdf()` executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory with lectures subdirectory
@@ -668,12 +548,11 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test - only verify it completes without exception.
         csfolole._generate_pdf(class_dir, source_path, source_name)
 
     def test2(self) -> None:
         """
-        Fast test: _generate_pdf with limit parameter completes successfully.
+        Fast test: `_generate_pdf()` with limit parameter completes successfully.
 
         Input:
         - class_dir: test class directory
@@ -703,7 +582,6 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
         limit = "1:1"
-        # Run test - only verify it completes without exception.
         csfolole._generate_pdf(class_dir, source_path, source_name, limit=limit)
 
 
@@ -714,16 +592,16 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
 
 class Test_generate_tex_e2e(hunitest.TestCase):
     """
-    End-to-end tests for _generate_tex function.
+    End-to-end tests for `_generate_tex()` function.
 
-    These tests execute the actual command line using hsystem.system
+    These tests execute the actual command line using `hsystem.system()`
     to verify TeX file generation.
     No output verification - only checks that the command completes.
     """
 
     def test1(self) -> None:
         """
-        Fast test: _generate_tex executes successfully with minimal source file.
+        Fast test: `_generate_tex()` executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory with lectures_tex subdirectory
@@ -748,7 +626,6 @@ class Test_generate_tex_e2e(hunitest.TestCase):
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test - only verify it completes without exception.
         csfolole._generate_tex(class_dir, source_path, source_name)
 
 
@@ -759,16 +636,16 @@ class Test_generate_tex_e2e(hunitest.TestCase):
 
 class Test_generate_script_e2e(hunitest.TestCase):
     """
-    End-to-end tests for _generate_script function.
+    End-to-end tests for `_generate_script()` function.
 
-    These tests execute the actual command line using hsystem.system
+    These tests execute the actual command line using `hsystem.system()`
     to verify script file generation.
     No output verification - only checks that the command completes.
     """
 
     def test1(self) -> None:
         """
-        Fast test: _generate_script executes successfully with minimal source file.
+        Fast test: `_generate_script()` executes successfully with minimal source file.
 
         Input:
         - class_dir: test class directory
@@ -796,7 +673,6 @@ class Test_generate_script_e2e(hunitest.TestCase):
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        # Run test - only verify it completes without exception.
         csfolole._generate_script(class_dir, source_path, source_name)
 
 
@@ -807,15 +683,15 @@ class Test_generate_script_e2e(hunitest.TestCase):
 
 class Test_process_lecture_file_e2e(hunitest.TestCase):
     """
-    End-to-end integration tests for _process_lecture_file function.
+    End-to-end integration tests for `_process_lecture_file()` function.
 
-    These tests execute actual command pipelines via hsystem.system.
+    These tests execute actual command pipelines via `hsystem.system()`.
     No output verification - only checks that execution completes.
     """
 
     def test1(self) -> None:
         """
-        Fast test: Process single file with generate_pdf action.
+        Fast test: Process single file with `generate_pdf` action.
 
         Input:
         - class_dir: test class directory
@@ -883,7 +759,7 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
 
     def test3(self) -> None:
         """
-        Fast test: Process file with generate_script action.
+        Fast test: Process file with `generate_script` action.
 
         Input:
         - class_dir: test class directory
@@ -924,14 +800,14 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
 
 class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
     """
-    Test _process_lecture_file function with generate_toc action.
+    Test `_process_lecture_file()` function with `generate_toc` action.
 
-    Verifies that the function returns TOC content when generate_toc is specified.
+    Verifies that the function returns TOC content when `generate_toc` is specified.
     """
 
     def test1(self) -> None:
         """
-        Test _process_lecture_file returns TOC content for generate_toc action.
+        Test `_process_lecture_file()` returns TOC content for `generate_toc` action.
 
         Input:
         - class_dir: test class directory
@@ -964,7 +840,7 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
 
     def test2(self) -> None:
         """
-        Test _process_lecture_file returns None for non-generate_toc actions.
+        Test `_process_lecture_file()` returns None for non-`generate_toc` actions.
 
         Input:
         - class_dir: test class directory
@@ -991,37 +867,3 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
             )
         # Check outputs.
         self.assertIsNone(result)
-
-
-# #############################################################################
-# Test_valid_actions_contains_generate_toc
-# #############################################################################
-
-
-class Test_valid_actions_contains_generate_toc(hunitest.TestCase):
-    """
-    Test that generate_toc action is properly configured.
-    """
-
-    def test1(self) -> None:
-        """
-        Test that generate_toc is in _VALID_ACTIONS list.
-        """
-        # Run test.
-        self.assertIn("generate_toc", csfolole._VALID_ACTIONS)
-
-    def test2(self) -> None:
-        """
-        Test that generate_toc is not duplicated in _VALID_ACTIONS.
-        """
-        # Run test.
-        count = csfolole._VALID_ACTIONS.count("generate_toc")
-        # Check outputs.
-        self.assertEqual(count, 1)
-
-    def test3(self) -> None:
-        """
-        Test that generate_tocs (plural) is not in _VALID_ACTIONS.
-        """
-        # Run test.
-        self.assertNotIn("generate_tocs", csfolole._VALID_ACTIONS)
