@@ -6,11 +6,13 @@ import helpers.hio as hio
 import helpers.hunit_test as hunitest
 import helpers.hprint as hprint
 
-import class_scripts.for_loop_lessons as dshsprle
+import class_scripts.for_loop_lessons as csfolole
+
 
 # #############################################################################
 # Test_parse_lecture_patterns
 # #############################################################################
+
 
 class Test_parse_lecture_patterns(hunitest.TestCase):
     """
@@ -27,7 +29,7 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
         Helper to test _parse_lecture_patterns and assert results.
         """
         # Run test.
-        actual_is_range, actual_patterns = dshsprle._parse_lecture_patterns(
+        actual_is_range, actual_patterns = csfolole._parse_lecture_patterns(
             lectures_arg
         )
         # Check outputs.
@@ -101,7 +103,7 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
         lectures_arg = "01.1-03.2:04*"
         # Run test and check output.
         with self.assertRaises(AssertionError) as cm:
-            dshsprle._parse_lecture_patterns(lectures_arg)
+            csfolole._parse_lecture_patterns(lectures_arg)
         expected_error = (
             "Cannot mix range syntax (hyphen) with union syntax (colon)"
         )
@@ -118,13 +120,15 @@ class Test_parse_lecture_patterns(hunitest.TestCase):
         lectures_arg = "01.1-03.2-05.1"
         # Run test and check output.
         with self.assertRaises(AssertionError) as cm:
-            dshsprle._parse_lecture_patterns(lectures_arg)
+            csfolole._parse_lecture_patterns(lectures_arg)
         expected_error = "Range syntax must have exactly two parts (start-end)"
         self.assertIn(expected_error, str(cm.exception))
+
 
 # #############################################################################
 # Test_expand_lecture_range
 # #############################################################################
+
 
 class Test_expand_lecture_range(hunitest.TestCase):
     """
@@ -183,7 +187,7 @@ class Test_expand_lecture_range(hunitest.TestCase):
         expected_first_file = "Lesson01.1-Intro.txt"
         expected_last_file = "Lesson02.1-Git.txt"
         # Run test.
-        actual_files = dshsprle._expand_lecture_range(
+        actual_files = csfolole._expand_lecture_range(
             class_dir, start_lesson, end_lesson
         )
         # Check outputs.
@@ -211,7 +215,7 @@ class Test_expand_lecture_range(hunitest.TestCase):
         expected_count = 1
         expected_file = "Lesson01.1-Intro.txt"
         # Run test.
-        actual_files = dshsprle._expand_lecture_range(
+        actual_files = csfolole._expand_lecture_range(
             class_dir, start_lesson, end_lesson
         )
         # Check outputs.
@@ -236,13 +240,15 @@ class Test_expand_lecture_range(hunitest.TestCase):
         end_lesson = "99.9"
         # Run test and check output.
         with self.assertRaises(AssertionError) as cm:
-            dshsprle._expand_lecture_range(class_dir, start_lesson, end_lesson)
+            csfolole._expand_lecture_range(class_dir, start_lesson, end_lesson)
         expected_error = "No lecture files found in range"
         self.assertIn(expected_error, str(cm.exception))
+
 
 # #############################################################################
 # Test_find_lecture_files
 # #############################################################################
+
 
 class Test_find_lecture_files(hunitest.TestCase):
     """
@@ -283,7 +289,7 @@ class Test_find_lecture_files(hunitest.TestCase):
         Helper to test _find_lecture_files and assert result count.
         """
         # Run test.
-        actual_files = dshsprle._find_lecture_files(
+        actual_files = csfolole._find_lecture_files(
             class_dir, is_range, patterns_or_range
         )
         # Check outputs.
@@ -381,13 +387,15 @@ class Test_find_lecture_files(hunitest.TestCase):
         patterns_or_range = ["01.1", "02.1", "03.1"]
         # Run test and check output.
         with self.assertRaises(AssertionError) as cm:
-            dshsprle._find_lecture_files(class_dir, is_range, patterns_or_range)
+            csfolole._find_lecture_files(class_dir, is_range, patterns_or_range)
         expected_error = "Range must have exactly two elements"
         self.assertIn(expected_error, str(cm.exception))
+
 
 # #############################################################################
 # Test_generate_tex
 # #############################################################################
+
 
 class Test_generate_tex(hunitest.TestCase):
     """
@@ -411,7 +419,7 @@ class Test_generate_tex(hunitest.TestCase):
         """
         # Run test.
         with mock.patch("helpers.hsystem.system") as mock_system:
-            dshsprle._generate_tex(
+            csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
@@ -466,7 +474,7 @@ class Test_generate_tex(hunitest.TestCase):
         limit = "1:3"
         # Run test.
         with mock.patch("helpers.hsystem.system") as mock_system:
-            dshsprle._generate_tex(
+            csfolole._generate_tex(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
@@ -474,9 +482,11 @@ class Test_generate_tex(hunitest.TestCase):
             cmd_str = mock_system.call_args[0][0]
             self.assertIn(f"--limit {limit}", cmd_str)
 
+
 # #############################################################################
 # Test_generate_pdf
 # #############################################################################
+
 
 class Test_generate_pdf(hunitest.TestCase):
     """
@@ -504,7 +514,7 @@ class Test_generate_pdf(hunitest.TestCase):
         hio.to_file(source_path, "Test content")
         # Run test.
         with mock.patch("helpers.hsystem.system") as mock_system:
-            dshsprle._generate_pdf(
+            csfolole._generate_pdf(
                 class_dir, source_path, source_name, skip_action="open"
             )
             # Check outputs.
@@ -537,7 +547,7 @@ class Test_generate_pdf(hunitest.TestCase):
         limit = "1:5"
         # Run test.
         with mock.patch("helpers.hsystem.system") as mock_system:
-            dshsprle._generate_pdf(
+            csfolole._generate_pdf(
                 class_dir, source_path, source_name, limit=limit
             )
             # Check outputs.
@@ -546,9 +556,11 @@ class Test_generate_pdf(hunitest.TestCase):
             self.assertIn(f"--limit {limit}", cmd_str)
             self.assertIn("notes_to_pdf.py", cmd_str)
 
+
 # #############################################################################
 # Test_generate_toc
 # #############################################################################
+
 
 class Test_generate_toc(hunitest.TestCase):
     """
@@ -579,7 +591,7 @@ class Test_generate_toc(hunitest.TestCase):
                 0,
                 "## Section 1\n### Subsection",
             )
-            result = dshsprle._generate_toc(source_path, source_name)
+            result = csfolole._generate_toc(source_path, source_name)
         # Check outputs.
         self.assertIsNotNone(result)
         self.assertIn("# Lesson01.1-Intro.txt", result)
@@ -606,7 +618,7 @@ class Test_generate_toc(hunitest.TestCase):
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
             mock_system_to_string.return_value = (0, "## Content")
-            dshsprle._generate_toc(source_path, source_name)
+            csfolole._generate_toc(source_path, source_name)
             # Check outputs.
             mock_system_to_string.assert_called_once()
             cmd_str = mock_system_to_string.call_args[0][0]
@@ -615,9 +627,11 @@ class Test_generate_toc(hunitest.TestCase):
             self.assertIn("--warn_on_malformed", cmd_str)
             self.assertIn(source_path, cmd_str)
 
+
 # #############################################################################
-# End-to-End Tests
+# Test_generate_pdf_e2e
 # #############################################################################
+
 
 class Test_generate_pdf_e2e(hunitest.TestCase):
     """
@@ -655,7 +669,7 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
         # Run test - only verify it completes without exception.
-        dshsprle._generate_pdf(class_dir, source_path, source_name)
+        csfolole._generate_pdf(class_dir, source_path, source_name)
 
     def test2(self) -> None:
         """
@@ -690,9 +704,12 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         hio.to_file(source_path, source_content)
         limit = "1:1"
         # Run test - only verify it completes without exception.
-        dshsprle._generate_pdf(
-            class_dir, source_path, source_name, limit=limit
-        )
+        csfolole._generate_pdf(class_dir, source_path, source_name, limit=limit)
+
+
+# #############################################################################
+# Test_generate_tex_e2e
+# #############################################################################
 
 
 class Test_generate_tex_e2e(hunitest.TestCase):
@@ -732,7 +749,12 @@ class Test_generate_tex_e2e(hunitest.TestCase):
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
         # Run test - only verify it completes without exception.
-        dshsprle._generate_tex(class_dir, source_path, source_name)
+        csfolole._generate_tex(class_dir, source_path, source_name)
+
+
+# #############################################################################
+# Test_generate_script_e2e
+# #############################################################################
 
 
 class Test_generate_script_e2e(hunitest.TestCase):
@@ -775,7 +797,12 @@ class Test_generate_script_e2e(hunitest.TestCase):
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
         # Run test - only verify it completes without exception.
-        dshsprle._generate_script(class_dir, source_path, source_name)
+        csfolole._generate_script(class_dir, source_path, source_name)
+
+
+# #############################################################################
+# Test_process_lecture_file_e2e
+# #############################################################################
 
 
 class Test_process_lecture_file_e2e(hunitest.TestCase):
@@ -814,7 +841,7 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         hio.to_file(source_path, source_content)
         actions = ["generate_pdf"]
         # Run test - only verify it completes without exception.
-        dshsprle._process_lecture_file(
+        csfolole._process_lecture_file(
             class_dir, source_path, source_name, actions
         )
 
@@ -850,7 +877,7 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         hio.to_file(source_path, source_content)
         actions = ["generate_pdf", "generate_tex"]
         # Run test - only verify it completes without exception.
-        dshsprle._process_lecture_file(
+        csfolole._process_lecture_file(
             class_dir, source_path, source_name, actions
         )
 
@@ -885,14 +912,15 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         hio.to_file(source_path, source_content)
         actions = ["generate_script"]
         # Run test - only verify it completes without exception.
-        dshsprle._process_lecture_file(
+        csfolole._process_lecture_file(
             class_dir, source_path, source_name, actions
         )
 
 
 # #############################################################################
-# Test_process_lecture_file and generate_toc action
+# Test_process_lecture_file_with_generate_toc
 # #############################################################################
+
 
 class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
     """
@@ -926,7 +954,7 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
             mock_system_to_string.return_value = (0, "## Section 1")
-            result = dshsprle._process_lecture_file(
+            result = csfolole._process_lecture_file(
                 class_dir, source_path, source_name, actions
             )
         # Check outputs.
@@ -958,11 +986,16 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
         actions = ["generate_pdf"]
         # Mock hsystem.system.
         with mock.patch("helpers.hsystem.system"):
-            result = dshsprle._process_lecture_file(
+            result = csfolole._process_lecture_file(
                 class_dir, source_path, source_name, actions
             )
         # Check outputs.
         self.assertIsNone(result)
+
+
+# #############################################################################
+# Test_valid_actions_contains_generate_toc
+# #############################################################################
 
 
 class Test_valid_actions_contains_generate_toc(hunitest.TestCase):
@@ -975,14 +1008,14 @@ class Test_valid_actions_contains_generate_toc(hunitest.TestCase):
         Test that generate_toc is in _VALID_ACTIONS list.
         """
         # Run test.
-        self.assertIn("generate_toc", dshsprle._VALID_ACTIONS)
+        self.assertIn("generate_toc", csfolole._VALID_ACTIONS)
 
     def test2(self) -> None:
         """
         Test that generate_toc is not duplicated in _VALID_ACTIONS.
         """
         # Run test.
-        count = dshsprle._VALID_ACTIONS.count("generate_toc")
+        count = csfolole._VALID_ACTIONS.count("generate_toc")
         # Check outputs.
         self.assertEqual(count, 1)
 
@@ -991,4 +1024,4 @@ class Test_valid_actions_contains_generate_toc(hunitest.TestCase):
         Test that generate_tocs (plural) is not in _VALID_ACTIONS.
         """
         # Run test.
-        self.assertNotIn("generate_tocs", dshsprle._VALID_ACTIONS)
+        self.assertNotIn("generate_tocs", csfolole._VALID_ACTIONS)
