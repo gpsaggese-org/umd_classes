@@ -648,7 +648,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     if "generate_toc" in actions:
         output_path = os.path.join(args.class_name, "all_tocs.md")
         _LOG.info("Generating consolidated TOCs to %s", output_path)
-        final_content = "\n".join(toc_results)
+        final_content = "".join(toc_results).strip()
         hio.to_file(output_path, final_content)
         _LOG.info("Consolidated TOCs written to %s", output_path)
     _LOG.info("All files processed successfully")
