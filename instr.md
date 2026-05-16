@@ -1,5 +1,5 @@
-- Write a Python script class_scripts/count_pdf_pages.py similar to
-  class_scripts/count_lecture_slides.py that given a dir, for each lecture
+- Write a Python script class_scripts/count_lecture_slides.py similar to
+  class_scripts/count_pdf_pages.py that given a dir, for each lecture
   like msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt
 
   - counts all the slides
@@ -9,8 +9,6 @@
   grep "^# " <file>
   grep "^## " <file>
   grep "^### " <file>
-
-extract_toc_from_txt.py -i msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt --max_level 5 --warn_on_malformed
 
   - count the lines, words, characters in
   wc  msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt

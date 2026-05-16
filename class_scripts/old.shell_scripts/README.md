@@ -7,8 +7,8 @@ university courses (`data605` and `msml610`).
 
 - `fix_slides.prompt.md`
   - LLM prompt for improving slides with better structure examples and grammar
-- `process_lessons.md`
-  - Documentation for process_lessons.py including usage examples and architecture
+- `for_loop_lessons.md`
+  - Documentation for for_loop_lessons.py including usage examples and architecture
 - `suggest_improvements.prompt.md`
   - LLM prompt for suggesting which slides to remove or merge
 

@@ -22,6 +22,8 @@ import os
 import re
 from typing import List, Optional, Tuple
 
+from tqdm import tqdm
+
 import helpers.hdbg as hdbg
 import helpers.hlint as hlint
 import helpers.hio as hio
@@ -38,6 +40,7 @@ _VALID_ACTIONS = [
     "generate_pdf",
     "generate_script",
     "generate_tex",
+    "generate_tocs",
     "improve_slide",
     "reduce_slide",
 ]
@@ -449,6 +452,7 @@ def _generate_class_recap(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
+    # TODO(ai_gp): Use dassert
     if not match:
         hdbg.dfatal("Could not extract lesson number from:", source_name)
     lesson_number = match.group(1)
@@ -459,6 +463,37 @@ def _generate_class_recap(
     cmd_str = f"gen_quizzes.py --for_class_recap {class_dir} {lesson_number}"
     _LOG.info("Executing: %s", cmd_str)
     hsystem.system(cmd_str, suppress_output=False)
+
+
+def _generate_toc(
+) -> None:
+    """
+    Generate a consolidated file with TOCs from all lecture files.
+
+    Calls extract_toc_from_txt.py for each lecture file and combines
+    the results into a single file in the class directory.
+
+    :param class_dir: class directory (data605 or msml610)
+    :param files: list of tuples (source_path, source_name)
+    """
+    _LOG.debug("Extracting TOC from %s", source_name)
+    # Build command to extract TOC.
+    cmd = [
+        "extract_toc_from_txt.py",
+        f"-i {source_path}",
+        "--max_level 5",
+        "--warn_on_malformed",
+    ]
+    cmd_str = " ".join(cmd)
+    _LOG.debug("Executing: %s", cmd_str)
+
+    # Capture output from extract_toc_from_txt.py.
+    _, output = hsystem.system_to_string(cmd_str, suppress_output=True)
+    output = output.strip()
+
+    # Add lesson header and TOC content.
+    output = f"# {source_name}\n" + output
+    return output
 
 
 def _process_lecture_file(
@@ -481,6 +516,8 @@ def _process_lecture_file(
     :param limit: optional slide range to process
     """
     _LOG.info("Processing file: %s", source_path)
+
+    results = []
     # Process each action.
     for action in actions:
         if action == "generate_pdf":
@@ -502,8 +539,19 @@ def _process_lecture_file(
             _generate_class_quizzes(class_dir, source_path, source_name)
         elif action == "generate_class_recap":
             _generate_class_recap(class_dir, source_path, source_name)
+        elif action == "generate_toc":
+            result = _generate_toc(class_dir, source_path, source_name)
+            results.append(result)
         else:
             hdbg.dfatal("Unknown action:", action)
+    if action == "generate_toc":
+        output_path = os.path.join(class_dir, "all_tocs.md")
+        _LOG.info("Generating consolidated TOCs to %s", output_path)
+
+        # Write consolidated TOCs to file.
+        final_content = "\n".join(results)
+        hio.to_file(output_path, final_content)
+        _LOG.info("Consolidated TOCs written to %s", output_path)
 
 
 # #############################################################################
@@ -522,13 +570,14 @@ def _parse() -> argparse.ArgumentParser:
     parser.add_argument(
         "--lectures",
         action="store",
-        required=True,
+        required=False,
         help=(
             "Lecture(s) to process. Supports multiple formats: "
             "- Single pattern: '01.1' or '01*' "
             "- Union (colon-separated): '01*:02*:03.1' "
             "- Range (hyphen-separated): '01.1-03.2' (inclusive). "
-            "Note: Range and union syntax cannot be mixed."
+            "Note: Range and union syntax cannot be mixed. "
+            "If not specified processes all lessons."
         ),
     )
     parser.add_argument(
@@ -571,13 +620,19 @@ def _main(parser: argparse.ArgumentParser) -> None:
     is_range, patterns_or_range = _parse_lecture_patterns(args.lectures)
     actions = hparser.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     _LOG.info("Selected actions: %s", actions)
+    # Determine lectures to process.
+    lectures_arg = args.lectures
+    if lectures_arg is None:
+        # If --lectures not specified, use all lectures.
+        lectures_arg = "*"
+    is_range, patterns_or_range = _parse_lecture_patterns(lectures_arg)
     # Find matching lecture files.
     files = _find_lecture_files(args.class_name, is_range, patterns_or_range)
     hdbg.dassert_lt(
         0,
         len(files),
         "No lecture files found for input: %s",
-        args.lectures,
+        lectures_arg,
     )
     # Validate if --limit is specified.
     if args.limit:

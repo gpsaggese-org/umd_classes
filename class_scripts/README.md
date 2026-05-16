@@ -21,6 +21,7 @@ slide quality through automated LLM-powered transformations.
 | :------------------------- | :------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------- |
 | `concatenate_pdfs.py`      | `helpers_root/dev_scripts_helpers/documentation/` | Combines multiple PDF files into a single PDF (used for creating full book from chapters)                               |
 | `count_book_pages.py`      | `class_scripts/`                                  | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
+| `count_lecture_slides.py`  | `class_scripts/`                                  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
 | `count_pdf_pages.py`       | `class_scripts/`                                  | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command                                 |
 | `count_words.py`           | `class_scripts/`                                  | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
 | `extract_png_from_pdf.py`  | `class_scripts/`                                  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
@@ -36,7 +37,7 @@ slide quality through automated LLM-powered transformations.
 | `llm_cli.py`               | `helpers_root/dev_scripts_helpers/llms/`          | LLM command-line interface for AI-powered text transformations and content generation                                   |
 | `llm_transform.py`         | `helpers_root/dev_scripts_helpers/llms/`          | Applies LLM transformations to content with various prompts (slide_improve, etc.)                                       |
 | `notes_to_pdf.py`          | `helpers_root/dev_scripts_helpers/documentation/` | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`                                |
-| `process_lessons.py`       | `class_scripts/`                                  | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
+| `for_loop_lessons.py`      | `class_scripts/`                                  | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
 | `process_slides.py`        | `class_scripts/`                                  | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
 | `slide_check.py`           | `class_scripts/`                                  | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting                           |
 | `slide_improve.py`         | `class_scripts/`                                  | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness               |
@@ -52,6 +53,26 @@ slide quality through automated LLM-powered transformations.
   ```bash
   > count_book_pages.py data605
   > count_book_pages.py msml610
+  ```
+
+## `count_lecture_slides.py`
+
+- Counts slides, headers (at 3 levels), lines, words, and characters in lecture
+  source files in `{DIR}/lectures_source/` directory
+- Displays results in a formatted table supporting markdown (default), TSV, and
+  CSV output formats
+- Count lecture slides with default markdown output:
+  ```bash
+  > count_lecture_slides.py data605
+  > count_lecture_slides.py msml610
+  ```
+- Count with TSV format for easy spreadsheet import:
+  ```bash
+  > count_lecture_slides.py msml610 --format tsv
+  ```
+- Count with CSV format:
+  ```bash
+  > count_lecture_slides.py msml610 --format csv
   ```
 
 ## `count_pdf_pages.py`
@@ -314,7 +335,7 @@ custom header styling:
   ```
 
 # Orchestration Scripts
-## `process_lessons.py`
+## `for_loop_lessons.py`
 
 Orchestrates the generation of multiple outputs from lecture source files for
 educational materials. This is the main entry point for processing lecture
@@ -369,42 +390,42 @@ content into various formats.
 
 - Generate PDF for single lecture:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action generate_pdf
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action generate_pdf
   ```
 
 - Generate scripts for multiple lectures:
   ```bash
-  > process_lessons.py --lectures 01*:02* --class data605 --action generate_script
+  > for_loop_lessons.py --lectures 01*:02* --class data605 --action generate_script
   ```
 
 - Multiple actions on same lectures:
   ```bash
-  > process_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
+  > for_loop_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
   ```
 
 - Partial slide processing:
   ```bash
-  > process_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
+  > for_loop_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
   ```
 
 - Process a continuous range of lessons:
   ```bash
-  > process_lessons.py --lectures "01.1-03.2" --class data605 --action generate_pdf
+  > for_loop_lessons.py --lectures "01.1-03.2" --class data605 --action generate_pdf
   ```
 
 - Reduce slide content using LLM for a single lecture:
   ```bash
-  > process_lessons.py --lectures "01.1" --class data605 --action reduce_slide
+  > for_loop_lessons.py --lectures "01.1" --class data605 --action reduce_slide
   ```
 
 - Generate multiple choice quizzes from lecture content:
   ```bash
-  > process_lessons.py --lectures "01.1" --class data605 --action generate_class_quizzes
+  > for_loop_lessons.py --lectures "01.1" --class data605 --action generate_class_quizzes
   ```
 
 - Process with verbose logging for debugging:
   ```bash
-  > process_lessons.py --lectures "01.1" --class data605 --action generate_pdf -v DEBUG
+  > for_loop_lessons.py --lectures "01.1" --class data605 --action generate_pdf -v DEBUG
   ```
 
 **Workflow:**
@@ -428,21 +449,21 @@ content into various formats.
 - Generates PDF files for all lessons starting with 0 or 1 (e.g., 01.1, 01.2,
   10.1, etc.) in `data605/lectures/`:
   ```bash
-  > process_lessons.py --lectures "0*:1*" --class data605 --action generate_pdf
+  > for_loop_lessons.py --lectures "0*:1*" --class data605 --action generate_pdf
   ```
 
 **Generate Both PDF Slides and Reading Scripts**
 
 - Generates PDFs in `lectures/` and scripts in `lectures_script/`:
   ```bash
-  > process_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
+  > for_loop_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
   ```
 
 **Generate PDF and Book Chapter for a Single Lesson**
 
 - Creates slide PDF and corresponding book chapter with pandoc conversion:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action generate_pdf --action book_chapter
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action generate_pdf --action book_chapter
   ```
 
 ## Assessment Generation
@@ -450,7 +471,7 @@ content into various formats.
 
 - Creates 20-question quizzes saved to `lectures_quizzes/<lesson>.quizzes.md`:
   ```bash
-  > process_lessons.py --lectures 01* --class data605 --action generate_class_quizzes
+  > for_loop_lessons.py --lectures 01* --class data605 --action generate_class_quizzes
   ```
 
 - Alternatively, use the direct script:
@@ -463,7 +484,7 @@ content into various formats.
 - Creates 3-6 open-ended discussion questions saved to
   `lectures_recap/<lesson>.recap.md`:
   ```bash
-  > process_lessons.py --lectures 01* --class data605 --action generate_class_recap
+  > for_loop_lessons.py --lectures 01* --class data605 --action generate_class_recap
   ```
 
 - Alternatively, use the direct script:
@@ -474,9 +495,9 @@ content into various formats.
 ## Slide Quality Improvement
 **Check and Fix Spelling/grammar in Slides**
 
-- Use process_lessons.py:
+- Use for_loop_lessons.py:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action check_slide
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action check_slide
   ```
 
 - **Advanced usage** (check one lecture from inside the container):
@@ -495,9 +516,9 @@ content into various formats.
 
 **Improve Slide Clarity and Structure**
 
-- Use process_lessons.py:
+- Use for_loop_lessons.py:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action improve_slide
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action improve_slide
   ```
 
 - Alternatively, use the direct script:
@@ -512,9 +533,9 @@ content into various formats.
 
 **Reduce Slide Length and Remove Redundancy**
 
-- Use process_lessons.py:
+- Use for_loop_lessons.py:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action reduce_slide
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action reduce_slide
   ```
 
 - **Advanced usage** (reduce from inside the container):
@@ -544,9 +565,9 @@ content into various formats.
   > gen_lecture_script.py data605 01.1
   ```
 
-- Or use `process_lessons.py`:
+- Or use `for_loop_lessons.py`:
   ```bash
-  > process_lessons.py --lectures 01.1 --class data605 --action generate_script
+  > for_loop_lessons.py --lectures 01.1 --class data605 --action generate_script
   ```
 
 **Generate Just the Intro for a Lecture**
@@ -607,14 +628,14 @@ content into various formats.
 
 - Only applies to `generate_pdf` action when a single lecture file matches:
   ```bash
-  > process_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
+  > for_loop_lessons.py --lectures 01.1 --limit 1:3 --class data605 --action generate_pdf
   ```
 
 **Preview Commands Without Executing (dry-run)**
 
 - Prints all commands that would be executed without running them:
   ```bash
-  > process_lessons.py --lectures 01* --class data605 --action generate_pdf --dry_run
+  > for_loop_lessons.py --lectures 01* --class data605 --action generate_pdf --dry_run
   ```
 
 ## Running Interactive Tutorials
