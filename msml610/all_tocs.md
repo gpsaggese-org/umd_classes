@@ -1,5 +1,4 @@
 # Lesson00-Class.txt
-
 - MSML610
         - Invariants of a Class Lecture
         - Books of the Class
@@ -27,15 +26,11 @@
         - Refresher Game Theory
         - Refresher: Numerical Optimization
         - Refresher: Stochastic Processes
-
 # Lesson01-1.aux.md
-
 - Analytical Sophistication 1
 - Analytical Sophistication 2
 - Hotel Pricing Paradox
-
 # Lesson01.1-AI_and_Machine_Learning.txt
-
 - AI and Machine Learning
   - What is AI?
         - ML, AI, and Intelligence
@@ -57,9 +52,7 @@
         - Limits of ML Compared to Human Intelligence
         - The 3 Machine Learning Assumptions
         - AI vs ML vs Deep-Learning
-
 # Lesson01.2-The_Foundations_of_AI.txt
-
 - The Foundations of AI
         - AI Relates to Many Other Disciplines
         - AI and Philosophy (1/2)
@@ -74,9 +67,7 @@
         - AI and Computer Science
         - AI and Control Theory
         - AI and Computer Engineering
-
 # Lesson01.3-Brief_History_of_AI.txt
-
 - Brief History of AI
         - AI Timeline
         - The Beginning (1943-1956)
@@ -105,9 +96,7 @@
         - My 2 cents
         - Solutions to Problem of Control
         - Cooperative Inverse Reinforcement Learning
-
 # Lesson02.1-A_Map_of_Machine_Learning.txt
-
 - A Map of Machine Learning
         - A Map of Machine Learning
         - Machine Learning Paradigms
@@ -115,9 +104,7 @@
         - Machine Learning Models
         - Machine Learning Techniques
         - Machine Learning Adages
-
 # Lesson02.2-ML_Paradigms.txt
-
 - Machine Learning Paradigms
   - Major Paradigms
         - Machine Learning Paradigms with Examples (1/3)
@@ -141,9 +128,7 @@
         - Getting More Data
         - OCR Pipeline: Example of Artificial Data Synthesis
         - Ceiling Analysis for ML Pipeline
-
 # Lesson02.3-ML_Techniques_Input_Processing.txt
-
 - Input Processing
         - Data Processing Transformations
         - Data Cleaning
@@ -154,9 +139,7 @@
         - Dimensionality Reduction
         - Discretization
         - Noise Removal
-
 # Lesson02.4-ML_Techniques_Model_Learning.txt
-
 - Learning Algorithms
     - Gradient Descent
         - The Problem of Minimizing a Function
@@ -177,9 +160,7 @@
         - Map-Reduce for Batch Gradient Descent
         - Coordinate Descend
         - Gradient Descent vs Pseudo-Inverse
-
 # Lesson02.5-ML_Techniques_Model_Evaluation.txt
-
 - Performance Metrics
         - How to Make Progress in ML Research
         - How to Measure Classifier's Performance?
@@ -225,9 +206,7 @@
     - Stacking
         - Stacking
         - Boosting vs Bagging vs Stacking
-
 # Lesson02.6-ML_Techniques_How_To_Do_Research.txt
-
 - How to Do Research
     - Simple Is Better
         - Occam's Razor
@@ -248,9 +227,7 @@
         - Example: Spam Filter Classification
         - Right and Wrong Approach to Research
         - Incremental vs Iterative
-
 # Lesson03-Knowledge_representation.txt
-
 - Knowledge Representation
   - Basics of Knowledge Representation
         - What is Knowledge Representation?
@@ -352,9 +329,7 @@
         - ConceptNet
         - Knowledge Graphs
         - Knowledge Graph: University Example
-
 # Lesson04.1-Models.txt
-
 - Naive Bayes Model
         - Naive Bayes Model
         - Naive Bayes: Weather Prediction Example
@@ -397,9 +372,7 @@
         - Linear Regression for Classification
         - Perceptron Learning Algorithm (PLA)
         - Non-Linear Transformations for Classifications
-
 # Lesson04.2-Models.txt
-
 - Logistic Regression
         - Logistic Regression Is a Probabilistic Classifier
         - Logistic Regression: Example
@@ -458,9 +431,7 @@
         - Classes of Support Vectors for Soft Margin SVM
         - Intuition for C in SVM
         - Multi-Class Classification for SVM
-
 # Lesson04.3-Models.txt
-
 - Similarity-Based Models
         - Similarity-Based Models: Intuition
         - Similarity-Based Models: Gaussian Kernels
@@ -499,9 +470,7 @@
         - Evaluate Anomaly Detection Systems
         - Evaluate Anomaly Detection Systems
         - Anomaly Detection vs Supervised Learning
-
 # Lesson05.1-Learning_Theory.txt
-
 - Is Machine Learning Even Possible?
         - A Simple Visual ML Experiment (1/2)
         - A Simple Visual ML Experiment (2/2)
@@ -532,9 +501,7 @@
         - VC Generalization Bounds
         - VC Generalization Bounds
         - How to Void the VC Analysis Guarantee
-
 # Lesson05.2-Overfitting.txt
-
 - Overfitting
         - Overfitting: Definition
         - Optimal Fit
@@ -566,9 +533,7 @@
         - Learning Curves vs Bias-Variance Curves
         - Typical Form of Learning Curves
         - High-Bias vs High-Variance Regime
-
 # Lesson05.3-Learn_Validation.txt
-
 - Learn-Validation Approach
   - Train / Test
         - Estimating Out-Of-Sample Error with One Point
@@ -590,9 +555,7 @@
         - Bootstrap: Example of Die Rolls
         - Bootstrap of the Median: Pseudo-Code
         - Bootstrap for variance of sample statistics: explanation
-
 # Lesson06.1-Bayesian_Networks.txt
-
 - Logic-Based AI Under Uncertainty
         - Logic-Based AI Under Uncertainty: Problem
         - Logic-Based AI Under Uncertainty: Naive Solution
@@ -623,9 +586,7 @@
         - Bayesian Networks: Burglar Example
         - Bayesian Networks: Burglar Example
         - Conditional Probability Table
-
 # Lesson06.2-Using_Bayesian_Networks.txt
-
 - Semantics of Bayesian Networks
         - Bayesian Networks: Semantics
         - Chain Rule for a Joint Distribution
@@ -665,9 +626,7 @@
         - Markov Chain Monte Carlo: Mixing
         - Gibbs Sampling in Bayesian Networks
         - Metropolis–Hastings Sampling
-
 # Lesson07.1-Intro_to_Probabilistic_Programming.txt
-
 - Concepts
         - EDA vs Inference
         - Good vs Bad Way to Do Statistics
@@ -697,9 +656,7 @@
         - Coin Example: Numerical Solution (1/3)
         - Coin Example: Numerical Solution (2/3)
         - Coin Example: Numerical Solution (3/3)
-
 # Lesson07.2-Posterior_Based_Decisions.txt
-
 - Posterior-Based Decisions
         - Posterior-Based Decisions
         - Savage-Dickey Density Ratio
@@ -732,9 +689,7 @@
         - Group Comparison Bayesian-Style
         - Sample Size Effect
         - Cohen's d
-
 # Lesson07.3-Hierarchical_Models.txt
-
 - Hierarchical Models
         - Hierarchical Models
         - Hierarchical Models: Examples
@@ -747,9 +702,7 @@
         - Shrinkage
         - You Need to Know When to Stop
         - Tutorial
-
 # Lesson07.4-Generalized_Linear_Models.txt
-
 - Generalized Linear Models
   - Simple Linear Model
         - Linear Model
@@ -783,9 +736,7 @@
         - Multiple Regression: Rented Bike Example 1/2
         - Multiple Regression: Rented Bike Example 2/2
         - Tutorial
-
 # Lesson07.5-Bayesian_Model_Comparison.txt
-
 - Bayesian Model Comparison
         - Models as Maps of the Real World
     - Posterior Predictive Checks
@@ -828,9 +779,7 @@
   - Regularizing Priors
         - Priors and Regularization
         - Popular Regularization Methods in Bayesian Framework
-
 # Lesson08.1-Causal_AI_intro.txt
-
 - Introduction and Motivation
   - Background
         - Big Data and Traditional AI
@@ -896,9 +845,7 @@
         - Techniques for Interpretability
         - Causal AI in Interpretable AI
         - The Future of Causal AI
-
 # Lesson08.2-Causal_Networks.txt
-
 - Causal Networks
   - Causal DAGs
         - (Non-Causal) Bayesian Networks
@@ -935,9 +882,7 @@
   - Types of Paths in Causal AI
         - Fork Structure
         - Inverted Fork
-
 # Lesson08.3-Do_Calculus.txt
-
 - Intervention and Counterfactuals
         - Interventions in Causal Networks
         - Interventions in Causal Networks
@@ -965,9 +910,7 @@
         - Do-Calculus
         - The Rules of Do-Calculus
         - Back/Front-door Adjustments and Do-calculus
-
 # Lesson08.4.txt
-
 - Introduction to Causal Inference
         - Sales example
         - Definitions
@@ -1079,9 +1022,7 @@
 - Geo and switchback experiments
 - Non-compliance and instruments
 - Next steps
-
 # Lesson08.5-Experimentation.md
-
 - Introduction and Motivation
 - Randomization as Causal Identification
   - Why Randomization Breaks Confounding
@@ -1095,9 +1036,7 @@
   - Multi-Armed Bandits
   - Limits of Standard A/B Testing
 - When to Experiment vs. Observe
-
 # Lesson09.1-Reasoning_over_time.txt
-
 - Reasoning Over Time
   - Definitions
         - Static vs Dynamic Probabilistic Reasoning
@@ -1135,9 +1074,7 @@
         - Viterbi Algorithm: Intuition
         - Viterbi Algorithm: Example 1/2
         - Viterbi Algorithm: Example 2/2
-
 # Lesson09.2-Hidden_Markov_Models.txt
-
 - HMMs
         - Algorithms for Specific Models
         - Hidden Markov Model: Formulation
@@ -1162,9 +1099,7 @@
         - Mathematical Foundation of EM
         - Example: Gaussian Mixture Models (GMM)
         - Properties and Limitations of EM
-
 # Lesson09.3-Multi_Armed_Bandits.txt
-
 - Introduction
         - What are Multi-Armed Bandits?
         - Why Study Bandits?
@@ -1215,9 +1150,7 @@
         - Structured Bandits
         - Best-Arm Identification
         - Practical Issues
-
 # Lesson09.4-gh_Filter.txt
-
 - gh Filter
         - Tracking Objects
         - Some Guiding Principles
@@ -1230,9 +1163,7 @@
         - Interpretation of $g$
         - Interpretation of $h$
         - Control Theory Nomenclature
-
 # Lesson09.5-Kalman_Filter.txt
-
 - Discrete Bayes Filtering
         - Tutorial
         - A Discrete Bayesian 1-D Dog
@@ -1280,9 +1211,7 @@
         - Generic particle filter algorithm
         - Degeneracy Problem in Sequential Importance Sampling (SIS)
         - Resampling: Core Idea
-
 # Lesson09.6-Dynamic_Bayesian_Networks.txt
-
 - Dynamic Bayesian networks
         - Dynamic Bayesian Networks (DBNs)
         - DBNs vs HMMs
@@ -1296,9 +1225,7 @@
         - DBN to Represent Changing Model
         - DBN: Inference
         - DBN: Optimization for Inference
-
 # Lesson10-Timeseries_forecasting.txt
-
 - Time Series
   - Basic definition
         - Time Series
@@ -1386,9 +1313,7 @@
   - Time Series Generative Models
   - Long-Horizon Forecasting Challenges
   - Uncertainty Quantification and Calibration
-
 # Lesson10.1-Causal_Inference_for_Time_Series.txt
-
 - Time Series vs. Cross-Sectional Causality
   - Temporal Causal Structures
         - Why Time Series Causality Is Different
@@ -1453,9 +1378,7 @@
         - Synthetic Control: When It Fails
         - Synthetic Control vs. Other Methods: Summary
         - Putting It All Together: Which Method When?
-
 # Lesson10.2-Causal_Discovery.txt
-
 - The Discovery Problem: When and Why It Works
   - Inferring Causal Structure from Observational Data
         - Causal Discovery: Motivation
@@ -1504,9 +1427,7 @@
   - When Discovery Should Change Your DAG
         - When Discovery Should Change Your DAG
         - Causal Discovery: Key Takeaways
-
 # Lesson11-Probabilistic_deep_learning.txt
-
 - Neural networks
         - Deep learning
         - DL vs ML
@@ -1628,9 +1549,7 @@
         - Multimodal Deep Learning (Vision+Language Models)
         - Inverse Problems and Deep Learning
         - Deep Learning for Scientific Discovery (e.g., Protein Folding, Physics)
-
 # Lesson11.1-Decision_Making_with_Causal_Models.txt
-
 - Why Prediction Is Not Enough
   - Prediction Pipelines vs. Decision Pipelines
         - From Predictions to Decisions
@@ -1698,9 +1617,7 @@
         - Communicating Uncertainty to Stakeholders
         - Communicating Uncertainty: A Worked Example
         - Summary: Decision-Making with Causal Models
-
 # Lesson12-Reinforcement_learning.txt
-
 - Sequential Decision Problems
         - Sequential Decision Problems
         - Markov Decision Process
@@ -1817,9 +1734,7 @@
         - Reinforcement Learning for Robotics
         - Reinforcement Learning for Recommendation Systems
         - Reinforcement Learning for Finance
-
 # Lesson15.1-Causal_Reasoning_Agents.md
-
 - LLMs and Causal Reasoning
   - LLMs: Strengths and Limitations
   - Pattern-Based Reasoning vs. Causal Reasoning
@@ -1834,9 +1749,7 @@
   - Robustness Through Causal Constraints
   - Fairness Through Causal Reasoning
   - Safety Through Causal Reasoning
-
 # Lesson91.Refresher_probability.txt
-
 - Probability
   - Probability definition
         - What is probability?
@@ -2158,9 +2071,7 @@
         - Bootstrap for variance of sample statistics: analytical formula
         - Bootstrap confidence intervals
         - Bootstrap hypothesis testing: example
-
 # Lesson92.Refresher_probability_distributions.txt
-
 - Interesting RVs
   - Bernoulli
         - Bernoulli distribution: definition
@@ -2213,9 +2124,7 @@
         - Proof of Chebyshev inequality
         - Comparing Markov and Chebyshev inequalities
         - Hoeffding inequality
-
 # Lesson93.Refresher_linear_algebra.txt
-
 - Linear algebra
   - Vector and vector spaces
         - Field: definition
@@ -2306,9 +2215,7 @@
         - Kronecker and Hadamard Products
         - Matrix Calculus
   - Connections between Machine Learning and Linear Algebra
-
 # Lesson94.Refresher_information_theory.txt
-
 - Information theory
   - Entropy
         - Entropy: Definition
@@ -2334,9 +2241,7 @@
         - Kolmogorov Complexity
         - Information Bottleneck
         - Multi-Information and Total Correlation
-
 # Lesson95.Refresher_game_theory.txt
-
 - Game theory
         - Normal Form Games
         - Extensive Form Games
@@ -2359,9 +2264,7 @@
         - Cooperative Game Theory
         - Social Choice and Voting
   - Connections between Machine Learning and Game Theory
-
 # Lesson96.Refresher_stochastic_processes.txt
-
 - Stochastic processes
         - Random Variables and Index Sets
         - Markov Chains
@@ -2383,9 +2286,7 @@
         - Law of Large Numbers and Central Limit Theorem
         - Monte Carlo Methods
         - Filtering and Prediction
-
 # Lesson97.Refresher_numerical_optimization.txt
-
 - Optimization / numerical methods
         - Unconstrained Optimization
         - Gradient Descent

@@ -1,4 +1,5 @@
 import os
+import pprint
 from typing import List, Optional
 from unittest import mock
 
@@ -429,13 +430,19 @@ class Test_generate_pdf(_DirectoryTestBase):
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, skip_action="open"
             )
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
-            # Check outputs.
-            self.assertEqual(len(invocations), 1)
-            cmd_str = invocations[0]["args"][0]
-            self.assertIn("notes_to_pdf.py", cmd_str)
-            self.assertIn(source_path, cmd_str)
-            self.assertIn("--type slides", cmd_str)
+        # Check outputs.
+        actual_str = pprint.pformat(invocations)
+        expected_str = hprint.dedent("""
+            [{'args': ('notes_to_pdf.py --input '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test1/tmp.scratch/Lesson01.1-Intro.txt '
+                       '--output '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test1/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
+                       '--type slides --toc_type navigation --skip_action open '
+                       '--debug_on_error',),
+              'function': 'hsystem.system',
+              'kwargs': {'suppress_output': False}}]
+            """)
+        self.assert_equal(actual_str, expected_str, purify_text=True)
 
     def test2(self) -> None:
         """
@@ -454,12 +461,19 @@ class Test_generate_pdf(_DirectoryTestBase):
             csfolole._generate_pdf(
                 class_dir, source_path, source_name, limit=limit
             )
-            # Check outputs.
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
-            self.assertEqual(len(invocations), 1)
-            cmd_str = invocations[0]["args"][0]
-            self.assertIn(f"--limit {limit}", cmd_str)
-            self.assertIn("notes_to_pdf.py", cmd_str)
+        # Check outputs.
+        actual_str = pprint.pformat(invocations)
+        expected_str = hprint.dedent("""
+            [{'args': ('notes_to_pdf.py --input '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/Lesson01.1-Intro.txt '
+                       '--output '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
+                       '--type slides --toc_type navigation --skip_action open '
+                       '--debug_on_error --limit 1:5',),
+              'function': 'hsystem.system',
+              'kwargs': {'suppress_output': False}}]
+            """)
+        self.assert_equal(actual_str, expected_str, purify_text=True)
 
 
 # #############################################################################
@@ -482,7 +496,6 @@ class Test_generate_toc(_DirectoryTestBase):
         source_name = "Lesson01.1-Intro.txt"
         hio.to_file(source_path, "# Main\n## Section 1\n### Subsection")
         # Mock `system_to_string()` to return TOC content.
-        # TODO(ai_gp): Use with hunteuti.capture_system_calls() as invocations:
         with mock.patch(
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
@@ -492,7 +505,6 @@ class Test_generate_toc(_DirectoryTestBase):
             )
             result = csfolole._generate_toc(source_path, source_name)
         # Check outputs.
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
         self.assertIsNotNone(result)
         self.assertIn("# Lesson01.1-Intro.txt", result)
         self.assertIn("## Section 1", result)
@@ -506,21 +518,19 @@ class Test_generate_toc(_DirectoryTestBase):
         source_path = os.path.join(scratch_dir, "Lesson02.1-Advanced.txt")
         source_name = "Lesson02.1-Advanced.txt"
         hio.to_file(source_path, "# Title\n## Content")
-        # Mock system_to_string.
-        # TODO(ai_gp): Use with hunteuti.capture_system_calls() as invocations:
-        with mock.patch(
-            "helpers.hsystem.system_to_string"
-        ) as mock_system_to_string:
-            mock_system_to_string.return_value = (0, "## Content")
+        # Capture system calls.
+        with hunteuti.capture_system_calls() as invocations:
             csfolole._generate_toc(source_path, source_name)
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
-            # Check outputs.
-            mock_system_to_string.assert_called_once()
-            cmd_str = mock_system_to_string.call_args[0][0]
-            self.assertIn("extract_toc_from_txt.py", cmd_str)
-            self.assertIn("--max_level 5", cmd_str)
-            self.assertIn("--warn_on_malformed", cmd_str)
-            self.assertIn(source_path, cmd_str)
+        # Check outputs.
+        actual_str = pprint.pformat(invocations)
+        expected_str = hprint.dedent("""
+            [{'args': ('extract_toc_from_txt.py -i '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_toc.test2/tmp.scratch/Lesson02.1-Advanced.txt '
+                       '--max_level 5 --warn_on_malformed',),
+              'function': 'hsystem.system_to_string',
+              'kwargs': {'suppress_output': True}}]
+            """)
+        self.assert_equal(actual_str, expected_str, purify_text=True)
 
 
 # #############################################################################
@@ -771,7 +781,6 @@ class Test_process_lecture_file_with_generate_toc(_DirectoryTestBase):
         hio.to_file(source_path, "# Title\n## Section 1")
         actions = ["generate_toc"]
         # Mock system_to_string.
-        # TODO(ai_gp): Use with hunteuti.capture_system_calls() as invocations:
         with mock.patch(
             "helpers.hsystem.system_to_string"
         ) as mock_system_to_string:
@@ -780,7 +789,6 @@ class Test_process_lecture_file_with_generate_toc(_DirectoryTestBase):
                 class_dir, source_path, source_name, actions
             )
         # Check outputs.
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
         self.assertIsNotNone(result)
         self.assertIn("# Lesson01.1-Intro.txt", result)
         self.assertIn("## Section 1", result)
@@ -806,12 +814,21 @@ class Test_process_lecture_file_with_generate_toc(_DirectoryTestBase):
         source_name = "Lesson01.1-Intro.txt"
         hio.to_file(source_path, "# Title")
         actions = ["generate_pdf"]
-        # Mock hsystem.system.
-        # TODO(ai_gp): Use with hunteuti.capture_system_calls() as invocations:
-        with mock.patch("helpers.hsystem.system"):
+        # Capture system calls.
+        with hunteuti.capture_system_calls() as invocations:
             result = csfolole._process_lecture_file(
                 class_dir, source_path, source_name, actions
             )
         # Check outputs.
-        # TODO(ai_gp): Use hunit_test_utils.assert_invocations
-        self.assertIsNone(result)
+        actual_str = pprint.pformat(invocations)
+        expected_str = hprint.dedent("""
+            [{'args': ('notes_to_pdf.py --input '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_process_lecture_file_with_generate_toc.test2/tmp.scratch/Lesson01.1-Intro.txt '
+                       '--output '
+                       '$GIT_ROOT/class_scripts/test/outcomes/Test_process_lecture_file_with_generate_toc.test2/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
+                       '--type slides --toc_type navigation --skip_action open '
+                       '--debug_on_error',),
+              'function': 'hsystem.system',
+              'kwargs': {'suppress_output': False}}]
+            """)
+        self.assert_equal(actual_str, expected_str, purify_text=True)

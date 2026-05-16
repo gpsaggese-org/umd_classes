@@ -22,6 +22,7 @@ import os
 import re
 from typing import List, Optional, Tuple
 
+from tqdm import tqdm
 
 import helpers.hdbg as hdbg
 import helpers.hlint as hlint
@@ -489,7 +490,7 @@ def _generate_toc(
     _LOG.debug("Executing: %s", cmd_str)
     _, output = hsystem.system_to_string(cmd_str, suppress_output=True)
     output = output.strip()
-    output = f"# {source_name}\n" + output
+    output = f"\n# {source_name}\n\n" + output
     return output
 
 
@@ -606,7 +607,6 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Parse arguments.
-    is_range, patterns_or_range = _parse_lecture_patterns(args.lectures)
     actions = hparser.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     _LOG.info("Selected actions: %s", actions)
     # Determine lectures to process.
@@ -637,7 +637,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
             _LOG.info("Processing file: %s", source_path)
         return
     toc_results = []
-    for source_path, source_name in files:
+    for source_path, source_name in tqdm(
+        files, desc="Processing lectures", unit="file"
+    ):
         result = _process_lecture_file(
             args.class_name, source_path, source_name, actions, limit=args.limit
         )
