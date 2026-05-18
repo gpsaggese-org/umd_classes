@@ -202,6 +202,8 @@ digraph Discovery {
 
 * Markov Equivalence: The Core Limitation
 
+// TODO(gp): Clarify
+
 - **Question**: can observational data distinguish every DAG?
 
 - **Answer**: no. Different DAGs encode identical conditional independencies
