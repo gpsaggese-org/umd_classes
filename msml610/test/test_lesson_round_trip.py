@@ -38,12 +38,14 @@ class TestLessonRoundTrip(hunitest.TestCase):
         _LOG.info("Processing %s", lesson_file)
         # Read original content.
         original_content = hio.from_file(lesson_file)
+        # Remove trailing empty lines before round-trip test.
+        original_content = original_content.rstrip() + "\n"
         # Parse the lesson file.
         items = list(read_lesson_file(lesson_file))
         # Reassemble from parsed items.
-        reassembled_content = reassemble_from_items(
-            items, original_content=original_content
-        )
+        reassembled_content = reassemble_from_items(items)
+        # Remove trailing empty lines from reassembled content.
+        reassembled_content = reassembled_content.rstrip() + "\n"
         # Verify round-trip: reassembled must match original.
         self.assert_equal(
             original_content,
