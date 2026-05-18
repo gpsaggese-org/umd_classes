@@ -490,7 +490,7 @@ def _generate_toc(
     _LOG.debug("Executing: %s", cmd_str)
     _, output = hsystem.system_to_string(cmd_str, suppress_output=True)
     output = output.strip()
-    output = f"\n# {source_name}\n\n" + output
+    output = f"\n# {source_name}\n\n" + output + "\n"
     return output
 
 

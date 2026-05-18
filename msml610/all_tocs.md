@@ -27,11 +27,13 @@
         - Refresher Game Theory
         - Refresher: Numerical Optimization
         - Refresher: Stochastic Processes
+
 # Lesson01-1.aux.md
 
 - Analytical Sophistication 1
 - Analytical Sophistication 2
 - Hotel Pricing Paradox
+
 # Lesson01.1-AI_and_Machine_Learning.txt
 
 - AI and Machine Learning
@@ -1416,6 +1418,7 @@
         - Synthetic Control: When It Fails
         - Synthetic Control vs. Other Methods: Summary
         - Putting It All Together: Which Method When?
+
 # Lesson10.2-Causal_Discovery.txt
 
 - The Discovery Problem: When and Why It Works
@@ -1466,6 +1469,7 @@
   - When Discovery Should Change Your DAG
         - When Discovery Should Change Your DAG
         - Causal Discovery: Key Takeaways
+
 # Lesson11-Probabilistic_deep_learning.txt
 
 - Neural networks
@@ -1589,6 +1593,7 @@
         - Multimodal Deep Learning (Vision+Language Models)
         - Inverse Problems and Deep Learning
         - Deep Learning for Scientific Discovery (e.g., Protein Folding, Physics)
+
 # Lesson11.1-Decision_Making_with_Causal_Models.txt
 
 - Why Prediction Is Not Enough
@@ -1658,6 +1663,7 @@
         - Communicating Uncertainty to Stakeholders
         - Communicating Uncertainty: A Worked Example
         - Summary: Decision-Making with Causal Models
+
 # Lesson12-Reinforcement_learning.txt
 
 - Sequential Decision Problems
@@ -1776,6 +1782,7 @@
         - Reinforcement Learning for Robotics
         - Reinforcement Learning for Recommendation Systems
         - Reinforcement Learning for Finance
+
 # Lesson15.1-Causal_Reasoning_Agents.md
 
 - LLMs and Causal Reasoning
@@ -1792,6 +1799,7 @@
   - Robustness Through Causal Constraints
   - Fairness Through Causal Reasoning
   - Safety Through Causal Reasoning
+
 # Lesson91.Refresher_probability.txt
 
 - Probability
