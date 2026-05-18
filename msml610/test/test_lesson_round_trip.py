@@ -10,10 +10,15 @@ import os
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
+
+# TODO(ai_gp): Use import helpers.hmarkdown_lesson_iterator as XYZ
 from helpers.hmarkdown_lesson_iterator import (
     read_lesson_file,
     reassemble_from_items,
 )
+
+import logging
+_LOG = logging.getLogger(__name__)
 
 
 class TestLessonRoundTrip(hunitest.TestCase):
@@ -30,6 +35,7 @@ class TestLessonRoundTrip(hunitest.TestCase):
 
         :param lesson_file: Path to the lesson file to test
         """
+        _LOG.info("Processing %s", lesson_file)
         # Read original content.
         original_content = hio.from_file(lesson_file)
         # Parse the lesson file.
@@ -40,8 +46,8 @@ class TestLessonRoundTrip(hunitest.TestCase):
         )
         # Verify round-trip: reassembled must match original.
         self.assert_equal(
-            reassembled_content,
             original_content,
+            reassembled_content,
         )
 
     def test_lesson_files_round_trip(self) -> None:
@@ -53,8 +59,6 @@ class TestLessonRoundTrip(hunitest.TestCase):
         """
         # Find all lesson files.
         lesson_dir = "msml610/lectures_source"
-        if not os.path.exists(lesson_dir):
-            self.skipTest(f"Lesson directory '{lesson_dir}' not found")
         lesson_pattern = os.path.join(lesson_dir, "Lesson*.txt")
         lesson_files = sorted(glob.glob(lesson_pattern))
         hdbg.dassert_ne(
@@ -65,5 +69,4 @@ class TestLessonRoundTrip(hunitest.TestCase):
         )
         # Test each lesson file.
         for lesson_file in lesson_files:
-            with self.subTest(lesson_file=lesson_file):
-                self.helper_test_round_trip(lesson_file)
+            self.helper_test_round_trip(lesson_file)
