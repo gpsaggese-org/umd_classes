@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 # ---
 
 # %% [markdown]
@@ -23,13 +23,8 @@
 import logging
 
 # Third party libraries.
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 # %%
-import msml610_utils as ut
 import L10_2_causal_discovery_utils as utils
 
 # %%

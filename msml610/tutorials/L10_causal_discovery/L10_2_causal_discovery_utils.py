@@ -1,4 +1,9 @@
-"""Utilities for causal discovery notebook."""
+"""Utilities for causal discovery notebook.
+
+Import as:
+
+import msml610.tutorials.L10_causal_discovery.L10_2_causal_discovery_utils as mtlcdl2cdu
+"""
 
 import logging
 import numpy as np
@@ -96,9 +101,7 @@ def cell1_correlation_vs_causation():
         plt.show()
 
         # Summary box.
-        print(
-            "\n" + "=" * 60
-        )
+        print("\n" + "=" * 60)
         print(
             "KEY INSIGHT: Same observational correlation, opposite causal implications."
         )
@@ -122,9 +125,7 @@ def cell1_correlation_vs_causation():
     def update(change):
         with output:
             clear_output(wait=True)
-            plot_causal_structures(
-                correlation_slider.value, mode_toggle.value
-            )
+            plot_causal_structures(correlation_slider.value, mode_toggle.value)
 
     correlation_slider.observe(update, names="value")
     mode_toggle.observe(update, names="value")
@@ -240,7 +241,9 @@ def cell2_markov_equivalence():
             width=0.3,
         )
         ax_cond.set_ylabel("Conditional Correlation X-Z|Y", fontsize=10)
-        ax_cond.set_title("Conditional Correlation", fontsize=11, fontweight="bold")
+        ax_cond.set_title(
+            "Conditional Correlation", fontsize=11, fontweight="bold"
+        )
         ax_cond.set_ylim(-1, 1)
         ax_cond.grid(True, alpha=0.3, axis="y")
 
@@ -353,7 +356,9 @@ def cell3_causal_effects():
         plt.show()
 
         print("\n" + "=" * 70)
-        print("KEY INSIGHT: Edge direction determines whether an intervention works.")
+        print(
+            "KEY INSIGHT: Edge direction determines whether an intervention works."
+        )
         print(
             "Choosing the wrong DAG leads to ineffective or harmful interventions."
         )
@@ -371,9 +376,7 @@ def cell3_causal_effects():
     def update(change):
         with output:
             clear_output(wait=True)
-            plot_interventions(
-                intervention_slider.value, sample_slider.value
-            )
+            plot_interventions(intervention_slider.value, sample_slider.value)
 
     intervention_slider.observe(update, names="value")
     sample_slider.observe(update, names="value")
@@ -430,7 +433,9 @@ def cell4_pc_algorithm():
             nx.draw_networkx_edges(G, pos, ax=ax_left, width=2)
             nx.draw_networkx_labels(G, pos, font_size=12, ax=ax_left)
 
-            ax_left.set_title("PC Algorithm Progression", fontsize=12, fontweight="bold")
+            ax_left.set_title(
+                "PC Algorithm Progression", fontsize=12, fontweight="bold"
+            )
             ax_left.axis("off")
 
             # Right panel: Test details.
@@ -455,8 +460,11 @@ def cell4_pc_algorithm():
             ax_right.set_title("Current Test", fontsize=12, fontweight="bold")
             ax_right.axis("off")
 
-        plt.suptitle("The PC Algorithm: Learning from Conditional Independence Tests",
-                     fontsize=14, fontweight="bold")
+        plt.suptitle(
+            "The PC Algorithm: Learning from Conditional Independence Tests",
+            fontsize=14,
+            fontweight="bold",
+        )
         plt.tight_layout()
         plt.show()
 
@@ -467,7 +475,11 @@ def cell4_pc_algorithm():
 
     # Interactive widgets.
     alpha_slider = FloatSlider(
-        value=0.05, min=0.001, max=0.2, step=0.01, description="Alpha (CI threshold):"
+        value=0.05,
+        min=0.001,
+        max=0.2,
+        step=0.01,
+        description="Alpha (CI threshold):",
     )
     test_dropdown = Dropdown(
         options=["Partial correlation", "Gaussian G-squared", "Conditional MI"],
@@ -482,7 +494,9 @@ def cell4_pc_algorithm():
     def update(change):
         with output:
             clear_output(wait=True)
-            plot_pc_steps(alpha_slider.value, test_dropdown.value, speed_slider.value)
+            plot_pc_steps(
+                alpha_slider.value, test_dropdown.value, speed_slider.value
+            )
 
     alpha_slider.observe(update, names="value")
     test_dropdown.observe(update, names="value")
@@ -535,11 +549,22 @@ def cell5_ges_algorithm():
         ax_left.axis("off")
 
         # Right: BIC trajectory.
-        ax_right.plot(iterations, bic_scores, "o-", color="steelblue", linewidth=2, markersize=6)
-        ax_right.axvline(x=8, color="red", linestyle="--", label="Forward/Backward transition")
+        ax_right.plot(
+            iterations,
+            bic_scores,
+            "o-",
+            color="steelblue",
+            linewidth=2,
+            markersize=6,
+        )
+        ax_right.axvline(
+            x=8, color="red", linestyle="--", label="Forward/Backward transition"
+        )
         ax_right.set_xlabel("Iteration", fontsize=11)
         ax_right.set_ylabel("BIC Score", fontsize=11)
-        ax_right.set_title("Score Trajectory (GES Search)", fontsize=12, fontweight="bold")
+        ax_right.set_title(
+            "Score Trajectory (GES Search)", fontsize=12, fontweight="bold"
+        )
         ax_right.grid(True, alpha=0.3)
         ax_right.legend()
 
@@ -608,11 +633,9 @@ def cell6_lingam_nongaussian():
         Z = 0.8 * Y + noise * np.sqrt(1 - snr)
 
         # Plot three scatter plots.
-        for idx, (data_x, data_y, title) in enumerate([
-            (X, Y, "X → Y"),
-            (Y, Z, "Y → Z"),
-            (X, Z, "X → Z (indirect)")
-        ]):
+        for idx, (data_x, data_y, title) in enumerate(
+            [(X, Y, "X → Y"), (Y, Z, "Y → Z"), (X, Z, "X → Z (indirect)")]
+        ):
             ax = fig.add_subplot(gs[0, idx])
             ax.scatter(data_x, data_y, alpha=0.6, s=30, color="steelblue")
             ax.set_xlabel("Input", fontsize=10)
@@ -620,14 +643,19 @@ def cell6_lingam_nongaussian():
             ax.set_title(title, fontsize=11, fontweight="bold")
             ax.grid(True, alpha=0.3)
 
-        plt.suptitle("LiNGAM: Non-Gaussianity Reveals Causal Direction",
-                     fontsize=14, fontweight="bold")
+        plt.suptitle(
+            "LiNGAM: Non-Gaussianity Reveals Causal Direction",
+            fontsize=14,
+            fontweight="bold",
+        )
         plt.tight_layout()
         plt.show()
 
         # Jarque-Bera test for non-Gaussianity.
         jb_result = jarque_bera(noise)  # type: ignore
-        print(f"\nJarque-Bera Test: statistic={jb_result.statistic:.4f}, p-value={jb_result.pvalue:.4f}")  # type: ignore
+        print(
+            f"\nJarque-Bera Test: statistic={jb_result.statistic:.4f}, p-value={jb_result.pvalue:.4f}"
+        )  # type: ignore
         if jb_result.pvalue < 0.05:  # type: ignore
             print("Result: Data are NON-GAUSSIAN (rejects normality)")
         else:
@@ -638,7 +666,11 @@ def cell6_lingam_nongaussian():
         value=0, min=0, max=5, step=0.5, description="Skewness:"
     )
     snr_slider = FloatSlider(
-        value=0.8, min=0.1, max=0.99, step=0.05, description="Signal-to-Noise Ratio:"
+        value=0.8,
+        min=0.1,
+        max=0.99,
+        step=0.05,
+        description="Signal-to-Noise Ratio:",
     )
     output = Output()
 
@@ -673,7 +705,11 @@ def cell7_algorithm_comparison():
         """Plot three algorithm outputs side-by-side."""
         fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-        algorithms = ["PC (Constraint-Based)", "GES (Score-Based)", "LiNGAM (Functional)"]
+        algorithms = [
+            "PC (Constraint-Based)",
+            "GES (Score-Based)",
+            "LiNGAM (Functional)",
+        ]
         edge_counts = [4, 5, 6]
         ambiguity = [2, 0, 0]
 
@@ -718,8 +754,11 @@ def cell7_algorithm_comparison():
             ax.set_title(algo, fontsize=12, fontweight="bold")
             ax.axis("off")
 
-        plt.suptitle("Comparing Causal Discovery Algorithms",
-                     fontsize=14, fontweight="bold")
+        plt.suptitle(
+            "Comparing Causal Discovery Algorithms",
+            fontsize=14,
+            fontweight="bold",
+        )
         plt.tight_layout()
         plt.show()
 
@@ -778,7 +817,9 @@ def cell8_validation():
         p_values = [0.12, 0.03, 0.45]
         colors = ["green" if p > alpha_threshold else "red" for p in p_values]
         ax1.barh(tests, p_values, color=colors, alpha=0.7)
-        ax1.axvline(x=alpha_threshold, color="black", linestyle="--", label="Alpha")
+        ax1.axvline(
+            x=alpha_threshold, color="black", linestyle="--", label="Alpha"
+        )
         ax1.set_xlabel("p-value", fontsize=10)
         ax1.set_title("CI Test Validation", fontsize=11, fontweight="bold")
         ax1.legend()
@@ -803,26 +844,41 @@ def cell8_validation():
         ax3 = fig.add_subplot(gs[0, 2])
         confounder_values = np.linspace(0, 1, 50)
         robustness = 1 - (confounder_values * confounder_strength)
-        ax3.plot(confounder_values, robustness, "o-", color="steelblue", linewidth=2)
-        ax3.axvline(x=confounder_strength, color="red", linestyle="--",
-                    label=f"Current: {confounder_strength:.2f}")
+        ax3.plot(
+            confounder_values, robustness, "o-", color="steelblue", linewidth=2
+        )
+        ax3.axvline(
+            x=confounder_strength,
+            color="red",
+            linestyle="--",
+            label=f"Current: {confounder_strength:.2f}",
+        )
         ax3.set_xlabel("Confounder Strength", fontsize=10)
         ax3.set_ylabel("Robustness", fontsize=10)
         ax3.set_title("Sensitivity Analysis", fontsize=11, fontweight="bold")
         ax3.grid(True, alpha=0.3)
         ax3.legend()
 
-        plt.suptitle("Validating Discovered DAGs with Refutation Tests",
-                     fontsize=14, fontweight="bold")
+        plt.suptitle(
+            "Validating Discovered DAGs with Refutation Tests",
+            fontsize=14,
+            fontweight="bold",
+        )
         plt.tight_layout()
         plt.show()
 
         validation_score = 0.67
-        print(f"\nValidation Score: {validation_score:.1%} of implied CIs confirmed")
+        print(
+            f"\nValidation Score: {validation_score:.1%} of implied CIs confirmed"
+        )
 
     # Interactive widgets.
     alpha_slider = FloatSlider(
-        value=0.05, min=0.01, max=0.2, step=0.01, description="Alpha (CI threshold):"
+        value=0.05,
+        min=0.01,
+        max=0.2,
+        step=0.01,
+        description="Alpha (CI threshold):",
     )
     confounder_slider = FloatSlider(
         value=0.3, min=0, max=1, step=0.1, description="Confounder Strength:"
@@ -869,7 +925,9 @@ def cell9_domain_knowledge():
         nx.draw_networkx_nodes(
             G_unconstrained, pos, node_color="lightblue", node_size=600, ax=ax
         )
-        nx.draw_networkx_edges(G_unconstrained, pos, ax=ax, width=2, arrowsize=15)
+        nx.draw_networkx_edges(
+            G_unconstrained, pos, ax=ax, width=2, arrowsize=15
+        )
         nx.draw_networkx_labels(G_unconstrained, pos, font_size=11, ax=ax)
         ax.set_title("No Constraints", fontsize=11, fontweight="bold")
         ax.axis("off")
@@ -930,8 +988,11 @@ def cell9_domain_knowledge():
         ax.axis("off")
         ax.set_title("Impact Summary", fontsize=11, fontweight="bold")
 
-        plt.suptitle("Domain Knowledge Integration: Constraints and Prior DAGs",
-                     fontsize=14, fontweight="bold")
+        plt.suptitle(
+            "Domain Knowledge Integration: Constraints and Prior DAGs",
+            fontsize=14,
+            fontweight="bold",
+        )
         plt.tight_layout()
         plt.show()
 
@@ -985,10 +1046,7 @@ def cell10_end_to_end_workflow():
         ax.text(
             0.5,
             0.5,
-            "Stage 1: Data Prep\n"
-            "✓ Variables: 5\n"
-            "✓ Samples: 500\n"
-            "✓ Non-Gaussian",
+            "Stage 1: Data Prep\n✓ Variables: 5\n✓ Samples: 500\n✓ Non-Gaussian",
             ha="center",
             va="center",
             fontsize=10,
@@ -1019,9 +1077,7 @@ def cell10_end_to_end_workflow():
         ax.text(
             0.5,
             0.5,
-            "Stage 3: Consensus\n"
-            "Edges found by 2+ algos\n"
-            "(more trustworthy)",
+            "Stage 3: Consensus\nEdges found by 2+ algos\n(more trustworthy)",
             ha="center",
             va="center",
             fontsize=10,
@@ -1035,9 +1091,7 @@ def cell10_end_to_end_workflow():
         ax.text(
             0.5,
             0.5,
-            "Stage 4: Refinement\n"
-            "Expert review\n"
-            "Add constraints",
+            "Stage 4: Refinement\nExpert review\nAdd constraints",
             ha="center",
             va="center",
             fontsize=10,
@@ -1051,9 +1105,7 @@ def cell10_end_to_end_workflow():
         ax.text(
             0.5,
             0.5,
-            "Stage 5: Validation\n"
-            "Refutation tests\n"
-            "Sensitivity analysis",
+            "Stage 5: Validation\nRefutation tests\nSensitivity analysis",
             ha="center",
             va="center",
             fontsize=10,
@@ -1067,9 +1119,7 @@ def cell10_end_to_end_workflow():
         ax.text(
             0.5,
             0.5,
-            "Stage 6: Final DAG\n"
-            "Refined & validated\n"
-            "Ready for inference",
+            "Stage 6: Final DAG\nRefined & validated\nReady for inference",
             ha="center",
             va="center",
             fontsize=10,
@@ -1108,8 +1158,11 @@ def cell10_end_to_end_workflow():
 
     # Interactive widgets.
     dataset_dropdown = Dropdown(
-        options=["Synthetic: Linear Gaussian", "Synthetic: Non-Gaussian",
-                 "Real: Economic Data"],
+        options=[
+            "Synthetic: Linear Gaussian",
+            "Synthetic: Non-Gaussian",
+            "Real: Economic Data",
+        ],
         value="Synthetic: Linear Gaussian",
         description="Dataset:",
     )

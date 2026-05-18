@@ -14,7 +14,7 @@ import logging
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
-import helpers.hmarkdown_lesson_iterator as hmarlesit
+import helpers.hmarkdown_lesson_iterator as hmaleite
 import helpers.hparser as hparser
 
 _LOG = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         input_file,
     )
     # Iterate through items in the lesson file.
-    items = hmarlesit.read_lesson_file(input_file)
+    items = hmaleite.read_lesson_file(input_file)
     output_lines = []
     item_count = 0
     for item in items:
@@ -82,9 +82,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         output_lines.append(
             f"Item #{item_count}: type={item['type']}, line={item['line_number']}"
         )
-        output_lines.append(
-            f"Content ({len(item['content'])} lines):"
-        )
+        output_lines.append(f"Content ({len(item['content'])} lines):")
         for line in item["content"][:5]:
             output_lines.append(f"  {line}")
         if len(item["content"]) > 5:
