@@ -83,13 +83,14 @@ MSML610: Advanced Machine Learning
 
 * Causal Discovery: Motivation
 
-- So far we have **assumed a causal DAG was given**
-  - E.g., drawn by a domain expert
-
-- **Question**
+- **Problem**
+  - So far we have assumed a causal DAG was given
+    - E.g., drawn by a domain expert
   - What if we _do not_ know the DAG?
   - Can we learn causal structure directly from data?
 
+- **Solution**
+- **Goal**: extract causal hypotheses that can be tested later
 - **Causal discovery** (a.k.a. _structure learning_)
   - Recover the causal DAG from observational and optionally interventional data
 
@@ -97,18 +98,14 @@ MSML610: Advanced Machine Learning
   - _Observational data_ is plentiful but ambiguous
   - _Experiments_ are expensive, slow, or unethical
     - E.g., cannot randomize exposing humans to asbestos
-  - **Goal**: extract causal hypotheses that can be tested later
 
 * Causal Discovery: Definition
 
-- **Causal discovery** is the process of inferring from a dataset sampled from an
-  unknown data-generating process:
-  $$
-  \mathcal{D} \sim \Pr(X_1, \dots, X_n)
-  $$
-  a graph $G$ (or equivalence class) describing causal relations among
-  $X_1, ..., X_n$
-  such that:
+- **Definition**:
+  Given a dataset sampled from an unknown data-generating process
+  $\mathcal{D} \sim \Pr(X_1, \dots, X_n)$
+  _causal discovery_ is the process of inferring a graph $G$ (or equivalence
+  class) describing causal relations among $X_1, ..., X_n$ such that:
   $$
   \Pr(X_1, \dots, X_n) = \prod_{i=1}^n \Pr(X_i \mid Pa_G(X_i))
   $$
@@ -137,17 +134,18 @@ MSML610: Advanced Machine Learning
 | **Pros**         | Abundant and cheap                       | Identifies causal direction             |
 |                  | No ethical constraints                   | Breaks spurious correlations            |
 | **Cons**         | Cannot distinguish cause vs correlation  | Expensive, slow, often infeasible       |
-|                  | Hidden confounders                       | Ethical issues (e.g., smoking trials)   |
+|                  | Hidden confounders                       | Ethical issues                          |
 \endgroup
 
-- Discovery algorithms combine both when possible
+- Causal discovery algorithms combine both when possible
 
-* The Discovery Problem in One Picture
+* The Discovery Problem
 
 ::: columns
 :::: {.column width=45%}
-- We observe a table of measurements
-- We do not know the DAG
+- **Assumptions**
+  - We observe a table of measurements
+  - We do not know the DAG
 - **Goal**: recover arrows among variables
 ::::
 :::: {.column width=50%}
