@@ -296,7 +296,7 @@ digraph Chain2 {
 
 * Discovery vs. Domain Knowledge
 
-- When should we _run an algorithm_ vs _ask an expert_?
+- **Question**: When should we _run an algorithm_ vs _ask an expert_?
 
 \begingroup
 \footnotesize
@@ -736,7 +736,7 @@ digraph PCExample {
   - They are _predictively equivalent_
   - They are _causally_ different
 
-- Three classic patterns:
+- **Key patterns**: Three classic patterns
   1. **Chain**: $X \to Y \to Z$
   2. **Reverse chain**: $Z \to Y \to X$
   3. **Common cause**: $X \leftarrow Y \rightarrow Z$
@@ -785,8 +785,9 @@ digraph C3 {
 ::::
 :::
 
-- All three imply $X \perp Z \mid Y$
-- Observational distribution identical
+- **Key insight**: All three imply $X \perp Z \mid Y$
+  - Observational distribution identical
+
 - **Causal implications are very different**:
   - Intervening on $X$ in Chain 1 affects $Z$
   - Intervening on $X$ in Chain 2 does _not_ affect $Z$
