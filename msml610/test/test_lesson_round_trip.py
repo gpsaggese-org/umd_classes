@@ -5,18 +5,15 @@ Tests that lesson files can be read, parsed, reassembled, and match the original
 """
 
 import glob
-import logging
 import os
-from typing import Any, Dict, List
 
+import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
 from helpers.hmarkdown_lesson_iterator import (
     read_lesson_file,
     reassemble_from_items,
 )
-
-_LOG = logging.getLogger(__name__)
 
 
 class TestLessonRoundTrip(hunitest.TestCase):
@@ -26,6 +23,26 @@ class TestLessonRoundTrip(hunitest.TestCase):
     Verifies that lesson files can be read, parsed into structured items,
     reassembled back to markdown, and match the original content exactly.
     """
+
+    def helper_test_round_trip(self, lesson_file: str) -> None:
+        """
+        Test helper for lesson round-trip parsing.
+
+        :param lesson_file: Path to the lesson file to test
+        """
+        # Read original content.
+        original_content = hio.from_file(lesson_file)
+        # Parse the lesson file.
+        items = list(read_lesson_file(lesson_file))
+        # Reassemble from parsed items.
+        reassembled_content = reassemble_from_items(
+            items, original_content=original_content
+        )
+        # Verify round-trip: reassembled must match original.
+        self.assert_equal(
+            reassembled_content,
+            original_content,
+        )
 
     def test_lesson_files_round_trip(self) -> None:
         """
@@ -40,27 +57,13 @@ class TestLessonRoundTrip(hunitest.TestCase):
             self.skipTest(f"Lesson directory '{lesson_dir}' not found")
         lesson_pattern = os.path.join(lesson_dir, "Lesson*.txt")
         lesson_files = sorted(glob.glob(lesson_pattern))
-        # TODO(ai_gp): Turn this into a dassert
-        if not lesson_files:
-            self.skipTest(f"No lesson files found matching '{lesson_pattern}'")
+        hdbg.dassert_ne(
+            len(lesson_files),
+            0,
+            "Lesson files must be found matching pattern: '%s'",
+            lesson_pattern,
+        )
         # Test each lesson file.
         for lesson_file in lesson_files:
-            # TODO(ai_gp): Factor out in a helper.
             with self.subTest(lesson_file=lesson_file):
-                # Read original content.
-                # TODO(ai_gp): Use hio.from_file
-                with open(lesson_file, "r") as f:
-                    original_content = f.read()
-                # Parse the lesson file.
-                items = list(read_lesson_file(lesson_file))
-                # Reassemble from parsed items.
-                reassembled_content = reassemble_from_items(
-                    items, original_content=original_content
-                )
-                # Verify round-trip: reassembled must match original.
-                self.assertEqual(
-                    reassembled_content,
-                    original_content,
-                    f"Round-trip failed for {lesson_file}: reassembled content "
-                    "does not match original",
-                )
+                self.helper_test_round_trip(lesson_file)
