@@ -1,17 +1,16 @@
 # Jupyter Notebook Outline: Causal Discovery
 
 ## Overview
+This notebook teaches causal discovery through interactive visualizations and
+incremental examples, building intuition about how algorithms infer causal
+structure from observational data
 
-This notebook teaches causal discovery through interactive visualizations and incremental examples, building intuition about how algorithms infer causal structure from observational data.
-
----
-
-## Cell 1: The Core Problem
-
+## Cell 1: the Core Problem
 **Purpose**
 
 - Understand why causal direction matters for decision-making
-- See the gap between correlation (what ML optimizes) and causation (what we need for intervention)
+- See the gap between correlation (what ML optimizes) and causation (what we
+  need for intervention)
 - Build motivation for learning causal discovery
 
 **Display**
@@ -28,7 +27,8 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 - Toggle between observational and interventional outcomes
   - When "observational": both DAGs produce identical correlation
-  - When "interventional": left plot shows change in $Y$ when $X$ intervenes; right plot shows no change
+  - When "interventional": left plot shows change in $Y$ when $X$ intervenes;
+    right plot shows no change
 - Slider: correlation strength ($r = 0.3$ to $r = 0.99$)
 - Seed: randomization for data generation
 
@@ -40,17 +40,18 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Comment box**
 
-- Highlight the essential problem: "No amount of observational data alone distinguishes these structures"
-
----
+- Highlight the essential problem: "No amount of observational data alone
+  distinguishes these structures"
 
 ## Cell 2: Markov Equivalence---Three Indistinguishable Structures
-
 **Purpose**
 
-- Show the fundamental limit: different DAGs encode identical conditional independencies
-- Build intuition for why the best observational algorithms return equivalence classes, not unique DAGs
-- Introduce the CPDAG (Completed Partially Directed Acyclic Graph) as the solution
+- Show the fundamental limit: different DAGs encode identical conditional
+  independencies
+- Build intuition for why the best observational algorithms return equivalence
+  classes, not unique DAGs
+- Introduce the CPDAG (Completed Partially Directed Acyclic Graph) as the
+  solution
 
 **Display**
 
@@ -67,11 +68,13 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Interactive widgets**
 
-- Generate samples from each structure and show they are statistically indistinguishable
+- Generate samples from each structure and show they are statistically
+  indistinguishable
   - Slider: sample size ($N = 50$ to $N = 5000$)
   - Histogram of $X$ vs. $Z$ correlation (identical across all three)
   - Histogram of $X$ vs. $Z$ given $Y$ (near-zero for all three)
-- Toggle: "Show conditional independencies tested" to reveal which CI tests matter
+- Toggle: "Show conditional independencies tested" to reveal which CI tests
+  matter
 
 **Key insights**
 
@@ -81,12 +84,10 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Comment box**
 
-- "This is why observational discovery outputs equivalence classes. Without interventions or functional assumptions, multiple DAGs are equally valid."
+- "This is why observational discovery outputs equivalence classes. Without
+  interventions or functional assumptions, multiple DAGs are equally valid."
 
----
-
-## Cell 3: When Direction Matters: Causal Effects via Intervention
-
+## Cell 3: When Direction Matters: Causal Effects Via Intervention
 **Purpose**
 
 - Show concretely why edge direction determines causal effect
@@ -95,7 +96,8 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Display**
 
-- Side-by-side counterfactual outcomes for each of the three structures from Cell 2
+- Side-by-side counterfactual outcomes for each of the three structures from
+  Cell 2
 - Scenario: intervene on $X$ (set it to high vs. low) and observe effect on $Z$
   - **Chain 1** ($X \to Y \to Z$): large effect on $Z$
   - **Chain 2** ($Z \to Y \to X$): no effect on $Z$
@@ -107,7 +109,8 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 - Slider: intervention strength (how much to change $X$)
 - Slider: sample size for estimating the effect
-- Toggle: "Show confounding" to highlight when a hidden confounder explains the observation
+- Toggle: "Show confounding" to highlight when a hidden confounder explains the
+  observation
 - Seed: for reproducibility
 
 **Key insights**
@@ -118,12 +121,10 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Comment box**
 
-- "Policy decisions depend critically on DAG structure. Choosing the wrong DAG leads to ineffective interventions."
+- "Policy decisions depend critically on DAG structure. Choosing the wrong DAG
+  leads to ineffective interventions."
 
----
-
-## Cell 4: The PC Algorithm: Learning from Conditional Independence Tests
-
+## Cell 4: the PC Algorithm: Learning From Conditional Independence Tests
 **Purpose**
 
 - Understand constraint-based discovery: using CI tests to prune edges
@@ -143,7 +144,7 @@ This notebook teaches causal discovery through interactive visualizations and in
   6. Apply orientation rules to finalize CPDAG
 - Panel on right shows:
   - Current step number and CI test being performed
-  - p-value from the CI test
+  - P-value from the CI test
   - Separating set (if edge was removed)
   - Visualization of which edges remain
 
@@ -167,12 +168,11 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Comment box**
 
-- "PC is sound in the large-sample limit, but CI tests are underpowered in finite samples. Small sample size or weak dependencies can cause edge recovery errors."
-
----
+- "PC is sound in the large-sample limit, but CI tests are underpowered in
+  finite samples. Small sample size or weak dependencies can cause edge recovery
+  errors."
 
 ## Cell 5: Score-Based Search: GES (Greedy Equivalence Search)
-
 **Purpose**
 
 - Introduce score-based discovery: search DAG space to optimize fit
@@ -206,27 +206,31 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Key insights**
 
-- Score-based search explores DAG space (combinatorially large) using greedy heuristics
-- BIC balances likelihood fit with model complexity: more edges must improve fit more than their added complexity costs
-- Forward-backward search: forward phase finds good edges; backward removes edges that add little
+- Score-based search explores DAG space (combinatorially large) using greedy
+  heuristics
+- BIC balances likelihood fit with model complexity: more edges must improve fit
+  more than their added complexity costs
+- Forward-backward search: forward phase finds good edges; backward removes
+  edges that add little
 
 **Comment box**
 
-- "GES is guaranteed to recover the true equivalence class in the limit, but greedy search can get stuck in local optima. Start from multiple random initializations for robustness."
-
----
+- "GES is guaranteed to recover the true equivalence class in the limit, but
+  greedy search can get stuck in local optima. Start from multiple random
+  initializations for robustness."
 
 ## Cell 6: Non-Gaussian Methods: LiNGAM for Full Identifiability
-
 **Purpose**
 
 - Show how non-Gaussianity breaks symmetry and enables full DAG recovery
-- Understand that functional assumptions (beyond CI and scores) can identify direction
+- Understand that functional assumptions (beyond CI and scores) can identify
+  direction
 - Compare LiNGAM output to PC and GES
 
 **Display**
 
-- Top row: three panels showing data clouds for the same three indistinguishable structures from Cell 2
+- Top row: three panels showing data clouds for the same three indistinguishable
+  structures from Cell 2
   - If data are Gaussian: shapes are identical (same covariance ellipsoid)
   - If data are non-Gaussian: shapes show asymmetry that reveals direction
 - Middle row: LiNGAM adjacency matrices
@@ -250,18 +254,18 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Key insights**
 
-- Gaussian linear models are symmetric: swapping cause and effect preserves distribution
+- Gaussian linear models are symmetric: swapping cause and effect preserves
+  distribution
 - Non-Gaussianity breaks the symmetry: LiNGAM exploits this to orient edges
-- LiNGAM requires strong assumptions (linear, independent non-Gaussian noise) but provides full identifiability
+- LiNGAM requires strong assumptions (linear, independent non-Gaussian noise)
+  but provides full identifiability
 
 **Comment box**
 
-- "If your data are non-Gaussian, LiNGAM can recover the full directed DAG. Test for non-Gaussianity first (Jarque-Bera, skewness tests)."
-
----
+- "If your data are non-Gaussian, LiNGAM can recover the full directed DAG. Test
+  for non-Gaussianity first (Jarque-Bera, skewness tests)."
 
 ## Cell 7: Comparing Algorithms: Which One to Use?
-
 **Purpose**
 
 - Show outputs from PC, GES, and LiNGAM on the same data
@@ -292,19 +296,20 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Key insights**
 
-- PC: constraint-based, good for small samples, returns equivalence class (many ambiguous edges)
+- PC: constraint-based, good for small samples, returns equivalence class (many
+  ambiguous edges)
 - GES: score-based, more interpretable output, but assumes no hidden confounders
-- LiNGAM: functional, requires non-Gaussianity, gives full DAG, but limited to linear models
+- LiNGAM: functional, requires non-Gaussianity, gives full DAG, but limited to
+  linear models
 - Consensus: edges found by multiple algorithms are more trustworthy
 
 **Comment box**
 
-- "Start with PC for exploratory analysis. Use GES if you want directed edges. Use LiNGAM only if non-Gaussianity is confirmed. Trust edges found by multiple algorithms."
-
----
+- "Start with PC for exploratory analysis. Use GES if you want directed edges
+  Use LiNGAM only if non-Gaussianity is confirmed. Trust edges found by multiple
+  algorithms."
 
 ## Cell 8: Validating Discovered DAGs with Refutation Tests
-
 **Purpose**
 
 - Show how to validate a discovered DAG against data
@@ -322,7 +327,8 @@ This notebook teaches causal discovery through interactive visualizations and in
   - **Placebo test**: shuffle the target variable and re-run discovery
     - Show that discovery still finds edges (should not!)
     - Highlight this as evidence of overfitting
-  - **Sensitivity analysis**: add a simulated hidden confounder and measure effect on conclusions
+  - **Sensitivity analysis**: add a simulated hidden confounder and measure
+    effect on conclusions
     - Line plot: conclusion robustness vs. confounder strength
 - Bottom: overall validation score (% of implied independencies confirmed)
 
@@ -337,18 +343,19 @@ This notebook teaches causal discovery through interactive visualizations and in
 **Key insights**
 
 - Validation checks whether the discovered DAG's implications hold in data
-- Low validation score suggests violated assumptions (hidden confounders, non-stationarity)
-- Placebo tests catch overfitting: if discovery finds structure in pure noise, something is wrong
+- Low validation score suggests violated assumptions (hidden confounders,
+  non-stationarity)
+- Placebo tests catch overfitting: if discovery finds structure in pure noise,
+  something is wrong
 - Sensitivity analysis quantifies robustness to unobserved confounders
 
 **Comment box**
 
-- "A discovered DAG is a hypothesis. Validation tells you if the hypothesis is consistent with data. Consistency is not proof, but inconsistency is refutation."
-
----
+- "A discovered DAG is a hypothesis. Validation tells you if the hypothesis is
+  consistent with data. Consistency is not proof, but inconsistency is
+  refutation."
 
 ## Cell 9: Domain Knowledge Integration: Constraints and Prior DAGs
-
 **Purpose**
 
 - Show how expert knowledge can guide discovery
@@ -382,19 +389,19 @@ This notebook teaches causal discovery through interactive visualizations and in
 
 **Key insights**
 
-- Partial domain knowledge drastically reduces search space and improves accuracy
+- Partial domain knowledge drastically reduces search space and improves
+  accuracy
 - Constraints must be correct: wrong priors inject errors
 - Temporal ordering is the strongest constraint (past cannot depend on future)
-- Active learning: after discovery, expert can suggest next experiment to reduce ambiguity
+- Active learning: after discovery, expert can suggest next experiment to reduce
+  ambiguity
 
 **Comment box**
 
-- "Combine automatic discovery with domain expertise. Expert knowledge should guide the search, but data should refute false structures."
-
----
+- "Combine automatic discovery with domain expertise. Expert knowledge should
+  guide the search, but data should refute false structures."
 
 ## Cell 10: End-to-End Workflow: From Data to Validated DAG
-
 **Purpose**
 
 - Integrate all previous concepts into a complete discovery pipeline
@@ -404,11 +411,14 @@ This notebook teaches causal discovery through interactive visualizations and in
 **Display**
 
 - Multi-panel workflow visualization:
-  1. **Data preparation**: histogram of variables, test for non-Gaussianity, identify temporal order
-  2. **Discovery step**: run PC, GES, and LiNGAM (toggle which algorithms to use)
+  1. **Data preparation**: histogram of variables, test for non-Gaussianity,
+     identify temporal order
+  2. **Discovery step**: run PC, GES, and LiNGAM (toggle which algorithms to
+     use)
   3. **Consensus step**: Venn diagram of edges found by each algorithm
   4. **Refinement step**: expert review, add constraints, re-run discovery
-  5. **Validation step**: refutation tests, validation score, sensitivity analysis
+  5. **Validation step**: refutation tests, validation score, sensitivity
+     analysis
   6. **Final DAG**: refined and validated causal structure
 - Progress bar: shows which stage of workflow is active
 
@@ -426,24 +436,31 @@ This notebook teaches causal discovery through interactive visualizations and in
 **Key insights**
 
 - Discovery is a pipeline, not a single algorithm call
-- Multiple algorithms provide robustness: edges found by all are most trustworthy
-- Expert review and constraints improve accuracy without losing data-driven insights
-- Validation ensures the discovered structure is plausible and consistent with data
+- Multiple algorithms provide robustness: edges found by all are most
+  trustworthy
+- Expert review and constraints improve accuracy without losing data-driven
+  insights
+- Validation ensures the discovered structure is plausible and consistent with
+  data
 
 **Comment box**
 
-- "This workflow balances automated discovery with expert judgment. Discovery is most powerful when combined with domain knowledge, validated with care, and interpreted as a hypothesis for further investigation."
-
----
+- "This workflow balances automated discovery with expert judgment. Discovery is
+  most powerful when combined with domain knowledge, validated with care, and
+  interpreted as a hypothesis for further investigation."
 
 ## Summary of Key Takeaways
-
-- **Identifiability is limited**: observational data can only recover equivalence classes unless you have interventions or functional assumptions
+- **Identifiability is limited**: observational data can only recover
+  equivalence classes unless you have interventions or functional assumptions
 - **Three algorithm families**:
   - Constraint-based (PC): uses conditional independence tests
   - Score-based (GES): searches DAG space to optimize fit
   - Functional (LiNGAM): exploits non-Gaussianity for full recovery
-- **Discovery generates hypotheses**: treat output as plausible candidates, not ground truth
-- **Validation is essential**: check that discovered DAG's implications hold in data
-- **Combine with expertise**: domain knowledge guides discovery and refutes implausible structures
-- **No algorithm solves causality alone**: humans and data together recover causal understanding
+- **Discovery generates hypotheses**: treat output as plausible candidates, not
+  ground truth
+- **Validation is essential**: check that discovered DAG's implications hold in
+  data
+- **Combine with expertise**: domain knowledge guides discovery and refutes
+  implausible structures
+- **No algorithm solves causality alone**: humans and data together recover
+  causal understanding
