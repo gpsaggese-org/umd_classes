@@ -83,70 +83,66 @@ MSML610: Advanced Machine Learning
 
 * Causal Discovery: Motivation
 
-- **Problem**
-  - So far we have assumed a causal DAG was given
-    - E.g., drawn by a domain expert
-  - What if we _do not_ know the DAG?
-  - Can we learn causal structure directly from data?
+- **Problem**: So far we have assumed the causal DAG was known (e.g., given by
+  domain experts?)
 
-- **Solution**
-- **Goal**: extract causal hypotheses that can be tested later
-- **Causal discovery** (a.k.a. _structure learning_)
-  - Recover the causal DAG from observational and optionally interventional data
+- **Questions**:
+  - How do we discover the DAG when it is not specified?
+  - Can we learn causal structure directly from observational data?
 
 - **Why it matters**
-  - _Observational data_ is plentiful but ambiguous
-  - _Experiments_ are expensive, slow, or unethical
+  - Observational data is plentiful but ambiguous (confounding, correlation)
+  - Experiments are expensive, slow, or unethical
     - E.g., cannot randomize exposing humans to asbestos
 
-* Causal Discovery: Definition
+- **Solution**: _Causal discovery_ (aka structure learning)
+  - Recover the causal DAG from observational and/or interventional data
+  - Extract causal hypotheses that can be tested and refined
 
-- **Definition**:
-  Given a dataset sampled from an unknown data-generating process
-  $\mathcal{D} \sim \Pr(X_1, \dots, X_n)$
-  _causal discovery_ is the process of inferring a graph $G$ (or equivalence
-  class) describing causal relations among $X_1, ..., X_n$ such that:
-  $$
-  \Pr(X_1, \dots, X_n) = \prod_{i=1}^n \Pr(X_i \mid Pa_G(X_i))
-  $$
+* Causal Discovery: Formal Definition
+
+- **Definition**: Given a dataset $\mathcal{D} \sim \Pr(X_1, \dots, X_n)$,
+  causal discovery is the process of inferring a causal DAG $G$ (or
+  equivalence class) such that:
+  $$\Pr(X_1, \dots, X_n) = \prod_{i=1}^n \Pr(X_i | Pa_G(X_i))$$
   where $Pa_G(X_i)$ are the parents of $X_i$ in $G$
 
-- **Example**: 
-  - Macroeconomic drivers
-    - From time-series data, infer causal links between inflation, unemployment,
-      and interest rates
-  - Education $\to$ income
-    - From observational survey data, estimate whether education causally affects
-      earnings (vs confounding)
-  - Peer influence in social networks
-    - From user behavior data, infer whether friends influence each other's
-      purchases or opinions
+- **Examples**:
+  - Macroeconomic drivers: from time-series data, infer causal links between
+    inflation, unemployment, and interest rates
+  - Education and income: estimate whether education causally affects earnings
+    (vs. pure confounding)
+  - Social networks: infer whether friends influence each other's purchases
+    or opinions
 
 * Observational vs. Interventional Data
 
 \begingroup
-\footnotesize
-|                  | **Observational Data**                   | **Interventional Data**                 |
-|------------------|------------------------------------------|-----------------------------------------|
-| **Definition**   | Data collected by *watching* the system  | Data collected under *do*-interventions |
-| **Manipulation** | No variable is manipulated               | Variables are actively manipulated      |
-| **Example**      | Hospital records of patients             | Randomized Controlled Trial (RCT)       |
-| **Pros**         | Abundant and cheap                       | Identifies causal direction             |
-|                  | No ethical constraints                   | Breaks spurious correlations            |
-| **Cons**         | Cannot distinguish cause vs correlation  | Expensive, slow, often infeasible       |
-|                  | Hidden confounders                       | Ethical issues                          |
+\scriptsize
+| **Aspect**   | **Observational Data** | **Interventional Data** |
+|--------------|------------------------|------------------------|
+| Definition   | _Watch_ the system    | Apply _do_-interventions |
+| Manipulation | None; passive observation | Active variable control |
+| Example      | Hospital records      | Randomized Controlled Trial (RCT) |
+| Pros         | Abundant, cheap, ethical | Identifies causal direction; breaks spurious correlations |
+| Cons         | Cannot distinguish cause from correlation; hidden confounders | Expensive, slow, often infeasible |
 \endgroup
 
-- Causal discovery algorithms combine both when possible
+- **Key insight**: discovery algorithms combine both types when available
 
 * The Discovery Problem
 
 ::: columns
 :::: {.column width=45%}
-- **Assumptions**
+- **Assumptions**:
   - We observe a table of measurements
-  - We do not know the DAG
-- **Goal**: recover arrows among variables
+  - We do not know the true causal DAG
+
+- **Goal**: recover causal arrows among variables
+
+- **Key insight**: discovery always requires _assumptions_
+  - No algorithm recovers structure from data alone
+  - Assumptions include faithfulness, causal sufficiency, etc.
 ::::
 :::: {.column width=50%}
 ```graphviz
@@ -156,11 +152,11 @@ digraph Discovery {
     ranksep=0.6;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Data1 [label="Observational\ndataset D1", fillcolor="#FFD1A6"];
-    Data2 [label="Interventional\ndataset D2", fillcolor="#FFD1A6"];
+    Data1 [label="Observational\ndataset", fillcolor="#FFD1A6"];
+    Data2 [label="Interventional\ndataset", fillcolor="#FFD1A6"];
     Algo [label="Discovery\nalgorithm", fillcolor="#A0D6D1"];
-    DAG [label="Causal DAG G", fillcolor="#A6C8F4"];
-    Assump [label="Assumptions\n(faithfulness, sufficiency, ...)", fillcolor="#A6E7F4"];
+    DAG [label="Causal DAG", fillcolor="#A6C8F4"];
+    Assump [label="Assumptions", fillcolor="#A6E7F4"];
 
     Data1 -> Algo;
     Data2 -> Algo;
@@ -170,10 +166,6 @@ digraph Discovery {
 ```
 ::::
 :::
-
-- **Key insight**
-  - Discovery is always based on _assumptions_
-  - No algorithm recovers structure from data alone without some prior axiom
 
 // Tutorial:
 // - Load a real dataset (e.g., stock returns, health metrics)
@@ -194,97 +186,91 @@ digraph Discovery {
 // - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
 //   https://arxiv.org/pdf/1205.2599
 
-* Key Assumptions for Causal Discovery
+* Three Assumptions for Causal Discovery
 
-- Causal discovery rests on three main assumptions:
-  1. **Causal Markov condition**
-     - Each variable is independent of its non-descendants given its parents
-     - Equivalent to the factorization $\Pr(X) = \prod_i \Pr(X_i \mid Pa(X_i))$
-  2. **Faithfulness**
-     - All conditional independencies in the data come from the DAG structure,
-       not from _numerical coincidences_ (no cancelling paths)
-  3. **Causal sufficiency**
-     - No hidden common causes (unobserved confounders)
-     - All relevant variables are measured
+- **Causal Markov condition**: each variable is independent of its
+  non-descendants given its parents
+  - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i \mid Pa(X_i))$
 
-- Violating any of these can lead to an **incorrect** recovered DAG
+- **Faithfulness**: all conditional independencies in the data stem from DAG
+  structure, not from numerical coincidences (no path cancellation)
 
-* Markov Equivalence Classes
+- **Causal sufficiency**: no hidden common causes (confounders)
+  - All relevant variables are measured
 
-- Can observational data distinguish every DAG?
-  - **No**
-  - Different DAGs may encode the same conditional independencies
+- **Implication**: violating any assumption leads to incorrect recovered DAGs
+
+* Markov Equivalence: The Core Limitation
+
+- **Question**: can observational data distinguish every DAG?
+
+- **Answer**: no. Different DAGs encode identical conditional independencies
 
 - **Markov equivalent DAGs** share the same:
-  - Skeleton (undirected edges)
+  - Skeleton (undirected edges between nodes)
   - v-structures (colliders $X \to Z \leftarrow Y$)
 
-- The best an observational-only algorithm can return is a **CPDAG**
-  (Completed Partially Directed Acyclic Graph) that represents the equivalence
-  class
+- **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph) represents the
+  entire equivalence class—the best observational algorithms can return
 
 // TODO(gp): Improve layout
-
 ::: columns
 :::: {.column width=50%}
+Chain: $X \to Y \to Z$
 ```graphviz
 digraph Chain1 {
     rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4", fontname="Helvetica"];
+    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
     X -> Y -> Z;
 }
 ```
 ::::
 :::: {.column width=50%}
+Reverse: $Z \to Y \to X$
 ```graphviz
 digraph Chain2 {
     rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4", fontname="Helvetica"];
+    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
     Z -> Y -> X;
 }
 ```
 ::::
 :::
 
-- Both imply $X \perp Z \mid Y$; indistinguishable from observational data
+- Both imply $X \perp Z \mid Y$; observational data cannot distinguish them
 
-* Identifiability: When Can We Recover the DAG?
+* Identifiability: Paths to Full Recovery
 
-- **Identifiable from observational data alone**
-  - Only the _Markov equivalence class_ (a CPDAG)
-  - Directions of some edges remain ambiguous
+- **From observational data alone**: only the Markov equivalence class (CPDAG)
+  - Edge directions remain ambiguous without functional assumptions
 
-- **Fully identifiable under stronger assumptions**
-  - _Linear non-Gaussian noise_ (LiNGAM): direction recovered uniquely
-  - _Additive noise models_ with nonlinear functions
-  - _Post-nonlinear_ models (Zhang et al., 2009)
+- **With stronger functional assumptions**: full DAG recovery possible
+  - Linear non-Gaussian noise (LiNGAM): asymmetry in noise breaks direction
+    ambiguity
+  - Additive noise models with nonlinear functions
+  - Post-nonlinear causal models (Zhang et al., 2009)
 
-- **Identifiable with interventional data**
-  - Each intervention cuts incoming edges to the target variable
-  - Enough interventions recover the full DAG
+- **With interventional data**: each intervention cuts incoming edges
+  - Sufficient interventions recover the full directed DAG
 
-- **Rule of thumb**: more structure (non-Gaussianity, nonlinearity,
-  interventions) $\Rightarrow$ more identifiability
+- **Rule of thumb**: more structural information $\Rightarrow$ more identifiability
 
-* Faithfulness: A Subtle Assumption
+* Faithfulness: When Correlations Hide Causation
 
-- **Faithfulness**: the observed distribution has _no extra_ independencies
-  beyond those implied by the DAG
+- **Faithfulness assumption**: the observed distribution contains no extra
+  independencies beyond those implied by the DAG structure
 
-// TODO(gp): Add diagram
-- **Example of violation**
-  - Path cancellation
-  - Suppose $X \to Y$ and $X \to Z \to Y$
-  - If the two paths' effects are equal in magnitude and opposite in sign,
-    $X \perp Y$ in the data even though $X$ causes $Y$
-  - Algorithm would conclude _no edge_
+- **Example of violation**: path cancellation
+  - Suppose $X \to Y$ and $X \to Z \to Y$ (two paths)
+  - If the effects are equal in magnitude but opposite in sign, the paths
+    cancel: $X \perp Y$ in data even though $X$ causes $Y$
+  - Algorithm incorrectly concludes: no edge between $X$ and $Y$
 
-- In practice, exact cancellations are _measure zero_, but near-cancellations
+- **In practice**: exact cancellations are measure-zero, but near-cancellations
   in finite samples cause errors
 
-- Discovery is:
-  - Statistically correct in the limit
-  - Fragile with small data
+- **Implication**: discovery is statistically correct in the limit but fragile
+  with small data
 
 ## #############################################################################
 ## Practical Limitations of Automated Discovery
@@ -295,42 +281,35 @@ digraph Chain2 {
 // - 2017, Uhler et al., "Geometries of faithfulness in graphical models"
 //   https://arxiv.org/abs/1608.00191
 
-* Practical Limitations
+* Practical Challenges: Data and Algorithm
 
-- **Sample complexity**
-  - Conditional independence tests need many samples
-  - Error rate scales with number of tests: $O(n^2)$ pairs of variables
+- **Sample complexity**: conditional independence tests require many samples
+  - Test error rate scales with number of variable pairs: $O(n^2)$
 
-- **Hidden confounders**
-  - Break causal sufficiency
-  - Produce spurious edges or wrong directions
+- **Hidden confounders**: break causal sufficiency
+  - Produce spurious edges or incorrect edge directions
 
-- **Selection bias**
-  - Sampling mechanism depends on variables of interest
-  - E.g., only patients sick enough to visit hospital are measured
+- **Selection bias**: sampling mechanism depends on variables of interest
+  - E.g., only sufficiently ill patients visit hospital
 
-- **Finite-sample faithfulness**
-  - Weak dependencies look like independencies
+- **Finite-sample faithfulness**: weak dependencies appear as independencies
   - Statistical power drops rapidly with conditioning set size
 
-* Practical Limitations (cont.)
+* Practical Challenges: Structure and Computation
 
-- **Temporal information is usually ignored**
-  - Yet time is the strongest causal prior
-  - Some algorithms (Granger-causality, DYNOTEARS) exploit it explicitly
+- **Temporal information often ignored**: despite time being the strongest
+  causal prior
+  - Some algorithms (Granger-causality, DYNOTEARS) exploit temporal order
 
-- **Non-stationarity and heterogeneity**
-  - Distribution shifts across subpopulations break i.i.d. assumptions
+- **Non-stationarity and heterogeneity**: distribution shifts across
+  subpopulations violate i.i.d. assumptions
 
-- **Computational complexity**
-  - Search space grows _super-exponentially_ in the number of variables $n$:
-    $$
-    |\{\text{DAGs over } n \text{ nodes}\}| \approx 2^{O(n^2)}
-    $$
-  - PC algorithm: $O(n^q)$ where $q$ is max degree
-  - NP-hard in general for score-based search
+- **Computational complexity**: DAG space grows super-exponentially
+  $$|\{\text{DAGs over } n \text{ nodes}\}| \approx 2^{O(n^2)}$$
+  - PC algorithm: $O(n^q)$ where $q$ is maximum degree
+  - Score-based search is NP-hard in general
 
-- **Bottom line**: discovery is a _hypothesis generator_, not a truth oracle
+- **Bottom line**: discovery generates _candidate hypotheses_, not ground truth
 
 # ##############################################################################
 # When to Use Discovery vs. Domain Knowledge
