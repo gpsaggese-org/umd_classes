@@ -157,7 +157,7 @@ digraph Discovery {
 
 - **Causal Markov condition**: each variable is independent of its
   non-descendants given its parents
-  - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i \mid Pa(X_i))$
+  - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i | Pa(X_i))$
 
 - **Faithfulness**: all conditional independencies in the data stem from DAG
   structure, not from numerical coincidences (no path cancellation)
@@ -216,7 +216,7 @@ digraph Chain3 {
 - _"Intervening on X has no effect on Z"_
 
 - Same observational correlation, different causal implications
-  - Both imply $X \perp Z \mid Y$
+  - Both imply $X \perp Z | Y$
   - No amount of data can distinguish these structures
   - Without intervention data or additional assumptions, we cannot distinguish
     these structures from correlation alone
@@ -405,20 +405,24 @@ digraph PathCancellation {
 // - 2018, Squires et al., "Active structure learning of causal DAGs"
 //   https://arxiv.org/abs/2011.00641
 // - 2015, Sachs et al., "Causal protein-signaling networks derived from multiparameter single-cell data"
+//  (Meek, 2006)
 
 * Using Domain Knowledge as Constraints
 
-- Partial domain knowledge can **drastically** reduce the search space
+- Partial domain knowledge can _drastically_ reduce the search space
+  for causal discovery algorithms
 
 - Common forms of prior knowledge:
-  - **Forbidden edges**: "variable $X$ cannot cause variable $Y$"
-  - **Required edges**: "we know $X \to Y$ from physics"
-  - **Tiered ordering**: variables in tier $k$ cannot cause tier $<k$
+  - Forbidden edges: "variable $X$ cannot cause variable $Y$"
+    - E.g., _"age cannot be caused by purchasing behavior"_
+  - Required edges: "we know $X \to Y$ from physics"
+  - Tiered ordering:
+    - Organize variables into causal levels where lower tiers cannot affect
+      higher ones
     - E.g., _demographics $\to$ behavior $\to$ outcome_
-  - **Temporal order**: past cannot depend on future
+  - Temporal order: past cannot depend on future
 
-- These constraints are passed to the discovery algorithm as a **"knowledge"
-  object** (Meek, 2006)
+- These constraints are passed to the discovery algorithm as a "knowledge" object
 
 - **Pros**: faster, more accurate, more interpretable
 - **Cons**: wrong priors inject wrong edges
@@ -430,12 +434,10 @@ digraph PathCancellation {
   2. Expert marks _forbidden_ and _required_ edges
   3. Algorithm proposes a CPDAG over remaining edges
   4. Expert reviews output; refutes edges via subject-matter reasoning
-  5. Active learning suggests _next intervention_ to disambiguate edges
+  5. Active learning suggests _next intervention_ that _most reduces_ the number
+     of DAGs consistent with the data
 
-- **Example**: _Active causal structure learning_ (Squires et al., 2018)
-  - Pick the intervention that _most reduces_ the number of DAGs consistent
-    with the data
-  - Analogous to active learning in classification
+// (Squires et al., 2018)
 
 ```graphviz
 digraph Workflow {
@@ -468,6 +470,13 @@ digraph Workflow {
 
 * Three Main Algorithm Families
 
+::: columns
+:::: {.column width=40%}
+- _Constraint-based_: use conditional independence tests
+- _Score-based_: search DAG space to optimize a goodness-of-fit score
+- _Functional_: exploit specific noise or functional form for identifiability
+::::
+:::: {.column width=55%}
 ```mermaid
 mindmap
   root((**Causal Discovery**))
@@ -484,13 +493,11 @@ mindmap
       ANM
       PNL
 ```
-
-- **Constraint-based**: use conditional independence tests
-- **Score-based**: search DAG space to optimize a goodness-of-fit score
-- **Functional**: exploit specific noise or functional form for identifiability
+::::
+:::
 
 ## #############################################################################
-## Constraint-Based Methods: PC and FCI
+## Constraint-Based Methods
 ## #############################################################################
 
 // Papers:
@@ -500,19 +507,27 @@ mindmap
 
 * PC Algorithm: Idea
 
-- Named after inventors **P**eter Spirtes and **C**lark Glymour (1993)
+- Spirtes and Glymour (1993)
 
-- **Key idea**: use conditional independence (CI) tests to recover the skeleton
-  of the DAG, then orient edges
+- **Key idea**:
+  - Use conditional independence (CI) tests to recover the skeleton of the DAG
+    (undirected edges)
+  - Then orient edges
 
-- **Input**: dataset $\mathcal{D}$, CI test (e.g., partial correlation,
-  $G^2$-test)
+- **Input**:
+  - Dataset $\mathcal{D}$
+  - CI test (e.g., partial correlation, $G^2$-test)
+
 - **Output**: a CPDAG representing the Markov equivalence class
 
-- **Assumes**:
-  - Causal sufficiency (no hidden confounders)
-  - Faithfulness
-  - Correct CI tests
+- **Assumptions**:
+  - Causal sufficiency: no hidden confounders affect observed variables
+  - Faithfulness: the true causal structure exactly reflects all conditional
+    independencies in the data
+  - Correct CI tests: your test accurately identifies independencies
+
+- **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
+  degree of the true DAG
 
 // - **Implementation**:
 // - Use `gCastle.pc()` to run PC algorithm on your data
@@ -523,17 +538,14 @@ mindmap
 
 - **Steps**:
   1. Start from a fully connected undirected graph over $X_1, \dots, X_n$
-  2. For each pair $(X_i, X_j)$, test $X_i \perp X_j \mid S$ for subsets $S$
+  2. For each pair $(X_i, X_j)$, test $X_i \perp X_j | S$ for subsets $S$
      of increasing size
      - If independence found, remove the edge and record the _separating set_
        $S_{ij}$
-  3. Identify **v-structures**: for any unshielded triple $X_i - X_k - X_j$, if
+  3. Identify _v-structures_: for any unshielded triple $X_i - X_k - X_j$, if
      $X_k \notin S_{ij}$ then orient as $X_i \to X_k \leftarrow X_j$
-  4. Apply **orientation rules** (Meek) to propagate directions without
+  4. Apply _orientation rules_ (Meek) to propagate directions without
      creating new v-structures or cycles
-
-- **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
-  degree of the true DAG
 
 * PC Algorithm: Example
 
@@ -545,7 +557,7 @@ mindmap
   - $S \not\perp C$
   - $S \not\perp T$
   - $T \not\perp C$
-  - $S \perp C \mid T$ $\Rightarrow$ separating set $\{T\}$
+  - $S \perp C | T$ $\Rightarrow$ separating set $\{T\}$
 
 - **Conclusion**:
   - Remove edge $S - C$
@@ -616,7 +628,7 @@ digraph PCExample {
 - **Common scores**:
   - **BIC** (Bayesian Information Criterion):
     $$
-    S(G) = \log \Pr(\mathcal{D} \mid G, \hat{\theta}) - \frac{k}{2}\log N
+    S(G) = \log \Pr(\mathcal{D} | G, \hat{\theta}) - \frac{k}{2}\log N
     $$
     where $k$ = number of parameters, $N$ = sample size
   - **BDeu** (Bayesian Dirichlet equivalent uniform)
@@ -756,7 +768,7 @@ digraph PCExample {
 
 - **Goal**: minimize prediction error
 - **Assumes**: i.i.d. data
-- Optimizes $\Pr(Y \mid X)$
+- Optimizes $\Pr(Y | X)$
 - Blind to arrow direction
 - Fails under shift
 
@@ -773,7 +785,7 @@ digraph PCExample {
 
 - **Goal**: recover $G$
 - **Assumes**: structural model
-- Targets $\Pr(Y \mid do(X))$
+- Targets $\Pr(Y | do(X))$
 - Edge directions matter
 - Stable under shift
 
@@ -806,7 +818,7 @@ digraph PCExample {
   2. **Reverse chain**: $Z \to Y \to X$
   3. **Common cause**: $X \leftarrow Y \rightarrow Z$
 
-- All imply $X \perp Z \mid Y$ and are **indistinguishable** from observational
+- All imply $X \perp Z | Y$ and are **indistinguishable** from observational
   data
 
 - **Implication**: no matter how much data you collect, you cannot identify
@@ -850,7 +862,7 @@ digraph C3 {
 ::::
 :::
 
-- **Key insight**: All three imply $X \perp Z \mid Y$
+- **Key insight**: All three imply $X \perp Z | Y$
   - Observational distribution identical
 
 - **Causal implications are very different**:
