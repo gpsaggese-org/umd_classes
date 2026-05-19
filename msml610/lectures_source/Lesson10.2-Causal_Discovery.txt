@@ -295,7 +295,7 @@ digraph PathCancellation {
 // - 2017, Uhler et al., "Geometries of faithfulness in graphical models"
 //   https://arxiv.org/abs/1608.00191
 
-* Practical Challenges: Data and Algorithm
+* Practical Challenges for Causal Discovery
 
 - **Sample complexity**:
   - Causal discovery from data is sample-intensive
@@ -304,39 +304,50 @@ digraph PathCancellation {
   - Small sample sizes lead to high error rates in independence tests
 
 - **Hidden confounders**:
-  - Most algorithms assume causal sufficiency (all confounders are measured),
-    which rarely holds in practice
-  - Unmeasured variables break the core assumption of causal discovery algorithms
+  - Algorithms assume causal sufficiency (all confounders are measured), rarely
+    true
+  - Unmeasured variables break core assumptions
   - Create spurious edges (false associations) in the learned graph
   - Cause incorrect edge directions
 
-- **Selection bias**: sampling mechanism depends on variables of interest
-  - Non-random sampling introduces systematic errors
-  - When the sampling mechanism itself depends on the variables you're studying,
-    it creates artificial associations
-  - Example: Hospitals see sicker patients (selection bias toward severe cases),
-    so treatment and outcome appear more associated than they would in the
-    general population
+- **Selection bias**:
+  - Sampling mechanism depends on studied variables, creating artificial
+    associations
+  - Non-random sampling introduces errors
+  - E.g., hospitals see sicker patients (selection bias toward severe cases),
+    so treatment and outcome appear more associated than in the general
+    population
 
-- **Finite-sample faithfulness**: weak dependencies appear as independencies
-  - Statistical power drops rapidly with conditioning set size
-  - Absence of evidence as evidence of absence
+- **Finite-sample faithfulness**:
+  - Weak dependencies appear as independencies
+  - Statistical power drops with larger conditioning sets
+  - "Absence of evidence" seen as "evidence of absence"
 
-* Practical Challenges: Structure and Computation
+* Practical Challenges for Causal Discovery
 
-- **Temporal information often ignored**: despite time being the strongest
-  causal prior
-  - Some algorithms (Granger-causality, DYNOTEARS) exploit temporal order
+- **Temporal information often ignored**
+    Time is one of the strongest causal signals, but most discovery
+    algorithms ignore temporal ordering
+  - Some algorithms (e.g., Granger-causality, DYNOTEARS) exploit temporal order
 
-- **Non-stationarity and heterogeneity**: distribution shifts across
-  subpopulations violate i.i.d. assumptions
+- **Non-stationarity and heterogeneity**
+  - Real-world data rarely satisfies the i.i.d. assumption across populations and
+    time
+  - Non-stationarity: statistical properties change over time
+  - Heterogeneity: different subpopulations have different causal structures
+  - Both violate the foundational assumptions most discovery algorithms rely on
 
-- **Computational complexity**: DAG space grows super-exponentially
-  $$|\{\text{DAGs over } n \text{ nodes}\}| \approx 2^{O(n^2)}$$
-  - PC algorithm: $O(n^q)$ where $q$ is maximum degree
+- **Computational complexity**:
+  - DAG space grows super-exponentially
+    $$|\{\text{DAGs over } n \text{ nodes}\}| \approx 2^{O(n^2)}$$
+  - PC algorithm: $O(n^q)$ where $q$ is maximum graph degree
   - Score-based search is NP-hard in general
+  - Practical implication: exact discovery is infeasible beyond small graphs
 
-- **Bottom line**: discovery generates _candidate hypotheses_, not ground truth
+- **Conclusion**:
+  - Discovery generates _candidate hypotheses_, not ground truth
+  - Requires domain validation and additional evidence
+  - No algorithm can definitively resolve observational causal questions alone
 
 # ##############################################################################
 # When to Use Discovery vs. Domain Knowledge
@@ -352,7 +363,7 @@ digraph PathCancellation {
 ## Discovery as Hypothesis Generation
 ## #############################################################################
 
-* Discovery vs. Domain Knowledge
+* Discovery vs Domain Knowledge
 
 - **Question**: When should we _run an algorithm_ vs _ask an expert_?
 
@@ -371,23 +382,19 @@ digraph PathCancellation {
 
 * Discovery as Hypothesis Generation
 
-- **Discovery algorithms output *candidate* DAGs, not truth**
+- Discovery algorithms are a hypothesis generator, not a truth finder
   - Output depends on assumptions that may not hold
   - Multiple DAGs in the equivalence class are equally compatible
 
 - Use discovery to:
-  - Generate **plausible structures** to examine
-  - Highlight **surprising edges** worth investigating
-  - Flag **missing confounders** (variables with many high-correlation edges)
+  - Generate _plausible structures_ to examine
+  - Highlight _surprising edges_ worth investigating
+  - Flag _missing confounders_ (variables with many high-correlation edges)
 
 - Do _not_ use discovery to:
   - Make final policy decisions without expert review
   - Replace RCTs for treatment-effect estimation
   - Claim causation from purely observational pipelines
-
-- **Example**: Sachs et al. (2005) reconstructed a known protein-signaling
-  network from single-cell data $\rightarrow$ validated discovery as a
-  _scientific_ tool
 
 ## #############################################################################
 ## Combining Discovery with Domain Knowledge
