@@ -42,7 +42,7 @@ except ImportError:
 import helpers.hmodule as hmodule
 
 hmodule.install_module_if_not_present(
-    ["networkx", "fklearn"],
+    ["networkx"],
     use_activate=True,
     use_sudo=False,
     venv_path="/opt/venv",
@@ -68,24 +68,19 @@ hnotebo.set_all_loggers_to_print()
 
 # %% [markdown]
 # **Goal**:
-# - Understand why causal direction matters for decision-making
-# - See the fundamental gap between correlation and causation
 # - Recognize that identical observational patterns can hide opposite causal implications
-
-# %% [markdown]
+#
 # **Plots**:
 # - Two scatter plots side-by-side showing identical correlation patterns
 # - Both show X and Y with strong correlation (r = 0.8 to 0.99)
 # - Left plot labeled: "Chain: X → Y" with annotation "(if we intervene on X, Y changes)"
 # - Right plot labeled: "Reverse: Z → Y → X" with annotation "(intervening on X has no effect)"
 # - Summary annotations showing decision scenarios
-
-# %% [markdown]
+#
 # **Parameters**:
 # - `Correlation (r)`: Strength of correlation between variables (0.3 to 0.99)
 # - `Mode`: Toggle between observational vs. interventional reasoning
-
-# %% [markdown]
+#
 # **Key observations**:
 # - Prediction and causation require fundamentally different reasoning
 # - Correlation alone cannot determine causal direction
