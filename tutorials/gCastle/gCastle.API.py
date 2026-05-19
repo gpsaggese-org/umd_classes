@@ -28,7 +28,8 @@
 # ## Setup
 
 # %%
-# !python -m "import pandas; print(pandas)"
+# #!python -m "import pandas; print(pandas)"
+# !python -c "import sys; print(sys.executable)"
 
 # %%
 import helpers.hmodule as hmodule
