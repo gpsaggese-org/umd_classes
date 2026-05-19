@@ -26,7 +26,7 @@ from tqdm import tqdm
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm_cli as hllmcli
-import helpers.hmarkdown_slide_iterator as hmsiterite
+import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hparser as hparser
 
 _LOG = logging.getLogger(__name__)
@@ -52,8 +52,8 @@ def _read_prompt_file(rule_path: str) -> str:
 
 
 def _extract_slides(
-    items: List[hmsiterite.SlideItem],
-) -> Tuple[List[hmsiterite.SlideItem], List[str]]:
+    items: List[hmaslite.SlideItem],
+) -> Tuple[List[hmaslite.SlideItem], List[str]]:
     """
     Extract slides and their string content from parsed items.
 
@@ -134,7 +134,7 @@ def _process_slides_with_llm(
 
 
 def _reconstruct_file(
-    items: List[hmsiterite.SlideItem],
+    items: List[hmaslite.SlideItem],
     transformed_slides: List[str],
 ) -> str:
     """
@@ -152,7 +152,7 @@ def _reconstruct_file(
         if item["type"] == "slide" and slide_idx < len(transformed_slides):
             item["content"] = transformed_slides[slide_idx].split("\n")
             slide_idx += 1
-    reconstructed = hmsiterite.reassemble_from_items(items)
+    reconstructed = hmaslite.reassemble_from_items(items)
     _LOG.info("Reconstructed file with %d transformed slides", slide_idx)
     return reconstructed
 
@@ -238,7 +238,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     _LOG.info("Processing input file: %s", args.input)
     _LOG.info("Using rule file: %s", args.rule)
     prompt = _read_prompt_file(args.rule)
-    items = list(hmsiterite.read_lesson_file(args.input))
+    items = list(hmaslite.read_lesson_file(args.input))
     _LOG.debug("Read %d items from input file", len(items))
     _, slide_texts = _extract_slides(items)
     hdbg.dassert_lt(

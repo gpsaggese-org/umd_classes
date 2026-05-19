@@ -44,9 +44,7 @@ class TestLessonRoundTrip(hunitest.TestCase):
         # Parse the lesson file.
         items = list(hmaslite.read_lesson_file(lesson_file))
         # Reassemble from parsed items.
-        reassembled_content = hmaslite.reassemble_from_items(
-            items
-        )
+        reassembled_content = hmaslite.reassemble_from_items(items)
         # Remove trailing empty lines from reassembled content.
         reassembled_content = reassembled_content.rstrip() + "\n"
         # Verify round-trip: reassembled must match original.

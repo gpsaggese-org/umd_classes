@@ -1,4 +1,5 @@
-"""Utilities for causal discovery notebook.
+"""
+Utilities for causal discovery notebook.
 
 Import as:
 

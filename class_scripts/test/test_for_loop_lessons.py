@@ -29,6 +29,7 @@ def _create_test_structure(
     os.makedirs(subdir, exist_ok=True)
     return class_dir, scratch_dir
 
+
 def _create_test_structure_with_multiple_files(
     self,
     test_files: List[str],
@@ -173,7 +174,7 @@ class Test_expand_lecture_range(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         scratch_dir = self.get_scratch_space()
         start_lesson = "01.1"
         end_lesson = "02.1"
@@ -196,7 +197,7 @@ class Test_expand_lecture_range(hunitest.TestCase):
         """
         # Prepare inputs.
         test_files = ["Lesson01.1-Intro.txt"]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         scratch_dir = self.get_scratch_space()
         start_lesson = "01.1"
         end_lesson = "01.1"
@@ -219,7 +220,7 @@ class Test_expand_lecture_range(hunitest.TestCase):
         """
         # Prepare inputs.
         test_files = ["Lesson01.1-Intro.txt"]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         start_lesson = "99.1"
         end_lesson = "99.9"
         # Run test and check output.
@@ -268,7 +269,7 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         is_range = True
         patterns_or_range = ["01.1", "02.1"]
         expected_count = 3
@@ -285,7 +286,7 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         is_range = False
         patterns_or_range = ["01*"]
         expected_count = 2
@@ -302,7 +303,7 @@ class Test_find_lecture_files(hunitest.TestCase):
             "Lesson01.2-BigData.txt",
             "Lesson02.1-Git.txt",
         ]
-        class_dir = _create_test_structure_with_multiple_files(self,test_files)
+        class_dir = _create_test_structure_with_multiple_files(self, test_files)
         is_range = False
         patterns_or_range = ["01*", "02*"]
         expected_count = 3
@@ -314,7 +315,7 @@ class Test_find_lecture_files(hunitest.TestCase):
         Test that invalid range length raises `AssertionError`.
         """
         # Prepare inputs.
-        class_dir = _create_test_structure_with_multiple_files(self,[])
+        class_dir = _create_test_structure_with_multiple_files(self, [])
         is_range = True
         patterns_or_range = ["01.1", "02.1", "03.1"]
         # Run test and check output.
@@ -364,8 +365,8 @@ class Test_generate_tex(hunitest.TestCase):
         Test `_generate_tex()` with basic inputs generates correct command.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "data605", "lectures_tex"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_tex"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -378,8 +379,8 @@ class Test_generate_tex(hunitest.TestCase):
         Test `_generate_tex()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "data605", "lectures_tex"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_tex"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -411,8 +412,8 @@ class Test_generate_pdf(hunitest.TestCase):
         Test `_generate_pdf()` with basic inputs generates correct command.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -441,8 +442,8 @@ class Test_generate_pdf(hunitest.TestCase):
         Test `_generate_pdf()` with limit parameter includes limit in command.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -543,8 +544,8 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         Fast test: `_generate_pdf()` executes successfully with minimal source file.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
@@ -563,8 +564,8 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         Fast test: `_generate_pdf()` with limit parameter completes successfully.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson02.1-Advanced.txt")
         source_name = "Lesson02.1-Advanced.txt"
@@ -602,8 +603,8 @@ class Test_generate_tex_e2e(hunitest.TestCase):
         Fast test: `_generate_tex()` executes successfully with minimal source file.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "data605", "lectures_tex"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_tex"
         )
         source_path = os.path.join(scratch_dir, "Lesson03.1-Distributed.txt")
         source_name = "Lesson03.1-Distributed.txt"
@@ -637,8 +638,8 @@ class Test_generate_script_e2e(hunitest.TestCase):
         Fast test: `_generate_script()` executes successfully with minimal source file.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "data605", "lectures_script"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_script"
         )
         source_path = os.path.join(scratch_dir, "Lesson04.1-Scripts.txt")
         source_name = "Lesson04.1-Scripts.txt"
@@ -674,8 +675,8 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         Fast test: Process single file with `generate_pdf` action.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Test.txt")
         source_name = "Lesson01.1-Test.txt"
@@ -726,8 +727,8 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         Fast test: Process file with `generate_script` action.
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "data605", "lectures_script"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "data605", "lectures_script"
         )
         source_path = os.path.join(scratch_dir, "Lesson03.1-Script.txt")
         source_name = "Lesson03.1-Script.txt"
@@ -799,8 +800,8 @@ class Test_process_lecture_file_with_generate_toc(hunitest.TestCase):
         - Returns None
         """
         # Prepare inputs.
-        class_dir, scratch_dir = _create_test_structure(self,
-            "msml610", "lectures"
+        class_dir, scratch_dir = _create_test_structure(
+            self, "msml610", "lectures"
         )
         source_path = os.path.join(scratch_dir, "Lesson01.1-Intro.txt")
         source_name = "Lesson01.1-Intro.txt"
