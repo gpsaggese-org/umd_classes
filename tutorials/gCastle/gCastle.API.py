@@ -28,19 +28,6 @@
 # ## Setup
 
 # %%
-# #!python -m "import pandas; print(pandas)"
-# !python -c "import sys; print(sys.executable)"
-
-# %%
-import helpers.hmodule as hmodule
-hmodule.install_module_if_not_present(
-    "gcastle",
-    use_activate=True,
-    use_sudo=False,
-    venv_path="/opt/venv",
-)
-
-# %%
 # Load extension for auto-reload on edit.
 # %load_ext autoreload
 # %autoreload 2
@@ -49,11 +36,44 @@ hmodule.install_module_if_not_present(
 import logging
 import warnings
 
-import tutorials.gCastle.gCastle_utils as tgcasti
-
 logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
+
+# %%
+# #!pip install gcastle
+
+# %%
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     "castle",
+#     package_name="gcastle",
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
+# %%
+import castle
+print(castle.__name__)
+print("Version:", castle.__version__)
+
+# %%
+dir(castle)
+
+# %%
+# from castle.algorithms import PC
+
+# from castle.algorithms import GES
+
+# from castle.algorithms import GOLEM
+
+# from castle.algorithms import Notears
+
+# from castle.algorithms import DAG_GNN
+
+# %%
+import tutorials.gCastle.gCastle_utils as tgcasti
 
 # %% [markdown]
 # ## Part 1: Data Generation

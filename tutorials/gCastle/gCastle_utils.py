@@ -13,15 +13,16 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
-from gcastle.datasets import IIDSimulation, DAG
-from gcastle.estimators import (
+# TODO(ai_gp): Use import
+from castle.datasets import IIDSimulation, DAG
+from castle.estimators import (
     PC,
     GES,
     GOLEM,
     NOTEARS,
     DAG_GNN,
 )
-from gcastle.metrics import MetricsDAG
+from castle.metrics import MetricsDAG
 
 import helpers.hdbg as hdbg
 
