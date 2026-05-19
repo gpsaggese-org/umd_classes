@@ -1,0 +1,71 @@
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+.jupyter/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Docker
+docker_build.sh
+docker_push.sh
+docker_clean.sh
+docker_exec.sh
+docker_cmd.sh
+docker_bash.sh
+docker_jupyter.sh
+docker_name.sh
+Dockerfile.*
+
+# Project-specific
+.pytest_cache/
+*.log
+*.tmp
+*.cache
+.coverage
+htmlcov/
