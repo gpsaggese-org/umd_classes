@@ -53,15 +53,14 @@ class TestLessonRoundTrip(hunitest.TestCase):
             reassembled_content,
         )
 
-    def test_lesson_files_round_trip(self) -> None:
+    def helper_lesson_files_round_trip(self, lesson_dir: str) -> None:
         """
-        Test round-trip parsing of all Lesson*.txt files in msml610/lectures_source/.
+        Test round-trip parsing of all Lesson*.txt files in `lesson_dir/`.
 
         Reads each lesson file, parses it, reassembles it, and verifies the
         reassembled content matches the original byte-for-byte.
         """
         # Find all lesson files.
-        lesson_dir = "msml610/lectures_source"
         lesson_pattern = os.path.join(lesson_dir, "Lesson*.txt")
         lesson_files = sorted(glob.glob(lesson_pattern))
         hdbg.dassert_ne(
@@ -73,3 +72,11 @@ class TestLessonRoundTrip(hunitest.TestCase):
         # Test each lesson file.
         for lesson_file in lesson_files:
             self.helper_test_round_trip(lesson_file)
+
+    def test_data605(self) -> None:
+        lesson_dir = "data605/lectures_source"
+        self.helper_lesson_files_round_trip(lesson_dir)
+
+    def test_msml610(self) -> None:
+        lesson_dir = "msml610/lectures_source"
+        self.helper_lesson_files_round_trip(lesson_dir)
