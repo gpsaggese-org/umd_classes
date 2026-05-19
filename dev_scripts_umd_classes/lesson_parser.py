@@ -14,7 +14,7 @@ import logging
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
-import helpers.hmarkdown_lesson_iterator as hmaleite
+import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hparser as hparser
 
 _LOG = logging.getLogger(__name__)
@@ -72,7 +72,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         input_file,
     )
     # Iterate through items in the lesson file.
-    items = hmaleite.read_lesson_file(input_file)
+    items = hmaslite.read_lesson_file(input_file)
     output_lines = []
     item_count = 0
     for item in items:

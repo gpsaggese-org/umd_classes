@@ -10,7 +10,7 @@ import os
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hunit_test as hunitest
-import helpers.hmarkdown_lesson_iterator as hmaleite
+import helpers.hmarkdown_slide_iterator as hmaslite
 
 import logging
 
@@ -42,9 +42,9 @@ class TestLessonRoundTrip(hunitest.TestCase):
         # Remove trailing empty lines before round-trip test.
         original_content = original_content.rstrip() + "\n"
         # Parse the lesson file.
-        items = list(hmaleite.read_lesson_file(lesson_file))
+        items = list(hmaslite.read_lesson_file(lesson_file))
         # Reassemble from parsed items.
-        reassembled_content = hmaleite.reassemble_from_items(
+        reassembled_content = hmaslite.reassemble_from_items(
             items
         )
         # Remove trailing empty lines from reassembled content.

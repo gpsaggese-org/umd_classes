@@ -1,10 +1,10 @@
-Create a script apply_claude_rule.py
+Create a script lesson/for_loop_slides.py
 
---rule rule.md
 --input ./msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+--prompt rule.md
 
-that reads the input slides with hmarkdown_lesson_iterator
-and transform each slide with hllm_cli.py
+that reads the input slides with hmarkdown_slide_iterator and transform each
+slide with hllm_cli.py using _process_batches from hllm_cli.py
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications
