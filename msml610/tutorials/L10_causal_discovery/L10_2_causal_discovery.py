@@ -7,7 +7,11 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
+#   kernelspec:
+#     display_name: Python 3 (ipykernel)
+#     language: python
+#     name: python3
 # ---
 
 # %% [markdown]
@@ -19,18 +23,45 @@
 # structure from observational data.
 
 # %%
-# System libraries.
+# %load_ext autoreload
+# %autoreload 2
+
 import logging
 
-# Third party libraries.
+from matplotlib import pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+
+try:
+    from IPython.display import display
+except ImportError:
+    display = print  # type: ignore
 
 # %%
+import helpers.hmodule as hmodule
+
+hmodule.install_module_if_not_present(
+    ["networkx", "fklearn"],
+    use_activate=True,
+    use_sudo=False,
+    venv_path="/opt/venv",
+)
+
+# %%
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebo
+
+import msml610_utils as ut
 import L10_2_causal_discovery_utils as utils
 
-# %%
-# Local utility.
+ut.config_notebook()
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
-utils.init_logger(_LOG)
+hnotebo.set_logger_to_print(_LOG)
+hnotebo.set_all_loggers_to_print()
 
 # %% [markdown]
 # # Cell 1: The Core Problem: Correlation vs. Causation

@@ -174,16 +174,20 @@ digraph Discovery {
 - **Question**: can observational data distinguish every DAG?
 
 - **Answer**: no. Different DAGs encode identical conditional independencies
+  entire equivalence class
 
+// TODO(gp): Improve layout
+::: columns
+:::: {.column width=50%}
 - **Markov equivalent DAGs** share the same:
   - Skeleton (undirected edges between nodes)
   - v-structures (colliders $X \to Z \leftarrow Y$)
 
 - **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph) represents the
-  entire equivalence class—the best observational algorithms can return
 
-// TODO(gp): Improve layout
-::: columns
+- Both imply $X \perp Z \mid Y$
+- Observational data cannot distinguish them
+::::
 :::: {.column width=50%}
 Chain: $X \to Y \to Z$
 ```graphviz
@@ -193,8 +197,7 @@ digraph Chain1 {
     X -> Y -> Z;
 }
 ```
-::::
-:::: {.column width=50%}
+
 Reverse: $Z \to Y \to X$
 ```graphviz
 digraph Chain2 {
@@ -205,8 +208,6 @@ digraph Chain2 {
 ```
 ::::
 :::
-
-- Both imply $X \perp Z \mid Y$; observational data cannot distinguish them
 
 * Identifiability: Paths to Full Recovery
 

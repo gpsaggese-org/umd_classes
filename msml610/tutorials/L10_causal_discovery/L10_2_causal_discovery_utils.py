@@ -30,7 +30,9 @@ _LOG = logging.getLogger(__name__)
 
 
 def init_logger(notebook_log: logging.Logger) -> None:
-    """Initialize logger for the notebook."""
+    """
+    Initialize logger for the notebook.
+    """
     hnotebo.config_notebook()
     hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
     hnotebo.set_logger_to_print(notebook_log)
@@ -38,29 +40,30 @@ def init_logger(notebook_log: logging.Logger) -> None:
     _LOG = hnotebo.set_logger_to_print(_LOG)
 
 
-# ####################...
+# #############################################################################
 # Cell 1: Correlation vs. Causation
-# ####################...
+# #############################################################################
 
 
 def cell1_correlation_vs_causation():
-    """Interactive widget showing correlation vs causation problem."""
+    """
+    Interactive widget showing correlation vs causation problem.
+    """
 
     def plot_causal_structures(correlation_strength, _intervention_mode):
-        """Plot two DAGs with identical correlation but different causation."""
+        """
+        Plot two DAGs with identical correlation but different causation.
+        """
         _, axes = plt.subplots(1, 2, figsize=(14, 5))
-
         # Generate correlated data.
         np.random.seed(42)
         n_samples = 200
         noise = np.random.normal(0, 1 - correlation_strength, n_samples)
         X = np.random.normal(0, 1, n_samples)
-
         # Chain: X -> Y.
         Y_chain = correlation_strength * X + noise
         # Reverse: Z -> Y -> X (same correlation structure).
         Y_reverse = correlation_strength * X + noise
-
         # Plot Chain: X -> Y.
         axes[0].scatter(X, Y_chain, alpha=0.6, s=30, color="steelblue")
         axes[0].set_xlabel("X", fontsize=12)
@@ -76,7 +79,6 @@ def cell1_correlation_vs_causation():
             bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
             fontsize=10,
         )
-
         # Plot Reverse: Z -> Y -> X (same correlation).
         axes[1].scatter(X, Y_reverse, alpha=0.6, s=30, color="coral")
         axes[1].set_xlabel("X", fontsize=12)
@@ -92,15 +94,12 @@ def cell1_correlation_vs_causation():
             bbox=dict(boxstyle="round", facecolor="lightyellow", alpha=0.5),
             fontsize=10,
         )
-
         for ax in axes:
             ax.set_xlim(-4, 4)
             ax.set_ylim(-4, 4)
             ax.grid(True, alpha=0.3)
-
         plt.tight_layout()
         plt.show()
-
         # Summary box.
         print("\n" + "=" * 60)
         print(
@@ -120,7 +119,6 @@ def cell1_correlation_vs_causation():
         options=["Observational", "Interventional"],
         description="Mode:",
     )
-
     output = Output()
 
     def update(change):
@@ -130,7 +128,6 @@ def cell1_correlation_vs_causation():
 
     correlation_slider.observe(update, names="value")
     mode_toggle.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -142,64 +139,55 @@ def cell1_correlation_vs_causation():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 2: Markov Equivalence
-# ####################...
-
-
+# #############################################################################
 def cell2_markov_equivalence():
-    """Show three indistinguishable DAG structures."""
+    """
+    Show three indistinguishable DAG structures.
+    """
 
     def plot_markov_equivalence(sample_size):
-        """Plot three Markov equivalent structures."""
+        """
+        Plot three Markov equivalent structures.
+        """
         fig = plt.figure(figsize=(15, 8))
-
         # Create 3 subplots for DAGs + CI structure.
         gs = fig.add_gridspec(3, 3, hspace=0.4, wspace=0.3)
-
         # Generate data from one structure (chain).
         np.random.seed(42)
         Z = np.random.normal(0, 1, sample_size)
         Y = 0.8 * Z + np.random.normal(0, 0.5, sample_size)
         X = 0.8 * Y + np.random.normal(0, 0.5, sample_size)
-
         # Compute correlations.
         corr_XZ = np.corrcoef(X, Z)[0, 1]
-
         # Compute partial correlation X-Z given Y using residuals.
         reg_X_Y = linregress(Y, X)  # type: ignore
         residuals_X = X - (reg_X_Y.slope * Y + reg_X_Y.intercept)  # type: ignore
         reg_Z_Y = linregress(Y, Z)  # type: ignore
         residuals_Z = Z - (reg_Z_Y.slope * Y + reg_Z_Y.intercept)  # type: ignore
         corr_XZ_given_Y = np.corrcoef(residuals_X, residuals_Z)[0, 1]
-
         # Plot three DAG structures.
         structures = [
             ("Chain: X → Y → Z", [(0, 1), (1, 2)]),
             ("Reverse: Z → Y → X", [(2, 1), (1, 0)]),
             ("Common Cause: X ← Y → Z", [(1, 0), (1, 2)]),
         ]
-
         for idx, (title, edges) in enumerate(structures):
             ax = fig.add_subplot(gs[0, idx])
-
             # Draw simple DAG.
             G = nx.DiGraph()
             G.add_nodes_from([0, 1, 2])
             G.add_edges_from(edges)
-
             pos = {0: (0, 0), 1: (1, 1), 2: (2, 0)}
             node_labels = {0: "X", 1: "Y", 2: "Z"}
-
             nx.draw_networkx_nodes(
                 G, pos, node_color="lightblue", node_size=500, ax=ax
             )
             nx.draw_networkx_edges(G, pos, ax=ax, arrowsize=20, width=2)
             nx.draw_networkx_labels(G, pos, node_labels, font_size=12, ax=ax)
-
             ax.set_title(title, fontsize=12, fontweight="bold")
             ax.axis("off")
-
         # Plot CI structure.
         ax_ci = fig.add_subplot(gs[1, :])
         ci_text = (
@@ -218,7 +206,6 @@ def cell2_markov_equivalence():
             transform=ax_ci.transAxes,
         )
         ax_ci.axis("off")
-
         # Plot correlation and conditional correlation.
         ax_corr = fig.add_subplot(gs[2, 0])
         ax_corr.bar(
@@ -232,7 +219,6 @@ def cell2_markov_equivalence():
         ax_corr.set_title("Marginal Correlation", fontsize=11, fontweight="bold")
         ax_corr.set_ylim(-1, 1)
         ax_corr.grid(True, alpha=0.3, axis="y")
-
         ax_cond = fig.add_subplot(gs[2, 1])
         ax_cond.bar(
             ["All 3 structures"],
@@ -247,7 +233,6 @@ def cell2_markov_equivalence():
         )
         ax_cond.set_ylim(-1, 1)
         ax_cond.grid(True, alpha=0.3, axis="y")
-
         ax_n = fig.add_subplot(gs[2, 2])
         ax_n.text(
             0.5,
@@ -260,7 +245,6 @@ def cell2_markov_equivalence():
             transform=ax_n.transAxes,
         )
         ax_n.axis("off")
-
         plt.suptitle(
             "Markov Equivalence: Three Indistinguishable Structures",
             fontsize=14,
@@ -285,37 +269,34 @@ def cell2_markov_equivalence():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 3: Causal Effects via Intervention
-# ####################...
-
-
+# #############################################################################
 def cell3_causal_effects():
-    """Show why edge direction determines causal effect."""
+    """
+    Show why edge direction determines causal effect.
+    """
 
     def plot_interventions(intervention_strength, sample_size):
-        """Plot counterfactual outcomes for three structures."""
+        """
+        Plot counterfactual outcomes for three structures.
+        """
         fig, axes = plt.subplots(1, 3, figsize=(15, 4))
-
         # Simulate three structures with intervention.
         np.random.seed(42)
-
         # Chain: X -> Y -> Z.
         X_baseline = np.random.normal(0, 1, sample_size)
         X_intervened = np.ones(sample_size) * intervention_strength
         Y_chain = 0.8 * X_intervened + np.random.normal(0, 0.3, sample_size)
         Z_chain = 0.8 * Y_chain + np.random.normal(0, 0.3, sample_size)
         effect_chain = np.mean(Z_chain) - 0  # baseline at 0.
-
         # Reverse: Z -> Y -> X (no effect on Z).
         effect_reverse = 0.0  # Intervening on X doesn't affect Z.
-
         # Common Cause: Y confounds both X and Z.
         Y_confound = np.random.normal(0, 1, sample_size)
         X_conf = 0.8 * Y_confound + np.random.normal(0, 0.3, sample_size)
         Z_conf = 0.8 * Y_confound + np.random.normal(0, 0.3, sample_size)
         effect_common = 0.0  # No direct effect on Z.
-
         effects = [effect_chain, effect_reverse, effect_common]
         titles = [
             "Chain: X → Y → Z\n(LARGE effect)",
@@ -323,7 +304,6 @@ def cell3_causal_effects():
             "Common Cause: Y confounds\n(NO direct effect)",
         ]
         colors = ["green", "red", "orange"]
-
         for idx, (ax, title, effect, color) in enumerate(
             zip(axes, titles, effects, colors)
         ):
@@ -347,7 +327,6 @@ def cell3_causal_effects():
                 fontsize=11,
                 fontweight="bold",
             )
-
         plt.suptitle(
             "Why Edge Direction Matters: Same Correlation, Different Effects",
             fontsize=14,
@@ -355,7 +334,6 @@ def cell3_causal_effects():
         )
         plt.tight_layout()
         plt.show()
-
         print("\n" + "=" * 70)
         print(
             "KEY INSIGHT: Edge direction determines whether an intervention works."
@@ -381,7 +359,6 @@ def cell3_causal_effects():
 
     intervention_slider.observe(update, names="value")
     sample_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -393,18 +370,19 @@ def cell3_causal_effects():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 4: PC Algorithm
-# ####################...
-
-
+# #############################################################################
 def cell4_pc_algorithm():
-    """Show PC algorithm step-by-step."""
+    """
+    Show PC algorithm step-by-step.
+    """
 
     def plot_pc_steps(alpha_threshold, test_type, speed):
-        """Animate PC algorithm on small DAG."""
+        """
+        Animate PC algorithm on small DAG.
+        """
         fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(14, 6))
-
         # Simplified visualization of PC steps.
         steps = [
             ("Step 1: Test X1 ⊥ X2", True, "Test 1/6"),
@@ -412,33 +390,27 @@ def cell4_pc_algorithm():
             ("Step 3: Orient V-structures", None, "Orientation"),
             ("Step 4: Final CPDAG", None, "Complete"),
         ]
-
         for step_idx, (step_desc, result, step_label) in enumerate(steps):
             ax_left.clear()
-
             # Draw evolving graph structure.
             G = nx.Graph()
             G.add_nodes_from([1, 2, 3])
-
             if step_idx == 0:
                 G.add_edges_from([(1, 2), (1, 3), (2, 3)])
             elif step_idx == 1:
                 G.add_edges_from([(1, 3), (2, 3)])
             else:
                 G.add_edges_from([(1, 3), (2, 3)])
-
             pos = {1: (0, 0), 2: (2, 0), 3: (1, 1.5)}
             nx.draw_networkx_nodes(
                 G, pos, node_color="lightblue", node_size=600, ax=ax_left
             )
             nx.draw_networkx_edges(G, pos, ax=ax_left, width=2)
             nx.draw_networkx_labels(G, pos, font_size=12, ax=ax_left)
-
             ax_left.set_title(
                 "PC Algorithm Progression", fontsize=12, fontweight="bold"
             )
             ax_left.axis("off")
-
             # Right panel: Test details.
             ax_right.clear()
             test_text = (
@@ -460,7 +432,6 @@ def cell4_pc_algorithm():
             )
             ax_right.set_title("Current Test", fontsize=12, fontweight="bold")
             ax_right.axis("off")
-
         plt.suptitle(
             "The PC Algorithm: Learning from Conditional Independence Tests",
             fontsize=14,
@@ -468,7 +439,6 @@ def cell4_pc_algorithm():
         )
         plt.tight_layout()
         plt.show()
-
         print(
             "PC Algorithm: Sound in large sample limit, but CI tests are "
             "underpowered in finite samples."
@@ -502,7 +472,6 @@ def cell4_pc_algorithm():
     alpha_slider.observe(update, names="value")
     test_dropdown.observe(update, names="value")
     speed_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -514,41 +483,38 @@ def cell4_pc_algorithm():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 5: GES Score-Based Search
-# ####################...
-
-
+# #############################################################################
 def cell5_ges_algorithm():
-    """Show GES algorithm evolution."""
+    """
+    Show GES algorithm evolution.
+    """
 
     def plot_ges_search(sample_size, regularization):
-        """Plot GES search progress."""
+        """
+        Plot GES search progress.
+        """
         fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(14, 5))
-
         # Simulate BIC scores during search.
         iterations = np.arange(0, 15)
         bic_scores = -100 + 20 * np.sin(iterations / 3) - 0.5 * iterations
-
         # Left: DAG evolution.
         G = nx.DiGraph()
         G.add_nodes_from([1, 2, 3, 4])
         G.add_edges_from([(1, 2), (2, 3), (3, 4)])
-
         pos = {1: (0, 0), 2: (1, 0), 3: (2, 0), 4: (3, 0)}
         nx.draw_networkx_nodes(
             G, pos, node_color="lightblue", node_size=500, ax=ax_left
         )
         nx.draw_networkx_edges(G, pos, ax=ax_left, width=2, arrowsize=15)
         nx.draw_networkx_labels(G, pos, font_size=11, ax=ax_left)
-
         ax_left.set_title(
             f"Current DAG Structure\nN={sample_size}, Regularization={regularization:.2f}",
             fontsize=12,
             fontweight="bold",
         )
         ax_left.axis("off")
-
         # Right: BIC trajectory.
         ax_right.plot(
             iterations,
@@ -568,10 +534,8 @@ def cell5_ges_algorithm():
         )
         ax_right.grid(True, alpha=0.3)
         ax_right.legend()
-
         plt.tight_layout()
         plt.show()
-
         print(
             "GES: Forward phase adds edges, backward phase removes low-value edges. "
             "Greedy search can get stuck in local optima."
@@ -593,7 +557,6 @@ def cell5_ges_algorithm():
 
     sample_slider.observe(update, names="value")
     regularization_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -605,34 +568,32 @@ def cell5_ges_algorithm():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 6: LiNGAM Non-Gaussian
-# ####################...
-
-
+# #############################################################################
 def cell6_lingam_nongaussian():
-    """Show how non-Gaussianity enables full DAG recovery."""
+    """
+    Show how non-Gaussianity enables full DAG recovery.
+    """
 
     def plot_lingam(skewness, snr):
-        """Plot LiNGAM with non-Gaussian noise."""
+        """
+        Plot LiNGAM with non-Gaussian noise.
+        """
         fig = plt.figure(figsize=(15, 5))
         gs = fig.add_gridspec(1, 3, hspace=0.3, wspace=0.3)
-
         # Generate data with non-Gaussian noise.
         np.random.seed(42)
         n_samples = 200
-
         # Generate skewed noise.
         if skewness > 0:
             noise = np.random.exponential(scale=1, size=n_samples) - 1
             noise = noise * skewness / np.std(noise)
         else:
             noise = np.random.normal(0, 1, n_samples)
-
         X = np.random.normal(0, 1, n_samples) * np.sqrt(snr)
         Y = 0.8 * X + noise * np.sqrt(1 - snr)
         Z = 0.8 * Y + noise * np.sqrt(1 - snr)
-
         # Plot three scatter plots.
         for idx, (data_x, data_y, title) in enumerate(
             [(X, Y, "X → Y"), (Y, Z, "Y → Z"), (X, Z, "X → Z (indirect)")]
@@ -643,7 +604,6 @@ def cell6_lingam_nongaussian():
             ax.set_ylabel("Output", fontsize=10)
             ax.set_title(title, fontsize=11, fontweight="bold")
             ax.grid(True, alpha=0.3)
-
         plt.suptitle(
             "LiNGAM: Non-Gaussianity Reveals Causal Direction",
             fontsize=14,
@@ -651,7 +611,6 @@ def cell6_lingam_nongaussian():
         )
         plt.tight_layout()
         plt.show()
-
         # Jarque-Bera test for non-Gaussianity.
         jb_result = jarque_bera(noise)  # type: ignore
         print(
@@ -682,7 +641,6 @@ def cell6_lingam_nongaussian():
 
     skewness_slider.observe(update, names="value")
     snr_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -694,18 +652,19 @@ def cell6_lingam_nongaussian():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 7: Comparing Algorithms
-# ####################...
-
-
+# #############################################################################
 def cell7_algorithm_comparison():
-    """Compare PC, GES, and LiNGAM outputs."""
+    """
+    Compare PC, GES, and LiNGAM outputs.
+    """
 
     def plot_comparison(dataset_type, sample_size):
-        """Plot three algorithm outputs side-by-side."""
+        """
+        Plot three algorithm outputs side-by-side.
+        """
         fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-
         algorithms = [
             "PC (Constraint-Based)",
             "GES (Score-Based)",
@@ -713,28 +672,24 @@ def cell7_algorithm_comparison():
         ]
         edge_counts = [4, 5, 6]
         ambiguity = [2, 0, 0]
-
         for idx, (ax, algo, edges, ambig) in enumerate(
             zip(axes, algorithms, edge_counts, ambiguity)
         ):
             # Draw sample DAG.
             G = nx.DiGraph()
             G.add_nodes_from([1, 2, 3])
-
             if idx == 0:  # PC: mixed edges.
                 G.add_edges_from([(1, 2), (2, 3)])
             elif idx == 1:  # GES: all directed.
                 G.add_edges_from([(1, 2), (2, 3)])
             else:  # LiNGAM: full DAG with weights.
                 G.add_edges_from([(1, 2), (2, 3)])
-
             pos = {1: (0, 0), 2: (1, 1), 3: (2, 0)}
             nx.draw_networkx_nodes(
                 G, pos, node_color="lightblue", node_size=600, ax=ax
             )
             nx.draw_networkx_edges(G, pos, ax=ax, width=2, arrowsize=20)
             nx.draw_networkx_labels(G, pos, font_size=12, ax=ax)
-
             # Summary text.
             summary = (
                 f"{algo}\n"
@@ -751,10 +706,8 @@ def cell7_algorithm_comparison():
                 transform=ax.transAxes,
                 bbox=dict(boxstyle="round", facecolor="lightyellow", alpha=0.7),
             )
-
             ax.set_title(algo, fontsize=12, fontweight="bold")
             ax.axis("off")
-
         plt.suptitle(
             "Comparing Causal Discovery Algorithms",
             fontsize=14,
@@ -762,7 +715,6 @@ def cell7_algorithm_comparison():
         )
         plt.tight_layout()
         plt.show()
-
         print(
             "PC: Good for exploratory analysis.\n"
             "GES: More directed edges, assumes no hidden confounders.\n"
@@ -787,7 +739,6 @@ def cell7_algorithm_comparison():
 
     dataset_dropdown.observe(update, names="value")
     sample_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -799,19 +750,20 @@ def cell7_algorithm_comparison():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 8: Validating DAGs
-# ####################...
-
-
+# #############################################################################
 def cell8_validation():
-    """Show validation tests for discovered DAGs."""
+    """
+    Show validation tests for discovered DAGs.
+    """
 
     def plot_validation(alpha_threshold, confounder_strength):
-        """Plot validation dashboard."""
+        """
+        Plot validation dashboard.
+        """
         fig = plt.figure(figsize=(15, 5))
         gs = fig.add_gridspec(1, 3, hspace=0.3, wspace=0.3)
-
         # CI validation test results.
         ax1 = fig.add_subplot(gs[0, 0])
         tests = ["X⊥Z|Y", "X⊥W|Y", "Y⊥Z"]
@@ -824,7 +776,6 @@ def cell8_validation():
         ax1.set_xlabel("p-value", fontsize=10)
         ax1.set_title("CI Test Validation", fontsize=11, fontweight="bold")
         ax1.legend()
-
         # Placebo test result.
         ax2 = fig.add_subplot(gs[0, 1])
         ax2.text(
@@ -840,7 +791,6 @@ def cell8_validation():
         )
         ax2.set_title("Placebo Test", fontsize=11, fontweight="bold")
         ax2.axis("off")
-
         # Sensitivity analysis.
         ax3 = fig.add_subplot(gs[0, 2])
         confounder_values = np.linspace(0, 1, 50)
@@ -859,7 +809,6 @@ def cell8_validation():
         ax3.set_title("Sensitivity Analysis", fontsize=11, fontweight="bold")
         ax3.grid(True, alpha=0.3)
         ax3.legend()
-
         plt.suptitle(
             "Validating Discovered DAGs with Refutation Tests",
             fontsize=14,
@@ -867,7 +816,6 @@ def cell8_validation():
         )
         plt.tight_layout()
         plt.show()
-
         validation_score = 0.67
         print(
             f"\nValidation Score: {validation_score:.1%} of implied CIs confirmed"
@@ -893,7 +841,6 @@ def cell8_validation():
 
     alpha_slider.observe(update, names="value")
     confounder_slider.observe(update, names="value")
-
     display(
         VBox(
             [
@@ -905,18 +852,19 @@ def cell8_validation():
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 9: Domain Knowledge Integration
-# ####################...
-
-
+# #############################################################################
 def cell9_domain_knowledge():
-    """Show impact of domain knowledge constraints."""
+    """
+    Show impact of domain knowledge constraints.
+    """
 
     def plot_domain_constraints(prior_strength):
-        """Plot discovery with and without constraints."""
+        """
+        Plot discovery with and without constraints.
+        """
         fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-
         # Without constraints.
         ax = axes[0, 0]
         G_unconstrained = nx.DiGraph()
@@ -932,7 +880,6 @@ def cell9_domain_knowledge():
         nx.draw_networkx_labels(G_unconstrained, pos, font_size=11, ax=ax)
         ax.set_title("No Constraints", fontsize=11, fontweight="bold")
         ax.axis("off")
-
         # Constraints listed.
         ax = axes[0, 1]
         constraints_text = (
@@ -953,7 +900,6 @@ def cell9_domain_knowledge():
         )
         ax.axis("off")
         ax.set_title("Expert Constraints", fontsize=11, fontweight="bold")
-
         # With constraints.
         ax = axes[1, 0]
         G_constrained = nx.DiGraph()
@@ -966,7 +912,6 @@ def cell9_domain_knowledge():
         nx.draw_networkx_labels(G_constrained, pos, font_size=11, ax=ax)
         ax.set_title("With Constraints", fontsize=11, fontweight="bold")
         ax.axis("off")
-
         # Impact summary.
         ax = axes[1, 1]
         impact_text = (
@@ -988,7 +933,6 @@ def cell9_domain_knowledge():
         )
         ax.axis("off")
         ax.set_title("Impact Summary", fontsize=11, fontweight="bold")
-
         plt.suptitle(
             "Domain Knowledge Integration: Constraints and Prior DAGs",
             fontsize=14,
@@ -1009,24 +953,24 @@ def cell9_domain_knowledge():
             plot_domain_constraints(prior_slider.value)
 
     prior_slider.observe(update, names="value")
-
     display(VBox([prior_slider, output]))
     update(None)
 
 
-# ####################...
+# #############################################################################
 # Cell 10: End-to-End Workflow
-# ####################...
-
-
+# #############################################################################
 def cell10_end_to_end_workflow():
-    """Show complete discovery pipeline."""
+    """
+    Show complete discovery pipeline.
+    """
 
     def plot_workflow(dataset_name, selected_algorithms, progress_stage):
-        """Plot multi-stage workflow."""
+        """
+        Plot multi-stage workflow.
+        """
         fig = plt.figure(figsize=(16, 10))
         gs = fig.add_gridspec(3, 3, hspace=0.4, wspace=0.3)
-
         stages = [
             "Data Preparation",
             "Algorithm Selection",
@@ -1035,13 +979,11 @@ def cell10_end_to_end_workflow():
             "Validation",
             "Final DAG",
         ]
-
         # Color-code stages by completion status.
         colors = [
             "lightgreen" if i <= progress_stage else "lightgray"
             for i in range(len(stages))
         ]
-
         # Stage 1: Data Preparation.
         ax = fig.add_subplot(gs[0, 0])
         ax.text(
@@ -1055,7 +997,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Stage 2: Algorithm Selection.
         ax = fig.add_subplot(gs[0, 1])
         algo_text = "Stage 2: Algorithms\n"
@@ -1072,7 +1013,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Stage 3: Consensus.
         ax = fig.add_subplot(gs[0, 2])
         ax.text(
@@ -1086,7 +1026,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Stage 4: Refinement.
         ax = fig.add_subplot(gs[1, 0])
         ax.text(
@@ -1100,7 +1039,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Stage 5: Validation.
         ax = fig.add_subplot(gs[1, 1])
         ax.text(
@@ -1114,7 +1052,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Stage 6: Final DAG.
         ax = fig.add_subplot(gs[1, 2])
         ax.text(
@@ -1128,7 +1065,6 @@ def cell10_end_to_end_workflow():
             transform=ax.transAxes,
         )
         ax.axis("off")
-
         # Progress bar at bottom.
         ax = fig.add_subplot(gs[2, :])
         progress_pct = (progress_stage + 1) / len(stages)
@@ -1148,7 +1084,6 @@ def cell10_end_to_end_workflow():
         ax.set_xlabel("Workflow Progress", fontsize=11)
         ax.set_yticks([])
         ax.set_title("Overall Progress", fontsize=11, fontweight="bold")
-
         plt.suptitle(
             f"End-to-End Causal Discovery Workflow: {dataset_name}",
             fontsize=14,
@@ -1167,15 +1102,12 @@ def cell10_end_to_end_workflow():
         value="Synthetic: Linear Gaussian",
         description="Dataset:",
     )
-
     algo_pc = Checkbox(value=True, description="PC")
     algo_ges = Checkbox(value=True, description="GES")
     algo_lingam = Checkbox(value=False, description="LiNGAM")
-
     progress_slider = IntSlider(
         value=0, min=0, max=5, step=1, description="Progress Stage:"
     )
-
     output = Output()
 
     def update(change):
@@ -1190,7 +1122,6 @@ def cell10_end_to_end_workflow():
                 selected.append("LiNGAM")
             if not selected:
                 selected = ["PC", "GES"]
-
             plot_workflow(
                 dataset_dropdown.value, selected, progress_slider.value
             )
@@ -1200,7 +1131,6 @@ def cell10_end_to_end_workflow():
     algo_ges.observe(update, names="value")
     algo_lingam.observe(update, names="value")
     progress_slider.observe(update, names="value")
-
     display(
         VBox(
             [
