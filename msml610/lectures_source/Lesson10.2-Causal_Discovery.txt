@@ -210,24 +210,28 @@ digraph Chain2 {
 
 * Identifiability: Paths to Full Recovery
 
-- **From observational data alone**: only the Markov equivalence class (CPDAG)
+- **Observation**: From observational data alone, only the Markov equivalence
+  class (CPDAG) can be identified
   - Edge directions remain ambiguous without functional assumptions
 
-- **With stronger functional assumptions**: full DAG recovery possible
+- **Proposition**: With stronger functional assumptions, full DAG recovery is
+  possible
   - Linear non-Gaussian noise (LiNGAM): asymmetry in noise breaks direction
     ambiguity
   - Additive noise models with nonlinear functions
   - Post-nonlinear causal models (Zhang et al., 2009)
 
-- **With interventional data**: each intervention cuts incoming edges
-  - Sufficient interventions recover the full directed DAG
+- **Claim**: With interventional data, each intervention cuts incoming edges
+  - Sufficient interventions can recover the full directed DAG
 
-- **Rule of thumb**: more structural information $\Rightarrow$ more identifiability
+- **Rule of Thumb**: More structural information leads to more identifiability
 
 * Faithfulness: When Correlations Hide Causation
 
 - **Faithfulness assumption**: the observed distribution contains no extra
   independencies beyond those implied by the DAG structure
+  - This means that if two variables are independent in the data, they should
+    also be independent in the causal graph, and vice versa
 
 - **Example of violation**: path cancellation
   - Suppose $X \to Y$ and $X \to Z \to Y$ (two paths)

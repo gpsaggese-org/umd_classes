@@ -1,10 +1,14 @@
-Create a script lesson/for_loop_slides.py
+Modify the script llm_cli.py to accept a parameter rule
+--rule or -r (instead of -p and -pf)
+that extracts the part of the rules in .claude and then
+uses that to call the LLM as prompt
 
---input ./msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
---prompt rule.md
+Apply only 
+--rule '.claude/skills/slides.rules.md:58:# Slide Organization'
+--rule '.claude/skills/slides.rules.md:58'
 
-that reads the input slides with hmarkdown_slide_iterator and transform each
-slide with hllm_cli.py using _process_batches from hllm_cli.py
+Apply all the rules in the file
+--rule '.claude/skills/slides.rules.md'
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications
