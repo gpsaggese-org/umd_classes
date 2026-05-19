@@ -101,7 +101,7 @@ print(data.head())
 # %%
 # Visualize the true causal structure.
 fig = tgcasti.visualize_dag(
-    true_dag.to_numpy(),
+    true_dag,
     title="True Causal DAG",
 )
 
@@ -124,7 +124,7 @@ print(pc_adjacency)
 # %%
 # Evaluate PC results against ground truth.
 pc_metrics = tgcasti.evaluate_causal_discovery(
-    true_dag.to_numpy(),
+    true_dag,
     pc_adjacency,
 )
 
@@ -148,7 +148,7 @@ print(ges_adjacency)
 # %%
 # Evaluate GES results.
 ges_metrics = tgcasti.evaluate_causal_discovery(
-    true_dag.to_numpy(),
+    true_dag,
     ges_adjacency,
 )
 
@@ -176,7 +176,7 @@ print(notears_adjacency)
 # %%
 # Evaluate NOTEARS results.
 notears_metrics = tgcasti.evaluate_causal_discovery(
-    true_dag.to_numpy(),
+    true_dag,
     notears_adjacency,
 )
 
@@ -200,7 +200,7 @@ algorithms_results = {
 # %%
 # Visualize comparison of all three algorithms.
 fig = tgcasti.compare_dags(
-    true_dag.to_numpy(),
+    true_dag,
     algorithms_results,
 )
 fig.suptitle("Causal Discovery Algorithm Comparison", fontsize=16, fontweight="bold")
@@ -247,7 +247,7 @@ print(notears_thresholded)
 # %%
 # Evaluate thresholded results.
 notears_thresh_metrics = tgcasti.evaluate_causal_discovery(
-    true_dag.to_numpy(),
+    true_dag,
     notears_thresholded,
 )
 
