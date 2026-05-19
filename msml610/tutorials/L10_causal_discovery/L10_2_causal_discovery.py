@@ -85,8 +85,8 @@ hnotebo.set_all_loggers_to_print()
 # - Prediction and causation require fundamentally different reasoning
 # - Correlation alone cannot determine causal direction
 # - Same correlation pattern can hide opposite causal implications
-# - This is the core problem: no amount of observational data alone distinguishes these structures
-# - We need additional assumptions or interventions
+#     - This is the core problem: no amount of observational data alone distinguishes these structures
+#     - We need additional assumptions or interventions
 
 # %%
 # Display interactive widget for correlation vs causation.
@@ -100,8 +100,7 @@ utils.cell1_correlation_vs_causation()
 # - Show that different DAGs encode identical conditional independencies
 # - Introduce the CPDAG as the best we can do with observational data alone
 # - Understand why causal discovery outputs equivalence classes, not unique DAGs
-
-# %% [markdown]
+#
 # **Plots**:
 # - Three DAGs side-by-side: Chain (X → Y → Z), Reverse (Z → Y → X), Common Cause (X ← Y → Z)
 # - Below each DAG: list of implied conditional independencies
@@ -111,14 +110,12 @@ utils.cell1_correlation_vs_causation()
 # - Histograms showing correlation patterns:
 #   - Marginal correlation X-Z: identical across all three structures
 #   - Conditional correlation X-Z|Y: near-zero for all
-
-# %% [markdown]
+#
 # **Parameters**:
 # - `Sample Size (N)`: Number of observations (50 to 5000)
 #   - Larger samples provide stronger statistical power for CI tests
 #   - But even infinite samples cannot distinguish Markov equivalent structures
-
-# %% [markdown]
+#
 # **Key observations**:
 # - Observational data recover only conditional independence structure
 # - Edge directions in chains are fundamentally ambiguous
@@ -137,8 +134,7 @@ utils.cell2_markov_equivalence()
 # - Show concretely why edge direction determines causal effect
 # - Build intuition for why structure recovery is crucial for policy
 # - Demonstrate that same correlation leads to wildly different intervention outcomes
-
-# %% [markdown]
+#
 # **Plots**:
 # - Three side-by-side panels showing counterfactual outcomes for each structure
 # - Scenario: intervene on X (set to high value) and observe effect on Z
@@ -147,13 +143,11 @@ utils.cell2_markov_equivalence()
 #   - Common Cause (Y confounds both): no direct effect on Z (orange bar)
 # - Bar chart showing effect sizes with confidence bands
 # - Visualization of how effect propagates (or not) through the DAG
-
-# %% [markdown]
+#
 # **Parameters**:
 # - `Intervention Strength`: Magnitude of change to X (0 to 3)
 # - `Sample Size (N)`: Observations used for effect estimation (100 to 5000)
-
-# %% [markdown]
+#
 # **Key observations**:
 # - Same observational correlation, wildly different causal effects
 # - Edge direction determines whether an intervention is effective
@@ -172,8 +166,7 @@ utils.cell3_causal_effects()
 # - Understand constraint-based discovery
 # - See step-by-step how PC uses conditional independence (CI) tests
 # - Build intuition for why CI tests are powerful but fallible
-
-# %% [markdown]
+#
 # **Plots**:
 # - Animated visualization of PC algorithm on 4-5 variable DAG
 # - Left panel: evolving graph structure
@@ -184,16 +177,14 @@ utils.cell3_causal_effects()
 #   - Test number and description
 #   - p-value and threshold comparison
 #   - Separating set information
-
-# %% [markdown]
+#
 # **Parameters**:
 # - `Alpha (CI threshold)`: Significance level for CI tests (0.001 to 0.2)
 #   - Lower alpha: stricter tests, keep more edges
 #   - Higher alpha: liberal tests, remove more edges
 # - `Test Type`: CI test method (Partial correlation, Gaussian G-squared, Conditional MI)
 # - `Speed`: Animation speed for step-by-step progression
-
-# %% [markdown]
+#
 # **Key observations**:
 # - PC recovers skeleton via CI tests, then orients v-structures (colliders)
 # - Stronger distributional assumptions enable more powerful tests

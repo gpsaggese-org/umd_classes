@@ -169,24 +169,20 @@ digraph Discovery {
 
 * Markov Equivalence: The Core Limitation
 
-// TODO(gp): Clarify
-
 - **Question**: can observational data distinguish every DAG?
 
 - **Answer**: no. Different DAGs encode identical conditional independencies
   entire equivalence class
 
-// TODO(gp): Improve layout
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=40%}
 - **Markov equivalent DAGs** share the same:
   - Skeleton (undirected edges between nodes)
   - v-structures (colliders $X \to Z \leftarrow Y$)
 
-- **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph) represents the
+- **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph) represents
+  a Markov equivalence class of Bayesian network DAGs
 
-- Both imply $X \perp Z \mid Y$
-- Observational data cannot distinguish them
 ::::
 :::: {.column width=50%}
 Chain: $X \to Y \to Z$
@@ -197,6 +193,7 @@ digraph Chain1 {
     X -> Y -> Z;
 }
 ```
+- _"If we intervene on X, Z changes"_
 
 Reverse: $Z \to Y \to X$
 ```graphviz
@@ -206,13 +203,30 @@ digraph Chain2 {
     Z -> Y -> X;
 }
 ```
+- _"Intervening on X has no effect on Z"_
+
+Confounder: $X \leftarrow Y \rightarrow Z$
+```graphviz
+digraph Chain3 {
+    rankdir=LR;
+    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
+    X <- Y -> Z;
+}
+```
+- _"Intervening on X has no effect on Z"_
+
+- Same observational correlation, different causal implications
+  - Both imply $X \perp Z \mid Y$
+  - No amount of data can distinguish these structures
+  - Without intervention data or additional assumptions, we cannot distinguish
+    these structures from correlation alone
 ::::
 :::
 
 * Identifiability: Paths to Full Recovery
 
-- **Observation**: From observational data alone, only the Markov equivalence
-  class (CPDAG) can be identified
+- **Observation**: From observational data alone
+  - Only the Markov equivalence class (CPDAG) can be identified
   - Edge directions remain ambiguous without functional assumptions
 
 - **Proposition**: With stronger functional assumptions, full DAG recovery is
@@ -229,22 +243,48 @@ digraph Chain2 {
 
 * Faithfulness: When Correlations Hide Causation
 
-- **Faithfulness assumption**: the observed distribution contains no extra
-  independencies beyond those implied by the DAG structure
-  - This means that if two variables are independent in the data, they should
-    also be independent in the causal graph, and vice versa
+- **Faithfulness assumption**: observed distribution has no extra independencies
+  beyond DAG structure
+  - Independent variables in data should be independent in causal graph, and
+    vice versa
+  - The statistical relationships are assumed to “faithfully” reflect the graph
+    structure
+  - Statistical independencies are structural, not accidental
 
-- **Example of violation**: path cancellation
-  - Suppose $X \to Y$ and $X \to Z \to Y$ (two paths)
-  - If the effects are equal in magnitude but opposite in sign, the paths
-    cancel: $X \perp Y$ in data even though $X$ causes $Y$
+::: columns
+:::: {.column width=50%}
+
+- **Example**: path cancellation leads to violation of faithfulness
+  - $X \to Y$ and $X \to Z \to Y$ (two paths)
+  - Equal but opposite effects cancel: $X \perp Y$ in data, though $X$ causes
+    $Y$
   - Algorithm incorrectly concludes: no edge between $X$ and $Y$
 
-- **In practice**: exact cancellations are measure-zero, but near-cancellations
-  in finite samples cause errors
+- In theory: Exact cancellations are rare
+- In practice: Near-cancellations in finite samples cause errors
 
-- **Implication**: discovery is statistically correct in the limit but fragile
-  with small data
+::::
+:::: {.column width=45%}
+
+```graphviz
+digraph PathCancellation {
+    rankdir=LR;
+    splines=true;
+    nodesep=1.2;
+    ranksep=1.5;
+    node [shape=circle, style="filled", fontname="Helvetica", fontsize=13, penwidth=1.5];
+    X [label="X", fillcolor="#FFB6C6"];
+    Y [label="Y", fillcolor="#FFB6C6"];
+    Z [label="Z", fillcolor="#C6D9FF"];
+    # Direct path: X -> Y (solid, positive effect)
+    X -> Y [label="b₁ > 0 = - b₂ b₃", fontsize=11, color="#E74C3C", penwidth=2.5, style=solid];
+    # Indirect path: X -> Z -> Y (dashed, opposite effect)
+    X -> Z [label="b₂ > 0", fontsize=11, color="#3498DB", penwidth=2.5];
+    Z -> Y [label="b₃ < 0", fontsize=11, color="#3498DB", penwidth=2.5, style=dashed];
+}
+```
+::::
+:::
 
 ## #############################################################################
 ## Practical Limitations of Automated Discovery
@@ -257,17 +297,30 @@ digraph Chain2 {
 
 * Practical Challenges: Data and Algorithm
 
-- **Sample complexity**: conditional independence tests require many samples
-  - Test error rate scales with number of variable pairs: $O(n^2)$
+- **Sample complexity**:
+  - Causal discovery from data is sample-intensive
+  - Conditional independence tests require many samples
+  - Testing all pairs of variables is $O(n^2)$
+  - Small sample sizes lead to high error rates in independence tests
 
-- **Hidden confounders**: break causal sufficiency
-  - Produce spurious edges or incorrect edge directions
+- **Hidden confounders**:
+  - Most algorithms assume causal sufficiency (all confounders are measured),
+    which rarely holds in practice
+  - Unmeasured variables break the core assumption of causal discovery algorithms
+  - Create spurious edges (false associations) in the learned graph
+  - Cause incorrect edge directions
 
 - **Selection bias**: sampling mechanism depends on variables of interest
-  - E.g., only sufficiently ill patients visit hospital
+  - Non-random sampling introduces systematic errors
+  - When the sampling mechanism itself depends on the variables you're studying,
+    it creates artificial associations
+  - Example: Hospitals see sicker patients (selection bias toward severe cases),
+    so treatment and outcome appear more associated than they would in the
+    general population
 
 - **Finite-sample faithfulness**: weak dependencies appear as independencies
   - Statistical power drops rapidly with conditioning set size
+  - Absence of evidence as evidence of absence
 
 * Practical Challenges: Structure and Computation
 
