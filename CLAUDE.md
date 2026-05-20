@@ -94,6 +94,6 @@ working with symlinked files, the actual content lives in `helpers_root/`.
 
 # Important
 
-- You MUST read and strictly follow `.claude/convention_rules.md`
+- You MUST read and strictly follow `.claude/rules.md`
 
 - You MUST never commit changes without user permission

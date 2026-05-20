@@ -497,10 +497,9 @@ mindmap
 :::
 
 * Metrics
-- **Motivation**: 
-  - Causal discovery algorithms produce estimated graphs
-  - Need quantitative metrics to assess how well the estimated structure matches
-    the true structure
+- **Motivation**:
+  - Causal discovery algorithms estimate graphs
+  - Quantitative metrics assess match with true structure
   - Different errors have different consequences
 
 - **Three Categories of Metrics**:
@@ -509,8 +508,8 @@ mindmap
   - _Complexity metrics_: Number of Non-Zero edges (NNZ)
 
 - **Key Distinction**: Structure vs. Parameters
-  - Structure learning: Do we have the right edges and directions?
-  - Parameter learning: Are the edge weights correct?
+  - Structure learning: Right edges and directions?
+  - Parameter learning: Correct edge weights?
 
 * Edge-Level Metrics
 - **True Positive Rate (TPR)**:
@@ -518,24 +517,26 @@ mindmap
   edges recovered
   - High TPR: Find most causal relationships
   - Low TPR: Miss many real causal effects
+
 - **False Discovery Rate (FDR)**:
   $\text{FDR} = \frac{\text{FP}}{\text{FP} + \text{TP}}$ = fraction of predicted
   edges that are false
-  - Low FDR: Predictions are mostly correct
+  - Low FDR: Predictions mostly correct
   - High FDR: Many false positives
+
 - **F1 Score**:
   $\text{F1} = 2 \cdot \frac{\text{TPR} \cdot (1 - \text{FDR})}{\text{TPR} + (1 - \text{FDR})}$
   = harmonic mean balancing both
 
-* Structure-Level and Complexity Metric
+* Structure-Level and Complexity Metrics
 - **Structural Hamming Distance**:
   $\text{SHD} = |\text{missing}| + |\text{extra}| + |\text{reversed}|$
-  - Counts missing edges, false positives, and reversed edge directions
+  - Counts missing edges, false positives, reversed edge directions
   - Lower SHD is better (0 = perfect recovery)
 
 - **Complexity metrics**: Number of Non-Zero edges (NNZ)
 
-- **Best Practice**: Report TPR, FDR, F1, and SHD together
+- **Best Practice**: Report TPR, FDR, F1, SHD together
   - Different stakeholders prioritize different metrics
   - Scientists want high TPR (find all mechanisms)
   - Practitioners want low FDR (avoid false claims)
@@ -551,13 +552,12 @@ mindmap
 // - 1999, Zhang, "On the completeness of orientation rules for causal discovery in the presence of latent confounders and selection bias"
 
 * PC Algorithm: Idea
-
 - Spirtes and Glymour (1993)
 
 - **Key idea**:
-  - Use conditional independence (CI) tests to recover the skeleton of the DAG
-    (undirected edges)
-  - Then orient edges
+  1. Use conditional independence (CI) tests to recover the skeleton of the DAG
+     (undirected edges)
+  2. Orient edges
 
 - **Input**:
   - Dataset $\mathcal{D}$
@@ -566,31 +566,13 @@ mindmap
 - **Output**: a CPDAG representing the Markov equivalence class
 
 - **Assumptions**:
-  - Causal sufficiency: no hidden confounders affect observed variables
-  - Faithfulness: the true causal structure exactly reflects all conditional
+  - _Correct CI tests_: your test accurately identifies independencies
+  - _Causal sufficiency_: no hidden confounders affect observed variables
+  - _Faithfulness_: the true causal structure exactly reflects all conditional
     independencies in the data
-  - Correct CI tests: your test accurately identifies independencies
 
 - **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
   degree of the true DAG
-
-// - **Implementation**:
-// - Use `gCastle.pc()` to run PC algorithm on your data
-// - Use `DoWhy` to test conditional independence and refute discovered edges
-// - Visualize output DAGs using `CausalNex` for graph operations
-
-* PC Algorithm: Steps
-
-- **Steps**:
-  1. Start from a fully connected undirected graph over $X_1, \dots, X_n$
-  2. For each pair $(X_i, X_j)$, test $X_i \perp X_j | S$ for subsets $S$
-     of increasing size
-     - If independence found, remove the edge and record the _separating set_
-       $S_{ij}$
-  3. Identify _v-structures_: for any unshielded triple $X_i - X_k - X_j$, if
-     $X_k \notin S_{ij}$ then orient as $X_i \to X_k \leftarrow X_j$
-  4. Apply _orientation rules_ (Meek) to propagate directions without
-     creating new v-structures or cycles
 
 * PC Algorithm: Example
 
