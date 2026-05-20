@@ -69,105 +69,197 @@ def generate_synthetic_data(
     return df, w_matrix
 
 
-# #############################################################################
-# Cell 2, 3, 4: Causal Discovery Algorithms
-# #############################################################################
-
-
-def run_pc_algorithm(
-    data: np.ndarray,
-    *,
-    alpha: float = 0.05,
-) -> np.ndarray:
+def cell1_data_generation_interactive() -> Tuple[pd.DataFrame, np.ndarray]:
     """
-    Run the PC (Peter-Clark) constraint-based algorithm.
+    Interactive data generation with adjustable parameters.
 
-    :param data: Data array of shape (n_samples, n_features)
-    :param alpha: Significance level for independence tests
-    :return: Estimated adjacency matrix
+    Shows four horizontally-aligned panels:
+    1. True adjacency matrix heatmap
+    2. True causal DAG visualization
+    3. Data correlation matrix heatmap
+    4. Data DataFrame sample
+
+    Returns the generated data and DAG for use in subsequent cells.
+
+    :return: Tuple of (data_dataframe, true_dag_adjacency_matrix)
     """
-    model = castle.algorithms.PC(alpha=alpha)
-    model.learn(data)
-    return model.causal_matrix
-
-
-def run_ges_algorithm(data: np.ndarray) -> np.ndarray:
-    """
-    Run the GES (Greedy Equivalence Search) score-based algorithm.
-
-    :param data: Data array of shape (n_samples, n_features)
-    :return: Estimated adjacency matrix
-    """
-    model = castle.algorithms.GES()
-    model.learn(data)
-    return model.causal_matrix
-
-
-def run_notears_algorithm(
-    data: np.ndarray,
-    *,
-    lambda1: float = 0.0,
-    loss_type: str = "l2",
-) -> np.ndarray:
-    """
-    Run the NOTEARS gradient-based algorithm.
-
-    :param data: Data array of shape (n_samples, n_features)
-    :param lambda1: L1 regularization parameter
-    :param loss_type: Loss function type ('l2' for linear, 'logistic' for nonlinear)
-    :return: Estimated adjacency matrix
-    """
-    model = castle.algorithms.Notears(
-        lambda1=lambda1,
-        loss_type=loss_type,
-        max_iter=100,
+    n_nodes_slider, n_nodes_box = htutori.build_widget_control(
+        name="n_nodes",
+        description="number of nodes in the DAG",
+        min_val=3,
+        max_val=10,
+        step=1,
+        initial_value=5,
+        is_float=False,
     )
-    model.learn(data)
-    return model.causal_matrix
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
+        name="n_samples",
+        description="number of data samples",
+        min_val=100,
+        max_val=1000,
+        step=100,
+        initial_value=500,
+        is_float=False,
+    )
+    noise_scale_slider, noise_scale_box = htutori.build_widget_control(
+        name="noise_scale",
+        description="standard deviation of Gaussian noise",
+        min_val=0.1,
+        max_val=2.0,
+        step=0.1,
+        initial_value=1.0,
+        is_float=True,
+    )
+    seed_slider, seed_box = htutori.build_widget_control(
+        name="seed",
+        description="random seed for reproducibility",
+        min_val=1,
+        max_val=100,
+        step=1,
+        initial_value=43,
+        is_float=False,
+    )
+    output = ipywidgets.Output()
+    data_output = ipywidgets.Output()
 
+    def update_plot(_change: dict | None = None) -> None:
+        """
+        Update the data generation visualization.
 
-def run_golem_algorithm(
-    data: np.ndarray,
-    *,
-    lambda1: float = 0.0,
-    seed: int = 42,
-) -> np.ndarray:
-    """
-    Run the GOLEM (GO-Lagrangian Expectation-Maximization) algorithm.
+        :param _change: Dictionary with change information (unused)
+        """
+        with output:
+            clear_output(wait=True)
+            n_nodes = int(n_nodes_slider.value)
+            n_samples = int(n_samples_slider.value)
+            noise_scale = noise_scale_slider.value
+            seed = int(seed_slider.value)
+            data, true_dag = generate_synthetic_data(
+                n_nodes=n_nodes,
+                n_samples=n_samples,
+                noise_scale=noise_scale,
+                seed=seed,
+            )
+            n_nodes = true_dag.shape[0]
+            style_config = _get_graph_style_config()
+            _fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 5))
+            im1 = ax1.imshow(
+                true_dag,
+                cmap="YlOrRd",
+                aspect="equal",
+                vmin=0,
+                vmax=1,
+            )
+            ax1.set_xlabel("Target Node", fontsize=12)
+            ax1.set_ylabel("Source Node", fontsize=12)
+            ax1.set_title(
+                "True Adjacency Matrix", fontsize=14, fontweight="bold"
+            )
+            ax1.set_xticks(range(n_nodes))
+            ax1.set_yticks(range(n_nodes))
+            ax1.set_xticklabels([f"X{i}" for i in range(n_nodes)])
+            ax1.set_yticklabels([f"X{i}" for i in range(n_nodes)])
+            plt.colorbar(im1, ax=ax1, label="Edge")
+            graph_true = _create_graph(true_dag)
+            pos = nx.spring_layout(graph_true, k=2, iterations=50, seed=seed)
+            nx.draw_networkx_nodes(
+                graph_true,
+                pos,
+                node_color=style_config["node_color_true"],
+                node_size=style_config["node_size"],
+                ax=ax2,
+            )
+            nx.draw_networkx_edges(
+                graph_true,
+                pos,
+                arrowsize=style_config["arrow_size"],
+                arrowstyle=style_config["arrow_style"],
+                edge_color=style_config["edge_color"],
+                ax=ax2,
+            )
+            node_labels = {i: f"X{i}" for i in range(n_nodes)}
+            nx.draw_networkx_labels(
+                graph_true, pos, node_labels, ax=ax2, font_size=10
+            )
+            ax2.set_title("True Causal DAG", fontsize=14, fontweight="bold")
+            ax2.axis("off")
+            corr_matrix = data.corr().values
+            im3 = ax3.imshow(
+                corr_matrix,
+                cmap="coolwarm",
+                aspect="equal",
+                vmin=-1,
+                vmax=1,
+            )
+            ax3.set_xlabel("Variable", fontsize=12)
+            ax3.set_ylabel("Variable", fontsize=12)
+            ax3.set_title(
+                "Data Correlation Matrix", fontsize=14, fontweight="bold"
+            )
+            ax3.set_xticks(range(n_nodes))
+            ax3.set_yticks(range(n_nodes))
+            ax3.set_xticklabels([f"X{i}" for i in range(n_nodes)])
+            ax3.set_yticklabels([f"X{i}" for i in range(n_nodes)])
+            plt.colorbar(im3, ax=ax3, label="Correlation")
+            ax4.axis("off")
+            ax4.set_title("Data Summary", fontsize=14, fontweight="bold")
+            summary_text = (
+                f"Parameters:\n\n"
+                f"N Nodes:     {n_nodes}\n"
+                f"N Samples:   {n_samples}\n"
+                f"Noise Scale: {noise_scale:.2f}\n"
+                f"Seed:        {seed}\n\n"
+                f"Generated Data Shape: {data.shape}\n"
+                f"True Edges:  {int(np.sum(true_dag))}\n"
+            )
+            ax4.text(
+                0.5,
+                0.5,
+                summary_text,
+                horizontalalignment="center",
+                verticalalignment="center",
+                fontsize=12,
+                family="monospace",
+                bbox=dict(boxstyle="round", facecolor="lightgray", alpha=0.8),
+            )
+            plt.tight_layout()
+            plt.show()
+            with data_output:
+                clear_output(wait=True)
+                print("\nFirst 5 rows of generated data:")
+                print(data.head())
 
-    :param data: Data array of shape (n_samples, n_features)
-    :param lambda1: L1 regularization parameter
-    :param seed: Random seed for reproducibility
-    :return: Estimated adjacency matrix
-    """
-    model = castle.algorithms.GOLEM(
-        lambda1=lambda1,
+    n_nodes_slider.observe(update_plot, names="value")
+    n_samples_slider.observe(update_plot, names="value")
+    noise_scale_slider.observe(update_plot, names="value")
+    seed_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label("Cell 1: Interactive Data Generation"),
+                ipywidgets.Label(
+                    "Adjust parameters to generate synthetic causal data:"
+                ),
+                n_nodes_box,
+                n_samples_box,
+                noise_scale_box,
+                seed_box,
+                output,
+                data_output,
+            ]
+        )
+    )
+    n_nodes = int(n_nodes_slider.value)
+    n_samples = int(n_samples_slider.value)
+    noise_scale = noise_scale_slider.value
+    seed = int(seed_slider.value)
+    return generate_synthetic_data(
+        n_nodes=n_nodes,
+        n_samples=n_samples,
+        noise_scale=noise_scale,
         seed=seed,
     )
-    model.learn(data)
-    return model.causal_matrix
-
-
-def run_dag_gnn_algorithm(
-    data: np.ndarray,
-    *,
-    lambda1: float = 0.0,
-    seed: int = 42,
-) -> np.ndarray:
-    """
-    Run the DAG-GNN (DAG learning with Graph Neural Networks) algorithm.
-
-    :param data: Data array of shape (n_samples, n_features)
-    :param lambda1: L1 regularization parameter
-    :param seed: Random seed for reproducibility
-    :return: Estimated adjacency matrix
-    """
-    model = castle.algorithms.DAG_GNN(
-        lambda1=lambda1,
-        seed=seed,
-    )
-    model.learn(data)
-    return model.causal_matrix
 
 
 # #############################################################################
@@ -369,8 +461,106 @@ def compare_dags(
 
 
 # #############################################################################
-# Interactive Visualization
+# Cell 2, 3, 4: Causal Discovery Algorithms
 # #############################################################################
+
+
+def run_pc_algorithm(
+    data: np.ndarray,
+    *,
+    alpha: float = 0.05,
+) -> np.ndarray:
+    """
+    Run the PC (Peter-Clark) constraint-based algorithm.
+
+    :param data: Data array of shape (n_samples, n_features)
+    :param alpha: Significance level for independence tests
+    :return: Estimated adjacency matrix
+    """
+    model = castle.algorithms.PC(alpha=alpha)
+    model.learn(data)
+    return model.causal_matrix
+
+
+def run_ges_algorithm(data: np.ndarray) -> np.ndarray:
+    """
+    Run the GES (Greedy Equivalence Search) score-based algorithm.
+
+    :param data: Data array of shape (n_samples, n_features)
+    :return: Estimated adjacency matrix
+    """
+    model = castle.algorithms.GES()
+    model.learn(data)
+    return model.causal_matrix
+
+
+def run_notears_algorithm(
+    data: np.ndarray,
+    *,
+    lambda1: float = 0.0,
+    loss_type: str = "l2",
+) -> np.ndarray:
+    """
+    Run the NOTEARS gradient-based algorithm.
+
+    :param data: Data array of shape (n_samples, n_features)
+    :param lambda1: L1 regularization parameter
+    :param loss_type: Loss function type ('l2' for linear, 'logistic' for nonlinear)
+    :return: Estimated adjacency matrix
+    """
+    model = castle.algorithms.Notears(
+        lambda1=lambda1,
+        loss_type=loss_type,
+        max_iter=100,
+    )
+    model.learn(data)
+    return model.causal_matrix
+
+
+def run_golem_algorithm(
+    data: np.ndarray,
+    *,
+    lambda1: float = 0.0,
+    seed: int = 42,
+) -> np.ndarray:
+    """
+    Run the GOLEM (GO-Lagrangian Expectation-Maximization) algorithm.
+
+    :param data: Data array of shape (n_samples, n_features)
+    :param lambda1: L1 regularization parameter
+    :param seed: Random seed for reproducibility
+    :return: Estimated adjacency matrix
+    """
+    model = castle.algorithms.GOLEM(
+        lambda1=lambda1,
+        seed=seed,
+    )
+    model.learn(data)
+    return model.causal_matrix
+
+
+def run_dag_gnn_algorithm(
+    data: np.ndarray,
+    *,
+    lambda1: float = 0.0,
+    seed: int = 42,
+) -> np.ndarray:
+    """
+    Run the DAG-GNN (DAG learning with Graph Neural Networks) algorithm.
+
+    :param data: Data array of shape (n_samples, n_features)
+    :param lambda1: L1 regularization parameter
+    :param seed: Random seed for reproducibility
+    :return: Estimated adjacency matrix
+    """
+    model = castle.algorithms.DAG_GNN(
+        lambda1=lambda1,
+        seed=seed,
+    )
+    model.learn(data)
+    return model.causal_matrix
+
+
 
 
 def _plot_five_panel_layout(
@@ -647,197 +837,4 @@ def cell4_notears_algorithm_interactive(
                 output,
             ]
         )
-    )
-
-
-def cell1_data_generation_interactive() -> Tuple[pd.DataFrame, np.ndarray]:
-    """
-    Interactive data generation with adjustable parameters.
-
-    Shows four horizontally-aligned panels:
-    1. True adjacency matrix heatmap
-    2. True causal DAG visualization
-    3. Data correlation matrix heatmap
-    4. Data DataFrame sample
-
-    Returns the generated data and DAG for use in subsequent cells.
-
-    :return: Tuple of (data_dataframe, true_dag_adjacency_matrix)
-    """
-    n_nodes_slider, n_nodes_box = htutori.build_widget_control(
-        name="n_nodes",
-        description="number of nodes in the DAG",
-        min_val=3,
-        max_val=10,
-        step=1,
-        initial_value=5,
-        is_float=False,
-    )
-    n_samples_slider, n_samples_box = htutori.build_widget_control(
-        name="n_samples",
-        description="number of data samples",
-        min_val=100,
-        max_val=1000,
-        step=100,
-        initial_value=500,
-        is_float=False,
-    )
-    noise_scale_slider, noise_scale_box = htutori.build_widget_control(
-        name="noise_scale",
-        description="standard deviation of Gaussian noise",
-        min_val=0.1,
-        max_val=2.0,
-        step=0.1,
-        initial_value=1.0,
-        is_float=True,
-    )
-    seed_slider, seed_box = htutori.build_widget_control(
-        name="seed",
-        description="random seed for reproducibility",
-        min_val=1,
-        max_val=100,
-        step=1,
-        initial_value=43,
-        is_float=False,
-    )
-    output = ipywidgets.Output()
-    data_output = ipywidgets.Output()
-
-    def update_plot(_change: dict | None = None) -> None:
-        """
-        Update the data generation visualization.
-
-        :param _change: Dictionary with change information (unused)
-        """
-        with output:
-            clear_output(wait=True)
-            n_nodes = int(n_nodes_slider.value)
-            n_samples = int(n_samples_slider.value)
-            noise_scale = noise_scale_slider.value
-            seed = int(seed_slider.value)
-            data, true_dag = generate_synthetic_data(
-                n_nodes=n_nodes,
-                n_samples=n_samples,
-                noise_scale=noise_scale,
-                seed=seed,
-            )
-            n_nodes = true_dag.shape[0]
-            style_config = _get_graph_style_config()
-            _fig, (ax1, ax2, ax3, ax4) = plt.subplots(1, 4, figsize=(20, 5))
-            im1 = ax1.imshow(
-                true_dag,
-                cmap="YlOrRd",
-                aspect="equal",
-                vmin=0,
-                vmax=1,
-            )
-            ax1.set_xlabel("Target Node", fontsize=12)
-            ax1.set_ylabel("Source Node", fontsize=12)
-            ax1.set_title(
-                "True Adjacency Matrix", fontsize=14, fontweight="bold"
-            )
-            ax1.set_xticks(range(n_nodes))
-            ax1.set_yticks(range(n_nodes))
-            ax1.set_xticklabels([f"X{i}" for i in range(n_nodes)])
-            ax1.set_yticklabels([f"X{i}" for i in range(n_nodes)])
-            plt.colorbar(im1, ax=ax1, label="Edge")
-            graph_true = _create_graph(true_dag)
-            pos = nx.spring_layout(graph_true, k=2, iterations=50, seed=seed)
-            nx.draw_networkx_nodes(
-                graph_true,
-                pos,
-                node_color=style_config["node_color_true"],
-                node_size=style_config["node_size"],
-                ax=ax2,
-            )
-            nx.draw_networkx_edges(
-                graph_true,
-                pos,
-                arrowsize=style_config["arrow_size"],
-                arrowstyle=style_config["arrow_style"],
-                edge_color=style_config["edge_color"],
-                ax=ax2,
-            )
-            node_labels = {i: f"X{i}" for i in range(n_nodes)}
-            nx.draw_networkx_labels(
-                graph_true, pos, node_labels, ax=ax2, font_size=10
-            )
-            ax2.set_title("True Causal DAG", fontsize=14, fontweight="bold")
-            ax2.axis("off")
-            corr_matrix = data.corr().values
-            im3 = ax3.imshow(
-                corr_matrix,
-                cmap="coolwarm",
-                aspect="equal",
-                vmin=-1,
-                vmax=1,
-            )
-            ax3.set_xlabel("Variable", fontsize=12)
-            ax3.set_ylabel("Variable", fontsize=12)
-            ax3.set_title(
-                "Data Correlation Matrix", fontsize=14, fontweight="bold"
-            )
-            ax3.set_xticks(range(n_nodes))
-            ax3.set_yticks(range(n_nodes))
-            ax3.set_xticklabels([f"X{i}" for i in range(n_nodes)])
-            ax3.set_yticklabels([f"X{i}" for i in range(n_nodes)])
-            plt.colorbar(im3, ax=ax3, label="Correlation")
-            ax4.axis("off")
-            ax4.set_title("Data Summary", fontsize=14, fontweight="bold")
-            summary_text = (
-                f"Parameters:\n\n"
-                f"N Nodes:     {n_nodes}\n"
-                f"N Samples:   {n_samples}\n"
-                f"Noise Scale: {noise_scale:.2f}\n"
-                f"Seed:        {seed}\n\n"
-                f"Generated Data Shape: {data.shape}\n"
-                f"True Edges:  {int(np.sum(true_dag))}\n"
-            )
-            ax4.text(
-                0.5,
-                0.5,
-                summary_text,
-                horizontalalignment="center",
-                verticalalignment="center",
-                fontsize=12,
-                family="monospace",
-                bbox=dict(boxstyle="round", facecolor="lightgray", alpha=0.8),
-            )
-            plt.tight_layout()
-            plt.show()
-            with data_output:
-                clear_output(wait=True)
-                print("\nFirst 5 rows of generated data:")
-                print(data.head())
-
-    n_nodes_slider.observe(update_plot, names="value")
-    n_samples_slider.observe(update_plot, names="value")
-    noise_scale_slider.observe(update_plot, names="value")
-    seed_slider.observe(update_plot, names="value")
-    update_plot()
-    display(
-        ipywidgets.VBox(
-            [
-                ipywidgets.Label("Cell 1: Interactive Data Generation"),
-                ipywidgets.Label(
-                    "Adjust parameters to generate synthetic causal data:"
-                ),
-                n_nodes_box,
-                n_samples_box,
-                noise_scale_box,
-                seed_box,
-                output,
-                data_output,
-            ]
-        )
-    )
-    n_nodes = int(n_nodes_slider.value)
-    n_samples = int(n_samples_slider.value)
-    noise_scale = noise_scale_slider.value
-    seed = int(seed_slider.value)
-    return generate_synthetic_data(
-        n_nodes=n_nodes,
-        n_samples=n_samples,
-        noise_scale=noise_scale,
-        seed=seed,
     )
