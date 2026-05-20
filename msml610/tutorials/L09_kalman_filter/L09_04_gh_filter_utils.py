@@ -17,9 +17,9 @@ import pandas as pd
 from IPython.display import display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import tutorial_utils as mtumsuti
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import tutorial_utils as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

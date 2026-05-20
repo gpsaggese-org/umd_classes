@@ -41,36 +41,13 @@ _LOG = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
 
 # %%
-# #!pip install gcastle
-
-# %%
-# import helpers.hmodule as hmodule
-# hmodule.install_module_if_not_present(
-#     "castle",
-#     package_name="gcastle",
-#     use_activate=True,
-#     use_sudo=False,
-#     venv_path="/opt/venv",
-# )
+import helpers.hnotebook as hnotebo
+hnotebo.config_notebook()
 
 # %%
 import castle
 print(castle.__name__)
 print("Version:", castle.__version__)
-
-# %%
-dir(castle)
-
-# %%
-# from castle.algorithms import PC
-
-# from castle.algorithms import GES
-
-# from castle.algorithms import GOLEM
-
-# from castle.algorithms import Notears
-
-# from castle.algorithms import DAG_GNN
 
 # %%
 import tutorials.gCastle.gCastle_utils as tgcasti
@@ -99,6 +76,9 @@ print("\nFirst 5 rows of synthetic data:")
 print(data.head())
 
 # %%
+print(true_dag)
+
+# %%
 # Visualize the true causal structure.
 fig = tgcasti.visualize_dag(
     true_dag,
@@ -118,8 +98,11 @@ pc_adjacency = tgcasti.run_pc_algorithm(
     alpha=0.05,
 )
 
-print("PC algorithm - Estimated adjacency matrix:")
+print("PC algorithm: Estimated adjacency matrix:")
 print(pc_adjacency)
+
+# %%
+print(true_dag)
 
 # %%
 # Evaluate PC results against ground truth.

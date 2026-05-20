@@ -33,7 +33,7 @@ except ImportError:
 # %%
 import helpers.hnotebook as hnotebo
 
-import msml610_utils as ut
+import tutorial_utils as ut
 # import L08_04_08_difference_in_difference_utils as mtl
 
 ut.config_notebook()

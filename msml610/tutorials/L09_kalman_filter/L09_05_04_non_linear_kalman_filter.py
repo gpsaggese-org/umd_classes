@@ -26,7 +26,7 @@ from numpy.random import multivariate_normal, normal
 import numpy as np
 import matplotlib.pyplot as plt
 
-import msml610.tutorials.msml610_utils as ut
+import tutorial_utils as ut
 
 ut.config_notebook()
 

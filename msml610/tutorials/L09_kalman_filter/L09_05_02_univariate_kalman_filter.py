@@ -22,7 +22,7 @@
 
 import logging
 
-import msml610.tutorials.msml610_utils as ut
+import tutorial_utils as ut
 
 ut.config_notebook()
 

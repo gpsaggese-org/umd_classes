@@ -16,7 +16,7 @@ import numpy as np
 from IPython.display import clear_output, display
 
 import helpers.hdbg as hdbg
-import msml610.tutorials.msml610_utils as ut
+import tutorial_utils as ut
 
 _LOG = logging.getLogger(__name__)
 

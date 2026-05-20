@@ -6,7 +6,7 @@ Import as:
 import tutorials.gCastle.gCastle_utils as tgcasti
 """
 
-from typing import Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 import castle.algorithms
 import castle.datasets
@@ -47,6 +47,7 @@ def generate_synthetic_data(
         seed=seed,
     )
     # Generate data from the DAG.
+    # X = linear combination of parents + Gaussian noise
     simulator = castle.datasets.IIDSimulation(
         w_matrix,
         n=n_samples,
@@ -212,7 +213,7 @@ def visualize_dag(
     adjacency_matrix: np.ndarray,
     *,
     title: str = "Causal DAG",
-    figsize: Tuple[int, int] = (10, 8),
+    figsize: Optional[Tuple[int, int]] = None,
 ) -> matplotlib.figure.Figure:
     """
     Visualize a DAG from an adjacency matrix.
@@ -222,6 +223,8 @@ def visualize_dag(
     :param figsize: Figure size
     :return: Matplotlib figure object
     """
+    if figsize is None:
+        figsize = plt.rcParams["figure.figsize"]
     n_nodes = adjacency_matrix.shape[0]
     # Create NetworkX graph.
     graph = nx.DiGraph()
@@ -239,16 +242,16 @@ def visualize_dag(
         graph,
         pos,
         node_color="lightblue",
-        node_size=1500,
+        node_size=500,
         ax=ax,
     )
     # Draw edges.
     nx.draw_networkx_edges(
         graph,
         pos,
-        arrowsize=20,
-        arrowstyle="->",
-        edge_color="gray",
+        arrowsize=25,
+        arrowstyle="-|>",
+        edge_color="darkgray",
         ax=ax,
     )
     # Draw labels.
@@ -289,9 +292,9 @@ def compare_dags(
     nx.draw_networkx_edges(
         graph,
         pos,
-        arrowsize=20,
+        arrowsize=35,
         arrowstyle="->",
-        edge_color="gray",
+        edge_color="darkgray",
         ax=ax,
     )
     nx.draw_networkx_labels(graph, pos, ax=ax)
@@ -311,9 +314,9 @@ def compare_dags(
         nx.draw_networkx_edges(
             graph,
             pos,
-            arrowsize=20,
+            arrowsize=35,
             arrowstyle="->",
-            edge_color="gray",
+            edge_color="darkgray",
             ax=ax,
         )
         nx.draw_networkx_labels(graph, pos, ax=ax)

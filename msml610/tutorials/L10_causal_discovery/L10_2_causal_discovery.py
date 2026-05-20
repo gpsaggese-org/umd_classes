@@ -52,7 +52,7 @@ hmodule.install_module_if_not_present(
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
 
-import msml610_utils as ut
+import tutorial_utils as ut
 import L10_2_causal_discovery_utils as utils
 
 ut.config_notebook()

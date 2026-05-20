@@ -3,7 +3,7 @@ Utility functions for MSML610 course tutorials.
 
 Import as:
 
-import msml610.tutorials.msml610_utils as mtumsuti
+import tutorial_utils as mtumsuti
 """
 
 import copy
@@ -41,6 +41,7 @@ def set_notebook_style() -> None:
     plt.rcParams["figure.figsize"] = [8, 3]
 
 
+# TODO(gp): Use hnotebook
 def notebook_signature() -> None:
     """
     Display Python environment information including version and module versions.

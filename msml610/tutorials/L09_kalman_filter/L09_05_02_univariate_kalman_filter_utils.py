@@ -20,9 +20,9 @@ from IPython.display import display
 from numpy.random import randn
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import tutorial_utils as mtumsuti
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import tutorial_utils as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

@@ -37,7 +37,7 @@ except ImportError:
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
 
-import msml610_utils as ut
+import tutorial_utils as ut
 import L08_04_07_metalearners_utils as mtl
 
 ut.config_notebook()

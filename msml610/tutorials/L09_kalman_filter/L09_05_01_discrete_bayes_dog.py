@@ -25,7 +25,7 @@ import logging
 import matplotlib.pyplot as plt
 import numpy as np
 
-import msml610.tutorials.msml610_utils as ut
+import tutorial_utils as ut
 
 ut.config_notebook()
 

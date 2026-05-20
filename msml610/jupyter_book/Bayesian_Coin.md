@@ -57,7 +57,7 @@ import preliz as pz
 ```{code-cell} ipython3
 :tags: [remove-cell]
 
-import msml610_utils as ut
+import tutorial_utils as ut
 
 ut.config_notebook()
 ```
