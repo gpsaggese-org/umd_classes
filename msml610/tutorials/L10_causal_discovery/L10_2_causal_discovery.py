@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -28,10 +28,6 @@
 
 import logging
 
-from matplotlib import pyplot as plt
-import numpy as np
-import pandas as pd
-import seaborn as sns
 
 try:
     from IPython.display import display
@@ -49,10 +45,9 @@ hmodule.install_module_if_not_present(
 )
 
 # %%
-import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
 
-import helpers.htutorial as ut
+import msml610_utils as ut
 import L10_2_causal_discovery_utils as utils
 
 ut.config_notebook()

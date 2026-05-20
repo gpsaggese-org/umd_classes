@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -48,6 +48,7 @@ hnotebo.config_notebook()
 
 # %%
 import castle
+
 print(castle.__name__)
 print("Version:", castle.__version__)
 
@@ -120,7 +121,9 @@ pc_adjacency = tgcasti.run_pc_algorithm(
     alpha=alpha_slider.value,
 )
 
-print(f"PC algorithm (alpha={alpha_slider.value:.2f}) - Estimated adjacency matrix:")
+print(
+    f"PC algorithm (alpha={alpha_slider.value:.2f}) - Estimated adjacency matrix:"
+)
 print(pc_adjacency)
 
 # %%
@@ -132,6 +135,7 @@ from ipywidgets import Output
 
 output = Output()
 
+
 @output.capture()
 def update_metrics(change):
     """Re-evaluate metrics whenever alpha changes."""
@@ -139,15 +143,18 @@ def update_metrics(change):
         data.values,
         alpha=alpha_slider.value,
     )
-    
+
     pc_metrics = tgcasti.evaluate_causal_discovery(
         true_dag,
         pc_adjacency,
     )
-    
-    print(f"\nPC Algorithm Performance Metrics (alpha={alpha_slider.value:.2f}):")
+
+    print(
+        f"\nPC Algorithm Performance Metrics (alpha={alpha_slider.value:.2f}):"
+    )
     for metric_name, value in pc_metrics.items():
         print(f"  {metric_name}: {value:.4f}")
+
 
 # Connect alpha slider to metrics update
 alpha_slider.observe(update_metrics, names="value")
@@ -227,7 +234,9 @@ fig = tgcasti.compare_dags(
     true_dag,
     algorithms_results,
 )
-fig.suptitle("Causal Discovery Algorithm Comparison", fontsize=16, fontweight="bold")
+fig.suptitle(
+    "Causal Discovery Algorithm Comparison", fontsize=16, fontweight="bold"
+)
 
 # %%
 # Print performance summary.

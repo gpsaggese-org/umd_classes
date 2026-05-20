@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -37,7 +37,6 @@
 import logging
 import warnings
 
-import numpy as np
 import pandas as pd
 
 import tutorials.gCastle.gCastle_utils as tgcasti
@@ -57,9 +56,17 @@ warnings.filterwarnings("ignore")
 # Variables: GDP, Inflation, Unemployment, Interest_Rate, Stock_Market
 n_nodes = 5
 n_samples = 1000
-node_names = ["GDP", "Inflation", "Unemployment", "Interest_Rate", "Stock_Market"]
+node_names = [
+    "GDP",
+    "Inflation",
+    "Unemployment",
+    "Interest_Rate",
+    "Stock_Market",
+]
 
-print(f"Generating {n_nodes}-variable economic system with {n_samples} observations...")
+print(
+    f"Generating {n_nodes}-variable economic system with {n_samples} observations..."
+)
 
 data, true_dag = tgcasti.generate_synthetic_data(
     n_nodes=n_nodes,

@@ -3,7 +3,7 @@ Utility functions for gCastle causal discovery workflows.
 
 Import as:
 
-import tutorials.gCastle.gCastle_utils as tgcasti
+import tutorials.gCastle.gCastle_utils as tgcgcuti
 """
 
 from typing import Dict, Optional, Tuple
@@ -262,6 +262,20 @@ def visualize_dag(
     return fig
 
 
+def _create_graph(adjacency_matrix: np.ndarray) -> nx.DiGraph:
+    """
+    Helper to create NetworkX graph from adjacency matrix.
+    """
+    n_nodes = adjacency_matrix.shape[0]
+    graph = nx.DiGraph()
+    graph.add_nodes_from(range(n_nodes))
+    for i in range(n_nodes):
+        for j in range(n_nodes):
+            if adjacency_matrix[i, j] != 0:
+                graph.add_edge(i, j)
+    return graph
+
+
 def compare_dags(
     true_dag: np.ndarray,
     estimated_dags: Dict[str, np.ndarray],
@@ -320,24 +334,12 @@ def compare_dags(
             ax=ax,
         )
         nx.draw_networkx_labels(graph, pos, ax=ax)
-        ax.set_title(f"Estimated ({algorithm_name})", fontsize=12, fontweight="bold")
+        ax.set_title(
+            f"Estimated ({algorithm_name})", fontsize=12, fontweight="bold"
+        )
         ax.axis("off")
     # Hide unused subplots.
     for idx in range(n_plots, len(axes)):
         axes[idx].axis("off")
     plt.tight_layout()
     return fig
-
-
-def _create_graph(adjacency_matrix: np.ndarray) -> nx.DiGraph:
-    """
-    Helper to create NetworkX graph from adjacency matrix.
-    """
-    n_nodes = adjacency_matrix.shape[0]
-    graph = nx.DiGraph()
-    graph.add_nodes_from(range(n_nodes))
-    for i in range(n_nodes):
-        for j in range(n_nodes):
-            if adjacency_matrix[i, j] != 0:
-                graph.add_edge(i, j)
-    return graph
