@@ -19,9 +19,9 @@ from IPython.display import display
 import helpers.hdbg as hdbg
 
 try:
-    import tutorial_utils as mtumsuti
+    import helpers.htutorial as mtumsuti
 except ImportError:
-    import tutorial_utils as mtumsuti
+    import helpers.htutorial as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

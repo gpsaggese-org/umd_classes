@@ -16,7 +16,7 @@ import numpy as np
 import scipy.stats as stats
 from IPython.display import clear_output, display
 
-import tutorial_utils as mtumsuti
+import helpers.htutorial as mtumsuti
 
 _LOG = logging.getLogger(__name__)
 

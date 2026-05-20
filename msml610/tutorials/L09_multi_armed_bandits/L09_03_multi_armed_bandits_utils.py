@@ -16,7 +16,7 @@ import numpy as np
 from IPython.display import clear_output, display
 
 import helpers.hdbg as hdbg
-import tutorial_utils as ut
+import helpers.htutorial as ut
 
 _LOG = logging.getLogger(__name__)
 

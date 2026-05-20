@@ -40,7 +40,7 @@ import matplotlib.pyplot as plt
 import preliz as pz
 
 # %%
-import tutorial_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 

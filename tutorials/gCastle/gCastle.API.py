@@ -41,7 +41,9 @@ _LOG = logging.getLogger(__name__)
 warnings.filterwarnings("ignore")
 
 # %%
+import helpers.htutorial as mtumsuti
 import helpers.hnotebook as hnotebo
+
 hnotebo.config_notebook()
 
 # %%
@@ -89,31 +91,70 @@ fig = tgcasti.visualize_dag(
 # ## Part 2: Constraint-Based Algorithm (PC)
 #
 # The PC (Peter-Clark) algorithm is a constraint-based approach that uses
-# conditional independence tests to discover causal relationships.
+# conditional independence tests to discover causal relationships. The key
+# parameter is **alpha** (significance level): higher values → fewer edges detected.</cell_type="markdown">
+# </invoke>
 
 # %%
-# Run the PC algorithm with significance level alpha=0.05.
-pc_adjacency = tgcasti.run_pc_algorithm(
-    data.values,
-    alpha=0.05,
+# Create interactive widget for alpha parameter.
+alpha_slider, alpha_box = mtumsuti.build_widget_control(
+    name="alpha",
+    description="significance level for independence tests",
+    min_val=0.01,
+    max_val=0.20,
+    step=0.01,
+    initial_value=0.05,
+    is_float=True,
 )
 
-print("PC algorithm: Estimated adjacency matrix:")
+display(alpha_box)
+
+# %%
+# **Purpose**: Run the PC algorithm with interactive alpha control
+# **What it does**: Learns causal structure using conditional independence tests at the selected significance level
+# **Key insight**: Lower alpha (more conservative) detects fewer edges; higher alpha (less conservative) detects more
+
+# Run the PC algorithm with the selected alpha value
+pc_adjacency = tgcasti.run_pc_algorithm(
+    data.values,
+    alpha=alpha_slider.value,
+)
+
+print(f"PC algorithm (alpha={alpha_slider.value:.2f}) - Estimated adjacency matrix:")
 print(pc_adjacency)
 
 # %%
-print(true_dag)
+# **Purpose**: Evaluate PC algorithm performance dynamically
+# **What it shows**: Metrics (F1, SHD, FDR, TPR) comparing estimated vs true causal structure
+# **Key insight**: Different alpha values trade off sensitivity (TPR) vs specificity (lower FDR)
 
-# %%
-# Evaluate PC results against ground truth.
-pc_metrics = tgcasti.evaluate_causal_discovery(
-    true_dag,
-    pc_adjacency,
-)
+from ipywidgets import Output
 
-print("\nPC Algorithm Performance Metrics:")
-for metric_name, value in pc_metrics.items():
-    print(f"  {metric_name}: {value:.4f}")
+output = Output()
+
+@output.capture()
+def update_metrics(change):
+    """Re-evaluate metrics whenever alpha changes."""
+    pc_adjacency = tgcasti.run_pc_algorithm(
+        data.values,
+        alpha=alpha_slider.value,
+    )
+    
+    pc_metrics = tgcasti.evaluate_causal_discovery(
+        true_dag,
+        pc_adjacency,
+    )
+    
+    print(f"\nPC Algorithm Performance Metrics (alpha={alpha_slider.value:.2f}):")
+    for metric_name, value in pc_metrics.items():
+        print(f"  {metric_name}: {value:.4f}")
+
+# Connect alpha slider to metrics update
+alpha_slider.observe(update_metrics, names="value")
+
+# Display initial metrics
+display(output)
+update_metrics(None)
 
 # %% [markdown]
 # ## Part 3: Score-Based Algorithm (GES)
@@ -237,16 +278,3 @@ notears_thresh_metrics = tgcasti.evaluate_causal_discovery(
 print("\nNOTEARS Thresholded Performance Metrics:")
 for metric_name, value in notears_thresh_metrics.items():
     print(f"  {metric_name}: {value:.4f}")
-
-# %% [markdown]
-# ## Summary
-#
-# You've learned how to:
-# - Generate synthetic causal data with known ground truth
-# - Run constraint-based (PC), score-based (GES), and gradient-based (NOTEARS) algorithms
-# - Evaluate causal discovery results using standard metrics (F1, SHD, FDR, TPR)
-# - Visualize and compare learned causal structures
-# - Apply thresholding to weighted adjacency matrices
-#
-# In the next notebook (gCastle.example.ipynb), we'll apply these techniques
-# to a realistic application: discovering causal relationships in real-world data.

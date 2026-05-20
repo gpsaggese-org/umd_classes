@@ -496,6 +496,51 @@ mindmap
 ::::
 :::
 
+* Metrics
+- **Motivation**: 
+  - Causal discovery algorithms produce estimated graphs
+  - Need quantitative metrics to assess how well the estimated structure matches
+    the true structure
+  - Different errors have different consequences
+
+- **Three Categories of Metrics**:
+  - _Edge-level metrics_: TPR (recall), FDR (false discovery rate), F1 score
+  - _Structure-level metrics_: Structural Hamming Distance (SHD)
+  - _Complexity metrics_: Number of Non-Zero edges (NNZ)
+
+- **Key Distinction**: Structure vs. Parameters
+  - Structure learning: Do we have the right edges and directions?
+  - Parameter learning: Are the edge weights correct?
+
+* Edge-Level Metrics
+- **True Positive Rate (TPR)**:
+  $\text{TPR} = \frac{\text{TP}}{\text{TP} + \text{FN}}$ = fraction of true
+  edges recovered
+  - High TPR: Find most causal relationships
+  - Low TPR: Miss many real causal effects
+- **False Discovery Rate (FDR)**:
+  $\text{FDR} = \frac{\text{FP}}{\text{FP} + \text{TP}}$ = fraction of predicted
+  edges that are false
+  - Low FDR: Predictions are mostly correct
+  - High FDR: Many false positives
+- **F1 Score**:
+  $\text{F1} = 2 \cdot \frac{\text{TPR} \cdot (1 - \text{FDR})}{\text{TPR} + (1 - \text{FDR})}$
+  = harmonic mean balancing both
+
+* Structure-Level and Complexity Metric
+- **Structural Hamming Distance**:
+  $\text{SHD} = |\text{missing}| + |\text{extra}| + |\text{reversed}|$
+  - Counts missing edges, false positives, and reversed edge directions
+  - Lower SHD is better (0 = perfect recovery)
+
+- **Complexity metrics**: Number of Non-Zero edges (NNZ)
+
+- **Best Practice**: Report TPR, FDR, F1, and SHD together
+  - Different stakeholders prioritize different metrics
+  - Scientists want high TPR (find all mechanisms)
+  - Practitioners want low FDR (avoid false claims)
+  - Report NNZ to contextualize conservative vs liberal predictions
+
 ## #############################################################################
 ## Constraint-Based Methods
 ## #############################################################################

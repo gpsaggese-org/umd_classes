@@ -24,7 +24,7 @@ import logging
 import numpy as np
 import matplotlib.pyplot as plt
 
-import tutorial_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 

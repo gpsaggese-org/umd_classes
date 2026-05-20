@@ -84,7 +84,7 @@ os.environ["CSFY_GIT_ROOT_PATH"] = "/workspace/msml610"
 
 ```
 
-After that, replace the below line in [tutorial_utils](https://github.com/gpsaggese-org/umd_classes/blob/master/tutorial_utils.py).py
+After that, replace the below line in [htutorial](https://github.com/gpsaggese-org/umd_classes/blob/master/helpers/htutorial.py)
 
 ```
 import helpers.hdbg as hdbg
