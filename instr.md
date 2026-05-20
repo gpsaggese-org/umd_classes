@@ -1,21 +1,14 @@
-Update the rules so that the size of each figure is always passed
-from the interface using
+Change cell2_interactive_distribution_explorer in
+.claude/templates/interactive_notebook.template.ipynb to have PDF, CDF, and a
+commenting box using the idiom
 
-def ...
-  *
-  figsize: Optional[Tuple[int, int]] = None,
-):
+to follow the idiom like cell1_plot_true_target_function from
+msml610/tutorials/L05_statistical_learning/L05_02_02_overfitting.ipynb
 
-  if figsize is None:
-      figsize = plt.rcParams["figure.figsize"]
-
-.claude/skills/notebook.rules.md
-.claude/skills/interactive_notebook.format/SKILL.md
-.claude/skills/notebook.implement_outline/SKILL.md
-
-.claude/templates/interactive_notebook_template.ipynb
-.claude/templates/interactive_notebook_template.py
-.claude/templates/interactive_notebook_template_utils.py
+- Use the special widgets in helpers/htutorials.py such as build_widget_control
+- Use multiple plots aligned horizontally in the same figure, that react to
+  changes to the widgets
+- Add a comment bar using yellow background
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications

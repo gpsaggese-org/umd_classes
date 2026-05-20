@@ -893,16 +893,14 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create initial_position widget (belief about where the dog starts).
-    initial_position_slider, initial_position_box = (
-        htutori.build_widget_control(
-            name="initial_position",
-            description="initial_position",
-            min_val=-50.0,
-            max_val=500.0,
-            step=1.0,
-            initial_value=0.0,
-            is_float=True,
-        )
+    initial_position_slider, initial_position_box = htutori.build_widget_control(
+        name="initial_position",
+        description="initial_position",
+        min_val=-50.0,
+        max_val=500.0,
+        step=1.0,
+        initial_value=0.0,
+        is_float=True,
     )
     # Create actual_initial_pos widget (true starting position of the dog).
     actual_initial_pos_slider, actual_initial_pos_box = (
