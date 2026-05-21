@@ -209,18 +209,18 @@ digraph Discovery {
 
 * Identifiability
 
-- **Observation**: From observational data alone
+- From observational data alone:
   - Only the Markov equivalence class (CPDAG) can be identified
   - Edge directions remain ambiguous without functional assumptions
 
-- **Proposition**: With stronger functional assumptions, full DAG recovery is
+- With stronger functional assumptions, full DAG recovery is
   possible
   - Linear non-Gaussian noise (LiNGAM): asymmetry in noise breaks direction
     ambiguity
   - Additive noise models with nonlinear functions
-  - Post-nonlinear causal models (Zhang et al., 2009)
+  - Post-nonlinear causal models
 
-- **Claim**: With interventional data, each intervention cuts incoming edges
+- With interventional data, each intervention cuts incoming edges
   - Sufficient interventions can recover the full directed DAG
 
 - **Rule of Thumb**: More structural information leads to more identifiability
@@ -235,17 +235,16 @@ digraph Discovery {
     structure
   - Statistical independencies are structural, not accidental
 
+- **Problem**: path cancellation leads to violation of faithfulness
+
 ::: columns
 :::: {.column width=50%}
 
-- **Example**: path cancellation leads to violation of faithfulness
-  - $X \to Y$ and $X \to Z \to Y$ (two paths)
-  - Equal but opposite effects cancel: $X \perp Y$ in data, though $X$ causes
-    $Y$
+- **Example**:
+  - Two paths: $X \to Y$ and $X \to Z \to Y$
+  - Equal but opposite effects cancel
   - Algorithm incorrectly concludes: no edge between $X$ and $Y$
-
-- In theory: Exact cancellations are rare
-- In practice: Near-cancellations in finite samples cause errors
+    (i.e., $X \perp Y$ from data) though $X$ causes $Y$
 
 ::::
 :::: {.column width=45%}
@@ -254,19 +253,21 @@ digraph Discovery {
 digraph PathCancellation {
     rankdir=LR;
     splines=true;
-    nodesep=1.2;
+    nodesep=0.8;
     ranksep=1.5;
-    node [shape=circle, style="filled", fontname="Helvetica", fontsize=13, penwidth=1.5];
+    node [shape=circle, style="filled", fontname="Helvetica", fontsize=14, penwidth=1.5];
     X [label="X", fillcolor="#FFB6C6"];
     Y [label="Y", fillcolor="#FFB6C6"];
     Z [label="Z", fillcolor="#C6D9FF"];
-    # Direct path: X -> Y (solid, positive effect)
-    X -> Y [label="b₁ > 0 = - b₂ b₃", fontsize=11, color="#E74C3C", penwidth=2.5, style=solid];
-    # Indirect path: X -> Z -> Y (dashed, opposite effect)
-    X -> Z [label="b₂ > 0", fontsize=11, color="#3498DB", penwidth=2.5];
-    Z -> Y [label="b₃ < 0", fontsize=11, color="#3498DB", penwidth=2.5, style=dashed];
+    X -> Y [label="b_1 > 0 = - b_2 b_3", fontsize=13, color="#E74C3C", penwidth=2.5, style=solid];
+    X -> Z [label="b_2 > 0", fontsize=13, color="#3498DB", penwidth=2.5];
+    Z -> Y [label="b_3 < 0", fontsize=13, color="#3498DB", penwidth=2.5, style=dashed];
 }
 ```
+
+- In theory: Exact cancellations are rare
+- In practice: Near-cancellations in finite samples cause errors
+
 ::::
 :::
 
