@@ -154,22 +154,6 @@ digraph Discovery {
 // - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
 //   https://arxiv.org/pdf/1205.2599
 
-* Typical Assumptions for Causal Discovery
-
-- When performing causal discovery, certain assumptions are made:
-
-  - **Causal Markov condition**: each variable is independent of its
-    non-descendants given its parents
-    - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i | Pa(X_i))$
-
-  - **Faithfulness**: all conditional independencies in the data stem from DAG
-    structure, not from numerical coincidences
-
-  - **Causal sufficiency**: no hidden common causes (confounders)
-    - All relevant variables are measured
-
-- Violating any assumption leads to incorrect recovered DAGs
-
 * Markov Equivalence
 
 - **Question**: Can observational data distinguish every Directed Acyclic Graph
@@ -207,6 +191,22 @@ digraph Discovery {
   - Without intervention data or additional assumptions, we cannot distinguish
     these structures from correlation alone
 
+* Typical Assumptions for Causal Discovery
+
+- When performing causal discovery, certain assumptions are made:
+
+  - **Causal Markov condition**: each variable is independent of its
+    non-descendants given its parents
+    - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i | Pa(X_i))$
+
+  - **Faithfulness**: all conditional independencies in the data stem from DAG
+    structure, not from numerical coincidences
+
+  - **Causal sufficiency**: no hidden common causes (confounders)
+    - All relevant variables are measured
+
+- Violating any assumption leads to incorrect recovered DAGs
+
 * Identifiability
 
 - From observational data alone:
@@ -227,18 +227,16 @@ digraph Discovery {
 
 * Faithfulness
 
-- **Faithfulness assumption**: observed distribution has no extra independencies
-  beyond DAG structure
-  - Independent variables in data should be independent in causal graph, and
-    vice versa
-  - The statistical relationships are assumed to “faithfully” reflect the graph
+- **Faithfulness assumption**:
+  - Independent variables in data should be independent in causal graph, and vice
+    versa
+  - The statistical relationships are assumed to "faithfully" reflect the graph
     structure
-  - Statistical independencies are structural, not accidental
 
 - **Problem**: path cancellation leads to violation of faithfulness
 
 ::: columns
-:::: {.column width=50%}
+:::: {.column width=60%}
 
 - **Example**:
   - Two paths: $X \to Y$ and $X \to Z \to Y$
@@ -247,32 +245,32 @@ digraph Discovery {
     (i.e., $X \perp Y$ from data) though $X$ causes $Y$
 
 ::::
-:::: {.column width=45%}
+:::: {.column width=35%}
 
 ```graphviz
 digraph PathCancellation {
     rankdir=LR;
     splines=true;
-    nodesep=0.8;
-    ranksep=1.5;
+    nodesep=0.6;
+    ranksep=0.6;
     node [shape=circle, style="filled", fontname="Helvetica", fontsize=14, penwidth=1.5];
     X [label="X", fillcolor="#FFB6C6"];
     Y [label="Y", fillcolor="#FFB6C6"];
     Z [label="Z", fillcolor="#C6D9FF"];
-    X -> Y [label="b_1 > 0 = - b_2 b_3", fontsize=13, color="#E74C3C", penwidth=2.5, style=solid];
-    X -> Z [label="b_2 > 0", fontsize=13, color="#3498DB", penwidth=2.5];
-    Z -> Y [label="b_3 < 0", fontsize=13, color="#3498DB", penwidth=2.5, style=dashed];
+    X -> Y [label="a > 0 = - b c$", fontsize=13, color="#E74C3C", penwidth=2.5, style=solid];
+    X -> Z [label="b > 0", fontsize=13, color="#3498DB", penwidth=2.5];
+    Z -> Y [label="c < 0", fontsize=13, color="#3498DB", penwidth=2.5, style=dashed];
 }
 ```
-
-- In theory: Exact cancellations are rare
-- In practice: Near-cancellations in finite samples cause errors
 
 ::::
 :::
 
+- In theory: Exact cancellations are rare
+- In practice: Near-cancellations in finite samples cause errors
+
 ## #############################################################################
-## Practical Limitations of Automated Discovery
+## Practical Limitations
 ## #############################################################################
 
 // Papers:
@@ -284,21 +282,18 @@ digraph PathCancellation {
 
 - **Sample complexity**:
   - Causal discovery from data is sample-intensive
-  - Conditional independence tests require many samples
   - Testing all pairs of variables is $O(n^2)$
-  - Small sample sizes lead to high error rates in independence tests
 
 - **Hidden confounders**:
   - Algorithms assume causal sufficiency (all confounders are measured), rarely
     true
   - Unmeasured variables break core assumptions
-  - Create spurious edges (false associations) in the learned graph
-  - Cause incorrect edge directions
+  - Create spurious edges (false associations) in the learned graph or incorrect
+    edge directions
 
 - **Selection bias**:
   - Sampling mechanism depends on studied variables, creating artificial
     associations
-  - Non-random sampling introduces errors
   - E.g., hospitals see sicker patients (selection bias toward severe cases),
     so treatment and outcome appear more associated than in the general
     population
@@ -311,9 +306,9 @@ digraph PathCancellation {
 * Practical Challenges for Causal Discovery
 
 - **Temporal information often ignored**
-    Time is one of the strongest causal signals, but most discovery
-    algorithms ignore temporal ordering
-  - Some algorithms (e.g., Granger-causality, DYNOTEARS) exploit temporal order
+  - Time is one of the strongest causal signals, but most discovery algorithms
+    ignore temporal ordering
+  - Some algorithms (e.g., Granger-causality) exploit temporal order
 
 - **Non-stationarity and heterogeneity**
   - Real-world data rarely satisfies the i.i.d. assumption across populations and
@@ -328,11 +323,6 @@ digraph PathCancellation {
   - PC algorithm: $O(n^q)$ where $q$ is maximum graph degree
   - Score-based search is NP-hard in general
   - Practical implication: exact discovery is infeasible beyond small graphs
-
-- **Conclusion**:
-  - Discovery generates _candidate hypotheses_, not ground truth
-  - Requires domain validation and additional evidence
-  - No algorithm can definitively resolve observational causal questions alone
 
 # ##############################################################################
 # When to Use Discovery vs Domain Knowledge
