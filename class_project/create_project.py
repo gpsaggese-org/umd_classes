@@ -13,6 +13,7 @@ import os
 
 import helpers.hdbg as hdbg
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -91,15 +92,43 @@ def _rename_template_files(
     for template_file in template_files:
         src_path = os.path.join(dst_dir, template_file)
         # Skip if template file doesn't exist.
-        if not os.path.exists(src_path):
-            _LOG.debug("Template file not found: '%s'", template_file)
-            continue
+        hdbg.dassert_file_exists(src_path)
         # Create new filename by replacing template with project name.
         new_filename = template_file.replace("template", project_name)
         dst_path = os.path.join(dst_dir, new_filename)
         _LOG.info("Renaming '%s' -> '%s'", template_file, new_filename)
         hsystem.system(f"mv {src_path} {dst_path}")
     _LOG.info("Successfully renamed template files")
+
+
+def customize_files(
+    project_name: str,
+    dst_dir: str
+) -> None:
+    """
+    Customize files in the project directory.
+
+    Updates docker_name.sh to use project-specific image name.
+
+    :param project_name: project name
+    :param dst_dir: destination directory path
+    """
+    docker_file = os.path.join(dst_dir, "docker_name.sh")
+    if not os.path.exists(docker_file):
+        _LOG.debug("docker_name.sh not found in '%s'", dst_dir)
+        return
+    # Read the file.
+    with open(docker_file, "r") as f:
+        content = f.read()
+    # Replace IMAGE_NAME template with project-specific name.
+    content = content.replace(
+        "IMAGE_NAME=umd_project_template",
+        f"IMAGE_NAME=umd_project_{project_name}"
+    )
+    # Write back the modified content.
+    with open(docker_file, "w") as f:
+        f.write(content)
+    _LOG.info("Updated docker_name.sh with project name")
 
 
 # #############################################################################
@@ -128,7 +157,7 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    project_name = os.path.basename(dst_dir)
+    project_name = os.path.basename(args.dst_dir)
     _LOG.info("Project name='%s'", project_name)
     # Get source directory.
     src_dir = _get_source_dir()
@@ -139,7 +168,22 @@ def _main(parser: argparse.ArgumentParser) -> None:
         overwrite=args.overwrite,
     )
     # Rename template files to use project name.
-    _rename_template_files(project_name)
+    _rename_template_files(project_name, args.dst_dir)
+    # Customize project files.
+    customize_files(project_name, args.dst_dir)
+    #
+    text = f"""
+    Next steps:
+    - Commit the changes
+      ```
+      > git add tutorials/{project_name}
+      > git commit -am "Add template"
+      > git push
+      ```
+    - Change `tutorials/{project_name}/requirements.txt`
+    - Edit `tutorials/{project_name}/{project_name}*.py
+    """
+    print(hprint.dedent(text))
 
 
 if __name__ == "__main__":
