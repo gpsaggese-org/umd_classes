@@ -163,6 +163,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         output_dir: str,
         lessons: List[str],
         output_type: str,
+        *,
         toc_type: str = "none",
     ) -> None:
         """

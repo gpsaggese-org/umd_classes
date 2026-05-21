@@ -36,7 +36,7 @@ MSML610: Advanced Machine Learning
 :::
 
 # ##############################################################################
-# The Discovery Problem: When and Why It Works
+# The Discovery Problem
 # ##############################################################################
 
 // Books & Foundational:
@@ -59,8 +59,8 @@ MSML610: Advanced Machine Learning
 
 * Causal Discovery: Motivation
 
-- **Problem**: So far we have assumed the causal DAG was known (e.g., given by
-  domain experts)
+- **Problem**: So far we have assumed the causal DAG was known
+  - E.g., given by domain experts
 
 - **Questions**:
   - How do we discover the DAG when it is not specified?
