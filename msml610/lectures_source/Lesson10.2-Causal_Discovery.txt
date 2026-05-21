@@ -574,65 +574,6 @@ mindmap
 - **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
   degree of the true DAG
 
-* PC Algorithm: Example
-
-::: columns
-:::: {.column width=55%}
-- **Variables**: Smoking ($S$), Tar ($T$), Cancer ($C$)
-
-- **CI tests**:
-  - $S \not\perp C$
-  - $S \not\perp T$
-  - $T \not\perp C$
-  - $S \perp C | T$ $\Rightarrow$ separating set $\{T\}$
-
-- **Conclusion**:
-  - Remove edge $S - C$
-  - No v-structure ($T$ is in separating set)
-  - Skeleton: $S - T - C$
-::::
-:::: {.column width=45%}
-```graphviz
-digraph PCExample {
-    rankdir=LR;
-    splines=true;
-    nodesep=0.5;
-    ranksep=0.5;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    S [label="Smoking"];
-    T [label="Tar"];
-    C [label="Cancer"];
-
-    S -> T [dir=none];
-    T -> C [dir=none];
-}
-```
-::::
-:::
-
-- Directions of edges $S - T - C$ remain **undirected** without extra
-  assumptions
-
-* FCI: Dealing with Latent Confounders
-
-- **PC fails** under hidden confounders (causal sufficiency violated)
-
-- **FCI (Fast Causal Inference)** (Spirtes et al., 1995; Zhang, 1999)
-  - Extends PC to handle _unobserved_ common causes and selection bias
-  - Output: a **PAG** (Partial Ancestral Graph), with edge marks:
-    - $\to$: causes
-    - $\leftrightarrow$: confounded (unobserved common cause)
-    - $\circ\!\to$: ambiguous
-    - $\circ\!\!-\!\!\circ$: undetermined
-
-- **Pros**: sound under latent confounders
-- **Cons**: slower; output less informative (many $\circ$ marks)
-
-- **Example**: in econometrics with unobserved "ability" confounding
-  education and wages, FCI correctly marks $\text{Education}
-  \leftrightarrow \text{Wage}$ instead of asserting causation
-
 ## #############################################################################
 ## Score-Based Methods: GES and NOTEARS
 ## #############################################################################
@@ -827,77 +768,6 @@ digraph PCExample {
 :::
 
 ## #############################################################################
-## Multiple Models Produce Identical Predictions
-## #############################################################################
-
-// Papers:
-// - 2013, Margaritis et al., "Learning Bayesian network model structure from data"
-// - 2000, Spirtes et al., "Causation, Prediction, and Search"
-
-* The Identifiability Ceiling
-
-- **Observation**: many DAGs induce the **same joint distribution**
-  - They are _predictively equivalent_
-  - They are _causally_ different
-
-- **Key patterns**: Three classic patterns
-  1. **Chain**: $X \to Y \to Z$
-  2. **Reverse chain**: $Z \to Y \to X$
-  3. **Common cause**: $X \leftarrow Y \rightarrow Z$
-
-- All imply $X \perp Z | Y$ and are **indistinguishable** from observational
-  data
-
-- **Implication**: no matter how much data you collect, you cannot identify
-  which of these holds without either:
-  - An intervention
-  - A functional assumption (e.g., non-Gaussianity)
-
-* Markov Equivalence: Example
-
-::: columns
-:::: {.column width=33%}
-**Chain 1**
-```graphviz
-digraph C1 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    X -> Y -> Z;
-}
-```
-::::
-:::: {.column width=33%}
-**Chain 2**
-```graphviz
-digraph C2 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    Z -> Y -> X;
-}
-```
-::::
-:::: {.column width=33%}
-**Common cause**
-```graphviz
-digraph C3 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    Y -> X;
-    Y -> Z;
-}
-```
-::::
-:::
-
-- **Key insight**: All three imply $X \perp Z | Y$
-  - Observational distribution identical
-
-- **Causal implications are very different**:
-  - Intervening on $X$ in Chain 1 affects $Z$
-  - Intervening on $X$ in Chain 2 does _not_ affect $Z$
-  - Intervening on $X$ in Common Cause does _not_ affect $Z$
-
-## #############################################################################
 ## Domain Expert Review and Refutation Testing
 ## #############################################################################
 
@@ -906,46 +776,44 @@ digraph C3 {
 //   https://arxiv.org/abs/2006.05690
 // - 2018, Squires et al., "Active structure learning of causal DAGs"
 //   https://arxiv.org/abs/2011.00641
-// - 2008, Castelo et al., "Structural, syntactic, and statistical issues in learning Bayesian networks from data"
+// - 2008, Castelo et al., "Structural, syntactic, and statistical issues in
+//   learning Bayesian networks from data"
 
 * Validating a Discovered DAG
 
-- **A recovered DAG is a *hypothesis*** until validated
+- A recovered DAG is a *hypothesis* until validated
 
 - **Validation strategies**:
-  1. **Expert review**: do edges match known mechanisms?
-  2. **Refutation tests**: does data contradict implied conditional
-     independencies?
-  3. **Sensitivity analysis**: do results change under perturbations of the
+  1. _Expert review_: do edges match known mechanisms?
+  2. _Refutation tests_: does data contradict implied conditional independencies?
+  3. _Sensitivity analysis_: do results change under perturbations of the
      assumptions?
-  4. **Interventional check**: do targeted experiments confirm predicted
-     effects?
-
-- **Tools**: `causalnex`, `dowhy`, `CausalDiscoveryToolbox`, `gCastle`
+  4. _Interventional check_: do targeted experiments confirm predicted effects?
 
 * Refutation Testing
 
-- Given a discovered DAG $G$, check each implied independence against data
+- **Definition**: given a discovered DAG $G$, check each implied independence
+  against data
 
 - **Procedure**:
   1. Enumerate CI statements implied by $G$ (via d-separation)
   2. Test each on held-out data using an appropriate CI test
   3. Count violations; low count $\Rightarrow$ DAG is _consistent_
 
-- **Placebo tests** (Pearl): introduce a known-null edge; discovery should
+- **Placebo tests**: introduce a known-null edge; discovery should
   assign it low weight
 
-- **Example** (DoWhy library):
+- **Example**
   - Replace treatment with a random variable; effect should vanish
   - Add an unobserved confounder; estimate sensitivity of conclusions
 
-- **Q**: what if the DAG passes all refutation tests?
-  - **Answer**: it is _consistent_, not _proven_. Causality is never
-    established by data alone; always requires domain-informed interpretation
+- **Remark**: if the conditional independence was used to discover the causal
+  DAG, then a refutation test is redundant
 
-## #############################################################################
-## When Discovery Should Change Your DAG
-## #############################################################################
+- **Question**: what if the DAG passes all refutation tests?
+  - **Answer**: it is _consistent_, not _proven_
+  - Causality is never established by data alone; always requires domain-informed
+    interpretation
 
 // Papers:
 // - 2017, Peters et al., "Elements of Causal Inference"
@@ -955,18 +823,21 @@ digraph C3 {
 
 - **Update your DAG when**:
   - Multiple independent algorithms converge on the same edge
-  - The new edge is _mechanistically plausible_
+  - The new edge is _mechanistically plausible_: the discovered edge must be
+    theoretically coherent with domain knowledge, not just statistically
+    present
   - Refutation tests fail your current DAG
   - Interventional experiments confirm the discovered structure
 
-- **Do *not* update your DAG when**:
+- **Do not update your DAG when**:
   - Edge contradicts well-established mechanism (e.g., time order, physics)
   - Result hinges on weak faithfulness near independence boundary
   - Sample size is too small for reliable CI tests
   - Hidden confounders could explain the edge
 
-- **Rule of thumb**: discovery shifts the _prior probability_ of an edge; it
-  does not provide a _posterior certainty_
+- **Rule of thumb**: Discovery
+  - Shifts the _prior probability_ of an edge
+  - Does not provide a _posterior certainty_
 
 * Causal Discovery: Key Takeaways
 
@@ -986,6 +857,6 @@ digraph C3 {
   - Use it to _generate_ hypotheses
   - Combine with domain knowledge and interventions
   - Validate via refutation and expert review
-
-- **Bottom line**: automated discovery is a powerful exploratory tool, not a
-  replacement for scientific reasoning
+  - Automated discovery is a powerful exploratory tool, not a replacement for
+    scientific reasoning
+  - Treat discovery as informative but fallible
