@@ -67,7 +67,8 @@ MSML610: Advanced Machine Learning
   - Can we learn causal structure directly from observational data?
 
 - **Why it matters**
-  - Observational data is plentiful but ambiguous (confounding, correlation)
+  - Observational data is plentiful but ambiguous
+    - E.g., due to confounding
   - Experiments are expensive, slow, or unethical
     - E.g., cannot randomize exposing humans to asbestos
 
@@ -78,7 +79,7 @@ MSML610: Advanced Machine Learning
 * Causal Discovery: Formal Definition
 
 - **Definition**: Given a dataset $\mathcal{D} \sim \Pr(X_1, \dots, X_n)$,
-  causal discovery is the process of inferring a causal DAG $G$ (or
+  _causal discovery_ is the process of inferring a causal DAG $G$ (or
   equivalence class) such that:
   $$\Pr(X_1, \dots, X_n) = \prod_{i=1}^n \Pr(X_i | Pa_G(X_i))$$
   where $Pa_G(X_i)$ are the parents of $X_i$ in $G$
@@ -87,21 +88,21 @@ MSML610: Advanced Machine Learning
   - Macroeconomic drivers: from time-series data, infer causal links between
     inflation, unemployment, and interest rates
   - Education and income: estimate whether education causally affects earnings
-    (vs. pure confounding)
+    (vs pure confounding)
   - Social networks: infer whether friends influence each other's purchases
     or opinions
 
-* Observational vs. Interventional Data
+* Observational vs Interventional Data
 
 \begingroup
 \scriptsize
 | **Aspect**   | **Observational Data** | **Interventional Data** |
 |--------------|------------------------|------------------------|
-| Definition   | _Watch_ the system    | Apply _do_-interventions |
-| Manipulation | None; passive observation | Active variable control |
-| Example      | Hospital records      | Randomized Controlled Trial (RCT) |
+| Definition   | Watch the system       | Apply do-interventions |
+| Manipulation | Only passive observation | Active variable control |
+| Example      | Hospital records       | Randomized Controlled Trial (RCT) |
 | Pros         | Abundant, cheap, ethical | Identifies causal direction; breaks spurious correlations |
-| Cons         | Cannot distinguish cause from correlation; hidden confounders | Expensive, slow, often infeasible |
+| Cons         | Cannot distinguish cause from correlation | Expensive, slow, often infeasible |
 \endgroup
 
 - **Key insight**: discovery algorithms combine both types when available
@@ -111,14 +112,14 @@ MSML610: Advanced Machine Learning
 ::: columns
 :::: {.column width=45%}
 - **Assumptions**:
-  - We observe a table of measurements
+  - We have observational and interventional data
   - We do not know the true causal DAG
 
 - **Goal**: recover causal arrows among variables
 
 - **Key insight**: discovery always requires _assumptions_
+  - E.g., faithfulness, causal sufficiency
   - No algorithm recovers structure from data alone
-  - Assumptions include faithfulness, causal sufficiency, etc.
 ::::
 :::: {.column width=50%}
 ```graphviz
@@ -153,77 +154,60 @@ digraph Discovery {
 // - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
 //   https://arxiv.org/pdf/1205.2599
 
-* Three Assumptions for Causal Discovery
+* Typical Assumptions for Causal Discovery
 
-- **Causal Markov condition**: each variable is independent of its
-  non-descendants given its parents
-  - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i | Pa(X_i))$
+- When performing causal discovery, certain assumptions are made:
 
-- **Faithfulness**: all conditional independencies in the data stem from DAG
-  structure, not from numerical coincidences (no path cancellation)
+  - **Causal Markov condition**: each variable is independent of its
+    non-descendants given its parents
+    - Equivalent to: $\Pr(X) = \prod_i \Pr(X_i | Pa(X_i))$
 
-- **Causal sufficiency**: no hidden common causes (confounders)
-  - All relevant variables are measured
+  - **Faithfulness**: all conditional independencies in the data stem from DAG
+    structure, not from numerical coincidences
 
-- **Implication**: violating any assumption leads to incorrect recovered DAGs
+  - **Causal sufficiency**: no hidden common causes (confounders)
+    - All relevant variables are measured
 
-* Markov Equivalence: The Core Limitation
+- Violating any assumption leads to incorrect recovered DAGs
 
-- **Question**: can observational data distinguish every DAG?
+* Markov Equivalence
 
-- **Answer**: no. Different DAGs encode identical conditional independencies
-  entire equivalence class
+- **Question**: Can observational data distinguish every Directed Acyclic Graph
+  (DAG)?
+  - No, it cannot
+  - Different DAGs can encode identical conditional independencies, forming an
+    equivalence class
 
-::: columns
-:::: {.column width=40%}
+- **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph)
+  represents a Markov equivalence class of Bayesian network DAGs
+  - A CPDAG includes both directed and undirected edges to capture the
+    equivalence class
+
 - **Markov equivalent DAGs** share the same:
   - Skeleton (undirected edges between nodes)
-  - v-structures (colliders $X \to Z \leftarrow Y$)
+  - v-structures (e.g., $X \to Z \leftarrow Y$)
+  - E.g., consider two DAGs, $A \to B \to C$ and $A \leftarrow B \to C$. Both
+    have the same skeleton and no v-structures, hence they are Markov equivalent
 
-- **Definition**: _CPDAG_ (Completed Partially Directed Acyclic Graph) represents
-  a Markov equivalence class of Bayesian network DAGs
+* Markov Equivalence: Examples
 
-::::
-:::: {.column width=50%}
-Chain: $X \to Y \to Z$
-```graphviz
-digraph Chain1 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    X -> Y -> Z;
-}
-```
-- _"If we intervene on X, Z changes"_
+- Chain: $X \to Y \to Z$
+  - _"If we intervene on X, Z changes"_
 
-Reverse: $Z \to Y \to X$
-```graphviz
-digraph Chain2 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    Z -> Y -> X;
-}
-```
-- _"Intervening on X has no effect on Z"_
+- Reverse chain: $X \leftarrow Y \leftarrow Z$
+  - _"Intervening on X has no effect on Z"_
 
-Confounder: $X \leftarrow Y \rightarrow Z$
-```graphviz
-digraph Chain3 {
-    rankdir=LR;
-    node [shape=circle, style="filled", fillcolor="#A6C8F4"];
-    X <- Y -> Z;
-}
-```
-- _"Intervening on X has no effect on Z"_
+- Confounder: $X \leftarrow Y \to Z$
+  - _"Intervening on X has no effect on Z"_
 
 - Same observational correlation, different causal implications
-  - Both imply $X \perp Z | Y$
-  - No amount of data can distinguish these structures
+  - All imply $X \perp Z | Y$
+
+- No amount of data can distinguish these structures
   - Without intervention data or additional assumptions, we cannot distinguish
     these structures from correlation alone
-::::
-:::
 
-* Identifiability: Paths to Full Recovery
+* Identifiability
 
 - **Observation**: From observational data alone
   - Only the Markov equivalence class (CPDAG) can be identified
@@ -241,7 +225,7 @@ digraph Chain3 {
 
 - **Rule of Thumb**: More structural information leads to more identifiability
 
-* Faithfulness: When Correlations Hide Causation
+* Faithfulness
 
 - **Faithfulness assumption**: observed distribution has no extra independencies
   beyond DAG structure
@@ -350,7 +334,7 @@ digraph PathCancellation {
   - No algorithm can definitively resolve observational causal questions alone
 
 # ##############################################################################
-# When to Use Discovery vs. Domain Knowledge
+# When to Use Discovery vs Domain Knowledge
 # ##############################################################################
 
 // Papers:
@@ -509,7 +493,7 @@ mindmap
   - _Structure-level metrics_: Structural Hamming Distance (SHD)
   - _Complexity metrics_: Number of Non-Zero edges (NNZ)
 
-- **Key Distinction**: Structure vs. Parameters
+- **Key Distinction**: Structure vs Parameters
   - Structure learning: Right edges and directions?
   - Parameter learning: Correct edge weights?
 
