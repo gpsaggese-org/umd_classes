@@ -60,7 +60,7 @@ MSML610: Advanced Machine Learning
 * Causal Discovery: Motivation
 
 - **Problem**: So far we have assumed the causal DAG was known (e.g., given by
-  domain experts?)
+  domain experts)
 
 - **Questions**:
   - How do we discover the DAG when it is not specified?
@@ -470,6 +470,8 @@ digraph Workflow {
 
 * Three Main Algorithm Families
 
+// TODO(gp): Maybe use tree instead of mind map
+
 ::: columns
 :::: {.column width=40%}
 - _Constraint-based_: use conditional independence tests
@@ -542,139 +544,23 @@ mindmap
   - Practitioners want low FDR (avoid false claims)
   - Report NNZ to contextualize conservative vs liberal predictions
 
-## #############################################################################
-## Constraint-Based Methods
-## #############################################################################
+* Discovery Algorithm Families: Overview
 
-// Papers:
-// - 1993, Spirtes et al., "An algorithm for fast recovery of sparse causal graphs"
-// - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
-// - 1999, Zhang, "On the completeness of orientation rules for causal discovery in the presence of latent confounders and selection bias"
+- **Question**: _"How do we discover causal relationships from data?"_
+  - Different data types and assumptions enable different approaches
+  - No single algorithm works for all settings
 
-* PC Algorithm: Idea
-- Spirtes and Glymour (1993)
+- **Key Insight**: Causal discovery algorithms fall into distinct families based
+  on their assumptions and data requirements
+  - Constraint-based: Use conditional independence tests
+  - Score-based: Optimize likelihood with regularization
+  - Functional: Exploit non-linear or non-Gaussian properties
+  - Interventional: Leverage experimental data from interventions
 
-- **Key idea**:
-  1. Use conditional independence (CI) tests to recover the skeleton of the DAG
-     (undirected edges)
-  2. Orient edges
+- **Trade-off**: More assumptions about the data $\to$ stronger causal
+  guarantees but narrower applicability
 
-- **Input**:
-  - Dataset $\mathcal{D}$
-  - CI test (e.g., partial correlation, $G^2$-test)
-
-- **Output**: a CPDAG representing the Markov equivalence class
-
-- **Assumptions**:
-  - _Correct CI tests_: your test accurately identifies independencies
-  - _Causal sufficiency_: no hidden confounders affect observed variables
-  - _Faithfulness_: the true causal structure exactly reflects all conditional
-    independencies in the data
-
-- **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
-  degree of the true DAG
-
-## #############################################################################
-## Score-Based Methods: GES and NOTEARS
-## #############################################################################
-
-// Papers:
-// - 2023, Ke et al., "Learning sparse causal models is not NP-hard"
-//   https://arxiv.org/abs/1309.6824
-// - 2018, Zheng et al., "DAGs with NO TEARS: continuous optimization for learning Bayesian networks"
-//   https://arxiv.org/abs/1803.01422
-// - 2006, Chickering, "Learning equivalence classes of Bayesian network structures"
-//   https://arxiv.org/abs/1302.3566
-
-* Score-Based Approach: Idea
-
-- Treat discovery as a **search problem**:
-  - Space: all DAGs $G$ over $n$ nodes
-  - Objective: score $S(G, \mathcal{D})$ measuring how well $G$ explains the
-    data
-
-- **Common scores**:
-  - **BIC** (Bayesian Information Criterion):
-    $$
-    S(G) = \log \Pr(\mathcal{D} | G, \hat{\theta}) - \frac{k}{2}\log N
-    $$
-    where $k$ = number of parameters, $N$ = sample size
-  - **BDeu** (Bayesian Dirichlet equivalent uniform)
-
-- **Pros**: sound theory, decomposes over nodes
-- **Cons**: DAG space is super-exponential $\rightarrow$ heuristic search
-
-* GES: Greedy Equivalence Search
-
-- **GES** (Chickering, 2002)
-
-- **Input**: dataset $\mathcal{D}$, decomposable score $S(\cdot)$
-- **Output**: a CPDAG (equivalence class)
-
-- **Steps**:
-  1. **Forward phase**: start from empty graph; add the edge that most
-     _increases_ the score, repeat until no improvement
-  2. **Backward phase**: remove the edge that most _increases_ the score, until
-     no improvement
-
-- Proven to recover the true equivalence class in the **large-sample limit**
-
-- **Complexity**: polynomial per step, but many steps; practical up to
-  $n \approx 100$ variables
-
-* NOTEARS: Continuous Optimization
-
-- **Key idea** (Zheng et al., 2018): turn discrete DAG search into a
-  **continuous optimization** problem
-
-- Represent the graph by a weighted adjacency matrix $W \in \mathbb{R}^{n
-  \times n}$
-
-- DAG-ness constraint encoded as a smooth function:
-  $$
-  h(W) = \operatorname{tr}(e^{W \odot W}) - n = 0
-  $$
-  where $h(W) = 0$ iff $W$ corresponds to a DAG
-
-- **Problem**:
-  $$
-  \min_W \; \|X - X W\|_F^2 + \lambda \|W\|_1 \quad \text{s.t.} \quad h(W) = 0
-  $$
-
-- **Pros**: solvable with gradient descent; scales to 100s of variables
-- **Cons**: sensitive to data scaling (Reisach et al., 2021); local minima
-
-## #############################################################################
-## Non-Gaussian and Functional Methods
-## #############################################################################
-
-// Papers:
-// - 2006, Shimizu et al., "A linear non-Gaussian acyclic model for causal discovery"
-//   https://www.jmlr.org/papers/volume7/shimizu06a/shimizu06a.pdf
-// - 2011, Hyvarinen et al., LiNGAM extensions
-// - 2021, Reisach et al., "Beware of the Simulated DAG!"
-//   https://arxiv.org/abs/2102.13647
-
-* LiNGAM: Linear Non-Gaussian Acyclic Model
-
-- **Assumption**: data are generated by
-  $$
-  X_i = \sum_{j} b_{ij} X_j + e_i
-  $$
-  where
-  - $b_{ij}$ encodes a DAG (acyclic $B$)
-  - Noises $e_i$ are _mutually independent_ and _non-Gaussian_
-
-- **Key insight**: _non-Gaussian_ noise breaks the symmetry
-  - Gaussian case: $X \to Y$ and $Y \to X$ are indistinguishable
-  - Non-Gaussian: asymmetry $\Rightarrow$ direction is **identifiable**
-
-- Algorithm uses **Independent Component Analysis (ICA)** to recover $B$
-
-- **Example**: in a stock-returns panel, non-Gaussian "fat tails" allow LiNGAM
-  to orient edges that Gaussian methods cannot
-
-* Discovery Algorithm Families: Summary
+* Discovery Algorithm Families: Detailed Comparison
 
 \begingroup \scriptsize
 | **Family**       | **Example**   | **Uses**                    | **Output** | **Key limit**                  |
@@ -685,11 +571,264 @@ mindmap
 | Interventional   | IGSP, JCI     | Data from interventions     | Full DAG   | Cost of experiments            |
 \endgroup
 
-- **Recommendation**:
-  - Start with **PC** or **GES** for exploratory analysis
-  - Use **LiNGAM** when non-Gaussianity is plausible
-  - Use **FCI** when latent confounders are likely
-  - Use **interventional** methods when experiments are affordable
+- **Remark**: Output types differ in what the algorithm can identify
+  - CPDAG/PAG: Partially directed acyclic graph (includes some undirected edges)
+  - Full DAG: Complete directed acyclic graph (fully oriented graph)
+  - Weight matrix $W$: Explicit edge strengths
+
+* Constraint-Based Discovery
+
+- **Intuition**: _"If two variables are independent given a set of others, they
+  cannot have a direct causal link"_
+  - Conditional independence (CI) is a fingerprint of the causal graph structure
+  - Different graph structures imply different independence patterns
+
+- **Working Principle**:
+  - Start with a complete undirected graph (all variables connected)
+  - Test conditional independence: are $X \perp Y | Z$?
+  - Remove edges where CI holds
+  - Orient edges using rules (e.g., detect colliders)
+
+- **Example**: In a causal graph $X \to Z \to Y$, we expect $X \perp Y | Z$
+  - If this CI holds empirically, we know $Z$ must be a mediator
+  - If $X \perp Y | Z$ fails, $Z$ might not be the only path
+
+- **Limitation**: Many different graphs can have the same CI pattern
+  - Result is partially directed (undirected edges remain)
+
+* Score-Based Discovery
+
+- **Intuition**: _"The true causal graph should have high likelihood and be
+  simple"_
+  - Good models explain data well without overfitting
+  - Regularization penalizes complexity
+
+- **Working Principle**:
+  - Define a score combining fit and complexity: Score$(G) = \text{Likelihood}(G) -
+    \lambda \cdot \text{Complexity}(G)$
+  - Search over possible DAGs to maximize the score
+  - Use greedy algorithms (e.g., hill climbing) to avoid exponential search
+
+- **Example**: GES (Greedy Equivalence Search)
+  - Forward phase: Add edges that most improve score
+  - Backward phase: Remove edges if they don't decrease score
+  - Find a local optimum in the space of DAGs
+
+- **Limitation**: Search is NP-hard; greedy algorithm finds local optima
+
+* Functional Discovery
+
+- **Intuition**: _"Causal mechanisms have special statistical properties that
+  differ from confounding"_
+  - True causal relationships exhibit asymmetry in the residuals
+  - Fitting $Y = f(X) + \varepsilon$ works better than $X = f(Y) + \varepsilon'$
+
+- **Working Principle** (example: LiNGAM):
+  - Assume linear model: $X_i = \sum_j w_{ij} X_j + e_i$
+  - Assume non-Gaussian noise: $e_i$ are independent and non-Gaussian
+  - Non-Gaussianity breaks symmetry: fitting in reverse direction leaves
+    dependent residuals
+  - Identify the causal order using this asymmetry
+
+- **Example**: $Y = 2X + e$ (causal) vs $X = 0.4Y + e'$ (spurious)
+  - Non-Gaussian noise $e$ makes the forward model identifiable
+  - Backward model would require dependent residuals $e'$
+
+- **Limitation**: Strong assumptions (linear, non-Gaussian); breaks under
+  Gaussianity
+
+* Interventional Discovery
+
+- **Intuition**: _"Intervening on a variable breaks confounding"_
+  - Randomized experiments eliminate confounders by design
+  - Multiple interventions can resolve ambiguities from observational data
+
+- **Working Principle**:
+  - Perform interventions: set variable $X$ to value $x$ and observe effects
+  - Interventional data follows different distribution than observational
+  - Combine with constraint-based or other methods on interventional data
+
+- **Example**: Effect of price on sales
+  - Observational: price and sales are correlated (confounded by demand)
+  - Interventional: set price $= 5$ regardless of demand, observe sales
+  - Causal effect is identified under randomization assumption
+
+- **Advantage**: Can identify full DAG with sufficient interventions
+  - Gold standard in experimental science
+  - Limitation: Cost and feasibility of experiments
+
+* Choosing an Algorithm Family
+
+// TODO(gp): Maybe convert to table?
+
+- **Constraint-based** (PC, FCI)
+  - Use when: Observational data with large sample size
+  - Advantage: Minimal distributional assumptions
+  - Limitation: Many edges may remain undirected; high sample requirement
+
+- **Score-based** (GES, NOTEARS)
+  - Use when: Enough data to reliably estimate likelihood
+  - Advantage: Flexible to different model specifications
+  - Limitation: NP-hard search problem; local optima common
+
+- **Functional** (LiNGAM, ANM)
+  - Use when: Strong domain knowledge about the functional form
+  - Advantage: Can identify full DAG from observational data
+  - Limitation: Requires assumptions (linear, non-Gaussian; or additive noise)
+
+- **Interventional** (IGSP, JCI)
+  - Use when: Experimental data available from targeted interventions
+  - Advantage: Strongest causal guarantees; can resolve ambiguities
+  - Limitation: Expensive; requires designing good experiments
+
+// ## #############################################################################
+// ## Constraint-Based Methods
+// ## #############################################################################
+// 
+// // Papers:
+// // - 1993, Spirtes et al., "An algorithm for fast recovery of sparse causal graphs"
+// // - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
+// // - 1999, Zhang, "On the completeness of orientation rules for causal discovery in the presence of latent confounders and selection bias"
+// 
+// * PC Algorithm: Idea
+// - Spirtes and Glymour (1993)
+// 
+// - **Key idea**:
+//   1. Use conditional independence (CI) tests to recover the skeleton of the DAG
+//      (undirected edges)
+//   2. Orient edges
+// 
+// - **Input**:
+//   - Dataset $\mathcal{D}$
+//   - CI test (e.g., partial correlation, $G^2$-test)
+// 
+// - **Output**: a CPDAG representing the Markov equivalence class
+// 
+// - **Assumptions**:
+//   - _Correct CI tests_: your test accurately identifies independencies
+//   - _Causal sufficiency_: no hidden confounders affect observed variables
+//   - _Faithfulness_: the true causal structure exactly reflects all conditional
+//     independencies in the data
+// 
+// - **Complexity**: $O(n^q)$ in the number of CI tests, where $q$ is the maximum
+//   degree of the true DAG
+// 
+// ## #############################################################################
+// ## Score-Based Methods: GES and NOTEARS
+// ## #############################################################################
+// 
+// // Papers:
+// // - 2023, Ke et al., "Learning sparse causal models is not NP-hard"
+// //   https://arxiv.org/abs/1309.6824
+// // - 2018, Zheng et al., "DAGs with NO TEARS: continuous optimization for learning Bayesian networks"
+// //   https://arxiv.org/abs/1803.01422
+// // - 2006, Chickering, "Learning equivalence classes of Bayesian network structures"
+// //   https://arxiv.org/abs/1302.3566
+// 
+// * Score-Based Approach: Idea
+// 
+// - Treat discovery as a **search problem**:
+//   - Space: all DAGs $G$ over $n$ nodes
+//   - Objective: score $S(G, \mathcal{D})$ measuring how well $G$ explains the
+//     data
+// 
+// - **Common scores**:
+//   - **BIC** (Bayesian Information Criterion):
+//     $$
+//     S(G) = \log \Pr(\mathcal{D} | G, \hat{\theta}) - \frac{k}{2}\log N
+//     $$
+//     where $k$ = number of parameters, $N$ = sample size
+//   - **BDeu** (Bayesian Dirichlet equivalent uniform)
+// 
+// - **Pros**: sound theory, decomposes over nodes
+// - **Cons**: DAG space is super-exponential $\rightarrow$ heuristic search
+// 
+// * GES: Greedy Equivalence Search
+// 
+// - **GES** (Chickering, 2002)
+// 
+// - **Input**: dataset $\mathcal{D}$, decomposable score $S(\cdot)$
+// - **Output**: a CPDAG (equivalence class)
+// 
+// - **Steps**:
+//   1. **Forward phase**: start from empty graph; add the edge that most
+//      _increases_ the score, repeat until no improvement
+//   2. **Backward phase**: remove the edge that most _increases_ the score, until
+//      no improvement
+// 
+// - Proven to recover the true equivalence class in the **large-sample limit**
+// 
+// - **Complexity**: polynomial per step, but many steps; practical up to
+//   $n \approx 100$ variables
+// 
+// * NOTEARS: Continuous Optimization
+// 
+// - **Key idea** (Zheng et al., 2018): turn discrete DAG search into a
+//   **continuous optimization** problem
+// 
+// - Represent the graph by a weighted adjacency matrix $W \in \mathbb{R}^{n
+//   \times n}$
+// 
+// - DAG-ness constraint encoded as a smooth function:
+//   $$
+//   h(W) = \operatorname{tr}(e^{W \odot W}) - n = 0
+//   $$
+//   where $h(W) = 0$ iff $W$ corresponds to a DAG
+// 
+// - **Problem**:
+//   $$
+//   \min_W \; \|X - X W\|_F^2 + \lambda \|W\|_1 \quad \text{s.t.} \quad h(W) = 0
+//   $$
+// 
+// - **Pros**: solvable with gradient descent; scales to 100s of variables
+// - **Cons**: sensitive to data scaling (Reisach et al., 2021); local minima
+// 
+// ## #############################################################################
+// ## Non-Gaussian and Functional Methods
+// ## #############################################################################
+// 
+// // Papers:
+// // - 2006, Shimizu et al., "A linear non-Gaussian acyclic model for causal discovery"
+// //   https://www.jmlr.org/papers/volume7/shimizu06a/shimizu06a.pdf
+// // - 2011, Hyvarinen et al., LiNGAM extensions
+// // - 2021, Reisach et al., "Beware of the Simulated DAG!"
+// //   https://arxiv.org/abs/2102.13647
+// 
+// * LiNGAM: Linear Non-Gaussian Acyclic Model
+// 
+// - **Assumption**: data are generated by
+//   $$
+//   X_i = \sum_{j} b_{ij} X_j + e_i
+//   $$
+//   where
+//   - $b_{ij}$ encodes a DAG (acyclic $B$)
+//   - Noises $e_i$ are _mutually independent_ and _non-Gaussian_
+// 
+// - **Key insight**: _non-Gaussian_ noise breaks the symmetry
+//   - Gaussian case: $X \to Y$ and $Y \to X$ are indistinguishable
+//   - Non-Gaussian: asymmetry $\Rightarrow$ direction is **identifiable**
+// 
+// - Algorithm uses **Independent Component Analysis (ICA)** to recover $B$
+// 
+// - **Example**: in a stock-returns panel, non-Gaussian "fat tails" allow LiNGAM
+//   to orient edges that Gaussian methods cannot
+// 
+// * Discovery Algorithm Families: Summary
+// 
+// \begingroup \scriptsize
+// | **Family**       | **Example**   | **Uses**                    | **Output** | **Key limit**                  |
+// | ---------------- | ------------- | --------------------------- | ---------- | ------------------------------ |
+// | Constraint-based | PC, FCI       | CI tests                    | CPDAG/PAG  | Sample size for CI tests       |
+// | Score-based      | GES, NOTEARS  | Likelihood + regularization | CPDAG / W  | Search / optimization hardness |
+// | Functional       | LiNGAM, ANM   | Non-Gaussianity, nonlinearity | Full DAG | Strong functional assumptions  |
+// | Interventional   | IGSP, JCI     | Data from interventions     | Full DAG   | Cost of experiments            |
+// \endgroup
+// 
+// - **Recommendation**:
+//   - Start with **PC** or **GES** for exploratory analysis
+//   - Use **LiNGAM** when non-Gaussianity is plausible
+//   - Use **FCI** when latent confounders are likely
+//   - Use **interventional** methods when experiments are affordable
 
 # ##############################################################################
 # Challenges and Validation
@@ -698,78 +837,6 @@ mindmap
 // Papers:
 // - 2021, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
 // - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
-
-## #############################################################################
-## Why Standard ML Fails at Causal Discovery
-## #############################################################################
-
-// Papers:
-// - 2019, Scholkopf, "Causality for Machine Learning"
-//   https://arxiv.org/abs/1911.10500
-// - 2011, Peters et al., "Causal discovery with continuous additive noise models"
-//   https://arxiv.org/abs/1309.6779
-
-* Why Standard ML Fails at Causal Discovery
-
-- Standard ML optimizes **predictive accuracy**, not causal structure
-  - Correlation suffices for prediction
-  - Direction of arrows is irrelevant to loss
-
-- **Symptoms of the mismatch**:
-  - Models exploit _shortcuts_ (spurious features)
-  - Fail under distribution shift
-  - Cannot answer _"what if we intervene?"_ queries
-
-- **Example**: a classifier trained to detect cows may rely on grass
-  backgrounds rather than cow features
-  - High test accuracy, zero causal understanding
-  - Fails on cows at the beach
-
-- **Scholkopf (2019)**: _"Causality for Machine Learning"_ argues that to build
-  robust AI, we must reason about _causal_ mechanisms, not just correlations
-
-* Standard ML vs. Causal Discovery
-
-::: columns
-:::: {.column width=50%}
-**Standard ML**
-
-- **Goal**: minimize prediction error
-- **Assumes**: i.i.d. data
-- Optimizes $\Pr(Y | X)$
-- Blind to arrow direction
-- Fails under shift
-
-- **Pros**
-  - Simple, scalable
-  - Mature tooling
-
-- **Cons**
-  - No interventions
-  - No counterfactuals
-::::
-:::: {.column width=50%}
-**Causal Discovery**
-
-- **Goal**: recover $G$
-- **Assumes**: structural model
-- Targets $\Pr(Y | do(X))$
-- Edge directions matter
-- Stable under shift
-
-- **Pros**
-  - Supports intervention
-  - Interpretable
-
-- **Cons**
-  - Assumption-heavy
-  - Harder to validate
-::::
-:::
-
-## #############################################################################
-## Domain Expert Review and Refutation Testing
-## #############################################################################
 
 // Papers:
 // - 2021, Gamella et al., "Active learning of linear causal models"
