@@ -1,10 +1,14 @@
-FROM python:3.10-slim
+# Refer to https://github.com/mckinsey/causalnex/blob/develop/devel-cpu.Dockerfile
+FROM ubuntu:20.04
 
 # Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install CA certificates, build tools, and graphviz (needed for pygraphviz).
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -y && apt-get install -y \
+    python3.10 \
+    python3-venv \
+    python3-pip \
     ca-certificates \
     build-essential \
     graphviz \
@@ -17,13 +21,17 @@ RUN python3 -m venv /opt/venv
 # Make the venv the default Python.
 ENV PATH="/opt/venv/bin:$PATH"
 
+RUN mkdir -p /install
+
 # Upgrade pip inside the venv.
 RUN python -m pip install --upgrade pip
 
 # Install project specific packages.
 COPY requirements.txt /install/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext
+RUN pip install --no-cache-dir cython
+RUN pip install --no-cache-dir -r /install/requirements.txt
 
 RUN mkdir -p /install
 
