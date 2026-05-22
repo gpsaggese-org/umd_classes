@@ -44,3 +44,7 @@ ubuntu:24.04 (newer, modern)
   > cd tutorials/causalnex/
   > docker_cmd.sh "python /git_root/tutorials/causalnex/causalnex.API.py"
   ``` 
+
+## In a notebook
+
+jupyter lab --ContentsManager.allow_hidden=True

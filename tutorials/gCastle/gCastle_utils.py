@@ -69,6 +69,36 @@ def generate_synthetic_data(
     return df, w_matrix
 
 
+def _get_graph_style_config() -> Dict[str, Any]:
+    """
+    Get consistent styling configuration for graph visualizations.
+
+    :return: Dictionary with graph styling parameters
+    """
+    return {
+        "node_color": "lightblue",
+        "node_color_true": "lightgreen",
+        "node_size": 800,
+        "edge_color": "darkgray",
+        "arrow_size": 20,
+        "arrow_style": "->",
+    }
+
+
+def _create_graph(adjacency_matrix: np.ndarray) -> nx.DiGraph:
+    """
+    Helper to create NetworkX graph from adjacency matrix.
+    """
+    n_nodes = adjacency_matrix.shape[0]
+    graph = nx.DiGraph()
+    graph.add_nodes_from(range(n_nodes))
+    for i in range(n_nodes):
+        for j in range(n_nodes):
+            if adjacency_matrix[i, j] != 0:
+                graph.add_edge(i, j)
+    return graph
+
+
 def cell1_data_generation_interactive() -> Tuple[pd.DataFrame, np.ndarray]:
     """
     Interactive data generation with adjustable parameters.
@@ -361,36 +391,6 @@ def visualize_dag(
     return fig
 
 
-def _get_graph_style_config() -> Dict[str, Any]:
-    """
-    Get consistent styling configuration for graph visualizations.
-
-    :return: Dictionary with graph styling parameters
-    """
-    return {
-        "node_color": "lightblue",
-        "node_color_true": "lightgreen",
-        "node_size": 800,
-        "edge_color": "darkgray",
-        "arrow_size": 20,
-        "arrow_style": "->",
-    }
-
-
-def _create_graph(adjacency_matrix: np.ndarray) -> nx.DiGraph:
-    """
-    Helper to create NetworkX graph from adjacency matrix.
-    """
-    n_nodes = adjacency_matrix.shape[0]
-    graph = nx.DiGraph()
-    graph.add_nodes_from(range(n_nodes))
-    for i in range(n_nodes):
-        for j in range(n_nodes):
-            if adjacency_matrix[i, j] != 0:
-                graph.add_edge(i, j)
-    return graph
-
-
 def compare_dags(
     true_dag: np.ndarray,
     estimated_dags: Dict[str, np.ndarray],
@@ -559,8 +559,6 @@ def run_dag_gnn_algorithm(
     )
     model.learn(data)
     return model.causal_matrix
-
-
 
 
 def _plot_five_panel_layout(

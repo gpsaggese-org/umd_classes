@@ -138,6 +138,7 @@ TL;DR `uv` is a very fast Python package manager written in Rust that replaces
       ^^^^^^^^^^^^^^^
   ModuleNotFoundError: No module named 'requests'
   ```
+
 - Install `requests`
   ```bash
   > uv pip install requests
@@ -161,6 +162,7 @@ TL;DR `uv` is a very fast Python package manager written in Rust that replaces
 - Install multiple packages:
   ```bash
   > uv pip install requests pandas numpy
+  ...
   ```
 
 - Install from a requirements file:
@@ -199,11 +201,11 @@ TL;DR `uv` is a very fast Python package manager written in Rust that replaces
   > cd myproject
   ```
 
-  - This creates a new project with:
-    - `pyproject.toml`: Project configuration and dependencies
-    - `README.md`: Project documentation
-    - `src/myproject/`: Source code directory
-    - `.python-version`: Python version specification
+- This creates a new project with:
+  - `pyproject.toml`: Project configuration and dependencies
+  - `README.md`: Project documentation
+  - `src/myproject/`: Source code directory
+  - `.python-version`: Python version specification
 
 ### Dev vs Prod Dependencies
 

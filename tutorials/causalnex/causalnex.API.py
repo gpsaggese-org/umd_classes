@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.17.1
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -30,7 +30,7 @@
 # System libraries.
 import logging
 
-# Third party libraries.
+# Third-party libraries.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,14 +44,19 @@ import matplotlib.pyplot as plt
 #     venv_path="/opt/venv",
 # )
 
-# %%
+# %% editable=true slideshow={"slide_type": ""}
+# Helpers packages.
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
+
+# Tutorial-specific packages.
 import tutorials.causalnex.causalnex_utils as tcnut
 
 _LOG = logging.getLogger(__name__)
-hdbg.init_logger(verbosity=logging.INFO)
-hnotebo.config_notebook()
+tcnut.init_logger(_LOG)
+
+# %%
+_LOG.info("hello")
 
 # %% [markdown]
 # ## Cell 1: Load Data
@@ -63,7 +68,7 @@ hnotebo.config_notebook()
 # Load the student performance dataset.
 df = tcnut.load_student_performance_data(data_dir="data")
 _LOG.info("Dataset shape: %s", df.shape)
-print(df.head())
+display(df.head())
 
 # %% [markdown]
 # ## Cell 2: Structure Learning

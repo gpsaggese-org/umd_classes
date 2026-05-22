@@ -53,9 +53,10 @@ def _copy_files(
     hdbg.dassert_dir_exists(src_dir, "Source directory does not exist:", src_dir)
     # Check if destination directory already exists.
     if not overwrite:
-        hdbg.dassert_path_not_exists(dst_dir,
-                f"Destination directory already existss "
-                "(use --overwrite to replace)")
+        hdbg.dassert_path_not_exists(
+            dst_dir,
+            "Destination directory already existss (use --overwrite to replace)",
+        )
     else:
         if os.path.exists(dst_dir):
             # Remove existing directory to allow fresh copy.
@@ -68,10 +69,7 @@ def _copy_files(
     _LOG.info("Successfully copied directory to '%s'", dst_dir)
 
 
-def _rename_template_files(
-    project_name: str,
-    dst_dir: str
-) -> None:
+def _rename_template_files(project_name: str, dst_dir: str) -> None:
     """
     Rename template files to use project name.
 
@@ -101,10 +99,7 @@ def _rename_template_files(
     _LOG.info("Successfully renamed template files")
 
 
-def customize_files(
-    project_name: str,
-    dst_dir: str
-) -> None:
+def customize_files(project_name: str, dst_dir: str) -> None:
     """
     Customize files in the project directory.
 
@@ -123,7 +118,7 @@ def customize_files(
     # Replace IMAGE_NAME template with project-specific name.
     content = content.replace(
         "IMAGE_NAME=umd_project_template",
-        f"IMAGE_NAME=umd_project_{project_name}"
+        f"IMAGE_NAME=umd_project_{project_name}",
     )
     # Write back the modified content.
     with open(docker_file, "w") as f:

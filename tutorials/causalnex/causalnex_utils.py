@@ -4,7 +4,9 @@ causalnex_utils.py
 This file contains utility functions that support the causalnex tutorial
 notebooks.
 
-import tutorials.causalnex.causalnex_utils as tcnut
+Import as:
+
+import tutorials.causalnex.causalnex_utils as tcacauti
 """
 
 import logging
@@ -15,8 +17,20 @@ import zipfile
 import pandas as pd
 
 import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebo
 
 logger = logging.getLogger(__name__)
+
+
+def init_logger(notebook_log: logging.Logger) -> None:
+    hnotebo.config_notebook()
+    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+    # Init notebook logging.
+    hnotebo.set_logger_to_print(notebook_log)
+    # Init module logging.
+    # <package>_logger: logging.Logger = logging.getLogger("<package>")
+    # hnotebo.set_logger_to_print(<package>_logger)
+
 
 # #############################################################################
 # Download and load student performance dataset
@@ -31,7 +45,9 @@ def _download_file(url: str, *, output_path: str) -> None:
     :param output_path: Local path where the file should be saved
     """
     if os.path.exists(output_path):
-        logger.info("File already exists at '%s', skipping download", output_path)
+        logger.info(
+            "File already exists at '%s', skipping download", output_path
+        )
         return
     logger.info("Downloading file from '%s' to '%s'", url, output_path)
     urllib.request.urlretrieve(url, output_path)
