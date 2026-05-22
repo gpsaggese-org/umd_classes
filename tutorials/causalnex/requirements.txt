@@ -1,8 +1,0 @@
-matplotlib
-numpy
-pandas
-seaborn
-
-causalnex
-#torch
-pygraphviz
