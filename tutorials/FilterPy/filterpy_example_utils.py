@@ -17,6 +17,7 @@ import tutorials.FilterPy.filterpy_example_utils as tffiexut
 """
 
 import logging
+from typing import Dict, List, Tuple
 
 import ipywidgets as widgets
 import matplotlib.pyplot as plt
@@ -55,7 +56,7 @@ def _simulate_price_trend(
     seed: int = 42,
     drift: float = 0.05,
     obs_noise_std: float = 3.0,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Simulate a latent price trend and noisy observed prices.
 
@@ -281,7 +282,7 @@ def _run_linear_kf_trend(
     Q_val: float,
     n_days: int = 100,
     seed: int = 42,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Run a linear KF to extract a latent price trend from noisy observations.
 
@@ -410,7 +411,7 @@ def _run_kf_uncertainty(
     R_val: float,
     P0_val: float,
     n_days: int = 100,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Run linear KF and collect uncertainty P and Kalman gain K over time.
 
@@ -530,7 +531,7 @@ def _simulate_pairs(
     sigma_beta: float = 0.05,
     R_val: float = 1.0,
     seed: int = 42,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Simulate two cointegrated stocks with a time-varying hedge ratio.
 
@@ -568,7 +569,7 @@ def _run_ekf_pairs(
     stock_b: np.ndarray,
     sigma_beta: float,
     R_val: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run EKF to track a time-varying log-beta between two stocks.
 
@@ -891,7 +892,7 @@ def _simulate_stochastic_vol(
     n_days: int = 200,
     kappa: float = 0.1,
     seed: int = 42,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Simulate log-returns from a simple stochastic volatility model.
 
@@ -921,7 +922,7 @@ def _run_ukf_volatility(
     log_returns: np.ndarray,
     alpha_param: float,
     kappa_param: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run UKF to estimate latent volatility from observed log-returns.
 
@@ -1206,7 +1207,7 @@ def _simulate_stress_returns(
     spike_magnitude: float = 4.0,
     spike_duration: int = 10,
     seed: int = 42,
-) -> tuple[np.ndarray, np.ndarray, int, int]:
+) -> Tuple[np.ndarray, np.ndarray, int, int]:
     """
     Simulate log-returns with a volatility spike in the middle.
 
@@ -1404,7 +1405,7 @@ def _run_enkf_portfolio(
     Q_val: float = 0.1,
     n_days: int = 100,
     seed: int = 42,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, List]:
     """
     Run EnKF on a portfolio price state and return ensemble trajectories.
 
@@ -1607,7 +1608,9 @@ def show_enkf_portfolio_interactive() -> None:
 
 def _run_all_filters_financial(
     n_days: int = 100, seed: int = 42
-) -> dict[str, tuple[np.ndarray, np.ndarray]]:
+) -> Tuple[
+    np.ndarray, np.ndarray, np.ndarray, Dict[str, Tuple[np.ndarray, np.ndarray]]
+]:
     """
     Run all four filters on the same financial state estimation problem.
 

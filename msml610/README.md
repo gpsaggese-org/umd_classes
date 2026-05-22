@@ -38,7 +38,7 @@ deploying course materials
 - `tutorials/`: Hands-on tutorial materials organized by topic
   - Contains Jupyter notebooks and Python scripts for each lesson
   - Named as `L##_##_topic.ipynb` and `L##_##_topic.py`
-  - Includes `msml610_utils.py` utility functions for tutorials
+  - See `helpers/htutorial.py` at repository root for tutorial utility functions
   - Includes `notebook_template.ipynb` for creating new notebooks
 
 ## Infrastructure

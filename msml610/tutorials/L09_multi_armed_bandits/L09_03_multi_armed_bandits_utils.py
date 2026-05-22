@@ -3,7 +3,7 @@ Utility functions for Multi-Armed Bandits lesson.
 
 Import as:
 
-import L09_03_multi_armed_bandits_utils as mtul3maba
+import msml610.tutorials.L09_multi_armed_bandits.L09_03_multi_armed_bandits_utils as mtlmabl0mabu
 """
 
 import abc
@@ -16,7 +16,7 @@ import numpy as np
 from IPython.display import clear_output, display
 
 import helpers.hdbg as hdbg
-import msml610.tutorials.msml610_utils as ut
+import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -643,7 +643,7 @@ def cell1_casino_slot_machines() -> None:
     }
 
     # Create seed widget.
-    seed_slider, seed_box = ut.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,
@@ -654,7 +654,7 @@ def cell1_casino_slot_machines() -> None:
     )
 
     # Create coins widget.
-    coins_slider, coins_box = ut.build_widget_control(
+    coins_slider, coins_box = htutori.build_widget_control(
         name="coins",
         description="number of coins",
         min_val=5,
@@ -896,7 +896,7 @@ def cell2_exploration_vs_exploitation() -> None:
     }
 
     # Create seed widget.
-    seed_slider, seed_box = ut.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,
@@ -907,7 +907,7 @@ def cell2_exploration_vs_exploitation() -> None:
     )
 
     # Create coins widget.
-    coins_slider, coins_box = ut.build_widget_control(
+    coins_slider, coins_box = htutori.build_widget_control(
         name="coins",
         description="number of coins",
         min_val=10,
@@ -918,7 +918,7 @@ def cell2_exploration_vs_exploitation() -> None:
     )
 
     # Create epsilon slider.
-    epsilon_slider, epsilon_box = ut.build_widget_control(
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
         name="epsilon",
         description="exploration probability",
         min_val=0.0,
@@ -1304,7 +1304,7 @@ def cell3_strategy_comparison() -> None:
         "results": None,
     }
     # Create widgets.
-    k_machines_slider, k_machines_box = ut.build_widget_control(
+    k_machines_slider, k_machines_box = htutori.build_widget_control(
         name="k_machines",
         description="number of machines (K)",
         min_val=2,
@@ -1313,7 +1313,7 @@ def cell3_strategy_comparison() -> None:
         initial_value=3,
         is_float=False,
     )
-    n_coins_slider, n_coins_box = ut.build_widget_control(
+    n_coins_slider, n_coins_box = htutori.build_widget_control(
         name="n_coins",
         description="number of coins (N)",
         min_val=50,
@@ -1322,7 +1322,7 @@ def cell3_strategy_comparison() -> None:
         initial_value=100,
         is_float=False,
     )
-    n_trials_slider, n_trials_box = ut.build_widget_control(
+    n_trials_slider, n_trials_box = htutori.build_widget_control(
         name="n_trials",
         description="number of trials",
         min_val=5,
@@ -1331,7 +1331,7 @@ def cell3_strategy_comparison() -> None:
         initial_value=10,
         is_float=False,
     )
-    seed_slider, seed_box = ut.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,
@@ -1436,7 +1436,7 @@ def cell4_ensemble_comparison() -> None:
         "results": None,
     }
     # Create widgets.
-    k_machines_slider, k_machines_box = ut.build_widget_control(
+    k_machines_slider, k_machines_box = htutori.build_widget_control(
         name="k_machines",
         description="number of machines (K)",
         min_val=2,
@@ -1445,7 +1445,7 @@ def cell4_ensemble_comparison() -> None:
         initial_value=3,
         is_float=False,
     )
-    n_coins_slider, n_coins_box = ut.build_widget_control(
+    n_coins_slider, n_coins_box = htutori.build_widget_control(
         name="n_coins",
         description="number of coins (N)",
         min_val=50,
@@ -1454,7 +1454,7 @@ def cell4_ensemble_comparison() -> None:
         initial_value=100,
         is_float=False,
     )
-    n_trials_slider, n_trials_box = ut.build_widget_control(
+    n_trials_slider, n_trials_box = htutori.build_widget_control(
         name="n_trials",
         description="number of trials",
         min_val=5,
@@ -1463,7 +1463,7 @@ def cell4_ensemble_comparison() -> None:
         initial_value=10,
         is_float=False,
     )
-    n_mu_configs_slider, n_mu_configs_box = ut.build_widget_control(
+    n_mu_configs_slider, n_mu_configs_box = htutori.build_widget_control(
         name="n_mu_configs",
         description="number of mu configs",
         min_val=5,
@@ -1472,7 +1472,7 @@ def cell4_ensemble_comparison() -> None:
         initial_value=10,
         is_float=False,
     )
-    epsilon_slider, epsilon_box = ut.build_widget_control(
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
         name="epsilon",
         description="epsilon value",
         min_val=0.0,
@@ -1481,7 +1481,7 @@ def cell4_ensemble_comparison() -> None:
         initial_value=0.1,
         is_float=True,
     )
-    seed_slider, seed_box = ut.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,

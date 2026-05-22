@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import msml610.tutorials.msml610_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 

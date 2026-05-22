@@ -1,592 +1,257 @@
----
-title: "How to Use Claude Code"
-draft: true
-authors:
-  - gpsaggese
-date: 2026-03-01
-description:
-categories:
-  - Causal AI
----
-
-TL;DR:
-
-<!-- more -->
-
-<!-- https://code.claude.com/docs/en -->
-
-# Getting started
-
-## Core concepts
-
-### How CC works
-
-- The agentic loop:
-  - Gather context
-  - Take action
-  - Verify results
-
-- It is powered by models (to reason) and tools (to act)
-- CC is the harness around Claude (the model)
-  - Provide tools
-  - Manage context
-  - Execution environment
-
-- Multiple models `/model` or `claude --model <name>`
-
-- Tools allow to act
-  - E.g., read code, edit files, run commands, search the web
-  - Return information feeding back into the loop
-
-- Extensions of the agentic loop
-  - Skills
-  - MCP (connect to external services)
-  - Hooks (automate workflows)
-  - Subagents (offload / delegate tasks)
-
-- Work with sessions
-  - CC saves your conversation locally
-  - Before CC makes changes, it takes a snapshot of files
-  - Each session starts with a fresh context window
-  - Each CC conversation is a session tied to the current dir
-
-- Context window
-  - Stores conversation history, file contents, skills, ...
-  - You can use `/context` to see what's using space
-  - When context reaches the limit. it's compacted, cleaned up
-  - Skills are loaded on demand
-  - Subagents are separated from main conversation
-
-- Checkpoints
-  - Every file edit is reversible
-  - You can press `Esc` twice to rewind to a previous state
-
-- Permission mode
-  - `Shift + Tab` to cycle through permission modes
-  - Asks before edits
-  - Auto-accept edits
-  - Plan mode (read-only tools)
-
-- Ask CC for help
-  - "How do I set up hooks?" ...
-  - `/init` walks through creating a CLAUDE.md
-  - `/agents` configures subagents
-  - `/doctor`
-
-- If CC is going to wrong path, just type your correction
-  - CC will stop and adjust the approach
-
-- CC performs best when it can check its own work
-  - E.g., include test cases, paste expected UI, define the output you want
-
-- Explore before implementing
-  - Separate research from coding, using plan mode
-    ```
-    Read ... and understand. Then create a plan for ...
-    ```
-  - Then let CC implement
-
-- Delegate, don't dictate
-  - Think of CC as a capable colleague
-  - Give context and direction and trust CC to figure out the details
-
-### Extend CC
-
-- Extensions for agentic loop
-  - `CLAUDE.md` to add context for every sessions
-  - Skills: on-demand / reusable knowledge and invocable workflows
-  - MCP: connects to external services
-  - Subagents: run in isolated context, returning summaries
-  - Agent teams: coordinate independent sessions with shared tasks and
-    peer-to-peer messaging
-  - Hooks: run scripts outside the loop
-  - Plugins and packages
-
-- Skill
-  - Markdown file containing knowledge and workflows
-  - You can invoke skills with slash command or CC can load them when relevant
-  - You can run skills in current conversation or via subagents
-
-- Skill vs Subagents
-  - Skills are reusable content you can load into any context
-  - Subagents are isolated workers (e.g., parallel work and specialized workers)
-
-- Skill vs `CLAUDE.md`
-  - `CLAUDE.md` is for every session ("always do X" rule)
-    - E.g., coding conventions, project structure, "never do X" rules
-    - It should be less than 500 lines
-  - Skills can be invoked for `/name`
-  - Both can include paths with @path imports
-    ```
-    @path ./rules.md
-    @path ./examples.md
-    ```
-
-- Subagent vs Agent team
-  - Subagents run inside the same session and report back to main context
-  - Agent teams are independent CC that communicate with each other
-  - Use subagent when need a focused worked
-  - Use agent team when agents need to coordinate independently
-
-- MCP vs Skill
-  - MCP connects to external services
-  - Skills extend what CC knows
-
-- You can nest `CLAUDE.md` files in subdirs
-
-- Skill + MCP: MCP provides the connection, a skill teaches CC how to use it
-- Skill + Subagent: A skill can spawn subagents for parallel work
-- `CLAUDE.md` + Skills: CLAUDE.md is for always-on rules, skills are for
-  on-demand knowledge
-- Hook + MCP: a hook triggers external actions (e.g., "send a Slack notification"
-  when CC modifies critical files)
-
-- Features consume CC's context
-  - Too much can fill context window and add noise
-
-### Common workflows
-
-- Quick codebase overview
-  - Navigate to project root
-  - "Give me an overview of this codebase"
-  - "Explain the main architecture patterns"
-  - "What are the key data models?"
-  - ...
-
-- Find relevant code
-  - "Find the files that handle user authentication"
-  - "How do these authentication files work together?"
-
-- Fix bugs efficiently
-
-- Refactor code
-  - Do refactoring in small / testable increments
-
-- Use specialized subagents
-  - "Use the code-reviewer subagent ..."
-  - "Have the debugger subagent investigate ..."
-
-- Use Plan Mode for safe code analysis
-  - E.g., `claude --permission-mode plan`
-
-- Work with tests
-
-- Create pull requests
-  - Create a PR
-  - E.g., `/commit-push-pr` skill
-
-- Handle documentation
-
-- Work with images
-  - Drag-and-drop image into CC window
-  - Copy-paste image with `CTRL+v` (not `CMD+v`)
-
-- Reference files and directories
-  - E.g., "What's the structure of @src/...?"
-
-- Reference MCP resources
-  - E.g., "Show me the data from @github:repos/owner/`
-
-- Use extended thinking
-  - The reasoning is visible in verbose mode, toggled with `CTRL+O`
-  - Phrases like "think", "think hard", "ultrathink"
-
-- Extended thinking controls how much internal reasoning CC perform before
-  responding
-
-- Resume conversations
-  - `/rename` and `/resume`
-
-- Git worktrees
-  - When running on multiple tasks at once, you need to have different copies of
-    the codebase
-  - E.g., work on a feature in one worktree and fix a bug in another, without
-    sessions interfering
-  ```
-  > git worktree add ../.. -b feature-XYZ
-  > git worktree add ../.. bugfix-XYZ
-  > cd ../.. && claude
-  > git worktree list
-  > git worktree remove ../...
-  ```
-
-- Subagents can use worktree to work in parallel
-  - E.g., use `isolation: worktree` to the agent front matter
-
-- Get notified when CC needs your attention
-  - Use hooks in `.claude/settings.local.json`
-  - Hooks communicate through stdin, stdout, stderr and exit codes
-
-- Use Claude as a unix-style utility
-  ```
-  > claude -p "..." --output-format ...
-  ```
-
-### Best practices
-
-- CC's context window fills up fast and then performance degrades (e.g.,
-  forgetting earlier instructions)
-  - Context window holds your entire conversation, every message, every file,
-    every command output
-
-- CC performs much better when it can verify its work
-  - It needs a clear success criteria
-
-- Explore first, then plan, then code
-  - Enter plan mode to read files and answers questions without making changes
-    - This is important when you are uncertain about the approach
-    - If the task is simple (fix a typo, rename a variable) skip planning
-  - Ask to create a detailed implementation plan (press `CTRL+G` in your text
-    editor to edit directly)
-  - Implement switch to normal mode and let CC code and verify against its plan
-  - Commit
-
-- Provide specific context to avoid corrections
-  - Scope the task (e.g., specific file, testing preferences)
-  - Point to sources
-  - Reference existing patterns in your code base
-  - Describe the symptom and what "fixed" looks like
-
-- `CLAUDE.md`
-  - Treat it like code: review it, prune it, test changes to see whether CC's
-    behavior shifts
-  - Use `@path/...` to import additional files
-
-- CLI tools are the most context-efficient way to interact with external services
-  - E.g., `gh`
-
-- Create custom subagents
-  - Stored in `.claude/agents`
-  - Set of allowed tools
-  - Invoke with "Use a subagent to review this code for security issues"
-
-- Let CC interview you
-  ```
-  I want to build [brief description]. Interview me in detail using the AskUserQuestion tool.
-  Ask about technical implementation, edge cases, concerns, and tradeoffs.
-  Don't ask obvious questions, dig into the hard parts I might not have considered.
-  Keep interviewing until we've covered everything, then write a complete spec to SPEC.md.
-  ```
-
-- Course-correct early and often
-  - `ESC`: stop CC mid-action, context is preserved
-  - `ESC + ESC`: rewind and restore code state
-  - `/clear` to start fresh
-  - `/rewind` to a checkpoint
-
-- Manage context
-  - `/clear`
-  - `/compact <instructions>`
-
-- Use subagents to investigate
-  - When CC researches a codebase and reads lots of files, which consume context
-  - A subagent explores the codebase and reports back with findings
-  - E.g., "use a subagent to review this code for edge cases"
-
-- Writer / Reviewer pattern
-  - Writer: Implement XYZ
-  - Reviewer: Review the implementation and look for edge cases, ...
-  - Writer: Address the issues from the review ...
-
-- Write code / Unit tests
-
-- After two failed corrections, `/clear` and write a better initial prompt
-  using what you have learned
-
-# Build with CC
-
-- CC include built-in subagents
-  - Explore
-    - Fast
-    - Agent optimized for searching and analyzing codebases
-    - Read-only tools
-  - Plan
-    - Gather context before presenting a plan
-    - Read-only tools
-  - General-purpose
-    - Agent for complex, multi-step tasks, code modifications
-    - All tools
-
-- You can create your own subagent with
-  - Custom prompts
-  - Tool restrictions
-  - Hooks
-  - Skills
-
-## Create custom subagents
-
-- Subagents are specialized AI assistants that handle specific types of tasks
-  - They have
-    - Custom context window
-    - Custom system prompt
-    - Specific tool access
-
-- When CC finds a task that matches a subagent description it delegates to
-  subagent
-  - Subagent works independently and returns results
-
-- Subagents are defined in Markdown files with YAML frontmatter
-  - Store in `.claude/agents`
-    - Specific of a code base
-    - User subagents for all projects
-    - Specify name, description, tools, model, prompt
-  - `/agents` command
-  - You can pre-load skills into subagent at startup
-  - You can enable memory to persist information across conversations (e.g.,
-    build up knowledge over time)
-  - Can run in foreground (blocking) or background (concurrent)
-
-- Common patterns for subagents
-  - Isolate operations that produce large amounts of output
-    - E.g., fetching doc, processing logs
-    - The work is self-contained and can return a summary
-  - Run parallel research
-  - Multi-step workflows to use subagents in sequence
-    ```
-    Use the code-reviewer subagent to find performance issues, then use the
-    optimizer subagent to fix them
-    ```
-
-### Example subagents
-
-- Subagents should excel at one specific task
-  - Task descriptions should be clear
-
-- Code reviewer
-- Debugger
-- Data scientist
-- Database query validator
-
-## Run agent teams
-
-- Agent teams are disable by default
-
-- Agent teams let you coordinate multiple CC instances working together
-  - One session is the team lead
-    - Coordinate work
-    - Assign tasks
-    - Synthesize results
-  - Teammates
-    - work independently
-    - Communicate with each other
-
-### When to use agent teams
-
-- Use when parallel exploration adds real value
-  - Research and review
-  - New independent features
-  - Debugging with competing hypotheses
-
-- Subagent don't talk to each other but only to the main agent
-- In agent teams, teammates share a task list and communicate with each other
-
-## Create plugins
-
-- Plugins allow to extend CC with skills, agents, hooks, and MCP servers
-
-- Use plugins when you want to
-  - share functionality with your team or community
-  - use the same skills/agents across multiple projects
-  - version control and update
-  - distribute through a marketplace
-
-- Plugins use namespaced skills like `/plugin-name:hello`
-
-- You can point CC to a plugin with `--plugin-dir`
-  - Need a plugin manifest `.claude-plugin-name/plugin.json`
-  - Then the various dirs `commands/`, `agents/`, `skills`
-
-## Prebuilt plugins
-
-- You can find and install plugins from marketplaces to install CC with new
-  commands, agents, and capabilities
-
-- Add the marketplace and browse catalog for plugins
-- Install plugins
-
-- External integrations
-  - Github
-  - Asana
-  - Slack
-
-## Extend CC with skills
-
-- Commands and skills have been merged
-  - `.claude/commands/review.md` and a skill at `.claude/skills/review/SKILL.md`
-    both create `/review`
-
-- `/simplify` reviews recently changed files for code, reuse, quality
-  - It spawns 3 agents (code reuse, code quality, efficiency) and then applies
-    fixes
-  - E.g., `/simplify focus on memory efficiency`
-
-- `/batch <instruction>` orchestrate large-scale changes in parallel
-  - Decompose the work into 5 to 30 units
-  - Present a plan for approval
-  - Spawns agents in isolated `git worktree`
-  - E.g., `/batch migrate src/ from Solid to React`
-
-- Skills can be organized in nested `.claude/skills` directories
-  - Useful in monorepos where each "package" can have their own skills
-
-- Skills are like
-  ```
-  my-skill
-    - SKILL.md
-    - template.md
-    - reference.md  (detailed API docs, loaded when needed)
-    - examples
-      - sample.md   (usage examples, loaded when needed)
-    - scripts/
-      - helper.py   (utility scripts)
-  ```
-- Description can refer to more files
-  ```
-  - For complete API details, see [reference.md](reference.md)
-  - For usage examples, see [examples.md](examples.md)
-  ```
-
-- Fields
-  - `name`: name (if different from directory name)
-  - `description`
-  - `argument-hint`: hint shown during autocomplete
-  - `disable-model-invocation`: prevent CC from triggering automatically
-    - E.g., `/commit`, `send-slack-message`
-  - `model`: model to use
-
-- String substitution
-  - `$ARGUMENTS`: all arguments when invoking the skill
-  - `$N$, `$ARGUMENTS[n]`: n-th argument
-  ```
-  Fix GitHub issue $ARGUMENTS following our coding standards.
-  ```
-  - E.g., `/fix-issue 123`
-
-- The `!command` runs shell commands before the skill content is sent to CC
-  - E.g., to pull the content in `pr-summary`
-    ```
-    ## Pull request context
-    - PR diff: !`gh pr diff`
-    - PR comments: !`gh pr view --comments`
-    - Changed files: !`gh pr diff --name-only`
-    ```
-
-## Output styles
-
-- Control CC's system prompt
-  - `Default`: normal behavior for software engineering
-  - `Explanatory`: provide educational insights
-  - `Learning`: collaborative, CC will add `TODO(human)` to implement
-
-- `/output-style [style]`
-
-- You can create new styles
-
-## Automate with hooks
-
-- Run shell commands automatically when CC
-  - edits files
-  - finishes tasks
-  - need input
-  - format code
-  - send notification
-  - enforce project rules
-
-- Hooks are user-defined commands that execute at specific points
-  - Provide deterministic control
-
-- For decisions that require judgement, use prompt-based hooks
-
-- Examples
-  - Get notified when CC needs input
-  - Autoformat code after edits
-  - Audit config changes
-
-- `Notification` event fires when CC is waiting for input or permission
-
-- Hooks events fire at specific lifecycle points in CC
-  - When an event fires, all matching hooks run in parallel
-  - `Session Start`
-  - `Notification`: when CC sends a notification
-  - `Stop`: when CC finishes responding
-
-- Hooks have a type
-  - `prompt`: single turn LLM eval (i.e., Prompt-based hooks)
-  - `agent`: multi-turn LLM eval (i.e., Agent-based hooks)
-
-- Hooks communicate with CC through stdin, stdout, stderr, exit codes
-  - Inputs are passed as JSON to `stdin`
-  - Hooks can return a structure JSON output and exit code
-
-- Hook matchers let specify which occurrence of an event
-  - E.g., `Notification` has values `permission_prompt`, `idle_prompt`,
-    `elicitation_dialog`
-
-- Prompt based hooks
-  - Use `type: "prompt"` and `model`
-  - The return value should be `"ok": true / false`
-
-## Programmatic usage
-
-- Agent SDK and CLI (aka headless mode)
-  ```bash
-  > claude -p "..."
-  ```
-- Use `--output-format` for `text`, `json`
-  - It is possible to pass `--json-schema`
-  - Use `--allowedTools` to use certain tools without prompting
-    - E.g., `Bash(git diff *)`, `Read,Edit`
-
-## Model Context Protocol (MCP)
-
-- MCP is an open source standard for AI-tool integrations
-
-- E.g.,
-  - Implement features from issue trackers
-  - Analyze monitoring data
-  - Query DBs
-  - Automate workflows
-
-- E.g.,
-  - Notion
-  - Slack
-  - Asana
-  - Zapier
-
-- Use a remote HTTP server
-- Use a local stdio server
-
-## Troubleshooting
-
-# Deployment
-
-<!-- https://code.claude.com/docs/en/third-party-integrations -->
-
-- You can deploy CC through Anthropic or through a cloud provider
-  - Claude for Teams: best for smaller teams to get started
-  - Claude for Enterprise: SSO, compliance
-
-- Development containers
-  - Preconfigured development container
-  - Works with VS Code
-
-# Administration
-
-## Advanced setup
-
-## Authentication
-
-## Security
-- `/sandbox` allows to define boundaries where CC can work autonomously
-- CC only write to the folder where it was started and its subfolders
-  - It can read files outside the working directory
-- Support for allow frequently used commands
-- Accept Edits mode
-
-# Configuration
-
-# Reference
-
-# Resources
-
-- Official documentation for Claude Code: https://code.claude.com/docs/en
+<!-- toc -->
+
+- [Using Claude Code](#using-claude-code)
+  * [1. Opening Claude Code](#1-opening-claude-code)
+  * [2. Creating and Editing Code](#2-creating-and-editing-code)
+  * [3. Running and Testing Code](#3-running-and-testing-code)
+  * [4. Debugging with Claude Code](#4-debugging-with-claude-code)
+  * [5. Working with Larger Projects](#5-working-with-larger-projects)
+  * [6. Prompting Tips](#6-prompting-tips)
+- [Workflows](#workflows)
+  * [Overview](#overview)
+  * [Interesting Files](#interesting-files)
+  * [AI Development Workflow Template](#ai-development-workflow-template)
+  * [AI Review and Transform Tools](#ai-review-and-transform-tools)
+    + [Operations Overview](#operations-overview)
+    + [Use Templates](#use-templates)
+    + [Available Tools](#available-tools)
+
+<!-- tocstop -->
+
+# Using Claude Code
+
+Claude Code is a coding-focused interface for the Claude AI assistant. It helps
+you write, understand, and debug code more efficiently.
+
+## 1. Opening Claude Code
+
+- Run `claude` in your Git client
+
+- Initially you should give permissions to `claude` for any action
+
+- It's not a good idea to use `claude --dangerously-skip-permissions` unless you
+  know what you are doing
+
+## 2. Creating and Editing Code
+
+You can use Claude Code in two ways:
+
+1. Paste or write code directly
+   - Paste existing code into the editor.
+   - Ask Claude something like:
+     - "Explain what this function does."
+     - "Refactor this into smaller functions."
+     - "Convert this from JavaScript to Python."
+
+2. Start from a natural-language request
+   - Type a prompt such as:
+     - "Create a Python script that reads a CSV and prints summary stats."
+     - "Generate a React component for a login form with validation."
+
+3. I like to use a `instr.md` file with the instructions to `claude` so that
+   - E.g., see the template `.claude/templates/ai.instruction_template.md`
+   ```bash
+   > cp .claude/templates/ai.instruction_template.md instr.md
+   # Customize instr.md with detailed instructions
+   claude> execute instr.md
+   ```
+
+Claude will:
+
+- Propose code in the chat
+- Often insert or update code directly in the editor
+
+Save or copy the generated code into your own environment to run it.
+
+## 3. Running and Testing Code
+
+Depending on the integration, Claude Code may:
+
+- Simulate running code (describe what would happen, spot logical issues)
+- Provide test cases and examples
+- Help you write unit tests
+
+Ask things like:
+
+- "Write unit tests for this function using pytest."
+- "What edge cases might break this code?"
+- "Can you step through this algorithm with an example input?"
+
+Then paste results or error messages back into the chat so Claude can help
+debug.
+
+## 4. Debugging with Claude Code
+
+When you get an error in your local environment:
+
+1. Copy the error message and the relevant code snippet.
+2. Paste them into Claude Code.
+3. Ask:
+   - "Here is the error I am seeing. Can you help me fix it?"
+   - "Why does this raise a TypeError? Suggest a fix."
+
+Claude will:
+
+- Explain the error
+- Suggest changes
+- Sometimes give rewritten code blocks
+
+Review changes carefully and test them yourself.
+
+## 5. Working with Larger Projects
+
+For multi-file projects:
+
+- Use any available file browser or project view
+- Open individual files in the editor.
+- Ask questions like:
+  - "Give me a high-level overview of this repository."
+  - "Where is the main entry point for this app?"
+  - "Find where the user authentication logic is implemented."
+
+Claude can:
+
+- Summarize architecture
+- Trace how functions call each other
+- Suggest refactors at the project level
+
+## 6. Prompting Tips
+
+To get better results:
+
+1. Be specific
+   - Instead of "Fix this", say:
+     - "Reduce the time complexity."
+     - "Make this function pure and side-effect free."
+     - "Rewrite this using async/await."
+
+2. Set constraints
+   - "Use only standard library."
+   - "Target Python 3.10."
+   - "Avoid external dependencies."
+
+3. Iterate
+   - Start with a rough version.
+   - Ask Claude to optimize, clean up, or document it:
+     - "Add comments explaining each step."
+     - "Improve variable names and structure."
+
+# Workflows
+
+This document consolidates all AI development workflows, coding conventions, and
+tools used in the Causify/helpers ecosystem.
+
+## Overview
+
+This documentation provides comprehensive guidelines for:
+
+- Writing Python code following Causify conventions
+- Creating unit tests
+- Formatting notes and documentation
+- Using AI-powered review and transformation tools
+- Integrating with ChatGPT API
+- Understanding the helpers repository architecture
+
+## Interesting Files
+
+- `.claude/templates/code_template.py` shows our coding style
+- `.claude/templates/unit_test_template.py` shows how our unit tests look like
+
+- `CLAUDE.md`: Project architecture overview and development conventions for
+  Claude Code working with the `helpers` repository
+- `.claude/templates/ai.instruction_template.md`: Workflow template for creating
+  Python scripts with tests, documentation, planning steps, and AI todos
+- `.claude/skills/coding.rules.md`: Python coding standards including
+  hdbg assertions, hsystem usage, logging patterns, and script templates
+- `docs/ai_prompts/testing.format.md`: Unit testing conventions
+  including test structure, naming patterns, and golden file testing
+
+- `docs/ai_prompts/blog.format.md`: Markdown formatting guidelines for
+  writing blog posts with proper structure, code blocks, and metadata
+
+- `docs/ai_coding/ai.md_instructions.md`: Style guide for writing structured
+  bullet-point notes optimized for clarity and AI/human readability
+
+## AI Development Workflow Template
+
+When creating a Python script:
+
+1. **Write a Python script** following the instructions in
+   `.claude/skills/coding.rules.md`
+
+2. **Generate unit tests** for the code following the instructions in
+   `docs/ai_prompts/testing.format.md`
+
+3. **Generate a short description** of how to use the script in a file close to
+   the script with extension `.md`
+   - Explain the goal of the script
+   - Report some examples of how to use the tool
+   - Describe the architecture
+
+## AI Review and Transform Tools
+
+### Operations Overview
+
+There are several operations we want to perform using LLMs:
+
+- Apply a transformation to a chunk of text (e.g., create a unit test)
+- Create comments and lints in the form of a `cfile` (e.g., lint or AI review
+  based on certain criteria)
+- Apply modifications from a `cfile` to a set of files (e.g., from linter and AI
+  review)
+- Add TODOs from a `cfile` to Python or markdown files
+- Apply a set of transformations to an entire Python file (e.g.,
+  styling/formatting code)
+- Rewrite an entire markdown to fix English mistakes without changing its
+  structure
+
+**Important:** Always commit your code before applying automatic transforms, in
+the same way that we run the `linter` on a clean tree. This way, modifying a
+file is a separate commit and it's easy to review.
+
+### Use Templates
+
+We use templates for code and documentation to show and describe how a document
+or code should look like:
+
+- `all.how_to_guide_template_doc.md` shows how a Diataxis how-to guide should be
+  structured and look like
+
+The same templates have multiple applications:
+
+- **For Humans:**
+  - Understand how to write documentation and code
+  - As boilerplate (e.g., "copy the template and customize it to achieve a
+    certain goal")
+- **For LLMs:**
+  - As reference style to apply transforms
+  - To report violations of coding styles
+  - As boilerplate (e.g., "explain this piece of code using this template")
+
+### Available Tools
+
+- `llm_transform.py`
+- `transform_notes.py`: Some transformations don't need LLMs and are implemented
+  as code.
+- `ai_review.py`: The rules for AI are saved in
+  `./docs/code_guidelines/all.coding_style_guidelines.reference.md`. This file
+  has a special structure:
+  - First level represents the target language (e.g., `General`, `Python`)
+  - Second level represents a rule topic (e.g., `Imports`, `Functions`)
+  - Third level represents instructions for an LLM vs Linter
+- `inject_todos.py`: Injects TODOs from a `cfile` into source files.
+- `apply_todos.py`: Automatically applies TODOs from a `cfile` using an LLM.
+
+#
+
+- Planning mode
+
+> claude --permission-mode plan
+
+Create a plan without coding
+
+- Cheap-o mode
+
+> claude --model haiku
+
+> claude --output-format text -p "Fix update_md.py -i docs/datapull/all.add_new_data_source.how_to_guide.md -a summarize -a apply_style" --dangerously-skip-permissions

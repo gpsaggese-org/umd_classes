@@ -50,7 +50,7 @@ import preliz as pz
 import ipywidgets as widgets
 
 # %%
-import msml610.tutorials.msml610_utils as ut
+import helpers.htutorial as ut
 import L07_01_bayesian_coin_utils as coin_ut
 
 ut.config_notebook()

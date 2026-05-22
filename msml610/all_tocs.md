@@ -1,0 +1,2368 @@
+# Lesson00-Class.txt
+
+- MSML610
+        - Invariants of a Class Lecture
+        - Books of the Class
+        - Grading
+        - Class Projects
+        - Links
+        - Yours Truly
+- Class Map
+        - 1. Intro
+        - 2. Machine Learning Techniques
+        - 3. Knowledge Representation
+        - 4. Machine Learning Models
+        - 5. Machine Learning Theories
+        - 6. Bayesian Statistics
+        - 7. Probabilistic Programming
+        - 8. Reasoning Over Time
+        - 9. Causal Inference
+        - 10. Timeseries Forecasting
+        - 11. Probabilistic Deep Learning
+        - 12. Reinforcement Learning
+        - Refresher: Probability
+        - Refresher Probability Distributions
+        - Refresher Linear Algebra
+        - Refresher Information Theory
+        - Refresher Game Theory
+        - Refresher: Numerical Optimization
+        - Refresher: Stochastic Processes
+
+# Lesson01-1.aux.md
+
+- Analytical Sophistication 1
+- Analytical Sophistication 2
+- Hotel Pricing Paradox
+
+# Lesson01.1-AI_and_Machine_Learning.txt
+
+- AI and Machine Learning
+  - What is AI?
+        - ML, AI, and Intelligence
+        - Human Intelligence
+        - Artificial Intelligence
+        - AI Formal Definition
+        - 1. AI as Thinking Humanly
+        - 2. AI as Thinking Rationally
+        - Thinking Rationally: Cons
+        - 3. AI as Acting Humanly
+        - Turing Test: Pros and Cons
+        - 4. AI as Acting Rationally
+        - Acting Rationally as Ultimate Goal of AI
+        - Rationally is Not Absolute
+        - Problems of a Rational Agent
+  - What is Machine Learning?
+        - Machine Learning: Definitions
+        - Limits of ML Compared to Human Intelligence
+        - Limits of ML Compared to Human Intelligence
+        - The 3 Machine Learning Assumptions
+        - AI vs ML vs Deep-Learning
+# Lesson01.2-The_Foundations_of_AI.txt
+
+- The Foundations of AI
+        - AI Relates to Many Other Disciplines
+        - AI and Philosophy (1/2)
+        - AI and Philosophy (2/2)
+        - AI and Cognitive Psychology
+        - AI and Mathematics
+        - AI and Economics (1/2)
+        - AI and Economics (2/2)
+        - AI and Linguistics
+        - AI and Neuroscience
+        - The Brain Causes the Mind
+        - AI and Computer Science
+        - AI and Control Theory
+        - AI and Computer Engineering
+# Lesson01.3-Brief_History_of_AI.txt
+
+- Brief History of AI
+        - AI Timeline
+        - The Beginning (1943-1956)
+        - Enthusiasm and Great Expectations (1952-1969)
+        - First AI winter (1975-1980)
+        - Expert Systems (1980-1990)
+        - Second AI Winter (late 1980-early 1990)
+        - Return of Neural Networks (1986-)
+        - Probabilistic Reasoning and ML (1987-)
+        - Progress in Speech Recognition
+        - Bayesian Networks
+        - Reinforcement Learning
+        - Reunification (1990s-2000s)
+        - Big Data (2001-Present)
+        - Deep Learning (2011-Present)
+        - Progress in AI Research
+        - What Can AI Do Today? (1/2)
+        - What Can AI Do Today? (2/2)
+  - Risks and Benefits of AI
+        - Benefits of AI
+        - Risks of AI (1/2)
+        - Risks of AI (2/2)
+        - Human-level AI / AGI
+        - The Problem of Control
+        - E/acc vs P(doom)
+        - My 2 cents
+        - Solutions to Problem of Control
+        - Cooperative Inverse Reinforcement Learning
+# Lesson02.1-A_Map_of_Machine_Learning.txt
+
+- A Map of Machine Learning
+        - A Map of Machine Learning
+        - Machine Learning Paradigms
+        - Machine Learning Theory
+        - Machine Learning Models
+        - Machine Learning Techniques
+        - Machine Learning Adages
+# Lesson02.2-ML_Paradigms.txt
+
+- Machine Learning Paradigms
+  - Major Paradigms
+        - Machine Learning Paradigms with Examples (1/3)
+        - Machine Learning Paradigms with Examples (2/3)
+        - Machine Learning Paradigms with Examples (3/3)
+  - Some Examples
+        - Supervised Learning
+        - Unsupervised Learning
+        - Reinforcement Learning
+        - Reinforcement Learning: Examples
+  - Machine Learning in Practice
+        - Machine Learning Flow (1/2)
+        - Machine Learning Flow (2/2)
+        - Question
+        - Input Data
+        - Features
+        - Models
+  - Pipeline Organization
+        - How Are Machine Learning Systems Organized?
+        - Example of Photo OCR System
+        - Getting More Data
+        - OCR Pipeline: Example of Artificial Data Synthesis
+        - Ceiling Analysis for ML Pipeline
+# Lesson02.3-ML_Techniques_Input_Processing.txt
+
+- Input Processing
+        - Data Processing Transformations
+        - Data Cleaning
+        - Handling Outliers and Missing Data
+        - Normalization and Standardization
+        - Encoding Categorical Data
+        - Feature Construction
+        - Dimensionality Reduction
+        - Discretization
+        - Noise Removal
+# Lesson02.4-ML_Techniques_Model_Learning.txt
+
+- Learning Algorithms
+    - Gradient Descent
+        - The Problem of Minimizing a Function
+        - Gradient Descent: Intuition
+        - Gradient descent with fixed learning rate (1/3)
+        - Gradient Descent with Fixed Learning Rate (2/3)
+        - Gradient Descent with Fixed Learning Rate (3/3)
+        - Gradient Descent: Stopping Criteria
+        - Gradient Descent with Fixed Learning Rate
+        - Gradient Descent with Variable Learning Rate
+        - Feature Scaling in Gradient Descent
+        - Issues with Batch Gradient Descent
+    - Stochastic Gradient Descent
+        - Stochastic Gradient Descent
+        - Mini-Batch Gradient Descent
+        - On-Line Learning and Gradient Descent
+        - SGD vs BGD vs Mini-Batch
+        - Map-Reduce for Batch Gradient Descent
+        - Coordinate Descend
+        - Gradient Descent vs Pseudo-Inverse
+# Lesson02.5-ML_Techniques_Model_Evaluation.txt
+
+- Performance Metrics
+        - How to Make Progress in ML Research
+        - How to Measure Classifier's Performance?
+        - Training vs Test Set
+        - Lots of Data Scenario vs Scarce Data Scenario
+        - Splitting Data Into Training, Validation, Test Sets
+        - Rule of Thumbs for Data Set Splits
+        - Can You Use Test Set for Training?
+        - In-Sample vs Out-Of-Sample Error Expressions
+        - Mean Squared Error (MSE)
+        - Root Mean Squared Error (RMSE)
+        - Median-Based Metrics
+        - How to Choose an Error Measure?
+        - Error Measures: Fingerprint Verification Example
+    - Precision and Recall
+        - Error Metrics for Skewed Classes
+        - Confusion Matrix
+        - Precision vs Recall: Definition
+        - Precision / Recall as Quality / Quantity
+        - Precision / Recall for Trivial Classifiers
+        - Trading Off Precision and Recall
+        - Precision-Recall: Pros / Cons
+        - Precision-Recall Curves
+        - Area Under the Curve
+        - F-Score
+  - Model Selection
+        - The Problem of Model Selection
+        - Model Selection Process
+        - Model Selection as Learning
+  - Aggregation
+        - Ensemble Learning: Intuition
+        - Ensemble Learning: Different Techniques
+        - Ensemble Learning: Relation with Statistics
+        - Ensemble Learning: Pros and Cons
+        - When Ensemble Learning Works
+        - How to Combine Outputs in Ensemble Learning
+    - Bagging
+        - Bagging
+        - Bagging and Instability in Learning Algorithms
+    - Boosting
+        - Boosting
+        - Adaboost.M1
+    - Stacking
+        - Stacking
+        - Boosting vs Bagging vs Stacking
+# Lesson02.6-ML_Techniques_How_To_Do_Research.txt
+
+- How to Do Research
+    - Simple Is Better
+        - Occam's Razor
+        - What is a "simple model"?
+        - Model Soundness
+        - Sampling Bias (1/2)
+        - Sampling Bias (2/2)
+        - Data Snooping (1/2)
+        - Data Snooping (2/2)
+        - "Burning the Test Set"
+    - Research Methodology
+        - How to Achieve Out-Of-Sample Fit
+        - What If Out-Of-Sample Fit Is Poor?
+        - Why Using a Lot of Data?
+        - What to Do When You Have Lots of Data?
+        - Why We Do Things?
+        - Summary of the Results, Next Steps
+        - Example: Spam Filter Classification
+        - Right and Wrong Approach to Research
+        - Incremental vs Iterative
+# Lesson03-Knowledge_representation.txt
+
+- Knowledge Representation
+  - Basics of Knowledge Representation
+        - What is Knowledge Representation?
+        - Expressiveness vs. Tractability
+        - Symbolic vs. Sub-symbolic Representation
+        - Neuro-symbolic Approach: Conceptual Spaces
+        - Natural languages
+        - Procedural vs Declarative Approaches
+        - Programming Languages
+  - Examples of Logic
+        - Propositional Logic
+        - First-Order Logic (FOL)
+        - Reasoning and Inference in Logic
+        - Rule-Based Systems (1/2)
+        - Rule-Based Systems (2/2)
+        - Grounding
+  - Logical Agents
+        - Reflex Agents
+        - Knowledge-based Agents
+        - Logic / Knowledge Base (1/2)
+        - Logic / Knowledge Base (2/2)
+        - Model and Possible Worlds: Examples
+        - Satisfaction of a Sentence in a Model
+        - Logical Entailment
+        - Logical Entailment vs Implication
+        - Model Checking Procedure
+        - Sound and Complete Inference Algorithm
+        - Isomorphism between Model and Possible Worlds
+        - Entailment vs Inference vs Implication
+        - Grounding
+  - Ontologies
+        - Ontologies (in computer science)
+        - Ontologies: Components
+        - Ontology: Example University
+  - Reasoning in Ontologies
+        - Example of Reasoning Tasks (1/4)
+        - Example of reasoning tasks in KR (2/4)
+        - Example of reasoning tasks in KR (3/4)
+        - Example of reasoning tasks in KR (4/4)
+        - Ontologies tools: Protege Example
+- Propositional logic
+  - Syntax
+        - Propositional Logic
+        - Proposition Symbol
+        - Sentences
+        - Proposition Logic: Weather Example
+        - Grammar in BNF form
+  - Semantics
+        - Semantics of Propositional Logic
+        - Computing the Truth Value of a Sentence
+        - Interpretation of Implication
+        - Model Checking is Sound and Complete
+        - Inference in Propositional Logic
+        - Propositional Theorem Proving
+        - Logical Equivalence of Sentences
+        - Logical Equivalences (1/2)
+        - Logical Equivalences (2/2)
+        - Deduction theorem
+        - Satisfiability
+        - Proof by Contraction
+        - Propositional Logic
+- First-order Logic
+  - Syntax
+        - First-Order Logic (FOL)
+        - First-Order Logic: Syntax
+        - Sentences
+        - Quantifiers
+        - Nested Quantifiers
+        - Connection between $\forall$ and $\exists$
+  - Semantics
+        - First-order Logic: Semantics
+        - Representing Knowledge in FOL
+        - First-Order Logic: Inference
+- Non-classical Logics
+  - Intro and Examples
+        - Ontological Commitment
+        - Epistemological Commitment
+        - Non-monotonic Logic
+        - Default Reasoning
+        - Non-Monotonic Logic: University Example
+        - Common Sense Reasoning
+        - Common Sense Reasoning: University Example
+        - Open World vs Closed World Assumptions
+        - Inductive Logic Programming
+  - Description Logics
+        - Description Logic
+        - ALC
+        - SHOIN
+        - OWL
+        - Example of OWL in RDF
+        - RDF (Resource Description Framework)
+        - SPARQL
+  - Semantic Web
+        - Semantic Web
+        - WikiData
+        - DBPedia
+        - Semantic Networks
+        - WordNet
+        - ConceptNet
+        - Knowledge Graphs
+        - Knowledge Graph: University Example
+# Lesson04.1-Models.txt
+
+- Naive Bayes Model
+        - Naive Bayes Model
+        - Naive Bayes: Weather Prediction Example
+        - Naive Bayes: Weather Prediction Example
+        - Naive Bayes: Weather Prediction Example
+        - 1-Rule
+        - Naive Bayes: Why Independence Assumption
+        - Estimating Probabilities: MLE
+        - Estimating Probabilities: Laplace Estimator
+  - Decision Trees
+        - Decision Tree
+        - Typical Decision Trees
+        - Decision Trees: Pros
+        - Decision Trees: Cons
+        - Learning Decision Trees: Intuition
+        - Splitting at One Node: Problem Formulation
+        - Measures of Node Impurity for Classification
+        - Probability of Classification in a Node
+        - Misclassification Error: Definition
+        - Gini Impurity Index: Definition
+        - Information Gain: Definition
+        - Measures of Impurity: Examples
+        - Measures of Impurity for Regression
+        - Tips for Using Trees
+        - Feature Selection with Trees
+        - Embeddings with Trees
+  - Random Forests
+        - From Decision Trees to Random Forests
+        - Randomization in Trees
+        - Random Forests: Pros and Cons
+  - Linear Models
+        - Linear Regression Model
+        - Linear Regression: In-sample Error
+        - Linear Regression: Find Optimal Model 
+        - Complexity of One-Step Learning
+        - Linear Models Are Linear in What?
+        - Non-Linear Transformations in Linear Models
+  - Perceptron
+        - Example of Classification Problems
+        - Linear Regression for Classification
+        - Perceptron Learning Algorithm (PLA)
+        - Non-Linear Transformations for Classifications
+# Lesson04.2-Models.txt
+
+- Logistic Regression
+        - Logistic Regression Is a Probabilistic Classifier
+        - Logistic Regression: Example
+        - Logistic Function
+        - Logistic Regression vs Linear Classifier
+        - Error for Probabilistic Binary Classifiers
+        - One-Liner Error for Probabilistic Binary Classifiers
+        - One-Liner Error for Logistic Regression
+        - Cross-Entropy Error
+        - Fitting Logistic Regression
+        - Fitting Logistic Regression (Optional)
+        - Fitting Logistic Regression (Optional)
+        - Gradient Descent for Logistic Regression
+        - One-Vs-All Multi-Class Classification
+        - Cost Function for Multi-Class Classification (Opt)
+  - LDA, QDA
+        - Basic Idea of Parametric Models
+        - Linear and Quadratic Discriminant Analysis
+        - LDA / QDA: Model Form
+        - Bayes Theorem for LDA / QDA
+        - LDA / QDA: Boundary Decision (Optional)
+        - LDA / QDA: Boundary Decision (Optional)
+        - LDA / QDA: Learn Model (Optional)
+        - Evaluating LDA / QDA
+  - Kernel Methods
+        - Kernel: Definition
+        - Kernel: Expression From the Transform
+        - Gaussian Kernel
+        - Kernel as Way to Measure Similarity
+        - Linear Kernel
+        - Polynomial Kernel
+        - Kernel: Identifying a Function as a Kernel
+        - Kernel: Example of Identifying a Kernel
+        - A Kernel Is a Computational Shortcut
+  - Support Vector Machines (Optional)
+        - Support Vector Machines (SVM)
+        - SVM Is a Large Margin Classifier
+        - SVM: Notation and Conventions
+        - SVM: Original Form of Problem
+        - Primal Form of SVM Problem
+        - Dual (Lagrangian) Form of SVM Problem
+        - Dual Form of SVM as QP Problem
+        - Solving Dual Formulation of SVM Problem (1/2)
+        - Solving Dual Formulation of SVM Problem (2/2)
+        - Support Vectors and Degrees of Freedom for SVM
+        - Non-Linear Transform for SVM
+        - Non-Linear Transforms for SVM vs Others
+        - SVM in Higher Dimensional Space
+        - Non-Linear Transform in SVM vs Kernel Trick
+        - SVM in Terms of Kernel: Optimization Step
+        - SVM in Terms of Kernel: Prediction Step
+        - Implications of Kernel Trick in SVM
+        - Non-Linearly Separable SVM Problem
+        - Soft-Margin SVM: Advantages
+        - Primal Formulation for Soft Margin SVM
+        - Classes of Support Vectors for Soft Margin SVM
+        - Intuition for C in SVM
+        - Multi-Class Classification for SVM
+# Lesson04.3-Models.txt
+
+- Similarity-Based Models
+        - Similarity-Based Models: Intuition
+        - Similarity-Based Models: Gaussian Kernels
+        - Radial Basis Function Model for Regression
+        - Radial Basis Function Model for Classification
+        - RBF: Block Diagram
+        - RBF: Number of Parameters
+        - RBF: Reducing Model VC Dimension
+        - RBF: Learning Models (1/2)
+        - RBF: Learning Models (2/2)
+        - Learning RBF Models
+        - RBF Network vs Neural Networks
+        - RBF Network vs SVM
+        - K-Nearest Neighbor (KNN) Model
+        - KNN: Intuition of Number Degrees of Freedom
+        - KNN: Assumptions on the Data
+        - KNN: Training and Test Error
+        - KNN vs RBF Models
+  - Clustering
+        - K-Means Clustering: Problem Formulation
+        - K-Means Clustering: Lloyd's Algorithm
+        - K-Means Clustering: Convergence
+        - K-Means Clustering: Non-Separable Clusters
+        - Choosing the Number of Clusters
+        - Interpretation of Clusters
+  - Anomaly Detection
+        - Anomaly Detection: Problem Formulation
+        - Anomaly Detection: Example of Aircraft Engines
+        - Anomaly Detection: Example of Hacked Account
+        - Anomaly Detection: Example of Data Center
+        - Using a Gaussian Model for Anomaly Detection
+        - Estimate Univariate Gaussian Model
+        - Estimate Multivariate Independent Gaussian Model
+        - Estimate a Multi-Variate Gaussian Model
+        - Estimate a Multi-Variate Gaussian Model
+        - Evaluate Anomaly Detection Systems
+        - Evaluate Anomaly Detection Systems
+        - Anomaly Detection vs Supervised Learning
+# Lesson05.1-Learning_Theory.txt
+
+- Is Machine Learning Even Possible?
+        - A Simple Visual ML Experiment (1/2)
+        - A Simple Visual ML Experiment (2/2)
+        - Is Machine Learning Possible?
+        - Supervised Learning: Bin Analogy (1/2)
+        - Hoeffding Inequality
+        - Supervised Learning: Bin Analogy (2/2)
+        - Validation vs Learning: Bin Analogy
+        - Validation vs Learning: Coin Analogy
+        - Validation vs Learning: Coin Analogy
+        - Validation vs Learning: Hoeffding Inequality
+        - Intuition Why Bound for Hoeffding Is Weak
+        - Training vs Testing: College Course Analogy (1/2)
+        - Training vs Testing: College Course Analogy (2/2)
+- Growth Function
+        - Dichotomy: Definition
+        - Dichotomies vs Hypotheses
+        - Growth Function
+        - What Can Vary in a Dichotomy
+        - Growth Function Is Increasing
+        - Growth Function: Examples
+        - Growth Function: Examples
+        - Break Point of an Hypothesis Set
+        - Break Point for an Hypothesis Set and Learning
+- The VC Dimension
+        - VC Dimension of an Hypothesis Set
+        - VC Dimension: Interpretation
+        - VC Generalization Bounds
+        - VC Generalization Bounds
+        - How to Void the VC Analysis Guarantee
+# Lesson05.2-Overfitting.txt
+
+- Overfitting
+        - Overfitting: Definition
+        - Optimal Fit
+        - Overfitting: Diamond Price Example
+        - Overfitting: Classification Example
+- Bias Variance Analysis
+        - VC Analysis vs Bias-Variance Analysis
+        - Hypothesis Set and Bias-Variance Analysis
+        - Decomposing Error in Bias-Variance (1/4)
+        - Decomposing Error in Bias-Variance (2/4)
+        - Decomposing Error in Bias-Variance (3/4)
+        - Decomposing Error in Bias-Variance (4/4)
+        - Interpretation of Average Hypothesis
+        - Interpretation of Variance and Bias Terms
+        - Variance and Bias Term Varying Cardinality of $\calH$
+        - Bias-Variance Trade-Off: Numerical Example
+        - Bias-Variance Trade-Off: Numerical Example
+        - Bias-Variance Curves
+        - Bias-Variance Curves and Regularization
+        - How to Measure the Model Complexity
+        - Bias-Variance Decomposition with a Noisy Target
+        - Bias as Deterministic Noise
+        - Deterministic vs Stochastic Noise in Practice
+        - Deterministic vs Stochastic Noise Example
+        - Deterministic vs Stochastic Noise Example
+        - Amount of Data and Model Complexity
+        - Overfitting as a Function of Data Resources, Model Complexity, Noise
+- Learning Curves
+        - Learning Curves vs Bias-Variance Curves
+        - Typical Form of Learning Curves
+        - High-Bias vs High-Variance Regime
+# Lesson05.3-Learn_Validation.txt
+
+- Learn-Validation Approach
+  - Train / Test
+        - Estimating Out-Of-Sample Error with One Point
+        - Estimating Out-Of-Sample Error with $K$ Points
+        - Trade-Off Between Training and Validation Set
+        - Error From VC Analysis vs Learn-Validation Approach
+        - Reusing Validation / Test Set for Training
+        - Learn-Validation Approach: Pros and Cons
+  - Cross-Validation
+        - Cross-validation
+        - Cross-Validation: Pros and Cons
+        - Repeated Cross-Validation
+        - Leave-One-Out Cross-Validation
+        - Leave-One-Out Cross-Validation: Pros and Cons
+        - Bootstrap
+        - Bootstrap: Problem
+        - Bootstrap Procedure: Algorithm
+        - Bootstrap: Pros
+        - Bootstrap: Example of Die Rolls
+        - Bootstrap of the Median: Pseudo-Code
+        - Bootstrap for variance of sample statistics: explanation
+# Lesson06.1-Bayesian_Networks.txt
+
+- Logic-Based AI Under Uncertainty
+        - Logic-Based AI Under Uncertainty: Problem
+        - Logic-Based AI Under Uncertainty: Naive Solution
+        - Logic-Based AI Under Uncertainty: Example
+        - Causal and Exhaustive Augmentation
+        - Causal and Exhaustive Augmentation
+        - Failure of Logic-Based AI: Wet Grass Example
+        - Failure of Logic-Based AI: Wet Grass Example
+        - Acting Under Uncertainty: Actual Solution
+        - The Paradox of Probability and Knowledge
+        - The Paradox of Probability and Knowledge
+- Probabilistic Reasoning
+  - Conditional Independence
+        - Full Joint Probability Distribution
+        - Independence of Random Variables: Definition
+        - Conditional Independence: Definition
+        - Conditional Independence: Example
+        - Conditional Independence: Garden Example
+  - Bayesian Networks
+        - Bayesian Networks: Definition
+        - Bayesian Network: Intuition
+        - Bayesian Network and Full-joint distribution
+        - Bayesian Networks: Wet Grass Example
+        - Bayesian Networks: Wet Grass Example
+        - Bayesian Networks: Wet Grass Example
+        - Conditional Probability Table
+        - Bayesian Networks: Burglar Example
+        - Bayesian Networks: Burglar Example
+        - Bayesian Networks: Burglar Example
+        - Conditional Probability Table
+# Lesson06.2-Using_Bayesian_Networks.txt
+
+- Semantics of Bayesian Networks
+        - Bayesian Networks: Semantics
+        - Chain Rule for a Joint Distribution
+        - Statement Probability from Bayesian Network
+        - Statement Probability From Bayes Nets: Example
+- Constructing a Bayesian Network
+        - Constructing a Bayesian Network
+        - Bayesian Networks: Properties
+        - Ordering of Nodes
+        - Causal vs Diagnostic Models
+        - Markov Blanket of a Node
+        - Conditional Independence on Markov Blanket
+        - How Can a Node Be Influenced by Its Children?
+        - Markov Blanket: Medical Example
+        - Markov Blanket: Economic Example
+        - Markov Blanket: Finance Example
+        - Specifying a Conditional Probability Table
+        - Deterministic Nodes
+        - Noisy Logical Relationships
+        - Context-specific Independence
+        - Bayesian Networks with Continuous Variables
+        - Bayesian Network: Car Insurance Company (1/2)
+        - Bayesian Network: Car Insurance Company (2/2)
+- Exact Inference in Bayesian Networks
+        - Exact Inference in Bayesian Networks
+        - Exact Inference in Bayesian Networks: Example
+- Approximate Inference in Bayesian Networks
+        - Monte Carlo Algorithms
+        - Sampling from Arbitrary Distributions
+        - Sampling Bayesian Network Without Evidence
+        - Consistency of Sampling
+        - Rejection Sampling
+        - Rejection Sampling: Pros and Cons
+        - Importance Sampling
+        - Markov Chain Monte Carlo
+        - Markov Chain Construction
+        - Markov Chain Monte Carlo: Mixing
+        - Gibbs Sampling in Bayesian Networks
+        - Metropolis–Hastings Sampling
+# Lesson07.1-Intro_to_Probabilistic_Programming.txt
+
+- Concepts
+        - EDA vs Inference
+        - Good vs Bad Way to Do Statistics
+        - Data
+        - Models
+        - Bayes' Theorem: Recap
+        - Bayesian Models
+- Coin Example
+  - Analytical Approach
+        - Coin Example: Problem
+        - Binomial Distribution
+        - Beta Distribution
+        - Conjugate Prior of a Likelihood
+        - Coin Example: Analytical Solution
+        - Coin Example: Effect of Priors (1/2)
+        - Coin Example: Effect of Priors (2/2)
+  - Frequentist vs Bayesian
+        - Frequentist Approach vs Priors
+        - Advantages of Using Prior
+        - How to Choose Priors
+        - Communicating the Model of a Bayesian Analysis
+        - Confidence Intervals vs Credible Intervals
+        - Confidence Intervals vs Credible Intervals (ELI5)
+  - Probabilistic Programming
+        - Bayesian Statistics
+        - Probabilistic Programming Languages
+        - Coin Example: Numerical Solution (1/3)
+        - Coin Example: Numerical Solution (2/3)
+        - Coin Example: Numerical Solution (3/3)
+# Lesson07.2-Posterior_Based_Decisions.txt
+
+- Posterior-Based Decisions
+        - Posterior-Based Decisions
+        - Savage-Dickey Density Ratio
+        - Savage-Dickey Density Ratio: Example
+        - Region of Practical Equivalence
+        - Loss Function: Motivation
+        - Loss Function
+        - Tutorial
+  - Chemical Shift: Example
+        - Chemical Shift
+        - Use of Gaussians in Statistics
+        - Chemical Shift: Example
+        - Chemical Shift: PyMC
+        - Chemical Shift: PyMC
+  - Posterior Predictive Checks
+        - Samples from Posterior Distribution
+        - Posterior Predictive Check (PPC)
+        - Bayesian Workflow Using PPC
+    - Robust Inference
+        - Chemical Shift Example: PPC
+        - Chemical Shift: Model Critique
+        - Student's t-distribution: Recap
+        - Chemical Shift: Use Student's t-dist (1/3)
+        - Chemical Shift: Use Student's t-dist (2/3)
+        - Chemical Shift: Use Student's t-dist (3/3)
+        - Tutorial
+  - Groups Comparison
+        - Group Comparison
+        - Bogus Control Groups
+        - Group Comparison Bayesian-Style
+        - Sample Size Effect
+        - Cohen's d
+# Lesson07.3-Hierarchical_Models.txt
+
+- Hierarchical Models
+        - Hierarchical Models
+        - Hierarchical Models: Examples
+        - Unpooled, Pooled, Hierarchical Models
+        - Hierarchical Models: Chemical Shift
+        - Hierarchical Models: Chemical Shift
+        - Chemical Shift: Unpooled Model
+        - Chemical Shift: Hierarchical Model
+        - Chemical Shift: Results
+        - Shrinkage
+        - You Need to Know When to Stop
+        - Tutorial
+# Lesson07.4-Generalized_Linear_Models.txt
+
+- Generalized Linear Models
+  - Simple Linear Model
+        - Linear Model
+        - Linear Model: Frequentist Approach
+        - Linear Model: Bayesian Approach
+        - Linear Model: Synthetic Example
+        - Linear Model: Synthetic Example
+        - Linear Model: Synthetic Example
+        - Linear Model: Bike Rental Example
+        - Linear Model: Bike Rental Example
+        - Linear Model: Bike Rental Example (Criticism)
+        - Count Data
+        - Generalized Liner Model (GLM)
+        - Poisson Distribution
+        - Negative Binomial Distribution
+        - Overdispersion
+        - Robust Regression
+  - Logistic Regression
+        - Logistic Regression
+        - Iris Dataset
+        - Classification with Logistic Regression
+        - Boundary Decision for a Classifier
+        - Odds
+        - Classification with Logistic Regression: Bayesian
+        - Heteroskedasticity
+        - Heteroskedasticity: Bayesian Model
+  - Multiple Linear Regression
+        - Multiple Linear Regression
+        - Multiple Regression: Synthetic Example 1/2
+        - Multiple Regression: Synthetic Example 2/2
+        - Multiple Regression: Rented Bike Example 1/2
+        - Multiple Regression: Rented Bike Example 2/2
+        - Tutorial
+# Lesson07.5-Bayesian_Model_Comparison.txt
+
+- Bayesian Model Comparison
+        - Models as Maps of the Real World
+    - Posterior Predictive Checks
+        - Posterior Predictive Checks
+        - Posterior Predictive Checks
+        - Bayesian P-Value for a Statistic
+        - Bayesian P-Value for Entire Distribution
+        - Bayesian P-Value: Example
+        - Bayesian vs Frequentist P-Value
+  - The Balance Between Simplicity and Accuracy
+        - Occam's Razor
+        - Overfitting and Underfitting
+        - Bias-Variance Trade-Off
+  - Measures of Predictive Accuracy
+        - Accuracy Measures
+    - Information Criteria
+        - Information Criteria: Intuition
+        - Model Parameters for Bayesian vs Non-Bayesian Set-Up
+        - Maximum Likelihood Estimation (MLE)
+        - Akaike Information Criterion (AIC)
+        - Bayesian Information Criteria
+    - Cross-Validation
+        - Cross-Validation
+        - ELPD with LOO-CV
+        - Pointwise Predictive Density (PPD)
+        - Expected Log Pointwise Predictive Density
+        - PSIS-LOO-CV
+  - Bayesian Model Selection and Ensemble
+        - Bayesian Model Selection
+        - Model Averaging
+  - Bayesian Hypothesis Testing
+        - Bayes Factors
+        - Assumption of Bayes Factors
+        - Bayes Factors: Pros and Cons
+        - Hierarchical Models: Candies in a Jar Examples
+        - Computing Bayes Factors as Hierarchical Models
+        - Common Problems When Computing Bayes Factors
+        - Using Sequential Monte Carlo to Compute Bayes Factors
+    - Bayes Factors and Information Criteria
+  - Regularizing Priors
+        - Priors and Regularization
+        - Popular Regularization Methods in Bayesian Framework
+# Lesson08.1-Causal_AI_intro.txt
+
+- Introduction and Motivation
+  - Background
+        - Big Data and Traditional AI
+        - Data Analytics Sophistication
+        - Test
+  - What ML Systems Can and Cannot Tell You
+        - The Illusion of Understanding
+        - Association, Correlation, and Causation
+        - What ML Systems Can Tell You
+        - What ML Systems Cannot Tell You
+- Why Causal AI Matters
+  - Problems with Traditional AI
+        - Problem 1: Correlation is Not Causation!
+        - Correlation is Not Causation: Examples
+        - Correlation is Not Causation: Examples
+        - Problem 2: Decision Making
+        - Problem 3: ML Explainability
+        - Problem 4: How ML Systems Make Decisions Today
+        - Data Science for Decisions: Examples
+        - Problem 5: Feedback Loops
+        - Problem 6: Distribution Shift
+  - Optimization vs. Inference vs. Decision Theory
+        - Optimization vs. Inference vs. Decision Theory
+        - Where ML Falls Short
+  - The Cost of Ignoring Causality
+        - The Cost of Ignoring Causality (1/2)
+        - The Cost of Ignoring Causality (2/2)
+        - Causal AI
+        - Causal AI vs Traditional AI
+- Causal AI Fundamentals
+  - The Ladder of Causation
+        - The Ladder of Causation
+        - Rung 1: Association
+        - Rung 2: Intervention
+        - Rung 3: Counterfactuals
+  - Correlation vs Causation Models
+        - Correlation vs Causation Model
+        - Correlation-Based Model Process
+        - Causation-based Model Process
+  - Data Science vs. Decision Science
+        - From Data Science to Decision Science
+        - Causal Questions vs. Predictive Questions
+        - A Roadmap From Prediction to Decision Intelligence
+- Causal AI in Business
+  - Business Context and Motivation
+        - Digital Transformation in Business
+        - Why AI Projects Fail?
+        - How to Make AI Project Succeed
+  - The Causal AI Workflow
+        - AI in Business
+        - Step 1: What Are the Intended Outcomes?
+        - Step 2: What Are the Proposed Interventions?
+        - Step 3: What Factors Create Changes?
+        - Step 4: Build Causal DAG
+        - Marketing Example: Price Intervention
+        - Step 5: Data Acquisition and Integration
+        - Step 6: Model Modification
+        - Step 7: Preparing for Deployment in Business
+        - Roles in Hybrid Teams
+        - Executing for a Hybrid Team Project
+  - Explainability and Interpretability
+        - The Importance of Explainability
+        - Techniques for Interpretability
+        - Causal AI in Interpretable AI
+        - The Future of Causal AI
+# Lesson08.2-Causal_Networks.txt
+
+- Causal Networks
+  - Causal DAGs
+        - (Non-Causal) Bayesian Networks
+        - Causal (Bayesian) Networks
+        - Causal DAG
+        - Causal Edges are Stable
+        - Causal DAG: Example
+    - Example of ladder of causation
+        - Example: Tornado Warning
+        - Tornado Warning: Level 1 (Association)
+        - Tornado Warning: Level 2 (Intervention)
+        - Tornado Warning: Level 3 (Counterfactual)
+  - Structural Causal Model
+        - Structural Causal Model
+        - Structural Causal Model: Sprinkler Example
+  - Variables
+        - Observed Vs. Unobserved Variables
+        - Endogenous Vs. Exogenous Variables
+        - Endo / Exogenous, Observed / Unobserved Vars
+        - Building a Causal DAG
+        - Heart Attack: Example
+        - Weights
+  - Type of Variables in Causal AI
+        - Mediator Variable
+        - Mediator Variable: Example
+        - Moderator Variable
+        - Moderator Variable: Example
+        - Confounder Variable
+        - Confounder Variable: Example
+        - Confounder Variable: Example
+        - Collider
+        - Collider: Examples
+        - Collider Bias
+  - Types of Paths in Causal AI
+        - Fork Structure
+        - Inverted Fork
+# Lesson08.3-Do_Calculus.txt
+
+- Intervention and Counterfactuals
+        - Interventions in Causal Networks
+        - Interventions in Causal Networks
+        - Intervention
+        - Counterfactuals
+        - Causal Discovery
+  - Randomized Controlled Trial
+        - What is a Randomized Controlled Trial?
+        - Randomized Controlled Trial: Example
+        - Randomized Controlled Trial: Limits
+  - Back-door Adjustment
+        - Back-Door Paths: Example
+        - The Back-Door Adjustment
+        - Back-Door Criterion: Overview
+        - Chains, Forks, and Colliders
+        - Common Mistakes
+        - When Back-Door Adjustment Fails
+  - Front-door Adjustment
+        - Front-Door Adjustment in Causal Inference
+        - Cereal and Ads: Example
+        - Cereal and Ads: Solutions
+        - Cereal and Ads: Finding a Mediator
+        - When Front-Door Works
+  - Do-Calculus
+        - Do-Calculus
+        - The Rules of Do-Calculus
+        - Back/Front-door Adjustments and Do-calculus
+# Lesson08.4.txt
+
+- Introduction to Causal Inference
+        - Sales example
+        - Definitions
+        - The Fundamental Problem of Causal Inference
+        - Causal Model
+        - Causal Model: Sales Example
+        - Applying a Treatment to Sales Example
+        - Conditioning vs Intervention
+        - Individual Treatment Effect
+        - Potential Outcomes
+        - Consistency of the Treatment
+        - No Interference (SUTVA)
+        - Average Treatment Effect
+        - Average Treatment effect on the Treated (ATT)
+        - Conditional Average Treatment Effects (CATE)
+        - Bias
+        - The Bias Equation
+        - The Bias Equation: Remarks
+        - The Bias Equation: Visual Example
+        - Simpson's Paradox
+        - Simpson's Paradox: Admission Bias in University
+        - Identifying the Treatment Effect
+        - Independence Property (Aka Unconfoundedness)
+        - Independence Property (Aka Unconfoundedness)
+        - Phases of Causal Inference
+        - Randomization Removes Bias
+- Randomized Experiments and Stats Review
+        - A/B Testing: Example
+        - A/B Testing: Example
+        - Randomized Controlled Trials (RCTs)
+        - Small Size effect
+- Graphical Causal Models
+        - Graphical Models
+        - Email Conversion Example
+        - Are Consultants Worth It?
+        - Chains
+        - Chains: Example
+        - Forks
+        - Collider
+        - D-separation
+        - Identification
+        - Identification: Consultancy Example
+        - Backdoor Adjustment
+        - Confounding Bias
+        - Surrogate Confounding
+        - Selection bias
+        - Selection bias: Example
+        - Selection bias through the collider: Example
+        - Selection bias through mediator: Example
+- The Unreasonable Effectiveness of Linear Regression
+        - Lending Industry: Example
+        - Lending Industry: Example
+        - Bank Loan Risk: Adjustment Formula
+        - Using Regression to Estimate Causal Effects
+        - Regression theory
+        - FWL Theorem
+        - FWL Theorem
+        - Non-linear Estimate
+        - Conditionally Random Experiments
+        - Noise-Reducing vs Noise-Inducing Controls
+  - Feature Selection Dilemma
+- Propensity score
+        - The Impact of Management Training
+        - The problem of non-compliance
+        - Propensity score
+        - Propensity Score Estimation
+        - FWL Orthogonalization and Propensity Score
+        - Propensity score matching
+        - Inverse Propensity Weighting (IPW)
+        - Stabilized Propensity Weights
+        - Propensity Score for Selection Bias
+        - Positivity
+    - IPW Sensitivity
+    - Comparison with Regression
+    - Positivity-Bias Trade-Off
+- Effect heterogeneity
+        - From ATE to CATE
+        - CATE
+        - Why Prediction Is Not the Answer
+        - Restaurant Discount: Example
+        - Evaluating CATE Predictions
+        - Process:
+        - Cumulative Effect
+        - Cumulative Gain
+        - Area Under Curve (AUC)
+- Metalearners
+        - Metalearners
+        - Marketing Email: Example
+        - T-Learner
+        - Regularization Bias
+        - X-Learner
+        - X-Learner With Weighting Scheme
+        - Metalearners for Continuous Treatments
+        - S-Learner
+        - S-Learner: Implementation Steps
+        - S-Learner: The Bias Problem
+        - R-learner (Double/Debiased Machine Learning)
+        - Double-ML: the Overfitting Problem
+        - Double-ML for CATE Estimation
+- Difference-in-differences
+  - Canonical Difference-in-Differences
+        - Data Structures: Definition
+        - Panel
+        - Canonical Difference-in-Differences: The Setup
+        - DiD: Imputing the Counterfactual
+        - Why Difference-in-Difference?
+  - Identification Assumption
+- Synthetic control
+- Geo and switchback experiments
+- Non-compliance and instruments
+- Next steps
+# Lesson08.5-Experimentation.md
+
+- Introduction and Motivation
+- Randomization as Causal Identification
+  - Why Randomization Breaks Confounding
+  - Potential Outcomes and ATE
+- A/B Testing in Practice
+  - Classic A/B Test Design
+  - Power Analysis and Sample Size
+  - Common A/B Testing Pitfalls
+- Advanced Experimental Designs
+  - Switchback Experiments
+  - Multi-Armed Bandits
+  - Limits of Standard A/B Testing
+- When to Experiment vs. Observe
+# Lesson09.1-Reasoning_over_time.txt
+
+- Reasoning Over Time
+  - Definitions
+        - Static vs Dynamic Probabilistic Reasoning
+        - Agents in Partially Observable Environments
+        - Agent: Model Components
+        - Discrete vs Continuous Time Models
+        - Markov Property
+        - Markov Process
+        - Time-Homogeneous Process
+        - First-Order Time-Homogeneous Process
+        - Sensor Model
+        - Sensor Model: Rain Example
+        - Prior Probability
+        - First-Order Markov Process: Joint Distribution
+        - First-Order Markov Process: Joint Distribution
+        - Improving Approximation of Real-World Systems
+  - Defining Temporal Inference Tasks
+        - Inference Tasks in Temporal Models
+        - Task 1: Filtering
+        - Task 2: Prediction
+        - Task 3: Smoothing
+        - Task 4: Most-Likely Explanation
+        - Task 5: Learning
+  - Solving Temporal Inference Tasks
+        - Solving Task 1: Filtering
+        - Recursive Filtering: Update Formula
+        - Recursive Filtering: Update Formula
+        - Recursive Filtering: Intuition
+        - Forward update
+        - Solving Task 2: Prediction
+        - Solving Task 3: Smoothing
+        - Task 3: Smoothing: Update Formula
+        - Task 4: Most Likely Explanation: Intuition 1/2
+        - Task 4: Most Likely Explanation: Intuition 2/2
+        - Viterbi Algorithm: Intuition
+        - Viterbi Algorithm: Example 1/2
+        - Viterbi Algorithm: Example 2/2
+# Lesson09.2-Hidden_Markov_Models.txt
+
+- HMMs
+        - Algorithms for Specific Models
+        - Hidden Markov Model: Formulation
+        - Hidden Markov Model: Example
+        - Hidden Markov Model: Algorithms
+        - Hidden Markov Model: Algorithms
+        - Hidden Markov Model: Applications
+        - Hidden Markov Model: Applications
+        - Hidden Markov Model: Limitations
+- Markov Random Fields
+        - Markov Random Fields
+        - Markov Random Fields: Model Form
+- Markov Logic Network
+        - Markov Logic Networks: Intuition
+        - Markov Logic Networks: Basics
+- Variational Inference
+  - Expectation-Maximization (EM) Algorithm
+        - EM Algorithm: Intuition and Applications
+        - EM Algorithm: Mechanics and Example in Gaussian Mixture Models
+        - Introduction to the Expectation–Maximization (EM) Algorithm
+        - The EM Algorithm: Step-By-Step
+        - Mathematical Foundation of EM
+        - Example: Gaussian Mixture Models (GMM)
+        - Properties and Limitations of EM
+# Lesson09.3-Multi_Armed_Bandits.txt
+
+- Introduction
+        - What are Multi-Armed Bandits?
+        - Why Study Bandits?
+        - Applications: Real-World Decision-Making
+        - Applications: Real-World Decision-Making
+        - The Exploration–Exploitation Tradeoff
+        - The K-Armed Bandit Problem: Formal Definition
+        - Reward Distributions
+        - Performance Metrics
+        - Performance Metrics: Intuition
+        - Regret Lower Bounds
+        - Regret Lower Bounds: Lai–Robbins Bound
+        - Regret Lower Bounds: Implications for Algorithm Design
+- Algorithms
+        - Baseline Strategies
+        - Baseline Strategies: Limitations
+        - $\epsilon$-Greedy Algorithm
+        - $\epsilon$-Greedy: Exploration Schedules
+        - $\epsilon$-Greedy: Regret Behavior
+        - Optimism in the Face of Uncertainty
+        - Optimism: Confidence Intervals
+        - Upper Confidence Bound (UCB)
+        - Upper Confidence Bound: Arm Selection Rule
+        - Upper Confidence Bound: Key Intuition
+        - Regret Analysis of UCB
+        - Regret Analysis: Role of Concentration Inequalities
+        - Regret Comparison: UCB vs. $\epsilon$-Greedy
+        - Variants of UCB
+        - Variants of UCB: When They Matter
+- Bayesian Approaches
+        - Bayesian Bandits
+        - Bayesian Bandits: Priors and Posteriors
+        - Bayesian Decision-Making
+        - Thompson Sampling
+        - Thompson Sampling: Algorithm Steps
+        - Thompson Sampling: Practical Performance
+        - Comparison of UCB and Thompson Sampling
+        - Adversarial Bandits
+        - EXP3 Algorithm
+        - Stochastic vs. Adversarial Settings
+        - Contextual Bandits
+        - Linear Contextual Bandits
+        - LinUCB
+        - Contextual Thompson Sampling
+        - Bandits vs. Reinforcement Learning
+        - Non-Stationary Bandits
+        - Algorithms for Non-Stationary Bandits
+        - Structured Bandits
+        - Best-Arm Identification
+        - Practical Issues
+# Lesson09.4-gh_Filter.txt
+
+- gh Filter
+        - Tracking Objects
+        - Some Guiding Principles
+        - Example of Estimating Body Weight
+        - Example of Estimating Body Weight
+        - Example of Estimating Body Weight
+        - Example of Estimating Body Weight
+        - g-h Filter
+        - g-h Filter Algorithm: Pseudo-Code
+        - Interpretation of $g$
+        - Interpretation of $h$
+        - Control Theory Nomenclature
+# Lesson09.5-Kalman_Filter.txt
+
+- Discrete Bayes Filtering
+        - Tutorial
+        - A Discrete Bayesian 1-D Dog
+        - You Cannot Trust Either Source Alone
+        - Predict: Loses Information
+        - Update: Gains Information
+        - Bayesian Update Algorithm
+        - Bayesian Update Algorithm
+- Unidimensional Kalman Filters
+        - Tutorial
+        - Kalman Filter: Interpretations
+        - Kalman Filter: Bayesian Interpretation
+        - Sum of Gaussians
+        - Product of Gaussians
+        - Kalman Filter: Classical Representation
+        - Kalman Pseudo-Algorithm
+        - Kalman Pseudo-Algorithm
+        - Kalman Gain
+- Multivariate Kalman Filters
+        - Tutorial
+        - Multivariate State
+        - Multivariate Gaussian
+        - Multiplying Two Multivariate Gaussians
+        - Core Insight: Power Comes from Correlated Structure
+        - Multivariate Filtering
+        - Notation
+        - Multivariate Kalman Filter
+        - From Univariate to Multivariate Kalman Filter
+        - Designing a Kalman filter
+        - Algorithm
+  - Modeling
+        - State Space Systems
+        - Designing the Process Noise Matrix
+  - Non-Linear Filtering
+        - Optimality
+        - The World Is Non-Linear
+        - Nonlinear Kalman Filtering Overview
+        - Extended Kalman Filter EKF
+        - Unscented Kalman Filter UKF
+        - Unscented Transform
+        - Unscented Transform: 1D Case
+        - Unscented Transform: Sigma Points
+        - Particle Filter PF
+        - Intuition of Sampling Techniques
+        - Generic particle filter algorithm
+        - Degeneracy Problem in Sequential Importance Sampling (SIS)
+        - Resampling: Core Idea
+# Lesson09.6-Dynamic_Bayesian_Networks.txt
+
+- Dynamic Bayesian networks
+        - Dynamic Bayesian Networks (DBNs)
+        - DBNs vs HMMs
+        - DBNs vs Kalman Filters
+        - Constructing a DBN
+        - DBN Example: Tracking a Robot (1/3)
+        - DBN Example: Tracking a Robot (2/3)
+        - DBN Example: Tracking a Robot (3/3)
+        - Inference in DBNs
+        - Approximate Inference in DBNs
+        - DBN to Represent Changing Model
+        - DBN: Inference
+        - DBN: Optimization for Inference
+# Lesson10-Timeseries_forecasting.txt
+
+- Time Series
+  - Basic definition
+        - Time Series
+        - Time Series
+        - Time Series: Visualization and Exploration
+        - Autocovariance
+        - Stationarity: Intuition
+        - Strictly Stationary: Definition
+        - Weakly Stationary: Definition
+      - Original ####
+        - Auto-Correlation Function (ACF)
+        - Transformation of a time series
+  - Time series operators
+        - Lag Operator
+        - Lead Operator
+        - Shifting More Than One Time Step
+        - Difference Operator
+        - Second Difference Operator
+        - N-th Difference Operator
+  - Time series decomposition
+        - Decomposition of Time Series
+        - Seasonality: Example
+        - Cycle: Example
+        - Seasonal Plot
+        - Seasonal Differencing
+        - Spectral Plot
+- Classical Methods
+  - Simple Models for Stochastic Process
+        - White Noise Process
+        - Deterministically Trending Process
+        - Random Walk
+  - Autoregressive models
+        - Autoregressive (AR) Models
+        - AR(1) process
+        - AR(1) process: mean
+        - AR(1) process: in terms of mean
+        - AR(1) process: properties
+        - AR(1) process is mean-reverting
+        - AR(1) Process Approximates Ergodicity
+        - AR(1) Process vs Gaussian White Noise
+        - AR(1) to model financial time series
+        - AR(p) model
+        - AR(p) model in terms of lag operator
+  - Moving average models
+        - Moving Average (MA) Models
+        - MA(1) process: def
+        - MA(1) process: properties
+        - MA(q) model
+        - MA(q) model in terms of lag operator
+  - ARMA(p, q) process
+        - ARMA(p, q) model
+        - Residuals of ARMA model
+        - ARIMA Models
+        - ARIMA Models: Differencing
+        - SARIMA
+        - Fitting ARMA / ARIMA models
+  - ARCH model
+        - ARCH: Intuition
+        - ARCH(q): definition
+        - GARCH(p, q): definition
+        - Exponential Smoothing Model
+        - Additive Holt-Winters Model
+        - Additive Holt-Winters Model: Use
+        - Vector Autoregressions (VAR)
+        - Forecasting with Exogenous Variables
+- Modern Approaches
+        - State Space Models
+        - Frequency Domain Methods
+        - Machine Learning for Time Series
+        - Deep Learning for Time Series
+        - Bayesian Time Series Models
+- Special techniques for time series modeling
+        - Time Series Machine Learning: Problems
+        - Cross-Validation for Time Series
+        - Anomaly Detection in Time Series
+        - Probabilistic Forecasting
+        - Granger Causality
+        - Change Point Detection in Time Series
+        - Markov-Switching Models
+  - Self-Supervised and Representation Learning for Time Series
+  - Hierarchical Bayesian Forecasting
+  - Reinforcement Learning for Time Series Decision Making
+  - Transformers and Attention Mechanisms for Time Series
+  - Energy-Based Models and Diffusion Models for Forecasting
+  - Time Series Generative Models
+  - Long-Horizon Forecasting Challenges
+  - Uncertainty Quantification and Calibration
+# Lesson10.1-Causal_Inference_for_Time_Series.txt
+
+- Time Series vs. Cross-Sectional Causality
+  - Temporal Causal Structures
+        - Why Time Series Causality Is Different
+        - Temporal Causal Structures: Basic Setup
+        - Temporal Causal Structures: Key Quantities
+  - Challenges Specific to Time Series
+        - Autocorrelation: The First Challenge
+        - Non-Stationarity and Trends
+        - Feedback Loops and Simultaneity
+        - Unobserved Confounders That Vary Over Time
+        - Other Common Challenges
+  - When Temporal Structure Helps and When It Misleads
+        - When Temporal Structure Helps
+        - When Temporal Structure Misleads
+- Granger Causality
+  - Definition and Intuition
+        - Granger Causality: Motivation
+        - Granger Causality: Formal Definition
+        - Granger Causality: Intuition and Geometry
+  - Assumptions and Limitations
+        - Granger Causality: Key Assumptions
+        - Granger Causality: Limitations
+  - Practical Examples
+        - Granger Causality: Practical Example 1
+        - Granger Causality: Practical Example 2
+- Interrupted Time Series (ITS)
+  - Design and Estimation
+        - Interrupted Time Series: Motivation
+        - ITS: Design
+        - ITS: Basic Regression Formulation
+        - ITS: Estimation Details
+  - ITS and Regression Discontinuity
+        - ITS as a Regression Discontinuity in Time
+        - ITS vs. Cross-Sectional RDD: Comparison
+  - Applications in Causal Inference
+        - ITS: Applications
+        - ITS: Strengths and Weaknesses
+- Difference-in-Differences (DiD)
+  - Parallel Trends Assumption
+        - DiD: Motivation and Setup
+        - DiD: The Core Idea
+        - DiD: Regression Formulation
+        - Parallel Trends Assumption
+        - Checking Parallel Trends: Visual and Statistical Tests
+  - Estimation and Robustness
+        - DiD: Estimation Details
+        - DiD: Robustness Checks
+  - Extensions: Multiple Time Periods
+        - DiD with Multiple Periods: Staggered Adoption
+        - Modern Staggered DiD Estimators
+        - DiD: Summary of Strengths and Limits
+- Synthetic Control Methods
+  - Constructing a Counterfactual from Donor Series
+        - Synthetic Control: Motivation
+        - Synthetic Control: Construction
+  - Weighted Combinations and Optimal Weights
+        - Synthetic Control: Formal Setup
+        - Synthetic Control: Optimization
+        - Synthetic Control: Inference via Placebos
+  - When Synthetic Control Succeeds and Fails
+        - Synthetic Control: When It Works Well
+        - Synthetic Control: When It Fails
+        - Synthetic Control vs. Other Methods: Summary
+        - Putting It All Together: Which Method When?
+
+# Lesson10.2-Causal_Discovery.txt
+
+- The Discovery Problem: When and Why It Works
+  - Inferring Causal Structure from Observational Data
+        - Causal Discovery: Motivation
+        - Causal Discovery: Definition
+        - Observational vs. Interventional Data
+        - The Discovery Problem in One Picture
+  - Identifiability and Causal Sufficiency
+        - Key Assumptions for Causal Discovery
+        - Markov Equivalence Classes
+        - Identifiability: When Can We Recover the DAG?
+        - Faithfulness: A Subtle Assumption
+  - Practical Limitations of Automated Discovery
+        - Practical Limitations
+        - Practical Limitations (cont.)
+- When to Use Discovery vs. Domain Knowledge
+  - Discovery as Hypothesis Generation
+        - Discovery vs. Domain Knowledge
+        - Discovery as Hypothesis Generation
+  - Combining Discovery with Domain Knowledge
+        - Using Domain Knowledge as Constraints
+        - Combining Automated Discovery with Expert Judgment
+- Discovery Algorithm Families
+        - Three Main Algorithm Families
+  - Constraint-Based Methods: PC and FCI
+        - PC Algorithm: Idea
+        - PC Algorithm: Steps
+        - PC Algorithm: Example
+        - FCI: Dealing with Latent Confounders
+  - Score-Based Methods: GES and NOTEARS
+        - Score-Based Approach: Idea
+        - GES: Greedy Equivalence Search
+        - NOTEARS: Continuous Optimization
+  - Non-Gaussian and Functional Methods
+        - LiNGAM: Linear Non-Gaussian Acyclic Model
+        - Discovery Algorithm Families: Summary
+- Challenges and Validation
+  - Why Standard ML Fails at Causal Discovery
+        - Why Standard ML Fails at Causal Discovery
+        - Standard ML vs. Causal Discovery
+  - Multiple Models Produce Identical Predictions
+        - The Identifiability Ceiling
+        - Markov Equivalence: Example
+  - Domain Expert Review and Refutation Testing
+        - Validating a Discovered DAG
+        - Refutation Testing
+  - When Discovery Should Change Your DAG
+        - When Discovery Should Change Your DAG
+        - Causal Discovery: Key Takeaways
+
+# Lesson11-Probabilistic_deep_learning.txt
+
+- Neural networks
+        - Deep learning
+        - DL vs ML
+  - Biological inspiration
+        - Biological Inspiration for Neural Networks
+        - Neurons in the brain
+        - Neural Network
+        - The "one learning algorithm" theory
+        - Why resurgence of neural networks?
+        - NN vs logistic regression + non-linear transform
+  - Neural networks
+        - Neural Network Perceptron
+        - Activation Functions
+        - Activation Functions
+        - Neural networks to compute boolean functions
+        - Universal Approximation in Feedforward Networks
+        - Feedforward vs Recurrent Neural Networks
+        - Structure of feedforward neural network
+        - Structure of feedforward neural network
+        - Conventions for neurons in a neural network
+        - Feedforward propagation algorithm
+        - Vectorized feedforward propagation algorithm
+        - Cost Function for Single-Class NN Classification
+        - Multi-output neural networks for multi-class classification
+        - Cost Function for Multi-Class NN Classification
+        - Issues with fitting a neural networks
+        - Fitting a neural networks for SGD
+        - Computing the gradient
+        - Backpropagation in Neural Networks
+        - Backpropagation in Neural Networks
+        - Gradient checking
+        - Automatic Differentiation
+- Advanced Neural Network Architectures
+  - Convolutional Neural Networks
+        - Convolutional Neural Networks
+        - Convolutional Neural Networks
+        - Convolutional Neural Networks
+        - Residual Networks (ResNets)
+  - Recurrent Neural Networks
+        - Recurrent Neural Networks (RNNs)
+        - Vanishing and Exploding Gradient Problem
+        - Long Short-Term Memory (LSTM) Networks
+        - Gated Recurrent Units (GRUs)
+  - Deep learning learning algorithms
+        - Techniques for Training Deep Neural Networks
+        - Techniques for Training Deep Neural Networks
+        - Regularization in neural networks
+  - Deep learning for NLP
+        - NLP Tasks
+        - Part-of-speech (POS) tagging
+        - NLP using Rules-Based Systems
+        - The bitter lesson
+        - The bitter lesson
+        - Word Representation
+        - Word Embeddings: Emerging Properties
+        - Word Embeddings: Pretrained vs Custom
+        - Language Models
+        - Feedforward network for language models
+        - RNNs for language models
+        - RNNs for language models: pros and cons
+        - Sequence-to-Sequence Models
+        - Sequence-to-Sequence Attention
+        - Sequence-to-Sequence Attention
+        - Types of Attention
+        - Attention: Vectorized Formula
+        - Sequence-to-Sequence: Decoding
+        - Transformer Architecture
+        - Pretraining
+        - Masked language models
+- Fundamentals of Deep Learning
+        - Neural Networks and Backpropagation
+        - Loss Functions
+        - Optimization
+        - Overfitting and Regularization
+- Training Deep Neural Networks
+        - Weight Initialization Strategies
+        - Batch Normalization
+        - Learning Rate Schedules and Warmup
+        - Early Stopping and Model Checkpointing
+        - Data Augmentation Techniques
+- Interpretability and Explainability
+        - Feature Attribution Methods (Saliency Maps, SHAP)
+        - Explainable AI (XAI) Techniques
+        - Attention Mechanisms for Interpretability
+        - Layer-wise Relevance Propagation
+- Deep Generative Models
+        - Variational Autoencoders (VAEs)
+        - Generative Adversarial Networks (GANs)
+        - Energy-Based Models
+        - Flow-Based Generative Models (Normalizing Flows)
+        - Diffusion Models
+- Bayesian Deep Learning
+        - Bayesian Neural Networks (BNNs)
+        - Dropout as Approximate Bayesian Inference
+        - Deep Ensembles
+        - Posterior Approximation Techniques (MC Dropout, VI)
+- Deep Probabilistic Models
+        - Probabilistic Graphical Models (PGMs)
+        - Deep Latent Variable Models
+        - Structured Variational Inference
+        - Neural Processes and Meta-Learning
+- Uncertainty Quantification
+        - Aleatoric vs Epistemic Uncertainty
+        - Calibration of Neural Networks
+        - Conformal Prediction for Deep Models
+        - Predictive Uncertainty in Classification and Regression
+- Probabilistic Programming and Inference
+        - Introduction to Probabilistic Programming Languages (PyMC, Pyro, Edward)
+        - Variational Inference (VI)
+        - Markov Chain Monte Carlo (MCMC) for Deep Models
+        - Stochastic Variational Inference
+- Modern Research Frontiers
+        - Diffusion Probabilistic Models (DDPMs, Stable Diffusion)
+        - Score-Based Generative Modeling
+        - Neural ODEs and Continuous Normalizing Flows
+        - Self-Supervised Learning (SimCLR, BYOL)
+        - Causal Deep Learning (Counterfactual Deep Networks)
+- Bonus Topics
+        - Multimodal Deep Learning (Vision+Language Models)
+        - Inverse Problems and Deep Learning
+        - Deep Learning for Scientific Discovery (e.g., Protein Folding, Physics)
+
+# Lesson11.1-Decision_Making_with_Causal_Models.txt
+
+- Why Prediction Is Not Enough
+  - Prediction Pipelines vs. Decision Pipelines
+        - From Predictions to Decisions
+        - Prediction Pipeline: Standard Supervised Learning
+        - Decision Pipeline: What Changes
+        - Prediction vs. Decision: Side-by-Side
+  - When Prediction Fails
+        - Simpson's Paradox
+        - Simpson's Paradox: Causal Resolution
+        - Confounding: The Root Cause
+        - Policy Reversal
+  - Causal Models as the Foundation for Decisions
+        - Causal Models for Decisions
+        - Decision Loop with Causal Models
+- Foundations of Decision Theory
+  - Utility Functions and Expected Utility
+        - Utility Functions
+        - Expected Utility Principle
+        - Expected Utility: A Simple Example
+  - Causal Interventions and Expected Outcomes
+        - From Observational to Interventional Expectation
+        - Intervention in an Influence Graph
+        - Expected Outcome of an Intervention
+  - Risk Preferences and Multi-Criteria Trade-offs
+        - Risk Preferences
+        - Visualizing Risk Aversion
+        - Multi-Criteria Trade-offs
+        - Risk and Trade-offs: Practical Advice
+- Decision Support with Causal Models
+  - Influence Diagrams
+        - Influence Diagrams: Motivation
+        - Influence Diagram: Anatomy
+        - Solving an Influence Diagram
+        - Influence Diagrams: Pros and Cons
+  - Bayesian Decision-Making
+        - Posteriors to Optimal Actions
+        - Bayesian Decision Rule: Example
+        - Bayesian vs. Frequentist Decisions
+  - Prior Elicitation
+        - Prior Elicitation: What and Why
+        - Methods for Eliciting Priors
+        - Pitfalls and Best Practices
+- Sequential Decision-Making and Active Learning
+  - Value of Information
+        - Value of Information: Motivation
+        - Expected Value of Perfect Information (EVPI)
+        - Expected Value of Sample Information (EVSI)
+  - Exploration vs. Exploitation
+        - Exploration vs. Exploitation
+        - Causal Multi-Armed Bandits
+        - Thompson Sampling
+  - Bayesian Optimization for Experimentation
+        - Bayesian Optimization: The Setup
+        - Acquisition Functions
+        - BO in Causal Experimentation
+- Uncertainty in Causal Decisions
+  - Aleatoric Uncertainty
+        - Aleatoric Uncertainty: Irreducible Randomness
+        - Representing Aleatoric Uncertainty
+  - Epistemic Uncertainty
+        - Epistemic Uncertainty: Model Misspecification
+        - Aleatoric vs. Epistemic: Side-by-Side
+        - Distinguishing in Practice
+  - Communicating Uncertainty
+        - Communicating Uncertainty to Stakeholders
+        - Communicating Uncertainty: A Worked Example
+        - Summary: Decision-Making with Causal Models
+
+# Lesson12-Reinforcement_learning.txt
+
+- Sequential Decision Problems
+        - Sequential Decision Problems
+        - Markov Decision Process
+        - MDP: Solution
+        - MDP: 4x3 Environment Example
+  - Utilities Over Time
+        - Utility Function
+        - Additive Rewards
+        - Expected Utility of a Policy
+        - Principle of Maximum Expected Utility (MEU)
+        - MDP: Tetris Example
+        - Utility of a State
+        - Bellman Equation
+        - Bellman Equation: Intuition
+        - Q-Function
+        - Shaping Theorem
+        - Representing MDP
+        - Dynamic Decision Networks: Tetris Example
+  - Algorithms for MDPs
+        - Value Iteration (1/2)
+        - Value Iteration (2/2)
+        - Policy Iteration
+        - Off-Line vs On-Line Solution of MDPS
+        - The $n$-Bandit Problem
+        - Partially Observable MDPs (POMDPs)
+        - POMDP: 4x3 World with Noisy Four-Bit Sensor
+        - Belief State Transitions and Value of Information
+        - Solving POMDPs
+- Reinforcement Learning
+        - Problem with Supervised Learning
+        - Reinforcement Learning
+        - Sparse vs Immediate Rewards
+        - Applications of Reinforcement Learning
+        - Model-Based Reinforcement Learning
+        - Model-Free Reinforcement Learning
+        - Model-Based vs Model-Free Reinforcement Learning
+        - Active vs Passive Reinforcement Learning
+  - Passive Reinforcement Learning
+        - Passive Learning Agent
+        - Adaptive Dynamic Programming
+        - Temporal-Difference Learning
+  - Active Reinforcement Learning
+        - Active Reinforcement Learning
+        - Greedy Agent in Reinforcement Learning
+        - Safe Exploration in Reinforcement Learning
+        - Temporal-Difference Q-Learning
+  - Generalization in Reinforcement Learning
+        - Generalization in Reinforcement Learning (1/2)
+  - Policy Search
+        - Policy Search in Reinforcement Learning
+- Fundamentals
+        - What Is Reinforcement Learning?
+        - Components of an RL Problem (Agent, Environment, State, Action, Reward)
+        - Policy, Value Function, and Model
+        - Exploration vs Exploitation
+        - Discount Factor and Infinite Horizon
+        - Episodic vs Continuing Tasks
+- Classical Methods
+        - Dynamic Programming (DP)
+        - Policy Evaluation (Prediction Problem)
+        - Policy Iteration
+        - Value Iteration
+        - Monte Carlo Methods
+        - Temporal Difference (TD) Learning
+        - SARSA Algorithm
+        - Q-Learning Algorithm
+        - Eligibility Traces and TD($\lambda$)
+- Exploration Strategies
+        - $\epsilon$-Greedy Exploration
+        - Softmax Action Selection
+        - Upper Confidence Bound (UCB)
+        - Thompson Sampling
+        - Optimistic Initial Values
+- Policy Gradient Methods
+        - Policy Optimization vs Value-Based Methods
+        - REINFORCE Algorithm
+        - Variance Reduction in Policy Gradients (Baselines)
+        - Actor-Critic Methods
+        - Advantage Actor-Critic (A2C)
+        - Trust Region Policy Optimization (TRPO)
+        - Proximal Policy Optimization (PPO)
+- Value Function Approximation
+        - Function Approximation with Linear Models
+        - Nonlinear Function Approximation with Neural Networks
+        - Stability and Divergence Issues
+        - Deep Q-Network (DQN)
+        - Experience Replay
+        - Target Networks
+- Deep Reinforcement Learning
+        - Double DQN
+        - Dueling DQN
+        - Prioritized Experience Replay
+        - Distributional Reinforcement Learning
+        - Rainbow DQN
+- Model-Based Reinforcement Learning
+        - Planning vs Learning
+        - Dyna Architecture
+        - Model Learning and Planning Algorithms
+        - Model Predictive Control (MPC)
+        - Dreamer and Planet (World Models)
+- Advanced Topics
+        - Multi-Agent Reinforcement Learning
+        - Inverse Reinforcement Learning
+        - Imitation Learning
+        - Hierarchical Reinforcement Learning (Options Framework)
+        - Safe Reinforcement Learning
+        - Offline Reinforcement Learning (Batch RL)
+        - Meta Reinforcement Learning
+        - Curriculum Learning
+        - Exploration in Sparse Reward Environments
+        - Generalization and Transfer in RL
+- Applications
+        - Reinforcement Learning in Games (e.g., AlphaGo, Dota 2)
+        - Reinforcement Learning for Robotics
+        - Reinforcement Learning for Recommendation Systems
+        - Reinforcement Learning for Finance
+
+# Lesson15.1-Causal_Reasoning_Agents.md
+
+- LLMs and Causal Reasoning
+  - LLMs: Strengths and Limitations
+  - Pattern-Based Reasoning vs. Causal Reasoning
+- Enhancing LLM Reasoning with Causality
+  - Chain-of-Thought Prompting for Causal Reasoning
+  - Integrating Causal and Probabilistic Frameworks
+- Causal Agent Architectures
+  - Agents with Explicit Causal Models
+  - Integrating Causal Inference into Planning
+- Trustworthy AI Through Causality
+  - Transparency and Interpretability
+  - Robustness Through Causal Constraints
+  - Fairness Through Causal Reasoning
+  - Safety Through Causal Reasoning
+
+# Lesson91.Refresher_probability.txt
+
+- Probability
+  - Probability definition
+        - What is probability?
+        - Sample outcome and sample space
+        - Event
+        - Event space $\calF$
+        - Summary of definitions
+        - Properties of event space
+        - Two mutually exclusive events
+        - Mutually vs pairwise exclusive
+        - Mutually exclusive as Venn diagrams
+        - Partition of $\Omega$
+  - Probability measure
+        - Probability measure
+        - Set operations on events and probability measure
+        - Union upper / lower bound
+  - Independent events
+        - Two independent events
+        - Exclusive vs independent events
+        - Set of mutually / pairwise independent events
+        - Probabilistic Principle of Inclusion-Exclusion
+        - PPIE with N events
+  - Conditional probability
+        - Conditional probability
+        - Conditional probability: intuition
+        - Conditional probability: example
+        - Conditional probability: example
+        - Probability of the intersection of two non-independent events
+        - Conditional probability: example marbles
+        - Prosecutor's fallacy
+        - Prosecutor's fallacy: example
+        - Independent events and conditional probability
+        - Odds: definition
+        - Interpretation of odds
+  - Law of total probability
+        - Law of total probability
+        - Law of total probability for two events
+  - Bayes theorem
+        - Bayes' theorem for 2 events
+        - General form of Bayes' theorem
+        - Interpretation of Bayes' theorem as update of beliefs
+        - Bayes' theorem + Law of total probability
+        - Bayes' theorem vs Law of total probability
+        - Making decisions using Bayes' theorem
+        - Bayes' theorem: detect spam email
+        - Bayes' theorem: rain example
+        - Frequentist interpretation
+        - Bayesian interpretation
+- Random variables
+  - Random variables
+        - Random variable (RV)
+        - Random variables link sample space and data
+        - RVs are not defined in a unique way
+  - CDF, PMF, PDF of Random Variables
+        - Cumulative Distribution Function of a RV
+        - Properties of CDF
+        - CDF of discrete RV in terms of probability
+        - Probability Mass Function for a discrete RV
+        - Properties of PMF
+        - PMF: example of coin flip
+        - Discrete RV in terms of continuous RV
+        - Integrals in terms of PDF and CDF
+        - Empirical CDF of a (discrete or continuous) RV
+        - Empirical PMF
+        - Empirical PMF of a (discrete or continuous) RV
+        - Integral of empirical CDF / PMF
+        - Probability Density Function for continuous RV var
+        - 2 properties of PDF
+        - CDF for continuous RV in terms of PDF
+        - Probability of event in terms of CDF / PDF of continuous RV
+        - Probability of a single value
+  - Joint distributions
+        - Joint CDF for 2 RV: definition
+        - Joint CDF: intuition
+        - Joint CDF for discrete RV in terms of probability
+        - Joint PMF for discrete RV in terms of probability
+        - Joint PMF properties
+        - Joint PDF for continuous RV in terms of joint CDF
+        - Joint CDF for discrete RV in terms of joint PDF
+        - Joint CDF for continuous RV in terms of joint PDF
+        - Probability of event in terms of joint PDF for continuous RV
+  - Marginal distributions
+        - Marginal CDF for discrete / continuous RV in terms of joint CDF
+        - Marginal PMF for discrete RV in terms of joint PMF
+        - Marginal PDF for continuous RV in terms of joint PDF
+  - Independent RVs
+        - Def of independent RV
+        - CDF of independent RV
+        - PDF / PMF of independent RVs
+        - Characterization of PDF and CDF of independent RV
+        - Marginal PDF / PMF / CDF
+  - Conditional PDF RVs
+        - Def of conditional PDF for RVs
+        - Conditional probability in terms of conditional PDF
+        - Marginal PDF for continuous RV in terms of conditional PDF
+        - Summary of relationships
+- Mathematical expectation of RVs
+  - Mean
+        - Mean of discrete RV: definition
+        - Mean of discrete RV in terms of probability
+        - Alternative names and symbols for mean of a RV
+        - What is the mean of a biased coin?
+        - Mean of continuous RV: definition
+        - Mean as measure of central tendency
+        - Intuition of law of large numbers for discrete vars
+        - Mean as center of mass
+        - Mean as minimum value for squared errors
+        - Theorem of the mean
+        - Theorem of the mean: proof
+        - Indicator variable of an event
+        - Intuition of indicator RV
+        - Example of indicator variable
+        - Mean of an indicator variable
+        - Mean of an indicator variable: proof
+        - Linearity of mean
+        - Mean of product of independent RVs
+        - Conditional mean
+        - Conditional mean of independent variables
+        - Law of total expectation
+        - Law of total expectation: proof
+        - Example: random sum of RVs
+        - Corollary of law of total expectation
+        - Corollary of law of total expectation: proof
+        - Theorem of mean for joint RVs
+        - Theorem of conditional mean of a function of RV
+        - Theorem of conditional mean of a function of RVs
+        - Theorem of conditional mean of a function of RVs: proof
+  - Variance and covariance
+        - Variance of a RV
+        - Computing variance using theorem of mean
+        - Standard deviation of a RV
+        - Meaning of variance
+        - Variance of a die toss
+        - Variance of a biased coin
+        - Alternative expression for variance
+        - Variance of linear combination of 2 RV
+        - Variance of independent RV
+        - Variance of the difference of RVs
+        - Law of total variance
+        - Law of total variance: proof
+        - Law of total variance: example
+        - Law of total variance: example solution
+        - Covariance of RV
+        - Compute covariance using theorem of mean
+        - Intuition of covariance
+        - Covariance in terms of mean
+        - Covariance of independent RV
+        - Variance for sum / difference of RV
+        - Relationship between covariance of RV and variance of RV
+        - Correlation coefficient of RVs
+        - Meaning of correlation coefficient
+        - Rank of an array of numbers
+        - Rank of an array of numbers: example
+        - Rank of an array of numbers: interpretation
+        - Spearman rho: definition
+        - Spearman rho: interpretation
+        - Pearson vs Spearman rho
+  - Statistics of RVs
+        - Summarizing statistics
+        - Mode of a RV
+        - Mean vs mode of a RV
+        - Quantile of a RV
+        - Quantile of a RV: more general definition
+        - Percentile of a RV
+        - Median of a RV
+        - Median is more robust than mean
+        - Geometric mean
+        - Geometric mean in terms of arithmetic mean
+        - Harmonic mean
+        - Interquartile range of a RV
+        - Mean absolute deviation
+        - Semi-variance
+        - Skewness
+        - Skewness: interpretation
+        - Kurtosis
+        - Excess kurtosis
+        - Kurtosis: interpretation
+- Probability inequalities
+        - PAC statements
+        - Markov inequality
+        - Markov inequality: geometric interpretation
+        - Proof of Markov inequality
+        - Chebyshev inequality
+        - Chebyshev inequality in terms of z-scores
+        - Proof of Chebyshev inequality
+        - Comparing Markov and Chebyshev inequalities
+        - Hoeffding inequality
+- Statistical Inference
+  - Definitions
+        - Statistical inference
+        - Population vs sample
+        - Examples of statistical inference
+        - Sampling with / without replacement
+        - IID samples
+        - IID samples as idealized condition
+        - Sample statistics
+        - Sample statistics is a RV
+        - Example of sample statistics
+        - Example of sample statistics: OLS beta
+        - Sampling distribution of a sample statistics
+        - How to evaluate sampling distribution?
+        - Estimator properties
+        - Estimator properties: examples
+        - Selection bias
+        - Self-selection bias
+        - Publication bias
+        - Small sample effect
+        - Meta-analysis
+        - Anthropic selection bias
+  - Sample mean
+        - Sample mean
+        - Standard error of a sample statistics
+        - Standard error of the mean
+        - Sample mean is an unbiased estimator
+        - Standard error of the mean
+        - Interpretation of the formula for std err of the mean
+        - Estimate of standard error of the mean
+        - Summary of properties for sample mean
+  - Sample variance
+        - Unbiased estimator of population variance knowing population mean $\mu_X$
+        - Unbiased estimator of population variance not knowing $\mu_X$
+        - Sample variance as RV
+  - Asymptotics
+        - Asymptotics
+        - LLN vs CLT
+        - Consistent estimator
+        - Consistent vs unbiased estimator
+        - Law of Large Numbers (LLN) in few words
+        - Law of Large Numbers (LLN)
+        - LLN for other estimators
+        - LLN for variance
+        - Example of LLN: Bernoulli distribution
+        - Central Limit Theorem (CLT) in few words
+        - Central Limit Theorem (CLT)
+        - CLT + LLN
+        - Example of CLT for fair dice
+        - Example of CLT for biased coin flip
+  - Confidence intervals
+        - Confidence intervals for a statistic
+        - Confidence intervals for the sample mean
+        - Confidence intervals for the mean using sample mean
+        - Correct interpretation of confidence intervals
+        - z-confidence intervals for the mean
+        - t-confidence intervals for the mean
+        - z- vs t-confidence intervals for the mean
+        - When to use t-confidence intervals
+        - Confidence intervals for asymmetric distributions
+        - T-confidence intervals for paired observations
+        - T-confidence intervals for groups in randomized trial (A/B test)
+  - Hypothesis testing
+        - What is hypothesis testing?
+        - Hypothesis testing set-up
+        - Test statistic, rejection region, and decision
+        - Accepting null / alternative hypothesis
+        - Type I and II errors
+        - Probabilities of type I and II in hypothesis testing
+        - Confidence level vs confidence interval
+        - One-sided vs two-sided test
+        - One-sided hypothesis test: example of reasoning for sample mean
+        - Hypothesis testing algorithm
+        - One-sided hypothesis test: example
+        - Two-sided hypothesis test: example
+        - P-value
+        - Interpretation of p-values
+        - Example of p-value
+        - P-value vs hypothesis testing
+        - P-value in terms of confidence level of hypothesis testing
+        - Example of p-value (7 girls)
+        - Example of p-value (infection rate)
+        - Trade-off between confidence level and power of a test
+        - Power of a test
+        - Power of a test as function of $\beta$
+        - Example of calculating power for z-test
+        - T-test power
+  - Multiple hypothesis testing
+        - Multiple tests and false discoveries
+        - P-hacking
+        - Example of data mining (jelly beans and acne)
+        - Example of multiple-comparison problem using coins
+        - Nomenclature for multiple testing
+        - Probability of false positive
+        - False Positive Rate
+        - Controlling FPR in a single experiment
+        - Family Wise Error Rate
+        - Bonferroni correction to control FWER
+        - Bonferroni correction to control FWER: proof
+        - Bonferroni correction: pros and cons
+        - False Discovery Rate
+        - FDR-controlling procedures
+        - FPR vs FWER vs FDR
+        - BH to control FDR
+        - BH correction: pros and cons
+        - BY to control FDR
+        - Multiple testing in python
+        - Using normal distribution of z-scores of test statistics
+  - Estimating CDF and statistical functional
+        - Empirical CDF
+        - Convergence of empirical CDF
+        - Proof of mean of empirical CDF
+        - Proof of variance of empirical CDF
+        - Statistical functional
+        - Statistical functional: number or RV
+        - Statistical functional: example
+        - Plug-in principle
+        - Linear statistical functional
+        - Linear statistical functional: examples and non-examples
+        - Plug-in estimator for linear statistical functional
+  - Bootstrap
+        - Bootstrap in brief
+        - Bootstrap procedure
+        - Sample with replacement as computational shortcut in bootstrap
+        - Bootstrap: pros
+        - Bootstrap: example of die rolls
+        - Pseudo-code for bootstrap of the median {.fragile}
+        - Bootstrap for variance of sample statistics: explanation
+        - Bootstrap for variance of sample statistics (1/3)
+        - Bootstrap for variance of sample statistics (2/3)
+        - Bootstrap for variance of sample statistics (3/3)
+        - Bootstrap for variance of sample statistics: analytical formula
+        - Bootstrap confidence intervals
+        - Bootstrap hypothesis testing: example
+# Lesson92.Refresher_probability_distributions.txt
+
+- Interesting RVs
+  - Bernoulli
+        - Bernoulli distribution: definition
+        - Bernoulli distribution: PDF
+        - Bernoulli distribution: mean and variance
+  - Binomial
+        - Binomial distribution: definition
+        - Binomial distribution: PDF
+        - Relationship between Binomial and Bernoulli variables
+        - Mean and variance of Binomial distribution
+        - Example of binomial distribution (7 girls)
+  - Gaussian
+        - Gaussian distribution
+        - Gaussian distribution: parameters
+        - A standard Gaussian
+        - Area under the center of a Gaussian curve
+        - Area under 2 tails of a Gaussian curve
+        - Area under 1 tail of a Gaussian
+        - 1-side Gaussian quantiles for $1, 2, 3 \sigma$
+        - 1-side Gaussian quantiles for $95\%, 97.5\%, 99\%$
+        - 1-sided and 2-sided quantiles for symmetric distributions
+        - 1-sided and 2-sided quantiles for symmetric distributions: proof
+        - What is the 95\% percentile of a Gaussian?
+        - Example of computing probabilities with Gaussian
+  - Log-Normal
+        - Log-normal distribution
+        - Log-normal: mean and variance
+  - Poisson
+        - Poisson distribution: interpretation
+        - Poisson distribution: PDF
+        - Poisson distribution: mean and variance
+        - Poisson distribution for modeling rates
+        - Example of use of Poisson distribution
+        - Poisson as approximation to the Binomial
+  - Chi-square
+        - Chi-square distribution
+        - Chi-square distribution: PDF properties
+        - Chi-square
+  - Student's t-distribution
+        - Student's t-distribution: definition in terms of Gaussians
+        - Student's t-distribution: definition in terms of Chi-square
+        - Student's t-distribution: shape and properties
+- Probability inequalities
+        - PAC statements
+        - Markov inequality
+        - Markov inequality: geometric interpretation
+        - Proof of Markov inequality
+        - Chebyshev inequality
+        - Chebyshev inequality in terms of z-scores
+        - Proof of Chebyshev inequality
+        - Comparing Markov and Chebyshev inequalities
+        - Hoeffding inequality
+# Lesson93.Refresher_linear_algebra.txt
+
+- Linear algebra
+  - Vector and vector spaces
+        - Field: definition
+        - Field: examples
+        - Vector space: definition
+        - Linear combination of vectors
+        - Span of vectors
+        - Null space of a matrix
+        - Homogeneous linear system associated with null space
+        - Dot product on a vector space: definition
+        - Vector inner product
+  - Affine spaces
+        - Affine space: definition
+        - Affine space: example of plane passing through 3 points
+        - Affine combination: definition
+        - Affine hull of vectors
+        - Affine hull of vectors is an affine space
+        - The solution set of non-homogeneous linear system is empty or affine space
+        - Vector space vs affine space: summary
+        - Matrix
+  - Linear functions
+        - Linear functions over vector spaces: definition
+        - Matrix and linear function
+        - Linear functions: examples and non-examples
+        - Kernel of a Linear Function
+        - Domain, Image, Co-domain of a Function
+        - One-to-one Function
+        - Onto function
+        - Invertible function
+        - Linear function composition in matrix terms
+        - Matrix inverse
+  - Linear dependence
+        - Coordinate representation of a vector
+        - Linear dependence between vectors: definition
+        - Linear independence: definition
+        - Property of linear dependence / independence
+        - Linear dependence and null space
+        - Linear one-to-one function and linear independence
+        - Superfluous-vector lemma
+        - Equivalent questions in linear algebra
+  - Basis
+        - Basis of a vector space: definition
+        - Unique-representation lemma
+        - Change of basis transformation
+  - Dimension of a vector space
+        - Simplified exchange lemma
+        - Exchange lemma
+        - Morphing lemma
+        - A basis as smallest generator set
+        - Dimension of vector space
+        - Rank of a set S of vectors / matrix
+        - Rank and dimension: example
+        - Nullity of a set of vectors / matrix
+        - Dimension of trivial vector space
+        - Subspace dimension lemma
+        - Subspace dimension lemma: example
+        - Column space of a matrix
+        - Row space of a matrix
+        - Row / column rank of a matrix $\mM$
+        - Row / column rank of a matrix: example
+        - Matrix rank theorem: lemma
+        - Matrix rank theorem: lemma proof
+        - Matrix rank theorem
+        - Matrix rank theorem: proof
+  - Direct sum
+        - Minimal intersection of subspaces
+        - Direct sum of vector spaces: definition
+        - Direct sum: geometric interpretation
+        - Direct sum: properties
+        - Direct sum: example
+        - Complementary subspace
+        - Existence of complementary subspaces
+        - Systems of Linear Equations
+        - Rank of a Matrix
+        - Inverse of a Matrix
+        - Determinants
+        - Orthogonality and Orthonormal Bases
+        - Projections and Least Squares
+        - Eigenvalues and Eigenvectors
+        - Diagonalization
+        - Symmetric Matrices
+        - Positive Definite and Semidefinite Matrices
+        - Singular Value Decomposition (SVD)
+        - Principal Component Analysis (PCA)
+        - Matrix Norms
+        - Vector Norms
+        - Trace of a Matrix
+        - Kronecker and Hadamard Products
+        - Matrix Calculus
+  - Connections between Machine Learning and Linear Algebra
+# Lesson94.Refresher_information_theory.txt
+
+- Information theory
+  - Entropy
+        - Entropy: Definition
+        - Entropy as Expected Information Content
+        - Axiomatic Derivation of Entropy
+        - Entropy and Probability Density Function (PDF)
+        - Joint Entropy
+        - Conditional Entropy
+        - Mutual Information
+        - Kullback-Leibler (KL) Divergence
+        - Cross-Entropy
+        - Data Processing Inequality
+        - Chain Rule for Entropy and Mutual Information
+        - Source Coding Theorem
+        - Noisy-Channel Coding Theorem
+        - Redundancy and Compression
+        - Typical Set
+        - Rate-Distortion Theory
+        - Fano's Inequality
+        - Differential Entropy
+        - Maximum entropy principle
+        - Minimum Description Length (MDL)
+        - Kolmogorov Complexity
+        - Information Bottleneck
+        - Multi-Information and Total Correlation
+# Lesson95.Refresher_game_theory.txt
+
+- Game theory
+        - Normal Form Games
+        - Extensive Form Games
+        - Pure and Mixed Strategies
+        - Nash Equilibrium
+        - Dominant and Dominated Strategies
+        - Best Response and Reaction Functions
+        - Zero-Sum Games
+        - Minimax Theorem
+        - Correlated Equilibrium
+        - Bayesian Games
+        - Evolutionary Game Theory
+        - Repeated Games
+        - Stochastic Games
+        - Mechanism Design
+        - Auction Theory
+        - Potential Games
+        - Learning in Games
+        - Multi-Agent Reinforcement Learning (MARL)
+        - Cooperative Game Theory
+        - Social Choice and Voting
+  - Connections between Machine Learning and Game Theory
+# Lesson96.Refresher_stochastic_processes.txt
+
+- Stochastic processes
+        - Random Variables and Index Sets
+        - Markov Chains
+        - Stationarity
+        - Martingales
+        - Poisson Process
+        - Brownian Motion (Wiener Process)
+        - Autoregressive (AR) Processes
+        - Moving Average (MA) Processes
+        - Hidden Markov Models (HMMs)
+        - Gaussian Processes
+        - Stochastic Differential Equations (SDEs)
+        - Ergodicity
+        - Renewal Processes
+        - Birth-Death Processes
+        - Queueing Models
+        - Random Walks
+        - Time Series Analysis
+        - Law of Large Numbers and Central Limit Theorem
+        - Monte Carlo Methods
+        - Filtering and Prediction
+# Lesson97.Refresher_numerical_optimization.txt
+
+- Optimization / numerical methods
+        - Unconstrained Optimization
+        - Gradient Descent
+        - Stochastic Gradient Descent (SGD)
+        - Convex Optimization
+        - Constrained Optimization
+        - Newton’s Method
+        - Quasi-Newton Methods
+        - Line Search and Trust Region Methods
+        - Numerical Linear Algebra
+        - Regularization Techniques
+        - Duality
+        - Backtracking and Adaptive Step Sizes
+        - Coordinate Descent
+        - Conjugate Gradient Method
+        - Eigenvalue and SVD Computation
+        - Automatic Differentiation
+        - Numerical Stability and Conditioning
+        - Optimization for Non-Smooth Functions
+        - Metaheuristic Algorithms
+        - Convex Relaxation and Approximation

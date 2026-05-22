@@ -43,7 +43,7 @@ plt.rcParams["figure.figsize"] = (12, 6)
 # )
 
 # %%
-import msml610_utils as ut
+import helpers.htutorial as ut
 import L08_04_02_causal_inference_utils as mtl0cireout
 
 ut.config_notebook()
