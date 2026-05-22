@@ -19,17 +19,12 @@ import pandas as pd
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
 
-logger = logging.getLogger(__name__)
+_LOG = logging.getLogger(__name__)
 
 
-def init_logger(notebook_log: logging.Logger) -> None:
-    hnotebo.config_notebook()
-    hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
-    # Init notebook logging.
-    hnotebo.set_logger_to_print(notebook_log)
-    # Init module logging.
-    # <package>_logger: logging.Logger = logging.getLogger("<package>")
-    # hnotebo.set_logger_to_print(<package>_logger)
+def init_loggers(notebook_log: logging.Logger) -> None:
+    global _LOG
+    hnotebo.init_loggers(notebook_log, utils_log=_LOG)
 
 
 # #############################################################################
@@ -45,13 +40,13 @@ def _download_file(url: str, *, output_path: str) -> None:
     :param output_path: Local path where the file should be saved
     """
     if os.path.exists(output_path):
-        logger.info(
+        _LOG.info(
             "File already exists at '%s', skipping download", output_path
         )
         return
-    logger.info("Downloading file from '%s' to '%s'", url, output_path)
+    _LOG.info("Downloading file from '%s' to '%s'", url, output_path)
     urllib.request.urlretrieve(url, output_path)
-    logger.info("Download complete")
+    _LOG.info("Download complete")
 
 
 def _decompress_zip(zip_path: str, *, extract_dir: str) -> None:
@@ -62,10 +57,10 @@ def _decompress_zip(zip_path: str, *, extract_dir: str) -> None:
     :param extract_dir: Directory where the zip file should be extracted
     """
     hdbg.dassert_file_exists(zip_path, "Zip file does not exist")
-    logger.info("Extracting zip file from '%s' to '%s'", zip_path, extract_dir)
+    _LOG.info("Extracting zip file from '%s' to '%s'", zip_path, extract_dir)
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         zip_ref.extractall(extract_dir)
-    logger.info("Extraction complete")
+    _LOG.info("Extraction complete")
 
 
 def load_student_performance_data(*, data_dir: str = "data") -> pd.DataFrame:
@@ -94,7 +89,7 @@ def load_student_performance_data(*, data_dir: str = "data") -> pd.DataFrame:
         nested_zip_path = os.path.join(extract_dir, "student.zip")
         if os.path.exists(nested_zip_path):
             _decompress_zip(nested_zip_path, extract_dir=extract_dir)
-    logger.info("Loading student performance data from '%s'", csv_path)
+    _LOG.info("Loading student performance data from '%s'", csv_path)
     df = pd.read_csv(csv_path, sep=";")
-    logger.info("Data loaded: %s rows, %s columns", len(df), len(df.columns))
+    _LOG.info("Data loaded: %s rows, %s columns", len(df), len(df.columns))
     return df

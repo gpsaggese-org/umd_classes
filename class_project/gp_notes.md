@@ -48,3 +48,9 @@ ubuntu:24.04 (newer, modern)
 ## In a notebook
 
 jupyter lab --ContentsManager.allow_hidden=True
+
+
+try:
+  from IPython.display import display
+except ImportError:
+  display = print  # type: ignore

@@ -31,9 +31,12 @@
 import logging
 
 # Third-party libraries.
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+# Note: we need to import sklearn first to avoid conflicts with libgomp-d22c30c5.so.1.0.0: cannot allocate memory in static TLS block
+import sklearn
+_ = sklearn
 
 # %%
 # import helpers.hmodule as hmodule
@@ -47,22 +50,19 @@ import matplotlib.pyplot as plt
 # %% editable=true slideshow={"slide_type": ""}
 # Helpers packages.
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebo
 
 # Tutorial-specific packages.
 import tutorials.causalnex.causalnex_utils as tcnut
+import causalnex
+print(causalnex.__version__)
 
 _LOG = logging.getLogger(__name__)
-tcnut.init_logger(_LOG)
+tcnut.init_loggers(_LOG)
 
-# %%
-_LOG.info("hello")
+_LOG.info("Test _LOG.info")
 
 # %% [markdown]
 # ## Cell 1: Load Data
-#
-# Load the student performance dataset from the UCI machine learning repository.
-# The dataset will be automatically downloaded and cached locally if not present.
 
 # %%
 # Load the student performance dataset.
@@ -81,18 +81,21 @@ display(df.head())
 
 # %%
 from causalnex.structure import StructureModel
+
 # Create a StructureModel instance to define causal relationships.
 sm = StructureModel()
 # Add edges representing causal relationships between variables.
-sm.add_edges_from([
-    ('health', 'absences'),
-    ('health', 'G1'),
-    ('studytime', 'G1'),
-    ('studytime', 'G2'),
-    ('G1', 'G2'),
-    ('absences', 'G1'),
-    ('absences', 'G2'),
-])
+sm.add_edges_from(
+    [
+        ("health", "absences"),
+        ("health", "G1"),
+        ("studytime", "G1"),
+        ("studytime", "G2"),
+        ("G1", "G2"),
+        ("absences", "G1"),
+        ("absences", "G2"),
+    ]
+)
 _LOG.info("Structure nodes: %s", sm.nodes)
 _LOG.info("Structure edges: %s", sm.edges)
 print(f"Nodes: {list(sm.nodes)}")
@@ -108,24 +111,24 @@ print(f"Edges: {list(sm.edges)}")
 # Create a copy of the dataframe for discretization.
 df_discrete = df.copy()
 # Discretize continuous variables into categorical buckets.
-df_discrete['studytime_bin'] = pd.cut(
-    df['studytime'], bins=[0, 1, 2, 3, 4],
-    labels=['very_low', 'low', 'medium', 'high']
+df_discrete["studytime_bin"] = pd.cut(
+    df["studytime"],
+    bins=[0, 1, 2, 3, 4],
+    labels=["very_low", "low", "medium", "high"],
 )
-df_discrete['absences_bin'] = pd.cut(
-    df['absences'], bins=[0, 5, 10, 20, 100],
-    labels=['low', 'medium', 'high', 'very_high']
+df_discrete["absences_bin"] = pd.cut(
+    df["absences"],
+    bins=[0, 5, 10, 20, 100],
+    labels=["low", "medium", "high", "very_high"],
 )
-df_discrete['G1_bin'] = pd.cut(
-    df['G1'], bins=[0, 10, 20],
-    labels=['fail', 'pass']
+df_discrete["G1_bin"] = pd.cut(
+    df["G1"], bins=[0, 10, 20], labels=["fail", "pass"]
 )
-df_discrete['G2_bin'] = pd.cut(
-    df['G2'], bins=[0, 10, 20],
-    labels=['fail', 'pass']
+df_discrete["G2_bin"] = pd.cut(
+    df["G2"], bins=[0, 10, 20], labels=["fail", "pass"]
 )
 _LOG.info("Discretized data shape: %s", df_discrete.shape)
-print(df_discrete[['studytime_bin', 'absences_bin', 'G1_bin', 'G2_bin']].head())
+print(df_discrete[["studytime_bin", "absences_bin", "G1_bin", "G2_bin"]].head())
 
 # %% [markdown]
 # ## Cell 4: CPD Fitting
@@ -135,13 +138,14 @@ print(df_discrete[['studytime_bin', 'absences_bin', 'G1_bin', 'G2_bin']].head())
 
 # %%
 from causalnex.network import BayesianNetwork
+
 # Create a Bayesian Network from the structure model.
 bn = BayesianNetwork(sm)
 # Select only the columns needed for the network.
-cols = ['health', 'studytime', 'absences', 'G1', 'G2']
+cols = ["health", "studytime", "absences", "G1", "G2"]
 df_fit = df_discrete[cols].copy()
 # Fit the network to the data.
-bn.fit_cpds(df_fit, method='BayesianEstimator', prior_type='BDeu')
+bn.fit_cpds(df_fit, method="BayesianEstimator", prior_type="BDeu")
 _LOG.info("CPDs fitted successfully")
 _LOG.info("Network CPDs: %s", list(bn.cpds.keys()))
 print(f"CPDs: {list(bn.cpds.keys())}")
@@ -160,8 +164,8 @@ test_data = df_discrete[train_size:]
 # Get predictions from the Bayesian Network on test data.
 predictions = []
 for idx, row in test_data.iterrows():
-    pred = bn.predict(test_data[[c for c in cols if c != 'G2']].iloc[idx])
-    predictions.append(pred.get('G2', 'unknown'))
+    pred = bn.predict(test_data[[c for c in cols if c != "G2"]].iloc[idx])
+    predictions.append(pred.get("G2", "unknown"))
 _LOG.info("Test set size: %s", len(test_data))
 _LOG.info("Predictions made: %s", len(predictions))
 print(f"Test set size: {len(test_data)}")
@@ -175,14 +179,14 @@ print(f"Predictions made: {len(predictions)}")
 
 # %%
 # Extract the CPD for G2 (second period grade).
-cpd_g2 = bn.cpds.get('G2')
+cpd_g2 = bn.cpds.get("G2")
 if cpd_g2 is not None:
     _LOG.info("CPD for G2: %s", cpd_g2.variable)
     _LOG.info("G2 cardinality: %s", cpd_g2.cardinality)
     print(f"CPD variable: {cpd_g2.variable}")
     print(f"G2 cardinality: {cpd_g2.cardinality}")
 # Perform inference with observations.
-_ = bn.fit_cpds(train_data[cols], method='BayesianEstimator')
+_ = bn.fit_cpds(train_data[cols], method="BayesianEstimator")
 _LOG.info("Inference complete on training data")
 
 # %% [markdown]
@@ -195,13 +199,17 @@ _LOG.info("Inference complete on training data")
 # Create counterfactual scenarios by intervention.
 df_intervention = df_discrete.copy()
 # Intervene: set studytime to 'high' for all students.
-df_intervention['studytime'] = 'high'
+df_intervention["studytime"] = "high"
 # Compare outcomes before and after intervention.
-pass_rate_before = (df_discrete['G2_bin'] == 'pass').sum() / len(df_discrete)
-pass_rate_after = (df_intervention['G2_bin'] == 'pass').sum() / len(df_intervention)
+pass_rate_before = (df_discrete["G2_bin"] == "pass").sum() / len(df_discrete)
+pass_rate_after = (df_intervention["G2_bin"] == "pass").sum() / len(
+    df_intervention
+)
 improvement = (pass_rate_after - pass_rate_before) * 100
 _LOG.info("Pass rate before intervention: %.1f%%", pass_rate_before * 100)
-_LOG.info("Pass rate after intervention (hypothetical): %.1f%%", pass_rate_after * 100)
+_LOG.info(
+    "Pass rate after intervention (hypothetical): %.1f%%", pass_rate_after * 100
+)
 _LOG.info("Intervention effect: %.1f%% improvement", improvement)
 print(f"Pass rate before: {pass_rate_before * 100:.1f}%")
 print(f"Pass rate after: {pass_rate_after * 100:.1f}%")
@@ -214,12 +222,23 @@ print(f"Improvement: {improvement:.1f}%")
 
 # %%
 from causalnex.plots import draw
+
 # Create a figure to display the causal graph.
 fig, ax = plt.subplots(figsize=(10, 8))
 # Draw the structure model with nodes and edges.
-draw(sm, with_labels=True, node_color="lightblue",
-     node_size=3000, font_size=10, arrows=True, arrowsize=20, ax=ax)
-ax.set_title("Causal Structure: Student Performance", fontsize=14, fontweight="bold")
+draw(
+    sm,
+    with_labels=True,
+    node_color="lightblue",
+    node_size=3000,
+    font_size=10,
+    arrows=True,
+    arrowsize=20,
+    ax=ax,
+)
+ax.set_title(
+    "Causal Structure: Student Performance", fontsize=14, fontweight="bold"
+)
 plt.tight_layout()
 plt.show()
 _LOG.info("Network visualization complete")
