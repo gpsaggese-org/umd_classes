@@ -1,13 +1,14 @@
-# Use Python 3.12 slim (already has Python and pip).
-FROM python:3.12-slim
+FROM python:3.10-slim
 
 # Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install CA certificates (needed for HTTPS) and basic build tools.
+# Install CA certificates, build tools, and graphviz (needed for pygraphviz).
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     build-essential \
+    graphviz \
+    graphviz-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment.

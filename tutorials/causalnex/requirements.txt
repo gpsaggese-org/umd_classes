@@ -2,3 +2,7 @@ matplotlib
 numpy
 pandas
 seaborn
+
+causalnex[all]
+torch
+pygraphviz
