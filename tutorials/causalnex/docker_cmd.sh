@@ -33,7 +33,7 @@ run "docker image ls $FULL_IMAGE_NAME"
 #(docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 
 # Configure and run the Docker container with the specified command.
-CONTAINER_NAME=$IMAGE_NAME
+CONTAINER_NAME="${IMAGE_NAME}.cmd"
 DOCKER_CMD=$(get_docker_cmd_command)
 PORT=""
 DOCKER_RUN_OPTS=""

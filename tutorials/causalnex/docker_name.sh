@@ -8,5 +8,6 @@
 
 REPO_NAME=gpsaggese
 # The file should be all lower case.
-IMAGE_NAME=umd_project_causalnex
+#IMAGE_NAME=umd_project_causalnex
+IMAGE_NAME=umd_gcastle
 FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME

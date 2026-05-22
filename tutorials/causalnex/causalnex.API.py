@@ -36,13 +36,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # %%
-import helpers.hmodule as hmodule
-hmodule.install_module_if_not_present(
-    ["pycaret"],
-    use_activate=True,
-    use_sudo=False,
-    venv_path="/opt/venv",
-)
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     [""],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
 
 # %%
 import helpers.hdbg as hdbg
