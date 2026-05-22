@@ -1,3 +1,10 @@
+- Run a Python script
+  ```
+  > cd tutorials/causalnex/
+  > docker_cmd.sh "python /git_root/tutorials/causalnex/causalnex.API.py"
+  ``` 
+
+# Fix the PR issues
 > (cd helpers_root; chmod -R +w docs; git reset --hard origin/master; chmod -R +w docs)
 > git -c submodule.recurse=false checkout UmdTask27_Fall2025_HMMlearn_Anomaly_Detection_in_Network_Traffic
 
@@ -33,9 +40,6 @@ git add -u
 # git diff --name-only origin/master...HEAD
 #
 git commit -m "Merge" && git push
-
-
-
 
 find class_project/MSML610/Fall2025/Projects/UmdTask78_Fall2025_Ax_Multi_Objective_Optimization_for_Marketing_Campaigns/  -type f -exec du -h {} + | sort -hr | head -n 10
 

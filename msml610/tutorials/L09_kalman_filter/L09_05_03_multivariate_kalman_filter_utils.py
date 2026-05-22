@@ -3,7 +3,7 @@ Utility functions for multivariate Kalman filter tutorial (L09_05_03).
 
 Import as:
 
-import L09_05_03_multivariate_kalman_filter_utils as mtl00mkfu
+import msml610.tutorials.L09_kalman_filter.L09_05_03_multivariate_kalman_filter_utils as mtlkfl00mkfu
 """
 
 import logging
@@ -19,9 +19,9 @@ import numpy as np
 from IPython.display import display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -361,7 +361,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         fig_sum = plt.gcf()
 
     # Create widgets for Gaussian 1.
-    var_x1_slider, var_x1_box = mtumsuti.build_widget_control(
+    var_x1_slider, var_x1_box = htutori.build_widget_control(
         name="var_x1",
         description="var_x1 (G1)",
         min_val=0.1,
@@ -370,7 +370,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         initial_value=2.0,
         is_float=True,
     )
-    var_y1_slider, var_y1_box = mtumsuti.build_widget_control(
+    var_y1_slider, var_y1_box = htutori.build_widget_control(
         name="var_y1",
         description="var_y1 (G1)",
         min_val=0.1,
@@ -379,7 +379,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         initial_value=2.0,
         is_float=True,
     )
-    cov_xy1_slider, cov_xy1_box = mtumsuti.build_widget_control(
+    cov_xy1_slider, cov_xy1_box = htutori.build_widget_control(
         name="cov_xy1",
         description="cov_xy1 (G1)",
         min_val=-5.0,
@@ -389,7 +389,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         is_float=True,
     )
     # Create widgets for Gaussian 2.
-    var_x2_slider, var_x2_box = mtumsuti.build_widget_control(
+    var_x2_slider, var_x2_box = htutori.build_widget_control(
         name="var_x2",
         description="var_x2 (G2)",
         min_val=0.1,
@@ -398,7 +398,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         initial_value=3.0,
         is_float=True,
     )
-    var_y2_slider, var_y2_box = mtumsuti.build_widget_control(
+    var_y2_slider, var_y2_box = htutori.build_widget_control(
         name="var_y2",
         description="var_y2 (G2)",
         min_val=0.1,
@@ -407,7 +407,7 @@ def cell_1_2_plot_sum_of_gaussians() -> None:
         initial_value=1.0,
         is_float=True,
     )
-    cov_xy2_slider, cov_xy2_box = mtumsuti.build_widget_control(
+    cov_xy2_slider, cov_xy2_box = htutori.build_widget_control(
         name="cov_xy2",
         description="cov_xy2 (G2)",
         min_val=-5.0,
@@ -506,7 +506,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         fig_prod = plt.gcf()
 
     # Create widgets for Gaussian 1.
-    var_x1_slider, var_x1_box = mtumsuti.build_widget_control(
+    var_x1_slider, var_x1_box = htutori.build_widget_control(
         name="var_x1",
         description="var_x1 (G1)",
         min_val=0.1,
@@ -515,7 +515,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         initial_value=4.0,
         is_float=True,
     )
-    var_y1_slider, var_y1_box = mtumsuti.build_widget_control(
+    var_y1_slider, var_y1_box = htutori.build_widget_control(
         name="var_y1",
         description="var_y1 (G1)",
         min_val=0.1,
@@ -524,7 +524,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         initial_value=2.0,
         is_float=True,
     )
-    cov_xy1_slider, cov_xy1_box = mtumsuti.build_widget_control(
+    cov_xy1_slider, cov_xy1_box = htutori.build_widget_control(
         name="cov_xy1",
         description="cov_xy1 (G1)",
         min_val=-5.0,
@@ -534,7 +534,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         is_float=True,
     )
     # Create widgets for Gaussian 2.
-    var_x2_slider, var_x2_box = mtumsuti.build_widget_control(
+    var_x2_slider, var_x2_box = htutori.build_widget_control(
         name="var_x2",
         description="var_x2 (G2)",
         min_val=0.1,
@@ -543,7 +543,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         initial_value=2.0,
         is_float=True,
     )
-    var_y2_slider, var_y2_box = mtumsuti.build_widget_control(
+    var_y2_slider, var_y2_box = htutori.build_widget_control(
         name="var_y2",
         description="var_y2 (G2)",
         min_val=0.1,
@@ -552,7 +552,7 @@ def cell_1_3_plot_product_of_gaussians() -> None:
         initial_value=4.0,
         is_float=True,
     )
-    cov_xy2_slider, cov_xy2_box = mtumsuti.build_widget_control(
+    cov_xy2_slider, cov_xy2_box = htutori.build_widget_control(
         name="cov_xy2",
         description="cov_xy2 (G2)",
         min_val=-5.0,
@@ -645,7 +645,7 @@ def cell_1_1_plot_covariance_matrix() -> None:
         fig_cov = plt.gcf()
 
     # Create var_x widget.
-    var_x_slider, var_x_box = mtumsuti.build_widget_control(
+    var_x_slider, var_x_box = htutori.build_widget_control(
         name="var_x",
         description="var_x",
         min_val=0.1,
@@ -655,7 +655,7 @@ def cell_1_1_plot_covariance_matrix() -> None:
         is_float=True,
     )
     # Create var_y widget.
-    var_y_slider, var_y_box = mtumsuti.build_widget_control(
+    var_y_slider, var_y_box = htutori.build_widget_control(
         name="var_y",
         description="var_y",
         min_val=0.1,
@@ -665,7 +665,7 @@ def cell_1_1_plot_covariance_matrix() -> None:
         is_float=True,
     )
     # Create cov_xy widget.
-    cov_xy_slider, cov_xy_box = mtumsuti.build_widget_control(
+    cov_xy_slider, cov_xy_box = htutori.build_widget_control(
         name="cov_xy",
         description="cov_xy",
         min_val=-10.0,
@@ -675,7 +675,7 @@ def cell_1_1_plot_covariance_matrix() -> None:
         is_float=True,
     )
     # Create n_samples widget.
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="n_samples",
         description="n_samples",
         min_val=100,
@@ -685,7 +685,7 @@ def cell_1_1_plot_covariance_matrix() -> None:
         is_float=False,
     )
     # Create seed widget (always last by convention).
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,
@@ -1024,7 +1024,7 @@ def cell_hidden_variable_comparison_interactive() -> None:
         )
         fig_cmp = plt.gcf()
 
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,
@@ -1033,7 +1033,7 @@ def cell_hidden_variable_comparison_interactive() -> None:
         initial_value=42,
         is_float=False,
     )
-    z_var_slider, z_var_box = mtumsuti.build_widget_control(
+    z_var_slider, z_var_box = htutori.build_widget_control(
         name="z_var",
         description="z_var",
         min_val=0.1,
@@ -1042,7 +1042,7 @@ def cell_hidden_variable_comparison_interactive() -> None:
         initial_value=1.0,
         is_float=True,
     )
-    process_var_slider, process_var_box = mtumsuti.build_widget_control(
+    process_var_slider, process_var_box = htutori.build_widget_control(
         name="process_var",
         description="process_var",
         min_val=0.01,
@@ -1051,7 +1051,7 @@ def cell_hidden_variable_comparison_interactive() -> None:
         initial_value=0.1,
         is_float=True,
     )
-    count_slider, count_box = mtumsuti.build_widget_control(
+    count_slider, count_box = htutori.build_widget_control(
         name="count",
         description="count",
         min_val=10,
@@ -1114,7 +1114,7 @@ def cell_dog_tracking_interactive() -> None:
         fig_dog = plt.gcf()
 
     # Seed widget is always first.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,
@@ -1123,7 +1123,7 @@ def cell_dog_tracking_interactive() -> None:
         initial_value=42,
         is_float=False,
     )
-    z_var_slider, z_var_box = mtumsuti.build_widget_control(
+    z_var_slider, z_var_box = htutori.build_widget_control(
         name="z_var",
         description="z_var",
         min_val=0.1,
@@ -1132,7 +1132,7 @@ def cell_dog_tracking_interactive() -> None:
         initial_value=1.0,
         is_float=True,
     )
-    process_var_slider, process_var_box = mtumsuti.build_widget_control(
+    process_var_slider, process_var_box = htutori.build_widget_control(
         name="process_var",
         description="process_var",
         min_val=0.01,
@@ -1141,7 +1141,7 @@ def cell_dog_tracking_interactive() -> None:
         initial_value=0.1,
         is_float=True,
     )
-    count_slider, count_box = mtumsuti.build_widget_control(
+    count_slider, count_box = htutori.build_widget_control(
         name="count",
         description="count",
         min_val=10,

@@ -21,9 +21,9 @@ from IPython.display import display
 import helpers.hdbg as hdbg
 
 try:
-    import msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -368,7 +368,7 @@ def cell3_create_binary_entropy_widget() -> None:
     """
     p_init = 0.5
     # Create slider for probability p.
-    p_slider, p_box = mtumsuti.build_widget_control(
+    p_slider, p_box = htutori.build_widget_control(
         name="p",
         description="Probability p",
         min_val=0.00,
@@ -396,7 +396,7 @@ def cell3_generate_binary_entropy_animation() -> None:
     changes as probability p varies from 0 to 1.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="p",
         const_variable="n",
@@ -406,7 +406,7 @@ def cell3_generate_binary_entropy_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Binary_Entropy_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell3_plot_binary_entropy_interactive,
         values,
         dst_dir,
@@ -669,7 +669,7 @@ def cell4_create_joint_entropy_widget() -> None:
     dependence_init = 0.5
     n_samples_init = 300
     # Create slider for dependence.
-    dependence_slider, dependence_box = mtumsuti.build_widget_control(
+    dependence_slider, dependence_box = htutori.build_widget_control(
         name="dependence",
         description="Dependence",
         min_val=0.0,
@@ -679,7 +679,7 @@ def cell4_create_joint_entropy_widget() -> None:
         is_float=True,
     )
     # Create slider for sample size.
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="n_samples",
         description="Sample size",
         min_val=10,
@@ -707,7 +707,7 @@ def cell4_generate_joint_entropy_animation() -> None:
     changes as dependence between variables varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="dependence",
         const_variable="n_samples",
@@ -717,7 +717,7 @@ def cell4_generate_joint_entropy_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Joint_Entropy_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell4_plot_joint_entropy_interactive,
         values,
         dst_dir,
@@ -967,7 +967,7 @@ def cell5_create_conditional_entropy_widget() -> None:
     """
     dependence_init = 0.5
     # Create slider for dependence.
-    dependence_slider, dependence_box = mtumsuti.build_widget_control(
+    dependence_slider, dependence_box = htutori.build_widget_control(
         name="dependence",
         description="Dependence",
         min_val=0.0,
@@ -995,7 +995,7 @@ def cell5_generate_conditional_entropy_animation() -> None:
     changes as dependence between variables varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="dependence",
         n_steps=11,
@@ -1003,7 +1003,7 @@ def cell5_generate_conditional_entropy_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Conditional_Entropy_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell5_plot_conditional_entropy_interactive,
         values,
         dst_dir,
@@ -1626,7 +1626,7 @@ def cell6_create_mutual_information_venn_widget() -> None:
     """
     dependence_init = 0.5
     # Create slider for dependence.
-    dependence_slider, dependence_box = mtumsuti.build_widget_control(
+    dependence_slider, dependence_box = htutori.build_widget_control(
         name="dependence",
         description="Dependence",
         min_val=0.0,
@@ -1668,7 +1668,7 @@ def cell6_create_mutual_info_correlation_widget() -> None:
     """
     correlation_init = 0.5
     # Create slider for correlation.
-    correlation_slider, correlation_box = mtumsuti.build_widget_control(
+    correlation_slider, correlation_box = htutori.build_widget_control(
         name="correlation",
         description="Correlation",
         min_val=0.0,
@@ -1696,7 +1696,7 @@ def cell6_generate_mutual_info_venn_binary_animation() -> None:
     is represented as a Venn diagram for binary variables as dependence varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="dependence",
         n_steps=11,
@@ -1705,7 +1705,7 @@ def cell6_generate_mutual_info_venn_binary_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Mutual_Info1_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell6_plot_mutual_information_venn_interactive,
         values,
         dst_dir,
@@ -1723,7 +1723,7 @@ def cell6_generate_mutual_info_venn_weather_animation() -> None:
     is represented as a Venn diagram for weather variables as dependence varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="dependence",
         n_steps=11,
@@ -1732,7 +1732,7 @@ def cell6_generate_mutual_info_venn_weather_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Mutual_Info2_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell6_plot_mutual_information_venn_interactive,
         values,
         dst_dir,
@@ -1750,7 +1750,7 @@ def cell6_generate_mutual_info_correlation_animation() -> None:
     changes with correlation between continuous variables.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="correlation",
         n_steps=11,
@@ -1758,7 +1758,7 @@ def cell6_generate_mutual_info_correlation_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Mutual_Info_Correlation_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell6_plot_mutual_info_interactive,
         values,
         dst_dir,
@@ -2129,7 +2129,7 @@ def cell7_create_kl_divergence_widget() -> None:
     p1_init = 0.7
     q1_init = 0.5
     # Create slider for P(outcome=1).
-    p1_slider, p1_box = mtumsuti.build_widget_control(
+    p1_slider, p1_box = htutori.build_widget_control(
         name="p1",
         description="P(outcome=1)",
         min_val=0.05,
@@ -2139,7 +2139,7 @@ def cell7_create_kl_divergence_widget() -> None:
         is_float=True,
     )
     # Create slider for Q(outcome=1).
-    q1_slider, q1_box = mtumsuti.build_widget_control(
+    q1_slider, q1_box = htutori.build_widget_control(
         name="q1",
         description="Q(outcome=1)",
         min_val=0.05,
@@ -2168,7 +2168,7 @@ def cell7_generate_kl_divergence_animation() -> None:
     """
     # Generate animation values.
     # Fix true distribution P at p1=0.7, vary approximating distribution Q.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="q1",
         const_variable="p1",
@@ -2180,7 +2180,7 @@ def cell7_generate_kl_divergence_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_KL_Divergence_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell7_plot_kl_divergence_interactive,
         values,
         dst_dir,
@@ -2444,7 +2444,7 @@ def cell8_create_cross_entropy_widget() -> None:
     p1_init = 0.7
     q1_init = 0.5
     # Create slider for P(outcome=1).
-    p1_slider, p1_box = mtumsuti.build_widget_control(
+    p1_slider, p1_box = htutori.build_widget_control(
         name="p1",
         description="P(outcome=1)",
         min_val=0.05,
@@ -2454,7 +2454,7 @@ def cell8_create_cross_entropy_widget() -> None:
         is_float=True,
     )
     # Create slider for Q(outcome=1).
-    q1_slider, q1_box = mtumsuti.build_widget_control(
+    q1_slider, q1_box = htutori.build_widget_control(
         name="q1",
         description="Q(outcome=1)",
         min_val=0.05,
@@ -2484,7 +2484,7 @@ def cell8_generate_cross_entropy_animation() -> None:
 
     # Generate animation values.
     # Fix true distribution P at p1=0.7, vary model distribution Q.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="q1",
         const_variable="p1",
@@ -2496,7 +2496,7 @@ def cell8_generate_cross_entropy_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Cross_Entropy_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell8_plot_cross_entropy_interactive,
         values,
         dst_dir,
@@ -3037,7 +3037,7 @@ def cell9_create_data_processing_inequality_widget() -> None:
     """
     noise_level_init = 0.2
     # Create slider for noise level.
-    noise_level_slider, noise_level_box = mtumsuti.build_widget_control(
+    noise_level_slider, noise_level_box = htutori.build_widget_control(
         name="noise_level",
         description="Noise Level",
         min_val=0.0,
@@ -3073,7 +3073,7 @@ def cell9_generate_data_processing_inequality_animation() -> None:
     through successive processing stages as noise level varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="noise_level",
         n_steps=21,
@@ -3082,7 +3082,7 @@ def cell9_generate_data_processing_inequality_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Data_Processing_Inequality_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell9_plot_data_processing_inequality_interactive,
         values,
         dst_dir,
@@ -3406,7 +3406,7 @@ def cell10_create_mdl_widget() -> None:
     """
     degree_init = 3
     # Create slider for polynomial degree.
-    degree_slider, degree_box = mtumsuti.build_widget_control(
+    degree_slider, degree_box = htutori.build_widget_control(
         name="degree",
         description="Polynomial Degree",
         min_val=1,
@@ -3438,7 +3438,7 @@ def cell10_generate_mdl_animation() -> None:
     complexity with data fit as polynomial degree varies.
     """
     # Generate animation values.
-    values = mtumsuti.generate_animation_values(
+    values = htutori.generate_animation_values(
         mode="linear",
         sweep_variable="degree",
         n_steps=8,
@@ -3451,7 +3451,7 @@ def cell10_generate_mdl_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_MDL_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell10_plot_mdl_interactive,
         values,
         dst_dir,
@@ -3886,7 +3886,7 @@ def cell11_generate_kolmogorov_complexity_animation() -> None:
     # Directory to save frames.
     dst_dir = "./figures/L94_Kolmogorov_Complexity_video"
     # Generate animation frames with fixed dimensions.
-    mtumsuti.generate_animation(
+    htutori.generate_animation(
         cell11_plot_kolmogorov_complexity_interactive,
         values,
         dst_dir,

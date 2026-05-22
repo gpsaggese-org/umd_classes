@@ -3,7 +3,7 @@ Utility functions for L05_02_02_overfitting notebook.
 
 Import as:
 
-import L05_02_02_overfitting_utils as mtl00ovut
+import msml610.tutorials.L05_statistical_learning.L05_02_02_overfitting_utils as mtlsll00ou
 """
 
 import logging
@@ -15,9 +15,9 @@ import numpy as np
 from IPython.display import clear_output, display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -126,7 +126,7 @@ def cell1_plot_true_target_function() -> None:
     4. Key insights and comments
     """
     # Create seed widget with slider and +/- buttons.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random Seed",
         min_val=0,
@@ -143,7 +143,7 @@ def cell1_plot_true_target_function() -> None:
         style={"description_width": "initial"},
     )
     # Create epsilon widget with slider and +/- buttons.
-    epsilon_slider, epsilon_box = mtumsuti.build_widget_control(
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
         name="epsilon",
         description="epsilon (noise std dev)",
         min_val=0.0,
@@ -155,7 +155,7 @@ def cell1_plot_true_target_function() -> None:
     # Create N widget with logarithmic slider and +/- buttons.
     # Uses exponents 2-10 for base 2: gives values 4, 8, 16, 32, 64, 128, 256, 512, 1024
     # Initial exponent 4 gives initial value of 16
-    N_exp_slider, N_box = mtumsuti.build_log_widget_control(
+    N_exp_slider, N_box = htutori.build_log_widget_control(
         name="log(N)",
         description="N (total samples)",
         min_exp=2,
@@ -313,7 +313,7 @@ def cell1_plot_true_target_function() -> None:
                 f"- epsilon: more noise → harder learning\n"
                 f"- seed: different random samples"
             )
-            mtumsuti.add_fitted_text_box(
+            htutori.add_fitted_text_box(
                 ax4, text_content, max_fontsize=14, min_fontsize=10
             )
             plt.tight_layout()
@@ -624,7 +624,7 @@ def cell2_plot_model() -> None:
                 f"how the model changes with different\n"
                 f"training data."
             )
-            mtumsuti.add_fitted_text_box(
+            htutori.add_fitted_text_box(
                 ax4, text_content, max_fontsize=14, min_fontsize=10
             )
             plt.tight_layout()

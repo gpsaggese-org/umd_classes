@@ -3,7 +3,7 @@ Utility functions for MSML610 course tutorials.
 
 Import as:
 
-import L09_05_01_discrete_bayes_dog_utils as mtl00dbdu
+import msml610.tutorials.L09_kalman_filter.L09_05_01_discrete_bayes_dog_utils as mtlkfl00dbdu
 """
 
 import copy
@@ -19,9 +19,9 @@ import numpy as np
 import helpers.hdbg as hdbg
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -565,7 +565,7 @@ def animate_discrete_bayes_with_movement_and_info(
         sensor_text += (
             f"Actual door: {actual_door}\nSensor correct: {is_correct}"
         )
-        mtumsuti.add_fitted_text_box(
+        htutori.add_fitted_text_box(
             axes[0],
             sensor_text,
             box_xy=(0.02, 0.98),
@@ -653,7 +653,7 @@ def cell2_1_interactive() -> None:
         style={"description_width": "initial"},
     )
     # z_prob slider with +/- buttons.
-    z_prob_slider, z_prob_box = mtumsuti.build_widget_control(
+    z_prob_slider, z_prob_box = htutori.build_widget_control(
         name="z_prob",
         description="Sensor accuracy",
         min_val=0.0,
@@ -663,7 +663,7 @@ def cell2_1_interactive() -> None:
         is_float=True,
     )
     # Step slider with +/- buttons.
-    step_slider, step_box = mtumsuti.build_widget_control(
+    step_slider, step_box = htutori.build_widget_control(
         name="step",
         description="Animation step",
         min_val=1,
@@ -760,7 +760,7 @@ def cell2_2_interactive() -> None:
         style={"description_width": "initial"},
     )
     # z_prob slider with +/- buttons.
-    z_prob_slider, z_prob_box = mtumsuti.build_widget_control(
+    z_prob_slider, z_prob_box = htutori.build_widget_control(
         name="z_prob",
         description="Sensor accuracy",
         min_val=0.0,
@@ -770,7 +770,7 @@ def cell2_2_interactive() -> None:
         is_float=True,
     )
     # Step slider with +/- buttons.
-    step_slider, step_box = mtumsuti.build_widget_control(
+    step_slider, step_box = htutori.build_widget_control(
         name="step",
         description="Animation step",
         min_val=1,

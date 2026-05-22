@@ -28,7 +28,7 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 
 # %%
-import notes.MSML610.tutorial_msml610.msml610_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 

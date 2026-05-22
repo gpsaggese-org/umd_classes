@@ -43,7 +43,7 @@ import matplotlib.pyplot as plt
 import preliz as pz
 
 # %% tags=["remove-cell"]
-import msml610_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 

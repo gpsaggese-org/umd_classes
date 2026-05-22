@@ -17,7 +17,7 @@ from unittest import mock
 import helpers.hdbg as hdbg
 import helpers.hunit_test as hunitest
 
-import dev_scripts_helpers.slides.process_lessons as dshsprle
+import class_scripts.for_loop_lessons as csfolole
 
 _LOG = logging.getLogger(__name__)
 
@@ -87,9 +87,9 @@ class Test__generate_tex(hunitest.TestCase):
         os.makedirs(lectures_tex_dir, exist_ok=True)
         with mock.patch("helpers.hsystem.system") as mock_system:
             if limit is None:
-                dshsprle._generate_tex(msml610_dir, source_path, source_name)
+                csfolole._generate_tex(msml610_dir, source_path, source_name)
             else:
-                dshsprle._generate_tex(
+                csfolole._generate_tex(
                     msml610_dir, source_path, source_name, limit=limit
                 )
             mock_system.assert_called_once()
@@ -156,11 +156,11 @@ class Test__generate_pdf(hunitest.TestCase):
         os.makedirs(lectures_dir, exist_ok=True)
         with mock.patch("helpers.hsystem.system") as mock_system:
             if limit is None:
-                dshsprle._generate_pdf(
+                csfolole._generate_pdf(
                     msml610_dir, source_path, source_name, skip_action="open"
                 )
             else:
-                dshsprle._generate_pdf(
+                csfolole._generate_pdf(
                     msml610_dir,
                     source_path,
                     source_name,
@@ -219,7 +219,7 @@ class Test__find_lecture_files(hunitest.TestCase):
         is_range = False
         patterns = ["01*"]
         # Run test.
-        files = dshsprle._find_lecture_files(msml610_dir, is_range, patterns)
+        files = csfolole._find_lecture_files(msml610_dir, is_range, patterns)
         # Check outputs.
         self.assertGreater(len(files), 0)
         for file_path, file_name in files:
@@ -235,7 +235,7 @@ class Test__find_lecture_files(hunitest.TestCase):
         is_range = True
         range_specs = ["01.1", "02.2"]
         # Run test.
-        files = dshsprle._find_lecture_files(msml610_dir, is_range, range_specs)
+        files = csfolole._find_lecture_files(msml610_dir, is_range, range_specs)
         # Check outputs.
         self.assertGreater(len(files), 0)
         for file_path, file_name in files:

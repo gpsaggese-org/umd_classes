@@ -14,6 +14,7 @@ import tutorials.FilterPy.filterpy_api_utils as tffiaput
 """
 
 import logging
+from typing import Tuple
 
 import ipywidgets as widgets
 import matplotlib.pyplot as plt
@@ -37,7 +38,7 @@ _LOG = logging.getLogger(__name__)
 
 def _make_1d_signal(
     n_steps: int = 50, seed: int = 42
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a 1D true position signal and its noisy measurements.
 
@@ -228,7 +229,7 @@ def _run_linear_kf_1d(
     measurements: np.ndarray,
     r_var: float,
     q_var: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run a 1D linear Kalman filter tracking position and velocity.
 
@@ -345,7 +346,7 @@ def _run_linear_kf_uncertainty(
     r_var: float,
     p0_var: float,
     q_var: float = 0.1,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Run linear KF and collect P diagonal elements and Kalman gain over time.
 
@@ -450,7 +451,7 @@ def show_uncertainty_evolution_interactive() -> None:
 # #############################################################################
 
 
-def _polar_to_cartesian(r: float, bearing: float) -> tuple[float, float]:
+def _polar_to_cartesian(r: float, bearing: float) -> Tuple[float, float]:
     """
     Convert polar coordinates to Cartesian.
 
@@ -463,7 +464,7 @@ def _polar_to_cartesian(r: float, bearing: float) -> tuple[float, float]:
 
 def _generate_circular_path(
     n_steps: int = 60, radius: float = 8.0
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a circular path in 2D Cartesian coordinates.
 
@@ -480,7 +481,7 @@ def _run_ekf_radar(
     y_true: np.ndarray,
     sigma_r: float,
     sigma_b: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run EKF to track 2D motion from noisy polar (range, bearing) measurements.
 
@@ -923,7 +924,7 @@ def show_sigma_points_interactive() -> None:
 
 def _generate_curved_path(
     n_steps: int = 60, curvature: float = 0.5
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Generate a curved 2D path controlled by a curvature parameter.
 
@@ -942,7 +943,7 @@ def _run_ukf_2d(
     x_true: np.ndarray,
     y_true: np.ndarray,
     r_var: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run UKF to track 2D position from noisy Cartesian measurements.
 
@@ -997,7 +998,7 @@ def _run_ekf_2d(
     x_true: np.ndarray,
     y_true: np.ndarray,
     r_var: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """
     Run EKF to track 2D position from noisy Cartesian measurements.
 
@@ -1131,7 +1132,7 @@ def _run_enkf_1d(
     n_ensemble: int,
     q_var: float,
     r_var: float,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Run 1D Ensemble Kalman Filter.
 

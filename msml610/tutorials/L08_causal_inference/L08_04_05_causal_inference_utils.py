@@ -6,6 +6,8 @@ Import as:
 import msml610.tutorials.L08_causal_inference.L08_04_05_causal_inference_utils as mtlcil00ciu
 """
 
+from typing import Callable, List, Optional, Tuple
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -28,7 +30,7 @@ _FIGSIZE_PER_SUBPLOT = (4, 3)
 def plot_engagement_vs_intervention(
     data: pd.DataFrame,
     *,
-    figsize: tuple = _FIGSIZE_SINGLE,
+    figsize: Tuple[int, int] = _FIGSIZE_SINGLE,
     jitter_strength: float = 0.03,
 ) -> None:
     """
@@ -98,7 +100,7 @@ def plot_engagement_vs_intervention(
 def plot_engagement_density_by_intervention(
     data: pd.DataFrame,
     *,
-    figsize: tuple = _FIGSIZE_SINGLE,
+    figsize: Tuple[int, int] = _FIGSIZE_SINGLE,
     jitter_strength: float = 0.02,
 ) -> None:
     """
@@ -181,7 +183,7 @@ def plot_engagement_density_by_intervention(
 def plot_engagement_vs_intervention_by_department(
     data: pd.DataFrame,
     *,
-    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
+    figsize_per_plot: Tuple[int, int] = _FIGSIZE_PER_SUBPLOT,
     max_departments: int = 6,
     jitter_strength: float = 0.03,
 ) -> None:
@@ -279,8 +281,8 @@ def plot_engagement_vs_intervention_by_department(
 def plot_all_correlations_to_intervention(
     data: pd.DataFrame,
     *,
-    numeric_cols: list | None = None,
-    figsize: tuple = _FIGSIZE_SINGLE,
+    numeric_cols: Optional[List[str]] = None,
+    figsize: Tuple[int, int] = _FIGSIZE_SINGLE,
 ) -> None:
     """
     Regress all numeric columns on intervention and plot treatment effects.
@@ -333,8 +335,8 @@ def plot_all_correlations_to_intervention(
 def plot_all_variables_vs_intervention(
     data: pd.DataFrame,
     *,
-    numeric_cols: list | None = None,
-    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
+    numeric_cols: Optional[List[str]] = None,
+    figsize_per_plot: Tuple[int, int] = _FIGSIZE_PER_SUBPLOT,
 ) -> None:
     """
     Plot scatter with jitter and means for each numeric variable vs intervention.
@@ -423,8 +425,8 @@ def plot_all_variables_vs_intervention(
 def plot_all_variables_density_by_intervention(
     data: pd.DataFrame,
     *,
-    numeric_cols: list | None = None,
-    figsize_per_plot: tuple = _FIGSIZE_PER_SUBPLOT,
+    numeric_cols: Optional[List[str]] = None,
+    figsize_per_plot: Tuple[int, int] = _FIGSIZE_PER_SUBPLOT,
 ) -> None:
     """
     Plot density curves for each numeric variable by intervention group.
@@ -588,7 +590,7 @@ def plot_iptw(
     ps_col: str = "propensity_score",
     outcome_col: str = "engagement_score",
     treatment_col: str = "intervention",
-    figsize: tuple = _FIGSIZE_SINGLE,
+    figsize: Tuple[int, int] = _FIGSIZE_SINGLE,
 ) -> None:
     """
     Plot Inverse Probability of Treatment Weighting (IPTW) results.
@@ -646,7 +648,7 @@ def estimate_ate_iptw(
     ps_col: str = "propensity_score",
     outcome_col: str = "engagement_score",
     treatment_col: str = "intervention",
-) -> tuple[float, float, float]:
+) -> Tuple[float, float, float]:
     """
     Estimate Average Treatment Effect using Inverse Probability weighting.
 
@@ -756,7 +758,7 @@ def plot_propensity_distributions(
     *,
     ps_col: str = "propensity_score",
     treatment_col: str = "intervention",
-    figsize: tuple = (12, 5),
+    figsize: Tuple[int, int] = (12, 5),
 ) -> None:
     """
     Plot propensity score distributions before and after weighting.
@@ -836,11 +838,11 @@ def plot_propensity_distributions(
 
 def bootstrap(
     data: pd.DataFrame,
-    est_fn,
+    est_fn: Callable[[pd.DataFrame], float],
     *,
     rounds: int = 200,
     seed: int = 123,
-    pcts: list | None = None,
+    pcts: Optional[List[float]] = None,
 ) -> np.ndarray:
     """
     Bootstrap helper function for estimating confidence intervals.
@@ -867,12 +869,12 @@ def bootstrap(
 
 def estimate_confidence_interval_bootstrap(
     data: pd.DataFrame,
-    est_fn,
+    est_fn: Callable[[pd.DataFrame], float],
     *,
     rounds: int = 200,
     seed: int = 123,
     n_jobs: int = 4,
-    pcts: list | None = None,
+    pcts: Optional[List[float]] = None,
 ) -> np.ndarray:
     """
     Estimate confidence interval using bootstrap resampling.

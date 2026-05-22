@@ -8,9 +8,8 @@ categories:
   - Python
 ---
 
-TL;DR `uv` is a blazingly fast Python package manager written in Rust that
-replaces `pip`, `pip-tools`, and `virtualenv` with a single tool that is 10-100x
-faster.
+TL;DR `uv` is a very fast Python package manager written in Rust that replaces
+`pip`, `pip-tools`, and `virtualenv` with a single tool that is 10-100x faster.
 
 <!-- more -->
 
@@ -29,7 +28,7 @@ faster.
   - Modern dependency management
   - Efficient virtual environment handling
 
-## Why UV?
+## Why `uv`?
 
 - **Speed**: Written in Rust with highly optimized algorithms, `uv` is 10-100x
   faster than `pip` for dependency resolution and installation
@@ -45,14 +44,14 @@ faster.
 - **Project management**: Built-in support for creating and managing Python
   projects
 
-Here's a speed comparison for installing packages:
+- Here's a speed comparison for installing packages:
 
-| Tool               | Time (seconds) | Notes                       |
-| :----------------- | :------------- | :-------------------------- |
-| `pip install`      | 45.2           | Standard installation       |
-| `poetry install`   | 38.7           | With lock file              |
-| `uv pip install`   | 2.1            | First install with caching  |
-| `uv pip install`   | 0.3            | Subsequent install (cached) |
+  | Tool               | Time (seconds) | Notes                       |
+  | :----------------- | :------------- | :-------------------------- |
+  | `pip install`      | 45.2           | Standard installation       |
+  | `poetry install`   | 38.7           | With lock file              |
+  | `uv pip install`   | 2.1            | First install with caching  |
+  | `uv pip install`   | 0.3            | Subsequent install (cached) |
 
 ## Installation
 
@@ -79,7 +78,7 @@ Here's a speed comparison for installing packages:
 - Verify the installation:
   ```bash
   > uv --version
-  uv 0.9.5 (Homebrew 2025-10-21
+  uv 0.9.5 (Homebrew 2025-10-21)
   ```
 
 ## Basic Usage
@@ -93,7 +92,8 @@ Here's a speed comparison for installing packages:
   Creating virtual environment at: .venv
   Activate with: source .venv/bin/activate
   ```
-  - This creates a `.venv` directory with a fresh Python environment
+
+- This creates a `.venv` directory with a fresh Python environment
   ```bash
   > ls .venv/
   bin          CACHEDIR.TAG lib          pyvenv.cfg
@@ -106,7 +106,7 @@ Here's a speed comparison for installing packages:
   /Users/USER/.venv/bin/python
   ```
 
-- Create a virtual environment with a specific Python version:
+- Create a virtual environment with a specific Python version in one line:
   ```bash
   > uv venv --python 3.9 --clear; source .venv/bin/activate; python --version
   Using CPython 3.9.6 interpreter at: /Library/Developer/CommandLineTools/usr/bin/python3
@@ -118,6 +118,7 @@ Here's a speed comparison for installing packages:
 ### Installing Packages
 
 - Install a package using `uv pip`:
+- Create venv and activate
   ```bash
   > uv venv --python 3.14 --clear; source .venv/bin/activate
   Using CPython 3.14.2 interpreter at: /opt/homebrew/opt/python@3.14/bin/python3.14
@@ -126,14 +127,20 @@ Here's a speed comparison for installing packages:
 
   > which python; python --version
   Python 3.14.2
+  ```
 
+- Check that `requests` is not installed
+  ```bash
   > python -c "import requests; print(requests.__version__)"
   Traceback (most recent call last):
     File "<string>", line 1, in <module>
       import requests; print(requests.__version__)
       ^^^^^^^^^^^^^^^
   ModuleNotFoundError: No module named 'requests'
+  ```
 
+- Install `requests`
+  ```bash
   > uv pip install requests
   Resolved 5 packages in 86ms
   Installed 5 packages in 14ms
@@ -142,7 +149,10 @@ Here's a speed comparison for installing packages:
    + idna==3.11
    + requests==2.32.5
    + urllib3==2.6.3
+  ```
 
+- Check whether `requests` is installed
+  ```bash
   > python -c "import requests"
 
   > python -c "import requests; print(requests.__version__)"
@@ -152,6 +162,7 @@ Here's a speed comparison for installing packages:
 - Install multiple packages:
   ```bash
   > uv pip install requests pandas numpy
+  ...
   ```
 
 - Install from a requirements file:
@@ -190,11 +201,11 @@ Here's a speed comparison for installing packages:
   > cd myproject
   ```
 
-  - This creates a new project with:
-    - `pyproject.toml`: Project configuration and dependencies
-    - `README.md`: Project documentation
-    - `src/myproject/`: Source code directory
-    - `.python-version`: Python version specification
+- This creates a new project with:
+  - `pyproject.toml`: Project configuration and dependencies
+  - `README.md`: Project documentation
+  - `src/myproject/`: Source code directory
+  - `.python-version`: Python version specification
 
 ### Dev vs Prod Dependencies
 
