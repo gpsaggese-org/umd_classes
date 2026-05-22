@@ -33,6 +33,8 @@ import logging
 # Third-party libraries.
 import pandas as pd
 import matplotlib.pyplot as plt
+import IPython
+from IPython.display import display, HTML
 
 # Note: we need to import sklearn first to avoid conflicts with libgomp-d22c30c5.so.1.0.0: cannot allocate memory in static TLS block
 import sklearn
@@ -65,10 +67,23 @@ _LOG.info("Test _LOG.info")
 # ## Cell 1: Load Data
 
 # %%
-# Load the student performance dataset.
+# Load the student performance dataset from https://archive.ics.uci.edu/dataset/320/student+performance
 df = tcnut.load_student_performance_data(data_dir="data")
 _LOG.info("Dataset shape: %s", df.shape)
 display(df.head())
+
+# %%
+print(df.columns)
+
+# %%
+# !cat /git_root/tutorials/causalnex/data/info.txt 
+
+# %%
+# !cat /git_root/tutorials/causalnex/data/student.txt
+
+# %%
+metadata_df = pd.read_csv("/git_root/tutorials/causalnex/data/metadata.csv")
+display(metadata_df)
 
 # %% [markdown]
 # ## Cell 2: Structure Learning
@@ -96,10 +111,74 @@ sm.add_edges_from(
         ("absences", "G2"),
     ]
 )
-_LOG.info("Structure nodes: %s", sm.nodes)
-_LOG.info("Structure edges: %s", sm.edges)
 print(f"Nodes: {list(sm.nodes)}")
 print(f"Edges: {list(sm.edges)}")
+
+# %%
+from causalnex.plots import plot_structure, NODE_STYLE, EDGE_STYLE
+
+viz = plot_structure(
+    sm,
+    all_node_attributes=NODE_STYLE.WEAK,
+    all_edge_attributes=EDGE_STYLE.WEAK,
+)
+# viz.save_graph("graph.html")
+# display(HTML("graph.html"))
+
+# %%
+G = nx.DiGraph(sm)
+plt.figure(figsize=(6, 4))
+
+pos = nx.spring_layout(G, seed=42)
+
+nx.draw(
+
+    G,
+
+    pos,
+
+    with_labels=True,
+
+    node_color="lightblue",
+
+    node_size=2000,
+
+    font_size=10,
+
+    arrows=True,
+
+)
+
+plt.title("Graph Visualization")
+
+plt.show()
+
+# %%
+# Using pygraphviz
+
+# from networkx.drawing.nx_pydot import graphviz_layout
+
+# import matplotlib.pyplot as plt
+
+# pos = graphviz_layout(G, prog="dot")
+
+# nx.draw(
+
+#     G,
+
+#     pos,
+
+#     with_labels=True,
+
+#     node_color="lightgreen",
+
+#     node_size=2000,
+
+#     arrows=True,
+
+# )
+
+# plt.show()
 
 # %% [markdown]
 # ## Cell 3: Data Discretization
@@ -111,24 +190,26 @@ print(f"Edges: {list(sm.edges)}")
 # Create a copy of the dataframe for discretization.
 df_discrete = df.copy()
 # Discretize continuous variables into categorical buckets.
-df_discrete["studytime_bin"] = pd.cut(
+# Replace originals so column names match the structure model nodes.
+df_discrete["studytime"] = pd.cut(
     df["studytime"],
     bins=[0, 1, 2, 3, 4],
     labels=["very_low", "low", "medium", "high"],
-)
-df_discrete["absences_bin"] = pd.cut(
+).astype(str)
+df_discrete["absences"] = pd.cut(
     df["absences"],
-    bins=[0, 5, 10, 20, 100],
+    bins=[-1, 5, 10, 20, 100],
     labels=["low", "medium", "high", "very_high"],
-)
-df_discrete["G1_bin"] = pd.cut(
-    df["G1"], bins=[0, 10, 20], labels=["fail", "pass"]
-)
-df_discrete["G2_bin"] = pd.cut(
-    df["G2"], bins=[0, 10, 20], labels=["fail", "pass"]
-)
+).astype(str)
+df_discrete["G1"] = pd.cut(
+    df["G1"], bins=[-1, 10, 20], labels=["fail", "pass"]
+).astype(str)
+df_discrete["G2"] = pd.cut(
+    df["G2"], bins=[-1, 10, 20], labels=["fail", "pass"]
+).astype(str)
+df_discrete["health"] = df["health"].astype(str)
 _LOG.info("Discretized data shape: %s", df_discrete.shape)
-print(df_discrete[["studytime_bin", "absences_bin", "G1_bin", "G2_bin"]].head())
+print(df_discrete[["health", "studytime", "absences", "G1", "G2"]].head())
 
 # %% [markdown]
 # ## Cell 4: CPD Fitting
@@ -144,8 +225,10 @@ bn = BayesianNetwork(sm)
 # Select only the columns needed for the network.
 cols = ["health", "studytime", "absences", "G1", "G2"]
 df_fit = df_discrete[cols].copy()
+# Learn the categorical states for each node before fitting the CPDs.
+bn = bn.fit_node_states(df_fit)
 # Fit the network to the data.
-bn.fit_cpds(df_fit, method="BayesianEstimator", prior_type="BDeu")
+bn.fit_cpds(df_fit, method="BayesianEstimator", bayes_prior="BDeu", equivalent_sample_size=10)
 _LOG.info("CPDs fitted successfully")
 _LOG.info("Network CPDs: %s", list(bn.cpds.keys()))
 print(f"CPDs: {list(bn.cpds.keys())}")
@@ -162,14 +245,13 @@ train_size = int(0.8 * len(df_discrete))
 train_data = df_discrete[:train_size]
 test_data = df_discrete[train_size:]
 # Get predictions from the Bayesian Network on test data.
-predictions = []
-for idx, row in test_data.iterrows():
-    pred = bn.predict(test_data[[c for c in cols if c != "G2"]].iloc[idx])
-    predictions.append(pred.get("G2", "unknown"))
+input_cols = [c for c in cols if c != "G2"]
+predictions_df = bn.predict(test_data[cols], "G2")
 _LOG.info("Test set size: %s", len(test_data))
-_LOG.info("Predictions made: %s", len(predictions))
+_LOG.info("Predictions made: %s", len(predictions_df))
 print(f"Test set size: {len(test_data)}")
-print(f"Predictions made: {len(predictions)}")
+print(f"Predictions made: {len(predictions_df)}")
+print(predictions_df.head())
 
 # %% [markdown]
 # ## Cell 6: Inference & Querying
@@ -178,15 +260,21 @@ print(f"Predictions made: {len(predictions)}")
 # Compute marginal and conditional probabilities given observations.
 
 # %%
-# Extract the CPD for G2 (second period grade).
+# Extract the CPD for G2 (second period grade) as a DataFrame.
 cpd_g2 = bn.cpds.get("G2")
 if cpd_g2 is not None:
-    _LOG.info("CPD for G2: %s", cpd_g2.variable)
-    _LOG.info("G2 cardinality: %s", cpd_g2.cardinality)
-    print(f"CPD variable: {cpd_g2.variable}")
-    print(f"G2 cardinality: {cpd_g2.cardinality}")
+    _LOG.info("CPD for G2 shape: %s", cpd_g2.shape)
+    _LOG.info("G2 states: %s", list(cpd_g2.index))
+    print(f"CPD shape: {cpd_g2.shape}")
+    print(f"G2 states: {list(cpd_g2.index)}")
+    print(cpd_g2.head())
 # Perform inference with observations.
-_ = bn.fit_cpds(train_data[cols], method="BayesianEstimator")
+_ = bn.fit_cpds(
+    train_data[cols],
+    method="BayesianEstimator",
+    bayes_prior="BDeu",
+    equivalent_sample_size=10,
+)
 _LOG.info("Inference complete on training data")
 
 # %% [markdown]
@@ -200,10 +288,13 @@ _LOG.info("Inference complete on training data")
 df_intervention = df_discrete.copy()
 # Intervene: set studytime to 'high' for all students.
 df_intervention["studytime"] = "high"
+# Predict G2 outcomes under the intervention using the fitted network.
+intervention_preds = bn.predict(df_intervention[cols], "G2")
+pred_col = intervention_preds.columns[0]
 # Compare outcomes before and after intervention.
-pass_rate_before = (df_discrete["G2_bin"] == "pass").sum() / len(df_discrete)
-pass_rate_after = (df_intervention["G2_bin"] == "pass").sum() / len(
-    df_intervention
+pass_rate_before = (df_discrete["G2"] == "pass").sum() / len(df_discrete)
+pass_rate_after = (intervention_preds[pred_col] == "pass").sum() / len(
+    intervention_preds
 )
 improvement = (pass_rate_after - pass_rate_before) * 100
 _LOG.info("Pass rate before intervention: %.1f%%", pass_rate_before * 100)
@@ -221,13 +312,15 @@ print(f"Improvement: {improvement:.1f}%")
 # Visualize the causal structure and relationships.
 
 # %%
-from causalnex.plots import draw
+import networkx as nx
 
 # Create a figure to display the causal graph.
 fig, ax = plt.subplots(figsize=(10, 8))
-# Draw the structure model with nodes and edges.
-draw(
+# Draw the structure model with nodes and edges using networkx.
+pos = nx.spring_layout(sm, seed=42)
+nx.draw(
     sm,
+    pos=pos,
     with_labels=True,
     node_color="lightblue",
     node_size=3000,
@@ -240,5 +333,7 @@ ax.set_title(
     "Causal Structure: Student Performance", fontsize=14, fontweight="bold"
 )
 plt.tight_layout()
-plt.show()
-_LOG.info("Network visualization complete")
+# Save the figure since the script runs headless without a display.
+fig.savefig("/git_root/tutorials/causalnex/causal_structure.png")
+plt.close(fig)
+_LOG.info("Network visualization saved to causal_structure.png")
