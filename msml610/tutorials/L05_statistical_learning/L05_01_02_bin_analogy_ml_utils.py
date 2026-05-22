@@ -3,7 +3,7 @@ Utility functions for Learning Theory lesson - Bin Analogy of ML.
 
 Import as:
 
-import L05_01_02_bin_analogy_ml_utils as mtl00bamu
+import msml610.tutorials.L05_statistical_learning.L05_01_02_bin_analogy_ml_utils as mtlsll00bamu
 """
 
 import logging
@@ -15,9 +15,9 @@ import ipywidgets
 from IPython.display import display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -111,7 +111,7 @@ def cell1_draw_bin_with_marbles_interactive() -> None:
     mu_init = 0.5
     seed_init = 42
     # Create slider for seed.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="",
         min_val=0,
@@ -121,7 +121,7 @@ def cell1_draw_bin_with_marbles_interactive() -> None:
         is_float=False,
     )
     # Create slider for mu.
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="",
         min_val=0.0,
@@ -227,7 +227,7 @@ def _plot_single_experiment(mu: float, N: int, seed: int) -> None:
         f"  In this run, nu {closeness} close to mu.\n"
         f"  Color: {color_desc}\n\n"
     )
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -243,7 +243,7 @@ def cell2_plot_single_experiment_interactive() -> None:
     N_init = 100
     seed_init = 42
     # Create interactive widgets.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,
@@ -252,7 +252,7 @@ def cell2_plot_single_experiment_interactive() -> None:
         initial_value=seed_init,
         is_float=False,
     )
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="mu",
         min_val=0.0,
@@ -261,7 +261,7 @@ def cell2_plot_single_experiment_interactive() -> None:
         initial_value=mu_init,
         is_float=True,
     )
-    N_slider, N_box = mtumsuti.build_widget_control(
+    N_slider, N_box = htutori.build_widget_control(
         name="N",
         description="N",
         min_val=10,
@@ -398,7 +398,7 @@ def _plot_monte_carlo_simulation(
         f"- Only {empirical_prob * 100:.1f}% of experiments\n"
         f"  have |nu - mu| > {eps:.3f}\n\n"
     )
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     plt.tight_layout()
     plt.show()
 
@@ -417,7 +417,7 @@ def cell3_monte_carlo_simulation_interactive() -> None:
     eps_init = 0.1
     seed_init = 42
     # Create interactive widgets.
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="",
         min_val=0,
@@ -426,7 +426,7 @@ def cell3_monte_carlo_simulation_interactive() -> None:
         initial_value=seed_init,
         is_float=False,
     )
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="",
         min_val=0.0,
@@ -435,7 +435,7 @@ def cell3_monte_carlo_simulation_interactive() -> None:
         initial_value=mu_init,
         is_float=True,
     )
-    N_slider, N_box = mtumsuti.build_widget_control(
+    N_slider, N_box = htutori.build_widget_control(
         name="N",
         description="",
         min_val=10,
@@ -444,7 +444,7 @@ def cell3_monte_carlo_simulation_interactive() -> None:
         initial_value=N_init,
         is_float=False,
     )
-    n_experiments_slider, n_experiments_box = mtumsuti.build_widget_control(
+    n_experiments_slider, n_experiments_box = htutori.build_widget_control(
         name="n_experiments",
         description="",
         min_val=100,
@@ -453,7 +453,7 @@ def cell3_monte_carlo_simulation_interactive() -> None:
         initial_value=n_experiments_init,
         is_float=False,
     )
-    eps_slider, eps_box = mtumsuti.build_widget_control(
+    eps_slider, eps_box = htutori.build_widget_control(
         name="eps",
         description="",
         min_val=0.01,

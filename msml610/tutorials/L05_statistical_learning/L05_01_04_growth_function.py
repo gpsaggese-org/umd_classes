@@ -32,7 +32,7 @@ plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
 import L05_01_04_growth_function_utils as mtugrowf
-import msml610.tutorials.msml610_utils as ut
+import helpers.htutorial as ut
 
 ut.config_notebook()
 
