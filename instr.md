@@ -1,16 +1,15 @@
-In class_project/create_project.py
+Update notebook in 
+~/src/umd_classes1/tutorials/causalnex/causalnex.API.ipynb
 
-After _rename_template_files
+Create function in the *_utils.py to download file if it doesn't exist
 
-In tutorials/causalnex/docker_name.sh
-replace
-IMAGE_NAME=umd_project_template
-->
-IMAGE_NAME=umd_project_{dirname}
-
+wget https://archive.ics.uci.edu/static/public/320/student+performance.zip
+decompress it
+and read it with pandas csv
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications
 
 - When writing code you must always follow the instructions in
-  `@.claude/skills/coding.rules.md`
+  `.claude/skills/coding.rules.md`
+- When writing a notebook follow .claude/skills/notebook.rules.md

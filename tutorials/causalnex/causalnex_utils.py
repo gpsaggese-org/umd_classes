@@ -1,72 +1,79 @@
 """
-template_utils.py
+causalnex_utils.py
 
-This file contains utility functions that support the tutorial notebooks.
+This file contains utility functions that support the causalnex tutorial
+notebooks.
 
-- Notebooks should call these functions instead of writing raw logic inline.
-- This helps keep the notebooks clean, modular, and easier to debug.
-- Students should implement functions here for data preprocessing,
-  model setup, evaluation, or any reusable logic.
-
-Import as:
-
-import class_project.project_template.template_utils as cpptteut
+import tutorials.causalnex.causalnex_utils as tcnut
 """
 
-import pandas as pd
 import logging
+import os
+import urllib.request
+import zipfile
+
+import pandas as pd
 from sklearn.model_selection import train_test_split
 from pycaret.classification import compare_models
 
-# -----------------------------------------------------------------------------
-# Logging
-# -----------------------------------------------------------------------------
+import helpers.hdbg as hdbg
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# -----------------------------------------------------------------------------
-# Example 1: Split the dataset into train and test sets
-# -----------------------------------------------------------------------------
+# #############################################################################
+# Download and load student performance dataset
+# #############################################################################
 
 
-def split_data(df: pd.DataFrame, target_column: str, test_size: float = 0.2):
+def _download_file(url: str, *, output_path: str) -> None:
     """
-    Split the dataset into training and testing sets.
+    Download a file from the given URL if it doesn't already exist.
 
-    :param df: full dataset
-    :param target_column: name of the target column
-    :param test_size: proportion of test data (default = 0.2)
-
-    :return: X_train, X_test, y_train, y_test
+    :param url: URL of the file to download
+    :param output_path: Local path where the file should be saved
     """
-    logger.info("Splitting data into train and test sets")
-    X = df.drop(columns=[target_column])
-    y = df[target_column]
-    return train_test_split(X, y, test_size=test_size, random_state=42)
+    if os.path.exists(output_path):
+        logger.info("File already exists at '%s', skipping download", output_path)
+        return
+    logger.info("Downloading file from '%s' to '%s'", url, output_path)
+    urllib.request.urlretrieve(url, output_path)
+    logger.info("Download complete")
 
 
-# -----------------------------------------------------------------------------
-# Example 2: PyCaret classification pipeline
-# -----------------------------------------------------------------------------
-
-
-def run_pycaret_classification(
-    df: pd.DataFrame, target_column: str
-) -> pd.DataFrame:
+def _decompress_zip(zip_path: str, *, extract_dir: str) -> None:
     """
-    Run a basic PyCaret classification experiment.
+    Decompress a zip file to the specified directory.
 
-    :param df: dataset containing features and target
-    :param target_column: name of the target column
-
-    :return: comparison of top-performing models
+    :param zip_path: Path to the zip file
+    :param extract_dir: Directory where the zip file should be extracted
     """
-    logger.info("Initializing PyCaret classification setup")
-    ...
+    hdbg.dassert_file_exists(zip_path, "Zip file does not exist")
+    logger.info("Extracting zip file from '%s' to '%s'", zip_path, extract_dir)
+    with zipfile.ZipFile(zip_path, "r") as zip_ref:
+        zip_ref.extractall(extract_dir)
+    logger.info("Extraction complete")
 
-    logger.info("Comparing models")
-    results = compare_models()
-    ...
 
-    return results
+def load_student_performance_data(*, data_dir: str = "data") -> pd.DataFrame:
+    """
+    Download and load the student performance dataset from UCI.
+
+    Downloads the student performance dataset if it doesn't exist locally,
+    decompresses the zip file, and loads the CSV data into a DataFrame.
+
+    :param data_dir: Directory where the dataset will be stored
+        - Default: `"data"`
+    :return: DataFrame containing the student performance data
+    """
+    os.makedirs(data_dir, exist_ok=True)
+    url = "https://archive.ics.uci.edu/static/public/320/student+performance.zip"
+    zip_path = os.path.join(data_dir, "student_performance.zip")
+    extract_dir = os.path.join(data_dir, "student_performance")
+    _download_file(url, output_path=zip_path)
+    if not os.path.exists(extract_dir):
+        _decompress_zip(zip_path, extract_dir=extract_dir)
+    # Find the CSV file in the extracted directory.
+    _LOG.info("Loading student performance data from '%s'", csv_path)
+    df = pd.read_csv(csv_path, sep=";")
+    _LOG.info("Data loaded: %s rows, %s columns", len(df), len(df.columns))
+    return df
