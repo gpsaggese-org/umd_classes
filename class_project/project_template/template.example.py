@@ -51,8 +51,19 @@ _LOG = logging.getLogger(__name__)
 hnotebo.config_notebook()
 
 
+# %%
+# # To install additional packages, use:
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     ["pycaret"],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
 # %% [markdown]
 # ## Make the notebook flow clear
+#
 # Each notebook needs to follow a clear and logical flow, e.g:
 # - Load data
 # - Compute stats
@@ -61,14 +72,7 @@ hnotebo.config_notebook()
 # - Do analysis
 # - Show results
 #
-#
-#
-#
-
-
-# #############################################################################
-# Template
-# #############################################################################
+# ## Template
 
 
 # %%

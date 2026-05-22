@@ -57,6 +57,16 @@ _LOG = logging.getLogger(__name__)
 hnotebo.config_notebook()
 
 
+# %%
+# # To install additional packages, use:
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     ["pycaret"],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
 # %% [markdown]
 # ## Make the notebook flow clear
 # Each notebook needs to follow a clear and logical flow, e.g:
@@ -74,7 +84,10 @@ class Template:
     Brief imperative description of what the class does in one line, if needed.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """
+        Initialize the Template class.
+        """
         pass
 
     def method1(self, arg1: int) -> None:
@@ -88,7 +101,7 @@ class Template:
         :param arg1: description of arg1
         :return: description of return
         """
-        # Code bloks go here.
+        # Code blocks go here.
         # Make sure to include comments to explain what the code is doing.
         # No empty lines between code blocks.
         pass
@@ -105,7 +118,7 @@ def template_function(arg1: int) -> None:
     :param arg1: description of arg1
     :return: description of return
     """
-    # Code bloks go here.
+    # Code blocks go here.
     # Make sure to include comments to explain what the code is doing.
     # No empty lines between code blocks.
     pass

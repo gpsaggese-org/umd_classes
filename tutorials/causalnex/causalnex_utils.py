@@ -13,8 +13,6 @@ import urllib.request
 import zipfile
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from pycaret.classification import compare_models
 
 import helpers.hdbg as hdbg
 
@@ -72,8 +70,8 @@ def load_student_performance_data(*, data_dir: str = "data") -> pd.DataFrame:
     _download_file(url, output_path=zip_path)
     if not os.path.exists(extract_dir):
         _decompress_zip(zip_path, extract_dir=extract_dir)
-    # Find the CSV file in the extracted directory.
-    _LOG.info("Loading student performance data from '%s'", csv_path)
+    csv_path = os.path.join(extract_dir, "student-mat.csv")
+    logger.info("Loading student performance data from '%s'", csv_path)
     df = pd.read_csv(csv_path, sep=";")
-    _LOG.info("Data loaded: %s rows, %s columns", len(df), len(df.columns))
+    logger.info("Data loaded: %s rows, %s columns", len(df), len(df.columns))
     return df

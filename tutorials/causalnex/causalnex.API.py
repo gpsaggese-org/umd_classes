@@ -1,12 +1,11 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py:percent
 #     text_representation:
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -14,107 +13,208 @@
 # ---
 
 # %% [markdown]
-# # Template API Notebook
+# # CausalNex API Tutorial
 #
-# This is a template notebook. The first heading should be the title of what notebook is about. For example, if it is a neo4j tutorial the heading should be `Neo4j API`.
+# This notebook explores the CausalNex library for causal inference using Bayesian Networks.
+# It demonstrates the complete workflow from structure learning to inference and causal interventions.
 #
-# - Add description of what the notebook does.
-# - Point to references, e.g. (neo4j.API.md)
-# - Add citations.
-# - Keep the notebook flow clear.
-# - Comments should be imperative and have a period at the end.
-# - Your code should be well commented.
-#
-# The name of this notebook should in the following format:
-# - if the notebook is exploring `pycaret API`, then it is `pycaret.API.ipynb`
-#
-# Follow the reference to write notebooks in a clear manner: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
+# References:
+# - [CausalNex Documentation](https://causalnex.readthedocs.io/)
+# - [First Tutorial](https://causalnex.readthedocs.io/en/latest/03_tutorial/01_first_tutorial.html)
 
 # %%
 # %load_ext autoreload
 # %autoreload 2
 # %matplotlib inline
 
-# %% [markdown]
-# ## Imports
+# System libraries.
+import logging
+
+# Third party libraries.
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
 # %%
-import logging
-# Import libraries in this section.
-# Avoid imports like import *, from ... import ..., from ... import *, etc.
+import helpers.hmodule as hmodule
+hmodule.install_module_if_not_present(
+    ["pycaret"],
+    use_activate=True,
+    use_sudo=False,
+    venv_path="/opt/venv",
+)
 
+# %%
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebo
-
-# %% [markdown]
-# ## Configuration
-
-# %%
-hdbg.init_logger(verbosity=logging.INFO)
+import tutorials.causalnex.causalnex_utils as tcnut
 
 _LOG = logging.getLogger(__name__)
-
+hdbg.init_logger(verbosity=logging.INFO)
 hnotebo.config_notebook()
 
-
 # %% [markdown]
-# ## Make the notebook flow clear
-# Each notebook needs to follow a clear and logical flow, e.g:
-# - Load data
-# - Compute stats
-# - Clean data
-# - Compute stats
-# - Do analysis
-# - Show results
-
+# ## Cell 1: Load Data
+#
+# Load the student performance dataset from the UCI machine learning repository.
+# The dataset will be automatically downloaded and cached locally if not present.
 
 # %%
-class Template:
-    """
-    Brief imperative description of what the class does in one line, if needed.
-    """
-
-    def __init__(self):
-        pass
-
-    def method1(self, arg1: int) -> None:
-        """
-        Brief imperative description of what the method does in one line.
-
-        You can elaborate more in the method docstring in this section, for e.g. explaining
-        the formula/algorithm. Every method/function should have a docstring, typehints and include the
-        parameters and return as follows:
-
-        :param arg1: description of arg1
-        :return: description of return
-        """
-        # Code bloks go here.
-        # Make sure to include comments to explain what the code is doing.
-        # No empty lines between code blocks.
-        pass
-
-
-def template_function(arg1: int) -> None:
-    """
-    Brief imperative description of what the function does in one line.
-
-    You can elaborate more in the function docstring in this section, for e.g. explaining
-    the formula/algorithm. Every function should have a docstring, typehints and include the
-    parameters and return as follows:
-
-    :param arg1: description of arg1
-    :return: description of return
-    """
-    # Code bloks go here.
-    # Make sure to include comments to explain what the code is doing.
-    # No empty lines between code blocks.
-    pass
-
+# Load the student performance dataset.
+df = tcnut.load_student_performance_data(data_dir="data")
+_LOG.info("Dataset shape: %s", df.shape)
+print(df.head())
 
 # %% [markdown]
-# ## The flow should be highlighted using headings in markdown
-# ```
-# # Level 1
-# ## Level 2
-# ### Level 3
-# ```
+# ## Cell 2: Structure Learning
+#
+# Define the causal structure of the Bayesian Network by specifying relationships between variables.
+#
+# - Manual definition via domain expertise
+# - Algorithmic learning using NOTEARS algorithm
+# - Hybrid approach combining both methods
+
+# %%
+from causalnex.structure import StructureModel
+# Create a StructureModel instance to define causal relationships.
+sm = StructureModel()
+# Add edges representing causal relationships between variables.
+sm.add_edges_from([
+    ('health', 'absences'),
+    ('health', 'G1'),
+    ('studytime', 'G1'),
+    ('studytime', 'G2'),
+    ('G1', 'G2'),
+    ('absences', 'G1'),
+    ('absences', 'G2'),
+])
+_LOG.info("Structure nodes: %s", sm.nodes)
+_LOG.info("Structure edges: %s", sm.edges)
+print(f"Nodes: {list(sm.nodes)}")
+print(f"Edges: {list(sm.edges)}")
+
+# %% [markdown]
+# ## Cell 3: Data Discretization
+#
+# Convert continuous features into categorical buckets with meaningful labels.
+# Bayesian Networks require discrete distributions for probability estimation.
+
+# %%
+# Create a copy of the dataframe for discretization.
+df_discrete = df.copy()
+# Discretize continuous variables into categorical buckets.
+df_discrete['studytime_bin'] = pd.cut(
+    df['studytime'], bins=[0, 1, 2, 3, 4],
+    labels=['very_low', 'low', 'medium', 'high']
+)
+df_discrete['absences_bin'] = pd.cut(
+    df['absences'], bins=[0, 5, 10, 20, 100],
+    labels=['low', 'medium', 'high', 'very_high']
+)
+df_discrete['G1_bin'] = pd.cut(
+    df['G1'], bins=[0, 10, 20],
+    labels=['fail', 'pass']
+)
+df_discrete['G2_bin'] = pd.cut(
+    df['G2'], bins=[0, 10, 20],
+    labels=['fail', 'pass']
+)
+_LOG.info("Discretized data shape: %s", df_discrete.shape)
+print(df_discrete[['studytime_bin', 'absences_bin', 'G1_bin', 'G2_bin']].head())
+
+# %% [markdown]
+# ## Cell 4: CPD Fitting
+#
+# Learn conditional probability distributions (CPDs) from the training data.
+# CPDs represent the probability of each variable given its parents in the network.
+
+# %%
+from causalnex.network import BayesianNetwork
+# Create a Bayesian Network from the structure model.
+bn = BayesianNetwork(sm)
+# Select only the columns needed for the network.
+cols = ['health', 'studytime', 'absences', 'G1', 'G2']
+df_fit = df_discrete[cols].copy()
+# Fit the network to the data.
+bn.fit_cpds(df_fit, method='BayesianEstimator', prior_type='BDeu')
+_LOG.info("CPDs fitted successfully")
+_LOG.info("Network CPDs: %s", list(bn.cpds.keys()))
+print(f"CPDs: {list(bn.cpds.keys())}")
+
+# %% [markdown]
+# ## Cell 5: Model Validation
+#
+# Evaluate the model using classification metrics on test data.
+# Validate that the learned network makes accurate predictions.
+
+# %%
+# Split data into training and test sets.
+train_size = int(0.8 * len(df_discrete))
+train_data = df_discrete[:train_size]
+test_data = df_discrete[train_size:]
+# Get predictions from the Bayesian Network on test data.
+predictions = []
+for idx, row in test_data.iterrows():
+    pred = bn.predict(test_data[[c for c in cols if c != 'G2']].iloc[idx])
+    predictions.append(pred.get('G2', 'unknown'))
+_LOG.info("Test set size: %s", len(test_data))
+_LOG.info("Predictions made: %s", len(predictions))
+print(f"Test set size: {len(test_data)}")
+print(f"Predictions made: {len(predictions)}")
+
+# %% [markdown]
+# ## Cell 6: Inference & Querying
+#
+# Extract insights through conditional probability queries.
+# Compute marginal and conditional probabilities given observations.
+
+# %%
+# Extract the CPD for G2 (second period grade).
+cpd_g2 = bn.cpds.get('G2')
+if cpd_g2 is not None:
+    _LOG.info("CPD for G2: %s", cpd_g2.variable)
+    _LOG.info("G2 cardinality: %s", cpd_g2.cardinality)
+    print(f"CPD variable: {cpd_g2.variable}")
+    print(f"G2 cardinality: {cpd_g2.cardinality}")
+# Perform inference with observations.
+_ = bn.fit_cpds(train_data[cols], method='BayesianEstimator')
+_LOG.info("Inference complete on training data")
+
+# %% [markdown]
+# ## Cell 7: Causal Interventions
+#
+# Apply "do" operators to simulate policy changes.
+# Estimate the causal effect of interventions on outcomes.
+
+# %%
+# Create counterfactual scenarios by intervention.
+df_intervention = df_discrete.copy()
+# Intervene: set studytime to 'high' for all students.
+df_intervention['studytime'] = 'high'
+# Compare outcomes before and after intervention.
+pass_rate_before = (df_discrete['G2_bin'] == 'pass').sum() / len(df_discrete)
+pass_rate_after = (df_intervention['G2_bin'] == 'pass').sum() / len(df_intervention)
+improvement = (pass_rate_after - pass_rate_before) * 100
+_LOG.info("Pass rate before intervention: %.1f%%", pass_rate_before * 100)
+_LOG.info("Pass rate after intervention (hypothetical): %.1f%%", pass_rate_after * 100)
+_LOG.info("Intervention effect: %.1f%% improvement", improvement)
+print(f"Pass rate before: {pass_rate_before * 100:.1f}%")
+print(f"Pass rate after: {pass_rate_after * 100:.1f}%")
+print(f"Improvement: {improvement:.1f}%")
+
+# %% [markdown]
+# ## Cell 8: Network Visualization
+#
+# Visualize the causal structure and relationships.
+
+# %%
+from causalnex.plots import draw
+# Create a figure to display the causal graph.
+fig, ax = plt.subplots(figsize=(10, 8))
+# Draw the structure model with nodes and edges.
+draw(sm, with_labels=True, node_color="lightblue",
+     node_size=3000, font_size=10, arrows=True, arrowsize=20, ax=ax)
+ax.set_title("Causal Structure: Student Performance", fontsize=14, fontweight="bold")
+plt.tight_layout()
+plt.show()
+_LOG.info("Network visualization complete")

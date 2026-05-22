@@ -1,11 +1,9 @@
 Update notebook in 
 ~/src/umd_classes1/tutorials/causalnex/causalnex.API.ipynb
 
-Create function in the *_utils.py to download file if it doesn't exist
+with the tutorial from
 
-wget https://archive.ics.uci.edu/static/public/320/student+performance.zip
-decompress it
-and read it with pandas csv
+https://causalnex.readthedocs.io/en/latest/03_tutorial/01_first_tutorial.html
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications
