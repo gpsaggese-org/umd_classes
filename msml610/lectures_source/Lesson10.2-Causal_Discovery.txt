@@ -671,6 +671,9 @@ mindmap
 //   https://arxiv.org/abs/2011.00641
 // - 2008, Castelo et al., "Structural, syntactic, and statistical issues in
 //   learning Bayesian networks from data"
+// - 2018, Zheng et al., "DAGs with NO TEARS: Continuous Optimization for
+//   Structure Learning"
+//   https://papers.nips.cc/paper/8157-dags-with-no-tears-continuous-optimization-for-structure-learning.pdf
 
 * Validating a Discovered DAG
 

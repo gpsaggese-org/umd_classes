@@ -40,9 +40,7 @@ def _download_file(url: str, *, output_path: str) -> None:
     :param output_path: Local path where the file should be saved
     """
     if os.path.exists(output_path):
-        _LOG.info(
-            "File already exists at '%s', skipping download", output_path
-        )
+        _LOG.info("File already exists at '%s', skipping download", output_path)
         return
     _LOG.info("Downloading file from '%s' to '%s'", url, output_path)
     urllib.request.urlretrieve(url, output_path)

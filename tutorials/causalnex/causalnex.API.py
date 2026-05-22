@@ -19,8 +19,8 @@
 # It demonstrates the complete workflow from structure learning to inference and causal interventions.
 #
 # References:
-# - [CausalNex Documentation](https://causalnex.readthedocs.io/)
-# - [First Tutorial](https://causalnex.readthedocs.io/en/latest/03_tutorial/01_first_tutorial.html)
+# - https://causalnex.readthedocs.io/
+# - https://causalnex.readthedocs.io/en/latest/03_tutorial/01_first_tutorial.html
 
 # %%
 # %load_ext autoreload
@@ -33,11 +33,11 @@ import logging
 # Third-party libraries.
 import pandas as pd
 import matplotlib.pyplot as plt
-import IPython
-from IPython.display import display, HTML
+from IPython.display import display
 
 # Note: we need to import sklearn first to avoid conflicts with libgomp-d22c30c5.so.1.0.0: cannot allocate memory in static TLS block
 import sklearn
+
 _ = sklearn
 
 # %%
@@ -51,11 +51,11 @@ _ = sklearn
 
 # %% editable=true slideshow={"slide_type": ""}
 # Helpers packages.
-import helpers.hdbg as hdbg
 
 # Tutorial-specific packages.
 import tutorials.causalnex.causalnex_utils as tcnut
 import causalnex
+
 print(causalnex.__version__)
 
 _LOG = logging.getLogger(__name__)
@@ -115,38 +115,33 @@ print(f"Nodes: {list(sm.nodes)}")
 print(f"Edges: {list(sm.edges)}")
 
 # %%
-from causalnex.plots import plot_structure, NODE_STYLE, EDGE_STYLE
-
-viz = plot_structure(
-    sm,
-    all_node_attributes=NODE_STYLE.WEAK,
-    all_edge_attributes=EDGE_STYLE.WEAK,
-)
-# viz.save_graph("graph.html")
-# display(HTML("graph.html"))
+# Plot the relationships using networkx.
+if False:
+    from causalnex.plots import plot_structure, NODE_STYLE, EDGE_STYLE
+    
+    viz = plot_structure(
+        sm,
+        all_node_attributes=NODE_STYLE.WEAK,
+        all_edge_attributes=EDGE_STYLE.WEAK,
+    )
+    # viz.save_graph("graph.html")
+    # display(HTML("graph.html"))
 
 # %%
+# Plot the relationships using networkx.
 G = nx.DiGraph(sm)
 plt.figure(figsize=(6, 4))
 
 pos = nx.spring_layout(G, seed=42)
 
 nx.draw(
-
     G,
-
     pos,
-
     with_labels=True,
-
     node_color="lightblue",
-
     node_size=2000,
-
     font_size=10,
-
     arrows=True,
-
 )
 
 plt.title("Graph Visualization")
@@ -154,30 +149,18 @@ plt.title("Graph Visualization")
 plt.show()
 
 # %%
-# Using pygraphviz
-
+# Plot using pygraphviz.
 # from networkx.drawing.nx_pydot import graphviz_layout
-
 # import matplotlib.pyplot as plt
-
 # pos = graphviz_layout(G, prog="dot")
-
 # nx.draw(
-
 #     G,
-
 #     pos,
-
 #     with_labels=True,
-
 #     node_color="lightgreen",
-
 #     node_size=2000,
-
 #     arrows=True,
-
 # )
-
 # plt.show()
 
 # %% [markdown]
@@ -189,6 +172,7 @@ plt.show()
 # %%
 # Create a copy of the dataframe for discretization.
 df_discrete = df.copy()
+
 # Discretize continuous variables into categorical buckets.
 # Replace originals so column names match the structure model nodes.
 df_discrete["studytime"] = pd.cut(
@@ -209,7 +193,8 @@ df_discrete["G2"] = pd.cut(
 ).astype(str)
 df_discrete["health"] = df["health"].astype(str)
 _LOG.info("Discretized data shape: %s", df_discrete.shape)
-print(df_discrete[["health", "studytime", "absences", "G1", "G2"]].head())
+
+display(df_discrete[["health", "studytime", "absences", "G1", "G2"]].head())
 
 # %% [markdown]
 # ## Cell 4: CPD Fitting
@@ -228,7 +213,12 @@ df_fit = df_discrete[cols].copy()
 # Learn the categorical states for each node before fitting the CPDs.
 bn = bn.fit_node_states(df_fit)
 # Fit the network to the data.
-bn.fit_cpds(df_fit, method="BayesianEstimator", bayes_prior="BDeu", equivalent_sample_size=10)
+bn.fit_cpds(
+    df_fit,
+    method="BayesianEstimator",
+    bayes_prior="BDeu",
+    equivalent_sample_size=10,
+)
 _LOG.info("CPDs fitted successfully")
 _LOG.info("Network CPDs: %s", list(bn.cpds.keys()))
 print(f"CPDs: {list(bn.cpds.keys())}")
