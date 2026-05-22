@@ -3,7 +3,7 @@ Utility functions for Learning Theory lesson - Hoeffding Inequality.
 
 Import as:
 
-import L05_01_01_hoeffding_inequality_utils as mtl00hiut
+import msml610.tutorials.L05_statistical_learning.L05_01_01_hoeffding_inequality_utils as mtlsll00hiu
 """
 
 import logging
@@ -19,9 +19,9 @@ from IPython.display import display
 import helpers.hdbg as hdbg
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -151,7 +151,7 @@ def _create_basic_widget_controls(
     :param seed_init: Initial seed value
     :return: Tuple of (mu_slider, mu_box, N_slider, N_box, seed_slider, seed_box)
     """
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="prob of success",
         min_val=0.1,
@@ -160,7 +160,7 @@ def _create_basic_widget_controls(
         initial_value=mu_init,
         is_float=True,
     )
-    N_slider, N_box = mtumsuti.build_widget_control(
+    N_slider, N_box = htutori.build_widget_control(
         name="N",
         description="number of samples",
         min_val=10,
@@ -169,7 +169,7 @@ def _create_basic_widget_controls(
         initial_value=N_init,
         is_float=False,
     )
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,
@@ -304,7 +304,7 @@ def _plot_bernoulli_sample2(
         f"  Failures (0): {n_failures}\n"
         f"  Empirical prob: {empirical_prob:.4f}"
     )
-    mtumsuti.add_fitted_text_box(ax3, text_content)
+    htutori.add_fitted_text_box(ax3, text_content)
     # Use subplots_adjust for consistent spacing.
     plt.subplots_adjust(
         left=0.05, right=0.98, top=0.92, bottom=0.10, wspace=0.30
@@ -485,7 +485,7 @@ def _plot_bernoulli_sample4(
         f"- As N increases, the distribution becomes more concentrated\n"
         f"  around mu."
     )
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     # Use subplots_adjust for consistent spacing.
     plt.subplots_adjust(
         left=0.05, right=0.98, top=0.92, bottom=0.10, wspace=0.25
@@ -521,7 +521,7 @@ def cell1_3_distribution_empirical_mean() -> None:
     # The slider operates in log10 space: 10^slider_value = n_samples
     # log10(100) = 2.0, log10(10000) = 4.0
     log_n_samples_init = np.log10(n_samples_init)
-    n_samples_slider, n_samples_box = mtumsuti.build_widget_control(
+    n_samples_slider, n_samples_box = htutori.build_widget_control(
         name="log10(n_samples)",
         description="number of trials (log scale)",
         min_val=2.0,
@@ -884,7 +884,7 @@ def _plot_hoeffding_inequality_demo(
         f"  P(|nu - mean| >= {epsilon}) = {empirical_prob:.6f}\n"
         f"  (from {n_trials} trials)\n\n"
     )
-    mtumsuti.add_fitted_text_box(ax3, text_content)
+    htutori.add_fitted_text_box(ax3, text_content)
     # Use subplots_adjust for consistent spacing.
     plt.subplots_adjust(
         left=0.05, right=0.98, top=0.92, bottom=0.10, wspace=0.30
@@ -943,7 +943,7 @@ def cell2_2_hoeffding_inequality_demo() -> None:
         layout=ipywidgets.Layout(width="500px"),
     )
     # Create mu and seed widgets.
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="mu",
         min_val=0.1,
@@ -952,7 +952,7 @@ def cell2_2_hoeffding_inequality_demo() -> None:
         initial_value=mu_init,
         is_float=True,
     )
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,
@@ -964,7 +964,7 @@ def cell2_2_hoeffding_inequality_demo() -> None:
     # Create N widget with logarithmic slider and +/- buttons.
     # Uses exponents 3-10 for base 2: gives values 8, 16, 32, 64, 128, 256, 512, 1024
     # Initial exponent 7 gives initial value of 128
-    N_exp_slider, N_box = mtumsuti.build_log_widget_control(
+    N_exp_slider, N_box = htutori.build_log_widget_control(
         name="log(N)",
         description="N",
         min_exp=3,
@@ -972,7 +972,7 @@ def cell2_2_hoeffding_inequality_demo() -> None:
         initial_exp=7,
         base=2,
     )
-    epsilon_slider, epsilon_box = mtumsuti.build_widget_control(
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
         name="epsilon",
         description="epsilon",
         min_val=0.01,
@@ -1142,7 +1142,7 @@ def _plot_hoeffding_inequality_demo2(
         f"  variable = {scan_variable}\n"
         f"  fixed value = {fixed_value}\n\n"
     )
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     # Adjust layout.
     plt.subplots_adjust(
         left=0.05, right=0.98, top=0.92, bottom=0.10, wspace=0.25
@@ -1205,7 +1205,7 @@ def cell2_3_empirical_vs_bound() -> None:
         layout=ipywidgets.Layout(width="500px"),
     )
     # Create widgets.
-    mu_slider, mu_box = mtumsuti.build_widget_control(
+    mu_slider, mu_box = htutori.build_widget_control(
         name="mu",
         description="distribution parameter",
         min_val=0.1,
@@ -1214,7 +1214,7 @@ def cell2_3_empirical_vs_bound() -> None:
         initial_value=mu_init,
         is_float=True,
     )
-    fixed_N_slider, fixed_N_box = mtumsuti.build_widget_control(
+    fixed_N_slider, fixed_N_box = htutori.build_widget_control(
         name="fixed_N",
         description="N (when scanning epsilon)",
         min_val=10,
@@ -1223,7 +1223,7 @@ def cell2_3_empirical_vs_bound() -> None:
         initial_value=fixed_N_init,
         is_float=False,
     )
-    fixed_epsilon_slider, fixed_epsilon_box = mtumsuti.build_widget_control(
+    fixed_epsilon_slider, fixed_epsilon_box = htutori.build_widget_control(
         name="fixed_epsilon",
         description="epsilon (when scanning N)",
         min_val=0.01,
@@ -1232,7 +1232,7 @@ def cell2_3_empirical_vs_bound() -> None:
         initial_value=fixed_epsilon_init,
         is_float=True,
     )
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
         min_val=0,
@@ -1383,7 +1383,7 @@ def _plot_hoeffding_bound_surface(
             f"  N_max = {N_max}\n"
             f"  epsilon_max = {epsilon_max}\n"
         )
-        mtumsuti.add_fitted_text_box(ax2, text_content)
+        htutori.add_fitted_text_box(ax2, text_content)
     elif fixed_epsilon is not None:
         # Plot bound vs N for fixed epsilon.
         fig, (ax1, ax2) = plt.subplots(
@@ -1432,7 +1432,7 @@ def _plot_hoeffding_bound_surface(
             f"  N_max = {N_max}\n"
             f"  epsilon_max = {epsilon_max}\nn"
         )
-        mtumsuti.add_fitted_text_box(ax2, text_content)
+        htutori.add_fitted_text_box(ax2, text_content)
     elif plot_type == "heatmap":
         # Create heatmap of bound as function of both N and epsilon.
         fig, (ax1, ax2) = plt.subplots(
@@ -1487,7 +1487,7 @@ def _plot_hoeffding_bound_surface(
             f"- Black lines show constant probability levels\n"
             f"- Labels indicate the bound value\n"
         )
-        mtumsuti.add_fitted_text_box(ax2, text_content)
+        htutori.add_fitted_text_box(ax2, text_content)
     elif plot_type == "contour":
         # Create contour plot.
         fig, (ax1, ax2) = plt.subplots(
@@ -1529,7 +1529,7 @@ def _plot_hoeffding_bound_surface(
             f"- The curves show (N, epsilon) pairs that achieve\n"
             f"  the same confidence level."
         )
-        mtumsuti.add_fitted_text_box(ax2, text_content)
+        htutori.add_fitted_text_box(ax2, text_content)
     # Adjust layout.
     plt.subplots_adjust(
         left=0.05, right=0.98, top=0.92, bottom=0.10, wspace=0.25
@@ -1558,7 +1558,7 @@ def cell2_4_bound_surface_heatmap() -> None:
     N_max_init = 500
     epsilon_max_init = 0.5
     # Create widgets for controlling the plot.
-    N_max_slider, N_max_box = mtumsuti.build_widget_control(
+    N_max_slider, N_max_box = htutori.build_widget_control(
         name="N_max",
         description="max N for plot",
         min_val=100,
@@ -1567,7 +1567,7 @@ def cell2_4_bound_surface_heatmap() -> None:
         initial_value=N_max_init,
         is_float=False,
     )
-    epsilon_max_slider, epsilon_max_box = mtumsuti.build_widget_control(
+    epsilon_max_slider, epsilon_max_box = htutori.build_widget_control(
         name="epsilon_max",
         description="max epsilon for plot",
         min_val=0.1,
@@ -1590,7 +1590,7 @@ def cell2_4_bound_surface_heatmap() -> None:
         layout=ipywidgets.Layout(width="500px"),
     )
     # Create sliders for fixed values.
-    fixed_N_slider, fixed_N_box = mtumsuti.build_widget_control(
+    fixed_N_slider, fixed_N_box = htutori.build_widget_control(
         name="fixed_N",
         description="fixed N value",
         min_val=10,
@@ -1599,7 +1599,7 @@ def cell2_4_bound_surface_heatmap() -> None:
         initial_value=100,
         is_float=False,
     )
-    fixed_epsilon_slider, fixed_epsilon_box = mtumsuti.build_widget_control(
+    fixed_epsilon_slider, fixed_epsilon_box = htutori.build_widget_control(
         name="fixed_epsilon",
         description="fixed epsilon value",
         min_val=0.01,
@@ -1786,7 +1786,7 @@ def _plot_hoeffding_bound_3d(
         f"- Exponential decay in epsilon direction (y-axis)\n"
         f"- Steepest descent along the diagonal\n"
     )
-    mtumsuti.add_fitted_text_box(ax2, text_content)
+    htutori.add_fitted_text_box(ax2, text_content)
     # Adjust layout.
     plt.tight_layout()
     plt.show()
@@ -1816,7 +1816,7 @@ def cell2_5_bound_3d_surface() -> None:
     elevation_init = 30
     azimuth_init = 45
     # Create widgets for controlling the plot.
-    N_max_slider, N_max_box = mtumsuti.build_widget_control(
+    N_max_slider, N_max_box = htutori.build_widget_control(
         name="N_max",
         description="max N for plot",
         min_val=100,
@@ -1825,7 +1825,7 @@ def cell2_5_bound_3d_surface() -> None:
         initial_value=N_max_init,
         is_float=False,
     )
-    epsilon_max_slider, epsilon_max_box = mtumsuti.build_widget_control(
+    epsilon_max_slider, epsilon_max_box = htutori.build_widget_control(
         name="epsilon_max",
         description="max epsilon for plot",
         min_val=0.1,
@@ -1834,7 +1834,7 @@ def cell2_5_bound_3d_surface() -> None:
         initial_value=epsilon_max_init,
         is_float=True,
     )
-    elevation_slider, elevation_box = mtumsuti.build_widget_control(
+    elevation_slider, elevation_box = htutori.build_widget_control(
         name="elevation",
         description="viewing angle (up/down)",
         min_val=0,
@@ -1843,7 +1843,7 @@ def cell2_5_bound_3d_surface() -> None:
         initial_value=elevation_init,
         is_float=True,
     )
-    azimuth_slider, azimuth_box = mtumsuti.build_widget_control(
+    azimuth_slider, azimuth_box = htutori.build_widget_control(
         name="azimuth",
         description="viewing angle (rotation)",
         min_val=0,

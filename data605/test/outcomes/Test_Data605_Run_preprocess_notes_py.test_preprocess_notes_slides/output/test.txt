@@ -1,0 +1,219 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\textcolor{blue}{\text{12.3: Graph Data Processing}}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+
+::::
+:::: {.column width=20%}
+::::
+:::
+
+## Typical graph analysis tasks
+
+#### Queries vs Analysis Tasks
+- **\textcolor{red}{Queries}**
+  - Explore data
+  - Result is small graph portion (often a node)
+  - Challenges
+    - Minimize explored graph portion
+    - Use indexes (auxiliary data structures)
+
+- **\textcolor{blue}{Analysis tasks}**
+  - Process entire graph
+  - Challenges
+    - Handle large data efficiently
+    - Parallelize if data doesn't fit in memory/disk
+
+#### Graph Algorithms
+- **\textcolor{red}{Graph algorithms}** are general algorithms applicable to various graph types
+  - Network flows (e.g., max flow, min cut)
+  - Spanning trees (e.g., minimal connectivity)
+  - ...
+
+- **\textcolor{blue}{Applications}**
+  - Logistics and supply chain optimization
+  - Electric grid design
+  - Telecommunications (e.g., bandwidth allocation)
+
+#### Subgraph Matching
+- **\textcolor{red}{Subgraph Matching}** = find matching instances of a small pattern in a larger
+  graph
+  - Patterns are typically small and fixed
+  - Matching can be _approximate_
+
+- **\textcolor{blue}{Applications}**
+  - Fraud detection (e.g., detecting fraudulent transaction patterns)
+  - Bioinformatics (e.g., finding protein interaction motifs)
+  - Social network analysis (e.g., community pattern detection)
+
+\center
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_1.png){width=60%}
+
+#### Shortest Path Queries
+- **\textcolor{red}{Shortest Path Queries}** = find the shortest or optimal path between two nodes
+  - May consider edge weights (e.g., distance, cost)
+
+- **\textcolor{blue}{Applications}**
+  - GPS navigation (e.g., Google Maps)
+  - Network routing (e.g., Internet traffic routing)
+  - Robotics (e.g., path planning)
+
+\center
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_2.png){width=70%}
+
+#### Reachability
+- **\textcolor{red}{Reachability}** = determine if a path exists between two nodes
+  - May include constraints (e.g., edge types, direction)
+
+- **\textcolor{blue}{Applications}**
+  - Access control (e.g., "can user X reach resource Y?")
+  - Dependency analysis (e.g., package installation)
+  - Workflow engines (e.g., task progression)
+
+#### Keyword Search
+:::columns
+::::{.column width=45%}
+- **\textcolor{red}{Keyword Search}** = find smallest subgraph containing all specified keywords
+
+- **\textcolor{blue}{Applications}**
+  - Knowledge graphs (e.g., question answering)
+  - Enterprise search (e.g., documents linked by shared entities)
+  - Academic citation networks
+::::
+::::{.column width=50%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_3.png)
+::::
+:::
+
+#### Historical Queries
+- **\textcolor{red}{Historical Queries}** = find nodes with similar evolution or temporal behavior
+  - Typically on dynamic or time-stamped graphs
+
+- **\textcolor{blue}{Applications}**
+  - Stock market analysis (e.g., similar price movement)
+  - Social media trends (e.g., user behavior over time)
+  - Epidemiology (e.g., disease spread patterns)
+
+## Graph Data Processing Systems
+
+#### Bulk Synchronous Parallel Model
+- BSP is a model for parallel computation using synchronized steps
+
+::: columns
+:::: {.column width=60%}
+
+- **\textcolor{red}{Computation is organized into supersteps}**
+  - _Local computation_
+  - _Message passing_
+    - Parallel processors to exchange data
+    - Messages are sent during a superstep but delivered in the next
+  - _Synchronization barriers_
+    - Ensure all processors complete a superstep before moving on
+::::
+:::: {.column width=35%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_4.png)
+::::
+:::
+
+- **\textcolor{darkgreen}{Pros}**
+  - Deterministic and predictable behavior
+  - Simple abstraction for reasoning about parallelism
+  - Suitable for graph computations with regular communication patterns
+- **\textcolor{blue}{Cons}**
+  - Global synchronization can cause idle time (stragglers)
+  - Inefficient for highly irregular workloads or dynamic computation patterns
+
+#### Pregel
+- **\textcolor{red}{Pregel}** is a graph processing framework inspired by the BSP model
+  - Pregel = Parallel + Graph + Google
+  - Designed for large-scale distributed graph computations
+  - Uses a vertex-centric programming model
+    - Each vertex performs computation independently in supersteps
+    - Motto: _"Think like a vertex"_
+  - Vertices
+    - Send messages to neighbors
+    - Update state based on received messages
+    - Can vote to halt; computation ends when all are inactive
+
+- **\textcolor{darkgreen}{PageRank example}**
+  - Each vertex divides its rank among neighbors
+  - In each superstep, vertices update rank from incoming messages
+
+- **\textcolor{blue}{Connected components example}**
+  - Each vertex propagates smallest ID seen to neighbors
+  - Repeats until no changes occur
+
+#### Apache Giraph
+::: columns
+:::: {.column width=70%}
+- **\textcolor{red}{Apache Giraph}** is an open-source implementation of Pregel
+  - Written in Java for high scalability
+
+- Suitable for batch-processing large graphs
+
+- **\textcolor{darkgreen}{Integrates with Hadoop ecosystem}**
+  - Runs on Hadoop MapReduce
+  - Uses HDFS for storage and YARN for resource management
+::::
+:::: {.column width=25%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_5.png)
+::::
+:::
+
+- **\textcolor{blue}{Example use cases}**:
+  - Social network analysis (e.g., friend recommendation)
+  - Web graph analysis (e.g., PageRank)
+  - Biological network exploration (e.g., gene interaction)
+
+#### Apache Spark GraphX
+::: columns
+:::: {.column width=70%}
+- **\textcolor{red}{GraphX}** is Spark's API for graph-parallel computation
+
+- Seamless integration with Spark ecosystem and pipelines
+
+- Graphs represented using RDDs
+  - Vertices and edges as distributed collections
+
+::::
+:::: {.column width=25%}
+![](data605/lectures_source/images/lecture_12_2/lec_12_2_slide_40_image_6.png)
+::::
+:::
+
+- Includes a Pregel API
+  - Enables iterative message-passing computations
+  - Preserves immutability and functional programming style
+
+- **\textcolor{darkgreen}{Strengths vs traditional graph DBs}**
+  - Scalable to very large graphs
+  - Efficient for batch analytics and machine learning workflows
+
+- **\textcolor{blue}{Limitations}**
+  - Less suitable for real-time queries and transactional workloads
+  - Requires understanding of Spark internals for tuning performance

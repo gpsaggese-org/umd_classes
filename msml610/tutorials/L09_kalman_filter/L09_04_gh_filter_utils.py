@@ -3,7 +3,7 @@ Utility functions for g-h filter tutorial (L09_04).
 
 Import as:
 
-import L09_04_gh_filter_utils as mtl0gfiut
+import msml610.tutorials.L09_kalman_filter.L09_04_gh_filter_utils as mtlkfl0gfu
 """
 
 import logging
@@ -17,9 +17,9 @@ import pandas as pd
 from IPython.display import display
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -231,7 +231,7 @@ def cell1_4_create_interactive_gain_rate_widget(
         )
 
     # Create slider for initial weight.
-    weight_slider, weight_box = mtumsuti.build_widget_control(
+    weight_slider, weight_box = htutori.build_widget_control(
         name="weight",
         description="",
         min_val=100.0,
@@ -241,7 +241,7 @@ def cell1_4_create_interactive_gain_rate_widget(
         is_float=True,
     )
     # Create slider for weight scale.
-    weight_scale_slider, weight_scale_box = mtumsuti.build_widget_control(
+    weight_scale_slider, weight_scale_box = htutori.build_widget_control(
         name="weight_scale",
         description="",
         min_val=0.0,
@@ -251,7 +251,7 @@ def cell1_4_create_interactive_gain_rate_widget(
         is_float=True,
     )
     # Create slider for gain rate.
-    gain_rate_slider, gain_rate_box = mtumsuti.build_widget_control(
+    gain_rate_slider, gain_rate_box = htutori.build_widget_control(
         name="gain_rate",
         description="",
         min_val=-20.0,
@@ -575,7 +575,7 @@ def cell2_1_create_interactive_linear_noisy_data_widget() -> None:
         plt.grid(True, alpha=0.3)
 
     # Create seed widget (first widget per convention).
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed",
         min_val=0,
@@ -585,7 +585,7 @@ def cell2_1_create_interactive_linear_noisy_data_widget() -> None:
         is_float=False,
     )
     # Create count widget.
-    count_slider, count_box = mtumsuti.build_widget_control(
+    count_slider, count_box = htutori.build_widget_control(
         name="count",
         description="Number of points",
         min_val=10,
@@ -595,7 +595,7 @@ def cell2_1_create_interactive_linear_noisy_data_widget() -> None:
         is_float=False,
     )
     # Create noise_factor widget.
-    noise_factor_slider, noise_factor_box = mtumsuti.build_widget_control(
+    noise_factor_slider, noise_factor_box = htutori.build_widget_control(
         name="noise_factor",
         description="Noise std dev",
         min_val=0.0,
@@ -668,7 +668,7 @@ def cell2_9_create_interactive_gh_filter_widget() -> None:
         plt.grid(True, alpha=0.3)
 
     # Create x widget.
-    x_slider, x_box = mtumsuti.build_widget_control(
+    x_slider, x_box = htutori.build_widget_control(
         name="x",
         description="Initial state",
         min_val=-200.0,
@@ -678,7 +678,7 @@ def cell2_9_create_interactive_gh_filter_widget() -> None:
         is_float=True,
     )
     # Create dx widget.
-    dx_slider, dx_box = mtumsuti.build_widget_control(
+    dx_slider, dx_box = htutori.build_widget_control(
         name="dx",
         description="Initial rate",
         min_val=-50.0,
@@ -688,7 +688,7 @@ def cell2_9_create_interactive_gh_filter_widget() -> None:
         is_float=True,
     )
     # Create g widget.
-    g_slider, g_box = mtumsuti.build_widget_control(
+    g_slider, g_box = htutori.build_widget_control(
         name="g",
         description="State gain",
         min_val=0.01,
@@ -698,7 +698,7 @@ def cell2_9_create_interactive_gh_filter_widget() -> None:
         is_float=True,
     )
     # Create h widget.
-    h_slider, h_box = mtumsuti.build_widget_control(
+    h_slider, h_box = htutori.build_widget_control(
         name="h",
         description="Rate gain",
         min_val=0.0,
@@ -708,7 +708,7 @@ def cell2_9_create_interactive_gh_filter_widget() -> None:
         is_float=True,
     )
     # Create noise_factor widget.
-    noise_factor_slider, noise_factor_box = mtumsuti.build_widget_control(
+    noise_factor_slider, noise_factor_box = htutori.build_widget_control(
         name="noise_factor",
         description="Noise std dev",
         min_val=0.0,
@@ -789,7 +789,7 @@ def cell2_5_create_interactive_non_linear_noisy_data_widget() -> None:
         plt.grid(True, alpha=0.3)
 
     # Create seed widget (first widget per convention).
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="Random seed",
         min_val=0,
@@ -799,7 +799,7 @@ def cell2_5_create_interactive_non_linear_noisy_data_widget() -> None:
         is_float=False,
     )
     # Create count widget.
-    count_slider, count_box = mtumsuti.build_widget_control(
+    count_slider, count_box = htutori.build_widget_control(
         name="count",
         description="Number of points",
         min_val=10,
@@ -809,7 +809,7 @@ def cell2_5_create_interactive_non_linear_noisy_data_widget() -> None:
         is_float=False,
     )
     # Create noise_factor widget.
-    noise_factor_slider, noise_factor_box = mtumsuti.build_widget_control(
+    noise_factor_slider, noise_factor_box = htutori.build_widget_control(
         name="noise_factor",
         description="Noise std dev",
         min_val=0.0,
@@ -819,7 +819,7 @@ def cell2_5_create_interactive_non_linear_noisy_data_widget() -> None:
         is_float=True,
     )
     # Create accel widget.
-    accel_slider, accel_box = mtumsuti.build_widget_control(
+    accel_slider, accel_box = htutori.build_widget_control(
         name="accel",
         description="Acceleration",
         min_val=-10.0,

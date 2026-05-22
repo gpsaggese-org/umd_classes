@@ -1,0 +1,5 @@
+[{'args': ('extract_toc_from_txt.py -i '
+           '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_toc.test2/tmp.scratch/Lesson02.1-Advanced.txt '
+           '--max_level 5 --warn_on_malformed',),
+  'function': 'hsystem.system_to_string',
+  'kwargs': {'suppress_output': True}}]

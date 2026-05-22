@@ -3,7 +3,7 @@ Utility functions for Kalman filter tutorial (L09_05_02).
 
 Import as:
 
-import L09_05_02_univariate_kalman_filter_utils as mtl00ukfu
+import msml610.tutorials.L09_kalman_filter.L09_05_02_univariate_kalman_filter_utils as mtlkfl00ukfu
 """
 
 import logging
@@ -20,9 +20,9 @@ from IPython.display import display
 from numpy.random import randn
 
 try:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 except ImportError:
-    import msml610.tutorials.msml610_utils as mtumsuti
+    import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
@@ -239,7 +239,7 @@ def cell1_1_plot_gaussian_sum() -> None:
         fig_sum = plt.gcf()
 
     # Create widgets for first Gaussian.
-    mu1_slider, mu1_box = mtumsuti.build_widget_control(
+    mu1_slider, mu1_box = htutori.build_widget_control(
         name="mu1",
         description="mu1",
         min_val=-10.0,
@@ -248,7 +248,7 @@ def cell1_1_plot_gaussian_sum() -> None:
         initial_value=0.0,
         is_float=True,
     )
-    sigma1_slider, sigma1_box = mtumsuti.build_widget_control(
+    sigma1_slider, sigma1_box = htutori.build_widget_control(
         name="sigma1",
         description="sigma1",
         min_val=0.1,
@@ -258,7 +258,7 @@ def cell1_1_plot_gaussian_sum() -> None:
         is_float=True,
     )
     # Create widgets for second Gaussian.
-    mu2_slider, mu2_box = mtumsuti.build_widget_control(
+    mu2_slider, mu2_box = htutori.build_widget_control(
         name="mu2",
         description="mu2",
         min_val=-10.0,
@@ -267,7 +267,7 @@ def cell1_1_plot_gaussian_sum() -> None:
         initial_value=3.0,
         is_float=True,
     )
-    sigma2_slider, sigma2_box = mtumsuti.build_widget_control(
+    sigma2_slider, sigma2_box = htutori.build_widget_control(
         name="sigma2",
         description="sigma2",
         min_val=0.1,
@@ -277,7 +277,7 @@ def cell1_1_plot_gaussian_sum() -> None:
         is_float=True,
     )
     # Create widget for correlation.
-    rho_slider, rho_box = mtumsuti.build_widget_control(
+    rho_slider, rho_box = htutori.build_widget_control(
         name="rho",
         description="rho",
         min_val=-0.99,
@@ -432,7 +432,7 @@ def cell1_2_plot_gaussian_product() -> None:
         fig_prod = plt.gcf()
 
     # Create widgets for first Gaussian.
-    mu1_slider, mu1_box = mtumsuti.build_widget_control(
+    mu1_slider, mu1_box = htutori.build_widget_control(
         name="mu1",
         description="mu1",
         min_val=-10.0,
@@ -441,7 +441,7 @@ def cell1_2_plot_gaussian_product() -> None:
         initial_value=0.0,
         is_float=True,
     )
-    sigma1_slider, sigma1_box = mtumsuti.build_widget_control(
+    sigma1_slider, sigma1_box = htutori.build_widget_control(
         name="sigma1",
         description="sigma1",
         min_val=0.1,
@@ -451,7 +451,7 @@ def cell1_2_plot_gaussian_product() -> None:
         is_float=True,
     )
     # Create widgets for second Gaussian.
-    mu2_slider, mu2_box = mtumsuti.build_widget_control(
+    mu2_slider, mu2_box = htutori.build_widget_control(
         name="mu2",
         description="mu2",
         min_val=-10.0,
@@ -460,7 +460,7 @@ def cell1_2_plot_gaussian_product() -> None:
         initial_value=3.0,
         is_float=True,
     )
-    sigma2_slider, sigma2_box = mtumsuti.build_widget_control(
+    sigma2_slider, sigma2_box = htutori.build_widget_control(
         name="sigma2",
         description="sigma2",
         min_val=0.1,
@@ -873,7 +873,7 @@ def cell2_interactive_dog_simulation() -> None:
         fig_dog = plt.gcf()
 
     # Create process_var widget.
-    process_var_slider, process_var_box = mtumsuti.build_widget_control(
+    process_var_slider, process_var_box = htutori.build_widget_control(
         name="process_var",
         description="process_var",
         min_val=0.1,
@@ -883,7 +883,7 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create sensor_var widget.
-    sensor_var_slider, sensor_var_box = mtumsuti.build_widget_control(
+    sensor_var_slider, sensor_var_box = htutori.build_widget_control(
         name="sensor_var",
         description="sensor_var",
         min_val=0.1,
@@ -893,20 +893,18 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create initial_position widget (belief about where the dog starts).
-    initial_position_slider, initial_position_box = (
-        mtumsuti.build_widget_control(
-            name="initial_position",
-            description="initial_position",
-            min_val=-50.0,
-            max_val=500.0,
-            step=1.0,
-            initial_value=0.0,
-            is_float=True,
-        )
+    initial_position_slider, initial_position_box = htutori.build_widget_control(
+        name="initial_position",
+        description="initial_position",
+        min_val=-50.0,
+        max_val=500.0,
+        step=1.0,
+        initial_value=0.0,
+        is_float=True,
     )
     # Create actual_initial_pos widget (true starting position of the dog).
     actual_initial_pos_slider, actual_initial_pos_box = (
-        mtumsuti.build_widget_control(
+        htutori.build_widget_control(
             name="actual_initial_pos",
             description="actual_initial_pos",
             min_val=-50.0,
@@ -917,7 +915,7 @@ def cell2_interactive_dog_simulation() -> None:
         )
     )
     # Create initial_pos_var widget (uncertainty in initial position belief).
-    initial_pos_var_slider, initial_pos_var_box = mtumsuti.build_widget_control(
+    initial_pos_var_slider, initial_pos_var_box = htutori.build_widget_control(
         name="initial_pos_var",
         description="initial_pos_var",
         min_val=1.0,
@@ -927,7 +925,7 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create acceleration widget (how fast the dog's velocity changes).
-    acceleration_slider, acceleration_box = mtumsuti.build_widget_control(
+    acceleration_slider, acceleration_box = htutori.build_widget_control(
         name="acceleration",
         description="acceleration",
         min_val=0.0,
@@ -937,7 +935,7 @@ def cell2_interactive_dog_simulation() -> None:
         is_float=True,
     )
     # Create seed widget last (per convention, seed is always the last widget).
-    seed_slider, seed_box = mtumsuti.build_widget_control(
+    seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="seed",
         min_val=0,

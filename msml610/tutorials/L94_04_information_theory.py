@@ -31,7 +31,7 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (12, 6)
 
 # %%
-import msml610_utils as ut
+import helpers.htutorial as ut
 import L94_04_information_theory_utils as utils
 
 ut.config_notebook()

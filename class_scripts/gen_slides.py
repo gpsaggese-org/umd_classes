@@ -17,6 +17,7 @@ import logging
 import os
 import re
 import shlex
+from typing import Tuple
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
@@ -28,7 +29,7 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
-def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
+def _extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
     """
     Extract lesson number and directory from a file path.
 
@@ -63,7 +64,7 @@ def _extract_lesson_from_file(file_path_str: str) -> tuple[str, str]:
     return dir_name, lesson
 
 
-def _parse_first_arg(arg: str) -> tuple[str, str]:
+def _parse_first_arg(arg: str) -> Tuple[str, str]:
     """
     Parse the first argument to extract directory and lesson.
 
@@ -129,34 +130,16 @@ def _main(parser: argparse.ArgumentParser) -> None:
     output_file = f"{dir_arg}/lectures/{dst_name}"
     # Ensure output directory exists.
     csccouti.ensure_dir_exists(f"{dir_arg}/lectures")
-    # Prepare command arguments.
-    script_name = "notes_to_pdf.py"
-    input_flag = "--input"
-    output_flag = "--output"
-    type_flag = "--type"
-    output_type = "slides"
-    toc_type_flag = "--toc_type"
-    toc_type = "navigation"
-    debug_flag = "--debug_on_error"
-    skip_action_flag = "--skip_action"
-    cleanup_before = "cleanup_before"
-    cleanup_after = "cleanup_after"
     # Build the command with debug options.
     cmd_parts = [
-        script_name,
-        input_flag,
-        input_file,
-        output_flag,
-        output_file,
-        type_flag,
-        output_type,
-        toc_type_flag,
-        toc_type,
-        debug_flag,
-        skip_action_flag,
-        cleanup_before,
-        skip_action_flag,
-        cleanup_after,
+        "notes_to_pdf.py",
+        f"--input={input_file}",
+        f"--output={output_file}",
+        "--type=slides",
+        "--toc_type=navigation",
+        "--debug_on_error",
+        "--skip_action=cleanup_before",
+        "--skip_action=cleanup_after",
     ]
     # Add extra options if provided.
     if args.extra_opts:

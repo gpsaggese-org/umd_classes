@@ -41,7 +41,7 @@ import pandas as pd
 # %%
 import helpers.hnotebook as hnotebo
 
-import msml610_utils as ut
+import helpers.htutorial as ut
 import L08_04_05_causal_inference_utils as mtl0cire05
 
 ut.config_notebook()

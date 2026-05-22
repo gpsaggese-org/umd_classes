@@ -37,7 +37,7 @@ import helpers.hmatplotlib as hmatplo
 import helpers.hmodule as hmodule
 import helpers.hpandas_display as hpandisp
 
-import msml610_utils as ut
+import helpers.htutorial as ut
 import L08_04_01_causal_inference_utils as mtl0cireout
 
 ut.config_notebook()
