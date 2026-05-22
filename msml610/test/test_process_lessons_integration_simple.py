@@ -17,7 +17,7 @@ from unittest import mock
 import helpers.hdbg as hdbg
 import helpers.hunit_test as hunitest
 
-import dev_scripts_helpers.slides.for_loop_lessons as dshsprle
+import class_scripts.for_loop_lessons as dshsprle
 
 _LOG = logging.getLogger(__name__)
 

@@ -33,7 +33,7 @@ class Test_docker(hdoctest.DockerTestCase):
         Test that template.example.ipynb runs without error inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "template.example.ipynb"
+        notebook_name = "causalnex.example.ipynb"
         # Run test.
         self._helper(notebook_name)
 
@@ -43,6 +43,6 @@ class Test_docker(hdoctest.DockerTestCase):
         Test that template.API.ipynb runs without error inside Docker.
         """
         # Prepare inputs.
-        notebook_name = "template.API.ipynb"
+        notebook_name = "causalnex.API.ipynb"
         # Run test.
         self._helper(notebook_name)

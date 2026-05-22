@@ -104,7 +104,7 @@ def _expand_lecture_range(
     lectures_source_dir = os.path.join(class_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     # Find all lecture files in the directory.
-    all_files_pattern = os.path.join(lectures_source_dir, "Lesson*")
+    all_files_pattern = os.path.join(lectures_source_dir, "Lesson*.txt")
     all_files = sorted(glob.glob(all_files_pattern))
     _LOG.debug("Found %d total lecture files", len(all_files))
     # Extract lesson numbers from filenames and filter to range.
@@ -173,7 +173,7 @@ def _find_lecture_files(
     )
     all_files = []
     for pattern in patterns_or_range:
-        pattern_path = os.path.join(lectures_source_dir, f"Lesson{pattern}*")
+        pattern_path = os.path.join(lectures_source_dir, f"Lesson{pattern}*.txt")
         matched_files = sorted(glob.glob(pattern_path))
         _LOG.debug("Pattern '%s' matched %d files", pattern, len(matched_files))
         all_files.extend(matched_files)
