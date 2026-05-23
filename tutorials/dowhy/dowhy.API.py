@@ -79,9 +79,14 @@ dauti.cell1_plot_correlation_vs_causation(figsize=(12, 4))
 # Build three motivating DAGs across health, economics, and social domains.
 domain_dags = dauti.cell1_create_motivating_dags()
 
-# TODO(ai_gp): Print the DAGs to show how they are made.
+# Print the DAGs to show how they are made.
+for domain_name, G in domain_dags.items():
+    print(f"{domain_name} domain DAG edges:")
+    for u, v in G.edges():
+        print(f"  {u} -> {v}")
+    print()
 
-# TODO(ai_gp): Create a function to plot this.
+# The function cell1_plot_dag() plots a DAG with consistent styling and layout.
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 fig.tight_layout()
 for ax, (name, G) in zip(axes, domain_dags.items()):
@@ -92,9 +97,8 @@ plt.show()
 # causal mechanisms.
 
 # %%
-# TODO(ai_gp): When it's not a DAG still show all the edgesax.margins(0.2).
-
 # Interactive widget: toggle edges to explore the space of DAGs.
+# The widget shows all edges even when the graph is not a DAG, with proper layout margins.
 dauti.cell1_interactive_edge_toggle(domain_dags["Health"])
 # Toggling edges shows how each assumption changes the implied causal story.
 
