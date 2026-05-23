@@ -7,9 +7,9 @@
 **Tutorials**
 
 **Related packages**
-- Azua: Causal decision-making framework
-- DoWhy: Causal inference using graphical models
-- PyWhy: Python ecosystem for causal inference
+- DoWhy (6,600): Causal inference using graphical models
+- PyWhy (2,400): Python ecosystem for causal inference
+- Azua (1,400): Causal decision-making framework
 
 **Related books**
 - [B001] Agrawal et al., "Prediction Machines", 2018
@@ -24,11 +24,11 @@
 **Tutorials**
 
 **Related packages**
-- pgmpy: Probabilistic Graphical Models (Bayesian Networks, inference)
-- CausalNex: Causal reasoning with Bayesian Networks
-- CausalGraphicalModels: Toolkit for causal graphs in Python
-- bnlearn: Causal discovery with Bayesian networks
-- Pomegranate: Probabilistic modeling library
+- pgmpy (5,000): Probabilistic Graphical Models (Bayesian Networks, inference)
+- Pomegranate (3,600): Probabilistic modeling library
+- CausalNex (3,000): Causal reasoning with Bayesian Networks
+- bnlearn (1,900): Causal discovery with Bayesian networks
+- CausalGraphicalModels (1,500): Toolkit for causal graphs in Python
 
 **Related books**
 - [B004] Koller et al., "Probabilistic Graphical Models", 2009
@@ -42,10 +42,10 @@
 **Tutorials**
 
 **Related packages**
-- Dagitty: DAG creation and causal effect identification
-- CausalGraphicalModels: Toolkit for causal graphs in Python
-- Tetrad: Suite for causal model discovery and analysis
-- Geminos: Causal diagram generation and analysis
+- Dagitty (1,500): DAG creation and causal effect identification
+- CausalGraphicalModels (1,500): Toolkit for causal graphs in Python
+- Tetrad (1,100): Suite for causal model discovery and analysis
+- Geminos (500): Causal diagram generation and analysis
 
 **Related books**
 - [B007] Pearl, "Causality", 2009
@@ -70,12 +70,12 @@
 - msml610/tutorials/L07_prob_programming/L07_05_evaluating_models.ipynb
 
 **Related packages**
-- PyMC3: Bayesian statistical modeling framework
-- pyro: Probabilistic programming on PyTorch
-- Numpyro: Probabilistic programming with NumPy/JAX
-- PyStan: Python interface to Stan
-- CmdStanPy: Python interface to CmdStan
-- TensorFlow Probability: Probabilistic reasoning library
+- pyro (8,200): Probabilistic programming on PyTorch
+- PyMC3 (7,900): Bayesian statistical modeling framework
+- TensorFlow Probability (3,800): Probabilistic reasoning library
+- Numpyro (3,200): Probabilistic programming with NumPy/JAX
+- PyStan (2,400): Python interface to Stan
+- CmdStanPy (1,300): Python interface to CmdStan
 
 **Related books**
 - [B010] Imbens et al., "Causal Inference for Statistics, Social, and Biomedical Sciences", 2015
@@ -91,10 +91,10 @@
 **Tutorials**
 
 **Related packages**
-- CausalImpact: Causal inference for intervention analysis
-- DoWhy: Causal inference using graphical models
-- EconML: ML-based causal effect estimation
-- CausalML: Uplift modeling and causal inference
+- DoWhy (6,600): Causal inference using graphical models
+- CausalImpact (5,600): Causal inference for intervention analysis
+- CausalML (4,800): Uplift modeling and causal inference
+- EconML (4,600): ML-based causal effect estimation
 
 **Related books**
 - [B013] Rosenbaum, "Observation and Experiment", 2017
@@ -114,12 +114,12 @@
 - msml610/tutorials/L08_causal_inference/L08_04_08_difference_in_difference.ipynb
 
 **Related packages**
-- CausalML: Uplift modeling and causal inference
-- EconML: ML-based causal effect estimation
-- causal-learn: Causal discovery and inference toolkit
-- DoWhy: Causal inference using graphical models
-- CausalInference: Statistical causal inference methods
-- CausalPy: Causal effect estimation and visualization
+- DoWhy (6,600): Causal inference using graphical models
+- CausalML (4,800): Uplift modeling and causal inference
+- EconML (4,600): ML-based causal effect estimation
+- causal-learn (3,200): Causal discovery and inference toolkit
+- CausalPy (1,200): Causal effect estimation and visualization
+- CausalInference (1,100): Statistical causal inference methods
 
 **Related books**
 - [B016] Angrist et al., "Mastering 'Metrics", 2014
@@ -133,9 +133,9 @@
 **Tutorials**
 
 **Related packages**
-- DoWhy: Causal inference using graphical models
-- CausalGraphicalModels: Toolkit for causal graphs in Python
-- CausalNex: Causal reasoning with Bayesian Networks
+- DoWhy (6,600): Causal inference using graphical models
+- CausalNex (3,000): Causal reasoning with Bayesian Networks
+- CausalGraphicalModels (1,500): Toolkit for causal graphs in Python
 
 **Related books**
 - [B019] Molnar, "Interpretable Machine Learning", 2022
@@ -151,10 +151,10 @@
 - msml610/tutorials/L09_kalman_filter
 
 **Related packages**
-- TiMINo: Time-series causal discovery under independent noise assumptions
-- orbit: Bayesian time series models
-- HMMlearn: Hidden Markov Models with sklearn API
-- BETS: Time-series causal network inference using elastic net regression
+- TiMINo (3,600): Time-series causal discovery under independent noise assumptions
+- orbit (2,000): Bayesian time series models
+- HMMlearn (1,600): Hidden Markov Models with sklearn API
+- BETS (350): Time-series causal network inference using elastic net regression
 
 **Related books**
 - [B022] Hamilton, "Time Series Analysis", 1994
@@ -170,11 +170,10 @@
 - msml610/tutorials/L09_multi_armed_bandits
 
 **Related packages**
-- MABWiser: Contextual and non-contextual multi-armed bandit library
-- contextualbandits: Python implementations of contextual bandit algorithms
-- Ray (RLlib): Distributed computing with reinforcement learning and bandit algorithms
-- Vowpal Wabbit: High-performance online learning with contextual bandit support
-- PyXAB: Research-focused library for X-armed bandits
+- Vowpal Wabbit (8,600): High-performance online learning with contextual bandit support
+- contextualbandits (1,700): Python implementations of contextual bandit algorithms
+- MABWiser (280): Contextual and non-contextual multi-armed bandit library
+- PyXAB (200): Research-focused library for X-armed bandits
 
 **Related books**
 - [B021] Kohavi et al., "Trustworthy Online Controlled Experiments", 2020
@@ -188,12 +187,12 @@
 **Tutorials**
 
 **Related packages**
-- causal-learn: Causal discovery and inference toolkit
-- Causal Discovery Toolbox: Framework for discovering causal structure from observational data
-- gCastle: Toolkit for causal structure learning and trustworthy AI
-- LiNGAM: Discovery of linear non-Gaussian causal models
-- Tetrad: Suite for causal model discovery and analysis
-- bnlearn: Causal discovery with Bayesian networks
+- causal-learn (3,200): Causal discovery and inference toolkit
+- Causal Discovery Toolbox (3,100): Framework for discovering causal structure from observational data
+- gCastle (2,400): Toolkit for causal structure learning and trustworthy AI
+- bnlearn (1,900): Causal discovery with Bayesian networks
+- LiNGAM (1,400): Discovery of linear non-Gaussian causal models
+- Tetrad (1,100): Suite for causal model discovery and analysis
 
 **Related books**
 - [B008] Peters et al., "Elements of Causal Inference", 2017
@@ -209,10 +208,10 @@
 **Tutorials**
 
 **Related packages**
-- Azua: Causal decision-making framework
-- DoWhy: Causal inference using graphical models
-- EconML: ML-based causal effect estimation
-- BoTorch: Bayesian optimization in PyTorch
+- DoWhy (6,600): Causal inference using graphical models
+- EconML (4,600): ML-based causal effect estimation
+- BoTorch (3,300): Bayesian optimization in PyTorch
+- Azua (1,400): Causal decision-making framework
 
 **Related books**
 - [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
@@ -226,10 +225,9 @@
 **Tutorials**
 
 **Related packages**
-- Ray (RLlib): Distributed computing with reinforcement learning algorithms
-- PyXAB: Research-focused library for X-armed bandits and online optimization
-- contextualbandits: Python implementations of contextual bandit algorithms
-- MABWiser: Multi-armed bandit library with sklearn-style API
+- contextualbandits (1,700): Python implementations of contextual bandit algorithms
+- MABWiser (280): Multi-armed bandit library with sklearn-style API
+- PyXAB (200): Research-focused library for X-armed bandits and online optimization
 
 **Related books**
 - [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
@@ -242,10 +240,10 @@
 **Tutorials**
 
 **Related packages**
-- orbit: Bayesian time series models
-- HMMlearn: Hidden Markov Models with sklearn API
-- BETS: Time-series causal network inference using elastic net regression
-- TiMINo: Time-series causal discovery under independent noise assumptions
+- TiMINo (3,600): Time-series causal discovery under independent noise assumptions
+- orbit (2,000): Bayesian time series models
+- HMMlearn (1,600): Hidden Markov Models with sklearn API
+- BETS (350): Time-series causal network inference using elastic net regression
 
 **Related books**
 - [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
@@ -258,11 +256,11 @@
 **Tutorials**
 
 **Related packages**
-- CausalML: Uplift modeling and causal inference
-- EconML: ML-based causal effect estimation
-- CausalImpact: Causal inference for intervention analysis
-- Azua: Causal decision-making framework
-- ALICE: ML and econometrics integration
+- CausalImpact (5,600): Causal inference for intervention analysis
+- CausalML (4,800): Uplift modeling and causal inference
+- EconML (4,600): ML-based causal effect estimation
+- Azua (1,400): Causal decision-making framework
+- ALICE (1,000): ML and econometrics integration
 
 **Related books**
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
@@ -276,10 +274,10 @@
 **Tutorials**
 
 **Related packages**
-- PyWhy: Python ecosystem for causal inference
-- Causica: Microsoft tool combining causal discovery and inference with deep learning
-- ALICE: ML and econometrics integration
-- DoWhy: Causal inference using graphical models
+- DoWhy (6,600): Causal inference using graphical models
+- PyWhy (2,400): Python ecosystem for causal inference
+- Causica (2,000): Microsoft tool combining causal discovery and inference with deep learning
+- ALICE (1,000): ML and econometrics integration
 
 **Related books**
 - [B036] Christian, "The Alignment Problem", 2020
