@@ -28,6 +28,9 @@ from scipy import stats
 _LOG = logging.getLogger(__name__)
 
 
+# TODO(gp): Move this code somewhere in helpers
+
+
 def _graph_to_graphviz_dot(
     G: nx.DiGraph,
     title: str,
@@ -74,8 +77,7 @@ def _graph_to_graphviz_dot(
     return "\n".join(lines)
 
 
-# TODO(ai_gp): -> plot_dag_with_graphviz.
-def _apply_dag_style_graphviz(
+def plot_dag_with_graphviz(
     G: nx.DiGraph,
     title: str,
     *,
@@ -88,7 +90,7 @@ def _apply_dag_style_graphviz(
 
     Uses graphviz's layout engine for automatic positioning and supports
     custom node and edge colors. Nodes are rounded rectangles with optional
-    fill colors. Falls back to NetworkX if graphviz executables are unavailable.
+    fill colors.
 
     :param G: Directed acyclic graph to plot
     :param title: Title displayed on the axes
@@ -119,8 +121,7 @@ def _apply_dag_style_graphviz(
         fig.tight_layout()
 
 
-# TODO(ai_gp): -> plot_dag_with_networkx_rounded_boxes
-def _apply_dag_style_networkx(
+def plot_dag_with_networkx_rounded_boxes(
     G: nx.DiGraph,
     title: str,
     *,
@@ -129,10 +130,7 @@ def _apply_dag_style_networkx(
     ax: Optional[maxes.Axes] = None,
 ) -> None:
     """
-    Render a DAG using NetworkX with rounded box nodes (fallback implementation).
-
-    This is used as a fallback when graphviz executables are not available.
-    Provides clean rendering with automatic layout.
+    Render a DAG using NetworkX with rounded box nodes.
 
     :param G: Directed acyclic graph to plot
     :param title: Title displayed on the axes
@@ -199,8 +197,7 @@ def _apply_dag_style_networkx(
         ax.margins(0.2)
 
 
-# TODO(ai_gp): -> plot_dag_with_networkx
-def _apply_dag_style_networkx(
+def plot_dag_with_networkx(
     G: nx.DiGraph,
     pos: Dict,
     *,
@@ -209,8 +206,7 @@ def _apply_dag_style_networkx(
     ax: Optional[maxes.Axes] = None,
 ) -> None:
     """
-    This implementation used NetworkX's drawing functions with matplotlib
-    patches for rounded rectangles.
+    This implementation used NetworkX's drawing functions.
 
     :param G: Graph to draw
     :param pos: Node position dictionary
@@ -218,14 +214,58 @@ def _apply_dag_style_networkx(
     :param edge_color: Single color or list of colors for edges
     :param ax: Matplotlib axes object
     """
+    #
     node_kwargs = {"node_size": 2000, "edgecolors": "black", "ax": ax}
     if node_color is not None:
         node_kwargs["node_color"] = node_color
     nx.draw_networkx_nodes(G, pos, **node_kwargs)
+    #
     edge_kwargs = {"arrowsize": 20, "arrowstyle": "-|>", "width": 1.8, "ax": ax}
     if edge_color is not None:
         edge_kwargs["edge_color"] = edge_color
     nx.draw_networkx_edges(G, pos, **edge_kwargs)
+
+
+def plot_dag(
+    G: nx.DiGraph,
+    title: str,
+    *,
+    mode: str = "graphviz",
+    node_colors: Optional[Mapping[str, Any]] = None,
+    edge_colors: Optional[Mapping[Tuple[str, str], Any]] = None,
+    ax: Optional[maxes.Axes] = None,
+    pos: Optional[Dict] = None,
+) -> None:
+    """
+    Render a DAG using the specified visualization mode.
+
+    Supports three visualization backends: graphviz (automatic layout, highest
+    quality), networkx_rounded_boxes (fallback with rounded rectangles), and
+    networkx (simple NetworkX rendering).
+
+    :param G: Directed acyclic graph to plot
+    :param title: Title displayed on the axes
+    :param mode: One of "graphviz", "networkx_rounded_boxes", or "networkx"
+    :param node_colors: Optional per-node fill color (mapping)
+    :param edge_colors: Optional per-edge color (mapping)
+    :param ax: Matplotlib axes to draw on
+    :param pos: Node position dictionary (used only with "networkx" mode)
+    :raises ValueError: If mode is not one of the supported options
+    """
+    if mode == "graphviz":
+        plot_dag_with_graphviz(
+            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
+        )
+    elif mode == "networkx_rounded_boxes":
+        plot_dag_with_networkx_rounded_boxes(
+            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
+        )
+    elif mode == "networkx":
+        if pos is None:
+            pos = nx.spring_layout(G, k=2, iterations=50, seed=42)
+        plot_dag_with_networkx(G, pos, node_color=node_colors, edge_color=edge_colors, ax=ax)
+    else:
+        raise ValueError(f"Unknown mode: {mode}")
 
 
 # #############################################################################
@@ -305,7 +345,7 @@ def cell1_plot_dag(
             figsize = (10, 8)
         fig, ax = plt.subplots(figsize=figsize)
     # Use graphviz for rendering.
-    _apply_dag_style_graphviz(
+    plot_dag_with_graphviz(
         G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
     )
     # Automatically adjust spacing to prevent labels and titles from being clipped.
@@ -313,13 +353,6 @@ def cell1_plot_dag(
     if fig is not None:
         fig.tight_layout()
     return ax
-
-
-# TODO(ai_gp): Add a function plot_dag(graph, mode) to use 
-# plot_dag_with_graphviz
-# plot_dag_with_networkx_rounded_boxes
-# plot_dag_with_networkx
-# depending on mode
 
 
 def cell1_plot_correlation_vs_causation(
@@ -754,7 +787,7 @@ def cell4_plot_workflow_diagram(
     node_colors = {
         n: "#FDB462" for n in workflow.nodes()
     }
-    _apply_dag_style_graphviz(
+    plot_dag_with_graphviz(
         workflow,
         "Generic causal discovery workflow",
         node_colors=node_colors,

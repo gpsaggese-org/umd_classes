@@ -73,7 +73,7 @@ _LOG.info("Notebook initialized")
 
 # %%
 # Plot a correlation-vs-causation example with the implied DAG.
-dauti.cell1_plot_correlation_vs_causation(figsize=(12, 4))
+dauti.cell1_plot_correlation_vs_causation()
 
 # %%
 # Build three motivating DAGs across health, economics, and social domains.
