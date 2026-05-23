@@ -1,6 +1,5 @@
 ---
 title: "How to Connect Claude Code Securely to Gmail"
-draft: true
 authors:
   - gpsaggese
 date: 2026-02-28

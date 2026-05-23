@@ -1,6 +1,5 @@
 ---
 title: "Python Code Coverage How-To Guide"
-draft: true
 authors:
   - gpsaggese
 date: 2026-03-21
