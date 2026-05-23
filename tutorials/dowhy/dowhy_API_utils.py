@@ -27,6 +27,11 @@ from scipy import stats
 
 _LOG = logging.getLogger(__name__)
 
+# Default figure size for DAG visualizations
+_FIG_SIZE = (10, 8)
+
+# Default DPI for image rendering
+_FIG_DPI = 150
 
 # TODO(gp): Move this code somewhere in helpers
 
@@ -84,6 +89,7 @@ def plot_dag_with_graphviz(
     node_colors: Optional[Mapping[str, Any]] = None,
     edge_colors: Optional[Mapping[Tuple[str, str], Any]] = None,
     ax: Optional[maxes.Axes] = None,
+    dpi: int = _FIG_DPI,
 ) -> None:
     """
     Render a DAG using graphviz DOT format with professional styling.
@@ -97,6 +103,7 @@ def plot_dag_with_graphviz(
     :param node_colors: Optional per-node fill color
     :param edge_colors: Optional per-edge color
     :param ax: Matplotlib axes to draw on
+    :param dpi: Resolution in dots per inch
     """
     import graphviz
     from PIL import Image
@@ -105,16 +112,20 @@ def plot_dag_with_graphviz(
     dot_str = _graph_to_graphviz_dot(
         G, title, node_colors=node_colors, edge_colors=edge_colors
     )
-    # Render to PNG and display.
+    # Render to PNG with specified DPI.
     g = graphviz.Source(dot_str, format="png")
-    png_data = g.pipe()
+    png_data = g.pipe(format="png")
     img = Image.open(io.BytesIO(png_data))
+    # Adjust image size based on DPI (default graphviz uses 96 DPI).
+    if dpi != 96:
+        new_size = (int(img.width * dpi / 96), int(img.height * dpi / 96))
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
     if ax is not None:
         ax.imshow(img)
         ax.axis("off")
         ax.set_title(title, fontsize=12, fontweight="bold")
     else:
-        fig, ax_new = plt.subplots(figsize=(10, 8))
+        fig, ax_new = plt.subplots(figsize=_FIG_SIZE)
         ax_new.imshow(img)
         ax_new.axis("off")
         ax_new.set_title(title, fontsize=12, fontweight="bold")
@@ -235,6 +246,7 @@ def plot_dag(
     edge_colors: Optional[Mapping[Tuple[str, str], Any]] = None,
     ax: Optional[maxes.Axes] = None,
     pos: Optional[Dict] = None,
+    dpi: int = _FIG_DPI,
 ) -> None:
     """
     Render a DAG using the specified visualization mode.
@@ -250,11 +262,12 @@ def plot_dag(
     :param edge_colors: Optional per-edge color (mapping)
     :param ax: Matplotlib axes to draw on
     :param pos: Node position dictionary (used only with "networkx" mode)
+    :param dpi: Resolution in dots per inch (default 96, used only with graphviz)
     :raises ValueError: If mode is not one of the supported options
     """
     if mode == "graphviz":
         plot_dag_with_graphviz(
-            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
+            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax, dpi=dpi
         )
     elif mode == "networkx_rounded_boxes":
         plot_dag_with_networkx_rounded_boxes(
@@ -282,13 +295,13 @@ def cell1_create_motivating_dags() -> Dict[str, nx.DiGraph]:
 
     :return: Mapping from domain name to a `networkx.DiGraph`
     """
-    # Health domain: smoking influences lung disease which influences mortality.
+    # Health domain: air pollution influences lung disease which influences mortality.
     health = nx.DiGraph()
     health.add_edges_from(
         [
-            ("Smoking", "LungDisease"),
+            ("AirPollution", "LungDisease"),
             ("LungDisease", "Mortality"),
-            ("Age", "Smoking"),
+            ("Age", "AirPollution"),
             ("Age", "Mortality"),
         ]
     )
@@ -322,6 +335,7 @@ def cell1_plot_dag(
     ax: Optional[maxes.Axes] = None,
     figsize: Optional[Tuple[int, int]] = None,
     pos: Optional[Dict] = None,
+    dpi: int = _FIG_DPI,
 ) -> maxes.Axes:
     """
     Render a DAG with graphviz for automatic layout.
@@ -336,17 +350,18 @@ def cell1_plot_dag(
     :param ax: Existing axes to draw on, else a new figure is created
     :param figsize: Override the default figure size
     :param pos: Ignored when using graphviz
+    :param dpi: Resolution in dots per inch (default 96)
     :return: The axes containing the plot
     """
     # Build the figure only when no axes was provided.
     fig = None
     if ax is None:
         if figsize is None:
-            figsize = (10, 8)
+            figsize = _FIG_SIZE
         fig, ax = plt.subplots(figsize=figsize)
     # Use graphviz for rendering.
     plot_dag_with_graphviz(
-        G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
+        G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax, dpi=dpi
     )
     # Automatically adjust spacing to prevent labels and titles from being clipped.
     # This is only called if we created a new figure (not when using existing axes).
@@ -479,33 +494,33 @@ def cell2_generate_healthcare_data(
     rng = np.random.default_rng(random_state)
     # Age is an exogenous root variable.
     age = rng.uniform(25, 75, n_samples)
-    # Smoking probability rises with age.
-    smoking = (rng.uniform(0, 1, n_samples) < (age - 25) / 100).astype(int)
-    # Exercise drops with age and smoking habit.
+    # Air pollution exposure rises with age.
+    air_pollution = (rng.uniform(0, 1, n_samples) < (age - 25) / 100).astype(int)
+    # Exercise drops with age and air pollution exposure.
     exercise = (
-        -0.05 * age - 1.5 * smoking + rng.normal(0, 1, n_samples) + 5
+        -0.05 * age - 1.5 * air_pollution + rng.normal(0, 1, n_samples) + 5
     )
     # Diet quality is partially independent and partially driven by exercise.
     diet = 0.3 * exercise + rng.normal(0, 1, n_samples) + 3
     # Cholesterol is driven by diet (negative) and age (positive).
     cholesterol = (
-        180 + 0.5 * age - 5 * diet + 10 * smoking + rng.normal(0, 10, n_samples)
+        180 + 0.5 * age - 5 * diet + 10 * air_pollution + rng.normal(0, 10, n_samples)
     )
-    # Blood pressure is driven by age, smoking, exercise, and cholesterol.
+    # Blood pressure is driven by age, air pollution, exercise, and cholesterol.
     blood_pressure = (
         100
         + 0.4 * age
-        + 8 * smoking
+        + 8 * air_pollution
         - 2 * exercise
         + 0.1 * cholesterol
         + rng.normal(0, 8, n_samples)
     )
-    # Heart disease risk increases with blood pressure, cholesterol, smoking.
+    # Heart disease risk increases with blood pressure, cholesterol, air pollution.
     heart_disease_risk = (
         -10
         + 0.05 * blood_pressure
         + 0.03 * cholesterol
-        + 2 * smoking
+        + 2 * air_pollution
         - 0.5 * exercise
         + rng.normal(0, 2, n_samples)
     )
@@ -513,7 +528,7 @@ def cell2_generate_healthcare_data(
     return pd.DataFrame(
         {
             "Age": age,
-            "Smoking": smoking,
+            "AirPollution": air_pollution,
             "Exercise": exercise,
             "Diet": diet,
             "Cholesterol": cholesterol,
@@ -532,14 +547,14 @@ def cell2_build_domain_dag() -> nx.DiGraph:
     G = nx.DiGraph()
     G.add_edges_from(
         [
-            ("Age", "Smoking"),
+            ("Age", "AirPollution"),
             ("Age", "Exercise"),
             ("Age", "Cholesterol"),
             ("Age", "BloodPressure"),
-            ("Smoking", "Exercise"),
-            ("Smoking", "Cholesterol"),
-            ("Smoking", "BloodPressure"),
-            ("Smoking", "HeartDisease"),
+            ("AirPollution", "Exercise"),
+            ("AirPollution", "Cholesterol"),
+            ("AirPollution", "BloodPressure"),
+            ("AirPollution", "HeartDisease"),
             ("Exercise", "Diet"),
             ("Exercise", "BloodPressure"),
             ("Exercise", "HeartDisease"),
