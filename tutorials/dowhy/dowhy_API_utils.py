@@ -28,9 +28,39 @@ from scipy import stats
 _LOG = logging.getLogger(__name__)
 
 
-# ######################
+def _apply_dag_style(
+    G: nx.DiGraph,
+    pos: Dict,
+    *,
+    node_color: Any = None,
+    edge_color: Any = None,
+    ax: Optional[maxes.Axes] = None,
+) -> None:
+    """
+    Draw a DAG with consistent styling for nodes and edges.
+
+    Applies standard NetworkX drawing style parameters (node size, edge arrow
+    style, etc.) to ensure all plots look visually consistent.
+
+    :param G: Graph to draw
+    :param pos: Node position dictionary
+    :param node_color: Single color or list of colors for nodes
+    :param edge_color: Single color or list of colors for edges
+    :param ax: Matplotlib axes object
+    """
+    node_kwargs = {"node_size": 2000, "edgecolors": "black", "ax": ax}
+    if node_color is not None:
+        node_kwargs["node_color"] = node_color
+    nx.draw_networkx_nodes(G, pos, **node_kwargs)
+    edge_kwargs = {"arrowsize": 20, "arrowstyle": "-|>", "width": 1.8, "ax": ax}
+    if edge_color is not None:
+        edge_kwargs["edge_color"] = edge_color
+    nx.draw_networkx_edges(G, pos, **edge_kwargs)
+
+
+# #############################################################################
 # Cell 1: Introduction to Causal Graphs
-# ######################
+# #############################################################################
 
 
 def cell1_create_motivating_dags() -> Dict[str, nx.DiGraph]:
@@ -111,23 +141,7 @@ def cell1_plot_dag(
     edge_color = [
         (edge_colors or {}).get((u, v), "#555555") for u, v in G.edges()
     ]
-    nx.draw_networkx_nodes(
-        G,
-        pos,
-        node_color=node_color,
-        node_size=2000,
-        edgecolors="black",
-        ax=ax,
-    )
-    nx.draw_networkx_edges(
-        G,
-        pos,
-        edge_color=edge_color,
-        arrowsize=20,
-        arrowstyle="->",
-        width=1.8,
-        ax=ax,
-    )
+    _apply_dag_style(G, pos, node_color=node_color, edge_color=edge_color, ax=ax)
     nx.draw_networkx_labels(G, pos, font_size=10, ax=ax)
     ax.set_title(title, fontsize=12, fontweight="bold")
     ax.axis("off")
@@ -234,9 +248,9 @@ def cell1_interactive_edge_toggle(base_graph: nx.DiGraph) -> None:
     _update()
 
 
-# ######################
+# #############################################################################
 # Cell 2: Domain Knowledge and Expert Causal Graphs
-# ######################
+# #############################################################################
 
 
 def cell2_generate_healthcare_data(
@@ -342,9 +356,9 @@ def cell2_describe_graph(G: nx.DiGraph) -> pd.DataFrame:
     return pd.DataFrame(edges)
 
 
-# ######################
+# #############################################################################
 # Cell 3: Limitations of Domain Knowledge Alone
-# ######################
+# #############################################################################
 
 
 def cell3_make_candidate_graphs() -> Dict[str, nx.DiGraph]:
@@ -505,9 +519,9 @@ def cell3_interactive_hypothesis_comparison(
     _update()
 
 
-# ######################
+# #############################################################################
 # Cell 4: Causal Discovery Algorithms Overview
-# ######################
+# #############################################################################
 
 
 def cell4_algorithm_comparison_table() -> pd.DataFrame:
@@ -570,20 +584,11 @@ def cell4_plot_workflow_diagram(
         "Orientation rules": (3, 0),
         "Causal graph": (4, 0),
     }
-    nx.draw_networkx_nodes(
+    _apply_dag_style(
         workflow,
         pos,
         node_color="#FDB462",
-        node_size=4000,
-        edgecolors="black",
-        ax=ax,
-    )
-    nx.draw_networkx_edges(
-        workflow,
-        pos,
-        arrowsize=22,
-        arrowstyle="->",
-        width=2,
+        edge_color=None,
         ax=ax,
     )
     nx.draw_networkx_labels(workflow, pos, font_size=9, ax=ax)
@@ -592,9 +597,9 @@ def cell4_plot_workflow_diagram(
     plt.show()
 
 
-# ######################
+# #############################################################################
 # Cell 5: Causal Discovery with CDT
-# ######################
+# #############################################################################
 
 
 def _build_skeleton(
@@ -762,9 +767,9 @@ def cell5_plot_discovery_comparison(
     plt.show()
 
 
-# ######################
+# #############################################################################
 # Cell 6: Causal Discovery with dodiscover
-# ######################
+# #############################################################################
 
 
 def cell6_run_dodiscover_like(
@@ -855,9 +860,9 @@ def cell6_plot_method_comparison(
     return pd.DataFrame(rows)
 
 
-# ######################
+# #############################################################################
 # Cell 7: Causal Discovery with causal-learn
-# ######################
+# #############################################################################
 
 
 def cell7_run_pc_algorithm(
@@ -999,9 +1004,9 @@ def cell7_interactive_causal_learn_widget(
     _update()
 
 
-# ######################
+# #############################################################################
 # Cell 8: Comparing Causal Discovery Methods
-# ######################
+# #############################################################################
 
 
 def cell8_compute_consensus_graph(
@@ -1083,9 +1088,9 @@ def cell8_agreement_table(
     return pd.DataFrame(rows).sort_values("Support", ascending=False)
 
 
-# ######################
+# #############################################################################
 # Cell 9: Independence Tests for Causal Validation
-# ######################
+# #############################################################################
 
 
 def cell9_run_independence_test(
@@ -1208,9 +1213,9 @@ def cell9_interactive_independence_widget(df: pd.DataFrame) -> None:
     _update()
 
 
-# ######################
+# #############################################################################
 # Cell 10: Refuting Causal Graphs
-# ######################
+# #############################################################################
 
 
 def cell10_refute_graph(
@@ -1299,9 +1304,9 @@ def cell10_plot_annotated_graph(
     plt.show()
 
 
-# ######################
+# #############################################################################
 # Cell 11: Sensitivity Analysis on Graph Discovery
-# ######################
+# #############################################################################
 
 
 def cell11_sensitivity_over_sample_size(

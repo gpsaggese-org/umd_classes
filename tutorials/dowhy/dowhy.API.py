@@ -26,10 +26,6 @@
 #     causal-learn)
 #   - Validate causal hypotheses using independence tests
 #   - Refute and stress-test discovered graphs
-# - References:
-#   - Pearl, J. (2009). _Causality_: Models, Reasoning and Inference
-#   - Spirtes, Glymour, Scheines (2000). _Causation, Prediction, and Search_
-#   - Causal Discovery Toolbox, dodiscover, causal-learn library docs
 
 # %% [markdown]
 # ## Imports
@@ -67,8 +63,8 @@ _LOG.info("Notebook initialized")
 #
 # - Causal graphs (DAGs) encode assumptions about how variables influence each
 #   other
-# - A statistical model describes joint distributions; a causal model describes
-#   what happens under interventions
+#     - A statistical model describes joint distributions
+#     - A causal model describes what happens under interventions
 # - The classic example: ice cream sales and drownings are correlated because
 #   temperature drives both
 #   - Statistical thinking sees a correlation
@@ -82,15 +78,22 @@ dauti.cell1_plot_correlation_vs_causation(figsize=(12, 4))
 # %%
 # Build three motivating DAGs across health, economics, and social domains.
 domain_dags = dauti.cell1_create_motivating_dags()
+
+# TODO(ai_gp): Print the DAGs to show how they are made.
+
+# TODO(ai_gp): Create a function to plot this.
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+fig.tight_layout()
 for ax, (name, G) in zip(axes, domain_dags.items()):
+    ax.margins(0.2)
     dauti.cell1_plot_dag(G, name, ax=ax)
-fig.suptitle("Causal graphs across domains", fontweight="bold")
 plt.show()
 # Each domain encodes domain knowledge as a DAG that constrains plausible
 # causal mechanisms.
 
 # %%
+# TODO(ai_gp): When it's not a DAG still show all the edgesax.margins(0.2).
+
 # Interactive widget: toggle edges to explore the space of DAGs.
 dauti.cell1_interactive_edge_toggle(domain_dags["Health"])
 # Toggling edges shows how each assumption changes the implied causal story.
