@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -39,8 +39,6 @@ import logging
 
 # Third-party libraries.
 import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 import numpy as np
 
 # %%
@@ -76,7 +74,9 @@ _LOG.info("Notebook initialized")
 # Plot the correlation vs causation example.
 utils.cell1_plot_correlation_vs_causation()
 
-print("Left: Statistical view sees a correlation between ice cream sales and drownings")
+print(
+    "Left: Statistical view sees a correlation between ice cream sales and drownings"
+)
 print("Right: Causal view attributes both to a common cause (temperature)")
 
 # %%
@@ -84,14 +84,12 @@ print("Right: Causal view attributes both to a common cause (temperature)")
 health_dag = utils.cell1_create_health_dag()
 
 fig, ax = plt.subplots(figsize=(8, 6))
-utils.cell1_plot_dag(
-    health_dag,
-    "Health Outcome Causal DAG",
-    ax=ax
-)
+utils.cell1_plot_dag(health_dag, "Health Outcome Causal DAG", ax=ax)
 plt.show()
 
-print("The DAG encodes the assumption that health depends on age, diet, exercise, and genetics.")
+print(
+    "The DAG encodes the assumption that health depends on age, diet, exercise, and genetics."
+)
 
 # %% [markdown]
 # # Cell 2: Building a Simple GCM by Hand
@@ -108,11 +106,7 @@ print("The DAG encodes the assumption that health depends on age, diet, exercise
 gcm, mechanisms = utils.cell2_create_simple_gcm()
 
 fig, ax = plt.subplots(figsize=(8, 6))
-utils.cell1_plot_dag(
-    gcm,
-    "Simple GCM: Temperature → Activity → Sales",
-    ax=ax
-)
+utils.cell1_plot_dag(gcm, "Simple GCM: Temperature → Activity → Sales", ax=ax)
 plt.show()
 
 print("Causal edges:")
@@ -167,7 +161,9 @@ print(f"Columns: {list(df_sachs.columns)}")
 
 # %%
 # Automatically assign mechanisms to the DAG.
-mechanisms_auto = utils.cell3_assign_mechanisms_automatically(sachs_dag, df_sachs)
+mechanisms_auto = utils.cell3_assign_mechanisms_automatically(
+    sachs_dag, df_sachs
+)
 
 print("Automatically assigned mechanisms:")
 for node, mech in mechanisms_auto.items():
@@ -176,11 +172,7 @@ for node, mech in mechanisms_auto.items():
 # %%
 # Visualize the Sachs dataset causal structure.
 fig, ax = plt.subplots(figsize=(10, 8))
-utils.cell1_plot_dag(
-    sachs_dag,
-    "Sachs et al. Protein Signaling Network",
-    ax=ax
-)
+utils.cell1_plot_dag(sachs_dag, "Sachs et al. Protein Signaling Network", ax=ax)
 plt.show()
 
 # %% [markdown]
@@ -199,9 +191,13 @@ fitted_params = utils.cell4_fit_scm_simple(sachs_dag, df_sachs)
 print("Fitted model parameters:")
 for node, params in fitted_params.items():
     if "r_squared" in params:
-        print(f"  {node}: R² = {params['r_squared']:.3f}, Residual Std = {params['residual_std']:.3f}")
+        print(
+            f"  {node}: R² = {params['r_squared']:.3f}, Residual Std = {params['residual_std']:.3f}"
+        )
     else:
-        print(f"  {node}: Mean = {params['mean']:.3f}, Std = {params['std']:.3f}")
+        print(
+            f"  {node}: Mean = {params['mean']:.3f}, Std = {params['std']:.3f}"
+        )
 
 # %% [markdown]
 # # Cell 5: Generating Samples from a Fitted Model
@@ -215,9 +211,7 @@ for node, params in fitted_params.items():
 # %%
 # Generate synthetic samples from the fitted model.
 df_synthetic = utils.cell5_generate_synthetic_samples(
-    sachs_dag,
-    fitted_params,
-    n_samples=200
+    sachs_dag, fitted_params, n_samples=200
 )
 
 display(df_synthetic.head())
@@ -242,7 +236,9 @@ print("Good alignment suggests the model captured the data distribution well.")
 
 # %%
 # Evaluate the quality of each fitted mechanism.
-evaluation = utils.cell6_evaluate_model_quality(sachs_dag, fitted_params, df_sachs)
+evaluation = utils.cell6_evaluate_model_quality(
+    sachs_dag, fitted_params, df_sachs
+)
 
 display(evaluation)
 print("\nR² values indicate how much variance each mechanism explains.")
@@ -264,17 +260,15 @@ treatment_var = "PKA"
 outcome_var = "ERK"
 
 point_est, ci = utils.cell7_bootstrap_confidence_intervals(
-    sachs_dag,
-    df_sachs,
-    treatment_var,
-    outcome_var,
-    n_bootstrap=100
+    sachs_dag, df_sachs, treatment_var, outcome_var, n_bootstrap=100
 )
 
 print(f"Effect of {treatment_var} on {outcome_var}:")
 print(f"  Point estimate: {point_est:.3f}")
 print(f"  95% CI: [{ci[0]:.3f}, {ci[1]:.3f}]")
-print(f"\nInterpretation: With 95% confidence, the causal effect lies in the interval.")
+print(
+    "\nInterpretation: With 95% confidence, the causal effect lies in the interval."
+)
 
 # %% [markdown]
 # # Cell 8: Customizing Causal Mechanism Assignment
@@ -291,9 +285,7 @@ print(f"\nInterpretation: With 95% confidence, the causal effect lies in the int
 custom_gcm, custom_mechanisms = utils.cell8_custom_mechanism_example()
 
 df_custom = utils.cell2_generate_samples_from_gcm(
-    custom_gcm,
-    custom_mechanisms,
-    n_samples=300
+    custom_gcm, custom_mechanisms, n_samples=300
 )
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
@@ -311,7 +303,9 @@ axes[1].set_title("Custom nonlinear mechanism: exponential")
 plt.tight_layout()
 plt.show()
 
-print("Custom mechanisms capture nonlinear relationships that linear models miss.")
+print(
+    "Custom mechanisms capture nonlinear relationships that linear models miss."
+)
 
 # %% [markdown]
 # # Cell 9: Root Cause Analysis Example
@@ -394,21 +388,29 @@ patient_profile = {
 
 # Extract relevant rows matching patient profile (approximately)
 similar_patients = df_medical[
-    (df_medical["Age"] >= patient_profile["Age"] - 5) &
-    (df_medical["Age"] <= patient_profile["Age"] + 5)
+    (df_medical["Age"] >= patient_profile["Age"] - 5)
+    & (df_medical["Age"] <= patient_profile["Age"] + 5)
 ]
 
-outcome_with_treatment = similar_patients[similar_patients["Treatment"] == 1]["Outcome"].mean()
-outcome_without_treatment = similar_patients[similar_patients["Treatment"] == 0]["Outcome"].mean()
+outcome_with_treatment = similar_patients[similar_patients["Treatment"] == 1][
+    "Outcome"
+].mean()
+outcome_without_treatment = similar_patients[similar_patients["Treatment"] == 0][
+    "Outcome"
+].mean()
 
 treatment_effect = outcome_with_treatment - outcome_without_treatment
 
-print(f"Patient: Age {patient_profile['Age']}, Cholesterol {patient_profile['Cholesterol']}")
-print(f"\nEstimated outcomes:")
+print(
+    f"Patient: Age {patient_profile['Age']}, Cholesterol {patient_profile['Cholesterol']}"
+)
+print("\nEstimated outcomes:")
 print(f"  With treatment: {outcome_with_treatment:.2f}")
 print(f"  Without treatment: {outcome_without_treatment:.2f}")
 print(f"  Treatment effect: {treatment_effect:.2f}")
-print(f"\nRecommendation: {'Recommend treatment' if treatment_effect > 0 else 'Recommend no treatment'}")
+print(
+    f"\nRecommendation: {'Recommend treatment' if treatment_effect > 0 else 'Recommend no treatment'}"
+)
 
 # %% [markdown]
 # # Cell 11: Model Limitations and When GCMs Fail
@@ -433,10 +435,10 @@ y = df_confounded["Y"].values
 naive_corr = np.corrcoef(X, y)[0, 1]
 
 print(f"Observed correlation X ↔ Y: {naive_corr:.3f}")
-print(f"\nThis appears to show X causes Y, but actually:")
-print(f"  - Both X and Y are caused by an unobserved confounder")
-print(f"  - The correlation is spurious")
-print(f"  - Intervening on X would NOT change Y")
+print("\nThis appears to show X causes Y, but actually:")
+print("  - Both X and Y are caused by an unobserved confounder")
+print("  - The correlation is spurious")
+print("  - Intervening on X would NOT change Y")
 
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.scatter(df_confounded["X"], df_confounded["Y"], alpha=0.5)

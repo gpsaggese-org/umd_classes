@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -75,7 +75,7 @@ _LOG.info("Notebook initialized")
 # In the function the process generating the data is a set of equations
 # representing the causal DAG.
 
-# #dauti.cell1_plot_correlation_vs_causation??
+# # dauti.cell1_plot_correlation_vs_causation??
 
 # %%
 # Plot a correlation-vs-causation example with the implied DAG.
@@ -119,7 +119,7 @@ plt.show()
 dauti.cell2_describe_graph(true_dag)
 
 # %%
-# #dauti.cell2_generate_healthcare_data??
+# # dauti.cell2_generate_healthcare_data??
 
 # %%
 # Generate the synthetic healthcare data.
@@ -140,7 +140,9 @@ df_health.head()
 # %%
 # Build candidate hypothesis graphs and score them against the data.
 candidates = dauti.cell3_make_candidate_graphs()
-sub_df = pd.DataFrame(df_health[["Exercise", "Diet", "Cholesterol", "BloodPressure"]])
+sub_df = pd.DataFrame(
+    df_health[["Exercise", "Diet", "Cholesterol", "BloodPressure"]]
+)
 # Score each candidate graph by testing whether its implied conditional
 # independencies hold in the data. The score is the mean p-value at non-edges
 # (pairs not directly connected in the DAG). Higher scores indicate the graph
@@ -159,7 +161,7 @@ scores_df = pd.DataFrame(
 display(scores_df)
 
 # %%
-# #dauti.cell3_score_graph_against_data??
+# # dauti.cell3_score_graph_against_data??
 
 # %%
 # Interactive widget: pick a hypothesis and inspect its data-consistency score.

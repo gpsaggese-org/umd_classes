@@ -7,7 +7,7 @@ pedagogical flow.
 
 Import as:
 
-import tutorials.dowhy.dowhy_API_utils as tdduti
+import tutorials.dowhy.dowhy_01_causal_graphs_utils as tdd0cgrut
 """
 
 import itertools
@@ -33,7 +33,7 @@ _LOG = logging.getLogger(__name__)
 _FIG_SIZE = (10, 8)
 
 # Default DPI for image rendering
-#_FIG_DPI = 96
+# _FIG_DPI = 96
 _FIG_DPI = 150
 
 
@@ -55,6 +55,7 @@ def _graph_to_graphviz_dot(
     :param edge_colors: Optional per-edge color
     :return: DOT string for graphviz rendering
     """
+
     # Map matplotlib colors to hex for graphviz.
     def _to_hex(color: Any) -> str:
         if isinstance(color, str):
@@ -62,13 +63,14 @@ def _graph_to_graphviz_dot(
                 return color
             return color
         return "#A6C8F4"
+
     # Build the DOT representation.
-    lines = ['digraph {', '    rankdir=TB;', '    splines=true;']
-    lines.append('    nodesep=0.6;')
-    lines.append('    ranksep=0.6;')
+    lines = ["digraph {", "    rankdir=TB;", "    splines=true;"]
+    lines.append("    nodesep=0.6;")
+    lines.append("    ranksep=0.6;")
     lines.append(
         '    node [shape=box, style="rounded,filled", fontname="Helvetica", '
-        'fontsize=11, penwidth=1.4];'
+        "fontsize=11, penwidth=1.4];"
     )
     # Add nodes with colors.
     for node in G.nodes():
@@ -157,18 +159,26 @@ def plot_dag_with_networkx_rounded_boxes(
             (edge_colors or {}).get(e, "#555555") for e in edge_list
         ]
         nx.draw_networkx_edges(
-            G, pos, arrowsize=35, arrowstyle="-|>", width=2.0, ax=ax,
+            G,
+            pos,
+            arrowsize=35,
+            arrowstyle="-|>",
+            width=2.0,
+            ax=ax,
             edge_color=edge_color_list,
         )
     else:
         nx.draw_networkx_edges(
-            G, pos, arrowsize=35, arrowstyle="-|>", width=2.0, ax=ax,
+            G,
+            pos,
+            arrowsize=35,
+            arrowstyle="-|>",
+            width=2.0,
+            ax=ax,
         )
     # Draw nodes as rounded rectangles.
     node_color_list = (
-        [
-            (node_colors or {}).get(n, "#A6C8F4") for n in G.nodes()
-        ]
+        [(node_colors or {}).get(n, "#A6C8F4") for n in G.nodes()]
         if node_colors
         else "#A6C8F4"
     )
@@ -316,7 +326,12 @@ def cell1_plot_dag(
         fig, ax = plt.subplots(figsize=figsize)
     # Use graphviz for rendering.
     plot_dag_with_graphviz(
-        G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax, dpi=dpi
+        G,
+        title,
+        node_colors=node_colors,
+        edge_colors=edge_colors,
+        ax=ax,
+        dpi=dpi,
     )
     # Automatically adjust spacing to prevent labels and titles from being clipped.
     # This is only called if we created a new figure (not when using existing axes).
@@ -415,9 +430,7 @@ def cell1_interactive_edge_toggle(base_graph: nx.DiGraph) -> None:
     """
     # Generate all possible directed edges between nodes (excluding self).
     nodes = list(base_graph.nodes())
-    candidate_edges = [
-        (u, v) for u, v in itertools.permutations(nodes, 2)
-    ]
+    candidate_edges = [(u, v) for u, v in itertools.permutations(nodes, 2)]
     # Create one checkbox per candidate edge, pre-checked if it exists.
     checkboxes = {
         e: widgets.Checkbox(
@@ -490,7 +503,11 @@ def cell2_generate_healthcare_data(
     diet = 0.3 * exercise + rng.normal(0, 1, n_samples) + 3
     # Cholesterol is driven by diet (negative) and age (positive).
     cholesterol = (
-        180 + 0.5 * age - 5 * diet + 10 * air_pollution + rng.normal(0, 10, n_samples)
+        180
+        + 0.5 * age
+        - 5 * diet
+        + 10 * air_pollution
+        + rng.normal(0, 10, n_samples)
     )
     # Blood pressure is driven by age, air pollution, exercise, and cholesterol.
     blood_pressure = (
@@ -612,6 +629,20 @@ def cell3_make_candidate_graphs() -> Dict[str, nx.DiGraph]:
     return {"Hypothesis A": a, "Hypothesis B": b, "Hypothesis C": c}
 
 
+def _pearsonr_safe(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
+    """
+    Run `scipy.stats.pearsonr()` and cast the result to a plain float tuple.
+
+    Wrapping the call isolates the type-narrowing logic in one place.
+
+    :param x: First sample
+    :param y: Second sample
+    :return: Tuple of correlation and p-value
+    """
+    res: Any = stats.pearsonr(x, y)
+    return float(res[0]), float(res[1])
+
+
 def _partial_corr(
     df: pd.DataFrame,
     x: str,
@@ -643,20 +674,6 @@ def _partial_corr(
     res_x = x_arr - z_mat @ beta_x
     res_y = y_arr - z_mat @ beta_y
     return _pearsonr_safe(res_x, res_y)
-
-
-def _pearsonr_safe(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
-    """
-    Run `scipy.stats.pearsonr()` and cast the result to a plain float tuple.
-
-    Wrapping the call isolates the type-narrowing logic in one place.
-
-    :param x: First sample
-    :param y: Second sample
-    :return: Tuple of correlation and p-value
-    """
-    res: Any = stats.pearsonr(x, y)
-    return float(res[0]), float(res[1])
 
 
 def cell3_score_graph_against_data(
@@ -1202,7 +1219,9 @@ def cell7_interactive_causal_learn_widget(
                 metrics_text += f"TP: {metrics['tp']}, FP: {metrics['fp']}, "
                 metrics_text += f"FN: {metrics['fn']}"
                 axes[2].text(
-                    0.1, 0.5, metrics_text,
+                    0.1,
+                    0.5,
+                    metrics_text,
                     fontsize=11,
                     family="monospace",
                     verticalalignment="center",
@@ -1464,9 +1483,7 @@ def cell9_interactive_independence_widget(df: pd.DataFrame) -> None:
         result = cell9_run_independence_test(df, x, y, cond, method_drop.value)
         with output:
             output.clear_output(wait=True)
-            verdict = (
-                "Independent" if result["p_value"] > 0.05 else "Dependent"
-            )
+            verdict = "Independent" if result["p_value"] > 0.05 else "Dependent"
             print(
                 f"X={x}, Y={y}, Conditioning={cond or '(none)'}\n"
                 f"Statistic: {result['statistic']:.4f}\n"
@@ -1511,9 +1528,7 @@ def cell10_refute_graph(
             continue
         # Build conditioning set from the union of parents for the local
         # Markov property.
-        cond = list(
-            (set(G.predecessors(u)) | set(G.predecessors(v))) - {u, v}
-        )
+        cond = list((set(G.predecessors(u)) | set(G.predecessors(v))) - {u, v})
         _, p = _partial_corr(df, u, v, cond)
         rows.append(
             {
@@ -1557,9 +1572,7 @@ def cell10_plot_annotated_graph(
     max_count = max(counts.values()) if counts else 0
     cmap = plt.get_cmap("Reds")
     node_colors = {
-        n: cmap(0.2 + 0.6 * (counts[n] / max_count))
-        if max_count
-        else "#A6CEE3"
+        n: cmap(0.2 + 0.6 * (counts[n] / max_count)) if max_count else "#A6CEE3"
         for n in G.nodes()
     }
     fig, ax = plt.subplots(figsize=figsize)

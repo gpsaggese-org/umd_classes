@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -118,7 +118,7 @@ print(f"Edges: {list(sm.edges)}")
 # Plot the relationships using networkx.
 if False:
     from causalnex.plots import plot_structure, NODE_STYLE, EDGE_STYLE
-    
+
     viz = plot_structure(
         sm,
         all_node_attributes=NODE_STYLE.WEAK,

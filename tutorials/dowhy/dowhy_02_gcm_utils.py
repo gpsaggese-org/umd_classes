@@ -1,5 +1,9 @@
 """
 Utility functions for the Graphical Causal Models notebook.
+
+Import as:
+
+import tutorials.dowhy.dowhy_02_gcm_utils as tdd0gcut
 """
 
 import numpy as np
@@ -21,12 +25,14 @@ def cell1_create_health_dag() -> nx.DiGraph:
     :return: Directed acyclic graph with health-related causal relationships
     """
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("Age", "Health"),
-        ("Diet", "Health"),
-        ("Exercise", "Health"),
-        ("Genetics", "Health"),
-    ])
+    G.add_edges_from(
+        [
+            ("Age", "Health"),
+            ("Diet", "Health"),
+            ("Exercise", "Health"),
+            ("Genetics", "Health"),
+        ]
+    )
     return G
 
 
@@ -53,13 +59,17 @@ def cell1_plot_dag(
     # Compute node positions using spring layout.
     pos = nx.spring_layout(G, seed=42, k=2, iterations=50)
     # Draw graph elements: nodes, labels, and edges.
-    nx.draw_networkx_nodes(
-        G, pos, node_color="lightblue", node_size=2000, ax=ax
-    )
+    nx.draw_networkx_nodes(G, pos, node_color="lightblue", node_size=2000, ax=ax)
     nx.draw_networkx_labels(G, pos, font_size=10, font_weight="bold", ax=ax)
     nx.draw_networkx_edges(
-        G, pos, edge_color="gray", arrows=True, arrowsize=20,
-        arrowstyle="-|>", ax=ax, width=2
+        G,
+        pos,
+        edge_color="gray",
+        arrows=True,
+        arrowsize=20,
+        arrowstyle="-|>",
+        ax=ax,
+        width=2,
     )
     # Format the plot.
     ax.set_title(title, fontsize=14, fontweight="bold")
@@ -90,7 +100,9 @@ def cell1_plot_correlation_vs_causation() -> None:
     ax1.set_title("Statistical correlation", fontsize=12, fontweight="bold")
     # Plot 2: Causal perspective (showing true causal structure).
     G = nx.DiGraph()
-    G.add_edges_from([("Temperature", "Ice Cream"), ("Temperature", "Drownings")])
+    G.add_edges_from(
+        [("Temperature", "Ice Cream"), ("Temperature", "Drownings")]
+    )
     pos = {
         "Temperature": (0.5, 1),
         "Ice Cream": (0.2, 0),
@@ -103,8 +115,14 @@ def cell1_plot_correlation_vs_causation() -> None:
     )
     nx.draw_networkx_labels(G, pos, font_size=9, font_weight="bold", ax=ax2)
     nx.draw_networkx_edges(
-        G, pos, edge_color="gray", arrows=True, arrowsize=20,
-        arrowstyle="-|>", ax=ax2, width=2
+        G,
+        pos,
+        edge_color="gray",
+        arrows=True,
+        arrowsize=20,
+        arrowstyle="-|>",
+        ax=ax2,
+        width=2,
     )
     ax2.set_title("Causal structure", fontsize=12, fontweight="bold")
     ax2.axis("off")
@@ -125,15 +143,20 @@ def cell2_create_simple_gcm() -> Tuple[nx.DiGraph, Dict[str, Callable]]:
     :return: Tuple of (directed acyclic graph, dictionary of mechanism functions)
     """
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("Temperature", "IceCreamSales"),
-        ("Temperature", "Activity"),
-        ("Activity", "IceCreamSales"),
-    ])
+    G.add_edges_from(
+        [
+            ("Temperature", "IceCreamSales"),
+            ("Temperature", "Activity"),
+            ("Activity", "IceCreamSales"),
+        ]
+    )
     mechanisms = {
         "Temperature": lambda n: np.random.normal(25, 5, n),
         "Activity": lambda t: 50 + 2 * t + np.random.normal(0, 5, len(t)),
-        "IceCreamSales": lambda t, a: 100 + 3 * t + 0.5 * a + np.random.normal(0, 10, len(t)),
+        "IceCreamSales": lambda t, a: 100
+        + 3 * t
+        + 0.5 * a
+        + np.random.normal(0, 10, len(t)),
     }
     return G, mechanisms
 
@@ -173,7 +196,9 @@ def cell2_generate_samples_from_gcm(
 # #############################################################################
 
 
-def cell3_load_sample_dataset(dataset_name: str = "sachs") -> Tuple[pd.DataFrame, nx.DiGraph]:
+def cell3_load_sample_dataset(
+    dataset_name: str = "sachs",
+) -> Tuple[pd.DataFrame, nx.DiGraph]:
     """
     Load a sample causal discovery dataset.
 
@@ -195,20 +220,26 @@ def cell3_load_sample_dataset(dataset_name: str = "sachs") -> Tuple[pd.DataFrame
     data["PKA"] = np.random.normal(0, 1, n)
     # Generate endogenous variables following the causal structure.
     data["RAF"] = 0.5 * data["PKC"] + np.random.normal(0, 0.5, n)
-    data["MEK"] = 0.6 * data["RAF"] + 0.3 * data["PKA"] + np.random.normal(0, 0.5, n)
+    data["MEK"] = (
+        0.6 * data["RAF"] + 0.3 * data["PKA"] + np.random.normal(0, 0.5, n)
+    )
     data["ERK"] = 0.7 * data["MEK"] + np.random.normal(0, 0.5, n)
-    data["AKT"] = 0.4 * data["PKA"] + 0.2 * data["ERK"] + np.random.normal(0, 0.5, n)
+    data["AKT"] = (
+        0.4 * data["PKA"] + 0.2 * data["ERK"] + np.random.normal(0, 0.5, n)
+    )
     # Define the causal structure.
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("PKC", "RAF"),
-        ("PKA", "RAF"),
-        ("PKA", "MEK"),
-        ("RAF", "MEK"),
-        ("MEK", "ERK"),
-        ("ERK", "AKT"),
-        ("PKA", "AKT"),
-    ])
+    G.add_edges_from(
+        [
+            ("PKC", "RAF"),
+            ("PKA", "RAF"),
+            ("PKA", "MEK"),
+            ("RAF", "MEK"),
+            ("MEK", "ERK"),
+            ("ERK", "AKT"),
+            ("PKA", "AKT"),
+        ]
+    )
     return pd.DataFrame(data), G
 
 
@@ -285,7 +316,9 @@ def cell4_fit_scm_simple(
             fitted_params[node] = {
                 "coefficients": coeffs,
                 "residual_std": float(np.std(residuals)),
-                "r_squared": float(1 - (np.sum(residuals**2) / np.sum((y - y_mean)**2))),
+                "r_squared": float(
+                    1 - (np.sum(residuals**2) / np.sum((y - y_mean) ** 2))
+                ),
             }
     return fitted_params
 
@@ -319,17 +352,14 @@ def cell5_generate_synthetic_samples(
         if "mean" in params:
             # Sample exogenous variables.
             data[node] = np.random.normal(
-                params["mean"],
-                params["std"],
-                n_samples
+                params["mean"], params["std"], n_samples
             )
         else:
             # Sample endogenous variables using fitted linear model.
             parents = list(G.predecessors(node))
-            X = np.column_stack([
-                np.ones(n_samples),
-                np.array([data[p] for p in parents]).T
-            ])
+            X = np.column_stack(
+                [np.ones(n_samples), np.array([data[p] for p in parents]).T]
+            )
             noise = np.random.normal(0, params["residual_std"], n_samples)
             data[node] = X @ params["coefficients"] + noise
     return pd.DataFrame(data)
@@ -362,8 +392,16 @@ def cell5_compare_distributions(
         axes = [axes]
     # Plot histograms for each variable.
     for ax, col in zip(axes, df_original.columns):
-        ax.hist(df_original[col], alpha=0.5, bins=20, label="Original", color="blue")
-        ax.hist(df_synthetic[col], alpha=0.5, bins=20, label="Synthetic", color="orange")
+        ax.hist(
+            df_original[col], alpha=0.5, bins=20, label="Original", color="blue"
+        )
+        ax.hist(
+            df_synthetic[col],
+            alpha=0.5,
+            bins=20,
+            label="Synthetic",
+            color="orange",
+        )
         ax.set_xlabel(col, fontsize=10)
         ax.set_ylabel("Frequency", fontsize=10)
         ax.legend()
@@ -398,19 +436,23 @@ def cell6_evaluate_model_quality(
     for node in nx.topological_sort(G):
         params = fitted_params[node]
         if "r_squared" in params:
-            metrics.append({
-                "Variable": node,
-                "Type": "linear fit",
-                "R²": params["r_squared"],
-                "Residual Std": params["residual_std"],
-            })
+            metrics.append(
+                {
+                    "Variable": node,
+                    "Type": "linear fit",
+                    "R²": params["r_squared"],
+                    "Residual Std": params["residual_std"],
+                }
+            )
         else:
-            metrics.append({
-                "Variable": node,
-                "Type": "exogenous",
-                "Mean": params["mean"],
-                "Std": params["std"],
-            })
+            metrics.append(
+                {
+                    "Variable": node,
+                    "Type": "exogenous",
+                    "Mean": params["mean"],
+                    "Std": params["std"],
+                }
+            )
     return pd.DataFrame(metrics)
 
 
@@ -447,8 +489,16 @@ def cell7_bootstrap_confidence_intervals(
         idx = np.random.choice(len(df), size=len(df), replace=True)
         df_boot = df.iloc[idx]
         # Compute simple treatment effect.
-        treated = float(df_boot[df_boot[treatment_var] > df_boot[treatment_var].median()][outcome_var].mean())
-        control = float(df_boot[df_boot[treatment_var] <= df_boot[treatment_var].median()][outcome_var].mean())
+        treated = float(
+            df_boot[df_boot[treatment_var] > df_boot[treatment_var].median()][
+                outcome_var
+            ].mean()
+        )
+        control = float(
+            df_boot[df_boot[treatment_var] <= df_boot[treatment_var].median()][
+                outcome_var
+            ].mean()
+        )
         effect = treated - control
         effects.append(effect)
     # Compute point estimate and confidence interval.
@@ -473,13 +523,16 @@ def cell8_custom_mechanism_example() -> Tuple[nx.DiGraph, Dict[str, Callable]]:
     :return: Tuple of (directed acyclic graph, dictionary of mechanism functions)
     """
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("Input", "Output1"),
-        ("Input", "Output2"),
-    ])
+    G.add_edges_from(
+        [
+            ("Input", "Output1"),
+            ("Input", "Output2"),
+        ]
+    )
     mechanisms = {
         "Input": lambda n: np.random.uniform(0, 10, n),
-        "Output1": lambda x: np.sin(x / 5) * 100 + np.random.normal(0, 10, len(x)),
+        "Output1": lambda x: np.sin(x / 5) * 100
+        + np.random.normal(0, 10, len(x)),
         "Output2": lambda x: np.exp(x / 10) + np.random.normal(0, 2, len(x)),
     }
     return G, mechanisms
@@ -490,7 +543,9 @@ def cell8_custom_mechanism_example() -> Tuple[nx.DiGraph, Dict[str, Callable]]:
 # #############################################################################
 
 
-def cell9_system_metrics_dataset(n_samples: int = 200) -> Tuple[pd.DataFrame, nx.DiGraph]:
+def cell9_system_metrics_dataset(
+    n_samples: int = 200,
+) -> Tuple[pd.DataFrame, nx.DiGraph]:
     """
     Generate synthetic system metrics dataset.
 
@@ -506,18 +561,32 @@ def cell9_system_metrics_dataset(n_samples: int = 200) -> Tuple[pd.DataFrame, nx
     # Generate exogenous variable.
     data["CpuUsage"] = np.random.uniform(10, 80, n_samples)
     # Generate endogenous variables following causal structure.
-    data["MemoryUsage"] = 30 + 0.3 * data["CpuUsage"] + np.random.normal(0, 5, n_samples)
-    data["NetworkLatency"] = 10 + 0.2 * data["CpuUsage"] + 0.15 * data["MemoryUsage"] + np.random.normal(0, 2, n_samples)
-    data["ApiLatency"] = 50 + 0.5 * data["CpuUsage"] + 0.3 * data["NetworkLatency"] + np.random.normal(0, 5, n_samples)
+    data["MemoryUsage"] = (
+        30 + 0.3 * data["CpuUsage"] + np.random.normal(0, 5, n_samples)
+    )
+    data["NetworkLatency"] = (
+        10
+        + 0.2 * data["CpuUsage"]
+        + 0.15 * data["MemoryUsage"]
+        + np.random.normal(0, 2, n_samples)
+    )
+    data["ApiLatency"] = (
+        50
+        + 0.5 * data["CpuUsage"]
+        + 0.3 * data["NetworkLatency"]
+        + np.random.normal(0, 5, n_samples)
+    )
     # Define the causal structure.
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("CpuUsage", "MemoryUsage"),
-        ("CpuUsage", "NetworkLatency"),
-        ("MemoryUsage", "NetworkLatency"),
-        ("NetworkLatency", "ApiLatency"),
-        ("CpuUsage", "ApiLatency"),
-    ])
+    G.add_edges_from(
+        [
+            ("CpuUsage", "MemoryUsage"),
+            ("CpuUsage", "NetworkLatency"),
+            ("MemoryUsage", "NetworkLatency"),
+            ("NetworkLatency", "ApiLatency"),
+            ("CpuUsage", "ApiLatency"),
+        ]
+    )
     return pd.DataFrame(data), G
 
 
@@ -526,7 +595,9 @@ def cell9_system_metrics_dataset(n_samples: int = 200) -> Tuple[pd.DataFrame, nx
 # #############################################################################
 
 
-def cell10_medical_dataset(n_samples: int = 300) -> Tuple[pd.DataFrame, nx.DiGraph]:
+def cell10_medical_dataset(
+    n_samples: int = 300,
+) -> Tuple[pd.DataFrame, nx.DiGraph]:
     """
     Generate synthetic medical records dataset.
 
@@ -542,11 +613,17 @@ def cell10_medical_dataset(n_samples: int = 300) -> Tuple[pd.DataFrame, nx.DiGra
     # Generate exogenous variable.
     data["Age"] = np.random.uniform(30, 80, n_samples)
     # Generate confounders.
-    data["BloodPressure"] = 120 + 0.3 * data["Age"] + np.random.normal(0, 10, n_samples)
-    data["Cholesterol"] = 180 + 0.5 * data["Age"] + np.random.normal(0, 20, n_samples)
+    data["BloodPressure"] = (
+        120 + 0.3 * data["Age"] + np.random.normal(0, 10, n_samples)
+    )
+    data["Cholesterol"] = (
+        180 + 0.5 * data["Age"] + np.random.normal(0, 20, n_samples)
+    )
     # Generate confounded treatment assignment.
     treatment_prob = 1 / (1 + np.exp(-(data["Age"] - 60) / 10))
-    data["Treatment"] = (np.random.random(n_samples) < treatment_prob).astype(int)
+    data["Treatment"] = (np.random.random(n_samples) < treatment_prob).astype(
+        int
+    )
     # Generate outcome: depends on age, cholesterol, and treatment.
     data["Outcome"] = (
         50
@@ -557,14 +634,16 @@ def cell10_medical_dataset(n_samples: int = 300) -> Tuple[pd.DataFrame, nx.DiGra
     )
     # Define the causal structure.
     G = nx.DiGraph()
-    G.add_edges_from([
-        ("Age", "BloodPressure"),
-        ("Age", "Cholesterol"),
-        ("Age", "Treatment"),
-        ("BloodPressure", "Outcome"),
-        ("Cholesterol", "Outcome"),
-        ("Treatment", "Outcome"),
-    ])
+    G.add_edges_from(
+        [
+            ("Age", "BloodPressure"),
+            ("Age", "Cholesterol"),
+            ("Age", "Treatment"),
+            ("BloodPressure", "Outcome"),
+            ("Cholesterol", "Outcome"),
+            ("Treatment", "Outcome"),
+        ]
+    )
     return pd.DataFrame(data), G
 
 
@@ -573,7 +652,9 @@ def cell10_medical_dataset(n_samples: int = 300) -> Tuple[pd.DataFrame, nx.DiGra
 # #############################################################################
 
 
-def cell11_demonstrate_unobserved_confounder() -> Tuple[pd.DataFrame, nx.DiGraph]:
+def cell11_demonstrate_unobserved_confounder() -> Tuple[
+    pd.DataFrame, nx.DiGraph
+]:
     """
     Demonstrate the effect of an unobserved confounder.
 
