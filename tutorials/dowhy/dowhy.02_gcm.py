@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -21,11 +21,6 @@
 #   - How to assign and customize causal mechanisms
 #   - How to fit models to data and evaluate their quality
 #   - How to use fitted models for counterfactual reasoning
-# - Learning objectives:
-#   - Understand the components of a GCM (DAG and mechanisms)
-#   - Build and fit an SCM to real data
-#   - Generate synthetic samples from fitted models
-#   - Apply GCMs to root cause analysis and counterfactual reasoning
 
 # %% [markdown]
 # ## Imports
@@ -457,26 +452,3 @@ ax.set_title("Spurious correlation due to unobserved confounder")
 ax.legend()
 plt.tight_layout()
 plt.show()
-
-# %% [markdown]
-# # Cell 12: Putting It All Together
-#
-# - Complete workflow for applying GCMs to a real domain
-#   - **Step 1**: Define causal graph from domain knowledge or discovery
-#   - **Step 2**: Specify or customize causal mechanisms
-#   - **Step 3**: Fit the model to available data
-#   - **Step 4**: Evaluate model quality and identify weak points
-#   - **Step 5**: Generate counterfactual predictions for decision-making
-
-# %%
-# Summarize the complete GCM workflow.
-workflow = utils.cell12_workflow_summary()
-
-print("Complete GCM Workflow:")
-print("=" * 50)
-for step, description in workflow.items():
-    print(f"{step}: {description}")
-
-print("\n" + "=" * 50)
-print("This notebook has demonstrated all five steps.")
-print("You can now apply GCMs to your own domain!")

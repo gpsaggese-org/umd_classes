@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from typing import Callable, Dict, Tuple, Optional, Any
 
+import helpers.hgraphviz as hgraphviz
+
 # #############################################################################
 # Cell 1: What are Graphical Causal Models?
 # #############################################################################
@@ -53,27 +55,13 @@ def cell1_plot_dag(
         - Default: `None` (uses (10, 6))
     :return: None
     """
-    # Create subplots if axes not provided.
-    if ax is None:
-        _, ax = plt.subplots(figsize=figsize or (10, 6))
-    # Compute node positions using spring layout.
-    pos = nx.spring_layout(G, seed=42, k=2, iterations=50)
-    # Draw graph elements: nodes, labels, and edges.
-    nx.draw_networkx_nodes(G, pos, node_color="lightblue", node_size=2000, ax=ax)
-    nx.draw_networkx_labels(G, pos, font_size=10, font_weight="bold", ax=ax)
-    nx.draw_networkx_edges(
+    hgraphviz.plot_causal_dag(
         G,
-        pos,
-        edge_color="gray",
-        arrows=True,
-        arrowsize=20,
-        arrowstyle="-|>",
+        title,
+        mode="networkx_rounded_boxes",
         ax=ax,
-        width=2,
+        figsize=figsize or (10, 6),
     )
-    # Format the plot.
-    ax.set_title(title, fontsize=14, fontweight="bold")
-    ax.axis("off")
 
 
 def cell1_plot_correlation_vs_causation() -> None:
