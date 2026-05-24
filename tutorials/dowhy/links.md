@@ -1,5 +1,6 @@
 * [Foreword](https://www.pywhy.org/dowhy/v0.14/user_guide/foreword.html)  
   * [The need for causal inference](https://www.pywhy.org/dowhy/v0.14/user_guide/foreword.html#the-need-for-causal-inference)  
+
 * [Introduction to DoWhy](https://www.pywhy.org/dowhy/v0.14/user_guide/intro.html)  
   * [Supported causal tasks](https://www.pywhy.org/dowhy/v0.14/user_guide/intro.html#supported-causal-tasks)  
   * [Testing validity of a causal analysis](https://www.pywhy.org/dowhy/v0.14/user_guide/intro.html#testing-validity-of-a-causal-analysis)  
@@ -14,6 +15,7 @@
   * [Refuting a Causal Graph](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_causal_relations/refuting_causal_graph/index.html)  
     * [Performing independence tests](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_causal_relations/refuting_causal_graph/independence_tests.html)  
     * [Graph refutations](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_causal_relations/refuting_causal_graph/refute_causal_structure.html)  
+
 * [Modeling Graphical Causal Models (GCMs)](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/index.html)  
   * [Fitting an SCM to the data](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/index.html#fitting-an-scm-to-the-data)  
   * [Evaluating a fitted SCM](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/index.html#evaluating-a-fitted-scm)  
@@ -24,6 +26,7 @@
     * [Evaluate a GCM](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/model_evaluation.html)  
     * [Customizing Causal Mechanism Assignment](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/customizing_model_assignment.html)  
     * [Estimating Confidence Intervals](https://www.pywhy.org/dowhy/v0.14/user_guide/modeling_gcm/estimating_confidence_intervals.html)  
+
 * [Performing Causal Tasks](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/index.html)  
   * [Estimating Causal Effects](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/estimating_causal_effects/index.html)  
     * [Identifying causal effect](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/estimating_causal_effects/identifying_causal_effect/index.html)  
@@ -43,6 +46,7 @@
     * [Simulating the Impact of Interventions](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/what_if/interventions.html)  
     * [Computing Counterfactuals](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/what_if/counterfactuals.html)  
   * [Predicting outcome for out-of-distribution inputs](https://www.pywhy.org/dowhy/v0.14/user_guide/causal_tasks/causal_prediction/index.html)  
+
 * [Refuting causal estimates](https://www.pywhy.org/dowhy/v0.14/user_guide/refuting_causal_estimates/index.html)  
   * [Refuting Effect Estimates](https://www.pywhy.org/dowhy/v0.14/user_guide/refuting_causal_estimates/refuting_effect_estimates/index.html)  
     * [Refutations based on negative control](https://www.pywhy.org/dowhy/v0.14/user_guide/refuting_causal_estimates/refuting_effect_estimates/index.html#refutations-based-on-negative-control)  
