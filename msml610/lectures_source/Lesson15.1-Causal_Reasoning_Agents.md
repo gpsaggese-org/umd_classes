@@ -596,16 +596,6 @@ digraph CausalAgent {
 ## Safety Through Causal Reasoning
 ## ##############################################################################
 
-// Articles:
-// - 2023, Hendrycks, "Natural and Artificial Intelligence"
-//   https://arxiv.org/abs/2307.04187
-// - 2018, Everitt et al., "Sequential Extensions of Causal Models"
-//   https://arxiv.org/abs/1807.10470
-// - 2017, Soares et al., "Agent Foundations for Artificial General Intelligence"
-//   https://intelligence.org/files/Foundations.pdf
-// - 2016, Amodei et al., "Concrete Problems in AI Safety"
-//   https://arxiv.org/abs/1606.06565
-
 * Causal Constraints on Harmful Outcomes
 
 - **Safety challenge**: prevent AI systems from causing harm
@@ -661,18 +651,6 @@ digraph CausalAgent {
   - Diagnosis: new cohort is older, has comorbidities
   - Causal monitoring: heterogeneous effect analysis reveals drug less effective for elderly
   - Adaptation: patient stratification in treatment recommendations
-
-// Books:
-// - 2018, Pearl et al., "The Book of Why: The New Science of Cause and Effect"
-//   https://www.basicbooks.com/titles/judea-pearl/the-book-of-why/9780465097609/
-// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms" (2nd ed.)
-//   https://mitpress.mit.edu/books/elements-causal-inference
-
-// Articles:
-// - 2021, Schölkopf et al., "Toward Causal Representation Learning"
-//   https://arxiv.org/abs/2102.11107
-// - 2018, Brendel et al., "Decision-based adversarial attacks: reliable attacks against machine learning models"
-//   https://arxiv.org/abs/1712.04248
 
 * Causal Reasoning for Trustworthy AI
 
