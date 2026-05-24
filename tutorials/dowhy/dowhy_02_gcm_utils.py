@@ -38,6 +38,7 @@ def cell1_create_health_dag() -> nx.DiGraph:
     return G
 
 
+# TODO(ai_gp): Remove this function and have callers call directly hgraphviz.plot_causal_dag passing figsize.
 def cell1_plot_dag(
     G: nx.DiGraph,
     title: str = "Causal DAG",
@@ -91,29 +92,13 @@ def cell1_plot_correlation_vs_causation() -> None:
     G.add_edges_from(
         [("Temperature", "Ice Cream"), ("Temperature", "Drownings")]
     )
-    pos = {
-        "Temperature": (0.5, 1),
-        "Ice Cream": (0.2, 0),
-        "Drownings": (0.8, 0),
-    }
-    ax2.set_xlim(-0.1, 1.1)
-    ax2.set_ylim(-0.2, 1.2)
-    nx.draw_networkx_nodes(
-        G, pos, node_color="lightcoral", node_size=2000, ax=ax2
-    )
-    nx.draw_networkx_labels(G, pos, font_size=9, font_weight="bold", ax=ax2)
-    nx.draw_networkx_edges(
+    hgraphviz.plot_causal_dag(
         G,
-        pos,
-        edge_color="gray",
-        arrows=True,
-        arrowsize=20,
-        arrowstyle="-|>",
+        "Causal structure",
+        mode="graphviz",
         ax=ax2,
-        width=2,
+        figsize=(13, 5),
     )
-    ax2.set_title("Causal structure", fontsize=12, fontweight="bold")
-    ax2.axis("off")
     # Display the plots.
     plt.tight_layout()
     plt.show()

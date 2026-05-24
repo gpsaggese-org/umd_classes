@@ -75,22 +75,14 @@ _LOG.info("Notebook initialized")
 # Plot the correlation vs causation example.
 utils.cell1_plot_correlation_vs_causation()
 
-print(
-    "Left: Statistical view sees a correlation between ice cream sales and drownings"
-)
-print("Right: Causal view attributes both to a common cause (temperature)")
-
 # %%
 # Create and visualize a health outcome causal DAG.
+# The DAG encodes the assumption that health depends on age, diet, exercise, and genetics.
 health_dag = utils.cell1_create_health_dag()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 utils.cell1_plot_dag(health_dag, "Health Outcome Causal DAG", ax=ax)
 plt.show()
-
-print(
-    "The DAG encodes the assumption that health depends on age, diet, exercise, and genetics."
-)
 
 # %% [markdown]
 # # Cell 2: Building a Simple GCM by Hand
@@ -106,6 +98,7 @@ print(
 # Create a simple causal graph with manually defined mechanisms.
 gcm, mechanisms = utils.cell2_create_simple_gcm()
 
+# TODO(ai_gp): Call directly hgraphviz.plot_causal_dag passing figsize.
 fig, ax = plt.subplots(figsize=(8, 6))
 utils.cell1_plot_dag(gcm, "Simple GCM: Temperature → Activity → Sales", ax=ax)
 plt.show()
@@ -125,16 +118,19 @@ print(f"\nGenerated {len(df_simple)} samples from the GCM")
 # Visualize relationships between variables.
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 
+# TODO(ai_gp): Factor out in a function in paired utils.
 axes[0].scatter(df_simple["Temperature"], df_simple["Activity"], alpha=0.6)
 axes[0].set_xlabel("Temperature")
 axes[0].set_ylabel("Activity")
 axes[0].set_title("Temperature → Activity")
 
+# TODO(ai_gp): Use the factored out in a function in paired utils.
 axes[1].scatter(df_simple["Temperature"], df_simple["IceCreamSales"], alpha=0.6)
 axes[1].set_xlabel("Temperature")
 axes[1].set_ylabel("Ice Cream Sales")
 axes[1].set_title("Temperature → Sales (direct)")
 
+# TODO(ai_gp): Use the factored out in a function in paired utils.
 axes[2].scatter(df_simple["Activity"], df_simple["IceCreamSales"], alpha=0.6)
 axes[2].set_xlabel("Activity")
 axes[2].set_ylabel("Ice Cream Sales")
@@ -158,7 +154,6 @@ df_sachs, sachs_dag = utils.cell3_load_sample_dataset("sachs")
 
 display(df_sachs.head())
 print(f"\nDataset shape: {df_sachs.shape}")
-print(f"Columns: {list(df_sachs.columns)}")
 
 # %%
 # Automatically assign mechanisms to the DAG.
