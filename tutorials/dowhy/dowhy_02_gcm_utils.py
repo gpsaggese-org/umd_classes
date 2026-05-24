@@ -58,7 +58,7 @@ def cell1_plot_dag(
     hgraphviz.plot_causal_dag(
         G,
         title,
-        mode="networkx_rounded_boxes",
+        mode="graphviz",
         ax=ax,
         figsize=figsize or (10, 6),
     )

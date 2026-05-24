@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -20,12 +20,6 @@
 #   - How to encode domain knowledge as a DAG
 #   - How to learn causal structure from data using different algorithm families
 #   - How to validate and refute hypothesized causal graphs
-# - Learning objectives:
-#   - Specify causal graphs using domain knowledge
-#   - Compare three families of causal discovery algorithms (CDT, dodiscover,
-#     causal-learn)
-#   - Validate causal hypotheses using independence tests
-#   - Refute and stress-test discovered graphs
 
 # %% [markdown]
 # ## Imports

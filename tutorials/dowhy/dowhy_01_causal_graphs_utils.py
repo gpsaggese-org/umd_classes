@@ -78,45 +78,6 @@ def cell1_create_motivating_dags() -> Dict[str, nx.DiGraph]:
     return {"Health": health, "Economics": economics, "Social": social}
 
 
-def cell1_plot_dag(
-    G: nx.DiGraph,
-    title: str,
-    *,
-    node_colors: Optional[Mapping[str, Any]] = None,
-    edge_colors: Optional[Mapping[Tuple[str, str], Any]] = None,
-    ax: Optional[maxes.Axes] = None,
-    figsize: Optional[Tuple[int, int]] = None,
-    pos: Optional[Dict] = None,
-    dpi: int = hgraphviz.FIG_DPI,
-) -> maxes.Axes:
-    """
-    Render a DAG with graphviz for automatic layout.
-
-    Uses graphviz DOT format for professional-looking graphs with automatic
-    positioning. Nodes are rendered as rounded rectangles.
-
-    :param G: Directed acyclic graph to plot
-    :param title: Title displayed on the axes
-    :param node_colors: Optional per-node fill color
-    :param edge_colors: Optional per-edge color
-    :param ax: Existing axes to draw on, else a new figure is created
-    :param figsize: Override the default figure size
-    :param pos: Ignored when using graphviz
-    :param dpi: Resolution in dots per inch (default 96)
-    :return: The axes containing the plot
-    """
-    return hgraphviz.plot_causal_dag(
-        G,
-        title,
-        mode="graphviz",
-        node_colors=node_colors,
-        edge_colors=edge_colors,
-        ax=ax,
-        figsize=figsize,
-        dpi=dpi,
-    )
-
-
 def cell1_plot_correlation_vs_causation(
     *,
     figsize: Optional[Tuple[int, int]] = None,
@@ -160,7 +121,7 @@ def cell1_plot_correlation_vs_causation(
             ("Temperature", "Drownings"),
         ]
     )
-    cell1_plot_dag(causal_g, "True causal structure", ax=axes[1])
+    hgraphviz.plot_causal_dag(causal_g, "True causal structure", mode="graphviz", ax=axes[1])
     fig.tight_layout()
     plt.show()
 
@@ -192,7 +153,7 @@ def cell1_print_and_plot_motivating_dags(
     fig.tight_layout()
     for ax, (name, G) in zip(axes, domain_dags.items()):
         ax.margins(0.2)
-        cell1_plot_dag(G, name, ax=ax)
+        hgraphviz.plot_causal_dag(G, name, mode="graphviz", ax=ax)
     plt.show()
 
 
@@ -235,7 +196,7 @@ def cell1_interactive_edge_toggle(base_graph: nx.DiGraph) -> None:
                 else "Current graph (NOT a DAG)"
             )
             fig, ax = plt.subplots(figsize=(5, 4))
-            cell1_plot_dag(new_graph, title, ax=ax)
+            hgraphviz.plot_causal_dag(new_graph, title, mode="graphviz", ax=ax)
             plt.show()
 
     for cb in checkboxes.values():
@@ -509,9 +470,10 @@ def cell3_interactive_hypothesis_comparison(
         with output:
             output.clear_output(wait=True)
             fig, ax = plt.subplots(figsize=(6, 4))
-            cell1_plot_dag(
+            hgraphviz.plot_causal_dag(
                 G,
                 f"{choice}\nMean p-value at non-edges: {score:.3f}",
+                mode="graphviz",
                 ax=ax,
             )
             plt.show()
@@ -723,15 +685,16 @@ def cell5_plot_discovery_comparison(
     # Share node positions across both panels for visual alignment.
     pos = nx.kamada_kawai_layout(true_g)
     fig, axes = plt.subplots(1, 2, figsize=figsize)
-    cell1_plot_dag(true_g, "Ground truth", ax=axes[0], pos=pos)
+    hgraphviz.plot_causal_dag(true_g, "Ground truth", mode="graphviz", ax=axes[0], pos=pos)
     # Color discovered edges by whether they exist in the true graph.
     edge_colors = {
         (u, v): "#33A02C" if true_g.has_edge(u, v) else "#E31A1C"
         for u, v in discovered_g.edges()
     }
-    cell1_plot_dag(
+    hgraphviz.plot_causal_dag(
         discovered_g,
         "Discovered",
+        mode="graphviz",
         ax=axes[1],
         pos=pos,
         edge_colors=edge_colors,
@@ -824,8 +787,8 @@ def cell6_plot_method_comparison(
         figsize = (14, 5)
     pos = nx.kamada_kawai_layout(g1)
     fig, axes = plt.subplots(1, 2, figsize=figsize)
-    cell1_plot_dag(g1, labels[0], ax=axes[0], pos=pos)
-    cell1_plot_dag(g2, labels[1], ax=axes[1], pos=pos)
+    hgraphviz.plot_causal_dag(g1, labels[0], mode="graphviz", ax=axes[0], pos=pos)
+    hgraphviz.plot_causal_dag(g2, labels[1], mode="graphviz", ax=axes[1], pos=pos)
     fig.tight_layout()
     plt.show()
     # Build an edge agreement summary.
@@ -976,15 +939,17 @@ def cell7_interactive_causal_learn_widget(
                 # Show three subplots: discovered, ground truth, and metrics.
                 fig, axes = plt.subplots(1, 3, figsize=(16, 5))
                 # Discovered graph.
-                cell1_plot_dag(
+                hgraphviz.plot_causal_dag(
                     G,
                     f"Discovered ({choice})",
+                    mode="graphviz",
                     ax=axes[0],
                 )
                 # Ground truth graph.
-                cell1_plot_dag(
+                hgraphviz.plot_causal_dag(
                     true_dag,
                     "Ground Truth",
+                    mode="graphviz",
                     ax=axes[1],
                 )
                 # Metrics as text box.
@@ -1008,9 +973,10 @@ def cell7_interactive_causal_learn_widget(
                 fig.tight_layout()
             else:
                 fig, ax = plt.subplots(figsize=(7, 5))
-                cell1_plot_dag(
+                hgraphviz.plot_causal_dag(
                     G,
                     f"causal-learn ({choice}) discovered graph",
+                    mode="graphviz",
                     ax=ax,
                 )
             plt.show()
@@ -1073,9 +1039,10 @@ def cell8_plot_consensus_graph(
         e: cmap(0.3 + 0.7 * (s / n_methods)) for e, s in support.items()
     }
     fig, ax = plt.subplots(figsize=figsize)
-    cell1_plot_dag(
+    hgraphviz.plot_causal_dag(
         consensus,
         "Consensus graph (darker edges = more methods agree)",
+        mode="graphviz",
         ax=ax,
         edge_colors=edge_colors,
     )
@@ -1353,9 +1320,10 @@ def cell10_plot_annotated_graph(
         for n in G.nodes()
     }
     fig, ax = plt.subplots(figsize=figsize)
-    cell1_plot_dag(
+    hgraphviz.plot_causal_dag(
         G,
         "Refutation annotated graph (red = more violations)",
+        mode="graphviz",
         ax=ax,
         node_colors=node_colors,
     )
@@ -1441,9 +1409,10 @@ def cell11_interactive_sensitivity_widget(df: pd.DataFrame) -> None:
         with output:
             output.clear_output(wait=True)
             fig, ax = plt.subplots(figsize=(7, 5))
-            cell1_plot_dag(
+            hgraphviz.plot_causal_dag(
                 G,
                 f"Discovery with N={n_slider.value}, alpha={alpha_slider.value:.3f}",
+                mode="graphviz",
                 ax=ax,
             )
             plt.show()
