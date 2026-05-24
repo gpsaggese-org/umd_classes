@@ -27,13 +27,14 @@ from scipy import stats
 
 _LOG = logging.getLogger(__name__)
 
+# TODO(gp): Move this code somewhere in helpers
+
 # Default figure size for DAG visualizations
 _FIG_SIZE = (10, 8)
 
 # Default DPI for image rendering
+#_FIG_DPI = 96
 _FIG_DPI = 150
-
-# TODO(gp): Move this code somewhere in helpers
 
 
 def _graph_to_graphviz_dot(
@@ -114,12 +115,10 @@ def plot_dag_with_graphviz(
     )
     # Render to PNG with specified DPI.
     g = graphviz.Source(dot_str, format="png")
+    # TODO(gp): This doesn't work.
+    # g.graph_attr["dpi"] = "300"
     png_data = g.pipe(format="png")
     img = Image.open(io.BytesIO(png_data))
-    # Adjust image size based on DPI (default graphviz uses 96 DPI).
-    if dpi != 96:
-        new_size = (int(img.width * dpi / 96), int(img.height * dpi / 96))
-        img = img.resize(new_size, Image.Resampling.LANCZOS)
     if ax is not None:
         ax.imshow(img)
         ax.axis("off")
@@ -415,6 +414,37 @@ def cell1_plot_correlation_vs_causation(
     )
     cell1_plot_dag(causal_g, "True causal structure", ax=axes[1])
     fig.tight_layout()
+    plt.show()
+
+
+def cell1_print_and_plot_motivating_dags(
+    domain_dags: Dict[str, nx.DiGraph],
+    figsize: Optional[Tuple[int, int]] = None,
+) -> None:
+    """
+    Print the edges of motivating DAGs and visualize them side-by-side.
+
+    Shows how domain knowledge is encoded as a DAG with explicit edges,
+    demonstrating that different domains have different causal structures.
+
+    :param domain_dags: Mapping from domain name to motivating DAG
+    :param figsize: Override the default figure size
+    """
+    if figsize is None:
+        figsize = (15, 4)
+    # Print the DAGs to show how they are made.
+    for domain_name, G in domain_dags.items():
+        print(f"{domain_name} domain DAG edges:")
+        for u, v in G.edges():
+            print(f"  {u} -> {v}")
+        print()
+
+    # Plot each DAG with consistent styling and layout.
+    fig, axes = plt.subplots(1, 3, figsize=figsize)
+    fig.tight_layout()
+    for ax, (name, G) in zip(axes, domain_dags.items()):
+        ax.margins(0.2)
+        cell1_plot_dag(G, name, ax=ax)
     plt.show()
 
 

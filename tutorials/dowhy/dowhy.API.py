@@ -72,6 +72,12 @@ _LOG.info("Notebook initialized")
 #     link
 
 # %%
+# In the function the process generating the data is a set of equations
+# representing the causal DAG.
+
+# #dauti.cell1_plot_correlation_vs_causation??
+
+# %%
 # Plot a correlation-vs-causation example with the implied DAG.
 dauti.cell1_plot_correlation_vs_causation()
 
@@ -79,20 +85,8 @@ dauti.cell1_plot_correlation_vs_causation()
 # Build three motivating DAGs across health, economics, and social domains.
 domain_dags = dauti.cell1_create_motivating_dags()
 
-# Print the DAGs to show how they are made.
-for domain_name, G in domain_dags.items():
-    print(f"{domain_name} domain DAG edges:")
-    for u, v in G.edges():
-        print(f"  {u} -> {v}")
-    print()
-
-# The function cell1_plot_dag() plots a DAG with consistent styling and layout.
-fig, axes = plt.subplots(1, 3, figsize=(15, 4))
-fig.tight_layout()
-for ax, (name, G) in zip(axes, domain_dags.items()):
-    ax.margins(0.2)
-    dauti.cell1_plot_dag(G, name, ax=ax)
-plt.show()
+# Print and plot the DAGs to show how domain knowledge is encoded as a structure.
+dauti.cell1_print_and_plot_motivating_dags(domain_dags)
 # Each domain encodes domain knowledge as a DAG that constrains plausible
 # causal mechanisms.
 
@@ -113,13 +107,6 @@ dauti.cell1_interactive_edge_toggle(domain_dags["Health"])
 #   - $\mathit{Cholesterol}$, $\mathit{BloodPressure}$, $\mathit{HeartDisease}$
 
 # %%
-# Generate the synthetic healthcare data.
-df_health = dauti.cell2_generate_healthcare_data(n_samples=1000)
-
-print(f"Generated {len(df_health)} samples with {df_health.shape[1]} variables")
-df_health.head()
-
-# %%
 # Build the expert DAG that captures the true data-generating process.
 true_dag = dauti.cell2_build_domain_dag()
 
@@ -130,6 +117,16 @@ plt.show()
 # %%
 # Print the graph structure as an edge list table for inspection.
 dauti.cell2_describe_graph(true_dag)
+
+# %%
+# #dauti.cell2_generate_healthcare_data??
+
+# %%
+# Generate the synthetic healthcare data.
+df_health = dauti.cell2_generate_healthcare_data(n_samples=1000)
+
+print(f"Generated {len(df_health)} samples with {df_health.shape[1]} variables")
+df_health.head()
 
 # %% [markdown]
 # # Cell 3: Limitations of domain knowledge alone
@@ -144,6 +141,10 @@ dauti.cell2_describe_graph(true_dag)
 # Build candidate hypothesis graphs and score them against the data.
 candidates = dauti.cell3_make_candidate_graphs()
 sub_df = pd.DataFrame(df_health[["Exercise", "Diet", "Cholesterol", "BloodPressure"]])
+# Score each candidate graph by testing whether its implied conditional
+# independencies hold in the data. The score is the mean p-value at non-edges
+# (pairs not directly connected in the DAG). Higher scores indicate the graph
+# is more consistent with the data's conditional independence structure.
 scores = {
     name: dauti.cell3_score_graph_against_data(G, sub_df)
     for name, G in candidates.items()
@@ -155,7 +156,10 @@ scores_df = pd.DataFrame(
         for name, score in scores.items()
     ]
 )
-print(scores_df)
+display(scores_df)
+
+# %%
+# #dauti.cell3_score_graph_against_data??
 
 # %%
 # Interactive widget: pick a hypothesis and inspect its data-consistency score.
@@ -177,10 +181,6 @@ dauti.cell3_interactive_hypothesis_comparison(sub_df, candidates)
 # %%
 # Show the comparison table of algorithm families.
 dauti.cell4_algorithm_comparison_table()
-
-# %%
-# Visualize the canonical causal discovery workflow.
-dauti.cell4_plot_workflow_diagram(figsize=(10, 3))
 
 # %% [markdown]
 # # Cell 5: Causal discovery with CDT
