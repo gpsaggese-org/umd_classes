@@ -47,7 +47,13 @@ import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebook
 
 # Notebook-specific utilities.
-import dowhy_01_gcm_utils as utils
+import dowhy_02_gcm_utils as utils
+
+try:
+    from IPython.display import display
+except ImportError:
+    def display(obj):
+        print(obj)
 
 _LOG = logging.getLogger(__name__)
 
