@@ -236,50 +236,6 @@ def plot_dag_with_networkx(
     nx.draw_networkx_edges(G, pos, **edge_kwargs)
 
 
-def plot_dag(
-    G: nx.DiGraph,
-    title: str,
-    *,
-    mode: str = "graphviz",
-    node_colors: Optional[Mapping[str, Any]] = None,
-    edge_colors: Optional[Mapping[Tuple[str, str], Any]] = None,
-    ax: Optional[maxes.Axes] = None,
-    pos: Optional[Dict] = None,
-    dpi: int = _FIG_DPI,
-) -> None:
-    """
-    Render a DAG using the specified visualization mode.
-
-    Supports three visualization backends: graphviz (automatic layout, highest
-    quality), networkx_rounded_boxes (fallback with rounded rectangles), and
-    networkx (simple NetworkX rendering).
-
-    :param G: Directed acyclic graph to plot
-    :param title: Title displayed on the axes
-    :param mode: One of "graphviz", "networkx_rounded_boxes", or "networkx"
-    :param node_colors: Optional per-node fill color (mapping)
-    :param edge_colors: Optional per-edge color (mapping)
-    :param ax: Matplotlib axes to draw on
-    :param pos: Node position dictionary (used only with "networkx" mode)
-    :param dpi: Resolution in dots per inch (default 96, used only with graphviz)
-    :raises ValueError: If mode is not one of the supported options
-    """
-    if mode == "graphviz":
-        plot_dag_with_graphviz(
-            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax, dpi=dpi
-        )
-    elif mode == "networkx_rounded_boxes":
-        plot_dag_with_networkx_rounded_boxes(
-            G, title, node_colors=node_colors, edge_colors=edge_colors, ax=ax
-        )
-    elif mode == "networkx":
-        if pos is None:
-            pos = nx.spring_layout(G, k=2, iterations=50, seed=42)
-        plot_dag_with_networkx(G, pos, node_color=node_colors, edge_color=edge_colors, ax=ax)
-    else:
-        raise ValueError(f"Unknown mode: {mode}")
-
-
 # #############################################################################
 # Cell 1: Introduction to Causal Graphs
 # #############################################################################
@@ -808,40 +764,6 @@ def cell4_algorithm_comparison_table() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def cell4_plot_workflow_diagram(
-    *,
-    figsize: Optional[Tuple[int, int]] = None,
-) -> None:
-    """
-    Visualize the generic causal discovery pipeline as a flow diagram.
-
-    :param figsize: Override the default figure size
-    """
-    if figsize is None:
-        figsize = (12, 4)
-    workflow = nx.DiGraph()
-    workflow.add_edges_from(
-        [
-            ("Data", "Independence tests"),
-            ("Independence tests", "Skeleton"),
-            ("Skeleton", "Orientation rules"),
-            ("Orientation rules", "Causal graph"),
-        ]
-    )
-    fig, ax = plt.subplots(figsize=figsize)
-    node_colors = {
-        n: "#FDB462" for n in workflow.nodes()
-    }
-    plot_dag_with_graphviz(
-        workflow,
-        "Generic causal discovery workflow",
-        node_colors=node_colors,
-        ax=ax,
-    )
-    fig.tight_layout()
-    plt.show()
-
-
 # #############################################################################
 # Cell 5: Causal Discovery with CDT
 # #############################################################################
@@ -964,6 +886,24 @@ def cell5_compute_graph_metrics(
         "fp": fp,
         "fn": fn,
     }
+
+
+def _print_method_metrics(
+    method_name: str,
+    metrics: Dict[str, float],
+) -> None:
+    """
+    Print discovery metrics for a single method in a clean format.
+
+    :param method_name: Name of the discovery method
+    :param metrics: Dictionary from `cell5_compute_graph_metrics()`
+    """
+    print(f"{method_name}:")
+    for k, v in metrics.items():
+        if isinstance(v, float):
+            print(f"  {k}: {v:.3f}")
+        else:
+            print(f"  {k}: {v}")
 
 
 def cell5_plot_discovery_comparison(
@@ -1200,12 +1140,16 @@ def cell7_run_fci_algorithm(
 def cell7_interactive_causal_learn_widget(
     df: pd.DataFrame,
     *,
+    true_dag: Optional[nx.DiGraph] = None,
     variable_order: Optional[List[str]] = None,
 ) -> None:
     """
     Render a widget to switch between PC, GES, and FCI style discovery.
 
+    Shows the discovered graph, ground truth (if provided), and metrics.
+
     :param df: Observed data
+    :param true_dag: Optional ground truth DAG to display alongside discovered graph
     :param variable_order: Optional topological order passed to GES
     """
     algorithm = widgets.Dropdown(
@@ -1234,12 +1178,45 @@ def cell7_interactive_causal_learn_widget(
             G = cell7_run_fci_algorithm(df, alpha=alpha)
         with output:
             output.clear_output(wait=True)
-            fig, ax = plt.subplots(figsize=(7, 5))
-            cell1_plot_dag(
-                G,
-                f"causal-learn ({choice}) discovered graph",
-                ax=ax,
-            )
+            if true_dag is not None:
+                # Show three subplots: discovered, ground truth, and metrics.
+                fig, axes = plt.subplots(1, 3, figsize=(16, 5))
+                # Discovered graph.
+                cell1_plot_dag(
+                    G,
+                    f"Discovered ({choice})",
+                    ax=axes[0],
+                )
+                # Ground truth graph.
+                cell1_plot_dag(
+                    true_dag,
+                    "Ground Truth",
+                    ax=axes[1],
+                )
+                # Metrics as text box.
+                metrics = cell5_compute_graph_metrics(true_dag, G)
+                metrics_text = f"{choice} vs Ground Truth\n"
+                metrics_text += f"Precision: {metrics['precision']:.3f}\n"
+                metrics_text += f"Recall: {metrics['recall']:.3f}\n"
+                metrics_text += f"F1: {metrics['f1']:.3f}\n"
+                metrics_text += f"TP: {metrics['tp']}, FP: {metrics['fp']}, "
+                metrics_text += f"FN: {metrics['fn']}"
+                axes[2].text(
+                    0.1, 0.5, metrics_text,
+                    fontsize=11,
+                    family="monospace",
+                    verticalalignment="center",
+                    bbox=dict(boxstyle="round", facecolor="#F0F0F0", alpha=0.8),
+                )
+                axes[2].axis("off")
+                fig.tight_layout()
+            else:
+                fig, ax = plt.subplots(figsize=(7, 5))
+                cell1_plot_dag(
+                    G,
+                    f"causal-learn ({choice}) discovered graph",
+                    ax=ax,
+                )
             plt.show()
 
     algorithm.observe(_update, names="value")
@@ -1331,6 +1308,52 @@ def cell8_agreement_table(
         row["Support"] = sum(1 for name in method_names if row[name] == "Y")
         rows.append(row)
     return pd.DataFrame(rows).sort_values("Support", ascending=False)
+
+
+def cell8_plot_method_statistics(
+    true_g: nx.DiGraph,
+    graphs: Dict[str, nx.DiGraph],
+    *,
+    figsize: Optional[Tuple[int, int]] = None,
+) -> pd.DataFrame:
+    """
+    Compute and visualize metrics for all discovery methods side-by-side.
+
+    Computes precision, recall, and F1 for each method and displays them
+    in a dataframe and a bar plot for easy comparison.
+
+    :param true_g: Ground-truth DAG
+    :param graphs: Mapping from method name to discovered DAG
+    :param figsize: Override the default figure size
+    :return: DataFrame with metrics for each method
+    """
+    if figsize is None:
+        figsize = (12, 5)
+    rows = []
+    for name, G in graphs.items():
+        metrics = cell5_compute_graph_metrics(true_g, G)
+        row = {"Method": name}
+        row.update(metrics)
+        rows.append(row)
+    metrics_df = pd.DataFrame(rows)
+    display(metrics_df)
+    # Plot the key metrics (precision, recall, F1) for comparison.
+    fig, ax = plt.subplots(figsize=figsize)
+    x = np.arange(len(metrics_df))
+    width = 0.25
+    ax.bar(x - width, metrics_df["precision"], width, label="Precision")
+    ax.bar(x, metrics_df["recall"], width, label="Recall")
+    ax.bar(x + width, metrics_df["f1"], width, label="F1")
+    ax.set_xlabel("Method")
+    ax.set_ylabel("Score")
+    ax.set_title("Discovery Method Performance Comparison")
+    ax.set_xticks(x)
+    ax.set_xticklabels(metrics_df["Method"], rotation=45, ha="right")
+    ax.legend()
+    ax.set_ylim(0, 1)
+    fig.tight_layout()
+    plt.show()
+    return metrics_df
 
 
 # #############################################################################

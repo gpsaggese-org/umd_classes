@@ -185,6 +185,10 @@
 - msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
 **Tutorials**
+- pywhy
+- causal-learn
+- CDT
+- LiNGAM
 
 **Related packages**
 - causal-learn (3,200): Causal discovery and inference toolkit

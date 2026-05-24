@@ -103,7 +103,7 @@ dauti.cell1_interactive_edge_toggle(domain_dags["Health"])
 # - We simulate a healthcare dataset with a known DAG so we can later check
 #   whether discovery methods recover it
 # - Variables in the simulated dataset:
-#   - $\mathit{Age}$, $\mathit{Smoking}$, $\mathit{Exercise}$, $\mathit{Diet}$
+#   - $\mathit{Age}$, $\mathit{AirPollution}$, $\mathit{Exercise}$, $\mathit{Diet}$
 #   - $\mathit{Cholesterol}$, $\mathit{BloodPressure}$, $\mathit{HeartDisease}$
 
 # %%
@@ -171,9 +171,9 @@ dauti.cell3_interactive_hypothesis_comparison(sub_df, candidates)
 # # Cell 4: Causal discovery algorithms overview
 #
 # - Three main library families dominate practical causal discovery
-#   - **CDT** (Causal Discovery Toolbox): score-based and hybrid methods
-#   - **dodiscover**: PyWhy's constraint-based discovery framework
-#   - **causal-learn**: a broad library covering PC, FCI, GES, LiNGAM
+#   - `CDT` (Causal Discovery Toolbox): score-based and hybrid methods
+#   - `dodiscover`: PyWhy's constraint-based discovery framework
+#   - `causal-learn`: a broad library covering PC, FCI, GES, LiNGAM
 # - All approaches share a common workflow: data $\to$ independence tests $\to$
 #   skeleton $\to$ orientation rules $\to$ causal graph
 # - They differ in assumptions, computational complexity, and output type
@@ -197,7 +197,7 @@ dauti.cell4_algorithm_comparison_table()
 # Run a CDT-style discovery on the healthcare data.
 variable_order = [
     "Age",
-    "Smoking",
+    "AirPollution",
     "Exercise",
     "Diet",
     "Cholesterol",
@@ -226,8 +226,8 @@ dauti.cell5_plot_discovery_comparison(true_dag, cdt_dag, figsize=(14, 5))
 # %% [markdown]
 # # Cell 6: Causal discovery with dodiscover
 #
-# - dodiscover follows the constraint-based PC family
-# - The simplified dodiscover-style discovery here:
+# - `dodiscover` follows the constraint-based PC family
+# - The simplified `dodiscover`-style discovery here:
 #   - Builds the skeleton via conditional independence tests
 #   - Records separating sets for non-adjacent pairs
 #   - Orients v-structures using the rule: if $A - B - C$ are unshielded and $B$
@@ -244,19 +244,14 @@ for k, v in dodiscover_metrics.items():
     print(f"  {k}: {v:.3f}" if isinstance(v, float) else f"  {k}: {v}")
 
 # %%
-# Side-by-side comparison and agreement table with CDT.
-agreement_cdt_dodiscover = dauti.cell6_plot_method_comparison(
-    cdt_dag,
-    dodiscover_dag,
-    labels=("CDT-style", "dodiscover-style"),
-    figsize=(14, 5),
-)
-print(agreement_cdt_dodiscover)
+# Visualize the side-by-side comparison.
+dauti.cell5_plot_discovery_comparison(true_dag, dodiscover_dag, figsize=(14, 5))
+# Green edges are correctly recovered; red edges are spurious.
 
 # %% [markdown]
 # # Cell 7: Causal discovery with causal-learn
 #
-# - causal-learn provides several algorithm flavors:
+# - `causal-learn` provides several algorithm flavors:
 #   - **PC**: constraint-based, returns a CPDAG
 #   - **GES**: greedy equivalence search, score-based
 #   - **FCI**: handles potential latent confounders, returns a PAG
@@ -264,20 +259,53 @@ print(agreement_cdt_dodiscover)
 #   compare the resulting graphs
 
 # %%
-# Run PC, GES, and FCI style discovery procedures.
+# Run PC algorithm.
 pc_dag = dauti.cell7_run_pc_algorithm(df_health, alpha=0.05)
+
+# Compute metrics.
+pc_metrics = dauti.cell5_compute_graph_metrics(true_dag, pc_dag)
+
+dauti._print_method_metrics("causal-learn PC vs ground truth", pc_metrics)
+
+# %%
+# Visualize the side-by-side comparison.
+dauti.cell5_plot_discovery_comparison(true_dag, pc_dag, figsize=(14, 5))
+# Green edges are correctly recovered; red edges are spurious.
+
+# %%
+# Run GES algorithm.
 ges_dag = dauti.cell7_run_ges_algorithm(df_health, variable_order=variable_order)
+
+# Compute metrics.
+ges_metrics = dauti.cell5_compute_graph_metrics(true_dag, ges_dag)
+
+dauti._print_method_metrics("causal-learn GES vs ground truth", ges_metrics)
+
+# %%
+# Visualize the side-by-side comparison.
+dauti.cell5_plot_discovery_comparison(true_dag, ges_dag, figsize=(14, 5))
+# Green edges are correctly recovered; red edges are spurious.
+
+# %%
+# Run FCI algorithm.
 fci_dag = dauti.cell7_run_fci_algorithm(df_health, alpha=0.05)
 
-print("Edges discovered:")
-print(f"  PC: {len(pc_dag.edges())}")
-print(f"  GES: {len(ges_dag.edges())}")
-print(f"  FCI: {len(fci_dag.edges())}")
+# Compute metrics.
+fci_metrics = dauti.cell5_compute_graph_metrics(true_dag, fci_dag)
+
+dauti._print_method_metrics("causal-learn FCI vs ground truth", fci_metrics)
+
+# %%
+# Visualize the side-by-side comparison.
+dauti.cell5_plot_discovery_comparison(true_dag, fci_dag, figsize=(14, 5))
+# Green edges are correctly recovered; red edges are spurious.
 
 # %%
 # Interactive widget to switch among causal-learn algorithms.
+# Shows discovered graph, ground truth, and metrics side-by-side.
 dauti.cell7_interactive_causal_learn_widget(
     df_health,
+    true_dag=true_dag,
     variable_order=variable_order,
 )
 
@@ -288,6 +316,20 @@ dauti.cell7_interactive_causal_learn_widget(
 #   - Which edges did every method find? Those are high-confidence
 #   - Which edges only appear in one method? Those are likely fragile
 # - The consensus graph colors each edge by how many methods agree
+
+# %%
+# Plot the statistics for all the methods in a single dataframe.
+# This shows precision, recall, and F1 for easy comparison.
+method_stats = dauti.cell8_plot_method_statistics(
+    true_dag,
+    {
+        "CDT-style": cdt_dag,
+        "dodiscover-style": dodiscover_dag,
+        "causal-learn PC": pc_dag,
+        "causal-learn GES": ges_dag,
+        "causal-learn FCI": fci_dag,
+    },
+)
 
 # %%
 # Aggregate the discovered graphs and build a consensus.
@@ -338,7 +380,7 @@ print(implied_tests)
 # %%
 # Interactive widget: pick variables and a conditioning set.
 dauti.cell9_interactive_independence_widget(df_health)
-# Try $Cholesterol$ vs $BloodPressure$ given $\{Age, Smoking\}$ to see how
+# Try $Cholesterol$ vs $BloodPressure$ given $\{Age, Exercise\}$ to see how
 # conditioning changes apparent dependence.
 
 # %% [markdown]
