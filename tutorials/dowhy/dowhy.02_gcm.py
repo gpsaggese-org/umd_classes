@@ -40,6 +40,7 @@ import numpy as np
 # Helpers imports.
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebook
+import helpers.hgraphviz as hgraphviz
 
 # Notebook-specific utilities.
 import dowhy_02_gcm_utils as utils
@@ -80,9 +81,12 @@ utils.cell1_plot_correlation_vs_causation()
 # The DAG encodes the assumption that health depends on age, diet, exercise, and genetics.
 health_dag = utils.cell1_create_health_dag()
 
-fig, ax = plt.subplots(figsize=(8, 6))
-utils.cell1_plot_dag(health_dag, "Health Outcome Causal DAG", ax=ax)
-plt.show()
+_ = hgraphviz.plot_causal_dag(
+    health_dag,
+    "Health Outcome Causal DAG",
+    mode="graphviz",
+    figsize=(8, 6)
+)
 
 # %% [markdown]
 # # Cell 2: Building a Simple GCM by Hand
@@ -98,14 +102,12 @@ plt.show()
 # Create a simple causal graph with manually defined mechanisms.
 gcm, mechanisms = utils.cell2_create_simple_gcm()
 
-# TODO(ai_gp): Call directly hgraphviz.plot_causal_dag passing figsize.
-fig, ax = plt.subplots(figsize=(8, 6))
-utils.cell1_plot_dag(gcm, "Simple GCM: Temperature → Activity → Sales", ax=ax)
-plt.show()
-
-print("Causal edges:")
-for edge in gcm.edges():
-    print(f"  {edge[0]} → {edge[1]}")
+_ = hgraphviz.plot_causal_dag(
+    gcm,
+    "Simple GCM: Temperature → Activity → Sales",
+    mode="graphviz",
+    figsize=(6, 8),
+)
 
 # %%
 # Generate samples from the model.
@@ -118,23 +120,32 @@ print(f"\nGenerated {len(df_simple)} samples from the GCM")
 # Visualize relationships between variables.
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 
-# TODO(ai_gp): Factor out in a function in paired utils.
-axes[0].scatter(df_simple["Temperature"], df_simple["Activity"], alpha=0.6)
-axes[0].set_xlabel("Temperature")
-axes[0].set_ylabel("Activity")
-axes[0].set_title("Temperature → Activity")
+utils.cell1_plot_relationship(
+    axes[0],
+    df_simple["Temperature"],
+    df_simple["Activity"],
+    "Temperature",
+    "Activity",
+    "Temperature → Activity",
+)
 
-# TODO(ai_gp): Use the factored out in a function in paired utils.
-axes[1].scatter(df_simple["Temperature"], df_simple["IceCreamSales"], alpha=0.6)
-axes[1].set_xlabel("Temperature")
-axes[1].set_ylabel("Ice Cream Sales")
-axes[1].set_title("Temperature → Sales (direct)")
+utils.cell1_plot_relationship(
+    axes[1],
+    df_simple["Temperature"],
+    df_simple["IceCreamSales"],
+    "Temperature",
+    "Ice Cream Sales",
+    "Temperature → Sales (direct)",
+)
 
-# TODO(ai_gp): Use the factored out in a function in paired utils.
-axes[2].scatter(df_simple["Activity"], df_simple["IceCreamSales"], alpha=0.6)
-axes[2].set_xlabel("Activity")
-axes[2].set_ylabel("Ice Cream Sales")
-axes[2].set_title("Activity → Sales")
+utils.cell1_plot_relationship(
+    axes[2],
+    df_simple["Activity"],
+    df_simple["IceCreamSales"],
+    "Activity",
+    "Ice Cream Sales",
+    "Activity → Sales",
+)
 
 plt.tight_layout()
 plt.show()
@@ -168,7 +179,13 @@ for node, mech in mechanisms_auto.items():
 # %%
 # Visualize the Sachs dataset causal structure.
 fig, ax = plt.subplots(figsize=(10, 8))
-utils.cell1_plot_dag(sachs_dag, "Sachs et al. Protein Signaling Network", ax=ax)
+hgraphviz.plot_causal_dag(
+    sachs_dag,
+    "Sachs et al. Protein Signaling Network",
+    mode="graphviz",
+    ax=ax,
+    figsize=(10, 8),
+)
 plt.show()
 
 # %% [markdown]

@@ -20,6 +20,31 @@ import helpers.hgraphviz as hgraphviz
 # #############################################################################
 
 
+def cell1_plot_relationship(
+    ax: Axes,
+    x_data: Any,
+    y_data: Any,
+    x_label: str,
+    y_label: str,
+    title: str,
+) -> None:
+    """
+    Plot a scatter plot showing relationship between two variables.
+
+    :param ax: Matplotlib axes to plot on
+    :param x_data: X-axis data
+    :param y_data: Y-axis data
+    :param x_label: Label for X-axis
+    :param y_label: Label for Y-axis
+    :param title: Title for the plot
+    :return: None
+    """
+    ax.scatter(x_data, y_data, alpha=0.6)
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.set_title(title)
+
+
 def cell1_create_health_dag() -> nx.DiGraph:
     """
     Create a simple health causal DAG.
@@ -36,33 +61,6 @@ def cell1_create_health_dag() -> nx.DiGraph:
         ]
     )
     return G
-
-
-# TODO(ai_gp): Remove this function and have callers call directly hgraphviz.plot_causal_dag passing figsize.
-def cell1_plot_dag(
-    G: nx.DiGraph,
-    title: str = "Causal DAG",
-    ax: Optional[Axes] = None,
-    figsize: Optional[Tuple[float, float]] = None,
-) -> None:
-    """
-    Plot a directed acyclic graph.
-
-    :param G: Directed acyclic graph to visualize
-    :param title: Title for the plot
-    :param ax: Matplotlib axes to plot on
-        - Default: `None` (creates new subplots)
-    :param figsize: Figure size (width, height)
-        - Default: `None` (uses (10, 6))
-    :return: None
-    """
-    hgraphviz.plot_causal_dag(
-        G,
-        title,
-        mode="graphviz",
-        ax=ax,
-        figsize=figsize or (10, 6),
-    )
 
 
 def cell1_plot_correlation_vs_causation() -> None:

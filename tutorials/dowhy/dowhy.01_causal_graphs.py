@@ -40,9 +40,10 @@ import seaborn as sns
 # Helpers imports.
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebook
+import helpers.hgraphviz as hgraphviz
 
 # Notebook-specific utilities.
-import dowhy_API_utils as dauti
+import dowhy_01_causal_graphs_utils as dauti
 
 _LOG = logging.getLogger(__name__)
 
@@ -105,7 +106,13 @@ dauti.cell1_interactive_edge_toggle(domain_dags["Health"])
 true_dag = dauti.cell2_build_domain_dag()
 
 fig, ax = plt.subplots(figsize=(10, 7))
-dauti.cell1_plot_dag(true_dag, "Expert-specified healthcare DAG", ax=ax)
+hgraphviz.plot_causal_dag(
+    true_dag,
+    "Expert-specified healthcare DAG",
+    mode="graphviz",
+    ax=ax,
+    figsize=(10, 7),
+)
 plt.show()
 
 # %%
