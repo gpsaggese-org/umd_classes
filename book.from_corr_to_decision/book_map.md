@@ -15,6 +15,33 @@
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B002] Pearl et al., "The Book of Why", 2018
 - [B003] Huyen, "Designing Machine Learning Systems", 2022
+- [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
+- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
+- [B041] Angrist & Pischke, "Probability, Statistics, and Causal Inference", 2020
+
+**Related Papers**
+- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of Any Classifier", 2016
+  https://arxiv.org/pdf/1602.04938.pdf
+- [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions", 2017
+  https://arxiv.org/pdf/1705.07874.pdf
+- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2020
+  https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
+- [P004] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program Evaluation", 2018
+  https://www.nber.org/papers/w24318
+- [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
+  https://bayes.cs.ucla.edu/BOOK-2K
+- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms", 2023
+  https://www.nature.com/articles/s41598-020-59669-x
+- [P007] Zhang et al., "A Survey on Causal Inference", 2020
+  https://arxiv.org/pdf/2002.05209.pdf
+- [P008] Peters et al., "Causality: Models, Learning, and Inference", 2023
+  https://arxiv.org/pdf/2012.13993.pdf
+- [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on Machine Learning", 2021
+  https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
+- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with Contrastive Pertinent Features", 2019
+  https://arxiv.org/pdf/1906.04957.pdf
+- [P011] Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms", 2020
+  https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
 ### 2: Bayesian Networks
 **Lessons**
@@ -199,9 +226,38 @@
 - Tetrad (1,100): Suite for causal model discovery and analysis
 
 **Related books**
+- [B007] Pearl, "Causality", 2009
 - [B008] Peters et al., "Elements of Causal Inference", 2017
 - [B004] Koller et al., "Probabilistic Graphical Models", 2009
 - [B027] Spirtes et al., "Causation, Prediction, and Search", 2000
+
+**Related Papers**
+- [P012] Zanga et al., "A Survey on Causal Discovery: Theory and Practice", 2023
+  https://arxiv.org/pdf/2305.10032
+- [P013] Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models", 2020
+  https://par.nsf.gov/servlets/purl/10125762
+- [P014] Guo et al., "A survey on causal inference", 2015
+  https://qiniu.pattern.swarma.org/attachment/A%20Survey%20on%20Causal%20Inference.pdf
+- [P015] Meek, "Causal inference and causal explanation with background knowledge", 2006
+  https://arxiv.org/pdf/1302.4972
+- [P016] Maathuis et al., "Estimating high-dimensional intervention effects from observational data", 2012
+- [P017] Kalisch et al., "Causal inference using invariant prediction", 2010
+- [P018] Zhang et al., "On the identifiability of the post-nonlinear causal model", 2009
+  https://arxiv.org/pdf/1205.2599
+- [P019] Loh et al., "Causal discovery with identifiable nonlinear models", 2018
+- [P020] Uhler et al., "Geometries of faithfulness in graphical models", 2017
+  https://arxiv.org/abs/1608.00191
+- [P021] Gamella et al., "Active learning of linear causal models", 2021
+  https://arxiv.org/abs/2006.05690
+- [P022] Wang et al., "RL-based structural equation modeling", 2019
+- [P023] Mani et al., "Learning the structure of causal models with experimental and observational data", 2013
+- [P024] Solus et al., "Causal discovery with unknown interventions", 2019
+- [P025] Squires et al., "Active structure learning of causal DAGs", 2018
+  https://arxiv.org/abs/2011.00641
+- [P026] Sachs et al., "Causal protein-signaling networks derived from multiparameter single-cell data", 2015
+- [P027] Castelo et al., "Structural, syntactic, and statistical issues in learning Bayesian networks from data", 2008
+- [P028] Zheng et al., "DAGs with NO TEARS: Continuous Optimization for Structure Learning", 2018
+  https://papers.nips.cc/paper/8157-dags-with-no-tears-continuous-optimization-for-structure-learning.pdf
 
 ## Part III: Making Decisions with Causality
 
