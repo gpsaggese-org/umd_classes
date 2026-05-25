@@ -15,6 +15,9 @@ from typing import Callable, Dict, Tuple, Optional, Any
 
 import helpers.hgraphviz as hgraphviz
 
+# Constants for visualization.
+DAG_FIGSIZE = (10, 8)
+
 # #############################################################################
 # Cell 1: What are Graphical Causal Models?
 # #############################################################################
@@ -24,9 +27,10 @@ def cell1_plot_relationship(
     ax: Axes,
     x_data: Any,
     y_data: Any,
-    x_label: str,
-    y_label: str,
-    title: str,
+    *,
+    x_label: Optional[str] = None,
+    y_label: Optional[str] = None,
+    title: str = "",
 ) -> None:
     """
     Plot a scatter plot showing relationship between two variables.
@@ -35,13 +39,22 @@ def cell1_plot_relationship(
     :param x_data: X-axis data
     :param y_data: Y-axis data
     :param x_label: Label for X-axis
+        - Default: `None` (derived from `x_data.name` if available)
     :param y_label: Label for Y-axis
+        - Default: `None` (derived from `y_data.name` if available)
     :param title: Title for the plot
+        - Default: `""`
     :return: None
     """
+    x_label_str: str = (
+        x_label if x_label is not None else str(getattr(x_data, "name", "X"))
+    )
+    y_label_str: str = (
+        y_label if y_label is not None else str(getattr(y_data, "name", "Y"))
+    )
     ax.scatter(x_data, y_data, alpha=0.6)
-    ax.set_xlabel(x_label)
-    ax.set_ylabel(y_label)
+    ax.set_xlabel(x_label_str)
+    ax.set_ylabel(y_label_str)
     ax.set_title(title)
 
 
@@ -160,6 +173,50 @@ def cell2_generate_samples_from_gcm(
             parent_data = [data[p] for p in parents]
             data[node] = mechanisms[node](*parent_data)
     return pd.DataFrame(data)
+
+
+def cell2_plot_relationships(
+    df: pd.DataFrame,
+    x_var: str,
+    y_var1: str,
+    y_var2: str,
+) -> None:
+    """
+    Plot three causal relationships for a simple GCM.
+
+    Creates a 1x3 subplot showing relationships between an exogenous variable
+    and two endogenous variables, plus their interaction.
+
+    :param df: DataFrame with the data
+    :param x_var: Name of the exogenous variable (e.g., "Temperature")
+    :param y_var1: Name of first endogenous variable (e.g., "Activity")
+    :param y_var2: Name of second endogenous variable (e.g., "IceCreamSales")
+    :return: None
+    """
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+    # Plot 1: exogenous → first endogenous.
+    cell1_plot_relationship(
+        axes[0],
+        df[x_var],
+        df[y_var1],
+        title=f"{x_var} → {y_var1}",
+    )
+    # Plot 2: exogenous → second endogenous (direct effect).
+    cell1_plot_relationship(
+        axes[1],
+        df[x_var],
+        df[y_var2],
+        title=f"{x_var} → {y_var2} (direct)",
+    )
+    # Plot 3: first endogenous → second endogenous (mediated effect).
+    cell1_plot_relationship(
+        axes[2],
+        df[y_var1],
+        df[y_var2],
+        title=f"{y_var1} → {y_var2}",
+    )
+    plt.tight_layout()
+    plt.show()
 
 
 # #############################################################################

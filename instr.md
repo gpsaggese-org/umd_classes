@@ -1,4 +1,5 @@
-Use the functions in helpers.hgraphviz for dowhy_02_gcm_utils.py
+- Implement unit tests for process_jupytext.py following
+  .claude/skills/testing.rules.md:704:# End-to-end Unit Tests for Executables
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications

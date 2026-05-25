@@ -118,45 +118,12 @@ print(f"\nGenerated {len(df_simple)} samples from the GCM")
 
 # %%
 # Visualize relationships between variables.
-fig, axes = plt.subplots(1, 3, figsize=(14, 4))
-
-# TODO(ai_gp): Pass cell1_plot_relationship(df_simple, "Temperature", "Activity") and derive everything from those vars.
-# TODO(ai_gp): Create a function in _utils.py to call all the 3 cell1_plot_relationship.
-utils.cell1_plot_relationship(
-    axes[0],
-    df_simple["Temperature"],
-    df_simple["Activity"],
-    "Temperature",
-    "Activity",
-    "Temperature → Activity",
-)
-
-utils.cell1_plot_relationship(
-    axes[1],
-    df_simple["Temperature"],
-    df_simple["IceCreamSales"],
-    "Temperature",
-    "Ice Cream Sales",
-    "Temperature → Sales (direct)",
-)
-
-utils.cell1_plot_relationship(
-    axes[2],
-    df_simple["Activity"],
-    df_simple["IceCreamSales"],
-    "Activity",
-    "Ice Cream Sales",
-    "Activity → Sales",
-)
-
-plt.tight_layout()
-plt.show()
+utils.cell2_plot_relationships(df_simple, "Temperature", "Activity", "IceCreamSales")
 
 # %% [markdown]
 # # Cell 3: Automatic Mechanism Assignment
 #
 # - When working with real data, we may not know the exact mechanisms
-# # TODO(ai_gp): In the comments use `DoWhy`
 # - DoWhy can automatically assign mechanisms based on the data:
 #   - Fit linear mechanisms by default
 #   - Explore nonlinear mechanisms for complex relationships
@@ -174,7 +141,10 @@ print(f"\nDataset shape: {df_sachs.shape}")
 
 # %%
 # Automatically assign mechanisms to the DAG.
-# TODO(ai_gp): Explain more what cell3_assign_mechanisms_automatically does
+# This function inspects the causal graph and assigns mechanism types based on
+# node positions:
+# - Root nodes (no parents) get exogenous mechanisms (sample from standard normal)
+# - Other nodes get linear mechanisms f(parents) + noise
 mechanisms_auto = utils.cell3_assign_mechanisms_automatically(
     sachs_dag, df_sachs
 )
@@ -185,14 +155,13 @@ for node, mech in mechanisms_auto.items():
 
 # %%
 # Visualize the Sachs dataset causal structure.
-# TODO(ai_gp): Use a constant from the paired _utils.py instead of (10, 8) everywhere.
-fig, ax = plt.subplots(figsize=(10, 8))
+fig, ax = plt.subplots(figsize=utils.DAG_FIGSIZE)
 hgraphviz.plot_causal_dag(
     sachs_dag,
     "Sachs et al. Protein Signaling Network",
     mode="graphviz",
     ax=ax,
-    figsize=(10, 8),
+    figsize=utils.DAG_FIGSIZE,
 )
 plt.show()
 
@@ -212,7 +181,10 @@ plt.show()
 # Fit a simple linear SCM to the Sachs data.
 fitted_params = utils.cell4_fit_scm_simple(sachs_dag, df_sachs)
 
-# TODO(ai_gp): Explain the content of fitted_params.
+# The fitted_params dictionary contains:
+# - For exogenous nodes (no parents): mean and std of the variable
+# - For endogenous nodes (with parents): intercept and slope coefficients from
+#   linear regression, plus R² and residual_std to assess fit quality
 import pprint
 pprint.pprint(fitted_params)
 
@@ -235,8 +207,11 @@ for node, params in fitted_params.items():
 #   - Sample exogenous variables (sources)
 #   - For each node, apply mechanism using parent values plus noise
 # - Compare synthetic samples with original data to validate the fit
-#
-# # TODO(ai_gp): Explain the why of this
+#   - Good agreement between synthetic and original distributions suggests the model
+#     captured the underlying data-generating process
+#   - Discrepancies indicate the model misses important patterns
+# - This validation step is crucial before using the model for prediction or
+#   counterfactual reasoning
 
 # %%
 # #utils.cell5_generate_synthetic_samples??
@@ -257,7 +232,12 @@ utils.cell5_compare_distributions(df_sachs, df_synthetic, figsize=(16, 4))
 # Good alignment suggests the model captured the data distribution well.
 
 # %%
-# TODO(ai_gp): Comment the output above, making reference to the plots.
+# The plots above show histograms comparing the distributions of original and
+# synthetic data for each variable. The overlapping histograms (blue for original,
+# orange for synthetic) indicate how well the fitted model reproduces the data
+# distribution. Close alignment across all variables suggests the model successfully
+# captured the joint distribution; significant divergence suggests the model needs
+# refinement (e.g., nonlinear mechanisms, more data, or parameter tuning).
 
 # %% [markdown]
 # # Cell 6: Evaluating Model Quality
