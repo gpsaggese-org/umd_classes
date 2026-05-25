@@ -120,6 +120,8 @@ print(f"\nGenerated {len(df_simple)} samples from the GCM")
 # Visualize relationships between variables.
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 
+# TODO(ai_gp): Pass cell1_plot_relationship(df_simple, "Temperature", "Activity") and derive everything from those vars.
+# TODO(ai_gp): Create a function in _utils.py to call all the 3 cell1_plot_relationship.
 utils.cell1_plot_relationship(
     axes[0],
     df_simple["Temperature"],
@@ -154,7 +156,8 @@ plt.show()
 # # Cell 3: Automatic Mechanism Assignment
 #
 # - When working with real data, we may not know the exact mechanisms
-# - DoWhy can automatically assign mechanisms based on the data
+# # TODO(ai_gp): In the comments use `DoWhy`
+# - DoWhy can automatically assign mechanisms based on the data:
 #   - Fit linear mechanisms by default
 #   - Explore nonlinear mechanisms for complex relationships
 # - We load the Sachs et al. protein signaling dataset with a known causal structure
@@ -167,7 +170,11 @@ display(df_sachs.head())
 print(f"\nDataset shape: {df_sachs.shape}")
 
 # %%
+# utils.cell3_assign_mechanisms_automatically??
+
+# %%
 # Automatically assign mechanisms to the DAG.
+# TODO(ai_gp): Explain more what cell3_assign_mechanisms_automatically does
 mechanisms_auto = utils.cell3_assign_mechanisms_automatically(
     sachs_dag, df_sachs
 )
@@ -178,6 +185,7 @@ for node, mech in mechanisms_auto.items():
 
 # %%
 # Visualize the Sachs dataset causal structure.
+# TODO(ai_gp): Use a constant from the paired _utils.py instead of (10, 8) everywhere.
 fig, ax = plt.subplots(figsize=(10, 8))
 hgraphviz.plot_causal_dag(
     sachs_dag,
@@ -198,8 +206,15 @@ plt.show()
 # - This approach is fast and interpretable for linear models
 
 # %%
+# #utils.cell4_fit_scm_simple??
+
+# %%
 # Fit a simple linear SCM to the Sachs data.
 fitted_params = utils.cell4_fit_scm_simple(sachs_dag, df_sachs)
+
+# TODO(ai_gp): Explain the content of fitted_params.
+import pprint
+pprint.pprint(fitted_params)
 
 print("Fitted model parameters:")
 for node, params in fitted_params.items():
@@ -220,6 +235,11 @@ for node, params in fitted_params.items():
 #   - Sample exogenous variables (sources)
 #   - For each node, apply mechanism using parent values plus noise
 # - Compare synthetic samples with original data to validate the fit
+#
+# # TODO(ai_gp): Explain the why of this
+
+# %%
+# #utils.cell5_generate_synthetic_samples??
 
 # %%
 # Generate synthetic samples from the fitted model.
@@ -234,8 +254,10 @@ print(f"\nGenerated {len(df_synthetic)} synthetic samples")
 # Compare original vs synthetic distributions.
 utils.cell5_compare_distributions(df_sachs, df_synthetic, figsize=(16, 4))
 
-print("Blue: original data | Orange: synthetic data")
-print("Good alignment suggests the model captured the data distribution well.")
+# Good alignment suggests the model captured the data distribution well.
+
+# %%
+# TODO(ai_gp): Comment the output above, making reference to the plots.
 
 # %% [markdown]
 # # Cell 6: Evaluating Model Quality
