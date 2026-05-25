@@ -137,7 +137,7 @@ display(df_sachs.head())
 print(f"\nDataset shape: {df_sachs.shape}")
 
 # %%
-# utils.cell3_assign_mechanisms_automatically??
+# #utils.cell3_assign_mechanisms_automatically??
 
 # %%
 # Automatically assign mechanisms to the DAG.
@@ -155,15 +155,12 @@ for node, mech in mechanisms_auto.items():
 
 # %%
 # Visualize the Sachs dataset causal structure.
-fig, ax = plt.subplots(figsize=utils.DAG_FIGSIZE)
-hgraphviz.plot_causal_dag(
+_ = hgraphviz.plot_causal_dag(
     sachs_dag,
     "Sachs et al. Protein Signaling Network",
     mode="graphviz",
-    ax=ax,
-    figsize=utils.DAG_FIGSIZE,
+    figsize=(5,5)
 )
-plt.show()
 
 # %% [markdown]
 # # Cell 4: Fitting an SCM to Data
@@ -185,10 +182,10 @@ fitted_params = utils.cell4_fit_scm_simple(sachs_dag, df_sachs)
 # - For exogenous nodes (no parents): mean and std of the variable
 # - For endogenous nodes (with parents): intercept and slope coefficients from
 #   linear regression, plus R² and residual_std to assess fit quality
-import pprint
-pprint.pprint(fitted_params)
+#import pprint
+#pprint.pprint(fitted_params)
 
-print("Fitted model parameters:")
+print("# Fitted model parameters:")
 for node, params in fitted_params.items():
     if "r_squared" in params:
         print(
@@ -231,13 +228,14 @@ utils.cell5_compare_distributions(df_sachs, df_synthetic, figsize=(16, 4))
 
 # Good alignment suggests the model captured the data distribution well.
 
-# %%
-# The plots above show histograms comparing the distributions of original and
-# synthetic data for each variable. The overlapping histograms (blue for original,
-# orange for synthetic) indicate how well the fitted model reproduces the data
-# distribution. Close alignment across all variables suggests the model successfully
-# captured the joint distribution; significant divergence suggests the model needs
-# refinement (e.g., nonlinear mechanisms, more data, or parameter tuning).
+# %% [markdown]
+# The plots above show histograms comparing the distributions of the original and
+# synthetic data for each variable
+# - The overlapping histograms (blue for original, orange for synthetic) indicate
+#   how well the fitted model reproduces the data distribution
+# - Close alignment across all variables suggests the model successfully
+#   captured the joint distribution; significant divergence suggests the model needs
+#   refinement (e.g., nonlinear mechanisms, more data, or parameter tuning).
 
 # %% [markdown]
 # # Cell 6: Evaluating Model Quality
@@ -250,14 +248,19 @@ utils.cell5_compare_distributions(df_sachs, df_synthetic, figsize=(16, 4))
 # - Problematic mechanisms warrant customization or more data
 
 # %%
+# #utils.cell6_evaluate_model_quality??
+
+# %%
 # Evaluate the quality of each fitted mechanism.
 evaluation = utils.cell6_evaluate_model_quality(
     sachs_dag, fitted_params, df_sachs
 )
 
 display(evaluation)
-print("\nR² values indicate how much variance each mechanism explains.")
-print("Higher R² → better fit. Values < 0.5 may warrant attention.")
+
+# %% [markdown]
+# - R² values indicate how much variance each mechanism explains
+# - Higher R² → better fit. Values < 0.5 may warrant attention
 
 # %% [markdown]
 # # Cell 7: Confidence Intervals for Causal Estimates
@@ -303,6 +306,7 @@ df_custom = utils.cell2_generate_samples_from_gcm(
     custom_gcm, custom_mechanisms, n_samples=300
 )
 
+# TODO(ai_gp): Use code similar to cell2_plot_relationships
 fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
 axes[0].scatter(df_custom["Input"], df_custom["Output1"], alpha=0.6)
@@ -333,11 +337,22 @@ print(
 # - Use counterfactual reasoning to identify highest-impact interventions
 
 # %%
+# TODO(ai_gp): Explain better the set-up. Do we know the causal graph?
+
+# %%
+# #utils.cell9_system_metrics_dataset??
+
+# %%
 # Load system metrics dataset with known causal structure.
 df_metrics, metrics_dag = utils.cell9_system_metrics_dataset(n_samples=300)
 
+# TODO(ai_gp): Plot the metrics_dag
+
 display(df_metrics.head())
 print(f"\nDataset: {df_metrics.shape[0]} observations of system behavior")
+
+# %%
+# #utils.cell4_fit_scm_simple??
 
 # %%
 # Fit the system model.
@@ -348,7 +363,8 @@ for node, params in metrics_params.items():
     if "r_squared" in params:
         print(f"  {node}: R² = {params['r_squared']:.3f}")
 
-# %%
+# %% jupyter={"source_hidden": true}
+# TODO(ai_gp): Explain better this code.
 # Estimate impact of reducing each metric on API latency.
 baseline_latency = df_metrics["ApiLatency"].mean()
 
@@ -376,6 +392,9 @@ print(f"Improvement: {improvement:.2f} ms ({percent_improvement:.1f}%)")
 #   - Treatment effect heterogeneity by patient characteristics
 # - Fit model to historical data
 # - Use counterfactuals to recommend treatment for new patients
+
+# %%
+# TODO(ai_gp): Same TODOs as in Cell9
 
 # %%
 # Load medical records dataset.
@@ -439,30 +458,3 @@ print(
 #   - Unobserved confounders → spurious correlations misattributed as causal
 #   - Feedback loops → DAG assumption breaks down
 #   - Nonlinear mechanisms fit with linear model → poor predictions
-
-# %%
-# Demonstrate an unobserved confounder problem.
-df_confounded, _ = utils.cell11_demonstrate_unobserved_confounder()
-
-# Naive analysis: regress Y on X
-X = df_confounded["X"].values
-y = df_confounded["Y"].values
-naive_corr = np.corrcoef(X, y)[0, 1]
-
-print(f"Observed correlation X ↔ Y: {naive_corr:.3f}")
-print("\nThis appears to show X causes Y, but actually:")
-print("  - Both X and Y are caused by an unobserved confounder")
-print("  - The correlation is spurious")
-print("  - Intervening on X would NOT change Y")
-
-fig, ax = plt.subplots(figsize=(8, 6))
-ax.scatter(df_confounded["X"], df_confounded["Y"], alpha=0.5)
-z = np.polyfit(X, y, 1)
-p = np.poly1d(z)
-ax.plot(X, p(X), "r--", lw=2, label=f"Fitted line (r={naive_corr:.3f})")
-ax.set_xlabel("X")
-ax.set_ylabel("Y")
-ax.set_title("Spurious correlation due to unobserved confounder")
-ax.legend()
-plt.tight_layout()
-plt.show()
