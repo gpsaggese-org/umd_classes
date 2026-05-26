@@ -32,12 +32,12 @@ _FOUR_PANEL_FIGSIZE = (15, 10)
 # #############################################################################
 
 # #############################################################################
-# Cell 1: Potential Outcomes Framework
+# Cell 1.1: Potential Outcomes Framework
 # #############################################################################
 
 
 # TODO(ai_gp): 
-def cell1_plot_potential_outcomes() -> None:
+def cell1_1_plot_potential_outcomes() -> None:
 	"""
 	Visualize the potential outcomes framework.
 
@@ -123,11 +123,11 @@ def cell1_plot_potential_outcomes() -> None:
 
 
 # #############################################################################
-# Cell 2: Backdoor Criterion and Confounding
+# Cell 1.2: Backdoor Criterion and Confounding
 # #############################################################################
 
 
-def cell2_healthcare_dataset(
+def cell1_2_healthcare_dataset(
 	*,
 	n_samples: int = 500,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -165,7 +165,7 @@ def cell2_healthcare_dataset(
 
 
 # TODO(ai_gp): Inline this function.
-def cell2_plot_backdoor_dag(G: nx.DiGraph) -> None:
+def cell1_2_plot_backdoor_dag(G: nx.DiGraph) -> None:
 	"""
 	Plot the backdoor criterion DAG.
 
@@ -190,7 +190,7 @@ def _sigmoid(x: np.ndarray) -> np.ndarray:
 	return 1 / (1 + np.exp(-x))
 
 
-def cell2_compute_naive_ate(df: pd.DataFrame) -> float:
+def cell1_2_compute_naive_ate(df: pd.DataFrame) -> float:
 	"""
 	Compute naive ATE (simple comparison of means).
 
@@ -215,7 +215,7 @@ def _fit_ols(X: np.ndarray, y: np.ndarray) -> np.ndarray:
 	return coeffs
 
 
-def cell2_compute_adjusted_ate(
+def cell1_2_compute_adjusted_ate(
 	df: pd.DataFrame,
 	method: str = "regression",
 ) -> float:
@@ -265,7 +265,7 @@ def cell2_compute_adjusted_ate(
 		raise ValueError(f"Unknown method: {method}")
 
 
-def cell2_interactive_adjustment_methods(df: pd.DataFrame) -> None:
+def cell1_2_interactive_adjustment_methods(df: pd.DataFrame) -> None:
 	"""
 	Interactive widget for comparing adjustment methods.
 
@@ -282,8 +282,8 @@ def cell2_interactive_adjustment_methods(df: pd.DataFrame) -> None:
 		with output:
 			output.clear_output(wait=True)
 			method = method_dropdown.value
-			naive_ate = cell2_compute_naive_ate(df)
-			adjusted_ate = cell2_compute_adjusted_ate(df, method)
+			naive_ate = cell1_2_compute_naive_ate(df)
+			adjusted_ate = cell1_2_compute_adjusted_ate(df, method)
 			fig, ax = plt.subplots(figsize=_SINGLE_PANEL_FIGSIZE)
 			methods_list = ["Naive", "Adjusted"]
 			estimates = [naive_ate, adjusted_ate]
@@ -304,11 +304,11 @@ def cell2_interactive_adjustment_methods(df: pd.DataFrame) -> None:
 
 
 # #############################################################################
-# Cell 3: Instrumental Variables
+# Cell 1.3: Instrumental Variables
 # #############################################################################
 
 
-def cell3_education_earnings_dataset(
+def cell1_3_education_earnings_dataset(
 	*,
 	n_samples: int = 500,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -340,7 +340,7 @@ def cell3_education_earnings_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell3_compute_2sls(df: pd.DataFrame) -> Dict[str, float]:
+def cell1_3_compute_2sls(df: pd.DataFrame) -> Dict[str, float]:
 	"""
 	Compute two-stage least squares (2SLS/IV estimator).
 
@@ -370,7 +370,7 @@ def cell3_compute_2sls(df: pd.DataFrame) -> Dict[str, float]:
 	}
 
 
-def cell3_interactive_iv_strength(df: pd.DataFrame) -> None:
+def cell1_3_interactive_iv_strength(df: pd.DataFrame) -> None:
 	"""
 	Interactive widget showing how IV strength affects 2SLS estimate.
 
@@ -394,7 +394,7 @@ def cell3_interactive_iv_strength(df: pd.DataFrame) -> None:
 			distance_noisy = df["Distance"].values + np.random.normal(0, noise_level, len(df))
 			df_noisy = df.copy()
 			df_noisy["Distance"] = distance_noisy
-			results = cell3_compute_2sls(df_noisy)
+			results = cell1_3_compute_2sls(df_noisy)
 			late = results["late"]
 			fig, (ax1, ax2) = plt.subplots(1, 2, figsize=_TWO_PANEL_FIGSIZE)
 			# Left: first stage strength (correlation distance -> education).
@@ -417,11 +417,11 @@ def cell3_interactive_iv_strength(df: pd.DataFrame) -> None:
 
 
 # #############################################################################
-# Cell 4: Difference-in-Differences
+# Cell 1.4: Difference-in-Differences
 # #############################################################################
 
 
-def cell4_policy_dataset(
+def cell1_4_policy_dataset(
 	*,
 	n_units: int = 200,
 	n_periods: int = 3,
@@ -457,7 +457,7 @@ def cell4_policy_dataset(
 	return pd.DataFrame(data)
 
 
-def cell4_plot_did_trends(df: pd.DataFrame) -> None:
+def cell1_4_plot_did_trends(df: pd.DataFrame) -> None:
 	"""
 	Plot difference-in-differences trends.
 
@@ -486,7 +486,7 @@ def cell4_plot_did_trends(df: pd.DataFrame) -> None:
 	plt.show()
 
 
-def cell4_compute_did(df: pd.DataFrame) -> float:
+def cell1_4_compute_did(df: pd.DataFrame) -> float:
 	"""
 	Compute difference-in-differences estimate.
 
@@ -509,11 +509,11 @@ def cell4_compute_did(df: pd.DataFrame) -> float:
 
 
 # #############################################################################
-# Cell 5: Conditional Average Treatment Effects (CATE)
+# Cell 1.5: Conditional Average Treatment Effects (CATE)
 # #############################################################################
 
 
-def cell5_estimate_cate(
+def cell1_5_estimate_cate(
 	df: pd.DataFrame,
 	*,
 	by_var: str = "Severity",
@@ -548,7 +548,7 @@ def cell5_estimate_cate(
 	return pd.DataFrame(cate_estimates)
 
 
-def cell5_plot_cate_heterogeneity(cate_df: pd.DataFrame) -> None:
+def cell1_5_plot_cate_heterogeneity(cate_df: pd.DataFrame) -> None:
 	"""
 	Plot conditional average treatment effects by group.
 
@@ -569,7 +569,7 @@ def cell5_plot_cate_heterogeneity(cate_df: pd.DataFrame) -> None:
 	plt.show()
 
 
-def cell5_interactive_patient_profile(df: pd.DataFrame) -> None:
+def cell1_5_interactive_patient_profile(df: pd.DataFrame) -> None:
 	"""
 	Interactive widget for predicting treatment effect given patient profile.
 
@@ -614,11 +614,11 @@ def cell5_interactive_patient_profile(df: pd.DataFrame) -> None:
 
 
 # #############################################################################
-# Cell 6: Causal Effects via Graphical Causal Models
+# Cell 1.6: Causal Effects via Graphical Causal Models
 # #############################################################################
 
 
-def cell6_synthetic_scm_dataset(
+def cell1_6_synthetic_scm_dataset(
 	*,
 	n_samples: int = 300,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -645,7 +645,7 @@ def cell6_synthetic_scm_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell6_estimate_effect_via_gcm(
+def cell1_6_estimate_effect_via_gcm(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 	*,
@@ -752,7 +752,7 @@ def _generate_from_fitted_scm(
 	return pd.DataFrame(data)
 
 
-def cell6_compare_methods(
+def cell1_6_compare_methods(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> pd.DataFrame:
@@ -769,7 +769,7 @@ def cell6_compare_methods(
 	coeffs_ols = np.linalg.lstsq(X, y, rcond=None)[0]
 	regression_ate = coeffs_ols[1]
 	# GCM estimate.
-	gcm_results = cell6_estimate_effect_via_gcm(df, G)
+	gcm_results = cell1_6_estimate_effect_via_gcm(df, G)
 	gcm_ate = gcm_results["ate"]
 	# Mediation-based decomposition (direct + indirect).
 	X = np.column_stack([np.ones(len(df)), df["X"].values])
@@ -791,11 +791,11 @@ def cell6_compare_methods(
 # #############################################################################
 
 # #############################################################################
-# Cell 7: Mediation Analysis
+# Cell 2.1: Mediation Analysis
 # #############################################################################
 
 
-def cell7_mediation_dataset(
+def cell2_1_mediation_dataset(
 	*,
 	n_samples: int = 400,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -828,7 +828,7 @@ def cell7_mediation_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell7_estimate_mediation(df: pd.DataFrame) -> Dict[str, float]:
+def cell2_1_estimate_mediation(df: pd.DataFrame) -> Dict[str, float]:
 	"""
 	Estimate natural direct effect (NDE) and indirect effect (NIE).
 
@@ -863,7 +863,7 @@ def cell7_estimate_mediation(df: pd.DataFrame) -> Dict[str, float]:
 	}
 
 
-def cell7_plot_mediation_pathways(
+def cell2_1_plot_mediation_pathways(
 	df: pd.DataFrame,
 	mediation_results: Dict[str, float],
 ) -> None:
@@ -893,11 +893,11 @@ def cell7_plot_mediation_pathways(
 
 
 # #############################################################################
-# Cell 8: Arrow Strength / Direct Effects
+# Cell 2.2: Arrow Strength / Direct Effects
 # #############################################################################
 
 
-def cell8_supply_chain_dataset(
+def cell2_2_supply_chain_dataset(
 	*,
 	n_samples: int = 300,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -935,7 +935,7 @@ def cell8_supply_chain_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell8_estimate_arrow_strengths(
+def cell2_2_estimate_arrow_strengths(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> Dict[str, float]:
@@ -962,7 +962,7 @@ def cell8_estimate_arrow_strengths(
 	return strengths
 
 
-def cell8_plot_weighted_dag(
+def cell2_2_plot_weighted_dag(
 	G: nx.DiGraph,
 	strengths: Dict[Tuple[str, str], float],
 ) -> None:
@@ -1002,11 +1002,11 @@ def cell8_plot_weighted_dag(
 
 
 # #############################################################################
-# Cell 9: Intrinsic Causal Influence
+# Cell 2.3: Intrinsic Causal Influence
 # #############################################################################
 
 
-def cell9_compute_icc(
+def cell2_3_compute_icc(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> Dict[str, float]:
@@ -1037,7 +1037,7 @@ def cell9_compute_icc(
 	return icc_scores
 
 
-def cell9_plot_icc(
+def cell2_3_plot_icc(
 	G: nx.DiGraph,
 	icc_scores: Dict[str, float],
 ) -> None:
@@ -1070,11 +1070,11 @@ def cell9_plot_icc(
 # #############################################################################
 
 # #############################################################################
-# Cell 10: Anomaly Attribution
+# Cell 3.1: Anomaly Attribution
 # #############################################################################
 
 
-def cell10_system_metrics_dataset(
+def cell3_1_system_metrics_dataset(
 	*,
 	n_samples: int = 200,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -1111,7 +1111,7 @@ def cell10_system_metrics_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell10_inject_anomaly(
+def cell3_1_inject_anomaly(
 	df: pd.DataFrame,
 ) -> Tuple[Dict[str, float], Dict[str, float]]:
 	"""
@@ -1131,7 +1131,7 @@ def cell10_inject_anomaly(
 	return baseline_stats, anomaly_point
 
 
-def cell10_attribute_anomaly(
+def cell3_1_attribute_anomaly(
 	baseline: Dict[str, float],
 	anomaly: Dict[str, float],
 	G: nx.DiGraph,
@@ -1162,7 +1162,7 @@ def cell10_attribute_anomaly(
 	return attribution
 
 
-def cell10_interactive_anomaly_dashboard(
+def cell3_1_interactive_anomaly_dashboard(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> None:
@@ -1176,9 +1176,9 @@ def cell10_interactive_anomaly_dashboard(
 	# Fit SCM.
 	fitted_params = _fit_linear_scm(G, df)
 	# Get baseline and anomaly.
-	baseline, anomaly = cell10_inject_anomaly(df)
+	baseline, anomaly = cell3_1_inject_anomaly(df)
 	# Compute attribution.
-	attribution = cell10_attribute_anomaly(baseline, anomaly, G, fitted_params)
+	attribution = cell3_1_attribute_anomaly(baseline, anomaly, G, fitted_params)
 	output = widgets.Output()
 	def _display() -> None:
 		with output:
@@ -1204,11 +1204,11 @@ def cell10_interactive_anomaly_dashboard(
 
 
 # #############################################################################
-# Cell 11: Distributional Change Attribution
+# Cell 3.2: Distributional Change Attribution
 # #############################################################################
 
 
-def cell11_customer_shift_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
+def cell3_2_customer_shift_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
 	"""
 	Generate before/after customer datasets with distributional shift.
 
@@ -1234,7 +1234,7 @@ def cell11_customer_shift_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
 	return before_df, after_df
 
 
-def cell11_compute_shift_attribution(
+def cell3_2_compute_shift_attribution(
 	df_before: pd.DataFrame,
 	df_after: pd.DataFrame,
 ) -> pd.DataFrame:
@@ -1260,7 +1260,7 @@ def cell11_compute_shift_attribution(
 	return pd.DataFrame(feature_changes)
 
 
-def cell11_plot_shift_attribution(shift_df: pd.DataFrame) -> None:
+def cell3_2_plot_shift_attribution(shift_df: pd.DataFrame) -> None:
 	"""
 	Plot distribution shift contributions.
 
@@ -1286,11 +1286,11 @@ def cell11_plot_shift_attribution(shift_df: pd.DataFrame) -> None:
 
 
 # #############################################################################
-# Cell 12: Feature Relevance in Causal Context
+# Cell 3.3: Feature Relevance in Causal Context
 # #############################################################################
 
 
-def cell12_loan_dataset(
+def cell3_3_loan_dataset(
 	*,
 	n_samples: int = 400,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -1332,7 +1332,7 @@ def cell12_loan_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell12_compute_causal_relevance(
+def cell3_3_compute_causal_relevance(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> pd.DataFrame:
@@ -1361,7 +1361,7 @@ def cell12_compute_causal_relevance(
 	return pd.DataFrame(causal_effects).sort_values("Causal_Effect", ascending=False)
 
 
-def cell12_compute_statistical_relevance(
+def cell3_3_compute_statistical_relevance(
 	df: pd.DataFrame,
 	outcome_col: str = "Approved",
 ) -> pd.DataFrame:
@@ -1386,7 +1386,7 @@ def cell12_compute_statistical_relevance(
 	return pd.DataFrame(stat_relevance).sort_values("Correlation", ascending=False)
 
 
-def cell12_plot_causal_vs_statistical(
+def cell3_3_plot_causal_vs_statistical(
 	causal_df: pd.DataFrame,
 	stat_df: pd.DataFrame,
 ) -> None:
@@ -1415,11 +1415,11 @@ def cell12_plot_causal_vs_statistical(
 # #############################################################################
 
 # #############################################################################
-# Cell 13: Simulating Impact of Interventions
+# Cell 4.1: Simulating Impact of Interventions
 # #############################################################################
 
 
-def cell13_marketing_dataset(
+def cell4_1_marketing_dataset(
 	*,
 	n_samples: int = 300,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -1455,7 +1455,7 @@ def cell13_marketing_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell13_simulate_dose_response(
+def cell4_1_simulate_dose_response(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> pd.DataFrame:
@@ -1481,7 +1481,7 @@ def cell13_simulate_dose_response(
 	return pd.DataFrame(results)
 
 
-def cell13_plot_dose_response(dose_response_df: pd.DataFrame) -> None:
+def cell4_1_plot_dose_response(dose_response_df: pd.DataFrame) -> None:
 	"""
 	Plot dose-response curve.
 
@@ -1498,7 +1498,7 @@ def cell13_plot_dose_response(dose_response_df: pd.DataFrame) -> None:
 	plt.show()
 
 
-def cell13_interactive_intervention(
+def cell4_1_interactive_intervention(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> None:
@@ -1539,11 +1539,11 @@ def cell13_interactive_intervention(
 
 
 # #############################################################################
-# Cell 14: Computing Counterfactuals
+# Cell 4.2: Computing Counterfactuals
 # #############################################################################
 
 
-def cell14_compute_counterfactual(
+def cell4_2_compute_counterfactual(
 	individual: Dict[str, float],
 	G: nx.DiGraph,
 	fitted_params: Dict[str, Dict[str, Any]],
@@ -1572,7 +1572,7 @@ def cell14_compute_counterfactual(
 	return result
 
 
-def cell14_interactive_counterfactual(
+def cell4_2_interactive_counterfactual(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> None:
@@ -1608,11 +1608,11 @@ def cell14_interactive_counterfactual(
 
 
 # #############################################################################
-# Cell 15: Optimal Policy Estimation
+# Cell 4.3: Optimal Policy Estimation
 # #############################################################################
 
 
-def cell15_customer_support_dataset(
+def cell4_3_customer_support_dataset(
 	*,
 	n_samples: int = 300,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -1655,7 +1655,7 @@ def cell15_customer_support_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell15_estimate_policy_value(
+def cell4_3_estimate_policy_value(
 	df: pd.DataFrame,
 	cate_estimates: pd.Series,
 	*,
@@ -1678,7 +1678,7 @@ def cell15_estimate_policy_value(
 	return float(policy_value)
 
 
-def cell15_plot_policy_comparison(df: pd.DataFrame) -> None:
+def cell4_3_plot_policy_comparison(df: pd.DataFrame) -> None:
 	"""
 	Plot comparison of actual vs optimal treatment allocation.
 
@@ -1706,7 +1706,7 @@ def cell15_plot_policy_comparison(df: pd.DataFrame) -> None:
 	plt.show()
 
 
-def cell15_interactive_policy(df: pd.DataFrame) -> None:
+def cell4_3_interactive_policy(df: pd.DataFrame) -> None:
 	"""
 	Interactive widget for exploring policy thresholds.
 
@@ -1748,11 +1748,11 @@ def cell15_interactive_policy(df: pd.DataFrame) -> None:
 # #############################################################################
 
 # #############################################################################
-# Cell 16: Predicting Outcomes for OOD Inputs
+# Cell 5.1: Predicting Outcomes for OOD Inputs
 # #############################################################################
 
 
-def cell16_generate_ood_data(
+def cell5_1_generate_ood_data(
 	*,
 	n_train: int = 300,
 	n_test: int = 100,
@@ -1778,7 +1778,7 @@ def cell16_generate_ood_data(
 	return train_df, test_df
 
 
-def cell16_fit_ml_and_causal_models(
+def cell5_1_fit_ml_and_causal_models(
 	df_train: pd.DataFrame,
 ) -> Tuple[Dict[str, float], Dict[str, float]]:
 	"""
@@ -1796,7 +1796,7 @@ def cell16_fit_ml_and_causal_models(
 	return ml_params, causal_params
 
 
-def cell16_compare_ood_predictions(
+def cell5_1_compare_ood_predictions(
 	df_test: pd.DataFrame,
 	ml_params: Dict[str, float],
 	causal_params: Dict[str, float],
@@ -1822,7 +1822,7 @@ def cell16_compare_ood_predictions(
 	})
 
 
-def cell16_plot_ood_comparison(df_train: pd.DataFrame, df_test: pd.DataFrame) -> None:
+def cell5_1_plot_ood_comparison(df_train: pd.DataFrame, df_test: pd.DataFrame) -> None:
 	"""
 	Plot OOD prediction comparison.
 
@@ -1848,11 +1848,11 @@ def cell16_plot_ood_comparison(df_train: pd.DataFrame, df_test: pd.DataFrame) ->
 
 
 # #############################################################################
-# Cell 17: Transportability and Generalization
+# Cell 5.2: Transportability and Generalization
 # #############################################################################
 
 
-def cell17_two_population_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
+def cell5_2_two_population_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
 	"""
 	Generate datasets from two populations with different distributions.
 
@@ -1874,7 +1874,7 @@ def cell17_two_population_dataset() -> Tuple[pd.DataFrame, pd.DataFrame]:
 	return pop_a, pop_b
 
 
-def cell17_compute_transported_estimate(
+def cell5_2_compute_transported_estimate(
 	df_source: pd.DataFrame,
 	df_target: pd.DataFrame,
 	effect_source: float,
@@ -1896,7 +1896,7 @@ def cell17_compute_transported_estimate(
 	return float(transported_effect)
 
 
-def cell17_interactive_population_comparison(
+def cell5_2_interactive_population_comparison(
 	df_source: pd.DataFrame,
 	df_target: pd.DataFrame,
 ) -> None:
@@ -1943,11 +1943,11 @@ def cell17_interactive_population_comparison(
 # #############################################################################
 
 # #############################################################################
-# Cell 18: Method Selection Decision Tree
+# Cell 6.1: Method Selection Decision Tree
 # #############################################################################
 
 
-def cell18_interactive_decision_tree() -> None:
+def cell6_1_interactive_decision_tree() -> None:
 	"""
 	Interactive decision tree to select appropriate causal method.
 
@@ -2003,11 +2003,11 @@ def cell18_interactive_decision_tree() -> None:
 
 
 # #############################################################################
-# Cell 19: End-to-End Case Study
+# Cell 6.2: End-to-End Case Study
 # #############################################################################
 
 
-def cell19_ecommerce_dataset(
+def cell6_2_ecommerce_dataset(
 	*,
 	n_samples: int = 500,
 ) -> Tuple[pd.DataFrame, nx.DiGraph]:
@@ -2051,7 +2051,7 @@ def cell19_ecommerce_dataset(
 	return pd.DataFrame(data), G
 
 
-def cell19_run_full_analysis(
+def cell6_2_run_full_analysis(
 	df: pd.DataFrame,
 	G: nx.DiGraph,
 ) -> Dict[str, Any]:
@@ -2072,14 +2072,14 @@ def cell19_run_full_analysis(
 	coeffs = np.linalg.lstsq(X, y, rcond=None)[0]
 	results["regression_ate"] = float(coeffs[1])
 	# GCM-based estimate.
-	gcm_result = cell6_estimate_effect_via_gcm(df, G, treatment="MarketingBudget", outcome="Revenue")
+	gcm_result = cell1_6_estimate_effect_via_gcm(df, G, treatment="MarketingBudget", outcome="Revenue")
 	results["gcm_ate"] = gcm_result["ate"]
 	# Mediation: decompose effect through Traffic and Conversion.
 	results["mediation_estimated"] = True
 	return results
 
 
-def cell19_plot_case_study_summary(results: Dict[str, Any]) -> None:
+def cell6_2_plot_case_study_summary(results: Dict[str, Any]) -> None:
 	"""
 	Plot comprehensive summary of case study analysis.
 
