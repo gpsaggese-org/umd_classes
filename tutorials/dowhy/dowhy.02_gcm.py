@@ -85,7 +85,6 @@ _ = hgraphviz.plot_causal_dag(
     health_dag,
     "Health Outcome Causal DAG",
     mode="graphviz",
-    figsize=(8, 6)
 )
 
 # %% [markdown]
@@ -106,7 +105,7 @@ _ = hgraphviz.plot_causal_dag(
     gcm,
     "Simple GCM: Temperature → Activity → Sales",
     mode="graphviz",
-    figsize=(6, 8),
+    figsize=(4, 4),
 )
 
 # %%
@@ -306,25 +305,10 @@ df_custom = utils.cell2_generate_samples_from_gcm(
     custom_gcm, custom_mechanisms, n_samples=300
 )
 
-# TODO(ai_gp): Use code similar to cell2_plot_relationships
-fig, axes = plt.subplots(1, 2, figsize=(12, 4))
+# Visualize custom nonlinear relationships.
+utils.cell2_plot_relationships(df_custom, "Input", "Output1", "Output2")
 
-axes[0].scatter(df_custom["Input"], df_custom["Output1"], alpha=0.6)
-axes[0].set_xlabel("Input")
-axes[0].set_ylabel("Output1 (sinusoidal)")
-axes[0].set_title("Custom nonlinear mechanism: sine")
-
-axes[1].scatter(df_custom["Input"], df_custom["Output2"], alpha=0.6)
-axes[1].set_xlabel("Input")
-axes[1].set_ylabel("Output2 (exponential)")
-axes[1].set_title("Custom nonlinear mechanism: exponential")
-
-plt.tight_layout()
-plt.show()
-
-print(
-    "Custom mechanisms capture nonlinear relationships that linear models miss."
-)
+# Custom mechanisms capture nonlinear relationships that linear models miss.
 
 # %% [markdown]
 # # Cell 9: Root Cause Analysis Example
@@ -337,7 +321,12 @@ print(
 # - Use counterfactual reasoning to identify highest-impact interventions
 
 # %%
-# TODO(ai_gp): Explain better the set-up. Do we know the causal graph?
+# In this example, we assume we know the causal structure of system behavior:
+# - CPU usage is a root cause (no parents, driven by external workload)
+# - Memory and network latency increase when CPU is high
+# - API latency depends on both network latency and memory pressure
+# This known causal graph allows us to identify which metrics to optimize
+# to reduce API latency via counterfactual reasoning.
 
 # %%
 # #utils.cell9_system_metrics_dataset??
@@ -346,7 +335,12 @@ print(
 # Load system metrics dataset with known causal structure.
 df_metrics, metrics_dag = utils.cell9_system_metrics_dataset(n_samples=300)
 
-# TODO(ai_gp): Plot the metrics_dag
+# Visualize the system metrics causal structure.
+_ = hgraphviz.plot_causal_dag(
+    metrics_dag,
+    "System Metrics Causal Structure",
+    mode="graphviz",
+)
 
 display(df_metrics.head())
 print(f"\nDataset: {df_metrics.shape[0]} observations of system behavior")
@@ -364,7 +358,13 @@ for node, params in metrics_params.items():
         print(f"  {node}: R² = {params['r_squared']:.3f}")
 
 # %% jupyter={"source_hidden": true}
-# TODO(ai_gp): Explain better this code.
+# Counterfactual analysis: "What if we reduced CPU usage by 20%?"
+# We answer this by modifying the data and refitting the model to estimate
+# cascading effects through the causal graph. The fitted parameters from the
+# causal model let us predict how reducing CPU would impact memory and network
+# latency, and ultimately API latency. This identifies the most impactful
+# optimization target.
+
 # Estimate impact of reducing each metric on API latency.
 baseline_latency = df_metrics["ApiLatency"].mean()
 
@@ -394,11 +394,24 @@ print(f"Improvement: {improvement:.2f} ms ({percent_improvement:.1f}%)")
 # - Use counterfactuals to recommend treatment for new patients
 
 # %%
-# TODO(ai_gp): Same TODOs as in Cell9
+# In this example, we assume a known causal structure for patient outcomes:
+# - Age and genetics are root causes
+# - Age affects blood pressure, cholesterol, and treatment decisions
+# - Treatment is assigned based on baseline health metrics (confounding)
+# - Outcome depends on age, cholesterol, blood pressure, and treatment
+# With this known structure, we can estimate heterogeneous treatment effects
+# for individual patients by reasoning about causal mechanisms.
 
 # %%
 # Load medical records dataset.
 df_medical, medical_dag = utils.cell10_medical_dataset(n_samples=400)
+
+# Visualize the medical causal structure.
+_ = hgraphviz.plot_causal_dag(
+    medical_dag,
+    "Patient Outcome Causal Model",
+    mode="graphviz",
+)
 
 display(df_medical.head())
 print(f"\nMedical records: {df_medical.shape[0]} patients")
@@ -413,6 +426,13 @@ for node, params in medical_params.items():
         print(f"  {node}: R² = {params['r_squared']:.3f}")
 
 # %%
+# Personalized treatment recommendation via counterfactual reasoning:
+# For a given patient profile, we estimate the treatment effect by finding
+# similar patients (matched on age, baseline health) and comparing their
+# outcomes with and without treatment. The causal structure ensures we're
+# comparing similar enough patients that the treatment assignment differences
+# are plausibly causal rather than due to confounding.
+
 # Estimate treatment effect for a specific patient.
 patient_profile = {
     "Age": 65,

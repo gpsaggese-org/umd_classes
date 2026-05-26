@@ -1,13 +1,8 @@
-- Implement unit tests for process_jupytext.py following
-  .claude/skills/testing.rules.md:704:# End-to-end Unit Tests for Executables
+/notebook.implement_outline ./tutorials/dowhy/notebook_outline.03_causal_tasks.md
 
-## Run Command Instead of Calling its Main
-- Do not inject (`sys.argv = ["process_jupytext.py"] + args_list`)
-  and call the main of the script (e.g., `_main(parser)`)
-  - Instead call the executable directly with a call like `hsystem.system()`
-
-- If the task is not perfectly clear, you MUST not perform it, but ask for
-  clarifications
+Use ./tutorials/dowhy/dowhy.01_causal_graphs.py
+./tutorials/dowhy/dowhy.02_gcm.py
+as reference
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`
