@@ -36,7 +36,6 @@ _FOUR_PANEL_FIGSIZE = (15, 10)
 # #############################################################################
 
 
-# TODO(ai_gp): 
 def cell1_1_plot_potential_outcomes() -> None:
 	"""
 	Visualize the potential outcomes framework.
@@ -50,14 +49,18 @@ def cell1_1_plot_potential_outcomes() -> None:
 	fig, (ax1, ax2) = plt.subplots(1, 2, figsize=_TWO_PANEL_FIGSIZE)
 	np.random.seed(42)
 	n = 200
-	# Generate confounded data: disease severity -> treatment and outcome.
+	# Block 1: Generate confounded data.
+	# The data-generating process: Severity is a confounder that affects both
+	# treatment assignment and outcome. This creates selection bias.
 	severity = np.random.uniform(0, 100, n)
 	# Treatment: more severe cases more likely to get treated.
 	treatment_prob = 0.2 + 0.005 * severity
 	treatment = (np.random.random(n) < treatment_prob).astype(int)
-	# Outcome: depends on severity and treatment (treatment effect = 10).
+	# Outcome: depends on severity and treatment (true treatment effect = 10).
 	outcome = 20 + 0.3 * severity + 10 * treatment + np.random.normal(0, 5, n)
-	# Panel 1: Naive comparison (biased).
+	# Block 2: Panel 1: Naive comparison (biased by confounding).
+	# Simply compare treated vs control outcomes without adjusting for severity.
+	# This estimate is biased because treated units tend to have higher severity.
 	treated_outcome = outcome[treatment == 1]
 	control_outcome = outcome[treatment == 0]
 	ax1.scatter(
@@ -83,7 +86,9 @@ def cell1_1_plot_potential_outcomes() -> None:
 	ax1.set_xticklabels(["Control", "Treated"])
 	ax1.set_title("Naive Comparison (Biased)")
 	ax1.legend()
-	# Panel 2: Stratified by confounder (unbiased).
+	# Block 3: Panel 2: Stratified comparison (unbiased adjustment).
+	# Control for confounding by stratifying on severity bins. Within each
+	# severity level, treatment is more as-if random, so comparison is unbiased.
 	severity_bins = pd.cut(severity, bins=3, labels=["Low", "Medium", "High"])
 	effects_by_stratum = []
 	colors_list = ["lightblue", "lightgreen", "lightcoral"]
@@ -103,6 +108,7 @@ def cell1_1_plot_potential_outcomes() -> None:
 		ax2.axhline(
 			outcome[mask].mean(), color=colors_list[i], linestyle="--", linewidth=2
 		)
+	# Average the within-stratum effects to get the overall ATE.
 	adjusted_effect = np.mean(effects_by_stratum)
 	ax2.text(
 		1,
@@ -162,22 +168,6 @@ def cell1_2_healthcare_dataset(
 		[("Severity", "Medication"), ("Severity", "Recovery"), ("Medication", "Recovery")]
 	)
 	return pd.DataFrame(data), G
-
-
-# TODO(ai_gp): Inline this function.
-def cell1_2_plot_backdoor_dag(G: nx.DiGraph) -> None:
-	"""
-	Plot the backdoor criterion DAG.
-
-	:param G: Causal DAG
-	:return: None
-	"""
-	_ = hgraphviz.plot_causal_dag(
-		G,
-		"Healthcare Backdoor DAG: Severity confounds Medication->Recovery",
-		mode="graphviz",
-		figsize=_SINGLE_PANEL_FIGSIZE,
-	)
 
 
 def _sigmoid(x: np.ndarray) -> np.ndarray:
@@ -633,11 +623,11 @@ def cell1_6_synthetic_scm_dataset(
 	"""
 	np.random.seed(42)
 	data = {}
-	# Exogenous.
+	# Exogenous variable (X).
 	data["X"] = np.random.normal(0, 1, n_samples)
-	# Mediator.
+	# Mediator variable (M): transforms X with some noise.
 	data["M"] = 0.5 * data["X"] + np.random.normal(0, 0.5, n_samples)
-	# Outcome.
+	# Outcome variable (Y): depends on both X and M.
 	data["Y"] = 0.3 * data["X"] + 0.4 * data["M"] + np.random.normal(0, 0.5, n_samples)
 	# Define DAG.
 	G = nx.DiGraph()
@@ -850,7 +840,7 @@ def cell2_1_estimate_mediation(df: pd.DataFrame) -> Dict[str, float]:
 	# Second stage: Earnings ~ Experience (coefficient).
 	ss_coeff = np.linalg.lstsq(X_de, y, rcond=None)[0][2]
 	ie_coeff = fs_coeff * ss_coeff
-	# Compute percentages.
+	# Compute mediation percentage: proportion of total effect through indirect path.
 	nde = de_coeff
 	nie = ie_coeff
 	te = te_coeff
@@ -1087,7 +1077,7 @@ def cell3_1_system_metrics_dataset(
 	"""
 	np.random.seed(42)
 	data = {}
-	# Root exogenous variable.
+	# Root exogenous variable: CPU usage.
 	data["CpuUsage"] = np.random.uniform(10, 80, n_samples)
 	# Causal chain: CPU -> Memory -> Network -> Latency.
 	data["MemoryUsage"] = (

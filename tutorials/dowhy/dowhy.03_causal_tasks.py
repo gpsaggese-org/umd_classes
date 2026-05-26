@@ -74,14 +74,39 @@ _LOG.info("Notebook initialized")
 # %% [markdown]
 # ## Cell 1.1: The Fundamental Problem of Causal Inference
 
-# %%
-# #utils.cell1_1_plot_potential_outcomes??
+# %% [markdown]
+# In this cell, we demonstrate the fundamental challenge of causal inference using a
+# **confounded healthcare scenario**.
+#
+# **Data Generation Process:**
+# - Exogenous variable: `Severity` (disease severity) is randomly generated
+# - Confounder: Severity causes both treatment assignment and outcome
+#   - Patients with higher severity are more likely to receive treatment
+#   - Patients with higher severity have worse outcomes regardless of treatment
+# - Treatment: `Severity → Treatment assignment` (not randomized)
+# - Outcome: `Severity + Treatment → Outcome` (true treatment effect ≈ 10)
+#
+# **Causal DAG:**
+# ```
+# Severity → Treatment
+#    ↓
+#    ↓
+#  Outcome ← Treatment
+# ```
+# Severity is a **confounder** that opens a backdoor path:
+# `Treatment ← Severity → Outcome`
+#
+# **Why this matters:**
+# - Naive comparison (treated vs control) is **biased** because treated units tend to have
+#   higher severity
+# - Solution: **Adjust for confounders** (stratification, regression, matching, IPW)
+#   to break the backdoor path and estimate causal effects consistently
 
 # %%
 utils.cell1_1_plot_potential_outcomes()
 
 # %% [markdown]
-# Visualize the fundamental problem of causal inference using confounded healthcare data.
+# Visualize the fundamental problem of causal inference using confounded healthcare data
 # - Left panel: naive comparison showing biased ATE due to disease severity confounding.
 # - Right panel: adjusted comparison using stratification to remove bias and recover true effect.
 
@@ -92,11 +117,16 @@ utils.cell1_1_plot_potential_outcomes()
 # Generate healthcare dataset with confounded treatment.
 df_health, G_health = utils.cell1_2_healthcare_dataset(n_samples=500)
 
-display(df_health.head())
-print(f"\nDataset shape: {df_health.shape}")
+_ = hgraphviz.plot_causal_dag(
+	G_health,
+	"Healthcare Backdoor DAG: Severity confounds Medication->Recovery",
+	mode="graphviz",
+	figsize=(10, 5),
+)
 
 # %%
-utils.cell1_2_plot_backdoor_dag(G_health)
+display(df_health.head())
+print(f"\nDataset shape: {df_health.shape}")
 
 # %%
 # Compute naive ATE and show the bias.
