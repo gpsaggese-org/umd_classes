@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -74,6 +74,9 @@ _LOG.info("Notebook initialized")
 # %% [markdown]
 # ## Cell 1.1: The Fundamental Problem of Causal Inference
 
+# %%
+# #utils.cell1_1_plot_potential_outcomes??
+
 # %% [markdown]
 # In this cell, we demonstrate the fundamental challenge of causal inference using a
 # **confounded healthcare scenario**.
@@ -117,12 +120,7 @@ utils.cell1_1_plot_potential_outcomes()
 # Generate healthcare dataset with confounded treatment.
 df_health, G_health = utils.cell1_2_healthcare_dataset(n_samples=500)
 
-_ = hgraphviz.plot_causal_dag(
-	G_health,
-	"Healthcare Backdoor DAG: Severity confounds Medication->Recovery",
-	mode="graphviz",
-	figsize=(10, 5),
-)
+utils.cell1_2_plot_backdoor_dag(G_health)
 
 # %%
 display(df_health.head())

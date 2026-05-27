@@ -814,7 +814,7 @@ def cell11_create_job_training_data(
     post_income = (
         40000
         + 1.5 * education * 1000
-        + (2000 if training else 0)
+        + np.where(training, 2000, 0)
         + motivation * 5000
         + rng.normal(0, 5000, n_samples)
     )
