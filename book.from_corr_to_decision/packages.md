@@ -11,7 +11,7 @@
 | **7. Bayesian Optimization / Sequential Optimization** | Bayesian optimization and sequential black-box optimization | BoTorch (3,300), scikit-optimize (2,800) |
 | **8. Time-Series / Temporal Probabilistic Modeling** | Time-series forecasting, temporal latent-state models, hidden Markov models | TiMINo (3,600), orbit (2,000), HMMlearn (1,600) |
 
-# Packages
+# Packages from PyWhy Ecosystem
 
 ## causal-learn
 - Description: Causal Discovery in Python. Learning causality from data

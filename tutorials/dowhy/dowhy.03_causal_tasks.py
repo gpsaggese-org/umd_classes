@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -64,12 +64,12 @@ _LOG.info("Notebook initialized")
 # %% [markdown]
 # # Part 1: Estimating Causal Effects
 #
-# - The **fundamental problem of causal inference**: we can't observe all potential outcomes
+# - The **fundamental problem of causal inference**: "we can't observe multiple potential outcomes at the same time"
 # - Learn strategies to estimate causal effects from observational data
 #   - Backdoor adjustment: condition on confounders
 #   - Instrumental variables: use exogenous variation
-#   - Natural experiments: exploit as-if-random assignment
 #   - Graphical causal models: use fitted mechanisms
+#   - Randomized-controlled trials: exploit as-if-random assignment
 
 # %% [markdown]
 # ## Cell 1.1: The Fundamental Problem of Causal Inference
@@ -88,16 +88,18 @@ _LOG.info("Notebook initialized")
 #   - Patients with higher severity have worse outcomes regardless of treatment
 # - Treatment: `Severity → Treatment assignment` (not randomized)
 # - Outcome: `Severity + Treatment → Outcome` (true treatment effect ≈ 10)
+
+# %%
+# TODO(ai_gp): Use plot_causal_dag to plot the DAG
+utils.cell1_1_plot_potential_outcomes()
+
+# %% [markdown]
+# Visualize the fundamental problem of causal inference using confounded healthcare data
+# - Left panel: naive comparison showing biased ATE due to disease severity confounding.
+# - Right panel: adjusted comparison using stratification to remove bias and recover true effect.
 #
-# **Causal DAG:**
-# ```
-# Severity → Treatment
-#    ↓
-#    ↓
-#  Outcome ← Treatment
-# ```
 # Severity is a **confounder** that opens a backdoor path:
-# `Treatment ← Severity → Outcome`
+#   `Treatment ← Severity → Outcome`
 #
 # **Why this matters:**
 # - Naive comparison (treated vs control) is **biased** because treated units tend to have
@@ -105,21 +107,15 @@ _LOG.info("Notebook initialized")
 # - Solution: **Adjust for confounders** (stratification, regression, matching, IPW)
 #   to break the backdoor path and estimate causal effects consistently
 
-# %%
-utils.cell1_1_plot_potential_outcomes()
-
-# %% [markdown]
-# Visualize the fundamental problem of causal inference using confounded healthcare data
-# - Left panel: naive comparison showing biased ATE due to disease severity confounding.
-# - Right panel: adjusted comparison using stratification to remove bias and recover true effect.
-
 # %% [markdown]
 # ## Cell 1.2: Backdoor Criterion and Confounding
 
 # %%
 # Generate healthcare dataset with confounded treatment.
+# TODO(ai_gp): Use plot_causal_dag to plot the causal DAG generating the data
 df_health, G_health = utils.cell1_2_healthcare_dataset(n_samples=500)
 
+# TODO(ai_gp): Fix this function.
 utils.cell1_2_plot_backdoor_dag(G_health)
 
 # %%
@@ -134,6 +130,7 @@ print("This estimate is biased because severity confounds the medication-recover
 
 # %%
 # Interactive widget: compare different adjustment methods.
+# TODO(ai_gp): cell1_2_interactive_adjustment_methods crashes for ipw
 utils.cell1_2_interactive_adjustment_methods(df_health)
 
 # %% [markdown]
@@ -141,6 +138,7 @@ utils.cell1_2_interactive_adjustment_methods(df_health)
 
 # %%
 # Generate education-earnings dataset with unobserved ability.
+# TODO(ai_gp): Use plot_causal_dag to plot the causal DAG generating the data
 df_edu, G_edu = utils.cell1_3_education_earnings_dataset(n_samples=500)
 
 display(df_edu.head())
@@ -148,6 +146,7 @@ print(f"\nNote: Ability is unobserved; Distance is the instrument.")
 
 # %%
 # Compute 2SLS estimate of education effect on earnings.
+# TODO(ai_gp): explain the compute two-stage least squares (2SLS/IV estimator).
 iv_results = utils.cell1_3_compute_2sls(df_edu)
 print(f"First-stage coefficient (Distance → Education): {iv_results['first_stage']:.3f}")
 print(f"2SLS estimate (LATE): {iv_results['late']:.0f}")
