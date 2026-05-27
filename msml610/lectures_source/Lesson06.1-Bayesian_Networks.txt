@@ -1,5 +1,3 @@
-// notes_to_pdf.py --input lectures_source/Lesson07-Bayesian_statistics_1.txt --output tmp.pdf --type slides --debug_on_error --skip_action cleanup_after --toc_type navigation
-
 ::: columns
 :::: {.column width=15%}
 ![](msml610/lectures_source/figures/UMD_Logo.png)
@@ -40,81 +38,87 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Logic-Based AI Under Uncertainty
-# ##############################################################################
+
+## Problem
 
 * Logic-Based AI Under Uncertainty: Problem
 
-- **Logic-based AI systems**:
-  - Based on **propositional logic**
-  - Represent **actions** using **rules** like:
+- **Definition**: Logic-based AI systems
+  - Based on _propositional logic_
+  - Represent _actions_ using _rules_ like:
     - _"If preconditions P hold, then action A causes effect E"_
-  - Example:
-    - _"If I turn the car key, the engine starts"_
-    - **But**: the battery might be dead, there's no fuel, the starter is
-      broken, etc.
 
-- Real-world agents face **uncertainty** from:
-  - Partial observability
-    - Agent can't see the full state of the world
-  - Non-determinism
-    - Actions don't always have predictable outcomes
-  - Adversarial conditions
-    - Other agents may interfere
+- **Example**:
+  - _"If I turn the car key, the engine starts"_
+  - _But_: the battery might be dead, there's no fuel, the starter is broken, ...
 
-* Logic-Based AI Under Uncertainty: Naive Solution
+- **Problem**: Real-world agents face _uncertainty_ from:
+  1. Partial observability
+     - Agent can't see the full state of the world
+  2. Non-determinism
+     - Actions don't always have predictable outcomes
+  3. Adversarial conditions
+     - Other agents may interfere
 
-- A possible solution to uncertainty is:
+* Logic-Based Under Uncertainty: Naive Solution
 
-  1. Use a **belief state**, i.e., set of all possible current world states
-  2. Use **causal and exhaustive augmentation** for rules
-     - Must consider all possible preconditions for acting, even unlikely ones
-  3. Construct **contingent plans** that handle every possible sensor report and
-     belief
-     - Plans become large and complex
+- **(Naive) Solution**: A possible solution to logic-based AI under uncertainty
+  is to use:
+
+  1. _Belief state_, i.e., set of all possible current world states
+     - Cons: difficult to enumerate and track
+  2. _Causal and exhaustive augmentation_ for rules
+     - Cons: Must consider all possible preconditions for acting, even unlikely ones
+  3. _Contingent plans_ to handle every possible sensor report and belief
+     - Cons: Plans become large and complex
      - No guaranteed plan may exist, yet action is required
 
-* Logic-Based AI Under Uncertainty: Example
-- **Goal**: start a car by turning the car key
+* Naive Solution: Example of Starting a Car
+- **Goal**: build a system to start a car by turning the car key
 
 - **Obvious preconditions**
   - The car has fuel
   - The car battery is charged
   - The car key is the right one
-  - The starter motor is working
   - ...
 
 - **Less obvious preconditions**
-  - The fuel lines are not clogged
-  - The fuel pump is working
   - The electrical system is intact (no blown fuses)
+  - The fuel pump is working
+  - The fuel lines are not clogged
   - The engine oil level is sufficient
   - ...
 
-- Every precondition requires something different to do to achieve the goal!
+- **Problem**: Every precondition requires something else in order to do to
+  achieve the goal!
+
+## Solution
 
 * Causal and Exhaustive Augmentation
-- To use propositional logic under uncertainty, augment the left-side of
-  $X \implies Y$ to make it:
-  1. **Causal**: identify true causal-effect relationships
-  2. **Exhaustive**: identify all possible conditions leading to the outcome
+
+- **Definition**: Causal and exhaustive augmentation of logic-rules
+  - To use propositional logic under uncertainty, need to augment the left-side of
+    rules $X \implies Y$ to make it:
+    1. _Causal_: identify true causal-effect relationships
+    2. _Exhaustive_: identify all possible conditions $X$ leading to the outcome
+       $Y$
 
 - **Logical qualification problem**
-  - Enumerate all the preconditions necessary for an action to succeed
+  - Need to enumerate all the preconditions necessary for an action to succeed
 
 - **Difficulties**
-  - Every action can have more hidden conditions in order to succeed
+  - Every action can have more hidden conditions needed in order to succeed
     - E.g., start the engine $\implies$ turn car key $\implies$ starter motor is
       working $\implies$ battery is charged $\implies$ ...
   - Preconditions can change depending on the situation
-    - E.g., start the engine $\implies$ battery is charged $\implies$ it's not
+    - E.g., ... $\implies$ battery is charged $\implies$ it's not
       too cold $\implies$ ...
 
-* Causal and Exhaustive Augmentation
+* Causal and Exhaustive Augmentation: Limitations
 - **Limitations** of logical qualification
-  1. **Laziness**
-     - Too much work to create all possible rules
+  1. _Laziness_
+     - Too much effort to create all possible rules
   2. **Theoretical ignorance**
      - Science doesn't always have a complete theory of the domain
      - E.g., medical science doesn't know all the "rules"
