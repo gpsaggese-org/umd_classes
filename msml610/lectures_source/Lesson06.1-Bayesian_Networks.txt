@@ -695,20 +695,18 @@ digraph BayesianFlow {
 	- $S$ = "Snow"
 	- $R$ = "Rush Hour"
 
-- The CPT models
-  $$
-  \Pr(\text{Traffic Jam} | \text{Snow}, \text{Rush Hour}) = \Pr(T | S, R)
-  $$
+- The CPT models $\Pr(\text{Traffic Jam} | \text{Snow}, \text{Rush Hour}) = \Pr(T | S, R)$
 
 \begingroup \scriptsize
-| T 		| P(T|S,R) | P(T|S,-R) | P(T|-S,R) | P(T|-S,-R) |
+| T 		| P(T\|S,R) | P(T\|S,-R) | P(T\|-S,R) | P(T\|-S,-R) |
 |-------|----------|-----------|-----------|------------|
 | True  | 0.80     | 0.10      | 0.50      | 0.05       |
 | False | 0.20     | 0.90      | 0.50      | 0.95       |
 \endgroup
 
-- As for any conditional probability, the sum of probabilities on the left side
-  of the conditioning is 1, but not on the right side
+- As for any conditional probability
+  - The sum of probabilities on the left side of the conditioning is 1
+  - Not on the right side
 
 - **Interpretation**
   - Traffic is highly likely when there is both snow and rush hour
@@ -725,7 +723,7 @@ digraph BayesianFlow {
 
 ::: columns
 :::: {.column width=60%}
-- The **structure of the graph** shows that:
+- The structure of the graph shows that:
   - $Burglary$ and $Earthquake$ affects the event $Alarm$
   - $JohnCalls$ and $MaryCalls$ depend only on the $Alarm$, and not on
     $Burglary$ and $Earthquake$
@@ -739,19 +737,19 @@ digraph BayesianFlow {
 
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Burglary     [label="Burglary",     fillcolor="#A6C8F4"];
-    Earthquake   [label="Earthquake",   fillcolor="#FFD1A6"];
-    Alarm        [label="Alarm",        fillcolor="#B2E2B2"];
-    JohnCalls    [label="JohnCalls",    fillcolor="#C6A6F4"];
-    MaryCalls    [label="MaryCalls",    fillcolor="#C6A6F4"];
+    Burglary [label="Burglary", fillcolor="#A6C8F4"];
+    Earthquake [label="Earthquake", fillcolor="#FFD1A6"];
+    Alarm [label="Alarm", fillcolor="#B2E2B2"];
+    JohnCalls [label="JohnCalls", fillcolor="#C6A6F4"];
+    MaryCalls [label="MaryCalls", fillcolor="#C6A6F4"];
 
     { rank = same; Burglary; Earthquake; }
     { rank = same; JohnCalls; MaryCalls; }
 
-    Burglary   -> Alarm;
+    Burglary -> Alarm;
     Earthquake -> Alarm;
-    Alarm      -> JohnCalls;
-    Alarm      -> MaryCalls;
+    Alarm -> JohnCalls;
+    Alarm -> MaryCalls;
 }
 ```
 ::::
@@ -764,7 +762,7 @@ digraph BayesianFlow {
   - $Burglary$ is 0.001
   - $Earthquake$ is 0.002
 
-- $Alarm$ system:
+- The $Alarm$ system:
   - Is fairly reliable at detecting $Burglary$
   - Responds to minor $Earthquakes$ (false positives)
 
@@ -804,19 +802,20 @@ digraph BayesianFlow {
 ::::
 :::
 
-- Since events are independent:
+- Since events are conditionally independent:
   $$\Pr(Alarm) = \Pr(Alarm | Burglary, Earthquake) \Pr(Burglary) \Pr(Earthquake)$$
 
 * Bayesian Networks: Burglar Example
 
 - Two neighbors, $John$ and $Mary$ will $Call$ you when they hear the $Alarm$
-  - $John$:
-    - Almost always $Call$s when he hears the alarm
-    - Sometimes confuses telephone with the $Alarm$ and $Call$s (false positives)
-  - $Mary$:
-    - Misses the alarm 30% of the cases (false negatives)
 
-- $JohnCalls$ and $MaryCalls$ are represented by:
+::: columns
+:::: {.column width=60%}
+- $John$:
+  - Almost always $Call$s when he hears the alarm
+  - Sometimes confuses telephone with the $Alarm$ and $Call$s (false positives)
+::::
+:::: {.column width=35%}
 
 \begingroup \scriptsize
 | **Alarm (A)** | **P(JohnCalls\| Alarm)** |
@@ -824,6 +823,19 @@ digraph BayesianFlow {
 | True          | 0.90                   |
 | False         | 0.05                   |
 \endgroup
+::::
+:::
+
+\vspace{1.2cm}
+
+::: columns
+:::: {.column width=60%}
+
+- $Mary$:
+  - Misses the alarm 30% of the cases (false negatives)
+
+::::
+:::: {.column width=35%}
 
 \begingroup \scriptsize
 | **Alarm (A)** | **P(MaryCalls\| Alarm)** |
@@ -831,14 +843,16 @@ digraph BayesianFlow {
 | True          | 0.70                   |
 | False         | 0.01                   |
 \endgroup
+::::
+:::
 
-* Conditional Probability Table
+* CTP: Burglar Example
 
 ::: columns
-:::: {.column width=60%}
-- A **node without parents** has an unconditional probability
+:::: {.column width=50%}
+- A _node without parents_ has an unconditional probability
 ::::
-:::: {.column width=35%}
+:::: {.column width=45%}
 \begingroup \scriptsize
 | **P(Burglary)** |
 | ----------------- |
@@ -852,8 +866,9 @@ digraph BayesianFlow {
 
 ::: columns
 :::: {.column width=40%}
-- The **sum of probabilities** must be 1
-  - If there is a single input variable, it is possible to remove the redundancy
+- If there is a single input variable
+  - The _sum of probabilities_ must be 1
+  - It is possible to remove the redundancy
 ::::
 :::: {.column width=55%}
 \vspace{-0.5cm}
@@ -876,11 +891,11 @@ digraph BayesianFlow {
 \vspace{1cm}
 
 ::: columns
-:::: {.column width=60%}
-- **A node with $k$ parents** has $2^k$ possible rows in the table
+:::: {.column width=50%}
+- A node with $k$ parents has $2^k$ possible rows in the table
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=45%}
 \vspace{-0.5cm}
 
 \begingroup \scriptsize
