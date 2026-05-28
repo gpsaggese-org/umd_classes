@@ -793,12 +793,8 @@ def cell6_plot_method_comparison(
         figsize = (14, 5)
     pos = nx.kamada_kawai_layout(g1)
     fig, axes = plt.subplots(1, 2, figsize=figsize)
-    hgraphv.plot_causal_dag(
-        g1, labels[0], mode="graphviz", ax=axes[0], pos=pos
-    )
-    hgraphv.plot_causal_dag(
-        g2, labels[1], mode="graphviz", ax=axes[1], pos=pos
-    )
+    hgraphv.plot_causal_dag(g1, labels[0], mode="graphviz", ax=axes[0], pos=pos)
+    hgraphv.plot_causal_dag(g2, labels[1], mode="graphviz", ax=axes[1], pos=pos)
     fig.tight_layout()
     plt.show()
     # Build an edge agreement summary.

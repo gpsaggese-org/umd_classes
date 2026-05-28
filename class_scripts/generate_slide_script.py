@@ -31,7 +31,7 @@ import tqdm
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
-import helpers.hselect_input_output as hselsio
+import helpers.hselect_input_output as hseinout
 import helpers.hparser as hparser
 import dev_scripts_helpers.slides.slides_utils as dshsslut
 
@@ -173,7 +173,7 @@ def _parse() -> argparse.ArgumentParser:
         default=3,
         help="Number of slides to process per LLM call (default: 3)",
     )
-    hselsio.add_limit_range_arg(parser)
+    hseinout.add_limit_range_arg(parser)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -182,7 +182,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Parse limit range.
-    limit_range = hselsio.parse_limit_range_args(args)
+    limit_range = hseinout.parse_limit_range_args(args)
     # Generate the slide script.
     _generate_slide_script(
         in_file=args.in_file,
