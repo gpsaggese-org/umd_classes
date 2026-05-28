@@ -118,16 +118,17 @@ MSML610: Advanced Machine Learning
 * Causal and Exhaustive Augmentation: Limitations
 - **Limitations** of logical qualification
   1. _Laziness_
-     - Too much effort to create all possible rules
+     - Too much effort is required to create all possible rules
   2. **Theoretical ignorance**
      - Science doesn't always have a complete theory of the domain
      - E.g., medical science doesn't know all the "rules"
   3. **Practical ignorance**
-     - Even if you knew all the rules, you might not have all the information
-       needed
-     - E.g., not all necessary medical tests can be run for a particular patient
+     - Even if you knew all the rules, you might not have all the necessary
+       information
+     - E.g., not all required medical tests can be performed for a particular
+       patient
 
-- Expert systems failure and AI winter (mid 1980s, 1990s)
+- Expert systems failure and AI winter (mid-1980s, 1990s)
   - The real world is complex and open-ended
   - Logical rules can't capture all necessary and sufficient conditions
 
@@ -148,13 +149,13 @@ MSML610: Advanced Machine Learning
 
 - "$Rain \implies WetGrass$" is not true in general
   - If it rains but there is a cover over the grass, the grass will not be wet
-  - If it rains but there is high temperature, the wet grass might dry quickly
+  - If it rains but there is a high temperature, the wet grass might dry quickly
 
-- "$WetGrass \implies Rain$" is not true in general
+- "$WetGrass \implies Rain$" is not true in general:
   - The grass could be wet because of a sprinkler system
   - The grass could be wet because of morning dew
 
-- You need to consider also the propositions:
+- You also need to consider the propositions:
   - $Cover$ = "there is a protective cover over the grass"
   - $Evaporate$ = "the water evaporates quickly"
   - $Sprinkler$ = "the sprinkler system is on"
@@ -840,4 +841,3 @@ digraph BayesianFlow {
 \endgroup
 ::::
 :::
-
