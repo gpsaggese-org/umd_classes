@@ -719,15 +719,9 @@ digraph BayesianFlow {
 - Famous example from Judea Pearl
 
 - An $Alarm$ system installed at a home in LA
-  - Fairly reliable at detecting $Burglary$
-  - Also responds to minor $Earthquakes$ (false positive)
+  - Detects $Burglary$, but also responds to minor $Earthquakes$
 
 - Two neighbors, $John$ and $Mary$ will $Call$ you when they hear the $Alarm$
-  - $John$:
-    - Almost always $Call$s when he hears the alarm
-    - Sometimes confuses telephone with the $Alarm$ and $Call$s (false positives)
-  - $Mary$:
-    - Misses the alarm 30% of the cases (false negatives)
 
 ::: columns
 :::: {.column width=60%}
@@ -766,12 +760,13 @@ digraph BayesianFlow {
 * Bayesian Networks: Burglar Example
 ::: columns
 :::: {.column width=60%}
-- The probability of $Burglary$ is 0.001
-- The probability of $Earthquake$ is 0.002
+- The probability of:
+  - $Burglary$ is 0.001
+  - $Earthquake$ is 0.002
 
-- $Alarm$ system
+- $Alarm$ system:
   - Is fairly reliable at detecting $Burglary$
-  - Responds to minor $Earthquakes$
+  - Responds to minor $Earthquakes$ (false positives)
 
 \begingroup \scriptsize
 | **Burglary** | **Earthquake** | **P(Alarm\| B,E)** |
