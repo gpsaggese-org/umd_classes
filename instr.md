@@ -1,12 +1,6 @@
-the --select mode with a start pattern (without a :
-range specifier) currently extracts to the end of the file instead of stopping at
-the next paragraph with the same heading level.
+In llm_cli.py do not transform the code unless there is an option -m, --modify_in_place
 
-Instead When --select <start> without a : it should stop at the next paragraph with the same level
-
---select should consider the text until the end only if it's like <start>:END
-
-Update the documentation and the docstrings
+Add an option --skill to reuse 
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`

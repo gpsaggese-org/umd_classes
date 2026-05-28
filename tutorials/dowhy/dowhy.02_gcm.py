@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -33,8 +33,6 @@
 import logging
 
 # Third-party libraries.
-import matplotlib.pyplot as plt
-import numpy as np
 
 # %%
 # Helpers imports.
@@ -48,8 +46,10 @@ import dowhy_02_gcm_utils as utils
 try:
     from IPython.display import display
 except ImportError:
+
     def display(obj):
         print(obj)
+
 
 _LOG = logging.getLogger(__name__)
 
@@ -117,7 +117,9 @@ print(f"\nGenerated {len(df_simple)} samples from the GCM")
 
 # %%
 # Visualize relationships between variables.
-utils.cell2_plot_relationships(df_simple, "Temperature", "Activity", "IceCreamSales")
+utils.cell2_plot_relationships(
+    df_simple, "Temperature", "Activity", "IceCreamSales"
+)
 
 # %% [markdown]
 # # Cell 3: Automatic Mechanism Assignment
@@ -136,7 +138,7 @@ display(df_sachs.head())
 print(f"\nDataset shape: {df_sachs.shape}")
 
 # %%
-# #utils.cell3_assign_mechanisms_automatically??
+# # utils.cell3_assign_mechanisms_automatically??
 
 # %%
 # Automatically assign mechanisms to the DAG.
@@ -158,7 +160,7 @@ _ = hgraphviz.plot_causal_dag(
     sachs_dag,
     "Sachs et al. Protein Signaling Network",
     mode="graphviz",
-    figsize=(5,5)
+    figsize=(5, 5),
 )
 
 # %% [markdown]
@@ -171,7 +173,7 @@ _ = hgraphviz.plot_causal_dag(
 # - This approach is fast and interpretable for linear models
 
 # %%
-# #utils.cell4_fit_scm_simple??
+# # utils.cell4_fit_scm_simple??
 
 # %%
 # Fit a simple linear SCM to the Sachs data.
@@ -181,8 +183,8 @@ fitted_params = utils.cell4_fit_scm_simple(sachs_dag, df_sachs)
 # - For exogenous nodes (no parents): mean and std of the variable
 # - For endogenous nodes (with parents): intercept and slope coefficients from
 #   linear regression, plus R² and residual_std to assess fit quality
-#import pprint
-#pprint.pprint(fitted_params)
+# import pprint
+# pprint.pprint(fitted_params)
 
 print("# Fitted model parameters:")
 for node, params in fitted_params.items():
@@ -210,7 +212,7 @@ for node, params in fitted_params.items():
 #   counterfactual reasoning
 
 # %%
-# #utils.cell5_generate_synthetic_samples??
+# # utils.cell5_generate_synthetic_samples??
 
 # %%
 # Generate synthetic samples from the fitted model.
@@ -247,7 +249,7 @@ utils.cell5_compare_distributions(df_sachs, df_synthetic, figsize=(16, 4))
 # - Problematic mechanisms warrant customization or more data
 
 # %%
-# #utils.cell6_evaluate_model_quality??
+# # utils.cell6_evaluate_model_quality??
 
 # %%
 # Evaluate the quality of each fitted mechanism.
@@ -329,7 +331,7 @@ utils.cell2_plot_relationships(df_custom, "Input", "Output1", "Output2")
 # to reduce API latency via counterfactual reasoning.
 
 # %%
-# #utils.cell9_system_metrics_dataset??
+# # utils.cell9_system_metrics_dataset??
 
 # %%
 # Load system metrics dataset with known causal structure.
@@ -346,7 +348,7 @@ display(df_metrics.head())
 print(f"\nDataset: {df_metrics.shape[0]} observations of system behavior")
 
 # %%
-# #utils.cell4_fit_scm_simple??
+# # utils.cell4_fit_scm_simple??
 
 # %%
 # Fit the system model.

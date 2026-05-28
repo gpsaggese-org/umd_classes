@@ -12,12 +12,13 @@ import tutorials.dowhy.dowhy_01_causal_graphs_utils as tdd0cgrut
 
 import itertools
 import logging
-from typing import Any, Dict, FrozenSet, List, Mapping, Optional, Tuple
+from typing import Any, Dict, FrozenSet, List, Optional, Tuple
 
 import ipywidgets as widgets
+
 # TODO(ai_gp): import matplotlib
-import matplotlib.axes as maxes
 import matplotlib.patches as mpatches
+
 # TODO(ai_gp): This import is fine.
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -25,10 +26,11 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from IPython.display import display
+
 # TODO(ai_gp): import scipy
 from scipy import stats
 
-import helpers.hgraphviz as hgraphviz
+import helpers.hgraphviz as hgraphv
 
 _LOG = logging.getLogger(__name__)
 
@@ -121,7 +123,9 @@ def cell1_plot_correlation_vs_causation(
             ("Temperature", "Drownings"),
         ]
     )
-    hgraphviz.plot_causal_dag(causal_g, "True causal structure", mode="graphviz", ax=axes[1])
+    hgraphv.plot_causal_dag(
+        causal_g, "True causal structure", mode="graphviz", ax=axes[1]
+    )
     fig.tight_layout()
     plt.show()
 
@@ -153,7 +157,7 @@ def cell1_print_and_plot_motivating_dags(
     fig.tight_layout()
     for ax, (name, G) in zip(axes, domain_dags.items()):
         ax.margins(0.2)
-        hgraphviz.plot_causal_dag(G, name, mode="graphviz", ax=ax)
+        hgraphv.plot_causal_dag(G, name, mode="graphviz", ax=ax)
     plt.show()
 
 
@@ -196,7 +200,7 @@ def cell1_interactive_edge_toggle(base_graph: nx.DiGraph) -> None:
                 else "Current graph (NOT a DAG)"
             )
             fig, ax = plt.subplots(figsize=(5, 4))
-            hgraphviz.plot_causal_dag(new_graph, title, mode="graphviz", ax=ax)
+            hgraphv.plot_causal_dag(new_graph, title, mode="graphviz", ax=ax)
             plt.show()
 
     for cb in checkboxes.values():
@@ -470,7 +474,7 @@ def cell3_interactive_hypothesis_comparison(
         with output:
             output.clear_output(wait=True)
             fig, ax = plt.subplots(figsize=(6, 4))
-            hgraphviz.plot_causal_dag(
+            hgraphv.plot_causal_dag(
                 G,
                 f"{choice}\nMean p-value at non-edges: {score:.3f}",
                 mode="graphviz",
@@ -685,13 +689,15 @@ def cell5_plot_discovery_comparison(
     # Share node positions across both panels for visual alignment.
     pos = nx.kamada_kawai_layout(true_g)
     fig, axes = plt.subplots(1, 2, figsize=figsize)
-    hgraphviz.plot_causal_dag(true_g, "Ground truth", mode="graphviz", ax=axes[0], pos=pos)
+    hgraphv.plot_causal_dag(
+        true_g, "Ground truth", mode="graphviz", ax=axes[0], pos=pos
+    )
     # Color discovered edges by whether they exist in the true graph.
     edge_colors = {
         (u, v): "#33A02C" if true_g.has_edge(u, v) else "#E31A1C"
         for u, v in discovered_g.edges()
     }
-    hgraphviz.plot_causal_dag(
+    hgraphv.plot_causal_dag(
         discovered_g,
         "Discovered",
         mode="graphviz",
@@ -787,8 +793,12 @@ def cell6_plot_method_comparison(
         figsize = (14, 5)
     pos = nx.kamada_kawai_layout(g1)
     fig, axes = plt.subplots(1, 2, figsize=figsize)
-    hgraphviz.plot_causal_dag(g1, labels[0], mode="graphviz", ax=axes[0], pos=pos)
-    hgraphviz.plot_causal_dag(g2, labels[1], mode="graphviz", ax=axes[1], pos=pos)
+    hgraphv.plot_causal_dag(
+        g1, labels[0], mode="graphviz", ax=axes[0], pos=pos
+    )
+    hgraphv.plot_causal_dag(
+        g2, labels[1], mode="graphviz", ax=axes[1], pos=pos
+    )
     fig.tight_layout()
     plt.show()
     # Build an edge agreement summary.
@@ -939,14 +949,14 @@ def cell7_interactive_causal_learn_widget(
                 # Show three subplots: discovered, ground truth, and metrics.
                 fig, axes = plt.subplots(1, 3, figsize=(16, 5))
                 # Discovered graph.
-                hgraphviz.plot_causal_dag(
+                hgraphv.plot_causal_dag(
                     G,
                     f"Discovered ({choice})",
                     mode="graphviz",
                     ax=axes[0],
                 )
                 # Ground truth graph.
-                hgraphviz.plot_causal_dag(
+                hgraphv.plot_causal_dag(
                     true_dag,
                     "Ground Truth",
                     mode="graphviz",
@@ -973,7 +983,7 @@ def cell7_interactive_causal_learn_widget(
                 fig.tight_layout()
             else:
                 fig, ax = plt.subplots(figsize=(7, 5))
-                hgraphviz.plot_causal_dag(
+                hgraphv.plot_causal_dag(
                     G,
                     f"causal-learn ({choice}) discovered graph",
                     mode="graphviz",
@@ -1039,7 +1049,7 @@ def cell8_plot_consensus_graph(
         e: cmap(0.3 + 0.7 * (s / n_methods)) for e, s in support.items()
     }
     fig, ax = plt.subplots(figsize=figsize)
-    hgraphviz.plot_causal_dag(
+    hgraphv.plot_causal_dag(
         consensus,
         "Consensus graph (darker edges = more methods agree)",
         mode="graphviz",
@@ -1320,7 +1330,7 @@ def cell10_plot_annotated_graph(
         for n in G.nodes()
     }
     fig, ax = plt.subplots(figsize=figsize)
-    hgraphviz.plot_causal_dag(
+    hgraphv.plot_causal_dag(
         G,
         "Refutation annotated graph (red = more violations)",
         mode="graphviz",
@@ -1409,7 +1419,7 @@ def cell11_interactive_sensitivity_widget(df: pd.DataFrame) -> None:
         with output:
             output.clear_output(wait=True)
             fig, ax = plt.subplots(figsize=(7, 5))
-            hgraphviz.plot_causal_dag(
+            hgraphv.plot_causal_dag(
                 G,
                 f"Discovery with N={n_slider.value}, alpha={alpha_slider.value:.3f}",
                 mode="graphviz",

@@ -29,6 +29,7 @@ from typing import List
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
+import helpers.hselect_input_output as hselsio
 import helpers.hparser as hparser
 import helpers.hsystem as hsystem
 
@@ -69,7 +70,7 @@ def _parse() -> argparse.ArgumentParser:
         default="both",
         help="Action to perform: generate_summary, generate_projects, or both (default: both)",
     )
-    hparser.add_limit_range_arg(parser)
+    hselsio.add_limit_range_arg(parser)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -93,7 +94,7 @@ def _find_lesson_files(input_dir: str, *, limit_range=None) -> List[str]:
             lesson_files.append(full_path)
     lesson_files.sort()
     # Apply limit range if specified.
-    lesson_files = hparser.apply_limit_range(
+    lesson_files = hselsio.apply_limit_range(
         lesson_files, limit_range, item_name="lesson files"
     )
     return lesson_files
@@ -273,7 +274,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Validate input directory
     hdbg.dassert_dir_exists(args.input_dir)
     # Parse limit range if specified.
-    limit_range = hparser.parse_limit_range_args(args)
+    limit_range = hselsio.parse_limit_range_args(args)
     # Process all lessons
     _process_all_lessons(
         args.input_dir,

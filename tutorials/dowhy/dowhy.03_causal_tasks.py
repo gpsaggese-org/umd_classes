@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -34,15 +34,11 @@
 import logging
 
 # Third-party libraries.
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 
 # %%
 # Helpers imports.
 import helpers.hdbg as hdbg
 import helpers.hnotebook as hnotebook
-import helpers.hgraphviz as hgraphviz
 
 # Notebook-specific utilities.
 import dowhy_03_causal_tasks_utils as utils
@@ -50,8 +46,10 @@ import dowhy_03_causal_tasks_utils as utils
 try:
     from IPython.display import display
 except ImportError:
+
     def display(obj):
         print(obj)
+
 
 _LOG = logging.getLogger(__name__)
 
@@ -75,7 +73,7 @@ _LOG.info("Notebook initialized")
 # ## Cell 1.1: The Fundamental Problem of Causal Inference
 
 # %%
-# #utils.cell1_1_plot_potential_outcomes??
+# # utils.cell1_1_plot_potential_outcomes??
 
 # %% [markdown]
 # In this cell, we demonstrate the fundamental challenge of causal inference using a
@@ -126,7 +124,9 @@ print(f"\nDataset shape: {df_health.shape}")
 # Compute naive ATE and show the bias.
 naive_ate = utils.cell1_2_compute_naive_ate(df_health)
 print(f"Naive ATE (biased): {naive_ate:.3f}")
-print("This estimate is biased because severity confounds the medication-recovery relationship.")
+print(
+    "This estimate is biased because severity confounds the medication-recovery relationship."
+)
 
 # %%
 # Interactive widget: compare different adjustment methods.
@@ -142,15 +142,17 @@ utils.cell1_2_interactive_adjustment_methods(df_health)
 df_edu, G_edu = utils.cell1_3_education_earnings_dataset(n_samples=500)
 
 display(df_edu.head())
-print(f"\nNote: Ability is unobserved; Distance is the instrument.")
+print("\nNote: Ability is unobserved; Distance is the instrument.")
 
 # %%
 # Compute 2SLS estimate of education effect on earnings.
 # TODO(ai_gp): explain the compute two-stage least squares (2SLS/IV estimator).
 iv_results = utils.cell1_3_compute_2sls(df_edu)
-print(f"First-stage coefficient (Distance → Education): {iv_results['first_stage']:.3f}")
+print(
+    f"First-stage coefficient (Distance → Education): {iv_results['first_stage']:.3f}"
+)
 print(f"2SLS estimate (LATE): {iv_results['late']:.0f}")
-print(f"True effect: ~15000 (education increases earnings by ~$15k)")
+print("True effect: ~15000 (education increases earnings by ~$15k)")
 
 # %%
 # Interactive widget: explore IV strength sensitivity.
@@ -173,8 +175,8 @@ utils.cell1_4_plot_did_trends(df_did)
 # Compute difference-in-differences estimate.
 did_estimate = utils.cell1_4_compute_did(df_did)
 print(f"DiD estimate: {did_estimate:.2f}")
-print(f"True treatment effect: ~15 (policy increases outcome by 15 units)")
-print(f"The estimate is valid if the parallel trends assumption holds.")
+print("True treatment effect: ~15 (policy increases outcome by 15 units)")
+print("The estimate is valid if the parallel trends assumption holds.")
 
 # %% [markdown]
 # ## Cell 1.5: Conditional Average Treatment Effects (CATE)
@@ -321,10 +323,14 @@ utils.cell3_1_interactive_anomaly_dashboard(df_sys, G_sys)
 df_before, df_after = utils.cell3_2_customer_shift_dataset()
 
 print("Before: Younger, lower-income customers")
-print(f"  Mean Age: {df_before['Age'].mean():.1f}, Mean Satisfaction: {df_before['Satisfaction'].mean():.2f}")
+print(
+    f"  Mean Age: {df_before['Age'].mean():.1f}, Mean Satisfaction: {df_before['Satisfaction'].mean():.2f}"
+)
 
 print("\nAfter: Older, higher-income customers")
-print(f"  Mean Age: {df_after['Age'].mean():.1f}, Mean Satisfaction: {df_after['Satisfaction'].mean():.2f}")
+print(
+    f"  Mean Age: {df_after['Age'].mean():.1f}, Mean Satisfaction: {df_after['Satisfaction'].mean():.2f}"
+)
 
 # %%
 # Compute distribution shift attribution.
@@ -431,20 +437,26 @@ utils.cell4_3_interactive_policy(df_support)
 # Generate training and OOD test datasets.
 df_train, df_test = utils.cell5_1_generate_ood_data(n_train=300, n_test=100)
 
-print(f"Training data range: X ∈ [{df_train['X'].min():.2f}, {df_train['X'].max():.2f}]")
-print(f"Test data range (OOD): X ∈ [{df_test['X'].min():.2f}, {df_test['X'].max():.2f}]")
+print(
+    f"Training data range: X ∈ [{df_train['X'].min():.2f}, {df_train['X'].max():.2f}]"
+)
+print(
+    f"Test data range (OOD): X ∈ [{df_test['X'].min():.2f}, {df_test['X'].max():.2f}]"
+)
 
 # %%
 # Fit ML and causal models.
 ml_params, causal_params = utils.cell5_1_fit_ml_and_causal_models(df_train)
 
-print(f"Fitted models:")
+print("Fitted models:")
 print(f"  Intercept: {ml_params['intercept']:.2f}")
 print(f"  Slope: {ml_params['slope']:.2f}")
 
 # %%
 # Compare predictions on OOD data.
-perf_df = utils.cell5_1_compare_ood_predictions(df_test, ml_params, causal_params)
+perf_df = utils.cell5_1_compare_ood_predictions(
+    df_test, ml_params, causal_params
+)
 
 display(perf_df)
 
@@ -459,8 +471,8 @@ utils.cell5_1_plot_ood_comparison(df_train, df_test)
 # Generate datasets from two populations with different distributions.
 pop_a, pop_b = utils.cell5_2_two_population_dataset()
 
-print("Population A: Mean age = {:.1f}".format(pop_a['Age'].mean()))
-print("Population B: Mean age = {:.1f}".format(pop_b['Age'].mean()))
+print("Population A: Mean age = {:.1f}".format(pop_a["Age"].mean()))
+print("Population B: Mean age = {:.1f}".format(pop_b["Age"].mean()))
 
 # %%
 # Interactive widget comparing populations.
@@ -496,7 +508,7 @@ analysis_results = utils.cell6_2_run_full_analysis(df_ecommerce, G_ecommerce)
 print("Case Study: E-Commerce Marketing ROI")
 print(f"  Regression-based ATE: {analysis_results['regression_ate']:.2f}")
 print(f"  GCM-based ATE: {analysis_results['gcm_ate']:.2f}")
-print(f"  Estimates are similar, suggesting robust effect")
+print("  Estimates are similar, suggesting robust effect")
 
 # %%
 # Plot comprehensive summary.

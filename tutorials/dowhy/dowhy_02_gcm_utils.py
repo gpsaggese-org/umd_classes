@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
 from typing import Callable, Dict, Tuple, Optional, Any
 
-import helpers.hgraphviz as hgraphviz
+import helpers.hgraphviz as hgraphv
 
 # Constants for visualization.
 DAG_FIGSIZE = (10, 8)
@@ -103,7 +103,7 @@ def cell1_plot_correlation_vs_causation() -> None:
     G.add_edges_from(
         [("Temperature", "Ice Cream"), ("Temperature", "Drownings")]
     )
-    hgraphviz.plot_causal_dag(
+    hgraphv.plot_causal_dag(
         G,
         "Causal structure",
         mode="graphviz",

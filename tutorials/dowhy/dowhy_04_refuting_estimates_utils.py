@@ -7,7 +7,7 @@ pedagogical flow.
 
 Import as:
 
-import tutorials.dowhy.dowhy_04_refuting_estimates_utils as darti
+import tutorials.dowhy.dowhy_04_refuting_estimates_utils as tdd0resut
 """
 
 import logging
@@ -185,9 +185,7 @@ def cell3_visualize_data(df: pd.DataFrame, true_ate: float) -> None:
     axes[0].set_xlabel("Treatment (X)")
     axes[0].set_ylabel("Outcome (Y)")
     axes[0].set_title("Data colored by confounder (Z)")
-    _ = plt.colorbar(
-        axes[0].collections[0], ax=axes[0], label="Confounder (Z)"
-    )
+    _ = plt.colorbar(axes[0].collections[0], ax=axes[0], label="Confounder (Z)")
     axes[1].hist(df.loc[df["X"] < 0, "Y"], alpha=0.5, label="X < 0", bins=20)
     axes[1].hist(df.loc[df["X"] >= 0, "Y"], alpha=0.5, label="X >= 0", bins=20)
     axes[1].set_xlabel("Outcome (Y)")
@@ -201,7 +199,7 @@ def cell3_visualize_data(df: pd.DataFrame, true_ate: float) -> None:
             f"Data Summary:\n"
             f"Sample size: {len(df)}\n"
             f"True ATE: {true_ate:.2f}\n"
-            f"Mean(Y|X≥0) - Mean(Y|X<0):\n  {df.loc[df['X']>=0, 'Y'].mean() - df.loc[df['X']<0, 'Y'].mean():.2f}\n\n"
+            f"Mean(Y|X≥0) - Mean(Y|X<0):\n  {df.loc[df['X'] >= 0, 'Y'].mean() - df.loc[df['X'] < 0, 'Y'].mean():.2f}\n\n"
             f"Causal Structure:\n"
             f"Z (confounder) → X, Y\n"
             f"X (treatment) → Y\n\n"
@@ -236,6 +234,7 @@ def cell4_naive_estimation(df: pd.DataFrame, true_ate: float) -> Dict[str, Any]:
     :return: Dictionary with estimation results
     """
     from sklearn.linear_model import LinearRegression
+
     model = LinearRegression()
     model.fit(df[["X"]], df["Y"])
     naive_ate = model.coef_[0]
@@ -273,7 +272,13 @@ def cell4_visualize_bias(results: Dict[str, Any]) -> None:
         color="red",
         linewidth=2,
     )
-    ax.axhline(results["true_ate"], color="green", linestyle="--", linewidth=2, label="True ATE")
+    ax.axhline(
+        results["true_ate"],
+        color="green",
+        linestyle="--",
+        linewidth=2,
+        label="True ATE",
+    )
     ax.set_xlim(0.5, 1.5)
     ax.set_ylim(
         min(results["true_ate"], results["ci_lower"]) - 0.5,
@@ -325,6 +330,7 @@ def cell5_run_placebo_refutation(
     :return: Dictionary with placebo results
     """
     from sklearn.linear_model import LinearRegression
+
     rng = np.random.default_rng(random_state)
     placebo_effects = []
     for _ in range(n_placebos):
@@ -425,6 +431,7 @@ def cell6_run_dummy_outcome_refutation(
     :return: Dictionary with dummy outcome results
     """
     from sklearn.linear_model import LinearRegression
+
     rng = np.random.default_rng(random_state)
     dummy_effects = []
     for _ in range(n_dummy):
@@ -433,10 +440,9 @@ def cell6_run_dummy_outcome_refutation(
         model.fit(df[["X"]], dummy_y)
         dummy_effects.append(model.coef_[0])
     dummy_effects = np.array(dummy_effects)
-    true_in_tail = (
-        true_ate > np.percentile(dummy_effects, 95)
-        or true_ate < np.percentile(dummy_effects, 5)
-    )
+    true_in_tail = true_ate > np.percentile(
+        dummy_effects, 95
+    ) or true_ate < np.percentile(dummy_effects, 5)
     results = {
         "dummy_effects": dummy_effects,
         "true_ate": true_ate,
@@ -526,6 +532,7 @@ def cell7_run_random_confounder_refutation(
     :return: Dictionary with results
     """
     from sklearn.linear_model import LinearRegression
+
     rng = np.random.default_rng(random_state)
     estimates_with_noise = []
     for _ in range(n_confounders):
@@ -614,6 +621,7 @@ def cell8_run_subsample_refutation(
     :return: Dictionary with results
     """
     from sklearn.linear_model import LinearRegression
+
     rng = np.random.default_rng(random_state)
     subsample_effects = []
     subsample_size = int(len(df) * subsample_fraction)
@@ -641,7 +649,9 @@ def cell8_visualize_subsample(results: Dict[str, Any]) -> None:
     :param results: Results from cell8_run_subsample_refutation
     """
     _, axes = plt.subplots(1, 2, figsize=(14, 5))
-    axes[0].hist(results["effects"], bins=15, alpha=0.7, color="teal", edgecolor="black")
+    axes[0].hist(
+        results["effects"], bins=15, alpha=0.7, color="teal", edgecolor="black"
+    )
     axes[0].axvline(
         results["mean_effect"],
         color="red",
@@ -700,6 +710,7 @@ def cell9_sensitivity_analysis(
     :return: Dictionary with sensitivity results
     """
     from sklearn.linear_model import LinearRegression
+
     if confounder_strengths is None:
         confounder_strengths = [0, 0.25, 0.5, 0.75, 1.0, 1.5, 2.0]
     rng = np.random.default_rng(random_state)
@@ -759,6 +770,7 @@ def cell10_compare_estimators(
     :return: Dictionary with results for each estimator
     """
     from sklearn.linear_model import LinearRegression
+
     results = {}
     naive_model = LinearRegression()
     naive_model.fit(df[["X"]], df["Y"])
@@ -818,14 +830,16 @@ def cell11_create_job_training_data(
         + motivation * 5000
         + rng.normal(0, 5000, n_samples)
     )
-    df = pd.DataFrame({
-        "Age": age,
-        "Education": education,
-        "Prior_Income": prior_income,
-        "Motivation": motivation,
-        "Training": training,
-        "Post_Income": post_income,
-    })
+    df = pd.DataFrame(
+        {
+            "Age": age,
+            "Education": education,
+            "Prior_Income": prior_income,
+            "Motivation": motivation,
+            "Training": training,
+            "Post_Income": post_income,
+        }
+    )
     return df
 
 
@@ -836,6 +850,7 @@ def cell11_analyze_job_training(df: pd.DataFrame) -> None:
     :param df: Job training dataset
     """
     from sklearn.linear_model import LinearRegression
+
     naive_model = LinearRegression()
     naive_model.fit(df[["Training"]], df["Post_Income"])
     naive_ate = naive_model.coef_[0]
