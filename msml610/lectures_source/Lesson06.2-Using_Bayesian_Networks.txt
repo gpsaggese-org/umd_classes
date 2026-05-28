@@ -46,7 +46,7 @@ MSML610: Advanced Machine Learning
 
 * Bayesian Networks: Semantics
 
-- There are **two equivalent semantic interpretations** of a Bayesian Network
+- **Two equivalent semantic interpretations** of a Bayesian Network:
 
   1. **Joint Distribution View**
      - The network encodes the _joint probability distribution_ over all
@@ -66,9 +66,10 @@ MSML610: Advanced Machine Learning
 // ### Representing the full joint distribution (p. 533)
 
 * Chain Rule for a Joint Distribution
-- A **joint distribution** can always be expressed using the chain rule for any:
-  - Subset of its RVs
-  - Ordering of the RVs
+- **Theorem**: A joint distribution can always be expressed using the chain rule
+  for any:
+  - Subset of its random variables
+  - Ordering of the random variables
 
 1. You **express one variable** conditionally to the remaining ones
    $$
@@ -1064,10 +1065,12 @@ digraph BayesianFlow {
   - Estimate probability by averaging weighted samples:
     $$
     E[f(X)] \approx \frac{1}{N} \sum_{i=1}^N w_i f(X_i)
-    $$ :::: ::::
-    {.column width=35%}
-    ![](msml610/lectures_source/figures/L06.2.Importance_Sampling.png) ::::
-    :::
+    $$
+::::
+:::: {.column width=35%}
+![](msml610/lectures_source/figures/L06.2.Importance_Sampling.png)
+::::
+:::
 
 - **Example**:
   - Estimate $\Pr(A | E=e)$ where $E$ is rare
