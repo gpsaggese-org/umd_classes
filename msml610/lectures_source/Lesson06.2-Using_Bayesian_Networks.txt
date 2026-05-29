@@ -116,7 +116,7 @@ MSML610: Advanced Machine Learning
 * Evaluate a Bayesian Network: Example
 ::: columns
 :::: {.column width=60%}
-- **Question**: Given Pearl LA example, you want to compute the probability that:
+- **Problem**: Given Pearl LA example, you want to compute the probability that:
   - The alarm has sounded: $Alarm$
   - Neither a burglary nor an earthquake has occurred:
     $\lnot Burglary \land \lnot Earthquake$
@@ -164,13 +164,13 @@ digraph BayesianFlow {
 
 * Constructing a Bayesian Network
 1. **Gather domain knowledge**
-   - Identify key variables and their potential interactions
    - List all relevant random variables necessary to describe the system
+   - Identify key variables and their potential interactions
 
 2. **Order the nodes** according to cause-effects dependencies
-   - So that the Bayesian network is minimal
+   - The Bayesian network will be minimal
 
-3. For each node, **pick the minimum set of parents** $Parents(X_i)$
+3. **Pick the minimum set of parents** $Parents(X_i)$ for each node
    - Add edges to represent the dependencies
    - Avoid redundant connections
 
@@ -198,9 +198,9 @@ digraph BayesianFlow {
     - Typically yields linear (not exponential) growth in complexity
     - Sometimes we ignore real-world dependency to keep the graph simple
 
-- In **fully connected systems**
-  - Each variable is influenced by all others
-  - The Bayesian network has the same complexity as the joint probability
+- In **fully connected systems** each variable is influenced by all others
+  - The Bayesian network is sparse but has the same complexity as the joint
+    probability
 
 * Ordering of Nodes
 - The complexity of the Bayesian network depends on the choice in ordering the
