@@ -1,6 +1,4 @@
-In llm_cli.py do not transform the code unless there is an option -m, --modify_in_place
-
-Add an option --skill to reuse 
+Change llm_cli.py so that do not transform file in place unless there is an option -m, --modify_in_place
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`

@@ -71,7 +71,8 @@ MSML610: Advanced Machine Learning
   - Subset of its random variables
   - Ordering of the random variables
 
-1. You **express one variable** conditionally to the remaining ones
+- **Proof**
+1. **Express one variable** conditionally to the remaining ones
    $$
    \Pr(\blue{x_1, ..., x_{n-1}}, \red{x_n})
    = \Pr(\red{x_n} | \blue{x_{n-1}, ..., x_1}) \Pr(\blue{x_{n-1}, ..., x_1})
@@ -94,48 +95,50 @@ MSML610: Advanced Machine Learning
    \end{align*}
    \endgroup
 
-* Statement Probability from Bayesian Network
-- The **full joint distribution** represents the probability of an assignment to
-  each variable $X_i = x_i$:
-  $$\Pr(x_1, ..., x_n) \defeq \Pr(X_1 = x_1 \land ... \land X_n = x_n)$$
+* Evaluate a Bayesian Network
+1. Sort the nodes in topological order
+   - There are several orderings consistent with the directed graph structure
+2. Use the chain rule with the topological ordering:
+   $$
+   \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{i-1}, ..., X_1)
+   $$
+3. Since the probability of each node is conditionally independent of all its
+   predecessors given its parents
+   $$
+   \Pr(X_i | X_{i-1}, ..., X_1) = \Pr(X_i | Parents(X_i))
+   $$
+4. Express the joint probability in terms of the Conditional Probability Tables
+   (CPTs):
+   $$
+   \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | Parents(X_i))
+   $$
 
-- To **evaluate a Bayesian network**
-  - Sort the nodes in topological order
-    - There are several orderings consistent with the directed graph structure
-  - Use the chain rule with the topological ordering:
-    $$
-    \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{i-1}, ..., X_1)
-    $$
-  - Since the probability of each node is conditionally independent of all its
-    predecessors given its parents
-    $$
-    \Pr(X_i | X_{i-1}, ..., X_1) = \Pr(X_i | Parents(X_i))
-    $$
-  - Express the joint probability in terms of the Conditional Probability Tables
-    (CPTs):
-    $$
-    \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | Parents(X_i))
-    $$
-
-* Statement Probability From Bayes Nets: Example
+* Evaluate a Bayesian Network: Example
 ::: columns
 :::: {.column width=60%}
-- Given Pearl LA example, you want to compute the probability that:
+- **Question**: Given Pearl LA example, you want to compute the probability that:
   - The alarm has sounded: $Alarm$
   - Neither a burglary nor an earthquake has occurred:
     $\lnot Burglary \land \lnot Earthquake$
   - Both John and Mary call: $JohnCalls, MaryCalls$
 ::::
 :::: {.column width=35%}
-```graphviz
-digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+```graphviz[width=70%]
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
 
-    Burglary [label="Burglary", xlabel="P(B) = 0.001"];
-    Earthquake [label="Earthquake", xlabel="P(E) = 0.002"];
-    Alarm [label="Alarm", xlabel="P(A | B,E)"];
-    JohnCalls [label="JohnCalls", xlabel="P(J | A)"];
-    MaryCalls [label="MaryCalls", xlabel="P(M | A)"];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Burglary [label="Burglary", fillcolor="#A6C8F4"];
+    Earthquake [label="Earthquake", fillcolor="#FFD1A6"];
+    Alarm [label="Alarm", fillcolor="#B2E2B2"];
+    JohnCalls [label="JohnCalls", fillcolor="#C6A6F4"];
+    MaryCalls [label="MaryCalls", fillcolor="#C6A6F4"];
+
+    { rank = same; Burglary; Earthquake; }
+    { rank = same; JohnCalls; MaryCalls; }
 
     Burglary -> Alarm;
     Earthquake -> Alarm;
@@ -147,8 +150,8 @@ digraph BayesianNetwork {
 :::
 
 - **Solution**
-  - Compute the probability as a product of conditional probabilities from the
-    Bayesian Network
+- Compute the probability as a product of conditional probabilities from the
+  Bayesian Network:
   \begin{align*}
   & \Pr(JohnCalls, MaryCalls, Alarm, \lnot Burglary, \lnot Earthquake) \\
   & = \Pr(JohnCalls|Alarm) \cdot \\
