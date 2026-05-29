@@ -210,7 +210,20 @@ digraph BayesianFlow {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     Burglary -> Alarm;
     Earthquake -> Alarm;
     Alarm -> JohnCalls;
@@ -221,8 +234,20 @@ digraph BayesianNetwork {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
 
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     MaryCalls -> Alarm;
     JohnCalls -> Alarm;
     Alarm -> Burglary;
@@ -238,8 +263,20 @@ digraph BayesianNetwork {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
 
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     MaryCalls -> Earthquake;
     MaryCalls -> Burglary;
     MaryCalls -> JohnCalls;
