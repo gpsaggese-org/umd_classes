@@ -729,6 +729,7 @@ digraph StockPriceGraph {
 
 - Noisy Logical Relationships
 
+* Noisy Logic Relationships
 - **Definition**: _Noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
   - Are a probabilistic version of a logical relationship
   - Can be simpler to describe given $k$ parents
