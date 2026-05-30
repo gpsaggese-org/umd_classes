@@ -15,8 +15,6 @@ Edit vi requirements.txt to add the packages pinning down to the last version
 
 docker_build.sh
 
-docker_jupyter.sh
-
 # 
 
 https://pgmpy.org/documentation.html
@@ -41,5 +39,11 @@ probabilistic_inference_utils.py
 
 jupytext.py --action pair --files probabilistic_inference.ipynb
 
+linters2/lint_cc.py --files tutorials/pgmpy/probabilistic_inference_utils.py
+
+docker_jupyter.sh
+http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
+
 #
-docker_cmd.sh "python /git_root/umd_classes1/tutorials/pgmpy/causalnex.API.py"
+docker_cmd.sh "python /git_root/tutorials/pgmpy/probabilistic_inference.py"
+

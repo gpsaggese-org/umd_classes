@@ -6,9 +6,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -21,8 +21,6 @@
 # %%
 import warnings
 warnings.filterwarnings('ignore')
-import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from probabilistic_inference_utils import *
 
@@ -76,7 +74,7 @@ create_cpd_widget(disease_prior=0.05)
 # %%
 # Sample from the prior distribution
 model = create_medical_network()
-forward_sample_and_plot(model, num_samples=1000)
+forward_sample_and_plot(model, n_samples=1000)
 plt.show()
 
 print("This is what the network believes in a vacuum.")
