@@ -523,7 +523,7 @@ digraph BayesianFlow {
 * Markov Blanket: Medical Example
 ::: columns
 :::: {.column width=25%}
-- Consider risk factors and outcomes for heart disease
+- Consider the risk factors and outcomes for heart disease
 ::::
 :::: {.column width=70%}
 ```graphviz
@@ -535,12 +535,12 @@ digraph HeartDiseaseGraph {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Nodes
-    H [label="Heart Disease", fillcolor="#F4A6A6"];
+    H [label="HeartDisease", fillcolor="#F4A6A6"];
     A [label="Age", fillcolor="#A6C8F4"];
     G [label="Genetics", fillcolor="#A6C8F4"];
     D [label="Diet", fillcolor="#A6C8F4"];
     E [label="Exercise", fillcolor="#A6C8F4"];
-    BP [label="Blood Pressure", fillcolor="#B2E2B2"];
+    BP [label="BloodPressure", fillcolor="#B2E2B2"];
     C [label="Cholesterol", fillcolor="#B2E2B2"];
 
     // Risk factors influencing Heart Disease
@@ -571,36 +571,37 @@ digraph HeartDiseaseGraph {
 ::::
 :::
 - **\red{Target node}**
-  - Heart disease
+  - $Heart Disease$
 
 - **\blue{Parent nodes}**
-  - Risk factors of heart disease
+  - Risk factors of heart disease (e.g., $Age$, $Genetics$, $Diet$, $Exercise$)
   - Direct influence of $H$
 
-- **\green{Children nodes}**
-  - Outcomes of heart disease
-  - Directly influenced by $H$ $\to$ 
-
 - **\blue{Spouse nodes}**
-  - $A$, $G$, $D$, $E$ also influence $BP$ and $C$
+  - The parent nodes are also spouse nodes since $Age$, $Genetics$, ... also
+    influence $BloodPressure$ and $Cholesterol$
 
-- Knowing the state of $A$, $G$, $D$, $E$, $BP$, $C$ (Markov Blanket) allows to
-  compute $H$, without any other information
+- **\green{Children nodes}**
+  - Outcomes of $HeartDisease$ are $BloodPressure$ and $Cholesterol$
+
+- Knowing the state of the parent, spouse, and children nodes (i.e., the Markov
+  Blanket) allows to compute $HeartDisease$, without any other information
 
 * Markov Blanket: Economic Example
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=65%}
 - Consider factors affecting house prices in a particular region
 
 - **\red{Target node}**
-  - House prices
+  - $HousePrices$
 
 - **\blue{Parent nodes}**
-  - Economic growth
-  - Interest rate
-  - Unemployment rate
+  - $EconomicGrowth$
+  - $InterestRate$
+  - $UnemploymentRate$
+  - They all clearly influence $HoursePrices$
 ::::
-:::: {.column width=40%}
+:::: {.column width=30%}
 ```graphviz
 digraph HousePriceGraph {
     splines=true;
@@ -610,12 +611,12 @@ digraph HousePriceGraph {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Nodes
-    HP [label="House Prices", fillcolor="#F4A6A6"];
-    E [label="Economic Growth", fillcolor="#A6C8F4"];
-    IR [label="Interest Rate", fillcolor="#A6C8F4"];
-    UE [label="Unemployment Rate", fillcolor="#A6C8F4"];
-    DI [label="Disposable Income", fillcolor="#B2E2B2"];
-    D [label="Housing Demand", fillcolor="#B2E2B2"];
+    HP [label="HousePrices", fillcolor="#F4A6A6"];
+    E [label="EconomicGrowth", fillcolor="#A6C8F4"];
+    IR [label="InterestRate", fillcolor="#A6C8F4"];
+    UE [label="UnemploymentRate", fillcolor="#A6C8F4"];
+    DI [label="DisposableIncome", fillcolor="#B2E2B2"];
+    D [label="HousingDemand", fillcolor="#B2E2B2"];
 
     // Edges
     E -> HP;
@@ -633,10 +634,10 @@ digraph HousePriceGraph {
 ::::
 :::
 - **\green{Children nodes}**
-  - Disposable income
+  - $DisposableIncome$
     - The house price affects how much money people have left after housing
       costs
-  - Demand for houses
+  - $HousingDemand$
     - Higher prices can reduce demand
 
 * Markov Blanket: Finance Example
@@ -704,8 +705,8 @@ digraph StockPriceGraph {
 // ### 13.2.2, Efficient representation of conditional distributions (p. 433)
 
 * Specifying a Conditional Probability Table
-- Conditional Probability Table (CPT) for a node requires $O(2^k)$ values in the
-  worst case
+- **Problem**: Conditional Probability Table (CPT) for a node requires $O(2^k)$
+  values in the worst case
   - Difficult to specify even with a small number of parents $k$
 
 - Often, the relationship is not completely arbitrary, e.g.,
@@ -714,8 +715,8 @@ digraph StockPriceGraph {
   - Context-specific independence
 
 * Deterministic Nodes
-- **Deterministic nodes** have values specified by their parents, without
-  uncertainty, e.g.,
+- **Definition**: _Deterministic nodes_ have values specified by their parents,
+  without uncertainty, e.g.,
   - A logical relationship:
     - Useful when a condition is met if any of the sub-conditions are true
     - $IsNorthAmerican = IsCanadian \lor IsUS \lor IsMexican$
@@ -726,21 +727,20 @@ digraph StockPriceGraph {
   - Deterministic nodes do not involve randomness or probability
   - Often used in models to simplify relationships and computations
 
-* Noisy Logical Relationships
-- **Noisy logical relationships** (e.g., noisy-OR, noisy-MAX):
+- Noisy Logical Relationships
+
+- **Definition**: _Noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
   - Are a probabilistic version of a logical relationship
   - Can be simpler to describe given $k$ parents
 
 - **Example**
-- In propositional logic
-  $$Fever \iff Cold \lor Flu \lor Malaria$$
+- In propositional logic: $Fever \iff Cold \lor Flu \lor Malaria$
 
-- In Bayesian networks
-  - The assumptions are:
-    1. All the possible causes are listed (you can use a leak node for "misc
-       causes")
-    2. There is uncertainty about the parents to cause the child node
-    3. The probabilities of parents are independent
+- In Bayesian networks, the assumptions are:
+  1. All the possible causes are listed (you can use a leak node for
+     "miscellaneous causes")
+  2. There is uncertainty about the parents causing the child node
+  3. The probabilities of the parents are independent
   - Under these assumptions:
     \begin{align*}
     &\Pr(Fever | parents(Fever)) \\
