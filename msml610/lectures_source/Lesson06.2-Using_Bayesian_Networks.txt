@@ -913,30 +913,28 @@ digraph InsuranceRiskModel {
 
 * Exact Inference in Bayesian Networks
 
-- **Goal of exact inference**
-  - Compute the posterior $P(X|\vE=\ve)$ for query variable $X$ given evidence
-    $\ve$
-
-- **Variables involved**
-  - Query variable $X$
-  - Evidence variables $\vE = \{E_1, \dots, E_m\}$
-  - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
+- **Goal**
+  - Compute the posterior $P(X|\vE=\ve)$ for the query variable $X$ given
+    evidence $\ve$, where:
+    - Query variable $X$
+    - Evidence variables $\vE = \{E_1, \dots, E_m\}$
+    - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
 
 - **Inference by Enumeration**
-  - Use full joint distribution and sum over all hidden variables:
+  - Use the full joint distribution and sum over all hidden variables:
     $$P(X|e) = \alpha \sum_Y P(X,e,Y)$$
 
 - **Variable Elimination**
   - Improves efficiency by caching intermediate results
   - Eliminates variables systematically to avoid redundant sums
-  - Removing irrelevant variables
-    - Variables not ancestors of query or evidence can be ignored
+  - Removes irrelevant variables
+    - Variables that are not ancestors of the query or evidence can be ignored
 
 - **Problems**
   - Exact inference is efficient $O(n)$ for trees, but intractable $O(2^n)$ in
     general
-  - It doesn't work for continuous variables
-  - Basis for approximate methods when exact is impractical
+  - It does not work for continuous variables
+  - Basis for approximate methods when exact methods are impractical
 
 * Exact Inference in Bayesian Networks: Example
 - You get a call from both John and Mary, what is the probability of the
