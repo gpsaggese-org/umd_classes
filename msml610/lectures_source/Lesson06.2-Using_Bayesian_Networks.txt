@@ -715,7 +715,7 @@ digraph StockPriceGraph {
   - Context-specific independence
 
 * Deterministic Nodes
-- **Definition**: _Deterministic nodes_ have values specified by their parents,
+- **Definition**: _deterministic nodes_ have values specified by their parents,
   without uncertainty, e.g.,
   - A logical relationship:
     - Useful when a condition is met if any of the sub-conditions are true
@@ -730,18 +730,20 @@ digraph StockPriceGraph {
 - Noisy Logical Relationships
 
 * Noisy Logic Relationships
-- **Definition**: _Noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
+- **Definition**: _noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
   - Are a probabilistic version of a logical relationship
   - Can be simpler to describe given $k$ parents
 
 - **Example**
-- In propositional logic: $Fever \iff Cold \lor Flu \lor Malaria$
+- In _propositional logic_, relationships are expressed like
+  $Fever \iff Cold \lor Flu \lor Malaria$
 
-- In Bayesian networks, the assumptions are:
+- In _Bayesian networks_, the assumptions are:
   1. All the possible causes are listed (you can use a leak node for
      "miscellaneous causes")
   2. There is uncertainty about the parents causing the child node
   3. The probabilities of the parents are independent
+
   - Under these assumptions:
     \begin{align*}
     &\Pr(Fever | parents(Fever)) \\
@@ -751,8 +753,8 @@ digraph StockPriceGraph {
     \end{align*}
 
 * Context-specific Independence
-- A variable exhibits **context-specific independence** if it is conditionally
-  independent of its parents given certain values of others
+- **Definition**: a variable exhibits _context-specific independence_ if it is
+  conditionally independent of its parents given certain values of others
 
 - **Example**
   - $Damage$ occurs depending on the $Ruggedness$ of your car and whether an
@@ -781,30 +783,34 @@ digraph StockPriceGraph {
      - Families of probability density functions (e.g., Gaussian distribution)
      - Non-parametric PDFs
 
-- **Hybrid Bayesian networks** mix discrete and continuous variables, e.g.,
-  - A customer buys a number of apples (discrete) depending on its cost
-    (continuous)
-  - Decide annual premium to charge to insure a vehicle based on applicant
-    information (e.g., make model)
+- **Definition**: _hybrid Bayesian networks_ mix discrete and continuous
+  variables, e.g.,
+  - _"A customer buys a number of apples (discrete) depending on its cost
+    (continuous)"
+  - _"Decide annual premium to charge to insure a vehicle based on applicant
+    information (e.g., maker model)"_
 
 * Bayesian Network: Car Insurance Company (1/2)
-- A **car insurance company**:
-  - Receive an application from an individual to insure a specific vehicle
-  - Analyze information about the individual and its car
-  - Decide on appropriate annual premium to charge
-  - Pay out a claim, based on the type of claim
+- **Problem**:
+  - A _car insurance company_:
+    - Receive an application from an individual to insure a specific vehicle
+    - Analyze information about the individual and its car
+    - Decide on appropriate annual premium to charge
+    - Pay out a claim, based on the type of claim
 
-- Build a Bayesian network that captures the causal structure of the domain
+- **Solution**: build a Bayesian network that captures the causal structure of
+  the domain
 
-  - **Input information**:
+  - _Input information_:
     - About the applicant: $Age$, $YearsWithLicense$, $DrivingRecord$,
       $GoodStudent$
     - About the vehicle: $MakeModel$, $VehicleYear$, $Airbag$, $SafetyFeatures$
     - About the driving situation: $Mileage$, $HasGarage$
-  - Some input informations are **important but not available**:
+  - _Unobservable information_: some input informations are important but not
+    available:
     - $RiskAversion$
     - $DrivingBehavior$
-  - **Type of claims**:
+  - _Type of claims_:
     - $MedicalCost$: injuries sustained by the applicant
     - $LiabilityCost$: lawsuits filed by other parties against applicant
     - $PropertyCost$: vehicle damage to either party and theft of the vehicle
