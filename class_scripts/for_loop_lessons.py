@@ -453,9 +453,11 @@ def _generate_class_recap(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    # TODO(ai_gp): Use dassert
-    if not match:
-        hdbg.dfatal("Could not extract lesson number from:", source_name)
+    hdbg.dassert_is_not(
+        match,
+        "Could not extract lesson number from: %s",
+        source_name,
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(

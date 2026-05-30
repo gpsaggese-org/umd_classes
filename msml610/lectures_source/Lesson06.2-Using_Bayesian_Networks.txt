@@ -406,10 +406,10 @@ digraph CausalModel {
 * Conditional Independence on Markov Blanket
 ::: columns
 :::: {.column width=55%}
-- In a Bayesian network, each variable is conditionally independent of:
-  - **Its predecessors given its parents**
-  - **All other nodes given its Markov blanket**, i.e., its parents, its
-    children, and its spouses
+- In a Bayesian network, each variable is **conditionally independent** of:
+  - Its predecessors given its parents
+  - All other nodes given its Markov blanket (i.e., its parents, its children,
+    and its spouses)
 
 - The **Markov blanket** of a node $X_i$:
   - Contains all the nodes necessary to predict the state of the node $X_i$,
@@ -491,7 +491,7 @@ digraph CausalModel {
 
 - E.g.,
   - Consider the Garden World
-  - You know the grass is wet $WetGrass$
+  - You know the grass is wet ($WetGrass$)
   - This evidence increases the probability of either causes $Rain$ or
     $Sprinkler$
   - If you find out that the $Sprinkler$ was on, this "explains away" the

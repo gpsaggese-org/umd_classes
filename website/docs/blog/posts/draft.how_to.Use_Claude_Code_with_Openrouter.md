@@ -159,9 +159,9 @@ export ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
 > env | grep ANTH
 ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
 ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
+ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
 ANTHROPIC_BASE_URL=https://openrouter.ai/api
 ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
-ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
 
 
 Test the model
@@ -174,7 +174,6 @@ Test the model
 
    ❯ /model
 
-   ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
      Select model
        Switch between Claude models. Your pick becomes the default for new
        sessions. For other/previous model names, specify with --model.
@@ -189,4 +188,11 @@ Test the model
 
                             Enter to set as default · s to use this session only
                             · Esc to cancel
+
+
+/model anthropic/claude-haiku-4.5
+
+Check the logs
+https://openrouter.ai/logs
+
 
