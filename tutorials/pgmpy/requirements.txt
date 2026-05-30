@@ -2,3 +2,5 @@ matplotlib
 numpy
 pandas
 seaborn
+
+pgmpy==1.1.2
