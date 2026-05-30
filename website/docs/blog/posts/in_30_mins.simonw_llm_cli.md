@@ -240,8 +240,10 @@ composable Unix tool you can pipe, script, and template from the terminal.
   ```bash
   # Anthropic Claude models.
   > llm install llm-anthropic
+
   # OpenRouter models.
   > llm install llm-openrouter
+
   # Google Gemini.
   > llm install llm-gemini
   ```
@@ -249,6 +251,7 @@ composable Unix tool you can pipe, script, and template from the terminal.
   ```bash
   # Install plugin.
   > llm install llm-anthropic
+
   # List models including new plugin.
   > llm models
   OpenAI Chat: gpt-4o (aliases: 4o)
@@ -260,6 +263,7 @@ composable Unix tool you can pipe, script, and template from the terminal.
   ```bash
   # Use Claude for PDF summarization.
   > llm -m claude "Summarize this PDF"
+
   # Start chat with security expert prompt.
   > llm chat -m claude-3-opus -s "You are a security expert"
   ```
