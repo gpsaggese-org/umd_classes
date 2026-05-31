@@ -997,24 +997,20 @@ digraph InsuranceRiskModel {
 
 * Sampling Bayesian Network Without Evidence
 
-- **Goal**: Generate events from a Bayesian network without evidence (prior sampling)
+- **Goal**: Generate samples from a Bayesian network without evidence (prior
+  sampling)
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=65%}
 - **Solution**
-  - Sample variables in topological order (to ensure parents have values)
-  - Source nodes have known unconditional probability distribution
-    - E.g., $\Pr(Rain) = 0.5$
-  - Conditional variable's probability distribution depends on parent's values
-    - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
-  - Implement Bayesian network semantics, representing joint probability:
-    $$
-    f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
-    $$
-    where $PS$ means "Prior Sampling"
+- Sample variables in topological order
+- Source nodes have known unconditional probability distribution
+  - E.g., $\Pr(Rain) = 0.5$
+- Conditional variable's probability distribution depends on parent's values
+  - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 
 ```graphviz
 digraph BayesianFlow {
@@ -1037,6 +1033,13 @@ digraph BayesianFlow {
 ::::
 :::
 
+- **Key Insight**: Implement Bayesian network semantics, representing joint
+  probability:
+  $$
+  f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
+  $$
+  where $PS$ means "Prior Sampling"
+
 * Consistency of Sampling
 - **Consistency of estimation**: distribution from prior sampling converges to
   true probability as $N \to \infty$
@@ -1051,7 +1054,7 @@ digraph BayesianFlow {
   $$
   \Pr(x_1, ..., x_n) \approx \frac{N_{PS}(x_1, ..., x_n)}{N}
   $$
-  - Converges with rate $\frac{1}{\sqrt{N}}$
+  converges with rate $\frac{1}{\sqrt{N}}$
 
 * Rejection Sampling
 ::: columns
@@ -1060,12 +1063,18 @@ digraph BayesianFlow {
   distribution
 
 - **Goal**: Compute $\Pr(X=x| E=e)$ when evidence $e$ is rare
+
+- **Algorithm**:
   1. Generate samples from the prior distribution
      - Estimate $\Pr(x, e)$
   2. Reject samples not matching evidence, i.e., $X \land E \neq e$
      - Remaining samples $X \land E=e$ estimate $\Pr(X, E=e)$
   3. Count occurrences of $X=x$ in remaining samples $X \land E=e$
      - Estimate $\Pr(X=x | E=e)$
+
+* Rejection Sampling: Estimating Pi
+
+- TODO(ai_gp): Add some notes explaining this
 
 ::::
 :::: {.column width=45%}
@@ -1075,21 +1084,22 @@ digraph BayesianFlow {
 ::::
 :::
 
-- **Example**:
-  - You want to estimate $\Pr(Rain | Sprinkler = T)$
-  - Sample 100 times
-    - You get 73 samples with $\lnot Sprinkler$ and they are rejected
-    - You are left with 27 samples with $Sprinkler$
-    - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
-  - Thus:
-    $$
-    \Pr(Rain | Sprinkler) = \frac{8}{27}
-    $$
+* Rejection Sampling: Garden World Example
+
+- You want to estimate $\Pr(Rain | Sprinkler = T)$
+- Sample 100 times
+  - You get 73 samples with $\lnot Sprinkler$ and they are rejected
+  - You are left with 27 samples with $Sprinkler$
+  - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
+- Thus:
+  $$
+  \Pr(Rain | Sprinkler) = \frac{8}{27}
+  $$
 
 * Rejection Sampling: Pros and Cons
 - **Pros**
   - Consistent estimate
-    - Converges to true value as number of samples increases
+    - I.e., converges to true value as number of samples increases
 
 - **Cons**
   - Many samples are rejected, depending on rarity of $\Pr(E=e)$
