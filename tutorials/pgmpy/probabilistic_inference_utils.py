@@ -31,7 +31,11 @@ _LOG = logging.getLogger(__name__)
 warnings.filterwarnings('ignore')
 
 
-def create_medical_network() -> DiscreteBayesianNetwork:
+# #############################################################################
+# Helper: Medical Network Implementation
+# #############################################################################
+
+def _create_medical_network_impl() -> DiscreteBayesianNetwork:
     """
     Create a simple medical diagnosis Bayesian network.
 
@@ -73,7 +77,7 @@ def create_medical_network() -> DiscreteBayesianNetwork:
     return model
 
 
-def visualize_network(
+def _visualize_network_impl(
     model: DiscreteBayesianNetwork,
     *,
     evidence: Optional[List[str]] = None,
@@ -110,24 +114,32 @@ def visualize_network(
     )
 
 
-def display_cpd_tables(model: DiscreteBayesianNetwork) -> None:
-    """
-    Display conditional probability distribution tables in formatted output.
+# #############################################################################
+# Cell 2.2: Network Structure Visualization
+# #############################################################################
 
-    Prints each CPD from the model with a header and separator for readability.
-
-    :param model: Bayesian network containing CPDs to display
-    """
-    _LOG.info("Conditional Probability Tables")
-    _LOG.info("=" * 50)
-    for cpd in model.get_cpds():
-        _LOG.info("%s:", cpd.variable)
-        _LOG.info(str(cpd))
+def cell2_2_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
 
 
-def create_cpd_widget(
+def cell2_2_visualize_network(
+    model: DiscreteBayesianNetwork,
+    *,
+    evidence: Optional[List[str]] = None,
+    figsize: Tuple[int, int] = (10, 6),
+) -> None:
+    """Visualize Bayesian network structure with optional evidence highlighting."""
+    return _visualize_network_impl(model, evidence=evidence, figsize=figsize)
+
+
+# #############################################################################
+# Cell 3.2: Interactive CPD Visualization
+# #############################################################################
+
+def cell3_2_create_cpd_widget(
     *, disease_prior: float = 0.05
-) -> VBox:
+) -> ipywidgets.VBox:
     """
     Create interactive widget for exploring conditional probability distributions.
 
@@ -207,9 +219,18 @@ def create_cpd_widget(
     ])
 
 
-def forward_sample_and_plot(
+# #############################################################################
+# Cell 4.1: Sampling from Prior
+# #############################################################################
+
+def cell4_1_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell4_1_forward_sample_and_plot(
     model: DiscreteBayesianNetwork, *, n_samples: int = 1000
-) -> plt.Figure:
+) -> None:
     """
     Sample from network prior and visualize marginal distributions.
 
@@ -220,7 +241,6 @@ def forward_sample_and_plot(
     :param model: Bayesian network to sample from
     :param n_samples: Number of samples to generate
         - Default: `1000`
-    :return: Matplotlib figure with marginal distribution plots
     """
     # Generate samples from the network prior.
     samples = model.simulate(n_samples=n_samples, show_progress=False)
@@ -254,12 +274,20 @@ def forward_sample_and_plot(
         fontweight='bold', fontsize=14
     )
     plt.tight_layout()
-    return fig
 
 
-def compare_exact_and_sampling(
+# #############################################################################
+# Cell 4.2: Exact vs Approximate Inference
+# #############################################################################
+
+def cell4_2_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell4_2_compare_exact_and_sampling(
     model: DiscreteBayesianNetwork,
-) -> plt.Figure:
+) -> None:
     """
     Compare exact inference results with sampling-based approximations.
 
@@ -268,7 +296,6 @@ def compare_exact_and_sampling(
     variable to visualize the approximation quality.
 
     :param model: Bayesian network to analyze
-    :return: Matplotlib figure with comparative plots
     """
     # Create exact inference engine.
     inference = VariableElimination(model)
@@ -307,10 +334,18 @@ def compare_exact_and_sampling(
     # Set overall title and layout.
     fig.suptitle('Exact vs. Sampling Inference', fontweight='bold', fontsize=14)
     plt.tight_layout()
-    return fig
 
 
-def condition_on_evidence(model: DiscreteBayesianNetwork) -> plt.Figure:
+# #############################################################################
+# Cell 5.1: Effect of Evidence on Beliefs
+# #############################################################################
+
+def cell5_1_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell5_1_condition_on_evidence(model: DiscreteBayesianNetwork) -> None:
     """
     Visualize how evidence updates beliefs through Bayesian updating.
 
@@ -319,7 +354,6 @@ def condition_on_evidence(model: DiscreteBayesianNetwork) -> plt.Figure:
     how the same test result differently impacts belief depending on outcome.
 
     :param model: Bayesian network for inference
-    :return: Matplotlib figure with prior and posterior plots
     """
     # Create exact inference engine.
     inference = VariableElimination(model)
@@ -361,10 +395,78 @@ def condition_on_evidence(model: DiscreteBayesianNetwork) -> plt.Figure:
     # Set overall title and layout.
     fig.suptitle('How Evidence Changes Beliefs', fontweight='bold', fontsize=14)
     plt.tight_layout()
-    return fig
 
 
-def create_evidence_explorer() -> VBox:
+# #############################################################################
+# Cell 5.2: Evidence Combination and Strength
+# #############################################################################
+
+def cell5_2_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell5_2_compare_exact_and_sampling(
+    model: DiscreteBayesianNetwork,
+) -> None:
+    """
+    Compare exact inference results with sampling-based approximations.
+
+    Performs variable elimination for exact inference and forward sampling,
+    then displays both results side-by-side as grouped bar charts for each
+    variable to visualize the approximation quality.
+
+    :param model: Bayesian network to analyze
+    """
+    # Create exact inference engine.
+    inference = VariableElimination(model)
+    # Generate samples from the network.
+    n_samples = 1000
+    samples = model.simulate(n_samples=n_samples, show_progress=False)
+    # Create figure with one subplot per variable.
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4))
+    # Compare inference methods for each variable.
+    for idx, var in enumerate(model.nodes()):
+        ax = axes[idx]
+        # Compute exact marginal probabilities via variable elimination.
+        exact_result = inference.query(variables=[var])
+        exact_probs = exact_result.values.flatten()
+        # Compute approximate marginal from samples.
+        sample_counts = samples[var].value_counts(normalize=True).sort_index()
+        sample_probs = sample_counts.values
+        # Create grouped bar chart comparing methods.
+        x = np.arange(2)
+        width = 0.35
+        ax.bar(
+            x - width / 2, sample_probs, width, label='Forward Sampling',
+            alpha=0.7
+        )
+        ax.bar(
+            x + width / 2, exact_probs, width,
+            label='Variable Elimination', alpha=0.7
+        )
+        # Set labels and formatting.
+        ax.set_ylabel('Probability')
+        ax.set_title(f'{var}', fontweight='bold')
+        ax.set_xticks(x)
+        ax.set_xticklabels(['Absent', 'Present'])
+        ax.set_ylim([0, 1])
+        ax.legend()
+    # Set overall title and layout.
+    fig.suptitle('Exact vs. Sampling Inference', fontweight='bold', fontsize=14)
+    plt.tight_layout()
+
+
+# #############################################################################
+# Cell 5.3: Interactive Evidence Explorer
+# #############################################################################
+
+def cell5_3_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
     """
     Create interactive widget for exploring Bayesian inference with evidence.
 
@@ -401,7 +503,7 @@ def create_evidence_explorer() -> VBox:
         with output:
             output.clear_output(wait=True)
             # Create model and inference engine.
-            model = create_medical_network()
+            model = cell5_3_create_network()
             inference = VariableElimination(model)
             # Collect selected evidence from dropdowns.
             evidence = {}
@@ -413,7 +515,7 @@ def create_evidence_explorer() -> VBox:
             result = inference.query(variables=['Disease'], evidence=evidence)
             # Create figure with network visualization and belief plot.
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-            visualize_network(model, evidence=list(evidence.keys()))
+            _visualize_network_impl(model, evidence=list(evidence.keys()))
             plt.sca(ax1)
             # Plot posterior belief about disease.
             colors = ['#4ecdc4', '#ff6b6b']
@@ -455,18 +557,25 @@ def create_evidence_explorer() -> VBox:
     ])
 
 
-def compare_inference_algorithms() -> plt.Figure:
+# #############################################################################
+# Cell 6.1: Algorithm Comparison
+# #############################################################################
+
+def cell6_1_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell6_1_compare_inference_algorithms() -> None:
     """
     Compare inference results and performance across different algorithms.
 
     Implements three inference methods: variable elimination, belief propagation,
     and forward sampling. Displays results as grouped bars for posterior values
     and a separate bar chart for computation time (log scale).
-
-    :return: Matplotlib figure with comparison plots
     """
     # Create model and set evidence.
-    model = create_medical_network()
+    model = cell6_1_create_network()
     evidence = {'Test': 'Positive'}
     results = {}
     times = {}
@@ -512,10 +621,79 @@ def compare_inference_algorithms() -> plt.Figure:
     # Set overall title and layout.
     fig.suptitle('Comparing Inference Algorithms', fontweight='bold', fontsize=14)
     plt.tight_layout()
-    return fig
 
 
-def gibbs_sampling_interactive() -> VBox:
+# #############################################################################
+# Cell 7.1: MAP Queries
+# #############################################################################
+
+def cell7_1_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell7_1_map_query_demo() -> None:
+    """
+    Demonstrate Maximum A Posteriori (MAP) inference query.
+
+    Finds the most likely joint assignment of variables given evidence and
+    visualizes the full joint distribution with the MAP assignment highlighted
+    in red. Shows how MAP differs from expected values by identifying the mode.
+    """
+    # Create model and inference engine.
+    model = cell7_1_create_network()
+    inference = VariableElimination(model)
+    # Find MAP assignment given evidence.
+    evidence = {'Test': 'Positive'}
+    map_result = inference.map_query(
+        variables=['Disease', 'Symptom'], evidence=evidence
+    )
+    # Create figure for visualization.
+    fig, ax = plt.subplots(figsize=(10, 4))
+    # Define all possible joint assignments.
+    all_combos = [
+        'Disease Absent, Symptom Absent',
+        'Disease Absent, Symptom Present',
+        'Disease Present, Symptom Absent',
+        'Disease Present, Symptom Present'
+    ]
+    # Compute full joint distribution.
+    joint_result = inference.query(
+        variables=['Disease', 'Symptom'],
+        evidence=evidence
+    )
+    probs = joint_result.values.flatten()
+    # Determine which assignment is the MAP and set its color to red.
+    colors = ['lightgray'] * 4
+    disease_idx = 1 if map_result['Disease'] == 'Present' else 0
+    symptom_idx = 1 if map_result['Symptom'] == 'Present' else 0
+    map_idx = disease_idx * 2 + symptom_idx
+    colors[map_idx] = '#ff6b6b'
+    # Plot joint distribution with MAP highlighted.
+    bars = ax.bar(range(len(all_combos)), probs, color=colors)
+    ax.set_xticks(range(len(all_combos)))
+    ax.set_xticklabels(all_combos, rotation=45, ha='right')
+    ax.set_ylabel('Probability')
+    ax.set_title(f'MAP Assignment: {map_result}', fontweight='bold')
+    # Add probability values on bars.
+    for i, (bar, prob) in enumerate(zip(bars, probs)):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2., prob,
+            f'{prob:.4f}', ha='center', va='bottom'
+        )
+    plt.tight_layout()
+
+
+# #############################################################################
+# Cell 7.2: Gibbs Sampling Convergence
+# #############################################################################
+
+def cell7_2_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
     """
     Create interactive widget to visualize sampling convergence and burn-in.
 
@@ -552,7 +730,7 @@ def gibbs_sampling_interactive() -> VBox:
         with output:
             output.clear_output(wait=True)
             # Create model and generate samples.
-            model = create_medical_network()
+            model = cell7_2_create_network()
             n_samples = samples_slider.value
             burn_in = burnin_slider.value
             samples_df = model.simulate(
@@ -610,7 +788,16 @@ def gibbs_sampling_interactive() -> VBox:
     ])
 
 
-def joint_distribution_explorer() -> VBox:
+# #############################################################################
+# Cell 7.3: Joint Distribution Explorer
+# #############################################################################
+
+def cell7_3_create_network() -> DiscreteBayesianNetwork:
+    """Create a simple medical diagnosis Bayesian network."""
+    return _create_medical_network_impl()
+
+
+def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
     """
     Create interactive widget to explore joint and marginal distributions.
 
@@ -639,7 +826,7 @@ def joint_distribution_explorer() -> VBox:
         with output:
             output.clear_output(wait=True)
             # Create model and inference engine.
-            model = create_medical_network()
+            model = cell7_3_create_network()
             inference = VariableElimination(model)
             # Collect selected evidence from dropdowns.
             evidence = {}
@@ -697,62 +884,114 @@ def joint_distribution_explorer() -> VBox:
     ])
 
 
-def map_query_demo() -> plt.Figure:
+# #############################################################################
+# Cell 8.1: Larger Network Interactive Demo
+# #############################################################################
+
+def cell8_1_larger_network_interactive() -> ipywidgets.VBox:
     """
-    Demonstrate Maximum A Posteriori (MAP) inference query.
+    Create interactive widget for exploring inference on larger networks.
 
-    Finds the most likely joint assignment of variables given evidence and
-    visualizes the full joint distribution with the MAP assignment highlighted
-    in red. Shows how MAP differs from expected values by identifying the mode.
+    Allows selection of evidence scenarios and inference methods (exact vs
+    sampling) then displays network structure, posterior beliefs, and computation
+    time for comparing algorithmic approaches on a more complex network.
 
-    :return: Matplotlib figure with joint distribution and MAP highlighting
+    :return: IPywidgets VBox containing scenario selector and inference results
     """
-    # Create model and inference engine.
-    model = create_medical_network()
-    inference = VariableElimination(model)
-    # Find MAP assignment given evidence.
-    evidence = {'Test': 'Positive'}
-    map_result = inference.map_query(
-        variables=['Disease', 'Symptom'], evidence=evidence
+    output = ipywidgets.Output()
+    # Create scenario selector dropdown.
+    scenario_dropdown = ipywidgets.Dropdown(
+        options=[
+            ('Positive Test Only', {'Test1': 'Positive'}),
+            (
+                'Test and Symptoms',
+                {'Test1': 'Positive', 'Symptom1': 'Present'}
+            ),
+            (
+                'Test but No Symptom',
+                {'Test1': 'Positive', 'Symptom1': 'Absent'}
+            )
+        ],
+        description='Scenario:',
+        style={'description_width': '100px'}
     )
-    # Create figure for visualization.
-    fig, ax = plt.subplots(figsize=(10, 4))
-    # Define all possible joint assignments.
-    all_combos = [
-        'Disease Absent, Symptom Absent',
-        'Disease Absent, Symptom Present',
-        'Disease Present, Symptom Absent',
-        'Disease Present, Symptom Present'
-    ]
-    # Compute full joint distribution.
-    joint_result = inference.query(
-        variables=['Disease', 'Symptom'],
-        evidence=evidence
+    # Create inference method selector.
+    method_dropdown = ipywidgets.Dropdown(
+        options=[
+            ('Variable Elimination', 'VE'),
+            ('Sampling', 'Sampling')
+        ],
+        description='Method:',
+        style={'description_width': '100px'}
     )
-    probs = joint_result.values.flatten()
-    # Determine which assignment is the MAP and set its color to red.
-    colors = ['lightgray'] * 4
-    disease_idx = 1 if map_result['Disease'] == 'Present' else 0
-    symptom_idx = 1 if map_result['Symptom'] == 'Present' else 0
-    map_idx = disease_idx * 2 + symptom_idx
-    colors[map_idx] = '#ff6b6b'
-    # Plot joint distribution with MAP highlighted.
-    bars = ax.bar(range(len(all_combos)), probs, color=colors)
-    ax.set_xticks(range(len(all_combos)))
-    ax.set_xticklabels(all_combos, rotation=45, ha='right')
-    ax.set_ylabel('Probability')
-    ax.set_title(f'MAP Assignment: {map_result}', fontweight='bold')
-    # Add probability values on bars.
-    for i, (bar, prob) in enumerate(zip(bars, probs)):
-        ax.text(
-            bar.get_x() + bar.get_width() / 2., prob,
-            f'{prob:.4f}', ha='center', va='bottom'
-        )
-    plt.tight_layout()
-    return fig
+    # Define callback to update visualization when settings change.
+    def _update_larger_net(change: Optional[Dict] = None) -> None:
+        """Update network visualization and inference results."""
+        with output:
+            output.clear_output(wait=True)
+            # Create model and extract evidence scenario.
+            model = cell8_2_larger_network_demo()
+            evidence = scenario_dropdown.value
+            # Perform inference based on selected method.
+            if method_dropdown.value == 'VE':
+                # Exact inference via variable elimination.
+                inference = VariableElimination(model)
+                start = time.time()
+                result = inference.query(
+                    variables=['Disease'], evidence=evidence
+                )
+                elapsed = (time.time() - start) * 1000
+                result_vals = result.values.flatten()
+            else:
+                # Approximate inference via sampling.
+                start = time.time()
+                samples = model.simulate(
+                    n_samples=5000, evidence=evidence,
+                    show_progress=False
+                )
+                elapsed = (time.time() - start) * 1000
+                disease_counts = (
+                    (samples['Disease'] == 'Present').sum() / len(samples)
+                )
+                result_vals = np.array([1 - disease_counts, disease_counts])
+            # Create visualization with network and belief plots.
+            fig, axes = plt.subplots(1, 2, figsize=(14, 4))
+            _visualize_network_impl(model, evidence=list(evidence.keys()))
+            plt.sca(axes[0])
+            # Plot posterior belief about disease.
+            colors = ['#4ecdc4', '#ff6b6b']
+            bars = axes[1].bar(['Absent', 'Present'], result_vals, color=colors)
+            axes[1].set_ylabel('Probability')
+            axes[1].set_title(
+                f'P(Disease | Evidence)\nTime: {elapsed:.2f}ms',
+                fontweight='bold'
+            )
+            axes[1].set_ylim([0, 1])
+            # Add probability values on bars.
+            for bar in bars:
+                height = bar.get_height()
+                axes[1].text(
+                    bar.get_x() + bar.get_width() / 2., height,
+                    f'{height:.3f}', ha='center', va='bottom'
+                )
+            plt.tight_layout()
+            plt.show()
+    # Register callbacks for interactive updates.
+    scenario_dropdown.observe(_update_larger_net, 'value')
+    method_dropdown.observe(_update_larger_net, 'value')
+    # Display initial state.
+    _update_larger_net()
+    return ipywidgets.VBox([
+        ipywidgets.HBox([scenario_dropdown, method_dropdown]),
+        output
+    ])
 
 
-def larger_network_demo() -> DiscreteBayesianNetwork:
+# #############################################################################
+# Cell 8.2: Practical Workflow Demonstration
+# #############################################################################
+
+def cell8_2_larger_network_demo() -> DiscreteBayesianNetwork:
     """
     Create a more complex Bayesian network with multiple latent variables.
 
@@ -857,106 +1096,7 @@ def larger_network_demo() -> DiscreteBayesianNetwork:
     return model
 
 
-def larger_network_interactive() -> VBox:
-    """
-    Create interactive widget for exploring inference on larger networks.
-
-    Allows selection of evidence scenarios and inference methods (exact vs
-    sampling) then displays network structure, posterior beliefs, and computation
-    time for comparing algorithmic approaches on a more complex network.
-
-    :return: IPywidgets VBox containing scenario selector and inference results
-    """
-    output = ipywidgets.Output()
-    # Create scenario selector dropdown.
-    scenario_dropdown = ipywidgets.Dropdown(
-        options=[
-            ('Positive Test Only', {'Test1': 'Positive'}),
-            (
-                'Test and Symptoms',
-                {'Test1': 'Positive', 'Symptom1': 'Present'}
-            ),
-            (
-                'Test but No Symptom',
-                {'Test1': 'Positive', 'Symptom1': 'Absent'}
-            )
-        ],
-        description='Scenario:',
-        style={'description_width': '100px'}
-    )
-    # Create inference method selector.
-    method_dropdown = ipywidgets.Dropdown(
-        options=[
-            ('Variable Elimination', 'VE'),
-            ('Sampling', 'Sampling')
-        ],
-        description='Method:',
-        style={'description_width': '100px'}
-    )
-    # Define callback to update visualization when settings change.
-    def _update_larger_net(change: Optional[Dict] = None) -> None:
-        """Update network visualization and inference results."""
-        with output:
-            output.clear_output(wait=True)
-            # Create model and extract evidence scenario.
-            model = larger_network_demo()
-            evidence = scenario_dropdown.value
-            # Perform inference based on selected method.
-            if method_dropdown.value == 'VE':
-                # Exact inference via variable elimination.
-                inference = VariableElimination(model)
-                start = time.time()
-                result = inference.query(
-                    variables=['Disease'], evidence=evidence
-                )
-                elapsed = (time.time() - start) * 1000
-                result_vals = result.values.flatten()
-            else:
-                # Approximate inference via sampling.
-                start = time.time()
-                samples = model.simulate(
-                    n_samples=5000, evidence=evidence,
-                    show_progress=False
-                )
-                elapsed = (time.time() - start) * 1000
-                disease_counts = (
-                    (samples['Disease'] == 'Present').sum() / len(samples)
-                )
-                result_vals = np.array([1 - disease_counts, disease_counts])
-            # Create visualization with network and belief plots.
-            fig, axes = plt.subplots(1, 2, figsize=(14, 4))
-            visualize_network(model, evidence=list(evidence.keys()))
-            plt.sca(axes[0])
-            # Plot posterior belief about disease.
-            colors = ['#4ecdc4', '#ff6b6b']
-            bars = axes[1].bar(['Absent', 'Present'], result_vals, color=colors)
-            axes[1].set_ylabel('Probability')
-            axes[1].set_title(
-                f'P(Disease | Evidence)\nTime: {elapsed:.2f}ms',
-                fontweight='bold'
-            )
-            axes[1].set_ylim([0, 1])
-            # Add probability values on bars.
-            for bar in bars:
-                height = bar.get_height()
-                axes[1].text(
-                    bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.3f}', ha='center', va='bottom'
-                )
-            plt.tight_layout()
-            plt.show()
-    # Register callbacks for interactive updates.
-    scenario_dropdown.observe(_update_larger_net, 'value')
-    method_dropdown.observe(_update_larger_net, 'value')
-    # Display initial state.
-    _update_larger_net()
-    return ipywidgets.VBox([
-        ipywidgets.HBox([scenario_dropdown, method_dropdown]),
-        output
-    ])
-
-
-def practical_workflow_demo() -> None:
+def cell8_2_practical_workflow_demo() -> None:
     """
     Demonstrate a complete practical Bayesian inference workflow.
 
@@ -965,7 +1105,7 @@ def practical_workflow_demo() -> None:
     Serves as a template for applying these techniques to real problems.
     """
     # Load the network model.
-    model = larger_network_demo()
+    model = cell8_2_larger_network_demo()
     # Step 1: Inspect network structure and validity.
     _LOG.info("Step 1: Load and Inspect Model")
     _LOG.info("=" * 50)

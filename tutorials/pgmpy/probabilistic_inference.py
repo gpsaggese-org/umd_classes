@@ -14,7 +14,10 @@
 # ---
 
 # %% [markdown]
-# # Description
+# # Part 1: Overview and Setup
+
+# %% [markdown]
+# ## Cell 1.1: Overview
 #
 # - Bayesian networks for probabilistic inference with pgmpy:
 #   - Building networks and defining conditional relationships
@@ -23,7 +26,7 @@
 #   - MAP queries and interactive visualizations
 
 # %% [markdown]
-# ## Imports
+# ## Cell 1.2: Imports
 
 # %%
 # %load_ext autoreload
@@ -34,16 +37,6 @@ import logging
 
 # Third-party libraries.
 import matplotlib.pyplot as plt
-
-# %%
-# # To install additional packages, use:
-# import helpers.hmodule as hmodule
-# hmodule.install_module_if_not_present(
-#     ["graphviz"],
-#     use_activate=True,
-#     use_sudo=False,
-#     venv_path="/opt/venv",
-# )
 
 # %%
 # Use this for most notebooks.
@@ -70,6 +63,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # %% [markdown]
+# # Part 2: Bayesian Networks Fundamentals
+
+# %% [markdown]
+# ## Cell 2.1: Definition and Medical Example
+#
 # - **Definition**: Bayesian networks are directed acyclic graphs encoding conditional relationships
 #   - Nodes represent random variables
 #   - Edges represent conditional dependencies
@@ -84,21 +82,31 @@ warnings.filterwarnings("ignore")
 #   - Enables efficient inference algorithms
 #   - Order of evidence doesn't matter for combining observations
 
+# %% [markdown]
+# ## Cell 2.2: Network Structure Visualization
+
 # %%
 # Build the medical diagnosis network
-model = utils.create_medical_network()
+model = utils.cell2_2_create_network()
 
 # Visualize the network structure
-utils.visualize_network(model)
+utils.cell2_2_visualize_network(model)
 plt.show()
 
 # %% [markdown]
+# ## Cell 2.3: Independence from Structure
+#
 # - **Network structure encodes independence**: The visualization shows how graph structure represents conditional relationships
 #   - Given Disease status, Symptom and Test observations become independent of each other
 #   - This independence assumption is critical for efficient inference algorithms
 #   - The graph structure encodes domain knowledge about relationships between variables
 
 # %% [markdown]
+# # Part 3: Conditional Probability Tables (CPDs)
+
+# %% [markdown]
+# ## Cell 3.1: CPD Definition and Role
+#
 # - **CPD**: Conditional probability table assigns numerical beliefs to network structure
 #   - Root nodes (no parents): Prior probability distribution
 #   - Non-root nodes: Conditional probability given parent values
@@ -111,18 +119,23 @@ plt.show()
 # - **Key concept**: CPDs + network structure = complete probabilistic model
 #   - Enables queries about unobserved variables given evidence
 
-# %%
-# #utils.create_cpd_widget??
+# %% [markdown]
+# ## Cell 3.2: Interactive CPD Visualization
 
 # %%
 # Interactive CPD visualization
-# TODO(ai_gp): Explain what utils.create_cpd_widget does, what the plots mean, what the widget do
-utils.create_cpd_widget(disease_prior=0.05)
+utils.cell3_2_create_cpd_widget(disease_prior=0.05)
+
+# %% [markdown]
+# # Part 4: Prior Distribution and Inference
+
+# %% [markdown]
+# ## Cell 4.1: Sampling from Prior
 
 # %%
 # Sample from the prior distribution.
-model = utils.create_medical_network()
-utils.forward_sample_and_plot(model, n_samples=1000)
+model = utils.cell4_1_create_network()
+utils.cell4_1_forward_sample_and_plot(model, n_samples=1000)
 plt.show()
 
 # %% [markdown]
@@ -131,10 +144,13 @@ plt.show()
 #   - Base rate dominance: the rare disease prior overwhelms the samples
 #   - Each sample represents one hypothetical patient drawn from the network's generative model
 
+# %% [markdown]
+# ## Cell 4.2: Exact vs Approximate Inference
+
 # %%
 # Compare exact inference with forward sampling
-model = utils.create_medical_network()
-utils.compare_exact_and_sampling(model)
+model = utils.cell4_2_create_network()
+utils.cell4_2_compare_exact_and_sampling(model)
 plt.show()
 
 # %% [markdown]
@@ -148,10 +164,16 @@ plt.show()
 #   - **Forward Sampling**: Approximate, scales to large networks, needs more samples for same accuracy
 
 # %% [markdown]
-# # Show effect of conditioning on evidence
-# model = utils.create_medical_network()
-# utils.condition_on_evidence(model)
-# plt.show()
+# # Part 5: Conditioning on Evidence
+
+# %% [markdown]
+# ## Cell 5.1: Effect of Evidence on Beliefs
+
+# %%
+# Show effect of conditioning on evidence
+model = utils.cell5_1_create_network()
+utils.cell5_1_condition_on_evidence(model)
+plt.show()
 
 # %% [markdown]
 # - **Bayes' rule in action**: Observing evidence shifts posterior probabilities away from prior beliefs
@@ -163,10 +185,13 @@ plt.show()
 #   - Test is fairly informative: 95% sensitivity (true positive), 90% specificity (true negative)
 #   - But base rate effect still matters: rare diseases stay rare unless evidence is overwhelming
 
+# %% [markdown]
+# ## Cell 5.2: Evidence Combination and Strength
+
 # %%
-# Compare exact inference with forward sampling
-model = utils.create_medical_network()
-utils.compare_exact_and_sampling(model)
+# Compare exact inference with forward sampling under evidence
+model = utils.cell5_2_create_network()
+utils.cell5_2_compare_exact_and_sampling(model)
 plt.show()
 
 print("Exact Inference: Variable Elimination")
@@ -191,22 +216,13 @@ print("- Slower per query but parallelizable")
 # - **Bayes' rule in action**: $\Pr(\text{Disease} | \text{Evidence}) = \frac{\Pr(\text{Evidence} | \text{Disease}) \Pr(\text{Disease})}{\Pr(\text{Evidence})}$
 #   - Prior beliefs updated using observed evidence
 
-# %%
-# Compare inference algorithms
-model = utils.create_medical_network()
-utils.compare_inference_algorithms()
-plt.show()
-
 # %% [markdown]
-# - **Algorithm equivalence on small networks**: All inference methods answer the same question correctly
-#   - Variable Elimination: Exact, efficient for small networks
-#   - Belief Propagation: Exact for tree networks, efficient structure exploitation
-#   - Sampling (Forward, Gibbs): Approximate, more accurate with more samples
-#
-# - **Practical algorithm selection**:
-#   - Small networks (≤15 variables): Use exact methods (Variable Elimination)
-#   - Larger networks (>15 variables): Use approximate methods (Sampling, Variational Inference)
-#   - Network topology matters: Tree networks have faster exact algorithms than general loopy networks
+# ## Cell 5.3: Interactive Evidence Explorer
+
+# %%
+# Interactive evidence explorer
+model = utils.cell5_3_create_network()
+utils.cell5_3_create_evidence_explorer()
 
 # %% [markdown]
 # - **Interactive exploration**: Combine different evidence and observe posterior probability updates in real time
@@ -220,10 +236,40 @@ plt.show()
 #   - Order of evidence doesn't matter
 #   - Encodes probability, not causality in time
 
+# %% [markdown]
+# # Part 6: Inference Algorithm Comparison
+
+# %% [markdown]
+# ## Cell 6.1: Algorithm Comparison
+
 # %%
-# Interactive evidence explorer
-model = utils.create_medical_network()
-utils.create_evidence_explorer()
+# Compare inference algorithms
+model = utils.cell6_1_create_network()
+utils.cell6_1_compare_inference_algorithms()
+plt.show()
+
+# %% [markdown]
+# - **Algorithm equivalence on small networks**: All inference methods answer the same question correctly
+#   - Variable Elimination: Exact, efficient for small networks
+#   - Belief Propagation: Exact for tree networks, efficient structure exploitation
+#   - Sampling (Forward, Gibbs): Approximate, more accurate with more samples
+#
+# - **Practical algorithm selection**:
+#   - Small networks (≤15 variables): Use exact methods (Variable Elimination)
+#   - Larger networks (>15 variables): Use approximate methods (Sampling, Variational Inference)
+#   - Network topology matters: Tree networks have faster exact algorithms than general loopy networks
+
+# %%
+# Compare inference algorithms
+model = utils.cell6_1_create_network()
+utils.cell6_1_compare_inference_algorithms()
+plt.show()
+
+print("All methods answer the same question correctly.")
+print("Choice of algorithm is driven by network size and structure.")
+print("\nRule of thumb:")
+print("- <=15 variables: Exact methods (Variable Elimination)")
+print("- >15 variables: Approximate methods (Sampling, Variational)")
 
 # %% [markdown]
 # - **Inference algorithms**: Different approaches with different performance tradeoffs
@@ -238,23 +284,20 @@ utils.create_evidence_explorer()
 # - **Small networks**: All methods give identical results
 #   - Choice of algorithm driven by network size and structure
 
-# %%
-# Compare inference algorithms
-model = utils.create_medical_network()
-utils.compare_inference_algorithms()
-plt.show()
-
-print("All methods answer the same question correctly.")
-print("Choice of algorithm is driven by network size and structure.")
-print("\nRule of thumb:")
-print("- <=15 variables: Exact methods (Variable Elimination)")
-print("- >15 variables: Approximate methods (Sampling, Variational)")
+# %% [markdown]
+# # Part 7: Advanced Topics
 
 # %% [markdown]
-# # MAP query demonstration
-# model = utils.create_medical_network()
-# utils.map_query_demo()
-# plt.show()
+# ## Cell 7.1: MAP Queries
+
+# %%
+# MAP query demonstration
+model = utils.cell7_1_create_network()
+utils.cell7_1_map_query_demo()
+plt.show()
+
+print("MAP finds the single most likely joint assignment.")
+print("Useful for diagnosis: 'What's the best explanation for the observations?'")
 
 # %% [markdown]
 # - **MAP query finds single best explanation**: Different from marginal inference which computes individual probabilities
@@ -265,11 +308,29 @@ print("- >15 variables: Approximate methods (Sampling, Variational)")
 # - **Interpretation**: The result shows the joint state that maximizes posterior probability
 #   - Most likely to occur given the evidence
 #   - Useful when you need one actionable answer, not a full probability distribution
+#
+# - **Distinction from marginal inference**:
+#   - Marginal: $\Pr(\text{Disease} = \text{Yes} | \text{Evidence})$ for individual variables
+#   - MAP: $\arg\max \Pr(\text{Disease}, \text{Symptom} | \text{Evidence})$ single joint assignment
+#
+# - **Practical use**: Diagnostics want single best explanation
+#   - "What's most likely disease state and symptom combination?"
+
+# %% [markdown]
+# ## Cell 7.2: Gibbs Sampling Convergence
 
 # %%
 # Gibbs sampling interactive visualization
-model = utils.create_medical_network()
-utils.gibbs_sampling_interactive()
+model = utils.cell7_2_create_network()
+utils.cell7_2_gibbs_sampling_interactive()
+
+# %% [markdown]
+# ## Cell 7.3: Joint Distribution Explorer
+
+# %%
+# Joint distribution explorer
+model = utils.cell7_3_create_network()
+utils.cell7_3_joint_distribution_explorer()
 
 # %% [markdown]
 # - **Real inference problems**: Multiple observed variables with joint distribution over unobserved variables
@@ -284,29 +345,15 @@ utils.gibbs_sampling_interactive()
 # - **Visualization**: Heatmap shows joint probability distribution
 #   - Marginal bar plots show what we learn about individual variables
 
-# %%
-# Joint distribution explorer
-model = utils.create_medical_network()
-utils.joint_distribution_explorer()
+# %% [markdown]
+# # Part 8: Scaling to Larger Networks
 
 # %% [markdown]
-# - **MAP query**: Find single most likely explanation for evidence
-#
-# - **Distinction from marginal inference**:
-#   - Marginal: $\Pr(\text{Disease} = \text{Yes} | \text{Evidence})$ for individual variables
-#   - MAP: $\arg\max \Pr(\text{Disease}, \text{Symptom} | \text{Evidence})$ single joint assignment
-#
-# - **Practical use**: Diagnostics want single best explanation
-#   - "What's most likely disease state and symptom combination?"
+# ## Cell 8.1: Larger Network Interactive Demo
 
 # %%
-# MAP query demonstration
-model = utils.create_medical_network()
-utils.map_query_demo()
-plt.show()
-
-print("MAP finds the single most likely joint assignment.")
-print("Useful for diagnosis: 'What's the best explanation for the observations?'")
+# Larger network interactive demo
+utils.cell8_1_larger_network_interactive()
 
 # %% [markdown]
 # - **Real-world networks**: Many variables: genetic factors, lifestyle, multiple tests, symptoms, environmental factors
@@ -320,9 +367,13 @@ print("Useful for diagnosis: 'What's the best explanation for the observations?'
 #   - Up to 15 variables: Exact methods (Variable Elimination)
 #   - Beyond 15: Approximate methods (Sampling, Variational)
 
+# %% [markdown]
+# ## Cell 8.2: Practical Workflow Demonstration
+
 # %%
-# Larger network interactive demo
-utils.larger_network_interactive()
+# Practical workflow demonstration
+model = utils.cell8_2_larger_network_demo()
+utils.cell8_2_practical_workflow_demo()
 
 # %% [markdown]
 # - **Practical workflow**: From model to inference and interpretation
@@ -335,10 +386,8 @@ utils.larger_network_interactive()
 #   5. Query with evidence to answer domain questions
 #   6. Interpret results in context
 
-# %%
-# Practical workflow demonstration
-model = utils.larger_network_demo()
-utils.practical_workflow_demo()
+# %% [markdown]
+# # Part 9: Summary and Next Steps
 
 # %% [markdown]
 # - **Structure**: Bayesian networks encode conditional relationships and independence assumptions
