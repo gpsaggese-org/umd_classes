@@ -39,7 +39,7 @@ import matplotlib.pyplot as plt
 # # To install additional packages, use:
 # import helpers.hmodule as hmodule
 # hmodule.install_module_if_not_present(
-#     ["pgmpy"],
+#     ["graphviz"],
 #     use_activate=True,
 #     use_sudo=False,
 #     venv_path="/opt/venv",
@@ -92,9 +92,11 @@ model = utils.create_medical_network()
 utils.visualize_network(model)
 plt.show()
 
-print("Network structure encodes independence:")
-print("Given Disease, Symptom and Test are independent of each other.")
-print("\nThis is critical for efficient inference!")
+# %% [markdown]
+# - **Network structure encodes independence**: The visualization shows how graph structure represents conditional relationships
+#   - Given Disease status, Symptom and Test observations become independent of each other
+#   - This independence assumption is critical for efficient inference algorithms
+#   - The graph structure encodes domain knowledge about relationships between variables
 
 # %% [markdown]
 # - **CPD**: Conditional probability table assigns numerical beliefs to network structure
@@ -110,37 +112,56 @@ print("\nThis is critical for efficient inference!")
 #   - Enables queries about unobserved variables given evidence
 
 # %%
-# Interactive CPD visualization
-utils.create_cpd_widget(disease_prior=0.05)
-
-# %% [markdown]
-# - **Forward sampling**: Draw samples from prior distribution before observing any data
-#   - Each sample: one hypothetical patient
-#   - Samples reflect network beliefs
-#
-# - **Observation**: Rare diseases stay rare in samples even when they cause symptoms
-#   - Base rate (disease prevalence) dominates the samples
-#   - Disease prior: 5% means most samples show disease absent
+# #utils.create_cpd_widget??
 
 # %%
-# Sample from the prior distribution
+# Interactive CPD visualization
+# TODO(ai_gp): Explain what utils.create_cpd_widget does, what the plots mean, what the widget do
+utils.create_cpd_widget(disease_prior=0.05)
+
+# %%
+# Sample from the prior distribution.
 model = utils.create_medical_network()
 utils.forward_sample_and_plot(model, n_samples=1000)
 plt.show()
 
-print("This is what the network believes in a vacuum.")
-print("Disease is rare (5%), so both Symptom and Test mostly indicate Absent.")
+# %% [markdown]
+# - **Sampling reveals prior beliefs**: The distribution shows what the network believes in a vacuum without any observations
+#   - Disease is rare (5% prior), so both Symptom and Test mostly indicate Absent status
+#   - Base rate dominance: the rare disease prior overwhelms the samples
+#   - Each sample represents one hypothetical patient drawn from the network's generative model
+
+# %%
+# Compare exact inference with forward sampling
+model = utils.create_medical_network()
+utils.compare_exact_and_sampling(model)
+plt.show()
 
 # %% [markdown]
-# - **Variable Elimination**: Exact inference algorithm computes probabilities without sampling
-#   - Guaranteed correct
-#   - Scales poorly with network size
-#   - Fast for small networks (like ours)
+# - **Exact inference vs forward sampling**: Both methods answer what we believe about the prior distribution
+#   - Exact results (blue line) computed with Variable Elimination, guaranteed correct
+#   - Forward sampling results (orange) match exactly; accuracy improves with more samples
+#   - Scaling comparison: Exact scales poorly as network grows (exponential), sampling scales better but needs many samples
 #
-# - **Comparison**: Exact inference vs forward sampling
-#   - Exact results (blue) match forward samples (orange) perfectly
-#   - Both answer: "What do we believe (prior)?"
-#   - Sampling becomes more accurate with more samples
+# - **Algorithm tradeoffs**:
+#   - **Variable Elimination**: Guaranteed correct, fast for small networks, intractable for large networks
+#   - **Forward Sampling**: Approximate, scales to large networks, needs more samples for same accuracy
+
+# %% [markdown]
+# # Show effect of conditioning on evidence
+# model = utils.create_medical_network()
+# utils.condition_on_evidence(model)
+# plt.show()
+
+# %% [markdown]
+# - **Bayes' rule in action**: Observing evidence shifts posterior probabilities away from prior beliefs
+#   - Formula: $\Pr(\text{Disease} | \text{Evidence}) = \frac{\Pr(\text{Evidence} | \text{Disease}) \Pr(\text{Disease})}{\Pr(\text{Evidence})}$
+#   - Positive test shifts disease probability from 5% (prior) to ~45% (posterior)
+#   - Negative test dramatically reduces disease probability to <1%
+#
+# - **Evidence informativeness**: The strength of the shift depends on test accuracy and base rate
+#   - Test is fairly informative: 95% sensitivity (true positive), 90% specificity (true negative)
+#   - But base rate effect still matters: rare diseases stay rare unless evidence is overwhelming
 
 # %%
 # Compare exact inference with forward sampling
@@ -171,14 +192,21 @@ print("- Slower per query but parallelizable")
 #   - Prior beliefs updated using observed evidence
 
 # %%
-# Show effect of conditioning on evidence
+# Compare inference algorithms
 model = utils.create_medical_network()
-utils.condition_on_evidence(model)
+utils.compare_inference_algorithms()
 plt.show()
 
-print("This is Bayes' rule in action:")
-print("P(Disease | Evidence) = P(Evidence | Disease) * P(Disease) / P(Evidence)")
-print("\nWe update prior beliefs using observed evidence.")
+# %% [markdown]
+# - **Algorithm equivalence on small networks**: All inference methods answer the same question correctly
+#   - Variable Elimination: Exact, efficient for small networks
+#   - Belief Propagation: Exact for tree networks, efficient structure exploitation
+#   - Sampling (Forward, Gibbs): Approximate, more accurate with more samples
+#
+# - **Practical algorithm selection**:
+#   - Small networks (≤15 variables): Use exact methods (Variable Elimination)
+#   - Larger networks (>15 variables): Use approximate methods (Sampling, Variational Inference)
+#   - Network topology matters: Tree networks have faster exact algorithms than general loopy networks
 
 # %% [markdown]
 # - **Interactive exploration**: Combine different evidence and observe posterior probability updates in real time
@@ -223,14 +251,20 @@ print("- <=15 variables: Exact methods (Variable Elimination)")
 print("- >15 variables: Approximate methods (Sampling, Variational)")
 
 # %% [markdown]
-# - **Gibbs sampling**: Markov Chain Monte Carlo algorithm generating samples from posterior distribution
+# # MAP query demonstration
+# model = utils.create_medical_network()
+# utils.map_query_demo()
+# plt.show()
+
+# %% [markdown]
+# - **MAP query finds single best explanation**: Different from marginal inference which computes individual probabilities
+#   - Marginal: $\Pr(\text{Disease} = \text{Yes} | \text{Evidence})$ for individual variables
+#   - MAP: $\arg\max_{\text{all vars}} \Pr(\text{Disease}, \text{Symptom}, ... | \text{Evidence})$ single joint assignment
+#   - Practical use: Diagnostics want single best explanation, not individual probability distributions
 #
-# - **Key parameters**:
-#   - Burn-in: Early samples depend on initialization, discard them
-#   - Sample count: More samples = more accuracy, slower computation
-#
-# - **Convergence**: With enough samples, empirical frequencies match true probabilities
-#   - Trade-off: accuracy vs computational cost
+# - **Interpretation**: The result shows the joint state that maximizes posterior probability
+#   - Most likely to occur given the evidence
+#   - Useful when you need one actionable answer, not a full probability distribution
 
 # %%
 # Gibbs sampling interactive visualization

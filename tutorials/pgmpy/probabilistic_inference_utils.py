@@ -18,22 +18,13 @@ import pandas as pd
 import seaborn as sns
 from IPython.display import HTML as IPhtml
 from IPython.display import display
-from ipywidgets import (
-    Button,
-    Dropdown,
-    FloatSlider,
-    HBox,
-    HTML,
-    IntSlider,
-    Output,
-    ToggleButtons,
-    VBox,
-)
+import ipywidgets
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import ApproxInference, BeliefPropagation, VariableElimination
 from pgmpy.models import DiscreteBayesianNetwork
 
 import helpers.hdbg as hdbg
+import helpers.hgraphviz as hgraphviz
 
 _LOG = logging.getLogger(__name__)
 
@@ -87,50 +78,36 @@ def visualize_network(
     *,
     evidence: Optional[List[str]] = None,
     figsize: Tuple[int, int] = (10, 6),
-) -> plt.Figure:
+) -> None:
     """
     Visualize Bayesian network structure with optional evidence highlighting.
 
-    Draws the network graph using spring layout with nodes colored based on
-    whether they are part of the evidence set. Evidence nodes are highlighted
-    in red while other nodes are shown in teal.
+    Renders the network graph with nodes colored based on whether they are
+    part of the evidence set. Evidence nodes are highlighted in red while
+    other nodes are shown in teal. Uses graphviz for professional layout.
 
     :param model: Bayesian network to visualize
     :param evidence: List of node names to highlight as evidence
         - Default: `None` (no nodes highlighted)
     :param figsize: Figure dimensions as (width, height)
         - Default: `(10, 6)`
-    :return: Matplotlib figure object
     """
-    # Create figure and axis for visualization.
-    fig, ax = plt.subplots(figsize=figsize)
     # Create directed graph from model edges.
     graph = nx.DiGraph()
     graph.add_edges_from(model.edges())
-    # Compute spring layout for node positioning.
-    pos = nx.spring_layout(graph, k=2, iterations=50)
-    # Color nodes based on evidence status.
-    node_colors = []
-    for node in graph.nodes():
-        if evidence and node in evidence:
-            node_colors.append('#ff6b6b')
-        else:
-            node_colors.append('#4ecdc4')
-    # Draw network components.
-    nx.draw_networkx_nodes(
-        graph, pos, node_color=node_colors, node_size=2000, ax=ax
+    # Map node colors based on evidence status.
+    node_colors = {
+        node: '#ff6b6b' if (evidence and node in evidence) else '#4ecdc4'
+        for node in graph.nodes()
+    }
+    # Render using graphviz-based plotting function.
+    hgraphviz.plot_causal_dag(
+        graph,
+        'Bayesian Network Structure',
+        mode='graphviz',
+        node_colors=node_colors,
+        figsize=figsize,
     )
-    nx.draw_networkx_labels(
-        graph, pos, font_size=10, font_weight='bold', ax=ax
-    )
-    nx.draw_networkx_edges(
-        graph, pos, edge_color='gray', arrows=True,
-        arrowsize=20, arrowstyle='->', ax=ax, width=2
-    )
-    # Set title and remove axes.
-    ax.set_title('Bayesian Network Structure', fontsize=14, fontweight='bold')
-    ax.axis('off')
-    return fig
 
 
 def display_cpd_tables(model: DiscreteBayesianNetwork) -> None:
@@ -162,9 +139,9 @@ def create_cpd_widget(
         - Default: `0.05`
     :return: IPywidgets VBox containing slider and visualization output
     """
-    output = Output()
+    output = ipywidgets.Output()
     # Create disease prior probability slider.
-    slider = FloatSlider(
+    slider = ipywidgets.FloatSlider(
         value=disease_prior,
         min=0.0,
         max=1.0,
@@ -174,7 +151,7 @@ def create_cpd_widget(
         layout={'width': '400px'}
     )
     # Create disease state toggle button.
-    toggle = ToggleButtons(
+    toggle = ipywidgets.ToggleButtons(
         options=['None', 'Present', 'Absent'],
         description='Disease:',
         style={'description_width': '100px'}
@@ -224,8 +201,8 @@ def create_cpd_widget(
     toggle.observe(_update_display, 'value')
     # Display initial state.
     _update_display()
-    return VBox([
-        HBox([slider, toggle]),
+    return ipywidgets.VBox([
+        ipywidgets.HBox([slider, toggle]),
         output
     ])
 
@@ -397,9 +374,9 @@ def create_evidence_explorer() -> VBox:
 
     :return: IPywidgets VBox containing controls and visualization output
     """
-    output = Output()
+    output = ipywidgets.Output()
     # Create test result selector.
-    test_dropdown = Dropdown(
+    test_dropdown = ipywidgets.Dropdown(
         options=[
             ('No Test', None), ('Positive', 'Positive'),
             ('Negative', 'Negative')
@@ -408,7 +385,7 @@ def create_evidence_explorer() -> VBox:
         style={'description_width': '120px'}
     )
     # Create symptom state selector.
-    symptom_dropdown = Dropdown(
+    symptom_dropdown = ipywidgets.Dropdown(
         options=[
             ('No Symptom', None), ('Present', 'Present'),
             ('Absent', 'Absent')
@@ -417,7 +394,7 @@ def create_evidence_explorer() -> VBox:
         style={'description_width': '120px'}
     )
     # Create button to clear all evidence.
-    clear_button = Button(description='Clear Evidence', button_style='danger')
+    clear_button = ipywidgets.Button(description='Clear Evidence', button_style='danger')
     # Define callback to update visualization when evidence changes.
     def _update_plot(change: Optional[Dict] = None) -> None:
         """Update network visualization and posterior belief plot."""
@@ -472,8 +449,8 @@ def create_evidence_explorer() -> VBox:
     clear_button.on_click(_on_clear_click)
     # Display initial state.
     _update_plot()
-    return VBox([
-        HBox([test_dropdown, symptom_dropdown, clear_button]),
+    return ipywidgets.VBox([
+        ipywidgets.HBox([test_dropdown, symptom_dropdown, clear_button]),
         output
     ])
 
@@ -548,9 +525,9 @@ def gibbs_sampling_interactive() -> VBox:
 
     :return: IPywidgets VBox containing sliders and convergence plot
     """
-    output = Output()
+    output = ipywidgets.Output()
     # Create slider for number of samples.
-    samples_slider = IntSlider(
+    samples_slider = ipywidgets.IntSlider(
         value=1000,
         min=100,
         max=10000,
@@ -559,7 +536,7 @@ def gibbs_sampling_interactive() -> VBox:
         style={'description_width': '100px'}
     )
     # Create slider for burn-in period.
-    burnin_slider = IntSlider(
+    burnin_slider = ipywidgets.IntSlider(
         value=200,
         min=0,
         max=2000,
@@ -568,7 +545,7 @@ def gibbs_sampling_interactive() -> VBox:
         style={'description_width': '100px'}
     )
     # Create button to trigger sampling.
-    run_button = Button(description='Run Sampling', button_style='info')
+    run_button = ipywidgets.Button(description='Run Sampling', button_style='info')
     # Define callback to update convergence visualization.
     def _update_gibbs(change: Optional[Dict] = None) -> None:
         """Update convergence plot based on slider values."""
@@ -627,8 +604,8 @@ def gibbs_sampling_interactive() -> VBox:
     run_button.on_click(_update_gibbs)
     # Display initial state.
     _update_gibbs()
-    return VBox([
-        HBox([samples_slider, burnin_slider, run_button]),
+    return ipywidgets.VBox([
+        ipywidgets.HBox([samples_slider, burnin_slider, run_button]),
         output
     ])
 
@@ -643,15 +620,15 @@ def joint_distribution_explorer() -> VBox:
 
     :return: IPywidgets VBox containing dropdowns and distribution plots
     """
-    output = Output()
+    output = ipywidgets.Output()
     # Create disease state selector.
-    disease_dropdown = Dropdown(
+    disease_dropdown = ipywidgets.Dropdown(
         options=[('None', None), ('Present', 'Present'), ('Absent', 'Absent')],
         description='Disease:',
         style={'description_width': '100px'}
     )
     # Create symptom state selector.
-    symptom_dropdown = Dropdown(
+    symptom_dropdown = ipywidgets.Dropdown(
         options=[('None', None), ('Present', 'Present'), ('Absent', 'Absent')],
         description='Symptom:',
         style={'description_width': '100px'}
@@ -714,8 +691,8 @@ def joint_distribution_explorer() -> VBox:
     symptom_dropdown.observe(_update_joint, 'value')
     # Display initial state.
     _update_joint()
-    return VBox([
-        HBox([disease_dropdown, symptom_dropdown]),
+    return ipywidgets.VBox([
+        ipywidgets.HBox([disease_dropdown, symptom_dropdown]),
         output
     ])
 
@@ -890,9 +867,9 @@ def larger_network_interactive() -> VBox:
 
     :return: IPywidgets VBox containing scenario selector and inference results
     """
-    output = Output()
+    output = ipywidgets.Output()
     # Create scenario selector dropdown.
-    scenario_dropdown = Dropdown(
+    scenario_dropdown = ipywidgets.Dropdown(
         options=[
             ('Positive Test Only', {'Test1': 'Positive'}),
             (
@@ -908,7 +885,7 @@ def larger_network_interactive() -> VBox:
         style={'description_width': '100px'}
     )
     # Create inference method selector.
-    method_dropdown = Dropdown(
+    method_dropdown = ipywidgets.Dropdown(
         options=[
             ('Variable Elimination', 'VE'),
             ('Sampling', 'Sampling')
@@ -973,8 +950,8 @@ def larger_network_interactive() -> VBox:
     method_dropdown.observe(_update_larger_net, 'value')
     # Display initial state.
     _update_larger_net()
-    return VBox([
-        HBox([scenario_dropdown, method_dropdown]),
+    return ipywidgets.VBox([
+        ipywidgets.HBox([scenario_dropdown, method_dropdown]),
         output
     ])
 
