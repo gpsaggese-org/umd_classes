@@ -49,7 +49,6 @@ import exact_inference_utils as utils
 htutori.config_notebook()
 
 # Initialize logger.
-logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
 utils.init_loggers(_LOG)
 
