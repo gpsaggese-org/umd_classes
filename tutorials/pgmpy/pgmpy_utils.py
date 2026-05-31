@@ -1,12 +1,8 @@
 """
-template_utils.py
-
-This file contains utility functions that support the tutorial notebooks.
+Utility functions for pgmpy tutorial notebooks.
 
 - Notebooks should call these functions instead of writing raw logic inline.
 - This helps keep the notebooks clean, modular, and easier to debug.
-- Students should implement functions here for data preprocessing,
-  model setup, evaluation, or any reusable logic.
 
 Import as:
 
@@ -15,58 +11,42 @@ import tutorials.pgmpy.pgmpy_utils as tpgpguti
 
 import pandas as pd
 import logging
+from itertools import product
 from sklearn.model_selection import train_test_split
 from pycaret.classification import compare_models
 
-# -----------------------------------------------------------------------------
-# Logging
-# -----------------------------------------------------------------------------
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# -----------------------------------------------------------------------------
-# Example 1: Split the dataset into train and test sets
-# -----------------------------------------------------------------------------
-
-
-def split_data(df: pd.DataFrame, target_column: str, test_size: float = 0.2):
+def draw_pgmpy_model(model, filename="model.png", prog="dot"):
     """
-    Split the dataset into training and testing sets.
+    Draw a pgmpy model using Graphviz and display it in a notebook.
+    Requires pygraphviz + graphviz system packages.
 
-    :param df: full dataset
-    :param target_column: name of the target column
-    :param test_size: proportion of test data (default = 0.2)
-
-    :return: X_train, X_test, y_train, y_test
+    :param model: pgmpy DiscreteBayesianNetwork model
+    :param filename: output filename for the PNG image
+    :param prog: graphviz program to use (default: "dot")
+    :return: graphviz object
     """
-    logger.info("Splitting data into train and test sets")
-    X = df.drop(columns=[target_column])
-    y = df[target_column]
-    return train_test_split(X, y, test_size=test_size, random_state=42)
+    from IPython.display import Image, display
+
+    g = model.to_graphviz()
+    g.draw(filename, prog=prog)
+    display(Image(filename=filename))
+    return g
 
 
-# -----------------------------------------------------------------------------
-# Example 2: PyCaret classification pipeline
-# -----------------------------------------------------------------------------
-
-
-def run_pycaret_classification(
-    df: pd.DataFrame, target_column: str
-) -> pd.DataFrame:
+def factor_to_dataframe(factor, value_col="probability"):
     """
-    Run a basic PyCaret classification experiment.
+    Convert a pgmpy Factor to a pandas DataFrame.
 
-    :param df: dataset containing features and target
-    :param target_column: name of the target column
-
-    :return: comparison of top-performing models
+    :param factor: pgmpy DiscreteFactor object
+    :param value_col: name of the column for probability values
+    :return: pandas DataFrame with factor variables and values
     """
-    logger.info("Initializing PyCaret classification setup")
-    ...
-
-    logger.info("Comparing models")
-    results = compare_models()
-    ...
-
-    return results
+    variables = factor.variables
+    states = [
+        factor.state_names.get(v, list(range(factor.cardinality[i])))
+        for i, v in enumerate(variables)
+    ]
+    assignments = list(product(*states))
+    df = pd.DataFrame(assignments, columns=variables)
+    df[value_col] = factor.values.flatten()
+    return df
