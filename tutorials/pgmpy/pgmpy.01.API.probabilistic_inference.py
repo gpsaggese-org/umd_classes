@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -59,6 +59,9 @@ import numpy as np
 import helpers.htutorial as htutori
 
 htutori.config_notebook()
+
+# Import pgmpy utilities.
+import tutorials.pgmpy.pgmpy_utils as tpgpguti
 
 # Initialize logger.
 logging.basicConfig(level=logging.INFO)
@@ -185,7 +188,13 @@ print(f"All ancestors of C: {model.get_ancestors('C')}")
 # %% [markdown]
 # ### Mental Model
 #
-# // TODO(ai_gp): Add this
+# A **TabularCPD** is:
+# - A probability table quantifying relationships between variables
+# - For a node with no parents: a prior probability distribution (column vector)
+# - For a node with parents: conditional distributions (one column per parent configuration)
+# - Specifies P(Variable=value | ParentA=val_a, ParentB=val_b, ...)
+# - Each column sums to 1.0 (valid probability distribution)
+# - Essential for converting the graph structure into concrete probabilities
 
 # %% [markdown]
 # ### CPD with No Parents
@@ -290,19 +299,8 @@ print(f"Type: {type(inference)}")
 print(f"Model: {inference.model.nodes()}")
 
 # %%
-# TODO(ai_gp): Move to utils.py
-from IPython.display import Image, display
-
-def draw_pgmpy_model(model, filename="model.png", prog="dot"):
-    """
-    Draw a pgmpy model using Graphviz and display it in a notebook.
-    Requires pygraphviz + graphviz system packages.
-    """
-    g = model.to_graphviz()
-    g.draw(filename, prog=prog)
-    display(Image(filename=filename))
-    return g
-
+# Import helper functions from pgmpy_utils.
+draw_pgmpy_model = tpgpguti.draw_pgmpy_model
 
 # %%
 _ = draw_pgmpy_model(model)
@@ -320,22 +318,8 @@ print(f"\nP(B=0 | A=1) = {result.values[0]}")
 print(f"P(B=1 | A=1) = {result.values[1]}")
 
 # %%
-# TODO(ai_gp): Move to utils.py
-import pandas as pd
-
-from itertools import product
-
-def factor_to_dataframe(factor, value_col="probability"):
-    variables = factor.variables
-    states = [
-        factor.state_names.get(v, list(range(factor.cardinality[i])))
-        for i, v in enumerate(variables)
-    ]
-    assignments = list(product(*states))
-    df = pd.DataFrame(assignments, columns=variables)
-    df[value_col] = factor.values.flatten()
-    return df
-
+# Import helper functions from pgmpy_utils.
+factor_to_dataframe = tpgpguti.factor_to_dataframe
 
 # %%
 factor_to_dataframe(result)
