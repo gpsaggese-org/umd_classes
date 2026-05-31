@@ -45,8 +45,6 @@ import pandas as pd
 import numpy as np
 
 # %%
-# # TODO(gp): Add this dep to the container.
-
 # # To install additional packages, use:
 # import helpers.hmodule as hmodule
 # hmodule.install_module_if_not_present(
