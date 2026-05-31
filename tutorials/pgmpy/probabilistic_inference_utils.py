@@ -37,7 +37,7 @@ warnings.filterwarnings("ignore")
 # Helper: Medical Network Implementation
 # #############################################################################
 
-def _create_medical_network_impl() -> DiscreteBayesianNetwork:
+def create_medical_network() -> DiscreteBayesianNetwork:
     """
     Create a simple medical diagnosis Bayesian network.
 
@@ -132,7 +132,7 @@ def cell2_2_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell2_2_visualize_network(
@@ -208,7 +208,7 @@ def cell3_2_create_cpd_widget(
                 index=pd.Index(["P(Disease)"])
             )
             sns.heatmap(
-                data_prior, annot=True, fmt=".3f", cmap="RdYlGn",
+                data_prior, annot=True, fmt=".3f", cmap="viridis",
                 vmin=0, vmax=1, ax=axes[0], cbar=False
             )
             axes[0].set_title("P(Disease)", fontweight="bold")
@@ -218,7 +218,7 @@ def cell3_2_create_cpd_widget(
                 index=pd.Index(["Disease", "No Disease"])
             )
             sns.heatmap(
-                symptom_given_disease, annot=True, fmt=".2f", cmap="Blues",
+                symptom_given_disease, annot=True, fmt=".2f", cmap="viridis",
                 vmin=0, vmax=1, ax=axes[1], cbar=False
             )
             axes[1].set_title("P(Symptom | Disease)", fontweight="bold")
@@ -228,7 +228,7 @@ def cell3_2_create_cpd_widget(
                 index=pd.Index(["Disease", "No Disease"])
             )
             sns.heatmap(
-                test_given_disease, annot=True, fmt=".2f", cmap="Oranges",
+                test_given_disease, annot=True, fmt=".2f", cmap="viridis",
                 vmin=0, vmax=1, ax=axes[2], cbar=False
             )
             axes[2].set_title("P(Test | Disease)", fontweight="bold")
@@ -264,7 +264,7 @@ def cell4_1_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell4_1_forward_sample_and_plot(
@@ -272,11 +272,12 @@ def cell4_1_forward_sample_and_plot(
     figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
-    Sample from network prior and visualize marginal distributions.
+    Sample from network prior and visualize network structure and
+    marginal distributions.
 
     Generates samples from the Bayesian network without any evidence and plots
-    the resulting marginal probability distribution for each variable as a bar
-    chart with annotated values.
+    the network DAG structure along with marginal probability distributions
+    for each variable as bar charts with annotated values.
 
     :param model: Bayesian network to sample from
     :param n_samples: Number of samples to generate
@@ -285,13 +286,29 @@ def cell4_1_forward_sample_and_plot(
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
-        figsize = plt.rcParams["figure.figsize"]
+        figsize = (16, 4)
     # Generate samples from the network prior.
     samples = model.simulate(n_samples=n_samples, show_progress=False)
-    # Create figure with one subplot per variable.
-    fig, axes = plt.subplots(1, 3, figsize=figsize)
+    # Create figure with one subplot for DAG plus one per variable.
+    fig, axes = plt.subplots(1, 4, figsize=figsize)
+    # Plot network structure in first subplot.
+    graph = nx.DiGraph()
+    graph.add_edges_from(model.edges())
+    pos = nx.spring_layout(graph, seed=42)
+    nx.draw_networkx_nodes(
+        graph, pos, node_color="#4ecdc4", node_size=1500, ax=axes[0]
+    )
+    nx.draw_networkx_edges(
+        graph, pos, edge_color="gray", arrows=True,
+        arrowsize=20, ax=axes[0]
+    )
+    nx.draw_networkx_labels(
+        graph, pos, font_size=10, font_weight="bold", ax=axes[0]
+    )
+    axes[0].set_title("Network Structure", fontweight="bold")
+    axes[0].axis("off")
     # Plot marginal distribution for each variable.
-    for col, ax in zip(samples.columns, axes):
+    for idx, (col, ax) in enumerate(zip(samples.columns, axes[1:])):
         # Count occurrences and normalize to get probabilities.
         counts = samples[col].value_counts(normalize=True).sort_index()
         colors = ["#4ecdc4", "#ff6b6b"]
@@ -314,7 +331,7 @@ def cell4_1_forward_sample_and_plot(
             )
     # Set overall title and layout.
     fig.suptitle(
-        "Belief Before Any Observations (Forward Sampling)",
+        "Network Structure and Belief Before Any Observations (Forward Sampling)",
         fontweight="bold", fontsize=14
     )
     plt.tight_layout()
@@ -330,7 +347,7 @@ def cell4_2_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell4_2_compare_exact_and_sampling(
@@ -399,7 +416,7 @@ def cell5_1_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell5_1_condition_on_evidence(
@@ -471,7 +488,7 @@ def cell5_2_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell5_2_compare_exact_and_sampling(
@@ -540,7 +557,7 @@ def cell5_3_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
@@ -700,7 +717,7 @@ def cell6_1_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell6_1_compare_inference_algorithms(
@@ -785,7 +802,7 @@ def cell7_1_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell7_1_map_query_demo(
@@ -857,7 +874,7 @@ def cell7_2_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
@@ -1015,7 +1032,7 @@ def cell7_3_create_network() -> DiscreteBayesianNetwork:
 
     :return: configured `DiscreteBayesianNetwork` instance
     """
-    return _create_medical_network_impl()
+    return create_medical_network()
 
 
 def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
