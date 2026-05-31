@@ -554,7 +554,6 @@ inference = VariableElimination(model)
 # ## Pattern 2: Query Pattern
 #
 # Basic query: `inference.query(variables, evidence)`
-#
 
 # %%
 # Pattern: query(variables=[...], evidence={...}).
@@ -579,7 +578,6 @@ print(result)
 # ## Pattern 3: MAP Query Pattern
 #
 # Find the most probable assignment.
-#
 
 # %%
 # Pattern: map_query(variables, evidence).
@@ -590,14 +588,14 @@ result = inference.map_query(variables=['C'], evidence={'A': 1})
 print(f"MAP(C | A=1): {result}")
 print(f"Interpretation: Most likely value of C is {result['C']}")
 
-# Most probable joint assignment
+# %%
+# Most probable joint assignment.
 result = inference.map_query(variables=['B', 'C'], evidence={'A': 0})
 print(f"\nMAP(B, C | A=0): {result}")
 print(f"Interpretation: Most likely (B, C) = ({result['B']}, {result['C']})")
 
 # %% [markdown]
 # ## Pattern 4: Inference Engine Alternatives
-#
 
 # %%
 # VariableElimination: Default, efficient for many models.
@@ -617,7 +615,6 @@ except Exception as e:
 
 # %% [markdown]
 # ## Pattern 5: Evidence Specification
-#
 
 # %%
 # Evidence is specified as {variable: value}.
@@ -642,63 +639,6 @@ result = inference.query(
 )
 print("\nP(A, B | C=1) - joint distribution of A and B.")
 print(result)
-
-# %% [markdown]
-# # Part 5: Object Relationships
-#
-# Understanding how objects interact:
-#
-
-# %%
-import pandas as pd
-
-# Create example objects
-bn = DiscreteBayesianNetwork([('A', 'B'), ('A', 'C')])
-cpd_a = TabularCPD('A', 2, [[0.3], [0.7]])
-cpd_b = TabularCPD(
-    'B', 2,
-    [[0.8, 0.2], [0.2, 0.8]],
-    evidence=['A'], evidence_card=[2]
-)
-cpd_c = TabularCPD(
-    'C', 2,
-    [[0.6, 0.4], [0.4, 0.6]],
-    evidence=['A'], evidence_card=[2]
-)
-bn.add_cpds(cpd_a, cpd_b, cpd_c)
-
-inference = VariableElimination(bn)
-query_result = inference.query(variables=['B'], evidence={'A': 1})
-
-# Display relationships
-relationships = pd.DataFrame([
-    {
-        'Object': 'DiscreteBayesianNetwork',
-        'Created By': 'Direct instantiation',
-        'Consumed By': 'InferenceEngine',
-        'Purpose': 'Encode graph structure and dependencies'
-    },
-    {
-        'Object': 'TabularCPD',
-        'Created By': 'Direct instantiation',
-        'Consumed By': 'DiscreteBayesianNetwork.add_cpds()',
-        'Purpose': 'Quantify conditional probability relationships'
-    },
-    {
-        'Object': 'InferenceEngine',
-        'Created By': 'VariableElimination(model) or BeliefPropagation(model)',
-        'Consumed By': 'query(), map_query() methods',
-        'Purpose': 'Compute posterior probabilities from model'
-    },
-    {
-        'Object': 'Query Result',
-        'Created By': 'inference.query() or inference.map_query()',
-        'Consumed By': 'User code for decision-making',
-        'Purpose': 'Answer probability questions given evidence'
-    },
-])
-
-print(relationships.to_string(index=False))
 
 # %% [markdown]
 # # Part 6: Interactive Exploration
