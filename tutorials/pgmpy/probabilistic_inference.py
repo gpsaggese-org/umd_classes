@@ -82,12 +82,54 @@ warnings.filterwarnings("ignore")
 # ## Cell 2.2: Network Structure Visualization
 
 # %%
-# Build the medical diagnosis network.
-model = utils.cell2_2_create_network()
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+
+# Create network structure with disease as root node.
+model = DiscreteBayesianNetwork(
+    [("Disease", "Symptom"), ("Disease", "Test")]
+)
+
+# Define disease prior probability.
+cpd_disease = TabularCPD(
+    "Disease",
+    2,
+    [[0.95], [0.05]],
+    state_names={"Disease": ["Absent", "Present"]},
+)
+
+# Define symptom likelihood given disease state.
+cpd_symptom = TabularCPD(
+    "Symptom",
+    2,
+    [[0.95, 0.2], [0.05, 0.8]],
+    evidence=["Disease"],
+    evidence_card=[2],
+    state_names={
+        "Symptom": ["Absent", "Present"],
+        "Disease": ["Absent", "Present"],
+    },
+)
+
+# Define test result likelihood given disease state.
+cpd_test = TabularCPD(
+    "Test",
+    2,
+    [[0.95, 0.1], [0.05, 0.9]],
+    evidence=["Disease"],
+    evidence_card=[2],
+    state_names={
+        "Test": ["Negative", "Positive"],
+        "Disease": ["Absent", "Present"],
+    },
+)
+
+# Add CPDs and validate the model.
+model.add_cpds(cpd_disease, cpd_symptom, cpd_test)
+model.check_model()
 
 # Visualize the network structure.
-# TODO(ai_gp): Make the DAG smaller.
-utils.cell2_2_visualize_network(model)
+utils.cell2_2_visualize_network(model, figsize=(8, 5))
 plt.show()
 
 # %% [markdown]
@@ -156,17 +198,15 @@ utils.cell3_2_create_cpd_widget(disease_prior=0.05)
 # ## Cell 4.1: Sampling from Prior
 
 # %%
-# TODO(ai_gp): Explain what cell4_1_forward_sample_and_plot does 
+# Create medical network and sample from prior distribution.
+model = utils.create_medical_network()
 
-# %%
-# Sample from the prior distribution.
-# TODO(ai_gp): Inline the functions that are creating the DAG _create_medical_network_impl and make it public
-model = utils.cell4_1_create_network()
-# TODO(ai_gp): Plot the DAG in the first plot of the 1x4 plot below.
-utils.cell4_1_forward_sample_and_plot(model, n_samples=1000)
+# Sample from the prior distribution using forward sampling.
+samples = model.simulate(n_samples=1000, show_progress=False)
+
+# Plot the samples and network structure.
+utils.cell4_1_plot_forward_samples(samples)
 plt.show()
-
-# TODO(ai_gp): Use the same color scheme everywhere.
 
 # %% [markdown]
 # - **Sampling reveals prior beliefs**: The distribution shows what the network believes in a vacuum without any observations
@@ -178,11 +218,25 @@ plt.show()
 # ## Cell 4.2: Exact vs Approximate Inference
 
 # %%
-# Compare exact inference with forward sampling
-model = utils.cell4_2_create_network()
+from pgmpy.inference import VariableElimination
 
-# TODO(ai_gp): Explain what this function does.
-utils.cell4_2_compare_exact_and_sampling(model)
+# Create medical network.
+model = utils.create_medical_network()
+
+# Perform exact inference using Variable Elimination.
+inference = VariableElimination(model)
+
+# Compute exact marginal probabilities for each variable.
+exact_results = {}
+for var in model.nodes():
+    exact_results[var] = inference.query(variables=[var])
+
+# Generate samples from the network for comparison.
+n_samples = 1000
+samples = model.simulate(n_samples=n_samples, show_progress=False)
+
+# Plot exact vs sampling comparison.
+utils.cell4_2_plot_exact_vs_sampling(exact_results, samples)
 plt.show()
 
 # %% [markdown]
@@ -202,9 +256,21 @@ plt.show()
 # ## Cell 5.1: Effect of Evidence on Beliefs
 
 # %%
-# Show effect of conditioning on evidence
-model = utils.cell5_1_create_network()
-utils.cell5_1_condition_on_evidence(model)
+# Create medical network and inference engine.
+model = utils.create_medical_network()
+inference = VariableElimination(model)
+
+# Compute prior and posterior distributions.
+prior = inference.query(variables=["Disease"])
+posterior_pos = inference.query(
+    variables=["Disease"], evidence={"Test": "Positive"}
+)
+posterior_neg = inference.query(
+    variables=["Disease"], evidence={"Test": "Negative"}
+)
+
+# Plot belief updates from prior and posteriors.
+utils.cell5_1_plot_belief_update(prior, posterior_pos, posterior_neg)
 plt.show()
 
 # %% [markdown]
@@ -221,9 +287,24 @@ plt.show()
 # ## Cell 5.2: Evidence Combination and Strength
 
 # %%
-# Compare exact inference with forward sampling under evidence
-model = utils.cell5_2_create_network()
-utils.cell5_2_compare_exact_and_sampling(model)
+# Create medical network.
+model = utils.create_medical_network()
+
+# Perform exact inference with evidence.
+inference = VariableElimination(model)
+
+# Compute exact marginals under evidence.
+evidence = {"Test": "Positive"}
+exact_results = {}
+for var in model.nodes():
+    exact_results[var] = inference.query(variables=[var], evidence=evidence)
+
+# Generate samples under evidence.
+n_samples = 1000
+samples = model.simulate(n_samples=n_samples, evidence=evidence, show_progress=False)
+
+# Plot exact vs sampling comparison under evidence.
+utils.cell5_2_plot_exact_vs_sampling(exact_results, samples)
 plt.show()
 
 # %% [markdown]
@@ -274,9 +355,43 @@ utils.cell5_3_create_evidence_explorer()
 # ## Cell 6.1: Algorithm Comparison
 
 # %%
-# Compare inference algorithms
-model = utils.cell6_1_create_network()
-utils.cell6_1_compare_inference_algorithms()
+import time
+from pgmpy.inference import BeliefPropagation
+
+# Create medical network.
+model = utils.create_medical_network()
+evidence = {"Test": "Positive"}
+
+# Variable Elimination inference.
+ve_inference = VariableElimination(model)
+start = time.time()
+ve_result = ve_inference.query(variables=["Disease"], evidence=evidence)
+ve_time = (time.time() - start) * 1000
+ve_probs = ve_result.values.flatten()
+
+# Belief Propagation inference.
+bp_inference = BeliefPropagation(model)
+start = time.time()
+bp_result = bp_inference.query(variables=["Disease"], evidence=evidence)
+bp_time = (time.time() - start) * 1000
+bp_probs = bp_result.values.flatten()
+
+# Sampling-based inference.
+start = time.time()
+samples = model.simulate(
+    n_samples=10000, evidence=evidence, show_progress=False
+)
+sampling_time = (time.time() - start) * 1000
+sampling_result = (
+    samples["Disease"].value_counts(normalize=True).sort_index()
+)
+sampling_probs = sampling_result.values
+
+# Plot algorithm comparison results and timing.
+utils.cell6_1_plot_algorithm_comparison(
+    ve_probs, bp_probs, sampling_probs,
+    ve_time, bp_time, sampling_time
+)
 plt.show()
 
 # %% [markdown]
@@ -310,9 +425,23 @@ plt.show()
 # ## Cell 7.1: MAP Queries
 
 # %%
-# MAP query demonstration
-model = utils.cell7_1_create_network()
-utils.cell7_1_map_query_demo()
+# Create medical network and inference engine.
+model = utils.create_medical_network()
+inference = VariableElimination(model)
+
+# Find MAP assignment given evidence.
+evidence = {"Test": "Positive"}
+map_result = inference.map_query(
+    variables=["Disease", "Symptom"], evidence=evidence
+)
+
+# Compute full joint distribution for visualization.
+joint_result = inference.query(
+    variables=["Disease", "Symptom"], evidence=evidence
+)
+
+# Plot MAP result highlighting the most likely joint assignment.
+utils.cell7_1_plot_map_result(map_result, joint_result)
 plt.show()
 
 # %% [markdown]
@@ -413,9 +542,42 @@ utils.cell7_2_gibbs_sampling_interactive()
 # ## Cell 8.2: Practical Workflow Demonstration
 
 # %%
-# Practical workflow demonstration
+# Step 1: Load and inspect the network model.
 model = utils.cell8_2_larger_network_demo()
-utils.cell8_2_practical_workflow_demo()
+_LOG.info("Model has %d nodes and %d edges", len(model.nodes()), len(model.edges()))
+_LOG.info("Nodes: %s", list(model.nodes()))
+
+# Validate the model.
+model.check_model()
+_LOG.info("Model validity: VALID")
+
+# Step 2: Choose inference algorithm.
+_LOG.info("\nFor an 8-node network: Variable Elimination is exact and fast")
+
+# Step 3: Query the model with evidence.
+evidence = {"Test1": "Positive", "Symptom1": "Present"}
+_LOG.info("Evidence: %s", str(evidence))
+
+# Perform inference using Variable Elimination.
+inference = VariableElimination(model)
+start = time.time()
+result = inference.query(variables=["Disease"], evidence=evidence)
+elapsed = (time.time() - start) * 1000
+_LOG.info("\nResult P(Disease | Evidence):")
+_LOG.info(str(result))
+_LOG.info("Time: %.3f ms", elapsed)
+
+# Step 4: Visualize and report results.
+_LOG.info("\nStep 4: Visualize Results")
+_LOG.info("=" * 50)
+
+utils.cell8_2_plot_workflow_result(result)
+plt.show()
+
+_LOG.info(
+    "\nConclusion: %.1f%% probability of disease given evidence",
+    result.values.flatten()[1] * 100,
+)
 
 # %% [markdown]
 # - **Practical workflow**: From model to inference and interpretation

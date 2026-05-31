@@ -276,58 +276,27 @@ def cell3_2_create_cpd_widget(*, disease_prior: float = 0.05) -> ipywidgets.VBox
 # #############################################################################
 
 
-def cell4_1_create_network() -> DiscreteBayesianNetwork:
-    """
-    Create a simple medical diagnosis Bayesian network.
-
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell4_1_forward_sample_and_plot(
-    model: DiscreteBayesianNetwork,
+def cell4_1_plot_forward_samples(
+    samples: pd.DataFrame,
     *,
-    n_samples: int = 1000,
     figsize: Optional[Tuple[int, int]] = None,
 ) -> None:
     """
-    Sample from network prior and visualize network structure and
-    marginal distributions.
+    Visualize marginal distributions from forward sampled data.
 
-    Generates samples from the Bayesian network without any evidence and plots
-    the network DAG structure along with marginal probability distributions
-    for each variable as bar charts with annotated values.
+    Plots bar charts showing the marginal probability distribution for each
+    variable in the network.
 
-    :param model: Bayesian network to sample from
-    :param n_samples: Number of samples to generate
-        - Default: `1000`
+    :param samples: DataFrame of samples from model.simulate()
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
-        figsize = (16, 4)
-    # Generate samples from the network prior.
-    samples = model.simulate(n_samples=n_samples, show_progress=False)
-    # Create figure with one subplot for DAG plus one per variable.
-    fig, axes = plt.subplots(1, 4, figsize=figsize)
-    # Plot network structure in first subplot.
-    graph = nx.DiGraph()
-    graph.add_edges_from(model.edges())
-    pos = nx.spring_layout(graph, seed=42)
-    nx.draw_networkx_nodes(
-        graph, pos, node_color="#4ecdc4", node_size=1500, ax=axes[0]
-    )
-    nx.draw_networkx_edges(
-        graph, pos, edge_color="gray", arrows=True, arrowsize=20, ax=axes[0]
-    )
-    nx.draw_networkx_labels(
-        graph, pos, font_size=10, font_weight="bold", ax=axes[0]
-    )
-    axes[0].set_title("Network Structure", fontweight="bold")
-    axes[0].axis("off")
+        figsize = (14, 4)
+    # Create figure with one subplot per variable.
+    fig, axes = plt.subplots(1, len(samples.columns), figsize=figsize)
     # Plot marginal distribution for each variable.
-    for idx, (col, ax) in enumerate(zip(samples.columns, axes[1:])):
+    for idx, (col, ax) in enumerate(zip(samples.columns, axes)):
         # Count occurrences and normalize to get probabilities.
         counts = samples[col].value_counts(normalize=True).sort_index()
         colors = ["#4ecdc4", "#ff6b6b"]
@@ -339,7 +308,7 @@ def cell4_1_forward_sample_and_plot(
         state_labels = ["Absent", "Present"]
         ax.set_xticklabels(state_labels[: len(counts)])
         ax.set_ylabel("Probability")
-        ax.set_title(f"{col}", fontweight="bold")
+        ax.set_title(f"P({col})", fontweight="bold")
         ax.set_ylim([0, 1])
         # Add value labels on top of bars.
         for i, bar in enumerate(bars):
@@ -353,7 +322,7 @@ def cell4_1_forward_sample_and_plot(
             )
     # Set overall title and layout.
     fig.suptitle(
-        "Network Structure and Belief Before Any Observations (Forward Sampling)",
+        "Marginal Distributions from Forward Sampling",
         fontweight="bold",
         fontsize=14,
     )
@@ -365,44 +334,29 @@ def cell4_1_forward_sample_and_plot(
 # #############################################################################
 
 
-def cell4_2_create_network() -> DiscreteBayesianNetwork:
-    """
-    Create a simple medical diagnosis Bayesian network.
-
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell4_2_compare_exact_and_sampling(
-    model: DiscreteBayesianNetwork, *, figsize: Optional[Tuple[int, int]] = None
+def cell4_2_plot_exact_vs_sampling(
+    exact_results: Dict, samples: pd.DataFrame, *, figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
-    Compare exact inference results with sampling-based approximations.
+    Plot comparison of exact inference results with sampling-based approximations.
 
-    Performs variable elimination for exact inference and forward sampling,
-    then displays both results side-by-side as grouped bar charts for each
-    variable to visualize the approximation quality.
+    Displays both results side-by-side as grouped bar charts for each variable
+    to visualize the approximation quality.
 
-    :param model: Bayesian network to analyze
+    :param exact_results: Dictionary mapping variable names to exact inference results
+    :param samples: DataFrame of samples from model.simulate()
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Create exact inference engine.
-    inference = VariableElimination(model)
-    # Generate samples from the network.
-    n_samples = 1000
-    samples = model.simulate(n_samples=n_samples, show_progress=False)
     # Create figure with one subplot per variable.
     fig, axes = plt.subplots(1, 3, figsize=figsize)
     # Compare inference methods for each variable.
-    for idx, var in enumerate(model.nodes()):
+    for idx, var in enumerate(exact_results.keys()):
         ax = axes[idx]
-        # Compute exact marginal probabilities via variable elimination.
-        exact_result = inference.query(variables=[var])
-        exact_probs = exact_result.values.flatten()
+        # Exact marginal probabilities.
+        exact_probs = exact_results[var].values.flatten()
         # Compute approximate marginal from samples.
         sample_counts = samples[var].value_counts(normalize=True).sort_index()
         sample_probs = sample_counts.values
@@ -440,43 +394,25 @@ def cell4_2_compare_exact_and_sampling(
 # #############################################################################
 
 
-def cell5_1_create_network() -> DiscreteBayesianNetwork:
-    """
-    Create a simple medical diagnosis Bayesian network.
-
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell5_1_condition_on_evidence(
-    model: DiscreteBayesianNetwork, *, figsize: Optional[Tuple[int, int]] = None
+def cell5_1_plot_belief_update(
+    prior, posterior_pos, posterior_neg, *, figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
     Visualize how evidence updates beliefs through Bayesian updating.
 
-    Computes and displays three probability distributions: prior belief,
-    posterior after positive test, and posterior after negative test. Shows
-    how the same test result differently impacts belief depending on outcome.
+    Displays three probability distributions: prior belief, posterior after
+    positive test, and posterior after negative test.
 
-    :param model: Bayesian network for inference
+    :param prior: Prior probability distribution from inference
+    :param posterior_pos: Posterior after positive test
+    :param posterior_neg: Posterior after negative test
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Create exact inference engine.
-    inference = VariableElimination(model)
     # Create figure with three subplots for prior and posteriors.
     fig, axes = plt.subplots(1, 3, figsize=figsize)
-    # Compute prior and posterior distributions.
-    prior = inference.query(variables=["Disease"])
-    posterior_pos = inference.query(
-        variables=["Disease"], evidence={"Test": "Positive"}
-    )
-    posterior_neg = inference.query(
-        variables=["Disease"], evidence={"Test": "Negative"}
-    )
     # Prepare data for plotting.
     probs = [
         prior.values.flatten(),
@@ -515,44 +451,29 @@ def cell5_1_condition_on_evidence(
 # #############################################################################
 
 
-def cell5_2_create_network() -> DiscreteBayesianNetwork:
-    """
-    Create a simple medical diagnosis Bayesian network.
-
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell5_2_compare_exact_and_sampling(
-    model: DiscreteBayesianNetwork, *, figsize: Optional[Tuple[int, int]] = None
+def cell5_2_plot_exact_vs_sampling(
+    exact_results: Dict, samples: pd.DataFrame, *, figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
-    Compare exact inference results with sampling-based approximations.
+    Plot comparison of exact inference results with sampling-based approximations.
 
-    Performs variable elimination for exact inference and forward sampling,
-    then displays both results side-by-side as grouped bar charts for each
-    variable to visualize the approximation quality.
+    Displays both results side-by-side as grouped bar charts for each variable
+    to visualize the approximation quality under evidence.
 
-    :param model: Bayesian network to analyze
+    :param exact_results: Dictionary mapping variable names to exact inference results
+    :param samples: DataFrame of samples from model.simulate() with evidence
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Create exact inference engine.
-    inference = VariableElimination(model)
-    # Generate samples from the network.
-    n_samples = 1000
-    samples = model.simulate(n_samples=n_samples, show_progress=False)
     # Create figure with one subplot per variable.
     fig, axes = plt.subplots(1, 3, figsize=figsize)
     # Compare inference methods for each variable.
-    for idx, var in enumerate(model.nodes()):
+    for idx, var in enumerate(exact_results.keys()):
         ax = axes[idx]
-        # Compute exact marginal probabilities via variable elimination.
-        exact_result = inference.query(variables=[var])
-        exact_probs = exact_result.values.flatten()
+        # Exact marginal probabilities.
+        exact_probs = exact_results[var].values.flatten()
         # Compute approximate marginal from samples.
         sample_counts = samples[var].value_counts(normalize=True).sort_index()
         sample_probs = sample_counts.values
@@ -759,56 +680,38 @@ def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
 # #############################################################################
 
 
-def cell6_1_create_network() -> DiscreteBayesianNetwork:
-    """
-    Create a simple medical diagnosis Bayesian network.
-
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell6_1_compare_inference_algorithms(
+def cell6_1_plot_algorithm_comparison(
+    ve_probs, bp_probs, sampling_probs, ve_time, bp_time, sampling_time,
     *, figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
-    Compare inference results and performance across different algorithms.
+    Plot comparison of inference results and performance across different algorithms.
 
-    Implements three inference methods: variable elimination, belief propagation,
-    and forward sampling. Displays results as grouped bars for posterior values
-    and a separate bar chart for computation time (log scale).
+    Displays posterior values side-by-side and a separate bar chart for
+    computation time (log scale).
 
+    :param ve_probs: Posterior probabilities from Variable Elimination
+    :param bp_probs: Posterior probabilities from Belief Propagation
+    :param sampling_probs: Posterior probabilities from Sampling
+    :param ve_time: Computation time for Variable Elimination (ms)
+    :param bp_time: Computation time for Belief Propagation (ms)
+    :param sampling_time: Computation time for Sampling (ms)
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Create model and set evidence.
-    model = cell6_1_create_network()
-    evidence = {"Test": "Positive"}
-    results = {}
-    times = {}
-    # Perform variable elimination inference.
-    ve_inference = VariableElimination(model)
-    start = time.time()
-    ve_result = ve_inference.query(variables=["Disease"], evidence=evidence)
-    times["Variable Elimination"] = (time.time() - start) * 1000
-    results["Variable Elimination"] = ve_result.values.flatten()
-    # Perform belief propagation inference.
-    bp_inference = BeliefPropagation(model)
-    start = time.time()
-    bp_result = bp_inference.query(variables=["Disease"], evidence=evidence)
-    times["Belief Propagation"] = (time.time() - start) * 1000
-    results["Belief Propagation"] = bp_result.values.flatten()
-    # Perform sampling-based inference.
-    samples = model.simulate(
-        n_samples=10000, evidence=evidence, show_progress=False
-    )
-    sampling_result = (
-        samples["Disease"].value_counts(normalize=True).sort_index()
-    )
-    times["Sampling"] = 10
-    results["Sampling"] = sampling_result.values
+    # Prepare results dictionary for plotting.
+    results = {
+        "Variable Elimination": ve_probs,
+        "Belief Propagation": bp_probs,
+        "Sampling": sampling_probs,
+    }
+    times = {
+        "Variable Elimination": ve_time,
+        "Belief Propagation": bp_time,
+        "Sampling": sampling_time,
+    }
     # Create figure with result and timing subplots.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
     # Plot posterior probabilities by algorithm.
@@ -841,36 +744,22 @@ def cell6_1_compare_inference_algorithms(
 # #############################################################################
 
 
-def cell7_1_create_network() -> DiscreteBayesianNetwork:
+def cell7_1_plot_map_result(
+    map_result, joint_result, *, figsize: Optional[Tuple[int, int]] = None
+) -> None:
     """
-    Create a simple medical diagnosis Bayesian network.
+    Plot Maximum A Posteriori (MAP) inference query result.
 
-    :return: configured `DiscreteBayesianNetwork` instance
-    """
-    return create_medical_network()
-
-
-def cell7_1_map_query_demo(*, figsize: Optional[Tuple[int, int]] = None) -> None:
-    """
-    Demonstrate Maximum A Posteriori (MAP) inference query.
-
-    Finds the most likely joint assignment of variables given evidence and
-    visualizes the full joint distribution with the MAP assignment highlighted
+    Visualizes the full joint distribution with the MAP assignment highlighted
     in red. Shows how MAP differs from expected values by identifying the mode.
 
+    :param map_result: MAP assignment result from inference.map_query()
+    :param joint_result: Joint distribution result from inference.query()
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Create model and inference engine.
-    model = cell7_1_create_network()
-    inference = VariableElimination(model)
-    # Find MAP assignment given evidence.
-    evidence = {"Test": "Positive"}
-    map_result = inference.map_query(
-        variables=["Disease", "Symptom"], evidence=evidence
-    )
     # Create figure for visualization.
     fig, ax = plt.subplots(figsize=figsize)
     # Define all possible joint assignments.
@@ -880,10 +769,7 @@ def cell7_1_map_query_demo(*, figsize: Optional[Tuple[int, int]] = None) -> None
         "Disease Present, Symptom Absent",
         "Disease Present, Symptom Present",
     ]
-    # Compute full joint distribution.
-    joint_result = inference.query(
-        variables=["Disease", "Symptom"], evidence=evidence
-    )
+    # Get joint distribution probabilities.
     probs = joint_result.values.flatten()
     # Determine which assignment is the MAP and set its color to red.
     colors = ["lightgray"] * 4
@@ -1501,53 +1387,20 @@ def cell8_1_larger_network_interactive() -> ipywidgets.VBox:
     )
 
 
-def cell8_2_practical_workflow_demo(
-    *, figsize: Optional[Tuple[int, int]] = None
+def cell8_2_plot_workflow_result(
+    result, *, figsize: Optional[Tuple[int, int]] = None
 ) -> None:
     """
-    Demonstrate a complete practical Bayesian inference workflow.
+    Plot the final result of the practical Bayesian inference workflow.
 
-    Shows end-to-end process: load network, inspect structure, select inference
-    algorithm, query with evidence, visualize results, and draw conclusions.
-    Serves as a template for applying these techniques to real problems.
+    Visualizes the posterior probability of disease given evidence.
 
+    :param result: Inference result from inference.query()
     :param figsize: Figure dimensions as (width, height)
         - Default: `None` (uses matplotlib defaults)
     """
     if figsize is None:
         figsize = plt.rcParams["figure.figsize"]
-    # Load the network model.
-    model = cell8_2_larger_network_demo()
-    # Step 1: Inspect network structure and validity.
-    _LOG.info("Step 1: Load and Inspect Model")
-    _LOG.info("=" * 50)
-    _LOG.info(
-        "Model has %d nodes and %d edges", len(model.nodes()), len(model.edges())
-    )
-    _LOG.info("Nodes: %s", list(model.nodes()))
-    # Check model validity; raises if the model is inconsistent.
-    model.check_model()
-    _LOG.info("Model validity: VALID")
-    # Step 2: Algorithm selection guidance.
-    _LOG.info("\n\nStep 2: Choose Inference Algorithm")
-    _LOG.info("=" * 50)
-    _LOG.info("For an 8-node network: Variable Elimination is exact and fast")
-    # Step 3: Query the model with evidence.
-    _LOG.info("\n\nStep 3: Query with Evidence")
-    _LOG.info("=" * 50)
-    evidence = {"Test1": "Positive", "Symptom1": "Present"}
-    _LOG.info("Evidence: %s", str(evidence))
-    # Perform inference and measure timing.
-    inference = VariableElimination(model)
-    start = time.time()
-    result = inference.query(variables=["Disease"], evidence=evidence)
-    elapsed = (time.time() - start) * 1000
-    _LOG.info("\nResult P(Disease | Evidence):")
-    _LOG.info(str(result))
-    _LOG.info("\nTime: %.3f ms", elapsed)
-    # Step 4: Visualize and report results.
-    _LOG.info("\n\nStep 4: Visualize Results")
-    _LOG.info("=" * 50)
     fig, ax = plt.subplots(figsize=figsize)
     colors = ["#4ecdc4", "#ff6b6b"]
     bars = ax.bar(["Absent", "Present"], result.values.flatten(), color=colors)
@@ -1566,8 +1419,3 @@ def cell8_2_practical_workflow_demo(
         )
     plt.tight_layout()
     plt.show()
-    # Report conclusion.
-    _LOG.info(
-        "\nConclusion: %.1f%% probability of disease given evidence",
-        result.values.flatten()[1] * 100,
-    )
