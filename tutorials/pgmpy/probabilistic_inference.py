@@ -14,34 +14,82 @@
 # ---
 
 # %% [markdown]
-# # Probabilistic Inference with pgmpy: Interactive Tutorial
+# # Description
 #
-# Learn how to build Bayesian networks and answer questions about uncertain variables using probabilistic inference. This notebook guides you from intuition to practical algorithms.
-
-# %%
-import warnings
-warnings.filterwarnings('ignore')
-import matplotlib.pyplot as plt
-from probabilistic_inference_utils import *
+# - Bayesian networks for probabilistic inference with pgmpy:
+#   - Building networks and defining conditional relationships
+#   - Conditional probability tables (CPDs)
+#   - Exact and approximate inference algorithms
+#   - MAP queries and interactive visualizations
 
 # %% [markdown]
-# ## Cell 1: Building Your First Bayesian Network
+# ## Imports
+
+# %%
+# %load_ext autoreload
+# %autoreload 2
+
+# System libraries.
+import logging
+
+# Third-party libraries.
+import matplotlib.pyplot as plt
+
+# %%
+# # To install additional packages, use:
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     ["pgmpy"],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
+# %%
+# Use this for most notebooks.
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebook
+
+_LOG = logging.getLogger(__name__)
+
+# Initialize notebook configuration and logging.
+# hnotebook.config_notebook()
+# hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+# hnotebook.set_logger_to_print(_LOG)
+
+import probabilistic_inference_utils as utils
+
+# Convert `display` into `print()`.
+try:
+    from IPython.display import display
+except ImportError:
+    display = print  # type: ignore
+
+import warnings
+
+warnings.filterwarnings("ignore")
+
+# %% [markdown]
+# - **Definition**: Bayesian networks are directed acyclic graphs encoding conditional relationships
+#   - Nodes represent random variables
+#   - Edges represent conditional dependencies
+#   - Structure encodes independence assumptions
 #
-# A Bayesian network is a directed acyclic graph where nodes represent random variables and edges represent conditional relationships. Let's build a simple medical diagnosis network: does a patient have a disease? We'll observe symptoms and test results to infer the presence or absence of disease.
+# - **Medical diagnosis example**: Infer disease status from observable symptoms and test results
+#   - Disease: Hidden cause we want to infer
+#   - Symptom: Observable sign depending on disease status
+#   - Test: Diagnostic test result depending on disease status
 #
-# The network structure shows:
-# - **Disease**: The hidden cause we want to infer
-# - **Symptom**: Observable sign that depends on Disease
-# - **Test**: Diagnostic test whose result depends on Disease
-#
-# This structure encodes independence assumptions: given the disease status, symptom and test are independent.
+# - **Key insight**: Given disease status, symptom and test are conditionally independent
+#   - Enables efficient inference algorithms
+#   - Order of evidence doesn't matter for combining observations
 
 # %%
 # Build the medical diagnosis network
-model = create_medical_network()
+model = utils.create_medical_network()
 
 # Visualize the network structure
-visualize_network(model)
+utils.visualize_network(model)
 plt.show()
 
 print("Network structure encodes independence:")
@@ -49,48 +97,55 @@ print("Given Disease, Symptom and Test are independent of each other.")
 print("\nThis is critical for efficient inference!")
 
 # %% [markdown]
-# ## Cell 2: Defining Conditional Probability Tables
+# - **CPD**: Conditional probability table assigns numerical beliefs to network structure
+#   - Root nodes (no parents): Prior probability distribution
+#   - Non-root nodes: Conditional probability given parent values
 #
-# Each node in the network has a probability table that defines how likely its values are. For root nodes (no parents), this is a prior probability. For other nodes, it's a conditional probability given the parents.
+# - **Medical domain knowledge encoded in CPDs**:
+#   - Disease prevalence in population
+#   - Symptom likelihood given disease status
+#   - Diagnostic test accuracy
 #
-# These tables encode domain knowledge:
-# - How common is the disease in the population?
-# - If someone has the disease, how likely are they to show a symptom?
-# - How accurate is the diagnostic test?
-#
-# Try adjusting the disease prior and see how the tables change.
+# - **Key concept**: CPDs + network structure = complete probabilistic model
+#   - Enables queries about unobserved variables given evidence
 
 # %%
 # Interactive CPD visualization
-create_cpd_widget(disease_prior=0.05)
+utils.create_cpd_widget(disease_prior=0.05)
 
 # %% [markdown]
-# ## Cell 3: Forward Simulation From the Prior
+# - **Forward sampling**: Draw samples from prior distribution before observing any data
+#   - Each sample: one hypothetical patient
+#   - Samples reflect network beliefs
 #
-# What does the network "believe" before we observe any data? We can sample from the network to find out. Each sample represents one hypothetical patient drawn from our prior beliefs.
-#
-# Notice that rare diseases stay rare in samples, even when they cause symptoms. That's because the disease base rate (5%) dominates.
+# - **Observation**: Rare diseases stay rare in samples even when they cause symptoms
+#   - Base rate (disease prevalence) dominates the samples
+#   - Disease prior: 5% means most samples show disease absent
 
 # %%
 # Sample from the prior distribution
-model = create_medical_network()
-forward_sample_and_plot(model, n_samples=1000)
+model = utils.create_medical_network()
+utils.forward_sample_and_plot(model, n_samples=1000)
 plt.show()
 
 print("This is what the network believes in a vacuum.")
 print("Disease is rare (5%), so both Symptom and Test mostly indicate Absent.")
 
 # %% [markdown]
-# ## Cell 4: Exact Inference Without Evidence
+# - **Variable Elimination**: Exact inference algorithm computes probabilities without sampling
+#   - Guaranteed correct
+#   - Scales poorly with network size
+#   - Fast for small networks (like ours)
 #
-# We can compute exact probabilities instead of sampling. The pgmpy library uses algorithms like Variable Elimination that compute probabilities efficiently without drawing samples.
-#
-# Notice how the exact results (blue) line up perfectly with the forward samples (orange). Both methods answer the same question: "What do we believe?"
+# - **Comparison**: Exact inference vs forward sampling
+#   - Exact results (blue) match forward samples (orange) perfectly
+#   - Both answer: "What do we believe (prior)?"
+#   - Sampling becomes more accurate with more samples
 
 # %%
 # Compare exact inference with forward sampling
-model = create_medical_network()
-compare_exact_and_sampling(model)
+model = utils.create_medical_network()
+utils.compare_exact_and_sampling(model)
 plt.show()
 
 print("Exact Inference: Variable Elimination")
@@ -103,19 +158,22 @@ print("- Scales to large networks")
 print("- Slower per query but parallelizable")
 
 # %% [markdown]
-# ## Cell 5: Conditioning on Evidence Changes Everything
+# - **Core inference concept**: Observing evidence shifts what we believe about unobserved variables
+#   - Prior: Disease probability = 5%
+#   - Positive test: Disease probability = ~45%
+#   - Negative test: Disease probability = <1%
 #
-# This is the core of inference: observing evidence dramatically shifts what we believe about unobserved variables.
+# - **Strength of shift depends on evidence informativeness**:
+#   - Test accuracy: 95% for positives, 90% for negatives
+#   - Fairly informative about disease status
 #
-# - A **positive test** increases disease probability from 5% to ~45%
-# - A **negative test** decreases it to <1%
-#
-# The strength of the shift depends on how strongly the evidence relates to the hidden variable. A test that's 95% accurate for positive cases and 90% for negative cases is fairly informative.
+# - **Bayes' rule in action**: $\Pr(\text{Disease} | \text{Evidence}) = \frac{\Pr(\text{Evidence} | \text{Disease}) \Pr(\text{Disease})}{\Pr(\text{Evidence})}$
+#   - Prior beliefs updated using observed evidence
 
 # %%
 # Show effect of conditioning on evidence
-model = create_medical_network()
-condition_on_evidence(model)
+model = utils.create_medical_network()
+utils.condition_on_evidence(model)
 plt.show()
 
 print("This is Bayes' rule in action:")
@@ -123,37 +181,39 @@ print("P(Disease | Evidence) = P(Evidence | Disease) * P(Disease) / P(Evidence)"
 print("\nWe update prior beliefs using observed evidence.")
 
 # %% [markdown]
-# ## Cell 6: Interactive Evidence Explorer
+# - **Interactive exploration**: Combine different evidence and observe posterior probability updates in real time
 #
-# Now it's your turn! Combine different evidence and watch the posterior probability update in real time.
+# - **Try these combinations**:
+#   - Positive test alone
+#   - Positive test + symptom present (strong evidence)
+#   - Positive test + symptom absent (conflicting evidence)
 #
-# Try these combinations:
-# - Positive test alone
-# - Positive test + symptom present (strong evidence)
-# - Positive test + symptom absent (conflicting evidence)
-#
-# Notice how the network combines evidence. Order doesn't matter—Bayesian networks encode probability, not causality in time.
+# - **Network behavior**: Combines evidence probabilistically
+#   - Order of evidence doesn't matter
+#   - Encodes probability, not causality in time
 
 # %%
 # Interactive evidence explorer
-model = create_medical_network()
-create_evidence_explorer()
+model = utils.create_medical_network()
+utils.create_evidence_explorer()
 
 # %% [markdown]
-# ## Cell 7: Comparing Inference Algorithms
+# - **Inference algorithms**: Different approaches with different performance tradeoffs
 #
-# There are many algorithms for probabilistic inference:
+# - **Exact methods**:
+#   - Variable Elimination: Efficient for small networks
+#   - Belief Propagation: Efficient for tree-structured networks
 #
-# 1. **Variable Elimination**: Exact, efficient for small networks
-# 2. **Belief Propagation**: Exact, efficient for tree-structured networks
-# 3. **Sampling**: Approximate, scales to large networks
+# - **Approximate methods**:
+#   - Sampling: Scales to large networks, requires more samples for accuracy
 #
-# For our small network, all methods give identical results. The differences appear when networks grow larger or have complex structure (loops).
+# - **Small networks**: All methods give identical results
+#   - Choice of algorithm driven by network size and structure
 
 # %%
 # Compare inference algorithms
-model = create_medical_network()
-compare_inference_algorithms()
+model = utils.create_medical_network()
+utils.compare_inference_algorithms()
 plt.show()
 
 print("All methods answer the same question correctly.")
@@ -163,113 +223,107 @@ print("- <=15 variables: Exact methods (Variable Elimination)")
 print("- >15 variables: Approximate methods (Sampling, Variational)")
 
 # %% [markdown]
-# ## Cell 8: Approximate Inference With Gibbs Sampling
+# - **Gibbs sampling**: Markov Chain Monte Carlo algorithm generating samples from posterior distribution
 #
-# Gibbs sampling is a Markov Chain Monte Carlo (MCMC) algorithm that generates samples from the posterior distribution.
+# - **Key parameters**:
+#   - Burn-in: Early samples depend on initialization, discard them
+#   - Sample count: More samples = more accuracy, slower computation
 #
-# Key points:
-# - **Burn-in**: Early samples depend on initialization; discard them
 # - **Convergence**: With enough samples, empirical frequencies match true probabilities
-# - **Trade-off**: More samples = more accurate, but slower
-#
-# Adjust the sliders to see how burn-in and sample count affect convergence.
+#   - Trade-off: accuracy vs computational cost
 
 # %%
 # Gibbs sampling interactive visualization
-model = create_medical_network()
-gibbs_sampling_interactive()
+model = utils.create_medical_network()
+utils.gibbs_sampling_interactive()
 
 # %% [markdown]
-# ## Cell 9: When Evidence is Complex: Multiple Constraints
+# - **Real inference problems**: Multiple observed variables with joint distribution over unobserved variables
+#   - Full joint contains more information than individual marginals
+#   - Different observation combinations reveal different dependencies
 #
-# Real inference problems often involve multiple observed variables. The full joint distribution over unobserved variables contains more information than individual marginals.
+# - **Explore combinations**:
+#   - Disease alone
+#   - Disease + Symptom
+#   - Disease + Test
 #
-# Try observing different combinations:
-# - Disease alone
-# - Disease + Symptom
-# - Disease + Test
-#
-# The heatmap shows how probability is distributed across combinations. The marginal bar plots show what we learn about individual variables.
+# - **Visualization**: Heatmap shows joint probability distribution
+#   - Marginal bar plots show what we learn about individual variables
 
 # %%
 # Joint distribution explorer
-model = create_medical_network()
-joint_distribution_explorer()
+model = utils.create_medical_network()
+utils.joint_distribution_explorer()
 
 # %% [markdown]
-# ## Cell 10: Maximum A Posteriori (MAP) Queries
+# - **MAP query**: Find single most likely explanation for evidence
 #
-# Sometimes we don't need the full probability distribution. We just want: "What is the single most likely explanation for the evidence?"
+# - **Distinction from marginal inference**:
+#   - Marginal: $\Pr(\text{Disease} = \text{Yes} | \text{Evidence})$ for individual variables
+#   - MAP: $\arg\max \Pr(\text{Disease}, \text{Symptom} | \text{Evidence})$ single joint assignment
 #
-# **MAP vs. Marginal Inference:**
-# - **Marginal**: P(Disease=Yes | Evidence) — probability for each variable independently
-# - **MAP**: argmax P(Disease, Symptom | Evidence) — single most likely joint assignment
-#
-# Diagnostics usually want MAP: "What's the most likely disease state and symptom combination?"
+# - **Practical use**: Diagnostics want single best explanation
+#   - "What's most likely disease state and symptom combination?"
 
 # %%
 # MAP query demonstration
-model = create_medical_network()
-map_query_demo()
+model = utils.create_medical_network()
+utils.map_query_demo()
 plt.show()
 
 print("MAP finds the single most likely joint assignment.")
 print("Useful for diagnosis: 'What's the best explanation for the observations?'")
 
 # %% [markdown]
-# ## Cell 11: Building Intuition for Larger Networks
+# - **Real-world networks**: Many variables: genetic factors, lifestyle, multiple tests, symptoms, environmental factors
 #
-# Real-world Bayesian networks have many variables: genetic factors, lifestyle, multiple tests and symptoms, environmental factors, etc.
+# - **Computational challenges at scale**:
+#   - Exact inference becomes intractable (exponential in variables)
+#   - Network topology (tree vs loopy) matters for algorithm efficiency
+#   - Must choose algorithm carefully based on problem size
 #
-# **Challenges at scale:**
-# - Exact inference becomes intractable (exponential in variables)
-# - Network topology (tree vs. loopy) matters for algorithm efficiency
-# - Must choose algorithm carefully
-#
-# Try different evidence scenarios and inference methods to see how computation time grows.
+# - **Scaling rules of thumb**:
+#   - Up to 15 variables: Exact methods (Variable Elimination)
+#   - Beyond 15: Approximate methods (Sampling, Variational)
 
 # %%
 # Larger network interactive demo
-larger_network_interactive()
+utils.larger_network_interactive()
 
 # %% [markdown]
-# ## Cell 12: Practical Workflow: From Model to Inference
+# - **Practical workflow**: From model to inference and interpretation
 #
-# In practice, you'll follow this workflow:
-#
-# 1. **Load** a pre-trained or pre-built Bayesian network
-# 2. **Inspect** the model structure and probability tables
-# 3. **Validate** that all CPDs are well-formed (sum to 1)
-# 4. **Choose** an inference algorithm based on network size
-# 5. **Query** with evidence to answer domain questions
-# 6. **Interpret** results in context
-#
-# Let's walk through a complete example.
+# - **Steps**:
+#   1. Load pre-trained or pre-built Bayesian network
+#   2. Inspect model structure and probability tables
+#   3. Validate CPDs are well-formed (sum to 1)
+#   4. Choose inference algorithm based on network size
+#   5. Query with evidence to answer domain questions
+#   6. Interpret results in context
 
 # %%
 # Practical workflow demonstration
-model = larger_network_demo()
-practical_workflow_demo()
+model = utils.larger_network_demo()
+utils.practical_workflow_demo()
 
 # %% [markdown]
-# ## Summary
+# - **Structure**: Bayesian networks encode conditional relationships and independence assumptions
 #
-# You've learned:
+# - **Probabilities**: CPDs assign numerical beliefs to network structure
 #
-# 1. **Structure**: Bayesian networks encode conditional relationships and independence assumptions
-# 2. **Probabilities**: CPDs assign numerical beliefs to network structure
-# 3. **Inference**: Computing P(unobserved | observed) using Bayes' rule
-# 4. **Algorithms**: Different exact/approximate methods with different tradeoffs
-# 5. **Practice**: Building networks, observing evidence, and interpreting results
+# - **Inference**: Computing $\Pr(\text{unobserved} | \text{observed})$ using Bayes' rule
 #
-# ### Key Takeaways:
-# - Bayesian networks automate probabilistic reasoning
-# - Same network structure + different evidence → different conclusions
-# - Algorithm choice (exact vs. approximate) depends on network size
-# - Order of evidence doesn't matter; combine observations probabilistically
+# - **Algorithms**: Different exact/approximate methods with different tradeoffs
+#   - Exact methods for small networks
+#   - Approximate methods for large networks
 #
-# ### Next Steps:
-# - Build your own Bayesian network for a domain you care about
-# - Compare MAP and marginal inference on your model
-# - Learn about parameter learning (fitting CPDs from data)
-# - Explore structure learning (discovering network structure from data)
+# - **Key insights**:
+#   - Same network + different evidence = different conclusions
+#   - Algorithm choice depends on network size
+#   - Order of evidence doesn't matter
+#
+# - **Next steps**:
+#   - Build networks for your domain
+#   - Compare MAP and marginal inference
+#   - Learn parameter learning (fitting CPDs from data)
+#   - Explore structure learning (discovering network structure from data)
