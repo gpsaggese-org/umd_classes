@@ -68,3 +68,6 @@ https://pgmpy.org/guides/datasets.html
   > docker_jupyter.sh
   http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
   ```
+
+- 
+  /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/probabilistic_inference.html and save it in tutorials/pgmpy/pgmpy.01.API.probabilistic_inference.ipynb

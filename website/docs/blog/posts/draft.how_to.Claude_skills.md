@@ -172,3 +172,6 @@ Skill cookbooks - Working examples you can adapt
   3. Additional files loaded when needed
 
 // https://agentskills.io/home
+
+
+// https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#skill-structure
