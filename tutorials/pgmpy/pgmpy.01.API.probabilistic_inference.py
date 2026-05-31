@@ -60,14 +60,12 @@ import numpy as np
 # Use this for most notebooks.
 import helpers.htutorial as htutori
 
-import exact_inference_utils as utils
-
 htutori.config_notebook()
 
 # Initialize logger.
 logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
-utils.init_loggers(_LOG)
+#utils.init_loggers(_LOG)
 
 # Convert `display` into `print()` when running outside IPython.
 try:
@@ -109,7 +107,7 @@ G.add_edges_from([
 ])
 
 # Visualize using graphviz.
-hgraphv.plot_causal_dag(
+_ = hgraphv.plot_causal_dag(
     G,
     title='PGMPy API Workflow',
     figsize=(8, 6)
@@ -175,6 +173,11 @@ print(f"All ancestors of C: {model.get_ancestors('C')}")
 # Quantifies the relationship between variables as a probability table.
 
 # %% [markdown]
+# ### Mental Model
+#
+# // TODO(ai_gp): Add this
+
+# %% [markdown]
 # ### CPD with No Parents
 
 # %%
@@ -182,6 +185,7 @@ print(f"All ancestors of C: {model.get_ancestors('C')}")
 cpd_a = TabularCPD(
     variable='A',
     # A can take 2 values: 0 or 1.
+    # `card` stands for cardinality.
     variable_card=2,
     # P(A=0)=0.6, P(A=1)=0.4.
     values=[[0.6], [0.4]]
@@ -192,7 +196,6 @@ print(cpd_a)
 
 # %% [markdown]
 # ### CPD with Parents
-#
 
 # %%
 # CPD for B given A (B has parent A).
@@ -219,9 +222,11 @@ print(cpd_b)
 # - Column A(1): P(B=0 | A=1)=0.2, P(B=1 | A=1)=0.8
 # - Each column sums to 1.0 (valid probability distribution)
 
+# %%
+factor_to_dataframe(cpd_b)
+
 # %% [markdown]
 # ### Important Methods
-#
 
 # %%
 # Inspect a CPD.
@@ -274,9 +279,26 @@ inference = VariableElimination(model)
 print(f"Type: {type(inference)}")
 print(f"Model: {inference.model.nodes()}")
 
+# %%
+# TODO(ai_gp): Move to utils.py
+from IPython.display import Image, display
+
+def draw_pgmpy_model(model, filename="model.png", prog="dot"):
+    """
+    Draw a pgmpy model using Graphviz and display it in a notebook.
+    Requires pygraphviz + graphviz system packages.
+    """
+    g = model.to_graphviz()
+    g.draw(filename, prog=prog)
+    display(Image(filename=filename))
+    return g
+
+
+# %%
+_ = draw_pgmpy_model(model)
+
 # %% [markdown]
 # ### Important Methods
-#
 
 # %%
 # Query: compute P(B | A=1).
@@ -286,6 +308,27 @@ print(f"Type of result: {type(result)}")
 print(result)
 print(f"\nP(B=0 | A=1) = {result.values[0]}")
 print(f"P(B=1 | A=1) = {result.values[1]}")
+
+# %%
+# TODO(ai_gp): Move to utils.py
+import pandas as pd
+
+from itertools import product
+
+def factor_to_dataframe(factor, value_col="probability"):
+    variables = factor.variables
+    states = [
+        factor.state_names.get(v, list(range(factor.cardinality[i])))
+        for i, v in enumerate(variables)
+    ]
+    assignments = list(product(*states))
+    df = pd.DataFrame(assignments, columns=variables)
+    df[value_col] = factor.values.flatten()
+    return df
+
+
+# %%
+factor_to_dataframe(result)
 
 # %% [markdown]
 # ## Primitive 4: Query Results
@@ -335,8 +378,7 @@ print(f"Nodes: {model.nodes()}")
 print(f"Edges: {model.edges()}")
 
 # %%
-g = model.to_graphviz()
-g.draw("model.png", prog="dot")
+_ = draw_pgmpy_model(model)
 
 # %%
 # 4. Create inference engine and query.
@@ -359,7 +401,6 @@ print(result)
 # ## Example 2: Add Multi-State Variables
 #
 # Temperature (cold, warm, hot) → Comfort (bad, good)
-#
 
 # %%
 # Variables can have more than 2 states.
@@ -393,11 +434,13 @@ print("P(Temperature | Comfort=good):")
 for i, val in enumerate(result.values):
     print(f"  P(Temp={i}) = {val:.3f}")
 
+# %%
+_ = draw_pgmpy_model(model)
+
 # %% [markdown]
 # ## Example 3: Chain Structure
 #
 # X → Y → Z (three-node chain)
-#
 
 # %%
 model = DiscreteBayesianNetwork([('X', 'Y'), ('Y', 'Z')])
@@ -417,6 +460,11 @@ cpd_z = TabularCPD(
 model.add_cpds(cpd_x, cpd_y, cpd_z)
 model.check_model()
 
+
+# %%
+_ = draw_pgmpy_model(model)
+
+# %%
 inference = VariableElimination(model)
 
 # Query with evidence at the beginning.
@@ -433,7 +481,6 @@ print(result)
 # ## Example 4: V-Structure (Collider)
 #
 # A ← B → C (classic collider pattern)
-#
 
 # %%
 # V-structure: both A and C point to B.
@@ -456,6 +503,10 @@ cpd_b = TabularCPD(
 model.add_cpds(cpd_a, cpd_c, cpd_b)
 model.check_model()
 
+# %%
+_ = draw_pgmpy_model(model)
+
+# %%
 inference = VariableElimination(model)
 
 # Without evidence on B, A and C are independent.
@@ -473,7 +524,6 @@ print("\nNote: Probabilities change when B is observed (explaining away effect)"
 # # Part 4: API Patterns
 #
 # ## Pattern 1: Model Construction and Validation
-#
 
 # %%
 # Pattern: define structure > add CPDs > validate > create engine.
