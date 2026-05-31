@@ -74,6 +74,8 @@ except ImportError:
 # %% [markdown]
 # # Part 1: Library Overview
 #
+
+# %% [markdown]
 # ## What Problem Does PGMPy Solve?
 #
 # PGMPy enables probabilistic reasoning over graphical models:
@@ -82,6 +84,8 @@ except ImportError:
 # - **Probabilistic Inference**: Answer probability questions given observed evidence: "What is P(X=x | Y=y)?"
 # - **MAP Queries**: Find most probable variable assignments given evidence
 #
+
+# %% [markdown]
 # ## Key Abstractions
 #
 # 1. **BayesianNetwork**: The graph structure (nodes and edges)
@@ -89,7 +93,10 @@ except ImportError:
 # 3. **InferenceEngine** (VariableElimination, BeliefPropagation): Compute probabilities given evidence
 # 4. **Query Results**: Distributions over variables conditioned on evidence
 #
+
+# %% [markdown]
 # ## How the Pieces Fit Together
+#
 
 # %%
 import networkx as nx
@@ -114,10 +121,14 @@ _ = hgraphv.plot_causal_dag(
 # %% [markdown]
 # # Part 2: Core Primitives
 #
+
+# %% [markdown]
 # ## Primitive 1: DiscreteBayesianNetwork
 #
 # Represents the graph structure (directed acyclic graph).
 #
+
+# %% [markdown]
 # ### Mental Model
 #
 # A **BayesianNetwork** is:
@@ -126,6 +137,7 @@ _ = hgraphv.plot_causal_dag(
 # - Each node requires a Conditional Probability Distribution (CPD)
 # - Nodes without parents are root nodes (prior distributions)
 # - Nodes with parents are conditional on those parents
+#
 
 # %% [markdown]
 # ### Minimal Construction
@@ -345,9 +357,12 @@ print(f"\nAs array: {result.values}")
 # %% [markdown]
 # # Part 3: Composition Examples
 #
+
+# %% [markdown]
 # ## Example 1: Minimal End-to-End Workflow
 #
 # Rain → Sprinkler → Grass Wet
+#
 
 # %%
 # 1. Define structure.
@@ -521,7 +536,10 @@ print("\nNote: Probabilities change when B is observed (explaining away effect)"
 # %% [markdown]
 # # Part 4: API Patterns
 #
+
+# %% [markdown]
 # ## Pattern 1: Model Construction and Validation
+#
 
 # %%
 # Pattern: define structure > add CPDs > validate > create engine.
@@ -643,6 +661,8 @@ print(result)
 # %% [markdown]
 # # Part 6: Interactive Exploration
 #
+
+# %% [markdown]
 # ## Experiment 1: How Does Evidence Change Posteriors?
 #
 
@@ -722,7 +742,6 @@ print(result)
 
 # %% [markdown]
 # ## Experiment 3: Computational Complexity
-#
 
 # %%
 import time
@@ -758,112 +777,6 @@ for chain_length in [3, 5, 7, 10]:
     print(f"Chain length {chain_length}: {elapsed*1000:.2f}ms")
 
 # %% [markdown]
-# # Part 7: Cheat Sheet
-#
-# ## Core Objects Quick Reference
-#
-
-# %%
-cheat_sheet = pd.DataFrame([
-    {
-        'Object': 'DiscreteBayesianNetwork',
-        'Purpose': 'Graph structure',
-        'Construction': 'DiscreteBayesianNetwork([(a, b), (b, c)])',
-        'Key Method': 'add_cpds(), check_model()'
-    },
-    {
-        'Object': 'TabularCPD',
-        'Purpose': 'Quantify relationships',
-        'Construction': 'TabularCPD(variable, cardinality, values, evidence, evidence_card)',
-        'Key Method': '.values, .cardinality'
-    },
-    {
-        'Object': 'VariableElimination',
-        'Purpose': 'Exact inference (default)',
-        'Construction': 'VariableElimination(model)',
-        'Key Method': 'query(), map_query()'
-    },
-    {
-        'Object': 'Query Result',
-        'Purpose': 'Posterior distribution',
-        'Construction': 'inference.query(...)',
-        'Key Method': '.values, .to_dataframe()'
-    },
-])
-
-print(cheat_sheet.to_string(index=False))
-
-# %% [markdown]
-# ## Most Useful Methods
-#
-
-# %%
-methods = pd.DataFrame([
-    {
-        'Method': 'inference.query(variables, evidence)',
-        'Returns': 'Posterior distribution P(variables | evidence)',
-        'Example': 'inference.query(["B"], {"A": 1})'
-    },
-    {
-        'Method': 'inference.map_query(variables, evidence)',
-        'Returns': 'Most likely assignment (dict)',
-        'Example': 'inference.map_query(["B"], {"A": 1})'
-    },
-    {
-        'Method': 'model.add_cpds(*cpds)',
-        'Returns': 'None',
-        'Example': 'model.add_cpds(cpd_a, cpd_b)'
-    },
-    {
-        'Method': 'model.check_model()',
-        'Returns': 'True if valid, raises exception otherwise',
-        'Example': 'model.check_model()'
-    },
-    {
-        'Method': 'result.to_dataframe()',
-        'Returns': 'Pandas DataFrame with probability values',
-        'Example': 'result.to_dataframe()'
-    },
-])
-
-print(methods.to_string(index=False))
-
-# %% [markdown]
-# ## Typical Workflow (End-to-End)
-#
-
-# %%
-# Complete, minimal end-to-end example.
-
-# 1. Define the graph structure.
-model = DiscreteBayesianNetwork([('Disease', 'Test')])
-
-# 2. Define probability distributions.
-cpd_disease = TabularCPD('Disease', 2, [[0.99], [0.01]])
-cpd_test = TabularCPD(
-    'Test', 2,
-    [[0.95, 0.1], [0.05, 0.9]],
-    evidence=['Disease'], evidence_card=[2]
-)
-
-# 3. Add CPDs to model.
-model.add_cpds(cpd_disease, cpd_test)
-model.check_model()
-
-# 4. Create inference engine.
-inference = VariableElimination(model)
-
-# 5. Answer probability questions.
-# Q: Someone tests positive. How likely do they have the disease?
-posterior = inference.query(variables=['Disease'], evidence={'Test': 1})
-
-print("P(Disease | Test=positive):")
-print(f"  P(Disease=0) = {posterior.values[0]:.4f}")
-print(f"  P(Disease=1) = {posterior.values[1]:.4f}")
-print(f"\nInterpretation: Even with positive test, only {posterior.values[1]:.1%} likely to have disease")
-print("(This is base rate fallacy - prior was very low)")
-
-# %% [markdown]
 # ## Summary: The Mental Model
 #
 # - **BayesianNetwork**: "Here's the causal/dependency structure"
@@ -871,7 +784,3 @@ print("(This is base rate fallacy - prior was very low)")
 # - **InferenceEngine**: "Use this structure + relationships to answer probability questions"
 # - **query()**: "What's the distribution over X given we observed Y=y?"
 # - **map_query()**: "What's the single most likely X given we observed Y=y?"
-#
-# The API is remarkably consistent across different inference algorithms.
-# Switch from VariableElimination to BeliefPropagation by just changing one line of instantiation.
-#
