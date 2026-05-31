@@ -156,6 +156,7 @@ def cell3_2_create_cpd_widget(
     # Create disease prior probability slider using htutori.
     prior_slider, prior_box = htutori.build_widget_control(
         name="prior",
+        description="disease prior",
         min_val=0.0,
         max_val=1.0,
         step=0.01,
@@ -777,6 +778,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
     # Create seed slider using htutori.
     seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
+        description="random seed",
         min_val=0,
         max_val=99,
         step=1,
@@ -786,6 +788,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
     # Create log-scale samples slider using htutori.
     samples_slider, samples_box = htutori.build_log_widget_control(
         name="N",
+        description="num samples",
         min_exp=6,
         max_exp=13,
         initial_exp=9,
@@ -794,6 +797,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
     # Create slider for burn-in period using htutori.
     burnin_slider, burnin_box = htutori.build_widget_control(
         name="burn-in",
+        description="burn-in period",
         min_val=0,
         max_val=2000,
         step=100,

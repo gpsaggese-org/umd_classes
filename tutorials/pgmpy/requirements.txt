@@ -1,7 +1,10 @@
+graphviz
 ipywidgets
 matplotlib
+networkx
 numpy
 pandas
+pillow
 seaborn
 
 pgmpy==1.1.2

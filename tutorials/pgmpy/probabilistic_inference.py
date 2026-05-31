@@ -77,19 +77,16 @@ warnings.filterwarnings("ignore")
 #   - Disease: Hidden cause we want to infer
 #   - Symptom: Observable sign depending on disease status
 #   - Test: Diagnostic test result depending on disease status
-#
-# - **Key insight**: Given disease status, symptom and test are conditionally independent
-#   - Enables efficient inference algorithms
-#   - Order of evidence doesn't matter for combining observations
 
 # %% [markdown]
 # ## Cell 2.2: Network Structure Visualization
 
 # %%
-# Build the medical diagnosis network
+# Build the medical diagnosis network.
 model = utils.cell2_2_create_network()
 
-# Visualize the network structure
+# Visualize the network structure.
+# TODO(ai_gp): Make the DAG smaller.
 utils.cell2_2_visualize_network(model)
 plt.show()
 
@@ -103,6 +100,8 @@ plt.show()
 
 # %% [markdown]
 # # Part 3: Conditional Probability Tables (CPDs)
+#
+# # TODO(ai_gp): Replace CPD -> CPT
 
 # %% [markdown]
 # ## Cell 3.1: CPD Definition and Role
@@ -143,7 +142,12 @@ plt.show()
 
 # %%
 # Interactive CPD visualization
+
+# TODO(ai_gp): Make the heatmaps use the same color scheme.
 utils.cell3_2_create_cpd_widget(disease_prior=0.05)
+
+# %%
+# TODO(ai_gp): Add an explanation of what happens moving the P(Disease) and with the state toggle.
 
 # %% [markdown]
 # # Part 4: Prior Distribution and Inference
@@ -152,8 +156,12 @@ utils.cell3_2_create_cpd_widget(disease_prior=0.05)
 # ## Cell 4.1: Sampling from Prior
 
 # %%
+# TODO(ai_gp): Explain what cell4_1_forward_sample_and_plot does 
+
+# %%
 # Sample from the prior distribution.
 model = utils.cell4_1_create_network()
+# TODO(ai_gp): Plot the DAG in the first plot of the 1x4 plot below.
 utils.cell4_1_forward_sample_and_plot(model, n_samples=1000)
 plt.show()
 
