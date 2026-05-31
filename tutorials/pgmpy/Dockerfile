@@ -4,11 +4,10 @@ FROM python:3.12-slim
 # Avoid interactive prompts during apt operations.
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install CA certificates, build tools, and graphviz for DAG visualization.
+# Install CA certificates and build tools.
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     build-essential \
-    graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment.
@@ -26,6 +25,16 @@ RUN pip install --upgrade pip
 # Pin down jupytext to avoid jitter in the notebook files due to changing
 # version.
 RUN pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext==1.19.3 -r /install/requirements.txt
+
+# Install pygraphviz.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  graphviz \
+  libgraphviz-dev \
+  pkg-config \
+  gcc \
+  python3-dev \
+  && rm -rf /var/lib/apt/lists/*
+RUN pip install pygraphviz
 
 RUN mkdir -p /install
 

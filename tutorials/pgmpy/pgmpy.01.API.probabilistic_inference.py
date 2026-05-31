@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -44,8 +44,36 @@ from pgmpy.estimators import MaximumLikelihoodEstimator
 import pandas as pd
 import numpy as np
 
+# %%
+# # TODO(gp): Add this dep to the container.
+
+# # To install additional packages, use:
+# import helpers.hmodule as hmodule
+# hmodule.install_module_if_not_present(
+#     ["pygraphviz"],
+#     use_activate=True,
+#     use_sudo=False,
+#     venv_path="/opt/venv",
+# )
+
+# %%
+# Use this for most notebooks.
+import helpers.htutorial as htutori
+
+import exact_inference_utils as utils
+
+htutori.config_notebook()
+
+# Initialize logger.
+logging.basicConfig(level=logging.INFO)
 _LOG = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
+utils.init_loggers(_LOG)
+
+# Convert `display` into `print()` when running outside IPython.
+try:
+    from IPython.display import display
+except ImportError:
+    display = print  # type: ignore
 
 # %% [markdown]
 # # Part 1: Library Overview
@@ -210,7 +238,19 @@ print(f"P(B=1 | A=0): {cpd_b.values[1, 0]}")
 # ## Primitive 3: InferenceEngine (VariableElimination)
 #
 # Computes posterior probabilities given evidence.
+
+# %% [markdown]
+# ### Mental Model
 #
+# An **InferenceEngine** is:
+# - An algorithm that computes posterior probabilities from a graphical model
+# - Takes a fitted BayesianNetwork (with CPDs)
+# - Answers conditional probability questions: P(query_vars | evidence)
+# - Different implementations
+#     - `VariableElimination`: Exact, efficient for many practical models
+#     - `BeliefPropagation`: Exact, optimized for repeated queries
+
+# %% [markdown]
 # ### Minimal Construction and Setup
 
 # %%
@@ -248,15 +288,6 @@ print(f"\nP(B=0 | A=1) = {result.values[0]}")
 print(f"P(B=1 | A=1) = {result.values[1]}")
 
 # %% [markdown]
-# ### Mental Model
-#
-# An **InferenceEngine** is:
-# - An algorithm that computes posterior probabilities from a graphical model
-# - Takes a fitted BayesianNetwork (with CPDs)
-# - Answers conditional probability questions: P(query_vars | evidence)
-# - VariableElimination: Exact, efficient for many practical models
-# - BeliefPropagation: Exact, optimized for repeated queries
-#
 # ## Primitive 4: Query Results
 #
 # The output of inference queries: probability distributions.
@@ -269,10 +300,6 @@ print(f"Type: {type(result)}")
 print(f"Variables: {result.variables}")
 print(f"Cardinality: {result.cardinality}")
 print(f"\nAs array: {result.values}")
-# Note: to_dataframe() is not available on all DiscreteFactor versions
-# print(f"\nAs DataFrame:")
-# result_df = result.to_dataframe()
-# print(result_df)
 
 # %% [markdown]
 # # Part 3: Composition Examples
@@ -280,7 +307,6 @@ print(f"\nAs array: {result.values}")
 # ## Example 1: Minimal End-to-End Workflow
 #
 # Rain → Sprinkler → Grass Wet
-#
 
 # %%
 # 1. Define structure.
@@ -307,6 +333,10 @@ model.check_model()
 print("Model is valid!")
 print(f"Nodes: {model.nodes()}")
 print(f"Edges: {model.edges()}")
+
+# %%
+g = model.to_graphviz()
+g.draw("model.png", prog="dot")
 
 # %%
 # 4. Create inference engine and query.
