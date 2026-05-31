@@ -25,12 +25,7 @@ try:
     response = client.messages.create(
         model=MODEL,
         max_tokens=20,
-        messages=[
-            {
-                "role": "user",
-                "content": "Reply with exactly: API_OK"
-            }
-        ],
+        messages=[{"role": "user", "content": "Reply with exactly: API_OK"}],
     )
 
     text = "".join(
@@ -40,10 +35,10 @@ try:
     )
 
     print("SUCCESS")
-    #print("Response:", repr(text))
+    # print("Response:", repr(text))
 
-except Exception as e:
+except Exception:
     print("FAILED")
-    #print(type(e).__name__)
-    #print(str(e))
+    # print(type(e).__name__)
+    # print(str(e))
     sys.exit(2)

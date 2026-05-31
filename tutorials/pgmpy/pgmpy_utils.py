@@ -10,7 +10,7 @@ This file contains utility functions that support the tutorial notebooks.
 
 Import as:
 
-import class_project.project_template.template_utils as cpptteut
+import tutorials.pgmpy.pgmpy_utils as tpgpguti
 """
 
 import pandas as pd
