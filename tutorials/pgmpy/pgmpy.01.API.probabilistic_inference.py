@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -44,7 +44,6 @@ from pgmpy.estimators import MaximumLikelihoodEstimator
 import pandas as pd
 import numpy as np
 
-# TODO(ai_gp): Use standard template.
 _LOG = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 
@@ -67,18 +66,26 @@ logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(mes
 # 4. **Query Results**: Distributions over variables conditioned on evidence
 #
 # ## How the Pieces Fit Together
-#
-# // TODO(ai_gp): Use a better graph using graphviz
-#
-# ```
-# BayesianNetwork (structure)
-#     + TabularCPD (quantification)
-#     ↓
-# InferenceEngine (instantiate with model)
-#     ↓
-# query(variables, evidence) → Distribution
-# map_query(variables, evidence) → Most probable assignment
-# ```
+
+# %%
+import networkx as nx
+import helpers.hgraphviz as hgraphv
+
+# Create a directed graph showing the API workflow.
+G = nx.DiGraph()
+G.add_edges_from([
+    ('BayesianNetwork', 'InferenceEngine'),
+    ('TabularCPD', 'BayesianNetwork'),
+    ('InferenceEngine', 'query()'),
+    ('InferenceEngine', 'map_query()'),
+])
+
+# Visualize using graphviz.
+hgraphv.plot_causal_dag(
+    G,
+    title='PGMPy API Workflow',
+    figsize=(8, 6)
+)
 
 # %% [markdown]
 # # Part 2: Core Primitives
@@ -162,20 +169,27 @@ print(cpd_a)
 # %%
 # CPD for B given A (B has parent A).
 # B's distribution depends on A's value.
-# TODO(ai_gp): Avoid inlined comments but use comments before the corresponding code.
+# P(B=0 | A=0)=0.9, P(B=0 | A=1)=0.2.
+# P(B=1 | A=0)=0.1, P(B=1 | A=1)=0.8.
 cpd_b = TabularCPD(
     variable='B',
     variable_card=2,
     values=[
-        [0.9, 0.2],  # P(B=0 | A=0)=0.9, P(B=0 | A=1)=0.2.
-        [0.1, 0.8]   # P(B=1 | A=0)=0.1, P(B=1 | A=1)=0.8.
+        [0.9, 0.2],
+        [0.1, 0.8]
     ],
-    evidence=['A'],  # B depends on A.
-    evidence_card=[2]  # A has 2 values.
+    evidence=['A'],
+    evidence_card=[2]
 )
 
 print(cpd_b)
-# TODO(ai_gp): Convert the comments using print statements into markdown comments after the cell running the code.
+
+# %% [markdown]
+# The CPD table shows the conditional probability distribution of B given A:
+# - Each column represents one value of the parent variable A
+# - Column A(0): P(B=0 | A=0)=0.9, P(B=1 | A=0)=0.1
+# - Column A(1): P(B=0 | A=1)=0.2, P(B=1 | A=1)=0.8
+# - Each column sums to 1.0 (valid probability distribution)
 
 # %% [markdown]
 # ### Important Methods
@@ -192,29 +206,12 @@ print(f"Evidence cardinality: {cpd_b.cardinality[1:]}")
 print(f"\nP(B=0 | A=1): {cpd_b.values[0, 1]}")
 print(f"P(B=1 | A=0): {cpd_b.values[1, 0]}")
 
-# %%
-# TODO(ai_gp): Move the Mental Model at the beginning of each section
-
 # %% [markdown]
-# ### Mental Model
-#
-# A **TabularCPD** is:
-# - A probability table organizing conditional distributions
-# - For a node with k parents (each with c_i values), table has ∏c_i columns
-# - Each column represents one evidence configuration
-# - Each column sums to 1.0 (valid probability distribution)
-# - Columns are ordered by evidence cardinality (rightmost parent varies fastest)
-#
-# // TODO(ai_gp): Remove the page separators
-# ---
-#
 # ## Primitive 3: InferenceEngine (VariableElimination)
 #
 # Computes posterior probabilities given evidence.
 #
-# // TODO(ai_gp): Move this in a separate cell, everywhere in the notebook.
 # ### Minimal Construction and Setup
-#
 
 # %%
 # Create a complete model.
@@ -231,8 +228,7 @@ cpd_b = TabularCPD(
 model.add_cpds(cpd_a, cpd_b)
 model.check_model()
 
-# Create inference engine.
-# TODO(ai_gp): Explain what it does and that it will be explained later.
+# Create inference engine: computes posterior probabilities given evidence.
 inference = VariableElimination(model)
 
 print(f"Type: {type(inference)}")
@@ -261,12 +257,9 @@ print(f"P(B=1 | A=1) = {result.values[1]}")
 # - VariableElimination: Exact, efficient for many practical models
 # - BeliefPropagation: Exact, optimized for repeated queries
 #
-# ---
-#
 # ## Primitive 4: Query Results
 #
 # The output of inference queries: probability distributions.
-#
 
 # %%
 # Query result is a Factor object.
