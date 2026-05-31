@@ -46,9 +46,9 @@ import helpers.hnotebook as hnotebook
 _LOG = logging.getLogger(__name__)
 
 # Initialize notebook configuration and logging.
-# hnotebook.config_notebook()
-# hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
-# hnotebook.set_logger_to_print(_LOG)
+hnotebook.config_notebook()
+hdbg.init_logger(verbosity=logging.INFO, use_exec_path=False)
+hnotebook.set_logger_to_print(_LOG)
 
 import probabilistic_inference_utils as utils
 
@@ -121,6 +121,25 @@ plt.show()
 
 # %% [markdown]
 # ## Cell 3.2: Interactive CPD Visualization
+#
+# **Goal**: Explore how disease prevalence affects the joint conditional probability tables
+#   - Adjust disease prior probability and observe CPD updates
+#   - Understand relationship between prior belief and likelihood functions
+#   - Visualize how all three CPDs interact
+#
+# **Plots**:
+#   - P(Disease): Prior probability of disease given current slider setting
+#   - P(Symptom | Disease): Conditional probability of symptom given disease state
+#   - P(Test | Disease): Conditional probability of test given disease state
+#
+# **Parameters**:
+#   - Disease prior probability slider: ranges 0.0 to 1.0, affects P(Disease) heatmap
+#   - Disease state toggle: select None, Present, or Absent
+#
+# **Key observations**:
+#   - Higher disease prior increases "Present" bar in first heatmap
+#   - CPD conditional probabilities stay constant; only priors change
+#   - Symptom and Test tables show likelihood of evidence given disease state
 
 # %%
 # Interactive CPD visualization
@@ -194,15 +213,6 @@ model = utils.cell5_2_create_network()
 utils.cell5_2_compare_exact_and_sampling(model)
 plt.show()
 
-print("Exact Inference: Variable Elimination")
-print("- Guaranteed correct")
-print("- Scales poorly with network size")
-print("- Fast for small networks")
-print("\nForward Sampling: Approximate")
-print("- Gets more accurate with more samples")
-print("- Scales to large networks")
-print("- Slower per query but parallelizable")
-
 # %% [markdown]
 # - **Core inference concept**: Observing evidence shifts what we believe about unobserved variables
 #   - Prior: Disease probability = 5%
@@ -218,23 +228,31 @@ print("- Slower per query but parallelizable")
 
 # %% [markdown]
 # ## Cell 5.3: Interactive Evidence Explorer
+#
+# **Goal**: Understand how combining multiple evidence updates disease belief via Bayes' rule
+#   - Observe posterior shifts as evidence combinations change
+#   - Discover how different evidence sources interact
+#   - Learn that order of evidence doesn't matter
+#
+# **Plots**:
+#   - Network structure visualization with evidence nodes highlighted
+#   - Posterior bar chart showing P(Disease | Evidence) distribution
+#
+# **Parameters**:
+#   - Test Result dropdown: None, Positive, or Negative
+#   - Symptom dropdown: None, Present, or Absent
+#   - Clear Evidence button: resets both dropdowns
+#
+# **Key observations**:
+#   - Positive test alone increases disease probability to 45%
+#   - Positive test + symptom present gives strongest evidence (~73%)
+#   - Positive test + symptom absent conflicts, reduces disease probability
+#   - Order of evidence combination doesn't affect final posterior
 
 # %%
 # Interactive evidence explorer
 model = utils.cell5_3_create_network()
 utils.cell5_3_create_evidence_explorer()
-
-# %% [markdown]
-# - **Interactive exploration**: Combine different evidence and observe posterior probability updates in real time
-#
-# - **Try these combinations**:
-#   - Positive test alone
-#   - Positive test + symptom present (strong evidence)
-#   - Positive test + symptom absent (conflicting evidence)
-#
-# - **Network behavior**: Combines evidence probabilistically
-#   - Order of evidence doesn't matter
-#   - Encodes probability, not causality in time
 
 # %% [markdown]
 # # Part 6: Inference Algorithm Comparison
@@ -255,21 +273,9 @@ plt.show()
 #   - Sampling (Forward, Gibbs): Approximate, more accurate with more samples
 #
 # - **Practical algorithm selection**:
-#   - Small networks (≤15 variables): Use exact methods (Variable Elimination)
+#   - Small networks (<=15 variables): Use exact methods (Variable Elimination)
 #   - Larger networks (>15 variables): Use approximate methods (Sampling, Variational Inference)
 #   - Network topology matters: Tree networks have faster exact algorithms than general loopy networks
-
-# %%
-# Compare inference algorithms
-model = utils.cell6_1_create_network()
-utils.cell6_1_compare_inference_algorithms()
-plt.show()
-
-print("All methods answer the same question correctly.")
-print("Choice of algorithm is driven by network size and structure.")
-print("\nRule of thumb:")
-print("- <=15 variables: Exact methods (Variable Elimination)")
-print("- >15 variables: Approximate methods (Sampling, Variational)")
 
 # %% [markdown]
 # - **Inference algorithms**: Different approaches with different performance tradeoffs
@@ -296,9 +302,6 @@ model = utils.cell7_1_create_network()
 utils.cell7_1_map_query_demo()
 plt.show()
 
-print("MAP finds the single most likely joint assignment.")
-print("Useful for diagnosis: 'What's the best explanation for the observations?'")
-
 # %% [markdown]
 # - **MAP query finds single best explanation**: Different from marginal inference which computes individual probabilities
 #   - Marginal: $\Pr(\text{Disease} = \text{Yes} | \text{Evidence})$ for individual variables
@@ -318,6 +321,28 @@ print("Useful for diagnosis: 'What's the best explanation for the observations?'
 
 # %% [markdown]
 # ## Cell 7.2: Gibbs Sampling Convergence
+#
+# **Goal**: Visualize how MCMC sampling converges to true posterior and understand burn-in
+#   - Observe running mean trajectory over iterations
+#   - Understand burn-in period and why samples are discarded
+#   - Explore accuracy vs computational cost tradeoff
+#
+# **Plots**:
+#   - Running mean trajectory: averaged probability estimate over iterations
+#   - Burn-in period shaded in gray: iterations discarded before convergence
+#   - True posterior line: reference value from exact inference
+#   - Confidence region: band around true posterior
+#
+# **Parameters**:
+#   - Seed slider: control randomness of sampling chain (0-99)
+#   - N samples slider: total number of MCMC iterations (log scale 64-8192)
+#   - Burn-in slider: number of initial samples to discard (0-2000)
+#
+# **Key observations**:
+#   - Running mean jumps early (initialization), then converges smoothly
+#   - Burn-in period visibly higher variability, settles after discard
+#   - Longer chains give smoother convergence curves
+#   - All chains converge to same true posterior regardless of seed
 
 # %%
 # Gibbs sampling interactive visualization
@@ -326,46 +351,50 @@ utils.cell7_2_gibbs_sampling_interactive()
 
 # %% [markdown]
 # ## Cell 7.3: Joint Distribution Explorer
-
-# %%
-# Joint distribution explorer
-model = utils.cell7_3_create_network()
-utils.cell7_3_joint_distribution_explorer()
-
-# %% [markdown]
-# - **Real inference problems**: Multiple observed variables with joint distribution over unobserved variables
-#   - Full joint contains more information than individual marginals
-#   - Different observation combinations reveal different dependencies
 #
-# - **Explore combinations**:
-#   - Disease alone
-#   - Disease + Symptom
-#   - Disease + Test
+# **Goal**: Explore joint and marginal distributions under different evidence scenarios
+#   - Visualize full joint distribution as heatmap
+#   - Compare individual marginal distributions
+#   - Understand independence relationships in the network
 #
-# - **Visualization**: Heatmap shows joint probability distribution
-#   - Marginal bar plots show what we learn about individual variables
+# **Plots**:
+#   - Joint distribution heatmap P(Disease, Symptom) with color intensity showing probability
+#   - Marginal bar charts: P(Disease) and P(Symptom) derived from joint
+#
+# **Parameters**:
+#   - Disease dropdown: None, Present, or Absent (condition on disease evidence)
+#   - Symptom dropdown: None, Present, or Absent (condition on symptom evidence)
+#
+# **Key observations**:
+#   - Joint heatmap shows all combinations; marginals sum across rows/columns
+#   - No evidence: heatmap reveals correlated structure (disease causes symptom)
+#   - Conditioning on disease: symptom distribution changes based on disease state
+#   - Different evidence combinations show different dependency structures
 
 # %% [markdown]
 # # Part 8: Scaling to Larger Networks
 
 # %% [markdown]
 # ## Cell 8.1: Larger Network Interactive Demo
-
-# %%
-# Larger network interactive demo
-utils.cell8_1_larger_network_interactive()
-
-# %% [markdown]
-# - **Real-world networks**: Many variables: genetic factors, lifestyle, multiple tests, symptoms, environmental factors
 #
-# - **Computational challenges at scale**:
-#   - Exact inference becomes intractable (exponential in variables)
-#   - Network topology (tree vs loopy) matters for algorithm efficiency
-#   - Must choose algorithm carefully based on problem size
+# **Goal**: Compare inference algorithms on a realistic 8-variable network
+#   - Test Variable Elimination vs sampling on larger problem
+#   - Observe algorithm performance tradeoffs
+#   - Understand when approximation becomes necessary
 #
-# - **Scaling rules of thumb**:
-#   - Up to 15 variables: Exact methods (Variable Elimination)
-#   - Beyond 15: Approximate methods (Sampling, Variational)
+# **Plots**:
+#   - Network topology visualization with evidence nodes highlighted
+#   - Posterior disease probability bar chart with inference times
+#
+# **Parameters**:
+#   - Scenario dropdown: choose evidence combinations (Test only, Test+Symptoms, Test but no Symptom)
+#   - Method dropdown: Variable Elimination or Sampling
+#
+# **Key observations**:
+#   - Variable Elimination exact but slower on larger networks
+#   - Sampling approximation comparable speed with good accuracy
+#   - Same evidence produces consistent posteriors across methods
+#   - Network size and topology affect which algorithm to choose
 
 # %% [markdown]
 # ## Cell 8.2: Practical Workflow Demonstration
@@ -385,28 +414,3 @@ utils.cell8_2_practical_workflow_demo()
 #   4. Choose inference algorithm based on network size
 #   5. Query with evidence to answer domain questions
 #   6. Interpret results in context
-
-# %% [markdown]
-# # Part 9: Summary and Next Steps
-
-# %% [markdown]
-# - **Structure**: Bayesian networks encode conditional relationships and independence assumptions
-#
-# - **Probabilities**: CPDs assign numerical beliefs to network structure
-#
-# - **Inference**: Computing $\Pr(\text{unobserved} | \text{observed})$ using Bayes' rule
-#
-# - **Algorithms**: Different exact/approximate methods with different tradeoffs
-#   - Exact methods for small networks
-#   - Approximate methods for large networks
-#
-# - **Key insights**:
-#   - Same network + different evidence = different conclusions
-#   - Algorithm choice depends on network size
-#   - Order of evidence doesn't matter
-#
-# - **Next steps**:
-#   - Build networks for your domain
-#   - Compare MAP and marginal inference
-#   - Learn parameter learning (fitting CPDs from data)
-#   - Explore structure learning (discovering network structure from data)
