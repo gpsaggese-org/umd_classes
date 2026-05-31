@@ -37,16 +37,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # %%
-# Install pgmpy if needed
-# import subprocess
-# import importlib.util
-
-# if importlib.util.find_spec('pgmpy') is None:
-#     subprocess.check_call(
-#         [sys.executable, '-m', 'pip', 'install', 'pgmpy', '-q']
-#     )
-
-# %%
 from pgmpy.models import DiscreteBayesianNetwork
 from pgmpy.factors.discrete import TabularCPD
 from pgmpy.inference import VariableElimination, BeliefPropagation
@@ -54,7 +44,7 @@ from pgmpy.estimators import MaximumLikelihoodEstimator
 import pandas as pd
 import numpy as np
 
-# TODO(ai_gp): Use standard initialization
+# TODO(ai_gp): Use standard template.
 _LOG = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 
@@ -78,7 +68,8 @@ logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(mes
 #
 # ## How the Pieces Fit Together
 #
-# # TODO(ai_gp): Use a graphviz graph
+# // TODO(ai_gp): Use a better graph using graphviz
+#
 # ```
 # BayesianNetwork (structure)
 #     + TabularCPD (quantification)
@@ -92,51 +83,10 @@ logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(mes
 # %% [markdown]
 # # Part 2: Core Primitives
 #
-# ## Primitive 1: BayesianNetwork
+# ## Primitive 1: DiscreteBayesianNetwork
 #
 # Represents the graph structure (directed acyclic graph).
 #
-# ### Minimal Construction
-#
-
-# %%
-# Smallest possible Bayesian network: 2 nodes with 1 edge
-model = DiscreteBayesianNetwork([('A', 'B')])
-
-print(f"Type: {type(model)}")
-print(f"Nodes: {model.nodes()}")
-print(f"Edges: {model.edges()}")
-
-# %% [markdown]
-# ### Inspect the Object
-#
-
-# %%
-# View important attributes
-print(f"Has CPDs: {model.get_cpds()}")
-print(f"Check valid: {model.check_model()}")
-
-# BayesianNetwork is invalid without CPDs
-try:
-    model.check_model()
-    print("Model is valid")
-except Exception as e:
-    print(f"Model is INVALID: {type(e).__name__}")
-    print(f"  Reason: Missing CPDs for nodes {model.nodes()}")
-
-# %% [markdown]
-# ### Important Methods
-#
-
-# %%
-# Exploring the network structure
-model = BayesianNetwork([('A', 'B'), ('A', 'C'), ('B', 'C')])
-
-print(f"Parents of B: {model.get_parents('B')}")
-print(f"Children of A: {model.get_children('A')}")
-print(f"All predecessors of C: {model.get_predecessors('C')}")
-
-# %% [markdown]
 # ### Mental Model
 #
 # A **BayesianNetwork** is:
@@ -145,22 +95,61 @@ print(f"All predecessors of C: {model.get_predecessors('C')}")
 # - Each node requires a Conditional Probability Distribution (CPD)
 # - Nodes without parents are root nodes (prior distributions)
 # - Nodes with parents are conditional on those parents
-#
-# ---
-#
+
+# %% [markdown]
+# ### Minimal Construction
+
+# %%
+# Smallest possible Bayesian network: 2 nodes with 1 edge.
+model = DiscreteBayesianNetwork([('A', 'B')])
+
+print(f"Type: {type(model)}")
+print(f"Nodes: {model.nodes()}")
+print(f"Edges: {model.edges()}")
+
+# %% [markdown]
+# ### Inspect the Object
+
+# %%
+# View important attributes.
+print(f"Has CPDs: {model.get_cpds()}")
+
+# DiscreteBayesianNetwork is invalid without CPDs.
+try:
+    result = model.check_model()
+    print(f"Check valid: {result}")
+    print("Model is valid")
+except Exception as e:
+    print(f"Model is INVALID: {type(e).__name__}")
+    print(f"  Reason: Missing CPDs for nodes {model.nodes()}")
+
+# %% [markdown]
+# ### Important Methods
+
+# %%
+# Exploring the network structure.
+model = DiscreteBayesianNetwork([('A', 'B'), ('A', 'C'), ('B', 'C')])
+
+print(f"Parents of B: {model.get_parents('B')}")
+print(f"Children of A: {model.get_children('A')}")
+print(f"All ancestors of C: {model.get_ancestors('C')}")
+
+# %% [markdown]
 # ## Primitive 2: TabularCPD (Conditional Probability Distribution)
 #
 # Quantifies the relationship between variables as a probability table.
-#
-# ### Minimal Construction
-#
+
+# %% [markdown]
+# ### CPD with No Parents
 
 # %%
-# CPD for a node with no parents (prior)
+# CPD for a node with no parents (prior).
 cpd_a = TabularCPD(
     variable='A',
-    variable_card=2,  # A can take 2 values: 0 or 1
-    values=[[0.6], [0.4]]  # P(A=0)=0.6, P(A=1)=0.4
+    # A can take 2 values: 0 or 1.
+    variable_card=2,
+    # P(A=0)=0.6, P(A=1)=0.4.
+    values=[[0.6], [0.4]]
 )
 
 print(f"Type: {type(cpd_a)}")
@@ -171,37 +160,40 @@ print(cpd_a)
 #
 
 # %%
-# CPD for B given A (B has parent A)
-# B's distribution depends on A's value
+# CPD for B given A (B has parent A).
+# B's distribution depends on A's value.
+# TODO(ai_gp): Avoid inlined comments but use comments before the corresponding code.
 cpd_b = TabularCPD(
     variable='B',
     variable_card=2,
     values=[
-        [0.9, 0.2],  # P(B=0 | A=0)=0.9, P(B=0 | A=1)=0.2
-        [0.1, 0.8]   # P(B=1 | A=0)=0.1, P(B=1 | A=1)=0.8
+        [0.9, 0.2],  # P(B=0 | A=0)=0.9, P(B=0 | A=1)=0.2.
+        [0.1, 0.8]   # P(B=1 | A=0)=0.1, P(B=1 | A=1)=0.8.
     ],
-    evidence=['A'],  # B depends on A
-    evidence_card=[2]  # A has 2 values
+    evidence=['A'],  # B depends on A.
+    evidence_card=[2]  # A has 2 values.
 )
 
 print(cpd_b)
-print(f"\nRead as: When A=0, P(B=0)=0.9 and P(B=1)=0.1")
-print(f"         When A=1, P(B=0)=0.2 and P(B=1)=0.8")
+# TODO(ai_gp): Convert the comments using print statements into markdown comments after the cell running the code.
 
 # %% [markdown]
 # ### Important Methods
 #
 
 # %%
-# Inspect a CPD
+# Inspect a CPD.
 print(f"Variable: {cpd_b.variable}")
 print(f"Cardinality (num values): {cpd_b.cardinality}")
 print(f"Evidence: {cpd_b.variables[1:]}")
 print(f"Evidence cardinality: {cpd_b.cardinality[1:]}")
 
-# Access probability values
+# Access probability values.
 print(f"\nP(B=0 | A=1): {cpd_b.values[0, 1]}")
 print(f"P(B=1 | A=0): {cpd_b.values[1, 0]}")
+
+# %%
+# TODO(ai_gp): Move the Mental Model at the beginning of each section
 
 # %% [markdown]
 # ### Mental Model
@@ -213,20 +205,22 @@ print(f"P(B=1 | A=0): {cpd_b.values[1, 0]}")
 # - Each column sums to 1.0 (valid probability distribution)
 # - Columns are ordered by evidence cardinality (rightmost parent varies fastest)
 #
+# // TODO(ai_gp): Remove the page separators
 # ---
 #
 # ## Primitive 3: InferenceEngine (VariableElimination)
 #
 # Computes posterior probabilities given evidence.
 #
+# // TODO(ai_gp): Move this in a separate cell, everywhere in the notebook.
 # ### Minimal Construction and Setup
 #
 
 # %%
-# Create a complete model
-model = BayesianNetwork([('A', 'B')])
+# Create a complete model.
+model = DiscreteBayesianNetwork([('A', 'B')])
 
-# Add CPDs
+# Add CPDs.
 cpd_a = TabularCPD('A', 2, [[0.6], [0.4]])
 cpd_b = TabularCPD(
     'B', 2,
@@ -237,7 +231,8 @@ cpd_b = TabularCPD(
 model.add_cpds(cpd_a, cpd_b)
 model.check_model()
 
-# Create inference engine
+# Create inference engine.
+# TODO(ai_gp): Explain what it does and that it will be explained later.
 inference = VariableElimination(model)
 
 print(f"Type: {type(inference)}")
@@ -248,7 +243,7 @@ print(f"Model: {inference.model.nodes()}")
 #
 
 # %%
-# Query: compute P(B | A=1)
+# Query: compute P(B | A=1).
 result = inference.query(variables=['B'], evidence={'A': 1})
 
 print(f"Type of result: {type(result)}")
@@ -274,16 +269,17 @@ print(f"P(B=1 | A=1) = {result.values[1]}")
 #
 
 # %%
-# Query result is a Factor object
+# Query result is a Factor object.
 result = inference.query(variables=['B'], evidence={'A': 0})
 
 print(f"Type: {type(result)}")
 print(f"Variables: {result.variables}")
 print(f"Cardinality: {result.cardinality}")
 print(f"\nAs array: {result.values}")
-print(f"\nAs DataFrame:")
-result_df = result.to_dataframe()
-print(result_df)
+# Note: to_dataframe() is not available on all DiscreteFactor versions
+# print(f"\nAs DataFrame:")
+# result_df = result.to_dataframe()
+# print(result_df)
 
 # %% [markdown]
 # # Part 3: Composition Examples
@@ -294,19 +290,19 @@ print(result_df)
 #
 
 # %%
-# 1. Define structure
-model = BayesianNetwork([('Rain', 'GrassWet'), ('Sprinkler', 'GrassWet')])
+# 1. Define structure.
+model = DiscreteBayesianNetwork([('Rain', 'GrassWet'), ('Sprinkler', 'GrassWet')])
 
-# 2. Define CPDs
-cpd_rain = TabularCPD('Rain', 2, [[0.8], [0.2]])  # Usually no rain
-cpd_sprinkler = TabularCPD('Sprinkler', 2, [[0.6], [0.4]])  # Usually off
+# 2. Define CPDs.
+cpd_rain = TabularCPD('Rain', 2, [[0.8], [0.2]])  # Usually no rain.
+cpd_sprinkler = TabularCPD('Sprinkler', 2, [[0.6], [0.4]])  # Usually off.
 
-# 3. Grass wet depends on both Rain and Sprinkler
+# 3. Grass wet depends on both Rain and Sprinkler.
 cpd_grass = TabularCPD(
     'GrassWet', 2,
     [
-        [0.99, 0.1, 0.1, 0.01],  # P(Grass=dry | ...)
-        [0.01, 0.9, 0.9, 0.99]   # P(Grass=wet | ...)
+        [0.99, 0.1, 0.1, 0.01],  # P(Grass=dry | ...).
+        [0.01, 0.9, 0.9, 0.99]   # P(Grass=wet | ...).
     ],
     evidence=['Rain', 'Sprinkler'],
     evidence_card=[2, 2]
@@ -320,7 +316,7 @@ print(f"Nodes: {model.nodes()}")
 print(f"Edges: {model.edges()}")
 
 # %%
-# 4. Create inference engine and query
+# 4. Create inference engine and query.
 inference = VariableElimination(model)
 
 # Query 1: Grass is wet, what's probability of rain?
@@ -343,22 +339,22 @@ print(result)
 #
 
 # %%
-# Variables can have more than 2 states
-model = BayesianNetwork([('Temperature', 'Comfort')])
+# Variables can have more than 2 states.
+model = DiscreteBayesianNetwork([('Temperature', 'Comfort')])
 
-# Temperature: 0=cold, 1=warm, 2=hot
+# Temperature: 0=cold, 1=warm, 2=hot.
 cpd_temp = TabularCPD(
     'Temperature', 3,
-    [[0.3], [0.5], [0.2]]  # 30% cold, 50% warm, 20% hot
+    [[0.3], [0.5], [0.2]]  # 30% cold, 50% warm, 20% hot.
 )
 
-# Comfort: 0=bad, 1=good
-# Changes based on temperature
+# Comfort: 0=bad, 1=good.
+# Changes based on temperature.
 cpd_comfort = TabularCPD(
     'Comfort', 2,
     [
-        [0.8, 0.1, 0.6],  # P(Comfort=bad | ...)
-        [0.2, 0.9, 0.4]   # P(Comfort=good | ...)
+        [0.8, 0.1, 0.6],  # P(Comfort=bad | ...).
+        [0.2, 0.9, 0.4]   # P(Comfort=good | ...).
     ],
     evidence=['Temperature'],
     evidence_card=[3]
@@ -381,7 +377,7 @@ for i, val in enumerate(result.values):
 #
 
 # %%
-model = BayesianNetwork([('X', 'Y'), ('Y', 'Z')])
+model = DiscreteBayesianNetwork([('X', 'Y'), ('Y', 'Z')])
 
 cpd_x = TabularCPD('X', 2, [[0.4], [0.6]])
 cpd_y = TabularCPD(
@@ -400,12 +396,12 @@ model.check_model()
 
 inference = VariableElimination(model)
 
-# Query with evidence at the beginning
+# Query with evidence at the beginning.
 result = inference.query(variables=['Z'], evidence={'X': 1})
 print("P(Z | X=1):")
 print(result)
 
-# Query with evidence in the middle
+# Query with evidence in the middle.
 result = inference.query(variables=['X'], evidence={'Z': 1})
 print("\nP(X | Z=1) [backwards inference]:")
 print(result)
@@ -417,18 +413,18 @@ print(result)
 #
 
 # %%
-# V-structure: both A and C point to B
-model = BayesianNetwork([('A', 'B'), ('C', 'B')])
+# V-structure: both A and C point to B.
+model = DiscreteBayesianNetwork([('A', 'B'), ('C', 'B')])
 
 cpd_a = TabularCPD('A', 2, [[0.5], [0.5]])
 cpd_c = TabularCPD('C', 2, [[0.5], [0.5]])
 
-# B depends on both A and C
+# B depends on both A and C.
 cpd_b = TabularCPD(
     'B', 2,
     [
-        [0.99, 0.6, 0.6, 0.05],  # P(B=0 | ...)
-        [0.01, 0.4, 0.4, 0.95]   # P(B=1 | ...)
+        [0.99, 0.6, 0.6, 0.05],  # P(B=0 | ...).
+        [0.01, 0.4, 0.4, 0.95]   # P(B=1 | ...).
     ],
     evidence=['A', 'C'],
     evidence_card=[2, 2]
@@ -439,8 +435,8 @@ model.check_model()
 
 inference = VariableElimination(model)
 
-# Without evidence on B, A and C are independent
-# With evidence on B, they become dependent (explaining away)
+# Without evidence on B, A and C are independent.
+# With evidence on B, they become dependent (explaining away).
 result_before = inference.query(variables=['A'], evidence={'C': 1})
 result_after = inference.query(variables=['A'], evidence={'B': 1, 'C': 1})
 
@@ -457,12 +453,12 @@ print("\nNote: Probabilities change when B is observed (explaining away effect)"
 #
 
 # %%
-# Pattern: define structure → add CPDs → validate → create engine
+# Pattern: define structure > add CPDs > validate > create engine.
 
-# Step 1: Structure
-model = BayesianNetwork([('A', 'B'), ('B', 'C')])
+# Step 1: Structure.
+model = DiscreteBayesianNetwork([('A', 'B'), ('B', 'C')])
 
-# Step 2: Add CPDs
+# Step 2: Add CPDs.
 cpd_a = TabularCPD('A', 2, [[0.3], [0.7]])
 cpd_b = TabularCPD(
     'B', 2,
@@ -476,11 +472,11 @@ cpd_c = TabularCPD(
 )
 model.add_cpds(cpd_a, cpd_b, cpd_c)
 
-# Step 3: Validation
+# Step 3: Validation.
 is_valid = model.check_model()
 print(f"Model valid: {is_valid}")
 
-# Step 4: Create inference engine
+# Step 4: Create inference engine.
 inference = VariableElimination(model)
 
 # %% [markdown]
@@ -490,20 +486,20 @@ inference = VariableElimination(model)
 #
 
 # %%
-# Pattern: query(variables=[...], evidence={...})
-# Returns posterior distribution P(variables | evidence)
+# Pattern: query(variables=[...], evidence={...}).
+# Returns posterior distribution P(variables | evidence).
 
-# Single variable, no evidence
+# Single variable, no evidence.
 result = inference.query(variables=['A'])
 print("P(A): prior distribution")
 print(result)
 
-# Single variable with evidence
+# Single variable with evidence.
 result = inference.query(variables=['C'], evidence={'A': 1})
 print("\nP(C | A=1): posterior distribution")
 print(result)
 
-# Multiple variables with evidence
+# Multiple variables with evidence.
 result = inference.query(variables=['A', 'B'], evidence={'C': 0})
 print("\nP(A, B | C=0): joint posterior")
 print(result)
@@ -515,10 +511,10 @@ print(result)
 #
 
 # %%
-# Pattern: map_query(variables, evidence)
-# Returns most probable variable assignment given evidence
+# Pattern: map_query(variables, evidence).
+# Returns most probable variable assignment given evidence.
 
-# Most probable value of C given A=1
+# Most probable value of C given A=1.
 result = inference.map_query(variables=['C'], evidence={'A': 1})
 print(f"MAP(C | A=1): {result}")
 print(f"Interpretation: Most likely value of C is {result['C']}")
@@ -533,12 +529,12 @@ print(f"Interpretation: Most likely (B, C) = ({result['B']}, {result['C']})")
 #
 
 # %%
-# VariableElimination: Default, efficient for many models
+# VariableElimination: Default, efficient for many models.
 inference_ve = VariableElimination(model)
 result_ve = inference_ve.query(variables=['C'], evidence={'A': 1})
 
-# BeliefPropagation: Optimized for repeated queries
-# Note: Works best on singly-connected networks
+# BeliefPropagation: Optimized for repeated queries.
+# Note: Works best on singly-connected networks.
 try:
     inference_bp = BeliefPropagation(model)
     result_bp = inference_bp.query(variables=['C'], evidence={'A': 1})
@@ -553,14 +549,14 @@ except Exception as e:
 #
 
 # %%
-# Evidence is specified as {variable: value}
-# Can use multiple pieces of evidence
+# Evidence is specified as {variable: value}.
+# Can use multiple pieces of evidence.
 
-# Single observation
+# Single observation.
 result = inference.query(variables=['A'], evidence={'C': 1})
 print("P(A | C=1)")
 
-# Multiple observations
+# Multiple observations.
 result = inference.query(
     variables=['A'],
     evidence={'B': 1, 'C': 0}
@@ -568,12 +564,12 @@ result = inference.query(
 print("\nP(A | B=1, C=0)")
 print(result)
 
-# Querying variables can also have evidence
+# Querying variables can also have evidence.
 result = inference.query(
     variables=['A', 'B'],
     evidence={'C': 1}
 )
-print("\nP(A, B | C=1) - joint distribution of A and B")
+print("\nP(A, B | C=1) - joint distribution of A and B.")
 print(result)
 
 # %% [markdown]
@@ -586,7 +582,7 @@ print(result)
 import pandas as pd
 
 # Create example objects
-bn = BayesianNetwork([('A', 'B'), ('A', 'C')])
+bn = DiscreteBayesianNetwork([('A', 'B'), ('A', 'C')])
 cpd_a = TabularCPD('A', 2, [[0.3], [0.7]])
 cpd_b = TabularCPD(
     'B', 2,
@@ -606,7 +602,7 @@ query_result = inference.query(variables=['B'], evidence={'A': 1})
 # Display relationships
 relationships = pd.DataFrame([
     {
-        'Object': 'BayesianNetwork',
+        'Object': 'DiscreteBayesianNetwork',
         'Created By': 'Direct instantiation',
         'Consumed By': 'InferenceEngine',
         'Purpose': 'Encode graph structure and dependencies'
@@ -614,7 +610,7 @@ relationships = pd.DataFrame([
     {
         'Object': 'TabularCPD',
         'Created By': 'Direct instantiation',
-        'Consumed By': 'BayesianNetwork.add_cpds()',
+        'Consumed By': 'DiscreteBayesianNetwork.add_cpds()',
         'Purpose': 'Quantify conditional probability relationships'
     },
     {
@@ -640,12 +636,12 @@ print(relationships.to_string(index=False))
 #
 
 # %%
-# Simple model: Cause → Effect
-model = BayesianNetwork([('Cause', 'Effect')])
-cpd_cause = TabularCPD('Cause', 2, [[0.5], [0.5]])  # Cause is equally likely
+# Simple model: Cause > Effect.
+model = DiscreteBayesianNetwork([('Cause', 'Effect')])
+cpd_cause = TabularCPD('Cause', 2, [[0.5], [0.5]])  # Cause is equally likely.
 cpd_effect = TabularCPD(
     'Effect', 2,
-    [[0.95, 0.1], [0.05, 0.9]],  # Effect strongly correlated with Cause
+    [[0.95, 0.1], [0.05, 0.9]],  # Effect strongly correlated with Cause.
     evidence=['Cause'], evidence_card=[2]
 )
 model.add_cpds(cpd_cause, cpd_effect)
@@ -653,13 +649,13 @@ model.check_model()
 
 inference = VariableElimination(model)
 
-# Prior on Cause (no evidence)
+# Prior on Cause (no evidence).
 prior = inference.query(variables=['Cause'])
 print("Prior P(Cause):")
 print(f"  P(Cause=0) = {prior.values[0]:.3f}")
 print(f"  P(Cause=1) = {prior.values[1]:.3f}")
 
-# Posterior given Effect=1 (strong evidence for Cause)
+# Posterior given Effect=1 (strong evidence for Cause).
 posterior = inference.query(variables=['Cause'], evidence={'Effect': 1})
 print("\nPosterior P(Cause | Effect=1):")
 print(f"  P(Cause=0) = {posterior.values[0]:.3f}")
@@ -673,10 +669,10 @@ print(f"Belief shift: {prior.values[1]:.3f} → {posterior.values[1]:.3f}")
 #
 
 # %%
-# Create two models: one with 2 states, one with 5 states
+# Create two models: one with 2 states, one with 5 states.
 
-# Binary model
-model_binary = BayesianNetwork([('Weather', 'Traffic')])
+# Binary model.
+model_binary = DiscreteBayesianNetwork([('Weather', 'Traffic')])
 cpd_w = TabularCPD('Weather', 2, [[0.7], [0.3]])
 cpd_t = TabularCPD(
     'Traffic', 2,
@@ -692,8 +688,8 @@ print("Binary model (Weather: clear/rainy):")
 print(f"  CPD table size: 2x2")
 print(result)
 
-# Multi-state model
-model_multi = BayesianNetwork([('Weather', 'Traffic')])
+# Multi-state model.
+model_multi = DiscreteBayesianNetwork([('Weather', 'Traffic')])
 cpd_w = TabularCPD('Weather', 5, [[0.5], [0.2], [0.15], [0.1], [0.05]])
 cpd_t = TabularCPD(
     'Traffic', 3,
@@ -720,15 +716,15 @@ print(result)
 # %%
 import time
 
-# Create a chain of increasing length
-# X₀ → X₁ → X₂ → ... → X_n
+# Create a chain of increasing length.
+# X0 > X1 > X2 > ... > X_n.
 
 for chain_length in [3, 5, 7, 10]:
-    # Build chain
-    edges = [(f'X{i}', f'X{i+1}') for i in range(chain_length)]
-    model = BayesianNetwork(edges)
-    
-    # Add CPDs
+    # Build chain.
+    edges = [(f'X{i}', f'X{i+1}') for i in range(chain_length - 1)]
+    model = DiscreteBayesianNetwork(edges)
+
+    # Add CPDs.
     for i in range(chain_length):
         if i == 0:
             cpd = TabularCPD(f'X{i}', 2, [[0.5], [0.5]])
@@ -739,11 +735,11 @@ for chain_length in [3, 5, 7, 10]:
                 evidence=[f'X{i-1}'], evidence_card=[2]
             )
         model.add_cpds(cpd)
-    
+
     model.check_model()
     inference = VariableElimination(model)
-    
-    # Time a query
+
+    # Time a query.
     start = time.time()
     result = inference.query(variables=[f'X{chain_length-1}'], evidence={'X0': 1})
     elapsed = time.time() - start
@@ -759,9 +755,9 @@ for chain_length in [3, 5, 7, 10]:
 # %%
 cheat_sheet = pd.DataFrame([
     {
-        'Object': 'BayesianNetwork',
+        'Object': 'DiscreteBayesianNetwork',
         'Purpose': 'Graph structure',
-        'Construction': 'BayesianNetwork([(a, b), (b, c)])',
+        'Construction': 'DiscreteBayesianNetwork([(a, b), (b, c)])',
         'Key Method': 'add_cpds(), check_model()'
     },
     {
@@ -826,12 +822,12 @@ print(methods.to_string(index=False))
 #
 
 # %%
-# Complete, minimal end-to-end example
+# Complete, minimal end-to-end example.
 
-# 1. Define the graph structure
-model = BayesianNetwork([('Disease', 'Test')])
+# 1. Define the graph structure.
+model = DiscreteBayesianNetwork([('Disease', 'Test')])
 
-# 2. Define probability distributions
+# 2. Define probability distributions.
 cpd_disease = TabularCPD('Disease', 2, [[0.99], [0.01]])
 cpd_test = TabularCPD(
     'Test', 2,
@@ -839,14 +835,14 @@ cpd_test = TabularCPD(
     evidence=['Disease'], evidence_card=[2]
 )
 
-# 3. Add CPDs to model
+# 3. Add CPDs to model.
 model.add_cpds(cpd_disease, cpd_test)
 model.check_model()
 
-# 4. Create inference engine
+# 4. Create inference engine.
 inference = VariableElimination(model)
 
-# 5. Answer probability questions
+# 5. Answer probability questions.
 # Q: Someone tests positive. How likely do they have the disease?
 posterior = inference.query(variables=['Disease'], evidence={'Test': 1})
 
