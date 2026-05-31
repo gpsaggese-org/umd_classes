@@ -160,10 +160,13 @@ utils.cell3_2_create_cpd_widget(disease_prior=0.05)
 
 # %%
 # Sample from the prior distribution.
+# TODO(ai_gp): Inline the functions that are creating the DAG _create_medical_network_impl and make it public
 model = utils.cell4_1_create_network()
 # TODO(ai_gp): Plot the DAG in the first plot of the 1x4 plot below.
 utils.cell4_1_forward_sample_and_plot(model, n_samples=1000)
 plt.show()
+
+# TODO(ai_gp): Use the same color scheme everywhere.
 
 # %% [markdown]
 # - **Sampling reveals prior beliefs**: The distribution shows what the network believes in a vacuum without any observations
@@ -177,6 +180,8 @@ plt.show()
 # %%
 # Compare exact inference with forward sampling
 model = utils.cell4_2_create_network()
+
+# TODO(ai_gp): Explain what this function does.
 utils.cell4_2_compare_exact_and_sampling(model)
 plt.show()
 

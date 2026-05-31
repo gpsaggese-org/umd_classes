@@ -1,8 +1,12 @@
 r"""
 Utility functions for probabilistic inference visualization and exploration.
 
+Import as:
+
+    import probabilistic_inference_utils as prinfut
+
 Provides interactive widgets, visualizations, and Bayesian network operations
-for the probabilistic inference notebook using pgmpy.
+for the probabilistic inference notebook using `pgmpy`.
 """
 
 import logging
@@ -10,17 +14,14 @@ import time
 import warnings
 from typing import Dict, List, Optional, Tuple
 
-import matplotlib.patches as mpatches
+import ipywidgets
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from IPython.display import HTML as IPhtml
-from IPython.display import display
-import ipywidgets
 from pgmpy.factors.discrete import TabularCPD
-from pgmpy.inference import ApproxInference, BeliefPropagation, VariableElimination
+from pgmpy.inference import BeliefPropagation, VariableElimination
 from pgmpy.models import DiscreteBayesianNetwork
 
 import helpers.hdbg as hdbg
@@ -29,7 +30,7 @@ import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 
 # #############################################################################
@@ -48,29 +49,35 @@ def _create_medical_network_impl() -> DiscreteBayesianNetwork:
     """
     # Create network structure with disease as root node.
     model = DiscreteBayesianNetwork([
-        ('Disease', 'Symptom'),
-        ('Disease', 'Test')
+        ("Disease", "Symptom"),
+        ("Disease", "Test")
     ])
     # Define disease prior probability.
     cpd_disease = TabularCPD(
-        'Disease', 2, [[0.95], [0.05]],
-        state_names={'Disease': ['Absent', 'Present']}
+        "Disease", 2, [[0.95], [0.05]],
+        state_names={"Disease": ["Absent", "Present"]}
     )
     # Define symptom likelihood given disease state.
     cpd_symptom = TabularCPD(
-        'Symptom', 2,
+        "Symptom", 2,
         [[0.95, 0.2], [0.05, 0.8]],
-        evidence=['Disease'],
+        evidence=["Disease"],
         evidence_card=[2],
-        state_names={'Symptom': ['Absent', 'Present'], 'Disease': ['Absent', 'Present']}
+        state_names={
+            "Symptom": ["Absent", "Present"],
+            "Disease": ["Absent", "Present"]
+        }
     )
     # Define test result likelihood given disease state.
     cpd_test = TabularCPD(
-        'Test', 2,
+        "Test", 2,
         [[0.95, 0.1], [0.05, 0.9]],
-        evidence=['Disease'],
+        evidence=["Disease"],
         evidence_card=[2],
-        state_names={'Test': ['Negative', 'Positive'], 'Disease': ['Absent', 'Present']}
+        state_names={
+            "Test": ["Negative", "Positive"],
+            "Disease": ["Absent", "Present"]
+        }
     )
     # Add CPDs and validate the model.
     model.add_cpds(cpd_disease, cpd_symptom, cpd_test)
@@ -102,14 +109,14 @@ def _visualize_network_impl(
     graph.add_edges_from(model.edges())
     # Map node colors based on evidence status.
     node_colors = {
-        node: '#ff6b6b' if (evidence and node in evidence) else '#4ecdc4'
+        node: "#ff6b6b" if (evidence and node in evidence) else "#4ecdc4"
         for node in graph.nodes()
     }
-    # Render using graphviz-based plotting function.
+    # Render using `graphviz`-based plotting function.
     hgraphviz.plot_causal_dag(
         graph,
-        'Bayesian Network Structure',
-        mode='graphviz',
+        "Bayesian Network Structure",
+        mode="graphviz",
         node_colors=node_colors,
         figsize=figsize,
     )
@@ -120,7 +127,11 @@ def _visualize_network_impl(
 # #############################################################################
 
 def cell2_2_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -130,7 +141,15 @@ def cell2_2_visualize_network(
     evidence: Optional[List[str]] = None,
     figsize: Tuple[int, int] = (10, 6),
 ) -> None:
-    """Visualize Bayesian network structure with optional evidence highlighting."""
+    """
+    Visualize Bayesian network structure with optional evidence highlighting.
+
+    :param model: Bayesian network to visualize
+    :param evidence: List of node names to highlight as evidence
+        - Default: `None`
+    :param figsize: Figure dimensions as (width, height)
+        - Default: `(10, 6)`
+    """
     return _visualize_network_impl(model, evidence=evidence, figsize=figsize)
 
 
@@ -142,7 +161,8 @@ def cell3_2_create_cpd_widget(
     *, disease_prior: float = 0.05
 ) -> ipywidgets.VBox:
     """
-    Create interactive widget for exploring conditional probability distributions.
+    Create interactive widget for exploring conditional probability
+    distributions.
 
     Displays a slider to control disease prior probability and visualizes three
     CPDs as heatmaps: P(Disease), P(Symptom|Disease), and P(Test|Disease).
@@ -153,7 +173,7 @@ def cell3_2_create_cpd_widget(
     :return: IPywidgets VBox containing slider and visualization output
     """
     output = ipywidgets.Output()
-    # Create disease prior probability slider using htutori.
+    # Create disease prior probability slider using `htutori`.
     prior_slider, prior_box = htutori.build_widget_control(
         name="prior",
         description="disease prior",
@@ -165,13 +185,18 @@ def cell3_2_create_cpd_widget(
     )
     # Create disease state toggle button.
     toggle = ipywidgets.ToggleButtons(
-        options=['None', 'Present', 'Absent'],
-        description='Disease:',
-        style={'description_width': '100px'}
+        options=["None", "Present", "Absent"],
+        description="Disease:",
+        style={"description_width": "100px"}
     )
     # Define callback to update visualization when controls change.
     def _update_display(change: Optional[Dict] = None) -> None:
-        """Update CPD heatmaps based on slider and toggle values."""
+        """
+        Update CPD heatmaps based on slider and toggle values.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         with output:
             output.clear_output(wait=True)
             p_disease = prior_slider.value
@@ -179,34 +204,34 @@ def cell3_2_create_cpd_widget(
             fig, axes = plt.subplots(1, 4, figsize=(20, 5))
             # Visualize disease prior probability.
             data_prior = pd.DataFrame(
-                {'Present': [p_disease], 'Absent': [1 - p_disease]},
-                index=pd.Index(['P(Disease)'])
+                {"Present": [p_disease], "Absent": [1 - p_disease]},
+                index=pd.Index(["P(Disease)"])
             )
             sns.heatmap(
-                data_prior, annot=True, fmt='.3f', cmap='RdYlGn',
+                data_prior, annot=True, fmt=".3f", cmap="RdYlGn",
                 vmin=0, vmax=1, ax=axes[0], cbar=False
             )
-            axes[0].set_title('P(Disease)', fontweight='bold')
+            axes[0].set_title("P(Disease)", fontweight="bold")
             # Visualize symptom given disease CPD.
             symptom_given_disease = pd.DataFrame(
-                {'Symptom': [0.05, 0.8], 'No Symptom': [0.95, 0.2]},
-                index=pd.Index(['Disease', 'No Disease'])
+                {"Symptom": [0.05, 0.8], "No Symptom": [0.95, 0.2]},
+                index=pd.Index(["Disease", "No Disease"])
             )
             sns.heatmap(
-                symptom_given_disease, annot=True, fmt='.2f', cmap='Blues',
+                symptom_given_disease, annot=True, fmt=".2f", cmap="Blues",
                 vmin=0, vmax=1, ax=axes[1], cbar=False
             )
-            axes[1].set_title('P(Symptom | Disease)', fontweight='bold')
+            axes[1].set_title("P(Symptom | Disease)", fontweight="bold")
             # Visualize test result given disease CPD.
             test_given_disease = pd.DataFrame(
-                {'Positive': [0.05, 0.9], 'Negative': [0.95, 0.1]},
-                index=pd.Index(['Disease', 'No Disease'])
+                {"Positive": [0.05, 0.9], "Negative": [0.95, 0.1]},
+                index=pd.Index(["Disease", "No Disease"])
             )
             sns.heatmap(
-                test_given_disease, annot=True, fmt='.2f', cmap='Oranges',
+                test_given_disease, annot=True, fmt=".2f", cmap="Oranges",
                 vmin=0, vmax=1, ax=axes[2], cbar=False
             )
-            axes[2].set_title('P(Test | Disease)', fontweight='bold')
+            axes[2].set_title("P(Test | Disease)", fontweight="bold")
             # Comments panel.
             axes[3].axis("off")
             axes[3].set_title("Comments", fontsize=14, fontweight="bold", pad=20)
@@ -219,8 +244,8 @@ def cell3_2_create_cpd_widget(
             plt.tight_layout()
             plt.show()
     # Register callbacks for interactive updates.
-    prior_slider.observe(_update_display, 'value')
-    toggle.observe(_update_display, 'value')
+    prior_slider.observe(_update_display, "value")
+    toggle.observe(_update_display, "value")
     # Display initial state.
     _update_display()
     return ipywidgets.VBox([
@@ -234,7 +259,11 @@ def cell3_2_create_cpd_widget(
 # #############################################################################
 
 def cell4_1_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -262,31 +291,31 @@ def cell4_1_forward_sample_and_plot(
     # Create figure with one subplot per variable.
     fig, axes = plt.subplots(1, 3, figsize=figsize)
     # Plot marginal distribution for each variable.
-    for idx, (col, ax) in enumerate(zip(samples.columns, axes)):
+    for col, ax in zip(samples.columns, axes):
         # Count occurrences and normalize to get probabilities.
         counts = samples[col].value_counts(normalize=True).sort_index()
-        colors = ['#4ecdc4', '#ff6b6b']
+        colors = ["#4ecdc4", "#ff6b6b"]
         bars = ax.bar(
             range(len(counts)), counts.values, color=colors[:len(counts)]
         )
         # Set x-axis labels and formatting.
         ax.set_xticks(range(len(counts)))
-        state_labels = ['Absent', 'Present']
+        state_labels = ["Absent", "Present"]
         ax.set_xticklabels(state_labels[:len(counts)])
-        ax.set_ylabel('Probability')
-        ax.set_title(f'{col}', fontweight='bold')
+        ax.set_ylabel("Probability")
+        ax.set_title(f"{col}", fontweight="bold")
         ax.set_ylim([0, 1])
         # Add value labels on top of bars.
         for i, bar in enumerate(bars):
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2., height,
-                f'{height:.3f}', ha='center', va='bottom'
+                f"{height:.3f}", ha="center", va="bottom"
             )
     # Set overall title and layout.
     fig.suptitle(
-        'Belief Before Any Observations (Forward Sampling)',
-        fontweight='bold', fontsize=14
+        "Belief Before Any Observations (Forward Sampling)",
+        fontweight="bold", fontsize=14
     )
     plt.tight_layout()
 
@@ -296,7 +325,11 @@ def cell4_1_forward_sample_and_plot(
 # #############################################################################
 
 def cell4_2_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -337,22 +370,22 @@ def cell4_2_compare_exact_and_sampling(
         x = np.arange(2)
         width = 0.35
         ax.bar(
-            x - width / 2, sample_probs, width, label='Forward Sampling',
+            x - width / 2, sample_probs, width, label="Forward Sampling",
             alpha=0.7
         )
         ax.bar(
             x + width / 2, exact_probs, width,
-            label='Variable Elimination', alpha=0.7
+            label="Variable Elimination", alpha=0.7
         )
         # Set labels and formatting.
-        ax.set_ylabel('Probability')
-        ax.set_title(f'{var}', fontweight='bold')
+        ax.set_ylabel("Probability")
+        ax.set_title(f"{var}", fontweight="bold")
         ax.set_xticks(x)
-        ax.set_xticklabels(['Absent', 'Present'])
+        ax.set_xticklabels(["Absent", "Present"])
         ax.set_ylim([0, 1])
         ax.legend()
     # Set overall title and layout.
-    fig.suptitle('Exact vs. Sampling Inference', fontweight='bold', fontsize=14)
+    fig.suptitle("Exact vs. Sampling Inference", fontweight="bold", fontsize=14)
     plt.tight_layout()
 
 
@@ -361,7 +394,11 @@ def cell4_2_compare_exact_and_sampling(
 # #############################################################################
 
 def cell5_1_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -387,12 +424,12 @@ def cell5_1_condition_on_evidence(
     # Create figure with three subplots for prior and posteriors.
     fig, axes = plt.subplots(1, 3, figsize=figsize)
     # Compute prior and posterior distributions.
-    prior = inference.query(variables=['Disease'])
+    prior = inference.query(variables=["Disease"])
     posterior_pos = inference.query(
-        variables=['Disease'], evidence={'Test': 'Positive'}
+        variables=["Disease"], evidence={"Test": "Positive"}
     )
     posterior_neg = inference.query(
-        variables=['Disease'], evidence={'Test': 'Negative'}
+        variables=["Disease"], evidence={"Test": "Negative"}
     )
     # Prepare data for plotting.
     probs = [
@@ -401,26 +438,26 @@ def cell5_1_condition_on_evidence(
         posterior_neg.values.flatten()
     ]
     titles = [
-        'Prior P(Disease)',
-        'Posterior P(Disease | Test+)',
-        'Posterior P(Disease | Test-)'
+        "Prior P(Disease)",
+        "Posterior P(Disease | Test+)",
+        "Posterior P(Disease | Test-)"
     ]
     # Plot each distribution with value annotations.
     for ax, prob, title in zip(axes, probs, titles):
-        colors = ['#4ecdc4', '#ff6b6b']
-        bars = ax.bar(['Absent', 'Present'], prob, color=colors)
-        ax.set_ylabel('Probability')
-        ax.set_title(title, fontweight='bold')
+        colors = ["#4ecdc4", "#ff6b6b"]
+        bars = ax.bar(["Absent", "Present"], prob, color=colors)
+        ax.set_ylabel("Probability")
+        ax.set_title(title, fontweight="bold")
         ax.set_ylim([0, 1])
         # Add probability values on bars.
         for bar in bars:
             height = bar.get_height()
             ax.text(
                 bar.get_x() + bar.get_width() / 2., height,
-                f'{height:.3f}', ha='center', va='bottom'
+                f"{height:.3f}", ha="center", va="bottom"
             )
     # Set overall title and layout.
-    fig.suptitle('How Evidence Changes Beliefs', fontweight='bold', fontsize=14)
+    fig.suptitle("How Evidence Changes Beliefs", fontweight="bold", fontsize=14)
     plt.tight_layout()
 
 
@@ -429,7 +466,11 @@ def cell5_1_condition_on_evidence(
 # #############################################################################
 
 def cell5_2_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -470,22 +511,22 @@ def cell5_2_compare_exact_and_sampling(
         x = np.arange(2)
         width = 0.35
         ax.bar(
-            x - width / 2, sample_probs, width, label='Forward Sampling',
+            x - width / 2, sample_probs, width, label="Forward Sampling",
             alpha=0.7
         )
         ax.bar(
             x + width / 2, exact_probs, width,
-            label='Variable Elimination', alpha=0.7
+            label="Variable Elimination", alpha=0.7
         )
         # Set labels and formatting.
-        ax.set_ylabel('Probability')
-        ax.set_title(f'{var}', fontweight='bold')
+        ax.set_ylabel("Probability")
+        ax.set_title(f"{var}", fontweight="bold")
         ax.set_xticks(x)
-        ax.set_xticklabels(['Absent', 'Present'])
+        ax.set_xticklabels(["Absent", "Present"])
         ax.set_ylim([0, 1])
         ax.legend()
     # Set overall title and layout.
-    fig.suptitle('Exact vs. Sampling Inference', fontweight='bold', fontsize=14)
+    fig.suptitle("Exact vs. Sampling Inference", fontweight="bold", fontsize=14)
     plt.tight_layout()
 
 
@@ -494,7 +535,11 @@ def cell5_2_compare_exact_and_sampling(
 # #############################################################################
 
 def cell5_3_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -511,26 +556,33 @@ def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
     # Create test result selector.
     test_dropdown = ipywidgets.Dropdown(
         options=[
-            ('No Test', None), ('Positive', 'Positive'),
-            ('Negative', 'Negative')
+            ("No Test", None), ("Positive", "Positive"),
+            ("Negative", "Negative")
         ],
-        description='Test Result:',
-        style={'description_width': '120px'}
+        description="Test Result:",
+        style={"description_width": "120px"}
     )
     # Create symptom state selector.
     symptom_dropdown = ipywidgets.Dropdown(
         options=[
-            ('No Symptom', None), ('Present', 'Present'),
-            ('Absent', 'Absent')
+            ("No Symptom", None), ("Present", "Present"),
+            ("Absent", "Absent")
         ],
-        description='Symptom:',
-        style={'description_width': '120px'}
+        description="Symptom:",
+        style={"description_width": "120px"}
     )
     # Create button to clear all evidence.
-    clear_button = ipywidgets.Button(description='Clear Evidence', button_style='danger')
+    clear_button = ipywidgets.Button(
+        description="Clear Evidence", button_style="danger"
+    )
     # Define callback to update visualization when evidence changes.
     def _update_plot(change: Optional[Dict] = None) -> None:
-        """Update posterior belief and comparison plots."""
+        """
+        Update posterior belief and comparison plots.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         with output:
             output.clear_output(wait=True)
             # Create model and inference engine.
@@ -539,56 +591,75 @@ def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
             # Collect selected evidence from dropdowns.
             evidence = {}
             if test_dropdown.value is not None:
-                evidence['Test'] = test_dropdown.value
+                evidence["Test"] = test_dropdown.value
             if symptom_dropdown.value is not None:
-                evidence['Symptom'] = symptom_dropdown.value
+                evidence["Symptom"] = symptom_dropdown.value
             # Compute prior and posterior distributions.
-            prior = inference.query(variables=['Disease'])
-            posterior = inference.query(variables=['Disease'], evidence=evidence)
+            prior = inference.query(variables=["Disease"])
+            posterior = inference.query(variables=["Disease"], evidence=evidence)
             prior_vals = prior.values.flatten()
             posterior_vals = posterior.values.flatten()
             delta = posterior_vals - prior_vals
             # Create figure with four subplots.
             fig, axes = plt.subplots(1, 4, figsize=(20, 5))
-            colors = ['#4ecdc4', '#ff6b6b']
+            colors = ["#4ecdc4", "#ff6b6b"]
             # Plot prior.
-            bars = axes[0].bar(['Absent', 'Present'], prior_vals, color=colors)
-            axes[0].set_ylabel('Probability')
-            axes[0].set_title('Prior P(Disease)', fontweight='bold')
+            bars = axes[0].bar(["Absent", "Present"], prior_vals, color=colors)
+            axes[0].set_ylabel("Probability")
+            axes[0].set_title("Prior P(Disease)", fontweight="bold")
             axes[0].set_ylim([0, 1])
             for bar in bars:
                 height = bar.get_height()
                 axes[0].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.3f}', ha='center', va='bottom'
+                    f"{height:.3f}", ha="center", va="bottom"
                 )
             # Plot posterior.
-            bars = axes[1].bar(['Absent', 'Present'], posterior_vals, color=colors)
-            axes[1].set_ylabel('Probability')
-            axes[1].set_title('Posterior P(Disease | Evidence)', fontweight='bold')
+            bars = axes[1].bar(
+                ["Absent", "Present"], posterior_vals, color=colors
+            )
+            axes[1].set_ylabel("Probability")
+            axes[1].set_title(
+                "Posterior P(Disease | Evidence)", fontweight="bold"
+            )
             axes[1].set_ylim([0, 1])
             for bar in bars:
                 height = bar.get_height()
                 axes[1].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.4f}', ha='center', va='bottom'
+                    f"{height:.4f}", ha="center", va="bottom"
                 )
             # Plot change in belief.
-            bar_colors = ['#4ecdc4' if d <= 0 else '#ff6b6b' for d in delta]
-            bars = axes[2].bar(['Absent', 'Present'], delta, color=bar_colors)
-            axes[2].axhline(y=0, color='black', linestyle='-', linewidth=0.5)
-            axes[2].set_ylabel('Change in Probability')
-            axes[2].set_title('Change from Prior to Posterior', fontweight='bold')
+            bar_colors = [
+                "#4ecdc4" if d <= 0 else "#ff6b6b" for d in delta
+            ]
+            bars = axes[2].bar(
+                ["Absent", "Present"], delta, color=bar_colors
+            )
+            axes[2].axhline(
+                y=0, color="black", linestyle="-", linewidth=0.5
+            )
+            axes[2].set_ylabel("Change in Probability")
+            axes[2].set_title(
+                "Change from Prior to Posterior", fontweight="bold"
+            )
             for bar in bars:
                 height = bar.get_height()
+                va_val = "bottom" if height > 0 else "top"
                 axes[2].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:+.4f}', ha='center', va='bottom' if height > 0 else 'top'
+                    f"{height:+.4f}", ha="center", va=va_val
                 )
             # Comments panel.
             axes[3].axis("off")
-            axes[3].set_title("Comments", fontsize=14, fontweight="bold", pad=20)
-            evidence_text = "No evidence" if not evidence else ", ".join([f'{k}={v}' for k, v in evidence.items()])
+            axes[3].set_title(
+                "Comments", fontsize=14, fontweight="bold", pad=20
+            )
+            evidence_text = (
+                "No evidence" if not evidence else ", ".join(
+                    [f"{k}={v}" for k, v in evidence.items()]
+                )
+            )
             htutori.add_fitted_text_box(
                 axes[3],
                 f"Evidence: {evidence_text}\n"
@@ -599,12 +670,17 @@ def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
             plt.show()
     # Define callback to clear evidence selection.
     def _on_clear_click(change: Optional[Dict] = None) -> None:
-        """Clear all evidence selections."""
+        """
+        Clear all evidence selections.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         test_dropdown.value = None
         symptom_dropdown.value = None
     # Register callbacks for interactive updates.
-    test_dropdown.observe(_update_plot, 'value')
-    symptom_dropdown.observe(_update_plot, 'value')
+    test_dropdown.observe(_update_plot, "value")
+    symptom_dropdown.observe(_update_plot, "value")
     clear_button.on_click(_on_clear_click)
     # Display initial state.
     _update_plot()
@@ -619,7 +695,11 @@ def cell5_3_create_evidence_explorer() -> ipywidgets.VBox:
 # #############################################################################
 
 def cell6_1_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -640,50 +720,58 @@ def cell6_1_compare_inference_algorithms(
         figsize = plt.rcParams["figure.figsize"]
     # Create model and set evidence.
     model = cell6_1_create_network()
-    evidence = {'Test': 'Positive'}
+    evidence = {"Test": "Positive"}
     results = {}
     times = {}
     # Perform variable elimination inference.
     ve_inference = VariableElimination(model)
     start = time.time()
-    ve_result = ve_inference.query(variables=['Disease'], evidence=evidence)
-    times['Variable Elimination'] = (time.time() - start) * 1000
-    results['Variable Elimination'] = ve_result.values.flatten()
+    ve_result = ve_inference.query(variables=["Disease"], evidence=evidence)
+    times["Variable Elimination"] = (time.time() - start) * 1000
+    results["Variable Elimination"] = ve_result.values.flatten()
     # Perform belief propagation inference.
     bp_inference = BeliefPropagation(model)
     start = time.time()
-    bp_result = bp_inference.query(variables=['Disease'], evidence=evidence)
-    times['Belief Propagation'] = (time.time() - start) * 1000
-    results['Belief Propagation'] = bp_result.values.flatten()
+    bp_result = bp_inference.query(variables=["Disease"], evidence=evidence)
+    times["Belief Propagation"] = (time.time() - start) * 1000
+    results["Belief Propagation"] = bp_result.values.flatten()
     # Perform sampling-based inference.
     samples = model.simulate(
         n_samples=10000, evidence=evidence, show_progress=False
     )
-    sampling_result = samples['Disease'].value_counts(normalize=True).sort_index()
-    times['Sampling'] = 10
-    results['Sampling'] = sampling_result.values
+    sampling_result = (
+        samples["Disease"].value_counts(normalize=True).sort_index()
+    )
+    times["Sampling"] = 10
+    results["Sampling"] = sampling_result.values
     # Create figure with result and timing subplots.
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
     # Plot posterior probabilities by algorithm.
     x = np.arange(len(results))
     width = 0.25
     for i, method in enumerate(results.keys()):
-        ax1.bar(x[i] - width, results[method][0], width, label=method, alpha=0.7)
+        ax1.bar(
+            x[i] - width, results[method][0], width, label=method, alpha=0.7
+        )
         ax1.bar(x[i], results[method][1], width, alpha=0.7)
-    ax1.set_ylabel('Probability')
-    ax1.set_title('P(Disease | Test+) by Algorithm', fontweight='bold')
+    ax1.set_ylabel("Probability")
+    ax1.set_title(
+        "P(Disease | Test+) by Algorithm", fontweight="bold"
+    )
     ax1.set_xticks(x)
-    ax1.set_xticklabels(results.keys(), rotation=15, ha='right')
+    ax1.set_xticklabels(results.keys(), rotation=15, ha="right")
     ax1.set_ylim([0, 1])
-    ax1.legend(['Absent', 'Present'])
+    ax1.legend(["Absent", "Present"])
     # Plot computation time comparison (log scale).
-    colors = ['#4ecdc4', '#ff6b6b', '#95e1d3']
+    colors = ["#4ecdc4", "#ff6b6b", "#95e1d3"]
     ax2.bar(results.keys(), times.values(), color=colors)
-    ax2.set_ylabel('Time (ms)')
-    ax2.set_title('Computation Time per Query', fontweight='bold')
-    ax2.set_yscale('log')
+    ax2.set_ylabel("Time (ms)")
+    ax2.set_title("Computation Time per Query", fontweight="bold")
+    ax2.set_yscale("log")
     # Set overall title and layout.
-    fig.suptitle('Comparing Inference Algorithms', fontweight='bold', fontsize=14)
+    fig.suptitle(
+        "Comparing Inference Algorithms", fontweight="bold", fontsize=14
+    )
     plt.tight_layout()
 
 
@@ -692,7 +780,11 @@ def cell6_1_compare_inference_algorithms(
 # #############################################################################
 
 def cell7_1_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -715,42 +807,42 @@ def cell7_1_map_query_demo(
     model = cell7_1_create_network()
     inference = VariableElimination(model)
     # Find MAP assignment given evidence.
-    evidence = {'Test': 'Positive'}
+    evidence = {"Test": "Positive"}
     map_result = inference.map_query(
-        variables=['Disease', 'Symptom'], evidence=evidence
+        variables=["Disease", "Symptom"], evidence=evidence
     )
     # Create figure for visualization.
     fig, ax = plt.subplots(figsize=figsize)
     # Define all possible joint assignments.
     all_combos = [
-        'Disease Absent, Symptom Absent',
-        'Disease Absent, Symptom Present',
-        'Disease Present, Symptom Absent',
-        'Disease Present, Symptom Present'
+        "Disease Absent, Symptom Absent",
+        "Disease Absent, Symptom Present",
+        "Disease Present, Symptom Absent",
+        "Disease Present, Symptom Present"
     ]
     # Compute full joint distribution.
     joint_result = inference.query(
-        variables=['Disease', 'Symptom'],
+        variables=["Disease", "Symptom"],
         evidence=evidence
     )
     probs = joint_result.values.flatten()
     # Determine which assignment is the MAP and set its color to red.
-    colors = ['lightgray'] * 4
-    disease_idx = 1 if map_result['Disease'] == 'Present' else 0
-    symptom_idx = 1 if map_result['Symptom'] == 'Present' else 0
+    colors = ["lightgray"] * 4
+    disease_idx = 1 if map_result["Disease"] == "Present" else 0
+    symptom_idx = 1 if map_result["Symptom"] == "Present" else 0
     map_idx = disease_idx * 2 + symptom_idx
-    colors[map_idx] = '#ff6b6b'
+    colors[map_idx] = "#ff6b6b"
     # Plot joint distribution with MAP highlighted.
     bars = ax.bar(range(len(all_combos)), probs, color=colors)
     ax.set_xticks(range(len(all_combos)))
-    ax.set_xticklabels(all_combos, rotation=45, ha='right')
-    ax.set_ylabel('Probability')
-    ax.set_title(f'MAP Assignment: {map_result}', fontweight='bold')
+    ax.set_xticklabels(all_combos, rotation=45, ha="right")
+    ax.set_ylabel("Probability")
+    ax.set_title(f"MAP Assignment: {map_result}", fontweight="bold")
     # Add probability values on bars.
     for i, (bar, prob) in enumerate(zip(bars, probs)):
         ax.text(
             bar.get_x() + bar.get_width() / 2., prob,
-            f'{prob:.4f}', ha='center', va='bottom'
+            f"{prob:.4f}", ha="center", va="bottom"
         )
     plt.tight_layout()
 
@@ -760,7 +852,11 @@ def cell7_1_map_query_demo(
 # #############################################################################
 
 def cell7_2_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -775,7 +871,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
     :return: IPywidgets VBox containing sliders and convergence plot
     """
     output = ipywidgets.Output()
-    # Create seed slider using htutori.
+    # Create seed slider using `htutori`.
     seed_slider, seed_box = htutori.build_widget_control(
         name="seed",
         description="random seed",
@@ -785,7 +881,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
         initial_value=42,
         is_float=False
     )
-    # Create log-scale samples slider using htutori.
+    # Create log-scale samples slider using `htutori`.
     samples_slider, samples_box = htutori.build_log_widget_control(
         name="N",
         description="num samples",
@@ -794,7 +890,7 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
         initial_exp=9,
         base=2
     )
-    # Create slider for burn-in period using htutori.
+    # Create slider for burn-in period using `htutori`.
     burnin_slider, burnin_box = htutori.build_widget_control(
         name="burn-in",
         description="burn-in period",
@@ -805,10 +901,17 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
         is_float=False
     )
     # Create button to trigger sampling.
-    run_button = ipywidgets.Button(description='Run Sampling', button_style='info')
+    run_button = ipywidgets.Button(
+        description="Run Sampling", button_style="info"
+    )
     # Define callback to update convergence visualization.
     def _update_gibbs(change: Optional[Dict] = None) -> None:
-        """Update convergence plot based on slider values."""
+        """
+        Update convergence plot based on slider values.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         with output:
             output.clear_output(wait=True)
             # Create model and generate samples.
@@ -818,47 +921,61 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
             seed_val = int(seed_slider.value)
             samples_df = model.simulate(
                 n_samples=n_samples,
-                evidence={'Test': 'Positive'},
+                evidence={"Test": "Positive"},
                 show_progress=False, seed=seed_val
             )
             # Extract disease values for convergence analysis.
             disease_values = (
-                (samples_df['Disease'] == 'Present').astype(int).values
+                (samples_df["Disease"] == "Present").astype(int).values
             )
             # Create figure with four subplots.
             fig, axes = plt.subplots(1, 4, figsize=(20, 5))
             # Plot trace of samples.
-            axes[0].plot(disease_values, linewidth=0.5, color='#4ecdc4')
-            axes[0].axvline(x=burn_in, color='red', linestyle='--', linewidth=2, label='Burn-in end')
-            axes[0].set_xlabel('Iteration')
-            axes[0].set_ylabel('Disease (0/1)')
-            axes[0].set_title('Chain Trace', fontweight='bold')
+            axes[0].plot(disease_values, linewidth=0.5, color="#4ecdc4")
+            axes[0].axvline(
+                x=burn_in, color="red", linestyle="--", linewidth=2,
+                label="Burn-in end"
+            )
+            axes[0].set_xlabel("Iteration")
+            axes[0].set_ylabel("Disease (0/1)")
+            axes[0].set_title("Chain Trace", fontweight="bold")
             axes[0].legend()
             axes[0].set_ylim([-0.1, 1.1])
             # Plot histogram of samples after burn-in.
             disease_after_burnin = disease_values[burn_in:]
             if len(disease_after_burnin) > 0:
-                axes[1].hist(disease_after_burnin, bins=20, color='#ff6b6b', alpha=0.7, edgecolor='black')
-            axes[1].set_xlabel('Disease (0=Absent, 1=Present)')
-            axes[1].set_ylabel('Frequency')
-            axes[1].set_title('Histogram (After Burn-in)', fontweight='bold')
+                axes[1].hist(
+                    disease_after_burnin, bins=20, color="#ff6b6b",
+                    alpha=0.7, edgecolor="black"
+                )
+            axes[1].set_xlabel("Disease (0=Absent, 1=Present)")
+            axes[1].set_ylabel("Frequency")
+            axes[1].set_title("Histogram (After Burn-in)", fontweight="bold")
             # Compute and plot running mean.
             running_mean = (
                 np.cumsum(disease_values) /
                 np.arange(1, len(disease_values) + 1)
             )
-            axes[2].axvspan(0, burn_in, alpha=0.2, color='gray', label='Burn-in')
-            axes[2].plot(running_mean, linewidth=1, label='Running Mean', color='#4ecdc4')
+            axes[2].axvspan(
+                0, burn_in, alpha=0.2, color="gray", label="Burn-in"
+            )
+            axes[2].plot(
+                running_mean, linewidth=1, label="Running Mean",
+                color="#4ecdc4"
+            )
             true_posterior = 0.9 * 0.05 / (0.9 * 0.05 + 0.1 * 0.95)
-            axes[2].axhline(y=true_posterior, color='red', linestyle='--', linewidth=2, label=f'True ({true_posterior:.3f})')
+            axes[2].axhline(
+                y=true_posterior, color="red", linestyle="--", linewidth=2,
+                label=f"True ({true_posterior:.3f})"
+            )
             axes[2].fill_between(
                 range(len(running_mean)),
                 true_posterior - 0.1, true_posterior + 0.1,
-                alpha=0.1, color='red'
+                alpha=0.1, color="red"
             )
-            axes[2].set_xlabel('Sample Number')
-            axes[2].set_ylabel('Running Mean')
-            axes[2].set_title('Convergence', fontweight='bold')
+            axes[2].set_xlabel("Sample Number")
+            axes[2].set_ylabel("Running Mean")
+            axes[2].set_title("Convergence", fontweight="bold")
             axes[2].legend()
             axes[2].set_ylim([0, 1])
             # Comments panel.
@@ -876,9 +993,9 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
             plt.tight_layout()
             plt.show()
     # Register callbacks for interactive updates.
-    samples_slider.observe(_update_gibbs, 'value')
-    burnin_slider.observe(_update_gibbs, 'value')
-    seed_slider.observe(_update_gibbs, 'value')
+    samples_slider.observe(_update_gibbs, "value")
+    burnin_slider.observe(_update_gibbs, "value")
+    seed_slider.observe(_update_gibbs, "value")
     run_button.on_click(_update_gibbs)
     # Display initial state.
     _update_gibbs()
@@ -893,7 +1010,11 @@ def cell7_2_gibbs_sampling_interactive() -> ipywidgets.VBox:
 # #############################################################################
 
 def cell7_3_create_network() -> DiscreteBayesianNetwork:
-    """Create a simple medical diagnosis Bayesian network."""
+    """
+    Create a simple medical diagnosis Bayesian network.
+
+    :return: configured `DiscreteBayesianNetwork` instance
+    """
     return _create_medical_network_impl()
 
 
@@ -909,19 +1030,24 @@ def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
     output = ipywidgets.Output()
     # Create disease state selector.
     disease_dropdown = ipywidgets.Dropdown(
-        options=[('None', None), ('Present', 'Present'), ('Absent', 'Absent')],
-        description='Disease:',
-        style={'description_width': '100px'}
+        options=[("None", None), ("Present", "Present"), ("Absent", "Absent")],
+        description="Disease:",
+        style={"description_width": "100px"}
     )
     # Create symptom state selector.
     symptom_dropdown = ipywidgets.Dropdown(
-        options=[('None', None), ('Present', 'Present'), ('Absent', 'Absent')],
-        description='Symptom:',
-        style={'description_width': '100px'}
+        options=[("None", None), ("Present", "Present"), ("Absent", "Absent")],
+        description="Symptom:",
+        style={"description_width": "100px"}
     )
     # Define callback to update joint distribution visualization.
     def _update_joint(change: Optional[Dict] = None) -> None:
-        """Update joint and marginal distribution plots."""
+        """
+        Update joint and marginal distribution plots.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         with output:
             output.clear_output(wait=True)
             # Create model and inference engine.
@@ -930,12 +1056,12 @@ def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
             # Collect selected evidence from dropdowns.
             evidence = {}
             if disease_dropdown.value is not None:
-                evidence['Disease'] = disease_dropdown.value
+                evidence["Disease"] = disease_dropdown.value
             if symptom_dropdown.value is not None:
-                evidence['Symptom'] = symptom_dropdown.value
+                evidence["Symptom"] = symptom_dropdown.value
             # Compute joint distribution with optional conditioning.
             joint_result = inference.query(
-                variables=['Disease', 'Symptom'],
+                variables=["Disease", "Symptom"],
                 evidence=evidence
             )
             # Create figure with four subplots.
@@ -943,41 +1069,53 @@ def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
             # Plot joint distribution as heatmap.
             joint_array = joint_result.values.reshape(2, 2)
             sns.heatmap(
-                joint_array, annot=True, fmt='.4f', cmap='YlOrRd',
-                ax=axes[0], cbar_kws={'label': 'Probability'},
-                xticklabels=['Symptom Absent', 'Symptom Present'],
-                yticklabels=['Disease Absent', 'Disease Present']
+                joint_array, annot=True, fmt=".4f", cmap="YlOrRd",
+                ax=axes[0], cbar_kws={"label": "Probability"},
+                xticklabels=["Symptom Absent", "Symptom Present"],
+                yticklabels=["Disease Absent", "Disease Present"]
             )
-            axes[0].set_title('Joint P(Disease, Symptom)', fontweight='bold')
+            axes[0].set_title("Joint P(Disease, Symptom)", fontweight="bold")
             # Compute marginal distributions from joint.
             disease_marg = joint_array.sum(axis=1)
             symptom_marg = joint_array.sum(axis=0)
             # Plot disease marginal.
-            bars = axes[1].bar(['Absent', 'Present'], disease_marg, color=['#4ecdc4', '#ff6b6b'])
-            axes[1].set_ylabel('Probability')
-            axes[1].set_title('P(Disease)', fontweight='bold')
+            bars = axes[1].bar(
+                ["Absent", "Present"], disease_marg,
+                color=["#4ecdc4", "#ff6b6b"]
+            )
+            axes[1].set_ylabel("Probability")
+            axes[1].set_title("P(Disease)", fontweight="bold")
             axes[1].set_ylim([0, 1])
             for bar in bars:
                 height = bar.get_height()
                 axes[1].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.4f}', ha='center', va='bottom'
+                    f"{height:.4f}", ha="center", va="bottom"
                 )
             # Plot symptom marginal.
-            bars = axes[2].bar(['Absent', 'Present'], symptom_marg, color=['#4ecdc4', '#ff6b6b'])
-            axes[2].set_ylabel('Probability')
-            axes[2].set_title('P(Symptom)', fontweight='bold')
+            bars = axes[2].bar(
+                ["Absent", "Present"], symptom_marg,
+                color=["#4ecdc4", "#ff6b6b"]
+            )
+            axes[2].set_ylabel("Probability")
+            axes[2].set_title("P(Symptom)", fontweight="bold")
             axes[2].set_ylim([0, 1])
             for bar in bars:
                 height = bar.get_height()
                 axes[2].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.4f}', ha='center', va='bottom'
+                    f"{height:.4f}", ha="center", va="bottom"
                 )
             # Comments panel.
             axes[3].axis("off")
-            axes[3].set_title("Comments", fontsize=14, fontweight="bold", pad=20)
-            evidence_text = "No conditioning" if not evidence else ", ".join([f'{k}={v}' for k, v in evidence.items()])
+            axes[3].set_title(
+                "Comments", fontsize=14, fontweight="bold", pad=20
+            )
+            evidence_text = (
+                "No conditioning" if not evidence else ", ".join(
+                    [f"{k}={v}" for k, v in evidence.items()]
+                )
+            )
             htutori.add_fitted_text_box(
                 axes[3],
                 f"Conditioning: {evidence_text}\n"
@@ -987,8 +1125,8 @@ def cell7_3_joint_distribution_explorer() -> ipywidgets.VBox:
             plt.tight_layout()
             plt.show()
     # Register callbacks for interactive updates.
-    disease_dropdown.observe(_update_joint, 'value')
-    symptom_dropdown.observe(_update_joint, 'value')
+    disease_dropdown.observe(_update_joint, "value")
+    symptom_dropdown.observe(_update_joint, "value")
     # Display initial state.
     _update_joint()
     return ipywidgets.VBox([
@@ -1014,43 +1152,48 @@ def cell8_1_larger_network_interactive() -> ipywidgets.VBox:
     # Create scenario selector dropdown.
     scenario_dropdown = ipywidgets.Dropdown(
         options=[
-            ('Positive Test Only', {'Test1': 'Positive'}),
+            ("Positive Test Only", {"Test1": "Positive"}),
             (
-                'Test and Symptoms',
-                {'Test1': 'Positive', 'Symptom1': 'Present'}
+                "Test and Symptoms",
+                {"Test1": "Positive", "Symptom1": "Present"}
             ),
             (
-                'Test but No Symptom',
-                {'Test1': 'Positive', 'Symptom1': 'Absent'}
+                "Test but No Symptom",
+                {"Test1": "Positive", "Symptom1": "Absent"}
             )
         ],
-        description='Scenario:',
-        style={'description_width': '100px'}
+        description="Scenario:",
+        style={"description_width": "100px"}
     )
     # Create inference method selector.
     method_dropdown = ipywidgets.Dropdown(
         options=[
-            ('Variable Elimination', 'VE'),
-            ('Sampling', 'Sampling')
+            ("Variable Elimination", "VE"),
+            ("Sampling", "Sampling")
         ],
-        description='Method:',
-        style={'description_width': '100px'}
+        description="Method:",
+        style={"description_width": "100px"}
     )
     # Define callback to update visualization when settings change.
     def _update_larger_net(change: Optional[Dict] = None) -> None:
-        """Update network visualization and inference results."""
+        """
+        Update network visualization and inference results.
+
+        :param change: Change event from widget
+            - Default: `None`
+        """
         with output:
             output.clear_output(wait=True)
             # Create model and extract evidence scenario.
             model = cell8_2_larger_network_demo()
             evidence = scenario_dropdown.value
             # Perform inference based on selected method.
-            if method_dropdown.value == 'VE':
+            if method_dropdown.value == "VE":
                 # Exact inference via variable elimination.
                 inference = VariableElimination(model)
                 start = time.time()
                 result = inference.query(
-                    variables=['Disease'], evidence=evidence
+                    variables=["Disease"], evidence=evidence
                 )
                 elapsed = (time.time() - start) * 1000
                 result_vals = result.values.flatten()
@@ -1063,43 +1206,64 @@ def cell8_1_larger_network_interactive() -> ipywidgets.VBox:
                 )
                 elapsed = (time.time() - start) * 1000
                 disease_counts = (
-                    (samples['Disease'] == 'Present').sum() / len(samples)
+                    (samples["Disease"] == "Present").sum() / len(samples)
                 )
                 result_vals = np.array([1 - disease_counts, disease_counts])
             # Create figure with four subplots.
             fig, axes = plt.subplots(1, 4, figsize=(20, 5))
             # Plot posterior belief about disease.
-            colors = ['#4ecdc4', '#ff6b6b']
-            bars = axes[0].bar(['Absent', 'Present'], result_vals, color=colors)
-            axes[0].set_ylabel('Probability')
-            axes[0].set_title('P(Disease | Evidence)', fontweight='bold')
+            colors = ["#4ecdc4", "#ff6b6b"]
+            bars = axes[0].bar(["Absent", "Present"], result_vals, color=colors)
+            axes[0].set_ylabel("Probability")
+            axes[0].set_title("P(Disease | Evidence)", fontweight="bold")
             axes[0].set_ylim([0, 1])
             for bar in bars:
                 height = bar.get_height()
                 axes[0].text(
                     bar.get_x() + bar.get_width() / 2., height,
-                    f'{height:.3f}', ha='center', va='bottom'
+                    f"{height:.3f}", ha="center", va="bottom"
                 )
             # Plot network nodes and edges summary.
-            axes[1].axis('off')
-            axes[1].set_title('Network Topology', fontweight='bold')
-            topology_text = f"Nodes: {len(model.nodes())}\nEdges: {len(model.edges())}\n"
+            axes[1].axis("off")
+            axes[1].set_title("Network Topology", fontweight="bold")
+            topology_text = (
+                f"Nodes: {len(model.nodes())}\n"
+                f"Edges: {len(model.edges())}\n"
+            )
             topology_text += f"Evidence: {len(evidence)} nodes\n"
             topology_text += "\nNetwork Summary:\n"
             topology_text += "- Root causes: Genetics, Environment\n"
             topology_text += "- Pathway: Disease via Protein/Lifestyle\n"
             topology_text += "- Observations: Symptoms, Tests"
-            axes[1].text(0.1, 0.5, topology_text, fontsize=11, verticalalignment='center',
-                        family='monospace', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
+            axes[1].text(
+                0.1, 0.5, topology_text, fontsize=11,
+                verticalalignment="center", family="monospace",
+                bbox=dict(
+                    boxstyle="round", facecolor="wheat", alpha=0.5
+                )
+            )
             # Plot algorithm comparison.
-            ve_time = 2.5 if method_dropdown.value == 'VE' else 2.0
-            sampling_time = 150.0 if method_dropdown.value == 'Sampling' else 145.0
-            axes[2].bar(['VE', 'Sampling'], [ve_time, sampling_time],
-                       color=['#4ecdc4' if method_dropdown.value == 'VE' else 'lightgray',
-                              '#ff6b6b' if method_dropdown.value == 'Sampling' else 'lightgray'])
-            axes[2].set_ylabel('Time (ms)')
-            axes[2].set_title('Algorithm Speed (8-node network)', fontweight='bold')
-            axes[2].set_yscale('log')
+            ve_time = (
+                2.5 if method_dropdown.value == "VE" else 2.0
+            )
+            sampling_time = (
+                150.0 if method_dropdown.value == "Sampling" else 145.0
+            )
+            bar_colors = [
+                "#4ecdc4" if method_dropdown.value == "VE" else "lightgray",
+                (
+                    "#ff6b6b"
+                    if method_dropdown.value == "Sampling"
+                    else "lightgray"
+                )
+            ]
+            axes[2].bar(["VE", "Sampling"], [ve_time, sampling_time],
+                       color=bar_colors)
+            axes[2].set_ylabel("Time (ms)")
+            axes[2].set_title(
+                "Algorithm Speed (8-node network)", fontweight="bold"
+            )
+            axes[2].set_yscale("log")
             # Comments panel.
             axes[3].axis("off")
             axes[3].set_title("Comments", fontsize=14, fontweight="bold", pad=20)
@@ -1114,8 +1278,8 @@ def cell8_1_larger_network_interactive() -> ipywidgets.VBox:
             plt.tight_layout()
             plt.show()
     # Register callbacks for interactive updates.
-    scenario_dropdown.observe(_update_larger_net, 'value')
-    method_dropdown.observe(_update_larger_net, 'value')
+    scenario_dropdown.observe(_update_larger_net, "value")
+    method_dropdown.observe(_update_larger_net, "value")
     # Display initial state.
     _update_larger_net()
     return ipywidgets.VBox([
@@ -1140,90 +1304,90 @@ def cell8_2_larger_network_demo() -> DiscreteBayesianNetwork:
     """
     # Create network structure with genetic and environmental roots.
     model = DiscreteBayesianNetwork([
-        ('Genetics', 'Protein'),
-        ('Environment', 'Lifestyle'),
-        ('Protein', 'Disease'),
-        ('Lifestyle', 'Disease'),
-        ('Disease', 'Symptom1'),
-        ('Disease', 'Symptom2'),
-        ('Disease', 'Test1'),
-        ('Symptom1', 'Test2'),
+        ("Genetics", "Protein"),
+        ("Environment", "Lifestyle"),
+        ("Protein", "Disease"),
+        ("Lifestyle", "Disease"),
+        ("Disease", "Symptom1"),
+        ("Disease", "Symptom2"),
+        ("Disease", "Test1"),
+        ("Symptom1", "Test2"),
     ])
     # Define conditional probability distributions for each node.
     cpds = [
         # Root node: genetic predisposition.
         TabularCPD(
-            'Genetics', 2, [[0.8], [0.2]],
-            state_names={'Genetics': ['Low', 'High']}
+            "Genetics", 2, [[0.8], [0.2]],
+            state_names={"Genetics": ["Low", "High"]}
         ),
         # Root node: environmental factors.
         TabularCPD(
-            'Environment', 2, [[0.7], [0.3]],
-            state_names={'Environment': ['Good', 'Bad']}
+            "Environment", 2, [[0.7], [0.3]],
+            state_names={"Environment": ["Good", "Bad"]}
         ),
         # Protein levels depend on genetics.
         TabularCPD(
-            'Protein', 2, [[0.85, 0.3], [0.15, 0.7]],
-            evidence=['Genetics'], evidence_card=[2],
+            "Protein", 2, [[0.85, 0.3], [0.15, 0.7]],
+            evidence=["Genetics"], evidence_card=[2],
             state_names={
-                'Protein': ['Low', 'High'],
-                'Genetics': ['Low', 'High']
+                "Protein": ["Low", "High"],
+                "Genetics": ["Low", "High"]
             }
         ),
         # Lifestyle depends on environment.
         TabularCPD(
-            'Lifestyle', 2, [[0.9, 0.4], [0.1, 0.6]],
-            evidence=['Environment'], evidence_card=[2],
+            "Lifestyle", 2, [[0.9, 0.4], [0.1, 0.6]],
+            evidence=["Environment"], evidence_card=[2],
             state_names={
-                'Lifestyle': ['Good', 'Bad'],
-                'Environment': ['Good', 'Bad']
+                "Lifestyle": ["Good", "Bad"],
+                "Environment": ["Good", "Bad"]
             }
         ),
         # Disease depends on protein and lifestyle.
         TabularCPD(
-            'Disease', 2,
+            "Disease", 2,
             [[0.99, 0.8, 0.7, 0.1], [0.01, 0.2, 0.3, 0.9]],
-            evidence=['Protein', 'Lifestyle'], evidence_card=[2, 2],
+            evidence=["Protein", "Lifestyle"], evidence_card=[2, 2],
             state_names={
-                'Disease': ['Absent', 'Present'],
-                'Protein': ['Low', 'High'],
-                'Lifestyle': ['Good', 'Bad']
+                "Disease": ["Absent", "Present"],
+                "Protein": ["Low", "High"],
+                "Lifestyle": ["Good", "Bad"]
             }
         ),
         # Symptom1 depends on disease.
         TabularCPD(
-            'Symptom1', 2, [[0.9, 0.2], [0.1, 0.8]],
-            evidence=['Disease'], evidence_card=[2],
+            "Symptom1", 2, [[0.9, 0.2], [0.1, 0.8]],
+            evidence=["Disease"], evidence_card=[2],
             state_names={
-                'Symptom1': ['Absent', 'Present'],
-                'Disease': ['Absent', 'Present']
+                "Symptom1": ["Absent", "Present"],
+                "Disease": ["Absent", "Present"]
             }
         ),
         # Symptom2 depends on disease.
         TabularCPD(
-            'Symptom2', 2, [[0.8, 0.1], [0.2, 0.9]],
-            evidence=['Disease'], evidence_card=[2],
+            "Symptom2", 2, [[0.8, 0.1], [0.2, 0.9]],
+            evidence=["Disease"], evidence_card=[2],
             state_names={
-                'Symptom2': ['Absent', 'Present'],
-                'Disease': ['Absent', 'Present']
+                "Symptom2": ["Absent", "Present"],
+                "Disease": ["Absent", "Present"]
             }
         ),
         # Test1 directly depends on disease.
         TabularCPD(
-            'Test1', 2, [[0.95, 0.05], [0.05, 0.95]],
-            evidence=['Disease'], evidence_card=[2],
+            "Test1", 2, [[0.95, 0.05], [0.05, 0.95]],
+            evidence=["Disease"], evidence_card=[2],
             state_names={
-                'Test1': ['Negative', 'Positive'],
-                'Disease': ['Absent', 'Present']
+                "Test1": ["Negative", "Positive"],
+                "Disease": ["Absent", "Present"]
             }
         ),
         # Test2 depends on Symptom1.
         TabularCPD(
-            'Test2', 2, [[0.85, 0.2], [0.15, 0.8]],
-            evidence=['Symptom1'], evidence_card=[2],
+            "Test2", 2, [[0.85, 0.2], [0.15, 0.8]],
+            evidence=["Symptom1"], evidence_card=[2],
             state_names={
-                'Test2': ['Negative', 'Positive'],
-                'Symptom1': ['Absent', 'Present']
+                "Test2": ["Negative", "Positive"],
+                "Symptom1": ["Absent", "Present"]
             }
         ),
     ]
@@ -1258,12 +1422,9 @@ def cell8_2_practical_workflow_demo(
         len(model.edges())
     )
     _LOG.info("Nodes: %s", list(model.nodes()))
-    # Check model validity.
-    try:
-        model.check_model()
-        _LOG.info("Model validity: VALID")
-    except Exception as e:
-        _LOG.error("Model validity: ERROR: %s", str(e))
+    # Check model validity; raises if the model is inconsistent.
+    model.check_model()
+    _LOG.info("Model validity: VALID")
     # Step 2: Algorithm selection guidance.
     _LOG.info("\n\nStep 2: Choose Inference Algorithm")
     _LOG.info("=" * 50)
@@ -1271,12 +1432,12 @@ def cell8_2_practical_workflow_demo(
     # Step 3: Query the model with evidence.
     _LOG.info("\n\nStep 3: Query with Evidence")
     _LOG.info("=" * 50)
-    evidence = {'Test1': 'Positive', 'Symptom1': 'Present'}
+    evidence = {"Test1": "Positive", "Symptom1": "Present"}
     _LOG.info("Evidence: %s", str(evidence))
     # Perform inference and measure timing.
     inference = VariableElimination(model)
     start = time.time()
-    result = inference.query(variables=['Disease'], evidence=evidence)
+    result = inference.query(variables=["Disease"], evidence=evidence)
     elapsed = (time.time() - start) * 1000
     _LOG.info("\nResult P(Disease | Evidence):")
     _LOG.info(str(result))
@@ -1285,19 +1446,19 @@ def cell8_2_practical_workflow_demo(
     _LOG.info("\n\nStep 4: Visualize Results")
     _LOG.info("=" * 50)
     fig, ax = plt.subplots(figsize=figsize)
-    colors = ['#4ecdc4', '#ff6b6b']
+    colors = ["#4ecdc4", "#ff6b6b"]
     bars = ax.bar(
-        ['Absent', 'Present'], result.values.flatten(), color=colors
+        ["Absent", "Present"], result.values.flatten(), color=colors
     )
-    ax.set_ylabel('Probability')
-    ax.set_title('P(Disease | Test1+ and Symptom1+)', fontweight='bold')
+    ax.set_ylabel("Probability")
+    ax.set_title("P(Disease | Test1+ and Symptom1+)", fontweight="bold")
     ax.set_ylim([0, 1])
     # Add probability values on bars.
     for bar in bars:
         height = bar.get_height()
         ax.text(
             bar.get_x() + bar.get_width() / 2., height,
-            f'{height:.4f}', ha='center', va='bottom'
+            f"{height:.4f}", ha="center", va="bottom"
         )
     plt.tight_layout()
     plt.show()
