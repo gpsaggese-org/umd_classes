@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -44,7 +44,7 @@ import seaborn as sns
 # Use this for most notebooks.
 import helpers.htutorial as htutori
 
-import exact_inference_utils as utils
+import L06_01_exact_inference_utils as utils
 
 htutori.config_notebook()
 

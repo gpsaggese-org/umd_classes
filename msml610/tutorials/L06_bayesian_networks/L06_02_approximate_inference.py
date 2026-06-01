@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -18,10 +18,9 @@
 #
 # - This notebook teaches how to estimate posteriors $P(X \mid \mathbf{e})$ by
 #   sampling, when exact inference is too expensive or impossible
-# - Concepts are built on the canonical AIMA sprinkler network with variables
-#   $Cloudy \to Sprinkler$, $Cloudy \to Rain$, $Sprinkler \to WetGrass$,
-#   $Rain \to WetGrass$, and the running query $P(Rain \mid Sprinkler{=}T)$
-# - The pedagogical arc is:
+# - Concepts are built on the Garden Wold examples with variables
+#   to run the query $P(Rain \mid Sprinkler{=}T)$
+# - The flow is:
 #   - Turn uniform randomness into samples (inverse transform)
 #   - Sample a whole network (prior sampling)
 #   - Watch estimates converge ($1/\sqrt{N}$)
@@ -49,7 +48,7 @@ import seaborn as sns
 # Use this for most notebooks.
 import helpers.htutorial as htutori
 
-import approximate_inference_utils as utils
+import L06_02_approximate_inference_utils as utils
 
 htutori.config_notebook()
 
@@ -70,7 +69,6 @@ except ImportError:
 # ## Cell 1.1: Turning Uniform Randomness into Any Distribution
 #
 # **Goal**:
-# - Establish the atom of every method in this notebook
 # - Show that a single stream of uniform numbers $r \in [0,1]$ becomes samples
 #   from any distribution via the inverse CDF
 #
@@ -94,6 +92,9 @@ except ImportError:
 # - Larger $N$ fills the histogram in toward the target
 
 # %%
+# TODO(ai_gp): Split this into two cells one for discrete die and the other for the exponentials. Also update the markdown above.
+# Reuse the code as much as possible.
+
 # Map a uniform r through the CDF into a sample from the chosen target.
 utils.cell1_1_inverse_transform_widget()
 
