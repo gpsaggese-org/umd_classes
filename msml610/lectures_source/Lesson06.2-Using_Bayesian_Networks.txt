@@ -46,7 +46,7 @@ MSML610: Advanced Machine Learning
 
 * Bayesian Networks: Semantics
 
-- There are **two equivalent semantic interpretations** of a Bayesian Network
+- **Two equivalent semantic interpretations** of a Bayesian Network:
 
   1. **Joint Distribution View**
      - The network encodes the _joint probability distribution_ over all
@@ -66,11 +66,13 @@ MSML610: Advanced Machine Learning
 // ### Representing the full joint distribution (p. 533)
 
 * Chain Rule for a Joint Distribution
-- A **joint distribution** can always be expressed using the chain rule for any:
-  - Subset of its RVs
-  - Ordering of the RVs
+- **Theorem**: A joint distribution can always be expressed using the chain rule
+  for any:
+  - Subset of its random variables
+  - Ordering of the random variables
 
-1. You **express one variable** conditionally to the remaining ones
+- **Proof**
+1. **Express one variable** conditionally to the remaining ones
    $$
    \Pr(\blue{x_1, ..., x_{n-1}}, \red{x_n})
    = \Pr(\red{x_n} | \blue{x_{n-1}, ..., x_1}) \Pr(\blue{x_{n-1}, ..., x_1})
@@ -93,48 +95,50 @@ MSML610: Advanced Machine Learning
    \end{align*}
    \endgroup
 
-* Statement Probability from Bayesian Network
-- The **full joint distribution** represents the probability of an assignment to
-  each variable $X_i = x_i$:
-  $$\Pr(x_1, ..., x_n) \defeq \Pr(X_1 = x_1 \land ... \land X_n = x_n)$$
+* Evaluate a Bayesian Network
+1. Sort the nodes in topological order
+   - There are several orderings consistent with the directed graph structure
+2. Use the chain rule with the topological ordering:
+   $$
+   \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{i-1}, ..., X_1)
+   $$
+3. Since the probability of each node is conditionally independent of all its
+   predecessors given its parents
+   $$
+   \Pr(X_i | X_{i-1}, ..., X_1) = \Pr(X_i | Parents(X_i))
+   $$
+4. Express the joint probability in terms of the Conditional Probability Tables
+   (CPTs):
+   $$
+   \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | Parents(X_i))
+   $$
 
-- To **evaluate a Bayesian network**
-  - Sort the nodes in topological order
-    - There are several orderings consistent with the directed graph structure
-  - Use the chain rule with the topological ordering:
-    $$
-    \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | X_{i-1}, ..., X_1)
-    $$
-  - Since the probability of each node is conditionally independent of all its
-    predecessors given its parents
-    $$
-    \Pr(X_i | X_{i-1}, ..., X_1) = \Pr(X_i | Parents(X_i))
-    $$
-  - Express the joint probability in terms of the Conditional Probability Tables
-    (CPTs):
-    $$
-    \Pr(X_1, ..., X_n) = \prod_{i=1}^n \Pr(X_i | Parents(X_i))
-    $$
-
-* Statement Probability From Bayes Nets: Example
+* Evaluate a Bayesian Network: Example
 ::: columns
 :::: {.column width=60%}
-- Given Pearl LA example, you want to compute the probability that:
+- **Problem**: Given Pearl LA example, you want to compute the probability that:
   - The alarm has sounded: $Alarm$
   - Neither a burglary nor an earthquake has occurred:
     $\lnot Burglary \land \lnot Earthquake$
   - Both John and Mary call: $JohnCalls, MaryCalls$
 ::::
 :::: {.column width=35%}
-```graphviz
-digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+```graphviz[width=70%]
+digraph BayesianFlow {
+    splines=true;
+    nodesep=1.0;
+    ranksep=0.75;
 
-    Burglary [label="Burglary", xlabel="P(B) = 0.001"];
-    Earthquake [label="Earthquake", xlabel="P(E) = 0.002"];
-    Alarm [label="Alarm", xlabel="P(A | B,E)"];
-    JohnCalls [label="JohnCalls", xlabel="P(J | A)"];
-    MaryCalls [label="MaryCalls", xlabel="P(M | A)"];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+
+    Burglary [label="Burglary", fillcolor="#A6C8F4"];
+    Earthquake [label="Earthquake", fillcolor="#FFD1A6"];
+    Alarm [label="Alarm", fillcolor="#B2E2B2"];
+    JohnCalls [label="JohnCalls", fillcolor="#C6A6F4"];
+    MaryCalls [label="MaryCalls", fillcolor="#C6A6F4"];
+
+    { rank = same; Burglary; Earthquake; }
+    { rank = same; JohnCalls; MaryCalls; }
 
     Burglary -> Alarm;
     Earthquake -> Alarm;
@@ -146,8 +150,8 @@ digraph BayesianNetwork {
 :::
 
 - **Solution**
-  - Compute the probability as a product of conditional probabilities from the
-    Bayesian Network
+- Compute the probability as a product of conditional probabilities from the
+  Bayesian Network:
   \begin{align*}
   & \Pr(JohnCalls, MaryCalls, Alarm, \lnot Burglary, \lnot Earthquake) \\
   & = \Pr(JohnCalls|Alarm) \cdot \\
@@ -160,13 +164,13 @@ digraph BayesianNetwork {
 
 * Constructing a Bayesian Network
 1. **Gather domain knowledge**
-   - Identify key variables and their potential interactions
    - List all relevant random variables necessary to describe the system
+   - Identify key variables and their potential interactions
 
 2. **Order the nodes** according to cause-effects dependencies
-   - So that the Bayesian network is minimal
+   - The Bayesian network will be minimal
 
-3. For each node, **pick the minimum set of parents** $Parents(X_i)$
+3. **Pick the minimum set of parents** $Parents(X_i)$ for each node
    - Add edges to represent the dependencies
    - Avoid redundant connections
 
@@ -194,9 +198,9 @@ digraph BayesianNetwork {
     - Typically yields linear (not exponential) growth in complexity
     - Sometimes we ignore real-world dependency to keep the graph simple
 
-- In **fully connected systems**
-  - Each variable is influenced by all others
-  - The Bayesian network has the same complexity as the joint probability
+- In **fully connected systems** each variable is influenced by all others
+  - The Bayesian network is sparse but has the same complexity as the joint
+    probability
 
 * Ordering of Nodes
 - The complexity of the Bayesian network depends on the choice in ordering the
@@ -206,7 +210,20 @@ digraph BayesianNetwork {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     Burglary -> Alarm;
     Earthquake -> Alarm;
     Alarm -> JohnCalls;
@@ -217,8 +234,20 @@ digraph BayesianNetwork {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
 
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     MaryCalls -> Alarm;
     JohnCalls -> Alarm;
     Alarm -> Burglary;
@@ -234,8 +263,20 @@ digraph BayesianNetwork {
 :::: {.column width=30%}
 ```graphviz
 digraph BayesianNetwork {
-    node [shape=ellipse, style=filled, fillcolor=lightblue];
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.8;
 
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    // Nodes
+    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+
+    // Edges
     MaryCalls -> Earthquake;
     MaryCalls -> Burglary;
     MaryCalls -> JohnCalls;
@@ -365,10 +406,10 @@ digraph CausalModel {
 * Conditional Independence on Markov Blanket
 ::: columns
 :::: {.column width=55%}
-- In a Bayesian network, each variable is conditionally independent of:
-  - **Its predecessors given its parents**
-  - **All other nodes given its Markov blanket**, i.e., its parents, its
-    children, and its spouses
+- In a Bayesian network, each variable is **conditionally independent** of:
+  - Its predecessors given its parents
+  - All other nodes given its Markov blanket (i.e., its parents, its children,
+    and its spouses)
 
 - The **Markov blanket** of a node $X_i$:
   - Contains all the nodes necessary to predict the state of the node $X_i$,
@@ -450,7 +491,7 @@ digraph CausalModel {
 
 - E.g.,
   - Consider the Garden World
-  - You know the grass is wet $WetGrass$
+  - You know the grass is wet ($WetGrass$)
   - This evidence increases the probability of either causes $Rain$ or
     $Sprinkler$
   - If you find out that the $Sprinkler$ was on, this "explains away" the
@@ -482,7 +523,7 @@ digraph BayesianFlow {
 * Markov Blanket: Medical Example
 ::: columns
 :::: {.column width=25%}
-- Consider risk factors and outcomes for heart disease
+- Consider the risk factors and outcomes for heart disease
 ::::
 :::: {.column width=70%}
 ```graphviz
@@ -494,12 +535,12 @@ digraph HeartDiseaseGraph {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Nodes
-    H [label="Heart Disease", fillcolor="#F4A6A6"];
+    H [label="HeartDisease", fillcolor="#F4A6A6"];
     A [label="Age", fillcolor="#A6C8F4"];
     G [label="Genetics", fillcolor="#A6C8F4"];
     D [label="Diet", fillcolor="#A6C8F4"];
     E [label="Exercise", fillcolor="#A6C8F4"];
-    BP [label="Blood Pressure", fillcolor="#B2E2B2"];
+    BP [label="BloodPressure", fillcolor="#B2E2B2"];
     C [label="Cholesterol", fillcolor="#B2E2B2"];
 
     // Risk factors influencing Heart Disease
@@ -530,36 +571,37 @@ digraph HeartDiseaseGraph {
 ::::
 :::
 - **\red{Target node}**
-  - Heart disease
+  - $Heart Disease$
 
 - **\blue{Parent nodes}**
-  - Risk factors of heart disease
+  - Risk factors of heart disease (e.g., $Age$, $Genetics$, $Diet$, $Exercise$)
   - Direct influence of $H$
 
-- **\green{Children nodes}**
-  - Outcomes of heart disease
-  - Directly influenced by $H$ $\to$ 
-
 - **\blue{Spouse nodes}**
-  - $A$, $G$, $D$, $E$ also influence $BP$ and $C$
+  - The parent nodes are also spouse nodes since $Age$, $Genetics$, ... also
+    influence $BloodPressure$ and $Cholesterol$
 
-- Knowing the state of $A$, $G$, $D$, $E$, $BP$, $C$ (Markov Blanket) allows to
-  compute $H$, without any other information
+- **\green{Children nodes}**
+  - Outcomes of $HeartDisease$ are $BloodPressure$ and $Cholesterol$
+
+- Knowing the state of the parent, spouse, and children nodes (i.e., the Markov
+  Blanket) allows to compute $HeartDisease$, without any other information
 
 * Markov Blanket: Economic Example
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=65%}
 - Consider factors affecting house prices in a particular region
 
 - **\red{Target node}**
-  - House prices
+  - $HousePrices$
 
 - **\blue{Parent nodes}**
-  - Economic growth
-  - Interest rate
-  - Unemployment rate
+  - $EconomicGrowth$
+  - $InterestRate$
+  - $UnemploymentRate$
+  - They all clearly influence $HoursePrices$
 ::::
-:::: {.column width=40%}
+:::: {.column width=30%}
 ```graphviz
 digraph HousePriceGraph {
     splines=true;
@@ -569,12 +611,12 @@ digraph HousePriceGraph {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Nodes
-    HP [label="House Prices", fillcolor="#F4A6A6"];
-    E [label="Economic Growth", fillcolor="#A6C8F4"];
-    IR [label="Interest Rate", fillcolor="#A6C8F4"];
-    UE [label="Unemployment Rate", fillcolor="#A6C8F4"];
-    DI [label="Disposable Income", fillcolor="#B2E2B2"];
-    D [label="Housing Demand", fillcolor="#B2E2B2"];
+    HP [label="HousePrices", fillcolor="#F4A6A6"];
+    E [label="EconomicGrowth", fillcolor="#A6C8F4"];
+    IR [label="InterestRate", fillcolor="#A6C8F4"];
+    UE [label="UnemploymentRate", fillcolor="#A6C8F4"];
+    DI [label="DisposableIncome", fillcolor="#B2E2B2"];
+    D [label="HousingDemand", fillcolor="#B2E2B2"];
 
     // Edges
     E -> HP;
@@ -592,10 +634,10 @@ digraph HousePriceGraph {
 ::::
 :::
 - **\green{Children nodes}**
-  - Disposable income
+  - $DisposableIncome$
     - The house price affects how much money people have left after housing
       costs
-  - Demand for houses
+  - $HousingDemand$
     - Higher prices can reduce demand
 
 * Markov Blanket: Finance Example
@@ -663,8 +705,8 @@ digraph StockPriceGraph {
 // ### 13.2.2, Efficient representation of conditional distributions (p. 433)
 
 * Specifying a Conditional Probability Table
-- Conditional Probability Table (CPT) for a node requires $O(2^k)$ values in the
-  worst case
+- **Problem**: Conditional Probability Table (CPT) for a node requires $O(2^k)$
+  values in the worst case
   - Difficult to specify even with a small number of parents $k$
 
 - Often, the relationship is not completely arbitrary, e.g.,
@@ -673,8 +715,8 @@ digraph StockPriceGraph {
   - Context-specific independence
 
 * Deterministic Nodes
-- **Deterministic nodes** have values specified by their parents, without
-  uncertainty, e.g.,
+- **Definition**: _deterministic nodes_ have values specified by their parents,
+  without uncertainty, e.g.,
   - A logical relationship:
     - Useful when a condition is met if any of the sub-conditions are true
     - $IsNorthAmerican = IsCanadian \lor IsUS \lor IsMexican$
@@ -685,21 +727,23 @@ digraph StockPriceGraph {
   - Deterministic nodes do not involve randomness or probability
   - Often used in models to simplify relationships and computations
 
-* Noisy Logical Relationships
-- **Noisy logical relationships** (e.g., noisy-OR, noisy-MAX):
+- Noisy Logical Relationships
+
+* Noisy Logic Relationships
+- **Definition**: _noisy logical relationships_ (e.g., noisy-OR, noisy-MAX):
   - Are a probabilistic version of a logical relationship
   - Can be simpler to describe given $k$ parents
 
 - **Example**
-- In propositional logic
-  $$Fever \iff Cold \lor Flu \lor Malaria$$
+- In _propositional logic_, relationships are expressed like
+  $Fever \iff Cold \lor Flu \lor Malaria$
 
-- In Bayesian networks
-  - The assumptions are:
-    1. All the possible causes are listed (you can use a leak node for "misc
-       causes")
-    2. There is uncertainty about the parents to cause the child node
-    3. The probabilities of parents are independent
+- In _Bayesian networks_, the assumptions are:
+  1. All the possible causes are listed (you can use a leak node for
+     "miscellaneous causes")
+  2. There is uncertainty about the parents causing the child node
+  3. The probabilities of the parents are independent
+
   - Under these assumptions:
     \begin{align*}
     &\Pr(Fever | parents(Fever)) \\
@@ -709,8 +753,8 @@ digraph StockPriceGraph {
     \end{align*}
 
 * Context-specific Independence
-- A variable exhibits **context-specific independence** if it is conditionally
-  independent of its parents given certain values of others
+- **Definition**: a variable exhibits _context-specific independence_ if it is
+  conditionally independent of its parents given certain values of others
 
 - **Example**
   - $Damage$ occurs depending on the $Ruggedness$ of your car and whether an
@@ -739,30 +783,34 @@ digraph StockPriceGraph {
      - Families of probability density functions (e.g., Gaussian distribution)
      - Non-parametric PDFs
 
-- **Hybrid Bayesian networks** mix discrete and continuous variables, e.g.,
-  - A customer buys a number of apples (discrete) depending on its cost
-    (continuous)
-  - Decide annual premium to charge to insure a vehicle based on applicant
-    information (e.g., make model)
+- **Definition**: _hybrid Bayesian networks_ mix discrete and continuous
+  variables, e.g.,
+  - _"A customer buys a number of apples (discrete) depending on its cost
+    (continuous)"
+  - _"Decide annual premium to charge to insure a vehicle based on applicant
+    information (e.g., maker model)"_
 
 * Bayesian Network: Car Insurance Company (1/2)
-- A **car insurance company**:
-  - Receive an application from an individual to insure a specific vehicle
-  - Analyze information about the individual and its car
-  - Decide on appropriate annual premium to charge
-  - Pay out a claim, based on the type of claim
+- **Problem**:
+  - A _car insurance company_:
+    - Receive an application from an individual to insure a specific vehicle
+    - Analyze information about the individual and its car
+    - Decide on appropriate annual premium to charge
+    - Pay out a claim, based on the type of claim
 
-- Build a Bayesian network that captures the causal structure of the domain
+- **Solution**: build a Bayesian network that captures the causal structure of
+  the domain
 
-  - **Input information**:
+  - _Input information_:
     - About the applicant: $Age$, $YearsWithLicense$, $DrivingRecord$,
       $GoodStudent$
     - About the vehicle: $MakeModel$, $VehicleYear$, $Airbag$, $SafetyFeatures$
     - About the driving situation: $Mileage$, $HasGarage$
-  - Some input informations are **important but not available**:
+  - _Unobservable information_: some input informations are important but not
+    available:
     - $RiskAversion$
     - $DrivingBehavior$
-  - **Type of claims**:
+  - _Type of claims_:
     - $MedicalCost$: injuries sustained by the applicant
     - $LiabilityCost$: lawsuits filed by other parties against applicant
     - $PropertyCost$: vehicle damage to either party and theft of the vehicle
@@ -865,30 +913,28 @@ digraph InsuranceRiskModel {
 
 * Exact Inference in Bayesian Networks
 
-- **Goal of exact inference**
-  - Compute the posterior $P(X|\vE=\ve)$ for query variable $X$ given evidence
-    $\ve$
-
-- **Variables involved**
-  - Query variable $X$
-  - Evidence variables $\vE = \{E_1, \dots, E_m\}$
-  - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
+- **Goal**
+  - Compute the posterior $P(X|\vE=\ve)$ for the query variable $X$ given
+    evidence $\ve$, where:
+    - Query variable $X$
+    - Evidence variables $\vE = \{E_1, \dots, E_m\}$
+    - Hidden variables $\vY = \{Y_1, \dots, Y_\ell\}$
 
 - **Inference by Enumeration**
-  - Use full joint distribution and sum over all hidden variables:
+  - Use the full joint distribution and sum over all hidden variables:
     $$P(X|e) = \alpha \sum_Y P(X,e,Y)$$
 
 - **Variable Elimination**
   - Improves efficiency by caching intermediate results
   - Eliminates variables systematically to avoid redundant sums
-  - Removing irrelevant variables
-    - Variables not ancestors of query or evidence can be ignored
+  - Removes irrelevant variables
+    - Variables that are not ancestors of the query or evidence can be ignored
 
 - **Problems**
   - Exact inference is efficient $O(n)$ for trees, but intractable $O(2^n)$ in
     general
-  - It doesn't work for continuous variables
-  - Basis for approximate methods when exact is impractical
+  - It does not work for continuous variables
+  - Basis for approximate methods when exact methods are impractical
 
 * Exact Inference in Bayesian Networks: Example
 - You get a call from both John and Mary, what is the probability of the
@@ -951,24 +997,20 @@ digraph InsuranceRiskModel {
 
 * Sampling Bayesian Network Without Evidence
 
-- **Goal**: Generate events from a Bayesian network without evidence (prior sampling)
+- **Goal**: Generate samples from a Bayesian network without evidence (prior
+  sampling)
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=65%}
 - **Solution**
-  - Sample variables in topological order (to ensure parents have values)
-  - Source nodes have known unconditional probability distribution
-    - E.g., $\Pr(Rain) = 0.5$
-  - Conditional variable's probability distribution depends on parent's values
-    - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
-  - Implement Bayesian network semantics, representing joint probability:
-    $$
-    f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
-    $$
-    where $PS$ means "Prior Sampling"
+- Sample variables in topological order
+- Source nodes have known unconditional probability distribution
+  - E.g., $\Pr(Rain) = 0.5$
+- Conditional variable's probability distribution depends on parent's values
+  - E.g., $\Pr(WetGrass | Rain = T) = 0.1$
 
 ::::
-:::: {.column width=35%}
+:::: {.column width=30%}
 
 ```graphviz
 digraph BayesianFlow {
@@ -991,6 +1033,13 @@ digraph BayesianFlow {
 ::::
 :::
 
+- **Key Insight**: Implement Bayesian network semantics, representing joint
+  probability:
+  $$
+  f_{PS}(x_1, ..., x_n) = \prod_{i=1}^n \Pr(x_i | parents(X_i))
+  $$
+  where $PS$ means "Prior Sampling"
+
 * Consistency of Sampling
 - **Consistency of estimation**: distribution from prior sampling converges to
   true probability as $N \to \infty$
@@ -1005,7 +1054,7 @@ digraph BayesianFlow {
   $$
   \Pr(x_1, ..., x_n) \approx \frac{N_{PS}(x_1, ..., x_n)}{N}
   $$
-  - Converges with rate $\frac{1}{\sqrt{N}}$
+  converges with rate $\frac{1}{\sqrt{N}}$
 
 * Rejection Sampling
 ::: columns
@@ -1014,12 +1063,18 @@ digraph BayesianFlow {
   distribution
 
 - **Goal**: Compute $\Pr(X=x| E=e)$ when evidence $e$ is rare
+
+- **Algorithm**:
   1. Generate samples from the prior distribution
      - Estimate $\Pr(x, e)$
   2. Reject samples not matching evidence, i.e., $X \land E \neq e$
      - Remaining samples $X \land E=e$ estimate $\Pr(X, E=e)$
   3. Count occurrences of $X=x$ in remaining samples $X \land E=e$
      - Estimate $\Pr(X=x | E=e)$
+
+* Rejection Sampling: Estimating Pi
+
+- TODO(ai_gp): Add some notes explaining this
 
 ::::
 :::: {.column width=45%}
@@ -1029,21 +1084,22 @@ digraph BayesianFlow {
 ::::
 :::
 
-- **Example**:
-  - You want to estimate $\Pr(Rain | Sprinkler = T)$
-  - Sample 100 times
-    - You get 73 samples with $\lnot Sprinkler$ and they are rejected
-    - You are left with 27 samples with $Sprinkler$
-    - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
-  - Thus:
-    $$
-    \Pr(Rain | Sprinkler) = \frac{8}{27}
-    $$
+* Rejection Sampling: Garden World Example
+
+- You want to estimate $\Pr(Rain | Sprinkler = T)$
+- Sample 100 times
+  - You get 73 samples with $\lnot Sprinkler$ and they are rejected
+  - You are left with 27 samples with $Sprinkler$
+  - Out of them only 8 have $Rain$ and 19 have $\lnot Rain$
+- Thus:
+  $$
+  \Pr(Rain | Sprinkler) = \frac{8}{27}
+  $$
 
 * Rejection Sampling: Pros and Cons
 - **Pros**
   - Consistent estimate
-    - Converges to true value as number of samples increases
+    - I.e., converges to true value as number of samples increases
 
 - **Cons**
   - Many samples are rejected, depending on rarity of $\Pr(E=e)$
@@ -1064,10 +1120,12 @@ digraph BayesianFlow {
   - Estimate probability by averaging weighted samples:
     $$
     E[f(X)] \approx \frac{1}{N} \sum_{i=1}^N w_i f(X_i)
-    $$ :::: ::::
-    {.column width=35%}
-    ![](msml610/lectures_source/figures/L06.2.Importance_Sampling.png) ::::
-    :::
+    $$
+::::
+:::: {.column width=35%}
+![](msml610/lectures_source/figures/L06.2.Importance_Sampling.png)
+::::
+:::
 
 - **Example**:
   - Estimate $\Pr(A | E=e)$ where $E$ is rare

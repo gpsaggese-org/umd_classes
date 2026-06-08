@@ -26,6 +26,7 @@ from tqdm import tqdm
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm_cli as hllmcli
+import helpers.hmarkdown_select as hmarsele
 import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hparser as hparser
 
@@ -34,21 +35,6 @@ _LOG = logging.getLogger(__name__)
 _DEFAULT_MODEL = "claude-opus-4"
 _DEFAULT_BATCH_MODE = "individual"
 _DEFAULT_BATCH_SIZE = 1
-
-
-def _read_prompt_file(rule_path: str) -> str:
-    """
-    Read the prompt from a rule file.
-
-    :param rule_path: path to the rule file
-    :return: content of the rule file as string
-    """
-    hdbg.dassert_file_exists(rule_path, "Rule file must exist")
-    _LOG.info("Reading prompt from rule file: %s", rule_path)
-    with open(rule_path, "r") as f:
-        prompt = f.read()
-    _LOG.debug("Read prompt of length %d", len(prompt))
-    return prompt
 
 
 def _extract_slides(
@@ -183,12 +169,8 @@ def _parse() -> argparse.ArgumentParser:
         default=None,
         help="Path to output file (if not specified, modify input in place)",
     )
-    parser.add_argument(
-        "--rule",
-        action="store",
-        required=True,
-        help="Path to rule file containing the transformation prompt",
-    )
+    rule_group = parser.add_mutually_exclusive_group(required=True)
+    hmarsele.add_rule_cli_arg(rule_group)
     # TODO(gp): These could be factor out.
     parser.add_argument(
         "--batch_size",
@@ -234,10 +216,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     hdbg.dassert_file_exists(args.input, "Input file must exist")
-    hdbg.dassert_file_exists(args.rule, "Rule file must exist")
     _LOG.info("Processing input file: %s", args.input)
     _LOG.info("Using rule file: %s", args.rule)
-    prompt = _read_prompt_file(args.rule)
+    prompt = hmarsele.extract_rule_from_file(args.rule)
     items = list(hmaslite.read_lesson_file(args.input))
     _LOG.debug("Read %d items from input file", len(items))
     _, slide_texts = _extract_slides(items)
