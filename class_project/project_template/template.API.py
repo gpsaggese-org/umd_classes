@@ -14,48 +14,37 @@
 # ---
 
 # %% [markdown]
-# # Template API Notebook
+# # Description
 #
-# This is a template notebook. The first heading should be the title of what notebook is about. For example, if it is a neo4j tutorial the heading should be `Neo4j API`.
+# This notebook examines ...
 #
+# The name of this notebook should follow the format: `<tool>.API.ipynb` (e.g., `pycaret.API.ipynb` for exploring the pycaret API).
+#
+# References:
 # - Add description of what the notebook does.
-# - Point to references, e.g. (neo4j.API.md)
+# - Point to references, e.g. (tool.API.md)
 # - Add citations.
 # - Keep the notebook flow clear.
 # - Comments should be imperative and have a period at the end.
 # - Your code should be well commented.
 #
-# The name of this notebook should in the following format:
-# - if the notebook is exploring `pycaret API`, then it is `pycaret.API.ipynb`
-#
-# Follow the reference to write notebooks in a clear manner: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
-
-# %%
-# %load_ext autoreload
-# %autoreload 2
-# %matplotlib inline
+# Guide: https://github.com/causify-ai/helpers/blob/master/docs/coding/all.jupyter_notebook.how_to_guide.md
 
 # %% [markdown]
 # ## Imports
 
 # %%
+# %load_ext autoreload
+# %autoreload 2
+
+# System libraries.
 import logging
-# Import libraries in this section.
-# Avoid imports like import *, from ... import ..., from ... import *, etc.
 
-import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebo
-
-# %% [markdown]
-# ## Configuration
-
-# %%
-hdbg.init_logger(verbosity=logging.INFO)
-
-_LOG = logging.getLogger(__name__)
-
-hnotebo.config_notebook()
-
+# Third-party libraries.
+# import numpy as np
+# import pandas as pd
+# import seaborn as sns
+# import matplotlib.pyplot as plt
 
 # %%
 # # To install additional packages, use:
@@ -66,6 +55,23 @@ hnotebo.config_notebook()
 #     use_sudo=False,
 #     venv_path="/opt/venv",
 # )
+
+# %%
+# Use this for most notebooks.
+import helpers.hdbg as hdbg
+import helpers.hnotebook as hnotebook
+
+_LOG = logging.getLogger(__name__)
+
+# Initialize notebook configuration and logging.
+hdbg.init_logger(verbosity=logging.INFO)
+hnotebook.config_notebook()
+
+# Convert `display` into `print()`.
+try:
+    from IPython.display import display
+except ImportError:
+    display = print  # type: ignore
 
 # %% [markdown]
 # ## Make the notebook flow clear
