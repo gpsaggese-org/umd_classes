@@ -1,10 +1,12 @@
 # Create a project
-```
-> class_project/create_project.py ---dst_dir tutorials/pgmpy
-```
+
+- Create the dir
+  ```bash
+  > class_project/create_project.py ---dst_dir tutorials/pgmpy
+  ```
 
 - Commit the changes
-  ```
+  ```bash
   > git add tutorials/pgmpy
   > git commit -am "Add template"
   > git push
@@ -12,20 +14,14 @@
 - Edit `requirements.txt` to add the packages pinning down to the last version
   of the important packages
 
-- Build th container
-  ```
+- Build the container
+  ```bash
   > docker_build.sh
   ```
 
-- Edit `tutorials/pgmpy/pgmpy*.py
+- Edit `tutorials/pgmpy/pgmpy*.py`
 
-# 
-
-https://pgmpy.org/documentation.html
-
-https://pgmpy.org/guides/probabilistic_inference.html
-
-https://pgmpy.org/guides/datasets.html
+# Create a Tutorial
 
 - Create a tutorial
   ```
@@ -33,6 +29,8 @@ https://pgmpy.org/guides/datasets.html
   ```
 
 # Create a notebook about one topic
+
+## Using `/notebook.create_outline` and `/notebook.implement_outline`
 
 - Create `notebook_outline.probabilistic_inference.md`
   ```
@@ -69,5 +67,16 @@ https://pgmpy.org/guides/datasets.html
   http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
   ```
 
-- 
-  /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/probabilistic_inference.html and save it in tutorials/pgmpy/pgmpy.01.API.probabilistic_inference.ipynb
+## Using /notebook.implement_for_package_API
+
+- The skill `./helpers_root/.claude/skills/notebook.implement_for_package_API/SKILL.md` is more complete
+  ```
+  claude> /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/probabilistic_inference.html and save it in tutorials/pgmpy/pgmpy.01.API.probabilistic_inference.ipynb
+  ```
+
+  ```
+  claude> /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/datasets.html
+  and save it in tutorials/pgmpy/pgmpy.02.API.datasets.ipynb
+  ```
+
+  - [Example Models](https://pgmpy.org/guides/example_models.html)

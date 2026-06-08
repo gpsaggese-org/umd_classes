@@ -1,8 +1,5 @@
 """
-Utility functions for pgmpy tutorial notebooks.
-
-- Notebooks should call these functions instead of writing raw logic inline.
-- This helps keep the notebooks clean, modular, and easier to debug.
+Utility functions for all pgmpy tutorial notebooks.
 
 Import as:
 
@@ -12,8 +9,7 @@ import tutorials.pgmpy.pgmpy_utils as tpgpguti
 import pandas as pd
 import logging
 from itertools import product
-from sklearn.model_selection import train_test_split
-from pycaret.classification import compare_models
+
 
 def draw_pgmpy_model(model, filename="model.png", prog="dot"):
     """
