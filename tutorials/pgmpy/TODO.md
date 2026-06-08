@@ -19,10 +19,10 @@
     - [Plotting Models](https://pgmpy.org/guides/plotting.html)
 
   - The most interesting are:
-    - [Probabilistic Inference](https://pgmpy.org/guides/probabilistic_inference.html)
-    - [Example Datasets](https://pgmpy.org/guides/datasets.html)
-    - [Example Models](https://pgmpy.org/guides/example_models.html)
-    - [Parameter Estimation](https://pgmpy.org/guides/parameter_estimation.html)
+    - [x] [Probabilistic Inference](https://pgmpy.org/guides/probabilistic_inference.html)
+    - [x] [Example Datasets](https://pgmpy.org/guides/datasets.html)
+    - [ ] [Example Models](https://pgmpy.org/guides/example_models.html)
+    - [ ] [Parameter Estimation](https://pgmpy.org/guides/parameter_estimation.html)
 
 - Workflow oriented: https://pgmpy.org/documentation.html
 - Object oriented: https://pgmpy.org/reference.html

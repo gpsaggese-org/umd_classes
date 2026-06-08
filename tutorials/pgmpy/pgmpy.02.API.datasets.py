@@ -101,7 +101,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 # %% [markdown]
 # # Part 2: Primitive-by-Primitive Exploration
 #
-# ## Primitive 1: `list_datasets()` — The Catalog
+# ## Primitive 1: `list_datasets()`: The Catalog
 #
 # **Mental model**: A searchable registry of all available benchmark datasets.
 # Returns a plain list of name strings suitable for passing to `load_dataset()`.
@@ -149,7 +149,7 @@ simulated = ds.list_datasets(is_simulated=True)
 print(f"Simulated datasets ({len(simulated)}): {simulated}")
 
 # %% [markdown]
-# ## Primitive 2: `load_dataset()` — The Loader
+# ## Primitive 2: `load_dataset()`: The Loader
 #
 # **Mental model**: Given a name string from the catalog, load and return a fully
 # populated `Dataset` object with tabular data and optional metadata.
@@ -173,7 +173,7 @@ print(f"type: {type(data2)}")
 print(f"dir: {[a for a in dir(data2) if not a.startswith('_')]}")
 
 # %% [markdown]
-# ## Primitive 3: `Dataset.data` — The Tabular Data
+# ## Primitive 3: `Dataset.data`: The Tabular Data
 #
 # **Mental model**: The actual observations as a pandas DataFrame, ready for
 # `estimator.fit(data)`.
@@ -197,7 +197,7 @@ print(f"Summary statistics:")
 display(data.data.describe())
 
 # %% [markdown]
-# ## Primitive 4: `Dataset.ground_truth` — The True Causal Graph
+# ## Primitive 4: `Dataset.ground_truth`: The True Causal Graph
 #
 # **Mental model**: When available, this is a `DAG` object representing the true
 # underlying causal structure. Used to evaluate how well a causal discovery
@@ -229,10 +229,10 @@ print(f"Is 'jnk' a parent of 'pkc'?: {gt.has_edge('jnk', 'pkc')}")
 # Check what happens when a dataset has no ground truth.
 data2 = ds.load_dataset('galton_stature')
 print(f"galton_stature ground_truth: {data2.ground_truth}")
-# Returns None — the field is optional.
+# Returns None : the field is optional.
 
 # %% [markdown]
-# ## Primitive 5: `Dataset.expert_knowledge` — Domain Constraints
+# ## Primitive 5: `Dataset.expert_knowledge`: Domain Constraints
 #
 # **Mental model**: Prior knowledge about edges that must be present, must be
 # absent, or temporal ordering, which is used to guide causal discovery algorithms.
@@ -256,7 +256,7 @@ data2 = ds.load_dataset('galton_stature')
 print(f"galton_stature expert_knowledge: {data2.expert_knowledge}")
 
 # %% [markdown]
-# ## Primitive 6: `Dataset.tags` — Metadata Dictionary
+# ## Primitive 6: `Dataset.tags`: Metadata Dictionary
 #
 # **Mental model**: A dictionary of descriptive metadata about the dataset,
 # including counts, boolean flags for data type, and provenance info.
