@@ -361,8 +361,8 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
     FIRST_LESSON: str = ""
     SECOND_LESSON: str = ""
 
-    # TODO(ai_gp): Make it static
-    def _run_gen_slides(self, course_dir: str, lesson: str) -> None:
+    @staticmethod
+    def _run_gen_slides(course_dir: str, lesson: str) -> None:
         """
         Run gen_slides for a lesson, generating only TeX output.
         """
