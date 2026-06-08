@@ -211,11 +211,17 @@ print(f"Number of nodes: {len(model.nodes())}")
 print(f"Number of edges: {len(model.edges())}")
 
 # %%
+_ = tpgpguti.draw_pgmpy_model(model)
+
+# %%
 # Load a structure-only DAG.
 model_dag = load_model('dagitty/mediator')
 print(f"Loaded model: dagitty/mediator")
 print(f"Object type: {type(model_dag)}")
 print(f"Object type name: {type(model_dag).__name__}")
+
+# %%
+_ = tpgpguti.draw_pgmpy_model(model_dag)
 
 # %% [markdown]
 # ## Primitive 3: `DiscreteBayesianNetwork` (Parameterized)
@@ -233,6 +239,9 @@ model = load_model('bnlearn/cancer')
 print(f"Model: {model}")
 print(f"Nodes: {sorted(model.nodes())}")
 print(f"Edges: {sorted(model.edges())}")
+
+# %%
+_ = tpgpguti.draw_pgmpy_model(model)
 
 # %%
 # Inspect the CPDs (the probability tables).
@@ -265,10 +274,6 @@ print(f"Local independencies for 'Cancer': {model.local_independencies('Cancer')
 is_valid = model.check_model()
 print(f"Model is valid: {is_valid}")
 
-# %%
-# Visualize the model (requires pygraphviz to be installed).
-_ = tpgpguti.draw_pgmpy_model(model)
-
 # %% [markdown]
 # ## Primitive 4: `DAG` (Structure-Only)
 #
@@ -286,6 +291,9 @@ print(f"Model: {model}")
 print(f"Type: {type(model).__name__}")
 print(f"Nodes: {sorted(model.nodes())}")
 print(f"Edges: {sorted(model.edges())}")
+
+# %%
+_ = tpgpguti.draw_pgmpy_model(model)
 
 # %%
 # Confirm no CPDs available.
@@ -337,6 +345,9 @@ print(f"Mediator model edges: {sorted(model_m.edges())}")
 print(f"\nIs X and Y d-connected? {model_m.is_dconnected('X', 'Y')}")
 print(f"Is X and Y d-separated given I? {model_m.is_dconnected('X', 'Y', observed='I')}")
 
+# %%
+_ = tpgpguti.draw_pgmpy_model(model_m)
+
 # %% [markdown]
 # ### Subtypes: `dagitty/m_bias` (M-Bias Pattern)
 
@@ -349,6 +360,9 @@ print(f"M-bias model edges: {sorted(model_mb.edges())}")
 # Classic M-bias: conditioning on Z opens a path between D and E.
 print(f"\nD and E d-connected unconditionally? {model_mb.is_dconnected('D', 'E')}")
 print(f"D and E d-connected given Z? {model_mb.is_dconnected('D', 'E', observed='Z')}")
+
+# %%
+_ = tpgpguti.draw_pgmpy_model(model_mb)
 
 # %% [markdown]
 # ## Primitive 5: `LinearGaussianBayesianNetwork` (Continuous)
@@ -372,6 +386,9 @@ print(f"Model: {cont_models[4]}")
 print(f"Type: {type(model_cont).__name__}")
 print(f"Number of nodes: {len(model_cont.nodes())}")
 print(f"Number of edges: {len(model_cont.edges())}")
+
+# %%
+_ = tpgpguti.draw_pgmpy_model(model_cont)
 
 # %% [markdown]
 # # Part 3: Composition Examples
@@ -470,6 +487,9 @@ print(f"Nodes: {sorted(alarm.nodes())}")
 print(f"Edges: {sorted(alarm.edges())}")
 
 # %%
+_ = tpgpguti.draw_pgmpy_model(alarm)
+
+# %%
 # View the CPDs.
 for cpd in alarm.get_cpds():
     print(cpd)
@@ -482,81 +502,11 @@ result = inference.query(variables=['Burglary'], evidence={'JohnCalls': 'True'})
 print("P(Burglary | JohnCalls=True):")
 print(result)
 
-# %%
-_ = tpgpguti.draw_pgmpy_model(alarm)
-
-# %% [markdown]
-# # Part 4: API Patterns
-#
-# ## 1. Catalog-Load Pattern
-#
-# The dominant pattern: `list_models()` (discover) -> `load_model()` (fetch).
-# This is similar to `sklearn.datasets.fetch_*` or `torchvision.datasets`.
-
-# %%
-# The pattern in one line.
-model = load_model(list_models(is_discrete=True, n_nodes=5)[0])
-print(f"Loaded: {model}")
-
-# %% [markdown]
-# ## 2. Filter Criterion Pattern
-#
-# Filters are keyword arguments that function as predicates on model metadata.
-# Multiple filters combine with AND semantics.
-
-# %%
-# AND-combined filters: discrete AND small.
-small_discrete = list_models(is_discrete=True, n_nodes=[4, 5, 6])
-print(f"Small discrete models ({len(small_discrete)}): {small_discrete}")
-
-# %% [markdown]
-# ## 3. Model Type Dispatch Pattern
-#
-# `load_model()` returns different types depending on the model.
-# You can check the type and adapt your code:
-
-# %%
-# Dispatch on model type.
-def describe_model(name):
-    """
-    Load a model by name and print type-specific information.
-    """
-    model = load_model(name)
-    print(f"\nModel: {name}")
-    print(f"  Type: {type(model).__name__}")
-    print(f"  Nodes: {len(model.nodes())}, Edges: {len(model.edges())}")
-
-    if hasattr(model, 'get_cpds'):
-        cpds = model.get_cpds()
-        print(f"  CPDs: {len(cpds)}")
-        for cpd in cpds[:3]:
-            print(f"    {cpd.variable}: card={cpd.variable_card}")
-        if len(cpds) > 3:
-            print(f"    ... and {len(cpds) - 3} more CPDs")
-
-# Test with different model types.
-describe_model('bnlearn/cancer')
-describe_model('dagitty/confounding')
-describe_model('bnlearn/sachs')
-
 # %% [markdown]
 # # Part 5: Interactive Exploration
-#
-# ## Experiment 1: What Happens If You Filter with Conflicting Flags?
-
-# %%
-# Explore filter behavior.
-print("is_discrete=True + is_continuous=True -> AND semantics")
-both = list_models(is_discrete=True, is_continuous=True)
-print(f"  Result: {len(both)} models (a model can't be both discrete and continuous)")
-print(f"  Models: {both}")
-
-print("\nis_parameterized=True + is_discrete=True")
-both2 = list_models(is_parameterized=True, is_discrete=True)
-print(f"  Result: {len(both2)} models (parameterized discrete models)")
 
 # %% [markdown]
-# ## Experiment 3: Inspect a Large Model (Sachs)
+# ## Experiment 1: Inspect a Large Model (Sachs)
 
 # %%
 # Load the Sachs protein signaling network (a benchmark model).
@@ -575,7 +525,7 @@ for node in sorted(sachs.nodes()):
 _ = tpgpguti.draw_pgmpy_model(sachs)
 
 # %% [markdown]
-# ## Experiment 4: Explore the Model API with `dir()`
+# ## Experiment 2: Explore the Model API with `dir()`
 
 # %%
 # Use dir() to see what methods are available on a model.
@@ -597,22 +547,3 @@ other = [m for m in methods if m not in graph_methods + inference_methods]
 print(f"\n  Graph structure methods: {sorted(graph_methods)}")
 print(f"\n  Inference/CPD methods: {sorted(inference_methods)}")
 print(f"\n  Other methods: {sorted(other)}")
-
-# %% [markdown]
-# # Summary: The Mental Model
-#
-# - **`list_models(**filters)`**: "Show me which pre-built models are available"
-#   - Filters by type (`is_discrete`, `is_continuous`, `is_hybrid`, `is_parameterized`)
-#   - Filters by size (`n_nodes`, `n_edges`) with exact int or list of ints
-#   - Returns a list of `repository/name` strings
-#
-# - **`load_model(name)`**: "Fetch that model by name"
-#   - Returns `DiscreteBayesianNetwork` (parameterized, discrete, with CPDs) for bnlearn/bnrep
-#   - Returns `DAG` (structure-only, no parameters) for dagitty
-#   - Returns `LinearGaussianBayesianNetwork` (continuous) for some models
-#
-# - **Three model types**, one unified discovery API:
-#   - Parameterized discrete models: ready for `VariableElimination`, `predict()`, `simulate()`
-#   - Structure-only DAGs: ready for `is_dconnected()`, `get_independencies()`, causal reasoning
-#   - Continuous models: ready for Gaussian inference
-#   - All share `nodes()`, `edges()`, `get_parents()`, `to_graphviz()`, and other graph methods
