@@ -21,8 +21,10 @@ RUN python -m pip install --upgrade pip
 
 # Install project specific packages.
 COPY requirements.txt /install/requirements.txt
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext -r /install/requirements.txt
+RUN pip install --upgrade pip 
+# Pin down jupytext to avoid jitter in the notebook files due to changing
+# version.
+RUN pip install --no-cache-dir jupyterlab jupyterlab_vim jupytext==1.19.3 -r /install/requirements.txt
 
 RUN mkdir -p /install
 

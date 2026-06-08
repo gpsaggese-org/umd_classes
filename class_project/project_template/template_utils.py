@@ -10,63 +10,72 @@ This file contains utility functions that support the tutorial notebooks.
 
 Import as:
 
-import class_project.project_template.template_utils as cpptteut
+import class_project.project_template.template_utils as utils
 """
 
-import pandas as pd
 import logging
-from sklearn.model_selection import train_test_split
-from pycaret.classification import compare_models
 
-# -----------------------------------------------------------------------------
-# Logging
-# -----------------------------------------------------------------------------
+from typing import Any, Optional, Tuple
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+import ipywidgets
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats
+from IPython.display import clear_output, display
 
-# -----------------------------------------------------------------------------
-# Example 1: Split the dataset into train and test sets
-# -----------------------------------------------------------------------------
+import helpers.hnotebook as hnotebo
+import helpers.htutorial as htutori
 
 
-def split_data(df: pd.DataFrame, target_column: str, test_size: float = 0.2):
-    """
-    Split the dataset into training and testing sets.
-
-    :param df: full dataset
-    :param target_column: name of the target column
-    :param test_size: proportion of test data (default = 0.2)
-
-    :return: X_train, X_test, y_train, y_test
-    """
-    logger.info("Splitting data into train and test sets")
-    X = df.drop(columns=[target_column])
-    y = df[target_column]
-    return train_test_split(X, y, test_size=test_size, random_state=42)
+_LOG = logging.getLogger(__name__)
 
 
-# -----------------------------------------------------------------------------
-# Example 2: PyCaret classification pipeline
-# -----------------------------------------------------------------------------
+def init_loggers(notebook_log: logging.Logger) -> None:
+    global _LOG
+    hnotebo.init_loggers(notebook_log, utils_log=_LOG)
 
 
-def run_pycaret_classification(
-    df: pd.DataFrame, target_column: str
-) -> pd.DataFrame:
-    """
-    Run a basic PyCaret classification experiment.
+# #############################################################################
+# Cell 1: Interactive Distribution Explorer with Plot Type Selection
+# #############################################################################
 
-    :param df: dataset containing features and target
-    :param target_column: name of the target column
 
-    :return: comparison of top-performing models
-    """
-    logger.info("Initializing PyCaret classification setup")
-    ...
+# def cell1_interactive_distribution_explorer(
+#     *,
+#     figsize: Optional[Tuple[float, float]] = None,
+# ) -> None:
+#     """
+#     Create interactive widget to explore Beta and Normal distributions.
+# 
+#     Demonstrates:
+#     - Slider widgets for continuous parameters via build_widget_control()
+#     - Dropdown for selecting distribution type
+#     - Real-time plot updates using observe() callbacks
+#     - Multiple synchronized plots (1x3 layout)
+# 
+#     :param figsize: Optional figure size (width, height). Defaults to
+#         plt.rcParams["figure.figsize"]
+#     """
 
-    logger.info("Comparing models")
-    results = compare_models()
-    ...
 
-    return results
+# #############################################################################
+# Cell 2: Interactive Sampling Visualization
+# #############################################################################
+
+
+# def cell2_interactive_sample_generator(
+#     *,
+#     figsize: Optional[Tuple[float, float]] = None,
+# ) -> None:
+#     """
+#     Create interactive widget to generate and visualize random samples.
+# 
+#     Demonstrates:
+#     - Multiple linked slider widgets via build_widget_control()
+#     - Logarithmic scale slider for sample count via build_log_widget_control()
+#     - Histogram visualization with theoretical overlay
+#     - Sample statistics display
+# 
+#     :param figsize: Optional figure size (width, height). Defaults to
+#         plt.rcParams["figure.figsize"]
+#     """
