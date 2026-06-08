@@ -60,6 +60,11 @@ try:
 except ImportError:
     display = print  # type: ignore
 
+# %%
+import logging
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 # %% [markdown]
 # # Part 1: Library Overview
 #
@@ -105,18 +110,7 @@ except ImportError:
 # Smallest construction: no arguments returns all 47+ datasets.
 all_datasets = ds.list_datasets()
 print(f"Total datasets available: {len(all_datasets)}")
-print(f"First 10: {all_datasets[:10]}")
-
-# %%
-# Inspect the object.
-print(f"type: {type(all_datasets)}")
-print(f"length: {len(all_datasets)}")
-print(f"all strings: {all(isinstance(n, str) for n in all_datasets)}")
-
-# %% [markdown]
-# ### `list_datasets()` Filters
-#
-# The real power comes from keyword filters that narrow the catalog.
+print("\n".join(all_datasets))
 
 # %%
 # Filter by data type: discrete only.
@@ -133,15 +127,6 @@ print(f"Continuous datasets ({len(continuous_ds)}): {continuous_ds[:10]}")
 mixed_ds = ds.list_datasets(is_mixed=True)
 print(f"Mixed datasets ({len(mixed_ds)}): {mixed_ds}")
 
-# %% [markdown]
-# **Question**: Can a dataset be both discrete and mixed?
-
-# %%
-# Check: datasets that match both discrete and mixed filters.
-both = ds.list_datasets(is_discrete=True, is_mixed=True)
-print(f"Both discrete and mixed: {len(both)} datasets")
-# A dataset is either discrete, continuous, or mixed — never more than one.
-
 # %%
 # Filter by presence of ground truth.
 with_gt = ds.list_datasets(has_ground_truth=True)
@@ -154,15 +139,6 @@ print(f"Datasets with exactly 5 variables: {few_vars}")
 
 ten_vars = ds.list_datasets(n_variables=10)
 print(f"Datasets with exactly 10 variables: {ten_vars}")
-
-# %% [markdown]
-# **Question**: What happens with a filter that matches no datasets?
-
-# %%
-# Empty result for very restrictive filters.
-empty = ds.list_datasets(n_samples=100, is_discrete=True)
-print(f"Restrictive filter result: {empty}")
-# Returns an empty list — no error.
 
 # %%
 # Combine multiple filters for precise selection.
@@ -239,6 +215,9 @@ print(f"\nNodes: {sorted(list(data.ground_truth.nodes()))}")
 print(f"\nEdges: {list(data.ground_truth.edges())}")
 
 # %%
+_ = tpgpguti.draw_pgmpy_model(data.ground_truth)
+
+# %%
 # Inspect the DAG: check predecessors and successors.
 gt = data.ground_truth
 print(f"Predecessors of 'erk': {list(gt.predecessors('erk'))}")
@@ -256,7 +235,7 @@ print(f"galton_stature ground_truth: {data2.ground_truth}")
 # ## Primitive 5: `Dataset.expert_knowledge` — Domain Constraints
 #
 # **Mental model**: Prior knowledge about edges that must be present, must be
-# absent, or temporal ordering — used to guide causal discovery algorithms.
+# absent, or temporal ordering, which is used to guide causal discovery algorithms.
 
 # %%
 # Load a dataset with expert knowledge.
@@ -296,6 +275,7 @@ for key, value in data.tags.items():
 sachs_tags = ds.load_dataset('sachs_discrete').tags
 galton_tags = ds.load_dataset('galton_stature').tags
 
+# TODO(ai_gp): Convert it into a pandas df
 print(f"{'Property':<25} {'sachs_discrete':<20} {'galton_stature':<20}")
 print("-" * 65)
 for key in sachs_tags:
@@ -442,111 +422,3 @@ print(f"Discrete datasets with ground truth: {precise}")
 # %%
 # Show the dataclass structure via a print.
 print(ds.load_dataset('boston_housing'))
-
-# %% [markdown]
-# ## 4. Optional Ground Truth / Expert Knowledge
-#
-# Not all datasets provide ground truth or expert knowledge. Always check for
-# `None` before using them.
-
-# %%
-# Safe access pattern.
-# Note: some datasets require HuggingFace download which may fail in restricted
-# environments. We catch those gracefully.
-def summarize_dataset(name):
-    try:
-        d = ds.load_dataset(name)
-    except Exception as e:
-        print(f"{name:30s} | ERROR: {type(e).__name__}")
-        return
-    has_gt = d.ground_truth is not None
-    has_ek = d.expert_knowledge is not None
-    print(f"{name:30s} | shape={str(d.data.shape):15s} | GT={has_gt} | EK={has_ek}")
-
-for name in ds.list_datasets()[:10]:
-    summarize_dataset(name)
-
-# %% [markdown]
-# # Part 5: Interactive Exploration
-#
-# Experiment with the API yourself.
-
-# %%
-# Explore all available filters.
-print("All list_datasets() keyword arguments:")
-import inspect
-sig = inspect.signature(ds.list_datasets)
-print(f"  {sig}")
-
-# %%
-# Question: What happens if you pass an invalid dataset name?
-try:
-    ds.load_dataset('nonexistent_dataset')
-except Exception as e:
-    print(f"Error type: {type(e).__name__}")
-    print(f"Error message: {e}")
-
-# %%
-# Question: What happens if you pass an invalid filter name?
-try:
-    ds.list_datasets(invalid_filter=True)
-except Exception as e:
-    print(f"Error type: {type(e).__name__}")
-    print(f"Error message: {e}")
-
-# %%
-# Explore: list all datasets and their tags in a table.
-# Some datasets require HuggingFace download and may fail — skip those.
-rows = []
-for name in ds.list_datasets():
-    try:
-        d = ds.load_dataset(name)
-    except Exception:
-        continue
-    rows.append({
-        'name': name,
-        'n_vars': d.tags['n_variables'],
-        'n_samples': d.tags['n_samples'],
-        'type': 'disc' if d.tags['is_discrete'] else ('cont' if d.tags['is_continuous'] else 'mixed'),
-        'has_GT': d.tags['has_ground_truth'],
-        'has_EK': d.tags['has_expert_knowledge'],
-        'simulated': d.tags['is_simulated'],
-    })
-
-summary = pd.DataFrame(rows)
-print(f"Loaded {len(rows)} of {len(ds.list_datasets())} datasets successfully")
-display(summary)
-
-# %%
-# Question: What is the range of dataset sizes?
-if len(summary) > 0:
-    print(f"Minimum variables: {summary['n_vars'].min()}")
-    print(f"Maximum variables: {summary['n_vars'].max()}")
-    print(f"Minimum samples: {summary['n_samples'].min()}")
-    print(f"Maximum samples: {summary['n_samples'].max()}")
-    print(f"Median samples: {summary['n_samples'].median()}")
-else:
-    print("No datasets loaded successfully to compute statistics")
-
-# %%
-# Question: Which datasets have NO ground truth AND NO expert knowledge?
-if len(summary) > 0:
-    plain = summary[(summary['has_GT'] == False) & (summary['has_EK'] == False)]
-    print(f"Datasets with neither GT nor EK: {len(plain)}")
-    display(plain.head())
-else:
-    print("No summary data available")
-
-# %% [markdown]
-# ## Summary: The Mental Model
-#
-# `pgmpy.datasets` implements a **catalog-loader** pattern:
-# - `list_datasets(**filters)` discovers available datasets by querying a metadata
-#   registry, returning matching name strings
-# - `load_dataset(name)` fetches the named dataset and returns a `Dataset` dataclass
-#   that bundles a `pd.DataFrame` (`.data`) with optional resources:
-#   - A true causal graph (`.ground_truth`) for supervised structure learning evaluation
-#   - Domain constraints (`.expert_knowledge`) to guide discovery algorithms
-#   - Descriptive metadata (`.tags`) for programmatic filtering and inspection
-# - The separation of catalog from loader, combined with keyword filters, makes the
-#   API scalable: users can discover without loading, and load only what they need.

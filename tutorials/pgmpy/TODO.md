@@ -1,7 +1,8 @@
-- [ ] Check the blog in_30_mins.pgmpy.md
-  - [ ] Move examples to notebooks
+# [ ] Check the blog in_30_mins.pgmpy.md
 
-- [ ] Create more notebooks based on the user manual
+## [ ] Move examples to notebooks
+
+# [ ] Create more notebooks based on the user manual
 
   - All the notebooks are
     - [Causal Discovery and Structure Learning](https://pgmpy.org/guides/causal_discovery.html)
@@ -26,4 +27,26 @@
 - Workflow oriented: https://pgmpy.org/documentation.html
 - Object oriented: https://pgmpy.org/reference.html
 
-- [ ] Add unit tests
+## Decide what to do with
+
+  > ls -1 tutorials/pgmpy/probabilistic_inference*
+  tutorials/pgmpy/probabilistic_inference_utils.py
+  tutorials/pgmpy/probabilistic_inference.ipynb
+  tutorials/pgmpy/probabilistic_inference.plan.md
+  tutorials/pgmpy/probabilistic_inference.py
+
+  - This seems to be generated using `/notebook.create_outline` and
+    `/notebook.implement_outline`
+  - Probably we want to delete it
+
+## [x] Generate 02 from datasets
+
+## [x] Remove —
+
+- Add a note in the skill to use : instead of —
+
+## [x] Disable httpx logging
+
+## Create a function to do a quick EDA
+
+# [ ] Add unit tests
