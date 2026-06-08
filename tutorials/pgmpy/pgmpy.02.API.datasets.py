@@ -275,11 +275,15 @@ for key, value in data.tags.items():
 sachs_tags = ds.load_dataset('sachs_discrete').tags
 galton_tags = ds.load_dataset('galton_stature').tags
 
-# TODO(ai_gp): Convert it into a pandas df
-print(f"{'Property':<25} {'sachs_discrete':<20} {'galton_stature':<20}")
-print("-" * 65)
-for key in sachs_tags:
-    print(f"{key:<25} {str(sachs_tags[key]):<20} {str(galton_tags[key]):<20}")
+# Build a comparison DataFrame from the tags dictionaries.
+tags_df = pd.DataFrame(
+    {
+        "Property": list(sachs_tags.keys()),
+        "sachs_discrete": [str(sachs_tags[k]) for k in sachs_tags],
+        "galton_stature": [str(galton_tags[k]) for k in sachs_tags],
+    }
+)
+display(tags_df)
 
 # %% [markdown]
 # # Part 3: Composition Examples

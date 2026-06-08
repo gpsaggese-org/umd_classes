@@ -78,6 +78,6 @@
   claude> /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/datasets.html and save it in tutorials/pgmpy/pgmpy.02.API.datasets.ipynb
   ```
 
-  claude> /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/example_models.html and save it in tutorials/pgmpy/pgmpy.03.API.example_models.ipynb
+  /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/example_models.html and save it in tutorials/pgmpy/pgmpy.03.API.example_models.ipynb
 
   - [Example Models](https://pgmpy.org/guides/example_models.html)

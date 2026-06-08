@@ -45,6 +45,8 @@ import helpers.htutorial as htutori
 
 htutori.config_notebook()
 
+import pandas as pd
+
 # Import pgmpy utilities.
 import tutorials.pgmpy.pgmpy_utils as tpgpguti
 
@@ -404,15 +406,29 @@ bn = load_model('bnlearn/cancer')
 # Structure-only DAG.
 dag = load_model('dagitty/confounding')
 
-# TODO(ai_gp): Use a pandas dataframe
-print(f"{'Property':<25} {'bnlearn/cancer (BN)':<30} {'dagitty/confounding (DAG)':<30}")
-print("-" * 85)
-print(f"{'Type':<25} {str(type(bn).__name__):<30} {str(type(dag).__name__):<30}")
-print(f"{'Nodes':<25} {str(len(bn.nodes())):<30} {str(len(dag.nodes())):<30}")
-print(f"{'Edges':<25} {str(len(bn.edges())):<30} {str(len(dag.edges())):<30}")
-print(f"{'Has CPDs':<25} {'Yes':<30} {'No':<30}")
-print(f"{'Can do inference':<25} {'Yes':<30} {'No (structure only)':<30}")
-print(f"{'Parents(X) works':<25} {str(bn.get_parents('Cancer')):<30} {str(dag.get_parents('A')):<30}")
+# Build a comparison DataFrame.
+comparison_df = pd.DataFrame(
+    {
+        "Property": ["Type", "Nodes", "Edges", "Has CPDs", "Can do inference", "Parents(X)"],
+        "bnlearn/cancer (BN)": [
+            type(bn).__name__,
+            str(len(bn.nodes())),
+            str(len(bn.edges())),
+            "Yes",
+            "Yes",
+            str(bn.get_parents("Cancer")),
+        ],
+        "dagitty/confounding (DAG)": [
+            type(dag).__name__,
+            str(len(dag.nodes())),
+            str(len(dag.edges())),
+            "No",
+            "No (structure only)",
+            str(dag.get_parents("A")),
+        ],
+    }
+)
+display(comparison_df)
 
 # %% [markdown]
 # ## Example 3: Use a DAG for Causal Structure Analysis
