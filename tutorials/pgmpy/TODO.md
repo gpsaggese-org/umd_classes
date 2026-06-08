@@ -8,7 +8,7 @@
     - [x] [Probabilistic Inference](https://pgmpy.org/guides/probabilistic_inference.html)
     - [x] [Example Datasets](https://pgmpy.org/guides/datasets.html)
     - [x] [Example Models](https://pgmpy.org/guides/example_models.html)
-    - [ ] [Parameter Estimation](https://pgmpy.org/guides/parameter_estimation.html)
+    - [x] [Parameter Estimation](https://pgmpy.org/guides/parameter_estimation.html)
 
     - [ ] [Causal Discovery and Structure Learning](https://pgmpy.org/guides/causal_discovery.html)
     - [ ] [Causal Identification](https://pgmpy.org/guides/causal_identification.html)

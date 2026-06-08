@@ -57,46 +57,46 @@ MSML610: Advanced Machine Learning
 - **Decision** answers: _"What should I do?"_
   - Input: current state, set of possible actions $\mathcal{A}$
   - Output: action $a^* \in \mathcal{A}$ that maximizes expected utility
-  - Requires reasoning about **what would change** under each action
+  - Requires reasoning about _what would change_ under each action
 
 - **Question**: If we already have a highly accurate predictor, isn't the
   decision obvious?
-  - **No**, a good predictor tells us what correlates with good outcomes,
-    not what _causes_ them
+  - No: a good predictor tells us what _correlates_ with good outcomes, not what
+    _causes_ them
 
 * Prediction Pipeline: Standard Supervised Learning
 
-- Typical ML system is optimized _end-to-end_ for prediction:
+- **Typical ML system** is optimized _end-to-end_ for prediction:
   1. Collect observational data $(X_i, Y_i)$
   2. Fit a model $\hat{f}(X) \approx \EE[Y | X]$
-  3. Deploy to score new units
+  3. Deploy system to score new units
 
-- **Crucial assumption**: the joint distribution $\Pr(X, Y)$ at deployment is
-  the same as at training
+- **Assumption**: the joint distribution $\Pr(X, Y)$ at deployment is the same as
+  at training
   - No intervention changes how $X$ is generated
   - No agent _acts_ on the prediction
 
-- **Example**: a spam filter trained on past emails to predict
-  $\Pr(\text{spam} | X)$
-  - Accurate predictor $\to$ useful as long as spammers do not adapt
+- **Example**: a spam filter trained on past emails to predict $\Pr(spam | X)$
+  - Accurate predictor is useful as long as spammers do not adapt
 
 * Decision Pipeline: What Changes
 
 - A **decision pipeline** explicitly represents:
   - The set of available actions $\mathcal{A}$
-  - A utility function $U(y, a)$ over outcomes and actions
-  - A **causal** model $\Pr(Y | \operatorname{do}(a))$ of how actions affect
+  - A utility function $U(y, a)$ over outcomes $y$ and actions
+    $a \in \mathcal{A}$
+  - A causal model $\Pr(Y | \operatorname{do}(a))$ of how actions affect
     outcomes
 
 - **Key distinction**:
   - $\Pr(Y | X = x)$ is observational
   - $\Pr(Y | \operatorname{do}(X = x))$ is interventional
   - These can differ drastically when confounders are present
-  - Decisions depend on the **interventional** quantity
+  - Decisions depend on the interventional quantity
 
 - **Example**: a hospital wants to decide _whether to prescribe drug A_
-  - Observational: $\Pr(\text{recovery} | \text{took drug A})$
-  - Interventional: $\Pr(\text{recovery} | \operatorname{do}(\text{give drug A}))$
+  - Observational: $\Pr(recovery | took drug A)$
+  - Interventional: $\Pr(recovery | \operatorname{do}(give drug A))$
   - The first is biased by who chose to take the drug
 
 * Prediction vs. Decision: Side-by-Side
@@ -104,14 +104,16 @@ MSML610: Advanced Machine Learning
 - Prediction and decision-making live in different mathematical settings
   - Collapsing them is a common source of costly errors
 
-| Aspect               | Prediction                 | Decision                                                |
-|----------------------|-----------------------------|--------------------------------------------------------|
-| Target               | $\mathbb{E}[Y | X]$         | $\arg\max_a \mathbb{E}[U(Y) | \operatorname{do}(a)]$   |
-| Data                 | Observational only          | Observational + experimental                           |
-| Metric               | Accuracy, AUC, MSE          | Regret, expected utility                               |
-| Modeling assumption  | i.i.d. and stable world     | Models the intervention itself                         |
-| Loss if wrong        | Miscalibration              | Policy harm                                            |
-| Interaction w/ world | No feedback with the world  | Actions change the world                               |
+\begingroup \small
+| **Aspect**           | **Prediction**              | **Decision**                          |
+|----------------------|-----------------------------|---------------------------------------|
+| Target               | $\mathbb{E}[Y | X]$         | $\arg\max_a \mathbb{E}[U(Y) | do(a)]$ |
+| Data                 | Observational only          | Observational + experimental          |
+| Metric               | Accuracy, AUC, MSE          | Regret, expected utility              |
+| Modeling assumption  | i.i.d. and stable world     | Models the intervention itself        |
+| Loss from            | Miscalibration              | Policy harm                           |
+| Interaction w/ world | No feedback with the world  | Actions change the world              |
+\endgroup
 
 ## #############################################################################
 ## When Prediction Fails
@@ -121,17 +123,17 @@ MSML610: Advanced Machine Learning
 
 - **Simpson's paradox**: a trend in subgroups reverses when groups are
   aggregated
-  - Cause: a **confounder** is unevenly distributed across groups
+  - Cause: a confounder is unevenly distributed across groups
   - Naive aggregation $\to$ wrong decision
 
 - **Example**: drug recovery rates
 
-\begingroup \scriptsize
-| **Group**       | **Drug** (recovery) | **No Drug** (recovery) |
-| --------------- | ------------------- | ---------------------- |
-| Men             | 81 / 87 = 93%       | 234 / 270 = 87%        |
-| Women           | 192 / 263 = 73%     | 55 / 80 = 69%          |
-| **Combined**    | 273 / 350 = 78%     | 289 / 350 = 83%        |
+\begingroup \small
+| **Group**    | **Recovery w/ drug** | **Recovery w/o drug** |
+| -------------| ---------------------|-----------------------|
+| Men          | 81 / 87 = 93%        | 234 / 270 = 87%       |
+| Women        | 192 / 263 = 73%      | 55 / 80 = 69%         |
+| Combined     | 273 / 350 = 78%      | 289 / 350 = 83%       |
 \endgroup
 
 - Within each subgroup, the drug helps; pooled, it appears to hurt
@@ -141,24 +143,24 @@ MSML610: Advanced Machine Learning
 
 * Simpson's Paradox: Causal Resolution
 
-- The numbers alone cannot tell us whether to prescribe the drug — we need a
-  **causal graph**
+- The numbers alone cannot tell us whether to prescribe the drug
+  - We need a causal graph
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=60%}
 - **Case A**: Sex $\to$ Drug, Sex $\to$ Recovery
   - Sex confounds treatment choice
-  - Correct answer: look at the **subgroup** table
+  - Correct answer: look at the _subgroup_ table
   - The drug helps
 
 - **Case B**: Drug $\to$ Sex (post-treatment), Sex $\to$ Recovery
   - Sex is a mediator
-  - Correct answer: look at the **aggregate** table
+  - Correct answer: look at the _aggregate_ table
   - The drug hurts
 
 - _Same data, opposite decisions_ depending on the causal graph
 ::::
-:::: {.column width=45%}
+:::: {.column width=35%}
 ```graphviz
 digraph SimpsonCaseA {
     splines=true; nodesep=0.6; ranksep=0.5;
@@ -192,12 +194,12 @@ digraph SimpsonCaseA {
   - Confounder: hot weather causes both
 
 - **Question**: Can we avoid this by collecting more features?
-  - Only if the missing confounder is among them _and_ properly adjusted for
+  - Only if the missing confounder is among features _and_ properly adjusted for
 
 * Policy Reversal
 
-- A **policy reversal** is when an optimal-looking decision based on predictions
-  becomes harmful once enacted
+- **Definition**: A _policy reversal_ is when an optimal decision based on
+  predictions becomes harmful once enacted
   - Common in medicine, economics, operations research
 
 - **Mechanism**: acting on $X$ breaks the correlation with the unobserved
@@ -209,8 +211,8 @@ digraph SimpsonCaseA {
   - Reality: they had lower mortality _because_ they received aggressive care
     - Removing the care removes the protection
 
-- Predictive patterns in historical data reflect the **policy that generated the
-  data**, not what happens when we change it
+- Predictive patterns in historical data reflect the _policy that generated the
+  data_, not what happens when we change it
 
 ## #############################################################################
 ## Causal Models as the Foundation for Decisions
@@ -219,18 +221,18 @@ digraph SimpsonCaseA {
 * Causal Models for Decisions
 
 - A **causal model** specifies, for each variable $X_i$:
-  - Its direct causes (parents) $\text{Pa}(X_i)$
-  - A structural mechanism $X_i = f_i(\text{Pa}(X_i), U_i)$ with noise $U_i$
+  - Its direct causes (parents): $\text{Pa}(X_i)$
+  - A structural mechanism: $X_i = f_i(\text{Pa}(X_i), U_i)$ with noise $U_i$
 
 - Enables reasoning about:
-  - **Observation**: $\Pr(Y | X = x)$ (seeing $x$)
-  - **Intervention**: $\Pr(Y | \operatorname{do}(X = x))$ (setting $x$)
-  - **Counterfactual**: $\Pr(Y_{X=x} | X = x', Y = y')$ (had $x$ been different)
+  - _Observation_: $\Pr(Y | X = x)$ (seeing $x$)
+  - _Intervention_: $\Pr(Y | \operatorname{do}(X = x))$ (setting $x$)
+  - _Counterfactual_: $\Pr(Y_{X=x} | X = x')$ (had $x$ been different)
 
-- For decision-making we primarily need the **interventional** layer
+- For decision-making we primarily need the interventional layer
 
 - **Example**:
-  - A marketing team can observe that users who open an email buy more
+  - A marketing team can observe that users who open an email purchase more
   - Only a causal model can say whether _sending_ the email causes purchases
 
 * Decision Loop with Causal Models

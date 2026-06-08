@@ -41,10 +41,6 @@ import pandas as pd
 warnings.filterwarnings('ignore')
 
 # %%
-from pgmpy.models import DiscreteBayesianNetwork
-from pgmpy.parameter_estimator import DiscreteMLE, DiscreteBayesianEstimator, DiscreteEM
-
-# %%
 # Use this for most notebooks.
 import helpers.htutorial as htutori
 
@@ -64,6 +60,10 @@ try:
     from IPython.display import display
 except ImportError:
     display = print  # type: ignore
+
+# %%
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.parameter_estimator import DiscreteMLE, DiscreteBayesianEstimator, DiscreteEM
 
 # %%
 logging.getLogger("httpx").setLevel(logging.WARNING)
