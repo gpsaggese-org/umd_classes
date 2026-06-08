@@ -39,23 +39,11 @@ MSML610: Advanced Machine Learning
 # The Discovery Problem
 # ##############################################################################
 
-// Books & Foundational:
-// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
-// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
 
 ## #############################################################################
 ## Inferring Causal Structure from Observational Data
 ## #############################################################################
 
-// Papers:
-// - 2023, Zanga et al., "A Survey on Causal Discovery: Theory and Practice"
-//   https://arxiv.org/pdf/2305.10032
-// - 2020, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
-//   https://par.nsf.gov/servlets/purl/10125762
-// - 2015, Guo et al., "A survey on causal inference"
-//   https://qiniu.pattern.swarma.org/attachment/A%20Survey%20on%20Causal%20Inference.pdf
-// - 2006, Meek, "Causal inference and causal explanation with background knowledge"
-//   https://arxiv.org/pdf/1302.4972
 
 * Causal Discovery: Motivation
 
@@ -148,11 +136,6 @@ digraph Discovery {
 ## Identifiability and Causal Sufficiency
 ## #############################################################################
 
-// Papers:
-// - 2012, Maathuis et al., "Estimating high-dimensional intervention effects from observational data"
-// - 2010, Kalisch et al., "Causal inference using invariant prediction"
-// - 2009, Zhang et al., "On the identifiability of the post-nonlinear causal model"
-//   https://arxiv.org/pdf/1205.2599
 
 * Markov Equivalence
 
@@ -273,10 +256,6 @@ digraph PathCancellation {
 ## Practical Limitations
 ## #############################################################################
 
-// Papers:
-// - 2018, Loh et al., "Causal discovery with identifiable nonlinear models"
-// - 2017, Uhler et al., "Geometries of faithfulness in graphical models"
-//   https://arxiv.org/abs/1608.00191
 
 * Practical Challenges for Causal Discovery
 
@@ -328,11 +307,6 @@ digraph PathCancellation {
 # When to Use Discovery vs Domain Knowledge
 # ##############################################################################
 
-// Papers:
-// - 2021, Gamella et al., "Active learning of linear causal models"
-//   https://arxiv.org/abs/2006.05690
-// - 2019, Wang et al., "RL-based structural equation modeling"
-// - 2013, Mani et al., "Learning the structure of causal models with experimental and observational data"
 
 ## #############################################################################
 ## Discovery as Hypothesis Generation
@@ -375,12 +349,6 @@ digraph PathCancellation {
 ## Combining Discovery with Domain Knowledge
 ## #############################################################################
 
-// Papers:
-// - 2019, Solus et al., "Causal discovery with unknown interventions"
-// - 2018, Squires et al., "Active structure learning of causal DAGs"
-//   https://arxiv.org/abs/2011.00641
-// - 2015, Sachs et al., "Causal protein-signaling networks derived from multiparameter single-cell data"
-//  (Meek, 2006)
 
 * Using Domain Knowledge as Constraints
 
@@ -439,9 +407,6 @@ digraph Workflow {
 # Discovery Algorithm Families
 # ##############################################################################
 
-// Books:
-// - 2000, Spirtes et al., "Causation, Prediction, and Search" (2nd ed.)
-// - 2009, Pearl, "Causality: Models, Reasoning, and Inference"
 
 * Three Main Algorithm Families
 
@@ -660,20 +625,6 @@ mindmap
 # Challenges and Validation
 # ##############################################################################
 
-// Papers:
-// - 2021, Glymour et al., "Review of Causal Discovery Methods Based on Graphical Models"
-// - 2017, Peters et al., "Elements of Causal Inference: Foundations and Learning Algorithms"
-
-// Papers:
-// - 2021, Gamella et al., "Active learning of linear causal models"
-//   https://arxiv.org/abs/2006.05690
-// - 2018, Squires et al., "Active structure learning of causal DAGs"
-//   https://arxiv.org/abs/2011.00641
-// - 2008, Castelo et al., "Structural, syntactic, and statistical issues in
-//   learning Bayesian networks from data"
-// - 2018, Zheng et al., "DAGs with NO TEARS: Continuous Optimization for
-//   Structure Learning"
-//   https://papers.nips.cc/paper/8157-dags-with-no-tears-continuous-optimization-for-structure-learning.pdf
 
 * Validating a Discovered DAG
 

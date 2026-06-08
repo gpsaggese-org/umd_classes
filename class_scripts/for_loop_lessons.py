@@ -28,6 +28,7 @@ import helpers.hdbg as hdbg
 import helpers.hlint as hlint
 import helpers.hio as hio
 import helpers.hparser as hparser
+import helpers.hselect_action as hselacti
 import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
@@ -452,9 +453,11 @@ def _generate_class_recap(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    # TODO(ai_gp): Use dassert
-    if not match:
-        hdbg.dfatal("Could not extract lesson number from:", source_name)
+    hdbg.dassert_is_not(
+        match,
+        "Could not extract lesson number from: %s",
+        source_name,
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(
@@ -587,7 +590,7 @@ def _parse() -> argparse.ArgumentParser:
         action="store_true",
         help="Print the commands that would be executed without running them",
     )
-    hparser.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    hselacti.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -607,7 +610,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     # Parse arguments.
-    actions = hparser.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     _LOG.info("Selected actions: %s", actions)
     # Determine lectures to process.
     lectures_arg = args.lectures

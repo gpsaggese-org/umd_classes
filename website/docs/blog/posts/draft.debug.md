@@ -17,3 +17,12 @@ Run msml610/tutorials/L08_causal_inference/L08_04_07_metalearners.py in the cont
 
 Everybody should have 2-3 agents going at very single time
 
+# Run test inside container
+
+> more tmp.sh
+i docker_cmd --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp
+--skip-pull --cmd 'bash -c ./script.sh'
+
+> more script.sh
+sudo bash -c "(source /venv/bin/activate; pip install libcst)"
+pytest linters/test/test_amp_dev_scripts.py::Test_linter_py1::test_linter_ipynb1

@@ -469,7 +469,6 @@ configure_jupyter_vim_keybindings() {
     "enabled": true,
     "enabledInEditors": true,
     "extraKeybindings": [],
-    "autosaveInterval": 6
 }
 EOF
     else
@@ -479,7 +478,6 @@ EOF
     "enabled": false,
     "enabledInEditors": false,
     "extraKeybindings": [],
-    "autosaveInterval": 6
 }
 EOF
     fi;

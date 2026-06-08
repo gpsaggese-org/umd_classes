@@ -27,7 +27,6 @@ import create_markdown_summary as crmasu
 # TODO(gp): Use mistletoe to parse the markdown file and process it.
 # See https://github.com/miyuchina/mistletoe/blob/master/dev-guide.md
 
-
 import argparse
 import logging
 import os
@@ -40,6 +39,7 @@ import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hmarkdown as hmarkdo
 import helpers.hparser as hparser
+import helpers.hselect_action as hselacti
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
 
@@ -468,7 +468,7 @@ def _parse() -> argparse.ArgumentParser:
         action="store_true",
         help="Use llm library instead of command line llm tool",
     )
-    hparser.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    hselacti.add_action_arg(parser, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -485,7 +485,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         base_name = os.path.splitext(os.path.basename(args.in_file))[0]
         args.out_file = f"{base_name}.summary.txt"
     # Get selected actions.
-    actions = hparser.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
+    actions = hselacti.select_actions(args, _VALID_ACTIONS, _DEFAULT_ACTIONS)
     # Process each action.
     for action in actions:
         if action == "summarize":

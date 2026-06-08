@@ -20,6 +20,7 @@ import helpers.hgit as hgit
 import helpers.hio as hio
 import helpers.hllm_cli as hllmcli
 import helpers.hmarkdown_slides as hmarslid
+import helpers.hselect_input_output as hseinout
 import helpers.hparser as hparser
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
@@ -218,7 +219,7 @@ def _process_slides(
     :return: list of formatted processed results
     """
     # Apply limit range filtering.
-    slides = hparser.apply_limit_range(slides, limit_range, item_name="slides")
+    slides = hseinout.apply_limit_range(slides, limit_range, item_name="slides")
     # Process slides sequentially with progress bar.
     processed_results = []
     for slide_title, slide_content in tqdm(slides, desc="Processing slides"):
@@ -271,7 +272,7 @@ def _parse() -> argparse.ArgumentParser:
         action="store_true",
         help="Continue processing even if LLM transformation fails",
     )
-    hparser.add_limit_range_arg(parser)
+    hseinout.add_limit_range_arg(parser)
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -285,7 +286,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hparser.parse_verbosity_args(args)
     # Parse limit range.
-    limit_range = hparser.parse_limit_range_args(args)
+    limit_range = hseinout.parse_limit_range_args(args)
     # Validate input file exists.
     hdbg.dassert_file_exists(args.in_file)
     _LOG.info("Reading input file: %s", args.in_file)
