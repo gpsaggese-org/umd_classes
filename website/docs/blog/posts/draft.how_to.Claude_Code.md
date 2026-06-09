@@ -6,7 +6,7 @@ authors:
 date: 2026-06-09
 description: Guide on using Claude Code for development
 categories:
-  - AI Tools
+  - Developer Tools
   - Software Engineering
 ---
 

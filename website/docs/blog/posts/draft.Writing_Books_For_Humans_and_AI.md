@@ -6,8 +6,8 @@ authors:
 date: 2026-06-09
 description: Guide on writing books optimized for both human readers and AI consumption
 categories:
-  - Writing
-  - AI Tools
+  - AI Research
+  - Developer Tools
 ---
 
 # How to write books for humans and AI

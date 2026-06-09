@@ -47,7 +47,8 @@ The built site will be in the `site/` directory.
 
 - Or use the convenience scripts:
   ```bash
-  > ./test.sh      # Run local server
+  > ./test.sh      # Run local server (including drafts)
+  > ./preview.sh   # Preview GitHub Pages
   > ./publish.sh   # Deploy to GitHub Pages
   ```
 
