@@ -385,39 +385,58 @@ digraph DecisionLoop {
     the causal graph + sufficient data)
 
 * Intervention in an Influence Graph
-
-::: columns
-:::: {.column width=55%}
-- **Do-operator** $\operatorname{do}(X = x)$ mutates the causal graph:
+- **Do-operator** $do(X = x)$ mutates the causal graph:
   - Remove all edges _into_ $X$
   - Fix $X$ to the value $x$
   - Propagate through the remaining structural equations
-
-- Turns a _passive_ question into an _active_ one
-
-- **Example**: $\operatorname{do}(\text{Drug} = 1)$
-  - Drug is no longer chosen by the physician
-  - All causal arrows from Sex, Age, etc. _into_ Drug are cut
   - Resulting distribution reflects a policy, not the observed world
-::::
+
+- **Example**: $do(Drug = 1)$
+  - Drug is no longer chosen by the physician
+  - All causal arrows from $Sex$, $Age$, etc. into $Drug$ are cut
+
+::: columns
 :::: {.column width=45%}
-```graphviz
-digraph DoMutation {
+\begingroup \centering
+Before:
+\endgroup
+
+```graphviz[width=50%]
+digraph PreMutation {
     splines=true; nodesep=0.5; ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
 
-    Z [label="Z (Sex)", fillcolor="#A6E7F4"];
-    X [label="do(X)", fillcolor="#F4A6A6"];
+    Gender [label="Gender", fillcolor="#A6E7F4"];
+    Age [label="Age", fillcolor="#A6E7F4"];
+    Drug [label="Drug", fillcolor="#F4A6A6"];
     Y [label="Y", fillcolor="#A6C8F4"];
 
-    Z -> Y;
-    X -> Y;
-    // Note: Z -> X edge removed by intervention
+    Gender -> Drug;
+    Age -> Drug;
+    Drug -> Y;
 }
 ```
+::::
+:::: {.column width=40%}
+\begingroup \centering
+After:
+\endgroup
 
-\scriptsize
-_Edge $Z \to X$ is cut under_ $\operatorname{do}(X)$
+```graphviz[width=80%]
+digraph PostMutation {
+    splines=true; nodesep=0.5; ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Gender [label="Gender", fillcolor="#A6E7F4"];
+    Age [label="Age", fillcolor="#A6E7F4"];
+    Drug [label="do(Drug = 1)", fillcolor="#F4A6A6"];
+    Y [label="Y", fillcolor="#A6C8F4"];
+
+    Gender -> Y;
+    Age -> Y;
+    Drug -> Y;
+}
+```
 ::::
 :::
 
@@ -426,18 +445,18 @@ _Edge $Z \to X$ is cut under_ $\operatorname{do}(X)$
 - Given a causal graph and estimated mechanisms, compute the expected outcome
   under each candidate action:
   $$
-  \EE[Y | \operatorname{do}(a)] = \sum_{y} y \cdot \Pr(Y = y | \operatorname{do}(A = a))
+  \EE[Y | do(a)] = \sum_{y} y \cdot \Pr(Y = y | do(A = a))
   $$
 
-- **Adjustment formula** (back-door):
+- Using back-door adjustment formula, compute interventional distribution
   $$
-  \Pr(Y | \operatorname{do}(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
+  \Pr(Y | do(A)) = \sum_{Z} \Pr(Y | A, Z) \Pr(Z)
   $$
   where $Z$ is a back-door adjustment set
 
 - **Example**: drug decision
   - Observational: $\Pr(\text{recovery} | \text{drug}) = 0.78$
-  - Adjusted: $\sum_z \Pr(\text{rec} | \text{drug}, z) \Pr(z) = 0.83$
+  - Adjusted: $\sum_z \Pr(\text{recovery} | \text{drug}, z) \Pr(z) = 0.83$
   - The adjusted value is what plugs into expected utility
 
 ## #############################################################################
@@ -447,7 +466,8 @@ _Edge $Z \to X$ is cut under_ $\operatorname{do}(X)$
 * Risk Preferences
 
 - Expected utility handles risk through the _shape_ of $U$:
-  - **Risk-neutral**: $U$ is linear, $U(y) = y$ — care only about the mean
+// TODO(ai_gp): Convert this into a markdown table
+  - **Risk-neutral**: $U$ is linear, $U(y) = y$ care only about the mean
   - **Risk-averse**: $U$ is concave — penalize variance
   - **Risk-seeking**: $U$ is convex — reward variance
 
