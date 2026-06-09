@@ -3,10 +3,10 @@ title: "LLM CLI in 30 mins"
 authors:
   - gpsaggese
 date: 2026-05-30
-description: Transform text files with LLMs from the command line - integrate AI into your editing workflow
+description: Transform text files with LLMs from the command line, integrate AI into your editing workflow
 categories:
+  - Developer Tools
   - LLM
-  - Tools
 ---
 
 TL;DR `llm_cli` is a lightweight command-line tool that applies LLM
