@@ -1,6 +1,6 @@
 ---
-title: "How to Compare LLM Models"
-draft: true
+title: "How to Compare and Choose LLM Models"
+draft: false
 authors:
   - gpsaggese
 date: 2026-06-09
@@ -158,7 +158,7 @@ combines quality, cost, and speed to pick the right model for each task
 ## My Personal Workflow
 
 - After comparing models across these categories, my daily setup has converged
-  in the following
+  to the following
 
 - **Reasoning and planning**: I use `Claude Opus 4.7-4.8` or `Sonnet 4.6` for
   architecture design, refactoring plans, and complex multi-step analysis
