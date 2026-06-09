@@ -42,5 +42,12 @@
 
 ## Languages
 
-- **English:** Native or bilingual proficiency
-- **Italian:** Mother tongue
+- **English:** Bilingual proficiency
+- **Italian:** Native proficiency
+- **Neapolitan:** Bilingual proficiency
+  - Recognized by UNESCO as a distinct language rather than a dialect of Italian
+  - Partially mutually intelligible with Italian; linguistic studies suggest
+    that, in some respects, Spanish is closer to standard Italian than Neapolitan
+- **Latin and Ancient Greek:** Five years of classical studies, including
+  competitive translation and interpretation during the 1990s (yes, there is
+  such a thing as competitive Latin)
