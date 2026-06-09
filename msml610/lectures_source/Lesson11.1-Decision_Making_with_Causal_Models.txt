@@ -277,15 +277,15 @@ digraph DecisionLoop {
 
 * Utility Functions
 
-- A **utility function** $U: \mathcal{Y} \to \bbR$ maps each outcome $y$ to a
-  real-valued preference score
+- **Definition**: A _utility function_ $U: \mathcal{Y} \to \bbR$ maps each
+  outcome $y \in \mathcal{Y}$ to a real-valued preference score
   - Higher is better
   - Encodes the decision-maker's goals on a single scale
 
 - **Properties**:
-  - Utilities are _ordinal_: rank is what matters, not absolute values
   - Utilities are _subjective_: different stakeholders can have different $U$
-  - Defined up to positive affine transformations $U \to a U + b$, $a > 0$
+  - Utilities are _ordinal_: rank is what matters, not absolute values
+    - Defined up to positive affine transformations $U \to a U + b$, $a > 0$
 
 - **Example**: a hospital utility
   - Full recovery: $U = 1.0$
@@ -295,33 +295,61 @@ digraph DecisionLoop {
 
 * Expected Utility Principle
 
-- Under uncertainty, a rational agent chooses the action $a$ that maximizes
-  **expected utility**:
+- **Fact**: A _rational agent_ chooses the action $a$ that maximizes expected
+  utility under uncertainty:
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(\cdot | a)}[U(Y)]
+  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | a)}[U(Y)]
   $$
 
-- **Von Neumann-Morgenstern theorem (1944)**: if preferences over lotteries
-  satisfy 4 axioms (completeness, transitivity, continuity, independence),
-  there exists a utility function $U$ such that the agent acts _as if_
-  maximizing expected utility
+- The justification for maximizing expected utility comes from VNM theorem
 
-- **Example**: buying insurance
-  - Premium $c$ for certain
-  - Uninsured loss $L$ with probability $p$
-  - Insure if $U(W - c) > p \cdot U(W - L) + (1 - p) \cdot U(W)$
-  - Risk-averse utilities make this inequality easier to satisfy
+- **Definition**: _Lottery_ = uncertain prospect that assigns probabilities $p_i$
+  to possible outcomes $x_i$
+  - E.g., $L = (0.5, \$100;\; 0.5, \$0)$
 
-* Expected Utility: A Simple Example
+- **Theorem** (Von Neumann-Morgenstern theorem, 1944):
+  - If preferences over lotteries satisfy 4 axioms
+    - Completeness: a person prefers lottery $A$ to $B$ ($A \succeq B$), $B$ to
+      $A$ or is indifferent
+    - Transitivity: $A \succeq B, B \succeq C \implies A succeq C$
+    - Continuity: If $A \succ B \succ C$ then there exists some probability
+      $p \in (0,1)$ such that the individual is indifferent between $B$ and a
+      lottery that gives $A$ with probability $p$ and $C$ with probability $1-p$
+    - Independence: If $A \succeq B$, then for any lottery $C$ and probability
+      $\alpha \in (0,1)$, then
+      $\alpha A + (1-\alpha)C \succeq \alpha B + (1-\alpha)C$
+      (adding the same “background gamble” to both options should not reverse
+      preferences)
+  - Then there exists a utility function $U$ such that the agent acts _as if_
+    maximizing expected utility $\EE[U(L)] = \sum_i p_i U(x_i)$
+
+* Expected Utility: Buying insurance Example
+- Assume
+  - $W$ = current wealth
+  - $c$ = insurance premium (paid for sure)
+  - $L$ = potential loss (without insurance) with probability $p$
+  - $U(\cdot)$ = utility preference
+
+- Decision: buy insurance if
+  $$U(W - c) > p \cdot U(W - L) + (1 - p) \cdot U(W)$$
+
+- Risk-averse utilities (concave, i.e., $U(\EE[W]) > \EE[U(W)]$) make this
+  inequality easier to satisfy
+  - Concavity means that losing money hurts more than gaining the same amount
+  - There is also a reduction in uncertainty
+
+// TODO(ai_gp): Add example
+
+* Expected Utility: Two Treatment Example
 
 - **Setup**: a doctor chooses between two treatments
   - Treatment 1: cures with probability $0.9$, no side effect
-  - Treatment 2: cures with probability $0.95$, mild side effect ($U = 0.8$)
+  - Treatment 2: cures with probability $0.95$, mild side effect
 
-- **Utility**:
-  - Cure with no side effect: $1.0$
-  - Cure with side effect: $0.8$
-  - No cure: $0.0$
+- **Utility**: Need to quantify side effect through $U(\cdot)$
+  - $U$(_"Cure with no side effect"_) = $1.0$
+  - $U$(_"Cure with side effect"_) = $0.8$
+  - $U$(_"No cure"_) = $0.0$
 
 - **Computation**:
   \begin{align*}
@@ -329,8 +357,10 @@ digraph DecisionLoop {
   \EE[U | T_2] &= 0.95 \cdot 0.8 + 0.05 \cdot 0.0 = 0.76
   \end{align*}
 
-- **Decision**: choose $T_1$
-  - Even though $T_2$ is more effective, its side-effect penalty outweighs the gain
+- **Decision**:
+  - $T_1$ is better
+  - Even though $T_2$ is more effective, its side-effect penalty outweighs the
+    gain
 
 ## #############################################################################
 ## Causal Interventions and Expected Outcomes
@@ -338,20 +368,21 @@ digraph DecisionLoop {
 
 * From Observational to Interventional Expectation
 
-- Classical decision theory uses $\Pr(Y | a)$, treated as the distribution of $Y$
-  given action $a$
+- _Classical decision theory_ uses $\Pr(Y | a)$ as the distribution of $Y$ given
+  action $a$
   - If the data is observational, $\Pr(Y | a)$ includes confounding bias
-  - Plugging it into expected utility yields a **biased** action ranking
+  - Plugging it into expected utility yields a biased action ranking
 
-- Causal decision theory replaces it with the **interventional distribution**:
+- _Causal decision theory_ replaces $\Pr(Y | a)$ with the interventional distribution
+  $\Pr(Y | do(a))$
   $$
   a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | \operatorname{do}(a))}[U(Y)]
   $$
 
-- **Equivalent under**:
+- **Property**: They are equivalent under:
   - Randomized experiments (no confounders)
-  - Successful back-door or front-door adjustment
-  - Complete knowledge of the causal graph + sufficient data
+  - Successful back-door or front-door adjustment (i.e., complete knowledge of
+    the causal graph + sufficient data)
 
 * Intervention in an Influence Graph
 
