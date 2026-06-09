@@ -1,10 +1,3 @@
-<!-- toc -->
-
-- [Overview](#overview)
-- [How to Use Copilot Code Review](#how-to-use-copilot-code-review)
-
-<!-- tocstop -->
-
 ## Overview
 
 - You can request a review from GitHub Copilot on your PR

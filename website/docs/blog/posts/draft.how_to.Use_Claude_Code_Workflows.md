@@ -1,10 +1,3 @@
-<!-- toc -->
-
-- [Create a Script From Scratch](#create-a-script-from-scratch)
-- [Create a Readme.Md](#create-a-readmemd)
-
-<!-- tocstop -->
-
 # Create a Script From Scratch
 
 - Use the template in `ai.instruction_template.md`

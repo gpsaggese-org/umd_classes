@@ -1,23 +1,3 @@
-<!-- toc -->
-
-- [Using Claude Code](#using-claude-code)
-  * [1. Opening Claude Code](#1-opening-claude-code)
-  * [2. Creating and Editing Code](#2-creating-and-editing-code)
-  * [3. Running and Testing Code](#3-running-and-testing-code)
-  * [4. Debugging with Claude Code](#4-debugging-with-claude-code)
-  * [5. Working with Larger Projects](#5-working-with-larger-projects)
-  * [6. Prompting Tips](#6-prompting-tips)
-- [Workflows](#workflows)
-  * [Overview](#overview)
-  * [Interesting Files](#interesting-files)
-  * [AI Development Workflow Template](#ai-development-workflow-template)
-  * [AI Review and Transform Tools](#ai-review-and-transform-tools)
-    + [Operations Overview](#operations-overview)
-    + [Use Templates](#use-templates)
-    + [Available Tools](#available-tools)
-
-<!-- tocstop -->
-
 # Using Claude Code
 
 Claude Code is a coding-focused interface for the Claude AI assistant. It helps

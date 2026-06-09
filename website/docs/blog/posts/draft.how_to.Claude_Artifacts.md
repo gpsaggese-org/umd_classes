@@ -1,15 +1,3 @@
-<!-- toc -->
-
-- [Tutorial: How to Create a Claude Artifact](#tutorial-how-to-create-a-claude-artifact)
-  * [1. Open a Claude Chat](#1-open-a-claude-chat)
-  * [2. Enter a Prompt for an Artifact](#2-enter-a-prompt-for-an-artifact)
-  * [3. Accept the Artifact Suggestion](#3-accept-the-artifact-suggestion)
-  * [4. Edit the Artifact](#4-edit-the-artifact)
-  * [5. Iterate Through Chat](#5-iterate-through-chat)
-  * [6. Export or Share](#6-export-or-share)
-
-<!-- tocstop -->
-
 # Tutorial: How to Create a Claude Artifact
 
 ## 1. Open a Claude Chat

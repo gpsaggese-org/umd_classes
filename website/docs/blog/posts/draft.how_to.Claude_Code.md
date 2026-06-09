@@ -1,13 +1,3 @@
-<!-- toc -->
-
-- [Overview](#overview)
-- [How to Start Developing on the Dev Servers](#how-to-start-developing-on-the-dev-servers)
-  * [Start a Claude Session in Your Project Dir](#start-a-claude-session-in-your-project-dir)
-  * [Log in to Your Claude Account](#log-in-to-your-claude-account)
-  * [Using Claude Code](#using-claude-code)
-
-<!-- tocstop -->
-
 ## Overview
 
 - Claude Code is a CLI tool that lets you work with Claude directly inside your
