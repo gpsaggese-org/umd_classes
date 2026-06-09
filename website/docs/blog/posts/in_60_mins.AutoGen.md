@@ -1,5 +1,6 @@
 ---
 title: "AutoGen in 60 Minutes"
+draft: false
 authors:
   - PranavShashidhara
   - gpsaggese

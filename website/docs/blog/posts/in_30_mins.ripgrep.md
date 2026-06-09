@@ -1,5 +1,6 @@
 ---
 title: "Ripgrep in 30 mins"
+draft: false
 authors:
   - gpsaggese
 date: 2026-02-10

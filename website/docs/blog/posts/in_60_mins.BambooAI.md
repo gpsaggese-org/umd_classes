@@ -1,5 +1,6 @@
 ---
 title: "BambooAI in 60 Minutes"
+draft: false
 authors:
   - aver81
   - gpsaggese

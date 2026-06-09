@@ -1,5 +1,6 @@
 ---
 title: "Welcome to Our Blog"
+draft: false
 authors:
   - gpsaggese
 date: 2026-02-06

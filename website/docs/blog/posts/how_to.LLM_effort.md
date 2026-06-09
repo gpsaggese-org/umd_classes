@@ -3,6 +3,7 @@ title: "What is LLM effort?"
 authors:
   - gpsaggese
 date: 2026-06-08
+draft: true
 description:
 categories:
   - LLM

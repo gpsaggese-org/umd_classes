@@ -1,5 +1,6 @@
 ---
 title: "LLM CLI in 30 mins"
+draft: false
 authors:
   - gpsaggese
 date: 2026-05-30

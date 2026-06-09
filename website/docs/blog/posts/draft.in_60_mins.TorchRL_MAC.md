@@ -1,5 +1,6 @@
 ---
 title: "TorchRL + PettingZoo MPE in 60 Minutes"
+draft: false
 authors:
   - SaranshKumar
   - AbhinavSingh
