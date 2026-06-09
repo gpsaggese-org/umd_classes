@@ -2,12 +2,12 @@
 title: "LLM CLI in 30 mins"
 draft: false
 authors:
-  - gpsaggese
+    - gpsaggese
 date: 2026-05-30
 description: Transform text files with LLMs from the command line, integrate AI into your editing workflow
 categories:
-  - Developer Tools
-  - LLM
+    - Developer Tools
+    - LLM
 ---
 
 TL;DR `llm_cli` is a lightweight command-line tool that applies LLM
@@ -18,6 +18,7 @@ from your shell without leaving your editor
 <!-- more -->
 
 ## Introduction
+
 Text transformation is one of the most common tasks in software development:
 refactoring code, improving documentation, fixing style issues, applying rules
 to slide decks, or generating summaries. Traditionally, these tasks require
@@ -37,6 +38,7 @@ rules—you can apply the same transformations you use in the IDE from the comma
 line
 
 ## When to Use It
+
 Use `llm_cli` when you need to:
 
 - Refactor multiple files with the same rules
@@ -51,6 +53,7 @@ ChatGPT web interface, or one-off Python scripts—but none combine the power of
 LLM transformations with file handling and rule integration as cleanly
 
 ## Prerequisites
+
 You need:
 
 - Python 3.11 or later
@@ -59,31 +62,37 @@ You need:
 - A `.claude/skills/` directory with skill definitions (optional, but powerful)
 
 ## Installation and Setup
+
 The tool comes with the helpers library. To use it:
 
 Verify the tool is available:
+
 ```bash
 > llm_cli.py --help
 usage: llm_cli.py [-h] [--input INPUT] [--input_text INPUT_TEXT] ...
 ```
 
 Configure your LLM API key:
+
 ```bash
 > export OPENAI_API_KEY="your-key-here"
 ```
 
 Or for Claude via Anthropic:
+
 ```bash
 > export ANTHROPIC_API_KEY="your-key-here"
 ```
 
 Check that your LLM is working:
+
 ```bash
 > llm_cli.py --input_text "Say hello" --output -
 Hello! How can I help you today?
 ```
 
 ## Core Concepts
+
 `llm_cli` operates in these stages:
 
 1. **Read input**: From a file, stdin, or directly as text
@@ -98,6 +107,7 @@ Each stage is optional depending on your use case. The simplest usage is just
 input and output
 
 ### Key Options
+
 - `--input FILE` / `-i FILE`: Input file path. Use `-` for stdin
 - `--input_text TEXT`: Input text from command line
 - `--output FILE` / `-o FILE`: Output file path. Use `-` for stdout
@@ -114,9 +124,11 @@ input and output
 ## Hands-On Examples
 
 ### Example 1: Basic Text Transformation
+
 Start with the simplest case: transform input text and print the result
 
 Create a sample file:
+
 ```bash
 > cat > input.txt << 'EOF'
 The quick brown fox jumps over the lazy dog.
@@ -126,6 +138,7 @@ EOF
 ```
 
 Transform it with a simple prompt:
+
 ```bash
 > llm_cli.py -i input.txt -o - --system_prompt "Rewrite this in one sentence"
 The quick brown fox leaped over a lazy dog during a dark, stormy night as the cautious hero entered the room.
@@ -134,12 +147,15 @@ The quick brown fox leaped over a lazy dog during a dark, stormy night as the ca
 The `-o -` flag prints to stdout instead of writing to a file
 
 ### Example 2: Edit a File in Place
+
 Now process a file and save the result back to itself:
+
 ```bash
 > llm_cli.py -i input.txt --system_prompt "Make this more formal" -m
 ```
 
 Check the result:
+
 ```bash
 > cat input.txt
 A swift, auburn canine traversed an obstacle formed by a sluggish animal.
@@ -150,7 +166,9 @@ The protagonist proceeded cautiously into the chamber.
 The `-m` flag modifies the file in place without needing a separate output file
 
 ### Example 3: Apply a Skill From Claude Code
+
 If you have a skill in `.claude/skills/`, you can apply it directly:
+
 ```bash
 > llm_cli.py -i code.py --skill coding.fix_docstring -m
 ```
@@ -160,10 +178,12 @@ more powerful than inline prompts because they contain detailed instructions and
 examples
 
 ### Example 4: Transform Only Part of a File
+
 Extract a chunk, transform it, and reassemble. This is useful when you only want
 to modify specific lines:
 
 Create a sample file with markers:
+
 ```bash
 > cat > slides.txt << 'EOF'
 ## Slide 1: Introduction
@@ -184,6 +204,7 @@ EOF
 ```
 
 Transform only Slide 2 using line numbers:
+
 ```bash
 > llm_cli.py -i slides.txt --select 6:8 --system_prompt "Improve clarity" -m
 ```
@@ -191,8 +212,10 @@ Transform only Slide 2 using line numbers:
 The `--select 6:8` processes only lines 6 through 8, leaving the rest untouched
 
 ### Example 5: Apply a Rule with Auto-Linting
+
 Rules are snippets from a skill file. Extract one and apply it with automatic
 formatting:
+
 ```bash
 > llm_cli.py -i README.md --rule '.claude/skills/markdown.rules.md:42:# Fix Bold Labels' --lint -m
 ```
@@ -203,26 +226,33 @@ Prettier on the output to ensure consistent formatting
 ## Tips and Gotchas
 
 ### Tip 1: Use Pipes for Chaining
+
 `llm_cli` integrates with Unix pipes. Transform output from one tool into input
 for another:
+
 ```bash
 > cat raw_notes.txt | llm_cli.py -i - -o - --system_prompt "Summarize in 3 bullet points"
 ```
 
 ### Tip 2: Estimate Output Size for Large Files
+
 By default, `llm_cli` shows a progress bar but doesn't know the output size
 Help it:
+
 ```bash
 > llm_cli.py -i large_file.py --system_prompt "Add type hints" --expected_num_chars 50000
 ```
 
 Or let it auto-estimate:
+
 ```bash
 > llm_cli.py -i large_file.py --system_prompt "Add type hints" --progress_bar
 ```
 
 ### Tip 3: Use Dry-Run to Preview
+
 Before modifying your files, do a dry run to see what would happen:
+
 ```bash
 > llm_cli.py -i important_file.py --system_prompt "Refactor" --dry_run
 ```
@@ -231,32 +261,40 @@ This shows the LLM parameters without actually calling the API or modifying
 files
 
 ### Gotcha 1: Stdin Requires Output Specification
+
 When reading from stdin with `-i -`, you must specify an output:
+
 ```bash
 > echo "text" | llm_cli.py -i - -o output.txt  # OK
 > echo "text" | llm_cli.py -i -                 # ERROR
 ```
 
 Use `-o -` to print to stdout if you don't want a file:
+
 ```bash
 > echo "text" | llm_cli.py -i - -o -
 ```
 
 ### Gotcha 2: Only One Prompt Option at a Time
+
 You can use `-p` (inline), `-pf` (from file), `--rule` (from rules), or
 `--skill` (full skill), but not multiple:
+
 ```bash
 > llm_cli.py -i file.txt -p "Fix it" --rule '.claude/skills/my.rules.md:10:Rule'  # ERROR
 ```
 
 ### Gotcha 3: Linting Only Works with Markdown
+
 The `--lint` flag currently formats output as Markdown with Prettier. If you're
 working with code files, linting won't apply:
+
 ```bash
 > llm_cli.py -i code.py --system_prompt "Add comments" --lint  # Linting won't affect Python
 ```
 
 ## Next Steps
+
 - Read the full documentation in `dev_scripts_helpers/llms/README.md`
 - Explore existing skills in `.claude/skills/` to understand what
   transformations are available
@@ -267,19 +305,23 @@ working with code files, linting won't apply:
   `--model openrouter/anthropic/claude-opus-4.6`
 
 ## Advanced: Combining with Other Tools
+
 Use `llm_cli` alongside other helpers:
 
 Refactor code and run tests:
+
 ```bash
 > llm_cli.py -i module.py --system_prompt "Refactor for readability" -m && python -m pytest module_test.py
 ```
 
 Fix a specific function in a file:
+
 ```bash
 > llm_cli.py -i file.py --select "def my_func" --skill coding.fix_docstring -m
 ```
 
 Process multiple files in a loop:
+
 ```bash
 > for file in *.md; do llm_cli.py -i "$file" --skill markdown.fix_bullet_points -m; done
 ```

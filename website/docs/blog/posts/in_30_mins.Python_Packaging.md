@@ -2,11 +2,11 @@
 title: "Python Package Tools in 30 mins"
 draft: false
 authors:
-  - gpsaggese
+    - gpsaggese
 date: 2026-02-14
 description:
 categories:
-  - Python
+    - Python
 ---
 
 TL;DR: Comprehensive guide to Python package managers and virtual environment
@@ -15,6 +15,7 @@ tools, from `pip` and `venv` to modern alternatives like Poetry and `uv`.
 <!-- more -->
 
 ## Summary
+
 Python's ecosystem offers numerous tools for managing packages and virtual
 environments. Choosing the right tool depends on:
 
@@ -30,6 +31,7 @@ you select the best fit for your workflow.
 ## Built-In and Standard Tools
 
 ### `pip`
+
 **What it does**: Default Python package installer that downloads and installs
 packages from PyPI
 
@@ -37,29 +39,31 @@ Key capabilities:
 
 - Installs packages from PyPI
 - Works with `requirements.txt` for dependency specifications
-  ```bash
-  # Install a single package from PyPI
-  > pip install requests
 
-  # Install all packages listed in requirements.txt (common for project setup)
-  > pip install -r requirements.txt
+    ```bash
+    # Install a single package from PyPI
+    > pip install requests
 
-  # Export all installed packages with their versions to requirements.txt (for sharing/reproducing environment)
-  > pip freeze > requirements.txt
+    # Install all packages listed in requirements.txt (common for project setup)
+    > pip install -r requirements.txt
 
-  # Install a specific version of a package (for version pinning)
-  > pip install requests==2.28.0
+    # Export all installed packages with their versions to requirements.txt (for sharing/reproducing environment)
+    > pip freeze > requirements.txt
 
-  # Upgrade a package to the latest version
-  > pip install --upgrade requests
+    # Install a specific version of a package (for version pinning)
+    > pip install requests==2.28.0
 
-  # Uninstall a package
-  > pip uninstall requests
-  ```
+    # Upgrade a package to the latest version
+    > pip install --upgrade requests
+
+    # Uninstall a package
+    > pip uninstall requests
+    ```
 
 - **Best for**: Basic package installation and simple projects
 
 ### `venv`
+
 **What it does**: Creates isolated Python environments to separate project
 dependencies and avoid conflicts
 
@@ -67,29 +71,31 @@ Key capabilities:
 
 - Built-in virtual environment tool (Python 3.3+)
 - Isolated environments with their own Python interpreter and packages
-  ```bash
-  # Create a new virtual environment named 'venv' in the current directory
-  > python -m venv venv
 
-  # Activate the virtual environment on macOS/Linux (makes Python and pip point to the venv)
-  > source venv/bin/activate
+    ```bash
+    # Create a new virtual environment named 'venv' in the current directory
+    > python -m venv venv
 
-  # Activate on Windows
-  > venv\Scripts\activate.bat
+    # Activate the virtual environment on macOS/Linux (makes Python and pip point to the venv)
+    > source venv/bin/activate
 
-  # Deactivate the current virtual environment (returns to system Python)
-  > deactivate
+    # Activate on Windows
+    > venv\Scripts\activate.bat
 
-  # Create a venv without pip (if you want to install pip separately)
-  > python -m venv venv --without-pip
+    # Deactivate the current virtual environment (returns to system Python)
+    > deactivate
 
-  # Remove a virtual environment (just delete the directory)
-  > rm -rf venv
-  ```
+    # Create a venv without pip (if you want to install pip separately)
+    > python -m venv venv --without-pip
+
+    # Remove a virtual environment (just delete the directory)
+    > rm -rf venv
+    ```
 
 - **Best for**: Basic environment isolation without extra dependencies
 
 ### `virtualenv`
+
 **What it does**: Creates isolated Python environments with more features and
 flexibility than `venv`
 
@@ -98,31 +104,33 @@ Key capabilities:
 - Older alternative to `venv` but still maintained and enhanced
 - Python version discovery and environment templates
 - Slightly faster environment creation
-  ```bash
-  # Install virtualenv globally (required before first use)
-  > pip install virtualenv
 
-  # Create a new virtual environment named 'myenv'
-  > virtualenv myenv
+    ```bash
+    # Install virtualenv globally (required before first use)
+    > pip install virtualenv
 
-  # Create a virtualenv with a specific Python version (if multiple Pythons are installed)
-  > virtualenv -p python3.11 myenv
+    # Create a new virtual environment named 'myenv'
+    > virtualenv myenv
 
-  # Create a virtualenv using system site-packages (inherits globally installed packages)
-  > virtualenv --system-site-packages myenv
+    # Create a virtualenv with a specific Python version (if multiple Pythons are installed)
+    > virtualenv -p python3.11 myenv
 
-  # Activate the virtualenv (same as venv)
-  > source myenv/bin/activate
+    # Create a virtualenv using system site-packages (inherits globally installed packages)
+    > virtualenv --system-site-packages myenv
 
-  # List available Python interpreters that virtualenv can use
-  > virtualenv --discovery cached
-  ```
+    # Activate the virtualenv (same as venv)
+    > source myenv/bin/activate
+
+    # List available Python interpreters that virtualenv can use
+    > virtualenv --discovery cached
+    ```
 
 - **Best for**: Advanced virtual environment needs or pre-Python 3.3 projects
 
 ## Modern Dependency and Environment Managers
 
 ### `pipenv`
+
 **What it does**: Unifies package management and virtual environment creation
 into a single tool
 
@@ -131,30 +139,32 @@ Key capabilities:
 - Combines `pip` + `venv` functionality
 - Uses `Pipfile` and `Pipfile.lock` for deterministic dependency resolution
 - Automatic virtual environment management
-  ```bash
-  # Install a package and automatically create/update Pipfile and Pipfile.lock
-  > pipenv install requests
 
-  # Activate a subshell within the virtual environment (creates venv if it doesn't exist)
-  > pipenv shell
+    ```bash
+    # Install a package and automatically create/update Pipfile and Pipfile.lock
+    > pipenv install requests
 
-  # Install dev dependencies (e.g., testing tools, linters)
-  > pipenv install --dev pytest
+    # Activate a subshell within the virtual environment (creates venv if it doesn't exist)
+    > pipenv shell
 
-  # Install all dependencies from Pipfile.lock (for reproducible deployments)
-  > pipenv sync
+    # Install dev dependencies (e.g., testing tools, linters)
+    > pipenv install --dev pytest
 
-  # Update all packages to their latest compatible versions
-  > pipenv update
+    # Install all dependencies from Pipfile.lock (for reproducible deployments)
+    > pipenv sync
 
-  # Run a command within the virtual environment without activating shell
-  > pipenv run python script.py
-  ```
+    # Update all packages to their latest compatible versions
+    > pipenv update
+
+    # Run a command within the virtual environment without activating shell
+    > pipenv run python script.py
+    ```
 
 - **Best for**: Simple project workflows requiring both dependency and
   environment management
 
 ### Poetry
+
 **What it does**: Comprehensive tool for dependency management, packaging, and
 publishing using modern standards
 
@@ -164,39 +174,41 @@ Key capabilities:
 - Uses `pyproject.toml` (PEP 518 standard)
 - Built-in dependency resolution and lockfile generation
 - Handles packaging and publishing to PyPI
-  ```bash
-  # Initialize a new Poetry project interactively (creates pyproject.toml)
-  > poetry init
 
-  # Add a package as a dependency (updates pyproject.toml and poetry.lock)
-  > poetry add requests
+    ```bash
+    # Initialize a new Poetry project interactively (creates pyproject.toml)
+    > poetry init
 
-  # Activate a shell within the virtual environment
-  > poetry shell
+    # Add a package as a dependency (updates pyproject.toml and poetry.lock)
+    > poetry add requests
 
-  # Add a dev dependency (e.g., testing or linting tools)
-  > poetry add --group dev pytest
+    # Activate a shell within the virtual environment
+    > poetry shell
 
-  # Install all dependencies from poetry.lock (for setting up project on new machine)
-  > poetry install
+    # Add a dev dependency (e.g., testing or linting tools)
+    > poetry add --group dev pytest
 
-  # Build distribution packages (wheel and sdist) for publishing
-  > poetry build
+    # Install all dependencies from poetry.lock (for setting up project on new machine)
+    > poetry install
 
-  # Publish package to PyPI
-  > poetry publish
+    # Build distribution packages (wheel and sdist) for publishing
+    > poetry build
 
-  # Update dependencies to their latest compatible versions
-  > poetry update
+    # Publish package to PyPI
+    > poetry publish
 
-  # Run a command within the virtual environment without activating shell
-  > poetry run python script.py
-  ```
+    # Update dependencies to their latest compatible versions
+    > poetry update
+
+    # Run a command within the virtual environment without activating shell
+    > poetry run python script.py
+    ```
 
 - **Best for**: Modern Python applications and libraries requiring robust
   dependency management and publishing
 
 ### Conda
+
 **What it does**: Cross-language package and environment manager handling Python
 packages and system dependencies
 
@@ -206,39 +218,41 @@ Key capabilities:
 - Popular in data science and scientific computing communities
 - Manages Python versions and binary dependencies
 - Installs pre-compiled binaries for faster installation
-  ```bash
-  # Create a new environment with a specific Python version
-  > conda create -n myenv python=3.11
 
-  # Activate an environment (makes it the active Python)
-  > conda activate myenv
+    ```bash
+    # Create a new environment with a specific Python version
+    > conda create -n myenv python=3.11
 
-  # Install a package from conda channels (pre-compiled binaries)
-  > conda install numpy
+    # Activate an environment (makes it the active Python)
+    > conda activate myenv
 
-  # Install multiple packages at once (recommended for better dependency resolution)
-  > conda install numpy pandas matplotlib
+    # Install a package from conda channels (pre-compiled binaries)
+    > conda install numpy
 
-  # Export environment to a file (for sharing/reproducing)
-  > conda env export > environment.yml
+    # Install multiple packages at once (recommended for better dependency resolution)
+    > conda install numpy pandas matplotlib
 
-  # Create environment from a YAML file
-  > conda env create -f environment.yml
+    # Export environment to a file (for sharing/reproducing)
+    > conda env export > environment.yml
 
-  # Deactivate current environment (returns to base)
-  > conda deactivate
+    # Create environment from a YAML file
+    > conda env create -f environment.yml
 
-  # List all environments
-  > conda env list
+    # Deactivate current environment (returns to base)
+    > conda deactivate
 
-  # Remove an environment
-  > conda env remove -n myenv
-  ```
+    # List all environments
+    > conda env list
+
+    # Remove an environment
+    > conda env remove -n myenv
+    ```
 
 - **Best for**: Data science and scientific computing projects requiring complex
   binary dependencies
 
 ### Mamba
+
 **What it does**: Drop-in replacement for Conda with faster C++ dependency
 solver
 
@@ -247,29 +261,31 @@ Key capabilities:
 - Faster alternative to conda with compatible commands and packages
 - Faster dependency solver written in C++
 - Particularly beneficial for large, complex environments
-  ```bash
-  # Create a new environment (same as conda but much faster)
-  > mamba create -n myenv python=3.11
 
-  # Activate environment (use conda activate, not mamba activate)
-  > conda activate myenv
+    ```bash
+    # Create a new environment (same as conda but much faster)
+    > mamba create -n myenv python=3.11
 
-  # Install packages with faster dependency resolution than conda
-  > mamba install numpy pandas scikit-learn
+    # Activate environment (use conda activate, not mamba activate)
+    > conda activate myenv
 
-  # Update packages (significantly faster than conda update)
-  > mamba update --all
+    # Install packages with faster dependency resolution than conda
+    > mamba install numpy pandas scikit-learn
 
-  # Search for available packages
-  > mamba search tensorflow
+    # Update packages (significantly faster than conda update)
+    > mamba update --all
 
-  # Install from a YAML file (faster than conda)
-  > mamba env create -f environment.yml
-  ```
+    # Search for available packages
+    > mamba search tensorflow
+
+    # Install from a YAML file (faster than conda)
+    > mamba env create -f environment.yml
+    ```
 
 - **Best for**: Large scientific environments where conda's solver is too slow
 
 ### `uv`
+
 **What it does**: Ultra-fast Rust-based package installer and resolver with
 10-100x performance improvement
 
@@ -279,30 +295,32 @@ Key capabilities:
 - Extremely fast Rust-based package manager
 - Can manage virtual environments
 - Supports lockfiles for reproducible installs
-  ```bash
-  # Create a virtual environment (10-100x faster than venv)
-  > uv venv
 
-  # Install packages (significantly faster than pip)
-  > uv pip install requests
+    ```bash
+    # Create a virtual environment (10-100x faster than venv)
+    > uv venv
 
-  # Install from requirements.txt (with parallel downloads)
-  > uv pip install -r requirements.txt
+    # Install packages (significantly faster than pip)
+    > uv pip install requests
 
-  # Compile dependencies to a lockfile (for reproducible installs)
-  > uv pip compile requirements.in -o requirements.txt
+    # Install from requirements.txt (with parallel downloads)
+    > uv pip install -r requirements.txt
 
-  # Sync environment to exactly match lockfile (removes unlisted packages)
-  > uv pip sync requirements.txt
+    # Compile dependencies to a lockfile (for reproducible installs)
+    > uv pip compile requirements.in -o requirements.txt
 
-  # Install a specific version with fast resolution
-  > uv pip install "django>=4.0,<5.0"
-  ```
+    # Sync environment to exactly match lockfile (removes unlisted packages)
+    > uv pip sync requirements.txt
+
+    # Install a specific version with fast resolution
+    > uv pip install "django>=4.0,<5.0"
+    ```
 
 - **Best for**: Fast modern workflows where performance matters, especially for
   CI/CD pipelines
 
 ### `pipx`
+
 **What it does**: Installs and runs Python CLI applications in isolated
 environments without dependency conflicts
 
@@ -312,33 +330,35 @@ Key capabilities:
 - Each tool gets its own virtual environment
 - Tools are globally accessible as commands
 - Prevents dependency conflicts between CLI tools
-  ```bash
-  # Install a CLI tool globally in its own isolated environment
-  > pipx install black
 
-  # Install another tool (gets separate venv, no dependency conflicts)
-  > pipx install pytest
+    ```bash
+    # Install a CLI tool globally in its own isolated environment
+    > pipx install black
 
-  # Run a tool temporarily without installing it (downloads, runs, then cleans up)
-  > pipx run cowsay "Hello!"
+    # Install another tool (gets separate venv, no dependency conflicts)
+    > pipx install pytest
 
-  # Upgrade an installed tool to the latest version
-  > pipx upgrade black
+    # Run a tool temporarily without installing it (downloads, runs, then cleans up)
+    > pipx run cowsay "Hello!"
 
-  # List all installed tools and their versions
-  > pipx list
+    # Upgrade an installed tool to the latest version
+    > pipx upgrade black
 
-  # Uninstall a tool and its isolated environment
-  > pipx uninstall black
+    # List all installed tools and their versions
+    > pipx list
 
-  # Upgrade all installed tools at once
-  > pipx upgrade-all
-  ```
+    # Uninstall a tool and its isolated environment
+    > pipx uninstall black
+
+    # Upgrade all installed tools at once
+    > pipx upgrade-all
+    ```
 
 - **Best for**: Installing and managing CLI tools like black, pytest, or
   cookiecutter globally
 
 ## Comparison Overview
+
 | Tool       | Manages Packages | Manages Venv | Lockfile | Python Version Mgmt | Best For                      |
 | :--------- | :--------------- | :----------- | :------- | :------------------ | :---------------------------- |
 | pip        | Yes              | No           | No       | No                  | Basic installs                |

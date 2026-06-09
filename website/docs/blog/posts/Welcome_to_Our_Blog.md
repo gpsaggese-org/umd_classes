@@ -2,11 +2,11 @@
 title: "Welcome to Our Blog"
 draft: false
 authors:
-  - gpsaggese
+    - gpsaggese
 date: 2026-02-06
 categories:
-  - AI Research
-  - Software Engineering
+    - AI Research
+    - Software Engineering
 ---
 
 TL;DR: Welcome to our new blog where we'll share insights on AI research,
@@ -74,4 +74,3 @@ I'd love to hear from you! Feel free to reach out via:
 Stay tuned for upcoming posts from our team, and thank you for visiting!
 
 ## The team
-
