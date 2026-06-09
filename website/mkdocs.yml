@@ -95,7 +95,7 @@ nav:
   - Research: 06_research.md
   - Coding: 07_coding.md
   - Screwups: 08_screw_ups.md
-  - Blog: blog/blog.md
+  - Blog: blog/index.md
 
 markdown_extensions:
   - admonition
