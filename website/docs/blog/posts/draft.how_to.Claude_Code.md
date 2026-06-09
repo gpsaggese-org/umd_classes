@@ -1,3 +1,15 @@
+---
+title: "How to Use Claude Code"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using Claude Code for development
+categories:
+  - AI Tools
+  - Software Engineering
+---
+
 ## Overview
 
 - Claude Code is a CLI tool that lets you work with Claude directly inside your

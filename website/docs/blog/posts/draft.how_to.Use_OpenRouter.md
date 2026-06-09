@@ -1,3 +1,15 @@
+---
+title: "How to Use OpenRouter with LLM CLI"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using OpenRouter with Simon Willison's LLM CLI
+categories:
+  - LLM
+  - Developer Tools
+---
+
 llm install llm-openrouter
 
 > llm --version

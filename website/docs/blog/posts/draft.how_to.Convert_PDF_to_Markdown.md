@@ -10,12 +10,9 @@ categories:
   - Python
 ---
 
-# Summary
-Converting PDFs to Markdown in Python is fundamentally an extraction and
-reconstruction problem. PDFs encode layout, not semantics, and each library
-differs in how much structure it infers automatically versus how much control it
-gives you. This guide covers four essential libraries with installation, usage,
-and practical examples.
+TL;DR: Converting PDFs to Markdown in Python is an extraction and reconstruction
+problem: encode layout, not semantics. This guide covers four libraries with
+installation, usage, and examples.
 
 <!-- more -->
 

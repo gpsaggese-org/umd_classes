@@ -1,3 +1,14 @@
+---
+title: "How to Create a Claude Artifact"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Tutorial on creating Claude Artifacts
+categories:
+  - AI Tools
+---
+
 # Tutorial: How to Create a Claude Artifact
 
 ## 1. Open a Claude Chat

@@ -1,3 +1,14 @@
+---
+title: "Debugging Tips and Workflows"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Debugging workflows and tips
+categories:
+  - Software Engineering
+---
+
 pytest_log 
 
 Run ... | 2>&1 tmp.pytest_script.txt

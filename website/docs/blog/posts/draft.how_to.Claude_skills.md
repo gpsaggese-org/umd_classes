@@ -1,3 +1,14 @@
+---
+title: "How to Create and Use Claude Skills"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide to creating and using Claude Skills
+categories:
+  - AI Tools
+---
+
 # Claude Skills
 - Claude Skills
   - Transforms Claude from a general-purpose AI into a specialized agent

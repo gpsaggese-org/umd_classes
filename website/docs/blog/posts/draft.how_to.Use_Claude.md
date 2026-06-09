@@ -9,6 +9,11 @@ categories:
   - Software Engineering
 ---
 
+TL;DR: Learn how to use Claude effectively with best practices for prompting,
+tool usage, model capabilities, and API integration.
+
+<!-- more -->
+
 // https://platform.claude.com/docs/en/home
 
 # Developer Guide

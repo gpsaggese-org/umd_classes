@@ -1,3 +1,15 @@
+---
+title: "How to Use Claude Code with OpenRouter"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Configure Claude Code to use OpenRouter for LLM access
+categories:
+  - LLM
+  - AI Tools
+---
+
 # Configure Openrouter
 
 - Create keys for the providers you already have

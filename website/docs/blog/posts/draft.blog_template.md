@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Blog Post Template"
 draft: true
 authors:
   - gpsaggese

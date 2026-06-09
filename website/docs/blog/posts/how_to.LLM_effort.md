@@ -8,7 +8,9 @@ categories:
   - LLM
 ---
 
-TL;DR: 
+TL;DR: LLM reasoning effort settings (low, medium, high) affect how much compute
+a model uses, increasing total token consumption and cost, even when per-token
+pricing stays the same.
 
 <!-- more -->
 

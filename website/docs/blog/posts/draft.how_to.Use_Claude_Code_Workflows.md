@@ -1,3 +1,15 @@
+---
+title: "How to Use Claude Code Workflows"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using Claude Code workflows for development
+categories:
+  - AI Tools
+  - Software Engineering
+---
+
 # Create a Script From Scratch
 
 - Use the template in `ai.instruction_template.md`

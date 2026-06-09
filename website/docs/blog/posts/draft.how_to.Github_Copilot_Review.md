@@ -1,3 +1,15 @@
+---
+title: "How to Use GitHub Copilot Code Review"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using GitHub Copilot for code reviews
+categories:
+  - Developer Tools
+  - Software Engineering
+---
+
 ## Overview
 
 - You can request a review from GitHub Copilot on your PR

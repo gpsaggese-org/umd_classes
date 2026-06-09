@@ -1,3 +1,15 @@
+---
+title: "How to Use Claude Code"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Complete guide on using Claude Code for coding
+categories:
+  - AI Tools
+  - Software Engineering
+---
+
 # Using Claude Code
 
 Claude Code is a coding-focused interface for the Claude AI assistant. It helps
