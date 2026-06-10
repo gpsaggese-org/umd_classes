@@ -46,7 +46,6 @@ MSML610: Advanced Machine Learning
 ## Prediction Pipelines vs. Decision Pipelines
 ## #############################################################################
 
-// TODO(gp): Explain
 * From Predictions to Decisions
 
 - **Prediction** answers: _"What will happen?"_
@@ -298,7 +297,9 @@ digraph DecisionLoop {
 - **Fact**: A _rational agent_ chooses the action $a$ that maximizes expected
   utility under uncertainty:
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | a)}[U(Y)]
+  a^*
+    = \arg\max_{a \in \mathcal{A}}
+      \EE_{Y \sim \Pr(Y | a)}[U(Y)]
   $$
 
 - The justification for maximizing expected utility comes from VNM theorem
@@ -376,7 +377,9 @@ digraph DecisionLoop {
 - _Causal decision theory_ replaces $\Pr(Y | a)$ with the interventional distribution
   $\Pr(Y | do(a))$
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
+  a^*
+    = \arg\max_{a \in \mathcal{A}}
+      \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
   $$
 
 - **Property**: They are equivalent under:
@@ -641,7 +644,7 @@ digraph ID {
 
 * Posteriors to Optimal Actions
 
-- **Structure**: Bayesian decision-making is composed of two steps:
+- Bayesian decision-making is composed of two steps:
   1. _Inference_: compute the posterior $\Pr(\theta | \mathcal{D})$ from data
   2. _Decision_: choose the action that maximizes _posterior_ expected utility
   $$
@@ -651,10 +654,10 @@ digraph ID {
           \EE_{Y \sim \Pr(Y | do(a), \theta)}[U(Y)]
         \right]
   $$
-
-- The _inner expectation_ is over outcome uncertainty $Y$ given $\theta$
-  (aleatoric)
-- The _outer expectation_ is over parameter uncertainty $\theta$ (epistemic)
+  where:
+  - The _inner expectation_ is over outcome uncertainty $Y$ given $\theta$
+    (aleatoric)
+  - The _outer expectation_ is over parameter uncertainty $\theta$ (epistemic)
 
 - **Key property**: Bayesian decision rule is _admissible_: no other rule
   dominates it under all priors
@@ -811,8 +814,12 @@ digraph ID {
 - **EVPI** is the upper bound on what any information-gathering activity
   could be worth:
   $$
-  \text{EVPI} = \EE_{\theta} \left[ \max_a U(a, \theta) \right] -
-                \max_a \EE_\theta[U(a, \theta)]
+  \text{EVPI}
+    = \EE_{\theta}
+      \left[
+        \max_a U(a, \theta)
+      \right]
+      - \max_a \EE_\theta[U(a, \theta)]
   $$
 
 - Interpret the two terms:
@@ -1067,15 +1074,15 @@ digraph ID {
 
 - A Bayesian predictive distribution decomposes as:
   $$
-  \Pr(Y | do(a), \mathcal{D}) =
-  \int \Pr(Y | do(a), \theta) \, \Pr(\theta | \mathcal{D}) \, d\theta
+  \Pr(Y | do(a), \mathcal{D})
+    = \int \Pr(Y | do(a), \theta) \, \Pr(\theta | \mathcal{D}) \, d\theta
   $$
 
 - **Variance decomposition**:
   $$
-  \VV[Y | do(a), \mathcal{D}] =
-  \underbrace{\EE_\theta[\VV[Y | a, \theta]]}_{\text{aleatoric}} +
-  \underbrace{\VV_\theta[\EE[Y | a, \theta]]}_{\text{epistemic}}
+  \VV[Y | do(a), \mathcal{D}]
+    = \underbrace{\EE_\theta[\VV[Y | a, \theta]]}_{\text{aleatoric}}
+      + \underbrace{\VV_\theta[\EE[Y | a, \theta]]}_{\text{epistemic}}
   $$
 
 - **Example**: deep ensemble for sales forecasting
@@ -1132,7 +1139,9 @@ digraph ID {
 
 - **Expected utility** under interventional distributions is the right target
   $$
-  a^* = \arg\max_a \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
+  a^*
+    = \arg\max_a
+      \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
   $$
 
 - **Influence diagrams** extend causal DAGs with decisions and utilities,

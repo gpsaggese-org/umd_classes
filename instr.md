@@ -1,4 +1,16 @@
-Read msml610/lectures_source/{Lesson06.1-Bayesian_Networks.txt,Lesson06.2-Using_Bayesian_Networks.txt}
-and come up for more rules to add `.claude/skills/slides.rules.md`
+Change the code so that in hdocker.py if CSFY_DOCKER_ENGINE is not defined, use apple if we are running
+on mac, otherwise use docker
 
-Only add rules that you are sure about and add them in the right section
+- The interface is like:
+  ...
+
+- When writing code you must always follow the instructions in
+  `.claude/skills/coding.rules.md`
+
+- When writing unit tests for follow the instructions in
+  `.claude/skills/testing.rules.md`
+
+- If the task is not perfectly clear, you MUST not perform it, but ask for
+  clarifications
+  - When the task is complex, create a `plan.md` with 5 bullet points explaining
+    what the plan is
