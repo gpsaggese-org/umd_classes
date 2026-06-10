@@ -647,20 +647,79 @@ digraph ID {
 - Bayesian decision-making is composed of two steps:
   1. _Inference_: compute the posterior $\Pr(\theta | \mathcal{D})$ from data
   2. _Decision_: choose the action that maximizes _posterior_ expected utility
-  $$
-  a^* = \arg\max_{a \in \mathcal{A}}
-        \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
-        \left[
-          \EE_{Y \sim \Pr(Y | do(a), \theta)}[U(Y)]
-        \right]
-  $$
-  where:
-  - The _inner expectation_ is over outcome uncertainty $Y$ given $\theta$
-    (aleatoric)
-  - The _outer expectation_ is over parameter uncertainty $\theta$ (epistemic)
+     $$
+     a^* = \arg\max_{a \in \mathcal{A}}
+           \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
+           \left[
+             \EE_{Y \sim \Pr(Y | do(a), \theta)}[U(Y)]
+           \right]
+     $$
+     where:
+     - The _inner expectation_ is over outcome uncertainty $Y$ given $\theta$
+       (aleatoric)
+     - The _outer expectation_ is over parameter uncertainty $\theta$ (epistemic)
 
-- **Key property**: Bayesian decision rule is _admissible_: no other rule
-  dominates it under all priors
+* Risk Function: Definition
+
+- **Definition**: The _risk function_ $R(\theta, \delta)$ is the expected loss of
+  decision rule $\delta$ when the true state of nature is $\theta$
+  $$
+  R(\theta, \delta) \defeq \EE_{X \sim P_\theta}[L(\theta, \delta(X))]
+  $$
+  - $L(\theta, \delta(X))$ = loss incurred by choosing action $\delta(X)$ when
+    the true parameter is $\theta$
+  - The expectation is over data $X$ drawn from $P_\theta$
+  - Risk is a function of both the rule $\delta$ and the parameter $\theta$
+
+- **Intuition**: $R(\theta, \delta)$ tells you how bad rule $\delta$ is on
+  average for each possible value of $\theta$
+  - Lower risk is better
+  - No single rule is guaranteed to have the lowest risk at every $\theta$
+
+- **Example**: a decision rule with risks $(2, 3, 4)$ over
+  $\theta \in \{0, 1, 2\}$ means:
+  - $R(0, \delta) = 2$, $R(1, \delta) = 3$, $R(2, \delta) = 4$
+  - A competing rule with risks $(2, 2, 4)$ _dominates_ it (better at
+    $\theta = 1$, ties elsewhere)
+
+* Admissible Decision Rules: Definition
+
+- **Definition**: In decision theory, a decision rule $\delta_1$ _dominates_
+  $\delta_2$ when:
+  - For every parameter $\theta$, $R(\theta, \delta_1) \le R(\theta, \delta_2)$
+  - For at least one $\theta$, $R(\theta, \delta_1) < R(\theta, \delta_2)$
+  - **Intuition**: $\delta_1$ is never worse and sometimes strictly better
+
+- **Definition**: In decision theory, a decision rule $\delta$ is _admissible_ if
+  no other rule _dominates_ it
+
+- **Intuition**: An admissible rule cannot be uniformly beaten
+  - If another rule were at least as good everywhere and better somewhere, you
+    could replace the original
+  - Admissibility is a _minimal_ standard: a rule that _is_ dominated should
+    never be used
+
+- **Example**: a rule with risks $(2, 3, 4)$ over $\theta \in \{0, 1, 2\}$ is dominated by $(2, 2, 4)$
+  - The alternative matches at $\theta=0, 2$ and improves at $\theta=1$
+
+* Why Bayes Rules Are Admissible
+
+- **Theorem**: A Bayes decision rule (minimizing Bayes risk $r(\delta) = \int R(\theta, \delta)\,\pi(\theta)\,d\theta$) is admissible
+
+- **Proof** (by contradiction)
+  1. **Assume** a Bayes rule $\delta_B$ were not admissible
+     - Then some $\delta'$ dominates it: $R(\theta, \delta') \le R(\theta, \delta_B)\;\forall\theta$, with strict $<$ for some $\theta$
+  2. **Integrate** both sides with respect to the prior $\pi(\theta)$:
+     $$
+     \int R(\theta, \delta')\,\pi(\theta)\,d\theta
+       \;<\;
+     \int R(\theta, \delta_B)\,\pi(\theta)\,d\theta
+     $$
+     - The inequality is strict because the integrand is strictly smaller on a set of positive prior mass
+  3. **Contradiction**: $r(\delta') < r(\delta_B)$, but $\delta_B$ was chosen to minimize Bayes risk
+     - Therefore no dominating rule can exist, and $\delta_B$ is admissible
+
+- **Key insight**: a prior assigns weights to parameter values; a rule that is optimal on average cannot be uniformly improved — if it could, the weighted average would also be better
 
 * Bayesian Decision Rule: Example
 
