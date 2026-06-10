@@ -85,18 +85,18 @@ MSML610: Advanced Machine Learning
   - The set of available actions $\mathcal{A}$
   - A utility function $U(y, a)$ over outcomes $y$ and actions
     $a \in \mathcal{A}$
-  - A causal model $\Pr(Y | \operatorname{do}(a))$ of how actions affect
+  - A causal model $\Pr(Y | do(a))$ of how actions affect
     outcomes
 
 - **Key distinction**:
   - $\Pr(Y | X = x)$ is observational
-  - $\Pr(Y | \operatorname{do}(X = x))$ is interventional
+  - $\Pr(Y | do(X = x))$ is interventional
   - These can differ drastically when confounders are present
   - Decisions depend on the interventional quantity
 
 - **Example**: a hospital wants to decide _whether to prescribe drug A_
   - Observational: $\Pr(recovery | took drug A)$
-  - Interventional: $\Pr(recovery | \operatorname{do}(give drug A))$
+  - Interventional: $\Pr(recovery | do(give drug A))$
   - The first is biased by who chose to take the drug
 
 * Prediction vs. Decision: Side-by-Side
@@ -183,7 +183,7 @@ digraph SimpsonCaseA {
 - A **confounder** $Z$ is a common cause of both the proposed action $X$ and
   the outcome $Y$
   - Induces a non-causal association $X \leftrightarrow Y$ through $Z$
-  - Observational $\Pr(Y | X) \neq \Pr(Y | \operatorname{do}(X))$
+  - Observational $\Pr(Y | X) \neq \Pr(Y | do(X))$
 
 - Without adjusting for $Z$, any purely predictive model will encode the
   spurious association
@@ -226,7 +226,7 @@ digraph SimpsonCaseA {
 
 - Enables reasoning about:
   - _Observation_: $\Pr(Y | X = x)$ (seeing $x$)
-  - _Intervention_: $\Pr(Y | \operatorname{do}(X = x))$ (setting $x$)
+  - _Intervention_: $\Pr(Y | do(X = x))$ (setting $x$)
   - _Counterfactual_: $\Pr(Y_{X=x} | X = x')$ (had $x$ been different)
 
 - For decision-making we primarily need the interventional layer
@@ -376,7 +376,7 @@ digraph DecisionLoop {
 - _Causal decision theory_ replaces $\Pr(Y | a)$ with the interventional distribution
   $\Pr(Y | do(a))$
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | \operatorname{do}(a))}[U(Y)]
+  a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
   $$
 
 - **Property**: They are equivalent under:
@@ -648,7 +648,7 @@ digraph ID {
   a^* = \arg\max_{a \in \mathcal{A}}
         \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
         \left[
-          \EE_{Y \sim \Pr(Y | \operatorname{do}(a), \theta)}[U(Y)]
+          \EE_{Y \sim \Pr(Y | do(a), \theta)}[U(Y)]
         \right]
   $$
 
@@ -803,7 +803,7 @@ digraph ID {
 - **Example**: a company considers an expensive market survey before a
   \$10M product launch
   - Launch without: expected utility $\EE[U]$
-  - Launch with survey outcome $E$: $\EE_E[\max_a \EE[U(Y) | \operatorname{do}(a), E]]$
+  - Launch with survey outcome $E$: $\EE_E[\max_a \EE[U(Y) | do(a), E]]$
   - Run the survey only if the difference exceeds its cost
 
 * Expected Value of Perfect Information (EVPI)
@@ -867,7 +867,7 @@ digraph ID {
   - At each step, pull one arm, observe reward, update beliefs
   - Objective: minimize **regret** relative to the best arm
 
-- **Causal bandit**: arms are _interventions_ $\operatorname{do}(a)$ on a
+- **Causal bandit**: arms are _interventions_ $do(a)$ on a
   known (or partly known) causal graph
   - Observing one arm provides information about _other_ arms via the graph
   - Much lower regret than a standard bandit in many settings
@@ -942,7 +942,7 @@ digraph ID {
 * BO in Causal Experimentation
 
 - Causal BO combines BO with causal graphs:
-  - Decision variable $x$ is an **intervention** $\operatorname{do}(X = x)$
+  - Decision variable $x$ is an **intervention** $do(X = x)$
   - Surrogate model is a **structural causal model**, not just a GP on $y$
   - Leverages the graph to share information across interventions
 
@@ -974,7 +974,7 @@ digraph ID {
   outcome
   - Also called _statistical_ or _risk_ uncertainty
   - Cannot be reduced by collecting more data
-  - Captured by $\Pr(Y | \operatorname{do}(a), \theta)$ given known $\theta$
+  - Captured by $\Pr(Y | do(a), \theta)$ given known $\theta$
 
 - **Example**: flipping a known-fair coin
   - $\Pr(\text{heads}) = 0.5$ exactly
@@ -1067,13 +1067,13 @@ digraph ID {
 
 - A Bayesian predictive distribution decomposes as:
   $$
-  \Pr(Y | \operatorname{do}(a), \mathcal{D}) =
-  \int \Pr(Y | \operatorname{do}(a), \theta) \, \Pr(\theta | \mathcal{D}) \, d\theta
+  \Pr(Y | do(a), \mathcal{D}) =
+  \int \Pr(Y | do(a), \theta) \, \Pr(\theta | \mathcal{D}) \, d\theta
   $$
 
 - **Variance decomposition**:
   $$
-  \VV[Y | \operatorname{do}(a), \mathcal{D}] =
+  \VV[Y | do(a), \mathcal{D}] =
   \underbrace{\EE_\theta[\VV[Y | a, \theta]]}_{\text{aleatoric}} +
   \underbrace{\VV_\theta[\EE[Y | a, \theta]]}_{\text{epistemic}}
   $$
@@ -1132,7 +1132,7 @@ digraph ID {
 
 - **Expected utility** under interventional distributions is the right target
   $$
-  a^* = \arg\max_a \EE_{Y \sim \Pr(Y | \operatorname{do}(a))}[U(Y)]
+  a^* = \arg\max_a \EE_{Y \sim \Pr(Y | do(a))}[U(Y)]
   $$
 
 - **Influence diagrams** extend causal DAGs with decisions and utilities,

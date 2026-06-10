@@ -101,8 +101,8 @@ digraph TemporalCausal {
 
 - The **causal effect of a sustained intervention** starting at time $t^*$:
   $$
-  \tau = \EE[Y_t | \operatorname{do}(T_{t^*:t} = 1)]
-       - \EE[Y_t | \operatorname{do}(T_{t^*:t} = 0)]
+  \tau = \EE[Y_t | do(T_{t^*:t} = 1)]
+       - \EE[Y_t | do(T_{t^*:t} = 0)]
   $$
   - Average effect when we _force_ the treatment from $t^*$ onward
 
