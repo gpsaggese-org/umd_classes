@@ -1,6 +1,8 @@
 ## Part I: Understanding Causality
 
-### 1: From Prediction Pipelines to Decision Pipelines **Lessons**
+### 1: From Prediction Pipelines to Decision Pipelines
+
+**Lessons**
 - msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
 
 **Tutorials**
@@ -44,7 +46,9 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
-### 2: Bayesian Networks **Lessons**
+### 2: Bayesian Networks
+
+**Lessons**
 - msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
 - msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
 
@@ -62,7 +66,9 @@
 - [B005] Jensen et al., "Bayesian Networks and Decision Graphs", 2007
 - [B006] Bishop, "Pattern Recognition and Machine Learning", 2006
 
-### 3: Causal DAGs and Structural Models **Lessons**
+### 3: Causal DAGs and Structural Models
+
+**Lessons**
 - msml610/lectures_source/Lesson08.3-Do_Calculus.txt
 
 **Tutorials**
@@ -111,7 +117,9 @@
 
 ## Part II: Estimating Causal Effects
 
-### 5: Interventions, Experiments, and Adjustments **Lessons**
+### 5: Interventions, Experiments, and Adjustments
+
+**Lessons**
 - msml610/lectures_source/Lesson08.3-Do_Calculus.txt
 
 **Tutorials**
@@ -152,7 +160,9 @@
 - [B017] Wooldridge, "Econometric Analysis of Cross Section and Panel Data", 2010
 - [B018] Huntington-Klein, "The Effect", 2021
 
-### 7: Explainability and Causal Attribution **Lessons**
+### 7: Explainability and Causal Attribution
+
+**Lessons**
 - ?
 
 **Tutorials**
@@ -167,7 +177,9 @@
 - [B020] Kearns et al., "The Ethical Algorithm", 2019
 - [B021] Kohavi et al., "Trustworthy Online Controlled Experiments", 2020
 
-### 8: Causal Inference for Time Series **Lessons**
+### 8: Causal Inference for Time Series
+
+**Lessons**
 - msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
 - msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt
 
@@ -207,7 +219,9 @@
 - [B025] Siroker et al., "A/B Testing", 2013
 - [B026] Thomke, "Experimentation Works", 2020
 
-### 10: Causal Discovery **Lessons**
+### 10: Causal Discovery
+
+**Lessons**
 - msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
 **Tutorials**
@@ -267,7 +281,9 @@
 
 ## Part III: Making Decisions with Causality
 
-### 11: Decision-Making with Causal Models **Lessons**
+### 11: Decision-Making with Causal Models
+
+**Lessons**
 - msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt
 
 **Tutorials**
@@ -283,7 +299,9 @@
 - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
 - [B002] Pearl et al., "The Book of Why", 2018
 
-### 12: Causal Reinforcement Learning **Lessons**
+### 12: Causal Reinforcement Learning
+
+**Lessons**
 - msml610/lectures_source/Lesson12-Reinforcement_learning.txt
 
 **Tutorials**
@@ -300,7 +318,9 @@
 - [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
 - [B032] Ness et al., "Causal AI", 2023
 
-### 13: Forecasting Under Causal Intervention **Lessons**
+### 13: Forecasting Under Causal Intervention
+
+**Lessons**
 
 **Tutorials**
 
@@ -316,7 +336,9 @@
 - [B033] Hanke et al., "Business Forecasting", 2009
 - [B022] Hamilton, "Time Series Analysis", 1994
 
-### 14: Causal Decision Making in Practice **Lessons**
+### 14: Causal Decision Making in Practice
+
+**Lessons**
 
 **Tutorials**
 
@@ -332,7 +354,9 @@
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 
-### 15: Causal Reasoning in AI Systems **Lessons**
+### 15: Causal Reasoning in AI Systems
+
+**Lessons**
 - msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents
 
 **Tutorials**
