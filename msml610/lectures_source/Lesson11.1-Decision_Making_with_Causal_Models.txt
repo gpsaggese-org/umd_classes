@@ -697,8 +697,6 @@ digraph ID {
 - **Example**: a decision rule with risks $(2, 3, 4)$ over
   $\theta \in \{0, 1, 2\}$ means:
   - $R(0, \delta) = 2$, $R(1, \delta) = 3$, $R(2, \delta) = 4$
-  - A competing rule with risks $(2, 2, 4)$ _dominates_ it (better at
-    $\theta = 1$, ties elsewhere)
 
 * Admissible Decision Rules: Definition
 
@@ -706,7 +704,11 @@ digraph ID {
   $\delta_2$ when:
   - For every parameter $\theta$, $R(\theta, \delta_1) \le R(\theta, \delta_2)$
   - For at least one $\theta$, $R(\theta, \delta_1) < R(\theta, \delta_2)$
-  - **Intuition**: $\delta_1$ is never worse and sometimes strictly better
+
+- **Intuition**: $\delta_1$ is never worse and sometimes strictly better
+
+- **Example**: the rule with risks $(2, 3, 4)$ from the previous slide is
+  dominated by $(2, 2, 4)$, since it is better at $\theta=1$, ties elsewhere
 
 - **Definition**: In decision theory, a decision rule $\delta$ is _admissible_ if
   no other rule _dominates_ it
@@ -717,27 +719,31 @@ digraph ID {
   - Admissibility is a _minimal_ standard: a rule that _is_ dominated should
     never be used
 
-- **Example**: the rule with risks $(2, 3, 4)$ from the previous slide is
-  dominated by $(2, 2, 4)$ — better at $\theta=1$, ties elsewhere
-
 * Why Bayes Rules Are Admissible
 
-- **Theorem**: A Bayes decision rule (minimizing Bayes risk $r(\delta) = \int R(\theta, \delta)\,\pi(\theta)\,d\theta$) is admissible
+- **Theorem**: A Bayes decision rule, i.e., minimizing Bayes risk
+  $$r(\delta) = \int R(\theta, \delta)\,\pi(\theta)\,d\theta$$
+  is admissible
 
 - **Proof** (by contradiction)
-  1. **Assume** a Bayes rule $\delta_B$ were not admissible
-     - Then some $\delta'$ dominates it: $R(\theta, \delta') \le R(\theta, \delta_B)\;\forall\theta$, with strict $<$ for some $\theta$
-  2. **Integrate** both sides with respect to the prior $\pi(\theta)$:
+  1. Assume a Bayes rule $\delta_B$ were not admissible
+     - Then some $\delta'$ dominates it: $R(\theta, \delta') \le R(\theta,
+       \delta_B)\;\forall\theta$, with strict $<$ for some $\theta$
+  2. Integrate both sides with respect to the prior $\pi(\theta)$:
      $$
      \int R(\theta, \delta')\,\pi(\theta)\,d\theta
        \;<\;
      \int R(\theta, \delta_B)\,\pi(\theta)\,d\theta
      $$
      - The inequality is strict because the integrand is strictly smaller on a set of positive prior mass
-  3. **Contradiction**: $r(\delta') < r(\delta_B)$, but $\delta_B$ was chosen to minimize Bayes risk
+  3. Contradiction: $r(\delta') < r(\delta_B)$, but $\delta_B$ was chosen to
+     minimize Bayes risk
      - Therefore no dominating rule can exist, and $\delta_B$ is admissible
 
-- **Key insight**: a prior assigns weights to parameter values; a rule that is optimal on average cannot be uniformly improved — if it could, the weighted average would also be better
+- **Key insight**:
+  - A prior assigns weights to parameter values
+  - A rule that is optimal on average cannot be uniformly improved
+  - If it could, the weighted average would also be better
 
 * Bayesian Decision Rule: Example
 
