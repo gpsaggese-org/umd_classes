@@ -1104,6 +1104,15 @@ digraph ID {
 // - 2020, Hullermeier & Waegeman, "Aleatoric and Epistemic Uncertainty in ML"
 // - 2011, Spiegelhalter et al., "Visualizing Uncertainty About the Future"
 
+* 
+
+- There are different types of uncertainty
+  - Aleatoric uncertainty
+  - Epistemic 
+
+A decision-maker needs to know: how much of the outcome uncertainty can I learn away (epistemic), and how much is just irreducible randomness (aleatoric)? If you can't separate signal from noise, you can't answer that question, and you can't compute the Value of Information correctly — you might over-pay for data that can't actually reduce the uncertainty you care about.
+
+
 ## #############################################################################
 ## Aleatoric Uncertainty
 ## #############################################################################
@@ -1112,42 +1121,74 @@ digraph ID {
 
 - **Definition**: _Aleatoric uncertainty_ comes from the inherent randomness in
   the outcome
-  - Aka _statistical_ or _risk_ uncertainty
+  - Aka _statistical_or _risk_ uncertainty, stochastic uncertainty
   - Cannot be reduced by collecting more data
-  - Captured by $\Pr(Y | do(a), \theta)$ given known $\theta$
+  - Captured by $\Pr(Y | do(a), \theta)$ given known $\theta$ (i.e., the noise
+    term in the structural equation.)
 
 - **Example**: flipping a known-fair coin
   - $\Pr(\text{heads}) = 0.5$ exactly
-  - More flips don't sharpen the single-flip outcome
+  - More flips don't add information so we can predict better
 
-- **Example**: medical treatment with a known response distribution
+- **Example**: medical treatment
   - Even if we knew the drug's exact mechanism, individual patient outcomes
     would vary due to biological stochasticity
 
+- **Example**:
+  - A recommender's click-through rate varies user-to-user
+  - Even with perfect knowledge of $\Pr(\text{click} | \text{user, item})$,
+    specific clicks are random
+
 - **Implication**: aleatoric uncertainty sets the _floor_ on risk
-  - No amount of learning removes it
+  - No amount of data or learning removes uncertainty
 
 * Representing Aleatoric Uncertainty
 
 - In a structural causal model:
-  $$
-  Y = f(\text{Pa}(Y), U_Y), \quad U_Y \sim \Pr(U_Y)
-  $$
+  \begin{align*}
+  Y = f(\text{Pa}(Y), U_Y)\\
+  U_Y \sim \Pr(U_Y)
+  \end{align*}
+  where:
   - $U_Y$ is the exogenous noise capturing aleatoric variability
 
-- Common distributional assumptions:
+- Common assumptions for $U_Y$
   - Gaussian: $U_Y \sim \mathcal{N}(0, \sigma^2)$ for continuous $Y$
-  - Bernoulli / categorical for discrete outcomes
   - Heavy-tailed (Student-$t$, Laplace) for robust modeling
+  - Bernoulli / categorical for discrete outcomes
 
 - **Question**: How do we tell the signal apart from the noise when we only see
   $Y$?
   - We can't, unless $U_Y$ has a tractable parametric form and we exploit the
     causal structure
 
-- **Example**: a recommender's click-through rate varies user-to-user; even
-  with perfect knowledge of $\Pr(\text{click} | \text{user, item})$, specific
-  clicks are random
+- You observe $Y$ (the outcome), but $Y$ is a mixture of:
+  - Signal: the systematic part $f(Pa(Y))$ driven by the parents (causes) of $Y$
+  - Noise: the random shock $U_Y$
+
+- **Problem**: you only see the sum as the realized $Y$
+  - Without additional assumptions, there are infinitely many ways to split $Y$
+    into signal + noise, all are equally consistent with the data
+  - They're not separately identifiable from $Y$ alone
+
+- **Solution**:
+  - You can separate them if you have both:
+    1. A tractable parametric form for $U_Y$ (e.g., you assume $U_Y \sim
+       \mathcal{N}(0, \sigma^2)$)
+       - This constrains how much of $Y$'s variation could plausibly be noise.
+    2. Causal structure: i.e., you know (or have estimated) the parents $Pa(Y)$
+       and the function $f$. If you can measure the parents and estimate $f$,
+       then you can compute the expected $Y$ (the signal) and attribute the
+       residual to noise:
+       $\hat{U}_Y = Y - \hat{f}(Pa(Y))$
+
+- **Example:**
+  - Suppose $Y$ is blood pressure
+  - Causal model says
+    - Parents $Pa(Y) = \{Age, BMI, DrugDose\}$
+    - $f$ is linear: $Y = \beta_0 + \beta_1 Age + \beta_2 BMI + \beta_3 DrugDose + U_Y$
+  - If you have data on $Age$, $BMI$, and $DrugDose$, fit the regression and get $\hat{f}(Pa(Y))$
+  - Then the residual $Y - \hat{f}(Pa(Y))$ is your estimate of the noise $U_Y$
 
 ## #############################################################################
 ## Epistemic Uncertainty
