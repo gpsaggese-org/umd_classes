@@ -130,13 +130,13 @@ MSML610: Advanced Machine Learning
 \begingroup \small
 | **Group**    | **Recovery w/ drug** | **Recovery w/o drug** |
 | -------------| ---------------------|-----------------------|
-| Men          | 81 / 87 = 93%        | 234 / 270 = 87%       |
-| Women        | 192 / 263 = 73%      | 55 / 80 = 69%         |
+| Male         | 81 / 87 = 93%        | 234 / 270 = 87%       |
+| Female       | 192 / 263 = 73%      | 55 / 80 = 69%         |
 | Combined     | 273 / 350 = 78%      | 289 / 350 = 83%       |
 \endgroup
 
 - Within each subgroup, the drug helps; pooled, it appears to hurt
-  - Sex is a confounder correlated with both treatment assignment and
+  - Gender is a confounder correlated with both treatment assignment and
     recovery baseline
   - The right decision depends on what we _do_ with the drug, not what we _see_
 
@@ -146,33 +146,48 @@ MSML610: Advanced Machine Learning
   - We need a causal graph
 
 ::: columns
-:::: {.column width=60%}
-- **Case A**: Sex $\to$ Drug, Sex $\to$ Recovery
-  - Sex confounds treatment choice
+:::: {.column width=55%}
+- **Case A**: Gender $\to$ Drug, Gender $\to$ Recovery
+  - Gender confounds treatment choice
   - Correct answer: look at the _subgroup_ table
   - The drug helps
 
-- **Case B**: Drug $\to$ Blood Pressure (post-treatment), Blood Pressure $\to$
-  Recovery
-  - Blood Pressure is a mediator
+- **Case B**: Drug $\to$ Blood Pressure, Blood Pressure $\to$ Recovery
+  - Blood Pressure is a mediator (post-treatment)
   - Correct answer: look at the _aggregate_ table
   - The drug hurts
 
 - _Same data, opposite decisions_ depending on the causal graph
 ::::
-:::: {.column width=35%}
+:::: {.column width=40%}
+**Case A** (confounder):
 ```graphviz
 digraph SimpsonCaseA {
     splines=true; nodesep=0.6; ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
 
-    Sex [label="Sex", fillcolor="#A6E7F4"];
+    Gender [label="Gender", fillcolor="#A6E7F4"];
     Drug [label="Drug", fillcolor="#F4A6A6"];
     Rec [label="Recovery", fillcolor="#A6C8F4"];
 
-    Sex -> Drug;
-    Sex -> Rec;
+    Gender -> Drug;
+    Gender -> Rec;
     Drug -> Rec;
+}
+```
+
+**Case B** (mediator):
+```graphviz
+digraph SimpsonCaseB {
+    splines=true; nodesep=0.6; ranksep=0.5;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+
+    Drug [label="Drug", fillcolor="#F4A6A6"];
+    BP [label="Blood\nPressure", fillcolor="#FFD1A6"];
+    Rec [label="Recovery", fillcolor="#A6C8F4"];
+
+    Drug -> BP;
+    BP -> Rec;
 }
 ```
 ::::
@@ -284,9 +299,9 @@ digraph DecisionLoop {
 
 - **Properties**:
   - Utilities are _subjective_: different stakeholders can have different $U$
-  - Utilities are _cardinal_: rank is what matters, not absolute values
+  - Utilities are _cardinal_: differences (not just rank) carry meaning
     - Defined up to positive affine transformations $U \to a U + b$, $a > 0$
-    - Differences are meaningful, but the zero point and unit are arbitrary
+    - The zero point and unit are arbitrary, but differences are meaningful
 
 - **Example**: a hospital utility
   - Full recovery: $U = 1.0$
@@ -304,7 +319,7 @@ digraph DecisionLoop {
       \EE_{Y \sim \Pr(Y | a)}[U(Y)]
   $$
 
-- The justification for maximizing expected utility comes from VNM theorem
+- The justification for maximizing expected utility comes from the VNM theorem
 
 - **Definition**: _Lottery_ = uncertain prospect that assigns probabilities $p_i$
   to possible outcomes $x_i$
@@ -312,8 +327,8 @@ digraph DecisionLoop {
 
 - **Theorem** (Von Neumann-Morgenstern theorem, 1944):
   - If preferences over lotteries satisfy 4 axioms
-    - _Completeness_: for any two lotteries a person prefers one to the other
-       ($A \succeq B$ or $B \succeq A$) or is indifference
+    - _Completeness_: for any two lotteries, $A \succeq B$ or $B \succeq A$
+      (any pair can be compared)
     - _Transitivity_: $A \succeq B, B \succeq C \implies A \succeq C$
     - _Continuity_: If $A \succ B \succ C$ then there exists some probability
       $p \in (0,1)$ such that the individual is indifferent between $B$ and a
@@ -397,7 +412,7 @@ digraph DecisionLoop {
 
 - **Example**: $do(Drug = 1)$
   - Drug is no longer chosen by the physician
-  - All causal arrows from $Sex$, $Age$, etc. into $Drug$ are cut
+  - All causal arrows from $Gender$, $Age$, etc. into $Drug$ are cut
 
 ::: columns
 :::: {.column width=45%}
@@ -405,7 +420,7 @@ digraph DecisionLoop {
 Before:
 \endgroup
 
-```graphviz[width=50%]
+```graphviz
 digraph PreMutation {
     splines=true; nodesep=0.5; ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
@@ -428,7 +443,7 @@ digraph PreMutation {
 After:
 \endgroup
 
-```graphviz[width=80%]
+```graphviz
 digraph PostMutation {
     splines=true; nodesep=0.5; ranksep=0.5;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
@@ -518,9 +533,9 @@ digraph PostMutation {
   - Weights $w_k$ elicited from stakeholders
   - Works when trade-offs are approximately linear
 
-- **Definition**: _Pareto frontier_ presents trade-offs to the decision-maker
-  visually keeping only non-dominated actions
-  - Avoid picking a single $U$ until preferences are clear
+- **Definition**: the _Pareto frontier_ is the set of _non-dominated_ actions
+  - Presents trade-offs visually without committing to weights
+  - Useful when stakeholder preferences are not yet clear
 
 - **Example**: recommending a cancer therapy
   - Objectives: 5-year survival, quality of life, cost
@@ -702,8 +717,8 @@ digraph ID {
   - Admissibility is a _minimal_ standard: a rule that _is_ dominated should
     never be used
 
-- **Example**: a rule with risks $(2, 3, 4)$ over $\theta \in \{0, 1, 2\}$ is dominated by $(2, 2, 4)$
-  - The alternative matches at $\theta=0, 2$ and improves at $\theta=1$
+- **Example**: the rule with risks $(2, 3, 4)$ from the previous slide is
+  dominated by $(2, 2, 4)$ — better at $\theta=1$, ties elsewhere
 
 * Why Bayes Rules Are Admissible
 
