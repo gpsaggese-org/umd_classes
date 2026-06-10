@@ -106,7 +106,7 @@ MSML610: Advanced Machine Learning
 \begingroup \small
 | **Aspect**           | **Prediction**              | **Decision**                          |
 |----------------------|-----------------------------|---------------------------------------|
-| Target               | $\mathbb{E}[Y | X]$         | $\arg\max_a \mathbb{E}[U(Y) | do(a)]$ |
+| Target               | $\EE[Y \| X]$               | $\arg\max_a \EE[U(Y) \| do(a)]$       |
 | Data                 | Observational only          | Observational + experimental          |
 | Metric               | Accuracy, AUC, MSE          | Regret, expected utility              |
 | Modeling assumption  | i.i.d. and stable world     | Models the intervention itself        |
@@ -152,8 +152,9 @@ MSML610: Advanced Machine Learning
   - Correct answer: look at the _subgroup_ table
   - The drug helps
 
-- **Case B**: Drug $\to$ Sex (post-treatment), Sex $\to$ Recovery
-  - Sex is a mediator
+- **Case B**: Drug $\to$ Blood Pressure (post-treatment), Blood Pressure $\to$
+  Recovery
+  - Blood Pressure is a mediator
   - Correct answer: look at the _aggregate_ table
   - The drug hurts
 
@@ -283,8 +284,9 @@ digraph DecisionLoop {
 
 - **Properties**:
   - Utilities are _subjective_: different stakeholders can have different $U$
-  - Utilities are _ordinal_: rank is what matters, not absolute values
+  - Utilities are _cardinal_: rank is what matters, not absolute values
     - Defined up to positive affine transformations $U \to a U + b$, $a > 0$
+    - Differences are meaningful, but the zero point and unit are arbitrary
 
 - **Example**: a hospital utility
   - Full recovery: $U = 1.0$
@@ -310,21 +312,20 @@ digraph DecisionLoop {
 
 - **Theorem** (Von Neumann-Morgenstern theorem, 1944):
   - If preferences over lotteries satisfy 4 axioms
-    - Completeness: a person prefers lottery $A$ to $B$ ($A \succeq B$), $B$ to
-      $A$ or is indifferent
-    - Transitivity: $A \succeq B, B \succeq C \implies A succeq C$
-    - Continuity: If $A \succ B \succ C$ then there exists some probability
+    - _Completeness_: for any two lotteries a person prefers one to the other
+       ($A \succeq B$ or $B \succeq A$) or is indifference
+    - _Transitivity_: $A \succeq B, B \succeq C \implies A \succeq C$
+    - _Continuity_: If $A \succ B \succ C$ then there exists some probability
       $p \in (0,1)$ such that the individual is indifferent between $B$ and a
       lottery that gives $A$ with probability $p$ and $C$ with probability $1-p$
-    - Independence: If $A \succeq B$, then for any lottery $C$ and probability
-      $\alpha \in (0,1)$, then
+    - _Independence_: Adding the same "background gamble" to both options should
+      not reverse preferences. If $A \succeq B$, then for any lottery $C$ and
+      probability $\alpha \in (0,1)$,
       $\alpha A + (1-\alpha)C \succeq \alpha B + (1-\alpha)C$
-      (adding the same “background gamble” to both options should not reverse
-      preferences)
   - Then there exists a utility function $U$ such that the agent acts _as if_
     maximizing expected utility $\EE[U(L)] = \sum_i p_i U(x_i)$
 
-* Expected Utility: Buying insurance Example
+* Expected Utility: Buying Insurance Example
 - Assume
   - $W$ = current wealth
   - $c$ = insurance premium (paid for sure)
@@ -337,7 +338,7 @@ digraph DecisionLoop {
 - Risk-averse utilities (concave, i.e., $U(\EE[W]) > \EE[U(W)]$) make this
   inequality easier to satisfy
   - Concavity means that losing money hurts more than gaining the same amount
-  - There is also a reduction in uncertainty
+  - Insurance also removes outcome variance, which is valuable to a risk-averse agent
 
 // TODO(gp): Add example
 
@@ -416,6 +417,8 @@ digraph PreMutation {
 
     Gender -> Drug;
     Age -> Drug;
+    Gender -> Y;
+    Age -> Y;
     Drug -> Y;
 }
 ```
@@ -1066,7 +1069,8 @@ digraph ID {
   - Bernoulli / categorical for discrete outcomes
   - Heavy-tailed (Student-$t$, Laplace) for robust modeling
 
-- **Q**: How do we tell the agent apart from the noise when we only see $Y$?
+- **Question**: How do we tell the signal apart from the noise when we only see
+  $Y$?
   - We can't, unless $U_Y$ has a tractable parametric form and we exploit the
     causal structure
 
