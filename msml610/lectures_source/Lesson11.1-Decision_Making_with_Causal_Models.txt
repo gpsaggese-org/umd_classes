@@ -978,6 +978,67 @@ digraph ID {
     effect
   - Exploiting this structure cuts samples needed to find the best combination
 
+## #############################################################################
+## Bayesian Optimization for Experimentation
+## #############################################################################
+
+* Bayesian Optimization
+
+- **Definition**: _Bayesian optimization_ (BO) targets problems where:
+  - The objective $f(x)$ is _expensive_ to evaluate
+    in terms of time, money, or resources
+    - E.g., training a deep model, running a chemistry experiment, testing a web
+      layout
+  - No gradients available $\nabla f(x)$
+    - You can't do gradient descent on $f(x)$
+  - $x$ lies in a low-to-moderate dimensional space (not high-dimensional)
+    - E.g., < 20 dimensions
+
+- **Algorithm**:
+  1. Place a prior over $f(x)$ (typically a Gaussian process)
+  2. At each round, fit the posterior on observed $(x_i, f(x_i))$
+  3. Select $x_{next}$ by maximizing an _acquisition function_ $\alpha(x)$
+  4. Query $f(x_{next})$, update, repeat
+
+- **Key insight**:
+  - Posterior (e.g., Gaussian Process) gives both a mean estimate $\mu(x)$
+    and an uncertainty estimate $\sigma(x)$ at every point
+  - You don't just chase the current best, but also explore regions where you're
+    uncertain
+
+- **Examples**:
+  - Hyperparameter tuning for a deep model
+  - Tuning web page layout
+  - Picking reagent concentrations in a chemistry lab
+
+* Acquisition Functions
+
+- The acquisition function $\alpha(x)$ is the decision policy
+  - Encodes how you trade off exploration vs exploitation
+
+- There are several strategies
+  - _Expected improvement (EI)_:
+    $$\alpha_{EI}(x) = \EE[\max(f(x) - f^*, 0)]$$
+    - _"How much better than current best $f^*$ might this point be, in
+      expectation?"_
+  - _Upper confidence bound (UCB)_:
+    $$\alpha_{UCB}(x) = \mu(x) + \kappa \sigma(x)$$
+    - _"Optimistically bias toward high-uncertainty regions; $\kappa$ controls
+      how much"_
+  - _Thompson sampling_: sample $\tilde f \sim \Pr(f | \mathcal{D})$,
+    maximize $\tilde f$
+    - _"Act as if a random plausible world is the real one"_
+  - _Entropy search_: pick $x$ that most reduces entropy of $\arg\max f$
+    - _"Which point tells me most about where the optimum is?"_
+
+- **Example**: tuning a learning rate
+  - Posterior mean peaks at $10^{-3}$, variance is largest at $10^{-5}$
+  - EI may query $10^{-5}$ if improvement potential > current best
+  - UCB with high $\kappa$ behaves similarly
+
+- **Key takeaway**: the acquisition function _is_ the policy, derived from the
+  posterior and a utility for information
+
 // TODO(gp): I don't think this is the right place
 // TODO(gp): Add an example
 * Thompson Sampling
@@ -1000,63 +1061,12 @@ digraph ID {
   - Easy to adapt to causal structure by sampling from posteriors over causal
     effects
 
-## #############################################################################
-## Bayesian Optimization for Experimentation
-## #############################################################################
-
-* Bayesian Optimization
-
-- **Definition**: _Bayesian optimization_ (BO) targets problems where:
-  - The objective $f(x)$ is _expensive_ to evaluate
-    in terms of time, money, or resources
-    - E.g., training a deep model, running a chemistry experiment, testing a web
-      layout
-  - No gradients available $\nabla f(x)$
-    - You can't do gradient descent on $f(x)$
-  - $x$ lies in a low-to-moderate dimensional space (not high-dimensional)
-    - E.g., < 20 dimensions
-
-- **Algorithm**:
-  1. Place a prior over $f(x)$ (typically a Gaussian process)
-  2. At each round, fit the posterior on observed $(x_i, f(x_i))$
-  3. Select $x_{next}$ by maximizing an _acquisition function_
-  4. Query $f(x_{next})$, update, repeat
-
-- **Key insight**:
-  - Posterior (e.g., Gaussian Process) gives both a mean estimate $\mu(x)$
-    and an uncertainty estimate $\sigma(x)$ at every point
-  - You don't just chase the current best, but also explore regions where you're
-    uncertain
-
-- **Examples**:
-  - Hyperparameter tuning for a deep model
-  - Tuning web page layout
-  - Picking reagent concentrations in a chemistry lab
-
-* Acquisition Functions
-
-- The acquisition function trades off exploration and exploitation:
-  - _Expected improvement (EI)_:
-    $$\alpha_{EI}(x) = \EE[\max(f(x) - f^*, 0)]$$
-  - _Upper confidence bound (UCB)_:
-    $$\alpha_{UCB}(x) = \mu(x) + \kappa \sigma(x)$$
-  - _Thompson sampling_: sample $\tilde f \sim \Pr(f | \mathcal{D})$,
-    maximize $\tilde f$
-  - _Entropy search_: pick $x$ that most reduces entropy of $\arg\max f$
-
-- **Example**: tuning a learning rate
-  - Posterior mean peaks at $10^{-3}$, variance is largest at $10^{-5}$
-  - EI may query $10^{-5}$ if improvement potential > current best
-  - UCB with high $\kappa$ behaves similarly
-
-- **Key takeaway**: the acquisition function _is_ the policy, derived from the
-  posterior and a utility for information
-
-* BO in Causal Experimentation
+* Causal Bayesian Optimization
 
 - Causal BO combines BO with causal graphs:
-  - Decision variable $x$ is an **intervention** $do(X = x)$
-  - Surrogate model is a **structural causal model**, not just a GP on $y$
+  - Decision variable $x$ is an intervention $do(X = x)$
+  - Surrogate model is a structural causal model (not just a Gaussian Process on
+    $y$)
   - Leverages the graph to share information across interventions
 
 - **Example**: drug dose optimization
@@ -1064,9 +1074,26 @@ digraph ID {
   - Causal BO models intermediate biomarkers that mediate dose $\to$ outcome
   - Fewer trials needed when the causal mechanism is partly known
 
-- **Pros**: sample efficient, principled exploration, uncertainty-aware
-- **Cons**: requires accurate causal structure; misspecification can hurt more
-  than help
+- **Pros**:
+  - Sample efficient
+  - Principled exploration
+  - Uncertainty-aware
+- **Cons**
+  - Requires accurate causal structure
+  - Misspecification can hurt more than help
+
+* Putting Everything Together
+
+- Sequential decision-making:
+  - _Value of Information_ tells you whether to explore
+  - _Acquisition functions_ tell you where to explore
+  - _Causal structure_ tells you how to share information across different
+    interventions
+    - Makes exploration vastly more efficient than a black-box approach
+
+- Prediction alone can't guide decisions
+- A causal model + Bayesian uncertainty + a principled exploration policy gives
+  you a system that learns which actions work with minimal cost
 
 # ##############################################################################
 # Uncertainty in Causal Decisions
@@ -1083,9 +1110,9 @@ digraph ID {
 
 * Aleatoric Uncertainty: Irreducible Randomness
 
-- **Aleatoric uncertainty** comes from the _inherent_ randomness in the
-  outcome
-  - Also called _statistical_ or _risk_ uncertainty
+- **Definition**: _Aleatoric uncertainty_ comes from the inherent randomness in
+  the outcome
+  - Aka _statistical_ or _risk_ uncertainty
   - Cannot be reduced by collecting more data
   - Captured by $\Pr(Y | do(a), \theta)$ given known $\theta$
 
@@ -1097,8 +1124,8 @@ digraph ID {
   - Even if we knew the drug's exact mechanism, individual patient outcomes
     would vary due to biological stochasticity
 
-- **Decision implication**: aleatoric uncertainty sets the _floor_ on risk —
-  no amount of learning removes it
+- **Implication**: aleatoric uncertainty sets the _floor_ on risk
+  - No amount of learning removes it
 
 * Representing Aleatoric Uncertainty
 
