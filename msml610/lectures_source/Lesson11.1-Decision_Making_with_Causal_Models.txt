@@ -338,7 +338,7 @@ digraph DecisionLoop {
   - Concavity means that losing money hurts more than gaining the same amount
   - There is also a reduction in uncertainty
 
-// TODO(ai_gp): Add example
+// TODO(gp): Add example
 
 * Expected Utility: Two Treatment Example
 
@@ -465,70 +465,64 @@ digraph PostMutation {
 
 * Risk Preferences
 
+- **Intuition**: The curvature of $U$ encodes attitude toward risk
+  - If each extra dollar delights you less than the last ($dU/dx$ decreasing), you
+    are risk-averse
+  - If each extra dollar delights you more ($dU/dx$ increasing), you are risk-seeking
+
 - Expected utility handles risk through the _shape_ of $U$:
-// TODO(ai_gp): Convert this into a markdown table
-  - **Risk-neutral**: $U$ is linear, $U(y) = y$ care only about the mean
-  - **Risk-averse**: $U$ is concave — penalize variance
-  - **Risk-seeking**: $U$ is convex — reward variance
+  - Mathematically, the second derivative $U''$ determines risk attitude
 
-- **Certainty equivalent** $y_{CE}$: the sure outcome the agent values as
+\begingroup \small
+| **Profile**      | **$U$ Shape** | **$U''$** | **Effect**               |
+| ---------------- | ------------- | --------- | ------------------------ |
+| Risk-neutral     | Linear        | $=0$      | Care only about the mean |
+| Risk-averse      | Concave       | $<0$      | Penalize variance        |
+| Risk-seeking     | Convex        | $>0$      | Reward variance          |
+\endgroup
+
+- **Definition**: _certainty equivalent_ $y_{CE}$ is the sure outcome the agent values as
   much as a risky prospect
-  - Risk-averse: $y_{CE} < \EE[Y]$
-  - Gap $\EE[Y] - y_{CE}$ is the **risk premium**
-
-- **Example**: $U(y) = \log(y)$
-  - A 50/50 bet between \$100 and \$400 has mean \$250
-  - $y_{CE} = \exp(0.5 \log 100 + 0.5 \log 400) = \$200 < \$250$
+  - Risk-averse: $y_{CE} < \EE[Y]$ (gap is the _risk premium_)
+  - Risk-neutral: $y_{CE} = \EE[Y]$
+  - Risk-seeking: $y_{CE} > \EE[Y]$
 
 * Visualizing Risk Aversion
 
-```graphviz
-digraph RiskAversion {
-    splines=curved;
-    rankdir=LR;
-    nodesep=0.7; ranksep=0.9;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+- **Example**: $U(y) = \log(y)$ is concave ($U'' < 0$), so the agent is risk-averse
+  - A 50/50 bet between \$100 and \$400 has $\EE[Y] = \$250$
+  - $y_{CE} = \exp(0.5 \log 100 + 0.5 \log 400) = \$200 < \$250$
+  - Risk premium = \$50: the agent would pay \$50 to avoid the gamble
 
-    Low [label="Outcome $100\nU=4.6", fillcolor="#FFD1A6"];
-    High [label="Outcome $400\nU=6.0", fillcolor="#FFD1A6"];
-    EU [label="E[U] = 5.3", fillcolor="#A0D6D1"];
-    CE [label="CE = $200\n(U = 5.3)", fillcolor="#B2E2B2"];
-    Mean [label="E[Y] = $250", fillcolor="#A6C8F4"];
-
-    Low -> EU;
-    High -> EU;
-    EU -> CE [label="  invert U"];
-    Mean -> CE [label="  premium $50", style=dashed];
-}
-```
-
-- **Key takeaway**: a concave $U$ trades expected return for reduced variance
-  - Choose actions whose outcome distribution is _both_ high in mean and
-    narrow in spread
+// TODO(gp): Add example
 
 * Multi-Criteria Trade-offs
 
-- Real decisions weigh **multiple objectives** that pull in different
-  directions
-  - Clinical: efficacy, side effects, cost, patient burden
-  - Business: revenue, churn, brand, regulatory risk
+- **Problem**: real decisions weigh _multiple objectives_ that pull in different
+  directions (i.e., trade-offs)
+- E.g.,
+  - In clinical settings: efficacy, side effects, cost, patient burden
+  - In business: revenue, churn, brand, regulatory risk
 
-- **Scalarization**: collapse into a single utility
-  $$
-  U(y) = \sum_{k} w_k \cdot u_k(y_k)
-  $$
+- **Solution**
+  - _Scalarization_ collapses into a single utility
+    $$
+    U(y) = \sum_{k} w_k \cdot U_k(y_k)
+    $$
   - Weights $w_k$ elicited from stakeholders
   - Works when trade-offs are approximately linear
 
-- **Pareto frontier**: keep only non-dominated actions
+- **Definition**: _Pareto frontier_ presents trade-offs to the decision-maker
+  visually keeping only non-dominated actions
   - Avoid picking a single $U$ until preferences are clear
-  - Present trade-offs to the decision-maker visually
 
 - **Example**: recommending a cancer therapy
   - Objectives: 5-year survival, quality of life, cost
-  - Elicit weights; or present the Pareto front of treatments
+  - Elicit weights or present the Pareto front of treatments
 
-* Risk and Trade-offs: Practical Advice
+// TODO(gp): Add pareto frontier
+
+* Utility Theory: Pros and Cons
 
 - **Pros**
   - Expected utility unifies risk, uncertainty, and multi-criteria reasoning
@@ -536,13 +530,13 @@ digraph RiskAversion {
   - Maps cleanly onto Bayesian posteriors
 
 - **Cons**
-  - Utility elicitation is hard — stakeholders struggle to quantify preferences
+  - Utility elicitation is hard: stakeholders struggle to quantify preferences
   - Sensitivity: small changes in $U$ can flip the optimal action
-  - Behavioral humans _systematically_ violate the axioms (Kahneman \& Tversky)
+  - Behavioral humans _systematically_ violate the VNM axioms (Kahneman \& Tversky)
 
-- **Rule of thumb**: perform a **sensitivity analysis** over $U$ — if the
-  optimal action is stable across a plausible range of utilities, the decision
-  is robust
+- **Rule of thumb**: perform a _sensitivity analysis_ over $U$
+  - If the optimal action is stable across a plausible range of utilities, the
+    decision is robust
 
 # ##############################################################################
 # Decision Support with Causal Models
@@ -562,20 +556,28 @@ digraph RiskAversion {
 - Bayesian networks model _uncertainty_; we need to also represent _decisions_
   and _preferences_
 
-- An **influence diagram** extends a causal DAG with three kinds of nodes:
-  - **Chance nodes** (ovals): random variables, same as in a Bayesian network
-  - **Decision nodes** (rectangles): variables set by the decision-maker
-  - **Utility nodes** (diamonds): deterministic functions yielding utility
+- **Definition**: An _influence diagram_ extends a causal DAG with three kinds of
+  nodes:
+  - _Chance nodes_ (ovals): random variables, same as in a Bayesian network
+  - _Decision nodes_ (rectangles): variables set by the decision-maker
+  - _Utility nodes_ (diamonds): deterministic functions yielding utility
 
-- **Purpose**: a compact, graphical specification of a decision problem that
-  can be solved by message passing
+- **Goal**: a compact, graphical specification of a decision problem that can be
+  solved automatically
 
+* Influence Diagram: Medical Example
+
+::: columns
+:::: {.column width=50%}
 - **Example**: whether to run a diagnostic test before treating a patient
   - Chance: disease status, test result, outcome
   - Decision: order test?, choose therapy?
   - Utility: cost of test, value of outcome
-
-* Influence Diagram: Anatomy
+- Arrows into decision nodes denote _information available_ at decision time (no
+  causal meaning)
+- Arrows into chance and utility nodes retain their _causal_ interpretation
+::::
+:::: {.column width=45%}
 
 ```graphviz
 digraph ID {
@@ -598,19 +600,18 @@ digraph ID {
     Outcome -> U;
 }
 ```
-
-- Arrows into decision nodes denote **information available** at decision time
-  (no causal meaning)
-- Arrows into chance and utility nodes retain their **causal** interpretation
+::::
+:::
 
 * Solving an Influence Diagram
 
 - **Input**: influence diagram with CPTs for chance nodes and a utility table
-- **Output**: optimal policy $\pi^*$ = function from information to actions
+- **Output**: optimal policy $\pi^*$, i.e., a function from information to
+  actions
 
 - **Steps** (variable elimination):
   1. Eliminate chance nodes by summing them out
-  2. Eliminate decision nodes by **maximizing** over their domain
+  2. Eliminate decision nodes by maximizing over their domain
   3. Process in reverse topological order
   4. Record the arg-max at each decision node as the optimal policy
 
@@ -632,10 +633,6 @@ digraph ID {
   - Requires fully specified CPTs and utilities — often heroic
   - Exact solution is intractable for large continuous problems
   - Assumes a single rational decision-maker with stable utilities
-
-- **Example**: the oil wildcatter problem (classic)
-  - Decide whether to drill, after optionally running a seismic test
-  - Closed-form optimal policy using a 4-node influence diagram
 
 ## #############################################################################
 ## Bayesian Decision-Making
