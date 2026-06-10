@@ -176,6 +176,52 @@ ANTHROPIC_BASE_URL=https://openrouter.ai/api
 ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
 
 
+# cc — Convenience Wrapper for Claude Code
+
+We provide a `cc` script in `dev_scripts_helpers/ai/` that wraps `claude` with
+sensible defaults for model selection and tmux integration.
+
+## What It Does
+
+- Launches Claude Code interactively with `--dangerously-skip-permissions` for
+  faster iteration
+- Supports model selection via shorthand flags (Anthropic direct or various
+  models through OpenRouter)
+- Automatically configures the right environment variables depending on the
+  chosen model
+- Renames the tmux pane to `*CC*` during the session and restores it on exit
+- Passes all additional arguments through to the underlying `claude` command
+
+## Model Selection Flags
+
+| Flag | Description |
+|------|-------------|
+| `--anth` | Use Anthropic directly (clears OpenRouter env vars) |
+| `--or_anth` | Claude Haiku 4.5 via OpenRouter |
+| `--ds` | DeepSeek V4 Flash via OpenRouter (default) |
+| `--dsp` | DeepSeek V4 Pro via OpenRouter |
+| `--model MODEL` | Any model through OpenRouter |
+| `--test` | Run diagnostics (`claude doctor` + `/model`) |
+
+## Examples
+
+```bash
+# Default: DeepSeek V4 Flash via OpenRouter
+> cc
+
+# Use Anthropic directly
+> cc --anth
+
+# Use Claude Haiku 4.5 via OpenRouter
+> cc --or_anth
+
+# Use a custom model through OpenRouter
+> cc --model openrouter/meta-llama/llama-3.1-8b-instruct
+
+# Run diagnostics
+> cc --test
+```
+
 Test the model
 
 > cc
