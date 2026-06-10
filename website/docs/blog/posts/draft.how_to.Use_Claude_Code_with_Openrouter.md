@@ -2,186 +2,221 @@
 title: "How to Use Claude Code with OpenRouter"
 draft: true
 authors:
-  - gpsaggese
+    - gpsaggese
 date: 2026-06-09
 description: Configure Claude Code to use OpenRouter for LLM access
 categories:
-  - LLM
-  - AI Tools
+    - AI Tools
+    - LLM
 ---
 
-# Configure Openrouter
+TL;DR Learn how to configure Claude Code to route LLM calls through OpenRouter,
+enabling access to models from multiple providers through a single API.
 
-- Create keys for the providers you already have
-  https://platform.claude.com/settings/workspaces/default/keys
+<!-- more -->
 
-- Then do BYOK
+- [OpenRouter](https://openrouter.ai/) is a unified API gateway that provides
+  access to LLMs from multiple providers (Anthropic, OpenAI, DeepSeek, Meta,
+  Google, etc.) through a single endpoint
+    - This enables using Claude Code with non-Anthropic models like DeepSeek or
+      OpenAI GPT
+    - It also allows mixing models from different providers for different tasks
 
-- https://openrouter.ai/workspaces/default/byok
+- This guide covers:
+    - Setting up OpenRouter, with and without BYOK (Bring Your Own Key)
+    - Testing the API connection
+    - Configuring Claude Code to route through OpenRouter
+    - Using the `cc` convenience wrapper for model selection
 
-An openrouter key looks like
+## What is OpenRouter and BYOK
 
-OPENROUTER_API_KEY=sk-or-v1-...
+- OpenRouter acts as a proxy between your client and LLM providers
+    - You send requests to `https://openrouter.ai/api/v1`
+    - OpenRouter routes them to the appropriate provider
 
-An Anthropic key looks like
+- **BYOK (Bring Your Own Key)** means you use your existing API keys from providers
+  (Anthropic, OpenAI, etc.) rather than buying credits from OpenRouter
+    - This is useful if you already have subscriptions or credits with specific
+      providers
+    - You register your keys with OpenRouter, and traffic is routed through your
+      own accounts
 
-ANTHROPIC_KEY=sk-ant-api03-...
+## Prerequisites: API Keys
 
-An OpenAI key looks like
+- Before configuring OpenRouter, ensure you have API keys for the providers you
+  plan to use:
 
-OPENAI_API_KEY=sk-proj-...
+    | Provider   | Environment Variable | Key Format         |
+    | :--------- | :------------------- | :----------------- |
+    | Anthropic  | `ANTHROPIC_API_KEY`  | `sk-ant-api03-...` |
+    | OpenAI     | `OPENAI_API_KEY`     | `sk-proj-...`      |
 
-# Test Openrouter
+## Step 1: Configure OpenRouter with BYOK
 
-- The available models are
-curl https://openrouter.ai/api/v1/models -H "Authorization: Bearer $OPENROUTER_API_KEY" | jq '.data[].id' | sort
+- Create API keys for your providers at:
+    - [Anthropic Console](https://platform.claude.com/settings/workspaces/default/keys)
+    - [OpenAI API Keys](https://platform.openai.com/api-keys)
 
-- Test a completion
-curl https://openrouter.ai/api/v1/chat/completions \
-  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "openai/gpt-5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Reply with the word OK"
-      }
-    ]
-  }'
+- Register your keys with OpenRouter at:
+  [BYOK Settings](https://openrouter.ai/workspaces/default/byok)
 
+- Generate an OpenRouter API key (`sk-or-v1-...`) for your client applications
 
-# Configure ClaudeCode
-export ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
-export ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
-export ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
-export ANTHROPIC_BASE_URL=https://openrouter.ai/api/v1/anthropic
-export ANTHROPIC_AUTH_TOKEN=$OPENROUTER_API_KEY
+## Step 2: Test the OpenRouter API
 
-unset ANTHROPIC_KEY
+- List available models through OpenRouter:
 
-The env looks like
-> env  | sort | grep ANT
-ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
-ANTHROPIC_BASE_URL=https://openrouter.ai/api/v1/anthropic
-ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
-ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
-ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
+    ```bash
+    > curl https://openrouter.ai/api/v1/models \
+        -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+        | jq '.data[].id' | sort
+    ```
 
-Test that the models are available through the API
+- Test a simple completion:
 
-#
-curl https://openrouter.ai/api/v1/chat/completions \
-  -H "Authorization: Bearer $OPENROUTER_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "openai/gpt-5",
-    "messages": [
-      {
-        "role": "user",
-        "content": "Reply with the word OK"
-      }
-    ]
-  }'
-
-
-export ANTHROPIC_BASE_URL=https://openrouter.ai/api
-export ANTHROPIC_BASE_URL=https://openrouter.ai/api/v1
-export ANTHROPIC_API_KEY=sk-or-v1
-
-unset ANTHROPIC_API_KEY
-
-
-
-
-> export ANTHROPIC_BASE_URL=https://openrouter.ai/api
-
-saggese@gpmac.local venv:(client_venv.helpers) branch:'gp_scratch' ~/src/umd_classes1
-> vi quick_test.py
-
-saggese@gpmac.local venv:(client_venv.helpers) branch:'gp_scratch' ~/src/umd_classes1
-> python quick_test.py
-Endpoint : https://openrouter.ai/api
-Model    : openai/gpt-5
-Testing...
-
-SUCCESS
-
-#!/usr/bin/env python3
-
-import os
-import sys
-from anthropic import Anthropic
-
-BASE_URL = os.environ["ANTHROPIC_BASE_URL"]
-API_KEY = os.environ["ANTHROPIC_AUTH_TOKEN"]
-MODEL = os.environ["ANTHROPIC_DEFAULT_HAIKU_MODEL"]
-
-if not API_KEY:
-    print("ERROR: ANTHROPIC_AUTH_TOKEN is not set")
-    sys.exit(1)
-
-print(f"Endpoint : {BASE_URL}")
-print(f"Model    : {MODEL}")
-print("Testing...\n")
-
-try:
-    client = Anthropic(
-        api_key=API_KEY,
-        base_url=BASE_URL,
-    )
-
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=20,
-        messages=[
+    ```bash
+    > curl https://openrouter.ai/api/v1/chat/completions \
+        -H "Authorization: Bearer $OPENROUTER_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d '{
+          "model": "openai/gpt-5",
+          "messages": [
             {
-                "role": "user",
-                "content": "Reply with exactly: API_OK"
+              "role": "user",
+              "content": "Reply with the word OK"
             }
-        ],
-    )
+          ]
+        }'
+    ```
 
-    text = "".join(
-        block.text
-        for block in response.content
-        if getattr(block, "type", None) == "text"
-    )
+## Step 3: Configure Claude Code for OpenRouter
 
-    print("SUCCESS")
-    #print("Response:", repr(text))
+- Claude Code uses Anthropic's SDK, which connects to `api.anthropic.com` by
+  default
+- To route to OpenAI models through OpenRouter, set the following environment
+  variables:
 
-except Exception as e:
-    print("FAILED")
-    #print(type(e).__name__)
-    #print(str(e))
-    sys.exit(2)
+    ```bash
+    > export ANTHROPIC_BASE_URL=https://openrouter.ai/api
+    > export ANTHROPIC_AUTH_TOKEN=$OPENROUTER_API_KEY
+    > export ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
+    > export ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
+    > export ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
 
+    # Unset the direct Anthropic key to avoid conflicts.
+    > unset ANTHROPIC_API_KEY
+    ```
 
-> echo $ANTHROPIC_BASE_URL
-https://openrouter.ai/api
+- Verify the environment is configured correctly:
 
-It works!
+    ```bash
+    > env | sort | grep ANT
+    ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
+    ANTHROPIC_BASE_URL=https://openrouter.ai/api
+    ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
+    ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
+    ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
+    ```
 
+### Testing with the Anthropic Python SDK
 
-export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
-export ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
-export ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
+<!-- TODO(ai_gp): move to repo and point to it -->
 
-> env | grep ANTH
-ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
-ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
-ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
-ANTHROPIC_BASE_URL=https://openrouter.ai/api
-ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
+- Create a quick test script (`quick_test.py`):
 
+    ```python
+    import os
+    import sys
+    from anthropic import Anthropic
 
-# cc — Convenience Wrapper for Claude Code
+    BASE_URL = os.environ["ANTHROPIC_BASE_URL"]
+    API_KEY = os.environ["ANTHROPIC_AUTH_TOKEN"]
+    MODEL = os.environ["ANTHROPIC_DEFAULT_HAIKU_MODEL"]
 
-We provide a `cc` script in `dev_scripts_helpers/ai/` that wraps `claude` with
-sensible defaults for model selection and tmux integration.
+    if not API_KEY:
+        print("ERROR: ANTHROPIC_AUTH_TOKEN is not set")
+        sys.exit(1)
 
-## What It Does
+    print(f"Endpoint : {BASE_URL}")
+    print(f"Model    : {MODEL}")
+    print("Testing...\n")
+
+    try:
+        client = Anthropic(
+            api_key=API_KEY,
+            base_url=BASE_URL,
+        )
+
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=20,
+            messages=[
+                {
+                    "role": "user",
+                    "content": "Reply with exactly: API_OK"
+                }
+            ],
+        )
+
+        text = "".join(
+            block.text
+            for block in response.content
+            if getattr(block, "type", None) == "text"
+        )
+
+        print("SUCCESS")
+
+    except Exception as e:
+        print("FAILED")
+        sys.exit(2)
+    ```
+
+- Run the test:
+
+    ```bash
+    > python quick_test.py
+    Endpoint : https://openrouter.ai/api
+    Model    : openai/gpt-5
+    Testing...
+
+    SUCCESS
+    ```
+
+## Step 4: Using Different Models
+
+- Once OpenRouter is configured, map Claude Code's model tiers to any models you
+  prefer:
+
+    ```bash
+    > export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
+    > export ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
+    > export ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/sonnet-4.6
+    ```
+
+- Verify the current configuration:
+
+    ```bash
+    > env | grep ANTH
+    ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
+    ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
+    ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
+    ANTHROPIC_BASE_URL=https://openrouter.ai/api
+    ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
+    ```
+
+## Test Claude Code
+
+<!-- TODO(ai_gp): Show commands from cc with /models /doctor -->
+
+## The `cc` Convenience Wrapper
+
+<!-- TODO(ai_gp): Point to the README of cc -->
+<!-- TODO(ai_gp): Always use links to repo besides the path -->
+
+- The repository provides a `cc` script at `dev_scripts_helpers/ai/` that wraps
+  `claude` with sensible defaults for model selection and tmux integration
+
+### Key Features
 
 - Launches Claude Code interactively with `--dangerously-skip-permissions` for
   faster iteration
@@ -192,18 +227,18 @@ sensible defaults for model selection and tmux integration.
 - Renames the tmux pane to `*CC*` during the session and restores it on exit
 - Passes all additional arguments through to the underlying `claude` command
 
-## Model Selection Flags
+### Model Selection Flags
 
-| Flag | Description |
-|------|-------------|
-| `--anth` | Use Anthropic directly (clears OpenRouter env vars) |
-| `--or_anth` | Claude Haiku 4.5 via OpenRouter |
-| `--ds` | DeepSeek V4 Flash via OpenRouter (default) |
-| `--dsp` | DeepSeek V4 Pro via OpenRouter |
-| `--model MODEL` | Any model through OpenRouter |
-| `--test` | Run diagnostics (`claude doctor` + `/model`) |
+| Flag            | Description                                         |
+| :-------------- | :-------------------------------------------------- |
+| `--anth`        | Use Anthropic directly (clears OpenRouter env vars) |
+| `--or_anth`     | Claude Haiku 4.5 via OpenRouter                     |
+| `--ds`          | DeepSeek V4 Flash via OpenRouter (default)          |
+| `--dsp`         | DeepSeek V4 Pro via OpenRouter                      |
+| `--model MODEL` | Any model through OpenRouter                        |
+| `--test`        | Run diagnostics (`claude doctor` + `/model`)        |
 
-## Examples
+### Usage Examples
 
 ```bash
 # Default: DeepSeek V4 Flash via OpenRouter
@@ -222,35 +257,41 @@ sensible defaults for model selection and tmux integration.
 > cc --test
 ```
 
-Test the model
+### Verifying the Model in Claude Code
 
-> cc
- ▐▛███▜▌   Claude Code v2.1.158
- ▝▜█████▛▘  deepseek/deepseek-v4-flash · API Usage Billing
-   ▘▘ ▝▝    ~/src/umd_classes1
+- Once Claude Code launches with the `cc` wrapper, verify which model is active
+  using the `/model` command:
 
+    ```bash
+    > cc
+     ▐▛███▜▌   Claude Code v2.1.158
+    ▝▜█████▛▘  deepseek/deepseek-v4-flash · API Usage Billing
+      ▘▘ ▝▝    ~/src/xyz
 
-   ❯ /model
+    ❯ /model
 
-     Select model
+    Select model
        Switch between Claude models. Your pick becomes the default for new
-       sessions. For other/previous model names, specify with --model.
+       sessions.
 
            1. Default (recommended)         Use the default model (currently
-              anthropic/haiku-4.5[1m]) · $5/$25 per Mtok
-                  2. anthropic/haiku-4.5           Custom Opus model
-                      3. anthropic/haiku-4.5           Custom Sonnet model
-                        ❯ 4. deepseek/deepseek-v4-flash ✔  Custom Haiku model
+              anthropic/haiku-4.5) · $5/$25 per Mtok
+           2. anthropic/haiku-4.5           Custom Opus model
+           3. anthropic/haiku-4.5           Custom Sonnet model
+         ❯ 4. deepseek/deepseek-v4-flash ✔  Custom Haiku model
+    ```
 
-                          ● High effort (default) ←/→ to adjust
+## Monitoring and Troubleshooting
 
-                            Enter to set as default · s to use this session only
-                            · Esc to cancel
+- Check [OpenRouter Logs](https://openrouter.ai/logs) to see request history,
+  latency, and error details
 
-
-/model anthropic/claude-haiku-4.5
-
-Check the logs
-https://openrouter.ai/logs
-
-
+- Common issues:
+    - **Authentication errors**: Ensure `ANTHROPIC_AUTH_TOKEN` is set to your
+      OpenRouter key, not your Anthropic key
+    - **Model not found**: Verify the exact model ID on OpenRouter's models page
+      (e.g., `deepseek/deepseek-v4-flash`, not `deepseek-v4-flash`)
+    - **Rate limiting**: OpenRouter applies rate limits based on the provider's
+      constraints
+    - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter, as it
+      can conflict with `ANTHROPIC_AUTH_TOKEN`
