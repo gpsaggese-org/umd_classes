@@ -1104,18 +1104,18 @@ digraph ID {
 // - 2020, Hullermeier & Waegeman, "Aleatoric and Epistemic Uncertainty in ML"
 // - 2011, Spiegelhalter et al., "Visualizing Uncertainty About the Future"
 
-* 
+* Aleatoric vs Epistemic Uncertainty
 
 - There are different types of uncertainty
-  - Aleatoric uncertainty
-  - Epistemic 
+  - Aleatoric (related to physical reality of the system)
+  - Epistemic (related to lack of knowledge)
 
-A decision-maker needs to know: how much of the outcome uncertainty can I learn away (epistemic), and how much is just irreducible randomness (aleatoric)? If you can't separate signal from noise, you can't answer that question, and you can't compute the Value of Information correctly — you might over-pay for data that can't actually reduce the uncertainty you care about.
-
-
-## #############################################################################
-## Aleatoric Uncertainty
-## #############################################################################
+- A decision-maker needs to know
+  - how much of the outcome uncertainty can I learn away (epistemic)
+  - how much is just irreducible randomness (aleatoric)?
+  - You can't compute the Value of Information correctly
+  - You might over-pay for data that can't actually reduce the uncertainty you care
+    about
 
 * Aleatoric Uncertainty: Irreducible Randomness
 
@@ -1144,55 +1144,45 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
 
 * Representing Aleatoric Uncertainty
 
-- In a structural causal model:
+- Consider a structural causal model:
   \begin{align*}
   Y = f(\text{Pa}(Y), U_Y)\\
   U_Y \sim \Pr(U_Y)
   \end{align*}
-  where:
-  - $U_Y$ is the exogenous noise capturing aleatoric variability
+  where $U_Y$ is the exogenous noise capturing aleatoric variability
+  - Common assumptions for $U_Y$
+    - Gaussian: $U_Y \sim \mathcal{N}(0, \sigma^2)$ for continuous $Y$
+    - Heavy-tailed (Student-$t$, Laplace) for robust modeling
+    - Bernoulli / categorical for discrete outcomes
 
-- Common assumptions for $U_Y$
-  - Gaussian: $U_Y \sim \mathcal{N}(0, \sigma^2)$ for continuous $Y$
-  - Heavy-tailed (Student-$t$, Laplace) for robust modeling
-  - Bernoulli / categorical for discrete outcomes
+- **Question**: How do you separate signal from noise when you only see $Y$?
 
-- **Question**: How do we tell the signal apart from the noise when we only see
-  $Y$?
-  - We can't, unless $U_Y$ has a tractable parametric form and we exploit the
-    causal structure
-
-- You observe $Y$ (the outcome), but $Y$ is a mixture of:
-  - Signal: the systematic part $f(Pa(Y))$ driven by the parents (causes) of $Y$
+- **Problem**: you only observe the sum as the realized $Y$, which mixes
+  - Signal: the systematic part $f(Pa(Y))$ driven by the parents of $Y$
   - Noise: the random shock $U_Y$
 
-- **Problem**: you only see the sum as the realized $Y$
-  - Without additional assumptions, there are infinitely many ways to split $Y$
-    into signal + noise, all are equally consistent with the data
-  - They're not separately identifiable from $Y$ alone
+- Without additional assumptions, infinitely many splits into signal + noise are
+  equally consistent with the data
 
 - **Solution**:
-  - You can separate them if you have both:
-    1. A tractable parametric form for $U_Y$ (e.g., you assume $U_Y \sim
+  - If you have
+    1. A tractable parametric form for $U_Y$ (e.g., assume $U_Y \sim
        \mathcal{N}(0, \sigma^2)$)
-       - This constrains how much of $Y$'s variation could plausibly be noise.
-    2. Causal structure: i.e., you know (or have estimated) the parents $Pa(Y)$
-       and the function $f$. If you can measure the parents and estimate $f$,
-       then you can compute the expected $Y$ (the signal) and attribute the
-       residual to noise:
-       $\hat{U}_Y = Y - \hat{f}(Pa(Y))$
+       - Constrains how much of $Y$'s variation could plausibly be noise.
+    2. Causal structure: know (or estimate) the parents $Pa(Y)$ and function
+       $f$
+    - Measure the parents, estimate $f$, compute expected $Y$ (signal), and
+      attribute the residual to noise:
+      $\hat{U}_Y = Y - \hat{f}(Pa(Y))$
 
 - **Example:**
   - Suppose $Y$ is blood pressure
   - Causal model says
     - Parents $Pa(Y) = \{Age, BMI, DrugDose\}$
     - $f$ is linear: $Y = \beta_0 + \beta_1 Age + \beta_2 BMI + \beta_3 DrugDose + U_Y$
-  - If you have data on $Age$, $BMI$, and $DrugDose$, fit the regression and get $\hat{f}(Pa(Y))$
+  - If you have data on $Age$, $BMI$, and $DrugDose$, fit the regression and get
+    $\hat{f}(Pa(Y))$
   - Then the residual $Y - \hat{f}(Pa(Y))$ is your estimate of the noise $U_Y$
-
-## #############################################################################
-## Epistemic Uncertainty
-## #############################################################################
 
 * Epistemic Uncertainty: Model Misspecification
 
@@ -1207,45 +1197,30 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
   - Missing variables or wrong causal graph
   - Confounders not adjusted for
 
-- **Example**: a small clinical trial with $n = 40$ patients
+- **Example**:
+  - A small clinical trial with $n = 40$ patients
   - Wide posterior on treatment effect $\theta$
   - Gathering more data shrinks this posterior
 
 * Aleatoric vs. Epistemic: Side-by-Side
 
-::: columns
-:::: {.column width=50%}
-**Aleatoric**
+\begingroup \small
+| **Dimension**   | **Aleatoric**                       | **Epistemic**                              |
+|-----------------|-------------------------------------|--------------------------------------------|
+| Source          | Inherent randomness                 | Model \& data limits                       |
+| Reducible?      | No                                  | Yes, via evidence                          |
+| Represented by  | Noise $U$                           | Posterior on $\theta$                      |
+| Behavior        | Grows with complexity of $Y$        | Shrinks with data, experiments             |
+| Managed by      | Risk preferences                    | Learning, VOI                              |
+| Example         | Coin flip, weather                  | Effect of a new drug                       |
+| Implication     | Influences utility function shape   | Motivates sequential decision-making       |
+\endgroup
 
-- Source: inherent randomness
-- Reducible: **No**
-- Represented: noise $U$
-- Grows with: complexity of $Y$
-- Managed by: risk preferences
-- Example: coin flip, weather
+- **Key takeaway**:
+  - Good decision systems _separate_ the two
+  - Combining them collapses information that matters for action
 
-- **Implication**: influences
-  utility function shape
-::::
-:::: {.column width=50%}
-**Epistemic**
-
-- Source: model \& data limits
-- Reducible: **Yes**, via evidence
-- Represented: posterior on $\theta$
-- Shrinks with: data, experiments
-- Managed by: learning, VOI
-- Example: effect of a new drug
-
-- **Implication**: motivates
-  sequential decision-making
-::::
-:::
-
-- **Key takeaway**: good decision systems _separate_ the two — combining
-  them collapses information that matters for action
-
-* Distinguishing in Practice
+* Variance Decomposition of Uncertainty
 
 - A Bayesian predictive distribution decomposes as:
   $$
@@ -1265,7 +1240,7 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
   - Between-model variance $\approx$ epistemic
   - Report both to the decision-maker
 
-- **Warning**: most off-the-shelf ML models report only a point prediction —
+- **Warning**: most off-the-shelf ML models report only a point prediction,
   neither kind of uncertainty is visible
 
 ## #############################################################################
@@ -1274,15 +1249,19 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
 
 * Communicating Uncertainty to Stakeholders
 
-- Stakeholders often prefer a single number; giving one is a disservice
+- Stakeholders often want a single number
+  - _"How long does it take to do X?"_
+  - _"How much does it cost"_
+
+- Giving one is a disservice
 
 - **Best practices**:
-  - Report **intervals** (90% posterior credible intervals) alongside point estimates
+  - Report intervals (90% posterior credible intervals) alongside point estimates
   - Distinguish aleatoric from epistemic in words and visuals
   - Frame probabilities in natural frequencies: _"about 2 in 100"_
-  - Use **visual aids**: fan charts, violin plots, calibration plots
-  - Link uncertainty to **actions**: _"if we get 200 more samples, the interval
-    shrinks from \$5M to \$1M"_
+  - Use _visual aids_: fan charts, violin plots, calibration plots
+  - Link uncertainty to _actions_:
+    - E.g., _"if we get 200 more samples, the interval shrinks from \$5M to \$1M"_
 
 - **Anti-patterns**:
   - Reporting only point predictions
@@ -1293,26 +1272,27 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
 
 - **Setting**: pricing team evaluating a new fee structure
 
-- **Bad communication**:
-  - _"The model predicts \$2.3M in additional revenue."_
+- **Bad**:
+  - _The model predicts \$2.3M in additional revenue_
 
-- **Better communication**:
-  - _"Our best estimate is \$2.3M. 90% of the uncertainty sits between
-    \$0.8M and \$3.7M._
+- **Good**:
+  - _Our best estimate is \$2.3M
+  - _90% of the uncertainty sits between \$0.8M and \$3.7M_
   - _Of this, about \$1.5M of the width is intrinsic customer variability
-    (aleatoric) — a pilot won't narrow that much._
-  - _The remaining \$1.4M is parameter uncertainty (epistemic) and would
-    shrink by roughly 60% if we ran the proposed 4-week pilot."_
+    (aleatoric), a pilot won't narrow that much_
+  - _The remaining \$1.4M is parameter uncertainty (epistemic) and would shrink
+    by roughly 60% if we ran the proposed 4-week pilot"_
 
 - **Decision impact**: the pilot discussion now has a clear expected value,
   not a gut feeling
 
 * Summary: Decision-Making with Causal Models
 
-- **Prediction alone is insufficient** for choosing actions — Simpson's
-  paradox, confounding, and policy reversal all require causal reasoning
+- **Prediction alone is insufficient** for choosing actions
+  - E.g., Simpson's paradox, confounding, and policy reversal
+  - Causal reasoning is needed
 
-- **Expected utility** under interventional distributions is the right target
+- **Expected utility under interventional distributions** is the right target
   $$
   a^*
     = \arg\max_a
@@ -1322,12 +1302,13 @@ A decision-maker needs to know: how much of the outcome uncertainty can I learn 
 - **Influence diagrams** extend causal DAGs with decisions and utilities,
   giving a graphical, solvable decision problem
 
-- **Sequential decisions** need exploration: VOI tells us when to gather
-  information; Thompson sampling and Bayesian optimization tell us _how_
+- **Sequential decisions** need exploration
+  - VOI tells us _when_ to gather information
+  - Thompson sampling and Bayesian optimization tell us _how_
 
 - **Uncertainty** decomposes into aleatoric (irreducible) and epistemic
-  (reducible) — both must be modeled and communicated
+  (reducible)
+  - Both must be modeled and communicated
 
 - **Key takeaway**: causal reasoning, decision theory, and Bayesian inference
-  are three sides of the same coin — and together they turn predictions into
-  _robust_ actions
+  turn predictions into _robust_ actions
