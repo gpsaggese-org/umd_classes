@@ -553,8 +553,8 @@ digraph PostMutation {
 
 * Influence Diagrams: Motivation
 
-- Bayesian networks model _uncertainty_; we need to also represent _decisions_
-  and _preferences_
+- **Motivation**: Bayesian networks model _uncertainty_; we need to also represent
+  _decisions_ and _preferences_
 
 - **Definition**: An _influence diagram_ extends a causal DAG with three kinds of
   nodes:
@@ -573,9 +573,10 @@ digraph PostMutation {
   - Chance: disease status, test result, outcome
   - Decision: order test?, choose therapy?
   - Utility: cost of test, value of outcome
-- Arrows into decision nodes denote _information available_ at decision time (no
-  causal meaning)
-- Arrows into chance and utility nodes retain their _causal_ interpretation
+- **Information arrows**: arrows into decision nodes denote _information available_
+  at decision time (no causal meaning)
+- **Causal arrows**: arrows into chance and utility nodes retain their _causal_
+  interpretation
 ::::
 :::: {.column width=45%}
 
@@ -640,19 +641,22 @@ digraph ID {
 
 * Posteriors to Optimal Actions
 
-- Bayesian decision-making composes two steps:
-  1. **Inference**: compute the posterior $\Pr(\theta | \mathcal{D})$ from data
-  2. **Decision**: choose the action that maximizes _posterior_ expected
-     utility
+- **Structure**: Bayesian decision-making is composed of two steps:
+  1. _Inference_: compute the posterior $\Pr(\theta | \mathcal{D})$ from data
+  2. _Decision_: choose the action that maximizes _posterior_ expected utility
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
-        \left[ \EE_{Y \sim \Pr(Y | \operatorname{do}(a), \theta)}[U(Y)] \right]
+  a^* = \arg\max_{a \in \mathcal{A}}
+        \EE_{\theta \sim \Pr(\theta | \mathcal{D})}
+        \left[
+          \EE_{Y \sim \Pr(Y | \operatorname{do}(a), \theta)}[U(Y)]
+        \right]
   $$
 
-- The **inner expectation** is over outcome uncertainty given $\theta$ (aleatoric)
-- The **outer expectation** is over parameter uncertainty (epistemic)
+- The _inner expectation_ is over outcome uncertainty $Y$ given $\theta$
+  (aleatoric)
+- The _outer expectation_ is over parameter uncertainty $\theta$ (epistemic)
 
-- **Key property**: Bayesian decision rule is _admissible_ — no other rule
+- **Key property**: Bayesian decision rule is _admissible_: no other rule
   dominates it under all priors
 
 * Bayesian Decision Rule: Example

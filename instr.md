@@ -1,20 +1,4 @@
-Create a script
-helpers_root/dev_scripts_helpers/scraping/update_link_gsheet_from_raindrop.py
---url XYZ
-that
+Read msml610/lectures_source/{Lesson06.1-Bayesian_Networks.txt,Lesson06.2-Using_Bayesian_Networks.txt}
+and come up for more rules to add `.claude/skills/slides.rules.md`
 
-1) Download the data to a temporary file using a command like
-
-from_gsheet.py --url
-https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=1509921826#gid=1509921826
---tabname "All" --output_file file.csv
-
-2) Find the biggest timestamp in the CSV
-
-3) Use the API to raindrop.io to download all the links after timestamp
-
-- When writing code you must always follow the instructions in
-  `.claude/skills/coding.rules.md`
-
-- If the task is not perfectly clear, you MUST not perform it, but ask for
-  clarifications
+Only add rules that you are sure about and add them in the right section
