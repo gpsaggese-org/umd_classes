@@ -4,9 +4,14 @@
 - **3x startup founder**
 - **Adjunct Professor**, Computer Science @ University of Maryland, College Park (USA)
 - **Industry experiences**
-    - Tech: NVIDIA, Synopsys
-    - Finance: June, Teza, Engineers' Gate
-- Been writing code almost every day for the last 35 years (see [GitHub stats](https://github.com/gpsaggese?tab=activity))
+    - _Tech_: NVIDIA, Synopsys, Intel
+    - _Finance_: June, Teza, Engineers' Gate
+- **Expertise**:
+  - Bayesian machine learning, LLMs, reasoning agents
+  - 20+ years building AI/ML systems, quant strategies, and high-performance software
+
+- Been writing code almost every day for the last 35 years (see [GitHub
+  stats](https://github.com/gpsaggese?tab=activity) for the last few years)
 
 <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
   <div style="text-align: center;">
@@ -27,27 +32,15 @@
 - **Location:** Washington DC-Baltimore Area
 - **Citizenship:** USA / Italy
 
-## Summary
-
-- AI/machine learning researcher, systems architect, and technology executive
-- 20+ years building AI/ML systems, quant strategies, and high-performance software
-
-- [CV/Resume](02_cv.md)
-- [Education](03_education.md)
-- [Teaching](04_teaching.md)
-- [Publications](05_publications.md)
-- [Research](06_research.md)
-- [Coding](07_coding.md)
-- [Screw ups](08_screw_ups.md)
-
 ## Languages
 
 - **English:** Bilingual proficiency
 - **Italian:** Native proficiency
 - **Neapolitan:** Bilingual proficiency
-  - Recognized by UNESCO as a distinct language rather than a dialect of Italian
-  - Partially mutually intelligible with Italian; linguistic studies suggest
-    that, in some respects, Spanish is closer to standard Italian than Neapolitan
+    - Neapolitan is Recognized by UNESCO as a distinct language rather than a
+      dialect of Italian
+    - It is partially intelligible with Italian; linguistic studies suggest that,
+      in some respects, Spanish is closer to standard Italian than Neapolitan
 - **Latin and Ancient Greek:** Five years of classical studies, including
   competitive translation and interpretation during the 1990s (yes, there is
   such a thing as competitive Latin)

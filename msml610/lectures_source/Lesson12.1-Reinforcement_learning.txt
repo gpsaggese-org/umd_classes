@@ -32,87 +32,210 @@ MSML610: Advanced Machine Learning
 // # 17, Making complex decisions (p. 575)
 
 * Sequential Decision Problems
-- **Agents need to make decisions in the real world**:
-  - In a stochastic environment (randomness, unpredictability)
-    - E.g., weather conditions affecting a delivery route
-  - Where utility depends on a sequence of decisions
-    - E.g., planning a multi-step journey where each step influences the next
+- **Goal**: Agents need to make decisions in the real world:
+  - In a _stochastic environment_
+  - Where utility depends on a _sequence of decisions_
 
 - **What is involved**
-  - Uncertainty
-    - Represent the lack of certainty in outcomes, modeled using probabilities
+  - _Uncertainty_
+    - Represent the lack of unpredictability in outcomes, modeled using
+      probabilities
     - E.g., weather forecasts often include uncertainty (70% chance of rain)
-  - Utility functions
+  - _Utility functions_
     - Measure the desirability of outcomes by quantifying preferences
     - E.g., assign higher values to outcomes with more profit and lower risk
-  - Rewards
+  - _Rewards_
     - Yielded by the environment as feedback for actions taken
     - E.g., receive points in a game for completing a level
-  - Sensing
+  - _Sensing_
     - Gather information about the environment using sensors
     - E.g., a robot using a camera to detect obstacles in its path
-  - Search and planning
+  - _Search and planning_
     - Find a sequence of actions to achieve a goal
-    - E.g., a GPS system planning the shortest route to a destination
+    - E.g., a navigation system planning the shortest route to a destination
 
-* Markov Decision Process
-- **MDPs** are a formal model for sequential decision making
-
-- **Assumptions**
-  - Fully observable but stochastic environment
-    - Sensors give agent the complete state of the environment $\forall t$
-    - Next state is not completely determined by current state and agent's action
-  - Initial state $s_0$
-  - An agent takes action $a \in Actions(s)$ in each state $s$
-  - Transition model
-    - $\Pr(s' | s, a)$ is probability of reaching state $s'$, if action $a$ is
-      done in state $s$
-    - Markov assumption: probability depends on $(s, a)$, not on history
-  - Reward function
-    - For every transition $s \to s'$ via $a$ the agent receives a reward
-      $R(s, a, s')$
-    - Total reward depends on sequence of states and actions, i.e., environment
-      history
-  - Goal states
-
+* Markov Decision Process (MDPs)
 ::: columns
 :::: {.column width=70%}
-- E.g., a robot navigating a slippery surface
-  - It knows its exact location and the map (fully observable)
-  - Its wheels may slip unpredictably (stochastic outcome)
+- **MDPs** are a model for sequential decision making
+
+1. **Environment**: fully observable but stochastic 
+   - Sensors give complete state of the environment
+   - Next state is not completely determined by current state and agent's action
+2. **Initial state** $s_0$
+3. **Action**: agent chooses $a \in Actions(s)$ in each $s$
+4. **Transition model**
+   - $\Pr(s' | s, a)$ is probability of reaching state $s'$, if action $a$ is
+     done in state $s$
+   - Markov assumption: probability depends on $(s, a)$, not on history
+5. **Reward function**
+   - For every transition $s \to s'$ via $a$ the agent receives a reward
+     $R(s, a, s')$
+   - Total reward depends on sequence of states and actions
+6. **Goal states**
+
 ::::
 :::: {.column width=25%}
-![](msml610/lectures_source/figures/L12.Star_Wars_droid.png)
+
+```graphviz[width=90%]
+digraph MDP {
+    rankdir=TB;
+
+    node [shape=box];
+
+    s0 [label="Initial State\ns0", shape=ellipse];
+    st [label="State s_t"];
+    action [label="Choose\nAction a_t", shape=plaintext];
+    agent [label="Agent"];
+    transition [label="Transition Model\nP(s'|s,a)"];
+    next [label="Next State\ns_(t+1)"];
+    reward [label="Reward\nR(s,a,s')"];
+    goal [label="Goal?", shape=diamond];
+
+    s0 -> st;
+
+    st -> agent;
+
+    action -> agent [style=invis];
+
+    agent -> transition;
+    transition -> next;
+    next -> reward;
+    reward -> goal;
+
+    next -> st;
+
+    { rank=same; action; agent; }
+}
+```
+
 ::::
 :::
 
+* MDP: Examples
+
+- **Example**: environment is fully observable and stochastic
+  ::: columns
+  :::: {.column width=70%}
+  - E.g., a robot navigating a slippery surface
+    - It knows its exact location and the map (fully observable)
+    - Its wheels may slip unpredictably (stochastic outcome)
+  ::::
+  :::: {.column width=25%}
+  ![](msml610/lectures_source/figures/L12.Star_Wars_droid.png)
+  ::::
+  :::
+
+- **Example**: MDP
+```graphviz
+digraph MDP {
+    rankdir=LR;
+    splines=true;
+    nodesep=0.4;
+    ranksep=0.4;
+
+    graph [
+        fontname="Helvetica",
+        fontsize=20,
+    ];
+
+    node [
+        shape=circle,
+        width=0.55,
+        height=0.55,
+        fixedsize=true,
+        fontname="Helvetica",
+        fontsize=18,
+        style="filled",
+        fillcolor="white",
+        color="black",
+        penwidth=1.8
+    ];
+
+    edge [
+        fontname="Helvetica",
+        fontsize=16,
+        color="black",
+        penwidth=1.4
+    ];
+
+    // States
+    s0 [label="s₀"];
+    s1 [label="s₁"];
+    s2 [label="s₂"];
+
+    goal [
+        label="sg",
+        shape=doublecircle,
+        width=0.7,
+        height=0.7,
+        penwidth=2.2
+    ];
+
+    // Initial state marker
+    start [
+        shape=point,
+        width=0.12,
+        label=""
+    ];
+
+    start -> s0 [arrowhead=normal];
+
+    // Transitions
+    s0 -> s1 [
+        label="P = 0.8, R = +5",
+        taillabel="a₁",
+        labeldistance=2.2
+    ];
+
+    s0 -> s2 [
+        label="P = 0.2, R = −1",
+        taillabel="a₁",
+        labeldistance=2.2
+    ];
+
+    s1 -> s2 [
+        label="P = 1.0, R = 0",
+        taillabel="a₂",
+        labeldistance=2.2
+    ];
+
+    s2 -> goal [
+        label="P = 1.0, R = +10",
+        taillabel="a₃",
+        labeldistance=2.2
+    ];
+}
+```
 
 * MDP: Solution
 
-- The solution of an MDP is a **policy** _"in state $s$ take action $a$"_
+- **Definition**: The solution of an MDP is a _policy_: _"in state $s$ take action $a$"_
   $$
   \pi(s): s \to a \in Actions(s)
   $$
-  - Any execution of the policy leads to a different **environment history**
-    because of the stochastic nature of the environment
-  - Environment history is a sequence of states and actions
-    $(s_0, a_0) \to (s_1, a_1) \to ... \to (s_i, a_i) \to ...$
 
-- A policy is measured by the **expected utility** of the environment history
+- **Definition**: _Environment history_ is a sequence of states and actions
+  $$(s_0, a_0) \to (s_1, a_1) \to ... \to (s_i, a_i) \to ...$$
+  - Any execution of the policy leads to a different _environment history_
+    because of the stochastic nature of the environment
+
+- **Definition**: A policy is measured by the _expected utility_ of the
+  environment history
   $$
   U(\pi(s)) = \EE[f(s_0, \pi(s), R(s, a, s'))]
   $$
-- The **optimal policy** $\pi^*(s)$ yields the highest expected utility
-  $$
-  \pi^*(s) = \argmax_{\pi} \; \EE[f(s_0, \pi(s), R(s, a, s'))]
-  $$
-  - Note: the optimal policy is a function of the reward function
+  - The _optimal policy_ $\pi^*(s)$ yields the highest expected utility
+    $$
+    \pi^*(s) = \argmax_{\pi} \; \EE[f(s_0, \pi(s), R(s, a, s'))]
+    $$
+  - The optimal policy is function of the reward function
 
 // TODO: Consider adding a dot graph from s_0, a_0, s^(0)_1, a^(0)_1, ...
 // s_0, a_0, s^(1)_1, a^(1)_1, ...
 // Apply R(s_i, a_i, s_{i+1}) and sum
 
-- MDP is often solved with **dynamic programming**
+- MDP is often solved with _dynamic programming_
   1. Break the problem in smaller pieces recursively
   2. Solve the sub-problems
   3. Remember solutions of the pieces
@@ -120,13 +243,12 @@ MSML610: Advanced Machine Learning
 * MDP: 4x3 Environment Example
 
 ::: columns
-:::: {.column width=70%}
+:::: {.column width=75%}
 - **Environment**
   - A 4 x 3 grid world
   - Fully observable: the agent always knows its location
   - Non-deterministic: actions are not reliable
     - Pr(intended action) = 0.8
-    - Pr(move right/left angle) = 0.1
 - **Agent**
   - Begin at the `START` cell
   - Choose actions `Up`, `Down`, `Left`, `Right` at each step
@@ -166,36 +288,37 @@ MSML610: Advanced Machine Learning
 ## #############################################################################
 
 * Utility Function
-- The **utility function** for environment histories (finite or infinite) is
-  expressed as:
+- **Definition**: The _utility function_ for environment histories (finite or
+  infinite) is expressed as:
   $$
   U_h([\blue{s_0, a_0}, \green{s_1, a_1}, ..., s_n, ...])
   $$
 
-- A **finite horizon** indicates a fixed time $N$ after which nothing matters:
-  $$
-  U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
-  = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
-  $$
-  - Actions are chosen based on the current state and remaining steps
+- **Finite horizon**
+  - Indicates a fixed time $N$ after which nothing matters:
+    $$
+    U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
+    = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
+    $$
   - Lead to non-stationary policies
+  - Actions are chosen based on the current state and remaining steps
 
 - **Infinite horizon**
   - No fixed time limit, i.e., the process continues indefinitely
   - Utility is often defined using a discount factor $\gamma < 1$ for
     convergence
-  - The optimal policy can be **stationary**
-    - Policies do not depend on the specific time step
+  - The optimal policy can be _stationary_
     - Same action is chosen whenever the agent visits the same state
+    - Policies do not depend on the specific time step
 
 * Additive Rewards
-- **Additive rewards**:
+- **Definition**: _Additive rewards_
   - Rewards for each transition $s_i \xrightarrow{a_i} s_{i+1}$ are summed:
     $$
     U_h([s_0, a_0, s_1, a_1, \ldots]) = \sum_{i=0} R(s_i, a_i, s_{i+1})
     $$
 
-- **Additive discounted rewards**:
+- **Definition**: _Additive discounted rewards_
   - Include a discount factor $\gamma \in [0, 1]$:
     $$
     \begin{aligned}
@@ -209,7 +332,7 @@ MSML610: Advanced Machine Learning
     - $\gamma \to 0$: future rewards are negligible
     - $\gamma \to 1$: future rewards significant
 
-- **Pros of discounted rewards**:
+- **Pros**: Discounted rewards
   - Reflect human tendency to prioritize near-term rewards
   - In economics, early rewards can be reinvested, compounding further rewards
   - Support infinite horizons, preventing unbounded rewards
