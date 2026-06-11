@@ -128,6 +128,45 @@ parse_docker_jupyter_args() {
 
 
 # #############################################################################
+# Docker engine detection
+# #############################################################################
+
+
+get_docker_engine() {
+    # """
+    # Return the container engine to use ("docker" or "apple").
+    #
+    # Priority:
+    # 1. DOCKER_ENGINE env var if set.
+    # 2. Auto-detect: "apple" on macOS (Darwin), "docker" otherwise.
+    # """
+    if [[ -n "$DOCKER_ENGINE" ]]; then
+        echo "$DOCKER_ENGINE"
+    elif [[ "$(uname -s)" == "Darwin" ]]; then
+        echo "apple"
+    else
+        echo "docker"
+    fi
+}
+
+
+get_docker_cmd() {
+    # """
+    # Return the CLI command string for the active engine.
+    #
+    # :return: "docker" for the docker engine, "container" for Apple engine
+    # """
+    local engine
+    engine=$(get_docker_engine)
+    if [[ "$engine" == "apple" ]]; then
+        echo "container"
+    else
+        echo "docker"
+    fi
+}
+
+
+# #############################################################################
 # Docker image management
 # #############################################################################
 
@@ -171,10 +210,12 @@ build_container_image() {
     # :param @: Additional options to pass to docker build/buildx build
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
     # Prepare build area.
-    #tar -czh . | docker build $OPTS -t $IMAGE_NAME -
+    #tar -czh . | $DOCKER_CMD build $OPTS -t $IMAGE_NAME -
     DIR="../tmp.build"
     if [[ -d $DIR ]]; then
         rm -rf $DIR
@@ -187,9 +228,9 @@ build_container_image() {
         # Build for a single architecture.
         echo "Building for current architecture..."
         OPTS="--progress plain $@"
-        (cd $DIR; docker build $OPTS -t $FULL_IMAGE_NAME . 2>&1 | tee ../docker_build.log; exit ${PIPESTATUS[0]})
+        (cd $DIR; $DOCKER_CMD build $OPTS -t $FULL_IMAGE_NAME . 2>&1 | tee ../docker_build.log; exit ${PIPESTATUS[0]})
     else
-        # Build for multiple architectures.
+        # Multi-arch builds require docker buildx; force docker CLI.
         echo "Building for multiple architectures..."
         OPTS="$@"
         export DOCKER_CLI_EXPERIMENTAL=enabled
@@ -210,9 +251,9 @@ build_container_image() {
     if [ -f docker_build.version.log ]; then
       rm docker_build.version.log
     fi
-    (cd $DIR; docker run --rm -it -v $(pwd):/data $FULL_IMAGE_NAME bash -c "/data/version.sh") 2>&1 | tee docker_build.version.log
+    (cd $DIR; $DOCKER_CMD run --rm -it -v $(pwd):/data $FULL_IMAGE_NAME bash -c "/data/version.sh") 2>&1 | tee docker_build.version.log
     #
-    docker image ls $REPO_NAME/$IMAGE_NAME
+    $DOCKER_CMD image ls | grep "$REPO_NAME/$IMAGE_NAME" || true
     rm -rf $DIR
     echo "*****************************"
     echo "SUCCESS"
@@ -225,11 +266,13 @@ remove_container_image() {
     # Remove Docker container image(s) matching the current configuration.
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-    docker image ls | grep $FULL_IMAGE_NAME
-    docker image ls | grep $FULL_IMAGE_NAME | awk '{print $1}' | xargs -n 1 -t docker image rm -f
-    docker image ls
+    $DOCKER_CMD image ls | grep $FULL_IMAGE_NAME
+    $DOCKER_CMD image ls | grep $FULL_IMAGE_NAME | awk '{print $1}' | xargs -n 1 -t $DOCKER_CMD image rm -f
+    $DOCKER_CMD image ls
     echo "${FUNCNAME[0]} ... done"
 }
 
@@ -241,11 +284,13 @@ push_container_image() {
     # Authenticates using credentials from ~/.docker/passwd.$REPO_NAME.txt.
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-    docker login --username $REPO_NAME --password-stdin <~/.docker/passwd.$REPO_NAME.txt
-    docker images $FULL_IMAGE_NAME
-    docker push $FULL_IMAGE_NAME
+    $DOCKER_CMD login --username $REPO_NAME --password-stdin <~/.docker/passwd.$REPO_NAME.txt
+    $DOCKER_CMD images $FULL_IMAGE_NAME
+    $DOCKER_CMD push $FULL_IMAGE_NAME
     echo "${FUNCNAME[0]} ... done"
 }
 
@@ -255,9 +300,11 @@ pull_container_image() {
     # Pull Docker container image from registry.
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-    docker pull $FULL_IMAGE_NAME
+    $DOCKER_CMD pull $FULL_IMAGE_NAME
     echo "${FUNCNAME[0]} ... done"
 }
 
@@ -272,15 +319,17 @@ kill_container() {
     # Kill and remove Docker container(s) matching the current configuration.
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-    docker container ls
+    $DOCKER_CMD container ls
     #
-    CONTAINER_ID=$(docker container ls -a | grep $FULL_IMAGE_NAME | awk '{print $1}')
+    CONTAINER_ID=$($DOCKER_CMD container ls -a | grep $FULL_IMAGE_NAME | awk '{print $1}')
     echo "CONTAINER_ID=$CONTAINER_ID"
     if [[ ! -z $CONTAINER_ID ]]; then
-        docker container rm -f $CONTAINER_ID
-        docker container ls
+        $DOCKER_CMD container rm -f $CONTAINER_ID
+        $DOCKER_CMD container ls
     fi;
     echo "${FUNCNAME[0]} ... done"
 }
@@ -293,12 +342,14 @@ kill_container_by_name() {
     # :param container_name: Name of the container to kill
     # """
     local container_name=$1
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     echo "# ${FUNCNAME[0]}: $container_name"
     # Check if container exists (running or stopped).
-    local container_id=$(docker container ls -a --filter "name=^${container_name}$" --format "{{.ID}}")
+    local container_id=$($DOCKER_CMD container ls -a --filter "name=^${container_name}$" --format "{{.ID}}")
     if [[ -n $container_id ]]; then
         echo "Killing container: $container_name (ID: $container_id)"
-        docker container rm -f $container_id
+        $DOCKER_CMD container rm -f $container_id
     else
         echo "Container '$container_name' not found"
     fi
@@ -314,13 +365,15 @@ exec_container() {
     # current configuration.
     # """
     echo "# ${FUNCNAME[0]} ..."
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
     echo "FULL_IMAGE_NAME=$FULL_IMAGE_NAME"
-    docker container ls
+    $DOCKER_CMD container ls
     #
-    CONTAINER_ID=$(docker container ls -a | grep $FULL_IMAGE_NAME | awk '{print $1}')
+    CONTAINER_ID=$($DOCKER_CMD container ls -a | grep $FULL_IMAGE_NAME | awk '{print $1}')
     echo "CONTAINER_ID=$CONTAINER_ID"
-    docker exec -it $CONTAINER_ID bash
+    $DOCKER_CMD exec -it $CONTAINER_ID bash
     echo "${FUNCNAME[0]} ... done"
 }
 
@@ -343,7 +396,8 @@ get_docker_common_options() {
     -e PYTHONPATH=/git_root:/git_root/helpers_root:/git_root/msml610/tutorials \
     -e CSFY_GIT_ROOT_PATH=/git_root \
     -e CSFY_HOST_OS_NAME=$(uname -s) \
-    -e CSFY_HOST_NAME=$(uname -n)"
+    -e CSFY_HOST_NAME=$(uname -n) \
+    -e DOCKER_ENGINE=$(get_docker_engine)"
 }
 
 
@@ -358,10 +412,12 @@ get_docker_bash_command() {
     #
     # :return: docker run command string with --rm and -ti flags
     # """
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
     if [ -t 0 ]; then
-        echo "docker run --rm -ti"
+        echo "$DOCKER_CMD run --rm -ti"
     else
-        echo "docker run --rm -i"
+        echo "$DOCKER_CMD run --rm -i"
     fi
 }
 
@@ -400,7 +456,9 @@ get_docker_cmd_command() {
     #
     # :return: docker run command string with --rm and -i flags
     # """
-    echo "docker run --rm -i"
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
+    echo "$DOCKER_CMD run --rm -i"
 }
 
 
@@ -415,12 +473,14 @@ get_docker_jupyter_command() {
     #
     # :return: docker run command string with --rm and -ti flags (if TTY available)
     # """
-    local docker_cmd="docker run --rm"
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
+    local cmd="$DOCKER_CMD run --rm"
     # Add interactive and TTY flags only if stdin is a TTY.
     if [[ -t 0 ]]; then
-        docker_cmd="$docker_cmd -ti"
+        cmd="$cmd -ti"
     fi
-    echo "$docker_cmd"
+    echo "$cmd"
 }
 
 
@@ -589,8 +649,10 @@ list_and_inspect_docker_image() {
     # Lists all images matching FULL_IMAGE_NAME and attempts to inspect
     # their architecture using docker manifest inspect.
     # """
-    run "docker image ls $FULL_IMAGE_NAME"
-    (docker manifest inspect $FULL_IMAGE_NAME | grep arch) || true
+    local DOCKER_CMD
+    DOCKER_CMD=$(get_docker_cmd)
+    run "$DOCKER_CMD image ls | grep '$FULL_IMAGE_NAME' || true"
+    ($DOCKER_CMD manifest inspect $FULL_IMAGE_NAME | grep arch) || true
 }
 
 

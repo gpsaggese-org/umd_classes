@@ -357,10 +357,11 @@ digraph MDP {
 
 * Principle of Maximum Expected Utility (MEU)
 
-- MEU posits: _"A rational agent should choose the action that maximizes its
-  expected utility based on its beliefs"_
+- **Intuition**
+  - MEU posits: _"A rational agent should choose the action that maximizes its
+    expected utility based on its beliefs"_
 
-- **Formal Definition**
+- **Definition**
   - Possible actions: $a \in A$
   - Possible outcomes: $s'$
   - Probability distribution: $\Pr(s'|a)$ for each action
@@ -382,11 +383,7 @@ digraph MDP {
 * MDP: Tetris Example
 
 ::: columns
-:::: {.column width=20%}
-![](msml610/lectures_source/figures/L12.Tetris.png)
-::::
-:::: {.column width=80%}
-
+:::: {.column width=85%}
 - **States $S$**
   - Current board configuration and falling piece
 - **Actions $A$**
@@ -396,13 +393,16 @@ digraph MDP {
     - Hard drop (instant placement)
 - **Transition Model $T(s, a, s')$**
   - Deterministic or stochastic based on next piece modeling
-  - Piece generation often random (uniform or "bag" system)
+  - Piece generation often random
 - **Reward $R(s, a, s')$**
   - +1 for each cleared line
   - Negative reward for new block addition or height increase
   - Game over may have large negative reward
 - **Discount Factor $\gamma$**
   - Close to 1 for valuing long-term survival and line-clearing
+::::
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/L12.Tetris.png)
 ::::
 :::
 
