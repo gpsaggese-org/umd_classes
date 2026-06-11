@@ -91,6 +91,7 @@ import gymnasium as gym
 
 # Inspect what Env exposes.
 # Show the public interface (skip dunder attributes).
+# TODO(ai_gp): Create a function in hintrospection.py to print all the public methods, docstrings, and function signature
 public_attrs = [a for a in dir(gym.Env) if not a.startswith("__")]
 print(public_attrs)
 
@@ -142,6 +143,7 @@ display(pd.DataFrame(data))
 #   - Returns `(observation, info)` — always a 2-tuple
 
 # %%
+# TODO(ai_gp): Apply ./.claude/skills/notebook.rules.md:206:## Print Variable Name With Value to this file
 # Reset and inspect the return values.
 observation, info = env.reset(seed=42)
 print("observation type:", type(observation))
@@ -172,6 +174,11 @@ print("Diff seed → diff obs:", not np.array_equal(obs1, obs3))
 #   - `terminated`: episode ended naturally (goal / failure)
 #   - `truncated`: episode cut off externally (time limit)
 #   - The distinction matters for value bootstrapping in RL algorithms
+
+# %%
+# TODO(ai_gp): Create a function to print 
+# observation, reward, terminated, truncated, info in a way that is nicely legible
+# Save it into *_utils.py
 
 # %%
 env.reset(seed=42)
@@ -212,9 +219,10 @@ print(f"Steps: {step_count}  Total reward: {total_reward}")
 # %% [markdown]
 # ## Primitive 4: Spaces: Describing Valid Data
 #
-# - **Mental model**: a `Space` is a typed contract. It knows the shape, dtype,
-#   and bounds of valid data. It can sample random valid values and check
-#   membership
+# - **Mental model**:
+#     - A `Space` is a typed contract
+#     - It knows the shape, dtype, and bounds of valid data
+#     - It can sample random valid values and check membership
 #
 # - Every env has exactly two spaces:
 #   - `env.observation_space`: type of observations returned by `step`/`reset`
@@ -230,9 +238,14 @@ d = spaces.Discrete(3)
 print("type:", type(d))
 print("n:", d.n)
 print("dtype:", d.dtype)
+
+
+# %%
 # Sample several times to see the range.
-samples = [d.sample() for _ in range(10)]
+samples = [int(d.sample()) for _ in range(10)]
 print("samples:", samples)
+
+# %%
 # Membership check.
 print("2 in d:", d.contains(2))
 print("5 in d:", d.contains(5))
@@ -258,6 +271,7 @@ print("contains [2.0, 0.0, 0.0]:", b.contains(np.array([2.0, 0.0, 0.0], dtype=np
 cart = gym.make("CartPole-v1")
 mountain = gym.make("MountainCar-v0")
 rows = []
+# TODO(ai_gp): Convert it into print() without a table
 for name, e in [("CartPole-v1", cart), ("MountainCar-v0", mountain)]:
     rows.append(
         {
@@ -355,7 +369,9 @@ display(pd.DataFrame(data))
 
 # %%
 class OneDGridEnv(gym.Env):
-    """Walk a 1-D grid to reach position (size-1)."""
+    """
+    Walk a 1-D grid to reach position (size-1).
+    """
 
     def __init__(self, size: int = 5) -> None:
         super().__init__()
@@ -386,6 +402,7 @@ print("initial obs:", obs)
 # Walk right until done.
 done = False
 steps = []
+# TODO(ai_gp): print value as you go without table
 while not done:
     obs, reward, terminated, truncated, info = custom_env.step(1)
     steps.append({"obs": obs, "reward": reward, "terminated": terminated})
@@ -396,6 +413,7 @@ display(pd.DataFrame(steps))
 # ### Registering and using a custom env via `gym.make()`
 
 # %%
+# TODO(ai_gp): Add more comments.
 gym.register(id="OneDGrid-v0", entry_point=OneDGridEnv, max_episode_steps=20)
 env2 = gym.make("OneDGrid-v0", size=4)
 obs, _ = env2.reset(seed=0)
@@ -407,9 +425,10 @@ env2.close()
 # %% [markdown]
 # ## Composition: Wrappers
 #
-# - **Mental model**: a `Wrapper` wraps an `Env` and intercepts its calls. The
-#   wrapped object is still an `Env` and can be wrapped again
-# - Wrappers avoid modifying environment code while adding behavior
+# - **Mental model**:
+#     - A `Wrapper` wraps an `Env` and intercepts its calls
+#     - The wrapped object is still an `Env` and can be wrapped again
+#     - Wrappers avoid modifying environment code while adding behavior
 
 # %%
 from gymnasium.wrappers import RecordEpisodeStatistics, TimeLimit
@@ -431,6 +450,7 @@ while not done:
     obs, reward, terminated, truncated, info = env_w.step(
         env_w.action_space.sample()
     )
+    print(obs, reward, terminated, truncated, info)
     done = terminated or truncated
 # RecordEpisodeStatistics adds 'episode' key at episode end.
 print("episode stats:", info.get("episode"))
@@ -464,51 +484,6 @@ data = {
 }
 display(pd.DataFrame(data))
 vec_env.close()
-
-# %% [markdown]
-# ## API Patterns
-#
-# ### Pattern 1: Episode loop (most common)
-
-# %%
-env3 = gym.make("CartPole-v1")
-obs, info = env3.reset(seed=42)
-done = False
-while not done:
-    action = env3.action_space.sample()
-    obs, reward, terminated, truncated, info = env3.step(action)
-    done = terminated or truncated
-env3.close()
-
-# %% [markdown]
-# ### Pattern 2: Seed for reproducibility
-
-# %%
-env4 = gym.make("CartPole-v1")
-obs_a, _ = env4.reset(seed=99)
-obs_b, _ = env4.reset(seed=99)
-print("reproducible:", np.array_equal(obs_a, obs_b))
-env4.close()
-
-# %% [markdown]
-# ### Pattern 3: Space sampling for random agents
-
-# %%
-env5 = gym.make("CartPole-v1")
-# Valid random action without knowing the action space details.
-action = env5.action_space.sample()
-print("random action:", action, "  type:", type(action))
-env5.close()
-
-# %% [markdown]
-# ### Pattern 4: `contains()` for validation
-
-# %%
-obs_space = gym.make("CartPole-v1").observation_space
-good = np.zeros(4, dtype=np.float32)
-bad = np.zeros(5, dtype=np.float32)
-print("4-dim obs valid:", obs_space.contains(good))
-print("5-dim obs valid:", obs_space.contains(bad))
 
 # %% [markdown]
 # ## Interactive Exploration

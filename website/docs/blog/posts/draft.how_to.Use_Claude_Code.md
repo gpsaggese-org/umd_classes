@@ -378,6 +378,36 @@ The same templates have multiple applications:
 - `inject_todos.py`: Injects TODOs from a `cfile` into source files.
 - `apply_todos.py`: Automatically applies TODOs from a `cfile` using an LLM.
 
+## Memory
+
+<!-- From https://code.claude.com/docs/en/memory -->
+
+To make Claude Code stop remembering information between sessions:
+
+- Run /memory and turn Auto Memory off, or set:
+  ```
+  {
+    "autoMemoryEnabled": false
+  }
+  ```
+
+- Disable it for a session:
+  ```
+  CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude
+  ```
+
+- To remove existing memories, delete files under:
+  ```
+  ~/.claude/projects/<project>/memory/
+  ```
+
+- To disable persistent instructions from CLAUDE.md, use:
+  ```
+  > claude --no-memory
+  ```
+
+- Use `/memory` at any time to check whether memory is enabled for the current project
+
 ## API Reference
 
 ## MCP

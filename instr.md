@@ -1,16 +1,16 @@
-Change the code so that in hdocker.py if CSFY_DOCKER_ENGINE is not defined, use apple if we are running
-on mac, otherwise use docker
-
-- The interface is like:
-  ...
-
-- When writing code you must always follow the instructions in
-  `.claude/skills/coding.rules.md`
-
-- When writing unit tests for follow the instructions in
-  `.claude/skills/testing.rules.md`
-
-- If the task is not perfectly clear, you MUST not perform it, but ask for
-  clarifications
-  - When the task is complex, create a `plan.md` with 5 bullet points explaining
-    what the plan is
+- Change the 
+## Print Variable Name With Value
+- When using `print()` to inspect a variable, always include the variable name as a
+  label alongside its value
+  ```python
+  print("type(env)=", type(env))
+  print("env=", env)
+  ```
+  - **Bad**: bare output with no context
+    ```python
+    print(env)
+    ```
+  - **Good**: self-documenting print with variable name
+    ```python
+    print("env=", env)
+    ```
