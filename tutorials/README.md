@@ -1,17 +1,29 @@
-- This document shows how to create a tutorial
+- This document shows how to create a tutorial for a package
 
-  ```
+- Create the skeleton of the project
+  ```bash
   > export PROJ=...
-  > class_project/create_project.py ---dst_dir tutorials/{PROJ}
+  > class_project/create_project.py ---dst_dir tutorials/${PROJ}
   ```
 
-- Follow the next steps:
-  - Commit the changes
-    ```bash
-    > git add tutorials/pgmpy
-    > git commit -am "Add template"
-    > git push
-    ```
+- Commit the changes
+  ```bash
+  > git add tutorials/${PROJ}
+  > git commit -am "Add template"
+  > git push
+  ```
+
+## Create the README
+
+- Create the blog entry for the tutorial
+  ```
+  claude> /blog.write_tutorial_readme ${PROJ}
+  ```
+
+- Find information about:
+  - Installation
+  - Documentation
+  - Tutorial
 
 - Edit `requirements.txt` to add the packages pinning down to the last version
   of the important packages
@@ -21,18 +33,20 @@
   > docker_build.sh
   ```
 
-- Edit `tutorials/{PROJ}/{PROJ}.py`
+- Edit `tutorials/${PROJ}/${PROJ}.py`
 
-# Create the README
 
-- Create a tutorial
+## Create Notebook about API intro
+
+- Create a short README for the blog:
   ```
-  claude> /blog.write_tutorial_tool_in_30_mins {PROJ}
+  claude> /notebook.create_api_intro ... https://....html and save it in tutorials/${PROJ}/${PROJ}.01.API.XYZ.ipynb
   ```
+- The file is `.claude/skills/notebook.create_api_intro/SKILL.md`
 
-# Create a notebook about one topic
+## Create Notebook about Examples
 
-## Using `/notebook.create_outline` and `/notebook.implement_outline`
+// TODO(gp): Improve this
 
 - Create `notebook_outline.probabilistic_inference.md`
   ```
@@ -67,11 +81,4 @@
   ```
   > docker_jupyter.sh
   http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
-  ```
-
-## Using /notebook.implement_for_package_API
-
-- The skill `./helpers_root/.claude/skills/notebook.implement_for_package_API/SKILL.md` is more complete
-  ```
-  claude> /notebook.implement_for_package_API pgmpy https://pgmpy.org/guides/probabilistic_inference.html and save it in tutorials/pgmpy/pgmpy.01.API.probabilistic_inference.ipynb
   ```
