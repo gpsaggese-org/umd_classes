@@ -1,10 +1,9 @@
 # [ ] Create API notebooks
 
-- https://gymnasium.farama.org/api/env
 
-  - [ ] Env
+  - [x] Env, https://gymnasium.farama.org/api/env
   - [ ] Make and register
-  - [ ] Spaces
+  - [ ] Spaces https://gymnasium.farama.org/api/spaces/
   - [ ] Wrappers
   - [ ] Vectorize
   - [ ] Utility functions
