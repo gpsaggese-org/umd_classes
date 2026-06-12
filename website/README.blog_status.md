@@ -47,6 +47,14 @@
   > prettier --prose-wrap always --print-width 80 --tab-width 4 -w $FILE
   ```
 
+- Checklist for publishing (from `website/blog_checklist.sh`)
+  ```
+  claude> /blog.create_from_notes XYZ
+  claude> /coding.todoai_gp XYZ
+  claude> /blog.humanize XYZ
+  claude> /blog.add_links XYZ
+  ```
+
 # Draft Blogs
 
 ## High-priority

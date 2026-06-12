@@ -55,8 +55,9 @@ cost, even when per-token pricing stays the same.
       during its deliberation phase
         - These are consumed by the provider's infrastructure
         - Some providers bill for them, others absorb the cost
-        - Example: Claude Sonnet with extended thinking can generate thousands
-          of internal reasoning tokens per query
+        - Example: Claude Sonnet with
+          [extended thinking](https://docs.anthropic.com/en/docs/build-with-claude/extended-thinking)
+          can generate thousands of internal reasoning tokens per query
 
     - **Output tokens**: The final visible response tokens
         - Higher effort often produces longer, more detailed answers
@@ -126,13 +127,14 @@ cost, even when per-token pricing stays the same.
 - **Medium effort**: Includes error handling, input validation, comments, ~400
   output tokens + 200 thinking tokens
     - Cost: ~$0.004
-- **High effort**: Comprehensive solution with tests, edge case handling,
+- **High effort**: Thorough solution with tests, edge case handling,
   documentation, ~800 output tokens + 1,500 thinking tokens
     - Cost: ~$0.015
 
 # Choosing the Right Effort Level
 
-- The choice depends on the task and the quality requirements:
+- The choice depends on the task and the quality requirements (see
+  [How to Compare and Choose LLM Models](how_to.Compare_LLM_models.md)):
 
     **Low effort** is ideal for:
     - Simple factual queries
@@ -160,23 +162,18 @@ cost, even when per-token pricing stays the same.
   increase only when the task demands it
 - **Match effort to task difficulty**: A simple summarization does not need high
   reasoning effort
-- **Monitor your costs**: Track token usage across effort levels to understand
-  the real impact
-- **Use per-query control**: Many providers let you set effort level per
-  request, not just globally
+- **[Monitor your costs](draft.how_to.Count_cost.md)**: Track token usage across
+  effort levels to understand the real impact
+- **Use [per-query control](draft.how_to.Use_Claude_Code_with_Openrouter.md)**:
+  Many providers let you set effort level per request, not just globally
 - **Think of it as a dial, not a switch**: Experiment with intermediate settings
   to find the sweet spot for your use case
 
-# Summary
+# Conclusions
 
-- Higher reasoning effort means more internal computation by the model
-- This increases token consumption and, in most cases, cost
-- The cost multiplier varies from 1.2x to 10x depending on the provider's
-  pricing model
-- Match effort level to task complexity for optimal cost-efficiency
-- Always check your provider's specific pricing for reasoning and extended
-  thinking features
+- The relationship between reasoning effort and cost is not always transparent,
+  but it is true that "more reasoning = more tokens = higher cost".
 
-The relationship between reasoning effort and cost is not always transparent,
-but the principle is consistent: more reasoning = more tokens = higher cost.
-Choose wisely based on what each task actually needs.
+- I've seen cost multipliers from 1.2x to 10x depending on the provider's
+  pricing model. I match the effort level to the task and check how my provider
+  bills for reasoning before assuming the cost is the same.

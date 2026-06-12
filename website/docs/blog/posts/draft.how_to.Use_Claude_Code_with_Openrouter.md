@@ -14,12 +14,14 @@ enabling access to models from multiple providers through a single API.
 
 <!-- more -->
 
-- [OpenRouter](https://openrouter.ai/) is a unified API gateway that provides
-  access to LLMs from multiple providers (Anthropic, OpenAI, DeepSeek, Meta,
-  Google, etc.) through a single endpoint
-    - This enables using Claude Code with non-Anthropic models like DeepSeek or
-      OpenAI GPT
-    - It also allows mixing models from different providers for different tasks
+- [OpenRouter](https://openrouter.ai/) is an API gateway that gives you access
+  to LLMs from multiple providers (Anthropic, OpenAI, DeepSeek, Meta, Google,
+  etc.) through a single endpoint
+    - Use Claude Code with non-Anthropic models like DeepSeek or OpenAI GPT
+    - Or mix models from different providers depending on the task
+
+- For a general introduction to Claude Code, see
+  [How to Use Claude Code](draft.how_to.Use_Claude_Code.md)
 
 - This guide covers:
     - Setting up OpenRouter, with and without BYOK (Bring Your Own Key)
@@ -32,17 +34,15 @@ enabling access to models from multiple providers through a single API.
     - You send requests to `https://openrouter.ai/api/v1`
     - OpenRouter routes them to the appropriate provider
 
-- **BYOK (Bring Your Own Key)** means you use your existing API keys from providers
-  (Anthropic, OpenAI, etc.) rather than buying credits from OpenRouter
-    - This is useful if you already have subscriptions or credits with specific
-      providers
-    - You register your keys with OpenRouter, and traffic is routed through your
-      own accounts
+- **BYOK (Bring Your Own Key)** lets you use your existing API keys from
+  providers (Anthropic, OpenAI, etc.) instead of buying credits from OpenRouter
+    - Useful if you already have subscriptions or credits with a provider
+    - Register your keys with OpenRouter and traffic routes through your own
+      accounts
 
 ## Prerequisites: API Keys
 
-- Before configuring OpenRouter, ensure you have API keys for the providers you
-  plan to use:
+- Grab API keys for the providers you want to use:
 
     | Provider  | Environment Variable | Key Format         |
     | :-------- | :------------------- | :----------------- |
@@ -91,8 +91,7 @@ enabling access to models from multiple providers through a single API.
 
 - Claude Code uses Anthropic's SDK, which connects to `api.anthropic.com` by
   default
-- To route to OpenAI models through OpenRouter, set the following environment
-  variables:
+- To route through OpenRouter, set these environment variables:
 
     ```bash
     > export ANTHROPIC_BASE_URL=https://openrouter.ai/api
@@ -182,8 +181,10 @@ enabling access to models from multiple providers through a single API.
 
 ## Step 4: Using Different Models
 
-- Once OpenRouter is configured, map Claude Code's model tiers to any models you
-  prefer:
+- Once OpenRouter is configured, point Claude Code's model tiers at whatever
+  models you want
+- For help choosing which model fits your workflow, see
+  [How to Compare and Choose LLM Models](how_to.Compare_LLM_models.md):
 
     ```bash
     > export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
@@ -206,12 +207,13 @@ enabling access to models from multiple providers through a single API.
 
 <!-- TODO(ai_gp): Show commands with /models /doctor -->
 
-<!-- TODO(ai_gp): Add a pointer to blog_posts/draft.in_5_mins.helpers_cc_wrapper.md -->
+- This repository also ships a `cc` wrapper script that automates the environment
+  variable setup for OpenRouter (see [The `cc` Convenience
+  Wrapper](draft.in_5_mins.helpers_cc_wrapper.md))
 
 ### Verifying the Model in Claude Code
 
-- Once Claude Code launches with the `cc` wrapper, verify which model is active
-  using the `/model` command:
+- Once Claude Code launches, check which model is active with the `/model` command:
 
     ```bash
     > cc
@@ -234,15 +236,21 @@ enabling access to models from multiple providers through a single API.
 
 ## Monitoring and Troubleshooting
 
-- Check [OpenRouter Logs](https://openrouter.ai/logs) to see request history,
+- Check [OpenRouter Logs](https://openrouter.ai/logs) for request history,
   latency, and error details
 
+- For an alternative workflow using OpenRouter with Simon Willison's LLM CLI,
+  see [How to Use OpenRouter with LLM CLI](draft.how_to.Use_OpenRouter.md)
+
+- Refer to the
+  [OpenRouter API documentation](https://openrouter.ai/docs/api-reference) for
+  the full API specification
+
 - Common issues:
-    - **Authentication errors**: Ensure `ANTHROPIC_AUTH_TOKEN` is set to your
+    - **Authentication errors**: Make sure `ANTHROPIC_AUTH_TOKEN` is your
       OpenRouter key, not your Anthropic key
-    - **Model not found**: Verify the exact model ID on OpenRouter's models page
+    - **Model not found**: Check the exact model ID on OpenRouter's models page
       (e.g., `deepseek/deepseek-v4-flash`, not `deepseek-v4-flash`)
-    - **Rate limiting**: OpenRouter applies rate limits based on the provider's
-      constraints
-    - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter, as it
+    - **Rate limiting**: OpenRouter applies rate limits per provider
+    - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter — it
       can conflict with `ANTHROPIC_AUTH_TOKEN`
