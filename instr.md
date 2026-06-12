@@ -1,18 +1,24 @@
-Improve the output of jupytext.py by making it less verbose at INFO level
+Create a bash script website/publish_blog.py that accepts
+a --file XYZ.md
 
-This
+The file must have the format with draft.XYZ.md
 
-08:54:31 - WARN  hsystem.py remove_dirs:491                             Removed dirs: helpers_root
+The action of publishing means
 
-should be at DEBUG level
+removing the draft. prefix
+(e.g., 
+draft.how_to.Use_Claude_Code_with_Openrouter.md
+-> 
+how_to.Use_Claude_Code_with_Openrouter.md)
 
-Also add a tqdm progress bar to show the progress 
+and switching the 'draft: true' to 'draft: false'
+
+Add an option --undo to reverse the transformation and get a blog
+from published to unpublished (adding back `draft.` and flipping
+'draft: false' to 'draft: true')
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`
-
-- When writing unit tests for follow the instructions in
-  `.claude/skills/testing.rules.md`
 
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications

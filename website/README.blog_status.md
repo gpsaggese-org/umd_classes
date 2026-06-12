@@ -55,6 +55,11 @@
   claude> /blog.add_links XYZ
   ```
 
+- To publish use the script
+  ```
+  > website/publish_blog.py ...
+  ```
+
 # Draft Blogs
 
 ## High-priority
