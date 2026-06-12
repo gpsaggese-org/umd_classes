@@ -88,12 +88,10 @@ except ImportError:
 
 # %%
 import gymnasium as gym
+import helpers.hintrospection as hintros
 
-# Inspect what Env exposes.
-# Show the public interface (skip dunder attributes).
-# TODO(ai_gp): Create a function in hintrospection.py to print all the public methods, docstrings, and function signature
-public_attrs = [a for a in dir(gym.Env) if not a.startswith("__")]
-print(public_attrs)
+# Inspect what Env exposes as a markdown list.
+hintros.print_public_methods(gym.Env, use_markdown=True)
 
 # %% [markdown]
 # ### Constructing an `Env` via `gym.make()`
@@ -105,8 +103,8 @@ print(public_attrs)
 # %%
 # Create the simplest classic-control environment.
 env = gym.make("CartPole-v1", render_mode=None)
-print("type(env)=", type(env))
-print("env=", env)
+print("type(env):", type(env))
+print("env:", env)
 
 # %% [markdown]
 # ### Inspecting the env object
@@ -116,17 +114,17 @@ print("env=", env)
 #   - `action_space`: what the env accepts
 
 # %%
-# TODO(ai_gp): Print type and content.
-data = {
-    "attribute": ["observation_space", "action_space", "spec", "unwrapped"],
-    "value": [
-        str(env.observation_space),
-        str(env.action_space),
-        str(env.spec),
-        str(type(env.unwrapped)),
-    ],
-}
-display(pd.DataFrame(data))
+# Print type and content of env attributes.
+print("observation_space type:", type(env.observation_space))
+print("observation_space:", env.observation_space)
+
+print("\naction_space type:", type(env.action_space))
+print("action_space:", env.action_space)
+
+print("\nspec:", env.spec)
+
+print("\nunwrapped type:", type(env.unwrapped))
+print("unwrapped:", env.unwrapped)
 
 # %% [markdown]
 # ## Primitive 2: `reset()`: Start an Episode
@@ -143,13 +141,11 @@ display(pd.DataFrame(data))
 #   - Returns `(observation, info)` — always a 2-tuple
 
 # %%
-# TODO(ai_gp): Apply ./.claude/skills/notebook.rules.md:206:## Print Variable Name With Value to this file
 # Reset and inspect the return values.
 observation, info = env.reset(seed=42)
-print("observation type:", type(observation))
-print("observation shape:", observation.shape)
 print("observation:", observation)
-print("info type:", type(info))
+print("observation.shape:", observation.shape)
+print("observation.dtype:", observation.dtype)
 print("info:", info)
 
 # %%
@@ -157,9 +153,6 @@ print("info:", info)
 obs1, _ = env.reset(seed=0)
 obs2, _ = env.reset(seed=0)
 print("Same seed → same obs:", np.array_equal(obs1, obs2))
-
-obs3, _ = env.reset(seed=1)
-print("Diff seed → diff obs:", not np.array_equal(obs1, obs3))
 
 # %% [markdown]
 # ## Primitive 3: `step()`: Advance One Timestep
@@ -176,27 +169,14 @@ print("Diff seed → diff obs:", not np.array_equal(obs1, obs3))
 #   - The distinction matters for value bootstrapping in RL algorithms
 
 # %%
-# TODO(ai_gp): Create a function to print 
-# observation, reward, terminated, truncated, info in a way that is nicely legible
-# Save it into *_utils.py
+import tutorials.gymnasium.gymnasium_utils as gymutils
 
 # %%
 env.reset(seed=42)
 # Take one random action and inspect all five return values.
 action = env.action_space.sample()
-observation, reward, terminated, truncated, info = env.step(action)
-data = {
-    "name": ["observation", "reward", "terminated", "truncated", "info"],
-    "type": [
-        str(type(observation)),
-        str(type(reward)),
-        str(type(terminated)),
-        str(type(truncated)),
-        str(type(info)),
-    ],
-    "value": [str(observation), reward, terminated, truncated, str(info)],
-}
-display(pd.DataFrame(data))
+obs, reward, terminated, truncated, info = env.step(action)
+gymutils.print_step(obs=obs, reward=reward, terminated=terminated, truncated=truncated, info=info)
 
 # %% [markdown]
 # ### Running a Full Episode
@@ -204,15 +184,20 @@ display(pd.DataFrame(data))
 # - The canonical episode loop: reset once, then step until done
 
 # %%
+# Reset the env with a fixed seed for reproducibility.
 env.reset(seed=42)
 total_reward = 0.0
 step_count = 0
 done = False
+# Loop until the episode ends (either terminated or truncated).
 while not done:
+    # Sample a random action from the action space.
     action = env.action_space.sample()
+    # Advance the environment by one timestep.
     _obs, reward, terminated, truncated, _info = env.step(action)
     total_reward += reward
     step_count += 1
+    # An episode ends when terminated (goal/failure) or truncated (time limit).
     done = terminated or truncated
 print(f"Steps: {step_count}  Total reward: {total_reward}")
 
@@ -234,6 +219,9 @@ print(f"Steps: {step_count}  Total reward: {total_reward}")
 # %%
 from gymnasium import spaces
 
+# `Discrete(n)` represents a set of n integer values 0, 1, ..., n-1.
+# It is used for action spaces with a finite number of discrete choices
+# (e.g., move left/right in CartPole has n=2).
 d = spaces.Discrete(3)
 print("type:", type(d))
 print("n:", d.n)
@@ -254,7 +242,11 @@ print("5 in d:", d.contains(5))
 # ### `Box(low, high, shape)`: continuous tensor
 
 # %%
+# `Box(low, high, shape)` represents a continuous tensor where each element is
+# bounded in [low, high]. It is used for observation spaces with continuous
+# values (e.g., position, velocity in CartPole has shape (4,) with bounds).
 b = spaces.Box(low=-1.0, high=1.0, shape=(3,), dtype=np.float32)
+
 print("type:", type(b))
 print("low:", b.low)
 print("high:", b.high)
@@ -270,20 +262,15 @@ print("contains [2.0, 0.0, 0.0]:", b.contains(np.array([2.0, 0.0, 0.0], dtype=np
 # %%
 cart = gym.make("CartPole-v1")
 mountain = gym.make("MountainCar-v0")
-rows = []
-# TODO(ai_gp): Convert it into print() without a table
+# Compare observation and action spaces of two classic-control envs.
 for name, e in [("CartPole-v1", cart), ("MountainCar-v0", mountain)]:
-    rows.append(
-        {
-            "env": name,
-            "obs_space": str(e.observation_space),
-            "obs_shape": str(e.observation_space.shape),
-            "act_space": str(e.action_space),
-        }
-    )
+    print(f"{name}:")
+    print(f"  obs_space: {e.observation_space}")
+    print(f"  obs_shape: {e.observation_space.shape}")
+    print(f"  act_space: {e.action_space}")
+    print()
 cart.close()
 mountain.close()
-display(pd.DataFrame(rows))
 
 # %% [markdown]
 # ### Other Space Types
@@ -375,22 +362,27 @@ class OneDGridEnv(gym.Env):
 
     def __init__(self, size: int = 5) -> None:
         super().__init__()
+        # Grid length and starting position (leftmost cell).
         self._size = size
         self._pos = 0
-        # Observation: current integer position.
+        # Observation: current integer position (0 to size-1).
         self.observation_space = spaces.Discrete(size)
         # Actions: 0 = left, 1 = right.
         self.action_space = spaces.Discrete(2)
 
     def reset(self, *, seed=None, options=None):
+        # Reset the RNG and place the agent at the leftmost cell.
         super().reset(seed=seed)
         self._pos = 0
         return self._pos, {}
 
     def step(self, action):
+        # Move right (action=1) or left (action=0), clamped to grid bounds.
         self._pos += 1 if action == 1 else -1
         self._pos = int(np.clip(self._pos, 0, self._size - 1))
+        # Episode terminates when the agent reaches the rightmost cell.
         terminated = self._pos == self._size - 1
+        # Reward is 1 only on reaching the goal, 0 otherwise.
         reward = 1.0 if terminated else 0.0
         return self._pos, reward, terminated, False, {}
 
@@ -400,26 +392,29 @@ custom_env = OneDGridEnv(size=5)
 obs, info = custom_env.reset(seed=7)
 print("initial obs:", obs)
 # Walk right until done.
+step_count = 0
 done = False
-steps = []
-# TODO(ai_gp): print value as you go without table
 while not done:
     obs, reward, terminated, truncated, info = custom_env.step(1)
-    steps.append({"obs": obs, "reward": reward, "terminated": terminated})
+    print(f"Step {step_count}: obs={obs}, reward={reward}, terminated={terminated}")
     done = terminated or truncated
-display(pd.DataFrame(steps))
+    step_count += 1
 
 # %% [markdown]
 # ### Registering and using a custom env via `gym.make()`
 
 # %%
-# TODO(ai_gp): Add more comments.
+# Register the custom env so it can be created via gym.make().
 gym.register(id="OneDGrid-v0", entry_point=OneDGridEnv, max_episode_steps=20)
+# Create the registered env with a custom size (overriding the default).
 env2 = gym.make("OneDGrid-v0", size=4)
+# Reset returns the starting position (0 for leftmost cell).
 obs, _ = env2.reset(seed=0)
 print("obs after reset:", obs)
+# Step right: action=1 moves one cell to the right.
 obs, reward, terminated, truncated, info = env2.step(1)
 print("obs after step right:", obs, "reward:", reward)
+# Clean up the env.
 env2.close()
 
 # %% [markdown]
@@ -450,7 +445,15 @@ while not done:
     obs, reward, terminated, truncated, info = env_w.step(
         env_w.action_space.sample()
     )
-    print(obs, reward, terminated, truncated, info)
+    # Use compact=True to print all five values on a single line.
+    gymutils.print_step(
+        obs=obs,
+        reward=reward,
+        terminated=terminated,
+        truncated=truncated,
+        info=info,
+        compact=True,
+    )
     done = terminated or truncated
 # RecordEpisodeStatistics adds 'episode' key at episode end.
 print("episode stats:", info.get("episode"))

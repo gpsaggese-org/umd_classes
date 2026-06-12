@@ -1,81 +1,58 @@
 """
-template_utils.py
+gymnasium_utils.py
 
-This file contains utility functions that support the tutorial notebooks.
-
-- Notebooks should call these functions instead of writing raw logic inline.
-- This helps keep the notebooks clean, modular, and easier to debug.
-- Students should implement functions here for data preprocessing,
-  model setup, evaluation, or any reusable logic.
+Utility functions for the gymnasium tutorial notebooks.
 
 Import as:
 
-import class_project.project_template.template_utils as utils
+import tutorials.gymnasium.gymnasium_utils as gymutils
 """
 
 import logging
 
-from typing import Any, Optional, Tuple
-
-import ipywidgets
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.stats
-from IPython.display import clear_output, display
-
-import helpers.hnotebook as hnotebo
-import helpers.htutorial as htutori
-
-
 _LOG = logging.getLogger(__name__)
 
 
-def init_loggers(notebook_log: logging.Logger) -> None:
-    global _LOG
-    hnotebo.init_loggers(notebook_log, utils_log=_LOG)
-
-
 # #############################################################################
-# Cell 1: Interactive Distribution Explorer with Plot Type Selection
+# Step result printing
 # #############################################################################
 
 
-# def cell1_interactive_distribution_explorer(
-#     *,
-#     figsize: Optional[Tuple[float, float]] = None,
-# ) -> None:
-#     """
-#     Create interactive widget to explore Beta and Normal distributions.
-# 
-#     Demonstrates:
-#     - Slider widgets for continuous parameters via build_widget_control()
-#     - Dropdown for selecting distribution type
-#     - Real-time plot updates using observe() callbacks
-#     - Multiple synchronized plots (1x3 layout)
-# 
-#     :param figsize: Optional figure size (width, height). Defaults to
-#         plt.rcParams["figure.figsize"]
-#     """
+def print_step(
+    obs,
+    reward,
+    terminated,
+    truncated,
+    info,
+    *,
+    label: str = "",
+    compact: bool = False,
+) -> None:
+    """
+    Print the five return values of `env.step()` in a legible format.
 
-
-# #############################################################################
-# Cell 2: Interactive Sampling Visualization
-# #############################################################################
-
-
-# def cell2_interactive_sample_generator(
-#     *,
-#     figsize: Optional[Tuple[float, float]] = None,
-# ) -> None:
-#     """
-#     Create interactive widget to generate and visualize random samples.
-# 
-#     Demonstrates:
-#     - Multiple linked slider widgets via build_widget_control()
-#     - Logarithmic scale slider for sample count via build_log_widget_control()
-#     - Histogram visualization with theoretical overlay
-#     - Sample statistics display
-# 
-#     :param figsize: Optional figure size (width, height). Defaults to
-#         plt.rcParams["figure.figsize"]
-#     """
+    :param obs: observation from step
+    :param reward: reward from step
+    :param terminated: whether the episode ended naturally
+    :param truncated: whether the episode was cut off externally
+    :param info: info dict from step
+    :param label: optional prefix label
+    :param compact: print in a single compact line
+    """
+    prefix = f"{label} " if label else ""
+    if compact:
+        obs_repr = f"{tuple(obs.shape)}: {obs}" if hasattr(obs, "shape") else str(obs)
+        print(
+            f"{prefix}obs={obs_repr} rew={reward} "
+            f"term={terminated} trunc={truncated} info={info}"
+        )
+    else:
+        if hasattr(obs, "shape"):
+            obs_shape = tuple(obs.shape)
+            print(f"{prefix}observation {obs_shape}: {obs}")
+        else:
+            print(f"{prefix}observation: {obs}")
+        print(f"{prefix}reward: {reward}")
+        print(f"{prefix}terminated: {terminated}")
+        print(f"{prefix}truncated: {truncated}")
+        print(f"{prefix}info: {info}")
