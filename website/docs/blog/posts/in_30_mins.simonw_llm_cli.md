@@ -3,7 +3,7 @@ title: "llm CLI in 30 minutes"
 draft: false
 authors:
     - gpsaggese
-date: 2026-04-19
+date: 2026-05-01
 description:
 categories:
     - Developer Tools

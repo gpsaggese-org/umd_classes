@@ -3,7 +3,7 @@ title: "UV in 30 mins"
 draft: false
 authors:
     - gpsaggese
-date: 2026-02-14
+date: 2026-02-20
 description:
 categories:
     - Python

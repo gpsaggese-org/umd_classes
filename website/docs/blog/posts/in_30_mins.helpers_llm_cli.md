@@ -3,7 +3,7 @@ title: "LLM CLI in 30 mins"
 draft: false
 authors:
     - gpsaggese
-date: 2026-05-30
+date: 2026-05-08
 description: Transform text files with LLMs from the command line, integrate AI into your editing workflow
 categories:
     - Developer Tools

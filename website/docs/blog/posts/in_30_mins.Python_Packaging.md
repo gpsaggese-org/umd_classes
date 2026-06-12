@@ -3,7 +3,7 @@ title: "Python Package Tools in 30 mins"
 draft: false
 authors:
     - gpsaggese
-date: 2026-02-14
+date: 2026-02-27
 description:
 categories:
     - Python

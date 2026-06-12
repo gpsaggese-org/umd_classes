@@ -3,7 +3,7 @@ title: "How to Compare and Choose LLM Models"
 draft: false
 authors:
     - gpsaggese
-date: 2026-06-09
+date: 2026-05-15
 description:
 categories:
     - LLM
@@ -25,6 +25,40 @@ combines quality, cost, and speed to pick the right model for each task
     - Some score highest on benchmarks but cost 100x more
     - Some are great for code but struggle with "creative" reasoning
 - The goal is to pick the right model for your workflow at the minimum price
+
+<!--  rendered_images:begin -->
+<!--  ```mermaid -->
+<!--  mindmap -->
+<!--    root((LLM Model Selection)) -->
+<!--      Quality -->
+<!--        Benchmark Scores -->
+<!--        Reasoning Ability -->
+<!--        Code Generation -->
+<!--        Task Fit -->
+<!--      Cost -->
+<!--        Input Tokens -->
+<!--        Output Tokens -->
+<!--        Provider Markup -->
+<!--        Daily Budget -->
+<!--      Speed -->
+<!--        Latency -->
+<!--        Tokens Per Second -->
+<!--        Time To First Token -->
+<!--        Throughput -->
+<!--      Context -->
+<!--        Window Size -->
+<!--        Long Document Support -->
+<!--        Memory / State -->
+<!--  ``` -->
+<!--  rendered_images:end -->
+<!--  render_images:begin -->
+![](how_to.Compare_LLM_models.md.figs/how_to.Compare_LLM_models.1.png)
+<!--  render_images:end -->
+
+<div style="text-align: center; font-style: italic;">
+The four dimensions of LLM model selection: Quality, Cost, Speed, and Context
+work together to determine the right model for any given task.
+</div>
 
 ## Where to Find Reliable Benchmarks
 
@@ -58,6 +92,50 @@ combines quality, cost, and speed to pick the right model for each task
     \text{Efficiency} = \frac{\text{Quality} \times \text{Speed}}{\text{Cost}}
     $$
 
+<!--  rendered_images:begin -->
+<!--  ```graphviz -->
+<!--  digraph EfficiencyMetric { -->
+<!--      splines=false; -->
+<!--      nodesep=1.2; -->
+<!--      ranksep=0.6; -->
+<!--   -->
+<!--      node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7]; -->
+<!--   -->
+<!--      // Input nodes -->
+<!--      Quality [label="Quality\n(Coding IQ 0-100)", fillcolor="#A6C8F4"]; -->
+<!--      Speed   [label="Speed\n(Tokens/sec)", fillcolor="#B2E2B2"]; -->
+<!--      Cost    [label="Cost\n($ per 1M tokens)", fillcolor="#F4A6A6"]; -->
+<!--   -->
+<!--      // Operator nodes -->
+<!--      Multiply [label="Quality × Speed", fillcolor="#FFD1A6", shape=diamond]; -->
+<!--      Divide   [label="Efficiency\n(Quality × Speed) / Cost", fillcolor="#A0D6D1", shape=box, style="rounded,filled,bold", penwidth=2.5]; -->
+<!--   -->
+<!--      // Output -->
+<!--      Decision [label="High Eff. → Cheap & Fast\nLow Eff. → Expensive & Slow", fillcolor="#D4A6F4", shape=box, style="rounded,filled"]; -->
+<!--   -->
+<!--      // Edges -->
+<!--      Quality -> Multiply; -->
+<!--      Speed -> Multiply; -->
+<!--      Multiply -> Divide; -->
+<!--      Cost -> Divide [color="#CC3333", penwidth=1.5]; -->
+<!--      Divide -> Decision [penwidth=2.0]; -->
+<!--   -->
+<!--      // Force rank alignment -->
+<!--      { rank=same; Quality; Speed; Cost; } -->
+<!--      Multiply -> Divide [style=invis, weight=10]; -->
+<!--  } -->
+<!--  ``` -->
+<!--  rendered_images:end -->
+<!--  render_images:begin -->
+![](how_to.Compare_LLM_models.md.figs/how_to.Compare_LLM_models.2.png)
+<!--  render_images:end -->
+
+<div style="text-align: center; font-style: italic;">
+The efficiency metric combines Quality × Speed into a numerator representing
+"useful work per second" and divides by Cost to find the value each model
+delivers per dollar.
+</div>
+
 - The components are:
     - **Quality**: Artificial Analysis Coding Index (0-100), a benchmark composite
       for code generation tasks
@@ -90,6 +168,38 @@ combines quality, cost, and speed to pick the right model for each task
     ```bash
     > openrouter_models_table.py --models_from_file models.txt -v DEBUG -a fetch_aa_benchmarks -a fetch_openrouter_throughput
     ```
+
+<!--  rendered_images:begin -->
+<!--  ```mermaid -->
+<!--  quadrantChart -->
+<!--      title Model Categories by Quality and Cost -->
+<!--      x-axis "Low Cost" --> "High Cost" -->
+<!--      y-axis "Low Quality" --> "High Quality" -->
+<!--      quadrant-1 "Best Value (Sweet Spot)" -->
+<!--      quadrant-2 "Premium Picks" -->
+<!--      quadrant-3 "Budget Basics" -->
+<!--      quadrant-4 "Avoid (Poor Value)" -->
+<!--      deepseek-v4-flash: [0.15, 0.55] -->
+<!--      deepseek-v4-pro: [0.25, 0.65] -->
+<!--      mimo-v2-5-pro: [0.25, 0.60] -->
+<!--      qwen3-7-max: [0.35, 0.68] -->
+<!--      claude-sonnet-4-6: [0.50, 0.72] -->
+<!--      claude-opus-4-7: [0.75, 0.80] -->
+<!--      gemini-3-1-pro: [0.45, 0.78] -->
+<!--      gpt-5-5: [0.85, 0.82] -->
+<!--      gpt-oss-120b: [0.10, 0.38] -->
+<!--  ``` -->
+<!--  rendered_images:end -->
+<!--  render_images:begin -->
+![](how_to.Compare_LLM_models.md.figs/how_to.Compare_LLM_models.3.png)
+<!--  render_images:end -->
+
+<div style="text-align: center; font-style: italic;">
+The quadrant chart clusters models into value groups. Models in the
+upper-left quadrant deliver high quality at low cost — the efficiency
+sweet spot for daily use. Premium models cluster in the upper-right,
+while the lower-left holds budget-friendly options for simple tasks.
+</div>
 
 <!-- TODO(ai_gp): Add list of models -->
 

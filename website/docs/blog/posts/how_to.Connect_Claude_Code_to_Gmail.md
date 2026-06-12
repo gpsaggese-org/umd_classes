@@ -3,7 +3,7 @@ title: "How to Connect Claude Code Securely to Gmail"
 draft: false
 authors:
   - gpsaggese
-date: 2026-02-28
+date: 2026-03-20
 description:
 categories:
   - Causal AI

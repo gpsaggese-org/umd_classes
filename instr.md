@@ -1,21 +1,7 @@
-Create a bash script website/publish_blog.py that accepts
-a --file XYZ.md
+Create a script website_screenshot.py that given a website --url
+uses playwright to take a screenshot and saves it --output *.png
 
-The file must have the format with draft.XYZ.md
-
-The action of publishing means
-
-removing the draft. prefix
-(e.g., 
-draft.how_to.Use_Claude_Code_with_Openrouter.md
--> 
-how_to.Use_Claude_Code_with_Openrouter.md)
-
-and switching the 'draft: true' to 'draft: false'
-
-Add an option --undo to reverse the transformation and get a blog
-from published to unpublished (adding back `draft.` and flipping
-'draft: false' to 'draft: true')
+Use uv to install the packages on the fly
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`

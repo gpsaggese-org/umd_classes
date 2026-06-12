@@ -3,7 +3,7 @@ title: "mdm, a Unified Markdown Manager for Agent Skills"
 draft: false
 authors:
     - gpsaggese
-date: 2026-03-29
+date: 2026-04-24
 description:
 categories:
     - Productivity
