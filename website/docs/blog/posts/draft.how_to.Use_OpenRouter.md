@@ -43,11 +43,6 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
 
     ```bash
     > pip show llm-openrouter
-    ```
-
-    Expected output:
-
-    ```verbatim
     Name: llm-openrouter
     Version: 0.5
     Summary: LLM plugin for models hosted by OpenRouter
