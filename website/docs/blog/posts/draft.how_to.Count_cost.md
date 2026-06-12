@@ -333,19 +333,3 @@ patterns.
     - Once you know your typical daily spend, you can spot anomalies quickly
     - A sudden spike often indicates an inefficient workflow or a runaway agent
       loop
-
-## Conclusion
-
-- LLM-powered coding assistants are transformative, but their costs need
-  visibility
-
-- **ccusage** provides clean, focused CLI reports for tracking usage across
-  coding agent CLIs
-
-- **OpenUsage** offers a richer real-time dashboard with broader provider
-  coverage and historical data collection
-
-- Both tools are open-source, run locally, and complement each other well
-
-- Installing both gives you a complete picture of your AI tool spending, from
-  quick daily reports to continuous monitoring

@@ -40,6 +40,10 @@
 
 - To format use:
   ```
+  > website/format_blog.sh <FILE>
+  ```
+  which wraps something like:
+  ```
   > prettier --prose-wrap always --print-width 80 --tab-width 4 -w $FILE
   ```
 

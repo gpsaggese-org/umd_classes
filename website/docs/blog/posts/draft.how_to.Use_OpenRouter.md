@@ -1,5 +1,5 @@
 ---
-title: "How to Use OpenRouter with LLM CLI"
+title: "How to Use OpenRouter with Simonw's LLM CLI"
 draft: true
 authors:
     - gpsaggese

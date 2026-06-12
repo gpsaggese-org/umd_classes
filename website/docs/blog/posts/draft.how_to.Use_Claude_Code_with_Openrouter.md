@@ -4,7 +4,6 @@ draft: true
 authors:
     - gpsaggese
 date: 2026-06-09
-description: Configure Claude Code to use OpenRouter for LLM access
 categories:
     - AI Tools
     - LLM
@@ -26,7 +25,6 @@ enabling access to models from multiple providers through a single API.
     - Setting up OpenRouter, with and without BYOK (Bring Your Own Key)
     - Testing the API connection
     - Configuring Claude Code to route through OpenRouter
-    - Using the `cc` convenience wrapper for model selection
 
 ## What is OpenRouter and BYOK
 
@@ -206,56 +204,9 @@ enabling access to models from multiple providers through a single API.
 
 ## Test Claude Code
 
-<!-- TODO(ai_gp): Show commands from cc with /models /doctor -->
+<!-- TODO(ai_gp): Show commands with /models /doctor -->
 
-## The `cc` Convenience Wrapper
-
-<!-- TODO(ai_gp): Point to the README of cc -->
-<!-- TODO(ai_gp): Always use links to repo besides the path -->
-
-- The repository provides a `cc` script at `dev_scripts_helpers/ai/` that wraps
-  `claude` with sensible defaults for model selection and tmux integration
-
-### Key Features
-
-- Launches Claude Code interactively with `--dangerously-skip-permissions` for
-  faster iteration
-- Supports model selection via shorthand flags (Anthropic direct or various
-  models through OpenRouter)
-- Automatically configures the right environment variables depending on the
-  chosen model
-- Renames the tmux pane to `*CC*` during the session and restores it on exit
-- Passes all additional arguments through to the underlying `claude` command
-
-### Model Selection Flags
-
-| Flag            | Description                                         |
-| :-------------- | :-------------------------------------------------- |
-| `--anth`        | Use Anthropic directly (clears OpenRouter env vars) |
-| `--or_anth`     | Claude Haiku 4.5 via OpenRouter                     |
-| `--ds`          | DeepSeek V4 Flash via OpenRouter (default)          |
-| `--dsp`         | DeepSeek V4 Pro via OpenRouter                      |
-| `--model MODEL` | Any model through OpenRouter                        |
-| `--test`        | Run diagnostics (`claude doctor` + `/model`)        |
-
-### Usage Examples
-
-```bash
-# Default: DeepSeek V4 Flash via OpenRouter
-> cc
-
-# Use Anthropic directly
-> cc --anth
-
-# Use Claude Haiku 4.5 via OpenRouter
-> cc --or_anth
-
-# Use a custom model through OpenRouter
-> cc --model openrouter/meta-llama/llama-3.1-8b-instruct
-
-# Run diagnostics
-> cc --test
-```
+<!-- TODO(ai_gp): Add a pointer to blog_posts/draft.in_5_mins.helpers_cc_wrapper.md -->
 
 ### Verifying the Model in Claude Code
 
