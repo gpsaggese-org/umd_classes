@@ -115,16 +115,17 @@ digraph MDP {
 * MDP: Examples
 
 - **Example**: environment is fully observable and stochastic
-  ::: columns
-  :::: {.column width=70%}
-  - E.g., a robot navigating a slippery surface
-    - It knows its exact location and the map (fully observable)
-    - Its wheels may slip unpredictably (stochastic outcome)
-  ::::
-  :::: {.column width=25%}
-  ![](msml610/lectures_source/figures/L12.Star_Wars_droid.png)
-  ::::
-  :::
+
+::: columns
+:::: {.column width=70%}
+- E.g., a robot navigating a slippery surface
+  - It knows its exact location and the map (fully observable)
+  - Its wheels may slip unpredictably (stochastic outcome)
+::::
+:::: {.column width=25%}
+![](msml610/lectures_source/figures/L12.Star_Wars_droid.png)
+::::
+:::
 
 - **Example**: MDP
 ```graphviz
