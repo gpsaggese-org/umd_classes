@@ -176,9 +176,6 @@ env.reset(seed=42)
 # Take one random action and inspect all five return values.
 action = env.action_space.sample()
 obs, reward, terminated, truncated, info = env.step(action)
-# TODO(ai_gp): in print_step print observation merging shape and the content like `(4, ): [...]`
-# TODO(ai_gp): Add a field, compact: bool = False to print in a single line like
-# print("obs=%s" % obs, "rew=%s" % reward, "term=%s" % terminated, "trunc=%s" % truncated, "info=%s" % info)
 gymutils.print_step(obs=obs, reward=reward, terminated=terminated, truncated=truncated, info=info)
 
 # %% [markdown]

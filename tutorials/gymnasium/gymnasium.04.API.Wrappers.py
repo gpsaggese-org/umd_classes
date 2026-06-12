@@ -41,7 +41,6 @@ import pandas as pd
 
 # %%
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
 
 _LOG = logging.getLogger(__name__)
 
@@ -126,7 +125,9 @@ obs, info = wrapper.reset(seed=42)
 print("obs (delegated):", obs)
 
 # Step is delegated.
-obs2, reward, terminated, truncated, _info = wrapper.step(wrapper.action_space.sample())
+obs2, reward, terminated, truncated, _info = wrapper.step(
+    wrapper.action_space.sample()
+)
 gymutils.print_step(
     obs=obs2,
     reward=reward,
@@ -151,7 +152,10 @@ print("observation_space:", wrapper.observation_space)
 # Show the wrapper chain.
 print("wrapper.env is base_env:", wrapper.env is base_env)
 print("wrapper.unwrapped:", type(wrapper.unwrapped))
-print("wrapper.unwrapped is base_env.unwrapped:", wrapper.unwrapped is base_env.unwrapped)
+print(
+    "wrapper.unwrapped is base_env.unwrapped:",
+    wrapper.unwrapped is base_env.unwrapped,
+)
 
 # Clean up.
 wrapper.close()
@@ -249,7 +253,10 @@ obs_a, *_ = base2.step(0)
 obs_b, *_ = action_swap_env.step(0)
 print("action=0 on base env -> obs:", obs_a)
 print("action=0 on swap wrapper (→ action=1) -> obs:", obs_b)
-print("Different because a different action was taken:", not np.array_equal(obs_a, obs_b))
+print(
+    "Different because a different action was taken:",
+    not np.array_equal(obs_a, obs_b),
+)
 
 # %% [markdown]
 # ## Primitive 4: `RewardWrapper`: Transform Rewards
@@ -308,7 +315,11 @@ print(f"ratio: {rew_b / rew_a}")
 # - These are the "quick and clean" way for simple transformations
 
 # %%
-from gymnasium.wrappers import TransformObservation, TransformAction, TransformReward
+from gymnasium.wrappers import (
+    TransformObservation,
+    TransformAction,
+    TransformReward,
+)
 
 # %%
 # TransformObservation: add Gaussian noise to every observation.
@@ -329,7 +340,6 @@ display(pd.DataFrame(data))
 
 # %%
 # TransformAction: scale continuous actions for MountainCarContinuous.
-from gymnasium.wrappers import TransformAction
 
 base5 = gym.make("MountainCarContinuous-v0")
 # Clip action magnitude to 50%.
@@ -375,6 +385,7 @@ scaled_reward_env.close()
 
 # %%
 from gymnasium.wrappers import TimeLimit
+
 
 # Make a custom env with no natural termination.
 class InfiniteCartPole(gym.Env):
@@ -575,8 +586,6 @@ penalty_env.close()
 #   episode end, containing `"r"` (return), `"l"` (length), `"t"` (time)
 
 # %%
-from gymnasium.wrappers import RecordEpisodeStatistics
-
 base9 = gym.make("CartPole-v1")
 stats_env = RecordEpisodeStatistics(base9, buffer_length=10)
 
@@ -611,8 +620,6 @@ stats_env.close()
 #   environments in a single environment
 
 # %%
-from gymnasium.wrappers import Autoreset
-
 base10 = gym.make("CartPole-v1")
 # Limit steps to 3 so episodes end quickly, then auto-reset.
 limited = TimeLimit(base10, max_episode_steps=3)
@@ -680,14 +687,18 @@ base_for_order = gym.make("CartPole-v1")
 env_a = DoubleReward(FlipObservation(base_for_order), factor=10.0)
 env_a.reset(seed=0)
 obs_a, rew_a, *_ = env_a.step(1)
-print(f"Order A (flip inside, reward outside): obs={obs_a[:2]}, reward={rew_a:.1f}")
+print(
+    f"Order A (flip inside, reward outside): obs={obs_a[:2]}, reward={rew_a:.1f}"
+)
 
 # Order B: scale reward first, then flip obs.
 base_for_order2 = gym.make("CartPole-v1")
 env_b = FlipObservation(DoubleReward(base_for_order2, factor=10.0))
 env_b.reset(seed=0)
 obs_b, rew_b, *_ = env_b.step(1)
-print(f"Order B (reward inside, flip outside): obs={obs_b[:2]}, reward={rew_b:.1f}")
+print(
+    f"Order B (reward inside, flip outside): obs={obs_b[:2]}, reward={rew_b:.1f}"
+)
 
 # The observation is flipped in both cases, but the reward order doesn't matter
 # for independent transforms. For linked transforms, order matters!
@@ -695,7 +706,9 @@ base_for_order.close()
 
 # %%
 # Inspect the wrapper chain with `get_wrapper_attr`.
-env_chain = DoubleReward(FlipObservation(SwapAction(gym.make("CartPole-v1"))), factor=5.0)
+env_chain = DoubleReward(
+    FlipObservation(SwapAction(gym.make("CartPole-v1"))), factor=5.0
+)
 # `get_wrapper_attr` searches through the wrapper stack for an attribute.
 print("get_wrapper_attr('_factor'):", env_chain.get_wrapper_attr("_factor"))
 
@@ -712,7 +725,9 @@ except Exception as e:
 # %%
 # Question: can you wrap a wrapped environment with the same wrapper type?
 # (Yes, nesting is the fundamental composition mechanism.)
-env_nested = DoubleReward(DoubleReward(gym.make("CartPole-v1"), factor=2.0), factor=3.0)
+env_nested = DoubleReward(
+    DoubleReward(gym.make("CartPole-v1"), factor=2.0), factor=3.0
+)
 env_nested.reset(seed=0)
 _, rew_nested, *_ = env_nested.step(1)
 print(f"Reward with double wrapping (2x inner, 3x outer): {rew_nested}")

@@ -41,6 +41,7 @@ import pandas as pd
 
 # %%
 import helpers.hdbg as hdbg
+import helpers.hintrospection as hintros
 
 _LOG = logging.getLogger(__name__)
 
@@ -96,9 +97,7 @@ except ImportError:
 from gymnasium import spaces
 
 # Inspect the public interface of the base Space class.
-# TODO(ai_gp): use print_public_methods from helpers_root/helpers/hintrospection.py
-public_attrs = [a for a in dir(spaces.Space) if not a.startswith("_")]
-print("public_attrs=", public_attrs)
+hintros.print_public_methods(spaces.Space)
 
 # %%
 # Confirm that all concrete spaces are subclasses of Space.

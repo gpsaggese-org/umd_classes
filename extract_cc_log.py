@@ -175,9 +175,7 @@ def _extract_requests(
             current["input_tokens"] = usage.get("input_tokens", 0)
             current["output_tokens"] = usage.get("output_tokens", 0)
             output_details = usage.get("output_tokens_details", {})
-            current["thinking_tokens"] = output_details.get(
-                "thinking_tokens", 0
-            )
+            current["thinking_tokens"] = output_details.get("thinking_tokens", 0)
             current["cost"] = usage.get("cost", 0)
             current["speed"] = usage.get("speed", "")
             requests.append(dict(current))
@@ -435,6 +433,28 @@ def _extract_tool_calls(
     return events
 
 
+def _write_output(
+    output: str,
+    file_name: str,
+    *,
+    output_dir: str = "",
+) -> None:
+    """
+    Print output and optionally write to a file.
+
+    :param output: String content to print and optionally save
+    :param file_name: File name to save under `output_dir`
+    :param output_dir: Optional directory to write the output file
+    """
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+        file_path = os.path.join(output_dir, file_name)
+        with open(file_path, "w") as f:
+            f.write(output)
+        _LOG.info("Output written to '%s'", file_path)
+    print(output)
+
+
 # #############################################################################
 # Output functions
 # #############################################################################
@@ -470,9 +490,7 @@ def _print_narrative(
         model = init_info.get("model", "")
         cc_ver = init_info.get("claude_code_version", "")
         session_id = init_info.get("session_id", "")[:8]
-        lines.append(
-            f"=== Session: {session_id} | {model} | CC {cc_ver} ==="
-        )
+        lines.append(f"=== Session: {session_id} | {model} | CC {cc_ver} ===")
     else:
         lines.append("=== Claude Code Session ===")
 
@@ -540,13 +558,11 @@ def _print_narrative(
             cost = usage.get("cost", 0)
             inp = usage.get("input_tokens", 0)
             out = usage.get("output_tokens", 0)
-            think = (
-                usage.get("output_tokens_details", {})
-                .get("thinking_tokens", 0)
+            think = usage.get("output_tokens_details", {}).get(
+                "thinking_tokens", 0
             )
             lines.append(
-                f"  [Cost] {inp} in, {out} out, "
-                f"{think} think, ${cost:.6f}"
+                f"  [Cost] {inp} in, {out} out, {think} think, ${cost:.6f}"
             )
             lines.append("")
         elif event_type == "message_stop":
@@ -579,7 +595,15 @@ def _print_narrative(
             if len(inp_summary) > 120:
                 inp_summary = inp_summary[:120] + "..."
             lines.append("  " + tool_name + "(" + inp_summary + ")")
-            detail = "    -> (" + err + ", " + content_type + ", " + str(content_len) + " chars)"
+            detail = (
+                "    -> ("
+                + err
+                + ", "
+                + content_type
+                + ", "
+                + str(content_len)
+                + " chars)"
+            )
             if url:
                 detail += " url=" + url
             if dur:
@@ -600,28 +624,6 @@ def _print_narrative(
 
     output = "\n".join(lines)
     _write_output(output, "cc_log_narrative.txt", output_dir=output_dir)
-
-
-def _write_output(
-    output: str,
-    file_name: str,
-    *,
-    output_dir: str = "",
-) -> None:
-    """
-    Print output and optionally write to a file.
-
-    :param output: String content to print and optionally save
-    :param file_name: File name to save under `output_dir`
-    :param output_dir: Optional directory to write the output file
-    """
-    if output_dir:
-        os.makedirs(output_dir, exist_ok=True)
-        file_path = os.path.join(output_dir, file_name)
-        with open(file_path, "w") as f:
-            f.write(output)
-        _LOG.info("Output written to '%s'", file_path)
-    print(output)
 
 
 # #############################################################################

@@ -7,7 +7,6 @@ import tutorials.pgmpy.pgmpy_utils as tpgpguti
 """
 
 import pandas as pd
-import logging
 from itertools import product
 
 

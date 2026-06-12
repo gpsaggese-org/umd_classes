@@ -5,7 +5,7 @@ Utility functions for the gymnasium tutorial notebooks.
 
 Import as:
 
-import tutorials.gymnasium.gymnasium_utils as gymutils
+import tutorials.gymnasium.gymnasium_utils as tgygyuti
 """
 
 import logging
@@ -41,7 +41,9 @@ def print_step(
     """
     prefix = f"{label} " if label else ""
     if compact:
-        obs_repr = f"{tuple(obs.shape)}: {obs}" if hasattr(obs, "shape") else str(obs)
+        obs_repr = (
+            f"{tuple(obs.shape)}: {obs}" if hasattr(obs, "shape") else str(obs)
+        )
         print(
             f"{prefix}obs={obs_repr} rew={reward} "
             f"term={terminated} trunc={truncated} info={info}"

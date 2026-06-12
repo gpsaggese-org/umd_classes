@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -31,10 +31,9 @@
 # %autoreload 2
 
 import logging
-import sys
 import warnings
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 # %%
 from pgmpy.example_models import list_models, load_model
@@ -118,9 +117,9 @@ print(f"Total models available: {len(all_models)}")
 
 # %%
 # Categorize models by source repository.
-bnlearn = sorted([m for m in all_models if m.startswith('bnlearn/')])
-bnrep = sorted([m for m in all_models if m.startswith('bnrep/')])
-dagitty = sorted([m for m in all_models if m.startswith('dagitty/')])
+bnlearn = sorted([m for m in all_models if m.startswith("bnlearn/")])
+bnrep = sorted([m for m in all_models if m.startswith("bnrep/")])
+dagitty = sorted([m for m in all_models if m.startswith("dagitty/")])
 
 print(f"bnlearn models (discrete parameterized): {len(bnlearn)}")
 print(f"  {bnlearn[:5]}...")
@@ -190,8 +189,8 @@ for m in precise:
 # %%
 # Filter for causal DAGs from dagitty with few nodes.
 causal_dag = list_models(n_nodes=[4, 5, 6])
-causal_dag = [m for m in causal_dag if m.startswith('dagitty/')]
-print(f"Small dagitty causal DAGs (4-6 nodes):")
+causal_dag = [m for m in causal_dag if m.startswith("dagitty/")]
+print("Small dagitty causal DAGs (4-6 nodes):")
 for m in causal_dag:
     print(f"  {m}")
 
@@ -203,8 +202,8 @@ for m in causal_dag:
 
 # %%
 # Smallest construction: load a simple parameterized discrete model.
-model = load_model('bnlearn/cancer')
-print(f"Loaded model: bnlearn/cancer")
+model = load_model("bnlearn/cancer")
+print("Loaded model: bnlearn/cancer")
 print(f"Object type: {type(model)}")
 print(f"Object type name: {type(model).__name__}")
 print(f"Number of nodes: {len(model.nodes())}")
@@ -215,8 +214,8 @@ _ = tpgpguti.draw_pgmpy_model(model)
 
 # %%
 # Load a structure-only DAG.
-model_dag = load_model('dagitty/mediator')
-print(f"Loaded model: dagitty/mediator")
+model_dag = load_model("dagitty/mediator")
+print("Loaded model: dagitty/mediator")
 print(f"Object type: {type(model_dag)}")
 print(f"Object type name: {type(model_dag).__name__}")
 
@@ -234,7 +233,7 @@ _ = tpgpguti.draw_pgmpy_model(model_dag)
 
 # %%
 # Load the small 'cancer' model: Pollution -> Cancer <- Smoker, Cancer -> Xray, Cancer -> Dyspnoea.
-model = load_model('bnlearn/cancer')
+model = load_model("bnlearn/cancer")
 
 print(f"Model: {model}")
 print(f"Nodes: {sorted(model.nodes())}")
@@ -259,15 +258,21 @@ for cpd in cpds:
 # View a specific CPD in detail.
 cpd_cancer = model.get_cpds("Cancer")
 print(cpd_cancer)
-print(f"\nP(Cancer=no | Pollution=low, Smoker=non): {cpd_cancer.values[0, 0, 0]:.4f}")
-print(f"P(Cancer=yes | Pollution=high, Smoker=smoker): {cpd_cancer.values[1, 1, 1]:.4f}")
+print(
+    f"\nP(Cancer=no | Pollution=low, Smoker=non): {cpd_cancer.values[0, 0, 0]:.4f}"
+)
+print(
+    f"P(Cancer=yes | Pollution=high, Smoker=smoker): {cpd_cancer.values[1, 1, 1]:.4f}"
+)
 
 # %%
 # Use network analysis methods.
 print(f"Parents of 'Cancer': {model.get_parents('Cancer')}")
 print(f"Children of 'Cancer': {model.get_children('Cancer')}")
 print(f"Children of 'Smoker': {model.get_children('Smoker')}")
-print(f"Local independencies for 'Cancer': {model.local_independencies('Cancer')}")
+print(
+    f"Local independencies for 'Cancer': {model.local_independencies('Cancer')}"
+)
 
 # %%
 # Check model validity (all CPDs consistent with graph structure).
@@ -285,7 +290,7 @@ print(f"Model is valid: {is_valid}")
 
 # %%
 # Load a structure-only DAG.
-model = load_model('dagitty/confounding')
+model = load_model("dagitty/confounding")
 
 print(f"Model: {model}")
 print(f"Type: {type(model).__name__}")
@@ -300,9 +305,9 @@ _ = tpgpguti.draw_pgmpy_model(model)
 try:
     cpds = model.get_cpds()
     print(f"get_cpds() returned: {cpds}")
-except AttributeError as e:
-    print(f"No CPDs: DAG has no CPD methods.")
-    print(f"  Only DiscreteBayesianNetwork has CPDs.")
+except AttributeError:
+    print("No CPDs: DAG has no CPD methods.")
+    print("  Only DiscreteBayesianNetwork has CPDs.")
 
 # %%
 # Structure analysis works on DAGs.
@@ -315,18 +320,21 @@ print(f"Root nodes (no parents): {model.get_roots()}")
 # %%
 # DAGs support d-separation checks: are variables independent conditional on others?
 print(f"A and B d-connected? {model.is_dconnected('A', 'B')}")
-print(f"A and B d-separated given Z? {model.is_dconnected('A', 'B', observed='Z')}")
+print(
+    f"A and B d-separated given Z? {model.is_dconnected('A', 'B', observed='Z')}"
+)
 
 # %%
 # Get conditional independences implied by the graph structure.
-from pgmpy.base import DAG
 
 independencies = model.get_independencies()
 assertions = independencies.get_assertions()
 print(f"Number of implied independencies: {len(assertions)}")
-print(f"Sample independencies:")
+print("Sample independencies:")
 for assertion in assertions[:5]:
-    print(f"  ({assertion.event1}) _|_ ({assertion.event2}) | ({assertion.event3})")
+    print(
+        f"  ({assertion.event1}) _|_ ({assertion.event2}) | ({assertion.event3})"
+    )
 
 # %%
 # Visualize the DAG.
@@ -337,13 +345,15 @@ _ = tpgpguti.draw_pgmpy_model(model)
 
 # %%
 # Mediator: X -> I -> Y, with Z confounder of I and X.
-model_m = load_model('dagitty/mediator')
+model_m = load_model("dagitty/mediator")
 print(f"Mediator model nodes: {sorted(model_m.nodes())}")
 print(f"Mediator model edges: {sorted(model_m.edges())}")
 
 # The mediator pattern: X affects Y through I (the mediator).
 print(f"\nIs X and Y d-connected? {model_m.is_dconnected('X', 'Y')}")
-print(f"Is X and Y d-separated given I? {model_m.is_dconnected('X', 'Y', observed='I')}")
+print(
+    f"Is X and Y d-separated given I? {model_m.is_dconnected('X', 'Y', observed='I')}"
+)
 
 # %%
 _ = tpgpguti.draw_pgmpy_model(model_m)
@@ -353,13 +363,17 @@ _ = tpgpguti.draw_pgmpy_model(model_m)
 
 # %%
 # M-bias: two independent causes (u_D_Z, u_E_Z) both affect a collider Z.
-model_mb = load_model('dagitty/m_bias')
+model_mb = load_model("dagitty/m_bias")
 print(f"M-bias model nodes: {sorted(model_mb.nodes())}")
 print(f"M-bias model edges: {sorted(model_mb.edges())}")
 
 # Classic M-bias: conditioning on Z opens a path between D and E.
-print(f"\nD and E d-connected unconditionally? {model_mb.is_dconnected('D', 'E')}")
-print(f"D and E d-connected given Z? {model_mb.is_dconnected('D', 'E', observed='Z')}")
+print(
+    f"\nD and E d-connected unconditionally? {model_mb.is_dconnected('D', 'E')}"
+)
+print(
+    f"D and E d-connected given Z? {model_mb.is_dconnected('D', 'E', observed='Z')}"
+)
 
 # %%
 _ = tpgpguti.draw_pgmpy_model(model_mb)
@@ -419,14 +433,21 @@ _ = tpgpguti.draw_pgmpy_model(model)
 
 # %%
 # Discrete Bayesian network (parameterized).
-bn = load_model('bnlearn/cancer')
+bn = load_model("bnlearn/cancer")
 # Structure-only DAG.
-dag = load_model('dagitty/confounding')
+dag = load_model("dagitty/confounding")
 
 # Build a comparison DataFrame.
 comparison_df = pd.DataFrame(
     {
-        "Property": ["Type", "Nodes", "Edges", "Has CPDs", "Can do inference", "Parents(X)"],
+        "Property": [
+            "Type",
+            "Nodes",
+            "Edges",
+            "Has CPDs",
+            "Can do inference",
+            "Parents(X)",
+        ],
         "bnlearn/cancer (BN)": [
             type(bn).__name__,
             str(len(bn.nodes())),
@@ -455,7 +476,7 @@ display(comparison_df)
 
 # %%
 # The Asia network: a model about tuberculosis, lung cancer, and bronchitis.
-asia = load_model('bnlearn/asia')
+asia = load_model("bnlearn/asia")
 
 print(f"Asia network: {len(asia.nodes())} nodes, {len(asia.edges())} edges")
 print(f"\nNodes: {sorted(asia.nodes())}")
@@ -466,8 +487,12 @@ print(f"Edges: {sorted(asia.edges())}")
 print(f"Root nodes: {asia.get_roots()}")
 print(f"Leaf nodes: {asia.get_leaves()}")
 print(f"Markov blanket of 'lung': {asia.get_markov_blanket('lung')}")
-print(f"Active trail from 'smoke' to 'dysp': {asia.is_dconnected('smoke', 'dysp')}")
-print(f"Does 'tub' d-separate 'asia' from 'either'?: {asia.is_dconnected('asia', 'either', observed='tub')}")
+print(
+    f"Active trail from 'smoke' to 'dysp': {asia.is_dconnected('smoke', 'dysp')}"
+)
+print(
+    f"Does 'tub' d-separate 'asia' from 'either'?: {asia.is_dconnected('asia', 'either', observed='tub')}"
+)
 
 # %%
 _ = tpgpguti.draw_pgmpy_model(asia)
@@ -481,8 +506,10 @@ _ = tpgpguti.draw_pgmpy_model(asia)
 from pgmpy.inference import VariableElimination
 
 # Load the classic Burglar Alarm model.
-alarm = load_model('bnlearn/earthquake')
-print(f"Earthquake model: {len(alarm.nodes())} nodes, {len(alarm.edges())} edges")
+alarm = load_model("bnlearn/earthquake")
+print(
+    f"Earthquake model: {len(alarm.nodes())} nodes, {len(alarm.edges())} edges"
+)
 print(f"Nodes: {sorted(alarm.nodes())}")
 print(f"Edges: {sorted(alarm.edges())}")
 
@@ -498,7 +525,7 @@ for cpd in alarm.get_cpds():
 # Perform inference: given John calls, what is P(Burglary)?
 # Note: state names are strings ('True', 'False'), not integers.
 inference = VariableElimination(alarm)
-result = inference.query(variables=['Burglary'], evidence={'JohnCalls': 'True'})
+result = inference.query(variables=["Burglary"], evidence={"JohnCalls": "True"})
 print("P(Burglary | JohnCalls=True):")
 print(result)
 
@@ -510,13 +537,13 @@ print(result)
 
 # %%
 # Load the Sachs protein signaling network (a benchmark model).
-sachs = load_model('bnlearn/sachs')
+sachs = load_model("bnlearn/sachs")
 print(f"Sachs network: {len(sachs.nodes())} nodes, {len(sachs.edges())} edges")
 print(f"Nodes: {sorted(sachs.nodes())}")
 print(f"Edges: {sorted(sachs.edges())}")
 
 # Check state counts (some variables have more than 2 states).
-print(f"\nVariable cardinalities:")
+print("\nVariable cardinalities:")
 for node in sorted(sachs.nodes()):
     cpd = sachs.get_cpds(node)
     print(f"  {node}: {cpd.variable_card} states")
@@ -529,19 +556,48 @@ _ = tpgpguti.draw_pgmpy_model(sachs)
 
 # %%
 # Use dir() to see what methods are available on a model.
-model = load_model('bnlearn/cancer')
-methods = [m for m in dir(model) if not m.startswith('_')]
+model = load_model("bnlearn/cancer")
+methods = [m for m in dir(model) if not m.startswith("_")]
 print(f"Methods on DiscreteBayesianNetwork ({len(methods)}):")
 
 # Group by category.
-graph_methods = [m for m in methods if any(
-    x in m for x in ['edge', 'node', 'graph', 'parent', 'child', 'ancestor',
-                      'neighbor', 'root', 'leaf', 'successor', 'predecessor']
-)]
-inference_methods = [m for m in methods if any(
-    x in m for x in ['cpd', 'factor', 'markov', 'moral', 'independ',
-                      'dconnec', 'simul', 'predict']
-)]
+graph_methods = [
+    m
+    for m in methods
+    if any(
+        x in m
+        for x in [
+            "edge",
+            "node",
+            "graph",
+            "parent",
+            "child",
+            "ancestor",
+            "neighbor",
+            "root",
+            "leaf",
+            "successor",
+            "predecessor",
+        ]
+    )
+]
+inference_methods = [
+    m
+    for m in methods
+    if any(
+        x in m
+        for x in [
+            "cpd",
+            "factor",
+            "markov",
+            "moral",
+            "independ",
+            "dconnec",
+            "simul",
+            "predict",
+        ]
+    )
+]
 other = [m for m in methods if m not in graph_methods + inference_methods]
 
 print(f"\n  Graph structure methods: {sorted(graph_methods)}")

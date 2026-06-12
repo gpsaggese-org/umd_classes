@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -31,15 +31,13 @@
 # %autoreload 2
 
 import logging
-import sys
 import warnings
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 # %%
 import pgmpy.datasets as ds
 import pandas as pd
-import numpy as np
 
 # %%
 # Use this for most notebooks.
@@ -156,18 +154,21 @@ print(f"Simulated datasets ({len(simulated)}): {simulated}")
 
 # %%
 # Smallest construction: load a simple dataset.
-data = ds.load_dataset('galton_stature')
+data = ds.load_dataset("galton_stature")
 print(f"Loaded dataset: {data.name}")
 print(f"Object type: {type(data)}")
 
 # %%
 # Inspect the object.
 print(f"type(data): {type(data)}")
-print(f"dir(data) basic attributes:", [a for a in dir(data) if not a.startswith('_')])
+print(
+    "dir(data) basic attributes:",
+    [a for a in dir(data) if not a.startswith("_")],
+)
 
 # %%
 # Try loading a different dataset.
-data2 = ds.load_dataset('pima_diabetes')
+data2 = ds.load_dataset("pima_diabetes")
 print(f"Loaded: {data2.name}")
 print(f"type: {type(data2)}")
 print(f"dir: {[a for a in dir(data2) if not a.startswith('_')]}")
@@ -180,20 +181,20 @@ print(f"dir: {[a for a in dir(data2) if not a.startswith('_')]}")
 
 # %%
 # Load the Pima diabetes dataset.
-data = ds.load_dataset('pima_diabetes')
+data = ds.load_dataset("pima_diabetes")
 
 # Inspect the data field.
 print(f"type: {type(data.data)}")
 print(f"shape: {data.data.shape}")
 print(f"columns: {list(data.data.columns)}")
 print(f"dtypes:\n{data.data.dtypes}")
-print(f"\nfirst 5 rows:")
+print("\nfirst 5 rows:")
 display(data.data.head())
 
 # %%
 # Check basic statistics.
 print(f"Missing values: {data.data.isnull().sum().sum()}")
-print(f"Summary statistics:")
+print("Summary statistics:")
 display(data.data.describe())
 
 # %% [markdown]
@@ -205,7 +206,7 @@ display(data.data.describe())
 
 # %%
 # Load a dataset with ground truth.
-data = ds.load_dataset('sachs_discrete')
+data = ds.load_dataset("sachs_discrete")
 
 # Inspect the ground truth.
 print(f"ground_truth type: {type(data.ground_truth)}")
@@ -227,7 +228,7 @@ print(f"Is 'jnk' a parent of 'pkc'?: {gt.has_edge('jnk', 'pkc')}")
 
 # %%
 # Check what happens when a dataset has no ground truth.
-data2 = ds.load_dataset('galton_stature')
+data2 = ds.load_dataset("galton_stature")
 print(f"galton_stature ground_truth: {data2.ground_truth}")
 # Returns None : the field is optional.
 
@@ -239,7 +240,7 @@ print(f"galton_stature ground_truth: {data2.ground_truth}")
 
 # %%
 # Load a dataset with expert knowledge.
-data = ds.load_dataset('sachs_discrete')
+data = ds.load_dataset("sachs_discrete")
 
 # Inspect expert knowledge.
 ek = data.expert_knowledge
@@ -252,7 +253,7 @@ print(f"temporal_order: {ek.temporal_order}")
 
 # %%
 # Check dataset without expert knowledge.
-data2 = ds.load_dataset('galton_stature')
+data2 = ds.load_dataset("galton_stature")
 print(f"galton_stature expert_knowledge: {data2.expert_knowledge}")
 
 # %% [markdown]
@@ -263,7 +264,7 @@ print(f"galton_stature expert_knowledge: {data2.expert_knowledge}")
 
 # %%
 # Load a dataset and inspect tags.
-data = ds.load_dataset('sachs_discrete')
+data = ds.load_dataset("sachs_discrete")
 print(f"tags type: {type(data.tags)}")
 
 # Print each tag key-value pair.
@@ -272,8 +273,8 @@ for key, value in data.tags.items():
 
 # %%
 # Compare tags across different dataset types.
-sachs_tags = ds.load_dataset('sachs_discrete').tags
-galton_tags = ds.load_dataset('galton_stature').tags
+sachs_tags = ds.load_dataset("sachs_discrete").tags
+galton_tags = ds.load_dataset("galton_stature").tags
 
 # Build a comparison DataFrame from the tags dictionaries.
 tags_df = pd.DataFrame(
@@ -316,7 +317,7 @@ gt_ds = ds.list_datasets(has_ground_truth=True)
 print(f"Datasets with ground truth: {gt_ds}")
 
 # Use `sachs_discrete` since some ground-truth graphs have parsing issues.
-ds2 = ds.load_dataset('sachs_discrete')
+ds2 = ds.load_dataset("sachs_discrete")
 
 print(f"Dataset: {ds2.name}")
 print(f"Data shape: {ds2.data.shape}")
@@ -339,7 +340,7 @@ print(f"Continuous datasets: {len(cont)}")
 print(f"  {cont}")
 
 # Load a modest-sized one.
-ds3 = ds.load_dataset('airfoil')
+ds3 = ds.load_dataset("airfoil")
 print(f"\nDataset: {ds3.name}")
 print(f"Shape: {ds3.data.shape}")
 print(f"Columns: {list(ds3.data.columns)}")
@@ -353,10 +354,10 @@ display(ds3.data.describe())
 
 # %%
 # Load the mixed-type Sachs dataset.
-ds4 = ds.load_dataset('sachs_mixed')
+ds4 = ds.load_dataset("sachs_mixed")
 
 print(f"Dataset: {ds4.name}")
-print(f"Data type: discrete, continuous, or mixed?")
+print("Data type: discrete, continuous, or mixed?")
 print(f"  is_discrete: {ds4.tags['is_discrete']}")
 print(f"  is_continuous: {ds4.tags['is_continuous']}")
 print(f"  is_mixed: {ds4.tags['is_mixed']}")
@@ -368,13 +369,13 @@ print(f"\nGround truth: {gt.nodes()} -> {gt.edges()}")
 
 # Check expert knowledge.
 ek = ds4.expert_knowledge
-print(f"\nExpert knowledge:")
+print("\nExpert knowledge:")
 print(f"  Required edges: {len(ek.required_edges)}")
 print(f"  Forbidden edges: {len(ek.forbidden_edges)}")
 
 # %%
 # Check that the same ground truth graph is shared across all Sachs variants.
-sachs_variants = [n for n in ds.list_datasets() if n.startswith('sachs')]
+sachs_variants = [n for n in ds.list_datasets() if n.startswith("sachs")]
 print(f"Sachs variants: {sachs_variants}")
 
 gt_edges = {}
@@ -382,7 +383,9 @@ for name in sachs_variants:
     try:
         d = ds.load_dataset(name)
         gt_edges[name] = len(d.ground_truth.edges())
-        print(f"  {name}: {d.data.shape}, GT edges: {len(d.ground_truth.edges())}")
+        print(
+            f"  {name}: {d.data.shape}, GT edges: {len(d.ground_truth.edges())}"
+        )
     except Exception as e:
         print(f"  {name}: ERROR - {type(e).__name__}")
 
@@ -425,4 +428,4 @@ print(f"Discrete datasets with ground truth: {precise}")
 
 # %%
 # Show the dataclass structure via a print.
-print(ds.load_dataset('boston_housing'))
+print(ds.load_dataset("boston_housing"))

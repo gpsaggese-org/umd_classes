@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -32,13 +32,12 @@
 # %autoreload 2
 
 import logging
-import sys
 import warnings
 
 import numpy as np
 import pandas as pd
 
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 # %%
 # Use this for most notebooks.
@@ -46,7 +45,6 @@ import helpers.htutorial as htutori
 
 htutori.config_notebook()
 
-import pandas as pd
 
 # Import pgmpy utilities.
 import tutorials.pgmpy.pgmpy_utils as tpgpguti
@@ -63,7 +61,11 @@ except ImportError:
 
 # %%
 from pgmpy.models import DiscreteBayesianNetwork
-from pgmpy.parameter_estimator import DiscreteMLE, DiscreteBayesianEstimator, DiscreteEM
+from pgmpy.parameter_estimator import (
+    DiscreteMLE,
+    DiscreteBayesianEstimator,
+    DiscreteEM,
+)
 
 # %%
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -183,7 +185,7 @@ for cpd in estimator_mle.parameters_:
 
 # %%
 # Inspect the estimator's internal state.
-print(f"State names learned from data:")
+print("State names learned from data:")
 for var, states in estimator_mle.state_names_.items():
     print(f"  {var}: {states}")
 
@@ -209,7 +211,7 @@ for cpd in estimator_mle.parameters_:
 cpd_grade = estimator_mle.parameters_[0]
 print(f"Variable: {cpd_grade.variable}")
 print(f"Parents: {cpd_grade.variables[1:]}")
-print(f"\nCPD values (Grade x [Difficulty, Intelligence] combinations):")
+print("\nCPD values (Grade x [Difficulty, Intelligence] combinations):")
 print(cpd_grade.get_values())
 
 # %%
@@ -239,11 +241,13 @@ for var in student_model.nodes():
 
 # %%
 # Create tiny data with missing parent configurations.
-tiny_data = pd.DataFrame({
-    "Difficulty": [0, 0, 0],
-    "Intelligence": [0, 0, 0],
-    "Grade": [0, 1, 2],
-})
+tiny_data = pd.DataFrame(
+    {
+        "Difficulty": [0, 0, 0],
+        "Intelligence": [0, 0, 0],
+        "Grade": [0, 1, 2],
+    }
+)
 
 estimator_tiny = DiscreteMLE()
 estimator_tiny.fit(student_model, tiny_data)
@@ -304,7 +308,9 @@ for var in ["Difficulty", "Intelligence"]:
 # %%
 # Fit with different equivalent sample sizes.
 for ess in [1, 5, 50]:
-    est = DiscreteBayesianEstimator(prior_type="BDeu", equivalent_sample_size=ess)
+    est = DiscreteBayesianEstimator(
+        prior_type="BDeu", equivalent_sample_size=ess
+    )
     est.fit(student_model, data)
     cpd = [c for c in est.parameters_ if c.variable == "Difficulty"][0]
     print(f"ESS={ess}: P(Difficulty) = {cpd.get_values().flatten().round(3)}")
@@ -317,9 +323,15 @@ for ess in [1, 5, 50]:
 estimator_k2 = DiscreteBayesianEstimator(prior_type="K2")
 estimator_k2.fit(student_model, data)
 
-cpd_diff_k2 = [c for c in estimator_k2.parameters_ if c.variable == "Difficulty"][0]
-cpd_diff_mle = [c for c in estimator_mle.parameters_ if c.variable == "Difficulty"][0]
-print(f"MLE:      P(Difficulty) = {cpd_diff_mle.get_values().flatten().round(3)}")
+cpd_diff_k2 = [
+    c for c in estimator_k2.parameters_ if c.variable == "Difficulty"
+][0]
+cpd_diff_mle = [
+    c for c in estimator_mle.parameters_ if c.variable == "Difficulty"
+][0]
+print(
+    f"MLE:      P(Difficulty) = {cpd_diff_mle.get_values().flatten().round(3)}"
+)
 print(f"K2:       P(Difficulty) = {cpd_diff_k2.get_values().flatten().round(3)}")
 
 # %% [markdown]
@@ -398,7 +410,9 @@ for cpd in estimator_em.parameters_:
 
 # %%
 # Note: EM returns CPDs for ALL variables, including the latent one.
-cpd_study = [c for c in estimator_em.parameters_ if c.variable == "StudyHabits"][0]
+cpd_study = [c for c in estimator_em.parameters_ if c.variable == "StudyHabits"][
+    0
+]
 print(f"Latent variable CPD: {cpd_study.variable}")
 print(f"  Parents: {cpd_study.variables[1:]}")
 print(cpd_study)
@@ -421,7 +435,9 @@ for init in ["random", "uniform"]:
     est.fit(latent_model, data)
     # Extract the latent CPD.
     cpd = [c for c in est.parameters_ if c.variable == "StudyHabits"][0]
-    print(f"init_cpds='{init}': P(StudyHabits) = {cpd.get_values().flatten().round(3)}")
+    print(
+        f"init_cpds='{init}': P(StudyHabits) = {cpd.get_values().flatten().round(3)}"
+    )
 
 # %% [markdown]
 # ### Experiment: EM with Missing Data
@@ -432,7 +448,7 @@ for init in ["random", "uniform"]:
 # Introduce missing values in the Grade column.
 data_missing = data.copy()
 data_missing.loc[0:4, "Grade"] = np.nan
-print(f"Data with missing values (first 8 rows):")
+print("Data with missing values (first 8 rows):")
 display(data_missing.head(8))
 
 # %%
@@ -472,9 +488,13 @@ for cpd in model_fitted.get_cpds():
 # %%
 # Switch to Bayesian estimation: only change the estimator argument.
 model_bayes = student_model.copy()
-model_bayes.fit(data, estimator=DiscreteBayesianEstimator(
-    prior_type="BDeu", equivalent_sample_size=5,
-))
+model_bayes.fit(
+    data,
+    estimator=DiscreteBayesianEstimator(
+        prior_type="BDeu",
+        equivalent_sample_size=5,
+    ),
+)
 
 for cpd in model_bayes.get_cpds():
     print(f"\n{cpd.variable}:")
@@ -519,11 +539,13 @@ display(tpgpguti.factor_to_dataframe(cpd))
 
 # %%
 # Create very sparse data: only 3 rows.
-sparse_data = pd.DataFrame({
-    "Difficulty": [0, 1, 0],
-    "Intelligence": [0, 0, 1],
-    "Grade": [2, 0, 1],
-})
+sparse_data = pd.DataFrame(
+    {
+        "Difficulty": [0, 1, 0],
+        "Intelligence": [0, 0, 1],
+        "Grade": [2, 0, 1],
+    }
+)
 
 # Fit with MLE.
 sparse_mle = student_model.copy()
@@ -531,9 +553,13 @@ sparse_mle.fit(sparse_data, estimator=DiscreteMLE())
 
 # Fit with Bayesian (BDeu).
 sparse_bayes = student_model.copy()
-sparse_bayes.fit(sparse_data, estimator=DiscreteBayesianEstimator(
-    prior_type="BDeu", equivalent_sample_size=5,
-))
+sparse_bayes.fit(
+    sparse_data,
+    estimator=DiscreteBayesianEstimator(
+        prior_type="BDeu",
+        equivalent_sample_size=5,
+    ),
+)
 
 # Compare root node CPDs only (simpler than comparing conditional CPDs).
 for var in ["Difficulty", "Intelligence"]:
@@ -558,7 +584,11 @@ for var in ["Difficulty", "Intelligence"]:
 # %%
 # Model with latent StudyHabits.
 model_with_latent = DiscreteBayesianNetwork(
-    [("Difficulty", "Grade"), ("Intelligence", "Grade"), ("StudyHabits", "Grade")],
+    [
+        ("Difficulty", "Grade"),
+        ("Intelligence", "Grade"),
+        ("StudyHabits", "Grade"),
+    ],
     latents={"StudyHabits"},
 )
 
@@ -566,7 +596,9 @@ model_with_latent = DiscreteBayesianNetwork(
 em_result = model_with_latent.copy()
 em_result.fit(
     data,
-    estimator=DiscreteEM(latent_card={"StudyHabits": 2}, show_progress=False, seed=42),
+    estimator=DiscreteEM(
+        latent_card={"StudyHabits": 2}, show_progress=False, seed=42
+    ),
 )
 
 print(f"CPDs learned ({len(em_result.get_cpds())} total):")
@@ -682,13 +714,18 @@ def show_cpd_summary(cpd_list):
     """
     rows = []
     for cpd in cpd_list:
-        rows.append({
-            "Variable": cpd.variable,
-            "Cardinality": cpd.variable_card,
-            "Parents": ", ".join(cpd.variables[1:]) if len(cpd.variables) > 1 else "",
-            "Values Shape": str(cpd.values.shape),
-        })
+        rows.append(
+            {
+                "Variable": cpd.variable,
+                "Cardinality": cpd.variable_card,
+                "Parents": ", ".join(cpd.variables[1:])
+                if len(cpd.variables) > 1
+                else "",
+                "Values Shape": str(cpd.values.shape),
+            }
+        )
     display(pd.DataFrame(rows))
+
 
 # Show summary for MLE result.
 show_cpd_summary(estimator_mle.parameters_)
@@ -702,14 +739,20 @@ show_cpd_summary(estimator_mle.parameters_)
 
 # %%
 # Demonstration: MLE produces zeros, Bayesian avoids them.
-sparse = pd.DataFrame({
-    "Difficulty": [0, 0, 0],
-    "Intelligence": [0, 0, 0],
-    "Grade": [0, 1, 2],
-})
+sparse = pd.DataFrame(
+    {
+        "Difficulty": [0, 0, 0],
+        "Intelligence": [0, 0, 0],
+        "Grade": [0, 1, 2],
+    }
+)
 
 mle_sparse = DiscreteMLE().fit(student_model, sparse).parameters_
-bayes_sparse = DiscreteBayesianEstimator(prior_type="K2").fit(student_model, sparse).parameters_
+bayes_sparse = (
+    DiscreteBayesianEstimator(prior_type="K2")
+    .fit(student_model, sparse)
+    .parameters_
+)
 
 # Check if any CPD has zero values.
 for cpd in mle_sparse:
@@ -732,11 +775,13 @@ for cpd in bayes_sparse:
 
 # %%
 # Data missing state "2" for Difficulty.
-partial_data = pd.DataFrame({
-    "Difficulty": [0, 0, 1, 1],
-    "Intelligence": [0, 1, 0, 1],
-    "Grade": [0, 1, 0, 1],
-})
+partial_data = pd.DataFrame(
+    {
+        "Difficulty": [0, 0, 1, 1],
+        "Intelligence": [0, 1, 0, 1],
+        "Grade": [0, 1, 0, 1],
+    }
+)
 
 est_partial = DiscreteMLE()
 est_partial.fit(student_model, partial_data)
@@ -746,11 +791,13 @@ for var, states in est_partial.state_names_.items():
 
 # %%
 # Use state_names to declare all possible states explicitly.
-est_full = DiscreteMLE(state_names={
-    "Difficulty": [0, 1, 2],
-    "Intelligence": [0, 1],
-    "Grade": [0, 1, 2],
-})
+est_full = DiscreteMLE(
+    state_names={
+        "Difficulty": [0, 1, 2],
+        "Intelligence": [0, 1],
+        "Grade": [0, 1, 2],
+    }
+)
 est_full.fit(student_model, partial_data)
 print("State names (all states declared):")
 for var, states in est_full.state_names_.items():
@@ -758,7 +805,7 @@ for var, states in est_full.state_names_.items():
 
 # The CPD for Difficulty now includes state 2 with probability 0.
 cpd_diff = [c for c in est_full.parameters_ if c.variable == "Difficulty"][0]
-print(f"\nP(Difficulty) with explicit states:")
+print("\nP(Difficulty) with explicit states:")
 print(cpd_diff)
 
 # %% [markdown]
@@ -766,17 +813,21 @@ print(cpd_diff)
 
 # %%
 # Explore the DiscreteMLE API.
-mle_methods = [m for m in dir(DiscreteMLE()) if not m.startswith('_')]
+mle_methods = [m for m in dir(DiscreteMLE()) if not m.startswith("_")]
 print(f"DiscreteMLE methods: {mle_methods}")
 
 # %%
 # Explore the DiscreteBayesianEstimator API.
-bayes_methods = [m for m in dir(DiscreteBayesianEstimator()) if not m.startswith('_')]
+bayes_methods = [
+    m for m in dir(DiscreteBayesianEstimator()) if not m.startswith("_")
+]
 print(f"DiscreteBayesianEstimator methods: {bayes_methods}")
 
 # %%
 # Explore the DiscreteEM API.
-em_methods = [m for m in dir(DiscreteEM(show_progress=False)) if not m.startswith('_')]
+em_methods = [
+    m for m in dir(DiscreteEM(show_progress=False)) if not m.startswith("_")
+]
 print(f"DiscreteEM methods: {em_methods}")
 
 # %% [markdown]
@@ -809,7 +860,9 @@ for cpd in estimator_mle.parameters_:
     vals = cpd.get_values()
     col_sums = vals.sum(axis=0)
     all_close = np.allclose(col_sums, 1.0)
-    print(f"{cpd.variable}: column sums close to 1.0? {all_close}  (min={col_sums.min():.6f}, max={col_sums.max():.6f})")
+    print(
+        f"{cpd.variable}: column sums close to 1.0? {all_close}  (min={col_sums.min():.6f}, max={col_sums.max():.6f})"
+    )
 
 # %% [markdown]
 # # Summary: The Mental Model

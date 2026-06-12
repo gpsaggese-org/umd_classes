@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -42,6 +42,7 @@ import pandas as pd
 
 # %%
 import helpers.hdbg as hdbg
+import helpers.hintrospection as hintros
 import helpers.hnotebook as hnotebook
 
 _LOG = logging.getLogger(__name__)
@@ -140,12 +141,8 @@ spec = gym.spec("CartPole-v1")
 print("type(spec):", type(spec))
 print()
 
-# List all public attributes.
-# TODO(ai_gp): Use /Users/saggese/src/umd_classes1/.claude/skills/notebook.rules.md:560:## Print Public Methods of Objects
-for attr_name in dir(spec):
-    if not attr_name.startswith("_") and not callable(getattr(spec, attr_name)):
-        val = getattr(spec, attr_name)
-        print(f"  spec.{attr_name}: {val}")
+# List all public methods.
+hintros.print_public_methods(spec)
 
 # %%
 # Build a DataFrame comparing multiple EnvSpecs.
