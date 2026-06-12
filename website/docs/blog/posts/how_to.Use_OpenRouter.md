@@ -1,9 +1,9 @@
 ---
 title: "How to Use OpenRouter with Simonw's LLM CLI"
-draft: true
+draft: false
 authors:
     - gpsaggese
-date: 2026-06-09
+date: 2026-06-12
 description: Guide on using OpenRouter with Simon Willison's LLM CLI
 categories:
     - LLM

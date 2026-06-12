@@ -1,9 +1,9 @@
 ---
 title: "How to Count LLM Usage Costs"
-draft: true
+draft: false
 authors:
     - gpsaggese
-date: 2026-06-09
+date: 2026-06-12
 description: Tools for tracking LLM API usage costs
 categories:
     - LLM

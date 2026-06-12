@@ -2,8 +2,8 @@
 title: "What Is LLM Reasoning Effort and How Does It Affect Cost?"
 authors:
     - gpsaggese
-date: 2026-06-08
-draft: true
+date: 2026-06-12
+draft: false
 description:
 categories:
     - LLM

@@ -3,9 +3,9 @@
 """
 Toggle a blog post between draft and published states.
 
-The script
-- renames the file (adding/removing `draft.` prefix)
-- flips the `draft:` flag in the YAML frontmatter.
+The script:
+- Renames the file using `git mv` (adding/removing `draft.` prefix)
+- Flips the `draft:` flag in the YAML frontmatter.
 
 # Usage
 
@@ -29,6 +29,23 @@ import helpers.hsystem as hsystem
 _LOG = logging.getLogger(__name__)
 
 # #############################################################################
+
+
+def _check_file_is_tracked_by_git(file_path: str) -> None:
+    """
+    Assert that the file is tracked by git version control.
+
+    :param file_path: Path to the file to check
+    """
+    rc, _ = hsystem.system_to_string(
+        "git ls-files --error-unmatch '%s'" % file_path,
+        abort_on_error=False,
+    )
+    hdbg.dassert_eq(
+        rc, 0,
+        "The file must be tracked by git to use this script: '%s'",
+        file_path,
+    )
 
 
 def _parse() -> argparse.ArgumentParser:
@@ -68,6 +85,8 @@ def _publish(file_path: str) -> None:
         "File name must start with 'draft.' for publishing: '%s'",
         file_path,
     )
+    # Assert that the file is tracked by git.
+    _check_file_is_tracked_by_git(file_path)
     # Read the file content using helpers.
     content = hio.from_file(file_path)
     # Swap 'draft: true' to 'draft: false' in the YAML frontmatter.
@@ -97,9 +116,10 @@ def _publish(file_path: str) -> None:
     # Strip the `draft.` prefix to get the new file name.
     new_basename = basename[len("draft."):]
     new_path = os.path.join(os.path.dirname(file_path), new_basename)
-    # Write the modified content and remove the old file.
+    # Use git mv to rename the file, preserving git history.
+    hsystem.system("git mv '%s' '%s'" % (file_path, new_path))
+    # Write the modified content to the new path.
     hio.to_file(new_path, content)
-    os.remove(file_path)
     _LOG.info("Published -> '%s'", new_path)
 
 
@@ -120,6 +140,8 @@ def _unpublish(file_path: str) -> None:
         "File name must not start with 'draft.' for unpublishing: '%s'",
         file_path,
     )
+    # Assert that the file is tracked by git.
+    _check_file_is_tracked_by_git(file_path)
     # Read the file content using helpers.
     content = hio.from_file(file_path)
     # Swap 'draft: false' to 'draft: true' in the YAML frontmatter.
@@ -133,9 +155,10 @@ def _unpublish(file_path: str) -> None:
     # Prepend the `draft.` prefix to get the new file name.
     new_basename = "draft." + basename
     new_path = os.path.join(os.path.dirname(file_path), new_basename)
-    # Write the modified content and remove the old file.
+    # Use git mv to rename the file, preserving git history.
+    hsystem.system("git mv '%s' '%s'" % (file_path, new_path))
+    # Write the modified content to the new path.
     hio.to_file(new_path, content)
-    os.remove(file_path)
     _LOG.info("Unpublished -> '%s'", new_path)
 
 
