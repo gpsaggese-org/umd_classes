@@ -1,9 +1,9 @@
 ---
 title: "How to Use Claude Code with OpenRouter"
-draft: true
+draft: false
 authors:
     - gpsaggese
-date: 2026-06-09
+date: 2026-06-12
 categories:
     - AI Tools
     - LLM

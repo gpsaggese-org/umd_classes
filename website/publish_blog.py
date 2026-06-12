@@ -21,6 +21,11 @@ import logging
 import os
 import re
 
+import helpers.hdbg as hdbg
+import helpers.hio as hio
+import helpers.hparser as hparser
+import helpers.hsystem as hsystem
+
 _LOG = logging.getLogger(__name__)
 
 # #############################################################################
@@ -42,6 +47,7 @@ def _parse() -> argparse.ArgumentParser:
         action="store_true",
         help="Reverse the transformation: published -> draft",
     )
+    hparser.add_verbosity_arg(parser)
     return parser
 
 
@@ -57,24 +63,42 @@ def _publish(file_path: str) -> None:
     _LOG.info("Publishing '%s'", file_path)
     basename = os.path.basename(file_path)
     # Validate that the file starts with `draft.` prefix.
-    # TODO(ai_gp): Use dassert
-    if not basename.startswith("draft."):
-        raise ValueError(
-            "File name must start with 'draft.' for publishing: '%s'" % file_path
-        )
-    # TODO(ai_gp): Add the date in the frontmatter as today
-    # TODO(ai_gp): Do a move and then edit in place using hio.from_file and hio.to_file
-    # Read the file content.
-    with open(file_path, "r") as f:
-        content = f.read()
+    hdbg.dassert(
+        basename.startswith("draft."),
+        "File name must start with 'draft.' for publishing: '%s'",
+        file_path,
+    )
+    # Read the file content using helpers.
+    content = hio.from_file(file_path)
     # Swap 'draft: true' to 'draft: false' in the YAML frontmatter.
-    content = re.sub(r"^draft:\s*true", "draft: false", content, count=1)
+    content = re.sub(
+        r"^draft:\s*true",
+        "draft: false",
+        content,
+        count=1,
+        flags=re.MULTILINE,
+    )
+    # Add or update the date to today in the YAML frontmatter.
+    today = "2026-06-12"
+    if re.search(r"^date:\s*\S+", content, re.MULTILINE):
+        # Update existing date line.
+        content = re.sub(
+            r"^date:\s*\S+", "date: " + today, content, count=1, flags=re.MULTILINE
+        )
+    else:
+        # Insert date line after the `draft:` line.
+        content = re.sub(
+            r"^(draft:\s*(?:true|false))\n",
+            r"\1\n" + "date: " + today + "\n",
+            content,
+            count=1,
+            flags=re.MULTILINE,
+        )
     # Strip the `draft.` prefix to get the new file name.
     new_basename = basename[len("draft."):]
     new_path = os.path.join(os.path.dirname(file_path), new_basename)
     # Write the modified content and remove the old file.
-    with open(new_path, "w") as f:
-        f.write(content)
+    hio.to_file(new_path, content)
     os.remove(file_path)
     _LOG.info("Published -> '%s'", new_path)
 
@@ -91,37 +115,36 @@ def _unpublish(file_path: str) -> None:
     _LOG.info("Unpublishing '%s'", file_path)
     basename = os.path.basename(file_path)
     # Validate that the file does NOT start with `draft.` prefix.
-    if basename.startswith("draft."):
-        raise ValueError(
-            "File name must not start with 'draft.' for unpublishing: '%s'" % file_path
-        )
-    # Read the file content.
-    with open(file_path, "r") as f:
-        content = f.read()
+    hdbg.dassert(
+        not basename.startswith("draft."),
+        "File name must not start with 'draft.' for unpublishing: '%s'",
+        file_path,
+    )
+    # Read the file content using helpers.
+    content = hio.from_file(file_path)
     # Swap 'draft: false' to 'draft: true' in the YAML frontmatter.
-    content = re.sub(r"^draft:\s*false", "draft: true", content, count=1)
+    content = re.sub(
+        r"^draft:\s*false",
+        "draft: true",
+        content,
+        count=1,
+        flags=re.MULTILINE,
+    )
     # Prepend the `draft.` prefix to get the new file name.
     new_basename = "draft." + basename
     new_path = os.path.join(os.path.dirname(file_path), new_basename)
     # Write the modified content and remove the old file.
-    with open(new_path, "w") as f:
-        f.write(content)
+    hio.to_file(new_path, content)
     os.remove(file_path)
     _LOG.info("Unpublished -> '%s'", new_path)
 
 
 def _main(parser: argparse.ArgumentParser) -> None:
-    # TODO(ai_gp): Follow /Users/saggese/src/umd_classes1/.claude/skills/coding.rules.md:823:# Script Development
     args = parser.parse_args()
-    # Configure logging.
-    logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    )
+    hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
     file_path = args.file
     # Validate that the file exists.
-    # TODO(ai_gp): dassert
-    if not os.path.exists(file_path):
-        raise FileNotFoundError("File not found: '%s'" % file_path)
+    hdbg.dassert_file_exists(file_path, "File not found: '%s'", file_path)
     if args.undo:
         _unpublish(file_path)
     else:
