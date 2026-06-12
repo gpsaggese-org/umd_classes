@@ -38,6 +38,11 @@
   - 2026-02-10: `website/docs/blog/posts/in_30_mins.ripgrep.md`
   - 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
 
+- To format use:
+  ```
+  > prettier --prose-wrap always --print-width 80 --tab-width 4 -w $FILE
+  ```
+
 # Draft Blogs
 
 ## High-priority

@@ -10,150 +10,155 @@ categories:
     - Developer Tools
 ---
 
+TL;DR Track your LLM API spending with open-source tools like `ccusage` and
+`OpenUsage` to gain visibility into daily costs, model-level breakdowns, and usage
+patterns.
+
+<!-- more -->
 
 ## Overview
 
 - LLM-powered coding assistants like Claude Code, GitHub Copilot, and Codex CLI
-  boost productivity tremendously
+  boost productivity but API usage costs can add up quickly, especially on
+  complex tasks consuming hundreds of thousands of tokens per session
 
-- However, the cost of API usage can add up quickly, especially when working on
-  complex tasks that consume hundreds of thousands of tokens per session
-
-- Without tracking, it is easy to lose visibility into:
-    - How much you are spending per day, week, or month
-    - Which models are driving the costs
+- You need to keep visibility into:
+    - How much you spend per day, week, or month
+    - Which models drive the costs
     - Whether your usage patterns are efficient
 
-- Fortunately, several open-source tools exist to help you monitor and analyze
-  your LLM usage
+- Several open-source tools exist to help monitor and analyze LLM usage
 
-- In this post, we explore two practical tools for counting LLM costs:
-    - **ccusage**: A CLI tool for generating usage reports across coding agent CLIs
-    - **OpenUsage**: A terminal-based dashboard for monitoring AI tool usage and
+- In this post we explore how to track costs for an individual running
+  requests to provider APIs and OpenRouter, using two practical tools:
+    - `ccusage`: CLI tool for generating usage reports across coding agent
+      CLIs
+    - `OpenUsage`: Terminal-based dashboard for monitoring AI tool usage and
       spend
 
-<!-- more -->
+## Comparison of LLM Cost Computation Methods
 
-# Comparison of LLM Cost Computation Methods
+- The table below summarizes available methods for computing LLM costs across
+  different providers:
 
-| Method | OpenAI Direct | Anthropic Direct | OpenRouter | Accuracy | Implementation Effort | Notes |
-|----------|----------|----------|----------|----------|----------|----------|
-| Provider-reported cost | Yes | Limited | Yes | Very High | Low | Best source when available |
-| Response usage fields + pricing table | Yes | Yes | Yes | High | Low | Most common approach |
-| Cost returned in API response | No | No | Sometimes | Very High | Very Low | Depends on provider or gateway |
-| LiteLLM cost calculator | Yes | Yes | Yes | High | Low | Centralized multi-provider accounting |
-| Langfuse cost tracking | Yes | Yes | Yes | High | Medium | Production observability and attribution |
-| Helicone cost tracking | Yes | Yes | Yes | High | Medium | Request-level analytics |
-| OpenRouter Analytics | No | No | Yes | Very High | Very Low | Includes provider-specific costs |
-| Custom token accounting | Yes | Yes | Yes | Medium | Medium | Requires maintaining pricing catalog |
-| CCUsage | No | Yes (Claude Code) | Partial | Medium | Very Low | Developer-focused usage tracking |
-| OpenCost (Kubernetes) | No | No | No | N/A | Medium | Measures infrastructure, not token costs |
-| GPU runtime accounting | Self-hosted only | Self-hosted only | Self-hosted only | High | Medium | For vLLM, TGI, SGLang, etc. |
+| Method                                | OpenAI Direct    | Anthropic Direct  | OpenRouter       | Accuracy  | Implementation Effort | Notes                                    |
+| :------------------------------------ | :--------------- | :---------------- | :--------------- | :-------- | :-------------------- | :--------------------------------------- |
+| Provider-reported cost                | Yes              | Limited           | Yes              | Very High | Low                   | Best source when available               |
+| Response usage fields + pricing table | Yes              | Yes               | Yes              | High      | Low                   | Most common approach                     |
+| Cost returned in API response         | No               | No                | Sometimes        | Very High | Very Low              | Depends on provider or gateway           |
+| LiteLLM cost calculator               | Yes              | Yes               | Yes              | High      | Low                   | Centralized multi-provider accounting    |
+| Langfuse cost tracking                | Yes              | Yes               | Yes              | High      | Medium                | Production observability and attribution |
+| Helicone cost tracking                | Yes              | Yes               | Yes              | High      | Medium                | Request-level analytics                  |
+| OpenRouter Analytics                  | No               | No                | Yes              | Very High | Very Low              | Includes provider-specific costs         |
+| CCUsage                               | No               | Yes (Claude Code) | Partial          | Medium    | Very Low              | Developer-focused usage tracking         |
+| OpenCost (Kubernetes)                 | No               | No                | No               | N/A       | Medium                | Measures infrastructure, not token costs |
+| GPU runtime accounting                | Self-hosted only | Self-hosted only  | Self-hosted only | High      | Medium                | For vLLM, TGI, SGLang, etc.              |
 
-# Typical Cost Formula
+// TODO(ai_gp): Add a short explanation of the different methods and what the
+// columns mean
 
-## OpenAI / Anthropic Direct
+## Typical Cost Formula
 
-```text
-Cost =
-(input_tokens × input_price_per_million / 1,000,000)
-+
-(output_tokens × output_price_per_million / 1,000,000)
-```
+- For direct API providers (OpenAI, Anthropic), the standard formula is:
 
-Example:
+    ```text
+    Cost = (input_tokens * input_price_per_million / 1,000,000)
+           + (output_tokens * output_price_per_million / 1,000,000)
+    ```
 
-```text
-GPT-4o
+- Example using GPT-4o pricing (as of 2026-06-12):
+    - Input: 100,000 tokens at $2.50 / 1M = $0.25
+    - Output: 50,000 tokens at $10.00 / 1M = $0.50
+    - Total = $0.75
 
-Input:
-100,000 tokens × $2.50 / 1M = $0.25
+- Key factors to consider:
+    - Input and output tokens are priced differently (output is typically 2-4x
+      more expensive)
+    - Cache hit tokens are billed at a discount (usually 50-90% off input price)
+    - Some providers charge for reasoning tokens separately
 
-Output:
-50,000 tokens × $10.00 / 1M = $0.50
+## OpenRouter Cost Computation
 
-Total = $0.75
-```
+- OpenRouter is a gateway that routes requests to multiple model providers.
 
-# OpenRouter Cost Computation
+- Costs can be computed in two ways:
+  1. **OpenRouter Analytics**
+     - Use the cost that OpenRouter reports in its Analytics dashboard
+       // TODO(ai_gp): Add link
+     - Advantages:
+         - Reflects the actual routed provider and its specific pricing
+         - Accounts for cached token discounts automatically
+         - Includes any provider-specific adjustments
 
-## Option 1: OpenRouter Analytics
+  2. **Response Usage Data**
+     - Parse the `usage` field from each API response:
+   
+         ```json
+         {
+             "usage": {
+                 "prompt_tokens": 1234,
+                 "completion_tokens": 567
+             }
+         }
+         ```
+   
+     - Then multiply token counts against the OpenRouter model pricing catalog:
+   
+         ```text
+         Cost = (prompt_tokens * model_input_price)
+                + (completion_tokens * model_output_price)
+         ```
 
-```text
-Cost = provider-reported cost
-```
+### Viewing OpenRouter Logs
 
-Advantages:
+// TODO(ai_gp): Add links to the pages if possible
 
-- Actual routed provider
-- Actual model pricing
-- Cached token discounts
-- Provider-specific adjustments
+- OpenRouter provides several ways to inspect usage and costs:
 
-## Option 2: Response Usage Data
+- **Activity page** (Usage Logs):
+    - Navigate to OpenRouter dashboard -> **Activity**
+    - View requests, models, providers, API key activity, token usage, and costs
 
-Example response:
+- **Full prompt and response logging**:
+    - Go to **Settings** -> **Observability** in the dashboard
+    - Enable **Input and Output Logging**
+    - Open the **Logs** page to inspect prompts, completions, model, provider,
+      token counts, and request cost
+    - Note: logging only applies to requests made after the feature is enabled
 
-```json
-{
-  "usage": {
-    "prompt_tokens": 1234,
-    "completion_tokens": 567
-  }
-}
-```
+- **Programmatic retrieval**:
+    - Analytics endpoints require a **Management Key** (not a standard API key):
 
-Then:
+        ```bash
+        > curl https://openrouter.ai/api/v1/analytics/activity \
+            -H "Authorization: Bearer YOUR_MANAGEMENT_KEY"
+        ```
 
-```text
-Cost =
-(prompt_tokens × model_input_price)
-+
-(completion_tokens × model_output_price)
-```
+    - Available filters include date range, API key, user, endpoint, and model
 
-using the OpenRouter model pricing catalog.
+- **Per-request tracking**:
+    - Every OpenRouter response includes usage information with prompt tokens,
+      completion tokens, total tokens, and cost when available
+    - Example in Python:
 
-# What Each Tool Measures
+        ```python
+        response = client.chat.completions.create(
+            model="openai/gpt-4o",
+            messages=[
+                {"role": "user", "content": "Hello"}
+            ]
+        )
 
-| Tool | Token Cost | Infrastructure Cost | User Attribution | Multi-provider |
-|--------|--------|--------|--------|--------|
-| OpenAI Usage API | Yes | No | Limited | No |
-| Anthropic Usage API | Yes | No | Limited | No |
-| OpenRouter Analytics | Yes | No | Yes | Yes |
-| LiteLLM | Yes | No | Yes | Yes |
-| Langfuse | Yes | No | Yes | Yes |
-| Helicone | Yes | No | Yes | Yes |
-| CCUsage | Yes | No | Limited | Partial |
-| OpenCost | No | Yes | Namespace/Team | N/A |
-| Prometheus/Grafana | Custom | Yes | Custom | N/A |
+        print(response.usage)
+        ```
 
-# Recommended Approaches
+- Useful dashboard pages:
+    - **Activity**: Usage history
+    - **Logs**: Prompts and completions
+    - **Analytics**: Cost and token breakdown
+    - **Settings -> Observability**: Input and Output Logging toggle
 
-| Scenario | Recommended Solution |
-|-----------|----------------------|
-| OpenAI only | Usage API + pricing table |
-| Anthropic only | Usage fields + pricing table |
-| OpenRouter only | OpenRouter Analytics |
-| Multi-provider gateway | LiteLLM + Langfuse |
-| Claude Code usage | CCUsage |
-| Self-hosted models | OpenCost + Prometheus |
-| Enterprise FinOps | Langfuse + OpenCost + billing APIs |
-
-# Decision Matrix
-
-| Requirement | Recommended Tool |
-|------------|-----------|
-| Exact billing amount | OpenRouter Analytics |
-| Lowest implementation effort | Provider-reported cost |
-| Multi-provider visibility | LiteLLM |
-| User/team attribution | Langfuse |
-| Claude Code tracking | CCUsage |
-| Kubernetes GPU costs | OpenCost |
-| Self-hosted inference costs | OpenCost + Prometheus |
-| Enterprise cost governance | Langfuse + OpenCost + billing APIs |
-
-## ccusage: CLI Usage Reports
+## `ccusage`: CLI Usage Reports
 
 ### What It Does
 
@@ -164,28 +169,26 @@ using the OpenRouter model pricing catalog.
     - Tracks cache creation and cache read tokens separately
     - Exports data in structured JSON format for programmatic use
 
+// TODO(ai_gp): Improve this list by splitting in better category.
 - It supports a wide range of coding assistants, including:
     - Claude Code, Codex CLI, OpenCode
     - Amp, Droid, Codebuff
     - Hermes Agent, pi-agent, Goose
     - GitHub Copilot CLI, Gemini CLI, Qwen, Kilo
-    - And several others
 
-- A key design principle is privacy: all data is read from local logs, and
-  nothing is uploaded to external servers
+- A key design principle is privacy: all data reads from local logs, and nothing
+  uploads to external servers
 
 ### Installation
 
-- ccusage can be installed globally via npm:
+- Install globally via npm:
 
     ```bash
     > npm install -g ccusage
     ```
 
-- Alternatively, you can run it without installation using package runners like
-  `bunx`, `pnpm dlx`, or `npx`
-
-- It requires either Bun 1.3+ (recommended) or Node.js as a runtime
+- Alternatively, run without installation using `bunx`, `pnpm dlx`, or `npx`
+- Requires Bun 1.3+ (recommended) or Node.js as a runtime
 
 ### Basic Usage
 
@@ -195,10 +198,8 @@ using the OpenRouter model pricing catalog.
     > ccusage daily --breakdown --no-color
     ```
 
-- The output is a terminal table showing:
-    - Date and models used
-    - Input and output token counts
-    - Estimated cost in USD
+- The output is a terminal table showing date, models used, input and output
+  token counts, and estimated cost in USD
 
 - Example output (simplified):
 
@@ -214,20 +215,18 @@ using the OpenRouter model pricing catalog.
     └──────────┴──────────────────────┴────────────┴──────────┴─────────────┘
     ```
 
-- The tool also supports:
+// TODO(ai_gp): Create more command examples and output example
+
+- Additional commands and flags:
     - `ccusage weekly` and `ccusage monthly` for longer timeframes
     - `--breakdown` flag for per-model cost breakdowns
     - `--json` flag for structured data export
     - `--since` flag to specify a start date
     - Offline mode using pre-cached pricing data
 
-### Live Monitoring
-
-- ccusage offers a `blocks --live` command for real-time monitoring of Claude
+- `ccusage` offers a `blocks --live` command for real-time monitoring of Claude
   Code sessions
-
-- This is particularly useful for keeping an eye on costs during active
-  development sessions
+- This is useful for keeping an eye on costs during active development sessions
 
 ## OpenUsage: Terminal Dashboard
 
@@ -245,7 +244,7 @@ using the OpenRouter model pricing catalog.
 
 ### Installation
 
-- OpenUsage can be installed via npm:
+- Install via npm:
 
     ```bash
     > npm install -g openusage
@@ -269,7 +268,8 @@ using the OpenRouter model pricing catalog.
   `session`, and `blocks` reports in table or JSON format
 
 - **Claude Code integration**:
-    - Statusline support showing session cost, burn rate, and context window usage
+    - Statusline support showing session cost, burn rate, and context window
+      usage
     - Tmux status bar integration with provider-specific logos
 
 - **Export capabilities**: Export to JSON or CSV, plus Prometheus metrics
@@ -287,22 +287,22 @@ using the OpenRouter model pricing catalog.
     - Want a real-time dashboard they can leave running in a terminal window
     - Use multiple AI tools and want a unified view of all spending
     - Need to track usage across both coding agents and direct API access
-    - Want to integrate cost metrics into their existing monitoring
-      infrastructure via Prometheus
+    - Want to integrate cost metrics into existing monitoring infrastructure via
+      Prometheus
 
 ## Choosing Between ccusage and OpenUsage
 
 - Both tools serve the same general purpose but have different strengths:
 
-    | Aspect               | ccusage                 | OpenUsage                       |
-    | :------------------- | :---------------------- | :------------------------------ |
-    | Primary interface    | CLI reports             | TUI dashboard + CLI reports     |
-    | Real-time monitoring | `blocks --live` command | Live dashboard with daemon      |
-    | Model coverage       | Coding assistants focus | 34 providers, including APIs    |
-    | Data export          | JSON                    | JSON, CSV, Prometheus           |
-    | Auto-detection       | Manual source selection | Auto-detects tools and API keys |
-    | Historical tracking  | Per-report queries      | SQLite-backed daemon            |
-    | Theme support        | Terminal tables         | 17 built-in themes + custom     |
+| Aspect               | ccusage                 | OpenUsage                       |
+| :------------------- | :---------------------- | :------------------------------ |
+| Primary interface    | CLI reports             | TUI dashboard + CLI reports     |
+| Real-time monitoring | `blocks --live` command | Live dashboard with daemon      |
+| Model coverage       | Coding assistants focus | 34 providers, including APIs    |
+| Data export          | JSON                    | JSON, CSV, Prometheus           |
+| Auto-detection       | Manual source selection | Auto-detects tools and API keys |
+| Historical tracking  | Per-report queries      | SQLite-backed daemon            |
+| Theme support        | Terminal tables         | 17 built-in themes + custom     |
 
 - **Use ccusage if** you need quick, one-off reports and primarily use coding
   assistant CLIs
@@ -310,7 +310,7 @@ using the OpenRouter model pricing catalog.
 - **Use OpenUsage if** you want a persistent dashboard, use multiple AI tools,
   and need real-time visibility into costs
 
-- There is no reason not to install both -- they complement each other well
+- I use both since they complement each other well
 
 ## Practical Tips for Managing LLM Costs
 
@@ -349,109 +349,3 @@ using the OpenRouter model pricing catalog.
 
 - Installing both gives you a complete picture of your AI tool spending, from
   quick daily reports to continuous monitoring
-
-
-## OpenRouter Logs
-
-# How to View OpenRouter Logs
-
-## 1. Activity Page (Usage Logs)
-
-Open the OpenRouter dashboard and navigate to **Activity**. There you can view:
-
-- Requests made
-- Models used
-- Providers used
-- API key activity
-- Token usage
-- Costs
-
----
-
-## 2. Enable Full Prompt & Response Logging
-
-To view prompts and completions:
-
-1. Open OpenRouter Dashboard.
-2. Go to **Settings** → **Observability**.
-3. Enable **Input & Output Logging**.
-4. Open the **Logs** page.
-
-You will be able to inspect:
-
-- Prompt
-- Completion
-- Model
-- Provider
-- Token counts
-- Request cost
-
-> Note: Logging only applies to requests made after the feature is enabled.
-
----
-
-## 3. Retrieve Logs Programmatically
-
-Analytics endpoints require a **Management Key** (not a standard API key).
-
-Example:
-
-```bash
-curl https://openrouter.ai/api/v1/analytics/activity \
-  -H "Authorization: Bearer YOUR_MANAGEMENT_KEY"
-```
-
-Available filters include:
-
-- Date range
-- API key
-- User
-- Endpoint
-- Model
-
----
-
-## 4. Log Usage Per API Request
-
-Every OpenRouter response includes usage information:
-
-```json
-{
-  "usage": {
-    "prompt_tokens": 125,
-    "completion_tokens": 342,
-    "total_tokens": 467
-  }
-}
-```
-
-Example in Python:
-
-```python
-response = client.chat.completions.create(
-    model="openai/gpt-4o",
-    messages=[
-        {"role": "user", "content": "Hello"}
-    ]
-)
-
-print(response.usage)
-```
-
-This allows you to track:
-
-- Prompt tokens
-- Completion tokens
-- Total tokens
-- Cost (when available)
-- Cached tokens
-- Reasoning tokens (supported models)
-
----
-
-## Useful Dashboard Pages
-
-- Activity → Usage history
-- Logs → Prompts and completions
-- Analytics → Cost and token breakdown
-- Settings → Observability → Input & Output Logging

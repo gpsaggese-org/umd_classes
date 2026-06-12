@@ -46,10 +46,10 @@ enabling access to models from multiple providers through a single API.
 - Before configuring OpenRouter, ensure you have API keys for the providers you
   plan to use:
 
-    | Provider   | Environment Variable | Key Format         |
-    | :--------- | :------------------- | :----------------- |
-    | Anthropic  | `ANTHROPIC_API_KEY`  | `sk-ant-api03-...` |
-    | OpenAI     | `OPENAI_API_KEY`     | `sk-proj-...`      |
+    | Provider  | Environment Variable | Key Format         |
+    | :-------- | :------------------- | :----------------- |
+    | Anthropic | `ANTHROPIC_API_KEY`  | `sk-ant-api03-...` |
+    | OpenAI    | `OPENAI_API_KEY`     | `sk-proj-...`      |
 
 ## Step 1: Configure OpenRouter with BYOK
 

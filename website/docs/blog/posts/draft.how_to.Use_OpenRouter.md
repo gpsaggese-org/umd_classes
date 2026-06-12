@@ -10,7 +10,8 @@ categories:
     - Developer Tools
 ---
 
-TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to access dozens of LLM models from a single terminal, including free tier options.
+TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to
+access dozens of LLM models from a single terminal, including free tier options.
 
 <!-- more -->
 
@@ -18,18 +19,24 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
 
 ## What is OpenRouter
 
-- **OpenRouter** is a unified API gateway that provides access to dozens of LLM models from different providers through a single endpoint
-    - Instead of managing separate API keys for OpenAI, Anthropic, Google, and others, you use one key and one API format
+- **OpenRouter** is a unified API gateway that provides access to dozens of LLM
+  models from different providers through a single endpoint
+    - Instead of managing separate API keys for OpenAI, Anthropic, Google, and
+      others, you use one key and one API format
     - OpenRouter handles routing, billing, and rate limiting across providers
-    - Includes free tier models (e.g., Google Gemma 4) for testing and experimentation
+    - Includes free tier models (e.g., Google Gemma 4) for testing and
+      experimentation
 
 ## What is LLM CLI
 
-- **LLM CLI** (by Simon Willison) is a command-line tool for interacting with LLMs:
-    - Supports plugins for different backends (OpenAI, Anthropic, OpenRouter, etc.)
+- **LLM CLI** (by Simon Willison) is a command-line tool for interacting with
+  LLMs:
+    - Supports plugins for different backends (OpenAI, Anthropic, OpenRouter,
+      etc.)
     - Provides a consistent interface regardless of the underlying model
     - Version 0.30 at the time of writing
-    - Project page: [https://github.com/simonw/llm](https://github.com/simonw/llm)
+    - Project page:
+      [https://github.com/simonw/llm](https://github.com/simonw/llm)
 
 ## Installation
 
@@ -60,8 +67,10 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
     ```
 
     - The plugin reads the `OPENROUTER_KEY` environment variable
-    - You can obtain an API key from [openrouter.ai/keys](https://openrouter.ai/keys)
-    - Some workflows also use `OPENROUTER_API_KEY` directly (e.g., for curl requests)
+    - You can obtain an API key from
+      [openrouter.ai/keys](https://openrouter.ai/keys)
+    - Some workflows also use `OPENROUTER_API_KEY` directly (e.g., for curl
+      requests)
 
 ## Listing Available Models
 
@@ -82,7 +91,8 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
       supports_schema: True
     ```
 
-- After installation, models appear in the main `llm models` list with an `OpenRouter:` prefix:
+- After installation, models appear in the main `llm models` list with an
+  `OpenRouter:` prefix:
 
     ```bash
     > llm models | grep openrouter | head
@@ -95,7 +105,8 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
     OpenRouter: openrouter/qwen/qwen3.6-plus
     ```
 
-- Free models are marked with a `:free` suffix, making them easy to identify for cost-effective experimentation
+- Free models are marked with a `:free` suffix, making them easy to identify for
+  cost-effective experimentation
 
 ## Making Requests
 
@@ -113,7 +124,8 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
 
 ### Provider and Routing Options
 
-- OpenRouter supports provider-level options, such as sorting by throughput for faster responses:
+- OpenRouter supports provider-level options, such as sorting by throughput for
+  faster responses:
 
     ```bash
     > llm -m openrouter/anthropic/claude-opus-4.7 \
@@ -121,13 +133,17 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
         "Explain recursion in 1000 words" | tee output.txt
     ```
 
-    - The `-o provider` flag passes a JSON object that configures provider routing
-    - `{"sort": "throughput"}` selects the fastest provider for the requested model
-    - `tee output.txt` saves the response to a file while displaying it in the terminal
+    - The `-o provider` flag passes a JSON object that configures provider
+      routing
+    - `{"sort": "throughput"}` selects the fastest provider for the requested
+      model
+    - `tee output.txt` saves the response to a file while displaying it in the
+      terminal
 
 ## Using the API Directly with curl
 
-- For programmatic access or scripting, you can call the OpenRouter API directly:
+- For programmatic access or scripting, you can call the OpenRouter API
+  directly:
 
     ```bash
     > curl -s https://openrouter.ai/api/v1/chat/completions \
@@ -139,9 +155,11 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
       }'
     ```
 
-    - The endpoint is `https://openrouter.ai/api/v1/chat/completions` (OpenAI-compatible)
+    - The endpoint is `https://openrouter.ai/api/v1/chat/completions`
+      (OpenAI-compatible)
     - Use `Authorization: Bearer $OPENROUTER_API_KEY` for authentication
-    - The request body follows the same format as the OpenAI chat completions API
+    - The request body follows the same format as the OpenAI chat completions
+      API
 
 ## Monitoring Usage
 
@@ -153,25 +171,33 @@ TLDR: A practical guide on using OpenRouter through Simon Willison's LLM CLI to 
       | jq '.data.usage'
     ```
 
-    - Returns JSON with usage statistics including credits used and remaining balance
+    - Returns JSON with usage statistics including credits used and remaining
+      balance
     - Useful for tracking costs across different models and providers
 
 ## Key Benefits
 
-- **Single API key**: Access dozens of models from different providers with one credential
-- **Consistent interface**: LLM CLI provides the same commands regardless of backend model
-- **Free tier available**: Test models like Google Gemma 4 at no cost before committing
+- **Single API key**: Access dozens of models from different providers with one
+  credential
+- **Consistent interface**: LLM CLI provides the same commands regardless of
+  backend model
+- **Free tier available**: Test models like Google Gemma 4 at no cost before
+  committing
 - **Provider routing**: Route requests to the fastest available provider
-- **OpenAI-compatible API**: Direct API calls follow the familiar chat completions format
+- **OpenAI-compatible API**: Direct API calls follow the familiar chat
+  completions format
 
 ## Conclusion
 
-- Combining OpenRouter with LLM CLI gives you a powerful, flexible way to experiment with and use LLMs from the terminal
-    - Install once, configure your API key, and you have access to dozens of models
+- Combining OpenRouter with LLM CLI gives you a powerful, flexible way to
+  experiment with and use LLMs from the terminal
+    - Install once, configure your API key, and you have access to dozens of
+      models
     - Switch between models with a single flag change
     - Use the direct API for scripting and automation
 
 - For more information:
     - LLM CLI: [https://github.com/simonw/llm](https://github.com/simonw/llm)
     - OpenRouter: [https://openrouter.ai](https://openrouter.ai)
-    - LLM OpenRouter plugin: [https://github.com/simonw/llm-openrouter](https://github.com/simonw/llm-openrouter)
+    - LLM OpenRouter plugin:
+      [https://github.com/simonw/llm-openrouter](https://github.com/simonw/llm-openrouter)
