@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -21,9 +21,9 @@
 # - Focus on primitives: what they are, how they are created, what state they hold,
 #   and how they compose
 #
-# References:
-# - API: https://gymnasium.farama.org/api/vector
-# - GitHub: https://github.com/Farama-Foundation/Gymnasium
+# - References:
+#   - API: https://gymnasium.farama.org/api/vector
+#   - GitHub: https://github.com/Farama-Foundation/Gymnasium
 
 # %% [markdown]
 # ## Imports

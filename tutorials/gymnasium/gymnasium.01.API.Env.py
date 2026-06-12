@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -21,9 +21,9 @@
 # - Focus on primitives: what they are, how they are created, what state they hold,
 #   and how they compose
 #
-# References:
-# - API: https://gymnasium.farama.org/api/env
-# - GitHub: https://github.com/Farama-Foundation/Gymnasium
+# - References:
+#   - API: https://gymnasium.farama.org/api/env
+#   - GitHub: https://github.com/Farama-Foundation/Gymnasium
 
 # %% [markdown]
 # ## Imports
@@ -176,6 +176,9 @@ env.reset(seed=42)
 # Take one random action and inspect all five return values.
 action = env.action_space.sample()
 obs, reward, terminated, truncated, info = env.step(action)
+# TODO(ai_gp): in print_step print observation merging shape and the content like `(4, ): [...]`
+# TODO(ai_gp): Add a field, compact: bool = False to print in a single line like
+# print("obs=%s" % obs, "rew=%s" % reward, "term=%s" % terminated, "trunc=%s" % truncated, "info=%s" % info)
 gymutils.print_step(obs=obs, reward=reward, terminated=terminated, truncated=truncated, info=info)
 
 # %% [markdown]

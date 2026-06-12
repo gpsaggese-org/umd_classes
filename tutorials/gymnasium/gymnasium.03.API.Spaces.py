@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -16,14 +16,14 @@
 # %% [markdown]
 # # Description
 #
-# - Teach the `gymnasium.spaces` API surface by exploring every Space class
-#   from the smallest possible working example
+# - Teach the `gymnasium.spaces` API by exploring every `Space` class
+#   with small working example
 # - Focus on primitives: what they represent, how they are constructed, what
 #   attributes they hold, and how they compose
 #
-# References:
-# - API: https://gymnasium.farama.org/api/spaces
-# - GitHub: https://github.com/Farama-Foundation/Gymnasium
+# - References:
+#   - API: https://gymnasium.farama.org/api/spaces
+#   - GitHub: https://github.com/Farama-Foundation/Gymnasium
 
 # %% [markdown]
 # ## Imports

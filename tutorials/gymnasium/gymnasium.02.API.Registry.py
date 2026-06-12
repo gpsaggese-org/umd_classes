@@ -16,14 +16,15 @@
 # %% [markdown]
 # # Description
 #
-# - Teach the `gymnasium` Registry API surface by building up from the smallest
+# - Teach the `gymnasium` Registry API by building up from the smallest
 #   possible working example
-# - Focus on primitives: `gym.make`, `gym.register`, `gym.spec`,
-#   `gym.pprint_registry`, `gym.envs.registry`, and `EnvSpec`
+# - Focus on primitives:
+#   - `gym.make`, `gym.register`, `gym.spec`, `gym.pprint_registry`
+#   - `gym.envs.registry`, `EnvSpec`
 #
-# References:
-# - API: https://gymnasium.farama.org/api/registry
-# - GitHub: https://github.com/Farama-Foundation/Gymnasium
+# - References:
+#   - API: https://gymnasium.farama.org/api/registry
+#   - GitHub: https://github.com/Farama-Foundation/Gymnasium
 
 # %% [markdown]
 # ## Imports
@@ -55,9 +56,10 @@ except ImportError:
 # %% [markdown]
 # ## Library Overview
 #
-# - **What problem it solves**: every environment must be registered before
-#   `gym.make()` can create it. The registry is the central catalog that maps
-#   string IDs (e.g. `"CartPole-v1"`) to their implementations
+# - **What problem it solves**:
+#   - Every environment must be registered before `gym.make()` can create it
+#   - The registry is the central catalog that maps string IDs (e.g.,
+#     `"CartPole-v1"`) to their implementations
 #
 # - **Key abstractions**:
 #   - `gym.envs.registry`: a plain `dict[str, EnvSpec]` holding all registered
@@ -83,10 +85,12 @@ except ImportError:
 # %% [markdown]
 # ## Primitive 1: `gym.envs.registry`: The Global Catalog
 #
-# - **Mental model**: a plain Python `dict` that maps environment string IDs to
-#   `EnvSpec` objects. Every env that `gym.make()` can create must have an entry here
+# - **Mental model**:
+#   - A plain Python `dict` that maps environment string IDs to `EnvSpec` objects
+#   - Every env that `gym.make()` can create must have an entry here
 #
-# - This is the single source of truth for available environments
+# - **Key insight**:
+#   - This is the single source of truth for available environments
 
 # %%
 import gymnasium as gym
@@ -112,8 +116,9 @@ display(pd.DataFrame({"namespaced_ids": namespaced}))
 # %% [markdown]
 # ## Primitive 2: `EnvSpec`: The Metadata Object
 #
-# - **Mental model**: each entry in the registry is an `EnvSpec` -- a container
-#   of metadata that tells `gym.make()` how to construct the environment
+# - **Mental model**:
+#   - Each entry in the registry is an `EnvSpec`, a container of metadata that
+#     tells `gym.make()` how to construct the environment
 #
 # - An `EnvSpec` stores:
 #   - `id`: the string identifier
@@ -136,6 +141,7 @@ print("type(spec):", type(spec))
 print()
 
 # List all public attributes.
+# TODO(ai_gp): Use /Users/saggese/src/umd_classes1/.claude/skills/notebook.rules.md:560:## Print Public Methods of Objects
 for attr_name in dir(spec):
     if not attr_name.startswith("_") and not callable(getattr(spec, attr_name)):
         val = getattr(spec, attr_name)
@@ -156,9 +162,10 @@ print(spec.pprint())
 # %% [markdown]
 # ## Primitive 3: `gym.spec()`: Look Up by ID
 #
-# - **Mental model**: a convenience function that retrieves an `EnvSpec` from the
-#   registry by its string ID. Equivalent to `registry[id]` but with error
-#   handling and parsing
+# - **Mental model**:
+#   - A convenience function that retrieves an `EnvSpec` from the registry by its
+#     string ID
+#   - Equivalent to `registry[id]` but with error handling and parsing
 
 # %%
 # Look up a spec from its string ID.
@@ -167,13 +174,6 @@ print("id:", spec.id)
 print("entry_point:", spec.entry_point)
 print("max_episode_steps:", spec.max_episode_steps)
 print("version:", spec.version)
-
-# %%
-# Requesting an unknown ID raises an error.
-try:
-    gym.spec("NonExistent-v0")
-except gym.error.Error as e:
-    print("Error:", e)
 
 # %% [markdown]
 # ## Primitive 4: `gym.make()`: From Registry to Environment
@@ -362,8 +362,8 @@ display(pd.DataFrame(data))
 # ## Composition 1: Register with Custom kwargs
 #
 # - The `kwargs` parameter in `gym.register()` sets default constructor
-#   arguments. They are merged with any kwargs passed to `gym.make()` (make
-#   kwargs take precedence)
+#   arguments, merged with any kwargs passed to `gym.make()` (make kwargs take
+#   precedence)
 
 # %%
 class ConfigurableGrid(Env):

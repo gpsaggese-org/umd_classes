@@ -14,3 +14,9 @@
 /notebook.create_api_intro https://gymnasium.farama.org/api/spaces and save it in tutorials/gymnasium/gymnasium.03.API.Spaces.ipynb
 
 - https://gymnasium.farama.org/tutorials/index.html
+
+tutorials/gymnasium/gymnasium.01.API.Env.py
+tutorials/gymnasium/gymnasium.01.API.Wrappers.py
+tutorials/gymnasium/gymnasium.02.API.Registry.py
+tutorials/gymnasium/gymnasium.03.API.Spaces.py
+tutorials/gymnasium/gymnasium.05.API.Vector.py

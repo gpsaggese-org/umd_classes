@@ -4,6 +4,8 @@ When running Claude Code with `--print --output-format=stream-json`, every event
 is written to stdout as a newline-delimited JSON stream (NDJSON). Each line is
 a self-contained JSON record.
 
+cc --model=deepseek/deepseek-v4-flash -p '/notebook.create_api_intro https://gymnasium.farama.org/api/vector and save it in tutorials/gymnasium/gymnasium.05.API.Vector.ipynb' --include-partial-messages --print --output-format=stream-json
+
 ## Record types
 
 // TODO(ai_gp): Add a short explanation of `type`
