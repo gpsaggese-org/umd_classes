@@ -1,10 +1,44 @@
-# Draft Blog Posts — Readiness Ranking
+# Blog Posts
 
-This document tracks the work on the blogs
-
+- This document tracks the work on the blogs
 - Blogs are ranked from _most ready_ (near-publishable) to _least ready_ (raw
   scratchpad).
   - Criteria: front matter completeness, TL;DR quality, content structure, and polish.
+
+# Published Blogs
+
+- To find the ones that are already published
+  ```
+  > \grep -i "draft:" website/docs/blog/posts/*.md | grep -i false
+  website/docs/blog/posts/how_to.Compare_LLM_models.md:draft: false
+  website/docs/blog/posts/how_to.Connect_Claude_Code_to_Gmail.md:draft: false
+  website/docs/blog/posts/in_30_mins.helpers_llm_cli.md:draft: false
+  ...
+  ```
+
+- To extract dates and paths use:
+  ```
+  > website/find_published_blogs.sh
+  ```
+
+- The published ones are:
+  - 2026-06-09: `website/docs/blog/posts/how_to.Compare_LLM_models.md`
+  - 2026-05-30: `website/docs/blog/posts/in_30_mins.helpers_llm_cli.md`
+  - 2026-04-19: `website/docs/blog/posts/in_30_mins.simonw_llm_cli.md`
+  - 2026-03-29: `website/docs/blog/posts/in_30_mins.mdm_unified_markdown_manager.md`
+  - 2026-03-21: `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
+  - 2026-03-18: `website/docs/blog/posts/in_60_mins.CausalML.md`
+  - 2026-03-15: `website/docs/blog/posts/in_60_mins.BambooAI.md`
+  - 2026-03-03: `website/docs/blog/posts/in_60_mins.TorchRL_MAC.md`
+  - 2026-02-28: `website/docs/blog/posts/how_to.Connect_Claude_Code_to_Gmail.md`
+  - 2026-02-21: `website/docs/blog/posts/in_60_mins.Tensorflow.md`
+  - 2026-02-21: `website/docs/blog/posts/in_60_mins.AutoGen.md`
+  - 2026-02-14: `website/docs/blog/posts/in_30_mins.uv.md`
+  - 2026-02-14: `website/docs/blog/posts/in_30_mins.Python_Packaging.md`
+  - 2026-02-10: `website/docs/blog/posts/in_30_mins.ripgrep.md`
+  - 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
+
+# Draft Blogs
 
 ## High-priority
 
@@ -13,11 +47,6 @@ This document tracks the work on the blogs
 - `website/docs/blog/posts/in_30_mins.simonw_llm_cli.md`
 - `website/docs/blog/posts/draft.how_to.Count_cost.md`
 - `website/docs/blog/posts/draft.how_to.LLM_effort.md`
-
-## Published
-
-- DONE: `website/docs/blog/posts/draft.how_to.Compare_LLM_models.md`
-- DONE: `website/docs/blog/posts/in_30_mins.helpers_llm_cli.md`
 
 ## Tier 1: Ready — Well-structured, near-publishable
 
