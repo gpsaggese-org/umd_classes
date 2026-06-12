@@ -4,8 +4,8 @@ Ranked from **most ready** (near-publishable) to **least ready** (raw scratchpad
 Criteria: front matter completeness, TL;DR quality, content structure, and polish.
 
 ## To publish
-website/docs/blog/posts/draft.how_to.Compare_LLM_models.md
-blog_posts/draft.how_to.helpers_llm_cli.md
+- DONE: website/docs/blog/posts/draft.how_to.Compare_LLM_models.md
+- DONE: blog_posts/draft.how_to.helpers_llm_cli.md
 draft.how_to.Use_Claude_Code_with_Openrouter.md
 draft.how_to.Use_OpenRouter.md
 in_30_mins.simonw_llm_cli.md
