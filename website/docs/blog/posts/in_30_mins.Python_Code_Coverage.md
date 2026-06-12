@@ -36,16 +36,21 @@ TL;DR: Python code coverage measures how much of your source code is tested, hel
 
 ## Text report
 
-- Assume you have a `test_math.py` containing unit tests:
+- Assume you have a simple module `my_module.py` and a corresponding
+  `test_math.py` containing unit tests:
+  ```python
+  # my_module.py
+  def add(a, b):
+      return a + b
+  ```
 
-<!-- TODO(ai_gp): Add math.py with add -->
+  ```python
+  # test_math.py
+  from my_module import add
 
-```python
-from my_module import add
-
-def test_add():
-    assert add(2, 3) == 5
-```
+  def test_add():
+      assert add(2, 3) == 5
+  ```
 
 - Run tests with coverage and collects coverage data:
 
@@ -66,7 +71,9 @@ def test_add():
     my_module.py      10      2    80%
     ```
 
-<!-- TODO(ai_gp): Explain table -->
+- The table shows the coverage data: `Stmts` is the number of statements, `Miss`
+  shows how many statements were not executed, and `Cover` is the percentage of
+  statements covered by tests
 
 ## Interactive Coverage Analysis
 
@@ -173,7 +180,11 @@ def test_add():
     TOTAL                                     6956   3824   1700    168    41%
     ```
 
-<!-- TODO(ai_gp): Explain the table above -->
+- The full report shows coverage across the entire project, including both source
+  and test files
+  - `BrPart` indicates partially-covered branches
+  - `Branch` shows total branches
+  - These columns help identify conditional logic that was not fully exercised.
 
 - Generate the coverage for only certain target code (e.g.,
   `helpers/hmarkdown*.py`)
@@ -223,22 +234,29 @@ def test_add():
     > open htmlcov/index.html
     ```
 
+// TODO(ai_gp): This seems to be malformed
+
 - You can analyze coverage by
   Files Functions Classes
 
     ```
-
-    	 	Statements	 	Branches	 	Total
+          Statements	 	Branches	 	Total
     File	 	coverage	statements	missing	excluded	 	coverage	branches	partial	 	coverage
     helpers / hmarkdown_bullets.py	 	83%	93	16	0	 	68%	44	6	 	78%
     helpers / hmarkdown_coloring.py	 	83%	86	15	0	 	64%	28	6	 	78%
     helpers / hmarkdown_comments.py	 	57%	28	12	0	 	40%	10	4	 	53%
     ```
 
-```
 
-<!-- TODO(ai_gp): Explain each column -->
+- The columns in the interactive view:
+  - **Statements coverage**: percentage of statements executed
+  - **statements**: total statements
+  - **missing**: statements not covered
+  - **excluded**: statements excluded from coverage
+  - **Branches coverage**: percentage of branches taken
+  - **branches**: total branches
+  - **partial**: branches partially covered
+  - **Total coverage**: combined statements and branches coverage
 
 - You can click on each column to sort by that column
 - You can click on a file to see which lines are covered
-```
