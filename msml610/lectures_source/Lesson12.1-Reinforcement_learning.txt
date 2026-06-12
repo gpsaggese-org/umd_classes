@@ -295,17 +295,17 @@ digraph MDP {
   U_h([\blue{s_0, a_0}, \green{s_1, a_1}, ..., s_n, ...])
   $$
 
-- **Finite horizon**
-  - Indicates a fixed time $N$ after which nothing matters:
-    $$
-    U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
-    = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
-    $$
+- **Definition**: _Finite horizon_ indicates a fixed time $N$ after which nothing
+  matters:
+  $$
+  U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
+  = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
+  $$
   - Lead to non-stationary policies
   - Actions are chosen based on the current state and remaining steps
 
-- **Infinite horizon**
-  - No fixed time limit, i.e., the process continues indefinitely
+- **Definition**: _Infinite horizon_ indicates that there is no fixed time limit,
+  i.e., the process continues indefinitely
   - Utility is often defined using a discount factor $\gamma < 1$ for
     convergence
   - The optimal policy can be _stationary_

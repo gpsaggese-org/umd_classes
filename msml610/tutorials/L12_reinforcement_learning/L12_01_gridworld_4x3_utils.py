@@ -1,0 +1,2133 @@
+"""
+Utility functions for the 4x3 grid world reinforcement learning lesson.
+
+Implements the canonical AIMA 4x3 grid world from scratch (no gymnasium):
+- The stochastic environment (states, transition model, rewards).
+- Exact planning (value iteration, policy iteration).
+- Model-free learning (Q-learning).
+- Interactive notebook cells built on top of these primitives.
+
+Import as:
+
+import msml610.tutorials.L12_reinforcement_learning.L12_01_gridworld_4x3_utils as gridu
+"""
+
+import logging
+from typing import Any, Dict, List, Optional, Tuple
+
+import ipywidgets
+import matplotlib.axes
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from IPython.display import clear_output, display
+
+import helpers.hnotebook as hnotebo
+import helpers.htutorial as htutori
+
+_LOG = logging.getLogger(__name__)
+
+
+def init_loggers(notebook_log: logging.Logger) -> None:
+    global _LOG
+    hnotebo.init_loggers(notebook_log, utils_log=_LOG)
+
+
+# #############################################################################
+# GridWorld environment
+# #############################################################################
+
+
+# Action names and their (d_col, d_row) displacement on the grid.
+_ACTIONS = ["Up", "Down", "Left", "Right"]
+_ACTION_DELTA = {
+    "Up": (0, 1),
+    "Down": (0, -1),
+    "Left": (-1, 0),
+    "Right": (1, 0),
+}
+# Perpendicular directions used by the stochastic "slip" model.
+_PERPENDICULAR = {
+    "Up": ["Left", "Right"],
+    "Down": ["Left", "Right"],
+    "Left": ["Up", "Down"],
+    "Right": ["Up", "Down"],
+}
+# Arrow displacement used when drawing a policy action in a cell.
+_ARROW_DELTA = {
+    "Up": (0.0, 0.3),
+    "Down": (0.0, -0.3),
+    "Left": (-0.3, 0.0),
+    "Right": (0.3, 0.0),
+}
+
+
+class GridWorld:
+    """
+    The canonical AIMA 4x3 grid world as a Markov decision process.
+
+    Coordinates are 1-indexed `(col, row)` with `(1, 1)` at the bottom-left.
+    The agent intends an action but slips perpendicular with some probability,
+    and bumping a wall or boundary leaves it in place. Rewards are collected on
+    arrival: a small living reward for non-terminal cells and +1 / -1 for the
+    two terminal cells.
+    """
+
+    def __init__(
+        self,
+        *,
+        r_step: float = -0.04,
+        gamma: float = 1.0,
+        p_intended: float = 0.8,
+    ) -> None:
+        """
+        Build the 4x3 grid world.
+
+        :param r_step: living reward for entering a non-terminal cell
+        :param gamma: discount factor
+        :param p_intended: probability the intended action succeeds
+        """
+        self.n_cols = 4
+        self.n_rows = 3
+        self.start = (1, 1)
+        # Terminal cells map to the reward collected on entering them.
+        self.terminals = {(4, 3): 1.0, (4, 2): -1.0}
+        self.walls = {(2, 2)}
+        self.r_step = r_step
+        self.gamma = gamma
+        self.p_intended = p_intended
+        self.actions = list(_ACTIONS)
+        # Enumerate every reachable cell (all cells except walls).
+        self.states = [
+            (c, r)
+            for r in range(1, self.n_rows + 1)
+            for c in range(1, self.n_cols + 1)
+            if (c, r) not in self.walls
+        ]
+        self.nonterminal_states = [
+            s for s in self.states if s not in self.terminals
+        ]
+
+    def is_terminal(self, s: Tuple[int, int]) -> bool:
+        """
+        Return whether `s` is a terminal (episode-ending) cell.
+        """
+        return s in self.terminals
+
+    def reward(self, s: Tuple[int, int]) -> float:
+        """
+        Return the reward collected on arriving in cell `s`.
+        """
+        if s in self.terminals:
+            return self.terminals[s]
+        return self.r_step
+
+    def _attempt_move(
+        self, s: Tuple[int, int], direction: str
+    ) -> Tuple[int, int]:
+        """
+        Move one step in `direction`, bouncing back on a wall or boundary.
+
+        :param s: current cell
+        :param direction: one of the action names
+        :return: resulting cell (equal to `s` if the move is blocked)
+        """
+        d_col, d_row = _ACTION_DELTA[direction]
+        target = (s[0] + d_col, s[1] + d_row)
+        # Reject moves off the grid or into a wall: the agent stays put.
+        off_grid = not (
+            1 <= target[0] <= self.n_cols and 1 <= target[1] <= self.n_rows
+        )
+        if off_grid or target in self.walls:
+            return s
+        return target
+
+    def transitions(
+        self, s: Tuple[int, int], a: str
+    ) -> Dict[Tuple[int, int], float]:
+        """
+        Return the next-state distribution `Pr(s' | s, a)`.
+
+        :param s: current cell
+        :param a: intended action
+        :return: dict mapping each reachable next cell to its probability
+        """
+        # Terminal states are absorbing: no transitions leave them.
+        if self.is_terminal(s):
+            return {}
+        p_perp = (1.0 - self.p_intended) / 2.0
+        # The intended action and its two perpendicular slips.
+        outcome_probs = [(a, self.p_intended)]
+        for perp in _PERPENDICULAR[a]:
+            outcome_probs.append((perp, p_perp))
+        # Accumulate probability mass, merging outcomes that land on the
+        # same cell (e.g. several blocked moves all bounce back to `s`).
+        dist: Dict[Tuple[int, int], float] = {}
+        for direction, prob in outcome_probs:
+            s2 = self._attempt_move(s, direction)
+            dist[s2] = dist.get(s2, 0.0) + prob
+        return dist
+
+    def q_value(
+        self,
+        s: Tuple[int, int],
+        a: str,
+        u: Dict[Tuple[int, int], float],
+    ) -> float:
+        """
+        Compute the expected one-step value of action `a` in state `s`.
+
+        Uses the reward-on-arrival convention:
+        `Q(s, a) = sum_s' Pr(s' | s, a) [R(s') + gamma U(s')]`.
+
+        :param s: current cell
+        :param a: action to evaluate
+        :param u: current utility estimate over states
+        :return: action value
+        """
+        q = 0.0
+        for s2, prob in self.transitions(s, a).items():
+            q += prob * (self.reward(s2) + self.gamma * u[s2])
+        return q
+
+    def sample_next(
+        self,
+        s: Tuple[int, int],
+        a: str,
+        rng: np.random.RandomState,
+    ) -> Tuple[int, int]:
+        """
+        Sample a next state from `Pr(s' | s, a)` (used by model-free learning).
+
+        :param s: current cell
+        :param a: chosen action
+        :param rng: random state for reproducible sampling
+        :return: sampled next cell
+        """
+        dist = self.transitions(s, a)
+        cells = list(dist.keys())
+        probs = list(dist.values())
+        idx = rng.choice(len(cells), p=probs)
+        return cells[idx]
+
+    def to_grid(
+        self,
+        values: Dict[Tuple[int, int], float],
+        *,
+        fill: float = np.nan,
+    ) -> np.ndarray:
+        """
+        Convert a dict over states into a 2D array for heatmap plotting.
+
+        Row 3 (top of the grid) is placed in the first array row so the
+        heatmap orientation matches the drawn grid.
+
+        :param values: mapping from cell to a scalar value
+        :param fill: value used for walls / missing cells
+        :return: array of shape `(n_rows, n_cols)`
+        """
+        grid = np.full((self.n_rows, self.n_cols), fill, dtype=float)
+        for (col, row), val in values.items():
+            # Array row 0 is the visual top row (row == n_rows).
+            grid[self.n_rows - row, col - 1] = val
+        return grid
+
+
+# #############################################################################
+# Exact planning: value iteration and policy iteration
+# #############################################################################
+
+
+def value_iteration(
+    env: GridWorld,
+    *,
+    max_sweeps: int = 100,
+    tol: float = 1e-6,
+) -> Tuple[List[Dict[Tuple[int, int], float]], List[float]]:
+    """
+    Run value iteration, recording the utilities after each sweep.
+
+    :param env: grid world to solve
+    :param max_sweeps: maximum number of Bellman sweeps
+    :param tol: stop once the max per-state change drops below this
+    :return: (snapshots, deltas) where snapshots[i] is the utility dict after
+        sweep i (snapshots[0] is the all-zero initialization) and deltas[i] is
+        the max change during sweep i
+    """
+    # Initialize utilities to zero everywhere (terminals stay at zero).
+    u = {s: 0.0 for s in env.states}
+    snapshots = [dict(u)]
+    deltas: List[float] = []
+    for _ in range(max_sweeps):
+        u_new = dict(u)
+        delta = 0.0
+        for s in env.nonterminal_states:
+            best = max(env.q_value(s, a, u) for a in env.actions)
+            delta = max(delta, abs(best - u[s]))
+            u_new[s] = best
+        u = u_new
+        snapshots.append(dict(u))
+        deltas.append(delta)
+        if delta < tol:
+            break
+    return snapshots, deltas
+
+
+def extract_policy(
+    env: GridWorld,
+    u: Dict[Tuple[int, int], float],
+) -> Dict[Tuple[int, int], str]:
+    """
+    Extract the greedy policy with respect to utilities `u`.
+
+    :param env: grid world
+    :param u: utility estimate over states
+    :return: mapping from each non-terminal cell to its greedy action
+    """
+    policy = {}
+    for s in env.nonterminal_states:
+        policy[s] = max(env.actions, key=lambda a: env.q_value(s, a, u))
+    return policy
+
+
+def policy_evaluation(
+    env: GridWorld,
+    policy: Dict[Tuple[int, int], str],
+) -> Dict[Tuple[int, int], float]:
+    """
+    Exactly evaluate a fixed policy by solving the linear Bellman system.
+
+    With the action fixed per state the `max` disappears and the Bellman
+    equations become linear, solvable in one shot with `numpy.linalg.solve`.
+
+    :param env: grid world
+    :param policy: action to take in each non-terminal state
+    :return: utility `U^pi(s)` for every state (terminals are zero)
+    """
+    states = env.nonterminal_states
+    index = {s: i for i, s in enumerate(states)}
+    n = len(states)
+    # Build (I - gamma P) U = b restricted to non-terminal states.
+    a_mat = np.eye(n)
+    b_vec = np.zeros(n)
+    for s in states:
+        i = index[s]
+        for s2, prob in env.transitions(s, policy[s]).items():
+            b_vec[i] += prob * env.reward(s2)
+            # Terminal next states contribute zero future utility.
+            if s2 in index:
+                a_mat[i, index[s2]] -= env.gamma * prob
+    solution = np.linalg.solve(a_mat, b_vec)
+    u = {s: 0.0 for s in env.states}
+    for s in states:
+        u[s] = float(solution[index[s]])
+    return u
+
+
+def policy_iteration(
+    env: GridWorld,
+    *,
+    initial_policy: Optional[Dict[Tuple[int, int], str]] = None,
+    max_iters: int = 50,
+) -> Tuple[List[Dict[Tuple[int, int], str]], List[int]]:
+    """
+    Run policy iteration, recording the policy after each improvement.
+
+    :param env: grid world to solve
+    :param initial_policy: starting policy (defaults to "Up" everywhere)
+    :param max_iters: maximum evaluate/improve rounds
+    :return: (policies, changes) where policies[i] is the policy after round i
+        (policies[0] is the initial policy) and changes[i] is the number of
+        states whose action changed during round i
+    """
+    if initial_policy is None:
+        policy = {s: "Up" for s in env.nonterminal_states}
+    else:
+        policy = dict(initial_policy)
+    policies = [dict(policy)]
+    changes: List[int] = []
+    for _ in range(max_iters):
+        u = policy_evaluation(env, policy)
+        new_policy = extract_policy(env, u)
+        n_changed = sum(
+            1 for s in env.nonterminal_states if new_policy[s] != policy[s]
+        )
+        policy = new_policy
+        policies.append(dict(policy))
+        changes.append(n_changed)
+        # Convergence: the policy is stable and therefore optimal.
+        if n_changed == 0:
+            break
+    return policies, changes
+
+
+# #############################################################################
+# Model-free learning: Q-learning
+# #############################################################################
+
+
+def _greedy_action(
+    env: GridWorld,
+    q: Dict[Tuple[Tuple[int, int], str], float],
+    s: Tuple[int, int],
+) -> str:
+    """
+    Return the action with the highest current Q-value at state `s`.
+    """
+    return max(env.actions, key=lambda a: q[(s, a)])
+
+
+def q_learning(
+    env: GridWorld,
+    *,
+    n_episodes: int,
+    alpha: float,
+    epsilon: float,
+    seed: int,
+    max_steps: int = 100,
+    snapshot_every: int = 0,
+) -> Dict[str, Any]:
+    """
+    Learn the optimal policy from experience tuples with tabular Q-learning.
+
+    :param env: grid world (its transition model is used only to sample
+        experience, never read directly by the learner)
+    :param n_episodes: number of training episodes
+    :param alpha: learning rate
+    :param epsilon: exploration probability for epsilon-greedy action choice
+    :param seed: random seed for reproducibility
+    :param max_steps: step cap per episode (guards against non-terminating runs)
+    :param snapshot_every: if > 0, store the greedy policy every this many
+        episodes
+    :return: dict with the final Q-table, per-episode returns, visit counts,
+        the final greedy policy, and optional policy snapshots
+    """
+    rng = np.random.RandomState(seed)
+    # Initialize all Q-values to zero.
+    q = {(s, a): 0.0 for s in env.states for a in env.actions}
+    visit_counts = {s: 0 for s in env.states}
+    returns: List[float] = []
+    snapshots: List[Tuple[int, Dict[Tuple[int, int], str]]] = []
+    for episode in range(n_episodes):
+        s = env.start
+        total_reward = 0.0
+        for _ in range(max_steps):
+            visit_counts[s] += 1
+            # Epsilon-greedy action selection.
+            if rng.rand() < epsilon:
+                a = env.actions[rng.randint(len(env.actions))]
+            else:
+                a = _greedy_action(env, q, s)
+            s2 = env.sample_next(s, a, rng)
+            r = env.reward(s2)
+            total_reward += r
+            # TD target uses the best next-state Q (zero past a terminal).
+            if env.is_terminal(s2):
+                td_target = r
+            else:
+                best_next = max(q[(s2, a2)] for a2 in env.actions)
+                td_target = r + env.gamma * best_next
+            q[(s, a)] += alpha * (td_target - q[(s, a)])
+            s = s2
+            if env.is_terminal(s):
+                break
+        returns.append(total_reward)
+        if snapshot_every > 0 and (episode + 1) % snapshot_every == 0:
+            snapshots.append((episode + 1, _greedy_policy_from_q(env, q)))
+    result = {
+        "q": q,
+        "returns": returns,
+        "visit_counts": visit_counts,
+        "policy": _greedy_policy_from_q(env, q),
+        "snapshots": snapshots,
+    }
+    return result
+
+
+def _greedy_policy_from_q(
+    env: GridWorld,
+    q: Dict[Tuple[Tuple[int, int], str], float],
+) -> Dict[Tuple[int, int], str]:
+    """
+    Derive the greedy policy implied by a Q-table.
+    """
+    return {s: _greedy_action(env, q, s) for s in env.nonterminal_states}
+
+
+def max_q_values(
+    env: GridWorld,
+    q: Dict[Tuple[Tuple[int, int], str], float],
+) -> Dict[Tuple[int, int], float]:
+    """
+    Return `max_a Q(s, a)` per state, the learned value estimate.
+    """
+    return {s: max(q[(s, a)] for a in env.actions) for s in env.states}
+
+
+# #############################################################################
+# Drawing helpers
+# #############################################################################
+
+
+# Fill colors for the special cells.
+_COLOR_START = "#cfe8ff"
+_COLOR_GOAL = "#a8e6a3"
+_COLOR_PIT = "#f4a6a6"
+_COLOR_WALL = "#9e9e9e"
+_COLOR_EMPTY = "#ffffff"
+
+
+def _cell_facecolor(env: GridWorld, cell: Tuple[int, int]) -> str:
+    """
+    Return the fill color for a cell based on its role.
+    """
+    if cell in env.walls:
+        return _COLOR_WALL
+    if cell == (4, 3):
+        return _COLOR_GOAL
+    if cell == (4, 2):
+        return _COLOR_PIT
+    if cell == env.start:
+        return _COLOR_START
+    return _COLOR_EMPTY
+
+
+def _draw_grid_base(
+    env: GridWorld,
+    ax: matplotlib.axes.Axes,
+    *,
+    annotate_coords: bool = False,
+    highlight: Optional[Tuple[int, int]] = None,
+) -> None:
+    """
+    Draw the empty 4x3 grid with colored special cells.
+
+    :param env: grid world
+    :param ax: axes to draw on
+    :param annotate_coords: if True, label each cell with its `(col, row)`
+    :param highlight: optional cell to outline in bold
+    """
+    for col in range(1, env.n_cols + 1):
+        for row in range(1, env.n_rows + 1):
+            cell = (col, row)
+            rect = mpatches.Rectangle(
+                (col - 0.5, row - 0.5),
+                1.0,
+                1.0,
+                facecolor=_cell_facecolor(env, cell),
+                edgecolor="black",
+                linewidth=1.5,
+            )
+            ax.add_patch(rect)
+            # Label the terminals and the start with their role.
+            label = None
+            if cell == (4, 3):
+                label = "+1"
+            elif cell == (4, 2):
+                label = "-1"
+            elif cell == env.start:
+                label = "START"
+            elif cell in env.walls:
+                label = "WALL"
+            if label is not None:
+                ax.text(
+                    col,
+                    row + 0.32,
+                    label,
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                    fontweight="bold",
+                )
+            if annotate_coords:
+                ax.text(
+                    col,
+                    row - 0.32,
+                    f"({col},{row})",
+                    ha="center",
+                    va="center",
+                    fontsize=8,
+                    color="dimgray",
+                )
+    if highlight is not None:
+        rect = mpatches.Rectangle(
+            (highlight[0] - 0.5, highlight[1] - 0.5),
+            1.0,
+            1.0,
+            fill=False,
+            edgecolor="darkblue",
+            linewidth=3.5,
+        )
+        ax.add_patch(rect)
+    ax.set_xlim(0.4, env.n_cols + 0.6)
+    ax.set_ylim(0.4, env.n_rows + 0.6)
+    ax.set_xticks(range(1, env.n_cols + 1))
+    ax.set_yticks(range(1, env.n_rows + 1))
+    ax.set_aspect("equal")
+
+
+def _draw_policy_arrows(
+    env: GridWorld,
+    ax: matplotlib.axes.Axes,
+    policy: Dict[Tuple[int, int], str],
+    *,
+    color: str = "black",
+) -> None:
+    """
+    Draw an arrow for each non-terminal cell showing its policy action.
+    """
+    for s, a in policy.items():
+        if s in env.walls or env.is_terminal(s):
+            continue
+        d_x, d_y = _ARROW_DELTA[a]
+        ax.annotate(
+            "",
+            xy=(s[0] + d_x, s[1] + d_y),
+            xytext=(s[0] - d_x, s[1] - d_y),
+            arrowprops=dict(arrowstyle="-|>", color=color, linewidth=2.5),
+        )
+
+
+def _draw_value_heatmap(
+    env: GridWorld,
+    ax: matplotlib.axes.Axes,
+    u: Dict[Tuple[int, int], float],
+    *,
+    title: str,
+    cmap: str = "RdYlGn",
+) -> None:
+    """
+    Draw a utility heatmap with per-cell value annotations.
+    """
+    grid = env.to_grid(u)
+    sns.heatmap(
+        grid,
+        ax=ax,
+        cmap=cmap,
+        center=0.0,
+        annot=True,
+        fmt=".2f",
+        cbar=False,
+        linewidths=1.0,
+        linecolor="black",
+        annot_kws={"fontsize": 10},
+        mask=np.isnan(grid),
+    )
+    # Mark the wall cell explicitly since it is masked in the heatmap.
+    for wall in env.walls:
+        ax.add_patch(
+            mpatches.Rectangle(
+                (wall[0] - 1, env.n_rows - wall[1]),
+                1.0,
+                1.0,
+                facecolor=_COLOR_WALL,
+                edgecolor="black",
+            )
+        )
+    ax.set_title(title, fontsize=13, fontweight="bold")
+    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+    ax.set_xlabel("col")
+    ax.set_ylabel("row")
+
+
+def _comment_panel(ax: matplotlib.axes.Axes, text: str) -> None:
+    """
+    Render a wheat-colored comment panel with a bold "Comments" title.
+    """
+    ax.axis("off")
+    ax.set_title("Comments", fontsize=14, fontweight="bold", pad=20)
+    htutori.add_fitted_text_box(ax, text, max_fontsize=12, min_fontsize=8)
+
+
+# #############################################################################
+# Cell 1.1: The 4x3 grid and its states
+# #############################################################################
+
+
+def cell1_1_show_grid(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Draw the 4x3 grid world layout that every later algorithm reasons about.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (7, 5)
+    env = GridWorld()
+    _, ax = plt.subplots(figsize=figsize)
+    _draw_grid_base(env, ax, annotate_coords=True)
+    ax.set_title(
+        "The 4x3 grid world (11 reachable states)",
+        fontsize=14,
+        fontweight="bold",
+    )
+    plt.tight_layout()
+    plt.show()
+    print("env.states (n=%d):" % len(env.states), env.states)
+    print("env.terminals=", env.terminals)
+    print("env.walls=", env.walls)
+
+
+# #############################################################################
+# Cell 1.2: Stochastic action model
+# #############################################################################
+
+
+def cell1_2_stochastic_action(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Interactively show how an intended action spreads probability mass.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    action_dropdown = ipywidgets.Dropdown(
+        options=_ACTIONS,
+        value="Up",
+        description="action:",
+        style={"description_width": "initial"},
+    )
+    p_slider, p_box = htutori.build_widget_control(
+        name="p_intended",
+        description="probability intended action succeeds",
+        min_val=0.5,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.8,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+    # Use a central cell that has a wall and boundary nearby to show bouncing.
+    focal = (3, 2)
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.p_intended = p_slider.value
+            action = action_dropdown.value
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            # Panel 1: focal cell with arrows whose width encodes probability.
+            _draw_grid_base(env, ax1, highlight=focal)
+            for direction in _ACTIONS:
+                s2 = env._attempt_move(focal, direction)
+                # Probability assigned to this direction by the slip model.
+                if direction == action:
+                    prob = env.p_intended
+                elif direction in _PERPENDICULAR[action]:
+                    prob = (1.0 - env.p_intended) / 2.0
+                else:
+                    prob = 0.0
+                if prob == 0.0:
+                    continue
+                d_x, d_y = _ACTION_DELTA[direction]
+                if s2 == focal:
+                    # Blocked move: draw a small self-loop marker.
+                    ax1.text(
+                        focal[0],
+                        focal[1],
+                        "stay\n%.2f" % prob,
+                        ha="center",
+                        va="center",
+                        fontsize=9,
+                        color="firebrick",
+                    )
+                else:
+                    ax1.annotate(
+                        "",
+                        xy=(focal[0] + d_x * 0.45, focal[1] + d_y * 0.45),
+                        xytext=(focal[0], focal[1]),
+                        arrowprops=dict(
+                            arrowstyle="-|>",
+                            color="steelblue",
+                            linewidth=1.0 + 8.0 * prob,
+                        ),
+                    )
+                    ax1.text(
+                        focal[0] + d_x * 0.62,
+                        focal[1] + d_y * 0.62,
+                        "%.2f" % prob,
+                        ha="center",
+                        va="center",
+                        fontsize=9,
+                        color="steelblue",
+                    )
+            ax1.set_title(
+                "Intended action '%s' from cell %s" % (action, focal),
+                fontsize=13,
+                fontweight="bold",
+            )
+            # Panel 2: comments.
+            p_perp = (1.0 - env.p_intended) / 2.0
+            text = (
+                "Parameters:\n"
+                "  action: %s\n"
+                "  p_intended: %.2f\n\n"
+                "Outcome probabilities:\n"
+                "  intended: %.2f\n"
+                "  each perpendicular: %.2f\n\n"
+                "Key idea:\n"
+                "- The wheels slip: the agent\n"
+                "  veers perpendicular.\n"
+                "- Walls and boundaries bounce\n"
+                "  the agent back in place.\n"
+                "- As p_intended -> 1.0 the\n"
+                "  world becomes deterministic."
+                % (action, env.p_intended, env.p_intended, p_perp)
+            )
+            _comment_panel(ax2, text)
+            plt.tight_layout()
+            plt.show()
+
+    action_dropdown.observe(update_plot, names="value")
+    p_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Pick an action and reliability; watch probability spread:"
+                ),
+                action_dropdown,
+                p_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 1.3: Transition model as an explicit table
+# #############################################################################
+
+
+def cell1_3_transition_table(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Display the explicit `Pr(s' | s, a)` row for a chosen state and action.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (7, 5)
+    env = GridWorld()
+    state_dropdown = ipywidgets.Dropdown(
+        options=[str(s) for s in env.nonterminal_states],
+        value=str(env.start),
+        description="state:",
+        style={"description_width": "initial"},
+    )
+    action_dropdown = ipywidgets.Dropdown(
+        options=_ACTIONS,
+        value="Up",
+        description="action:",
+        style={"description_width": "initial"},
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            s = eval(state_dropdown.value)
+            a = action_dropdown.value
+            dist = env.transitions(s, a)
+            # Build the probability row as a DataFrame.
+            df = pd.DataFrame(
+                {
+                    "next_state": [str(s2) for s2 in dist],
+                    "probability": [round(p, 3) for p in dist.values()],
+                }
+            ).sort_values("probability", ascending=False)
+            # Draw the grid shaded by transition probability.
+            prob_map = {cell: 0.0 for cell in env.states}
+            for s2, p in dist.items():
+                prob_map[s2] = p
+            _, ax = plt.subplots(figsize=figsize)
+            grid = env.to_grid(prob_map, fill=np.nan)
+            sns.heatmap(
+                grid,
+                ax=ax,
+                cmap="Blues",
+                annot=True,
+                fmt=".2f",
+                cbar=False,
+                linewidths=1.0,
+                linecolor="black",
+                vmin=0.0,
+                vmax=1.0,
+                mask=np.isnan(grid),
+            )
+            ax.add_patch(
+                mpatches.Rectangle(
+                    (s[0] - 1, env.n_rows - s[1]),
+                    1.0,
+                    1.0,
+                    fill=False,
+                    edgecolor="darkorange",
+                    linewidth=3.5,
+                )
+            )
+            ax.set_title(
+                "Pr(s' | s=%s, a=%s)" % (s, a),
+                fontsize=13,
+                fontweight="bold",
+            )
+            ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+            ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+            ax.set_xlabel("col")
+            ax.set_ylabel("row")
+            plt.tight_layout()
+            plt.show()
+            display(df.reset_index(drop=True))
+            print("sum of probabilities=", round(sum(dist.values()), 6))
+
+    state_dropdown.observe(update_plot, names="value")
+    action_dropdown.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label("Select a state and action to see the model row:"),
+                state_dropdown,
+                action_dropdown,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 1.4: Rewards and episode returns
+# #############################################################################
+
+
+def _sample_trajectory(
+    env: GridWorld,
+    policy: Dict[Tuple[int, int], str],
+    *,
+    seed: int,
+    max_steps: int = 30,
+) -> List[Tuple[int, int]]:
+    """
+    Roll out a trajectory from START following `policy` under the slip model.
+    """
+    rng = np.random.RandomState(seed)
+    s = env.start
+    path: List[Tuple[int, int]] = [s]
+    for _ in range(max_steps):
+        if env.is_terminal(s):
+            break
+        s = env.sample_next(s, policy[s], rng)
+        path.append(s)
+    return path
+
+
+def cell1_4_rewards_and_returns(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Show per-cell rewards and the discounted return of a sample trajectory.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    # A fixed sensible policy used only to produce an illustrative path.
+    base_policy = {
+        (1, 1): "Up",
+        (1, 2): "Up",
+        (1, 3): "Right",
+        (2, 3): "Right",
+        (3, 3): "Right",
+        (2, 1): "Right",
+        (3, 1): "Up",
+        (4, 1): "Up",
+        (3, 2): "Up",
+    }
+    r_slider, r_box = htutori.build_widget_control(
+        name="r_step",
+        description="living reward per step",
+        min_val=-1.0,
+        max_val=0.0,
+        step=0.02,
+        initial_value=-0.04,
+        is_float=True,
+    )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    seed_slider, seed_box = htutori.build_widget_control(
+        name="seed",
+        description="trajectory seed",
+        min_val=0,
+        max_val=100,
+        step=1,
+        initial_value=1,
+        is_float=False,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.r_step = r_slider.value
+            gamma = gamma_slider.value
+            path = _sample_trajectory(env, base_policy, seed=seed_slider.value)
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            # Panel 1: grid annotated with rewards and the trajectory path.
+            _draw_grid_base(env, ax1)
+            for col in range(1, env.n_cols + 1):
+                for row in range(1, env.n_rows + 1):
+                    cell = (col, row)
+                    if cell in env.walls:
+                        continue
+                    ax1.text(
+                        col,
+                        row - 0.05,
+                        "%.2f" % env.reward(cell),
+                        ha="center",
+                        va="center",
+                        fontsize=10,
+                    )
+            xs = [c[0] for c in path]
+            ys = [c[1] for c in path]
+            ax1.plot(
+                xs, ys, "-o", color="darkblue", linewidth=2.0, markersize=6
+            )
+            ax1.set_title(
+                "Rewards and a sample trajectory",
+                fontsize=13,
+                fontweight="bold",
+            )
+            # Panel 2: comments with running discounted return.
+            running = 0.0
+            lines = []
+            for t in range(1, len(path)):
+                r_t = env.reward(path[t])
+                running += (gamma**t) * r_t
+                if t <= 8:
+                    lines.append(
+                        "  t=%d enter %s r=%.2f" % (t, path[t], r_t)
+                    )
+            text = (
+                "Parameters:\n"
+                "  r_step: %.2f\n"
+                "  gamma: %.2f\n\n"
+                "Discounted return G = %.3f\n\n"
+                "First steps:\n%s\n\n"
+                "Key idea:\n"
+                "- Return is the discounted\n"
+                "  sum of rewards, not the\n"
+                "  final cell alone."
+                % (env.r_step, gamma, running, "\n".join(lines))
+            )
+            _comment_panel(ax2, text)
+            plt.tight_layout()
+            plt.show()
+
+    r_slider.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    seed_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Change the living reward and discount; watch the return:"
+                ),
+                r_box,
+                gamma_box,
+                seed_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 2.1: The Bellman equation for one state
+# #############################################################################
+
+
+def cell2_1_bellman_one_state(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Show the value of each action at one state under converged utilities.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (16, 5)
+    env = GridWorld()
+    state_dropdown = ipywidgets.Dropdown(
+        options=[str(s) for s in env.nonterminal_states],
+        value="(3, 1)",
+        description="state:",
+        style={"description_width": "initial"},
+    )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            s = eval(state_dropdown.value)
+            # Solve the MDP to get utilities used in the one-step lookahead.
+            snapshots, _ = value_iteration(env)
+            u = snapshots[-1]
+            q_vals = {a: env.q_value(s, a, u) for a in env.actions}
+            best_action = max(q_vals, key=lambda a: q_vals[a])
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            # Panel 1: grid with the inspected state highlighted.
+            _draw_grid_base(env, ax1, highlight=s)
+            ax1.set_title("Inspected state %s" % (s,), fontsize=13, fontweight="bold")
+            # Panel 2: bar chart of action values, best one highlighted.
+            colors = [
+                "seagreen" if a == best_action else "steelblue"
+                for a in env.actions
+            ]
+            ax2.bar(env.actions, [q_vals[a] for a in env.actions], color=colors)
+            ax2.axhline(0.0, color="black", linewidth=0.8)
+            ax2.set_ylabel("expected action value Q(s, a)")
+            ax2.set_title(
+                "Action values (max kept)", fontsize=13, fontweight="bold"
+            )
+            ax2.grid(True, alpha=0.3)
+            # Panel 3: comments.
+            text = (
+                "State: %s\n"
+                "gamma: %.2f\n\n"
+                "Action values:\n%s\n\n"
+                "Best action: %s\n"
+                "U(s) = %.3f\n\n"
+                "Key idea:\n"
+                "- Utility = value of the\n"
+                "  best action, not average.\n"
+                "- The max makes the system\n"
+                "  nonlinear -> we iterate."
+                % (
+                    s,
+                    env.gamma,
+                    "\n".join(
+                        "  %-6s %.3f" % (a, q_vals[a]) for a in env.actions
+                    ),
+                    best_action,
+                    q_vals[best_action],
+                )
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    state_dropdown.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label("Pick a state to see the value of each action:"),
+                state_dropdown,
+                gamma_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 2.2: Value iteration converging over sweeps
+# #############################################################################
+
+
+def cell2_2_value_iteration(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Step through value iteration sweeps and watch utilities converge.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (16, 5)
+    env = GridWorld()
+    iter_slider, iter_box = htutori.build_widget_control(
+        name="iteration",
+        description="value iteration sweep",
+        min_val=0,
+        max_val=30,
+        step=1,
+        initial_value=0,
+        is_float=False,
+    )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.5,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    r_slider, r_box = htutori.build_widget_control(
+        name="r_step",
+        description="living reward",
+        min_val=-1.0,
+        max_val=0.0,
+        step=0.02,
+        initial_value=-0.04,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            env.r_step = r_slider.value
+            snapshots, deltas = value_iteration(env, max_sweeps=30)
+            # Clamp the requested sweep to what is available.
+            i = min(iter_slider.value, len(snapshots) - 1)
+            u = snapshots[i]
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            _draw_value_heatmap(
+                env, ax1, u, title="Utilities after sweep %d" % i
+            )
+            # Panel 2: convergence curve of the max change per sweep.
+            ax2.plot(
+                range(1, len(deltas) + 1),
+                deltas,
+                "-o",
+                color="darkorange",
+            )
+            if 1 <= i <= len(deltas):
+                ax2.axvline(i, color="gray", linestyle="--")
+            ax2.set_xlabel("sweep")
+            ax2.set_ylabel("max |U_{i+1} - U_i|")
+            ax2.set_title("Convergence", fontsize=13, fontweight="bold")
+            ax2.grid(True, alpha=0.3)
+            # Panel 3: comments.
+            converged = len(deltas)
+            text = (
+                "Parameters:\n"
+                "  sweep: %d / %d\n"
+                "  gamma: %.2f\n"
+                "  r_step: %.2f\n\n"
+                "U(start) = %.3f\n"
+                "sweeps to converge: %d\n\n"
+                "Key idea:\n"
+                "- Value flows backward from\n"
+                "  the terminals, one ring of\n"
+                "  cells per sweep.\n"
+                "- The change shrinks each\n"
+                "  sweep (geometric)."
+                % (
+                    i,
+                    len(snapshots) - 1,
+                    env.gamma,
+                    env.r_step,
+                    u[env.start],
+                    converged,
+                )
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    iter_slider.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    r_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Step through the sweeps and watch utilities spread:"
+                ),
+                iter_box,
+                gamma_box,
+                r_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 2.3: Extracting the optimal policy
+# #############################################################################
+
+
+def cell2_3_extract_policy(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Show the greedy policy extracted from converged utilities.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    r_slider, r_box = htutori.build_widget_control(
+        name="r_step",
+        description="living reward",
+        min_val=-2.0,
+        max_val=0.0,
+        step=0.05,
+        initial_value=-0.04,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.r_step = r_slider.value
+            snapshots, _ = value_iteration(env)
+            u = snapshots[-1]
+            policy = extract_policy(env, u)
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            # Panel 1: utilities heatmap with policy arrows overlaid.
+            _draw_value_heatmap(env, ax1, u, title="Optimal policy over utilities")
+            # Translate policy arrows into heatmap coordinates.
+            for s, a in policy.items():
+                d_x, d_y = _ARROW_DELTA[a]
+                x = s[0] - 0.5
+                y = env.n_rows - s[1] + 0.5
+                ax1.annotate(
+                    "",
+                    xy=(x + d_x, y - d_y),
+                    xytext=(x - d_x, y + d_y),
+                    arrowprops=dict(arrowstyle="-|>", color="black", linewidth=2.0),
+                )
+            # Panel 2: comments.
+            text = (
+                "Parameters:\n"
+                "  r_step: %.2f\n\n"
+                "U(start) = %.3f\n\n"
+                "Key idea:\n"
+                "- The policy is greedy w.r.t.\n"
+                "  the converged utilities.\n"
+                "- Large penalty -> short risky\n"
+                "  path near the -1 cell.\n"
+                "- Near-zero penalty -> long\n"
+                "  safe path avoiding -1."
+                % (env.r_step, u[env.start])
+            )
+            _comment_panel(ax2, text)
+            plt.tight_layout()
+            plt.show()
+
+    r_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Change the living reward and watch the policy change:"
+                ),
+                r_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 3.1: Policy evaluation for a fixed policy
+# #############################################################################
+
+
+# Preset policies used to illustrate policy evaluation.
+def _preset_policy(env: GridWorld, name: str) -> Dict[Tuple[int, int], str]:
+    """
+    Return one of several named preset policies over the non-terminal states.
+    """
+    if name == "always-up":
+        return {s: "Up" for s in env.nonterminal_states}
+    if name == "always-right":
+        return {s: "Right" for s in env.nonterminal_states}
+    if name == "random":
+        rng = np.random.RandomState(0)
+        return {
+            s: env.actions[rng.randint(len(env.actions))]
+            for s in env.nonterminal_states
+        }
+    # Hand-tuned reasonable policy.
+    return {
+        (1, 1): "Up",
+        (1, 2): "Up",
+        (1, 3): "Right",
+        (2, 3): "Right",
+        (3, 3): "Right",
+        (2, 1): "Left",
+        (3, 1): "Up",
+        (4, 1): "Up",
+        (3, 2): "Up",
+    }
+
+
+def cell3_1_policy_evaluation(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Evaluate a fixed policy by solving the linear Bellman system.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    policy_dropdown = ipywidgets.Dropdown(
+        options=["random", "always-up", "always-right", "hand-tuned"],
+        value="hand-tuned",
+        description="policy:",
+        style={"description_width": "initial"},
+    )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            policy = _preset_policy(env, policy_dropdown.value)
+            u = policy_evaluation(env, policy)
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            _draw_value_heatmap(
+                env, ax1, u, title="U^pi for policy '%s'" % policy_dropdown.value
+            )
+            for s, a in policy.items():
+                d_x, d_y = _ARROW_DELTA[a]
+                x = s[0] - 0.5
+                y = env.n_rows - s[1] + 0.5
+                ax1.annotate(
+                    "",
+                    xy=(x + d_x, y - d_y),
+                    xytext=(x - d_x, y + d_y),
+                    arrowprops=dict(arrowstyle="-|>", color="black", linewidth=2.0),
+                )
+            text = (
+                "Parameters:\n"
+                "  policy: %s\n"
+                "  gamma: %.2f\n\n"
+                "U(start) = %.3f\n\n"
+                "Key idea:\n"
+                "- A fixed action per state\n"
+                "  drops the max: the Bellman\n"
+                "  equations become linear.\n"
+                "- Solved in one shot with\n"
+                "  numpy.linalg.solve.\n"
+                "- A bad policy yields low\n"
+                "  utilities."
+                % (policy_dropdown.value, env.gamma, u[env.start])
+            )
+            _comment_panel(ax2, text)
+            plt.tight_layout()
+            plt.show()
+
+    policy_dropdown.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label("Pick a fixed policy and see how good it is:"),
+                policy_dropdown,
+                gamma_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 3.2: Policy improvement and iteration to optimality
+# #############################################################################
+
+
+def cell3_2_policy_iteration(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Step through policy iteration rounds and watch arrows flip to optimal.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (16, 5)
+    env = GridWorld()
+    # Start from a deliberately poor policy so improvement is visible.
+    initial = {s: "Down" for s in env.nonterminal_states}
+    policies, changes = policy_iteration(env, initial_policy=initial)
+    iter_slider, iter_box = htutori.build_widget_control(
+        name="iteration",
+        description="evaluate/improve round",
+        min_val=0,
+        max_val=len(policies) - 1,
+        step=1,
+        initial_value=0,
+        is_float=False,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            i = min(iter_slider.value, len(policies) - 1)
+            before = policies[max(i - 1, 0)]
+            after = policies[i]
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            _draw_grid_base(env, ax1)
+            _draw_policy_arrows(env, ax1, before, color="gray")
+            ax1.set_title(
+                "Policy before round %d" % i, fontsize=13, fontweight="bold"
+            )
+            _draw_grid_base(env, ax2)
+            _draw_policy_arrows(env, ax2, after, color="darkblue")
+            ax2.set_title(
+                "Policy after round %d" % i, fontsize=13, fontweight="bold"
+            )
+            n_changed = changes[i - 1] if 1 <= i <= len(changes) else 0
+            text = (
+                "Round: %d / %d\n\n"
+                "States changed action: %d\n"
+                "rounds to converge: %d\n\n"
+                "Key idea:\n"
+                "- Evaluate the policy, then\n"
+                "  make it greedy. Repeat.\n"
+                "- Terminates when no state\n"
+                "  changes action -> optimal.\n"
+                "- Converges in very few\n"
+                "  rounds."
+                % (i, len(policies) - 1, n_changed, len(changes))
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    iter_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Step through policy iteration; watch arrows flip:"
+                ),
+                iter_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 3.3: Value iteration vs policy iteration
+# #############################################################################
+
+
+def cell3_3_compare_solvers(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Compare convergence of value iteration and policy iteration.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (16, 5)
+    env = GridWorld()
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.5,
+        max_val=0.99,
+        step=0.01,
+        initial_value=0.9,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            _, vi_deltas = value_iteration(env, max_sweeps=200)
+            initial = {s: "Down" for s in env.nonterminal_states}
+            _, pi_changes = policy_iteration(env, initial_policy=initial)
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            # Panel 1: value iteration convergence.
+            ax1.plot(
+                range(1, len(vi_deltas) + 1),
+                vi_deltas,
+                "-o",
+                color="darkorange",
+            )
+            ax1.set_xlabel("sweep")
+            ax1.set_ylabel("max utility change")
+            ax1.set_title(
+                "Value iteration", fontsize=13, fontweight="bold"
+            )
+            ax1.grid(True, alpha=0.3)
+            # Panel 2: policy iteration convergence.
+            ax2.plot(
+                range(1, len(pi_changes) + 1),
+                pi_changes,
+                "-s",
+                color="seagreen",
+            )
+            ax2.set_xlabel("round")
+            ax2.set_ylabel("states changed action")
+            ax2.set_title(
+                "Policy iteration", fontsize=13, fontweight="bold"
+            )
+            ax2.grid(True, alpha=0.3)
+            # Panel 3: comments with a small summary table.
+            text = (
+                "gamma: %.2f\n\n"
+                "value iteration sweeps: %d\n"
+                "policy iteration rounds: %d\n\n"
+                "Key idea:\n"
+                "- Value iteration: many cheap\n"
+                "  sweeps.\n"
+                "- Policy iteration: few\n"
+                "  expensive rounds.\n"
+                "- As gamma -> 1, value\n"
+                "  iteration slows much more.\n"
+                "- Both reach the same optimal\n"
+                "  policy."
+                % (env.gamma, len(vi_deltas), len(pi_changes))
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    gamma_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Change gamma and compare how fast each method converges:"
+                ),
+                gamma_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 4.1: Why reinforcement learning is harder than planning
+# #############################################################################
+
+
+def cell4_1_planning_vs_learning(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Contrast planning (knows the model) with learning (must experience it).
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+    # Panel 1: the grid with the transition table marked unknown.
+    _draw_grid_base(env, ax1)
+    ax1.text(
+        2.5,
+        2.0,
+        "Pr(s' | s, a)\nUNKNOWN\nto the agent",
+        ha="center",
+        va="center",
+        fontsize=14,
+        color="firebrick",
+        fontweight="bold",
+        bbox=dict(boxstyle="round", facecolor="white", alpha=0.7),
+    )
+    ax1.set_title(
+        "Same world, blindfolded", fontsize=13, fontweight="bold"
+    )
+    # Panel 2: comments comparing planning and learning.
+    text = (
+        "Planning (Parts 2-3):\n"
+        "- Knows Pr(s'|s,a) and R.\n"
+        "- Solves Bellman equations.\n\n"
+        "Learning (Part 4):\n"
+        "- Does NOT know the model.\n"
+        "- Sees only experience\n"
+        "  tuples (s, a, r, s').\n"
+        "- Must act to discover the\n"
+        "  rules.\n\n"
+        "Goal is unchanged: maximize\n"
+        "expected return."
+    )
+    _comment_panel(ax2, text)
+    plt.tight_layout()
+    plt.show()
+
+
+# #############################################################################
+# Cell 4.2: The Q-learning update rule
+# #############################################################################
+
+
+def cell4_2_q_update_rule(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Show how a single experience tuple nudges one Q-value via the TD update.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (14, 5)
+    env = GridWorld()
+    alpha_slider, alpha_box = htutori.build_widget_control(
+        name="alpha",
+        description="learning rate",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.5,
+        is_float=True,
+    )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            alpha = alpha_slider.value
+            # A concrete illustrative experience tuple s -a-> s' with reward r.
+            s, a, s2 = (3, 1), "Up", (3, 2)
+            r = env.reward(s2)
+            # Use converged utilities as a stand-in for current Q(s', .).
+            snapshots, _ = value_iteration(env)
+            u = snapshots[-1]
+            q_old = 0.0
+            # Use the converged utility of s' as the current best next value.
+            best_next = u[s2]
+            td_target = r + env.gamma * best_next
+            td_error = td_target - q_old
+            q_new = q_old + alpha * td_error
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            # Panel 1: the focused transition diagram.
+            _draw_grid_base(env, ax1, highlight=s)
+            ax1.annotate(
+                "",
+                xy=(s2[0], s2[1] - 0.1),
+                xytext=(s[0], s[1] + 0.1),
+                arrowprops=dict(arrowstyle="-|>", color="darkblue", linewidth=3.0),
+            )
+            ax1.text(
+                (s[0] + s2[0]) / 2 + 0.25,
+                (s[1] + s2[1]) / 2,
+                "a=%s\nr=%.2f" % (a, r),
+                ha="left",
+                va="center",
+                fontsize=10,
+                color="darkblue",
+            )
+            ax1.set_title(
+                "One experience tuple", fontsize=13, fontweight="bold"
+            )
+            # Panel 2: comments breaking the update into parts.
+            text = (
+                "Update:\n"
+                "Q <- Q + alpha[r + gamma\n"
+                "      max Q(s',.) - Q]\n\n"
+                "Parameters:\n"
+                "  alpha: %.2f\n"
+                "  gamma: %.2f\n\n"
+                "For tuple (%s, %s, %.2f, %s):\n"
+                "  old Q: %.3f\n"
+                "  TD target: %.3f\n"
+                "  TD error: %.3f\n"
+                "  new Q: %.3f\n\n"
+                "Key idea:\n"
+                "- TD error is surprise.\n"
+                "- alpha controls the nudge.\n"
+                "- No model needed."
+                % (
+                    alpha,
+                    env.gamma,
+                    s,
+                    a,
+                    r,
+                    s2,
+                    q_old,
+                    td_target,
+                    td_error,
+                    q_new,
+                )
+            )
+            _comment_panel(ax2, text)
+            plt.tight_layout()
+            plt.show()
+
+    alpha_slider.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Adjust learning rate and discount; watch the TD update:"
+                ),
+                alpha_box,
+                gamma_box,
+                output,
+            ]
+        )
+    )
+
+
+# #############################################################################
+# Cell 4.3: Exploration vs exploitation with epsilon-greedy
+# #############################################################################
+
+
+def cell4_3_exploration(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Compare state coverage under low vs high exploration.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (16, 5)
+    env = GridWorld()
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
+        name="epsilon",
+        description="exploration probability",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.1,
+        is_float=True,
+    )
+    n_exp_slider, n_box = htutori.build_log_widget_control(
+        name="log(n_episodes)",
+        description="number of training episodes",
+        min_exp=4,
+        max_exp=11,
+        initial_exp=7,
+        base=2,
+    )
+    seed_slider, seed_box = htutori.build_widget_control(
+        name="seed",
+        description="random seed",
+        min_val=0,
+        max_val=100,
+        step=1,
+        initial_value=42,
+        is_float=False,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            n_episodes = 2**n_exp_slider.value
+            epsilon = epsilon_slider.value
+            seed = seed_slider.value
+            # Run two agents: the chosen epsilon and a high-exploration agent.
+            low = q_learning(
+                env,
+                n_episodes=n_episodes,
+                alpha=0.5,
+                epsilon=epsilon,
+                seed=seed,
+            )
+            high = q_learning(
+                env,
+                n_episodes=n_episodes,
+                alpha=0.5,
+                epsilon=0.9,
+                seed=seed,
+            )
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            _draw_visit_heatmap(
+                env,
+                ax1,
+                low["visit_counts"],
+                title="Visits at epsilon=%.2f" % epsilon,
+            )
+            _draw_visit_heatmap(
+                env,
+                ax2,
+                high["visit_counts"],
+                title="Visits at epsilon=0.90",
+            )
+            text = (
+                "Parameters:\n"
+                "  epsilon: %.2f\n"
+                "  n_episodes: %d\n"
+                "  seed: %d\n\n"
+                "Key idea:\n"
+                "- Greedy (epsilon=0) may never\n"
+                "  visit off-path states.\n"
+                "- epsilon near 1 wastes\n"
+                "  episodes acting randomly.\n"
+                "- Good learning balances the\n"
+                "  two, often decaying epsilon."
+                % (epsilon, n_episodes, seed)
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    epsilon_slider.observe(update_plot, names="value")
+    n_exp_slider.observe(update_plot, names="value")
+    seed_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Adjust exploration and compare state coverage:"
+                ),
+                epsilon_box,
+                n_box,
+                seed_box,
+                output,
+            ]
+        )
+    )
+
+
+def _draw_visit_heatmap(
+    env: GridWorld,
+    ax: matplotlib.axes.Axes,
+    visit_counts: Dict[Tuple[int, int], int],
+    *,
+    title: str,
+) -> None:
+    """
+    Draw a heatmap of per-state visit counts.
+    """
+    grid = env.to_grid({s: float(c) for s, c in visit_counts.items()})
+    sns.heatmap(
+        grid,
+        ax=ax,
+        cmap="viridis",
+        annot=True,
+        fmt=".0f",
+        cbar=False,
+        linewidths=1.0,
+        linecolor="black",
+        mask=np.isnan(grid),
+    )
+    ax.set_title(title, fontsize=13, fontweight="bold")
+    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+    ax.set_xlabel("col")
+    ax.set_ylabel("row")
+
+
+# #############################################################################
+# Cell 4.4: Watching Q-learning learn the optimal policy
+# #############################################################################
+
+
+def cell4_4_q_learning_converges(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Train Q-learning and compare its policy to the value iteration optimum.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (18, 5)
+    env = GridWorld()
+    n_exp_slider, n_box = htutori.build_log_widget_control(
+        name="log(n_episodes)",
+        description="training episodes",
+        min_exp=4,
+        max_exp=12,
+        initial_exp=9,
+        base=2,
+    )
+    alpha_slider, alpha_box = htutori.build_widget_control(
+        name="alpha",
+        description="learning rate",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.5,
+        is_float=True,
+    )
+    epsilon_slider, epsilon_box = htutori.build_widget_control(
+        name="epsilon",
+        description="exploration probability",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.2,
+        is_float=True,
+    )
+    seed_slider, seed_box = htutori.build_widget_control(
+        name="seed",
+        description="random seed",
+        min_val=0,
+        max_val=100,
+        step=1,
+        initial_value=42,
+        is_float=False,
+    )
+    output = ipywidgets.Output()
+    # The planning-optimal policy for comparison (computed once).
+    vi_snapshots, _ = value_iteration(env)
+    optimal_policy = extract_policy(env, vi_snapshots[-1])
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            n_episodes = 2**n_exp_slider.value
+            result = q_learning(
+                env,
+                n_episodes=n_episodes,
+                alpha=alpha_slider.value,
+                epsilon=epsilon_slider.value,
+                seed=seed_slider.value,
+            )
+            learned = result["policy"]
+            returns = result["returns"]
+            _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
+            # Panel 1: learned greedy policy.
+            _draw_grid_base(env, ax1)
+            _draw_policy_arrows(env, ax1, learned, color="darkblue")
+            ax1.set_title(
+                "Q-learning policy", fontsize=13, fontweight="bold"
+            )
+            # Panel 2: learning curve (smoothed return per episode).
+            window = max(1, len(returns) // 50)
+            smooth = pd.Series(returns).rolling(window, min_periods=1).mean()
+            ax2.plot(smooth, color="seagreen")
+            ax2.set_xlabel("episode")
+            ax2.set_ylabel("return (smoothed)")
+            ax2.set_title("Learning curve", fontsize=13, fontweight="bold")
+            ax2.grid(True, alpha=0.3)
+            # Panel 3: comments with agreement vs the optimal policy.
+            n_match = sum(
+                1
+                for s in env.nonterminal_states
+                if learned[s] == optimal_policy[s]
+            )
+            n_total = len(env.nonterminal_states)
+            text = (
+                "Parameters:\n"
+                "  n_episodes: %d\n"
+                "  alpha: %.2f\n"
+                "  epsilon: %.2f\n\n"
+                "Policy match vs value\n"
+                "iteration: %d / %d states\n\n"
+                "Key idea:\n"
+                "- With enough episodes,\n"
+                "  Q-learning recovers the\n"
+                "  optimal policy with no model.\n"
+                "- The curve is noisy early,\n"
+                "  then stabilizes."
+                % (
+                    n_episodes,
+                    alpha_slider.value,
+                    epsilon_slider.value,
+                    n_match,
+                    n_total,
+                )
+            )
+            _comment_panel(ax3, text)
+            plt.tight_layout()
+            plt.show()
+
+    n_exp_slider.observe(update_plot, names="value")
+    alpha_slider.observe(update_plot, names="value")
+    epsilon_slider.observe(update_plot, names="value")
+    seed_slider.observe(update_plot, names="value")
+    update_plot()
+    display(
+        ipywidgets.VBox(
+            [
+                ipywidgets.Label(
+                    "Train the agent and compare to the planning optimum:"
+                ),
+                n_box,
+                alpha_box,
+                epsilon_box,
+                seed_box,
+                output,
+            ]
+        )
+    )

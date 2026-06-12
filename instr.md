@@ -1,7 +1,10 @@
-Create a script website_screenshot.py that given a website --url
-uses playwright to take a screenshot and saves it --output *.png
+Create a script forward_port.py -i ... -o ...
 
-Use uv to install the packages on the fly
+e.g.,
+
+Create a script forward_port.py -i localhost:8888 -o 192.168.64.3:8888
+
+Decide where it should be saved
 
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`
