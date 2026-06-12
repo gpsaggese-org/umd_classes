@@ -1,19 +1,34 @@
 # Draft Blog Posts — Readiness Ranking
 
-Ranked from **most ready** (near-publishable) to **least ready** (raw scratchpad).
-Criteria: front matter completeness, TL;DR quality, content structure, and polish.
+This document tracks the work on the blogs
 
-## To publish
-- DONE: website/docs/blog/posts/draft.how_to.Compare_LLM_models.md
-- DONE: blog_posts/draft.how_to.helpers_llm_cli.md
+- Blogs are ranked from _most ready_ (near-publishable) to _least ready_ (raw
+  scratchpad).
+  - Criteria: front matter completeness, TL;DR quality, content structure, and polish.
+
+## High-priority
+
+// TODO(ai_gp): Add full paths
+
 draft.how_to.Use_Claude_Code_with_Openrouter.md
 draft.how_to.Use_OpenRouter.md
 in_30_mins.simonw_llm_cli.md
 draft.how_to.Count_cost.md
 blog_posts/how_to.LLM_effort.md
 
+## Published
+
+// TODO(ai_gp): Keep this update
+
+- DONE: website/docs/blog/posts/draft.how_to.Compare_LLM_models.md
+- DONE: blog_posts/draft.how_to.helpers_llm_cli.md
 
 ## Tier 1: Ready — Well-structured, near-publishable
+
+// TODO(ai_gp): Use a format like, instead of tables
+// - `file`
+//   - Comment 1
+//   - Comment 2
 
 | Rank | File | Notes |
 |------|------|-------|
