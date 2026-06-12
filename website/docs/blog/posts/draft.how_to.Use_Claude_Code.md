@@ -46,6 +46,9 @@ you write, understand, and debug code more efficiently.
 - It's not a good idea to use `claude --dangerously-skip-permissions` unless you
   know what you are doing
 
+<!-- TODO(ai_gp): Run claude --help and comment on the most interesting options-->
+
+
 ## 2. Creating and Editing Code
 
 You can use Claude Code in two ways:
@@ -407,6 +410,29 @@ To make Claude Code stop remembering information between sessions:
   ```
 
 - Use `/memory` at any time to check whether memory is enabled for the current project
+
+## Print Thinking / Verbosity
+
+- Global configuration (settings file)
+  - Open the settings file used by Claude Code.
+    `/Users/saggese/.claude/settings.json` or the project‑local
+    `.claude/settings.json`
+  - Add/modify the relevant flags:
+    ```
+    {
+      "displayThinking": false,      // hide all thinking blocks
+      "verbosity": "minimal",       // suppress most internal messages
+      "showToolUse": false          // optional – hide tool‑use logs
+    }
+    ```
+  - Save and restart the CLI / reload the workspace.
+  - No thinking lines appear in the terminal or UI.
+
+- Run Claude Code with a flag that disables thinking for that invocation only:
+   ```
+   claude-code --no-thinking          # or: --verbosity minimal
+   ```
+- You can see the exact flag name with claude-code --help.
 
 ## API Reference
 
