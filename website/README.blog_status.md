@@ -59,6 +59,12 @@
   claude> /blog.add_links XYZ
   ```
 
+- Render
+  ```
+  > render_images.py -i website/docs/blog/posts/$FILE
+  > git add ...
+  ```
+
 - To publish use the script
   ```
   > website/publish_blog.py ...
@@ -68,7 +74,11 @@
 
 ## High-priority
 
-TBD
+- `website/docs/blog/posts/draft.in_5_mins.helpers_cc_wrapper.md`
+- `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
+- `cache`
+  ./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+- Tier 1 blogs
 
 ## Tier 1: Ready — Well-structured, near-publishable
 
@@ -110,6 +120,10 @@ TBD
   - Very brief (32 lines). Needs much more content.
 - `website/docs/blog/posts/draft.how_to.Use_Claude_Code_Workflows.md`
   - Mixed content (79 lines) — some instructional, some raw notes.
+- `website/docs/blog/posts/draft.how_to.Use_Local_LLMs_On_Mac.md`
+  - Expanded to 203 lines with full front matter (date, description, categories).
+    Covers installation, model benchmarking, and CLI usage. Still reads like
+    command notes and terminal output — needs narrative rewriting.
 - `website/docs/blog/posts/draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md`
   - Minimal content (33 lines, JSON config snippet only). TL;DR fixed.
 - `website/docs/blog/posts/draft.how_to.VS_Code_Quick_Fix.md`
@@ -126,12 +140,11 @@ TBD
 
 ## Tier 4: Scratchpad — Raw notes, not yet a blog post
 
-- `website/docs/blog/posts/draft.how_to.Use_Local_LLMs_On_Mac.md`
-  - Raw terminal session output.
 - `website/docs/blog/posts/draft.how_to.format_markdown.md`
   - Just two URLs.
 - `website/docs/blog/posts/draft.debug.md`
-  - Scratchpad/debug notes.
+  - Has front matter (title, date, description) but content is still disjointed
+    command snippets and scratch notes. Not yet a blog post.
 - `website/docs/blog/posts/draft.blog_template.md`
   - Template file — not a blog post. TL;DR is boilerplate placeholder.
 - `website/docs/blog/posts/draft.how_to.AI_Coding_Assistant.md`
@@ -148,15 +161,6 @@ TBD
 - `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
   - Published. Has 1 remaining `TODO(ai_gp)` comment ("This seems to be
     malformed").
-- `website/docs/blog/posts/how_to.Compare_LLM_models.md`
-  - Published. Has 3 remaining `TODO(ai_gp)` comments (add models, re-run
-    benchmarks, fix table).
-- `website/docs/blog/posts/how_to.Use_Claude_Code_with_Openrouter.md`
-  - Published. Has 2 remaining `TODO(ai_gp)` comments (move to repo, show
-    commands).
-- `website/docs/blog/posts/how_to.Count_cost.md`
-  - Published. Has 4 remaining `TODO(ai_gp)` comments (explanations, links,
-    categories, examples).
 
 # Others
 
@@ -170,3 +174,7 @@ all.markdown_tools.explanation.md
 all.plotting_in_latex.how_to_guide.md
 all.writing_docs.how_to_guide.md
 figs
+
+dev_scripts_helpers/system_tools/README.md
+
+./helpers_root/dev_scripts_helpers/documentation/render_images.py

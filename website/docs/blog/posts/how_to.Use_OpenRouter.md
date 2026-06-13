@@ -15,7 +15,7 @@ access dozens of LLM models from a single terminal, including free tier options.
 
 <!-- more -->
 
-# How to Use OpenRouter with LLM CLI
+e How to Use OpenRouter with LLM CLI
 
 ## What is OpenRouter
 
@@ -26,6 +26,55 @@ access dozens of LLM models from a single terminal, including free tier options.
     - OpenRouter handles routing, billing, and rate limiting across providers
     - Includes free tier models (e.g., Google Gemma 4) for testing and
       experimentation
+
+<div style="text-align: center;">
+
+<!--  rendered_images:begin -->
+<!--  ```mermaid -->
+<!--  graph LR -->
+<!--      subgraph User["User"] -->
+<!--          CLI[LLM CLI] -->
+<!--          CURL[curl / Scripts] -->
+<!--      end -->
+<!--   -->
+<!--      subgraph Gateway["OpenRouter (Unified Gateway)"] -->
+<!--          OR[API Gateway] -->
+<!--          KM[Model Router] -->
+<!--          BP[Billing & Rate Limiting] -->
+<!--      end -->
+<!--   -->
+<!--      subgraph Providers["LLM Providers"] -->
+<!--          ANTH[<img src='https://img.icons8.com/color/24/anthropic.png'/> Anthropic] -->
+<!--          OAI[<img src='https://img.icons8.com/color/24/openai.png'/> OpenAI] -->
+<!--          GOOG[<img src='https://img.icons8.com/color/24/google-logo.png'/> Google] -->
+<!--          META[<img src='https://img.icons8.com/color/24/meta.png'/> Meta] -->
+<!--          MORE[⋯ More] -->
+<!--      end -->
+<!--   -->
+<!--      User |Single API Key| OR -->
+<!--      OR KM -->
+<!--      KM |Route requests| Providers -->
+<!--      BP |Track usage| Providers -->
+<!--   -->
+<!--      style OR fill:#4A90D9,stroke:#2C5F8A,color:#fff -->
+<!--      style KM fill:#5BA0E9,stroke:#2C5F8A,color:#fff -->
+<!--      style BP fill:#6BB0F9,stroke:#2C5F8A,color:#fff -->
+<!--      style ANTH fill:#F0E6D3,stroke:#8B7355 -->
+<!--      style OAI fill:#D4EDDA,stroke:#28A745 -->
+<!--      style GOOG fill:#D6EAF8,stroke:#3498DB -->
+<!--      style META fill:#E8DAEF,stroke:#7D3C98 -->
+<!--      style MORE fill:#F8F9FA,stroke:#6C757D -->
+<!--  ``` -->
+<!--  rendered_images:end -->
+<!--  render_images:begin -->
+![](how_to.Use_OpenRouter.md.figs/how_to.Use_OpenRouter.1.png)
+<!--  render_images:end -->
+
+*Figure 1: OpenRouter acts as a unified API gateway: you manage one API key and one
+integration point, and OpenRouter handles routing, billing, and rate limiting across
+all supported LLM providers.*
+
+</div>
 
 ## What is LLM CLI
 
@@ -139,6 +188,58 @@ access dozens of LLM models from a single terminal, including free tier options.
       model
     - `tee output.txt` saves the response to a file while displaying it in the
       terminal
+
+<div style="text-align: center;">
+
+<!--  rendered_images:begin -->
+<!--  ```graphviz -->
+<!--  digraph Routing { -->
+<!--      splines=true; -->
+<!--      nodesep=0.8; -->
+<!--      ranksep=0.6; -->
+<!--   -->
+<!--      node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.5]; -->
+<!--   -->
+<!--      // Nodes -->
+<!--      User    [label="User Request", fillcolor="#D6EAF8"]; -->
+<!--      CLI     [label="LLM CLI\nllm -m openrouter/...\n-o provider '{\"sort\": \"throughput\"}'", fillcolor="#A6C8F4"]; -->
+<!--      OR      [label="OpenRouter Gateway", fillcolor="#4A90D9", fontcolor="white"]; -->
+<!--      Router  [label="Provider Router", fillcolor="#5BA0E9", fontcolor="white"]; -->
+<!--   -->
+<!--      subgraph cluster_providers { -->
+<!--          label="Available Providers (sorted by throughput)"; -->
+<!--          style="rounded,dashed"; -->
+<!--          fillcolor="#F8F9FA"; -->
+<!--          fontsize=12; -->
+<!--   -->
+<!--          Fastest [label="Fastest Provider", fillcolor="#B2E2B2"]; -->
+<!--          Second  [label="Second Provider", fillcolor="#D4EDDA"]; -->
+<!--          Third   [label="Third Provider", fillcolor="#E8F0E8"]; -->
+<!--      } -->
+<!--   -->
+<!--      Response [label="Response\nReturned to User", fillcolor="#B2E2B2"]; -->
+<!--   -->
+<!--      // Edges -->
+<!--      User -> CLI [label="prompt"]; -->
+<!--      CLI -> OR [label="API call with routing options"]; -->
+<!--      OR -> Router; -->
+<!--      Router -> Fastest [label="route to fastest", style=bold, penwidth=2]; -->
+<!--      Router -> Second [style=dashed, penwidth=0.5]; -->
+<!--      Router -> Third [style=dashed, penwidth=0.5]; -->
+<!--      Fastest -> Response [label="completion"]; -->
+<!--      Response -> User [style=dashed]; -->
+<!--  } -->
+<!--  ``` -->
+<!--  rendered_images:end -->
+<!--  render_images:begin -->
+![](how_to.Use_OpenRouter.md.figs/how_to.Use_OpenRouter.2.png)
+<!--  render_images:end -->
+
+*Figure 2: When you pass `-o provider '{"sort": "throughput"}'`, OpenRouter ranks
+available providers hosting the requested model by response speed and routes to the
+fastest one, improving latency.*
+
+</div>
 
 ## Using the API Directly with curl
 
