@@ -345,14 +345,17 @@ kill_container_by_name() {
     local DOCKER_CMD
     DOCKER_CMD=$(get_docker_cmd)
     echo "# ${FUNCNAME[0]}: $container_name"
-    # Check if container exists (running or stopped).
-    local container_id=$($DOCKER_CMD container ls -a --filter "name=^${container_name}$" --format "{{.ID}}")
-    if [[ -n $container_id ]]; then
-        echo "Killing container: $container_name (ID: $container_id)"
-        $DOCKER_CMD container rm -f $container_id
+    # Apple's container list doesn't support --filter, so we try rm -f
+    # directly and ignore errors if the container doesn't exist.
+    local rm_opts
+    if [[ "$(get_docker_engine)" == "apple" ]]; then
+        rm_opts=("$DOCKER_CMD" "rm" "-f")
     else
-        echo "Container '$container_name' not found"
+        rm_opts=("$DOCKER_CMD" "container" "rm" "-f")
     fi
+    # Try to find and kill any container matching this name.
+    CONTAINER_ID=$("${rm_opts[@]}" "$container_name" 2>/dev/null) || true
+    echo "Container '$container_name' cleaned up"
     echo "${FUNCNAME[0]} ... done"
 }
 
@@ -501,10 +504,35 @@ get_docker_jupyter_options() {
         echo "Overwriting jupyter_use_vim since user='saggese'" >&2
         jupyter_use_vim=1
     fi
+    local port_opt=""
+    # Apple container engine's -p port forwarding is broken (v1.0.0).
+    # We skip it and use an external port forwarder via bridge100 instead.
+    if [[ "$(get_docker_engine)" != "apple" ]]; then
+        port_opt="-p $host_port:8888"
+    fi
     echo "--name $container_name \
-    -p $host_port:8888 \
+    $port_opt \
     $(get_docker_common_options) \
     -e JUPYTER_USE_VIM=$jupyter_use_vim"
+}
+
+
+get_container_ip() {
+    # """
+    # Get the bridge100 IP of a running Apple container.
+    #
+    # Apple containers get a 192.168.64.x IP on the vmnet bridge100 interface.
+    # Port forwarding via -p is broken, so we need this IP for direct access.
+    #
+    # :param container_name: Name of the running container
+    # :return: Container IP on bridge100
+    # """
+    local container_name=$1
+    local docker_cmd
+    docker_cmd=$(get_docker_cmd)
+    local ip
+    ip=$($docker_cmd exec "$container_name" hostname -I 2>/dev/null | awk '{print $1}')
+    echo "$ip"
 }
 
 

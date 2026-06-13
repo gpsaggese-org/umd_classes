@@ -74,20 +74,25 @@
 
 ## High-priority
 
-- `website/docs/blog/posts/draft.in_5_mins.helpers_cc_wrapper.md`
-- `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
-- `cache`
-  ./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
-- helpers_root/docs/documentation_meta/all.architecture_diagrams.explanation.md
-- helpers_root/docs/documentation_meta/all.diataxis.explanation.md
-- helpers_root/docs/documentation_meta/all.gdocs.how_to_guide.md
-- helpers_root/docs/documentation_meta/all.google_technical_writing.how_to_guide.md
-- helpers_root/docs/documentation_meta/all.markdown_tools.explanation.md
+- `website/docs/blog/posts/draft.in_30_mins.helpers_caching.md`
+  - `./helpers_root/docs/tools/helpers/all.hcache_simple.explanation.md`
+
+- `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md`
+
+- `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
+  - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
+  - `./helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
+  - `docs/tools/documentation_toolchain/all.render_images.explanation.md`
+
+- `helpers_root/docs/documentation_meta/all.architecture_diagrams.explanation.md`
+- `helpers_root/docs/documentation_meta/all.diataxis.explanation.md`
+- `helpers_root/docs/documentation_meta/all.gdocs.how_to_guide.md`
+- `helpers_root/docs/documentation_meta/all.google_technical_writing.how_to_guide.md`
+- `helpers_root/docs/documentation_meta/all.markdown_tools.explanation.md`
 - helpers_root/docs/documentation_meta/all.plotting_in_latex.how_to_guide.md
 - helpers_root/docs/documentation_meta/all.writing_docs.how_to_guide.md
 - helpers_root/dev_scripts_helpers/system_tools/README.md
-- docs/work_tools/documentation_toolchain/all.render_images.explanation.md
-- helpers_root/dev_scripts_helpers/documentation/render_images.py
+- `./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
 
 - Tier 1 blogs
 
