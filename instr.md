@@ -1,16 +1,19 @@
-Create a script forward_port.py -i ... -o ...
+1) Read research/ideas/Language_Mixing_LLM_and_Code.md
 
-e.g.,
+2) Implement a library to implement the specs in # Specs.
 
-Create a script forward_port.py -i localhost:8888 -o 192.168.64.3:8888
+3) Also come up with better comparison of pros and cons with alternative, create a
+matrix to compare the different approaches
 
-Decide where it should be saved
-
+# Conventions
 - When writing code you must always follow the instructions in
   `.claude/skills/coding.rules.md`
 
+- When writing unit tests for follow the instructions in
+  `.claude/skills/testing.rules.md`
+
+# Create a plan, if needed
 - If the task is not perfectly clear, you MUST not perform it, but ask for
   clarifications
   - When the task is complex, create a `plan.md` with 5 bullet points explaining
     what the plan is
-

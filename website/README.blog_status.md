@@ -79,6 +79,8 @@
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md`
 
+- helpers/hcheck_types.py
+
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
   - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
   - `./helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
