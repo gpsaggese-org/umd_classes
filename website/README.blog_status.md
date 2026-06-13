@@ -78,6 +78,17 @@
 - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
 - `cache`
   ./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+- helpers_root/docs/documentation_meta/all.architecture_diagrams.explanation.md
+- helpers_root/docs/documentation_meta/all.diataxis.explanation.md
+- helpers_root/docs/documentation_meta/all.gdocs.how_to_guide.md
+- helpers_root/docs/documentation_meta/all.google_technical_writing.how_to_guide.md
+- helpers_root/docs/documentation_meta/all.markdown_tools.explanation.md
+- helpers_root/docs/documentation_meta/all.plotting_in_latex.how_to_guide.md
+- helpers_root/docs/documentation_meta/all.writing_docs.how_to_guide.md
+- helpers_root/dev_scripts_helpers/system_tools/README.md
+- docs/work_tools/documentation_toolchain/all.render_images.explanation.md
+- helpers_root/dev_scripts_helpers/documentation/render_images.py
+
 - Tier 1 blogs
 
 ## Tier 1: Ready — Well-structured, near-publishable
@@ -161,20 +172,3 @@
 - `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
   - Published. Has 1 remaining `TODO(ai_gp)` comment ("This seems to be
     malformed").
-
-# Others
-
-> ls -1 helpers_root/docs/documentation_meta
-__init__.py
-all.architecture_diagrams.explanation.md
-all.diataxis.explanation.md
-all.gdocs.how_to_guide.md
-all.google_technical_writing.how_to_guide.md
-all.markdown_tools.explanation.md
-all.plotting_in_latex.how_to_guide.md
-all.writing_docs.how_to_guide.md
-figs
-
-dev_scripts_helpers/system_tools/README.md
-
-./helpers_root/dev_scripts_helpers/documentation/render_images.py
