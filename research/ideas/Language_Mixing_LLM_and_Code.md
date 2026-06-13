@@ -1,4 +1,29 @@
-# A Language for Mixing LLM and Code
+# Library for Embedding LLM in Code
+
+# Specs
+- There is a decorator 
+  @llm(model=...)
+  def func(a: ..., b...) -> int:
+    """
+    Sum with <a> and <b> and return 
+    """
+    pass
+
+- The decorator makes sure that the llm returns the right types using
+  - Use hdbg.dassert to make sure the output is correct
+- Use caching from helpers/hcache_simple.py
+- Use introspection to understand the types
+
+- Create unit tests automatically to show the input / output behavior
+- You can evolve code from all LLM to all code
+
+- compile to convert the llm code into actual code
+
+- LLM should be able to call Python code
+
+- Automatically batch calls to LLM
+
+- Use multi-shot prompting to fix some behaviors
 
 ## Description
 
