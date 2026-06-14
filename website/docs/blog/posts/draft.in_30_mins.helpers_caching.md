@@ -22,15 +22,25 @@ team via S3
 - Every data scientist and ML engineer has faced the same problem:
     - An expensive function that takes seconds (or minutes) to run
     - An API call that costs money every time
-    - A computation that produces the same result for the same inputs
 
 - The standard solution is ad-hoc caching code:
     - Save results to a file, check if the file exists before running, add a
       dictionary to remember past results
     - This is repetitive, error-prone, and hard to maintain across projects
 
-- There is a better way: `hcache_simple`, a Python module from the `helpers`
-  library that provides decorator-based caching with minimal boilerplate
+- `hcache_simple` is a Python module from the `helpers` library that provides
+  decorator-based caching with minimal boilerplate
+
+## References
+
+- Source code:
+  [`helpers/hcache_simple.py`](https://github.com/causify-ai/helpers/blob/master/helpers/hcache_simple.py)
+- Test code:
+  [`helpers/test/test_hcache_simple.py`](https://github.com/causify-ai/helpers/blob/master/test/test_hcache_simple.py)
+- Full documentation:
+  [`helpers/docs/tools/helpers/all.hcache_simple.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/helpers/all.hcache_simple.explanation.md)
+- Tutorial notebook:
+  [`helpers/notebooks/hcache_simple.tutorial.ipynb`](https://github.com/causify-ai/helpers/blob/master/notebooks/hcache_simple.tutorial.ipynb)
 
 ### What Is `hcache_simple`?
 
@@ -45,51 +55,55 @@ team via S3
       automatically
     - **Per-function configuration**: Each function can have its own cache
       directory, S3 bucket, or storage format
+    - **Different storage formats**: Use JSON or pickle to trade off speed
+      with easiness to inspect the data
     - **Performance tracking**: See hit rates and identify optimization
       opportunities
     - **Source-change detection**: Warns when a function's source code has
       changed since its value was cached
     - **Mock support**: Test cached functions without running expensive
       operations
+      - TODO(gp): Easily create a unit test from cache values
+    - **Work with Notebooks**
+    - **Flexible way to specify which parameters needs to be used to cached**
+    - **Flexible policy on a per function basis**
+      - E.g., assert on cache miss, disable only one function, refresh one
+    - **Flexible global management of cache** (disable all caches)
 
 ### The Three Cache Layers
 
 - `hcache_simple` uses three storage layers, checked in order:
-    1. **Memory cache**: A Python dictionary that returns cached results
-       instantly. No setup required
+    1. **Memory cache**: A Python dictionary that returns cached results.
+       Results are not persistant across Python sessions
     2. **Disk cache**: Stores results as JSON or pickle files on your
        filesystem. Results persist across Python sessions
     3. **S3 cache**: Stores results in an S3 bucket. Enables sharing across
-       machines and team members. Optional
+       machines and team members. This is optional
 
-- When a function is called, the system checks layers in order: memory -> disk
-  -> S3
+- When a function is called, the system checks layers in order:
+  ```
+  memory -> disk -> S3
+  ```
 - A cache miss only occurs if the key is not found in ANY layer
 
 ### When To Use `hcache_simple`
 
 - **Expensive computations**: Mathematical simulations, data processing, model
   inference that takes noticeable time
-
 - **API calls**: LLM completions, database queries, or any paid API where
   results are deterministic for the same inputs
-
 - **Development workflows**: Repeatedly calling the same function while
   debugging or iterating on code
-
 - **Team environments**: Share cached results across team members via S3 to
   avoid redundant computation
-
 - **CI/CD pipelines**: Cache results between pipeline runs to speed up execution
 
 ### When NOT To Use `hcache_simple`
 
 - **Highly dynamic data**: Functions whose outputs change frequently or depend
   on external state (e.g., stock prices, sensor readings)
-
 - **Non-deterministic functions**: Functions with randomness, time-based logic,
   or side effects
-
 - **Large-scale distributed caching**: For multi-node distributed systems,
   consider dedicated solutions like Redis or Memcached
 
@@ -106,14 +120,14 @@ team via S3
        miss
 
 - The decorator supports several parameters:
-    - **`cache_type`**: Choose `"json"` (human-readable, basic types) or
-      `"pickle"` (any Python object, including DataFrames)
-    - **`write_through`**: Whether to immediately flush cache to disk after each
+    - `cache_type`: Choose `"json"` (human-readable, basic types) or `"pickle"`
+      (any Python object, including DataFrames)
+    - `write_through`: Whether to immediately flush cache to disk after each
       update (default `True`)
-    - **`exclude_keys`**: Parameter names to ignore when building the cache key
+    - `exclude_keys`: Parameter names to ignore when building the cache key
       (useful for API clients, database connections, or loggers)
-    - **`auto_sync_s3`**: Automatically upload cache to S3 after each update
-      (default `False`)
+    - `auto_sync_s3`: Automatically upload cache to S3 after each update (default
+      `False`)
 
 - Each function can also have its own cache directory, S3 bucket, S3 prefix, and
   AWS profile, overriding global defaults
@@ -122,6 +136,7 @@ team via S3
   the full explanation document at
   [`helpers/docs/tools/helpers/all.hcache_simple.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/helpers/all.hcache_simple.explanation.md)
 
+// TODO(ai_gp): If it's the same add a pointer to https://github.com/causify-ai/helpers/blob/master/docs/tools/helpers/all.hcache_simple.explanation.md#execution-flow-diagram
 ### Execution Flow Diagram
 
 - The following diagram shows the complete flow from decoration through function
@@ -210,7 +225,7 @@ flowchart TD
   DataFrames, NumPy arrays, or trained models
     - Set `cache_type="pickle"` on the decorator
     - The transformed dataset is cached to disk
-    - On the next run, loading takes milliseconds instead of minutes
+    - On the next run, loading takes much less than computing
 
 ### Scenario 3: Per-Function Cache Organization
 
@@ -234,24 +249,25 @@ flowchart TD
     - A low hit rate suggests the function is called with too many unique
       inputs, or the cache key includes irrelevant parameters
 
-```python
-import helpers.hcache_simple as hcacsimp
+- Example
+  ```python
+  import helpers.hcache_simple as hcacsimp
 
-hcacsimp.enable_cache_perf("expensive_function")
+  hcacsimp.enable_cache_perf("expensive_function")
 
-@hcacsimp.simple_cache(cache_type="json")
-def expensive_function(x: int) -> int:
-    return x * x
+  @hcacsimp.simple_cache(cache_type="json")
+  def expensive_function(x: int) -> int:
+      return x * x
 
-# Use the function.
-for i in range(100):
-    expensive_function(i % 10)
+  # Use the function.
+  for i in range(100):
+      expensive_function(i % 10)
 
-# Get performance stats.
-stats = hcacsimp.get_cache_perf_stats("expensive_function")
-print(stats)
-# expensive_function: hits=90 misses=10 tot=100 hit_rate=0.90
-```
+  # Get performance stats.
+  stats = hcacsimp.get_cache_perf_stats("expensive_function")
+  print(stats)
+  # expensive_function: hits=90 misses=10 tot=100 hit_rate=0.90
+  ```
 
 ### Source-Change Detection
 
@@ -281,22 +297,23 @@ print(stats)
     - Makes tests fast, deterministic, and independent of external services
     - Requires using a temporary cache directory (not the main cache directory)
 
-```python
-import helpers.hcache_simple as hcacsimp
+- Example
+  ```python
+  import helpers.hcache_simple as hcacsimp
 
-# Set up temporary cache directory.
-temp_dir = "/tmp/test_cache"
-hcacsimp.set_cache_dir(temp_dir)
+  # Set up temporary cache directory.
+  temp_dir = "/tmp/test_cache"
+  hcacsimp.set_cache_dir(temp_dir)
 
-# Mock the cache with a known response.
-test_prompt = "Hello, world!"
-mock_response = "Mocked LLM response"
-hcacsimp.mock_cache_from_args_kwargs("call_llm", (test_prompt,), {}, mock_response)
+  # Mock the cache with a known response.
+  test_prompt = "Hello, world!"
+  mock_response = "Mocked LLM response"
+  hcacsimp.mock_cache_from_args_kwargs("call_llm", (test_prompt,), {}, mock_response)
 
-# Verify cache hit (function not actually called).
-result = call_llm(test_prompt, abort_on_cache_miss=True)
-assert result == mock_response
-```
+  # Verify cache hit (function not actually called).
+  result = call_llm(test_prompt, abort_on_cache_miss=True)
+  assert result == mock_response
+  ```
 
 ## Comparison with Alternatives
 
@@ -308,14 +325,3 @@ assert result == mock_response
   setup and is overkill for most single-machine or small-team use cases
 - **`hcache_simple`**: One-decorator setup, three storage layers, per-function
   config, S3 sharing, performance tracking, and mock support
-
-## References
-
-- Source code:
-  [`helpers/hcache_simple.py`](https://github.com/causify-ai/helpers/blob/master/helpers/hcache_simple.py)
-- Test code:
-  [`helpers/test/test_hcache_simple.py`](https://github.com/causify-ai/helpers/blob/master/test/test_hcache_simple.py)
-- Full documentation:
-  [`helpers/docs/tools/helpers/all.hcache_simple.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/helpers/all.hcache_simple.explanation.md)
-- Tutorial notebook:
-  [`helpers/notebooks/hcache_simple.tutorial.ipynb`](https://github.com/causify-ai/helpers/blob/master/notebooks/hcache_simple.tutorial.ipynb)

@@ -76,10 +76,24 @@
 
 - `website/docs/blog/posts/draft.in_30_mins.helpers_caching.md`
   - `./helpers_root/docs/tools/helpers/all.hcache_simple.explanation.md`
+  - `helpers/hcache_simple.py`
+
+- `helpers/hllm.py`
+    Underlying LLM completion interface
+  - [`notebooks/hllm.tutorial.ipynb`](https://github.com/causify-ai/helpers/blob/master/helpers/notebooks/hllm.tutorial.ipynb):
+  Jupyter notebook with `hllm` usage examples
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md`
 
-- helpers/hcheck_types.py
+- helpers/hcheck_types.py + dassert
+
+- hunit_test.py
+
+- `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md`
+    - `helpers/hllm_decorator.py`
+    - `docs/tools/helpers/all.hllm.explanation.md`
+      Detailed explanation of the `hllm` module
+
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
   - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
