@@ -1,9 +1,8 @@
-1) Read research/ideas/Language_Mixing_LLM_and_Code.md
+In research/ideas/
 
-2) Implement a library to implement the specs in # Specs.
-
-3) Also come up with better comparison of pros and cons with alternative, create a
-matrix to compare the different approaches
+Rename all the files (excluding README.md and research_idea.template.md)
+using git mv as {draft,in_progress,done}.<descr>.md based on the state of
+the proposal based on the README.md
 
 # Conventions
 - When writing code you must always follow the instructions in
