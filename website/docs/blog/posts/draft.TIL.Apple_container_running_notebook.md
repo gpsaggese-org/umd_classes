@@ -21,7 +21,7 @@ categories:
 
 TL;DR: Apple's `container run -p` port forwarding is broken in v1.0.0 (accepts
 TCP but resets on response). The host can reach containers via the vmnet
-bridge100 interface though. The fix is to skip `-p`, run a separate script that
+bridge100 interface though. The fix is to run a separate script that
 extracts the container's 192.168.64.x IP and forwards `localhost:PORT` ↔
 `container_IP:PORT`.
 
@@ -29,15 +29,15 @@ extracts the container's 192.168.64.x IP and forwards `localhost:PORT` ↔
 
 ## The Problem
 
-I was running Jupyter Lab inside an Apple container on macOS:
+- I was running Jupyter Lab inside an Apple container on macOS:
 
-```bash
-container run -p 8888:8888 ... gpsaggese/umd_project_l12_reinforcement_learning
-```
+  ```bash
+  container run -p 8888:8888 ... gpsaggese/umd_project_l12_reinforcement_learning
+  ```
 
-Jupyter started fine inside the container (listening on `0.0.0.0:8888`), and the
-`container` process bound port 8888 on the host. But my browser couldn't
-connect. The connection was being reset.
+- Jupyter started fine inside the container (listening on `0.0.0.0:8888`), and
+  the `container` process bound port 8888 on the host
+- But my browser couldn't connect and the connection was being reset
 
 ## Debugging
 
@@ -100,9 +100,10 @@ Apple's `container-network-vmnet` plugin in NAT mode (version 1.0.0):
 - **But fails to relay the return traffic** — the response path through the NAT
   returns a TCP RST
 
-This is a bug in Apple's early-stage container runtime. The `container ps` and
-`container attach` plugins aren't even installed by default with the Homebrew
-package, which confirms the tooling is still maturing.
+This is a bug in Apple's early-stage container runtime
+
+The `container ps` and `container attach` plugins aren't even installed by
+default with the Homebrew package, which confirms the tooling is still maturing.
 
 ## The Fix: External Port Forwarding
 
@@ -111,11 +112,11 @@ ports at the application level.
 
 ### The approach
 
-1. `docker_jupyter.sh` starts the container **without** `-p` (Apple engine
+1. `docker_jupyter.sh` starts the container _without_ `-p` (Apple engine
    detection skips it automatically)
 2. `docker_jupyter.sh` prints the container's bridge100 IP and a command to run
 3. The user opens a second terminal and runs
-   **`docker_jupyter_port_forward.sh`** — a standalone script that:
+   `docker_jupyter_port_forward.sh`, a standalone script that:
    - Gets the container's bridge100 IP
    - Starts a Python TCP forwarder relaying
      `localhost:<PORT>` → `<container_IP>:<PORT>`
@@ -123,118 +124,38 @@ ports at the application level.
 
 ### Usage
 
-```bash
-# Terminal 1: Start the container
-> DOCKER_ENGINE=apple ./docker_jupyter.sh -f
+- Start the container on Terminal 1: 
+  ```bash
+  > DOCKER_ENGINE=apple ./docker_jupyter.sh -f
 
-Apple container engine detected.
-NOTE: Apple's container tool has a bug where -p port forwarding does
-not work. To access Jupyter from your browser, run this in another
-terminal after the container starts:
+  Apple container engine detected.
+  NOTE: Apple's container tool has a bug where -p port forwarding does
+  not work. To access Jupyter from your browser, run this in another
+  terminal after the container starts:
 
-  ./docker_jupyter_port_forward.sh umd_project_l12_reinforcement_learning.jupyter 8888
+    ./docker_jupyter_port_forward.sh umd_project_l12_reinforcement_learning.jupyter 8888
 
-Container IP: 192.168.64.54
-Direct URL: http://192.168.64.54:8888
-...
-[I 2026-06-13 Jupyter Server 2.19.0 is running at:
-http://127.0.0.1:8888/lab
+  Container IP: 192.168.64.54
+  Direct URL: http://192.168.64.54:8888
+  ...
+  [I 2026-06-13 Jupyter Server 2.19.0 is running at:
+  http://127.0.0.1:8888/lab
+  ```
 
-# Terminal 2: Set up port forwarding
-> ./docker_jupyter_port_forward.sh umd_project_l12_reinforcement_learning.jupyter 8888
+- On terminal 2 Set up port forwarding
+  ```
+  > docker_jupyter_port_forward.sh umd_project_l12_reinforcement_learning.jupyter 8888
 
-Container: umd_project_l12_reinforcement_learning.jupyter
-Bridge IP: 192.168.64.54
-Forwarding localhost:8888 -> 192.168.64.54:8888
-Open http://localhost:8888 in your browser
-Press Ctrl+C to stop.
-```
+  Container: umd_project_l12_reinforcement_learning.jupyter
+  Bridge IP: 192.168.64.54
+  Forwarding localhost:8888 -> 192.168.64.54:8888
+  Open http://localhost:8888 in your browser
+  Press Ctrl+C to stop.
+  ```
 
-Then open `http://localhost:8888` in your browser.
+- Then open `http://localhost:8888` in your browser
 
-### The forwarder script
-
-The port forward script is a standalone shell script that embeds a Python TCP
-forwarder (stdlib only, no dependencies):
-
-```bash
-# docker_jupyter_port_forward.sh
-CONTAINER_NAME=$1
-HOST_PORT=${2:-8888}
-CONTAINER_PORT=${3:-8888}
-
-# Get the container's bridge IP
-CONTAINER_IP=$(container exec "$CONTAINER_NAME" hostname -I | awk '{print $1}')
-
-# Run the Python TCP forwarder
-python3 -c "
-import socketserver, threading, socket
-
-class _Forwarder(socketserver.BaseRequestHandler):
-    def handle(self):
-        upstream = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        upstream.connect(('$CONTAINER_IP', $CONTAINER_PORT))
-        thr = threading.Thread(target=_pipe, args=(self.request, upstream), daemon=True)
-        thr.start()
-        _pipe(upstream, self.request)
-
-def _pipe(src, dst):
-    try:
-        while True:
-            data = src.recv(65536)
-            if not data: break
-            dst.sendall(data)
-    except: pass
-    finally:
-        for s in (src, dst):
-            try: s.shutdown(socket.SHUT_RDWR)
-            except: pass
-
-s = socketserver.ThreadingTCPServer(('0.0.0.0', $HOST_PORT), _Forwarder)
-s.serve_forever()
-"
-```
-
-### The changes
-
-**`class_project/project_template/utils.sh`**:
-
-- `get_docker_jupyter_options()` now skips the `-p` flag when the engine is
-  `apple`
-- `get_container_ip()` extracts the bridge100 IP from a running container
-- `kill_container_by_name()` was fixed to use `container rm -f` directly
-  for Apple's CLI (which doesn't need the `container` subcommand)
-
-**`docker_jupyter.sh`**:
-
-- Detects Apple engine and prints instructions pointing to
-  `docker_jupyter_port_forward.sh`
-- Runs the container detached and follows logs
-
-**`docker_jupyter_port_forward.sh`** (new):
-
-- Standalone script the user runs in a separate terminal
-- Extracts the container IP and runs a Python TCP forwarder
-- Cleans up on Ctrl+C
-
-## Key Takeaways
-
-1. **Apple's container tool is early-stage** — v1.0.0 has several missing
-   plugins (`ps`, `attach`, `manifest`) and a broken NAT port forwarding
-   implementation.
-
-2. **The vmnet bridge works** — The `bridge100` interface (macOS's
-   Virtualization.framework) correctly routes traffic between host and
-   containers. The issue is specifically in the `-p` NAT code.
-
-3. **A standalone script is the cleanest workaround** — Rather than hiding the
-   complexity, `docker_jupyter.sh` prints the instructions and the user runs a
-   separate `docker_jupyter_port_forward.sh` in another terminal. This keeps
-   each script simple and makes the workaround explicit.
-
-4. **When possible, use Docker Desktop** — Setting `DOCKER_ENGINE=docker`
-   avoids this issue entirely. Docker Desktop's port forwarding is mature and
-   reliable.
+- The forwarder script is at `dev_scripts_helpers/docker/docker_jupyter_port_forward.sh`
 
 ## References
 

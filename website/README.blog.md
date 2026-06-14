@@ -121,10 +121,16 @@
 - Invoke bash_print_tree
 - Invoke workflow
 
+- helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md
+
 - https://docs.google.com/spreadsheets/d/1FpBI4tysk2kMSNeTc3WTGOw8KZkr4yG85nfDwqu8Fdo/edit?gid=1995318049#gid=1995318049
 - https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
 
 - /Users/saggese/src/csfy1/blog/docs/posts
+
+- ./helpers_root/dev_scripts_helpers/system_tools/create_links.py
+  - docs/tools/dev_system/all.replace_common_files_with_script_links.md
+  
 
 ## Tier 1: Ready — Well-structured, near-publishable
 
