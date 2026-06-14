@@ -85,9 +85,7 @@
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md`
 
-- helpers/hcheck_types.py + dassert
-
-- hunit_test.py
+- `website/docs/blog/posts/draft.in_15_mins.helpers_hunit_test.md`
 
 - `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md`
     - `helpers/hllm_decorator.py`
@@ -95,6 +93,8 @@
       Detailed explanation of the `hllm` module
 
 - `lint_txt.py`
+
+- helpers/hcheck_types.py + dassert
 
 - Dependency detector
 
@@ -115,7 +115,16 @@
 - helpers_root/dev_scripts_helpers/system_tools/README.md
 - `./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
 
-- Tier 1 blogs
+- From `helpers_root/papers/AIgentic_Development_System/`
+
+- Latex / slide documentation flow
+- Invoke bash_print_tree
+- Invoke workflow
+
+- https://docs.google.com/spreadsheets/d/1FpBI4tysk2kMSNeTc3WTGOw8KZkr4yG85nfDwqu8Fdo/edit?gid=1995318049#gid=1995318049
+- https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
+
+- /Users/saggese/src/csfy1/blog/docs/posts
 
 ## Tier 1: Ready — Well-structured, near-publishable
 
