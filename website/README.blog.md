@@ -94,6 +94,11 @@
     - `docs/tools/helpers/all.hllm.explanation.md`
       Detailed explanation of the `hllm` module
 
+- `lint_txt.py`
+
+- Dependency detector
+
+- Package handler
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
   - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
