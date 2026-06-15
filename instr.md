@@ -1,8 +1,4 @@
-In research/ideas/
 
-Rename all the files (excluding README.md and research_idea.template.md)
-using git mv as {draft,in_progress,done}.<descr>.md based on the state of
-the proposal based on the README.md
 
 # Conventions
 - When writing code you must always follow the instructions in

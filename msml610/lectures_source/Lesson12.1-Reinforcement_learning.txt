@@ -369,7 +369,7 @@ digraph MDP {
     - Choose `Action A`
 
 * Maximum Expected Utility (MEU): Definition
-- Assumptions:
+- **Assumptions**:
   - Possible actions: $a \in A$
   - Possible outcomes: $s'$
   - Probability distribution: $\Pr(s'|a)$ for each action

@@ -690,6 +690,12 @@ def cell1_2_stochastic_action(
     if figsize is None:
         figsize = (14, 5)
     env = GridWorld()
+    state_dropdown = ipywidgets.Dropdown(
+        options=[str(s) for s in env.nonterminal_states],
+        value=str(env.start),
+        description="state:",
+        style={"description_width": "initial"},
+    )
     action_dropdown = ipywidgets.Dropdown(
         options=_ACTIONS,
         value="Up",
@@ -706,8 +712,6 @@ def cell1_2_stochastic_action(
         is_float=True,
     )
     output = ipywidgets.Output()
-    # Use a central cell that has a wall and boundary nearby to show bouncing.
-    focal = (3, 2)
 
     def update_plot(change: Optional[Any] = None) -> None:
         _ = change
@@ -715,6 +719,7 @@ def cell1_2_stochastic_action(
             clear_output(wait=True)
             env.p_intended = p_slider.value
             action = action_dropdown.value
+            focal = eval(state_dropdown.value)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel 1: focal cell with arrows whose width encodes probability.
             _draw_grid_base(env, ax1, highlight=focal)
@@ -774,20 +779,14 @@ def cell1_2_stochastic_action(
                 "  p_intended: %.2f\n\n"
                 "Outcome probabilities:\n"
                 "  intended: %.2f\n"
-                "  each perpendicular: %.2f\n\n"
-                "Key idea:\n"
-                "- The wheels slip: the agent\n"
-                "  veers perpendicular.\n"
-                "- Walls and boundaries bounce\n"
-                "  the agent back in place.\n"
-                "- As p_intended -> 1.0 the\n"
-                "  world becomes deterministic."
+                "  each perpendicular: %.2f"
                 % (action, env.p_intended, env.p_intended, p_perp)
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
+    state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
     p_slider.observe(update_plot, names="value")
     update_plot()
@@ -795,8 +794,9 @@ def cell1_2_stochastic_action(
         ipywidgets.VBox(
             [
                 ipywidgets.Label(
-                    "Pick an action and reliability; watch probability spread:"
+                    "Pick a state and action; watch probability spread:"
                 ),
+                state_dropdown,
                 action_dropdown,
                 p_box,
                 output,
@@ -810,6 +810,102 @@ def cell1_2_stochastic_action(
 # #############################################################################
 
 
+def cell1_3_show_transition_table(
+    *,
+    figsize: Optional[Tuple[float, float]] = None,
+) -> None:
+    """
+    Display the transition model as a concrete probability table for a fixed
+    state-action pair.
+
+    Shows the Pr(s' | s, a) distribution for the START state with the Up action
+    as a pandas DataFrame, making the abstract model explicit.
+
+    :param figsize: optional figure size
+    """
+    if figsize is None:
+        figsize = (7, 5)
+    env = GridWorld()
+    s = env.start
+    a = "Up"
+    dist = env.transitions(s, a)
+    # Build the probability table as a sorted DataFrame.
+    rows = []
+    for s2, prob in sorted(dist.items(), key=lambda x: -x[1]):
+        rows.append(
+            {
+                "state s": str(s),
+                "action a": a,
+                "next state s'": str(s2),
+                "Pr(s' | s, a)": round(prob, 3),
+            }
+        )
+    df = pd.DataFrame(rows)
+    # Also draw the grid shaded by transition probability.
+    prob_map = {cell: 0.0 for cell in env.states}
+    for s2, p in dist.items():
+        prob_map[s2] = p
+    _, ax = plt.subplots(figsize=figsize)
+    grid = env.to_grid(prob_map, fill=np.nan)
+    sns.heatmap(
+        grid,
+        ax=ax,
+        cmap="Blues",
+        annot=True,
+        fmt=".2f",
+        cbar=False,
+        linewidths=1.0,
+        linecolor="black",
+        vmin=0.0,
+        vmax=1.0,
+        mask=np.isnan(grid),
+    )
+    # Highlight the source state.
+    ax.add_patch(
+        mpatches.Rectangle(
+            (s[0] - 1, env.n_rows - s[1]),
+            1.0,
+            1.0,
+            fill=False,
+            edgecolor="darkorange",
+            linewidth=3.5,
+        )
+    )
+    # Mark the wall cell with a grey patch and label.
+    for wall in env.walls:
+        ax.add_patch(
+            mpatches.Rectangle(
+                (wall[0] - 1, env.n_rows - wall[1]),
+                1.0,
+                1.0,
+                facecolor=_COLOR_WALL,
+                edgecolor="black",
+            )
+        )
+        ax.text(
+            wall[0] - 0.5,
+            env.n_rows - wall[1] + 0.5,
+            "WALL",
+            ha="center",
+            va="center",
+            fontsize=9,
+            fontweight="bold",
+        )
+    ax.set_title(
+        "Pr(s' | s=%s, a=%s)" % (s, a),
+        fontsize=13,
+        fontweight="bold",
+    )
+    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+    ax.set_xlabel("col")
+    ax.set_ylabel("row")
+    plt.tight_layout()
+    plt.show()
+    # Display the probability table as a DataFrame.
+    display(df)
+
+
 def cell1_3_transition_table(
     *,
     figsize: Optional[Tuple[float, float]] = None,
@@ -820,7 +916,7 @@ def cell1_3_transition_table(
     :param figsize: optional figure size
     """
     if figsize is None:
-        figsize = (7, 5)
+        figsize = (14, 5)
     env = GridWorld()
     state_dropdown = ipywidgets.Dropdown(
         options=[str(s) for s in env.nonterminal_states],
@@ -843,22 +939,26 @@ def cell1_3_transition_table(
             s = eval(state_dropdown.value)
             a = action_dropdown.value
             dist = env.transitions(s, a)
-            # Build the probability row as a DataFrame.
+            # Build the probability row as a DataFrame for the comments panel.
             df = pd.DataFrame(
                 {
                     "next_state": [str(s2) for s2 in dist],
                     "probability": [round(p, 3) for p in dist.values()],
                 }
             ).sort_values("probability", ascending=False)
-            # Draw the grid shaded by transition probability.
+            # Two-panel layout: heatmap + comments with probability table.
+            _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
+            # Panel 1: grid shaded by transition probability.
             prob_map = {cell: 0.0 for cell in env.states}
             for s2, p in dist.items():
                 prob_map[s2] = p
-            _, ax = plt.subplots(figsize=figsize)
             grid = env.to_grid(prob_map, fill=np.nan)
+            # Mask wall cells; zero-prob cells kept unmasked so annotations
+            # show, then overlaid with white patches below.
+            wall_mask = np.isnan(grid)
             sns.heatmap(
                 grid,
-                ax=ax,
+                ax=ax1,
                 cmap="Blues",
                 annot=True,
                 fmt=".2f",
@@ -867,9 +967,55 @@ def cell1_3_transition_table(
                 linecolor="black",
                 vmin=0.0,
                 vmax=1.0,
-                mask=np.isnan(grid),
+                mask=wall_mask,
             )
-            ax.add_patch(
+            # Overlay white patches on zero-probability cells.
+            for col in range(1, env.n_cols + 1):
+                for row in range(1, env.n_rows + 1):
+                    cell = (col, row)
+                    if cell not in env.walls and prob_map[cell] == 0.0:
+                        ax1.add_patch(
+                            mpatches.Rectangle(
+                                (col - 1, env.n_rows - row),
+                                1.0,
+                                1.0,
+                                facecolor="white",
+                                edgecolor="black",
+                                linewidth=1.0,
+                            )
+                        )
+                        ax1.text(
+                            col - 0.5,
+                            env.n_rows - row + 0.5,
+                            "0.00",
+                            ha="center",
+                            va="center",
+                            fontsize=10,
+                            color="lightgray",
+                        )
+            # Mark wall cells with grey patches and "WALL" label, matching
+            # the style from cell1_2.
+            for wall in env.walls:
+                ax1.add_patch(
+                    mpatches.Rectangle(
+                        (wall[0] - 1, env.n_rows - wall[1]),
+                        1.0,
+                        1.0,
+                        facecolor=_COLOR_WALL,
+                        edgecolor="black",
+                    )
+                )
+                ax1.text(
+                    wall[0] - 0.5,
+                    env.n_rows - wall[1] + 0.5,
+                    "WALL",
+                    ha="center",
+                    va="center",
+                    fontsize=9,
+                    fontweight="bold",
+                )
+            # Highlight the source state.
+            ax1.add_patch(
                 mpatches.Rectangle(
                     (s[0] - 1, env.n_rows - s[1]),
                     1.0,
@@ -879,19 +1025,37 @@ def cell1_3_transition_table(
                     linewidth=3.5,
                 )
             )
-            ax.set_title(
+            ax1.set_title(
                 "Pr(s' | s=%s, a=%s)" % (s, a),
                 fontsize=13,
                 fontweight="bold",
             )
-            ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
-            ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
-            ax.set_xlabel("col")
-            ax.set_ylabel("row")
+            ax1.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+            ax1.set_yticklabels(
+                [str(r) for r in range(env.n_rows, 0, -1)], rotation=0
+            )
+            ax1.set_xlabel("col")
+            ax1.set_ylabel("row")
+            # Panel 2: comments with the probability table.
+            table_text = "Probability table:\n\n"
+            for _, row in df.iterrows():
+                table_text += (
+                    "  %s -> %s:  %.3f\n"
+                    % (s, row["next_state"], row["probability"])
+                )
+            table_text += (
+                "\nsum of probabilities: %.6f" % round(sum(dist.values()), 6)
+            )
+            text = (
+                "Parameters:\n"
+                "  state: %s\n"
+                "  action: %s\n\n"
+                "%s"
+                % (s, a, table_text)
+            )
+            _comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
-            display(df.reset_index(drop=True))
-            print("sum of probabilities=", round(sum(dist.values()), 6))
 
     state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
@@ -1035,11 +1199,7 @@ def cell1_4_rewards_and_returns(
                 "  r_step: %.2f\n"
                 "  gamma: %.2f\n\n"
                 "Discounted return G = %.3f\n\n"
-                "First steps:\n%s\n\n"
-                "Key idea:\n"
-                "- Return is the discounted\n"
-                "  sum of rewards, not the\n"
-                "  final cell alone."
+                "First steps:\n%s"
                 % (env.r_step, gamma, running, "\n".join(lines))
             )
             _comment_panel(ax2, text)
@@ -1132,12 +1292,7 @@ def cell2_1_bellman_one_state(
                 "gamma: %.2f\n\n"
                 "Action values:\n%s\n\n"
                 "Best action: %s\n"
-                "U(s) = %.3f\n\n"
-                "Key idea:\n"
-                "- Utility = value of the\n"
-                "  best action, not average.\n"
-                "- The max makes the system\n"
-                "  nonlinear -> we iterate."
+                "U(s) = %.3f"
                 % (
                     s,
                     env.gamma,
@@ -1227,6 +1382,8 @@ def cell2_2_value_iteration(
             _draw_value_heatmap(
                 env, ax1, u, title="Utilities after sweep %d" % i
             )
+            ax1.set_xlabel("col\n\n_Utility heatmap_: each cell annotated with its current U(s)",
+                           fontsize=9)
             # Panel 2: convergence curve of the max change per sweep.
             ax2.plot(
                 range(1, len(deltas) + 1),
@@ -1236,11 +1393,12 @@ def cell2_2_value_iteration(
             )
             if 1 <= i <= len(deltas):
                 ax2.axvline(i, color="gray", linestyle="--")
-            ax2.set_xlabel("sweep")
+            ax2.set_xlabel("sweep\n\n_Convergence_: max |U_{i+1} - U_i| per sweep",
+                           fontsize=9)
             ax2.set_ylabel("max |U_{i+1} - U_i|")
             ax2.set_title("Convergence", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
-            # Panel 3: comments.
+            # Panel 3: comments with current state information only.
             converged = len(deltas)
             text = (
                 "Parameters:\n"
@@ -1248,13 +1406,7 @@ def cell2_2_value_iteration(
                 "  gamma: %.2f\n"
                 "  r_step: %.2f\n\n"
                 "U(start) = %.3f\n"
-                "sweeps to converge: %d\n\n"
-                "Key idea:\n"
-                "- Value flows backward from\n"
-                "  the terminals, one ring of\n"
-                "  cells per sweep.\n"
-                "- The change shrinks each\n"
-                "  sweep (geometric)."
+                "sweeps to converge: %d"
                 % (
                     i,
                     len(snapshots) - 1,
@@ -1276,7 +1428,7 @@ def cell2_2_value_iteration(
         ipywidgets.VBox(
             [
                 ipywidgets.Label(
-                    "Step through the sweeps and watch utilities spread:"
+                    "Step through sweeps: utilities spread backward from terminals one ring per sweep."
                 ),
                 iter_box,
                 gamma_box,
@@ -1341,14 +1493,7 @@ def cell2_3_extract_policy(
             text = (
                 "Parameters:\n"
                 "  r_step: %.2f\n\n"
-                "U(start) = %.3f\n\n"
-                "Key idea:\n"
-                "- The policy is greedy w.r.t.\n"
-                "  the converged utilities.\n"
-                "- Large penalty -> short risky\n"
-                "  path near the -1 cell.\n"
-                "- Near-zero penalty -> long\n"
-                "  safe path avoiding -1."
+                "U(start) = %.3f"
                 % (env.r_step, u[env.start])
             )
             _comment_panel(ax2, text)
@@ -1458,15 +1603,7 @@ def cell3_1_policy_evaluation(
                 "Parameters:\n"
                 "  policy: %s\n"
                 "  gamma: %.2f\n\n"
-                "U(start) = %.3f\n\n"
-                "Key idea:\n"
-                "- A fixed action per state\n"
-                "  drops the max: the Bellman\n"
-                "  equations become linear.\n"
-                "- Solved in one shot with\n"
-                "  numpy.linalg.solve.\n"
-                "- A bad policy yields low\n"
-                "  utilities."
+                "U(start) = %.3f"
                 % (policy_dropdown.value, env.gamma, u[env.start])
             )
             _comment_panel(ax2, text)
@@ -1541,14 +1678,7 @@ def cell3_2_policy_iteration(
             text = (
                 "Round: %d / %d\n\n"
                 "States changed action: %d\n"
-                "rounds to converge: %d\n\n"
-                "Key idea:\n"
-                "- Evaluate the policy, then\n"
-                "  make it greedy. Repeat.\n"
-                "- Terminates when no state\n"
-                "  changes action -> optimal.\n"
-                "- Converges in very few\n"
-                "  rounds."
+                "rounds to converge: %d"
                 % (i, len(policies) - 1, n_changed, len(changes))
             )
             _comment_panel(ax3, text)
@@ -1637,16 +1767,7 @@ def cell3_3_compare_solvers(
             text = (
                 "gamma: %.2f\n\n"
                 "value iteration sweeps: %d\n"
-                "policy iteration rounds: %d\n\n"
-                "Key idea:\n"
-                "- Value iteration: many cheap\n"
-                "  sweeps.\n"
-                "- Policy iteration: few\n"
-                "  expensive rounds.\n"
-                "- As gamma -> 1, value\n"
-                "  iteration slows much more.\n"
-                "- Both reach the same optimal\n"
-                "  policy."
+                "policy iteration rounds: %d"
                 % (env.gamma, len(vi_deltas), len(pi_changes))
             )
             _comment_panel(ax3, text)
@@ -1702,19 +1823,13 @@ def cell4_1_planning_vs_learning(
     ax1.set_title(
         "Same world, blindfolded", fontsize=13, fontweight="bold"
     )
-    # Panel 2: comments comparing planning and learning.
+    # Panel 2: environment parameters only.
     text = (
-        "Planning (Parts 2-3):\n"
-        "- Knows Pr(s'|s,a) and R.\n"
-        "- Solves Bellman equations.\n\n"
-        "Learning (Part 4):\n"
-        "- Does NOT know the model.\n"
-        "- Sees only experience\n"
-        "  tuples (s, a, r, s').\n"
-        "- Must act to discover the\n"
-        "  rules.\n\n"
-        "Goal is unchanged: maximize\n"
-        "expected return."
+        "Environment:\n"
+        "  r_step: %.2f\n"
+        "  gamma: %.2f\n"
+        "  p_intended: %.2f"
+        % (env.r_step, env.gamma, env.p_intended)
     )
     _comment_panel(ax2, text)
     plt.tight_layout()
@@ -1809,11 +1924,7 @@ def cell4_2_q_update_rule(
                 "  old Q: %.3f\n"
                 "  TD target: %.3f\n"
                 "  TD error: %.3f\n"
-                "  new Q: %.3f\n\n"
-                "Key idea:\n"
-                "- TD error is surprise.\n"
-                "- alpha controls the nudge.\n"
-                "- No model needed."
+                "  new Q: %.3f"
                 % (
                     alpha,
                     env.gamma,
@@ -1932,14 +2043,7 @@ def cell4_3_exploration(
                 "Parameters:\n"
                 "  epsilon: %.2f\n"
                 "  n_episodes: %d\n"
-                "  seed: %d\n\n"
-                "Key idea:\n"
-                "- Greedy (epsilon=0) may never\n"
-                "  visit off-path states.\n"
-                "- epsilon near 1 wastes\n"
-                "  episodes acting randomly.\n"
-                "- Good learning balances the\n"
-                "  two, often decaying epsilon."
+                "  seed: %d"
                 % (epsilon, n_episodes, seed)
             )
             _comment_panel(ax3, text)
@@ -2093,13 +2197,7 @@ def cell4_4_q_learning_converges(
                 "  alpha: %.2f\n"
                 "  epsilon: %.2f\n\n"
                 "Policy match vs value\n"
-                "iteration: %d / %d states\n\n"
-                "Key idea:\n"
-                "- With enough episodes,\n"
-                "  Q-learning recovers the\n"
-                "  optimal policy with no model.\n"
-                "- The curve is noisy early,\n"
-                "  then stabilizes."
+                "iteration: %d / %d states"
                 % (
                     n_episodes,
                     alpha_slider.value,
