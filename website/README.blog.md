@@ -142,6 +142,12 @@
 - https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
 - /Users/saggese/src/csfy1/blog/docs/posts
 
+## TIL
+
+- How to 
+  .claude/statusline.sh
+  .claude/settings.local.json
+
 ## Tier 1: Ready — Well-structured, near-publishable
 
 - `website/docs/blog/posts/draft.Intro_to_Bayesian_Optimization.md`
