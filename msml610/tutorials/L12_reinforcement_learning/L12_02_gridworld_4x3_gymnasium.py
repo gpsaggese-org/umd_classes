@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -75,53 +75,44 @@ utils.cell1_1_show_grid()
 # %% [markdown]
 # ## Cell 1.2: Stochastic Action Model
 #
-# - The gymnasium env uses the same slip model under the hood
-# - Transition probabilities live in `env.P[s][a]` as a list of
-#   `(prob, s', reward, terminated)` tuples
-# - The intended action succeeds with probability `p_intended`; the agent
-#   slips perpendicular with probability `(1-p_intended)/2` each
+# **Goal**:
+# - See the stochastic slip model through the gymnasium `env.P[s][a]` interface
+# - Understand how the intended action and perpendicular slips share probability mass
+#
+# _Grid_: Highlighted state with arrow thickness encoding outcome probability
+# _Comments_: Current parameter values and computed outcome probabilities
 
 # %%
-# The wheels slip. The transition data comes from env.P[s][a].
+# Show how an intended action spreads probability mass through env.P.
 utils.cell1_2_stochastic_action()
-
-# %% [markdown]
-# - The intended direction carries probability `p_intended`
-# - The two perpendicular directions split the remaining mass equally
-# - Blocked moves bounce back. All this is handled by `_compute_transitions()`
 
 # %% [markdown]
 # ## Cell 1.3: Transition Model from env.P
 #
-# - `env.P[s][a]` exposes `[(prob, s', reward, terminated)]` -- the same row
-#   of the transition model that the from-scratch version built explicitly
-# - This is exactly what `gymnasium` would hide inside `step()` for planning
-# - Value iteration and policy iteration read this dict; Q-learning uses
-#   `step()` instead and never touches `env.P`
+# **Goal**:
+# - See how `env.P[s][a]` exposes the transition model as `(prob, s', reward, terminated)` tuples
+# - Understand that planning algorithms read this dict while Q-learning uses `step()`
+#
+# _Transition heatmap_: Probability distribution over next states for the selected (state, action)
+# _Transition table_: Each outcome with probability, reward, and terminal flag
 
 # %%
-# This table is env.P[s][a]. Planning algorithms read it; Q-learning does not.
+# Display the explicit transition row from env.P for a chosen (state, action).
 utils.cell1_3_transition_table()
-
-# %% [markdown]
-# - Each row sums to 1.0
-# - The reward and terminal flag are part of each transition tuple
-# - Planning solvers read this table directly
 
 # %% [markdown]
 # ## Cell 1.4: Rewards and Episode Returns
 #
-# - The reward structure is identical: $-0.04$ living reward, $+1$ and $-1$
-#   for the two terminal cells
-# - A fixed policy is rolled out via `env.step()` for a sample trajectory
+# **Goal**:
+# - Define the reward structure and connect per-step rewards to discounted return
+# - See a sample trajectory rolled out via `env.step()`
+#
+# _Rewards and trajectory_: Per-cell living rewards with a sample path from START
+# _Comments_: Discounted return computation and step-by-step rewards
 
 # %%
-# Rewards and the discounted return of a sample trajectory.
+# Show per-cell rewards and the discounted return of a sample trajectory.
 utils.cell1_4_rewards_and_returns()
-
-# %% [markdown]
-# - Each step returns a reward, and the total return is the discounted sum
-# - Changing `r_step` and `gamma` shifts the return of the same path
 
 # %% [markdown]
 # # Part 2: Solving the MDP with Value Iteration
@@ -129,45 +120,49 @@ utils.cell1_4_rewards_and_returns()
 # %% [markdown]
 # ## Cell 2.1: The Bellman Equation for One State
 #
-# - The Bellman update reads the action values from `env.P[s][a]`
-# - The gymnasium version computes `Q(s,a)` the same way, but uses integer
-#   state IDs and action IDs
+# **Goal**:
+# - Build intuition for the Bellman update on a single state using integer state and action IDs
+# - See how the Bellman update reads `env.P[s][a]` to compute Q-values
 
 # %%
-# Bellman one state: utilities come from value_iteration() using env.P.
+# Show the value of each action at one state under converged utilities.
 utils.cell2_1_bellman_one_state()
 
 # %% [markdown]
+# **Key observations**:
 # - The utility of a state is the value of its best action
 # - The max is what makes the system nonlinear, requiring iteration
 
 # %% [markdown]
 # ## Cell 2.2: Value Iteration Converging Over Sweeps
 #
-# - Same `value_iteration()` algorithm, but operating on `env.P[s][a]`
-# - Sweeps converge to the same fixed point as the from-scratch version
+# **Goal**:
+# - Watch value iteration converge on the gymnasium `env.P` model
+# - See utility information propagate backward from the terminals
 
 # %%
-# Watch value iteration converge on the gymnasium env.P model.
+# Step through value iteration sweeps and watch utilities converge.
 utils.cell2_2_value_iteration()
 
 # %% [markdown]
+# **Key observations**:
 # - Value propagates backward from the terminals, one ring per sweep
 # - The change per sweep shrinks geometrically
 
 # %% [markdown]
 # ## Cell 2.3: Extracting the Optimal Policy
 #
-# - The greedy policy derived from converged utilities
-# - Identical to the from-scratch result -- same MDP, same answer
+# **Goal**:
+# - Turn converged utilities into an actionable policy
+# - Take the greedy action in every cell
 
 # %%
-# Extract the optimal policy from converged utilities.
+# Show the greedy policy extracted from converged utilities.
 utils.cell2_3_extract_policy()
 
 # %% [markdown]
-# - The living reward controls risk: expensive steps push the agent toward
-#   the short risky path; cheap steps let it take the long safe route
+# **Key observations**:
+# - The living reward controls risk: expensive steps push the agent toward the short risky path; cheap steps let it take the long safe route
 
 # %% [markdown]
 # # Part 3: Solving the MDP with Policy Iteration
@@ -175,44 +170,48 @@ utils.cell2_3_extract_policy()
 # %% [markdown]
 # ## Cell 3.1: Policy Evaluation for a Fixed Policy
 #
-# - Solves $(I - \gamma P) U = b$ using `numpy.linalg.solve`
-# - Reads the transition probabilities from `env.P[s][a]`
+# **Goal**:
+# - Compute the utility of a fixed policy by solving $(I - \gamma P) U = b$
+# - Read transition probabilities from `env.P[s][a]`
 
 # %%
-# Evaluate a fixed policy by solving linear Bellman equations.
+# Evaluate a fixed policy by solving the linear Bellman system.
 utils.cell3_1_policy_evaluation()
 
 # %% [markdown]
+# **Key observations**:
 # - A bad policy yields low utilities, especially near the $-1$ terminal
 # - Evaluation answers "how good is this policy"
 
 # %% [markdown]
 # ## Cell 3.2: Policy Improvement and Iteration to Optimality
 #
-# - Alternates evaluation and improvement, converging in a handful of rounds
-# - Starts from a deliberately poor policy so the improvement is visible
+# **Goal**:
+# - Alternate evaluation and improvement until the policy stops changing
+# - Watch convergence from a deliberately poor policy to the optimal one
 
 # %%
-# Step through policy iteration. Each round improves the policy.
+# Step through policy iteration rounds and watch arrows flip.
 utils.cell3_2_policy_iteration()
 
 # %% [markdown]
+# **Key observations**:
 # - Policy iteration typically converges in fewer rounds than value iteration
-# - Each round is more expensive (solving a linear system), but the total
-#   wall-clock can still be lower
+# - Each round is more expensive (solving a linear system), but the total wall-clock can still be lower
 
 # %% [markdown]
 # ## Cell 3.3: Value Iteration vs Policy Iteration
 #
-# - Both methods use the same `env.P[s][a]` model
-# - Both converge to the same optimal policy
-# - The tradeoff is many cheap sweeps vs few expensive evaluations
+# **Goal**:
+# - Contrast the two exact methods and their convergence behavior
+# - Understand the tradeoff between many cheap sweeps and few expensive rounds
 
 # %%
-# Compare the convergence behaviour of both solvers.
+# Compare convergence of the two exact methods.
 utils.cell3_3_compare_solvers()
 
 # %% [markdown]
+# **Key observations**:
 # - As $\gamma \to 1$, value iteration needs many more sweeps
 # - Policy iteration is relatively unaffected by gamma
 
@@ -222,65 +221,70 @@ utils.cell3_3_compare_solvers()
 # %% [markdown]
 # ## Cell 4.1: Why Reinforcement Learning is Harder Than Planning
 #
-# - Same world, but the agent now calls `env.step()` and never reads
-#   `env.P[s][a]`
-# - It must learn the value of actions purely from the experience tuples
-#   it gets back from each step
+# **Goal**:
+# - Contrast planning (reading `env.P[s][a]`) with learning (calling `env.step()`)
+# - Understand why the same optimal policy takes a harder route in RL
+#
+# - The agent calls `env.step()` and never reads `env.P[s][a]`
+# - It must learn the value of actions purely from the experience tuples it gets back from each step
 
 # %%
-# Planning reads env.P; learning calls env.step().
+# Contrast planning (reads env.P) with learning (calls env.step()).
 utils.cell4_1_planning_vs_learning()
 
 # %% [markdown]
+# **Key observations**:
 # - The transition model is hidden behind the gymnasium API
 # - The agent discovers the world by interacting with it
 
 # %% [markdown]
 # ## Cell 4.2: The Q-Learning Update Rule
 #
-# - One call to `env.step()` produces the tuple used in the TD update
-# - The Q-value is nudged toward the TD target $\alpha$ at a time
+# **Goal**:
+# - Introduce the single update that powers Q-learning
+# - Show how one `env.step()` call produces the TD update tuple
 
 # %%
-# One step, one nudge. The update uses only the (s, a, r, s') tuple.
+# Show how a single env.step() tuple nudges a Q-value.
 utils.cell4_2_q_update_rule()
 
 # %% [markdown]
-# - The TD error measures surprise: the gap between old expectation and
-#   observed outcome
+# **Key observations**:
+# - The TD error measures surprise: the gap between old expectation and observed outcome
 # - No transition probabilities are needed
 
 # %% [markdown]
 # ## Cell 4.3: Exploration vs Exploitation with Epsilon-Greedy
 #
-# - The same epsilon-greedy policy is used within `q_learning()`
-# - Low epsilon concentrates visits on a narrow path; high epsilon spreads
-#   visits broadly
+# **Goal**:
+# - Show why the agent must sometimes act randomly
+# - Compare state coverage at low and high exploration rates
 
 # %%
-# Compare state coverage at low and high exploration.
+# Compare state coverage under low vs high epsilon using q_learning().
 utils.cell4_3_exploration()
 
 # %% [markdown]
+# **Key observations**:
 # - The visit heatmap reveals exactly which states the agent has explored
 # - A balance between exploration and exploitation is essential
 
 # %% [markdown]
 # ## Cell 4.4: Watching Q-Learning Learn the Optimal Policy
 #
-# - With enough episodes, Q-learning recovers the same optimal policy found
-#   by value iteration -- without ever reading `env.P[s][a]`
-# - The only interface it uses is `env.step()`
+# **Goal**:
+# - Run full Q-learning and watch the learned policy emerge
+# - Compare it to the policy value iteration found with full knowledge
 
 # %%
-# Train Q-learning and compare to the planning optimum.
+# Train Q-learning via env.step() and compare to the planning optimum.
 utils.cell4_4_q_learning_converges()
 
 # %% [markdown]
+# **Key observations**:
 # - The learned arrows converge to the value iteration arrows as episodes grow
 # - Returns rise and flatten as the Q-table stabilises
-# - This is the payoff: the same optimal behaviour emerges from pure
-#   experience, no model required
+# - This is the payoff: the same optimal behaviour emerges from pure experience, no model required
 
 # %% [markdown]
 # # Summary: The Mental Model

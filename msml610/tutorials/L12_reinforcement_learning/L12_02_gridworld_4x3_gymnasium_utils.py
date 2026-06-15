@@ -747,6 +747,11 @@ def cell1_2_stochastic_action(
 ) -> None:
     """
     Show how an intended action spreads probability mass through env.P.
+
+    Interactive controls (ipywidgets):
+    :param action: the intended action (``Up``, ``Down``, ``Left``, ``Right``)
+    :param p_intended: probability the intended action succeeds (0.5 to 1.0)
+    :param figsize: optional figure size
     """
     if figsize is None:
         figsize = (14, 5)
@@ -820,6 +825,12 @@ def cell1_2_stochastic_action(
                 fontsize=13,
                 fontweight="bold",
             )
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Action spread_: the intended action and perpendicular "
+                "slips with arrow thickness encoding probability",
+                fontsize=9,
+            )
             p_perp = (1.0 - env.p_intended) / 2.0
             text = (
                 "Parameters:\n"
@@ -835,19 +846,29 @@ def cell1_2_stochastic_action(
             plt.tight_layout()
             plt.show()
 
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>action</b> — intended direction "
+        "(<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)"
+        "<br>"
+        "<b>p_intended</b> — probability the intended action succeeds "
+        "(0.50 to 1.00); the remaining 1&minus;p is split evenly across the "
+        "two perpendicular moves"
+        "</div>"
+    )
     action_dropdown.observe(update_plot, names="value")
     p_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.VBox(
-            [
-                ipywidgets.Label("Pick an action and reliability:"),
-                action_dropdown,
-                p_box,
-                output,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            ipywidgets.Label("Pick an action and reliability:"),
+            action_dropdown,
+            p_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -936,7 +957,12 @@ def cell1_3_transition_table(
             )
             ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
             ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
-            ax.set_xlabel("col")
+            ax.set_xlabel(
+                "col\n\n"
+                "_Transition table_: each row shows the probability distribution "
+                "over next states for a given state and action",
+                fontsize=9,
+            )
             ax.set_ylabel("row")
             plt.tight_layout()
             plt.show()
@@ -944,19 +970,28 @@ def cell1_3_transition_table(
             prob_sum = round(sum(outcome[0] for outcome in outcomes), 6)
             print("sum of probabilities=", prob_sum)
 
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>state</b> — which non-terminal cell to query env.P[s][a] for<br>"
+        "<b>action</b> — intended direction "
+        "(<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)"
+        "</div>"
+    )
     state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.VBox(
-            [
-                ipywidgets.Label("Select a state and action to see env.P[s][a]:"),
-                state_dropdown,
-                action_dropdown,
-                output,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            ipywidgets.Label(
+                "Select a state and action to see env.P[s][a]:"
+            ),
+            state_dropdown,
+            action_dropdown,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1047,6 +1082,12 @@ def cell1_4_rewards_and_returns(
             ys = [c[1] for c in path]
             ax1.plot(xs, ys, "-o", color="darkblue", linewidth=2.0, markersize=6)
             ax1.set_title("Rewards and trajectory (gymnasium)", fontsize=13, fontweight="bold")
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Rewards and trajectory_: per-cell rewards with a sample "
+                "path from START",
+                fontsize=9,
+            )
             running = 0.0
             lines = []
             for t in range(1, len(path)):
@@ -1075,17 +1116,28 @@ def cell1_4_rewards_and_returns(
     gamma_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.VBox(
-            [
-                ipywidgets.Label("Change living reward and discount (gymnasium env):"),
-                r_box,
-                gamma_box,
-                seed_box,
-                output,
-            ]
-        )
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>r_step</b> — living reward collected for each non-terminal step "
+        "(more negative = stronger penalty for wandering)<br>"
+        "<b>gamma</b> — discount factor (near 1 values distant rewards; "
+        "near 0 cares only about immediate reward)<br>"
+        "<b>seed</b> — random seed controlling the trajectory path taken"
+        "</div>"
     )
+    controls = ipywidgets.VBox(
+        [
+            ipywidgets.Label(
+                "Change living reward and discount (gymnasium env):"
+            ),
+            r_box,
+            gamma_box,
+            seed_box,
+        ]
+    )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1137,6 +1189,11 @@ def cell2_1_bellman_one_state(
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1, highlight=cell)
             ax1.set_title("Inspected state %s" % (cell,), fontsize=13, fontweight="bold")
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Inspected state_: the highlighted cell on the grid",
+                fontsize=9,
+            )
             colors = [
                 "seagreen" if a == best_action else "steelblue"
                 for a in _ACTION_NAMES
@@ -1145,6 +1202,11 @@ def cell2_1_bellman_one_state(
             ax2.axhline(0.0, color="black", linewidth=0.8)
             ax2.set_ylabel("expected action value Q(s,a)")
             ax2.set_title("Action values (max kept)", fontsize=13, fontweight="bold")
+            ax2.set_xlabel(
+                "action\n\n"
+                "_Action values_: a bar per action, the best (max) highlighted",
+                fontsize=9,
+            )
             ax2.grid(True, alpha=0.3)
             text = (
                 "State: %s\n"
@@ -1165,16 +1227,30 @@ def cell2_1_bellman_one_state(
             plt.tight_layout()
             plt.show()
 
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>state</b> — which cell to inspect the action values for<br>"
+        "<b>gamma</b> — discount factor controlling how future rewards are weighted"
+        "</div>"
+    )
     state_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Pick a state, see action values via env.P:"),
-                state_dropdown,
-                gamma_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Pick a state, see action values via env.P:"
+                        ),
+                        state_dropdown,
+                        gamma_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1242,7 +1318,14 @@ def cell2_2_value_iteration(
             # Convert id-keyed u to cell-keyed for heatmap.
             u_cells = {env.id_to_cell(s_id): val for s_id, val in u_ids.items()}
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
-            _draw_value_heatmap(env, ax1, u_cells, title="Utilities after sweep %d" % i)
+            _draw_value_heatmap(
+                env, ax1, u_cells, title="Utilities after sweep %d" % i
+            )
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Utility heatmap_: each cell annotated with its current U(s)",
+                fontsize=9,
+            )
             ax2.plot(
                 range(1, len(deltas) + 1),
                 deltas,
@@ -1251,7 +1334,11 @@ def cell2_2_value_iteration(
             )
             if 1 <= i <= len(deltas):
                 ax2.axvline(i, color="gray", linestyle="--")
-            ax2.set_xlabel("sweep")
+            ax2.set_xlabel(
+                "sweep\n\n"
+                "_Convergence_: max utility change per sweep",
+                fontsize=9,
+            )
             ax2.set_ylabel("max |U_{i+1} - U_i|")
             ax2.set_title("Convergence", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
@@ -1277,18 +1364,35 @@ def cell2_2_value_iteration(
             plt.tight_layout()
             plt.show()
 
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>iteration</b> — which Bellman sweep to display "
+        "(value propagates backward from terminals one ring per sweep)<br>"
+        "<b>gamma</b> — discount factor (higher gamma propagates value further "
+        "but converges more slowly)<br>"
+        "<b>r_step</b> — living reward collected for each non-terminal step"
+        "</div>"
+    )
     iter_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     r_slider.observe(update_plot, names="value")
     update_plot()
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Step through value iteration sweeps (gymnasium):"),
-                iter_box,
-                gamma_box,
-                r_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Step through value iteration sweeps (gymnasium):"
+                        ),
+                        iter_box,
+                        gamma_box,
+                        r_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1334,8 +1438,16 @@ def cell2_3_extract_policy(
             u_cells = {env.id_to_cell(s_id): val for s_id, val in u_ids.items()}
             policy = extract_policy(env, u_ids)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
-            _draw_value_heatmap(env, ax1, u_cells, title="Optimal policy over utilities")
+            _draw_value_heatmap(
+                env, ax1, u_cells, title="Optimal policy over utilities"
+            )
             _draw_policy_arrows_heatmap(env, ax1, policy)
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Policy over utilities_: an arrow per cell over the utility "
+                "heatmap",
+                fontsize=9,
+            )
             start_id = env.cell_to_id(env.start_cell)
             text = (
                 "Parameters:\n"
@@ -1355,12 +1467,27 @@ def cell2_3_extract_policy(
 
     r_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>r_step</b> — living reward per step; a large negative value makes "
+        "the agent take the short risky path, a near-zero value makes it take "
+        "the long safe path"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Change living reward, watch the policy (gymnasium):"),
-                r_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Change living reward, watch the policy (gymnasium):"
+                        ),
+                        r_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1439,6 +1566,12 @@ def cell3_1_policy_evaluation(
                 env, ax1, u_cells, title="U^pi for '%s'" % policy_dropdown.value
             )
             _draw_policy_arrows_heatmap(env, ax1, policy)
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Policy utilities_: the fixed policy as arrows over its "
+                "evaluated utilities",
+                fontsize=9,
+            )
             start_id = env.cell_to_id(env.start_cell)
             text = (
                 "Parameters:\n"
@@ -1456,13 +1589,29 @@ def cell3_1_policy_evaluation(
     policy_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>policy</b> — which fixed policy to evaluate "
+        "(<code>hand-tuned</code>, <code>always-up</code>, "
+        "<code>always-right</code>, <code>random</code>)<br>"
+        "<b>gamma</b> — discount factor weighting future rewards"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Pick a fixed policy (gymnasium env):"),
-                policy_dropdown,
-                gamma_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Pick a fixed policy (gymnasium env):"
+                        ),
+                        policy_dropdown,
+                        gamma_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1506,9 +1655,19 @@ def cell3_2_policy_iteration(
             env._draw_base(ax1)
             _draw_policy_arrows_cells(env, ax1, before, color="gray")
             ax1.set_title("Policy before round %d" % i, fontsize=13, fontweight="bold")
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Before_: the current policy arrows",
+                fontsize=9,
+            )
             env._draw_base(ax2)
             _draw_policy_arrows_cells(env, ax2, after, color="darkblue")
             ax2.set_title("Policy after round %d" % i, fontsize=13, fontweight="bold")
+            ax2.set_xlabel(
+                "col\n\n"
+                "_After_: the improved policy arrows",
+                fontsize=9,
+            )
             n_changed = changes[i - 1] if 1 <= i <= len(changes) else 0
             text = (
                 "Round: %d / %d\n\n"
@@ -1524,12 +1683,26 @@ def cell3_2_policy_iteration(
 
     iter_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>iteration</b> — which evaluate/improve round to display "
+        "(the policy converges in very few rounds)"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Step through policy iteration (gymnasium):"),
-                iter_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Step through policy iteration (gymnasium):"
+                        ),
+                        iter_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1576,14 +1749,22 @@ def cell3_3_compare_solvers(
             ax1.plot(
                 range(1, len(vi_deltas) + 1), vi_deltas, "-o", color="darkorange"
             )
-            ax1.set_xlabel("sweep")
+            ax1.set_xlabel(
+                "sweep\n\n"
+                "_Value iteration_: utility change per sweep",
+                fontsize=9,
+            )
             ax1.set_ylabel("max utility change")
             ax1.set_title("Value iteration", fontsize=13, fontweight="bold")
             ax1.grid(True, alpha=0.3)
             ax2.plot(
                 range(1, len(pi_changes) + 1), pi_changes, "-s", color="seagreen"
             )
-            ax2.set_xlabel("round")
+            ax2.set_xlabel(
+                "round\n\n"
+                "_Policy iteration_: changed-action count per round",
+                fontsize=9,
+            )
             ax2.set_ylabel("states changed action")
             ax2.set_title("Policy iteration", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
@@ -1602,12 +1783,26 @@ def cell3_3_compare_solvers(
 
     gamma_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>gamma</b> — discount factor; as gamma approaches 1, value iteration "
+        "needs many more sweeps while policy iteration stays at a handful of rounds"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Compare solvers (gymnasium env.P):"),
-                gamma_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Compare solvers (gymnasium env.P):"
+                        ),
+                        gamma_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1728,6 +1923,12 @@ def cell4_2_q_update_rule(
                 color="darkblue",
             )
             ax1.set_title("One env.step() tuple", fontsize=13, fontweight="bold")
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Transition diagram_: one transition from env.step() "
+                "with reward r",
+                fontsize=9,
+            )
             text = (
                 "Update: Q <- Q + alpha[r +\n"
                 "      gamma max Q(s',.) - Q]\n\n"
@@ -1748,13 +1949,29 @@ def cell4_2_q_update_rule(
     alpha_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>alpha</b> — learning rate; near 0 the estimate barely moves, "
+        "near 1 it jumps to the TD target<br>"
+        "<b>gamma</b> — discount factor weighting the next-state value in "
+        "the TD target"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Adjust parameters, watch the TD update:"),
-                alpha_box,
-                gamma_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Adjust parameters, watch the TD update:"
+                        ),
+                        alpha_box,
+                        gamma_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1813,8 +2030,25 @@ def cell4_3_exploration(
             low = q_learning(env, n_episodes=n_episodes, alpha=0.5, epsilon=eps, seed=seed)
             high = q_learning(env, n_episodes=n_episodes, alpha=0.5, epsilon=0.9, seed=seed)
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
-            _draw_visit_heatmap(env, ax1, low["visit_counts"], title="Visits at epsilon=%.2f" % eps)
-            _draw_visit_heatmap(env, ax2, high["visit_counts"], title="Visits at epsilon=0.90")
+            _draw_visit_heatmap(
+                env, ax1, low["visit_counts"],
+                title="Visits at epsilon=%.2f" % eps,
+            )
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Low-epsilon visits_: visit counts under the chosen "
+                "exploration rate",
+                fontsize=9,
+            )
+            _draw_visit_heatmap(
+                env, ax2, high["visit_counts"],
+                title="Visits at epsilon=0.90",
+            )
+            ax2.set_xlabel(
+                "col\n\n"
+                "_High-epsilon visits_: visit counts under broad exploration",
+                fontsize=9,
+            )
             text = (
                 "Parameters:\n"
                 "  epsilon: %.2f\n"
@@ -1836,14 +2070,30 @@ def cell4_3_exploration(
     n_exp_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>epsilon</b> — exploration probability; low epsilon concentrates "
+        "visits on a narrow corridor, high epsilon spreads visits broadly<br>"
+        "<b>n_episodes</b> — number of training episodes (log scale)<br>"
+        "<b>seed</b> — random seed for reproducible training runs"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Adjust epsilon, compare coverage:"),
-                epsilon_box,
-                n_box,
-                seed_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Adjust epsilon, compare coverage:"
+                        ),
+                        epsilon_box,
+                        n_box,
+                        seed_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )
@@ -1921,11 +2171,23 @@ def cell4_4_q_learning_converges(
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1)
             _draw_policy_arrows_cells(env, ax1, learned, color="darkblue")
-            ax1.set_title("Q-learning policy (gymnasium)", fontsize=13, fontweight="bold")
+            ax1.set_title(
+                "Q-learning policy (gymnasium)", fontsize=13, fontweight="bold"
+            )
+            ax1.set_xlabel(
+                "col\n\n"
+                "_Q-learning policy_: the greedy policy derived from "
+                "the learned Q-table",
+                fontsize=9,
+            )
             window = max(1, len(returns) // 50)
             smooth = pd.Series(returns).rolling(window, min_periods=1).mean()
             ax2.plot(smooth, color="seagreen")
-            ax2.set_xlabel("episode")
+            ax2.set_xlabel(
+                "episode\n\n"
+                "_Learning curve_: smoothed total return per episode",
+                fontsize=9,
+            )
             ax2.set_ylabel("return (smoothed)")
             ax2.set_title("Learning curve", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
@@ -1956,15 +2218,34 @@ def cell4_4_q_learning_converges(
     epsilon_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
+    param_info = ipywidgets.HTML(
+        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
+        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
+        "<b>n_episodes</b> — number of training episodes (log scale); "
+        "more episodes give the Q-table time to converge<br>"
+        "<b>alpha</b> — learning rate controlling how much each experience "
+        "updates the Q-value<br>"
+        "<b>epsilon</b> — exploration probability for epsilon-greedy action "
+        "selection<br>"
+        "<b>seed</b> — random seed for reproducible training"
+        "</div>"
+    )
     display(
-        ipywidgets.VBox(
+        ipywidgets.HBox(
             [
-                ipywidgets.Label("Train Q-learning, compare to VI optimum:"),
-                n_box,
-                alpha_box,
-                epsilon_box,
-                seed_box,
-                output,
+                ipywidgets.VBox(
+                    [
+                        ipywidgets.Label(
+                            "Train Q-learning, compare to VI optimum:"
+                        ),
+                        n_box,
+                        alpha_box,
+                        epsilon_box,
+                        seed_box,
+                        output,
+                    ]
+                ),
+                param_info,
             ]
         )
     )

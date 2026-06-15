@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -82,20 +82,12 @@ utils.cell1_1_show_grid()
 # %% [markdown]
 # ## Cell 1.2: Stochastic Action Model
 #
-# _Action spread_: the intended action and the three possible outcomes, with arrow thickness encoding probability. _Comments_: current parameters and the outcome distribution.
-#
 # **Goal**:
 # - Show why this is an MDP and not a deterministic puzzle
 # - The unreliable actions are the entire source of difficulty
-#
-# **Parameters**:
-# - `action`: the intended action (`Up`, `Down`, `Left`, `Right`)
-# - `p_intended`: probability the intended action succeeds (0.5 to 1.0)
 
 # %%
-# The wheels slip: the intended action happens 80% of the time; the agent
-# veers perpendicular 10% each way. This randomness is why a single plan is not
-# enough: we need a policy.
+# Create interactive widget showing the stochastic action model.
 utils.cell1_2_stochastic_action()
 
 # %% [markdown]
@@ -110,23 +102,15 @@ utils.cell1_2_stochastic_action()
 # %% [markdown]
 # ## Cell 1.3: Transition Model as an Explicit Table
 #
-# _Probability grid_: reachable next states shaded by probability. _DataFrame_: each reachable next state $s'$ and its probability.
-#
 # **Goal**:
 # - Make the abstract $\Pr(s' \mid s, a)$ concrete as an actual probability table
-#
-# **Parameters**:
-# - `state`: the current cell
-# - `action`: the intended action
 
 # %%
-# Show the transition model Pr(s' | s, a) as a concrete table for the START
-# state and Up action, so students see the probability distribution directly.
+# Display the concrete Pr(s' | s, a) table for the START state and Up action.
 utils.cell1_3_show_transition_table()
 
 # %%
-# This table is the MDP model Pr(s' | s, a). We build it by hand here. In Part
-# 4, Q-learning will solve the same world without ever seeing this table.
+# Show the transition model row for a chosen state and action pair.
 utils.cell1_3_transition_table()
 
 # %% [markdown]
@@ -139,20 +123,12 @@ utils.cell1_3_transition_table()
 # %% [markdown]
 # ## Cell 1.4: Rewards and Episode Returns
 #
-# _Rewards and trajectory_: per-cell rewards with a sample path from START. _Comments_: the running discounted return step by step.
-#
 # **Goal**:
 # - Define the reward structure and connect per-step rewards to discounted return
 # - Show how a single trajectory accumulates $\sum_t \gamma^t R_t$
-#
-# **Parameters**:
-# - `r_step`: the per-step living reward (-1.0 to 0.0)
-# - `gamma`: discount factor (0.0 to 1.0)
-# - `seed`: trajectory seed
 
 # %%
-# Reward is the feedback signal. The living reward of -0.04 is a gentle penalty
-# for taking too long. Return is the discounted sum the agent tries to maximize.
+# Show per-cell rewards and the discounted return of a sample trajectory.
 utils.cell1_4_rewards_and_returns()
 
 # %% [markdown]
@@ -170,19 +146,12 @@ utils.cell1_4_rewards_and_returns()
 # %% [markdown]
 # ## Cell 2.1: The Bellman Equation for One State
 #
-# _Inspected state_: the highlighted cell on the grid. _Action values_: a bar per action, the best (max) highlighted. _Comments_: the action values and the resulting utility.
-#
 # **Goal**:
 # - Build intuition for the Bellman update on a single state
 # - The full algorithm is just this update applied everywhere
-#
-# **Parameters**:
-# - `state`: which cell to inspect
-# - `gamma`: discount factor (0.0 to 1.0)
 
 # %%
-# Bellman: utility of a state = best immediate action + future potential. We
-# compute one value per action and keep the maximum.
+# Show the value of each action at one state under converged utilities.
 utils.cell2_1_bellman_one_state()
 
 # %% [markdown]
@@ -197,20 +166,12 @@ utils.cell2_1_bellman_one_state()
 # %% [markdown]
 # ## Cell 2.2: Value Iteration Converging Over Sweeps
 #
-# _Utility heatmap_: each cell annotated with its current $U(s)$. _Convergence_: max utility change $\lVert U_{i+1} - U_i \rVert$ per sweep. _Comments_: current sweep, parameters, and sweeps to converge.
-#
 # **Goal**:
 # - Watch state utilities converge to a fixed point as we sweep the grid
 # - See value information propagate backward from the terminals
-#
-# **Parameters**:
-# - `iteration`: step through sweeps $0, 1, 2, \ldots$
-# - `gamma`: discount factor (0.5 to 1.0)
-# - `r_step`: living reward (-1.0 to 0.0)
 
 # %%
-# Value iteration sweeps the Bellman update until utilities stop changing.
-# Watch value flow backward from the goal, like tracing a route from finish to start.
+# Step through value iteration sweeps and watch utilities converge.
 utils.cell2_2_value_iteration()
 
 # %% [markdown]
@@ -226,18 +187,12 @@ utils.cell2_2_value_iteration()
 # %% [markdown]
 # ## Cell 2.3: Extracting the Optimal Policy
 #
-# _Policy over utilities_: an arrow per cell over the utility heatmap. _Comments_: parameters and the utility of START.
-#
 # **Goal**:
 # - Turn converged utilities into an actionable policy
 # - Take the greedy action in every cell
-#
-# **Parameters**:
-# - `r_step`: living reward (-2.0 to 0.0)
 
 # %%
-# The policy is greedy with respect to the converged utilities. The living
-# reward silently controls how much risk the agent accepts to save time.
+# Show the greedy policy extracted from converged utilities.
 utils.cell2_3_extract_policy()
 
 # %% [markdown]
@@ -255,19 +210,12 @@ utils.cell2_3_extract_policy()
 # %% [markdown]
 # ## Cell 3.1: Policy Evaluation for a Fixed Policy
 #
-# _Policy utilities_: the fixed policy as arrows over its evaluated utilities. _Comments_: parameters and the utility of START.
-#
 # **Goal**:
 # - Compute the utility of a fixed (possibly bad) policy
 # - This is a simpler linear problem than the full Bellman equation
-#
-# **Parameters**:
-# - `policy`: a preset policy (random, always-up, always-right, hand-tuned)
-# - `gamma`: discount factor (0.0 to 1.0)
 
 # %%
-# Policy evaluation fixes the action in each state, removing the max. The
-# Bellman equations become linear and solvable in one shot.
+# Evaluate a fixed policy by solving the linear Bellman system.
 utils.cell3_1_policy_evaluation()
 
 # %% [markdown]
@@ -282,18 +230,12 @@ utils.cell3_1_policy_evaluation()
 # %% [markdown]
 # ## Cell 3.2: Policy Improvement and Iteration to Optimality
 #
-# _Before / after_: the current policy arrows and the improved policy arrows. _Comments_: states that changed action and rounds to converge.
-#
 # **Goal**:
 # - Alternate evaluation and improvement until the policy stops changing
 # - Watch convergence to the optimal policy in a few iterations
-#
-# **Parameters**:
-# - `iteration`: step through evaluate/improve rounds
 
 # %%
-# Policy iteration: evaluate, improve, repeat. It typically reaches the optimal
-# policy in a handful of iterations because each step is a big, decisive change.
+# Step through policy iteration rounds and watch arrows flip to optimal.
 utils.cell3_2_policy_iteration()
 
 # %% [markdown]
@@ -308,18 +250,12 @@ utils.cell3_2_policy_iteration()
 # %% [markdown]
 # ## Cell 3.3: Value Iteration vs Policy Iteration
 #
-# _Value iteration_: utility change per sweep. _Policy iteration_: changed-action count per round. _Comments_: sweeps vs rounds at the current gamma.
-#
 # **Goal**:
 # - Contrast the two exact methods and their convergence behavior
 # - Understand the tradeoff between many cheap sweeps and few expensive rounds
-#
-# **Parameters**:
-# - `gamma`: discount factor (0.5 to 0.99)
 
 # %%
-# Same optimal policy, different paths. Value iteration: simple, many sweeps.
-# Policy iteration: more work per step, fewer steps, robust to large gamma.
+# Compare convergence of value iteration and policy iteration.
 utils.cell3_3_compare_solvers()
 
 # %% [markdown]
@@ -361,19 +297,12 @@ utils.cell4_1_planning_vs_learning()
 # %% [markdown]
 # ## Cell 4.2: The Q-Learning Update Rule
 #
-# _Transition diagram_: one transition $s \xrightarrow{a} s'$ with reward $r$. _Comments_: the update broken into old estimate, TD target, and TD error.
-#
 # **Goal**:
 # - Introduce the single update that powers Q-learning
 # - Show how one experience tuple nudges a Q-value toward a better estimate
-#
-# **Parameters**:
-# - `alpha`: learning rate (0.0 to 1.0)
-# - `gamma`: discount factor (0.0 to 1.0)
 
 # %%
-# One tuple, one nudge. Q-learning moves each estimate a fraction alpha of the
-# way toward the TD target. No model needed: just (s, a, r, s').
+# Show how a single experience tuple nudges a Q-value via the TD update.
 utils.cell4_2_q_update_rule()
 
 # %% [markdown]
@@ -388,20 +317,12 @@ utils.cell4_2_q_update_rule()
 # %% [markdown]
 # ## Cell 4.3: Exploration vs Exploitation with Epsilon-Greedy
 #
-# _Low-epsilon visits_: visit counts under the chosen exploration rate. _High-epsilon visits_: visit counts under broad exploration. _Comments_: parameters and the exploration tradeoff.
-#
 # **Goal**:
 # - Show why the agent must sometimes act randomly
 # - A purely greedy agent can lock onto a suboptimal path
-#
-# **Parameters**:
-# - `epsilon`: exploration probability (0.0 to 1.0)
-# - `n_episodes`: number of training episodes (log scale)
-# - `seed`: random seed
 
 # %%
-# Explore to learn, exploit to earn. Epsilon-greedy takes the best-known action
-# most of the time but occasionally tries something new to avoid getting stuck.
+# Compare state coverage under low vs high exploration.
 utils.cell4_3_exploration()
 
 # %% [markdown]
@@ -416,21 +337,12 @@ utils.cell4_3_exploration()
 # %% [markdown]
 # ## Cell 4.4: Watching Q-Learning Learn the Optimal Policy
 #
-# _Q-learning policy_: the greedy policy derived from the learned Q-table. _Learning curve_: smoothed total return per episode. _Comments_: parameters and how many states match the planning optimum.
-#
 # **Goal**:
 # - Run full Q-learning and watch the learned policy emerge
 # - Compare it to the policy value iteration found with full knowledge
-#
-# **Parameters**:
-# - `n_episodes`: training episodes (log scale)
-# - `alpha`: learning rate (0.0 to 1.0)
-# - `epsilon`: exploration probability (0.0 to 1.0)
-# - `seed`: random seed
 
 # %%
-# Same answer, no model. Q-learning rediscovers the optimal policy purely from
-# experience. This is the payoff of reinforcement learning.
+# Train Q-learning and compare its policy to the value iteration optimum.
 utils.cell4_4_q_learning_converges()
 
 # %% [markdown]
