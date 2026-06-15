@@ -88,17 +88,19 @@
 - `website/docs/blog/posts/draft.in_15_mins.helpers_hunit_test.md`
 
 - `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md`
-    - `helpers/hllm_decorator.py`
-    - `docs/tools/helpers/all.hllm.explanation.md`
-      Detailed explanation of the `hllm` module
 
 - `lint_txt.py`
+- `linters2/lint.py`
+- `linters2/lint_cc.py`
 
 - helpers/hcheck_types.py + dassert
 
 - Dependency detector
 
 - Package handler
+
+- ./helpers_root/dev_scripts_helpers/system_tools/create_links.py
+  - docs/tools/dev_system/all.replace_common_files_with_script_links.md
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
   - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
@@ -127,13 +129,6 @@
 - https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
 
 - /Users/saggese/src/csfy1/blog/docs/posts
-
-- ./helpers_root/dev_scripts_helpers/system_tools/create_links.py
-  - docs/tools/dev_system/all.replace_common_files_with_script_links.md
-
-- linters2/lint.py
-- linters2/lint_cc.py
-  
 
 ## Tier 1: Ready — Well-structured, near-publishable
 

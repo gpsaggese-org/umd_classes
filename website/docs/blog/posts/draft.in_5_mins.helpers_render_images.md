@@ -81,6 +81,15 @@ commenting out the original source and inserting the resulting figures
 - **Interactive diagrams** that need clickable links or animations: The tool
   produces static image files (PNG/SVG), not interactive web components
 
+## References
+
+- Source code:
+  [`dev_scripts_helpers/documentation/render_images.py`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/render_images.py)
+- Tests:
+  [`dev_scripts_helpers/documentation/test/test_render_images.py`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/test/test_render_images.py)
+- Documentation:
+  [`docs/tools/documentation_toolchain/all.render_images.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/documentation_toolchain/all.render_images.explanation.md)
+
 ## How It Works
 
 - The tool operates as a text processor with the following pipeline:
@@ -203,19 +212,3 @@ flowchart LR
 | Multi-format     | PlantUML, Mermaid, TikZ, Graphviz, SVG, LaTeX, AI | Depends on tool  | One format                |
 | Automated        | Yes (CI-ready)                                    | No               | No                        |
 | Commented source | Yes                                               | No               | N/A                       |
-
-## References
-
-- Source code:
-  [`dev_scripts_helpers/documentation/render_images.py`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/render_images.py)
-- Tests:
-  [`dev_scripts_helpers/documentation/test/test_render_images.py`](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/test/test_render_images.py)
-- Documentation:
-  [`docs/tools/documentation_toolchain/all.render_images.explanation.md`](https://github.com/causify-ai/helpers/blob/master/docs/tools/documentation_toolchain/all.render_images.explanation.md)
-- Related tools:
-    - [Notes to PDF](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/notes_to_pdf.py):
-      Converts Markdown notes to PDF/HTML/slides
-    - [Generate Images](https://github.com/causify-ai/helpers/blob/master/dev_scripts_helpers/documentation/generate_images.py):
-      AI-powered image generation from text prompts
-    - [hcache_simple](https://github.com/causify-ai/helpers/blob/master/helpers/hcache_simple.py):
-      Caching module used to cache rendered results
