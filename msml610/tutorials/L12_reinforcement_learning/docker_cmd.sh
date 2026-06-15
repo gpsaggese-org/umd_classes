@@ -1,1 +1,1 @@
-/Users/saggese/src/umd_classes1/class_project/project_template/docker_cmd.sh
+../../../class_project/project_template/docker_cmd.sh

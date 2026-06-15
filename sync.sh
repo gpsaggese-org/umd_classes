@@ -48,6 +48,6 @@ TOPDIRS=(
 # Loop over Set 1: msml610/tutorials
 for dir in "${TOPDIRS[@]}"; do
     DST_DIR="$dir"
-    #create_links.py --src_dir class_project/project_template --dst_dir $DST_DIR --replace_links --
-    \cp -f class_project/project_template/docker_bash.sh class_project/project_template/docker_build.sh class_project/project_template/docker_clean.sh class_project/project_template/docker_cmd.sh class_project/project_template/docker_exec.sh class_project/project_template/docker_jupyter.sh class_project/project_template/docker_push.sh class_project/project_template/run_jupyter.sh class_project/project_template/version.sh $DST_DIR
+    create_links.py --src_dir class_project/project_template --dst_dir $DST_DIR --replace_links
+    #\cp -f class_project/project_template/docker_bash.sh class_project/project_template/docker_build.sh class_project/project_template/docker_clean.sh class_project/project_template/docker_cmd.sh class_project/project_template/docker_exec.sh class_project/project_template/docker_jupyter.sh class_project/project_template/docker_push.sh class_project/project_template/run_jupyter.sh class_project/project_template/version.sh $DST_DIR
 done
