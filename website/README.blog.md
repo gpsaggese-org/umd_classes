@@ -75,7 +75,7 @@
 ## High-priority
 
 - `website/docs/blog/posts/draft.in_30_mins.helpers_caching.md`
-  - `./helpers_root/docs/tools/helpers/all.hcache_simple.explanation.md`
+  - `helpers_root/docs/tools/helpers/all.hcache_simple.explanation.md`
   - `helpers/hcache_simple.py`
 
 - `helpers/hllm.py`
@@ -95,39 +95,51 @@
 
 - helpers/hcheck_types.py + dassert
 
-- Dependency detector
+- `helpers_root/import_check/detect_import_cycles.py`
+  - `helpers_root/docs/tools/all.import_check.reference.md`
 
-- Package handler
+- `linters2/normalize_import.py`
 
-- ./helpers_root/dev_scripts_helpers/system_tools/create_links.py
-  - docs/tools/dev_system/all.replace_common_files_with_script_links.md
+- `helpers_root/dev_scripts_helpers/system_tools/create_links.py`
+  - `docs/tools/dev_system/all.replace_common_files_with_script_links.md`
 
 - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
-  - `./helpers_root/dev_scripts_helpers/documentation/render_images.py`
-  - `./helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
+  - `helpers_root/dev_scripts_helpers/documentation/render_images.py`
+  - `helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
   - `docs/tools/documentation_toolchain/all.render_images.explanation.md`
+
+- `website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
 
 - `helpers_root/docs/documentation_meta/all.architecture_diagrams.explanation.md`
 - `helpers_root/docs/documentation_meta/all.diataxis.explanation.md`
 - `helpers_root/docs/documentation_meta/all.gdocs.how_to_guide.md`
 - `helpers_root/docs/documentation_meta/all.google_technical_writing.how_to_guide.md`
 - `helpers_root/docs/documentation_meta/all.markdown_tools.explanation.md`
-- helpers_root/docs/documentation_meta/all.plotting_in_latex.how_to_guide.md
-- helpers_root/docs/documentation_meta/all.writing_docs.how_to_guide.md
-- helpers_root/dev_scripts_helpers/system_tools/README.md
-- `./website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
+- `helpers_root/docs/documentation_meta/all.plotting_in_latex.how_to_guide.md`
+- `helpers_root/docs/documentation_meta/all.writing_docs.how_to_guide.md`
+- `helpers_root/dev_scripts_helpers/system_tools/README.md`
 
-- From `helpers_root/papers/AIgentic_Development_System/`
+- Blogs from `helpers_root/papers/AIgentic_Development_System/`
 
 - Latex / slide documentation flow
-- Invoke bash_print_tree
-- Invoke workflow
 
-- helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md
+- Invoke bash_print_tree
+  - `helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md`
+
+- Invoke workflow
+  - `helpers_root/docs/tools/all.invoke_workflows.how_to_guide.md`
+
+- Linter
+  - `helpers_root/docs/tools/linter/all.developing_linter.how_to_guide.md`
+  - `helpers_root/linters2/README.md`
+
+- Pre-commit
+  - `helpers_root/docs/tools/all.precommit.how_to_guide.md`
+
+- `helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md`
 
 - https://docs.google.com/spreadsheets/d/1FpBI4tysk2kMSNeTc3WTGOw8KZkr4yG85nfDwqu8Fdo/edit?gid=1995318049#gid=1995318049
 - https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
-
 - /Users/saggese/src/csfy1/blog/docs/posts
 
 ## Tier 1: Ready — Well-structured, near-publishable
