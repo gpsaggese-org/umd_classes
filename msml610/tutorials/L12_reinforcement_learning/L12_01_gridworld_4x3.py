@@ -218,7 +218,20 @@ utils.cell2_1_bellman_one_state()
 # **Goal**:
 # - Watch state utilities converge to a fixed point as we sweep the grid
 # - See value information propagate backward from the terminals
-#
+
+# %%
+# TODO(ai_gp): Add the description of each plot underneath the title (e.g., _Utility heatmap_: each cell annotated with its current $U(s)$)
+
+# TODO(ai_gp): Add a description of each widget close to it (but it needs to be entirely readable)
+
+# TODO(ai_gp): Remove comments like "key idea" from Comments and keep only the information about current state
+
+# %%
+# - Value iteration sweeps the Bellman update until utilities stop changing
+# - Watch value flow backward from the goal, like tracing a route from finish to start.
+utils.cell2_2_value_iteration()
+
+# %% [markdown]
 # **Plots**:
 # - _Utility heatmap_: each cell annotated with its current $U(s)$
 # - _Convergence_: max utility change $\lVert U_{i+1} - U_i \rVert$ per sweep
@@ -231,15 +244,10 @@ utils.cell2_1_bellman_one_state()
 #
 # **Key observations**:
 # - Utility spreads backward from the terminals, one ring of cells per sweep
-# - Cells near the $+1$ terminal end high; cells near the $-1$ terminal end low
+# - Cells near the $+1$ terminal end high
+# - Cells near the $-1$ terminal end low
 # - The change per sweep shrinks geometrically: convergence is guaranteed
-
-# %%
-# Value iteration sweeps the Bellman update until utilities stop changing. Watch
-# value flow backward from the goal, like tracing a route from finish to start.
-utils.cell2_2_value_iteration()
-
-# %% [markdown]
+#
 # - Early sweeps only affect cells adjacent to the terminals
 # - Later sweeps refine the interior until nothing changes
 # - Higher gamma propagates value further but converges more slowly

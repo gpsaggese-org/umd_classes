@@ -109,7 +109,6 @@ digraph MDP {
     { rank=same; action; agent; }
 }
 ```
-
 ::::
 :::
 
