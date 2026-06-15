@@ -37,21 +37,17 @@ MSML610: Advanced Machine Learning
   - Where utility depends on a _sequence of decisions_
 
 - **What is involved**
-  - _Uncertainty_
-    - Represent the lack of unpredictability in outcomes, modeled using
-      probabilities
+  - _Uncertainty_: Represent the lack of unpredictability in outcomes, modeled
+    using probabilities
     - E.g., weather forecasts often include uncertainty (70% chance of rain)
-  - _Utility functions_
-    - Measure the desirability of outcomes by quantifying preferences
+  - _Utility functions_: Measure the desirability of outcomes by quantifying
+    preferences
     - E.g., assign higher values to outcomes with more profit and lower risk
-  - _Rewards_
-    - Yielded by the environment as feedback for actions taken
+  - _Rewards_: Yielded by the environment as feedback for actions taken
     - E.g., receive points in a game for completing a level
-  - _Sensing_
-    - Gather information about the environment using sensors
+  - _Sensing_: Gather information about the environment using sensors
     - E.g., a robot using a camera to detect obstacles in its path
-  - _Search and planning_
-    - Find a sequence of actions to achieve a goal
+  - _Search and planning_: Find a sequence of actions to achieve a goal
     - E.g., a navigation system planning the shortest route to a destination
 
 * Markov Decision Process (MDPs)
@@ -59,10 +55,10 @@ MSML610: Advanced Machine Learning
 :::: {.column width=70%}
 - **MDPs** are a model for sequential decision making
 
-1. **Environment**: fully observable but stochastic 
+1. **Initial state** $s_0$
+2. **Environment**: _fully observable_ but _stochastic_
    - Sensors give complete state of the environment
    - Next state is not completely determined by current state and agent's action
-2. **Initial state** $s_0$
 3. **Action**: agent chooses $a \in Actions(s)$ in each $s$
 4. **Transition model**
    - $\Pr(s' | s, a)$ is probability of reaching state $s'$, if action $a$ is
@@ -83,19 +79,22 @@ digraph MDP {
 
     node [shape=box];
 
-    s0 [label="Initial State\ns0", shape=ellipse];
-    st [label="State s_t"];
-    action [label="Choose\nAction a_t", shape=plaintext];
+    env [label="Environment"];
+
+    s0 [label=<s<SUB>0</SUB>>, shape=ellipse];
+    st [label=<State s<SUB>t</SUB>>];
+    action [label=<Choose<BR/>Action a<SUB>t</SUB>>, shape=plaintext];
     agent [label="Agent"];
-    transition [label="Transition Model\nP(s'|s,a)"];
-    next [label="Next State\ns_(t+1)"];
-    reward [label="Reward\nR(s,a,s')"];
+    transition [label=<Transition Model<BR/>P(s'|s,a)>];
+    next [label=<Next State<BR/>s<SUB>t+1</SUB>>];
+    reward [label=<Reward<BR/>R(s,a,s')>];
     goal [label="Goal?", shape=diamond];
 
     s0 -> st;
+    env -> st;
+    env -> s0;
 
     st -> agent;
-
     action -> agent [style=invis];
 
     agent -> transition;
@@ -105,6 +104,8 @@ digraph MDP {
 
     next -> st;
 
+    { rank=min; s0; }
+    { rank=same; env; st; }
     { rank=same; action; agent; }
 }
 ```
@@ -119,8 +120,8 @@ digraph MDP {
 ::: columns
 :::: {.column width=70%}
 - E.g., a robot navigating a slippery surface
-  - It knows its exact location and the map (fully observable)
-  - Its wheels may slip unpredictably (stochastic outcome)
+  - It knows its exact location and the map (_fully observable_)
+  - Its wheels may slip unpredictably (_stochastic outcome_)
 ::::
 :::: {.column width=25%}
 ![](msml610/lectures_source/figures/L12.Star_Wars_droid.png)
@@ -208,10 +209,12 @@ digraph MDP {
     ];
 }
 ```
+- From $s_0$ with action $a_1$ the robot can end up in $s_1$ or $s_2$ with
+  different probabilities (and rewards)
 
 * MDP: Solution
 
-- **Definition**: The solution of an MDP is a _policy_: _"in state $s$ take action $a$"_
+- **Definition**: The solution of an MDP is a _policy_ _"in state $s$ take action $a$"_
   $$
   \pi(s): s \to a \in Actions(s)
   $$
@@ -236,23 +239,18 @@ digraph MDP {
 // s_0, a_0, s^(1)_1, a^(1)_1, ...
 // Apply R(s_i, a_i, s_{i+1}) and sum
 
-- MDP is often solved with _dynamic programming_
-  1. Break the problem in smaller pieces recursively
-  2. Solve the sub-problems
-  3. Remember solutions of the pieces
-
 * MDP: 4x3 Environment Example
 
 ::: columns
 :::: {.column width=75%}
 - **Environment**
-  - A 4 x 3 grid world
-  - Fully observable: the agent always knows its location
+  - A 4 x 3 grid world with a wall
+  - Fully observable: the agent knows its location
   - Non-deterministic: actions are not reliable
     - Pr(intended action) = 0.8
 - **Agent**
   - Begin at the `START` cell
-  - Choose actions `Up`, `Down`, `Left`, `Right` at each step
+  - Choose action `Up`, `Down`, `Left`, `Right` at each step
   - Aim to reach goal states marked `+1` or `-1`
 - **Transition Model**
   - Result of each action in each state $\Pr(s' | s, a)$
@@ -290,7 +288,7 @@ digraph MDP {
 
 * Utility Function
 - **Definition**: The _utility function_ for environment histories (finite or
-  infinite) is expressed as:
+  infinite) $h$ is expressed as:
   $$
   U_h([\blue{s_0, a_0}, \green{s_1, a_1}, ..., s_n, ...])
   $$
@@ -301,37 +299,33 @@ digraph MDP {
   U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
   = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
   $$
-  - Lead to non-stationary policies
   - Actions are chosen based on the current state and remaining steps
+  - Time matters, so it leads to non-stationary policies
 
 - **Definition**: _Infinite horizon_ indicates that there is no fixed time limit,
   i.e., the process continues indefinitely
-  - Utility is often defined using a discount factor $\gamma < 1$ for
-    convergence
   - The optimal policy can be _stationary_
     - Same action is chosen whenever the agent visits the same state
     - Policies do not depend on the specific time step
 
 * Additive Rewards
-- **Definition**: _Additive rewards_
-  - Rewards for each transition $s_i \xrightarrow{a_i} s_{i+1}$ are summed:
+- **Definition**: _Additive rewards_ means that rewards for each transition
+  $s_i \xrightarrow{a_i} s_{i+1}$ are summed:
     $$
     U_h([s_0, a_0, s_1, a_1, \ldots]) = \sum_{i=0} R(s_i, a_i, s_{i+1})
     $$
 
-- **Definition**: _Additive discounted rewards_
-  - Include a discount factor $\gamma \in [0, 1]$:
-    $$
-    \begin{aligned}
-    U_h([s_0, a_0, s_1, a_1, \ldots])
-    &= R(s_0, a_0, s_1) + \gamma R(s_1, a_1, s_2) + \gamma^2 R(s_2, a_2, s_3) + \ldots \\
-    &= \sum_{i=0} \gamma^i R(s_i, a_i, s_{i+1}) \\
-    \end{aligned}
-    $$
-    where:
-    - $\gamma = 1$: purely additive rewards
-    - $\gamma \to 0$: future rewards are negligible
-    - $\gamma \to 1$: future rewards significant
+- **Definition**: _Additive discounted rewards_ include a factor $\gamma \in [0, 1]$:
+  $$
+  \begin{aligned}
+  U_h([s_0, a_0, s_1, a_1, \ldots])
+  &= R(s_0, a_0, s_1) + \gamma R(s_1, a_1, s_2) + \gamma^2 R(s_2, a_2, s_3) + \ldots \\
+  &= \sum_{i=0} \gamma^i R(s_i, a_i, s_{i+1}) \\
+  \end{aligned}
+  $$
+  where:
+  - $\gamma \to 0$: future rewards are negligible
+  - $\gamma \to 1$: future rewards significant
 
 - **Pros**: Discounted rewards
   - Reflect human tendency to prioritize near-term rewards
@@ -339,8 +333,11 @@ digraph MDP {
   - Support infinite horizons, preventing unbounded rewards
 
 * Expected Utility of a Policy
-- We said that a policy leads to different environment histories
-- The expected **utility of executing policy** $\pi$ from state $s$:
+- We said that the same policy leads to different environment histories, because
+  of stochastic behaviors
+
+- **Definition**: the expected _utility of executing policy_ $\pi$ from state
+  $s$:
   $$
   U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi(S_i), S_{i+1}) ]
   $$
@@ -348,13 +345,14 @@ digraph MDP {
   - Over state sequences determined by $s$, $\pi(s)$
   - The environment's transition model $\Pr(s' | s, a)$
 
-- The agent should choose the **optimal policy**:
+- **Definition**: the _optimal policy_ is the one with maximal utility
   $$
   \pi_s^* = \argmax_{\pi} U^{\pi}(s)
   $$
   - With discounted utilities and infinite horizons, the optimal policy is
     independent of the starting state: $\pi_s^* = \pi^*$
-  - This is not true for finite-horizon policies or other reward combinations
+  - This is not true in general (e.g., for finite-horizon policies or
+    non-additive rewards)
 
 * Principle of Maximum Expected Utility (MEU)
 
@@ -362,24 +360,32 @@ digraph MDP {
   - MEU posits: _"A rational agent should choose the action that maximizes its
     expected utility based on its beliefs"_
 
-- **Definition**
+- **Example**: An agent must choose between:
+    - `Action A`: 80% chance of reward 10; 20% chance of reward 0
+    - `Action B`: 100% chance of reward 6
+  - By MEU
+    - $\EE[U(A)] = 0.8 \cdot 10 + 0.2 \cdot 0 = 8$
+    - $\EE[U(B)] = 1.0 \cdot 6 = 6$
+    - $\EE[U(A)] > \EE[U(B)]$
+    - Choose `Action A`
+
+* Maximum Expected Utility (MEU): Definition
+- Assumptions:
   - Possible actions: $a \in A$
   - Possible outcomes: $s'$
   - Probability distribution: $\Pr(s'|a)$ for each action
-  - Utility function: assign a numerical value $U(s')$ to each outcome
-  - The expected utility of action $a$ is (recursive):
-    $$
-    EU(a) = \EE[U(a)] = \sum_{s'} U(s') \Pr(s'|a)
-    $$
-  - Choose the action $a^*
-    = \argmax_{a \in A} \sum_{s'} U(s') \Pr(s'|a)$
+  - Utility function $U$: assign a numerical value $U(s')$ to each state
 
-- **Example**:
-  - E.g., an agent must choose between:
-    - `Action A`: 80% chance of reward 10; 20% chance of reward 0
-    - `Action B`: 100% chance of reward 6
-  - By MEU, choose `Action A`, since $EU(A) = 0.8 \cdot 10 + 0.2 \cdot 0 = 8$ >
-    $EU(B) = 1.0 \cdot 6 = 6$
+- The expected utility of action $a$ is:
+  $$
+  \EE[U(a)] = EU(a) = \sum_{s'} U(s') \Pr(s'|a)
+  $$
+  - Note that it is a recursive definition
+
+- A rational agent chooses the action:
+  $$a^*
+  = \argmax_{a \in A} \sum_{s'} U(s') \Pr(s'|a)
+  $$
 
 * MDP: Tetris Example
 
@@ -409,24 +415,35 @@ digraph MDP {
 
 * Utility of a State
 
-- The utility of a state $s$, $U(s)$, reflects the long-term desirability of a
-  state under optimal behavior
-  - I.e., $U(s) = U^{\pi^*}(s)$, the expected sum of discounted rewards under an
-    optimal policy from $s$
+- **Remark**: The utility of a state $s$ is not absolute but it depends on the
+  policy
+  $$
+  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi(S_i), S_{i+1}) ]
+  $$
   - To remove the dependency from the policy, use the optimal policy
-  - Calculated based on the expected rewards and the discount factor
 
+- **Definition**: the utility of a state $s$, $U(s)$, is the expected sum of
+  discounted rewards under an optimal policy from $s$
+  $$U(s) = U^{\pi^*}(s)$$
+  - Of course it still depends on the expected rewards $R()$ and the discount factor
+    $\gamma$
+
+- **Intuition**: The utility of a state reflects the long-term desirability of
+  that state under optimal behavior
+
+* Utility of a State: Example
 ::: columns
 :::: {.column width=70%}
 - **Example**:
-  - In a 4x3 environment, the utility of a state is:
-    - Higher closer to the +1 state, as fewer steps are needed to reach it
-    - Lower for the one close to the -1 state, since the agent needs to go
-      around it
+- In the 4x3 grid world, the utility of a state is:
+  - Higher closer to the +1 state, as fewer steps are needed to reach it
+  - Lower for the one close to the -1 state, since the agent needs to go
+    around it
   - E.g., if the agent is two steps away from the +1 state, the utility will be
     higher compared to being four steps away
-  - This assumes certain reward (e.g., $\gamma = 1$ and $r = -0.04$ for
-    non-terminal transitions)
+
+- This assumes certain reward (e.g., $\gamma = 1$ and $r = -0.04$ for
+  non-terminal transitions)
 ::::
 :::: {.column width=30%}
 ![](msml610/lectures_source/figures/L12.4x3_environment_utility_states.png)
