@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -44,6 +44,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Set plotting style.
+# TODO(ai_gp): Use usual style.
 sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (14, 5)
 
@@ -76,7 +77,6 @@ utils.cell1_1_show_grid()
 # %% [markdown]
 # - The environment has 11 reachable states (12 cells minus 1 wall)
 # - Two states are terminal: reaching either ends the episode
-# - Every later algorithm refers back to this same visible layout
 
 # %% [markdown]
 # ## Cell 1.2: Stochastic Action Model
@@ -103,6 +103,9 @@ utils.cell1_1_show_grid()
 # The wheels slip: the intended action happens 80% of the time; the agent
 # veers perpendicular 10% each way. This randomness is why a single plan is not
 # enough: we need a policy.
+# TODO(ai_gp): Allow to select the cell Select a state and action to see the model row:
+# state: (1, 1) action, like for cell1_3_transition_table
+# Add a button retry
 utils.cell1_2_stochastic_action()
 
 # %% [markdown]
@@ -115,7 +118,6 @@ utils.cell1_2_stochastic_action()
 #
 # **Goal**:
 # - Make the abstract $\Pr(s' \mid s, a)$ concrete as an actual probability table
-# - Show exactly what `gymnasium` would hide inside `env.step()`
 #
 # **Plots**:
 # - _Probability grid_: reachable next states shaded by probability
@@ -128,11 +130,16 @@ utils.cell1_2_stochastic_action()
 # **Key observations**:
 # - The transition model has shape $|S| \times |A| \times |S|$, but is sparse
 # - Each $(s, a)$ row sums to $1.0$: it is a probability distribution
-# - Value iteration and policy iteration need this table; Q-learning does not
+
+# %%
+# TODO(ai_gp): Represent the transition model as a table
 
 # %%
 # This table is the MDP model Pr(s' | s, a). We build it by hand here. In Part
 # 4, Q-learning will solve the same world without ever seeing this table.
+# TODO(ai_gp): Make the wall cell look like in cell1_2_stochastic_action
+# TODO(ai_gp): Make the cells with probability 0, white
+# TODO(ai_gp): print the probability table in a comments fig on the right
 utils.cell1_3_transition_table()
 
 # %% [markdown]
