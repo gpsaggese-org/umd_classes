@@ -20,7 +20,8 @@ source $DOCKER_NAME
 print_docker_vars
 
 # List the available Docker images matching the expected image name.
-run "docker image ls $FULL_IMAGE_NAME"
+DOCKER_CMD=$(get_docker_cmd)
+run "$DOCKER_CMD image ls $FULL_IMAGE_NAME"
 
 # Configure and run the Docker container with interactive bash shell.
 # - Container is removed automatically on exit (--rm)

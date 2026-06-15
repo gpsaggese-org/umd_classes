@@ -16,8 +16,8 @@ set -e
 # Print each command to stdout before executing it.
 #set -x
 
-# Import the utility functions from the project template.
-GIT_ROOT=/data
+# Import the utility functions from /git_root.
+GIT_ROOT=/git_root
 source $GIT_ROOT/class_project/project_template/utils.sh
 
 # Load Docker configuration variables for this script.
@@ -25,9 +25,8 @@ get_docker_vars_script ${BASH_SOURCE[0]}
 source $DOCKER_NAME
 print_docker_vars
 
-# Configure vim keybindings and notifications.
-configure_jupyter_vim_keybindings
-configure_jupyter_notifications
+# Setup Jupyter Lab environment.
+setup_jupyter_environment
 
 # Initialize Jupyter Lab command with base configuration.
 JUPYTER_ARGS=$(get_jupyter_args)

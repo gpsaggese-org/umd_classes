@@ -22,3 +22,7 @@ jupyter --version
 # List all installed Python packages and their versions.
 echo "# Python packages"
 pip3 list
+
+# Template for adding additional tool versions.
+# echo "# mongo"
+# mongod --version
