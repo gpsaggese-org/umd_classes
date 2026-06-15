@@ -768,7 +768,7 @@
   \textbf{Context}:
 
   \begin{itemize}
-    \item Joined as the \textit{second person} in the alternative data group in Berkeley
+    \item Joined as the second person in the alternative data group in Berkeley
 
     \item No existing research pipeline for ``low frequency'' trading,
       no data APIs
@@ -839,7 +839,7 @@
         \item Microstructure and price-based futures models
       \end{itemize}
 
-    \item \textit{Research hit rate $\approx$ 50\%} (2-3 data sets didn't
+    \item Research hit rate $\approx$ 50\% (2-3 data sets didn't
       pan out)
 
     \item Historical Sharpe ratio $\approx$ 4-5 for futures, before
@@ -863,9 +863,9 @@
   \begin{itemize}
     \item First year when the futures system was fully completed
 
-    \item \textit{1B USD} assets under management (AUM)
+    \item 1B USD assets under management (AUM)
 
-    \item \textit{25\%} of risk allocated to alternative data
+    \item 25\% of risk allocated to alternative data
 
     \item Mid-2016 to end of 2017: Sharpe ratio $\approx$ 3, \$90M profit
       and loss (PnL)
@@ -985,11 +985,12 @@
   US equity strategies, demonstrating consistent returns across multiple
   event-driven models with strong risk-adjusted performance.
 
-  \begin{center}
-    \includegraphics[width=0.95\linewidth]{image8.png}
-    \textit{Daily US equity strategy cumulative performance}
+  \begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.75\linewidth]{image8.png}
+    \caption{Daily US equity strategy cumulative performance}
     \label{fig:us-equity-daily}
-  \end{center}
+  \end{figure}
 
 % ------------------------------------------------------------------------------
   \subsection{US Equity: Intraday}
@@ -1038,15 +1039,15 @@
   for high-frequency microstructure-based models achieving Sharpe ratios
   exceeding 5.
 
-  \begin{center}
+  \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.50\linewidth]{image6.png}
 
     \includegraphics[width=0.50\linewidth]{image7.png}
 
-    \textit{Intraday equity strategy performance and drawdowns}
+    \caption{Intraday equity strategy performance and drawdowns}
     \label{fig:us-equity-intraday}
-  \end{center}
+  \end{figure}
 
 % ------------------------------------------------------------------------------
   \subsection{Alternative-data for US Equities / Futures}
@@ -1067,40 +1068,48 @@
 
   My team contributed around 25\% of PnL to both funds.
 
-  Figure 4 presents the realized performance of the global futures fund
+  Figure~\ref{fig:global-futures-performance} presents the realized performance of the global futures fund
   from its 2015 launch, demonstrating consistent profitability with Sharpe
   ratio of approximately 3 during peak performance periods (2016-2017).
 
-  \begin{center}
+  \begin{figure}[htbp]
+    \centering
     \includegraphics[width=6.5in]{image3.png}
 
-    \textit{Figure 4: Global futures fund realized performance (2015-2019)}
-  \end{center}
+    \caption{Global futures fund realized performance (2015-2019)}
+    \label{fig:global-futures-performance}
+  \end{figure}
 
-  Figures 5-6 show the US equity fund performance launched in 2017,
+  Figures~\ref{fig:us-equity-performance} and~\ref{fig:us-equity-risk} show the US equity fund performance launched in 2017,
   illustrating returns and risk metrics across different market conditions.
 
-  \begin{center}
+  \begin{figure}[htbp]
+    \centering
     \includegraphics[width=6.5in]{image2.png}
 
-    \textit{Figure 5: US equity fund performance (2017-2019)}
-  \end{center}
+    \caption{US equity fund performance (2017-2019)}
+    \label{fig:us-equity-performance}
+  \end{figure}
 
-  \begin{center}
+  \begin{figure}[htbp]
+    \centering
     \includegraphics[width=6.5in]{image1.png}
 
-    \textit{Figure 6: US equity fund risk metrics and returns}
-  \end{center}
+    \caption{US equity fund risk metrics and returns}
+    \label{fig:us-equity-risk}
+  \end{figure}
 
-  Figure 7 details the composition and diversification across strategy types,
+  Figure~\ref{fig:strategy-composition} details the composition and diversification across strategy types,
   showing the contribution of alternative data models alongside microstructure
   and fundamental strategies.
 
-  \begin{center}
+  \begin{figure}[htbp]
+    \centering
     \includegraphics[width=6.5in]{image5.png}
 
-    \textit{Figure 7: Strategy composition and diversification}
-  \end{center}
+    \caption{Strategy composition and diversification}
+    \label{fig:strategy-composition}
+  \end{figure}
 
   External validation of this work appeared in the Wall Street Journal:
 
@@ -1132,16 +1141,18 @@
 
     \item \emph{Exchange}: Binance
 
-    \item \emph{Performance}: Figure 8 displays the cumulative returns of
+    \item \emph{Performance}: Figure~\ref{fig:crypto-statarb} displays the cumulative returns of
       the cryptocurrency statistical arbitrage strategy, achieving a Sharpe
       ratio of approximately 7 with 150\% annualized returns since inception
       in January 2021.
 
-      \begin{center}
+      \begin{figure}[htbp]
+        \centering
         \includegraphics[width=6.24in]{image4.png}
 
-        \textit{Figure 8: Cryptocurrency statistical arbitrage cumulative returns}
-      \end{center}
+        \caption{Cryptocurrency statistical arbitrage cumulative returns}
+        \label{fig:crypto-statarb}
+      \end{figure}
 
       \begin{itemize}
         \item \emph{Number of trades per month}: 216,000 (=25 cryptos * 12
