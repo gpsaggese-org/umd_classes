@@ -130,6 +130,9 @@
 
 - ./helpers_root/dev_scripts_helpers/system_tools/create_links.py
   - docs/tools/dev_system/all.replace_common_files_with_script_links.md
+
+- linters2/lint.py
+- linters2/lint_cc.py
   
 
 ## Tier 1: Ready — Well-structured, near-publishable
