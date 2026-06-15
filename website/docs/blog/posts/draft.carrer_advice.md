@@ -1,3 +1,13 @@
+---
+title: "Career Advice"
+draft: true
+authors:
+    - gpsaggese
+date: 2026-06-15
+categories:
+    - Startup
+---
+
 I get questions about career advice all the times
 
 Start up vs climbing the professional ladder

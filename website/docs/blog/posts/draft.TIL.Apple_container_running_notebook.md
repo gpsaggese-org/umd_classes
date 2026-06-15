@@ -12,9 +12,7 @@ description: >
   interface.
 categories:
   - Software Engineering
-  - Containers
-  - Docker
-  - macOS
+  - Developer Tools
 ---
 
 // TODO(ai_gp): Use the link to the GitHub repo dir instead of class_project/project_template/

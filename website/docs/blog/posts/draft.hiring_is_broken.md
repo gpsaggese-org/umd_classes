@@ -1,3 +1,13 @@
+---
+title: "Hiring Is Broken"
+draft: true
+authors:
+    - gpsaggese
+date: 2026-06-15
+categories:
+    - Startup
+---
+
 - Evaluating people is incredibly difficult
 
 - I have plenty of cases of people with outstanding resume and incredible

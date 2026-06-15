@@ -1,3 +1,13 @@
+---
+title: "Render Markdown From Terminal"
+draft: true
+authors:
+    - gpsaggese
+date: 2026-06-15
+categories:
+    - Developer Tools
+---
+
 Markdown Viewers on macOS: Terminal and Browser Options
 
 Markdown has become the standard format for documentation, notes, READMEs, and technical writing. macOS users have several options for viewing Markdown from the command line, ranging from simple terminal renderers to full-featured browser previews with image support.

@@ -1,3 +1,14 @@
+---
+title: "Helpers cc - The Convenience Wrapper"
+draft: true
+authors:
+    - gpsaggese
+date: 2026-06-15
+categories:
+    - Developer Tools
+    - Python
+---
+
 ## The `cc` Convenience Wrapper
 
 <!-- TODO(ai_gp): Point to the README of cc -->

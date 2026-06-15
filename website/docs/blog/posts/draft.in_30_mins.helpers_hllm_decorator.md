@@ -7,7 +7,7 @@ date: 2026-06-13
 description:
 categories:
     - LLM
-    - Python Tools
+    - Python
 ---
 
 TL;DR The `@llm` decorator transforms a Python function stub into an LLM call

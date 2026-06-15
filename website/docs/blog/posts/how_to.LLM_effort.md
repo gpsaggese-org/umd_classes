@@ -162,9 +162,9 @@ cost, even when per-token pricing stays the same.
   increase only when the task demands it
 - **Match effort to task difficulty**: A simple summarization does not need high
   reasoning effort
-- **[Monitor your costs](draft.how_to.Count_cost.md)**: Track token usage across
+- **[Monitor your costs](how_to.Count_cost.md)**: Track token usage across
   effort levels to understand the real impact
-- **Use [per-query control](draft.how_to.Use_Claude_Code_with_Openrouter.md)**:
+- **Use [per-query control](how_to.Use_Claude_Code_with_Openrouter.md)**:
   Many providers let you set effort level per request, not just globally
 - **Think of it as a dial, not a switch**: Experiment with intermediate settings
   to find the sweet spot for your use case

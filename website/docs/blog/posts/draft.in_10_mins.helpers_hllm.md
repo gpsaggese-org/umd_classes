@@ -5,7 +5,7 @@ authors:
 date: 2026-06-14
 description:
 categories:
-    - Helpers
+    - Developer Tools
 ---
 
 TLDR A Python helper that wraps OpenAI and OpenRouter APIs with built-in

@@ -20,8 +20,8 @@ enabling access to models from multiple providers through a single API.
     - Use Claude Code with non-Anthropic models like DeepSeek or OpenAI GPT
     - Or mix models from different providers depending on the task
 
-- For a general introduction to Claude Code, see
-  [How to Use Claude Code](draft.how_to.Use_Claude_Code.md)
+- For a general introduction to Claude Code, see the
+  [Claude Code setup guide](https://docs.anthropic.com/en/docs/claude-code/setup)
 
 - This guide covers:
     - Setting up OpenRouter, with and without BYOK (Bring Your Own Key)
@@ -209,7 +209,7 @@ enabling access to models from multiple providers through a single API.
 
 - This repository also ships a `cc` wrapper script that automates the environment
   variable setup for OpenRouter (see [The `cc` Convenience
-  Wrapper](draft.in_5_mins.helpers_cc_wrapper.md))
+  Wrapper](draft.in_5_mins.helpers_cc.md))
 
 ### Verifying the Model in Claude Code
 
@@ -240,7 +240,7 @@ enabling access to models from multiple providers through a single API.
   latency, and error details
 
 - For an alternative workflow using OpenRouter with Simon Willison's LLM CLI,
-  see [How to Use OpenRouter with LLM CLI](draft.how_to.Use_OpenRouter.md)
+  see [How to Use OpenRouter with LLM CLI](how_to.Use_OpenRouter.md)
 
 - Refer to the
   [OpenRouter API documentation](https://openrouter.ai/docs/api-reference) for
