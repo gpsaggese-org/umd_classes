@@ -403,7 +403,7 @@ digraph DecisionLoop {
   - Successful back-door or front-door adjustment (i.e., complete knowledge of
     the causal graph + sufficient data)
 
-* Intervention in an Influence Graph
+* Intervention in an Decision Network
 - **Do-operator** $do(X = x)$ mutates the causal graph:
   - Remove all edges _into_ $X$
   - Fix $X$ to the value $x$
@@ -569,16 +569,19 @@ digraph PostMutation {
 // - 2004, O'Hagan et al., "Uncertain Judgements: Eliciting Experts' Probabilities"
 
 ## #############################################################################
-## Influence Diagrams
+## Decision Networks
 ## #############################################################################
 
-* Influence Diagrams: Motivation
+* Decision Networks: Motivation
 
-- **Motivation**: Bayesian networks model _uncertainty_; we need to also represent
-  _decisions_ and _preferences_
+- Aka Decision Network, Influence Diagram
 
-- **Definition**: An _influence diagram_ extends a causal DAG with three kinds of
-  nodes:
+- **Motivation**:
+  - Bayesian networks model _uncertainty_
+  - We need to also represent _decisions_ and _preferences_
+
+- **Definition**: An _decision networks_ extends a Bayesian / causal DAG with
+  three kinds of nodes:
   - _Chance nodes_ (ovals): random variables, same as in a Bayesian network
   - _Decision nodes_ (rectangles): variables set by the decision-maker
   - _Utility nodes_ (diamonds): deterministic functions yielding utility
@@ -586,7 +589,36 @@ digraph PostMutation {
 - **Goal**: a compact, graphical specification of a decision problem that can be
   solved automatically
 
-* Influence Diagram: Medical Example
+```graphviz
+digraph GardenDecisionDiagram {
+  rankdir=LR;
+
+  node [fontname="Helvetica"];
+
+  // Chance nodes
+  Rain  [shape=oval, label="Rain"];
+  Grass [shape=oval, label="Grass Wet?"];
+
+  // Decision node
+  Sprinkler [shape=box, label="Decision:\nTurn on Sprinkler?"];
+
+  // Utility node
+  Utility [shape=diamond, label="Utility:\nHealthy Lawn\n- Water Cost"];
+
+  // Causal influences
+  Rain -> Grass;
+  Sprinkler -> Grass;
+
+  // Information available when deciding
+  Rain -> Sprinkler [style=dashed, label="observed"];
+
+  // Utility depends on outcome and action
+  Grass -> Utility;
+  Sprinkler -> Utility;
+}
+```
+
+* Decision Network: Medical Example
 
 ::: columns
 :::: {.column width=50%}
@@ -625,9 +657,9 @@ digraph ID {
 ::::
 :::
 
-* Solving an Influence Diagram
+* Solving an Decision Network
 
-- **Input**: influence diagram with CPTs for chance nodes and a utility table
+- **Input**: decision diagram with CPTs for chance nodes and a utility table
 - **Output**: optimal policy $\pi^*$, i.e., a function from information to
   actions
 
@@ -644,7 +676,7 @@ digraph ID {
 - **Key insight**: the same graphical machinery used for Bayesian inference
   also supports optimal decision-making
 
-* Influence Diagrams: Pros and Cons
+* Decision Networks: Pros and Cons
 
 - **Pros**
   - Explicit separation of beliefs, choices, and preferences

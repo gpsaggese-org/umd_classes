@@ -488,18 +488,18 @@ digraph MDP {
   - E.g., in a grid world with a finite number of cells and actions
 
 * Bellman Equation: Intuition
-- Bellman equation for $s$ is:
+- **Recall**: Bellman equation for $s$ is:
   $$
   U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
   $$
-  and it says:
-  $$
-  \textit{"Utility of a state = Best immediate action + Future potential"}
-  $$
+
+- **Remarks**:
+  - Says: _"Utility of a state = Best immediate action + Future potential"_
   - Balances short-term gain and long-term value when outcomes are partly under
     the control of a decision-maker and partly random
 
-- E.g., to find the fastest path to the goal in a maze, the Bellman equation
+- **Example**: Maze
+- To find the fastest path to the goal in a maze, the Bellman equation
   prescribes:
   - _"Your current position is only as valuable as the best path out of it"_
   - Best path combines current proximity (reward now) and future position
@@ -507,68 +507,179 @@ digraph MDP {
   - Value backs up from future to present, similar to tracing a route from
     finish to start
 
-- E.g., in a chess game, the optimal strategy involves making the best move at
-  each turn while considering future moves and potential outcomes
+- **Example**: Chess game
+  - The optimal strategy involves making the best move at each turn while
+    considering future moves and potential outcomes
 
 * Q-Function
 - Aka "Action-utility function"
-- The Q-function $Q(s, a)$ is the expected utility of taking an _action_ in _a
-  given state_
-  - Gives the expected value of choosing action $a$ in state $s$, and then
-    acting optimally afterward
 
-- Utility of actions $Q(s, a)$ is the "dual" view of utility of states $U(s)$
+- **Definition**: the _Q-function_ $Q(s, a)$ is the expected utility of taking an
+  _action_ $a$ in _a given state_ $s$, and acting optimally afterward
+
+- **Remark**: Q-function $Q(s, a)$ is the "dual" view of utility of states $U(s)$
   - Express the utility of a state in terms of utility of actions:
     $$
     U(s) = \max_a Q(s, a)
     $$
-  - Bellman equation for Q-functions
-    $$
-    Q(s, a) = \sum_{s'} \Pr(s'|s, a)[R(s, a, s') + \gamma \max_{a'} Q(s', a')]
-    $$
-  - An optimal policy picks the "best" action:
-    $$
-    \pi^*(s) = \argmax_a Q(s, a)
-    $$
+
+- **Theorem**: Bellman equation for Q-functions
+  $$
+  Q(s, a) = \sum_{s'} \Pr(s'|s, a)[R(s, a, s') + \gamma \max_{a'} Q(s', a')]
+  $$
+  - Note the switch of $\max_{a'}$ with respect to Bellman equation for utility
+    of state
+
+- **Theorem**: The optimal policy picks the best action at each step
+  $$
+  \pi^*(s) = \argmax_a Q(s, a)
+  $$
 
 * Shaping Theorem
-- For discounted sums of rewards, the **scale of utilities** is arbitrary:
-  - An affine transformation $U'(s) = m \cdot U(s) + b$ does not change the
-    optimal policy $\pi^*(s)$
-  - What matters for decision-making is the relative ordering of utilities
-    (which is preserved)
+- **Theorem**: For discounted sums of rewards, the _scale of utilities_ is
+  arbitrary
+  - Affine transformation $U'(s) = m \cdot U(s) + b$ doesn't change optimal
+    policy $\pi^*(s)$
+  - Only relative ordering of utilities matters for decision-making
 
-- More generally, a **potential-based reward shaping**, i.e., using a function
-  $\Phi(s)$ of the state $s$ doesn't change the optimal policy:
-  $$
-  R'(s, a, s') = R(s, a, s') + \gamma \Phi(s') - \Phi(s)
-  $$
-  - It ensures the difference in value between states remains consistent
+- **Theorem**: Potential-based reward shaping
+  - Function $\Phi(s)$ of state $s$ doesn't change optimal policy:
+    $$
+    R'(s, a, s') = R(s, a, s') + \gamma \Phi(s') - \Phi(s)
+    $$
+  - Ensures consistent value difference between states
 
 - **Pros**
-  - Speed: Can significantly speed up learning by guiding the agent
-    - E.g., adding a potential function that increases with proximity to a goal
-      can encourage faster convergence
-    - E.g., animal trainers provide a small treat to the animal for each step in
-      the target sequence
-  - Safety: Prevents misleading the agent into a suboptimal policy
-    - E.g., an agent might prioritize short-term rewards over long-term gains
+  - _Speed_: Significantly speeds up learning by guiding the agent
+    - E.g., potential function increasing with proximity to goal encourages
+      faster convergence
+    - E.g., animal trainers provide small treat for each step in target sequence
+  - _Safety_: Prevents misleading agent into suboptimal policy
+    - E.g., agent might prioritize short-term rewards over long-term gains
 
 * Representing MDP
-- The transition model $\Pr(s' | s, a)$ and the reward function $R(s, a, a')$
+- The _transition model_ $\Pr(s' | s, a)$ and the _reward function_ $R(s, a, a')$
   can be represented with:
   - Three-dimensional tables of size $|S|^2 \cdot |A|$
-  - For sparse MDPs (i.e., each $s$ transitions to only a few states $s'$), the
-    table size is $O(|S| \cdot |A|)$
+  - Table with size $O(|S| \cdot |A|)$ for sparse MDPs (i.e., each $s$
+    transitions to only a few states $s'$)
 
-- MDPs can be represented using **Dynamic Decision Networks** (DDNs):
-  - DDNs are a type of probabilistic graphical model extending Bayesian networks
-    for sequential decision problems
-  - DDNs offer a factored representation, compactly encoding state variables and
-    dependencies
-  - They are more scalable and expressive than atomic (flat) representations
+- **Definition**: _Dynamic Decision Networks (DDNs)_ can represent MDPs
+  - Probabilistic graphical model extending Bayesian networks for sequential
+    decision problems under uncertainty
+  - Factored representation, compactly encoding state variables and dependencies
+  - More scalable and expressive than atomic (flat) representations
     - E.g., in a large MDP with many states, a DDN can efficiently represent the
       problem without explicitly listing every possible state transition
+
+* Taxonomy
+
+\begingroup \small
+| **Model** | **Purpose** |
+|---------|---------|
+| Bayesian Network | Reasoning under uncertainty |
+| Decision Network | One-shot decision making |
+| Dynamic Bayesian Network | Modeling evolving uncertain systems |
+| Dynamic Decision Network | Sequential decision making under uncertainty |
+\endgroup
+
+* Dynamic Decision Networks
+
+::: columns
+:::: {.column width=60%}
+- _State variables_ (chance nodes, ovals): Represent the underlying state
+  of the environment at time $t$
+  - E.g., a robot’s location, inventory levels, or market conditions:w
+- _Observation variables_ (chance nodes, ovals): Capture the information
+  available to the agent about the current state, which may be incomplete or
+  noisy
+- _Decision variables_ (decision nodes, rectangles): Represent the actions
+  or choices available to the agent at each time step
+- _Utility variables_ (diamonds): Quantify the desirability of outcomes and
+  provide the objective the agent seeks to maximize
+- _Transition model_: Defines how the environment evolves from one time step to
+  the next, conditioned on the current state and the agent’s actions
+
+- Can be replicated across time slices to model how actions influence future
+  states, observations, and rewards over time
+
+::::
+:::: {.column width=35%}
+
+```graphviz
+digraph DynamicDecisionDiagram {
+    rankdir=LR;
+
+    State_t    [shape=ellipse];
+    Observe_t  [shape=ellipse];
+    Decision_t [shape=box];
+    Utility_t  [shape=diamond];
+
+    State_t1   [shape=ellipse, label="State_t+1"];
+    Observe_t1 [shape=ellipse, label="Observe_t+1"];
+
+    State_t -> Observe_t;
+    State_t -> State_t1;
+    State_t1 -> Observe_t1;
+
+    Decision_t -> State_t1;
+
+    { rank=same; State_t; Decision_t; Utility_t; }
+    { rank=same; State_t1; Observe_t1; }
+}
+```
+::::
+:::
+
+* Dynamic Decision Networks: Grid World Example
+
+::: columns
+:::: {.column width=50%}
+
+- DDN models the 4x3 Grid World in terms of time slices with the agent's state,
+  actions, and rewards
+::::
+:::: {.column width=45%}
+```graphviz
+digraph GridWorldDDN {
+    rankdir=LR;
+
+    // Time t
+    subgraph cluster_t {
+        label="Time t";
+        Pos_t [label="Pos_t", shape=ellipse];
+        Action_t [label="Action_t", shape=box, style=filled, fillcolor=lightblue];
+        Reward_t [label="Reward_t", shape=diamond, style=filled, fillcolor=lightgreen];
+
+        Pos_t -> Action_t;
+        Pos_t -> Reward_t;
+        Action_t -> Reward_t;
+    }
+
+    // Time t+1
+    subgraph cluster_t1 {
+        label="Time t+1";
+        Pos_t1 [label="Pos_{t+1}", shape=ellipse];
+    }
+
+    // Temporal connections
+    Action_t -> Pos_t1;
+    Pos_t -> Pos_t1;
+    Pos_t1 -> Reward_t;
+}
+```
+::::
+:::
+
+- **State variables**:
+  - $Pos_t$: agent's grid position $(x, y)$ at time $t$
+- **Decision variable**:
+  - $Action_t$: movement direction (Up, Down, Left, Right)
+- **Chance nodes** (transition):
+  - $Pos_{t+1}$: next position after action (stochastic due to slippery
+    surface; Pr(intended action) = 0.8)
+- **Utility node**:
+  - $Reward_t$: derived from $Pos_{t+1}$ (e.g., -0.04 per step, +1/-1 at terminal states)
 
 * Dynamic Decision Networks: Tetris Example
 
@@ -577,17 +688,6 @@ digraph MDP {
 
 - DDN models Tetris in terms of time slices with the game's state, actions, and
   rewards
-  - **State variables**:
-    - $Board_t$: grid configuration at time $t$
-    - $Piece_t$: current piece falling
-    - $NextPiece_t$: upcoming piece
-  - **Decision variable**:
-    - $Action_t$: placement of $Piece_t$ (rotation and position)
-  - **Chance nodes** (transition):
-    - $Board_{t+1}$: board after action
-    - $Piece_{t+1}$: next piece, depending on $NextPiece_t$ or random selection
-  - **Utility node**:
-    - $Reward_t$: derived from $Board_{t+1}$ (e.g., lines cleared, holes created)
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -626,6 +726,18 @@ digraph TetrisDDN {
 ```
 ::::
 :::
+
+- **State variables**:
+  - $Board_t$: grid configuration at time $t$
+  - $Piece_t$: current piece falling
+  - $NextPiece_t$: upcoming piece
+- **Decision variable**:
+  - $Action_t$: placement of $Piece_t$ (rotation and position)
+- **Chance nodes** (transition):
+  - $Board_{t+1}$: board after action
+  - $Piece_{t+1}$: next piece, depending on $NextPiece_t$ or random selection
+- **Utility node**:
+  - $Reward_t$: derived from $Board_{t+1}$ (e.g., lines cleared, holes created)
 
 ## #############################################################################
 ## Algorithms for MDPs
