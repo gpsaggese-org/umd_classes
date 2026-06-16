@@ -158,6 +158,15 @@ def _parse() -> argparse.ArgumentParser:
 def _main(parser: argparse.ArgumentParser) -> None:
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
+    # Filter --daemon from extra_opts if REMAINDER swallowed it.
+    if args.extra_opts:
+        filtered = []
+        for opt in args.extra_opts:
+            if opt == "--daemon":
+                args.daemon = True
+            else:
+                filtered.append(opt)
+        args.extra_opts = filtered
     dir_arg, lesson_arg = _parse_first_arg(args.input)
     csccouti.validate_dir_lesson_args(dir_arg, lesson_arg)
     # Get source and destination names.

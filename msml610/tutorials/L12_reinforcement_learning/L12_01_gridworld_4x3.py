@@ -114,8 +114,11 @@ utils.cell1_3_transition_table()
 # %% [markdown]
 # **Key observations**:
 # - The transition model has shape $|S| \times |A| \times |S|$, but is sparse
-# - Most next states have zero probability
+#     - Most next states have zero probability
 # - Each $(s, a)$ row sums to $1.0$: it is a probability distribution
+
+# %%
+# TODO(ai_gp): Print the entire transition model somehow
 
 # %% [markdown]
 # ## Cell 1.4: Rewards and Episode Returns
@@ -125,40 +128,27 @@ utils.cell1_3_transition_table()
 # - Show how a single trajectory accumulates $\sum_t \gamma^t R_t$
 
 # %%
+# TODO(ai_gp): Move seed widget first (and also in the HTML box)
 # Show per-cell rewards and the discounted return of a sample trajectory.
 utils.cell1_4_rewards_and_returns()
+
+# TODO(ai_gp): For all the plots with a tile, put the caption under the title and remove the Italic part (e.g., Rewards for a simple trajectory, Per-cell rewards with a sample part from START)
 
 # %% [markdown]
 # **Key observations**:
 # - The small negative living reward $-0.04$ pushes the agent to finish quickly
+#     - Each non-terminal step costs a little, so wandering is penalized
 # - The discount factor $\gamma$ weights near-term rewards more than distant ones
+#     - Lowering gamma shrinks the contribution of later rewards
 # - Total return depends on the whole sequence of states, not just the final cell
-# - Each non-terminal step costs a little, so wandering is penalized
-# - Lowering gamma shrinks the contribution of later rewards
 # - The same path yields different returns as the reward and discount change
 
 # %% [markdown]
 # # Part 2: Solving the MDP with Value Iteration
 
-# %% [markdown]
-# ## Cell 2.1: The Bellman Equation for One State
-#
-# **Goal**:
-# - Build intuition for the Bellman update on a single state
-# - The full algorithm is just this update applied everywhere
-
 # %%
-# Show the value of each action at one state under converged utilities.
-utils.cell2_1_bellman_one_state()
-
-# %% [markdown]
-# **Key observations**:
-# - The utility of a state is the value of its best action, not an average
-# - Each action blends immediate reward with the discounted utility of next states
-# - The $\max$ operator makes the system nonlinear, so we iterate
-# - Different actions can have very different values at the same state
-# - The greedy action is the one whose expected next-state utility is highest
-# - Repeating this max update everywhere is exactly value iteration
+# TODO(ai_gp): Add a cell printing the system of bellman equations using U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+# for all the cells
 
 # %% [markdown]
 # ## Cell 2.2: Value Iteration Converging Over Sweeps
@@ -180,6 +170,26 @@ utils.cell2_2_value_iteration()
 # - Early sweeps only affect cells adjacent to the terminals
 # - Later sweeps refine the interior until nothing changes
 # - Higher gamma propagates value further but converges more slowly
+
+# %% [markdown]
+# ## Cell 2.1: The Bellman Equation for One State
+#
+# **Goal**:
+# - Build intuition for the Bellman update on a single state
+# - The full algorithm is just this update applied everywhere
+
+# %%
+# Show the value of each action at one state under converged utilities.
+utils.cell2_1_bellman_one_state()
+
+# %% [markdown]
+# **Key observations**:
+# - The utility of a state is the value of its best action, not an average
+# - Each action blends immediate reward with the discounted utility of next states
+# - The $\max$ operator makes the system nonlinear, so we iterate
+# - Different actions can have very different values at the same state
+# - The greedy action is the one whose expected next-state utility is highest
+# - Repeating this max update everywhere is exactly value iteration
 
 # %% [markdown]
 # ## Cell 2.3: Extracting the Optimal Policy

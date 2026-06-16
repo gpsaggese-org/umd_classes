@@ -876,18 +876,15 @@ digraph TetrisDDN {
 
 - **Online methods** compute actions at runtime, using only reachable parts of
   the state space
-  - Interleave planning and acting
-  - Agent explores environment and updates estimates (e.g., Q-learning)
+  - Agents interleave planning and acting
   - _Pros_:
     - Focuses computation on relevant parts of the state space
-    - Scales to large problems with heuristics and approximations
     - Allows adaptive, real-time decision-making
     - No need for full model of the MDP
   - _Cons_:
     - Requires fast, accurate state evaluation functions
     - May need significant computation at each decision point
     - Needs exploration and careful tradeoff with exploitation
-    - Sensitive to model accuracy and search depth
 
 * The $n$-Bandit Problem
 
