@@ -433,16 +433,17 @@ digraph MDP {
 * Utility of a State: Example
 ::: columns
 :::: {.column width=70%}
-- **Example**:
-- In the 4x3 grid world, the utility of a state is:
-  - Higher closer to the +1 state, as fewer steps are needed to reach it
+
+- In the 4x3 grid world, assume
+  - $r = -0.04$ for non-terminal transitions
+  - $\gamma = 1$ (constant additive rewards)
+
+- The utility of a state is:
+  - Higher closer to the +1 state, since fewer steps are needed to reach it
   - Lower for the one close to the -1 state, since the agent needs to go
     around it
-  - E.g., if the agent is two steps away from the +1 state, the utility will be
-    higher compared to being four steps away
-
-- This assumes certain reward (e.g., $\gamma = 1$ and $r = -0.04$ for
-  non-terminal transitions)
+  - If the agent is two steps away from the +1 state, the utility will be higher
+    compared to being four steps away
 ::::
 :::: {.column width=30%}
 ![](msml610/lectures_source/figures/L12.4x3_environment_utility_states.png)
@@ -450,9 +451,15 @@ digraph MDP {
 :::
 
 * Bellman Equation
-- The **utility of a state** $s$ is the expected reward for the next transition
-  plus the discounted utility of the next state, assuming the agent chooses the
-  optimal action:
+- **Recall**: The utility of a state $s$, $U(s)$, is the expected sum of
+  discounted rewards under an optimal policy $\pi^*$ from $s$
+  $$
+  U(s) = U^{\pi(s)^*} = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi^*(S_i), S_{i+1}) ]
+  $$
+
+- **Theorem** (Bellman Equation): the _utility of a state_ $s$ is the expected
+  reward for the next transition plus the discounted utility of the next state,
+  assuming the agent chooses the optimal action:
   $$
   U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
   $$
@@ -463,11 +470,17 @@ digraph MDP {
   - $R(s, a, s')$: reward after transitioning from state $s$ to $s'$ using $a$
   - $\gamma$: discount factor, where $0 \leq \gamma < 1$
 
-- Writing Bellman equations for all states gives a system of equations
-  - Each state has its own equation based on its possible actions and
-    transitions
-  - Each equation is recursive: utility of $s$ depends on utilities of its
-    successor states
+* Bellman Equation: Computing Utility of States
+- Bellman equation for $s$ is:
+  $$
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+  $$
+- Each state has its own equation based on its possible actions and
+  transitions
+- Each equation is recursive: utility of $s$ depends on utilities of its
+  successor states
+
+- Write Bellman equations for all states gives a system of equations
 
 - Under certain conditions (e.g., finite state/action spaces, $\gamma < 1$):
   - This system has a unique solution
@@ -475,7 +488,11 @@ digraph MDP {
   - E.g., in a grid world with a finite number of cells and actions
 
 * Bellman Equation: Intuition
-- The **Bellman Equation:** says
+- Bellman equation for $s$ is:
+  $$
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+  $$
+  and it says:
   $$
   \textit{"Utility of a state = Best immediate action + Future potential"}
   $$

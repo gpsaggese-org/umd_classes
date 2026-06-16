@@ -110,20 +110,26 @@ class GridWorldEnv(gym.Env):
         Terminal states are absorbing (stay in place with zero reward).
         """
         _LOG.debug(hprint.func_signature_to_str())
-        # Terminal state: absorbing.
+        # Terminal states are absorbing: stay in place with zero reward.
         if cell in self.terminal_cells:
             s_id = self._cell_to_id[cell]
             return [(1.0, s_id, 0.0, True)]
+        # Decompose the intended action into a distribution over actual moves,
+        # with probability p_intended for the chosen direction and equal
+        # probability for each perpendicular slip.
         action = _ACTION_ID_TO_NAME[a_id]
         p_perp = (1.0 - self.p_intended) / 2.0
         outcome_probs = [(action, self.p_intended)]
         for perp in _PERPENDICULAR[action]:
             outcome_probs.append((perp, p_perp))
-        # Aggregate by destination cell (blocked moves merge).
+        # Aggregate by destination cell (blocked/wall moves that bounce back
+        # to the same cell merge their probabilities into one entry).
         dist: Dict[Tuple[int, int], float] = {}
         for direction, prob in outcome_probs:
             s2_cell = self._attempt_move(cell, direction)
             dist[s2_cell] = dist.get(s2_cell, 0.0) + prob
+        # Convert the aggregated distribution into the flat outcome list
+        # expected by the FrozenLake P[s][a] convention.
         result: List[Tuple[float, int, float, bool]] = []
         for s2_cell, prob in dist.items():
             s2_id = self._cell_to_id[s2_cell]
@@ -366,6 +372,7 @@ def _draw_value_heatmap(
     """
     Draw a utility heatmap with per-cell annotations.
     """
+    _LOG.debug(hprint.to_str("title"))
     grid = env.to_grid(u)
     sns.heatmap(
         grid,
@@ -523,6 +530,8 @@ def value_iteration(
     snapshots = [dict(u)]
     deltas: List[float] = []
     nonterm = env.nonterminal_ids()
+    # Perform Bellman sweeps: update each non-terminal state's utility to
+    # the max over actions of the expected discounted return.
     for _ in range(max_sweeps):
         delta = 0.0
         u_new = dict(u)
@@ -571,15 +580,19 @@ def policy_evaluation(
     _LOG.debug(hprint.func_signature_to_str())
     n_states = env.observation_space.n
     nonterm_ids = env.nonterminal_ids()
+    # Build the linear system (I - gamma * P^pi) * u = r^pi.
+    # Only non-terminal states are solved; terminal states have fixed utilities.
     idx_map = {s_id: i for i, s_id in enumerate(nonterm_ids)}
     n = len(nonterm_ids)
     a_mat = np.eye(n)
     b_vec = np.zeros(n)
+    # Map each cell to the fixed action dictated by the policy.
     policy_action_ids: Dict[int, int] = {}
     for cell, a_name in policy.items():
         if cell in env.terminal_cells or cell in env.wall_cells:
             continue
         policy_action_ids[env.cell_to_id(cell)] = _NAME_TO_ACTION_ID[a_name]
+    # Fill the matrix and vector using the transition model P[s][policy(s)].
     for s_id in nonterm_ids:
         i = idx_map[s_id]
         a_id = policy_action_ids[s_id]
@@ -605,13 +618,14 @@ def policy_iteration(
     Run policy iteration, recording per-round snapshots.
     """
     _LOG.debug(hprint.to_str("initial_action max_iters"))
-    nonterm_ids = env.nonterminal_ids()
+    # Start with a uniform policy (all states take the same default action).
     policy: Dict[Tuple[int, int], str] = {}
     for c in env.all_cells:
         if c not in env.terminal_cells:
             policy[c] = _ACTION_ID_TO_NAME[initial_action]
     policies = [dict(policy)]
     changes: List[int] = []
+    # Repeat evaluate-then-improve until the policy stabilizes.
     for _ in range(max_iters):
         u = policy_evaluation(env, policy)
         new_policy = extract_policy(env, u)
@@ -678,17 +692,22 @@ def q_learning(
     visit_counts: Dict[int, int] = {s_id: 0 for s_id in range(n_states)}
     returns: List[float] = []
     policies: List[Dict[Tuple[int, int], str]] = []
+    # Each episode rolls out a trajectory by interacting with the environment
+    # through env.step(), performing on-policy TD updates at every step.
     for episode in range(n_episodes):
         s_id, _ = env.reset(seed=seed + episode if seed else None)
         total_reward = 0.0
         for _ in range(max_steps):
             visit_counts[s_id] += 1
+            # Epsilon-greedy: explore randomly with prob epsilon, otherwise greedy.
             if rng.rand() < epsilon:
                 a_id = rng.randint(n_actions)
             else:
                 a_id = _greedy_action_id(q, s_id)
             s2_id, reward, terminated, truncated, _ = env.step(a_id)
             total_reward += reward
+            # Compute the TD target: for terminal states it's just the reward;
+            # for non-terminal it's reward + gamma * max Q(s', a').
             if terminated or truncated:
                 td_target = reward
             else:
@@ -696,6 +715,7 @@ def q_learning(
                     q[s2_id * n_actions + a2] for a2 in range(n_actions)
                 )
                 td_target = reward + env.gamma * best_next
+            # Incremental Q-update: Q(s,a) += alpha * (TD_target - Q(s,a)).
             q[s_id * n_actions + a_id] += alpha * (
                 td_target - q[s_id * n_actions + a_id]
             )
@@ -733,6 +753,7 @@ def _sample_trajectory(
     """
     Roll out a trajectory using env.step() for realism.
     """
+    _LOG.debug(hprint.to_str("seed max_steps"))
     s_id, _ = env.reset(seed=seed)
     path = [env.id_to_cell(s_id)]
     for _ in range(max_steps):
@@ -745,6 +766,7 @@ def _sample_trajectory(
         path.append(env.id_to_cell(s_id))
         if terminated or truncated:
             break
+    _LOG.debug("return: len(path)=%d", len(path))
     return path
 
 
@@ -760,6 +782,7 @@ def cell1_1_show_grid(
     """
     Draw the grid and show the gymnasium observation/action spaces.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (7, 5)
     env = GridWorldEnv()
@@ -798,6 +821,7 @@ def cell1_2_stochastic_action(
     :param p_intended: probability the intended action succeeds (0.5 to 1.0)
     :param figsize: optional figure size
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -934,6 +958,7 @@ def cell1_3_transition_table(
     """
     Display the explicit transition row from env.P for a chosen (state, action).
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (7, 5)
     env = GridWorldEnv()
@@ -1058,6 +1083,7 @@ def cell1_4_rewards_and_returns(
     """
     Show per-cell rewards and the discounted return of a sample trajectory.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1110,6 +1136,8 @@ def cell1_4_rewards_and_returns(
             env.gamma = gamma_slider.value
             env.p_intended = 1.0  # deterministic for a clean illustration
             # Recompute transitions to update rewards.
+            # Changes to r_step or gamma require rebuilding env.P since
+            # the reward values are baked into each transition outcome.
             for s_id in range(len(env.all_cells)):
                 cell = env.id_to_cell(s_id)
                 for a_id in range(4):
@@ -1214,6 +1242,7 @@ def cell2_1_bellman_one_state(
     """
     Show the value of each action at one state under converged utilities.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (16, 5)
     env = GridWorldEnv()
@@ -1329,6 +1358,7 @@ def cell2_2_value_iteration(
     Step through value iteration sweeps and watch utilities converge.
     Uses the gymnasium env's `value_iteration()` planner which reads env.P.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (16, 5)
     env = GridWorldEnv()
@@ -1367,7 +1397,9 @@ def cell2_2_value_iteration(
             clear_output(wait=True)
             env.gamma = gamma_slider.value
             env.r_step = r_slider.value
-            # Recompute transitions so rewards propagate.
+            # Recompute transitions so rewards propagate through env.P.
+            # Any change to r_step or gamma requires rebuilding the
+            # transition model since rewards are baked into each outcome.
             for s_id in range(len(env.all_cells)):
                 cell = env.id_to_cell(s_id)
                 for a_id in range(4):
@@ -1460,6 +1492,7 @@ def cell2_3_extract_policy(
     """
     Show the greedy policy extracted from converged utilities.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1542,6 +1575,7 @@ def _preset_policy(env: GridWorldEnv, name: str) -> Dict[Tuple[int, int], str]:
     """
     Return a named preset policy.
     """
+    _LOG.debug(hprint.to_str("name"))
     if name == "always-up":
         return {s: "Up" for s in env.all_cells if s not in env.terminal_cells}
     if name == "always-right":
@@ -1553,7 +1587,7 @@ def _preset_policy(env: GridWorldEnv, name: str) -> Dict[Tuple[int, int], str]:
             for s in env.all_cells
             if s not in env.terminal_cells
         }
-    return {
+    policy = {
         (1, 1): "Up",
         (1, 2): "Up",
         (1, 3): "Right",
@@ -1564,6 +1598,8 @@ def _preset_policy(env: GridWorldEnv, name: str) -> Dict[Tuple[int, int], str]:
         (4, 1): "Up",
         (3, 2): "Up",
     }
+    _LOG.debug("return: %s actions", len(policy))
+    return policy
 
 
 def cell3_1_policy_evaluation(
@@ -1573,6 +1609,7 @@ def cell3_1_policy_evaluation(
     """
     Evaluate a fixed policy by solving the linear Bellman system.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1664,6 +1701,7 @@ def cell3_2_policy_iteration(
     """
     Step through policy iteration rounds, watch arrows flip.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (16, 5)
     env = GridWorldEnv()
@@ -1748,6 +1786,7 @@ def cell3_3_compare_solvers(
     """
     Compare convergence of the two exact methods.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (16, 5)
     env = GridWorldEnv()
@@ -1836,6 +1875,7 @@ def cell4_1_planning_vs_learning(
     """
     Contrast planning (reads env.P) with learning (calls env.step()).
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1879,6 +1919,7 @@ def cell4_2_q_update_rule(
     """
     Show how a single env.step() tuple nudges a Q-value.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1998,6 +2039,7 @@ def cell4_3_exploration(
     """
     Compare state coverage under low vs high epsilon using q_learning().
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (16, 5)
     env = GridWorldEnv()
@@ -2118,6 +2160,7 @@ def cell4_4_q_learning_converges(
     """
     Train Q-learning via env.step() and compare to the planning optimum.
     """
+    _LOG.debug(hprint.to_str("figsize"))
     if figsize is None:
         figsize = (18, 5)
     env = GridWorldEnv()
