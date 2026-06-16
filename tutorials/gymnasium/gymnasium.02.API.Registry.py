@@ -43,7 +43,6 @@ import pandas as pd
 # %%
 import helpers.hdbg as hdbg
 import helpers.hintrospection as hintros
-import helpers.hnotebook as hnotebook
 
 _LOG = logging.getLogger(__name__)
 
@@ -146,8 +145,18 @@ hintros.print_public_methods(spec)
 
 # %%
 # Build a DataFrame comparing multiple EnvSpecs.
-specs = [gym.spec("CartPole-v1"), gym.spec("MountainCar-v0"), gym.spec("FrozenLake-v1")]
-fields = ["id", "entry_point", "max_episode_steps", "reward_threshold", "version"]
+specs = [
+    gym.spec("CartPole-v1"),
+    gym.spec("MountainCar-v0"),
+    gym.spec("FrozenLake-v1"),
+]
+fields = [
+    "id",
+    "entry_point",
+    "max_episode_steps",
+    "reward_threshold",
+    "version",
+]
 data = {f: [getattr(s, f) for s in specs] for f in fields}
 data["id"] = [s.id for s in specs]
 display(pd.DataFrame(data))
@@ -576,7 +585,10 @@ display(ns_df.sort_values("count", ascending=False))
 # %%
 # Explore: what happens if you register an already-registered ID?
 try:
-    gym.register(id="CartPole-v1", entry_point="gymnasium.envs.classic_control.cartpole:CartPoleEnv")
+    gym.register(
+        id="CartPole-v1",
+        entry_point="gymnasium.envs.classic_control.cartpole:CartPoleEnv",
+    )
 except gym.error.Error as e:
     print("Error:", e)
 

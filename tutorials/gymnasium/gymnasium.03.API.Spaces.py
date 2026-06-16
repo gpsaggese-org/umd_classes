@@ -114,7 +114,10 @@ space_classes = [
     spaces.OneOf,
 ]
 rows = [
-    {"class": cls.__name__, "is_subclass_of_Space": issubclass(cls, spaces.Space)}
+    {
+        "class": cls.__name__,
+        "is_subclass_of_Space": issubclass(cls, spaces.Space),
+    }
     for cls in space_classes
 ]
 display(pd.DataFrame(rows))
@@ -274,7 +277,9 @@ print("md.shape=", md.shape)
 # %%
 # Each sample is a vector of independent integers.
 samples = [list(map(int, md.sample())) for _ in range(6)]
-display(pd.DataFrame(samples, columns=["dim0 (0-2)", "dim1 (0-3)", "dim2 (0-1)"]))
+display(
+    pd.DataFrame(samples, columns=["dim0 (0-2)", "dim1 (0-3)", "dim2 (0-1)"])
+)
 
 # %%
 # Non-zero start: each dimension starts at a different offset.
@@ -433,7 +438,9 @@ for s in fixed_samples:
 
 # %%
 # stack=True: stacks the tuple elements into a single numpy array.
-seq_stacked = spaces.Sequence(spaces.Box(low=0.0, high=1.0, shape=(2,)), stack=True)
+seq_stacked = spaces.Sequence(
+    spaces.Box(low=0.0, high=1.0, shape=(2,)), stack=True
+)
 s_stacked = seq_stacked.sample(mask=(4, None))
 print("type(s_stacked)=", type(s_stacked))
 print("s_stacked.shape=", s_stacked.shape)
@@ -459,15 +466,15 @@ print("g.edge_space=", g.edge_space)
 # Sample a graph with exactly 4 nodes and 3 edges.
 gi = g.sample(num_nodes=4, num_edges=3)
 print("type(gi)=", type(gi))
-print("gi.nodes.shape=", gi.nodes.shape)    # (4, 3): 4 nodes, 3 features each.
+print("gi.nodes.shape=", gi.nodes.shape)  # (4, 3): 4 nodes, 3 features each.
 print("gi.edge_links.shape=", gi.edge_links.shape)  # (3, 2): 3 edges, src/dst.
 
 # %%
 # Inspect node features and edge links.
 print("gi.nodes (first 2)=")
 print(gi.nodes[:2])
-print("gi.edges=", gi.edges)      # Edge feature per edge.
-print("gi.edge_links=")           # Shape (num_edges, 2): [src, dst].
+print("gi.edges=", gi.edges)  # Edge feature per edge.
+print("gi.edge_links=")  # Shape (num_edges, 2): [src, dst].
 print(gi.edge_links)
 
 # %% [markdown]
@@ -588,11 +595,11 @@ print("roundtrip['b']=", roundtrip["b"])
 # %%
 # Build a comparison table for all fundamental space types.
 specs = [
-    ("Discrete(4)",            spaces.Discrete(4)),
-    ("Box(0,1,shape=(3,))",    spaces.Box(0, 1, shape=(3,), dtype=np.float32)),
-    ("MultiBinary(4)",         spaces.MultiBinary(4)),
+    ("Discrete(4)", spaces.Discrete(4)),
+    ("Box(0,1,shape=(3,))", spaces.Box(0, 1, shape=(3,), dtype=np.float32)),
+    ("MultiBinary(4)", spaces.MultiBinary(4)),
     ("MultiDiscrete([3,4,2])", spaces.MultiDiscrete([3, 4, 2])),
-    ("Text(max_length=5)",     spaces.Text(max_length=5)),
+    ("Text(max_length=5)", spaces.Text(max_length=5)),
 ]
 rows = []
 for name, sp in specs:

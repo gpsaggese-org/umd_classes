@@ -41,12 +41,11 @@ import pandas as pd
 
 # %%
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
 
 _LOG = logging.getLogger(__name__)
 
 hdbg.init_logger(verbosity=logging.INFO)
-#hnotebook.config_notebook()
+# hnotebook.config_notebook()
 
 try:
     from IPython.display import display
@@ -176,7 +175,9 @@ env.reset(seed=42)
 # Take one random action and inspect all five return values.
 action = env.action_space.sample()
 obs, reward, terminated, truncated, info = env.step(action)
-gymutils.print_step(obs=obs, reward=reward, terminated=terminated, truncated=truncated, info=info)
+gymutils.print_step(
+    obs=obs, reward=reward, terminated=terminated, truncated=truncated, info=info
+)
 
 # %% [markdown]
 # ### Running a Full Episode
@@ -253,8 +254,14 @@ print("high:", b.high)
 print("shape:", b.shape)
 print("dtype:", b.dtype)
 print("sample:", b.sample())
-print("contains [0.5, -0.5, 0.0]:", b.contains(np.array([0.5, -0.5, 0.0], dtype=np.float32)))
-print("contains [2.0, 0.0, 0.0]:", b.contains(np.array([2.0, 0.0, 0.0], dtype=np.float32)))
+print(
+    "contains [0.5, -0.5, 0.0]:",
+    b.contains(np.array([0.5, -0.5, 0.0], dtype=np.float32)),
+)
+print(
+    "contains [2.0, 0.0, 0.0]:",
+    b.contains(np.array([2.0, 0.0, 0.0], dtype=np.float32)),
+)
 
 # %% [markdown]
 # ### Space comparison: CartPole vs MountainCar
@@ -343,7 +350,12 @@ display(pd.DataFrame({"id": sample_ids}))
 spec = gym.spec("CartPole-v1")
 data = {
     "field": ["id", "entry_point", "max_episode_steps", "reward_threshold"],
-    "value": [spec.id, spec.entry_point, spec.max_episode_steps, spec.reward_threshold],
+    "value": [
+        spec.id,
+        spec.entry_point,
+        spec.max_episode_steps,
+        spec.reward_threshold,
+    ],
 }
 display(pd.DataFrame(data))
 
@@ -396,7 +408,9 @@ step_count = 0
 done = False
 while not done:
     obs, reward, terminated, truncated, info = custom_env.step(1)
-    print(f"Step {step_count}: obs={obs}, reward={reward}, terminated={terminated}")
+    print(
+        f"Step {step_count}: obs={obs}, reward={reward}, terminated={terminated}"
+    )
     done = terminated or truncated
     step_count += 1
 
@@ -471,7 +485,7 @@ env_w.close()
 vec_env = gym.make_vec("CartPole-v1", num_envs=3, vectorization_mode="sync")
 print("type:", type(vec_env))
 obs_batch, info_batch = vec_env.reset(seed=0)
-print("obs_batch shape:", obs_batch.shape)   # (3, 4)
+print("obs_batch shape:", obs_batch.shape)  # (3, 4)
 # Step all 3 envs simultaneously.
 actions = vec_env.action_space.sample()
 print("actions batch:", actions)

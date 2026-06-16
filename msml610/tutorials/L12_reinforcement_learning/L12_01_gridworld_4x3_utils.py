@@ -9,7 +9,7 @@ Implements the canonical AIMA 4x3 grid world from scratch (no gymnasium):
 
 Import as:
 
-import msml610.tutorials.L12_reinforcement_learning.L12_01_gridworld_4x3_utils as gridu
+import msml610.tutorials.L12_reinforcement_learning.L12_01_gridworld_4x3_utils as mtlrll0g4u
 """
 
 import logging
@@ -62,6 +62,11 @@ _ARROW_DELTA = {
     "Left": (-0.3, 0.0),
     "Right": (0.3, 0.0),
 }
+
+
+# #############################################################################
+# GridWorld
+# #############################################################################
 
 
 class GridWorld:
@@ -379,6 +384,16 @@ def _greedy_action(
     return max(env.actions, key=lambda a: q[(s, a)])
 
 
+def _greedy_policy_from_q(
+    env: GridWorld,
+    q: Dict[Tuple[Tuple[int, int], str], float],
+) -> Dict[Tuple[int, int], str]:
+    """
+    Derive the greedy policy implied by a Q-table.
+    """
+    return {s: _greedy_action(env, q, s) for s in env.nonterminal_states}
+
+
 def q_learning(
     env: GridWorld,
     *,
@@ -444,16 +459,6 @@ def q_learning(
         "snapshots": snapshots,
     }
     return result
-
-
-def _greedy_policy_from_q(
-    env: GridWorld,
-    q: Dict[Tuple[Tuple[int, int], str], float],
-) -> Dict[Tuple[int, int], str]:
-    """
-    Derive the greedy policy implied by a Q-table.
-    """
-    return {s: _greedy_action(env, q, s) for s in env.nonterminal_states}
 
 
 def max_q_values(
@@ -920,8 +925,7 @@ def cell1_3_show_transition_table(
     ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
     ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
     ax.set_xlabel(
-        "col\n\n"
-        "_Probability grid_: reachable next states shaded by probability",
+        "col\n\n_Probability grid_: reachable next states shaded by probability",
         fontsize=9,
     )
     ax.set_ylabel("row")
@@ -1068,19 +1072,18 @@ def cell1_3_transition_table(
             # Panel 2: comments with the probability table.
             table_text = "Probability table:\n\n"
             for _, row in df.iterrows():
-                table_text += (
-                    "  %s -> %s:  %.3f\n"
-                    % (s, row["next_state"], row["probability"])
+                table_text += "  %s -> %s:  %.3f\n" % (
+                    s,
+                    row["next_state"],
+                    row["probability"],
                 )
-            table_text += (
-                "\nsum of probabilities: %.6f" % round(sum(dist.values()), 6)
+            table_text += "\nsum of probabilities: %.6f" % round(
+                sum(dist.values()), 6
             )
-            text = (
-                "Parameters:\n"
-                "  state: %s\n"
-                "  action: %s\n\n"
-                "%s"
-                % (s, a, table_text)
+            text = "Parameters:\n  state: %s\n  action: %s\n\n%s" % (
+                s,
+                a,
+                table_text,
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
@@ -1211,9 +1214,7 @@ def cell1_4_rewards_and_returns(
                     )
             xs = [c[0] for c in path]
             ys = [c[1] for c in path]
-            ax1.plot(
-                xs, ys, "-o", color="darkblue", linewidth=2.0, markersize=6
-            )
+            ax1.plot(xs, ys, "-o", color="darkblue", linewidth=2.0, markersize=6)
             ax1.set_title(
                 "Rewards and a sample trajectory",
                 fontsize=13,
@@ -1232,9 +1233,7 @@ def cell1_4_rewards_and_returns(
                 r_t = env.reward(path[t])
                 running += (gamma**t) * r_t
                 if t <= 8:
-                    lines.append(
-                        "  t=%d enter %s r=%.2f" % (t, path[t], r_t)
-                    )
+                    lines.append("  t=%d enter %s r=%.2f" % (t, path[t], r_t))
             text = (
                 "Parameters:\n"
                 "  r_step: %.2f\n"
@@ -1320,10 +1319,11 @@ def cell2_1_bellman_one_state(
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             # Panel 1: grid with the inspected state highlighted.
             _draw_grid_base(env, ax1, highlight=s)
-            ax1.set_title("Inspected state %s" % (s,), fontsize=13, fontweight="bold")
+            ax1.set_title(
+                "Inspected state %s" % (s,), fontsize=13, fontweight="bold"
+            )
             ax1.set_xlabel(
-                "col\n\n"
-                "_Inspected state_: the highlighted cell on the grid",
+                "col\n\n_Inspected state_: the highlighted cell on the grid",
                 fontsize=9,
             )
             # Panel 2: bar chart of action values, best one highlighted.
@@ -1444,8 +1444,10 @@ def cell2_2_value_iteration(
             _draw_value_heatmap(
                 env, ax1, u, title="Utilities after sweep %d" % i
             )
-            ax1.set_xlabel("col\n\n_Utility heatmap_: each cell annotated with its current U(s)",
-                           fontsize=9)
+            ax1.set_xlabel(
+                "col\n\n_Utility heatmap_: each cell annotated with its current U(s)",
+                fontsize=9,
+            )
             # Panel 2: convergence curve of the max change per sweep.
             ax2.plot(
                 range(1, len(deltas) + 1),
@@ -1455,8 +1457,10 @@ def cell2_2_value_iteration(
             )
             if 1 <= i <= len(deltas):
                 ax2.axvline(i, color="gray", linestyle="--")
-            ax2.set_xlabel("sweep\n\n_Convergence_: max |U_{i+1} - U_i| per sweep",
-                           fontsize=9)
+            ax2.set_xlabel(
+                "sweep\n\n_Convergence_: max |U_{i+1} - U_i| per sweep",
+                fontsize=9,
+            )
             ax2.set_ylabel("max |U_{i+1} - U_i|")
             ax2.set_title("Convergence", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
@@ -1545,7 +1549,9 @@ def cell2_3_extract_policy(
             policy = extract_policy(env, u)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel 1: utilities heatmap with policy arrows overlaid.
-            _draw_value_heatmap(env, ax1, u, title="Optimal policy over utilities")
+            _draw_value_heatmap(
+                env, ax1, u, title="Optimal policy over utilities"
+            )
             # Translate policy arrows into heatmap coordinates.
             for s, a in policy.items():
                 d_x, d_y = _ARROW_DELTA[a]
@@ -1555,7 +1561,9 @@ def cell2_3_extract_policy(
                     "",
                     xy=(x + d_x, y - d_y),
                     xytext=(x - d_x, y + d_y),
-                    arrowprops=dict(arrowstyle="-|>", color="black", linewidth=2.0),
+                    arrowprops=dict(
+                        arrowstyle="-|>", color="black", linewidth=2.0
+                    ),
                 )
             ax1.set_xlabel(
                 "col\n\n"
@@ -1564,11 +1572,9 @@ def cell2_3_extract_policy(
                 fontsize=9,
             )
             # Panel 2: comments.
-            text = (
-                "Parameters:\n"
-                "  r_step: %.2f\n\n"
-                "U(start) = %.3f"
-                % (env.r_step, u[env.start])
+            text = "Parameters:\n  r_step: %.2f\n\nU(start) = %.3f" % (
+                env.r_step,
+                u[env.start],
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
@@ -1675,7 +1681,9 @@ def cell3_1_policy_evaluation(
                     "",
                     xy=(x + d_x, y - d_y),
                     xytext=(x - d_x, y + d_y),
-                    arrowprops=dict(arrowstyle="-|>", color="black", linewidth=2.0),
+                    arrowprops=dict(
+                        arrowstyle="-|>", color="black", linewidth=2.0
+                    ),
                 )
             ax1.set_xlabel(
                 "col\n\n"
@@ -1761,8 +1769,7 @@ def cell3_2_policy_iteration(
                 "Policy before round %d" % i, fontsize=13, fontweight="bold"
             )
             ax1.set_xlabel(
-                "col\n\n"
-                "_Before_: the current policy arrows",
+                "col\n\n_Before_: the current policy arrows",
                 fontsize=9,
             )
             _draw_grid_base(env, ax2)
@@ -1771,8 +1778,7 @@ def cell3_2_policy_iteration(
                 "Policy after round %d" % i, fontsize=13, fontweight="bold"
             )
             ax2.set_xlabel(
-                "col\n\n"
-                "_After_: the improved policy arrows",
+                "col\n\n_After_: the improved policy arrows",
                 fontsize=9,
             )
             n_changed = changes[i - 1] if 1 <= i <= len(changes) else 0
@@ -1849,14 +1855,11 @@ def cell3_3_compare_solvers(
                 color="darkorange",
             )
             ax1.set_xlabel(
-                "sweep\n\n"
-                "_Value iteration_: utility change per sweep",
+                "sweep\n\n_Value iteration_: utility change per sweep",
                 fontsize=9,
             )
             ax1.set_ylabel("max utility change")
-            ax1.set_title(
-                "Value iteration", fontsize=13, fontweight="bold"
-            )
+            ax1.set_title("Value iteration", fontsize=13, fontweight="bold")
             ax1.grid(True, alpha=0.3)
             # Panel 2: policy iteration convergence.
             ax2.plot(
@@ -1866,14 +1869,11 @@ def cell3_3_compare_solvers(
                 color="seagreen",
             )
             ax2.set_xlabel(
-                "round\n\n"
-                "_Policy iteration_: changed-action count per round",
+                "round\n\n_Policy iteration_: changed-action count per round",
                 fontsize=9,
             )
             ax2.set_ylabel("states changed action")
-            ax2.set_title(
-                "Policy iteration", fontsize=13, fontweight="bold"
-            )
+            ax2.set_title("Policy iteration", fontsize=13, fontweight="bold")
             ax2.grid(True, alpha=0.3)
             # Panel 3: comments with a small summary table.
             text = (
@@ -1935,16 +1935,12 @@ def cell4_1_planning_vs_learning(
         fontweight="bold",
         bbox=dict(boxstyle="round", facecolor="white", alpha=0.7),
     )
-    ax1.set_title(
-        "Same world, blindfolded", fontsize=13, fontweight="bold"
-    )
+    ax1.set_title("Same world, blindfolded", fontsize=13, fontweight="bold")
     # Panel 2: environment parameters only.
-    text = (
-        "Environment:\n"
-        "  r_step: %.2f\n"
-        "  gamma: %.2f\n"
-        "  p_intended: %.2f"
-        % (env.r_step, env.gamma, env.p_intended)
+    text = "Environment:\n  r_step: %.2f\n  gamma: %.2f\n  p_intended: %.2f" % (
+        env.r_step,
+        env.gamma,
+        env.p_intended,
     )
     _comment_panel(ax2, text)
     plt.tight_layout()
@@ -2013,7 +2009,9 @@ def cell4_2_q_update_rule(
                 "",
                 xy=(s2[0], s2[1] - 0.1),
                 xytext=(s[0], s[1] + 0.1),
-                arrowprops=dict(arrowstyle="-|>", color="darkblue", linewidth=3.0),
+                arrowprops=dict(
+                    arrowstyle="-|>", color="darkblue", linewidth=3.0
+                ),
             )
             ax1.text(
                 (s[0] + s2[0]) / 2 + 0.25,
@@ -2024,9 +2022,7 @@ def cell4_2_q_update_rule(
                 fontsize=10,
                 color="darkblue",
             )
-            ax1.set_title(
-                "One experience tuple", fontsize=13, fontweight="bold"
-            )
+            ax1.set_title("One experience tuple", fontsize=13, fontweight="bold")
             ax1.set_xlabel(
                 "col\n\n"
                 "_Transition diagram_: one transition $s \\rightarrow s'$ (action $a$) "
@@ -2083,6 +2079,35 @@ def cell4_2_q_update_rule(
     )
     top_row = ipywidgets.HBox([controls, param_info])
     display(ipywidgets.VBox([top_row, output]))
+
+
+def _draw_visit_heatmap(
+    env: GridWorld,
+    ax: matplotlib.axes.Axes,
+    visit_counts: Dict[Tuple[int, int], int],
+    *,
+    title: str,
+) -> None:
+    """
+    Draw a heatmap of per-state visit counts.
+    """
+    grid = env.to_grid({s: float(c) for s, c in visit_counts.items()})
+    sns.heatmap(
+        grid,
+        ax=ax,
+        cmap="viridis",
+        annot=True,
+        fmt=".0f",
+        cbar=False,
+        linewidths=1.0,
+        linecolor="black",
+        mask=np.isnan(grid),
+    )
+    ax.set_title(title, fontsize=13, fontweight="bold")
+    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
+    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+    ax.set_xlabel("col")
+    ax.set_ylabel("row")
 
 
 # #############################################################################
@@ -2180,8 +2205,7 @@ def cell4_3_exploration(
                 "Parameters:\n"
                 "  epsilon: %.2f\n"
                 "  n_episodes: %d\n"
-                "  seed: %d"
-                % (epsilon, n_episodes, seed)
+                "  seed: %d" % (epsilon, n_episodes, seed)
             )
             _comment_panel(ax3, text)
             plt.tight_layout()
@@ -2209,35 +2233,6 @@ def cell4_3_exploration(
     )
     top_row = ipywidgets.HBox([controls, param_info])
     display(ipywidgets.VBox([top_row, output]))
-
-
-def _draw_visit_heatmap(
-    env: GridWorld,
-    ax: matplotlib.axes.Axes,
-    visit_counts: Dict[Tuple[int, int], int],
-    *,
-    title: str,
-) -> None:
-    """
-    Draw a heatmap of per-state visit counts.
-    """
-    grid = env.to_grid({s: float(c) for s, c in visit_counts.items()})
-    sns.heatmap(
-        grid,
-        ax=ax,
-        cmap="viridis",
-        annot=True,
-        fmt=".0f",
-        cbar=False,
-        linewidths=1.0,
-        linecolor="black",
-        mask=np.isnan(grid),
-    )
-    ax.set_title(title, fontsize=13, fontweight="bold")
-    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
-    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
-    ax.set_xlabel("col")
-    ax.set_ylabel("row")
 
 
 # #############################################################################
@@ -2315,9 +2310,7 @@ def cell4_4_q_learning_converges(
             # Panel 1: learned greedy policy.
             _draw_grid_base(env, ax1)
             _draw_policy_arrows(env, ax1, learned, color="darkblue")
-            ax1.set_title(
-                "Q-learning policy", fontsize=13, fontweight="bold"
-            )
+            ax1.set_title("Q-learning policy", fontsize=13, fontweight="bold")
             ax1.set_xlabel(
                 "col\n\n"
                 "_Q-learning policy_: the greedy policy derived from "
@@ -2329,8 +2322,7 @@ def cell4_4_q_learning_converges(
             smooth = pd.Series(returns).rolling(window, min_periods=1).mean()
             ax2.plot(smooth, color="seagreen")
             ax2.set_xlabel(
-                "episode\n\n"
-                "_Learning curve_: smoothed total return per episode",
+                "episode\n\n_Learning curve_: smoothed total return per episode",
                 fontsize=9,
             )
             ax2.set_ylabel("return (smoothed)")

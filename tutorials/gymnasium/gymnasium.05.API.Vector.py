@@ -53,14 +53,11 @@ from gymnasium.vector import (
     SyncVectorEnv,
     AsyncVectorEnv,
     AutoresetMode,
-    VectorWrapper,
-    VectorActionWrapper,
     VectorObservationWrapper,
     VectorRewardWrapper,
 )
 from gymnasium.vector.utils import (
     batch_space,
-    concatenate,
     create_empty_array,
     iterate,
 )
@@ -175,7 +172,7 @@ print("action_space:", vec_env.action_space)
 # Single vs batched shape.
 # ═══════════════════════════════════════════════════════════════════════════════
 obs_shape = vec_env.single_observation_space.shape  # one env
-batch_obs_shape = vec_env.observation_space.shape    # batched
+batch_obs_shape = vec_env.observation_space.shape  # batched
 data = {
     "property": ["single_observation_space.shape", "observation_space.shape"],
     "value": [str(obs_shape), str(batch_obs_shape)],
@@ -317,7 +314,7 @@ display(
 
 # %%
 # Compare NEXT_STEP vs SAME_STEP behaviour on a short-lived env.
-from gymnasium.envs.toy_text import FrozenLakeEnv
+
 
 class ShortFrozenLake(gym.Env):
     """
@@ -378,9 +375,7 @@ for t in range(6):
         print(f"    -> resetting envs {just_done}")
         mask = np.zeros(2, dtype=np.bool_)
         mask[just_done] = True
-        obs, info = vec_disabled.reset(
-            seed=0, options={"reset_mask": mask}
-        )
+        obs, info = vec_disabled.reset(seed=0, options={"reset_mask": mask})
         print(f"    -> obs after reset: {obs}")
 vec_disabled.close()
 vec_same = SyncVectorEnv(
@@ -392,7 +387,9 @@ for t in range(6):
     obs, rewards, term, trunc, info = vec_same.step(
         vec_same.action_space.sample()
     )
-    print(f"  step={t}: term={term}, trunc={trunc}, final_obs={info.get('final_observation', 'N/A')}")
+    print(
+        f"  step={t}: term={term}, trunc={trunc}, final_obs={info.get('final_observation', 'N/A')}"
+    )
 vec_same.close()
 
 # %% [markdown]
@@ -482,6 +479,7 @@ except RuntimeError as exc:
 # Compare sync vs async wall-clock time (3 envs, 100 steps each).
 import time
 
+
 def time_vector_env(vec_env_class, num_envs=3, num_steps=100):
     """
     Benchmark 100 steps of random actions.
@@ -505,12 +503,11 @@ def time_vector_env(vec_env_class, num_envs=3, num_steps=100):
     env.reset(seed=0)
     start = time.perf_counter()
     for _ in range(num_steps):
-        obs, rewards, term, trunc, info = env.step(
-            env.action_space.sample()
-        )
+        obs, rewards, term, trunc, info = env.step(env.action_space.sample())
     elapsed = time.perf_counter() - start
     env.close()
     return elapsed
+
 
 # Single env for baseline.
 single = gym.make("CartPole-v1")
@@ -525,7 +522,11 @@ sync_time = time_vector_env(SyncVectorEnv, num_envs=3, num_steps=100)
 async_time = time_vector_env(AsyncVectorEnv, num_envs=3, num_steps=100)
 
 data = {
-    "mode": ["1 env (sequential)", "SyncVectorEnv (3 envs)", "AsyncVectorEnv (3 envs)"],
+    "mode": [
+        "1 env (sequential)",
+        "SyncVectorEnv (3 envs)",
+        "AsyncVectorEnv (3 envs)",
+    ],
     "time_100_steps (s)": [
         f"{single_time:.4f}",
         f"{sync_time:.4f}",
@@ -550,6 +551,7 @@ display(pd.DataFrame(data))
 # %%
 # Build a custom VectorObservationWrapper that flattens observations.
 from gymnasium.spaces import Box
+
 
 class FlattenObsWrapper(VectorObservationWrapper):
     """
@@ -614,7 +616,7 @@ clipped.close()
 #   - `iterate(space, batch)`: iterate over the first dimension of a batch
 
 # %%
-from gymnasium.spaces import Box, Discrete, Dict
+from gymnasium.spaces import Discrete, Dict
 
 # batch_space: replicate a space N times.
 single = Box(low=0.0, high=1.0, shape=(4,), dtype=np.float32)
@@ -653,10 +655,10 @@ vec_env = gym.make_vec("CartPole-v1", num_envs=2, vectorization_mode="sync")
 obs, info = vec_env.reset(seed=0)
 print("Step  0 obs:\n", obs)
 for t in range(3):
-    obs, rewards, term, trunc, info = vec_env.step(
-        vec_env.action_space.sample()
+    obs, rewards, term, trunc, info = vec_env.step(vec_env.action_space.sample())
+    print(
+        f"Step {t + 1}: rewards={rewards}, term={term}, obs[0, :3]={obs[0, :3]}"
     )
-    print(f"Step {t+1}: rewards={rewards}, term={term}, obs[0, :3]={obs[0, :3]}")
 vec_env.close()
 
 # %% [markdown]
@@ -757,6 +759,7 @@ vec_env.close()
 # %%
 from gymnasium.wrappers import TimeLimit, RecordEpisodeStatistics
 
+
 def make_wrapped_cartpole():
     """Create a CartPole with a short time limit."""
     env = gym.make("CartPole-v1")
@@ -764,15 +767,12 @@ def make_wrapped_cartpole():
     env = RecordEpisodeStatistics(env)
     return env
 
-vec_env = SyncVectorEnv(
-    [make_wrapped_cartpole for _ in range(2)]
-)
+
+vec_env = SyncVectorEnv([make_wrapped_cartpole for _ in range(2)])
 obs, info = vec_env.reset(seed=0)
 done = False
 for t in range(60):
-    obs, rewards, term, trunc, info = vec_env.step(
-        vec_env.action_space.sample()
-    )
+    obs, rewards, term, trunc, info = vec_env.step(vec_env.action_space.sample())
     if np.any(term | trunc):
         print(f"step {t}: envs {np.where(term | trunc)[0]} terminated")
         break
@@ -807,19 +807,14 @@ vec_env.close()
 
 # %%
 # Explore the SyncVectorEnv interface.
-sync_env = SyncVectorEnv(
-    [lambda: gym.make("CartPole-v1") for _ in range(2)]
-)
+sync_env = SyncVectorEnv([lambda: gym.make("CartPole-v1") for _ in range(2)])
 print("Public attributes/methods:")
-for m in sorted(
-    [m for m in dir(sync_env) if not m.startswith("_")]
-):
+for m in sorted([m for m in dir(sync_env) if not m.startswith("_")]):
     print(f"  {m}")
 sync_env.close()
 
 # %%
 # Explore what batch_space does with a Dict space.
-from gymnasium.spaces import Dict
 
 dict_space = Dict(
     {
@@ -847,9 +842,7 @@ for t in range(6):
     if len(just_done) > 0:
         mask = np.zeros(2, dtype=np.bool_)
         mask[just_done] = True
-        obs, info = vec_disabled.reset(
-            seed=0, options={"reset_mask": mask}
-        )
+        obs, info = vec_disabled.reset(seed=0, options={"reset_mask": mask})
         print(f"    -> reset envs {just_done}, obs now: {obs}")
 vec_disabled.close()
 

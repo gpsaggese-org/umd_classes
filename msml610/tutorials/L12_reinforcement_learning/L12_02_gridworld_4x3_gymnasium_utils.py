@@ -8,7 +8,7 @@ the `env.step()` API.
 
 Import as:
 
-import msml610.tutorials.L12_reinforcement_learning.L12_02_gridworld_4x3_gymnasium_utils as gridgym
+import msml610.tutorials.L12_reinforcement_learning.L12_02_gridworld_4x3_gymnasium_utils as mtlrll0g4gu
 """
 
 import logging
@@ -65,7 +65,7 @@ _NAME_TO_ACTION_ID = {v: k for k, v in _ACTION_ID_TO_NAME.items()}
 
 
 # #############################################################################
-# GridWorldEnv as a gymnasium environment
+# GridWorldEnv
 # #############################################################################
 
 
@@ -83,6 +83,55 @@ class GridWorldEnv(gym.Env):
     """
 
     metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 4}
+
+    def _attempt_move(
+        self, cell: Tuple[int, int], direction: str
+    ) -> Tuple[int, int]:
+        """
+        Try moving one step; bounce back on walls and boundaries.
+        """
+        d_col, d_row = _ACTION_DELTA[direction]
+        target = (cell[0] + d_col, cell[1] + d_row)
+        off_grid = not (
+            1 <= target[0] <= self.n_cols and 1 <= target[1] <= self.n_rows
+        )
+        if off_grid or target in self.wall_cells:
+            return cell
+        return target
+
+    def _compute_transitions(
+        self, cell: Tuple[int, int], a_id: int
+    ) -> List[Tuple[float, int, float, bool]]:
+        """
+        Compute `[(prob, s', reward, terminated)]` for a state-action pair.
+
+        Terminal states are absorbing (stay in place with zero reward).
+        """
+        # Terminal state: absorbing.
+        if cell in self.terminal_cells:
+            s_id = self._cell_to_id[cell]
+            return [(1.0, s_id, 0.0, True)]
+        action = _ACTION_ID_TO_NAME[a_id]
+        p_perp = (1.0 - self.p_intended) / 2.0
+        outcome_probs = [(action, self.p_intended)]
+        for perp in _PERPENDICULAR[action]:
+            outcome_probs.append((perp, p_perp))
+        # Aggregate by destination cell (blocked moves merge).
+        dist: Dict[Tuple[int, int], float] = {}
+        for direction, prob in outcome_probs:
+            s2_cell = self._attempt_move(cell, direction)
+            dist[s2_cell] = dist.get(s2_cell, 0.0) + prob
+        result: List[Tuple[float, int, float, bool]] = []
+        for s2_cell, prob in dist.items():
+            s2_id = self._cell_to_id[s2_cell]
+            reward = (
+                self.terminal_cells[s2_cell]
+                if s2_cell in self.terminal_cells
+                else self.r_step
+            )
+            terminated = s2_cell in self.terminal_cells
+            result.append((prob, s2_id, reward, terminated))
+        return result
 
     def __init__(
         self,
@@ -138,9 +187,7 @@ class GridWorldEnv(gym.Env):
         cell = self._id_to_cell[self._state]
         return {"cell": cell}
 
-    def step(
-        self, action: int
-    ) -> Tuple[int, float, bool, bool, Dict[str, Any]]:
+    def step(self, action: int) -> Tuple[int, float, bool, bool, Dict[str, Any]]:
         """
         Apply action, sample the next state, and return the transition.
         """
@@ -164,100 +211,6 @@ class GridWorldEnv(gym.Env):
         self._state = self._cell_to_id[self.start_cell]
         return self._get_obs(), self._get_info()
 
-    def render(self) -> None:
-        """
-        Draw the grid. In `human` mode, show via plt.show().
-        """
-        _, ax = plt.subplots(figsize=(6, 4))
-        self._draw_base(ax, highlight=self._id_to_cell[self._state])
-        ax.set_title("GridWorldEnv", fontsize=13, fontweight="bold")
-        plt.tight_layout()
-        if self.render_mode == "human":
-            plt.show()
-
-    # --- Transition model (FrozenLake-style P[s][a] dict) ------------------
-
-    def _cell_to_id_safe(self, cell: Tuple[int, int]) -> Optional[int]:
-        """Return state id, or None if `cell` is a wall."""
-        return self._cell_to_id.get(cell)
-
-    def _attempt_move(
-        self, cell: Tuple[int, int], direction: str
-    ) -> Tuple[int, int]:
-        """Try moving one step; bounce back on walls and boundaries."""
-        d_col, d_row = _ACTION_DELTA[direction]
-        target = (cell[0] + d_col, cell[1] + d_row)
-        off_grid = not (
-            1 <= target[0] <= self.n_cols and 1 <= target[1] <= self.n_rows
-        )
-        if off_grid or target in self.wall_cells:
-            return cell
-        return target
-
-    def _compute_transitions(
-        self, cell: Tuple[int, int], a_id: int
-    ) -> List[Tuple[float, int, float, bool]]:
-        """
-        Compute `[(prob, s', reward, terminated)]` for a state-action pair.
-
-        Terminal states are absorbing (stay in place with zero reward).
-        """
-        # Terminal state: absorbing.
-        if cell in self.terminal_cells:
-            s_id = self._cell_to_id[cell]
-            return [(1.0, s_id, 0.0, True)]
-        action = _ACTION_ID_TO_NAME[a_id]
-        p_perp = (1.0 - self.p_intended) / 2.0
-        outcome_probs = [(action, self.p_intended)]
-        for perp in _PERPENDICULAR[action]:
-            outcome_probs.append((perp, p_perp))
-        # Aggregate by destination cell (blocked moves merge).
-        dist: Dict[Tuple[int, int], float] = {}
-        for direction, prob in outcome_probs:
-            s2_cell = self._attempt_move(cell, direction)
-            dist[s2_cell] = dist.get(s2_cell, 0.0) + prob
-        result: List[Tuple[float, int, float, bool]] = []
-        for s2_cell, prob in dist.items():
-            s2_id = self._cell_to_id[s2_cell]
-            reward = (
-                self.terminal_cells[s2_cell]
-                if s2_cell in self.terminal_cells
-                else self.r_step
-            )
-            terminated = s2_cell in self.terminal_cells
-            result.append((prob, s2_id, reward, terminated))
-        return result
-
-    # --- Drawing helpers exposed for the interactive cells -----------------
-
-    def id_to_cell(self, state_id: int) -> Tuple[int, int]:
-        return self._id_to_cell[state_id]
-
-    def cell_to_id(self, cell: Tuple[int, int]) -> int:
-        return self._cell_to_id[cell]
-
-    def nonterminal_ids(self) -> List[int]:
-        return [
-            i for i in range(len(self.all_cells)) if i not in self._terminal_ids
-        ]
-
-    def is_terminal_id(self, state_id: int) -> bool:
-        return state_id in self._terminal_ids
-
-    def to_grid(
-        self,
-        values: Dict[Tuple[int, int], float],
-        *,
-        fill: float = np.nan,
-    ) -> np.ndarray:
-        """
-        Convert a dict over (col, row) cells into a 2D array for heatmap plots.
-        """
-        grid = np.full((self.n_rows, self.n_cols), fill, dtype=float)
-        for (col, row), val in values.items():
-            grid[self.n_rows - row, col - 1] = val
-        return grid
-
     # --- Drawing helpers ---------------------------------------------------
 
     def _draw_base(
@@ -266,7 +219,9 @@ class GridWorldEnv(gym.Env):
         *,
         highlight: Optional[Tuple[int, int]] = None,
     ) -> None:
-        """Draw the grid layout with coloured special cells."""
+        """
+        Draw the grid layout with coloured special cells.
+        """
         _COLOR_START = "#cfe8ff"
         _COLOR_GOAL = "#a8e6a3"
         _COLOR_PIT = "#f4a6a6"
@@ -331,6 +286,55 @@ class GridWorldEnv(gym.Env):
         ax.set_yticks(range(1, self.n_rows + 1))
         ax.set_aspect("equal")
 
+    def render(self) -> None:
+        """
+        Draw the grid. In `human` mode, show via plt.show().
+        """
+        _, ax = plt.subplots(figsize=(6, 4))
+        self._draw_base(ax, highlight=self._id_to_cell[self._state])
+        ax.set_title("GridWorldEnv", fontsize=13, fontweight="bold")
+        plt.tight_layout()
+        if self.render_mode == "human":
+            plt.show()
+
+    # --- Transition model (FrozenLake-style P[s][a] dict) ------------------
+
+    def _cell_to_id_safe(self, cell: Tuple[int, int]) -> Optional[int]:
+        """
+        Return state id, or None if `cell` is a wall.
+        """
+        return self._cell_to_id.get(cell)
+
+    # --- Drawing helpers exposed for the interactive cells -----------------
+
+    def id_to_cell(self, state_id: int) -> Tuple[int, int]:
+        return self._id_to_cell[state_id]
+
+    def cell_to_id(self, cell: Tuple[int, int]) -> int:
+        return self._cell_to_id[cell]
+
+    def nonterminal_ids(self) -> List[int]:
+        return [
+            i for i in range(len(self.all_cells)) if i not in self._terminal_ids
+        ]
+
+    def is_terminal_id(self, state_id: int) -> bool:
+        return state_id in self._terminal_ids
+
+    def to_grid(
+        self,
+        values: Dict[Tuple[int, int], float],
+        *,
+        fill: float = np.nan,
+    ) -> np.ndarray:
+        """
+        Convert a dict over (col, row) cells into a 2D array for heatmap plots.
+        """
+        grid = np.full((self.n_rows, self.n_cols), fill, dtype=float)
+        for (col, row), val in values.items():
+            grid[self.n_rows - row, col - 1] = val
+        return grid
+
 
 # #############################################################################
 # Drawing helpers for plotting (value heatmap, policy arrows, comment panel)
@@ -349,7 +353,9 @@ def _draw_value_heatmap(
     title: str,
     cmap: str = "RdYlGn",
 ) -> None:
-    """Draw a utility heatmap with per-cell annotations."""
+    """
+    Draw a utility heatmap with per-cell annotations.
+    """
     grid = env.to_grid(u)
     sns.heatmap(
         grid,
@@ -388,7 +394,9 @@ def _draw_policy_arrows_cells(
     *,
     color: str = "black",
 ) -> None:
-    """Draw policy arrows over the grid (cell-keyed policy dict)."""
+    """
+    Draw policy arrows over the grid (cell-keyed policy dict).
+    """
     for s, a in policy.items():
         if s in env.wall_cells or s in env.terminal_cells:
             continue
@@ -406,7 +414,9 @@ def _draw_policy_arrows_heatmap(
     ax: matplotlib.axes.Axes,
     policy: Dict[Tuple[int, int], str],
 ) -> None:
-    """Overlay policy arrows on a heatmap plot (inverted-y coordinates)."""
+    """
+    Overlay policy arrows on a heatmap plot (inverted-y coordinates).
+    """
     for s, a in policy.items():
         d_x, d_y = _ARROW_DELTA[a]
         x = s[0] - 0.5
@@ -426,10 +436,11 @@ def _draw_visit_heatmap(
     *,
     title: str,
 ) -> None:
-    """Heatmap of per-state visit counts keyed by state id."""
+    """
+    Heatmap of per-state visit counts keyed by state id.
+    """
     cell_counts = {
-        env.id_to_cell(s_id): float(c)
-        for s_id, c in visit_counts.items()
+        env.id_to_cell(s_id): float(c) for s_id, c in visit_counts.items()
     }
     grid = env.to_grid(cell_counts)
     sns.heatmap(
@@ -451,7 +462,9 @@ def _draw_visit_heatmap(
 
 
 def _comment_panel(ax: matplotlib.axes.Axes, text: str) -> None:
-    """Render a wheat-coloured comment panel."""
+    """
+    Render a wheat-coloured comment panel.
+    """
     ax.axis("off")
     ax.set_title("Comments", fontsize=14, fontweight="bold", pad=20)
     htutori.add_fitted_text_box(ax, text, max_fontsize=12, min_fontsize=8)
@@ -583,7 +596,9 @@ def policy_iteration(
         u = policy_evaluation(env, policy)
         new_policy = extract_policy(env, u)
         n_changed = sum(
-            1 for c in env.all_cells if c not in env.terminal_cells and new_policy[c] != policy[c]
+            1
+            for c in env.all_cells
+            if c not in env.terminal_cells and new_policy[c] != policy[c]
         )
         policy = new_policy
         policies.append(dict(policy))
@@ -724,7 +739,11 @@ def cell1_1_show_grid(
     env = GridWorldEnv()
     _, ax = plt.subplots(figsize=figsize)
     env._draw_base(ax)
-    ax.set_title("The 4x3 grid world (gymnasium environment)", fontsize=14, fontweight="bold")
+    ax.set_title(
+        "The 4x3 grid world (gymnasium environment)",
+        fontsize=14,
+        fontweight="bold",
+    )
     plt.tight_layout()
     plt.show()
     print("observation_space:", env.observation_space)
@@ -840,7 +859,14 @@ def cell1_2_stochastic_action(
                 "  intended: %.2f\n"
                 "  each perpendicular: %.2f\n\n"
                 "Source: env.P[%d][%d]"
-                % (action, env.p_intended, env.p_intended, p_perp, focal_id, a_id)
+                % (
+                    action,
+                    env.p_intended,
+                    env.p_intended,
+                    p_perp,
+                    focal_id,
+                    a_id,
+                )
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
@@ -921,7 +947,9 @@ def cell1_3_transition_table(
                 ]
             ).sort_values("prob", ascending=False)
             # Grid overlay.
-            prob_map = {env.id_to_cell(i): 0.0 for i in range(env.observation_space.n)}
+            prob_map = {
+                env.id_to_cell(i): 0.0 for i in range(env.observation_space.n)
+            }
             for p, s2, _, _ in outcomes:
                 prob_map[env.id_to_cell(s2)] = p
             _, ax = plt.subplots(figsize=figsize)
@@ -955,7 +983,9 @@ def cell1_3_transition_table(
                 fontweight="bold",
             )
             ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
-            ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
+            ax.set_yticklabels(
+                [str(r) for r in range(env.n_rows, 0, -1)], rotation=0
+            )
             ax.set_xlabel(
                 "col\n\n"
                 "_Transition table_: each row shows the probability distribution "
@@ -1069,7 +1099,12 @@ def cell1_4_rewards_and_returns(
                     ax1.text(
                         col,
                         row - 0.05,
-                        "%.2f" % (env.terminal_cells[cell] if cell in env.terminal_cells else env.r_step),
+                        "%.2f"
+                        % (
+                            env.terminal_cells[cell]
+                            if cell in env.terminal_cells
+                            else env.r_step
+                        ),
                         ha="center",
                         va="center",
                         fontsize=10,
@@ -1077,7 +1112,11 @@ def cell1_4_rewards_and_returns(
             xs = [c[0] for c in path]
             ys = [c[1] for c in path]
             ax1.plot(xs, ys, "-o", color="darkblue", linewidth=2.0, markersize=6)
-            ax1.set_title("Rewards and trajectory (gymnasium)", fontsize=13, fontweight="bold")
+            ax1.set_title(
+                "Rewards and trajectory (gymnasium)",
+                fontsize=13,
+                fontweight="bold",
+            )
             ax1.set_xlabel(
                 "col\n\n"
                 "_Rewards and trajectory_: per-cell rewards with a sample "
@@ -1088,7 +1127,11 @@ def cell1_4_rewards_and_returns(
             lines = []
             for t in range(1, len(path)):
                 cell = path[t]
-                r_t = env.terminal_cells[cell] if cell in env.terminal_cells else env.r_step
+                r_t = (
+                    env.terminal_cells[cell]
+                    if cell in env.terminal_cells
+                    else env.r_step
+                )
                 running += (env.gamma**t) * r_t
                 if t <= 8:
                     lines.append("  t=%d enter %s r=%.2f" % (t, path[t], r_t))
@@ -1181,20 +1224,25 @@ def cell2_1_bellman_one_state(
             best_action = max(q_vals, key=lambda a: q_vals[a])
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1, highlight=cell)
-            ax1.set_title("Inspected state %s" % (cell,), fontsize=13, fontweight="bold")
+            ax1.set_title(
+                "Inspected state %s" % (cell,), fontsize=13, fontweight="bold"
+            )
             ax1.set_xlabel(
-                "col\n\n"
-                "_Inspected state_: the highlighted cell on the grid",
+                "col\n\n_Inspected state_: the highlighted cell on the grid",
                 fontsize=9,
             )
             colors = [
                 "seagreen" if a == best_action else "steelblue"
                 for a in _ACTION_NAMES
             ]
-            ax2.bar(_ACTION_NAMES, [q_vals[a] for a in _ACTION_NAMES], color=colors)
+            ax2.bar(
+                _ACTION_NAMES, [q_vals[a] for a in _ACTION_NAMES], color=colors
+            )
             ax2.axhline(0.0, color="black", linewidth=0.8)
             ax2.set_ylabel("expected action value Q(s,a)")
-            ax2.set_title("Action values (max kept)", fontsize=13, fontweight="bold")
+            ax2.set_title(
+                "Action values (max kept)", fontsize=13, fontweight="bold"
+            )
             ax2.set_xlabel(
                 "action\n\n"
                 "_Action values_: a bar per action, the best (max) highlighted",
@@ -1211,7 +1259,9 @@ def cell2_1_bellman_one_state(
                 % (
                     cell,
                     env.gamma,
-                    "\n".join("  %-6s %.3f" % (a, q_vals[a]) for a in _ACTION_NAMES),
+                    "\n".join(
+                        "  %-6s %.3f" % (a, q_vals[a]) for a in _ACTION_NAMES
+                    ),
                     best_action,
                     q_vals[best_action],
                 )
@@ -1319,8 +1369,7 @@ def cell2_2_value_iteration(
             if 1 <= i <= len(deltas):
                 ax2.axvline(i, color="gray", linestyle="--")
             ax2.set_xlabel(
-                "sweep\n\n"
-                "_Convergence_: max utility change per sweep",
+                "sweep\n\n_Convergence_: max utility change per sweep",
                 fontsize=9,
             )
             ax2.set_ylabel("max |U_{i+1} - U_i|")
@@ -1433,8 +1482,7 @@ def cell2_3_extract_policy(
                 "  the from-scratch env.\n"
                 "- Policy is greedy with\n"
                 "  respect to env.P-based\n"
-                "  utility estimates."
-                % (env.r_step, u_ids[start_id])
+                "  utility estimates." % (env.r_step, u_ids[start_id])
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
@@ -1465,7 +1513,9 @@ def cell2_3_extract_policy(
 
 
 def _preset_policy(env: GridWorldEnv, name: str) -> Dict[Tuple[int, int], str]:
-    """Return a named preset policy."""
+    """
+    Return a named preset policy.
+    """
     if name == "always-up":
         return {s: "Up" for s in env.all_cells if s not in env.terminal_cells}
     if name == "always-right":
@@ -1494,7 +1544,9 @@ def cell3_1_policy_evaluation(
     *,
     figsize: Optional[Tuple[float, float]] = None,
 ) -> None:
-    """Evaluate a fixed policy by solving the linear Bellman system."""
+    """
+    Evaluate a fixed policy by solving the linear Bellman system.
+    """
     if figsize is None:
         figsize = (14, 5)
     env = GridWorldEnv()
@@ -1611,18 +1663,20 @@ def cell3_2_policy_iteration(
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1)
             _draw_policy_arrows_cells(env, ax1, before, color="gray")
-            ax1.set_title("Policy before round %d" % i, fontsize=13, fontweight="bold")
+            ax1.set_title(
+                "Policy before round %d" % i, fontsize=13, fontweight="bold"
+            )
             ax1.set_xlabel(
-                "col\n\n"
-                "_Before_: the current policy arrows",
+                "col\n\n_Before_: the current policy arrows",
                 fontsize=9,
             )
             env._draw_base(ax2)
             _draw_policy_arrows_cells(env, ax2, after, color="darkblue")
-            ax2.set_title("Policy after round %d" % i, fontsize=13, fontweight="bold")
+            ax2.set_title(
+                "Policy after round %d" % i, fontsize=13, fontweight="bold"
+            )
             ax2.set_xlabel(
-                "col\n\n"
-                "_After_: the improved policy arrows",
+                "col\n\n_After_: the improved policy arrows",
                 fontsize=9,
             )
             n_changed = changes[i - 1] if 1 <= i <= len(changes) else 0
@@ -1698,8 +1752,7 @@ def cell3_3_compare_solvers(
                 range(1, len(vi_deltas) + 1), vi_deltas, "-o", color="darkorange"
             )
             ax1.set_xlabel(
-                "sweep\n\n"
-                "_Value iteration_: utility change per sweep",
+                "sweep\n\n_Value iteration_: utility change per sweep",
                 fontsize=9,
             )
             ax1.set_ylabel("max utility change")
@@ -1709,8 +1762,7 @@ def cell3_3_compare_solvers(
                 range(1, len(pi_changes) + 1), pi_changes, "-s", color="seagreen"
             )
             ax2.set_xlabel(
-                "round\n\n"
-                "_Policy iteration_: changed-action count per round",
+                "round\n\n_Policy iteration_: changed-action count per round",
                 fontsize=9,
             )
             ax2.set_ylabel("states changed action")
@@ -1722,8 +1774,7 @@ def cell3_3_compare_solvers(
                 "PI rounds: %d\n\n"
                 "Source: both use env.P.\n"
                 "Both converge to the same\n"
-                "optimal policy."
-                % (env.gamma, len(vi_deltas), len(pi_changes))
+                "optimal policy." % (env.gamma, len(vi_deltas), len(pi_changes))
             )
             _comment_panel(ax3, text)
             plt.tight_layout()
@@ -1850,7 +1901,9 @@ def cell4_2_q_update_rule(
                 "",
                 xy=(s2_cell[0], s2_cell[1] - 0.1),
                 xytext=(cell[0], cell[1] + 0.1),
-                arrowprops=dict(arrowstyle="-|>", color="darkblue", linewidth=3.0),
+                arrowprops=dict(
+                    arrowstyle="-|>", color="darkblue", linewidth=3.0
+                ),
             )
             ax1.text(
                 (cell[0] + s2_cell[0]) / 2 + 0.25,
@@ -1957,11 +2010,17 @@ def cell4_3_exploration(
             n_episodes = 2**n_exp_slider.value
             eps = epsilon_slider.value
             seed = seed_slider.value
-            low = q_learning(env, n_episodes=n_episodes, alpha=0.5, epsilon=eps, seed=seed)
-            high = q_learning(env, n_episodes=n_episodes, alpha=0.5, epsilon=0.9, seed=seed)
+            low = q_learning(
+                env, n_episodes=n_episodes, alpha=0.5, epsilon=eps, seed=seed
+            )
+            high = q_learning(
+                env, n_episodes=n_episodes, alpha=0.5, epsilon=0.9, seed=seed
+            )
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             _draw_visit_heatmap(
-                env, ax1, low["visit_counts"],
+                env,
+                ax1,
+                low["visit_counts"],
                 title="Visits at epsilon=%.2f" % eps,
             )
             ax1.set_xlabel(
@@ -1971,7 +2030,9 @@ def cell4_3_exploration(
                 fontsize=9,
             )
             _draw_visit_heatmap(
-                env, ax2, high["visit_counts"],
+                env,
+                ax2,
+                high["visit_counts"],
                 title="Visits at epsilon=0.90",
             )
             ax2.set_xlabel(
@@ -1989,8 +2050,7 @@ def cell4_3_exploration(
                 "Key idea:\n"
                 "- Low epsilon = narrow path.\n"
                 "- High epsilon = broad.\n"
-                "- Balance is key."
-                % (eps, n_episodes, seed)
+                "- Balance is key." % (eps, n_episodes, seed)
             )
             _comment_panel(ax3, text)
             plt.tight_layout()
@@ -2105,8 +2165,7 @@ def cell4_4_q_learning_converges(
             smooth = pd.Series(returns).rolling(window, min_periods=1).mean()
             ax2.plot(smooth, color="seagreen")
             ax2.set_xlabel(
-                "episode\n\n"
-                "_Learning curve_: smoothed total return per episode",
+                "episode\n\n_Learning curve_: smoothed total return per episode",
                 fontsize=9,
             )
             ax2.set_ylabel("return (smoothed)")
@@ -2115,9 +2174,12 @@ def cell4_4_q_learning_converges(
             n_match = sum(
                 1
                 for c in env.all_cells
-                if c not in env.terminal_cells and learned.get(c) == optimal_policy.get(c)
+                if c not in env.terminal_cells
+                and learned.get(c) == optimal_policy.get(c)
             )
-            n_total = len([c for c in env.all_cells if c not in env.terminal_cells])
+            n_total = len(
+                [c for c in env.all_cells if c not in env.terminal_cells]
+            )
             text = (
                 "Parameters:\n"
                 "  n_episodes: %d\n"
@@ -2128,7 +2190,13 @@ def cell4_4_q_learning_converges(
                 "  env.step() exclusively.\n"
                 "Same payoff: optimal policy\n"
                 "without ever reading env.P."
-                % (n_episodes, alpha_slider.value, epsilon_slider.value, n_match, n_total)
+                % (
+                    n_episodes,
+                    alpha_slider.value,
+                    epsilon_slider.value,
+                    n_match,
+                    n_total,
+                )
             )
             _comment_panel(ax3, text)
             plt.tight_layout()

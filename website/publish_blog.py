@@ -42,7 +42,8 @@ def _check_file_is_tracked_by_git(file_path: str) -> None:
         abort_on_error=False,
     )
     hdbg.dassert_eq(
-        rc, 0,
+        rc,
+        0,
         "The file must be tracked by git to use this script: '%s'",
         file_path,
     )
@@ -102,7 +103,11 @@ def _publish(file_path: str) -> None:
     if re.search(r"^date:\s*\S+", content, re.MULTILINE):
         # Update existing date line.
         content = re.sub(
-            r"^date:\s*\S+", "date: " + today, content, count=1, flags=re.MULTILINE
+            r"^date:\s*\S+",
+            "date: " + today,
+            content,
+            count=1,
+            flags=re.MULTILINE,
         )
     else:
         # Insert date line after the `draft:` line.
@@ -114,7 +119,7 @@ def _publish(file_path: str) -> None:
             flags=re.MULTILINE,
         )
     # Strip the `draft.` prefix to get the new file name.
-    new_basename = basename[len("draft."):]
+    new_basename = basename[len("draft.") :]
     new_path = os.path.join(os.path.dirname(file_path), new_basename)
     # Use git mv to rename the file, preserving git history.
     hsystem.system("git mv '%s' '%s'" % (file_path, new_path))
