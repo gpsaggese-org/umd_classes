@@ -458,9 +458,9 @@ digraph ITS {
     ranksep=0.8;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    PrePeriod  [label=<Pre-period<BR/>(t < t*)>,      fillcolor="#FFD1A6"];
+    PrePeriod  [label=<Pre-period<BR/>(t &lt; t*)>,      fillcolor="#FFD1A6"];
     Event      [label=<Intervention<BR/>at t = t*>,   fillcolor="#F4A6A6"];
-    PostPeriod [label=<Post-period<BR/>(t >= t*)>,    fillcolor="#B2E2B2"];
+    PostPeriod [label=<Post-period<BR/>(t &gt;= t*)>,    fillcolor="#B2E2B2"];
     Forecast   [label=<Counterfactual<BR/>forecast>,  fillcolor="#A6E7F4"];
     Effect     [label=<Causal effect<BR/>= Actual - Forecast>, fillcolor="#A6C8F4"];
 

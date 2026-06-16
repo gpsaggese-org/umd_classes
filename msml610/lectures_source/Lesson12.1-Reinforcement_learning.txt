@@ -755,6 +755,30 @@ digraph TetrisDDN {
 ## Algorithms for MDPs
 ## #############################################################################
 
+* Value and Policy Iteration: Intuition
+
+Value Iteration and Policy Iteration are two classic algorithms for solving a
+Markov Decision Process (MDP) and finding an optimal policy
+
+- The key difference is what they update at each step
+
+- Value iteration focuses on finding the optimal value function directly
+
+Imagine planning a road trip.
+
+- Value Iteration
+  - You repeatedly update your estimate of:
+  - "What is the best possible travel time from each city?"
+
+Eventually those estimates become accurate, and then you choose the best road from each city.
+
+- Policy Iteration
+  - You start with a route plan: "Always take highway A"
+  - Then:
+    1. Evaluate how good that route plan is
+    2. Improve the plan by choosing better roads
+    3. Repeat until the route plan stops changing
+
 * Value Iteration (1/2)
 - **Value iteration** solves MDPs using 2 steps:
   - Compute optimal utility for each state $U(s)$

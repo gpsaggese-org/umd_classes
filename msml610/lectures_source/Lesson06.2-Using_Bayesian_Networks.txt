@@ -1076,13 +1076,7 @@ digraph BayesianFlow {
 
 - TODO(ai_gp): Add some notes explaining this
 
-::::
-:::: {.column width=45%}
-
 ![](msml610/lectures_source/figures/L06.2.Rejection_Sampling.png)
-
-::::
-:::
 
 * Rejection Sampling: Garden World Example
 
