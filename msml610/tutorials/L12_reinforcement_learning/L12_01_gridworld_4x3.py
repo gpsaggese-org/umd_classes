@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -94,9 +94,8 @@ utils.cell1_2_stochastic_action()
 # - With $\Pr(\text{intended}) = 0.8$, the agent goes sideways $20\%$ of the time
 # - Walls and boundaries bounce the agent back to its current cell
 # - As `p_intended` approaches $1.0$, the world becomes deterministic
-# - The intended direction carries probability `p_intended`
-# - The two perpendicular directions split the remaining mass equally
-# - A blocked move (wall or boundary) returns the agent to its current cell
+#     - The intended direction carries probability `p_intended`
+#     - The two perpendicular directions split the remaining mass equally
 
 # %% [markdown]
 # ## Cell 1.3: Transition Model as an Explicit Table
@@ -115,9 +114,8 @@ utils.cell1_3_transition_table()
 # %% [markdown]
 # **Key observations**:
 # - The transition model has shape $|S| \times |A| \times |S|$, but is sparse
-# - Each $(s, a)$ row sums to $1.0$: it is a probability distribution
 # - Most next states have zero probability
-# - This explicit model is exactly what model-free learning will do without
+# - Each $(s, a)$ row sums to $1.0$: it is a probability distribution
 
 # %% [markdown]
 # ## Cell 1.4: Rewards and Episode Returns

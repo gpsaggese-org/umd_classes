@@ -25,6 +25,7 @@ import seaborn as sns
 from IPython.display import clear_output, display
 
 import helpers.hnotebook as hnotebo
+import helpers.hprint as hprint
 import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
@@ -97,6 +98,7 @@ class GridWorldEnv(gym.Env):
         )
         if off_grid or target in self.wall_cells:
             return cell
+        _LOG.debug("_attempt_move: %s -> %s", cell, target)
         return target
 
     def _compute_transitions(
@@ -107,6 +109,7 @@ class GridWorldEnv(gym.Env):
 
         Terminal states are absorbing (stay in place with zero reward).
         """
+        _LOG.debug(hprint.func_signature_to_str())
         # Terminal state: absorbing.
         if cell in self.terminal_cells:
             s_id = self._cell_to_id[cell]
@@ -141,6 +144,7 @@ class GridWorldEnv(gym.Env):
         gamma: float = 1.0,
         p_intended: float = 0.8,
     ) -> None:
+        _LOG.debug(hprint.func_signature_to_str())
         super().__init__()
         self.n_cols = 4
         self.n_rows = 3
@@ -191,6 +195,7 @@ class GridWorldEnv(gym.Env):
         """
         Apply action, sample the next state, and return the transition.
         """
+        _LOG.debug(hprint.to_str("action"))
         # Sample from the pre-computed transition distribution.
         outcomes = self.P[self._state][action]
         probs = [o[0] for o in outcomes]
@@ -199,6 +204,7 @@ class GridWorldEnv(gym.Env):
         self._state = s2_id
         terminated_bool = bool(terminated)
         truncated_bool = False
+        _LOG.debug(hprint.to_str("s2_id reward terminated_bool"))
         return s2_id, reward, terminated_bool, truncated_bool, self._get_info()
 
     def reset(
@@ -207,8 +213,10 @@ class GridWorldEnv(gym.Env):
         seed: Optional[int] = None,
         options: Optional[Dict[str, Any]] = None,
     ) -> Tuple[int, Dict[str, Any]]:
+        _LOG.debug(hprint.to_str("seed"))
         super().reset(seed=seed)
         self._state = self._cell_to_id[self.start_cell]
+        _LOG.debug("return=%s", self._state)
         return self._get_obs(), self._get_info()
 
     # --- Drawing helpers ---------------------------------------------------
@@ -222,6 +230,7 @@ class GridWorldEnv(gym.Env):
         """
         Draw the grid layout with coloured special cells.
         """
+        _LOG.debug(hprint.to_str("highlight"))
         _COLOR_START = "#cfe8ff"
         _COLOR_GOAL = "#a8e6a3"
         _COLOR_PIT = "#f4a6a6"
@@ -290,6 +299,7 @@ class GridWorldEnv(gym.Env):
         """
         Draw the grid. In `human` mode, show via plt.show().
         """
+        _LOG.debug(hprint.to_str("self.render_mode"))
         _, ax = plt.subplots(figsize=(6, 4))
         self._draw_base(ax, highlight=self._id_to_cell[self._state])
         ax.set_title("GridWorldEnv", fontsize=13, fontweight="bold")
@@ -486,9 +496,11 @@ def _q_value(
 
     Uses the convention: Q(s,a) = sum_{outcomes} prob * (reward + gamma * u[s']).
     """
+    _LOG.debug(hprint.to_str("s_id a_id"))
     q = 0.0
     for prob, s2_id, reward, _ in env.P[s_id][a_id]:
         q += prob * (reward + env.gamma * u[s2_id])
+    _LOG.debug("return=%s", q)
     return q
 
 
@@ -504,8 +516,10 @@ def value_iteration(
     :return: (snapshots, deltas) where snapshots[i] are utilities after sweep i
         and deltas[i] is the max per-state change during sweep i.
     """
+    _LOG.debug(hprint.func_signature_to_str())
     n_states = env.observation_space.n
     u: Dict[int, float] = {i: 0.0 for i in range(n_states)}
+    # Initialize snapshots with the zero-utility starting point.
     snapshots = [dict(u)]
     deltas: List[float] = []
     nonterm = env.nonterminal_ids()
@@ -521,6 +535,7 @@ def value_iteration(
         deltas.append(delta)
         if delta < tol:
             break
+    _LOG.debug(hprint.to_str("len(snapshots) deltas[-1]"))
     return snapshots, deltas
 
 
@@ -531,6 +546,7 @@ def extract_policy(
     """
     Extract the greedy policy (as cell->action dict) from utilities `u`.
     """
+    _LOG.debug(hprint.func_signature_to_str())
     policy: Dict[Tuple[int, int], str] = {}
     for c in env.all_cells:
         if c in env.terminal_cells:
@@ -538,6 +554,7 @@ def extract_policy(
         s_id = env.cell_to_id(c)
         best_a = max(range(4), key=lambda a: _q_value(env, s_id, a, u))
         policy[c] = _ACTION_ID_TO_NAME[best_a]
+    _LOG.debug(hprint.to_str("len(policy)"))
     return policy
 
 
@@ -551,6 +568,7 @@ def policy_evaluation(
     With a fixed action per state the max disappears and the Bellman equations
     are linear; solved in one shot with numpy.linalg.solve.
     """
+    _LOG.debug(hprint.func_signature_to_str())
     n_states = env.observation_space.n
     nonterm_ids = env.nonterminal_ids()
     idx_map = {s_id: i for i, s_id in enumerate(nonterm_ids)}
@@ -573,6 +591,7 @@ def policy_evaluation(
     u = {i: 0.0 for i in range(n_states)}
     for s_id in nonterm_ids:
         u[s_id] = float(solution[idx_map[s_id]])
+    _LOG.debug("return: n_states=%d", len(u))
     return u
 
 
@@ -585,6 +604,7 @@ def policy_iteration(
     """
     Run policy iteration, recording per-round snapshots.
     """
+    _LOG.debug(hprint.to_str("initial_action max_iters"))
     nonterm_ids = env.nonterminal_ids()
     policy: Dict[Tuple[int, int], str] = {}
     for c in env.all_cells:
@@ -605,6 +625,7 @@ def policy_iteration(
         changes.append(n_changed)
         if n_changed == 0:
             break
+    _LOG.debug(hprint.to_str("len(policies) len(changes)"))
     return policies, changes
 
 
@@ -621,7 +642,10 @@ def _greedy_action_id(
     Return the action with the highest Q-value at state `s_id`.
     Query by flattened key `(s_id * 4 + a_id)`.
     """
-    return max(range(4), key=lambda a: q[s_id * 4 + a])
+    _LOG.debug(hprint.to_str("s_id"))
+    best_a = max(range(4), key=lambda a: q[s_id * 4 + a])
+    _LOG.debug("return=%s", best_a)
+    return best_a
 
 
 def q_learning(
@@ -643,6 +667,7 @@ def q_learning(
         the final greedy policy as a cell->action dict, per-episode greedy
         policies.
     """
+    _LOG.debug(hprint.to_str("n_episodes alpha epsilon seed"))
     n_states = env.observation_space.n
     n_actions = 4
     rng = np.random.RandomState(seed)
@@ -694,6 +719,7 @@ def q_learning(
         "policy": final_policy,
         "policies": policies,
     }
+    _LOG.debug(hprint.to_str("len(result[q]) len(returns)"))
     return result
 
 
@@ -1139,13 +1165,13 @@ def cell1_4_rewards_and_returns(
                 "Parameters:\n"
                 "  r_step: %.2f\n"
                 "  gamma: %.2f\n\n"
-                "Discounted return G = %.3f\n\n"
                 "First steps:\n%s\n\n"
                 "Key idea:\n- Same return computation\n"
                 "  as the from-scratch env.\n"
                 "- Rewards come from env's\n"
                 "  reward model."
-                % (env.r_step, env.gamma, running, "\n".join(lines))
+                "Discounted return G = %.3f\n\n"
+                % (env.r_step, env.gamma, "\n".join(lines), running)
             )
             _comment_panel(ax2, text)
             plt.tight_layout()
