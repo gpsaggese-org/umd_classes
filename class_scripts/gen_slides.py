@@ -13,10 +13,12 @@ Usage:
 """
 
 import argparse
+import hashlib
 import logging
 import os
 import re
 import shlex
+import time
 from typing import Tuple
 
 import class_scripts.common_utils as csccouti
@@ -97,6 +99,37 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
     return dir_input, lesson
 
 
+def _file_hash(file_path: str) -> str:
+    """
+    Compute MD5 hash of a file.
+    """
+    hasher = hashlib.md5()
+    with open(file_path, "rb") as f:
+        for chunk in iter(lambda: f.read(65536), b""):
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 1) -> None:
+    """
+    Watch a file for changes every 1s and re-run cmd when hash changes.
+    """
+    _LOG.info("Daemon mode: watching '%s' for changes (poll every 1s)...", file_path)
+    prev_hash = None
+    while True:
+        try:
+            cur_hash = _file_hash(file_path)
+        except FileNotFoundError:
+            _LOG.error("File '%s' not found. Retrying...", file_path)
+            time.sleep(1)
+            continue
+        if prev_hash is not None and cur_hash != prev_hash:
+            _LOG.info("File changed (hash: %s -> %s). Regenerating...", prev_hash, cur_hash)
+            hsystem.system(cmd)
+        prev_hash = cur_hash
+        time.sleep(wait_in_sec)
+
+
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -107,6 +140,11 @@ def _parse() -> argparse.ArgumentParser:
         type=str,
         help="Lecture specification: 'data605/08.1', 'msml610/08.1', "
         "or file path 'msml610/lectures_source/Lesson10.2-Name.txt'",
+    )
+    parser.add_argument(
+        "--daemon",
+        action="store_true",
+        help="Watch input file for changes every 1s and regenerate PDF on change",
     )
     parser.add_argument(
         "extra_opts",
@@ -148,8 +186,11 @@ def _main(parser: argparse.ArgumentParser) -> None:
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
     _LOG.info("Running command: %s", cmd)
-    # Execute the command.
-    hsystem.system(cmd)
+    if args.daemon:
+        _daemon_watch(input_file, cmd)
+    else:
+        # Execute the command once.
+        hsystem.system(cmd)
 
 
 if __name__ == "__main__":

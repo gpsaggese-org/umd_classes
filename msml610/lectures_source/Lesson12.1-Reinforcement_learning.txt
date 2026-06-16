@@ -630,7 +630,7 @@ digraph DynamicDecisionDiagram {
 
 - _State variables_ (ovals)
   - Represent the underlying state of the environment at time $t$
-  - E.g., a robot’s location, inventory levels, or market conditions:w
+  - E.g., a robot's location, inventory levels, or market conditions:w
 - _Decision variables_ (rectangles)
   - Represent the actions or choices available to the agent at each time step
 - _Utility variables_ (diamonds)
@@ -638,7 +638,7 @@ digraph DynamicDecisionDiagram {
     seeks to maximize
 - _Transition model_
   - Defines how the environment evolves from one time step to the next,
-    conditioned on the current state and the agent’s actions
+    conditioned on the current state and the agent's actions
 
 - Can be replicated across time slices to model how actions influence future
   states, observations, and rewards over time
@@ -755,64 +755,67 @@ digraph TetrisDDN {
 ## Algorithms for MDPs
 ## #############################################################################
 
-* Value and Policy Iteration: Intuition
+* MDP Solution: Overview
 
-Value Iteration and Policy Iteration are two classic algorithms for solving a
-Markov Decision Process (MDP) and finding an optimal policy
+- **Problem**: An MDP defines a sequential decision problem, but how do we
+  actually compute an optimal policy $\pi^*$?
+  - Two classic dynamic programming algorithms exist
+    - _Value Iteration_: directly computes the optimal value function $U(s)^*$
+      and derives policy at the end
+    - _Policy Iteration_: iteratively evaluates and improves a candidate
+      policy $\pi(s)$
 
-- The key difference is what they update at each step
+- **Key difference**: what each algorithm updates at each step
 
-- Value iteration focuses on finding the optimal value function directly
+- **Analogy**: planning a road trip
+  - _Value Iteration_:
+    - You repeatedly update _"What is the best possible travel time from each
+      city?"_
+    - Start with guesses, then refine using neighbors' estimates
+    - Eventually all estimates become accurate $\to$ then choose the best road
+      from each city
 
-Imagine planning a road trip.
-
-- Value Iteration
-  - You repeatedly update your estimate of:
-  - "What is the best possible travel time from each city?"
-
-Eventually those estimates become accurate, and then you choose the best road from each city.
-
-- Policy Iteration
-  - You start with a route plan: "Always take highway A"
-  - Then:
-    1. Evaluate how good that route plan is
-    2. Improve the plan by choosing better roads
-    3. Repeat until the route plan stops changing
+  - _Policy Iteration_:
+    - Start with a route plan: _"Always take highway A"_
+    - Compute how good this plan is
+    - Switch to better roads where highway A underperforms
+    - Repeat until the route plan stops changing
 
 * Value Iteration (1/2)
-- **Value iteration** solves MDPs using 2 steps:
-  - Compute optimal utility for each state $U(s)$
-  - Extract optimal policy $\pi^*$ from utilities $U(s)$
+- **Algorithm**: _Value iteration_
+  1. Compute optimal utility $U^*(s)$
+     - Write $n$ Bellman equations in $n$ unknowns $U(s)$
+     - Solve the simultaneous system of equations
+  2. Extract optimal policy $\pi^*$ from utilities $U(s)$ by choosing the action
+     with the highest value
 
-- **Step 1**: compute optimal utility for each state
-  - There are $n$ possible states, so $n$ Bellman equations, one per state
+- **Step 1**: Compute optimal utility for each state
+  - There are $n$ possible states $\to$ $n$ Bellman equations
     $$
     U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
     $$
-  - Each equation relates the utility of a state to the utilities of its
-    successors
-  - The state utilities $U(s)$ are $n$ unknowns
+  - Each equation relates the utility of a state $s$ to the utilities of its
+    successors $s'$
   - Solve these equations $n$ equations with $n$ unknowns simultaneously
-    - Problem: equations are non-linear due to max operator
-    - Solution: use an iterative approach
+    - Equations are non-linear due to max operator $\to$ use an iterative approach
 
 * Value Iteration (2/2)
 
-- **Solve system of Bellman equations**
-  - Start with arbitrary values for utilities $U(s) = 0$
+- **Step 1**: Solve system of Bellman equations iteratively
+  - Start with arbitrary values for utilities $U(s)$
   - Perform Bellman updates:
     $$
     U_{i+1}(s) \leftarrow \max_a \sum_{s'} \Pr(s'|s,a)[R(s,a,s') + \gamma U_i(s')]
     $$
   - Calculate the right-hand side and plug it into the left-hand side
-  - No strict update order required for convergence, but intelligent ordering
-    can improve speed, especially in large or structured MDPs
-  - Repeat until equilibrium or close to convergence
-    $|| U_{i+1} - U_i || < \epsilon$
-  - Guaranteed to converge to the unique fixed point (optimal policy) for
-    additive discounted rewards and $\gamma < 1$
+  - Repeat until convergence: $|| U_{i+1} - U_i || < \epsilon$
 
-- **Step 2**: compute optimal policy
+  - _Convergence_ to single fixed point is guaranteed for additive discounted
+    rewards and $\gamma < 1$
+    - No strict update order required for convergence
+    - Intelligent ordering can improve speed especially in large or structured MDPs
+
+- **Step 2**: Compute optimal policy
   - Derive optimal policy by choosing action $a$ that maximizes expected utility
     for each state $s$:
     $$
@@ -821,54 +824,68 @@ Eventually those estimates become accurate, and then you choose the best road fr
 
 * Policy Iteration
 
-- **Policy iteration** solves MDPs by iteratively improving a policy
-  - Alternates between evaluating the current policy and improving it
-  - Uses the simplified Bellman equation with a fixed action per state
+- **Algorithm** solves MDPs by iteratively improving a policy
+  1. Evaluate current policy by computing $U(s)$ for each state
+  2. Improve current policy $\pi(s)$ using Bellman equations
+  3. Iterate until convergence
 
-- **Algorithm steps**
+- **Step 1**: Policy Evaluation
   - Start with an initial (random) policy $\pi$
-  - Policy Evaluation: compute $U^\pi(s)$ by solving:
+  - Compute $U^\pi(s)$ by solving:
     $$
     U^\pi(s) = \sum_{s'} \Pr(s'|s,\pi(s))[R(s,\pi(s),s') + \gamma U^\pi(s')]
     $$
-  - Policy Improvement: for each state, find:
+
+- **Step 2**: Policy Improvement
+  - For each state, find:
     $$
     \pi'(s) = \argmax_a \sum_{s'} \Pr(s'|s,a)[R(s,a,s') + \gamma U^\pi(s')]
     $$
+
+- **Step 3**: Convergence
   - Repeat until policy is unchanged or close to convergence
+  - _Convergence_ to an optimal policy for finite MDPs is guaranteed
+    - Each iteration strictly improves or maintains policy performance
 
-- **Convergence Guarantee**
-  - Each iteration strictly improves or maintains policy performance
-  - Guaranteed to terminate with an optimal policy for finite MDPs
+* Value vs Policy Iteration
 
-- **Efficiency Considerations**
-  - Policy evaluation involves solving linear equations
-  - Typically converges in fewer iterations than value iteration
+- Value Iteration: _"Learn how good every state is, then derive the best policy"_
+- Policy Iteration: _"Start with a policy, evaluate it, improve it, and repeat
+  until it can't get any better"_
+
+\begingroup small
+| **Value Iteration** | **Policy Iteration** |
+|----------------|------------------|
+| Updates values directly | Updates policies directly |
+| Policy is extracted at the end | Policy is improved every iteration |
+| Simpler update rule | Two-step process (evaluate + improve) |
+| Many cheap iterations | Fewer but more expensive iterations |
+| Often preferred for large problems | Often converges in fewer iterations |
+\endgroup
 
 * Off-Line vs On-Line Solution of MDPS
 
-- **Offline methods** (e.g., value iteration, policy iteration) precompute full
-  solutions
-  - Pros:
-    - Compute the entire optimal policy $\pi^* \; \forall s$ before taking any
-      action
-  - Cons:
-    - Assumes full knowledge of transition probabilities $\Pr(s'|s,a)$ and
-      reward function $R(s,a,s')$
+- **Offline methods** precompute full solutions
+  - E.g., value iteration, policy iteration
+  - _Pros_:
+    - Compute entire optimal policy $\pi^*(s) \; \forall s$ before action
+  - _Cons_:
+    - Assumes full knowledge of transition probabilities $\Pr(s'|a, s)$ and
+      reward function $R(s, a, s')$
     - Not feasible for large MDPs (e.g., Tetris with $10^{62}$ states)
 
 - **Online methods** compute actions at runtime, using only reachable parts of
   the state space
   - Interleave planning and acting
-  - Agent explores the environment and updates estimates (e.g., Q-learning)
-  - Pros:
-    - Focuses computation only on relevant parts of the state space
-    - Scales to large problems with appropriate heuristics and approximations
+  - Agent explores environment and updates estimates (e.g., Q-learning)
+  - _Pros_:
+    - Focuses computation on relevant parts of the state space
+    - Scales to large problems with heuristics and approximations
     - Allows adaptive, real-time decision-making
     - No need for full model of the MDP
-  - Cons
-    - Requires fast and accurate state evaluation functions
-    - May require significant computation at each decision point
+  - _Cons_:
+    - Requires fast, accurate state evaluation functions
+    - May need significant computation at each decision point
     - Needs exploration and careful tradeoff with exploitation
     - Sensitive to model accuracy and search depth
 
