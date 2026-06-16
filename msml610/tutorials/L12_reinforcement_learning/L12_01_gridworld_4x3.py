@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -63,7 +63,6 @@ utils.init_loggers(_LOG)
 # **Goal**:
 # - Visualize the grid world layout that every later algorithm will reason about
 # - Identify the special cells: start, terminals, and wall
-#
 # - This is the world the agent lives in
 # - It is fully observable (the agent always knows its cell) but stochastic
 #   (actions do not always succeed)
@@ -276,7 +275,6 @@ utils.cell3_3_compare_solvers()
 # **Goal**:
 # - Contrast planning (knowing the model) with learning (discovering through action)
 # - Understand why the same optimal policy takes a harder route in RL
-#
 # - Same world, blindfolded: the agent no longer has the transition table
 # - It must learn the value of actions purely from the rewards it stumbles into
 # - In RL the agent does not know $\Pr(s' \mid s, a)$ or $R(s, a, s')$

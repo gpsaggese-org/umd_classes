@@ -862,7 +862,6 @@ def cell1_2_stochastic_action(
     update_plot()
     controls = ipywidgets.VBox(
         [
-            ipywidgets.Label("Pick an action and reliability:"),
             action_dropdown,
             p_box,
         ]
@@ -983,9 +982,6 @@ def cell1_3_transition_table(
     update_plot()
     controls = ipywidgets.VBox(
         [
-            ipywidgets.Label(
-                "Select a state and action to see env.P[s][a]:"
-            ),
             state_dropdown,
             action_dropdown,
         ]
@@ -1128,9 +1124,6 @@ def cell1_4_rewards_and_returns(
     )
     controls = ipywidgets.VBox(
         [
-            ipywidgets.Label(
-                "Change living reward and discount (gymnasium env):"
-            ),
             r_box,
             gamma_box,
             seed_box,
@@ -1237,23 +1230,14 @@ def cell2_1_bellman_one_state(
     state_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Pick a state, see action values via env.P:"
-                        ),
-                        state_dropdown,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            state_dropdown,
+            gamma_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1378,24 +1362,15 @@ def cell2_2_value_iteration(
     gamma_slider.observe(update_plot, names="value")
     r_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Step through value iteration sweeps (gymnasium):"
-                        ),
-                        iter_box,
-                        gamma_box,
-                        r_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            iter_box,
+            gamma_box,
+            r_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1475,22 +1450,13 @@ def cell2_3_extract_policy(
         "the long safe path"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Change living reward, watch the policy (gymnasium):"
-                        ),
-                        r_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            r_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1598,23 +1564,14 @@ def cell3_1_policy_evaluation(
         "<b>gamma</b> — discount factor weighting future rewards"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Pick a fixed policy (gymnasium env):"
-                        ),
-                        policy_dropdown,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            policy_dropdown,
+            gamma_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1690,22 +1647,13 @@ def cell3_2_policy_iteration(
         "(the policy converges in very few rounds)"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Step through policy iteration (gymnasium):"
-                        ),
-                        iter_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            iter_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1790,22 +1738,13 @@ def cell3_3_compare_solvers(
         "needs many more sweeps while policy iteration stays at a handful of rounds"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Compare solvers (gymnasium env.P):"
-                        ),
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            gamma_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1958,23 +1897,14 @@ def cell4_2_q_update_rule(
         "the TD target"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Adjust parameters, watch the TD update:"
-                        ),
-                        alpha_box,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            alpha_box,
+            gamma_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -2079,24 +2009,15 @@ def cell4_3_exploration(
         "<b>seed</b> — random seed for reproducible training runs"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Adjust epsilon, compare coverage:"
-                        ),
-                        epsilon_box,
-                        n_box,
-                        seed_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            epsilon_box,
+            n_box,
+            seed_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -2230,22 +2151,13 @@ def cell4_4_q_learning_converges(
         "<b>seed</b> — random seed for reproducible training"
         "</div>"
     )
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Train Q-learning, compare to VI optimum:"
-                        ),
-                        n_box,
-                        alpha_box,
-                        epsilon_box,
-                        seed_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            n_box,
+            alpha_box,
+            epsilon_box,
+            seed_box,
+        ]
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))

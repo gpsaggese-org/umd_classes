@@ -689,6 +689,8 @@ def cell1_2_stochastic_action(
     :param action: the intended action (``Up``, ``Down``, ``Left``, ``Right``)
     :param p_intended: probability the intended action succeeds (0.5 to 1.0)
     :param figsize: optional figure size
+
+    Layout is a 2x2 grid: controls | HTML description, grid plot | comments.
     """
     if figsize is None:
         figsize = (14, 5)
@@ -724,11 +726,10 @@ def cell1_2_stochastic_action(
             action = action_dropdown.value
             focal = eval(state_dropdown.value)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
-            # Panel 1: focal cell with arrows whose width encodes probability.
+            # Panel left: grid plot with probability arrows.
             _draw_grid_base(env, ax1, highlight=focal)
             for direction in _ACTIONS:
                 s2 = env._attempt_move(focal, direction)
-                # Probability assigned to this direction by the slip model.
                 if direction == action:
                     prob = env.p_intended
                 elif direction in _PERPENDICULAR[action]:
@@ -739,7 +740,6 @@ def cell1_2_stochastic_action(
                     continue
                 d_x, d_y = _ACTION_DELTA[direction]
                 if s2 == focal:
-                    # Blocked move: draw a small self-loop marker.
                     ax1.text(
                         focal[0],
                         focal[1],
@@ -780,7 +780,7 @@ def cell1_2_stochastic_action(
                 "possible outcomes, with arrow thickness encoding probability",
                 fontsize=9,
             )
-            # Panel 2: comments.
+            # Panel right: comments.
             p_perp = (1.0 - env.p_intended) / 2.0
             text = (
                 "Parameters:\n"
@@ -811,24 +811,19 @@ def cell1_2_stochastic_action(
     action_dropdown.observe(update_plot, names="value")
     p_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Pick a state and action; watch probability spread:"
-                        ),
-                        state_dropdown,
-                        action_dropdown,
-                        p_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    # Build the 2x2 grid layout using the standard template pattern:
+    #   Top row: controls on the left, info box on the right.
+    #   Bottom row: the plot and comments (as a 1x2 matplotlib figure).
+    controls = ipywidgets.VBox(
+        [
+            state_dropdown,
+            action_dropdown,
+            p_box,
+        ],
+        layout=ipywidgets.Layout(padding="0px 8px 0px 0px"),
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1102,21 +1097,14 @@ def cell1_3_transition_table(
     state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label("Select a state and action to see the model row:"),
-                        state_dropdown,
-                        action_dropdown,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            state_dropdown,
+            action_dropdown,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1273,24 +1261,15 @@ def cell1_4_rewards_and_returns(
     gamma_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Change the living reward and discount; watch the return:"
-                        ),
-                        r_box,
-                        gamma_box,
-                        seed_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            r_box,
+            gamma_box,
+            seed_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1395,21 +1374,14 @@ def cell2_1_bellman_one_state(
     state_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label("Pick a state to see the value of each action:"),
-                        state_dropdown,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            state_dropdown,
+            gamma_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1524,24 +1496,15 @@ def cell2_2_value_iteration(
     gamma_slider.observe(update_plot, names="value")
     r_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Step through sweeps: utilities spread backward from terminals one ring per sweep."
-                        ),
-                        iter_box,
-                        gamma_box,
-                        r_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            iter_box,
+            gamma_box,
+            r_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1621,22 +1584,13 @@ def cell2_3_extract_policy(
     )
     r_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Change the living reward and watch the policy change:"
-                        ),
-                        r_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            r_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1752,21 +1706,14 @@ def cell3_1_policy_evaluation(
     policy_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label("Pick a fixed policy and see how good it is:"),
-                        policy_dropdown,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            policy_dropdown,
+            gamma_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1848,22 +1795,13 @@ def cell3_2_policy_iteration(
     )
     iter_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Step through policy iteration; watch arrows flip:"
-                        ),
-                        iter_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            iter_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1957,22 +1895,13 @@ def cell3_3_compare_solvers(
     )
     gamma_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Change gamma and compare how fast each method converges:"
-                        ),
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            gamma_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -2100,7 +2029,7 @@ def cell4_2_q_update_rule(
             )
             ax1.set_xlabel(
                 "col\n\n"
-                "_Transition diagram_: one transition $s \\xrightarrow{a} s'$ "
+                "_Transition diagram_: one transition $s \\rightarrow s'$ (action $a$) "
                 "with reward $r$",
                 fontsize=9,
             )
@@ -2146,23 +2075,14 @@ def cell4_2_q_update_rule(
     alpha_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Adjust learning rate and discount; watch the TD update:"
-                        ),
-                        alpha_box,
-                        gamma_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            alpha_box,
+            gamma_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -2280,24 +2200,15 @@ def cell4_3_exploration(
     n_exp_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Adjust exploration and compare state coverage:"
-                        ),
-                        epsilon_box,
-                        n_box,
-                        seed_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            epsilon_box,
+            n_box,
+            seed_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 def _draw_visit_heatmap(
@@ -2468,22 +2379,13 @@ def cell4_4_q_learning_converges(
     epsilon_slider.observe(update_plot, names="value")
     seed_slider.observe(update_plot, names="value")
     update_plot()
-    display(
-        ipywidgets.HBox(
-            [
-                ipywidgets.VBox(
-                    [
-                        ipywidgets.Label(
-                            "Train the agent and compare to the planning optimum:"
-                        ),
-                        n_box,
-                        alpha_box,
-                        epsilon_box,
-                        seed_box,
-                        output,
-                    ]
-                ),
-                param_info,
-            ]
-        )
+    controls = ipywidgets.VBox(
+        [
+            n_box,
+            alpha_box,
+            epsilon_box,
+            seed_box,
+        ],
     )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
