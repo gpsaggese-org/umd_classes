@@ -142,6 +142,8 @@
 - https://docs.google.com/document/d/1_G5bgSSxrC1EMA1eOx3KXNifj6XFSdZ6cebeZJKpywY/edit?tab=t.ihrvh5211a4x#heading=h.tdzvl3alcciy
 - /Users/saggese/src/csfy1/blog/docs/posts
 
+- Profiling ./helpers_root/docs/tools/all.profiling.how_to_guide.md
+
 ## TIL
 
 - How to 
