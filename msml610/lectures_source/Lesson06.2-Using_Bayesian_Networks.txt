@@ -319,8 +319,8 @@ digraph CausalModel {
     Causes [fillcolor="#B2E2B2"];
     Symptoms [fillcolor="#F4A6A6"];
     // Edges
-    Causes -> Symptoms [xlabel="Causal\nModel", fontname="Helvetica"];
-    Symptoms -> Causes [xlabel="Diagnostic\nModel", fontname="Helvetica"];
+    Causes -> Symptoms [xlabel=<Causal<BR/>Model>, fontname="Helvetica"];
+    Symptoms -> Causes [xlabel=<Diagnostic<BR/>Model>, fontname="Helvetica"];
 }
 ```
 ::::
@@ -349,13 +349,13 @@ digraph CausalModel {
   node [shape=ellipse, style=filled, fontname="Arial"];
 
   // Regular nodes
-  U1 [label="U_1", fillcolor="#FF9999"];
-  Um [label="U_m", fillcolor="#FF9999"];
+  U1 [label=<U<SUB>1</SUB>>, fillcolor="#FF9999"];
+  Um [label=<U<SUB>m</SUB>>, fillcolor="#FF9999"];
   X [label="X", fillcolor="#999999"];
-  Z1j [label="Z_1j", fillcolor="#99CCFF"];
-  Znj [label="Z_nj", fillcolor="#99CCFF"];
-  Y1 [label="Y_1", fillcolor="#99FF99"];
-  Yn [label="Y_n", fillcolor="#99FF99"];
+  Z1j [label=<Z<SUB>1j</SUB>>, fillcolor="#99CCFF"];
+  Znj [label=<Z<SUB>nj</SUB>>, fillcolor="#99CCFF"];
+  Y1 [label=<Y<SUB>1</SUB>>, fillcolor="#99FF99"];
+  Yn [label=<Y<SUB>n</SUB>>, fillcolor="#99FF99"];
 
   // Dots/ellipses as dummy nodes
   node [shape=plaintext, style=solid, fontname="Arial", fillcolor=transparent];
@@ -425,13 +425,13 @@ digraph CausalModel {
   node [shape=ellipse, style=filled, fontname="Arial"];
 
   // Regular nodes
-  U1 [label="U_1", fillcolor="#FF9999"];
-  Um [label="U_m", fillcolor="#FF9999"];
+  U1 [label=<U<SUB>1</SUB>>, fillcolor="#FF9999"];
+  Um [label=<U<SUB>m</SUB>>, fillcolor="#FF9999"];
   X [label="X", fillcolor="#999999"];
-  Z1j [label="Z_1j", fillcolor="#99CCFF"];
-  Znj [label="Z_nj", fillcolor="#99CCFF"];
-  Y1 [label="Y_1", fillcolor="#99FF99"];
-  Yn [label="Y_n", fillcolor="#99FF99"];
+  Z1j [label=<Z<SUB>1j</SUB>>, fillcolor="#99CCFF"];
+  Znj [label=<Z<SUB>nj</SUB>>, fillcolor="#99CCFF"];
+  Y1 [label=<Y<SUB>1</SUB>>, fillcolor="#99FF99"];
+  Yn [label=<Y<SUB>n</SUB>>, fillcolor="#99FF99"];
 
   // Dots/ellipses as dummy nodes
   node [shape=plaintext, style=solid, fontname="Arial", fillcolor=transparent];

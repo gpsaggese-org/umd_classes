@@ -77,13 +77,13 @@ digraph TemporalCausal {
     ranksep=0.6;
     node [shape=ellipse, style="filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    T_tm1 [label="T_{t-1}", fillcolor="#A6E7F4"];
-    T_t   [label="T_t",     fillcolor="#A6E7F4"];
-    T_tp1 [label="T_{t+1}", fillcolor="#A6E7F4"];
+    T_tm1 [label=<T<SUB>t-1</SUB>>, fillcolor="#A6E7F4"];
+    T_t   [label=<T<SUB>t</SUB>>,     fillcolor="#A6E7F4"];
+    T_tp1 [label=<T<SUB>t+1</SUB>>, fillcolor="#A6E7F4"];
 
-    Y_tm1 [label="Y_{t-1}", fillcolor="#A6C8F4"];
-    Y_t   [label="Y_t",     fillcolor="#A6C8F4"];
-    Y_tp1 [label="Y_{t+1}", fillcolor="#A6C8F4"];
+    Y_tm1 [label=<Y<SUB>t-1</SUB>>, fillcolor="#A6C8F4"];
+    Y_t   [label=<Y<SUB>t</SUB>>,     fillcolor="#A6C8F4"];
+    Y_tp1 [label=<Y<SUB>t+1</SUB>>, fillcolor="#A6C8F4"];
 
     T_tm1 -> T_t -> T_tp1;
     Y_tm1 -> Y_t -> Y_tp1;
@@ -172,10 +172,10 @@ digraph Feedback {
     nodesep=0.8;
     node [shape=ellipse, style="filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    T_t   [label="T_t (Policy)",    fillcolor="#A6E7F4"];
-    Y_t   [label="Y_t (Outcome)",   fillcolor="#A6C8F4"];
-    T_tp1 [label="T_{t+1}",         fillcolor="#A6E7F4"];
-    Y_tp1 [label="Y_{t+1}",         fillcolor="#A6C8F4"];
+    T_t   [label=<T<SUB>t</SUB> (Policy)>,    fillcolor="#A6E7F4"];
+    Y_t   [label=<Y<SUB>t</SUB> (Outcome)>,   fillcolor="#A6C8F4"];
+    T_tp1 [label=<T<SUB>t+1</SUB>>,         fillcolor="#A6E7F4"];
+    Y_tp1 [label=<Y<SUB>t+1</SUB>>,         fillcolor="#A6C8F4"];
 
     T_t -> Y_t;
     Y_t -> T_tp1;
@@ -322,9 +322,9 @@ digraph Granger {
     ranksep=0.8;
     node [shape=ellipse, style="filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    X_past [label="Past X\n(X_{t-1}, X_{t-2}, ...)", fillcolor="#FFD1A6"];
-    Y_past [label="Past Y\n(Y_{t-1}, Y_{t-2}, ...)", fillcolor="#B2E2B2"];
-    Y_t    [label="Y_t",                              fillcolor="#A6C8F4"];
+    X_past [label=<Past X<BR/>(X<SUB>t-1</SUB>, X<SUB>t-2</SUB>, ...)>, fillcolor="#FFD1A6"];
+    Y_past [label=<Past Y<BR/>(Y<SUB>t-1</SUB>, Y<SUB>t-2</SUB>, ...)>, fillcolor="#B2E2B2"];
+    Y_t    [label=<Y<SUB>t</SUB>>,                              fillcolor="#A6C8F4"];
 
     Y_past -> Y_t [label="  autoregressive"];
     X_past -> Y_t [label="  Granger effect"];
@@ -458,11 +458,11 @@ digraph ITS {
     ranksep=0.8;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    PrePeriod  [label="Pre-period\n(t < t*)",      fillcolor="#FFD1A6"];
-    Event      [label="Intervention\nat t = t*",   fillcolor="#F4A6A6"];
-    PostPeriod [label="Post-period\n(t >= t*)",    fillcolor="#B2E2B2"];
-    Forecast   [label="Counterfactual\nforecast",  fillcolor="#A6E7F4"];
-    Effect     [label="Causal effect\n= Actual - Forecast", fillcolor="#A6C8F4"];
+    PrePeriod  [label=<Pre-period<BR/>(t < t*)>,      fillcolor="#FFD1A6"];
+    Event      [label=<Intervention<BR/>at t = t*>,   fillcolor="#F4A6A6"];
+    PostPeriod [label=<Post-period<BR/>(t >= t*)>,    fillcolor="#B2E2B2"];
+    Forecast   [label=<Counterfactual<BR/>forecast>,  fillcolor="#A6E7F4"];
+    Effect     [label=<Causal effect<BR/>= Actual - Forecast>, fillcolor="#A6C8F4"];
 
     PrePeriod -> Event -> PostPeriod;
     PrePeriod -> Forecast [label="  fit model"];
@@ -645,11 +645,11 @@ digraph DiD {
     ranksep=0.8;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    TreatPre   [label="Treated\nPre",   fillcolor="#FFD1A6"];
-    TreatPost  [label="Treated\nPost",  fillcolor="#F4A6A6"];
-    CtrlPre    [label="Control\nPre",   fillcolor="#B2E2B2"];
-    CtrlPost   [label="Control\nPost",  fillcolor="#A0D6D1"];
-    Effect     [label="DiD =\n(T_post - T_pre)\n- (C_post - C_pre)", fillcolor="#A6C8F4"];
+    TreatPre   [label=<Treated<BR/>Pre>,   fillcolor="#FFD1A6"];
+    TreatPost  [label=<Treated<BR/>Post>,  fillcolor="#F4A6A6"];
+    CtrlPre    [label=<Control<BR/>Pre>,   fillcolor="#B2E2B2"];
+    CtrlPost   [label=<Control<BR/>Post>,  fillcolor="#A0D6D1"];
+    Effect     [label=<DiD =<BR/>(T_post - T_pre)<BR/>- (C_post - C_pre)>, fillcolor="#A6C8F4"];
 
     TreatPre -> TreatPost [label="  change in treated"];
     CtrlPre -> CtrlPost  [label="  change in control"];
@@ -867,11 +867,11 @@ digraph SC {
     ranksep=0.8;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Treated [label="Treated unit\n(e.g., California)",  fillcolor="#F4A6A6"];
-    Donors  [label="Donor pool\n(other states)",         fillcolor="#FFD1A6"];
-    Weights [label="Optimal weights\nw_1, w_2, ..., w_J",fillcolor="#A6E7F4"];
-    Synth   [label="Synthetic\ncounterfactual",          fillcolor="#B2E2B2"];
-    Effect  [label="Causal effect =\nTreated - Synthetic",fillcolor="#A6C8F4"];
+    Treated [label=<Treated unit<BR/>(e.g., California)>,  fillcolor="#F4A6A6"];
+    Donors  [label=<Donor pool<BR/>(other states)>,         fillcolor="#FFD1A6"];
+    Weights [label=<Optimal weights<BR/>w<SUB>1</SUB>, w<SUB>2</SUB>, ..., w_J>,fillcolor="#A6E7F4"];
+    Synth   [label=<Synthetic<BR/>counterfactual>,          fillcolor="#B2E2B2"];
+    Effect  [label=<Causal effect =<BR/>Treated - Synthetic>,fillcolor="#A6C8F4"];
 
     Donors -> Weights;
     Treated -> Weights [label="  pre-treatment fit"];

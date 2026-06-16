@@ -161,9 +161,9 @@ digraph MDP {
     ];
 
     // States
-    s0 [label="s₀"];
-    s1 [label="s₁"];
-    s2 [label="s₂"];
+    s0 [label=<s<SUB>0</SUB>>];
+    s1 [label=<s<SUB>1</SUB>>];
+    s2 [label=<s<SUB>2</SUB>>];
 
     goal [
         label="sg",
@@ -185,25 +185,25 @@ digraph MDP {
     // Transitions
     s0 -> s1 [
         label="P = 0.8, R = +5",
-        taillabel="a₁",
+        taillabel=<a<SUB>1</SUB>>,
         labeldistance=2.2
     ];
 
     s0 -> s2 [
-        label="P = 0.2, R = −1",
-        taillabel="a₁",
+        label=<P = 0.2, R = -1>,
+        taillabel=<a<SUB>1</SUB>>,
         labeldistance=2.2
     ];
 
     s1 -> s2 [
         label="P = 1.0, R = 0",
-        taillabel="a₂",
+        taillabel=<a<SUB>2</SUB>>,
         labeldistance=2.2
     ];
 
     s2 -> goal [
         label="P = 1.0, R = +10",
-        taillabel="a₃",
+        taillabel=<a<SUB>3</SUB>>,
         labeldistance=2.2
     ];
 }
@@ -310,9 +310,9 @@ digraph MDP {
 * Additive Rewards
 - **Definition**: _Additive rewards_ means that rewards for each transition
   $s_i \xrightarrow{a_i} s_{i+1}$ are summed:
-    $$
-    U_h([s_0, a_0, s_1, a_1, \ldots]) = \sum_{i=0} R(s_i, a_i, s_{i+1})
-    $$
+  $$
+  U_h([s_0, a_0, s_1, a_1, \ldots]) = \sum_{i=0} R(s_i, a_i, s_{i+1})
+  $$
 
 - **Definition**: _Additive discounted rewards_ include a factor $\gamma \in [0, 1]$:
   $$
@@ -586,50 +586,62 @@ digraph MDP {
 * Dynamic Decision Networks
 
 ::: columns
-:::: {.column width=60%}
-- _State variables_ (chance nodes, ovals): Represent the underlying state
-  of the environment at time $t$
-  - E.g., a robot’s location, inventory levels, or market conditions:w
-- _Observation variables_ (chance nodes, ovals): Capture the information
-  available to the agent about the current state, which may be incomplete or
-  noisy
-- _Decision variables_ (decision nodes, rectangles): Represent the actions
-  or choices available to the agent at each time step
-- _Utility variables_ (diamonds): Quantify the desirability of outcomes and
-  provide the objective the agent seeks to maximize
-- _Transition model_: Defines how the environment evolves from one time step to
-  the next, conditioned on the current state and the agent’s actions
-
-- Can be replicated across time slices to model how actions influence future
-  states, observations, and rewards over time
-
+:::: {.column width=40%}
+- _Observation variables_ (ovals)
+  - Capture the information available to the agent about the current state, which
+    may be incomplete or noisy
 ::::
-:::: {.column width=35%}
+:::: {.column width=55%}
 
 ```graphviz
 digraph DynamicDecisionDiagram {
     rankdir=LR;
 
-    State_t    [shape=ellipse];
-    Observe_t  [shape=ellipse];
-    Decision_t [shape=box];
-    Utility_t  [shape=diamond];
+    subgraph cluster_t {
+        label="Time t";
+        State_t    [shape=ellipse, label=<State<SUB>t</SUB>>];
+        Observe_t  [shape=ellipse, label=<Observe<SUB>t</SUB>>];
 
-    State_t1   [shape=ellipse, label="State_t+1"];
-    Observe_t1 [shape=ellipse, label="Observe_t+1"];
+        Decision_t [shape=box, label=<Decision<SUB>t</SUB>>];
+        Utility_t  [shape=diamond, label=<Utility<SUB>t</SUB>>];
 
-    State_t -> Observe_t;
+        State_t -> Observe_t;
+        Observe_t -> Decision_t;
+        State_t -> Utility_t;
+        Decision_t -> Utility_t;
+    }
+
+    subgraph cluster_t1 {
+        label="Time t+1";
+
+        State_t1 [shape=ellipse, label=<State<SUB>t+1</SUB>>];
+        Observe_t1 [shape=ellipse, label=<Observe<SUB>t+1</SUB>>];
+
+        State_t1 -> Observe_t1;
+    }
+
+    // Temporal dynamics
     State_t -> State_t1;
-    State_t1 -> Observe_t1;
-
     Decision_t -> State_t1;
-
-    { rank=same; State_t; Decision_t; Utility_t; }
-    { rank=same; State_t1; Observe_t1; }
 }
 ```
 ::::
 :::
+
+- _State variables_ (ovals)
+  - Represent the underlying state of the environment at time $t$
+  - E.g., a robot’s location, inventory levels, or market conditions:w
+- _Decision variables_ (rectangles)
+  - Represent the actions or choices available to the agent at each time step
+- _Utility variables_ (diamonds)
+  - Quantify the desirability of outcomes and provide the objective the agent
+    seeks to maximize
+- _Transition model_
+  - Defines how the environment evolves from one time step to the next,
+    conditioned on the current state and the agent’s actions
+
+- Can be replicated across time slices to model how actions influence future
+  states, observations, and rewards over time
 
 * Dynamic Decision Networks: Grid World Example
 
@@ -647,9 +659,9 @@ digraph GridWorldDDN {
     // Time t
     subgraph cluster_t {
         label="Time t";
-        Pos_t [label="Pos_t", shape=ellipse];
-        Action_t [label="Action_t", shape=box, style=filled, fillcolor=lightblue];
-        Reward_t [label="Reward_t", shape=diamond, style=filled, fillcolor=lightgreen];
+        Pos_t [label=<Pos<SUB>t</SUB>>, shape=ellipse];
+        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style=filled, fillcolor=lightblue];
+        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, style=filled, fillcolor=lightgreen];
 
         Pos_t -> Action_t;
         Pos_t -> Reward_t;
@@ -659,7 +671,7 @@ digraph GridWorldDDN {
     // Time t+1
     subgraph cluster_t1 {
         label="Time t+1";
-        Pos_t1 [label="Pos_{t+1}", shape=ellipse];
+        Pos_t1 [label=<Pos<SUB>t+1</SUB>>, shape=ellipse];
     }
 
     // Temporal connections
@@ -688,6 +700,12 @@ digraph GridWorldDDN {
 
 - DDN models Tetris in terms of time slices with the game's state, actions, and
   rewards
+- **State variables**:
+  - $Board_t$: grid configuration at time $t$
+  - $Piece_t$: current piece falling
+  - $NextPiece_t$: upcoming piece
+- **Decision variable**:
+  - $Action_t$: placement of $Piece_t$ (rotation and position)
 ::::
 :::: {.column width=45%}
 ```graphviz
@@ -697,24 +715,24 @@ digraph TetrisDDN {
     // Time t
     subgraph cluster_t {
         label="Time t";
-        Board_t [label="Board_t", shape=ellipse];
-        Piece_t [label="Piece_t", shape=ellipse];
-        Action_t [label="Action_t", shape=box, style=filled, fillcolor=lightblue];
-        Reward_t [label="Reward_t", shape=diamond, style=filled, fillcolor=lightgreen];
+        Board_t [label=<Board<SUB>t</SUB>>, shape=ellipse];
+        Piece_t [label=<Piece<SUB>t</SUB>>, shape=ellipse];
+        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style=filled, fillcolor=lightblue];
+        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, style=filled, fillcolor=lightgreen];
 
-        Board_t -> Action_t;
-        Piece_t -> Action_t;
-        Board_t -> Reward_t;
-        Piece_t -> Reward_t;
-        Action_t -> Reward_t;
+        Board_t -> Actionₜ;
+        Piece_t -> Actionₜ;
+        Board_t -> Rewardₜ;
+        Piece_t -> Rewardₜ;
+        Action_t -> Rewardₜ;
     }
 
     // Time t+1
     subgraph cluster_t1 {
         label="Time t+1";
-        Board_t1 [label="Board_{t+1}", shape=ellipse];
-        Piece_t1 [label="Piece_{t+1}", shape=ellipse];
-        NextPiece_t1 [label="NextPiece_{t+1}", shape=ellipse];
+        Board_t1 [label=<Board<SUB>t+1</SUB>>, shape=ellipse];
+        Piece_t1 [label=<Piece<SUB>t+1</SUB>>, shape=ellipse];
+        NextPiece_t1 [label=<NextPiece<SUB>t+1</SUB>>, shape=ellipse];
     }
 
     // Temporal connections
@@ -727,12 +745,6 @@ digraph TetrisDDN {
 ::::
 :::
 
-- **State variables**:
-  - $Board_t$: grid configuration at time $t$
-  - $Piece_t$: current piece falling
-  - $NextPiece_t$: upcoming piece
-- **Decision variable**:
-  - $Action_t$: placement of $Piece_t$ (rotation and position)
 - **Chance nodes** (transition):
   - $Board_{t+1}$: board after action
   - $Piece_{t+1}$: next piece, depending on $NextPiece_t$ or random selection
