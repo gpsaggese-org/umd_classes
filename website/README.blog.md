@@ -144,6 +144,8 @@
 
 - Profiling ./helpers_root/docs/tools/all.profiling.how_to_guide.md
 
+- Pre-commit hooks helpers_root/dev_scripts_helpers/git/git_hooks/pre-commit.py
+
 ## TIL
 
 - How to 
