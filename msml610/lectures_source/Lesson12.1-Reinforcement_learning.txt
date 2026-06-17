@@ -25,15 +25,11 @@ MSML610: Advanced Machine Learning
 - AIMA Chap 17: Making complex decisions
 - AIMA Chap 22: Reinforcement Learning
 
-# ##############################################################################
 # Sequential Decision Problems
-# ##############################################################################
 
 // # 17, Making complex decisions (p. 575)
 
-## #############################################################################
 ## MDPs
-## #############################################################################
 
 * Sequential Decision Problems
 - **Goal**: Agents need to make decisions in the real world:
@@ -285,9 +281,7 @@ digraph MDP {
 ::::
 :::
 
-## #############################################################################
 ## Utilities Over Time
-## #############################################################################
 
 * Utility Function
 - **Definition**: The _utility function_ for environment histories (finite or
@@ -754,9 +748,7 @@ digraph TetrisDDN {
 - **Utility node**:
   - $Reward_t$: derived from $Board_{t+1}$ (e.g., lines cleared, holes created)
 
-## #############################################################################
 ## Solving MDPs
-## #############################################################################
 
 * MDP Solution: Overview
 
@@ -923,10 +915,7 @@ _3-bandit problem_
   - Clinical trials (testing treatments)
   - A/B testing in web development
 
-## #############################################################################
 ## POMDPs
-## #############################################################################
-
 
 * Partially Observable MDPs (POMDPs)
 
@@ -1042,9 +1031,20 @@ _3-bandit problem_
     POMDP at depth 8)
   - Use approximation techniques
 
-# ##############################################################################
+* Hidden Confounders vs Hidden State
+
+- POMDPs hide state because the agent can't observe it — more sensing would
+  resolve the ambiguity
+- Confounding hides a cause because it influences both action and reward outside
+  the model entirely — no amount of sensing the modeled variables fixes it
+- A confounded MDP can look just like a fully observable one: the agent sees
+  state, action, and reward, yet still draws the wrong conclusion about what
+  caused what
+- This distinction motivates why "solve the POMDP" and "find the causal
+  structure" are different problems, even though both involve something the agent
+  can't directly see
+
 # Reinforcement Learning
-# ##############################################################################
 
 // # 22, Reinforcement learning (p. 802)
 
@@ -1128,9 +1128,7 @@ _3-bandit problem_
 - **Natural Language Processing**
   - Dialogue systems and chatbots learn conversational strategies
 
-## #############################################################################
 ## Model-Based vs Model-Free RL
-## #############################################################################
 
 * Model-Based vs Model-Free RL: Intuition
 
@@ -1201,10 +1199,14 @@ _3-bandit problem_
 | _Examples_ | Dyna-Q, PILCO | Q-learning, Deep Q-Networks (DQN), REINFORCE |
 \endgroup
 
-## #############################################################################
-## Active vs Passive RL
-## #############################################################################
+* When Correlation Misleads the Model
 
+A learned transition/reward model captures statistical regularities in the data — not necessarily the mechanisms producing them
+If two variables are correlated only because of a shared hidden cause, the model can "predict" well in training yet recommend the wrong action
+Example: an agent learns that a state feature predicts reward, but a confounder (not an action) is the true driver — the policy exploits a correlation that won't hold once the agent intervenes
+Raises the question: what would it mean for a model to capture causal structure rather than just predictive structure?
+
+## Active vs Passive RL
 
 * Active vs Passive Reinforcement Learning
 
@@ -1456,9 +1458,7 @@ _3-bandit problem_
 - Exploration strategy (e.g., $\epsilon$-greedy) is crucial for balancing
   learning and exploitation
 
-## #############################################################################
 ## Generalization in Reinforcement Learning
-## #############################################################################
 
 * Generalization in Reinforcement Learning
 - Tabular representations become infeasible for large state spaces
@@ -1503,9 +1503,14 @@ _3-bandit problem_
   - Structures behavior into reusable subprograms and subgoals
   - Decomposes complex tasks to improve learning efficiency
 
-## #############################################################################
+* Why Correlational Policies Fail to Transfer
+
+A policy tuned to correlations in one environment can break when the environment shifts, even if the reward-relevant mechanism hasn't changed
+Spurious features (artifacts of how training data was generated) get baked into the policy alongside real causal drivers
+Generalization failure is often not "the task changed" — it's "the correlation the agent relied on no longer holds"
+Sets up the core promise of causal RL: policies built on causal structure should transfer wherever the underlying mechanism is preserved
+
 ## Policy Search
-## #############################################################################
 
 * Policy Search in Reinforcement Learning
 - A policy $\pi(s)$ maps states to actions
@@ -1538,3 +1543,77 @@ _3-bandit problem_
     out the gradient
   - High variance in trial outcomes makes gradients noisy
   - Requires many trials to ensure reliable gradient estimation
+
+## Causal Reinforcement Learning
+
+* Causal Reinforcement Learning
+- Extends RL by incorporating causal inference — structural causal models,
+  do-calculus, counterfactual reasoning — into how agents learn and act
+- Goal: distinguish "this predicts reward" from "this causes reward," so policies
+  are built on mechanisms rather than coincidental patterns in the data
+- Addresses three recurring RL weaknesses: confounding, poor generalization under
+  distribution shift, and sample inefficiency
+- Bridges the gap left open by POMDPs (hidden state) and model-based RL
+  (predictive vs. causal models)
+
+* From Correlation to Causation in RL
+- Standard RL agents optimize over correlations between states, actions, and
+  rewards observed during interaction
+- Causal RL asks the agent to additionally represent why an action leads to an
+  outcome, not just that it tends to
+- Key formal tool: the do-operator, distinguishing "reward given we observed
+  action a" from "reward given we forced action a"
+- This distinction is invisible in standard MDP formalism but becomes critical
+  once data comes from sources other than the agent's own exploration
+
+* Confounding in Sequential Decision Making
+- A confounder is a hidden variable influencing both the chosen action and the
+  resulting reward
+- In sequential settings, confounding can compound across time steps, distorting
+  credit assignment over an entire trajectory, not just one decision
+- Common source: logged or human-generated data, where the policy that generated
+  the data depended on factors the agent never observes
+- Unaddressed confounding can make an agent confidently learn a policy that
+  performs worse than random once deployed
+
+* Structural Causal Models for MDPs
+- A structural causal model (SCM) augments the MDP with explicit causal
+  mechanisms: equations describing how each variable is generated from its causes
+- The causal graph makes confounders, mediators, and colliders explicit, rather
+  than leaving them implicit in a transition function
+- Lets the agent separate "what the data shows" from "what would happen under
+  intervention" — the basis for the do-calculus tools introduced above
+
+* Counterfactual Reasoning and Credit Assignment
+- Counterfactual reasoning asks "what would have happened had a different action
+  been taken in this exact instance," not just on average across similar states
+- Enables learning from a single trajectory by reasoning about unrealized
+  alternatives, rather than requiring repeated environment interaction
+- Improves credit assignment: helps isolate which action in a trajectory actually
+  caused a later reward, versus which merely preceded it
+
+* Deconfounding Offline/Off-Policy Data
+- Offline RL trains on logged data from a different (often unknown) policy —
+  exactly the setting where confounding is most likely
+- Causal deconfounding methods identify which correlations in the logged data are
+  exploitable for the new policy and which are artifacts of how the data was
+  collected
+- Without deconfounding, offline RL agents can overfit to the quirks of the
+  logging policy rather than learning the true environment dynamics
+
+* Causal Generalization and Transfer Across Environments
+- Causal RL provides formal criteria (e.g., transportability) for when a policy
+  learned under one set of conditions will hold under another
+- Transfer depends on which causal mechanisms are shared between environments
+  versus which have changed — not on surface similarity
+- Reframes "will this policy generalize?" as a question about graph structure,
+  answerable before deployment rather than discovered after failure
+
+* Causal RL: Open Challenges
+- Causal discovery from interaction data is hard, especially under partial
+  observability or limited samples — most settings don't come with a known causal
+  graph
+- Integrating causal structure into deep RL architectures without losing
+  scalability remains an open design problem
+- Active research question: how much causal structure is necessary to gain
+  robustness benefits, versus how much can be approximated statistically

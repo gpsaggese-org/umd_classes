@@ -461,10 +461,13 @@ utils.cell4_4_q_learning_converges()
 # # Summary: The Mental Model
 #
 # - An MDP is defined by states, stochastic actions $\Pr(s' \mid s, a)$, rewards
-#   $R(s, a, s')$, and a discount $\gamma$; the 4x3 grid makes all four concrete
-# - When the model is known, value iteration and policy iteration compute the
-#   optimal policy exactly by solving the Bellman equations
-# - When the model is unknown, Q-learning learns the optimal policy from raw
-#   experience tuples $(s, a, r, s')$, balancing exploration and exploitation
+#   $R(s, a, s')$, and a discount $\gamma$
+#   - E.g., the 4x3 grid
+# - When the model is known:
+#   - Value iteration and policy iteration compute the optimal policy exactly by
+#     solving the Bellman equations
+# - When the model is unknown
+#   - Q-learning learns the optimal policy from raw experience tuples $(s, a, r,
+#   s')$, balancing exploration and exploitation
 # - All three methods converge to the same optimal policy on the same world: the
 #   difference is whether you plan with a model or learn without one
