@@ -4,6 +4,10 @@ Shared constants and utility functions for the 4x3 grid world RL lesson.
 Used by both the from-scratch AIMA implementation (L12_01) and the gymnasium
 implementation (L12_02).  Kept in a separate file so each notebook-style
 utils module can import the shared pieces without duplicating them.
+
+Import as:
+
+import msml610.tutorials.L12_reinforcement_learning.L12_01_utils as mtlrll0ut
 """
 
 import logging
@@ -12,29 +16,23 @@ from typing import Any, Dict, Optional, Tuple
 import ipywidgets
 import matplotlib.axes
 import matplotlib.patches as mpatches
-import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from IPython.display import clear_output, display
 
 import helpers.hnotebook as hnotebo
 import helpers.htutorial as htutori
 
 _LOG = logging.getLogger(__name__)
 
-
-# TODO(ai_gp): Make everything that needs to be exposed to other files public
-# by removing the _.
-
 # #############################################################################
 # Action names and their geometry on the 4x3 grid
 # #############################################################################
 
 # List of direction names.
-_ACTIONS = ["Up", "Down", "Left", "Right"]
+ACTIONS = ["Up", "Down", "Left", "Right"]
 
 # Displacement (d_col, d_row) for each action.
-_ACTION_DELTA = {
+ACTION_DELTA = {
     "Up": (0, 1),
     "Down": (0, -1),
     "Left": (-1, 0),
@@ -42,7 +40,7 @@ _ACTION_DELTA = {
 }
 
 # Perpendicular slip directions used by the stochastic transition model.
-_PERPENDICULAR = {
+PERPENDICULAR = {
     "Up": ["Left", "Right"],
     "Down": ["Left", "Right"],
     "Left": ["Up", "Down"],
@@ -50,7 +48,7 @@ _PERPENDICULAR = {
 }
 
 # Arrow-tip offset when drawing a policy action arrow in a grid cell.
-_ARROW_DELTA = {
+ARROW_DELTA = {
     "Up": (0.0, 0.3),
     "Down": (0.0, -0.3),
     "Left": (-0.3, 0.0),
@@ -58,20 +56,18 @@ _ARROW_DELTA = {
 }
 
 # Integer-action <-> name mapping (gymnasium convention).
-_ACTION_ID_TO_NAME = {0: "Up", 1: "Down", 2: "Left", 3: "Right"}
-_NAME_TO_ACTION_ID = {v: k for k, v in _ACTION_ID_TO_NAME.items()}
-
+ACTION_ID_TO_NAME = {0: "Up", 1: "Down", 2: "Left", 3: "Right"}
+NAME_TO_ACTION_ID = {v: k for k, v in ACTION_ID_TO_NAME.items()}
 
 # #############################################################################
 # Cell fill colours used when drawing the grid
 # #############################################################################
 
-_COLOR_START = "#cfe8ff"
-_COLOR_GOAL = "#a8e6a3"
-_COLOR_PIT = "#f4a6a6"
-_COLOR_WALL = "#9e9e9e"
-_COLOR_EMPTY = "#ffffff"
-
+COLOR_START = "#cfe8ff"
+COLOR_GOAL = "#a8e6a3"
+COLOR_PIT = "#f4a6a6"
+COLOR_WALL = "#9e9e9e"
+COLOR_EMPTY = "#ffffff"
 
 # #############################################################################
 # Logger initialisation
@@ -127,17 +123,17 @@ def _cell_facecolor(
     Return the fill colour for a cell based on its role in the environment.
     """
     if cell in walls:
-        return _COLOR_WALL
+        return COLOR_WALL
     if cell == (4, 3):
-        return _COLOR_GOAL
+        return COLOR_GOAL
     if cell == (4, 2):
-        return _COLOR_PIT
+        return COLOR_PIT
     if cell == start:
-        return _COLOR_START
-    return _COLOR_EMPTY
+        return COLOR_START
+    return COLOR_EMPTY
 
 
-def _draw_grid_base(
+def draw_grid_base(
     env: Any,
     ax: matplotlib.axes.Axes,
     *,
@@ -226,7 +222,7 @@ def _draw_grid_base(
     ax.set_aspect("equal")
 
 
-def _draw_policy_arrows(
+def draw_policy_arrows(
     env: Any,
     ax: matplotlib.axes.Axes,
     policy: Dict[Tuple[int, int], str],
@@ -245,7 +241,7 @@ def _draw_policy_arrows(
     for s, a in policy.items():
         if s in walls or s in terminals:
             continue
-        d_x, d_y = _ARROW_DELTA[a]
+        d_x, d_y = ARROW_DELTA[a]
         ax.annotate(
             "",
             xy=(s[0] + d_x, s[1] + d_y),
@@ -254,7 +250,7 @@ def _draw_policy_arrows(
         )
 
 
-def _draw_policy_arrows_heatmap(
+def draw_policy_arrows_heatmap(
     env: Any,
     ax: matplotlib.axes.Axes,
     policy: Dict[Tuple[int, int], str],
@@ -263,10 +259,10 @@ def _draw_policy_arrows_heatmap(
     Overlay policy arrows on a heatmap plot (inverted-y coordinate system).
 
     The heatmap's array row 0 is the top of the grid, so the y-coordinate
-    is flipped compared to :func:`_draw_policy_arrows`.
+    is flipped compared to :func:`draw_policy_arrows`.
     """
     for s, a in policy.items():
-        d_x, d_y = _ARROW_DELTA[a]
+        d_x, d_y = ARROW_DELTA[a]
         x = s[0] - 0.5
         y = env.n_rows - s[1] + 0.5
         ax.annotate(
@@ -277,7 +273,7 @@ def _draw_policy_arrows_heatmap(
         )
 
 
-def _draw_value_heatmap(
+def draw_value_heatmap(
     env: Any,
     ax: matplotlib.axes.Axes,
     u: Dict[Tuple[int, int], float],
@@ -310,7 +306,7 @@ def _draw_value_heatmap(
                 (wall[0] - 1, env.n_rows - wall[1]),
                 1.0,
                 1.0,
-                facecolor=_COLOR_WALL,
+                facecolor=COLOR_WALL,
                 edgecolor="black",
             )
         )
@@ -321,7 +317,7 @@ def _draw_value_heatmap(
     ax.set_ylabel("row")
 
 
-def _draw_visit_heatmap(
+def draw_visit_heatmap(
     env: Any,
     ax: matplotlib.axes.Axes,
     visit_counts: Dict[Any, int],
@@ -339,8 +335,7 @@ def _draw_visit_heatmap(
     if visit_counts and not isinstance(next(iter(visit_counts)), tuple):
         # Keys are state ids -> convert to cell keys.
         cell_counts = {
-            env.id_to_cell(s_id): float(c)
-            for s_id, c in visit_counts.items()
+            env.id_to_cell(s_id): float(c) for s_id, c in visit_counts.items()
         }
     else:
         cell_counts = {s: float(c) for s, c in visit_counts.items()}
@@ -363,10 +358,33 @@ def _draw_visit_heatmap(
     ax.set_ylabel("row")
 
 
-def _comment_panel(ax: matplotlib.axes.Axes, text: str) -> None:
+def comment_panel(ax: matplotlib.axes.Axes, text: str) -> None:
     """
     Render a wheat-coloured comment panel with a bold "Comments" title.
     """
     ax.axis("off")
     ax.set_title("Comments", fontsize=14, fontweight="bold", pad=20)
     htutori.add_fitted_text_box(ax, text, max_fontsize=12, min_fontsize=8)
+
+
+def make_param_info(descriptions: Dict[str, str]) -> ipywidgets.HTML:
+    """
+    Build a styled HTML info box for notebook cell control panels.
+
+    Each ``(name, desc)`` pair renders as ``<b>name</b> — desc<br>``.
+    Description values may contain inline HTML (``<code>``, ``&minus;``, etc.).
+
+    :param descriptions: mapping from parameter name to its description text
+    :return: styled HTML widget ready for display
+    """
+    body = "\n".join(
+        "<b>%s</b>: %s<br>" % (name, desc) for name, desc in descriptions.items()
+    )
+    html = (
+        "<div style='background:#f5f5f5; padding:10px 14px; "
+        "border-radius:4px; border-left:3px solid #4682b4; "
+        "font-size:13px; line-height:1.8'>"
+        "%s"
+        "</div>"
+    ) % body
+    return ipywidgets.HTML(html)

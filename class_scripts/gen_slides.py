@@ -110,17 +110,23 @@ def _file_hash(file_path: str) -> str:
     return hasher.hexdigest()
 
 
-def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 1) -> None:
+def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 5) -> None:
     """
     Watch a file for changes every 1s and re-run cmd when hash changes.
     """
-    _LOG.info("Daemon mode: watching '%s' for changes (poll every 1s)...", file_path)
+    _LOG.info(
+        "Daemon mode: watching '%s' for changes (poll every 1s)...", file_path
+    )
     prev_hash = None
     hdbg.dassert_file_exists(file_path)
     while True:
         cur_hash = _file_hash(file_path)
         if prev_hash is None or cur_hash != prev_hash:
-            _LOG.info("File changed (hash: %s -> %s). Regenerating...", prev_hash, cur_hash)
+            _LOG.info(
+                "File changed (hash: %s -> %s). Regenerating...",
+                prev_hash,
+                cur_hash,
+            )
             hsystem.system(cmd)
             prev_hash = cur_hash
         else:
@@ -141,7 +147,7 @@ def _parse() -> argparse.ArgumentParser:
     parser.add_argument(
         "--daemon",
         action="store_true",
-        help="Watch input file for changes every 1s and regenerate PDF on change",
+        help="Watch input file for changes and regenerate PDF on change",
     )
     parser.add_argument(
         "extra_opts",
@@ -193,6 +199,8 @@ def _main(parser: argparse.ArgumentParser) -> None:
     cmd = " ".join(quoted_parts)
     _LOG.info("Running command: %s", cmd)
     if args.daemon:
+        # Skim auto-reloads PDF on change, so skip notes_to_pdf open action.
+        cmd + = "--skip_action=open"
         _daemon_watch(input_file, cmd)
     else:
         # Execute the command once.

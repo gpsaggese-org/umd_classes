@@ -891,24 +891,29 @@ digraph TetrisDDN {
 ::: columns
 :::: {.column width=60%}
 
-- A simplified reinforcement learning scenario
-  - There are $n$ different actions (arms)
-  - Each arm $a_i$ yields a reward drawn from an unknown probability
-    distribution $R_i$
-  - At each timestep $t$, agent selects an arm $a_t$ and receives reward
-    $r_t \sim R_{a_t}$
-  - No state transitions: the environment is static and memoryless
-  - Goal: maximize total reward over a sequence of pulls
+- The $n$-bandit problem is:
+  - Simple MDP
+  - Stateless reinforcement learning problem
 
 ::::
 :::: {.column width=35%}
 ![](msml610/lectures_source/figures/L12.Multi_armed_bandits.png)
+
+_3-bandit problem_
 ::::
 :::
 
-- **Exploration vs. Exploitation**
-  - Exploration: try different arms to learn their rewards
-  - Exploitation: choose the best-known arm to maximize immediate reward
+- **Set up**
+  - _Action_: 
+    - $n$ different arms to pull
+    - At each time step $t$, agent selects an arm $a_t$ and receives reward
+    $r_t \sim R_{a_t}$ (an unknown probability distribution)
+  - _No state transitions_: the environment is static and memoryless
+  - _Goal_: maximize total reward over a sequence of pulls
+
+- **Remark**: Exploration vs exploitation dilemma
+  - _Exploration_: try different arms to learn their rewards
+  - _Exploitation_: choose the best-known arm to maximize immediate reward
 
 - **Applications**
   - Online advertising (choosing ads to show)
@@ -918,59 +923,68 @@ digraph TetrisDDN {
 * Partially Observable MDPs (POMDPs)
 
 - **Motivation**
-  - Traditional MDPs assume full observability of the environment
-  - The agent knows in which state it is in
-  - In real-world situations, agents often lack precise knowledge of the current
-    state
-  - POMDPs (read "pom-dee-pees") extend MDPs to handle uncertainty in state
-    perception
+  - _Traditional MDPs_ assume full observability (i.e., agent knows its state)
+  - _Real-world situations_ often lack precise state knowledge
+  - _POMDPs_ extend MDPs to handle state uncertainty
 
-- **Definition**
-  - A POMDP is defined by:
-    - States $S$
-    - Actions $A$
-    - Transition model $\Pr(s'|s,a)$
-    - Reward function $R(s,a,s')$
-    - Sensor model $\Pr(e|s)$: probability of observing evidence $e$ in state
+- **Definition**: _POMDP_ defined by $(S, A, P, R, E)$
+    - States: $S$
+    - Actions: $A$
+    - Transition model: $P = \Pr(s'|s,a)$
+    - Reward function: $R(s,a,s')$
+    - Sensor model: $E = \Pr(e|s)$: probability of observing evidence $e$ in state
       $s$
 
 - **Belief States**
-  - A belief state $b(s)$ is a probability distribution over possible actual
-    states $s$ (i.e., the probability of being in $s$)
-  - The agent maintains $b(s)$ as its internal representation of the environment
-  - Optimal policies depend on belief states: $\pi^*(b)$
+  - Belief state $b(s)$: probability distribution over possible states $s$
+  - Agent maintains $b(s)$ as internal environment representation
+  - Policies depend on belief states (and not actual state $s$): $\pi(b)$
+
+* MDP vs POMDP: Comparison
+
+\begingroup \scriptsize
+| **Aspect** | **MDP** | **POMDP** |
+|----------|----------|----------|
+| _State Observability_ | Fully observable state | Partially observable state |
+| _Formal Definition_ | $(S, A, P, R)$ | $(S, A, P, R, E)$ |
+| _State Information_ | Agent knows the exact current state | Agent receives incomplete or noisy observations |
+| _Decision Basis_ | Current state $s$ | Belief state $b$ |
+| _State Representation_ | State $s$ | Hidden state $s$ and observation $e$ |
+| _Transition Model_ | $P(s' | s, a)$ | $P(s' | s, a)$ |
+| _Observation Model_ | Not required | $P(e | s', a)$ |
+| _Policy_ | $\pi(s)$ | $\pi(b)$ |
+| _Memory Requirement_ | Only current state needed (Markov property) | Must maintain a belief state $b(s)$ |
+| _Uncertainty Source_ | Uncertainty only in state transitions | Uncertainty in both transitions and observations |
+| _Complexity_ | Lower computational complexity | Higher computational complexity |
+| _Typical Example_ | Chess, fully observable grid world | Robot navigation with noisy sensors |
+\endgroup
 
 * POMDP: 4x3 World with Noisy Four-Bit Sensor
 
 ::: columns
 :::: {.column width=75%}
-- The world is the 4x3 grid with partial and probabilistic information about the
-  environment
+- The world is a 4x3 grid with partial, probabilistic information
+  - Noisy four-bit sensor detects obstacles: North, East, South, West
 
-- Use a noisy four-bit sensor, instead of knowing where the agent is
-  - Detect obstacles in four directions: North, East, South, West
-  - Produces a four-bit string (e.g., `1010`), each bit indicating presence
-    (`1`) or absence (`0`) of a wall in one direction
+- **Partial information**: 
+  - Produces a four-bit string (e.g., `NESW = 1010`)
+  - Each bit indicates presence (`1`) or absence (`0`) of a wall
 
-- **Error Model**
-  - Each bit is correct with probability $1 - \epsilon$, incorrect with
-    probability $\epsilon$
-  - Errors are assumed to be independent across bits
-  - Example: true config is `1100`, observed is `1110`
-
-- **Localization Rule**
-  - Helps infer the robot's position by comparing sensor output with map-based
-    expectations (integrated into belief state updates)
-  - Localization is achievable with high error rate by aggregating observations
-    over time
-  - E.g., if the robot believes to be in `(3, 2)`, moves left and the sensor reads
-    `NESW = 1100`, it's likely that it's in `(3, 1)` (although not guaranteed
-    because motion and sensor are noisy)
 ::::
 :::: {.column width=25%}
 ![](msml610/lectures_source/figures/L12.4x3_environment1.png)
 ::::
 :::
+- **Probabilistic information**
+  - Each bit correct with probability $1 - \epsilon$
+  - Errors are independent across bits
+  - E.g., true config `1100`, observed `1110`
+
+- **Localization Rule**
+  - Infer robot's position by comparing sensor output with map expectations
+  - Achieve localization with high error rate by aggregating observations
+  - E.g., if robot believes it's in `(3, 2)`, moves left, sensor reads
+    `NESW = 1100`, likely in `(3, 1)` (not guaranteed due to noise)
 
 * Belief State Transitions and Value of Information
 

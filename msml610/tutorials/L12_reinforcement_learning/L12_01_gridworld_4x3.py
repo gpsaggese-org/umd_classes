@@ -38,6 +38,7 @@ import logging
 
 # Third-party libraries.
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 
 # Set plotting style.
@@ -57,8 +58,77 @@ utils.init_loggers(_LOG)
 # %% [markdown]
 # # Part 1: Building the Grid World Environment
 
+# %% [markdown]
+# ## Cell 0: GridWorld API Overview
+#
+# **Goal**:
+# - See the `GridWorld` class in action
+# - Build intuition for the environment's basic structure
+#
+# The `GridWorld` class implements the canonical AIMA 4x3 grid world MDP.
+# Key properties accessible from any `GridWorld` instance:
+# - `.states` — all 11 reachable cells (col, row) 1-indexed
+# - `.actions` — the four directions: `Up`, `Down`, `Left`, `Right`
+# - `.terminals` — cells that end the episode with a reward
+# - `.walls` — cells the agent cannot occupy
+# - `.transitions(s, a)` — the stochastic next-state distribution
+# - `.q_value(s, a, u)` — expected return of action `a` under utilities `u`
+# - `.reward(s)` — reward collected on entering cell `s`
+# - `.sample_next(s, a, rng)` — draw one next state from the model (used by Q-learning)
+
 # %%
-# TODO(ai_gp): Create a few cells to show how GridWorld works in terms of API
+# Read the code for `GridWorld`.
+#??utils.GridWorld.__init__
+
+# %%
+# Create the default grid world and inspect its basic properties.
+env = utils.GridWorld()
+print("GridWorld API demo")
+print("==================")
+print("env.states (%d):" % len(env.states), env.states)
+print("env.actions:", env.actions)
+print("env.terminals:", env.terminals)
+print("env.walls:", env.walls)
+print("env.start:", env.start)
+print("env.r_step:", env.r_step)
+print("env.gamma:", env.gamma)
+print("env.p_intended:", env.p_intended)
+print()
+print("Each state's reward:")
+for s in env.states:
+    print("  R(%s) = %.2f" % (s, env.reward(s)))
+
+# %%
+# Query the transition model for a state-action pair.
+env = utils.GridWorld()
+s = (1, 1)  # START
+a = "Up"
+dist = env.transitions(s, a)
+print("Pr(s' | s=%s, a=%s):" % (s, a))
+for s2, prob in sorted(dist.items(), key=lambda x: -x[1]):
+    print("  s' = %s  p = %.2f  arrival reward = %.2f" % (s2, prob, env.reward(s2)))
+print()
+# Sample from the model.
+rng = np.random.RandomState(seed=42)
+samples = [env.sample_next(s, a, rng) for _ in range(10)]
+print("10 samples from Pr(s' | START, Up):", samples)
+
+# %%
+# Query Q-values under the uniform-utility baseline.
+env = utils.GridWorld()
+u0 = {s: 0.0 for s in env.states}
+print("Q-values at START (under zero-initialised utilities):")
+for a in env.actions:
+    q = env.q_value((1, 1), a, u0)
+    print("  Q(%s, %-5s) = %.3f" % ((1, 1), a, q))
+print()
+# With a dummy utility map to show how Q-values shift.
+u_favor_right = {s: 0.0 for s in env.states}
+u_favor_right[(2, 1)] = 1.0  # The cell to the right of START
+print("Same query with u[(2,1)] = 1.0 (favouring Right):")
+for a in env.actions:
+    q = env.q_value((1, 1), a, u_favor_right)
+    print("  Q(%s, %-5s) = %.3f" % ((1, 1), a, q))
 
 # %% [markdown]
 # ## Cell 1.1: The 4x3 Grid and Its States
@@ -122,7 +192,6 @@ utils.cell1_3_transition_table()
 
 # %%
 # Display the entire transition model for every state-action pair.
-# TODO(ai_gp): Make the numbers in the grid smaller.
 utils.cell1_3_full_transition_model()
 
 # %% [markdown]
@@ -162,7 +231,7 @@ utils.cell1_4_rewards_and_returns()
 # - The resulting utility value, satisfying the Bellman equation
 
 # %%
-# TODO(ai_gp): Allow to select one grid and print the Bellman optimality equation for that cell.
+# Pick a state and gamma to see its Bellman optimality equation.
 utils.cell2_1_bellman_equations()
 
 # %% [markdown]
@@ -227,7 +296,6 @@ utils.cell2_1_bellman_one_state()
 
 # %%
 # Show the greedy policy extracted from converged utilities.
-# TODO(ai_gp): Add also gamma as widget
 utils.cell2_3_extract_policy()
 
 # %% [markdown]

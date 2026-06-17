@@ -16,7 +16,6 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import ipywidgets
-import matplotlib.axes
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,35 +23,15 @@ import pandas as pd
 import seaborn as sns
 from IPython.display import clear_output, display
 
-import helpers.hnotebook as hnotebo
 import helpers.htutorial as htutori
 
-# TODO(ai_gp): Use import msml610.tutorials.L12_reinforcement_learning.L12_01_utils as ...
-from msml610.tutorials.L12_reinforcement_learning.L12_01_utils import (
-    _ACTIONS,
-    _ACTION_DELTA,
-    _ARROW_DELTA,
-    _PERPENDICULAR,
-    _COLOR_GOAL,
-    _COLOR_PIT,
-    _COLOR_START,
-    _COLOR_WALL,
-    _COLOR_EMPTY,
-    _comment_panel,
-    _draw_grid_base,
-    _draw_policy_arrows,
-    _draw_policy_arrows_heatmap,
-    _draw_value_heatmap,
-    _draw_visit_heatmap,
-    init_loggers as _shared_init_loggers,
-    to_grid as _shared_to_grid,
-)
+import msml610.tutorials.L12_reinforcement_learning.L12_01_utils as mtlrll0ut
 
 _LOG = logging.getLogger(__name__)
 
 
 def init_loggers(notebook_log: logging.Logger) -> None:
-    _shared_init_loggers(notebook_log)
+    mtlrll0ut.init_loggers(notebook_log)
 
 
 # #############################################################################
@@ -94,7 +73,7 @@ class GridWorld:
         self.r_step = r_step
         self.gamma = gamma
         self.p_intended = p_intended
-        self.actions = list(_ACTIONS)
+        self.actions = list(mtlrll0ut.ACTIONS)
         # Enumerate every reachable cell (all cells except walls).
         self.states = [
             (c, r)
@@ -130,7 +109,7 @@ class GridWorld:
         :param direction: one of the action names
         :return: resulting cell (equal to `s` if the move is blocked)
         """
-        d_col, d_row = _ACTION_DELTA[direction]
+        d_col, d_row = mtlrll0ut.ACTION_DELTA[direction]
         target = (s[0] + d_col, s[1] + d_row)
         # Reject moves off the grid or into a wall: the agent stays put.
         off_grid = not (
@@ -156,7 +135,7 @@ class GridWorld:
         p_perp = (1.0 - self.p_intended) / 2.0
         # The intended action and its two perpendicular slips.
         outcome_probs = [(a, self.p_intended)]
-        for perp in _PERPENDICULAR[a]:
+        for perp in mtlrll0ut.PERPENDICULAR[a]:
             outcome_probs.append((perp, p_perp))
         # Accumulate probability mass, merging outcomes that land on the
         # same cell (e.g. several blocked moves all bounce back to `s`).
@@ -224,7 +203,7 @@ class GridWorld:
         :param fill: value used for walls / missing cells
         :return: array of shape `(n_rows, n_cols)`
         """
-        return _shared_to_grid(values, self.n_rows, self.n_cols, fill=fill)
+        return mtlrll0ut.to_grid(values, self.n_rows, self.n_cols, fill=fill)
 
 
 # #############################################################################
@@ -460,14 +439,6 @@ def max_q_values(
 
 
 # #############################################################################
-# Drawing helpers (imported from shared L12_01_utils)
-# #############################################################################
-# See L12_01_utils.py for:
-#   _draw_grid_base, _draw_policy_arrows, _draw_value_heatmap,
-#   _draw_policy_arrows_heatmap, _draw_visit_heatmap, _comment_panel
-
-
-# #############################################################################
 # Cell 1.1: The 4x3 grid and its states
 # #############################################################################
 
@@ -485,7 +456,7 @@ def cell1_1_show_grid(
         figsize = (7, 5)
     env = GridWorld()
     _, ax = plt.subplots(figsize=figsize)
-    _draw_grid_base(env, ax, annotate_coords=True)
+    mtlrll0ut.draw_grid_base(env, ax, annotate_coords=True)
     ax.set_title(
         "The 4x3 grid world (11 reachable states)",
         fontsize=14,
@@ -527,7 +498,7 @@ def cell1_2_stochastic_action(
         style={"description_width": "initial"},
     )
     action_dropdown = ipywidgets.Dropdown(
-        options=_ACTIONS,
+        options=mtlrll0ut.ACTIONS,
         value="Up",
         description="action:",
         style={"description_width": "initial"},
@@ -552,18 +523,18 @@ def cell1_2_stochastic_action(
             focal = eval(state_dropdown.value)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel left: grid plot with probability arrows.
-            _draw_grid_base(env, ax1, highlight=focal)
-            for direction in _ACTIONS:
+            mtlrll0ut.draw_grid_base(env, ax1, highlight=focal)
+            for direction in mtlrll0ut.ACTIONS:
                 s2 = env._attempt_move(focal, direction)
                 if direction == action:
                     prob = env.p_intended
-                elif direction in _PERPENDICULAR[action]:
+                elif direction in mtlrll0ut.PERPENDICULAR[action]:
                     prob = (1.0 - env.p_intended) / 2.0
                 else:
                     prob = 0.0
                 if prob == 0.0:
                     continue
-                d_x, d_y = _ACTION_DELTA[direction]
+                d_x, d_y = mtlrll0ut.ACTION_DELTA[direction]
                 if s2 == focal:
                     ax1.text(
                         focal[0],
@@ -616,21 +587,16 @@ def cell1_2_stochastic_action(
                 "  each perpendicular: %.2f"
                 % (action, env.p_intended, env.p_intended, p_perp)
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>state</b> — which cell the agent is currently in<br>"
-        "<b>action</b> — intended direction "
-        "(<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)"
-        "<br>"
-        "<b>p_intended</b> — probability the intended action succeeds "
-        "(0.50 to 1.00); the remaining 1&minus;p is split evenly across the "
-        "two perpendicular moves"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "state": "which cell the agent is currently in",
+            "action": "intended direction (<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)",
+            "p_intended": "probability the intended action succeeds (0.50 to 1.00); the remaining 1&minus;p is split evenly across the two perpendicular moves",
+        }
     )
     state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
@@ -713,6 +679,7 @@ def cell1_3_full_transition_model(
             cmap="Blues",
             annot=True,
             fmt=".1f",
+            annot_kws={"fontsize": 5},
             cbar=False,
             linewidths=0.5,
             linecolor="black",
@@ -724,8 +691,10 @@ def cell1_3_full_transition_model(
         ax.set_title("Action: %s" % a, fontsize=12, fontweight="bold")
         ax.set_xlabel("next state s'")
         ax.set_ylabel("state s")
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha="right", fontsize=7)
-        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=7)
+        ax.set_xticklabels(
+            ax.get_xticklabels(), rotation=45, ha="right", fontsize=6
+        )
+        ax.set_yticklabels(ax.get_yticklabels(), rotation=0, fontsize=6)
     plt.suptitle(
         "Transition model Pr(s' | s, a) for each action",
         fontsize=14,
@@ -805,7 +774,7 @@ def cell1_3_show_transition_table(
                 (wall[0] - 1, env.n_rows - wall[1]),
                 1.0,
                 1.0,
-                facecolor=_COLOR_WALL,
+                facecolor=mtlrll0ut.COLOR_WALL,
                 edgecolor="black",
             )
         )
@@ -855,7 +824,7 @@ def cell1_3_transition_table(
         style={"description_width": "initial"},
     )
     action_dropdown = ipywidgets.Dropdown(
-        options=_ACTIONS,
+        options=mtlrll0ut.ACTIONS,
         value="Up",
         description="action:",
         style={"description_width": "initial"},
@@ -931,7 +900,7 @@ def cell1_3_transition_table(
                         (wall[0] - 1, env.n_rows - wall[1]),
                         1.0,
                         1.0,
-                        facecolor=_COLOR_WALL,
+                        facecolor=mtlrll0ut.COLOR_WALL,
                         edgecolor="black",
                     )
                 )
@@ -965,8 +934,7 @@ def cell1_3_transition_table(
                 [str(r) for r in range(env.n_rows, 0, -1)], rotation=0
             )
             ax1.set_xlabel(
-                "col\n\n"
-                "reachable next states shaded by probability",
+                "col\n\nreachable next states shaded by probability",
                 fontsize=9,
             )
             ax1.set_ylabel("row")
@@ -986,17 +954,15 @@ def cell1_3_transition_table(
                 a,
                 table_text,
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>state</b> — which non-terminal cell to query the model for<br>"
-        "<b>action</b> — intended direction "
-        "(<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "state": "which non-terminal cell to query the model for",
+            "action": "intended direction (<code>Up</code>, <code>Down</code>, <code>Left</code>, <code>Right</code>)",
+        }
     )
     state_dropdown.observe(update_plot, names="value")
     action_dropdown.observe(update_plot, names="value")
@@ -1099,7 +1065,7 @@ def cell1_4_rewards_and_returns(
             path = _sample_trajectory(env, base_policy, seed=seed_slider.value)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel 1: grid annotated with rewards and the trajectory path.
-            _draw_grid_base(env, ax1)
+            mtlrll0ut.draw_grid_base(env, ax1)
             for col in range(1, env.n_cols + 1):
                 for row in range(1, env.n_rows + 1):
                     cell = (col, row)
@@ -1122,9 +1088,7 @@ def cell1_4_rewards_and_returns(
                 fontweight="bold",
             )
             ax1.set_xlabel(
-                "col\n\n"
-                "per-cell rewards with a sample "
-                "path from START",
+                "col\n\nper-cell rewards with a sample path from START",
                 fontsize=9,
             )
             # Panel 2: comments with running discounted return.
@@ -1143,19 +1107,16 @@ def cell1_4_rewards_and_returns(
                 "First steps:\n%s"
                 % (env.r_step, gamma, running, "\n".join(lines))
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>seed</b> — random seed controlling the trajectory path taken<br>"
-        "<b>r_step</b> — living reward collected for each non-terminal step "
-        "(more negative = stronger penalty for wandering)<br>"
-        "<b>gamma</b> — discount factor (near 1 values distant rewards; "
-        "near 0 cares only about immediate reward)"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "seed": "random seed controlling the trajectory path taken",
+            "r_step": "living reward collected for each non-terminal step (more negative = stronger penalty for wandering)",
+            "gamma": "discount factor (near 1 values distant rewards; near 0 cares only about immediate reward)",
+        }
     )
     r_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
@@ -1182,9 +1143,9 @@ def cell2_1_bellman_equations(
     figsize: Optional[Tuple[float, float]] = None,
 ) -> None:
     """
-    Print the Bellman optimality equation for every non-terminal state.
+    Interactively show the Bellman optimality equation for a chosen state.
 
-    For each state shows:
+    For the selected state:
         U(s) = max_a sum_{s'} Pr(s' | s, a) [R(s') + gamma * U(s')]
 
     With the optimal utilities plugged in so the equation is satisfied by
@@ -1195,47 +1156,90 @@ def cell2_1_bellman_equations(
     if figsize is None:
         figsize = (14, 8)
     env = GridWorld()
-    snapshots, _ = value_iteration(env)
-    u = snapshots[-1]
-    policy = extract_policy(env, u)
-    lines = []
-    for s in env.nonterminal_states:
-        a_best = policy[s]
-        q_a = env.q_value(s, a_best, u)
-        dist = env.transitions(s, a_best)
-        term_lines = []
-        for s2, prob in sorted(dist.items(), key=lambda x: -x[1]):
-            r = env.reward(s2)
-            term = "%.2f * (%.2f + %.2f * %.3f)" % (prob, r, env.gamma, u[s2])
-            term_lines.append("         %s" % term)
-        eq = (
-            "U(%s) = max_a Q(%s, a) = %.3f\n"
-            "       Best action: %s\n"
-            "       sum_{s'} Pr(s'|s,%s)[R(s') + gamma U(s')]:\n"
-            "%s"
-            % (
-                s,
-                s,
-                q_a,
-                a_best,
-                a_best,
-                "\n".join(term_lines),
-            )
-        )
-        lines.append(eq)
-    # Render in a figure with a clean text panel.
-    _, ax = plt.subplots(figsize=figsize)
-    ax.axis("off")
-    ax.set_title(
-        "Bellman optimality equations for all states",
-        fontsize=14,
-        fontweight="bold",
-        pad=20,
+    state_dropdown = ipywidgets.Dropdown(
+        options=[str(s) for s in env.nonterminal_states],
+        value=str(env.start),
+        description="state:",
+        style={"description_width": "initial"},
     )
-    full_text = "\n\n".join(lines)
-    htutori.add_fitted_text_box(ax, full_text, max_fontsize=11, min_fontsize=7)
-    plt.tight_layout()
-    plt.show()
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
+    output = ipywidgets.Output()
+
+    def update_plot(change: Optional[Any] = None) -> None:
+        _ = change
+        with output:
+            clear_output(wait=True)
+            env.gamma = gamma_slider.value
+            s = eval(state_dropdown.value)
+            snapshots, _ = value_iteration(env)
+            u = snapshots[-1]
+            policy = extract_policy(env, u)
+            a_best = policy[s]
+            q_a = env.q_value(s, a_best, u)
+            dist = env.transitions(s, a_best)
+            term_lines = []
+            for s2, prob in sorted(dist.items(), key=lambda x: -x[1]):
+                r = env.reward(s2)
+                term = "%.2f * (%.2f + %.2f * %.3f)" % (
+                    prob,
+                    r,
+                    env.gamma,
+                    u[s2],
+                )
+                term_lines.append("         %s" % term)
+            eq = (
+                "Bellman optimality equation for %s:\n\n"
+                "U(%s) = max_a Q(%s, a) = %.3f\n\n"
+                "Best action: %s\n\n"
+                "sum_{s'} Pr(s'|s,%s)[R(s') + gamma U(s')]:\n"
+                "%s"
+                % (
+                    s,
+                    s,
+                    s,
+                    q_a,
+                    a_best,
+                    a_best,
+                    "\n".join(term_lines),
+                )
+            )
+            _, ax = plt.subplots(figsize=figsize)
+            ax.axis("off")
+            ax.set_title(
+                "Bellman optimality equation for %s" % (s,),
+                fontsize=14,
+                fontweight="bold",
+                pad=20,
+            )
+            htutori.add_fitted_text_box(ax, eq, max_fontsize=13, min_fontsize=9)
+            plt.tight_layout()
+            plt.show()
+
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "state": "which cell to inspect the Bellman equation for",
+            "gamma": "discount factor (higher gamma weights future rewards more)",
+        }
+    )
+    state_dropdown.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
+    update_plot()
+    controls = ipywidgets.VBox(
+        [
+            state_dropdown,
+            gamma_box,
+        ],
+    )
+    top_row = ipywidgets.HBox([controls, param_info])
+    display(ipywidgets.VBox([top_row, output]))
 
 
 # #############################################################################
@@ -1285,7 +1289,7 @@ def cell2_1_bellman_one_state(
             best_action = max(q_vals, key=lambda a: q_vals[a])
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             # Panel 1: grid with the inspected state highlighted.
-            _draw_grid_base(env, ax1, highlight=s)
+            mtlrll0ut.draw_grid_base(env, ax1, highlight=s)
             ax1.set_title(
                 "Inspected state %s" % (s,), fontsize=13, fontweight="bold"
             )
@@ -1305,8 +1309,7 @@ def cell2_1_bellman_one_state(
                 "Action values (max kept)", fontsize=13, fontweight="bold"
             )
             ax2.set_xlabel(
-                "action\n\n"
-                "a bar per action, the best (max) highlighted",
+                "action\n\na bar per action, the best (max) highlighted",
                 fontsize=9,
             )
             ax2.grid(True, alpha=0.3)
@@ -1327,16 +1330,15 @@ def cell2_1_bellman_one_state(
                     q_vals[best_action],
                 )
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>state</b> — which cell to inspect the action values for<br>"
-        "<b>gamma</b> — discount factor controlling how future rewards are weighted"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "state": "which cell to inspect the action values for",
+            "gamma": "discount factor controlling how future rewards are weighted",
+        }
     )
     state_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
@@ -1408,7 +1410,7 @@ def cell2_2_value_iteration(
             i = min(iter_slider.value, len(snapshots) - 1)
             u = snapshots[i]
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
-            _draw_value_heatmap(
+            mtlrll0ut.draw_value_heatmap(
                 env, ax1, u, title="Utilities after sweep %d" % i
             )
             ax1.set_xlabel(
@@ -1449,19 +1451,16 @@ def cell2_2_value_iteration(
                     converged,
                 )
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>iteration</b> — which Bellman sweep to display "
-        "(value propagates backward from terminals one ring per sweep)<br>"
-        "<b>gamma</b> — discount factor (higher gamma propagates value further "
-        "but converges more slowly)<br>"
-        "<b>r_step</b> — living reward collected for each non-terminal step"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "iteration": "which Bellman sweep to display (value propagates backward from terminals one ring per sweep)",
+            "gamma": "discount factor (higher gamma propagates value further but converges more slowly)",
+            "r_step": "living reward collected for each non-terminal step",
+        }
     )
     iter_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
@@ -1504,6 +1503,15 @@ def cell2_3_extract_policy(
         initial_value=-0.04,
         is_float=True,
     )
+    gamma_slider, gamma_box = htutori.build_widget_control(
+        name="gamma",
+        description="discount factor",
+        min_val=0.0,
+        max_val=1.0,
+        step=0.05,
+        initial_value=0.9,
+        is_float=True,
+    )
     output = ipywidgets.Output()
 
     def update_plot(change: Optional[Any] = None) -> None:
@@ -1511,43 +1519,44 @@ def cell2_3_extract_policy(
         with output:
             clear_output(wait=True)
             env.r_step = r_slider.value
+            env.gamma = gamma_slider.value
             snapshots, _ = value_iteration(env)
             u = snapshots[-1]
             policy = extract_policy(env, u)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel 1: utilities heatmap with policy arrows overlaid.
-            _draw_value_heatmap(
+            mtlrll0ut.draw_value_heatmap(
                 env, ax1, u, title="Optimal policy over utilities"
             )
-            _draw_policy_arrows_heatmap(env, ax1, policy)
+            mtlrll0ut.draw_policy_arrows_heatmap(env, ax1, policy)
             ax1.set_xlabel(
-                "col\n\n"
-                "an arrow per cell over the utility "
-                "heatmap",
+                "col\n\nan arrow per cell over the utility heatmap",
                 fontsize=9,
             )
             # Panel 2: comments.
-            text = "Parameters:\n  r_step: %.2f\n\nU(start) = %.3f" % (
-                env.r_step,
-                u[env.start],
+            text = (
+                "Parameters:\n"
+                "  r_step: %.2f\n"
+                "  gamma: %.2f\n\n"
+                "U(start) = %.3f" % (env.r_step, env.gamma, u[env.start])
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>r_step</b> — living reward per step; a large negative value makes "
-        "the agent take the short risky path, a near-zero value makes it take "
-        "the long safe path"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "r_step": "living reward per step; a large negative value makes the agent take the short risky path, a near-zero value makes it take the long safe path",
+            "gamma": "discount factor (higher gamma weights future rewards more, changing which actions are greedy)",
+        }
     )
     r_slider.observe(update_plot, names="value")
+    gamma_slider.observe(update_plot, names="value")
     update_plot()
     controls = ipywidgets.VBox(
         [
             r_box,
+            gamma_box,
         ],
     )
     top_row = ipywidgets.HBox([controls, param_info])
@@ -1625,14 +1634,12 @@ def cell3_1_policy_evaluation(
             policy = _preset_policy(env, policy_dropdown.value)
             u = policy_evaluation(env, policy)
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
-            _draw_value_heatmap(
+            mtlrll0ut.draw_value_heatmap(
                 env, ax1, u, title="U^pi for policy '%s'" % policy_dropdown.value
             )
-            _draw_policy_arrows_heatmap(env, ax1, policy)
+            mtlrll0ut.draw_policy_arrows_heatmap(env, ax1, policy)
             ax1.set_xlabel(
-                "col\n\n"
-                "the fixed policy as arrows over its "
-                "evaluated utilities",
+                "col\n\nthe fixed policy as arrows over its evaluated utilities",
                 fontsize=9,
             )
             text = (
@@ -1642,18 +1649,15 @@ def cell3_1_policy_evaluation(
                 "U(start) = %.3f"
                 % (policy_dropdown.value, env.gamma, u[env.start])
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>policy</b> — which fixed policy to evaluate "
-        "(<code>hand-tuned</code>, <code>always-up</code>, "
-        "<code>always-right</code>, <code>random</code>)<br>"
-        "<b>gamma</b> — discount factor weighting future rewards"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "policy": "which fixed policy to evaluate (<code>hand-tuned</code>, <code>always-up</code>, <code>always-right</code>, <code>random</code>)",
+            "gamma": "discount factor weighting future rewards",
+        }
     )
     policy_dropdown.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
@@ -1707,8 +1711,8 @@ def cell3_2_policy_iteration(
             before = policies[max(i - 1, 0)]
             after = policies[i]
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
-            _draw_grid_base(env, ax1)
-            _draw_policy_arrows(env, ax1, before, color="gray")
+            mtlrll0ut.draw_grid_base(env, ax1)
+            mtlrll0ut.draw_policy_arrows(env, ax1, before, color="gray")
             ax1.set_title(
                 "Policy before round %d" % i, fontsize=13, fontweight="bold"
             )
@@ -1716,8 +1720,8 @@ def cell3_2_policy_iteration(
                 "col\n\nthe current policy arrows",
                 fontsize=9,
             )
-            _draw_grid_base(env, ax2)
-            _draw_policy_arrows(env, ax2, after, color="darkblue")
+            mtlrll0ut.draw_grid_base(env, ax2)
+            mtlrll0ut.draw_policy_arrows(env, ax2, after, color="darkblue")
             ax2.set_title(
                 "Policy after round %d" % i, fontsize=13, fontweight="bold"
             )
@@ -1732,16 +1736,14 @@ def cell3_2_policy_iteration(
                 "rounds to converge: %d"
                 % (i, len(policies) - 1, n_changed, len(changes))
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>iteration</b> — which evaluate/improve round to display "
-        "(the policy converges in very few rounds)"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "iteration": "which evaluate/improve round to display (the policy converges in very few rounds)",
+        }
     )
     iter_slider.observe(update_plot, names="value")
     update_plot()
@@ -1826,16 +1828,14 @@ def cell3_3_compare_solvers(
                 "policy iteration rounds: %d"
                 % (env.gamma, len(vi_deltas), len(pi_changes))
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>gamma</b> — discount factor; as gamma approaches 1, value iteration "
-        "needs many more sweeps while policy iteration stays at a handful of rounds"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "gamma": "discount factor; as gamma approaches 1, value iteration needs many more sweeps while policy iteration stays at a handful of rounds",
+        }
     )
     gamma_slider.observe(update_plot, names="value")
     update_plot()
@@ -1867,7 +1867,7 @@ def cell4_1_planning_vs_learning(
     env = GridWorld()
     _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
     # Panel 1: the grid with the transition table marked unknown.
-    _draw_grid_base(env, ax1)
+    mtlrll0ut.draw_grid_base(env, ax1)
     ax1.text(
         2.5,
         2.0,
@@ -1886,7 +1886,7 @@ def cell4_1_planning_vs_learning(
         env.gamma,
         env.p_intended,
     )
-    _comment_panel(ax2, text)
+    mtlrll0ut.comment_panel(ax2, text)
     plt.tight_layout()
     plt.show()
 
@@ -1948,7 +1948,7 @@ def cell4_2_q_update_rule(
             q_new = q_old + alpha * td_error
             _, (ax1, ax2) = plt.subplots(1, 2, figsize=figsize)
             # Panel 1: the focused transition diagram.
-            _draw_grid_base(env, ax1, highlight=s)
+            mtlrll0ut.draw_grid_base(env, ax1, highlight=s)
             ax1.annotate(
                 "",
                 xy=(s2[0], s2[1] - 0.1),
@@ -1999,18 +1999,15 @@ def cell4_2_q_update_rule(
                     q_new,
                 )
             )
-            _comment_panel(ax2, text)
+            mtlrll0ut.comment_panel(ax2, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>alpha</b> — learning rate; near 0 the estimate barely moves, "
-        "near 1 it jumps to the TD target<br>"
-        "<b>gamma</b> — discount factor weighting the next-state value in "
-        "the TD target"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "alpha": "learning rate; near 0 the estimate barely moves, near 1 it jumps to the TD target",
+            "gamma": "discount factor weighting the next-state value in the TD target",
+        }
     )
     alpha_slider.observe(update_plot, names="value")
     gamma_slider.observe(update_plot, names="value")
@@ -2093,27 +2090,24 @@ def cell4_3_exploration(
                 seed=seed,
             )
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
-            _draw_visit_heatmap(
+            mtlrll0ut.draw_visit_heatmap(
                 env,
                 ax1,
                 low["visit_counts"],
                 title="Visits at epsilon=%.2f" % epsilon,
             )
             ax1.set_xlabel(
-                "col\n\n"
-                "visit counts under the chosen "
-                "exploration rate",
+                "col\n\nvisit counts under the chosen exploration rate",
                 fontsize=9,
             )
-            _draw_visit_heatmap(
+            mtlrll0ut.draw_visit_heatmap(
                 env,
                 ax2,
                 high["visit_counts"],
                 title="Visits at epsilon=0.90",
             )
             ax2.set_xlabel(
-                "col\n\n"
-                "visit counts under broad exploration",
+                "col\n\nvisit counts under broad exploration",
                 fontsize=9,
             )
             text = (
@@ -2122,18 +2116,16 @@ def cell4_3_exploration(
                 "  n_episodes: %d\n"
                 "  seed: %d" % (epsilon, n_episodes, seed)
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>epsilon</b> — exploration probability; low epsilon concentrates "
-        "visits on a narrow corridor, high epsilon spreads visits broadly<br>"
-        "<b>n_episodes</b> — number of training episodes (log scale)<br>"
-        "<b>seed</b> — random seed for reproducible training runs"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "epsilon": "exploration probability; low epsilon concentrates visits on a narrow corridor, high epsilon spreads visits broadly",
+            "n_episodes": "number of training episodes (log scale)",
+            "seed": "random seed for reproducible training runs",
+        }
     )
     epsilon_slider.observe(update_plot, names="value")
     n_exp_slider.observe(update_plot, names="value")
@@ -2223,13 +2215,11 @@ def cell4_4_q_learning_converges(
             returns = result["returns"]
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             # Panel 1: learned greedy policy.
-            _draw_grid_base(env, ax1)
-            _draw_policy_arrows(env, ax1, learned, color="darkblue")
+            mtlrll0ut.draw_grid_base(env, ax1)
+            mtlrll0ut.draw_policy_arrows(env, ax1, learned, color="darkblue")
             ax1.set_title("Q-learning policy", fontsize=13, fontweight="bold")
             ax1.set_xlabel(
-                "col\n\n"
-                "the greedy policy derived from "
-                "the learned Q-table",
+                "col\n\nthe greedy policy derived from the learned Q-table",
                 fontsize=9,
             )
             # Panel 2: learning curve (smoothed return per episode).
@@ -2265,21 +2255,17 @@ def cell4_4_q_learning_converges(
                     n_total,
                 )
             )
-            _comment_panel(ax3, text)
+            mtlrll0ut.comment_panel(ax3, text)
             plt.tight_layout()
             plt.show()
 
-    param_info = ipywidgets.HTML(
-        "<div style='background:#f5f5f5; padding:10px 14px; border-radius:4px; "
-        "border-left:3px solid #4682b4; font-size:13px; line-height:1.8'>"
-        "<b>n_episodes</b> — number of training episodes (log scale); "
-        "more episodes give the Q-table time to converge<br>"
-        "<b>alpha</b> — learning rate controlling how much each experience "
-        "updates the Q-value<br>"
-        "<b>epsilon</b> — exploration probability for epsilon-greedy action "
-        "selection<br>"
-        "<b>seed</b> — random seed for reproducible training"
-        "</div>"
+    param_info = mtlrll0ut.make_param_info(
+        {
+            "n_episodes": "number of training episodes (log scale); more episodes give the Q-table time to converge",
+            "alpha": "learning rate controlling how much each experience updates the Q-value",
+            "epsilon": "exploration probability for epsilon-greedy action selection",
+            "seed": "random seed for reproducible training",
+        }
     )
     n_exp_slider.observe(update_plot, names="value")
     alpha_slider.observe(update_plot, names="value")
