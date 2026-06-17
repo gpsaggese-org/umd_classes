@@ -40,25 +40,24 @@ enabling access to models from multiple providers through a single API.
     - Register your keys with OpenRouter and traffic routes through your own
       accounts
 
-## Prerequisites: API Keys
+## Step 1: Configure OpenRouter with BYOK
 
-- Grab API keys for the providers you want to use:
+- Generate an OpenRouter API key (`sk-or-v1-...`) for your client applications
+
+- To bring your own keys, create API keys for your providers at:
+    - [Anthropic Console](https://platform.claude.com/settings/workspaces/default/keys)
+    - [OpenAI API Keys](https://platform.openai.com/api-keys)
 
     | Provider  | Environment Variable | Key Format         |
     | :-------- | :------------------- | :----------------- |
     | Anthropic | `ANTHROPIC_API_KEY`  | `sk-ant-api03-...` |
     | OpenAI    | `OPENAI_API_KEY`     | `sk-proj-...`      |
 
-## Step 1: Configure OpenRouter with BYOK
+  - Note that Anthropic encodes in the key `...-api-03-...` since you need
+    to use metered use
 
-- Create API keys for your providers at:
-    - [Anthropic Console](https://platform.claude.com/settings/workspaces/default/keys)
-    - [OpenAI API Keys](https://platform.openai.com/api-keys)
-
-- Register your keys with OpenRouter at:
+- Register your BYOK keys with OpenRouter at:
   [BYOK Settings](https://openrouter.ai/workspaces/default/byok)
-
-- Generate an OpenRouter API key (`sk-or-v1-...`) for your client applications
 
 ## Step 2: Test the OpenRouter API
 
@@ -93,13 +92,20 @@ enabling access to models from multiple providers through a single API.
   default
 - To route through OpenRouter, set these environment variables:
 
+  - Send the API requests from Claude Code to OpenRouter using their API and key
     ```bash
     > export ANTHROPIC_BASE_URL=https://openrouter.ai/api
     > export ANTHROPIC_AUTH_TOKEN=$OPENROUTER_API_KEY
+    ```
+  - Select the models to use for the different Claude Code tier (e.g., using
+    OpenAI GPT-5 using OpenRouter)
+    ```
     > export ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
     > export ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
     > export ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
+    ```
 
+    ```
     # Unset the direct Anthropic key to avoid conflicts.
     > unset ANTHROPIC_API_KEY
     ```
@@ -115,7 +121,7 @@ enabling access to models from multiple providers through a single API.
     ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
     ```
 
-### Testing with the Anthropic Python SDK
+### Testing Connection to OpenRouter with the Anthropic Python SDK
 
 <!-- TODO(ai_gp): move to repo and point to it -->
 
@@ -186,6 +192,7 @@ enabling access to models from multiple providers through a single API.
 - For help choosing which model fits your workflow, see
   [How to Compare and Choose LLM Models](how_to.Compare_LLM_models.md):
 
+  - A set up I personally like based on the analysis above
     ```bash
     > export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
     > export ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
@@ -213,13 +220,18 @@ enabling access to models from multiple providers through a single API.
 
 ### Verifying the Model in Claude Code
 
-- Once Claude Code launches, check which model is active with the `/model` command:
+- Once Claude Code launches note that the model is the one mapped on Haiku 
+  (in the case above, it's `deepseek-v4-flash`) and the access is
+  `API Usage Billing` (since we are not going through a Claude plan)
+  ```bash
+  > claude ...
+   ▐▛███▜▌   Claude Code v2.1.158
+  ▝▜█████▛▘  deepseek/deepseek-v4-flash · API Usage Billing
+    ▘▘ ▝▝    ~/src/xyz
+    ```
 
-    ```bash
-    > cc
-     ▐▛███▜▌   Claude Code v2.1.158
-    ▝▜█████▛▘  deepseek/deepseek-v4-flash · API Usage Billing
-      ▘▘ ▝▝    ~/src/xyz
+check which model is active with the `/model` command:
+
 
     ❯ /model
 

@@ -1131,20 +1131,14 @@ _3-bandit problem_
 * Model-Based Reinforcement Learning
 
 - **Definition**: Model-based RL
-  - Learns explicit model of environment dynamics and uses it to make decisions
-    about how to act
-  - _Transition model_: estimates $\Pr(s'|a,s)$, probability of reaching state
-    $s'$ from $s$ after action $a$
-  - _Reward model_: estimates $R(s,a)$, expected reward after action $a$ in
-    state $s$
+  - Collect experience tuples $(s',a,s, r)$
+  - Update environment model
+    - _Transition model_: estimates $\Pr(s'|a,s)$
+    - _Reward model_: estimates $R(s,a)$
+  - Plan using model to improve policy (e.g., value iteration, policy iteration)
+  - E.g., Dyna-Q
 
 - **Intuition**: learn to drive by studying manual and physics
-
-- **Learning Process**
-  - Collect experience tuples $(s',a,s, r)$
-  - Update environment model (transition and reward)
-  - Plan using model to improve policy (e.g., value iteration, policy iteration)
-  - E.g., Dyna-Q algorithm combines model-free updates with simulated planning
 
 - **Pros**
   - Efficient sample usage: fewer real-world interactions
@@ -1161,15 +1155,11 @@ _3-bandit problem_
     model of dynamics
   - Agent observes $(s',a,s, r)$ and updates value or policy estimates based
     on observed outcomes
-  - No attempt to predict $P(s'|a,s)$ or $R(s,a)$
+    - E.g., Q-learning (learn $Q(a, s)$)
+    - E.g., REINFORCE (learn policy)
+  - No attempt to estimate $P(s'|a,s)$ or $R(s,a)$
 
 - **Intuition**: learn to drive by trial and error
-
-- **Learning Process**
-  - Value-based methods: Learn state or state-action values (e.g., $Q(s,a)$)
-    - E.g., Q-learning
-  - Policy-based methods: Learn the policy directly
-    - E.g., REINFORCE, actor-critic
 
 - **Pros**
   - Simpler to implement when environment model is unknown or too complex
@@ -1181,6 +1171,7 @@ _3-bandit problem_
 
 * Model-Based vs Model-Free Reinforcement Learning
 
+// TODO(ai_gp): Convert this into a table
 - **Core Distinction**
   - Model-Based RL: Learns a model of environment dynamics $P(s'|a,s)$ and
     $R(s,a)$ and uses it for planning
