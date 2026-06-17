@@ -2192,15 +2192,14 @@ digraph Transfer {
 
 * Causal RL: Open Challenges
 
-\begingroup \small
+\begingroup \scriptsize
 | **Challenge** | **What it is** | **Why it matters** |
-|----------|----------|----------|
-| **Causal Discovery** | Learn the graph $\mathcal{G}$ from interaction data | Most settings lack known causal structure; partial observability makes discovery hard |
-| **Identifiability** | Multiple SCMs can yield identical observational distribution | May recover wrong causal graph even with infinite data; intervene to disambiguate but interventions are expensive |
-| **Scalability** | Integrate causal structure into deep RL (e.g., deep networks for value functions) | Current approaches don't scale to high-dim state spaces; risk losing learned features |
-| **Sample Efficiency** | How much causal knowledge is necessary to gain robustness? | Open question: complete causal graph vs. partial causal knowledge vs. statistical approximation |
-| **Partial Observability** | Agent observes limited state; hidden variables affect both action and reward | Confounding hides in unobserved state; deconfounding becomes harder |
-\endgroup
+|----------|----------|----------| 
+| **Causal Discovery** | Learn graph $\mathcal{G}$ from interaction data | Lack of known causal structure; partial observability complicates discovery |
+| **Identifiability** | Multiple SCMs yield identical observational distribution | Risk recovering wrong causal graph; interventions needed but costly |
+| **Scalability** | Integrate causal structure into deep RL | Current methods don't scale to high-dim state spaces; risk losing features |
+| **Sample Efficiency** | Necessary causal knowledge for robustness | Open question: complete graph vs. partial knowledge vs. statistical approximation |
+| **Partial Observability** | Agent observes limited state; hidden variables affect action and reward | Confounding hides in unobserved state; deconfounding harder |
 
-- **Key Open Question**: Can we learn enough causal structure online to improve
-  generalization and robustness, without the cost of full causal discovery?
+- **Key Open Question**: Can you learn enough causal structure online to improve
+  generalization and robustness without full causal discovery cost?
