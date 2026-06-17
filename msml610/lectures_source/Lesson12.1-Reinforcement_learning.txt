@@ -1128,6 +1128,29 @@ _3-bandit problem_
 - **Natural Language Processing**
   - Dialogue systems and chatbots learn conversational strategies
 
+## #############################################################################
+## Model-Based vs Model-Free RL
+## #############################################################################
+
+* Model-Based vs Model-Free RL: Intuition
+
+- **Model-based RL** is like learning to ride a bike by studying manual and
+  physics
+  - Plan a sequence: "to make this turn at the corner, I should steer by 5
+    degrees..."
+  - When I change bike, you can update the parameters of the model, instead of
+    learning from scratch
+  - _"I understand how the world works, so let me plan ahead"_
+
+- **Model-free RL** is like learning to ride a bike purely through trial and error,
+    and repetition
+  - You don't have an explicit theory of physics, balance, or torque
+  - You just adjust your actions based on whether you fell down or stayed
+    upright
+  - Over many trials, you develop good intuitions about what to do in each
+    situation, but you never explicitly model why leaning works
+  - _"I know it works but I don't know why"_
+
 * Model-Based Reinforcement Learning
 
 - **Definition**: Model-based RL
@@ -1137,8 +1160,6 @@ _3-bandit problem_
     - _Reward model_: estimates $R(s,a)$
   - Plan using model to improve policy (e.g., value iteration, policy iteration)
   - E.g., Dyna-Q
-
-- **Intuition**: learn to drive by studying manual and physics
 
 - **Pros**
   - Efficient sample usage: fewer real-world interactions
@@ -1159,8 +1180,6 @@ _3-bandit problem_
     - E.g., REINFORCE (learn policy)
   - No attempt to estimate $P(s'|a,s)$ or $R(s,a)$
 
-- **Intuition**: learn to drive by trial and error
-
 - **Pros**
   - Simpler to implement when environment model is unknown or too complex
   - Robust to model inaccuracies since no model is used
@@ -1169,92 +1188,58 @@ _3-bandit problem_
   - Requires more environment interactions (sample inefficient)
   - Harder to incorporate planning or long-term reasoning
 
-* Model-Based vs Model-Free Reinforcement Learning
+* Model-Based vs Model-Free RL: Comparison
 
-// TODO(ai_gp): Convert this into a table
-- **Core Distinction**
-  - Model-Based RL: Learns a model of environment dynamics $P(s'|a,s)$ and
-    $R(s,a)$ and uses it for planning
-  - Model-Free RL: Learns value functions $Q(s,a)$ or policies $\pi(a|s)$
-    directly from experience
+\begingroup \scriptsize
+| **Aspect** | **Model-Based RL** | **Model-Free RL** |
+|----------|----------|----------|
+| _Core Distinction_ | Learns environment dynamics $P(s'\|a,s)$ and $R(s,a)$; uses model for planning | Learns value functions $Q(s,a)$ or policies $\pi(a\|s)$ directly from experience |
+| _Sample Efficiency_ | Generally more sample efficient due to simulated planning | Typically needs more environment interactions |
+| _Computation_ | Higher planning overhead; simulations required | Simpler computations per step; often more scalable |
+| _Flexibility and Robustness_ | Sensitive to model inaccuracies | More robust to model errors (since it doesn't learn one) |
+| _Typical Use Cases_ | Robotics, planning tasks, known environments | Games, large-scale unknown or stochastic environments |
+| _Examples_ | Dyna-Q, PILCO | Q-learning, Deep Q-Networks (DQN), REINFORCE |
+\endgroup
 
-- **Sample Efficiency**
-  - Model-Based: Generally more sample efficient due to simulated planning
-  - Model-Free: Typically needs more environment interactions
+## #############################################################################
+## Active vs Passive RL
+## #############################################################################
 
-- **Computation**
-  - Model-Based: Higher planning overhead; simulations required
-  - Model-Free: Simpler computations per step; often more scalable
-
-- **Flexibility and Robustness**
-  - Model-Based: Sensitive to model inaccuracies
-  - Model-Free: More robust to model errors (since it doesn't learn one)
-
-- **Typical Use Cases**
-  - Model-Based: Robotics, planning tasks, known environments
-  - Model-Free: Games, large-scale unknown or stochastic environments
-
-- **Examples**
-  - Model-Based: Dyna-Q, PILCO
-  - Model-Free: Q-learning, Deep Q-Networks (DQN), REINFORCE
-  - Hybrid Approaches combine both strengths: learn models for planning and use
-    model-free learning for robustness (e.g., AlphaZero)
 
 * Active vs Passive Reinforcement Learning
 
-- **Basic Distinction**
-  - Passive RL: Learns value of a fixed policy; does not choose actions
-  - Active RL: Learns both the value function and the optimal policy through
+- **Intuition**: it is about who controls the agent's behavior while it's
+  learning the value of states or a policy in a MDP
+
+- Core Distinction
+  - **Passive RL**: Learns value of a fixed policy; does not choose actions
+  - **Active RL**: Learns both the value function and optimal policy through
     exploration
 
-- **Policy Handling**
-  - Passive: Follows a given policy $\pi(s)$ and estimates $V^\pi(s)$ or
-    $Q^\pi(s,a)$
-  - Active: Improves policy over time, aiming for $\pi^*(s)$ that maximizes
-    reward
-
-- **Exploration**
-  - Passive: No exploration — strictly evaluates the given policy
-  - Active: Explores actions to improve the policy (e.g., $\epsilon$-greedy,
-    softmax)
-
-- **Learning Goal**
-  - Passive: Accurate value function for a known policy
-  - Active: Optimal policy and value function via interaction
-
-- **Algorithms**
-  - Passive: Temporal Difference Learning (TD), Adaptive Dynamic Programming for
-    a fixed policy
-  - Active: Q-learning, SARSA, policy iteration methods
-
-- **Use Cases**
-  - Passive: Evaluation of policies from human demonstrations or expert systems
-  - Active: Autonomous agents discovering optimal strategies from scratch
-
-- **Sample Efficiency**
-  - Passive: Can converge faster if policy is close to optimal
-  - Active: Slower due to need for exploration and policy improvement
-
-- **Challenges**
-  - Passive: Limited by the quality of the provided policy
-  - Active: Balancing exploration and exploitation effectively
-
-## #############################################################################
-## Passive Reinforcement Learning
-## #############################################################################
+\begingroup \scriptsize
+| **Aspect** | **Passive RL** | **Active RL** |
+|----------|----------|----------|
+| _Policy Handling_ | Follows a given policy $\pi(s)$ and estimates $V^\pi(s)$ or $Q^\pi(s,a)$ | Improves policy over time, aiming for $\pi^*(s)$ that maximizes reward |
+| _Exploration_ | No exploration — strictly evaluates the given policy | Explores actions to improve the policy (e.g., $\epsilon$-greedy, softmax) |
+| _Learning Goal_ | Accurate value function for a known policy | Optimal policy and value function via interaction |
+| _Algorithms_ | Temporal Difference Learning (TD), Adaptive Dynamic Programming for a fixed policy | Q-learning, SARSA, policy iteration methods |
+| _Use Cases_ | Evaluation of policies from human demonstrations or expert systems | Autonomous agents discovering optimal strategies from scratch |
+| _Sample Efficiency_ | Can converge faster if policy is close to optimal | Slower due to need for exploration and policy improvement |
+| _Challenges_ | Limited by the quality of the provided policy | Balancing exploration and exploitation effectively |
+\endgroup
 
 * Passive Learning Agent
-- Consider a fully observable environment with a small number of actions and
-  states
+- **Setup**
+  - A fully observable environment with a small number of actions and states
+  - The agent:
+    - Has a fixed policy $\pi(s)$ to determine its action
+    - Needs to learn $U^\pi(s)$, the expected discounted reward if policy $\pi$ is
+      executed starting in state $s$
+    - Doesn't know the transition model $\Pr(s'|s, a)$ and the reward function
+      $R(s',a,s)$
 
-- **The agent:**
-  - Has a fixed policy $\pi(s)$ to determine its action
-  - Needs to learn $U^\pi(s)$, the expected discounted reward if policy $\pi$ is
-    executed starting in state $s$
-  - Doesn't know the transition model $\Pr(s'|s, a)$ and the reward function
-    $R(s',a,s)$
-
-- The agent executes a set of trials using the policy $\pi$:
+- **Algorithm**
+  - The agent executes a set of trials using the policy $\pi$:
   - Starts from an initial state and experiences state transitions until
     reaching terminal states
   - Stores actions and rewards at each state $(s_0, a_0, r_1, s_1, ..., s_n)$
@@ -1262,28 +1247,25 @@ _3-bandit problem_
     $$
     U^{\pi}(s) = \EE[ \sum_{t=0}^{\infty} \gamma^t R(S_t, \pi(S_t), S_{t+1})]
     $$
-
-- Direct utility estimation
-  - For each state $s$, average the returns from all episodes in which $s$ was
-    visited:
+    average the returns from all episodes in which $s$ was visited:
     $$
     U^\pi(s) = \frac{1}{N(s)} \sum_{i=1}^{N(s)} G_i(s)
     $$
     where $G_i(s)$ is the return after state $s$ in episode $i$
 
-- **Advantages**
+- **Example**
+  - Evaluating a delivery drone's route utility based on completed delivery
+    missions without changing its behavior
+
+- **Pros**
   - Unbiased estimator of utility under $\pi$
   - Simple
 
-- **Limitations**
+- **Cons**
   - High variance: requires many samples
   - Inefficient if state visits are rare or episode lengths vary greatly
   - (Important): Ignore the connections between states given that the utility
     values obeys the Bellman equation for a fixed policy
-
-- **Example**
-  - Evaluating a delivery drone's route utility based on completed delivery
-    missions without changing its behavior
 
 * Adaptive Dynamic Programming
 
@@ -1306,19 +1288,19 @@ _3-bandit problem_
     - $R(s,a) \approx$ average observed reward
   - Use dynamic programming to compute $U^\pi(s)$
 
-- **Advantages**
-  - More sample-efficient than direct utility estimation
-  - Leverages structure of the MDP to generalize better
-
-- **Limitations**
-  - Requires accurate model estimation
-  - Computational cost of solving Bellman equations repeatedly
-
 - **Example**
   - Suitable when environment dynamics are stationary and can be learned from
     interaction
   - A thermostat estimates room temperature dynamics and uses them to predict
     comfort level under a fixed heating schedule
+
+- **Pros**
+  - More sample-efficient than direct utility estimation
+  - Leverages structure of the MDP to generalize better
+
+- **Cons**
+  - Requires accurate model estimation
+  - Computational cost of solving Bellman equations repeatedly
 
 * Temporal-Difference Learning
 
@@ -1347,23 +1329,19 @@ _3-bandit problem_
   - Online and incremental: updates occur after each step
   - Does not require knowledge of model $P(s'|a,s)$ or $R(s,a)$
 
-- **Advantages**
-  - More efficient and lower variance than Monte Carlo methods
-  - Simpler and more memory-efficient than model-based methods
-
-- **Limitations**
-  - Introduces bias due to bootstrapping
-  - May require careful tuning of learning rate $\alpha$
-
 - **Example**
   - Real-time systems, streaming environments, or when dynamics are too complex
     to model
   - An autonomous cleaner estimates long-term dirtiness reduction for each room
     it passes through, adjusting based on immediate results
 
-## #############################################################################
-## Active Reinforcement Learning
-## #############################################################################
+- **Pros**
+  - More efficient and lower variance than Monte Carlo methods
+  - Simpler and more memory-efficient than model-based methods
+
+- **Cons**
+  - Introduces bias due to bootstrapping
+  - May require careful tuning of learning rate $\alpha$
 
 * Active Reinforcement Learning
 
@@ -1560,454 +1538,3 @@ _3-bandit problem_
     out the gradient
   - High variance in trial outcomes makes gradients noisy
   - Requires many trials to ensure reliable gradient estimation
-
-/*
-
-# ##############################################################################
-# Fundamentals
-# ##############################################################################
-
-* What Is Reinforcement Learning?
-- Reinforcement Learning (RL) studies how agents learn to act by interacting
-  with an environment
-- Goal: maximize cumulative reward over time
-- Learning happens through trial and error, not from labeled examples
-- Feedback is sparse and delayed
-- Agent improves policy through experience
-- Example: A robot learns to walk by receiving rewards for forward movement
-
-* Components of an RL Problem (Agent, Environment, State, Action, Reward)
-- Agent: entity making decisions
-- Environment: external system the agent interacts with
-- State ($s$): representation of the environment at a specific time
-- Action ($a$): choice made by the agent affecting the environment
-- Reward ($r$): scalar feedback signal indicating success
-- Policy: mapping from states to actions
-- Example: In chess, the board position is the state, moving a piece is the
-  action, winning gives a reward
-
-* Policy, Value Function, and Model
-- Policy ($\pi$): defines behavior, maps states to actions
-- Value Function ($V(s)$): expected return starting from state $s$ under a
-  policy
-- Action-Value Function ($Q(s,a)$): expected return starting from state $s$,
-  taking action $a$
-- Model: predicts next state and reward, i.e., learns $P$ and $R$
-- Model-based vs Model-free methods
-- Example: A self-driving car policy maps camera input (state) to steering
-  actions
-
-* Exploration vs Exploitation
-- Exploration: trying new actions to discover better rewards
-- Exploitation: choosing known actions that yield high rewards
-- Fundamental trade-off: gather information vs maximize immediate reward
-- Pure exploitation may get stuck in suboptimal solutions
-- Pure exploration wastes time without rewards
-- Example: Trying a new restaurant (exploration) vs going to a favorite one
-  (exploitation)
-
-* Discount Factor and Infinite Horizon
-- Discount Factor ($\gamma \in [0,1]$) models preference for immediate rewards
-- $\gamma=0$: only immediate reward matters
-- $\gamma$ close to $1$: future rewards matter almost as much as immediate ones
-- Infinite Horizon: sum of rewards extends indefinitely into the future
-- Ensures convergence and finite expected returns
-- Example: Robot planning navigation across an infinite road
-
-* Episodic vs Continuing Tasks
-- Episodic tasks: interaction broken into episodes (with terminal states)
-- Continuing tasks: no terminal state, interaction goes on indefinitely
-- Example of episodic: playing a game of chess
-- Example of continuing: balancing a pole on a moving cart without ending
-- Different strategies are needed for each setting
-
-# ##############################################################################
-# Classical Methods
-# ##############################################################################
-
-* Dynamic Programming (DP)
-- Set of algorithms to solve MDPs exactly, assuming full knowledge
-- Relies on Bellman equations
-- Needs complete model ($P$ and $R$ known)
-- Iteratively improves value functions
-- Computationally expensive in large state spaces
-- Foundation for many RL methods
-- Example: Solving a small maze by full dynamic programming
-
-* Policy Evaluation (Prediction Problem)
-- Task: compute value function $V^\pi$ for a fixed policy $\pi$
-- Uses Bellman Expectation Equation
-- Iterative update methods: iterative policy evaluation
-- Exact for small finite MDPs
-- Useful for assessing the quality of a given behavior
-
-* Policy Iteration
-- Alternates between policy evaluation and policy improvement
-- Policy Evaluation: compute $V^\pi$
-- Policy Improvement: make policy greedy with respect to $V^\pi$
-- Guaranteed to converge to an optimal policy $\pi^*$
-- Often faster than value iteration in practice
-- Example: Robot gradually improving navigation policy
-
-* Value Iteration
-- Combines policy evaluation and improvement into a single update
-- Uses Bellman Optimality Equation
-- More efficient for large MDPs
-- Converges to optimal value function and policy
-- Intuitive: update values by considering the best next action immediately
-
-* Monte Carlo Methods
-- Learn from complete episodes
-- Estimate value functions by averaging returns
-- No need for knowledge of transitions ($P$) or rewards ($R$)
-- Suitable for episodic tasks
-- Variance can be high due to randomness
-- Example: Blackjack strategies based on observed outcomes
-
-* Temporal Difference (TD) Learning
-- Combines ideas from Monte Carlo and Dynamic Programming
-- Updates estimates based on partially observed returns
-- TD(0) update rule: one-step lookahead
-- More efficient than Monte Carlo
-- Example: Updating a value estimate after each move in a game, not at the end
-
-* SARSA Algorithm
-- On-policy TD control method
-- Updates action-value estimates based on action actually taken
-- Update rule uses current policy's behavior
-- Learns $\pi$ while behaving according to $\pi$
-- Safer but slower convergence compared to Q-learning
-- Example: Training a robot to follow safe paths with exploration
-
-* Q-Learning Algorithm
-- Off-policy TD control method
-- Updates action-value estimates assuming greedy action selection
-- Learns optimal policy independently of current behavior
-- More aggressive exploration possible
-- Very widely used in practice (e.g., DQN in Deep RL)
-
-* Eligibility Traces and TD($\lambda$)
-- Mix of TD and Monte Carlo ideas
-- Eligibility traces: credit assignment over sequences of states
-- TD($\lambda$) interpolates between TD(0) and Monte Carlo
-- $\lambda=0$: purely TD; $\lambda=1$: purely MC
-- Provides better learning speed and stability
-- Example: Remembering recent visited states to distribute reward credit
-
-# ##############################################################################
-# Exploration Strategies
-# ##############################################################################
-
-* $\epsilon$-Greedy Exploration
-- With probability $\epsilon$, choose a random action
-- With probability $1-\epsilon$, choose the best-known action
-- Simple and effective
-- Needs careful tuning of $\epsilon$
-- Example: Try random moves 10% of the time in a video game agent
-
-* Softmax Action Selection
-- Probabilistic action selection based on action values
-- Higher value actions are more likely, but not guaranteed
-- Temperature parameter $\tau$ controls exploration
-- $\tau$ high: near-uniform random; $\tau$ low: near-greedy
-- Example: Choosing moves in chess with probability proportional to their
-  expected win rate
-
-* Upper Confidence Bound (UCB)
-- Balances exploration and exploitation using confidence bounds
-- Prefer actions with high estimated reward or high uncertainty
-- Action selected by maximizing $Q(s,a) + c \sqrt{\frac{\ln t}{N(s,a)}}$
-- $c$: exploration parameter; $t$: total steps; $N(s,a)$: count of action
-- Common in bandit problems
-
-* Thompson Sampling
-- Bayesian approach to exploration
-- Sample from the posterior distribution of rewards
-- Choose the action that looks best according to the sample
-- Naturally balances exploration and exploitation
-- Example: Ad selection on a website based on user clicks
-
-* Optimistic Initial Values
-- Start with high estimates for action values
-- Encourage exploration early
-- Gradually corrects estimates with real experience
-- Simple way to induce initial exploration without randomness
-- Example: Assume all restaurants are excellent until visited
-
-# ##############################################################################
-# Policy Gradient Methods
-# ##############################################################################
-
-* Policy Optimization vs Value-Based Methods
-- Value-based methods optimize value functions indirectly (e.g., Q-Learning)
-- Policy optimization methods directly optimize the policy $\pi$
-- Policy gradients are better for high-dimensional or continuous action spaces
-- Policy optimization can handle stochastic policies naturally
-- Value-based methods struggle with non-discrete actions
-- Example: Controlling a robotic arm with continuous torque commands
-
-* REINFORCE Algorithm
-- Monte Carlo policy gradient method
-- Update policy parameters in the direction of
-  $\nabla_\theta \log \pi_\theta(a|s) R$
-- $R$ is the cumulative reward obtained from the episode
-- Requires complete episodes to compute updates
-- High variance but unbiased estimates
-- Example: Learning to balance a pole based only on full-episode returns
-
-* Variance Reduction in Policy Gradients (Baselines)
-- High variance is a major problem in REINFORCE
-- Introduce a baseline $b(s)$ to reduce variance without introducing bias
-- Common choice: value function $V(s)$ as baseline
-- Update becomes proportional to $(R - b(s))$
-- Intuition: reinforce actions only if they are better than expected
-
-* Actor-Critic Methods
-- Combine policy (actor) and value function (critic) estimation
-- Actor updates policy using feedback from critic
-- Critic estimates value function $V(s)$ or $Q(s,a)$
-- Reduces variance compared to pure REINFORCE
-- More sample efficient
-- Example: A robot uses a critic to estimate how good its movements are
-
-* Advantage Actor-Critic (A2C)
-- Uses advantage function $A(s,a) = Q(s,a) - V(s)$
-- Helps better focus learning on actions better than average
-- Reduces variance further compared to standard actor-critic
-- Advantage estimates can be bootstrapped using TD learning
-- Example: A2C applied to Atari games using convolutional networks
-
-* Trust Region Policy Optimization (TRPO)
-- Constrains the policy update to stay within a trust region
-- Prevents large destructive policy updates
-- Solves constrained optimization problem
-- Uses KL-divergence to measure step size
-- Achieves stable and monotonic improvement in policy performance
-
-* Proximal Policy Optimization (PPO)
-- Simplified version of TRPO
-- Uses clipped surrogate objective to limit policy updates
-- Much easier to implement and tune
-- Widely used in practical deep RL applications
-- Balances exploration and exploitation naturally
-
-# ##############################################################################
-# Value Function Approximation
-# ##############################################################################
-
-* Function Approximation with Linear Models
-- Approximate $V(s)$ or $Q(s,a)$ as a linear function of features
-- Simple and efficient
-- Suitable for small-scale problems
-- Often used with feature engineering
-- Example: Linearly predicting value based on board features in tic-tac-toe
-
-* Nonlinear Function Approximation with Neural Networks
-- Use deep networks to approximate value functions
-- Allows generalization across large or continuous state spaces
-- Needs careful training to avoid instability
-- Basis for Deep Reinforcement Learning
-- Example: Deep Q-Network (DQN) uses CNNs to process images
-
-* Stability and Divergence Issues
-- Bootstrapping and off-policy learning introduce instability
-- Function approximation can amplify errors
-- Divergence possible if learning rate or target shifts too fast
-- Techniques like experience replay and target networks are essential
-- Example: Unstable training when applying naive TD-learning with deep nets
-
-* Deep Q-Network (DQN)
-- Combines Q-learning with deep neural networks
-- Input: raw pixels; Output: Q-values for each action
-- Stabilized using experience replay and target networks
-- Revolutionized deep RL by achieving human-level Atari performance
-- Example: Playing Atari Breakout directly from screen pixels
-
-* Experience Replay
-- Store past experiences $(s,a,r,s')$ in a buffer
-- Sample minibatches uniformly for training
-- Breaks correlation between sequential samples
-- Improves sample efficiency and stability
-- Example: Randomly training on diverse past robot actions
-
-* Target Networks
-- Maintain a separate slow-moving target network
-- Use target network for stable Q-learning updates
-- Helps prevent rapid oscillations in targets
-- Target network periodically updated to match main network
-- Key stabilization technique for DQN
-
-# ##############################################################################
-# Deep Reinforcement Learning
-# ##############################################################################
-
-* Double DQN
-- Addresses overestimation bias in Q-learning
-- Uses two networks: one to select actions, one to evaluate
-- Reduces value overestimation, improves stability
-- Especially helpful in noisy environments
-- Example: More accurate Q-value predictions in Atari games
-
-* Dueling DQN
-- Separates estimation of state-value and advantage
-- $Q(s,a) = V(s) + (A(s,a) - \max_{a'} A(s,a'))$
-- Helps learning when actions do not affect outcome much
-- Improves data efficiency and final performance
-- Example: Identifying important states even when no good actions exist
-
-* Prioritized Experience Replay
-- Samples important transitions more frequently
-- Priority proportional to TD-error magnitude
-- Improves learning speed and efficiency
-- Needs correction for bias due to non-uniform sampling
-- Example: Learning faster from surprising or rare robot experiences
-
-* Distributional Reinforcement Learning
-- Predicts the distribution of returns, not just expected value
-- Captures uncertainty about outcomes
-- Leads to better and richer learning signals
-- Example: C51 algorithm approximates return distributions over 51 atoms
-
-* Rainbow DQN
-- Combines several DQN improvements: Double DQN, Dueling, Prioritized Replay,
-  Distributional RL, Noisy Nets, and Multi-step learning
-- Represents state-of-the-art DQN variant
-- Highly efficient and robust
-- Example: Rainbow DQN achieving superior Atari benchmark results
-
-# ##############################################################################
-# Model-Based Reinforcement Learning
-# ##############################################################################
-
-* Planning vs Learning
-- Planning: using a known model to compute optimal behavior
-- Learning: acquiring the model or policy through interaction
-- Model-based methods aim to combine planning and learning
-- Planning is faster if model is accurate
-- Learning is necessary when model is unknown
-- Example: Chess engines use planning with a known set of rules
-
-* Dyna Architecture
-- Integrates learning, planning, and acting
-- Learn a model from real experience
-- Plan by generating simulated experiences
-- Update policy or value functions from both real and simulated data
-- Increases sample efficiency
-- Example: Dyna-Q algorithm for accelerated learning
-
-* Model Learning and Planning Algorithms
-- Learn transition function $P(s'|a,s)$ and reward function $R(s,a)$
-- Use supervised learning for model prediction
-- Planning via methods like value iteration or trajectory optimization
-- Challenges: model bias, compounding errors over long horizons
-- Example: Predicting next frames in Atari games for planning
-
-* Model Predictive Control (MPC)
-- Plan actions by solving an optimization problem at every step
-- Execute only the first action of the optimized sequence
-- Re-plan at every timestep based on updated state
-- Robust to model inaccuracies over long horizons
-- Widely used in robotics and control applications
-
-* Dreamer and Planet (World Models)
-- Learn latent models of the environment
-- Dreamer: uses latent dynamics to predict future returns
-- PlaNet: model-predictive control in latent space
-- Operate efficiently in high-dimensional input spaces (e.g., images)
-- Example: Dreamer learns to control a robot using imagined rollouts
-
-# ##############################################################################
-# Advanced Topics
-# ##############################################################################
-
-* Multi-Agent Reinforcement Learning
-- Multiple agents interact in a shared environment
-- Agents may cooperate, compete, or both
-- Introduces non-stationarity from each agent's perspective
-- Example: Training multiple soccer-playing robots
-
-* Inverse Reinforcement Learning
-- Learn the reward function given expert behavior
-- Focuses on inferring motivations behind actions
-- Useful when reward is difficult to specify manually
-- Example: Learning driving behavior from human demonstrations
-
-* Imitation Learning
-- Directly learn policies by mimicking expert behavior
-- Bypasses the need for reward signal
-- Behavioral cloning: supervised learning on expert trajectories
-- Example: Training a drone to fly by imitating human control
-
-* Hierarchical Reinforcement Learning (Options Framework)
-- Learn policies at multiple levels of abstraction
-- Options: temporally extended actions
-- Top-level policy selects among options
-- Speeds up learning by structuring decision-making
-- Example: Navigating by setting subgoals like "exit room" before "exit
-  building"
-
-* Safe Reinforcement Learning
-- Ensure safety constraints during exploration and deployment
-- Address risk sensitivity and robustness
-- Techniques: constrained MDPs, risk-sensitive optimization
-- Example: Autonomous car learning without dangerous crashes
-
-* Offline Reinforcement Learning (Batch RL)
-- Learn policies from previously collected data without further interaction
-- Challenges: distributional shift, overestimation bias
-- Requires careful correction techniques like conservative Q-learning
-- Example: Healthcare decision-making from historical patient data
-
-* Meta Reinforcement Learning
-- Learn how to learn new tasks quickly
-- Inner loop: fast adaptation; Outer loop: meta-training across tasks
-- Example: Robot that quickly adapts to walking on new surfaces
-
-* Curriculum Learning
-- Train on progressively harder tasks
-- Mimics human learning by starting from easier problems
-- Helps overcome exploration challenges
-- Example: Teaching a robot to jump after first teaching it to walk
-
-* Exploration in Sparse Reward Environments
-- Rewards may be rare or delayed
-- Random exploration becomes inefficient
-- Techniques: intrinsic motivation, curiosity-driven learning
-- Example: Solving a maze where reward is only at the exit
-
-* Generalization and Transfer in RL
-- Learn policies that generalize across variations
-- Transfer knowledge from one environment to another
-- Important for real-world deployment
-- Example: Training a robot in simulation and transferring to reality (sim2real)
-
-# ##############################################################################
-# Applications
-# ##############################################################################
-
-* Reinforcement Learning in Games (e.g., AlphaGo, Dota 2)
-- AlphaGo: first program to defeat a world champion in Go
-- AlphaZero: self-play learning from scratch
-- OpenAI Five: defeated professional players in Dota 2
-- Games provide complex, high-dimensional, adversarial environments
-- RL enables strategic planning and adaptation
-
-* Reinforcement Learning for Robotics
-- Control continuous, high-dimensional systems
-- Handle perception, planning, and control under uncertainty
-- Applications: locomotion, manipulation, aerial navigation
-- Example: Boston Dynamics robots learning dynamic maneuvers
-
-* Reinforcement Learning for Recommendation Systems
-- Model user interactions as sequential decision-making
-- Optimize long-term user engagement and satisfaction
-- Contextual bandits and full RL approaches
-- Example: Personalized news recommendations adapting over time
-
-* Reinforcement Learning for Finance
-- Portfolio optimization, algorithmic trading
-- Adapt to non-stationary, stochastic environments
-- Focus on risk-sensitive, reward-maximizing strategies
-- Example: RL agent dynamically reallocating investments based on market trends
-
-*/
