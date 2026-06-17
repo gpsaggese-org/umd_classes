@@ -57,6 +57,9 @@ utils.init_loggers(_LOG)
 # %% [markdown]
 # # Part 1: Building the Grid World Environment
 
+# %%
+# TODO(ai_gp): Create a few cells to show how GridWorld works in terms of API
+
 # %% [markdown]
 # ## Cell 1.1: The 4x3 Grid and Its States
 #
@@ -118,7 +121,9 @@ utils.cell1_3_transition_table()
 # - Each $(s, a)$ row sums to $1.0$: it is a probability distribution
 
 # %%
-# TODO(ai_gp): Print the entire transition model somehow
+# Display the entire transition model for every state-action pair.
+# TODO(ai_gp): Make the numbers in the grid smaller.
+utils.cell1_3_full_transition_model()
 
 # %% [markdown]
 # ## Cell 1.4: Rewards and Episode Returns
@@ -128,11 +133,8 @@ utils.cell1_3_transition_table()
 # - Show how a single trajectory accumulates $\sum_t \gamma^t R_t$
 
 # %%
-# TODO(ai_gp): Move seed widget first (and also in the HTML box)
 # Show per-cell rewards and the discounted return of a sample trajectory.
 utils.cell1_4_rewards_and_returns()
-
-# TODO(ai_gp): For all the plots with a tile, put the caption under the title and remove the Italic part (e.g., Rewards for a simple trajectory, Per-cell rewards with a sample part from START)
 
 # %% [markdown]
 # **Key observations**:
@@ -146,9 +148,34 @@ utils.cell1_4_rewards_and_returns()
 # %% [markdown]
 # # Part 2: Solving the MDP with Value Iteration
 
+# %% [markdown]
+# ## Cell 2.1a: The Bellman Equations for All States
+#
+# **Goal**:
+# - See the Bellman optimality equation instantiated for every grid cell
+# - Understand how $U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s') + \gamma U(s')]$
+#   works out with the actual numbers
+#
+# The equation for each state shows:
+# - The optimal action (the one that achieves the max)
+# - Each possible next state with its probability, reward, and discounted utility
+# - The resulting utility value, satisfying the Bellman equation
+
 # %%
-# TODO(ai_gp): Add a cell printing the system of bellman equations using U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
-# for all the cells
+# TODO(ai_gp): Allow to select one grid and print the Bellman optimality equation for that cell.
+utils.cell2_1_bellman_equations()
+
+# %% [markdown]
+# **Key observations**:
+# - The Bellman equation expresses each state's utility in terms of its possible
+#   next states, their rewards, and their discounted utilities
+# - The $\max$ operator selects the best action, making the system nonlinear
+# - Each term shows the exact probability, reward, and discounted utility product
+#   that sums to the state's utility
+# - Higher probabilities weight their corresponding next-state outcomes more
+#   heavily in the sum
+# - The optimal action is the one whose expected return is highest
+# - Repeating this update across all states until convergence is value iteration
 
 # %% [markdown]
 # ## Cell 2.2: Value Iteration Converging Over Sweeps
@@ -163,12 +190,12 @@ utils.cell2_2_value_iteration()
 
 # %% [markdown]
 # **Key observations**:
-# - Utility spreads backward from the terminals, one ring of cells per sweep
-# - Cells near the $+1$ terminal end high
-# - Cells near the $-1$ terminal end low
+# - Utility spreads backward from the terminals
+#     - Cells near the $+1$ terminal state have high value
+#     - Cells near the $-1$ terminal state have low value
 # - The change per sweep shrinks geometrically: convergence is guaranteed
-# - Early sweeps only affect cells adjacent to the terminals
-# - Later sweeps refine the interior until nothing changes
+#     - Early sweeps only affect cells adjacent to the terminals
+#     - Later sweeps refine the interior until nothing changes
 # - Higher gamma propagates value further but converges more slowly
 
 # %% [markdown]
@@ -183,12 +210,12 @@ utils.cell2_2_value_iteration()
 utils.cell2_1_bellman_one_state()
 
 # %% [markdown]
-# **Key observations**:
-# - The utility of a state is the value of its best action, not an average
+# **Key observations**
+# - The utility of a state is the value of its best action (not the average)
+#     - Different actions can have very different values at the same state
 # - Each action blends immediate reward with the discounted utility of next states
-# - The $\max$ operator makes the system nonlinear, so we iterate
-# - Different actions can have very different values at the same state
-# - The greedy action is the one whose expected next-state utility is highest
+#     - The $\max$ operator makes the system nonlinear, so we iterate
+#     - The greedy action is the one whose expected next-state utility is highest
 # - Repeating this max update everywhere is exactly value iteration
 
 # %% [markdown]
@@ -200,16 +227,18 @@ utils.cell2_1_bellman_one_state()
 
 # %%
 # Show the greedy policy extracted from converged utilities.
+# TODO(ai_gp): Add also gamma as widget
 utils.cell2_3_extract_policy()
 
 # %% [markdown]
 # **Key observations**:
 # - The policy is derived from utilities, not learned separately
-# - A large negative living reward makes the agent take the short risky path
-# - A near-zero living reward makes the agent take the long safe path
 # - The arrows point toward the action that maximizes expected return
-# - Near the $-1$ terminal the policy steers cautiously when steps are cheap
-# - Making each step expensive flips the policy toward the shorter risky route
+# - Observed behaviors
+#     - A large negative living reward makes the agent take the short risky path
+#     - A near-zero living reward makes the agent take the long safe path
+#     - Near the $-1$ terminal the policy steers cautiously when steps are cheap
+#     - Making each step expensive flips the policy toward the shorter risky route
 
 # %% [markdown]
 # # Part 3: Solving the MDP with Policy Iteration

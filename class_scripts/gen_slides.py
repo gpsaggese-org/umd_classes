@@ -116,18 +116,15 @@ def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 1) -> None:
     """
     _LOG.info("Daemon mode: watching '%s' for changes (poll every 1s)...", file_path)
     prev_hash = None
+    hdbg.dassert_file_exists(file_path)
     while True:
-        try:
-            cur_hash = _file_hash(file_path)
-        except FileNotFoundError:
-            _LOG.error("File '%s' not found. Retrying...", file_path)
-            time.sleep(1)
-            continue
-        if prev_hash is not None and cur_hash != prev_hash:
+        cur_hash = _file_hash(file_path)
+        if prev_hash is None or cur_hash != prev_hash:
             _LOG.info("File changed (hash: %s -> %s). Regenerating...", prev_hash, cur_hash)
             hsystem.system(cmd)
-        prev_hash = cur_hash
-        time.sleep(wait_in_sec)
+            prev_hash = cur_hash
+        else:
+            time.sleep(wait_in_sec)
 
 
 def _parse() -> argparse.ArgumentParser:

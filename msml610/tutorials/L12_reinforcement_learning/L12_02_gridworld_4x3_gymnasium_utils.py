@@ -28,41 +28,30 @@ import helpers.hnotebook as hnotebo
 import helpers.hprint as hprint
 import helpers.htutorial as htutori
 
+# TODO(ai_gp): Use import msml610.tutorials.L12_reinforcement_learning.L12_01_utils as ...
+from msml610.tutorials.L12_reinforcement_learning.L12_01_utils import (
+    _ACTIONS,
+    _ACTION_DELTA,
+    _ACTION_ID_TO_NAME,
+    _ARROW_DELTA,
+    _NAME_TO_ACTION_ID,
+    _PERPENDICULAR,
+    _comment_panel,
+    _draw_grid_base,
+    _draw_policy_arrows,
+    _draw_policy_arrows_heatmap,
+    _draw_value_heatmap,
+    _draw_visit_heatmap,
+    init_loggers as _shared_init_loggers,
+    to_grid as _shared_to_grid,
+)
+
 _LOG = logging.getLogger(__name__)
 
 
 def init_loggers(notebook_log: logging.Logger) -> None:
-    global _LOG
-    hnotebo.init_loggers(notebook_log, utils_log=_LOG)
+    _shared_init_loggers(notebook_log)
 
-
-# #############################################################################
-# Action names and helpers
-# #############################################################################
-
-_ACTION_NAMES = ["Up", "Down", "Left", "Right"]
-_ACTION_DELTA = {
-    "Up": (0, 1),
-    "Down": (0, -1),
-    "Left": (-1, 0),
-    "Right": (1, 0),
-}
-_PERPENDICULAR = {
-    "Up": ["Left", "Right"],
-    "Down": ["Left", "Right"],
-    "Left": ["Up", "Down"],
-    "Right": ["Up", "Down"],
-}
-_ARROW_DELTA = {
-    "Up": (0.0, 0.3),
-    "Down": (0.0, -0.3),
-    "Left": (-0.3, 0.0),
-    "Right": (0.3, 0.0),
-}
-
-# Map integer action -> name
-_ACTION_ID_TO_NAME = {0: "Up", 1: "Down", 2: "Left", 3: "Right"}
-_NAME_TO_ACTION_ID = {v: k for k, v in _ACTION_ID_TO_NAME.items()}
 
 
 # #############################################################################
@@ -74,10 +63,11 @@ class GridWorldEnv(gym.Env):
     """
     The canonical AIMA 4x3 grid world as a gymnasium environment.
 
-    States are integers 0-10 mapped to (col, row) tuples. Actions are
-    0=Up,1=Down,2=Left,3=Right. The intended action succeeds with probability
-    `p_intended`; the agent slips perpendicular with probability (1-p_int)/2
-    each. Wall hits and boundary violations leave the agent in place.
+    - States are integers 0-10 mapped to (col, row) tuples
+    - Actions are 0=Up,1=Down,2=Left,3=Right
+    - The intended action succeeds with probability `p_intended`; the agent
+      slips perpendicular with probability (1-p_int)/2 each
+    - Wall hits and boundary violations leave the agent in place.
 
     The transition model is exposed as `P[s][a] -> list of (prob, s', reward,
     terminated)` for use by planning algorithms.
@@ -235,71 +225,11 @@ class GridWorldEnv(gym.Env):
     ) -> None:
         """
         Draw the grid layout with coloured special cells.
+
+        Delegates to the shared :func:`_draw_grid_base` in ``L12_01_utils``.
         """
         _LOG.debug(hprint.to_str("highlight"))
-        _COLOR_START = "#cfe8ff"
-        _COLOR_GOAL = "#a8e6a3"
-        _COLOR_PIT = "#f4a6a6"
-        _COLOR_WALL = "#9e9e9e"
-        _COLOR_EMPTY = "#ffffff"
-
-        def _facecolor(cell):
-            if cell in self.wall_cells:
-                return _COLOR_WALL
-            if cell == (4, 3):
-                return _COLOR_GOAL
-            if cell == (4, 2):
-                return _COLOR_PIT
-            if cell == self.start_cell:
-                return _COLOR_START
-            return _COLOR_EMPTY
-
-        for col in range(1, self.n_cols + 1):
-            for row in range(1, self.n_rows + 1):
-                cell = (col, row)
-                rect = mpatches.Rectangle(
-                    (col - 0.5, row - 0.5),
-                    1.0,
-                    1.0,
-                    facecolor=_facecolor(cell),
-                    edgecolor="black",
-                    linewidth=1.5,
-                )
-                ax.add_patch(rect)
-                label = None
-                if cell == (4, 3):
-                    label = "+1"
-                elif cell == (4, 2):
-                    label = "-1"
-                elif cell == self.start_cell:
-                    label = "START"
-                elif cell in self.wall_cells:
-                    label = "WALL"
-                if label is not None:
-                    ax.text(
-                        col,
-                        row + 0.32,
-                        label,
-                        ha="center",
-                        va="center",
-                        fontsize=9,
-                        fontweight="bold",
-                    )
-        if highlight is not None:
-            rect = mpatches.Rectangle(
-                (highlight[0] - 0.5, highlight[1] - 0.5),
-                1.0,
-                1.0,
-                fill=False,
-                edgecolor="darkblue",
-                linewidth=3.5,
-            )
-            ax.add_patch(rect)
-        ax.set_xlim(0.4, self.n_cols + 0.6)
-        ax.set_ylim(0.4, self.n_rows + 0.6)
-        ax.set_xticks(range(1, self.n_cols + 1))
-        ax.set_yticks(range(1, self.n_rows + 1))
-        ax.set_aspect("equal")
+        _draw_grid_base(self, ax, highlight=highlight)
 
     def render(self) -> None:
         """
@@ -346,145 +276,15 @@ class GridWorldEnv(gym.Env):
         """
         Convert a dict over (col, row) cells into a 2D array for heatmap plots.
         """
-        grid = np.full((self.n_rows, self.n_cols), fill, dtype=float)
-        for (col, row), val in values.items():
-            grid[self.n_rows - row, col - 1] = val
-        return grid
+        return _shared_to_grid(values, self.n_rows, self.n_cols, fill=fill)
 
 
 # #############################################################################
-# Drawing helpers for plotting (value heatmap, policy arrows, comment panel)
+# Drawing helpers (imported from shared L12_01_utils)
 # #############################################################################
-
-
-# Wall color constant used in heatmap plotting.
-_COLOR_WALL = "#9e9e9e"
-
-
-def _draw_value_heatmap(
-    env: GridWorldEnv,
-    ax: matplotlib.axes.Axes,
-    u: Dict[Tuple[int, int], float],
-    *,
-    title: str,
-    cmap: str = "RdYlGn",
-) -> None:
-    """
-    Draw a utility heatmap with per-cell annotations.
-    """
-    _LOG.debug(hprint.to_str("title"))
-    grid = env.to_grid(u)
-    sns.heatmap(
-        grid,
-        ax=ax,
-        cmap=cmap,
-        center=0.0,
-        annot=True,
-        fmt=".2f",
-        cbar=False,
-        linewidths=1.0,
-        linecolor="black",
-        annot_kws={"fontsize": 10},
-        mask=np.isnan(grid),
-    )
-    for wall in env.wall_cells:
-        ax.add_patch(
-            mpatches.Rectangle(
-                (wall[0] - 1, env.n_rows - wall[1]),
-                1.0,
-                1.0,
-                facecolor=_COLOR_WALL,
-                edgecolor="black",
-            )
-        )
-    ax.set_title(title, fontsize=13, fontweight="bold")
-    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
-    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
-    ax.set_xlabel("col")
-    ax.set_ylabel("row")
-
-
-def _draw_policy_arrows_cells(
-    env: GridWorldEnv,
-    ax: matplotlib.axes.Axes,
-    policy: Dict[Tuple[int, int], str],
-    *,
-    color: str = "black",
-) -> None:
-    """
-    Draw policy arrows over the grid (cell-keyed policy dict).
-    """
-    for s, a in policy.items():
-        if s in env.wall_cells or s in env.terminal_cells:
-            continue
-        d_x, d_y = _ARROW_DELTA[a]
-        ax.annotate(
-            "",
-            xy=(s[0] + d_x, s[1] + d_y),
-            xytext=(s[0] - d_x, s[1] - d_y),
-            arrowprops=dict(arrowstyle="-|>", color=color, linewidth=2.5),
-        )
-
-
-def _draw_policy_arrows_heatmap(
-    env: GridWorldEnv,
-    ax: matplotlib.axes.Axes,
-    policy: Dict[Tuple[int, int], str],
-) -> None:
-    """
-    Overlay policy arrows on a heatmap plot (inverted-y coordinates).
-    """
-    for s, a in policy.items():
-        d_x, d_y = _ARROW_DELTA[a]
-        x = s[0] - 0.5
-        y = env.n_rows - s[1] + 0.5
-        ax.annotate(
-            "",
-            xy=(x + d_x, y - d_y),
-            xytext=(x - d_x, y + d_y),
-            arrowprops=dict(arrowstyle="-|>", color="black", linewidth=2.0),
-        )
-
-
-def _draw_visit_heatmap(
-    env: GridWorldEnv,
-    ax: matplotlib.axes.Axes,
-    visit_counts: Dict[int, int],
-    *,
-    title: str,
-) -> None:
-    """
-    Heatmap of per-state visit counts keyed by state id.
-    """
-    cell_counts = {
-        env.id_to_cell(s_id): float(c) for s_id, c in visit_counts.items()
-    }
-    grid = env.to_grid(cell_counts)
-    sns.heatmap(
-        grid,
-        ax=ax,
-        cmap="viridis",
-        annot=True,
-        fmt=".0f",
-        cbar=False,
-        linewidths=1.0,
-        linecolor="black",
-        mask=np.isnan(grid),
-    )
-    ax.set_title(title, fontsize=13, fontweight="bold")
-    ax.set_xticklabels([str(c) for c in range(1, env.n_cols + 1)])
-    ax.set_yticklabels([str(r) for r in range(env.n_rows, 0, -1)], rotation=0)
-    ax.set_xlabel("col")
-    ax.set_ylabel("row")
-
-
-def _comment_panel(ax: matplotlib.axes.Axes, text: str) -> None:
-    """
-    Render a wheat-coloured comment panel.
-    """
-    ax.axis("off")
-    ax.set_title("Comments", fontsize=14, fontweight="bold", pad=20)
-    htutori.add_fitted_text_box(ax, text, max_fontsize=12, min_fontsize=8)
+# See L12_01_utils.py for:
+#   _draw_grid_base, _draw_policy_arrows, _draw_value_heatmap,
+#   _draw_policy_arrows_heatmap, _draw_visit_heatmap, _comment_panel
 
 
 # #############################################################################
@@ -826,7 +626,7 @@ def cell1_2_stochastic_action(
         figsize = (14, 5)
     env = GridWorldEnv()
     action_dropdown = ipywidgets.Dropdown(
-        options=_ACTION_NAMES,
+        options=_ACTIONS,
         value="Up",
         description="action:",
         style={"description_width": "initial"},
@@ -969,7 +769,7 @@ def cell1_3_transition_table(
         style={"description_width": "initial"},
     )
     action_dropdown = ipywidgets.Dropdown(
-        options=_ACTION_NAMES,
+        options=_ACTIONS,
         value="Up",
         description="action:",
         style={"description_width": "initial"},
@@ -1274,7 +1074,7 @@ def cell2_1_bellman_one_state(
             u = snapshots[-1]
             q_vals = {
                 a: _q_value(env, s_id, _NAME_TO_ACTION_ID[a], u)
-                for a in _ACTION_NAMES
+                for a in _ACTIONS
             }
             best_action = max(q_vals, key=lambda a: q_vals[a])
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
@@ -1288,10 +1088,10 @@ def cell2_1_bellman_one_state(
             )
             colors = [
                 "seagreen" if a == best_action else "steelblue"
-                for a in _ACTION_NAMES
+                for a in _ACTIONS
             ]
             ax2.bar(
-                _ACTION_NAMES, [q_vals[a] for a in _ACTION_NAMES], color=colors
+                _ACTIONS, [q_vals[a] for a in _ACTIONS], color=colors
             )
             ax2.axhline(0.0, color="black", linewidth=0.8)
             ax2.set_ylabel("expected action value Q(s,a)")
@@ -1315,7 +1115,7 @@ def cell2_1_bellman_one_state(
                     cell,
                     env.gamma,
                     "\n".join(
-                        "  %-6s %.3f" % (a, q_vals[a]) for a in _ACTION_NAMES
+                        "  %-6s %.3f" % (a, q_vals[a]) for a in _ACTIONS
                     ),
                     best_action,
                     q_vals[best_action],
@@ -1583,7 +1383,7 @@ def _preset_policy(env: GridWorldEnv, name: str) -> Dict[Tuple[int, int], str]:
     if name == "random":
         rng = np.random.RandomState(0)
         return {
-            s: _ACTION_NAMES[rng.randint(4)]
+            s: _ACTIONS[rng.randint(4)]
             for s in env.all_cells
             if s not in env.terminal_cells
         }
@@ -1726,7 +1526,7 @@ def cell3_2_policy_iteration(
             after = policies[i]
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1)
-            _draw_policy_arrows_cells(env, ax1, before, color="gray")
+            _draw_policy_arrows(env, ax1, before, color="gray")
             ax1.set_title(
                 "Policy before round %d" % i, fontsize=13, fontweight="bold"
             )
@@ -1735,7 +1535,7 @@ def cell3_2_policy_iteration(
                 fontsize=9,
             )
             env._draw_base(ax2)
-            _draw_policy_arrows_cells(env, ax2, after, color="darkblue")
+            _draw_policy_arrows(env, ax2, after, color="darkblue")
             ax2.set_title(
                 "Policy after round %d" % i, fontsize=13, fontweight="bold"
             )
@@ -2220,7 +2020,7 @@ def cell4_4_q_learning_converges(
             returns = result["returns"]
             _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=figsize)
             env._draw_base(ax1)
-            _draw_policy_arrows_cells(env, ax1, learned, color="darkblue")
+            _draw_policy_arrows(env, ax1, learned, color="darkblue")
             ax1.set_title(
                 "Q-learning policy (gymnasium)", fontsize=13, fontweight="bold"
             )
