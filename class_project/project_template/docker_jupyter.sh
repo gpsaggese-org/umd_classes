@@ -17,6 +17,10 @@ set -e
 GIT_ROOT=$(git rev-parse --show-toplevel)
 source $GIT_ROOT/class_project/project_template/utils.sh
 
+# Import tmux utils and rename window.
+source $GIT_ROOT/helpers_root/dev_scripts_helpers/thin_client/thin_client_utils.sh
+OLD_TMUX_TITLE=$(tmux_rename_on_entry "jupy" || true)
+
 # Parse command-line options and set Jupyter configuration variables.
 parse_docker_jupyter_args "$@"
 
@@ -64,3 +68,6 @@ else
     DOCKER_CMD=$(get_docker_jupyter_command)
     run "$DOCKER_CMD $DOCKER_CMD_OPTS $FULL_IMAGE_NAME $CMD"
 fi
+
+# Restore the TMUX.
+tmux_restore_on_exit "$OLD_TMUX_TITLE"
