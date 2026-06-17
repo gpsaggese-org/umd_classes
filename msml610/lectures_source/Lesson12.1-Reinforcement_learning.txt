@@ -1131,39 +1131,40 @@ _3-bandit problem_
 
 * Model-Based Reinforcement Learning
 
-- **Definition**
-  - Learns an explicit model of the environment's dynamics and uses it to make a
-    decision about how to act
-  - **Transition model**: estimates $\Pr(s'|a,s)$, i.e., probability of reaching
-    state $s'$ from $s$ after action $a$
-  - **Reward model**: estimates $R(s,a)$, i.e., expected reward after taking
-    action $a$ in state $s$
-  - Intuition: learn to drive by studying the manual and physics
+- **Definition**: Model-based RL
+  - Learns explicit model of environment dynamics and uses it to make decisions
+    about how to act
+  - _Transition model_: estimates $\Pr(s'|a,s)$, probability of reaching state
+    $s'$ from $s$ after action $a$
+  - _Reward model_: estimates $R(s,a)$, expected reward after action $a$ in
+    state $s$
+
+- **Intuition**: learn to drive by studying manual and physics
 
 - **Learning Process**
-  - Collects experience tuples $(s, a, r, s')$
-  - Updates the model of the environment (transition and reward)
-  - Plans using the model to improve policy (e.g., via value iteration or policy
-    iteration)
-  - Dyna-Q algorithm: combines model-free updates with simulated planning steps
+  - Collect experience tuples $(s, a, s', r)$
+  - Update environment model (transition and reward)
+  - Plan using model to improve policy (e.g., value iteration, policy iteration)
+  - E.g., Dyna-Q algorithm combines model-free updates with simulated planning
 
 - **Pros**
-  - Efficient sample usage: fewer real-world interactions required
+  - Efficient sample usage: fewer real-world interactions
   - Enables planning by simulating outcomes
 
 - **Cons**
-  - Learning an accurate model is challenging
-  - Errors in the model can propagate and lead to poor decisions
+  - Learning accurate model is challenging
+  - Model errors can propagate, leading to poor decisions
 
 * Model-Free Reinforcement Learning
 
-- **Definition**
+- **Definition**: Model-Free RL
   - Learns directly from interactions with the environment without building a
     model of dynamics
-  - Agent observes $(s, a, r, s')$ and updates value or policy estimates based
+  - Agent observes $(s, a, s', r)$ and updates value or policy estimates based
     on observed outcomes
   - No attempt to predict $P(s'|a,s)$ or $R(s,a)$
-  - Intuition: learn to drive by trial and error
+
+- **Intuition**: learn to drive by trial and error
 
 - **Learning Process**
   - Value-based methods: Learn state or state-action values (e.g., $Q(s,a)$)
@@ -1171,11 +1172,11 @@ _3-bandit problem_
   - Policy-based methods: Learn the policy directly
     - E.g., REINFORCE, actor-critic
 
-- **Advantages**
+- **Pros**
   - Simpler to implement when environment model is unknown or too complex
   - Robust to model inaccuracies since no model is used
 
-- **Disadvantages**
+- **Cons**
   - Requires more environment interactions (sample inefficient)
   - Harder to incorporate planning or long-term reasoning
 
