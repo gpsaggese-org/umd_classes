@@ -110,27 +110,43 @@ def _file_hash(file_path: str) -> str:
     return hasher.hexdigest()
 
 
-def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 5) -> None:
+def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 1, debounce_sec: int = 2) -> None:
     """
     Watch a file for changes every 1s and re-run cmd when hash changes.
+    Debounces for specified seconds to ensure user is done typing.
+
+    // TODO(ai_gp): Improve docstring.
     """
     _LOG.info(
-        "Daemon mode: watching '%s' for changes (poll every 1s)...", file_path
+        "Daemon mode: watching '%s' for changes (poll every 1s, debounce %ds)...",
+        file_path,
+        debounce_sec,
     )
-    prev_hash = None
     hdbg.dassert_file_exists(file_path)
+    prev_hash = _file_hash(file_path)
+    stable_hash = None
+    time_since_last_change = 0
     while True:
+        time.sleep(wait_in_sec)
         cur_hash = _file_hash(file_path)
-        if prev_hash is None or cur_hash != prev_hash:
+        if cur_hash != prev_hash:
+            # File changed, start debounce.
             _LOG.info(
-                "File changed (hash: %s -> %s). Regenerating...",
+                "File changed (hash: %s -> %s). Debouncing...",
                 prev_hash,
                 cur_hash,
             )
-            hsystem.system(cmd)
+            stable_hash = cur_hash
+            time_since_last_change = 0
             prev_hash = cur_hash
-        else:
-            time.sleep(wait_in_sec)
+        elif stable_hash is not None:
+            # In debounce period, tracking time without changes.
+            time_since_last_change += 1
+            if time_since_last_change >= debounce_sec:
+                # Debounce complete, regenerate.
+                _LOG.info("Debounce complete. Regenerating...")
+                hsystem.system(cmd)
+                stable_hash = None
 
 
 def _parse() -> argparse.ArgumentParser:

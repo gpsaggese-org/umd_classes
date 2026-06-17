@@ -1547,73 +1547,338 @@ Sets up the core promise of causal RL: policies built on causal structure should
 ## Causal Reinforcement Learning
 
 * Causal Reinforcement Learning
-- Extends RL by incorporating causal inference — structural causal models,
-  do-calculus, counterfactual reasoning — into how agents learn and act
-- Goal: distinguish "this predicts reward" from "this causes reward," so policies
-  are built on mechanisms rather than coincidental patterns in the data
-- Addresses three recurring RL weaknesses: confounding, poor generalization under
-  distribution shift, and sample inefficiency
-- Bridges the gap left open by POMDPs (hidden state) and model-based RL
-  (predictive vs. causal models)
+
+::: columns
+:::: {.column width=55%}
+
+- **Definition**: Extends RL by incorporating causal inference (structural causal
+  models, do-calculus, counterfactual reasoning) into how agents learn and act
+
+- **Goal**: Distinguish _"this predicts reward"_ from _"this causes reward"_
+  - Policies are built on mechanisms rather than coincidental patterns in the data
+
+- **Problem**: Three recurring weaknesses in standard RL:
+  - Confounding
+  - Poor generalization under distribution shift
+  - Sample inefficiency
+
+- **Solution**: Fills the gap left open by POMDPs (hidden state) and
+  model-based RL (predictive vs causal models)
+
+::::
+:::: {.column width=40%}
+// TODO(gp): Improve this diagram
+
+```graphviz
+digraph CausalRL {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.6;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+    edge [fontname="Helvetica", fontsize=10];
+
+    agent [label="Agent", fillcolor="#F4A6A6"];
+    causal [label="Causal Model\nSCM", fillcolor="#A0D6D1"];
+    action [label="Action a", fillcolor="#FFD1A6"];
+    reward [label="Reward R", fillcolor="#B2E2B2"];
+    confounder [label="Confounder U", fillcolor="#C6A6F4", style="filled"];
+
+    agent -> action;
+    causal -> agent;
+    action -> reward;
+    confounder -> action [style=dashed];
+    confounder -> reward [style=dashed];
+    action -> causal [label="  learn"];
+}
+```
+
+::::
+:::
 
 * From Correlation to Causation in RL
-- Standard RL agents optimize over correlations between states, actions, and
-  rewards observed during interaction
-- Causal RL asks the agent to additionally represent why an action leads to an
-  outcome, not just that it tends to
-- Key formal tool: the do-operator, distinguishing "reward given we observed
-  action a" from "reward given we forced action a"
-- This distinction is invisible in standard MDP formalism but becomes critical
-  once data comes from sources other than the agent's own exploration
+
+- **Problem**: Standard RL agents optimize over correlations between states,
+  actions, and rewards observed during interaction
+  - No distinction between _observational_ and _interventional_ distributions
+  - Policies may exploit spurious correlations
+
+- **Formalization**: Two distributions with different semantics
+  // TODO(gp_ai): Use a 3 aligned
+  $$
+  \text{Observational}: \quad \EE[R | a] = \sum_r r \cdot \Pr(r | a) \quad \text{(what we see)}
+  $$
+  $$
+  \text{Interventional}: \quad \EE[R | do(a)] = \sum_r r \cdot \Pr(r | \text{forced } a) \quad \text{(what happens if we force } a)
+  $$
+  - When confounders exist: $\EE[R | a] \neq \EE[R | do(a)]$
+
+- **Solution**: Causal RL represents _why_ an action leads to an outcome
+  - Uses the do-operator $do(a)$ to distinguish intervention from observation
+  - Builds policies on causal mechanisms, not correlations
+
+- **Key Insight**: Standard MDP formalism assumes no confounding
+  - $\Pr(s'|a, s)$ treats all transitions equally, regardless of causality
+  - Critical when data comes from sources other than the agent's own exploration
 
 * Confounding in Sequential Decision Making
-- A confounder is a hidden variable influencing both the chosen action and the
-  resulting reward
-- In sequential settings, confounding can compound across time steps, distorting
-  credit assignment over an entire trajectory, not just one decision
-- Common source: logged or human-generated data, where the policy that generated
-  the data depended on factors the agent never observes
-- Unaddressed confounding can make an agent confidently learn a policy that
-  performs worse than random once deployed
+
+::: columns
+:::: {.column width=50%}
+
+- **Definition**: A confounder $U$ is a hidden variable influencing both the
+  chosen action and the resulting reward
+
+  - Confounding creates a backdoor path: $U \to A, U \to R$
+  - Breaks the inference: $\EE[R | A] \neq \EE[R | do(A)]$
+
+::::
+:::: {.column width=50%}
+
+```graphviz
+digraph Confounding {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.6;
+    ranksep=0.8;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+    edge [fontname="Helvetica", fontsize=10];
+
+    U [label="Hidden Confounder U", fillcolor="#C6A6F4", style="filled"];
+    A [label="Action a", fillcolor="#FFD1A6"];
+    R [label="Reward R", fillcolor="#B2E2B2"];
+
+    U -> A [label="  influences", color="red", penwidth=2];
+    U -> R [label="  influences", color="red", penwidth=2];
+    A -> R [label="  causal effect", color="black", penwidth=2];
+
+    { rank=same; A; R; }
+}
+```
+::::
+:::
+
+- **Complication in Sequential Settings**: Confounding compounds across time
+  steps, distorting credit assignment over an entire trajectory
+  - Confounding affects choice of $a_t$, which influences $s_{t+1}$, which
+    influences future rewards $r_{t+k}$
+  - Errors propagate through the trajectory
+
+- **Common Source**: Logged or human-generated data
+  - Original policy depended on unobserved factors
+  - E.g., human driver brakes based on fatigue the RL agent can't sense
+
+- **Risk**: Agent learns a policy that performs _worse than random_ once deployed
 
 * Structural Causal Models for MDPs
-- A structural causal model (SCM) augments the MDP with explicit causal
-  mechanisms: equations describing how each variable is generated from its causes
-- The causal graph makes confounders, mediators, and colliders explicit, rather
-  than leaving them implicit in a transition function
-- Lets the agent separate "what the data shows" from "what would happen under
-  intervention" — the basis for the do-calculus tools introduced above
+
+::: columns
+:::: {.column width=50%}
+
+- **Definition**: A structural causal model (SCM) augments the MDP with explicit
+  causal mechanisms
+  - Equations describing how each variable is generated from its causes
+  - Makes confounders, mediators, and colliders explicit
+::::
+:::: {.column width=45%}
+
+// TODO(ai_gp): Change colors so that different variables (noise, S_..., a_t,
+// R_t) have the same color
+```graphviz
+digraph SCM {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.7;
+    ranksep=0.8;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+    edge [fontname="Helvetica", fontsize=10];
+
+    Us [label="U_s\n(State Noise)", fillcolor="#C6A6F4"];
+    Ur [label="U_r\n(Reward Noise)", fillcolor="#C6A6F4"];
+    St [label="S_t\n(State)", fillcolor="#B2E2B2"];
+    At [label="a_t\n(Action)", fillcolor="#FFD1A6"];
+    St1 [label="S_{t+1}", fillcolor="#A0D6D1"];
+    Rt [label="R_t", fillcolor="#B2E2B2"];
+
+    Us -> St1;
+    St -> St1;
+    At -> St1;
+    Ur -> Rt;
+    St -> Rt;
+    At -> Rt;
+    St1 -> Rt;
+
+    { rank=same; St; At; }
+    { rank=same; St1; Rt; }
+}
+```
+::::
+:::
+
+- **Formally**: An SCM specifies
+// TODO(ai_gp): Use aligned with curly
+  $$S_{t+1} := f_s(A_t, S_t, U_s)$$
+  $$R_{t+1} := f_r(S_{t+1}, A_t, S_t, U_r)$$
+  where $U_s, U_r$ are exogenous noise (unobserved causes)
+
+- **Advantage over Standard MDPs**
+  - Standard: $\Pr(s'|a,s)$ hides causal structure
+  - SCM: explicit equations reveal _why_ $s'$ follows from $a$ and $s$
+
+- **Enables Intervention**: The do-operator allows prediction under intervention
+  $$\EE[R | do(a), s] = \EE[f_r(a, s, f_s(a, s, U_s), U_r)]$$
+  instead of just conditioning $\EE[R | a, s]$ which is observational
 
 * Counterfactual Reasoning and Credit Assignment
-- Counterfactual reasoning asks "what would have happened had a different action
-  been taken in this exact instance," not just on average across similar states
-- Enables learning from a single trajectory by reasoning about unrealized
-  alternatives, rather than requiring repeated environment interaction
-- Improves credit assignment: helps isolate which action in a trajectory actually
-  caused a later reward, versus which merely preceded it
 
-* Deconfounding Offline/Off-Policy Data
-- Offline RL trains on logged data from a different (often unknown) policy —
-  exactly the setting where confounding is most likely
-- Causal deconfounding methods identify which correlations in the logged data are
-  exploitable for the new policy and which are artifacts of how the data was
-  collected
-- Without deconfounding, offline RL agents can overfit to the quirks of the
-  logging policy rather than learning the true environment dynamics
+- **Intuition**: _"What would have happened had a different action been taken in
+  this exact instance?"_, not just on average across similar states
 
-* Causal Generalization and Transfer Across Environments
-- Causal RL provides formal criteria (e.g., transportability) for when a policy
-  learned under one set of conditions will hold under another
-- Transfer depends on which causal mechanisms are shared between environments
-  versus which have changed — not on surface similarity
-- Reframes "will this policy generalize?" as a question about graph structure,
-  answerable before deployment rather than discovered after failure
+- **Formalization**: Individual treatment effect (ITE)
+  $$\tau_i(a_t) = R(a_t) - R(a'_t) \quad \text{for the same trajectory instance } i$$
+  - Asks: _"on this exact trajectory, how much did action $a_t$ vs. $a'_t$ affect
+    the final reward?"_
+  - Notation: $R(a_t) | \text{do}(a_t=a)$ vs. $R(a'_t) | \text{do}(a_t=a')$
+
+- **Benefits**
+  - Enables learning from a single trajectory via unrealized alternatives
+  - Avoids requiring repeated environment interaction
+  - Improves credit assignment by isolating which action _actually caused_ a
+    later reward vs merely _preceded it_
+
+- **Key Idea**: Counterfactuals use the SCM to answer _"what if?"_ questions
+  - E.g., _"If the robot had turned left at step $t$, would it have reached the
+    goal?"_
+  - Requires knowing causal mechanisms, not just observational statistics
+
+* Deconfounding Offline / Off-Policy Data
+
+::: columns
+:::: {.column width=60%}
+
+- **Motivation**: Offline RL trains on logged data from a different (often
+  unknown) policy, exactly the setting where confounding is most likely!
+  - Logging policy $\pi_{\text{log}}$ depends on unobserved factors
+  - New policy $\pi_{\text{new}}$ may exploit spurious correlations and overfit
+    to logging policy quirks rather than learning true environment dynamics
+
+::::
+:::: {.column width=35%}
+
+```graphviz
+digraph OfflineRL {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.6;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
+    edge [fontname="Helvetica", fontsize=10];
+
+    U [label="Confounder U\n(logging policy depends on it)", fillcolor="#C6A6F4"];
+    S [label="State s", fillcolor="#B2E2B2"];
+    A [label="Action a\n(log policy chose)", fillcolor="#FFD1A6"];
+    R [label="Reward R", fillcolor="#B2E2B2"];
+
+    U -> A [color="red", penwidth=2];
+    U -> R [color="red", penwidth=2];
+    S -> A;
+    A -> R;
+    S -> R;
+
+    { rank=same; S; A; }
+}
+```
+
+// TODO(ai_gp): Mark red paths as "confounding backdoors"
+
+::::
+:::
+
+- **Formalization**: Separate exploitable correlation from artifact
+  - Data contains transitions $(s, a, r, s')$ generated by $\pi_{\text{log}}$
+  - Need to estimate $\EE[R | do(a), s]$ from observational data
+  - Confounding introduces bias:
+    $\Pr_{\pi_{\text{log}}}(a | s) \neq \Pr_{\pi_{\text{new}}}(a | s)$
+
+- **Solution**: Causal deconfounding methods use backdoor adjustment
+  $$
+  \EE[R | do(a), s] = \sum_u \Pr(u | s) \EE[R | a, s, u]
+  $$
+  - Condition on confounder $u$ to isolate causal effect
+
+
+* Causal Generalization Across Environments
+
+::: columns
+:::: {.column width=55%}
+
+- **Question**: Will a policy learned under environment $\mathcal{E}_1$ hold under
+  environment $\mathcal{E}_2$?
+
+- **Correlational Approach**: Surface similarity suggests transfer
+  - Often fails: features that predict well in $\mathcal{E}_1$ may not in
+    $\mathcal{E}_2$
+
+// TODO(gp_ai) Add standard colors and make it look nicer
+::::
+:::: {.column width=40%}
+
+```graphviz
+digraph Transfer {
+    rankdir=TB;
+    splines=true;
+    nodesep=0.7;
+    ranksep=0.6;
+
+    subgraph cluster_env1 {
+        label="Environment 1";
+        S1 [label="State", fillcolor="#B2E2B2"];
+        A1 [label="Action", fillcolor="#FFD1A6"];
+        R1 [label="Reward", fillcolor="#A6C8F4"];
+        S1 -> A1 -> R1;
+        S1 -> R1;
+    }
+
+    subgraph cluster_env2 {
+        label="Environment 2";
+        S2 [label="State", fillcolor="#B2E2B2"];
+        A2 [label="Action", fillcolor="#FFD1A6"];
+        R2 [label="Reward", fillcolor="#A6C8F4"];
+        S2 -> A2 -> R2;
+        S2 -> R2;
+    }
+}
+```
+::::
+:::
+
+- **Causal Approach**: Transfer depends on which mechanisms are shared
+  - Let $\mathcal{G}_1, \mathcal{G}_2$ be causal graphs for
+    $\mathcal{E}_1, \mathcal{E}_2$
+  - Policy $\pi^*$ transfers if causal mechanisms of action on reward are
+    _identical_:
+    $$f_r^{(1)}(a, s, s') = f_r^{(2)}(a, s, s')$$
+  - Even if distributions shift: $\Pr^{(1)}(s) \neq \Pr^{(2)}(s)$
+
+- **Formal Criterion**: _Transportability_ (Pearl & Bareinboim)
+  - Check graph structure, not surface similarity
+  - Answerable before deployment
 
 * Causal RL: Open Challenges
-- Causal discovery from interaction data is hard, especially under partial
-  observability or limited samples — most settings don't come with a known causal
-  graph
-- Integrating causal structure into deep RL architectures without losing
-  scalability remains an open design problem
-- Active research question: how much causal structure is necessary to gain
-  robustness benefits, versus how much can be approximated statistically
+
+\begingroup \small
+| **Challenge** | **What it is** | **Why it matters** |
+|----------|----------|----------|
+| **Causal Discovery** | Learn the graph $\mathcal{G}$ from interaction data | Most settings lack known causal structure; partial observability makes discovery hard |
+| **Identifiability** | Multiple SCMs can yield identical observational distribution | May recover wrong causal graph even with infinite data; intervene to disambiguate but interventions are expensive |
+| **Scalability** | Integrate causal structure into deep RL (e.g., deep networks for value functions) | Current approaches don't scale to high-dim state spaces; risk losing learned features |
+| **Sample Efficiency** | How much causal knowledge is necessary to gain robustness? | Open question: complete causal graph vs. partial causal knowledge vs. statistical approximation |
+| **Partial Observability** | Agent observes limited state; hidden variables affect both action and reward | Confounding hides in unobserved state; deconfounding becomes harder |
+\endgroup
+
+- **Key Open Question**: Can we learn enough causal structure online to improve
+  generalization and robustness, without the cost of full causal discovery?
