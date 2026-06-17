@@ -41,7 +41,7 @@ MSML610: Advanced Machine Learning
   - Where utility depends on a _sequence of decisions_
 
 - **What is involved**
-  - _Uncertainty_: Represent the lack of unpredictability in outcomes, modeled
+  - _Uncertainty_: Represent the unpredictability in outcomes, modeled
     using probabilities
     - E.g., weather forecasts often include uncertainty (70% chance of rain)
   - _Utility functions_: Measure the desirability of outcomes by quantifying
@@ -54,7 +54,7 @@ MSML610: Advanced Machine Learning
   - _Search and planning_: Find a sequence of actions to achieve a goal
     - E.g., a navigation system planning the shortest route to a destination
 
-* Markov Decision Process (MDPs)
+* Markov Decision Processes (MDPs)
 ::: columns
 :::: {.column width=70%}
 - **MDPs** are a model for sequential decision making
@@ -65,12 +65,12 @@ MSML610: Advanced Machine Learning
    - Next state is not completely determined by current state and agent's action
 3. **Action**: agent chooses $a \in Actions(s)$ in each $s$
 4. **Transition model**
-   - $\Pr(s' | s, a)$ is probability of reaching state $s'$, if action $a$ is
+   - $\Pr(s'|a, s)$ is probability of reaching state $s'$, if action $a$ is
      done in state $s$
    - Markov assumption: probability depends on $(s, a)$, not on history
 5. **Reward function**
    - For every transition $s \to s'$ via $a$ the agent receives a reward
-     $R(s, a, s')$
+     $R(s',a,s)$
    - Total reward depends on sequence of states and actions
 6. **Goal states**
 
@@ -230,11 +230,11 @@ digraph MDP {
 - **Definition**: A policy is measured by the _expected utility_ of the
   environment history
   $$
-  U(\pi(s)) = \EE[f(s_0, \pi(s), R(s, a, s'))]
+  U(\pi(s)) = \EE[f(s_0, \pi(s), R(s',a,s))]
   $$
   - The _optimal policy_ $\pi^*(s)$ yields the highest expected utility
     $$
-    \pi^*(s) = \argmax_{\pi} \; \EE[f(s_0, \pi(s), R(s, a, s'))]
+    \pi^*(s) = \argmax_{\pi} \; \EE[f(s_0, \pi(s), R(s',a,s))]
     $$
   - The optimal policy is function of the reward function
 
@@ -256,10 +256,10 @@ digraph MDP {
   - Choose action `Up`, `Down`, `Left`, `Right` at each step
   - Aim to reach goal states marked `+1` or `-1`
 - **Transition Model**
-  - Result of each action in each state $\Pr(s' | s, a)$
+  - Result of each action in each state $\Pr(s'|a, s)$
 - **Utility Function**
   - The reward for each state transition $s \to s'$ via action $a$ is
-    $R(s, a, s')$
+    $R(s',a,s)$
     - -0.04 for all transitions (to encourage reaching terminal states swiftly)
     - +1 or -1 upon reaching terminal states
   - Total utility is the sum of all received rewards
@@ -342,11 +342,11 @@ digraph MDP {
 - **Definition**: the expected _utility of executing policy_ $\pi$ from state
   $s$:
   $$
-  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi(S_i), S_{i+1}) ]
+  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^i R(S_i, \pi(S_i), S_{i+1}) ]
   $$
   where the expectation $\EE[\cdot]$ is:
   - Over state sequences determined by $s$, $\pi(s)$
-  - The environment's transition model $\Pr(s' | s, a)$
+  - The environment's transition model $\Pr(s'|a, s)$
 
 - **Definition**: the _optimal policy_ is the one with maximal utility
   $$
@@ -383,7 +383,6 @@ digraph MDP {
   $$
   \EE[U(a)] = EU(a) = \sum_{s'} U(s') \Pr(s'|a)
   $$
-  - Note that it is a recursive definition
 
 - A rational agent chooses the action:
   $$a^*
@@ -401,10 +400,10 @@ digraph MDP {
     - Rotation (0–3 positions)
     - Horizontal movement (left, right)
     - Hard drop (instant placement)
-- **Transition Model $T(s, a, s')$**
+- **Transition Model $T(s',a,s)$**
   - Deterministic or stochastic based on next piece modeling
   - Piece generation often random
-- **Reward $R(s, a, s')$**
+- **Reward $R(s',a,s)$**
   - +1 for each cleared line
   - Negative reward for new block addition or height increase
   - Game over may have large negative reward
@@ -421,7 +420,7 @@ digraph MDP {
 - **Remark**: The utility of a state $s$ is not absolute but it depends on the
   policy
   $$
-  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi(S_i), S_{i+1}) ]
+  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^i R(S_i, \pi(S_i), S_{i+1}) ]
   $$
   - To remove the dependency from the policy, use the optimal policy
 
@@ -458,26 +457,26 @@ digraph MDP {
 - **Recall**: The utility of a state $s$, $U(s)$, is the expected sum of
   discounted rewards under an optimal policy $\pi^*$ from $s$
   $$
-  U(s) = U^{\pi(s)^*} = \EE[ \sum_{i=0}^\infty \gamma^t R(S_i, \pi^*(S_i), S_{i+1}) ]
+  U(s) = U^{\pi^*(s)} = \EE[ \sum_{i=0}^\infty \gamma^i R(S_i, \pi^*(S_i), S_{i+1}) ]
   $$
 
 - **Theorem** (Bellman Equation): the _utility of a state_ $s$ is the expected
   reward for the next transition plus the discounted utility of the next state,
   assuming the agent chooses the optimal action:
   $$
-  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
   $$
   where:
   - $A(s)$: set of actions available in state $s$
-  - $\Pr(s' | s, a)$: probability of transitioning to state $s'$ from state $s$
+  - $\Pr(s'|a, s)$: probability of transitioning to state $s'$ from state $s$
     by action $a$
-  - $R(s, a, s')$: reward after transitioning from state $s$ to $s'$ using $a$
+  - $R(s',a,s)$: reward after transitioning from state $s$ to $s'$ using $a$
   - $\gamma$: discount factor, where $0 \leq \gamma < 1$
 
 * Bellman Equation: Computing Utility of States
 - Bellman equation for $s$ is:
   $$
-  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
   $$
 - Each state has its own equation based on its possible actions and
   transitions
@@ -494,7 +493,7 @@ digraph MDP {
 * Bellman Equation: Intuition
 - **Recall**: Bellman equation for $s$ is:
   $$
-  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
   $$
 
 - **Remarks**:
@@ -529,7 +528,7 @@ digraph MDP {
 
 - **Theorem**: Bellman equation for Q-functions
   $$
-  Q(s, a) = \sum_{s'} \Pr(s'|s, a)[R(s, a, s') + \gamma \max_{a'} Q(s', a')]
+  Q(s, a) = \sum_{s'} \Pr(s'|s, a)[R(s',a,s) + \gamma \max_{a'} Q(s', a')]
   $$
   - Note the switch of $\max_{a'}$ with respect to Bellman equation for utility
     of state
@@ -549,7 +548,7 @@ digraph MDP {
 - **Theorem**: Potential-based reward shaping
   - Function $\Phi(s)$ of state $s$ doesn't change optimal policy:
     $$
-    R'(s, a, s') = R(s, a, s') + \gamma \Phi(s') - \Phi(s)
+    R'(s',a,s) = R(s',a,s) + \gamma \Phi(s') - \Phi(s)
     $$
   - Ensures consistent value difference between states
 
@@ -562,7 +561,7 @@ digraph MDP {
     - E.g., agent might prioritize short-term rewards over long-term gains
 
 * Representing MDP
-- The _transition model_ $\Pr(s' | s, a)$ and the _reward function_ $R(s, a, a')$
+- The _transition model_ $\Pr(s'|a, s)$ and the _reward function_ $R(s',a,s)$
   can be represented with:
   - Three-dimensional tables of size $|S|^2 \cdot |A|$
   - Table with size $O(|S| \cdot |A|)$ for sparse MDPs (i.e., each $s$
@@ -634,7 +633,7 @@ digraph DynamicDecisionDiagram {
 
 - _State variables_ (ovals)
   - Represent the underlying state of the environment at time $t$
-  - E.g., a robot's location, inventory levels, or market conditions:w
+  - E.g., a robot's location, inventory levels, or market conditions
 - _Decision variables_ (rectangles)
   - Represent the actions or choices available to the agent at each time step
 - _Utility variables_ (diamonds)
@@ -724,11 +723,11 @@ digraph TetrisDDN {
         Action_t [label=<Action<SUB>t</SUB>>, shape=box, style=filled, fillcolor=lightblue];
         Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, style=filled, fillcolor=lightgreen];
 
-        Board_t -> Actionₜ;
-        Piece_t -> Actionₜ;
-        Board_t -> Rewardₜ;
-        Piece_t -> Rewardₜ;
-        Action_t -> Rewardₜ;
+        Board_t -> Action_t;
+        Piece_t -> Action_t;
+        Board_t -> Reward_t;
+        Piece_t -> Reward_t;
+        Action_t -> Reward_t;
     }
 
     // Time t+1
@@ -796,7 +795,7 @@ digraph TetrisDDN {
 - **Step 1**: Compute optimal utility for each state
   - There are $n$ possible states $\to$ $n$ Bellman equations
     $$
-    U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s' | s, a)[R(s, a, s') + \gamma U(s')]
+    U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
     $$
   - Each equation relates the utility of a state $s$ to the utilities of its
     successors $s'$
@@ -875,7 +874,7 @@ digraph TetrisDDN {
     - Compute entire optimal policy $\pi^*(s) \; \forall s$ before action
   - _Cons_:
     - Assumes full knowledge of transition probabilities $\Pr(s'|a, s)$ and
-      reward function $R(s, a, s')$
+      reward function $R(s',a,s)$
     - Not feasible for large MDPs (e.g., Tetris with $10^{62}$ states)
 
 - **Online methods** compute actions at runtime, using only reachable parts of
@@ -959,8 +958,8 @@ _3-bandit problem_
 | _State Information_ | Agent knows the exact current state | Agent receives incomplete or noisy observations |
 | _Decision Basis_ | Current state $s$ | Belief state $b$ |
 | _State Representation_ | State $s$ | Hidden state $s$ and observation $e$ |
-| _Transition Model_ | $P(s' | s, a)$ | $P(s' | s, a)$ |
-| _Observation Model_ | Not required | $P(e | s', a)$ |
+| _Transition Model_ | $\Pr(s'|a, s)$ | $\Pr(s'|a, s)$ |
+| _Observation Model_ | Not required | $\Pr(e|s', a)$ |
 | _Policy_ | $\pi(s)$ | $\pi(b)$ |
 | _Memory Requirement_ | Only current state needed (Markov property) | Must maintain a belief state $b(s)$ |
 | _Uncertainty Source_ | Uncertainty only in state transitions | Uncertainty in both transitions and observations |
@@ -1142,7 +1141,7 @@ _3-bandit problem_
 - **Intuition**: learn to drive by studying manual and physics
 
 - **Learning Process**
-  - Collect experience tuples $(s, a, s', r)$
+  - Collect experience tuples $(s',a,s, r)$
   - Update environment model (transition and reward)
   - Plan using model to improve policy (e.g., value iteration, policy iteration)
   - E.g., Dyna-Q algorithm combines model-free updates with simulated planning
@@ -1160,7 +1159,7 @@ _3-bandit problem_
 - **Definition**: Model-Free RL
   - Learns directly from interactions with the environment without building a
     model of dynamics
-  - Agent observes $(s, a, s', r)$ and updates value or policy estimates based
+  - Agent observes $(s',a,s, r)$ and updates value or policy estimates based
     on observed outcomes
   - No attempt to predict $P(s'|a,s)$ or $R(s,a)$
 
@@ -1262,7 +1261,7 @@ _3-bandit problem_
   - Needs to learn $U^\pi(s)$, the expected discounted reward if policy $\pi$ is
     executed starting in state $s$
   - Doesn't know the transition model $\Pr(s'|s, a)$ and the reward function
-    $R(s, a, s')$
+    $R(s',a,s)$
 
 - The agent executes a set of trials using the policy $\pi$:
   - Starts from an initial state and experiences state transitions until
@@ -1377,34 +1376,32 @@ _3-bandit problem_
 
 * Active Reinforcement Learning
 
-- Passive RL assumes agent has a fixed policy and passively receives reward
-  signals
-  - In many real-world cases, agent needs to decide what actions to take and
-    rewards must be actively sought or queried
+- **Definition**: Active RL learns an optimal policy through interaction with the
+  environment
+  - Agent chooses actions to balance exploration (gather info) and exploitation
+    (maximize reward)
+  - Does not follow a fixed policy — improves policy over time
+  - Exploration strategies: $\epsilon$-greedy, softmax, UCB
 
-- Active RL includes cost-sensitive decisions about when to query for rewards
-  - Useful when querying is expensive or limited (e.g., human feedback)
-- Key problem: balancing cost of querying against benefit of accurate reward
-- Formal model:
-  - Agent observes state $s$ and selects action $a$
-  - Decides whether to query for reward $r$
-  - Cost $c$ incurred if query is made
-- Objective:
-  - Maximize cumulative reward minus query costs
-  - $\sum (r_t - c_t)$ where $c_t = c$ if query made, 0 otherwise
-- Optimal policy needs to learn both:
-  - What actions to take
-  - When it is worth querying for reward
-- Applications:
-  - Robotics with costly sensors
-  - Interactive systems with human-in-the-loop feedback
+- **Active RL vs Passive RL**
+  - Passive: follows a fixed policy $\pi$, estimates $U^\pi(s)$
+  - Active: chooses actions to improve policy $\pi \to \pi^*$
+
+- **Cost-Sensitive Reward Querying** (extension of active RL)
+  - Useful when querying for rewards is expensive or limited (e.g., human
+    feedback)
+  - Agent decides whether to query for reward $r$ at cost $c$
+  - Objective: maximize cumulative reward minus query costs
+  - Applications: robotics with costly sensors, human-in-the-loop systems
 
 * Greedy Agent in Reinforcement Learning
 
 - A greedy agent always selects the action with the highest estimated value
   based on current knowledge or Q-values
   $$
-  a = \argmax_a Q(s, a)$$ for state $s$
+  a = \argmax_a Q(s, a)
+  $$
+  - For state $s$
   - No exploration: purely exploits known information
 - An agent must make a tradeoff between
   - Exploitation of current best action to maximize its short-term reward
@@ -1494,7 +1491,7 @@ _3-bandit problem_
 ## Generalization in Reinforcement Learning
 ## #############################################################################
 
-* Generalization in Reinforcement Learning (1/2)
+* Generalization in Reinforcement Learning
 - Tabular representations become infeasible for large state spaces
   - Real-world problems often have millions or more distinct states
   - Example: Backgammon has ~$10^{20}$ states, but successful agents visit only
@@ -1554,7 +1551,7 @@ _3-bandit problem_
   - Useful in high-dimensional or continuous action spaces
 
 - Even if learning a function replaces the Q-function, it is not an
-  approximation of Q-function (i.e., Q_learning)
+  approximation of the Q-function (as in Q-learning)
   - Seek a function that gives good performance and might differ from the
     optimal Q-function $Q^*$
 
