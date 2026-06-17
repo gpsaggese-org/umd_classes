@@ -31,6 +31,10 @@ MSML610: Advanced Machine Learning
 
 // # 17, Making complex decisions (p. 575)
 
+## #############################################################################
+## MDPs
+## #############################################################################
+
 * Sequential Decision Problems
 - **Goal**: Agents need to make decisions in the real world:
   - In a _stochastic environment_
@@ -85,9 +89,9 @@ digraph MDP {
     st [label=<State s<SUB>t</SUB>>];
     action [label=<Choose<BR/>Action a<SUB>t</SUB>>, shape=plaintext];
     agent [label="Agent"];
-    transition [label=<Transition Model<BR/>P(s'|s,a)>];
+    transition [label=<Transition Model<BR/>P(s'|a,s)>];
     next [label=<Next State<BR/>s<SUB>t+1</SUB>>];
-    reward [label=<Reward<BR/>R(s,a,s')>];
+    reward [label=<Reward<BR/>R(s', a, s)>];
     goal [label="Goal?", shape=diamond];
 
     s0 -> st;
@@ -752,7 +756,7 @@ digraph TetrisDDN {
   - $Reward_t$: derived from $Board_{t+1}$ (e.g., lines cleared, holes created)
 
 ## #############################################################################
-## Algorithms for MDPs
+## Solving MDPs
 ## #############################################################################
 
 * MDP Solution: Overview
@@ -805,7 +809,7 @@ digraph TetrisDDN {
   - Start with arbitrary values for utilities $U(s)$
   - Perform Bellman updates:
     $$
-    U_{i+1}(s) \leftarrow \max_a \sum_{s'} \Pr(s'|s,a)[R(s,a,s') + \gamma U_i(s')]
+    U_{i+1}(s) \leftarrow \max_a \sum_{s'} \Pr(s'|a,s)[R(s',a,s) + \gamma U_i(s')]
     $$
   - Calculate the right-hand side and plug it into the left-hand side
   - Repeat until convergence: $|| U_{i+1} - U_i || < \epsilon$
@@ -819,7 +823,7 @@ digraph TetrisDDN {
   - Derive optimal policy by choosing action $a$ that maximizes expected utility
     for each state $s$:
     $$
-    \pi^*(s) = \argmax_a \sum_{s'} \Pr(s'|s,a) [R(s,a,s') + \gamma U(s')]
+    \pi^*(s) = \argmax_a \sum_{s'} \Pr(s'|a,s) [R(s',a,s) + \gamma U(s')]
     $$
 
 * Policy Iteration
@@ -839,7 +843,7 @@ digraph TetrisDDN {
 - **Step 2**: Policy Improvement
   - For each state, find:
     $$
-    \pi'(s) = \argmax_a \sum_{s'} \Pr(s'|s,a)[R(s,a,s') + \gamma U^\pi(s')]
+    \pi'(s) = \argmax_a \sum_{s'} \Pr(s'|a,s)[R(s',a,s) + \gamma U^\pi(s')]
     $$
 
 - **Step 3**: Convergence
@@ -920,6 +924,11 @@ _3-bandit problem_
   - Clinical trials (testing treatments)
   - A/B testing in web development
 
+## #############################################################################
+## POMDPs
+## #############################################################################
+
+
 * Partially Observable MDPs (POMDPs)
 
 - **Motivation**
@@ -930,8 +939,8 @@ _3-bandit problem_
 - **Definition**: _POMDP_ defined by $(S, A, P, R, E)$
     - States: $S$
     - Actions: $A$
-    - Transition model: $P = \Pr(s'|s,a)$
-    - Reward function: $R(s,a,s')$
+    - Transition model: $P = \Pr(s'|a,s)$
+    - Reward function: $R(s',a,s)$
     - Sensor model: $E = \Pr(e|s)$: probability of observing evidence $e$ in state
       $s$
 
@@ -982,66 +991,57 @@ _3-bandit problem_
 
 - **Localization Rule**
   - Infer robot's position by comparing sensor output with map expectations
-  - Achieve localization with high error rate by aggregating observations
+  - Achieve localization (even with high error rates) by aggregating observations
+  // TODO(gp): Add figure showing this.
   - E.g., if robot believes it's in `(3, 2)`, moves left, sensor reads
     `NESW = 1100`, likely in `(3, 1)` (not guaranteed due to noise)
 
-* Belief State Transitions and Value of Information
+* Belief State Transitions
 
 - **Belief Update**
-  - After action $a$ and observation $e$, belief state $b$ is updated:
+  - After action $a$ and observation $e$, update belief state $b$:
     $$
-    b'(s') = \alpha \Pr(e|s') \sum_s \Pr(s'|s,a) b(s)
+    b'(s') = \alpha \Pr(e|s') \sum_s \Pr(s'|a,s) b(s)
     $$
     where $\alpha$ normalizes the distribution
-  - Same equation as the filtering task to calculate the new belief state
-    $b'(s)$ from the previous belief state $b(s)$ and the new evidence $e$
+  - Same as filtering task to compute new belief state $b'(s)$
 
-- **Belief space**
-  - Everything (policy, transition and reward models) is now function of belief
-    state
-  - It can't be function of the actual state the agent is in, since the agent
-    doesn't know the actual state
-  - Intermediate belief states have lower utility due to uncertainty
+- **Belief Space**
+  - Policy, transition, and reward models:
+    - Depend on belief state $b$
+    - Can't depend on actual state $s$, as agent doesn't know it
   - Information-gathering actions can improve future decision quality
 
 - **Transition and Reward Models in Belief Space**
-  - Transition: $\Pr(b'|b,a)$ defined using:
-    $$
-    \Pr(b'|b,a) = \sum_e \Pr(b'|e,a,b) \Pr(e|a,b)
-    $$
-  - Expected reward in belief state:
-    $$
-    \rho(b,a) = \sum_s b(s) \sum_{s'} \Pr(s'|s,a) R(s,a,s')
-    $$
+  - Transition: 
+    $\Pr(b'|b,a) = \sum_e \Pr(b'|e,a,b) \Pr(e|a,b)$
+  - Reward:
+    $\rho(b,a) = \sum_s b(s) \sum_{s'} \Pr(s'|a,s) R(s',a,s)$
 
-- **Decision cycle for POMDP**
+- **Decision Cycle for POMDP**
   - Repeat
-    1. Given the current belief state $b$, execute action $a = \pi(b)$
+    1. Given belief state $b$, execute action $a = \pi(b)$
     2. Observe percept $e$
     3. Update belief state $b'$
 
 * Solving POMDPs
-- **Observable MDP over Belief Space**
-  - A POMDP on an actual state space can be converted into an MDP on the belief
-    space
+- Convert POMDP on state space to MDP on belief space
 
 - **Value Iteration for POMDPs**
-  - Maintains a set of conditional plans $p$ with associated utility vectors
-    $\alpha_p$
-  - Expected utility of a plan in belief state $b$ is $b \cdot \alpha_p$
-  - Optimal utility is piecewise linear and convex over belief space
+  - Maintain conditional plans $p$ with utility vectors $\alpha_p$
+  - Expected utility in belief state $b$: $b \cdot \alpha_p$
+  - Optimal utility is piecewise linear, convex over belief space
 
 - **Recursive Plan Evaluation**
   $$
-  \alpha_p(s) = \sum_{s'} \Pr(s'|s,a) \left[ R(s,a,s') + \gamma \sum_e \Pr(e|s') \alpha_{p.e}(s') \right]
+  \alpha_p(s) = \sum_{s'} \Pr(s'|a,s) [ R(s',a,s) + \gamma \sum_e \Pr(e|s') \alpha_{p.e}(s') ]
   $$
 
 - **Challenges**
-  - Number of plans grows exponentially with depth
-  - Even small problems generate many plans (e.g., $2^{255}$ plans for a
-    two-state POMDP at depth 8)
-  - Approximation Techniques
+  - Plans grow exponentially with depth
+  - Small problems generate many plans (e.g., $2^{255}$ plans for two-state
+    POMDP at depth 8)
+  - Use approximation techniques
 
 # ##############################################################################
 # Reinforcement Learning
@@ -1050,100 +1050,91 @@ _3-bandit problem_
 // # 22, Reinforcement learning (p. 802)
 
 * Problem with Supervised Learning
-- **In supervised learning**
-  - An agent learns by observing examples of input / outputs
-  - It's hard to find labeled data for all situations
+- _In supervised learning_ an agent learns by observing input/output examples
 
-- E.g., apply supervised learning to play chess
-  - Take a board position as input $\vx$ and return a move $m$
-  - Build a DB of grandmaster games with positions and winner (assuming moves by
-    winner are good)
-  - Problems
-    - In a new game, positions differ from DB, as we have few examples compared
-      to possible positions ($10^{40}$)
-    - The agent doesn't understand the game's goal (i.e., checkmate) or valid
-      moves of each piece
+- **Problem**
+  - Hard to find labeled data for all situations
+
+- **Example**: apply supervised learning to play chess
+  - Take board position as input $\vx$ and return move $m$
+  - Build training set of grandmaster games with positions and winner (assuming
+    all winner's moves are good)
+  - _Problems_
+    - New game positions differ from DB (all possible positions are $10^{40}$)
+    - Agent doesn't understand game's goal (checkmate) or valid moves of each
+      piece
 
 - _"The AI revolution will not be supervised"_ (Yann LeCun)
 
 * Reinforcement Learning
 
-- **Reinforcement Learning (RL) Paradigm**
-  - Agent learns from direct interaction with the environment
-  - Periodically receives reward signals indicating success or failure
-    ("reinforcements")
-  - Learns a policy to maximize cumulative future rewards
-  - Goal: maximize expected sum of rewards
+- **Definition**: Reinforcement Learning (RL) Paradigm
+  - Agent learns from interaction with environment
+  - _Receives_ reward signals indicating success or failure ("reinforcements")
+  - _Learns_ policy $\pi$
+  - _Goal_: maximize expected sum of future rewards
 
 - **RL vs supervised learning**
-  - Providing a reward signal to the agent is easier than providing inputs /
-    outputs
-  - RL is active since the agent explores the environment and learn from actions
-    and consequences
+  - Easier to provide reward signal than inputs/outputs
+  - RL is active: agent explores environment, learns from actions and
+    consequences
 
 - **RL vs MDP**
-  - The goal of both is to maximize the expected sum of rewards
-  - In RL the agent:
-    - Doesn't know the transition model or the reward function (doesn't know the
-      rules)
-    - Needs to act to learn more
+  - Both aim to maximize expected sum of rewards
+  - In RL, the agent:
+    - Doesn't know transition model or reward function (rules)
+    - Acts to learn more
 
 * Sparse vs Immediate Rewards
-- Sparse rewards = in the vast majority of states the agent is not given
-  informative reward
+- **Definition**: _sparse rewards_: most states lack informative reward
   - E.g., win/lose at the end of a chess game
-  - The agent must explore many states to find the few that provide rewards
-  - Often requires more sophisticated exploration strategies
+  - Explore many states to find rewarding ones
+  - Requires sophisticated exploration strategies
 
-- Immediate / intermediate rewards help guide learning
+- **Remark**: Immediate/intermediate rewards guide learning
   - E.g.,
-    - In tennis, you can get rewards for every point scored
-    - Learning to crawl, any forward motion is a reward
-    - In a video game, collecting coins or power-ups can serve as intermediate
-      rewards
-  - Provides continuous feedback to the agent
+    - Tennis: rewards for points scored
+    - Crawling: forward motion is a reward
+    - Video game: coins or power-ups as intermediate rewards
+  - Provides continuous feedback to agent
 
 * Applications of Reinforcement Learning
 
 - **Games and Simulations**
-  - RL has achieved superhuman performance in games like Go, Chess, and Dota2
-  - Algorithms learn strategies through self-play and reward-driven improvement
+  - Learn strategies through self-play and rewards
+  - E.g., achieve superhuman performance in Go, Chess, Dota2
 
 - **Robotics**
-  - RL enables learning of complex control policies for walking, grasping, and
-    manipulation
-  - Applications include robotic arms, quadrupeds, and autonomous drones
+  - Learn complex control for walking, grasping, manipulation
+  - E.g., robotic arms, quadrupeds, drones
 
 - **Autonomous Vehicles**
-  - RL used for decision-making and control in self-driving cars
-  - Handles tasks like lane merging, navigation, and obstacle avoidance
+  - Decision-making and control in self-driving cars
+  - E.g., lane merging, navigation, obstacle avoidance
 
 - **Recommendation Systems**
-  - Adaptive recommendation based on user interactions (e.g., Netflix, YouTube)
-    to optimize long-term engagement and satisfaction
+  - Adaptive recommendations based on user interactions to optimize long-term
+    engagement and satisfaction
 
 - **Finance and Trading**
-  - Portfolio management and trading strategies learned through market
-    simulations
-  - Agents aim to maximize returns under uncertainty and risk constraints
+  - Learn portfolio management and trading strategies
+  - Maximize returns under uncertainty and risk
 
 - **Healthcare**
-  - Personalized treatment policies learned from patient data
-  - Applications in dynamic dosing, diagnostics, and medical decision support
+  - Learn personalized treatment policies from patient data
 
 - **Industrial Control**
-  - Optimization of manufacturing processes, energy grids, and logistics
+  - Optimize manufacturing, energy grids, logistics
 
 - **Natural Language Processing**
-  - Dialogue systems and chatbots that learn optimal conversational strategies
-  - Use RL to improve response quality and user satisfaction over time
+  - Dialogue systems and chatbots learn conversational strategies
 
 * Model-Based Reinforcement Learning
 
 - **Definition**
   - Learns an explicit model of the environment's dynamics and uses it to make a
     decision about how to act
-  - **Transition model**: estimates $\Pr(s'|s,a)$, i.e., probability of reaching
+  - **Transition model**: estimates $\Pr(s'|a,s)$, i.e., probability of reaching
     state $s'$ from $s$ after action $a$
   - **Reward model**: estimates $R(s,a)$, i.e., expected reward after taking
     action $a$ in state $s$
@@ -1156,15 +1147,13 @@ _3-bandit problem_
     iteration)
   - Dyna-Q algorithm: combines model-free updates with simulated planning steps
 
-- **Advantages**
+- **Pros**
   - Efficient sample usage: fewer real-world interactions required
   - Enables planning by simulating outcomes
 
-- **Disadvantages**
+- **Cons**
   - Learning an accurate model is challenging
   - Errors in the model can propagate and lead to poor decisions
-
-- **Examples**
 
 * Model-Free Reinforcement Learning
 
@@ -1173,7 +1162,7 @@ _3-bandit problem_
     model of dynamics
   - Agent observes $(s, a, r, s')$ and updates value or policy estimates based
     on observed outcomes
-  - No attempt to predict $P(s'|s,a)$ or $R(s,a)$
+  - No attempt to predict $P(s'|a,s)$ or $R(s,a)$
   - Intuition: learn to drive by trial and error
 
 - **Learning Process**
@@ -1193,7 +1182,7 @@ _3-bandit problem_
 * Model-Based vs Model-Free Reinforcement Learning
 
 - **Core Distinction**
-  - Model-Based RL: Learns a model of environment dynamics $P(s'|s,a)$ and
+  - Model-Based RL: Learns a model of environment dynamics $P(s'|a,s)$ and
     $R(s,a)$ and uses it for planning
   - Model-Free RL: Learns value functions $Q(s,a)$ or policies $\pi(a|s)$
     directly from experience
@@ -1312,7 +1301,7 @@ _3-bandit problem_
     estimated model of the environment
 
 - **Key Components**
-  - Model learning: Estimate transition probabilities $\Pr(s'|s,a)$ and reward
+  - Model learning: Estimate transition probabilities $\Pr(s'|a,s)$ and reward
     function $R(s,a)$ from experience
   - Utility update: Solve the Bellman equations for the fixed policy:
     $$
@@ -1322,7 +1311,7 @@ _3-bandit problem_
 - **Learning Process**
   - Collect transitions $(s, \pi(s), r, s')$ during execution
   - Update model estimates:
-    - $\Pr(s'|s,a) \approx$ empirical frequency
+    - $\Pr(s'|a,s) \approx$ empirical frequency
     - $R(s,a) \approx$ average observed reward
   - Use dynamic programming to compute $U^\pi(s)$
 
@@ -1365,7 +1354,7 @@ _3-bandit problem_
 
 - **Characteristics**
   - Online and incremental: updates occur after each step
-  - Does not require knowledge of model $P(s'|s,a)$ or $R(s,a)$
+  - Does not require knowledge of model $P(s'|a,s)$ or $R(s,a)$
 
 - **Advantages**
   - More efficient and lower variance than Monte Carlo methods
@@ -1416,7 +1405,6 @@ _3-bandit problem_
   $$
   a = \argmax_a Q(s, a)$$ for state $s$
   - No exploration: purely exploits known information
-  $$
 - An agent must make a tradeoff between
   - Exploitation of current best action to maximize its short-term reward
   - Exploration of unknown states to gain information that can lead to a change
@@ -1919,7 +1907,7 @@ _3-bandit problem_
 - Example: Dyna-Q algorithm for accelerated learning
 
 * Model Learning and Planning Algorithms
-- Learn transition function $P(s'|s,a)$ and reward function $R(s,a)$
+- Learn transition function $P(s'|a,s)$ and reward function $R(s,a)$
 - Use supervised learning for model prediction
 - Planning via methods like value iteration or trajectory optimization
 - Challenges: model bias, compounding errors over long horizons

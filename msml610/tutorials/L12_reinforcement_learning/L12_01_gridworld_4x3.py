@@ -78,13 +78,11 @@ utils.init_loggers(_LOG)
 
 # %%
 # Read the code for `GridWorld`.
-#??utils.GridWorld.__init__
+# ??utils.GridWorld.__init__
 
 # %%
 # Create the default grid world and inspect its basic properties.
 env = utils.GridWorld()
-print("GridWorld API demo")
-print("==================")
 print("env.states (%d):" % len(env.states), env.states)
 print("env.actions:", env.actions)
 print("env.terminals:", env.terminals)
@@ -106,7 +104,9 @@ a = "Up"
 dist = env.transitions(s, a)
 print("Pr(s' | s=%s, a=%s):" % (s, a))
 for s2, prob in sorted(dist.items(), key=lambda x: -x[1]):
-    print("  s' = %s  p = %.2f  arrival reward = %.2f" % (s2, prob, env.reward(s2)))
+    print(
+        "  s' = %s  p = %.2f  arrival reward = %.2f" % (s2, prob, env.reward(s2))
+    )
 print()
 # Sample from the model.
 rng = np.random.RandomState(seed=42)

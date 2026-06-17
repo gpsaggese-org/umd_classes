@@ -200,7 +200,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     _LOG.info("Running command: %s", cmd)
     if args.daemon:
         # Skim auto-reloads PDF on change, so skip notes_to_pdf open action.
-        cmd + = "--skip_action=open"
+        cmd += " --skip_action=open"
         _daemon_watch(input_file, cmd)
     else:
         # Execute the command once.
