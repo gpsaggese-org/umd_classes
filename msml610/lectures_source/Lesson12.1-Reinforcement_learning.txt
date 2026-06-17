@@ -76,19 +76,35 @@ MSML610: Advanced Machine Learning
 ```graphviz[width=90%]
 digraph MDP {
     rankdir=TB;
+    splines=spline;
+    nodesep=0.7;
+    ranksep=0.6;
+    bgcolor="white";
 
-    node [shape=box];
+    node [
+        fontname="Helvetica",
+        fontsize=12,
+        style="filled",
+        penwidth=1.4
+    ];
 
-    env [label="Environment"];
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.2
+    ];
 
-    s0 [label=<s<SUB>0</SUB>>, shape=ellipse];
-    st [label=<State s<SUB>t</SUB>>];
-    action [label=<Choose<BR/>Action a<SUB>t</SUB>>, shape=plaintext];
-    agent [label="Agent"];
-    transition [label=<Transition Model<BR/>P(s'|a,s)>];
-    next [label=<Next State<BR/>s<SUB>t+1</SUB>>];
-    reward [label=<Reward<BR/>R(s', a, s)>];
-    goal [label="Goal?", shape=diamond];
+    env [label="Environment", shape=box, fillcolor="#B3E5FC", color="#0277BD"];
+
+    s0 [label=<s<SUB>0</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+    st [label=<State s<SUB>t</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+    action [label=<Choose<BR/>Action a<SUB>t</SUB>>, shape=plaintext, fillcolor="white"];
+    agent [label="Agent", shape=box, style="rounded,filled", fillcolor="#F4A6A6", color="#B23A48"];
+    transition [label=<Transition Model<BR/>P(s'|a,s)>, shape=box, style="rounded,filled", fillcolor="#FFECB3", color="#F57F17"];
+    next [label=<Next State<BR/>s<SUB>t+1</SUB>>, shape=ellipse, fillcolor="#A0D6D1", color="#00897B"];
+    reward [label=<Reward<BR/>R(s', a, s)>, shape=diamond, fillcolor="#B2E2B2", color="#558B2F"];
+    goal [label="Goal?", shape=diamond, fillcolor="#9CC4F2", color="#1565C0"];
 
     s0 -> st;
     env -> st;
@@ -102,7 +118,7 @@ digraph MDP {
     next -> reward;
     reward -> goal;
 
-    next -> st;
+    next -> st [constraint=false];
 
     { rank=min; s0; }
     { rank=same; env; st; }
@@ -131,45 +147,50 @@ digraph MDP {
 ```graphviz
 digraph MDP {
     rankdir=LR;
-    splines=true;
-    nodesep=0.4;
-    ranksep=0.4;
+    splines=spline;
+    nodesep=0.7;
+    ranksep=0.8;
+    bgcolor="white";
+    compound=true;
 
     graph [
         fontname="Helvetica",
-        fontsize=20,
+        pad="0.25"
     ];
 
     node [
         shape=circle,
-        width=0.55,
-        height=0.55,
+        width=0.65,
+        height=0.65,
         fixedsize=true,
         fontname="Helvetica",
-        fontsize=18,
+        fontsize=14,
         style="filled",
-        fillcolor="white",
-        color="black",
+        fillcolor="#A9DDB0",
+        color="#4F9A5C",
         penwidth=1.8
     ];
 
     edge [
         fontname="Helvetica",
-        fontsize=16,
-        color="black",
-        penwidth=1.4
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
     ];
 
     // States
-    s0 [label=<s<SUB>0</SUB>>];
-    s1 [label=<s<SUB>1</SUB>>];
-    s2 [label=<s<SUB>2</SUB>>];
+    s0 [label=<s<SUB>0</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
+    s1 [label=<s<SUB>1</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
+    s2 [label=<s<SUB>2</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
 
     goal [
-        label="sg",
+        label=<s<SUB>g</SUB>>,
         shape=doublecircle,
-        width=0.7,
-        height=0.7,
+        width=0.85,
+        height=0.85,
+        fillcolor="#9CC4F2",
+        color="#1565C0",
         penwidth=2.2
     ];
 
@@ -177,34 +198,42 @@ digraph MDP {
     start [
         shape=point,
         width=0.12,
-        label=""
+        label="",
+        fillcolor="black"
     ];
 
-    start -> s0 [arrowhead=normal];
+    start -> s0 [arrowhead=normal, penwidth=1.8];
 
     // Transitions
     s0 -> s1 [
         label="P = 0.8, R = +5",
         taillabel=<a<SUB>1</SUB>>,
-        labeldistance=2.2
+        labeldistance=2.2,
+        fontcolor="#4A4A4A"
     ];
 
     s0 -> s2 [
-        label=<P = 0.2, R = -1>,
+        label="P = 0.2, R = -1",
         taillabel=<a<SUB>1</SUB>>,
-        labeldistance=2.2
+        labeldistance=2.2,
+        fontcolor="#4A4A4A"
     ];
 
     s1 -> s2 [
         label="P = 1.0, R = 0",
         taillabel=<a<SUB>2</SUB>>,
-        labeldistance=2.2
+        labeldistance=2.2,
+        fontcolor="#4A4A4A"
     ];
 
     s2 -> goal [
         label="P = 1.0, R = +10",
         taillabel=<a<SUB>3</SUB>>,
-        labeldistance=2.2
+        labeldistance=2.2,
+        fontcolor="#4A4A4A",
+        style="bold",
+        color="#2E7D32",
+        penwidth=2.0
     ];
 }
 ```
@@ -386,7 +415,7 @@ digraph MDP {
 * MDP: Tetris Example
 
 ::: columns
-:::: {.column width=85%}
+:::: {.column width=70%}
 - **States $S$**
   - Current board configuration and falling piece
 - **Actions $A$**
@@ -404,7 +433,7 @@ digraph MDP {
 - **Discount Factor $\gamma$**
   - Close to 1 for valuing long-term survival and line-clearing
 ::::
-:::: {.column width=15%}
+:::: {.column width=25%}
 ![](msml610/lectures_source/figures/L12.Tetris.png)
 ::::
 :::
@@ -590,17 +619,53 @@ digraph MDP {
 ::::
 :::: {.column width=55%}
 
+// TODO(ai_gp): Make the subgraph aligned to occupy less space and make State and
+// Observe node different colors
 ```graphviz
 digraph DynamicDecisionDiagram {
     rankdir=LR;
+    splines=spline;
+    nodesep=0.8;
+    ranksep=0.8;
+    bgcolor="white";
+    compound=true;
+
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
+
+    node [
+        fontname="Helvetica",
+        fontsize=12,
+        style="filled",
+        penwidth=1.4
+    ];
+
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
 
     subgraph cluster_t {
         label="Time t";
-        State_t    [shape=ellipse, label=<State<SUB>t</SUB>>];
-        Observe_t  [shape=ellipse, label=<Observe<SUB>t</SUB>>];
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
 
-        Decision_t [shape=box, label=<Decision<SUB>t</SUB>>];
-        Utility_t  [shape=diamond, label=<Utility<SUB>t</SUB>>];
+        State_t    [shape=ellipse, label=<State<SUB>t</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Observe_t  [shape=ellipse, label=<Observe<SUB>t</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
+
+        Decision_t [shape=box, style="rounded,filled", label=<Decision<SUB>t</SUB>>, fillcolor="#FFC98A", color="#D98E2B"];
+        Utility_t  [shape=diamond, label=<Utility<SUB>t</SUB>>, fillcolor="#9CC4F2", color="#1565C0"];
 
         State_t -> Observe_t;
         Observe_t -> Decision_t;
@@ -610,16 +675,24 @@ digraph DynamicDecisionDiagram {
 
     subgraph cluster_t1 {
         label="Time t+1";
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
 
-        State_t1 [shape=ellipse, label=<State<SUB>t+1</SUB>>];
-        Observe_t1 [shape=ellipse, label=<Observe<SUB>t+1</SUB>>];
+        State_t1 [shape=ellipse, label=<State<SUB>t+1</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Observe_t1 [shape=ellipse, label=<Observe<SUB>t+1</SUB>>, fillcolor="#A9DDB0", color="#4F9A5C"];
 
         State_t1 -> Observe_t1;
     }
 
     // Temporal dynamics
-    State_t -> State_t1;
-    Decision_t -> State_t1;
+    State_t -> State_t1 [penwidth=1.8];
+    Decision_t -> State_t1 [penwidth=1.8];
 }
 ```
 ::::
@@ -652,13 +725,47 @@ digraph DynamicDecisionDiagram {
 ```graphviz
 digraph GridWorldDDN {
     rankdir=LR;
+    splines=spline;
+    nodesep=0.7;
+    ranksep=0.8;
+    bgcolor="white";
+    compound=true;
+
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
+
+    node [
+        fontname="Helvetica",
+        fontsize=12,
+        style="filled",
+        penwidth=1.4
+    ];
+
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
 
     // Time t
     subgraph cluster_t {
         label="Time t";
-        Pos_t [label=<Pos<SUB>t</SUB>>, shape=ellipse];
-        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style=filled, fillcolor=lightblue];
-        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, style=filled, fillcolor=lightgreen];
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
+
+        Pos_t [label=<Pos<SUB>t</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style="rounded,filled", fillcolor="#FFC98A", color="#D98E2B"];
+        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, fillcolor="#9CC4F2", color="#1565C0"];
 
         Pos_t -> Action_t;
         Pos_t -> Reward_t;
@@ -668,12 +775,21 @@ digraph GridWorldDDN {
     // Time t+1
     subgraph cluster_t1 {
         label="Time t+1";
-        Pos_t1 [label=<Pos<SUB>t+1</SUB>>, shape=ellipse];
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
+
+        Pos_t1 [label=<Pos<SUB>t+1</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
     }
 
     // Temporal connections
-    Action_t -> Pos_t1;
-    Pos_t -> Pos_t1;
+    Action_t -> Pos_t1 [penwidth=1.8];
+    Pos_t -> Pos_t1 [penwidth=1.8];
     Pos_t1 -> Reward_t;
 }
 ```
@@ -708,14 +824,49 @@ digraph GridWorldDDN {
 ```graphviz
 digraph TetrisDDN {
     rankdir=LR;
+    splines=spline;
+    nodesep=0.7;
+    ranksep=0.8;
+    bgcolor="white";
+    compound=true;
+    newrank=true;
+
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
+
+    node [
+        fontname="Helvetica",
+        fontsize=12,
+        style="filled",
+        penwidth=1.4
+    ];
+
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
 
     // Time t
     subgraph cluster_t {
         label="Time t";
-        Board_t [label=<Board<SUB>t</SUB>>, shape=ellipse];
-        Piece_t [label=<Piece<SUB>t</SUB>>, shape=ellipse];
-        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style=filled, fillcolor=lightblue];
-        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, style=filled, fillcolor=lightgreen];
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
+
+        Board_t [label=<Board<SUB>t</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Piece_t [label=<Piece<SUB>t</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Action_t [label=<Action<SUB>t</SUB>>, shape=box, style="rounded,filled", fillcolor="#FFC98A", color="#D98E2B"];
+        Reward_t [label=<Reward<SUB>t</SUB>>, shape=diamond, fillcolor="#9CC4F2", color="#1565C0"];
 
         Board_t -> Action_t;
         Piece_t -> Action_t;
@@ -727,15 +878,24 @@ digraph TetrisDDN {
     // Time t+1
     subgraph cluster_t1 {
         label="Time t+1";
-        Board_t1 [label=<Board<SUB>t+1</SUB>>, shape=ellipse];
-        Piece_t1 [label=<Piece<SUB>t+1</SUB>>, shape=ellipse];
-        NextPiece_t1 [label=<NextPiece<SUB>t+1</SUB>>, shape=ellipse];
+        fontname="Helvetica-Bold";
+        fontsize=13;
+        fontcolor="#1A1A2E";
+        style="rounded,filled";
+        fillcolor="#F7F9FC";
+        color="#B8C4D9";
+        penwidth=1.4;
+        margin=16;
+
+        Board_t1 [label=<Board<SUB>t+1</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+        Piece_t1 [label=<Piece<SUB>t+1</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
+        NextPiece_t1 [label=<NextPiece<SUB>t+1</SUB>>, shape=ellipse, fillcolor="#A9DDB0", color="#4F9A5C"];
     }
 
     // Temporal connections
-    Action_t -> Board_t1;
-    Board_t -> Board_t1;
-    Piece_t -> Piece_t1;
+    Action_t -> Board_t1 [penwidth=1.8];
+    Board_t -> Board_t1 [penwidth=1.8];
+    Piece_t -> Piece_t1 [penwidth=1.8];
     Board_t1 -> Reward_t;
 }
 ```
@@ -848,7 +1008,7 @@ digraph TetrisDDN {
 - Policy Iteration: _"Start with a policy, evaluate it, improve it, and repeat
   until it can't get any better"_
 
-\begingroup small
+\begingroup \scriptsize
 | **Value Iteration** | **Policy Iteration** |
 |----------------|------------------|
 | Updates values directly | Updates policies directly |
@@ -1201,10 +1361,18 @@ _3-bandit problem_
 
 * When Correlation Misleads the Model
 
-A learned transition/reward model captures statistical regularities in the data — not necessarily the mechanisms producing them
-If two variables are correlated only because of a shared hidden cause, the model can "predict" well in training yet recommend the wrong action
-Example: an agent learns that a state feature predicts reward, but a confounder (not an action) is the true driver — the policy exploits a correlation that won't hold once the agent intervenes
-Raises the question: what would it mean for a model to capture causal structure rather than just predictive structure?
+- **Problem**: A learned transition/reward model captures statistical regularities
+  in the data — not necessarily the mechanisms producing them
+
+- **Key Insight**: If two variables are correlated only because of a shared hidden
+  cause, the model can _"predict"_ well in training yet recommend the wrong action
+
+- **Example**: An agent learns that a state feature predicts reward, but a
+  confounder (not an action) is the true driver
+  - The policy exploits a correlation that won't hold once the agent intervenes
+
+- **Question**: What would it mean for a model to capture causal structure rather
+  than just predictive structure?
 
 ## Active vs Passive RL
 
@@ -1505,10 +1673,20 @@ Raises the question: what would it mean for a model to capture causal structure 
 
 * Why Correlational Policies Fail to Transfer
 
-A policy tuned to correlations in one environment can break when the environment shifts, even if the reward-relevant mechanism hasn't changed
-Spurious features (artifacts of how training data was generated) get baked into the policy alongside real causal drivers
-Generalization failure is often not "the task changed" — it's "the correlation the agent relied on no longer holds"
-Sets up the core promise of causal RL: policies built on causal structure should transfer wherever the underlying mechanism is preserved
+- **Problem**: A policy tuned to correlations in one environment can break when
+  the environment shifts, even if the reward-relevant mechanism hasn't changed
+
+- **Root Cause**: Spurious features (artifacts of how training data was generated)
+  get baked into the policy alongside real causal drivers
+  - Model learns spurious correlations during training
+  - Agent treats them as reliable causal drivers
+
+- **Manifestation**: Generalization failure is often not _"the task changed"_ — it's
+  _"the correlation the agent relied on no longer holds"_
+
+- **Key Insight**: Policies built on causal structure should transfer wherever the
+  underlying mechanism is preserved
+  - Sets up the core promise of causal RL
 
 ## Policy Search
 
@@ -1572,25 +1750,46 @@ Sets up the core promise of causal RL: policies built on causal structure should
 ```graphviz
 digraph CausalRL {
     rankdir=TB;
-    splines=true;
+    splines=spline;
     nodesep=0.8;
-    ranksep=0.6;
+    ranksep=0.7;
+    bgcolor="white";
+    compound=true;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
-    edge [fontname="Helvetica", fontsize=10];
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
 
-    agent [label="Agent", fillcolor="#F4A6A6"];
-    causal [label="Causal Model\nSCM", fillcolor="#A0D6D1"];
-    action [label="Action a", fillcolor="#FFD1A6"];
-    reward [label="Reward R", fillcolor="#B2E2B2"];
-    confounder [label="Confounder U", fillcolor="#C6A6F4", style="filled"];
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontname="Helvetica",
+        fontsize=12,
+        penwidth=1.4,
+        margin="0.18,0.12"
+    ];
 
-    agent -> action;
-    causal -> agent;
-    action -> reward;
-    confounder -> action [style=dashed];
-    confounder -> reward [style=dashed];
-    action -> causal [label="  learn"];
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
+
+    agent [label="Agent", fillcolor="#F4A6A6", color="#B23A48"];
+    causal [label="Causal Model\nSCM", fillcolor="#A0D6D1", color="#00897B"];
+    action [label="Action a", fillcolor="#FFC98A", color="#D98E2B"];
+    reward [label="Reward R", fillcolor="#B2E2B2", color="#558B2F"];
+    confounder [label="Confounder U", fillcolor="#E8D9F7", color="#9B7DB1"];
+
+    agent -> action [penwidth=1.8];
+    causal -> agent [penwidth=1.8];
+    action -> reward [penwidth=1.8];
+    confounder -> action [style=dashed, color="#8C8C8C", penwidth=1.6];
+    confounder -> reward [style=dashed, color="#8C8C8C", penwidth=1.6];
+    action -> causal [label="  learn", penwidth=1.8];
 }
 ```
 
@@ -1639,20 +1838,40 @@ digraph CausalRL {
 ```graphviz
 digraph Confounding {
     rankdir=TB;
-    splines=true;
-    nodesep=0.6;
+    splines=spline;
+    nodesep=0.8;
     ranksep=0.8;
+    bgcolor="white";
+    compound=true;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
-    edge [fontname="Helvetica", fontsize=10];
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
 
-    U [label="Hidden Confounder U", fillcolor="#C6A6F4", style="filled"];
-    A [label="Action a", fillcolor="#FFD1A6"];
-    R [label="Reward R", fillcolor="#B2E2B2"];
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontname="Helvetica",
+        fontsize=12,
+        penwidth=1.4,
+        margin="0.18,0.12"
+    ];
 
-    U -> A [label="  influences", color="red", penwidth=2];
-    U -> R [label="  influences", color="red", penwidth=2];
-    A -> R [label="  causal effect", color="black", penwidth=2];
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
+
+    U [label="Hidden Confounder U", fillcolor="#E8D9F7", color="#9B7DB1"];
+    A [label="Action a", fillcolor="#FFC98A", color="#D98E2B"];
+    R [label="Reward R", fillcolor="#B2E2B2", color="#558B2F"];
+
+    U -> A [label="  influences", color="#D64545", penwidth=2.2, fontcolor="#D64545"];
+    U -> R [label="  influences", color="#D64545", penwidth=2.2, fontcolor="#D64545"];
+    A -> R [label="  causal effect", color="#2E7D32", penwidth=2.0, fontcolor="#2E7D32"];
 
     { rank=same; A; R; }
 }
@@ -1689,27 +1908,48 @@ digraph Confounding {
 ```graphviz
 digraph SCM {
     rankdir=TB;
-    splines=true;
-    nodesep=0.7;
+    splines=spline;
+    nodesep=0.8;
     ranksep=0.8;
+    bgcolor="white";
+    compound=true;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
-    edge [fontname="Helvetica", fontsize=10];
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
 
-    Us [label="U_s\n(State Noise)", fillcolor="#C6A6F4"];
-    Ur [label="U_r\n(Reward Noise)", fillcolor="#C6A6F4"];
-    St [label="S_t\n(State)", fillcolor="#B2E2B2"];
-    At [label="a_t\n(Action)", fillcolor="#FFD1A6"];
-    St1 [label="S_{t+1}", fillcolor="#A0D6D1"];
-    Rt [label="R_t", fillcolor="#B2E2B2"];
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontname="Helvetica",
+        fontsize=12,
+        penwidth=1.4,
+        margin="0.18,0.12"
+    ];
 
-    Us -> St1;
-    St -> St1;
-    At -> St1;
-    Ur -> Rt;
-    St -> Rt;
-    At -> Rt;
-    St1 -> Rt;
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        color="#4A4A4A",
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
+
+    Us [label="U_s\n(State Noise)", fillcolor="#E8D9F7", color="#9B7DB1"];
+    Ur [label="U_r\n(Reward Noise)", fillcolor="#E8D9F7", color="#9B7DB1"];
+    St [label="S_t\n(State)", fillcolor="#A9DDB0", color="#4F9A5C"];
+    At [label="a_t\n(Action)", fillcolor="#FFC98A", color="#D98E2B"];
+    St1 [label="S_{t+1}", fillcolor="#A0D6D1", color="#00897B"];
+    Rt [label="R_t", fillcolor="#9CC4F2", color="#1565C0"];
+
+    Us -> St1 [penwidth=1.6];
+    St -> St1 [penwidth=1.6];
+    At -> St1 [penwidth=1.6];
+    Ur -> Rt [penwidth=1.6];
+    St -> Rt [penwidth=1.6];
+    At -> Rt [penwidth=1.6];
+    St1 -> Rt [penwidth=1.6];
 
     { rank=same; St; At; }
     { rank=same; St1; Rt; }
@@ -1771,23 +2011,43 @@ digraph SCM {
 ```graphviz
 digraph OfflineRL {
     rankdir=TB;
-    splines=true;
-    nodesep=0.6;
-    ranksep=0.7;
+    splines=spline;
+    nodesep=0.8;
+    ranksep=0.8;
+    bgcolor="white";
+    compound=true;
 
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.4];
-    edge [fontname="Helvetica", fontsize=10];
+    graph [
+        fontname="Helvetica",
+        pad="0.25"
+    ];
 
-    U [label="Confounder U\n(logging policy depends on it)", fillcolor="#C6A6F4"];
-    S [label="State s", fillcolor="#B2E2B2"];
-    A [label="Action a\n(log policy chose)", fillcolor="#FFD1A6"];
-    R [label="Reward R", fillcolor="#B2E2B2"];
+    node [
+        shape=box,
+        style="rounded,filled",
+        fontname="Helvetica",
+        fontsize=12,
+        penwidth=1.4,
+        margin="0.18,0.12"
+    ];
 
-    U -> A [color="red", penwidth=2];
-    U -> R [color="red", penwidth=2];
-    S -> A;
-    A -> R;
-    S -> R;
+    edge [
+        fontname="Helvetica",
+        fontsize=11,
+        penwidth=1.4,
+        arrowsize=0.8
+    ];
+
+    U [label="Confounder U\n(logging policy depends on it)", fillcolor="#E8D9F7", color="#9B7DB1"];
+    S [label="State s", fillcolor="#A9DDB0", color="#4F9A5C"];
+    A [label="Action a\n(log policy chose)", fillcolor="#FFC98A", color="#D98E2B"];
+    R [label="Reward R", fillcolor="#B2E2B2", color="#558B2F"];
+
+    U -> A [color="#D64545", penwidth=2.2, fontcolor="#D64545"];
+    U -> R [color="#D64545", penwidth=2.2, fontcolor="#D64545"];
+    S -> A [color="#4A4A4A"];
+    A -> R [color="#4A4A4A"];
+    S -> R [color="#4A4A4A"];
 
     { rank=same; S; A; }
 }
@@ -1831,8 +2091,8 @@ digraph OfflineRL {
 digraph Transfer {
     rankdir=TB;
     splines=spline;
-    nodesep=0.6;
-    ranksep=0.5;
+    nodesep=0.8;
+    ranksep=0.8;
     bgcolor="white";
     compound=true;
     newrank=true;
@@ -1847,7 +2107,7 @@ digraph Transfer {
         fontsize=13,
         style="filled",
         shape="box",
-        penwidth=1.3,
+        penwidth=1.4,
         margin="0.18,0.12"
     ];
 
@@ -1862,7 +2122,7 @@ digraph Transfer {
     subgraph cluster_env1 {
         label="Environment 1";
         fontname="Helvetica-Bold";
-        fontsize=14;
+        fontsize=13;
         fontcolor="#1A1A2E";
         style="rounded,filled";
         fillcolor="#F7F9FC";
@@ -1872,17 +2132,17 @@ digraph Transfer {
 
         S1 [label="State", shape="ellipse", fillcolor="#A9DDB0", color="#4F9A5C"];
         A1 [label="Action", shape="box", style="filled,rounded", fillcolor="#FFC98A", color="#D98E2B"];
-        R1 [label="Reward", shape="diamond", fillcolor="#9CC4F2", color="#3C6FB0"];
+        R1 [label="Reward", shape="diamond", fillcolor="#9CC4F2", color="#1565C0"];
 
-        S1 -> A1 [label="policy  π₁"];
-        A1 -> R1 [label="dynamics"];
+        S1 -> A1 [label="  policy  π₁", fontcolor="#4A4A4A"];
+        A1 -> R1 [label="  dynamics", fontcolor="#4A4A4A"];
         S1 -> R1 [style="dashed", color="#8C8C8C", constraint="false"];
     }
 
     subgraph cluster_env2 {
         label="Environment 2";
         fontname="Helvetica-Bold";
-        fontsize=14;
+        fontsize=13;
         fontcolor="#1A1A2E";
         style="rounded,filled";
         fillcolor="#F7F9FC";
@@ -1892,10 +2152,10 @@ digraph Transfer {
 
         S2 [label="State", shape="ellipse", fillcolor="#A9DDB0", color="#4F9A5C"];
         A2 [label="Action", shape="box", style="filled,rounded", fillcolor="#FFC98A", color="#D98E2B"];
-        R2 [label="Reward", shape="diamond", fillcolor="#9CC4F2", color="#3C6FB0"];
+        R2 [label="Reward", shape="diamond", fillcolor="#9CC4F2", color="#1565C0"];
 
-        S2 -> A2 [label="policy  π₂"];
-        A2 -> R2 [label="dynamics"];
+        S2 -> A2 [label="  policy  π₂", fontcolor="#4A4A4A"];
+        A2 -> R2 [label="  dynamics", fontcolor="#4A4A4A"];
         S2 -> R2 [style="dashed", color="#8C8C8C", constraint="false"];
     }
 
@@ -1911,7 +2171,7 @@ digraph Transfer {
         style="bold",
         color="#B23A48",
         fontcolor="#B23A48",
-        penwidth=2.0
+        penwidth=2.2
     ];
 }
 ```
