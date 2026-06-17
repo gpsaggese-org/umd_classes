@@ -110,7 +110,9 @@ def _file_hash(file_path: str) -> str:
     return hasher.hexdigest()
 
 
-def _daemon_watch(file_path: str, cmd: str, *, wait_in_sec: int = 1, debounce_sec: int = 2) -> None:
+def _daemon_watch(
+    file_path: str, cmd: str, *, wait_in_sec: int = 1, debounce_sec: int = 2
+) -> None:
     """
     Watch a file for changes every 1s and re-run cmd when hash changes.
     Debounces for specified seconds to ensure user is done typing.
