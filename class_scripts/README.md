@@ -4,7 +4,7 @@ courses, generating lecture materials (slides, scripts, quizzes), and improving
 slide quality through automated LLM-powered transformations.
 
 ## Structure of the Dir
-- `book/`: Output directory for book chapter files
+- `lectures_commentary/`: Output directory for lecture commentary
 - `lectures_quizzes/`: Output directory for multiple choice quiz files
 - `lectures_recap/`: Output directory for discussion and recap question files
 - `lectures_script/`: Output directory for generated script files
@@ -19,7 +19,7 @@ slide quality through automated LLM-powered transformations.
 
 | Script                     | Description                                                                                                             |
 | :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| `count_book_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
+| `count_lecture_commentary_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
 | `count_lecture_slides.py`  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
 | `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command                                 |
 | `count_words.py`           | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
@@ -49,16 +49,72 @@ slide quality through automated LLM-powered transformations.
 | `llm_transform.py`         | Applies LLM transformations to content with various prompts (slide_improve, etc.)                                       |
 | `notes_to_pdf.py`          | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`                                |
 
+
+## Script Dependency Hierarchy
+
+- `for_loop_lessons.py` (Main orchestrator)
+  - action=`generate_pdf`
+    - `notes_to_pdf.py`
+  - action=`generate_tex`
+    - `notes_to_pdf.py`
+  - action=`generate_script`
+    - `generate_slide_script.py`
+    - `lint_txt.py`
+  - action=`reduce_slide`
+    - `process_slides.py`
+  - action=`check_slide`
+    - `process_slides.py`
+  - action=`improve_slide` (not yet implemented)
+  - action=`generate_book_chapter`
+    - `gen_book_chapter.py`
+  - action=`generate_class_quizzes`
+    - `gen_quizzes.py`
+  - action=`generate_class_recap`
+    - `gen_quizzes.py`
+  - action=`generate_toc`
+    - `extract_toc_from_txt.py`
+
+- **Wrapper/Convenience Scripts**
+  - `gen_slides.py`
+    - `notes_to_pdf.py`
+  - `gen_lecture_script.py`
+    - `generate_slide_script.py`
+    - `llm_cli.py`
+    - `lint_txt.py`
+  - `gen_book_chapter.py`
+    - `notes_to_pdf.py`
+    - `generate_book_chapter.py`
+  - `slide_check.py`
+    - `process_slides.py`
+  - `slide_improve.py`
+    - `process_slides.py`
+  - `slide_reduce.py`
+    - `process_slides.py`
+
+- **Quiz/Assessment Generation**
+  - `gen_quizzes.py`
+    - `llm_cli.py`
+    - `lint_txt.py`
+
+- **Standalone Analysis/Utility Scripts** (no dependencies on other scripts)
+  - `count_lecture_pages.py`
+  - `count_lecture_commentary_pages.py`
+  - `count_lecture_slides.py`
+  - `count_words.py`
+  - `get_lecture_file.py`
+  - `extract_png_from_pdf.py`
+  - `generate_class_images.py`
+
 # Counting and Analysis Scripts
 
-## `class_scripts/count_book_pages.py`
+## `class_scripts/count_lecture_commentary_pages.py`
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
 - Count pages for a specific class:
   ```bash
-  > count_book_pages.py data605
-  > count_book_pages.py msml610
+  > count_lecture_commentary_pages.py data605
+  > count_lecture_commentary_pages.py msml610
   ```
 
 // TODO(ai_gp): Add output example
@@ -618,7 +674,7 @@ content into various formats.
 ## Analysis and Reporting
 **Count Pages in All Book PDFs**
 ```bash
-> count_book_pages.py data605
+> count_lecture_commentary_pages.py data605
 ```
 
 **Count Pages in All Lecture PDFs**

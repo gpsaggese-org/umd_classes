@@ -1,13 +1,12 @@
-- What's the difference between count_lecture_pages.py and count_book_pages.py?
-
+- What's the difference between count_lecture_pages.py and count_lecture_commentary_pages.py?
   count_pdf_pages.py -> count_lecture_pages.py (✓ Done)
-  count_book_pages.py -> count_lecture_commentary_pages.py
+  count_book_pages.py -> count_lecture_commentary_pages.py (✓ Done)
 
 - Create a diagram of which script calls which as a dot diagram
 
 - Update class_scripts/README.md
 
-- Rename the dir `book` to `lecture_commentary`
+- Rename the dir `data605/book` to `data605/lecture_commentary` (✓ Done)
 
 - Rename `gen_book_chapter.py` -> `gen_lecture_commentary.py`
 

@@ -6,7 +6,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides002.png){width=80%}
 
 </center>
 
@@ -59,7 +59,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides003.png){width=80%}
 
 </center>
 
@@ -112,7 +112,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides004.png){width=80%}
 
 </center>
 
@@ -152,7 +152,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides005.png){width=80%}
 
 </center>
 
@@ -209,7 +209,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides006.png){width=80%}
 
 </center>
 
@@ -262,7 +262,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides007.png){width=80%}
 
 </center>
 
@@ -307,7 +307,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides008.png){width=80%}
 
 </center>
 
@@ -349,7 +349,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides009.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides009.png){width=80%}
 
 </center>
 
@@ -398,7 +398,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides010.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides010.png){width=80%}
 
 </center>
 
@@ -439,7 +439,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides011.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides011.png){width=80%}
 
 </center>
 
@@ -479,7 +479,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides012.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides012.png){width=80%}
 
 </center>
 
@@ -529,7 +529,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides013.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides013.png){width=80%}
 
 </center>
 
@@ -568,7 +568,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides014.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides014.png){width=80%}
 
 </center>
 
@@ -615,7 +615,7 @@ title: "Lesson 2.2: Data Pipelines"
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides015.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides015.png){width=80%}
 
 </center>
 
@@ -670,7 +670,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides016.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides016.png){width=80%}
 
 </center>
 
@@ -721,7 +721,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides017.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides017.png){width=80%}
 
 </center>
 
@@ -760,7 +760,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides018.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides018.png){width=80%}
 
 </center>
 
@@ -817,7 +817,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides019.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides019.png){width=80%}
 
 </center>
 
@@ -860,7 +860,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides020.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides020.png){width=80%}
 
 </center>
 
@@ -902,7 +902,7 @@ techniques for processing and analysis.
 
 <center>
 
-![](data605/book/Lesson02.3-Data_Pipelines.png/slides021.png){width=80%}
+![](data605/lecture_commentary/Lesson02.3-Data_Pipelines.png/slides021.png){width=80%}
 
 </center>
 

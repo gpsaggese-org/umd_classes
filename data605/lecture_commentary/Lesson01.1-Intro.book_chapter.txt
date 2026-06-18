@@ -6,7 +6,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides002.png){width=80%}
 
 </center>
 
@@ -65,7 +65,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides003.png){width=80%}
 
 </center>
 
@@ -99,7 +99,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides004.png){width=80%}
 
 </center>
 
@@ -150,7 +150,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides005.png){width=80%}
 
 </center>
 
@@ -213,7 +213,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides006.png){width=80%}
 
 </center>
 
@@ -270,7 +270,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides007.png){width=80%}
 
 </center>
 
@@ -313,7 +313,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides008.png){width=80%}
 
 </center>
 
@@ -365,7 +365,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides009.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides009.png){width=80%}
 
 </center>
 
@@ -411,7 +411,7 @@ title: "Lesson 1.1: Introduction"
 
 <center>
 
-![](data605/book/Lesson01.1-Intro.png/slides010.png){width=80%}
+![](data605/lecture_commentary/Lesson01.1-Intro.png/slides010.png){width=80%}
 
 </center>
 

@@ -4,7 +4,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides002.png){width=80%}
 
 </center>
 
@@ -62,7 +62,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides003.png){width=80%}
 
 </center>
 
@@ -94,7 +94,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides004.png){width=80%}
 
 </center>
 
@@ -138,7 +138,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides005.png){width=80%}
 
 </center>
 
@@ -177,7 +177,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides006.png){width=80%}
 
 </center>
 
@@ -219,7 +219,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides007.png){width=80%}
 
 </center>
 
@@ -263,7 +263,7 @@ title: "Lesson 3.2: Docker"
 
 <center>
 
-![](data605/book/Lesson03.2-Docker.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson03.2-Docker.png/slides008.png){width=80%}
 
 </center>
 

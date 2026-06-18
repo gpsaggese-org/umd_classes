@@ -4,7 +4,7 @@
 Generate a PDF to comment the slides from lecture source
 
 The output looks like
-https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book
+https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/lecture_commentary
 
 This script performs multiple steps:
 1. Generate PDF using notes_to_pdf.py

@@ -4,7 +4,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides002.png){width=80%}
 
 </center>
 
@@ -63,7 +63,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides003.png){width=80%}
 
 </center>
 
@@ -118,7 +118,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides004.png){width=80%}
 
 </center>
 
@@ -153,7 +153,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides005.png){width=80%}
 
 </center>
 
@@ -193,7 +193,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides006.png){width=80%}
 
 </center>
 
@@ -243,7 +243,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides007.png){width=80%}
 
 </center>
 
@@ -289,7 +289,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides008.png){width=80%}
 
 </center>
 
@@ -326,7 +326,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides009.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides009.png){width=80%}
 
 </center>
 
@@ -360,7 +360,7 @@ title: "Lesson 5.1: NoSQL Databases"
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides010.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides010.png){width=80%}
 
 </center>
 
@@ -398,7 +398,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides011.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides011.png){width=80%}
 
 </center>
 
@@ -443,7 +443,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides012.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides012.png){width=80%}
 
 </center>
 
@@ -483,7 +483,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides013.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides013.png){width=80%}
 
 </center>
 
@@ -521,7 +521,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides014.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides014.png){width=80%}
 
 </center>
 
@@ -573,7 +573,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides015.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides015.png){width=80%}
 
 </center>
 
@@ -614,7 +614,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides016.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides016.png){width=80%}
 
 </center>
 
@@ -656,7 +656,7 @@ prioritize these properties based on their specific needs and use cases.
 
 <center>
 
-![](data605/book/Lesson05.1-NoSQL.png/slides017.png){width=80%}
+![](data605/lecture_commentary/Lesson05.1-NoSQL.png/slides017.png){width=80%}
 
 </center>
 

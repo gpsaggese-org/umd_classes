@@ -6,12 +6,12 @@ Count pages in book PDF files.
 This script counts the number of pages in each PDF file in {DIR}/book/.
 
 Usage:
-> count_book_pages.py data605
-> count_book_pages.py msml610
+> count_lecture_commentary_pages.py data605
+> count_lecture_commentary_pages.py msml610
 
 Import as:
 
-import class_scripts.count_book_pages as clcobopa
+import class_scripts.count_lecture_commentary_pages as clclecopa
 """
 
 import argparse

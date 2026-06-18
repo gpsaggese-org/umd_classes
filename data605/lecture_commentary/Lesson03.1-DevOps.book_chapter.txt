@@ -6,7 +6,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides002.png){width=80%}
 
 </center>
 
@@ -61,7 +61,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides003.png){width=80%}
 
 </center>
 
@@ -104,7 +104,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides004.png){width=80%}
 
 </center>
 
@@ -137,7 +137,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides005.png){width=80%}
 
 </center>
 
@@ -190,7 +190,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides006.png){width=80%}
 
 </center>
 
@@ -236,7 +236,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides007.png){width=80%}
 
 </center>
 
@@ -290,7 +290,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides008.png){width=80%}
 
 </center>
 
@@ -336,7 +336,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides009.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides009.png){width=80%}
 
 </center>
 
@@ -379,7 +379,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides010.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides010.png){width=80%}
 
 </center>
 
@@ -421,7 +421,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides011.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides011.png){width=80%}
 
 </center>
 
@@ -464,7 +464,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides012.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides012.png){width=80%}
 
 </center>
 
@@ -509,7 +509,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides013.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides013.png){width=80%}
 
 </center>
 
@@ -553,7 +553,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides014.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides014.png){width=80%}
 
 </center>
 
@@ -591,7 +591,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides015.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides015.png){width=80%}
 
 </center>
 
@@ -641,7 +641,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides016.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides016.png){width=80%}
 
 </center>
 
@@ -675,7 +675,7 @@ title: "Lesson 3.1: DevOps"
 
 <center>
 
-![](data605/book/Lesson03.1-DevOps.png/slides017.png){width=80%}
+![](data605/lecture_commentary/Lesson03.1-DevOps.png/slides017.png){width=80%}
 
 </center>
 

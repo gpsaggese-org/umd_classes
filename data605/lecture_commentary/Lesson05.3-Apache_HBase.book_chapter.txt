@@ -4,7 +4,7 @@ title: "Lesson 5.3: Apache HBase"
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides001.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 5.3: Apache HBase"
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides002.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides002.png){width=80%}
 
 </center>
 
@@ -66,7 +66,7 @@ title: "Lesson 5.3: Apache HBase"
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides003.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides003.png){width=80%}
 
 </center>
 
@@ -122,7 +122,7 @@ title: "Lesson 5.3: Apache HBase"
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides004.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides004.png){width=80%}
 
 </center>
 
@@ -158,7 +158,7 @@ title: "Lesson 5.3: Apache HBase"
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides005.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides005.png){width=80%}
 
 </center>
 
@@ -202,7 +202,7 @@ keys and column identifiers.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides006.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides006.png){width=80%}
 
 </center>
 
@@ -248,7 +248,7 @@ keys and column identifiers.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides007.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides007.png){width=80%}
 
 </center>
 
@@ -288,7 +288,7 @@ keys and column identifiers.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides008.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides008.png){width=80%}
 
 </center>
 
@@ -326,7 +326,7 @@ column family and its content. The example shows how to access the text of the
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides009.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides009.png){width=80%}
 
 </center>
 
@@ -372,7 +372,7 @@ column family and its content. The example shows how to access the text of the
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides010.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides010.png){width=80%}
 
 </center>
 
@@ -420,7 +420,7 @@ column family and its content. The example shows how to access the text of the
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides011.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides011.png){width=80%}
 
 </center>
 
@@ -468,7 +468,7 @@ column family and its content. The example shows how to access the text of the
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides012.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides012.png){width=80%}
 
 </center>
 
@@ -515,7 +515,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides013.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides013.png){width=80%}
 
 </center>
 
@@ -557,7 +557,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides014.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides014.png){width=80%}
 
 </center>
 
@@ -607,7 +607,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides015.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides015.png){width=80%}
 
 </center>
 
@@ -647,7 +647,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides016.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides016.png){width=80%}
 
 </center>
 
@@ -692,7 +692,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides017.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides017.png){width=80%}
 
 </center>
 
@@ -750,7 +750,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides018.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides018.png){width=80%}
 
 </center>
 
@@ -782,7 +782,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides019.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides019.png){width=80%}
 
 </center>
 
@@ -828,7 +828,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides020.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides020.png){width=80%}
 
 </center>
 
@@ -874,7 +874,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides021.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides021.png){width=80%}
 
 </center>
 
@@ -930,7 +930,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides022.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides022.png){width=80%}
 
 </center>
 
@@ -967,7 +967,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides023.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides023.png){width=80%}
 
 </center>
 
@@ -1017,7 +1017,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides024.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides024.png){width=80%}
 
 </center>
 
@@ -1106,7 +1106,7 @@ data management.
 
 <center>
 
-![](data605/book/Lesson05.3-Apache_HBase.png/slides025.png){width=80%}
+![](data605/lecture_commentary/Lesson05.3-Apache_HBase.png/slides025.png){width=80%}
 
 </center>
 
