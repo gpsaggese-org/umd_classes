@@ -4,7 +4,7 @@ title: "Lesson 4.1: Relational DBs"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 4.1: Relational DBs"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides002.png){width=80%}
 
 </center>
 
@@ -59,7 +59,7 @@ title: "Lesson 4.1: Relational DBs"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides003.png){width=80%}
 
 </center>
 
@@ -100,7 +100,7 @@ showing how data is organized in a relational database.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides004.png){width=80%}
 
 </center>
 
@@ -141,7 +141,7 @@ and organizing complex systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides005.png){width=80%}
 
 </center>
 
@@ -187,7 +187,7 @@ and organizing complex systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides006.png){width=80%}
 
 </center>
 
@@ -221,7 +221,7 @@ and organizing complex systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides007.png){width=80%}
 
 </center>
 
@@ -273,7 +273,7 @@ and organizing complex systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides008.png){width=80%}
 
 </center>
 
@@ -326,7 +326,7 @@ record, ensuring data integrity and efficient data retrieval.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides009.png){width=80%}
 
 </center>
 
@@ -361,7 +361,7 @@ record, ensuring data integrity and efficient data retrieval.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides010.png){width=80%}
 
 </center>
 
@@ -409,7 +409,7 @@ record, ensuring data integrity and efficient data retrieval.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides011.png){width=80%}
 
 </center>
 
@@ -448,7 +448,7 @@ record, ensuring data integrity and efficient data retrieval.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides012.png){width=80%}
 
 </center>
 
@@ -480,7 +480,7 @@ record, ensuring data integrity and efficient data retrieval.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.1-Relational_DBs.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson04.1-Relational_DBs.png/slides013.png){width=80%}
 
 </center>
 

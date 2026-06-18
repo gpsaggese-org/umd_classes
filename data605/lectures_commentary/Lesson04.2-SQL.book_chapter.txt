@@ -4,7 +4,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides002.png){width=80%}
 
 </center>
 
@@ -59,7 +59,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides003.png){width=80%}
 
 </center>
 
@@ -97,7 +97,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides004.png){width=80%}
 
 </center>
 
@@ -149,7 +149,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides005.png){width=80%}
 
 </center>
 
@@ -186,7 +186,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides006.png){width=80%}
 
 </center>
 
@@ -225,7 +225,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides007.png){width=80%}
 
 </center>
 
@@ -266,7 +266,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides008.png){width=80%}
 
 </center>
 
@@ -303,7 +303,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides009.png){width=80%}
 
 </center>
 
@@ -339,7 +339,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides010.png){width=80%}
 
 </center>
 
@@ -377,7 +377,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides011.png){width=80%}
 
 </center>
 
@@ -423,7 +423,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides012.png){width=80%}
 
 </center>
 
@@ -465,7 +465,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides013.png){width=80%}
 
 </center>
 
@@ -497,7 +497,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides014.png){width=80%}
 
 </center>
 
@@ -547,7 +547,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides015.png){width=80%}
 
 </center>
 
@@ -590,7 +590,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides016.png){width=80%}
 
 </center>
 
@@ -625,7 +625,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides017.png){width=80%}
 
 </center>
 
@@ -660,7 +660,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides018.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides018.png){width=80%}
 
 </center>
 
@@ -718,7 +718,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides019.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides019.png){width=80%}
 
 </center>
 
@@ -764,7 +764,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides020.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides020.png){width=80%}
 
 </center>
 
@@ -807,7 +807,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides021.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides021.png){width=80%}
 
 </center>
 
@@ -862,7 +862,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides022.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides022.png){width=80%}
 
 </center>
 
@@ -902,7 +902,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides023.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides023.png){width=80%}
 
 </center>
 
@@ -933,7 +933,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides024.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides024.png){width=80%}
 
 </center>
 
@@ -970,7 +970,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides025.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides025.png){width=80%}
 
 </center>
 
@@ -1001,7 +1001,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides026.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides026.png){width=80%}
 
 </center>
 
@@ -1040,7 +1040,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides027.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides027.png){width=80%}
 
 </center>
 
@@ -1082,7 +1082,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides028.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides028.png){width=80%}
 
 </center>
 
@@ -1133,7 +1133,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides029.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides029.png){width=80%}
 
 </center>
 
@@ -1169,7 +1169,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides030.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides030.png){width=80%}
 
 </center>
 
@@ -1208,7 +1208,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides031.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides031.png){width=80%}
 
 </center>
 
@@ -1237,7 +1237,7 @@ title: "Lesson 4.2: SQL"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.2-SQL.png/slides032.png){width=80%}
+![](data605/lectures_commentary/Lesson04.2-SQL.png/slides032.png){width=80%}
 
 </center>
 

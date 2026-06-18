@@ -6,7 +6,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides002.png){width=80%}
 
 </center>
 
@@ -67,7 +67,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides003.png){width=80%}
 
 </center>
 
@@ -117,7 +117,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides004.png){width=80%}
 
 </center>
 
@@ -166,7 +166,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides005.png){width=80%}
 
 </center>
 
@@ -208,7 +208,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides006.png){width=80%}
 
 </center>
 
@@ -251,7 +251,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides007.png){width=80%}
 
 </center>
 
@@ -293,7 +293,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides008.png){width=80%}
 
 </center>
 
@@ -330,7 +330,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides009.png){width=80%}
 
 </center>
 
@@ -377,7 +377,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides010.png){width=80%}
 
 </center>
 
@@ -426,7 +426,7 @@ text format.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides011.png){width=80%}
 
 </center>
 
@@ -468,7 +468,7 @@ they appear in different tools, helping to visualize the process described.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides012.png){width=80%}
 
 </center>
 
@@ -519,7 +519,7 @@ they appear in different tools, helping to visualize the process described.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides013.png){width=80%}
 
 </center>
 
@@ -555,7 +555,7 @@ they appear in different tools, helping to visualize the process described.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides014.png){width=80%}
 
 </center>
 
@@ -602,7 +602,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides015.png){width=80%}
 
 </center>
 
@@ -647,7 +647,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides016.png){width=80%}
 
 </center>
 
@@ -689,7 +689,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides017.png){width=80%}
 
 </center>
 
@@ -731,7 +731,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides018.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides018.png){width=80%}
 
 </center>
 
@@ -766,7 +766,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides019.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides019.png){width=80%}
 
 </center>
 
@@ -808,7 +808,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides020.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides020.png){width=80%}
 
 </center>
 
@@ -851,7 +851,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides021.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides021.png){width=80%}
 
 </center>
 
@@ -900,7 +900,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides022.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides022.png){width=80%}
 
 </center>
 
@@ -944,7 +944,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides023.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides023.png){width=80%}
 
 </center>
 
@@ -989,7 +989,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides024.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides024.png){width=80%}
 
 </center>
 
@@ -1023,7 +1023,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides025.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides025.png){width=80%}
 
 </center>
 
@@ -1069,7 +1069,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides026.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides026.png){width=80%}
 
 </center>
 
@@ -1118,7 +1118,7 @@ understanding when and how to use rebasing effectively.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.2-Git_Branching.png/slides027.png){width=80%}
+![](data605/lectures_commentary/Lesson02.2-Git_Branching.png/slides027.png){width=80%}
 
 </center>
 

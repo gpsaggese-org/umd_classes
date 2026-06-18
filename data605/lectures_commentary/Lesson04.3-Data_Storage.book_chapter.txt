@@ -4,7 +4,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides002.png){width=80%}
 
 </center>
 
@@ -61,7 +61,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides003.png){width=80%}
 
 </center>
 
@@ -111,7 +111,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides004.png){width=80%}
 
 </center>
 
@@ -164,7 +164,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides005.png){width=80%}
 
 </center>
 
@@ -211,7 +211,7 @@ title: "Lesson 4.3: Data Storage"
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides006.png){width=80%}
 
 </center>
 
@@ -244,7 +244,7 @@ magnetic disk storage systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides007.png){width=80%}
 
 </center>
 
@@ -284,7 +284,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides008.png){width=80%}
 
 </center>
 
@@ -333,7 +333,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides009.png){width=80%}
 
 </center>
 
@@ -380,7 +380,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides010.png){width=80%}
 
 </center>
 
@@ -425,7 +425,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides011.png){width=80%}
 
 </center>
 
@@ -480,7 +480,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides012.png){width=80%}
 
 </center>
 
@@ -536,7 +536,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides013.png){width=80%}
 
 </center>
 
@@ -576,7 +576,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides014.png){width=80%}
 
 </center>
 
@@ -613,7 +613,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides015.png){width=80%}
 
 </center>
 
@@ -658,7 +658,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides016.png){width=80%}
 
 </center>
 
@@ -697,7 +697,7 @@ years, driven by technological advancements and increasing data demands.
 
 <center>
 
-![](data605/lecture_commentary/Lesson04.3-Data_Storage.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson04.3-Data_Storage.png/slides017.png){width=80%}
 
 </center>
 

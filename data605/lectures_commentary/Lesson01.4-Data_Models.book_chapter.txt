@@ -6,7 +6,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides002.png){width=80%}
 
 </center>
 
@@ -61,7 +61,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides003.png){width=80%}
 
 </center>
 
@@ -101,7 +101,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides004.png){width=80%}
 
 </center>
 
@@ -143,7 +143,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides005.png){width=80%}
 
 </center>
 
@@ -178,7 +178,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides006.png){width=80%}
 
 </center>
 
@@ -237,7 +237,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides007.png){width=80%}
 
 </center>
 
@@ -285,7 +285,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides008.png){width=80%}
 
 </center>
 
@@ -335,7 +335,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides009.png){width=80%}
 
 </center>
 
@@ -380,7 +380,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides010.png){width=80%}
 
 </center>
 
@@ -419,7 +419,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides011.png){width=80%}
 
 </center>
 
@@ -466,7 +466,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides012.png){width=80%}
 
 </center>
 
@@ -502,7 +502,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides013.png){width=80%}
 
 </center>
 
@@ -546,7 +546,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides014.png){width=80%}
 
 </center>
 
@@ -597,7 +597,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides015.png){width=80%}
 
 </center>
 
@@ -642,7 +642,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides016.png){width=80%}
 
 </center>
 
@@ -684,7 +684,7 @@ title: "Lesson 1.4: Data Models"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.4-Data_Models.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson01.4-Data_Models.png/slides017.png){width=80%}
 
 </center>
 

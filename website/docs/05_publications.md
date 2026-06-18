@@ -1,7 +1,7 @@
 # Publications
 
 ## Books
-- [Big Data Systems](https://github.com/gpsaggese/umd_classes/blob/master/data605/lecture_commentary/book.pdf)
+- [Big Data Systems](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures_commentary/book.pdf)
 - [Advanced Machine Learning](https://github.com/gpsaggese/umd_classes/blob/master/msml610/book/book.pdf)
 
 ## Blogs

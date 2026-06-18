@@ -6,7 +6,7 @@ title: "Lesson 1.3: Is Data Science Just Hype?"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 1.3: Is Data Science Just Hype?"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides002.png){width=80%}
 
 </center>
 
@@ -56,7 +56,7 @@ title: "Lesson 1.3: Is Data Science Just Hype?"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides003.png){width=80%}
 
 </center>
 
@@ -102,7 +102,7 @@ title: "Lesson 1.3: Is Data Science Just Hype?"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides004.png){width=80%}
 
 </center>
 
@@ -142,7 +142,7 @@ title: "Lesson 1.3: Is Data Science Just Hype?"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides005.png){width=80%}
 
 </center>
 
@@ -177,7 +177,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides006.png){width=80%}
 
 </center>
 
@@ -211,7 +211,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides007.png){width=80%}
 
 </center>
 
@@ -252,7 +252,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides008.png){width=80%}
 
 </center>
 
@@ -297,7 +297,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides009.png){width=80%}
 
 </center>
 
@@ -341,7 +341,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides010.png){width=80%}
 
 </center>
 
@@ -383,7 +383,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides011.png){width=80%}
 
 </center>
 
@@ -422,7 +422,7 @@ industries and solve complex problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides012.png){width=80%}
 
 </center>
 
@@ -472,7 +472,7 @@ structured approach to solving complex data problems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides013.png){width=80%}
 
 </center>
 
@@ -511,7 +511,7 @@ tasks, emphasizing their significance in the data science workflow._
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson01.3-Is_Data_Science_Just_Hype.png/slides014.png){width=80%}
 
 </center>
 

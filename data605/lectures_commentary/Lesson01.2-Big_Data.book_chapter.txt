@@ -6,7 +6,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides001.png){width=80%}
 
 </center>
 
@@ -20,7 +20,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides002.png){width=80%}
 
 </center>
 
@@ -67,7 +67,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides003.png){width=80%}
 
 </center>
 
@@ -111,7 +111,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides004.png){width=80%}
 
 </center>
 
@@ -163,7 +163,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides005.png){width=80%}
 
 </center>
 
@@ -229,7 +229,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides006.png){width=80%}
 
 </center>
 
@@ -281,7 +281,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides007.png){width=80%}
 
 </center>
 
@@ -318,7 +318,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides008.png){width=80%}
 
 </center>
 
@@ -366,7 +366,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides009.png){width=80%}
 
 </center>
 
@@ -402,7 +402,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides010.png){width=80%}
 
 </center>
 
@@ -439,7 +439,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides011.png){width=80%}
 
 </center>
 
@@ -492,7 +492,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides012.png){width=80%}
 
 </center>
 
@@ -540,7 +540,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides013.png){width=80%}
 
 </center>
 
@@ -585,7 +585,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides014.png){width=80%}
 
 </center>
 
@@ -623,7 +623,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides015.png){width=80%}
 
 </center>
 
@@ -669,7 +669,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides016.png){width=80%}
 
 </center>
 
@@ -712,7 +712,7 @@ title: "Lesson 1.2: Introduction to Big Data"
 
 <center>
 
-![](data605/lecture_commentary/Lesson01.2-Big_Data.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson01.2-Big_Data.png/slides017.png){width=80%}
 
 </center>
 

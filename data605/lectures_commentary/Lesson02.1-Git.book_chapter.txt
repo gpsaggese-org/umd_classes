@@ -4,7 +4,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides002.png){width=80%}
 
 </center>
 
@@ -62,7 +62,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides003.png){width=80%}
 
 </center>
 
@@ -111,7 +111,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides004.png){width=80%}
 
 </center>
 
@@ -155,7 +155,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides005.png){width=80%}
 
 </center>
 
@@ -194,7 +194,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides006.png){width=80%}
 
 </center>
 
@@ -235,7 +235,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides007.png){width=80%}
 
 </center>
 
@@ -275,7 +275,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides008.png){width=80%}
 
 </center>
 
@@ -309,7 +309,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides009.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides009.png){width=80%}
 
 </center>
 
@@ -354,7 +354,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides010.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides010.png){width=80%}
 
 </center>
 
@@ -397,7 +397,7 @@ title: "Lesson 2.1: Git"
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides011.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides011.png){width=80%}
 
 </center>
 
@@ -444,7 +444,7 @@ conflicts, as they are a common part of collaborative software development.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides012.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides012.png){width=80%}
 
 </center>
 
@@ -484,7 +484,7 @@ conflicts, as they are a common part of collaborative software development.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides013.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides013.png){width=80%}
 
 </center>
 
@@ -516,7 +516,7 @@ conflicts, as they are a common part of collaborative software development.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides014.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides014.png){width=80%}
 
 </center>
 
@@ -559,7 +559,7 @@ conflicts, as they are a common part of collaborative software development.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides015.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides015.png){width=80%}
 
 </center>
 
@@ -600,7 +600,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides016.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides016.png){width=80%}
 
 </center>
 
@@ -653,7 +653,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides017.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides017.png){width=80%}
 
 </center>
 
@@ -695,7 +695,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides018.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides018.png){width=80%}
 
 </center>
 
@@ -727,7 +727,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides019.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides019.png){width=80%}
 
 </center>
 
@@ -761,7 +761,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides020.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides020.png){width=80%}
 
 </center>
 
@@ -802,7 +802,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides021.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides021.png){width=80%}
 
 </center>
 
@@ -853,7 +853,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides022.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides022.png){width=80%}
 
 </center>
 
@@ -897,7 +897,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides023.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides023.png){width=80%}
 
 </center>
 
@@ -943,7 +943,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides024.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides024.png){width=80%}
 
 </center>
 
@@ -976,7 +976,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides025.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides025.png){width=80%}
 
 </center>
 
@@ -1021,7 +1021,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides026.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides026.png){width=80%}
 
 </center>
 
@@ -1062,7 +1062,7 @@ developers.
 
 <center>
 
-![](data605/lecture_commentary/Lesson02.1-Git.png/slides027.png){width=80%}
+![](data605/lectures_commentary/Lesson02.1-Git.png/slides027.png){width=80%}
 
 </center>
 

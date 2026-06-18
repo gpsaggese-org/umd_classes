@@ -4,7 +4,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides001.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides001.png){width=80%}
 
 </center>
 
@@ -16,7 +16,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides002.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides002.png){width=80%}
 
 </center>
 
@@ -62,7 +62,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides003.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides003.png){width=80%}
 
 </center>
 
@@ -115,7 +115,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides004.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides004.png){width=80%}
 
 </center>
 
@@ -163,7 +163,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides005.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides005.png){width=80%}
 
 </center>
 
@@ -208,7 +208,7 @@ title: "Lesson 5.2: Database Taxonomy"
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides006.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides006.png){width=80%}
 
 </center>
 
@@ -258,7 +258,7 @@ visualize the differences from traditional row-based storage systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides007.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides007.png){width=80%}
 
 </center>
 
@@ -305,7 +305,7 @@ visualize the differences from traditional row-based storage systems.
 
 <center>
 
-![](data605/lecture_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides008.png){width=80%}
+![](data605/lectures_commentary/Lesson05.2-NoSQL_Taxonomy.png/slides008.png){width=80%}
 
 </center>
 
