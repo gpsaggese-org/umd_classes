@@ -1,6 +1,6 @@
 #!/usr/bin/env -S uv run
 
-"""
+r"""
 Generate book chapter from markdown slides and PNG images.
 
 This script processes markdown slides and corresponding PNG images to create
@@ -72,7 +72,7 @@ The output should be in markdown format without a heading.
 
 
 def _extract_title_from_markdown(input_file: str) -> Optional[str]:
-    """
+    r"""
     Extract title from markdown file.
 
     Looks for patterns like:
@@ -370,20 +370,20 @@ def _parse() -> argparse.ArgumentParser:
         action="store",
         type=int,
         default=200,
-        help="DPI for PDF extraction (default: 200)",
+        help="DPI for PDF extraction",
     )
     parser.add_argument(
         "--image_width",
         action="store",
         type=str,
         default="80%",
-        help="Width of images in output markdown (e.g., 80%%, 50%%) (default: 80%%)",
+        help="Width of images in output markdown (e.g., 80%%, 50%%)",
     )
     parser.add_argument(
         "--add_new_page",
         action="store_true",
         default=False,
-        help="Add \\newpage commands before each slide (default: False)",
+        help=r"Add \newpage commands before each slide",
     )
     hparser.add_verbosity_arg(parser)
     return parser

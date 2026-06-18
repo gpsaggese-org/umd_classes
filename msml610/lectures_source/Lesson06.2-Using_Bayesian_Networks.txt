@@ -1071,6 +1071,8 @@ digraph BayesianFlow {
      - Remaining samples $X \land E=e$ estimate $\Pr(X, E=e)$
   3. Count occurrences of $X=x$ in remaining samples $X \land E=e$
      - Estimate $\Pr(X=x | E=e)$
+::::
+:::
 
 * Rejection Sampling: Estimating Pi
 

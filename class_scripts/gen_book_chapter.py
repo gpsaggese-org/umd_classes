@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 """
-Generate a book chapter from lecture source.
+Generate a PDF to comment the slides from lecture source
+
+The output looks like
+https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book
 
 This script performs multiple steps:
 1. Generate PDF using notes_to_pdf.py

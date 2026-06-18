@@ -1,51 +1,57 @@
-# Class_scripts
-
 # Summary
 A comprehensive suite of command-line tools and scripts for managing university
 courses, generating lecture materials (slides, scripts, quizzes), and improving
 slide quality through automated LLM-powered transformations.
 
 ## Structure of the Dir
-- `lectures_source/`: Input directory containing `Lesson*.txt` files
-- `lectures/`: Output directory for generated PDF files
-- `lectures_script/`: Output directory for generated script files
+- `book/`: Output directory for book chapter files
 - `lectures_quizzes/`: Output directory for multiple choice quiz files
 - `lectures_recap/`: Output directory for discussion and recap question files
-- `book/`: Output directory for book chapter files
+- `lectures_script/`: Output directory for generated script files
+- `lectures_source/`: Input directory containing `Lesson*.txt` files
+- `lectures/`: Output directory for generated PDF files
 
 ## Description of Files
 - `common_utils.py`: Shared utility functions for argument validation, file
   finding, directory management, and PDF page counting
 
-| Script                     | Location                                          | Description                                                                                                             |
-| :------------------------- | :------------------------------------------------ | :---------------------------------------------------------------------------------------------------------------------- |
-| `concatenate_pdfs.py`      | `helpers_root/dev_scripts_helpers/documentation/` | Combines multiple PDF files into a single PDF (used for creating full book from chapters)                               |
-| `count_book_pages.py`      | `class_scripts/`                                  | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
-| `count_lecture_slides.py`  | `class_scripts/`                                  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
-| `count_pdf_pages.py`       | `class_scripts/`                                  | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command                                 |
-| `count_words.py`           | `class_scripts/`                                  | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
-| `extract_png_from_pdf.py`  | `class_scripts/`                                  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
-| `gen_book_chapter.py`      | `class_scripts/`                                  | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
-| `gen_lecture_script.py`    | `class_scripts/`                                  | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically                    |
-| `gen_quizzes.py`           | `class_scripts/`                                  | Generates multiple choice quizzes (20 questions) or discussion/review questions (3-6 questions) from lecture content    |
-| `gen_slides.py`            | `class_scripts/`                                  | Generates lecture slide PDFs from source files using `notes_to_pdf.py` for markdown-to-PDF conversion                   |
-| `generate_book_chapter.py` | `class_scripts/`                                  | Generates book chapters from markdown and PDF/PNG images with LLM-based commentary and pandoc conversion                |
-| `generate_class_images.py` | `class_scripts/`                                  | Generates images using OpenAI's DALL-E API from text prompts; supports standard and HD quality                          |
-| `generate_slide_script.py` | `class_scripts/`                                  | Generates lecture scripts from slide content; groups slides and lints output                                            |
-| `get_lecture_file.py`      | `class_scripts/`                                  | Finds and prints the path to a lecture source file matching `{DIR}/lectures_source/Lesson{LESSON}*`                     |
-| `lint_txt.py`              | `helpers_root/dev_scripts_helpers/documentation/` | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting                             |
-| `llm_cli.py`               | `helpers_root/dev_scripts_helpers/llms/`          | LLM command-line interface for AI-powered text transformations and content generation                                   |
-| `llm_transform.py`         | `helpers_root/dev_scripts_helpers/llms/`          | Applies LLM transformations to content with various prompts (slide_improve, etc.)                                       |
-| `notes_to_pdf.py`          | `helpers_root/dev_scripts_helpers/documentation/` | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`                                |
-| `for_loop_lessons.py`      | `class_scripts/`                                  | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
-| `process_slides.py`        | `class_scripts/`                                  | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
-| `slide_check.py`           | `class_scripts/`                                  | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting                           |
-| `slide_improve.py`         | `class_scripts/`                                  | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness               |
-| `slide_reduce.py`          | `class_scripts/`                                  | Reduces and simplifies lecture slides using LLM; removes redundancy and condenses content                               |
-| `slides_utils.py`          | `class_scripts/`                                  | Utility functions for extracting and processing slide content                                                           |
+- Under `class_scripts`
+
+| Script                     | Description                                                                                                             |
+| :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| `count_book_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
+| `count_lecture_slides.py`  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
+| `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command                                 |
+| `count_words.py`           | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
+| `extract_png_from_pdf.py`  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
+| `gen_book_chapter.py`      | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
+| `gen_lecture_script.py`    | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically                    |
+| `gen_quizzes.py`           | Generates multiple choice quizzes (20 questions) or discussion/review questions (3-6 questions) from lecture content    |
+| `gen_slides.py`            | Generates lecture slide PDFs from source files using `notes_to_pdf.py` for markdown-to-PDF conversion                   |
+| `generate_book_chapter.py` | Generates book chapters from markdown and PDF/PNG images with LLM-based commentary and pandoc conversion                |
+| `generate_class_images.py` | Generates images using OpenAI's DALL-E API from text prompts; supports standard and HD quality                          |
+| `generate_slide_script.py` | Generates lecture scripts from slide content; groups slides and lints output                                            |
+| `get_lecture_file.py`      | Finds and prints the path to a lecture source file matching `{DIR}/lectures_source/Lesson{LESSON}*`                     |
+| `for_loop_lessons.py`      | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
+| `process_slides.py`        | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
+| `slide_check.py`           | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting                           |
+| `slide_improve.py`         | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness               |
+| `slide_reduce.py`          | Reduces and simplifies lecture slides using LLM; removes redundancy and condenses content                               |
+| `slides_utils.py`          | Utility functions for extracting and processing slide content                                                           |
+
+- Under `helpers_root/dev_scripts_helpers/documentation`
+
+| Script                     | Description                                                                                                             |
+| :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| `concatenate_pdfs.py`      | Combines multiple PDF files into a single PDF (used for creating full book from chapters)                               |
+| `lint_txt.py`              | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting                             |
+| `llm_cli.py`               | LLM command-line interface for AI-powered text transformations and content generation                                   |
+| `llm_transform.py`         | Applies LLM transformations to content with various prompts (slide_improve, etc.)                                       |
+| `notes_to_pdf.py`          | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`                                |
 
 # Counting and Analysis Scripts
-## `count_book_pages.py`
+
+## `class_scripts/count_book_pages.py`
 
 - Counts pages in all PDF files in the `{DIR}/book/` directory using macOS
   `mdls` command to extract PDF metadata
@@ -55,7 +61,9 @@ slide quality through automated LLM-powered transformations.
   > count_book_pages.py msml610
   ```
 
-## `count_lecture_slides.py`
+// TODO(ai_gp): Add output example
+
+## `class_scripts/count_lecture_slides.py`
 
 - Counts slides, headers (at 3 levels), lines, words, and characters in lecture
   source files in `{DIR}/lectures_source/` directory
@@ -75,17 +83,17 @@ slide quality through automated LLM-powered transformations.
   > count_lecture_slides.py msml610 --format csv
   ```
 
-## `count_pdf_pages.py`
+## `class_scripts/count_lecture_pages.py`
 
 - Counts pages in all PDF files in the `{DIR}/lectures/` directory and displays
   page counts for each lecture PDF file
 - Count pages for lecture PDFs:
   ```bash
-  > count_pdf_pages.py data605
-  > count_pdf_pages.py msml610
+  > count_lecture_pages.py data605
+  > count_lecture_pages.py msml610
   ```
 
-## `count_words.py`
+## `class_scripts/count_words.py`
 
 - Counts words in all files in the `{DIR}/lectures_script/` directory to help
   track lecture length and content volume
@@ -96,7 +104,8 @@ slide quality through automated LLM-powered transformations.
   ```
 
 # Generation Scripts
-## `gen_slides.py`
+
+## `class_scripts/gen_slides.py`
 
 - Generates lecture slide PDFs from source files using `notes_to_pdf.py` to
   convert markdown to PDF
@@ -110,7 +119,7 @@ slide quality through automated LLM-powered transformations.
   > gen_slides.py msml610 02.3 --theme dark
   ```
 
-## `gen_lecture_script.py`
+## `class_scripts/gen_lecture_script.py`
 
 - Generates complete lecture scripts from slides using LLM
 - Automatically creates intro and outro sections, combines all sections, and
@@ -124,7 +133,7 @@ slide quality through automated LLM-powered transformations.
   > gen_lecture_script.py msml610 02.3 --force
   ```
 
-## `generate_slide_script.py`
+## `class_scripts/generate_slide_script.py`
 
 - Processes markdown slides and generates presentation scripts using LLM
 - Groups slides for batch processing to optimize LLM API calls
@@ -146,24 +155,25 @@ slide quality through automated LLM-powered transformations.
   > generate_slide_script.py --in_file slides.md --out_file script.md --log_level DEBUG
   ```
 
-## `generate_book_chapter.py`
+## `class_scripts/generate_book_chapter.py`
 
 - Processes markdown slides with PNG images or PDF file to create book chapter
   format
 - Extracts title from markdown file (e.g., from `\text{\blue{Lesson 2.1: Git}}`)
   and adds YAML preamble for pandoc metadata
-- Extracts PNG images from PDF automatically when --input_pdf_file is provided
+- Extracts PNG images from PDF automatically when `--input_pdf_file` is provided
 - Validates that the number of slides in markdown matches the number of PNG
-  files (expects num_slides + 1 = num_pngs to account for title slide)
+  files (expects `num_slides + 1 = num_pngs` to account for title slide)
 - Properly aligns title slide (first PNG) with content slides (remaining PNGs)
   to ensure header, slide image, and commentary are synchronized
 - First slide (PNG 1) is treated as title slide with only the image (no title or
   commentary)
 - Content slides (PNG 2+) are paired with corresponding markdown slides, with
   centered headers formatted as "idx / tot: title" and LLM-based commentary
-- Supports optional page breaks via --add_new_page flag to insert `\newpage`
+- Supports optional page breaks via `--add_new_page` flag to insert `\newpage`
   commands before each slide (disabled by default)
-- Formats output with prettier for consistent markdown formatting
+- Formats output with `prettier` for consistent markdown formatting
+
 - Generate book chapter from markdown and PNG directory:
   ```bash
   > generate_book_chapter.py --input_file data605/lectures_source/Lesson01.1-Intro.txt --input_png_dir output --output_dir test
@@ -181,22 +191,19 @@ slide quality through automated LLM-powered transformations.
   > generate_book_chapter.py --input_file lecture.txt --input_pdf_file lecture.pdf --output_dir ./book_chapters/ --add_new_page
   ```
 
-**Converting to PDF with pandoc**:
+- Converting to PDF with pandoc, after generating the book chapter markdown,
+  convert it to PDF using pandoc with custom header styling:
+  ```bash
+  > pandoc test/Lesson01.1-Intro.book_chapter.txt -o output.pdf --include-in-header=header-style.tex
+  ```
 
-After generating the book chapter markdown, convert it to PDF using pandoc with
-custom header styling:
-
-```bash
-> pandoc test/Lesson01.1-Intro.book_chapter.txt -o output.pdf --include-in-header=header-style.tex
-```
-
-## `gen_quizzes.py`
+## `class_scripts/gen_quizzes.py`
 
 - Generates questions from lecture content using LLM
 - Supports two modes:
-  - **Multiple choice quizzes**: 20 questions with 5 answers each →
+  - _Multiple choice quizzes_: 20 questions with 5 answers each →
     `{DIR}/lectures_quizzes/<lesson>.quizzes.md`
-  - **Discussion/review questions**: 3-6 open-ended questions →
+  - _Discussion/review questions_: 3-6 open-ended questions →
     `{DIR}/lectures_recap/<lesson>.recap.md`
 - Automatically formats output using `lint_txt.py` with prettier (use
   `--no_lint` to skip)
@@ -217,12 +224,13 @@ custom header styling:
   > gen_quizzes.py --for_class_quizzes data605 01.1 --model gpt-4
   ```
 
-## `process_slides.py`
+## `class_scripts/process_slides.py`
 
 - Extracts individual slides from markdown files and processes each with LLM
   prompts
 - Supports various actions like slide reduction, text checking, and improvement
 - Provides parallel processing with incremental execution and error recovery
+
 - Process slides with LLM transformation:
   ```bash
   > process_slides.py --in_file lecture.txt --action slide_reduce --out_file output.txt --use_llm_transform
@@ -241,7 +249,8 @@ custom header styling:
   ```
 
 # Slide Improvement Scripts
-## `slide_check.py`
+
+## `class_scripts/slide_check.py`
 
 - Checks and fixes text in lecture slides using LLM
 - Corrects spelling, grammar, and formatting issues using `process_slides.py`
@@ -255,7 +264,7 @@ custom header styling:
   > slide_check.py msml610 02.3 --dry-run
   ```
 
-## `slide_improve.py`
+## `class_scripts/slide_improve.py`
 
 - Improves lecture slides using LLM suggestions
 - Enhances clarity, structure, and pedagogical effectiveness using
@@ -269,7 +278,7 @@ custom header styling:
   > slide_improve.py msml610 02.3 --max-suggestions 5
   ```
 
-## `slide_reduce.py`
+## `class_scripts/slide_reduce.py`
 
 - Reduces and simplifies lecture slides using LLM
 - Removes redundancy and condenses content using `process_slides.py` with
@@ -284,7 +293,7 @@ custom header styling:
   ```
 
 # Image and PDF Processing Scripts
-## `extract_png_from_pdf.py`
+## `class_scripts/extract_png_from_pdf.py`
 
 - Extracts each page of a PDF file as a separate PNG image
 - Numbers output files sequentially (slides001.png, slides002.png, etc.)
@@ -303,7 +312,7 @@ custom header styling:
   > extract_png_from_pdf.py --input_file presentation.pdf --output_dir ./images/ --from_scratch
   ```
 
-## `generate_class_images.py`
+## `class_scripts/generate_class_images.py`
 
 - Generates multiple images using OpenAI's DALL-E 3 API from text prompts
 - Supports both standard and HD quality image generation in 1024x1024 resolution
@@ -323,7 +332,7 @@ custom header styling:
   ```
 
 # Utility Scripts
-## `get_lecture_file.py`
+## `class_scripts/get_lecture_file.py`
 
 - Finds and prints the path to a lecture source file matching
   `{DIR}/lectures_source/Lesson{LESSON}*`
@@ -335,7 +344,8 @@ custom header styling:
   ```
 
 # Orchestration Scripts
-## `for_loop_lessons.py`
+
+## `class_scripts/for_loop_lessons.py`
 
 Orchestrates the generation of multiple outputs from lecture source files for
 educational materials. This is the main entry point for processing lecture
@@ -613,7 +623,7 @@ content into various formats.
 
 **Count Pages in All Lecture PDFs**
 ```bash
-> count_pdf_pages.py data605
+> count_lecture_pages.py data605
 ```
 
 **Count Words in All Lecture Scripts**
