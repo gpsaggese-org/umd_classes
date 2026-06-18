@@ -16,7 +16,7 @@ fi
 OPTS=${@:2}
 SRC_NAME=$(cd $DIR/lectures_source; ls Lesson${LESSON}*)
 DST_NAME=$(echo $SRC_NAME | sed 's/\.txt$/.script.txt/')
-OUT_FILE="data605/lectures_script/$DST_NAME"
+OUT_FILE="data605/lectures_video_script/$DST_NAME"
 
 uv run generate_slide_script.py \
   --in_file data605/lectures_source/$SRC_NAME \

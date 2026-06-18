@@ -7,7 +7,7 @@ slide quality through automated LLM-powered transformations.
 - `lectures_commentary/`: Output directory for lecture commentary
 - `lectures_quizzes/`: Output directory for multiple choice quiz files
 - `lectures_recap/`: Output directory for discussion and recap question files
-- `lectures_script/`: Output directory for generated script files
+- `lectures_video_script/`: Output directory for generated script files
 - `lectures_source/`: Input directory containing `Lesson*.txt` files
 - `lectures_pdf/`: Output directory for generated PDF files
 
@@ -22,7 +22,7 @@ slide quality through automated LLM-powered transformations.
 | `count_lecture_commentary_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
 | `count_lecture_slides.py`  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
 | `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures_pdf/` directory using macOS `mdls` command                                 |
-| `count_words.py`           | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
+| `count_words.py`           | Counts words in all files in `{DIR}/lectures_video_script/` directory to track lecture length                                 |
 | `extract_png_from_pdf.py`  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
 | `gen_lecture_commentary.py`      | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
 | `gen_lecture_script.py`    | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically                    |
@@ -151,7 +151,7 @@ slide quality through automated LLM-powered transformations.
 
 ## `class_scripts/count_words.py`
 
-- Counts words in all files in the `{DIR}/lectures_script/` directory to help
+- Counts words in all files in the `{DIR}/lectures_video_script/` directory to help
   track lecture length and content volume
 - Count words in lecture scripts:
   ```bash
@@ -429,6 +429,8 @@ content into various formats.
   content using LLM
 - `generate_class_recap`: Generate open-ended discussion/review questions from
   lecture content using LLM
+- `generate_toc`: Extract table of contents (headers) from all lectures and
+  create a consolidated course syllabus
 
 **Lecture Pattern Examples:**
 
@@ -501,9 +503,9 @@ content into various formats.
 2. Find matching lecture source files in `<class>/lectures_source/` directory
 3. For each matching file, execute specified actions in sequence
 4. Output generated files to appropriate directories:
-   - PDF slides → `<class>/lectures/`
-   - Scripts → `<class>/lectures_script/`
-   - Book chapters → `<class>/book/`
+   - PDF slides → `<class>/lectures_pdf/`
+   - Scripts → `<class>/lectures_video_script/`
+   - Book chapters → `<class>/lectures_commentary/`
    - Multiple choice quizzes → `<class>/lectures_quizzes/`
    - Discussion/recap questions → `<class>/lectures_recap/`
 
@@ -520,7 +522,7 @@ content into various formats.
 
 **Generate Both PDF Slides and Reading Scripts**
 
-- Generates PDFs in `lectures/` and scripts in `lectures_script/`:
+- Generates PDFs in `lectures_pdf/` and scripts in `lectures_video_script/`:
   ```bash
   > for_loop_lessons.py --lectures 01* --class msml610 --action generate_pdf --action generate_script
   ```
@@ -640,14 +642,14 @@ content into various formats.
 
 - Creates a 50-word introduction for Lesson 08.3:
   ```bash
-  > TAG=08.3; llm_cli.py -i data605/lectures_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to do an introduction in 50 word the content of the slides starting with In this lesson" -o -
+  > TAG=08.3; llm_cli.py -i data605/lectures_video_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to do an introduction in 50 word the content of the slides starting with In this lesson" -o -
   ```
 
 **Generate Just the Outro/summary for a Lecture**
 
 - Creates a 50-word summary/conclusion for Lesson 08.3:
   ```bash
-  > TAG=08.3; llm_cli.py -i data605/lectures_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to summarize what was discussed in less than 50 word in the slides like In this lesson we have discussed" -o -
+  > TAG=08.3; llm_cli.py -i data605/lectures_video_script/Lesson${TAG}*.script.txt -p "You are a college professor and you need to summarize what was discussed in less than 50 word in the slides like In this lesson we have discussed" -o -
   ```
 
 **Generate Scripts From Inside a Container (advanced)**
@@ -669,6 +671,26 @@ content into various formats.
 - Converts markdown lecture notes to PDF format (slides 1-4 only):
   ```bash
   > notes_to_pdf.py --input data605/lectures_md/final_enhanced_markdown_lecture_2.txt --output tmp.pdf --type slides --skip_action cleanup_after --debug_on_error --toc_type navigation --filter_by_slides 1:4
+  ```
+
+## Course Syllabus and Structure
+
+**Generate Complete Course Syllabus**
+
+- Extracts all lecture headers and creates a consolidated syllabus:
+  ```bash
+  > for_loop_lessons.py --class data605 --action generate_toc
+  > for_loop_lessons.py --class msml610 --action generate_toc
+  ```
+- Output: `<class>/all_tocs.md` containing all lecture headers organized hierarchically
+
+**Generate Syllabus for Specific Lectures**
+
+- Extract headers from pattern-matched lectures:
+  ```bash
+  > for_loop_lessons.py --class data605 --lectures "01*" --action generate_toc
+  > for_loop_lessons.py --class data605 --lectures "01*:02*:03.1" --action generate_toc
+  > for_loop_lessons.py --class data605 --lectures "01.1-03.2" --action generate_toc
   ```
 
 ## Analysis and Reporting

@@ -295,7 +295,7 @@ def _generate_script(
     """
     # Compute output path.
     dst_name = source_name.replace(".txt", ".script.txt")
-    lectures_script_dir = os.path.join(class_dir, "lectures_script")
+    lectures_script_dir = os.path.join(class_dir, "lectures_video_script")
     hio.create_dir(lectures_script_dir, incremental=True)
     output_path = os.path.join(lectures_script_dir, dst_name)
     # Step 1: Generate slide script.
