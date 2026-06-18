@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -319,17 +319,35 @@ utils.cell2_3_extract_policy()
 # - This is a simpler linear problem than the full Bellman equation
 
 # %%
+# When a policy π is fixed (i.e., π(s) specifies a single action for each state),
+# the Bellman equation becomes LINEAR because the max operator disappears.
+#
+# For a fixed policy π:
+#   U^π(s) = R(s) + γ ∑_{s'} P(s' | s, π(s)) U^π(s')
+#
+# This is a system of |S| linear equations in |S| unknowns (the utilities).
+# It can be solved directly using linear algebra: (I - γP) U^π = b
+#
+# In contrast, the optimal Bellman equation has a max over actions:
+#   U*(s) = max_a [ R(s) + γ ∑_{s'} P(s' | s, a) U*(s') ]
+# which is NONLINEAR and must be solved iteratively (value iteration).
+#
+# Key insight: Policy evaluation trades the hard nonlinear system for a cheap
+# linear one by committing to a fixed action per state first.
+
+# %%
 # Evaluate a fixed policy by solving the linear Bellman system.
 utils.cell3_1_policy_evaluation()
 
 # %% [markdown]
 # **Key observations**:
-# - With a fixed action per state the $\max$ disappears: the equations are linear
-# - A bad policy yields low utilities, especially where it steers into $-1$
-# - Evaluation answers "how good is this policy", not "what should I do instead"
-# - The linear system $(I - \gamma P) U = b$ is solved directly with `numpy`
-# - A poor policy produces visibly low utilities near the $-1$ terminal
 # - Evaluation is the first half of policy iteration
+#     - Evaluation answers "how good is this policy", not "what should I do instead"
+# - With a fixed action per state the $\max$ disappears: the equations are linear
+#     - The linear system $(I - \gamma P) U = b$ is solved directly with `numpy`
+# - A bad policy
+#     - yields low utilities, especially where it steers into $-1$
+#     - produces visibly low utilities near the $-1$ terminal
 
 # %% [markdown]
 # ## Cell 3.2: Policy Improvement and Iteration to Optimality
@@ -338,17 +356,22 @@ utils.cell3_1_policy_evaluation()
 # - Alternate evaluation and improvement until the policy stops changing
 # - Watch convergence to the optimal policy in a few iterations
 
+# %% [markdown]
+# https://github.com/gpsaggese/gpsaggese.github.io/blob/maste
+#
+# https://github.com/gpsaggese/gpsaggese.github.io/tree/gp_scratch/msml610/tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3_utils.py#L1680
+
 # %%
 # Step through policy iteration rounds and watch arrows flip to optimal.
+# Source: https://github.com/gpsaggese/gpsaggese.github.io/blob/main/msml610/tutorials/L12_reinforcement_learning/L12_01_gridworld_4x3_utils.py#L1680
 utils.cell3_2_policy_iteration()
 
 # %% [markdown]
 # **Key observations**:
 # - Each round evaluates the policy, then makes it greedy with respect to it
-# - It converges in very few iterations, often fewer than value iteration sweeps
-# - It terminates exactly when no state changes its action
-# - Early rounds flip many arrows at once
-# - The count of changed states drops to zero at convergence
+#     - It converges in very few iterations, often fewer than value iteration sweeps
+#     - It terminates exactly when no state changes its action
+#     - Early rounds flip many arrows at once
 # - A stable policy is provably optimal
 
 # %% [markdown]
@@ -364,12 +387,11 @@ utils.cell3_3_compare_solvers()
 
 # %% [markdown]
 # **Key observations**:
-# - Value iteration does many cheap sweeps; policy iteration does few expensive ones
+# - _Value iteration_ does many cheap sweeps
+# - _Policy iteration_ does few expensive ones
 # - As $\gamma \to 1$, value iteration needs many more sweeps
 # - Both converge to the same optimal policy
-# - Raising gamma stretches the value iteration curve to the right
-# - Policy iteration stays at a handful of rounds across gamma
-# - They are different routes to the same answer
+#     - They are different routes to the same answer
 
 # %% [markdown]
 # # Part 4: Learning Without a Model (Q-Learning)
@@ -378,24 +400,23 @@ utils.cell3_3_compare_solvers()
 # ## Cell 4.1: Why Reinforcement Learning is Harder Than Planning
 #
 # **Goal**:
-# - Contrast planning (knowing the model) with learning (discovering through action)
+# - Contrast:
+#     - Planning (knowing the model)
+#     - Learning (discovering through action)
 # - Understand why the same optimal policy takes a harder route in RL
-# - Same world, blindfolded: the agent no longer has the transition table
-# - It must learn the value of actions purely from the rewards it stumbles into
-# - In RL the agent does not know $\Pr(s' \mid s, a)$ or $R(s, a, s')$
-# - The agent only sees experience tuples $(s, a, r, s')$ as it moves
+#     - Same world, blindfolded: the agent no longer has the transition table
+#     - It must learn the value of actions purely from the rewards it stumbles into
+#     - In RL the agent does not know $\Pr(s' \mid s, a)$ or $R(s, a, s')$
+#     - The agent only sees experience tuples $(s, a, r, s')$ as it moves
 # - The goal is unchanged (maximize expected return), but it must learn and act
 #   at the same time
 
-# %%
-# Contrast planning (knows Pr and R) with learning (must experience transitions).
-utils.cell4_1_planning_vs_learning()
-
 # %% [markdown]
 # **Key observations**:
-# - Planning reads the model; learning must discover it through action
+# - Planning evaluates the model
+# - Learning must discover it through action
 # - Every later algorithm in this part sees only $(s, a, r, s')$ tuples
-# - The same optimal policy is the target, reached by a harder route
+#     - The same optimal policy is the target, reached by a harder route
 
 # %% [markdown]
 # ## Cell 4.2: The Q-Learning Update Rule
