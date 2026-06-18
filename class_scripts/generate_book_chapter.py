@@ -16,7 +16,7 @@ Examples:
 # Generate book chapter from markdown and PDF file
 > generate_book_chapter.py \
     --input_file data605/lectures_source/Lesson01.1-Intro.txt \
-    --input_pdf_file data605/lectures/Lesson01.1-Intro.pdf \
+    --input_pdf_file data605/lectures_pdf/Lesson01.1-Intro.pdf \
     --output_dir test
 """
 

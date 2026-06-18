@@ -380,7 +380,7 @@ def _generate_book_chapter(
     """
     Generate book chapter from a lecture source file.
 
-    Uses gen_book_chapter.py Python script which:
+    Uses gen_lecture_commentary.py Python script which:
     1. Generates a PDF from the lecture source
     2. Creates book chapter using generate_book_chapter.py
     3. Converts to PDF using pandoc
@@ -399,7 +399,7 @@ def _generate_book_chapter(
     _LOG.info(
         "Generating book chapter for %s (lesson %s)", source_name, lesson_number
     )
-    cmd_str = f"gen_book_chapter.py {class_dir} {lesson_number}"
+    cmd_str = f"gen_lecture_commentary.py {class_dir} {lesson_number}"
     _LOG.info("Executing: %s", cmd_str)
     hsystem.system(cmd_str, suppress_output=False)
 

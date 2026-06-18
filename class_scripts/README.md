@@ -9,7 +9,7 @@ slide quality through automated LLM-powered transformations.
 - `lectures_recap/`: Output directory for discussion and recap question files
 - `lectures_script/`: Output directory for generated script files
 - `lectures_source/`: Input directory containing `Lesson*.txt` files
-- `lectures/`: Output directory for generated PDF files
+- `lectures_pdf/`: Output directory for generated PDF files
 
 ## Description of Files
 - `common_utils.py`: Shared utility functions for argument validation, file
@@ -21,10 +21,10 @@ slide quality through automated LLM-powered transformations.
 | :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
 | `count_lecture_commentary_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
 | `count_lecture_slides.py`  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
-| `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures/` directory using macOS `mdls` command                                 |
+| `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures_pdf/` directory using macOS `mdls` command                                 |
 | `count_words.py`           | Counts words in all files in `{DIR}/lectures_script/` directory to track lecture length                                 |
 | `extract_png_from_pdf.py`  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
-| `gen_book_chapter.py`      | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
+| `gen_lecture_commentary.py`      | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
 | `gen_lecture_script.py`    | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically                    |
 | `gen_quizzes.py`           | Generates multiple choice quizzes (20 questions) or discussion/review questions (3-6 questions) from lecture content    |
 | `gen_slides.py`            | Generates lecture slide PDFs from source files using `notes_to_pdf.py` for markdown-to-PDF conversion                   |
@@ -66,7 +66,7 @@ slide quality through automated LLM-powered transformations.
     - `process_slides.py`
   - action=`improve_slide` (not yet implemented)
   - action=`generate_book_chapter`
-    - `gen_book_chapter.py`
+    - `gen_lecture_commentary.py`
   - action=`generate_class_quizzes`
     - `gen_quizzes.py`
   - action=`generate_class_recap`
@@ -81,7 +81,7 @@ slide quality through automated LLM-powered transformations.
     - `generate_slide_script.py`
     - `llm_cli.py`
     - `lint_txt.py`
-  - `gen_book_chapter.py`
+  - `gen_lecture_commentary.py`
     - `notes_to_pdf.py`
     - `generate_book_chapter.py`
   - `slide_check.py`
@@ -236,7 +236,7 @@ slide quality through automated LLM-powered transformations.
   ```
 - Generate book chapter from markdown and PDF file:
   ```bash
-  > generate_book_chapter.py --input_file data605/lectures_source/Lesson01.1-Intro.txt --input_pdf_file data605/lectures/Lesson01.1-Intro.pdf --output_dir test
+  > generate_book_chapter.py --input_file data605/lectures_source/Lesson01.1-Intro.txt --input_pdf_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir test
   ```
 - Process with custom image width:
   ```bash
@@ -357,7 +357,7 @@ slide quality through automated LLM-powered transformations.
 - Creates output directory automatically with optional from-scratch mode
 - Extract all pages from a PDF with default settings:
   ```bash
-  > extract_png_from_pdf.py --input_file data605/lectures/Lesson01.1-Intro.pdf --output_dir output
+  > extract_png_from_pdf.py --input_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir output
   ```
 - Extract with higher DPI for better image quality:
   ```bash
@@ -513,7 +513,7 @@ content into various formats.
 **Generate PDF Slides for All Lessons in a Course**
 
 - Generates PDF files for all lessons starting with 0 or 1 (e.g., 01.1, 01.2,
-  10.1, etc.) in `data605/lectures/`:
+  10.1, etc.) in `data605/lectures_pdf/`:
   ```bash
   > for_loop_lessons.py --lectures "0*:1*" --class data605 --action generate_pdf
   ```

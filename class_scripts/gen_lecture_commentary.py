@@ -13,12 +13,12 @@ This script performs multiple steps:
 4. Open the PDF in Skim
 
 Usage:
-> gen_book_chapter.py data605 01.1
-> gen_book_chapter.py msml610 02.3
+> gen_lecture_commentary.py data605 01.1
+> gen_lecture_commentary.py msml610 02.3
 
 Import as:
 
-import class_scripts.gen_book_chapter as clgeboch
+import class_scripts.gen_lecture_commentary as clgelcom
 """
 
 import argparse
