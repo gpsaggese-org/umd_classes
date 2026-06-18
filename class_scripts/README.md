@@ -33,6 +33,7 @@ slide quality through automated LLM-powered transformations.
 | `generate_slide_script.py` | Generates lecture scripts from slide content; groups slides and lints output                                            |
 | `get_lecture_file.py`      | Finds and prints the path to a lecture source file matching `{DIR}/lectures_source/Lesson{LESSON}*`                     |
 | `for_loop_lessons.py`      | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
+| `for_loop_slides.py`       | Transforms lecture slides using LLM with specified rules; processes slides in batches and applies rule-based modifications |
 | `process_slides.py`        | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
 | `slide_check.py`           | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting                           |
 | `slide_improve.py`         | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness               |
@@ -481,6 +482,13 @@ slide quality through automated LLM-powered transformations.
   > generate_class_images.py --dst_dir ./course_images --workload MSML610
   ```
 
+# Test Utilities
+
+## `class_scripts/gen_slides_test_utils.py`
+
+- Shared utilities for slide generation testing. Provides helper functions for
+  discovering lessons, testing slide generation, and validating output.
+
 # Utility Scripts
 ## `class_scripts/get_lecture_file.py`
 
@@ -495,6 +503,51 @@ slide quality through automated LLM-powered transformations.
   ```
 
 # Orchestration Scripts
+
+## `class_scripts/for_loop_slides.py`
+
+Transforms lecture slides using LLM with specified rules. Reads slides from lesson
+files, applies LLM-based transformations based on a rule prompt, and writes the
+transformed slides back to the file or output.
+
+**Key features:**
+
+- Extracts slides from lesson files while preserving file structure
+- Applies LLM transformations using specified rule prompts
+- Processes slides in configurable batches for efficiency
+- Supports multiple batch modes: individual, shared_prompt, combined
+- Integrates with `hllm_cli._process_batches` for batch processing
+
+**Command Line Arguments:**
+
+- `--input_file`: Input lesson file containing slides (required)
+- `--output_file`: Output file for transformed slides (optional)
+- `--prompt_file` or `--prompt`: Rule prompt to guide transformation
+- `--model`: LLM model to use (default: "claude-opus-4")
+- `--batch_size`: Number of slides per batch (default: 1)
+- `--batch_mode`: Batch processing mode - "individual", "shared_prompt", or
+  "combined" (default: "individual")
+- `-v/--log_level`: Set logging verbosity (DEBUG, INFO, WARNING, ERROR)
+
+**Usage Examples:**
+
+- Transform slides using a prompt file:
+  ```bash
+  > for_loop_slides.py --input_file data605/lectures_source/Lesson01.1-Intro.txt \
+      --prompt_file my_rules.prompt.md --output_file output.txt
+  ```
+
+- Transform slides in batches with custom model:
+  ```bash
+  > for_loop_slides.py --input_file msml610/lectures_source/Lesson02.1-*.txt \
+      --prompt "Simplify the content" --model claude-opus-4 --batch_size 5
+  ```
+
+- Transform with combined batch mode:
+  ```bash
+  > for_loop_slides.py --input_file lecture.txt --prompt_file rules.txt \
+      --batch_mode combined --batch_size 3
+  ```
 
 ## `class_scripts/for_loop_lessons.py`
 
