@@ -28,12 +28,6 @@
         - Refresher: Numerical Optimization
         - Refresher: Stochastic Processes
 
-# Lesson01-1.aux.md
-
-- Analytical Sophistication 1
-- Analytical Sophistication 2
-- Hotel Pricing Paradox
-
 # Lesson01.1-AI_and_Machine_Learning.txt
 
 - AI and Machine Learning
@@ -57,6 +51,7 @@
         - Limits of ML Compared to Human Intelligence
         - The 3 Machine Learning Assumptions
         - AI vs ML vs Deep-Learning
+
 # Lesson01.2-The_Foundations_of_AI.txt
 
 - The Foundations of AI
@@ -73,6 +68,7 @@
         - AI and Computer Science
         - AI and Control Theory
         - AI and Computer Engineering
+
 # Lesson01.3-Brief_History_of_AI.txt
 
 - Brief History of AI
@@ -103,6 +99,7 @@
         - My 2 cents
         - Solutions to Problem of Control
         - Cooperative Inverse Reinforcement Learning
+
 # Lesson02.1-A_Map_of_Machine_Learning.txt
 
 - A Map of Machine Learning
@@ -112,6 +109,7 @@
         - Machine Learning Models
         - Machine Learning Techniques
         - Machine Learning Adages
+
 # Lesson02.2-ML_Paradigms.txt
 
 - Machine Learning Paradigms
@@ -137,6 +135,7 @@
         - Getting More Data
         - OCR Pipeline: Example of Artificial Data Synthesis
         - Ceiling Analysis for ML Pipeline
+
 # Lesson02.3-ML_Techniques_Input_Processing.txt
 
 - Input Processing
@@ -149,6 +148,7 @@
         - Dimensionality Reduction
         - Discretization
         - Noise Removal
+
 # Lesson02.4-ML_Techniques_Model_Learning.txt
 
 - Learning Algorithms
@@ -171,6 +171,7 @@
         - Map-Reduce for Batch Gradient Descent
         - Coordinate Descend
         - Gradient Descent vs Pseudo-Inverse
+
 # Lesson02.5-ML_Techniques_Model_Evaluation.txt
 
 - Performance Metrics
@@ -218,6 +219,7 @@
     - Stacking
         - Stacking
         - Boosting vs Bagging vs Stacking
+
 # Lesson02.6-ML_Techniques_How_To_Do_Research.txt
 
 - How to Do Research
@@ -240,6 +242,7 @@
         - Example: Spam Filter Classification
         - Right and Wrong Approach to Research
         - Incremental vs Iterative
+
 # Lesson03-Knowledge_representation.txt
 
 - Knowledge Representation
@@ -343,6 +346,7 @@
         - ConceptNet
         - Knowledge Graphs
         - Knowledge Graph: University Example
+
 # Lesson04.1-Models.txt
 
 - Naive Bayes Model
@@ -387,6 +391,7 @@
         - Linear Regression for Classification
         - Perceptron Learning Algorithm (PLA)
         - Non-Linear Transformations for Classifications
+
 # Lesson04.2-Models.txt
 
 - Logistic Regression
@@ -447,6 +452,7 @@
         - Classes of Support Vectors for Soft Margin SVM
         - Intuition for C in SVM
         - Multi-Class Classification for SVM
+
 # Lesson04.3-Models.txt
 
 - Similarity-Based Models
@@ -487,6 +493,7 @@
         - Evaluate Anomaly Detection Systems
         - Evaluate Anomaly Detection Systems
         - Anomaly Detection vs Supervised Learning
+
 # Lesson05.1-Learning_Theory.txt
 
 - Is Machine Learning Even Possible?
@@ -519,6 +526,7 @@
         - VC Generalization Bounds
         - VC Generalization Bounds
         - How to Void the VC Analysis Guarantee
+
 # Lesson05.2-Overfitting.txt
 
 - Overfitting
@@ -552,6 +560,7 @@
         - Learning Curves vs Bias-Variance Curves
         - Typical Form of Learning Curves
         - High-Bias vs High-Variance Regime
+
 # Lesson05.3-Learn_Validation.txt
 
 - Learn-Validation Approach
@@ -575,45 +584,51 @@
         - Bootstrap: Example of Die Rolls
         - Bootstrap of the Median: Pseudo-Code
         - Bootstrap for variance of sample statistics: explanation
+
 # Lesson06.1-Bayesian_Networks.txt
 
 - Logic-Based AI Under Uncertainty
+  - Problem
         - Logic-Based AI Under Uncertainty: Problem
-        - Logic-Based AI Under Uncertainty: Naive Solution
-        - Logic-Based AI Under Uncertainty: Example
+        - Logic-Based Under Uncertainty: Naive Solution
+        - Naive Solution: Example of Starting a Car
+  - Solution
         - Causal and Exhaustive Augmentation
-        - Causal and Exhaustive Augmentation
-        - Failure of Logic-Based AI: Wet Grass Example
-        - Failure of Logic-Based AI: Wet Grass Example
+        - Causal and Exhaustive Augmentation: Limitations
+        - Failure of Logic AI: Garden World Example
+        - Failure of Logic AI: Garden World Example
         - Acting Under Uncertainty: Actual Solution
         - The Paradox of Probability and Knowledge
-        - The Paradox of Probability and Knowledge
+        - The Paradox of Probability and Knowledge: Example
 - Probabilistic Reasoning
   - Conditional Independence
         - Full Joint Probability Distribution
         - Independence of Random Variables: Definition
         - Conditional Independence: Definition
         - Conditional Independence: Example
-        - Conditional Independence: Garden Example
+        - CI: Garden World Example
   - Bayesian Networks
         - Bayesian Networks: Definition
         - Bayesian Network: Intuition
         - Bayesian Network and Full-joint distribution
-        - Bayesian Networks: Wet Grass Example
-        - Bayesian Networks: Wet Grass Example
-        - Bayesian Networks: Wet Grass Example
+        - Bayesian Networks: Garden World Example
+        - Bayesian Networks: Garden World Example
+        - Bayesian Networks: Garden World Example
+        - Bayesian Networks: Garden World Example
         - Conditional Probability Table
+        - Conditional Probability Table: Example
         - Bayesian Networks: Burglar Example
         - Bayesian Networks: Burglar Example
         - Bayesian Networks: Burglar Example
-        - Conditional Probability Table
+        - CTP: Burglar Example
+
 # Lesson06.2-Using_Bayesian_Networks.txt
 
 - Semantics of Bayesian Networks
         - Bayesian Networks: Semantics
         - Chain Rule for a Joint Distribution
-        - Statement Probability from Bayesian Network
-        - Statement Probability From Bayes Nets: Example
+        - Evaluate a Bayesian Network
+        - Evaluate a Bayesian Network: Example
 - Constructing a Bayesian Network
         - Constructing a Bayesian Network
         - Bayesian Networks: Properties
@@ -627,7 +642,7 @@
         - Markov Blanket: Finance Example
         - Specifying a Conditional Probability Table
         - Deterministic Nodes
-        - Noisy Logical Relationships
+        - Noisy Logic Relationships
         - Context-specific Independence
         - Bayesian Networks with Continuous Variables
         - Bayesian Network: Car Insurance Company (1/2)
@@ -641,6 +656,8 @@
         - Sampling Bayesian Network Without Evidence
         - Consistency of Sampling
         - Rejection Sampling
+        - Rejection Sampling: Estimating Pi
+        - Rejection Sampling: Garden World Example
         - Rejection Sampling: Pros and Cons
         - Importance Sampling
         - Markov Chain Monte Carlo
@@ -648,6 +665,7 @@
         - Markov Chain Monte Carlo: Mixing
         - Gibbs Sampling in Bayesian Networks
         - Metropolis–Hastings Sampling
+
 # Lesson07.1-Intro_to_Probabilistic_Programming.txt
 
 - Concepts
@@ -679,6 +697,7 @@
         - Coin Example: Numerical Solution (1/3)
         - Coin Example: Numerical Solution (2/3)
         - Coin Example: Numerical Solution (3/3)
+
 # Lesson07.2-Posterior_Based_Decisions.txt
 
 - Posterior-Based Decisions
@@ -713,6 +732,7 @@
         - Group Comparison Bayesian-Style
         - Sample Size Effect
         - Cohen's d
+
 # Lesson07.3-Hierarchical_Models.txt
 
 - Hierarchical Models
@@ -727,6 +747,7 @@
         - Shrinkage
         - You Need to Know When to Stop
         - Tutorial
+
 # Lesson07.4-Generalized_Linear_Models.txt
 
 - Generalized Linear Models
@@ -762,6 +783,7 @@
         - Multiple Regression: Rented Bike Example 1/2
         - Multiple Regression: Rented Bike Example 2/2
         - Tutorial
+
 # Lesson07.5-Bayesian_Model_Comparison.txt
 
 - Bayesian Model Comparison
@@ -806,6 +828,7 @@
   - Regularizing Priors
         - Priors and Regularization
         - Popular Regularization Methods in Bayesian Framework
+
 # Lesson08.1-Causal_AI_intro.txt
 
 - Introduction and Motivation
@@ -873,6 +896,7 @@
         - Techniques for Interpretability
         - Causal AI in Interpretable AI
         - The Future of Causal AI
+
 # Lesson08.2-Causal_Networks.txt
 
 - Causal Networks
@@ -911,6 +935,7 @@
   - Types of Paths in Causal AI
         - Fork Structure
         - Inverted Fork
+
 # Lesson08.3-Do_Calculus.txt
 
 - Intervention and Counterfactuals
@@ -940,6 +965,7 @@
         - Do-Calculus
         - The Rules of Do-Calculus
         - Back/Front-door Adjustments and Do-calculus
+
 # Lesson08.4.txt
 
 - Introduction to Causal Inference
@@ -1053,21 +1079,7 @@
 - Geo and switchback experiments
 - Non-compliance and instruments
 - Next steps
-# Lesson08.5-Experimentation.md
 
-- Introduction and Motivation
-- Randomization as Causal Identification
-  - Why Randomization Breaks Confounding
-  - Potential Outcomes and ATE
-- A/B Testing in Practice
-  - Classic A/B Test Design
-  - Power Analysis and Sample Size
-  - Common A/B Testing Pitfalls
-- Advanced Experimental Designs
-  - Switchback Experiments
-  - Multi-Armed Bandits
-  - Limits of Standard A/B Testing
-- When to Experiment vs. Observe
 # Lesson09.1-Reasoning_over_time.txt
 
 - Reasoning Over Time
@@ -1107,6 +1119,7 @@
         - Viterbi Algorithm: Intuition
         - Viterbi Algorithm: Example 1/2
         - Viterbi Algorithm: Example 2/2
+
 # Lesson09.2-Hidden_Markov_Models.txt
 
 - HMMs
@@ -1133,6 +1146,7 @@
         - Mathematical Foundation of EM
         - Example: Gaussian Mixture Models (GMM)
         - Properties and Limitations of EM
+
 # Lesson09.3-Multi_Armed_Bandits.txt
 
 - Introduction
@@ -1185,6 +1199,7 @@
         - Structured Bandits
         - Best-Arm Identification
         - Practical Issues
+
 # Lesson09.4-gh_Filter.txt
 
 - gh Filter
@@ -1199,6 +1214,7 @@
         - Interpretation of $g$
         - Interpretation of $h$
         - Control Theory Nomenclature
+
 # Lesson09.5-Kalman_Filter.txt
 
 - Discrete Bayes Filtering
@@ -1248,6 +1264,7 @@
         - Generic particle filter algorithm
         - Degeneracy Problem in Sequential Importance Sampling (SIS)
         - Resampling: Core Idea
+
 # Lesson09.6-Dynamic_Bayesian_Networks.txt
 
 - Dynamic Bayesian networks
@@ -1263,6 +1280,7 @@
         - DBN to Represent Changing Model
         - DBN: Inference
         - DBN: Optimization for Inference
+
 # Lesson10-Timeseries_forecasting.txt
 
 - Time Series
@@ -1352,6 +1370,7 @@
   - Time Series Generative Models
   - Long-Horizon Forecasting Challenges
   - Uncertainty Quantification and Calibration
+
 # Lesson10.1-Causal_Inference_for_Time_Series.txt
 
 - Time Series vs. Cross-Sectional Causality
@@ -1421,56 +1440,121 @@
 
 # Lesson10.2-Causal_Discovery.txt
 
-- The Discovery Problem: When and Why It Works
+- The Discovery Problem
   - Inferring Causal Structure from Observational Data
         - Causal Discovery: Motivation
-        - Causal Discovery: Definition
-        - Observational vs. Interventional Data
-        - The Discovery Problem in One Picture
+        - Causal Discovery: Formal Definition
+        - Observational vs Interventional Data
+        - The Discovery Problem
   - Identifiability and Causal Sufficiency
-        - Key Assumptions for Causal Discovery
-        - Markov Equivalence Classes
-        - Identifiability: When Can We Recover the DAG?
-        - Faithfulness: A Subtle Assumption
-  - Practical Limitations of Automated Discovery
-        - Practical Limitations
-        - Practical Limitations (cont.)
-- When to Use Discovery vs. Domain Knowledge
+        - Markov Equivalence
+        - Markov Equivalence: Examples
+        - Typical Assumptions for Causal Discovery
+        - Identifiability
+        - Faithfulness
+  - Practical Limitations
+        - Practical Challenges for Causal Discovery
+        - Practical Challenges for Causal Discovery
+- When to Use Discovery vs Domain Knowledge
   - Discovery as Hypothesis Generation
-        - Discovery vs. Domain Knowledge
+        - Discovery vs Domain Knowledge
         - Discovery as Hypothesis Generation
   - Combining Discovery with Domain Knowledge
         - Using Domain Knowledge as Constraints
         - Combining Automated Discovery with Expert Judgment
 - Discovery Algorithm Families
         - Three Main Algorithm Families
-  - Constraint-Based Methods: PC and FCI
-        - PC Algorithm: Idea
-        - PC Algorithm: Steps
-        - PC Algorithm: Example
-        - FCI: Dealing with Latent Confounders
-  - Score-Based Methods: GES and NOTEARS
-        - Score-Based Approach: Idea
-        - GES: Greedy Equivalence Search
-        - NOTEARS: Continuous Optimization
-  - Non-Gaussian and Functional Methods
-        - LiNGAM: Linear Non-Gaussian Acyclic Model
-        - Discovery Algorithm Families: Summary
+        - Metrics
+        - Edge-Level Metrics
+        - Structure-Level and Complexity Metrics
+        - Discovery Algorithm Families: Overview
+        - Discovery Algorithm Families: Detailed Comparison
+        - Constraint-Based Discovery
+        - Score-Based Discovery
+        - Functional Discovery
+        - Interventional Discovery
+        - Choosing an Algorithm Family
 - Challenges and Validation
-  - Why Standard ML Fails at Causal Discovery
-        - Why Standard ML Fails at Causal Discovery
-        - Standard ML vs. Causal Discovery
-  - Multiple Models Produce Identical Predictions
-        - The Identifiability Ceiling
-        - Markov Equivalence: Example
-  - Domain Expert Review and Refutation Testing
         - Validating a Discovered DAG
         - Refutation Testing
-  - When Discovery Should Change Your DAG
         - When Discovery Should Change Your DAG
         - Causal Discovery: Key Takeaways
 
-# Lesson11-Probabilistic_deep_learning.txt
+# Lesson11.1-Decision_Making_with_Causal_Models.txt
+
+- Why Prediction Is Not Enough
+  - Prediction Pipelines vs. Decision Pipelines
+        - From Predictions to Decisions
+        - Prediction Pipeline: Standard Supervised Learning
+        - Decision Pipeline: What Changes
+        - Prediction vs. Decision: Side-by-Side
+  - When Prediction Fails
+        - Simpson's Paradox
+        - Simpson's Paradox: Causal Resolution
+        - Confounding: The Root Cause
+        - Policy Reversal
+  - Causal Models as the Foundation for Decisions
+        - Causal Models for Decisions
+        - Decision Loop with Causal Models
+- Foundations of Decision Theory
+  - Utility Functions and Expected Utility
+        - Utility Functions
+        - Expected Utility Principle
+        - Expected Utility: Buying Insurance Example
+        - Expected Utility: Two Treatment Example
+  - Causal Interventions and Expected Outcomes
+        - From Observational to Interventional Expectation
+        - Intervention in an Decision Network
+        - Expected Outcome of an Intervention
+  - Risk Preferences and Multi-Criteria Trade-offs
+        - Risk Preferences
+        - Visualizing Risk Aversion
+        - Multi-Criteria Trade-offs
+        - Utility Theory: Pros and Cons
+- Decision Support with Causal Models
+  - Decision Networks
+        - Decision Networks: Motivation
+        - Decision Network: Medical Example
+        - Solving an Decision Network
+        - Decision Networks: Pros and Cons
+  - Bayesian Decision-Making
+        - Posteriors to Optimal Actions
+        - Risk Function: Definition
+        - Admissible Decision Rules: Definition
+        - Why Bayes Rules Are Admissible
+        - Bayesian Decision Rule: Example
+        - Bayesian vs. Frequentist Decisions
+  - Prior Elicitation
+        - Prior Elicitation: What and Why
+        - Methods for Eliciting Priors
+        - Pitfalls and Best Practices
+- Sequential Decision-Making and Active Learning
+  - Value of Information
+        - Value of Information: Motivation
+        - Expected Value of Perfect Information
+        - Expected Value of Sample Information (EVSI)
+  - Exploration vs. Exploitation
+        - Exploration vs Exploitation
+        - Causal Multi-Armed Bandits
+  - Bayesian Optimization for Experimentation
+        - Bayesian Optimization
+        - Acquisition Functions
+        - Thompson Sampling
+        - Causal Bayesian Optimization
+        - Putting Everything Together
+- Uncertainty in Causal Decisions
+        - Aleatoric vs Epistemic Uncertainty
+        - Aleatoric Uncertainty: Irreducible Randomness
+        - Representing Aleatoric Uncertainty
+        - Epistemic Uncertainty: Model Misspecification
+        - Aleatoric vs. Epistemic: Side-by-Side
+        - Variance Decomposition of Uncertainty
+  - Communicating Uncertainty
+        - Communicating Uncertainty to Stakeholders
+        - Communicating Uncertainty: A Worked Example
+        - Summary: Decision-Making with Causal Models
+
+# Lesson11.2-Probabilistic_deep_learning.txt
 
 - Neural networks
         - Deep learning
@@ -1594,81 +1678,13 @@
         - Inverse Problems and Deep Learning
         - Deep Learning for Scientific Discovery (e.g., Protein Folding, Physics)
 
-# Lesson11.1-Decision_Making_with_Causal_Models.txt
-
-- Why Prediction Is Not Enough
-  - Prediction Pipelines vs. Decision Pipelines
-        - From Predictions to Decisions
-        - Prediction Pipeline: Standard Supervised Learning
-        - Decision Pipeline: What Changes
-        - Prediction vs. Decision: Side-by-Side
-  - When Prediction Fails
-        - Simpson's Paradox
-        - Simpson's Paradox: Causal Resolution
-        - Confounding: The Root Cause
-        - Policy Reversal
-  - Causal Models as the Foundation for Decisions
-        - Causal Models for Decisions
-        - Decision Loop with Causal Models
-- Foundations of Decision Theory
-  - Utility Functions and Expected Utility
-        - Utility Functions
-        - Expected Utility Principle
-        - Expected Utility: A Simple Example
-  - Causal Interventions and Expected Outcomes
-        - From Observational to Interventional Expectation
-        - Intervention in an Influence Graph
-        - Expected Outcome of an Intervention
-  - Risk Preferences and Multi-Criteria Trade-offs
-        - Risk Preferences
-        - Visualizing Risk Aversion
-        - Multi-Criteria Trade-offs
-        - Risk and Trade-offs: Practical Advice
-- Decision Support with Causal Models
-  - Influence Diagrams
-        - Influence Diagrams: Motivation
-        - Influence Diagram: Anatomy
-        - Solving an Influence Diagram
-        - Influence Diagrams: Pros and Cons
-  - Bayesian Decision-Making
-        - Posteriors to Optimal Actions
-        - Bayesian Decision Rule: Example
-        - Bayesian vs. Frequentist Decisions
-  - Prior Elicitation
-        - Prior Elicitation: What and Why
-        - Methods for Eliciting Priors
-        - Pitfalls and Best Practices
-- Sequential Decision-Making and Active Learning
-  - Value of Information
-        - Value of Information: Motivation
-        - Expected Value of Perfect Information (EVPI)
-        - Expected Value of Sample Information (EVSI)
-  - Exploration vs. Exploitation
-        - Exploration vs. Exploitation
-        - Causal Multi-Armed Bandits
-        - Thompson Sampling
-  - Bayesian Optimization for Experimentation
-        - Bayesian Optimization: The Setup
-        - Acquisition Functions
-        - BO in Causal Experimentation
-- Uncertainty in Causal Decisions
-  - Aleatoric Uncertainty
-        - Aleatoric Uncertainty: Irreducible Randomness
-        - Representing Aleatoric Uncertainty
-  - Epistemic Uncertainty
-        - Epistemic Uncertainty: Model Misspecification
-        - Aleatoric vs. Epistemic: Side-by-Side
-        - Distinguishing in Practice
-  - Communicating Uncertainty
-        - Communicating Uncertainty to Stakeholders
-        - Communicating Uncertainty: A Worked Example
-        - Summary: Decision-Making with Causal Models
-
-# Lesson12-Reinforcement_learning.txt
+# Lesson12.1-Reinforcement_learning.txt
 
 - Sequential Decision Problems
+  - MDPs
         - Sequential Decision Problems
-        - Markov Decision Process
+        - Markov Decision Processes (MDPs)
+        - MDP: Examples
         - MDP: Solution
         - MDP: 4x3 Environment Example
   - Utilities Over Time
@@ -1676,129 +1692,69 @@
         - Additive Rewards
         - Expected Utility of a Policy
         - Principle of Maximum Expected Utility (MEU)
+        - Maximum Expected Utility (MEU): Definition
         - MDP: Tetris Example
         - Utility of a State
+        - Utility of a State: Example
         - Bellman Equation
+        - Bellman Equation: Computing Utility of States
         - Bellman Equation: Intuition
         - Q-Function
         - Shaping Theorem
         - Representing MDP
+        - Taxonomy
+        - Dynamic Decision Networks
+        - Dynamic Decision Networks: Grid World Example
         - Dynamic Decision Networks: Tetris Example
-  - Algorithms for MDPs
+  - Solving MDPs
+        - MDP Solution: Overview
         - Value Iteration (1/2)
         - Value Iteration (2/2)
         - Policy Iteration
+        - Value vs Policy Iteration
         - Off-Line vs On-Line Solution of MDPS
         - The $n$-Bandit Problem
+  - POMDPs
         - Partially Observable MDPs (POMDPs)
+        - MDP vs POMDP: Comparison
         - POMDP: 4x3 World with Noisy Four-Bit Sensor
-        - Belief State Transitions and Value of Information
+        - Belief State Transitions
         - Solving POMDPs
+        - Hidden Confounders vs Hidden State
 - Reinforcement Learning
         - Problem with Supervised Learning
         - Reinforcement Learning
         - Sparse vs Immediate Rewards
         - Applications of Reinforcement Learning
+  - Model-Based vs Model-Free RL
+        - Model-Based vs Model-Free RL: Intuition
         - Model-Based Reinforcement Learning
         - Model-Free Reinforcement Learning
-        - Model-Based vs Model-Free Reinforcement Learning
+        - Model-Based vs Model-Free RL: Comparison
+        - When Correlation Misleads the Model
+  - Active vs Passive RL
         - Active vs Passive Reinforcement Learning
-  - Passive Reinforcement Learning
         - Passive Learning Agent
         - Adaptive Dynamic Programming
         - Temporal-Difference Learning
-  - Active Reinforcement Learning
         - Active Reinforcement Learning
         - Greedy Agent in Reinforcement Learning
         - Safe Exploration in Reinforcement Learning
         - Temporal-Difference Q-Learning
   - Generalization in Reinforcement Learning
-        - Generalization in Reinforcement Learning (1/2)
+        - Generalization in Reinforcement Learning
+        - Why Correlational Policies Fail to Transfer
   - Policy Search
         - Policy Search in Reinforcement Learning
-- Fundamentals
-        - What Is Reinforcement Learning?
-        - Components of an RL Problem (Agent, Environment, State, Action, Reward)
-        - Policy, Value Function, and Model
-        - Exploration vs Exploitation
-        - Discount Factor and Infinite Horizon
-        - Episodic vs Continuing Tasks
-- Classical Methods
-        - Dynamic Programming (DP)
-        - Policy Evaluation (Prediction Problem)
-        - Policy Iteration
-        - Value Iteration
-        - Monte Carlo Methods
-        - Temporal Difference (TD) Learning
-        - SARSA Algorithm
-        - Q-Learning Algorithm
-        - Eligibility Traces and TD($\lambda$)
-- Exploration Strategies
-        - $\epsilon$-Greedy Exploration
-        - Softmax Action Selection
-        - Upper Confidence Bound (UCB)
-        - Thompson Sampling
-        - Optimistic Initial Values
-- Policy Gradient Methods
-        - Policy Optimization vs Value-Based Methods
-        - REINFORCE Algorithm
-        - Variance Reduction in Policy Gradients (Baselines)
-        - Actor-Critic Methods
-        - Advantage Actor-Critic (A2C)
-        - Trust Region Policy Optimization (TRPO)
-        - Proximal Policy Optimization (PPO)
-- Value Function Approximation
-        - Function Approximation with Linear Models
-        - Nonlinear Function Approximation with Neural Networks
-        - Stability and Divergence Issues
-        - Deep Q-Network (DQN)
-        - Experience Replay
-        - Target Networks
-- Deep Reinforcement Learning
-        - Double DQN
-        - Dueling DQN
-        - Prioritized Experience Replay
-        - Distributional Reinforcement Learning
-        - Rainbow DQN
-- Model-Based Reinforcement Learning
-        - Planning vs Learning
-        - Dyna Architecture
-        - Model Learning and Planning Algorithms
-        - Model Predictive Control (MPC)
-        - Dreamer and Planet (World Models)
-- Advanced Topics
-        - Multi-Agent Reinforcement Learning
-        - Inverse Reinforcement Learning
-        - Imitation Learning
-        - Hierarchical Reinforcement Learning (Options Framework)
-        - Safe Reinforcement Learning
-        - Offline Reinforcement Learning (Batch RL)
-        - Meta Reinforcement Learning
-        - Curriculum Learning
-        - Exploration in Sparse Reward Environments
-        - Generalization and Transfer in RL
-- Applications
-        - Reinforcement Learning in Games (e.g., AlphaGo, Dota 2)
-        - Reinforcement Learning for Robotics
-        - Reinforcement Learning for Recommendation Systems
-        - Reinforcement Learning for Finance
-
-# Lesson15.1-Causal_Reasoning_Agents.md
-
-- LLMs and Causal Reasoning
-  - LLMs: Strengths and Limitations
-  - Pattern-Based Reasoning vs. Causal Reasoning
-- Enhancing LLM Reasoning with Causality
-  - Chain-of-Thought Prompting for Causal Reasoning
-  - Integrating Causal and Probabilistic Frameworks
-- Causal Agent Architectures
-  - Agents with Explicit Causal Models
-  - Integrating Causal Inference into Planning
-- Trustworthy AI Through Causality
-  - Transparency and Interpretability
-  - Robustness Through Causal Constraints
-  - Fairness Through Causal Reasoning
-  - Safety Through Causal Reasoning
+  - Causal Reinforcement Learning
+        - Causal Reinforcement Learning
+        - From Correlation to Causation in RL
+        - Confounding in Sequential Decision Making
+        - Structural Causal Models for MDPs
+        - Counterfactual Reasoning and Credit Assignment
+        - Deconfounding Offline / Off-Policy Data
+        - Causal Generalization Across Environments
+        - Causal RL: Open Challenges
 
 # Lesson91.Refresher_probability.txt
 
@@ -2123,6 +2079,7 @@
         - Bootstrap for variance of sample statistics: analytical formula
         - Bootstrap confidence intervals
         - Bootstrap hypothesis testing: example
+
 # Lesson92.Refresher_probability_distributions.txt
 
 - Interesting RVs
@@ -2177,6 +2134,7 @@
         - Proof of Chebyshev inequality
         - Comparing Markov and Chebyshev inequalities
         - Hoeffding inequality
+
 # Lesson93.Refresher_linear_algebra.txt
 
 - Linear algebra
@@ -2269,6 +2227,7 @@
         - Kronecker and Hadamard Products
         - Matrix Calculus
   - Connections between Machine Learning and Linear Algebra
+
 # Lesson94.Refresher_information_theory.txt
 
 - Information theory
@@ -2296,6 +2255,7 @@
         - Kolmogorov Complexity
         - Information Bottleneck
         - Multi-Information and Total Correlation
+
 # Lesson95.Refresher_game_theory.txt
 
 - Game theory
@@ -2320,6 +2280,7 @@
         - Cooperative Game Theory
         - Social Choice and Voting
   - Connections between Machine Learning and Game Theory
+
 # Lesson96.Refresher_stochastic_processes.txt
 
 - Stochastic processes
@@ -2343,6 +2304,7 @@
         - Law of Large Numbers and Central Limit Theorem
         - Monte Carlo Methods
         - Filtering and Prediction
+
 # Lesson97.Refresher_numerical_optimization.txt
 
 - Optimization / numerical methods

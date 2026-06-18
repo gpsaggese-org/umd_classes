@@ -5,9 +5,7 @@
 - Rename the dir `data605/book` to `data605/lectures_commentary` (✓ Done)
 - Rename `gen_book_chapter.py` -> `gen_lecture_commentary.py` (✓ Done)
 - Rename `lectures/` -> `lectures_pdf` (✓ Done)
-
 - Rename the dir `data605/lectures_script` -> `data605/lectures_video_script` (✓ Done)
-
 - Add output to some of the tools
 - Implement todos
 - Update class_scripts/README.md

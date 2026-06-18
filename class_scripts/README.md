@@ -115,9 +115,11 @@ slide quality through automated LLM-powered transformations.
   ```bash
   > count_lecture_commentary_pages.py data605
   > count_lecture_commentary_pages.py msml610
+  Lesson01.1-Intro.book_chapter.pdf	12
+  Lesson01.2-Big_Data.book_chapter.pdf	18
+  Lesson01.3-Is_Data_Science_Just_Hype.book_chapter.pdf	16
+  Lesson01.4-Data_Models.book_chapter.pdf	14
   ```
-
-// TODO(ai_gp): Add output example
 
 ## `class_scripts/count_lecture_slides.py`
 
@@ -129,24 +131,41 @@ slide quality through automated LLM-powered transformations.
   ```bash
   > count_lecture_slides.py data605
   > count_lecture_slides.py msml610
+  | File                                             |   Slides |   H1 |   H2 |   H3 |   Lines |   Words |   Chars |
+  |--------------------------------------------------|----------|------|------|------|---------|---------|---------|
+  | Lesson01.1-Intro.txt                             |        9 |    0 |    0 |    0 |     201 |     723 |    5903 |
+  | Lesson01.2-Big_Data.txt                          |       16 |    0 |    0 |    0 |     309 |    1282 |    8845 |
+  | Lesson01.3-Is_Data_Science_Just_Hype.txt         |       13 |    0 |    0 |    0 |     185 |     671 |    5274 |
+  | Lesson02.1-Git.txt                               |       14 |    0 |    0 |    0 |     364 |    1265 |    9457 |
   ```
 - Count with TSV format for easy spreadsheet import:
   ```bash
   > count_lecture_slides.py msml610 --format tsv
+  File	  Slides	  H1	  H2	  H3	  Lines	  Words	  Chars
+  Lesson01.1-Intro.txt	       9	   0	   0	   0	    201	    723	   5903
+  Lesson01.2-Big_Data.txt	      16	   0	   0	   0	    309	   1282	   8845
   ```
 - Count with CSV format:
   ```bash
   > count_lecture_slides.py msml610 --format csv
+  File,Slides,H1,H2,H3,Lines,Words,Chars
+  Lesson01.1-Intro.txt,9,0,0,0,201,723,5903
+  Lesson01.2-Big_Data.txt,16,0,0,0,309,1282,8845
   ```
 
 ## `class_scripts/count_lecture_pages.py`
 
-- Counts pages in all PDF files in the `{DIR}/lectures/` directory and displays
-  page counts for each lecture PDF file
+- Counts pages in all PDF files in the `{DIR}/lectures_pdf/` directory and
+  displays page counts for each lecture PDF file
 - Count pages for lecture PDFs:
   ```bash
   > count_lecture_pages.py data605
   > count_lecture_pages.py msml610
+  Lesson01.1-Intro.pdf	8
+  Lesson01.2-Big_Data.pdf	9
+  Lesson01.3-Is_Data_Science_Just_Hype.pdf	10
+  Lesson01.4-Data_Models.pdf	12
+  Lesson02.1-Git.pdf	15
   ```
 
 ## `class_scripts/count_words.py`
@@ -157,6 +176,11 @@ slide quality through automated LLM-powered transformations.
   ```bash
   > count_words.py data605
   > count_words.py msml610
+  Lesson01.1-Intro.script.txt	1346
+  Lesson01.2-Big_Data.script.txt	2088
+  Lesson01.3-Is_Data_Science_Just_Hype.script.txt	1339
+  Lesson01.4-Data_Models.script.txt	1957
+  Lesson02.1-Git.script.txt	2811
   ```
 
 # Generation Scripts
@@ -169,6 +193,9 @@ slide quality through automated LLM-powered transformations.
 - Generate slides with default settings:
   ```bash
   > gen_slides.py data605 01.1
+  Running command: notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after
+  [notes_to_pdf output...]
+  PDF generated: data605/lectures/Lesson01.1-Intro.pdf
   ```
 - Generate slides with custom theme:
   ```bash
@@ -183,6 +210,14 @@ slide quality through automated LLM-powered transformations.
 - Generate lecture script:
   ```bash
   > gen_lecture_script.py data605 01.1
+  Generating lecture script for Lesson01.1
+  Reading slides from: data605/lectures_source/Lesson01.1-Intro.txt
+  Generating intro section...
+  Generating script sections...
+  Generating outro section...
+  Combining and linting output...
+  Script saved to: data605/lectures_video_script/Lesson01.1-Intro.script.txt
+  Total words: 1346
   ```
 - Generate script with forced regeneration:
   ```bash
@@ -266,10 +301,18 @@ slide quality through automated LLM-powered transformations.
 - Generate multiple choice quiz:
   ```bash
   > gen_quizzes.py --for_class_quizzes data605 01.1
+  Reading lecture from: data605/lectures_source/Lesson01.1-Intro.txt
+  Generating 20 multiple choice questions...
+  Formatting with prettier...
+  Quiz saved to: data605/lectures_quizzes/Lesson01.1-Intro.quizzes.md
+  Generated 20 questions with 5 options each
   ```
 - Generate discussion questions:
   ```bash
   > gen_quizzes.py --for_class_recap msml610 02.3
+  Reading lecture from: msml610/lectures_source/Lesson02.3-...txt
+  Generating 5 discussion questions...
+  Recap saved to: msml610/lectures_recap/Lesson02.3-...recap.md
   ```
 - Generate without linting:
   ```bash
@@ -290,6 +333,15 @@ slide quality through automated LLM-powered transformations.
 - Process slides with LLM transformation:
   ```bash
   > process_slides.py --in_file lecture.txt --action slide_reduce --out_file output.txt --use_llm_transform
+  Processing input file: lecture.txt
+  Found 15 slides
+  Processing with action: slide_reduce (threads: 4)
+  Slide 1/15: Processing... [2.5s]
+  Slide 2/15: Processing... [2.3s]
+  ...
+  Completed: 15/15 slides
+  Output saved to: output.txt
+  Processing time: 45s
   ```
 - Check slide quality and generate report:
   ```bash
@@ -314,6 +366,14 @@ slide quality through automated LLM-powered transformations.
 - Check and fix slides:
   ```bash
   > slide_check.py data605 01.1
+  Checking slides in: data605/lectures_source/Lesson01.1-Intro.txt
+  Processing 9 slides with LLM text check...
+  Slide 1: Fixed 2 spelling errors, 1 grammar issue
+  Slide 2: No issues found
+  Slide 3: Fixed 1 capitalization error
+  ...
+  Results saved to: data605/lectures_source/Lesson01.1-Intro.txt
+  Total issues fixed: 8
   ```
 - Preview changes without executing:
   ```bash
@@ -328,6 +388,14 @@ slide quality through automated LLM-powered transformations.
 - Improve slides:
   ```bash
   > slide_improve.py data605 01.1
+  Improving slides in: data605/lectures_source/Lesson01.1-Intro.txt
+  Processing 9 slides with LLM improvement suggestions...
+  Slide 1: Suggested clearer explanation of key concepts
+  Slide 2: Suggested adding examples for better understanding
+  Slide 3: Suggested reorganizing content for better flow
+  ...
+  Suggestions saved to: data605/lectures_source/Lesson01.1-Intro.improved.txt
+  Total suggestions: 7
   ```
 - Limit suggestions:
   ```bash
@@ -342,6 +410,14 @@ slide quality through automated LLM-powered transformations.
 - Reduce slide content:
   ```bash
   > slide_reduce.py data605 01.1
+  Reducing slides in: data605/lectures_source/Lesson01.1-Intro.txt
+  Processing 9 slides with LLM reduction...
+  Slide 1: Reduced from 150 words to 95 words (37% reduction)
+  Slide 2: Reduced from 120 words to 78 words (35% reduction)
+  Slide 3: No reduction needed (already concise)
+  ...
+  Results saved to: data605/lectures_source/Lesson01.1-Intro.reduced.txt
+  Total reduction: 35% (avg)
   ```
 - Set target length:
   ```bash
@@ -358,7 +434,15 @@ slide quality through automated LLM-powered transformations.
 - Extract all pages from a PDF with default settings:
   ```bash
   > extract_png_from_pdf.py --input_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir output
+  Processing PDF file: data605/lectures_pdf/Lesson01.1-Intro.pdf
+  Output directory: output
+  Converting PDF to images with DPI=200
+  Found 8 pages in PDF
+  Extracting pages: 100%|████████| 8/8
+  Successfully extracted 8 PNG images to output
   ```
+  Output files created: `output/slides001.png`, `output/slides002.png`, ..., `output/slides008.png`
+
 - Extract with higher DPI for better image quality:
   ```bash
   > extract_png_from_pdf.py --input_file lecture.pdf --output_dir slides --dpi 300
@@ -377,6 +461,16 @@ slide quality through automated LLM-powered transformations.
 - Generate 5 HD quality images from a prompt:
   ```bash
   > generate_class_images.py "A sunset over mountains" --dst_dir ./images
+  Generating 5 images with prompt: 'A sunset over mountains'
+  Resolution: 1024x1024, Quality: hd
+  Generating image 1/5
+  Downloading image to ./images/image_01_hd.png
+  Saved image to: ./images/image_01_hd.png
+  Generating image 2/5
+  Downloading image to ./images/image_02_hd.png
+  Saved image to: ./images/image_02_hd.png
+  ...
+  Image generation complete. Images saved to: ./images
   ```
 - Generate standard quality images with custom count:
   ```bash
@@ -397,6 +491,7 @@ slide quality through automated LLM-powered transformations.
   ```bash
   > get_lecture_file.py data605 01.1
   > get_lecture_file.py msml610 02.3
+  Lecture file: data605/lectures_source/Lesson01.1-Intro.txt
   ```
 
 # Orchestration Scripts
