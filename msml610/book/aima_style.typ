@@ -62,21 +62,33 @@
 // Configure heading styles
 #show heading: it => {
   if it.level == 2 {
+    counter(heading).step(level: it.level)
+    let nums = counter(heading).get()
+    let num-text = if nums.len() > 1 {
+      str(nums.at(0)) + "." + str(nums.at(1)) + " "
+    } else {
+      ""
+    }
     block(spacing: 0.5em)[
       #v(0.8em)
       #set text(size: 11pt, weight: "bold", fill: aima-maroon)
-      #counter(heading).display(it.numbering)
-      #h(0.4em)
+      #num-text
       #it.body
       #line(length: 100%, stroke: 1.2pt + aima-maroon)
       #v(0.4em)
     ]
   } else if it.level == 3 {
+    counter(heading).step(level: it.level)
+    let nums = counter(heading).get()
+    let num-text = if nums.len() > 2 {
+      str(nums.at(0)) + "." + str(nums.at(1)) + "." + str(nums.at(2)) + " "
+    } else {
+      ""
+    }
     block(spacing: 0.6em)[
       #v(0.6em)
       #set text(size: 10pt, weight: "bold", fill: aima-maroon)
-      #counter(heading).display(it.numbering)
-      #h(0.4em)
+      #num-text
       #it.body
       #v(0.3em)
     ]

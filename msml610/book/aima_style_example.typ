@@ -12,7 +12,10 @@
 
 // Chapter introduction
 #chapter-intro[
-  In which we examine the task of solving problems by searching through possible solutions. We cover uninformed and informed search strategies, emphasizing practical techniques for finding optimal paths in complex problem spaces.
+  In which we examine the task of solving problems by searching through
+  possible solutions. We cover uninformed and informed search strategies,
+  emphasizing practical techniques for finding optimal paths in complex problem
+  spaces.
 ]
 
 #v(0.8em)
