@@ -1,11 +1,14 @@
 // Import AIMA style formatting and macros
-#import "aima_style.typ": chapter, algorithm, glossary
+#import "aima_style.typ": aima-style, chapter, algorithm, glossary
 
 // Document metadata
 #set document(
   title: "Using Bayesian Networks",
   author: "MSML610: Advanced Machine Learning",
 )
+
+// Apply the AIMA document template (page/text/heading set + show rules)
+#show: aima-style
 
 #chapter(6, "Using Bayesian Networks")
 
