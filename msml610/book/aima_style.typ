@@ -1,6 +1,15 @@
 // AIMA-style formatting template
 // Reusable style configuration for textbook chapters
-// Import this file in your document with: #include "aima_style.typ"
+//
+// Usage:
+//   #import "aima_style.typ": aima-style, chapter, algorithm, glossary, chapter-intro
+//   #show: aima-style
+//   #chapter("3", "Title")
+//
+// NOTE: the page/text/heading `set` and `show` rules MUST live inside the
+// `aima-style` template applied via `#show: aima-style`. A plain `#import`
+// does not apply a module's top-level set/show rules to the importing
+// document, which is why these rules cannot sit at module top level.
 
 // Color definitions (AIMA palette)
 #let aima-purple = rgb("#8B7BA8")
@@ -8,27 +17,62 @@
 #let aima-blue = rgb("#0066CC")
 #let aima-gray = rgb("#F0F0F0")
 
-// Page and text configuration
-#set page(
-  margin: (left: 1.2in, right: 1.2in, top: 0.85in, bottom: 0.85in),
-  header: context {
-    let page-num = counter(page).get().first()
-    if page-num > 2 [
-      #set text(size: 8.5pt, fill: black)
-      #if page-num == 3 {
-        [Chapter 1 Introduction]
-      } else {
-        [Section 1.1 What Is AI?]
-      }
-      #h(1fr)
-      #page-num
-    ]
-  },
-)
+// Document-wide template: apply with `#show: aima-style`
+#let aima-style(body) = {
+  // Page and text configuration
+  set page(
+    margin: (left: 1.2in, right: 1.2in, top: 0.85in, bottom: 0.85in),
+    header: context {
+      let page-num = counter(page).get().first()
+      if page-num > 2 [
+        #set text(size: 8.5pt, fill: black)
+        #if page-num == 3 {
+          [Chapter 1 Introduction]
+        } else {
+          [Section 1.1 What Is AI?]
+        }
+        #h(1fr)
+        #page-num
+      ]
+    },
+  )
 
-#set text(font: "Times New Roman", size: 9.5pt, lang: "en")
-#set par(justify: true, leading: 0.6em)
-#set heading(numbering: "1.1.1")
+  set text(font: "Times New Roman", size: 9.5pt, lang: "en")
+  set par(justify: true, leading: 0.6em)
+  set heading(numbering: "1.1.1")
+
+  // Configure heading styles
+  show heading: it => {
+    // counter(heading).at(it.location()) works without `context` and reflects
+    // the heading's own auto-incremented number (no manual stepping).
+    let nums = counter(heading).at(it.location())
+    if it.level == 2 {
+      block(spacing: 0.5em)[
+        #v(0.8em)
+        #set text(size: 11pt, weight: "bold", fill: aima-maroon)
+        #numbering("1.1", ..nums)
+        #h(0.4em)
+        #it.body
+        #v(0.15em)
+        #line(length: 100%, stroke: 1.2pt + aima-maroon)
+        #v(0.4em)
+      ]
+    } else if it.level == 3 {
+      block(spacing: 0.6em)[
+        #v(0.6em)
+        #set text(size: 10pt, weight: "bold", fill: aima-maroon)
+        #numbering("1.1.1", ..nums)
+        #h(0.4em)
+        #it.body
+        #v(0.3em)
+      ]
+    } else {
+      it
+    }
+  }
+
+  body
+}
 
 // Chapter heading style (AIMA style)
 #let chapter(num, title) = {
@@ -57,44 +101,6 @@
   [#title]
 
   v(0.8em)
-}
-
-// Configure heading styles
-#show heading: it => {
-  if it.level == 2 {
-    counter(heading).step(level: it.level)
-    let nums = counter(heading).get()
-    let num-text = if nums.len() > 1 {
-      str(nums.at(0)) + "." + str(nums.at(1)) + " "
-    } else {
-      ""
-    }
-    block(spacing: 0.5em)[
-      #v(0.8em)
-      #set text(size: 11pt, weight: "bold", fill: aima-maroon)
-      #num-text
-      #it.body
-      #line(length: 100%, stroke: 1.2pt + aima-maroon)
-      #v(0.4em)
-    ]
-  } else if it.level == 3 {
-    counter(heading).step(level: it.level)
-    let nums = counter(heading).get()
-    let num-text = if nums.len() > 2 {
-      str(nums.at(0)) + "." + str(nums.at(1)) + "." + str(nums.at(2)) + " "
-    } else {
-      ""
-    }
-    block(spacing: 0.6em)[
-      #v(0.6em)
-      #set text(size: 10pt, weight: "bold", fill: aima-maroon)
-      #num-text
-      #it.body
-      #v(0.3em)
-    ]
-  } else {
-    it
-  }
 }
 
 // Margin glossary term

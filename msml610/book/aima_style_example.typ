@@ -1,11 +1,14 @@
 // Import AIMA style formatting and macros
-#import "aima_style.typ": chapter, algorithm, glossary, chapter-intro
+#import "aima_style.typ": aima-style, chapter, algorithm, glossary, chapter-intro
 
 // Document metadata
 #set document(
   title: "Search Algorithms",
   author: "AI Education",
 )
+
+// Apply the AIMA document template (page/text/heading set + show rules)
+#show: aima-style
 
 // Main document
 #chapter("3", "Solving Problems by Searching")
