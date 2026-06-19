@@ -158,3 +158,9 @@ After generating the chapter file:
    - Ensure no markdown syntax (`**`, `__`, `~~`) is used
    - Fix errors and retry
 4. Report success only when typst shows clean compilation with no warnings
+
+## Lint
+- Run
+  ```
+  > typstyle --inplace --wrap-text -l 80 [filename.typ]
+  ```
