@@ -121,7 +121,18 @@
 
 - Blogs from `helpers_root/papers/AIgentic_Development_System/`
 
-- Latex / slide documentation flow
+### Typst
+  website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md
+  website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.all_examples.typ
+  website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.hello_world.typ
+  website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/touying.all_examples.typ
+  website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/touying.hello_world.typ
+  website/docs/blog/posts/draft.how_to.latex_vs_typst_for_typsetting.md
+
+### Typesetting flow
+  website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
+  dev_scripts_helpers/documentation/README.md
+  dev_scripts_helpers/documentation/README.notes_to_pdf.md
 
 - Invoke bash_print_tree
   - `helpers_root/docs/tools/all.invoke_git_branch_copy.how_to_guide.md`
