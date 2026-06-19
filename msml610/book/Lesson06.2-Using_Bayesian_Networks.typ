@@ -13,6 +13,7 @@
 )
 
 #set text(font: "Georgia", size: 9pt, lang: "en")
+#set par(justify: true)
 #set heading(numbering: "1.1.1")
 
 // Chapter heading macro (AIMA style)
@@ -23,6 +24,7 @@
     Chapter #num: #title
   ]
   v(0.5em)
+  counter(heading).update(num)
 }
 
 // Algorithm box (AIMA style)
@@ -193,79 +195,100 @@ different edge counts and conditional probability table sizes.
 *Causal ordering* (Burglary, Earthquake, Alarm, JohnCalls, MaryCalls)—minimal
 edges following causal direction:
 
-```graphviz
-digraph BayesianNetwork {
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.8;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
-    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
-    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
-    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
-    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
-
-    Burglary -> Alarm;
-    Earthquake -> Alarm;
-    Alarm -> JohnCalls;
-    Alarm -> MaryCalls;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph BayesianNetwork {
+//     splines=true;
+//     nodesep=0.8;
+//     ranksep=0.8;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+//     Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+//     JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+//     MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+//     Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+// 
+//     Burglary -> Alarm;
+//     Earthquake -> Alarm;
+//     Alarm -> JohnCalls;
+//     Alarm -> MaryCalls;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.1.png"),
+)
+// render_images:end
 
 *Poor ordering 1*—requires backward edges, increasing complexity:
 
-```graphviz
-digraph BayesianNetwork {
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.8;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
-    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
-    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
-    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
-    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
-
-    MaryCalls -> Alarm;
-    JohnCalls -> Alarm;
-    Alarm -> Burglary;
-    Alarm -> Earthquake;
-    Burglary -> Alarm;
-    Earthquake -> Alarm;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph BayesianNetwork {
+//     splines=true;
+//     nodesep=0.8;
+//     ranksep=0.8;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+//     Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+//     JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+//     MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+//     Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+// 
+//     MaryCalls -> Alarm;
+//     JohnCalls -> Alarm;
+//     Alarm -> Burglary;
+//     Alarm -> Earthquake;
+//     Burglary -> Alarm;
+//     Earthquake -> Alarm;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.2.png"),
+)
+// render_images:end
 
 *Poor ordering 2*—dense interconnections requiring large CPTs:
 
-```graphviz
-digraph BayesianNetwork {
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.8;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Burglary   [label="Burglary", fillcolor="#A6C8F4"];
-    Alarm      [label="Alarm", fillcolor="#FFD1A6"];
-    JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
-    MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
-    Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
-
-    MaryCalls -> Earthquake;
-    MaryCalls -> Burglary;
-    MaryCalls -> JohnCalls;
-    JohnCalls -> Earthquake;
-    Earthquake -> Burglary;
-    Earthquake -> Alarm;
-    Burglary -> Alarm;
-    Alarm -> MaryCalls;
-    Alarm -> JohnCalls;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph BayesianNetwork {
+//     splines=true;
+//     nodesep=0.8;
+//     ranksep=0.8;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     Burglary   [label="Burglary", fillcolor="#A6C8F4"];
+//     Alarm      [label="Alarm", fillcolor="#FFD1A6"];
+//     JohnCalls   [label="JohnCalls", fillcolor="#B2E2B2"];
+//     MaryCalls   [label="MaryCalls", fillcolor="#B2E2B2"];
+//     Earthquake [label="Earthquake", fillcolor="#A6C8F4"];
+// 
+//     MaryCalls -> Earthquake;
+//     MaryCalls -> Burglary;
+//     MaryCalls -> JohnCalls;
+//     JohnCalls -> Earthquake;
+//     Earthquake -> Burglary;
+//     Earthquake -> Alarm;
+//     Burglary -> Alarm;
+//     Alarm -> MaryCalls;
+//     Alarm -> JohnCalls;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.3.png"),
+)
+// render_images:end
 
 The graph is "minimal" in terms of connectivity when all edges represent causal
 relationships. Using domain knowledge to order nodes causally leads to simpler,
@@ -288,20 +311,27 @@ with practical reasoning: given that Mary called, what caused it? To use
 diagnostic models, we apply Bayes' rule to invert the probabilities:
 $Pr("Cause"|"Symptom") = (Pr("Symptom"|"Cause")Pr("Cause"))/(Pr("Symptom"))$
 
-```graphviz
-digraph CausalModel {
-    splines=true;
-    nodesep=2.0;
-    ranksep=1.5;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Causes [label="Causes", fillcolor="#B2E2B2"];
-    Symptoms [label="Symptoms", fillcolor="#F4A6A6"];
-
-    Causes -> Symptoms;
-    Symptoms -> Causes;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph CausalModel {
+//     splines=true;
+//     nodesep=2.0;
+//     ranksep=1.5;
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     Causes [label="Causes", fillcolor="#B2E2B2"];
+//     Symptoms [label="Symptoms", fillcolor="#F4A6A6"];
+// 
+//     Causes -> Symptoms;
+//     Symptoms -> Causes;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.4.png"),
+)
+// render_images:end
 
 Effective Bayesian networks typically use causal structure for specification,
 then invert via Bayes' rule for diagnostic reasoning.
@@ -358,21 +388,28 @@ rain decreases—the observed cause "explains away" the alternative. Evidence fr
 a descendant thus flows backward, updating ancestors through dependent paths in
 the network.
 
-```graphviz
-digraph BayesianFlow {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Rain [fillcolor="#A6C8F4", label="Rain"];
-    WetGrass [fillcolor="#B2E2B2", label="WetGrass"];
-    Sprinkler [fillcolor="#A6E7F4", label="Sprinkler"];
-
-    Rain -> WetGrass;
-    Sprinkler -> WetGrass;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph BayesianFlow {
+//     splines=true;
+//     nodesep=1.0;
+//     ranksep=0.75;
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     Rain [fillcolor="#A6C8F4", label="Rain"];
+//     WetGrass [fillcolor="#B2E2B2", label="WetGrass"];
+//     Sprinkler [fillcolor="#A6E7F4", label="Sprinkler"];
+// 
+//     Rain -> WetGrass;
+//     Sprinkler -> WetGrass;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.5.png"),
+)
+// render_images:end
 
 This bidirectional information flow, despite the network's directed structure,
 is a subtle but powerful aspect of Bayesian reasoning.
@@ -383,43 +420,50 @@ is a subtle but powerful aspect of Bayesian reasoning.
 
 Consider risk factors and outcomes for heart disease:
 
-```graphviz
-digraph HeartDiseaseGraph {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    H [label="HeartDisease", fillcolor="#F4A6A6"];
-    A [label="Age", fillcolor="#A6C8F4"];
-    G [label="Genetics", fillcolor="#A6C8F4"];
-    D [label="Diet", fillcolor="#A6C8F4"];
-    E [label="Exercise", fillcolor="#A6C8F4"];
-    BP [label="BloodPressure", fillcolor="#B2E2B2"];
-    C [label="Cholesterol", fillcolor="#B2E2B2"];
-
-    A -> H;
-    G -> H;
-    D -> H;
-    E -> H;
-
-    H -> BP;
-    H -> C;
-
-    A -> BP;
-    A -> C;
-    G -> BP;
-    G -> C;
-    D -> BP;
-    D -> C;
-    E -> BP;
-    E -> C;
-
-    {rank=same; A; G; D; E}
-    {rank=same; BP; C}
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph HeartDiseaseGraph {
+//     splines=true;
+//     nodesep=1.0;
+//     ranksep=0.75;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     H [label="HeartDisease", fillcolor="#F4A6A6"];
+//     A [label="Age", fillcolor="#A6C8F4"];
+//     G [label="Genetics", fillcolor="#A6C8F4"];
+//     D [label="Diet", fillcolor="#A6C8F4"];
+//     E [label="Exercise", fillcolor="#A6C8F4"];
+//     BP [label="BloodPressure", fillcolor="#B2E2B2"];
+//     C [label="Cholesterol", fillcolor="#B2E2B2"];
+// 
+//     A -> H;
+//     G -> H;
+//     D -> H;
+//     E -> H;
+// 
+//     H -> BP;
+//     H -> C;
+// 
+//     A -> BP;
+//     A -> C;
+//     G -> BP;
+//     G -> C;
+//     D -> BP;
+//     D -> C;
+//     E -> BP;
+//     E -> C;
+// 
+//     {rank=same; A; G; D; E}
+//     {rank=same; BP; C}
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.6.png"),
+)
+// render_images:end
 
 - #strong[Target node]: HeartDisease
 - #strong[Parent nodes] (direct causes): Age, Genetics, Diet, Exercise
@@ -439,36 +483,43 @@ contain all relevant information for assessing disease presence.
 
 For house prices in a region:
 
-```graphviz
-digraph HousePriceGraph {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    HP [label="HousePrices", fillcolor="#F4A6A6"];
-    E [label="EconomicGrowth", fillcolor="#A6C8F4"];
-    IR [label="InterestRate", fillcolor="#A6C8F4"];
-    UE [label="UnemploymentRate", fillcolor="#A6C8F4"];
-    DI [label="DisposableIncome", fillcolor="#B2E2B2"];
-    D [label="HousingDemand", fillcolor="#B2E2B2"];
-
-    E -> HP;
-    IR -> HP;
-    UE -> HP;
-
-    HP -> DI;
-    HP -> D;
-
-    {rank=same; E; IR; UE}
-    {rank=same; DI; D}
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph HousePriceGraph {
+//     splines=true;
+//     nodesep=1.0;
+//     ranksep=0.75;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     HP [label="HousePrices", fillcolor="#F4A6A6"];
+//     E [label="EconomicGrowth", fillcolor="#A6C8F4"];
+//     IR [label="InterestRate", fillcolor="#A6C8F4"];
+//     UE [label="UnemploymentRate", fillcolor="#A6C8F4"];
+//     DI [label="DisposableIncome", fillcolor="#B2E2B2"];
+//     D [label="HousingDemand", fillcolor="#B2E2B2"];
+// 
+//     E -> HP;
+//     IR -> HP;
+//     UE -> HP;
+// 
+//     HP -> DI;
+//     HP -> D;
+// 
+//     {rank=same; E; IR; UE}
+//     {rank=same; DI; D}
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.7.png"),
+)
+// render_images:end
 
 - #strong[Target node]: HousePrices
-- #strong[Parent nodes] (direct influences): EconomicGrowth,
-  InterestRate, UnemploymentRate
+- #strong[Parent nodes] (direct influences): EconomicGrowth, InterestRate,
+  UnemploymentRate
 - #strong[Children nodes]: DisposableIncome (house price affects purchasing
   power), HousingDemand (price inversely affects demand)
 
@@ -484,47 +535,51 @@ determinants.
 
 For an individual company's stock price:
 
-```graphviz
-digraph StockPriceGraph {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    SP [label="Stock Price", fillcolor="#F4A6A6"];
-    EPS [label="Earnings Per Share", fillcolor="#A6C8F4"];
-    IP [label="Industry Performance", fillcolor="#A6C8F4"];
-    MS [label="Market Sentiment", fillcolor="#A6C8F4"];
-    TV [label="Trading Volume", fillcolor="#B2E2B2"];
-    RC [label="Regulatory Changes", fillcolor="#C6A6F4"];
-    GE [label="Global Economic Conditions", fillcolor="#C6A6F4"];
-
-    EPS -> SP;
-    IP -> SP;
-    MS -> SP;
-
-    SP -> TV;
-
-    RC -> EPS;
-    RC -> IP;
-    GE -> EPS;
-    GE -> MS;
-
-    {rank=same; EPS; IP; MS}
-    {rank=same; RC; GE}
-    {rank=same; TV}
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph StockPriceGraph {
+//     splines=true;
+//     nodesep=1.0;
+//     ranksep=0.75;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+// 
+//     SP [label="Stock Price", fillcolor="#F4A6A6"];
+//     EPS [label="Earnings Per Share", fillcolor="#A6C8F4"];
+//     IP [label="Industry Performance", fillcolor="#A6C8F4"];
+//     MS [label="Market Sentiment", fillcolor="#A6C8F4"];
+//     TV [label="Trading Volume", fillcolor="#B2E2B2"];
+//     RC [label="Regulatory Changes", fillcolor="#C6A6F4"];
+//     GE [label="Global Economic Conditions", fillcolor="#C6A6F4"];
+// 
+//     EPS -> SP;
+//     IP -> SP;
+//     MS -> SP;
+// 
+//     SP -> TV;
+// 
+//     RC -> EPS;
+//     RC -> IP;
+//     GE -> EPS;
+//     GE -> MS;
+// 
+//     {rank=same; EPS; IP; MS}
+//     {rank=same; RC; GE}
+//     {rank=same; TV}
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.8.png"),
+)
+// render_images:end
 
 - #strong[Target node]: StockPrice
-- #strong[Parent nodes]: IndustryPerformance, EarningsPerShare,
-  MarketSentiment
-- #strong[Children node]: TradingVolume (price changes trigger trading
-  activity)
+- #strong[Parent nodes]: IndustryPerformance, EarningsPerShare, MarketSentiment
+- #strong[Children node]: TradingVolume (price changes trigger trading activity)
 - #strong[Grandparents] (outside Markov blanket): RegulatoryChanges,
-  GlobalEconomicConditions (influence parents but not trading volume
-  directly)
+  GlobalEconomicConditions (influence parents but not trading volume directly)
 
 Notably, grandparents do not belong to the Markov blanket. This means estimating
 stock price requires only immediate factors (industry performance, earnings,
@@ -662,80 +717,87 @@ vehicle characteristics drive accident and theft risk, which translate to costs.
 
 // Slide: Bayesian Network: Car Insurance Company (2/2)
 
-```graphviz
-digraph InsuranceRiskModel {
-    splines=true;
-    nodesep=1.0;
-    ranksep=0.75;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
-
-    Age [fillcolor="#A6C8F4"];
-    GoodStudent [fillcolor="#A6C8F4"];
-    YearsLicensed [fillcolor="#A6C8F4"];
-    DrivingRecord [fillcolor="#A6C8F4"];
-    Mileage [fillcolor="#A6C8F4"];
-    SafetyFeatures [fillcolor="#A6C8F4"];
-    MakeModel [fillcolor="#A6C8F4"];
-    VehicleYear [fillcolor="#A6C8F4"];
-    CarValue [fillcolor="#A6C8F4"];
-    Airbag [fillcolor="#A6C8F4"];
-    AntiTheft [fillcolor="#A6C8F4"];
-    Garaged [fillcolor="#A6C8F4"];
-    ExtraCar [fillcolor="#A6C8F4"];
-
-    RiskAversion [fillcolor="#FFD1A6"];
-    DrivingSkill [fillcolor="#FFD1A6"];
-    DrivingBehavior [fillcolor="#FFD1A6"];
-    Ruggedness [fillcolor="#FFD1A6"];
-    Theft [fillcolor="#FFD1A6"];
-    Cushioning [fillcolor="#FFD1A6"];
-    OwnCarDamage [fillcolor="#FFD1A6"];
-    OtherCost [fillcolor="#FFD1A6"];
-    Accident [fillcolor="#FFD1A6"];
-    SocioEcon [fillcolor="#FFD1A6"];
-
-    MedicalCost [fillcolor="#C6A6F4"];
-    LiabilityCost [fillcolor="#C6A6F4"];
-    PropertyCost [fillcolor="#C6A6F4"];
-    OwnCarCost [fillcolor="#C6A6F4"];
-
-    Age -> YearsLicensed;
-    Age -> DrivingSkill;
-    Age -> GoodStudent;
-    Age -> RiskAversion;
-    YearsLicensed -> DrivingSkill;
-    DrivingSkill -> DrivingRecord;
-    DrivingSkill -> DrivingBehavior;
-    DrivingRecord -> DrivingBehavior;
-    DrivingBehavior -> Accident;
-    RiskAversion -> Garaged;
-    RiskAversion -> AntiTheft;
-    Garaged -> Theft;
-    AntiTheft -> Theft;
-    Mileage -> Ruggedness;
-    SafetyFeatures -> Ruggedness;
-    SocioEcon -> RiskAversion;
-    SocioEcon -> MakeModel;
-    SocioEcon -> ExtraCar;
-    MakeModel -> VehicleYear;
-    MakeModel -> SafetyFeatures;
-    MakeModel -> Ruggedness;
-    VehicleYear -> CarValue;
-    CarValue -> Ruggedness;
-    CarValue -> Airbag;
-    Ruggedness -> OwnCarDamage;
-    Airbag -> Cushioning;
-    Cushioning -> Accident;
-    Accident -> MedicalCost;
-    Accident -> LiabilityCost;
-    Accident -> PropertyCost;
-    Accident -> OtherCost;
-    OwnCarDamage -> OwnCarCost;
-    OwnCarCost -> PropertyCost;
-    Theft -> OwnCarDamage;
-}
-```
+// rendered_images:begin
+// ```graphviz
+// digraph InsuranceRiskModel {
+//     splines=true;
+//     nodesep=1.0;
+//     ranksep=0.75;
+// 
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.2];
+// 
+//     Age [fillcolor="#A6C8F4"];
+//     GoodStudent [fillcolor="#A6C8F4"];
+//     YearsLicensed [fillcolor="#A6C8F4"];
+//     DrivingRecord [fillcolor="#A6C8F4"];
+//     Mileage [fillcolor="#A6C8F4"];
+//     SafetyFeatures [fillcolor="#A6C8F4"];
+//     MakeModel [fillcolor="#A6C8F4"];
+//     VehicleYear [fillcolor="#A6C8F4"];
+//     CarValue [fillcolor="#A6C8F4"];
+//     Airbag [fillcolor="#A6C8F4"];
+//     AntiTheft [fillcolor="#A6C8F4"];
+//     Garaged [fillcolor="#A6C8F4"];
+//     ExtraCar [fillcolor="#A6C8F4"];
+// 
+//     RiskAversion [fillcolor="#FFD1A6"];
+//     DrivingSkill [fillcolor="#FFD1A6"];
+//     DrivingBehavior [fillcolor="#FFD1A6"];
+//     Ruggedness [fillcolor="#FFD1A6"];
+//     Theft [fillcolor="#FFD1A6"];
+//     Cushioning [fillcolor="#FFD1A6"];
+//     OwnCarDamage [fillcolor="#FFD1A6"];
+//     OtherCost [fillcolor="#FFD1A6"];
+//     Accident [fillcolor="#FFD1A6"];
+//     SocioEcon [fillcolor="#FFD1A6"];
+// 
+//     MedicalCost [fillcolor="#C6A6F4"];
+//     LiabilityCost [fillcolor="#C6A6F4"];
+//     PropertyCost [fillcolor="#C6A6F4"];
+//     OwnCarCost [fillcolor="#C6A6F4"];
+// 
+//     Age -> YearsLicensed;
+//     Age -> DrivingSkill;
+//     Age -> GoodStudent;
+//     Age -> RiskAversion;
+//     YearsLicensed -> DrivingSkill;
+//     DrivingSkill -> DrivingRecord;
+//     DrivingSkill -> DrivingBehavior;
+//     DrivingRecord -> DrivingBehavior;
+//     DrivingBehavior -> Accident;
+//     RiskAversion -> Garaged;
+//     RiskAversion -> AntiTheft;
+//     Garaged -> Theft;
+//     AntiTheft -> Theft;
+//     Mileage -> Ruggedness;
+//     SafetyFeatures -> Ruggedness;
+//     SocioEcon -> RiskAversion;
+//     SocioEcon -> MakeModel;
+//     SocioEcon -> ExtraCar;
+//     MakeModel -> VehicleYear;
+//     MakeModel -> SafetyFeatures;
+//     MakeModel -> Ruggedness;
+//     VehicleYear -> CarValue;
+//     CarValue -> Ruggedness;
+//     CarValue -> Airbag;
+//     Ruggedness -> OwnCarDamage;
+//     Airbag -> Cushioning;
+//     Cushioning -> Accident;
+//     Accident -> MedicalCost;
+//     Accident -> LiabilityCost;
+//     Accident -> PropertyCost;
+//     Accident -> OtherCost;
+//     OwnCarDamage -> OwnCarCost;
+//     OwnCarCost -> PropertyCost;
+//     Theft -> OwnCarDamage;
+// }
+// ```
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson06.2-Using_Bayesian_Networks.typ.figs/Lesson06.2-Using_Bayesian_Networks.9.png"),
+)
+// render_images:end
 
 The network uses color coding: blue nodes are observable applicant/vehicle
 inputs, brown nodes are hidden variables, purple nodes are claim costs. This
