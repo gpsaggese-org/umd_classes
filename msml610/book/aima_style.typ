@@ -3,23 +3,31 @@
 // Import this file in your document with: #include "aima_style.typ"
 
 // Color definitions (AIMA palette)
-#let aima-purple = rgb("#9B8BB0")
-#let aima-maroon = rgb("#933333")
-#let aima-blue = rgb("#0077BE")
-#let aima-gray = rgb("#E8E8E8")
+#let aima-purple = rgb("#8B7BA8")
+#let aima-maroon = rgb("#8B3A62")
+#let aima-blue = rgb("#0066CC")
+#let aima-gray = rgb("#F0F0F0")
 
 // Page and text configuration
 #set page(
-  margin: (left: 1.5in, right: 1.2in, top: 1in, bottom: 1in),
-  footer: context [
-    #set text(size: 10pt, fill: gray)
-    #h(1fr)
-    #counter(page).display("– 1 –")
-  ],
+  margin: (left: 1.2in, right: 1.2in, top: 0.85in, bottom: 0.85in),
+  header: context {
+    let page-num = counter(page).get().first()
+    if page-num > 2 [
+      #set text(size: 8.5pt, fill: black)
+      #if page-num == 3 {
+        [Chapter 1 Introduction]
+      } else {
+        [Section 1.1 What Is AI?]
+      }
+      #h(1fr)
+      #page-num
+    ]
+  },
 )
 
-#set text(font: "Times New Roman", size: 9pt, lang: "en")
-#set par(justify: true)
+#set text(font: "Times New Roman", size: 9.5pt, lang: "en")
+#set par(justify: true, leading: 0.6em)
 #set heading(numbering: "1.1.1")
 
 // Chapter heading style (AIMA style)
@@ -29,56 +37,48 @@
   // Reset heading counter to chapter number
   counter(heading).update((int(num),))
 
-  // Purple header bar with "CHAPTER" label
+  // Purple header bar with "CHAPTER" label and number
   block(
     fill: aima-purple,
     width: 100%,
-    inset: (x: 12pt, y: 8pt),
+    inset: (x: 12pt, y: 10pt),
   )[
-    #set text(size: 14pt, weight: "bold", fill: white)
+    #set text(size: 13pt, weight: "bold", fill: white)
     CHAPTER
-  ]
-
-  v(-0.8em)
-
-  // Chapter number in large purple text, positioned on the right
-  box(width: 100%, height: auto)[
-    #set text(size: 48pt, weight: "bold", fill: aima-purple)
     #h(1fr)
+    #set text(size: 32pt, weight: "bold")
     #num
   ]
 
-  v(0.3em)
+  v(0.5em)
 
   // Title in burgundy/maroon
-  set text(size: 24pt, weight: "bold", fill: aima-maroon)
+  set text(size: 26pt, weight: "bold", fill: aima-maroon)
   [#title]
 
-  v(0.5em)
+  v(0.8em)
 }
 
 // Configure heading styles
 #show heading: it => {
   if it.level == 2 {
     block(spacing: 0.5em)[
-      #v(1.2em)
+      #v(0.8em)
       #set text(size: 11pt, weight: "bold", fill: aima-maroon)
-      #if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(0.5em)
-      }
+      #counter(heading).display(it.numbering)
+      #h(0.4em)
       #it.body
-      #v(-0.5em)
-      #line(length: 100%, stroke: 1pt + aima-maroon)
+      #line(length: 100%, stroke: 1.2pt + aima-maroon)
+      #v(0.4em)
     ]
   } else if it.level == 3 {
-    block(spacing: 0.8em)[
+    block(spacing: 0.6em)[
+      #v(0.6em)
       #set text(size: 10pt, weight: "bold", fill: aima-maroon)
-      #if it.numbering != none {
-        counter(heading).display(it.numbering)
-        h(0.5em)
-      }
+      #counter(heading).display(it.numbering)
+      #h(0.4em)
       #it.body
+      #v(0.3em)
     ]
   } else {
     it
@@ -88,28 +88,28 @@
 // Margin glossary term
 #let glossary(term) = {
   place(
-    left,
-    dx: -1.4in,
+    right,
+    dx: 0.3in,
     dy: 0em,
   )[
-    #set text(size: 9pt, fill: aima-blue, weight: "regular")
+    #set text(size: 8.5pt, fill: aima-blue, weight: "regular")
     #term
   ]
 }
 
 // Algorithm box (AIMA style)
 #let algorithm(name, content) = {
-  set text(size: 8pt, font: "Courier New")
   block(
-    fill: rgb("#f5f5f5"),
-    inset: 12pt,
-    radius: 4pt,
+    fill: rgb("#F5F5F5"),
+    inset: 10pt,
+    radius: 0pt,
     breakable: false,
+    stroke: 0.5pt + rgb("#E0E0E0"),
   )[
-    #set text(weight: "bold", size: 8.5pt)
+    #set text(weight: "bold", size: 8pt, font: "Courier New")
     Figure. #name
-    #set text(weight: "regular", size: 8pt)
-    #v(0.3em)
+    #v(0.2em)
+    #set text(weight: "regular", size: 7.8pt, font: "Courier New", fill: black)
     #content
   ]
 }
@@ -118,11 +118,12 @@
 #let chapter-intro(content) = {
   block(
     fill: aima-gray,
-    inset: 12pt,
+    inset: 11pt,
     radius: 0pt,
     width: 100%,
+    stroke: 0.5pt + rgb("#CCCCCC"),
   )[
-    #set text(size: 10pt, style: "italic", fill: black)
+    #set text(size: 9.5pt, style: "italic", fill: black)
     #content
   ]
 }
