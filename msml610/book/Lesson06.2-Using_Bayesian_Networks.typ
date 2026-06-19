@@ -1,48 +1,11 @@
+// Import AIMA style formatting and macros
+#import "aima_style.typ": chapter, algorithm, glossary
+
+// Document metadata
 #set document(
   title: "Using Bayesian Networks",
   author: "MSML610: Advanced Machine Learning",
 )
-
-#set page(
-  margin: (left: 1.5in, right: 1in, top: 1in, bottom: 1in),
-  footer: context [
-    #set text(size: 10pt, fill: gray)
-    #h(1fr)
-    #counter(page).display("– 1 –")
-  ],
-)
-
-#set text(font: "Georgia", size: 9pt, lang: "en")
-#set par(justify: true)
-#set heading(numbering: "1.1.1")
-
-// Chapter heading macro (AIMA style)
-#let chapter(num, title) = {
-  pagebreak()
-  [
-    #set text(size: 24pt, weight: "bold")
-    Chapter #num: #title
-  ]
-  v(0.5em)
-  counter(heading).update(num)
-}
-
-// Algorithm box (AIMA style)
-#let algorithm(name, content) = {
-  set text(size: 9pt, font: "Courier New")
-  block(
-    fill: rgb("#f5f5f5"),
-    inset: 12pt,
-    radius: 4pt,
-    breakable: false,
-  )[
-    #set text(weight: "bold", size: 10pt)
-    Figure. #name
-    #set text(weight: "regular", size: 9pt)
-    #v(0.3em)
-    #content
-  ]
-}
 
 #chapter(6, "Using Bayesian Networks")
 
