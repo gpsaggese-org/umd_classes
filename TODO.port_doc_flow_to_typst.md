@@ -28,5 +28,9 @@ website/docs/blog/posts/draft.how_to.latex_vs_typst_for_typsetting.md
 # Step 3: Extend the flow and document it
 dev_scripts_helpers/documentation/notes_to_pdf.py
 
+notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
+
+Cause: my typst path used container_type = "pandoc_only", which points at the bare pandoc/core:3.7 image. That image isn't built/pulled locally (only pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
+
 # Step 4: Reorg dev_scripts_helpers/documentation
 - Too many files
