@@ -1,14 +1,48 @@
-- What's the difference between count_lecture_pages.py and count_lecture_commentary_pages.py?
-  count_pdf_pages.py -> count_lecture_pages.py (✓ Done)
-  count_book_pages.py -> count_lecture_commentary_pages.py (✓ Done)
-- Create a diagram of which script calls which as a dot diagram
-- Rename the dir `data605/book` to `data605/lectures_commentary` (✓ Done)
-- Rename `gen_book_chapter.py` -> `gen_lecture_commentary.py` (✓ Done)
-- Rename `lectures/` -> `lectures_pdf` (✓ Done)
-- Rename the dir `data605/lectures_script` -> `data605/lectures_video_script` (✓ Done)
-- Add output to some of the tools
-- Implement todos
-- Update class_scripts/README.md
+Write a script to 
+
+1) open an iterm terminal with about 120 characters wide
+
+2) execute in it a certain command
+
+3) take a screenshot of only the iterm terminal and save it in a file
+
+Follow the approach
+
+import subprocess
+import time
+import os
+
+def run_script_in_iterm(script_path: str, screenshot_path: str, wait_seconds: int = 5):
+    # Open iTerm and run script
+    apple_script = f"""
+    tell application "iTerm"
+        activate
+        create window with default profile
+        tell current window
+            tell current session
+                write text "bash {script_path}"
+            end tell
+        end tell
+    end tell
+    """
+
+    subprocess.run(["osascript", "-e", apple_script])
+
+    # Wait for script execution
+    time.sleep(wait_seconds)
+
+    # Take screenshot
+    subprocess.run(["screencapture", "-x", screenshot_path])
+
+# Usage
+run_script_in_iterm("/path/to/script.sh", "/tmp/screenshot.png", wait_seconds=10)
+
+
+4) Run the script calling 
+
+`glow TODO.convert_slides_into_book.md`
+
+and saving the file in screenshot1.png
 
 # Conventions
 - When writing code you must always follow the instructions in
