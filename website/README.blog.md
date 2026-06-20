@@ -163,6 +163,24 @@
   .claude/statusline.sh
   .claude/settings.local.json
 
+## From notes
+
+/Users/saggese/src/notes1/blog/posts
+
+/Users/saggese/src/notes1/notes
+  - cs.software_development.txt - Software dev practices
+  - cs.The_clean_coder.Martin.2011.txt
+  - cs.The_pragmatic_programmer.txt
+  - IN_PROGRESS.cs.A_philosophy_of_software_design.Ousterout.2018.txt
+  - IN_PROGRESS.cs.Clean_architecture.Martin.2017.txt
+  - IN_PROGRESS.cs.Design_it.Keeling.2017.txt
+
+python.pytest.txt
+python.asyncio.txt
+python.mypy.txt
+python.mock.txt
+python.invoke.txt
+
 # Drafts
 
 <!--

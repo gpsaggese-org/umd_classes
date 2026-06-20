@@ -272,4 +272,7 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - _For image rendering_: Browser-based solutions (`grip` or `pandoc` to HTML)
   remain most reliable on macOS
 
-<!-- TODO(gp): Add open_md_on_github.sh  open_md.sh -->
+<!-- TODO(gp): Finish this -->
+- My favorite is Grip
+
+<!-- TODO(gp): Add open_md_on_github.sh open_md.sh -->
