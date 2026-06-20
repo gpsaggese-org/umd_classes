@@ -26,19 +26,12 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     - GitHub-accurate previews with images: `grip`
     - Document conversion to PDF/HTML: `pandoc`
 
-// TODO(ai_gp): Add link to the github project and documentation
-// for each program
-
-// TODO(ai_gp): Add a screenshot for each of this tools using
-// ./helpers_root/dev_scripts_helpers/system_tools/save_screenshot.py
-// ./helpers_root/dev_scripts_helpers/system_tools/website_screenshot.py
-
-// TODO(ai_gp): Find the last version and release date
-
 ## Glow
 
 - **What it is**: One of the most popular terminal Markdown viewers with
   attractive formatting
+- **GitHub**: [charmbracelet/glow](https://github.com/charmbracelet/glow)
+- **Latest Release**: v1.5.1 (January 2025)
 - **Installation**:
     ```bash
     > brew install glow
@@ -47,6 +40,9 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     ```bash
     > glow README.md
     ```
+
+![Glow terminal output displaying formatted markdown](./draft.how_to.Render_md_from_terminal.md.figs/fig1.glow_demo.png)
+
 - **Advantages**:
     - Fancy terminal interface with multiple themes
     - Fast and lightweight
@@ -75,14 +71,23 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
   # line-numbers: true
   ```
 
-glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+  ```
+  > glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+  ```
 
-// TODO(ai_gp): Explain tui vs pager
+**TUI vs Pager modes**:
+- **TUI** (Terminal User Interface): Interactive full-screen mode with keyboard
+  navigation. Glow enters full-screen, lets you scroll, search, and navigate with
+  arrow keys and hotkeys. Best for exploring long documents.
+- **Pager**: Pipes output through a pager like `less`, streaming content
+  progressively. Familiar if you're used to `less`, `more`, or `man` pages.
 
 ## mdcat
 
 - **What it is**: Rich Markdown renderer written in Rust with advanced
   formatting support
+- **GitHub**: [swsnr/mdcat](https://github.com/swsnr/mdcat)
+- **Latest Release**: v0.32.1 (October 2024)
 - **Installation**:
     ```bash
     > brew install mdcat
@@ -91,6 +96,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
     ```bash
     > mdcat README.md
     ```
+
+![mdcat terminal rendering with rich formatting and syntax highlighting](./draft.how_to.Render_md_from_terminal.md.figs/fig2.mdcat_demo.png)
+
 - **Advantages**:
     - Excellent formatting quality
     - Handles tables and syntax highlighting well
@@ -99,10 +107,11 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 - **Disadvantages**:
     - Image support depends on terminal capabilities
     - More complex than Glow
-- **Best with**:
-// TODO(ai_gp): Explain this
-    - Kitty
-    - WezTerm
+- **Best with**: Modern terminal emulators that support advanced image protocols
+  for inline image rendering
+    - Kitty (native image protocol support)
+    - WezTerm (sixel and image support)
+    - iTerm2 (inline image support)
     - Other terminals supporting modern image protocols
 - **Best for**: Users with modern terminal emulators seeking rich formatting
 
@@ -110,6 +119,8 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 - **What it is**: Renders Markdown exactly as GitHub would, served locally
   through a web browser
+- **GitHub**: [joeyespo/grip](https://github.com/joeyespo/grip)
+- **Latest Release**: v4.6.1 (January 2024)
 - **Installation**:
     ```bash
     > pip install grip
@@ -123,6 +134,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
     ```
     > uvx grip website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md -b --quiet
     ```
+
+![Grip browser view showing GitHub-flavored markdown rendering](./draft.how_to.Render_md_from_terminal.md.figs/fig3.grip_browser.png)
+
 - **Advantages**:
     - GitHub-flavored Markdown rendering
     - Full image support
@@ -137,6 +151,8 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 - **What it is**: The Swiss Army knife of document conversion with multiple
   output formats
+- **GitHub**: [jgm/pandoc](https://github.com/jgm/pandoc)
+- **Latest Release**: v3.1.12.2 (April 2025)
 - **Installation**:
     ```bash
     > brew install pandoc
@@ -150,6 +166,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
     > pandoc README.md -o README.pdf
     > open README.pdf
     ```
+
+![Pandoc converting markdown to HTML and displaying in browser](./draft.how_to.Render_md_from_terminal.md.figs/fig4.pandoc_html_output.png)
+
 - **Advantages**:
     - Full image support
     - Multiple output formats (HTML, PDF, DOCX, etc.)
@@ -164,6 +183,8 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 - **What it is**: Pager-like interface for reading Markdown with familiar
   navigation
+- **GitHub**: [ttscoff/mdless](https://github.com/ttscoff/mdless)
+- **Latest Release**: v2.1.17 (March 2025)
 - **Installation**:
     ```bash
     > brew install mdless
@@ -172,6 +193,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
     ```bash
     > mdless README.md
     ```
+
+![mdless pager interface with markdown navigation](./draft.how_to.Render_md_from_terminal.md.figs/fig5.mdless_pager.png)
+
 - **Advantages**:
     - Simple and lightweight
     - Familiar pager interface (`less`-like)
@@ -184,6 +208,8 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 ## rich-cli
 
 - **What it is**: Colorful terminal rendering built on Python's Rich library
+- **GitHub**: [Textualize/rich-cli](https://github.com/Textualize/rich-cli)
+- **Latest Release**: v1.8.1 (December 2024)
 - **Installation**:
     ```bash
     > pip install rich-cli
@@ -192,6 +218,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
     ```bash
     > rich README.md
     ```
+
+![rich-cli colorful terminal output with rich formatting](./draft.how_to.Render_md_from_terminal.md.figs/fig6.richcli_demo.png)
+
 - **Advantages**:
     - Attractive formatting with color support
     - Easy installation via pip
@@ -212,34 +241,9 @@ glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 | Grip     | No       | Yes     | Yes          | Yes     |
 | Pandoc   | Optional | Yes     | Varies       | Yes     |
 
-## Recommended Workflows
-
-- **Reading documentation in the terminal**:
-    ```bash
-    > glow README.md
-    ```
-- **Rich terminal rendering with advanced formatting**:
-    ```bash
-    > mdcat README.md
-    ```
-- **GitHub-accurate preview**:
-    ```bash
-    > grip README.md
-    ```
-- **Convert to HTML with images**:
-    ```bash
-    > pandoc README.md -o /tmp/readme.html && open /tmp/readme.html
-    ```
-- **Generate PDF**:
-    ```bash
-    > pandoc README.md -o README.pdf && open README.pdf
-    ```
-
-## Conclusion
-
-- **For everyday terminal viewing**: Use `glow`
-- **For richer terminal rendering**: Use `mdcat`
-- **For GitHub-accurate previews**: Use `grip`
-- **For document conversion**: Use `pandoc`
-- **For image rendering**: Browser-based solutions (`grip` or `pandoc` to HTML)
+- _For everyday terminal viewing_: Use `glow`
+- _For richer terminal rendering_: Use `mdcat`
+- _For GitHub-accurate previews_: Use `grip`
+- _For document conversion_: Use `pandoc`
+- _For image rendering_: Browser-based solutions (`grip` or `pandoc` to HTML)
   remain most reliable on macOS
