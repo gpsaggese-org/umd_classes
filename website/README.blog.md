@@ -163,84 +163,59 @@
   .claude/statusline.sh
   .claude/settings.local.json
 
-## Tier 1: Ready — Well-structured, near-publishable
+# Drafts
 
-- `website/docs/blog/posts/draft.Intro_to_Bayesian_Optimization.md`
-  - Complete post (266 lines), good TL;DR, well-structured with code examples
-    and references. Marked `draft: true` but could publish.
-- `website/docs/blog/posts/draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md`
-  - Near-complete (287 lines). Good content, code, references. Missing TL;DR
-    (uses `# Summary` style intro).
-- `website/docs/blog/posts/draft.in_60_mins.GluonTS.md`
-  - Very comprehensive (476 lines). Only issue: `draft: True` (capital T) in
-    front matter, minor formatting inconsistency.
+<!--
+- Create a table of all the draft blogs in website/docs/blog/posts/draft*
+- Rank them from how close they are to be publishable
+- Write the result in a markdown table with columns File, Words, Status where Status is (Ready, Almost Ready, Not Ready)
+-->
 
-## Tier 2: Good Content — Needs minor polish
-
-- `website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md`
-  - Well-structured (238 lines), good content on Markdown viewers for macOS.
-    Missing front matter (no `draft:`, `title:`, `date:` fields).
-- `website/docs/blog/posts/draft.pidev_vs_claude_code_comparison.md`
-  - Complete comparison post (421 lines) with good TL;DR.
-- `website/docs/blog/posts/draft.in_30_mins.pi_dev.md`
-  - Comprehensive tutorial (390 lines) with examples. Ready after light editing.
-- `website/docs/blog/posts/draft.how_to.Convert_PDF_to_Markdown.md`
-  - Good content coverage (446 lines). TL;DR fixed to proper format.
-- `website/docs/blog/posts/draft.how_to.Claude_skills.md`
-  - Decent content (188 lines) about Claude Skills. Needs restructuring and summary.
-
-## Tier 3: Partial — Needs significant work
-
-- `website/docs/blog/posts/draft.how_to.Use_Claude_Code.md`
-  - Has structure and some content (443 lines), but reads like internal notes.
-    Needs rewriting.
-- `website/docs/blog/posts/draft.how_to.Apple_Container.md`
-  - Has some content (109 lines) but reads like raw command notes and URLs.
-    Needs structuring into a tutorial.
-- `website/docs/blog/posts/draft.how_to.Claude_Artifacts.md`
-  - Short but coherent tutorial (56 lines). Needs expansion and TL;DR.
-- `website/docs/blog/posts/draft.how_to.Github_Copilot_Review.md`
-  - Very brief (32 lines). Needs much more content.
-- `website/docs/blog/posts/draft.how_to.Use_Claude_Code_Workflows.md`
-  - Mixed content (79 lines) — some instructional, some raw notes.
-- `website/docs/blog/posts/draft.how_to.Use_Local_LLMs_On_Mac.md`
-  - Expanded to 203 lines with full front matter (date, description, categories).
-    Covers installation, model benchmarking, and CLI usage. Still reads like
-    command notes and terminal output — needs narrative rewriting.
-- `website/docs/blog/posts/draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md`
-  - Minimal content (33 lines, JSON config snippet only). TL;DR fixed.
-- `website/docs/blog/posts/draft.how_to.VS_Code_Quick_Fix.md`
-  - Minimal content (46 lines, JSON config snippet only). TL;DR fixed.
-- `website/docs/blog/posts/draft.how_to.VS_Code_and_containers.md`
-  - Barely started (21 lines) — just two URLs.
-- `website/docs/blog/posts/draft.Writing_Books_For_Humans_and_AI.md`
-  - Has good guidelines (98 lines) but no front matter originally (added now).
-    Needs TL;DR and structure.
-- `website/docs/blog/posts/draft.GWS.md`
-  - Rough notes (36 lines) with terminal output. TL;DR and front matter added.
-- `website/docs/blog/posts/draft.in_5_mins.helpers_cc_wrapper.md`
-  - Decent structure (73 lines) but has TODO comments. Needs cleanup and links.
-
-## Tier 4: Scratchpad — Raw notes, not yet a blog post
-
-- `website/docs/blog/posts/draft.how_to.format_markdown.md`
-  - Just two URLs.
-- `website/docs/blog/posts/draft.debug.md`
-  - Has front matter (title, date, description) but content is still disjointed
-    command snippets and scratch notes. Not yet a blog post.
-- `website/docs/blog/posts/draft.blog_template.md`
-  - Template file — not a blog post. TL;DR is boilerplate placeholder.
-- `website/docs/blog/posts/draft.how_to.AI_Coding_Assistant.md`
-  - Raw unordered list of AI coding assistant tools (6 lines). No narrative.
-- `website/docs/blog/posts/draft.how_to.Claude_Code_and_tmux.md`
-  - Single URL (1 line). Barely started.
-- `website/docs/blog/posts/draft.carrer_advice.md`
-  - Raw notes (15 lines). Not yet a blog post.
-- `website/docs/blog/posts/draft.hiring_is_broken.md`
-  - Raw notes (34 lines). Not yet a blog post.
-
-## Published posts with remaining TODOs
-
-- `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
-  - Published. Has 1 remaining `TODO(ai_gp)` comment ("This seems to be
-    malformed").
+| File | Words | Status |
+|------|------:|--------|
+| `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | Ready |
+| `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | Ready |
+| `draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | Ready |
+| `draft.how_to.Render_md_from_terminal.md` | 1060 | Ready |
+| `draft.in_10_mins.helpers_hllm.md` | 1477 | Ready |
+| `draft.in_15_mins.helpers_hunit_test.md` | 1488 | Ready |
+| `draft.in_30_mins.helpers_caching.md` | 1599 | Ready |
+| `draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | Ready |
+| `draft.in_30_mins.pi_dev.md` | 1537 | Ready |
+| `draft.in_5_mins.helpers_render_images.md` | 1086 | Ready |
+| `draft.in_60_mins.GluonTS.md` | 2564 | Ready |
+| `draft.Intro_to_Bayesian_Optimization.md` | 1553 | Ready |
+| `draft.pidev_vs_claude_code_comparison.md` | 1930 | Ready |
+| `draft.Claude_Paid_Plans.md` | 970 | Almost Ready |
+| `draft.how_to.Apple_Container.md` | 660 | Almost Ready |
+| `draft.how_to.Claude_Artifacts.md` | 225 | Almost Ready |
+| `draft.how_to.Claude_skills.md` | 917 | Almost Ready |
+| `draft.how_to.Coding_Agents.md` | 1873 | Almost Ready |
+| `draft.how_to.Github_Copilot_Review.md` | 110 | Almost Ready |
+| `draft.how_to.latex_vs_typst_for_typsetting.md` | 457 | Almost Ready |
+| `draft.how_to.Use_Claude_Code.md` | 1870 | Almost Ready |
+| `draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | Almost Ready |
+| `draft.in_5_mins.helpers_cc.md` | 341 | Almost Ready |
+| `draft.TIL.Apple_container_running_notebook.md` | 714 | Almost Ready |
+| `draft.TIL.Autoreload_in_vim.md` | 366 | Almost Ready |
+| `draft.Writing_Books_For_Humans_and_AI.md` | 470 | Almost Ready |
+| `draft.blog_template.md` | 22 | Not Ready |
+| `draft.carrer_advice.md` | 58 | Not Ready |
+| `draft.debug.md` | 109 | Not Ready |
+| `draft.GWS.md` | 118 | Not Ready |
+| `draft.hermes.md` | 2 | Not Ready |
+| `draft.hiring_is_broken.md` | 250 | Not Ready |
+| `draft.how_to.AI_Coding_Assistant.md` | 53 | Not Ready |
+| `draft.how_to.Claude_Code_and_tmux.md` | 19 | Not Ready |
+| `draft.how_to.Codebase_local_kg.md` | 225 | Not Ready |
+| `draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | Not Ready |
+| `draft.how_to.format_markdown.md` | 81 | Not Ready |
+| `draft.how_to.Use_Claude_Code_Workflows.md` | 286 | Not Ready |
+| `draft.how_to.Use_tiny_docker_template.md` | 20 | Not Ready |
+| `draft.how_to.Use_typst_for_slides.md` | 320 | Not Ready |
+| `draft.how_to.VS_Code_and_containers.md` | 58 | Not Ready |
+| `draft.how_to.VS_Code_Quick_Fix.md` | 105 | Not Ready |
+| `draft.in_30_mins.helpers_typesetting_system.md` | 6 | Not Ready |
+| `draft.LLM_issues.md` | 41 | Not Ready |
+| `draft.My_AI_Policy.md` | 82 | Not Ready |
+| `draft.Reducing_hllm_cli_import_time.md` | 24 | Not Ready |
