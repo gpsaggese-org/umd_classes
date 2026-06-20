@@ -1,11 +1,9 @@
 # Step 0:
 
-Finish
-src/umd_classes2/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
-
+- [ ] Finish src/umd_classes2/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 - [ ] Implement TODOs
 - [ ] Add pictures of screen with ./dev_scripts_helpers/system_tools/capture_iterm_command.py --command "(cd ~/src/umd_classes2/helpers_root; clear; glow TODO.convert_slides_into_book.md)" --output_file screenshot1.png
-- [ ] Refresh the README
+- [ ] Refresh the README.blog.md
 
 # Step 1: Document current system
 helpers_root/dev_scripts_helpers/documentation/README.md

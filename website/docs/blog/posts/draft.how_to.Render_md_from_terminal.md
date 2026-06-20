@@ -41,6 +41,8 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > glow README.md
     ```
 
+<!-- capture_iterm_command.py --command "glow -p $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig1.glow_demo.png -->
+
 ![Glow terminal output displaying formatted markdown](./draft.how_to.Render_md_from_terminal.md.figs/fig1.glow_demo.png)
 
 - **Advantages**:
@@ -56,24 +58,24 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - **Tips and tricks**:
 
 - Disable pager
-  ```
-  > more /Users/saggese/Library/Preferences/glow/glow.yml
-  # style name or JSON path (default "auto")
-  style: "auto"
-  # mouse support (TUI-mode only)
-  mouse: true
-  # use pager to display markdown
-  #pager: true
-  # word-wrap at width
-  width: 80
-  # show all files, including hidden and ignored.
-  all: false
-  # line-numbers: true
-  ```
+    ```
+    > more /Users/saggese/Library/Preferences/glow/glow.yml
+    # style name or JSON path (default "auto")
+    style: "auto"
+    # mouse support (TUI-mode only)
+    mouse: true
+    # use pager to display markdown
+    #pager: true
+    # word-wrap at width
+    width: 80
+    # show all files, including hidden and ignored.
+    all: false
+    # line-numbers: true
+    ```
 
-  ```
-  > glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
-  ```
+    ```
+    > glow -l --tui website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+    ```
 
 **TUI vs Pager modes**:
 - **TUI** (Terminal User Interface): Interactive full-screen mode with keyboard
@@ -96,6 +98,10 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     ```bash
     > mdcat README.md
     ```
+
+<!-- 
+> capture_iterm_command.py --command "mdcat -p $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig2.mdcat_demo.png
+-->
 
 ![mdcat terminal rendering with rich formatting and syntax highlighting](./draft.how_to.Render_md_from_terminal.md.figs/fig2.mdcat_demo.png)
 
@@ -135,6 +141,11 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > uvx grip website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md -b --quiet
     ```
 
+<!-- 
+> uvx grip -b --quiet $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md
+> ./helpers_root/dev_scripts_helpers/system_tools/capture_browser_screenshot.py --url "http://localhost:6419" --output /Users/saggese/src/umd_classes2/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig3.grip_browser.png
+-->
+
 ![Grip browser view showing GitHub-flavored markdown rendering](./draft.how_to.Render_md_from_terminal.md.figs/fig3.grip_browser.png)
 
 - **Advantages**:
@@ -146,38 +157,6 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     - Requires a web browser
     - Runs a local web server
 - **Best for**: Previewing work before pushing to GitHub
-
-## Pandoc
-
-- **What it is**: The Swiss Army knife of document conversion with multiple
-  output formats
-- **GitHub**: [jgm/pandoc](https://github.com/jgm/pandoc)
-- **Latest Release**: v3.1.12.2 (April 2025)
-- **Installation**:
-    ```bash
-    > brew install pandoc
-    ```
-- **Usage examples**:
-    ```bash
-    > pandoc README.md -o /tmp/readme.html
-    > open /tmp/readme.html
-    ```
-    ```bash
-    > pandoc README.md -o README.pdf
-    > open README.pdf
-    ```
-
-![Pandoc converting markdown to HTML and displaying in browser](./draft.how_to.Render_md_from_terminal.md.figs/fig4.pandoc_html_output.png)
-
-- **Advantages**:
-    - Full image support
-    - Multiple output formats (HTML, PDF, DOCX, etc.)
-    - Highly customizable with templates
-    - Industry-standard converter
-- **Disadvantages**:
-    - More complex than dedicated viewers
-    - Primarily a converter rather than a real-time viewer
-- **Best for**: Document conversion and maximum flexibility
 
 ## mdless
 
@@ -194,7 +173,7 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > mdless README.md
     ```
 
-![mdless pager interface with markdown navigation](./draft.how_to.Render_md_from_terminal.md.figs/fig5.mdless_pager.png)
+<!-- ![mdless pager interface with markdown navigation](./draft.how_to.Render_md_from_terminal.md.figs/fig5.mdless_pager.png) -->
 
 - **Advantages**:
     - Simple and lightweight
@@ -219,6 +198,14 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > rich README.md
     ```
 
+```
+> uvx --from rich-cli rich website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md --pager
+```
+
+<!-- 
+> capture_iterm_command.py --command "uvx --from rich-cli rich $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md --pager" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig6.richcli_demo.png
+-->
+
 ![rich-cli colorful terminal output with rich formatting](./draft.how_to.Render_md_from_terminal.md.figs/fig6.richcli_demo.png)
 
 - **Advantages**:
@@ -229,6 +216,43 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     - No image rendering
     - Less feature-rich than mdcat
 - **Best for**: Quick terminal previews with minimal setup
+
+## Pandoc
+
+- **What it is**: The Swiss Army knife of document conversion with multiple
+  output formats
+- **GitHub**: [jgm/pandoc](https://github.com/jgm/pandoc)
+- **Latest Release**: v3.1.12.2 (April 2025)
+- **Installation**:
+    ```bash
+    > brew install pandoc
+    ```
+- **Usage examples**:
+    ```bash
+    > pandoc README.md -o /tmp/readme.html
+    > open /tmp/readme.html
+    ```
+    ```bash
+    > pandoc README.md -o README.pdf
+    > open README.pdf
+    ```
+
+<!--
+> pandoc $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md -o /tmp/readme.html; open /tmp/readme.html
+> ./helpers_root/dev_scripts_helpers/system_tools/capture_browser_screenshot.py --url "file:///private/tmp/readme.html" --output /Users/saggese/src/umd_classes2/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig4.pandoc_html_output.png
+-->
+
+![Pandoc converting markdown to HTML and displaying in browser](./draft.how_to.Render_md_from_terminal.md.figs/fig4.pandoc_html_output.png)
+
+- **Advantages**:
+    - Full image support
+    - Multiple output formats (HTML, PDF, DOCX, etc.)
+    - Highly customizable with templates
+    - Industry-standard converter
+- **Disadvantages**:
+    - More complex than dedicated viewers
+    - Primarily a converter rather than a real-time viewer
+- **Best for**: Document conversion and maximum flexibility
 
 ## Comparison Table
 
@@ -247,3 +271,5 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - _For document conversion_: Use `pandoc`
 - _For image rendering_: Browser-based solutions (`grip` or `pandoc` to HTML)
   remain most reliable on macOS
+
+<!-- TODO(gp): Add open_md_on_github.sh  open_md.sh -->
