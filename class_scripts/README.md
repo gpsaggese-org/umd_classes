@@ -1,7 +1,7 @@
 # Summary
 A comprehensive suite of command-line tools and scripts for managing university
 courses, generating lecture materials (slides, scripts, quizzes), and improving
-slide quality through automated LLM-powered transformations.
+slide quality through automated LLM-powered transformations
 
 ## Structure of the Dir
 - `lectures_commentary/`: Output directory for lecture commentary
@@ -26,40 +26,39 @@ slide quality through automated LLM-powered transformations.
 
 - Under `class_scripts`
 
-| Script | Goal | Function |
-| :--- | :--- | :--- |
-| `common_utils.py` | Utility | Argument validation, file finding, directory management |
-| `count_lecture_commentary_pages.py` | Analysis | Count pages in book PDFs |
-| `count_lecture_slides.py` | Analysis | Count slides, headers, lines, words, and characters in source files |
-| `count_lecture_pages.py` | Analysis | Count pages in lecture PDFs |
-| `count_words.py` | Analysis | Count words in lecture scripts |
-| `extract_png_from_pdf.py` | Processing | Extract PDF pages as PNG images with customizable DPI |
-| `gen_lecture_commentary.py` | Generation | Generate book chapters from lecture source material |
-| `gen_lecture_script.py` | Generation | Generate lecture scripts from slides with intro/outro sections |
-| `gen_quizzes.py` | Generation | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
-| `gen_slides.py` | Generation | Generate lecture slide PDFs from source files |
-| `gen_slides_test_utils.py` | Test | Helper functions for slide generation testing and validation |
-| `generate_book_chapter.py` | Generation | Generate book chapters from markdown and PDF/PNG images |
-| `generate_class_images.py` | Generation | Generate images using DALL-E from text prompts |
-| `generate_slide_script.py` | Generation | Generate lecture scripts from slide content with LLM |
-| `get_lecture_file.py` | Utility | Find and print path to lecture source file |
-| `create_book_toc_from_slides.py` | Generation | Extract table of contents from lecture slides |
-| `for_loop_lessons.py` | Orchestration | Main orchestrator for generating PDFs, scripts, and materials |
-| `for_loop_slides.py` | Orchestration | Transform slides using LLM with specified rules |
-| `process_slides.py` | Processing | Process slides with LLM transformations (reduce, check, improve) |
-| `slide_check.py` | Quality | Check and fix text in lecture slides (spelling, grammar) |
-| `slide_improve.py` | Quality | Improve slides using LLM suggestions |
-| `slide_reduce.py` | Quality | Reduce and simplify slides using LLM |
-| `slides_utils.py` | Utility | Extract and process slide content |
+| Script                              | Goal          | Function                                                             |
+| :---------------------------------- | :------------ | :------------------------------------------------------------------- |
+| `common_utils.py`                   | Utility       | Argument validation, file finding, directory management              |
+| `count_lecture_commentary_pages.py` | Analysis      | Count pages in book PDFs                                             |
+| `count_lecture_slides.py`           | Analysis      | Count slides, headers, lines, words, and characters in source files  |
+| `count_lecture_pages.py`            | Analysis      | Count pages in lecture PDFs                                          |
+| `count_words.py`                    | Analysis      | Count words in lecture scripts                                       |
+| `extract_png_from_pdf.py`           | Processing    | Extract PDF pages as PNG images with customizable DPI                |
+| `gen_lecture_commentary.py`         | Generation    | Generate book chapters from lecture source material                  |
+| `gen_lecture_script.py`             | Generation    | Generate lecture scripts from slides with intro/outro sections       |
+| `gen_quizzes.py`                    | Generation    | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
+| `gen_slides.py`                     | Generation    | Generate lecture slide PDFs from source files                        |
+| `gen_slides_test_utils.py`          | Test          | Helper functions for slide generation testing and validation         |
+| `generate_book_chapter.py`          | Generation    | Generate book chapters from markdown and PDF/PNG images              |
+| `generate_class_images.py`          | Generation    | Generate images using DALL-E from text prompts                       |
+| `generate_slide_script.py`          | Generation    | Generate lecture scripts from slide content with LLM                 |
+| `get_lecture_file.py`               | Utility       | Find and print path to lecture source file                           |
+| `create_book_toc_from_slides.py`    | Generation    | Extract table of contents from lecture slides                        |
+| `for_loop_lessons.py`               | Orchestration | Main orchestrator for generating PDFs, scripts, and materials        |
+| `for_loop_slides.py`                | Orchestration | Transform slides using LLM with specified rules                      |
+| `process_slides.py`                 | Processing    | Process slides with LLM transformations (reduce, check, improve)     |
+| `slide_check.py`                    | Quality       | Check and fix text in lecture slides (spelling, grammar)             |
+| `slide_improve.py`                  | Quality       | Improve slides using LLM suggestions                                 |
+| `slide_reduce.py`                   | Quality       | Reduce and simplify slides using LLM                                 |
+| `slides_utils.py`                   | Utility       | Extract and process slide content                                    |
 
 - Under `helpers_root/dev_scripts_helpers/documentation`
 
-| Script                | Description                                                                  |
-| :---------------------| :--------------------------------------------------------------------------|
-| `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters)      |
-| `lint_txt.py`         | Lints and formats text using prettier; used for quiz output                |
-| `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py        |
-
+| Script                | Description                                                            |
+| :-------------------- | :--------------------------------------------------------------------- |
+| `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters) |
+| `lint_txt.py`         | Lints and formats text using prettier; used for quiz output            |
+| `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py    |
 
 ## Script Dependency Hierarchy
 
