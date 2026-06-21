@@ -2,17 +2,17 @@
 
 ## 1: From Prediction Pipelines to Decision Pipelines
 
-**Lessons**
+### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - DoWhy (6,600): Causal inference using graphical models
 - PyWhy (2,400): Python ecosystem for causal inference
 - Azua (1,400): Causal decision-making framework
 
-**Related books**
+### Related books
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B002] Pearl et al., "The Book of Why", 2018
 - [B003] Huyen, "Designing Machine Learning Systems", 2022
@@ -20,7 +20,7 @@
 - [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
 - [B041] Angrist & Pischke, "Probability, Statistics, and Causal Inference", 2020
 
-**Related Papers**
+### Related Papers
 - [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
   Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
 - [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions",
@@ -50,92 +50,92 @@
 
 ## 11: Decision-Making with Causal Models
 
-**Lessons**
+### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - DoWhy (6,600): Causal inference using graphical models
 - EconML (4,600): ML-based causal effect estimation
 - BoTorch (3,300): Bayesian optimization in PyTorch
 - Azua (1,400): Causal decision-making framework
 
-**Related books**
+### Related books
 - [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
 - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
 - [B002] Pearl et al., "The Book of Why", 2018
 
 ## 12: Causal Reinforcement Learning
 
-**Lessons**
+### Lessons
 - ./`msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - contextualbandits (1,700): Python implementations of contextual bandit
   algorithms
 - MABWiser (280): Multi-armed bandit library with sklearn-style API
 - PyXAB (200): Research-focused library for X-armed bandits and online
   optimization
 
-**Related books**
+### Related books
 - [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
 - [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
 - [B032] Ness et al., "Causal AI", 2023
 
 ## 13: Forecasting Under Causal Intervention
 
-**Lessons**
+### Lessons
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - TiMINo (3,600): Time-series causal discovery under independent noise
   assumptions
 - orbit (2,000): Bayesian time series models
 - HMMlearn (1,600): Hidden Markov Models with sklearn API
 - BETS (350): Time-series causal network inference using elastic net regression
 
-**Related books**
+### Related books
 - [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
 - [B033] Hanke et al., "Business Forecasting", 2009
 - [B022] Hamilton, "Time Series Analysis", 1994
 
 ## 14: Causal Decision Making in Practice
 
-**Lessons**
+### Lessons
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - CausalImpact (5,600): Causal inference for intervention analysis
 - CausalML (4,800): Uplift modeling and causal inference
 - EconML (4,600): ML-based causal effect estimation
 - Azua (1,400): Causal decision-making framework
 - ALICE (1,000): ML and econometrics integration
 
-**Related books**
+### Related books
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 
 ## 15: Causal Reasoning in AI Systems
 
-**Lessons**
+### Lessons
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
 
-**Tutorials**
+### Tutorials
 
-**Related packages**
+### Related packages
 - DoWhy (6,600): Causal inference using graphical models
 - PyWhy (2,400): Python ecosystem for causal inference
 - Causica (2,000): Microsoft tool combining causal discovery and inference with
   deep learning
 - ALICE (1,000): ML and econometrics integration
 
-**Related books**
+### Related books
 - [B002] Pearl et al., "The Book of Why", 2018
 - [B004] Koller et al., "Probabilistic Graphical Models", 2009
 - [B007] Pearl, "Causality", 2009
@@ -155,7 +155,7 @@
 - [B045] Barocas et al., "Fairness and Machine Learning", 2019
   https://fairmlbook.org
 
-**Related Papers**
+### Related Papers
 - [P029] Brown et al., "Language Models are Few-Shot Learners", 2020
   https://arxiv.org/abs/2005.14165
 - [P030] Kaplan et al., "Scaling Laws for Neural Language Models", 2020
