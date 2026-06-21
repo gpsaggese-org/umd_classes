@@ -333,6 +333,52 @@ slide quality through automated LLM-powered transformations
   > gen_quizzes.py --for_class_quizzes data605 01.1 --model gpt-4
   ```
 
+## `class_scripts/create_book_toc_from_slides.py`
+
+- Extracts and combines table of contents from lecture slides into a structured
+  document
+- Supports two modes:
+  - batch processing to separate file
+  - in-place insertion
+- Parses lesson files from `### Lessons` sections in markdown files from
+  `book_map.md`
+- Creates combined TOC with chapter organization and formatted lesson sections
+
+- Generate combined TOC to separate file:
+  ```bash
+  > create_book_toc_from_slides.py --input=book_map.md --output=book_toc.md --max_level=2
+  Found 8 chapters
+  Processing lectures: 100%|████████| 24/24
+  Wrote output to 'book_toc.md'
+  ```
+- Insert TOC directly into a markdown file (in-place mode):
+  ```bash
+  > create_book_toc_from_slides.py --input=book.Causal_Probabilistic_ML/book_map.md --in_place --max_level=3
+  Inserted TOC into 'book.Causal_Probabilistic_ML/book_map.md'
+  ```
+- Book map format with `### Lessons` section:
+  ```markdown
+  ## 1: Chapter Title
+  
+  ### Lessons
+  - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+  - `msml610/lectures_source/Lesson08.2-Causal_Models.txt`
+  ```
+- After running with `--in_place`, inserts:
+  ```markdown
+  ### Current TOC
+  
+  // msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+  
+  - Topic 1 (5)
+    - Subtopic A (2)
+  - Topic 2 (8)
+  
+  // msml610/lectures_source/Lesson08.2-Causal_Models.txt
+  
+  - Introduction (3)
+  ```
+
 ## `class_scripts/process_slides.py`
 
 - Extracts individual slides from markdown files and processes each with LLM

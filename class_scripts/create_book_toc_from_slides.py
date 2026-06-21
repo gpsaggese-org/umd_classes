@@ -23,6 +23,7 @@ from tqdm import tqdm
 import helpers.hdbg as hdbg
 import helpers.hgit as hgit
 import helpers.hparser as hparser
+import helpers.hprint as hprint
 import helpers.hselect_input_output as hseinout
 
 _LOG = logging.getLogger(__name__)
@@ -39,11 +40,15 @@ def _extract_chapters_and_lessons(
         where each tuple contains the chapter title, markdown header line,
         and list of associated lesson file paths
     """
+    _LOG.debug(hprint.to_str("book_map_file"))
     hdbg.dassert_file_exists(book_map_file)
     # Read book_map.md file.
     with open(book_map_file, "r") as f:
         lines = f.readlines()
-    # Parse chapters and lessons.
+    # Parse chapters and lessons via state machine:
+    # - Track chapter headers (## N: Title) and switch to new chapter
+    # - Within chapter, look for **Lessons** section
+    # - Extract bullet-point lesson files within lessons section
     chapters = []
     current_chapter_title = ""
     current_chapter_header = ""
@@ -81,6 +86,7 @@ def _extract_chapters_and_lessons(
         chapters.append(
             (current_chapter_title, current_chapter_header, current_lessons)
         )
+    _LOG.debug("return=%s chapters", len(chapters))
     return chapters
 
 
@@ -95,8 +101,10 @@ def _extract_toc_from_lesson(lesson_file: str, *, max_level: int) -> str:
     :param max_level: Maximum header level to extract
     :return: Extracted table of contents as markdown string
     """
+    _LOG.debug(hprint.to_str("lesson_file max_level"))
     hdbg.dassert_file_exists(lesson_file)
-    # Call extract_toc_from_txt.py to extract TOC.
+    # Build and execute command to extract TOC via external script.
+    # Script is located in git tree and outputs to stdout.
     extract_toc_script = hgit.find_file_in_git_tree("extract_toc_from_txt.py")
     cmd_parts = [
         extract_toc_script,
@@ -114,7 +122,81 @@ def _extract_toc_from_lesson(lesson_file: str, *, max_level: int) -> str:
         text=True,
         check=True,
     )
+    _LOG.debug("return=%d chars", len(result.stdout))
     return result.stdout
+
+
+def _insert_toc_in_file(
+    file_path: str,
+    *,
+    max_level: int,
+) -> None:
+    """
+    Insert table of contents after `### Lessons` section in a file.
+
+    Reads the file, finds the lessons listed under '### Lessons',
+    extracts TOC from each lesson file, and inserts a '### Current TOC'
+    section with the extracted content.
+
+    :param file_path: Path to the file to process
+    :param max_level: Maximum header level to extract
+    """
+    _LOG.debug(hprint.to_str("file_path max_level"))
+    hdbg.dassert_file_exists(file_path)
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+    # Parse lessons section: track when we enter/exit "### Lessons",
+    # extract bullet-point lesson files, remember where section ends.
+    in_lessons_section = False
+    lesson_lines_end = -1
+    lessons = []
+    processed_lines = []
+    for idx, line in enumerate(lines):
+        line_stripped = line.rstrip()
+        if line_stripped.startswith("### Lessons"):
+            in_lessons_section = True
+            processed_lines.append(line)
+            continue
+        if in_lessons_section:
+            if line_stripped.startswith("###") and line_stripped != "### Lessons":
+                in_lessons_section = False
+                lesson_lines_end = idx
+                processed_lines.append(line)
+                continue
+            if line_stripped.strip().startswith("- "):
+                lesson_file = line_stripped.strip()[2:].strip()
+                lessons.append(lesson_file)
+        processed_lines.append(line)
+    hdbg.dassert(
+        len(lessons) > 0,
+        "No lessons found in '%s'",
+        file_path,
+    )
+    # Build TOC section by extracting headers from each lesson file.
+    # Include file path as comment above each lesson's TOC.
+    toc_lines = []
+    toc_lines.append("### Current TOC")
+    toc_lines.append("")
+    for lesson_file in lessons:
+        hdbg.dassert_file_exists(lesson_file)
+        toc_lines.append(f"// {lesson_file}")
+        toc_lines.append("")
+        toc_content = _extract_toc_from_lesson(lesson_file, max_level=max_level)
+        hdbg.dassert_ne(toc_content, "")
+        toc_lines.append(toc_content)
+    toc_content_str = "\n".join(toc_lines)
+    # Insert TOC at the end of lessons section (or at EOF if no next section).
+    if lesson_lines_end == -1:
+        processed_lines.append("\n")
+        processed_lines.append(toc_content_str)
+    else:
+        processed_lines.insert(lesson_lines_end, "\n")
+        processed_lines.insert(lesson_lines_end + 1, toc_content_str)
+        processed_lines.insert(lesson_lines_end + 2, "\n")
+    output_content = "".join(processed_lines)
+    with open(file_path, "w") as f:
+        f.write(output_content)
+    _LOG.info("Inserted TOC into '%s'", file_path)
 
 
 def _create_book_toc(
@@ -137,6 +219,9 @@ def _create_book_toc(
     :param max_number: Maximum number of chapters (h2 headers) to include
         - Default: 0 (include all chapters)
     """
+    _LOG.debug(
+        hprint.to_str("book_map_file output_file max_level max_number")
+    )
     # Validate input file exists.
     hdbg.dassert_file_exists(book_map_file)
     # Extract chapters and lessons.
@@ -154,12 +239,14 @@ def _create_book_toc(
     output_lines = []
     output_lines.append("# Book Table of Contents")
     output_lines.append("")
-    # Create flattened list with chapter info for progress tracking.
+    # Flatten chapter structure (chapter_idx, header, lesson_file) for progress bar.
+    # Allows iteration with chapter context while tracking total lessons count.
     lessons_with_chapters = [
         (chapter_idx, chapter_header, lesson_file)
         for chapter_idx, (_, chapter_header, lessons) in enumerate(chapters)
         for lesson_file in lessons
     ]
+    _LOG.debug("total_lessons=%d", len(lessons_with_chapters))
     # Process lessons with progress bar.
     current_chapter_idx = -1
     for chapter_idx, chapter_header, lesson_file in tqdm(
@@ -217,6 +304,11 @@ def _parse() -> argparse.ArgumentParser:
         default=0,
         help="Maximum number of chapters (h2 headers) to include (0 = all)",
     )
+    parser.add_argument(
+        "--in_place",
+        action="store_true",
+        help="Insert TOC sections into input file instead of creating separate output",
+    )
     hparser.add_verbosity_arg(parser)
     return parser
 
@@ -229,12 +321,19 @@ def _main(parser: argparse.ArgumentParser) -> None:
     """
     args = parser.parse_args()
     hdbg.init_logger(verbosity=args.log_level, use_exec_path=True)
-    _create_book_toc(
-        book_map_file=args.input,
-        output_file=args.output,
-        max_level=args.max_level,
-        max_number=args.max_number,
+    _LOG.debug(
+        hprint.to_str("args.in_place args.input args.output args.max_level")
     )
+    # Dispatch to either in-place insertion or full TOC generation.
+    if args.in_place:
+        _insert_toc_in_file(args.input, max_level=args.max_level)
+    else:
+        _create_book_toc(
+            book_map_file=args.input,
+            output_file=args.output,
+            max_level=args.max_level,
+            max_number=args.max_number,
+        )
 
 
 if __name__ == "__main__":

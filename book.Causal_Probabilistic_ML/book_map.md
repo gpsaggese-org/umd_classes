@@ -10,6 +10,14 @@
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
 
+### Target TOC
+- The Problem: When Prediction Fails
+- What ML Systems Can and Cannot Tell You
+- The Ladder of Causation
+- Data Science vs. Decision Science
+- Tools and Tutorials — Introduction to causal DAGs using real-world examples
+- Summary
+
 ### TODOs
 - [ ] Add content to probabilistic intro
 
@@ -60,6 +68,14 @@
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
 
+### Target TOC
+- Probability and Conditional Independence
+- Bayesian Networks
+- Constructing a Bayesian Network
+- Exact and Approximate Inference
+- Tools and Tutorials — Implementing Bayesian Networks in PyMC
+- Summary
+
 ### Tutorials
 
 ### Related packages
@@ -78,6 +94,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
+
+### Target TOC
+- Causal vs. Observational Graphs
+- Structural Causal Models
+- Special Variable Types (mediators, moderators, confounders, colliders)
+- Building Causal DAGs from Domain Knowledge
+- Tools and Tutorials — Building and visualizing causal DAGs
+- Summary
 
 ### Tutorials
 
@@ -100,6 +124,15 @@
 - `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
 - `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
 - `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
+
+
+### Target TOC
+- Bayesian Inference in Practice
+- Generalized Linear Models
+- Hierarchical Models
+- Posterior-Based Decisions
+- Tools and Tutorials — Posterior workflows in PyMC
+- Summary
 
 ### Tutorials
 - msml610/tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb
@@ -130,6 +163,15 @@
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 
+
+### Target TOC
+- Interventions and Counterfactuals
+- Randomized Controlled Trials
+- Observational Adjustment
+- Do-Calculus
+- Tools and Tutorials — Using DoWhy for causal inference
+- Summary
+
 ### Tutorials
 
 ### Related packages
@@ -147,6 +189,17 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
+
+
+### Target TOC
+- The Identification Problem
+- Classical Strategies (instrumental variables, RDD, DiD)
+- Matching and Propensity Scores
+- Modern Causal Forests
+- Sensitivity to Unmeasured Confounding
+- Case Study: Healthcare Treatment Effects
+- Tools and Tutorials — EconML and CausalML
+- Summary
 
 ### Tutorials
 - msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb
@@ -173,6 +226,16 @@
 ### Lessons
 - ?
 
+
+### Target TOC
+- Explanation vs. Causality
+- Explanation Methods (SHAP, LIME)
+- The Critical Gap: Feature Importance Is Not Causality
+- Causal Attribution
+- Decision Support
+- Tools and Tutorials — SHAP, LIME, DiCE, and DoWhy
+- Summary
+
 ### Tutorials
 
 ### Related packages
@@ -191,8 +254,17 @@
 - `msml610/lectures_source/Lesson10-Timeseries_forecasting.txt`
 - `msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt`
 
+### Target TOC
+- Time Series vs. Cross-Sectional Causality
+- Granger Causality
+- Interrupted Time Series
+- Difference-in-Differences
+- Synthetic Control Methods
+- Tools and Tutorials — CausalImpact and CausalPy
+- Summary
+
 ### Tutorials
-- msml610/tutorials/L09_kalman_filter
+- `msml610/tutorials/L09_kalman_filter`
 
 ### Related packages
 - TiMINo (3,600): Time-series causal discovery under independent noise
@@ -211,8 +283,16 @@
 ### Lessons
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
 
+### Target TOC
+- Randomization as Causal Identification
+- A/B Test Design
+- Beyond Standard A/B Tests (switchbacks, multi-armed bandits)
+- Sequential Decision-Making
+- Tools and Tutorials — CausalML and CausalPy
+- Summary
+
 ### Tutorials
-- msml610/tutorials/L09_multi_armed_bandits
+- `msml610/tutorials/L09_multi_armed_bandits`
 
 ### Related packages
 - Vowpal Wabbit (8,600): High-performance online learning with contextual bandit
@@ -231,6 +311,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson10.2-Causal_Discovery.txt`
+
+### Target TOC
+- When Discovery Works and When It Doesn't
+- Discovery vs. Domain Knowledge
+- Discovery Algorithms (PC, FCI, GES, NOTEARS, LiNGAM)
+- Validation and Refutation
+- Tools and Tutorials — causal-learn and LiNGAM
+- Summary
 
 ### Tutorials
 - From
