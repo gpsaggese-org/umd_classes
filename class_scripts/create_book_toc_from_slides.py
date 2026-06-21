@@ -146,113 +146,81 @@ def _insert_toc_in_file(
     hdbg.dassert_file_exists(file_path)
     with open(file_path, "r") as f:
         lines = f.readlines()
-    # First pass: remove all existing "### Current TOC" sections.
-    processed_lines = []
-    skip_current_toc = False
+    # Remove Current TOC sections and collect lessons in one pass.
+    processed = []
+    all_lessons = []
+    in_lessons = False
+    skip_toc = False
     for line in lines:
-        line_stripped = line.rstrip()
-        # Start of Current TOC section: skip until next ### heading.
-        if line_stripped.startswith("### Current TOC"):
-            skip_current_toc = True
+        line_s = line.rstrip()
+        # Skip Current TOC sections.
+        if line_s.startswith("### Current TOC"):
+            skip_toc = True
             continue
-        # End of Current TOC section (new ### heading).
-        if skip_current_toc:
-            if line_stripped.startswith("###"):
-                skip_current_toc = False
-                processed_lines.append(line)
-            # Skip blank lines after Current TOC section.
+        if skip_toc:
+            if line_s.startswith("###"):
+                skip_toc = False
+            else:
+                continue
+        # Track lessons and collect them.
+        if line_s.startswith("### Lessons"):
+            in_lessons = True
+            processed.append(line)
             continue
-        processed_lines.append(line)
-    # Second pass: identify lessons in each chapter.
-    all_chapters_lessons = []
-    current_chapter_lessons = []
-    in_lessons_section = False
-    for line in processed_lines:
-        line_stripped = line.rstrip()
-        # Start of lessons section.
-        if line_stripped.startswith("### Lessons"):
-            in_lessons_section = True
-            current_chapter_lessons = []
-            continue
-        # End of lessons section (new ### heading).
-        if in_lessons_section and line_stripped.startswith("###"):
-            in_lessons_section = False
-            if current_chapter_lessons:
-                all_chapters_lessons.append(current_chapter_lessons)
-            continue
-        # Extract lesson files in lessons section.
-        if in_lessons_section and line_stripped.strip().startswith("- "):
-            lesson_file = line_stripped.strip()[2:].strip().strip("`")
-            current_chapter_lessons.append(lesson_file)
-    # Handle case where file ends within lessons section.
-    if in_lessons_section and current_chapter_lessons:
-        all_chapters_lessons.append(current_chapter_lessons)
-    # Flatten and collect unique lessons.
-    lessons = []
-    for chapter_lessons in all_chapters_lessons:
-        lessons.extend(chapter_lessons)
-    hdbg.dassert(
-        len(lessons) > 0,
-        "No lessons found in '%s'",
-        file_path,
-    )
+        if in_lessons and line_s.startswith("###"):
+            in_lessons = False
+        elif in_lessons and line_s.strip().startswith("- "):
+            lesson = line_s.strip()[2:].strip().strip("`")
+            all_lessons.append(lesson)
+        processed.append(line)
+    hdbg.dassert(len(all_lessons) > 0, "No lessons found in '%s'", file_path)
     # Extract TOC for each lesson.
     lesson_tocs = {}
-    for lesson_file in lessons:
+    for lesson_file in all_lessons:
         hdbg.dassert_file_exists(lesson_file)
-        toc_content = _extract_toc_from_lesson(lesson_file, max_level=max_level)
-        hdbg.dassert_ne(toc_content, "")
-        lesson_tocs[lesson_file] = toc_content
-    # Rebuild file: for each "### Lessons" section, after lesson entries,
-    # insert "### Current TOC" with that section's lesson TOCs.
-    output_lines = []
-    in_lessons_section = False
+        toc = _extract_toc_from_lesson(lesson_file, max_level=max_level)
+        hdbg.dassert_ne(toc, "")
+        lesson_tocs[lesson_file] = toc
+    # Rebuild with Current TOC sections inserted after each lessons section.
+    output = []
+    in_lessons = False
     current_chapter_lessons = []
-    for line in processed_lines:
-        line_stripped = line.rstrip()
-        output_lines.append(line)
-        # Start of lessons section: track it.
-        if line_stripped.startswith("### Lessons"):
-            in_lessons_section = True
+    for line in processed:
+        line_s = line.rstrip()
+        output.append(line)
+        if line_s.startswith("### Lessons"):
+            in_lessons = True
             current_chapter_lessons = []
             continue
-        # Collect lesson files in lessons section.
-        if in_lessons_section and line_stripped.strip().startswith("- "):
-            lesson_file = line_stripped.strip()[2:].strip().strip("`")
-            current_chapter_lessons.append(lesson_file)
-        # End of lessons section (new ### heading).
-        if in_lessons_section and line_stripped.startswith("###") and line_stripped != "### Lessons":
-            in_lessons_section = False
-            # Remove the line we just appended (it's the next section heading).
-            output_lines.pop()
-            # Remove trailing blank lines before inserting Current TOC.
-            while output_lines and output_lines[-1].strip() == "":
-                output_lines.pop()
-            output_lines.append("\n")
-            output_lines.append("\n")
-            output_lines.append("### Current TOC\n")
+        if in_lessons and line_s.strip().startswith("- "):
+            lesson = line_s.strip()[2:].strip().strip("`")
+            current_chapter_lessons.append(lesson)
+        if in_lessons and line_s.startswith("###") and line_s != "### Lessons":
+            in_lessons = False
+            # Remove this section heading we just appended.
+            output.pop()
+            # Remove trailing blanks and insert Current TOC.
+            while output and output[-1].strip() == "":
+                output.pop()
+            output.append("\n\n")
+            output.append("### Current TOC\n")
             for lesson_file in current_chapter_lessons:
-                output_lines.append(f"// `{lesson_file}`\n")
-                output_lines.append(lesson_tocs[lesson_file])
-                output_lines.append("\n")
-            # Re-add the section heading.
-            output_lines.append(line)
-            current_chapter_lessons = []
-    # Handle case where file ends within lessons section.
-    if in_lessons_section and current_chapter_lessons:
-        # Remove trailing blank lines.
-        while output_lines and output_lines[-1].strip() == "":
-            output_lines.pop()
-        output_lines.append("\n")
-        output_lines.append("\n")
-        output_lines.append("### Current TOC\n")
+                output.append(f"// `{lesson_file}`\n")
+                output.append(lesson_tocs[lesson_file])
+                output.append("\n")
+            output.append(line)
+    # Handle file ending in lessons section.
+    if in_lessons and current_chapter_lessons:
+        while output and output[-1].strip() == "":
+            output.pop()
+        output.append("\n\n")
+        output.append("### Current TOC\n")
         for lesson_file in current_chapter_lessons:
-            output_lines.append(f"// `{lesson_file}`\n")
-            output_lines.append(lesson_tocs[lesson_file])
-            output_lines.append("\n")
-    output_content = "".join(output_lines)
+            output.append(f"// `{lesson_file}`\n")
+            output.append(lesson_tocs[lesson_file])
+            output.append("\n")
     with open(file_path, "w") as f:
-        f.write(output_content)
+        f.write("".join(output))
     _LOG.info("Inserted TOC section into '%s'", file_path)
 
 
