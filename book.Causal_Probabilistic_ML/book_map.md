@@ -1,9 +1,9 @@
-## Part I: Understanding Causality
+# Part I: Understanding Causality
 
-### 1: From Prediction Pipelines to Decision Pipelines
+## 1: The Need for Probabilistic and Causal Machine Learning
 
 **Lessons**
-- msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
 
 **Tutorials**
 
@@ -46,11 +46,11 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
-### 2: Bayesian Networks
+## 2: Bayesian Networks
 
 **Lessons**
-- msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
-- msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
+- `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
+- `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
 
 **Tutorials**
 
@@ -66,10 +66,10 @@
 - [B005] Jensen et al., "Bayesian Networks and Decision Graphs", 2007
 - [B006] Bishop, "Pattern Recognition and Machine Learning", 2006
 
-### 3: Causal DAGs and Structural Models
+## 3: Causal DAGs and Structural Models
 
 **Lessons**
-- msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 
 **Tutorials**
 
@@ -84,14 +84,14 @@
 - [B008] Peters et al., "Elements of Causal Inference", 2017
 - [B009] Morgan et al., "Counterfactuals and Causal Inference", 2014
 
-### 4: From Causal Models to Code
+## 4: From Causal Models to Code
 
 **Lessons**
-- msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
-- msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
-- msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt
-- msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt
-- msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt
+- `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
+- `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
+- `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
+- `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
+- `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
 
 **Tutorials**
 - msml610/tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb
@@ -115,12 +115,12 @@
 - [B011] Sutton, "Python Causal Analysis", 2024
 - [B012] Burkov, "Machine Learning Engineering", 2020
 
-## Part II: Estimating Causal Effects
+# Part II: Estimating Causal Effects
 
-### 5: Interventions, Experiments, and Adjustments
+## 5: Interventions, Experiments, and Adjustments
 
 **Lessons**
-- msml610/lectures_source/Lesson08.3-Do_Calculus.txt
+- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 
 **Tutorials**
 
@@ -135,10 +135,10 @@
 - [B014] Angrist et al., "Mostly Harmless Econometrics", 2008
 - [B015] Gerber et al., "Field Experiments", 2012
 
-### 6: Causal Identification and Estimation
+## 6: Causal Identification and Estimation
 
 **Lessons**
-- msml610/lectures_source/Lesson08.4.txt
+- `msml610/lectures_source/Lesson08.4.txt`
 
 **Tutorials**
 - msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb
@@ -160,7 +160,7 @@
 - [B017] Wooldridge, "Econometric Analysis of Cross Section and Panel Data", 2010
 - [B018] Huntington-Klein, "The Effect", 2021
 
-### 7: Explainability and Causal Attribution
+## 7: Explainability and Causal Attribution
 
 **Lessons**
 - ?
@@ -177,11 +177,11 @@
 - [B020] Kearns et al., "The Ethical Algorithm", 2019
 - [B021] Kohavi et al., "Trustworthy Online Controlled Experiments", 2020
 
-### 8: Causal Inference for Time Series
+## 8: Causal Inference for Time Series
 
 **Lessons**
-- msml610/lectures_source/Lesson10-Timeseries_forecasting.txt
-- msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt
+- `msml610/lectures_source/Lesson10-Timeseries_forecasting.txt`
+- `msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt`
 
 **Tutorials**
 - msml610/tutorials/L09_kalman_filter
@@ -198,10 +198,10 @@
 - [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
 - [B024] Molak, "Causal Inference and Discovery in Python", 2023
 
-### 9: A/B Testing and Experimentation
+## 9: A/B Testing and Experimentation
 
 **Lessons**
-- msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+- `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
 
 **Tutorials**
 - msml610/tutorials/L09_multi_armed_bandits
@@ -219,10 +219,10 @@
 - [B025] Siroker et al., "A/B Testing", 2013
 - [B026] Thomke, "Experimentation Works", 2020
 
-### 10: Causal Discovery
+## 10: Causal Discovery
 
 **Lessons**
-- msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+- `msml610/lectures_source/Lesson10.2-Causal_Discovery.txt`
 
 **Tutorials**
 - From

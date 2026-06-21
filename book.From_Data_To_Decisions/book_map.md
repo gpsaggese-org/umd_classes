@@ -3,7 +3,7 @@
 ## 1: From Prediction Pipelines to Decision Pipelines
 
 **Lessons**
-- msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
 
 **Tutorials**
 
@@ -46,48 +46,12 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
-## 2: Bayesian Networks
-
-**Lessons**
-- msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt
-- msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt
-
-**Tutorials**
-
-**Related packages**
-- pgmpy (5,000): Probabilistic Graphical Models (Bayesian Networks, inference)
-- Pomegranate (3,600): Probabilistic modeling library
-- CausalNex (3,000): Causal reasoning with Bayesian Networks
-- bnlearn (1,900): Causal discovery with Bayesian networks
-- CausalGraphicalModels (1,500): Toolkit for causal graphs in Python
-
-**Related books**
-- [B004] Koller et al., "Probabilistic Graphical Models", 2009
-- [B005] Jensen et al., "Bayesian Networks and Decision Graphs", 2007
-- [B006] Bishop, "Pattern Recognition and Machine Learning", 2006
-
-## 3: Causal DAGs and Structural Models
-
-**Lessons**
-- msml610/lectures_source/Lesson08.3-Do_Calculus.txt
-
-**Tutorials**
-
-**Related packages**
-- Dagitty (1,500): DAG creation and causal effect identification
-- CausalGraphicalModels (1,500): Toolkit for causal graphs in Python
-- Tetrad (1,100): Suite for causal model discovery and analysis
-- Geminos (500): Causal diagram generation and analysis
-
-**Related books**
-- [B007] Pearl, "Causality", 2009
-- [B008] Peters et al., "Elements of Causal Inference", 2017
-- [B009] Morgan et al., "Counterfactuals and Causal Inference", 2014
+# Part III: Making Decisions with Causality
 
 ## 11: Decision-Making with Causal Models
 
 **Lessons**
-- msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt
+- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
 
 **Tutorials**
 
@@ -105,7 +69,7 @@
 ## 12: Causal Reinforcement Learning
 
 **Lessons**
-- ./msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
+- ./`msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
 
 **Tutorials**
 
@@ -160,7 +124,7 @@
 ## 15: Causal Reasoning in AI Systems
 
 **Lessons**
-- msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.md
+- `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
 
 **Tutorials**
 
