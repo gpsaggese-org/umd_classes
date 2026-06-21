@@ -1,5 +1,7 @@
 - Create a map from book.from_corr_to_decision/book_map.md
 
+class_scripts/create_book_toc_from_slides.py --max_number 2 --max_level 2
+
 # The old flow is
 `./class_scripts/gen_book_chapter.py`
 `./class_scripts/generate_book_chapter.py`
