@@ -79,7 +79,7 @@ def _extract_chapters_and_lessons(
             continue
         # Extract lesson files.
         if in_lessons_section and line.strip().startswith("- "):
-            lesson_file = line.strip()[2:].strip()
+            lesson_file = line.strip()[2:].strip().strip("`")
             current_lessons.append(lesson_file)
     # Save last chapter.
     if current_chapter_title:
@@ -164,7 +164,7 @@ def _insert_toc_in_file(
                 processed_lines.append(line)
                 continue
             if line_stripped.strip().startswith("- "):
-                lesson_file = line_stripped.strip()[2:].strip()
+                lesson_file = line_stripped.strip()[2:].strip().strip("`")
                 lessons.append(lesson_file)
         processed_lines.append(line)
     hdbg.dassert(
