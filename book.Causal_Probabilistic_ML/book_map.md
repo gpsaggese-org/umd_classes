@@ -1,5 +1,5 @@
-// class_scripts/create_book_toc_from_slides.py --input book.From_Data_To_Decisions/book_map.md --max_level 2 --in_place
-
+// class_scripts/create_book_toc_from_slides.py --input book.Causal_Probabilistic_ML/book_map.md --max_level 2 --in_place
+//
 // Current TOC: book.Causal_Probabilistic_ML/book_toc.md
 // Official TOC: ~/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
 
@@ -224,8 +224,6 @@
 ## 7: Explainability and Causal Attribution
 
 ### Lessons
-- ?
-
 
 ### Target TOC
 - Explanation vs. Causality
