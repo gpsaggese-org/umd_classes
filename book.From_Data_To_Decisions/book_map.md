@@ -1,3 +1,5 @@
+- [ ] TODO: Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
+
 # Part I: Understanding Causality
 
 ## 1: From Prediction Pipelines to Decision Pipelines
@@ -46,6 +48,49 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
+## Summary of Probabilistic and Causal Machine Learning
+
+## Advanced Topics for Time Series Predictions
+
+- Self-Supervised and Representation Learning for Time Series
+  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
+  - Predictive coding models (e.g., CPC)
+  - Applications: few-shot forecasting, anomaly detection
+
+- Hierarchical Bayesian Forecasting
+  - Multi-level time series models
+  - Shrinkage across groups
+  - Handling partial pooling across different but related series
+
+- Reinforcement Learning for Time Series Decision Making
+  - Forecasting coupled with decision making
+  - Inventory control, dynamic pricing
+  - Predict-then-Optimize pipelines
+
+- Transformers and Attention Mechanisms for Time Series
+  - Temporal Fusion Transformer (TFT)
+  - Informer, Autoformer, FEDformer
+  - Handling long-term dependencies better than RNNs
+
+- Energy-Based Models and Diffusion Models for Forecasting
+  - Energy-based forecasting models
+  - Diffusion probabilistic models adapted for sequences
+
+- Time Series Generative Models
+  - GANs for time series (e.g., TimeGAN)
+  - Variational Autoencoders (VAEs) for synthetic data generation
+  - Applications: simulation, data augmentation
+
+- Long-Horizon Forecasting Challenges
+  - Distribution shift over long horizons
+  - Degradation of model accuracy
+  - Specialized architectures: recurrent decoders, multi-resolution forecasting
+
+- Uncertainty Quantification and Calibration
+  - Prediction intervals
+  - Coverage probability and reliability diagrams
+  - Post-hoc calibration (e.g., temperature scaling)
+
 # Part III: Making Decisions with Causality
 
 ## 11: Decision-Making with Causal Models
@@ -68,8 +113,13 @@
 
 ## 12: Causal Reinforcement Learning
 
+<<<<<<< Updated upstream
 ### Lessons
 - ./`msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+=======
+**Lessons**
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+>>>>>>> Stashed changes
 
 ### Tutorials
 
