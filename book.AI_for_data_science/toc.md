@@ -8,6 +8,8 @@
 - Scoping the Solution and Managing Expectations
 - Framing the Problem: Classification, Regression, Clustering, or Other
 
+**Python Packages:** (Conceptual, no code packages required)
+
 ## Chapter 2: Data Collection
 
 - Data Sources and Storage Systems
@@ -16,6 +18,8 @@
 - Third-Party Data and External Datasets
 - Data Governance and Privacy Considerations
 - Building Data Pipelines
+
+**Python Packages:** `pandas`, `sqlalchemy`, `psycopg2`, `pymongo`, `requests`, `aiohttp`, `pyspark`, `kafka-python`, `boto3`, `google-cloud-storage`
 
 ## Chapter 3: Data Cleaning & Preprocessing
 
@@ -26,6 +30,8 @@
 - Handling Categorical and Text Data
 - Normalization and Scaling Techniques
 
+**Python Packages:** `pandas`, `numpy`, `scikit-learn`, `missingno`, `outlier-utils`, `pyjanitor`, `fancyimpute`
+
 ## Chapter 4: Exploratory Data Analysis (EDA)
 
 - Univariate Analysis and Distributions
@@ -34,6 +40,8 @@
 - Visual Storytelling and Interpretation
 - Hypothesis Formation and Statistical Testing
 - Identifying Patterns, Anomalies, and Insights
+
+**Python Packages:** `pandas`, `numpy`, `matplotlib`, `seaborn`, `plotly`, `scipy`, `statsmodels`, `pandas-profiling`, `sweetviz`
 
 ## Chapter 5: Feature Engineering & Selection
 
@@ -44,6 +52,8 @@
 - Feature Scaling and Normalization
 - Feature Selection Methods and Importance
 
+**Python Packages:** `pandas`, `numpy`, `scikit-learn`, `featuretools`, `category-encoders`, `tsfresh`, `optuna`, `shap`
+
 ## Chapter 6: Data Splitting
 
 - Train, Validation, and Test Set Strategy
@@ -52,6 +62,8 @@
 - Class Imbalance and Sampling Strategies
 - Avoiding Data Leakage
 - Setting Up Evaluation Pipelines
+
+**Python Packages:** `scikit-learn`, `imbalanced-learn`, `numpy`, `pandas`, `stratification-tools`
 
 ## Chapter 7: Model Selection & Training
 
@@ -62,6 +74,8 @@
 - Ensemble Methods and Stacking
 - Training Workflows and Reproducibility
 
+**Python Packages:** `scikit-learn`, `xgboost`, `lightgbm`, `catboost`, `tensorflow`, `torch`, `optuna`, `hyperopt`, `ray-tune`, `wandb`
+
 ## Chapter 8: Model Evaluation
 
 - Classification Metrics (Accuracy, Precision, Recall, F1)
@@ -70,6 +84,8 @@
 - Business-Oriented Metrics and ROI
 - Ablation Studies and Feature Importance
 - Error Analysis and Model Debugging
+
+**Python Packages:** `scikit-learn`, `numpy`, `pandas`, `matplotlib`, `seaborn`, `shap`, `lime`, `eli5`
 
 ## Chapter 9: Deployment
 
@@ -80,6 +96,8 @@
 - A/B Testing and Canary Releases
 - Version Control and Model Registry
 
+**Python Packages:** `fastapi`, `flask`, `gunicorn`, `mlflow`, `kubeflow`, `seldon-core`, `ray-serve`, `bentoml`, `docker`, `onnx`
+
 ## Chapter 10: Monitoring & Maintenance
 
 - Production Performance Tracking
@@ -88,3 +106,5 @@
 - Incident Response and Debugging
 - Continuous Improvement and Feedback Loops
 - Stakeholder Reporting and Governance
+
+**Python Packages:** `mlflow`, `evidently`, `whylabs`, `prometheus-client`, `airflow`, `dbt`, `grafana-api`, `pandas`, `numpy`
