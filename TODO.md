@@ -15,6 +15,12 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 
 ## The new flow 
 
+Use files with .typst to represent typist
+
+Convert the txt file to typst
+> pandoc /Users/saggese/src/umd_classes1/msml610/lectures_source/Lesson10.1-Causal_Discovery.txt -t typst > /Users/saggese/src/umd_classes1/msml610/lectures_source/typst.md
+> typst compile msml610/lectures_source/typst.md msml610/lectures/Lesson10.1-Causal_Discovery-typst.pdf
+
 - The style is like:
   vi msml610/book/aima_style.typ
 
@@ -149,3 +155,67 @@ llm_cli.py -p "Summarize the following text in 5 bullet points and less than 200
 tmux focus-events off · add 'set -g focus-events on' to ~/.tmux.conf and reattach for focus tracking
 tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll
 
+## Process Articles
+
+Read articles
+> more download_articles.sh
+https://arxiv.org/pdf/2305.10032
+https://par.nsf.gov/servlets/purl/10125762
+https://qiniu.pattern.swarma.org/attachment/A%20Survey%20on%20Causal%20Inference.pdf
+https://arxiv.org/pdf/1302.4972
+https://arxiv.org/pdf/1205.2599
+https://arxiv.org/abs/1608.00191
+https://arxiv.org/abs/2006.05690
+https://arxiv.org/abs/2011.00641
+https://arxiv.org/abs/2006.05690
+https://arxiv.org/abs/2011.00641
+
+download_academic_paper.py
+convert_pdf_to_md.py
+summarize_md.py
+
+> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
+> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+
+## Convert llm_transform.py to llm_cli.py
+Move prompts and action into a YAML file
+
+## Merge markdown. and text.
+Is there any difference?
+
+```
+> ls -1 -d .claude/skills/markdown* .claude/skills/text* | sort
+.claude/skills/markdown.add_summary
+.claude/skills/markdown.fix_bullet_points
+.claude/skills/markdown.reduce
+.claude/skills/markdown.rules.md
+.claude/skills/markdown.summarize
+.claude/skills/text.convert_to_latex
+.claude/skills/text.criticize
+.claude/skills/text.explain
+.claude/skills/text.extract_ideas
+.claude/skills/text.humanize
+.claude/skills/text.read_start_end
+.claude/skills/text.rules.md
+.claude/skills/text.summarize_hn_in_bullet_points
+.claude/skills/text.summarize_in_bullet_points
+.claude/skills/text.use_bullet_lists
+```
+
+## Improve / unify --rule, --skill, ...
+
+Move --skill and --topic from ./linters2/lint_cc.py to this parser hmarsele.add_rule_cli_arg(action_group)
+
+Merge rigrule into mdm
+
+## Make file interfaces aligned
+- Make compatible in terms of options
+
+  ```
+  i git_files
+  i git_branch_diff
+  linters2/lint.py
+  linters2/lint_cc.py
+  ```
+
+- Add -i, --input together with files
