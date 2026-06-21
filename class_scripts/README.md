@@ -54,13 +54,13 @@ slide quality through automated LLM-powered transformations.
 
 // TODO(ai_gp): Reduce the description without changing the format
 
-| Script                     | Description                                                                                                             |
-| :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| `concatenate_pdfs.py`      | Combines multiple PDF files into a single PDF (used for creating full book from chapters)                               |
-| `lint_txt.py`              | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting                             |
-| `llm_cli.py`               | LLM command-line interface for AI-powered text transformations and content generation                                   |
-| `llm_transform.py`         | Applies LLM transformations to content with various prompts (slide_improve, etc.)                                       |
-| `notes_to_pdf.py`          | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`                                |
+| Script                | Description                                                                                  |
+| :---------------------| :--------------------------------------------------------------------------------------------|
+| `concatenate_pdfs.py` | Combines multiple PDF files into a single PDF (used for creating full book from chapters)    |
+| `lint_txt.py`         | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting  |
+| `llm_cli.py`          | LLM command-line interface for AI-powered text transformations and content generation        |
+| `llm_transform.py`    | Applies LLM transformations to content with various prompts (slide_improve, etc.)            |
+| `notes_to_pdf.py`     | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`     |
 
 
 ## Script Dependency Hierarchy
@@ -886,18 +886,7 @@ content into various formats.
   > for_loop_lessons.py --lectures 01* --class data605 --action generate_pdf --dry_run
   ```
 
-## Running Interactive Tutorials
-**Start Jupyter Lab in Docker**
-
-- Starts a Jupyter Lab server in a Docker container:
-  ```bash
-  > cd msml610/tutorials
-  > i docker_jupyter --skip-pull --stage local --version 1.0.0
-  ```
-
-**Open a Specific Notebook in Chrome**
-
-- Opens the Bayesian Coin tutorial in Chrome:
-  ```bash
-  > open -a "Chrome" http://127.0.0.1:5011/lab/tree/notebooks/Bayesian_Coin.ipynb
-  ```
+# Invariants
+- All and only scripts in `class_scripts` and `helpers_root/dev_scripts_helpers/documentation`
+  are present
+- Each description of the script is accurate
