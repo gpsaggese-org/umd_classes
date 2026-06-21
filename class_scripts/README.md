@@ -15,32 +15,44 @@ slide quality through automated LLM-powered transformations.
 - `common_utils.py`: Shared utility functions for argument validation, file
   finding, directory management, and PDF page counting
 
+- The scripts implement the following functions:
+  - _Analysis_: Counting and Analysis Scripts
+  - _Generation_: Generation Scripts
+  - _Improvement_: Slide Improvement Scripts
+  - _Processing_: Image and PDF Processing Scripts
+  - _Test_: Test Utilities
+  - _Utility_: Utility Scripts
+  - _Orchestration_: Orchestration Scripts
+
 - Under `class_scripts`
 
-| Script                     | Description                                                                                                             |
-| :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
-| `count_lecture_commentary_pages.py`      | Counts pages in all PDF files in `{DIR}/book/` directory using macOS `mdls` command                                     |
-| `count_lecture_slides.py`  | Counts slides, headers, lines, words, and characters in `{DIR}/lectures_source/` files with markdown/csv/tsv output     |
-| `count_lecture_pages.py`       | Counts pages in all PDF files in `{DIR}/lectures_pdf/` directory using macOS `mdls` command                                 |
-| `count_words.py`           | Counts words in all files in `{DIR}/lectures_video_script/` directory to track lecture length                                 |
-| `extract_png_from_pdf.py`  | Extracts PNG images from PDF files with sequential numbering and customizable DPI                                       |
-| `gen_lecture_commentary.py`      | Generates book chapters from lecture source material; performs PDF generation, chapter creation, and pandoc conversion  |
-| `gen_lecture_script.py`    | Generates complete lecture scripts from slides using LLM; creates intro/outro sections automatically                    |
-| `gen_quizzes.py`           | Generates multiple choice quizzes (20 questions) or discussion/review questions (3-6 questions) from lecture content    |
-| `gen_slides.py`            | Generates lecture slide PDFs from source files using `notes_to_pdf.py` for markdown-to-PDF conversion                   |
-| `generate_book_chapter.py` | Generates book chapters from markdown and PDF/PNG images with LLM-based commentary and pandoc conversion                |
-| `generate_class_images.py` | Generates images using OpenAI's DALL-E API from text prompts; supports standard and HD quality                          |
-| `generate_slide_script.py` | Generates lecture scripts from slide content; groups slides and lints output                                            |
-| `get_lecture_file.py`      | Finds and prints the path to a lecture source file matching `{DIR}/lectures_source/Lesson{LESSON}*`                     |
-| `for_loop_lessons.py`      | Main orchestration script for generating PDFs/scripts; supports multiple actions with pattern matching and dry-run mode |
-| `for_loop_slides.py`       | Transforms lecture slides using LLM with specified rules; processes slides in batches and applies rule-based modifications |
-| `process_slides.py`        | Processes slides with LLM transformations (text_check, slide_reduce, slide_check, slide_format_figures); runs in Docker |
-| `slide_check.py`           | Checks and fixes text in lecture slides using LLM; corrects spelling, grammar, and formatting                           |
-| `slide_improve.py`         | Improves lecture slides using LLM suggestions; enhances clarity, structure, and pedagogical effectiveness               |
-| `slide_reduce.py`          | Reduces and simplifies lecture slides using LLM; removes redundancy and condenses content                               |
-| `slides_utils.py`          | Utility functions for extracting and processing slide content                                                           |
+| Script | Goal | Function |
+| :--- | :--- | :--- |
+| `count_lecture_commentary_pages.py` | Analysis | Count pages in book PDFs |
+| `count_lecture_slides.py` | Analysis | Count slides, headers, lines, words, and characters in source files |
+| `count_lecture_pages.py` | Analysis | Count pages in lecture PDFs |
+| `count_words.py` | Analysis | Count words in lecture scripts |
+| `extract_png_from_pdf.py` | Processing | Extract PDF pages as PNG images with customizable DPI |
+| `gen_lecture_commentary.py` | Generation | Generate book chapters from lecture source material |
+| `gen_lecture_script.py` | Generation | Generate lecture scripts from slides with intro/outro sections |
+| `gen_quizzes.py` | Generation | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
+| `gen_slides.py` | Generation | Generate lecture slide PDFs from source files |
+| `generate_book_chapter.py` | Generation | Generate book chapters from markdown and PDF/PNG images |
+| `generate_class_images.py` | Generation | Generate images using DALL-E from text prompts |
+| `generate_slide_script.py` | Generation | Generate lecture scripts from slide content with LLM |
+| `get_lecture_file.py` | Utility | Find and print path to lecture source file |
+| `create_book_toc_from_slides.py` | Generation | Extract table of contents from lecture slides |
+| `for_loop_lessons.py` | Orchestration | Main orchestrator for generating PDFs, scripts, and materials |
+| `for_loop_slides.py` | Orchestration | Transform slides using LLM with specified rules |
+| `process_slides.py` | Processing | Process slides with LLM transformations (reduce, check, improve) |
+| `slide_check.py` | Quality | Check and fix text in lecture slides (spelling, grammar) |
+| `slide_improve.py` | Quality | Improve slides using LLM suggestions |
+| `slide_reduce.py` | Quality | Reduce and simplify slides using LLM |
+| `slides_utils.py` | Utility | Extract and process slide content |
 
 - Under `helpers_root/dev_scripts_helpers/documentation`
+
+// TODO(ai_gp): Reduce the description without changing the format
 
 | Script                     | Description                                                                                                             |
 | :------------------------- | :---------------------------------------------------------------------------------------------------------------------- |

@@ -20,3 +20,9 @@
    (APIs, batch jobs, embedded apps).
 10. **Monitoring & Maintenance** — Track performance over time, watch for
     data/concept drift, retrain as needed.
+
+- Auto EDA
+- Auto Scientist
+- Benchmarks
+- Automatic generation
+- EDA / ML Agents

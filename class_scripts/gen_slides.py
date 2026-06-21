@@ -114,10 +114,17 @@ def _daemon_watch(
     file_path: str, cmd: str, *, wait_in_sec: int = 1, debounce_sec: int = 2
 ) -> None:
     """
-    Watch a file for changes every 1s and re-run cmd when hash changes.
-    Debounces for specified seconds to ensure user is done typing.
+    Watch a file for changes and re-run command with debouncing.
 
-    // TODO(ai_gp): Improve docstring.
+    Polls the file at regular intervals by computing its MD5 hash. When a
+    change is detected, waits for `debounce_sec` seconds with no further
+    changes before executing the command. This prevents repeatedly running
+    the command while the user is still editing the file.
+
+    :param file_path: Path to file to monitor
+    :param cmd: Command to execute when file changes
+    :param wait_in_sec: Poll interval in seconds (default: 1)
+    :param debounce_sec: Debounce duration in seconds (default: 2)
     """
     _LOG.info(
         "Daemon mode: watching '%s' for changes (poll every 1s, debounce %ds)...",

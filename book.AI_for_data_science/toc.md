@@ -108,3 +108,33 @@
 - Stakeholder Reporting and Governance
 
 **Python Packages:** `mlflow`, `evidently`, `whylabs`, `prometheus-client`, `airflow`, `dbt`, `grafana-api`, `pandas`, `numpy`
+
+## AI
+
+Cross-cutting benefits:
+- Code completion & boilerplate generation (60-80% dev time savings)
+- Documentation generation (docstrings, README sections)
+- Bug detection via code review (pre-commit analysis)
+- Explanation of complex concepts and error messages
+- Reproducibility tracking (parameter logging, experiment versioning)
+
+- The Evolution of AI Pair Programming — Tracing the path from autocomplete and
+  linting tools to today's context-aware coding agents, and what that trajectory
+  suggests about where development workflows are headed.
+- Prompting for Code: Communicating Intent to a Model — How to write effective
+  specifications and prompts that translate fuzzy human requirements into
+  precise, working code, including patterns for iterative refinement.
+- Trust, Verification, and the New Code Review — How developers should validate
+  AI-generated code, the risks of silent bugs or security vulnerabilities, and
+  how review practices need to adapt when a machine writes the first draft.
+- Agentic Workflows: From Snippets to Autonomous Tasks — Examining tools that
+  don't just suggest code but plan, execute, and self-correct across a whole
+  codebase — what changes when AI can run commands, write files, and iterate on
+  its own.
+- The Changing Role of the Developer — What skills become more or less valuable
+  when AI handles routine implementation: system design, taste, debugging
+  intuition, and the judgment calls that remain distinctly human.
+
+- Architecture of coding
+- Unit testing
+- Documentation
