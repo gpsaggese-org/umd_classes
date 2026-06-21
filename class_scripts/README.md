@@ -28,6 +28,7 @@ slide quality through automated LLM-powered transformations.
 
 | Script | Goal | Function |
 | :--- | :--- | :--- |
+| `common_utils.py` | Utility | Argument validation, file finding, directory management |
 | `count_lecture_commentary_pages.py` | Analysis | Count pages in book PDFs |
 | `count_lecture_slides.py` | Analysis | Count slides, headers, lines, words, and characters in source files |
 | `count_lecture_pages.py` | Analysis | Count pages in lecture PDFs |
@@ -37,6 +38,7 @@ slide quality through automated LLM-powered transformations.
 | `gen_lecture_script.py` | Generation | Generate lecture scripts from slides with intro/outro sections |
 | `gen_quizzes.py` | Generation | Generate quizzes (20 MC) or discussion questions (3-6) from lectures |
 | `gen_slides.py` | Generation | Generate lecture slide PDFs from source files |
+| `gen_slides_test_utils.py` | Test | Helper functions for slide generation testing and validation |
 | `generate_book_chapter.py` | Generation | Generate book chapters from markdown and PDF/PNG images |
 | `generate_class_images.py` | Generation | Generate images using DALL-E from text prompts |
 | `generate_slide_script.py` | Generation | Generate lecture scripts from slide content with LLM |
@@ -52,15 +54,11 @@ slide quality through automated LLM-powered transformations.
 
 - Under `helpers_root/dev_scripts_helpers/documentation`
 
-// TODO(ai_gp): Reduce the description without changing the format
-
-| Script                | Description                                                                                  |
-| :---------------------| :--------------------------------------------------------------------------------------------|
-| `concatenate_pdfs.py` | Combines multiple PDF files into a single PDF (used for creating full book from chapters)    |
-| `lint_txt.py`         | Lints and formats text files using prettier; used by `gen_quizzes.py` for output formatting  |
-| `llm_cli.py`          | LLM command-line interface for AI-powered text transformations and content generation        |
-| `llm_transform.py`    | Applies LLM transformations to content with various prompts (slide_improve, etc.)            |
-| `notes_to_pdf.py`     | Converts markdown/notes to PDF format (slides, documents, etc.); used by `gen_slides.py`     |
+| Script                | Description                                                                  |
+| :---------------------| :--------------------------------------------------------------------------|
+| `concatenate_pdfs.py` | Combines multiple PDF files into one (creates full book from chapters)      |
+| `lint_txt.py`         | Lints and formats text using prettier; used for quiz output                |
+| `notes_to_pdf.py`     | Converts markdown to PDF (slides, documents); used by gen_slides.py        |
 
 
 ## Script Dependency Hierarchy
