@@ -113,13 +113,8 @@
 
 ## 12: Causal Reinforcement Learning
 
-<<<<<<< Updated upstream
 ### Lessons
-- ./`msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-=======
-**Lessons**
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
->>>>>>> Stashed changes
 
 ### Tutorials
 
