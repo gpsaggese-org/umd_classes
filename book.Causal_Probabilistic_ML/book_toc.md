@@ -1,6 +1,6 @@
 # Book Table of Contents
 
-## 1: From Prediction Pipelines to Decision Pipelines
+## 1. The Need for Probabilistic and Causal Machine Learning
 
 ### msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
 

@@ -1,9 +1,17 @@
+// class_scripts/create_book_toc_from_slides.py
+
+// Current TOC: book.Causal_Probabilistic_ML/book_toc.md
+// Official TOC: ~/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
+
 # Part I: Understanding Causality
 
 ## 1: The Need for Probabilistic and Causal Machine Learning
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+
+### TODOs
+- [ ] Add content to probabilistic intro
 
 ### Tutorials
 
@@ -46,7 +54,7 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
-## 2: Bayesian Networks
+## 2: Bayesian Networks and Probabilistic Reasoning
 
 ### Lessons
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
