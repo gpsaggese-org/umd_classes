@@ -1,15 +1,13 @@
 // class_scripts/create_book_toc_from_slides.py --input book.Causal_Probabilistic_ML/book_map.md --max_level 2 --in_place
-//
 // Current TOC: book.Causal_Probabilistic_ML/book_toc.md
 // Official TOC: ~/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
 
-# Part I: Understanding Causality
+# Part I: Understanding Probabilistic and Causal ML
 
 ## 1: The Need for Probabilistic and Causal Machine Learning
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-
 
 ### Current TOC
 // `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -39,6 +37,11 @@
 
 ### TODOs
 - [ ] Add content to probabilistic intro
+- [ ] Keep tables in the text
+- [ ] Implement in tikz the pic
+- [ ] Move Causal AI in business in a separate chapter
+- [ ] Read papers
+- [ ] Read books
 
 ### Tutorials
 
@@ -87,7 +90,6 @@
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
 
-
 ### Current TOC
 // `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - Logic-Based AI Under Uncertainty (10)
@@ -130,7 +132,6 @@
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 
-
 ### Current TOC
 // `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Intervention and Counterfactuals (5)
@@ -168,7 +169,6 @@
 - `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
 - `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
 - `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
-
 
 ### Current TOC
 // `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
@@ -210,12 +210,12 @@
 - Summary
 
 ### Tutorials
-- msml610/tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb
-- msml610/tutorials/L07_prob_programming/L07_02_probabilistic_programming.ipynb
-- msml610/tutorials/L07_prob_programming/L07_02_robust_modeling.ipynb
-- msml610/tutorials/L07_prob_programming/L07_03_hierarchical_models.ipynb
-- msml610/tutorials/L07_prob_programming/L07_04_generalized_linear_models.ipynb
-- msml610/tutorials/L07_prob_programming/L07_05_evaluating_models.ipynb
+- `msml610/tutorials/L07_prob_programming/L07_01_bayesian_coin.ipynb`
+- `msml610/tutorials/L07_prob_programming/L07_02_probabilistic_programming.ipynb`
+- `msml610/tutorials/L07_prob_programming/L07_02_robust_modeling.ipynb`
+- `msml610/tutorials/L07_prob_programming/L07_03_hierarchical_models.ipynb`
+- `msml610/tutorials/L07_prob_programming/L07_04_generalized_linear_models.ipynb`
+- `msml610/tutorials/L07_prob_programming/L07_05_evaluating_models.ipynb`
 
 ### Related packages
 - pyro (8,200): Probabilistic programming on PyTorch
@@ -237,7 +237,6 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-
 
 ### Current TOC
 // `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
@@ -273,7 +272,6 @@
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
 
-
 ### Current TOC
 // `msml610/lectures_source/Lesson08.4.txt`
 - Introduction to Causal Inference (50)
@@ -303,11 +301,11 @@
 - Summary
 
 ### Tutorials
-- msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb
-- msml610/tutorials/L08_causal_inference/L08_04_02_causal_inference.ipynb
-- msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb
-- msml610/tutorials/L08_causal_inference/L08_04_07_metalearners.ipynb
-- msml610/tutorials/L08_causal_inference/L08_04_08_difference_in_difference.ipynb
+- `msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb`
+- `msml610/tutorials/L08_causal_inference/L08_04_02_causal_inference.ipynb`
+- `msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb`
+- `msml610/tutorials/L08_causal_inference/L08_04_07_metalearners.ipynb`
+- `msml610/tutorials/L08_causal_inference/L08_04_08_difference_in_difference.ipynb`
 
 ### Related packages
 - DoWhy (6,600): Causal inference using graphical models
@@ -325,7 +323,6 @@
 ## 7: Explainability and Causal Attribution
 
 ### Lessons
-
 
 ### Current TOC
 ### Target TOC
@@ -355,9 +352,8 @@
 - `msml610/lectures_source/Lesson10-Timeseries_forecasting.txt`
 - `msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt`
 
-
 ### Current TOC
-// `msml610/lectures_source/Lesson10-Timeseries_forecasting.txt`
+// `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`
 - Time Series (21)
   - Basic definition (9)
   - Time series operators (6)
@@ -371,7 +367,7 @@
 - Modern Approaches (10)
 - Special techniques for time series modeling (14)
 
-// `msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt`
+// `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
 - Time Series vs. Cross-Sectional Causality (10)
   - Temporal Causal Structures (3)
   - Challenges Specific to Time Series (5)
@@ -422,7 +418,6 @@
 ### Lessons
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
 
-
 ### Current TOC
 // `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
 - Introduction (24)
@@ -456,11 +451,10 @@
 ## 10: Causal Discovery
 
 ### Lessons
-- `msml610/lectures_source/Lesson10.2-Causal_Discovery.txt`
-
+- `msml610/lectures_source/Lesson12.1-Causal_Discovery.txt`
 
 ### Current TOC
-// `msml610/lectures_source/Lesson10.2-Causal_Discovery.txt`
+// `msml610/lectures_source/Lesson12.1-Causal_Discovery.txt`
 - The Discovery Problem (11)
   - Inferring Causal Structure from Observational Data (4)
   - Identifiability and Causal Sufficiency (5)

@@ -72,14 +72,57 @@ website/docs/blog/posts/draft.how_to.latex_vs_typst_for_typsetting.md
 ## Step 3: Extend the flow and document it
 dev_scripts_helpers/documentation/notes_to_pdf.py
 
-notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
+> notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
 
-Cause: my typst path used container_type = "pandoc_only", which points at the bare pandoc/core:3.7 image. That image isn't built/pulled locally (only pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
+### [ ] Fix pandoc/core:3.7
+
+- my typst path used container_type = "pandoc_only", which points at the bare
+  pandoc/core:3.7 image. That image isn't built/pulled locally (only
+  pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
+  ```
+  > container image pull pandoc/core:3.7
+  ```
+
+msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+
+### [ ] Fix Latex Preamble
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Lesson 10.2: Causal Discovery}}$$**
+\endgroup
+
+\vspace{1cm}
 
 ## Step 4: Reorg dev_scripts_helpers/documentation
 - Too many files
 
 # Mix
+
+## render_images.py
+
+- [ ] Add an option to only render without commenting out the code
+
+- [ ] Clarify what is the boilerplate for Latex and Tikz
+
+- [ ] Improve documentation
+
+./helpers_root/dev_scripts_helpers/documentation/render_images.py
+./helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py
+
+/Users/saggese/src/umd_classes1/helpers_root/docs/tools/documentation_toolchain/all.render_images.explanation.md
+
+- [ ] Publish blog
+
+website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md
 
 ## Fix output of lint_cc.py
 

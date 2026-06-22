@@ -202,7 +202,7 @@ def _insert_toc_in_file(
             # Remove trailing blanks and insert Current TOC.
             while output and output[-1].strip() == "":
                 output.pop()
-            output.append("\n\n")
+            output.append("\n")
             output.append("### Current TOC\n")
             for lesson_file in current_chapter_lessons:
                 output.append(f"// `{lesson_file}`\n")
@@ -213,7 +213,7 @@ def _insert_toc_in_file(
     if in_lessons and current_chapter_lessons:
         while output and output[-1].strip() == "":
             output.pop()
-        output.append("\n\n")
+        output.append("\n")
         output.append("### Current TOC\n")
         for lesson_file in current_chapter_lessons:
             output.append(f"// `{lesson_file}`\n")
