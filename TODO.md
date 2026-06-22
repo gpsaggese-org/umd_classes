@@ -46,7 +46,6 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 `./class_scripts/gen_book_chapter.py`
 `./class_scripts/generate_book_chapter.py`
 
-
 # Port documentation flow to typst
 
 ## Step 0:
@@ -188,9 +187,11 @@ helpers_root/dev_scripts_helpers/llms/openrouter_models_table.py --models_from_f
 lint_txt.py -i dev_scripts_helpers/ai/README.md --backend mdformat --mode uvx
 
 Better / faster markdown formatting
-- test_hmarkdown_formatting.py
-- pytest helpers/test/test_hmarkdown_formatting.py
-- pytest helpers/test/test_hmarkdown_formatting.py::Test_format_md_comparison_and_performance
+test_hmarkdown_formatting.py
+```
+> pytest helpers/test/test_hmarkdown_formatting.py
+> pytest helpers/test/test_hmarkdown_formatting.py::Test_format_md_comparison_and_performance
+```
 
 ## Improve cost and speed accounting for hllm
 
@@ -222,12 +223,18 @@ https://arxiv.org/abs/2011.00641
 https://arxiv.org/abs/2006.05690
 https://arxiv.org/abs/2011.00641
 
-download_academic_paper.py
-convert_pdf_to_md.py
-summarize_md.py
-
+```
 > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
 > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+> summarize_md.py
+```
+
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
+claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
+> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
+claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
+```
 
 ## Convert llm_transform.py to llm_cli.py
 Move prompts and action into a YAML file

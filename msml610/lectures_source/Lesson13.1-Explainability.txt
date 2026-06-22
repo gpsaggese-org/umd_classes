@@ -1,0 +1,168 @@
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Lesson 13.1: Machine Learning Explanaibility}}$$**
+\endgroup
+
+\vspace{1cm}
+
+::: columns
+:::: {.column width=75%}
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+**References**:
+
+::::
+:::: {.column width=20%}
+
+::::
+:::
+
+# Machine Learning Explainability
+
+* Why Explainability Matters
+
+- **Question**: _"A model predicts a patient has 92% chance of heart disease
+  $\to$ should the doctor trust it?"_
+  - Without explanation, even accurate models are unusable in high-stakes
+    decisions
+
+- **Problem**: ML models are increasingly used for decisions that affect
+  people's lives
+  - Credit scoring, medical diagnosis, criminal sentencing, hiring
+  - Stakeholders (doctors, judges, regulators) need to understand _why_ a
+    prediction was made, not just _what_ it is
+
+- **Definition**: Explainability (aka _"interpretability"_) is the degree to
+  which a human can understand the cause of a model's decision
+  - Aka "Interpretable ML", "XAI" (Explainable Artificial Intelligence)
+
+* Accuracy vs Interpretability
+
+- **Key insight**: there is a fundamental tension between model _accuracy_ and
+  _interpretability_
+  - Linear regression $\to$ interpretable but limited capacity
+  - Deep neural networks $\to$ high capacity but opaque (_"black box"_)
+
+- **Goal**: develop methods that explain black-box models _post-hoc_, without
+  sacrificing predictive performance
+
+* Taxonomy of Explainability Methods
+
+- **Definition**: explainability methods can be classified along several axes
+
+::: columns
+:::: {.column width=55%}
+- By _scope_:
+  - **Global**: explain the model's overall behavior
+    - E.g., feature importance rankings, partial dependence plots
+  - **Local**: explain a single prediction
+    - E.g., _"why was this loan application rejected?"_
+
+- By _model dependence_:
+  - **Model-specific**: exploit internal model structure
+    - E.g., attention weights in transformers, decision paths in trees
+  - **Model-agnostic**: treat the model as a black box
+    - E.g., LIME, SHAP $\to$ work with any model
+
+- By _output type_:
+  - Feature attributions (numeric importance scores)
+  - Rules or decision sets
+  - Example-based (prototypes, counterfactuals)
+::::
+:::: {.column width=45%}
+
+```mermaid
+mindmap
+  root((**Explainability Methods**))
+    (**By Scope**)
+      Global
+      Local
+    (**By Model Dependence**)
+      Model-specific
+      Model-agnostic
+    (**By Output**)
+      Feature attributions
+      Rules
+      Examples
+```
+
+::::
+:::
+
+* LIME: Local Interpretable Model-Agnostic Explanations
+
+- **Key idea**: approximate a complex model _locally_ with a simple,
+  interpretable model (Ribeiro et al., 2016)
+
+::: columns
+:::: {.column width=55%}
+- **Algorithm**:
+  1. Pick an instance $\blue{x}$ to explain
+  2. Generate perturbed samples $\{z_1, ..., z_N\}$ around $\blue{x}$
+  3. Weight each $z_i$ by proximity to $\blue{x}$ using a kernel
+     $\pi_{\blue{x}}(z_i)$
+  4. Query the black-box model $f$ on all $z_i$ to get predictions $f(z_i)$
+  5. Fit a simple model $\red{g}$ (e.g., linear) on $\{(z_i, f(z_i))\}$ weighted
+     by $\pi_{\blue{x}}$
+
+::::
+:::: {.column width=45%}
+```graphviz[80%]
+digraph LIME {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Instance   [label="Instance x", fillcolor="#A6C8F4"];
+    Perturb    [label="Perturbed\nSamples", fillcolor="#FFD1A6"];
+    BlackBox   [label="Black-Box\nModel f", fillcolor="#F4A6A6"];
+    Predict    [label="Predictions\nf(z_i)", fillcolor="#B2E2B2"];
+    FitSimple  [label="Fit Simple\nModel g", fillcolor="#A0D6D1"];
+    Explain    [label="Local\nExplanation", fillcolor="#C6A6F4"];
+
+    Instance -> Perturb [label="  perturb  "];
+    Perturb -> BlackBox [label="  query  "];
+    BlackBox -> Predict;
+    Instance -> FitSimple [label="  weight by\n  proximity  ", style=dashed];
+    Predict -> FitSimple;
+    FitSimple -> Explain;
+}
+```
+::::
+:::
+- **Example**: a spam classifier flags an email $\to$ LIME reveals the words
+  _"free"_, _"winner"_, and _"click here"_ drove the prediction
+  - The linear explanation $\red{g}$ assigns a positive coefficient to each of
+    these tokens
+
+* LIME: Local Interpretable Model-Agnostic Explanations
+
+- **Formally**:
+  $$
+  \red{g^*}
+    = \arg\min_{g \in G}
+        \sum_{i=1}^{N}
+          \pi_{\blue{x}}(z_i)
+          \left(
+            f(z_i) - \red{g}(z_i)
+          \right)^2
+        + \Omega(\red{g})
+  $$
+  - $\Omega(\red{g})$ penalizes complexity of the explanation (e.g., number of
+    non-zero coefficients)
