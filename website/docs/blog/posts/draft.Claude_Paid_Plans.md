@@ -1,3 +1,19 @@
+---
+title: "Understanding Claude Pro and Max Plans"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "AI Tools"
+  - "LLM"
+draft: true
+---
+
+TL;DR: Claude Max plans offer higher usage limits than Pro but still have rolling limits and aren't truly unlimited.
+
+<!-- more -->
+
 # Understanding Claude Pro and Max Plans
 
 Anthropic offers several subscription tiers for Claude, ranging from Free to Pro and the more powerful Max plans. While many users assume Max provides unlimited access, the reality is a bit more nuanced.

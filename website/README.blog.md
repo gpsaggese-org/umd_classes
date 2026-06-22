@@ -7,19 +7,12 @@
 
 # Published Blogs
 
-- To find the ones that are already published
-  ```
-  > \grep -i "draft:" website/docs/blog/posts/*.md | grep -i false
-  website/docs/blog/posts/how_to.Compare_LLM_models.md:draft: false
-  website/docs/blog/posts/how_to.Connect_Claude_Code_to_Gmail.md:draft: false
-  website/docs/blog/posts/in_30_mins.helpers_llm_cli.md:draft: false
-  ...
-  ```
-
 - To extract dates and paths use:
   ```
   > website/find_published_blogs.sh
   ```
+
+## Published Blogs
 
 - The published ones are:
   - 2026-06-12: `website/docs/blog/posts/how_to.Use_OpenRouter.md`
@@ -41,34 +34,6 @@
   - 2026-02-20: `website/docs/blog/posts/in_30_mins.uv.md`
   - 2026-02-13: `website/docs/blog/posts/in_30_mins.ripgrep.md`
   - 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
-
-- To format use:
-  ```
-  > website/format_blog.sh <FILE>
-  ```
-  which wraps something like:
-  ```
-  > prettier --prose-wrap always --print-width 80 --tab-width 4 -w $FILE
-  ```
-
-- Checklist for publishing (from `website/blog_checklist.sh`)
-  ```
-  claude> /blog.create_from_notes XYZ
-  claude> /coding.todoai_gp XYZ
-  claude> /blog.humanize XYZ
-  claude> /blog.add_links XYZ
-  ```
-
-- Render
-  ```
-  > render_images.py -i website/docs/blog/posts/$FILE
-  > git add ...
-  ```
-
-- To publish use the script
-  ```
-  > website/publish_blog.py ...
-  ```
 
 # Draft Blogs
 
@@ -183,13 +148,9 @@ python.invoke.txt
 
 # Drafts
 
-<!--
-- Create a table of all the draft blogs in website/docs/blog/posts/draft*
-- Rank them from how close they are to be publishable
-- Write the result in a markdown table with columns File, Words, Status where Status is (Ready, Almost Ready, Not Ready)
--->
+## List of Drafts
 
-| File | Words | Status |
+| File | Words | Ready % |
 |------|------:|--------|
 | `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | Ready |
 | `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | Ready |
@@ -237,3 +198,74 @@ python.invoke.txt
 | `draft.LLM_issues.md` | 41 | Not Ready |
 | `draft.My_AI_Policy.md` | 82 | Not Ready |
 | `draft.Reducing_hllm_cli_import_time.md` | 24 | Not Ready |
+
+# Publishing Checklist
+
+- Create
+  ```bash
+  claude> /blog.create_from_notes XYZ
+  ```
+
+- Set the target
+  ```bash
+  FILE="..."
+  echo "Processing $FILE ..."
+  MODEL="--model deepseek/deepseek-v4-flash"
+  MODEL=""
+  ```
+
+- Make sure there are no TODOs
+  ```bash
+  > cc -p "/coding.todoai_gp $FILE"
+  ```
+
+- Detect and remove AI slop, if any
+  ```bash
+  > cc -p "/blog.humanize $FILE"
+  ```
+
+- Add links to rest of the blogs
+  ```bash
+  > cc -p "/blog.add_links $FILE"
+  ```
+
+- To format use
+  ```
+  > website/format_blog.sh <FILE>
+  ```
+
+- Render
+  ```
+  > render_images.py -i website/docs/blog/posts/$FILE
+  > git add ...
+  ```
+
+- Check how it's rendered
+  ```bash
+  > open_md.py --input website/docs/blog/posts/how_to.Render_md_from_terminal.md --mode github
+  ```
+
+- Mark ready for publishing
+  ```bash
+  > website/mark_blog_as_ready.py --file $FILE
+  ```
+
+- Preview the website
+  ```bash
+  > website/preview_website.sh
+  ```
+
+- Fix all the problematic blogs, if any
+  ```
+  > cc -p "Run website/preview_website.sh and fix the problems following .claude/skills/blog.rules.md"
+  ```
+
+- Publish the website
+  ```bash
+  > website/publish_website.sh
+  ```
+
+- Update the readme:
+  ```bash
+  > cc -p "Execute website/prompt.update_README_blog.md"
+  ```

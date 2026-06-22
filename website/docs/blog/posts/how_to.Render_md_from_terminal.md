@@ -4,7 +4,9 @@ authors:
     - gpsaggese
 date: 2026-06-22
 categories:
-    - Developer Tools ---
+    - "Developer Tools"
+draft: false
+---
 
 TL;DR: Render markdown from terminal using `glow` (for terminal viewing),
 `mdcat` (for rich formatting), `grip` (for GitHub-accurate previews with

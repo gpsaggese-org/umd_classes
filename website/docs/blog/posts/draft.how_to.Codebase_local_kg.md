@@ -1,3 +1,19 @@
+---
+title: "Codebase local kg"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "AI Tools"
+  - "AI Coding"
+draft: true
+---
+
+TL;DR: [Summary needed]
+
+<!-- more -->
+
 What are the alternatives to Tools like Graphify build a local knowledge graph of the codebase so the agent doesn’t repeatedly reread large portions of code
 
 ool

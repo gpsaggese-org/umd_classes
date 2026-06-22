@@ -10,10 +10,10 @@ The script:
 # Usage
 
 ## Publish a draft
-> ./publish_blog.py --file draft.how_to.Use_OpenRouter.md
+> mark_blog_as_ready.py --file draft.how_to.Use_OpenRouter.md
 
 ## Unpublish (revert to draft)
-> ./publish_blog.py --file how_to.Use_OpenRouter.md --undo
+> mark_blog_as_ready.py --file how_to.Use_OpenRouter.md --undo
 """
 
 import argparse

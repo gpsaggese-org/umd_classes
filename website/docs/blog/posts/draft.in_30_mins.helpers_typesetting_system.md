@@ -1,3 +1,18 @@
+---
+title: "helpers typesetting system"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "Python"
+draft: true
+---
+
+TL;DR: [Summary needed]
+
+<!-- more -->
+
 helpers_root/dev_scripts_helpers/documentation/README.md
 
 // Refresh helpers_root/dev_scripts_helpers/documentation/README.md

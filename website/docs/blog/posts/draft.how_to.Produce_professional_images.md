@@ -1,3 +1,18 @@
+---
+title: "Produce professional images"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "Developer Tools"
+draft: true
+---
+
+TL;DR: [Summary needed]
+
+<!-- more -->
+
 SVG vs Tikz
 
 Both can produce professional vector output, but they're suited to different workflows. Here's how they compare:

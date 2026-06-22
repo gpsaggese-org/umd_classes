@@ -1,3 +1,18 @@
+---
+title: "Use typst for slides"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "Software Engineering"
+draft: true
+---
+
+TL;DR: [Summary needed]
+
+<!-- more -->
+
 
 Typst vs Latex
 

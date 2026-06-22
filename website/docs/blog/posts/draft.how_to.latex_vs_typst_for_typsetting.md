@@ -1,3 +1,18 @@
+---
+title: "latex vs typst for typsetting"
+authors:
+  - gpsaggese
+date: 2026-06-22
+description:
+categories:
+  - "Software Engineering"
+draft: true
+---
+
+TL;DR: [Summary needed]
+
+<!-- more -->
+
 # LaTeX vs Typst
 
 - **LaTeX** is the long-established standard, with decades of packages, journal templates, and institutional support — but it has a steep learning curve, painfully slow compile times, and cryptic error messages that can take real effort to debug.
