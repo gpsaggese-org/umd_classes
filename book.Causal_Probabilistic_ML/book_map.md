@@ -38,6 +38,9 @@
 ### TODOs
 - [ ] Add / integrate probabilistic / explainable
 - [ ] Add "small data"
+  - /Users/saggese/src/csfy1/blog/docs/posts/AI_for_Optimal_Decision-Making.md
+  - /Users/saggese/src/csfy1/blog/docs/posts/Cracking_the_Long_Tail_of_Data_Science_Problems.md
+  - /Users/saggese/src/csfy1/blog/docs/posts/Data_Is_Dumb_And_Thats_Why_Causality_Matters.md
 - [ ] Keep tables in the text
 - [ ] Implement in tikz the pic
   - Use inkspace / svg from msml610/lectures_source/Lesson01-1.aux.md
@@ -351,8 +354,8 @@
 ## 8: Causal Inference for Time Series
 
 ### Lessons
-- `msml610/lectures_source/Lesson10-Timeseries_forecasting.txt`
-- `msml610/lectures_source/Lesson10.1-Causal_Inference_for_Time_Series.txt`
+- `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`
+- `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
 
 ### Current TOC
 // `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`

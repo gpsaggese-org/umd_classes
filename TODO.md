@@ -1,3 +1,7 @@
+# Work on slides
+
+book.Causal_Probabilistic_ML/book_map.md
+
 # Convert slides into book
 
 - [x] Create a map from book.from_corr_to_decision/book_map.md
@@ -41,10 +45,8 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
   > open msml610/book/Lesson06.2-Using_Bayesian_Networks.pdf
   ```
 
-- Create some scripts similar
-
-`./class_scripts/gen_book_chapter.py`
-`./class_scripts/generate_book_chapter.py`
+- Create some scripts similar `./class_scripts/gen_book_chapter.py` and
+  `./class_scripts/generate_book_chapter.py`
 
 # Port documentation flow to typst
 
@@ -54,12 +56,12 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 - [x] Add pictures of screen with ./dev_scripts_helpers/system_tools/capture_iterm_command.py --command "(cd ~/src/umd_classes2/helpers_root; clear; glow TODO.convert_slides_into_book.md)" --output_file screenshot1.png
 - [x] Refresh the README.blog.md
 - [x] Convert to Python dev_scripts_helpers/documentation/open_md.sh
-- [ ] Test dev_scripts_helpers/documentation/open_md.sh
-- [ ] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
+- [x] Test dev_scripts_helpers/documentation/open_md.sh
+- [x] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 ## Step 1: Document current system
-helpers_root/dev_scripts_helpers/documentation/README.md
-helpers_root/dev_scripts_helpers/documentation/README.notes_to_pdf.md
+- `helpers_root/dev_scripts_helpers/documentation/README.md`
+- `helpers_root/dev_scripts_helpers/documentation/README.notes_to_pdf.md`
 
 website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
 -> create blog
@@ -123,14 +125,13 @@ MSML610: Advanced Machine Learning
 
 - [ ] Improve documentation
 
-./helpers_root/dev_scripts_helpers/documentation/render_images.py
-./helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py
-
-/Users/saggese/src/umd_classes1/helpers_root/docs/tools/documentation_toolchain/all.render_images.explanation.md
+  - `helpers_root/dev_scripts_helpers/documentation/render_images.py`
+  - `helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py`
+  - `helpers_root/docs/tools/documentation_toolchain/all.render_images.explanation.md`
 
 - [ ] Publish blog
 
-website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md
+  - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
 
 ## Fix output of lint_cc.py
 
@@ -208,32 +209,19 @@ llm_cli.py -p "Summarize the following text in 5 bullet points and less than 200
 tmux focus-events off · add 'set -g focus-events on' to ~/.tmux.conf and reattach for focus tracking
 tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll
 
-## Process Articles
+## Process Academic Articles
 
-Read articles
-> more download_articles.sh
-https://arxiv.org/pdf/2305.10032
-https://par.nsf.gov/servlets/purl/10125762
-https://qiniu.pattern.swarma.org/attachment/A%20Survey%20on%20Causal%20Inference.pdf
-https://arxiv.org/pdf/1302.4972
-https://arxiv.org/pdf/1205.2599
-https://arxiv.org/abs/1608.00191
-https://arxiv.org/abs/2006.05690
-https://arxiv.org/abs/2011.00641
-https://arxiv.org/abs/2006.05690
-https://arxiv.org/abs/2011.00641
+  ```
+  > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
+  > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+  > summarize_md.py
+  ```
 
-```
-> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
-> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
-> summarize_md.py
-```
-
-```
-> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
-claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
-> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
-claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
+  ```
+  > download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
+  claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
+  > mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
+  claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
 ```
 
 ## Convert llm_transform.py to llm_cli.py
@@ -242,34 +230,32 @@ Move prompts and action into a YAML file
 ## Merge markdown. and text.
 Is there any difference?
 
-```
-> ls -1 -d .claude/skills/markdown* .claude/skills/text* | sort
-.claude/skills/markdown.add_summary
-.claude/skills/markdown.fix_bullet_points
-.claude/skills/markdown.reduce
-.claude/skills/markdown.rules.md
-.claude/skills/markdown.summarize
-.claude/skills/text.convert_to_latex
-.claude/skills/text.criticize
-.claude/skills/text.explain
-.claude/skills/text.extract_ideas
-.claude/skills/text.humanize
-.claude/skills/text.read_start_end
-.claude/skills/text.rules.md
-.claude/skills/text.summarize_hn_in_bullet_points
-.claude/skills/text.summarize_in_bullet_points
-.claude/skills/text.use_bullet_lists
-```
+  ```
+  > ls -1 -d .claude/skills/markdown* .claude/skills/text* | sort
+  .claude/skills/markdown.add_summary
+  .claude/skills/markdown.fix_bullet_points
+  .claude/skills/markdown.reduce
+  .claude/skills/markdown.rules.md
+  .claude/skills/markdown.summarize
+  .claude/skills/text.convert_to_latex
+  .claude/skills/text.criticize
+  .claude/skills/text.explain
+  .claude/skills/text.extract_ideas
+  .claude/skills/text.humanize
+  .claude/skills/text.read_start_end
+  .claude/skills/text.rules.md
+  .claude/skills/text.summarize_hn_in_bullet_points
+  .claude/skills/text.summarize_in_bullet_points
+  .claude/skills/text.use_bullet_lists
+  ```
 
 ## Improve / unify --rule, --skill, ...
 
-Move --skill and --topic from ./linters2/lint_cc.py to this parser hmarsele.add_rule_cli_arg(action_group)
-
-Merge rigrule into mdm
+- Move --skill and --topic from ./linters2/lint_cc.py to this parser hmarsele.add_rule_cli_arg(action_group)
+- Merge rigrule into mdm
 
 ## Make file interfaces aligned
 - Make compatible in terms of options
-
   ```
   i git_files
   i git_branch_diff
@@ -289,56 +275,6 @@ Merge rigrule into mdm
   Causal and Probabilistic Machine Learning in Action
   ```
 
-### [ ] Improve Manning proposal after review
-
-
-- [x] Remove the last part
-  ```
-  > vimdiff \
-    manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v1.toc.md
-    manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
-  ```
-  and keep only first 2 parts of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
-
-  ```
-  > vi /Users/saggese/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/{manning.proposal_v3.toc.md,manning.template.md,manning.changes_after_review.md}
-  ```
-
-- [ ] Change Chap 1
-  - Explain small data
-  - Systems with low signal to noise ratio
-  - Explainability, actionability
-
-/Users/saggese/src/notes1
-> ls -1 book.manning.Causal_Probabilistic_Machine_Learning/
-manning.changes_after_review.md
-manning.proposal_v1.md
-manning.proposal_v1.toc.md
-manning.proposal_v2.md
-manning.proposal_v2.toc.md
-manning.proposal_v3.toc.md
-manning.reviews_v1.md
-manning.template.md
-
-### [ ] Expand the TOC
-
-- The 
-book_proposals/manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
-      using
-      /Users/saggese/src/umd_classes2/book.Causal_Probabilistic_ML/book_toc.md
-
-| Ch     | Manning Proposal                    | Book TOC (Lecture Source)             | Gap                                                                                                                                                                                                                               |
-| ------ | ----------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1**  | Prediction→Decision pipelines       | Lesson08.1: good coverage            | Book TOC adds "Causal AI in Business" (workflow, explainability) not in Manning                                                                                                                                                   |
-| **2**  | Bayesian Networks                   | Lesson06.1 + 06.2: strong coverage   | Well aligned                                                                                                                                                                                                                      |
-| **3**  | Causal DAGs & Structural Models     | Lesson08.3 (Do-Calculus only)         | **Major gap**: Manning has SCMs, mediators/moderators/confounders/colliders, building DAGs from domain knowledge. Book TOC only has intervention/counterfactuals/adjustment/do-calculus (which is actually Manning Ch 5 material) |
-| **4**  | Causal Models→Code (PyMC)           | Lesson07.1-07.5: very deep           | Book TOC much richer: adds Bayesian Model Comparison (07.5) not in Manning. Manning lacks model comparison entirely                                                                                                               |
-| **5**  | Interventions & Adjustments         | Lesson08.3 (same source as Ch 3)      | **Duplicate**: Book TOC maps identical Lesson08.3 content to both Ch 3 and Ch 5                                                                                                                                                   |
-| **6**  | Causal Identification & Estimation  | Lesson08.4: extensive                | Book TOC much broader: metalearners, geo/switchback experiments, non-compliance/instruments. Manning has case study + sensitivity analysis not in lectures                                                                        |
-| **7**  | Explainability & Causal Attribution | **Missing entirely**                  | **No lecture source mapped** for SHAP, LIME, DiCE, causal attribution                                                                                                                                                             |
-| **8**  | Causal Inference for Time Series    | Lesson10 + 10.1: deep                | Book TOC includes full time series foundations (ARMA, ARCH, modern approaches) that Manning assumes as prerequisite                                                                                                               |
-| **9**  | A/B Testing & Experimentation       | Lesson09.3 (Multi-Armed Bandits only) | **Thin**: Missing A/B test design, switchbacks, sequential decision-making from Manning                                                                                                                                           |
-| **10** | Causal Discovery                    | Lesson10.2: good match               | Well aligned                                                                                                                                                                                                                      |
 # Springer
 
 - Title
@@ -367,3 +303,55 @@ springer.template.md
 # AI for Finance
 - ?
 
+# DONE
+
+### [x] Improve Manning proposal after review
+
+
+- [x] Remove the last part
+  ```
+  > vimdiff \
+    manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v1.toc.md
+    manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
+  ```
+  and keep only first 2 parts of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
+
+  ```
+  > vi /Users/saggese/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/{manning.proposal_v3.toc.md,manning.template.md,manning.changes_after_review.md}
+  ```
+
+- [x] Change Chap 1
+  - Explain small data
+  - Systems with low signal to noise ratio
+  - Explainability, actionability
+
+/Users/saggese/src/notes1
+> ls -1 book.manning.Causal_Probabilistic_Machine_Learning/
+manning.changes_after_review.md
+manning.proposal_v1.md
+manning.proposal_v1.toc.md
+manning.proposal_v2.md
+manning.proposal_v2.toc.md
+manning.proposal_v3.toc.md
+manning.reviews_v1.md
+manning.template.md
+
+### [x] Expand the TOC
+
+- The 
+book_proposals/manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
+      using
+      /Users/saggese/src/umd_classes2/book.Causal_Probabilistic_ML/book_toc.md
+
+| Ch     | Manning Proposal                    | Book TOC (Lecture Source)             | Gap                                                                                                                                                                                                                               |
+| ------ | ----------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1**  | Prediction→Decision pipelines       | Lesson08.1: good coverage            | Book TOC adds "Causal AI in Business" (workflow, explainability) not in Manning                                                                                                                                                   |
+| **2**  | Bayesian Networks                   | Lesson06.1 + 06.2: strong coverage   | Well aligned                                                                                                                                                                                                                      |
+| **3**  | Causal DAGs & Structural Models     | Lesson08.3 (Do-Calculus only)         | **Major gap**: Manning has SCMs, mediators/moderators/confounders/colliders, building DAGs from domain knowledge. Book TOC only has intervention/counterfactuals/adjustment/do-calculus (which is actually Manning Ch 5 material) |
+| **4**  | Causal Models→Code (PyMC)           | Lesson07.1-07.5: very deep           | Book TOC much richer: adds Bayesian Model Comparison (07.5) not in Manning. Manning lacks model comparison entirely                                                                                                               |
+| **5**  | Interventions & Adjustments         | Lesson08.3 (same source as Ch 3)      | **Duplicate**: Book TOC maps identical Lesson08.3 content to both Ch 3 and Ch 5                                                                                                                                                   |
+| **6**  | Causal Identification & Estimation  | Lesson08.4: extensive                | Book TOC much broader: metalearners, geo/switchback experiments, non-compliance/instruments. Manning has case study + sensitivity analysis not in lectures                                                                        |
+| **7**  | Explainability & Causal Attribution | **Missing entirely**                  | **No lecture source mapped** for SHAP, LIME, DiCE, causal attribution                                                                                                                                                             |
+| **8**  | Causal Inference for Time Series    | Lesson10 + 10.1: deep                | Book TOC includes full time series foundations (ARMA, ARCH, modern approaches) that Manning assumes as prerequisite                                                                                                               |
+| **9**  | A/B Testing & Experimentation       | Lesson09.3 (Multi-Armed Bandits only) | **Thin**: Missing A/B test design, switchbacks, sequential decision-making from Manning                                                                                                                                           |
+| **10** | Causal Discovery                    | Lesson10.2: good match               | Well aligned                                                                                                                                                                                                                      |

@@ -82,6 +82,7 @@ MSML610: Advanced Machine Learning
   - Feature attributions (numeric importance scores)
   - Rules or decision sets
   - Example-based (prototypes, counterfactuals)
+
 ::::
 :::: {.column width=45%}
 
@@ -146,6 +147,7 @@ digraph LIME {
 ```
 ::::
 :::
+
 - **Example**: a spam classifier flags an email $\to$ LIME reveals the words
   _"free"_, _"winner"_, and _"click here"_ drove the prediction
   - The linear explanation $\red{g}$ assigns a positive coefficient to each of
