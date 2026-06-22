@@ -4,40 +4,49 @@
 
 class_scripts/create_book_toc_from_slides.py --max_number 2 --max_level 2
 
-- [ ] Add comments to README
+- [x] Add comments to README
 
 ## The old flow
-`./class_scripts/gen_book_chapter.py`
-`./class_scripts/generate_book_chapter.py`
-
 The output looks like 
 https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson01.1-Intro.book_chapter.pdf
 
 ## The new flow 
 
-Use files with .typst to represent typist
-
-Convert the txt file to typst
-> pandoc /Users/saggese/src/umd_classes1/msml610/lectures_source/Lesson10.1-Causal_Discovery.txt -t typst > /Users/saggese/src/umd_classes1/msml610/lectures_source/typst.md
-> typst compile msml610/lectures_source/typst.md msml610/lectures/Lesson10.1-Causal_Discovery-typst.pdf
-
 - The style is like:
   vi msml610/book/aima_style.typ
+  ```
+  > typst compile --root . msml610/book/aima_style_example.typ && open msml610/book/aima_style_example.pdf
+  ```
 
 - TODO(gp): Improve the figure handling
 
-Generate the text from the slides
-```
-claude> msml610/book/prompt.slides_to_text.txt
-```
+- Generate the text from the slides
+  ```
+  claude> /model sonnet
+  claude> msml610/book/prompt.slides_to_text.txt msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+  ```
 
 - TODO(gp): Improve the prompt
 
-```
-> render_images.py -i msml610/book/Lesson06.2-Using_Bayesian_Networks.typ
-> typst compile --root . msml610/book/aima_style_example.typ && open msml610/book/aima_style_example.pdf
-> typst compile --root . msml610/book/Lesson06.2-Using_Bayesian_Networks.typ && open msml610/book/Lesson06.2-Using_Bayesian_Networks.pdf
-```
+- TODO(gp): Inject the prompt in a `gen_....py`
+
+- Render with
+  ```
+  > ./msml610/book/render_chapter.sh msml610/book/Lesson06.2-Using_Bayesian_Networks
+  ```
+  which is equivalent to:
+  ```
+  > render_images.py -i msml610/book/Lesson06.2-Using_Bayesian_Networks.typ
+  > typst compile --root . msml610/book/Lesson06.2-Using_Bayesian_Networks.typ
+  > open msml610/book/Lesson06.2-Using_Bayesian_Networks.pdf
+  ```
+
+- Create some scripts similar
+
+`./class_scripts/gen_book_chapter.py`
+`./class_scripts/generate_book_chapter.py`
+
+
 # Port documentation flow to typst
 
 ## Step 0:
