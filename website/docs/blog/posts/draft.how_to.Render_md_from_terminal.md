@@ -2,8 +2,7 @@
 title: "Markdown Viewers on macOS: Terminal and Browser Options"
 authors:
     - gpsaggese
-date: 2026-06-19
-draft: true
+date: 2026-06-22
 categories:
     - Developer Tools
 ---
@@ -272,7 +271,8 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - _For image rendering_: Browser-based solutions (`grip` or `pandoc` to HTML)
   remain most reliable on macOS
 
-<!-- TODO(gp): Finish this -->
-- My favorite is Grip
+## Combining the Best of Everything
 
-<!-- TODO(gp): Add open_md_on_github.sh open_md.sh -->
+- `open_md.py` combines the best of all this
+  website/docs/blog/posts/draft.in_10_mins.helpers_open_md.md
+
