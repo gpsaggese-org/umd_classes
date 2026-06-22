@@ -15,6 +15,7 @@
 ## Published Blogs
 
 - 2026-06-22: `website/docs/blog/posts/how_to.Render_md_from_terminal.md`
+- 2026-06-21: `website/docs/blog/posts/in_10_mins.helpers_open_md.md`
 - 2026-06-12: `website/docs/blog/posts/how_to.Use_OpenRouter.md`
 - 2026-06-05: `website/docs/blog/posts/how_to.Use_Claude_Code_with_Openrouter.md`
 - 2026-05-29: `website/docs/blog/posts/how_to.LLM_effort.md`

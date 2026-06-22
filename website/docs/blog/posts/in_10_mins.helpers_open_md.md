@@ -6,6 +6,7 @@ date: 2026-06-21
 categories:
     - Developer Tools
     - Python
+draft: false
 ---
 
 TL;DR: `open_md.py` is a flexible CLI tool that renders markdown files to HTML
