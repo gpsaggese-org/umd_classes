@@ -36,9 +36,11 @@
 - Summary
 
 ### TODOs
-- [ ] Add content to probabilistic intro
+- [ ] Add / integrate probabilistic / explainable
+- [ ] Add "small data"
 - [ ] Keep tables in the text
 - [ ] Implement in tikz the pic
+  - Use inkspace / svg from msml610/lectures_source/Lesson01-1.aux.md
 - [ ] Move Causal AI in business in a separate chapter
 - [ ] Read papers
 - [ ] Read books

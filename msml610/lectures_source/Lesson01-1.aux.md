@@ -196,6 +196,209 @@
 \end{document}
 ```
 
+# Analytical Sophistication (SVG)
+
+```svg
+<svg viewBox="0 0 1010 665" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <!--
+    Coordinate mapping from TikZ (cm) to SVG (px):
+    scale = 50 px/cm, y flipped: svg_y = (630 + 35) - (tikz_y * 50)
+    (extra 35px top margin added so the topmost question label isn't clipped)
+    x: svg_x = tikz_x * 50
+  -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2d2d2d"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1010" height="665" fill="white"/>
+  <g transform="translate(0,35)">
+
+  <!-- ============ Axes ============ -->
+  <!-- Y axis: from (50, 630) up to (50, 70) with arrow -->
+  <line x1="50" y1="630" x2="50" y2="60" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+  <!-- X axis: from (50, 630) to (1010, 630) with arrow -->
+  <line x1="50" y1="630" x2="990" y2="630" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+
+  <!-- Axis titles -->
+  <text x="16" y="350" fill="#6e6e6c" font-size="15" text-anchor="middle" transform="rotate(-90 16 350)">STRATEGIC VALUE</text>
+  <text x="520" y="655" fill="#6e6e6c" font-size="15" text-anchor="middle">ANALYTICAL SOPHISTICATION</text>
+
+  <!-- ============ Dashed divider between Historical / Future ============ -->
+  <line x1="410" y1="605" x2="410" y2="25" stroke="#aaaaa5" stroke-width="1.3" stroke-dasharray="7,6"/>
+
+  <!-- ============ View tag pills ============ -->
+  <!-- Historical view pill -->
+  <rect x="67.5" y="0" width="160" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
+  <text x="147.5" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">HISTORICAL VIEW</text>
+
+  <!-- Future view pill -->
+  <rect x="730" y="0" width="145" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
+  <text x="802.5" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">FUTURE VIEW</text>
+
+  <!-- ============ Maturity curve ============ -->
+  <path d="M 77.5,547.5
+           C 155,544 222.5,537.5 280,470
+           C 337.5,402.5 377.5,386 417.5,362.5
+           C 457.5,339 487.5,315 522.5,287.5
+           C 557.5,260 592.5,232.5 632.5,207.5
+           C 672.5,182.5 727.5,155 800,127.5
+           C 842.5,111.5 885,102.5 930,97.5"
+        fill="none" stroke="#285a96" stroke-width="2.4"/>
+
+  <!-- ============ Stage 1: Raw data ============ -->
+  <rect x="87.5" y="497.5" width="100" height="40" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
+  <text x="137.5" y="522.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Raw data</text>
+
+  <!-- ============ Stage 2: Descriptive statistics ============ -->
+  <rect x="242.5" y="432.5" width="100" height="50" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
+  <text x="292.5" y="453" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Descriptive</text>
+  <text x="292.5" y="468" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">statistics</text>
+
+  <!-- Question label: What happened? -->
+  <text x="137.5" y="402.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What happened?</text>
+
+  <!-- ============ Stage 3: Predictive models ============ -->
+  <rect x="397.5" y="357.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+  <text x="447.5" y="378" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Predictive</text>
+  <text x="447.5" y="393" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">models</text>
+  <text x="447.5" y="327.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What will happen?</text>
+
+  <!-- ============ Stage 4: Prescriptive model ============ -->
+  <rect x="552.5" y="277.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+  <text x="602.5" y="298" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Prescriptive</text>
+  <text x="602.5" y="313" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">model</text>
+  <text x="602.5" y="247.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What should we do?</text>
+
+  <!-- ============ Stage 5: Simulation ============ -->
+  <text x="777.5" y="139" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the</text>
+  <text x="777.5" y="154" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">best we can do?</text>
+  <rect x="727.5" y="177.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+  <text x="777.5" y="207.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Simulation</text>
+
+  <!-- ============ Stage 6: Optimization ============ -->
+  <text x="902.5" y="22.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the best</text>
+  <text x="902.5" y="37.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">course to take?</text>
+  <rect x="852.5" y="77.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+  <text x="902.5" y="107.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Optimization</text>
+
+  </g>
+</svg>
+```
+
+# Analytical Sophistication 3
+
+```
+\documentclass[border=12pt]{standalone}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{positioning, arrows.meta, calc, fit, backgrounds}
+
+\begin{document}
+
+\definecolor{axisInk}{RGB}{45,45,45}
+\definecolor{labelInk}{RGB}{110,110,108}
+\definecolor{curveInk}{RGB}{40,90,150}
+\definecolor{dividerInk}{RGB}{170,170,165}
+\definecolor{tagBorder}{RGB}{60,60,58}
+\definecolor{histFill}{RGB}{246,247,248}
+\definecolor{histBorder}{RGB}{198,200,202}
+\definecolor{futFill}{RGB}{224,237,246}
+\definecolor{futBorder}{RGB}{151,190,216}
+\definecolor{futTextInk}{RGB}{30,70,110}
+
+\begin{tikzpicture}[
+  every node/.style={font=\sffamily}
+]
+
+% ============ Canvas guides ============
+% Plot area roughly x: 0 to 17.6, y: 0 to 11
+\def\xmin{0}
+\def\xmax{20.2}
+\def\ymin{0}
+\def\ymax{12.6}
+\def\xaxisY{1.4}     % y position of x-axis
+\def\yaxisX{1.0}      % x position of y-axis
+
+% ============ Axes ============
+\draw[axisInk, line width=0.5pt, -{Latex[length=2.4mm]}] (\yaxisX, \xaxisY) -- (\yaxisX, \ymax);
+\draw[axisInk, line width=0.5pt, -{Latex[length=2.4mm]}] (\yaxisX, \xaxisY) -- (\xmax, \xaxisY);
+
+% Axis titles
+\node[labelInk, font=\sffamily\small, rotate=90, anchor=south] at (0.32, 7.0) {STRATEGIC VALUE};
+\node[labelInk, font=\sffamily\small, anchor=north] at ({(\yaxisX+\xmax)/2}, \xaxisY-0.35) {ANALYTICAL SOPHISTICATION};
+
+% ============ Dashed divider between Historical / Future ============
+\def\dividerX{7.35}
+\draw[dividerInk, line width=0.5pt, dash pattern=on 3pt off 2.4pt] (\dividerX, 12.1) -- (\dividerX, \xaxisY);
+
+% ============ View tag pills ============
+% Historical view pill (centered in left side)
+\draw[tagBorder, line width=0.7pt, rounded corners=9pt, fill=white]
+  (2.575, 11.9) rectangle (5.775, 12.6);
+\node[axisInk, font=\sffamily\bfseries\small] at (4.175, 12.25) {HISTORICAL VIEW};
+\node[labelInk, font=\sffamily\small] at (4.175, 11.3) {What happened?};
+
+% Future view pill (centered in right side)
+\draw[tagBorder, line width=0.7pt, rounded corners=9pt, fill=white]
+  (12.325, 11.9) rectangle (15.225, 12.6);
+\node[axisInk, font=\sffamily\bfseries\small] at (13.775, 12.25) {FUTURE VIEW};
+\node[labelInk, font=\sffamily\small] at (13.775, 11.3) {What will happen?};
+
+% ============ Maturity curve ============
+\draw[curveInk, line width=1.5pt]
+  (1.55, 1.65)
+  .. controls (3.1, 1.72) and (4.45, 1.85) .. (5.6, 2.15)
+  .. controls (6.75, 2.45) and (7.55, 2.78) .. (8.35, 3.25)
+  .. controls (9.15, 3.72) and (9.75, 4.2) .. (10.45, 4.75)
+  .. controls (11.15, 5.3) and (11.85, 5.85) .. (12.65, 6.35)
+  .. controls (13.45, 6.85) and (14.55, 7.4) .. (16.0, 7.95)
+  .. controls (16.85, 8.27) and (17.7, 8.45) .. (18.6, 8.55);
+
+% (dot markers removed — boxes already anchor each stage along the curve)
+
+% ============ Stage 1: Raw data ============
+\draw[histBorder, line width=0.7pt, rounded corners=4pt, fill=histFill]
+  (1.6, 1.2) rectangle (3.6, 2.2);
+\node[axisInk, font=\sffamily\small\bfseries] at (2.6, 1.7) {Raw data};
+
+% ============ Stage 2: Descriptive statistics ============
+\draw[histBorder, line width=0.7pt, rounded corners=4pt, fill=histFill]
+  (4.8, 2.7) rectangle (6.8, 3.7);
+\node[axisInk, font=\sffamily\small\bfseries] at (5.8, 3.35) {Descriptive};
+\node[axisInk, font=\sffamily\small\bfseries] at (5.8, 3.05) {statistics};
+
+% ============ Stage 3: Predictive models ============
+\draw[futBorder, line width=0.7pt, rounded corners=4pt, fill=futFill]
+  (8.0, 3.8) rectangle (10.0, 4.8);
+\node[futTextInk, font=\sffamily\small\bfseries] at (9.0, 4.45) {Predictive};
+\node[futTextInk, font=\sffamily\small\bfseries] at (9.0, 4.15) {models};
+
+% ============ Stage 4: Prescriptive model ============
+\draw[futBorder, line width=0.7pt, rounded corners=4pt, fill=futFill]
+  (11.2, 5.35) rectangle (13.2, 6.35);
+\node[futTextInk, font=\sffamily\small\bfseries] at (12.2, 5.95) {Prescriptive};
+\node[futTextInk, font=\sffamily\small\bfseries] at (12.2, 5.65) {model};
+\node[labelInk, font=\sffamily\small] at (12.2, 7.0) {What should we do?};
+
+% ============ Stage 5: Simulation ============
+\draw[futBorder, line width=0.7pt, rounded corners=4pt, fill=futFill]
+  (14.4, 6.7) rectangle (16.4, 7.7);
+\node[futTextInk, font=\sffamily\small\bfseries] at (15.4, 7.2) {Simulation};
+\node[labelInk, font=\sffamily\small, align=center] at (15.4, 8.0) {What is the\\best we can do?};
+
+% ============ Stage 6: Optimization ============
+\draw[futBorder, line width=0.7pt, rounded corners=4pt, fill=futFill]
+  (17.6, 8.0) rectangle (19.6, 9.0);
+\node[futTextInk, font=\sffamily\small\bfseries] at (18.6, 8.5) {Optimization};
+\node[labelInk, font=\sffamily\small, align=center] at (18.6, 9.3) {What is the best\\course to take?};
+
+\end{tikzpicture}
+
+\end{document}
+```
+
 // #############################################################################
 # Hotel Pricing Paradox
 
@@ -601,95 +804,3 @@
   </g>
 </svg>
 ```
-
-
-
-```svg
-<svg viewBox="0 0 1010 665" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
-  <!--
-    Coordinate mapping from TikZ (cm) to SVG (px):
-    scale = 50 px/cm, y flipped: svg_y = (630 + 35) - (tikz_y * 50)
-    (extra 35px top margin added so the topmost question label isn't clipped)
-    x: svg_x = tikz_x * 50
-  -->
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,3 L0,6 Z" fill="#2d2d2d"/>
-    </marker>
-  </defs>
-
-  <rect x="0" y="0" width="1010" height="665" fill="white"/>
-  <g transform="translate(0,35)">
-
-  <!-- ============ Axes ============ -->
-  <!-- Y axis: from (50, 630) up to (50, 70) with arrow -->
-  <line x1="50" y1="630" x2="50" y2="60" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
-  <!-- X axis: from (50, 630) to (1010, 630) with arrow -->
-  <line x1="50" y1="630" x2="990" y2="630" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
-
-  <!-- Axis titles -->
-  <text x="16" y="350" fill="#6e6e6c" font-size="15" text-anchor="middle" transform="rotate(-90 16 350)">STRATEGIC VALUE</text>
-  <text x="520" y="655" fill="#6e6e6c" font-size="15" text-anchor="middle">ANALYTICAL SOPHISTICATION</text>
-
-  <!-- ============ Dashed divider between Historical / Future ============ -->
-  <line x1="410" y1="605" x2="410" y2="25" stroke="#aaaaa5" stroke-width="1.3" stroke-dasharray="7,6"/>
-
-  <!-- ============ View tag pills ============ -->
-  <!-- Historical view pill -->
-  <rect x="67.5" y="0" width="160" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
-  <text x="147.5" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">HISTORICAL VIEW</text>
-
-  <!-- Future view pill -->
-  <rect x="730" y="0" width="145" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
-  <text x="802.5" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">FUTURE VIEW</text>
-
-  <!-- ============ Maturity curve ============ -->
-  <path d="M 77.5,547.5
-           C 155,544 222.5,537.5 280,470
-           C 337.5,402.5 377.5,386 417.5,362.5
-           C 457.5,339 487.5,315 522.5,287.5
-           C 557.5,260 592.5,232.5 632.5,207.5
-           C 672.5,182.5 727.5,155 800,127.5
-           C 842.5,111.5 885,102.5 930,97.5"
-        fill="none" stroke="#285a96" stroke-width="2.4"/>
-
-  <!-- ============ Stage 1: Raw data ============ -->
-  <rect x="87.5" y="497.5" width="100" height="40" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
-  <text x="137.5" y="522.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Raw data</text>
-
-  <!-- ============ Stage 2: Descriptive statistics ============ -->
-  <rect x="242.5" y="432.5" width="100" height="50" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
-  <text x="292.5" y="453" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Descriptive</text>
-  <text x="292.5" y="468" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">statistics</text>
-
-  <!-- Question label: What happened? -->
-  <text x="137.5" y="402.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What happened?</text>
-
-  <!-- ============ Stage 3: Predictive models ============ -->
-  <rect x="397.5" y="357.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
-  <text x="447.5" y="378" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Predictive</text>
-  <text x="447.5" y="393" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">models</text>
-  <text x="447.5" y="327.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What will happen?</text>
-
-  <!-- ============ Stage 4: Prescriptive model ============ -->
-  <rect x="552.5" y="277.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
-  <text x="602.5" y="298" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Prescriptive</text>
-  <text x="602.5" y="313" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">model</text>
-  <text x="602.5" y="247.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What should we do?</text>
-
-  <!-- ============ Stage 5: Simulation ============ -->
-  <text x="777.5" y="139" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the</text>
-  <text x="777.5" y="154" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">best we can do?</text>
-  <rect x="727.5" y="177.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
-  <text x="777.5" y="207.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Simulation</text>
-
-  <!-- ============ Stage 6: Optimization ============ -->
-  <text x="902.5" y="22.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the best</text>
-  <text x="902.5" y="37.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">course to take?</text>
-  <rect x="852.5" y="77.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
-  <text x="902.5" y="107.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Optimization</text>
-
-  </g>
-</svg>
-```
-

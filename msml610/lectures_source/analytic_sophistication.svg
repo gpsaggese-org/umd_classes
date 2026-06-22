@@ -1,0 +1,101 @@
+<svg viewBox="0 0 1010 665" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <!--
+    Coordinate mapping from TikZ (cm) to SVG (px):
+    scale = 50 px/cm, y flipped: svg_y = (630 + 35) - (tikz_y * 50)
+    (extra 35px top margin added so the topmost question label isn't clipped)
+    x: svg_x = tikz_x * 50
+  -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#2d2d2d"/>
+    </marker>
+  </defs>
+
+  <g transform="translate(0,35)">
+  <rect id="canvas-background" x="0" y="-35" width="1010" height="665" fill="white"/>
+
+  <!-- ============ Axes ============ -->
+  <!-- Y axis: from (50, 630) up to (50, 70) with arrow -->
+  <line x1="50" y1="630" x2="50" y2="60" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+  <!-- X axis: from (50, 630) to (1010, 630) with arrow -->
+  <line x1="50" y1="630" x2="990" y2="630" stroke="#2d2d2d" stroke-width="1.2" marker-end="url(#arrowhead)"/>
+
+  <!-- Axis titles -->
+  <text x="16" y="350" fill="#6e6e6c" font-size="15" text-anchor="middle" transform="rotate(-90 16 350)">STRATEGIC VALUE</text>
+  <text x="520" y="655" fill="#6e6e6c" font-size="15" text-anchor="middle">ANALYTICAL SOPHISTICATION</text>
+
+  <!-- ============ Dashed divider between Historical / Future ============ -->
+  <line x1="360" y1="605" x2="360" y2="25" stroke="#aaaaa5" stroke-width="1.3" stroke-dasharray="7,6"/>
+
+  <!-- ============ View tag pills ============ -->
+  <!-- Historical view pill -->
+  <g id="view-historical">
+    <rect x="150" y="0" width="160" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
+    <text x="230" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">HISTORICAL VIEW</text>
+    <text x="230" y="60" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What happened?</text>
+  </g>
+
+  <!-- Future view pill -->
+  <g id="view-future">
+    <rect x="627.5" y="0" width="145" height="35" rx="17" ry="17" fill="white" stroke="#3c3c3a" stroke-width="1.2"/>
+    <text x="700" y="22.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">FUTURE VIEW</text>
+    <text x="700" y="60" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What will happen?</text>
+  </g>
+
+  <!-- ============ Maturity curve (sigmoid) ============ -->
+  <path id="maturity-curve" d="M 77.5,547.5
+           C 180,545 260,540 320,530
+           C 380,520 420,480 470,420
+           C 520,360 580,260 650,200
+           C 720,150 820,120 930,97.5"
+        fill="none" stroke="#285a96" stroke-width="2.4"/>
+
+  <!-- ============ Stage 1: Raw data ============ -->
+  <g id="stage-1-raw-data">
+    <text id="stage-1-question" x="137.5" y="402.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What happened?</text>
+    <rect id="stage-1-box" x="87.5" y="497.5" width="100" height="40" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
+    <text id="stage-1-label" x="137.5" y="522.5" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Raw data</text>
+  </g>
+
+  <!-- ============ Stage 2: Descriptive statistics ============ -->
+  <g id="stage-2-descriptive-statistics">
+    <text id="stage-2-question" x="292.5" y="402.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What patterns existed?</text>
+    <rect id="stage-2-box" x="242.5" y="432.5" width="100" height="50" rx="4" ry="4" fill="#f6f7f8" stroke="#c6c8ca" stroke-width="1.2"/>
+    <text id="stage-2-label-1" x="292.5" y="453" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">Descriptive</text>
+    <text id="stage-2-label-2" x="292.5" y="468" fill="#2d2d2d" font-size="14" font-weight="bold" text-anchor="middle">statistics</text>
+  </g>
+
+  <!-- ============ Stage 3: Predictive models ============ -->
+  <g id="stage-3-predictive-models">
+    <text id="stage-3-question" x="447.5" y="327.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What will happen?</text>
+    <rect id="stage-3-box" x="397.5" y="357.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+    <text id="stage-3-label-1" x="447.5" y="378" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Predictive</text>
+    <text id="stage-3-label-2" x="447.5" y="393" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">models</text>
+  </g>
+
+  <!-- ============ Stage 4: Prescriptive model ============ -->
+  <g id="stage-4-prescriptive-model">
+    <text id="stage-4-question" x="602.5" y="247.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What should we do?</text>
+    <rect id="stage-4-box" x="552.5" y="277.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+    <text id="stage-4-label-1" x="602.5" y="298" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Prescriptive</text>
+    <text id="stage-4-label-2" x="602.5" y="313" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">model</text>
+  </g>
+
+  <!-- ============ Stage 5: Simulation ============ -->
+  <g id="stage-5-simulation">
+    <text id="stage-5-question-1" x="777.5" y="139" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the</text>
+    <text id="stage-5-question-2" x="777.5" y="154" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">best we can do?</text>
+    <rect id="stage-5-box" x="727.5" y="177.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+    <text id="stage-5-label" x="777.5" y="207.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Simulation</text>
+  </g>
+
+  <!-- ============ Stage 6: Optimization ============ -->
+  <g id="stage-6-optimization">
+    <text id="stage-6-question-1" x="902.5" y="22.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">What is the best</text>
+    <text id="stage-6-question-2" x="902.5" y="37.5" fill="#6e6e6c" font-size="14" font-style="italic" text-anchor="middle">course to take?</text>
+    <rect id="stage-6-box" x="852.5" y="77.5" width="100" height="50" rx="4" ry="4" fill="#e0edf6" stroke="#97bed8" stroke-width="1.2"/>
+    <text id="stage-6-label" x="902.5" y="107.5" fill="#1e466e" font-size="14" font-weight="bold" text-anchor="middle">Optimization</text>
+  </g>
+
+  </g>
+</svg>

@@ -40,3 +40,7 @@ Just use SVG directly — Typst has native SVG support via #image():
 
 #image("diagram.svg")
 #image("figure.pdf")
+
+#
+
+.claude/skills/svg.rules.md
