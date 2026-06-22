@@ -4,26 +4,25 @@ authors:
     - gpsaggese
 date: 2026-06-22
 categories:
-    - Developer Tools
----
+    - Developer Tools ---
 
-TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat`
-(for rich formatting), `grip` (for GitHub-accurate previews with images), or
-`pandoc` (for maximum flexibility).
+TL;DR: Render markdown from terminal using `glow` (for terminal viewing),
+`mdcat` (for rich formatting), `grip` (for GitHub-accurate previews with
+images), or `pandoc` (for document conversion and flexibility).
 
 <!-- more -->
 
 ## Overview
 
-- Markdown is the standard format for documentation, notes, READMEs, and
-  technical writing
-- macOS users have several options for viewing Markdown from the command line
-- Tools range from simple terminal renderers to full-featured browser previews
-  with image support
-- Choice depends on your workflow:
-    - Terminal-only with attractive formatting: `glow` or `mdcat`
-    - GitHub-accurate previews with images: `grip`
-    - Document conversion to PDF/HTML: `pandoc`
+[Markdown](https://www.markdownguide.org/) is the standard format for
+documentation, notes, READMEs, and technical writing. macOS users have several
+options for viewing it from the command line, ranging from simple terminal
+renderers to full-featured browser previews with image support. The right tool
+depends on your workflow:
+
+- **Terminal-only with attractive formatting**: `glow` or `mdcat`
+- **GitHub-accurate previews with images**: `grip`
+- **Document conversion to PDF/HTML**: `pandoc`
 
 ## Glow
 
@@ -39,6 +38,8 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     ```bash
     > glow README.md
     ```
+    See [glow documentation](https://github.com/charmbracelet/glow#readme) for
+    advanced options and paging modes.
 
 <!-- capture_iterm_command.py --command "glow -p $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig1.glow_demo.png -->
 
@@ -47,16 +48,17 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - **Advantages**:
     - Fancy terminal interface with multiple themes
     - Fast and lightweight
-    - Excellent for reading documentation
+    - Great for reading documentation
     - No dependencies beyond the binary
 - **Disadvantages**:
     - Does not display images inline
-    - Primarily focused on terminal viewing only
+    - Terminal-only
 - **Best for**: Everyday terminal documentation reading
 
 - **Tips and tricks**:
 
 - Disable pager
+
     ```
     > more /Users/saggese/Library/Preferences/glow/glow.yml
     # style name or JSON path (default "auto")
@@ -77,9 +79,10 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     ```
 
 **TUI vs Pager modes**:
+
 - **TUI** (Terminal User Interface): Interactive full-screen mode with keyboard
-  navigation. Glow enters full-screen, lets you scroll, search, and navigate with
-  arrow keys and hotkeys. Best for exploring long documents.
+  navigation. Glow enters full-screen, lets you scroll, search, and navigate
+  with arrow keys and hotkeys. Best for exploring long documents.
 - **Pager**: Pipes output through a pager like `less`, streaming content
   progressively. Familiar if you're used to `less`, `more`, or `man` pages.
 
@@ -97,28 +100,28 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     ```bash
     > mdcat README.md
     ```
+    For image rendering, see
+    [mdcat terminal support](https://github.com/swsnr/mdcat#terminal-support).
 
-<!-- 
+<!--
 > capture_iterm_command.py --command "mdcat -p $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig2.mdcat_demo.png
 -->
 
 ![mdcat terminal rendering with rich formatting and syntax highlighting](./draft.how_to.Render_md_from_terminal.md.figs/fig2.mdcat_demo.png)
 
 - **Advantages**:
-    - Excellent formatting quality
+    - Good formatting quality
     - Handles tables and syntax highlighting well
     - Supports hyperlinks
     - Can display inline images in compatible terminals
 - **Disadvantages**:
     - Image support depends on terminal capabilities
     - More complex than Glow
-- **Best with**: Modern terminal emulators that support advanced image protocols
-  for inline image rendering
-    - Kitty (native image protocol support)
-    - WezTerm (sixel and image support)
-    - iTerm2 (inline image support)
-    - Other terminals supporting modern image protocols
-- **Best for**: Users with modern terminal emulators seeking rich formatting
+- **Works best with**: Terminal emulators that support image protocols:
+    - [Kitty](https://sw.kovidgoyal.net/kitty/) (native image protocol support)
+    - [WezTerm](https://wezfurlong.org/wezterm/) (sixel and image support)
+    - [iTerm2](https://iterm2.com/) (inline image support)
+- **Best for**: Terminal users who want rich formatting and image support
 
 ## Grip
 
@@ -135,12 +138,14 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > grip README.md
     ```
     Then open `http://localhost:6419`
-   - Using `uvx`
+    - Using `uvx`
     ```
     > uvx grip website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md -b --quiet
     ```
+    See [grip's feature list](https://github.com/joeyespo/grip#features) for
+    rendering customization.
 
-<!-- 
+<!--
 > uvx grip -b --quiet $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md
 > ./helpers_root/dev_scripts_helpers/system_tools/capture_browser_screenshot.py --url "http://localhost:6419" --output /Users/saggese/src/umd_classes2/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig3.grip_browser.png
 -->
@@ -150,7 +155,7 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 - **Advantages**:
     - GitHub-flavored Markdown rendering
     - Full image support
-    - Excellent table rendering
+    - Good table rendering
     - Matches GitHub appearance exactly
 - **Disadvantages**:
     - Requires a web browser
@@ -179,7 +184,7 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     - Familiar pager interface (`less`-like)
     - Good for large documents
 - **Disadvantages**:
-    - Limited styling compared to alternatives
+    - Limited styling compared to other tools
     - No image rendering
 - **Best for**: Reading long documents with familiar pager shortcuts
 
@@ -201,19 +206,19 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 > uvx --from rich-cli rich website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md --pager
 ```
 
-<!-- 
+<!--
 > capture_iterm_command.py --command "uvx --from rich-cli rich $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md --pager" --output_file $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/fig6.richcli_demo.png
 -->
 
 ![rich-cli colorful terminal output with rich formatting](./draft.how_to.Render_md_from_terminal.md.figs/fig6.richcli_demo.png)
 
 - **Advantages**:
-    - Attractive formatting with color support
+    - Colorful terminal output
     - Easy installation via pip
     - Good Unicode support
 - **Disadvantages**:
     - No image rendering
-    - Less feature-rich than mdcat
+    - Fewer features than mdcat
 - **Best for**: Quick terminal previews with minimal setup
 
 ## Pandoc
@@ -235,6 +240,8 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     > pandoc README.md -o README.pdf
     > open README.pdf
     ```
+    For advanced options and output formats, see
+    [pandoc's user guide](https://pandoc.org/MANUAL.html).
 
 <!--
 > pandoc $GIT_ROOT/website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md.figs/test_markdown.md -o /tmp/readme.html; open /tmp/readme.html
@@ -250,8 +257,8 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
     - Industry-standard converter
 - **Disadvantages**:
     - More complex than dedicated viewers
-    - Primarily a converter rather than a real-time viewer
-- **Best for**: Document conversion and maximum flexibility
+    - Converts rather than previews in real-time
+- **Best for**: Document conversion and flexibility
 
 ## Comparison Table
 
@@ -264,15 +271,19 @@ TL;DR: Render markdown from terminal using `glow` (for terminal viewing), `mdcat
 | Grip     | No       | Yes     | Yes          | Yes     |
 | Pandoc   | Optional | Yes     | Varies       | Yes     |
 
-- _For everyday terminal viewing_: Use `glow`
-- _For richer terminal rendering_: Use `mdcat`
-- _For GitHub-accurate previews_: Use `grip`
-- _For document conversion_: Use `pandoc`
-- _For image rendering_: Browser-based solutions (`grip` or `pandoc` to HTML)
-  remain most reliable on macOS
+- **Everyday terminal viewing**: `glow`
+- **Richer terminal rendering**: `mdcat`
+- **GitHub-accurate previews**: `grip`
+- **Document conversion**: `pandoc`
+- **Image rendering**: Browser-based solutions (`grip` or `pandoc` to HTML) work
+  best on macOS
 
-## Combining the Best of Everything
+## Beyond Individual Tools
 
-- `open_md.py` combines the best of all this
-  website/docs/blog/posts/draft.in_10_mins.helpers_open_md.md
-
+I've built a tool called `open_md.py` that combines the strengths of all these
+approaches. It supports multiple rendering backends (pandoc, grip), integrates
+with Docker, and automatically preprocesses embedded diagrams. See the
+[`helpers_open_md` blog post](./draft.in_10_mins.helpers_open_md.md) for how it
+works, or check out the
+[`open_md.py` source code](https://github.com/causify-ai/helpers/blob/master/helpers_root/dev_scripts_helpers/documentation/open_md.py)
+directly.
