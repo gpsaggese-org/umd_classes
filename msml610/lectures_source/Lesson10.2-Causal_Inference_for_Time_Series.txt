@@ -292,8 +292,6 @@ digraph Feedback {
   equispaced observations
   - E.g., sensor dropouts, holidays, weekends
 
-## When Temporal Structure Helps and When It Misleads
-
 * When Temporal Structure Helps
 
 - **Time orders causes before effects**: rules out many causal directions a
@@ -334,75 +332,42 @@ digraph Feedback {
 
 # Granger Causality
 
-## Definition and Intuition
+* Granger Causality: Intuition
 
-* Granger Causality: Motivation
-
-- Clive Granger (Nobel 2003) asked a specific, testable question:
+- **Intuition**: Granger Causality (Nobel 2003)
   _"Does knowing the past of $X$ help me predict $Y$ beyond what $Y$'s own past
   already tells me?"_
+  - Causes must come before effects, and effects should carry information about
+    their causes
 
-- This is **not** causation in Pearl's do-calculus sense
-  - It is a **predictive** notion based on temporal precedence
-  - Granger himself said: _"testing whether $X$ causes $Y$ is equivalent to
-    testing whether $X$ precedes $Y$ in a specific sense"_
+- "Granger-causing" (a bit of a misnomer)
+  - Is _not_ causation in Pearl's do-calculus sense
+  - Is a _predictive_ notion based on temporal precedence
+  - Answers _"does X help predict Y?"_ not _"does changing X change Y?"_
+  - $X \to Y$ and $Y \to X$ can both hold (common in economic feedback systems)
 
-- **Key intuition**: causes must come before effects, and effects should carry
-  information about their causes
-
-- **Example**: do ice cream sales Granger-cause swimming pool attendance?
-  - Probably not — but _temperature_ Granger-causes both
+- **Example**:
+  - _Ice cream sales_ does not Granger-cause _drowning_
+  - _Temperature_ Granger-causes both _ice cream sales_ and _drowning_
 
 * Granger Causality: Formal Definition
 
-- Consider two stationary time series $X_t$ and $Y_t$. Compare two predictors
-  of $Y_t$:
-  1. **Restricted model**: uses only past $Y$
+- Consider two stationary time series $X_t$ and $Y_t$
+
+- Compare two predictors of $Y_t$:
+  1. _Restricted model_: uses only past $Y$
      $$
      Y_t = \alpha + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t
      $$
-  2. **Unrestricted model**: adds past $X$
+  2. _Unrestricted model_: adds past $X$
      $$
      Y_t = \alpha + \sum_{i=1}^p \phi_i Y_{t-i}
                   + \sum_{j=1}^p \beta_j X_{t-j} + \eta_t
      $$
 
-- $X$ **Granger-causes** $Y$ iff the unrestricted model has _strictly smaller_
-  forecast error than the restricted one
-  - Equivalently: not all $\beta_j = 0$
-
-- **Test**: F-test on $H_0: \beta_1 = \beta_2 = ... = \beta_p = 0$
-
-* Granger Causality: Intuition and Geometry
-
-- Think of Granger causality as a **variance-reduction** test
-  - Does adding $X$'s history reduce the unexplained variance in forecasting
-    $Y$?
-
-```graphviz
-digraph Granger {
-    rankdir=LR;
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.8;
-    node [shape=ellipse, style="filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    X_past [label=<Past X<BR/>(X<SUB>t-1</SUB>, X<SUB>t-2</SUB>, ...)>, fillcolor="#FFD1A6"];
-    Y_past [label=<Past Y<BR/>(Y<SUB>t-1</SUB>, Y<SUB>t-2</SUB>, ...)>, fillcolor="#B2E2B2"];
-    Y_t    [label=<Y<SUB>t</SUB>>,                              fillcolor="#A6C8F4"];
-
-    Y_past -> Y_t [label="  autoregressive"];
-    X_past -> Y_t [label="  Granger effect"];
-}
-```
-
-- **Bidirectional Granger causality**: $X \to Y$ and $Y \to X$ can both hold
-  - Common in economic feedback systems
-
-- **Example**: do oil prices Granger-cause inflation?
-  - Run an F-test on lags of oil prices added to an inflation autoregression
-
-## Assumptions and Limitations
+- **Definition**: $X$ _Granger-causes_ $Y$ iff the unrestricted model has
+  _strictly smaller_ forecast error than the restricted one
+  - Equivalently: F-test on $H_0: \beta_1 = \beta_2 = ... = \beta_p = 0$
 
 * Granger Causality: Key Assumptions
 
@@ -413,7 +378,7 @@ digraph Granger {
 2. **Correct lag order $p$**: too few lags miss the effect; too many overfit
    - Choose via AIC, BIC, or cross-validation
 
-3. **Linearity** (in the basic VAR formulation)
+3. **Linearity** (in the basic formulation)
    - Non-linear Granger causality extensions exist (e.g., transfer entropy)
 
 4. **No omitted common causes** (the big one)
@@ -450,37 +415,15 @@ digraph Granger {
 - **Question**: does advertising spend Granger-cause sales?
   - $X_t$: weekly ad spend
   - $Y_t$: weekly sales
-  - 156 weeks of data (3 years)
 
-- **Procedure**:
-  1. Check stationarity of both series with ADF test
-     - If non-stationary, take first differences: $\Delta X_t$, $\Delta Y_t$
-  2. Fit VAR(p) and choose $p$ with BIC (say $p = 4$ weeks)
-  3. F-test on $\beta_1 = ... = \beta_4 = 0$ in the sales equation
-  4. If $p\text{-value} < 0.05$, reject null $\to$ ads Granger-cause sales
-
-- **Caveat**: this does **not** mean "if we spend more on ads, sales will rise"
-  - Both could be driven by seasonal demand $\to$ need an experiment or a
-    causal design (ITS, DiD, ...) to get an interventional answer
-
-* Granger Causality: Practical Example 2
+- **Caveat**: this does _not_ mean "if we spend more on ads, sales will rise"
+  - Both could be driven by seasonal demand $\to$ need an experiment or a causal
+    design to get an interventional answer
 
 - **Question**: do Twitter sentiment scores Granger-cause stock returns?
   - A widely-studied question; results are mixed
-
-- **Typical finding**: Twitter sentiment _does_ Granger-cause short-horizon
-  returns for some stocks and horizons
-  - But effect sizes are small
-  - And profits after trading costs are often zero
-
-- **Lesson**: Granger causality is a _screening_ tool
-  - Useful for generating hypotheses
-  - Not a substitute for controlled experiments or causal models
-  - Follow up with an interventional design (A/B test, natural experiment)
-
-- **Key takeaway**: Granger causality answers
-  _"does past $X$ help predict future $Y$?"_ — not _"does changing $X$ change
-  $Y$?"_
+  - Twitter sentiment _does_ Granger-cause short-horizon returns for some stocks
+    and horizons, but effect sizes are small
 
 # Interrupted Time Series (ITS)
 
@@ -488,22 +431,29 @@ digraph Granger {
 
 * Interrupted Time Series: Motivation
 
-- Suppose a policy is implemented at a single known date $t^*$ across all units
+- **Scenario**: suppose a policy is implemented at a single known date $t^*$
+  across all units
   - E.g., new speed limit enforced from January 1st
   - E.g., a website redesign launched on a specific day
 
-- **No control group is available** — the whole population is treated
+- **Problem**
+  - No control group is available: the whole population is treated
 
-- **ITS idea**: use the _pre-intervention_ trajectory of the series to forecast
-  what would have happened _without_ the intervention
-  - Compare the forecast (**counterfactual**) to what actually happened
+- **Solution**:
+  - Use the _pre-intervention_ trajectory of the series to forecast what would
+    have happened _without_ the intervention
+  - Compare the forecast (_counterfactual_) to what actually happened
   - The gap is the estimated causal effect
 
-- **Example**: in 1988, California banned smoking in workplaces
-  - Pre-1988 cigarette consumption trajectory $\to$ forecast consumption
-  - Actual consumption fell below the forecast $\to$ attributed to the ban
-
-* ITS: Design
+- **Example**: 
+  - Seatbelt law: ~15-20% reduction in fatalities
+  - Netflix password ban: 
+    - Expected: subscriber growth from monetizing shared accounts
+    - Actual: mixed results (growth in certain regions, churn in others)
+  - iOS privacy changes:
+    - Apps must ask permission to track
+    - 60-70% opt-in to tracking $\to$ 15-25% opt-in
+    - ad-targeting effectiveness tanked, Meta reported billions in revenue losses
 
 ```graphviz
 digraph ITS {
@@ -526,74 +476,43 @@ digraph ITS {
 }
 ```
 
-- **Required ingredients**:
-  - Long pre-period (typically $\ge 2$ years or $\ge$ several dozen time points)
-  - Clearly defined intervention date $t^*$
-  - Outcome series that can be forecast with reasonable accuracy
+* ITS: Segmented Regression Formulation
 
-* ITS: Basic Regression Formulation
-
-- **Segmented regression** model:
+- _Segmented regression_ model:
   $$
   Y_t = \beta_0 + \beta_1 t + \beta_2 D_t + \beta_3 (t - t^*) D_t + \varepsilon_t
   $$
-  where $D_t = \mathbf{1}(t \ge t^*)$
+  where $D_t = I(t \ge t^*)$
 
-- Interpretation of coefficients:
+- **Interpretation**
   - $\beta_0$: pre-intervention intercept
   - $\beta_1$: pre-intervention slope (trend)
-  - $\beta_2$: **level change** at the intervention (immediate jump)
-  - $\beta_3$: **slope change** after the intervention (trend shift)
+  - $\beta_2$: _level change_ at the intervention (immediate jump)
+  - $\beta_3$: _slope change_ after the intervention (trend shift)
 
-- **Two questions**:
-  1. Is there a jump at $t^*$? (test $\beta_2 = 0$)
-  2. Does the trajectory change? (test $\beta_3 = 0$)
+- **Questions**:
+  1. Is there a jump at $t^*$?
+     - Test $\beta_2 = 0$
+  2. Does the trajectory change?
+     - Test $\beta_3 = 0$
 
-- **Example**: after the new speed limit:
-  - $\hat{\beta}_2 = -5$ (accidents drop by 5 per month immediately)
-  - $\hat{\beta}_3 = -0.3$ (accidents decline by 0.3 more per month going forward)
+* ITS: Details
 
-* ITS: Estimation Details
+- _Autocorrelation_ is almost always present
+  - Fit with autocorrelation robust methods (Newey-West, ARIMA)
 
-- **Autocorrelation** is almost always present
-  - Fit with Newey-West SE, Prais-Winsten, or ARIMA error structure
-
-- **Alternative**: fit an **ARIMA intervention model** (Box & Tiao, 1975)
-  - Model the pre-period as ARIMA
-  - Add step or pulse intervention terms
-
-- **Robustness checks**:
+- _Robustness checks_:
   - Vary the window size (use 1, 2, 5 years pre-period)
-  - Try placebo intervention dates — find fake effects?
+  - Try placebo intervention dates: do you find fake effects?
   - Check for seasonality, holidays, co-occurring events
 
-- **Visual diagnostic**: always plot the series with the fitted model and the
-  intervention date marked
-  - A suspicious ITS result rarely survives a good plot
-
-## ITS and Regression Discontinuity
-
-* ITS as a Regression Discontinuity in Time
-
-- **Regression discontinuity design (RDD)**: treatment is assigned when a
-  running variable crosses a cutoff
-  - E.g., students with score $\ge 80$ get a scholarship
-
-- **ITS is an RDD where the running variable is _time_**
-  - Cutoff: the intervention date $t^*$
-  - All units are treated after the cutoff; none before
-
-- Both designs share the identifying assumption:
-  - _The outcome function is smooth at the cutoff except for the treatment_
-  - In RDD: assume similar units on either side of the score cutoff
-  - In ITS: assume the pre-period trajectory would have continued smoothly
-
-- **Practical consequence**: ITS identification relies on **extrapolation**
-  - Unlike cross-sectional RDD which compares units _at_ the cutoff, ITS must
-    project the pre-period _forward_
-  - Extrapolation is brittle $\to$ more assumptions, more caution
+- _Visual diagnostic_:
+  - Always plot the series with the fitted model and the intervention date marked
+  - Does ITS result survives?
 
 * ITS vs. Cross-Sectional RDD: Comparison
+
+// TODO(ai_gp): Convert in table
 
 ::: columns
 :::: {.column width=50%}
@@ -616,7 +535,8 @@ digraph ITS {
 ::::
 :::
 
-- **Key insight**: ITS is a valuable but _weaker_ design than cross-sectional RDD
+- **Key insight**:
+  - ITS is a valuable but _weaker_ design than cross-sectional analysis
   - Pair it with DiD or synthetic control whenever a credible comparison unit
     exists
 
@@ -625,7 +545,6 @@ digraph ITS {
 * ITS: Applications
 
 - **Public health**
-  - Effect of smoking bans on hospital admissions (Glasgow 2007)
   - Effect of soda taxes on sugar-sweetened beverage purchases
 
 - **Policy evaluation**
@@ -639,25 +558,20 @@ digraph ITS {
 - **Safety interventions**
   - Did installing speed cameras reduce accidents?
 
-- **Example**: Glasgow 2006 smoking ban
-  - Weekly hospital admissions for acute coronary syndrome pre/post ban
-  - ITS estimated a 17% reduction — consistent across robustness checks
-
 * ITS: Strengths and Weaknesses
 
 - **Pros**
-  - Works when **no control group exists** (universal policy changes)
+  - Works when _no control group exists_ (universal policy changes)
   - Uses the unit as its own control $\to$ time-invariant confounders cancel
-  - Transparent: one model, clear visualization, clear interpretation
 
 - **Cons**
-  - Relies on **extrapolation** of the pre-period trend
-  - Vulnerable to **co-occurring events** (_"was it the policy or the
+  - Relies on _extrapolation_ of the pre-period trend
+  - Vulnerable to _co-occurring events_ (_"was it the policy or the
     recession?"_)
-  - Autocorrelation inflates Type I errors if ignored
-  - Needs a long, stable pre-period — rare in practice
+  - Autocorrelation inflates errors if ignored
+  - Needs a long, stable pre-period (rare in practice)
 
-- **Rule of thumb**: ITS is most credible when
+- **Rule of thumb**: ITS is most credible when:
   1. The intervention is sharply timed
   2. No other major events occur near $t^*$
   3. The pre-period is long and stable
