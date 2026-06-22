@@ -20,6 +20,7 @@ import argparse
 import logging
 import os
 import re
+from datetime import datetime
 
 import helpers.hdbg as hdbg
 import helpers.hio as hio
@@ -99,7 +100,7 @@ def _publish(file_path: str) -> None:
         flags=re.MULTILINE,
     )
     # Add or update the date to today in the YAML frontmatter.
-    today = "2026-06-12"
+    today = datetime.today().strftime("%Y-%m-%d")
     if re.search(r"^date:\s*\S+", content, re.MULTILINE):
         # Update existing date line.
         content = re.sub(

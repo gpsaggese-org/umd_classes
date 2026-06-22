@@ -285,7 +285,7 @@ depends on your workflow:
 I've built a tool called `open_md.py` that combines the strengths of all these
 approaches. It supports multiple rendering backends (pandoc, grip), integrates
 with Docker, and automatically preprocesses embedded diagrams. See the
-[`helpers_open_md` blog post](./draft.in_10_mins.helpers_open_md.md) for how it
+[`helpers_open_md` blog post](in_10_mins.helpers_open_md.md)
 works, or check out the
 [`open_md.py` source code](https://github.com/causify-ai/helpers/blob/master/helpers_root/dev_scripts_helpers/documentation/open_md.py)
 directly.

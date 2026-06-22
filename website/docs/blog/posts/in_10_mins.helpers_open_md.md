@@ -2,7 +2,7 @@
 title: "Rendering Markdown Files From Your Terminal with open_md.py"
 authors:
     - gpsaggese
-date: 2026-06-22
+date: 2026-06-21
 categories:
     - Developer Tools
     - Python

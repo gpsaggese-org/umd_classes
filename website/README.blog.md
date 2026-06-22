@@ -148,57 +148,56 @@ python.invoke.txt
 
 # Drafts
 
-## List of Drafts
+## List of Drafts (ranked by readiness)
 
-| File | Words | Ready % |
-|------|-------|---------|
-| `draft.in_60_mins.GluonTS.md` | 2564 | 70 |
-| `draft.pidev_vs_claude_code_comparison.md` | 1930 | 70 |
-| `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | 70 |
-| `draft.in_15_mins.helpers_hunit_test.md` | 1488 | 70 |
-| `draft.in_10_mins.helpers_hllm.md` | 1477 | 70 |
-| `draft.in_5_mins.helpers_render_images.md` | 1086 | 70 |
-| `draft.Intro_to_Bayesian_Optimization.md` | 1553 | 65 |
-| `draft.in_30_mins.pi_dev.md` | 1537 | 65 |
-| `draft.how_to.Claude_skills.md` | 917 | 65 |
-| `draft.how_to.Apple_Container.md` | 660 | 65 |
-| `draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | 60 |
-| `draft.how_to.Coding_Agents.md` | 1873 | 50 |
-| `draft.in_10_mins.helpers_open_md.md` | 576 | 50 |
-| `draft.Writing_Books_For_Humans_and_AI.md` | 470 | 50 |
-| `draft.TIL.Autoreload_in_vim.md` | 366 | 50 |
-| `draft.Claude_Paid_Plans.md` | 1015 | 45 |
-| `draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | 45 |
-| `draft.how_to.Use_Claude_Code.md` | 1872 | 40 |
-| `draft.in_30_mins.helpers_caching.md` | 1599 | 40 |
-| `draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | 40 |
-| `draft.how_to.Produce_professional_images.md` | 229 | 40 |
-| `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | 35 |
-| `draft.TIL.Apple_container_running_notebook.md` | 714 | 35 |
-| `draft.how_to.latex_vs_typst_for_typsetting.md` | 483 | 35 |
-| `draft.how_to.Github_Copilot_Review.md` | 110 | 35 |
-| `draft.how_to.Use_typst_for_slides.md` | 345 | 25 |
-| `draft.in_5_mins.helpers_cc.md` | 341 | 25 |
-| `draft.how_to.Use_Claude_Code_Workflows.md` | 286 | 25 |
-| `draft.hiring_is_broken.md` | 250 | 25 |
-| `draft.how_to.Codebase_local_kg.md` | 246 | 25 |
-| `draft.debug.md` | 109 | 25 |
-| `draft.how_to.VS_Code_Quick_Fix.md` | 105 | 25 |
-| `draft.My_AI_Policy.md` | 120 | 20 |
-| `draft.GWS.md` | 118 | 20 |
-| `draft.how_to.VS_Code_and_containers.md` | 58 | 20 |
-| `draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | 15 |
-| `draft.how_to.format_markdown.md` | 81 | 15 |
-| `draft.LLM_issues.md` | 76 | 15 |
-| `draft.Reducing_hllm_cli_import_time.md` | 61 | 15 |
-| `draft.carrer_advice.md` | 58 | 15 |
-| `draft.how_to.AI_Coding_Assistant.md` | 53 | 15 |
-| `draft.hermes.md` | 29 | 15 |
-| `draft.in_30_mins.helpers_typesetting_system.md` | 29 | 15 |
-| `draft.blog_template.md` | 22 | 15 |
-| `draft.how_to.Use_tiny_docker_template.md` | 20 | 15 |
-| `draft.how_to.Claude_Code_and_tmux.md` | 19 | 15 |
-| `draft.how_to.Claude_Artifacts.md` | 225 | 10 |
+| File | Words | Ready % | Comment |
+|------|-------|---------|---------|
+| `website/docs/blog/posts/draft.hiring_is_broken.md` | 250 | 75% | Ready for review |
+| `website/docs/blog/posts/draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | 70% | 3 TODOs to resolve |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_caching.md` | 1599 | 70% | 2 TODOs to resolve |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | 70% | 2 TODOs to resolve |
+| `website/docs/blog/posts/draft.TIL.Apple_container_running_notebook.md` | 714 | 70% | 1 TODOs to resolve |
+| `website/docs/blog/posts/draft.how_to.Claude_Artifacts.md` | 225 | 70% | 1 TODOs to resolve |
+| `website/docs/blog/posts/draft.in_60_mins.GluonTS.md` | 2564 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.pidev_vs_claude_code_comparison.md` | 1930 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.Coding_Agents.md` | 1873 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.Intro_to_Bayesian_Optimization.md` | 1553 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.in_30_mins.pi_dev.md` | 1537 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.in_15_mins.helpers_hunit_test.md` | 1488 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.in_10_mins.helpers_hllm.md` | 1477 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md` | 1086 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.Claude_Paid_Plans.md` | 1015 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.Claude_skills.md` | 917 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.Apple_Container.md` | 660 | 65% | Has placeholders, review needed |
+| `website/docs/blog/posts/draft.how_to.latex_vs_typst_for_typsetting.md` | 483 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.Writing_Books_For_Humans_and_AI.md` | 470 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.TIL.Autoreload_in_vim.md` | 366 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md` | 345 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.in_5_mins.helpers_cc.md` | 341 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.how_to.Use_Claude_Code_Workflows.md` | 286 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.how_to.Codebase_local_kg.md` | 246 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.how_to.Produce_professional_images.md` | 229 | 55% | Has placeholders, needs content |
+| `website/docs/blog/posts/draft.how_to.Use_Claude_Code.md` | 1872 | 50% | 7 TODOs to resolve |
+| `website/docs/blog/posts/draft.My_AI_Policy.md` | 120 | 40% | Short, needs more detail |
+| `website/docs/blog/posts/draft.GWS.md` | 118 | 40% | Short, needs more detail |
+| `website/docs/blog/posts/draft.how_to.Github_Copilot_Review.md` | 110 | 40% | Short, needs more detail |
+| `website/docs/blog/posts/draft.debug.md` | 109 | 40% | Short, needs more detail |
+| `website/docs/blog/posts/draft.how_to.VS_Code_Quick_Fix.md` | 105 | 40% | Short, needs more detail |
+| `website/docs/blog/posts/draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.how_to.format_markdown.md` | 81 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.LLM_issues.md` | 76 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.Reducing_hllm_cli_import_time.md` | 61 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.carrer_advice.md` | 58 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.how_to.VS_Code_and_containers.md` | 58 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.how_to.AI_Coding_Assistant.md` | 53 | 30% | Very short, needs expansion |
+| `website/docs/blog/posts/draft.hermes.md` | 29 | 20% | Too short, needs content |
+| `website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md` | 29 | 20% | Too short, needs content |
+| `website/docs/blog/posts/draft.blog_template.md` | 22 | 20% | Too short, needs content |
+| `website/docs/blog/posts/draft.how_to.Use_tiny_docker_template.md` | 20 | 20% | Too short, needs content |
+| `website/docs/blog/posts/draft.how_to.Claude_Code_and_tmux.md` | 19 | 20% | Too short, needs content |
 
 # Publishing Checklist
 
