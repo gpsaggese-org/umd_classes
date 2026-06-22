@@ -14,26 +14,26 @@
 
 ## Published Blogs
 
-- The published ones are:
-  - 2026-06-12: `website/docs/blog/posts/how_to.Use_OpenRouter.md`
-  - 2026-06-05: `website/docs/blog/posts/how_to.Use_Claude_Code_with_Openrouter.md`
-  - 2026-05-29: `website/docs/blog/posts/how_to.LLM_effort.md`
-  - 2026-05-22: `website/docs/blog/posts/how_to.Count_cost.md`
-  - 2026-05-15: `website/docs/blog/posts/how_to.Compare_LLM_models.md`
-  - 2026-05-08: `website/docs/blog/posts/in_30_mins.helpers_llm_cli.md`
-  - 2026-05-01: `website/docs/blog/posts/in_30_mins.simonw_llm_cli.md`
-  - 2026-04-24: `website/docs/blog/posts/in_30_mins.mdm_unified_markdown_manager.md`
-  - 2026-04-17: `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
-  - 2026-04-10: `website/docs/blog/posts/in_60_mins.CausalML.md`
-  - 2026-04-03: `website/docs/blog/posts/in_60_mins.BambooAI.md`
-  - 2026-03-27: `website/docs/blog/posts/in_60_mins.TorchRL_MAC.md`
-  - 2026-03-20: `website/docs/blog/posts/how_to.Connect_Claude_Code_to_Gmail.md`
-  - 2026-03-13: `website/docs/blog/posts/in_60_mins.AutoGen.md`
-  - 2026-03-06: `website/docs/blog/posts/in_60_mins.Tensorflow.md`
-  - 2026-02-27: `website/docs/blog/posts/in_30_mins.Python_Packaging.md`
-  - 2026-02-20: `website/docs/blog/posts/in_30_mins.uv.md`
-  - 2026-02-13: `website/docs/blog/posts/in_30_mins.ripgrep.md`
-  - 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
+- 2026-06-22: `website/docs/blog/posts/how_to.Render_md_from_terminal.md`
+- 2026-06-12: `website/docs/blog/posts/how_to.Use_OpenRouter.md`
+- 2026-06-05: `website/docs/blog/posts/how_to.Use_Claude_Code_with_Openrouter.md`
+- 2026-05-29: `website/docs/blog/posts/how_to.LLM_effort.md`
+- 2026-05-22: `website/docs/blog/posts/how_to.Count_cost.md`
+- 2026-05-15: `website/docs/blog/posts/how_to.Compare_LLM_models.md`
+- 2026-05-08: `website/docs/blog/posts/in_30_mins.helpers_llm_cli.md`
+- 2026-05-01: `website/docs/blog/posts/in_30_mins.simonw_llm_cli.md`
+- 2026-04-24: `website/docs/blog/posts/in_30_mins.mdm_unified_markdown_manager.md`
+- 2026-04-17: `website/docs/blog/posts/in_30_mins.Python_Code_Coverage.md`
+- 2026-04-10: `website/docs/blog/posts/in_60_mins.CausalML.md`
+- 2026-04-03: `website/docs/blog/posts/in_60_mins.BambooAI.md`
+- 2026-03-27: `website/docs/blog/posts/in_60_mins.TorchRL_MAC.md`
+- 2026-03-20: `website/docs/blog/posts/how_to.Connect_Claude_Code_to_Gmail.md`
+- 2026-03-13: `website/docs/blog/posts/in_60_mins.AutoGen.md`
+- 2026-03-06: `website/docs/blog/posts/in_60_mins.Tensorflow.md`
+- 2026-02-27: `website/docs/blog/posts/in_30_mins.Python_Packaging.md`
+- 2026-02-20: `website/docs/blog/posts/in_30_mins.uv.md`
+- 2026-02-13: `website/docs/blog/posts/in_30_mins.ripgrep.md`
+- 2026-02-06: `website/docs/blog/posts/Welcome_to_Our_Blog.md`
 
 # Draft Blogs
 
@@ -151,53 +151,54 @@ python.invoke.txt
 ## List of Drafts
 
 | File | Words | Ready % |
-|------|------:|--------|
-| `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | Ready |
-| `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | Ready |
-| `draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | Ready |
-| `draft.how_to.Render_md_from_terminal.md` | 1060 | Ready |
-| `draft.in_10_mins.helpers_hllm.md` | 1477 | Ready |
-| `draft.in_15_mins.helpers_hunit_test.md` | 1488 | Ready |
-| `draft.in_30_mins.helpers_caching.md` | 1599 | Ready |
-| `draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | Ready |
-| `draft.in_30_mins.pi_dev.md` | 1537 | Ready |
-| `draft.in_5_mins.helpers_render_images.md` | 1086 | Ready |
-| `draft.in_60_mins.GluonTS.md` | 2564 | Ready |
-| `draft.Intro_to_Bayesian_Optimization.md` | 1553 | Ready |
-| `draft.pidev_vs_claude_code_comparison.md` | 1930 | Ready |
-| `draft.Claude_Paid_Plans.md` | 970 | Almost Ready |
-| `draft.how_to.Apple_Container.md` | 660 | Almost Ready |
-| `draft.how_to.Claude_Artifacts.md` | 225 | Almost Ready |
-| `draft.how_to.Claude_skills.md` | 917 | Almost Ready |
-| `draft.how_to.Coding_Agents.md` | 1873 | Almost Ready |
-| `draft.how_to.Github_Copilot_Review.md` | 110 | Almost Ready |
-| `draft.how_to.latex_vs_typst_for_typsetting.md` | 457 | Almost Ready |
-| `draft.how_to.Use_Claude_Code.md` | 1870 | Almost Ready |
-| `draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | Almost Ready |
-| `draft.in_5_mins.helpers_cc.md` | 341 | Almost Ready |
-| `draft.TIL.Apple_container_running_notebook.md` | 714 | Almost Ready |
-| `draft.TIL.Autoreload_in_vim.md` | 366 | Almost Ready |
-| `draft.Writing_Books_For_Humans_and_AI.md` | 470 | Almost Ready |
-| `draft.blog_template.md` | 22 | Not Ready |
-| `draft.carrer_advice.md` | 58 | Not Ready |
-| `draft.debug.md` | 109 | Not Ready |
-| `draft.GWS.md` | 118 | Not Ready |
-| `draft.hermes.md` | 2 | Not Ready |
-| `draft.hiring_is_broken.md` | 250 | Not Ready |
-| `draft.how_to.AI_Coding_Assistant.md` | 53 | Not Ready |
-| `draft.how_to.Claude_Code_and_tmux.md` | 19 | Not Ready |
-| `draft.how_to.Codebase_local_kg.md` | 225 | Not Ready |
-| `draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | Not Ready |
-| `draft.how_to.format_markdown.md` | 81 | Not Ready |
-| `draft.how_to.Use_Claude_Code_Workflows.md` | 286 | Not Ready |
-| `draft.how_to.Use_tiny_docker_template.md` | 20 | Not Ready |
-| `draft.how_to.Use_typst_for_slides.md` | 320 | Not Ready |
-| `draft.how_to.VS_Code_and_containers.md` | 58 | Not Ready |
-| `draft.how_to.VS_Code_Quick_Fix.md` | 105 | Not Ready |
-| `draft.in_30_mins.helpers_typesetting_system.md` | 6 | Not Ready |
-| `draft.LLM_issues.md` | 41 | Not Ready |
-| `draft.My_AI_Policy.md` | 82 | Not Ready |
-| `draft.Reducing_hllm_cli_import_time.md` | 24 | Not Ready |
+|------|-------|---------|
+| `draft.in_60_mins.GluonTS.md` | 2564 | 70 |
+| `draft.pidev_vs_claude_code_comparison.md` | 1930 | 70 |
+| `draft.Ax_Multi_Objective_Optimization_On_Marketing_Campaigns.md` | 1713 | 70 |
+| `draft.in_15_mins.helpers_hunit_test.md` | 1488 | 70 |
+| `draft.in_10_mins.helpers_hllm.md` | 1477 | 70 |
+| `draft.in_5_mins.helpers_render_images.md` | 1086 | 70 |
+| `draft.Intro_to_Bayesian_Optimization.md` | 1553 | 65 |
+| `draft.in_30_mins.pi_dev.md` | 1537 | 65 |
+| `draft.how_to.Claude_skills.md` | 917 | 65 |
+| `draft.how_to.Apple_Container.md` | 660 | 65 |
+| `draft.how_to.Convert_PDF_to_Markdown.md` | 1544 | 60 |
+| `draft.how_to.Coding_Agents.md` | 1873 | 50 |
+| `draft.in_10_mins.helpers_open_md.md` | 576 | 50 |
+| `draft.Writing_Books_For_Humans_and_AI.md` | 470 | 50 |
+| `draft.TIL.Autoreload_in_vim.md` | 366 | 50 |
+| `draft.Claude_Paid_Plans.md` | 1015 | 45 |
+| `draft.how_to.Use_Local_LLMs_On_Mac.md` | 925 | 45 |
+| `draft.how_to.Use_Claude_Code.md` | 1872 | 40 |
+| `draft.in_30_mins.helpers_caching.md` | 1599 | 40 |
+| `draft.in_30_mins.helpers_hllm_decorator.md` | 1525 | 40 |
+| `draft.how_to.Produce_professional_images.md` | 229 | 40 |
+| `draft.how_to.Compress_LLM_in_out_tokens.md` | 2084 | 35 |
+| `draft.TIL.Apple_container_running_notebook.md` | 714 | 35 |
+| `draft.how_to.latex_vs_typst_for_typsetting.md` | 483 | 35 |
+| `draft.how_to.Github_Copilot_Review.md` | 110 | 35 |
+| `draft.how_to.Use_typst_for_slides.md` | 345 | 25 |
+| `draft.in_5_mins.helpers_cc.md` | 341 | 25 |
+| `draft.how_to.Use_Claude_Code_Workflows.md` | 286 | 25 |
+| `draft.hiring_is_broken.md` | 250 | 25 |
+| `draft.how_to.Codebase_local_kg.md` | 246 | 25 |
+| `draft.debug.md` | 109 | 25 |
+| `draft.how_to.VS_Code_Quick_Fix.md` | 105 | 25 |
+| `draft.My_AI_Policy.md` | 120 | 20 |
+| `draft.GWS.md` | 118 | 20 |
+| `draft.how_to.VS_Code_and_containers.md` | 58 | 20 |
+| `draft.how_to.Create_Hook_To_Run_Ruff_In_Claude_Code.md` | 82 | 15 |
+| `draft.how_to.format_markdown.md` | 81 | 15 |
+| `draft.LLM_issues.md` | 76 | 15 |
+| `draft.Reducing_hllm_cli_import_time.md` | 61 | 15 |
+| `draft.carrer_advice.md` | 58 | 15 |
+| `draft.how_to.AI_Coding_Assistant.md` | 53 | 15 |
+| `draft.hermes.md` | 29 | 15 |
+| `draft.in_30_mins.helpers_typesetting_system.md` | 29 | 15 |
+| `draft.blog_template.md` | 22 | 15 |
+| `draft.how_to.Use_tiny_docker_template.md` | 20 | 15 |
+| `draft.how_to.Claude_Code_and_tmux.md` | 19 | 15 |
+| `draft.how_to.Claude_Artifacts.md` | 225 | 10 |
 
 # Publishing Checklist
 
