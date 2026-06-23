@@ -510,38 +510,6 @@ digraph ITS {
   - Always plot the series with the fitted model and the intervention date marked
   - Does ITS result survives?
 
-* ITS vs. Cross-Sectional RDD: Comparison
-
-// TODO(ai_gp): Convert in table
-
-::: columns
-:::: {.column width=50%}
-**Cross-Sectional RDD**
-
-- Cutoff: a continuous running variable (score, age, income)
-- Comparison: units just above vs. just below the cutoff
-- No extrapolation: local effect at the cutoff
-- Strong assumption: no manipulation of the running variable
-- Good when: continuous cutoffs and many units
-::::
-:::: {.column width=50%}
-**ITS (RDD in time)**
-
-- Cutoff: a date $t^*$
-- Comparison: pre-period vs. post-period of the same unit
-- Requires extrapolation of the pre-period trend
-- Strong assumption: no co-occurring events, stable DGP
-- Good when: a single intervention with a clear date
-::::
-:::
-
-- **Key insight**:
-  - ITS is a valuable but _weaker_ design than cross-sectional analysis
-  - Pair it with DiD or synthetic control whenever a credible comparison unit
-    exists
-
-## Applications in Causal Inference
-
 * ITS: Applications
 
 - **Public health**

@@ -53,9 +53,9 @@ knowledge to reason counterfactually.
 In time series causal models, we typically observe sequences of variables over
 time: a treatment process $T_t$ (continuous or binary), an outcome $Y_t$, and
 covariates $X_t$. The fundamental principle is that *effects cannot precede
-causes*. This means treatment at time t can affect outcomes at times t , $t+1$,
-$t+2$, and beyond, but never at times before t . Mathematically, $T_t$ can cause
-$Y_t$, , etc., but never .
+causes*. This means treatment at time $t$ can affect outcomes at times $t$,
+$t+1$, $t+2$, and beyond, but never at times before $t$. Mathematically, $T_t$
+can cause $Y_t$, $Y_{t+1}$, etc., but never $Y_{t-1}$.
 
 This constraint is immensely powerful because it eliminates a large class of
 incorrect causal directions without any data analysis. We can represent this
@@ -87,20 +87,13 @@ is encoded by the arrow structure.
 // ```
 // label=fig:temporal-causal
 // caption=First-order temporal causal graph showing treatment and outcome
-// variables across consecutive time periods with their causal relationships.
-// Solid arrows represent direct causal effects; dashed arrow shows feedback.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.1.png",
-    width: 85%,
-  ),
-  caption: [First-order temporal causal graph showing treatment ($T_t$) and
-    outcome ($Y_t$) variables across consecutive time periods with causal
-    relationships. Solid arrows represent direct causal effects; dashed arrow
-    shows feedback.],
-) <fig:temporal-causal>
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.1.png"),
+  caption: [First-order temporal causal graph showing treatment and outcome],
+  <fig:temporal-causal>,
+)
 // render_images:end
 
 === Temporal Causal Structures: Key Quantities
@@ -115,14 +108,15 @@ defined as:
 The causal effect of a sustained intervention is the difference in expected
 outcomes between forcing treatment on versus off from time t_start onward.
 
-This measures the average outcome at time t when we force the treatment to one
-level versus zero from t_start onward. The intuition is that we *force* the
+This measures the average outcome at time $t$ when we force the treatment to one
+level versus zero from $t_0$ onward. The intuition is that we *force* the
 treatment sequence, contrasting it with what would have happened without
 intervention.
 
-#strong[Dynamic treatment] occurs when treatment at time t depends on the unit's
-history: covariates , past outcomes , and past treatments . This is common in
-medicine, where dosing depends on patient response so far.
+#strong[Dynamic treatment] occurs when treatment at time $t$ depends on the
+unit's history: covariates $X_{1:t}$, past outcomes $Y_{1:t-1}$, and past
+treatments $T_{1:t-1}$. This is common in medicine, where dosing depends on
+patient response so far.
 
 Two special cases are particularly important. *Contemporaneous effects* occur
 when $T_t \to Y_t$ instantly. *Lagged effects* occur when for some lag $k > 0$.
@@ -138,11 +132,12 @@ inference.
 // Slide: Autocorrelation
 
 #strong[Autocorrelation] means that $Y_t$ is correlated with its own past
-values: , , etc. This has profound consequences for statistical inference. When
-we compute standard errors assuming independent observations, our estimates are
-*too small*. Autocorrelated data carries less independent information than the
-number of observations suggests. Significance tests reject the null hypothesis
-far more often than their nominal rate, leading to spurious conclusions.
+values: $Y_{t-1}$, $Y_{t-2}$, etc. This has profound consequences for
+statistical inference. When we compute standard errors assuming independent
+observations, our estimates are *too small*. Autocorrelated data carries less
+independent information than the number of observations suggests. Significance
+tests reject the null hypothesis far more often than their nominal rate, leading
+to spurious conclusions.
 
 Consider a simple example: regressing daily stock returns on a dummy variable
 for "news day." Stock returns exhibit strong autocorrelation. If we ignore this
@@ -220,19 +215,13 @@ responds to sales, creating bidirectional causality that OLS cannot untangle.
 // ```
 // label=fig:feedback-loop
 // caption=Feedback loop structure where policy affects outcome contemporaneously,
-// and past outcomes influence future policy decisions, creating simultaneity bias.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.2.png",
-    width: 85%,
-  ),
-  caption: [Feedback loop structure: policy ($T_t$) affects outcome ($Y_t$)
-    contemporaneously, and past outcomes influence future policy decisions
-    ($T_{t+1}$), creating simultaneity bias that violates standard regression
-    assumptions.],
-) <fig:feedback-loop>
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.2.png"),
+  caption: [Feedback loop structure where policy affects outcome contemporaneously,],
+  <fig:feedback-loop>,
+)
 // render_images:end
 
 === Structural Vector Autoregressions
@@ -550,9 +539,10 @@ demonstrating the power of identifying when policy changes affect outcomes.
 
 The standard ITS model is #strong[segmented regression]:
 
-$Y_t = beta_0 + beta_1 t + beta_2 D_t + beta_3 (t - t_0) D_t + u_t$
+$$Y_t = beta_0 + beta_1 t + beta_2 D_t + beta_3 (t - t_0) D_t + u_t$$
 
-where is an indicator for the post-intervention period.
+where $D_t$ is an indicator for the post-intervention period ($D_t = 1$ if
+$t >= t^*$, and 0 otherwise).
 
 The parameters have clear interpretations:
 - $\beta_0$: pre-intervention intercept (baseline level)
@@ -697,13 +687,13 @@ removed.
 //     nodesep=0.8;
 //     ranksep=0.8;
 //     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
+// 
 //     TreatPre   [label=<Treated<BR/>Pre>,   fillcolor="#FFD1A6"];
 //     TreatPost  [label=<Treated<BR/>Post>,  fillcolor="#F4A6A6"];
 //     CtrlPre    [label=<Control<BR/>Pre>,   fillcolor="#B2E2B2"];
 //     CtrlPost   [label=<Control<BR/>Post>,  fillcolor="#A0D6D1"];
 //     Effect     [label=<DiD =<BR/>(T_post - T_pre)<BR/>- (C_post - C_pre)>, fillcolor="#A6C8F4"];
-//
+// 
 //     TreatPre -> TreatPost [label="  change in treated"];
 //     CtrlPre -> CtrlPost  [label="  change in control"];
 //     TreatPost -> Effect;
@@ -712,43 +702,39 @@ removed.
 // ```
 // label=fig:did-structure
 // caption=Difference-in-Differences design: the causal effect is the difference
-// between the treated group's change and the control group's change, removing
-// both baseline differences and common time trends.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.3.png",
-    width: 85%,
-  ),
-  caption: [Difference-in-Differences structure: the treatment effect is
-    estimated as (treated change) minus (control change), removing both
-    time-invariant between-group differences and common time trends.],
-) <fig:did-structure>
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.3.png"),
+  caption: [Difference-in-Differences design: the causal effect is the difference],
+  <fig:did-structure>,
+)
 // render_images:end
 
 === Regression Formulation
 
 // Slide: DiD Regression
 
-The equivalent regression formulation with unit i and time t is:
+The equivalent regression formulation with unit $i$ and time $t$ is:
 
-DiD regression: Y = α + βT + γP + τ(T × P) + u
+DiD regression: $Y = alpha + beta T + gamma P + tau(T times P) + u$
 
 The parameters are:
-- α : baseline outcome in control units in pre-period
-- β : time-invariant difference between groups
-- γ : common time trend affecting both groups
-- τ : #strong[the DiD causal effect] (coefficient on the interaction term)
+- $alpha$: baseline outcome in control units in pre-period
+- $beta$: time-invariant difference between groups
+- $gamma$: common time trend affecting both groups
+- $tau$: #strong[the DiD causal effect] (coefficient on the interaction term)
 
 A more flexible #strong[fixed-effects] generalization is:
 
-Here α_i are unit fixed effects (absorb all time-invariant unit traits:
-location, management, size), λ_t are time fixed effects (absorb all common
-shocks: recessions, industry trends), and D_it indicates whether unit i is
-treated at time t . The fixed-effects specification is more flexible because it
-allows heterogeneous levels and trends across units, not just between treated
-and control groups.
+$Y_{i,t} = alpha_i + lambda_t + tau D_{i,t} + epsilon_{i,t}$
+
+Here $alpha_i$ are unit fixed effects (absorb all time-invariant unit traits:
+location, management, size), $lambda_t$ are time fixed effects (absorb all
+common shocks: recessions, industry trends), and $D_{i,t}$ indicates whether
+unit $i$ is treated at time $t$. The fixed-effects specification is more
+flexible because it allows heterogeneous levels and trends across units, not
+just between treated and control groups.
 
 === The Parallel Trends Assumption
 
@@ -925,13 +911,13 @@ the estimated effect. The method's strength is transparency: reviewers can see
 //     nodesep=0.8;
 //     ranksep=0.8;
 //     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-//
+// 
 //     Treated [label=<Treated unit<BR/>(e.g., California)>,  fillcolor="#F4A6A6"];
 //     Donors  [label=<Donor pool<BR/>(other states)>,         fillcolor="#FFD1A6"];
 //     Weights [label=<Optimal weights<BR/>w<SUB>1</SUB>, w<SUB>2</SUB>, ..., w_J>,fillcolor="#A6E7F4"];
 //     Synth   [label=<Synthetic<BR/>counterfactual>,          fillcolor="#B2E2B2"];
 //     Effect  [label=<Causal effect =<BR/>Treated - Synthetic>,fillcolor="#A6C8F4"];
-//
+// 
 //     Donors -> Weights;
 //     Treated -> Weights [label="  pre-treatment fit"];
 //     Weights -> Synth;
@@ -941,20 +927,13 @@ the estimated effect. The method's strength is transparency: reviewers can see
 // ```
 // label=fig:synthetic-control-construction
 // caption=Synthetic control construction: the donor pool is weighted optimally
-// to match the treated unit's pre-treatment characteristics, producing a
-// data-driven counterfactual for post-period comparison.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image(
-    "Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.4.png",
-    width: 85%,
-  ),
-  caption: [Synthetic control construction workflow: donors are weighted
-    optimally to match the treated unit's pre-treatment characteristics,
-    producing a data-driven synthetic counterfactual for post-period comparison
-    and causal effect estimation.],
-) <fig:synthetic-control-construction>
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.4.png"),
+  caption: [Synthetic control construction: the donor pool is weighted optimally],
+  <fig:synthetic-control-construction>,
+)
 // render_images:end
 
 === Formal Setup
@@ -977,12 +956,13 @@ We choose optimal weights to minimize pre-treatment mismatch: The optimal
 weights minimize the squared pre-treatment mismatch between treated and donors.
 subject to weights being nonnegative and summing to one.
 
-The predictor matrix is diagonal, containing importance weights for each
+The predictor matrix $V$ is diagonal, containing importance weights for each
 predictor, chosen to minimize mean-squared prediction error on pre-treatment
 outcomes. This is a nested optimization: the inner loop finds weights for a
-given predictor matrix; the outer loop finds V. The estimated causal effect at
-time t onward is: The estimated effect at time t is the gap between the treated
-outcome and the weighted average of donors.
+given predictor matrix; the outer loop finds $V$.
+
+The #strong[estimated causal effect] at time $t >= t_0$ is the gap between the
+treated unit's outcome and the weighted average of donor outcomes.
 
 === Inference via Placebos
 
