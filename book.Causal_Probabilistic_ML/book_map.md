@@ -330,6 +330,7 @@
 ### Lessons
 
 ### Current TOC
+
 ### Target TOC
 - Explanation vs. Causality
 - Explanation Methods (SHAP, LIME)
@@ -359,6 +360,11 @@
 - `msml610/lectures_source/Lesson09.4-gh_Filter.txt`
 - `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`
 - `msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt`
+
+### Target TOC
+
+### TODOs
+- [ ] Review / reorg
 
 ## 8: Causal Inference for Time Series
 

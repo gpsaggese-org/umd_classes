@@ -623,7 +623,7 @@ Sub-seasonal plot
   back
   - The speed of mean reversion depends on $\phi$
 
-// TODO(ai_gp): Generate image: Time series plot showing mean-reverting AR(1) process behavior over 150 time steps. Horizontal dashed line at y=0 representing the mean (μ). Series starts at value 5 (above mean), decays back toward mean exponentially, overshoots to negative values, then oscillates with decreasing amplitude around the mean. The decay follows geometric pattern with |φ|=0.7. Annotations show: (1) starting deviation from mean, (2) rapid initial reversion, (3) damped oscillations, (4) convergence to mean. Color: teal/blue series with orange dashed mean line. Shaded band ±0.5 around mean showing convergence region.
+// TODO(ai_gp): Generate image: Time series plot showing mean-reverting AR(1) process behavior over 150 time steps. Horizontal dashed line at y=0 representing the mean (μ). Series starts at value 5 (above mean), decays back toward mean exponentially, overshoots to negative values, then oscillates with decreasing amplitude around the mean. The decay follows geometric pattern with |$\phi$|=0.7. Annotations show: (1) starting deviation from mean, (2) rapid initial reversion, (3) damped oscillations, (4) convergence to mean. Color: teal/blue series with orange dashed mean line. Shaded band ±0.5 around mean showing convergence region.
 
 * AR(1) Process is Ergodic
 - Ergodicity is a property of time series where $Y_t$ and $Y_{t-j}$ become
@@ -649,14 +649,14 @@ Sub-seasonal plot
 
 ::: columns
 :::: {.column width=50%}
-**Gaussian White Noise (φ=0)** — choppy, independent observations
+**Gaussian White Noise ($\phi$=0)** — choppy, independent observations
 ::::
 :::: {.column width=50%}
-**AR(1) Process (φ=0.8)** — smooth, autocorrelated observations
+**AR(1) Process ($\phi$=0.8)** — smooth, autocorrelated observations
 ::::
 :::
 
-// TODO(ai_gp): Generate image: Two time series plots displayed side-by-side, both 150 time steps. Left plot: Gaussian White Noise with φ=0, showing completely random fluctuations jumping rapidly between -3 and +3, resembling random noise with no pattern or smoothness, jagged sawtooth appearance. Right plot: AR(1) process with φ=0.8, showing smooth continuous curves with persistence, values move gradually from one level to another, autocorrelated behavior creates clustering of similar values, appears "sticky". Both plots have y-axis from -3 to 3, x-axis 0-150. Use contrasting colors: left in red/orange to show choppiness, right in blue/teal to show smoothness. Mean line at y=0 shown dashed in both.
+// TODO(ai_gp): Generate image: Two time series plots displayed side-by-side, both 150 time steps. Left plot: Gaussian White Noise with $\phi$=0, showing completely random fluctuations jumping rapidly between -3 and +3, resembling random noise with no pattern or smoothness, jagged sawtooth appearance. Right plot: AR(1) process with $\phi$=0.8, showing smooth continuous curves with persistence, values move gradually from one level to another, autocorrelated behavior creates clustering of similar values, appears "sticky". Both plots have y-axis from -3 to 3, x-axis 0-150. Use contrasting colors: left in red/orange to show choppiness, right in blue/teal to show smoothness. Mean line at y=0 shown dashed in both.
 
 * AR(1) to model financial time series
 - Good model for:
