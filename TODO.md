@@ -26,27 +26,26 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 
 - Generate the text from the slides
   ```
+  export FILE=Lesson08.1-Causal_AI_intro
   claude> /model sonnet
-  claude> msml610/book/prompt.slides_to_text.txt msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.slides_to_text.txt on msml610/lectures_source/${FILE}.txt
+  ```
+
+- Render with
+  ```
+  > ./msml610/book/render_chapter.sh msml610/book/$FILE
+  ```
+  which is equivalent to:
+  ```
+  > render_images.py -i msml610/book/$FILE.typ
+  > typst compile --root . msml610/book/$FILE.typ
+  > open msml610/book/$FILE.pdf
   ```
 
 - TODO(gp): Improve the prompt
 
-- TODO(gp): Inject the prompt in a `gen_....py`
-
-- Render with
-  ```
-  > ./msml610/book/render_chapter.sh msml610/book/Lesson06.2-Using_Bayesian_Networks
-  ```
-  which is equivalent to:
-  ```
-  > render_images.py -i msml610/book/Lesson06.2-Using_Bayesian_Networks.typ
-  > typst compile --root . msml610/book/Lesson06.2-Using_Bayesian_Networks.typ
-  > open msml610/book/Lesson06.2-Using_Bayesian_Networks.pdf
-  ```
-
-- Create some scripts similar `./class_scripts/gen_book_chapter.py` and
-  `./class_scripts/generate_book_chapter.py`
+- TODO(gp): create some scripts similar `./class_scripts/gen_book_chapter.py` and
+  `./class_scripts/generate_book_chapter.py` to run the prompt
 
 # Port documentation flow to typst
 
