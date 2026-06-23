@@ -351,6 +351,15 @@
 - [B020] Kearns et al., "The Ethical Algorithm", 2019
 - [B021] Kohavi et al., "Trustworthy Online Controlled Experiments", 2020
 
+## ?: Probabilistic Inference for Time Series
+
+### Lessons
+- `msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt`
+- `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`
+- `msml610/lectures_source/Lesson09.4-gh_Filter.txt`
+- `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`
+- `msml610/lectures_source/Lesson09.6-Dynamic_Bayesian_Networks.txt`
+
 ## 8: Causal Inference for Time Series
 
 ### Lessons

@@ -28,7 +28,7 @@ MSML610: Advanced Machine Learning
 
 # Time Series
 
-## Basic definition
+## Basic Definition
 
 * Time Series
 - A **time series** is a sequence of observations over time, e.g.,
@@ -38,10 +38,9 @@ MSML610: Advanced Machine Learning
   - Weather: Daily temperature measurements
   - Energy: Daily electricity usage of a household
 
-- You need time series only for things that change over time
-  - Everything in the real world (besides mathematical objects) changes over
-    time
-  - You need time series for pretty much everything!
+- Nearly everything changes over time
+  - Everything in the real world (besides mathematical objects) is dynamic
+  - Time series modeling is essential for real-world forecasting and inference
 
 * Time Series
 - A time series is modeled as a random process, a sequence of random variables
@@ -117,11 +116,22 @@ MSML610: Advanced Machine Learning
   - ADF Test (Augmented Dickey-Fuller): tests for unit root
   - KPSS Test: tests for trend stationarity
 
+::: columns
+:::: {.column width=50%}
+**Stationary Series** — consistent around mean
+::::
+:::: {.column width=50%}
+**Non-Stationary Series** — trend or changing mean
+::::
+:::
+
+// TODO(ai_gp): Generate image: Two time series plots displayed side-by-side. Left plot: stationary time series with fluctuations around a horizontal line at y=0, showing consistent variance and no trend, approximately 100 time steps. Series fluctuates roughly between -2.5 and 2.5, resembling random noise. Right plot: non-stationary time series showing a clear upward linear trend, starting at y=0 and increasing to approximately y=30 over 100 time steps, with fluctuations overlaid on the trend. Both plots have time (0-100) on x-axis. Use muted colors: left series in teal/cyan to show stability, right series in orange/rust to highlight the drift and trend.
+
 * Strictly Stationary: Definition
-- A time series $\{Y_t\}$ is **strictly stationary** iff for any any set of
-  $r > 0$ indices $t_1, t_2, ..., t_r < t$, the joint distribution of
-  $(Y_{t_1}, Y_{t_2}, ..., Y_{t_r})$ depends only on the differences $t_1 - t_2,
-  ..., t_1 - t_r$
+- A time series $\{Y_t\}$ is **strictly stationary** iff for any time indices
+  $t_1, t_2, ..., t_r$ and any time shift $h$, the joint distribution of
+  $(Y_{t_1}, Y_{t_2}, ..., Y_{t_r})$ equals the joint distribution of
+  $(Y_{t_1+h}, Y_{t_2+h}, ..., Y_{t_r+h})$
 
 - E.g.,
   - $(Y_1, Y_5)$ has the same joint distribution as $(Y_{12}, Y_{16})$
@@ -158,10 +168,10 @@ MSML610: Advanced Machine Learning
   - Variations around the mean have constant amplitude (variance is constant)
   - Consistent wiggling (random patterns look the same)
 
-  ... tmp.prettier_on_str.kysipema.md 20ms
-#### Original ####
-
 * Auto-Correlation Function (ACF)
+
+::: columns
+:::: {.column width=60%}
 - **Auto-correlation function** (ACF) is a graphical representation of the
   $i$-lag autocorrelation of a time series
   - Plot the correlation coefficient of a time series with its own lagged values
@@ -172,19 +182,24 @@ MSML610: Advanced Machine Learning
 
 - **Partial Auto-Correlation Function** (PACF) is like ACF but controls for the
   values of the time series at all shorter lags
-  $$\alpha(k) = \Corr(Y_t - Proj_{t,k}(Y_t), Y_{t-k} - Proj_{t,k}(Y_{t,k}))$$
+  $$\alpha(k) = \Corr(Y_t - Proj_{t,k}(Y_t), Y_{t-k} - Proj_{t,k}(Y_{t-k}))$$
   where:
   - $Proj_{t,k}(x)$ is the projection of $x$ onto the space spanned by
-    $(x_{t}, ..., x_{t-k+1})$
+    $(Y_{t-1}, ..., Y_{t-k+1})$
   - Helps understand the direct relationship between a time series and its
     lagged values, excluding the influence of intermediate lags
   - E.g., in a sales data time series, PACF can help identify the direct impact
     of sales from a specific previous month on the current month's sales,
     without the influence of other months in between
+::::
+:::: {.column width=40%}
+// TODO(ai_gp): Generate image: ACF (autocorrelation function) plot showing correlation coefficients on y-axis (ranging from -1 to 1) and lags on x-axis (0 to 20). First bar at lag 0 reaches 1.0 (perfect correlation with itself). Subsequent bars decay exponentially, representing AR(1) process behavior: lag 1 at ~0.8, lag 2 at ~0.6, lag 3 at ~0.4, etc. Horizontal dashed lines at +/-0.2 represent 95% confidence bands for white noise. Bars gradually approach zero as lags increase. Color: teal/blue bars on white background with subtle grid.
+::::
+:::
 
 * Transformation of a time series
-- Any deterministic transformation $g(\cdot)$ of a strictly (weakly) stationary
-  process $\{Y_t\}$ is also strictly (weakly) stationary
+- Any deterministic transformation $g(\cdot)$ of a strictly stationary
+  process $\{Y_t\}$ is also strictly stationary
 
 - **Examples**:
   - Log transformations useful when data grows exponentially
@@ -197,10 +212,10 @@ MSML610: Advanced Machine Learning
 
 - A transformation can make a process stationary, e.g.,
   - Detrending
-  - Differencing (integral or fractional) 
+  - Differencing (integer or fractional)
 
 ## ############################################################################
-## Time series operators
+## Time Series Operators
 ## ############################################################################
 
 * Lag Operator
@@ -311,7 +326,9 @@ MSML610: Advanced Machine Learning
 - The notation highlights that you can express the $n$-th difference operator in
   terms of $n$-th power of the difference operator
 
-## Time series decomposition
+## ############################################################################
+## Time Series Decomposition
+## ############################################################################
 
 * Decomposition of Time Series
 - A time series can be broken into several components:
@@ -332,6 +349,8 @@ MSML610: Advanced Machine Learning
 
 - Besides additive model, the components can also be mixed in different ways
   (e.g., multiplicative)
+
+// TODO(ai_gp): Generate image: Time series decomposition visualization showing 5 vertically stacked plots, all aligned by time (x-axis: 0-120 time steps). Top plot: Original time series showing combination of all components, fluctuating between 5 and 35 with upward trend and repeating patterns. Second plot: Trend component showing smooth upward linear increase from ~10 to ~30. Third plot: Seasonal component showing repeating sinusoidal pattern (±5 amplitude) with 12-step period. Fourth plot: Cycle component showing longer-period oscillation (±2 amplitude) with 40-50 step period. Bottom plot: Residual/Noise component showing random fluctuations around zero (±1 amplitude). All plots have consistent x-axis and use complementary colors: trend in blue, seasonality in teal, cycle in orange, residual in gray.
 
 * Seasonality: Example
 ::: columns
@@ -375,7 +394,28 @@ MSML610: Advanced Machine Learning
     - Major technological advancements and their adoption across industries
     - E.g., the widespread adoption of the Internet in 1995-2010
 
-// Add picture
+```graphviz
+digraph BusinessCycle {
+    rankdir=LR;
+    splines=spline;
+    nodesep=1.0;
+    ranksep=0.8;
+
+    node [shape=circle, style="filled", fontname="Helvetica", fontsize=12, penwidth=1.5];
+
+    Expansion [label="Expansion\n(Growth)", fillcolor="#B2E2B2", color="#2E7D32"];
+    Peak [label="Peak\n(Top)", fillcolor="#FFD1A6", color="#D98E2B"];
+    Contraction [label="Contraction\n(Decline)", fillcolor="#F4A6A6", color="#C62828"];
+    Trough [label="Trough\n(Bottom)", fillcolor="#A6E7F4", color="#0277BD"];
+
+    Expansion -> Peak [label="  economic growth accelerates"];
+    Peak -> Contraction [label="  demand weakens"];
+    Contraction -> Trough [label="  negative growth"];
+    Trough -> Expansion [label="  recovery begins", style=bold];
+
+    { rank=same; Expansion; Peak; Contraction; Trough; }
+}
+```
 
 * Seasonal Plot
 - Seasonal plot allows understanding the model structure over time
@@ -449,7 +489,9 @@ Sub-seasonal plot
 
 # Classical Methods
 
-## Simple Models for Stochastic Process
+## ############################################################################
+## Simple Models for Stochastic Processes
+## ############################################################################
 
 * White Noise Process
 - Defined as:
@@ -505,24 +547,26 @@ Sub-seasonal plot
   between innovations are 0
   - It is non-stationary in the variance
 
-## Autoregressive models
+## ############################################################################
+## Autoregressive Models
+## ############################################################################
 
 * Autoregressive (AR) Models
 - An AR model of order $p$ expresses future values using past $p$ values:
   \begin{alignat*}{2}
-  y_t & = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \dots + \phi_p y_{t-p} + \varepsilon_t \\
+  Y_t & = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + \varepsilon_t \\
   & = c + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t \\
   \end{alignat*}
   where:
-  - $y_t$ is the value at time $t$
+  - $Y_t$ is the value at time $t$
   - $c$ is a constant
   - $\phi_1, \phi_2, \dots, \phi_p$ are the model parameters
-  - $y_{t-1}, y_{t-2}, \dots, y_{t-p}$ are past values (aka lags)
-  - Random error term is white noise 
-    $\varepsilon_t \sim \text{ IID } Normal(0, \sigma^2)$ 
+  - $Y_{t-1}, Y_{t-2}, \dots, Y_{t-p}$ are past values (aka lags)
+  - Random error term is white noise
+    $\varepsilon_t \sim \text{ IID } Normal(0, \sigma^2)$
 
 - E.g., predicting temperature today using temperature for past 3 days:
-  $$y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \phi_3 y_{t-3} + \varepsilon_t$$
+  $$Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \phi_3 Y_{t-3} + \varepsilon_t$$
 
 * AR(1) process
 - Aka "auto-regressive of order 1"
@@ -579,18 +623,18 @@ Sub-seasonal plot
   back
   - The speed of mean reversion depends on $\phi$
 
-// Add pic
+// TODO(ai_gp): Generate image: Time series plot showing mean-reverting AR(1) process behavior over 150 time steps. Horizontal dashed line at y=0 representing the mean (μ). Series starts at value 5 (above mean), decays back toward mean exponentially, overshoots to negative values, then oscillates with decreasing amplitude around the mean. The decay follows geometric pattern with |φ|=0.7. Annotations show: (1) starting deviation from mean, (2) rapid initial reversion, (3) damped oscillations, (4) convergence to mean. Color: teal/blue series with orange dashed mean line. Shaded band ±0.5 around mean showing convergence region.
 
-* AR(1) Process Approximates Ergodicity
+* AR(1) Process is Ergodic
 - Ergodicity is a property of time series where $Y_t$ and $Y_{t-j}$ become
   independent as $j$ grows large enough
   - "Memory" fades over time
+  - For AR(1) with $|\phi| < 1$, this property holds
 
-- The autocorrelation of AR(1) has a geometric decay:
+- The autocovariance of AR(1) has geometric decay:
   $$\Cov[Y_t, Y_{t-j}] = \VV[Y_t] \phi^j$$
-  i.e., variables that are closer in time are more correlated than variables
-  that are farther in time
-  - If $j \to \infty$ then $\Cov[Y_t, Y_{t-j}] \to 0$ (ergodicity)
+  - Variables closer in time are more correlated than those farther apart
+  - As $j \to \infty$, $\Cov[Y_t, Y_{t-j}] \to 0$ (ergodicity holds)
 
 * AR(1) Process vs Gaussian White Noise
 - The Gaussian White Noise (GWN) is choppy
@@ -601,9 +645,18 @@ Sub-seasonal plot
   - $0 < \phi < 1$: it stays far from the mean and then reverts (it is smoother)
   - $\phi = 1$: random walk, it walks away from the mean
   - $\phi > 1$: explosive progress since it diverges accelerating
-  - $\phi < 0$:it is super choppy
+  - $\phi < 0$: it oscillates rapidly (highly oscillatory behavior)
 
-// Add pic
+::: columns
+:::: {.column width=50%}
+**Gaussian White Noise (φ=0)** — choppy, independent observations
+::::
+:::: {.column width=50%}
+**AR(1) Process (φ=0.8)** — smooth, autocorrelated observations
+::::
+:::
+
+// TODO(ai_gp): Generate image: Two time series plots displayed side-by-side, both 150 time steps. Left plot: Gaussian White Noise with φ=0, showing completely random fluctuations jumping rapidly between -3 and +3, resembling random noise with no pattern or smoothness, jagged sawtooth appearance. Right plot: AR(1) process with φ=0.8, showing smooth continuous curves with persistence, values move gradually from one level to another, autocorrelated behavior creates clustering of similar values, appears "sticky". Both plots have y-axis from -3 to 3, x-axis 0-150. Use contrasting colors: left in red/orange to show choppiness, right in blue/teal to show smoothness. Mean line at y=0 shown dashed in both.
 
 * AR(1) to model financial time series
 - Good model for:
@@ -650,7 +703,9 @@ Sub-seasonal plot
   \end{aligned}
   $$
 
-## Moving average models
+## ############################################################################
+## Moving Average Models
+## ############################################################################
 
 * Moving Average (MA) Models
 - A MA model of order $q$ predicts the next value using past $q$ errors:
@@ -682,19 +737,20 @@ Sub-seasonal plot
   $\varepsilon_t \sim \GWN(0, \sigma_{\varepsilon}^2)$
 
 - Why is it called moving average?
-  - Consider:
+  - Each observation is a weighted average of current and past innovations
+  - Consider the general MA(q):
     \begin{alignat*}{2}
-    Y_t = c + \varepsilon_{t} + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2} \\
-    Y_{t-1} = c + \varepsilon_{t-1} + \theta_1 \varepsilon_{t-2} + \theta_2 \varepsilon_{t-3} \\
+    Y_t &= c + \varepsilon_{t} + \theta_1 \varepsilon_{t-1} + ... + \theta_q \varepsilon_{t-q} \\
+    Y_{t+1} &= c + \varepsilon_{t+1} + \theta_1 \varepsilon_{t} + ... + \theta_q \varepsilon_{t+1-q} \\
     \end{alignat*}
-  - It's like a window with given coefficients (computing an average), moving in time
+  - The coefficients form a "window" that slides forward in time, weighting past errors
 
 * MA(1) process: properties
 - Using the definitions we obtain:
   $$
   \begin{aligned}
   & \EE[Y_t] = c \\
-  & \VV[Y_t] = (1 + \theta) \sigma_{\varepsilon}^2 \\
+  & \VV[Y_t] = (1 + \theta^2) \sigma_{\varepsilon}^2 \\
   & \Cov[Y_t, Y_{t-1}] = \theta \sigma_{\varepsilon}^2 \\
   & \Cov[Y_t, Y_{t-j}] = 0, \; \forall j > 1 \\
   \end{aligned}
@@ -707,7 +763,7 @@ Sub-seasonal plot
 * MA(q) model
 - MA(q) is a moving average model of order $q$:
   $$
-  Y_t = c  + \varepsilon_t + \sum_{i=1}^p \theta_i \varepsilon_{t - i}
+  Y_t = c  + \varepsilon_t + \sum_{i=1}^q \theta_i \varepsilon_{t - i}
   $$
   where:
   - $c$ is the mean
@@ -724,7 +780,7 @@ Sub-seasonal plot
     & Y_{t-k} = f(\varepsilon_{t-k}, \varepsilon_{t-k-1}, ..., \varepsilon_{t-k-q}) \\
     \end{aligned}
     $$
-    and noticing that there are common terms as long $t - k \le t - q \iff k \le q$
+    and noticing that there are common $\varepsilon$ terms whenever $k \le q$ (the lag between series does not exceed the order)
 
 * MA(q) model in terms of lag operator
 - The MA equation is:
@@ -739,31 +795,22 @@ Sub-seasonal plot
   $$
 
 ## ############################################################################
-## ARMA(p, q) process
+## ARMA(p, q) Process
 ## ############################################################################
 
 * ARMA(p, q) model
-- It contains $p$ autoregressive terms and $q$ moving average terms:
-  $$ARMA(p, q) = AR(p) + MA(q)$$
-  where:
-  - AR part involves regressing the variable on its own lagged values
-  - MA part models error term as a linear combination of lagged error terms
-- A realization of an ARMA(p, q) process is:
+- It combines $p$ autoregressive terms and $q$ moving average terms
+  - AR part: regresses the variable on its own lagged values
+  - MA part: models error term as a linear combination of lagged error terms
+- An ARMA(p, q) process is:
   $$
-  \begin{aligned}
-  Y_t
-  & = AR(p) + MA(q) \\
-  & = (c + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t) +
-  (c + \sum_{i=1}^q \theta_i \varepsilon_{t-i} + \varepsilon_t) \\
-  & = c + \sum_{i=1}^p \phi_i Y_{t-i} +
-  \sum_{i=1}^q \theta_i \varepsilon_{t-i} + \varepsilon_t \\
-  \end{aligned}
+  Y_t = c + \sum_{i=1}^p \phi_i Y_{t-i} + \sum_{i=1}^q \theta_i \varepsilon_{t-i} + \varepsilon_t
   $$
 
 - In terms of lag operator:
   $$
-  (1 - \sum_{i=1}^q \phi_i L^i) Y_t
-  = c + (1 + \sum_{i=1}^p \theta_i L^i) \varepsilon_i
+  (1 - \sum_{i=1}^p \phi_i L^i) Y_t
+  = c + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_t
   $$
 
 * Residuals of ARMA model
@@ -779,8 +826,8 @@ Sub-seasonal plot
 - From ARMA to ARIMA
   - ARMA models combine AR and MA components, using the lag operator:
     $$
-    (1 - \sum_{i=1}^q \phi_i L^i) Y_t
-    = c + (1 + \sum_{i=1}^p \theta_i L^i) \varepsilon_i
+    (1 - \sum_{i=1}^p \phi_i L^i) Y_t
+    = c + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_t
     $$
   - The $d$-order differencing is $(1 - L)^d$ in terms of lag operator
 
@@ -792,7 +839,7 @@ Sub-seasonal plot
   \end{cases}
   $$
   - Compute the final polynomials
-    $$poly_{\Phi}(\phi, L)(1 - L)^d Y_t = c + poly_{\Theta}(\theta, L) \varepsilon_i$$
+    $$poly_{\Phi}(\phi, L)(1 - L)^d Y_t = c + poly_{\Theta}(\theta, L) \varepsilon_t$$
   - Transform back into delays
 
 * ARIMA Models: Differencing
@@ -848,7 +895,7 @@ Sub-seasonal plot
        better model
 
 ## ############################################################################
-## ARCH model
+## ARCH Model
 ## ############################################################################
 
 * ARCH: Intuition
@@ -861,6 +908,8 @@ Sub-seasonal plot
   of the previous time periods error terms
     $$\VV[\varepsilon_t] = f(\varepsilon_{t-1}, ..., \varepsilon_{t-N})$$
 - E.g., error variance follows an AR model
+
+// TODO(ai_gp): Generate image: Time series plot showing error term with volatility clustering over 250 time steps. The series oscillates around zero (y-axis: -5 to 5) with variable amplitude. Distinct regions visible: (1) quiet period (0-60): small swings ±1, (2) volatile period (60-130): large swings ±3 to ±5, (3) quiet period (130-190): small swings ±1.5, (4) very volatile period (190-250): large swings ±4 to ±5. The volatility clusters — large movements tend to be followed by large movements, calm periods by calm periods (volatility persistence). Annotations highlight "High volatility regime" and "Low volatility regime" phases. Color: errors in teal/blue, with semi-transparent red bands showing time-varying confidence intervals widening during volatile periods and narrowing during calm periods.
 
 * ARCH(q): definition
 - The model for the error term of the time series is:
@@ -1021,6 +1070,66 @@ Sub-seasonal plot
   - Extended/Unscented Kalman Filter (nonlinear)
   - Particle Filter (nonlinear, non-Gaussian)
 
+```graphviz
+digraph StateSpaceModel {
+    rankdir=TB;
+    splines=spline;
+    nodesep=0.8;
+    ranksep=1.0;
+
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=11, penwidth=1.5];
+
+    subgraph cluster_state {
+        label="Hidden States";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#666666";
+        penwidth=1.2;
+
+        xtm1 [label="$x_{t-1}$", fillcolor="#A6E7F4"];
+        xt [label="$x_t$", fillcolor="#A6E7F4"];
+        xtp1 [label="$x_{t+1}$", fillcolor="#A6E7F4"];
+
+        xtm1 -> xt [label="$F_t$", fontsize=10];
+        xt -> xtp1 [label="$F_{t+1}$", fontsize=10];
+    }
+
+    subgraph cluster_obs {
+        label="Observations";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#666666";
+        penwidth=1.2;
+
+        ytm1 [label="$y_{t-1}$", fillcolor="#A6C8F4"];
+        yt [label="$y_t$", fillcolor="#A6C8F4"];
+        ytp1 [label="$y_{t+1}$", fillcolor="#A6C8F4"];
+    }
+
+    subgraph cluster_noise {
+        label="Noise Terms";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#666666";
+        penwidth=1.2;
+
+        wt [label="$w_t$ (process)", fillcolor="#FFD1A6"];
+        vt [label="$v_t$ (obs)", fillcolor="#FFD1A6"];
+    }
+
+    xt -> yt [label="$H_t$", fontsize=10, style=bold];
+    xt -> xtp1 [label="", style=invis];
+    wt -> xtp1 [label="", arrowsize=0.7];
+    vt -> yt [label="", arrowsize=0.7];
+}
+```
+
 * Frequency Domain Methods
 - Analyze time series in terms of cycles and frequencies
   - E.g., Fourier Transform decomposes series into sinusoidal components
@@ -1143,6 +1252,64 @@ Sub-seasonal plot
   - Machine learning becomes even more complicated
   - Conflates generalization error and non-stationarity
 
+```graphviz
+digraph WalkForwardValidation {
+    rankdir=TB;
+    splines=line;
+    nodesep=0.5;
+    ranksep=0.6;
+
+    node [shape=box, style="filled", fontname="Helvetica", fontsize=10, margin="0.1,0.05", height=0.3];
+
+    subgraph cluster_step1 {
+        label="Step 1";
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#999999";
+        penwidth=1;
+        margin=8;
+
+        t1_train [label="Train [t1..t100]", fillcolor="#B2E2B2"];
+        t1_test [label="Test t101", fillcolor="#A6C8F4"];
+    }
+
+    subgraph cluster_step2 {
+        label="Step 2";
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#999999";
+        penwidth=1;
+        margin=8;
+
+        t2_train [label="Train [t2..t101]", fillcolor="#B2E2B2"];
+        t2_test [label="Test t102", fillcolor="#A6C8F4"];
+    }
+
+    subgraph cluster_step3 {
+        label="Step 3";
+        style="rounded,filled";
+        fillcolor="#F0F0F0";
+        color="#999999";
+        penwidth=1;
+        margin=8;
+
+        t3_train [label="Train [t3..t102]", fillcolor="#B2E2B2"];
+        t3_test [label="Test t103", fillcolor="#A6C8F4"];
+    }
+
+    { rank=same; t1_train; t1_test; }
+    { rank=same; t2_train; t2_test; }
+    { rank=same; t3_train; t3_test; }
+
+    t1_train -> t1_test [style=invis];
+    t2_train -> t2_test [style=invis];
+    t3_train -> t3_test [style=invis];
+
+    t1_test -> t2_train [label="  shift window forward", fontsize=9, penwidth=2, color="#D98E2B"];
+    t2_test -> t3_train [label="  shift window forward", fontsize=9, penwidth=2, color="#D98E2B"];
+}
+```
+
 * Anomaly Detection in Time Series
 - Identify unusual patterns not consistent with past behavior
   - Important to account for seasonality and trend
@@ -1191,7 +1358,7 @@ Sub-seasonal plot
 - Cons:
   - Predictive, not necessarily true causal influence
   - Based on temporal precedence and improvement in forecast
-  - Need to measure out-of-sample 
+  - Need to measure out-of-sample
   - Need to account for model complexity
   - Sensitive to model specification (e.g., lag choice and non-linearity)
 
@@ -1199,6 +1366,51 @@ Sub-seasonal plot
   - Macroeconomics: does money supply affect inflation?
   - Finance: does trading volume predict stock returns?
   - Neuroscience: do neural signals in one region predict another?
+
+```graphviz
+digraph GrangerCausality {
+    rankdir=TB;
+    splines=spline;
+    nodesep=1.0;
+    ranksep=0.8;
+
+    node [shape=box, style="filled,rounded", fontname="Helvetica", fontsize=11, penwidth=1.5];
+
+    subgraph cluster_restricted {
+        label="Restricted Model";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        style="rounded,filled";
+        fillcolor="#FFE0E6";
+        color="#C62828";
+        penwidth=1.5;
+
+        R_Y [label="$Y_t = f(Y_{t-1}, Y_{t-2}, ...)$", fillcolor="#F4A6A6"];
+        R_Loss [label="Prediction Error: $e_R$", fillcolor="#FFB3B3"];
+    }
+
+    subgraph cluster_unrestricted {
+        label="Unrestricted Model";
+        fontname="Helvetica-Bold";
+        fontsize=12;
+        style="rounded,filled";
+        fillcolor="#E6F5E6";
+        color="#2E7D32";
+        penwidth=1.5;
+
+        U_Y [label="$Y_t = f(Y_{t-1}, Y_{t-2}, ..., X_{t-1}, X_{t-2}, ...)$", fillcolor="#B2E2B2"];
+        U_Loss [label="Prediction Error: $e_U$", fillcolor="#C8E6C9"];
+    }
+
+    R_Y -> R_Loss;
+    U_Y -> U_Loss;
+
+    Compare [label="Hypothesis Test:\nDoes $e_R$ >> $e_U$?\n(X Granger-causes Y)", shape=diamond, fillcolor="#A6E7F4", color="#0277BD", penwidth=2];
+
+    R_Loss -> Compare;
+    U_Loss -> Compare;
+}
+```
 
 * Change Point Detection in Time Series
 - Identify times when the statistical properties of a time series change, e.g.,

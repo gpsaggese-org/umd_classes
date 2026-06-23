@@ -17,9 +17,9 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 ## The new flow 
 
 - The style is like:
-  vi msml610/book/aima_style.typ
+  > vi helpers_root/dev_scripts_helpers/typst/aima_style.typ
   ```
-  > typst compile --root . msml610/book/aima_style_example.typ && open msml610/book/aima_style_example.pdf
+  > typst compile --root . helpers_root/dev_scripts_helpers/typst/aima_style_example.typ && open helpers_root/dev_scripts_helpers/typst/aima_style_example.pdf
   ```
 
 - TODO(gp): Improve the figure handling

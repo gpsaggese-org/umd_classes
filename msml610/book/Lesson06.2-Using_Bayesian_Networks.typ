@@ -1,5 +1,5 @@
 // Import AIMA style formatting and macros
-#import "aima_style.typ": aima-style, chapter, algorithm, glossary
+#import "../../helpers_root/dev_scripts_helpers/typst/aima_style.typ": aima-style, chapter, algorithm, glossary
 
 // Document metadata
 #set document(

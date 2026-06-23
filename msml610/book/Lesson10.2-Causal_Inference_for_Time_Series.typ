@@ -1,6 +1,6 @@
 // f69c795f 2026-06-23
 // Import AIMA style formatting and macros
-#import "aima_style.typ": aima-style, algorithm, chapter, glossary
+#import "../../helpers_root/dev_scripts_helpers/typst/aima_style.typ": aima-style, algorithm, chapter, glossary
 
 // Document metadata
 #set document(
@@ -233,9 +233,11 @@ estimating how they influence each other over time.
 
 A #strong[VAR(p) model] with $k$ variables is formulated as:
 
-$$
+```
+Y_t = c + A_1 Y_{t-1} + A_2 Y_{t-2} + ... + A_p Y_{t-p} + ε_t
+```
 
-Here $\vY_t$ is a vector of $k$ time series, the $A_i$ are coefficient matrices
+Here $Y_t$ is a vector of $k$ time series, the $A_i$ are coefficient matrices
 encoding dependence on lagged values, and $epsilon_t$ are structural shocks
 (uncorrelated across equations). The VAR estimates how shocks propagate through
 the system, revealing the causal effects of unexpected changes.
@@ -408,10 +410,14 @@ Consider two stationary time series $X_t$ and $Y_t$. We compare two predictors
 of $Y_t$:
 
 1. *Restricted model*: uses only past $Y$
-$$
+```
+Y_t = α + Σ_{i=1}^p φ_i Y_{t-i} + ε_t
+```
 
 2. *Unrestricted model*: adds past $X$
-$$
+```
+Y_t = α + Σ_{i=1}^p φ_i Y_{t-i} + Σ_{j=1}^p β_j X_{t-j} + η_t
+```
 
 #strong[Definition]: $X$ *Granger-causes* $Y$ if the unrestricted model has
 *strictly smaller* forecast error variance than the restricted model.
@@ -572,7 +578,7 @@ post-period outcome. The gap represents the policy effect.
 
 The standard ITS model is #strong[segmented regression]:
 
-$$Y_t = beta_0 + beta_1 t + beta_2 D_t + beta_3 (t - t_0) D_t + u_t$$
+`Y_t = β₀ + β₁ t + β₂ D_t + β₃ (t - t*) D_t + ε_t`
 
 where $D_t$ is an indicator for the post-intervention period ($D_t = 1$ if
 $t >= t^*$, and 0 otherwise).
@@ -685,8 +691,11 @@ treatment and a group that didn't
 // Slide: DiD Visual
 
 The DiD estimator with two groups and two periods is shown in
-@fig:did-structure. The estimator is: (mean treated post - mean treated pre) -
-(mean control post - mean control pre).
+@fig:did-structure shows the DiD estimator with two groups and two periods:
+
+```
+τ̂_{DiD} = (Ȳ^T_{post} - Ȳ^T_{pre}) - (Ȳ^C_{post} - Ȳ^C_{pre})
+```
 
 Here the treated group mean is compared against the control mean, with
 subscripts denoting time periods (pre vs. post). Visually, we compute the change
@@ -732,7 +741,9 @@ removed.
 
 The equivalent regression formulation with unit $i$ and time $t$ is:
 
-DiD regression: $Y = alpha + beta T + gamma P + tau(T times P) + u$
+```
+Y_{it} = α + β·Treat_i + γ·Post_t + τ·(Treat_i × Post_t) + ε_{it}
+```
 
 The parameters are:
 - $alpha$: baseline outcome in control units in pre-period
@@ -742,7 +753,9 @@ The parameters are:
 
 A more flexible #strong[fixed-effects] generalization is:
 
-$Y_{i,t} = alpha_i + lambda_t + tau D_{i,t} + epsilon_{i,t}$
+```
+Y_{it} = α_i + λ_t + τ D_{it} + ε_{it}
+```
 
 Here $alpha_i$ are unit fixed effects (absorb all time-invariant unit traits:
 location, management, size), $lambda_t$ are time fixed effects (absorb all
@@ -759,7 +772,11 @@ The identifying assumption for DiD is #strong[parallel trends]: in the absence
 of treatment, treated and control units would have followed the *same trend*
 over time:
 
-Y(0) denotes the untreated potential outcome. The intuition is: levels can
+```
+E[Y^{(0)}_{it} - Y^{(0)}_{i,t-1} | Treat_i = 1] = E[Y^{(0)}_{it} - Y^{(0)}_{i,t-1} | Treat_i = 0]
+```
+
+where $Y^{(0)}$ denotes the untreated potential outcome. The intuition is: levels can
 differ (NJ may always have higher wages than PA), but *changes* should match.
 Both regions should move together absent the policy.
 
@@ -961,22 +978,35 @@ matrix).
 
 #strong[Weights] must satisfy: each weight is nonnegative and sums to one.
 
+```
+w_j ≥ 0, Σ_{j=2}^{J+1} w_j = 1
+```
+
 Non-negativity and unit-sum ensure weights are a *convex combination* of donors,
 placing the synthetic control in the *convex hull* of the donor pool. This
 prevents extrapolation---the synthetic control is never outside the range
 spanned by donors.
 
-We choose optimal weights to minimize pre-treatment mismatch: The optimal
-weights minimize the squared pre-treatment mismatch between treated and donors.
-subject to weights being nonnegative and summing to one.
+We choose optimal weights to minimize pre-treatment mismatch:
+
+```
+w* = argmin_w (X_1 - X_0 w)' V (X_1 - X_0 w)
+```
+
+subject to $w_j >= 0$, $sum w_j = 1$.
 
 The predictor matrix $V$ is diagonal, containing importance weights for each
 predictor, chosen to minimize mean-squared prediction error on pre-treatment
 outcomes. This is a nested optimization: the inner loop finds weights for a
 given predictor matrix; the outer loop finds $V$.
 
-The #strong[estimated causal effect] at time $t >= t_0$ is the gap between the
-treated unit's outcome and the weighted average of donor outcomes.
+The #strong[estimated causal effect] at time $t >= t^*$ is:
+
+```
+τ̂_t = Y_{1t} - Σ_{j=2}^{J+1} w_j* Y_{jt}
+```
+
+the gap between the treated unit's outcome and the weighted average of donor outcomes.
 
 === Inference via Placebos
 
@@ -1052,24 +1082,43 @@ trust the post-period gap.
 
 // Slide: Method Comparison
 
-Each causal inference method has distinct strengths. @tbl:method-comparison
+Each causal inference method has distinct strengths. @tbl:causal-methods
 summarizes the key properties of each approach.
+
+#show table.cell.where(y: 0): set text(weight: "bold")
 
 #figure(
   table(
-    columns: (0.8fr, 1.2fr, 1.5fr, 1.8fr),
-    align: (left, left, left, left),
-    [*Method*], [*Control Group*], [*Strength*], [*Key Assumption*],
-    [Granger], [Own history], [Predictive screen], [Stationarity, no common causes],
-    [ITS], [Pre-period of same unit], [Works without controls], [Stable pre-trend, no co-events],
-    [DiD], [Untreated comparison], [Removes time-invariant confounders], [Parallel trends],
-    [Synthetic Control], [Weighted donor pool], [Data-driven counterfactual], [Good pre-fit, no spillovers],
+    columns: (1.1fr, 1.2fr, 2fr, 2fr),
+    inset: 6pt,
+    align: left + horizon,
+
+    stroke: none,
+
+    table.hline(stroke: 1.2pt),
+    [Method], [Control Group], [Strength], [Key Assumption],
+    table.hline(stroke: 0.8pt),
+
+    [Granger], [Own history], [Predictive screen],
+    [Stationarity, no common causes],
+
+    [ITS], [Pre-period of same unit],
+    [Works without controls],
+    [Stable pre-trend, no co-events],
+
+    [DiD], [Untreated comparison],
+    [Removes time-invariant confounders],
+    [Parallel trends],
+
+    [Synthetic Control],
+    [Weighted donor pool],
+    [Data-driven counterfactual],
+    [Good pre-fit, no spillovers],
+
+    table.hline(stroke: 1.2pt),
   ),
   caption: [Comparison of causal inference methods for time series data.],
-  kind: "table",
-  supplement: [Table],
-  placement: auto,
-) <tbl:method-comparison>
+) <tbl:causal-methods>
 
 *Granger Causality*: uses the own history as control, offering fast predictive
 screening but only testing predictions, not interventions.
