@@ -1,4 +1,4 @@
-// 382e0cdf 2026-06-22
+// f69c795f 2026-06-23
 // Import AIMA style formatting and macros
 #import "aima_style.typ": aima-style, algorithm, chapter, glossary
 
@@ -531,6 +531,41 @@ tracking permission) saw opt-in rates plummet from 60--70% to 15--25%,
 devastating ad targeting. Meta reported billions in revenue losses,
 demonstrating the power of identifying when policy changes affect outcomes.
 
+As illustrated in @fig:its-structure, the core ITS strategy is to extrapolate
+the pre-period trend as a counterfactual, then compare it to the actual
+post-period outcome. The gap represents the policy effect.
+
+// rendered_images:begin
+// ```graphviz
+// digraph ITS {
+//     rankdir=LR;
+//     splines=true;
+//     nodesep=0.6;
+//     ranksep=0.8;
+//     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+// 
+//     PrePeriod  [label=<Pre-period<BR/>(t &lt; t*)>,      fillcolor="#FFD1A6"];
+//     Event      [label=<Intervention<BR/>at t = t*>,   fillcolor="#F4A6A6"];
+//     PostPeriod [label=<Post-period<BR/>(t &gt;= t*)>,    fillcolor="#B2E2B2"];
+//     Forecast   [label=<Counterfactual<BR/>forecast>,  fillcolor="#A6E7F4"];
+//     Effect     [label=<Causal effect<BR/>= Actual - Forecast>, fillcolor="#A6C8F4"];
+// 
+//     PrePeriod -> Event -> PostPeriod;
+//     PrePeriod -> Forecast [label="  fit model"];
+//     Forecast -> Effect;
+//     PostPeriod -> Effect;
+// }
+// ```
+// label=fig:its-structure
+// caption=Interrupted Time Series design: using pre-period trends as counterfactual
+// rendered_images:end
+// render_images:begin
+#figure(
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.3.png"),
+  caption: [Interrupted Time Series design: using pre-period trends as counterfactual],
+) <fig:its-structure>
+// render_images:end
+
 === Segmented Regression Formulation
 
 // Slide: ITS Regression Model
@@ -578,28 +613,6 @@ Always check for confounding events near t_start : seasonality, holidays,
 economic shocks. Visual diagnostics are crucial: plot the series with the fitted
 model and the intervention date marked. Do the ITS results survive inspection?
 
-=== ITS vs. Cross-Sectional RDD
-
-// Slide: Comparing Designs
-
-ITS can be viewed as a temporal version of Regression Discontinuity Design
-(RDD). The comparison highlights when each is appropriate:
-
-#strong[Cross-Sectional RDD] uses a continuous running variable (test score,
-age, income) with a cutoff. Comparison is units just above vs. just below the
-cutoff. The design is local: no extrapolation is needed because we compare
-nearby units. It assumes no manipulation of the running variable.
-
-#strong[ITS] (RDD in time) uses a date cutoff. Comparison is pre-period vs.
-post-period of the same unit. It requires extrapolating the pre-trend forward,
-introducing extrapolation error. The key assumption is that no co-occurring
-events disrupt the trajectory and that the data-generating process remains
-stable at t_start .
-
-ITS is a valuable but *weaker* design than cross-sectional analysis. Pair it
-with Difference-in-Differences or synthetic control whenever a credible
-comparison unit exists to strengthen inference.
-
 === Applications
 
 // Slide: ITS Applications
@@ -645,22 +658,27 @@ confounding events, and data quality.
 === Motivation and Setup
 
 // Slide: DiD Core Concept
+// TODO(ai_gp): Overlaps with 08.4
 
-#strong[Difference-in-Differences] handles a more realistic scenario: a policy
-is rolled out in *some* units but not others. The classic example is New
-Jersey's minimum wage increase in 1992, while Pennsylvania did not raise its
-minimum wage. We have two groups (treated and control) and two periods (before
-and after).
+#strong[Motivating Example]
+- Suppose a policy is rolled out in *some* units but not others
+  - E.g., New Jersey raises its minimum wage in 1992; Pennsylvania does not
+  - Two groups: treated (NJ) and control (PA); two periods: before and after
 
-#strong[DiD compares the *change* in treated units to the *change* in controls.]
-This double-differencing subtracts out two sources of bias:
-1. Time-invariant differences between groups (e.g., NJ may always have higher
-  wages than PA)
-2. Common time trends affecting both (e.g., national economic growth)
+#strong[Definition]: Difference-in-Differences (DiD) estimates a causal effect by
+comparing the change in outcomes over time between a group that received
+treatment and a group that didn't
+- Assume both groups would have followed the same trend in the absence of
+  treatment
 
-What remains is attributed to the policy. The famous Card & Krueger (1994) study
-of the NJ minimum wage found essentially zero employment effect---a surprising
-result that contradicted standard economic theory and sparked decades of debate.
+#strong[Procedure]
+- Subtracts out time-invariant differences between groups
+- Subtracts out common time trends across groups
+- What's left is attributed to the policy
+
+- #strong[Example]: Card & Krueger (1994) studied the NJ minimum wage
+  - Standard theory predicted employment would fall
+  - DiD estimate: essentially zero (a surprising result)
 
 === The Core Idea Graphically
 
@@ -703,7 +721,7 @@ removed.
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.3.png"),
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.4.png"),
   caption: [Difference-in-Differences design: the causal effect is the difference],
 ) <fig:did-structure>
 // render_images:end
@@ -927,7 +945,7 @@ the estimated effect. The method's strength is transparency: reviewers can see
 // rendered_images:end
 // render_images:begin
 #figure(
-  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.4.png"),
+  image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.5.png"),
   caption: [Synthetic control construction: the donor pool is weighted optimally],
 ) <fig:synthetic-control-construction>
 // render_images:end
@@ -1034,7 +1052,24 @@ trust the post-period gap.
 
 // Slide: Method Comparison
 
-Each causal inference method has distinct strengths:
+Each causal inference method has distinct strengths. @tbl:method-comparison
+summarizes the key properties of each approach.
+
+#figure(
+  table(
+    columns: (0.8fr, 1.2fr, 1.5fr, 1.8fr),
+    align: (left, left, left, left),
+    [*Method*], [*Control Group*], [*Strength*], [*Key Assumption*],
+    [Granger], [Own history], [Predictive screen], [Stationarity, no common causes],
+    [ITS], [Pre-period of same unit], [Works without controls], [Stable pre-trend, no co-events],
+    [DiD], [Untreated comparison], [Removes time-invariant confounders], [Parallel trends],
+    [Synthetic Control], [Weighted donor pool], [Data-driven counterfactual], [Good pre-fit, no spillovers],
+  ),
+  caption: [Comparison of causal inference methods for time series data.],
+  kind: "table",
+  supplement: [Table],
+  placement: auto,
+) <tbl:method-comparison>
 
 *Granger Causality*: uses the own history as control, offering fast predictive
 screening but only testing predictions, not interventions.

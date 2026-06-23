@@ -549,7 +549,7 @@ digraph ITS {
 
 ## Parallel Trends Assumption
 
-// TODO(ai_gp): Overlaps with 08.4
+// TODO(ai_gp): Check if it overlaps with 08.4
 * DiD: Motivation and Setup
 
 - **Motivating Example**
@@ -568,12 +568,14 @@ digraph ITS {
   - Subtracts out common time trends across groups
   - What's left is attributed to the policy
 
-- **Example**: Card & Krueger (1994) studied the NJ minimum wage
-  - Standard theory predicted employment would fall
-  - DiD estimate: essentially zero (a surprising result)
+- **Example**: Card & Krueger (1994) studied the NJ vs PA minimum wage
+  - Standard economic theory predicted that raising the minimum wage would reduce
+    employment (since labor becomes more costly)
+  - DiD estimate: essentially no employment effect (a surprising result)
 
 * DiD: The Core Idea
 
+// TODO(ai_gp): T_post -> T<SUB>post</SUB> and align with formula
 ```graphviz
 digraph DiD {
     rankdir=LR;
@@ -595,10 +597,11 @@ digraph DiD {
 }
 ```
 
-- **DiD estimator** (with 2 groups, 2 periods):
+- _DiD estimator_ (with 2 groups, 2 periods):
   $$
-  \hat{\tau}_{DiD} = (\bar{Y}^{T}_{\text{post}} - \bar{Y}^{T}_{\text{pre}})
-                    - (\bar{Y}^{C}_{\text{post}} - \bar{Y}^{C}_{\text{pre}})
+  \hat{\tau}_{DiD}
+    = (\bar{Y}^{T}_{\text{post}} - \bar{Y}^{T}_{\text{pre}})
+      - (\bar{Y}^{C}_{\text{post}} - \bar{Y}^{C}_{\text{pre}})
   $$
 
 * DiD: Regression Formulation
@@ -611,20 +614,14 @@ digraph DiD {
   $$
   - $\beta$: time-invariant difference between groups
   - $\gamma$: common time trend
-  - $\tau$: **the DiD causal effect** (coefficient on the interaction)
+  - $\tau$: _the DiD causal effect_ (coefficient on the interaction)
 
-- Generalization with fixed effects:
-  $$
-  Y_{it} = \alpha_i + \lambda_t + \tau D_{it} + \varepsilon_{it}
-  $$
-  - $\alpha_i$: unit fixed effects (absorb all time-invariant unit traits)
-  - $\lambda_t$: time fixed effects (absorb all common shocks)
-  - $D_{it}$: indicator for "unit $i$ is treated at time $t$"
+// TODO(ai_gp): Improve
 
 * Parallel Trends Assumption
 
-- **The identifying assumption**: in the absence of treatment, the treated and
-  control units would have followed the _same trend_ over time
+- **Assumption**: in the absence of treatment, the treated and control units
+  would have followed the _same trend_ over time
   $$
   \EE[Y^{(0)}_{it} - Y^{(0)}_{i,t-1} | \text{Treat}_i = 1]
   = \EE[Y^{(0)}_{it} - Y^{(0)}_{i,t-1} | \text{Treat}_i = 0]
@@ -635,52 +632,20 @@ digraph DiD {
   - E.g., NJ may always have higher wages than PA, but both move together
     absent the policy
 
-- **Q**: how do we test it? We cannot — it is a _counterfactual_ statement
-  - But we can check the **pre-treatment** trends as a proxy
+- **Question**: how do we test it?
+  - We cannot test it: it is a _counterfactual_ statement
+  - But we can check the _pre-treatment_ trends as a proxy
   - If they are parallel _before_ treatment, we gain confidence (but no proof)
-
-* Checking Parallel Trends: Visual and Statistical Tests
 
 - **Visual check**: plot the two group means over time; do they move in
   lockstep before treatment?
 
-- **Placebo / event-study regression**:
-  $$
-  Y_{it} = \alpha_i + \lambda_t + \sum_{k \ne -1} \tau_k \cdot
-           \mathbf{1}(t - t^*_i = k) + \varepsilon_{it}
-  $$
-  - Estimate effects at all lags and leads relative to treatment
-  - For $k < 0$: should be near zero (no pre-treatment effect)
-  - For $k \ge 0$: captures dynamic post-treatment effects
-
 - **Red flags**:
   - Significant pre-trends with opposite sign of the effect
   - Divergence starting _before_ the policy (anticipation or selection)
-
-- **Remedy**: if pre-trends differ, **use a different method** (synthetic
-  control, matching on trends) — don't just add linear trend terms and hope
-
-## Estimation and Robustness
-
-* DiD: Estimation Details
-
-- **Standard errors**: cluster at the _unit_ level
-  - Bertrand, Duflo, Mullainathan (2004): ignoring clustering overrejects
-    by 40+%
-
-- **When to use OLS with fixed effects** vs. just means:
-  - OLS gives the same point estimate but lets you add covariates
-  - Helpful when covariates affect the outcome but are balanced across groups
-
-- **Balanced vs. unbalanced panels**
-  - Missing data or attrition can bias the estimate if non-random
-  - Always report attrition rates and check balance
-
-- **Common mistakes**
-  - Ignoring that $\text{Treat}$ and $\text{Post}$ enter as _main effects_, not
-    just interactions
-  - Forgetting to cluster standard errors
   - Using too short a pre-period $\to$ can't check parallel trends
+
+// TODO(ai_gp): Add plot
 
 * DiD: Robustness Checks
 
@@ -701,49 +666,6 @@ digraph DiD {
   effect
   - If they do, your design picks up something other than the treatment
 
-- **Example**: Card & Krueger robustness
-  - Tried different fast-food chains, different controls — effect held up
-
-## Extensions: Multiple Time Periods
-
-* DiD with Multiple Periods: Staggered Adoption
-
-- In reality, units are often treated at **different times** (staggered rollout)
-  - E.g., states adopting a law across different years
-
-- **Traditional two-way fixed effects (TWFE)**:
-  $$
-  Y_{it} = \alpha_i + \lambda_t + \tau D_{it} + \varepsilon_{it}
-  $$
-  - This was the workhorse — but we now know it can be **badly biased**
-
-- **Key issue** (Goodman-Bacon 2021, de Chaisemartin & D'Haultfoeuille 2020):
-  - With heterogeneous effects across units/time, TWFE becomes a weighted
-    average where _some weights are negative_
-  - Already-treated units serve as controls for later-treated units $\to$
-    wrong sign possible
-
-- **Fix**: use modern DiD estimators that handle staggered timing correctly
-
-* Modern Staggered DiD Estimators
-
-- **Callaway & Sant'Anna (2021)**: group-time average treatment effects
-  $ATT(g, t)$
-  - Estimate effect for each treatment cohort $g$ and calendar time $t$
-  - Aggregate with clean, interpretable weights
-
-- **Sun & Abraham (2021)**: interaction-weighted event-study estimator
-  - Avoids the negative-weights problem of naive event studies
-
-- **de Chaisemartin & D'Haultfœuille (2020)**: robust estimators under
-  heterogeneous effects
-
-- **Borusyak, Jaravel, Spiess (2024)**: imputation estimator that uses
-  never-treated or not-yet-treated units as controls
-
-- **Key takeaway**: for staggered adoption, _do not_ default to TWFE — use a
-  modern estimator and report the full event-study plot
-
 * DiD: Summary of Strengths and Limits
 
 - **Pros**
@@ -753,12 +675,12 @@ digraph DiD {
   - Flexible: extends to multiple periods, staggered adoption, covariates
 
 - **Cons**
-  - Parallel trends assumption is _untestable_ — can only check pre-trends
+  - Parallel trends assumption is _untestable_: can only check pre-trends
   - Time-varying confounders still bias the estimate
   - Staggered adoption with heterogeneous effects breaks naive TWFE
   - Standard errors require clustering — easy to get wrong
 
-- **Rule of thumb**: DiD is credible when
+- **Rule of thumb**: DiD is credible when:
   1. Pre-trends are visually parallel
   2. No co-occurring shocks hit treated and controls differently
   3. Staggered timing is handled with modern estimators
@@ -769,22 +691,25 @@ digraph DiD {
 
 * Synthetic Control: Motivation
 
-- DiD works when a credible control unit exists. But what if _no single control
-  unit_ matches the treated one?
+- **Problem**: DiD works when a credible control unit exists
+  - But what if _no single control unit_ matches the treated one?
 
-- **Example**: studying California's 1988 tobacco control program (Prop. 99)
-  - No other state matches California in size, demographics, consumption
-  - Using any single state as control is unconvincing
+- **Example**: studying the effect of German reunification (1990) on West
+  Germany's per-capita GDP
+  - No other single country matches West Germany's pre-1990 size, growth path,
+    and economic structure
+  - Synthetic Control instead builds a weighted combination of other OECD
+    countries that closely tracks West Germany's pre-reunification GDP, then uses
+    that as the counterfactual
 
-- **Synthetic control idea** (Abadie & Gardeazabal 2003; Abadie, Diamond,
-  Hainmueller 2010):
-  - Construct a **weighted average** of control units that best matches the
+- **Key idea**
+  - Construct a _weighted average_ of control units that best matches the
     treated unit's pre-treatment characteristics
-  - This weighted average is the **synthetic control**
+  - This weighted average is the synthetic control
   - Compare treated unit to the synthetic control in the post-period
   - The gap is the estimated causal effect
 
-- **Key advantage**: produces a _transparent, data-driven_ counterfactual
+// (Abadie & Gardeazabal 2003; Abadie, Diamond, Hainmueller 2010):
 
 * Synthetic Control: Construction
 
@@ -795,13 +720,14 @@ digraph SC {
     nodesep=0.8;
     ranksep=0.8;
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
-
-    Treated [label=<Treated unit<BR/>(e.g., California)>,  fillcolor="#F4A6A6"];
-    Donors  [label=<Donor pool<BR/>(other states)>,         fillcolor="#FFD1A6"];
-    Weights [label=<Optimal weights<BR/>w<SUB>1</SUB>, w<SUB>2</SUB>, ..., w_J>,fillcolor="#A6E7F4"];
-    Synth   [label=<Synthetic<BR/>counterfactual>,          fillcolor="#B2E2B2"];
+    Treated [label=<Treated unit<BR/>(e.g., West Germany)>,
+      fillcolor="#F4A6A6"];
+    Donors  [label=<Donor pool<BR/>(other countries)>,
+      fillcolor="#FFD1A6"];
+    Weights [label=<Optimal weights<BR/>w<SUB>1</SUB>, w<SUB>2</SUB>, ..., w_<SUB>J</SUB>>,
+      fillcolor="#A6E7F4"];
+    Synth   [label=<Synthetic<BR/>counterfactual>, fillcolor="#B2E2B2"];
     Effect  [label=<Causal effect =<BR/>Treated - Synthetic>,fillcolor="#A6C8F4"];
-
     Donors -> Weights;
     Treated -> Weights [label="  pre-treatment fit"];
     Weights -> Synth;
@@ -810,21 +736,22 @@ digraph SC {
 }
 ```
 
-- **Donor pool**: untreated units eligible for inclusion in the weighted
-  combination
+- **Definition**: _Donor pool_ are untreated units eligible for inclusion in the
+  weighted combination
   - Should exclude units treated by the same or similar interventions
 
 ## Weighted Combinations and Optimal Weights
 
 * Synthetic Control: Formal Setup
 
-- $J+1$ units: unit 1 is treated at time $t^*$, units $2, ..., J+1$ are
-  untreated (donors)
+- There are $J+1$ units:
+  - Unit 1 is treated at time $t^*$
+  - Units $2, ..., J+1$ are untreated (donors)
 
-- Let $\vX_1$ be a vector of pre-treatment predictors for the treated unit,
-  and $\vX_0$ the matrix of the same predictors for donors (size $k \times J$)
+- $\vX_1$ be a vector of pre-treatment predictors for the treated unit
+- $\vX_0$ the matrix of the same predictors for donors (size $k \times J$)
 
-- **Weights** $\vw = (w_2, ..., w_{J+1})$ satisfy:
+- Pick _weights_ $\vw = (w_2, ..., w_{J+1})$ satisfy:
   $$
   w_j \ge 0, \quad \sum_{j=2}^{J+1} w_j = 1
   $$
@@ -845,7 +772,7 @@ digraph SC {
   - Chosen to minimize mean-squared prediction error on pre-treatment outcomes
   - Nested optimization (inner: find $\vw$; outer: find $\vV$)
 
-- **Estimated causal effect** at time $t \ge t^*$:
+- The _estimated causal effect_ at time $t \ge t^*$:
   $$
   \hat{\tau}_t = Y_{1t} - \sum_{j=2}^{J+1} w^*_j Y_{jt}
   $$
@@ -853,23 +780,20 @@ digraph SC {
 
 * Synthetic Control: Inference via Placebos
 
-- **Problem**: there is only _one_ treated unit — standard inference doesn't
+- **Problem**: there is only _one_ treated unit, so standard inference doesn't
   apply
 
-- **Solution**: **placebo tests** by permutation
+- **Solution**: _placebo tests_ by permutation
   1. Pretend each donor was the treated unit
   2. Compute the synthetic control and causal-effect trajectory for each
   3. Compare the _actual_ treated unit's effect against this "null distribution"
 
-- If the treated unit's effect is **larger in magnitude** than most placebo
+- If the treated unit's effect is _larger in magnitude_ than most placebo
   effects $\to$ evidence of a real effect
   - Compute an empirical $p$-value from the placebos
 
 - **Variant**: filter placebos to keep only those with good pre-treatment fit
   - A donor with bad pre-fit produces noise, not a legitimate null
-
-- **Example**: in the California tobacco study, the post-period gap for
-  California was larger than 38 of 39 placebo runs $\to$ $p \approx 0.026$
 
 * Synthetic Control: When It Works Well
 
@@ -883,11 +807,6 @@ digraph SC {
   - Designed for aggregated units: countries, states, cities, firms
 
 - **Outcome with moderate noise**: low enough to detect the signal
-
-- **Canonical successes**:
-  - Abadie & Gardeazabal (2003): effect of ETA terrorism on Basque GDP
-  - Abadie et al. (2010): California Prop. 99 tobacco control
-  - Abadie et al. (2015): German reunification on West German GDP
 
 * Synthetic Control: When It Fails
 
@@ -904,51 +823,35 @@ digraph SC {
 - **Confounding unobserved events**: a co-occurring shock to the treated unit
   near $t^*$ masquerades as the treatment effect
 
-- **Interpolation bias if covariates are imbalanced**: synthetic control
-  averages over donors who differ in important but unmeasured ways
-
 - **Diagnostic**: always plot the pre-treatment fit
   - A poor pre-fit $\to$ don't trust the post-period gap
+
+# Summary
 
 * Synthetic Control vs. Other Methods: Summary
 
 \begingroup \scriptsize
 | **Method**        | **Control Group**       | **Strength**                         | **Key Assumption**                  |
 | ----------------- | ----------------------- | ------------------------------------ | ----------------------------------- |
-| ITS               | Pre-period of same unit | Works without controls               | Stable pre-trend, no co-events      |
+| Granger           | Own history             | Predictive screen                    | Stationarity, no common causes      |
+| Interrupted Time Series (ITS) | Pre-period of same unit | Works without controls               | Stable pre-trend, no co-events      |
 | DiD               | Untreated comparison    | Removes time-invariant confounders   | Parallel trends                     |
 | Synthetic Control | Weighted donor pool     | Data-driven counterfactual           | Good pre-fit, no spillovers         |
-| Granger           | Own history             | Predictive screen                    | Stationarity, no common causes      |
 \endgroup
 
-- **Pros of synthetic control**
-  - Transparent weights — reviewers can see _which_ donors contribute
-  - Avoids extrapolation (convex combination stays inside donor hull)
-  - Works when no single comparison unit is credible
-
-- **Cons of synthetic control**
-  - Inference requires placebos — less standard than $t$-tests
-  - Sensitive to donor pool choice — discipline needed
-  - Requires long, clean pre-period
-
-* Putting It All Together: Which Method When?
-
-- Use **Granger causality** when
+- Use **Granger causality** when:
   - You want a fast predictive screen on two long time series
   - Intervention / experiment is not available
 
-- Use **ITS** when
+- Use **Interrupted Time Series (ITS)** when:
   - A single intervention has a sharp date and no comparison units exist
   - Pre-period is long and stable
 
-- Use **DiD** when
+- Use **Difference-in-Differences (DiD)** when:
   - Some units are treated and others are not
   - Parallel pre-trends are plausible
   - You have panel data with units and time
 
-- Use **Synthetic Control** when
+- Use **Synthetic Control** when:
   - One (or few) treated units with a rich donor pool
-  - No single donor is a credible match, but a weighted combination is
-
-- **Key takeaway**: temporal structure is a _resource_ if exploited with the
-  right tool — and a _trap_ if ignored
+  t- No single donor is a credible match, but a weighted combination is
