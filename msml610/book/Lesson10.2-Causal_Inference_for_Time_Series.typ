@@ -92,8 +92,7 @@ is encoded by the arrow structure.
 #figure(
   image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.1.png"),
   caption: [First-order temporal causal graph showing treatment and outcome],
-  <fig:temporal-causal>,
-)
+) <fig:temporal-causal>
 // render_images:end
 
 === Temporal Causal Structures: Key Quantities
@@ -220,8 +219,7 @@ responds to sales, creating bidirectional causality that OLS cannot untangle.
 #figure(
   image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.2.png"),
   caption: [Feedback loop structure where policy affects outcome contemporaneously,],
-  <fig:feedback-loop>,
-)
+) <fig:feedback-loop>
 // render_images:end
 
 === Structural Vector Autoregressions
@@ -707,8 +705,7 @@ removed.
 #figure(
   image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.3.png"),
   caption: [Difference-in-Differences design: the causal effect is the difference],
-  <fig:did-structure>,
-)
+) <fig:did-structure>
 // render_images:end
 
 === Regression Formulation
@@ -932,8 +929,7 @@ the estimated effect. The method's strength is transparency: reviewers can see
 #figure(
   image("Lesson10.2-Causal_Inference_for_Time_Series.typ.figs/Lesson10.2-Causal_Inference_for_Time_Series.4.png"),
   caption: [Synthetic control construction: the donor pool is weighted optimally],
-  <fig:synthetic-control-construction>,
-)
+) <fig:synthetic-control-construction>
 // render_images:end
 
 === Formal Setup

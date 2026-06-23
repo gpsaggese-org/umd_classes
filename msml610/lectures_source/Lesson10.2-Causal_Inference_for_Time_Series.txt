@@ -549,20 +549,28 @@ digraph ITS {
 
 ## Parallel Trends Assumption
 
+// TODO(ai_gp): Overlaps with 08.4
 * DiD: Motivation and Setup
 
-- Suppose a policy is rolled out in _some_ units but not others
-  - E.g., New Jersey raises its minimum wage in 1992; Pennsylvania does not
-  - Two groups: treated (NJ) and control (PA); two periods: before and after
+- **Motivating Example**
+  - Suppose a policy is rolled out in _some_ units but not others
+    - E.g., New Jersey raises its minimum wage in 1992; Pennsylvania does not
+    - Two groups: treated (NJ) and control (PA); two periods: before and after
 
-- **DiD compares the _change_ in treated units to the _change_ in controls**
+- **Definition**: Difference-in-Differences (DiD) estimates a causal effect by
+  comparing the change in outcomes over time between a group that received
+  treatment and a group that didn't
+  - Assume both groups would have followed the same trend in the absence of
+    treatment
+
+- **Procedure**
   - Subtracts out time-invariant differences between groups
   - Subtracts out common time trends across groups
   - What's left is attributed to the policy
 
 - **Example**: Card & Krueger (1994) studied the NJ minimum wage
   - Standard theory predicted employment would fall
-  - DiD estimate: essentially zero — a famously surprising result
+  - DiD estimate: essentially zero (a surprising result)
 
 * DiD: The Core Idea
 
