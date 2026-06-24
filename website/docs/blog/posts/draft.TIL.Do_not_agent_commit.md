@@ -19,48 +19,41 @@ maintains your understanding of each change.
 
 ## What I Learned
 
-Coding agents shouldn't auto-commit. I learned this the hard way after watching
-agents complete tasks perfectly and then thoughtlessly commit changes without
-waiting for my review.
+Coding agents shouldn't auto-commit. 
 
-For me **the review _is_ the value**, not just for catching bugs, but for keeping
-my mental model synchronized with the codebase. When an agent makes a change and
-immediately commits, I lose the opportunity to fully understand what happened and
-why.
+The review itself is the value, not just for catching bugs, but for keeping my
+mental model synchronized with the codebase. When an agent changes code and
+commits immediately, I lose the chance to understand what happened and why.
 
-There are several reasons why agent auto-commits break my workflow:
+This breaks my workflow in three ways:
 
-**1. Mental Model Drift** Every change an agent makes should integrate into my
-understanding of the codebase. If the agent commits before I review, I might
-miss why a particular approach was chosen, what edge cases were considered, or
-how it affects surrounding code. This gap accumulates.
+**1. Mental Model Drift** Each agent change should integrate into my
+understanding of the codebase. If the agent commits before I review, I miss why a
+particular approach was chosen, what edge cases were considered, or how it
+affects surrounding code.
 
-**2. Large, Opaque PRs** When agents auto-commit multiple changes, you end up
-with large PRs that are hard to review. My preference is for targeted,
-self-contained prompts that result in reviewable diffs, not batches of
-auto-committed changes.
+**2. Large, Opaque PRs** Auto-committed batches create large PRs that are hard
+to review. I prefer targeted, self-contained prompts that produce reviewable
+diffs, not stacks of committed changes.
 
-**3. Loss of Agency** The whole point of using coding agents with something like
-`--yolo` mode is to give them independence. But that independence should be
-bounded—agents should execute tasks autonomously without permission prompts, yet
-remain under _your_ control when it comes to git history.
+**3. Loss of Agency** The point of agents with `--yolo` mode is independence.
+But that independence needs bounds: agents execute tasks autonomously without
+permission prompts, yet stay under _your_ control when it comes to git history.
 
 ## The Problem: Current LLM Behavior
 
-Current-generation LLMs are difficult to steer toward complex instructions. I
-tried:
+Current-generation LLMs still don't follow complex instructions reliably. I tried:
 
 - Adding rules to project-level `CLAUDE.md`
 - Adding rules to user-level `~/.claude/CLAUDE.md`
 - Writing explicit instructions in prompts
 
-The agents still committed. They followed the "make the change" instruction
-perfectly but glossed over the "don't commit" instruction in the noise of other
-guidance.
+Agents committed anyway. They nailed the "make the change" part but buried the
+"don't commit" instruction in the noise.
 
 ## The Solution: Permission Denies
 
-The most reliable solution I found: explicitly deny git commits and pushes in
+The most reliable fix: explicitly deny git commits and pushes in
 `.claude/settings.local.json`:
 
 ```json
@@ -71,8 +64,8 @@ The most reliable solution I found: explicitly deny git commits and pushes in
 }
 ```
 
-This works because it's a hard boundary enforced at the permission level, not a
-behavioral instruction the agent might misinterpret.
+This works because it's a hard boundary at the permission level, not a
+behavioral instruction the agent can misread.
 
 **References:**
 
