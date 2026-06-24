@@ -168,3 +168,28 @@ digraph LIME {
   $$
   - $\Omega(\red{g})$ penalizes complexity of the explanation (e.g., number of
     non-zero coefficients)
+
+/*
+* Introduction to Explainability in Machine Learning
+* Local vs. Global Explanations
+* Model-Agnostic vs. Model-Specific Methods
+* Intrinsic Interpretability vs. Post-Hoc Explanation
+   * Decision Trees and Rule-Based Models
+   * Linear and Generalized Additive Models (GAMs)
+* Feature Attribution Methods
+   * SHAP (Shapley Additive Explanations)
+   * LIME (Local Interpretable Model-Agnostic Explanations)
+   * Permutation Feature Importance
+* Counterfactual Explanations
+* Explainability in Bayesian Models
+   * Interpreting Posterior Distributions and Credible Intervals
+   * Bayesian Networks and Probabilistic Graphical Models
+   * Uncertainty Quantification as a Form of Explanation
+* Causal AI and Explainability
+   * Causal Inference vs. Correlational Explanation
+   * Structural Causal Models and Causal Graphs
+   * Counterfactual Reasoning in Causal Frameworks
+   * Distinguishing Causal Explanations from Feature Attribution
+* Faithfulness, Stability, and Robustness of Explanations
+* The Accuracy-Interpretability Tradeoff
+*/
