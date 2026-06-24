@@ -1,5 +1,5 @@
 ---
-title: "Do Not Let Coding Agents Commit Code Automatically"
+title: "TIL: How to Not Let Coding Agents Commit Code Automatically"
 date: 2026-06-24
 author: GP Saggese
 category: coding-best-practices
@@ -16,6 +16,8 @@ Disable coding agents from committing code automatically. Use git permission
 denies in `.claude/settings.local.json` to prevent auto-commits and force a
 review-before-commit workflow. This keeps you in control of your codebase and
 maintains your understanding of each change.
+
+<!-- more -->
 
 ## What I Learned
 
@@ -67,9 +69,9 @@ The most reliable fix: explicitly deny git commits and pushes in
 This works because it's a hard boundary at the permission level, not a
 behavioral instruction the agent can misread.
 
-**References:**
+## References and Further Reading
 
-- [Claude Code Documentation](https://claude.ai/code) — Permission and settings
+- [Claude Code Documentation](https://claude.ai/code): Permission and settings
   configuration
-- [Claude Code Permission System](https://claude.ai/code) — How to configure
+- [Claude Code Permission System](https://claude.ai/code): How to configure
   deny rules
