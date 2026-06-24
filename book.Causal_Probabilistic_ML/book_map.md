@@ -2,9 +2,25 @@
 // Current TOC: book.Causal_Probabilistic_ML/book_toc.md
 // Official TOC: ~/src/notes1/book.manning.Causal_Probabilistic_Machine_Learning/manning.proposal_v3.toc.md
 
+// Apply '/Users/saggese/src/umd_classes1/helpers_root/.claude/skills/slides.rules.md:117:## Use Bold for Slide Sections' to ...
+
 # Part I: Understanding Probabilistic and Causal ML
 
 ## 1: The Need for Probabilistic and Causal Machine Learning
+
+### TODOs
+- [ ] Finish slides (80%, 66)
+- [ ] Add / integrate probabilistic / explainable
+- [ ] Add "small data"
+  - /Users/saggese/src/csfy1/blog/docs/posts/AI_for_Optimal_Decision-Making.md
+  - /Users/saggese/src/csfy1/blog/docs/posts/Cracking_the_Long_Tail_of_Data_Science_Problems.md
+  - /Users/saggese/src/csfy1/blog/docs/posts/Data_Is_Dumb_And_Thats_Why_Causality_Matters.md
+- [ ] Keep tables in the text
+- [ ] Implement in tikz the pic
+  - Use inkspace / svg from msml610/lectures_source/Lesson01-1.aux.md
+- [ ] Move Causal AI in business in a separate chapter
+- [ ] Read papers
+- [ ] Read books
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -34,19 +50,6 @@
 - Data Science vs. Decision Science
 - Tools and Tutorials — Introduction to causal DAGs using real-world examples
 - Summary
-
-### TODOs
-- [ ] Add / integrate probabilistic / explainable
-- [ ] Add "small data"
-  - /Users/saggese/src/csfy1/blog/docs/posts/AI_for_Optimal_Decision-Making.md
-  - /Users/saggese/src/csfy1/blog/docs/posts/Cracking_the_Long_Tail_of_Data_Science_Problems.md
-  - /Users/saggese/src/csfy1/blog/docs/posts/Data_Is_Dumb_And_Thats_Why_Causality_Matters.md
-- [ ] Keep tables in the text
-- [ ] Implement in tikz the pic
-  - Use inkspace / svg from msml610/lectures_source/Lesson01-1.aux.md
-- [ ] Move Causal AI in business in a separate chapter
-- [ ] Read papers
-- [ ] Read books
 
 ### Tutorials
 
@@ -91,6 +94,14 @@
 
 ## 2: Bayesian Networks and Probabilistic Reasoning
 
+### TODOs
+- [ ] Finish slides (80%, 77)
+- [x] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
+
 ### Lessons
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
@@ -119,6 +130,8 @@
 - Summary
 
 ### Tutorials
+- pgmpy
+- DoWhy, CausalML, CausalNex, gcastle
 
 ### Related packages
 - pgmpy (5,000): Probabilistic Graphical Models (Bayesian Networks, inference)
@@ -133,6 +146,14 @@
 - [B006] Bishop, "Pattern Recognition and Machine Learning", 2006
 
 ## 3: Causal DAGs and Structural Models
+
+### TODOs
+- [ ] Finish slides (80%, 77)
+- [ ] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
@@ -154,6 +175,9 @@
 - Summary
 
 ### Tutorials
+- PyMC
+- arviz
+- xarray
 
 ### Related packages
 - Dagitty (1,500): DAG creation and causal effect identification
@@ -167,6 +191,15 @@
 - [B009] Morgan et al., "Counterfactuals and Causal Inference", 2014
 
 ## 4: From Causal Models to Code
+
+### TODOs
+- [ ] Finish slides
+- [ ] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Merge the slides into a single one
+- [ ] Finalize tutorial
 
 ### Lessons
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
@@ -240,6 +273,14 @@
 
 ## 5: Interventions, Experiments, and Adjustments
 
+### TODOs
+- [ ] Finish slides
+- [ ] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
+
 ### Lessons
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
 
@@ -260,6 +301,7 @@
 - Summary
 
 ### Tutorials
+- DoWhy, CausalML, CausalNex, gcastle
 
 ### Related packages
 - DoWhy (6,600): Causal inference using graphical models
@@ -273,6 +315,14 @@
 - [B015] Gerber et al., "Field Experiments", 2012
 
 ## 6: Causal Identification and Estimation
+
+### TODOs
+- [ ] Finish slides
+- [ ] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -306,6 +356,7 @@
 - Summary
 
 ### Tutorials
+- DoWhy, CausalML, CausalNex, gcastle
 - `msml610/tutorials/L08_causal_inference/L08_04_01_causal_inference.ipynb`
 - `msml610/tutorials/L08_causal_inference/L08_04_02_causal_inference.ipynb`
 - `msml610/tutorials/L08_causal_inference/L08_04_05_propensity_score.ipynb`
@@ -327,7 +378,15 @@
 
 ## 7: Explainability and Causal Attribution
 
+### TODOs
+- [ ] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
+
 ### Lessons
+- `msml610/lectures_source/Lesson13.1-Explainability.txt`
 
 ### Current TOC
 
@@ -367,6 +426,14 @@
 - [ ] Review / reorg
 
 ## 8: Causal Inference for Time Series
+
+### TODOs
+- [ ] Finish slides (40%, 79 + ...)
+- [x] Make sure to use definitions and other tags
+- [ ] Check slides for mistakes
+- [ ] Improve graphics and visuals
+- [ ] Generate book
+- [ ] Finalize tutorial
 
 ### Lessons
 - `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`
@@ -419,6 +486,7 @@
 - Summary
 
 ### Tutorials
+- Prophet, FilterPy, tsfresh, GluonTS
 - `msml610/tutorials/L09_kalman_filter`
 
 ### Related packages

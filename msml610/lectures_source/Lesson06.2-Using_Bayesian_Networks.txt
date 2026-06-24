@@ -46,7 +46,7 @@ MSML610: Advanced Machine Learning
 
 * Bayesian Networks: Semantics
 
-- **Two equivalent semantic interpretations** of a Bayesian Network:
+- **Definition**: Two equivalent semantic interpretations of a Bayesian Network:
 
   1. **Joint Distribution View**
      - The network encodes the _joint probability distribution_ over all
@@ -185,7 +185,7 @@ digraph BayesianFlow {
    - Test the network by predicting known outcomes and comparing with actual data
 
 * Bayesian Networks: Properties
-- Bayesian networks are a representation with several interesting properties
+- **Fact**: Bayesian networks are a representation with several interesting properties
   - **Complete**
     - Encode all information in a joint probability
   - **Consistent** (non-redundant)
@@ -297,12 +297,12 @@ digraph BayesianNetwork {
 
 ::: columns
 :::: {.column width=65%}
-- A **causal model** goes from causes to symptoms
+- **Definition**: A _causal model_ goes from causes to symptoms
   - E.g., $Burglary \to Alarm$
   - Simpler (i.e., fewer and more robust dependencies)
   - "Easier" to estimate
 
-- A **diagnostic model** goes from symptoms to causes
+- **Definition**: A _diagnostic model_ goes from symptoms to causes
   - E.g., $MaryCalls \to Alarm$ or $Alarm \to Burglary$
   - Tenuous / unstable
   - Difficult to estimate
