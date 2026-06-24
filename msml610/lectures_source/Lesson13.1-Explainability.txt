@@ -31,9 +31,7 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Introduction and Motivation
-# ##############################################################################
 
 * Machine Learning Explainability
 

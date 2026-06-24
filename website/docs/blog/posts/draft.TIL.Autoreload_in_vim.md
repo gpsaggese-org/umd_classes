@@ -16,17 +16,19 @@ buffers in sync when AI agents modify files on disk.
 <!-- more -->
 
 - I learned a practical vim trick that solves a common friction point when
-  collaborating with AI coding agents: automatic file reloading
+  collaborating with AI coding agents with `vim`: automatic file reloading
 
 ## What I Learned
 
 - When working with AI agents on code, a common workflow emerges:
     - The AI agent edits a file on disk
     - I have that same file open in vim
-    - Vim detects the external modification and prompts: `"File changed since
-      last read. Reload? (Y/N)"`
+    - Vim detects the external modification and prompts:
+      ```
+      "File changed since last read. Reload? (Y/N)"
+      ```
     - This creates awkward back-and-forth: approve the reload, lose your cursor
-      position, risk overwriting the agent's changes
+      position, risk overwriting the agent's changes, ...
 
 - The fix is a simple vimscript snippet that polls for file changes every second:
 

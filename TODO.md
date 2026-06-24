@@ -47,7 +47,8 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 - TODO(gp): create some scripts similar `./class_scripts/gen_book_chapter.py` and
   `./class_scripts/generate_book_chapter.py` to run the prompt
 
-# Port documentation flow to typst
+# HelperTask1276: Port slides flow to typst
+https://github.com/causify-ai/helpers/issues/1276
 
 ## Step 0:
 
