@@ -215,9 +215,9 @@ digraph SalesModelExtended {
   BusinessSize [label="BusinessSize", fillcolor="#A6E7F4"];
   IsOnSales [label="IsOnSales", fillcolor="#A6E7F4"];
   AmountSold [label="AmountSold", fillcolor="#A6C8F4"];
-  u_s [label="u_s", fillcolor="#FFD1A6"];
-  u_t [label="u_t", fillcolor="#FFD1A6"];
-  u_y [label="u_y", fillcolor="#FFD1A6"];
+  u_s [label=<u<SUB>s</SUB>>, fillcolor="#FFD1A6"];
+  u_t [label=<u<SUB>t</SUB>>, fillcolor="#FFD1A6"];
+  u_y [label=<u<SUB>t</SUB>>, fillcolor="#FFD1A6"];
 
   // Edges
   u_s -> BusinessSize;

@@ -1,13 +1,14 @@
 ---
 title: "AutoGen in 60 Minutes"
+draft: false
 authors:
-  - PranavShashidhara
-  - gpsaggese
-date: 2026-02-21
+    - PranavShashidhara
+    - gpsaggese
+date: 2026-03-13
 description:
 categories:
-  - AI Research
-  - Software Engineering
+    - AI Research
+    - Software Engineering
 ---
 
 TL;DR: Learn how to build agentic AI systems using AutoGen in 60 minutes with
@@ -53,15 +54,15 @@ This tutorial includes all the code, notebooks, and Docker containers in
   approach
 - [`autogen.API.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/Autogen/autogen.API.ipynb): Tutorial notebook focusing on API configurations and basic agent setup
 - [`autogen.example1.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/Autogen/autogen.example1.ipynb): Advanced end-to-end agentic workflow example Part 1
-  - Fetches real-time stock data from Yahoo Finance
-  - Bull and Bear strategist agents debate market trends
-  - Selector agent dynamically decides which expert to call at each step
-  - Generates stock charts and financial summaries
+    - Fetches real-time stock data from Yahoo Finance
+    - Bull and Bear strategist agents debate market trends
+    - Selector agent dynamically decides which expert to call at each step
+    - Generates stock charts and financial summaries
 - [`autogen.example2.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/Autogen/autogen.example2.ipynb): Advanced end-to-end agentic workflow example Part 2
-  - Pulls 10-K filings from SEC EDGAR and cleans them
-  - Embeds documents into a **ChromaDB** vector database
-  - Senior Quant Analyst agent queries the database to extract revenue splits,
-    risk factors, and other insights
-  - Quant Runtime agent executes Python code locally to transform raw tables into
-    structured visualizations
+    - Pulls 10-K filings from SEC EDGAR and cleans them
+    - Embeds documents into a **ChromaDB** vector database
+    - Senior Quant Analyst agent queries the database to extract revenue splits,
+      risk factors, and other insights
+    - Quant Runtime agent executes Python code locally to transform raw tables into
+      structured visualizations
 - [`autogen_utils.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/Autogen/autogen_utils.py): Utility functions required by the example notebooks

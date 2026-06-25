@@ -62,10 +62,35 @@ your needs, and maintain it over time.
   - All `docker_*.sh`, `docker_jupyter.sh`, and `run_jupyter.sh` scripts across
     the repo source this file from `class_project/project_template/utils.sh`
 
+## Container Engine
+
+- The scripts support two container engines, controlled by the `DOCKER_ENGINE`
+  environment variable:
+
+| Value | CLI used | When |
+|-------|----------|------|
+| `docker` | `docker` | Linux default; set explicitly to force Docker on macOS |
+| `apple` | `container` | macOS default (Apple's native container tool) |
+
+- On macOS the engine defaults to `"apple"` if `DOCKER_ENGINE` is not set.
+- On Linux the engine defaults to `"docker"`
+
+- Override the engine explicitly:
+  ```bash
+  # Force Docker Desktop on macOS.
+  > DOCKER_ENGINE=docker ./docker_build.sh
+
+  # Force Apple containers on macOS (the default, but explicit).
+  > DOCKER_ENGINE=apple ./docker_build.sh
+  ```
+
+- Note: multi-architecture builds (`DOCKER_BUILD_MULTI_ARCH=1`) always require
+  the `docker` CLI (`docker buildx`) regardless of `DOCKER_ENGINE`
+
 ## Workflows
 - All commands should be run from inside the project directory
   ```bash
-  > cd tutorials/FilterPy
+  > cd tutorials/${PROJ}
   ```
 
 - To build the container for a project
@@ -282,6 +307,8 @@ your needs, and maintain it over time.
 - **What It Does**
   - Central Bash library sourced by all `docker_*.sh` and `run_jupyter.sh`
     scripts across the repository
+  - Provides `get_docker_engine` and `get_docker_cmd` for engine detection:
+    reads `DOCKER_ENGINE` env var, auto-detects `"apple"` on macOS
   - Provides `parse_default_args` which adds `-h` (help) and `-v`
     (verbose/`set -x`) flags to every docker script
   - Provides `build_container_image`, `push_container_image`,

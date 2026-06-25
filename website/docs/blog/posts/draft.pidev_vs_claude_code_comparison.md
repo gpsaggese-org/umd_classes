@@ -5,7 +5,7 @@ authors:
   - gpsaggese
 date: 2026-05-23
 categories:
-  - AI Coding Tools
+  - AI Tools
   - Developer Tools
 ---
 

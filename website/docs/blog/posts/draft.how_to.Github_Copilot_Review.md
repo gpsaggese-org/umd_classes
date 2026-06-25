@@ -1,9 +1,14 @@
-<!-- toc -->
-
-- [Overview](#overview)
-- [How to Use Copilot Code Review](#how-to-use-copilot-code-review)
-
-<!-- tocstop -->
+---
+title: "How to Use GitHub Copilot Code Review"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using GitHub Copilot for code reviews
+categories:
+  - Developer Tools
+  - Software Engineering
+---
 
 ## Overview
 

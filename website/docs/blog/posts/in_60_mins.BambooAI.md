@@ -1,13 +1,14 @@
 ---
 title: "BambooAI in 60 Minutes"
+draft: false
 authors:
-  - aver81
-  - gpsaggese
-date: 2026-03-15
+    - aver81
+    - gpsaggese
+date: 2026-04-03
 description:
 categories:
-  - AI Research
-  - Software Engineering
+    - AI Research
+    - Software Engineering
 ---
 
 TL;DR: Learn how to build intelligent data analysis systems with BambooAI in 60
@@ -17,6 +18,7 @@ analysis, and dynamic code generation.
 <!-- more -->
 
 ## Tutorial in 30 Seconds
+
 BambooAI is a flexible framework for building intelligent systems made of
 multiple collaborating LLM agents that can reason over data and execute code.
 
@@ -56,13 +58,13 @@ This tutorial includes all the code, notebooks, and Docker containers in
 - [`bambooai.API.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.API.ipynb): Tutorial notebook focusing on fundamental classes,
   methods, and API configurations
 - [`bambooai.example.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.example.ipynb): Complete real-world application workflow using BambooAI
-  - Data exploration: Using Dataframe Inspector and Analyst agents to
-    understand your data
-  - Dynamic planning: Planner agent that decomposes complex analysis tasks
-    into steps
-  - Code generation: Code Generator agent that writes and proposes solutions
-  - Error handling: Error Corrector agent that fixes and improves generated
-    code
+    - Data exploration: Using Dataframe Inspector and Analyst agents to
+      understand your data
+    - Dynamic planning: Planner agent that decomposes complex analysis tasks
+      into steps
+    - Code generation: Code Generator agent that writes and proposes solutions
+    - Error handling: Error Corrector agent that fixes and improves generated
+      code
 - [`bambooai.example.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai.example.py): Stand-alone script version of the example for quick
   reference or automation
 - [`bambooai_utils.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/BambooAI/bambooai_utils.py): Utility functions required by the example notebooks

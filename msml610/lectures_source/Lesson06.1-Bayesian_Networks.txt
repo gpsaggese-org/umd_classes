@@ -77,13 +77,13 @@ MSML610: Advanced Machine Learning
 * Naive Solution: Example of Starting a Car
 - **Goal**: build a system to start a car by turning the car key
 
-- **Obvious preconditions**
+- **Remark**: Obvious preconditions
   - The car has fuel
   - The car battery is charged
   - The car key is the right one
   - ...
 
-- **Less obvious preconditions**
+- **Remark**: Less obvious preconditions
   - The electrical system is intact (no blown fuses)
   - The fuel pump is working
   - The fuel lines are not clogged
@@ -107,7 +107,7 @@ MSML610: Advanced Machine Learning
 - **Logical qualification problem**
   - Need to enumerate all the preconditions necessary for an action to succeed
 
-- **Difficulties**
+- **Limitations**: Difficulties
   - Every action can have more hidden conditions needed in order to succeed
     - E.g., start the engine $\implies$ turn car key $\implies$ starter motor is
       working $\implies$ battery is charged $\implies$ ...
