@@ -1,3 +1,4 @@
+/*
 ::: columns
 :::: {.column width=15%}
 ![](msml610/lectures_source/figures/UMD_Logo.png)
@@ -30,6 +31,7 @@ MSML610: Advanced Machine Learning
 
 ::::
 :::
+*/
 
 # Introduction and Motivation
 
@@ -103,6 +105,8 @@ mindmap
 
 ::::
 :::
+
+/*
 
 # ##############################################################################
 # Local vs. Global Explanations
@@ -1023,3 +1027,5 @@ digraph Tradeoff {
 
 - **Remark**: Rudin (2019) argues we should prefer inherently interpretable
   models in high-stakes settings rather than explaining black boxes post-hoc
+
+*/
