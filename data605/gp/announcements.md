@@ -5,8 +5,8 @@ Hello DATA605 team,
 This is a preparation for the in-class quiz and for the class project.
 
 1) Study the slides on Git
-   - [Lesson02.1-Git.pdf](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures/Lesson02.1-Git.pdf)
-   - [Lesson02.2-Git\_Branching.pdf](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures/Lesson02.2-Git_Branching.pdf)
+   - [Lesson02.1-Git.pdf](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures_pdf/Lesson02.1-Git.pdf)
+   - [Lesson02.2-Git\_Branching.pdf](https://github.com/gpsaggese/umd_classes/blob/master/data605/lectures_pdf/Lesson02.2-Git_Branching.pdf)
 
 2) Do the [Git tutorial](https://github.com/gpsaggese/umd_classes/tree/master/data605/tutorials/tutorial_git)
    - Video of the Git tutorial is [here](https://drive.google.com/file/d/12TcMNs4vZoZUWq47TUgcqB875GMfqK01/view?usp=drive_link)

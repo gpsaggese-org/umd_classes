@@ -18,7 +18,7 @@ and saved to the specified output directory.
 
 Examples:
 # Extract all pages from a PDF file.
-> extract_png_from_pdf.py --input_file data605/lectures/Lesson01.1-Intro.pdf --output_dir output
+> extract_png_from_pdf.py --input_file data605/lectures_pdf/Lesson01.1-Intro.pdf --output_dir output
 
 # Extract with custom DPI for higher quality.
 > extract_png_from_pdf.py --input_file lecture.pdf --output_dir slides --dpi 300

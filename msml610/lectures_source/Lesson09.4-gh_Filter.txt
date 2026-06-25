@@ -206,11 +206,11 @@ digraph BayesianFlow {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
 
     // Node styles
-    x0   [label="Initial Conditions (x_0)", shape=box, fillcolor="#F4A6A6"];
-    zk   [label="Measurement (z_k)", shape=box, fillcolor="#FFD1A6"];
-    pred [label="Predict\nStep", shape=box, fillcolor="#A6C8F4"];
-    upd  [label="Update\nStep", shape=box, fillcolor="#C6A6F4"];
-    xhat [label="State Estimate (\hat{x}_k)", shape=box, fillcolor="#B2E2B2"];
+    x0   [label=<Initial Conditions (x<SUB>0</SUB>)>, shape=box, fillcolor="#F4A6A6"];
+    zk   [label=<Measurement (z<SUB>k</SUB>)>, shape=box, fillcolor="#FFD1A6"];
+    pred [label=<Predict<BR/>Step>, shape=box, fillcolor="#A6C8F4"];
+    upd  [label=<Update<BR/>Step>, shape=box, fillcolor="#C6A6F4"];
+    xhat [label=<State Estimate (x̂<SUB>k</SUB>)>, shape=box, fillcolor="#B2E2B2"];
 
     // Force ranks
     {rank=same; x0; zk;}
@@ -321,8 +321,8 @@ digraph StateEstimation {
         fontname="Helvetica";
         fontsize=13;
         SystemModel [label="System model", fillcolor="#B2E2B2"];      // pastel green
-        Propagation [label="Predict step\n(System propagation)", fillcolor="#FFD1A6"];  // soft orange
-        Update [label="Update step\n(Measurement update)", fillcolor="#F4A6A6"];        // soft red
+        Propagation [label=<Predict step<BR/>(System propagation)>, fillcolor="#FFD1A6"];  // soft orange
+        Update [label=<Update step<BR/>(Measurement update)>, fillcolor="#F4A6A6"];        // soft red
         { rank=same; Propagation; Update; }
         SystemModel -> Propagation;
         Propagation -> Update [label="x_pred"];

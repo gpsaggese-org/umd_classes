@@ -20,7 +20,7 @@ def _create_test_structure(
     Create test directory structure.
 
     :param class_name: Name of class directory (e.g., 'data605', 'msml610')
-    :param dir_name: Name of subdirectory (e.g., 'lectures_tex', 'lectures', 'lectures_script')
+    :param dir_name: Name of subdirectory (e.g., 'lectures_tex', 'lectures_pdf', 'lectures_video_script')
     :return: Tuple of (class_dir, scratch_dir)
     """
     scratch_dir = self.get_scratch_space()
@@ -639,7 +639,7 @@ class Test_generate_script_e2e(hunitest.TestCase):
         """
         # Prepare inputs.
         class_dir, scratch_dir = _create_test_structure(
-            self, "data605", "lectures_script"
+            self, "data605", "lectures_video_script"
         )
         source_path = os.path.join(scratch_dir, "Lesson04.1-Scripts.txt")
         source_name = "Lesson04.1-Scripts.txt"
@@ -728,7 +728,7 @@ class Test_process_lecture_file_e2e(hunitest.TestCase):
         """
         # Prepare inputs.
         class_dir, scratch_dir = _create_test_structure(
-            self, "data605", "lectures_script"
+            self, "data605", "lectures_video_script"
         )
         source_path = os.path.join(scratch_dir, "Lesson03.1-Script.txt")
         source_name = "Lesson03.1-Script.txt"

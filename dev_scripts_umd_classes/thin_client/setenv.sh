@@ -102,7 +102,7 @@ umask 002
 
 # Remove write permissions for symlinked files to prevent accidental
 # modifications before starting to develop.
-set_symlink_permissions .
+#set_symlink_permissions .
 
 #################################################################################
 # Install pre-commit hooks.

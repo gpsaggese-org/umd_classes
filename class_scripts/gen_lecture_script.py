@@ -86,7 +86,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
     dst_name = clcomuut.get_output_name(src_name, ".script.txt")
     # Build paths.
     input_file = f"{args.dir}/lectures_source/{src_name}"
-    output_dir = f"{args.dir}/lectures_script"
+    output_dir = f"{args.dir}/lectures_video_script"
     output_file = f"{output_dir}/{dst_name}"
     # Ensure output directory exists.
     clcomuut.ensure_dir_exists(output_dir)

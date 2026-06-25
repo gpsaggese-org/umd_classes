@@ -151,22 +151,22 @@ digraph BayesianUpdateAlgo {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     // Node styles
-    x0   [label="x_0", shape=circle, fillcolor="#A6E7F4"];
-    zk   [label="z_k", shape=circle, fillcolor="#A6E7F4"];
-    xhat [label="hat_x_k", shape=circle, fillcolor="#B2E2B2"];
+    x_0   [label=<x<SUB>0</SUB>>, shape=circle, fillcolor="#A6E7F4"];
+    z_k   [label=<z<SUB>k</SUB>>, shape=circle, fillcolor="#A6E7F4"];
+    x_hat [label=<hat<SUB>xk</SUB>>, shape=circle, fillcolor="#B2E2B2"];
 
-    predict [label="Predict\nStep\n\nUse movement model\nBelief spreads out\n(loses information)", fillcolor="#A6C8F4"];
-    update  [label="Update\nStep\n\nUse measurement\nBelief concentrates\n(gains information)", fillcolor="#C6A6F4"];
+    predict [label=<Predict<BR/>Step<BR/><BR/>Use movement model<BR/>Belief spreads out<BR/>(loses information)>, fillcolor="#A6C8F4"];
+    update  [label=<Update<BR/>Step<BR/><BR/>Use measurement<BR/>Belief concentrates<BR/>(gains information)>, fillcolor="#C6A6F4"];
 
     // Force ranks
     {rank=same; predict; update}
 
     // Edges
-    x0 -> predict [label=" Prior"];
+    x_0 -> predict [label=" Prior"];
     predict -> update [label=" Prior"];
     update -> predict [label=" Posterior"];
-    predict -> xhat [label=" Posterior"];
-    zk -> update [label=" Measurement"];
+    predict -> x_hat [label=" Posterior"];
+    z_k -> update [label=" Measurement"];
 }
 ```
 

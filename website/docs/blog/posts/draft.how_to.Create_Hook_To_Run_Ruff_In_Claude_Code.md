@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "How to Create a Hook to Run Ruff in Claude Code"
 draft: true
 authors:
   - gpsaggese
@@ -9,7 +9,8 @@ categories:
   - Causal AI
 ---
 
-TL;DR:
+TL;DR: Use Claude Code's PostToolUse hook to automatically run Ruff linter after
+every file edit, keeping your code clean without manual steps.
 
 <!-- more -->
 
