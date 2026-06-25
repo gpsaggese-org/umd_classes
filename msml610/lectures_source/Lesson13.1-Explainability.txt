@@ -44,43 +44,46 @@ MSML610: Advanced Machine Learning
 
 - **Problem**: ML models are increasingly used for decisions that affect
   people's lives
-  - Credit scoring, medical diagnosis, criminal sentencing, hiring
-  - Stakeholders (doctors, judges, regulators) need to understand _why_ a
+  - E.g., credit scoring, medical diagnosis, criminal sentencing, hiring
+  - Stakeholders (e.g., doctors, judges, regulators) need to understand _why_ a
     prediction was made, not just _what_ it is
 
-- **Definition**: Explainability (aka _"interpretability"_) is the degree to
-  which a human can understand the cause of a model's decision
+- **Definition**: _Explainability_ is the degree to which a human can understand
+  the cause of a model's decision
   - Aka "Interpretable ML", "XAI" (Explainable Artificial Intelligence)
 
 * Accuracy vs Interpretability
 
 - **Key idea**: there is a fundamental tension between model _accuracy_ and
   _interpretability_
+
+- **Example**:
   - Linear regression $\to$ interpretable but limited capacity
   - Deep neural networks $\to$ high capacity but opaque (_"black box"_)
 
-- **Goal**: develop methods that explain black-box models _post-hoc_, without
-  sacrificing predictive performance
+- **Goal**: develop methods that
+  - Explain black-box models _post-hoc_
+  - Without sacrificing predictive performance
 
 * Taxonomy of Explainability Methods
 
-- **Definition**: explainability methods can be classified along several axes
+- Explainability methods can be classified along several axes
 
 ::: columns
 :::: {.column width=55%}
-- By _scope_:
-  - **Global**: explain the model's overall behavior
+- **By scope**
+  - _Global_: explain the model's overall behavior
     - E.g., feature importance rankings, partial dependence plots
-  - **Local**: explain a single prediction
+  - _Local_: explain a single prediction
     - E.g., _"why was this loan application rejected?"_
 
-- By _model dependence_:
-  - **Model-specific**: exploit internal model structure
+- **By model dependence**
+  - _Model-specific_: exploit internal model structure
     - E.g., attention weights in transformers, decision paths in trees
-  - **Model-agnostic**: treat the model as a black box
+  - _Model-agnostic_: treat the model as a black box
     - E.g., LIME, SHAP $\to$ work with any model
 
-- By _output type_:
+- **By output type_**
   - Feature attributions (numeric importance scores)
   - Rules or decision sets
   - Example-based (prototypes, counterfactuals)
@@ -106,11 +109,7 @@ mindmap
 ::::
 :::
 
-/*
-
-# ##############################################################################
 # Local vs. Global Explanations
-# ##############################################################################
 
 * Local vs. Global Explanations
 
@@ -145,9 +144,7 @@ mindmap
 - **Key idea**: local and global explanations are complementary $\to$ a
   complete picture requires both
 
-# ##############################################################################
 # Model-Agnostic vs. Model-Specific Methods
-# ##############################################################################
 
 * Model-Agnostic vs. Model-Specific Methods
 
@@ -196,9 +193,7 @@ digraph ModelAccess {
 ::::
 :::
 
-# ##############################################################################
 # Intrinsic Interpretability vs. Post-Hoc Explanation
-# ##############################################################################
 
 * Intrinsic Interpretability vs. Post-Hoc Explanation
 
@@ -306,9 +301,7 @@ digraph DecisionTree {
   - **Cons**: cannot capture feature interactions (unless explicitly added as
     $f_{jk}(x_j, x_k)$ terms)
 
-# ##############################################################################
 # Feature Attribution Methods
-# ##############################################################################
 
 * Feature Attribution Methods: Overview
 
@@ -534,9 +527,7 @@ digraph LIME {
 - **Remark**: in practice, using multiple methods and checking agreement
   increases confidence in the explanation
 
-# ##############################################################################
 # Counterfactual Explanations
-# ##############################################################################
 
 * Counterfactual Explanations
 
@@ -612,9 +603,7 @@ digraph Counterfactual {
   - Counterfactuals may lie outside the data manifold (unrealistic)
   - Sensitive to the choice of distance metric $d$
 
-# ##############################################################################
 # Explainability in Bayesian Models
-# ##############################################################################
 
 * Explainability in Bayesian Models
 
@@ -743,9 +732,7 @@ digraph BayesNet {
 - **Remark**: models that flag high epistemic uncertainty enable _safe
   deployment_ $\to$ defer to human experts when the model is unsure
 
-# ##############################################################################
 # Causal AI and Explainability
-# ##############################################################################
 
 * Causal AI and Explainability
 
@@ -915,9 +902,7 @@ digraph CausalVsAttribution {
 ::::
 :::
 
-# ##############################################################################
 # Quality of Explanations
-# ##############################################################################
 
 * Faithfulness of Explanations
 
@@ -972,9 +957,7 @@ digraph CausalVsAttribution {
   2. _Stability_: is it consistent across similar inputs?
   3. _Robustness_: can it be gamed or manipulated?
 
-# ##############################################################################
 # The Accuracy-Interpretability Tradeoff
-# ##############################################################################
 
 * The Accuracy-Interpretability Tradeoff
 
@@ -1027,5 +1010,3 @@ digraph Tradeoff {
 
 - **Remark**: Rudin (2019) argues we should prefer inherently interpretable
   models in high-stakes settings rather than explaining black boxes post-hoc
-
-*/

@@ -131,7 +131,15 @@ msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
 # Mix
 
-## render_images.py
+### [ ] Clean up all the messy interfaces
+
+    use_host_tools,
+    dockerized_force_rebuild,
+    dockerized_use_sudo,
+
+- It's not clear how to do it, maybe pass a config?
+
+### [ ] Update render_images.py
 
 - [ ] Add an option to only render without commenting out the code
 
@@ -147,7 +155,7 @@ msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
   - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
 
-## Fix output of lint_cc.py
+### [ ] Fix output of lint_cc.py
 
 Right now the output has all the verbose output from the model
 
