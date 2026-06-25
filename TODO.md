@@ -77,7 +77,7 @@ MSML610: Advanced Machine Learning
 
 \vspace{1cm}
 
-###
+### [ ] Fix the bold colored
 
 **\textcolor{red}{Question}**
 
@@ -85,6 +85,10 @@ MSML610: Advanced Machine Learning
   - Line 542: calls hmarkdo.colorize_bullet_points_in_slide() for slides
   - This function automatically colorizes specific keywords (like Question, Definition, Key idea, etc.) with red/blue colors
 3. The coloring happens here in preprocess_notes.py lines 524-560 via the _colorize_bullets() helper function which wraps hmarkdo.colorize_bullet_points_in_slide()
+
+### [ ] The title of a slide is not showing up
+
+### [ ] Autoscale the font to fit the slide
 
 ### [ ] Document current system
 - `helpers_root/dev_scripts_helpers/documentation/README.md`
