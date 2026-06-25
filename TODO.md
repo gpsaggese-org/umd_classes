@@ -58,7 +58,7 @@ https://github.com/causify-ai/helpers/issues/1276
 - [x] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 ## Get typst slides as close as possible to latex ones
-notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.new.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --skip_action=open --slides_engine typst
+notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
 
 ### [ ] Fix Latex Preamble
 
