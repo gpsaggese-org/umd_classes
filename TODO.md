@@ -61,6 +61,7 @@ https://github.com/causify-ai/helpers/issues/1276
 
 ```
 > notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
+> vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.notes_to_pdf.render_image2.typ
 ```
 
 ### Create branch for 1276
@@ -76,17 +77,37 @@ https://github.com/causify-ai/helpers/issues/1276
 - [ ] What is the coverage?
 - [ ] What is not tested?
 
-- [ ] Fix the names of the tests
+- [ ] IN PROGRESS: Fix the names of the tests
 helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
 
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test1 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test2 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test3 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test4 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test2 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test3 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_preprocess_notes.py::Test_preprocess_notes_executable1::test3 - RuntimeError:
-FAILED helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py::Test_render_image_code1::test3 - RuntimeError:
+- [ ] Check CsfyIssue8889
+
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py                                                                               85     12      8      2    83%
+dev_scripts_helpers/documentation/preprocess_notes.py                                                                                    349     78    140     19    77%
+dev_scripts_helpers/documentation/render_images.py                                                                                       381    174    142      9    53%
+
+dev_scripts_helpers/dockerize/lib_pandoc.py                                                                                              110     40     20      3    59%
+dev_scripts_helpers/dockerize/lib_prettier.py                                                                                            124     15     34      6    84%
+
+helpers/hmarkdown.py                                                                                                                      13      0      0      0   100%
+helpers/hmarkdown_bullets.py                                                                                                              93     81     44      0     9%
+helpers/hmarkdown_coloring.py                                                                                                            108     59     38      5    41%
+helpers/hmarkdown_comments.py                                                                                                             28      9     10      3    63%
+helpers/hmarkdown_div_blocks.py                                                                                                           54     23     24      4    55%
+helpers/hmarkdown_fenced_blocks.py                                                                                                        55      0     14      1    99%
+helpers/hmarkdown_filtering.py                                                                                                            68     56      8      0    16%
+helpers/hmarkdown_formatting.py                                                                                                          335    259     84      1    19%
+helpers/hmarkdown_headers.py                                                                                                             330    156    144     18    50%
+helpers/hmarkdown_rules.py                                                                                                               104     86     42      0    12%
+helpers/hmarkdown_select.py                                                                                                              251    112     92     14    54%
+helpers/hmarkdown_slides.py                                                                                                               90     24     30      5    69%
+helpers/hmarkdown_tables.py                                                                                                               48     31     14      1    32%
+helpers/hmarkdown_toc.py                                                                                                                  92     24     26      8    68%
+
+- [ ] Extract lib_notes_to_pdf.py
+
+./dev_scripts_helpers/documentation/notes_to_pdf.py
+
 
 ### What tests pass on master vs local?
 
@@ -94,25 +115,15 @@ FAILED helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py
 
 dev_scripts_helpers/documentation/preprocess_notes.py
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
+- [ ] Add unit tests
+- [ ] Factor out code to umd_classes
 
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 10.2: Causal Discovery}}$$**
-\endgroup
-
-\vspace{1cm}
 
 ### IN PROGRESS: [ ] Fix sided stuff
 
-- Add two steps of AST unit test
-- Add processing of AST
+- [x] Add two steps of AST unit test
+- [ ] Add unit tests (for 1 and 2 phases)
+- [ ] Add processing of AST
 
 ### [x] Fix the bold colored
 

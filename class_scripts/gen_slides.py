@@ -13,12 +13,10 @@ Usage:
 """
 
 import argparse
-import hashlib
 import logging
 import os
 import re
 import shlex
-import time
 from typing import Tuple
 
 import class_scripts.common_utils as csccouti
@@ -99,63 +97,6 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
     return dir_input, lesson
 
 
-def _file_hash(file_path: str) -> str:
-    """
-    Compute MD5 hash of a file.
-    """
-    hasher = hashlib.md5()
-    with open(file_path, "rb") as f:
-        for chunk in iter(lambda: f.read(65536), b""):
-            hasher.update(chunk)
-    return hasher.hexdigest()
-
-
-def _daemon_watch(
-    file_path: str, cmd: str, *, wait_in_sec: int = 1, debounce_sec: int = 2
-) -> None:
-    """
-    Watch a file for changes and re-run command with debouncing.
-
-    Polls the file at regular intervals by computing its MD5 hash. When a
-    change is detected, waits for `debounce_sec` seconds with no further
-    changes before executing the command. This prevents repeatedly running
-    the command while the user is still editing the file.
-
-    :param file_path: Path to file to monitor
-    :param cmd: Command to execute when file changes
-    :param wait_in_sec: Poll interval in seconds (default: 1)
-    :param debounce_sec: Debounce duration in seconds (default: 2)
-    """
-    _LOG.info(
-        "Daemon mode: watching '%s' for changes (poll every 1s, debounce %ds)...",
-        file_path,
-        debounce_sec,
-    )
-    hdbg.dassert_file_exists(file_path)
-    prev_hash = _file_hash(file_path)
-    stable_hash = None
-    time_since_last_change = 0
-    while True:
-        time.sleep(wait_in_sec)
-        cur_hash = _file_hash(file_path)
-        if cur_hash != prev_hash:
-            # File changed, start debounce.
-            _LOG.info(
-                "File changed (hash: %s -> %s). Debouncing...",
-                prev_hash,
-                cur_hash,
-            )
-            stable_hash = cur_hash
-            time_since_last_change = 0
-            prev_hash = cur_hash
-        elif stable_hash is not None:
-            # In debounce period, tracking time without changes.
-            time_since_last_change += 1
-            if time_since_last_change >= debounce_sec:
-                # Debounce complete, regenerate.
-                _LOG.info("Debounce complete. Regenerating...")
-                hsystem.system(cmd)
-                stable_hash = None
 
 
 def _parse() -> argparse.ArgumentParser:
@@ -225,11 +166,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
     _LOG.info("Running command: %s", cmd)
     if args.daemon:
         # Skim auto-reloads PDF on change, so skip notes_to_pdf open action.
-        cmd += " --skip_action=open"
-        _daemon_watch(input_file, cmd)
-    else:
-        # Execute the command once.
-        hsystem.system(cmd)
+        cmd += " --skip_action=open --daemon"
+    # Execute the command.
+    hsystem.system(cmd)
 
 
 if __name__ == "__main__":

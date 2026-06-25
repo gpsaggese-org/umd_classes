@@ -2,41 +2,6 @@
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 13.1: Machine Learning Explainability
 
-/*
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 13.1: Machine Learning Explainability}}$$**
-\endgroup
-
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-::::
-:::: {.column width=20%}
-
-::::
-:::
-*/
-
 # Introduction and Motivation
 
 * Machine Learning Explainability
@@ -87,7 +52,7 @@ MSML610: Advanced Machine Learning
   - _Model-agnostic_: treat the model as a black box
     - E.g., LIME, SHAP $\to$ work with any model
 
-- **By output type_**
+- **By output type**
   - Feature attributions (numeric importance scores)
   - Rules or decision sets
   - Example-based (prototypes, counterfactuals)
@@ -113,42 +78,29 @@ mindmap
 ::::
 :::
 
-# Local vs. Global Explanations
-
 * Local vs. Global Explanations
 
-- **Definition**: explanations differ in whether they describe _one prediction_
-  or the _entire model_
+- **Local Explanations**
+  - Explain a single prediction for a specific input
+  - _Example_: _"This loan was rejected because income < \$30k and
+    debt-to-income ratio > 0.6"_
+  - _Methods_:
+    - LIME, SHAP, Counterfactuals
+  - _Pros_:
+    - Actionable for the individual affected
+    - Required by regulations (e.g., GDPR "right to explanation")
 
-::: columns
-:::: {.column width=50%}
-**Local Explanations**
-
-- Explain a single prediction for a specific input $\blue{x}$
-- **Example**: _"This loan was rejected because income < \$30k and
-  debt-to-income ratio > 0.6"_
-- Methods: LIME, SHAP (individual), counterfactuals
-- **Pros**:
-  - Actionable for the individual affected
-  - Required by regulations (e.g., GDPR "right to explanation")
-::::
-:::: {.column width=50%}
-**Global Explanations**
-
-- Explain the model's overall decision-making logic
-- **Example**: _"Across all predictions, income and credit history are the
-  two most important features"_
-- Methods: feature importance, partial dependence plots, global surrogates
-- **Pros**:
-  - Help model developers debug and validate
-  - Enable stakeholders to assess fairness across populations
-::::
-:::
+- **Global Explanations**
+  - Explain the model's overall decision-making logic
+  - _Example_: _"Across all predictions, income and credit history are the
+    two most important features"_
+  - Methods: feature importance, partial dependence plots, global surrogates
+  - _Pros_:
+    - Help model developers debug and validate
+    - Enable stakeholders to assess fairness across populations
 
 - **Key idea**: local and global explanations are complementary $\to$ a
   complete picture requires both
-
-# Model-Agnostic vs. Model-Specific Methods
 
 * Model-Agnostic vs. Model-Specific Methods
 

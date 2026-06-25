@@ -142,9 +142,11 @@ helping you improve test quality.
     Full documentation is at https://coverage.readthedocs.io/en/7.8.0
     ```
 
-## Use Examples
+# Workflows
 
 - Let's use the repo `//helpers` as an example
+
+## Generate Coverage Data from Unit tests
 
 - You want to measure the coverage of the codebase from a set of unit tests
   (e.g., all the tests `helpers/test/test_hmarkdown*.py`)
@@ -183,12 +185,28 @@ helping you improve test quality.
 
 - The full report shows coverage across the entire project, including both source
   and test files
+// TODO(ai_gp): Convert this into a table
+  - `Stmts` TODO
+  - `Miss` TODO
   - `BrPart` indicates partially-covered branches
   - `Branch` shows total branches
-  - These columns help identify conditional logic that was not fully exercised.
+  - `Cover` TODO
 
-- Generate the coverage for only certain target code (e.g.,
-  `helpers/hmarkdown*.py`)
+- These columns help identify conditional logic that was not fully exercised
+
+- In general the quality of the coverage should be evaluated only running the
+  entire suite of tests (including `fast`, `slow`, `superslow`)
+- A good approximation is to judge the coverage for the target unit tests
+  - E.g., for `dev_scripts_helpers/documentation`, you can run the tests
+    under `dev_scripts_helpers/documentation/test`
+
+pytest dev_scripts_helpers/documentation/test --cov
+coverage report --include=dev_scripts_helpers/documentation/test/*.py
+
+## Post-processing Coverage Data for Target Files
+
+- Post-process and generate the coverage report for only certain target code
+  (e.g., `helpers/hmarkdown*.py`)
 
     ```bash
     > coverage report --include=helpers/hmarkdown*.py
@@ -261,3 +279,117 @@ helping you improve test quality.
 
 - You can click on each column to sort by that column
 - You can click on a file to see which lines are covered
+
+## Gotchas
+
+pytest dev_scripts_helpers/documentation/test --cov
+
+When I run coverage I want to get a 0% if a file is not touched
+
+> coverage report --include=dev_scripts_helpers/documentation/*.py --sort=cover
+Name                                                              Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------------------------------------------------
+dev_scripts_helpers/documentation/piper_markdown_reader.py          329    275    110      1    13%
+dev_scripts_helpers/documentation/generate_images.py                179    129     70      3    27%
+dev_scripts_helpers/documentation/open_md.py                        129     92     36      2    28%
+dev_scripts_helpers/documentation/summarize_md.py                   225    151     80      4    30%
+dev_scripts_helpers/documentation/summarize_chapters.py              57     36     10      1    36%
+dev_scripts_helpers/documentation/render_images.py                  381    174    142      9    53%
+dev_scripts_helpers/documentation/convert_table.py                  111     36     30      6    62%
+dev_scripts_helpers/documentation/check_links.py                    146     48     56      9    65%
+dev_scripts_helpers/documentation/extract_chapters_from_text.py      99     27     34      1    74%
+dev_scripts_helpers/documentation/preprocess_notes.py               349     78    140     19    77%
+dev_scripts_helpers/documentation/lint_txt.py                       398     71    158     18    80%
+dev_scripts_helpers/documentation/documentation_utils.py            169      5     28      5    95%
+dev_scripts_helpers/documentation/__init__.py                         0      0      0      0   100%
+---------------------------------------------------------------------------------------------------
+TOTAL                                                              2572   1122    894     78    55%
+
+> ls -1 dev_scripts_helpers/documentation/*.py
+dev_scripts_helpers/documentation/__init__.py
+dev_scripts_helpers/documentation/check_ai_slop.py
+dev_scripts_helpers/documentation/check_links.py
+dev_scripts_helpers/documentation/clean_markdown.py
+dev_scripts_helpers/documentation/concatenate_pdfs.py
+dev_scripts_helpers/documentation/convert_docx_to_md.py
+dev_scripts_helpers/documentation/convert_epub_to_md.py
+dev_scripts_helpers/documentation/convert_pdf_to_md.py
+dev_scripts_helpers/documentation/convert_png_dir_to_movie.py
+dev_scripts_helpers/documentation/convert_table.py
+dev_scripts_helpers/documentation/count_words.py
+dev_scripts_helpers/documentation/dockerized_svg_with_inkscape.py
+dev_scripts_helpers/documentation/dockerized_svg_with_rsvg_convert.py
+dev_scripts_helpers/documentation/documentation_utils.py
+dev_scripts_helpers/documentation/extract_chapters_from_text.py
+dev_scripts_helpers/documentation/extract_from_md.py
+dev_scripts_helpers/documentation/extract_gdoc_map.py
+dev_scripts_helpers/documentation/extract_toc_from_txt.py
+dev_scripts_helpers/documentation/generate_images.py
+dev_scripts_helpers/documentation/generate_images.README.py
+dev_scripts_helpers/documentation/generate_latex_sty.py
+dev_scripts_helpers/documentation/generate_script_catalog.py
+dev_scripts_helpers/documentation/lint_txt.py
+dev_scripts_helpers/documentation/notes_to_pdf.py
+dev_scripts_helpers/documentation/open_md.py
+dev_scripts_helpers/documentation/piper_markdown_reader.py
+dev_scripts_helpers/documentation/preprocess_notes.py
+dev_scripts_helpers/documentation/publish_notes.py
+dev_scripts_helpers/documentation/render_images.py
+dev_scripts_helpers/documentation/replace_latex.py
+dev_scripts_helpers/documentation/run_pandoc.py
+dev_scripts_helpers/documentation/standardize_book_filename.py
+dev_scripts_helpers/documentation/summarize_chapters.py
+dev_scripts_helpers/documentation/summarize_md.py
+dev_scripts_helpers/documentation/transform_notes.py
+dev_scripts_helpers/documentation/update_md.py
+
+You need to do
+pytest dev_scripts_helpers/documentation/test --cov=dev_scripts_helpers/documentation
+
+
+2:56 PM
+The issue is that coverage report only shows files that were actually imported/executed during the test run and recorded in the .coverage data file. Files that were never touched at all (no import, no execution) don't show up as 0% — they're just absent from the report entirely.
+
+To force coverage to include untouched files as 0%, you need coverage run to know about them at collection time, via the --source option (not just --include at report time). --include/--omit only filter what's already in the data; --source tells coverage what the universe of files should be, so anything never imported still gets reported at 0%.
+
+
+> coverage report --include=dev_scripts_helpers/documentation/*.py --sort=cover
+Name                                                                    Stmts   Miss Branch BrPart  Cover
+---------------------------------------------------------------------------------------------------------
+dev_scripts_helpers/documentation/check_ai_slop.py                        151    151     28      0     0%
+dev_scripts_helpers/documentation/clean_markdown.py                        25     25      2      0     0%
+dev_scripts_helpers/documentation/concatenate_pdfs.py                      68     68     16      0     0%
+dev_scripts_helpers/documentation/convert_docx_to_md.py                    72     72     22      0     0%
+dev_scripts_helpers/documentation/convert_epub_to_md.py                   114    114     32      0     0%
+dev_scripts_helpers/documentation/convert_pdf_to_md.py                    256    256    110      0     0%
+dev_scripts_helpers/documentation/convert_png_dir_to_movie.py              92     92     16      0     0%
+dev_scripts_helpers/documentation/count_words.py                           65     65     12      0     0%
+dev_scripts_helpers/documentation/dockerized_svg_with_inkscape.py          25     25      4      0     0%
+dev_scripts_helpers/documentation/dockerized_svg_with_rsvg_convert.py      25     25      4      0     0%
+dev_scripts_helpers/documentation/extract_from_md.py                       32     32      2      0     0%
+dev_scripts_helpers/documentation/extract_gdoc_map.py                      89     89     22      0     0%
+dev_scripts_helpers/documentation/extract_toc_from_txt.py                 137    137     48      0     0%
+dev_scripts_helpers/documentation/generate_latex_sty.py                   102    102     32      0     0%
+dev_scripts_helpers/documentation/generate_script_catalog.py               75     75     24      0     0%
+dev_scripts_helpers/documentation/notes_to_pdf.py                         494    494    128      0     0%
+dev_scripts_helpers/documentation/publish_notes.py                         88     88     16      0     0%
+dev_scripts_helpers/documentation/replace_latex.py                         58     58     22      0     0%
+dev_scripts_helpers/documentation/run_pandoc.py                            26     26      4      0     0%
+dev_scripts_helpers/documentation/standardize_book_filename.py             38     38      6      0     0%
+dev_scripts_helpers/documentation/transform_notes.py                       76     76     26      0     0%
+dev_scripts_helpers/documentation/update_md.py                            173    173     42      0     0%
+dev_scripts_helpers/documentation/piper_markdown_reader.py                329    275    110      1    13%
+dev_scripts_helpers/documentation/generate_images.py                      179    129     70      3    27%
+dev_scripts_helpers/documentation/open_md.py                              129     92     36      2    28%
+dev_scripts_helpers/documentation/summarize_md.py                         225    151     80      4    30%
+dev_scripts_helpers/documentation/summarize_chapters.py                    57     36     10      1    36%
+dev_scripts_helpers/documentation/render_images.py                        381    174    142      9    53%
+dev_scripts_helpers/documentation/convert_table.py                        111     36     30      6    62%
+dev_scripts_helpers/documentation/check_links.py                          146     48     56      9    65%
+dev_scripts_helpers/documentation/extract_chapters_from_text.py            99     27     34      1    74%
+dev_scripts_helpers/documentation/preprocess_notes.py                     349     78    140     19    77%
+dev_scripts_helpers/documentation/lint_txt.py                             398     71    158     18    80%
+dev_scripts_helpers/documentation/documentation_utils.py                  169      5     28      5    95%
+dev_scripts_helpers/documentation/__init__.py                               0      0      0      0   100%
+---------------------------------------------------------------------------------------------------------
+TOTAL                                                                    4853   3403   1512     78    30%
