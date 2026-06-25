@@ -1,0 +1,1031 @@
+/*
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+MSML610: Advanced Machine Learning
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{Lesson 13.1: Machine Learning Explainability}}$$**
+\endgroup
+
+\vspace{1cm}
+
+::: columns
+:::: {.column width=75%}
+**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+
+**References**:
+
+::::
+:::: {.column width=20%}
+
+::::
+:::
+*/
+
+# Introduction and Motivation
+
+* Machine Learning Explainability
+
+- **Question**: _"A model predicts a patient has 92% chance of heart disease
+  $\to$ should the doctor trust it?"_
+  - Without explanation, even accurate models are unusable in high-stakes
+    decisions
+
+- **Problem**: ML models are increasingly used for decisions that affect
+  people's lives
+  - Credit scoring, medical diagnosis, criminal sentencing, hiring
+  - Stakeholders (doctors, judges, regulators) need to understand _why_ a
+    prediction was made, not just _what_ it is
+
+- **Definition**: Explainability (aka _"interpretability"_) is the degree to
+  which a human can understand the cause of a model's decision
+  - Aka "Interpretable ML", "XAI" (Explainable Artificial Intelligence)
+
+* Accuracy vs Interpretability
+
+- **Key idea**: there is a fundamental tension between model _accuracy_ and
+  _interpretability_
+  - Linear regression $\to$ interpretable but limited capacity
+  - Deep neural networks $\to$ high capacity but opaque (_"black box"_)
+
+- **Goal**: develop methods that explain black-box models _post-hoc_, without
+  sacrificing predictive performance
+
+* Taxonomy of Explainability Methods
+
+- **Definition**: explainability methods can be classified along several axes
+
+::: columns
+:::: {.column width=55%}
+- By _scope_:
+  - **Global**: explain the model's overall behavior
+    - E.g., feature importance rankings, partial dependence plots
+  - **Local**: explain a single prediction
+    - E.g., _"why was this loan application rejected?"_
+
+- By _model dependence_:
+  - **Model-specific**: exploit internal model structure
+    - E.g., attention weights in transformers, decision paths in trees
+  - **Model-agnostic**: treat the model as a black box
+    - E.g., LIME, SHAP $\to$ work with any model
+
+- By _output type_:
+  - Feature attributions (numeric importance scores)
+  - Rules or decision sets
+  - Example-based (prototypes, counterfactuals)
+
+::::
+:::: {.column width=45%}
+
+```mermaid
+mindmap
+  root((**Explainability Methods**))
+    (**By Scope**)
+      Global
+      Local
+    (**By Model Dependence**)
+      Model-specific
+      Model-agnostic
+    (**By Output**)
+      Feature attributions
+      Rules
+      Examples
+```
+
+::::
+:::
+
+/*
+
+# ##############################################################################
+# Local vs. Global Explanations
+# ##############################################################################
+
+* Local vs. Global Explanations
+
+- **Definition**: explanations differ in whether they describe _one prediction_
+  or the _entire model_
+
+::: columns
+:::: {.column width=50%}
+**Local Explanations**
+
+- Explain a single prediction for a specific input $\blue{x}$
+- **Example**: _"This loan was rejected because income < \$30k and
+  debt-to-income ratio > 0.6"_
+- Methods: LIME, SHAP (individual), counterfactuals
+- **Pros**:
+  - Actionable for the individual affected
+  - Required by regulations (e.g., GDPR "right to explanation")
+::::
+:::: {.column width=50%}
+**Global Explanations**
+
+- Explain the model's overall decision-making logic
+- **Example**: _"Across all predictions, income and credit history are the
+  two most important features"_
+- Methods: feature importance, partial dependence plots, global surrogates
+- **Pros**:
+  - Help model developers debug and validate
+  - Enable stakeholders to assess fairness across populations
+::::
+:::
+
+- **Key idea**: local and global explanations are complementary $\to$ a
+  complete picture requires both
+
+# ##############################################################################
+# Model-Agnostic vs. Model-Specific Methods
+# ##############################################################################
+
+* Model-Agnostic vs. Model-Specific Methods
+
+- **Definition**: explanation methods differ in whether they require access to
+  model internals
+
+::: columns
+:::: {.column width=55%}
+- **Model-specific** methods exploit the model's internal structure
+  - Decision tree $\to$ follow the path from root to leaf
+  - Linear model $\to$ read coefficients directly
+  - Neural network $\to$ gradient-based saliency maps, attention weights
+  - **Pros**: computationally efficient, structurally faithful
+  - **Cons**: tied to one model class, not transferable
+
+- **Model-agnostic** methods treat the model as a black box $f: X \to Y$
+  - Only require input-output access $\to$ query $f(x)$ and observe predictions
+  - LIME, SHAP, permutation importance, partial dependence
+  - **Pros**: applicable to any model, comparable across models
+  - **Cons**: can be computationally expensive, may not capture internal
+    mechanisms
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph ModelAccess {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Model [label="ML Model f", fillcolor="#F4A6A6"];
+    Specific [label="Model-Specific\nMethods", fillcolor="#A6C8F4"];
+    Agnostic [label="Model-Agnostic\nMethods", fillcolor="#A0D6D1"];
+    Internals [label="Internal\nStructure", fillcolor="#FFD1A6"];
+    IO [label="Input / Output\nOnly", fillcolor="#B2E2B2"];
+
+    Model -> Internals [label="  expose  "];
+    Model -> IO [label="  query  "];
+    Internals -> Specific;
+    IO -> Agnostic;
+}
+```
+
+::::
+:::
+
+# ##############################################################################
+# Intrinsic Interpretability vs. Post-Hoc Explanation
+# ##############################################################################
+
+* Intrinsic Interpretability vs. Post-Hoc Explanation
+
+- **Definition**: _intrinsically interpretable_ models are understandable by
+  design, without any additional explanation method
+  - The model _is_ the explanation
+
+- **Definition**: _post-hoc_ methods explain a model _after_ it has been trained
+  - Applied to black-box models to extract understanding
+
+- **Key idea**: the choice between intrinsic and post-hoc is a design decision
+
+\begingroup \scriptsize
+| **Aspect** | **Intrinsic** | **Post-Hoc** |
+| --- | --- | --- |
+| **When** | Built into model | Applied after training |
+| **Examples** | Decision trees, linear models, GAMs | LIME, SHAP, saliency maps |
+| **Faithfulness** | Perfect (model = explanation) | Approximate (explanation $\approx$ model) |
+| **Flexibility** | Limited model complexity | Any model |
+| **Risk** | May sacrifice accuracy | Explanation may not reflect true reasoning |
+\endgroup
+
+* Decision Trees and Rule-Based Models
+
+- **Key idea**: decision trees are the canonical intrinsically interpretable
+  model $\to$ every prediction follows an explicit if-then path
+
+::: columns
+:::: {.column width=55%}
+- **Algorithm**: classify by following a path from root to leaf
+  1. At each node, evaluate a condition on a single feature
+  2. Branch left or right based on the outcome
+  3. Reach a leaf $\to$ output the prediction
+
+- **Example**: _"Loan approved because income $> \$50$k AND debt ratio
+  $< 0.4$"_
+
+- **Limitations**:
+  - Deep trees become hard to interpret (hundreds of nodes)
+  - Unstable $\to$ small data changes can produce different trees
+  - Limited expressiveness for complex decision boundaries
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph DecisionTree {
+    splines=true;
+    nodesep=0.6;
+    ranksep=0.6;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
+
+    Root [label="Income > 50k?", fillcolor="#A6C8F4"];
+    Left [label="Debt Ratio < 0.4?", fillcolor="#FFD1A6"];
+    Right [label="Deny", fillcolor="#F4A6A6"];
+    LL [label="Approve", fillcolor="#B2E2B2"];
+    LR [label="Deny", fillcolor="#F4A6A6"];
+
+    Root -> Left [label="  Yes  "];
+    Root -> Right [label="  No  "];
+    Left -> LL [label="  Yes  "];
+    Left -> LR [label="  No  "];
+}
+```
+
+::::
+:::
+
+- **Remark**: rule-based models (e.g., decision lists, rule sets) offer similar
+  interpretability by expressing predictions as a collection of if-then rules
+
+* Linear and Generalized Additive Models (GAMs)
+
+- **Key idea**: linear models explain predictions through _additive feature
+  contributions_
+  - Each feature $x_j$ contributes $\blue{\beta_j} x_j$ to the prediction
+  - The coefficient $\blue{\beta_j}$ directly quantifies the effect of
+    feature $j$
+
+- **Definition**: a _linear model_ predicts:
+  $$
+  \hat{y}
+    = \blue{\beta_0}
+      + \blue{\beta_1} x_1
+      + \blue{\beta_2} x_2
+      + \cdots
+      + \blue{\beta_p} x_p
+  $$
+  - **Interpretation**: increasing $x_j$ by one unit changes $\hat{y}$ by
+    $\blue{\beta_j}$, holding all else equal
+
+- **Definition**: a _Generalized Additive Model_ (GAM) extends this to
+  nonlinear feature effects:
+  $$
+  \hat{y}
+    = \beta_0
+      + \red{f_1}(x_1)
+      + \red{f_2}(x_2)
+      + \cdots
+      + \red{f_p}(x_p)
+  $$
+  - Each $\red{f_j}$ is a smooth, potentially nonlinear function (e.g., spline)
+  - **Pros**: captures nonlinear patterns while remaining additive $\to$
+    each feature's effect can be plotted independently
+  - **Cons**: cannot capture feature interactions (unless explicitly added as
+    $f_{jk}(x_j, x_k)$ terms)
+
+# ##############################################################################
+# Feature Attribution Methods
+# ##############################################################################
+
+* Feature Attribution Methods: Overview
+
+- **Definition**: _feature attribution_ assigns a numeric importance score
+  $\phi_j$ to each input feature $x_j$ for a given prediction
+
+- **Goal**: answer _"how much did each feature contribute to this prediction?"_
+
+- **Key idea**: different methods define _"contribution"_ differently
+
+```mermaid
+mindmap
+  root((**Feature Attribution**))
+    (**SHAP**)
+      Game-theoretic
+      Shapley values
+      Exact and approximate
+    (**LIME**)
+      Local surrogate
+      Perturbation-based
+      Model-agnostic
+    (**Permutation Importance**)
+      Global method
+      Measures performance drop
+      Feature shuffling
+```
+
+- **Remark**: all three methods are model-agnostic but differ in scope
+  (local vs global) and theoretical foundation
+
+* SHAP: Shapley Values Foundation
+
+- **Key idea**: SHAP (Lundberg and Lee, 2017) uses _Shapley values_ from
+  cooperative game theory to fairly distribute the prediction among features
+
+- **Intuition**: think of each feature as a _player_ in a cooperative game
+  - The _game_ is the prediction task
+  - The _payout_ is the model's prediction $f(x)$
+  - Each player's _Shapley value_ is their fair contribution to the payout
+
+- **Definition**: the Shapley value for feature $j$ is:
+  $$
+  \phi_j
+    = \sum_{S \subseteq N \setminus \{j\}}
+        \frac{|S|! \; (|N| - |S| - 1)!}{|N|!}
+        \left[
+          f(\blue{S \cup \{j\}}) - f(\blue{S})
+        \right]
+  $$
+  - $N$ = set of all features, $S$ = a subset excluding feature $j$
+  - $f(S)$ = model prediction using only features in $S$
+  - The sum averages the _marginal contribution_ of $j$ over all possible
+    orderings
+
+- **Remark**: Shapley values are the _unique_ attribution method satisfying
+  four axioms: efficiency, symmetry, dummy, and additivity
+
+* SHAP: Properties and Computation
+
+- **Key idea**: SHAP satisfies desirable theoretical properties
+
+- **Properties**:
+  - _Efficiency_: contributions sum to the prediction difference from baseline
+    $$
+    f(x) - \EE[f(x)]
+      = \sum_{j=1}^{p} \phi_j
+    $$
+  - _Symmetry_: features with identical contributions get equal attribution
+  - _Dummy_: features that never change the prediction get $\phi_j = 0$
+  - _Additivity_: for ensemble models, SHAP values of the ensemble equal the
+    average of individual SHAP values
+
+- **Problem**: exact computation requires $2^p$ model evaluations $\to$
+  exponential in the number of features
+
+- **Solution**: efficient approximations exist
+  - `TreeSHAP` $\to$ exact in $O(TLD^2)$ for tree-based models
+  - `KernelSHAP` $\to$ weighted regression approximation (model-agnostic)
+  - `DeepSHAP` $\to$ backpropagation-based for neural networks
+
+* SHAP: Visualization and Interpretation
+
+- **Key idea**: SHAP provides rich visualization tools for both local and
+  global explanations
+
+- **Local explanation** (single prediction):
+  - _Force plot_: shows how each feature pushes the prediction from the
+    baseline $\EE[f(x)]$ toward the final output $f(x)$
+  - Features colored $\red{red}$ push the prediction higher; $\blue{blue}$
+    push it lower
+
+- **Global explanation** (entire dataset):
+  - _Summary plot_: shows the distribution of SHAP values for each feature
+    across all data points
+  - _Dependence plot_: shows how one feature's SHAP value varies with its
+    actual value, revealing nonlinear effects
+
+- **Example**: predicting house prices
+  - Local: _"This house is priced \$50k above average because it has 4
+    bedrooms ($+\$30$k) and is near a school ($+\$20$k)"_
+  - Global: _"Square footage and location are the two most important features
+    across all predictions"_
+
+- **Remark**: SHAP unifies several existing methods (LIME, DeepLIFT,
+  layer-wise relevance propagation) under a single theoretical framework
+
+* LIME: Local Interpretable Model-Agnostic Explanations
+
+- **Key idea**: approximate a complex model _locally_ with a simple,
+  interpretable model (Ribeiro et al., 2016)
+
+::: columns
+:::: {.column width=55%}
+- **Algorithm**:
+  1. Pick an instance $\blue{x}$ to explain
+  2. Generate perturbed samples $\{z_1, ..., z_N\}$ around $\blue{x}$
+  3. Weight each $z_i$ by proximity to $\blue{x}$ using a kernel
+     $\pi_{\blue{x}}(z_i)$
+  4. Query the black-box model $f$ on all $z_i$ to get predictions $f(z_i)$
+  5. Fit a simple model $\red{g}$ (e.g., linear) on $\{(z_i, f(z_i))\}$ weighted
+     by $\pi_{\blue{x}}$
+
+::::
+:::: {.column width=45%}
+```graphviz[80%]
+digraph LIME {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Instance   [label="Instance x", fillcolor="#A6C8F4"];
+    Perturb    [label="Perturbed\nSamples", fillcolor="#FFD1A6"];
+    BlackBox   [label="Black-Box\nModel f", fillcolor="#F4A6A6"];
+    Predict    [label="Predictions\nf(z_i)", fillcolor="#B2E2B2"];
+    FitSimple  [label="Fit Simple\nModel g", fillcolor="#A0D6D1"];
+    Explain    [label="Local\nExplanation", fillcolor="#C6A6F4"];
+
+    Instance -> Perturb [label="  perturb  "];
+    Perturb -> BlackBox [label="  query  "];
+    BlackBox -> Predict;
+    Instance -> FitSimple [label="  weight by\n  proximity  ", style=dashed];
+    Predict -> FitSimple;
+    FitSimple -> Explain;
+}
+```
+::::
+:::
+
+- **Example**: a spam classifier flags an email $\to$ LIME reveals the words
+  _"free"_, _"winner"_, and _"click here"_ drove the prediction
+  - The linear explanation $\red{g}$ assigns a positive coefficient to each of
+    these tokens
+
+* LIME: Formal Objective
+
+- **Definition**: LIME finds the best local explanation by solving:
+  $$
+  \red{g^*}
+    = \arg\min_{g \in G}
+        \sum_{i=1}^{N}
+          \pi_{\blue{x}}(z_i)
+          \left(
+            f(z_i) - \red{g}(z_i)
+          \right)^2
+        + \Omega(\red{g})
+  $$
+  - $\Omega(\red{g})$ penalizes complexity of the explanation (e.g., number of
+    non-zero coefficients)
+
+- **Interpretation**: LIME minimizes weighted reconstruction error between the
+  black-box $f$ and the simple surrogate $\red{g}$, with more weight on
+  samples close to $\blue{x}$
+
+- **Limitations**:
+  - Explanations depend on the perturbation strategy $\to$ different
+    perturbations can yield different explanations
+  - The kernel width is a hyperparameter that affects locality
+  - No theoretical guarantees on faithfulness to the original model
+
+* Permutation Feature Importance
+
+- **Key idea**: measure how much the model's performance _degrades_ when a
+  feature's values are randomly shuffled (Breiman, 2001)
+
+- **Algorithm**:
+  1. Compute baseline performance $\blue{P_0}$ on the validation set
+  2. For each feature $j$:
+     - Randomly permute the values of $x_j$ across all samples
+     - Compute the new performance $\red{P_j}$
+     - Importance of feature $j$: $\phi_j = \blue{P_0} - \red{P_j}$
+  3. Repeat and average over multiple permutations for stability
+
+- **Interpretation**: a large drop $\phi_j$ means the model relies heavily
+  on feature $j$
+
+- **Pros**:
+  - Model-agnostic, global, easy to implement
+  - Directly tied to predictive performance
+
+- **Cons**:
+  - Breaks feature correlations $\to$ can produce unrealistic data points
+  - Correlated features split importance (e.g., height and weight)
+  - Only measures _predictive_ importance, not _causal_ importance
+
+* Comparing Feature Attribution Methods
+
+- **Key idea**: SHAP, LIME, and permutation importance each have distinct
+  strengths $\to$ choice depends on the use case
+
+\begingroup \scriptsize
+| **Property** | **SHAP** | **LIME** | **Permutation Importance** |
+| --- | --- | --- | --- |
+| **Scope** | Local (aggregable to global) | Local | Global |
+| **Theory** | Shapley axioms | Local fidelity | Performance degradation |
+| **Consistency** | Guaranteed | Depends on perturbations | Stable with enough repeats |
+| **Speed** | Slow (exact), fast (TreeSHAP) | Moderate | Fast |
+| **Interactions** | Captures via coalition structure | Ignores (linear surrogate) | Ignores |
+| **Correlation handling** | Conditional vs marginal variants | Perturbs independently | Breaks correlations |
+\endgroup
+
+- **Remark**: in practice, using multiple methods and checking agreement
+  increases confidence in the explanation
+
+# ##############################################################################
+# Counterfactual Explanations
+# ##############################################################################
+
+* Counterfactual Explanations
+
+- **Definition**: a _counterfactual explanation_ identifies the smallest change
+  to the input that would _flip_ the model's decision (Wachter et al., 2017)
+  - _"What would need to change for the outcome to be different?"_
+
+- **Example**: a loan application is denied
+  - Counterfactual: _"If your income were \$5k higher and you had no
+    outstanding defaults, the loan would be approved"_
+  - This tells the applicant _what to change_, not just _why it was rejected_
+
+::: columns
+:::: {.column width=55%}
+- **Key idea**: counterfactuals are _actionable_ $\to$ they suggest a path
+  from the current outcome to the desired one
+
+- **Properties of good counterfactuals**:
+  - _Proximity_: as close as possible to the original input
+  - _Sparsity_: change as few features as possible
+  - _Plausibility_: the counterfactual should be realistic
+  - _Actionability_: only change features the user can control
+    - E.g., age and race are immutable
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph Counterfactual {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Original [label="Original x\nDeny", fillcolor="#F4A6A6"];
+    CF [label="Counterfactual x'\nApprove", fillcolor="#B2E2B2"];
+    Delta [label="Minimal\nChange", fillcolor="#A0D6D1"];
+
+    Original -> Delta [label="  compute  "];
+    Delta -> CF [label="  apply  "];
+}
+```
+
+::::
+:::
+
+* Counterfactual Explanations: Formal Framework
+
+- **Definition**: find a counterfactual $\red{x'}$ by solving:
+  $$
+  \red{x'}
+    = \arg\min_{x'}
+        d(\blue{x}, \red{x'})
+    \quad \text{subject to} \quad
+        f(\red{x'}) = y'
+  $$
+  - $\blue{x}$ = original input, $y'$ = desired outcome
+  - $d(\cdot, \cdot)$ = distance function measuring how much the input changes
+
+- **Remark**: in practice, a soft constraint formulation is used:
+  $$
+  \red{x'}
+    = \arg\min_{x'}
+        \lambda \cdot \ell\bigl(f(\red{x'}), y'\bigr)
+        + d(\blue{x}, \red{x'})
+  $$
+  - $\ell$ is a loss penalizing predictions far from $y'$
+  - $\lambda$ controls the tradeoff between achieving $y'$ and staying close
+    to $\blue{x}$
+
+- **Limitations**:
+  - Multiple valid counterfactuals may exist $\to$ which one to present?
+  - Counterfactuals may lie outside the data manifold (unrealistic)
+  - Sensitive to the choice of distance metric $d$
+
+# ##############################################################################
+# Explainability in Bayesian Models
+# ##############################################################################
+
+* Explainability in Bayesian Models
+
+- **Key idea**: Bayesian models provide a natural form of explainability through
+  _uncertainty quantification_
+  - Instead of a single point prediction, they output a full posterior
+    distribution over outcomes
+
+- **Intuition**: a model that says _"I predict 80% chance of disease, but I'm
+  very uncertain"_ is more informative than one that just says _"disease"_
+
+- **Definition**: in Bayesian inference, we update our belief about parameters
+  $\theta$ given data $\mathcal{D}$:
+  $$
+  \underbrace{\Pr(\theta | \mathcal{D})}_{\text{posterior}}
+    = \frac{
+        \overbrace{\Pr(\mathcal{D} | \theta)}^{\text{likelihood}}
+        \cdot
+        \overbrace{\Pr(\theta)}^{\text{prior}}
+      }{
+        \underbrace{\Pr(\mathcal{D})}_{\text{evidence}}
+      }
+  $$
+
+- **Remark**: the posterior is inherently interpretable $\to$ it tells us which
+  parameter values are plausible and how confident we should be
+
+* Interpreting Posterior Distributions and Credible Intervals
+
+- **Key idea**: the shape of the posterior distribution directly communicates
+  model uncertainty about each parameter
+
+- **Definition**: a _credible interval_ $[\theta_L, \theta_U]$ contains the
+  true parameter with probability $1 - \alpha$:
+  $$
+  \Pr(\theta_L \leq \theta \leq \theta_U | \mathcal{D}) = 1 - \alpha
+  $$
+
+- **Interpretation**:
+  - _Narrow_ posterior $\to$ model is confident about $\theta$
+  - _Wide_ posterior $\to$ high uncertainty, need more data
+  - _Multimodal_ posterior $\to$ multiple plausible explanations exist
+
+- **Example**: predicting treatment effect
+  - Posterior mean = 5.2 units, 95% credible interval = $[1.1, 9.3]$
+  - _"The treatment likely has a positive effect, but we're uncertain about
+    its magnitude"_
+
+- **Remark**: credible intervals have a direct probability interpretation,
+  unlike frequentist confidence intervals
+
+* Bayesian Networks and Probabilistic Graphical Models
+
+- **Key idea**: Bayesian Networks (BNs) encode _conditional independence_
+  relationships as a directed acyclic graph (DAG) $\to$ the structure itself
+  is an explanation
+
+::: columns
+:::: {.column width=55%}
+- **Definition**: a Bayesian Network is a pair $(\mathcal{G}, \Pr)$ where:
+  - $\mathcal{G}$ = DAG whose nodes represent random variables
+  - $\Pr$ = joint distribution factored according to $\mathcal{G}$:
+    $$
+    \Pr(X_1, ..., X_n)
+      = \prod_{i=1}^{n} \Pr(X_i | Parents(X_i))
+    $$
+
+- **Interpretation**:
+  - Edges encode direct dependencies
+  - Missing edges encode conditional independencies
+  - The graph answers _"what influences what?"_
+
+- **Example**: _"The model predicts high risk because Smoking $\to$ Cancer
+  $\to$ Mortality"_ $\to$ the causal pathway is visible in the graph
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph BayesNet {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Smoking [label="Smoking", fillcolor="#FFD1A6"];
+    Cancer [label="Cancer", fillcolor="#F4A6A6"];
+    XRay [label="X-Ray\nResult", fillcolor="#B2E2B2"];
+    Dyspnea [label="Dyspnea", fillcolor="#A6C8F4"];
+    Pollution [label="Pollution", fillcolor="#C6A6F4"];
+
+    Smoking -> Cancer;
+    Pollution -> Cancer;
+    Cancer -> XRay;
+    Cancer -> Dyspnea;
+}
+```
+
+::::
+:::
+
+* Uncertainty Quantification as a Form of Explanation
+
+- **Key idea**: knowing _what the model doesn't know_ is itself an explanation
+  $\to$ uncertainty quantification (UQ) distinguishes confident from unreliable
+  predictions
+
+- **Definition**: two types of uncertainty
+  - _Aleatoric_ (data uncertainty): irreducible noise in the data
+    - E.g., inherent randomness in patient outcomes
+  - _Epistemic_ (model uncertainty): reducible with more data
+    - E.g., model hasn't seen enough examples of a rare condition
+
+- **Interpretation**: a Bayesian model decomposes total predictive uncertainty:
+  $$
+  \underbrace{\VV[Y | x, \mathcal{D}]}_{\text{total}}
+    = \underbrace{\EE[\VV[Y | x, \theta]]}_{\text{aleatoric}}
+      + \underbrace{\VV[\EE[Y | x, \theta]]}_{\text{epistemic}}
+  $$
+
+- **Example**: a medical diagnosis model
+  - High aleatoric uncertainty $\to$ _"This case is inherently ambiguous"_
+  - High epistemic uncertainty $\to$ _"We haven't seen enough cases like this,
+    collect more data"_
+
+- **Remark**: models that flag high epistemic uncertainty enable _safe
+  deployment_ $\to$ defer to human experts when the model is unsure
+
+# ##############################################################################
+# Causal AI and Explainability
+# ##############################################################################
+
+* Causal AI and Explainability
+
+- **Problem**: most ML explanations are _correlational_ $\to$ _"feature $X$ is
+  associated with outcome $Y$"_ does not mean _"$X$ causes $Y$"_
+
+- **Question**: _"Does the model's explanation reflect a true causal mechanism,
+  or just a spurious correlation in the training data?"_
+
+- **Key idea**: causal AI provides tools to distinguish _why_ something happens
+  from _what_ co-occurs
+  - Pearl's _Ladder of Causation_ (2018):
+    1. **Association** (seeing): $\Pr(Y | X)$ $\to$ observational
+    2. **Intervention** (doing): $\Pr(Y | do(X))$ $\to$ experimental
+    3. **Counterfactual** (imagining): $\Pr(Y_x | X = x', Y = y')$ $\to$
+       retrospective
+
+- **Remark**: standard ML operates at level 1 (association) $\to$ causal
+  explanations require level 2 or 3
+
+* Causal Inference vs. Correlational Explanation
+
+- **Key idea**: correlational explanations can be misleading when confounders
+  exist
+
+- **Example**: _"Ice cream sales are correlated with drowning deaths"_
+  - Correlational explanation: ice cream $\to$ drowning
+  - Causal explanation: temperature $\to$ both ice cream sales and swimming
+    $\to$ drowning
+  - The confounder (temperature) creates a spurious association
+
+::: columns
+:::: {.column width=50%}
+- **Correlational explanation**:
+  - Reports statistical associations: $\Pr(Y | X)$
+  - Cannot distinguish direct effects from confounding
+  - Sufficient for prediction
+  - Insufficient for intervention planning
+::::
+:::: {.column width=50%}
+- **Causal explanation**:
+  - Reports interventional effects: $\Pr(Y | do(X))$
+  - Accounts for confounders via adjustment
+  - Answers _"what if we change $X$?"_
+  - Required for decision-making and policy
+::::
+:::
+
+- **Remark**: a feature can be highly important for prediction (high SHAP
+  value) but have zero causal effect $\to$ e.g., an umbrella predicts rain
+  but doesn't cause it
+
+* Structural Causal Models and Causal Graphs
+
+- **Definition**: a _Structural Causal Model_ (SCM) is a tuple
+  $\mathcal{M} = (U, V, F, \Pr(U))$ where:
+  - $U$ = exogenous (unobserved) variables
+  - $V$ = endogenous (observed) variables
+  - $F$ = structural equations: $V_i = f_i(Parents(V_i), U_i)$
+  - $\Pr(U)$ = distribution over exogenous variables
+
+::: columns
+:::: {.column width=55%}
+- **Key idea**: the causal graph encodes which variables directly cause
+  which others
+  - Edges represent _causal mechanisms_, not mere associations
+  - Removing an edge = removing a causal pathway
+
+- **Intervention** via the $do()$ operator:
+  - $do(X = x)$ = set $X$ to $x$ regardless of its causes
+  - Graphically: delete all incoming edges to $X$
+  - Computes $\Pr(Y | do(X = x))$ via adjustment formulas
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph SCM {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Z [label="Confounder Z", fillcolor="#C6A6F4"];
+    X [label="Treatment X", fillcolor="#A6C8F4"];
+    Y [label="Outcome Y", fillcolor="#B2E2B2"];
+
+    Z -> X;
+    Z -> Y;
+    X -> Y [style="bold", penwidth=2.0, label="  causal\n  effect  "];
+}
+```
+
+::::
+:::
+
+* Counterfactual Reasoning in Causal Frameworks
+
+- **Key idea**: causal counterfactuals go beyond predictive counterfactuals
+  $\to$ they reason about _what would have happened_ under a different
+  intervention
+
+- **Definition**: the causal counterfactual _"$Y$ had $X$ been $x$"_ for an
+  individual with observed $(X = x', Y = y')$ is computed in three steps:
+  1. **Abduction**: infer the exogenous variables $U$ from observations
+     $$
+     \Pr(U | X = x', Y = y')
+     $$
+  2. **Action**: modify the structural equation for $X$ to $do(X = x)$
+  3. **Prediction**: compute the counterfactual outcome $Y_x$ under the
+     modified model with the inferred $U$
+
+- **Example**: a patient received treatment A and recovered
+  - Counterfactual: _"Would the patient have recovered had they received
+    treatment B instead?"_
+  - Requires the full SCM, not just observational data
+
+- **Remark**: causal counterfactuals are strictly more demanding than
+  interventional queries $\to$ they require individual-level (not just
+  population-level) reasoning
+
+* Distinguishing Causal Explanations from Feature Attribution
+
+- **Problem**: feature attribution methods (SHAP, LIME) answer _"what features
+  are important for the model's prediction?"_ but not _"what features actually
+  cause the outcome?"_
+
+::: columns
+:::: {.column width=55%}
+- **Key idea**: there is a crucial difference between:
+  - _Model explanation_: why did the model predict $\hat{y}$?
+  - _Causal explanation_: what actually caused outcome $y$?
+
+- **Example**: predicting hospital readmission
+  - SHAP says _"number of prior visits"_ is the top feature
+  - But prior visits don't _cause_ readmission $\to$ they are a proxy for
+    underlying disease severity
+  - A causal analysis would identify the actual mechanism
+
+- **Remark**: conflating model explanations with causal explanations is
+  a common and dangerous mistake
+  - Leads to misguided interventions
+  - E.g., _"reduce the number of prior visits"_ doesn't help
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph CausalVsAttribution {
+    splines=true;
+    nodesep=0.8;
+    ranksep=0.7;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
+
+    Severity [label="Disease\nSeverity", fillcolor="#C6A6F4"];
+    Visits [label="Prior\nVisits", fillcolor="#FFD1A6"];
+    Readmit [label="Readmission", fillcolor="#F4A6A6"];
+    Model [label="Model\nPrediction", fillcolor="#A6C8F4"];
+
+    Severity -> Visits;
+    Severity -> Readmit [label="  true cause  ", style="bold", penwidth=2.0];
+    Visits -> Model [label="  high SHAP  ", style=dashed];
+    Severity -> Model [style=dashed];
+}
+```
+
+::::
+:::
+
+# ##############################################################################
+# Quality of Explanations
+# ##############################################################################
+
+* Faithfulness of Explanations
+
+- **Definition**: an explanation is _faithful_ if it accurately reflects the
+  model's actual reasoning process
+  - A faithful explanation describes _how the model truly works_, not just a
+    plausible story
+
+- **Problem**: post-hoc explanations are approximations $\to$ they may not
+  accurately represent the model's internal logic
+  - LIME's linear surrogate may miss nonlinear interactions
+  - SHAP with marginal expectations may attribute importance to features the
+    model never uses conditionally
+
+- **Key idea**: two types of faithfulness
+  - _Descriptive faithfulness_: does the explanation match the model's
+    computation?
+  - _Selective faithfulness_: if we remove the "important" features, does the
+    prediction actually change?
+
+- **Example**: testing faithfulness
+  - Remove the top-$k$ features according to the explanation
+  - If the prediction doesn't change $\to$ the explanation is unfaithful
+  - If it changes dramatically $\to$ the explanation is likely faithful
+
+- **Remark**: there is no universal metric for faithfulness $\to$ it depends
+  on how _"matching the model's reasoning"_ is defined
+
+* Stability and Robustness of Explanations
+
+- **Definition**: an explanation is _stable_ if small changes to the input
+  produce small changes in the explanation
+  - Aka _"continuity"_ or _"smoothness"_ of the explanation function
+
+- **Problem**: many explanation methods are _unstable_
+  - LIME: different random perturbations yield different explanations for the
+    same input
+  - Gradient-based methods: explanations can be noisy and visually
+    incoherent
+
+- **Definition**: an explanation is _robust_ if it cannot be manipulated by
+  adversarial perturbations
+  - Slack et al. (2020): showed that biased models can be made to produce
+    _fair-looking_ LIME/SHAP explanations via adversarial scaffolding
+
+- **Key idea**: unreliable explanations are worse than no explanations
+  - They create false confidence in flawed models
+  - Stakeholders make decisions based on explanations they trust
+
+- **Remark**: evaluating explanation quality requires checking:
+  1. _Faithfulness_: does it reflect the model?
+  2. _Stability_: is it consistent across similar inputs?
+  3. _Robustness_: can it be gamed or manipulated?
+
+# ##############################################################################
+# The Accuracy-Interpretability Tradeoff
+# ##############################################################################
+
+* The Accuracy-Interpretability Tradeoff
+
+- **Key idea**: the _accuracy-interpretability tradeoff_ is the central tension
+  in explainable ML
+
+::: columns
+:::: {.column width=55%}
+- **Intuition**: as models grow more complex, they capture more patterns in the
+  data (higher accuracy) but become harder to understand
+
+- **Spectrum**:
+  - Linear regression $\to$ fully interpretable, limited capacity
+  - Decision trees $\to$ interpretable if shallow, brittle
+  - GAMs $\to$ nonlinear but additive, moderate interpretability
+  - Random forests / gradient boosting $\to$ high accuracy, low
+    interpretability
+  - Deep neural networks $\to$ highest capacity, opaque
+
+- **Question**: _"Is this tradeoff fundamental, or can we have both?"_
+  - Recent work suggests _some_ domains allow high accuracy with interpretable
+    models (Rudin, 2019)
+  - But for many tasks, the gap remains significant
+::::
+:::: {.column width=45%}
+
+```graphviz[80%]
+digraph Tradeoff {
+    splines=true;
+    nodesep=0.6;
+    ranksep=0.5;
+
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
+
+    LR [label="Linear\nRegression", fillcolor="#B2E2B2"];
+    DT [label="Decision\nTrees", fillcolor="#A0D6D1"];
+    GAM [label="GAMs", fillcolor="#A6E7F4"];
+    RF [label="Random\nForests", fillcolor="#FFD1A6"];
+    DNN [label="Deep Neural\nNetworks", fillcolor="#F4A6A6"];
+
+    LR -> DT [label="  + complexity  "];
+    DT -> GAM;
+    GAM -> RF;
+    RF -> DNN [label="  + accuracy\n  - interpretability  "];
+}
+```
+
+::::
+:::
+
+- **Remark**: Rudin (2019) argues we should prefer inherently interpretable
+  models in high-stakes settings rather than explaining black boxes post-hoc
+
+*/

@@ -1,3 +1,15 @@
+---
+title: "How to Write Books for Humans and AI"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on writing books optimized for both human readers and AI consumption
+categories:
+  - AI Research
+  - Developer Tools
+---
+
 # How to write books for humans and AI
 
 - Writing a textbook optimized for learning using notes means prioritizing

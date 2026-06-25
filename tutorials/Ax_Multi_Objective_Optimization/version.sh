@@ -1,12 +1,1 @@
-#!/bin/bash
-echo "# Pytho3"
-python3 --version
-echo "# pip3"
-pip3 --version
-echo "# jupyter"
-jupyter --version
-echo "# Python packages"
-pip3 list
-# Add more versions for more tools.
-# echo "# mongo"
-# mongod --version
+../../class_project/project_template/version.sh

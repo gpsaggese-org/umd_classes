@@ -2116,7 +2116,7 @@ def sweatstack_remove_data():
 
 if __name__ == "__main__":
     # Simple command line argument for debug mode
-    parser = argparse.ArgumentParser(description="BambooAI Flask App")
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--debug", action="store_true", help="Skip thread cleanup"
     )

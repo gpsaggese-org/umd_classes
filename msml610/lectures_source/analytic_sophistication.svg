@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1010 665"
+   font-family="Helvetica, Arial, sans-serif"
+   version="1.1"
+   id="svg7"
+   sodipodi:docname="analytic_sophistication.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.029703"
+     inkscape:cx="505"
+     inkscape:cy="332.13462"
+     inkscape:window-width="1680"
+     inkscape:window-height="969"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g7" />
+  <!--
+    Coordinate mapping from TikZ (cm) to SVG (px):
+    scale = 50 px/cm, y flipped: svg_y = (630 + 35) - (tikz_y * 50)
+    (extra 35px top margin added so the topmost question label isn't clipped)
+    x: svg_x = tikz_x * 50
+  -->
+  <defs
+     id="defs1">
+    <marker
+       id="arrowhead"
+       markerWidth="10"
+       markerHeight="10"
+       refX="8"
+       refY="3"
+       orient="auto"
+       markerUnits="strokeWidth">
+      <path
+         d="M0,0 L8,3 L0,6 Z"
+         fill="#2d2d2d"
+         id="path1" />
+    </marker>
+  </defs>
+  <g
+     transform="translate(0,11.75)"
+     id="g7"
+     style="display:inline">
+    <!-- ============ Axes ============ -->
+    <!-- Y axis: from (50, 630) up to (50, 70) with arrow -->
+    <line
+       x1="50"
+       y1="615"
+       x2="50"
+       y2="45"
+       stroke="#2d2d2d"
+       stroke-width="1.2"
+       marker-end="url(#arrowhead)"
+       id="line1" />
+    <!-- X axis: from (50, 630) to (1010, 630) with arrow -->
+    <line
+       x1="50"
+       y1="615"
+       x2="990"
+       y2="615"
+       stroke="#2d2d2d"
+       stroke-width="1.2"
+       marker-end="url(#arrowhead)"
+       id="line2" />
+    <!-- Axis titles -->
+    <text
+       x="-305"
+       y="40"
+       fill="#6e6e6c"
+       font-size="18px"
+       text-anchor="middle"
+       transform="rotate(-90)"
+       id="text2">STRATEGIC VALUE</text>
+    <text
+       x="521.79376"
+       y="636"
+       fill="#6e6e6c"
+       font-size="18px"
+       text-anchor="middle"
+       id="text3">ANALYTICAL SOPHISTICATION</text>
+    <!-- ============ Dashed divider between Historical / Future ============ -->
+    <line
+       x1="360"
+       y1="605"
+       x2="360"
+       y2="25"
+       stroke="#aaaaa5"
+       stroke-width="1.3"
+       stroke-dasharray="7, 6"
+       id="line3" />
+    <!-- ============ View tag pills ============ -->
+    <!-- Historical view pill -->
+    <g
+       id="view-historical"
+       transform="translate(0,30)">
+      <rect
+         x="150"
+         y="0"
+         width="160"
+         height="35"
+         rx="17"
+         ry="17"
+         fill="#ffffff"
+         stroke="#3c3c3a"
+         stroke-width="1.2"
+         id="rect3" />
+      <text
+         x="230"
+         y="22.5"
+         fill="#2d2d2d"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle"
+         id="text4">HISTORICAL VIEW</text>
+      <text
+         x="230"
+         y="60"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle"
+         id="text5">What happened?</text>
+    </g>
+    <!-- Future view pill -->
+    <g
+       id="view-future"
+       transform="translate(0,30)">
+      <rect
+         x="627.5"
+         y="0"
+         width="145"
+         height="35"
+         rx="17"
+         ry="17"
+         fill="#ffffff"
+         stroke="#3c3c3a"
+         stroke-width="1.2"
+         id="rect5" />
+      <text
+         x="700"
+         y="22.5"
+         fill="#2d2d2d"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle"
+         id="text6">FUTURE VIEW</text>
+      <text
+         x="700"
+         y="60"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle"
+         id="text7">What will happen?</text>
+    </g>
+    <!-- ============ Maturity curve (sigmoid) ============ -->
+    <path
+       id="maturity-curve"
+       d="m 77.5,578.25 c 102.5,-2.5 182.5,-7.5 242.5,-17.5 60,-10 100,-50 150,-110 50,-60 110,-160 180,-220 70,-50 170,-80 280,-102.5"
+       fill="none"
+       stroke="#285a96"
+       stroke-width="2.4" />
+    <!-- ============ Stage 1: Raw data ============ -->
+    <g
+       id="stage-1-raw-data"
+       transform="translate(0,30.75)">
+      <text
+         id="stage-1-question"
+         x="135.68167"
+         y="470.97458"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle"
+         inkscape:label="stage-1-question">What happened?</text>
+      <rect
+         id="stage-1-box"
+         x="87.5"
+         y="495.25"
+         width="100"
+         height="40"
+         rx="4"
+         ry="4"
+         fill="#f6f7f8"
+         stroke="#c6c8ca"
+         stroke-width="1.2"
+         inkscape:label="stage-1-box" />
+      <text
+         id="stage-1-label"
+         x="137.5"
+         y="522.5"
+         fill="#2d2d2d"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">Raw data</text>
+    </g>
+    <!-- ============ Stage 2: Descriptive statistics ============ -->
+    <g
+       id="stage-2-descriptive-statistics"
+       transform="translate(0,30.75)">
+      <text
+         id="stage-2-question"
+         x="292.45468"
+         y="410.10828"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle">What patterns existed?</text>
+      <rect
+         id="stage-2-box"
+         x="242.5"
+         y="432.5"
+         width="100"
+         height="50"
+         rx="4"
+         ry="4"
+         fill="#f6f7f8"
+         stroke="#c6c8ca"
+         stroke-width="1.2"
+         inkscape:label="stage-2-box" />
+      <text
+         id="stage-2-label-1"
+         x="292.5"
+         y="453"
+         fill="#2d2d2d"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">Descriptive</text>
+      <text
+         id="stage-2-label-2"
+         x="292.5"
+         y="468"
+         fill="#2d2d2d"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">statistics</text>
+    </g>
+    <!-- ============ Stage 3: Predictive models ============ -->
+    <g
+       id="stage-3-predictive-models"
+       transform="translate(0,30.75)">
+      <text
+         id="stage-3-question"
+         x="447.5"
+         y="327.5"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle">What will happen?</text>
+      <rect
+         id="stage-3-box"
+         x="397.5"
+         y="357.5"
+         width="100"
+         height="50"
+         rx="4"
+         ry="4"
+         fill="#e0edf6"
+         stroke="#97bed8"
+         stroke-width="1.2" />
+      <text
+         id="stage-3-label-1"
+         x="447.5"
+         y="378"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">Predictive</text>
+      <text
+         id="stage-3-label-2"
+         x="447.5"
+         y="393"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">models</text>
+    </g>
+    <!-- ============ Stage 4: Prescriptive model ============ -->
+    <g
+       id="stage-4-prescriptive-model"
+       transform="translate(0,30.75)">
+      <text
+         id="stage-4-question"
+         x="602.5"
+         y="247.5"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle">What should we do?</text>
+      <rect
+         id="stage-4-box"
+         x="552.5"
+         y="277.5"
+         width="100"
+         height="50"
+         rx="4"
+         ry="4"
+         fill="#e0edf6"
+         stroke="#97bed8"
+         stroke-width="1.2" />
+      <text
+         id="stage-4-label-1"
+         x="602.5"
+         y="298"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">Prescriptive</text>
+      <text
+         id="stage-4-label-2"
+         x="602.5"
+         y="313"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">model</text>
+    </g>
+    <!-- ============ Stage 5: Simulation ============ -->
+    <g
+       id="stage-5-simulation"
+       transform="translate(-52.5,15.75)">
+      <text
+         id="stage-5-question-1"
+         x="777.5"
+         y="139"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle">What is the</text>
+      <text
+         id="stage-5-question-2"
+         x="777.5"
+         y="154"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle">best we can do?</text>
+      <rect
+         id="stage-5-box"
+         x="727.5"
+         y="177.5"
+         width="100"
+         height="50"
+         rx="4"
+         ry="4"
+         fill="#e0edf6"
+         stroke="#97bed8"
+         stroke-width="1.2" />
+      <text
+         id="stage-5-label"
+         x="777.5"
+         y="207.5"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle">Simulation</text>
+    </g>
+    <g
+       id="stage-6-optimization"
+       transform="translate(0,38.25)"
+       inkscape:label="stage-6-optimization">
+      <text
+         id="stage-6-question-2"
+         x="902.5"
+         y="55.770714"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle"
+         inkscape:transform-center-y="-15.216573">course to take?</text>
+      <text
+         id="stage-6-question-1"
+         x="902.5"
+         y="41.520714"
+         fill="#6e6e6c"
+         font-size="16px"
+         font-style="italic"
+         text-anchor="middle"
+         inkscape:label="stage-6-question-1">What is the best</text>
+      <rect
+         id="stage-6-box"
+         x="852.5"
+         y="77.5"
+         width="100"
+         height="50"
+         rx="4"
+         ry="4"
+         fill="#e0edf6"
+         stroke="#97bed8"
+         stroke-width="1.2" />
+      <text
+         id="stage-6-label"
+         x="902.5"
+         y="107.5"
+         fill="#1e466e"
+         font-size="16px"
+         font-weight="bold"
+         text-anchor="middle"
+         inkscape:label="stage-6-label">Optimization</text>
+    </g>
+    <!-- ============ Stage 6: Optimization ============ -->
+  </g>
+</svg>

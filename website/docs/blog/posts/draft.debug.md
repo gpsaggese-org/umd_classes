@@ -1,3 +1,14 @@
+---
+title: "Debugging Tips and Workflows"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Debugging workflows and tips
+categories:
+  - Software Engineering
+---
+
 pytest_log 
 
 Run ... | 2>&1 tmp.pytest_script.txt
@@ -8,6 +19,7 @@ it
 
 pytest -s --log
 
+pytest -s --dbg
 
 Apply '.claude/skills/coding.rules.md:47:## Decompose Dense Method Chain in Assignments' where possible in msml610/tutorials/L08_causal_inference/L08_04_07_metalearners.py and then apply to ipynb
 
@@ -26,3 +38,5 @@ i docker_cmd --base-image=623860924167.dkr.ecr.eu-north-1.amazonaws.com/cmamp
 > more script.sh
 sudo bash -c "(source /venv/bin/activate; pip install libcst)"
 pytest linters/test/test_amp_dev_scripts.py::Test_linter_py1::test_linter_ipynb1
+
+i ... -d

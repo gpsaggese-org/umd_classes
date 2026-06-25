@@ -23,7 +23,7 @@ def configure_logging(verbosity: int) -> None:
     )
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Enhance text file to markdown using Gemini.")
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--verbose",
         "-v",

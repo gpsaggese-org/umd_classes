@@ -1,22 +1,36 @@
-<!-- toc -->
+---
+title: "How to Use Claude Code"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-11
+description: Complete guide on using Claude Code for coding, including best
+  practices for prompting, tool usage, model capabilities, and getting started
+  on dev servers
+categories:
+  - AI Tools
+  - Software Engineering
+  - Developer Tools
+---
 
-- [Using Claude Code](#using-claude-code)
-  * [1. Opening Claude Code](#1-opening-claude-code)
-  * [2. Creating and Editing Code](#2-creating-and-editing-code)
-  * [3. Running and Testing Code](#3-running-and-testing-code)
-  * [4. Debugging with Claude Code](#4-debugging-with-claude-code)
-  * [5. Working with Larger Projects](#5-working-with-larger-projects)
-  * [6. Prompting Tips](#6-prompting-tips)
-- [Workflows](#workflows)
-  * [Overview](#overview)
-  * [Interesting Files](#interesting-files)
-  * [AI Development Workflow Template](#ai-development-workflow-template)
-  * [AI Review and Transform Tools](#ai-review-and-transform-tools)
-    + [Operations Overview](#operations-overview)
-    + [Use Templates](#use-templates)
-    + [Available Tools](#available-tools)
+TL;DR: Learn how to use Claude Code effectively with best practices for
+prompting, tool usage, model capabilities, and API integration.
 
-<!-- tocstop -->
+<!-- more -->
+
+## Overview
+
+- Claude Code is a CLI tool that lets you work with Claude directly inside your
+  project directory
+
+- It acts as a coding assistant that can plan and execute tasks, generate code,
+  run commands, test, debug, and iterate on your code end-to-end
+
+- The following are some useful resources to get you started
+  - [Quickstart](https://code.claude.com/docs/en/quickstart)
+  - [Common workflows](https://code.claude.com/docs/en/common-workflows)
+  - [Best practices for agentic coding](https://www.anthropic.com/engineering/claude-code-best-practices)
+  - [Claude Code in Action](https://anthropic.skilljar.com/claude-code-in-action)
 
 # Using Claude Code
 
@@ -31,6 +45,9 @@ you write, understand, and debug code more efficiently.
 
 - It's not a good idea to use `claude --dangerously-skip-permissions` unless you
   know what you are doing
+
+<!-- TODO(ai_gp): Run claude --help and comment on the most interesting options-->
+
 
 ## 2. Creating and Editing Code
 
@@ -135,6 +152,128 @@ To get better results:
    - Ask Claude to optimize, clean up, or document it:
      - "Add comments explaining each step."
      - "Improve variable names and structure."
+
+## 7. Starting a Session on Dev Servers
+
+### Start a Claude Session in Your Project Dir
+
+```bash
+> heanhs@dev2:~/src/csfy1$ claude
+```
+
+### Log in to Your Claude Account
+
+- Choose Option 2 for pay-per-use API usage
+
+  ![](/docs/ai_coding/ai.claude_code.how_to_guide_figs/image3.png)
+
+- Open the provided link in your browser, choose the Causify.AI organization,
+  authorize Claude Code to create a key, and paste the token back into the
+  terminal
+
+  ![](/docs/ai_coding/ai.claude_code.how_to_guide_figs/image2.png)
+
+### Using Claude Code
+
+- Once everything is set up, you can begin using Claude Code in your project
+
+- To exit, just type `/exit`
+
+  ![](/docs/ai_coding/ai.claude_code.how_to_guide_figs/image1.png)
+
+## Developer Guide
+
+### Prompting Best Practices
+
+- Use clear and explicit instructions
+  - Do not rely on the model to infer from vague prompts
+  - Think of Claude as a brilliant but new employee
+  - Be specific about output and constraints
+  - Provide instructions as sequential steps
+
+- Use examples
+  - Aka few-shot prompting
+  - Create examples that are relevant and diverse
+  - Wrap examples in `<examples>` tags
+  - You can ask Claude to evaluate examples and provide additional ones
+
+- Use XML tags
+  - XML tags help Claude not get confused with instructions, context, input
+  - E.g.,
+    ```
+    <documents>
+    <document index=1>
+    ...
+    ```
+
+- Give Claude a role
+  - Use the system prompt to focus Claude's behavior and tone
+    ```
+    You are a helpful coding assistant specializing in Python
+    ```
+
+- When there are large docs
+  - Put longform data at the top
+  - Put the query at the end
+  - Structure document with XML tags
+  - Ask Claude to quote relevant parts of the documents first before carrying out
+    its tasks
+
+- Control the format of responses
+  - Tell Claude what to do and what not to do
+  - Use XML format indicators
+  - Match the prompt style to the desired output
+
+### Tool Usage
+
+- Leverage Claude's tools for file operations, command execution, and web search
+
+### Optimize Parallel Tool Calling
+
+- Run multiple speculative searches during research
+- Read several files at once to build context faster
+
+## Model Capabilities
+
+### Extended Thinking
+
+### Adaptive Thinking
+
+### Effort
+
+### Fast Mode
+
+### Structured Outputs
+
+### Citations
+
+### Streaming Messages
+
+### Batch Processing
+
+### PDF Support
+
+### Search Results
+
+### Multilingual Support
+
+### Embeddings
+
+### Vision
+
+## Planning Mode and Other Modes
+
+- Planning mode
+
+> claude --permission-mode plan
+
+Create a plan without coding
+
+- Cheap mode
+
+> claude --model haiku
+
+> claude --output-format text -p "Fix update_md.py -i docs/datapull/all.add_new_data_source.how_to_guide.md -a summarize -a apply_style" --dangerously-skip-permissions
 
 # Workflows
 
@@ -242,16 +381,63 @@ The same templates have multiple applications:
 - `inject_todos.py`: Injects TODOs from a `cfile` into source files.
 - `apply_todos.py`: Automatically applies TODOs from a `cfile` using an LLM.
 
-#
+## Memory
 
-- Planning mode
+<!-- From https://code.claude.com/docs/en/memory -->
 
-> claude --permission-mode plan
+To make Claude Code stop remembering information between sessions:
 
-Create a plan without coding
+- Run /memory and turn Auto Memory off, or set:
+  ```
+  {
+    "autoMemoryEnabled": false
+  }
+  ```
 
-- Cheap-o mode
+- Disable it for a session:
+  ```
+  CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude
+  ```
 
-> claude --model haiku
+- To remove existing memories, delete files under:
+  ```
+  ~/.claude/projects/<project>/memory/
+  ```
 
-> claude --output-format text -p "Fix update_md.py -i docs/datapull/all.add_new_data_source.how_to_guide.md -a summarize -a apply_style" --dangerously-skip-permissions
+- To disable persistent instructions from CLAUDE.md, use:
+  ```
+  > claude --no-memory
+  ```
+
+- Use `/memory` at any time to check whether memory is enabled for the current project
+
+## Print Thinking / Verbosity
+
+- Global configuration (settings file)
+  - Open the settings file used by Claude Code.
+    `/Users/saggese/.claude/settings.json` or the project‑local
+    `.claude/settings.json`
+  - Add/modify the relevant flags:
+    ```
+    {
+      "displayThinking": false,      // hide all thinking blocks
+      "verbosity": "minimal",       // suppress most internal messages
+      "showToolUse": false          // optional – hide tool‑use logs
+    }
+    ```
+  - Save and restart the CLI / reload the workspace.
+  - No thinking lines appear in the terminal or UI.
+
+- Run Claude Code with a flag that disables thinking for that invocation only:
+   ```
+   claude-code --no-thinking          # or: --verbosity minimal
+   ```
+- You can see the exact flag name with claude-code --help.
+
+## API Reference
+
+## MCP
+
+## Resources
+
+## Release Notes

@@ -10,8 +10,8 @@ categories:
 ---
 
 TL;DR `pgmpy` is a Python library for building and reasoning with Probabilistic
-Graphical Models (Bayesian networks, Markov networks, factor graphs). Use it when
-you need to model complex dependencies and perform inference over uncertain variables.
+Graphical Models (Bayesian networks, Markov networks, factor graphs) and model
+complex dependencies and perform inference over uncertain variables.
 
 <!-- more -->
 
@@ -22,21 +22,16 @@ probabilistic graphical models. It's particularly strong for Bayesian networks,
 which are DAGs (directed acyclic graphs) where nodes represent random variables
 and edges represent conditional dependencies.
 
-Why you should care: Many real-world problems involve uncertainty and dependencies.
+Many real-world problems involve uncertainty and dependencies (e.g., medical
+diagnosis, fraud detection, system anomaly detection, recommendation systems).
 Bayesian networks let you:
-
 - Model causal relationships explicitly
 - Perform inference (compute probability of an event given evidence)
 - Handle missing data naturally
 - Combine domain knowledge with data-driven learning
 - Explain predictions through probability distributions
 
-When to use pgmpy: You have a domain where relationships are important (medical
-diagnosis, fraud detection, system anomaly detection, recommendation systems). If
-you just need black-box predictions, stick with scikit-learn or neural networks.
-
 Other tools that solve similar problems:
-
 - `pymc`: Bayesian inference using MCMC sampling (more general, steeper learning curve)
 - `pybbn`: Simpler Bayesian networks library (less feature-rich)
 - `pomegranate`: Fast probabilistic models (different API, focused on speed)
@@ -45,33 +40,32 @@ Official docs: [pgmpy documentation](https://pgmpy.org/)
 
 ## Prerequisites
 
-- Python fluency
+- Python
 - Basic understanding of probability (conditional probability, independence)
 - Familiarity with NumPy and Pandas (helpful but not required)
 - Comfort with DAGs conceptually (parent-child node relationships)
 
 ## Installation
 
-On macOS and Linux:
+- On macOS and Linux:
+  ```bash
+  > pip install pgmpy
+  ```
 
-```bash
-> pip install pgmpy
-```
+- With a virtual environment:
+  ```bash
+  > python -m venv pgmpy_env
+  > source pgmpy_env/bin/activate
+  > pip install pgmpy
+  ```
 
-Or with a virtual environment:
+- TODO(ai_gp): Add instructions for uv
 
-```bash
-> python -m venv pgmpy_env
-> source pgmpy_env/bin/activate
-> pip install pgmpy
-```
-
-Verify installation:
-
-```bash
-> python -c "import pgmpy; print(pgmpy.__version__)"
-0.1.6
-```
+- Verify installation:
+  ```bash
+  > python -c "import pgmpy; print(pgmpy.__version__)"
+  0.1.6
+  ```
 
 ## Core Concepts
 
@@ -82,7 +76,7 @@ graph where:
 
 - **Nodes** represent random variables (discrete or continuous)
 - **Edges** represent conditional dependencies (parent node influences child node)
-- **CPDs** (Conditional Probability Distributions) specify P(child|parents)
+- **CPDs** (Conditional Probability Distributions) specify $P(child|parents)$
 
 Example: A simple weather network where `Rain` affects `Traffic`:
 
@@ -99,7 +93,8 @@ Inference is computing the probability of a variable given evidence (observation
 Types of inference:
 
 - **Exact inference**: Compute exact probabilities (fast for small networks)
-- **Approximate inference**: Use sampling when exact is too slow (MCMC, variational)
+- **Approximate inference**: Use sampling when exact inference is too slow (MCMC,
+  variational)
 
 ## Hands-On Examples
 

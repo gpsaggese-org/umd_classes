@@ -66,11 +66,16 @@ plugins:
           kwds:
             case: preserve
       categories_allowed:
+        - "AI Coding"
         - "AI Research"
+        - "AI Tools"
         - "Causal AI"
         - "Data Science"
         - "Deep Learning"
+        - "Developer Tools"
+        - "LLM"
         - "Machine Learning"
+        - "Productivity"
         - "Python"
         - "Software Engineering"
         - "Startup"
@@ -89,6 +94,7 @@ nav:
   - Publications: 05_publications.md
   - Research: 06_research.md
   - Coding: 07_coding.md
+  - Screwups: 08_screw_ups.md
   - Blog: blog/index.md
 
 markdown_extensions:
