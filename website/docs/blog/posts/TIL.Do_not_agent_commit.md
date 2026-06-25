@@ -1,6 +1,6 @@
 ---
 title: "TIL: How to Not Let Coding Agents Commit Code Automatically"
-date: 2026-06-24
+date: 2026-06-23
 author: GP Saggese
 category: coding-best-practices
 tags:
