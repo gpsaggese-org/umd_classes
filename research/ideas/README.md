@@ -1,0 +1,57 @@
+# Research Ideas
+
+This directory contains research project idea documents for data science, machine
+learning, and AI engineering topics. Each file describes a potential research
+project, study, or tutorial with motivation, methodology, and expected outcomes.
+
+## Description of Files
+
+Files are prefixed with their status when applicable:
+
+- `draft.*`: early-stage, incomplete ideas
+- `ready.*`: the specs are completed
+- `done.*`: project is completed
+- `in_progress.*`: actively being worked on
+
+| File | Links | Status | Assignee | Specs Complete | GitHub Issue | Result |
+| :-------------------------------------------- | :---- | :---------- | :------- | :------------- | :----------- | :----- |
+| `draft.AI_Architecture_Decision_Support.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.AI_Architecture_Decision_Support.md) | draft | - | 80% | - | - |
+| `draft.AI_Knowledge_Management_Development.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.AI_Knowledge_Management_Development.md) | draft | - | 80% | [#439](https://github.com/gpsaggese/gpsaggese.github.io/issues/439) | - |
+| `draft.AI_Semantic_Testing_Analysis.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.AI_Semantic_Testing_Analysis.md) | draft | - | 80% | - | - |
+| `draft.AI_Technical_Debt_Management.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.AI_Technical_Debt_Management.md) | draft | - | 80% | [#409](https://github.com/gpsaggese/gpsaggese.github.io/issues/409) | - |
+| `draft.Analysis_of_Apple_Containers.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Analysis_of_Apple_Containers.md) | draft | - | 60% | - | - |
+| `draft.Analysis_of_Venture_Capital_Predictive_Power.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Analysis_of_Venture_Capital_Predictive_Power.md) | draft | - | 60% | [#385](https://github.com/gpsaggese/gpsaggese.github.io/issues/385) | - |
+| `draft.Benchmarking_Data_Science_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Benchmarking_Data_Science_Agents.md) | draft | - | 60% | [#444](https://github.com/gpsaggese/gpsaggese.github.io/issues/444) | - |
+| `draft.Causal_Analysis_of_Age_and_Startup_Success.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_of_Age_and_Startup_Success.md) | draft | - | 60% | - | - |
+| `draft.Causal_Analysis_of_Financial_Tradability.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_of_Financial_Tradability.md) | draft | - | 60% | [#381](https://github.com/gpsaggese/gpsaggese.github.io/issues/381) | - |
+| `draft.Causal_Analysis_of_GPs_law.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_of_GPs_law.md) | draft | - | 70% | - | - |
+| `draft.Causal_Analysis_of_Hedge_Fund_Performance.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_of_Hedge_Fund_Performance.md) | draft | - | 60% | - | - |
+| `draft.Causal_Analysis_Planning_vs_execution.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Causal_Analysis_Planning_vs_execution.md) | draft | - | 60% | [#418](https://github.com/gpsaggese/gpsaggese.github.io/issues/418) | - |
+| `draft.Clone_openrouter.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Clone_openrouter.md) | draft | - | 10% | - | - |
+| `draft.Comparison_of_Debugging_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Comparison_of_Debugging_Agents.md) | draft | - | 80% | - | - |
+| `draft.Comparison_of_Documentation_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Comparison_of_Documentation_Agents.md) | draft | - | 80% | - | - |
+| `draft.Comparison_of_Refactoring_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Comparison_of_Refactoring_Agents.md) | draft | - | 80% | [#426](https://github.com/gpsaggese/gpsaggese.github.io/issues/426) | - |
+| `draft.Comparison_of_Security_Analysis_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Comparison_of_Security_Analysis_Agents.md) | draft | - | 80% | - | - |
+| `draft.Comparison_of_Testing_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Comparison_of_Testing_Agents.md) | draft | - | 80% | - | - |
+| `draft.Create_a_tutorial_about_Sampling.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Create_a_tutorial_about_Sampling.md) | draft | - | 60% | - | - |
+| `done.Causal_Analysis_of_Success_in_Modern_Society.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/done.Causal_Analysis_of_Success_in_Modern_Society.md) | done | - | 100% | [#339](https://github.com/gpsaggese/gpsaggese.github.io/issues/339) | completed |
+| `draft.Backtesting_Complexity.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Backtesting_Complexity.md) | draft | - | 10% | - | - |
+| `draft.Forgetting_Mechanisms.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Forgetting_Mechanisms.md) | draft | - | 10% | - | - |
+| `draft.Improve_dockerized_executables.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Improve_dockerized_executables.md) | draft | - | 10% | - | - |
+| `draft.Kolmogorov_Complexity_Over_Time.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Kolmogorov_Complexity_Over_Time.md) | draft | - | 10% | - | - |
+| `draft.Lean.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Lean.md) | draft | - | 30% | - | - |
+| `draft.MDL_Extensions_with_Research_Process.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.MDL_Extensions_with_Research_Process.md) | draft | - | 10% | - | - |
+| `draft.Misc_ML_ideas.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Misc_ML_ideas.md) | draft | - | 10% | - | - |
+| `draft.Symbolic_regression.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Symbolic_regression.md) | draft | - | 10% | - | - |
+| `draft.Temporal_VC_Dimension.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Temporal_VC_Dimension.md) | draft | - | 10% | - | - |
+| `draft.Time_as_a_Feature_in_Learning_Theory.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Time_as_a_Feature_in_Learning_Theory.md) | draft | - | 10% | - | - |
+| `draft.VC_Dimension_of_Causal_Networks.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.VC_Dimension_of_Causal_Networks.md) | draft | - | 10% | - | - |
+| `in_progress.Build_A_Conversational_Diagram_Designer.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Build_A_Conversational_Diagram_Designer.md) | in progress | - | 80% | [#440](https://github.com/gpsaggese/gpsaggese.github.io/issues/440) | - |
+| `in_progress.Comparison_of_Coding_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Comparison_of_Coding_Agents.md) | in progress | - | 80% | - | - |
+| `in_progress.Comparison_of_Data_Science_Agents.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/in_progress.Comparison_of_Data_Science_Agents.md) | in progress | - | 80% | [#403](https://github.com/gpsaggese/gpsaggese.github.io/issues/403) | - |
+| `draft.Language_Mixing_LLM_and_Code.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Language_Mixing_LLM_and_Code.md) | draft | - | 50% | - | - |
+| `draft.LLM_Collaborative_Editor.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.LLM_Collaborative_Editor.md) | draft | - | 50% | - | - |
+| `draft.Measure_ability_to_predict_events.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Measure_ability_to_predict_events.md) | draft | - | 10% | - | - |
+| `draft.Measuring_Quality_of_Skills_and_Prompts.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Measuring_Quality_of_Skills_and_Prompts.md) | draft | - | 50% | - | - |
+| `draft.Train_LLM_on_simple_language.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Train_LLM_on_simple_language.md) | draft | - | 10% | - | - |
+| `draft.Unit_Testing_LLM_Skills.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Unit_Testing_LLM_Skills.md) | draft | - | 50% | - | - |

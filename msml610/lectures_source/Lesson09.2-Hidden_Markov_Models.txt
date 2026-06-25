@@ -261,19 +261,19 @@ graph MRF {
   node [shape=circle, style=filled, fillcolor=white, fontname="Helvetica"];
   edge [fontname="Helvetica"];
 
-  X1 [label="X_1"];
-  X2 [label="X_2"];
-  X3 [label="X_3"];
-  X4 [label="X_4"];
+  X1 [label=<X<SUB>1</SUB>>];
+  X2 [label=<X<SUB>2</SUB>>];
+  X3 [label=<X<SUB>3</SUB>>];
+  X4 [label=<X<SUB>4</SUB>>];
 
   {rank=same; X1; X2}
   {rank=same; X3; X4}
 
-  X1 -- X2 [label="ψ_{12}"];
-  X1 -- X3 [label="ψ_{13}"];
-  X2 -- X4 [label="ψ_{24}"];
-  X3 -- X4 [label="ψ_{34}"];
-  X2 -- X3 [label="ψ_{23}", style=dashed];
+  X1 -- X2 [label=<ψ<SUB>12</SUB>>];
+  X1 -- X3 [label=<ψ<SUB>13</SUB>>];
+  X2 -- X4 [label=<ψ<SUB>24</SUB>>];
+  X3 -- X4 [label=<ψ<SUB>34</SUB>>];
+  X2 -- X3 [label=<ψ<SUB>23</SUB>>, style=dashed];
 }
 ```
 ::::

@@ -9,6 +9,11 @@ categories:
   - Software Engineering
 ---
 
+TL;DR: Develop inside Docker containers using VS Code's Dev Containers feature
+for consistent, isolated development environments.
+
+<!-- more -->
+
 # VS Code and containers
 
 VS Code developing inside a container
