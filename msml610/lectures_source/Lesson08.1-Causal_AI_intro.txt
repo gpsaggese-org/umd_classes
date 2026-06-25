@@ -34,13 +34,9 @@ MSML610: Advanced Machine Learning
 ::::
 :::
 
-# ##############################################################################
 # Introduction and Motivation
-# ##############################################################################
 
-## #############################################################################
 ## Background
-## #############################################################################
 
 * Big Data and Traditional AI
 - **Focus for past 10 years**:
@@ -81,9 +77,7 @@ MSML610: Advanced Machine Learning
 // include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 1"
 // //include:msml610/lectures_source/Lesson01-1.aux.md "Analytical Sophistication 2"
 
-## #############################################################################
 ## What ML Systems Can and Cannot Tell You
-## #############################################################################
 
 * The Illusion of Understanding
 - **Prediction vs. Explanation**
@@ -193,13 +187,9 @@ MSML610: Advanced Machine Learning
     - E.g., a 90% accurate model might lead to worse decisions than an 85%
       accurate one, depending on the consequences of different errors
 
-# ##############################################################################
 # Why Causal AI Matters
-# ##############################################################################
 
-## #############################################################################
 ## Problems with Traditional AI
-## #############################################################################
 
 * Problem 1: Correlation is Not Causation!
 - **Correlation**: statistical relationships between variables
@@ -355,9 +345,7 @@ TODO(gp): Add figure
     - Mechanisms more stable across distribution shifts
   - Understand "why" $\to$ predict in new contexts
 
-## #############################################################################
 ## Optimization vs. Inference vs. Decision Theory
-## #############################################################################
 
 * Optimization vs. Inference vs. Decision Theory
 - **Three paradigms that ML conflates**
@@ -396,9 +384,7 @@ TODO(gp): Add figure
   - Causal models: what happens when you act
   - Decision theory: which action to choose
 
-## #############################################################################
 ## The Cost of Ignoring Causality
-## #############################################################################
 
 * The Cost of Ignoring Causality (1/2)
 - Wrong decisions, wasted resources occur when organizations ignore causality
@@ -474,13 +460,9 @@ TODO(gp): Add figure
 - _"The next revolution of data science is the science of interpreting reality,
   not of summarizing data"_ (Judea Pearl, 2021)
 
-# ##############################################################################
 # Causal AI Fundamentals
-# ##############################################################################
 
-## #############################################################################
 ## The Ladder of Causation
-## #############################################################################
 
 * The Ladder of Causation
 
@@ -542,9 +524,7 @@ TODO(gp): Add figure
 
 // # Chap 3: Elements of Causal AI (Causal_AI_in_business.Hurwitz.2023.txt)
 
-## #############################################################################
 ## Correlation vs Causation Models
-## #############################################################################
 
 * Correlation vs Causation Model
 - **Correlation**: how variables relate
@@ -584,9 +564,7 @@ TODO(gp): Add figure
   - Data acquisition
   - ...
 
-## #############################################################################
 ## Data Science vs. Decision Science
-## #############################################################################
 
 * From Data Science to Decision Science
 - Data science and Decision science are **two different paradigms**
@@ -660,13 +638,9 @@ TODO(gp): Add figure
 - Most organizations stuck at Level 1
   - Causal AI enables jump to Levels 2 and 3
 
-# ##############################################################################
 # Causal AI in Business
-# ##############################################################################
 
-## #############################################################################
 ## Business Context and Motivation
-## #############################################################################
 
 * Digital Transformation in Business
 
@@ -729,9 +703,7 @@ TODO(gp): Add figure
    - Small team for targeted problem
    - Demonstrate AI approach merit
 
-## #############################################################################
 ## The Causal AI Workflow
-## #############################################################################
 
 * AI in Business
 
@@ -967,9 +939,7 @@ digraph CausalFlowGrid {
   - Build the model in small stages
   - Iterate with regular feedback
 
-## #############################################################################
 ## Explainability and Interpretability
-## #############################################################################
 
 * The Importance of Explainability
 - **Understanding AI-based models**
@@ -1023,3 +993,91 @@ digraph CausalFlowGrid {
   - Traditional AI
   - Deep learning
   - Generative techniques
+
+* Why Probabilistic Machine Learning Matters
+
+- **Question**: When is knowing _how confident_ a model is more important than the prediction itself?
+  - Medical diagnosis: A classifier that says "cancer" needs to know how sure it is
+  - Autonomous driving: When should the car defer to human control?
+  - Financial risk: Which decisions warrant caution despite high confidence?
+
+- **Key advantage**: Probabilistic models output full distributions, not point estimates
+  - Standard ML: "The diagnosis is pneumonia"
+  - Probabilistic ML: "87% pneumonia, 13% flu, plus credible intervals for each"
+
+- **Why it matters in practice**
+  - Uncertainty quantification drives better decisions under risk
+  - Limited or noisy data is handled naturally, not forced into deterministic assumptions
+  - Priors encode domain expertise formally, crucial when data is expensive or scarce
+
+- **Intuition**: Probability embraces what we _don't_ know, treating it as information rather than failure
+
+
+* Probabilistic ML: Robustness Through Uncertainty
+
+- **Problem**: Deterministic models fail silently
+  - Overfit to small datasets (commit to one "best" explanation)
+  - Produce overconfident predictions on out-of-distribution data
+  - Struggle with missing values (requires imputation or row deletion)
+
+- **Solution**: Probabilistic frameworks solve these naturally
+  - **Uncertainty propagation**: Bayesian model averaging marginalizes over plausible explanations, building in Occam's razor
+    - Naturally penalizes unnecessary complexity
+    - Confidence grows only when data strongly supports a model
+  - **Principled handling of incomplete data**: Integrate over unknown values instead of guessing or dropping rows
+  - **Composability**: Chain probabilistic models (graphical models, hierarchical Bayes) and reason about how uncertainty flows through pipelines
+    - Deterministic models bolted together hide how errors accumulate
+
+- **Key insight**: Probability isn't just about predictions—it's about decision-making under uncertainty
+  - When to act, when to wait for more data, when to defer to humans
+
+* Why Explainability Matters
+
+- **Problem**: Modern AI systems are powerful but opaque
+  - Deep neural networks with millions of parameters are hard to interpret
+  - Business logic becomes implicit rather than explicit
+  - Regulators and stakeholders demand accountability
+
+- **Question**: When do we need explanations?
+  - High-stakes decisions: healthcare diagnosis, loan approval, criminal justice
+  - Safety-critical systems: autonomous vehicles, aircraft control
+  - Building trust: users and decision-makers need to verify model behavior
+
+- **Example**: Medical diagnosis
+  - Model predicts patient has 85% likelihood of disease X
+  - Question: Which symptoms drove this prediction?
+  - Without explanation: doctor cannot assess clinical validity
+  - With explanation: doctor can override or accept the prediction
+
+- **Key idea**: Explainability enables accountability and builds trust
+
+* Approaches to Explainability
+
+- **Definition**: Explainability is the degree to which we can understand why a
+  model made a particular prediction
+  - Global explanation: _"How does the model work overall?"_
+  - Local explanation: _"Why did the model predict this specific outcome?"_
+  - Feature importance: _"Which input features most influence the prediction?"_
+
+- **Main approaches**:
+  1. Intrinsic methods: Design inherently interpretable models
+     - Decision trees, linear regression, rule-based systems
+     - Transparent structure allows direct inspection
+  2. Post-hoc methods: Explain predictions after training
+     - Feature attribution (LIME, SHAP, integrated gradients)
+     - Attention mechanisms in neural networks
+     - Counterfactual explanations: _"What would need to change for a different
+       prediction?"_
+
+- **Example**: SHAP (SHapley Additive exPlanations)
+  - Computes each feature's contribution to moving the prediction from baseline
+    to actual
+  - Assigns a value to each feature showing how much it pushed the decision
+  - Enables ranking features by importance and visualizing their impact
+
+- **Remark**: Trade-off between model performance and explainability
+  - Simpler models are easier to explain but may have lower accuracy
+  - Complex models achieve better performance but require post-hoc explanation
+    techniques
+  - Choice depends on the application's requirements for accuracy vs
+    interpretability

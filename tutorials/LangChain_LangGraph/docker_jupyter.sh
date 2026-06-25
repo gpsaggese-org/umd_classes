@@ -30,7 +30,7 @@ list_and_inspect_docker_image
 
 # Run the Docker container with Jupyter Lab.
 CMD=$(get_run_jupyter_cmd "${BASH_SOURCE[0]}" "$OLD_CMD_OPTS")
-CONTAINER_NAME=$IMAGE_NAME
+CONTAINER_NAME="${IMAGE_NAME}.jupyter"
 # Kill existing container if -f flag is set.
 kill_existing_container_if_forced
 

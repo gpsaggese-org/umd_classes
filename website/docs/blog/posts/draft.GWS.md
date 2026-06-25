@@ -9,6 +9,11 @@ categories:
   - Software Engineering
 ---
 
+TL;DR: Google Workspace CLI (`gws`) lets you manage Google Drive, Docs, Sheets,
+and other Workspace services directly from the terminal.
+
+<!-- more -->
+
 npm install -g @googleworkspace/cli
 
 

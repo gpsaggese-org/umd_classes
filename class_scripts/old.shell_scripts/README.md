@@ -38,7 +38,7 @@ university courses (`data605` and `msml610`).
 
 #### What It Does
 
-- Counts words in lecture script files located in data605/lectures_script/
+- Counts words in lecture script files located in data605/lectures_video_script/
 - Uses wc to count words in each file
 - Outputs filename and word count for each script file
 

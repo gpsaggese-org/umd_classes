@@ -1,0 +1,22 @@
+# [ ] Create API notebooks
+
+
+  - [x] Env, https://gymnasium.farama.org/api/env
+  - [ ] Make and register https://gymnasium.farama.org/api/registry/
+  - [x] Spaces https://gymnasium.farama.org/api/spaces/
+  - [ ] Wrappers https://gymnasium.farama.org/api/wrappers/
+  - [ ] Vectorize https://gymnasium.farama.org/api/vector/
+  - [ ] Utility functions https://gymnasium.farama.org/api/utils
+  - [ ] Functional Env https://gymnasium.farama.org/api/functional/
+
+/notebook.create_api_intro https://gymnasium.farama.org/api/env and save it in tutorials/gymnasium/gymnasium.01.API.Env.ipynb
+
+/notebook.create_api_intro https://gymnasium.farama.org/api/spaces and save it in tutorials/gymnasium/gymnasium.03.API.Spaces.ipynb
+
+- https://gymnasium.farama.org/tutorials/index.html
+
+tutorials/gymnasium/gymnasium.01.API.Env.py
+tutorials/gymnasium/gymnasium.01.API.Wrappers.py
+tutorials/gymnasium/gymnasium.02.API.Registry.py
+tutorials/gymnasium/gymnasium.03.API.Spaces.py
+tutorials/gymnasium/gymnasium.05.API.Vector.py

@@ -9,11 +9,14 @@ START=$(date +%s)
 #MODEL=openrouter/openai/gpt-oss-20b
 #MODEL=openrouter/meta-llama/llama-3.1-8b-instruct
 
-MODEL=openrouter/google/gemini-2.5-flash-lite
+#MODEL=openrouter/google/gemini-2.5-flash-lite
 
 # Nitro.
-MODEL=openrouter/openai/gpt-oss-20b
+#MODEL=openrouter/openai/gpt-oss-20b
+#MODEL=openrouter/openai/gpt-oss-120b
+MODEL=openrouter/qwen/qwen3-32b
 
+# Nitro
 OPTS="-o provider '{\"sort\": \"throughput\"}'"
 
 echo $MODEL

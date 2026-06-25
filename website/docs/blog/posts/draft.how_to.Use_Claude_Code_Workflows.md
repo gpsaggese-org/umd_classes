@@ -1,9 +1,14 @@
-<!-- toc -->
-
-- [Create a Script From Scratch](#create-a-script-from-scratch)
-- [Create a Readme.Md](#create-a-readmemd)
-
-<!-- tocstop -->
+---
+title: "How to Use Claude Code Workflows"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on using Claude Code workflows for development
+categories:
+  - AI Tools
+  - Software Engineering
+---
 
 # Create a Script From Scratch
 

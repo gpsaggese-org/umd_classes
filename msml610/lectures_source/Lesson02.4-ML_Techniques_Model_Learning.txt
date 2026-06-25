@@ -335,13 +335,13 @@ digraph StreamModel {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     // Node styles
-    DataStream [label="Stream of data\nx_i", fillcolor=white, shape=plaintext];
+    DataStream [label=<Stream of data<BR/>x<SUB>i</SUB>>, fillcolor=white, shape=plaintext];
     Model      [label="Model", fillcolor="#C6A6F4"];
-    Output     [label="Output\ny_i", fillcolor=white, shape=plaintext];
+    Output     [label=<Output<BR/>y<SUB>i</SUB>>, fillcolor=white, shape=plaintext];
 
     // Edges
     DataStream -> Model;
-    Model -> Model [label="w_i", fontsize=10];
+    Model -> Model [label=<w<SUB>i</SUB>>, fontsize=10];
     Model -> Output;
 }
 ```
@@ -390,22 +390,22 @@ digraph BayesianFlow {
     // Operation nodes (rounded boxes)
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
-    Map_0 [label="Map_0\nCompute Gradient", fillcolor="#A6C8F4"];
-    Map_1 [label="Map_1\nCompute Gradient", fillcolor="#A6C8F4"];
-    Map_n [label="Map_n\nCompute Gradient", fillcolor="#A6C8F4"];
+    Map_0 [label=<Map<SUB>0</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
+    Map_1 [label=<Map<SUB>1</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
+    Map_n [label=<Map<SUB>n</SUB><BR/>Compute Gradient>, fillcolor="#A6C8F4"];
     ShuffleSort [label="Shuffle & Sort", fillcolor="#C6A6F4"];
     Update [label="Update Model", fillcolor="#D2B48C"];
 
     // Variable/value nodes (plain ellipses with white background)
     node [shape=ellipse, style=filled, fontname="Helvetica", fontsize=12, penwidth=1.4, fillcolor=white];
 
-    DataShard_0  [label="DataShard_0"];
-    DataShard_1  [label="DataShard_1"];
-    DataShard_n  [label="DataShard_n"];
+    DataShard_0  [label=<DataShard<SUB>0</SUB>>];
+    DataShard_1  [label=<DataShard<SUB>1</SUB>>];
+    DataShard_n  [label=<DataShard<SUB>n</SUB>>];
 
-    Gradient_0 [label="Gradient_0"];
-    Gradient_1 [label="Gradient_1"];
-    Gradient_n [label="Gradient_n"];
+    Gradient_0 [label=<Gradient<SUB>0</SUB>>];
+    Gradient_1 [label=<Gradient<SUB>1</SUB>>];
+    Gradient_n [label=<Gradient<SUB>n</SUB>>];
 
     AggregatedGradient [label="Aggregated Gradient"];
     Model [label="Model Parameters"];

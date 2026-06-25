@@ -154,17 +154,17 @@ digraph BayesianFlow {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     // States (rounded boxes)
-    Battery_0 [label="Battery_0", fillcolor="#A6C8F4"];
-    Battery_1 [label="Battery_1", fillcolor="#A6C8F4"];
-    BMeter_1 [label="BMeter_1", fillcolor="#A6C8F4"];
+    Battery_0 [label=<Battery<SUB>0</SUB>>, fillcolor="#A6C8F4"];
+    Battery_1 [label=<Battery<SUB>1</SUB>>, fillcolor="#A6C8F4"];
+    BMeter_1 [label=<BMeter<SUB>1</SUB>>, fillcolor="#A6C8F4"];
 
     // Variables (circles)
     node [shape=circle];
-    Xdot_0 [label="Ẋ_0", fillcolor="#B2E2B2"];
-    Xdot_1 [label="Ẋ_1", fillcolor="#B2E2B2"];
-    X_0 [label="X_0", fillcolor="#C6A6F4"];
-    X_1 [label="X_1", fillcolor="#C6A6F4"];
-    Z_1 [label="Z_1", fillcolor="#FFD1A6"];
+    Xdot_0 [label=<Ẋ<SUB>0</SUB>>, fillcolor="#B2E2B2"];
+    Xdot_1 [label=<Ẋ<SUB>1</SUB>>, fillcolor="#B2E2B2"];
+    X_0 [label=<X<SUB>0</SUB>>, fillcolor="#C6A6F4"];
+    X_1 [label=<X<SUB>1</SUB>>, fillcolor="#C6A6F4"];
+    Z_1 [label=<Z<SUB>1</SUB>>, fillcolor="#FFD1A6"];
 
     // Edges
     Battery_0 -> Battery_1;
@@ -205,25 +205,25 @@ digraph RobotDBN {
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
 
     // Time slice 0 (Red)
-    Battery_0_0 [label="Battery_{0}", fillcolor="#F4A6A6"];
-    BMeter_0_0 [label="BMeter_{0}", fillcolor="#F4A6A6"];
-    Xdot_0_0 [label="Ẋ_{0}", shape=circle, fillcolor="#F4A6A6"];
-    X_0_0 [label="X_{0}", shape=circle, fillcolor="#F4A6A6"];
-    Z_0_0 [label="Z_{0}", shape=circle, fillcolor="#F4A6A6"];
+    Battery_0_0 [label=<Battery<SUB>0</SUB>>, fillcolor="#F4A6A6"];
+    BMeter_0_0 [label=<BMeter<SUB>0</SUB>>, fillcolor="#F4A6A6"];
+    Xdot_0_0 [label=<Ẋ<SUB>0</SUB>>, shape=circle, fillcolor="#F4A6A6"];
+    X_0_0 [label=<X<SUB>0</SUB>>, shape=circle, fillcolor="#F4A6A6"];
+    Z_0_0 [label=<Z<SUB>0</SUB>>, shape=circle, fillcolor="#F4A6A6"];
 
     // Time slice 1 (Green)
-    Battery_1_1 [label="Battery_{1}", fillcolor="#B2E2B2"];
-    BMeter_1_1 [label="BMeter_{1}", fillcolor="#B2E2B2"];
-    Xdot_1_1 [label="Ẋ_{1}", shape=circle, fillcolor="#B2E2B2"];
-    X_1_1 [label="X_{1}", shape=circle, fillcolor="#B2E2B2"];
-    Z_1_1 [label="Z_{1}", shape=circle, fillcolor="#B2E2B2"];
+    Battery_1_1 [label=<Battery<SUB>1</SUB>>, fillcolor="#B2E2B2"];
+    BMeter_1_1 [label=<BMeter<SUB>1</SUB>>, fillcolor="#B2E2B2"];
+    Xdot_1_1 [label=<Ẋ<SUB>1</SUB>>, shape=circle, fillcolor="#B2E2B2"];
+    X_1_1 [label=<X<SUB>1</SUB>>, shape=circle, fillcolor="#B2E2B2"];
+    Z_1_1 [label=<Z<SUB>1</SUB>>, shape=circle, fillcolor="#B2E2B2"];
 
     // Time slice 2 (Violet)
-    Battery_2_2 [label="Battery_{2}", fillcolor="#C6A6F4"];
-    BMeter_2_2 [label="BMeter_{2}", fillcolor="#C6A6F4"];
-    Xdot_2_2 [label="Ẋ_{2}", shape=circle, fillcolor="#C6A6F4"];
-    X_2_2 [label="X_{2}", shape=circle, fillcolor="#C6A6F4"];
-    Z_2_2 [label="Z_{2}", shape=circle, fillcolor="#C6A6F4"];
+    Battery_2_2 [label=<Battery<SUB>2</SUB>>, fillcolor="#C6A6F4"];
+    BMeter_2_2 [label=<BMeter<SUB>2</SUB>>, fillcolor="#C6A6F4"];
+    Xdot_2_2 [label=<Ẋ<SUB>2</SUB>>, shape=circle, fillcolor="#C6A6F4"];
+    X_2_2 [label=<X<SUB>2</SUB>>, shape=circle, fillcolor="#C6A6F4"];
+    Z_2_2 [label=<Z<SUB>2</SUB>>, shape=circle, fillcolor="#C6A6F4"];
 
     // Intra-slice dependencies
     Battery_0_0 -> BMeter_0_0;

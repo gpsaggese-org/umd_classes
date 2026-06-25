@@ -1,13 +1,14 @@
 ---
 title: "CausalML in 60 Minutes"
+draft: false
 authors:
-  - MohammedSyed
-  - gpsaggese
-date: 2026-03-18
+    - MohammedSyed
+    - gpsaggese
+date: 2026-04-10
 description:
 categories:
-  - AI Research
-  - Data Science
+    - AI Research
+    - Data Science
 ---
 
 TL;DR: Learn how to estimate heterogeneous treatment effects using CausalML in
@@ -56,10 +57,10 @@ This tutorial includes all the code, notebooks, and Docker containers in
   approach
 - [`CausalML.API.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/CausalML_Diabetes_Study/CausalML.API.ipynb): Tutorial notebook focusing on the CausalNavigator API and meta-learner configurations
 - [`CausalML.example.ipynb`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/CausalML_Diabetes_Study/CausalML.example.ipynb): Advanced end-to-end causal inference example
-  - Loads and preprocesses the CDC BRFSS diabetes dataset (250,000+ respondents)
-  - Checks causal assumptions (overlap/positivity) using propensity score analysis
-  - Estimates individualized treatment effects (CATE) using the X-Learner
-  - Visualizes heterogeneity across age, income, and health status subgroups
-  - Validates results with placebo tests, estimator comparisons, and sensitivity
-    analysis
+    - Loads and preprocesses the CDC BRFSS diabetes dataset (250,000+ respondents)
+    - Checks causal assumptions (overlap/positivity) using propensity score analysis
+    - Estimates individualized treatment effects (CATE) using the X-Learner
+    - Visualizes heterogeneity across age, income, and health status subgroups
+    - Validates results with placebo tests, estimator comparisons, and sensitivity
+      analysis
 - [`causalml_utils.py`](https://github.com/gpsaggese/umd_classes/blob/master/tutorials/CausalML_Diabetes_Study/causalml_utils.py): Utility functions and the `CausalNavigator` wrapper class

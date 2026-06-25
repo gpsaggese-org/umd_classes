@@ -1,3 +1,15 @@
+---
+title: "How to Use Local LLMs on Mac"
+draft: true
+authors:
+  - gpsaggese
+date: 2026-06-09
+description: Guide on running local LLMs on macOS
+categories:
+  - LLM
+  - Developer Tools
+---
+
 brew install ollama
 
 Start the server
