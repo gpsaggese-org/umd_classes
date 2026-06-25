@@ -1,5 +1,5 @@
 ---
-title: "Python Code Coverage How-To Guide"
+title: "Python Code Coverage In 30 Mins"
 draft: false
 authors:
     - gpsaggese
@@ -9,7 +9,8 @@ categories:
     - Python
 ---
 
-TL;DR: Python code coverage measures how much of your source code is tested, helping you improve test quality.
+TL;DR: Python code coverage measures how much of your source code is tested,
+helping you improve test quality.
 
 <!-- more -->
 

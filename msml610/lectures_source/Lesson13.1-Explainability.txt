@@ -1,3 +1,7 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=Lesson 13.1: Machine Learning Explainability
+
 /*
 ::: columns
 :::: {.column width=15%}

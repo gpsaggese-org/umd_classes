@@ -58,9 +58,41 @@ https://github.com/causify-ai/helpers/issues/1276
 - [x] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
 ## Get typst slides as close as possible to latex ones
-notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
 
-### [ ] Fix Latex Preamble
+```
+> notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
+```
+
+### Create branch for 1276
+https://github.com/causify-ai/helpers/issues/1276
+
+### IN PROGRESS: [ ] Improve unit testing
+
+```
+> pytest dev_scripts_helpers/documentation/test/
+```
+
+- [ ] Do test runs and which is disabled?
+- [ ] What is the coverage?
+- [ ] What is not tested?
+
+- [ ] Fix the names of the tests
+helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
+
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test1 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test2 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test3 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_generate_readme_index.py::Test_generate_readme_index::test4 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test2 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test3 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_preprocess_notes.py::Test_preprocess_notes_executable1::test3 - RuntimeError:
+FAILED helpers_root/dev_scripts_helpers/documentation/test/test_render_images.py::Test_render_image_code1::test3 - RuntimeError:
+
+### What tests pass on master vs local?
+
+### IN PROGRESS: [ ] Fix Latex Preamble
+
+dev_scripts_helpers/documentation/preprocess_notes.py
 
 \vspace{0.4cm}
 \begingroup \large
@@ -77,7 +109,12 @@ MSML610: Advanced Machine Learning
 
 \vspace{1cm}
 
-### [ ] Fix the bold colored
+### IN PROGRESS: [ ] Fix sided stuff
+
+- Add two steps of AST unit test
+- Add processing of AST
+
+### [x] Fix the bold colored
 
 **\textcolor{red}{Question}**
 
@@ -86,16 +123,13 @@ MSML610: Advanced Machine Learning
   - This function automatically colorizes specific keywords (like Question, Definition, Key idea, etc.) with red/blue colors
 3. The coloring happens here in preprocess_notes.py lines 524-560 via the _colorize_bullets() helper function which wraps hmarkdo.colorize_bullet_points_in_slide()
 
-### [ ] The title of a slide is not showing up
+### [x] The title of a slide is not showing up
 
 ### [ ] Autoscale the font to fit the slide
 
 ### [ ] Document current system
 - `helpers_root/dev_scripts_helpers/documentation/README.md`
-- `helpers_root/dev_scripts_helpers/documentation/README.notes_to_pdf.md`
-
-website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
--> create blog
+- `helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.README.md`
 
 ### [ ] Document typst and slides
 
@@ -103,6 +137,9 @@ website/README.blog.md
 
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md
 - Create blog
+
+website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
+-> create blog
 
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.all_examples.typ
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.hello_world.typ
@@ -126,8 +163,12 @@ dev_scripts_helpers/documentation/notes_to_pdf.py
 
 msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
-## Step 4: Reorg dev_scripts_helpers/documentation
+### [ ] Reorg dev_scripts_helpers/documentation
 - Too many files
+
+### Rename the txt files to smd
+
+smd = slide markdown
 
 # Mix
 
