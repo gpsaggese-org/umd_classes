@@ -123,12 +123,19 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [ ] Add unit tests
 - [ ] Factor out code to umd_classes
 
-
-### IN PROGRESS: [ ] Fix sided stuff
+### IN PROGRESS: [ ] Fix div stuff
 
 - [x] Add two steps of AST unit test
 - [ ] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
+
+### IN PROGRESS: [ ] Fix blue verbatim
+
+### Improve tables
+
+- [ ] Use table from let styled-table using AST transform
+- [ ] Add processing of AST
+- [ ] Add unit tests
 
 ### [x] Fix the bold colored
 

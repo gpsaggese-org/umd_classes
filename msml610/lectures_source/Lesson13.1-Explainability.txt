@@ -256,12 +256,9 @@ mindmap
 
 - **Definition**: the Shapley value for feature $j$ is:
 
-  $
-  phi_j =
-  sum_(S subseteq N without {j})
-    ((abs(S))! (abs(N) - abs(S) - 1)!) / (abs(N))!
-    (f(S union {j}) - f(S))
-  $
+  ```{=typst}
+  $ phi_j = sum_(S subset.eq N without {j}) ((|S|)! (|N| - |S| - 1)!) / (|N|)! (f(S union {j}) - f(S)) $
+  ```
 
   where:
   - $N$ = set of all features
