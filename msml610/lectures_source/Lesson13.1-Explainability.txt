@@ -81,8 +81,8 @@ mindmap
 * Local vs. Global Explanations
 
 - **Local Explanations**: Explain a single prediction for a specific input
-    - E.g., _"This loan was rejected because income < \$30k and
-    debt-to-income ratio > 0.6"_
+    - E.g., _"This loan was rejected because income $<$ \$30k and
+    debt-to-income ratio $>$ 0.6"_
   - _Methods_:
     - LIME, SHAP, Counterfactuals
   - _Pros_:
@@ -257,7 +257,7 @@ mindmap
 - **Definition**: the Shapley value for feature $j$ is:
 
   ```{=typst}
-   phi_j = sum_(S subset.eq N without {j}) ((|S|)! (|N| - |S| - 1)!) / (|N|)! (f(S union {j}) - f(S)) $
+  $ phi_j = sum_(S subset.eq N without {j}) ((|S|)! (|N| - |S| - 1)!) / (|N|)! (f(S union {j}) - f(S)) $
   ```
 
   where:
@@ -297,7 +297,7 @@ mindmap
 
 - **Local explanation** (single prediction):
   - _Force plot_: shows how each feature pushes the prediction from the baseline
-    $\frak[E][f(x)]$ toward the final output $f(x)$
+    $bb(E)[f(x)]$ toward the final output $f(x)$
   - Features colored red push the prediction higher; blue push it lower
 
 - **Global explanation** (entire dataset):
@@ -308,7 +308,7 @@ mindmap
 
 - **Example**: predicting house prices
   - Local: _"This house is priced \$50k above average because it has 4
-    bedrooms ($+\$30$k) and is near a school ($+\$20$k)"_
+    bedrooms (+\$30k) and is near a school (+\$20k)"_
   - Global: _"Square footage and location are the two most important features
     across all predictions"_
 
@@ -358,18 +358,20 @@ digraph LIME {
 ::::
 :::
 
-- **Example**: a spam classifier flags an email → LIME reveals the words _"free"_, _"winner"_, and _"click here"_ drove the prediction
-  - The linear explanation g assigns a positive coefficient to each of these tokens
+- **Example**: a spam classifier flags an email $\to$ LIME reveals the words
+  _"free"_, _"winner"_, and _"click here"_ drove the prediction
+  - The linear explanation g assigns a positive coefficient to each of these
+    tokens
 
 * LIME: Formal Objective
 
 - **Definition**: LIME finds the best local explanation by solving:
 
   ```{=typst}
-  $ g^* = arg min_(g in G) sum_(i=1)^N pi_x(z_i) (f(z_i) - g(z_i))^2 + Omega(g) $
+  $ g^* = op("arg min")_(g in G) sum_(i=1)^N pi_x(z_i) (f(z_i) - g(z_i))^2 + Omega(g) $
   ```
 
-  - Ω(g) penalizes complexity of the explanation (e.g., number of non-zero coefficients)
+  - $\Omega(g)$ penalizes complexity of the explanation (e.g., number of non-zero coefficients)
 
 - **Interpretation**: LIME minimizes weighted reconstruction error between the black-box f and the simple surrogate g, with more weight on samples close to x
 
@@ -385,11 +387,11 @@ digraph LIME {
   feature's values are randomly shuffled (Breiman, 2001)
 
 - **Algorithm**:
-  1. Compute baseline performance P₀ on the validation set
-  2. For each feature j:
-     - Randomly permute the values of x_j across all samples
-     - Compute the new performance P_j
-     - Importance of feature j:
+  1. Compute baseline performance $P_0$ on the validation set
+  2. For each feature $j$:
+     - Randomly permute the values of $x_j$ across all samples
+     - Compute the new performance $P_j$
+     - Importance of feature $j$:
 
        ```{=typst}
        $ phi_j = P_0 - P_j $
@@ -480,7 +482,7 @@ digraph Counterfactual {
 - **Definition**: find a counterfactual $x'$ by solving:
 
   ```{=typst}
-  $ x' = arg min_(x') d(x, x') quad "subject to" quad f(x') = y' $
+  $ x' = op("arg min")_(x') d(x, x') quad "subject to" quad f(x') = y' $
   ```
 
   - $x$ = original input, $y'$ = desired outcome
@@ -489,7 +491,7 @@ digraph Counterfactual {
 - **Remark**: in practice, a soft constraint formulation is used:
 
   ```{=typst}
-  $ x' = arg min_(x') lambda dot.op ell(f(x'), y') + d(x, x') $
+  $ x' = op("arg min")_(x') lambda dot.op ell(f(x'), y') + d(x, x') $
   ```
 
   - $ell$ is a loss penalizing predictions far from $y'$
@@ -512,7 +514,7 @@ digraph Counterfactual {
 - **Intuition**: a model that says _"I predict 80% chance of disease, but I'm
   very uncertain"_ is more informative than one that just says _"disease"_
 
-- **Definition**: in Bayesian inference, we update our belief about parameters θ given data 𝒟:
+- **Definition**: in Bayesian inference, we update our belief about parameters $\theta$ given data $cal(D)$:
 
   ```{=typst}
   $ Pr(theta | cal(D)) = frac(Pr(cal(D) | theta) dot.op Pr(theta), Pr(cal(D))) $
@@ -528,16 +530,16 @@ digraph Counterfactual {
 - **Key idea**: the shape of the posterior distribution directly communicates
   model uncertainty about each parameter
 
-- **Definition**: a _credible interval_ [θ_L, θ_U] contains the true parameter with probability 1 - α:
+- **Definition**: a _credible interval_ [$\theta_L$, $\theta_U$] contains the true parameter with probability $1 - \alpha$:
 
   ```{=typst}
   $ Pr(theta_L lt.eq theta lt.eq theta_U | cal(D)) = 1 - alpha $
   ```
 
 - **Interpretation**:
-  - _Narrow_ posterior → model is confident about θ
-  - _Wide_ posterior → high uncertainty, need more data
-  - _Multimodal_ posterior → multiple plausible explanations exist
+  - _Narrow_ posterior $\to$ model is confident about θ
+  - _Wide_ posterior $\to$ high uncertainty, need more data
+  - _Multimodal_ posterior $\to$ multiple plausible explanations exist
 
 - **Example**: predicting treatment effect
   - Posterior mean = 5.2 units, 95% credible interval = [1.1, 9.3]
@@ -553,9 +555,9 @@ digraph Counterfactual {
 
 ::: columns
 :::: {.column width=55%}
-- **Definition**: a Bayesian Network is a pair (𝒢, Pr) where:
-  - 𝒢 = DAG whose nodes represent random variables
-  - Pr = joint distribution factored according to 𝒢:
+- **Definition**: a Bayesian Network is a pair ($cal(G)$, $Pr$) where:
+  - $cal(G)$ = DAG whose nodes represent random variables
+  - $Pr$ = joint distribution factored according to $cal(G)$:
 
     ```{=typst}
     $ Pr(X_1 , ... , X_n) = product_(i = 1)^n Pr(X_i | "Parents"(X_i)) $
@@ -636,9 +638,9 @@ digraph BayesNet {
 - **Key idea**: causal AI provides tools to distinguish _why_ something happens
   from _what_ co-occurs
   - Pearl's _Ladder of Causation_ (2018):
-    1. **Association** (seeing): $\Pr(Y | X)$ $\to$ observational
-    2. **Intervention** (doing): $\Pr(Y | do(X))$ $\to$ experimental
-    3. **Counterfactual** (imagining): $\Pr(Y_x | X = x', Y = y')$ $\to$
+    1. **Association** (seeing): $Pr(Y | X)$ $\to$ observational
+    2. **Intervention** (doing): $Pr(Y | do(X))$ $\to$ experimental
+    3. **Counterfactual** (imagining): $Pr(Y_x | X = x', Y = y')$ $\to$
        retrospective
 
 - **Remark**: standard ML operates at level 1 (association) $\to$ causal
@@ -658,14 +660,14 @@ digraph BayesNet {
 ::: columns
 :::: {.column width=50%}
 - **Correlational explanation**:
-  - Reports statistical associations: $\Pr(Y | X)$
+  - Reports statistical associations: $Pr(Y | X)$
   - Cannot distinguish direct effects from confounding
   - Sufficient for prediction
   - Insufficient for intervention planning
 ::::
 :::: {.column width=50%}
 - **Causal explanation**:
-  - Reports interventional effects: $\Pr(Y | do(X))$
+  - Reports interventional effects: $Pr(Y | do(X))$
   - Accounts for confounders via adjustment
   - Answers _"what if we change $X$?"_
   - Required for decision-making and policy
@@ -679,11 +681,11 @@ digraph BayesNet {
 * Structural Causal Models and Causal Graphs
 
 - **Definition**: a _Structural Causal Model_ (SCM) is a tuple
-  $\mathcal{M} = (U, V, F, \Pr(U))$ where:
+  $cal(M) = (U, V, F, Pr(U))$ where:
   - $U$ = exogenous (unobserved) variables
   - $V$ = endogenous (observed) variables
   - $F$ = structural equations: $V_i = f_i(Parents(V_i), U_i)$
-  - $\Pr(U)$ = distribution over exogenous variables
+  - $Pr(U)$ = distribution over exogenous variables
 
 ::: columns
 :::: {.column width=55%}
@@ -695,7 +697,7 @@ digraph BayesNet {
 - **Intervention** via the $do()$ operator:
   - $do(X = x)$ = set $X$ to $x$ regardless of its causes
   - Graphically: delete all incoming edges to $X$
-  - Computes $\Pr(Y | do(X = x))$ via adjustment formulas
+  - Computes $Pr(Y | do(X = x))$ via adjustment formulas
 ::::
 :::: {.column width=45%}
 

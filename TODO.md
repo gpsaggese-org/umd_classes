@@ -135,6 +135,10 @@ It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_trans
 
 > notes_to_pdf.py --input=msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt --output=msml610/lectures/Lesson11.1-Decision_Making_with_Causal_Models.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine=beamer --skip_pandoc_ast_transform
 
+### 
+
+Add https://typst.app/play/ to the 
+
 ### IN PROGRESS: [ ] Fix blue verbatim
 
 ### Improve tables
