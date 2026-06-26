@@ -111,6 +111,11 @@ helpers/hmarkdown_toc.py                                                        
 
 ### What tests pass on master vs local?
 
+### Make the second and 3rd level of text smaller
+
+### Use Latex font
+https://tug.org/FontCatalogue/computermodern/ instead of DejaVu
+
 ### IN PROGRESS: [ ] Fix Latex Preamble
 
 dev_scripts_helpers/documentation/preprocess_notes.py

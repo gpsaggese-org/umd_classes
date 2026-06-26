@@ -80,9 +80,8 @@ mindmap
 
 * Local vs. Global Explanations
 
-- **Local Explanations**
-  - Explain a single prediction for a specific input
-  - _Example_: _"This loan was rejected because income < \$30k and
+- **Local Explanations**: Explain a single prediction for a specific input
+    - E.g., _"This loan was rejected because income < \$30k and
     debt-to-income ratio > 0.6"_
   - _Methods_:
     - LIME, SHAP, Counterfactuals
@@ -90,72 +89,40 @@ mindmap
     - Actionable for the individual affected
     - Required by regulations (e.g., GDPR "right to explanation")
 
-- **Global Explanations**
-  - Explain the model's overall decision-making logic
-  - _Example_: _"Across all predictions, income and credit history are the
-    two most important features"_
-  - Methods: feature importance, partial dependence plots, global surrogates
+- **Global Explanations**: Explain the model's overall decision-making logic
+    - E.g., _"Across all predictions, income and credit history are the two most
+      important features"_
+  - _Methods_: feature importance, partial dependence plots, global surrogates
   - _Pros_:
     - Help model developers debug and validate
     - Enable stakeholders to assess fairness across populations
 
-- **Key idea**: local and global explanations are complementary $\to$ a
-  complete picture requires both
+- **Key idea**: local and global explanations are complementary
+  - A complete picture requires both
 
 * Model-Agnostic vs. Model-Specific Methods
 
-- **Definition**: explanation methods differ in whether they require access to
-  model internals
+- **Model-specific**:
+  - Methods exploit the model's internal structure
+    - Decision tree $\to$ follow the path from root to leaf
+    - Linear model $\to$ read coefficients directly
+    - Neural network $\to$ gradient-based saliency maps, attention weights
+  - _Pros_: computationally efficient, structurally faithful
+  - _Cons_: tied to one model class, not transferable
 
-::: columns
-:::: {.column width=55%}
-- **Model-specific** methods exploit the model's internal structure
-  - Decision tree $\to$ follow the path from root to leaf
-  - Linear model $\to$ read coefficients directly
-  - Neural network $\to$ gradient-based saliency maps, attention weights
-  - **Pros**: computationally efficient, structurally faithful
-  - **Cons**: tied to one model class, not transferable
-
-- **Model-agnostic** methods treat the model as a black box $f: X \to Y$
-  - Only require input-output access $\to$ query $f(x)$ and observe predictions
-  - LIME, SHAP, permutation importance, partial dependence
-  - **Pros**: applicable to any model, comparable across models
-  - **Cons**: can be computationally expensive, may not capture internal
-    mechanisms
-::::
-:::: {.column width=45%}
-
-```graphviz[80%]
-digraph ModelAccess {
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.7;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Model [label="ML Model f", fillcolor="#F4A6A6"];
-    Specific [label="Model-Specific\nMethods", fillcolor="#A6C8F4"];
-    Agnostic [label="Model-Agnostic\nMethods", fillcolor="#A0D6D1"];
-    Internals [label="Internal\nStructure", fillcolor="#FFD1A6"];
-    IO [label="Input / Output\nOnly", fillcolor="#B2E2B2"];
-
-    Model -> Internals [label="  expose  "];
-    Model -> IO [label="  query  "];
-    Internals -> Specific;
-    IO -> Agnostic;
-}
-```
-
-::::
-:::
-
-# Intrinsic Interpretability vs. Post-Hoc Explanation
+- **Model-agnostic**
+  - Methods treat the model as a black box $f: X \to Y$
+    - Only require input-output access $\to$ query $f(x)$ and observe predictions
+  - E.g., LIME, SHAP, permutation importance, partial dependence
+  - _Pros_: applicable to any model, comparable across models
+  - _Cons_: can be computationally expensive, may not capture internal mechanisms
 
 * Intrinsic Interpretability vs. Post-Hoc Explanation
 
 - **Definition**: _intrinsically interpretable_ models are understandable by
   design, without any additional explanation method
   - The model _is_ the explanation
+  - E.g., decision trees, linear models
 
 - **Definition**: _post-hoc_ methods explain a model _after_ it has been trained
   - Applied to black-box models to extract understanding
@@ -175,7 +142,8 @@ digraph ModelAccess {
 * Decision Trees and Rule-Based Models
 
 - **Key idea**: decision trees are the canonical intrinsically interpretable
-  model $\to$ every prediction follows an explicit if-then path
+  model
+  - Every prediction follows an explicit if-then path
 
 ::: columns
 :::: {.column width=55%}
@@ -188,9 +156,13 @@ digraph ModelAccess {
   $< 0.4$"_
 
 - **Limitations**:
-  - Deep trees become hard to interpret (hundreds of nodes)
-  - Unstable $\to$ small data changes can produce different trees
+  - Deep trees (hundreds of nodes) become hard to interpret
+  - Unstable: small data changes can produce different trees
   - Limited expressiveness for complex decision boundaries
+
+- **Remark**: rule-based models (e.g., decision lists, rule sets) offer similar
+  interpretability by expressing predictions as a collection of if-then rules
+
 ::::
 :::: {.column width=45%}
 
@@ -218,46 +190,30 @@ digraph DecisionTree {
 ::::
 :::
 
-- **Remark**: rule-based models (e.g., decision lists, rule sets) offer similar
-  interpretability by expressing predictions as a collection of if-then rules
-
 * Linear and Generalized Additive Models (GAMs)
 
 - **Key idea**: linear models explain predictions through _additive feature
   contributions_
-  - Each feature $x_j$ contributes $\blue{\beta_j} x_j$ to the prediction
-  - The coefficient $\blue{\beta_j}$ directly quantifies the effect of
-    feature $j$
+  - Each feature $x_j$ contributes $\beta_j x_j$ to the prediction
+  - Coefficient $\beta_j$ quantifies feature $j$'s effect
 
 - **Definition**: a _linear model_ predicts:
   $$
-  \hat{y}
-    = \blue{\beta_0}
-      + \blue{\beta_1} x_1
-      + \blue{\beta_2} x_2
-      + \cdots
-      + \blue{\beta_p} x_p
+  \hat{y} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_p x_p
   $$
   - **Interpretation**: increasing $x_j$ by one unit changes $\hat{y}$ by
-    $\blue{\beta_j}$, holding all else equal
+    $\beta_j$, holding all else equal
 
-- **Definition**: a _Generalized Additive Model_ (GAM) extends this to
-  nonlinear feature effects:
+- **Definition**: a _Generalized Additive Model_ (GAM) extends to nonlinear
+  features:
   $$
-  \hat{y}
-    = \beta_0
-      + \red{f_1}(x_1)
-      + \red{f_2}(x_2)
-      + \cdots
-      + \red{f_p}(x_p)
+  \hat{y} = \beta_0 + f_1(x_1) + f_2(x_2) + \cdots + f_p(x_p)
   $$
-  - Each $\red{f_j}$ is a smooth, potentially nonlinear function (e.g., spline)
-  - **Pros**: captures nonlinear patterns while remaining additive $\to$
-    each feature's effect can be plotted independently
-  - **Cons**: cannot capture feature interactions (unless explicitly added as
-    $f_{jk}(x_j, x_k)$ terms)
-
-# Feature Attribution Methods
+  - Each $f_j$ is a smooth, potentially nonlinear function (e.g., spline)
+  - _Pros_: captures nonlinear patterns while remaining additive; each feature's
+    effect can be plotted independently
+  - _Cons_: cannot capture feature interactions unless explicitly added as
+    $f_{jk}(x_j, x_k)$ terms
 
 * Feature Attribution Methods: Overview
 
@@ -299,21 +255,20 @@ mindmap
   - Each player's _Shapley value_ is their fair contribution to the payout
 
 - **Definition**: the Shapley value for feature $j$ is:
-  $$
-  \phi_j
-    = \sum_{S \subseteq N \setminus \{j\}}
-        \frac{|S|! \; (|N| - |S| - 1)!}{|N|!}
-        \left[
-          f(\blue{S \cup \{j\}}) - f(\blue{S})
-        \right]
-  $$
-  - $N$ = set of all features, $S$ = a subset excluding feature $j$
-  - $f(S)$ = model prediction using only features in $S$
-  - The sum averages the _marginal contribution_ of $j$ over all possible
-    orderings
 
-- **Remark**: Shapley values are the _unique_ attribution method satisfying
-  four axioms: efficiency, symmetry, dummy, and additivity
+  $
+  phi_j =
+  sum_(S subseteq N without {j})
+    ((abs(S))! (abs(N) - abs(S) - 1)!) / (abs(N))!
+    (f(S union {j}) - f(S))
+  $
+
+  where:
+  - $N$ = set of all features
+  - $S$ = a subset excluding feature $j$
+  - $f(S)$ = model prediction using only features in $S$
+
+- The sum averages the _marginal contribution_ of $j$ over all possible orderings
 
 * SHAP: Properties and Computation
 
