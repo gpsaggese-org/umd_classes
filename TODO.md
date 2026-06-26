@@ -129,6 +129,12 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [ ] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
 
+### gen_slides.py msml610/11.1
+
+It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
+
+> notes_to_pdf.py --input=msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt --output=msml610/lectures/Lesson11.1-Decision_Making_with_Causal_Models.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine=beamer --skip_pandoc_ast_transform
+
 ### IN PROGRESS: [ ] Fix blue verbatim
 
 ### Improve tables

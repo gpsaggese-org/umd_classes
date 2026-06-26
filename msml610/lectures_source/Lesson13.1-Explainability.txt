@@ -257,7 +257,7 @@ mindmap
 - **Definition**: the Shapley value for feature $j$ is:
 
   ```{=typst}
-  $ phi_j = sum_(S subset.eq N without {j}) ((|S|)! (|N| - |S| - 1)!) / (|N|)! (f(S union {j}) - f(S)) $
+   phi_j = sum_(S subset.eq N without {j}) ((|S|)! (|N| - |S| - 1)!) / (|N|)! (f(S union {j}) - f(S)) $
   ```
 
   where:
@@ -273,10 +273,10 @@ mindmap
 
 - **Properties**:
   - _Efficiency_: contributions sum to the prediction difference from baseline
-    $$
-    f(x) - \EE[f(x)]
-      = \sum_{j=1}^{p} \phi_j
-    $$
+
+    ```{=typst}
+    $ f(x) - E[f(x)] = sum_(j=1)^p phi_j $
+    ```
   - _Symmetry_: features with identical contributions get equal attribution
   - _Dummy_: features that never change the prediction get $\phi_j = 0$
   - _Additivity_: for ensemble models, SHAP values of the ensemble equal the
@@ -296,10 +296,9 @@ mindmap
   global explanations
 
 - **Local explanation** (single prediction):
-  - _Force plot_: shows how each feature pushes the prediction from the
-    baseline $\EE[f(x)]$ toward the final output $f(x)$
-  - Features colored $\red{red}$ push the prediction higher; $\blue{blue}$
-    push it lower
+  - _Force plot_: shows how each feature pushes the prediction from the baseline
+    $\frak[E][f(x)]$ toward the final output $f(x)$
+  - Features colored red push the prediction higher; blue push it lower
 
 - **Global explanation** (entire dataset):
   - _Summary plot_: shows the distribution of SHAP values for each feature
@@ -324,13 +323,12 @@ mindmap
 ::: columns
 :::: {.column width=55%}
 - **Algorithm**:
-  1. Pick an instance $\blue{x}$ to explain
-  2. Generate perturbed samples $\{z_1, ..., z_N\}$ around $\blue{x}$
-  3. Weight each $z_i$ by proximity to $\blue{x}$ using a kernel
-     $\pi_{\blue{x}}(z_i)$
-  4. Query the black-box model $f$ on all $z_i$ to get predictions $f(z_i)$
-  5. Fit a simple model $\red{g}$ (e.g., linear) on $\{(z_i, f(z_i))\}$ weighted
-     by $\pi_{\blue{x}}$
+  1. Pick an instance $x$ to explain
+  2. Generate perturbed samples {$z_1$, ..., $z_N$} around $x$
+  3. Weight each $z_i$ by proximity to $x$ using a kernel $\pi_x(z_i)$
+  4. Query the black-box model $f()$ on all $z_i$ to get predictions $f(z_i)$
+  5. Fit a simple model $g$ (e.g., linear) on {($z_i$, $f(z_i)$)} weighted by
+     $\pi_x$
 
 ::::
 :::: {.column width=45%}
@@ -360,30 +358,20 @@ digraph LIME {
 ::::
 :::
 
-- **Example**: a spam classifier flags an email $\to$ LIME reveals the words
-  _"free"_, _"winner"_, and _"click here"_ drove the prediction
-  - The linear explanation $\red{g}$ assigns a positive coefficient to each of
-    these tokens
+- **Example**: a spam classifier flags an email → LIME reveals the words _"free"_, _"winner"_, and _"click here"_ drove the prediction
+  - The linear explanation g assigns a positive coefficient to each of these tokens
 
 * LIME: Formal Objective
 
 - **Definition**: LIME finds the best local explanation by solving:
-  $$
-  \red{g^*}
-    = \arg\min_{g \in G}
-        \sum_{i=1}^{N}
-          \pi_{\blue{x}}(z_i)
-          \left(
-            f(z_i) - \red{g}(z_i)
-          \right)^2
-        + \Omega(\red{g})
-  $$
-  - $\Omega(\red{g})$ penalizes complexity of the explanation (e.g., number of
-    non-zero coefficients)
 
-- **Interpretation**: LIME minimizes weighted reconstruction error between the
-  black-box $f$ and the simple surrogate $\red{g}$, with more weight on
-  samples close to $\blue{x}$
+  ```{=typst}
+  $ g^* = arg min_(g in G) sum_(i=1)^N pi_x(z_i) (f(z_i) - g(z_i))^2 + Omega(g) $
+  ```
+
+  - Ω(g) penalizes complexity of the explanation (e.g., number of non-zero coefficients)
+
+- **Interpretation**: LIME minimizes weighted reconstruction error between the black-box f and the simple surrogate g, with more weight on samples close to x
 
 - **Limitations**:
   - Explanations depend on the perturbation strategy $\to$ different
@@ -397,11 +385,16 @@ digraph LIME {
   feature's values are randomly shuffled (Breiman, 2001)
 
 - **Algorithm**:
-  1. Compute baseline performance $\blue{P_0}$ on the validation set
-  2. For each feature $j$:
-     - Randomly permute the values of $x_j$ across all samples
-     - Compute the new performance $\red{P_j}$
-     - Importance of feature $j$: $\phi_j = \blue{P_0} - \red{P_j}$
+  1. Compute baseline performance P₀ on the validation set
+  2. For each feature j:
+     - Randomly permute the values of x_j across all samples
+     - Compute the new performance P_j
+     - Importance of feature j:
+
+       ```{=typst}
+       $ phi_j = P_0 - P_j $
+       ```
+
   3. Repeat and average over multiple permutations for stability
 
 - **Interpretation**: a large drop $\phi_j$ means the model relies heavily
@@ -484,27 +477,23 @@ digraph Counterfactual {
 
 * Counterfactual Explanations: Formal Framework
 
-- **Definition**: find a counterfactual $\red{x'}$ by solving:
-  $$
-  \red{x'}
-    = \arg\min_{x'}
-        d(\blue{x}, \red{x'})
-    \quad \text{subject to} \quad
-        f(\red{x'}) = y'
-  $$
-  - $\blue{x}$ = original input, $y'$ = desired outcome
-  - $d(\cdot, \cdot)$ = distance function measuring how much the input changes
+- **Definition**: find a counterfactual $x'$ by solving:
+
+  ```{=typst}
+  $ x' = arg min_(x') d(x, x') quad "subject to" quad f(x') = y' $
+  ```
+
+  - $x$ = original input, $y'$ = desired outcome
+  - $d(dot, dot)$ = distance function measuring how much the input changes
 
 - **Remark**: in practice, a soft constraint formulation is used:
-  $$
-  \red{x'}
-    = \arg\min_{x'}
-        \lambda \cdot \ell\bigl(f(\red{x'}), y'\bigr)
-        + d(\blue{x}, \red{x'})
-  $$
-  - $\ell$ is a loss penalizing predictions far from $y'$
-  - $\lambda$ controls the tradeoff between achieving $y'$ and staying close
-    to $\blue{x}$
+
+  ```{=typst}
+  $ x' = arg min_(x') lambda dot.op ell(f(x'), y') + d(x, x') $
+  ```
+
+  - $ell$ is a loss penalizing predictions far from $y'$
+  - $lambda$ controls the tradeoff between achieving $y'$ and staying close to $x$
 
 - **Limitations**:
   - Multiple valid counterfactuals may exist $\to$ which one to present?
@@ -523,18 +512,13 @@ digraph Counterfactual {
 - **Intuition**: a model that says _"I predict 80% chance of disease, but I'm
   very uncertain"_ is more informative than one that just says _"disease"_
 
-- **Definition**: in Bayesian inference, we update our belief about parameters
-  $\theta$ given data $\mathcal{D}$:
-  $$
-  \underbrace{\Pr(\theta | \mathcal{D})}_{\text{posterior}}
-    = \frac{
-        \overbrace{\Pr(\mathcal{D} | \theta)}^{\text{likelihood}}
-        \cdot
-        \overbrace{\Pr(\theta)}^{\text{prior}}
-      }{
-        \underbrace{\Pr(\mathcal{D})}_{\text{evidence}}
-      }
-  $$
+- **Definition**: in Bayesian inference, we update our belief about parameters θ given data 𝒟:
+
+  ```{=typst}
+  $ Pr(theta | cal(D)) = frac(Pr(cal(D) | theta) dot.op Pr(theta), Pr(cal(D))) $
+  ```
+
+  where the numerator is (likelihood) × (prior) and denominator is (evidence)
 
 - **Remark**: the posterior is inherently interpretable $\to$ it tells us which
   parameter values are plausible and how confident we should be
@@ -544,24 +528,22 @@ digraph Counterfactual {
 - **Key idea**: the shape of the posterior distribution directly communicates
   model uncertainty about each parameter
 
-- **Definition**: a _credible interval_ $[\theta_L, \theta_U]$ contains the
-  true parameter with probability $1 - \alpha$:
-  $$
-  \Pr(\theta_L \leq \theta \leq \theta_U | \mathcal{D}) = 1 - \alpha
-  $$
+- **Definition**: a _credible interval_ [θ_L, θ_U] contains the true parameter with probability 1 - α:
+
+  ```{=typst}
+  $ Pr(theta_L lt.eq theta lt.eq theta_U | cal(D)) = 1 - alpha $
+  ```
 
 - **Interpretation**:
-  - _Narrow_ posterior $\to$ model is confident about $\theta$
-  - _Wide_ posterior $\to$ high uncertainty, need more data
-  - _Multimodal_ posterior $\to$ multiple plausible explanations exist
+  - _Narrow_ posterior → model is confident about θ
+  - _Wide_ posterior → high uncertainty, need more data
+  - _Multimodal_ posterior → multiple plausible explanations exist
 
 - **Example**: predicting treatment effect
-  - Posterior mean = 5.2 units, 95% credible interval = $[1.1, 9.3]$
-  - _"The treatment likely has a positive effect, but we're uncertain about
-    its magnitude"_
+  - Posterior mean = 5.2 units, 95% credible interval = [1.1, 9.3]
+  - _"The treatment likely has a positive effect, but we're uncertain about its magnitude"_
 
-- **Remark**: credible intervals have a direct probability interpretation,
-  unlike frequentist confidence intervals
+- **Remark**: credible intervals have a direct probability interpretation, unlike frequentist confidence intervals
 
 * Bayesian Networks and Probabilistic Graphical Models
 
@@ -571,13 +553,13 @@ digraph Counterfactual {
 
 ::: columns
 :::: {.column width=55%}
-- **Definition**: a Bayesian Network is a pair $(\mathcal{G}, \Pr)$ where:
-  - $\mathcal{G}$ = DAG whose nodes represent random variables
-  - $\Pr$ = joint distribution factored according to $\mathcal{G}$:
-    $$
-    \Pr(X_1, ..., X_n)
-      = \prod_{i=1}^{n} \Pr(X_i | Parents(X_i))
-    $$
+- **Definition**: a Bayesian Network is a pair (𝒢, Pr) where:
+  - 𝒢 = DAG whose nodes represent random variables
+  - Pr = joint distribution factored according to 𝒢:
+
+    ```{=typst}
+    $ Pr(X_1 , ... , X_n) = product_(i = 1)^n Pr(X_i | "Parents"(X_i)) $
+    ```
 
 - **Interpretation**:
   - Edges encode direct dependencies
@@ -626,11 +608,12 @@ digraph BayesNet {
     - E.g., model hasn't seen enough examples of a rare condition
 
 - **Interpretation**: a Bayesian model decomposes total predictive uncertainty:
-  $$
-  \underbrace{\VV[Y | x, \mathcal{D}]}_{\text{total}}
-    = \underbrace{\EE[\VV[Y | x, \theta]]}_{\text{aleatoric}}
-      + \underbrace{\VV[\EE[Y | x, \theta]]}_{\text{epistemic}}
-  $$
+
+  ```{=typst}
+  $ "Var"[Y | x, cal(D)] = "E"["Var"[Y | x, theta]] + "Var"["E"[Y | x, theta]] $
+  ```
+
+  where the first term is aleatoric (data) uncertainty and the second is epistemic (model) uncertainty
 
 - **Example**: a medical diagnosis model
   - High aleatoric uncertainty $\to$ _"This case is inherently ambiguous"_
@@ -743,12 +726,12 @@ digraph SCM {
   $\to$ they reason about _what would have happened_ under a different
   intervention
 
-- **Definition**: the causal counterfactual _"$Y$ had $X$ been $x$"_ for an
-  individual with observed $(X = x', Y = y')$ is computed in three steps:
+- **Definition**: the causal counterfactual _"$Y$ had $X$ been $x$"_ for an individual with observed $(X = x', Y = y')$ is computed in three steps:
   1. **Abduction**: infer the exogenous variables $U$ from observations
-     $$
-     \Pr(U | X = x', Y = y')
-     $$
+
+     ```{=typst}
+     $ Pr(U | X = x' , Y = y') $
+     ```
   2. **Action**: modify the structural equation for $X$ to $do(X = x)$
   3. **Prediction**: compute the counterfactual outcome $Y_x$ under the
      modified model with the inferred $U$
