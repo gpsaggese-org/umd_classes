@@ -2,6 +2,24 @@
 
 book.Causal_Probabilistic_ML/book_map.md
 
+# Downloading Papers
+
+export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999
+
+> download_link_articles.py --url "$LINKS_GSHEET" --row_idx 1 --dry_run
+
+- To understand the structure
+> ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+
+- Create unit tests from the cache
+
+- Run a test_generator.py with a command
+  ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+  1) the cache gets warmed up and saved in the right position (using a command
+     line switch)
+  2) test code gets generated that in practice runs the command (using the proper
+  command line switch)
+
 # Convert slides into book
 
 - [x] Create a map from book.from_corr_to_decision/book_map.md
