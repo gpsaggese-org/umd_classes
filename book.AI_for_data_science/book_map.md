@@ -125,6 +125,9 @@ team productivity
 **Goal:** Translate business questions into well-scoped ML problems with clear
 success metrics
 
+**Skills for This Chapter:** Ch 2 role prompts, Ch 2 chain-of-thought, Ch 5
+`project.scaffold_ml`
+
 - Translating Business Questions into ML Problems
   - Moving from "we need to predict X" to a precise problem statement
   - Classification, regression, clustering, or custom objectives
@@ -141,9 +144,22 @@ success metrics
   - Setting realistic baselines and MVP definitions
   - When to build incrementally vs. upfront design
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: project scaffold, metric tracking stubs, data contract
+  schemas, baseline model harness
+- Prompt patterns: role prompt ("act as senior ML engineer reviewing this
+  problem spec for hidden assumptions"), chain-of-thought to surface
+  constraints before writing code
+- Human judgment: whether the business question is actually solvable as stated
+  and whether the chosen metric captures real business impact
+
 ### Chapter 7: Data Collection and Loading
 **Goal:** Design and implement robust data pipelines that ingest from diverse
 sources
+
+**Skills for This Chapter:** Ch 2 context injection, Ch 2 decomposition, Ch 3
+red-teaming, Ch 5 `data.write_pipeline`
 
 - Data Sources and Storage Systems
   - Databases, APIs, real-time streams, sensor data, third-party datasets
@@ -160,9 +176,22 @@ sources
   - Anonymization and access controls
   - Audit trails for data lineage
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: SQL queries, API client stubs, retry/backoff logic,
+  Kafka consumer scaffolding — peak boilerplate density across all 15 chapters
+- Prompt patterns: context injection (paste schema + sample rows → connector
+  code); decomposition (split source / transform / load into three sub-prompts
+  to avoid hallucination cascades)
+- Human judgment: data quality assessment at source, governance decisions, and
+  compliance scope that requires domain expertise
+
 ### Chapter 8: Cleaning and Preparing Data
 **Goal:** Transform raw data into usable form through systematic cleaning and
 standardization
+
+**Skills for This Chapter:** Ch 2 context injection, Ch 3 red-teaming, Ch 3
+security scanning, Ch 5 `data.clean_pipeline`
 
 - Identifying and Handling Missing Values
   - Detecting missingness patterns
@@ -189,9 +218,22 @@ standardization
   - StandardScaler, MinMaxScaler, and robust scaling
   - When to apply scaling and why it matters for different models
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: imputation code, encoding pipelines, scaler setup,
+  duplicate detection logic
+- Prompt patterns: context injection (paste DataFrame schema + `.dtypes` +
+  `.describe()` output → cleaning script); red-team generated code by feeding
+  adversarial inputs (nulls, type mismatches, empty frames) per Ch 3
+- Human judgment: choosing imputation strategy based on domain knowledge of
+  *why* data is missing, not just statistical patterns
+
 ### Chapter 9: Exploratory Data Analysis
 **Goal:** Develop deep understanding of data through systematic exploration and
 hypothesis testing
+
+**Skills for This Chapter:** Ch 2 few-shot, Ch 2 role prompts, Ch 5
+`eda.generate_report`
 
 - Univariate Analysis and Distributions
   - Summary statistics, histograms, density plots
@@ -217,9 +259,22 @@ hypothesis testing
   - Time series patterns and seasonality
   - Anomalies that signal data quality issues or business insights
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: histogram / scatter / heatmap code, stat test
+  boilerplate, summary table generation
+- Prompt patterns: few-shot (supply 1–2 prior plot examples to match style);
+  role prompt ("act as statistician interpreting this correlation matrix and
+  flagging multicollinearity risks")
+- Human judgment: hypothesis formation and deciding which anomalies are signal
+  vs. noise — AI surfaces patterns; the scientist assigns meaning
+
 ### Chapter 10: Feature Engineering
 **Goal:** Transform raw data into predictive signals through creative and
 systematic feature creation
+
+**Skills for This Chapter:** Ch 2 context injection, Ch 4 type hints as
+contracts, Ch 5 `feature.suggest_from_schema`
 
 - Creating New Features from Existing Data
   - Polynomial and interaction features
@@ -245,11 +300,24 @@ systematic feature creation
   - Correlation-based selection, permutation importance, SHAP
   - Iterative selection: forward, backward, recursive elimination
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: lag features, rolling windows, polynomial interactions,
+  encoding pipelines, sklearn `Pipeline` scaffolding
+- Prompt patterns: context injection (domain description + target variable +
+  sample schema → feature suggestions); use type-hinted function signatures
+  from Ch 4 as specifications the model reads before generating transformers
+- Human judgment: which features encode real domain causality vs. spurious
+  correlation — AI generates candidates; the practitioner vets them
+
 ## Part 3: Production ML
 
 ### Chapter 11: Splitting Data Strategically
 **Goal:** Design data splits that prevent leakage and enable reliable model
 evaluation
+
+**Skills for This Chapter:** Ch 2 zero-shot, Ch 2 context injection, Ch 3 bug
+detection, Ch 5 `data.split_time_series`
 
 - Train, Validation, and Test Set Strategy
   - The purpose of each split and typical proportions
@@ -271,8 +339,21 @@ evaluation
   - Common leakage patterns and how to detect them
   - Ensuring each split is independent
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: stratified split utilities, forward-chaining time-series
+  splits, SMOTE oversampling wrappers
+- Prompt patterns: zero-shot for standard splits; context injection (paste
+  feature list + target + time column → leakage-safe split code); use static
+  analysis from Ch 3 to scan AI-generated split code for index bleed-through
+- Human judgment: identifying domain-specific leakage that AI cannot see from
+  code alone (e.g., a feature that encodes future information by business logic)
+
 ### Chapter 12: Model Selection and Training
 **Goal:** Build, train, and tune models that generalize well to unseen data
+
+**Skills for This Chapter:** Ch 2 decomposition, Ch 2 context injection, Ch 4
+modularity, Ch 5 `model.setup_experiment`
 
 - Understanding Algorithm Families
   - Linear models, tree-based models, neural networks, and specialized
@@ -300,8 +381,21 @@ evaluation
   - Experiment versioning with MLflow, Weights & Biases
   - Reproducible environments with pinned dependencies
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: training loop scaffolding, hyperparameter config files,
+  MLflow / W&B logging setup, grid search wrappers
+- Prompt patterns: decomposition (scaffold → tune → log as three sub-prompts);
+  context injection (paste prior run metrics → AI suggests next hyperparameter
+  range to try)
+- Human judgment: algorithm family selection based on data regime,
+  interpretability requirements, and latency budget — not inferable from code
+
 ### Chapter 13: Model Evaluation and Debugging
 **Goal:** Rigorously evaluate model performance and diagnose failure modes
+
+**Skills for This Chapter:** Ch 2 context injection, Ch 2 chain-of-thought,
+Ch 3 mutation testing, Ch 5 `eval.generate_report`
 
 - Classification Metrics
   - Accuracy, precision, recall, F1, ROC-AUC
@@ -328,9 +422,23 @@ evaluation
   - Finding patterns in failures
   - Iterating on problem framing or feature engineering
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: metric computation scripts, SHAP visualization code,
+  error segmentation tables, confusion matrix plots
+- Prompt patterns: context injection (paste confusion matrix or residual
+  summary → debugging hypotheses); chain-of-thought to walk through failure
+  categories before writing analysis code; mutation testing from Ch 3 to verify
+  AI-written metric functions catch edge cases
+- Human judgment: deciding whether error patterns require re-framing the
+  problem vs. more feature work vs. more data — a strategic call beyond code
+
 ### Chapter 14: Deployment
 **Goal:** Move trained models to production with robust serving and version
 control
+
+**Skills for This Chapter:** Ch 2 zero-shot, Ch 2 role prompts, Ch 3 security
+scanning, Ch 5 `deploy.scaffold_api`, `deploy.write_dockerfile`
 
 - Model Packaging and Containerization
   - Saving model artifacts and dependencies
@@ -361,9 +469,22 @@ control
   - Model registries: MLflow, Hugging Face Model Hub
   - Versioning for reproducibility and rollback
 
+### AI-Assisted Workflow
+
+- Boilerplate targets: Dockerfile, FastAPI route stubs, Airflow DAG
+  scaffolding, A/B test harness — second highest AI leverage after Ch 7
+- Prompt patterns: zero-shot for standard REST endpoints and containers; role
+  prompt ("act as DevSecOps engineer reviewing this Dockerfile for secrets and
+  privilege escalation") for security hardening per Ch 3
+- Human judgment: rollback trigger thresholds and canary traffic percentages
+  must align to business risk tolerance, not engineering defaults
+
 ### Chapter 15: Monitoring and Evolution
 **Goal:** Maintain model performance in production and continuously improve as
 data changes
+
+**Skills for This Chapter:** Ch 2 context injection, Ch 5 `monitoring.setup_drift_alerts`,
+`monitoring.write_runbook`
 
 - Production Performance Tracking
   - Instrumentation for latency, throughput, error rates
@@ -393,3 +514,13 @@ data changes
   - Translating model metrics to business impact
   - Compliance and regulatory reporting
   - Documentation for audits and governance
+
+### AI-Assisted Workflow
+
+- Boilerplate targets: drift detection scripts, dashboard metric queries,
+  retraining pipeline scaffolding, incident runbooks, alerting rule configs
+- Prompt patterns: context injection (paste recent metric time-series → drift
+  alert thresholds and detection code); iterative refinement loop from Ch 2
+  (run alert → observe false-positive rate → paste back → tighten threshold)
+- Human judgment: distinguishing concept drift from transient data quality
+  issues, and deciding whether retraining or re-framing is the right response

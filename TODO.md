@@ -1,6 +1,12 @@
 # Work on slides
 
+## 
+
 book.Causal_Probabilistic_ML/book_map.md
+
+##
+
+book.AI_for_data_science/book_map.md
 
 # Downloading Papers
 
@@ -90,8 +96,8 @@ https://github.com/causify-ai/helpers/issues/1276
 ## Get typst slides as close as possible to latex ones
 
 ```
-> notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
-> vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.notes_to_pdf.render_image2.typ
+notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
+vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.notes_to_pdf.render_image2.typ
 ```
 
 ### Create branch for 1276
@@ -150,6 +156,7 @@ https://tug.org/FontCatalogue/computermodern/ instead of DejaVu
 
 dev_scripts_helpers/documentation/preprocess_notes.py
 
+- [x] Get it working
 - [ ] Add unit tests
 - [ ] Factor out code to umd_classes
 
@@ -159,7 +166,7 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [ ] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
 
-### gen_slides.py msml610/11.1
+### Fix gen_slides.py msml610/11.1
 
 It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
 
@@ -169,7 +176,7 @@ It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_trans
 
 Add https://typst.app/play/ to the 
 
-### IN PROGRESS: [ ] Fix blue verbatim
+### [x] Fix blue verbatim
 
 ### Improve tables
 
