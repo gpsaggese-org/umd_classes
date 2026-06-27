@@ -6,7 +6,7 @@ book.Causal_Probabilistic_ML/book_map.md
 
 export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999
 
-> download_link_articles.py --url "$LINKS_GSHEET" --row_idx 1 --dry_run
+> download_link_articles.py --url "$LINKS_GSHEET" --row_idx 1
 
 - To understand the structure
 > ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
@@ -19,6 +19,18 @@ export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6
      line switch)
   2) test code gets generated that in practice runs the command (using the proper
   command line switch)
+
+hcacsimp.add_cache_control_arg(parser)
+
+- Switch the order of HN and article
+- Article_url is always present (even if we bookmark the url)
+  - If url is not hackernews than propagate
+- Check that the gsheet has all the expected columns in the expected order
+
+- Add a mode --cache_mode TRACE_CACHE to show the behavior of the cache (e.g.,
+  warning when there are cache hits), maybe different colors
+
+# Download and process Dwakersh blogs and LexFriedman blogs
 
 # Convert slides into book
 
