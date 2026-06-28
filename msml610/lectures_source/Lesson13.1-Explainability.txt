@@ -797,6 +797,13 @@ digraph CausalVsAttribution {
 
 # Quality of Explanations
 
+* Quality of Explanations
+
+- Evaluating explanation quality requires checking:
+  1. _Faithfulness_: does it reflect the model?
+  2. _Stability_: is it consistent across similar inputs?
+  3. _Robustness_: can it be gamed or manipulated?
+
 * Faithfulness of Explanations
 
 - **Definition**: an explanation is _faithful_ if it accurately reflects the
@@ -804,31 +811,22 @@ digraph CausalVsAttribution {
   - A faithful explanation describes _how the model truly works_, not just a
     plausible story
 
-- **Problem**: post-hoc explanations are approximations $\to$ they may not
-  accurately represent the model's internal logic
+- **Problem**: post-hoc explanations are approximations and may not accurately
+  represent the model's internal logic
   - LIME's linear surrogate may miss nonlinear interactions
   - SHAP with marginal expectations may attribute importance to features the
     model never uses conditionally
-
-- **Key idea**: two types of faithfulness
-  - _Descriptive faithfulness_: does the explanation match the model's
-    computation?
-  - _Selective faithfulness_: if we remove the "important" features, does the
-    prediction actually change?
 
 - **Example**: testing faithfulness
   - Remove the top-$k$ features according to the explanation
   - If the prediction doesn't change $\to$ the explanation is unfaithful
   - If it changes dramatically $\to$ the explanation is likely faithful
 
-- **Remark**: there is no universal metric for faithfulness $\to$ it depends
-  on how _"matching the model's reasoning"_ is defined
-
 * Stability and Robustness of Explanations
 
 - **Definition**: an explanation is _stable_ if small changes to the input
   produce small changes in the explanation
-  - Aka _"continuity"_ or _"smoothness"_ of the explanation function
+  - Aka _"continuity"_ or _"smoothness"_
 
 - **Problem**: many explanation methods are _unstable_
   - LIME: different random perturbations yield different explanations for the
@@ -845,13 +843,6 @@ digraph CausalVsAttribution {
   - They create false confidence in flawed models
   - Stakeholders make decisions based on explanations they trust
 
-- **Remark**: evaluating explanation quality requires checking:
-  1. _Faithfulness_: does it reflect the model?
-  2. _Stability_: is it consistent across similar inputs?
-  3. _Robustness_: can it be gamed or manipulated?
-
-# The Accuracy-Interpretability Tradeoff
-
 * The Accuracy-Interpretability Tradeoff
 
 - **Key idea**: the _accuracy-interpretability tradeoff_ is the central tension
@@ -862,6 +853,7 @@ digraph CausalVsAttribution {
 - **Intuition**: as models grow more complex, they capture more patterns in the
   data (higher accuracy) but become harder to understand
 
+// TODO(ai_gp): Convert it into a table
 - **Spectrum**:
   - Linear regression $\to$ fully interpretable, limited capacity
   - Decision trees $\to$ interpretable if shallow, brittle
@@ -871,35 +863,9 @@ digraph CausalVsAttribution {
   - Deep neural networks $\to$ highest capacity, opaque
 
 - **Question**: _"Is this tradeoff fundamental, or can we have both?"_
-  - Recent work suggests _some_ domains allow high accuracy with interpretable
-    models (Rudin, 2019)
+  - Recent work (Rudin, 2019) suggests _some_ domains allow high accuracy with
+    interpretable models 
   - But for many tasks, the gap remains significant
-::::
-:::: {.column width=45%}
-
-```graphviz[80%]
-digraph Tradeoff {
-    splines=true;
-    nodesep=0.6;
-    ranksep=0.5;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
-
-    LR [label="Linear\nRegression", fillcolor="#B2E2B2"];
-    DT [label="Decision\nTrees", fillcolor="#A0D6D1"];
-    GAM [label="GAMs", fillcolor="#A6E7F4"];
-    RF [label="Random\nForests", fillcolor="#FFD1A6"];
-    DNN [label="Deep Neural\nNetworks", fillcolor="#F4A6A6"];
-
-    LR -> DT [label="  + complexity  "];
-    DT -> GAM;
-    GAM -> RF;
-    RF -> DNN [label="  + accuracy\n  - interpretability  "];
-}
-```
-
-::::
-:::
 
 - **Remark**: Rudin (2019) argues we should prefer inherently interpretable
   models in high-stakes settings rather than explaining black boxes post-hoc
