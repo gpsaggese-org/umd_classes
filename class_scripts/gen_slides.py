@@ -116,6 +116,13 @@ def _parse() -> argparse.ArgumentParser:
         help="Watch input file for changes and regenerate PDF on change",
     )
     parser.add_argument(
+        "--slides_engine",
+        action="store",
+        default=None,
+        choices=["beamer", "typst"],
+        help="Engine used to render slides: 'beamer' (default) or 'typst'",
+    )
+    parser.add_argument(
         "extra_opts",
         nargs=argparse.REMAINDER,
         help="Additional options to pass to notes_to_pdf.py",
@@ -157,6 +164,9 @@ def _main(parser: argparse.ArgumentParser) -> None:
         "--skip_action=cleanup_before",
         "--skip_action=cleanup_after",
     ]
+    # Add slides engine if specified.
+    if args.slides_engine:
+        cmd_parts.append(f"--slides_engine={args.slides_engine}")
     # Add extra options if provided.
     if args.extra_opts:
         cmd_parts.extend(args.extra_opts)
@@ -168,7 +178,7 @@ def _main(parser: argparse.ArgumentParser) -> None:
         # Skim auto-reloads PDF on change, so skip notes_to_pdf open action.
         cmd += " --skip_action=open --daemon"
     # Execute the command.
-    hsystem.system(cmd)
+    hsystem.system(cmd, suppress_output=False)
 
 
 if __name__ == "__main__":

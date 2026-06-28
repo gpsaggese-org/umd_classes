@@ -244,6 +244,8 @@ mindmap
 - **Remark**: all three methods are model-agnostic but differ in scope
   (local vs global) and theoretical foundation
 
+## Explainability Methods
+
 * SHAP: Shapley Values Foundation
 
 - **Key idea**: SHAP (Lundberg and Lee, 2017) uses _Shapley values_ from
@@ -278,13 +280,23 @@ mindmap
   - Compute each person's marginal contribution in that order
   - Average to compute the Shapley value of each person
 
-// TODO(ai_gp): Create a table
 - With 3 people there are 3! = 6 orderings:
-  - `A` $\to$ `B` $\to$ C: `A` gets \$40k, `B` gets \$50k, `C` gets \$10k
-  - `A` $\to$ `C` $\to$ B: `A` gets \$40k, `C` gets \$45k, `B` gets \$15k
-  - `B` $\to$ `A` $\to$ C: `B` gets \$70k, `A` gets \$20k, `C` gets \$10k
-  - ... (3 more)
-  - Then average to get the Shapley values
+
+```{=typst}
+#styled-table(
+  ("Order", "A Contribution", "B Contribution", "C Contribution"),
+  (
+    ("A → B → C", "\$40k", "\$50k", "\$10k"),
+    ("A → C → B", "\$40k", "\$45k", "\$15k"),
+    ("B → A → C", "\$20k", "\$70k", "\$10k"),
+    ("B → C → A", "\$10k", "\$80k", "\$10k"),
+    ("C → A → B", "\$35k", "\$25k", "\$40k"),
+    ("C → B → A", "\$10k", "\$50k", "\$40k"),
+  )
+)
+```
+
+- Then average to get the Shapley values
 
 * SHAP: ML Example
 
@@ -294,11 +306,20 @@ mindmap
   - Three features: Bedrooms ($B$), Location ($L$), Square footage ($S$)
 
 - There are $3! = 6$ possible orderings; for each, compute marginal contribution:
-// TODO(ai_gp): Create a table
-  1. Order $B \to L \to S$: $B$ adds \$30k, $L$ adds \$50k, $S$ adds \$20k
-  2. Order $L \to B \to S$: $L$ adds \$40k, $B$ adds \$35k, $S$ adds \$25k
-  3. Order $B \to S \to L$: $B$ adds \$25k, $S$ adds \$40k, $L$ adds \$35k
-  4. ... (three more orderings)
+
+```{=typst}
+#styled-table(
+  ("Order", "B (Bedrooms)", "L (Location)", "S (Sq. Ft.)"),
+  (
+    ("B → L → S", "\$30k", "\$50k", "\$20k"),
+    ("L → B → S", "\$35k", "\$40k", "\$25k"),
+    ("B → S → L", "\$25k", "\$35k", "\$40k"),
+    ("L → S → B", "\$40k", "\$35k", "\$25k"),
+    ("S → B → L", "\$40k", "\$30k", "\$30k"),
+    ("S → L → B", "\$25k", "\$50k", "\$25k"),
+  )
+)
+```
 
 - Shapley value for $B$ = average of $B$'s contribution across all 6 orderings
   $\approx$ \$30k
@@ -409,20 +430,16 @@ digraph LIME {
     coefficients)
 
 - **Interpretation**: LIME minimizes weighted reconstruction error between the
-  black-box $f$ and the simple surrogate $g$, with more weight on samples close
+  black-box $f()$ and the simple surrogate $g()$, with more weight on samples close
   to $x$
 
-- **Intuition**: The locality kernel 
-
-$D()$ is the distance function
-    σ is a width parameter (a hyperparameter you must choose). Samples ziz_i
-zi​ close to xx
-x get weight near 1; samples far away get weight near 0 — so gg
-g is fit to faithfully match ff
-f's behavior near xx
-x, while being allowed to disagree with ff
-f far away.
-
+- **Intuition**: The locality kernel ensures that $g()$ is is fit to faithfully
+  match $f()$ behavior near $x$ while being allowed to disagree with $f()$ far
+  away
+  - $D()$ is the distance function
+  - $\sigma$ is a width parameter (hyperparameter to choose)
+  - Samples $z_i$ close to $x$ get weight near 1; samples far away get weight
+    near 0
 
 * LIME: Limitations
 - LIME solves
@@ -458,6 +475,8 @@ f far away.
 - **Interpretation**: a large drop $\phi_j$ means the model relies heavily
   on feature $j$
 
+* Permutation Feature Importance: Pros and Cons
+
 - **Pros**:
   - Model-agnostic, global, easy to implement
   - Directly tied to predictive performance
@@ -469,69 +488,47 @@ f far away.
 
 * Comparing Feature Attribution Methods
 
-- **Key idea**: SHAP, LIME, and permutation importance each have distinct
-  strengths $\to$ choice depends on the use case
+- **Key idea**:
+  - SHAP, LIME, and permutation importance each have distinct strengths
+  - The choice depends on the use case
+  - Using multiple methods and checking agreement increases confidence in the
+    explanation
 
-\begingroup \scriptsize
-| **Property** | **SHAP** | **LIME** | **Permutation Importance** |
-| --- | --- | --- | --- |
-| **Scope** | Local (aggregable to global) | Local | Global |
-| **Theory** | Shapley axioms | Local fidelity | Performance degradation |
-| **Consistency** | Guaranteed | Depends on perturbations | Stable with enough repeats |
-| **Speed** | Slow (exact), fast (TreeSHAP) | Moderate | Fast |
-| **Interactions** | Captures via coalition structure | Ignores (linear surrogate) | Ignores |
-| **Correlation handling** | Conditional vs marginal variants | Perturbs independently | Breaks correlations |
-\endgroup
+```{=typst}
+#styled-table(
+  ("Property", "SHAP", "LIME", "Permutation Importance"),
+  (
+    ("Scope", "Local / Global", "Local", "Global"),
+    ("Consistency", "Guaranteed", "Depends on perturbations", "Stable with enough repeats"),
+    ("Speed", "Slow (exact), fast (TreeSHAP)", "Moderate", "Fast"),
+    ("Interactions", "Captures", "Ignores", "Ignores"),
+    ("Correlation handling", "Conditional vs marginal variants", "Perturbs independently", "Breaks correlations"),
+  ),
+  bold-first-col: false
+)
+```
 
-- **Remark**: in practice, using multiple methods and checking agreement
-  increases confidence in the explanation
-
-# Counterfactual Explanations
+## Counterfactual Explanations
 
 * Counterfactual Explanations
 
-- **Definition**: a _counterfactual explanation_ identifies the smallest change
-  to the input that would _flip_ the model's decision (Wachter et al., 2017)
-  - _"What would need to change for the outcome to be different?"_
+- **Definition**: A _counterfactual explanation_ identifies the smallest change
+  to input to flip the model's decision (Wachter et al., 2017)
 
-- **Example**: a loan application is denied
-  - Counterfactual: _"If your income were \$5k higher and you had no
-    outstanding defaults, the loan would be approved"_
-  - This tells the applicant _what to change_, not just _why it was rejected_
+- **Example**: Loan application denied
+  - Counterfactual: _"If your income were \$5k higher and you had no outstanding
+    defaults, the loan would be approved"_
+  - Tells the applicant what to change, not just why it was rejected
 
-::: columns
-:::: {.column width=55%}
-- **Key idea**: counterfactuals are _actionable_ $\to$ they suggest a path
-  from the current outcome to the desired one
+- **Key idea**: Counterfactuals are _actionable_ and suggest a path from current
+  to desired outcome
 
-- **Properties of good counterfactuals**:
-  - _Proximity_: as close as possible to the original input
-  - _Sparsity_: change as few features as possible
-  - _Plausibility_: the counterfactual should be realistic
-  - _Actionability_: only change features the user can control
+- **Properties**:
+  - _Proximity_: Close to original input
+  - _Sparsity_: Change few features
+  - _Plausibility_: Realistic counterfactual
+  - _Actionability_: Change features user can control
     - E.g., age and race are immutable
-::::
-:::: {.column width=45%}
-
-```graphviz[80%]
-digraph Counterfactual {
-    splines=true;
-    nodesep=0.8;
-    ranksep=0.7;
-
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Original [label="Original x\nDeny", fillcolor="#F4A6A6"];
-    CF [label="Counterfactual x'\nApprove", fillcolor="#B2E2B2"];
-    Delta [label="Minimal\nChange", fillcolor="#A0D6D1"];
-
-    Original -> Delta [label="  compute  "];
-    Delta -> CF [label="  apply  "];
-}
-```
-
-::::
-:::
 
 * Counterfactual Explanations: Formal Framework
 
@@ -541,24 +538,25 @@ digraph Counterfactual {
   $ x' = op("arg min")_(x') d(x, x') quad "subject to" quad f(x') = y' $
   ```
 
-  - $x$ = original input, $y'$ = desired outcome
-  - $d(dot, dot)$ = distance function measuring how much the input changes
+  - $x$ = original input
+  - $y'$ = desired outcome
+  - $d(\cdot, \cdot)$ = distance function measuring how much the input changes
 
 - **Remark**: in practice, a soft constraint formulation is used:
 
   ```{=typst}
-  $ x' = op("arg min")_(x') lambda dot.op ell(f(x'), y') + d(x, x') $
+  $ x' = op("arg min")_(x') (lambda dot.op ell(f(x'), y') + d(x, x')) $
   ```
 
-  - $ell$ is a loss penalizing predictions far from $y'$
-  - $lambda$ controls the tradeoff between achieving $y'$ and staying close to $x$
+  - $\ell$ is a loss penalizing predictions far from $y'$
+  - $\lambda$ controls the tradeoff between achieving $y'$ and staying close to $x$
 
 - **Limitations**:
-  - Multiple valid counterfactuals may exist $\to$ which one to present?
+  - Multiple valid counterfactuals may exist
   - Counterfactuals may lie outside the data manifold (unrealistic)
   - Sensitive to the choice of distance metric $d$
 
-# Explainability in Bayesian Models
+## Explainability in Bayesian Models
 
 * Explainability in Bayesian Models
 
@@ -570,62 +568,59 @@ digraph Counterfactual {
 - **Intuition**: a model that says _"I predict 80% chance of disease, but I'm
   very uncertain"_ is more informative than one that just says _"disease"_
 
-- **Definition**: in Bayesian inference, we update our belief about parameters $\theta$ given data $cal(D)$:
+- **Definition**: in Bayesian inference, we update our belief about parameters
+  $\theta$ given data $\mathcal{D}$:
 
   ```{=typst}
   $ Pr(theta | cal(D)) = frac(Pr(cal(D) | theta) dot.op Pr(theta), Pr(cal(D))) $
   ```
 
-  where the numerator is (likelihood) × (prior) and denominator is (evidence)
+  where
+  - the numerator is "likelihood × prior"
+  - denominator is "evidence"
 
-- **Remark**: the posterior is inherently interpretable $\to$ it tells us which
-  parameter values are plausible and how confident we should be
-
-* Interpreting Posterior Distributions and Credible Intervals
+* Credible Intervals
 
 - **Key idea**: the shape of the posterior distribution directly communicates
   model uncertainty about each parameter
 
-- **Definition**: a _credible interval_ [$\theta_L$, $\theta_U$] contains the true parameter with probability $1 - \alpha$:
+- **Definition**: a _credible interval_ [$\theta_L$, $\theta_U$] contains the
+  true parameter with probability $1 - \alpha$:
 
   ```{=typst}
   $ Pr(theta_L lt.eq theta lt.eq theta_U | cal(D)) = 1 - alpha $
   ```
 
 - **Interpretation**:
-  - _Narrow_ posterior $\to$ model is confident about θ
-  - _Wide_ posterior $\to$ high uncertainty, need more data
-  - _Multimodal_ posterior $\to$ multiple plausible explanations exist
+  - _Narrow_ posterior: model is confident about θ
+  - _Wide_ posterior: high uncertainty, need more data
+  - _Multimodal_ posterior: multiple plausible explanations exist
 
 - **Example**: predicting treatment effect
-  - Posterior mean = 5.2 units, 95% credible interval = [1.1, 9.3]
-  - _"The treatment likely has a positive effect, but we're uncertain about its magnitude"_
+  - Posterior mean = 5.2 units
+  - 95% credible interval = [1.1, 9.3]
+  - _"The treatment likely has a positive effect, but we're uncertain about its
+    magnitude"_
 
-- **Remark**: credible intervals have a direct probability interpretation, unlike frequentist confidence intervals
+- **Remark**: credible intervals have a probability interpretation, unlike
+  frequentist confidence intervals
 
-* Bayesian Networks and Probabilistic Graphical Models
+* Interpretability of Bayesian Networks
 
-- **Key idea**: Bayesian Networks (BNs) encode _conditional independence_
-  relationships as a directed acyclic graph (DAG) $\to$ the structure itself
-  is an explanation
+- **Key idea**: The structure of Bayesian Networks encode an explanation as a
+  directed acyclic graph (DAG) 
 
 ::: columns
 :::: {.column width=55%}
-- **Definition**: a Bayesian Network is a pair ($cal(G)$, $Pr$) where:
-  - $cal(G)$ = DAG whose nodes represent random variables
-  - $Pr$ = joint distribution factored according to $cal(G)$:
-
-    ```{=typst}
-    $ Pr(X_1 , ... , X_n) = product_(i = 1)^n Pr(X_i | "Parents"(X_i)) $
-    ```
-
 - **Interpretation**:
   - Edges encode direct dependencies
   - Missing edges encode conditional independencies
   - The graph answers _"what influences what?"_
 
-- **Example**: _"The model predicts high risk because Smoking $\to$ Cancer
-  $\to$ Mortality"_ $\to$ the causal pathway is visible in the graph
+- Example: _"The model predicts a no-start condition because Battery Dead $\to$
+  $\to$ Engine Fails to Start"_
+  - The causal pathway is visible in the graph
+
 ::::
 :::: {.column width=45%}
 
@@ -634,19 +629,16 @@ digraph BayesNet {
     splines=true;
     nodesep=0.8;
     ranksep=0.7;
-
     node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.7];
-
-    Smoking [label="Smoking", fillcolor="#FFD1A6"];
-    Cancer [label="Cancer", fillcolor="#F4A6A6"];
-    XRay [label="X-Ray\nResult", fillcolor="#B2E2B2"];
-    Dyspnea [label="Dyspnea", fillcolor="#A6C8F4"];
-    Pollution [label="Pollution", fillcolor="#C6A6F4"];
-
-    Smoking -> Cancer;
-    Pollution -> Cancer;
-    Cancer -> XRay;
-    Cancer -> Dyspnea;
+    Battery [label="Battery\nDead", fillcolor="#FFD1A6"];
+    FuelEmpty [label="Fuel\nEmpty", fillcolor="#C6A6F4"];
+    EngineFail [label="Engine\nFails to Start", fillcolor="#F4A6A6"];
+    Lights [label="Dashboard\nLights Dim", fillcolor="#B2E2B2"];
+    Cranking [label="No Cranking\nSound", fillcolor="#A6C8F4"];
+    Battery -> EngineFail;
+    FuelEmpty -> EngineFail;
+    EngineFail -> Lights;
+    EngineFail -> Cranking;
 }
 ```
 
@@ -655,9 +647,7 @@ digraph BayesNet {
 
 * Uncertainty Quantification as a Form of Explanation
 
-- **Key idea**: knowing _what the model doesn't know_ is itself an explanation
-  $\to$ uncertainty quantification (UQ) distinguishes confident from unreliable
-  predictions
+- **Key idea**: knowing _what the model doesn't know_ is an explanation
 
 - **Definition**: two types of uncertainty
   - _Aleatoric_ (data uncertainty): irreducible noise in the data
@@ -665,28 +655,27 @@ digraph BayesNet {
   - _Epistemic_ (model uncertainty): reducible with more data
     - E.g., model hasn't seen enough examples of a rare condition
 
-- **Interpretation**: a Bayesian model decomposes total predictive uncertainty:
-
+- **Interpretation**: a Bayesian model decomposes uncertainty
+  (using Law of Total Variance)
   ```{=typst}
-  $ "Var"[Y | x, cal(D)] = "E"["Var"[Y | x, theta]] + "Var"["E"[Y | x, theta]] $
+  $ bb(V) [Y | x, cal(D)] = bb(E) [bb(V) [Y | x, theta]] + bb(V) [bb(E) [Y | x, theta]] $
   ```
-
-  where the first term is aleatoric (data) uncertainty and the second is epistemic (model) uncertainty
+  where:
+  - The first term is aleatoric (data) uncertainty
+  - The second is epistemic (model) uncertainty
 
 - **Example**: a medical diagnosis model
-  - High aleatoric uncertainty $\to$ _"This case is inherently ambiguous"_
-  - High epistemic uncertainty $\to$ _"We haven't seen enough cases like this,
-    collect more data"_
-
-- **Remark**: models that flag high epistemic uncertainty enable _safe
-  deployment_ $\to$ defer to human experts when the model is unsure
+  - High aleatoric uncertainty: _"This case is inherently ambiguous"_
+  - High epistemic uncertainty: _"We haven't seen enough cases like this, collect
+    more data"_
 
 # Causal AI and Explainability
 
 * Causal AI and Explainability
 
-- **Problem**: most ML explanations are _correlational_ $\to$ _"feature $X$ is
-  associated with outcome $Y$"_ does not mean _"$X$ causes $Y$"_
+- **Problem**: most ML explanations are _correlational_
+  - _"feature $X$ is associated with outcome $Y$"_ does not mean _"$X$ causes
+    $Y$"_
 
 - **Question**: _"Does the model's explanation reflect a true causal mechanism,
   or just a spurious correlation in the training data?"_
@@ -833,14 +822,22 @@ digraph CausalVsAttribution {
 - **Intuition**: as models grow more complex, they capture more patterns in the
   data (higher accuracy) but become harder to understand
 
-// TODO(ai_gp): Convert it into a table
 - **Spectrum**:
-  - Linear regression $\to$ fully interpretable, limited capacity
-  - Decision trees $\to$ interpretable if shallow, brittle
-  - GAMs $\to$ nonlinear but additive, moderate interpretability
-  - Random forests / gradient boosting $\to$ high accuracy, low
-    interpretability
-  - Deep neural networks $\to$ highest capacity, opaque
+
+```{=typst}
+#styled-table(
+  ("Model Type", "Interpretability", "Capacity", "Accuracy"),
+  (
+    ("Linear regression", "Fully interpretable", "Limited", "Low-Moderate"),
+    ("Decision trees", "Interpretable if shallow", "Moderate", "Moderate"),
+    ("GAMs", "Moderate", "Moderate-High", "Moderate-High"),
+    ("Random forests", "Low", "High", "High"),
+    ("Gradient boosting", "Low", "High", "High"),
+    ("Deep neural networks", "Opaque", "Highest", "Highest"),
+  ),
+  bold-first-col: false
+)
+```
 
 - **Question**: _"Is this tradeoff fundamental, or can we have both?"_
   - Recent work (Rudin, 2019) suggests _some_ domains allow high accuracy with
