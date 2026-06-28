@@ -166,6 +166,72 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [ ] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
 
+Not good that we need to call pandoc from inside the filter, better to use a
+filter (and leave the two steps pandoc as a way to debug)
+
+sided_blocks_filter.py
+
+pandoc two_blocks.md \
+    --template=./helpers_root/dev_scripts_helpers/documentation/pandoc_touying.typ \
+    --from=markdown \
+    --to=typst \
+    --filter=./sided_blocks_filter.py \
+    --output=two_blocks_output.typ && \
+  typst compile two_blocks_output.typ two_blocks_output.pdf
+
+Input
+
+# Two Side-by-Side Blocks
+
+::: columns
+:::: {.column width=55%}
+## Block A
+
+This is the first block.
+
+- Point A
+- Point B
+- Point C
+::::
+
+:::: {.column width=45%}
+## Block 2
+
+This is the second block.
+
+- Point X
+- Point Y
+- Point Z
+::::
+:::
+
+Output
+
+= Two Side-by-Side Blocks
+<two-side-by-side-blocks>
+#grid(
+  columns: (55fr, 45fr),
+  gutter: 1em,
+  rect(fill: rgb("#f0f0f0"), inset: 1em)[
+=== Block A
+
+This is the first block.
+
+- Point A
+- Point B
+- Point C
+  ],  rect(fill: rgb("#e0e0e0"), inset: 1em)[
+=== Block 2
+
+This is the second block.
+
+- Point X
+- Point Y
+- Point Z
+  ],
+)
+
+
 ### Fix gen_slides.py msml610/11.1
 
 It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
