@@ -378,6 +378,7 @@ openai/o3:nitro
 ```
 
 ## Improve llm_compare.py
+
 llm_compare.py --models "openrouter/openai/gpt-4o-mini,openrouter/openai/gpt-oss-120b" --benchmark summarization1 --output_dir results/
 
 run_eval.sh
@@ -415,17 +416,17 @@ tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.co
 
 ## Process Academic Articles
 
-  ```
-  > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
-  > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
-  > summarize_md.py
-  ```
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
+> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+> summarize_md.py
+```
 
-  ```
-  > download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
-  claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
-  > mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
-  claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
+claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
+> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
+claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
 ```
 
 ## Convert llm_transform.py to llm_cli.py
