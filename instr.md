@@ -1,7 +1,5 @@
-Read tutorials/ml_explainability/ml_explainability.01.API.shap.ipynb
-
-Restructure the notebook so that it Use only a single linear model model end-to-end
-- After showing one linear model, then says that there is a tree and a kernel one
+customize /Users/saggese/src/umd_classes2/tutorials/lime to use lime instead of
+shap, renaming files, updating files, but following the same approach
 
 # Conventions
 - When writing code you must always follow the instructions in

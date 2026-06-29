@@ -400,6 +400,8 @@
 - Summary
 
 ### Tutorials
+- tutorials/shap
+- tutorials/lime
 
 ### Related packages
 - SHAP → shap package with real datasets

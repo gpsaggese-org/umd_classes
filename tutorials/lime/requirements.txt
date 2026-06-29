@@ -6,3 +6,7 @@ seaborn
 ipywidgets
 
 shap==0.52.0
+#lime==0.2.0.1
+#dice-ml==0.12
+#alibi==0.9.6
+#pygam==0.12.0
