@@ -129,15 +129,18 @@ mindmap
 
 - **Key idea**: the choice between intrinsic and post-hoc is a design decision
 
-\begingroup \scriptsize
-| **Aspect** | **Intrinsic** | **Post-Hoc** |
-| --- | --- | --- |
-| **When** | Built into model | Applied after training |
-| **Examples** | Decision trees, linear models, GAMs | LIME, SHAP, saliency maps |
-| **Faithfulness** | Perfect (model = explanation) | Approximate (explanation $\approx$ model) |
-| **Flexibility** | Limited model complexity | Any model |
-| **Risk** | May sacrifice accuracy | Explanation may not reflect true reasoning |
-\endgroup
+```{=typst}
+#styled-table(
+  ("Aspect", "Intrinsic", "Post-Hoc"),
+  (
+    ("When", "Built into model", "Applied after training"),
+    ("Examples", "Decision trees, linear models, GAMs", "LIME, SHAP, saliency maps"),
+    ("Faithfulness", "Perfect (model = explanation)", "Approximate (explanation $\\approx$ model)"),
+    ("Flexibility", "Limited model complexity", "Any model"),
+    ("Risk", "May sacrifice accuracy", "Explanation may not reflect true reasoning"),
+  )
+)
+```
 
 * Decision Trees and Rule-Based Models
 
@@ -453,6 +456,21 @@ digraph LIME {
 
 - The kernel width is a hyperparameter that affects locality
   - No theoretical guarantees on faithfulness to the original model
+
+* LIME: Detecting Broken Model
+- **Goal**: classify 20 newsgroups text as "Christianity" or "Atheism" using SVM
+  with RBF kernel
+  - 94% held-out accuracy suggests high trust
+
+- **Problem**: LIME reveals that predictions are made for arbitrary reasons
+  - Classifier learned to use email headers and author names, which would not
+    generalize
+  - Words `Posting`, `Host`, `Re` appear important but have no connection to
+    Christianity or Atheism
+  - E.g., `Posting` appears in 22% of training examples, 99% in "Atheism" class
+- LIME explanations make the model has serious issues:
+  - These issues are invisible from raw data or held-out accuracy alone
+  - Remediation: remove leaked features, retrain
 
 * Permutation Feature Importance
 

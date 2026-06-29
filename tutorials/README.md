@@ -35,7 +35,6 @@
 
 - Edit `tutorials/${PROJ}/${PROJ}.py`
 
-
 ## Create Notebook about API intro
 
 - Create a short README for the blog:
