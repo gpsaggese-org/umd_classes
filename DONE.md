@@ -1,5 +1,16 @@
-### [x] Improve Manning proposal after review
+### [x] Tutorials for Explainable ML
+- Follow tutorials/README.md
 
+/notebook.create_api_intro shap https://shap.readthedocs.io/ and save it in tutorials/ml_explainability/ml_explainability.01.API.shap.ipynb
+
+Start with a single model end-to-end
+(linear model)
+
+Show local explanation
+
+Show global explanation
+
+### [x] Improve Manning proposal after review
 
 - [x] Remove the last part
   ```

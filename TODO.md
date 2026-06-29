@@ -4,18 +4,6 @@
 
 book.Causal_Probabilistic_ML/book_map.md
 
-### [ ] Tutorials for Explainable ML
-- Follow tutorials/README.md
-
-/notebook.create_api_intro shap https://shap.readthedocs.io/ and save it in tutorials/ml_explainability/ml_explainability.01.API.shap.ipynb
-
-Start with a single model end-to-end
-(linear model)
-
-Show local explanation
-
-Show global explanation
-
 ##
 
 book.AI_for_data_science/book_map.md
@@ -498,7 +486,7 @@ Is there any difference?
 - Title
   - From Data Science to Decision Science for Business
 
-## Improve Springer proposal
+### [x] Improve Springer proposal
 
 springer.Causal_Inference_for_Machine_Learning_Engineers.md
 springer.changes.md
@@ -507,8 +495,7 @@ springer.proposal.md
 springer.review.md
 springer.template.md
 
-
-## [ ] Finalize TOC
+### [x] Finalize TOC
 - Very short intro about causality and probability
 - Part 3 of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
 - Look at review
