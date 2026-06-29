@@ -76,8 +76,12 @@
   > docker_cmd.sh "python /git_root/tutorials/pgmpy/probabilistic_inference.py"
   ```
 
+## 
 - Edit and improve the notebook
   ```
   > docker_jupyter.sh
-  http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
+  > docker_jupyter_port_forward.sh umd_project_ml_explainability.jupyter <PORT>
+  Open http://localhost:8889/lab
   ```
+
+
