@@ -9,6 +9,13 @@ book.Causal_Probabilistic_ML/book_map.md
 
 /notebook.create_api_intro shap https://shap.readthedocs.io/ and save it in tutorials/ml_explainability/ml_explainability.01.API.shap.ipynb
 
+Start with a single model end-to-end
+(linear model)
+
+Show local explanation
+
+Show global explanation
+
 ##
 
 book.AI_for_data_science/book_map.md
@@ -172,6 +179,10 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [x] Add two steps of AST unit test
 - [ ] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
+
+./dev_scripts_helpers/documentation/convert_pandoc_divved_fence.py
+
+./helpers_root/dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py
 
 Not good that we need to call pandoc from inside the filter, better to use a
 filter (and leave the two steps pandoc as a way to debug)

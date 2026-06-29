@@ -36,17 +36,13 @@ import numpy as np
 import pandas as pd
 import shap
 
-# TODO(ai_gp): Use import ... instead of from import
-from sklearn.datasets import make_regression
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.tree import DecisionTreeRegressor
+import sklearn.datasets
+import sklearn.linear_model
 
 warnings.filterwarnings("ignore")
 
 # %%
 import helpers.hdbg as hdbg
-import helpers.hintrospection as hintros
 import helpers.hnotebook as hnotebook
 
 hdbg.init_logger(verbosity=logging.INFO)
@@ -71,8 +67,10 @@ except ImportError:
 #   - Every prediction = baseline + sum of per-feature SHAP values
 #   - Shapley values satisfy consistency, dummy, and efficiency axioms (no other
 #     attribution satisfying all three exists)
-#
+
+# %% [markdown]
 # - **Mental model**:
+#   TODO(ai_gp): Make this into a markdon table (object, description, comments
 #   ```
 #   model: X -> prediction
 #   Explainer(model, background) -> configured explainer
@@ -84,9 +82,8 @@ except ImportError:
 #   ```
 #
 # - **Key classes**:
-#   - `shap.Explainer`: auto-selects best algorithm for the model type
+#   - `shap.LinearExplainer`: exact for linear models (used throughout this notebook)
 #   - `shap.TreeExplainer`: fast and exact for tree-based models
-#   - `shap.LinearExplainer`: exact for linear models
 #   - `shap.KernelExplainer`: model-agnostic, works with any callable
 #   - `shap.Explanation`: result object (values, base_values, data)
 
@@ -103,7 +100,7 @@ except ImportError:
 # %%
 # Four named features, 30 samples, pure regression target.
 np.random.seed(42)
-X, y = make_regression(
+X, y = sklearn.datasets.make_regression(
     n_samples=30,
     n_features=4,
     n_informative=3,
@@ -118,135 +115,142 @@ print("y_s.shape=", y_s.shape)
 display(X_df.head(3))
 
 # %%
-# TODO(ai_gp): Perform some analysis of the data set (e.g., correlations between features, X and Y, ...)
+# TODO(ai_gp): Split this into 3 cells.
+# Data analysis: correlations and basic statistics
+print("=== Feature Statistics ===")
+print(X_df.describe())
+
+print("\n=== Correlations with target ===")
+corr_with_target = X_df.corrwith(y_s).sort_values(ascending=False)
+display(corr_with_target)
+
+print("\n=== Feature Correlations ===")
+# TODO(ai_gp): Make this a heatmap
+display(X_df.corr())
 
 # %% [markdown]
-# ## Cell 1.2: Train models (one per explainer type)
+# ## Cell 1.2: Train a linear regression model
 #
 # **Goal**:
-# - Prepare one tree model, one linear model, and one black-box model
-# - Use small models to make SHAP computation fast
+# - Train a `LinearRegression` model on the toy dataset
+# - This is the single model we will explain end-to-end throughout the notebook
 
 # %%
-# Tree model for TreeExplainer.
-tree_model = DecisionTreeRegressor(max_depth=3, random_state=42)
-tree_model.fit(X_df, y_s)
-print("tree_model=", tree_model)
-
-# %%
-# Linear model for LinearExplainer.
-linear_model = LinearRegression()
+# Train linear regression model.
+linear_model = sklearn.linear_model.LinearRegression()
 linear_model.fit(X_df, y_s)
 print("linear_model=", linear_model)
 
 # %%
-# Random forest as a "black box" model for KernelExplainer.
-rf_model = RandomForestRegressor(n_estimators=10, random_state=42)
-rf_model.fit(X_df, y_s)
-print("rf_model=", rf_model)
-
-# %%
-# TODO(ai_gp): For each model compute performance in sample and out of sample.
+# Show linear model coefficients and intercept.
+coef_df = pd.DataFrame({
+    "feature": X_df.columns,
+    "coefficient": linear_model.coef_,
+})
+coef_df["abs_coef"] = np.abs(coef_df["coefficient"])
+display(coef_df.sort_values("abs_coef", ascending=False))
+print(f"Intercept: {linear_model.intercept_:.6f}")
 
 # %% [markdown]
 # # Part 2: Primitive 1 - The Explainer
 
 # %% [markdown]
-# ## Cell 2.1: Construct a TreeExplainer
-#
-# **Mental model**:
-# - `TreeExplainer` wraps a trained tree-based model
-# - It traverses the tree structure to compute exact Shapley values in polynomial
-#   time (no sampling needed)
-# - No background data required: the tree encodes the full conditional distribution
-
-# %%
-# Smallest possible construction: just the model.
-tree_explainer = shap.TreeExplainer(tree_model)
-print("type(tree_explainer)=", type(tree_explainer))
-
-# %% [markdown]
-# ## Cell 2.2: Inspect the TreeExplainer
-
-# %%
-# expected_value is E[model(X)], the global baseline.
-print("tree_explainer.expected_value=", tree_explainer.expected_value)
-print("mean of y (approx baseline)=", round(y_s.mean(), 4))
-
-# TODO(ai_gp): Explain the results and what they mean.
-
-# %%
-# Public interface of the explainer.
-# TODO(ai_gp): Improve print_public_methods to create a dataframe with function, explanation, signature
-hintros.print_public_methods(tree_explainer, use_markdown=True)
-
-# %% [markdown]
-# ## Cell 2.3: Construct a LinearExplainer
+# ## Cell 2.1: Construct a LinearExplainer
 #
 # **Mental model**:
 # - `LinearExplainer` wraps a linear model together with background data
 # - Background data captures feature means and covariances used to compute
 #   conditional expectations
+# - For a linear model $f(x) = w \cdot x + b$, the SHAP value for feature $j$ is
+#   exactly $w_j \cdot (x_j - E[x_j])$
 
 # %%
-# LinearExplainer needs the model and background data.
+# TODO(ai_gp): Explain better background data, what it is, what it is useful for?
+
+# %%
+# Construct LinearExplainer with model and background data.
 linear_explainer = shap.LinearExplainer(linear_model, X_df)
 print("type(linear_explainer)=", type(linear_explainer))
 print("linear_explainer.expected_value=", linear_explainer.expected_value)
 
 # %% [markdown]
-# ## Cell 2.4: Construct a KernelExplainer (model-agnostic)
-#
-# **Mental model**:
-# - `KernelExplainer` works with any callable - it treats the model as a black box
-# - Approximates Shapley values by sampling perturbations of the input
-# - Slower than TreeExplainer but works with any model (sklearn, TensorFlow, etc.)
-# - Background data should be a small summary of the training distribution
+# ## Cell 2.2: Inspect the LinearExplainer
 
 # %%
-# Summarize background data with k-means to speed up sampling.
-background = shap.kmeans(X_df, k=5)
-print("type(background)=", type(background))
-print("background.data.shape=", background.data.shape)
+# expected_value is E[model(X)], the global baseline.
+print("linear_explainer.expected_value=", linear_explainer.expected_value)
+print("mean of y (approx baseline)=", round(y_s.mean(), 4))
+# Interpretation: expected_value equals the model's average prediction over the
+# training set, which is the intercept offset from the mean-centered features.
+print("\nInterpretation: expected_value = model's average output (~mean of y).")
+print("SHAP values = deviations from this baseline for each feature.")
 
 # %%
-# Wrap rf_model.predict as a callable.
-kernel_explainer = shap.KernelExplainer(rf_model.predict, background)
-print("type(kernel_explainer)=", type(kernel_explainer))
-print("kernel_explainer.expected_value=", kernel_explainer.expected_value)
+# Public interface of the LinearExplainer.
+import inspect
 
-# %% [markdown]
-# ## Cell 2.5: Construct shap.Explainer (auto-dispatch)
-#
-# **Mental model**:
-# - `shap.Explainer` inspects the model type and auto-selects the best algorithm
-# - If the model is a tree: uses TreeExplainer internally
-# - If linear: uses LinearExplainer
-# - Otherwise: falls back to PermutationExplainer or KernelExplainer
+# TODO(ai_gp): Merge this code in print_public_methods renaming use_markdown to mode = "dataframe", "markdown", "raw_output"
 
-# %%
-# Auto-dispatch based on model type.
-auto_explainer = shap.Explainer(tree_model, X_df)
-print("type(auto_explainer)=", type(auto_explainer))
-# Internally dispatches to TreeExplainer for a DecisionTreeRegressor.
+methods_list = []
+for name in dir(linear_explainer):
+    if not name.startswith("_"):
+        attr = getattr(linear_explainer, name)
+        if callable(attr):
+            try:
+                sig = inspect.signature(attr)
+                doc = inspect.getdoc(attr)
+                doc_short = doc.split("\n")[0] if doc else ""
+                methods_list.append({
+                    "Method": name,
+                    "Signature": str(sig),
+                    "Description": doc_short,
+                })
+            except (ValueError, TypeError):
+                pass
+methods_df = pd.DataFrame(methods_list)
+display(methods_df)
 
 # %% [markdown]
 # # Part 3: Primitive 2 - The Explanation Object
 
 # %% [markdown]
-# ## Cell 3.1: Compute SHAP values (get an Explanation)
+# `Explanation` object: The central data structure for SHAP
+# An `Explanation` bundles three key arrays:
+# 1. `.values`: SHAP contributions
+#    - shape: n_samples x n_features
+#    - How much each feature "pushed" the prediction away from baseline
+#    - Positive = increases prediction, Negative = decreases prediction
+# 3. `.base_values`: Model's average output
+#    - shape: n_samples, all usually identical
+#    - The expected value / baseline prediction
+#    - Same for all samples unless model has per-sample defaults
+# 5. `.data`: Original input features
+#    - shape: n_samples x n_features
+#    - Needed for plots that correlate feature value with SHAP impact
+#
+# Additive property:
+#
+# ```
+# prediction[i] = base_values[i] + sum(values[i, :])
+# ```
+#
+# This always holds exactly for tree and linear explainers. 
+
+# %% [markdown]
+# ## Cell 3.1: Compute SHAP values (get an `Explanation`)
 #
 # **Mental model**:
 # - Calling `explainer(X)` returns an `Explanation` object
 # - This bundles SHAP values, baseline, and original data into one structure
+# - For `LinearExplainer`, SHAP values are exact (no sampling)
 
 # %%
-# Compute SHAP values for all 30 samples.
-explanation = tree_explainer(X_df)
+# Compute SHAP values for all 30 samples using LinearExplainer.
+explanation = linear_explainer(X_df)
 print("type(explanation)=", type(explanation))
 
 # %% [markdown]
-# ## Cell 3.2: Inspect Explanation.values
+# ## Cell 3.2: Inspect `Explanation.values`
 
 # %%
 # .values: SHAP contribution of each feature for each sample.
@@ -257,7 +261,7 @@ values_df = pd.DataFrame(explanation.values, columns=X_df.columns)
 display(values_df.head(3))
 
 # %% [markdown]
-# ## Cell 3.3: Inspect Explanation.base_values
+# ## Cell 3.3: Inspect `Explanation.base_values`
 
 # %%
 # .base_values: model's expected output (same for all samples).
@@ -269,7 +273,7 @@ print(
 )
 
 # %% [markdown]
-# ## Cell 3.4: Inspect Explanation.data
+# ## Cell 3.4: Inspect `Explanation.data`
 
 # %%
 # .data: the original feature values passed to the explainer.
@@ -285,38 +289,13 @@ display(pd.DataFrame(explanation.data, columns=X_df.columns).head(3))
 # - This always holds exactly for TreeExplainer (and LinearExplainer)
 
 # %%
-# Verify for sample index 0.
+# Verify additive decomposition for sample index 0.
 idx = 0
-model_pred = tree_model.predict(X_df.iloc[[idx]])[0]
+model_pred = linear_model.predict(X_df.iloc[[idx]])[0]
 shap_sum = explanation.base_values[idx] + explanation.values[idx].sum()
 print("model_pred=", round(model_pred, 6))
 print("base + sum(shap)=", round(shap_sum, 6))
 print("match?", np.isclose(model_pred, shap_sum))
-
-# %% [markdown]
-# ## Cell 3.6: Index the Explanation object
-#
-# - `explanation[i]` selects sample i (returns Explanation with shape (n_features,))
-# - `explanation[:, j]` selects feature j across all samples (shape (n_samples,))
-# - `explanation[i, j]` selects a single SHAP scalar
-
-# %%
-# Single sample.
-sample_exp = explanation[0]
-print("type(sample_exp)=", type(sample_exp))
-print("sample_exp.values=", sample_exp.values)
-print("sample_exp.base_values=", sample_exp.base_values)
-
-# %%
-# Single feature across all samples.
-income_exp = explanation[:, "income"]
-print("type(income_exp)=", type(income_exp))
-print("income_exp.values.shape=", income_exp.values.shape)
-
-# %%
-# Single (sample, feature) scalar.
-scalar_exp = explanation[0, "income"]
-print("explanation[0, 'income'].values=", scalar_exp.values)
 
 # %% [markdown]
 # # Part 4: Primitive 3 - SHAP Plots
@@ -396,50 +375,10 @@ plt.close("all")
 # - A diagonal line -> monotonic effect; an S-curve -> threshold or saturation
 
 # %% [markdown]
-# # Part 5: Composition Examples
+# # Part 5: API Patterns
 
 # %% [markdown]
-# ## Cell 5.1: End-to-end with LinearExplainer
-#
-# Verify that LinearExplainer also satisfies the additive decomposition.
-
-# %%
-# Compute SHAP values with linear explainer.
-linear_explanation = linear_explainer(X_df)
-print("linear_explanation.values.shape=", linear_explanation.values.shape)
-
-# %%
-# Verify additivity for linear model.
-pred_lin = linear_model.predict(X_df.iloc[[0]])[0]
-shap_sum_lin = (
-    linear_explanation.base_values[0] + linear_explanation.values[0].sum()
-)
-print("linear model pred=", round(pred_lin, 6))
-print("base + sum(shap)=", round(shap_sum_lin, 6))
-print("match?", np.isclose(pred_lin, shap_sum_lin))
-
-# %% [markdown]
-# ## Cell 5.2: Compare SHAP importances across models
-#
-# Different model types may rank features differently even on the same data.
-
-# %%
-# Build a comparison DataFrame: tree vs linear mean absolute SHAP.
-tree_importance = pd.Series(
-    np.abs(explanation.values).mean(axis=0),
-    index=X_df.columns,
-    name="tree",
-)
-linear_importance = pd.Series(
-    np.abs(linear_explanation.values).mean(axis=0),
-    index=X_df.columns,
-    name="linear",
-)
-importance_df = pd.DataFrame([tree_importance, linear_importance]).T
-display(importance_df.sort_values("tree", ascending=False))
-
-# %% [markdown]
-# ## Cell 5.3: Local explanation for a specific sample
+# ## Cell 5.1: Local explanation for a specific sample
 #
 # Build a per-sample breakdown table of feature values and their SHAP contributions.
 
@@ -457,7 +396,9 @@ local_df = pd.DataFrame(
 display(local_df)
 
 # %% [markdown]
-# ## Cell 5.4: Global importance as a sorted DataFrame
+# ## Cell 5.2: Global importance as a sorted DataFrame
+#
+# Rank features by mean absolute SHAP value across all samples.
 
 # %%
 # Global feature ranking by mean absolute SHAP.
@@ -471,85 +412,10 @@ global_importance_df = pd.DataFrame(
 display(global_importance_df)
 
 # %% [markdown]
-# # Part 6: API Patterns
-
-# %% [markdown]
-# ## Cell 6.1: Fit-explain pattern
+# ## Cell 5.3: Sign of SHAP values
 #
-# The standard SHAP workflow: train model -> create explainer -> call on data.
-
-# %%
-# Train, wrap, explain in three lines.
-m = DecisionTreeRegressor(max_depth=2, random_state=0)
-m.fit(X_df, y_s)
-expl = shap.TreeExplainer(m)
-expl_vals = expl(X_df)
-print("expl_vals.values.shape=", expl_vals.values.shape)
-
-# %% [markdown]
-# ## Cell 6.2: Slicing and indexing pattern
-
-# %%
-# Slice by sample index -> one sample's explanation.
-s3 = explanation[3]
-print("explanation[3].values=", s3.values)
-
-# %%
-# Slice by feature name -> all samples for that feature.
-debt_shap = explanation[:, "debt"]
-print("explanation[:, 'debt'].values.shape=", debt_shap.values.shape)
-
-# %%
-# Slice by both -> scalar SHAP value.
-scalar_val = explanation[3, "income"]
-print("explanation[3, 'income'].values=", scalar_val.values)
-
-# %% [markdown]
-# ## Cell 6.3: Background data summary with shap.kmeans
-
-# %%
-# Summarize X_df into k representative rows for use in KernelExplainer.
-bg_3 = shap.kmeans(X_df, k=3)
-print("type(bg_3)=", type(bg_3))
-print("bg_3.data.shape=", bg_3.data.shape)
-display(pd.DataFrame(bg_3.data, columns=X_df.columns))
-
-# %% [markdown]
-# # Part 7: Interactive Exploration
-
-# %% [markdown]
-# ## Cell 7.1: What does the Explanation object expose?
-
-# %%
-# Inspect public interface of the Explanation object.
-hintros.print_public_methods(explanation, use_markdown=True)
-
-# %% [markdown]
-# ## Cell 7.2: What happens if you use a different sample?
-#
-# Each sample gets its own SHAP values - waterfall plots differ by sample.
-
-# %%
-# Waterfall for sample 10 vs sample 0.
-shap.plots.waterfall(explanation[10])
-plt.close("all")
-
-# %%
-# Build a comparison: SHAP values for sample 0 vs sample 10.
-compare_df = pd.DataFrame(
-    {
-        "sample_0": explanation[0].values,
-        "sample_10": explanation[10].values,
-    },
-    index=X_df.columns,
-)
-display(compare_df)
-
-# %% [markdown]
-# ## Cell 7.3: What is the sign of SHAP values?
-#
-# Positive SHAP -> feature increases prediction above baseline.
-# Negative SHAP -> feature decreases prediction below baseline.
+# - Positive SHAP: feature increases prediction above baseline
+# - Negative SHAP: feature decreases prediction below baseline
 
 # %%
 # Count positive vs negative SHAP values per feature across all samples.
@@ -563,19 +429,44 @@ sign_df = pd.DataFrame(
 display(sign_df)
 
 # %% [markdown]
-# # Part 8: Summary
+# # Part 6: Other Explainer Types
+#
+# This notebook used `LinearExplainer` end-to-end because it gives exact, interpretable
+# SHAP values for linear models. SHAP also provides two other key explainer types:
+#
+# - **`shap.TreeExplainer`**: for tree-based models (decision trees, random forests, gradient
+#   boosting)
+#   - Traverses the tree structure to compute exact Shapley values in polynomial time
+#   - No background data required: the tree encodes the full conditional distribution
+#   - Usage: `expl = shap.TreeExplainer(tree_model)`
+#
+# - **`shap.KernelExplainer`**: model-agnostic, works with any callable
+#   - Approximates Shapley values by sampling perturbations of the input
+#   - Slower than `TreeExplainer` but works with any model (sklearn, TensorFlow, etc.)
+#   - Requires a small background dataset (often summarized with `shap.kmeans`)
+#   - Usage: `expl = shap.KernelExplainer(model.predict, shap.kmeans(X_df, k=5))`
+#
+# All three explainers share the same interface: call with data, get back an `Explanation`
+# object with `.values`, `.base_values`, and `.data`. The additive decomposition
+# `prediction[i] = base_values[i] + values[i].sum()` holds for all of them.
+
+# %% [markdown]
+# # Part 7: Summary
 #
 # ## Summary: The Mental Model
 #
-# - **`Explainer` variants**: `TreeExplainer` (fastest, exact for trees),
-#   `LinearExplainer` (exact for linear models), `KernelExplainer` (any callable,
-#   slowest), and `shap.Explainer` (auto-dispatches) - all share the same
-#   interface: call with data, get back an `Explanation`
+# - **`LinearExplainer` (main focus)**: exact SHAP values for linear models; SHAP
+#   value for feature $j$ is $w_j \cdot (x_j - E[x_j])$; requires the trained model
+#   and background data
 # - **`Explanation` object**: the central data structure with three arrays:
 #   `.values` (SHAP contributions, shape `(n_samples, n_features)`),
 #   `.base_values` (model's average prediction), and `.data` (input feature values)
 # - **Additive decomposition**: `prediction[i] = base_values[i] + values[i].sum()`
-#   holds exactly - SHAP values are a faithful partition of each prediction
+#   holds exactly for `LinearExplainer` — SHAP values are a faithful partition of
+#   each prediction
 # - **Plots**: `waterfall` for single-prediction breakdown, `bar` for global
 #   magnitude ranking, `beeswarm` for global distribution with direction, and
 #   `scatter` for feature-level dependence analysis
+# - **Other explainers**: `TreeExplainer` for tree-based models (exact, fast),
+#   `KernelExplainer` for any callable (approximate, model-agnostic) — all share
+#   the same `Explanation` interface
