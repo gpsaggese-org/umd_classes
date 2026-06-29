@@ -39,7 +39,7 @@
 
 - Create a short README for the blog:
   ```
-  claude> /notebook.create_api_intro ... https://....html and save it in tutorials/${PROJ}/${PROJ}.01.API.XYZ.ipynb
+  claude> /notebook.create_api_intro https://....html and save it in tutorials/${PROJ}/${PROJ}.01.API.XYZ.ipynb
   ```
 - The file is `.claude/skills/notebook.create_api_intro/SKILL.md`
 

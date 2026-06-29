@@ -7,6 +7,8 @@ book.Causal_Probabilistic_ML/book_map.md
 ### [ ] Tutorials for Explainable ML
 - Follow tutorials/README.md
 
+/notebook.create_api_intro shap https://shap.readthedocs.io/ and save it in tutorials/ml_explainability/ml_explainability.01.API.shap.ipynb
+
 ##
 
 book.AI_for_data_science/book_map.md
