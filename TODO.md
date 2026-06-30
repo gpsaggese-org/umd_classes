@@ -1,18 +1,22 @@
 # Work on slides
 
+- LLM
+  - Kaparthy's LLM
 - AutoEDA
-- Topics from Berkeley class
+- IN PROGRESS: Topics from Berkeley class
 - AlphaEvolve
 - Monte Carlo search
-- Kaparthy's LLM
 - Kaparthy's AutoResearch
 
 ## From Data To Decisions
 book.From_Data_To_Decisions
+
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 
 /Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
 ### 12. Neural-Symbolic Decision Making
+
+/slides.write '/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md ### 1. What Is an Agentic AI?' Create 30 slides and save in msml610/lectures_source/Lesson16.1-What-Is-An-Agentic-AI.txt without running the linter
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
