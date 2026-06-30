@@ -240,6 +240,9 @@ smd = slide markdown
 - [ ] Add an option to only render without commenting out the code
 
 - [ ] Clarify what is the boilerplate for Latex and Tikz
+- [x] IN PROGRESS: Fix the names of the tests
+helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
+
 
 - [ ] Improve documentation
 
@@ -312,6 +315,12 @@ test_hmarkdown_formatting.py
 > pytest helpers/test/test_hmarkdown_formatting.py
 > pytest helpers/test/test_hmarkdown_formatting.py::Test_format_md_comparison_and_performance
 ```
+
+mdformat .claude/skills/slides.write/SKILL.md --number
+
+Need to disable the protection and keep it only for prettier
+
+Merge --backend and --mode
 
 ## Improve cost and speed accounting for hllm
 

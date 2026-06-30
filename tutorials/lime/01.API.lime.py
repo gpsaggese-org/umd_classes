@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -71,15 +71,17 @@ except ImportError:
 
 # %% [markdown]
 # - **Mental model**:
-# // TODO(ai_gp): Make this into a markdown table (object, description, comments)
-#   - model: X -> prediction
-#   - LimeTabularExplainer(model, X_train) -> configured explainer
-#   - explainer.explain_instance(x) -> Explanation
-#   - Explanation object:
-#     - .as_list(): list of (feature, weight) tuples
-#     - .as_pyplot_figure(): visualization of feature weights
-#     - local_pred: model prediction on weighted perturbations
-#     - score: R^2 accuracy of local linear model
+#
+# | Object | Description | Comments |
+# |--------|-------------|----------|
+# | `model` | Trained ML model | `X -> prediction` |
+# | `LimeTabularExplainer(X_train)` | Configured explainer | Wraps model + training data stats |
+# | `explainer.explain_instance(x, model.predict)` | Explanation for one instance | Perturbs features, fits local linear model |
+# | `Explanation` object | Results from `.explain_instance()` | Holds feature weights, local accuracy |
+# | `.as_list()` | Feature importance list | `[(feature_name, weight), ...]` |
+# | `.as_pyplot_figure()` | Visualization | Bar chart of feature contributions |
+# | `.local_pred` | Model prediction on instance | Same as original prediction |
+# | `.score` | R² accuracy of local model | How well linear approx captures nonlinearity |
 #
 # - **Key classes**:
 #   - `lime.lime_tabular.LimeTabularExplainer`: main explainer for tabular data (used throughout this notebook)
@@ -115,16 +117,19 @@ print("y_s.shape=", y_s.shape)
 display(X_df.head(3))
 
 # %%
-# TODO(ai_gp): Split this into 3 cells.
-# Data analysis: feature statistics and correlations with target.
+# Feature statistics: central tendency, spread, and range.
 print("=== Feature Statistics ===")
 print(X_df.describe())
 
-print("\n=== Correlations with target ===")
+# %%
+# Correlations between features and target.
+print("=== Correlations with target ===")
 corr_with_target = X_df.corrwith(y_s).sort_values(ascending=False)
 display(corr_with_target)
 
-print("\n=== Feature Correlations ===")
+# %%
+# Pairwise correlations between all features.
+print("=== Feature Correlations ===")
 display(X_df.corr())
 
 # %% [markdown]

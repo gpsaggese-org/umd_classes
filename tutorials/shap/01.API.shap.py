@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.3
+#       jupytext_version: 1.19.0
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -70,16 +70,16 @@ except ImportError:
 
 # %% [markdown]
 # - **Mental model**:
-# // TODO(ai_gp): Make this into a markdown table (object, description, comments)
-#   ```
-#   model: X -> prediction
-#   Explainer(model, background) -> configured explainer
-#   explainer(X) -> Explanation
-#   Explanation.values       shape (n_samples, n_features): per-feature SHAP
-#   Explanation.base_values  shape (n_samples,): E[model(X)] baseline
-#   Explanation.data         shape (n_samples, n_features): original feature values
-#   prediction[i] = base_values[i] + values[i].sum()
-#   ```
+#
+# | Object | Description | Shape / Type |
+# |--------|-------------|--------------|
+# | `model` | Trained ML model | `X -> prediction` |
+# | `Explainer(model, background)` | Configured explainer | Wraps model + background data |
+# | `explainer(X)` | Explanation for batch | Returns Explanation object |
+# | `Explanation.values` | SHAP contributions per feature | `(n_samples, n_features)` array |
+# | `Explanation.base_values` | Model's average output | `(n_samples,)` array, usually constant |
+# | `Explanation.data` | Original input features | `(n_samples, n_features)` array |
+# | `prediction[i]` | Additive decomposition | `base_values[i] + values[i].sum()` |
 #
 # - **Key classes**:
 #   - `shap.LinearExplainer`: exact for linear models (used throughout this notebook)
@@ -115,18 +115,28 @@ print("y_s.shape=", y_s.shape)
 display(X_df.head(3))
 
 # %%
-# TODO(ai_gp): Split this into 3 cells.
-# Data analysis: correlations and basic statistics
+# Feature statistics: central tendency, spread, and range.
 print("=== Feature Statistics ===")
 print(X_df.describe())
 
-print("\n=== Correlations with target ===")
+# %%
+# Correlations between features and target.
+print("=== Correlations with target ===")
 corr_with_target = X_df.corrwith(y_s).sort_values(ascending=False)
 display(corr_with_target)
 
-print("\n=== Feature Correlations ===")
-# TODO(ai_gp): Make this a heatmap
-display(X_df.corr())
+# %%
+# Pairwise correlations between all features as a heatmap.
+import seaborn as sns
+
+print("=== Feature Correlations ===")
+fig, ax = plt.subplots(figsize=(8, 6))
+corr_matrix = X_df.corr()
+sns.heatmap(corr_matrix, annot=True, fmt=".3f", cmap="coolwarm", center=0, ax=ax, square=True)
+ax.set_title("Feature Correlation Matrix")
+plt.tight_layout()
+plt.show()
+plt.close("all")
 
 # %% [markdown]
 # ## Cell 1.2: Train a linear regression model
@@ -165,7 +175,26 @@ print(f"Intercept: {linear_model.intercept_:.6f}")
 #   exactly $w_j \cdot (x_j - E[x_j])$
 
 # %%
-# TODO(ai_gp): Explain better background data, what it is, what it is useful for?
+# Background data: statistics used to compute baseline expectations.
+#
+# Background data defines the reference distribution for computing SHAP values.
+# LinearExplainer uses background data to estimate the expected value (baseline)
+# and feature covariances.
+#
+# Key insight: SHAP values measure deviations from the baseline (expected value).
+# The background data determines what "normal" or "average" means in your dataset.
+#
+# For LinearExplainer:
+# - expected_value = mean of model(X) over background data
+# - SHAP[i, j] = model_coef[j] * (X[i, j] - mean(background[:, j]))
+#
+# Larger background sets give more stable estimates but slower computation.
+# Smaller background sets (e.g., 100-1000 samples) are often sufficient.
+print("Background data usage:")
+print("  - Establishes baseline: E[model(X)] = expected_value")
+print("  - Computes feature means for centering")
+print("  - For tree models: encodes feature interaction structure")
+print("  - For kernel explainers: enables conditional expectation estimation")
 
 # %%
 # Construct LinearExplainer with model and background data.
@@ -187,28 +216,10 @@ print("SHAP values = deviations from this baseline for each feature.")
 
 # %%
 # Public interface of the LinearExplainer.
-import inspect
+# Display all public methods with their signatures and docstrings.
+import helpers.hintrospection as hintros
 
-# TODO(ai_gp): Merge this code in print_public_methods renaming use_markdown to mode = "dataframe", "markdown", "raw_output"
-
-methods_list = []
-for name in dir(linear_explainer):
-    if not name.startswith("_"):
-        attr = getattr(linear_explainer, name)
-        if callable(attr):
-            try:
-                sig = inspect.signature(attr)
-                doc = inspect.getdoc(attr)
-                doc_short = doc.split("\n")[0] if doc else ""
-                methods_list.append({
-                    "Method": name,
-                    "Signature": str(sig),
-                    "Description": doc_short,
-                })
-            except (ValueError, TypeError):
-                pass
-methods_df = pd.DataFrame(methods_list)
-display(methods_df)
+hintros.print_public_methods(linear_explainer, use_markdown=True)
 
 # %% [markdown]
 # # Part 3: Primitive 2 - The Explanation Object
