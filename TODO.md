@@ -392,7 +392,7 @@ Is there any difference?
 - Move --skill and --topic from ./linters2/lint_cc.py to this parser hmarsele.add_rule_cli_arg(action_group)
 - Merge rigrule into mdm
 
-## Make file interfaces aligned
+### [x] Make file interfaces aligned
 - Make compatible in terms of options
   ```
   i git_files
