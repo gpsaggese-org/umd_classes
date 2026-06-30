@@ -20,6 +20,8 @@ book.Causal_Probabilistic_ML/book_map.md
 ## AI for Data Science
 book.AI_for_data_science/book_map.md
 
+/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
+
 # Downloading Papers
 
 export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999
