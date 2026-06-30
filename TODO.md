@@ -1,14 +1,19 @@
 # Work on slides
 
-## 
+- AutoEDA
+- Topics from Berkeley class
+- AlphaEvolve
+- Monte Carlo search
 
+## From Data To Decisions
+book.From_Data_To_Decisions
+/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
+
+## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
 
-##
-
+## AI for Data Science
 book.AI_for_data_science/book_map.md
-
-##
 
 # Downloading Papers
 
