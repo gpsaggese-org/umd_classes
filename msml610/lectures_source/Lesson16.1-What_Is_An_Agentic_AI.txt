@@ -61,8 +61,9 @@ MSML610: Advanced Machine Learning
   - No persistent notion of the external world
   - No way to verify whether its claims are true
   - No mechanism to change the state of anything outside the conversation
+  - You can't "just prompt better"
 
-- **Cons of "just prompt better"**:
+- **Cons**:
   - Hallucinated facts cannot be corrected by the model itself
   - Multi-step tasks (e.g., _"refactor this repo and run the tests"_) exceed
     what a single forward pass can verify
@@ -217,8 +218,7 @@ digraph Autonomy {
 
   - _Cons_
     - Errors compound silently across many unsupervised steps
-    - Requires strong verification and safety mechanisms (see Lesson 16.4 on
-      safety) before it can be trusted
+    - Requires strong verification and safety mechanisms before it can be trusted
 
 ## The Perceive-Plan-Act Loop
 
@@ -263,7 +263,7 @@ digraph PerceivePlanAct {
     error message
 
 - **Problem**: raw observations are often too large or noisy to feed directly
-  into the model's context window
+  into the model's context window, e.g.,
   - A full HTML page can be tens of thousands of tokens
   - A directory listing can contain irrelevant files
 
@@ -296,8 +296,7 @@ digraph PerceivePlanAct {
     `write_file(path, content)`
 
 - **Remark**: actions are typically constrained to a fixed _action space_
-  - The agent cannot do anything; it can only invoke the operations exposed
-    to it
+  - The agent can only invoke the operations exposed to it
   - This constraint is what makes agent behavior auditable and controllable
 
 - **Example**: a coding agent's action space might be limited to
@@ -311,9 +310,11 @@ digraph PerceivePlanAct {
   - A loop lets the agent _notice_ that an action failed and try something
     else
 
-- **Example**: an agent runs a test suite (`Act`), observes a failing test
-  (`Perceive`), reasons about the cause (`Plan`), and edits the code
-  (`Act` again)
+- **Example**: an agent
+  - runs a test suite (`Act`)
+  - observes a failing test (`Perceive`)
+  - reasons about the cause (`Plan`)
+  - edits the code (`Act` again)
 
 - **Limitations**:
   - Loops can run indefinitely without a stopping condition or step budget
@@ -321,35 +322,40 @@ digraph PerceivePlanAct {
 
 * Worked Example: ReAct and the Loop in Practice
 
-- **Problem**: pure chain-of-thought reasoning produces text but never checks
-  itself against the world; pure action-only agents act without explaining
-  why, making errors hard to diagnose
+- **Problem**: 
+  - Pure chain-of-thought reasoning produces text but never checks itself against
+    the world
+  - Pure action-only agents act without explaining why, making errors hard to
+    diagnose
 
 - **Solution**: _ReAct_ (Yao et al., 2022) interleaves reasoning traces
   ("Thought") with actions ("Action") and their results ("Observation") in a
   single trace
   - `Thought` $\to$ `Action` $\to$ `Observation` $\to$ `Thought` $\to$ ...
-  - The reasoning trace explains _why_ an action was chosen, and the
-    observation grounds the next thought in what actually happened
+  - The reasoning trace explains _why_ an action was chosen
+  - The observation grounds the next thought in what actually happened
 
 - **Example** (question answering with a search tool):
   - `Thought`: _"I need the population of the city where X was born"_
   - `Action`: `search("X birthplace")`
   - `Observation`: _"X was born in City Y"_
-  - `Thought`: _"Now I need the population of Y"_ $\to$ next `Action`
+  - `Thought`: _"Now I need the population of Y"_
+  - $\to$ next `Action`
 
-## ##############################################################################
 ## Tools, Environments, and Observations
-## ##############################################################################
 
 * What Is a Tool? Definition
 
 - **Definition**: a _tool_ is a function with a well-defined interface
-  (name, input schema, output schema) that the agent can invoke to affect or
-  query something outside its own context window
-  - Aka:
-    - "Function" (when exposed via function calling)
-    - "Action" (when described from the agent's point of view)
+  ```
+  (name, input schema, output schema)
+  ```
+  that the agent can invoke to affect or query something outside its own context
+  window
+
+- Aka:
+  - "Function" (when exposed via function calling)
+  - "Action" (when described from the agent's point of view)
 
 - **Example tools**:
   - `search(query: str) -> List[Result]`
@@ -358,19 +364,23 @@ digraph PerceivePlanAct {
 
 * Tool Use: From Function Calls to APIs
 
-- **(Naive) Solution**: ask the model to output free-form text describing
-  what it wants to do, and parse it with regular expressions
-  - Cons: brittle, ambiguous, breaks whenever the model's phrasing shifts
+- **(Naive) Solution**:
+  - Ask the model to output free-form text describing what it wants to do
+  - Parse it with regular expressions
+  - _Cons_: brittle, ambiguous, breaks whenever the model's phrasing shifts
 
-- **Solution**: expose tools as typed schemas (name, parameters, types) and
-  have the model emit a structured call (e.g., JSON) that matches the schema
-  - The runtime validates the call, executes the underlying function, and
-    returns the result as the next observation
+- **Solution**:
+  - Expose tools as typed schemas `(name, parameters, types)`
+  - Have the agent emit a structured call (e.g., JSON) that matches the schema
+  - The runtime
+    - Validates the call
+    - Executes the underlying function
+    - Returns the result as the next observation
 
-- **Remark**: this is the same idea as a programming-language function
-  signature, applied to model outputs instead of source code
+- **Intuition**: same idea as a programming-language function signature, applied
+  to model outputs instead of source code
 
-* What Is an Environment? Definition
+* Environment: Definition
 
 - **Definition**: an _environment_ is everything external to the agent's
   controller that defines the state, the available observations, and the
@@ -378,8 +388,9 @@ digraph PerceivePlanAct {
   - The environment owns the "ground truth": what is actually true after an
     action is executed
 
-- **Example**: in a web agent, the environment is the live web page (DOM,
-  network responses); in a coding agent, it is the file system plus a shell
+- **Example**:
+  - In a web agent, the environment is the live web page (DOM, network responses)
+  - In a coding agent, it is the file system plus a shell
 
 * Types of Environments: A Taxonomy
 
@@ -436,22 +447,20 @@ digraph AgentSystem {
 }
 ```
 
-- **Key idea**: tools are the agent's _hands_, the environment is the
-  _world_ those hands act on, and observations are the agent's _eyes_ on the
-  result
+- **Intuition**:
+  - Tools are the agent's _hands_
+  - The environment is the _world_ those hands act on
+  - Observations are the agent's _eyes_ on the result
 
-## ##############################################################################
 ## Grounding Language in Action
-## ##############################################################################
 
 * The Grounding Problem: Definition
 
-- **Definition**: _grounding_ is the problem of connecting a model's
-  internal, linguistic representation of a task to concrete, executable
-  actions in a real environment
+- **Definition**: _grounding_ is the problem of connecting a model's internal
+  representation of a task to concrete, executable actions in a real environment
   - Aka "symbol grounding" in the older AI literature
 
-- **Problem**: an LLM's output is, by default, just more text
+- **Problem**: an LLM's output is just text
   - Saying _"I will click the 'Buy' button"_ does not, by itself, click
     anything
   - Without grounding, language and action are disconnected
@@ -472,8 +481,9 @@ digraph AgentSystem {
   - The mapping from action to effect is owned by the environment, not the
     model
 
-- **Remark**: constraining the action space is also a safety mechanism — the
-  agent literally cannot take an action outside the defined set
+- **Remark**:
+  - Constraining the action space is also a safety mechanism
+  - The agent literally cannot take an action outside the defined set
 
 * Grounding via Tool Schemas and APIs
 
@@ -493,8 +503,9 @@ digraph AgentSystem {
 * Example: Grounding in WebShop
 
 - **Setup**: `WebShop` (Yao et al., 2022) is a simulated e-commerce site
-  where an agent must find and purchase a product matching a natural-language
-  instruction (e.g., _"buy a red cotton t-shirt under \$20"_)
+  - An agent must find and purchase a product matching a natural-language
+    instruction
+    - E.g., _"buy a red cotton t-shirt under \$20"_
 
 - **Grounding in practice**:
   - Observation: a simplified text rendering of the current page (search
@@ -502,38 +513,35 @@ digraph AgentSystem {
   - Action space: `search(query)`, `click(button_or_link)`
   - Every action maps to a deterministic page transition in the simulator
 
-- **Why this matters**: WebShop shows that grounding does not require a real
-  browser or real money — a faithful, constrained simulation is enough to
-  train and evaluate grounded agents
+- **Why this matters**:
+  - Grounding does not require a real browser or real money
+  - A faithful, constrained simulation is enough to train and evaluate grounded
+    agents
 
-## ##############################################################################
 ## A Taxonomy of Agentic Systems
-## ##############################################################################
 
 * Dimensions of an Agentic Taxonomy
 
 - **Goal**: classify agentic systems along independent axes so that two
-  systems can be compared precisely rather than just both being called
-  "agents"
+  agents can be compared precisely
 
 - **Four useful dimensions**:
-  1. **Control**: reactive vs. deliberative vs. hybrid
-  2. **Cardinality**: single-agent vs. multi-agent
-  3. **Environment**: simulated, web, operating system, physical
-  4. **Autonomy**: human-in-the-loop vs. fully autonomous (recall the
-     spectrum from earlier in this lesson)
+  1. _Control_: reactive vs. deliberative vs. hybrid
+  2. _Cardinality_: single-agent vs. multi-agent
+  3. _Environment_: simulated, web, operating system, physical
+  4. _Autonomy_: human-in-the-loop vs. fully autonomous
 
 * Reactive vs. Deliberative Agents
 
 - **Reactive agents**: map the current observation directly to an action,
   with little or no explicit lookahead
-  - Pros: fast, simple, cheap per step
-  - Cons: prone to local mistakes, no long-horizon planning
+  - _Pros_: fast, simple, cheap per step
+  - _Cons_: prone to local mistakes, no long-horizon planning
 
 - **Deliberative agents**: maintain an internal plan and reason about future
   states before acting
-  - Pros: better at long-horizon, multi-step tasks
-  - Cons: more expensive per step, planning can itself be wrong
+  - _Pros_: better at long-horizon, multi-step tasks
+  - _Cons_: more expensive per step, planning can itself be wrong
 
 - **Hybrid agents**: deliberate to form a plan, then react quickly within
   that plan, replanning when observations diverge from expectations
@@ -547,12 +555,8 @@ digraph AgentSystem {
 
 - **Multi-agent systems**: several agents, each with its own role, interact
   to solve a task
-  - E.g., a "planner" agent delegates subtasks to "worker" agents, or
-    agents negotiate and critique each other's outputs
-
-- **Remark**: multi-agent systems are covered in depth in a later lesson;
-  here it suffices to know they are one axis of the taxonomy, not a
-  separate category of "agentic AI"
+  - E.g., a "planner" agent delegates subtasks to "worker" agents
+  - E.g., agents negotiate and critique each other's outputs
 
 * Taxonomy Overview: Putting It Together
 
@@ -576,10 +580,6 @@ mindmap
       Fully autonomous
 ```
 
-- **Key idea**: any concrete agent (e.g., a ReAct-style web agent, or a
-  WebShop shopping agent) can be located by picking one value on each of the
-  four axes above
-
 ## ##############################################################################
 ## Summary
 ## ##############################################################################
@@ -598,9 +598,9 @@ mindmap
   - Agentic systems can be classified along control, cardinality,
     environment, and autonomy
 
-- **Open questions** (previewed for later lessons):
+- **Open questions**
   - How does the underlying LLM's architecture constrain what an agent can
-    reason about? (Lesson 16.2)
+    reason about?
   - How did the field get from prompting to acting agents like ReAct and
-    WebShop? (Lesson 16.3)
+    WebShop?
   - How do we evaluate and trust an agent's behavior before deployment?
