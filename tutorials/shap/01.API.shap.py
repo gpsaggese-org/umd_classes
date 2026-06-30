@@ -70,7 +70,7 @@ except ImportError:
 
 # %% [markdown]
 # - **Mental model**:
-#   TODO(ai_gp): Make this into a markdon table (object, description, comments
+# // TODO(ai_gp): Make this into a markdown table (object, description, comments)
 #   ```
 #   model: X -> prediction
 #   Explainer(model, background) -> configured explainer

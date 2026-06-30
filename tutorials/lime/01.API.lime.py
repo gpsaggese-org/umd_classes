@@ -5,9 +5,9 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -68,8 +68,10 @@ except ImportError:
 #   - Get model predictions for perturbed samples
 #   - Fit a local weighted linear model on perturbations -> reveals feature weights
 #   - Feature weights show which features matter locally
-#
+
+# %% [markdown]
 # - **Mental model**:
+# // TODO(ai_gp): Make this into a markdown table (object, description, comments)
 #   - model: X -> prediction
 #   - LimeTabularExplainer(model, X_train) -> configured explainer
 #   - explainer.explain_instance(x) -> Explanation
@@ -113,6 +115,7 @@ print("y_s.shape=", y_s.shape)
 display(X_df.head(3))
 
 # %%
+# TODO(ai_gp): Split this into 3 cells.
 # Data analysis: feature statistics and correlations with target.
 print("=== Feature Statistics ===")
 print(X_df.describe())
@@ -177,18 +180,6 @@ print("lime_explainer.feature_names=", lime_explainer.feature_names)
 # - Understand what the explainer knows about the data
 # - Feature ranges and statistics used for perturbation
 
-# %%
-# LimeTabularExplainer stores feature statistics for perturbation.
-print("Feature scaling and statistics:")
-stats_df = pd.DataFrame({
-    "feature": X_df.columns,
-    "min": lime_explainer.scaler.data_min_,
-    "max": lime_explainer.scaler.data_max_,
-    "range": lime_explainer.scaler.data_max_ - lime_explainer.scaler.data_min_,
-})
-display(stats_df)
-print("\nInterpretation: LIME uses these ranges to perturb features locally.")
-
 # %% [markdown]
 # # Part 3: Primitive 2 - The Explanation Object
 
@@ -196,16 +187,16 @@ print("\nInterpretation: LIME uses these ranges to perturb features locally.")
 # ## Explanation Object: Local Interpretable Model Breakdown
 #
 # An `Explanation` object holds results from explaining a single instance:
-# 1. **`.as_list()`**: list of (feature_name, weight) tuples
+# 1. `.as_list()`: list of (feature_name, weight) tuples
 #    - Each weight shows how much a feature pushed the prediction away from baseline
 #    - Positive weight = feature increases prediction
 #    - Negative weight = feature decreases prediction
 #    - Weight magnitude = how much this feature influenced the local decision
 #
-# 2. **`.local_pred`**: Model's prediction on the instance
+# 2. `.local_pred`: Model's prediction on the instance
 #    - Same as the original prediction for the instance
 #
-# 3. **`.score`**: R^2 accuracy of the local linear model
+# 3. `.score`: R^2 accuracy of the local linear model
 #    - How well does the linear approximation fit the model's behavior locally?
 #    - Closer to 1.0 = linear approximation is accurate
 #    - Closer to 0 = model is highly nonlinear near this instance

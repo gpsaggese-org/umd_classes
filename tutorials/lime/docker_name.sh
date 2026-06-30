@@ -8,5 +8,5 @@
 
 REPO_NAME=gpsaggese
 # The file should be all lower case.
-IMAGE_NAME=tutorial_shap
+IMAGE_NAME=tutorial_lime
 FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
