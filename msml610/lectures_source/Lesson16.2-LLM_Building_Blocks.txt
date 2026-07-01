@@ -110,12 +110,17 @@ digraph Transformer {
 ::::
 :::
 
-* Embeddings and Positional Encoding
+* Vector Embeddings
 
 - **Definition**: an _embedding_ maps each token id to a dense vector
   $\ve \in \mathbb{R}^{d}$ learned during training
-  - Semantically similar tokens end up with nearby vectors
+  // TODO(ai_gp): Add example
 
+- **Property**:
+  - Semantically similar tokens end up with nearby vectors
+  // TODO(ai_gp): Elaborate example
+
+* Positional Encoding
 - **Problem**: attention is _permutation invariant_, so the raw model has no
   notion of token order
   - _"dog bites man"_ and _"man bites dog"_ would look identical
@@ -129,11 +134,13 @@ digraph Transformer {
 
 * The Transformer Block
 
-- **Definition**: a single _block_ composes two sublayers, each wrapped with a
-  residual connection and normalization
+- **Definition**: a _transformer_ is composed of two sublayers, each wrapped with
+  a residual connection and normalization
   1. _Multi-head self-attention_: mixes information across positions
   2. _Feed-forward network_ (FFN): transforms each position independently
 
+// TODO(ai_gp): Add curly
+// TODO(ai_gp): What is LN
 - Schematically, for input $\vx$:
   $$
   \vx' = \vx + \text{Attention}(\text{LN}(\vx))
@@ -142,8 +149,11 @@ digraph Transformer {
   \vx'' = \vx' + \text{FFN}(\text{LN}(\vx'))
   $$
 
-- **Intuition**: attention decides _what to read_, the FFN decides _how to
-  transform_ what was read
+- **Intuition**:
+  - Attention decides _what to read_
+  - The FFN decides _how to transform_ what was read
+
+// TODO(ai_gp): Add schematic
 
 * Residual Connections and Layer Normalization
 
@@ -161,10 +171,12 @@ digraph Transformer {
 
 - **Remark**: this is what makes 30-100+ layer models trainable in practice
 
+// TODO(ai_gp): Add schematic
+
 * Feed-Forward Networks
 
-- **Definition**: the _feed-forward network_ (FFN) is a small two-layer MLP
-  applied _independently_ to each position
+- **Definition**: the _feed-forward network_ (FFN) is a two-layer MLP
+  (multi-layer perceptron) applied _independently_ to each position
   $$
   \text{FFN}(\vx) = W_2 \, \sigma(W_1 \vx + b_1) + b_2
   $$
@@ -178,6 +190,8 @@ digraph Transformer {
 - **Remark**: mixture-of-experts models replace this dense FFN with many
   sparse experts
 
+// TODO(ai_gp): Add schematic
+
 ## Attention as the Core Mechanism
 
 * Attention: Motivation
@@ -185,8 +199,9 @@ digraph Transformer {
 - **Question**: when predicting the next token, which _previous_ tokens matter
   most?
 
-- **Example**: in _"The trophy did not fit in the suitcase because it was too
-  big"_, resolving _"it"_ requires looking back at _"trophy"_, not _"suitcase"_
+- **Example**:
+  - _"The trophy did not fit in the suitcase because it was too big"_
+  - Resolving _"it"_ requires looking back at _"trophy"_, not _"suitcase"_
 
 - **Key idea**: attention lets each position _selectively read_ from all other
   positions, weighted by relevance
@@ -198,20 +213,24 @@ digraph Transformer {
 - **Definition**: each token produces three learned projections
   - _Query_ $\vq$: _"what am I looking for?"_
   - _Key_ $\vk$: _"what do I offer to others?"_
-  - _Value_ $\vv$: _"what do I contribute if attended to?"_
+  - _Value_ $\vvv$: _"what do I contribute if attended to?"_
 
+// TODO(ai_gp): Specify vectors and matrices \mQ instead of Q
+// TODO(ai_gp): Convert in 3 equations with curly
 - Computed as linear maps of the input $\vx$:
   $$
   Q = X W_Q, \quad K = X W_K, \quad V = X W_V
   $$
 
-- **Intuition**: a query is matched against every key; strong matches pull in
-  the corresponding values
+- **Intuition**:
+  - A query is matched against every key
+  - Strong matches pull in the corresponding values
 
-- **Analogy**: a soft, differentiable dictionary lookup
+- **Analogy**: a differentiable dictionary lookup
 
 * Scaled Dot-Product Attention
 
+// TODO(ai_gp): Specify vectors and matrices \mQ instead of Q
 - **Definition**: attention output is a weighted average of values, with
   weights from a softmax over query-key similarities
   $$
@@ -233,14 +252,16 @@ digraph Transformer {
 * Multi-Head Attention
 
 - **Problem**: a single attention pattern can only capture one kind of
-  relationship at a time (e.g., syntax _or_ coreference)
+  relationship at a time (e.g., -syntax_ or _coreference_)
 
-- **Solution**: run $h$ attention operations (_heads_) in parallel, each with
-  its own $W_Q, W_K, W_V$, then concatenate and project
-  $$
-  \text{MHA}(X)
-    = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) \, W_O
-  $$
+- **Solution**:
+  - Run $h$ attention operations (_heads_) in parallel
+  - Each attention with its own $W_Q, W_K, W_V$
+  - Then concatenate and project
+    $$
+    \text{MHA}(X)
+      = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) \, W_O
+    $$
 
 - **Intuition**: different heads specialize
   - One head tracks the previous token
@@ -276,28 +297,27 @@ digraph Transformer {
   $$
   \text{score}_{i,j} = -\infty \quad \text{if } j > i
   $$
+  - E.g., when predicting the 5th token, positions 6, 7, ... are masked
+    out
 
-- **Key idea**: masking enforces the autoregressive factorization —
-  each position only attends to itself and the past
-
-- **Example**: when predicting the 5th token, positions 6, 7, ... are masked
-  out
+- **Key idea**: masking enforces the autoregressive factorization: each position
+  only attends to itself and the past
 
 * Attention: Complexity and Cost
 
 - **Problem**: computing $Q K^\top$ compares every token with every other token
   - Time and memory scale as $O(T^2)$ in the sequence length $T$
 
-- **Consequence**: doubling the context length _quadruples_ the attention cost
+- **Consequence**: 2x the context length \implies 4x the attention cost
   - This is the main obstacle to very long context windows
+  - This $O(T^2)$ cost is why context length is a scarce, expensive resource for
+    agents
 
+// TODO(ai_gp): Improve
 - **Partial solutions**:
   - Sparse / local attention (attend to a window)
   - Linear-attention approximations
   - I/O-aware exact kernels (e.g., FlashAttention)
-
-- **Remark**: this $O(T^2)$ cost is why context length is a scarce, expensive
-  resource for agents
 
 ## Pretraining Objectives and Scaling
 
@@ -315,7 +335,7 @@ digraph Transformer {
   - This is why it is called _self-supervised_ learning
 
 - **Remark**: minimizing next-token loss forces the model to absorb grammar,
-  facts, and reasoning patterns as a side effect
+  facts, and reasoning patterns
 
 * Masked vs. Autoregressive Objectives
 
@@ -350,13 +370,16 @@ digraph Transformer {
   3. Train the transformer to minimize next-token loss
   4. Optionally _post-train_: instruction tuning + preference optimization
 
-- **Key idea**: pretraining builds a broad _base model_; post-training makes it
-  follow instructions and act as an assistant
+- **Key idea**:
+  - Pretraining builds a broad _base model_
+  - Post-training makes it follow instructions and act as an assistant
 
-- **Remark**: the agent capabilities from Lesson 16.1 mostly emerge in the
-  post-training stage, on top of the pretrained base
+- **Remark**: the agent capabilities mostly emerge in the post-training stage, on
+  top of the pretrained base
 
 * Scaling Laws
+
+// TODO(ai_gp): Improve
 
 - **Fact**: model loss falls _predictably_ as a power law in model size $N$,
   data $D$, and compute $C$
@@ -375,11 +398,16 @@ digraph Transformer {
 
 - **Definition**: an _emergent ability_ is a capability that is absent in small
   models but appears, often abruptly, past some scale
-  - E.g., multi-step arithmetic, in-context learning, instruction following
+
+- **Example**:
+  - Multi-step arithmetic
+  - In-context learning
+  - Instruction following
 
 - **Intuition**: some skills only become useful once the model is accurate
   enough at each intermediate step
 
+// TODO(ai_gp): Unclear
 - **Remark**: emergence is debated — partly real, partly an artifact of
   discontinuous, all-or-nothing metrics
 
@@ -414,7 +442,7 @@ digraph Decode {
 }
 ```
 
-- **Remark**: generation cost is _sequential_ — each new token needs another
+- **Remark**: generation cost is _sequential_: each new token needs another
   forward pass
 
 * Decoding Strategies: Greedy vs. Sampling
@@ -425,25 +453,27 @@ digraph Decode {
 
 - **Sampling**: draw the next token from the distribution
   - _Temperature_ $\tau$ rescales the logits before softmax
-  $$
-  \Pr(x_i) \propto \exp\!\left(\frac{z_i}{\tau}\right)
-  $$
-  - $\tau \to 0$: approaches greedy; $\tau > 1$: more random / diverse
+    $$
+    \Pr(x_i) \propto \exp\!\left(\frac{z_i}{\tau}\right)
+    $$
+    where:
+    - $\tau \to 0$: approaches greedy
+    - $\tau > 1$: more random / diverse
 
 - **Key idea**: temperature trades off _coherence_ against _diversity_
 
-* Top-k and Top-p (Nucleus) Sampling
+* Top-k and Top-p Sampling
 
 - **Problem**: plain sampling can pick very low-probability tokens, producing
   incoherent text
 
 - **Solution**: restrict sampling to a high-probability subset
   - _Top-k_: keep only the $k$ most likely tokens, renormalize, then sample
-  - _Top-p (nucleus)_: keep the smallest set of tokens whose cumulative
-    probability exceeds $p$
+  - _Top-p_: keep the smallest set of tokens whose cumulative probability exceeds
+    $p$
 
 - **Intuition**: cut the unreliable tail while keeping genuine diversity in the
-  head
+  top tokens
 
 - **Remark**: for agents, lower temperature and tighter top-p give more
   _reliable_, reproducible tool calls
@@ -454,38 +484,39 @@ digraph Decode {
   model can attend to at once
   - Prompt + generated tokens must fit within it
 
-- **Problem**: the $O(T^2)$ attention cost makes long windows expensive, and
-  positional generalization degrades beyond training length
+- **Problem**:
+  - The $O(T^2)$ attention cost makes long windows expensive
+  - Positional generalization degrades beyond training length
 
 - **Consequence for agents**:
   - Long histories, tool outputs, and documents compete for limited space
-  - Motivates the _retrieval_ and _memory_ mechanisms of later lessons
+  - Motivates the _retrieval_ and _memory_ mechanisms
 
-- **Example**: an agent must summarize or truncate a huge log rather than paste
-  it whole (as we saw with observation filtering)
+- **Example**: an agent must summarize or truncate a huge log rather than
+  process it whole
 
 * The KV Cache
 
 - **Problem**: naively, generating token $t$ recomputes attention keys and
-  values for _all_ previous tokens every step — hugely wasteful
+  values for _all_ previous tokens every step, hugely wasteful
 
 - **Solution**: cache the keys and values of past tokens (the _KV cache_) and
   reuse them
   - Each new token computes only its own $Q, K, V$
   - Attends against the cached $K, V$
 
-- **Key idea**: the KV cache turns per-token cost from $O(T^2)$ back to
-  $O(T)$ per step, at the price of memory
+- **Key idea**: the KV cache turns per-token cost from $O(T^2)$ to $O(T)$ per
+  step (at the price of memory)
 
 - **Remark**: KV-cache memory is a primary driver of serving cost and the
   practical limit on batch size and context length
 
 ## Expressivity: What Transformers Can and Cannot Compute
 
-* Expressivity: The Question
+* The Question of "Expressivity"
 
-- **Question**: a single forward pass is a _fixed-depth_ circuit — what class
-  of problems can it actually solve?
+- **Question**: a single forward pass is a _fixed-depth_ circuit: what class of
+  problems can it actually solve?
 
 - **Key idea**: without intermediate outputs, a transformer's per-token
   computation is bounded
@@ -493,8 +524,8 @@ digraph Decode {
     steps
   - Some problems are _inherently serial_ and need many steps
 
-- **Connection**: this is exactly why agents _think out loud_ and take multiple
-  steps instead of answering in one shot
+- **Remark**: this is why agents "think out loud" and take multiple steps
+  instead of answering in one shot
 
 * Chain-of-Thought as Serial Computation
 
@@ -503,32 +534,32 @@ digraph Decode {
 
 - **Solution**: _chain-of-thought_ (CoT) prompting (Wei et al., 2022) makes the
   model emit intermediate steps as tokens before the answer
-  - _"Let's think step by step"_
+  ```
+  LLM> Let's think step by step
+  ```
+  - E.g., solving 17 x 24 by writing partial products, instead of emitting the
+    answer in a single step
 
 - **Key idea**: each generated token is another forward pass, so writing out
   steps effectively adds _serial depth_ to the computation
   - CoT trades extra tokens (time) for extra reasoning depth
 
-- **Example**: solving $17 \times 24$ by writing partial products, instead of
-  emitting the answer in a single step
-
 * What Transformers Cannot (Easily) Compute
 
 - **Limitations**: a fixed-depth transformer without scratch space struggles
-  with
-  - Unbounded counting and exact state tracking
+  with:
+  - Unbounded exact state tracking
   - Problems requiring computation that grows with input size in one pass
-  - Reliable, long multi-step arithmetic without writing steps out
+  - Reliable, long multi-step reasoning without writing steps out
 
 - **Fact**: with a long enough chain-of-thought scratchpad, transformers become
-  far more powerful (approaching general computation)
-  - See _(Optional)_ references: Neural GPUs, GPT as a Turing machine
+  far more powerful, approaching general computation
 
-- **Interpretation**: the model is not a fixed oracle
-  - Its effective computational power depends on _how many steps_ it is allowed
-    to take — motivating agentic loops
+- **Interpretation**:
+  - Its effective computational power of a model depends on _how many steps_ it
+    is allowed to take, which motivates agentic loops
 
-* LLM Building Blocks: Summary and Open Questions
+* Summary and Open Questions
 
 - **Key takeaways**:
   - An LLM is a _transformer_ trained to predict the next token via

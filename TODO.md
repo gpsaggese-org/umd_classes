@@ -18,9 +18,13 @@ book.From_Data_To_Decisions
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 
 /Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
-### 12. Neural-Symbolic Decision Making
+- [ ] 12. Neural-Symbolic Decision Making
 
 /slides.write '### 2. LLM Building Blocks' '/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md'  Create 30 slides and save in msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt without running the linter
+
+- [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
+- [ ] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
+- [ ] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
@@ -124,6 +128,16 @@ vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.note
 
 ### Create branch for 1276
 https://github.com/causify-ai/helpers/issues/1276
+
+### IN PROGRESS: [ ] Handle the latex macros
+
+> notes_to_pdf.py --input=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt --output=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
+
+- [ ] All unit tests should freeze the output of the script
+- [x] Use the right idiom for the command line construction
+
+Remove --fail_on_pandoc_warnings
+Remove open by default
 
 ### IN PROGRESS: [ ] Improve unit testing
 
