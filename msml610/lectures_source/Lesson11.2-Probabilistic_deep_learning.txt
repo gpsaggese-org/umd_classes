@@ -1,45 +1,26 @@
-// # 21, Deep learning (p. 763)
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=Lesson 11: Deep Learning
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 11: Deep Learning}}$$**
-\endgroup
-\vspace{1cm}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
+// From AIMA # 21, Deep learning (p. 763)
 
 # Neural networks
 
-* Deep learning
-- Deep learning is a family of ML models and techniques with complex expressions
-  and tunable connection strengths
-  $$\text{Deep Learning} \subseteq \text{Machine Learning}$$
-  - "Deep" as circuits are organized in layers with many connection paths
-    between inputs and outputs
-  - Represent hypotheses as computation graphs with learnable weights
-  - Fit the model to the training data by computing the gradient of the loss
-    function with respect to those weights
+* Deep Learning: Definition
 
-- Deep learning is extremely effective for:
+- **Definition**: _deep learning_ is a family of ML models and techniques using
+  complex expressions and tunable connection strengths
+  $$\text{Deep Learning} \subseteq \text{Machine Learning}$$
+
+- **Key characteristics**:
+  - Hypotheses represented as computation graphs with learnable weights
+  - Graphs have layers with many connection paths between inputs and outputs
+  - Model fit via gradient descent on the loss function
+
+- **Applications**: Deep learning excels in several fields:
   - Machine translation
-  - Image recognition/synthesis
-  - Speech recognition/synthesis
+  - Image recognition and synthesis
+  - Speech recognition and synthesis
 
 * DL vs ML
 - Many ML methods can handle a large number of input variables
