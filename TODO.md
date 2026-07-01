@@ -18,8 +18,7 @@ book.From_Data_To_Decisions
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 
 /Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
-
-/slides.write '### 3. A Brief History of LLM Agents' '/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md'  Create 30 slides and save in msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt without running the linter
+  - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
 - [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
 - [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt

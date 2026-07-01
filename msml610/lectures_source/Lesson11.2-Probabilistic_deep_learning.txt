@@ -4,7 +4,7 @@
 
 // From AIMA # 21, Deep learning (p. 763)
 
-# Neural networks
+# Neural Networks
 
 * Deep Learning: Definition
 
@@ -134,7 +134,7 @@
     - Commercial impact in healthcare, finance, and autonomous vehicles
     - 2012: AlexNet outperformed methods on ImageNet using deep CNNs
 
-* NN vs logistic regression + non-linear transform
+* NN vs Logistic Regression + Non-linear Transform
 
 ::: columns
 :::: {.column width=55%}
@@ -165,7 +165,7 @@
 ::::
 :::
 
-## Neural networks
+## Neural Networks
 
 * Neural Network Perceptron
 ::: columns
@@ -180,8 +180,8 @@
   $$
   - Same functional form as logistic regression ($\theta$ is logit) or linear
     classification ($\theta$ is sign)
-- The parameters $\vw$ are typically called _weights_ in neural network
-  literature
+- **Remark**: The parameters $\vw$ are typically called _weights_ in neural
+  network literature
 ::::
 :::: {.column width=40%}
 
@@ -268,7 +268,8 @@
 
 * Activation Functions
 
-- Map the neuron's input signal $s$ to an output activation value $\theta(s)$
+- **Intuition**: Map the neuron's input signal $s$ to an output activation value
+  $\theta(s)$
   - Approximately linear for small $s$
   - Saturate or threshold for large $|s|$
     - Non-linearity enable learning complex functions
@@ -317,11 +318,12 @@
 ::::
 :::
 
-* Neural networks to compute boolean functions
-- Build `AND`, `OR`, `NOT` functions with linear perceptrons using proper bias
-  and weights
+* Neural Networks to Compute Boolean Functions
+- **Goal**: Build `AND`, `OR`, `NOT` functions with linear perceptrons using
+  proper bias and weights
 
-- `AND` is implemented by a single neuron with 2 inputs $x_1$ and $x_2$ and bias
+- **Example**: `AND` is implemented by a single neuron with 2 inputs $x_1$ and
+  $x_2$ and bias
   - Implement in terms of $s$:
     ```
     x_1   x_2   AND
@@ -336,8 +338,8 @@
     $$
     Weights are $(w_0, w_1, w_2) = (-3, 2, 2)$
 
-- You cannot classify 4 points in a `XOR` position in a plane with a _single_
-  perceptron
+- **Problem**: You cannot classify 4 points in a `XOR` position in a plane with
+  a _single_ perceptron
   - Use two perceptrons to separate two regions of space
   - Then combine the outputs of the 2 perceptrons together
 
@@ -356,11 +358,11 @@
 
 - **Geometric Intuition**
   - To separate two classes with a circular boundary:
-    - Use multiple perceptrons (e.g., 8–16) to approximate the circle with a
+    - Use multiple perceptrons (e.g., 8-16) to approximate the circle with a
       polygon
     - Combine outputs logically for the final decision
-  - This forms a "lookup table" over regions of input space—similar to decision
-    trees
+  - This forms a _"lookup table"_ over regions of input space, similar to
+    decision trees
 
 * Feedforward vs Recurrent Neural Networks
 
@@ -380,7 +382,7 @@
     model longer-range dependencies
   - E.g., predicting the next word in a sentence based on previous words
 
-* Structure of feedforward neural network
+* Structure of Feedforward Neural Network
 
 - **Layered Architecture**
   - A feedforward network consists of an ordered set of layers indexed by $l$
@@ -487,7 +489,7 @@
 ::::
 :::
 
-* Conventions for neurons in a neural network
+* Conventions for Neurons in a Neural Network
 - Each neuron $x^{(l)}_j$:
   - Belongs to a layer with index $l$
   - Accepts inputs from the previous layer (scanning index $i$)
@@ -504,7 +506,7 @@
 
 // TODO: Add pic
 
-* Feedforward propagation algorithm
+* Feedforward Propagation Algorithm
 - The output of the generic $l$-th layer is $\vx^{(l)}$
 
 - The outputs of the input layer ($l = 0$) are the inputs of the network:
@@ -525,7 +527,7 @@
   $$
   - Outputs are $s^{(L)}_1$ for regression or $\theta(s^{(L)}_1)$ for classification
 
-* Vectorized feedforward propagation algorithm
+* Vectorized Feedforward Propagation Algorithm
 - Vectorize neuron evaluation:
   - The $j$-th neuron of the $l$-th layer uses the $d(l-1)$ outputs of the
     previous layer to compute its output:
@@ -561,7 +563,7 @@
 - By convention, we don't regularize the \green{bias} ($j=1$ and not $j=0$), as
   it is constant and does not affect the minimum $\vw$
 
-* Multi-output neural networks for multi-class classification
+* Multi-output Neural Networks for Multi-class Classification
 - **In one-vs-all approach:**
   - Train $n$ models, one per class, to recognize each class
   - Pick the model with the highest probability
@@ -595,7 +597,7 @@
 - Avoid to consider the inputs ($l \ne 0$) and the bias terms ($i \ne 0, j \ne
   0$)
 
-* Issues with fitting a neural networks
+* Issues with Fitting a Neural Networks
 
 - **Generalization**
   - Match model complexity to data resources
@@ -610,7 +612,7 @@
   - E.g., challenges in finding the global minimum due to the non-convex nature
     of the problem
 
-* Fitting a neural networks for SGD
+* Fitting a Neural Networks for SGD
 - Use Stochastic Gradient Descent (SGD) to determine the weights $\vw$
   - Consider the error on a single example $(\vx, y)$:
     $$
@@ -642,7 +644,7 @@
   \end{alignat*}
   \endgroup
 
-* Computing the gradient
+* Computing the Gradient
 - Compute all partial derivatives to get:
   $$\nabla_{\vw} e(\vw)$$
 
@@ -695,7 +697,7 @@
     training set
   - Update the weights with the accumulated values
 
-* Gradient checking
+* Gradient Checking
 - For some algorithms the analytical expression of the gradient becomes
   complicated: mistakes are possible
   - E.g., back-propagation in neural networks
@@ -1001,7 +1003,7 @@ digraph FeedbackSystem {
 
 // TODO(TA): Add a graphviz pic
 
-## Deep learning learning algorithms
+## Deep Learning Learning Algorithms
 
 * Techniques for Training Deep Neural Networks
 
@@ -1040,7 +1042,7 @@ digraph FeedbackSystem {
     - Acts as a regularizer, reducing need for dropout
 
 
-* Regularization in neural networks
+* Regularization in Neural Networks
 - (Soft) weight elimination: fewer weights $\implies$ smaller VC dimension, so
   we would like to remove some neurons (i.e., push weights towards 0)
 - For any activation function (e.g., tanh()) a small weight means that we work
@@ -1061,7 +1063,7 @@ digraph FeedbackSystem {
   function of the weight magnitude
 
 
-## Deep learning for NLP
+## Deep Learning for NLP
 
 * NLP Tasks
 - **Part-of-speech (POS) tagging**
@@ -1092,7 +1094,7 @@ digraph FeedbackSystem {
   - Identify and classify named entities (e.g., people, organizations, locations)
     in text
 
-* Part-of-speech (POS) tagging
+* Part-of-speech (POS) Tagging
 - **Example**
   - Input: "The dog barks loudly"
   - Output: [Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)]
@@ -1107,7 +1109,7 @@ digraph FeedbackSystem {
   - Ambiguity: "can" can be a verb or a noun
   - Context-dependency: Tags depend on the surrounding words
 
-* NLP using Rules-Based Systems
+* NLP Using Rules-Based Systems
 - Systems based on rules for parsing and semantic analysis have shown:
   - Success in many tasks
   - Performance limited by linguistic complexity
@@ -1120,7 +1122,7 @@ digraph FeedbackSystem {
   - Vast amount of text in machine-readable form $\to$ use data-driven ML
     approach 
 
-* The bitter lesson
+* The Bitter Lesson
 - _"General methods leveraging computation ultimately outperform
   human-knowledge-based systems"_, Sutton (2019)
 
@@ -1138,7 +1140,7 @@ digraph FeedbackSystem {
   - But machines learn better when allowed to discover patterns from data
     themselves
 
-* The bitter lesson
+* The Bitter Lesson
 - **Implications**
   - Invest in scalable methods over handcrafted knowledge
   - Embrace compute-heavy solutions that learn from data
@@ -1212,7 +1214,7 @@ digraph FeedbackSystem {
   2. Recurrent neural network
   3. Transformer architecture
 
-* Feedforward network for language models
+* Feedforward Network for Language Models
 - **Learning set-up**:
   - Large feedforward network
   - Fixed-size context window of $n$ words
@@ -1230,7 +1232,7 @@ digraph FeedbackSystem {
    - Too many parameters to learn
    - Computationally expensive
 
-* RNNs for language models
+* RNNs for Language Models
 - RNNs process sequence of data, one piece of data at a time
   - Process language, one word at a time
 
@@ -1240,7 +1242,7 @@ digraph FeedbackSystem {
      - Allocate storage space for features of inputs useful for the task
   3. The output is a probability over output words
 
-* RNNs for language models: pros and cons
+* RNNs for Language Models: Pros and Cons
 - **Pros**:
   - Context too long:
     - The number of parameters is constant independently of the context (i.e.,
@@ -1434,7 +1436,7 @@ digraph FeedbackSystem {
   - Fine tune the model with labeled data
   - It's an example of transfer learning
 
-* Masked language models
+* Masked Language Models
 - Word prediction in language models are made left-to-right
 - Sometimes the context comes later in the context
   - E.g., "the river rose five feet"

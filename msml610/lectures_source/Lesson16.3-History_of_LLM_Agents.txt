@@ -51,7 +51,7 @@ digraph Timeline {
 
 ## From Prompting to Acting
 
-* The Prompting Era: Language Models as Text Predictors
+* Prompting: Language Models as Text Predictors
 
 - **Definition**: a _pretrained language model_ is a function trained to
   predict the next token given a context
@@ -59,23 +59,24 @@ digraph Timeline {
   \Pr(x_t \mid x_1, \dots, x_{t-1})
   $$
 
-- **Goal** of the early era: get useful behavior purely by shaping the input
-  text (the _prompt_)
+- **Goal**: get useful behavior purely by shaping the input text (the _prompt_)
   - No fine-tuning, no external tools, no loop
+  - E.g., prompting GPT-style models with _"Translate to French: ..."_ to elicit
+    translation without task-specific training
 
-- **Example**: prompting GPT-style models with _"Translate to French: ..."_ to
-  elicit translation without task-specific training
+- **Limitation**:
+  - The model can only produce text
+  - Cannot check or act on what it produces
 
-- **Limitation**: the model can only produce text; it cannot check or act on
-  what it produces
-
-* In-Context Learning: The First Emergent Capability
+* In-Context Learning
 
 - **Definition**: _in-context learning_ is the ability to learn a task from a
   few examples placed in the prompt, without updating weights
+  - It is the first emergent capability
 
 - **Example** (few-shot):
   - Show 3 input-output pairs, then a 4th input
+  // TODO(ai_gp): Add example of prompt
   - The model completes the pattern by analogy
 
 - **Key idea**: the prompt became a _programming interface_
@@ -88,15 +89,18 @@ digraph Timeline {
 
 * Chain-of-Thought: Reasoning in Text
 
-- **Problem**: on multi-step problems (arithmetic, logic), models that output
-  an answer directly are often wrong
+- **Problem**: on multi-step problems (e.g., arithmetic, logic), models that
+  output an answer directly are often wrong
 
 - **Solution**: _chain-of-thought_ (CoT) prompting asks the model to generate
   intermediate reasoning steps before the final answer
-  - _"Let's think step by step"_
+  ```
+  prompt> Let's think step by step
+  ```
 
 - **Example**:
   - Question: a word problem with several quantities
+  // TODO(ai_gp): Add example
   - CoT: the model writes out each arithmetic step, then the answer
 
 - **Key idea**: reasoning can be externalized as text, giving the model more
@@ -105,7 +109,7 @@ digraph Timeline {
 - **Limitation**: CoT reasons about the world but never _checks_ its claims
   against it
 
-* The Missing Piece: Acting on the World
+* Acting on the World
 
 - **Problem**: pure text generation, even with reasoning, is a closed loop
   - The model cannot retrieve a fact it does not know
@@ -118,54 +122,51 @@ digraph Timeline {
 - **Question**: what if the model could _pause_ its reasoning, take an action
   in the world, and resume with the result?
 
-* From Prompting to Acting: The Conceptual Shift
+* From Prompting to Acting
 
-- **Key idea**: the field moved from treating the LLM as an _oracle_ to
-  treating it as a _controller_
+- **Key idea**: the field moved from treating the LLM as an _oracle_ to treating
+  it as a _controller_
 
+// TODO(ai_gp): Use the typst approach
 \begingroup \scriptsize
 | **Oracle view** | **Controller view** |
 | --------------- | -------------------- |
 | Input $\to$ single text output | Goal $\to$ sequence of actions |
-| No external state | Reads and writes environment state |
+| No external state | Read / write environment state |
 | Correct or incorrect answer | Succeeds or fails at a task |
 | Prompt engineering | Loop and tool design |
 \endgroup
 
-- **Intuition**: the same model weights, wrapped in a loop with tools, become
-  a qualitatively different kind of system
-
-- **Remark**: this shift is the conceptual birth of the _LLM agent_
+- **Remark**: 
+  - This shift is the conceptual birth of the _LLM agent_
+  - The same model (wrapped in a loop with tools) become a qualitatively
+    different kind of system
 
 ## ReAct and the Reasoning-Acting Synergy
 
+// TODO(ai_gp): Redundant with previous lessons?
 * ReAct: Motivation
 
 - **Problem**: two families of methods each had a critical weakness
-  - _Reasoning-only_ (CoT): rich internal reasoning, but no grounding, so
-    errors and hallucinations go unchecked
+  - _Reasoning-only_ (CoT): rich internal reasoning, but no grounding, so errors
+    and hallucinations go unchecked
   - _Action-only_: can call tools, but acts without explaining why, making
     behavior brittle and hard to debug
 
 - **Question**: can reasoning and acting be combined so each fixes the
   other's weakness?
 
-- **Solution preview**: _ReAct_ (Yao et al., 2022) interleaves the two in a
-  single trace
-
-* ReAct: The Core Idea
-
-- **Definition**: _ReAct_ (Reasoning + Acting) prompts the model to alternate
-  between:
+- **Solution**: _ReAct_ (Reasoning + Acting) (Yao et al., 2022) prompts the model
+  to alternate between:
   - `Thought`: a reasoning step in natural language
   - `Action`: a tool call chosen based on that thought
   - `Observation`: the environment's response, fed back into context
 
-- **Key idea**: reasoning decides _what to do_; acting produces _new
-  evidence_ to reason over next
-
-- **Remark**: this is exactly the perceive-plan-act loop, expressed as a text
-  trace the model both reads and writes
+- **Key idea**:
+  - Reasoning decides _what to do_
+  - Acting produces _new evidence_ to reason over next
+  - This is exactly the perceive-plan-act loop, expressed as a text trace the
+    model both reads and writes
 
 * ReAct: The Thought-Action-Observation Trace
 
@@ -197,6 +198,7 @@ digraph ReActLoop {
 - **Problem**: answer _"who wrote the novel that inspired the film that won
   Best Picture in year Y?"_ using a search tool
 
+// TODO(ai_gp): Convert it into typst table
 - **Solution** (ReAct trace):
   - `Thought`: _"First find the Best Picture winner of year Y"_
   - `Action`: `search("Best Picture year Y")`
@@ -206,11 +208,13 @@ digraph ReActLoop {
   - `Observation`: _"Novel N by author A"_
   - `Thought`: _"The answer is A"_ $\to$ `Finish(A)`
 
-- **Key idea**: no single step needs to know the full chain; each step is
-  grounded by the previous observation
+- **Key idea**:
+  - No single step needs to know the full chain
+  - Each step is grounded by the previous observation
 
 * ReAct vs. Chain-of-Thought vs. Act-Only
 
+// TODO(ai_gp): Convert it into typst table
 \begingroup \scriptsize
 | **Method** | **Reasons?** | **Acts?** | **Weakness** |
 | ---------- | ------------ | --------- | ------------ |
@@ -219,11 +223,12 @@ digraph ReActLoop {
 | ReAct | Yes | Yes | More tokens, tool latency |
 \endgroup
 
-- **Key idea**: ReAct dominates on knowledge-intensive tasks because grounding
-  suppresses hallucination while reasoning guides the search
+- **Key idea**: ReAct dominates on knowledge-intensive tasks because _grounding_
+  suppresses hallucination while _reasoning_ guides the search
 
-- **Remark**: ReAct is not the most token-efficient method, but it is far more
-  _reliable_ on tasks requiring external facts
+- **Remark**:
+  - ReAct is not the most token-efficient method
+  - But it is far more _reliable_ on tasks requiring external facts
 
 * Why ReAct Worked
 
@@ -248,19 +253,19 @@ digraph ReActLoop {
 
 - **Motivation**: the web is the richest, most general environment for testing
   agents
-  - Enormous action space (links, forms, buttons)
+  - Enormous action space (e.g., links, web forms, buttons)
   - Real, noisy, partially observable pages
 
-- **Problem**: turning _"buy a cheap red t-shirt"_ into concrete clicks and
-  form entries is a hard grounding problem
+- **Problem**: how to turn a prompt like _"buy a cheap red t-shirt"_ into
+  concrete clicks and form entries?
 
 - **Question**: can we build a benchmark that isolates web grounding without
   the cost and risk of the live internet?
 
 * WebShop: Motivation
 
-- **Setup**: _WebShop_ (Yao et al., 2022) is a large-scale simulated
-  e-commerce website
+- **Setup**: _WebShop_ (Yao et al., 2022) is a large-scale simulated e-commerce
+  website
   - Over one million real product listings
   - Natural-language shopping instructions
 
@@ -319,39 +324,43 @@ digraph ReActLoop {
 
 * Early Failures: Overview
 
-- **Goal**: catalog the recurring ways early LLM agents broke
-  - Understanding failure modes explains the design of modern safeguards
+- There are recurring ways early LLM agents broke
+  - Understand failure modes
+  - Explain the design of modern safeguards
 
-- **Four dominant failure modes**:
+- **Dominant failure modes**:
   1. Compounding errors over long horizons
   2. Hallucinated or malformed tool calls
   3. Getting stuck in repetitive loops
   4. Brittle output parsing and grounding
 
+- **Key takeaways** distilled from early failures:
+  - Detect and recover from errors instead of assuming per-step correctness
+  - Prefer _typed, validated_ actions over free-form text
+  - Always bound the loop with a step budget and stopping condition
+  - Give the agent memory of what it already tried
+  - Keep traces inspectable so failures can be diagnosed
+
 * Failure: Compounding Errors
 
 - **Problem**: in a multi-step task, a small early mistake propagates
-  - If step 1 misreads the goal, every later step builds on the error
+  - E.g., if agent misreads the goal, every later step builds on the error
+  - With per-step success probability $p$ and $n$ independent steps, end-to-end
+    success scales like $p^{\,n}$
+    - E.g., even $p = 0.95$ gives only $\approx 0.60$ over $10$ steps
 
-- **Intuition**: with per-step success probability $p$ and $n$ independent
-  steps, end-to-end success scales like
-  $$
-  p^{\,n}
-  $$
-  - Even $p = 0.95$ gives only $\approx 0.60$ over $10$ steps
-
-- **Lesson**: long-horizon reliability needs error _detection_ and recovery,
+- **Lesson**: long-horizon reliability needs error _detection_ and _recovery_,
   not just high per-step accuracy
 
 * Failure: Hallucinated Tool Calls
 
-- **Problem**: the agent invents a tool that does not exist, or supplies
+- **Problem**: the agent invents a tool that does not exist or supplies
   arguments in the wrong format
   - E.g., calling `book_flight()` when only `search_flight()` is available
   - E.g., passing a date as prose instead of ISO format
 
 - **Cons**:
-  - The runtime rejects the call, wasting a step
+  - The environment rejects the call, wasting a step
   - Worse, a loosely validated runtime may execute an unintended action
 
 - **Lesson**: constrain outputs with typed schemas and validate every call
@@ -360,17 +369,20 @@ digraph ReActLoop {
 * Failure: Getting Stuck in Loops
 
 - **Problem**: without memory of what it already tried, an agent repeats the
-  same failing action
-  - Re-issues an identical search that returned nothing
-  - Clicks the same broken link again and again
+  same failing action, e.g.,
 
-- **Example**: a web agent that keeps searching the exact same query,
-  observing the same empty result, and searching again
+- **Example**: a web agent that
+  - Keeps searching the exact same query, observing the same empty result, and
+    searching again
+  - Clicks the same broken link again and again
 
 - **Lesson**: agents need a stopping condition, a step budget, and short-term
   memory of recent actions and observations
 
 * Failure: Brittle Parsing and Grounding
+
+// TODO(ai_gp): Add problem
+- **Problem**
 
 - **(Naive) Solution**: let the model emit free-form text and parse the
   intended action with regular expressions
@@ -382,18 +394,6 @@ digraph ReActLoop {
 
 - **Lesson**: grounding must be _enforced_ by the runtime, not merely
   requested in the prompt
-
-* Lessons Learned: Design Principles
-
-- **Key takeaways** distilled from early failures:
-  - Prefer _typed, validated_ actions over free-form text
-  - Always bound the loop with a step budget and stopping condition
-  - Give the agent memory of what it already tried
-  - Detect and recover from errors instead of assuming per-step correctness
-  - Keep traces inspectable so failures can be diagnosed
-
-- **Remark**: nearly every modern agent framework encodes these lessons as
-  defaults
 
 ## The Road to General-Purpose Agents
 
@@ -407,12 +407,7 @@ digraph ReActLoop {
   - Swap the tools and observation format, keep the controller
   - The same ReAct-style loop drives web, coding, and OS agents
 
-- **Question**: what has to hold constant for one agent to generalize across
-  such different environments?
-
-* Ingredients of General-Purpose Agents
-
-- **Four recurring ingredients**:
+- **Ingredients of General-Purpose Agents**
   1. A capable base LLM (reasoning + instruction following)
   2. A standardized _tool interface_ (typed schemas, function calling)
   3. A control loop with memory and error recovery
@@ -440,6 +435,7 @@ digraph GeneralAgent {
 
 * The Rise of Tool-Use Standards
 
+// TODO(ai_gp): Is this MCP?
 - **Problem**: every early agent invented its own ad-hoc action format,
   preventing reuse across projects
 
@@ -459,11 +455,10 @@ digraph GeneralAgent {
   - Longer context windows $\to$ longer, more coherent traces
   - Stronger reasoning $\to$ better planning within the loop
 
-- **Remark**: many early failures were partly _capability_ failures that
-  scaling alleviated, and partly _design_ failures that scaffolding fixed
-
-- **Key idea**: progress came from both fronts at once, better models _and_
-  better loops
+- **Remark**: many early failures were partly
+  - _capability_ failures that scaling alleviated (better models); and
+  - _design_ failures that scaffolding fixed (better loops)
+  - Progress came from both fronts at once
 
 * Open Challenges on the Road Ahead
 
@@ -473,11 +468,9 @@ digraph GeneralAgent {
   - Memory that persists across sessions, not just within a loop
   - Safety when the action space touches the real world
 
-- **Key idea**: the history so far solved _how to act_; the frontier is _how
-  to act reliably and safely_
-
-- **Remark**: these challenges motivate the reasoning, memory, planning, and
-  safety lessons that follow
+- **Key idea**:
+  - _How to act_ is solved
+  - The frontier is _how to act reliably and safely_
 
 ## Summary
 
