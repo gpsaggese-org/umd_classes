@@ -13,7 +13,7 @@
 * Why Study the History of LLM Agents?
 
 - **Motivation**: today's agents did not appear fully formed
-  - They are the result of a decade of small, composable ideas
+  - Are the result of a decade of small, composable ideas
   - Understanding _why_ each step was taken explains why current agents are
     built the way they are
 
@@ -21,14 +21,14 @@
   that browse the web, edit code, and run experiments?
 
 - **Key idea**:
-  - Each capability we now take for granted (reasoning, tool use, grounding)
-    was once a separate research contribution
-  - The agentic loop is the _composition_ of these contributions
+  - The agentic loop is the _composition_ of these several contributions
+    (reasoning, tool use, grounding)
 
 * A Timeline of LLM Agents
 
-- **Goal**: place the key milestones on a single chronological axis before
-  studying each in detail
+- Key milestones on a single axis before studying each in detail
+  - The ordering is conceptual, not strictly by publication date
+  - Several of these ideas developed in parallel
 
 ```graphviz
 digraph Timeline {
@@ -48,9 +48,6 @@ digraph Timeline {
     Pre -> ICL -> CoT -> Ground -> ReAct -> Gen [label="  time"];
 }
 ```
-
-- **Remark**: the ordering is conceptual, not strictly by publication date
-  - Several of these ideas developed in parallel
 
 ## From Prompting to Acting
 

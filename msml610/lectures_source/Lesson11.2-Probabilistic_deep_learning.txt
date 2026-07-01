@@ -170,17 +170,17 @@
 * Neural Network Perceptron
 ::: columns
 :::: {.column width=55%}
-- Aka "artificial neuron", "logistic unit"
-- A perceptron has $n$ inputs and 1 output (like a brain neuron)
+- **Definition**: A perceptron has $n$ inputs and 1 output (like a brain neuron)
+  - Aka "artificial neuron", "logistic unit"
 
-- The inputs are combined using a non-linear activation function $\theta(s)$ to
-  implement:
+- **Intuition**: The inputs are combined using a non-linear activation function
+  $\theta(s)$ to implement:
   $$
   y = h_{\vw}(\vx) = \theta(\vw^T \vx)
   $$
   - Same functional form as logistic regression ($\theta$ is logit) or linear
     classification ($\theta$ is sign)
-- The parameters $\vw$ are typically called **weights** in neural network
+- The parameters $\vw$ are typically called _weights_ in neural network
   literature
 ::::
 :::: {.column width=40%}
@@ -224,16 +224,17 @@
 
 ::: columns
 :::: {.column width=55%}
-- **Sigmoid Function**:
-  - $\theta(s) = \frac{1}{1 + \exp(-s)}$
+- **Sigmoid Function**
+    $$\theta(s) = \frac{1}{1 + \exp(-s)}$$
   - Output range: $[0, 1]$
   - Smooth, differentiable, and used for probabilistic outputs
-  - Saturates at extremes; suffers from vanishing gradient
+  - Saturates at extremes (suffers from vanishing gradient)
 
-- **Hyperbolic Tangent (tanh)**:
-  - $\theta(s) = \tanh(s) = \frac{e^s - e^{-s}}{e^s + e^{-s}}$
+- **Hyperbolic Tangent**
+    $$\theta(s) = \tanh(s) = \frac{e^s - e^{-s}}{e^s + e^{-s}}$$
+  - Zero-centered
   - Output range: $[-1, +1]$
-  - Zero-centered; improves convergence over sigmoid
+  - Improves convergence over sigmoid
 ::::
 :::: {.column width=40%}
 
@@ -395,7 +396,7 @@
   - Numeric attributes are left unchanged (scaled to fit a fixed range, logged)
   - Categorical attributes can be one-hot encoded
 
-* Structure of feedforward neural network
+* Structure of Feedforward Neural Network
 
 ::: columns
 :::: {.column width=55%}

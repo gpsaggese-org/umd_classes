@@ -23,7 +23,11 @@ book.From_Data_To_Decisions
 
 - [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
 - [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
-- [ ] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+- [ ] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
+- [ ] IN PROGRESS: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+   Apply ./helpers_root/.claude/skills/slides.rules.md to msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt one slide at the time (i.e., chunks of code between `* ...`)
+   Start from ## Neural networks
+   Apply the change to one slide and wait for the user to confirm before moving forward to the next slide
 - [ ] Neural-Symbolic Decision Making
 
 ## Causal Probabilistic ML
