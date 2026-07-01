@@ -23,22 +23,23 @@
   - Speech recognition and synthesis
 
 * DL vs ML
-- Many ML methods can handle a large number of input variables
-  - **But**
-    - The path from input to output is very short (e.g., multiply and sum)
-    - There are no variable interactions
+- Many ML methods can handle a large number of input variables, _but_
+  - The path from input to output is very short (e.g., multiply and sum)
+  - There are no variable interactions
+  - The expressive power of such models is very limited
 
-- E.g., decision trees
+- **Examples**: decision trees
   - Allow long computation paths
   - Only a small fraction of variables can interact
 
-- The expressive power of such models is very limited
+- **Problem**:
   - Real-world concepts are far more complex
 
-## Biological inspiration
+## Biological Inspiration
 
 * Biological Inspiration for Neural Networks
-- To perform a function like in a biological system, replicate its structure
+- **Intuition**: To perform a function like in a biological system, replicate its
+  structure
 
 - There is a leap of faith: the _structure_ matters to achieve a _functionality_
 
@@ -48,7 +49,7 @@
   - You want to learn, the brain learns, the brain has many neurons and synapses
     $\implies$ build a system with many simple units connected together
 
-* Neurons in the brain
+* Neurons in the Brain
 ::: columns
 :::: {.column width=55%}
 - The brain is jam-packed with neurons
@@ -82,28 +83,28 @@
   - E.g., recurrent neural networks (RNNs) are used for sequence prediction
     tasks like language modeling
 
-* The "one learning algorithm" theory
+* The "One Learning Algorithm" Theory
 ::: columns
 :::: {.column width=55%}
 - The brain can perform various tasks
   - E.g., process vision, sense of touch, do math, play pickleball
   - Doesn't have thousands of different programs
-  - Seems to have a single learning algorithm
+  - Seems to have a _single_ learning algorithm
 
 - The "one learning algorithm" idea has been experimentally verified
   - Re-route the connection from eyes to the brain's sound-processing area
-  - After training, the brain can "see," e.g., visual discrimination
+  - After training, the brain can "see" (in the sense of visual discrimination)
 
 - The **AI dream**:
-  - If you can implement a (simplified) version of the brain algorithm, you can
-    have a machine that can learn anything
+  - If you can implement a version of the brain algorithm, you can have a machine
+    that can learn anything
 ::::
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/L11.Brain.png)
 ::::
 :::
 
-* Why resurgence of neural networks?
+* Why Resurgence of Neural Networks?
 - AI winter
   - Proposed in the 1950
   - Popular in '80s and '90s
