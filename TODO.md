@@ -11,6 +11,12 @@
 - AlphaEvolve
 - Monte Carlo search
 - Kaparthy's AutoResearch
+- https://www.manning.com/books/build-a-large-language-model-from-scratch
+- https://www.manning.com/books/build-a-reasoning-model-from-scratch
+
+- Add references to papers
+- Add more / better pictures
+- Summary
 
 ## From Data To Decisions
 book.From_Data_To_Decisions
@@ -28,6 +34,8 @@ book.From_Data_To_Decisions
    Start from ## Neural networks
    Apply the change to one slide and wait for the user to confirm before moving forward to the next slide
 - [ ] Neural-Symbolic Decision Making
+
+gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md

@@ -144,7 +144,6 @@ digraph Timeline {
 
 ## ReAct and the Reasoning-Acting Synergy
 
-// TODO(ai_gp): Redundant with previous lessons?
 * ReAct: Motivation
 
 - **Problem**: two families of methods each had a critical weakness
@@ -381,12 +380,8 @@ digraph ReActLoop {
 
 * Failure: Brittle Parsing and Grounding
 
-// TODO(ai_gp): Add problem
-- **Problem**
-
-- **(Naive) Solution**: let the model emit free-form text and parse the
-  intended action with regular expressions
-  - _Cons_: breaks whenever the model rephrases its output
+- **Problem**: early agents emitted actions as free-form text, parsed with
+  regular expressions, which breaks whenever the model rephrases its output
 
 - **Solution**: structured output (e.g., JSON matching a schema) plus a fixed,
   finite action space
@@ -439,8 +434,8 @@ digraph GeneralAgent {
 - **Problem**: every early agent invented its own ad-hoc action format,
   preventing reuse across projects
 
-- **Solution**: standardized _function calling_ / tool schemas
-  - Tools described once as `(name, typed parameters, description)`
+- **Solution**: standardized _function calling_ / tool schemas described once as
+  `(name, typed parameters, description)`
   - The model emits a structured call the runtime validates and executes
 
 - **Key idea**: standardizing the tool interface decoupled the _agent logic_

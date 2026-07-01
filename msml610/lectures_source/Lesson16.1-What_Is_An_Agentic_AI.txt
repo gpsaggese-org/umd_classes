@@ -291,27 +291,18 @@ digraph PerceivePlanAct {
   - Loops can run indefinitely without a stopping condition or step budget
   - Errors early in the loop can compound if the agent does not detect them
 
-* Worked Example: ReAct and the Loop in Practice
+* Preview: ReAct and the Loop in Practice
 
-- **Problem**: 
-  - Pure chain-of-thought reasoning produces text but never checks itself against
-    the world
-  - Pure action-only agents act without explaining why, making errors hard to
-    diagnose
-
-- **Solution**: _ReAct_ (Yao et al., 2022) interleaves reasoning traces
-  ("Thought") with actions ("Action") and their results ("Observation") in a
-  single trace
+- **Key idea**: _ReAct_ (Yao et al., 2022) is the canonical instance of the
+  perceive-plan-act loop expressed as a single text trace
+  - Interleaves reasoning traces (`Thought`) with actions (`Action`) and their
+    results (`Observation`)
   - `Thought` $\to$ `Action` $\to$ `Observation` $\to$ `Thought` $\to$ ...
-  - The reasoning trace explains _why_ an action was chosen
-  - The observation grounds the next thought in what actually happened
+  - The reasoning explains _why_ an action was chosen; the observation grounds
+    the next thought in what actually happened
 
-- **Example** (question answering with a search tool):
-  - `Thought`: _"I need the population of the city where X was born"_
-  - `Action`: `search("X birthplace")`
-  - `Observation`: _"X was born in City Y"_
-  - `Thought`: _"Now I need the population of Y"_
-  - $\to$ next `Action`
+- **Remark**: ReAct is covered in detail in Lesson 16.3 (motivation, trace,
+  worked example, and comparison to reason-only and act-only methods)
 
 ## Tools, Environments, and Observations
 
@@ -473,21 +464,18 @@ digraph AgentSystem {
 
 * Example: Grounding in WebShop
 
-- **Setup**: `WebShop` (Yao et al., 2022) is a simulated e-commerce site
-  - An agent must find and purchase a product matching a natural-language
-    instruction
-    - E.g., _"buy a red cotton t-shirt under \$20"_
-
-- **Grounding in practice**:
-  - Observation: a simplified text rendering of the current page (search
-    results, product listing, or product page)
-  - Action space: `search(query)`, `click(button_or_link)`
-  - Every action maps to a deterministic page transition in the simulator
+- **Setup**: `WebShop` (Yao et al., 2022) is a simulated e-commerce site where an
+  agent must purchase a product matching a natural-language instruction
+  - Action space: `search(query)`, `click(button_or_link)`, each mapping to a
+    deterministic page transition in the simulator
 
 - **Why this matters**:
   - Grounding does not require a real browser or real money
   - A faithful, constrained simulation is enough to train and evaluate grounded
     agents
+
+- **Remark**: WebShop's environment, action space, and findings are covered in
+  detail in Lesson 16.3
 
 ## A Taxonomy of Agentic Systems
 

@@ -18,7 +18,7 @@
 
 - **Motivation**: an agent is only as reliable as the _reasoning_ that drives
   its control loop
-  - As we saw in Lesson 16.3, the `Thought` step is what chooses each action
+  - As we saw, the `Thought` step is what chooses each action
   - A weak reasoner produces wasted actions, wrong plans, and unrecoverable
     errors
 
@@ -27,16 +27,13 @@
   - _How robust_ is it to irrelevant changes in the prompt?
   - _Can_ a model check and fix its own reasoning?
 
-- **Key idea**: this lesson looks _inside_ the reasoning step, not around it
-  - Lesson 16.2 gave the _mechanism_ (serial computation)
-  - Lesson 16.3 gave the _history_ (CoT, then ReAct)
-  - Here we study reasoning as an object with capabilities _and_ failure modes
+- This lesson looks _inside_ the reasoning step
 
 * What Do We Mean by "Reasoning"?
 
 - **Definition**: _reasoning_ is producing a conclusion through a chain of
   intermediate inferences, each following from the previous ones
-  - Contrast with _recall_, where the answer is retrieved in a single step
+  - Contrast with _recall_ (the answer is retrieved in a single step)
 
 - **Example**:
   - Recall: _"What is the capital of France?"_ $\to$ direct lookup
@@ -45,55 +42,29 @@
 
 - **Key idea**: reasoning needs _serial depth_, several dependent steps that
   cannot be collapsed into one
-
-- **Remark**: for an LLM, those intermediate steps are made of _tokens_, so
-  reasoning is literally text the model writes and then reads back
+  - For an LLM, those intermediate steps are made of _tokens_, so reasoning is
+    literally text the model writes and then reads back
 
 * Reasoning as Serial Computation: Recap and Beyond
 
-- **Recap** (Lesson 16.2): a single forward pass is a _fixed-depth_ circuit
+- **Recap**: a single forward pass is a _fixed-depth_ circuit
   - It cannot carry out an arbitrarily long chain of dependent steps in one shot
-  - Writing tokens adds serial depth: each token is another forward pass
+  - Writing tokens adds serial depth like further forward passes
 
-- **Beyond the recap**: this raises four questions this lesson answers
+- **Beyond the recap**: this raises four questions
   1. Are there _variants_ of chain-of-thought that reason better?
   2. Does reasoning _require_ a special prompt, or is it latent in the model?
   3. Why is reasoning _brittle_ to superficial changes like premise order?
   4. Can a model _self-correct_ its own reasoning?
 
-- **Key idea**: capability and brittleness are two sides of the same mechanism
-
-* Roadmap of This Lesson
-
-- Five threads, building on each other
-
-```graphviz
-digraph Roadmap {
-    rankdir=LR;
-    splines=true;
-    nodesep=0.4;
-    ranksep=0.55;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.5];
-
-    CoT   [label="CoT and\nits variants", fillcolor="#A0D6D1"];
-    NoP   [label="Reasoning\nwithout\nprompting", fillcolor="#A6E7F4"];
-    Order [label="Premise order\nand brittleness", fillcolor="#FFD1A6"];
-    Depth [label="Serial\ncomputation\nand depth", fillcolor="#A6C8F4"];
-    Self  [label="Limits of\nself-correction", fillcolor="#F4A6A6"];
-
-    CoT -> NoP -> Order -> Depth -> Self;
-}
-```
-
-- **Key idea**: we move from _how to elicit_ reasoning (variants, no prompt) to
-  _how it breaks_ (order, depth limits, failed self-correction)
+- **Key idea**: _capability_ and _brittleness_ are two sides of the same mechanism
 
 ## Chain-of-Thought and Its Variants
 
 * Chain-of-Thought: Quick Recap
 
-- **Recap** (Lessons 16.2-16.3): _chain-of-thought_ (CoT) prompting (Wei et
-  al., 2022) makes the model emit intermediate steps before the answer
+- **Recap** _Chain-of-thought_ (CoT) prompting (Wei et al., 2022) makes the model
+  emit intermediate steps before the answer
   ```
   prompt> Let's think step by step
   ```
@@ -104,45 +75,44 @@ digraph Roadmap {
 - **Question**: CoT is one recipe, but a whole family grew around it
   - What do the main variants change, and why?
 
-- **Remark**: we now go _beyond_ the basic prompt to the design space of
-  reasoning strategies
-
 * Why Does CoT Help? Two Hypotheses
 
 - **Question**: is CoT giving the model _more computation_, or just a better
   _prompt pattern_?
 
-- **Hypothesis 1** (computation): each step is a forward pass, so CoT adds
-  serial depth the architecture lacks (the Lesson 16.2 view)
+  - **Computation**: each step is a forward pass, so CoT adds serial depth the
+    architecture lacks
 
-- **Hypothesis 2** (elicitation): the steps put the model into a region of its
-  distribution where the right facts and format are more likely
+  - **Elicitation**: the steps put the model into a region of its distribution
+    where the right facts and format are more likely
 
-- **Key idea**: both are partly true, and they make different predictions
-  - Computation view: helps most on _serial_ tasks (arithmetic, multi-hop)
+- **Key idea**: both are partly true
+  - Computation view: helps most on _serial_ tasks (e.g., arithmetic, multi-hop)
   - Elicitation view: reasoning may be _latent_ and recoverable without a prompt
-    (next section)
 
 * Zero-Shot vs. Few-Shot CoT
 
+// TODO(ai_gp): Add an example
+- **Definition**: _zero-shot CoT_ adds only a trigger phrase (_"Let's think
+  step by step"_) with no worked examples
+
+// TODO(ai_gp): Add an example
 - **Definition**: _few-shot CoT_ places a handful of worked examples (with their
   reasoning) in the prompt before the target question
   - Demonstrates both the format _and_ the reasoning style
 
-- **Definition**: _zero-shot CoT_ adds only a trigger phrase (_"Let's think
-  step by step"_) with no worked examples
-
-\begingroup \scriptsize
-| **Variant** | **Prompt cost** | **When to prefer** |
-| ----------- | --------------- | ------------------ |
-| Few-shot CoT | High (examples) | Format matters, niche task |
-| Zero-shot CoT | Low (one phrase) | General reasoning, cheap |
-\endgroup
+#styled-table(
+  headers: ("Variant", "Prompt cost", "When to prefer"),
+  rows: (
+    ("Zero-shot CoT", "Low (one phrase)", "General reasoning, cheap"),
+    ("Few-shot CoT", "High (examples)", "Format matters, niche task"),
+  ),
+)
 
 - **Key idea**: both rely on an explicit textual trigger to _switch on_
   reasoning, an assumption we question in the next section
 
-* Self-Consistency: Sampling Many Chains
+* Self-Consistency
 
 - **Problem**: a single CoT chain can take one wrong turn and commit to it
 
@@ -150,18 +120,19 @@ digraph Roadmap {
   1. Sample _many_ reasoning chains with temperature $> 0$
   2. Extract the final answer from each
   3. Return the _majority_ answer (marginalize over reasoning paths)
-
-- **Intuition**: many _different_ correct derivations reach the same answer;
-  wrong derivations scatter across many different answers
   $$
   \hat{y} = \arg\max_{y} \; \sum_{i} \mathbb{1}[\text{answer}(\text{chain}_i) = y]
   $$
 
-- **Key idea**: reasoning becomes a _distribution_ to aggregate, not a single
-  trace to trust
+- **Intuition**:
+  - Reasoning becomes a _distribution_ to aggregate, not a single trace to trust
+  - Many _different_ correct derivations reach the same answer
+  - Wrong derivations scatter across many different answers
 
 * Search Over Reasoning: Tree and Graph of Thought
 
+::: columns
+:::: {.column width=50%}
 - **Problem**: self-consistency samples _independent_ chains and cannot revisit
   a promising partial path
 
@@ -169,6 +140,10 @@ digraph Roadmap {
   - _Tree-of-Thought_: branch into candidate steps, evaluate, expand the best
   - _Graph-of-Thought_: allow merging and reuse of intermediate results
 
+- **Key idea**: adds an explicit _evaluator_ and _backtracking_ that a linear
+  chain lacks, at the cost of many more model calls
+::::
+:::: {.column width=45%}
 ```graphviz
 digraph ToT {
     rankdir=TB;
@@ -180,19 +155,19 @@ digraph ToT {
     A -> A1; A -> A2; C -> C1;
 }
 ```
-
-- **Key idea**: adds an explicit _evaluator_ and _backtracking_ that a linear
-  chain lacks, at the cost of many more model calls
+::::
+:::
 
 * CoT Variants: Comparison
 
-\begingroup \scriptsize
-| **Method** | **Structure** | **Aggregation** | **Cost** |
-| ---------- | ------------- | --------------- | -------- |
-| Zero/few-shot CoT | Single chain | None | 1 call |
-| Self-consistency | Many chains | Majority vote | $k$ calls |
-| Tree-of-Thought | Tree + evaluator | Best path | Many calls |
-\endgroup
+#styled-table(
+  headers: ("Method", "Structure", "Aggregation", "Cost"),
+  rows: (
+    ("Zero/few-shot CoT", "Single chain", "None", "1 call"),
+    ("Self-consistency", "Many chains", "Majority vote", "$k$ calls"),
+    ("Tree-of-Thought", "Tree + evaluator", "Best path", "Many calls"),
+  ),
+)
 
 - **Key idea**: the variants trade _compute_ for _reliability_
   - More sampling and search reduce variance and catch wrong turns
@@ -313,14 +288,15 @@ digraph ToT {
 
 - **Example**: same facts, two orders
 
-\begingroup \scriptsize
-| **Forward order (easy)** | **Shuffled order (hard)** |
-| ------------------------ | ------------------------- |
-| If $A$ then $B$ | If $C$ then $D$ |
-| If $B$ then $C$ | If $A$ then $B$ |
-| If $C$ then $D$ | If $B$ then $C$ |
-| Given $A$, prove $D$ | Given $A$, prove $D$ |
-\endgroup
+#styled-table(
+  headers: ("Forward order (easy)", "Shuffled order (hard)"),
+  rows: (
+    ("If $A$ then $B$", "If $C$ then $D$"),
+    ("If $B$ then $C$", "If $A$ then $B$"),
+    ("If $C$ then $D$", "If $B$ then $C$"),
+    ("Given $A$, prove $D$", "Given $A$, prove $D$"),
+  ),
+)
 
 - **Interpretation**: the left column lets the model chain
   $A \to B \to C \to D$ by reading top to bottom
