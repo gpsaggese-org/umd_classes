@@ -1,39 +1,10 @@
-/*
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 16.1: What Is an Agentic AI?}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=75%}
-\vspace{1cm}
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- ReAct: Synergizing Reasoning and Acting in Language Models:
-  https://arxiv.org/abs/2210.03629
-- WebShop: Towards Scalable Real-World Web Interaction with Grounded
-  Language Agents: https://arxiv.org/abs/2207.01206
-
-::::
-:::
-*/
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=Lesson 16.1: What Is an Agentic AI?
+//- ReAct: Synergizing Reasoning and Acting in Language Models:
+//  https://arxiv.org/abs/2210.03629
+//- WebShop: Towards Scalable Real-World Web Interaction with Grounded
+//  Language Agents: https://arxiv.org/abs/2207.01206
 
 # What Is an Agentic AI?
 

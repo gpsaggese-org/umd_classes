@@ -32,11 +32,12 @@
     = \prod_{t=1}^{T} \Pr(x_t \mid x_1, \ldots, x_{t-1})
   $$
 
-- **Key idea**: the entire model reduces to one task
-  - Given the tokens so far, predict a distribution over the _next_ token
+- **Key idea**: the entire model implements one task
+  - _"Given the tokens so far, predict a distribution over the _next_ token"_
 
-- **Example**: given _"the capital of France is"_, the model puts most
-  probability mass on the token _"Paris"_
+- **Example**:
+  - Given _"the capital of France is"_
+  - The model puts most probability mass on the token _"Paris"_
 
 * Tokenization: From Text to Tokens
 
@@ -45,14 +46,13 @@
   - Word-level vocabularies explode and cannot handle unseen words
   - Character-level sequences are too long to model efficiently
 
-- **Solution**: _subword tokenization_ (e.g., byte-pair encoding, BPE) splits
-  text into frequent subword units
+- **Solution**: _subword tokenization_ splits text into frequent subword units
   - Common words become single tokens
   - Rare words split into several subword tokens
 
-- **Example**: _"tokenization"_ $\to$ `token` + `ization`
+- **Example**: The word _"tokenization"_ $\to$ `token` + `ization`
 
-- **Remark**: token count, not word count, drives context limits and cost
+- **Remark**: token count (not word count) drives context limits and cost
 
 ## The Transformer Architecture
 
@@ -71,14 +71,22 @@
   - Every position can directly attend to every other position
   - The whole sequence is processed in parallel during training
 
-- **Key idea**: _"Attention Is All You Need"_ — no recurrence, no convolution
+- **Key idea**:
+  - _"Attention Is All You Need"_
+  - No recurrence, no convolution
 
 * The Transformer: High-Level Architecture
 
-- **Definition**: a decoder-only transformer is a stack of $N$ identical
-  _blocks_ applied to token embeddings
+::: columns
+:::: {.column width=50%}
+- **Definition**: a decoder-only transformer is a stack of $N$ identical _blocks_
+  applied to token embeddings
   - Each block mixes information across positions (attention) and transforms
     each position (feed-forward)
+
+- **Remark**: modern LLMs are almost all _decoder-only_ stacks of this form
+::::
+:::: {.column width=35%}
 
 ```graphviz
 digraph Transformer {
@@ -99,8 +107,8 @@ digraph Transformer {
     Tok -> Emb -> B1 -> B2 -> Bd -> Head -> Prob;
 }
 ```
-
-- **Remark**: modern LLMs are almost all _decoder-only_ stacks of this form
+::::
+:::
 
 * Embeddings and Positional Encoding
 

@@ -173,11 +173,11 @@ def _main(parser: argparse.ArgumentParser) -> None:
     # Prepare command by quoting all arguments to preserve special characters.
     quoted_parts = [shlex.quote(part) for part in cmd_parts]
     cmd = " ".join(quoted_parts)
-    _LOG.info("Running command: %s", cmd)
     if args.daemon:
         # Skim auto-reloads PDF on change, so skip notes_to_pdf open action.
         cmd += " --skip_action=open --daemon"
     # Execute the command.
+    _LOG.info("Running command: '%s'", cmd)
     hsystem.system(cmd, suppress_output=False)
 
 

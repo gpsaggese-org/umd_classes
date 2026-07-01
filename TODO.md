@@ -2,6 +2,10 @@
 
 - LLM
   - Kaparthy's LLM
+  - https://github.com/karpathy/nanochat
+  - https://github.com/karpathy/nanoGPT
+  - https://github.com/karpathy/micrograd
+  - https://karpathy.ai/
 - AutoEDA
 - IN PROGRESS: Topics from Berkeley class
 - AlphaEvolve
