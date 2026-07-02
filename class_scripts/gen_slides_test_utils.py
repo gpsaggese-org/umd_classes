@@ -30,34 +30,40 @@ _LOG = logging.getLogger(__name__)
 # #############################################################################
 
 
+# TODO(ai_gp): If it's used by a single class make it static in that class.
 def get_lesson_files(course_dir: str) -> List[str]:
     """
     Discover all lesson files in a course directory.
 
     :param course_dir: Course directory (data605 or msml610)
     :return: Sorted list of lesson file paths
+        # TODO(ai_gp): Add an example of output
     """
     lectures_source_dir = os.path.join(course_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     lesson_files = []
     for file in os.listdir(lectures_source_dir):
+        # TODO(ai_gp): Add an example of the string in file.
         if re.match(r"^Lesson\d+", file):
             file_path = os.path.join(lectures_source_dir, file)
             lesson_files.append(file_path)
     return sorted(lesson_files)
 
 
+# TODO(ai_gp): If it's used by multiple classes make it private.
 def get_lesson_numbers(course_dir: str) -> List[str]:
     """
     Get all lesson numbers in a course.
 
     :param course_dir: Course directory (data605 or msml610)
     :return: Sorted list of lesson numbers like ["01.1", "01.2", ...]
+        # TODO(ai_gp): Add an example of output
     """
     lectures_source_dir = os.path.join(course_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     lessons = []
     for file in os.listdir(lectures_source_dir):
+        # TODO(ai_gp): Add an example of the string in file.
         match = re.match(r"Lesson(\d+(?:\.\d+)?)", file)
         if match:
             lesson_num = match.group(1)
@@ -70,11 +76,13 @@ def get_lesson_numbers(course_dir: str) -> List[str]:
 # #############################################################################
 
 
+# TODO(ai_gp): If it's used by a single class make it static in that class.
 def collect_all_lessons() -> Dict[str, List[str]]:
     """
     Collect all lessons organized by course.
 
     :return: Dict with course dirs as keys and lesson lists as values
+        # TODO(ai_gp): Add an example of output
     """
     all_lessons = {}
     for course_dir in csccouti.VALID_DIRS:
@@ -152,7 +160,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
 
 class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     """
-    Base class for integration tests for preprocess_notes.py script.
+    Base class for integration tests for `preprocess_notes.py` script.
     """
 
     COURSE_DIR: str = ""
@@ -189,6 +197,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             input_arg = shlex.quote(input_file)
             output_arg = shlex.quote(output_file)
             # Build and execute command.
+            # TODO(ai_gp): Add an example of how cmd looks like.
             cmd = (
                 f"preprocess_notes.py "
                 f"--input={input_arg} "
@@ -198,23 +207,25 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             )
             _LOG.info("Running command: %s", cmd)
             hsystem.system(cmd)
-            sys.stdout.flush()
+            #sys.stdout.flush()
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(output_file)
             content = hio.from_file(output_file)
             self.check_string(content, fuzzy_match=True)
-            sys.stdout.flush()
+            #sys.stdout.flush()
             _LOG.info(
                 "Verified %s preprocessing for lesson %s",
                 output_type.upper(),
                 lesson,
             )
 
+    # TODO(ai_gp): Add a docstring and comments to all these functions.
     @pytest.mark.slow
     def test_preprocess_notes_pdf(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
+        # TODO(ai_gp): Assign pdf to a variable.
         self._run_preprocess_notes_py(
             self, self.COURSE_DIR, output_dir, lessons, "pdf"
         )
@@ -250,6 +261,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
 
     COURSE_DIR: str = ""
 
+    # TODO(ai_gp2): Make this 
     def _run_notes_to_pdf_py(
         self,
         course_dir: str,
@@ -259,7 +271,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         skip_actions: Optional[List[str]] = None,
     ) -> None:
         """
-        Test preprocessing output (MD or TeX) for a set of lessons.
+        Test notes_to_pdf.py output (MD or TeX) for a set of lessons.
 
         :param course_dir: Course directory (e.g., "data605")
         :param output_dir: Output directory for test results
@@ -327,6 +339,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 "Verified %s output for lesson %s", output_type.upper(), lesson
             )
 
+    # TODO(ai_gp2): Add test_notes_to_pdf_typ
     @pytest.mark.superslow
     def test_notes_to_pdf_md(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
@@ -354,7 +367,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
 
 class Run_gen_slides_py_TestCase(hunitest.TestCase):
     """
-    Base class for testing gen_slides.py script with course-specific lessons.
+    Base class for testing `gen_slides.py` script with course-specific lessons.
     """
 
     COURSE_DIR: str = ""
@@ -371,6 +384,7 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         )
         hsystem.system(cmd)
 
+    # TODO(ai_gp): Add docstrings
     @pytest.mark.slow
     def test_gen_slides_first_lesson(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")

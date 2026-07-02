@@ -30,6 +30,7 @@ book.From_Data_To_Decisions
 - [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
 - [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
 - [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
+- [ ] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
 - [ ] IN PROGRESS: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
   - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
 
@@ -147,6 +148,46 @@ https://github.com/causify-ai/helpers/issues/1276
 
 Remove --fail_on_pandoc_warnings
 Remove open by default
+
+### IN PROGRESS: [ ] Make the unit tests pass
+
+pytest msml610/test
+
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_gen_slides_first_lesson
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_render_all_lessons
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_md
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_tex
+
+### IN PROGRESS: Failing tests
+
+pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test3_ast_transform_inline_formatting_columns
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_typst_abbrevs::test_end_to_end
 
 ### IN PROGRESS: [ ] Improve unit testing
 

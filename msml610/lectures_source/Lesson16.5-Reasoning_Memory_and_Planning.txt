@@ -1,0 +1,551 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=Lesson 16.5: Reasoning, Memory, and Planning
+//- Grokked Transformers are Implicit Reasoners:
+//  https://arxiv.org/abs/2405.15071
+//- HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language
+//  Models: https://arxiv.org/abs/2405.14831
+//- Is Your LLM Secretly a World Model of the Internet? Model-Based Planning
+//  for Web Agents: https://arxiv.org/abs/2411.06559
+
+# Reasoning, Memory, and Planning
+
+## Motivation: From Single-Shot Reasoning to a Persistent Loop
+
+* Why Memory and Planning Deserve Their Own Lesson
+
+- **Motivation**: Lesson 16.4 studied reasoning as a _single_ chain of tokens
+  inside one episode
+  - Real agents run _many_ episodes, over _long_ horizons, revisiting the
+    _same_ world
+  - A reasoner that forgets everything between episodes cannot improve, avoid
+    repeated mistakes, or act on facts learned yesterday
+
+- **Question**: Lesson 16.3 closed by asking how reasoning, memory, and
+  planning combine to fix long-horizon failures
+  - Lesson 16.4 closed by asking how memory and planning extend single-shot
+    reasoning across a full loop
+  - This lesson answers both
+
+- **Key idea**: memory extends reasoning _across time_, planning extends it
+  _across actions_
+
+* What Do We Mean by Memory and Planning?
+
+- **Definition**: _memory_ is the mechanism an agent uses to carry information
+  forward, either within an episode or across episodes
+
+- **Definition**: _planning_ is deciding a sequence of actions _before_ (or
+  while) executing them, rather than choosing one action at a time reactively
+  - As introduced in Lesson 16.1, planning is the step that picks the next
+    action; here we ask how far ahead that step can look
+
+- **Key idea**: both extend the perceive-plan-act loop (Lesson 16.1) along a
+  different axis
+  - Memory: what persists
+  - Planning: how far ahead the agent looks before acting
+
+* Two Threads to Reconnect
+
+- **Thread 1 (Memory)**: where does an agent's knowledge live?
+  - _Working memory_: the context window (Lesson 16.2)
+  - _External long-term memory_: a retrieval system (HippoRAG)
+  - _Parametric long-term memory_: reasoning baked into the weights (grokking)
+
+- **Thread 2 (Planning)**: how does an agent choose actions?
+  - _Reactive_: ReAct-style, one step at a time (Lesson 16.3)
+  - _Model-based_: simulate outcomes with a learned _world model_ before acting
+
+- **Roadmap**: working vs. long-term memory $\to$ HippoRAG $\to$ grokking
+  $\to$ world models $\to$ model-based planning for web agents
+
+## Working Memory vs. Long-Term Memory
+
+* Working Memory: The Context Window as a Scratchpad
+
+- **Definition**: _working memory_ is everything the model can attend to in
+  the current forward pass, i.e., the tokens in its context window
+  - As we saw in Lesson 16.2, this includes the prompt, the CoT scratchpad,
+    and the KV-cache of past tokens
+
+- **Properties**:
+  - _Fast_: no retrieval step, every token is directly attendable
+  - _Bounded_: capped by the context window size
+  - _Volatile_: discarded when the episode ends, unless copied elsewhere
+
+- **Key idea**: CoT (Lesson 16.4) is reasoning conducted _entirely_ in working
+  memory
+  - This is why long reasoning chains are expensive: they consume the same
+    finite resource as everything else in the prompt
+
+* Long-Term Memory: Beyond What Fits in Context
+
+- **Problem**: an agent that runs for days, or across many episodes,
+  accumulates far more information than any context window can hold
+
+- **Definition**: _long-term memory_ is information that persists _outside_
+  the context window and is brought in only when needed
+
+- Two ways to realize long-term memory
+  1. _External_: store facts in a database or knowledge graph, retrieve into
+     the context window on demand (e.g., HippoRAG)
+  2. _Parametric_: bake the facts and the reasoning over them directly into the
+     model's weights via training (e.g., grokking)
+
+- **Key idea**: the two are not competitors; a production agent typically uses
+  both
+
+* Working vs. Long-Term Memory: Comparison
+
+```{=typst}
+#styled-table(
+  headers: ("Property", "Working memory", "Long-term memory"),
+  rows: (
+    ("Location", "Context window", "External store or weights"),
+    ("Capacity", "Fixed, small", "Effectively unbounded"),
+    ("Access cost", "Free (already attended)", "Retrieval or recall step"),
+    ("Persistence", "One episode", "Across episodes"),
+    ("Failure mode", "Overflow, truncation", "Retrieval miss, stale facts"),
+  ),
+)
+```
+
+- **Key idea**: moving information from long-term to working memory is
+  exactly _retrieval_, the bottleneck the next two sections address
+
+* The Core Problem: Retrieval, Not Storage
+
+- **Question**: storing facts is easy (a database scales); what is hard?
+
+- **Problem**: _retrieval_, choosing the small subset of stored facts that
+  answers the current query
+  - **Single-hop**: the query directly mentions the needed fact; nearest-
+    neighbor search over embeddings usually works
+  - **Multi-hop**: the answer requires _chaining_ facts that were never stated
+    together in any single passage
+  - Standard retrieval-augmented generation (RAG) is built for the single-hop
+    case
+
+- **Key idea**: multi-hop retrieval needs _structure_ across facts, not just
+  similarity between a query and one passage
+  - This is exactly the gap HippoRAG targets
+
+## Neurobiologically Inspired Memory: HippoRAG
+
+* Problem: Why Standard RAG Struggles with Multi-Hop Facts
+
+- **Recap**: standard RAG embeds the query, retrieves the top-$k$ most similar
+  passages, and pastes them into the context window
+
+- **Problem**: a multi-hop question (_"Where did the director of the film
+  from [studio] X get their degree?"_) needs facts from _several_ passages
+  that individually look unrelated to the query
+  - Similarity search on the query embedding misses the second and third hop
+  - Iterative methods (retrieve, reason, retrieve again) fix this but pay for
+    _multiple_ LLM calls per query
+
+- **Question** (Gutiérrez et al., 2024): can a single retrieval pass integrate
+  information the way a brain consolidates experiences into associative
+  memory?
+
+* Biological Inspiration: The Hippocampal Indexing Theory
+
+- **Fact**: in mammalian brains, the _hippocampus_ and _neocortex_ play
+  distinct memory roles
+  - The neocortex stores rich, slowly-consolidated knowledge
+  - The hippocampus builds a fast, sparse _index_ of associations between
+    pieces of that knowledge, without duplicating the knowledge itself
+
+- **Key idea**: the hippocampus does not store facts, it stores _pointers
+  between_ facts, which is what makes multi-hop association fast
+
+- **Mapping to LLMs**:
+  - Neocortex $\to$ the LLM's parametric knowledge and the raw text corpus
+  - Hippocampal index $\to$ a knowledge graph over entities and relations
+  - Pattern separation and completion $\to$ graph retrieval that jumps across
+    linked entities
+
+* HippoRAG: Architecture Overview
+
+::: columns
+:::: {.column width=55%}
+- **Solution** (Gutiérrez et al., 2024): _HippoRAG_ builds an offline
+  knowledge graph once, then answers queries with a _single_ graph-based
+  retrieval pass
+
+- Three stages
+  1. _Offline_: extract facts from the corpus (open information extraction)
+  2. _Offline_: assemble facts into a knowledge graph
+  3. _Online_: retrieve via personalized PageRank over that graph
+::::
+:::: {.column width=40%}
+```graphviz
+digraph HippoRAG {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
+    Text  [label="Corpus\n(raw text)", fillcolor="#FFD1A6"];
+    OpenIE [label="Open IE", fillcolor="#A0D6D1"];
+    KG    [label="Knowledge\nGraph", fillcolor="#B2E2B2"];
+    PPR   [label="Personalized\nPageRank", fillcolor="#A0D6D1"];
+    Ans   [label="Retrieved\nPassages", fillcolor="#A6C8F4"];
+    Text -> OpenIE -> KG -> PPR -> Ans;
+}
+```
+::::
+:::
+
+- **Key idea**: separating _offline_ indexing from _online_ retrieval means a
+  query pays for one graph walk, not several LLM calls
+
+* Step 1: Offline Indexing via Open Information Extraction
+
+- **Definition**: _open information extraction_ (open IE) extracts
+  `(subject, relation, object)` triples from text without a fixed schema
+  - _Example_: _"Marie Curie discovered radium"_ $\to$ `(Marie Curie,
+    discovered, radium)`
+
+- **Algorithm**:
+  1. Run an LLM over each passage to extract triples
+  2. Each triple contributes two _nodes_ (subject, object) and one labeled
+     _edge_ (relation)
+  3. Merge nodes referring to the same entity across passages (synonymy)
+
+- **Key idea**: this is done _once_, offline, over the whole corpus
+  - The cost is amortized across all future queries, unlike iterative
+    retrieval which repeats LLM calls per query
+
+* Step 2: Building the Knowledge Graph
+
+- **Definition**: the extracted triples form a graph $G = (V, E)$
+  - $V$: entities mentioned anywhere in the corpus
+  - $E$: relations between them, plus a link from each entity back to every
+    passage that mentions it
+
+- **Key idea**: this graph is the _hippocampal index_
+  - It does not replace the corpus (the neocortex); it stores _how_ pieces of
+    the corpus relate
+  - Two entities that never co-occur in one passage can still be _close_ in
+    the graph if a chain of other entities connects them
+
+- **Example**: _"Director"_ and _"University"_ never appear in the same
+  sentence, but both connect through _"Film"_ and _"Studio"_ nodes
+
+* Step 3: Online Retrieval via Personalized PageRank
+
+- **Problem**: given a query, which graph nodes are relevant?
+
+- **Solution**: run _personalized PageRank_ (PPR), seeded at the entities
+  mentioned in the query
+  $$
+  \mathbf{p} = (1 - \alpha) \, \mathbf{q} + \alpha \, \mathbf{W} \mathbf{p}
+  $$
+  - $\mathbf{q}$: the _reset_ vector, concentrated on query entities
+  - $\mathbf{W}$: the graph's transition matrix
+  - $\alpha$: damping factor controlling how far probability mass spreads
+
+- **Algorithm**:
+  1. Extract entities from the query with the same open IE step
+  2. Seed PPR at those entities
+  3. Rank passages by the PPR mass on the entities they mention
+  4. Return the top-ranked passages to the LLM
+
+* HippoRAG: Worked Example
+
+- **Problem**: _"Where did the director of [Film] study?"_
+
+- **Solution** (single PPR pass)
+  1. Seed: the `[Film]` entity node
+  2. PPR spreads mass along `[Film]` $\to$ `directed_by` $\to$ `[Director]`
+  3. Mass continues along `[Director]` $\to$ `studied_at` $\to$ `[University]`
+  4. Passages mentioning `[University]` rank highly, even though no single
+     passage mentions `[Film]` and `[University]` together
+
+- **Interpretation**: one graph walk implicitly performs the _multi-hop chain_
+  that standard RAG would need several retrieval-and-reason rounds to find
+
+* HippoRAG: Results and Efficiency
+
+- **Findings** (Gutiérrez et al., 2024), on multi-hop QA benchmarks:
+  - Outperforms standard RAG retrieval by up to $20\%$ on multi-hop questions
+  - Matches iterative retrieval-and-reason methods (e.g., IRCoT) in accuracy
+  - Does so with a _single_ retrieval pass: $10$-$30\times$ cheaper and
+    $6$-$13\times$ faster than the iterative alternative
+  - Combining HippoRAG with iterative reasoning yields further gains, i.e.,
+    the two are complementary, not substitutes
+
+- **Key idea**: structuring long-term memory as a graph, indexed the way a
+  hippocampus indexes experience, buys most of the accuracy of expensive
+  multi-hop search at a fraction of the cost
+
+## Implicit Reasoning and Grokking
+
+* Problem: Can Reasoning Live Inside the Weights?
+
+- **Recap**: HippoRAG keeps facts _external_ and retrieves them on demand
+
+- **Question**: could a model instead learn to _chain_ facts internally, so
+  that a multi-hop answer comes out of a single forward pass, with no
+  retrieval step at all?
+  - This would be reasoning stored as _parametric long-term memory_
+
+- **Motivation**: Lesson 16.4 showed a forward pass is fixed-depth and needs
+  CoT tokens for serial reasoning
+  - Could _training_, rather than more tokens, give a model the equivalent of
+    a pre-computed reasoning chain?
+
+* What Is Grokking?
+
+- Aka:
+  - "Delayed generalization"
+
+- **Definition**: _grokking_ is a training phenomenon where a model first
+  _memorizes_ the training set (near-zero training loss, poor test accuracy),
+  then, after continuing to train far past that point, suddenly
+  _generalizes_ (test accuracy jumps to near-perfect)
+
+- **Key idea**: the useful behavior is hidden _after_ the point where training
+  loss looks converged
+  - Stopping early, the usual practice, would discard exactly the phase where
+    generalization emerges
+
+* Experimental Setup: Composition vs. Comparison
+
+- **Setup** (Wang et al., 2024): train a transformer on synthetic facts
+  designed so the test set requires _combining_ facts never seen combined
+  during training
+
+- Two reasoning types tested
+  - **Composition**: infer $a \to c$ from $a \to b$ and $b \to c$ (chain facts
+    together)
+  - **Comparison**: infer a relation between $a$ and $b$ from separately
+    known attributes of $a$ and of $b$
+
+- **Key variable**: the _ratio_ of atomic facts (directly stated) to inferred
+  facts (requiring composition or comparison) in the training data
+  - This ratio controls whether and how fast grokking occurs
+
+* Finding: Composition Fails to Generalize
+
+- **Finding** (Wang et al., 2024): on composition, grokked transformers reach
+  near-perfect accuracy on in-distribution (ID) test facts
+  - But accuracy on out-of-distribution (OOD) composition facts, i.e., chains
+    using entities in combinations never seen even indirectly, stays low
+
+- **Interpretation**: the model learns a _lookup-like_ shortcut for the
+  specific chains it was exposed to, not a general chaining _procedure_
+  - Systematic generalization, applying the same rule to genuinely new
+    combinations, does not emerge for composition
+
+* Finding: Comparison Generalizes
+
+- **Finding** (Wang et al., 2024): on comparison, grokked transformers
+  generalize to OOD test facts as well as ID ones
+
+- **Contrast with composition**:
+
+```{=typst}
+#styled-table(
+  headers: ("Task", "ID accuracy", "OOD accuracy"),
+  rows: (
+    ("Composition", "Near-perfect", "Low"),
+    ("Comparison", "Near-perfect", "Near-perfect"),
+  ),
+)
+```
+
+- **Key idea**: grokking is not a single uniform capability
+  - The same training recipe produces systematic generalization for one
+    reasoning type and shortcut memorization for another
+
+* Why the Difference? Generalizing vs. Memorizing Circuits
+
+- **Question**: what inside the network explains the gap?
+
+- **Interpretation** (Wang et al., 2024): grokking forms two competing kinds
+  of internal circuits
+  - A _memorizing_ circuit that stores training examples directly
+  - A _generalizing_ circuit that implements a reusable rule
+
+- **Key idea**: which circuit dominates depends on which is more
+  _parameter-efficient_ for that task
+  - Comparison admits a compact generalizing circuit that outcompetes
+    memorization once training continues long enough
+  - Composition's generalizing circuit is comparatively less efficient, so
+    memorization keeps winning even after prolonged training
+
+* Grokked Transformers vs. Frontier Models
+
+- **Finding** (Wang et al., 2024): on complex composition and comparison
+  reasoning tasks built from their synthetic facts, fully grokked
+  (small, task-specific) transformers achieve near-perfect accuracy where
+  **GPT-4-Turbo** and **Gemini-1.5-Pro**, prompted with the same facts in
+  context, fail substantially
+
+- **Interpretation**: this is not a claim that grokked models are smarter in
+  general
+  - It shows that reasoning _compiled into weights_ over a fixed body of facts
+    can outperform reasoning _read off_ the same facts placed in a context
+    window, at least on this evaluation
+
+* Implication: Parametric Memory as Implicit Long-Term Memory
+
+- **Key idea**: grokking demonstrates a _second_ route to long-term memory,
+  complementary to HippoRAG's external graph
+  - HippoRAG: facts stay external, retrieved into working memory per query
+  - Grokking: facts (and some reasoning over them) are absorbed into the
+    weights, available with no retrieval step
+
+- **Limitations**:
+  - Grokking needs extensive training well past apparent convergence, i.e., it
+    is not a knob available at inference time
+  - Generalization is _task-dependent_ (comparison, not composition)
+  - Updating parametric memory means re-training, unlike appending a document
+    to a retrieval index
+
+- **Open question**: how do we get the update-ability of external memory with
+  the low latency of parametric memory?
+
+## World Models for Planning
+
+* Problem: Reactive Agents and the Cost of Search
+
+- **Recap**: ReAct-style agents (Lesson 16.3) choose one action, observe the
+  real result, then choose the next
+  - This is _reactive_: every candidate action is tried for real before its
+    outcome is known
+
+- **Problem**: on the web, many actions are _irreversible_ (submit an order,
+  delete a file, send a message)
+  - Test-time tree search (Lesson 16.4's Tree-of-Thought, applied to actions)
+    would try and backtrack through several candidates, but backtracking is
+    unavailable once a real action fires
+  - Trying actions on the live web is also slow and can have side effects
+
+- **Question** (Gu et al., 2024): can an agent evaluate candidate actions
+  _without_ executing them for real?
+
+* Solution: An LLM as a World Model
+
+- **Definition**: a _world model_ predicts the next state (or observation)
+  that would result from taking an action in a given state, without actually
+  taking it
+  $$
+  \hat{s}_{t+1} = M(s_t, a_t)
+  $$
+
+- **Key idea**: if an LLM can play the role of $M$, an agent can _simulate_
+  several candidate actions internally, compare the imagined outcomes, and
+  only execute the best one for real
+  - This turns planning into search over _imagined_ trajectories, not real
+    ones, restoring the backtracking that irreversibility otherwise forbids
+
+- **Question**: is a generic LLM already an implicit world model of the web,
+  or does it need to be trained for this?
+
+* Training the World Model: Predicting State Transitions
+
+- **Solution** (Gu et al., 2024): fine-tune an LLM (_Dreamer-7B_) on a
+  synthesized dataset of `(state, action) -> next state` transitions
+  collected from web interactions
+
+- **Algorithm** (data synthesis pipeline)
+  1. Collect trajectories of `(observation, action, next observation)` from
+     web environments
+  2. Convert raw HTML/DOM observations into a compact textual state
+     representation
+  3. Train the model to predict the _next_ textual state given the current
+     state and a candidate action
+
+- **Key idea**: this is a specialized, smaller model, not the same LLM doing
+  the acting
+  - Separating the _actor_ from the _simulator_ keeps each component focused
+
+* WebDreamer: Simulate Before You Act
+
+::: columns
+:::: {.column width=55%}
+- **Algorithm** (_WebDreamer_):
+  1. At each step, propose $k$ candidate actions
+  2. For each candidate, ask the world model to _imagine_ the resulting state
+  3. Score each imagined state against the task goal
+  4. Execute only the highest-scoring candidate _for real_
+
+- **Key idea**: search happens entirely in _imagination_
+  - The real environment sees exactly one action per step, so
+    irreversibility is no longer a problem
+::::
+:::: {.column width=40%}
+```graphviz
+digraph WebDreamer {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
+    Agent [label="Agent LLM\n(propose k actions)", fillcolor="#F4A6A6"];
+    WM    [label="World Model\n(imagine outcomes)", fillcolor="#A0D6D1"];
+    Score [label="Score vs. goal", fillcolor="#A6E7F4"];
+    Env   [label="Real Web Env\n(1 action executed)", fillcolor="#B2E2B2"];
+    Agent -> WM -> Score -> Agent [label="  best action"];
+    Agent -> Env [label="  execute"];
+}
+```
+::::
+:::
+
+* WebDreamer: Efficiency and Real-World Results
+
+- **Findings** (Gu et al., 2024):
+  - $4$-$5\times$ more efficient than test-time tree search over the real
+    environment on VisualWebArena, at competitive accuracy
+  - Effective on _sandbox_ benchmarks (e.g., WebArena-style tasks) and on
+    _real_, live websites (Online-Mind2Web, Mind2Web-Live), where an actual
+    tree search would risk real side effects
+  - The specialized world model, Dreamer-7B, reaches simulation quality
+    comparable to prompting **GPT-4o** directly for the same predictions,
+    at much lower cost
+
+- **Key idea**: a modest, purpose-trained world model is enough to unlock
+  search-quality planning in an environment where real search is unsafe
+
+* Reasoning, Memory, and Planning: The Full Loop
+
+- **Key idea**: the three pieces of this lesson compose into one control loop
+
+- **Putting it together**:
+  - _Reasoning_ (Lesson 16.4) decides what to do with the facts in working
+    memory right now
+  - _Long-term memory_ (HippoRAG, grokking) supplies facts that do not fit,
+    or were never placed, in the context window
+  - _Planning with a world model_ (WebDreamer) lets the agent evaluate the
+    consequences of an action before committing to it, using imagined
+    rather than real rollouts
+
+- **Example**: an enterprise agent retrieves policy facts via a HippoRAG-style
+  graph, reasons over them with CoT, and simulates a risky action with a
+  world model before executing it
+
+## Summary
+
+* Reasoning, Memory, and Planning: Summary and Open Questions
+
+- **Key takeaways**:
+  - _Working memory_ (the context window) is fast but bounded; _long-term
+    memory_ persists beyond it, either _externally_ (HippoRAG) or
+    _parametrically_ (grokking)
+  - _HippoRAG_ indexes a corpus as a knowledge graph, modeled on hippocampal
+    indexing theory, and answers multi-hop queries with one personalized
+    PageRank pass, matching iterative retrieval at a fraction of the cost
+  - _Grokking_ shows reasoning can be compiled into weights through extended
+    training, but generalization is task-dependent: it emerges for
+    comparison, not composition
+  - _World models_ let an agent simulate candidate actions before acting,
+    restoring search in environments (like the web) where real actions are
+    irreversible
+  - _WebDreamer_ operationalizes this with a trained world model, gaining
+    $4$-$5\times$ efficiency over live tree search
+
+- **Open questions**:
+  - Can external and parametric long-term memory be combined into a single
+    update-able, low-latency system?
+  - How accurate must a world model be before simulated search becomes
+    unreliable, and how would an agent know?
+  - How do these mechanisms trade off against the inference-time techniques
+    of Lesson 16.6?

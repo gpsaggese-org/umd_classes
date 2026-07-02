@@ -493,12 +493,12 @@
 :::
 
 * Conventions for Neurons in a Neural Network
-- Each neuron $x^{(l)}_j$:
+- **Definition**: each neuron $x^{(l)}_j$:
   - Belongs to a layer with index $l$
   - Accepts inputs from the previous layer (scanning index $i$)
   - Has an index $j$ in the layer for its output
 
-- Weights are identified by 3 indices $w^{(l)}_{ij}$ where:
+- **Definition**: weights are identified by 3 indices $w^{(l)}_{ij}$ where:
   - $ij$ are organized as input-output
   - $0 \le l \le L$ denotes the layer
   - $0 \le j \le d(l)$ denotes the output of the layer (i.e., the neuron in the
@@ -510,52 +510,50 @@
 // TODO: Add pic
 
 * Feedforward Propagation Algorithm
-- The output of the generic $l$-th layer is $\vx^{(l)}$
-
-- The outputs of the input layer ($l = 0$) are the inputs of the network:
-  $$\vx^{(0)} = (x^{(0)}_0, x^{(0)}_1, ..., x^{(0)}_{d(0)}) = \vx = (1, x_1, ..., x_d)$$
-
-- The output of the $j$-th neuron of the $l$-th layer is $x_j^{(l)}$
-  - Has $d(l-1)$ inputs from the previous layer combined with the
-    weights
-  - Computes the signal $s^{(l)}_j$
-  - The activation function $\theta$ is applied:
-    $$
-    x^{(l)}_j = \theta(s^{(l)}_j) = \theta(\sum_{i=0}^{d(l-1)} w^{(l)}_{ij} x^{(l-1)}_i)
-    $$
-
-- The output of the network is the output of the neurons in the last layer
-  $$
-  y = h(\vx) = x^{(L)}_1
-  $$
-  - Outputs are $s^{(L)}_1$ for regression or $\theta(s^{(L)}_1)$ for classification
+- **Algorithm**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
+  1. The outputs of the input layer ($l = 0$) are the inputs of the network
+     $$
+     \vx^{(0)} = (x^{(0)}_0, x^{(0)}_1, ..., x^{(0)}_{d(0)}) = \vx = (1, x_1, ..., x_d)
+     $$
+  2. The output of the $j$-th neuron of the $l$-th layer is $x_j^{(l)}$
+     - Has $d(l-1)$ inputs from the previous layer combined with the
+       weights
+     - Computes the signal $s^{(l)}_j$
+     - The activation function $\theta$ is applied
+       $$
+       x^{(l)}_j = \theta(s^{(l)}_j) = \theta(\sum_{i=0}^{d(l-1)} w^{(l)}_{ij} x^{(l-1)}_i)
+       $$
+  3. The output of the network is the output of the neurons in the last layer
+     $$
+     y = h(\vx) = x^{(L)}_1
+     $$
+     - Outputs are $s^{(L)}_1$ for regression or $\theta(s^{(L)}_1)$ for
+       classification
 
 * Vectorized Feedforward Propagation Algorithm
-- Vectorize neuron evaluation:
-  - The $j$-th neuron of the $l$-th layer uses the $d(l-1)$ outputs of the
-    previous layer to compute its output:
-    $$
-    x^{(l)}_j = \theta(\sum_i w^{(l)}_{ij} x^{(l-1)}_i) = \theta( (\vw^{(l)}_j)^T \vx^{(l-1)} )
-    $$
-
-- Compute all inputs $\vs^{(l)}$ to the activation function as matrix-vector
-  product:
-  $$
-  \vs^{(l)} = \mW^{(l)} \cdot \vx^{(l-1)}
-  $$
-  where $\mW^{(l)}$ is a matrix with weight vectors for each neuron in layer $l$
-  as rows
-  - Include the bias by adding a column to weight matrix $\mW$ and padding
-    inputs $\vx^{(l)}$ with 1s
-
-- Apply the activation function in vectorized form:
-  $$
-  \vx^{(l)} = \vtheta(\vs^{(l)}) = \vtheta(\mW^{(l)} \cdot \vx^{(l-1)})
-  $$
+- **Algorithm**: vectorize neuron evaluation
+  1. The $j$-th neuron of the $l$-th layer uses the $d(l-1)$ outputs of the
+     previous layer to compute its output
+     $$
+     x^{(l)}_j = \theta(\sum_i w^{(l)}_{ij} x^{(l-1)}_i) = \theta( (\vw^{(l)}_j)^T \vx^{(l-1)} )
+     $$
+  2. Compute all inputs $\vs^{(l)}$ to the activation function as matrix-vector
+     product
+     $$
+     \vs^{(l)} = \mW^{(l)} \cdot \vx^{(l-1)}
+     $$
+     where $\mW^{(l)}$ is a matrix with weight vectors for each neuron in layer
+     $l$ as rows
+     - Include the bias by adding a column to weight matrix $\mW$ and padding
+       inputs $\vx^{(l)}$ with 1s
+  3. Apply the activation function in vectorized form
+     $$
+     \vx^{(l)} = \vtheta(\vs^{(l)}) = \vtheta(\mW^{(l)} \cdot \vx^{(l-1)})
+     $$
 
 * Cost Function for Single-Class NN Classification
-- For binary classification using neural networks, use
-  \red{logistic regression} cost function with a \blue{regularization term}:
+- **Definition**: for binary classification using neural networks, use
+  \red{logistic regression} cost function with a \blue{regularization term}
   $$
   E_{in}(\vw)
   = - \frac{1}{N}
@@ -563,11 +561,11 @@
   \blue{\frac{\lambda}{N} \sum_{\green{j=1}}^p \|\vw_j\|^2}
   $$
 
-- By convention, we don't regularize the \green{bias} ($j=1$ and not $j=0$), as
-  it is constant and does not affect the minimum $\vw$
+- **Remark**: by convention, we don't regularize the \green{bias} ($j=1$ and
+  not $j=0$), as it is constant and does not affect the minimum $\vw$
 
 * Multi-output Neural Networks for Multi-class Classification
-- **In one-vs-all approach:**
+- **(Naive) Solution**: one-vs-all approach
   - Train $n$ models, one per class, to recognize each class
   - Pick the model with the highest probability
   - The output is a one-hot encoding of each class
@@ -575,15 +573,15 @@
     - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
     - Encode pedestrian = `(1, 0, 0, 0)`
     - Encode car = `(0, 1, 0, 0)`
-    -
 
-- Instead of training $n$ neural networks, train a single neural network with an
-  output layer of $n$ nodes
+- **Solution**: instead of training $n$ neural networks, train a single neural
+  network with an output layer of $n$ nodes
   - Global optimization vs $n$ local optimizations
   - End-to-end learning
 
 * Cost Function for Multi-Class NN Classification
-- The loss function for multi-class classification using neural networks
+- **Definition**: the loss function for multi-class classification using
+  neural networks
   - encode one-hot
   - the expected outputs $\vy_i$
   - the outputs from the model $\vh(\vx_i)$
@@ -597,8 +595,8 @@
   \sum_{l=1}^L \sum_{j=1}^{d(l)} \sum_{i=1}^{d(l-1)} (w^{(l)}_{ij})^2 \\
   \end{alignat*}
 
-- Avoid to consider the inputs ($l \ne 0$) and the bias terms ($i \ne 0, j \ne
-  0$)
+- **Remark**: avoid to consider the inputs ($l \ne 0$) and the bias terms
+  ($i \ne 0, j \ne 0$)
 
 * Issues with Fitting a Neural Networks
 
@@ -616,7 +614,8 @@
     of the problem
 
 * Fitting a Neural Networks for SGD
-- Use Stochastic Gradient Descent (SGD) to determine the weights $\vw$
+- **Solution**: use Stochastic Gradient Descent (SGD) to determine the
+  weights $\vw$
   - Consider the error on a single example $(\vx, y)$:
     $$
     E_{in}(\vw) = e(h_{\vw}(\vx), y) = e(\vw)
@@ -634,7 +633,8 @@
     \frac{\partial e(\vw)}{\partial w^{(l)}_{ij}} \; \forall i, j, l
     $$
 
-- The entire formula for the hypothesis $h_{\vw}(\vx)$ is very convoluted:
+- **Problem**: the entire formula for the hypothesis $h_{\vw}(\vx)$ is very
+  convoluted:
   - Non-linearity $\theta$ of ...
   - Linear combinations of weights and $\theta$ of ...
   - Linear combinations of weights and $\theta$ of ...
@@ -648,10 +648,10 @@
   \endgroup
 
 * Computing the Gradient
-- Compute all partial derivatives to get:
+- **Goal**: compute all partial derivatives to get
   $$\nabla_{\vw} e(\vw)$$
 
-- **You can:**
+- **You can**:
   - Compute the analytic expression of the derivatives by brute force
   - Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
     computing the variation of $e$
