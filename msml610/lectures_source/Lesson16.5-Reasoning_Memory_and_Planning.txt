@@ -1,6 +1,9 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 16.5: Reasoning, Memory, and Planning
+// slides_backend=typst
+
+// References
 //- Grokked Transformers are Implicit Reasoners:
 //  https://arxiv.org/abs/2405.15071
 //- HippoRAG: Neurobiologically Inspired Long-Term Memory for Large Language

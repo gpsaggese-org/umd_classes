@@ -773,7 +773,7 @@
     the position in the image
   - Reduces number of parameters and improves generalization
 
-- **Feature map **
+- **Feature Map**
   - Output of a convolutional layer after applying filters (kernels) to the
     input
   - Represents spatial patterns such as edges, textures, or more complex
@@ -795,8 +795,8 @@
   - Invariant to translation and small distortions in input
   - Scalable to large input sizes (E.g., high-resolution images)
 
-- Pooling is a downsampling operation that reduces the spatial dimensions (width
-  and height) of feature maps
+- **Definition**: pooling is a downsampling operation that reduces the spatial
+  dimensions (width and height) of feature maps
   - Reducing computation
   - Controlling overfitting
   - Making features more translation-invariant
@@ -873,19 +873,19 @@ digraph ResidualBlock {
 * Recurrent Neural Networks (RNNs)
 ::: columns
 :::: {.column width=55%}
-- Maintain a hidden state that evolves over time
+- **Definition**: maintain a hidden state that evolves over time
   - Process input sequences one element at a time, maintaining a memory of
     previous inputs
   - Output depends on current input and previous hidden state
   - Useful for tasks where the order of data is crucial
-- Trained using backpropagation through time
+- **Remark**: trained using backpropagation through time
 
-- Pros
+- **Pros**
   - Designed for sequential data
     - E.g., time series, text
   - Can, in theory, capture temporal dependencies of arbitrary length
 
-- Cons
+- **Cons**
   - Struggle with long-term dependencies (vanishing gradients)
   - Training is slow due to sequential processing (no parallelism over time steps)
   - Struggles with long-term memory retention
@@ -930,7 +930,8 @@ digraph FeedbackSystem {
 
 * Vanishing and Exploding Gradient Problem
 
-- Arise due to repeated multiplication of gradients in the chain rule
+- **Remark**: arise due to repeated multiplication of gradients in the chain
+  rule
 
 - **Vanishing Gradient**
   - Gradients become very small in early layers as they are propagated backward
@@ -948,7 +949,8 @@ digraph FeedbackSystem {
   - Normalize inputs
   - Apply batch normalization
 
-- These issues motivated the design of architectures like LSTM and ResNet
+- **Remark**: these issues motivated the design of architectures like LSTM and
+  ResNet
 
 * Long Short-Term Memory (LSTM) Networks
 

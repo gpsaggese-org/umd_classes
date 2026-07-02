@@ -1,6 +1,9 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 16.3: A Brief History of LLM Agents
+// slides_backend=typst
+
+// References:
 //- ReAct: Synergizing Reasoning and Acting in Language Models:
 //  https://arxiv.org/abs/2210.03629
 //- WebShop: Towards Scalable Real-World Web Interaction with Grounded
