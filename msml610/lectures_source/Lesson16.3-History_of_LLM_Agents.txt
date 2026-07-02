@@ -127,15 +127,17 @@ digraph Timeline {
 - **Key idea**: the field moved from treating the LLM as an _oracle_ to treating
   it as a _controller_
 
-// TODO(ai_gp): Use the typst approach
-\begingroup \scriptsize
-| **Oracle view** | **Controller view** |
-| --------------- | -------------------- |
-| Input $\to$ single text output | Goal $\to$ sequence of actions |
-| No external state | Read / write environment state |
-| Correct or incorrect answer | Succeeds or fails at a task |
-| Prompt engineering | Loop and tool design |
-\endgroup
+```{=typst}
+#styled-table(
+  headers: ("Oracle view", "Controller view"),
+  rows: (
+    ("Input $\\to$ single text output", "Goal $\\to$ sequence of actions"),
+    ("No external state", "Read / write environment state"),
+    ("Correct or incorrect answer", "Succeeds or fails at a task"),
+    ("Prompt engineering", "Loop and tool design"),
+  ),
+)
+```
 
 - **Remark**: 
   - This shift is the conceptual birth of the _LLM agent_
@@ -213,14 +215,16 @@ digraph ReActLoop {
 
 * ReAct vs. Chain-of-Thought vs. Act-Only
 
-// TODO(ai_gp): Convert it into typst table
-\begingroup \scriptsize
-| **Method** | **Reasons?** | **Acts?** | **Weakness** |
-| ---------- | ------------ | --------- | ------------ |
-| Act-only | No | Yes | No explanation, brittle |
-| Chain-of-Thought | Yes | No | Ungrounded, hallucinates |
-| ReAct | Yes | Yes | More tokens, tool latency |
-\endgroup
+```{=typst}
+#styled-table(
+  headers: ("Method", "Reasons?", "Acts?", "Weakness"),
+  rows: (
+    ("Act-only", "No", "Yes", "No explanation, brittle"),
+    ("Chain-of-Thought", "Yes", "No", "Ungrounded, hallucinates"),
+    ("ReAct", "Yes", "Yes", "More tokens, tool latency"),
+  ),
+)
+```
 
 - **Key idea**: ReAct dominates on knowledge-intensive tasks because _grounding_
   suppresses hallucination while _reasoning_ guides the search
@@ -295,13 +299,16 @@ digraph ReActLoop {
 - **Finding**: agents could learn to shop, but a large gap remained between
   models and humans
 
-\begingroup \scriptsize
-| **Actor** | **Task success** | **Behavior** |
-| --------- | ---------------- | ------------ |
-| Rule-based | Low | Rigid, misses nuance |
-| LLM agent | Moderate | Good language, weak long-horizon nav |
-| Human | High | Reformulates queries, backtracks |
-\endgroup
+```{=typst}
+#styled-table(
+  headers: ("Actor", "Task success", "Behavior"),
+  rows: (
+    ("Rule-based", "Low", "Rigid, misses nuance"),
+    ("LLM agent", "Moderate", "Good language, weak long-horizon nav"),
+    ("Human", "High", "Reformulates queries, backtracks"),
+  ),
+)
+```
 
 - **Key idea**: language understanding was _not_ the bottleneck; robust
   multi-step navigation and search reformulation were

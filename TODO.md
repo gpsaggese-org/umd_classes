@@ -188,6 +188,12 @@ helpers/hmarkdown_toc.py                                                        
 
 ./dev_scripts_helpers/documentation/notes_to_pdf.py
 
+### Improve unit tests
+
+```
+> pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+```
+
 ### What tests pass on master vs local?
 
 ### [x] Make the second and 3rd level of text smaller
@@ -209,7 +215,7 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [x] Add unit tests (for 1 and 2 phases)
 - [ ] Add processing of AST
 
-### Fix gen_slides.py msml610/11.1
+### [x] Fix gen_slides.py msml610/11.1
 
 It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
 

@@ -101,6 +101,7 @@
   reasoning) in the prompt before the target question
   - Demonstrates both the format _and_ the reasoning style
 
+```{=typst}
 #styled-table(
   headers: ("Variant", "Prompt cost", "When to prefer"),
   rows: (
@@ -108,6 +109,7 @@
     ("Few-shot CoT", "High (examples)", "Format matters, niche task"),
   ),
 )
+```
 
 - **Key idea**: both rely on an explicit textual trigger to _switch on_
   reasoning, an assumption we question in the next section
@@ -121,11 +123,11 @@
   2. Extract the final answer from each
   3. Return the _majority_ answer (marginalize over reasoning paths)
   $$
-  \hat{y} = \arg\max_{y} \; \sum_{i} \mathbb{1}[\text{answer}(\text{chain}_i) = y]
+  \hat{y} = \arg \max_{y} \; \sum_{i} \mathbb{1}[\text{answer}(\text{chain}_i) = y]
   $$
 
 - **Intuition**:
-  - Reasoning becomes a _distribution_ to aggregate, not a single trace to trust
+  - Reasoning becomes a _distribution_, not a single trace to trust
   - Many _different_ correct derivations reach the same answer
   - Wrong derivations scatter across many different answers
 
@@ -140,15 +142,15 @@
   - _Tree-of-Thought_: branch into candidate steps, evaluate, expand the best
   - _Graph-of-Thought_: allow merging and reuse of intermediate results
 
-- **Key idea**: adds an explicit _evaluator_ and _backtracking_ that a linear
-  chain lacks, at the cost of many more model calls
+- **Key idea**: adds an explicit _evaluator_ and _backtracking_ (that a linear
+  chain lacks), at the cost of many more model calls
 ::::
 :::: {.column width=45%}
 ```graphviz
 digraph ToT {
     rankdir=TB;
     node [shape=circle, style="filled", fontname="Helvetica", fontsize=10, width=0.3, fixedsize=true, label=""];
-    Root [fillcolor="#A0D6D1"];
+    Root [fillcolor="#A6E7F4"];
     A [fillcolor="#A6E7F4"]; B [fillcolor="#A6E7F4"]; C [fillcolor="#A6E7F4"];
     A1 [fillcolor="#B2E2B2"]; A2 [fillcolor="#F4A6A6"]; C1 [fillcolor="#F4A6A6"];
     Root -> A; Root -> B; Root -> C;
@@ -160,31 +162,32 @@ digraph ToT {
 
 * CoT Variants: Comparison
 
+// TODO(ai_gp): Separate zero / few-shots CoT
+```{=typst}
 #styled-table(
   headers: ("Method", "Structure", "Aggregation", "Cost"),
   rows: (
     ("Zero/few-shot CoT", "Single chain", "None", "1 call"),
-    ("Self-consistency", "Many chains", "Majority vote", "$k$ calls"),
+    ("Self-consistency", "Many chains", "Majority vote", "K calls"),
     ("Tree-of-Thought", "Tree + evaluator", "Best path", "Many calls"),
   ),
 )
+```
 
-- **Key idea**: the variants trade _compute_ for _reliability_
+- **Key idea**: these are all _inference-time_ techniques
+  - The variants trade _compute_ for _reliability_
   - More sampling and search reduce variance and catch wrong turns
-
-- **Remark**: these are all _inference-time_ techniques, revisited in depth in
-  the inference-time lesson; here they set up a deeper question
-  - Does reasoning even need an explicit CoT _prompt_?
 
 ## Reasoning Without Explicit Prompting
 
 * Problem: Does Reasoning Require a Prompt?
 
-- **Setup**: every variant so far _asks_ the model to reason (a phrase or
-  examples)
-
-- **Question**: is step-by-step reasoning a capability _created_ by the prompt,
-  or one that is _latent_ and merely _uncovered_ by it?
+- **Question**: 
+  - Every variant so far _asks_ the model to reason (through a phrase or
+    examples)
+  - Does reasoning even need an explicit CoT _prompt_?
+  - Is step-by-step reasoning a capability _created_ by the prompt, or one that
+    is _latent_ and merely _uncovered_ by it?
 
 - **Motivation**: if reasoning is latent, prompt engineering is only _one_ way
   to access it, and maybe not the best one
@@ -194,9 +197,10 @@ digraph ToT {
 
 * Greedy Decoding Hides Reasoning
 
+// TODO(ai_gp): Add short explanation of greedy decoding
 - **Observation**: standard _greedy_ decoding always takes the single
   most-likely first token
-  - For a math question, that token is often the blurted-out final answer
+  - For a math question, that token is often the final answer
 
 - **Problem**: committing to that first token can skip the reasoning entirely
   - The model _has_ a reasoning path, but greedy decoding never enters it
@@ -216,26 +220,27 @@ digraph ToT {
   3. This yields $k$ candidate completions, some containing a CoT
   4. Score each path by its answer confidence and pick the best
 
+// TODO(ai_gp): Add an example of the algorithm
+
 - **Key idea**: branching only at the first step is enough to _surface_ latent
   reasoning paths already inside a pretrained model
 
 * The Confidence Signal
 
-- **Problem**: how to pick the reasoning path among the $k$ without an answer
-  key?
+- **Problem**: how to pick the reasoning path among the $k$ without knowing the
+  answer?
 
 - **Solution**: measure the model's _confidence_ in its final answer tokens
-  - **Finding**: paths that contain a chain of thought show a _larger
-    probability gap_ between the top and second answer token
+  - Paths that contain a chain of thought show a _larger probability gap_ between
+    the top and second answer token
     $$
     \Delta_{\text{answer}} = \Pr(\text{token}_1) - \Pr(\text{token}_2)
     $$
 
 - **Interpretation**: when the model has _reasoned_, it is more _committed_ to
   its answer, and $\Delta_{\text{answer}}$ is high
-
-- **Key idea**: the presence of CoT _correlates_ with answer confidence, giving
-  an unsupervised way to select the reasoning path
+  - The presence of CoT _correlates_ with answer confidence, giving an
+    unsupervised way to select the reasoning path
 
 * CoT-Decoding: Findings and Implications
 
@@ -248,55 +253,49 @@ digraph ToT {
 
 - **Interpretation**: reasoning is (partly) an _intrinsic_ property of the
   pretrained model, obscured by greedy decoding
-
-- **Key idea**: the _decoding procedure_ is part of the reasoning system, not a
-  neutral readout
-  - Yet, as the next section shows, this latent reasoning is fragile
+  - Yet this latent reasoning is fragile
 
 ## Premise Order and Brittleness
 
-* Reasoning Should Be Order-Invariant
+* Premise Order Matters: The Finding
+
+- **Question**: does an LLM respect this invariance, or does merely _reordering_
+  the same facts change its answer?
+  - Robustness to irrelevant changes is a basic test of whether a model _reasons_
+    or _pattern-matches_
 
 - **Fact**: in formal logic, the order of premises is irrelevant
   - $\{A, B, C\} \vdash Q$ holds regardless of how $A, B, C$ are listed
 
-- **Question**: does an LLM respect this invariance, or does merely _reordering_
-  the same facts change its answer?
+- **Answer** (Chen et al., 2024): LLMs are surprisingly _sensitive_ to premise
+  order
+  - Reasoning is not fully logical
 
-- **Motivation**: robustness to irrelevant changes is a basic test of whether a
-  model _reasons_ or _pattern-matches_
-
-- **Key idea** (Chen et al., 2024): LLMs are surprisingly _sensitive_ to premise
-  order, a sign the reasoning is not fully logical
-
-* Premise Order Matters: The Finding
-
-- **Setup**: take a reasoning problem and permute only the _order_ of its
-  premises, keeping the content identical
-
-- **Finding**: performance is _best_ when premise order matches the order needed
-  in the reasoning steps (the ground-truth proof order)
+- **Findings**:
+  - Take a reasoning problem and permute only the _order_ of its premises,
+    keeping the content identical
+  - Performance is _best_ when premise order matches the order needed in the
+    reasoning steps (the ground-truth proof order)
   - Reordering causes a performance drop of _over 30%_ on deductive tasks
-
-- **Interpretation**: the model prefers to consume premises in the order it will
-  _use_ them, rather than searching for the relevant one
-
-- **Key idea**: a logically irrelevant change causes a large, systematic
-  accuracy loss
+  - The model prefers to consume premises in the order it will _use_ them, rather
+    than searching for the relevant one
+  - A logically irrelevant change causes a large, systematic accuracy loss
 
 * Worked Example: Reordering Premises
 
 - **Example**: same facts, two orders
 
+```{=typst}
 #styled-table(
   headers: ("Forward order (easy)", "Shuffled order (hard)"),
   rows: (
-    ("If $A$ then $B$", "If $C$ then $D$"),
-    ("If $B$ then $C$", "If $A$ then $B$"),
-    ("If $C$ then $D$", "If $B$ then $C$"),
-    ("Given $A$, prove $D$", "Given $A$, prove $D$"),
+    ("If A then B", "If C then D"),
+    ("If B then C", "If A then B"),
+    ("If C then D", "If B then C"),
+    ("Given A, prove D", "Given A, prove D"),
   ),
 )
+```
 
 - **Interpretation**: the left column lets the model chain
   $A \to B \to C \to D$ by reading top to bottom
@@ -305,7 +304,7 @@ digraph ToT {
 - **Key idea**: extra "distance" between where a premise sits and where it is
   needed degrades reasoning
 
-* R-GSM: Measuring the Effect on Math
+* Measuring the Effect on Math (R-GSM)
 
 - **Problem**: is premise-order sensitivity limited to synthetic logic puzzles?
 
@@ -316,24 +315,22 @@ digraph ToT {
 - **Finding**: accuracy drops _significantly_ on R-GSM versus GSM8K across
   models
   - The effect grows with the number of premises to reorder
-
-- **Key idea**: brittleness to order shows up on _realistic_ math word problems,
-  not just toy logic
+  - Brittleness to order shows up on _realistic_ math word problems,
+    not just toy logic
 
 * Why Order Matters: An Autoregressive Bias
 
 - **Question**: why should a left-to-right model care about premise order?
 
 - **Interpretation**:
-  - Attention and generation are _causal_ (Lesson 16.2): the model builds its
-    chain forward
+  - As we know, attention and generation are "causal" (i.e., the model builds its
+    chain forward)
   - It is easier to attend to the _next_ needed premise if it is _nearby and
     ahead_, not buried earlier or later
   - Out-of-order premises force long-range, non-monotonic lookups the model does
     poorly
-
-- **Key idea**: the same causal mechanism that _enables_ serial reasoning also
-  _biases_ it toward a particular input order
+  - The same causal mechanism that _enables_ serial reasoning also _biases_ it
+    toward a particular input order
 
 * Brittleness Beyond Order
 
@@ -343,27 +340,23 @@ digraph ToT {
   - Renaming entities or changing surface wording
   - Changing numeric values that should not affect the method
 
-- **Interpretation**: a truly reasoning system would be invariant to all of
-  these; current LLMs are only _approximately_ so
-
-- **Key idea**: robustness, not raw accuracy, is the frontier for reasoning
-  - This motivates asking what LLM reasoning _provably can_ and _cannot_ do
+- **Key idea**:
+  - A truly reasoning system would be invariant to all of these
+  - Current LLMs are only _approximately_ so
+  - Robustness, not raw accuracy, is the frontier for reasoning
 
 ## Serial Computation and Depth
 
-* The Depth Limit: Recap from Building Blocks
+* The Depth Limit and CoT
 
-- **Recap** (Lesson 16.2): a constant-depth transformer is a highly _parallel_,
-  fixed-depth circuit
+- **Recap**:
+  - A constant-depth transformer is a highly _parallel_, fixed-depth circuit
   - Without intermediate tokens, its per-token power is bounded
   - It struggles with problems that are _inherently serial_
 
 - **Question**: can we make this precise?
   - _Exactly_ how much does chain-of-thought add to what a transformer can
     compute?
-
-- **Key idea** (Li et al., 2024): CoT length is a _computational resource_ we
-  can quantify with circuit complexity
 
 * CoT Empowers Serial Computation: The Result
 
@@ -374,11 +367,11 @@ digraph ToT {
   - _With_ $T$ steps of CoT: they can solve _any_ problem computable by a
     Boolean circuit of size $T$
 
-- **Interpretation**: adding $T$ reasoning tokens is like being handed a circuit
-  with $T$ gates of _serial_ compute
-
-- **Key idea**: CoT does not just help empirically, it _provably_ enlarges the
-  class of solvable problems
+- **Interpretation**:
+  - Adding $T$ reasoning tokens is like being handed a circuit with $T$ gates of
+    _serial_ compute
+  - CoT does not just help empirically, it _provably_ enlarges the class of
+    solvable problems
 
 * Intuition: Each Token Simulates One Gate
 
@@ -387,15 +380,14 @@ digraph ToT {
   2. Later steps _attend_ to earlier results and combine them
   3. $T$ steps simulate a size-$T$ computation, one gate at a time
 
-- **Fact**: this needs only $O(\log n)$ embedding width, so _depth in time_
-  (tokens), not width, supplies the extra power
-
 - **Example**: tasks that are hard in one pass but easy with CoT
   - Composition of permutations
   - Iterated squaring / modular arithmetic
   - Evaluating a Boolean circuit step by step
 
-* Consequences: Trading Tokens for Depth
+- **Fact**: _Depth in time_ (tokens) supplies the extra power
+
+* Trading Tokens for Depth
 
 - **Interpretation**: there is a _depth-for-tokens_ trade-off
   - A shallow model with a long CoT can match tasks that would otherwise need a
@@ -421,16 +413,11 @@ digraph ToT {
   revise_ its own answer
   - _"Here is your answer; find any mistakes and correct them"_
 
-- **Question**: does this _intrinsic self-correction_ (no external feedback,
-  no ground truth) actually improve reasoning?
-
 - **Definition**: _intrinsic self-correction_ = the model critiques and revises
   using _only_ its own capabilities, with no oracle label or tool
 
-- **Key idea** (Huang et al., 2023): the honest answer, for reasoning, is _not
-  yet_
-
-* Intrinsic Self-Correction: The Negative Result
+- **Question**: does this _intrinsic self-correction_ (no external feedback,
+  no ground truth) actually improve reasoning?
 
 - **Finding** (Huang et al., 2023): with no external feedback, self-correction
   _does not_ reliably improve reasoning
@@ -439,19 +426,8 @@ digraph ToT {
 - **Problem**: earlier optimistic results often used _oracle labels_
   - The loop was stopped only when the answer became correct
   - This _leaks_ the ground truth and hides the true (weak) behavior
-
-- **Key idea**: remove the oracle, and the gains largely disappear
+  - Remove the oracle, and the gains largely disappear
   - The model cannot tell _which_ of its answers was right
-
-* Why Self-Correction Fails Without an Oracle
-
-- **Interpretation**: correcting requires a _reliable verifier_
-  - Finding an error is often as hard as solving the problem
-  - If the model could reliably detect the mistake, it would have avoided it
-
-- **Cons** of naive self-correction:
-  - Can turn a _correct_ answer into a wrong one (over-correction)
-  - Adds cost and latency for no reliable gain
 
 - **Remark**: _multi-agent debate_ and re-prompting mostly recover the benefit
   of _self-consistency_ (sampling and voting), not a new correcting ability
@@ -468,7 +444,7 @@ digraph ToT {
 - **Key idea**: the fix is to _ground_ the correction signal, exactly the
   grounding lesson from ReAct (Lesson 16.3)
 
-- **Remark**: how to _build_ these signals is developed in later lessons
+- **Remark**: how to _build_ these signals?
   - Inference-time techniques (self-debugging, verifier-guided search)
   - Learning to reason from preference and verifiable rewards
 
