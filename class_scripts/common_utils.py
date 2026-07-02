@@ -58,7 +58,7 @@ def find_lecture_file(dir_path: str, lesson: str) -> Path:
     :return: path to the found lecture file
     """
     # Build the search pattern.
-    pattern = f"{dir_path}/lectures_source/Lesson{lesson}*"
+    pattern = f"{dir_path}/lectures_source/Lesson{lesson}*.txt"
     _LOG.debug("Searching for files matching pattern='%s'", pattern)
     # Find matching files.
     files = glob.glob(pattern)

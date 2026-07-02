@@ -20,6 +20,17 @@ class Test_Msml610_LessonDiscovery(csgsteut.LessonDiscovery_TestCase):
 
 
 # #############################################################################
+# Test_Msml610_Run_preprocess_notes_py
+# #############################################################################
+
+
+class Test_Msml610_Run_preprocess_notes_py(
+    csgsteut.Run_preprocess_notes_py_TestCase
+):
+    COURSE_DIR = "msml610"
+
+
+# #############################################################################
 # Test_Msml610_Run_notes_to_pdf_py
 # #############################################################################
 

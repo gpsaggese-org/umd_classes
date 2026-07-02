@@ -233,6 +233,16 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 > pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
 ```
 
+### Improve output
+
+18:05:06 common_utils.py find_lecture_file:62                Searching for files matching pattern='msml610/lectures_source/Lesson00*'
+18:05:06 - INFO  common_utils.py find_lecture_file:74                   Found lecture file: msml610/lectures_source/Lesson00-Class.txt
+18:05:06 common_utils.py get_source_name:92                  Source name='Lesson00-Class.txt'
+
+- Remove - which wastes space
+- Align everything
+- Maybe add DEBUG?
+
 ### What tests pass on master vs local?
 
 ### [x] Make the second and 3rd level of text smaller

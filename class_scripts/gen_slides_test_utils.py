@@ -237,7 +237,8 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         _LOG.debug(
             hprint.to_str("course_dir output_dir lessons output_type toc_type")
         )
-        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type.upper()}"):
+        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type}"):
+            _LOG.debug(hprint.to_str("lesson"))
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
