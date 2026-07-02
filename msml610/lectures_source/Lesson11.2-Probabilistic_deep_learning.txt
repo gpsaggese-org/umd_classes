@@ -23,7 +23,8 @@
   - Speech recognition and synthesis
 
 * DL vs ML
-- Many ML methods can handle a large number of input variables, _but_
+- **Remark**: many ML methods can handle a large number of input variables,
+  _but_:
   - The path from input to output is very short (e.g., multiply and sum)
   - There are no variable interactions
   - The expressive power of such models is very limited
@@ -41,7 +42,8 @@
 - **Intuition**: To perform a function like in a biological system, replicate its
   structure
 
-- There is a leap of faith: the _structure_ matters to achieve a _functionality_
+- **Remark**: there is a leap of faith: the _structure_ matters to achieve a
+  _functionality_
 
 - **Examples**
   - You want to fly, birds fly, birds have wings $\implies$ build a contraption
@@ -52,12 +54,12 @@
 * Neurons in the Brain
 ::: columns
 :::: {.column width=55%}
-- The brain is jam-packed with neurons
-- Each neuron has inputs (dendrites) and an output (axon)
-- Neurons connect their output to inputs of different neurons, sending pulse of
-  electricity
-- Senses (e.g., eyes) send pulses to the neurons
-- Neurons send pulses to the muscles to make them contract
+- **Fact**: the brain is jam-packed with neurons
+  - Each neuron has inputs (dendrites) and an output (axon)
+  - Neurons connect their output to inputs of different neurons, sending pulse
+    of electricity
+  - Senses (e.g., eyes) send pulses to the neurons
+  - Neurons send pulses to the muscles to make them contract
 ::::
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/L11.Neuron.png)
@@ -65,17 +67,17 @@
 :::
 
 * Neural Network
-- Get inspiration from networks of neurons in the brain
+- **Intuition**: get inspiration from networks of neurons in the brain
   - Human brain consist of layers of interconnected nodes
 
-- Resemblance with neural structures is superficial
+- **Remark**: resemblance with neural structures is superficial
   - Architecture is inspired by the brain but does not replicate its complexity
   - Each connection has a weight that adjusts as learning proceeds
   - Neural networks simplify the brain's processes to make them computationally
     feasible
 
-- Deep learning encompasses a broader range of models and algorithms beyond
-  neural networks
+- **Remark**: deep learning encompasses a broader range of models and
+  algorithms beyond neural networks
   $$\text{Neural Networks} \subseteq \text{Deep Learning}$$
   - Neural networks are building blocks for many deep learning models
   - E.g., a convolutional neural network (CNN) is used for image classification
@@ -86,16 +88,17 @@
 * The "One Learning Algorithm" Theory
 ::: columns
 :::: {.column width=55%}
-- The brain can perform various tasks
+- **Fact**: the brain can perform various tasks
   - E.g., process vision, sense of touch, do math, play pickleball
   - Doesn't have thousands of different programs
   - Seems to have a _single_ learning algorithm
 
-- The "one learning algorithm" idea has been experimentally verified
+- **Fact**: the "one learning algorithm" idea has been experimentally
+  verified
   - Re-route the connection from eyes to the brain's sound-processing area
   - After training, the brain can "see" (in the sense of visual discrimination)
 
-- The **AI dream**:
+- **AI dream**:
   - If you can implement a version of the brain algorithm, you can have a machine
     that can learn anything
 ::::
@@ -105,31 +108,31 @@
 :::
 
 * Why Resurgence of Neural Networks?
-- AI winter
-  - Proposed in the 1950
+- **Remark**: AI winter
+  - AI was proposed in the 1950
   - Popular in '80s and '90s
   - Then fell out of fashion due to limitations
 
 - **Key Reasons for Resurgence**
 
-  - **Increased Computational Power**
+  - _Increased Computational Power_
     - GPUs and TPUs suited for matrix operations in neural nets
 
-  - **Availability of Big Data**
-    - Open-source frameworks (e.g., TensorFlow and PyTorch)
+  - _Availability of Big Data_
+    - Open-source frameworks (e.g., `TensorFlow` and `PyTorch`)
     - Massive amounts of labeled data (Internet, IoT, and digital storage)
 
-  - **Algorithmic Improvements**
-    - Better activation functions (ReLU)
-    - Advanced optimization techniques (Adam, RMSprop)
-    - Regularization methods (dropout, batch normalization)
+  - _Algorithmic Improvements_
+    - Better activation functions (e.g., ReLU)
+    - Advanced optimization techniques (e.g., Adam, RMSprop)
+    - Regularization methods (e.g., dropout, batch normalization)
 
-  - **Breakthrough Architectures**
+  - _Breakthrough Architectures_
     - CNNs for image tasks
     - RNNs and LSTMs for sequences
     - Transformers for language and vision
 
-  - **Demonstrated Success in Applications**
+  - _Demonstrated Success in Applications_
     - State-of-the-art performance in vision, speech, language, and games
     - Commercial impact in healthcare, finance, and autonomous vehicles
     - 2012: AlexNet outperformed methods on ImageNet using deep CNNs
@@ -138,19 +141,19 @@
 
 ::: columns
 :::: {.column width=55%}
-- Logistic regression with non-linear transformations might seem sufficient for
-  any problem
+- **Problem**: logistic regression with non-linear transformations might seem
+  sufficient for any problem
   - However, the number of features increases rapidly
   - Neural networks synthesize their own features, offering an advantage
 
-- E.g., in computer vision for $50 \times 50$ 256-color images
+- **Example**: in computer vision for $50 \times 50$ 256-color images
   - There are 7500 bytes available as features
   - Using all cubic terms for a non-linear model requires $\approx 7500 ^ 3$
     features $\propto (10^4)^3 = 10^{12} = 1$ trillion features
   - Which ones are really needed?
   - The features are predetermined and not learned
 
-- Each neuron in a neural network performs logistic regression
+- **Solution**: each neuron in a neural network performs logistic regression
   - Features used are computed by other neurons
   - You are not limited to using inputs $\vx$ or polynomial terms derived from
     $\vx$
@@ -159,9 +162,9 @@
 :::: {.column width=40%}
 ![](msml610/lectures_source/figures/L11.Shallow_vs_Deep.png)
 
-- Shallow model has short computation path
-- A decision tree has some long paths
-- A deep learning network has long paths with many variables interacting
+- **Remark**: shallow model has short computation path
+  - A decision tree has some long paths
+  - A deep learning network has long paths with many variables interacting
 ::::
 :::
 

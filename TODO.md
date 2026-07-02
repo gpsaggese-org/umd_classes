@@ -28,14 +28,12 @@ book.From_Data_To_Decisions
 
 - [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
 - [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
-- [ ] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
+- [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
+- [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
 - [ ] IN PROGRESS: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-   Apply ./helpers_root/.claude/skills/slides.rules.md to msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt one slide at the time (i.e., chunks of code between `* ...`)
-   Start from ## Neural networks
-   Apply the change to one slide and wait for the user to confirm before moving forward to the next slide
-- [ ] Neural-Symbolic Decision Making
+  - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
 
-gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
+- gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
@@ -162,27 +160,27 @@ Remove open by default
 
 - [ ] Check CsfyIssue8889
 
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py                                                                               85     12      8      2    83%
-dev_scripts_helpers/documentation/preprocess_notes.py                                                                                    349     78    140     19    77%
-dev_scripts_helpers/documentation/render_images.py                                                                                       381    174    142      9    53%
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py   85     12      8      2    83%
+dev_scripts_helpers/documentation/preprocess_notes.py        349     78    140     19    77%
+dev_scripts_helpers/documentation/render_images.py           381    174    142      9    53%
 
-dev_scripts_helpers/dockerize/lib_pandoc.py                                                                                              110     40     20      3    59%
-dev_scripts_helpers/dockerize/lib_prettier.py                                                                                            124     15     34      6    84%
+dev_scripts_helpers/dockerize/lib_pandoc.py                  110     40     20      3    59%
+dev_scripts_helpers/dockerize/lib_prettier.py                124     15     34      6    84%
 
-helpers/hmarkdown.py                                                                                                                      13      0      0      0   100%
-helpers/hmarkdown_bullets.py                                                                                                              93     81     44      0     9%
-helpers/hmarkdown_coloring.py                                                                                                            108     59     38      5    41%
-helpers/hmarkdown_comments.py                                                                                                             28      9     10      3    63%
-helpers/hmarkdown_div_blocks.py                                                                                                           54     23     24      4    55%
-helpers/hmarkdown_fenced_blocks.py                                                                                                        55      0     14      1    99%
-helpers/hmarkdown_filtering.py                                                                                                            68     56      8      0    16%
-helpers/hmarkdown_formatting.py                                                                                                          335    259     84      1    19%
-helpers/hmarkdown_headers.py                                                                                                             330    156    144     18    50%
-helpers/hmarkdown_rules.py                                                                                                               104     86     42      0    12%
-helpers/hmarkdown_select.py                                                                                                              251    112     92     14    54%
-helpers/hmarkdown_slides.py                                                                                                               90     24     30      5    69%
-helpers/hmarkdown_tables.py                                                                                                               48     31     14      1    32%
-helpers/hmarkdown_toc.py                                                                                                                  92     24     26      8    68%
+helpers/hmarkdown.py                                          13      0      0      0   100%
+helpers/hmarkdown_bullets.py                                  93     81     44      0     9%
+helpers/hmarkdown_coloring.py                                108     59     38      5    41%
+helpers/hmarkdown_comments.py                                 28      9     10      3    63%
+helpers/hmarkdown_div_blocks.py                               54     23     24      4    55%
+helpers/hmarkdown_fenced_blocks.py                            55      0     14      1    99%
+helpers/hmarkdown_filtering.py                                68     56      8      0    16%
+helpers/hmarkdown_formatting.py                              335    259     84      1    19%
+helpers/hmarkdown_headers.py                                 330    156    144     18    50%
+helpers/hmarkdown_rules.py                                   104     86     42      0    12%
+helpers/hmarkdown_select.py                                  251    112     92     14    54%
+helpers/hmarkdown_slides.py                                   90     24     30      5    69%
+helpers/hmarkdown_tables.py                                   48     31     14      1    32%
+helpers/hmarkdown_toc.py                                      92     24     26      8    68%
 
 - [ ] Extract lib_notes_to_pdf.py
 
