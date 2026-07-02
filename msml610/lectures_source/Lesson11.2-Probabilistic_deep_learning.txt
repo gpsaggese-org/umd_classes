@@ -670,54 +670,53 @@
   - Adjust weights to reduce future errors
 
 * Backpropagation in Neural Networks
-- Initialize weights $\vw$ randomly
-  - Avoid $\vv{0}$ as it is an unstable equilibrium point
+- **Algorithm**:
+  1. Initialize weights $\vw$ randomly
+     - Avoid $\vv{0}$ as it is an unstable equilibrium point
+  2. For each iteration
+     - Pick a random input $\vx_n$ (SGD setup)
+     - Forward pass: compute outputs of all neurons $x^{(l)}_j$ given $\vx_n$
+       and current weights $\vw(t)$
+     - Backpropagation: compute all $\delta^{(l)}_j$ using backpropagation for
+       current $\vx_n$ and $\vw(t)$
+     - Compute derivatives of errors
+       $\frac{\partial e}{\partial w^{(l)}_{ij}} = \delta^{(l)}_j x^{(l-1)}_i$
+     - Update weights using derivatives
+       $$
+       \vw(t + 1) \leftarrow \vw(t) - \eta \nabla_{\vw} e(\vw(t))
+       $$
+       $$
+       w^{(l)}_{ij}(t + 1) \leftarrow w^{(l)}_{ij}(t) - \eta \frac{\partial e}{\partial w^{(l)}_{ij}}
+       $$
+  3. Iterate until termination
 
-- For each iteration:
-  - Pick a random input $\vx_n$ (SGD setup)
-  - Forward pass: compute outputs of all neurons $x^{(l)}_j$ given $\vx_n$
-    and current weights $\vw(t)$
-  - Backpropagation: compute all $\delta^{(l)}_j$ using backpropagation for
-    current $\vx_n$ and $\vw(t)$
-  - Compute derivatives of errors:
-    $\frac{\partial e}{\partial w^{(l)}_{ij}} = \delta^{(l)}_j x^{(l-1)}_i$
-  - Update weights using derivatives
-    $$
-    \vw(t + 1) \leftarrow \vw(t) - \eta \nabla_{\vw} e(\vw(t))
-    $$
-    $$
-    w^{(l)}_{ij}(t + 1) \leftarrow w^{(l)}_{ij}(t) - \eta \frac{\partial e}{\partial w^{(l)}_{ij}}
-    $$
-
-- Iterate until termination
-
-- Note that the cost function is not convex
+- **Remark**: the cost function is not convex
   - No guarantee of finding the global minimum
 
 * Backpropagation in Neural Networks
-- If we want to use batch gradient descent (instead of SGD)
+- **Remark**: if we want to use batch gradient descent (instead of SGD)
   - Accumulate the partial derivatives considering all the examples in the
     training set
   - Update the weights with the accumulated values
 
 * Gradient Checking
-- For some algorithms the analytical expression of the gradient becomes
-  complicated: mistakes are possible
+- **Problem**: for some algorithms the analytical expression of the gradient
+  becomes complicated: mistakes are possible
   - E.g., back-propagation in neural networks
 
-- One approach is:
-  - Compute the gradient analytically
-  - Compute the gradient numerically
-    $$
-    \frac{\partial E_{in}(\vw)}{\partial w_j} \approx
-    \frac{E_{in}(\vw - \hat{w_j} \varepsilon) - E_{in}(\vw + \hat{w_j} \varepsilon)}
-    {2 \varepsilon}
-    $$
-  - Compare the gradients within numerical approximation
-  - Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small to
-    cause too many numerical issues
+- **Solution**: one approach is
+  1. Compute the gradient analytically
+  2. Compute the gradient numerically
+     $$
+     \frac{\partial E_{in}(\vw)}{\partial w_j} \approx
+     \frac{E_{in}(\vw - \hat{w_j} \varepsilon) - E_{in}(\vw + \hat{w_j} \varepsilon)}
+     {2 \varepsilon}
+     $$
+  3. Compare the gradients within numerical approximation
+  4. Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
+     to cause too many numerical issues
 
-- Automatic differentiation packages solve this issue
+- **Remark**: automatic differentiation packages solve this issue
 
 * Automatic Differentiation
 - **Automatic Differentiation**

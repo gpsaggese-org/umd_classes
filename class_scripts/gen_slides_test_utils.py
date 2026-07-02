@@ -36,14 +36,18 @@ def get_lesson_files(course_dir: str) -> List[str]:
     Discover all lesson files in a course directory.
 
     :param course_dir: Course directory (data605 or msml610)
-    :return: Sorted list of lesson file paths
-        # TODO(ai_gp): Add an example of output
+    :return: Sorted list of lesson file paths, e.g.,
+        ```
+        ["data605/lectures_source/Lesson01.1-BigData.txt",
+         "data605/lectures_source/Lesson01.2-History.txt"]
+        ```
     """
     lectures_source_dir = os.path.join(course_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     lesson_files = []
     for file in os.listdir(lectures_source_dir):
-        # TODO(ai_gp): Add an example of the string in file.
+        # Match files like "Lesson01.1-BigData.txt" or
+        # "Lesson02-Introduction.txt".
         if re.match(r"^Lesson\d+", file):
             file_path = os.path.join(lectures_source_dir, file)
             lesson_files.append(file_path)
@@ -56,14 +60,18 @@ def get_lesson_numbers(course_dir: str) -> List[str]:
     Get all lesson numbers in a course.
 
     :param course_dir: Course directory (data605 or msml610)
-    :return: Sorted list of lesson numbers like ["01.1", "01.2", ...]
-        # TODO(ai_gp): Add an example of output
+    :return: Sorted list of lesson numbers like
+        ```
+        ["01.1", "01.2", "02", "03", "04.1"]
+        ```
     """
     lectures_source_dir = os.path.join(course_dir, "lectures_source")
     hdbg.dassert_dir_exists(lectures_source_dir)
     lessons = []
     for file in os.listdir(lectures_source_dir):
-        # TODO(ai_gp): Add an example of the string in file.
+        # Match lesson numbers
+        # from filenames like "Lesson01.1-BigData.txt"
+        #   -> "01.1".
         match = re.match(r"Lesson(\d+(?:\.\d+)?)", file)
         if match:
             lesson_num = match.group(1)
@@ -81,8 +89,10 @@ def collect_all_lessons() -> Dict[str, List[str]]:
     """
     Collect all lessons organized by course.
 
-    :return: Dict with course dirs as keys and lesson lists as values
-        # TODO(ai_gp): Add an example of output
+    :return: Dict with course dirs as keys and lesson lists as values, e.g.,
+        ```
+        {"data605": ["01.1", "01.2", "02"], "msml610": ["01", "02.1"]}
+        ```
     """
     all_lessons = {}
     for course_dir in csccouti.VALID_DIRS:
@@ -104,6 +114,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     COURSE_DIR: str = ""
     FIRST_LESSON_FILENAME: str = ""
 
+    # TODO(ai_gp): Add a docstring with a short explanation of what each test does.
     def test_check_lesson_discovery(self) -> None:
         hdbg.dassert_ne(self.COURSE_DIR, "")
         hdbg.dassert_ne(self.FIRST_LESSON_FILENAME, "")
@@ -196,8 +207,14 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             # Prepare command arguments.
             input_arg = shlex.quote(input_file)
             output_arg = shlex.quote(output_file)
-            # Build and execute command.
-            # TODO(ai_gp): Add an example of how cmd looks like.
+            # Build and execute command, e.g.,
+            # ```
+            # > preprocess_notes.py \
+            #     --input='/path/to/lesson.txt' \
+            #     --output='/out/notes.md' \
+            #     --type=pdf \
+            #     --toc_type=none
+            # ```
             cmd = (
                 f"preprocess_notes.py "
                 f"--input={input_arg} "
@@ -219,33 +236,44 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
                 lesson,
             )
 
-    # TODO(ai_gp): Add a docstring and comments to all these functions.
     @pytest.mark.slow
     def test_preprocess_notes_pdf(self) -> None:
+        """
+        Test preprocessing notes to PDF format.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
-        # TODO(ai_gp): Assign pdf to a variable.
+        # Test PDF output type.
+        output_type = "pdf"
         self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "pdf"
+            self.COURSE_DIR, output_dir, lessons, output_type
         )
 
     @pytest.mark.slow
     def test_preprocess_notes_html(self) -> None:
+        """
+        Test preprocessing notes to HTML format.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
+        # Test HTML output type.
         self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "html"
+            self.COURSE_DIR, output_dir, lessons, "html"
         )
 
     @pytest.mark.slow
     def test_preprocess_notes_slides(self) -> None:
+        """
+        Test preprocessing notes to slides format.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
+        # Test slides output type.
         self._run_preprocess_notes_py(
-            self, self.COURSE_DIR, output_dir, lessons, "slides"
+            self.COURSE_DIR, output_dir, lessons, "slides"
         )
 
 
@@ -261,7 +289,6 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
 
     COURSE_DIR: str = ""
 
-    # TODO(ai_gp2): Make this 
     def _run_notes_to_pdf_py(
         self,
         course_dir: str,
@@ -339,24 +366,29 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 "Verified %s output for lesson %s", output_type.upper(), lesson
             )
 
-    # TODO(ai_gp2): Add test_notes_to_pdf_typ
     @pytest.mark.superslow
     def test_notes_to_pdf_md(self) -> None:
+        """
+        Test converting notes to PDF (markdown intermediate).
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
         skip_actions = ["run_pandoc"]
         self._run_notes_to_pdf_py(
-            self, self.COURSE_DIR, output_dir, lessons, "md", skip_actions
+            self.COURSE_DIR, output_dir, lessons, "md", skip_actions
         )
 
     @pytest.mark.superslow
     def test_notes_to_pdf_tex(self) -> None:
+        """
+        Test converting notes to PDF (TeX intermediate).
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         output_dir = self.get_output_dir()
         lessons = get_lesson_numbers(self.COURSE_DIR)
         self._run_notes_to_pdf_py(
-            self, self.COURSE_DIR, output_dir, lessons, "tex"
+            self.COURSE_DIR, output_dir, lessons, "tex"
         )
 
 
@@ -384,20 +416,28 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         )
         hsystem.system(cmd)
 
-    # TODO(ai_gp): Add docstrings
     @pytest.mark.slow
     def test_gen_slides_first_lesson(self) -> None:
+        """
+        Test generating slides for the first lesson.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         self._run_gen_slides(self.COURSE_DIR, self.FIRST_LESSON)
 
     @pytest.mark.slow
     def test_gen_slides_second_lesson(self) -> None:
+        """
+        Test generating slides for the second lesson.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         hdbg.dassert_ne(self.SECOND_LESSON, "")
         self._run_gen_slides(self.COURSE_DIR, self.SECOND_LESSON)
 
     @pytest.mark.superslow
     def test_render_all_lessons(self) -> None:
+        """
+        Test generating slides for all the lessons.
+        """
         hdbg.dassert_ne(self.COURSE_DIR, "")
         lessons = get_lesson_numbers(self.COURSE_DIR)
         for lesson in tqdm(lessons, desc="Rendering lessons to TeX"):
