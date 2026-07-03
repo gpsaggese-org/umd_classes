@@ -219,7 +219,6 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     def _run_preprocess_notes_py(
         self,
         course_dir: str,
-        output_dir: str,
         lessons: List[str],
         output_type: str,
         *,
@@ -238,12 +237,13 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         _LOG.debug(
             hprint.to_str("course_dir output_dir lessons output_type toc_type")
         )
+        scratch_dir = self.get_scratch_space()
         for lesson in tqdm(lessons, desc=f"Preprocessing {output_type.upper()}", file=sys.stderr, disable=False):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
             # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+            lesson_dir = os.path.join(scratch_dir, f"lesson_{lesson}")
             hio.create_dir(lesson_dir, incremental=True)
             # Prepare output file path.
             output_file = os.path.join(lesson_dir, "preprocessed.md")
@@ -271,7 +271,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(output_file)
             content = hio.from_file(output_file)
-            self.check_string(content, fuzzy_match=True)
+            self.check_string(content, fuzzy_match=True, tag=lesson)
             #sys.stdout.flush()
             _LOG.debug(
                 "Verified %s preprocessing for lesson %s",
@@ -279,47 +279,46 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
                 lesson,
             )
 
-    @pytest.mark.slow
+    @pytest.mark.superslow
     def test_preprocess_notes_pdf(self) -> None:
         """
         Test preprocessing notes to PDF format.
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test PDF output type.
         output_type = "pdf"
         self._run_preprocess_notes_py(
-            self.COURSE_DIR, output_dir, lessons, output_type
+            self.COURSE_DIR, lessons, output_type
         )
 
-    @pytest.mark.slow
+    @pytest.mark.superslow
     def test_preprocess_notes_html(self) -> None:
         """
         Test preprocessing notes to HTML format.
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test HTML output type.
+        output_type = "html"
         self._run_preprocess_notes_py(
-            self.COURSE_DIR, output_dir, lessons, "html"
+            self.COURSE_DIR, lessons, output_type
         )
 
-    @pytest.mark.slow
+    @pytest.mark.superslow
     def test_preprocess_notes_slides(self) -> None:
         """
         Test preprocessing notes to slides format.
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test slides output type.
+        output_type = "slides"
         self._run_preprocess_notes_py(
-            self.COURSE_DIR, output_dir, lessons, "slides"
+            self.COURSE_DIR, lessons, output_type
         )
 
 
@@ -328,6 +327,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
 # #############################################################################
 
 
+@pytest.mark.superslow
 class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation using `notes_to_pdf.py`.
