@@ -345,6 +345,9 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
 
     COURSE_DIR: str = ""
 
+    # TODO(ai_gp): Add a test that computes a list of the slides that use
+    # typst or latex and save it with check_string.
+
     def _run_notes_to_pdf_py(
         self,
         course_dir: str,
