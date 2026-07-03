@@ -1,0 +1,2431 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 04.2: Machine Learning Models}}\]}
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\item
+  Burkov: \emph{``Machine Learning Engineering''} (2020)
+\item
+  Hastie et al.: \emph{``The Elements of Statistical Learning''} (2nd
+  ed, 2009)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg}
+
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Logistic Regression}}}
+\item
+  LDA, QDA
+\item
+  Kernel Methods
+\item
+  Support Vector Machines (Optional)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic Regression Is a Probabilistic Classifier}
+\protect\phantomsection\label{logistic-regression-is-a-probabilistic-classifier}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Logistic regression}} learns:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The probability of each class \(\Pr(y | \vx)\) given input \(\vx\)
+  \item
+    Instead of predicting class \(y\) directly
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Parametric approach}}: assume
+  \(\Pr(y | \vx; \vw)\) has a known functional form \[
+  \Pr(y=1|\vx; \vw) = \text{logit}(\vw^T \vx)
+  \]
+\item
+  \textbf{\textcolor{blue}{Optimize parameters}} \(\vw\) using maximum
+  likelihood \[
+  \vw^* = \argmax_{\vw} \Pr(\calD; \vw)
+  \]
+\item
+  \textbf{\textcolor{violet}{Predict}} by outputting class with highest
+  probability \[
+  h_{\vw}(\vx) =
+  \begin{cases}
+  +1 & \Pr(y=1|\vx; \vw) \ge 0.5 \\
+  -1 & \Pr(y=1|\vx; \vw) < 0.5 \\
+  \end{cases}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic Regression: Example}
+\protect\phantomsection\label{logistic-regression-example}
+\begin{itemize}
+\tightlist
+\item
+  Assume \(y\) is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The event \(y_i\) \emph{``patient with characteristics \(\vx\) had
+    heart attack''}
+  \item
+    Function of parameters \(\vx\) (e.g., age, gender, diet)
+  \end{itemize}
+\item
+  In data set \(\calD\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No samples of \(\Pr(y | \vx)\)
+  \item
+    Have realizations:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \emph{``Patient with \(\vx_1\) had a heart attack''}
+    \item
+      \emph{``Patient with \(\vx_2\) didn't''}
+    \item
+      \ldots{}
+    \end{itemize}
+  \end{itemize}
+\item
+  Learn \(\Pr(y | \vx)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Find best parameters \(\vw\) for logistic regression model to
+    explain data \(\calD\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic Function}
+\protect\phantomsection\label{logistic-function}
+\begin{itemize}
+\tightlist
+\item
+  Aka ``sigmoid''
+\item
+  \textbf{\textcolor{red}{Logistic function}} \(\text{logit}(s)\) is
+  defined as \[
+  \text{logit}(s) \defeq \frac{e^s}{1 + e^s} = \frac{1}{1 + e^{-s}}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Varies in {[}0, 1{]}
+  \item
+    Crosses the origin at 0.5
+  \item
+    Asymptotes at 0 and 1
+  \item
+    It is a soft version of \(\sign()\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic Regression vs Linear Classifier}
+\protect\phantomsection\label{logistic-regression-vs-linear-classifier}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Functional form is similar}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Logistic regression}}:
+    \(h(\vw) = \text{logit}(\vw^T \vx\))
+  \item
+    \textbf{\textcolor{darkgreen}{Linear classifier}} (perceptron):
+    \(h(\vw) = \sign(\vw^T \vx)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Difference}} in probabilistic interpretation
+  and fitting method
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Logistic regression** lacks samples of probability function to
+    interpolate
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Uses realizations of random variable
+    \item
+      Seeks model parameters maximizing data likelihood
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Linear classification}} assumes class value
+    is linear function of inputs
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Error for Probabilistic Binary Classifiers}
+\protect\phantomsection\label{error-for-probabilistic-binary-classifiers}
+\begin{itemize}
+\tightlist
+\item
+  For probabilistic binary classification, use
+  \textbf{\textcolor{red}{log-probability error}} as point-wise error \[
+  e(h(\vx), y) \defeq -\log(\Pr(y = h(\vx)| \vx; \vw))
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Negate for positive errors: \(\log([0, 1]) \in [-\infty, 0)\)
+  \end{itemize}
+\item
+  Log probability generalizes 0-1 error
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Case \(y = 1\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Output \(h(\vx)\) close to 1 \(\implies\) probability 1
+      \(\implies \log(1) = 0\) \(\implies e(\cdot) = 0\)
+    \item
+      Output close to 0 \(\implies e() = -\log(0) \to +\infty\)
+    \end{itemize}
+  \item
+    Similar behavior for \(y = 0\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-Liner Error for Probabilistic Binary Classifiers}
+\protect\phantomsection\label{one-liner-error-for-probabilistic-binary-classifiers}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Point-wise error}} for example \((\vx, y)\)
+  for probabilistic binary classifiers is defined as: \begingroup \small
+  \begin{alignat*}{2}
+  e(h(\vx), y) & \defeq -\log(\Pr(h(\vx) = y | \vx)) \\
+  & = \begin{cases}
+  -\log(\Pr(y=1|\vx)) & y = 1\\
+  -\log(\Pr(y=0|\vx)) & y = 0\\
+  \end{cases}
+  \\
+  & = \begin{cases}
+  -\log(\Pr(y=1|\vx)) & y = 1\\
+  -\log(1 - \Pr(y=1|\vx)) & y = 0\\
+  \end{cases}
+  \\
+  \end{alignat*}
+  \endgroup \vspace{-1cm}
+\item
+  Any function of a binary variable: \begingroup \small
+  $$
+  \begin{aligned}
+  y
+  &= \begin{cases}
+  a & x = 1\\
+  b & x = 0\\
+  \end{cases}\\
+  \end{aligned}
+  $$
+  \endgroup can be written as one-liner:
+  \(y = x \cdot a + (1 - x) \cdot b\)
+\item
+  Point-wise error can be written independently of \(\Pr(y=1|\vx)\):
+  \begingroup \small
+  $$
+  e(h(\vx), y) = -y \log(\Pr(y=1|\vx) - (1 - y) \log(1 - \Pr(y=1|\vx))
+  $$
+  \endgroup
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-Liner Error for Logistic Regression}
+\protect\phantomsection\label{one-liner-error-for-logistic-regression}
+\begin{itemize}
+\item
+  The point-wise error for a binary classifier is: \[
+  e(h(\vx), y) = -y \log(\Pr(y=1|\vx) - (1 - y) \log(1 - \Pr(y=1|\vx))
+  \]
+\item
+  Simplify further \textbf{\textcolor{red}{with logit function}}:
+  \begin{alignat*}{3}
+  e(h(\vx), y)
+  & \defeq - \log \Pr(h(\vx)=y)
+  &
+  \\
+  & \text{ ... a bit of math manipulation ...}
+  &
+  \\
+  &
+  = -\log \text{logit}(y \vw^T \vx)
+  &
+  \text{ since } \text{logit}(s) = \frac{1}{1 + e^{-s}}
+  \\
+  &
+  = \log(1 + \exp(-y \vw^T \vx))
+  &
+  \\
+  \end{alignat*} \vspace{-1cm}
+\item
+  Point-wise error for logistic regression equals
+  \textbf{\textcolor{blue}{cross-entropy error}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-Entropy Error}
+\protect\phantomsection\label{cross-entropy-error}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Point-wise error for logistic regression}} has
+  expression: \[
+  e(h(\vx), y) = \log(1 + \exp(- y \cdot \vw^T \vx))
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is called \textbf{\textcolor{darkgreen}{cross-entropy error}}
+  \item
+    Note: no \(-\) before \(\log(\cdot)\) but before
+    \(y \cdot \vw^T \vx\)
+  \end{itemize}
+\item
+  Cross-entropy error \textbf{\textcolor{blue}{generalizes 0-1 error}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(\vw^T \vx\) agrees with \(y\) in sign and \(|\vw^T \vx|\) is
+    large \(\implies\) error goes to 0
+  \item
+    If they disagree in sign \(\implies\) error goes towards \(\infty\)
+  \end{itemize}
+\item
+  Define \textbf{\textcolor{violet}{in-sample error on training set}} as
+  average of point-wise errors: \[
+  E_{in} \defeq \frac{1}{N} \sum_n e(h(\vx_n), y_n)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fitting Logistic Regression}
+\protect\phantomsection\label{fitting-logistic-regression}
+\begin{itemize}
+\item
+  A plausible error measure of a hypothesis is based on
+  \textbf{\textcolor{red}{likelihood of data}} \[
+  \Pr(\calD | h = f)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``How likely is the data \(\calD\) under the assumption that
+    \(h = f\)?''}
+  \item
+    \emph{``How likely is that the data \(\calD\) was generated by
+    \(h\)?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Maximize likelihood}} \(\calD\)
+  generated from logistic regression \[\Pr(y = 1| \vx; \vw)\]
+\item
+  It can be proved that this is equivalent to
+  \textbf{\textcolor{blue}{minimizing in-sample error}} on training set
+  \textbf{\textcolor{violet}{using cross-entropy error}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fitting Logistic Regression (Optional)}
+\protect\phantomsection\label{fitting-logistic-regression-optional}
+\begin{itemize}
+\item
+  Find \(\vw\) that maximizes likelihood for data set
+  \(\calD = \{ (\vx_1, y_1), ... , (\vx_N, y_N) \}\) generated by model
+  \(h(\vx)\): \[
+  \Pr(D | \vw)
+  = \Pr(y_1 = h(\vx_1) \land ... \land y_N = h(\vx_N))
+  = \Pr(y_1 = y_1' \land ... \land y_N = y_N')
+  \]
+\item
+  Model form: \[
+  y' = h(\vx) =
+  \begin{cases}
+  +1 & \text{ if logit}(\vw^T \vx) > 0.5\\
+  -1 & \text{ otherwise}
+  \end{cases}
+  \]
+\item
+  Assuming independence among training examples: \[
+  \Pr(D | \vw) = \prod_{i=1}^N \Pr(y_i = y_i' | \vx_i)
+  \]
+\item
+  Fold \(y_n\) in expression:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When \(y_n = 1\), \(\Pr(y_n = y_n') = \text{logit}(\vw^T \vx_n)\)
+  \item
+    When \(y_n = -1\), \(\Pr(y_n = y_n') = \text{logit}(-\vw^T \vx_n)\)
+  \end{itemize}
+\item
+  Thus, \(\Pr(y_n = y_n') = \text{logit}(y_n \vw^T \vx_n)\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fitting Logistic Regression (Optional)}
+\protect\phantomsection\label{fitting-logistic-regression-optional-1}
+\begin{itemize}
+\item
+  Given: \[
+  \Pr(D | \vw) = \prod_{i=1}^N \text{logit}(y_n \vw^T \vx_n)
+  \]
+\item
+  Re-write optimization as minimizing sum of point-wise errors
+  \(E_{in} = \sum e(h(\vx_n), y_n)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maximize \(\log(...)\) with respect to \(\vw\) since log argument
+    \(> 0\) and \(\log()\) is monotone
+  \end{itemize}
+\item
+  Equivalently, minimize:
+
+  \begin{alignat*}{3}
+  - \frac{1}{N} \log(...)
+  &= - \frac{1}{N} \log(\prod(...))
+  = - \frac{1}{N} \sum(\log(...))
+  & 
+  \text{ since } \text{logit}(s) = \frac{1}{1 + e^{-s}}
+  \\
+  &= \frac{1}{N} \sum \log(\frac{1}{\text{logit}(y_n \vw^T \vx_n)})
+  &
+  \\
+  &= \frac{1}{N} \sum \log(1 + \exp(- y_n \vw^T \vx_n))
+  = \frac{1}{N} \sum e(h(\vx_n), y_n) = E_{in}(\vw)
+  &
+  \\
+  \end{alignat*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gradient Descent for Logistic Regression}
+\protect\phantomsection\label{gradient-descent-for-logistic-regression}
+\begin{itemize}
+\item
+  Gradient descent requires two inputs:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Gradient of the cost function
+    \(\frac{\partial E}{w_j} \text{ for all } j\)
+  \item
+    Cost function \(E_{in}(\vw)\)
+  \end{itemize}
+\item
+  The cost function is: \[
+  E_{in}(\vw) = \frac{1}{N} \sum_i e(h(\vx_i; \vw), y_i)
+  \]
+\item
+  The cost function for logistic regression: \[
+  E_{in}(\vw) = \frac{1}{N} \sum_i \log(1 + \exp(-y_i \vw^T \vx_i))
+  \]
+\item
+  Thus gradient descent converges to global minimum
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It can be shown that \(E_{in}(\vw)\) is convex in \(\vw\)
+  \item
+    In fact sum of exponentials and flipped exponentials is convex and
+    log is monotone
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{One-Vs-All Multi-Class Classification}
+\protect\phantomsection\label{one-vs-all-multi-class-classification}
+\begin{itemize}
+\item
+  Aka ``one-vs-rest'' classifier
+\item
+  \textbf{\textcolor{red}{Problem}}: you have \(n\) classes
+  \(c_1, ... , c_n\) to distinguish given \(\vx\)
+\item
+  \textbf{\textcolor{darkgreen}{Learn}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Create \(n\) binary classification problems where we classify
+    \(c_i\) vs \(c_{-i}\) (everything but \(i\))
+  \item
+    Learn \(n\) classifiers with optimal \(\vw_i\), each estimating
+    \(\Pr(y=i | \vx; \vw_i)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Predict}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate the \(n\) classifiers
+  \item
+    Pick the class \(y = i\) with the maximum \(\Pr(y = i | \vx)\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cost Function for Multi-Class Classification (Opt)}
+\protect\phantomsection\label{cost-function-for-multi-class-classification-opt}
+\begin{itemize}
+\item
+  The cost function for logistic regression is: \[
+  E_{in}(\vw)
+  = - \frac{1}{N}
+  \sum_{i=1}^N (y_i \log \Pr(y=1|\vx_i) + (1 - y_i) \log (1 - \Pr(y=1|\vx_i)))
+  \]
+\item
+  Encode expected outputs \(\vy_i\) one-hot
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(j\)-th element \(\vy_i|_j\) is 1 if correct class is \(j\)-th
+  \item
+    E.g., for \(k = 4\) \textcolor{blue}{\texttt{1000}}
+  \end{itemize}
+\item
+  Using \(\vh(\vx)\) as model outputs and \(\Pr(y = 1|\vx) = p(\vx)\):
+  \[
+  E_{in}(\vw)
+  = - \frac{1}{N}
+  \sum_{i=1}^N \sum_{k=1}^K \left(
+  \vy_i \log(\vp(\vx_i)) +
+  (1 - \vy_i) \log(1 - \vp(\vx_i)) \right)\big|_k
+  \]
+\item
+  Innermost summation considers error on each class/digit
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., for \(k = 4\) \textcolor{blue}{\texttt{1000}} vs
+    \textcolor{blue}{\texttt{0100}}
+  \item
+    Equal digits don't contribute to error
+  \item
+    Different digits give positive contribution
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Logistic Regression
+\item
+  \emph{\textbf{\textcolor{red}{LDA, QDA}}}
+\item
+  Kernel Methods
+\item
+  Support Vector Machines (Optional)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Basic Idea of Parametric Models}
+\protect\phantomsection\label{basic-idea-of-parametric-models}
+\begin{itemize}
+\tightlist
+\item
+  Assume a model generates data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Known functional form
+  \item
+    Parametrized with unknown parameters to estimate
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Utilize data structure
+  \item
+    Easy to fit: few parameters
+  \item
+    Accurate predictions if assumptions correct
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Strong data assumptions
+  \item
+    Low accuracy if assumptions incorrect
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear and Quadratic Discriminant Analysis}
+\protect\phantomsection\label{linear-and-quadratic-discriminant-analysis}
+\begin{itemize}
+\item
+  Aka LDA and QDA
+\item
+  \textbf{\textcolor{red}{Parametric models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assume each class generating process is multivariate Gaussian
+  \item
+    Classifiers with linear and quadratic decision surface
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Closed-form solutions easy to compute (sample mean and covariance)
+  \item
+    Inherently multiclass
+  \item
+    No hyperparams to tune
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Strong assumptions about the data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LDA / QDA: Model Form}
+\protect\phantomsection\label{lda-qda-model-form}
+\begin{itemize}
+\item
+  Both LDA and QDA assume class generating process
+  \(f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})\) is
+  \textbf{\textcolor{red}{multivariate Gaussian}}
+\item
+  \textbf{\textcolor{darkgreen}{Linear discriminant analysis (LDA)}}
+  model: \[
+  f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})
+  \sim \calN(\vv{\mu_k}, \mSigma))
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Means \(\vv{\mu_k}\) differ for all \(k\) classes
+  \item
+    Covariance matrix \(\mSigma\) same for all \(k\) classes
+  \item
+    Classes separated by linear decision boundaries
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Quadratic discriminant analysis (QDA)}}
+  model:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classes \(k\) have different covariance matrix \(\mat{\Sigma_k}\)
+  \item
+    Classes separated by quadratic boundaries
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayes Theorem for LDA / QDA}
+\protect\phantomsection\label{bayes-theorem-for-lda-qda}
+\begin{itemize}
+\item
+  Consider a classification setup with multi-class output
+  \(Y \in \{1, ..., K\}\)
+\item
+  Build a
+  \textbf{\textcolor{red}{parametric model for the conditional distribution}}:
+  \[
+  \Pr(Y = k | X = \vx)
+  \]
+\item
+  Use \textbf{\textcolor{darkgreen}{Bayes theorem}}: \[
+  \Pr(Y = k | X = \vx) = \frac{\Pr(X = \vx | Y = k) \cdot \Pr(Y = k)}{\Pr(X = \vx)}
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(X = \vx | Y = k)\): given a class, estimate probability of
+    \(\vx\)
+  \item
+    \(\Pr(Y = k) = \pi_k\): probability of each class (prior)
+  \item
+    \(\Pr(X = \vx)\): probability of each input
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Estimate probabilities}} from data
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LDA / QDA: Boundary Decision (Optional)}
+\protect\phantomsection\label{lda-qda-boundary-decision-optional}
+\begin{itemize}
+\item
+  Consider the ratio between the probabilities of \(Y = k\) vs
+  \(Y = j\): \[
+  r = \frac{\Pr(Y = k | X = \vx)}{\Pr(Y = j | X = \vx)}
+  \]
+\item
+  Using the model assumption and Bayes theorem: \begin{alignat*}{2}
+  \Pr(Y = k | X = \vx)
+  &\propto \Pr(X = \vx | Y = k) \cdot \Pr(Y = k)
+  \\
+  &= f_k(\vx; \vv{\mu_k}) \cdot \pi_k
+  \\
+  \end{alignat*} where: \[
+  f_k(\vx) = c \cdot
+  \exp \left(
+  -\frac{1}{2}
+  (\vx - \vv{\mu_k})^T \mSigma^{-1} (\vx - \vv{\mu_k})
+  \right)
+  \]
+\item
+  Apply \(\log(\cdot)\) as a monotone transformation \[
+  r = \log \frac{f_k(\vx)}{f_j(\vx)} + \log \frac{\pi_k}{\pi_j}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LDA / QDA: Boundary Decision (Optional)}
+\protect\phantomsection\label{lda-qda-boundary-decision-optional-1}
+\begin{itemize}
+\item
+  Apply \(\log(\cdot)\) as a monotone transformation \[
+  r = \log \frac{f_k(\vx)}{f_j(\vx)} + \log \frac{\pi_k}{\pi_j}
+  \]
+\item
+  \textbf{\textcolor{red}{Second term}} independent of \(\vx\) so you
+  can ignore it
+\item
+  \textbf{\textcolor{blue}{First term}} proportional to: \[
+  (\vx - \vv{\mu_k})^T \mSigma^{-1} (\vx - \vv{\mu_k}) -
+  (\vx - \vv{\mu_j})^T \mSigma^{-1} (\vx - \vv{\mu_j})
+  \]
+\item
+  Expand, simplify \(\vx^T \mSigma^{-1} \vx\), and note: \[
+  2 \vx^T \mSigma^{-1} (\vv{\mu_k} - \vv{\mu_j})
+  \] Resulting in a linear relationship in \(\vx\) \[
+  - \frac{1}{2} (\vv{\mu_k} + \vv{\mu_j})^T \mSigma^{-1} (\vv{\mu_k} -
+  \vv{\mu_j})
+  + \vx^T \mSigma^{-1}(\vv{\mu_k} - \vv{\mu_j})
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{LDA / QDA: Learn Model (Optional)}
+\protect\phantomsection\label{lda-qda-learn-model-optional}
+\begin{itemize}
+\item
+  In practice:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ignore \(\Pr(X = \vx)\); it's common for all classes
+  \item
+    Know or estimate prior \(\Pr(Y = k) = \pi_k\) from data
+  \item
+    Estimate conditional probability \(\Pr(X = \vx | Y = k)\)
+  \end{itemize}
+\item
+  Model assumes Gaussian distribution for conditional probability: \[
+  \Pr(X = \vx | Y = k) = f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k})
+  \] where: \[
+  f_k(\vx) = \frac{1}{(2 \pi)^n |\mat{\Sigma_k}|^{1/2}}
+  \exp \left( -\frac{1}{2}(\vx - \vv{\mu_k})^T \mat{\Sigma_k}^{-1}
+  (\vx - \vv{\mu_k}) \right)
+  \]
+\item
+  Estimate parameters \(\vv{\mu_k}\), \(\mat{\Sigma_k}\) using sample
+  mean and covariance
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Evaluating LDA / QDA}
+\protect\phantomsection\label{evaluating-lda-qda}
+\begin{itemize}
+\item
+  For new \(\vx = \vx'\), compute for each class \(Y = k\) \[
+  \Pr(Y = k | X = \vx) \propto f_k(\vx; \vv{\mu_k}, \mat{\Sigma_k}) \cdot \pi_k
+  \]
+\item
+  Choose \(k\) that maximizes posterior probability
+\item
+  If \(f_i(\vx)\) is from a multivariate Gaussian distribution with
+  diagonal \(\mSigma\) (feature independence), you can simplify
+  expressions further
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Logistic Regression
+\item
+  LDA, QDA
+\item
+  \emph{\textbf{\textcolor{red}{Kernel Methods}}}
+\item
+  Support Vector Machines (Optional)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel: Definition}
+\protect\phantomsection\label{kernel-definition}
+\begin{itemize}
+\tightlist
+\item
+  Consider a transformation \(\Phi: \calX \rightarrow \calZ\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., transform features in space \(\calX\) non-linearly into
+    higher-dimensional space \(\calZ\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Kernel of transformation}} \(\Phi\) yields
+  inner product of two points \(\vx, \vx' \in \calX\) in transformed
+  space \(\calZ\) \[
+  K_{\Phi}(\vx, \vx')
+  \defeq \langle \Phi(\vx), \Phi(\vx') \rangle
+  = \Phi(\vx)^T \Phi(\vx')
+  = \vz^T \vz'
+  \]
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Why doing this?
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.Kernel_Trick.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Kernel: Expression From the Transform}
+\protect\phantomsection\label{kernel-expression-from-the-transform}
+\begin{itemize}
+\item
+  If you have an expression for \(\Phi\), compute a closed formula for
+  the kernel
+\item
+  E.g., if transformation is \(\Phi: \bbR^2 \to \bbR^6\), it introduces
+  interaction terms: \[
+  \vz = \Phi(\vx) = \Phi(x_1, x_2) = (1, x_1, x_2, x_1^2, x_2^2, x_1 x_2)
+  \]
+\item
+  Kernel of \(\Phi\) is: \begin{alignat*}{2}
+  & K_{\Phi}(\vx, \vx')
+  & = (1, x_1, x_2, x_1^2, x_2^2, x_1 x_2)^T
+    (1, {x'}_1, {x'}_2, {x'}_1^2, {x'}_2^2, {x'}_1 {x'}_2) \\
+  & 
+  & = 1 + x_1 x'_1 + x_2 x_2' + x_1^2 {x'}_1^2 + x_2^2 {x'}_2^2
+    + x_1 x_2 {x'}_1 {x'}_2 \\
+  \end{alignat*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gaussian Kernel}
+\protect\phantomsection\label{gaussian-kernel}
+\begin{itemize}
+\tightlist
+\item
+  Aka ``exponential kernel'' or ``Radial Basis Function'' (RBF) kernel
+\item
+  A \textbf{\textcolor{red}{Gaussian kernel}} has the form: \[
+  K(\vx, \vx')
+  = \exp(- \gamma \|\vx - \vx'\|^2)
+  = \exp(- \frac{\|\vx - \vx'\|^2}{\sigma^2})
+  \]
+\item
+  It can be shown to be an inner product in an infinite dimension
+  \(\calZ\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel as Way to Measure Similarity}
+\protect\phantomsection\label{kernel-as-way-to-measure-similarity}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}: The Gaussian kernel \[
+  K(\vx, \vx')
+  = \exp(- \gamma \|\vx - \vx'\|^2)
+  \] measures ``similarity'' of point \(\vx\) to point \(\vx_i\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(K(\vx, \vx')\) is 1 when points are the same
+  \item
+    Value is 0 when points are distant
+  \item
+    Effect strength depends on \(\gamma\)
+  \end{itemize}
+\item
+  Using kernels to compute features:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Kernels often rely on distance between vectors
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., euclidean norm \(\|\vx - \vx'\|^2\)
+    \end{itemize}
+  \item
+    Need to scale features for similar effects among coordinates
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Kernel}
+\protect\phantomsection\label{linear-kernel}
+\begin{itemize}
+\tightlist
+\item
+  Consider the transformation \(\Phi\) as the identity function
+  \(\Phi(\vx) = \vx\)
+\item
+  The kernel function is: \[
+  K_{\Phi}(\vx, \vx') = \vx^T \vx'
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A \textbf{\textcolor{red}{linear kernel}} means using no kernel
+  \item
+    It is just a ``pass-through''
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Polynomial Kernel}
+\protect\phantomsection\label{polynomial-kernel}
+\begin{itemize}
+\tightlist
+\item
+  Given a point \(\vx \in \bbR^n\), consider the function with two
+  parameters \(k\) and \(d\) \[
+  K_{\Phi}(\vx, \vx') = (k + \vx^T \vx')^d
+  \]
+\item
+  It is called \textbf{\textcolor{red}{polynomial}} since if you expand
+  the dot product you get a polynomial
+\item
+  It can be proved that this is always a kernel
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel: Identifying a Function as a Kernel}
+\protect\phantomsection\label{kernel-identifying-a-function-as-a-kernel}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You have a certain function \(K(\vx, \vx')\) and you want to show
+    that \(K(\cdot)\) is an inner product in the form for some function
+    \(\Phi(\cdot)\) \[
+    K(\vx, \vx') = \Phi(\vx)^T \Phi(\vx') \quad \forall \vx, \vx'
+    \] for a certain \(\Phi\) and \(\calZ\)
+  \end{itemize}
+\item
+  In theory, a given function \(K(\vx, \vx')\) is a valid kernel iff:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is a symmetric, and
+  \item
+    Satisfies the Mercer's condition: the matrix \(K(\vx_i, \vx_j)\) is
+    definite semi-positive
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel: Example of Identifying a Kernel}
+\protect\phantomsection\label{kernel-example-of-identifying-a-kernel}
+\begin{itemize}
+\item
+  Let's show that: \[K(\vx, \vx') = (k + \vx^T \vx')^d\] is a
+  \textbf{\textcolor{red}{kernel}} for any \(n, k, d\)
+\item
+  According to the definition you need to show that there is always a
+  transform \(\Phi\): \[
+  \Phi: \calX = \bbR^n \to \calZ = \bbR^q
+  \] with \(q \gg d\), such that \(K_{\Phi} = (k + \vx^T \vx')^d\)
+\item
+  \textbf{\textcolor{blue}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\calX = \bbR^2\),
+    \(K(\vx, \vx') = (1 + \vx^T \vx')^2 = (1 + x_1 x'_1 + x_2 x'_2)^2\)
+  \item
+    Compute the full expression in terms of the coordinates: \[
+    K(\vx, \vx')
+    = (1 + x_1^2 {x'}_1^2 + x_2^2 {x'}_2^2 + 2 x_1 x'_1 + 2 x_2 x'_2 + 2 x_1 x'_1 x_2 x'_2)
+    \]
+  \item
+    Choose:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\calZ = \bbR^6\)
+    \item
+      \(\Phi(x_1, x_2) = (1, x_1^2, x_2^2, \sqrt{2} x_1, \sqrt{2} x_2, \sqrt{2} x_1 x_2)\)
+    \end{itemize}
+  \item
+    This is a particular case of the polynomial kernel
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A Kernel Is a Computational Shortcut}
+\protect\phantomsection\label{a-kernel-is-a-computational-shortcut}
+\begin{itemize}
+\item
+  In literature, the \textbf{\textcolor{red}{kernel trick}} is a
+  \textbf{\textcolor{darkgreen}{computational shortcut}} for the dot
+  product of transformed vectors
+\item
+  Compare 2 ways to compute the inner product of transformed vectors for
+  a polynomial kernel
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\textcolor{blue}{Using definition}}: compute images of
+    vectors, then inner product in transformed space: \[
+    (1, x_1, x_2, \sqrt{2} x_1 x_2, x_1^2, x_2^2, ...)^T \cdot (1, x'_1, ...)
+    \]
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Requires combinatorial powers and a large dot product
+    \end{itemize}
+  \item
+    \textbf{\textcolor{violet}{Kernel trick}}: use kernel function for
+    dot product in transformed space \[
+    (k + \vx^T \vx')^d
+    \]
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Requires inner product of small vectors, then power of a number
+    \end{itemize}
+  \end{enumerate}
+\item
+  Kernel trick is more computationally efficient for inner product
+  computation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Logistic Regression
+\item
+  LDA, QDA
+\item
+  Kernel Methods
+\item
+  \emph{\textbf{\textcolor{red}{Support Vector Machines (Optional)}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Support Vector Machines (SVM)}
+\protect\phantomsection\label{support-vector-machines-svm}
+\begin{itemize}
+\item
+  Arguably one of the most successful classification algorithm, together
+  with neural networks and random forests
+\item
+  \textbf{\textcolor{red}{Idea}}: find a separating hyperplane that
+  maximizes the distance from the class points (aka ``margin'')
+\item
+  \textbf{\textcolor{blue}{All the rage in 2005-2015}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Robust classifier handling outliers automatically
+  \item
+    Strong theoretical justification of out-of-bound error
+  \item
+    Strong link with VC dimension
+  \item
+    Cool geometric interpretation
+  \item
+    Solve a very complex optimization problem with some neat tricks
+  \item
+    Works for both regression and classification
+  \end{itemize}
+\item
+  SVM for classification:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Does not output probabilities (like logistic regression), but
+    predicts directly the class
+  \item
+    Has a notion of confidence, as distance from the margin
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SVM Is a Large Margin Classifier}
+\protect\phantomsection\label{svm-is-a-large-margin-classifier}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  Why \textbf{\textcolor{red}{large margin}} classifier is good?
+\item
+  Given a linearly separable data set, the optimal separating line
+  maximizes the margin:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    More robust to noise
+  \item
+    Large margin reduces VC dimension of hypothesis set
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.SVM.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{SVM: Notation and Conventions}
+\protect\phantomsection\label{svm-notation-and-conventions}
+\begin{itemize}
+\tightlist
+\item
+  Assume that:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Outputs are encoded as \(y_i \in \{-1, 1\}\)
+  \item
+    Pull out \(w_0\) from \(\vw\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The bias \(w_0 = b\) plays a different role
+    \item
+      \(\vw = (w_1, ... , w_d)\) and there is no \(x_0 = 1\)
+    \item
+      \(\vw^T \vx + b = 0\) is the equation of the separating hyperplane
+    \end{itemize}
+  \item
+    \(\vx_n\) is the closest point to the hyperplane
+
+    \begin{itemize}
+    \tightlist
+    \item
+      It can be multiple points from different classes
+    \end{itemize}
+  \end{enumerate}
+\item
+  Normalize \(\vw\) and \(b\) to get a canonical representation of the
+  hyperplane imposing \(|\vw^T \vx_n + b| = 1\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SVM: Original Form of Problem}
+\protect\phantomsection\label{svm-original-form-of-problem}
+\begin{itemize}
+\item
+  The SVM problem is:
+
+  \begin{alignat*}{3}
+  \text{find }
+  & \vw, b
+  &
+  \\
+  \text{maximize }
+  & \frac{1}{\|\vw\|}
+  & \text{(max margin) }
+  \\
+  \text{subject to }
+  & \min_{i=1, ... , n} |\vw^T \vx_i + b| = 1
+  & \text{(hyperplane)}
+  \\
+  \end{alignat*}
+\item
+  This problem is not friendly to optimization since it has norm, min,
+  and absolute value
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Primal Form of SVM Problem}
+\protect\phantomsection\label{primal-form-of-svm-problem}
+\begin{itemize}
+\item
+  You can rewrite it as:
+
+  \[
+  \begin{aligned}
+  \text{find $\vw, b$} \eqspace & \\
+  \text{minimize } \eqspace & \frac{1}{2} \vw^T \vw\\
+  \text{subject to } \eqspace & y_i (\vw^T \vx_i + b) \ge 1 \; \forall i = 1, ..., n\\
+  \end{aligned}
+  \]
+\item
+  Note that under \(\vw\) minimal and linear separable classes, it is
+  guaranteed that for at least one \(\vx_i\) in the second equation will
+  be equal to \(1\) (as in the original problem)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In fact otherwise we could scale down \(\vw\) and \(b\) (which does
+    not change the plane) to use the slack, against the hypothesis of
+    minimality of \(\vw\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dual (Lagrangian) Form of SVM Problem}
+\protect\phantomsection\label{dual-lagrangian-form-of-svm-problem}
+\[
+  \begin{aligned}
+  \text{minimize with respect to } \valpha \eqspace &
+  \calL(\valpha) =
+  \sum_{i=1}^N \alpha_i -
+  \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N y_i y_j \alpha_i \alpha_j \vx_i^T \vx_j \\
+  %
+  \text{subject to } \eqspace &
+  \valpha \ge \vv{0}, \sum_{i=1}^N \alpha_i y_i = 0 \\
+  %
+  & \vw = \sum_{i=1}^N \alpha_i y_i \vx_i \\
+  \end{aligned}
+  \]
+
+\begin{itemize}
+\tightlist
+\item
+  The equation for \(\vw\) is not a constraint, but it computes \(\vw\)
+  (the plane) given \(\valpha\), while \(b\) is given by
+  \(\min |\vw^T \vx_i + b| = 1\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dual Form of SVM as QP Problem}
+\protect\phantomsection\label{dual-form-of-svm-as-qp-problem}
+\begin{itemize}
+\item
+  The dual form of SVM problem is a convex quadratic programming
+  problem, in the form:
+
+  \[
+  \begin{aligned}
+  \text{minimize with respect to } \valpha \eqspace &
+  \vv{1}^T \valpha - \frac{1}{2} \valpha^T \mQ \valpha\\
+  \text{subject to } \eqspace &
+  \valpha \ge 0, \vy^T \valpha = 0\\
+  \end{aligned}
+  \]
+
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the matrix is \(\mQ = \{ y_i y_j \vx_i^T \vx_j \}_{ij}\)
+  \item
+    \(\valpha\) is the column vector \((\alpha_1, \ldots , \alpha_N)\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving Dual Formulation of SVM Problem (1/2)}
+\protect\phantomsection\label{solving-dual-formulation-of-svm-problem-12}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Solving convex problem}} for \(\alpha\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feeding this problem to a QP solver, you get the optimal vector
+    \(\valpha\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Compute hyperplane}} \(\vw\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    From \(\valpha\) recover the plane \(\vw\) from the equation:
+    \(\vw = \sum_{i=1}^N \alpha_i y_i \vx_i\)
+  \item
+    Looking at the optimal \(\alpha_i\), you can observe that many of
+    them are \(0\)
+  \item
+    This is because when you applied the Lagrange multipliers to the
+    inequalities: \(y_i (\vw^T \vx_i + b) \ge 1\), you got the KKT
+    condition: \[
+    \alpha_i (y_i (\vw^T \vx_i + b) - 1) = 0
+    \]
+  \item
+    From these equations, either
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\alpha_i = 0\) and \(\vx_i\) is an \emph{interior point} since
+      it has non-null distance from the plane (i.e., slack) from the
+      plane; or
+    \item
+      \(\alpha_i \ne 0\) and the slack is \(0\), which implies that the
+      \(\vx_i\) point touches the margin, i.e., it is a \emph{support
+      vector}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving Dual Formulation of SVM Problem (2/2)}
+\protect\phantomsection\label{solving-dual-formulation-of-svm-problem-22}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Thus the hyperplane is only function of the support vectors: \[
+  \vw
+  = \sum_{i=1}^N \alpha_i y_i \vx_i
+  = \sum_{\vx_i \in \text{SV}} \alpha_i y_i \vx_i
+  \] since only for the support vectors \(\alpha \ne 0\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The \(\alpha_i \ne 0\) are the real degree of freedom
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.Support_Vectors.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Compute}} \(b\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Once \(\vw\) is known, you can use any support vector to compute
+    \(b\): \[
+    y_i (\vw^T \vx_i + b) = 1
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Support Vectors and Degrees of Freedom for SVM}
+\protect\phantomsection\label{support-vectors-and-degrees-of-freedom-for-svm}
+\begin{itemize}
+\tightlist
+\item
+  The number of support vectors is related to the degrees of freedom of
+  the model
+\item
+  Because of the VC dimension, you have an in-sample quantity to bound
+  the out-of-sample error: \[
+  E_{out} \le E_{in} + c \frac{\text{num of SVs}}{N - 1}
+  \]
+\item
+  You are ``guaranteed'' to not overfit
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linear Transform for SVM}
+\protect\phantomsection\label{non-linear-transform-for-svm}
+\begin{itemize}
+\item
+  \(\Phi: \calX \to \calZ\) transforms \(\vx_i\) into
+  \(\vz_i = \Phi(\vx_i) \in \bbR^{\tilde{d}}\) with \(\tilde{d} > d\)
+\item
+  Transform vectors through \(\Phi\) and apply SVM machinery
+\item
+  Dual SVM formulation in \(\calZ\) space: \[
+  \calL(\valpha) =
+  \sum_{i=1}^N \alpha_i -
+  \frac{1}{2} \sum_{i=1}^N \sum_{j=1}^N \alpha_i \alpha_j y_i y_j \vz_i^T \vz_j
+  \]
+\item
+  Note:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Optimization problem has same number of unknowns as original space
+    (number of points \(N\))
+  \item
+    Support vectors live in \(\calZ\): they have \(\alpha = 0\). In
+    \(\calX\), they are pre-images of support vectors
+  \item
+    Decision boundary and margin can be represented in original space
+    (not linear)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linear Transforms for SVM vs Others}
+\protect\phantomsection\label{non-linear-transforms-for-svm-vs-others}
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  In SVM the non-linear transform does not change the number of unknowns
+  and degrees of freedom of the model
+\item
+  This is different from transforming the variables in a linear problem,
+  since in that case the number of unknowns changes
+\end{itemize}
+\end{column}
+
+\begin{column}{0.6\linewidth}
+\includegraphics[width=4cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Non_linear_SVM1.png}
+\includegraphics[width=4cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Non_linear_SVM2.png}
+\includegraphics[width=4cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Non_linear_SVM3.png}
+\includegraphics[width=4cm,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Non_linear_SVM4.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{SVM in Higher Dimensional Space}
+\protect\phantomsection\label{svm-in-higher-dimensional-space}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You don't pay the price in terms of complexity of optimization
+    problem
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Number of unknowns is still \(N\) (different than a linear
+      problem)
+    \end{itemize}
+  \item
+    You don't pay the price in terms of increased generalization bounds
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Number of support vectors is \(\le N\)
+    \item
+      This is because each hypothesis \(h\) can be complex but the
+      cardinality of the hypothesis set \(\calH\) is the same
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You pay a price to compute \(\Phi(\vx_i)^T \Phi(\vx_j)\), since
+    \(\Phi\) could be very complex
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The kernel trick will remove this extra complexity by doing
+      \(\Phi(\vx_i)^T \Phi(\vx_j) = K_{\Phi}(\vx_i, \vx_j)\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linear Transform in SVM vs Kernel Trick}
+\protect\phantomsection\label{non-linear-transform-in-svm-vs-kernel-trick}
+\begin{itemize}
+\tightlist
+\item
+  The trivial approach is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transform vectors with \(\Phi(\cdot)\)
+  \item
+    Apply all SVM machinery to the transformed vectors
+  \item
+    \textbf{\textcolor{red}{Cons}}: \(\Phi\) might be very complex,
+    e.g., potentially exponential number of terms
+  \end{itemize}
+\item
+  You can express the SVM problem formulation and the prediction in
+  terms of a kernel \[
+  K_{\Phi}(\vx, \vx') = \Phi(\vx)^T \Phi(\vx') = \vz^T \vz'
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You only need the kernel \(K_{\Phi}(\vx, \vx')\) of the
+    transformation \(\Phi(\cdot)\) and not \(\Phi(\cdot)\) itself
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SVM in Terms of Kernel: Optimization Step}
+\protect\phantomsection\label{svm-in-terms-of-kernel-optimization-step}
+\begin{itemize}
+\item
+  When you build the QP formulation for the Lagrangian to compute the
+  \(\alpha\) we can use \(K_{\Phi}(\vx_i, \vx_j)\) instead of
+  \(\vz_i^T \vz_j\) \[
+  \calL(\valpha) =
+  \sum_{n=1}^N \alpha_n -
+  \frac{1}{2} \sum_{n=1}^N \sum_{m=1}^N y_n y_m \alpha_n \alpha_m
+  K_{\Phi}(\vx_n, \vx_m)
+  \]
+\item
+  \(\vz_n\) does not appear in the constraints
+
+  \[
+  \valpha \ge \vv{0}, \valpha^T \vy = 0
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SVM in Terms of Kernel: Prediction Step}
+\protect\phantomsection\label{svm-in-terms-of-kernel-prediction-step}
+\begin{itemize}
+\item
+  You need only inner products to compute a prediction for a given
+  \(\vz\)
+\item
+  In fact to make predictions, you replace the expression of
+  \(\tilde{\vw} = \sum_{i : \alpha_i > 0} \alpha_i y_i \vz_i\) in
+  \(h(\vx) = \sign(\vw^T \Phi(\vx) + b)\), yielding:
+
+  \[
+  h(\vx)
+  = \sign(\sum_{i : \alpha_i > 0} \alpha_i y_i K_{\Phi}(\vx_i, \vx) + b)
+  \]
+
+  where \(b\) is given by \(y_i(\vw^T \vz_i + b) = 1\) for any support
+  vector \(\vx_m\) and thus
+
+  \[
+  b = \frac{1}{y_m} - \sum_{i: \alpha_i > 0} \alpha_i y_i K_{\Phi}(\vx_i, \vx_m)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Implications of Kernel Trick in SVM}
+\protect\phantomsection\label{implications-of-kernel-trick-in-svm}
+\begin{itemize}
+\item
+  The ``kernel trick'' is a computational shortcut:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use the kernel of the transformation instead of the transformation
+    itself
+  \end{itemize}
+\item
+  To use SVMs, compute inner products between transformed vectors
+  \(\vz\)
+\item
+  The kernel trick implies:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No need to compute \(\Phi()\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use the kernel \(K_{\Phi}\), not the transformation \(\Phi\)
+    \end{itemize}
+  \item
+    No need to know \(\Phi\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      With function \(K_{\Phi}\) as an inner product, use SVM machinery
+      without knowing \(\calZ\) space or transformation \(\Phi\)
+    \end{itemize}
+  \item
+    \(\Phi\) can be impossible to compute
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(K_{\Phi}\) can correspond to a transformation \(\Phi\) to an
+      infinite dimensional space (e.g., Gaussian kernel)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linearly Separable SVM Problem}
+\protect\phantomsection\label{non-linearly-separable-svm-problem}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  In general there are different types of
+  \textbf{\textcolor{red}{non-linearly separable data sets}}
+\item
+  \textbf{\textcolor{darkgreen}{Slightly non-separable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Few points crossing the boundary
+  \item
+    \(\implies\) use soft margin SVMs
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Seriously non-separable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., the class inside the circle
+  \item
+    \(\implies\) use non-linear kernels
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=0.4\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Slightly_non_separable_dataset.png}
+
+\includegraphics[width=0.4\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Slightly_non_separable_dataset2.png}
+
+\includegraphics[width=0.4\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L04.2.Non_separable_dataset.png}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  In practice, both issues are present
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Combine soft margin SVM and non-linear kernel transforms
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Soft-Margin SVM: Advantages}
+\protect\phantomsection\label{soft-margin-svm-advantages}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Even with linearly separable data, improve \(E_{out}\) using soft
+  margin SVM at the cost of worse \(E_{in}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Trade-off between in-sample and out-of-sample performance
+  \end{itemize}
+\item
+  E.g., outliers force a smaller margin
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ignoring outliers could increase margin
+  \end{itemize}
+\item
+  Large \(C\) parameter in SVM requires minimizing error, trading off
+  large margin for correct classification
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.Hard_vs_Soft_margin.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.Hard_vs_Soft_margin2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Primal Formulation for Soft Margin SVM}
+\protect\phantomsection\label{primal-formulation-for-soft-margin-svm}
+\begin{itemize}
+\item
+  You want to introduce an error measure based on the margin violation
+  for each point, so instead of the constraint: \[
+  y_i (\vw^T \vx_i + b) \ge 1 \text{ (hard margin)}
+  \]
+\item
+  You can use: \[
+  y_i (\vw^T \vx_i + b) \ge 1 - \xi_i, \text{ where } \xi_i \ge 0
+  \text{ (soft margin)}
+  \]
+\item
+  The cumulative margin violation is \(C \sum_{i=1}^N \xi_i\)
+\item
+  The soft margin SVM optimization (primal form) is:
+
+  \[
+  \begin{aligned}
+  \text{find $\vw, b, \vxi$} & \\
+  \text{minimize } \eqspace & \frac{1}{2} \vw^T \vw + C \sum_{i=1}^N \xi_i\\
+  \text{subject to } \eqspace & y_i(\vw^T \vx_i + b) \ge 1 - \xi_i \; \forall i\\
+  & \xi_i \ge 0
+  \end{aligned}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Classes of Support Vectors for Soft Margin SVM}
+\protect\phantomsection\label{classes-of-support-vectors-for-soft-margin-svm}
+\begin{itemize}
+\tightlist
+\item
+  There are 3 classes of points:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Margin support vectors}}: they are exactly
+    on the margin and define it
+
+    \begin{itemize}
+    \tightlist
+    \item
+      In primal form: \(y_i (\vw^T \vx_i + b) = 1 \iff \xi_i = 0\)
+    \item
+      In dual form: \(0 < \alpha_i < C\)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Non-margin support vectors}}: they are
+    inside the margin and classified correctly or not
+
+    \begin{itemize}
+    \tightlist
+    \item
+      In primal form: \(y_i (\vw^T \vx_i + b) < 1 \iff \xi_i > 0\)
+    \item
+      In dual form: \(\alpha_i = C\)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Non-support vectors}}, i.e., interior
+    points:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      In primal form: \(y_i (\vw^T \vx_i + b) > 1\)
+    \item
+      In dual form: \(\alpha_i = 0\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Intuition for C in SVM}
+\protect\phantomsection\label{intuition-for-c-in-svm}
+\begin{itemize}
+\tightlist
+\item
+  \(C\) represents how much penalty you incur for passing the margin
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(C\) is large, then SVM will try to fit all the points to avoid
+    being penalized
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Lower bias / higher variance
+    \item
+      \(C \to \infty\) which yields hard-margin SVM
+    \end{itemize}
+  \item
+    If \(C\) is small, then you allow margin violations
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Higher bias / lower variance
+    \end{itemize}
+  \end{itemize}
+\item
+  From another point of view \(C \propto \frac{1}{\lambda}\), so large
+  \(C\) means small \(\lambda\) and thus small regularization
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(C\) is chosen through cross validation, like any regularization
+    parameter
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.2.Varying_C_in_SVM.png}}
+\end{frame}
+
+\begin{frame}{Multi-Class Classification for SVM}
+\protect\phantomsection\label{multi-class-classification-for-svm}
+\begin{itemize}
+\item
+  Often SVM packages have built-in multi-class classification
+\item
+  Otherwise use the one-vs-all method:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Train \(K\) SVMs distinguishing each class from the rest using
+    one-hot encoding
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Get SVM parameters \((\vw_1, b_1), ..., (\vw_K, b_k)\)
+    \end{itemize}
+  \item
+    For a new example \(\vx\) compute \(\vw_i^T \vx + b_i\) for all the
+    models
+  \item
+    Pick the model that gives the largest positive value
+
+    \begin{itemize}
+    \tightlist
+    \item
+      I.e., more confident about its class vs the rest of the classes
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

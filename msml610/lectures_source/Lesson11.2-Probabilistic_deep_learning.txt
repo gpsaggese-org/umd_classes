@@ -775,18 +775,17 @@
 * Convolutional Neural Networks
 
 - **Convolutional Layer Mechanics**
-  - Filter (or kernel): small matrix of weights (E.g., $3 \times 3$)
+  - _Filter_ (aka _kernel_) is small matrix of weights (E.g., $3 \times 3$)
   - Apply dot product between filter and local patch of input
 
 - **Weight Sharing**
   - Each filter is reused across all spatial locations
-  - Spatial invariance: things detectable in an image should be independent of
+  - _Spatial invariance_: things detectable in an image should be independent of
     the position in the image
   - Reduces number of parameters and improves generalization
 
-- **Feature Map**
-  - Output of a convolutional layer after applying filters (kernels) to the
-    input
+- **Feature Map** is the output of a convolutional layer after applying filters
+  to the input
   - Represents spatial patterns such as edges, textures, or more complex
     features learned by the network
 
@@ -796,18 +795,20 @@
     - Later layers detect object parts or entire objects
 
 - **Example**
-  - An image of size $32 \times 32 \times 3$ with a $5 \times 5$ filter creates a
-    $28 \times 28$ feature map (ignoring padding)
+  - An image of size 32 x 32 x 3 with a 5 x 5 filter creates a 28 x 28 feature
+    map (ignoring padding)
+
+// TODO(ai_gp): Add figures
 
 * Convolutional Neural Networks
 
 - **Pros**
   - Parameter efficiency due to local connectivity and weight sharing
   - Invariant to translation and small distortions in input
-  - Scalable to large input sizes (E.g., high-resolution images)
+  - Scalable to large input sizes
 
-- **Definition**: pooling is a downsampling operation that reduces the spatial
-  dimensions (width and height) of feature maps
+- **Definition**: _pooling_ is a downsampling operation that reduces the spatial
+  dimensions (both width and depth) of feature maps
   - Reducing computation
   - Controlling overfitting
   - Making features more translation-invariant
@@ -833,10 +834,9 @@
   - Deeper networks perform better on complex tasks
   - Very deep networks suffer from vanishing/exploding gradient problems
 
-- **Key Idea: Residual Learning**
+- **Key Idea**: Residual Learning
   - Learn a residual function $F(x) = H(x) - x$ instead of a direct mapping
     $H(x)$
-  - Original function becomes $H(x) = F(x) + x$
   - Easier to learn a small change from a function than a new function
 
 - **Residual Block Structure**
@@ -851,7 +851,7 @@
   - ResNets outperform plain networks of the same depth
   - Achieved state-of-the-art results on ImageNet and other benchmarks
 ::::
-:::: {.column width=25%}
+:::: {.column width=35%}
 ```graphviz[width=50%]
 digraph ResidualBlock {
     rankdir=LR;

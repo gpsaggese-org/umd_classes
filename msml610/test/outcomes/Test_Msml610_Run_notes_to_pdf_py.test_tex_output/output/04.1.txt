@@ -1,0 +1,2302 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 04.1: Machine Learning Models}}\]}
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\item
+  Burkov: \emph{``Machine Learning Engineering''} (2020)
+\item
+  Hastie et al.: \emph{``The Elements of Statistical Learning''} (2nd
+  ed, 2009)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg}
+
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Naive Bayes Model}}}
+\item
+  Decision Trees
+\item
+  Random Forests
+\item
+  Linear Models
+\item
+  Perceptron
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes Model}
+\protect\phantomsection\label{naive-bayes-model}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: predict classes \(H_1, ..., H_n\)
+  using evidence \(\vE\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use Bayes' rule of conditional probability to decide output class
+    \(H_1, ... H_n\) given evidence \(\vE\): \[
+    \Pr(H_j|\vv{E}) = \frac{\Pr(\vv{E}|H_j) \Pr(H_j)}{\Pr(\vv{E})}
+    \] where \(\vv{E}\) is the vector of features
+  \item
+    Training data estimates joint probability \(\Pr(H_i, \vE)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Assumptions:}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Features are independent
+  \item
+    Features are equally important (or at least all relevant)
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Naive Bayes model:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Called ``naive'' due to the simplifying assumption of independence,
+    even if not true
+  \item
+    Works surprisingly well
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes: Weather Prediction Example}
+\protect\phantomsection\label{naive-bayes-weather-prediction-example}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predict if kids play outside using past weather observations
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Supervised learning problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predictor vars:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textcolor{blue}{\texttt{outlook = {sunny, overcast, rainy}}}
+    \item
+      \textcolor{blue}{\texttt{temperature = {hot, mild, cold}}}
+    \item
+      \textcolor{blue}{\texttt{humidity = {high, normal}}}
+    \item
+      \textcolor{blue}{\texttt{windy = {true, false}}}
+    \end{itemize}
+  \item
+    Response var:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textcolor{blue}{\texttt{play = {yes, no}}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\begingroup \tiny
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+\textbf{Outlook} & \textbf{Temp} & \textbf{Humidity} & \textbf{Windy} &
+\textbf{Play} \\
+\midrule\noalign{}
+\endhead
+Overcast & Cold & Normal & True & Yes \\
+Overcast & Hot & High & False & Yes \\
+Overcast & Hot & Normal & False & Yes \\
+Overcast & Mild & High & True & Yes \\
+Rainy & Cold & Normal & False & Yes \\
+Rainy & Cold & Normal & True & No \\
+Rainy & Mild & High & False & Yes \\
+Rainy & Mild & High & True & No \\
+Rainy & Mild & Normal & False & Yes \\
+Sunny & Cold & Normal & False & Yes \\
+Sunny & Hot & High & False & No \\
+Sunny & Hot & High & True & No \\
+Sunny & Mild & High & False & No \\
+Sunny & Mild & Normal & True & Yes \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Training set}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Samples for predictors and response from observations
+  \item
+    Possible noise in data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., kids have different preferences, some are sick illness, some
+      have homework
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes: Weather Prediction Example}
+\protect\phantomsection\label{naive-bayes-weather-prediction-example-1}
+\begin{itemize}
+\tightlist
+\item
+  Use Bayes' rule to decide class \(H_j\): \[
+  \Pr(H_j|\vv{E}) = \frac{\Pr(\vv{E}|H_j) \Pr(H_j)}{\Pr(\vv{E})}
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(H_j\): event to predict
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{play = yes}}
+    \end{itemize}
+  \item
+    \(\vv{E}\): event with feature values
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g.,
+      \textcolor{blue}{\texttt{outlook=sunny, temperature=high, humidity=high, windy=yes}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes: Weather Prediction Example}
+\protect\phantomsection\label{naive-bayes-weather-prediction-example-2}
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{\textcolor{red}{model}} is: \begingroup \scriptsize
+  $$
+  \Pr(H_j|\vv{E}) = \frac{\Pr(\vv{E}|H_j) \Pr(H_j)}{\Pr(\vv{E})}
+  $$
+  \endgroup where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(H_j)\): \textbf{\textcolor{orange}{prior probability}}
+    (probability of the outcome before evidence \(\vv{E}\))
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \(\Pr(\text{play = yes})\)
+    \item
+      Computed from training set as: \begingroup \scriptsize
+      $\Pr(H_j) = \sum_{k=1}^N \Pr(H_j \land \vv{E}_k)$
+      \endgroup
+    \end{itemize}
+  \item
+    \(\Pr(\vv{E})\):
+    \textbf{\textcolor{darkgreen}{probability of the evidence}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Computed from training set
+    \item
+      Not needed as it is common to the probability of each class
+    \end{itemize}
+  \item
+    \(\Pr(\vv{E}|H_j)\):
+    \textbf{\textcolor{teal}{conditional probability}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Computed as independent probabilities (the ``naive'' assumption):
+      \begingroup \scriptsize
+      \begin{alignat*}{2}
+      \Pr(\vv{E}|H_j)
+      &= \Pr(E_1=e_1, E_2=e_2, ..., E_n=e_n | H_j) \\
+      &\approx \Pr(E_1=e_1|H_j) \cdot ... \cdot \Pr(E_n=e_n|H_j) \\
+      \end{alignat*}
+      \endgroup
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Interpretation of Bayes theorem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The prior is modulated through the conditional probability and the
+    probability of the evidence
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{1-Rule}
+\protect\phantomsection\label{rule}
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\item
+  Aka ``tree stump'', i.e., a decision tree with a single node
+\item
+  \textbf{\textcolor{red}{Algorithm}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pick a single feature (e.g., \textcolor{blue}{\texttt{outlook}}):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Most discriminant; or
+    \item
+      Based on expert opinion
+    \end{itemize}
+  \item
+    Choose the most frequent output for the feature's current value
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Tree_stump.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Tree_stump2.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Weather problem example}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pick \textcolor{blue}{\texttt{outlook}} as single feature
+  \item
+    Know predictor vars, e.g.,
+    \textcolor{blue}{\texttt{outlook = sunny}}
+  \item
+    Compute conditional probability using training set: \[
+    \Pr(\texttt{play = yes, no} | \texttt{outlook = sunny})
+    \]
+  \item
+    Output the predicted variable
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Naive Bayes: Why Independence Assumption}
+\protect\phantomsection\label{naive-bayes-why-independence-assumption}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Independence assumption}} factors joint
+  probability into marginal probabilities: \begin{alignat*}{2}
+  \Pr(\vv{E}|H_j)
+  &= \Pr(E_1=e_1, E_2=e_2, ..., E_n=e_n | H_j) \\
+  &\approx \Pr(E_1=e_1|H_j) \cdot ... \cdot \Pr(E_n=e_n|H_j) \\
+  \end{alignat*}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simplifies probability computation
+  \item
+    Aids generalization due to few samples needed
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assumption may not be true
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimating Probabilities: MLE}
+\protect\phantomsection\label{estimating-probabilities-mle}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Maximum Likelihood Estimate}} (MLE) estimates
+  event probability by counting occurrences among all possible events:
+  \[
+  \Pr(\vv{E} = \vv{e}') = \frac{\# I(\vv{E} = \vv{e}')}{K}
+  \]
+\item
+  For Naive Bayes, we need to estimate probability of each feature: \[
+  \Pr(E_i = e') = \frac{\# I(E_i = e')}{\sum_{j=1}^V \# I(E_i = e_k)}
+  \]
+\end{itemize}
+
+\vspace{-0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Value \(e'\) of feature \(E_i\) not in training set with output
+    class \(H_j\)
+  \item
+    Estimated probability \(\Pr(E_i=e'|H_j) = 0\)
+  \item
+    Plugging \(\Pr(E_i=e'|H_j) = 0\) into \[
+    \Pr(H_j|\vv{E}) \approx \Pr(E_1=e_1|H_j) \cdot ... \cdot \Pr(E_n=e_n|H_j)
+    \]
+  \item
+    Yields \(\Pr(H_j|\vv{E}) = 0\) \(\implies\) impossible to decide
+    output
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Estimating Probabilities: Laplace Estimator}
+\protect\phantomsection\label{estimating-probabilities-laplace-estimator}
+\begin{itemize}
+\item
+  Use Laplace estimator for events not in training set instead of MLE
+\item
+  \textbf{\textcolor{red}{Maximum likelihood estimate}} (MLE) \[
+  \Pr(E_i = e') = \frac{\# I(E_i = e')}{\sum_{j=1}^V \# I(E_i = e_k)}
+  \]
+\item
+  \textbf{\textcolor{blue}{Laplace estimator}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Adds 1 to each count and \(V\) (number of feature values) to
+    denominator: \[
+    \Pr(E_i = e')
+    = \frac{1 + \# I(E_i = e')}{\sum_{j=1}^V (1 + \# I(E_i = e'))}
+    = \frac{1 + \# I(E_i = e')}{V + \sum_{j=1}^V \# I(E_i = e')}
+    \]
+  \item
+    Blends prior of equiprobable feature values with MLE estimates
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Naive Bayes Model
+\item
+  \emph{\textbf{\textcolor{red}{Decision Trees}}}
+\item
+  Random Forests
+\item
+  Linear Models
+\item
+  Perceptron
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decision Tree}
+\protect\phantomsection\label{decision-tree}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Characteristics}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Supervised learning
+  \item
+    Classification and regression
+  \item
+    Non-parametric (i.e., no functional form)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Model}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decision rules organized in a tree
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Training}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Infer decision rules from data
+  \item
+    Greedy divide-and-conquer
+  \item
+    Worst case complexity: \(O(2^n)\) with number of variables
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Evaluation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate model from root to leaves
+  \item
+    Prediction cost: \(O(log(n))\) with number of training points
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Decision_Tree1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Typical Decision Trees}
+\protect\phantomsection\label{typical-decision-trees}
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Each node}} tests a feature against a constant
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Split input space with hyperplanes parallel to axes
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Each feature}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Tested once
+  \item
+    Checks feature \(x^{(j)}\) against threshold \(t\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \(x^{(j)} \{<, =, >\} t\)
+    \end{itemize}
+  \item
+    Result determines branch to follow
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Leaves}} represent decisions:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Class labels (e.g., classification)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Predict class or probability
+    \end{itemize}
+  \item
+    Regression function
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Decision_Tree1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Trees are non-linear models using variable interaction in
+  \textcolor{blue}{\texttt{OR-AND}} form: \[
+  y_i = (x_1 \ge x_1') \land (x_2 \ge x_2') ...) \lor (...)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No re-converging paths: it's a tree!
+  \item
+    Deeper tree \(\implies\) more complex decision rules \(\implies\)
+    fitter model
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decision Trees: Pros}
+\protect\phantomsection\label{decision-trees-pros}
+\begin{itemize}
+\item
+  Works for both \textbf{\textcolor{red}{regression and classification}}
+\item
+  \textbf{\textcolor{darkgreen}{Simple to understand and interpret}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    White box model: explainable decisions
+  \item
+    Visualizable
+  \item
+    Can be created by hand
+  \end{itemize}
+\item
+  Requires \textbf{\textcolor{blue}{little data preparation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Invariant under feature scaling
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No data normalization
+    \item
+      No dummy variables
+    \end{itemize}
+  \item
+    Handles numerical and categorical data
+  \item
+    Robust to irrelevant features (implicit feature selection)
+  \item
+    Missing values are treated:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      As their own value; or
+    \item
+      Assigned the most frequent value (i.e., imputation)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Scalable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Performs well with large datasets
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decision Trees: Cons}
+\protect\phantomsection\label{decision-trees-cons}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Learning optimal decision tree}} is
+  NP-complete
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Much worse than complexity of OLS
+  \item
+    Algorithms use heuristics (e.g., greedy algorithms)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Risk of overfitting}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Solutions:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Pruning
+    \item
+      Minimum samples at a leaf node
+    \item
+      Max depth of trees
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Some training sets are hard to learn}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \textcolor{blue}{\texttt{XORs}}, parity
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Decision_Tree_parity.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{violet}{Unstable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Small data variations greatly influence the tree
+  \item
+    Solutions:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Ensemble learning / randomization
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Learning Decision Trees: Intuition}
+\protect\phantomsection\label{learning-decision-trees-intuition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Several algorithms}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ID3
+  \item
+    C4.5 (proprietary)
+  \item
+    CART (Classification And Regression Trees)
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Typically, the problem has a
+  \textbf{\textcolor{blue}{recursive formulation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consider the current ``leaf''
+  \item
+    Find the variable/split (``node'') that best separates outcomes into
+    two groups (``leaves'')
+
+    \begin{itemize}
+    \tightlist
+    \item
+      ``Best'' = samples with same labels grouped together
+    \end{itemize}
+  \item
+    Continue splitting until:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Groups are small enough
+    \item
+      Maximum depth is reached
+    \item
+      Sufficiently ``pure''
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Decision_Tree_Intuition.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Splitting at One Node: Problem Formulation}
+\protect\phantomsection\label{splitting-at-one-node-problem-formulation}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Consider the $m$-th node}} of a decision tree
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given \(p_i = (\vx_i, y_i)\) where \(i = 1, ..., N_m\), with
+    training vectors \(\vx_i\) and labels \(y_i\)
+  \item
+    Candidate splits are \(\theta = (j, t_m)\) with feature \(j\) and
+    threshold \(t_m\)
+  \item
+    Each split partitions data into subsets: \begin{alignat*}{2}
+    Q_{L}(j, t_m) & = \{ p_i = (\vx_i, y_i): x_j \le t_m \} \\
+    Q_{R}(j, t_m) & = \{ p_i \notin Q_{L} \} \\
+    \end{alignat*}
+  \item
+    Impurity of a split is defined as: \[
+    H(j, t_m) = \frac{n_{L}}{N_m} H(Q_{L}) + \frac{n_{R}}{N_m} H(Q_{R})
+    \]
+  \item
+    Find split \((j, t_m)^*\) minimizing \(H(j, t_m)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Recurse}} on \(Q_{L}(j, t_m)^*\) and
+  \(Q_{R}(j, t_m)^*\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measures of Node Impurity for Classification}
+\protect\phantomsection\label{measures-of-node-impurity-for-classification}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Measures of node impurity:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Based on probabilities of choosing objects of different classes
+    \(k = 1, ..., K\) in the \(m\)-th node, i.e., \(p_k\)
+  \item
+    Smaller impurity values are better
+  \item
+    Less impurity means smaller probability of misclassification
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Misclassification error
+  \item
+    Gini impurity index
+  \item
+    Information gain
+  \end{enumerate}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L04.1.Decision_Tree_Impurity.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Probability of Classification in a Node}
+\protect\phantomsection\label{probability-of-classification-in-a-node}
+\begin{itemize}
+\item
+  Assume \(m\)-th node has \(N_m\) objects \(x_i\) in \(K\) classes
+\item
+  Compute class probability in \(m\)-th node as: \[
+  \hat{f}_{m, k}
+  \defeq \Pr(\text{pick object of class $k$ in $m$-th node })
+  = \frac{1}{N_m} \sum_{x_i \in \text{ node }} I(c(x_i) = k)
+  \] where \(y_i = c(x_i)\) is the correct class for element \(x_i\)
+\item
+  E.g., if there are \(N_m = 10\) objects belonging to \(K=3\) classes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    3 red, 6 blue, 1 green
+  \item
+    The probability of classification \(\hat{f}_{m, k}\) are:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Red = 3/10
+    \item
+      Blue = 6/10
+    \item
+      Green = 1/10
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Misclassification Error: Definition}
+\protect\phantomsection\label{misclassification-error-definition}
+\begin{itemize}
+\item
+  You have several class probabilities \(p_i\) and need a single
+  probability
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consider worst case: most common class \(k'\) in node
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Misclassification error}} \[
+  H_M(p) \defeq 1 - \max_{k}{p_k}
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Binary classifier}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Best case (perfect purity)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Only one class in node
+    \item
+      \(H_M(p) = 0\)
+    \end{itemize}
+  \item
+    Worst case (perfect impurity)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      50-50 split between classes in node
+    \item
+      \(H_M(p) = 0.5\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Multi-class classifier}} with \(K\) classes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misclassification error has upper bound: \(1 / K\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gini Impurity Index: Definition}
+\protect\phantomsection\label{gini-impurity-index-definition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Gini index}} \(H_G(p)\) is probability of
+  picking an element randomly and classifying it incorrectly
+
+  \begin{itemize}
+  \tightlist
+  \item
+    By using the law of total probability: \begingroup \small
+    \begin{alignat*}{2}
+    H_G(p)
+    & = \Pr(\text{pick elem of $k$-th class}) \cdot
+    \Pr(\text{misclassification | elem of $k$ class}) \\
+    & = \sum_{k=1}^K p_k \cdot (1 - p_k)
+    \end{alignat*}
+    \endgroup
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Binary classifier}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(H_G(p)\) is between 0 (perfect purity) and 0.5 (perfect impurity)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Multi-class classifier}} with \(K\) classes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(H_G(p)\) has upper bound:
+    \(1 - K \frac{1}{K}^2 = 1 - \frac{1}{K}\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Information Gain: Definition}
+\protect\phantomsection\label{information-gain-definition}
+\begin{itemize}
+\item
+  Aka cross-entropy (remember entropy is \(- p \log p\))
+\item
+  \textbf{\textcolor{red}{Information gain}} \[
+  H_{IG} = - \sum_{k=1}^K p_k \cdot \log_2(p_k)
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Binary classifier}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(H_{IG}\) varies between 0 (perfect purity) and 1 (perfect
+    impurity)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Multi-class classifier}} with \(K\) classes
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(H_{IG}\) has upper bound: \(\log{K}\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measures of Impurity: Examples}
+\protect\phantomsection\label{measures-of-impurity-examples}
+\begin{itemize}
+\item
+  Consider the case of 16 elements in a node , belonging to 2 classes
+\item
+  If all elements are of the same class:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misclassification error \(= 0\)
+  \item
+    Gini index \(= 1 - (1 - 0) = 0\)
+  \item
+    Information gain \(= - (1 \cdot \log_2(1) - 0 \cdot \log_2(0)) = 0\)
+  \end{itemize}
+\item
+  If one element is of one class:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misclassification error =
+    \(1 - \max(\frac{1}{16}, \frac{1}{15}) = \frac{1}{16}\)
+  \item
+    Gini index \(= 1 - ((\frac{1}{16})^2 + (\frac{1}{15})^2) = 0.12\)
+  \item
+    Information gain \(= -(\frac{1}{16} \log_2(\frac{1}{16}) +
+    \frac{15}{16} \log_2(\frac{15}{16})) = 0.34\)
+  \end{itemize}
+\item
+  If elements are split in the two classes equally:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misclassification error \(= \frac{8}{16} = 0.5\)
+  \item
+    Gini index \(= 1 - (\frac{8}{16}^2 + \frac{8}{16}^2) = 0.5\)
+  \item
+    Information gain \(= -( \frac{8}{16} \log_2(\frac{8}{16}) +
+    \frac{8}{16} \log_2(\frac{8}{16})) = 1\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Measures of Impurity for Regression}
+\protect\phantomsection\label{measures-of-impurity-for-regression}
+\begin{itemize}
+\item
+  For continuous variables with \(N_m\) observations at a node, minimize
+  mean squared error:
+
+  \[
+  \begin{aligned}
+  & c_m = \frac{1}{N_m} \sum_{i \in N_m} y_i & \text{ (average class)}\\
+  & H = \frac{1}{N_m} \sum_{i \in N_m} (y_i - c_m)^2 & \text{ (variance)}\\
+  \end{aligned}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tips for Using Trees}
+\protect\phantomsection\label{tips-for-using-trees}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Decision trees overfit}} with
+  \textbf{\textcolor{orange}{many features}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Get right ratio of training samples to features
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solutions}}
+
+  \begin{itemize}
+  \item
+    Use dimensionality reduction (PCA, feature selection) to remove
+    non-discriminative features
+  \item
+    Use maximum tree depth to prevent overfitting
+  \item
+    Control minimum number of examples at a leaf node / split
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Small number \(\to\) overfitting
+    \item
+      Large number \(\to\) no learning
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Balance dataset before training}} to avoid
+  \textbf{\textcolor{cyan}{bias}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Normalize sum of sample weights for each class
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Feature Selection with Trees}
+\protect\phantomsection\label{feature-selection-with-trees}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Top tree features predict more samples
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Importance of a variable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Feature's control over samples estimates importance
+  \item
+    Feature's depth as a decision node assesses importance
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Trees are unstable}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reduce estimation variance by averaging variable depth over multiple
+    randomized trees (random forest)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Embeddings with Trees}
+\protect\phantomsection\label{embeddings-with-trees}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learning a tree is like a non-parametric density estimation
+  \item
+    Neighboring data points likely lie within the same leaf
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Embedding: unsupervised data transformation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Tree encodes data by indices of leaves a data point belongs to
+  \item
+    Index encoded one-hot for high-dimensional, sparse, binary coding
+  \end{itemize}
+\item
+  Use \textbf{\textcolor{blue}{number of trees and max depth per tree}}
+  to control space size
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Naive Bayes Model
+\item
+  Decision Trees
+\item
+  \emph{\textbf{\textcolor{red}{Random Forests}}}
+\item
+  Linear Models
+\item
+  Perceptron
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From Decision Trees to Random Forests}
+\protect\phantomsection\label{from-decision-trees-to-random-forests}
+\begin{itemize}
+\item
+  Decision trees are \textbf{\textcolor{red}{high capacity models}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Low bias
+  \item
+    High variance
+  \end{itemize}
+\item
+  Idea: apply ensemble methods to trees \(\rightarrow\) ``random
+  forests''
+\item
+  \textbf{\textcolor{darkgreen}{Bagging}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reduces variance in ``unstable'' non-linear models
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Learning trees is unstable
+    \end{itemize}
+  \item
+    Best with complex models (e.g., fully grown trees)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Boosting works best with weak models (e.g., shallow decision
+      trees, aka tree stumps)
+    \end{itemize}
+  \item
+    Works for regression and classification
+  \item
+    Customizable for trees
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Different types of randomization in trees
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Bias-variance trade-off}} in random forests
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Forest bias could increase compared to a single non-random tree
+  \item
+    Forest variance reduced by averaging, usually compensating for bias
+    increase
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomization in Trees}
+\protect\phantomsection\label{randomization-in-trees}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Bagging}} (bootstrap aggregate) /
+  perturb-and-combine techniques designed for trees
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Training samples (with replacement)
+  \item
+    Picking features (random subspaces)
+  \item
+    Decision split thresholds
+  \item
+    All the above
+  \end{enumerate}
+\item
+  \textbf{\textcolor{darkgreen}{Random forests}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each tree built from samples drawn with replacement (bootstrap
+    sample)
+  \item
+    Split picked as best among random subset of features
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Extremely randomized trees}} (aka
+  ``Extra-Trees'')
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Thresholds randomized
+  \item
+    More randomness than random forests
+  \item
+    Trade off more bias for variance
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Combine random forests}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Majority vote on class
+  \item
+    Averaging prediction probability
+  \item
+    Averaging prediction
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Forests: Pros and Cons}
+\protect\phantomsection\label{random-forests-pros-and-cons}
+\begin{itemize}
+\item
+  Pros and cons are the same as ensemble learning
+\item
+  \textbf{\textcolor{red}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increased accuracy
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lower training and evaluation speed
+  \item
+    Loss of interpretability
+  \item
+    Overfitting (cross-validation is needed)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Naive Bayes Model
+\item
+  Decision Trees
+\item
+  Random Forests
+\item
+  \emph{\textbf{\textcolor{red}{Linear Models}}}
+\item
+  Perceptron
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Regression Model}
+\protect\phantomsection\label{linear-regression-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Data set}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \((\vx_1, y_1), ... , (\vx_N, y_N)\)
+  \item
+    \(N\) examples
+  \item
+    \(P\) features, \(\vx_i \in \bbR^P\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Linear regression model}} \[
+  h(\vx) = \sum_{i=1}^{P} w_i x_i = \vw^T \vx \in \bbR
+  \]
+\item
+  Add \textbf{\textcolor{blue}{bias term}} \(w_0\) to model with
+  \(x_0 = 1\) to data \[
+  h(\vx) = w_0 + \sum_{i=1}^{P} w_i x_i = \sum_{i=0}^{P} w_i x_i = \vw^T \vx
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Regression: In-sample Error}
+\protect\phantomsection\label{linear-regression-in-sample-error}
+\begin{itemize}
+\item
+  For regression, use
+  \textbf{\textcolor{red}{squared error for in-sample error}}: \[
+  E_{in}(h) = \frac{1}{N} \sum_{i=1}^{N} (h(\vx_i) - f(\vx_i)) ^ 2
+  \]
+\item
+  Squared error for \textbf{\textcolor{darkgreen}{linear regression}} \[
+  E_{in}(h)
+  = E_{in}(\vw)
+  = \frac{1}{N} \sum_{i=1}^{N} (\vw^T \vx_i - y_i) ^ 2
+  \]
+\item
+  Squared error \textbf{\textcolor{blue}{in vector form}} \[
+  E_{in}(h)
+  = \frac{1}{N} \| \mX \vw - \vy \| ^ 2
+  = \frac{1}{N} (\mX \vw - \vy)^T (\mX \vw - \vy)
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mX\) is the matrix with examples \(\vx_i^T\) as rows (``design
+    matrix'')
+  \item
+    \(\mX\) is a tall matrix with few parameters (\(P\)) and many
+    examples (\(N\))
+  \item
+    \(\vy\) is the column vector with all outputs (target vector)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Regression: Find Optimal Model}
+\protect\phantomsection\label{linear-regression-find-optimal-model}
+\begin{itemize}
+\item
+  You want to minimize
+  \(E_{in}(\vw) = (\mX \vw - \vy)^T (\mX \vw - \vy)\) with respect to
+  \(\vw\) \begingroup \small
+  \begin{alignat*}{1}
+  & \nabla E_{in}(\vw^*) = \vv{0} \\
+  & \frac{2}{N}\mX^T(\mX \vw^* - \vy) = \vv{0} \\
+  & \mX^T \mX \vw^* = \mX^T \vy \\
+  \end{alignat*}
+  \endgroup
+\item
+  If the square matrix \(\mX^T \mX\) is invertible: \[
+  \vw^* = (\mX^T \mX)^{-1} \mX^T \vy = \mX^\dagger \vy
+  \]
+\item
+  The matrix \(\mX^\dagger \defeq (\mX^T \mX)^{-1} \mX^T\) is called
+  \textbf{\textcolor{red}{pseudo-inverse}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It generalizes the inverse for non-square matrices, in fact:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\mX^\dagger \mX = \mI\)
+    \item
+      If \(\mX\) is square and invertible, then
+      \(\mX^\dagger = \mX^{-1}\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Complexity of One-Step Learning}
+\protect\phantomsection\label{complexity-of-one-step-learning}
+\begin{itemize}
+\tightlist
+\item
+  Learning with the pseudo-inverse is
+  \textbf{\textcolor{red}{one-step learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Contrasts with iterative methods, e.g., gradient descent
+  \end{itemize}
+\item
+  Inverting a square matrix of size \(P\) is related to the number of
+  parameters, not examples \(N\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Complexity of one-step learning is \(O(P^3)\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Models Are Linear in What?}
+\protect\phantomsection\label{linear-models-are-linear-in-what}
+\begin{itemize}
+\tightlist
+\item
+  A \textbf{\textcolor{red}{model is linear}} when the signal
+  \(s = \sum_{i=0}^P w_i x_i = \vw^T \vx\) is linear
+  \textbf{\textcolor{darkgreen}{with variables}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unknown variables: weights \(w_i\)
+  \item
+    Inputs \(x_i\) are fixed
+  \end{itemize}
+\item
+  Applying a \textbf{\textcolor{blue}{non-linear transform to inputs}}
+  \(z_i = \Phi(x_i)\) keeps the model linear, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Positive/negative part (e.g., \(z_i = RELU(x_i), RELU(-x_i)\))
+  \item
+    Waterfall (conditioning model to different feature ranges)
+  \item
+    Thresholding (e.g., \(z_i = \min(x_i, T)\))
+  \item
+    Indicator variables (e.g., \(z_i = I(x_i > 0)\))
+  \item
+    Winsorizing (replace outliers with a large constant value)
+  \end{itemize}
+\item
+  Applying a
+  \textbf{\textcolor{violet}{non-linear transform to weights}}
+  \(z_i = \Phi(w_i)\) makes the model non-linear
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linear Transformations in Linear Models}
+\protect\phantomsection\label{non-linear-transformations-in-linear-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Transform variables}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use \(\Phi: \calX \rightarrow \calZ\)
+  \item
+    Transform each point \(\vx_n \in \calX = \bbR^d\) into a point in
+    feature space \(\vz_n = \Phi(\vx_n) \in \calZ = \bbR^{\tilde{d}}\)
+    with \(d \ne \tilde{d}\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Learn}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn linear model in \(\calZ\), obtaining \(\vv{\tilde{w}}\) for
+    separating hyperplane
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Predict}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluate model on new point in \(\calZ\): \[
+    y = \sign(\vv{\tilde{w}}^T \Phi(\vx))
+    \text{or} \quad y = \vv{\tilde{w}}^T \Phi(\vx)
+    \]
+  \end{itemize}
+\item
+  Compute \textbf{\textcolor{violet}{decision boundary}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In \(\calX\) if \(\Phi\) is invertible; or
+  \item
+    By classifying any \(\vx \in \calX\) in \(\calZ\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Naive Bayes Model
+\item
+  Decision Trees
+\item
+  Random Forests
+\item
+  Linear Models
+\item
+  \emph{\textbf{\textcolor{red}{Perceptron}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example of Classification Problems}
+\protect\phantomsection\label{example-of-classification-problems}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Binary classification problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(y \in \{0, 1\}\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Typically assign 1 to what you want to detect
+    \end{itemize}
+  \item
+    Email: \textcolor{blue}{\texttt{spam}},
+    \textcolor{blue}{\texttt{not\_spam}}
+  \item
+    Online transaction: \textcolor{blue}{\texttt{fraudulent}},
+    \textcolor{blue}{\texttt{valid}}
+  \item
+    Tumor: \textcolor{blue}{\texttt{malignant}},
+    \textcolor{blue}{\texttt{benign}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Multi-class classification problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(y \in \{0, 1, 2, ... , K\}\)
+  \item
+    Email tagging: \textcolor{blue}{\texttt{work}},
+    \textcolor{blue}{\texttt{family}},
+    \textcolor{blue}{\texttt{friends}}
+  \item
+    Medical diagnosis: \textcolor{blue}{\texttt{not\_ill}},
+    \textcolor{blue}{\texttt{cold}}, \textcolor{blue}{\texttt{flu}}
+  \item
+    Weather: \textcolor{blue}{\texttt{sunny}},
+    \textcolor{blue}{\texttt{rainy}}, \textcolor{blue}{\texttt{cloudy}},
+    \textcolor{blue}{\texttt{snow}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear Regression for Classification}
+\protect\phantomsection\label{linear-regression-for-classification}
+\begin{itemize}
+\tightlist
+\item
+  Use \textbf{\textcolor{red}{linear regression for classification}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transform outputs into \(\{+1, -1\} \in \bbR\)
+  \item
+    Learn \(\vw^T \vx_n \approx y_n = \pm 1\)
+  \item
+    Use \(\sign(\vw^T \vx_n)\) as model (perceptron)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Not optimal}}: outliers influence fit due to
+  square distance metric
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use weights from linear regression to initialize a learning
+    algorithm for classification (e.g., PLA)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Perceptron Learning Algorithm (PLA)}
+\protect\phantomsection\label{perceptron-learning-algorithm-pla}
+\begin{itemize}
+\item
+  First machine learning algorithm discovered
+\item
+  \textbf{\textcolor{red}{Algorithm}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Training set \(\calD = \{(\vx_1, y_1), ..., (\vx_n, y_n) \}\)
+  \item
+    Initialize weights \(\vw\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Random values
+    \item
+      Use linear regression for classification as seed
+    \end{itemize}
+  \item
+    Pick a misclassified point \(\sign(\vw^T \vx_i) \ne y_i\) from
+    training set \(\calD\)
+  \item
+    Update weights: \(\vw(t + 1) = \vw(t) + y_i \vx_i\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Like stochastic gradient descent
+    \end{itemize}
+  \item
+    Iterate until no misclassified points
+  \end{itemize}
+\item
+  Algorithm \textbf{\textcolor{darkgreen}{converges}} (slowly) for
+  linearly separable data
+\item
+  \textbf{\textcolor{blue}{Pocket version of PLA}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Idea
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Continuously update solution
+    \item
+      Keep best solution ``in the back pocket''
+    \end{itemize}
+  \item
+    Have a solution if stopping after max iterations
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Non-Linear Transformations for Classifications}
+\protect\phantomsection\label{non-linear-transformations-for-classifications}
+\begin{itemize}
+\tightlist
+\item
+  Classification problems have
+  \textbf{\textcolor{red}{varying degrees of non-linear boundaries}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Non-linearly separable data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \(+\) in center, \(-\) in corners in a 2-feature scatter
+      plot
+    \end{itemize}
+  \item
+    Mostly linear classes with few outliers
+  \item
+    Higher-order decision boundary
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., quadratic
+    \end{itemize}
+  \item
+    Non-linear data-feature relationship
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., variable threshold
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\end{document}

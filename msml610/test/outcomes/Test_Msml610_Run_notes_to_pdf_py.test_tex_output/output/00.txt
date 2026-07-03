@@ -1,0 +1,1531 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{MSML610 Class Mechanics}}\]} \endgroup
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{MSML610}}}
+\item
+  Class Map
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Invariants of a Class Lecture}
+\protect\phantomsection\label{invariants-of-a-class-lecture}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Invariants}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Focus on intuition over math (unless necessary)
+  \item
+    Emphasize realistic assumptions and numerical methods
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Analytical solutions are so 1800s
+    \end{itemize}
+  \item
+    Interactive Jupyter notebook tutorials for hands-on approach
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Tutorials are mainly done at home
+    \item
+      Videos of each tutorial will be added over time
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Class flow}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lessons alternate between slides, whiteboard, tutorials
+  \item
+    2:45 hours per class lessons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      50 mins
+    \item
+      10 break
+    \item
+      50 mins
+    \item
+      10 mins
+    \item
+      45 slides (Topic refresher!)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Books of the Class}
+\protect\phantomsection\label{books-of-the-class}
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}: make the slides self-sufficient from
+  recommended books
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Simple}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Burkov: \emph{``The Hundred-Page Machine Learning Book''} (2019)
+    \item
+      Burkov: \emph{``Machine Learning Engineering''} (2020)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Medium}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Abu-Mostafa et al.: \emph{``Learning From Data''} (2012)
+    \item
+      Martin: \emph{``Bayesian Analysis with Python''} (2nd ed, 2021)
+    \item
+      Russell et al.: \emph{``Artificial Intelligence: A Modern
+      Approach''} (4th ed, 2020)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{violet}{Hardcore}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Hastie et al.: \emph{``The Elements of Statistical Learning''}
+      (2nd ed, 2009)
+    \item
+      Koller et al.: \emph{``Probabilistic Graphical Models: Principles
+      and Techniques''} (2009)
+    \item
+      Murphy: Machine Learning: \emph{``A Probabilistic Perspective''}
+      (2012)
+    \item
+      Sutton et al.: \emph{``Reinforcement Learning: An Introduction''}
+      (2nd ed, 2018)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Machine_Learning_Engineering.jpg}
+
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Bayesian_analysis_with_Python.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg}
+
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_ML_A_probabilistic_perspective.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Probabilistic_Graphical_Models.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Reinforcement_learning.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Grading}
+\protect\phantomsection\label{grading}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Quizzes}} (40\%)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Multi-choice quizzes on previous 2 lessons
+  \item
+    4-5 quizzes to make you study during the semester and don't cram
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Final Project}} (60\%)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A comprehensive application of course concepts
+  \item
+    Python project selected from a list of topics
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Class Projects}
+\protect\phantomsection\label{class-projects}
+\begin{itemize}
+\tightlist
+\item
+  The project is \emph{``Build \(X\) with \(Y\)''}, where \(X\) is a
+  ``use case'' and \(Y\) is a ``technology''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Study and describe technology \(Y\)
+  \item
+    Implement a use case \(X\) using the technology \(Y\)
+  \item
+    Create Jupyter notebooks to demo your project
+  \item
+    Commit code to GitHub and contribute to open-source repo
+  \item
+    Write a blog entry
+  \item
+    Present your project in a video
+  \end{itemize}
+\item
+  There is a list of \(X\) and \(Y\) you can pick from, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Statistical learning
+  \item
+    Big data
+  \item
+    LLMs
+  \item
+    Deep learning
+  \item
+    \ldots{}
+  \end{itemize}
+\item
+  Each project:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Is individual or group (\(n < 4\))
+  \item
+    Has different levels of difficulty
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Links}
+\protect\phantomsection\label{links}
+\begin{itemize}
+\item
+  \href{https://umd.instructure.com/courses/1391619/pages/homepage}{\textcolor{blue}{\underline{ELMS}}}
+\item
+  \href{https://docs.google.com/document/d/1YXCrqh6KGg3xm4-Lr4QGdBnjeWEfkqz67FHNHB_rdAk/edit?tab=t.0\#heading=h.278ryn4xodsb}{\textcolor{blue}{\underline{Syllabus}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Schedule
+  \item
+    GitHub project
+  \item
+    Class FAQs
+  \end{itemize}
+\item
+  \href{TBD}{\textcolor{blue}{\underline{Project specs}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Yours Truly}
+\protect\phantomsection\label{yours-truly}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{GP Saggese}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    2001-2006, PhD / Postdoc at the University of Illinois at
+    Urbana-Champaign
+  \item
+    \href{https://www.linkedin.com/in/gpsaggese/}{\textcolor{blue}{\underline{LinkedIn}}}
+  \item
+    \href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{University of Maryland}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    2023-, Lecturer for UMD DATA605: Big Data Systems
+  \item
+    2025-, Lecturer for UMD MSML610: Advanced Machine Learning
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{In the real-world}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Research scientist at NVIDIA, Synopys, Teza, Engineers' Gate
+  \item
+    3x AI and fin-tech startup founder (ZeroSoft, June, Causify AI)
+  \item
+    20+ academic papers, 2 US patents
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/GP_in_coding_state.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  MSML610
+\item
+  \emph{\textbf{\textcolor{red}{Class Map}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{1. Intro}
+\protect\phantomsection\label{intro}
+\begin{itemize}
+\tightlist
+\item
+  A Map of Machine Learning
+\item
+  What Is Artificial Intelligence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    AI
+  \item
+    Machine Learning
+  \item
+    AI vs ML vs Deep-Learning
+  \item
+    The Foundation of AI
+  \item
+    Brief History of AI
+  \item
+    AI State of the Art
+  \item
+    Risks and Benefits of AI
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{2. Machine Learning Techniques}
+\protect\phantomsection\label{machine-learning-techniques}
+\begin{itemize}
+\tightlist
+\item
+  Paradigms
+\item
+  Techniques
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Machine Learning in Practice
+  \item
+    How to Do Research
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Simple Is Better
+    \item
+      Research Methodology
+    \end{itemize}
+  \item
+    Pipeline Organization
+  \item
+    Input Processing
+  \item
+    Learning Algorithms
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Gradient Descent
+    \item
+      Stochastic Gradient Descent
+    \end{itemize}
+  \item
+    Performance Metrics
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Precision and Recall
+    \end{itemize}
+  \item
+    Model Selection
+  \item
+    Aggregation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Bagging
+    \item
+      Boosting
+    \item
+      Stacking
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{3. Knowledge Representation}
+\protect\phantomsection\label{knowledge-representation}
+\begin{itemize}
+\tightlist
+\item
+  Knowledge Representation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basics of Knowledge Representation
+  \item
+    Examples of Logic
+  \item
+    Logical Agents
+  \item
+    Ontologies
+  \item
+    Reasoning in Ontologies
+  \end{itemize}
+\item
+  Propositional logic
+\item
+  First-order Logic
+\item
+  Non-classical Logics
+\item
+  Description Logics
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Semantic Web
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{4. Machine Learning Models}
+\protect\phantomsection\label{machine-learning-models}
+\begin{itemize}
+\tightlist
+\item
+  Models
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Naive Bayes
+  \item
+    Decision trees
+  \item
+    Random forests
+  \item
+    Linear models
+  \item
+    Perceptron
+  \item
+    Logistic regression
+  \item
+    LDA, QDA
+  \item
+    Kernel methods
+  \item
+    Support vector machines
+  \item
+    Similarity-based models
+  \item
+    Clustering
+  \item
+    Anomaly detection
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{5. Machine Learning Theories}
+\protect\phantomsection\label{machine-learning-theories}
+\begin{itemize}
+\tightlist
+\item
+  Is machine learning possible?
+\item
+  Growth function
+\item
+  The VC dimension
+\item
+  Overfitting
+\item
+  Bias Variance Analysis
+\item
+  Learning curves
+\item
+  Learn-validation approach
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Train / test
+  \item
+    Cross-validation
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{6. Bayesian Statistics}
+\protect\phantomsection\label{bayesian-statistics}
+\begin{itemize}
+\tightlist
+\item
+  Logic-Based AI Under Uncertainty
+\item
+  Probabilistic Reasoning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Conditional Independence
+  \item
+    Bayesian Networks
+  \item
+    Semantics of Bayesian Networks
+  \item
+    Constructing a Bayesian Network
+  \item
+    Exact Inference in Bayesian Networks
+  \item
+    Approximate Inference in Bayesian Networks
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Direct sampling methods
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{7. Probabilistic Programming}
+\protect\phantomsection\label{probabilistic-programming}
+\begin{itemize}
+\tightlist
+\item
+  Concepts
+\item
+  Coin Example
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Analytical Approach
+  \item
+    Communicating a Bayesian Analysis
+  \item
+    Probabilistic Programming
+  \end{itemize}
+\item
+  Posterior-Based Decisions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Chemical Shift: Example
+  \item
+    Posterior Predictive Checks
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Robust Inference
+    \end{itemize}
+  \end{itemize}
+\item
+  Groups Comparison
+\item
+  Hierarchical Models
+\item
+  Simple Linear Model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Logistic Regression
+  \end{itemize}
+\item
+  Multiple linear regression
+\item
+  Comparing Models
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Posterior Predictive Checks
+  \item
+    The Balance Between Simplicity and Accuracy
+  \item
+    Measures of Predictive Accuracy
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Information Criteria
+    \item
+      Cross-Validation
+    \item
+      Bayes Factors and Information Criteria
+    \end{itemize}
+  \item
+    Regularizing priors
+  \item
+    Regularizing Priors
+  \item
+    Mixture Models
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{8. Reasoning Over Time}
+\protect\phantomsection\label{reasoning-over-time}
+\begin{itemize}
+\tightlist
+\item
+  Reasoning over time
+\item
+  HMMs
+\item
+  Markov random fields
+\item
+  Markov logic network
+\item
+  State space models and Kalman filter
+
+  \begin{itemize}
+  \tightlist
+  \item
+    G-h filter
+  \item
+    Discrete Bayes filter
+  \end{itemize}
+\item
+  Dynamic Bayesian networks
+\item
+  State space model
+\item
+  Variational Inference
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Expectation-Maximization (EM) Algorithm
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{9. Causal Inference}
+\protect\phantomsection\label{causal-inference}
+\begin{itemize}
+\tightlist
+\item
+  Causal AI
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Causal AI?
+  \item
+    Concepts in Causal AI
+  \item
+    Variables
+  \item
+    Paths
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs causation models
+  \end{itemize}
+\item
+  Business processes around data modeling
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modeling processes
+  \item
+    Roles
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{10. Timeseries Forecasting}
+\protect\phantomsection\label{timeseries-forecasting}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic definition
+  \item
+    Time series operators
+  \item
+    Time series decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple models for stochastic process
+  \item
+    Autoregressive models
+  \item
+    Moving average models
+  \item
+    ARMA(p, q) process
+  \item
+    ARIMA model
+  \item
+    ARCH model
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{11. Probabilistic Deep Learning}
+\protect\phantomsection\label{probabilistic-deep-learning}
+\begin{itemize}
+\tightlist
+\item
+  Neural networks
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Biological inspiration
+  \item
+    Neural networks
+  \end{itemize}
+\item
+  Advanced Neural Network Architectures
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Convolutional networks
+  \item
+    Recurrent Neural Networks (RNNs)
+  \item
+    Deep learning learning algorithms
+  \item
+    Deep learning architectures
+  \end{itemize}
+\item
+  Fundamentals of Deep Learning
+\item
+  Training Deep Neural Networks
+\item
+  Interpretability and Explainability
+\item
+  Deep Generative Models
+\item
+  Bayesian Deep Learning
+\item
+  Deep Probabilistic Models
+\item
+  Uncertainty Quantification
+\item
+  Probabilistic Programming and Inference
+\item
+  Modern Research Frontiers
+\item
+  Bonus Topics
+\end{itemize}
+\end{frame}
+
+\begin{frame}{12. Reinforcement Learning}
+\protect\phantomsection\label{reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  Sequential decision problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Utilities over time
+  \item
+    Algorithms for MDPs
+  \end{itemize}
+\item
+  Reinforcement learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Passive reinforcement learning
+  \item
+    Active reinforcement learning
+  \item
+    Generalization in reinforcement learning
+  \item
+    Policy search
+  \end{itemize}
+\item
+  Fundamentals
+\item
+  Classical Methods
+\item
+  Exploration Strategies
+\item
+  Policy Gradient Methods
+\item
+  Value Function Approximation
+\item
+  Deep Reinforcement Learning
+\item
+  Model-Based Reinforcement Learning
+\item
+  Advanced Topics
+\item
+  Applications
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher: Probability}
+\protect\phantomsection\label{refresher-probability}
+\begin{itemize}
+\tightlist
+\item
+  Probability
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Probability definition
+  \item
+    Probability measure
+  \item
+    Independent events
+  \item
+    Conditional probability
+  \item
+    Law of total probability
+  \item
+    Bayes theorem
+  \end{itemize}
+\item
+  Random variables
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Random variables
+  \item
+    CDF, PMF, PDF of Random Variables
+  \item
+    Joint distributions
+  \item
+    Marginal distributions
+  \item
+    Independent RVs
+  \item
+    Conditional PDF RVs
+  \end{itemize}
+\item
+  Mathematical expectation of RVs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mean
+  \item
+    Variance and covariance
+  \item
+    Statistics of RVs
+  \end{itemize}
+\item
+  Probability inequalities
+\item
+  Statistical Inference
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Definitions
+  \item
+    Sample mean
+  \item
+    Sample variance
+  \item
+    Asymptotics
+  \item
+    Confidence intervals
+  \item
+    Hypothesis testing
+  \item
+    Multiple hypothesis testing
+  \item
+    Estimating CDF and statistical functional
+  \item
+    Bootstrap
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher Probability Distributions}
+\protect\phantomsection\label{refresher-probability-distributions}
+\begin{itemize}
+\tightlist
+\item
+  Interesting RVs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Bernoulli
+  \item
+    Binomial
+  \item
+    Gaussian
+  \item
+    Log-Normal
+  \item
+    Poisson
+  \item
+    Chi-square
+  \item
+    Student's t-distribution
+  \end{itemize}
+\item
+  Probability inequalities
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher Linear Algebra}
+\protect\phantomsection\label{refresher-linear-algebra}
+\begin{itemize}
+\tightlist
+\item
+  Linear algebra
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Vector and vector spaces
+  \item
+    Affine spaces
+  \item
+    Vectors and matrices
+  \item
+    Linear functions
+  \item
+    Connections between Machine Learning and Linear Algebra
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher Information Theory}
+\protect\phantomsection\label{refresher-information-theory}
+\begin{itemize}
+\tightlist
+\item
+  Information theory
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Entropy
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Kullback-Leibler divergence
+    \end{itemize}
+  \item
+    Connections between Information Theory and ML
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher Game Theory}
+\protect\phantomsection\label{refresher-game-theory}
+\begin{itemize}
+\tightlist
+\item
+  Game theory
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Connections between Machine Learning and Game Theory
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher: Numerical Optimization}
+\protect\phantomsection\label{refresher-numerical-optimization}
+\begin{itemize}
+\tightlist
+\item
+  Optimization / numerical methods
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Refresher: Stochastic Processes}
+\protect\phantomsection\label{refresher-stochastic-processes}
+\begin{itemize}
+\tightlist
+\item
+  Stochastic processes
+\end{itemize}
+\end{frame}
+
+\end{document}

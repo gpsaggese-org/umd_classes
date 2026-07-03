@@ -20,6 +20,22 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - Run linters2/pyright
 - Run coverage
 
+### IN PROGRESS: Slides for Agentic AI
+
+/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
+  - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
+
+- [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
+- [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
+- [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
+- [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
+- [ ] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
+- [ ] IN PROGRESS: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+  - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+
+- gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
+
+
 # #############################################################################
 # BACKLOG
 # #############################################################################
@@ -48,19 +64,6 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 book.From_Data_To_Decisions
 
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
-
-/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
-  - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
-
-- [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
-- [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
-- [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
-- [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
-- [ ] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
-- [ ] IN PROGRESS: msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-  - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-
-- gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md

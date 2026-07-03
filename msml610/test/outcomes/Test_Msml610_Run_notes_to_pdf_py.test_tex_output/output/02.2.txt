@@ -1,0 +1,1631 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 02.2: Machine Learning Paradigms}}\]}
+\endgroup \vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\item
+  Burkov: \emph{``The Hundred-Page Machine Learning Book''} (2019)
+\item
+  Russell et al.: \emph{``Artificial Intelligence: A Modern Approach''}
+  (4th ed, 2020)
+\item
+  Hastie et al.: \emph{``The Elements of Statistical Learning''} (2nd
+  ed, 2009)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Machine Learning Paradigms}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Major Paradigms
+  \item
+    Some Examples
+  \item
+    Machine Learning in Practice
+  \item
+    Pipeline Organization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Machine Learning Paradigms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Major Paradigms}}}
+  \item
+    Some Examples
+  \item
+    Machine Learning in Practice
+  \item
+    Pipeline Organization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning Paradigms with Examples (1/3)}
+\protect\phantomsection\label{machine-learning-paradigms-with-examples-13}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Supervised Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn from labeled data to predict labels for new inputs
+  \item
+    E.g., image classification using ResNet on ImageNet
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Unsupervised Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Discover hidden patterns or structure in unlabeled data
+  \item
+    E.g., K-means clustering for customer segmentation
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Reinforcement Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn through interaction with an environment, receiving
+    rewards/punishments
+  \item
+    E.g., deep Q-Learning for playing Atari games
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Self-Supervised Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generate pseudo-labels from unlabeled data to pre-train models
+  \item
+    E.g., BERT (Masked Language Modeling)
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Semi-Supervised Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Combine small labeled data with large unlabeled data to improve
+    performance
+  \item
+    E.g., named entity recognition (NER) using annotated sentences with
+    entity tags combined with many raw text documents
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning Paradigms with Examples (2/3)}
+\protect\phantomsection\label{machine-learning-paradigms-with-examples-23}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Online Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn incrementally from a stream of data in real time
+  \item
+    E.g., online logistic regression for click-through rate prediction
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Multi-Task Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Train simultaneously a model to perform multiple related tasks
+  \item
+    E.g., learn sentiment analysis and question answering
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Meta-Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``Learning to learn'': adapt quickly to new tasks using prior
+    experience
+  \item
+    E.g., a model can be fine-tuned quickly on a new task using just a
+    few gradient steps
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Zero-Shot / Few-Shot Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generalize to new tasks with no or few labeled examples
+  \item
+    E.g., GPT-4 solving tasks with zero-shot prompting
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Active Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The model selects the most informative samples to be labeled by an
+    oracle (e.g., a human)
+  \item
+    E.g., pick samples where the model is least confident to get more
+    examples
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning Paradigms with Examples (3/3)}
+\protect\phantomsection\label{machine-learning-paradigms-with-examples-33}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Federated Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Train models across decentralized devices without sharing raw data
+  \item
+    E.g., fraud detection or credit scoring across banks
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Evolutionary Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Optimize model structures or parameters using evolutionary
+    algorithms inspired by natural selection and genetics
+  \item
+    Gradient free, global search, variable length inputs
+  \item
+    E.g., genetic algorithms
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Curriculum Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Train models on easier tasks first, gradually increasing difficulty
+  \item
+    E.g., training in robotic control simulations
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Multi-Agent Learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Multiple agents learn and interact in shared environments, often in
+    game-theoretic settings (e.g., competition, collaboration)
+  \item
+    E.g., AlphaStar to play StarCraft II
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Machine Learning Paradigms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Major Paradigms
+  \item
+    \emph{\textbf{\textcolor{red}{Some Examples}}}
+  \item
+    Machine Learning in Practice
+  \item
+    Pipeline Organization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Supervised Learning}
+\protect\phantomsection\label{supervised-learning}
+\begin{itemize}
+\tightlist
+\item
+  Learn a function \(f: X \to Y\) that maps inputs to correct outputs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Training examples \((\vx, y)\) with pairs of inputs and correct
+    outputs
+  \item
+    Requires labeled data for training
+  \item
+    Measure performance with error on a separate test set
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Classification}}: output is a discrete label,
+  e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{Spam}} vs
+    \textcolor{blue}{\texttt{Not Spam}}
+  \item
+    Digit recognition \textcolor{blue}{\texttt{0}},
+    \textcolor{blue}{\texttt{1}}, \ldots{}
+  \item
+    Sentiment analysis \textcolor{blue}{\texttt{Pos}},
+    \textcolor{blue}{\texttt{Neg}}, \textcolor{blue}{\texttt{Neutral}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Regression}}: output is a continuous
+  value, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    House prices given features like size and location
+  \item
+    House demand
+  \item
+    Stock prices
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Common algorithms}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Linear Regression
+  \item
+    Decision Trees
+  \item
+    K-nearest neighbors
+  \item
+    Neural Networks
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Unsupervised Learning}
+\protect\phantomsection\label{unsupervised-learning}
+\begin{itemize}
+\tightlist
+\item
+  Learn from data \textbf{\textcolor{red}{without}} labeled outputs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Goal: discover patterns or structure in the data
+  \item
+    No explicit feedback signal
+  \item
+    Evaluation can be qualitative
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Main techniques}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Clustering}}: Group similar examples,
+    e.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Customer segmentation
+    \item
+      Grouping news articles by topic without knowing the topics
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Dimensionality Reduction}}: Reduce number
+    of variables with PCA while preserving structure
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., visualize high-dimensional data in 2D
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Density Estimation}}: Estimate probability
+    distribution of data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., anomaly detection in server logs
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Association Rule Learning}}: Discover
+    interesting relations between variables
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., market basket analysis (e.g., ``people who buy X also buy
+      Y'')
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Common algorithms:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    K-means
+  \item
+    PCA
+  \item
+    Autoencoders
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reinforcement Learning}
+\protect\phantomsection\label{reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  Learn by \textbf{\textcolor{red}{interacting with an environment}} to
+  \textbf{\textcolor{darkgreen}{maximize cumulative reward}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn policy \(\pi(s) \to a\) that maximizes expected reward
+  \item
+    Trade-off between exploration (trying new actions) and exploitation
+    (using known good actions)
+  \item
+    Environments provide clear rules and feedback (win/loss/reward)
+  \item
+    Often involve physical simulation or real-world interaction
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Core elements:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Agent: Learner and decision maker
+  \item
+    Environment: Everything the agent interacts with
+  \item
+    State \(s\)
+  \item
+    Action \(a\)
+  \item
+    Reward \(r\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Algorithms:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Q-learning
+  \item
+    Policy Gradient methods
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Reinforcement Learning: Examples}
+\protect\phantomsection\label{reinforcement-learning-examples}
+\begin{itemize}
+\tightlist
+\item
+  In \textbf{\textcolor{red}{game playing}}, learn strategies through
+  trial and error
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., AlphaGo mastering the game of Go
+  \end{itemize}
+\item
+  In \textbf{\textcolor{orange}{robotics}}, learn control policies for
+  movement and manipulation
+\item
+  In \textbf{\textcolor{darkgreen}{autonomous driving}}, learn safe and
+  efficient driving behaviors
+\item
+  In \textbf{\textcolor{teal}{resource management}}, optimize allocation
+  of limited resources over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., data center cooling or CPU job scheduling
+  \end{itemize}
+\item
+  In \textbf{\textcolor{cyan}{personalized recommendations}}, adapt
+  suggestions based on user interaction
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., newsfeed ranking adjusting based on user clicks
+  \end{itemize}
+\item
+  In \textbf{\textcolor{blue}{healthcare}}, optimize treatment plans
+  over time
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Machine Learning Paradigms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Major Paradigms
+  \item
+    Some Examples
+  \item
+    \emph{\textbf{\textcolor{red}{Machine Learning in Practice}}}
+  \item
+    Pipeline Organization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning Flow (1/2)}
+\protect\phantomsection\label{machine-learning-flow-12}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Question}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., ``How can we predict house prices?''
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Input data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., historical data of house sales
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Features}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., number of bedrooms, location, square footage
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Algorithm}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., linear regression, decision trees
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Parameters}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., learning rate, number of trees in a random forest
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Evaluation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., accuracy, precision, recall
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning Flow (2/2)}
+\protect\phantomsection\label{machine-learning-flow-22}
+\includegraphics[width=\linewidth,height=0.8\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Not all phases are equally important!}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Question \(>\) Data \(>\) Features \(>\) Algorithm
+  \end{itemize}
+\item
+  Clarity of the \textbf{\textcolor{orange}{question}} impacts project
+  success
+\item
+  Quality and relevance of \textbf{\textcolor{darkgreen}{data}} are
+  crucial for performance
+\item
+  Proper \textbf{\textcolor{teal}{feature}} selection simplifies the
+  model and improves accuracy
+\item
+  \textbf{\textcolor{cyan}{Algorithm}} is often less important (contrary
+  to popular belief!)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Question}
+\protect\phantomsection\label{question}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Make the question concrete and precise}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Define the problem clearly
+  \item
+    Specify inputs and expected outputs
+  \item
+    Align question with business or research objectives
+  \item
+    E.g.,:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{\textcolor{darkgreen}{Bad}}: \emph{``How can we improve
+      sales?''}
+    \item
+      \textbf{\textcolor{blue}{Good}}: \emph{``What factors most
+      significantly impact sales of product X in region Y during season
+      Z?''}
+    \end{itemize}
+  \end{itemize}
+\item
+  Formulating question is
+  \textbf{\textcolor{violet}{the most important part}} of the machine
+  learning problem
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misunderstanding leads to:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Solving the wrong problem
+    \item
+      Collecting wrong data
+    \item
+      \ldots{}
+    \end{itemize}
+  \end{itemize}
+\item
+  \emph{``If I were given one hour to save the planet, I would spend 59
+  minutes defining the problem and one minute resolving it''} (Einstein)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Input Data}
+\protect\phantomsection\label{input-data}
+\begin{itemize}
+\tightlist
+\item
+  Ensure \textbf{\textcolor{red}{data is specific to prediction}} goal
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., use known movie ratings to predict unseen movie ratings from
+    the same population
+  \item
+    Training set \(\approx\) test set
+  \end{itemize}
+\item
+  Relationship between data and prediction goal is
+  \textbf{\textcolor{darkgreen}{not always direct}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., interested in prices but predict supply and demand instead
+  \end{itemize}
+\item
+  Poor-quality data leads to inaccurate predictions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Garbage in - garbage out''}
+  \end{itemize}
+\item
+  Recognize \textbf{\textcolor{blue}{when data is insufficient}} for
+  valid answers
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Combination of data and desire for an answer does not ensure
+    a reasonable answer can be extracted''} (John Tukey)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{More data vs better models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Meta-studies show difference between generic and best model is like
+    5\%
+  \item
+    \emph{``It's not who has the best algorithm that wins. It's who has
+    the most data''} (Google researcher)
+  \item
+    \emph{``Every time I fire a linguist, the performance of the speech
+    recognizer goes up''} (IBM researcher in speech recognition)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Features}
+\protect\phantomsection\label{features}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Features}} provide high-level information
+  about inputs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., use intensity and symmetry for scanned numbers instead of raw
+    bit maps
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Characteristics of good features}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Perform data compression
+  \item
+    Retain relevant information
+  \item
+    Often created with expert knowledge
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Common mistakes in feature building}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Automating feature selection may lead to overfitting
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Black box predictions can be accurate but stop working anytime
+    \item
+      E.g., Google Flu's unclear feature-model link
+    \end{itemize}
+  \item
+    Ignoring data-specific quirks
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., mislabeling outliers
+    \end{itemize}
+  \item
+    Unnecessarily discarding information
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Models}
+\protect\phantomsection\label{models}
+\begin{itemize}
+\tightlist
+\item
+  Best models are:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Interpretable}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Allow users to understand and trust the model's decisions
+    \item
+      E.g., decision trees are appropriate in medical studies since they
+      produce a ``reasoning''
+    \end{itemize}
+  \item
+    \textbf{\textcolor{orange}{Simple}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Easier to implement and maintain
+    \item
+      Reduces the risk of overfitting
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Accurate}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Often accuracy is traded off for remaining characteristics
+    \item
+      E.g., accuracy vs interpretability, accuracy vs speed
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Fast}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Reduce computational costs to train and test
+    \item
+      E.g., real-time applications
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Scalable}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Can handle large datasets efficiently (growing data and user
+      bases)
+    \item
+      E.g., in the Netflix prize, Netflix didn't end up implementing the
+      best algorithm since it wasn't scalable enough
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Machine Learning Paradigms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Major Paradigms
+  \item
+    Some Examples
+  \item
+    Machine Learning in Practice
+  \item
+    \emph{\textbf{\textcolor{red}{Pipeline Organization}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How Are Machine Learning Systems Organized?}
+\protect\phantomsection\label{how-are-machine-learning-systems-organized}
+\begin{itemize}
+\tightlist
+\item
+  Machine learning systems organized in a
+  \textbf{\textcolor{red}{pipeline}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Break down}} problem into sub-problems
+  \item
+    \textbf{\textcolor{blue}{Solve}} problems one at a time
+  \item
+    \textbf{\textcolor{violet}{Combine}} solutions to solve initial
+    problem
+  \end{enumerate}
+\item
+  Performance \(p\) of a pipeline: \[
+  p_{system} = \sum_i p_i \cdot \alpha_i
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(p_i\): Performance of each stage
+  \item
+    \(\alpha_i\): Importance of each stage
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example of Photo OCR System}
+\protect\phantomsection\label{example-of-photo-ocr-system}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}: build systems to read text in a
+  picture
+
+  \begin{itemize}
+  \tightlist
+  \item
+    OCR = ``Optical Character Recognition''
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Stages of ML pipeline for OCR:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Text detection: find text areas in the picture
+  \item
+    Character segmentation: split text into letter boxes
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{h e l l o}}
+    \end{itemize}
+  \item
+    Character classification: classify characters individually
+  \item
+    Spelling correction: fix text errors using context
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \textcolor{blue}{\texttt{hell0}} corrected to
+      \textcolor{blue}{\texttt{hello}}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Sliding window approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{violet}{Problem}}: Unknown text location and size
+  \item
+    Text detection
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Train classifier to recognize letters vs non-letters
+    \item
+      Scan image in two directions with different sizes for text
+    \item
+      Evaluate classifier cheaper than training
+    \item
+      Create text likelihood map (e.g., heatmap) using classifier
+      probabilities
+    \item
+      Enclose text areas in boxes
+    \item
+      Discard boxes not fitting aspect ratio (valid text width
+      \textgreater{} height)
+    \end{itemize}
+  \item
+    Character segmentation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use sliding window classifiers to find ``breaks'' between
+      characters
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Getting More Data}
+\protect\phantomsection\label{getting-more-data}
+\begin{itemize}
+\item
+  The ideal recipe for ML is: ``low-bias algorithm + train on massive
+  amount of data''
+\item
+  Use learning curves to make sure we are taking advantage of more data
+\item
+  The \textbf{\textcolor{red}{problem}} is getting large amount of data
+\item
+  Always ask yourself: \emph{``how much work is to get 10x more data
+  than we currently have?''}
+\item
+  Often it is not that difficult:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Artificial data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., synthesize or amplify data set
+    \end{itemize}
+  \item
+    Collect and label by hand
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., crowd sourcing like Amazon Mechanical Turk
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{OCR Pipeline: Example of Artificial Data Synthesis}
+\protect\phantomsection\label{ocr-pipeline-example-of-artificial-data-synthesis}
+\begin{itemize}
+\tightlist
+\item
+  How can we increase data set size?
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Synthesize data set
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use font libraries to generate large training sets
+    \item
+      Paste characters against random backgrounds
+    \item
+      Apply scaling, distortion, adding noise, etc
+    \end{itemize}
+  \item
+    Amplify a data set
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Add examples by warping/distorting existing examples
+    \end{itemize}
+  \end{enumerate}
+\item
+  Transformations and noise should be specific to the application domain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., Gaussian noise is not always appropriate
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Ceiling Analysis for ML Pipeline}
+\protect\phantomsection\label{ceiling-analysis-for-ml-pipeline}
+\begin{itemize}
+\item
+  The most valuable resource is time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You work on optimization for months
+  \item
+    Find out that the optimization doesn't make much difference
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: On which part of the pipeline
+  should time/resource be spent?
+\item
+  \textbf{\textcolor{blue}{Solution}}: Ceiling analysis to Analyze
+  pipeline performance
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Single number for system performance
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., accuracy for OCR
+    \end{itemize}
+  \item
+    For each component:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Mock component with ``oracle'' (always give correct output)
+    \item
+      Leave others untouched
+    \item
+      Compute pipeline performance
+    \end{itemize}
+  \item
+    Identify critical components by estimating performance improvement
+    with 10\% component improvement
+  \item
+    Measure, don't guess!
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}
