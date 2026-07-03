@@ -1,0 +1,3862 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\newenvironment{Shaded}{}{}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\BuiltInTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{#1}}
+\newcommand{\ImportTok}[1]{\textcolor[rgb]{0.00,0.50,0.00}{\textbf{#1}}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{#1}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 10: Time Series Machine Learning}}\]}
+\endgroup \vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Time Series}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Basic Definition}}}
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Time Series}
+\protect\phantomsection\label{time-series}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A \emph{time series} is a
+  sequence of observations over time
+\item
+  \textbf{\textcolor{darkgreen}{Example}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Finance: Hourly stock prices
+  \item
+    Web Analytics: Number of active users on a site sampled every minute
+  \item
+    Manufacturing: Sensor data from machinery (e.g., temperature or
+    vibration)
+  \item
+    Weather: Daily temperature measurements
+  \item
+    Energy: Daily electricity usage of a household
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: Nearly everything changes over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Everything in the real world (besides mathematical objects) is
+    dynamic
+  \item
+    Time series modeling is essential for real-world forecasting and
+    inference
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Time Series}
+\protect\phantomsection\label{time-series-1}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A \emph{time series} is modeled
+  as a random process, a sequence of random variables indexed by time:
+  \[\{ Y_t \}_{t=-\infty}^{\infty}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variables can be continuous or discrete
+  \item
+    Data is typically equi-spaced in time
+  \item
+    The time dimension matters since random variables exhibit dependence
+    over time
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Goal}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand patterns
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Identify trends, seasonality, and cyclic behavior
+    \item
+      Detect anomalies or outliers
+    \end{itemize}
+  \item
+    Predict future values
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Forecast future data points based on historical patterns
+    \item
+      E.g., predicting next month's sales based on past sales data
+    \end{itemize}
+  \item
+    Improve decision-making
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use insights from the time series to make informed business or
+      policy decisions
+    \item
+      E.g., adjusting inventory levels based on predicted demand
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Time Series: Visualization and Exploration}
+\protect\phantomsection\label{time-series-visualization-and-exploration}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}: \emph{Visualization} helps us
+  understand structure in time series:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Guides preprocessing choices
+  \item
+    Helps form hypotheses before modeling
+  \item
+    Distinguishes between underlying structure and randomness
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: \emph{Patterns} to look for
+  in time series:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Trend}: Long-term increase or decrease
+  \item
+    \emph{Seasonality}: Repeating patterns at regular intervals
+  \item
+    \emph{Noise}: Random fluctuations
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Line plots} show raw data over time, e.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Trend presence
+    \item
+      Outliers or abrupt changes
+    \end{itemize}
+  \item
+    \emph{Seasonal plots} reveal periodic patterns
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., plot monthly sales to find yearly seasonality
+    \end{itemize}
+  \item
+    \emph{Autocorrelation plots} detect repeating structures
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Autocovariance}
+\protect\phantomsection\label{autocovariance}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: The \(j\)-lag
+  \emph{autocovariance} of a time series \(\{Y_t\}\) is the covariance
+  of a random variable and the variable \(j\) samples before:
+  \[\Cov(Y_t, Y_{t-j}) \defeq \EE[(Y_t - \EE[Y_t]) (Y_{t-j} - \EE[Y_{t-j}])]\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represent how a variable varies over time
+  \item
+    Linear relationship
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Definition}}: The \(j\)-lag
+  \emph{autocorrelation} of a time series \(\{Y_t\}\) is: \[
+  \Corr(Y_t, Y_{t-j})
+  = \rho(Y_t, Y_{t-j})
+  \defeq \frac{\Cov(Y_t, Y_{t-j})}{\sqrt{\VV[Y_t] \VV[Y_{t-j}]}}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measure strength and direction of the linear relationship between
+    samples
+  \item
+    Scale-free
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stationarity: Intuition}
+\protect\phantomsection\label{stationarity-intuition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A time series \(\{Y_t\}\) is
+  \emph{stationary} if statistical properties (e.g., mean, variance,
+  autocorrelation structure) do not change over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stationarity is analogous to IID sampling for random variables
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Intuition}} a time series is stationary if
+  it is ``unchanged'' by shifts in time
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Time series are rarely
+  stationary
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stationarity is often an approximation/simplification of reality
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Key idea}}: Why stationarity matters:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Many models (e.g., ARIMA) assume stationarity
+  \item
+    E.g., raw stock prices are non-stationary, returns often are
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Solution}}: Tests for stationarity:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ADF Test (Augmented Dickey-Fuller): tests for unit root
+  \item
+    KPSS Test: tests for trend stationarity
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Strictly Stationary: Definition}
+\protect\phantomsection\label{strictly-stationary-definition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A time series \(\{Y_t\}\) is
+  \emph{strictly stationary} iff for any time indices
+  \(t_1, t_2, ..., t_r\) and any time shift \(h\), the joint
+  distribution of \((Y_{t_1}, Y_{t_2}, ..., Y_{t_r})\) equals the joint
+  distribution of \((Y_{t_1+h}, Y_{t_2+h}, ..., Y_{t_r+h})\)
+\item
+  \textbf{\textcolor{darkgreen}{Example}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \((Y_1, Y_5)\) has the same joint distribution as
+    \((Y_{12}, Y_{16})\)
+  \item
+    \((Y_1, Y_2, Y_3)\) has the same joint distribution as
+    \((Y_3, Y_4, Y_5)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Data properties are invariant to
+  time shifts
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The data (i.e., joint probability of any set of observations) is
+    invariant when we shift it in time
+  \item
+    Only the distances in time matter
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Fact}}: If \(\{Y_t\}\) is strictly
+  stationary:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    All moments (e.g., mean, variance) of \(Y_t\) don't depend on \(t\)
+  \item
+    Any statistics between lags of the time series depend only on the
+    difference in time between lags
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Weakly Stationary: Definition}
+\protect\phantomsection\label{weakly-stationary-definition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Weak stationarity}
+  requires milder assumptions than strict stationarity:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    The mean is constant over time: \[\EE[Y_t] = \mu \; \forall t\]
+  \item
+    The variance is constant over time:
+    \[\VV[Y_t] = \sigma^2 \; \forall t\]
+  \item
+    The \(j\)-lag autocovariance \(\Cov(Y_t, Y_{t-j})\) depends on
+    distance between lags \(j\) but not on \(t\):
+    \[\Cov(Y_t, Y_{t-j}) = \gamma_j\]
+  \end{enumerate}
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Practical constraints:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    First and second moments only
+  \item
+    The joint distribution of 2 time indices
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Key properties of weakly
+  stationary series:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No trend (mean is constant)
+  \item
+    Variations around the mean have constant amplitude (variance is
+    constant)
+  \item
+    Consistent ``wiggling'', i.e., random patterns look the same
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Auto-Correlation Function (ACF)}
+\protect\phantomsection\label{auto-correlation-function-acf}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Auto-correlation function}
+  (ACF)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot correlation coefficient of a time series with its lagged values
+  \item
+    Plot uncertainty of coefficients
+  \item
+    Identify repetitive patterns or seasonality
+  \item
+    E.g., ACF shows if today's temperature correlates with previous days
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Definition}}: \emph{Partial Auto-Correlation
+  Function} (PACF)
+  \[\alpha(k) = \Corr(Y_t - Proj_{t,k}(Y_t), Y_{t-k} - Proj_{t,k}(Y_{t-k}))\]
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Proj_{t,k}(x)\) is projection of \(x\) onto space spanned by
+    \((Y_{t-1}, ..., Y_{t-k+1})\)
+  \item
+    Understand direct relationship between time series and lagged
+    values, excluding intermediate lags
+  \item
+    E.g., PACF identifies direct impact of sales from a specific
+    previous month on current month's sales
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Transformation of a time series}
+\protect\phantomsection\label{transformation-of-a-time-series}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Any deterministic transformation
+  \(g(\cdot)\) of a strictly stationary process \(\{Y_t\}\) is also
+  strictly stationary
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: Common transformations:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Log transformations (useful when data grows exponentially)
+  \item
+    Differencing removes trend and makes series stationary
+
+    \begin{itemize}
+    \tightlist
+    \item
+      First difference: \(z_t = y_t - y_{t-1}\)
+    \end{itemize}
+  \item
+    Power transformations (e.g., square root) can reduce skewness
+  \item
+    Detrending
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Subtract a fitted trend line
+    \item
+      Apply moving average smoothing
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: Transformations can make a process
+  stationary, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Detrending
+  \item
+    Differencing (integer or fractional)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    \emph{\textbf{\textcolor{red}{Time Series Operators}}}
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lag Operator}
+\protect\phantomsection\label{lag-operator}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Given a time series
+  \(\{ X_t \}\), the lag operator \(L(\cdot)\) generates another time
+  series: \[Y_t = L X_t = X_{t-1}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aka ``shift back'', backshift, or delay
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: Understanding the lag
+  operator:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lagging a time series means that the \(t\) (today) element of the
+    new time series is the \(t - 1\) (yesterday) element of the old time
+    series
+  \item
+    It delays the time series
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: The ``normal'' direction (i.e.,
+  positive delay) is delaying, since you are not snooping in the future
+
+  \begin{itemize}
+  \item
+    \textcolor{blue}{\texttt{pd.shift(n>0)}} with a positive sign
+    \begingroup \scriptsize
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{date        val     val.shift(2)}
+\NormalTok{2016{-}03{-}10  0       nan}
+\NormalTok{2016{-}03{-}11  1       nan}
+\NormalTok{2016{-}03{-}14  2       0}
+\NormalTok{2016{-}03{-}15  3       1}
+\NormalTok{2016{-}03{-}16  4       2}
+\end{Highlighting}
+\end{Shaded}
+
+    \endgroup
+  \item
+    The values at the beginning of the period are not available since
+    they require data before the period of interest
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Lead Operator}
+\protect\phantomsection\label{lead-operator}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: It is accomplished by:
+  \[Y_t = L^{-1} X_t = X_{t+1}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When using a variable function of time, the transformation is like
+    \(x(t + 2)\) since the value today \(x(0)\) is the value computed in
+    the future \(x(2)\)
+  \end{itemize}
+\item
+  Aka ``shift forward''
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: When you shift forward
+  (lead) \textcolor{blue}{\texttt{df.shift(n<0)}}, you move a value from
+  the future (a value computed \(n\) periods in the future) to today
+  \begingroup \scriptsize
+
+\begin{verbatim}
+date        val     val.shift(-2)
+2016-03-10  0       2
+2016-03-11  1       3
+2016-03-14  2       4
+2016-03-15  3       nan
+2016-03-16  4       nan
+\end{verbatim}
+
+  \endgroup
+\item
+  \textbf{\textcolor{blue}{Remark}}: This is equivalent to ``shifting
+  up'' a time series ordered by increasing dates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some values at the end of the period won't be available since they
+    would have been computed after the period of interest is over
+  \item
+    Some values computed at the beginning of the period will be
+    discarded
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Shifting More Than One Time Step}
+\protect\phantomsection\label{shifting-more-than-one-time-step}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: You can shift more than one lag with:
+  \[L^k X_t = X_{t-k}\] \[L^{-k} X_t = X_{t+k}\]
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(L^k\) represents a backward shift by \(k\) time steps
+  \item
+    \(L^{-k}\) represents a forward shift by \(k\) time steps
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: If \(X_t\) is a time series:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(L^2 X_t = X_{t-2}\) shifts the data point two steps back
+  \item
+    \(L^{-3} X_t = X_{t+3}\) shifts the data point three steps forward
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Difference Operator}
+\protect\phantomsection\label{difference-operator}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: The \emph{first difference} of a
+  time series is defined as the time series:
+  \[Y_t = \Delta X_t \defeq X_t - X_{t-1}\] i.e., the time series that
+  is the difference between the original time series and its lagged
+  version
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: The first difference can be
+  written in terms of lag operator as: \[\Delta X_t = (1 - L) X_t\]
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Differencing means computing the
+  difference between consecutive observations: \[Y_t = X_t - X_{t-1}\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This means removing the changes in the level of a time series
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Eliminate trend and seasonality, which stabilize the mean of the
+      time series
+    \item
+      Differencing can make a time series stationary
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Second Difference Operator}
+\protect\phantomsection\label{second-difference-operator}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: The \emph{second difference} of
+  a time series is defined as: \[\Delta^2 X_t = \Delta (\Delta X_t)\]
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Note that the second
+  difference is not the difference \(Y_t - Y_{t-2}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Developing: \[Y_t = \Delta X_t = X_t - X_{t-1}\] and \[
+    \begin{aligned}
+    Z_t &= Y_t - Y_{t - 1} \\
+    &= X_t - X_{t - 1} - (X_{t - 1} - X_{t - 2}) \\
+    &= X_t - 2 X_{t - 1} + X_{t - 2}
+    \end{aligned}
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: The second difference operator can be
+  written in terms of lag operator as: \[\Delta^2 X_t = (1 - L)^2 X_t\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{N-th Difference Operator}
+\protect\phantomsection\label{n-th-difference-operator}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: The \emph{\(n\)-th difference
+  operator} is defined: \[\Delta^n X_t = (1 - L)^n X_t\]
+\item
+  \textbf{\textcolor{blue}{Remark}}: The notation highlights that you
+  can express the \(n\)-th difference operator in terms of \(n\)-th
+  power of the difference operator
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    \emph{\textbf{\textcolor{red}{Time Series Decomposition}}}
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decomposition of Time Series}
+\protect\phantomsection\label{decomposition-of-time-series}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A time series can be broken into
+  several components:
+  \[y_t = \text{Trend}_t + \text{Seasonality}_t + \text{Cycle}_t + \text{Residual}_t\]
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Trend}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Long-term increase or decrease in data
+    \item
+      Can change direction over time
+    \end{itemize}
+  \item
+    \emph{Seasonality}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Affected by seasonal factors (e.g., time of day, day of week,
+      month of year)
+    \item
+      Fixed and known frequency
+    \end{itemize}
+  \item
+    \emph{Cycle}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Value rises and falls without fixed frequency
+    \item
+      E.g., economic conditions exhibit cycles
+    \end{itemize}
+  \item
+    \emph{Residual (noise)}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Everything that is left after removing the other components
+    \item
+      Idiosyncratic component
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: Besides additive model, the
+  components can also be mixed in different ways (e.g., multiplicative)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Seasonality: Example}
+\protect\phantomsection\label{seasonality-example}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Example}}: Consider sales of antidiabetic drug
+  over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sharp spike in January
+  \item
+    Dip in February
+  \item
+    Increase over the year
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L10.Antidiabetic_drug_sales.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Why this pattern?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In January, government subsidy makes it cost-effective to stockpile
+    drugs
+  \item
+    In February, dip occurs as people have already bought many drugs
+  \item
+    Demand increases until December as people use their reserves
+  \item
+    Then the cycle repeats next year
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cycle: Example}
+\protect\phantomsection\label{cycle-example}
+\begin{itemize}
+\tightlist
+\item
+  Gross Domestic Product (GDP) moves around its long-term growth trend
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The fluctuation is the business cycle
+  \item
+    Understanding these cycles aids in economic planning and forecasting
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Different cycles by time scale:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Inventory}: 3-5 years
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Driven by inventory level changes in response to demand
+      fluctuations
+    \item
+      E.g., a retailer overstocks during high demand and then reduce
+      orders, leading to a cycle
+    \end{itemize}
+  \item
+    \emph{Fixed investment}: 7-11 years
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Investments in long-term assets like machinery and buildings
+    \item
+      E.g., a manufacturing company invests in new machinery every
+      decade to improve efficiency
+    \end{itemize}
+  \item
+    \emph{Infrastructural investment}: 15-25 years
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Large-scale infrastructure projects such as roads, bridges, and
+      public utilities
+    \item
+      E.g., a government plans a major highway expansion every 20 years
+      to accommodate growing traffic
+    \end{itemize}
+  \item
+    \emph{Technological investment}: 45-60 years
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Major technological advancements and their adoption across
+      industries
+    \item
+      E.g., the widespread adoption of the Internet in 1995-2010
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+\end{frame}
+
+\begin{frame}{Seasonal Plot}
+\protect\phantomsection\label{seasonal-plot}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Seasonal plot} allows
+  understanding the model structure over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Partition the time-series based on the periodicity:
+  \item
+    Plot each time series chunk on the same graph
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: Assume you know the
+  periodicity of a signal
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., yearly periodicity of a monthly time series
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L10.Antidiabetic_drug_sales_seasonal_plot.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Question}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do the data exhibit a seasonal pattern?
+  \item
+    Is there a within-group pattern (e.g., Jan and July exhibit similar
+    patterns)?
+  \item
+    Are there outliers after accounting for seasonality?
+  \item
+    Is the seasonality changing over time?
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Seasonal Differencing}
+\protect\phantomsection\label{seasonal-differencing}
+\begin{columns}[T]
+\begin{column}{0.45\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Seasonal differencing}
+  entails taking the difference between observations at the same point
+  of consecutive periods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., for time series with yearly periodicity, take the
+    Year-over-Year (YoY) difference
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Goal}}: Remove seasonal effects in time
+  series data with strong seasonal patterns
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., retail sales or temperature data
+  \item
+    Help identify underlying trends by eliminating seasonal fluctuations
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L10.Antidiabetic_drug_sales_subseasonal_plot.png}}
+\begingroup \small
+Sub-seasonal plot
+\endgroup
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Spectral Plot}
+\protect\phantomsection\label{spectral-plot}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Spectral plot} estimates
+  spectral density of a process from time samples of the signal
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Detect periodicity
+  \item
+    Identify dominant frequencies
+  \item
+    Analyze power distribution over frequency
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: A spectral plot identifies
+  different frequencies in a sound recording
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Noise reduction or enhancement of certain frequencies
+  \item
+    Speech recognition
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L10.Speech_spectrogram.png}}
+\end{column}
+\end{columns}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Example}}: Compute the frequency of ocean
+  waves
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L10.Wave_spectral_plot.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Classical Methods}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Simple Models for Stochastic Processes}}}
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{White Noise Process}
+\protect\phantomsection\label{white-noise-process}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A \emph{white noise process} is
+  defined as a sequence of iid variables with distribution, centered
+  around 0, and with constant variance:
+  \[\{ Y_t \} \sim \WN(0, \sigma^2)\]
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: Each \(Y_t\) is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A IID random variable at time \(t\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Independent over time
+    \item
+      Drawn from the same distribution
+      \(Y_t \sim \text{ IID from distribution } F\) (not necessarily
+      Gaussian)
+    \end{itemize}
+  \item
+    With mean \(\EE[Y_t] = 0\) and constant variance
+    \(\VV[Y_t] = \sigma^2\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key idea}}: Important properties of white
+  noise:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Strictly stationary
+  \item
+    \(\{ Y_t \}\) is uncorrelated over time
+  \item
+    Variance \(\sigma^2\) is constant for all \(t\)
+  \item
+    \(\Cov(Y_t, Y_{t-j}) = \gamma_j = 0 \text{ for } j \ne 0\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Intuition}}: Meaning of ``white noise''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There is no pattern (``noise'')
+  \item
+    Like ``white light'', the signal spectrum contains all frequencies
+    with equal power
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deterministically Trending Process}
+\protect\phantomsection\label{deterministically-trending-process}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A \_``deterministically trending
+  process'' is defined as: \[Y_t = \beta_0 + \beta_1 t + \varepsilon_t\]
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\beta_0\) is the intercept of the model
+  \item
+    \(\beta_1\) is the slope of the model, representing the trend over
+    time
+  \item
+    \(t\) is the time index
+  \item
+    The noise is Gaussian:
+    \(\varepsilon_t \sim \GWN(0, \sigma_{\varepsilon}^2)\)
+  \item
+    The noise term is also called ``innovation'' or ``error term''
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: The mean
+  \(\EE[Y_t] = \beta_0 + \beta_1 t\) depends on \(t\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is non-stationary in the mean due to the presence of the trend
+    component \(\beta_1 t\), e.g.,
+  \item
+    \(\beta_1 > 0\) indicates an upward trend
+  \item
+    \(\beta_1 < 0\) indicates a downward trend
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: The variance of the noise term
+  \(\sigma_{\varepsilon}^2\) is constant over time
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Random Walk}
+\protect\phantomsection\label{random-walk}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A \emph{``random walk''} Defined
+  as \[Y_t = Y_{t-1} + \varepsilon_t\] where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The noise is Gaussian:
+    \(\varepsilon_t \sim \GWN(0, \sigma_{\varepsilon}^2)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: It can be rewritten in terms of
+  the noise terms doing a recursive substitution:
+  \[Y_t = Y_0 + \sum_{i=1}^t \varepsilon_i\]
+\item
+  \textbf{\textcolor{blue}{Remark}}: The mean is constant:
+  \(\EE[Y_t] = \EE[Y_0] = \mu\)
+\item
+  \textbf{\textcolor{violet}{Key idea}}: The variance is
+  \(\VV[Y_t] = t \sigma_{\varepsilon}^2\) since all the covariances
+  between innovations are 0
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is non-stationary in the variance
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    \emph{\textbf{\textcolor{red}{Autoregressive Models}}}
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Autoregressive (AR) Models}
+\protect\phantomsection\label{autoregressive-ar-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: An \emph{AR model} of order
+  \(p\) expresses future values using past \(p\) values:
+  \begin{alignat*}{2}
+  Y_t & = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \dots + \phi_p Y_{t-p} + \varepsilon_t \\
+  & = c + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t \\
+  \end{alignat*} where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y_t\) is the value at time \(t\)
+  \item
+    \(c\) is a constant
+  \item
+    \(\phi_1, \phi_2, \dots, \phi_p\) are the model parameters
+  \item
+    \(Y_{t-1}, Y_{t-2}, \dots, Y_{t-p}\) are past values (aka lags)
+  \item
+    The random error term is white noise
+    \(\varepsilon_t \sim \text{ IID } Normal(0, \sigma^2)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Predicting temperature today using
+  temperature for past 3 days:
+  \[Y_t = c + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \phi_3 Y_{t-3} + \varepsilon_t\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process}
+\protect\phantomsection\label{ar1-process}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: An \emph{AR(1) model}
+  (autoregressive model of order 1) is defined as:
+  \[Y_t = c + \phi Y_{t-1} + \varepsilon_t\] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The model is an autoregressive term plus noise
+  \item
+    The noise is IID Gaussian
+    \(\varepsilon_t \sim \GWN(0, \sigma_{\varepsilon}^2)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is regressive with respect to itself, i.e., ``auto-regressive''
+  \item
+    The representation: \[Y_t = \phi Y_{t-1} + \varepsilon_t\] can be
+    thought as a regression of \(Y_t\) against \(Y_{t-1}\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process: Mean}
+\protect\phantomsection\label{ar1-process-mean}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Applying the expected value to the
+  definition of AR(1) \[Y_t = c + \phi Y_{t-1} + \varepsilon_t\] you
+  get: \[\EE[Y_t] = c + \phi \EE[Y_{t-1}] + \EE[\varepsilon_t]\]
+\item
+  \textbf{\textcolor{blue}{Key idea}}: Assuming the mean exists and it's
+  \(\mu\), then \(\mu = c + \phi \mu\) so:
+  \[\mu \triangleq \EE[Y_t] = \frac{c}{1 - \phi}\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process: Formulation in Terms of Mean}
+\protect\phantomsection\label{ar1-process-formulation-in-terms-of-mean}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Rewriting the AR(1) model:
+  \[Y_t = c + \phi Y_{t-1} + \varepsilon_t\] using the relationship for
+  the mean: \[\mu = \frac{c}{1 - \phi}\] you get:
+  \[Y_t = \mu (1 - \phi) + \phi Y_{t-1} + \varepsilon_t\]
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Rewriting in terms of difference
+  from the mean:
+  \[(Y_t - \mu) = \phi \cdot (Y_{t-1} - \mu) + \varepsilon_t\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is like random walk \(Y_t = Y_{t-1} + \varepsilon_t\) but with a
+    mean \(\mu\) and a param \(\phi\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process: Properties}
+\protect\phantomsection\label{ar1-process-properties}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Using the definition of model in terms
+  of the mean: \[Y_t = \mu (1 - \phi) + \phi Y_{t-1} + \varepsilon_t\]
+  you can compute the statistical properties of AR(1) process: \[
+  \begin{aligned}
+  & \EE[Y_t] = \mu \\
+  & \VV[Y_t] = \frac{\sigma_{\varepsilon}^2}{1 - \phi^2} \\
+  & \Cov[Y_t, Y_{t-j}] = \VV[Y_t] \phi^j \\
+  & \rho(Y_t, Y_{t-j}) = \phi^j \\
+  \end{aligned}
+  \]
+\item
+  \textbf{\textcolor{blue}{Theorem}}: If \(-1 < \phi < 1\), the AR(1)
+  model is weakly stationary
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process is Mean-reverting}
+\protect\phantomsection\label{ar1-process-is-mean-reverting}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Mean-reverting} means that
+  when the value is far from the mean, it tends to go back
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The speed of mean reversion depends on \(\phi\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process is Ergodic}
+\protect\phantomsection\label{ar1-process-is-ergodic}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Ergodicity} is a property
+  of time series where \(Y_t\) and \(Y_{t-j}\) become independent as
+  \(j\) grows large enough
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For AR(1) with \(|\phi| < 1\), this property holds
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The ``memory of the process'' fades over time
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: The autocovariance of AR(1) has
+  geometric decay: \[\Cov[Y_t, Y_{t-j}] = \VV[Y_t] \phi^j\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variables closer in time are more correlated than those farther
+    apart
+  \item
+    As \(j \to \infty\), \(\Cov[Y_t, Y_{t-j}] \to 0\) (ergodicity holds)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) Process vs Gaussian White Noise}
+\protect\phantomsection\label{ar1-process-vs-gaussian-white-noise}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Remark}}: The Gaussian White Noise (GWN) is
+  ``choppy''
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: The AR(1) process is
+  smoother than the GWN due to the autocorrelation in time
+\item
+  \textbf{\textcolor{blue}{Fact}}: AR(1) behavior as function of
+  \(\phi\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\phi = 0\): white noise, it bounces around the mean
+  \item
+    \(0 < \phi < 1\): it stays far from the mean and then reverts (it is
+    smoother)
+  \item
+    \(\phi = 1\): random walk, it walks away from the mean
+  \item
+    \(\phi > 1\): explosive progress since it diverges accelerating
+  \item
+    \(\phi < 0\): it oscillates rapidly (highly oscillatory behavior)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(1) to Model Financial Time Series}
+\protect\phantomsection\label{ar1-to-model-financial-time-series}
+\begin{itemize}
+\tightlist
+\item
+  AR(1) is a good model for:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Interest rates
+  \item
+    Growth rate of macroeconomic variables (e.g., GDP, unemployment
+    rate)
+  \item
+    Profit and losses
+  \end{itemize}
+\item
+  AR(1) is a bad model for:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Stocks don't show a strong time dependency
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Returns look like white noise
+    \item
+      Prices look like random walk
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(p) Model}
+\protect\phantomsection\label{arp-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: An AR(p) (autoregressive model
+  of order \(p\)) follows this relationship: \[
+  Y_t = c + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\varepsilon\) terms are white noise
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: In words, AR(p) models are
+  linear combination of \(p\) past realization plus noise
+\item
+  \textbf{\textcolor{blue}{Fact}}: AR models assume the time series is
+  stationary:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Partial Autocorrelation Function helps choose \(p\)
+  \item
+    Model parameters are estimated using Ordinary Least Squares (OLS) or
+    Maximum Likelihood Estimation (MLE)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AR(p) Model in Terms of Lag Operator}
+\protect\phantomsection\label{arp-model-in-terms-of-lag-operator}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: The AR(p) equation is: \[
+  Y_t = c + \sum_{i=1}^p \phi_i Y_{t-i} + \varepsilon_t
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Separating var and noise term
+  \[
+  Y_t - \sum \phi_i Y_{t-i} = c + \varepsilon_t
+  \]
+\item
+  \textbf{\textcolor{blue}{Fact}}: Using lag operator \[
+  \begin{aligned}
+  Y_t - \sum \phi_i L^i Y_t &= \\
+  (1 - \sum \phi_i L^i) Y_t &= \\
+  \text{polynomial}(\phi, L) Y_t &= c + \varepsilon_t\\
+  \end{aligned}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-7}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    \emph{\textbf{\textcolor{red}{Moving Average Models}}}
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Moving Average (MA) Models}
+\protect\phantomsection\label{moving-average-ma-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A \emph{Moving Average model of
+  order \(q\)} predicts the next value using past \(q\) errors:
+  \begin{alignat*}{2}
+  Y_t
+  & = \mu + \varepsilon_t + \theta_1 \varepsilon_{t-1} + \theta_2 \varepsilon_{t-2} + \dots + \theta_q \varepsilon_{t-q} \\
+  & = \mu + \varepsilon_t + \sum_{i=1}^q \theta_i \varepsilon_{t-i} \\
+  \end{alignat*} where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mu\) is the mean of the series
+  \item
+    \(\varepsilon_t\) is the white noise error term at time \(t\)
+  \item
+    \(\theta_1, \theta_2, \dots, \theta_q\) are the parameters of the
+    model
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: Correcting for sensor noise
+  by using past error patterns
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If a sensor consistently overestimates by a small amount, the MA
+    model can adjust for this by considering past errors
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: MA models are always stationary
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Suitable for time series data where the impact of a shock is
+    short-lived
+  \item
+    Useful for modeling time series with short-term dependencies
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MA(1) Model: Definition}
+\protect\phantomsection\label{ma1-model-definition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: MA(1) model (aka ``moving
+  average of order 1'') is defined as: \[
+  Y_t = c + \varepsilon_t + \theta \varepsilon_{t-1}
+  \] where the noise is iid Gaussian:
+  \(\varepsilon_t \sim \GWN(0, \sigma_{\varepsilon}^2)\)
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Why is it called moving average?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each observation is a weighted average of current and past
+    innovations
+  \item
+    Consider the general MA(q): \begin{alignat*}{2}
+    Y_t &= c + \varepsilon_{t} + \theta_1 \varepsilon_{t-1} + ... + \theta_q \varepsilon_{t-q} \\
+    Y_{t+1} &= c + \varepsilon_{t+1} + \theta_1 \varepsilon_{t} + ... + \theta_q \varepsilon_{t+1-q} \\
+    \end{alignat*}
+  \item
+    The coefficients form a ``window'' that slides forward in time,
+    weighting past errors
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MA(1) Model: Properties}
+\protect\phantomsection\label{ma1-model-properties}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Using the definitions we obtain: \[
+  \begin{aligned}
+  & \EE[Y_t] = c \\
+  & \VV[Y_t] = (1 + \theta^2) \sigma_{\varepsilon}^2 \\
+  & \Cov[Y_t, Y_{t-1}] = \theta \sigma_{\varepsilon}^2 \\
+  & \Cov[Y_t, Y_{t-j}] = 0, \; \forall j > 1 \\
+  \end{aligned}
+  \]
+\item
+  \textbf{\textcolor{blue}{Theorem}}: It is a weakly stationary process
+  since:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mean and variance are constant
+  \item
+    The covariance depends only on the difference of the lags
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MA(q) Model}
+\protect\phantomsection\label{maq-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{MA(q)} (a moving average
+  model of order \(q\)) has an expression: \[
+  Y_t = c  + \varepsilon_t + \sum_{i=1}^q \theta_i \varepsilon_{t - i}
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(c\) is the mean
+  \item
+    \(\varepsilon\) terms are white noise
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: MA(q) models are linear
+  combination of past \(q\) error terms
+\item
+  \textbf{\textcolor{blue}{Key idea}}: Covariance structure of MA(q):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MA(q) has dependency between consecutive terms \(Y_t\) up to
+    \(Y_{t-q}\) since: \[
+    \begin{aligned}
+    & Y_t = f(\varepsilon_t, \varepsilon_{t-1}, ..., \varepsilon_{t-q}) \\
+    & ... \\
+    & Y_{t-k} = f(\varepsilon_{t-k}, \varepsilon_{t-k-1}, ..., \varepsilon_{t-k-q}) \\
+    \end{aligned}
+    \] and there are common \(\varepsilon\) terms whenever \(k \le q\)
+    (the lag between series does not exceed the order)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MA(q) Model in Terms of Lag Operator}
+\protect\phantomsection\label{maq-model-in-terms-of-lag-operator}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Fact}}: The MA equation is: \[
+  Y_t = \mu + \varepsilon_t + \sum_{i=1}^q \theta_i \varepsilon_{t-i}
+  \]
+\item
+  \textbf{\textcolor{blue}{Remark}}: Using the lag operator: \[
+  Y_t
+  = \mu + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_i
+  = \mu + f(\theta, L) \varepsilon_i
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-8}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    \emph{\textbf{\textcolor{red}{ARMA(p, q) Process}}}
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ARMA(p, q) Model}
+\protect\phantomsection\label{armap-q-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{ARMA(p, q)}
+  (autoregressive moving average) model has \[
+  Y_t = c + \sum_{i=1}^p \phi_i Y_{t-i} + \sum_{i=1}^q \theta_i \varepsilon_{t-i} + \varepsilon_t
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: ARMA(p, q) model combines
+  \(p\) autoregressive terms and \(q\) moving average terms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{AR part}: regresses the variable on its own lagged values
+  \item
+    \emph{MA part}: models error term as a linear combination of lagged
+    error terms
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: In terms of lag operator: \[
+  (1 - \sum_{i=1}^p \phi_i L^i) Y_t
+  = c + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_t
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ARIMA Models}
+\protect\phantomsection\label{arima-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Consider \emph{ARIMA(p, d, q)}
+  where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(p\): number of autoregressive terms (AR)
+  \item
+    \(d\): order of differencing (I)
+  \item
+    \(q\): number of moving average terms (MA)
+  \end{itemize}
+\item
+  Remember that:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    ARIMA models extend ARMA by including differencing
+  \item
+    ARMA models combine AR and MA components, using the lag operator: \[
+    (1 - \sum_{i=1}^p \phi_i L^i) Y_t
+    = c + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_t
+    \]
+  \item
+    The \(d\)-order differencing is \((1 - L)^d\) in terms of lag
+    operator
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Solution}}: \[
+  \begin{cases}
+  Z_t = (1 - L)^d Y_t \\
+  (1 - \sum_{i=1}^p \phi_i L^i) Z_t = c + (1 + \sum_{i=1}^q \theta_i L^i) \varepsilon_t \\
+  \end{cases}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compute the final polynomials
+    \[poly_{\Phi}(\phi, L)(1 - L)^d Y_t = c + poly_{\Theta}(\theta, L) \varepsilon_t\]
+  \item
+    Transform back into delays
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ARIMA Models: Differencing}
+\protect\phantomsection\label{arima-models-differencing}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Key idea}}: Differencing stabilizes the time
+  series by handling non-stationary data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Over-differencing increases model complexity without improving
+    accuracy
+  \item
+    Under-differencing results in a non-stationary series
+  \item
+    E.g., if a time series shows a linear trend, first-order
+    differencing (\(d = 1\)) might be sufficient to achieve stationarity
+  \end{itemize}
+\item
+  ARIMA Can model and forecast a wide range of time series data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ARIMA is simplified to a ARMA, AR, I, MA model, by setting \(p\),
+    \(d\), or \(q\) to 0
+  \item
+    ARIMA(0, 0, 0)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(Y_t = \varepsilon_t\), which is white noise
+    \end{itemize}
+  \item
+    ARIMA(0, 1, 0) = I(1)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(Y_t = Y_{t-1} + \varepsilon_t\), which is a random walk
+    \end{itemize}
+  \item
+    ARIMA(p, 0, q) = ARMA(p, q)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SARIMA}
+\protect\phantomsection\label{sarima}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Seasonal ARIMA} (SARIMA)
+  extends ARIMA (autoregressive and moving average terms) to handle
+  seasonal patterns in time series data
+\item
+  \(SARIMA(p, d, q, P, D, Q, s)\) where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(p\): order of non-seasonal AR (autoregressive) terms
+  \item
+    \(d\): number of non-seasonal differences
+  \item
+    \(q\): order of non-seasonal MA (moving average) terms
+  \item
+    \(P\): order of seasonal AR terms
+  \item
+    \(D\): number of seasonal differences
+  \item
+    \(Q\): order of seasonal MA terms
+  \item
+    \(s\): length of the seasonal cycle
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., 12 for monthly data with yearly seasonality
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Useful when strong periodic behavior exists
+  \item
+    Seasonal differencing removes seasonal patterns:
+    \(y'_t = y_t - y_{t-s}\)
+  \item
+    E.g., forecasting monthly airline passenger data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fitting ARMA / ARIMA models}
+\protect\phantomsection\label{fitting-arma-arima-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Solution}}: The original Box-Jenkins approach
+  has 3 phases:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \emph{Model identification / selection}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Select \(p, d, q\)
+    \item
+      Identify seasonality
+    \item
+      Difference data, if necessary, to achieve stationarity
+    \item
+      Check if variables are stationary
+    \item
+      Use ACF, PACF to decide AR and MA components to use
+    \end{itemize}
+  \item
+    \emph{Parameter estimation}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Pick coefficients to get best fit
+    \end{itemize}
+  \item
+    \emph{Model checking}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Test estimated model
+    \item
+      E.g., the residual should have no serial correlation and be
+      stationary in mean and variance
+    \item
+      If estimation is inadequate, go back to step 1) and attempt to
+      build a better model
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-9}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    \emph{\textbf{\textcolor{red}{ARCH Model}}}
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ARCH: Intuition}
+\protect\phantomsection\label{arch-intuition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: Auto-Regressive Conditional
+  Heteroskedasticity (ARCH) is a model where variance of error term (aka
+  innovation) is described as a function of the value of the previous
+  time periods error terms \[
+  \VV[\varepsilon_t] = f(\varepsilon_{t-1}, ..., \varepsilon_{t-N})
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: ARCH is used to model time
+  series that exhibit:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Time-varying volatility
+  \item
+    Volatility clustering (periods of swings interspersed with periods
+    of calm)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}: Error variance follows an AR
+  model
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ARCH(q): definition}
+\protect\phantomsection\label{archq-definition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: The model for the error term of
+  the time series is: \[\varepsilon_t = \sigma_t \cdot z_t\] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(z_t\) is white noise process (stochastic part)
+  \item
+    \(\sigma_t^2\) is the time-dependent variance given by an AR(q)
+    model: \[\begin{aligned}
+      \sigma_t^2
+      &= \alpha_0 + \sum_{i=1}^q \alpha_i \varepsilon_{t-i}^2 \\
+      &= \alpha_0 + \alpha_1 \varepsilon_{t-1}^2 + ... +
+      \alpha_q \varepsilon_{t-q}^2 \\
+      &\text{ where } \alpha_i \ge 0
+      \end{aligned}\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: The error variance is AR(q), i.e., a
+  linear combination of squares of previous error term realizations
+\end{itemize}
+\end{frame}
+
+\begin{frame}{GARCH(p, q): definition}
+\protect\phantomsection\label{garchp-q-definition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: In GARCH (Generalized ARCH) the
+  error variance follows an ARMA model, as: \[
+  \varepsilon_t = \sigma_t \cdot z_t
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(z_t\) is white noise process (stochastic part)
+  \item
+    \(\sigma_t^2\) is the time-dependent variance given by an ARMA(p, q)
+    model \[\begin{aligned}
+    \sigma_t^2
+    &= \omega +
+    \sum_{i=1}^q \alpha_i \varepsilon_{t-i}^2 +
+    \sum_{i=1}^p \beta_i \sigma_{t-i}^2 \\
+    \end{aligned}\]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exponential Smoothing Model}
+\protect\phantomsection\label{exponential-smoothing-model}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Exponential smoothing is a time
+  series forecasting method using weighted averages of past observations
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Weights decrease exponentially for older data \begin{alignat*}{2}
+    & \hat{y_t}
+    = \alpha y_t + \alpha(1 - \alpha) y_{t-1} + \alpha(1 - \alpha)^2 y_{t-2} + \cdots \\
+    & = \sum_{k=0}^{\infty} \alpha (1 - \alpha)^k y_{t - k} \\
+    \end{alignat*} where \(\alpha\): smoothing parameter
+    (\(0 < \alpha < 1\))
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Most recent observations have the greatest influence on forecast
+  \item
+    Suitable for series with no trend or seasonality
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: It can be expressed in a recursive
+  formulation: \begin{alignat*}{2}
+  \hat{y}_{t+1} = z_t \\
+  z_t = \alpha y_t + (1 - \alpha) z_{t-1} \\
+  \end{alignat*}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Additive Holt-Winters Model}
+\protect\phantomsection\label{additive-holt-winters-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: Extends exponential smoothing to
+  capture trend and seasonality (seasonal variation is roughly constant
+  over time) \[
+  \hat{y}_{t+h} = \ell_t + h b_t + s_{t+h - m(k+1)}
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: Components of the model:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Level \(\ell_t\): the baseline value at time \(t\)
+  \item
+    Trend \(b_t\): the slope or direction of the series
+  \item
+    Seasonal component \(s_t\): repeated patterns over a fixed period
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: Forecast equation: where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m\): season length
+  \item
+    \(h\): forecast horizon
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Fact}}: Update equations:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Level:
+    \(\ell_t = \alpha (y_t - s_{t-m}) + (1 - \alpha)(\ell_{t-1} + b_{t-1})\)
+  \item
+    Trend: \(b_t = \beta (\ell_t - \ell_{t-1}) + (1 - \beta)b_{t-1}\)
+  \item
+    Season: \(s_t = \gamma (y_t - \ell_t) + (1 - \gamma)s_{t-m}\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Additive Holt-Winters Model: Use}
+\protect\phantomsection\label{additive-holt-winters-model-use}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}: How the model works:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Smoothly updates estimates of level, trend, and season
+  \item
+    Each component has its own smoothing parameter: \(\alpha\),
+    \(\beta\), \(\gamma\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: Additive nature:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Adds components together:
+    \(y_t = \ell_t + b_t + s_t + \varepsilon_t\)
+  \item
+    Good for stable seasonal effects (e.g., monthly sales with similar
+    variation)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Common applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Retail sales
+  \item
+    Web traffic
+  \item
+    Electricity demand with fixed seasonal amplitude
+  \item
+    Daily demand with seasonal shopping patterns
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Vector Autoregressions (VAR)}
+\protect\phantomsection\label{vector-autoregressions-var}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: VAR models generalize AR models
+  to multivariate time series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each variable depends on past values of itself and others
+  \item
+    E.g., for 2 variables \begin{alignat*}{2}
+    y_{1,t} &= c_1 + \phi_{11} y_{1,t-1} + \phi_{12} y_{2,t-1} + \varepsilon_{1,t} \\
+    y_{2,t} &= c_2 + \phi_{21} y_{1,t-1} + \phi_{22} y_{2,t-1} + \varepsilon_{2,t} \\
+    \end{alignat*}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: How VAR works:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Capture dynamic interrelationships among multiple series
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: Used for:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Economic indicators
+  \item
+    Multichannel sensor data
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Example}}: Modeling GDP growth and
+  inflation jointly
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Forecasting with Exogenous Variables}
+\protect\phantomsection\label{forecasting-with-exogenous-variables}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: ARIMAX, VARX, DeepAR
+  architectures
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ARIMAX (AutoRegressive Integrated Moving Average with Exogenous
+    variables) is an extension of ARIMA that includes external variables
+  \item
+    VARX (Vector AutoRegression with Exogenous variables) is used for
+    multivariate time series data with external influences
+  \item
+    DeepAR is a deep learning-based approach that can handle exogenous
+    variables for probabilistic forecasting
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key idea}}: Incorporating covariates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Covariates are external factors that can influence the variable
+    being forecasted
+  \item
+    Common covariates include:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Weather conditions (e.g., temperature, precipitation)
+    \item
+      Holidays and special events (e.g., Christmas, Black Friday)
+    \item
+      Marketing events (e.g., promotions, advertising campaigns)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Applications
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Retail forecasting
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Predicting sales based on upcoming holidays or promotional events
+    \item
+      E.g., forecasting increased demand for winter clothing based on
+      weather forecasts
+    \end{itemize}
+  \item
+    Energy consumption
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Estimating future energy needs based on temperature changes or
+      public holidays
+    \item
+      E.g., predicting higher electricity usage during a heatwave
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-10}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Modern Approaches}}}
+\item
+  Special techniques for time series modeling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{State Space Models}
+\protect\phantomsection\label{state-space-models}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: State space models describes how
+  a system evolves over time using states and observations
+\item
+  \textbf{\textcolor{orange}{Fact}}: Components of the model:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    State vector \(x_t\): Hidden/internal state of the system at time
+    \(t\)
+  \item
+    Observation vector \(y_t\): What we can measure at time \(t\)
+  \item
+    The model is \begin{alignat*}{2}
+    & x_{t+1} = F_t x_t + G_t u_t + w_t (\text{ State equation}) \\
+    & y_t = H_t x_t + v_t (\text{ Observation equation}) \\
+    \end{alignat*} where:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(F_t\): State transition matrix
+    \item
+      \(G_t\): Control input matrix
+    \item
+      \(H_t\): Observation matrix
+    \item
+      \(w_t\), \(v_t\): Process and observation noise
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Goal}}: Primary objectives:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Infer hidden states from noisy observations
+  \item
+    Predict future observations or states
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Engineering: control systems, signal processing
+  \item
+    Economics: modeling time series data
+  \item
+    Robotics: tracking position and velocity
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Solution}}: Common Algorithms:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Kalman Filter (linear, Gaussian)
+  \item
+    Extended/Unscented Kalman Filter (nonlinear)
+  \item
+    Particle Filter (nonlinear, non-Gaussian)
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+\end{frame}
+
+\begin{frame}{Frequency Domain Methods}
+\protect\phantomsection\label{frequency-domain-methods}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Analyze time series in terms of
+  cycles and frequencies
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., Fourier Transform decomposes series into sinusoidal components
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}: Understanding patterns:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand repeating patterns that may not be obvious in time domain
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key idea}}: Useful for:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Identifying dominant periodicities
+  \item
+    Filtering noise
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Seismology
+  \item
+    Climate cycles
+  \item
+    Detect yearly cycle in temperature data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Machine Learning for Time Series}
+\protect\phantomsection\label{machine-learning-for-time-series}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Solution}}: Use supervised learning to predict
+  future values
+\item
+  \textbf{\textcolor{orange}{Key idea}}: Feature engineering, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lags
+  \item
+    Rolling values
+  \item
+    Fourier terms
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: Common algorithms:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decision trees
+  \item
+    Random forests
+  \item
+    Gradient boosting (e.g., XGBoost)
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Pros}}: Handle nonlinearity and complex
+  interactions
+\item
+  \textbf{\textcolor{cyan}{Cons}}: Often requires careful
+  cross-validation due to temporal structure
+\item
+  \textbf{\textcolor{blue}{Example}}: Predicting electricity consumption
+  using lagged features
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deep Learning for Time Series}
+\protect\phantomsection\label{deep-learning-for-time-series}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Specialized neural networks for
+  sequential data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Recurrent Neural Networks (RNNs):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Capture dependencies across time steps
+    \end{itemize}
+  \item
+    Long Short-Term Memory networks (LSTMs):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Solve vanishing gradient problem
+    \item
+      Retain long-term dependencies
+    \end{itemize}
+  \item
+    Temporal Convolutional Networks (TCNs):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use causal convolutions for sequence modeling
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}: Handle complex, nonlinear
+  dynamics
+\item
+  \textbf{\textcolor{blue}{Cons}}: Require large datasets and careful
+  tuning
+\item
+  \textbf{\textcolor{violet}{Example}}: Predicting stock price movements
+  using past sequences
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian Time Series Models}
+\protect\phantomsection\label{bayesian-time-series-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Incorporate prior beliefs and
+  uncertainty into time series modeling
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Bayesian ARIMA}}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Extends classical ARIMA with prior distributions on parameters
+    \item
+      Captures uncertainty in predictions and parameter estimates
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Bayesian State Space Models}}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      General framework for modeling hidden processes over time
+    \item
+      Includes Kalman Filters and extensions with Bayesian inference
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Solution}}: Solve with MCMC (Markov Chain
+  Monte Carlo):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Key method for posterior inference in Bayesian models
+  \item
+    Generates samples from complex posterior distributions
+  \item
+    Probabilistic programming tools, e.g., PyMC
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Pros}}: Enables rich, interpretable models
+  with quantified uncertainty
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Suitable for forecasting, anomaly detection, and causal inference
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}: Computationally expensive
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-11}
+\begin{itemize}
+\tightlist
+\item
+  Time Series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Basic Definition
+  \item
+    Time Series Operators
+  \item
+    Time Series Decomposition
+  \end{itemize}
+\item
+  Classical Methods
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple Models for Stochastic Processes
+  \item
+    Autoregressive Models
+  \item
+    Moving Average Models
+  \item
+    ARMA(p, q) Process
+  \item
+    ARCH Model
+  \end{itemize}
+\item
+  Modern Approaches
+\item
+  \emph{\textbf{\textcolor{red}{Special techniques for time series modeling}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Time Series Machine Learning: Problems}
+\protect\phantomsection\label{time-series-machine-learning-problems}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Time Dependence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Observations are not independent and identically distributed
+    (i.i.d.)
+  \item
+    Temporal ordering affects model assumptions and evaluation
+  \item
+    Past values can strongly influence future ones (autocorrelation)
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Problem}}: Non-Stationarity
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data distributions change over time (mean, variance, etc.)
+  \item
+    Models trained on past data may perform poorly on future data
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Problem}}: Data Leakage
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Using future information in training can lead to over-optimistic
+    results
+  \item
+    Requires careful data splitting (e.g., no random shuffling)
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Problem}}: Seasonality and Trends
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Regular patterns (e.g., daily, yearly) complicate modeling
+  \item
+    Need to be explicitly handled or removed
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Problem}}: Missing or Irregular Data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Time series often have missing timestamps or irregular intervals
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Problem}}: Evaluation Challenges
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Time-aware cross-validation needed (e.g., rolling windows)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Problem}}: Feature Engineering Complexity
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lagged variables, rolling statistics, and domain-specific features
+    needed
+  \item
+    Makes pipeline design more involved compared to i.i.d. data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-Validation for Time Series}
+\protect\phantomsection\label{cross-validation-for-time-series}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Fact}}: Standard cross-validation is not
+  suitable due to time dependency
+\item
+  \textbf{\textcolor{orange}{Solution}}: \emph{Walk-forward validation}
+  is a time-aware cross-validation method for time series data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mimics real-world usage: train on past, predict future
+  \item
+    Choose a fixed-size training window
+  \item
+    Move the training and testing windows forward in time step-by-step
+  \item
+    Train and evaluate model performance at each step
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Step 1: Train on \([t_1, t_{100}]\), test on \(t_{101}\)
+  \item
+    Step 2: Train on \([t_2, t_{101}]\), test on \(t_{102}\)
+  \item
+    Continue moving forward through the time series
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Pros}}: Advantages:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Preserves time order
+  \item
+    Provides multiple performance estimates across time
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Cons}}: Disadvantages:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Machine learning becomes even more complicated
+  \item
+    Conflates generalization error and non-stationarity
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}}
+\end{frame}
+
+\begin{frame}{Anomaly Detection in Time Series}
+\protect\phantomsection\label{anomaly-detection-in-time-series}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Identify unusual patterns not
+  consistent with past behavior
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Important to account for seasonality and trend
+  \item
+    Unsupervised methods are often necessary
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solution}}: Common methods:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Statistical thresholds
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Gaussian modeling and consider anomaly anything \(> 3\sigma\) from
+      mean
+    \end{itemize}
+  \item
+    Machine learning, e.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Trees
+    \item
+      Autoencoders
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Finance: fraud detection, unusual trading activity
+  \item
+    Cybersecurity: intrusion detection, system failures
+  \item
+    Detecting a sudden drop in website traffic
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Probabilistic Forecasting}
+\protect\phantomsection\label{probabilistic-forecasting}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Predict full distribution of
+  future values, not just a single number
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Useful when risk-sensitive decisions depend on forecast range
+  \item
+    Helps express uncertainty explicitly
+  \item
+    E.g., forecasting a 90\% prediction interval for electricity demand
+  \item
+    E.g., finance, weather forecasting, and supply chain management
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: Common methods:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quantile regression
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Predict specific quantiles (e.g., 10\%, 50\%, 90\%)
+    \item
+      E.g., estimating the 10th percentile of future stock prices to
+      assess downside risk
+    \end{itemize}
+  \item
+    Bayesian models
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Incorporate prior knowledge and update beliefs with new data
+    \item
+      E.g., using Bayesian models to update demand forecasts as new
+      sales data becomes available
+    \end{itemize}
+  \item
+    Other methods:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Bootstrapping techniques to generate prediction intervals
+    \item
+      Ensemble methods that combine multiple models to improve forecast
+      accuracy
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Granger Causality}
+\protect\phantomsection\label{granger-causality}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A statistical hypothesis test
+  for determining causality in time series
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variable \(X\) \emph{Granger-causes} \(Y\) if past values of \(X\)
+    contain information that helps predict \(Y\) beyond the past values
+    of \(Y\) alone
+  \item
+    E.g., fit two Vector Autoregressive (VAR) models:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Restricted model: only past \(Y\)
+    \item
+      Unrestricted model: past \(Y\) and past \(X\)
+    \item
+      Test null hypothesis: \(X\) does not Granger-cause \(Y\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Cons}}: Limitations:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predictive, not necessarily true causal influence
+  \item
+    Based on temporal precedence and improvement in forecast
+  \item
+    Need to measure out-of-sample
+  \item
+    Need to account for model complexity
+  \item
+    Sensitive to model specification (e.g., lag choice and
+    non-linearity)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Macroeconomics: does money supply affect inflation?
+  \item
+    Finance: does trading volume predict stock returns?
+  \item
+    Neuroscience: do neural signals in one region predict another?
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+\end{frame}
+
+\begin{frame}{Change Point Detection in Time Series}
+\protect\phantomsection\label{change-point-detection-in-time-series}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Identify times when the
+  statistical properties of a time series change, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mean shift
+  \item
+    Variance change
+  \item
+    Trend change
+  \item
+    Distribution change
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Solution}}: Methods:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Offline detection: analyze full data set
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Useful when historical data is available
+    \item
+      E.g., analyzing stock prices over the past year to detect shifts
+    \end{itemize}
+  \item
+    Online detection: identify change in real-time
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Crucial for applications requiring immediate response
+    \item
+      E.g., monitoring network traffic for anomalies
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fact}}: Approaches:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-based methods rely on assumptions about data distribution
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., ARIMA models for time series forecasting
+    \end{itemize}
+  \item
+    Bayesian approaches:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Model changes with probabilistic assumptions and priors
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Financial market regime shifts
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Detecting bull and bear markets
+    \end{itemize}
+  \item
+    Environmental change
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Monitoring climate data for significant shifts
+    \end{itemize}
+  \item
+    System anomalies
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Identifying unusual patterns in server logs or network traffic
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Markov-Switching Models}
+\protect\phantomsection\label{markov-switching-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Time series models that allow
+  regime changes over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data is generated by multiple underlying regimes (states)
+  \item
+    Regimes switch according to a Markov process
+  \item
+    Each regime
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Has its own parameters (e.g., mean, variance, AR coefficients)
+    \item
+      Can represent different behaviors (e.g., growth vs.~recession)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Fact}}: Markov Property:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Probability of switching depends only on the current state
+  \item
+    Defined by a state transition matrix
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Economics: modeling business cycles
+  \item
+    Finance: volatility modeling (e.g., bull vs.~bear markets)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Pros}}: Captures nonlinear dynamics and
+  structural breaks in time series
+\end{itemize}
+\end{frame}
+
+\end{document}

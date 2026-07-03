@@ -240,7 +240,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         hdbg.dassert_in(output_type, ("pdf", "html", "slides"))
         scratch_dir = self.get_scratch_space()
         for lesson in tqdm(lessons, desc=f"Preprocessing {output_type}",
-            file=sys.stderr, disable=False):
+            file=sys.stderr, disable=False, mininterval=0, miniters=1):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
@@ -345,8 +345,38 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
 
     COURSE_DIR: str = ""
 
-    # TODO(ai_gp): Add a test that computes a list of the slides that use
-    # typst or latex and save it with check_string.
+    def test_slides_engine(self) -> None:
+        """
+        Check which lessons use the `typst` engine vs the `beamer` (LaTeX)
+        engine, as declared via the `// slides_engine=...` metadata directive.
+        """
+        _LOG.debug(hprint.to_str("self.COURSE_DIR"))
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        lessons = _get_lesson_numbers(self.COURSE_DIR)
+        typst_lessons = []
+        beamer_lessons = []
+        for lesson in tqdm(
+            lessons, desc="Checking slides engine", file=sys.stderr,
+            disable=False, mininterval=0, miniters=1,
+        ):
+            src_name = csccouti.get_source_name(self.COURSE_DIR, lesson)
+            input_file = os.path.join(
+                self.COURSE_DIR, "lectures_source", src_name
+            )
+            lines = hio.from_file(input_file).split("\n")
+            metadata, _ = dshdprno.extract_slide_metadata(lines)
+            slides_engine = metadata.get("slides_engine", "beamer")
+            if slides_engine == "typst":
+                typst_lessons.append(lesson)
+            else:
+                beamer_lessons.append(lesson)
+        txt = []
+        txt.append(hprint.frame("beamer:"))
+        txt.extend(beamer_lessons)
+        txt.append(hprint.frame("typst:"))
+        txt.extend(typst_lessons)
+        actual = "\n".join(txt)
+        self.check_string(actual)
 
     def _run_notes_to_pdf_py(
         self,
@@ -376,7 +406,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         scratch_dir = self.get_scratch_space()
         for lesson in tqdm(
             lessons, desc=f"Testing {output_type} output",
-            file=sys.stderr, disable=False):
+            file=sys.stderr, disable=False, mininterval=0, miniters=1):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)

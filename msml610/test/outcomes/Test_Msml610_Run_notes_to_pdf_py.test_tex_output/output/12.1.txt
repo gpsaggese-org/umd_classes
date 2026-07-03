@@ -1,0 +1,4361 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 12: Probabilistic Reinforcement Learning}}\]}
+\endgroup \vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\tightlist
+\item
+  AIMA Chap 17: Making complex decisions
+\item
+  AIMA Chap 22: Reinforcement Learning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Sequential Decision Problems}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{MDPs}}}
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sequential Decision Problems}
+\protect\phantomsection\label{sequential-decision-problems}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}: Agents need to make decisions in the
+  real world:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In a \emph{stochastic environment}
+  \item
+    Where utility depends on a \emph{sequence of decisions}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{What is involved}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Uncertainty}: Represent the unpredictability in outcomes,
+    modeled using probabilities
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., weather forecasts often include uncertainty (70\% chance of
+      rain)
+    \end{itemize}
+  \item
+    \emph{Utility functions}: Measure the desirability of outcomes by
+    quantifying preferences
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., assign higher values to outcomes with more profit and lower
+      risk
+    \end{itemize}
+  \item
+    \emph{Rewards}: Yielded by the environment as feedback for actions
+    taken
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., receive points in a game for completing a level
+    \end{itemize}
+  \item
+    \emph{Sensing}: Gather information about the environment using
+    sensors
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., a robot using a camera to detect obstacles in its path
+    \end{itemize}
+  \item
+    \emph{Search and planning}: Find a sequence of actions to achieve a
+    goal
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., a navigation system planning the shortest route to a
+      destination
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Markov Decision Processes (MDPs)}
+\protect\phantomsection\label{markov-decision-processes-mdps}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{MDPs}} are a model for sequential decision
+  making
+\end{itemize}
+
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{\textcolor{orange}{Initial state}} \(s_0\)
+\item
+  \textbf{\textcolor{darkgreen}{Environment}}: \emph{fully observable}
+  but \emph{stochastic}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sensors give complete state of the environment
+  \item
+    Next state is not completely determined by current state and agent's
+    action
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Action}}: agent chooses \(a \in Actions(s)\)
+  in each \(s\)
+\item
+  \textbf{\textcolor{cyan}{Transition model}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(s'|a, s)\) is probability of reaching state \(s'\), if action
+    \(a\) is done in state \(s\)
+  \item
+    Markov assumption: probability depends on \((s, a)\), not on history
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Reward function}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For every transition \(s \to s'\) via \(a\) the agent receives a
+    reward \(R(s',a,s)\)
+  \item
+    Total reward depends on sequence of states and actions
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Goal states}}
+\end{enumerate}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{MDP: Examples}
+\protect\phantomsection\label{mdp-examples}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Example}}: environment is fully observable and
+  stochastic
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  E.g., a robot navigating a slippery surface
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It knows its exact location and the map (\emph{fully observable})
+  \item
+    Its wheels may slip unpredictably (\emph{stochastic outcome})
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.Star_Wars_droid.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Example}}: MDP
+  \pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+\item
+  From \(s_0\) with action \(a_1\) the robot can end up in \(s_1\) or
+  \(s_2\) with different probabilities (and rewards)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MDP: Solution}
+\protect\phantomsection\label{mdp-solution}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: The solution of an MDP is a
+  \emph{policy} \emph{``in state \(s\) take action \(a\)''} \[
+  \pi(s): s \to a \in Actions(s)
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Definition}}: \emph{Environment history}
+  is a sequence of states and actions
+  \[(s_0, a_0) \to (s_1, a_1) \to ... \to (s_i, a_i) \to ...\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Any execution of the policy leads to a different \emph{environment
+    history} because of the stochastic nature of the environment
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Definition}}: A policy is measured by the
+  \emph{expected utility} of the environment history \[
+  U(\pi(s)) = \EE[f(s_0, \pi(s), R(s',a,s))]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The \emph{optimal policy} \(\pi^*(s)\) yields the highest expected
+    utility \[
+    \pi^*(s) = \argmax_{\pi} \; \EE[f(s_0, \pi(s), R(s',a,s))]
+    \]
+  \item
+    The optimal policy is function of the reward function
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MDP: 4x3 Environment Example}
+\protect\phantomsection\label{mdp-4x3-environment-example}
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Environment}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A 4 x 3 grid world with a wall
+  \item
+    Fully observable: the agent knows its location
+  \item
+    Non-deterministic: actions are not reliable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Pr(intended action) = 0.8
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Agent}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Begin at the \textcolor{blue}{\texttt{START}} cell
+  \item
+    Choose action \textcolor{blue}{\texttt{Up}},
+    \textcolor{blue}{\texttt{Down}}, \textcolor{blue}{\texttt{Left}},
+    \textcolor{blue}{\texttt{Right}} at each step
+  \item
+    Aim to reach goal states marked \textcolor{blue}{\texttt{+1}} or
+    \textcolor{blue}{\texttt{-1}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Transition Model}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Result of each action in each state \(\Pr(s'|a, s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Utility Function}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The reward for each state transition \(s \to s'\) via action \(a\)
+    is \(R(s',a,s)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      -0.04 for all transitions (to encourage reaching terminal states
+      swiftly)
+    \item
+      +1 or -1 upon reaching terminal states
+    \end{itemize}
+  \item
+    Total utility is the sum of all received rewards
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.4x3_environment1.png}}
+
+\vspace{0.5cm}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{msml610/lectures_source/figures/L12.4x3_environment2.png}
+{\scriptsize\text{Valid actions}}
+\end{center}
+
+\vspace{0.5cm}
+
+\begin{center}
+\includegraphics[width=1.0\textwidth]{msml610/lectures_source/figures/L12.4x3_environment3.png}
+{\scriptsize\text{Example of optimal policy}}
+\end{center}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    \emph{\textbf{\textcolor{red}{Utilities Over Time}}}
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Utility Function}
+\protect\phantomsection\label{utility-function}
+\begin{itemize}
+\item
+  \textbf{Definition}: The \emph{utility function} for environment
+  histories (finite or infinite) \(h\) is expressed as: \[
+  U_h([\blue{s_0, a_0}, \green{s_1, a_1}, ..., s_n, ...])
+  \]
+\item
+  \textbf{Definition}: \emph{Finite horizon} indicates a fixed time
+  \(N\) after which nothing matters: \[
+  U_h([s_0, a_0, s_1, ..., \red{s_N, ...s_{N+k}}])
+  = U_h([s_0, a_0, s_1, ..., \red{s_N}]) \; \forall k > 0
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Actions are chosen based on the current state and remaining steps
+  \item
+    Time matters, so it leads to non-stationary policies
+  \end{itemize}
+\item
+  \textbf{Definition}: \emph{Infinite horizon} indicates that there is
+  no fixed time limit, i.e., the process continues indefinitely
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The optimal policy can be \emph{stationary}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Same action is chosen whenever the agent visits the same state
+    \item
+      Policies do not depend on the specific time step
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Additive Rewards}
+\protect\phantomsection\label{additive-rewards}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Additive rewards} means
+  that rewards for each transition \(s_i \xrightarrow{a_i} s_{i+1}\) are
+  summed: \[
+  U_h([s_0, a_0, s_1, a_1, \ldots]) = \sum_{i=0} R(s_{i+1}, a_i, s_i)
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Definition}}: \emph{Additive discounted
+  rewards} include a factor \(\gamma \in [0, 1]\): \[
+  \begin{aligned}
+  U_h([s_0, a_0, s_1, a_1, \ldots])
+  &= R(s_1, a_0, s_0) + \gamma R(s_2, a_1, s_1) + \gamma^2 R(s_3, a_2, s_2) + \ldots \\
+  &= \sum_{i=0} \gamma^i R(s_{i+1}, a_i, s_i) \\
+  \end{aligned}
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\gamma \to 0\): future rewards are negligible
+  \item
+    \(\gamma \to 1\): future rewards significant
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pros}}: Discounted rewards
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reflect human tendency to prioritize near-term rewards
+  \item
+    In economics, early rewards can be reinvested, compounding further
+    rewards
+  \item
+    Support infinite horizons, preventing unbounded rewards
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Expected Utility of a Policy}
+\protect\phantomsection\label{expected-utility-of-a-policy}
+\begin{itemize}
+\item
+  We said that the same policy leads to different environment histories,
+  because of stochastic behaviors
+\item
+  \textbf{\textcolor{red}{Definition}}: the expected \emph{utility of
+  executing policy} \(\pi\) from state \(s\): \[
+  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^i R(S_{i+1}, \pi(S_i), S_i) ]
+  \] where the expectation \(\EE[\cdot]\) is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Over state sequences determined by \(s\), \(\pi(s)\)
+  \item
+    The environment's transition model \(\Pr(s'|a, s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Definition}}: the \emph{optimal policy} is
+  the one with maximal utility \[
+  \pi_s^* = \argmax_{\pi} U^{\pi}(s)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    With discounted utilities and infinite horizons, the optimal policy
+    is independent of the starting state: \(\pi_s^* = \pi^*\)
+  \item
+    This is not true in general (e.g., for finite-horizon policies or
+    non-additive rewards)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Principle of Maximum Expected Utility (MEU)}
+\protect\phantomsection\label{principle-of-maximum-expected-utility-meu}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MEU posits: \emph{``A rational agent should choose the action that
+    maximizes its expected utility based on its beliefs''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: An agent must choose between:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textcolor{blue}{\texttt{Action A}}: 80\% chance of reward 10; 20\%
+    chance of reward 0
+  \item
+    \textcolor{blue}{\texttt{Action B}}: 100\% chance of reward 6
+  \item
+    By MEU
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\EE[U(A)] = 0.8 \cdot 10 + 0.2 \cdot 0 = 8\)
+    \item
+      \(\EE[U(B)] = 1.0 \cdot 6 = 6\)
+    \item
+      \(\EE[U(A)] > \EE[U(B)]\)
+    \item
+      Choose \textcolor{blue}{\texttt{Action A}}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum Expected Utility (MEU): Definition}
+\protect\phantomsection\label{maximum-expected-utility-meu-definition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Assumptions}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Possible actions: \(a \in A\)
+  \item
+    Possible outcomes: \(s'\)
+  \item
+    Probability distribution: \(\Pr(s'|a)\) for each action
+  \item
+    Utility function \(U\): assign a numerical value \(U(s')\) to each
+    state
+  \end{itemize}
+\item
+  The expected utility of action \(a\) is: \[
+  \EE[U(a)] = EU(a) = \sum_{s'} U(s') \Pr(s'|a)
+  \]
+\item
+  A rational agent chooses the action: \[a^*
+  = \argmax_{a \in A} \sum_{s'} U(s') \Pr(s'|a)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MDP: Tetris Example}
+\protect\phantomsection\label{mdp-tetris-example}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{States $S$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Current board configuration and falling piece
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Actions $A$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Valid final placements of the piece
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Rotation (0--3 positions)
+    \item
+      Horizontal movement (left, right)
+    \item
+      Hard drop (instant placement)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Transition Model $T(s',a,s)$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Deterministic or stochastic based on next piece modeling
+  \item
+    Piece generation often random
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Reward $R(s',a,s)$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    +1 for each cleared line
+  \item
+    Negative reward for new block addition or height increase
+  \item
+    Game over may have large negative reward
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Discount Factor $\gamma$}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Close to 1 for valuing long-term survival and line-clearing
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.Tetris.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Utility of a State}
+\protect\phantomsection\label{utility-of-a-state}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Remark}}: The utility of a state \(s\) is not
+  absolute but it depends on the policy \[
+  U^\pi(s) = \EE[ \sum_{i=0}^\infty \gamma^i R(S_i, \pi(S_i), S_{i+1}) ]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    To remove the dependency from the policy, use the optimal policy
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Definition}}: the utility of a state
+  \(s\), \(U(s)\), is the expected sum of discounted rewards under an
+  optimal policy from \(s\) \[U(s) = U^{\pi^*}(s)\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Of course it still depends on the expected rewards \(R()\) and the
+    discount factor \(\gamma\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intuition}}: The utility of a state reflects
+  the long-term desirability of that state under optimal behavior
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Utility of a State: Example}
+\protect\phantomsection\label{utility-of-a-state-example}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  In the 4x3 grid world, assume
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(r = -0.04\) for non-terminal transitions
+  \item
+    \(\gamma = 1\) (constant additive rewards)
+  \end{itemize}
+\item
+  The utility of a state is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Higher closer to the +1 state, since fewer steps are needed to reach
+    it
+  \item
+    Lower for the one close to the -1 state, since the agent needs to go
+    around it
+  \item
+    If the agent is two steps away from the +1 state, the utility will
+    be higher compared to being four steps away
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.4x3_environment_utility_states.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Bellman Equation}
+\protect\phantomsection\label{bellman-equation}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Recall}}: The utility of a state \(s\),
+  \(U(s)\), is the expected sum of discounted rewards under an optimal
+  policy \(\pi^*\) from \(s\) \[
+  U(s) = U^{\pi^*(s)} = \EE[ \sum_{i=0}^\infty \gamma^i R(S_i, \pi^*(S_i), S_{i+1}) ]
+  \]
+\item
+  \textbf{\textcolor{blue}{Theorem}} (Bellman Equation): the
+  \emph{utility of a state} \(s\) is the expected reward for the next
+  transition plus the discounted utility of the next state, assuming the
+  agent chooses the optimal action: \[
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
+  \] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(A(s)\): set of actions available in state \(s\)
+  \item
+    \(\Pr(s'|a, s)\): probability of transitioning to state \(s'\) from
+    state \(s\) by action \(a\)
+  \item
+    \(R(s',a,s)\): reward after transitioning from state \(s\) to \(s'\)
+    using \(a\)
+  \item
+    \(\gamma\): discount factor, where \(0 \leq \gamma < 1\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bellman Equation: Computing Utility of States}
+\protect\phantomsection\label{bellman-equation-computing-utility-of-states}
+\begin{itemize}
+\item
+  Bellman equation for \(s\) is: \[
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
+  \]
+\item
+  Each state has its own equation based on its possible actions and
+  transitions
+\item
+  Each equation is recursive: utility of \(s\) depends on utilities of
+  its successor states
+\item
+  Write Bellman equations for all states gives a system of equations
+\item
+  Under certain conditions (e.g., finite state/action spaces,
+  \(\gamma < 1\)):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This system has a unique solution
+  \item
+    The utility function \(U(s)\) is well-defined
+  \item
+    E.g., in a grid world with a finite number of cells and actions
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bellman Equation: Intuition}
+\protect\phantomsection\label{bellman-equation-intuition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Recall}}: Bellman equation for \(s\) is: \[
+  U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Remarks}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Says: \emph{``Utility of a state = Best immediate action + Future
+    potential''}
+  \item
+    Balances short-term gain and long-term value when outcomes are
+    partly under the control of a decision-maker and partly random
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Maze
+\item
+  To find the fastest path to the goal in a maze, the Bellman equation
+  prescribes:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Your current position is only as valuable as the best path
+    out of it''}
+  \item
+    Best path combines current proximity (reward now) and future
+    position quality (reward later)
+  \item
+    Value backs up from future to present, similar to tracing a route
+    from finish to start
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Example}}: Chess game
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The optimal strategy involves making the best move at each turn
+    while considering future moves and potential outcomes
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Q-Function}
+\protect\phantomsection\label{q-function}
+\begin{itemize}
+\item
+  Aka ``Action-utility function''
+\item
+  \textbf{\textcolor{red}{Definition}}: the \emph{Q-function}
+  \(Q(s, a)\) is the expected utility of taking an \emph{action} \(a\)
+  in \emph{a given state} \(s\), and acting optimally afterward
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Q-function \(Q(s, a)\) is the
+  ``dual'' view of utility of states \(U(s)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Express the utility of a state in terms of utility of actions: \[
+    U(s) = \max_a Q(s, a)
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Theorem}}: Bellman equation for Q-functions
+  \[
+  Q(s, a) = \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma \max_{a'} Q(s', a')]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Note the switch of \(\max_{a'}\) with respect to Bellman equation
+    for utility of state
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Theorem}}: The optimal policy picks the
+  best action at each step \[
+  \pi^*(s) = \argmax_a Q(s, a)
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Shaping Theorem}
+\protect\phantomsection\label{shaping-theorem}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Theorem}}: For discounted sums of rewards, the
+  \emph{scale of utilities} is arbitrary
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Affine transformation \(U'(s) = m \cdot U(s) + b\) doesn't change
+    optimal policy \(\pi^*(s)\)
+  \item
+    Only relative ordering of utilities matters for decision-making
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Theorem}}: Potential-based reward
+  shaping
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Function \(\Phi(s)\) of state \(s\) doesn't change optimal policy:
+    \[
+    R'(s',a,s) = R(s',a,s) + \gamma \Phi(s') - \Phi(s)
+    \]
+  \item
+    Ensures consistent value difference between states
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Speed}: Significantly speeds up learning by guiding the agent
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., potential function increasing with proximity to goal
+      encourages faster convergence
+    \item
+      E.g., animal trainers provide small treat for each step in target
+      sequence
+    \end{itemize}
+  \item
+    \emph{Safety}: Prevents misleading agent into suboptimal policy
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., agent might prioritize short-term rewards over long-term
+      gains
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Representing MDP}
+\protect\phantomsection\label{representing-mdp}
+\begin{itemize}
+\tightlist
+\item
+  The \emph{transition model} \(\Pr(s'|a, s)\) and the \emph{reward
+  function} \(R(s',a,s)\) can be represented with:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Three-dimensional tables of size \(|S|^2 \cdot |A|\)
+  \item
+    Table with size \(O(|S| \cdot |A|)\) for sparse MDPs (i.e., each
+    \(s\) transitions to only a few states \(s'\))
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{Dynamic Decision Networks
+  (DDNs)} can represent MDPs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Probabilistic graphical model extending Bayesian networks for
+    sequential decision problems under uncertainty
+  \item
+    Factored representation, compactly encoding state variables and
+    dependencies
+  \item
+    More scalable and expressive than atomic (flat) representations
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., in a large MDP with many states, a DDN can efficiently
+      represent the problem without explicitly listing every possible
+      state transition
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Taxonomy}
+\protect\phantomsection\label{taxonomy}
+\begingroup \small
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Purpose}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Bayesian Network & Reasoning under uncertainty \\
+Decision Network & One-shot decision making \\
+Dynamic Bayesian Network & Modeling evolving uncertain systems \\
+Dynamic Decision Network & Sequential decision making under
+uncertainty \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Dynamic Decision Networks}
+\protect\phantomsection\label{dynamic-decision-networks}
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \emph{Observation variables} (ovals)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Capture the information available to the agent about the current
+    state, which may be incomplete or noisy
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{State variables} (ovals)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represent the underlying state of the environment at time \(t\)
+  \item
+    E.g., a robot's location, inventory levels, or market conditions
+  \end{itemize}
+\item
+  \emph{Decision variables} (rectangles)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represent the actions or choices available to the agent at each time
+    step
+  \end{itemize}
+\item
+  \emph{Utility variables} (diamonds)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quantify the desirability of outcomes and provide the objective the
+    agent seeks to maximize
+  \end{itemize}
+\item
+  \emph{Transition model}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Defines how the environment evolves from one time step to the next,
+    conditioned on the current state and the agent's actions
+  \end{itemize}
+\item
+  Can be replicated across time slices to model how actions influence
+  future states, observations, and rewards over time
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic Decision Networks: Grid World Example}
+\protect\phantomsection\label{dynamic-decision-networks-grid-world-example}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  DDN models the 4x3 Grid World in terms of time slices with the agent's
+  state, actions, and rewards
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{State variables}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Pos_t\): agent's grid position \((x, y)\) at time \(t\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Decision variable}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Action_t\): movement direction (Up, Down, Left, Right)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Chance nodes}} (transition):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Pos_{t+1}\): next position after action (stochastic due to
+    slippery surface; Pr(intended action) = 0.8)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Utility node}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Reward_t\): derived from \(Pos_{t+1}\) (e.g., -0.04 per step,
+    +1/-1 at terminal states)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic Decision Networks: Tetris Example}
+\protect\phantomsection\label{dynamic-decision-networks-tetris-example}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  DDN models Tetris in terms of time slices with the game's state,
+  actions, and rewards
+\item
+  \textbf{\textcolor{red}{State variables}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Board_t\): grid configuration at time \(t\)
+  \item
+    \(Piece_t\): current piece falling
+  \item
+    \(NextPiece_t\): upcoming piece
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Decision variable}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Action_t\): placement of \(Piece_t\) (rotation and position)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Chance nodes}} (transition):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Board_{t+1}\): board after action
+  \item
+    \(Piece_{t+1}\): next piece, depending on \(NextPiece_t\) or random
+    selection
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Utility node}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Reward_t\): derived from \(Board_{t+1}\) (e.g., lines cleared,
+    holes created)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    \emph{\textbf{\textcolor{red}{Solving MDPs}}}
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MDP Solution: Overview}
+\protect\phantomsection\label{mdp-solution-overview}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: An MDP defines a sequential
+  decision problem, but how do we actually compute an optimal policy
+  \(\pi^*\)?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Two classic dynamic programming algorithms exist
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \emph{Value Iteration}: directly computes the optimal value
+      function \(U(s)^*\) and derives policy at the end
+    \item
+      \emph{Policy Iteration}: iteratively evaluates and improves a
+      candidate policy \(\pi(s)\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key difference}}: what each algorithm
+  updates at each step
+\item
+  \textbf{\textcolor{blue}{Analogy}}: planning a road trip
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Value Iteration}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      You repeatedly update \emph{``What is the best possible travel
+      time from each city?''}
+    \item
+      Start with guesses, then refine using neighbors' estimates
+    \item
+      Eventually all estimates become accurate \(\to\) then choose the
+      best road from each city
+    \end{itemize}
+  \item
+    \emph{Policy Iteration}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Start with a route plan: \emph{``Always take highway A''}
+    \item
+      Compute how good this plan is
+    \item
+      Switch to better roads where highway A underperforms
+    \item
+      Repeat until the route plan stops changing
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Value Iteration (1/2)}
+\protect\phantomsection\label{value-iteration-12}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Algorithm}}: \emph{Value iteration}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Compute optimal utility \(U^*(s)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Write \(n\) Bellman equations in \(n\) unknowns \(U(s)\)
+    \item
+      Solve the simultaneous system of equations
+    \end{itemize}
+  \item
+    Extract optimal policy \(\pi^*\) from utilities \(U(s)\) by choosing
+    the action with the highest value
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Step 1}}: Compute optimal utility for each
+  state
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There are \(n\) possible states \(\to\) \(n\) Bellman equations \[
+    U(s) = \max_{a \in A(s)} \sum_{s'} \Pr(s'|a, s)[R(s',a,s) + \gamma U(s')]
+    \]
+  \item
+    Each equation relates the utility of a state \(s\) to the utilities
+    of its successors \(s'\)
+  \item
+    Solve these equations \(n\) equations with \(n\) unknowns
+    simultaneously
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Equations are non-linear due to max operator \(\to\) use an
+      iterative approach
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Value Iteration (2/2)}
+\protect\phantomsection\label{value-iteration-22}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Step 1}}: Solve system of Bellman equations
+  iteratively
+
+  \begin{itemize}
+  \item
+    Start with arbitrary values for utilities \(U(s)\)
+  \item
+    Perform Bellman updates: \[
+    U_{i+1}(s) \leftarrow \max_a \sum_{s'} \Pr(s'|a,s)[R(s',a,s) + \gamma U_i(s')]
+    \]
+  \item
+    Calculate the right-hand side and plug it into the left-hand side
+  \item
+    Repeat until convergence: \(|| U_{i+1} - U_i || < \epsilon\)
+  \item
+    \emph{Convergence} to single fixed point is guaranteed for additive
+    discounted rewards and \(\gamma < 1\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No strict update order required for convergence
+    \item
+      Intelligent ordering can improve speed especially in large or
+      structured MDPs
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Step 2}}: Compute optimal policy
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Derive optimal policy by choosing action \(a\) that maximizes
+    expected utility for each state \(s\): \[
+    \pi^*(s) = \argmax_a \sum_{s'} \Pr(s'|a,s) [R(s',a,s) + \gamma U(s')]
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Iteration}
+\protect\phantomsection\label{policy-iteration}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Algorithm}} solves MDPs by iteratively
+  improving a policy
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Evaluate current policy by computing \(U(s)\) for each state
+  \item
+    Improve current policy \(\pi(s)\) using Bellman equations
+  \item
+    Iterate until convergence
+  \end{enumerate}
+\item
+  \textbf{\textcolor{darkgreen}{Step 1}}: Policy Evaluation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Start with an initial (random) policy \(\pi\)
+  \item
+    Compute \(U^\pi(s)\) by solving: \[
+    U^\pi(s) = \sum_{s'} \Pr(s'|\pi(s),s)[R(s',\pi(s),s) + \gamma U^\pi(s')]
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Step 2}}: Policy Improvement
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For each state, find: \[
+    \pi'(s) = \argmax_a \sum_{s'} \Pr(s'|a,s)[R(s',a,s) + \gamma U^\pi(s')]
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Step 3}}: Convergence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Repeat until policy is unchanged or close to convergence
+  \item
+    \emph{Convergence} to an optimal policy for finite MDPs is
+    guaranteed
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Each iteration strictly improves or maintains policy performance
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Value vs Policy Iteration}
+\protect\phantomsection\label{value-vs-policy-iteration}
+\begin{itemize}
+\tightlist
+\item
+  Value Iteration: \emph{``Learn how good every state is, then derive
+  the best policy''}
+\item
+  Policy Iteration: \emph{``Start with a policy, evaluate it, improve
+  it, and repeat until it can't get any better''}
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4706}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5294}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Value Iteration}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Policy Iteration}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Updates values directly & Updates policies directly \\
+Policy is extracted at the end & Policy is improved every iteration \\
+Simpler update rule & Two-step process (evaluate + improve) \\
+Many cheap iterations & Fewer but more expensive iterations \\
+Often preferred for large problems & Often converges in fewer
+iterations \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Off-Line vs On-Line Solution of MDPS}
+\protect\phantomsection\label{off-line-vs-on-line-solution-of-mdps}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Offline methods}} precompute full solutions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., value iteration, policy iteration
+  \item
+    \emph{Pros}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Compute entire optimal policy \(\pi^*(s) \; \forall s\) before
+      action
+    \end{itemize}
+  \item
+    \emph{Cons}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Assumes full knowledge of transition probabilities
+      \(\Pr(s'|a, s)\) and reward function \(R(s',a,s)\)
+    \item
+      Not feasible for large MDPs (e.g., Tetris with \(10^{62}\) states)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Online methods}} compute actions at runtime,
+  using only reachable parts of the state space
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Agents interleave planning and acting
+  \item
+    \emph{Pros}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Focuses computation on relevant parts of the state space
+    \item
+      Allows adaptive, real-time decision-making
+    \item
+      No need for full model of the MDP
+    \end{itemize}
+  \item
+    \emph{Cons}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Requires fast, accurate state evaluation functions
+    \item
+      May need significant computation at each decision point
+    \item
+      Needs exploration and careful tradeoff with exploitation
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The \(n\)-Bandit Problem}
+\protect\phantomsection\label{the-n-bandit-problem}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  The \(n\)-bandit problem is:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simple MDP
+  \item
+    Stateless reinforcement learning problem
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.Multi_armed_bandits.png}}
+
+\emph{3-bandit problem}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Set up}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Action}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(n\) different arms to pull
+    \item
+      At each time step \(t\), agent selects an arm \(a_t\) and receives
+      reward \(r_t \sim R_{a_t}\) (an unknown probability distribution)
+    \end{itemize}
+  \item
+    \emph{No state transitions}: the environment is static and
+    memoryless
+  \item
+    \emph{Goal}: maximize total reward over a sequence of pulls
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Remark}}: Exploration vs exploitation
+  dilemma
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Exploration}: try different arms to learn their rewards
+  \item
+    \emph{Exploitation}: choose the best-known arm to maximize immediate
+    reward
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Online advertising (choosing ads to show)
+  \item
+    Clinical trials (testing treatments)
+  \item
+    A/B testing in web development
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    \emph{\textbf{\textcolor{red}{POMDPs}}}
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Partially Observable MDPs (POMDPs)}
+\protect\phantomsection\label{partially-observable-mdps-pomdps}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Motivation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Traditional MDPs} assume full observability (i.e., agent knows
+    its state)
+  \item
+    \emph{Real-world situations} often lack precise state knowledge
+  \item
+    \emph{POMDPs} extend MDPs to handle state uncertainty
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Definition}}: \emph{POMDP} defined by
+  \((S, A, P, R, E)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    States: \(S\)
+  \item
+    Actions: \(A\)
+  \item
+    Transition model: \(P = \Pr(s'|a,s)\)
+  \item
+    Reward function: \(R(s',a,s)\)
+  \item
+    Sensor model: \(E = \Pr(e|s)\): probability of observing evidence
+    \(e\) in state \(s\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Belief States}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Belief state \(b(s)\): probability distribution over possible states
+    \(s\)
+  \item
+    Agent maintains \(b(s)\) as internal environment representation
+  \item
+    Policies depend on belief states (and not actual state \(s\)):
+    \(\pi(b)\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{MDP vs POMDP: Comparison}
+\protect\phantomsection\label{mdp-vs-pomdp-comparison}
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Aspect}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{MDP}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{POMDP}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\emph{State Observability} & Fully observable state & Partially
+observable state \\
+\emph{Formal Definition} & \((S, A, P, R)\) & \((S, A, P, R, E)\) \\
+\emph{State Information} & Agent knows the exact current state & Agent
+receives incomplete or noisy observations \\
+\emph{Decision Basis} & Current state \(s\) & Belief state \(b\) \\
+\emph{State Representation} & State \(s\) & Hidden state \(s\) and
+observation \(e\) \\
+\emph{Transition Model} & \(\Pr(s'|a, s)\) & \(\Pr(s'|a, s)\) \\
+\emph{Observation Model} & Not required & \(\Pr(e|s', a)\) \\
+\emph{Policy} & \(\pi(s)\) & \(\pi(b)\) \\
+\emph{Memory Requirement} & Only current state needed (Markov property)
+& Must maintain a belief state \(b(s)\) \\
+\emph{Uncertainty Source} & Uncertainty only in state transitions &
+Uncertainty in both transitions and observations \\
+\emph{Complexity} & Lower computational complexity & Higher
+computational complexity \\
+\emph{Typical Example} & Chess, fully observable grid world & Robot
+navigation with noisy sensors \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{POMDP: 4x3 World with Noisy Four-Bit Sensor}
+\protect\phantomsection\label{pomdp-4x3-world-with-noisy-four-bit-sensor}
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  The world is a 4x3 grid with partial, probabilistic information
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Noisy four-bit sensor detects obstacles: North, East, South, West
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Partial information}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Produces a four-bit string (e.g.,
+    \textcolor{blue}{\texttt{NESW = 1010}})
+  \item
+    Each bit indicates presence (\textcolor{blue}{\texttt{1}}) or
+    absence (\textcolor{blue}{\texttt{0}}) of a wall
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.25\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L12.4x3_environment1.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Probabilistic information}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each bit correct with probability \(1 - \epsilon\)
+  \item
+    Errors are independent across bits
+  \item
+    E.g., true config \textcolor{blue}{\texttt{1100}}, observed
+    \textcolor{blue}{\texttt{1110}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Localization Rule}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Infer robot's position by comparing sensor output with map
+    expectations
+  \item
+    Achieve localization (even with high error rates) by aggregating
+    observations // TODO(gp): Add figure showing this.
+  \item
+    E.g., if robot believes it's in \textcolor{blue}{\texttt{(3, 2)}},
+    moves left, sensor reads \textcolor{blue}{\texttt{NESW = 1100}},
+    likely in \textcolor{blue}{\texttt{(3, 1)}} (not guaranteed due to
+    noise)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Belief State Transitions}
+\protect\phantomsection\label{belief-state-transitions}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Belief Update}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    After action \(a\) and observation \(e\), update belief state \(b\):
+    \[
+    b'(s') = \alpha \Pr(e|s') \sum_s \Pr(s'|a,s) b(s)
+    \] where \(\alpha\) normalizes the distribution
+  \item
+    Same as filtering task to compute new belief state \(b'(s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Belief Space}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Policy, transition, and reward models:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Depend on belief state \(b\)
+    \item
+      Can't depend on actual state \(s\), as agent doesn't know it
+    \end{itemize}
+  \item
+    Information-gathering actions can improve future decision quality
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Transition and Reward Models in Belief Space}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transition: \(\Pr(b'|b,a) = \sum_e \Pr(b'|e,a,b) \Pr(e|a,b)\)
+  \item
+    Reward: \(\rho(b,a) = \sum_s b(s) \sum_{s'} \Pr(s'|a,s) R(s',a,s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Decision Cycle for POMDP}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Repeat
+
+    \begin{enumerate}
+    \tightlist
+    \item
+      Given belief state \(b\), execute action \(a = \pi(b)\)
+    \item
+      Observe percept \(e\)
+    \item
+      Update belief state \(b'\)
+    \end{enumerate}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving POMDPs}
+\protect\phantomsection\label{solving-pomdps}
+\begin{itemize}
+\item
+  Convert POMDP on state space to MDP on belief space
+\item
+  \textbf{\textcolor{red}{Value Iteration for POMDPs}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Maintain conditional plans \(p\) with utility vectors \(\alpha_p\)
+  \item
+    Expected utility in belief state \(b\): \(b \cdot \alpha_p\)
+  \item
+    Optimal utility is piecewise linear, convex over belief space
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Recursive Plan Evaluation}} \[
+  \alpha_p(s) = \sum_{s'} \Pr(s'|a,s) [ R(s',a,s) + \gamma \sum_e \Pr(e|s') \alpha_{p.e}(s') ]
+  \]
+\item
+  \textbf{\textcolor{blue}{Challenges}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plans grow exponentially with depth
+  \item
+    Small problems generate many plans (e.g., \(2^{255}\) plans for
+    two-state POMDP at depth 8)
+  \item
+    Use approximation techniques
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hidden Confounders vs Hidden State}
+\protect\phantomsection\label{hidden-confounders-vs-hidden-state}
+\begin{itemize}
+\tightlist
+\item
+  POMDPs hide state because the agent can't observe it --- more sensing
+  would resolve the ambiguity
+\item
+  Confounding hides a cause because it influences both action and reward
+  outside the model entirely --- no amount of sensing the modeled
+  variables fixes it
+\item
+  A confounded MDP can look just like a fully observable one: the agent
+  sees state, action, and reward, yet still draws the wrong conclusion
+  about what caused what
+\item
+  This distinction motivates why ``solve the POMDP'' and ``find the
+  causal structure'' are different problems, even though both involve
+  something the agent can't directly see
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Reinforcement Learning}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem with Supervised Learning}
+\protect\phantomsection\label{problem-with-supervised-learning}
+\begin{itemize}
+\item
+  \emph{In supervised learning} an agent learns by observing
+  input/output examples
+\item
+  \textbf{\textcolor{red}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hard to find labeled data for all situations
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: apply supervised learning to play
+  chess
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Take board position as input \(\vx\) and return move \(m\)
+  \item
+    Build training set of grandmaster games with positions and winner
+    (assuming all winner's moves are good)
+  \item
+    \emph{Problems}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      New game positions differ from DB (all possible positions are
+      \(10^{40}\))
+    \item
+      Agent doesn't understand game's goal (checkmate) or valid moves of
+      each piece
+    \end{itemize}
+  \end{itemize}
+\item
+  \emph{``The AI revolution will not be supervised''} (Yann LeCun)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Reinforcement Learning}
+\protect\phantomsection\label{reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Reinforcement Learning (RL)
+  Paradigm
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Agent learns from interaction with environment
+  \item
+    \emph{Receives} reward signals indicating success or failure
+    (``reinforcements'')
+  \item
+    \emph{Learns} policy \(\pi\)
+  \item
+    \emph{Goal}: maximize expected sum of future rewards
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{RL vs supervised learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Easier to provide reward signal than inputs/outputs
+  \item
+    RL is active: agent explores environment, learns from actions and
+    consequences
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{RL vs MDP}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Both aim to maximize expected sum of rewards
+  \item
+    In RL, the agent:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Doesn't know transition model or reward function (rules)
+    \item
+      Acts to learn more
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sparse vs Immediate Rewards}
+\protect\phantomsection\label{sparse-vs-immediate-rewards}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: \emph{sparse rewards}: most
+  states lack informative reward
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., win/lose at the end of a chess game
+  \item
+    Explore many states to find rewarding ones
+  \item
+    Requires sophisticated exploration strategies
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Remark}}: Immediate/intermediate rewards
+  guide learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Tennis: rewards for points scored
+    \item
+      Crawling: forward motion is a reward
+    \item
+      Video game: coins or power-ups as intermediate rewards
+    \end{itemize}
+  \item
+    Provides continuous feedback to agent
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Applications of Reinforcement Learning}
+\protect\phantomsection\label{applications-of-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Games and Simulations}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn strategies through self-play and rewards
+  \item
+    E.g., achieve superhuman performance in Go, Chess, Dota2
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Robotics}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn complex control for walking, grasping, manipulation
+  \item
+    E.g., robotic arms, quadrupeds, drones
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Autonomous Vehicles}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decision-making and control in self-driving cars
+  \item
+    E.g., lane merging, navigation, obstacle avoidance
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Recommendation Systems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Adaptive recommendations based on user interactions to optimize
+    long-term engagement and satisfaction
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Finance and Trading}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn portfolio management and trading strategies
+  \item
+    Maximize returns under uncertainty and risk
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Healthcare}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn personalized treatment policies from patient data
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Industrial Control}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Optimize manufacturing, energy grids, logistics
+  \end{itemize}
+\item
+  \textbf{\textcolor{magenta}{Natural Language Processing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Dialogue systems and chatbots learn conversational strategies
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Model-Based vs Model-Free RL}}}
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model-Based vs Model-Free RL: Intuition}
+\protect\phantomsection\label{model-based-vs-model-free-rl-intuition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Model-based RL}} is like learning to ride a
+  bike by studying manual and physics
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plan a sequence: ``to make this turn at the corner, I should steer
+    by 5 degrees\ldots{}''
+  \item
+    When I change bike, you can update the parameters of the model,
+    instead of learning from scratch
+  \item
+    \emph{``I understand how the world works, so let me plan ahead''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Model-free RL}} is like learning to ride a
+  bike purely through trial and error, and repetition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You don't have an explicit theory of physics, balance, or torque
+  \item
+    You just adjust your actions based on whether you fell down or
+    stayed upright
+  \item
+    Over many trials, you develop good intuitions about what to do in
+    each situation, but you never explicitly model why leaning works
+  \item
+    \emph{``I know it works but I don't know why''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model-Based Reinforcement Learning}
+\protect\phantomsection\label{model-based-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Model-based RL
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Collect experience tuples \((s',a,s, r)\)
+  \item
+    Update environment model
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \emph{Transition model}: estimates \(\Pr(s'|a,s)\)
+    \item
+      \emph{Reward model}: estimates \(R(s,a)\)
+    \end{itemize}
+  \item
+    Plan using model to improve policy (e.g., value iteration, policy
+    iteration)
+  \item
+    E.g., Dyna-Q
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Efficient sample usage: fewer real-world interactions
+  \item
+    Enables planning by simulating outcomes
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learning accurate model is challenging
+  \item
+    Model errors can propagate, leading to poor decisions
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model-Free Reinforcement Learning}
+\protect\phantomsection\label{model-free-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Model-Free RL
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learns directly from interactions with the environment without
+    building a model of dynamics
+  \item
+    Agent observes \((s',a,s, r)\) and updates value or policy estimates
+    based on observed outcomes
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., Q-learning (learn \(Q(a, s)\))
+    \item
+      E.g., REINFORCE (learn policy)
+    \end{itemize}
+  \item
+    No attempt to estimate \(P(s'|a,s)\) or \(R(s,a)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simpler to implement when environment model is unknown or too
+    complex
+  \item
+    Robust to model inaccuracies since no model is used
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Requires more environment interactions (sample inefficient)
+  \item
+    Harder to incorporate planning or long-term reasoning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model-Based vs Model-Free RL: Comparison}
+\protect\phantomsection\label{model-based-vs-model-free-rl-comparison}
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Aspect}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model-Based RL}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Model-Free RL}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\emph{Core Distinction} & Learns environment dynamics \(P(s'\|a,s)\) and
+\(R(s,a)\); uses model for planning & Learns value functions \(Q(s,a)\)
+or policies \(\pi(a\|s)\) directly from experience \\
+\emph{Sample Efficiency} & Generally more sample efficient due to
+simulated planning & Typically needs more environment interactions \\
+\emph{Computation} & Higher planning overhead; simulations required &
+Simpler computations per step; often more scalable \\
+\emph{Flexibility and Robustness} & Sensitive to model inaccuracies &
+More robust to model errors (since it doesn't learn one) \\
+\emph{Typical Use Cases} & Robotics, planning tasks, known environments
+& Games, large-scale unknown or stochastic environments \\
+\emph{Examples} & Dyna-Q, PILCO & Q-learning, Deep Q-Networks (DQN),
+REINFORCE \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{When Correlation Misleads the Model}
+\protect\phantomsection\label{when-correlation-misleads-the-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: A learned transition/reward model
+  captures statistical regularities in the data --- not necessarily the
+  mechanisms producing them
+\item
+  \textbf{\textcolor{darkgreen}{Key Insight}}: If two variables are
+  correlated only because of a shared hidden cause, the model can
+  \emph{``predict''} well in training yet recommend the wrong action
+\item
+  \textbf{\textcolor{blue}{Example}}: An agent learns that a state
+  feature predicts reward, but a confounder (not an action) is the true
+  driver
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The policy exploits a correlation that won't hold once the agent
+    intervenes
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Question}}: What would it mean for a model
+  to capture causal structure rather than just predictive structure?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-7}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    \emph{\textbf{\textcolor{red}{Active vs Passive RL}}}
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Active vs Passive Reinforcement Learning}
+\protect\phantomsection\label{active-vs-passive-reinforcement-learning}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Intuition}}: it is about who controls the
+  agent's behavior while it's learning the value of states or a policy
+  in a MDP
+\item
+  Core Distinction
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Passive RL}}: Learns value of a fixed
+    policy; does not choose actions
+  \item
+    \textbf{\textcolor{blue}{Active RL}}: Learns both the value function
+    and optimal policy through exploration
+  \end{itemize}
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Aspect}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Passive RL}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Active RL}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\emph{Policy Handling} & Follows a given policy \(\pi(s)\) and estimates
+\(V^\pi(s)\) or \(Q^\pi(s,a)\) & Improves policy over time, aiming for
+\(\pi^*(s)\) that maximizes reward \\
+\emph{Exploration} & No exploration --- strictly evaluates the given
+policy & Explores actions to improve the policy (e.g.,
+\(\epsilon\)-greedy, softmax) \\
+\emph{Learning Goal} & Accurate value function for a known policy &
+Optimal policy and value function via interaction \\
+\emph{Algorithms} & Temporal Difference Learning (TD), Adaptive Dynamic
+Programming for a fixed policy & Q-learning, SARSA, policy iteration
+methods \\
+\emph{Use Cases} & Evaluation of policies from human demonstrations or
+expert systems & Autonomous agents discovering optimal strategies from
+scratch \\
+\emph{Sample Efficiency} & Can converge faster if policy is close to
+optimal & Slower due to need for exploration and policy improvement \\
+\emph{Challenges} & Limited by the quality of the provided policy &
+Balancing exploration and exploitation effectively \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Passive Learning Agent}
+\protect\phantomsection\label{passive-learning-agent}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Setup}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A fully observable environment with a small number of actions and
+    states
+  \item
+    The agent:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Has a fixed policy \(\pi(s)\) to determine its action
+    \item
+      Needs to learn \(U^\pi(s)\), the expected discounted reward if
+      policy \(\pi\) is executed starting in state \(s\)
+    \item
+      Doesn't know the transition model \(\Pr(s'|s, a)\) and the reward
+      function \(R(s',a,s)\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Algorithm}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The agent executes a set of trials using the policy \(\pi\):
+  \item
+    Starts from an initial state and experiences state transitions until
+    reaching terminal states
+  \item
+    Stores actions and rewards at each state
+    \((s_0, a_0, r_1, s_1, ..., s_n)\)
+  \item
+    Estimates: \[
+    U^{\pi}(s) = \EE[ \sum_{t=0}^{\infty} \gamma^t R(S_{t+1}, \pi(S_t), S_t)]
+    \] average the returns from all episodes in which \(s\) was visited:
+    \[
+    U^\pi(s) = \frac{1}{N(s)} \sum_{i=1}^{N(s)} G_i(s)
+    \] where \(G_i(s)\) is the return after state \(s\) in episode \(i\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Evaluating a delivery drone's route utility based on completed
+    delivery missions without changing its behavior
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unbiased estimator of utility under \(\pi\)
+  \item
+    Simple
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    High variance: requires many samples
+  \item
+    Inefficient if state visits are rare or episode lengths vary greatly
+  \item
+    (Important): Ignore the connections between states given that the
+    utility values obeys the Bellman equation for a fixed policy
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Adaptive Dynamic Programming}
+\protect\phantomsection\label{adaptive-dynamic-programming}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Objective}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn utility estimates \(U^\pi(s)\) for a fixed policy \(\pi\)
+    using an estimated model of the environment
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Key Components}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model learning: Estimate transition probabilities \(\Pr(s'|a,s)\)
+    and reward function \(R(s,a)\) from experience
+  \item
+    Utility update: Solve the Bellman equations for the fixed policy: \[
+    U^\pi(s) = \sum_{s'} \Pr(s'|\pi(s), s) [R(s', \pi(s), s) + \gamma U^\pi(s')]
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Learning Process}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Collect transitions \((s, \pi(s), r, s')\) during execution
+  \item
+    Update model estimates:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\Pr(s'|a,s) \approx\) empirical frequency
+    \item
+      \(R(s,a) \approx\) average observed reward
+    \end{itemize}
+  \item
+    Use dynamic programming to compute \(U^\pi(s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Suitable when environment dynamics are stationary and can be learned
+    from interaction
+  \item
+    A thermostat estimates room temperature dynamics and uses them to
+    predict comfort level under a fixed heating schedule
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    More sample-efficient than direct utility estimation
+  \item
+    Leverages structure of the MDP to generalize better
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Requires accurate model estimation
+  \item
+    Computational cost of solving Bellman equations repeatedly
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Temporal-Difference Learning}
+\protect\phantomsection\label{temporal-difference-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Objective}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimate utility values \(U^\pi(s)\) for a fixed policy \(\pi\)
+    using experience without a model
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Key Idea}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Combine benefits of Monte Carlo methods and Dynamic Programming
+  \item
+    Update estimates after every transition using bootstrapping
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{TD(0) Update Rule}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When a transition occurs from state \(s\) to state \(s'\) via action
+    \(\pi(s)\), we apply the update: \[
+    U^\pi(s) \leftarrow U^\pi(s) + \alpha [ r + \gamma U^\pi(s') - U^\pi(s) ]
+    \] where:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(s\) is the current state
+    \item
+      \(r\) is the immediate reward
+    \item
+      \(s'\) is the next state
+    \item
+      \(\alpha\) is the learning rate
+    \item
+      \(\gamma\) is the discount factor
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Characteristics}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Online and incremental: updates occur after each step
+  \item
+    Does not require knowledge of model \(P(s'|a,s)\) or \(R(s,a)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Real-time systems, streaming environments, or when dynamics are too
+    complex to model
+  \item
+    An autonomous cleaner estimates long-term dirtiness reduction for
+    each room it passes through, adjusting based on immediate results
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    More efficient and lower variance than Monte Carlo methods
+  \item
+    Simpler and more memory-efficient than model-based methods
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Introduces bias due to bootstrapping
+  \item
+    May require careful tuning of learning rate \(\alpha\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Active Reinforcement Learning}
+\protect\phantomsection\label{active-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Active RL learns an optimal
+  policy through interaction with the environment
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Agent chooses actions to balance exploration (gather info) and
+    exploitation (maximize reward)
+  \item
+    Does not follow a fixed policy --- improves policy over time
+  \item
+    Exploration strategies: \(\epsilon\)-greedy, softmax, UCB
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Active RL vs Passive RL}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Passive: follows a fixed policy \(\pi\), estimates \(U^\pi(s)\)
+  \item
+    Active: chooses actions to improve policy \(\pi \to \pi^*\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Cost-Sensitive Reward Querying}} (extension
+  of active RL)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Useful when querying for rewards is expensive or limited (e.g.,
+    human feedback)
+  \item
+    Agent decides whether to query for reward \(r\) at cost \(c\)
+  \item
+    Objective: maximize cumulative reward minus query costs
+  \item
+    Applications: robotics with costly sensors, human-in-the-loop
+    systems
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Greedy Agent in Reinforcement Learning}
+\protect\phantomsection\label{greedy-agent-in-reinforcement-learning}
+\begin{itemize}
+\item
+  A greedy agent always selects the action with the highest estimated
+  value based on current knowledge or Q-values \[
+  a = \argmax_a Q(s, a)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For state \(s\)
+  \item
+    No exploration: purely exploits known information
+  \end{itemize}
+\item
+  An agent must make a tradeoff between
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Exploitation of current best action to maximize its short-term
+    reward
+  \item
+    Exploration of unknown states to gain information that can lead to a
+    change in policy (and greater rewards in the future)
+  \item
+    E.g., in life you need to decide continuing a comfortable existence,
+    or try something unknown in the hopes of a better life
+  \end{itemize}
+\item
+  Goal: efficient learning with minimal queries to maximize information
+  gain per unit cost
+\item
+  Strategies include:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Random follow greedy policy or explore
+  \item
+    Cost-aware exploration: modify exploration bonus based on query cost
+  \item
+    Confidence-based querying: only query when uncertain about reward
+  \item
+    Give weight to actions not tried very often and avoid actions
+    (believed to be) of low utility
+  \item
+    Use an exploration function \(f(u, n)\) to trade-off greed
+    (preference for high values of utility) vs curiosity (preference for
+    actions not tried before)
+  \end{itemize}
+\item
+  Example:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    An agent exploring a maze may avoid querying in familiar areas
+  \item
+    Queries are focused on uncertain or novel states
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Safe Exploration in Reinforcement Learning}
+\protect\phantomsection\label{safe-exploration-in-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  In idealized settings, agents can explore freely and learn from
+  negative outcomes (e.g., losing in chess or simulations)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., a self-driving car in simulation can crash without
+    consequences
+  \end{itemize}
+\item
+  In the real world, exploration has risks:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Irreversible actions may lead to states that cannot be recovered
+    from
+  \item
+    Agents can enter ``absorbing states'' where no further rewards or
+    actions are possible
+  \item
+    E.g., a crash that destroys a self-driving car permanently limits
+    its future learning
+  \end{itemize}
+\item
+  Safer Policy Approaches
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Bayesian Reinforcement Learning}}: Maintain
+    a probability distribution over possible models
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Compute a policy that maximizes expected utility across all
+      plausible models
+    \item
+      In complex cases, leads to an ``exploration POMDP'' which is
+      computationally intractable but conceptually useful
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Robust Control Theory}}: Optimize for the
+    worst-case scenario among all plausible models
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Resulting policies are conservative but safe
+    \item
+      E.g., agent avoids any action that could possibly lead to death
+    \end{itemize}
+  \item
+    Impose constraints to prevent the agent from taking dangerous
+    actions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., safety controllers can intervene in risky states for
+      autonomous helicopters
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Temporal-Difference Q-Learning}
+\protect\phantomsection\label{temporal-difference-q-learning}
+\begin{itemize}
+\item
+  Q-learning is a model-free reinforcement learning algorithm
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learns the value of taking an action in a given state, denoted
+    \(Q(s, a)\)
+  \item
+    Does not require a model of the environment
+  \end{itemize}
+\item
+  Temporal-difference (TD) learning updates estimates based on other
+  learned estimates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unlike Monte Carlo methods, it updates after every step using
+    bootstrapping
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Q-learning update rule:}} \[
+  Q(s,a) \leftarrow Q(s,a) + \alpha [ r + \gamma \max_{a'} Q(s',a') - Q(s,a) ]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\alpha\): learning rate
+  \item
+    \(r\): reward received after action \(a\)
+  \item
+    \(\gamma\): discount factor for future rewards
+  \item
+    \(s'\): next state
+  \item
+    \(a'\): next action
+  \end{itemize}
+\item
+  The update aims to reduce ``the TD error''
+  \(r + \gamma \max_{a'} Q(s',a') - Q(s,a)\), i.e., the difference
+  between current estimate and observed return
+\item
+  Converges to the optimal action-value function \(Q^*\) under certain
+  conditions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Requires exploration of all state-action pairs
+  \item
+    Learning rate must decay appropriately
+  \end{itemize}
+\item
+  E.g., in a gridworld, Q-learning learns the optimal path to the goal
+  by updating \(Q\) values as it explores
+\item
+  Exploration strategy (e.g., \(\epsilon\)-greedy) is crucial for
+  balancing learning and exploitation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-8}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    \emph{\textbf{\textcolor{red}{Generalization in Reinforcement Learning}}}
+  \item
+    Policy Search
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Generalization in Reinforcement Learning}
+\protect\phantomsection\label{generalization-in-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  Tabular representations become infeasible for large state spaces
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Real-world problems often have millions or more distinct states
+  \item
+    Example: Backgammon has \textasciitilde{}\(10^{20}\) states, but
+    successful agents visit only a small fraction
+  \end{itemize}
+\item
+  Function approximation enables scalability and generalization
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Replace large tables with parameterized functions:
+    \(\hat{U}_\theta(s)\) or \(\hat{Q}_\theta(s, a)\)
+  \item
+    Linear example:
+    \(\hat{U}_\theta(s) = \theta_1 f_1(s) + \cdots + \theta_n f_n(s)\)
+  \end{itemize}
+\item
+  Benefit: Generalizes from visited states to unvisited ones
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Allows efficient learning with fewer examples
+  \end{itemize}
+\item
+  Temporal-Difference (TD) and Q-learning adapt to function
+  approximation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    TD update: \[
+    \theta_i \leftarrow \theta_i + \alpha [r + \gamma \hat{U}_\theta(s') -
+    \hat{U}_\theta(s)] \frac{\partial \hat{U}_\theta(s)}{\partial \theta_i}
+    \]
+  \item
+    Q-learning update: \[
+    \theta_i \leftarrow \theta_i + \alpha [r + \gamma \max_{a'}
+    \hat{Q}_\theta(s',a') - \hat{Q}_\theta(s,a)] \frac{\partial \hat{Q}_\theta(s,a)}{\partial \theta_i}
+    \]
+  \item
+    Issues and solutions:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \textbf{\textcolor{red}{Divergence}}: parameters can grow
+      uncontrollably
+    \item
+      \textbf{\textcolor{darkgreen}{Catastrophic forgetting}}: important
+      knowledge can be lost
+    \item
+      \textbf{\textcolor{blue}{Solution}}: experience replay reuses old
+      data to stabilize learning
+    \end{itemize}
+  \end{itemize}
+\item
+  Deep reinforcement learning:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Uses deep neural networks to approximate \(U\) or \(Q\)
+  \item
+    Learns features automatically from raw inputs (e.g., images)
+  \end{itemize}
+\item
+  Reward shaping:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Adds auxiliary (pseudo)rewards to guide learning
+  \item
+    Must be designed carefully to avoid misleading the agent
+  \end{itemize}
+\item
+  Hierarchical RL:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Structures behavior into reusable subprograms and subgoals
+  \item
+    Decomposes complex tasks to improve learning efficiency
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Correlational Policies Fail to Transfer}
+\protect\phantomsection\label{why-correlational-policies-fail-to-transfer}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: A policy tuned to correlations in
+  one environment can break when the environment shifts, even if the
+  reward-relevant mechanism hasn't changed
+\item
+  \textbf{\textcolor{darkgreen}{Root Cause}}: Spurious features
+  (artifacts of how training data was generated) get baked into the
+  policy alongside real causal drivers
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model learns spurious correlations during training
+  \item
+    Agent treats them as reliable causal drivers
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Manifestation}}: Generalization failure is
+  often not \emph{``the task changed''} --- it's \emph{``the correlation
+  the agent relied on no longer holds''}
+\item
+  \textbf{\textcolor{violet}{Key Insight}}: Policies built on causal
+  structure should transfer wherever the underlying mechanism is
+  preserved
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sets up the core promise of causal RL
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-9}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    \emph{\textbf{\textcolor{red}{Policy Search}}}
+  \item
+    Causal Reinforcement Learning
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Search in Reinforcement Learning}
+\protect\phantomsection\label{policy-search-in-reinforcement-learning}
+\begin{itemize}
+\tightlist
+\item
+  A policy \(\pi(s)\) maps states to actions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use a parameterized representation with fewer parameters than states
+    (e.g., linear, deep neural network): \(\pi_\theta(s)\)
+  \item
+    Directly optimizes parameters \(\theta\) of the policy
+    \(\pi_\theta(s)\) rather than value functions
+  \item
+    Pick the value with highest predicted value \[
+    \pi_\theta(s) = \argmax_a \hat{Q}_\theta(s, a)
+    \]
+  \item
+    Useful in high-dimensional or continuous action spaces
+  \end{itemize}
+\item
+  Even if learning a function replaces the Q-function, it is not an
+  approximation of the Q-function (as in Q-learning)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Seek a function that gives good performance and might differ from
+    the optimal Q-function \(Q^*\)
+  \end{itemize}
+\item
+  To avoid jittery policy for discrete actions, use stochastic policies
+  for smoother optimization:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., softmax over Q-values \[
+    \pi_\theta(s,a) = \frac{e^{\beta \hat{Q}_\theta(s,a)}}{\sum_{a'} e^{\beta \hat{Q}_\theta(s,a')}}
+    \] where \(\beta\) controls exploration vs exploitation
+  \end{itemize}
+\item
+  If everything is continuous and differentiable, use gradient descent
+  to find optimal policy
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If environment (or policy) is not deterministic, compute averages to
+    smooth out the gradient
+  \item
+    High variance in trial outcomes makes gradients noisy
+  \item
+    Requires many trials to ensure reliable gradient estimation
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-10}
+\begin{itemize}
+\tightlist
+\item
+  Sequential Decision Problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDPs
+  \item
+    Utilities Over Time
+  \item
+    Solving MDPs
+  \item
+    POMDPs
+  \end{itemize}
+\item
+  Reinforcement Learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model-Based vs Model-Free RL
+  \item
+    Active vs Passive RL
+  \item
+    Generalization in Reinforcement Learning
+  \item
+    Policy Search
+  \item
+    \emph{\textbf{\textcolor{red}{Causal Reinforcement Learning}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Reinforcement Learning}
+\protect\phantomsection\label{causal-reinforcement-learning}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: Extends RL by incorporating
+  causal inference (structural causal models, do-calculus,
+  counterfactual reasoning) into how agents learn and act
+\item
+  \textbf{\textcolor{darkgreen}{Goal}}: Distinguish \emph{``this
+  predicts reward''} from \emph{``this causes reward''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Policies are built on mechanisms rather than coincidental patterns
+    in the data
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Problem}}: Three recurring weaknesses in
+  standard RL:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Confounding
+  \item
+    Poor generalization under distribution shift
+  \item
+    Sample inefficiency
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Solution}}: Fills the gap left open by
+  POMDPs (hidden state) and model-based RL (predictive vs causal models)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{From Correlation to Causation in RL}
+\protect\phantomsection\label{from-correlation-to-causation-in-rl}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Standard RL agents optimize over
+  correlations between states, actions, and rewards observed during
+  interaction
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No distinction between \emph{observational} and
+    \emph{interventional} distributions
+  \item
+    Policies may exploit spurious correlations
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Formalization}}: Two distributions with
+  different semantics // TODO(gp\_ai): Use a 3 aligned \[
+  \text{Observational}: \quad \EE[R | a] = \sum_r r \cdot \Pr(r | a) \quad \text{(what we see)}
+  \] \[
+  \text{Interventional}: \quad \EE[R | do(a)] = \sum_r r \cdot \Pr(r | \text{forced } a) \quad \text{(what happens if we force } a)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When confounders exist: \(\EE[R | a] \neq \EE[R | do(a)]\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: Causal RL represents \emph{why}
+  an action leads to an outcome
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Uses the do-operator \(do(a)\) to distinguish intervention from
+    observation
+  \item
+    Builds policies on causal mechanisms, not correlations
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Key Insight}}: Standard MDP formalism
+  assumes no confounding
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(s'|a, s)\) treats all transitions equally, regardless of
+    causality
+  \item
+    Critical when data comes from sources other than the agent's own
+    exploration
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Confounding in Sequential Decision Making}
+\protect\phantomsection\label{confounding-in-sequential-decision-making}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Definition}}: A confounder \(U\) is a hidden
+  variable influencing both the chosen action and the resulting reward
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Confounding creates a backdoor path: \(U \to A, U \to R\)
+  \item
+    Breaks the inference: \(\EE[R | A] \neq \EE[R | do(A)]\)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.7.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Complication in Sequential Settings}}:
+  Confounding compounds across time steps, distorting credit assignment
+  over an entire trajectory
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Confounding affects choice of \(a_t\), which influences \(s_{t+1}\),
+    which influences future rewards \(r_{t+k}\)
+  \item
+    Errors propagate through the trajectory
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Common Source}}: Logged or human-generated
+  data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Original policy depended on unobserved factors
+  \item
+    E.g., human driver brakes based on fatigue the RL agent can't sense
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Risk}}: Agent learns a policy that performs
+  \emph{worse than random} once deployed
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Structural Causal Models for MDPs}
+\protect\phantomsection\label{structural-causal-models-for-mdps}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: A structural causal model (SCM)
+  augments the MDP with explicit causal mechanisms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Equations describing how each variable is generated from its causes
+  \item
+    Makes confounders, mediators, and colliders explicit
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.8.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Formally}}: An SCM specifies
+  \[S_{t+1} := f_s(A_t, S_t, U_s)\]
+  \[R_{t+1} := f_r(S_{t+1}, A_t, S_t, U_r)\] where \(U_s, U_r\) are
+  exogenous noise (unobserved causes)
+\item
+  \textbf{\textcolor{blue}{Advantage over Standard MDPs}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Standard: \(\Pr(s'|a,s)\) hides causal structure
+  \item
+    SCM: explicit equations reveal \emph{why} \(s'\) follows from \(a\)
+    and \(s\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Enables Intervention}}: The do-operator
+  allows prediction under intervention
+  \[\EE[R | do(a), s] = \EE[f_r(f_s(a, s, U_s), a, s, U_r)]\] instead of
+  just conditioning \(\EE[R | a, s]\) which is observational
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Counterfactual Reasoning and Credit Assignment}
+\protect\phantomsection\label{counterfactual-reasoning-and-credit-assignment}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Intuition}}: \emph{``What would have happened
+  had a different action been taken in this exact instance?''}, not just
+  on average across similar states
+\item
+  \textbf{\textcolor{darkgreen}{Formalization}}: Individual treatment
+  effect (ITE)
+  \[\tau_i(a_t) = R(a_t) - R(a'_t) \quad \text{for the same trajectory instance } i\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Asks: \emph{``on this exact trajectory, how much did action \(a_t\)
+    vs.~\(a'_t\) affect the final reward?''}
+  \item
+    Notation: \(R(a_t) | \text{do}(a_t=a)\)
+    vs.~\(R(a'_t) | \text{do}(a_t=a')\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Benefits}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Enables learning from a single trajectory via unrealized
+    alternatives
+  \item
+    Avoids requiring repeated environment interaction
+  \item
+    Improves credit assignment by isolating which action \emph{actually
+    caused} a later reward vs merely \emph{preceded it}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Key Idea}}: Counterfactuals use the SCM to
+  answer \emph{``what if?''} questions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \emph{``If the robot had turned left at step \(t\), would it
+    have reached the goal?''}
+  \item
+    Requires knowing causal mechanisms, not just observational
+    statistics
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deconfounding Offline / Off-Policy Data}
+\protect\phantomsection\label{deconfounding-offline-off-policy-data}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Motivation}}: Offline RL trains on logged data
+  from a different (often unknown) policy, exactly the setting where
+  confounding is most likely!
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Logging policy \(\pi_{\text{log}}\) depends on unobserved factors
+  \item
+    New policy \(\pi_{\text{new}}\) may exploit spurious correlations
+    and overfit to logging policy quirks rather than learning true
+    environment dynamics
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.9.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Formalization}}: Separate exploitable
+  correlation from artifact
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data contains transitions \((s, a, r, s')\) generated by
+    \(\pi_{\text{log}}\)
+  \item
+    Need to estimate \(\EE[R | do(a), s]\) from observational data
+  \item
+    Confounding introduces bias:
+    \(\Pr_{\pi_{\text{log}}}(a | s) \neq \Pr_{\pi_{\text{new}}}(a | s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}: Causal deconfounding methods use
+  backdoor adjustment \[
+  \EE[R | do(a), s] = \sum_u \Pr(u | s) \EE[R | a, s, u]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Condition on confounder \(u\) to isolate causal effect
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Generalization Across Environments}
+\protect\phantomsection\label{causal-generalization-across-environments}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Question}}: Will a policy learned under
+  environment \(\mathcal{E}_1\) hold under environment
+  \(\mathcal{E}_2\)?
+\item
+  \textbf{\textcolor{darkgreen}{Correlational Approach}}: Surface
+  similarity suggests transfer
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Often fails: features that predict well in \(\mathcal{E}_1\) may not
+    in \(\mathcal{E}_2\)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.10.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Causal Approach}}: Transfer depends on which
+  mechanisms are shared
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Let \(\mathcal{G}_1, \mathcal{G}_2\) be causal graphs for
+    \(\mathcal{E}_1, \mathcal{E}_2\)
+  \item
+    Policy \(\pi^*\) transfers if causal mechanisms of action on reward
+    are \emph{identical}: \[f_r^{(1)}(a, s, s') = f_r^{(2)}(a, s, s')\]
+  \item
+    Even if distributions shift: \(\Pr^{(1)}(s) \neq \Pr^{(2)}(s)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Formal Criterion}}: \emph{Transportability}
+  (Pearl \& Bareinboim)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Check graph structure, not surface similarity
+  \item
+    Answerable before deployment
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal RL: Open Challenges}
+\protect\phantomsection\label{causal-rl-open-challenges}
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Challenge}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{What it is}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Why it matters}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\textbf{Causal Discovery} & Learn graph \(\mathcal{G}\) from interaction
+data & Lack of known causal structure; partial observability complicates
+discovery \\
+\textbf{Identifiability} & Multiple SCMs yield identical observational
+distribution & Risk recovering wrong causal graph; interventions needed
+but costly \\
+\textbf{Scalability} & Integrate causal structure into deep RL & Current
+methods don't scale to high-dim state spaces; risk losing features \\
+\textbf{Sample Efficiency} & Necessary causal knowledge for robustness &
+Open question: complete graph vs.~partial knowledge vs.~statistical
+approximation \\
+\textbf{Partial Observability} & Agent observes limited state; hidden
+variables affect action and reward & Confounding hides in unobserved
+state; deconfounding harder \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Key Open Question}}: Can you learn enough
+  causal structure online to improve generalization and robustness
+  without full causal discovery cost?
+\end{itemize}
+\end{frame}
+
+\end{document}

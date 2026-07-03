@@ -1,0 +1,2269 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 09: A/B Testing and Experimentation}}\]}
+\endgroup \vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\item
+  Pearl, Glymour, Jewell: \emph{``Causal Inference in Statistics: A
+  Primer''} (2016)
+\item
+  Kohavi, Tang, Xu: \emph{``Trustworthy Online Controlled Experiments''}
+  (2020)
+\item
+  Sutton, Barto: \emph{``Reinforcement Learning: An Introduction''}
+  (2018)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Causal_AI.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Introduction and Motivation}}}
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why A/B Testing Matters}
+\protect\phantomsection\label{why-ab-testing-matters}
+\begin{itemize}
+\tightlist
+\item
+  Every day, companies ship changes that move billions of dollars
+
+  \begin{itemize}
+  \tightlist
+  \item
+    New checkout button color, new ranking model, new pricing rule
+  \item
+    \emph{Question}: Did the change \textbf{\textcolor{red}{cause}} the
+    observed shift in revenue?
+  \end{itemize}
+\item
+  Observational data alone cannot answer this
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Users who saw version B may differ from users who saw version A
+  \item
+    Seasonality, selection, and confounders distort naive comparisons
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{A/B testing}} is the workhorse of practical
+  causal inference
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Randomly assign users to \textbf{\textcolor{darkgreen}{treatment}}
+    or \textbf{\textcolor{teal}{control}}
+  \item
+    Compare average outcomes to estimate a causal effect
+  \item
+    Gold standard when feasible
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Example}}: Google reports running
+  \textgreater10,000 experiments per year to validate ranking changes
+  before launch
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  \emph{\textbf{\textcolor{red}{Randomization as Causal Identification}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Why Randomization Breaks Confounding}}}
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Core Problem: Confounding}
+\protect\phantomsection\label{the-core-problem-confounding}
+\begin{itemize}
+\item
+  In observational data, treatment \(T\) and outcome \(Y\) often share a
+  common cause \(C\) (confounder)
+\item
+  Naive comparison \(\EE[Y | T=1] - \EE[Y | T=0]\) mixes:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The true causal effect of \(T\) on \(Y\)
+  \item
+    Differences in \(C\) between treated and untreated groups
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}: Patients who take vitamin D (T)
+  have lower heart disease (Y)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    But \emph{healthier} patients tend to take vitamins (C = health
+    consciousness)
+  \item
+    Is vitamin D causal or just a proxy for healthy habits?
+  \end{itemize}
+\item
+  \emph{Goal of randomization}: force \(T\) to be independent of \(C\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomization: Causal Identification from Design}
+\protect\phantomsection\label{randomization-causal-identification-from-design}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Randomized Controlled Trial (RCT)}}: assign
+  each unit \(i\) a treatment \(T_i \in \{0, 1\}\) via coin flip,
+  independent of all covariates
+\item
+  Key property: \(T \perp C\) for every potential confounder \(C\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No selection bias
+  \item
+    No reverse causation
+  \end{itemize}
+\item
+  Under randomization, the observed difference equals the causal effect:
+  \[
+  \EE[Y | T=1] - \EE[Y | T=0] = \EE[Y^{1} - Y^{0}] \defeq \text{ATE}
+  \] where \(Y^{1}, Y^{0}\) are potential outcomes
+\item
+  \textbf{\textcolor{blue}{No back-door adjustment needed}} --- the
+  design closes all back-door paths
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Graph of an Observational Study}
+\protect\phantomsection\label{causal-graph-of-an-observational-study}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Estimating \(T \to Y\) requires adjusting for \(C\)
+\item
+  If \(C\) is unobserved, the effect is
+  \textbf{\textcolor{red}{not identifiable}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Graph of a Randomized Experiment}
+\protect\phantomsection\label{causal-graph-of-a-randomized-experiment}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Randomization \textbf{\textcolor{red}{severs}} the \(C \to T\) arrow
+\item
+  \(T\) has only one parent: the coin flip \(R\)
+\item
+  Association between \(T\) and \(Y\) is purely causal
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Do-Operator View of Randomization}
+\protect\phantomsection\label{do-operator-view-of-randomization}
+\begin{itemize}
+\item
+  Recall Pearl's do-operator: \(\Pr(Y | do(T=t))\) is the distribution
+  of \(Y\) when we \emph{intervene} to set \(T = t\)
+\item
+  In a graph, \(do(T=t)\) removes all incoming arrows to \(T\)
+\item
+  \textbf{\textcolor{red}{Randomization implements $do(T=t)$ physically}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The coin flip replaces all natural causes of \(T\)
+  \item
+    Hence \(\Pr(Y | T=t) = \Pr(Y | do(T=t))\) in an RCT
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key insight}}: The identification
+  problem disappears because the data come from the
+  \textbf{\textcolor{blue}{intervention distribution}}, not the
+  observational one
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    \emph{\textbf{\textcolor{red}{Potential Outcomes and ATE}}}
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Potential Outcomes Framework}
+\protect\phantomsection\label{potential-outcomes-framework}
+\begin{itemize}
+\item
+  For each unit \(i\), define two
+  \textbf{\textcolor{red}{potential outcomes}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Y_i^{1}\): outcome if treated
+  \item
+    \(Y_i^{0}\): outcome if untreated
+  \end{itemize}
+\item
+  We observe only one of them: \[
+  Y_i = T_i \cdot Y_i^{1} + (1 - T_i) \cdot Y_i^{0}
+  \]
+\item
+  This is the
+  \textbf{\textcolor{darkgreen}{Fundamental Problem of Causal Inference}}
+  (Holland, 1986)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Individual treatment effect \(Y_i^{1} - Y_i^{0}\) is never
+    observable
+  \end{itemize}
+\item
+  But the \textbf{\textcolor{blue}{average}} is estimable under
+  randomization: \[
+  \text{ATE} = \EE[Y^{1} - Y^{0}] = \EE[Y^{1}] - \EE[Y^{0}]
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Difference-in-Means Estimator}
+\protect\phantomsection\label{the-difference-in-means-estimator}
+\begin{itemize}
+\item
+  Under randomization \(T \perp (Y^{0}, Y^{1})\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\EE[Y | T=1] = \EE[Y^{1} | T=1] = \EE[Y^{1}]\)
+  \item
+    \(\EE[Y | T=0] = \EE[Y^{0} | T=0] = \EE[Y^{0}]\)
+  \end{itemize}
+\item
+  The \textbf{\textcolor{red}{difference-in-means}} estimator: \[
+  \widehat{\text{ATE}} = \frac{1}{n_1} \sum_{i: T_i=1} Y_i - \frac{1}{n_0} \sum_{i: T_i=0} Y_i
+  \]
+\item
+  Properties:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Unbiased: \(\EE[\widehat{\text{ATE}}] = \text{ATE}\)
+  \item
+    Consistent: converges to ATE as \(n \to \infty\)
+  \item
+    Variance:
+    \(\VV[\widehat{\text{ATE}}] = \sigma_1^2/n_1 + \sigma_0^2/n_0\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{SUTVA: The Silent Assumption}
+\protect\phantomsection\label{sutva-the-silent-assumption}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Stable Unit Treatment Value Assumption (SUTVA)}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \emph{No interference}: unit \(i\)'s outcome depends only on unit
+    \(i\)'s treatment
+  \item
+    \emph{No hidden variation}: one ``version'' of treatment per arm
+  \end{enumerate}
+\item
+  \textbf{\textcolor{darkgreen}{Example}} of SUTVA violation (network
+  effects):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treatment: show new feature to half of Facebook users
+  \item
+    A treated user's posts reach untreated friends
+  \item
+    Control is ``contaminated'' \(\to\) ATE estimate is biased
+  \end{itemize}
+\item
+  SUTVA is the \emph{Achilles heel} of online experimentation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Two-sided marketplaces (Uber, Airbnb) routinely violate it
+  \item
+    We will revisit with
+    \textbf{\textcolor{blue}{switchback experiments}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{A/B Testing in Practice}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Classic A/B Test Design}}}
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Anatomy of a Classic A/B Test}
+\protect\phantomsection\label{anatomy-of-a-classic-ab-test}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Example}}: Evaluate a new checkout button
+  color
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Define \textbf{\textcolor{orange}{primary metric}}: conversion rate
+    (purchase / visit)
+  \item
+    Specify \textbf{\textcolor{darkgreen}{null hypothesis}}:
+    \(H_0: \mu_A = \mu_B\)
+  \item
+    Choose \textbf{\textcolor{teal}{significance level}} \(\alpha\)
+    (typically 0.05)
+  \item
+    Choose \textbf{\textcolor{cyan}{power}} \(1 - \beta\) (typically
+    0.80)
+  \item
+    Compute required \textbf{\textcolor{blue}{sample size}} \(n\)
+  \item
+    Randomly assign each visitor to A or B
+  \item
+    Collect data for the pre-specified duration
+  \item
+    Compute test statistic, make decision
+  \end{enumerate}
+\item
+  Each step has \textbf{\textcolor{violet}{statistical}} and
+  \textbf{\textcolor{magenta}{business}} consequences
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hypothesis Testing Refresher}
+\protect\phantomsection\label{hypothesis-testing-refresher}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Two-sample z-test}} for difference in
+  proportions: \[
+  Z = \frac{\hat{p}_B - \hat{p}_A}{\sqrt{\hat{p}(1-\hat{p})\left(\frac{1}{n_A} + \frac{1}{n_B}\right)}}
+  \]
+\item
+  Reject \(H_0\) if \(|Z| > z_{1 - \alpha/2}\)
+\item
+  Types of error:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Type I error}} (\(\alpha\)): false
+    positive (ship a change that does nothing)
+  \item
+    \textbf{\textcolor{blue}{Type II error}} (\(\beta\)): false negative
+    (miss a real improvement)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Q}}: Which error is worse for a startup
+  vs.~a bank?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    \emph{\textbf{\textcolor{red}{Power Analysis and Sample Size}}}
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Power Analysis: The Key Formula}
+\protect\phantomsection\label{power-analysis-the-key-formula}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Power}} \(1 - \beta\) = probability of
+  detecting a true effect of size \(\delta\)
+\item
+  For two-sample test with equal arms: \[
+  n \approx \frac{2 \sigma^2 (z_{1-\alpha/2} + z_{1-\beta})^2}{\delta^2}
+  \]
+\item
+  Key drivers:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Variance}} \(\sigma^2\): noisier metric
+    \(\to\) larger \(n\)
+  \item
+    \textbf{\textcolor{darkgreen}{Effect size}} \(\delta\): smaller
+    effect \(\to\) \textbf{\textcolor{teal}{quadratically}} larger \(n\)
+  \item
+    \textbf{\textcolor{cyan}{Confidence}} (\(\alpha, \beta\)): stricter
+    \(\to\) larger \(n\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Halving the detectable effect
+  \textbf{\textcolor{violet}{quadruples}} required users
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Power Analysis: Worked Example}
+\protect\phantomsection\label{power-analysis-worked-example}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}: Test a checkout redesign
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Baseline conversion: \(p_A = 0.10\)
+  \item
+    Minimum detectable effect (MDE): \(\delta = 0.005\) (0.5 percentage
+    point)
+  \item
+    \(\alpha = 0.05\), \(\beta = 0.20\)
+  \end{itemize}
+\item
+  Plug in: \[
+  n \approx \frac{2 \cdot (0.10 \cdot 0.90) \cdot (1.96 + 0.84)^2}{(0.005)^2} \approx 56{,}400 \text{ per arm}
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Interpretation}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Need \textasciitilde113K users total
+  \item
+    If site has 10K daily visits, experiment runs \textasciitilde12 days
+  \item
+    Running shorter \textbf{\textcolor{blue}{under-powers}} the test and
+    wastes the effort
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Minimum Detectable Effect (MDE)}
+\protect\phantomsection\label{minimum-detectable-effect-mde}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{MDE}} is the smallest effect the experiment
+  can detect with target power
+\item
+  Flip the formula: \[
+  \text{MDE} \approx (z_{1-\alpha/2} + z_{1-\beta}) \sqrt{\frac{2 \sigma^2}{n}}
+  \]
+\item
+  Useful at planning time:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given traffic budget, what's the smallest effect we could catch?
+  \item
+    If MDE \(>\) business-relevant threshold, the test is not worth
+    running
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pro tip}}: Always compute MDE \emph{before}
+  running the test, not after
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Avoids the seductive ``we'll just look at the data'' mindset
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-7}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    \emph{\textbf{\textcolor{red}{Common A/B Testing Pitfalls}}}
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Peeking and the Multiple Comparisons Trap}
+\protect\phantomsection\label{peeking-and-the-multiple-comparisons-trap}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Peeking}}: checking the test repeatedly and
+  stopping when \(p < 0.05\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Problem}: each check is a new chance to commit Type I error
+  \item
+    True false-positive rate can exceed 30\%
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Solutions}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Pre-commit} to a sample size and a single analysis
+  \item
+    Use \textbf{\textcolor{darkgreen}{sequential tests}} (SPRT, mSPRT,
+    always-valid inference)
+  \item
+    Apply \textbf{\textcolor{teal}{Bonferroni}} or
+    \textbf{\textcolor{cyan}{Benjamini-Hochberg}} when testing many
+    metrics
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Testing 20 secondary metrics at
+  \(\alpha = 0.05\) gives \(1 - 0.95^{20} \approx 64\%\) chance of at
+  least one false positive
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sample Ratio Mismatch (SRM)}
+\protect\phantomsection\label{sample-ratio-mismatch-srm}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{SRM}}: observed traffic split differs
+  significantly from intended (e.g., 50/50 split turns out 48/52)
+\item
+  Often indicates a \textbf{\textcolor{darkgreen}{bug}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cookies not sticky; bot traffic routed to one arm
+  \item
+    Telemetry dropping in one arm only
+  \item
+    Opt-outs correlated with treatment
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Diagnosis}}: chi-square test on assignment
+  counts
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(p < 0.001\), \emph{do not trust the experiment}
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Rule}}: SRM invalidates the randomization
+  assumption \(\to\) the ATE estimate is no longer unbiased
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Novelty and Primacy Effects}
+\protect\phantomsection\label{novelty-and-primacy-effects}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Novelty}}: users react to ``new'' stimulus,
+  effect fades
+
+  \begin{itemize}
+  \tightlist
+  \item
+    New button gets more clicks the first week, then reverts
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Primacy}}: users resist change, effect
+  grows
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Power users initially confused, adapt over time
+  \end{itemize}
+\item
+  Both produce \textbf{\textcolor{blue}{time-varying treatment effects}}
+\item
+  \textbf{\textcolor{violet}{Mitigations}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Run experiments long enough to capture steady-state
+  \item
+    Analyze by user tenure cohort (new vs.~returning)
+  \item
+    Segment by exposure count (first-time vs.~repeated exposure)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cannibalization and Interference}
+\protect\phantomsection\label{cannibalization-and-interference}
+\begin{itemize}
+\tightlist
+\item
+  Treatment may help its arm by \textbf{\textcolor{red}{stealing}} from
+  another:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Showing discounts only to group A cannibalizes group B purchases
+  \item
+    SUTVA violated: control is no longer a clean counterfactual
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Symptoms}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treatment lift on the primary metric, but total company metric flat
+  \item
+    Downstream teams see unexplained regressions
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Fixes}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{teal}{Cluster-level randomization}} (by city,
+    marketplace, social group)
+  \item
+    \textbf{\textcolor{cyan}{Switchback experiments}} (next section)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-8}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Advanced Experimental Designs}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-9}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Switchback Experiments}}}
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Switchbacks? The Marketplace Problem}
+\protect\phantomsection\label{why-switchbacks-the-marketplace-problem}
+\begin{itemize}
+\tightlist
+\item
+  Two-sided marketplaces (Uber, Lyft, DoorDash) share
+  \textbf{\textcolor{red}{supply}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If A gets better driver matching, B gets worse matching
+    automatically
+  \item
+    User-level randomization violates SUTVA
+  \end{itemize}
+\item
+  \emph{Idea}: randomize \textbf{\textcolor{darkgreen}{time periods}},
+  not users
+
+  \begin{itemize}
+  \tightlist
+  \item
+    At time \(t\), entire city runs in treatment or control
+  \item
+    Alternate every \(\Delta\) minutes (e.g., 30 min)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Switchback experiment}}: the whole system
+  switches between A and B over contiguous time windows
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Switchback Design: Schematic}
+\protect\phantomsection\label{switchback-design-schematic}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Whole region alternates between A and B over time
+\item
+  Same users experience both arms \(\to\) paired comparison
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Switchback: Pros and Cons}
+\protect\phantomsection\label{switchback-pros-and-cons}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Pros}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Captures \textbf{\textcolor{orange}{total}} marketplace effect (no
+    supply spillover)
+  \item
+    Works when user randomization is impossible
+  \item
+    Natural for pricing, matching, surge algorithms
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{teal}{Temporal correlation}}: adjacent windows
+    are not independent
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Standard errors must be corrected (e.g., block-bootstrap)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Carryover effects}}: decisions at \(t-1\)
+    affect state at \(t\)
+  \item
+    Fewer effective ``units'' \(\to\) lower statistical power
+  \item
+    Day-of-week and hour-of-day confounds must be balanced
+  \end{itemize}
+\item
+  \emph{Rule of thumb}: use switchback when SUTVA is clearly violated;
+  otherwise prefer user-level A/B
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-10}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    \emph{\textbf{\textcolor{red}{Multi-Armed Bandits}}}
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From A/B to Multi-Armed Bandits}
+\protect\phantomsection\label{from-ab-to-multi-armed-bandits}
+\begin{itemize}
+\tightlist
+\item
+  Classic A/B test: 50/50 split, \emph{wait}, analyze
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Every visitor during the test contributes equally to learning
+  \item
+    Even after B looks clearly worse, we keep showing it
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Multi-armed bandit (MAB)}}: adaptively shift
+  traffic to better arms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Exploits the
+    \textbf{\textcolor{darkgreen}{exploration–exploitation}} tradeoff
+  \item
+    Less regret (lost reward) while learning
+  \item
+    Useful when many arms or continuous optimization
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: News site picking headlines ---
+  classic MAB territory
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exploration vs.~Exploitation}
+\protect\phantomsection\label{exploration-vs.-exploitation}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Exploration}}: try arms whose value is
+  uncertain
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Gathers information, reduces future regret
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Exploitation}}: choose the arm with highest
+  estimated value
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Captures known reward \emph{now}
+  \end{itemize}
+\end{itemize}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Pure exploration = classic A/B; pure exploitation = greedy, locks into
+  suboptimal arm
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Epsilon-Greedy Algorithm}
+\protect\phantomsection\label{epsilon-greedy-algorithm}
+\begin{itemize}
+\tightlist
+\item
+  Simplest bandit strategy:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    With prob. \(\varepsilon\): pick a \textbf{\textcolor{red}{random}}
+    arm (explore)
+  \item
+    With prob. \(1 - \varepsilon\): pick the
+    \textbf{\textcolor{darkgreen}{best empirical}} arm (exploit)
+  \end{enumerate}
+\item
+  Typical \(\varepsilon \in [0.05, 0.2]\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decay over time: \(\varepsilon_t \propto 1/t\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pros}}: trivially simple, works surprisingly
+  well
+\item
+  \textbf{\textcolor{violet}{Cons}}: wastes exploration on clearly bad
+  arms; ignores uncertainty
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Upper Confidence Bound (UCB)}
+\protect\phantomsection\label{upper-confidence-bound-ucb}
+\begin{itemize}
+\tightlist
+\item
+  Choose the arm that maximizes an
+  \textbf{\textcolor{red}{optimism index}}: \[
+  a_t = \arg\max_i \left[ \hat{\mu}_i + \sqrt{\frac{2 \log t}{n_i}} \right]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\hat{\mu}_i\): empirical mean reward of arm \(i\)
+  \item
+    \(n_i\): times arm \(i\) has been pulled
+  \end{itemize}
+\item
+  \emph{Idea}: be \textbf{\textcolor{blue}{optimistic}} about uncertain
+  arms
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Less-sampled arms get a confidence bonus
+  \item
+    Over time bonus shrinks \(\to\) converges to best arm
+  \end{itemize}
+\item
+  Regret: \(O(\log T)\) --- provably optimal scaling
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Thompson Sampling}
+\protect\phantomsection\label{thompson-sampling}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Bayesian}} approach:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Maintain posterior over each arm's reward, \(\pi_i(\theta)\)
+  \item
+    Sample \(\theta_i \sim \pi_i\) for each arm
+  \item
+    Pull arm \(\arg\max_i \theta_i\)
+  \item
+    Update posterior with observed reward
+  \end{enumerate}
+\item
+  For Bernoulli rewards: Beta-Binomial conjugate pair
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each arm has \(\text{Beta}(\alpha_i, \beta_i)\) posterior
+  \item
+    Update: \(\alpha_i \mathrel{+}= \text{success}\),
+    \(\beta_i \mathrel{+}= \text{failure}\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Pros}}: natural uncertainty, easy to extend,
+  empirically very strong
+\item
+  Used in: online ads, recommendation systems, clinical trials
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Contextual Bandits}
+\protect\phantomsection\label{contextual-bandits}
+\begin{itemize}
+\item
+  Standard bandit: reward depends only on arm
+\item
+  \textbf{\textcolor{red}{Contextual bandit}}: reward depends on arm
+  \emph{and} context \(x\) (user features)
+\item
+  Learn a policy \(\pi(x) \to a\) that maximizes expected reward
+
+  \begin{itemize}
+  \tightlist
+  \item
+    LinUCB, Thompson Sampling with linear models, neural bandits
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Example}}: personalized news
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Context: user's prior clicks, time of day, device
+  \item
+    Arms: candidate articles
+  \item
+    Reward: click (0/1)
+  \end{itemize}
+\item
+  This connects bandits to \textbf{\textcolor{blue}{uplift modeling}}
+  (Ch. 6) and \textbf{\textcolor{violet}{policy learning}} (Ch. 11)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-11}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    \emph{\textbf{\textcolor{red}{Limits of Standard A/B Testing}}}
+  \end{itemize}
+\item
+  When to Experiment vs.~Observe
+\end{itemize}
+\end{frame}
+
+\begin{frame}{When A/B Testing Is Not Enough}
+\protect\phantomsection\label{when-ab-testing-is-not-enough}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Small effects, massive samples}}: not every
+  question has a 10\% lift
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ranking changes often move metrics by 0.1\%
+  \item
+    Power budget may be infeasible
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Long-horizon effects}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Retention, LTV, churn show up over months
+  \item
+    Experiments rarely run that long
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Heterogeneous effects}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Average treatment effect hides which users benefit
+  \item
+    Need \textbf{\textcolor{teal}{CATE}} methods (causal forests,
+    meta-learners, see Ch. 6)
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Ethical and legal constraints}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can't randomize medical treatments when one is known better
+  \item
+    Can't deny service to control group in many regulated industries
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Network Effects and Interference}
+\protect\phantomsection\label{network-effects-and-interference}
+\begin{itemize}
+\item
+  Social networks, marketplaces, and platforms violate SUTVA routinely
+\item
+  \textbf{\textcolor{red}{Mitigations}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Cluster randomization}: treat entire cities, schools, or
+    social clusters
+  \item
+    \emph{Ego-network designs}: treat a user and all their neighbors
+    together
+  \item
+    \emph{Graph cluster randomization}: partition the graph into
+    near-independent components
+  \end{itemize}
+\item
+  \emph{Example}: Facebook's News Feed tests cluster by geography and
+  ``friends-of-friends'' to limit contamination
+\item
+  Often complemented with
+  \textbf{\textcolor{blue}{structural causal models}} that explicitly
+  model the spillover mechanism
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-12}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+\item
+  Randomization as Causal Identification
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Why Randomization Breaks Confounding
+  \item
+    Potential Outcomes and ATE
+  \end{itemize}
+\item
+  A/B Testing in Practice
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classic A/B Test Design
+  \item
+    Power Analysis and Sample Size
+  \item
+    Common A/B Testing Pitfalls
+  \end{itemize}
+\item
+  Advanced Experimental Designs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Switchback Experiments
+  \item
+    Multi-Armed Bandits
+  \item
+    Limits of Standard A/B Testing
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{When to Experiment vs. Observe}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Decision Framework: Experiment or Observe?}
+\protect\phantomsection\label{decision-framework-experiment-or-observe}
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+\textbf{Criterion} & \textbf{Experiment} & \textbf{Observational} \\
+\midrule\noalign{}
+\endhead
+Randomization & Feasible & Not feasible \\
+Ethics & Treatments equipoise & Known-better exists \\
+Cost / time & Acceptable & Prohibitive \\
+Treatment control & We control it & Already happened \\
+Confounding & Design removes it & Must adjust explicitly \\
+External validity & In-sample only & Population-wide \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\begin{itemize}
+\tightlist
+\item
+  Ask first: \emph{``Can I randomize, ethically and affordably?''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Yes \(\to\) run a controlled experiment
+  \item
+    No \(\to\) reach for observational causal methods
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Feasibility Constraints on Experiments}
+\protect\phantomsection\label{feasibility-constraints-on-experiments}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Cost}}: running a fleet-wide test on a
+  logistics system may burn millions
+\item
+  \textbf{\textcolor{orange}{Time}}: detecting LTV changes may require
+  multi-year follow-up
+\item
+  \textbf{\textcolor{darkgreen}{Sample scarcity}}: rare diseases,
+  enterprise customers, B2B
+\item
+  \textbf{\textcolor{teal}{Legal / regulatory}}: pricing discrimination
+  rules, data-use restrictions
+\item
+  \textbf{\textcolor{cyan}{Ethics}}: withholding beneficial treatments
+  is often impermissible
+\item
+  \textbf{\textcolor{blue}{Example}}: effect of maternal smoking on
+  infant birthweight
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cannot randomize mothers to smoke
+  \item
+    Must use \textbf{\textcolor{violet}{natural experiments}} or
+    \textbf{\textcolor{magenta}{IV}} (see Ch. 6)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hybrid Approaches: Experiments + Causal Methods}
+\protect\phantomsection\label{hybrid-approaches-experiments-causal-methods}
+\begin{itemize}
+\item
+  Best of both worlds when possible:
+\item
+  \textbf{\textcolor{red}{Stratified experiments}}: randomize
+  \emph{within} observational strata
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Improves power and captures heterogeneity
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Doubly robust estimation on RCT data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Combine randomization with outcome regression
+  \item
+    Robust to misspecification in either component
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Experiment + causal forest}}: estimate CATE
+  from randomized data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Find \emph{where} the effect is largest
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Transportability}}: use an RCT in one site
+  to inform observational analysis in another (Pearl \& Bareinboim,
+  2014)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Policy Evaluation and Off-Policy Learning}
+\protect\phantomsection\label{policy-evaluation-and-off-policy-learning}
+\begin{itemize}
+\item
+  Often we want to evaluate a \textbf{\textcolor{red}{new policy}}
+  \(\pi_{\text{new}}\) before deploying
+\item
+  \textbf{\textcolor{darkgreen}{Off-policy evaluation (OPE)}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use logged data from old policy \(\pi_{\text{old}}\)
+  \item
+    Estimate \(\EE_{\pi_{\text{new}}}[R]\) without deploying
+  \end{itemize}
+\item
+  Core tool: \textbf{\textcolor{blue}{inverse propensity score (IPS)}}
+  weighting \[
+  \hat{V}(\pi_{\text{new}}) = \frac{1}{n} \sum_i \frac{\pi_{\text{new}}(a_i | x_i)}{\pi_{\text{old}}(a_i | x_i)} r_i
+  \]
+\item
+  Bridges classic A/B testing with
+  \textbf{\textcolor{violet}{causal reinforcement learning}} (Ch. 12)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Case Study: Marketing Campaign Uplift}
+\protect\phantomsection\label{case-study-marketing-campaign-uplift}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Problem}}: send a promotional email to
+  maximize incremental revenue
+\item
+  Naive approach: target users likely to purchase
+
+  \begin{itemize}
+  \tightlist
+  \item
+    But many would purchase anyway \(\to\) wasted effort
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Uplift-based approach}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Run small randomized pilot (email vs.~hold-out)
+  \item
+    Fit a \textbf{\textcolor{blue}{CATE}} model (S/T/X-learner) on pilot
+    data
+  \item
+    Rank users by estimated individual uplift
+  \item
+    Deploy full campaign to top-\(k\) users
+  \item
+    Hold out a control slice to validate incremental lift
+  \end{enumerate}
+\item
+  Turns a predictive-ranking problem into a
+  \textbf{\textcolor{violet}{causal}} one
+\end{itemize}
+\end{frame}
+
+\end{document}

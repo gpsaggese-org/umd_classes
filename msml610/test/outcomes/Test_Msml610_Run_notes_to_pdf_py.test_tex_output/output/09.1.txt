@@ -1,0 +1,1969 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 09.1: Reasoning Over Time}}\]} \endgroup
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}: - AIMA 14: Probabilistic reasoning over time -
+\href{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}{\textcolor{blue}{\underline{https://github.com/rlabbe/Kalman-and-Bayesian-Filters-in-Python}}}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Reasoning Over Time}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Definitions
+  \item
+    Defining Temporal Inference Tasks
+  \item
+    Solving Temporal Inference Tasks
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Reasoning Over Time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Definitions}}}
+  \item
+    Defining Temporal Inference Tasks
+  \item
+    Solving Temporal Inference Tasks
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Static vs Dynamic Probabilistic Reasoning}
+\protect\phantomsection\label{static-vs-dynamic-probabilistic-reasoning}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Static probabilistic reasoning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Random variables have \emph{fixed} values
+  \item
+    Everything done so far
+  \item
+    E.g., repairing a car:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Broken parts remain broken during diagnosis
+    \item
+      Observed evidence stays fixed
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Dynamic probabilistic reasoning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Random variables \emph{change over time}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., tracking a plane's location, economic activity
+    \end{itemize}
+  \item
+    E.g., treating a diabetic patient
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Assess patient state, decide insulin dose
+    \item
+      Evidence: insulin doses, food intake, blood sugar (change over
+      time)
+    \item
+      Time dependency (e.g., metabolic activity, time of day)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Agents in Partially Observable Environments}
+\protect\phantomsection\label{agents-in-partially-observable-environments}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+
+\begin{itemize}
+\tightlist
+\item
+  Agents in \emph{partially observable environments} track current state
+  using:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Belief state}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Store possible world states
+    \item
+      Use probability theory to quantify belief
+    \item
+      Posterior distribution of current state given all evidence
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Belief state + Transition model}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Predict world evolution in next step
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Sensor model + Percepts}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Update belief state
+    \end{itemize}
+  \end{enumerate}
+\item
+  \emph{Idea}: handle time by making each quantity a function of time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\vX_{a:b}\) represents variables in \([a, b]\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Agent: Model Components}
+\protect\phantomsection\label{agent-model-components}
+\begin{enumerate}
+\tightlist
+\item
+  \textbf{\textcolor{red}{State of the world}}: \(\vX_t\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not directly observable
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Prior probability of the state}} at time 0:
+  \(\vX_0\)
+\item
+  \textbf{\textcolor{darkgreen}{Evidence variables}}: \(\vE_t\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Observable
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Transition model}}:
+  \(\Pr(\vX_t | \vX_{0:t-1})\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models world evolution
+  \item
+    Specifies probability distribution of state \(\vX_t\) given previous
+    values
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Sensor model}}:
+  \(\Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models generation of evidence variables \(\vE_t\)
+  \end{itemize}
+\end{enumerate}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+\end{frame}
+
+\begin{frame}{Discrete vs Continuous Time Models}
+\protect\phantomsection\label{discrete-vs-continuous-time-models}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Discrete time models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    View world as time slices (``snapshots'')
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Equal time intervals, equispaced samples
+    \item
+      Label times \(t = 0, 1, 2, ...\)
+    \end{itemize}
+  \item
+    Each slice contains random variables:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Hidden RVs (e.g., \(\vX_t\))
+    \item
+      Observable RVs (e.g., \(\vE_t\))
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Continuous time models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model uncertainty over continuous time with stochastic differential
+    equations (SDEs)
+  \item
+    Discrete time models approximate SDEs
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Markov Property}
+\protect\phantomsection\label{markov-property}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{In general}}, current state \(\vX_t\) depends
+  on a growing number of past states: \[
+  \Pr(\vX_t | history)
+  \defeq \Pr(\vX_t | \vX_{0:t-1})
+  = \Pr(\vX_t | \vX_0, \vX_1, ..., \vX_{t-1})
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Of course, there can't be dependency from the future \(\vX_{t + k}\)
+    with \(k > 0\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Markov property}}: current state depends
+  (conditionally) only on a finite fixed number of \(k\) previous
+  states: \[
+  \begin{aligned}
+  \Pr(\vX_t | \vX_{0:t-1})
+  & = \Pr(\vX_t | \textcolor{red}{\vX_0, \vX_1, ..., \vX_{t-k-1}},
+    \textcolor{purple}{\vX_{t-k}, ..., \vX_{t-1}}) \\
+  & = \Pr(\vX_t | \textcolor{purple}{\vX_{t-k:t-1}})
+  \end{aligned}
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Markov Process}
+\protect\phantomsection\label{markov-process}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Markov processes}} (aka Markov chains) have
+  the Markov property \[
+  \Pr(\vX_t | history) = \Pr(\vX_t | \textcolor{purple}{\vX_{t-k:t-1}})
+  \; \forall k, t
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{First-order Markov process}}: current
+  state \(\vX_t\) depends only on previous state \(\vX_{t-1}\): \[
+  \Pr(\vX_t | history) = \Pr(\vX_t | \textcolor{purple}{\vX_{t-1}})
+  \; \forall k, t
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Next state depends only on previous state, not full history
+  \item
+    \emph{Intuition}: system ``forgets'' everything except immediate
+    last state
+  \item
+    Bayesian network for a first-order Markov process:
+    \includegraphics[width=0.7\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}
+  \item
+    E.g., probability of rain today depends only on yesterday,
+    \(\Pr(R_t | R_{t-1}) \; \forall t\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Second-order Markov process}}: current state
+  \(\vX_t\) depends only on \(\vX_{t-1}\) and \(\vX_{t-2}\)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Time-Homogeneous Process}
+\protect\phantomsection\label{time-homogeneous-process}
+\begin{itemize}
+\item
+  Even with the Markov assumption, there is an infinite number of
+  probability distributions, one for each \(t\) \[
+  \Pr(\vX_t | \vX_{t-1:t-k})
+  \]
+\item
+  \textbf{\textcolor{red}{Time-homogeneous}} (aka stationarity):
+  probability remains constant by translation over \(t\) \[
+  \Pr(\textcolor{purple}{\vX_t} | \vX_{0:t-1})
+  = \Pr(\textcolor{purple}{\vX_{t-k}} | \vX_{0:t-k-1}) \; \forall k, t
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Intuition}: even if process evolves, governing laws remain
+    unchanged
+  \item
+    E.g., in the real-world, most physical laws are constant
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{First-Order Time-Homogeneous Process}
+\protect\phantomsection\label{first-order-time-homogeneous-process}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{First-order Markov property}} \[
+  \Pr(\vX_t | history) = \Pr(\vX_t | \textcolor{purple}{\vX_{t-1}})
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Time-homogeneous}} \[
+  \Pr(\textcolor{purple}{\vX_t} | \vX_{0:t-1}) = \Pr(\textcolor{purple}{\vX_{t-k}} | \vX_{0:t-k-1}) \;
+  \forall k, t
+  \]
+\item
+  \textbf{\textcolor{blue}{First-order time-homogeneous}}: putting both
+  properties together, one conditional probability table suffices: \[
+  \Pr(\vX_t | \vX_{t-1}) = \Pr(\vX_{t-k} | \vX_{t-k-1}) \; \forall k, t
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., rain probability for today depends only on yesterday and is
+    constant: \(\Pr(R_t | R_{t-1}) = f(R_{t-1}) \; \forall t\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sensor Model}
+\protect\phantomsection\label{sensor-model}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{In general}}, evidence variables \(\vE_t\)
+  depend on:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Previous state of the world \(\vX_{0:t}\)
+  \item
+    Previous sensor values \(\vE_{0:t-1}\) \[
+    \Pr(\vE_t | \vX_{0:t}, \vE_{0:t-1})
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Sensor Markov property}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assume sensor value \(\vE_t\) depends only on current state
+    \(\vX_t\), not on previous sensor values \[
+    \Pr(\vE_t | \vX_{0:t}, \textcolor{purple}{\vE_{0:t-1}})
+    = \Pr(\vE_t | \vX_t)
+    \]
+  \item
+    In a Bayesian network, even if \(\vX_t\) and \(\vE_t\) are
+    contemporaneous, the arrow goes from \(\vX_t \to \vE_t\) since the
+    world causes the sensor to take on particular values
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sensor Model: Rain Example}
+\protect\phantomsection\label{sensor-model-rain-example}
+\begin{itemize}
+\item
+  Consider the Bayesian network for the \textbf{rain model}
+\item
+  The world causes the sensor to take specific values
+  \(\vX_t \to \vE_t\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \(Rain_t \to Umbrella_t\), since rain ``causes'' the umbrella
+    to appear
+  \item
+    Inference goes the other direction: \emph{``see the umbrella, guess
+    if it's raining''}
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{\green{transition model}} is \(\Pr(Rain_t | Rain_{t-1})\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(R_t | R_{t-1}=T) = 0.7\)
+  \item
+    \(\Pr(R_t | R_{t-1}=F) = 0.4\)
+  \item
+    The sum doesn't have to be 1 since it's a conditional probability
+  \end{itemize}
+\item
+  The \textbf{\blue{sensor model}} is \(\Pr(Umbrella_t | Rain_t)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\Pr(U_t | R_t=T) = 0.9\) (people forget the umbrella)
+  \item
+    \(\Pr(U_t | R_t=F) = 0.2\) (people are paranoid)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\vspace{1cm}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Prior Probability}
+\protect\phantomsection\label{prior-probability}
+\begin{itemize}
+\tightlist
+\item
+  Complete system specification needs
+  \textbf{\textcolor{red}{prior probability of state variables}} at
+  initial time, \(\Pr(\vX_0)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represents initial belief about system state before observations
+  \item
+    Crucial for initializing state estimation process
+  \end{itemize}
+\item
+  E.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\vX_0\) represents position and velocity of a moving object
+  \item
+    \(\Pr(\vX_0)\) could be a Gaussian distribution centered around an
+    initial guess of object's position and velocity with uncertainty
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{First-Order Markov Process: Joint Distribution}
+\protect\phantomsection\label{first-order-markov-process-joint-distribution}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Goal}}: model a sequence of states
+  \(\vX_0, \vX_1, ..., \vX_t\) and observations \(\vE_1, ..., \vE_t\)
+  over time, i.e., \(\Pr(\vX_{0:t}, \vE_{1:t})\)
+\item
+  \textbf{\textcolor{orange}{Express the joint distribution}} of \(n\)
+  random variables using the chain rule: \[
+  \Pr(\vX_1, ..., \vX_n) = \prod_{i=1}^n \Pr(\vX_i | \vX_{0:i-1})
+  \]
+\item
+  Like for Bayesian networks
+  \textbf{\textcolor{darkgreen}{factorize joint distribution}} according
+  to graph dependencies: \[
+  \Pr(\vX_1, ..., \vX_n) = \prod_{i=1}^n \Pr(\vX_i | \text{parents}(\vX_i))
+  \]
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\item
+  \textbf{\textcolor{teal}{First-order Markov assumption}}:
+  \[\Pr(\vX_i | \vX_{0:i-1}) = \Pr(\vX_i | \vX_{i-1})\]
+\item
+  \textbf{\textcolor{cyan}{First-order Markov sensor model}}:
+  \[\Pr(\vE_i | \vX_{0:i}, \vE_{1:i-1}) = \Pr(\vE_i | \vX_i)\]
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{First-Order Markov Process: Joint Distribution}
+\protect\phantomsection\label{first-order-markov-process-joint-distribution-1}
+\begin{itemize}
+\tightlist
+\item
+  Putting everything together, the joint distribution probability for a
+  time-homogeneous first-order Markov process: \begin{align*}
+  \Pr(\vX_{0:t}, \vE_{1:t})
+  & = \red{\Pr(\vX_0)} 
+    \prod_{i=1}^t \green{\Pr(\vX_i | \vX_{i-1})} \blue{\Pr(\vE_i | \vX_i)} \\
+  & = \red{prior} \times \prod_{i} \green{transition model} \times \blue{sensor model} \\
+  \end{align*}
+\end{itemize}
+
+\vspace{-0.5cm}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Remarks}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The state evolves probabilistically from the previous state
+    (transition model)
+  \item
+    This structure reduces complexity and enables tractable inference
+  \item
+    A Bayesian network can represent a temporal model by modeling time
+    with indices \(t\), i.e., ``unrolling the model''
+  \end{itemize}
+\item
+  \textbf{Problem}: infinite \(t\), even assuming the Markov property
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Improving Approximation of Real-World Systems}
+\protect\phantomsection\label{improving-approximation-of-real-world-systems}
+\begin{itemize}
+\tightlist
+\item
+  Is first-order Markov process a
+  \textbf{\textcolor{red}{reasonable approximation of reality}}?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Particle following random walk is well represented by Markov process
+  \item
+    In umbrella example, rain depends only on previous day
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{How to improve the approximation}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \emph{Increase order of Markov process model}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Model ``rarely rains more than two days in a row'' with
+      second-order Markov model \(\Pr(Rain_t | Rain_{t-1}, Rain_{t-2})\)
+    \end{itemize}
+  \item
+    \emph{Increase number of state variables}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Add \(Season_t\) to incorporate historical records
+    \item
+      Transition model becomes more complicated
+    \end{itemize}
+  \item
+    \emph{Increase number of sensor variables}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Add \(Location_t, Temperature_t, Humidity_t, Pressure_t\)
+    \item
+      Simplifies modeling of state
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Reasoning Over Time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Definitions
+  \item
+    \emph{\textbf{\textcolor{red}{Defining Temporal Inference Tasks}}}
+  \item
+    Solving Temporal Inference Tasks
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Inference Tasks in Temporal Models}
+\protect\phantomsection\label{inference-tasks-in-temporal-models}
+\begin{itemize}
+\tightlist
+\item
+  There are \textbf{\textcolor{red}{several tasks}} in temporal
+  inference
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1840}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4800}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3360}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Task}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Description}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Estimate}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Filtering & Estimate \emph{current} state given past / current obs &
+\(\Pr(\vX_t | \vE_{1:t})\) \\
+Prediction & Estimate \emph{future} state given past / current obs &
+\(\Pr(\vX_{t+k} | \vE_{1:t})\) for \(k > 0\) \\
+Smoothing & Estimate \emph{past} state given past, current, and
+\emph{future} obs & \(\Pr(\vX_k | \vE_{1:T})\) for \(T < k\) \\
+Most likely explanation & Find most probable sequence of states given
+the evidence & \(\argmax_{\vx_{1:T}} \Pr(\vX_{1:t} | \vE_{1:t})\) \\
+Learning & Learn model parameters or structure from data & \(\theta\) of
+a model \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Task 1: Filtering}
+\protect\phantomsection\label{task-1-filtering}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Filtering}} (aka ``state estimation'')
+  computes the posterior distribution of the \emph{current state} given
+  \emph{all evidence to date}: \[
+  \Pr(\vX_t | \vE_{1:t} = \ve_{1:t})
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimate probability of rain today, given all umbrella observations
+    so far \(\Pr(Rain_t | Umbrella_{1:t})\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Application}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Filtering needed by a rational agent to \emph{track current state}
+  \item
+    Agent believes current state \(\Pr(\vX_{t-1})\) at time \(t - 1\)
+  \item
+    New evidence \(\ve_t\) arrives for time \(t\)
+  \item
+    Agent updates belief about current state \(\Pr(\vX_t)\) at time
+    \(t\)
+  \end{itemize}
+\item
+  \emph{``Filtering''} refers to filtering out noise in a signal by
+  estimating system parameters
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 2: Prediction}
+\protect\phantomsection\label{task-2-prediction}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Prediction}} involves predicting the posterior
+  distribution over a \emph{future state}, given \emph{all evidence to
+  date}: \[
+  \Pr(\vX_{t+k} | \vE_{1:t} = \ve_{1:t}) \text{ with } k > 0
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., compute the probability of rain three days from now: \[
+    \Pr(Rain_{t+3} | Umbrella_{1:t})
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Application}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Prediction helps rational agents evaluate actions based on expected
+    outcomes
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 3: Smoothing}
+\protect\phantomsection\label{task-3-smoothing}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Smoothing}} compute posterior distribution
+  over a \emph{past state} given \emph{all past, present, and future
+  evidence}: \[
+  \Pr(\vX_k | \vE_{1:t} = \ve_{1:t}) \text{ with } 0 \le k < t
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Important}}: you have information
+    about the ``future'' of the evidence, but not the state
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Application}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Smoothing provides a better state estimate by incorporating more
+    future evidence
+  \item
+    E.g., compute the probability it rained last Wednesday, given all
+    observations up to today
+  \end{itemize}
+\item
+  The term \emph{``smoothing''} refers to the state estimate being
+  smoother than filtering
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 4: Most-Likely Explanation}
+\protect\phantomsection\label{task-4-most-likely-explanation}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Most-likely explanation}} finds the sequence
+  of states \(\vX_{1:t}\) most likely to have generated observations
+  \(\vE_{1:t}\): \[
+  \argmax_{\vX_{1:t}} \Pr(\vX_{1:t} | \vE_{1:t})
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Umbrella appeared on 3 days, not on the fourth
+    \item
+      Most likely explanation: rained for 3 days, then stopped
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Speech recognition: most likely sequence of words given sounds
+  \item
+    Digital processing: reconstruct bit strings over a noisy channel
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 5: Learning}
+\protect\phantomsection\label{task-5-learning}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Learning}} involves estimating the transition
+  model \(\Pr(\vX_t | \vX_{0:t-1})\) and the sensor model
+  \(\Pr(\vE_i | \vX_i)\) from observations
+\item
+  Learning benefits from smoothing rather than filtering for better
+  state estimates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Smoothing uses all data to estimate states, leading to more accurate
+    models
+  \item
+    E.g., in weather prediction, smoothing uses past, present, and
+    future data to better estimate current weather state
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Reasoning Over Time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Definitions
+  \item
+    Defining Temporal Inference Tasks
+  \item
+    \emph{\textbf{\textcolor{red}{Solving Temporal Inference Tasks}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving Task 1: Filtering}
+\protect\phantomsection\label{solving-task-1-filtering}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Filtering}} computes the posterior
+  distribution of the \emph{current state} given \emph{all evidence to
+  date}, i.e., \(\Pr(\vX_t | \vE_{1:t} = \ve_{1:t})\)
+\item
+  A practical filtering algorithm updates the current state estimate
+  \(\vX_{t+1}\) using the previous state \(\vX_t\) and the new evidence
+  \(\ve_{t+1}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Instead of recomputing each state by going over the entire history
+    of the percepts
+  \item
+    Aka ``recursive state estimation'' \begin{align*}
+    & \Pr(\vX_{t+1} | \ve_{1:t+1}) = f(\Pr(\vX_t | \ve_{1:t}), \ve_{t+1}) \\
+    & NextState = f(PreviousState, \ve_{t+1}) \\
+    \end{align*}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Why?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Time and space requirements for updating must be constant for a
+    (finite) agent to keep track of current state indefinitively
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Is it possible?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What is the formula \(f(...)\)?
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recursive Filtering: Update Formula}
+\protect\phantomsection\label{recursive-filtering-update-formula}
+\begin{itemize}
+\item
+  Compute the state at time \(t+1\) with all the evidence up to that
+  time
+\item
+  Assume that state and evidence are scalar and not vector
+  \begingroup \footnotesize
+  \begin{alignat*}{2}
+  & \Pr(X_{t+1} | e_{1:t+1})
+    & & \\
+  &= \Pr(X_{t+1} | \red{e_{1:t}, e_{t+1}})
+    & \quad & \red{\text{Divide up the evidence}} \\
+  &= \alpha \Pr(e_{t+1}|X_{t+1},\green{e_{1:t}}) \Pr(X_{t+1}|\green{e_{1:t}})
+    & \quad & \green{\text{Bayes rule given }} \\
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \Pr(X_{t+1}|e_{1:t})
+    & \quad & \text{\cyan{Markov sensor assumption}} \\
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|\blue{x_t},\violet{e_{1:t}}) \Pr(\blue{x_t} | e_{1:t})
+    & \quad & \text{\blue{Condition on current state}} \\
+  &= \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
+    & \quad & \text{\violet{Markov assumption}} \\
+  \end{alignat*}
+  \endgroup
+\item
+  It has the expected form: \[
+  \Pr(X_{t+1} | e_{1:t+1}) = f(\Pr(X_t | e_{1:t}), e_{t+1})
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recursive Filtering: Update Formula}
+\protect\phantomsection\label{recursive-filtering-update-formula-1}
+\begin{itemize}
+\tightlist
+\item
+  The update formula for the state is: \[
+  \Pr(X_{t+1} | e_{1:t+1})
+  = \alpha \Pr(e_{t+1}|X_{t+1}) \sum_{x_t} \Pr(X_{t+1}|x_t) \Pr(x_t | e_{1:t})
+  \]
+\item
+  The next state is ``Sensor model x Transition model x Recursive
+  state''
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sensor model: \(\Pr(e_{t+1}|X_{t+1})\)
+  \item
+    Transition model: \(\Pr(X_{t+1}|x_t)\)
+  \item
+    Recursive term: \(\Pr(x_t|e_{1:t})\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Recursive Filtering: Intuition}
+\protect\phantomsection\label{recursive-filtering-intuition}
+\begin{itemize}
+\item
+  Recursive state estimation updates the state belief as new evidence
+  arrives \[
+  \textcolor{red}{\Pr(X_{t+1} | e_{1:t+1})}
+  = \textcolor{darkgreen}{\alpha \Pr(e_{t+1} | X_{t+1})}
+  \textcolor{blue}{\sum_{x_t} \Pr(X_{t+1} | x_t) \textcolor{purple}{\Pr(x_t | e_{1:t})}}
+  \] in \textbf{\black{two steps}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\black{Prediction step}}: Use the transition model to
+    predict the next state based on the current belief \[
+    \textcolor{blue}{\Pr(X_{t+1} | e_{1:t})
+      = \sum_{x_t} \Pr(X_{t+1} | x_t) \textcolor{purple}{\Pr(x_t | e_{1:t})}}
+    \]
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Intuition: Project the current belief forward using the model of
+      system evolution
+    \end{itemize}
+  \item
+    \textbf{\black{Update step}}: Incorporate the new observation to
+    refine the prediction \[
+    \textcolor{red}{\Pr(X_{t+1} | e_{1:t+1})} =
+    \textcolor{darkgreen}{\alpha \Pr(e_{t+1} | X_{t+1})} \textcolor{blue}{\Pr(X_{t+1} | e_{1:t})}
+    \]
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Intuition: Correct the prediction using the likelihood of the new
+      evidence
+    \end{itemize}
+  \end{enumerate}
+\item
+  Maintain \purple{$\Pr(X_t | e_{1:t})$}, the probability of the current
+  state given all past evidence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., in a weather model, if it was likely to rain today and rain
+    usually continues, the prediction leans toward rain tomorrow
+  \item
+    Seeing an umbrella supports this and updates the belief accordingly
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Forward update}
+\protect\phantomsection\label{forward-update}
+\begin{itemize}
+\item
+  We achieved: \begin{align*}
+  \Pr(\vX_{t+1} | \ve_{1:t+1})
+  &= \alpha \Pr(\ve_{t+1}|\vX_{t+1}) \sum_{x_t} \Pr(\vX_{t+1}|\vx_t) \Pr(\vx_t | \ve_{1:t}) \\
+  &= f(\Pr(\vX_t | \ve_{1:t}), \ve_{t+1}) \\
+  \end{align*}
+\item
+  The filtered estimate \(\vf_{1:t} = \Pr(\vX_t | \ve_{1:t})\) is
+  propagated forward and updated by each transition and new observation
+  \[
+  \vf_{1:t+1} = Forward(\vf_{1:t}, \ve_{t+1})
+  \] starting with the initial condition \(\vf_{1:0} = \Pr(\vX_0)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is called ``forward update''
+  \end{itemize}
+\item
+  This process allows efficient online inference without storing the
+  full history
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Time and space requirements for updating is constant
+  \item
+    A (finite) agent can keep track of current state indefinitively
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving Task 2: Prediction}
+\protect\phantomsection\label{solving-task-2-prediction}
+\begin{itemize}
+\item
+  Prediction is equivalent to filtering without updating the state with
+  new evidence, since there is no evidence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Only the transition model is needed, not the sensor model
+  \end{itemize}
+\item
+  The rule predicting state \(\vX_{t+k+1}\) given state \(\vX_{t+k}\)
+  and evidence \(\vE_{1:t}\) is:
+
+  \[
+  \Pr(\vX_{t+k+1} | \ve_{1:t}) =
+  \sum_{\vx_{t+k}} \Pr(\vX_{t+k+1} | \vx_{t+k}) \Pr(\vx_{t+k} | \ve_{1:t})
+  \]
+\item
+  This equation can be used recursively to advance over time
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Predicting even a few steps ahead generally incurs large uncertainty
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Solving Task 3: Smoothing}
+\protect\phantomsection\label{solving-task-3-smoothing}
+\begin{itemize}
+\tightlist
+\item
+  You want to calculate the probability distribution over the hidden
+  state at time \(k\), given all evidence up to time \(t\) (in the
+  future!) \[
+  \Pr(X_k | e_{1:t}) \text{  where } 0 \le k < t
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Filtering gives \(\Pr(X_k | e_{1:k})\) using past and present
+    evidence
+  \item
+    Smoothing refines the estimate of past states using later evidence
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You're tracking whether it was raining yesterday
+  \item
+    You had some evidence up to yesterday (e.g., a cloudy sky)
+  \item
+    Today you see puddles on the ground
+  \item
+    That new observation supports the idea that yesterday was raining
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 3: Smoothing: Update Formula}
+\protect\phantomsection\label{task-3-smoothing-update-formula}
+\begin{itemize}
+\item
+  Using the same math as for filtering and the two key assumptions of
+  Markov process and Markov sensor
+\item
+  \textbf{\textcolor{red}{Forward Pass (aka filtering):}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Move forward through time, using the filtering algorithm to compute:
+    \[
+    f_{1:k} = \Pr(X_k | e_{1:k})
+    \]
+  \item
+    This gives you a ``best guess'' of the state at time \(k\), based
+    only on evidence up to \(k\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Backward Pass (aka smoothing):}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Move backward through time from time \(t\), computing: \[
+    b_{k+1:t} = \Pr(e_{k+1:t} | X_k)
+    \]
+  \item
+    This captures how likely the future evidence is, given a particular
+    value of \(X_k\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Combine them:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Multiply forward and backward messages to get: \[
+    \Pr(X_k | e_{1:t}) \propto f_{1:k} \times b_{k+1:t}
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 4: Most Likely Explanation: Intuition 1/2}
+\protect\phantomsection\label{task-4-most-likely-explanation-intuition-12}
+\begin{itemize}
+\tightlist
+\item
+  You are tracking the weather (sunny or rainy) based on whether someone
+  carries an umbrella
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You can't see \(Weather\) directly (hidden state), but you observe
+    umbrellas (which is a noisy observation)
+  \item
+    You have 5 observations \(Umbrella = [T, T, F, T, T]\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Question}}: what is the most likely sequence
+  of \(Weather\) states that explains the \(Umbrella\) observations?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You know something about:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      the transition model (i.e., ``it tends to rain several days in a
+      row'')
+    \item
+      the sensor model (i.e., ``people often forget the umbrella'')
+    \end{itemize}
+  \end{itemize}
+\item
+  Mathematically: \[
+  \argmax_{x_{1:t}} \Pr(x_{1:t} | e_{1:t}) =
+  \argmax_{Weather_{1:t}} \Pr(Weather_{1:t} | Umbrella_{1:t})
+  \]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Task 4: Most Likely Explanation: Intuition 2/2}
+\protect\phantomsection\label{task-4-most-likely-explanation-intuition-22}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Naive approach}}: Use smoothing to choose the
+  most likely state at each time step
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cons
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Might lead to an implausible overall path
+    \item
+      Suboptimal since the question addresses joint probability and we
+      are not using all the information (only one step at the time!)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Viterbi algorithm}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Constructs a path through a state-time graph with states as nodes
+    and transitions as edges
+  \item
+    Finds the most likely entire path through the hidden states
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key difference:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In speech recognition, find the most likely word sequence behind a
+    noisy audio signal
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Smoothing: Best guess per time step (may miss non-English words or
+      suboptimal sequence)
+    \item
+      Viterbi: Best overall path (maximizes joint probability of the
+      entire sequence)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Viterbi Algorithm: Intuition}
+\protect\phantomsection\label{viterbi-algorithm-intuition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}: Find the most likely sequence of
+  hidden states given observations
+\end{itemize}
+
+\begin{enumerate}
+\tightlist
+\item
+  Initialization
+
+  \begin{itemize}
+  \tightlist
+  \item
+    At \(t = 1\), estimate probability of starting in each state using
+    initial state distribution and observation likelihood
+  \end{itemize}
+\item
+  Recursion via dynamic programming
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For each \(t > 1\), for each state \(x_t\):
+  \item
+    Compute maximum probability path to \(x_t\) from any previous state
+  \item
+    Use:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(\Pr(x_t | x_{t-1})\): transition model
+    \item
+      \(\Pr(e_t | x_t)\): sensor model
+    \item
+      Best path probability to \(x_{t-1}\) from prior step
+    \end{itemize}
+  \item
+    Store probability and corresponding back-pointer to \(x_{t-1}\)
+  \end{itemize}
+\item
+  Termination and backtrace
+
+  \begin{itemize}
+  \tightlist
+  \item
+    At final time \(t = T\), identify state with highest final
+    probability
+  \item
+    Trace back through stored pointers to reconstruct optimal path
+  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Viterbi Algorithm: Example 1/2}
+\protect\phantomsection\label{viterbi-algorithm-example-12}
+\begin{itemize}
+\tightlist
+\item
+  You observe a friend carrying an umbrella over 3 days
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(Umbrella = [Yes, Yes, No]\)
+  \end{itemize}
+\item
+  You want to infer the most likely sequence of hidden \(Weather\)
+  states
+
+  \begin{itemize}
+  \item
+    States: \(S = \{\text{Sunny}, \text{Rainy}\}\) (weather)
+  \item
+    Observations: \(O = \{\text{Yes}, \text{No}\}\) (umbrella)
+  \item
+    Initial Probabilities:
+
+    \[
+    \Pr(\text{Sunny}) = 0.6, \quad \Pr(\text{Rainy}) = 0.4
+    \]
+  \item
+    Transition Probabilities:
+
+    \[
+    \begin{aligned}
+    \Pr(\text{Sunny} \to \text{Sunny}) &= 0.7, \quad \Pr(\text{Sunny} \to \text{Rainy}) = 0.3 \\
+    \Pr(\text{Rainy} \to \text{Sunny}) &= 0.4, \quad \Pr(\text{Rainy} \to \text{Rainy}) = 0.6
+    \end{aligned}
+    \]
+  \item
+    Observation (Emission) Probabilities:
+
+    \[
+    \begin{aligned}
+    \Pr(\text{Yes} | \text{Sunny}) &= 0.1, \quad \Pr(\text{No} | \text{Sunny}) = 0.9 \\
+    \Pr(\text{Yes} | \text{Rainy}) &= 0.8, \quad \Pr(\text{No} | \text{Rainy}) = 0.2
+    \end{aligned}
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Viterbi Algorithm: Example 2/2}
+\protect\phantomsection\label{viterbi-algorithm-example-22}
+\begin{itemize}
+\tightlist
+\item
+  Viterbi table
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.0746}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1194}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.6119}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1940}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Day
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+State
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Probability
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Backpointer
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+1 & Sunny & \(0.6 \times 0.1 = \mathbf{0.06}\) & --- \\
+& Rainy & \(0.4 \times 0.8 = \mathbf{0.32}\) & --- \\
+2 & Sunny &
+\(\max(0.06 \times 0.7,\ 0.32 \times 0.4) \times 0.1 = \mathbf{0.0128}\)
+& Rainy \\
+& Rainy &
+\(\max(0.06 \times 0.3,\ 0.32 \times 0.6) \times 0.8 = \mathbf{0.1536}\)
+& Rainy \\
+3 & Sunny &
+\(\max(0.0128 \times 0.7,\ 0.1536 \times 0.4) \times 0.9 = \mathbf{0.0553}\)
+& Rainy \\
+& Rainy &
+\(\max(0.0128 \times 0.3,\ 0.1536 \times 0.6) \times 0.2 = \mathbf{0.0184}\)
+& Rainy \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Final most probable state
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Sunny (Day 3)
+  \end{itemize}
+\item
+  Find the most likely sequence
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\text{Rainy} \rightarrow \text{Rainy} \rightarrow \text{Sunny}\)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}

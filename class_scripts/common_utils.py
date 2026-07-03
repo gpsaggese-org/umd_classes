@@ -71,7 +71,7 @@ def find_lecture_file(dir_path: str, lesson: str) -> Path:
         files,
     )
     file_path = Path(files[0])
-    _LOG.info("Found lecture file: %s", file_path)
+    _LOG.debug("Found lecture file: %s", file_path)
     return file_path
 
 
