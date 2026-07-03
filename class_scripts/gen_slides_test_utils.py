@@ -228,17 +228,18 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         Test preprocessing output for a set of lessons.
 
         :param course_dir: Course directory (e.g., "data605")
-        :param output_dir: Output directory for test results
         :param lessons: List of lesson numbers to test
         :param output_type: Either "pdf", "html", or "slides"
         :param toc_type: Type of table of contents ("none", "pandoc_native",
             "navigation", "remove_headers")
         """
         _LOG.debug(
-            hprint.to_str("course_dir output_dir lessons output_type toc_type")
+            hprint.to_str("course_dir lessons output_type toc_type")
         )
+        hdbg.dassert_in(output_type, ("pdf", "html", "slides"))
         scratch_dir = self.get_scratch_space()
-        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type.upper()}", file=sys.stderr, disable=False):
+        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type}",
+            file=sys.stderr, disable=False):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
@@ -267,18 +268,18 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             )
             _LOG.debug("Running command: %s", cmd)
             hsystem.system(cmd)
-            #sys.stdout.flush()
             # Extract and check output after preprocessing.
             hdbg.dassert_file_exists(output_file)
             content = hio.from_file(output_file)
             self.check_string(content, fuzzy_match=True, tag=lesson)
-            #sys.stdout.flush()
             _LOG.debug(
-                "Verified %s preprocessing for lesson %s",
-                output_type.upper(),
-                lesson,
+                "Verified %s preprocessing for lesson %s", output_type, lesson,
             )
+            #
+            sys.stdout.flush()
+            sys.stderr.flush()
 
+    # TODO(ai_gp): Factor out common code
     @pytest.mark.superslow
     def test_preprocess_notes_pdf(self) -> None:
         """
@@ -327,7 +328,6 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
 # #############################################################################
 
 
-@pytest.mark.superslow
 class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation using `notes_to_pdf.py`.
@@ -347,16 +347,15 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     def _run_notes_to_pdf_py(
         self,
         course_dir: str,
-        output_dir: str,
         lessons: List[str],
         output_type: str,
+        *,
         skip_actions: Optional[List[str]] = None,
     ) -> None:
         """
         Test notes_to_pdf.py output (MD or TeX) for a set of lessons.
 
         :param course_dir: Course directory (e.g., "data605")
-        :param output_dir: Output directory for test results
         :param lessons: List of lesson numbers to test
         :param output_type: Either "md" for markdown or "tex" for LaTeX output
         :param skip_actions: Additional actions to skip (in addition to
@@ -364,46 +363,46 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         """
         _LOG.debug(
             hprint.to_str(
-                "course_dir output_dir lessons output_type skip_actions"
+                "course_dir lessons output_type skip_actions"
             )
         )
+        hdbg.dassert_in(output_type, ("pdf", "tex", "typ"))
+        scratch_dir = self.get_scratch_space()
         if skip_actions is None:
             skip_actions = []
         for lesson in tqdm(
-            lessons, desc=f"Testing {output_type.upper()} output"
-        ):
+            lessons, desc=f"Testing {output_type} output",
+            file=sys.stderr, disable=False):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
             # Use lesson-specific output directory to avoid file conflicts.
-            lesson_dir = os.path.join(output_dir, f"lesson_{lesson}")
+            lesson_dir = os.path.join(scratch_dir, f"lesson_{lesson}")
             hio.create_dir(lesson_dir, incremental=True)
             #
             # TODO(ai_gp): Use _extract_slide_metadata() to decide if the slides
             # for a lesson are typ or latex
             #
-            # TODO(ai_gp): Add an explanation of what output_file and temp_file
-            # mean.
             # `output_file` is the final rendered artifact (PDF/TeX/Typst);
-            # `temp_file` is the intermediate file whose content is checked
+            # `to_check_file` is the intermediate file whose content is checked
             # against the expected test output via `check_string()`.
-            if output_type == "md":
+            if output_type == "pdf":
                 output_file = os.path.join(lesson_dir, "output.pdf")
-                temp_file = os.path.join(
-                    lesson_dir, "tmp.notes_to_pdf.preprocess_notes.txt"
-                )
+                # No file to check.
+                to_check_file = ""
+                extra_args = ""
             elif output_type == "tex":
                 output_file = os.path.join(lesson_dir, "output.tex")
-                temp_file = os.path.join(
-                    lesson_dir, "tmp.notes_to_pdf.render_image2.tex"
-                )
+                # The file to check_string is the output tex file.
+                to_check_file = output_file
+                # Only generate the tex file.
+                extra_args = "--no_pdf"
             elif output_type == "typ":
                 output_file = os.path.join(lesson_dir, "output.typ")
-                # TODO(ai_gp): No intermediate file name is set for "typ" yet,
-                # so `temp_file` resolves to `lesson_dir` itself.
-                temp_file = os.path.join(
-                    lesson_dir, ""
-                )
+                # The file to check_string is the output tex file.
+                to_check_file = output_file
+                # Only generate the typ file.
+                extra_args = "--no_pdf"
             else:
                 raise ValueError(f"Unknown output_type: {output_type}")
             # Prepare command arguments.
@@ -418,8 +417,6 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             skip_action_args = " ".join(
                 f"--skip_action={action}" for action in all_skip_actions
             )
-            # Build tex_only argument for tex tests.
-            tex_only_arg = "--tex_only" if output_type == "tex" else ""
             # Build and execute command.
             cmd = (
                 f"notes_to_pdf.py "
@@ -428,60 +425,76 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 f"--type={output_type_arg} "
                 f"--toc_type={toc_type_arg} "
                 f"{skip_action_args} "
-                f"{tex_only_arg}"
+                f"{extra_args}"
             )
-            _LOG.info(f"Running command: {cmd}")
+            _LOG.debug("Running command: %s", cmd)
             hsystem.system(cmd)
-            sys.stdout.flush()
-            # Extract and check output after preprocessing.
-            hdbg.dassert_file_exists(temp_file)
-            content = hio.from_file(temp_file)
-            self.check_string(content, fuzzy_match=True, tag=lesson)
-            sys.stdout.flush()
-            _LOG.info(
-                "Verified %s output for lesson %s", output_type.upper(), lesson
+            # Check output.
+            _LOG.debug(hprint.to_str("output_file"))
+            hdbg.dassert_file_exists(output_file)
+            #
+            # Process file to check, if any.
+            _LOG.debug(hprint.to_str("to_check_file"))
+            if to_check_file:
+                content = hio.from_file(to_check_file)
+                self.check_string(content, fuzzy_match=True, tag=lesson)
+            #
+            _LOG.debug(
+                "Verified %s output for lesson %s", output_type, lesson
             )
+            sys.stdout.flush()
 
-    @pytest.mark.superslow
-    def test_notes_to_pdf_md(self) -> None:
-        """
-        Test converting notes to PDF (markdown intermediate).
-        """
-        _LOG.debug(hprint.to_str("self.COURSE_DIR"))
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
-        lessons = _get_lesson_numbers(self.COURSE_DIR)
-        skip_actions = ["run_pandoc"]
-        self._run_notes_to_pdf_py(
-            self.COURSE_DIR, output_dir, lessons, "md", skip_actions
-        )
+    # TODO(ai_gp): Factor out common code
 
     @pytest.mark.superslow
     def test_notes_to_pdf_tex(self) -> None:
         """
-        Test converting notes to PDF (TeX intermediate).
+        Test converting and saving notes to TeX.
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
         lessons = _get_lesson_numbers(self.COURSE_DIR)
+        output_type = "tex"
         self._run_notes_to_pdf_py(
-            self.COURSE_DIR, output_dir, lessons, "tex"
+            self.COURSE_DIR, lessons, output_type
         )
 
     @pytest.mark.superslow
     def test_notes_to_pdf_typ(self) -> None:
         """
-        Test converting notes to PDF (Typst intermediate).
+        Test converting and saving notes to Typst.
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        output_dir = self.get_output_dir()
         lessons = _get_lesson_numbers(self.COURSE_DIR)
+        output_type = "typ"
         self._run_notes_to_pdf_py(
-            self.COURSE_DIR, output_dir, lessons, "typ"
+            self.COURSE_DIR, lessons, output_type
         )
    
+    @pytest.mark.superslow
+    def test_notes_to_pdf(self) -> None:
+        """
+        Test converting notes to PDF. Nothing is saved only, check that the PDF
+        is generated.
+
+        > notes_to_pdf.py \
+            --input=msml610/lectures_source/Lesson00-Class.txt
+            --output=...tmp.scratch/lesson_00/output.pdf
+            --type=slides \
+            --toc_type=navigation \
+            --skip_action=cleanup_after \
+            --skip_action=open
+        """
+        _LOG.debug(hprint.to_str("self.COURSE_DIR"))
+        hdbg.dassert_ne(self.COURSE_DIR, "")
+        lessons = _get_lesson_numbers(self.COURSE_DIR)
+        output_type = "pdf"
+        self._run_notes_to_pdf_py(
+            self.COURSE_DIR, lessons, output_type,
+        )
+
+    # TODO(ai_gp): Add one for typ_pdf
 
 # #############################################################################
 # Run_gen_slides_py_TestCase
@@ -509,7 +522,7 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         """
         _LOG.debug(hprint.to_str("course_dir lesson"))
         cmd = (
-            f"gen_slides.py {course_dir}/{lesson} --skip_action open --tex_only"
+            f"gen_slides.py {course_dir}/{lesson} --skip_action open --no_pdf"
         )
         hsystem.system(cmd)
 
@@ -531,20 +544,3 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         hdbg.dassert_ne(self.COURSE_DIR, "")
         hdbg.dassert_ne(self.SECOND_LESSON, "")
         self._run_gen_slides(self.COURSE_DIR, self.SECOND_LESSON)
-
-    @pytest.mark.superslow
-    def test_render_all_lessons(self) -> None:
-        """
-        Test generating slides for all the lessons.
-        """
-        _LOG.debug(hprint.to_str("self.COURSE_DIR"))
-        hdbg.dassert_ne(self.COURSE_DIR, "")
-        lessons = _get_lesson_numbers(self.COURSE_DIR)
-        for lesson in tqdm(lessons, desc="Rendering lessons to TeX"):
-            cmd = f"gen_slides.py {self.COURSE_DIR}/{lesson} --skip_action open --tex_only"
-            hsystem.system(cmd)
-            _LOG.info(
-                "Successfully rendered %s lesson %s as TeX",
-                self.COURSE_DIR,
-                lesson,
-            )

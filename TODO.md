@@ -1,3 +1,29 @@
+# #############################################################################
+# IN PROGRESS
+# #############################################################################
+
+### IN PROGRESS: [ ] Make the unit tests pass
+
+Test_Msml610_Run_notes_to_pdf_py
+
+```
+pytest msml610/test
+
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_gen_slides_first_lesson
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_render_all_lessons
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_md
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_tex
+```
+
+- Save tex and typ files for all the lessons
+- Make all the lessons compile
+- Run linters2/pyright
+- Run coverage
+
+# #############################################################################
+# BACKLOG
+# #############################################################################
+
 # Work on slides
 
 - LLM
@@ -148,15 +174,6 @@ https://github.com/causify-ai/helpers/issues/1276
 
 Remove --fail_on_pandoc_warnings
 Remove open by default
-
-### IN PROGRESS: [ ] Make the unit tests pass
-
-pytest msml610/test
-
-msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_gen_slides_first_lesson
-msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_render_all_lessons
-msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_md
-msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_tex
 
 ### IN PROGRESS: Failing tests
 

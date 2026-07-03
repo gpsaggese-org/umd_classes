@@ -241,7 +241,7 @@ def _generate_tex(
     """
     Generate TeX files from a lecture source file.
 
-    Calls notes_to_pdf.py with tex_only and skip_action open to generate
+    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open` to generate
     TeX files without opening them.
 
     :param class_dir: class directory (data605 or msml610)
@@ -262,7 +262,7 @@ def _generate_tex(
         f"--output {output_path}",
         "--type slides",
         "--toc_type navigation",
-        "--tex_only",
+        "--no_pdf",
         "--skip_action open",
         "--debug_on_error",
     ]

@@ -1,7 +1,9 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 11: Deep Learning
+// slides_engine=typst
 
+// References:
 // From AIMA # 21, Deep learning (p. 763)
 
 # Neural Networks
@@ -327,7 +329,6 @@
 
 - **Example**: `AND` is implemented by a single neuron with 2 inputs $x_1$ and
   $x_2$ and bias
-  - Implement in terms of $s$:
     ```
     x_1   x_2   AND
      -1    -1    -1
@@ -350,16 +351,15 @@
 
 - **Power of Composition**
   - Connecting perceptrons enables complex functions
-  - A network of sufficient size and depth can approximate any Boolean or
-    continuous function to arbitrary precision
-  - Compositional structure: each layer builds on the previous one
+  - A network of sufficient size and depth can approximate any (Boolean or
+    continuous) function to arbitrary precision
+  - Each layer builds on the previous one
 
 - **Role of Nonlinearity**
   - Nonlinear activation functions (e.g., sigmoid, tanh, ReLU) are essential
   - Without nonlinearity, layers reduce to a single linear transformation
-  - Nonlinearity allows modeling of complex, non-linear decision boundaries
 
-- **Geometric Intuition**
+- **Example**
   - To separate two classes with a circular boundary:
     - Use multiple perceptrons (e.g., 8-16) to approximate the circle with a
       polygon
@@ -367,52 +367,60 @@
   - This forms a _"lookup table"_ over regions of input space, similar to
     decision trees
 
+// TODO(ai_gp): Add picture and schematic
+
 * Feedforward vs Recurrent Neural Networks
 
 - **Feedforward Neural Networks**
-  - Information flows in one direction from inputs to outputs without cycles in
-    the computational graph
-  - Can model static relationships between inputs and outputs
+  - Information flows in one direction from inputs to outputs without feedback in
+    the graph
+  - Limited in handling "static" / one-shot dependencies
     - E.g., classifying a handwritten digit from an image
-  - Limited in handling sequential dependencies (only fixed window of inputs)
 
 - **Recurrent Neural Networks (RNNs)**
-  $$z_t = f_w(z_{t-1}, x_t)$$
-  - Allow cycles in the computational graph with delays
-    - Each unit can take inputs from its previous output: adds memory
+  - Allow cycles in the computational graph (with delays)
+    - Each unit can take inputs from its previous output (memory)
     - Process sequences: outputs depend on current and previous inputs
-  - Suitable for sequential data (e.g., time series, language modeling) and
-    model longer-range dependencies
-  - E.g., predicting the next word in a sentence based on previous words
+      $$z_t = f_w(z_{t-1}, x_t)$$
+  - Suitable for sequential data (with longer-range dependencies), e.g.,
+    - Time series
+    - Language models (predict next word in a sentence based on previous words)
 
 * Structure of Feedforward Neural Network
 
 - **Layered Architecture**
-  - A feedforward network consists of an ordered set of layers indexed by $l$
+  - A feedforward network consists of an ordered set of $L+1$ layers, indexed by
+    $l$
     1. Input layer ($l = 0$)
     2. One or more hidden layers ($0 < l < L$)
     3. Output layer ($l = L$)
   - Each layer $l$ contains $d(l)$ units or neurons, and can vary in size
 
-- **Input Layer ($l = 0$)**
-  - Represents the input vector $(x_0=1, x_1, x_2, ..., x_d)$
+- **Input Layer**
+  - $l = 0$
+  - Represents the input vector $(x_0, x_1, x_2, ..., x_d)$
   - $x_0 = 1$ acts as the bias input
-  - Booleans are mapped to 0/1 or -1/+1
-  - Numeric attributes are left unchanged (scaled to fit a fixed range, logged)
-  - Categorical attributes can be one-hot encoded
+  - Encoding
+    - Booleans: mapped to 0/1 or -1/+1
+    - Numeric attributes: scaled / transformed to fit a fixed range
+    - Categorical attributes: can be one-hot encoded
 
 * Structure of Feedforward Neural Network
 
 ::: columns
 :::: {.column width=55%}
-- **Hidden Layers ($0 < l < L$)**
-  - Each neuron computes a weighted sum of inputs from the previous layer
-  - Applies a nonlinear activation function $\theta$
-  - Includes a bias unit with constant output 1
-  - Fully connected: every node in layer $l-1$ connects to every node in layer $l$
+- **Hidden Layers**
+  - $0 < l < L$
+  - Each neuron
+    - Includes a bias unit with constant output 1
+    - Computes weighted sum of inputs from the previous layer
+    - Applies a nonlinear activation function $\theta$
+  - Each layer is fully connected
+    - Every node in layer $l-1$ connects to every node in layer $l$
 
-- **Output Layer ($l = L$)**
-  - Final layer producing the output vector $\mathbf{y}$
+- **Output Layer**
+  - $l = L$
+  - Final layer producing the output vector $\vy$
   - Output can be:
     - Linear: for regression tasks
     - Nonlinear (e.g., softmax, sigmoid): for classification tasks
@@ -495,19 +503,19 @@
 * Conventions for Neurons in a Neural Network
 - **Definition**: each neuron $x^{(l)}_j$:
   - Belongs to a layer with index $l$
-  - Accepts inputs from the previous layer (scanning index $i$)
+  - Accepts inputs from the previous layer (index $i$)
   - Has an index $j$ in the layer for its output
 
 - **Definition**: weights are identified by 3 indices $w^{(l)}_{ij}$ where:
   - $ij$ are organized as input-output
-  - $0 \le l \le L$ denotes the layer
-  - $0 \le j \le d(l)$ denotes the output of the layer (i.e., the neuron in the
+  - $0 \le l \le L$: denotes the layer
+  - $0 \le j \le d(l)$: denotes the output of the layer (i.e., the neuron in the
     layer)
-  - $0 \le i \le d(l-1)$ denotes the inputs: start from 0 to account for the
+  - $0 \le i \le d(l-1)$ denotes the inputs, starting from 0 to account for the
     bias
     - Use $l - 1$ in $d(l-1)$ since you look at the previous layer
 
-// TODO: Add pic
+// TODO(ai_gp): Add pic
 
 * Feedforward Propagation Algorithm
 - **Algorithm**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
@@ -553,26 +561,29 @@
 
 * Cost Function for Single-Class NN Classification
 - **Definition**: for binary classification using neural networks, use
-  \red{logistic regression} cost function with a \blue{regularization term}
+  _logistic regression_ cost function with a
+  _regularization term_
+
   $$
   E_{in}(\vw)
   = - \frac{1}{N}
-  \sum_{i=1}^N (\red{y_i \log h(\vx_i) + (1 - y_i) \log (1 - h(\vx_i))}) +
-  \blue{\frac{\lambda}{N} \sum_{\green{j=1}}^p \|\vw_j\|^2}
+  \sum_{i=1}^N (y_i \log h(\vx_i) + (1 - y_i) \log (1 - h(\vx_i))) +
+  \frac{\lambda}{N} \sum_{j=1}^p \|\vw_j\|^2
   $$
 
-- **Remark**: by convention, we don't regularize the \green{bias} ($j=1$ and
-  not $j=0$), as it is constant and does not affect the minimum $\vw$
+- **Remark**: by convention, we don't regularize the bias (i.e., $j$ starts from
+  =1 and not 0), as it is constant and does not affect the minimum $\vw$
 
-* Multi-output Neural Networks for Multi-class Classification
+* Multi-output NN for Multi-class Classification
 - **(Naive) Solution**: one-vs-all approach
-  - Train $n$ models, one per class, to recognize each class
+  - Train $n$ models (one per class) to recognize each class
   - Pick the model with the highest probability
   - The output is a one-hot encoding of each class
-  - E.g.,
-    - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
-    - Encode pedestrian = `(1, 0, 0, 0)`
-    - Encode car = `(0, 1, 0, 0)`
+
+- **Example**
+  - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
+  - Encode pedestrian = `(1, 0, 0, 0)`
+  - Encode car = `(0, 1, 0, 0)`
 
 - **Solution**: instead of training $n$ neural networks, train a single neural
   network with an output layer of $n$ nodes
@@ -581,11 +592,12 @@
 
 * Cost Function for Multi-Class NN Classification
 - **Definition**: the loss function for multi-class classification using
-  neural networks
+  neural networks:
   - encode one-hot
   - the expected outputs $\vy_i$
   - the outputs from the model $\vh(\vx_i)$
 
+  $$
   \begin{alignat*}{2}
   E_{in}(\vw)
   & = - \frac{1}{N}
@@ -594,6 +606,7 @@
   & \frac{\lambda}{N}
   \sum_{l=1}^L \sum_{j=1}^{d(l)} \sum_{i=1}^{d(l-1)} (w^{(l)}_{ij})^2 \\
   \end{alignat*}
+  $$
 
 - **Remark**: avoid to consider the inputs ($l \ne 0$) and the bias terms
   ($i \ne 0, j \ne 0$)
@@ -602,7 +615,7 @@
 
 - **Generalization**
   - Match model complexity to data resources
-  - High flexibility $to$ lots of data is needed
+  - High flexibility, so lots of data is needed
   - Overly complex models can overfit if data is insufficient
   - E.g., a deep neural network with millions of parameters requires a large
     dataset to train effectively without overfitting
@@ -652,17 +665,16 @@
   $$\nabla_{\vw} e(\vw)$$
 
 - **You can**:
-  - Compute the analytic expression of the derivatives by brute force
-  - Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
-    computing the variation of $e$
-  - Use a very efficient algorithm (backpropagation) to compute the gradient
+  1. Compute the analytic expression of the derivatives by brute force
+  2. Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
+     computing the variation of $e$
+  3. Use backpropagation to compute the gradient
 
 - **Backpropagation** (or "backprop")
-  - Efficient algorithm for computing gradients of the loss function with
+  - Very efficient algorithm for computing gradients of the loss function with
     respect to all weights in the network
   - Enables training of multi-layer neural networks via gradient descent
   - Based on the chain rule of calculus
-  - Updates weights to minimize the overall prediction error
 
 - **Intuition**
   - Forward pass computes predictions
@@ -704,7 +716,7 @@
   becomes complicated: mistakes are possible
   - E.g., back-propagation in neural networks
 
-- **Solution**: one approach is
+- **Solution**: one approach is to:
   1. Compute the gradient analytically
   2. Compute the gradient numerically
      $$
@@ -713,8 +725,8 @@
      {2 \varepsilon}
      $$
   3. Compare the gradients within numerical approximation
-  4. Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
-     to cause too many numerical issues
+     - Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
+       to cause too many numerical issues
 
 - **Remark**: automatic differentiation packages solve this issue
 
@@ -724,15 +736,15 @@
   - Applies the chain rule efficiently from output to input
   - Avoids manual gradient derivation for new architectures
 
-- **Practical Benefits**
-  - Major deep learning frameworks (E.g., tensorFlow, PyTorch) implement
+- **Pros**
+  - Major deep learning frameworks (e.g., `TensorFlow`, `PyTorch`) implement
     automatic differentiation
   - Enables rapid experimentation with network structures, activation functions,
     and loss functions
   - Frees you from manually re-deriving learning rules
 
-- **Encouragement of End-to-End Learning**
-  - Complex tasks (E.g., machine translation) modeled as compositions of
+- **Encourage end-to-end learning**
+  - Complex tasks (e.g., machine translation) modeled as compositions of
     trainable subsystems
   - Trained on input-output pairs without explicit internal supervision
   - Requires minimal prior knowledge about internal components or roles
@@ -744,19 +756,18 @@
 * Convolutional Neural Networks
 
 - **Motivation**
-  - Feedforward networks do not scale with high-dimensional inputs like images
-  - Convolutional neural networks (CNNs) are designed to exploit spatial
-    structure in data
+  - Feedforward networks don't scale with high-dimensional inputs like images
+  - CNNs exploit spatial structure in data
 
 - **Key Idea**
-  - Local connectivity: adjacent pixels have meaning
-  - Weight sharing to detect spatially local patterns
-  - Convolutions act as learnable filters applied across input regions
+  - Local connectivity leverages adjacent pixels' meaning
+  - Weight sharing detects spatially local patterns
+  - Convolutions are learnable filters applied across input regions
 
 - **Basic Components**
   - Convolutional layer: applies multiple filters across input
   - Activation function: non-linearity (e.g., ReLU) after convolution
-  - Pooling layer: reduces spatial dimensions (e.g., max pooling)
+  - Pooling layer (e.g., max pooling): reduces spatial dimensions
   - Fully connected layers: typically at the end for classification
 
 ![](msml610/lectures_source/figures/L11.CNN.png)
@@ -958,7 +969,7 @@ digraph FeedbackSystem {
 
 // https://d2l.ai/chapter_recurrent-modern/lstm.html
 
-- Special architecture with memory cells and gates
+- **Definition**: special architecture with memory cells and gates
   - Forget gate: decides what information to discard from the cell state
   - Input gate: controls what new information to store
   - Output gate: determines what to output from the cell
@@ -974,8 +985,10 @@ digraph FeedbackSystem {
   - Slower training and inference compared to simpler models (e.g., GRUs)
   - Difficult to parallelize over time steps
 
-- Especially effective in natural language processing and time series tasks
-- E.g., used in machine translation, speech recognition, and language modeling
+- **Remark**: especially effective in natural language processing and time
+  series tasks
+  - E.g., used in machine translation, speech recognition, and language
+    modeling
 
 // TODO(TA): Add a graphviz pic
 
@@ -983,7 +996,7 @@ digraph FeedbackSystem {
 
 // https://d2l.ai/chapter_recurrent-modern/gru.html
 
-- Alternative to LSTMs for sequential modeling
+- **Definition**: alternative to LSTMs for sequential modeling
   - Combine **forget** and **input** gates into a single **update gate**
   - Retain essential functionality with fewer components:
     - Update gate controls how much of the past state to keep
@@ -1011,7 +1024,7 @@ digraph FeedbackSystem {
 
 * Techniques for Training Deep Neural Networks
 
-- Deep networks are hard to train 
+- **Problem**: deep networks are hard to train
   - Due to vanishing/exploding gradients
   - Optimization can be slow and sensitive to hyperparameters
 
@@ -1047,24 +1060,26 @@ digraph FeedbackSystem {
 
 
 * Regularization in Neural Networks
-- (Soft) weight elimination: fewer weights $\implies$ smaller VC dimension, so
-  we would like to remove some neurons (i.e., push weights towards 0)
-- For any activation function (e.g., tanh()) a small weight means that we work
-  in the linear regime, while a large weight leaves us in the binary regime
-- Using a normal regularization
+- **Goal**: (soft) weight elimination: fewer weights $\implies$ smaller VC
+  dimension, so we would like to remove some neurons (i.e., push weights
+  towards 0)
+- **Remark**: for any activation function (e.g., tanh()) a small weight means
+  that we work in the linear regime, while a large weight leaves us in the
+  binary regime
+- **(Naive) Solution**: using a normal regularization
   $$
   \Omega(\vw) = \sum_{i,j,l} (w^{(l)}_{ij})^2
   $$
-  we have the problem that a neuron in binary regime is penalized more than many
-  neurons in linear regime
-- So for neural networks we use a regularizer as:
+  - Cons: a neuron in binary regime is penalized more than many neurons in
+    linear regime
+- **Solution**: so for neural networks we use a regularizer as
 
   $$
   \Omega(\vw) = \lambda \sum_{i, j, l} \frac{(w^{(l)}_{ij})^2}{\beta^2 + (w^{(l)}_{ij})^2}
   $$
 
-  so that the penalization is quadratic for small $\vw$ and then it saturates as
-  function of the weight magnitude
+  so that the penalization is quadratic for small $\vw$ and then it saturates
+  as function of the weight magnitude
 
 
 ## Deep Learning for NLP
