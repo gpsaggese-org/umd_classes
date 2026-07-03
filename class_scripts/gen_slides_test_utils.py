@@ -14,7 +14,8 @@ import sys
 from typing import Dict, List, Optional
 
 import pytest
-from tqdm import tqdm
+# To handle better progress bars with pytest buffering output. 
+from tqdm.auto import tqdm
 
 import class_scripts.common_utils as csccouti
 import helpers.hdbg as hdbg
@@ -237,8 +238,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         _LOG.debug(
             hprint.to_str("course_dir output_dir lessons output_type toc_type")
         )
-        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type}"):
-            _LOG.debug(hprint.to_str("lesson"))
+        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type.upper()}", file=sys.stderr, disable=False):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
@@ -265,7 +265,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
                 f"--type={output_type} "
                 f"--toc_type={toc_type}"
             )
-            _LOG.info("Running command: %s", cmd)
+            _LOG.debug("Running command: %s", cmd)
             hsystem.system(cmd)
             #sys.stdout.flush()
             # Extract and check output after preprocessing.
@@ -273,7 +273,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             content = hio.from_file(output_file)
             self.check_string(content, fuzzy_match=True)
             #sys.stdout.flush()
-            _LOG.info(
+            _LOG.debug(
                 "Verified %s preprocessing for lesson %s",
                 output_type.upper(),
                 lesson,
