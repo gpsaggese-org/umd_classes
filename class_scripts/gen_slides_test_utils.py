@@ -407,6 +407,11 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         for lesson in tqdm(
             lessons, desc=f"Testing {output_type} output",
             file=sys.stderr, disable=False, mininterval=0, miniters=1):
+            # Shortcut for debugging.
+            if True:
+                if lesson < "09.1":
+                    _LOG.warning("Skip lesson '%s'", lesson)
+                    continue
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)

@@ -882,33 +882,12 @@ digraph ResidualBlock {
 ## Recurrent Neural Networks
 
 * Recurrent Neural Networks (RNNs)
-::: columns
-:::: {.column width=55%}
-- **Definition**: maintain a hidden state that evolves over time
-  - Process input sequences one element at a time, maintaining a memory of
-    previous inputs
+- **Definition**: _Recurrent Neural Networks_:
+  - Process input sequences one element at a time
+  - Maintain memory of previous inputs (hidden state)
   - Output depends on current input and previous hidden state
-  - Useful for tasks where the order of data is crucial
-- **Remark**: trained using backpropagation through time
+  - Useful for tasks where order of data is crucial
 
-- **Pros**
-  - Designed for sequential data
-    - E.g., time series, text
-  - Can, in theory, capture temporal dependencies of arbitrary length
-
-- **Cons**
-  - Struggle with long-term dependencies (vanishing gradients)
-  - Training is slow due to sequential processing (no parallelism over time steps)
-  - Struggles with long-term memory retention
-  - Suitable for simple sequences
-
-- **Examples**:
-  - Language modeling: Given a sequence of words, predict the next word
-  - Time series prediction: Forecast future values based on past observations
-  - Sentiment analysis: Determine the sentiment of a sentence by considering the
-    sequence of words
-::::
-:::: {.column width=40%}
 ```graphviz
 digraph FeedbackSystem {
     rankdir=TB;
@@ -935,33 +914,48 @@ digraph FeedbackSystem {
     {rank=same; x; Input; Block1; Block2; join1; Output}
 }
 ```
-// TODO(TA): Rotate the pic
-::::
-:::
+
+- **Remark**: Trained using backpropagation through time
+
+* Recurrent Neural Networks (RNNs)
+
+- **Pros**
+  - Designed for sequential data
+    - E.g., time series, text
+  - Capture temporal dependencies of arbitrary length (in theory)
+
+- **Cons**
+  - Struggle with vanishing gradients
+  - Slow training due to sequential processing (no parallelism over time steps)
+  - Struggle with long-term memory retention
+
+- **Examples**:
+  - Time series prediction: Forecast future values based on past observations
+  - Language modeling: Predict next word in a sequence
+  - Sentiment analysis: Determine sentiment of a sentence by considering
+    sequence of words
 
 * Vanishing and Exploding Gradient Problem
 
-- **Remark**: arise due to repeated multiplication of gradients in the chain
-  rule
-
-- **Vanishing Gradient**
-  - Gradients become very small in early layers as they are propagated backward
-  - Leads to extremely slow learning or no learning
-  - Common with activation functions like sigmoid or tanh
-
-- **Exploding Gradient**
-  - Gradients grow exponentially during backpropagation
-  - Causes unstable updates and potential overflow in weights
-  - Often seen when weights are initialized with large values
+- **Problem**:
+  - _Vanishing Gradient_:
+    - Gradients become small in early layers during backpropagation
+    - Leads to slow or no learning
+    - Common with sigmoid or tanh activations
+  - _Exploding Gradient_
+    - Gradients grow exponentially during backpropagation
+    - Causes unstable updates and potential overflow
+    - Seen with large initial weights
+  - Both issues are caused by repeated multiplication of gradients in the chain
+    rule
 
 - **Solutions**
-  - Use ReLU or similar activations to mitigate vanishing gradients
-  - Apply gradient clipping to handle exploding gradients
   - Normalize inputs
+  - Use ReLU or similar activations to mitigate vanishing gradients
+  - Apply gradient clipping for exploding gradients
   - Apply batch normalization
 
-- **Remark**: these issues motivated the design of architectures like LSTM and
-  ResNet
+- **Remark**: These issues motivated architectures like LSTM and ResNet
 
 * Long Short-Term Memory (LSTM) Networks
 
@@ -969,10 +963,11 @@ digraph FeedbackSystem {
 
 // https://d2l.ai/chapter_recurrent-modern/lstm.html
 
-- **Definition**: special architecture with memory cells and gates
-  - Forget gate: decides what information to discard from the cell state
-  - Input gate: controls what new information to store
-  - Output gate: determines what to output from the cell
+- **Definition**: Long Short-Term Memory is an architecture with memory cells and
+  several special gates:
+  - _Forget gate_: decides what information to discard from the cell state
+  - _Input gate_: controls what new information to store
+  - _Output gate_: determines what to output from the cell
 
 - **Pros**
   - Designed to overcome vanishing gradient problem in standard RNNs
@@ -987,17 +982,17 @@ digraph FeedbackSystem {
 
 - **Remark**: especially effective in natural language processing and time
   series tasks
-  - E.g., used in machine translation, speech recognition, and language
-    modeling
+  - E.g., machine translation, speech recognition, and language modeling
 
-// TODO(TA): Add a graphviz pic
+// TODO(ai_gp): Add a tikz pic
 
 * Gated Recurrent Units (GRUs)
 
 // https://d2l.ai/chapter_recurrent-modern/gru.html
 
-- **Definition**: alternative to LSTMs for sequential modeling
-  - Combine **forget** and **input** gates into a single **update gate**
+- **Definition**: Gated Recurrent Unites are alternative to LSTMs for sequential
+  modeling
+  - Combine forget and input gates into a single _update gate_
   - Retain essential functionality with fewer components:
     - Update gate controls how much of the past state to keep
     - Reset gate controls how much of the past information to forget
@@ -1009,37 +1004,37 @@ digraph FeedbackSystem {
   - Suitable for real-time and low-resource applications
 
 - **Cons**
-  - May be less expressive than LSTM for very complex patterns
+  - Less expressive than LSTM for very complex patterns
   - Lacks a separate memory cell, which may limit ability to retain long-term
     information
-  - Slightly less studied and standardized than LSTM in some domains
 
 - **Example**
   - GRUs are preferred in real-time speech recognition systems due to their
     efficiency
 
-// TODO(TA): Add a graphviz pic
+// TODO(ai_gp): Add a tikz pic
 
 ## Deep Learning Learning Algorithms
 
 * Techniques for Training Deep Neural Networks
 
-- **Problem**: deep networks are hard to train
-  - Due to vanishing/exploding gradients
-  - Optimization can be slow and sensitive to hyperparameters
+- **Problem**: deep networks are hard to train for several reasons:
+  1. Vanishing/exploding gradients
+  2. Training can be slow
+  3. Optimization is sensitive to hyperparameters
 
 - **Momentum**
   - Modifies gradient descent to accelerate convergence
   - Updates use an exponentially decaying average of past gradients
-  - Update rule: $v_t = \beta v_{t-1} + \eta \nabla \theta_t$,
-    $\theta_{t+1} = \theta_t - v_t$
-  - Helps overcome local minima and reduces oscillations in ravines
+  - Update rule: $v_t = \beta v_{t-1} + \eta \nabla \theta_t$
+  - Helps overcome local minima and reduces oscillations
 
 - **Adam (Adaptive Moment Estimation)**
   - Combines momentum with adaptive learning rates
   - Maintains estimates of both first moment (mean) and second moment
     (uncentered variance) of gradients
   - Update rule uses bias-corrected estimates:
+// TODO(ai_gp): Add all expressions in a single block with curly parenthesis
     - $m_t = \beta_1 m_{t-1} + (1 - \beta_1)\nabla \theta_t$
     - $v_t = \beta_2 v_{t-1} + (1 - \beta_2)(\nabla \theta_t)^2$
     - $\theta_{t+1} = \theta_t - \eta \cdot \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$
@@ -1053,87 +1048,85 @@ digraph FeedbackSystem {
     $$\hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$$
   - Introduces learnable parameters $\gamma$ and $\beta$ to scale and shift the
     normalized values
-  - Benefits:
-    - Reduces internal covariate shift
-    - Enables higher learning rates
-    - Acts as a regularizer, reducing need for dropout
 
+- **Pros**
+  - Reduces internal covariate shift
+  - Enables higher learning rates
+  - Acts as a regularizer, reducing need for dropout
 
 * Regularization in Neural Networks
-- **Goal**: (soft) weight elimination: fewer weights $\implies$ smaller VC
-  dimension, so we would like to remove some neurons (i.e., push weights
-  towards 0)
-- **Remark**: for any activation function (e.g., tanh()) a small weight means
-  that we work in the linear regime, while a large weight leaves us in the
-  binary regime
+- **Goal**: (soft) weight elimination
+  - Fewer weights $\implies$ smaller VC dimension
+  - Remove neurons (push weights towards 0)
+
+- **Remark**: Regardless of activation function (e.g., `tanh`), small weight
+  means linear regime, large weight means binary regime
+
 - **(Naive) Solution**: using a normal regularization
   $$
   \Omega(\vw) = \sum_{i,j,l} (w^{(l)}_{ij})^2
   $$
   - Cons: a neuron in binary regime is penalized more than many neurons in
     linear regime
-- **Solution**: so for neural networks we use a regularizer as
 
+- **Solution**: so for neural networks use a regularizer as:
   $$
   \Omega(\vw) = \lambda \sum_{i, j, l} \frac{(w^{(l)}_{ij})^2}{\beta^2 + (w^{(l)}_{ij})^2}
   $$
-
-  so that the penalization is quadratic for small $\vw$ and then it saturates
-  as function of the weight magnitude
-
+  - Penalization is quadratic for small $\vw$ and then it saturates as function
+    of the weight magnitude
 
 ## Deep Learning for NLP
 
 * NLP Tasks
 - **Part-of-speech (POS) tagging**
   - Assign a POS (e.g., noun, verb, adjective) to each word in a sentence 
-  - Data needs: labelled data
+  - Need: labelled data
 
 - **Co-reference resolution**
   - E.g., _"Mike told that John was sick, so I took him to the hospital"_
     - Who does _"him"_ refer to?
     - _"John"_ with high probability
   - The output is a distribution over possible antecedents
-  - Data needs: labelled data
+  - Need: labelled data
 
 - **Sentiment analysis**
   - Classify a text as having positive or negative sentiment
     - E.g., "the movie was poorly written and acted" $\to$ negative
-  - Data needs: nothing in theory
+  - Need: nothing in theory
 
 - **Machine translation**
   - Translate a sentence from a source language to a target language
     - E.g., from Spanish to English
-  - Data needs: large corpus of source/target sentence pairs
+  - Need: large corpus of source/target sentence pairs
 
 - **Information extraction**
-  - Automatically extracting structured information from unstructured text
+  - Extract structured information from unstructured text
 
-- **Named entity recognition**
+- **Named entity recognition** (NER)
   - Identify and classify named entities (e.g., people, organizations, locations)
     in text
 
 * Part-of-speech (POS) Tagging
 - **Example**
-  - Input: "The dog barks loudly"
-  - Output: [Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)]
+  - Input: _"The dog barks loudly"_
+  - Output: `Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)`
 
 - **Techniques**
   - _Rule-based_: hand-crafted grammar rules
-  - _Statistical_: models like Hidden Markov Models (HMMs)
+  - _Statistical_: models (e.g., Hidden Markov Models)
   - _Machine Learning_: classifiers (e.g., SVM)
   - _Neural Networks_: LSTM, BiLSTM, or Transformers
 
-- **Challenges**
-  - Ambiguity: "can" can be a verb or a noun
-  - Context-dependency: Tags depend on the surrounding words
+- **Problems**
+  - _Ambiguity_: "can" can be a verb or a noun
+  - _Context-dependency_: Tags depend on the surrounding words
 
 * NLP Using Rules-Based Systems
 - **(Naive) Solution**: systems based on rules for parsing and semantic
-  analysis have shown
-  - Success in many tasks
+  analysis
   - Cons: performance limited by linguistic complexity
-    - E.g., "cut" can be a verb or a noun
+    - E.g., _"cut"_ can be a verb or a noun
       - Present, past, infinite verb
       - Transitive or intransitive
       - The meaning depends on the context
@@ -1146,7 +1139,7 @@ digraph FeedbackSystem {
   human-knowledge-based systems"_, Sutton (2019)
 
 - **Key Observation**
-  - Human-designed heuristics and domain knowledge lose
+  - Human-designed heuristics and domain knowledge tend to lose
   - General-purpose learning algorithms that scale with computation tend to win
   - E.g.,
     - Chess: hand-crafted rules outperformed by AlphaZero using self-play and
@@ -1154,7 +1147,7 @@ digraph FeedbackSystem {
     - Vision: feature-engineered models replaced by end-to-end trained
       convolutional networks
 
-- **The "Bitter" Part**
+- **Why "Bitter"?**
   - Humans like to inject knowledge into systems
   - But machines learn better when allowed to discover patterns from data
     themselves
@@ -1174,14 +1167,14 @@ digraph FeedbackSystem {
 - **Goal**: create representation of words for NLP tasks
 
 - **Requirements**:
-  - No need for manual feature engineering
+  - No manual feature engineering (not scalable)
   - Allow for generalization between related words
     - Syntactically: "colorless" and "ideal" are both adjectives
     - Semantically: "cat" and "kitten" are both felines
     - Topically: "sunny" and "rainy" are both weather terms
     - Sentiment: "awesome" and "cringeworthy" are opposite
 
-- **Approaches**:
+- **Solutions**:
   1. Encode a word into an input vector (e.g., one-hot vector)
      - Cons: doesn't capture similarity between words
   2. Represent as a vector of n-gram counts
@@ -1195,19 +1188,21 @@ digraph FeedbackSystem {
 
 * Word Embeddings: Emerging Properties
 - **Fact**: similar words have similar word embeddings
-  - Words cluster based on their topics
+  - Words tend to cluster based on their topics
 
-- **Fact**: difference between related words seems to have a meaning
+- **Fact**: difference between embeddings of related words seems to have a
+  meaning
+  - E.g., negative, plural, superlative, past tense are "vectors" in embedding
+    space
   - E.g., `Greece` - `Athens` = country/capital relationship
-  - E.g., negative, plural, superlative, past tense
 
 - **Remark**: these properties are:
-  - Not really enforced
+  - Not enforced
   - Approximate
   - Emergent
 
 * Word Embeddings: Pretrained vs Custom
-- **Remark**: word embedding representations are independent of the task
+- **Remark**: word embeddings can be used independently of the task
   - Can pretrain and reuse them
     - Word2vec
     - GloVe (global vectors)
@@ -1216,20 +1211,20 @@ digraph FeedbackSystem {
 - **Remark**: for some tasks better to learn word embeddings end-to-end with
   the task
   - E.g., POS tagging: the same word needs to be represented in different ways
-    - E.g., "cut" can be verb or noun $\to$ multiple semantic embeddings
+    - E.g., _"cut"_ can be verb or noun $\to$ multiple semantic embeddings
 
 * Language Models
-- **Remark**: word embedding are a good representation for words in isolation
-- **Problem**: language consists of sequence of words where context of each
-  word is important
+- **Problem**:
+  - Word embedding are a good representation for words in isolation
+  - Language consists of sequence of words where the context of each word is
+    important
   - E.g., in _"Michael told me that John was sick, so I took him to the
-    hospital"_, "him" can refer to multiple people
+    hospital"_, _"him"_ can refer to multiple people
 
-- **Definition**: a _language model_ is a probability distribution of
-  sequences of words
-  - Predict the next word in a text given all the previous words
-    - Supervised learning
-    - Enormous amount of data
+- **Definition**: a _language model_ is a probability distribution of sequences
+  of words
+  - I.e., predict the next word in a text given all the previous words
+  - Supervised learning on enormous amount of data
 
 - **Question**: how to learn a language model?
   1. Feedforward neural network
@@ -1243,16 +1238,17 @@ digraph FeedbackSystem {
   - Word embeddings
 
 - **Problems**:
-  1. Context might need to be very long
+  1. _Context_ might need to be very long
      - Not all the words are important
      - E.g., a sentence with 20 words requires a large number of parameters if
        each word is considered in any context
-  2. Problem of asymmetry
+  2. _Asymmetry_
      - Weights need to be learned for each word in each position
-     - E.g., different weights for the word "cat" when it appears at the
+     - E.g., different weights for the word _"cat"_ when it appears at the
        beginning versus the end of a sentence
-     - Too many parameters to learn
-     - Computationally expensive
+     - Many parameters to learn $\to$ computationally expensive
+
+// TODO(ai_gp): Add tikz
 
 * RNNs for Language Models
 - **Intuition**: RNNs process sequence of data, one piece of data at a time
@@ -1263,6 +1259,8 @@ digraph FeedbackSystem {
   2. A hidden layer gets the previous state and the new word
      - Allocate storage space for features of inputs useful for the task
   3. The output is a probability over output words
+
+// TODO(ai_gp): Add tikz
 
 * RNNs for Language Models: Pros and Cons
 - **Pros**:
@@ -1461,14 +1459,14 @@ digraph FeedbackSystem {
   - It's an example of transfer learning
 
 * Masked Language Models
-- Word prediction in language models are made left-to-right
-- Sometimes the context comes later in the context
+- **Remark**: word prediction in language models are made left-to-right
+- **Problem**: sometimes the context comes later in the context
   - E.g., "the river rose five feet"
 
-- Train models using masking a word and predicting it
+- **Solution**: train models using masking a word and predicting it
   - E.g., "the river _______ five feet"
 
-- The sentence provides its own labels
+- **Remark**: the sentence provides its own labels
 
 /*
 # Fundamentals of Deep Learning
