@@ -409,7 +409,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             file=sys.stderr, disable=False, mininterval=0, miniters=1):
             # Shortcut for debugging.
             if True:
-                if lesson < "09.1":
+                if lesson < "91":
                     _LOG.warning("Skip lesson '%s'", lesson)
                     continue
             # Get source file.

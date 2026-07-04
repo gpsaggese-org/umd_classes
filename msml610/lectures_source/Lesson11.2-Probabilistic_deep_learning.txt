@@ -367,7 +367,16 @@
   - This forms a _"lookup table"_ over regions of input space, similar to
     decision trees
 
-// TODO(ai_gp): Add picture and schematic
+```tikz
+\draw[thick, blue] (0,0) circle (2cm);
+\draw[thick, red, dashed]
+  (2,0) -- (1.414,1.414) -- (0,2) -- (-1.414,1.414) -- (-2,0) --
+  (-1.414,-1.414) -- (0,-2) -- (1.414,-1.414) -- cycle;
+\node[circle, fill=blue!15, draw=blue, thick, minimum size=1.6cm] at (0,0) {$+$};
+\node[red] at (2.4,-1.1) {$-$};
+\node[blue] at (0,-2.6) {Circular decision boundary};
+\node[red] at (0,2.6) {Octagon from 8 perceptrons};
+```
 
 * Feedforward vs Recurrent Neural Networks
 
@@ -515,7 +524,22 @@
     bias
     - Use $l - 1$ in $d(l-1)$ since you look at the previous layer
 
-// TODO(ai_gp): Add pic
+```tikz
+\node[draw=none, fill=none] (x0) at (0,2.2) {$x_0^{(l-1)} = 1$};
+\node[draw=none, fill=none] (x1) at (0,1.1) {$x_1^{(l-1)}$};
+\node[draw=none, fill=none] (x2) at (0,0) {$x_2^{(l-1)}$};
+\node[draw=none, fill=none] (xd) at (0,-1.6) {$x_{d(l-1)}^{(l-1)}$};
+
+\node[circle, draw, thick, line width=1.2pt, minimum size=1.3cm] (neuron) at (4,0.3) {$x_j^{(l)}$};
+
+\draw[->, thick] (x0) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{0j}$} (neuron);
+\draw[->, thick] (x1) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{1j}$} (neuron);
+\draw[->, thick] (x2) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{2j}$} (neuron);
+\draw[->, thick] (xd) -- node[below, sloped, font=\scriptsize] {$w^{(l)}_{d(l-1)j}$} (neuron);
+
+\node[draw=none, fill=none, font=\small] at (-0.8,2.9) {layer $l-1$};
+\node[draw=none, fill=none, font=\small] at (5.6,0.3) {layer $l$};
+```
 
 * Feedforward Propagation Algorithm
 - **Algorithm**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
@@ -798,7 +822,26 @@
   - An image of size 32 x 32 x 3 with a 5 x 5 filter creates a 28 x 28 feature
     map (ignoring padding)
 
-// TODO(ai_gp): Add figures
+```tikz
+\foreach \i in {0,...,4} {
+  \foreach \j in {0,...,4} {
+    \node[draw, minimum size=0.6cm, fill=blue!10] at (\j*0.6,-\i*0.6) {};
+  }
+}
+\draw[thick, red, line width=1.4pt] (-0.3,0.3) rectangle (1.5,-1.5);
+\node[red, font=\scriptsize] at (0.6,0.9) {filter ($3\times3$)};
+
+\draw[->, thick] (3.2,-0.9) -- (4.4,-0.9);
+\node[font=\scriptsize] at (3.8,-0.6) {convolve};
+
+\foreach \i in {0,...,2} {
+  \foreach \j in {0,...,2} {
+    \node[draw, minimum size=0.6cm, fill=green!10] at (5+\j*0.6,-\i*0.6) {};
+  }
+}
+\draw[thick, red, line width=1.4pt] (4.7,0.3) rectangle (5.3,-0.3);
+\node[font=\scriptsize] at (6.1,0.9) {feature map};
+```
 
 * Convolutional Neural Networks
 
@@ -984,7 +1027,32 @@ digraph FeedbackSystem {
   series tasks
   - E.g., machine translation, speech recognition, and language modeling
 
-// TODO(ai_gp): Add a tikz pic
+```tikz
+\node[draw=none] (Ctm1) at (-6,1) {$C_{t-1}$};
+\node[draw=none] (htm1) at (-6,-1) {$h_{t-1}$};
+\node[draw=none] (xt) at (-6,-2) {$x_t$};
+
+\node[draw, fill=orange!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (forget) at (-3,-0.5) {Forget gate\\$f_t = \sigma(\cdot)$};
+\node[draw, fill=teal!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (input) at (-0.3,-0.5) {Input gate\\$i_t = \sigma(\cdot)$};
+\node[draw, fill=violet!20, rounded corners, align=center, minimum width=2cm, minimum height=1cm] (cand) at (2.4,-0.5) {Candidate\\$\tilde{C}_t = \tanh(\cdot)$};
+\node[draw, fill=blue!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (output) at (5.1,-0.5) {Output gate\\$o_t = \sigma(\cdot)$};
+
+\draw[->, thick] (Ctm1) -| (forget.north);
+\draw[->, thick] (htm1) -- (forget);
+\draw[->, thick] (htm1) -| (input.south);
+\draw[->, thick] (htm1) -| (cand.south);
+\draw[->, thick] (htm1) -| (output.south);
+\draw[->, thick] (xt) -- (-4.3,-2) -- (forget);
+
+\draw[->, thick] (forget) -- (input);
+\draw[->, thick] (input) -- (cand);
+\draw[->, thick] (cand) -- (output);
+
+\node[draw=none, align=left] (Ct) at (8.3,1) {$C_t = f_t C_{t-1}$\\$\hspace{0.65cm} + i_t \tilde{C}_t$};
+\node[draw=none] (ht) at (8.3,-1.5) {$h_t = o_t \tanh(C_t)$};
+\draw[->, thick] (output) -- (7,1) -- (Ct);
+\draw[->, thick] (output) -- (7,-1.5) -- (ht);
+```
 
 * Gated Recurrent Units (GRUs)
 
@@ -1012,7 +1080,24 @@ digraph FeedbackSystem {
   - GRUs are preferred in real-time speech recognition systems due to their
     efficiency
 
-// TODO(ai_gp): Add a tikz pic
+```tikz
+\node[draw=none] (htm1) at (-6,0.5) {$h_{t-1}$};
+\node[draw=none] (xt) at (-6,-1.5) {$x_t$};
+
+\node[draw, fill=teal!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (update) at (-3,1) {Update gate\\$z_t = \sigma(\cdot)$};
+\node[draw, fill=orange!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (reset) at (-3,-1) {Reset gate\\$r_t = \sigma(\cdot)$};
+\node[draw, fill=violet!20, rounded corners, align=center, minimum width=2.1cm, minimum height=1cm] (cand) at (0,-1) {Candidate\\$\tilde{h}_t = \tanh(\cdot)$};
+
+\draw[->, thick] (htm1) -- (update);
+\draw[->, thick] (htm1) -- (reset);
+\draw[->, thick] (xt) -- (-4.3,-1.6) -- (reset);
+\draw[->, thick] (xt) -- (-4.3,0.4) -- (update);
+\draw[->, thick] (reset) -- (cand);
+
+\node[draw=none, align=left] (ht) at (4,0) {$h_t = (1-z_t) h_{t-1}$\\$\hspace{0.85cm} + z_t \tilde{h}_t$};
+\draw[->, thick] (cand) -- (2,-1) -- (ht);
+\draw[->, thick] (update) -- (2,1) -- (ht);
+```
 
 ## Deep Learning Learning Algorithms
 
@@ -1248,7 +1333,25 @@ digraph FeedbackSystem {
        beginning versus the end of a sentence
      - Many parameters to learn $\to$ computationally expensive
 
-// TODO(ai_gp): Add tikz
+```tikz
+\node[draw, fill=orange!20, minimum width=1.1cm, minimum height=0.7cm] (w1) at (-3,2) {$w_{t-n}$};
+\node[draw=none] at (-1.8,2) {$\cdots$};
+\node[draw, fill=orange!20, minimum width=1.1cm, minimum height=0.7cm] (w2) at (-0.6,2) {$w_{t-1}$};
+
+\node[draw, fill=teal!20, minimum width=1.1cm, minimum height=0.7cm] (e1) at (-3,1) {embed};
+\node[draw, fill=teal!20, minimum width=1.1cm, minimum height=0.7cm] (e2) at (-0.6,1) {embed};
+
+\node[draw, fill=blue!20, rounded corners, minimum width=3.2cm, minimum height=0.8cm] (hidden) at (-1.8,0) {Hidden layer};
+
+\node[draw, fill=violet!20, rounded corners, minimum width=3.2cm, minimum height=0.8cm] (softmax) at (-1.8,-1.2) {Softmax over vocabulary};
+\node[draw=none, font=\scriptsize] at (-1.8,-2.1) {$\Pr(w_t | w_{t-n}, ..., w_{t-1})$};
+
+\draw[->, thick] (w1) -- (e1);
+\draw[->, thick] (w2) -- (e2);
+\draw[->, thick] (e1) -- (hidden);
+\draw[->, thick] (e2) -- (hidden);
+\draw[->, thick] (hidden) -- (softmax);
+```
 
 * RNNs for Language Models
 - **Intuition**: RNNs process sequence of data, one piece of data at a time
@@ -1260,7 +1363,20 @@ digraph FeedbackSystem {
      - Allocate storage space for features of inputs useful for the task
   3. The output is a probability over output words
 
-// TODO(ai_gp): Add tikz
+```tikz
+\node[draw=none] (wt) at (-1.5,2.2) {$w_t$};
+\node[draw, fill=teal!20, minimum width=1.2cm, minimum height=0.7cm] (embed) at (-1.5,1) {embed};
+\node[draw, fill=blue!20, rounded corners, minimum width=1.6cm, minimum height=1cm] (h) at (-1.5,-0.5) {$h_t$};
+\node[draw=none] (htm1) at (-4,-0.5) {$h_{t-1}$};
+
+\draw[->, thick] (wt) -- (embed);
+\draw[->, thick] (embed) -- (h);
+\draw[->, thick] (htm1) -- (h);
+
+\node[draw, fill=violet!20, rounded corners, minimum width=2.2cm, minimum height=0.7cm] (softmax) at (-1.5,-2) {Softmax};
+\draw[->, thick] (h) -- (softmax);
+\node[draw=none, font=\scriptsize] at (-1.5,-2.9) {$\Pr(w_{t+1} | w_1, ..., w_t)$};
+```
 
 * RNNs for Language Models: Pros and Cons
 - **Pros**:
@@ -1281,35 +1397,36 @@ digraph FeedbackSystem {
     - Solution: Use LSTMs
 
 * Sequence-to-Sequence Models
-- **Definition**: enable learning of mappings between sequences of differing
-  lengths and structures
-  - Used for transforming one sequence into another, e.g.,
-    - Machine translation
-    - Text summarization
-    - Speech recognition
+- **Definition**: Seq-to-Seq learn to transform sequences of differing lengths
+  and structures
+  - Training is supervised with input-output sequence pairs
 
-- **Remark**: composed of two main components:
-  - **Encoder**: Compress information from input sequence into a fixed-size
-    context vector
-  - **Decoder**: Generates output sequence from the context vector
+- **Examples**
+  - Machine translation
+  - Text summarization
+  - Speech recognition
+
+- **Remark**: models are composed of two main components:
+  - _Encoder_: Compress information from input sequence into a fixed-size context
+    vector
+  - _Decoder_: Generates output sequence from the context vector
   - Both encoder and decoder are typically RNNs (e.g., LSTM or GRU)
 
-- **Remark**: training is supervised with input-output sequence pairs
-
 - **Limitations**:
+  // TODO(ai_gp): The following is unclear, explain better
   - Fixed-size context vector can become a bottleneck for long sequences
   - Attention mechanisms so decoder can access all encoder states
 
-// TODO: Add pic
+// TODO(ai_gp): Add pic
 
 * Sequence-to-Sequence Attention
 - **Intuition**
   - Instead of processing input sequentially (like RNNs), attention processes all
     simultaneously
   - Each token can "look at" others and decide which are most important
-    - E.g., in translation, the word "bank" in "river bank" gets higher attention
-      from nearby words like "river"
-  - It's like "context-based summarization" of the source sentence into a
+    - E.g., in translation, the word _"bank"_ in _"river bank"_ gets higher
+      attention from nearby words like _"river"_
+  - It's like context-based summarization of the source sentence into a
     fixed-dimensional representation
 
 - **Motivation**
@@ -1321,10 +1438,12 @@ digraph FeedbackSystem {
 :::: {.column width=65%}
 - **Definition**: if the RNN model is
   $\vh_i = RNN(\vh_{i-1}, \vx_i)$
-- **Definition**: the sequence-to-sequence attention is the concatenation of
+
+- The sequence-to-sequence attention is the concatenation of
   $\vx_i$ and the context vector $\vc_i$
   $$\vh_i = RNN(\vh_{i-1}, [\vx_i, \vc_i])$$
-- **Definition**: the raw attention score $r_{ij}$ is:
+
+- The raw attention score $r_{ij}$ is:
   $$r_{ij} = \vh_{i-1} \cdot \vs_j$$
   where
   - $\vh_{i-1}$ is the current target state 
@@ -1338,24 +1457,26 @@ digraph FeedbackSystem {
 ::::
 :::
 
-- **Definition**: the attention scores are normalized into probability using
+- The attention scores are normalized into probability using
   a softmax:
   $$a_{ij} = \frac{e^{r_{ij}}}{\sum_k e^{r_{ik}}}$$
 
-- **Definition**: finally the vectors $\vs_j$ are weighted and summed as:
+- Finally the vectors $\vs_j$ are weighted and summed as:
   $$\vc_i = \sum_j a_{ij} \cdot \vs_j$$
 
-// TODO: Create a schematic picture with graphviz
+// TODO(ai_gp):: Create a schematic picture with graphviz
 
 * Types of Attention
 - **Self-Attention**: Each input attends to all inputs, including itself
   - Useful for capturing dependencies within a single sequence
   - E.g., in language models, each word can attend to all other words in a
     sentence
+
 - **Cross-Attention**: One sequence attends to another
   - Facilitates the interaction between different sequences
   - E.g., in machine translation, the target language sequence attends to the
     source language sequence
+
 - **Multi-Head Attention**
   - Applies attention multiple times in parallel (with different linear
     projections)
