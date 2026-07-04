@@ -4,7 +4,7 @@
 
 ### IN PROGRESS: [ ] Make the unit tests pass
 
-- Doing a full run pytest_log msml610/test/test_gen_slides.py
+- [ ] IN PROGRESS: Doing a full run pytest_log msml610/test/test_gen_slides.py
 - Run the same tests for Data605
 - Run linters2/pyright
 - Run coverage

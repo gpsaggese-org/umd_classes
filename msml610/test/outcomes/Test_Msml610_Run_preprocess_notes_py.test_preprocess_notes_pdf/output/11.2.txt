@@ -1550,9 +1550,9 @@ digraph FeedbackSystem {
 
 - **Greedy Decoding**
   - Pick the next word that has the highest probability
-  - **Pros**
+  - _Pros_
     - Fast
-  - **Cons**
+  - _Cons_
     - We need to maximize the probability of the entire target sequence
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
@@ -1562,7 +1562,10 @@ digraph FeedbackSystem {
   - Choose the hypothesis with the best score
 
 - **Transformer Architecture**
-- **Remark**: revolutionized sequence modeling through combining several ideas
+- Transformer revolutionized sequence modeling through combining several ideas
+  - It dominates current state-of-the-art in NLP
+    - E.g., BERT, GPT, T5, and others
+  - Enables scalability and parallelization
 
 - **Self-attention**
   - Eliminates recurrence by processing sequences in parallel
@@ -1570,40 +1573,36 @@ digraph FeedbackSystem {
   - Multi-head attention to capture different aspects of relationships between
     tokens
 
-- **Remark**: transformer has many (6 or more) transformer layers
-  - **Transformer layer**
+- **Transformer layer**
+  - Transformer has many (6 or more) transformer layers
+  - Each layer has
     - Self-attention
     - Residual connection
     - Feedforward layer (with ReLU)
     - Residual connection
 
-- **Positional embedding**: injects sequence order into token embeddings
+
+- **Positional embedding**
   - Transformer architecture has no inherent way to capture token order in
     sequences
   - Add "positional embeddings" to input embeddings to provide information about
     the position of each token in the sequence
 
-- **Pros**
-  - Enables greater scalability and parallelization
-
-- **Remark**: dominates current state-of-the-art in NLP
-  - E.g., BERT, GPT, T5, and others
-
-
 - **Pretraining**
-- **Remark**: for computer vision train using large collections of
-  hand-labeled images (e.g., ImageNet)
-- **Remark**: for text use un-labeled data
+- Pretrain using a large amount of text data
+  - Fine tune the model with labeled data
+  - It's an example of transfer learning
+
+- For text $\to$ train with self-supervision (un-labeled data)
   - NLP tasks are not easy for labellers (e.g., POS)
   - Internet has large amount of text (100b words added every day)
     - Common crawl
     - Wikipedia
-    - FAQs can be used (for question-answering)
-    - Websites have multiple version (for translation)
+    - FAQs (for question-answering)
+    - Websites with multiple versions (for translation)
 
-- **Solution**: pretrain using a large amount of text data
-  - Fine tune the model with labeled data
-  - It's an example of transfer learning
+- for computer vision train using large collections of
+  hand-labeled images (e.g., ImageNet)
 
 - **Masked Language Models**
 - **Remark**: word prediction in language models are made left-to-right

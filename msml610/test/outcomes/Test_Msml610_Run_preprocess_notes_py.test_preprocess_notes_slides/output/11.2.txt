@@ -1543,67 +1543,66 @@ digraph FeedbackSystem {
   - Maximize the probability of each word in the target training sentence
   - Conditioned on the source and previous target words
 
-- **\textcolor{orange}{Remark}**: at inference time:
+- **\textcolor{darkgreen}{Remark}**: at inference time:
   - Given a source sentence
   - Generate the target word one at a time
   - Feed back the target word for the next time step
 
-- **\textcolor{darkgreen}{Greedy Decoding}**
+- **\textcolor{blue}{Greedy Decoding}**
   - Pick the next word that has the highest probability
-  - **\textcolor{teal}{Pros}**
+  - _Pros_
     - Fast
-  - **\textcolor{cyan}{Cons}**
+  - _Cons_
     - We need to maximize the probability of the entire target sequence
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
 
-- **\textcolor{blue}{Beam Search}**:
+- **\textcolor{violet}{Beam Search}**:
   - Keep the top $k$ hypotheses at each stage
   - Choose the hypothesis with the best score
 
 #### Transformer Architecture
-- **\textcolor{red}{Remark}**: revolutionized sequence modeling through combining several ideas
+- Transformer revolutionized sequence modeling through combining several ideas
+  - It dominates current state-of-the-art in NLP
+    - E.g., BERT, GPT, T5, and others
+  - Enables scalability and parallelization
 
-- **\textcolor{orange}{Self-attention}**
+- **\textcolor{red}{Self-attention}**
   - Eliminates recurrence by processing sequences in parallel
   - Model long-distance context without a sequential dependency
   - Multi-head attention to capture different aspects of relationships between
     tokens
 
-- **\textcolor{darkgreen}{Remark}**: transformer has many (6 or more) transformer layers
-  - **\textcolor{teal}{Transformer layer}**
+- **\textcolor{darkgreen}{Transformer layer}**
+  - Transformer has many (6 or more) transformer layers
+  - Each layer has
     - Self-attention
     - Residual connection
     - Feedforward layer (with ReLU)
     - Residual connection
 
-- **\textcolor{cyan}{Positional embedding}**: injects sequence order into token embeddings
+
+- **\textcolor{blue}{Positional embedding}**
   - Transformer architecture has no inherent way to capture token order in
     sequences
   - Add "positional embeddings" to input embeddings to provide information about
     the position of each token in the sequence
 
-- **\textcolor{blue}{Pros}**
-  - Enables greater scalability and parallelization
-
-- **\textcolor{violet}{Remark}**: dominates current state-of-the-art in NLP
-  - E.g., BERT, GPT, T5, and others
-
-
 #### Pretraining
-- **\textcolor{red}{Remark}**: for computer vision train using large collections of
-  hand-labeled images (e.g., ImageNet)
-- **\textcolor{darkgreen}{Remark}**: for text use un-labeled data
+- Pretrain using a large amount of text data
+  - Fine tune the model with labeled data
+  - It's an example of transfer learning
+
+- For text $\to$ train with self-supervision (un-labeled data)
   - NLP tasks are not easy for labellers (e.g., POS)
   - Internet has large amount of text (100b words added every day)
     - Common crawl
     - Wikipedia
-    - FAQs can be used (for question-answering)
-    - Websites have multiple version (for translation)
+    - FAQs (for question-answering)
+    - Websites with multiple versions (for translation)
 
-- **\textcolor{blue}{Solution}**: pretrain using a large amount of text data
-  - Fine tune the model with labeled data
-  - It's an example of transfer learning
+- for computer vision train using large collections of
+  hand-labeled images (e.g., ImageNet)
 
 #### Masked Language Models
 - **\textcolor{red}{Remark}**: word prediction in language models are made left-to-right
