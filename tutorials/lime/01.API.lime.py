@@ -147,10 +147,12 @@ print("linear_model=", linear_model)
 
 # %%
 # Show linear model coefficients and intercept.
-coef_df = pd.DataFrame({
-    "feature": X_df.columns,
-    "coefficient": linear_model.coef_,
-})
+coef_df = pd.DataFrame(
+    {
+        "feature": X_df.columns,
+        "coefficient": linear_model.coef_,
+    }
+)
 coef_df["abs_coef"] = np.abs(coef_df["coefficient"])
 display(coef_df.sort_values("abs_coef", ascending=False))
 print(f"Intercept: {linear_model.intercept_:.6f}")
@@ -245,7 +247,7 @@ for feature_name, weight in feature_weights:
 # Convert to DataFrame for easier inspection.
 weights_df = pd.DataFrame(
     [(fname, weight) for fname, weight in feature_weights],
-    columns=["feature", "weight"]
+    columns=["feature", "weight"],
 )
 weights_df["abs_weight"] = np.abs(weights_df["weight"])
 display(weights_df.sort_values("abs_weight", ascending=False))
@@ -263,9 +265,11 @@ actual_prediction = linear_model.predict(X_df.iloc[[instance_idx]])[0]
 print(f"Actual model prediction: {actual_prediction:.6f}")
 print(f"Explanation.local_pred: {explanation.local_pred[0]:.6f}")
 print(f"Local model R^2 score: {explanation.score:.6f}")
-print(f"\nInterpretation:")
-print(f"  R^2 = {explanation.score:.4f} means the local linear model explains {explanation.score*100:.1f}% of variance.")
-print(f"  Higher R^2 -> linear approximation is accurate locally.")
+print("\nInterpretation:")
+print(
+    f"  R^2 = {explanation.score:.4f} means the local linear model explains {explanation.score * 100:.1f}% of variance."
+)
+print("  Higher R^2 -> linear approximation is accurate locally.")
 
 # %% [markdown]
 # ## Cell 3.4: Build a full instance explanation table
@@ -283,12 +287,14 @@ feature_names = X_df.columns.tolist()
 weights_dict = dict(explanation.as_list())
 lime_weights = [weights_dict.get(fname, 0.0) for fname in feature_names]
 
-explanation_table = pd.DataFrame({
-    "feature": feature_names,
-    "value": instance_values,
-    "lime_weight": lime_weights,
-    "abs_weight": np.abs(lime_weights),
-})
+explanation_table = pd.DataFrame(
+    {
+        "feature": feature_names,
+        "value": instance_values,
+        "lime_weight": lime_weights,
+        "abs_weight": np.abs(lime_weights),
+    }
+)
 explanation_table = explanation_table.sort_values("abs_weight", ascending=False)
 display(explanation_table)
 
@@ -308,7 +314,7 @@ fig = explanation.as_pyplot_figure()
 fig.set_size_inches(10, 5)
 plt.tight_layout()
 plt.show()
-plt.close('all')
+plt.close("all")
 
 # %% [markdown]
 # **Key observations**:
@@ -331,21 +337,31 @@ fig, ax = plt.subplots(figsize=(10, 5))
 
 # Get feature names and weights in order of absolute magnitude.
 feature_weight_list = explanation.as_list()
-feature_names_sorted = [fname for fname, _ in sorted(feature_weight_list, key=lambda x: abs(x[1]), reverse=True)]
-weights_sorted = [weight for _, weight in sorted(feature_weight_list, key=lambda x: abs(x[1]), reverse=True)]
+feature_names_sorted = [
+    fname
+    for fname, _ in sorted(
+        feature_weight_list, key=lambda x: abs(x[1]), reverse=True
+    )
+]
+weights_sorted = [
+    weight
+    for _, weight in sorted(
+        feature_weight_list, key=lambda x: abs(x[1]), reverse=True
+    )
+]
 
 # Color based on sign.
-colors = ['green' if w > 0 else 'red' for w in weights_sorted]
+colors = ["green" if w > 0 else "red" for w in weights_sorted]
 
 ax.barh(feature_names_sorted, weights_sorted, color=colors, alpha=0.7)
 ax.set_xlabel("Feature Weight (Local Importance)")
 ax.set_title(f"LIME Local Explanation - Instance {instance_idx}")
-ax.axvline(x=0, color='black', linestyle='-', linewidth=0.8)
-ax.grid(axis='x', alpha=0.3)
+ax.axvline(x=0, color="black", linestyle="-", linewidth=0.8)
+ax.grid(axis="x", alpha=0.3)
 
 plt.tight_layout()
 plt.show()
-plt.close('all')
+plt.close("all")
 
 # %% [markdown]
 # **Key observations**:
@@ -384,16 +400,22 @@ for idx in instances_to_explain:
     weights_dict = dict(exp.as_list())
     pred = linear_model.predict(X_df.iloc[[idx]])[0]
     for fname in X_df.columns:
-        comparison_data.append({
-            "instance": idx,
-            "feature": fname,
-            "weight": weights_dict.get(fname, 0.0),
-            "prediction": pred,
-        })
+        comparison_data.append(
+            {
+                "instance": idx,
+                "feature": fname,
+                "weight": weights_dict.get(fname, 0.0),
+                "prediction": pred,
+            }
+        )
 
 comparison_df = pd.DataFrame(comparison_data)
 print("\nComparison of LIME weights across instances:")
-display(comparison_df.pivot(index="feature", columns="instance", values="weight").round(3))
+display(
+    comparison_df.pivot(
+        index="feature", columns="instance", values="weight"
+    ).round(3)
+)
 
 # %% [markdown]
 # ## Cell 5.2: Extract prediction and confidence for a single instance
@@ -418,8 +440,10 @@ feature_weights = exp.as_list()
 print(f"Instance {sample_idx}:")
 print(f"  Actual prediction: {actual_pred:.4f}")
 print(f"  Local R^2 score: {local_r2:.4f} (linear approximation accuracy)")
-print(f"  Top feature weights:")
-for fname, weight in sorted(feature_weights, key=lambda x: abs(x[1]), reverse=True):
+print("  Top feature weights:")
+for fname, weight in sorted(
+    feature_weights, key=lambda x: abs(x[1]), reverse=True
+):
     print(f"    {fname}: {weight:+.4f}")
 
 # %% [markdown]
@@ -445,14 +469,22 @@ exp_inst0 = lime_explainer.explain_instance(
 local_weights = dict(exp_inst0.as_list())
 
 # Compare.
-comparison = pd.DataFrame({
-    "feature": X_df.columns,
-    "model_coef": [global_coef[fname] for fname in X_df.columns],
-    "lime_weight_inst0": [local_weights.get(fname, 0.0) for fname in X_df.columns],
-})
-comparison["difference"] = comparison["model_coef"] - comparison["lime_weight_inst0"]
+comparison = pd.DataFrame(
+    {
+        "feature": X_df.columns,
+        "model_coef": [global_coef[fname] for fname in X_df.columns],
+        "lime_weight_inst0": [
+            local_weights.get(fname, 0.0) for fname in X_df.columns
+        ],
+    }
+)
+comparison["difference"] = (
+    comparison["model_coef"] - comparison["lime_weight_inst0"]
+)
 display(comparison.round(3))
-print("\nNote: For linear models, LIME weights are typically close to model coefficients.")
+print(
+    "\nNote: For linear models, LIME weights are typically close to model coefficients."
+)
 print("For nonlinear models, local weights can differ significantly.")
 
 # %% [markdown]

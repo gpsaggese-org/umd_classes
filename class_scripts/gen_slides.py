@@ -97,8 +97,6 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
     return dir_input, lesson
 
 
-
-
 def _parse() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__,

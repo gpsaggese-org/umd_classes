@@ -11,10 +11,11 @@ import os
 import re
 import shlex
 import sys
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import pytest
-# To handle better progress bars with pytest buffering output. 
+
+# To handle better progress bars with pytest buffering output.
 from tqdm.auto import tqdm
 
 import class_scripts.common_utils as csccouti
@@ -234,13 +235,17 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         :param toc_type: Type of table of contents ("none", "pandoc_native",
             "navigation", "remove_headers")
         """
-        _LOG.debug(
-            hprint.to_str("course_dir lessons output_type toc_type")
-        )
+        _LOG.debug(hprint.to_str("course_dir lessons output_type toc_type"))
         hdbg.dassert_in(output_type, ("pdf", "html", "slides"))
         scratch_dir = self.get_scratch_space()
-        for lesson in tqdm(lessons, desc=f"Preprocessing {output_type}",
-            file=sys.stderr, disable=False, mininterval=0, miniters=1):
+        for lesson in tqdm(
+            lessons,
+            desc=f"Preprocessing {output_type}",
+            file=sys.stderr,
+            disable=False,
+            mininterval=0,
+            miniters=1,
+        ):
             # Get source file.
             src_name = csccouti.get_source_name(course_dir, lesson)
             input_file = os.path.join(course_dir, "lectures_source", src_name)
@@ -274,7 +279,9 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
             content = hio.from_file(output_file)
             self.check_string(content, fuzzy_match=True, tag=lesson)
             _LOG.debug(
-                "Verified %s preprocessing for lesson %s", output_type, lesson,
+                "Verified %s preprocessing for lesson %s",
+                output_type,
+                lesson,
             )
             #
             sys.stdout.flush()
@@ -291,9 +298,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test PDF output type.
         output_type = "pdf"
-        self._run_preprocess_notes_py(
-            self.COURSE_DIR, lessons, output_type
-        )
+        self._run_preprocess_notes_py(self.COURSE_DIR, lessons, output_type)
 
     @pytest.mark.superslow
     def test_preprocess_notes_html(self) -> None:
@@ -305,9 +310,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test HTML output type.
         output_type = "html"
-        self._run_preprocess_notes_py(
-            self.COURSE_DIR, lessons, output_type
-        )
+        self._run_preprocess_notes_py(self.COURSE_DIR, lessons, output_type)
 
     @pytest.mark.superslow
     def test_preprocess_notes_slides(self) -> None:
@@ -319,9 +322,7 @@ class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         # Test slides output type.
         output_type = "slides"
-        self._run_preprocess_notes_py(
-            self.COURSE_DIR, lessons, output_type
-        )
+        self._run_preprocess_notes_py(self.COURSE_DIR, lessons, output_type)
 
 
 # #############################################################################
@@ -356,8 +357,12 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         typst_lessons = []
         beamer_lessons = []
         for lesson in tqdm(
-            lessons, desc="Checking slides engine", file=sys.stderr,
-            disable=False, mininterval=0, miniters=1,
+            lessons,
+            desc="Checking slides engine",
+            file=sys.stderr,
+            disable=False,
+            mininterval=0,
+            miniters=1,
         ):
             src_name = csccouti.get_source_name(self.COURSE_DIR, lesson)
             input_file = os.path.join(
@@ -397,16 +402,17 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         :param lessons: List of lesson numbers to test
         :param output_type: Either "md" for markdown or "tex" for LaTeX output
         """
-        _LOG.debug(
-            hprint.to_str(
-                "course_dir lessons output_type"
-            )
-        )
+        _LOG.debug(hprint.to_str("course_dir lessons output_type"))
         hdbg.dassert_in(output_type, ("tex_pdf", "typ_pdf", "tex", "typ"))
         scratch_dir = self.get_scratch_space()
         for lesson in tqdm(
-            lessons, desc=f"Testing {output_type} output",
-            file=sys.stderr, disable=False, mininterval=0, miniters=1):
+            lessons,
+            desc=f"Testing {output_type} output",
+            file=sys.stderr,
+            disable=False,
+            mininterval=0,
+            miniters=1,
+        ):
             # Shortcut for debugging.
             if True:
                 if lesson < "91":
@@ -422,7 +428,9 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             metadata, _ = dshdprno.extract_slide_metadata(lines)
             slides_engine = metadata.get("slides_engine", "beamer")
             is_typst_output_type = output_type in ("typ_pdf", "typ")
-            _LOG.debug(hprint.to_str("slides_engine output_type is_typst_output_type"))
+            _LOG.debug(
+                hprint.to_str("slides_engine output_type is_typst_output_type")
+            )
             if (slides_engine == "typst") != is_typst_output_type:
                 _LOG.info(
                     "Skip lesson '%s': slides_engine='%s' doesn't match "
@@ -497,9 +505,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
                 content = hio.from_file(to_check_file)
                 self.check_string(content, fuzzy_match=True, tag=lesson)
             #
-            _LOG.debug(
-                "Verified %s output for lesson %s", output_type, lesson
-            )
+            _LOG.debug("Verified %s output for lesson %s", output_type, lesson)
             sys.stdout.flush()
 
     # TODO(ai_gp2): Factor out common code
@@ -522,9 +528,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         hdbg.dassert_ne(self.COURSE_DIR, "")
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         output_type = "tex"
-        self._run_notes_to_pdf_py(
-            self.COURSE_DIR, lessons, output_type
-        )
+        self._run_notes_to_pdf_py(self.COURSE_DIR, lessons, output_type)
 
     @pytest.mark.superslow
     def test_typ_output(self) -> None:
@@ -535,10 +539,8 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         hdbg.dassert_ne(self.COURSE_DIR, "")
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         output_type = "typ"
-        self._run_notes_to_pdf_py(
-            self.COURSE_DIR, lessons, output_type
-        )
-   
+        self._run_notes_to_pdf_py(self.COURSE_DIR, lessons, output_type)
+
     @pytest.mark.superslow
     def test_tex_pdf(self) -> None:
         """
@@ -558,7 +560,9 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         output_type = "tex_pdf"
         self._run_notes_to_pdf_py(
-            self.COURSE_DIR, lessons, output_type,
+            self.COURSE_DIR,
+            lessons,
+            output_type,
         )
 
     @pytest.mark.superslow
@@ -580,8 +584,11 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
         lessons = _get_lesson_numbers(self.COURSE_DIR)
         output_type = "typ_pdf"
         self._run_notes_to_pdf_py(
-            self.COURSE_DIR, lessons, output_type,
+            self.COURSE_DIR,
+            lessons,
+            output_type,
         )
+
 
 # #############################################################################
 # Run_gen_slides_py_TestCase
@@ -608,9 +615,7 @@ class Run_gen_slides_py_TestCase(hunitest.TestCase):
         Run gen_slides for a lesson, generating only TeX output.
         """
         _LOG.debug(hprint.to_str("course_dir lesson"))
-        cmd = (
-            f"gen_slides.py {course_dir}/{lesson} --skip_action open --no_pdf"
-        )
+        cmd = f"gen_slides.py {course_dir}/{lesson} --skip_action open --no_pdf"
         hsystem.system(cmd)
 
     @pytest.mark.slow

@@ -5,7 +5,7 @@
 ### IN PROGRESS: [ ] Make the unit tests pass
 
 - [x] Doing a full run `pytest_log msml610/test/test_gen_slides.py`
-- [.] `pytest_log data605/test/test_gen_slides.py`
+- [x] `pytest_log data605/test/test_gen_slides.py`
 - Run linters2/pyright
 - Run coverage
 

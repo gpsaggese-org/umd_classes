@@ -132,7 +132,15 @@ import seaborn as sns
 print("=== Feature Correlations ===")
 fig, ax = plt.subplots(figsize=(8, 6))
 corr_matrix = X_df.corr()
-sns.heatmap(corr_matrix, annot=True, fmt=".3f", cmap="coolwarm", center=0, ax=ax, square=True)
+sns.heatmap(
+    corr_matrix,
+    annot=True,
+    fmt=".3f",
+    cmap="coolwarm",
+    center=0,
+    ax=ax,
+    square=True,
+)
 ax.set_title("Feature Correlation Matrix")
 plt.tight_layout()
 plt.show()
@@ -153,10 +161,12 @@ print("linear_model=", linear_model)
 
 # %%
 # Show linear model coefficients and intercept.
-coef_df = pd.DataFrame({
-    "feature": X_df.columns,
-    "coefficient": linear_model.coef_,
-})
+coef_df = pd.DataFrame(
+    {
+        "feature": X_df.columns,
+        "coefficient": linear_model.coef_,
+    }
+)
 coef_df["abs_coef"] = np.abs(coef_df["coefficient"])
 display(coef_df.sort_values("abs_coef", ascending=False))
 print(f"Intercept: {linear_model.intercept_:.6f}")
