@@ -13,7 +13,8 @@
 - [.] Doing a full run `pytest_log msml610/test/test_gen_slides.py`
 - [.] `pytest_log data605/test/test_gen_slides.py`
 - [.] Run linters2/pyright
-- Run coverage
+- [ ] `pytest /Users/saggese/src/umd_classes2/class_scripts`
+- [ ] Run coverage
 
 data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
 

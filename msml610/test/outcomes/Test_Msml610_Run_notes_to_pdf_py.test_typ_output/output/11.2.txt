@@ -358,7 +358,7 @@
     network literature
   ],
   [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+  #box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
   ]
 )
 ==== Activation Functions
@@ -379,7 +379,7 @@
     - Improves convergence over sigmoid
   ],
   [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png"))
+  #box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png"))
   ]
 )
 ==== Activation Functions
@@ -405,7 +405,7 @@
     - Always differentiable; output in $\[ 0 \, oo \)$
   ],
   [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png"))
+  #box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png"))
   ]
 )
 ==== Neural Networks to Compute Boolean Functions
@@ -450,6 +450,8 @@
     - Combine outputs logically for the final decision
   - This forms a #emph["lookup table"] over regions of input space,
     similar to decision trees
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png"))
 
 ==== Feedforward vs Recurrent Neural Networks
 <feedforward-vs-recurrent-neural-networks>
@@ -512,7 +514,7 @@
       range
   ],
   [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png"))
+  #box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png"))
   ]
 )
 ==== Conventions for Neurons in a Neural Network
@@ -532,6 +534,8 @@
     to account for the bias
     - Use $l - 1$ in $d \( l - 1 \)$ since you look at the previous
       layer
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png"))
 
 ==== Feedforward Propagation Algorithm
 <feedforward-propagation-algorithm>
@@ -808,6 +812,8 @@
   - An image of size 32 x 32 x 3 with a 5 x 5 filter creates a 28 x 28
     feature map (ignoring padding)
 
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.7.png"))
+
 ==== Convolutional Neural Networks
 <convolutional-neural-networks-2>
 - #text(fill: red, weight: "bold")[Pros]
@@ -856,7 +862,7 @@
     - Achieved state-of-the-art results on ImageNet and other benchmarks
   ],
   [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png", width: 50.0%))
+  #box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.8.png", width: 50.0%))
   ]
 )
 ==== Table of Content
@@ -872,82 +878,65 @@
 
 ==== Recurrent Neural Networks (RNNs)
 <recurrent-neural-networks-rnns>
-#grid(
-  columns: (55%, 40%),
-  gutter: 0.5em,
-  [
-  - #text(fill: red, weight: "bold")[Definition]: maintain a hidden state
-    that evolves over time
-  
-    - Process input sequences one element at a time, maintaining a memory
-      of previous inputs
-    - Output depends on current input and previous hidden state
-    - Useful for tasks where the order of data is crucial
-  
-  - #text(fill: orange, weight: "bold")[Remark]: trained using
-    backpropagation through time
-  
-  - #text(fill: green, weight: "bold")[Pros]
-  
-    - Designed for sequential data
-      - E.g., time series, text
-    - Can, in theory, capture temporal dependencies of arbitrary length
-  
-  - #text(fill: teal, weight: "bold")[Cons]
-  
-    - Struggle with long-term dependencies (vanishing gradients)
-    - Training is slow due to sequential processing (no parallelism over
-      time steps)
-    - Struggles with long-term memory retention
-    - Suitable for simple sequences
-  
-  - #text(fill: rgb("#00FFFF"), weight: "bold")[Examples]:
-  
-    - Language modeling: Given a sequence of words, predict the next word
-    - Time series prediction: Forecast future values based on past
-      observations
-    - Sentiment analysis: Determine the sentiment of a sentence by
-      considering the sequence of words
-  ],
-  [
-  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_11.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png"))
-  ]
-)
+- #text(fill: red, weight: "bold")[Definition]: #emph[Recurrent Neural
+  Networks];:
+  - Process input sequences one element at a time
+  - Maintain memory of previous inputs (hidden state)
+  - Output depends on current input and previous hidden state
+  - Useful for tasks where order of data is crucial
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.9.png"))
+
+- #text(fill: blue, weight: "bold")[Remark]: Trained using
+  backpropagation through time
+
+==== Recurrent Neural Networks (RNNs)
+<recurrent-neural-networks-rnns-1>
+- #text(fill: red, weight: "bold")[Pros]
+  - Designed for sequential data
+    - E.g., time series, text
+  - Capture temporal dependencies of arbitrary length (in theory)
+- #text(fill: green, weight: "bold")[Cons]
+  - Struggle with vanishing gradients
+  - Slow training due to sequential processing (no parallelism over time
+    steps)
+  - Struggle with long-term memory retention
+- #text(fill: blue, weight: "bold")[Examples]:
+  - Time series prediction: Forecast future values based on past
+    observations
+  - Language modeling: Predict next word in a sequence
+  - Sentiment analysis: Determine sentiment of a sentence by considering
+    sequence of words
+
 ==== Vanishing and Exploding Gradient Problem
 <vanishing-and-exploding-gradient-problem>
-- #text(fill: red, weight: "bold")[Remark]: arise due to repeated
-  multiplication of gradients in the chain rule
-
-- #text(fill: orange, weight: "bold")[Vanishing Gradient]
-
-  - Gradients become very small in early layers as they are propagated
-    backward
-  - Leads to extremely slow learning or no learning
-  - Common with activation functions like sigmoid or tanh
-
-- #text(fill: green, weight: "bold")[Exploding Gradient]
-
-  - Gradients grow exponentially during backpropagation
-  - Causes unstable updates and potential overflow in weights
-  - Often seen when weights are initialized with large values
-
-- #text(fill: teal, weight: "bold")[Solutions]
-
-  - Use ReLU or similar activations to mitigate vanishing gradients
-  - Apply gradient clipping to handle exploding gradients
+- #text(fill: red, weight: "bold")[Problem]:
+  - #emph[Vanishing Gradient];:
+    - Gradients become small in early layers during backpropagation
+    - Leads to slow or no learning
+    - Common with sigmoid or tanh activations
+  - #emph[Exploding Gradient]
+    - Gradients grow exponentially during backpropagation
+    - Causes unstable updates and potential overflow
+    - Seen with large initial weights
+  - Both issues are caused by repeated multiplication of gradients in
+    the chain rule
+- #text(fill: green, weight: "bold")[Solutions]
   - Normalize inputs
+  - Use ReLU or similar activations to mitigate vanishing gradients
+  - Apply gradient clipping for exploding gradients
   - Apply batch normalization
-
-- #text(fill: rgb("#00FFFF"), weight: "bold")[Remark]: these issues
-  motivated the design of architectures like LSTM and ResNet
+- #text(fill: blue, weight: "bold")[Remark]: These issues motivated
+  architectures like LSTM and ResNet
 
 ==== Long Short-Term Memory (LSTM) Networks
 <long-short-term-memory-lstm-networks>
-- #text(fill: red, weight: "bold")[Definition]: special architecture
-  with memory cells and gates
-  - Forget gate: decides what information to discard from the cell state
-  - Input gate: controls what new information to store
-  - Output gate: determines what to output from the cell
+- #text(fill: red, weight: "bold")[Definition]: Long Short-Term Memory
+  is an architecture with memory cells and several special gates:
+  - #emph[Forget gate];: decides what information to discard from the
+    cell state
+  - #emph[Input gate];: controls what new information to store
+  - #emph[Output gate];: determines what to output from the cell
 - #text(fill: green, weight: "bold")[Pros]
   - Designed to overcome vanishing gradient problem in standard RNNs
   - Captures long-range dependencies through gated memory cells
@@ -960,32 +949,32 @@
   - Difficult to parallelize over time steps
 - #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: especially
   effective in natural language processing and time series tasks
-  - E.g., used in machine translation, speech recognition, and language
-    modeling
+  - E.g., machine translation, speech recognition, and language modeling
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.10.png"))
 
 ==== Gated Recurrent Units (GRUs)
 <gated-recurrent-units-grus>
-- #text(fill: red, weight: "bold")[Definition]: alternative to LSTMs for
-  sequential modeling
-  - Combine #text(fill: orange, weight: "bold")[forget] and
-    #text(fill: green, weight: "bold")[input] gates into a single
-    #text(fill: teal, weight: "bold")[update gate]
+- #text(fill: red, weight: "bold")[Definition]: Gated Recurrent Unites
+  are alternative to LSTMs for sequential modeling
+  - Combine forget and input gates into a single #emph[update gate]
   - Retain essential functionality with fewer components:
     - Update gate controls how much of the past state to keep
     - Reset gate controls how much of the past information to forget
-- #text(fill: rgb("#00FFFF"), weight: "bold")[Pros]
+- #text(fill: green, weight: "bold")[Pros]
   - Requires fewer parameters, leading to faster training
   - Comparable or better performance than LSTM on many tasks
   - Easier to tune and implement
   - Suitable for real-time and low-resource applications
 - #text(fill: blue, weight: "bold")[Cons]
-  - May be less expressive than LSTM for very complex patterns
+  - Less expressive than LSTM for very complex patterns
   - Lacks a separate memory cell, which may limit ability to retain
     long-term information
-  - Slightly less studied and standardized than LSTM in some domains
 - #text(fill: rgb("#8B00FF"), weight: "bold")[Example]
   - GRUs are preferred in real-time speech recognition systems due to
     their efficiency
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.11.png"))
 
 ==== Table of Content
 <table-of-content-6>
@@ -1001,15 +990,15 @@
 ==== Techniques for Training Deep Neural Networks
 <techniques-for-training-deep-neural-networks>
 - #text(fill: red, weight: "bold")[Problem]: deep networks are hard to
-  train
-  - Due to vanishing/exploding gradients
-  - Optimization can be slow and sensitive to hyperparameters
+  train for several reasons:
+  + Vanishing/exploding gradients
+  + Training can be slow
+  + Optimization is sensitive to hyperparameters
 - #text(fill: green, weight: "bold")[Momentum]
   - Modifies gradient descent to accelerate convergence
   - Updates use an exponentially decaying average of past gradients
-  - Update rule: $v_t = beta v_(t - 1) + eta nabla theta_t$,
-    $theta_(t + 1) = theta_t - v_t$
-  - Helps overcome local minima and reduces oscillations in ravines
+  - Update rule: $v_t = beta v_(t - 1) + eta nabla theta_t$
+  - Helps overcome local minima and reduces oscillations
 - #text(fill: blue, weight: "bold")[Adam (Adaptive Moment Estimation)]
   - Combines momentum with adaptive learning rates
   - Maintains estimates of both first moment (mean) and second moment
@@ -1029,20 +1018,21 @@
     $ hat(x) = frac(x - mu_B, sqrt(sigma_B^2 + epsilon.alt)) $
   - Introduces learnable parameters $gamma$ and $beta$ to scale and
     shift the normalized values
-  - Benefits:
-    - Reduces internal covariate shift
-    - Enables higher learning rates
-    - Acts as a regularizer, reducing need for dropout
+- #text(fill: blue, weight: "bold")[Pros]
+  - Reduces internal covariate shift
+  - Enables higher learning rates
+  - Acts as a regularizer, reducing need for dropout
 
 ==== Regularization in Neural Networks
 <regularization-in-neural-networks>
-- #text(fill: red, weight: "bold")[Goal]: (soft) weight elimination:
-  fewer weights $arrow.r.double.long$ smaller VC dimension, so we would
-  like to remove some neurons (i.e., push weights towards 0)
+- #text(fill: red, weight: "bold")[Goal]: (soft) weight elimination
 
-- #text(fill: green, weight: "bold")[Remark]: for any activation
-  function (e.g., tanh()) a small weight means that we work in the
-  linear regime, while a large weight leaves us in the binary regime
+  - Fewer weights $arrow.r.double.long$ smaller VC dimension
+  - Remove neurons (push weights towards 0)
+
+- #text(fill: green, weight: "bold")[Remark]: Regardless of activation
+  function (e.g., #text(fill: blue)[`tanh`]), small weight means linear
+  regime, large weight means binary regime
 
 - #text(fill: blue, weight: "bold")[(Naive) Solution]: using a normal
   regularization
@@ -1052,12 +1042,11 @@
     in linear regime
 
 - #text(fill: rgb("#8B00FF"), weight: "bold")[Solution]: so for neural
-  networks we use a regularizer as
-
+  networks use a regularizer as:
   $ Omega \( bold(underline(w)) \) = lambda sum_(i \, j \, l) frac(\( w_(i j)^(\( l \)) \)^2, beta^2 + \( w_(i j)^(\( l \)) \)^2) $
 
-  so that the penalization is quadratic for small $bold(underline(w))$
-  and then it saturates as function of the weight magnitude
+  - Penalization is quadratic for small $bold(underline(w))$ and then it
+    saturates as function of the weight magnitude
 
 ==== Table of Content
 <table-of-content-7>
@@ -1075,50 +1064,49 @@
 - #text(fill: red, weight: "bold")[Part-of-speech (POS) tagging]
   - Assign a POS (e.g., noun, verb, adjective) to each word in a
     sentence
-  - Data needs: labelled data
+  - Need: labelled data
 - #text(fill: orange, weight: "bold")[Co-reference resolution]
   - E.g., #emph["Mike told that John was sick, so I took him to the
     hospital"]
     - Who does #emph["him"] refer to?
     - #emph["John"] with high probability
   - The output is a distribution over possible antecedents
-  - Data needs: labelled data
+  - Need: labelled data
 - #text(fill: green, weight: "bold")[Sentiment analysis]
   - Classify a text as having positive or negative sentiment
     - E.g., "the movie was poorly written and acted" $arrow.r$ negative
-  - Data needs: nothing in theory
+  - Need: nothing in theory
 - #text(fill: teal, weight: "bold")[Machine translation]
   - Translate a sentence from a source language to a target language
     - E.g., from Spanish to English
-  - Data needs: large corpus of source/target sentence pairs
+  - Need: large corpus of source/target sentence pairs
 - #text(fill: rgb("#00FFFF"), weight: "bold")[Information extraction]
-  - Automatically extracting structured information from unstructured
-    text
-- #text(fill: blue, weight: "bold")[Named entity recognition]
+  - Extract structured information from unstructured text
+- #text(fill: blue, weight: "bold")[Named entity recognition] (NER)
   - Identify and classify named entities (e.g., people, organizations,
     locations) in text
 
 ==== Part-of-speech (POS) Tagging
 <part-of-speech-pos-tagging>
 - #text(fill: red, weight: "bold")[Example]
-  - Input: "The dog barks loudly"
-  - Output: \[Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)\]
+  - Input: #emph["The dog barks loudly"]
+  - Output:
+    #text(fill: blue)[`Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)`]
 - #text(fill: green, weight: "bold")[Techniques]
   - #emph[Rule-based];: hand-crafted grammar rules
-  - #emph[Statistical];: models like Hidden Markov Models (HMMs)
+  - #emph[Statistical];: models (e.g., Hidden Markov Models)
   - #emph[Machine Learning];: classifiers (e.g., SVM)
   - #emph[Neural Networks];: LSTM, BiLSTM, or Transformers
-- #text(fill: blue, weight: "bold")[Challenges]
-  - Ambiguity: "can" can be a verb or a noun
-  - Context-dependency: Tags depend on the surrounding words
+- #text(fill: blue, weight: "bold")[Problems]
+  - #emph[Ambiguity];: "can" can be a verb or a noun
+  - #emph[Context-dependency];: Tags depend on the surrounding words
 
 ==== NLP Using Rules-Based Systems
 <nlp-using-rules-based-systems>
 - #text(fill: red, weight: "bold")[(Naive) Solution]: systems based on
-  rules for parsing and semantic analysis have shown
-  - Success in many tasks
+  rules for parsing and semantic analysis
   - Cons: performance limited by linguistic complexity
-    - E.g., "cut" can be a verb or a noun
+    - E.g., #emph["cut"] can be a verb or a noun
       - Present, past, infinite verb
       - Transitive or intransitive
       - The meaning depends on the context
@@ -1133,7 +1121,7 @@
 
 - #text(fill: green, weight: "bold")[Key Observation]
 
-  - Human-designed heuristics and domain knowledge lose
+  - Human-designed heuristics and domain knowledge tend to lose
   - General-purpose learning algorithms that scale with computation tend
     to win
   - E.g.,
@@ -1142,7 +1130,7 @@
     - Vision: feature-engineered models replaced by end-to-end trained
       convolutional networks
 
-- #text(fill: blue, weight: "bold")[The "Bitter" Part]
+- #text(fill: blue, weight: "bold")[Why "Bitter"?]
 
   - Humans like to inject knowledge into systems
   - But machines learn better when allowed to discover patterns from
@@ -1166,14 +1154,14 @@
 
 - #text(fill: green, weight: "bold")[Requirements]:
 
-  - No need for manual feature engineering
+  - No manual feature engineering (not scalable)
   - Allow for generalization between related words
     - Syntactically: "colorless" and "ideal" are both adjectives
     - Semantically: "cat" and "kitten" are both felines
     - Topically: "sunny" and "rainy" are both weather terms
     - Sentiment: "awesome" and "cringeworthy" are opposite
 
-- #text(fill: blue, weight: "bold")[Approaches]:
+- #text(fill: blue, weight: "bold")[Solutions]:
 
   + Encode a word into an input vector (e.g., one-hot vector)
     - Cons: doesn't capture similarity between words
@@ -1191,21 +1179,22 @@
 <word-embeddings-emerging-properties>
 - #text(fill: red, weight: "bold")[Fact]: similar words have similar
   word embeddings
-  - Words cluster based on their topics
-- #text(fill: green, weight: "bold")[Fact]: difference between related
-  words seems to have a meaning
+  - Words tend to cluster based on their topics
+- #text(fill: green, weight: "bold")[Fact]: difference between
+  embeddings of related words seems to have a meaning
+  - E.g., negative, plural, superlative, past tense are "vectors" in
+    embedding space
   - E.g., #text(fill: blue)[`Greece`] - #text(fill: blue)[`Athens`] =
     country/capital relationship
-  - E.g., negative, plural, superlative, past tense
 - #text(fill: blue, weight: "bold")[Remark]: these properties are:
-  - Not really enforced
+  - Not enforced
   - Approximate
   - Emergent
 
 ==== Word Embeddings: Pretrained vs Custom
 <word-embeddings-pretrained-vs-custom>
-- #text(fill: red, weight: "bold")[Remark]: word embedding
-  representations are independent of the task
+- #text(fill: red, weight: "bold")[Remark]: word embeddings can be used
+  independently of the task
   - Can pretrain and reuse them
     - Word2vec
     - GloVe (global vectors)
@@ -1214,24 +1203,23 @@
   learn word embeddings end-to-end with the task
   - E.g., POS tagging: the same word needs to be represented in
     different ways
-    - E.g., "cut" can be verb or noun $arrow.r$ multiple semantic
+    - E.g., #emph["cut"] can be verb or noun $arrow.r$ multiple semantic
       embeddings
 
 ==== Language Models
 <language-models>
-- #text(fill: red, weight: "bold")[Remark]: word embedding are a good
-  representation for words in isolation
-- #text(fill: green, weight: "bold")[Problem]: language consists of
-  sequence of words where context of each word is important
+- #text(fill: red, weight: "bold")[Problem]:
+  - Word embedding are a good representation for words in isolation
+  - Language consists of sequence of words where the context of each
+    word is important
   - E.g., in #emph["Michael told me that John was sick, so I took him to
-    the hospital"];, "him" can refer to multiple people
-- #text(fill: blue, weight: "bold")[Definition]: a #emph[language model]
-  is a probability distribution of sequences of words
-  - Predict the next word in a text given all the previous words
-    - Supervised learning
-    - Enormous amount of data
-- #text(fill: rgb("#8B00FF"), weight: "bold")[Question]: how to learn a
-  language model?
+    the hospital"];, #emph["him"] can refer to multiple people
+- #text(fill: green, weight: "bold")[Definition]: a #emph[language
+  model] is a probability distribution of sequences of words
+  - I.e., predict the next word in a text given all the previous words
+  - Supervised learning on enormous amount of data
+- #text(fill: blue, weight: "bold")[Question]: how to learn a language
+  model?
   + Feedforward neural network
   + Recurrent neural network
   + Transformer architecture
@@ -1243,16 +1231,17 @@
   - Fixed-size context window of $n$ words
   - Word embeddings
 - #text(fill: blue, weight: "bold")[Problems]:
-  + Context might need to be very long
+  + #emph[Context] might need to be very long
     - Not all the words are important
     - E.g., a sentence with 20 words requires a large number of
       parameters if each word is considered in any context
-  + Problem of asymmetry
+  + #emph[Asymmetry]
     - Weights need to be learned for each word in each position
-    - E.g., different weights for the word "cat" when it appears at the
-      beginning versus the end of a sentence
-    - Too many parameters to learn
-    - Computationally expensive
+    - E.g., different weights for the word #emph["cat"] when it appears
+      at the beginning versus the end of a sentence
+    - Many parameters to learn $arrow.r$ computationally expensive
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.12.png"))
 
 ==== RNNs for Language Models
 <rnns-for-language-models>
@@ -1264,6 +1253,8 @@
   + A hidden layer gets the previous state and the new word
     - Allocate storage space for features of inputs useful for the task
   + The output is a probability over output words
+
+#box(image("/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.13.png"))
 
 ==== RNNs for Language Models: Pros and Cons
 <rnns-for-language-models-pros-and-cons>
@@ -1285,28 +1276,21 @@
 
 ==== Sequence-to-Sequence Models
 <sequence-to-sequence-models>
-- #text(fill: red, weight: "bold")[Definition]: enable learning of
-  mappings between sequences of differing lengths and structures
-
-  - Used for transforming one sequence into another, e.g.,
-    - Machine translation
-    - Text summarization
-    - Speech recognition
-
-- #text(fill: orange, weight: "bold")[Remark]: composed of two main
-  components:
-
-  - #text(fill: green, weight: "bold")[Encoder]: Compress information
-    from input sequence into a fixed-size context vector
-  - #text(fill: teal, weight: "bold")[Decoder]: Generates output
-    sequence from the context vector
+- #text(fill: red, weight: "bold")[Definition]: Seq-to-Seq learn to
+  transform sequences of differing lengths and structures
+  - Training is supervised with input-output sequence pairs
+- #text(fill: green, weight: "bold")[Examples]
+  - Machine translation
+  - Text summarization
+  - Speech recognition
+- #text(fill: blue, weight: "bold")[Remark]: models are composed of two
+  main components:
+  - #emph[Encoder];: Compress information from input sequence into a
+    fixed-size context vector
+  - #emph[Decoder];: Generates output sequence from the context vector
   - Both encoder and decoder are typically RNNs (e.g., LSTM or GRU)
-
-- #text(fill: rgb("#00FFFF"), weight: "bold")[Remark]: training is
-  supervised with input-output sequence pairs
-
-- #text(fill: blue, weight: "bold")[Limitations]:
-
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Limitations]: \/\/
+  TODO(ai\_gp): The following is unclear, explain better
   - Fixed-size context vector can become a bottleneck for long sequences
   - Attention mechanisms so decoder can access all encoder states
 
@@ -1316,10 +1300,10 @@
   - Instead of processing input sequentially (like RNNs), attention
     processes all simultaneously
   - Each token can "look at" others and decide which are most important
-    - E.g., in translation, the word "bank" in "river bank" gets higher
-      attention from nearby words like "river"
-  - It's like "context-based summarization" of the source sentence into
-    a fixed-dimensional representation
+    - E.g., in translation, the word #emph["bank"] in #emph["river
+      bank"] gets higher attention from nearby words like #emph["river"]
+  - It's like context-based summarization of the source sentence into a
+    fixed-dimensional representation
 - #text(fill: blue, weight: "bold")[Motivation]
   - Enables models to focus on relevant parts of the input sequence
   - Mimics human cognitive attention by weighting important information
@@ -1330,14 +1314,17 @@
   columns: (65%, 30%),
   gutter: 0.5em,
   [
-  - If the RNN model is
+  - #text(fill: red, weight: "bold")[Definition]: if the RNN model is
     $bold(underline(h))_i = R N N \( bold(underline(h))_(i - 1) \, bold(underline(x))_i \)$
+  
   - The sequence-to-sequence attention is the concatenation of
     $bold(underline(x))_i$ and the context vector $bold(underline(c))_i$
     $ bold(underline(h))_i = R N N \( bold(underline(h))_(i - 1) \, \[ bold(underline(x))_i \, bold(underline(c))_i \] \) $
+  
   - The raw attention score $r_(i j)$ is:
     $ r_(i j) = bold(underline(h))_(i - 1) dot.op bold(underline(s))_j $
     where
+  
     - $bold(underline(h))_(i - 1)$ is the current target state
     - $bold(underline(s))_j$ is the $j$-th source word (i.e., the output
       of the source RNN vector for the word $j$)
@@ -1372,13 +1359,14 @@
   - Concatenating is better than summing to keep important information
   - Captures different types of relationships at different subspaces
   - E.g., in a Transformer model, different heads might focus on
-    different parts of a sentence, such as subject-verb agreement or
-    noun-adjective relationships
+    different relationships of a sentence (e.g., subject-verb agreement,
+    noun-adjective relationships)
 
 ==== Attention: Vectorized Formula
 <attention-vectorized-formula>
-- Compute a weighted sum of values ($V$) using weights derived from
-  queries ($Q$) and keys ($K$)
+- #text(fill: red, weight: "bold")[Definition]: compute a weighted sum
+  of values ($V$) using weights derived from queries ($Q$) and keys
+  ($K$)
   $ upright("Attention") \( Q \, K \, V \) = upright("softmax") (frac(Q K^T, sqrt(d_k))) V $
   where:
   - $Q$: matrix of query vectors (shape: $n_q times d_k$)
@@ -1387,100 +1375,93 @@
   - $d_k$: dimensionality of the key vectors
   - $Q K^T$: dot products between each query and all keys (shape:
     $n_q times n_k$)
-- #text(fill: red, weight: "bold")[Steps]:
-  + #text(fill: orange, weight: "bold")[Dot Product]: Compute similarity
-    between each query and all keys
+- #text(fill: green, weight: "bold")[Steps]:
+  + #emph[Dot Product];: Compute similarity between each query and all
+    keys
     - $Q K^T$ produces attention scores
-  + #text(fill: green, weight: "bold")[Scaling]: Divide scores by
-    $sqrt(d_k)$
+  + #emph[Scaling];: Divide scores by $sqrt(d_k)$
     - To stabilize gradients
-  + #text(fill: teal, weight: "bold")[Softmax]: Apply softmax to each
-    row of the scaled scores
+  + #emph[Softmax];: Apply softmax to each row of the scaled scores
     - Converts scores into a probability distribution (attention
       weights)
-  + #text(fill: rgb("#00FFFF"), weight: "bold")[Weighted Sum]: Multiply
-    weights by $V$ to produce context vectors
-- #text(fill: blue, weight: "bold")[Advantages]
+  + #emph[Weighted Sum];: Multiply weights by $V$ to produce context
+    vectors
+- #text(fill: blue, weight: "bold")[Pros]
   - Parallelizable computation
   - Better handling of long-range dependencies than RNNs
 
 ==== Sequence-to-Sequence: Decoding
 <sequence-to-sequence-decoding>
-- Training a sequence-to-sequence model requires to:
+- #text(fill: red, weight: "bold")[Goal]: training a
+  sequence-to-sequence model requires to:
   - Maximize the probability of each word in the target training
     sentence
   - Conditioned on the source and previous target words
-- At inference time:
+- #text(fill: green, weight: "bold")[Remark]: at inference time:
   - Given a source sentence
   - Generate the target word one at a time
   - Feed back the target word for the next time step
-- Greedy decoding
+- #text(fill: blue, weight: "bold")[Greedy Decoding]
   - Pick the next word that has the highest probability
-  - Pros
+  - #emph[Pros]
     - Fast
-  - Cons
+  - #emph[Cons]
     - We need to maximize the probability of the entire target sequence
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
-- Beam search:
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Beam Search]:
   - Keep the top $k$ hypotheses at each stage
   - Choose the hypothesis with the best score
 
 ==== Transformer Architecture
 <transformer-architecture>
-- Revolutionized sequence modeling through combining several ideas
-
+- Transformer revolutionized sequence modeling through combining several
+  ideas
+  - It dominates current state-of-the-art in NLP
+    - E.g., BERT, GPT, T5, and others
+  - Enables scalability and parallelization
 - #text(fill: red, weight: "bold")[Self-attention]
-
   - Eliminates recurrence by processing sequences in parallel
   - Model long-distance context without a sequential dependency
   - Multi-head attention to capture different aspects of relationships
     between tokens
-
-- Transformer has many (6 or more) transformer layers
-
-  - #text(fill: green, weight: "bold")[Transformer layer]
+- #text(fill: green, weight: "bold")[Transformer layer]
+  - Transformer has many (6 or more) transformer layers
+  - Each layer has
     - Self-attention
     - Residual connection
     - Feedforward layer (with ReLU)
     - Residual connection
-
-- #text(fill: blue, weight: "bold")[Positional embedding]: injects
-  sequence order into token embeddings
-
+- #text(fill: blue, weight: "bold")[Positional embedding]
   - Transformer architecture has no inherent way to capture token order
     in sequences
   - Add "positional embeddings" to input embeddings to provide
     information about the position of each token in the sequence
 
-- #text(fill: rgb("#8B00FF"), weight: "bold")[Pros]
-
-  - Enables greater scalability and parallelization
-
-- Dominates current state-of-the-art in NLP
-
-  - E.g., BERT, GPT, T5, and others
-
 ==== Pretraining
 <pretraining>
-- For computer vision train using large collections of hand-labeled
-  images (e.g., ImageNet)
-- For text use un-labeled data
+- Pretrain using a large amount of text data
+  - Fine tune the model with labeled data
+  - It's an example of transfer learning
+- For text $arrow.r$ train with self-supervision (un-labeled data)
   - NLP tasks are not easy for labellers (e.g., POS)
   - Internet has large amount of text (100b words added every day)
     - Common crawl
     - Wikipedia
-    - FAQs can be used (for question-answering)
-    - Websites have multiple version (for translation)
-- Pretrain using a large amount of text data
-  - Fine tune the model with labeled data
-  - It's an example of transfer learning
+    - FAQs (for question-answering)
+    - Websites with multiple versions (for translation)
+- for computer vision train using large collections of hand-labeled
+  images (e.g., ImageNet)
 
 ==== Masked Language Models
 <masked-language-models>
-- Word prediction in language models are made left-to-right
-- Sometimes the context comes later in the context
+- #text(fill: red, weight: "bold")[Remark]: word prediction in language
+  models are made left-to-right
+- #text(fill: green, weight: "bold")[Problem]: sometimes the context
+  comes later in the context
   - E.g., "the river rose five feet"
-- Train models using masking a word and predicting it
+- #text(fill: blue, weight: "bold")[Solution]: train models using
+  masking a word and predicting it
   - E.g., "the river \_\_\_\_\_\_\_ five feet"
-- The sentence provides its own labels
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: the sentence
+  provides its own labels

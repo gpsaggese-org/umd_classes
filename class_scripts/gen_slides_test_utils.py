@@ -24,6 +24,7 @@ import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hprint as hprint
 import helpers.hsystem as hsystem
+import helpers.hunit_test as hunitest
 
 _LOG = logging.getLogger(__name__)
 
@@ -81,7 +82,7 @@ def collect_all_lessons() -> Dict[str, List[str]]:
 # #############################################################################
 
 
-class LessonDiscovery_TestCase:
+class LessonDiscovery_TestCase(hunitest.TestCase):
     """
     Base class for testing lesson discovery in a course.
 
@@ -203,7 +204,7 @@ class LessonDiscovery_TestCase:
 # #############################################################################
 
 
-class Run_preprocess_notes_py_TestCase:
+class Run_preprocess_notes_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for `preprocess_notes.py` script.
 
@@ -329,7 +330,7 @@ class Run_preprocess_notes_py_TestCase:
 # #############################################################################
 
 
-class Run_notes_to_pdf_py_TestCase:
+class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
     """
     Base class for integration tests for slide generation using `notes_to_pdf.py`.
 
@@ -594,7 +595,7 @@ class Run_notes_to_pdf_py_TestCase:
 # #############################################################################
 
 
-class Run_gen_slides_py_TestCase:
+class Run_gen_slides_py_TestCase(hunitest.TestCase):
     """
     Base class for testing `gen_slides.py` script with course-specific lessons.
 
