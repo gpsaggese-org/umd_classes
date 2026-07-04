@@ -2,12 +2,22 @@
 # IN PROGRESS
 # #############################################################################
 
-### IN PROGRESS: [ ] Make the unit tests pass
+### [.] Improve last_cmd and notify.py
 
-- [x] Doing a full run `pytest_log msml610/test/test_gen_slides.py`
-- [x] `pytest_log data605/test/test_gen_slides.py`
-- Run linters2/pyright
+/Users/saggese/src/umd_classes2/helpers_root/dev_scripts_helpers/coding_tools/last_cmd.py
+
+### [.] Improve linters2/lint.py
+
+### [.] Make the unit tests pass
+
+- [.] Doing a full run `pytest_log msml610/test/test_gen_slides.py`
+- [.] `pytest_log data605/test/test_gen_slides.py`
+- [.] Run linters2/pyright
 - Run coverage
+
+data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
+
+data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_pdf
 
 Test_Msml610_Run_notes_to_pdf_py
 
