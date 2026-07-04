@@ -1,7 +1,7 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 16.1: What Is an Agentic AI?
-// slides_backend=typst
+// slides_engine=typst
 
 // References:
 //- ReAct: Synergizing Reasoning and Acting in Language Models:

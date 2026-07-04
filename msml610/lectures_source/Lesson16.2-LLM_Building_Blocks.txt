@@ -1,7 +1,7 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 16.2: LLM Building Blocks}}
-// slides_backend=typst
+// slides_engine=typst
 
 # LLM Building Blocks
 

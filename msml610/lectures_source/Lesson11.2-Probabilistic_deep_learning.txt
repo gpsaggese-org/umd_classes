@@ -1119,33 +1119,33 @@ digraph FeedbackSystem {
   - Output: [Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)]
 
 - **Techniques**
-  - *Rule-based*: hand-crafted grammar rules
-  - *Statistical*: models like Hidden Markov Models (HMMs)
-  - *Machine Learning*: classifiers (e.g., SVM)
-  - *Neural Networks*: LSTM, BiLSTM, or Transformers
+  - _Rule-based_: hand-crafted grammar rules
+  - _Statistical_: models like Hidden Markov Models (HMMs)
+  - _Machine Learning_: classifiers (e.g., SVM)
+  - _Neural Networks_: LSTM, BiLSTM, or Transformers
 
 - **Challenges**
   - Ambiguity: "can" can be a verb or a noun
   - Context-dependency: Tags depend on the surrounding words
 
 * NLP Using Rules-Based Systems
-- Systems based on rules for parsing and semantic analysis have shown:
+- **(Naive) Solution**: systems based on rules for parsing and semantic
+  analysis have shown
   - Success in many tasks
-  - Performance limited by linguistic complexity
-  - E.g., "cut" can be a verb or a noun
-    - Present, past, infinite verb
-    - Transitive or intransitive
-    - The meaning depends on the context
+  - Cons: performance limited by linguistic complexity
+    - E.g., "cut" can be a verb or a noun
+      - Present, past, infinite verb
+      - Transitive or intransitive
+      - The meaning depends on the context
 
-- Idea:
-  - Vast amount of text in machine-readable form $\to$ use data-driven ML
-    approach 
+- **Solution**: vast amount of text in machine-readable form $\to$ use
+  data-driven ML approach
 
 * The Bitter Lesson
-- _"General methods leveraging computation ultimately outperform
+- **Fact**: _"General methods leveraging computation ultimately outperform
   human-knowledge-based systems"_, Sutton (2019)
 
-- Key Observation
+- **Key Observation**
   - Human-designed heuristics and domain knowledge lose
   - General-purpose learning algorithms that scale with computation tend to win
   - E.g.,
@@ -1154,7 +1154,7 @@ digraph FeedbackSystem {
     - Vision: feature-engineered models replaced by end-to-end trained
       convolutional networks
 
-- The "bitter" part
+- **The "Bitter" Part**
   - Humans like to inject knowledge into systems
   - But machines learn better when allowed to discover patterns from data
     themselves
@@ -1194,41 +1194,44 @@ digraph FeedbackSystem {
      - E.g., 100 dimensions
 
 * Word Embeddings: Emerging Properties
-- Similar words have similar word embeddings
+- **Fact**: similar words have similar word embeddings
   - Words cluster based on their topics
 
-- Difference between related words seems to have a meaning
+- **Fact**: difference between related words seems to have a meaning
   - E.g., `Greece` - `Athens` = country/capital relationship
   - E.g., negative, plural, superlative, past tense
 
-- These properties are:
+- **Remark**: these properties are:
   - Not really enforced
   - Approximate
   - Emergent
 
 * Word Embeddings: Pretrained vs Custom
-- Word embedding representations are independent of the task
+- **Remark**: word embedding representations are independent of the task
   - Can pretrain and reuse them
     - Word2vec
     - GloVe (global vectors)
     - FastText
 
-- For some tasks better to learn word embeddings end-to-end with the task
+- **Remark**: for some tasks better to learn word embeddings end-to-end with
+  the task
   - E.g., POS tagging: the same word needs to be represented in different ways
     - E.g., "cut" can be verb or noun $\to$ multiple semantic embeddings
 
 * Language Models
-- Word embedding are a good representation for words in isolation
-- Language consists of sequence of words where context of each word is important
+- **Remark**: word embedding are a good representation for words in isolation
+- **Problem**: language consists of sequence of words where context of each
+  word is important
   - E.g., in _"Michael told me that John was sick, so I took him to the
     hospital"_, "him" can refer to multiple people
 
-- A **language model** is a probability distribution of sequences of words
+- **Definition**: a _language model_ is a probability distribution of
+  sequences of words
   - Predict the next word in a text given all the previous words
     - Supervised learning
     - Enormous amount of data
 
-- How to learn a language model?
+- **Question**: how to learn a language model?
   1. Feedforward neural network
   2. Recurrent neural network
   3. Transformer architecture
@@ -1239,7 +1242,7 @@ digraph FeedbackSystem {
   - Fixed-size context window of $n$ words
   - Word embeddings
 
-- **Problems:**
+- **Problems**:
   1. Context might need to be very long
      - Not all the words are important
      - E.g., a sentence with 20 words requires a large number of parameters if
@@ -1248,14 +1251,14 @@ digraph FeedbackSystem {
      - Weights need to be learned for each word in each position
      - E.g., different weights for the word "cat" when it appears at the
        beginning versus the end of a sentence
-   - Too many parameters to learn
-   - Computationally expensive
+     - Too many parameters to learn
+     - Computationally expensive
 
 * RNNs for Language Models
-- RNNs process sequence of data, one piece of data at a time
+- **Intuition**: RNNs process sequence of data, one piece of data at a time
   - Process language, one word at a time
 
-- Architecture
+- **Architecture**
   1. Each input word is encoded as word embedding vector
   2. A hidden layer gets the previous state and the new word
      - Allocate storage space for features of inputs useful for the task
@@ -1280,22 +1283,22 @@ digraph FeedbackSystem {
     - Solution: Use LSTMs
 
 * Sequence-to-Sequence Models
-- Enable learning of mappings between sequences of differing lengths and
-  structures
+- **Definition**: enable learning of mappings between sequences of differing
+  lengths and structures
   - Used for transforming one sequence into another, e.g.,
     - Machine translation
     - Text summarization
     - Speech recognition
 
-- Composed of two main components:
+- **Remark**: composed of two main components:
   - **Encoder**: Compress information from input sequence into a fixed-size
     context vector
   - **Decoder**: Generates output sequence from the context vector
   - Both encoder and decoder are typically RNNs (e.g., LSTM or GRU)
 
-- Training is supervised with input-output sequence pairs
+- **Remark**: training is supervised with input-output sequence pairs
 
-- Limitation:
+- **Limitations**:
   - Fixed-size context vector can become a bottleneck for long sequences
   - Attention mechanisms so decoder can access all encoder states
 
@@ -1318,12 +1321,12 @@ digraph FeedbackSystem {
 * Sequence-to-Sequence Attention
 ::: columns
 :::: {.column width=65%}
-- If the RNN model is
+- **Definition**: if the RNN model is
   $\vh_i = RNN(\vh_{i-1}, \vx_i)$
-- The sequence-to-sequence attention is the concatenation of $\vx_i$
-  and the context vector $\vc_i$
+- **Definition**: the sequence-to-sequence attention is the concatenation of
+  $\vx_i$ and the context vector $\vc_i$
   $$\vh_i = RNN(\vh_{i-1}, [\vx_i, \vc_i])$$
-- The raw attention score $r_{ij}$ is:
+- **Definition**: the raw attention score $r_{ij}$ is:
   $$r_{ij} = \vh_{i-1} \cdot \vs_j$$
   where
   - $\vh_{i-1}$ is the current target state 
@@ -1337,10 +1340,11 @@ digraph FeedbackSystem {
 ::::
 :::
 
-- The attention scores are normalized into probability using a softmax:
+- **Definition**: the attention scores are normalized into probability using
+  a softmax:
   $$a_{ij} = \frac{e^{r_{ij}}}{\sum_k e^{r_{ik}}}$$
 
-- Finally the vectors $\vs_j$ are weighted and summed as:
+- **Definition**: finally the vectors $\vs_j$ are weighted and summed as:
   $$\vc_i = \sum_j a_{ij} \cdot \vs_j$$
 
 // TODO: Create a schematic picture with graphviz
@@ -1365,8 +1369,8 @@ digraph FeedbackSystem {
     relationships
 
 * Attention: Vectorized Formula
-- Compute a weighted sum of values ($V$) using weights derived from queries
-  ($Q$) and keys ($K$)
+- **Definition**: compute a weighted sum of values ($V$) using weights
+  derived from queries ($Q$) and keys ($K$)
   $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
   where:
   - $Q$: matrix of query vectors (shape: $n_q \times d_k$)
@@ -1389,30 +1393,30 @@ digraph FeedbackSystem {
   - Better handling of long-range dependencies than RNNs
 
 * Sequence-to-Sequence: Decoding
-- Training a sequence-to-sequence model requires to:
+- **Goal**: training a sequence-to-sequence model requires to:
   - Maximize the probability of each word in the target training sentence
   - Conditioned on the source and previous target words
 
-- At inference time:
+- **Remark**: at inference time:
   - Given a source sentence
   - Generate the target word one at a time
   - Feed back the target word for the next time step
 
-- Greedy decoding
+- **Greedy Decoding**
   - Pick the next word that has the highest probability
-  - Pros
+  - **Pros**
     - Fast
-  - Cons
+  - **Cons**
     - We need to maximize the probability of the entire target sequence
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
 
-- Beam search:
+- **Beam Search**:
   - Keep the top $k$ hypotheses at each stage
   - Choose the hypothesis with the best score
 
 * Transformer Architecture
-- Revolutionized sequence modeling through combining several ideas
+- **Remark**: revolutionized sequence modeling through combining several ideas
 
 - **Self-attention**
   - Eliminates recurrence by processing sequences in parallel
@@ -1420,7 +1424,7 @@ digraph FeedbackSystem {
   - Multi-head attention to capture different aspects of relationships between
     tokens
 
-- Transformer has many (6 or more) transformer layers
+- **Remark**: transformer has many (6 or more) transformer layers
   - **Transformer layer**
     - Self-attention
     - Residual connection
@@ -1436,14 +1440,15 @@ digraph FeedbackSystem {
 - **Pros**
   - Enables greater scalability and parallelization
 
-- Dominates current state-of-the-art in NLP
+- **Remark**: dominates current state-of-the-art in NLP
   - E.g., BERT, GPT, T5, and others
 
 // TODO(TA): Add a graphviz pic
 
 * Pretraining
-- For computer vision train using large collections of hand-labeled images (e.g., ImageNet)
-- For text use un-labeled data
+- **Remark**: for computer vision train using large collections of
+  hand-labeled images (e.g., ImageNet)
+- **Remark**: for text use un-labeled data
   - NLP tasks are not easy for labellers (e.g., POS)
   - Internet has large amount of text (100b words added every day)
     - Common crawl
@@ -1451,7 +1456,7 @@ digraph FeedbackSystem {
     - FAQs can be used (for question-answering)
     - Websites have multiple version (for translation)
 
-- Pretrain using a large amount of text data
+- **Solution**: pretrain using a large amount of text data
   - Fine tune the model with labeled data
   - It's an example of transfer learning
 

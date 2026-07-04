@@ -419,7 +419,7 @@ class Run_notes_to_pdf_py_TestCase(hunitest.TestCase):
             is_typst_output_type = output_type in ("typ_pdf", "typ")
             _LOG.debug(hprint.to_str("slides_engine output_type is_typst_output_type"))
             if (slides_engine == "typst") != is_typst_output_type:
-                _LOG.debug(
+                _LOG.info(
                     "Skip lesson '%s': slides_engine='%s' doesn't match "
                     "output_type='%s'",
                     lesson,

@@ -1,7 +1,7 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
 // lesson_title=Lesson 16.5: Reasoning, Memory, and Planning
-// slides_backend=typst
+// slides_engine=typst
 
 // References
 //- Grokked Transformers are Implicit Reasoners:

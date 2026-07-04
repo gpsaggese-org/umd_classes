@@ -15,8 +15,20 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_tex
 ```
 
-- Save tex and typ files for all the lessons
-- Make all the lessons compile
+- [x] IN PROGRESS Save tex and typ files for all the lessons
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
+
+      <UnitTestCase Test_Msml610_Run_notes_to_pdf_py>
+        <TestCaseFunction test_slides_engine>
+        <TestCaseFunction test_tex_output>
+        <TestCaseFunction test_tex_pdf>
+        <TestCaseFunction test_typ_output>
+        <TestCaseFunction test_typ_pdf>
+
+- Run the same tests for Data605
+
+- Make all the lessons compile to latex
 - Run linters2/pyright
 - Run coverage
 

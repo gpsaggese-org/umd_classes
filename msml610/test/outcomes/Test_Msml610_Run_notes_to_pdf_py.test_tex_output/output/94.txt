@@ -1,0 +1,1675 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Refresher 04: Information Theory}}\]} \endgroup
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Information theory}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Entropy
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Information theory
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Entropy}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Entropy: Definition}
+\protect\phantomsection\label{entropy-definition}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Entropy}} \(H(X)\) of a discrete random
+  variable \(X\) is defined as: \[H(X) \defeq -\sum_x p(x) \log_2 p(x)\]
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Entropy quantifies average \emph{information}, \emph{surprise}, or
+    \emph{uncertainty} in outcomes
+
+    \begin{itemize}
+    \tightlist
+    \item
+      High entropy = more unpredictability
+    \item
+      Low entropy = more certainty
+    \end{itemize}
+  \item
+    Log in base 2 \(\to\) entropy measured in bits
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fair coin
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Two equally likely outcomes (heads or tails) \(\to\) maximum
+      uncertainty \(H =
+      1\)
+    \end{itemize}
+  \item
+    Biased coin
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Coin lands heads 90\% of the time, less uncertainty \(\to\) less
+      entropy \(H <
+      1\)
+    \end{itemize}
+  \item
+    ``Broken'' coin
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Always lands on heads, no uncertainty \(\to\) no entropy \(H = 0\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Entropy as Expected Information Content}
+\protect\phantomsection\label{entropy-as-expected-information-content}
+\begin{itemize}
+\item
+  Entropy measures how \emph{surprising} a random variable is \emph{on
+  average}
+\item
+  \textbf{\textcolor{red}{Intuition}}: information quantifies how much
+  we \emph{learn} when an event occurs
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Information of outcome \(x_i\) is defined as \(-\log p_i\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Rare events (\(p_i \to 0\)) yield more information:
+      \(-\log p_i \to \infty\)
+    \item
+      Common events (\(p_i \to 1\)) yield little information:
+      \(-\log p_i \to 0\)
+    \end{itemize}
+  \end{itemize}
+\item
+  Entropy is the expected information content:
+  \[H(X) = \EE[-\log p_i] \defeq -\sum_i p_i \log p_i\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Axiomatic Derivation of Entropy}
+\protect\phantomsection\label{axiomatic-derivation-of-entropy}
+\begin{itemize}
+\tightlist
+\item
+  Shannon's criteria for \(H(p_1, ..., p_n)\):
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Continuity: \(H()\) is continuous in \(p_i\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Small changes in probabilities should not cause large jumps in
+      uncertainty
+    \end{itemize}
+  \item
+    Maximality: \(H()\) is maximal when outcomes are equally likely
+  \item
+    Additivity: For composite outcomes, \(H(X, Y) = H(X) + H(Y | X)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Uncertainty about \((X, Y)\) is uncertainty about \(H\) plus
+      remaining uncertainty about \(Y\)
+    \end{itemize}
+  \end{enumerate}
+\item
+  The only functional form is: \[H(X) \propto = - \sum_i p_i \log p_i\]
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Entropy and Probability Density Function (PDF)}
+\protect\phantomsection\label{entropy-and-probability-density-function-pdf}
+\begin{itemize}
+\tightlist
+\item
+  Entropy is related to variance but is not the same
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variance measures how far values are from the mean
+  \item
+    Entropy measures how unpredictable a random draw is
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  If a distribution has more spread, typically its entropy is larger
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is possible that variance increases, but entropy doesn't
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., a uniform distribution increasing its support
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L94.Uniform_PDF.png}}
+\end{column}
+\end{columns}
+
+\begin{columns}[T]
+\begin{column}{0.4\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Entropy is related to information and uncertainty
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A flatter distribution has high entropy
+  \item
+    A sharply peaked distribution has low entropy
+  \item
+    A distribution with two close peaks has low variance but high
+    entropy
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.55\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L94.Entropy_vs_Variance.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Joint Entropy}
+\protect\phantomsection\label{joint-entropy}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Joint entropy}} \(H(X, Y)\) of two variables
+  \(X\) and \(Y\) is defined as:
+  \[H(X, Y) \defeq -\sum_{x,y} p(x,y) \log p(x,y)\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Describes the information needed for the joint distribution of \(X\)
+    and \(Y\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Non-negative and zero if \(X\) and \(Y\) are perfectly determined
+  \item
+    For two independent binary variables \(X\) and \(Y\), the joint
+    entropy is the sum of the entropy
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Identifies dependencies or correlations in datasets
+  \item
+    Aids in feature selection by finding informative variable
+    combinations
+  \item
+    E.g., in sensor network data, joint entropy can highlight
+    overlapping sensor information
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Conditional Entropy}
+\protect\phantomsection\label{conditional-entropy}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Conditional entropy} \(H(Y | X)\) is defined as
+  \[H(Y|X) \defeq -\sum_{x,y} p(x,y) \log p(y|x)\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represents the average uncertainty in \(Y\) after observing \(X\)
+  \item
+    Measures the effectiveness of \(X\) in determining \(Y\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Low \(H(Y | X)\) implies stronger predictive power of \(X\) on \(Y\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      There is less uncertainty about \(Y\) after knowing \(X\)
+    \item
+      I.e., \(Y\) has predictive power on \(X\)
+    \end{itemize}
+  \item
+    If \(Y = X\), then \(H(Y|X) = 0\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No uncertainty about \(Y\) once \(X\) is known
+    \item
+      \(X\) completely determines \(Y\)
+    \end{itemize}
+  \item
+    If \(X\) and \(Y\) are independent, then \(H(Y|X) = H(Y)\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Knowledge of \(X\) provides no new information about \(Y\)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In feature selection assess the predictive power of independent
+    variables on dependent variables
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Mutual Information}
+\protect\phantomsection\label{mutual-information}
+\begin{itemize}
+\item
+  The \textbf{\textcolor{red}{mutual information}} \(I(X;Y)\) between
+  \(X\) and \(Y\) is defined as: \[I(X;Y) \defeq H(X) - H(X|Y)\]
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measures how much knowing \(X\) reduces uncertainty about \(Y\)
+  \item
+    Gauges the shared information between two variables
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Non-negative: \(I(X;Y) \geq 0\)
+  \item
+    Symmetric: \(I(X;Y) = I(Y;X)\)
+  \item
+    If \(X\) and \(Y\) are independent, then \(I(X;Y) = 0\)
+  \item
+    Higher mutual information indicates greater relation between \(X\)
+    and \(Y\)
+  \item
+    Related to the joint entropy but symmetric:
+    \[I(X;Y) = H(X) + H(Y) - H(X, Y)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Selects features sharing high information with the target variable
+  \item
+    Used to reduce dimensionality
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kullback-Leibler (KL) Divergence}
+\protect\phantomsection\label{kullback-leibler-kl-divergence}
+\begin{itemize}
+\item
+  The \textbf{\textcolor{red}{KL divergence}} \(D_{\text{KL}}(P \| Q)\)
+  between distributions \(P\) and \(Q\) is defined as:
+  \[D_{\text{KL}}(P \| Q) \defeq \sum_x P(x) \log \frac{P(x)}{Q(x)}\]
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quantify how much one distribution deviates from another
+    distribution
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not symmetric: \(D_{\text{KL}}(P \| Q) \ne D_{\text{KL}}(Q \| P)\)
+  \item
+    \(D_{\text{KL}}(P \| Q) = 0\) iff \(P = Q\), i.e., \(Q(x) = P(x)\)
+    for all \(x\)
+  \item
+    It is a distance, but not a metric (not symmetric, no triangle
+    inequality)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In optimization of machine learning models by minimizing divergence
+  \item
+    E.g., variational autoencoders use KL divergence to ensure that the
+    learned distribution is close to the true distribution
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-Entropy}
+\protect\phantomsection\label{cross-entropy}
+\begin{itemize}
+\tightlist
+\item
+  The \textbf{\textcolor{red}{cross-entropy}} \(H(P, Q)\) between two
+  distributions \(P\) and \(Q\) is defined as:
+  \[H(P, Q) \defeq -\sum_x P(x) \log Q(x)\] where:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(P(x)\) is the true probability of the event \(x\)
+  \item
+    \(Q(x)\) is the probability assigned by the model
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measures the average number of bits needed to encode data from \(P\)
+    using a code optimized for \(Q\)
+  \item
+    Indicates inefficiency when the code for \(Q\) is used to represent
+    \(P\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cross-entropy is related to entropy and KL divergence:
+    \[H(P, Q) = H(P) + D_{\text{KL}}(P \| Q)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Used to compare the similarity of the predicted outcomes probability
+    distribution to the true distribution
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., as loss function in logistic regression
+    \item
+      A perfect model has a cross-entropy of 0
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data Processing Inequality}
+\protect\phantomsection\label{data-processing-inequality}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Data processing inequality}} states that:
+  \[\textit{Processing data cannot increase information, it can only lose
+  information over time}\]
+\item
+  Formally: if \(X \to Y \to Z\), then \(I(X;Z) \le I(X;Y)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    After passing through an additional stage (from \(Y\) to \(Z\)), the
+    mutual information with the initial stage (\(X\)) cannot increase
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(X\) is a raw image, \(Y\) is a compressed version
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No additional processing \(Z\) will uncover more information about
+      \(X\) than what \(Y\) already represents
+    \end{itemize}
+  \item
+    If \(Y\) is a dataset derived from \(X\) (e.g., summary statistics)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Any analysis applied to \(Y\) alone cannot provide more insights
+      into \(X\) than \(Y\) itself
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compression can only lead to information loss
+  \item
+    Identify ``information bottlenecks'' in a modeled process, ensuring
+    model designs consider the constraints imposed by information
+    processing
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Chain Rule for Entropy and Mutual Information}
+\protect\phantomsection\label{chain-rule-for-entropy-and-mutual-information}
+\begin{itemize}
+\item
+  The \textbf{\textcolor{red}{entropy chain rule}}
+  \[H(X, Y) = H(X) + H(Y|X)\]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In words, the joint entropy of two random variables can be
+    decomposed into the entropy of one and the conditional entropy of
+    the other
+  \end{itemize}
+\item
+  Examples:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(X\) represents the weather (sunny, rainy)
+  \item
+    \(Y\) represents outdoor activity (park, cinema)
+  \item
+    \(H(Y|X)\) would provide information about outdoor activities given
+    specific weather conditions
+  \end{itemize}
+\item
+  The \textbf{\textcolor{darkgreen}{mutual information chain rule}}:
+  \[I(X,Y;Z) = I(X;Z) + I(Y;Z|X)\]
+\item
+  \textbf{\textcolor{blue}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    By using chain rules, one can decompose and understand the
+    complexity of joint distributions with multiple interacting
+    variables
+  \item
+    Useful in sequential models (e.g., speech recognition) and
+    time-series analysis (e.g., stock market prediction)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Source Coding Theorem}
+\protect\phantomsection\label{source-coding-theorem}
+\begin{itemize}
+\item
+  Aka ``Shannon's first theorem''
+\item
+  \textbf{\textcolor{red}{Statement}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compression cannot achieve an average code length less than the
+    entropy of the source
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Implications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It asserts a limit on lossless compression:
+  \item
+    E.g., if a source has entropy \(H(X) = 3\) bits, you cannot on
+    average encode it with fewer than 3 bits per symbol
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lossless compression methods approach the entropy limit
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., Huffman coding encode data by creating variable-length codes
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Noisy-Channel Coding Theorem}
+\protect\phantomsection\label{noisy-channel-coding-theorem}
+\begin{itemize}
+\item
+  Aka ``Shannon's second theorem''
+\item
+  \textbf{\textcolor{red}{Statement}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For any discrete memoryless channel with capacity \(C\), and for any
+    desired level of reliability \(\varepsilon > 0\), it is possible to
+    transmit information at any rate \(R < C\) with an arbitrarily small
+    probability of error, using a sufficiently long encoding scheme
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Implications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Accurate communication can be achieved even with noise
+  \item
+    Error correction techniques can be applied to achieve this
+  \item
+    It does not construct the code, it only proves existence
+  \end{itemize}
+\item
+  Channel capacity defines the upper limit of information that can be
+  transmitted reliably (e.g., 10 Mbps)
+\item
+  Applications:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fundamental principle for designing digital communication systems
+  \item
+    E.g., mobile networks, satellite communications, and the internet
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Redundancy and Compression}
+\protect\phantomsection\label{redundancy-and-compression}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Redundancy}} is the difference between actual
+  and optimal code length
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measures excess information in the data
+  \item
+    Redundancy implies room for compression, i.e., reduce data size
+    without losing information
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Compression techniques}} remove
+  redundancy while preserving information
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aim to make data smaller without losing meaning or important details
+  \item
+    Useful for reducing storage or speeding up data transmission
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Run-length encoding
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Compress by replacing consecutive identical elements with a single
+      value and count
+    \item
+      E.g., \textcolor{blue}{\texttt{AAAABBBCCDAA}} becomes
+      \textcolor{blue}{\texttt{4A3B2C1D2A}}
+    \end{itemize}
+  \item
+    Huffman coding
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Uses variable-length codes for encoding
+    \item
+      Frequently used symbols get shorter codes, reducing length
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Typical Set}
+\protect\phantomsection\label{typical-set}
+\begin{itemize}
+\tightlist
+\item
+  Set of sequences with probability close to \(2^{-nH(X)}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., if \(H(X) = 2\), then for large \(n\), sequences have a
+    probability close to \(2^{-2n}\)
+  \end{itemize}
+\item
+  Central to proving coding theorems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The typical set is essential in demonstrating the efficiency of
+    compression algorithms
+  \end{itemize}
+\item
+  Almost all sequences in large samples lie in the typical set
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., for a sequence length \(n\), the probability of falling
+    outside the typical set decreases exponentially as \(n\) increases
+  \end{itemize}
+\item
+  Enables asymptotic analysis of information theory
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Used in deriving limits related to data compression and reliable
+    communication
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rate-Distortion Theory}
+\protect\phantomsection\label{rate-distortion-theory}
+\begin{itemize}
+\item
+  Trade-off between compression rate \(R\) vs distortion \(D\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{red}{Compression rate}} \(R\): amount of data
+    remaining after compression
+  \item
+    \textbf{\textcolor{darkgreen}{Distortion}} \(D\): difference between
+    the original and compressed data
+  \item
+    Balancing \(R\) and \(D\) is crucial for effective lossy compression
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Goal}}: reduce data size (lossy compression)
+  while maintaining an acceptable level of quality
+\item
+  Rate-distortion function \(R(D)\) defines the minimal rate for a given
+  distortion
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Describes the lower bound of the data rate necessary to achieve a
+    specified level of distortion
+  \item
+    E.g., in image compression, \(R(D)\) helps in determining the lowest
+    bitrate for a desired image quality
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Widely used in image/audio/video compression, e.g., MP3, JPEG and
+    MPEG formats
+  \item
+    Important for streaming services and storage optimization
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fano's Inequality}
+\protect\phantomsection\label{fanos-inequality}
+\begin{itemize}
+\tightlist
+\item
+  When \(X\) is guessed from \(Y\), it holds:
+  \[H(X|Y) \le h(P_e) + P_e \log(|X| - 1)\] where
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(X\) is a discrete random variable
+  \item
+    \(Y\) is the estimate variable of \(X\) based on some observations
+  \item
+    \(H(X | Y)\) is the conditional entropy of \(X\) given \(Y\)
+  \item
+    \(h(P_e)\) is the binary entropy function quantifying uncertainty of
+    a binary random variable, where
+    \(h(p) = -p \log p - (1-p) \log(1-p)\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Intuition}}
+\item
+  It relates the uncertainty remaining about \(X\) after observing \(Y\)
+  to the probability of making an error in guessing \(X\)
+\item
+  ``You cannot simultaneously have low error and low entropy
+  (uncertainty). If the entropy is high, your probability of error must
+  also be high.''
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Differential Entropy}
+\protect\phantomsection\label{differential-entropy}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The differential entropy \(h(x)\) for continuous random variable
+    \(X\) with density \(p(x)\) is defined as:
+    \[h(X) \defeq -\int p(x) \log p(x) \, dx\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Concept}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Extends Shannon entropy to continuous distributions
+  \item
+    Measures ``spread'' or uncertainty of \(X\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not invariant under variable change
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., scaling affects \(h(X)\)
+    \end{itemize}
+  \item
+    Can be negative, unlike non-negative discrete entropy
+  \item
+    Units depend on logarithm base
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For Gaussian \(X \sim \mathcal{N}(\mu, \sigma^2)\):
+    \[h(X) = \frac{1}{2} \log(2\pi e \sigma^2)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Limitations}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cannot compare directly across variables with different units or
+    scales
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum entropy principle}
+\protect\phantomsection\label{maximum-entropy-principle}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use the prior with the largest entropy (i.e., the least informative)
+    given the constraints of the problem
+  \item
+    Can be solved as an optimization problem
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The distribution with largest entropy given a constraint is:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Without constraints: uniform
+    \item
+      A positive mean: exponential
+    \item
+      A given variance: normal distribution
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Minimum Description Length (MDL)}
+\protect\phantomsection\label{minimum-description-length-mdl}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The total description length of a dataset \(MDL(H)\) is given by:
+    \[MDL(H) = L(H) + L(D \mid H)\] where:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \(L(H)\) is the length (in bits) of the model or hypothesis
+    \item
+      \(L(D \mid H)\) is the length of the data encoded using the model
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Principle}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDL selects the hypothesis \(H\) that minimizes the total
+    description length \[\text{MDL}(H) = L(H) + L(D \mid H)\]
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Prefers the model that gives the shortest total description of data
+  \item
+    Based on Occam's Razor: simpler models are preferred
+  \item
+    Balances model complexity and data fit
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Example}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Given two decision trees for classifying email as spam:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Tree A is small and classifies 95\% correctly
+    \item
+      Tree B is large and classifies 96\% correctly
+    \item
+      MDL may prefer Tree A if the increased accuracy doesn't justify
+      the extra complexity
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Applications}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model selection in statistics and machine learning
+  \item
+    Compression-based clustering and classification
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Advantages}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No need for explicit prior probabilities
+  \item
+    Naturally penalizes overfitting
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Limitations}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Requires a good encoding scheme
+  \item
+    Computationally intensive for large hypothesis spaces
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Kolmogorov Complexity}
+\protect\phantomsection\label{kolmogorov-complexity}
+\begin{itemize}
+\item
+  The Kolmogorov complexity \(K(x)\) of a string \(x\) is the length of
+  the shortest binary program that outputs \(x\) on a universal Turing
+  machine
+\item
+  \textbf{\textcolor{red}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A string of 1000 random bits: high Kolmogorov complexity, no
+    compressible pattern
+  \item
+    A string of 1000 repeated \textcolor{blue}{\texttt{0}}s: low
+    Kolmogorov complexity, described by a short loop
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Intuition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Measures ``algorithmic randomness'' or compressibility of a string
+  \item
+    A string is complex if it has no shorter description than itself
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Formal Properties}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Incomputable: no algorithm computes \(K(x)\) for all \(x\)
+  \item
+    \(K(x) \leq |x| + c\) for some constant \(c\), showing the trivial
+    upper bound (print \(x\))
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Relation to MDL}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    MDL approximates Kolmogorov complexity by minimizing a practical
+    description length
+  \item
+    Both capture the essence of a pattern's simplicity
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Theoretical Importance}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Provides a framework for understanding randomness and information
+  \item
+    Links to information theory, learning theory, and data compression
+  \item
+    Not computable but can be approximated from
+  \item
+    Depends on the choice of universal Turing machine up to an additive
+    constant
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Information Bottleneck}
+\protect\phantomsection\label{information-bottleneck}
+\begin{itemize}
+\tightlist
+\item
+  Framework for extracting relevant information
+\item
+  Trade-off: compression of \(X\) vs retention of info about \(Y\)
+\item
+  Optimization: minimize \(I(X;T)\) while preserving \(I(T;Y)\)
+\item
+  Used in deep learning theory and representation learning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Multi-Information and Total Correlation}
+\protect\phantomsection\label{multi-information-and-total-correlation}
+\begin{itemize}
+\tightlist
+\item
+  Generalization of mutual information to multiple variables
+\item
+  Total correlation:
+  \(C(X_1, \dots, X_n) = \sum_i H(X_i) - H(X_1, \dots, X_n)\)
+\item
+  Measures total dependency in a set of variables
+\item
+  Used in ICA, variational inference, and dependency modeling
+\end{itemize}
+
+\begin{enumerate}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Applications in Machine Learning Entropy: Feature selection, decision
+  tree splitting criteria Mutual Information: Dependency detection,
+  feature relevance Cross-Entropy: Loss function for classification KL
+  Divergence: Variational inference, model comparison MDL: Model
+  selection, preventing overfitting
+\end{enumerate}
+\end{frame}
+
+\end{document}
