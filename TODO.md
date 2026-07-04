@@ -10,19 +10,19 @@
 
 ### [.] Make the unit tests pass
 
-- [.] Doing a full run `pytest_log msml610/test/test_gen_slides.py`
-- [.] `pytest_log data605/test/test_gen_slides.py`
+- [x] Run `pytest_log msml610/test/test_gen_slides.py`
+- [x] Run `pytest_log data605/test/test_gen_slides.py`
 - [.] Run `linters2/lint.py --action pyright`
-- [ ] `pytest_log /Users/saggese/src/umd_classes2/class_scripts`
+- [x] PASS `pytest_log /Users/saggese/src/umd_classes2/class_scripts`
   class_scripts/test/test_count_lecture_slides.py::Test__collect_stats::test1
-class_scripts/test/test_for_loop_lessons.py::Test_expand_lecture_range::test1
-class_scripts/test/test_for_loop_lessons.py::Test_expand_lecture_range::test2
-class_scripts/test/test_for_loop_lessons.py::Test_generate_pdf_e2e::test2
-class_scripts/test/test_for_loop_lessons.py::Test_generate_script_e2e::test1
-class_scripts/test/test_for_loop_lessons.py::Test_generate_tex::test1
-class_scripts/test/test_for_loop_lessons.py::Test_process_lecture_file_e2e::test3
-class_scripts/test/test_for_loop_slides.py::Test_read_prompt_file::test1
-class_scripts/test/test_for_loop_slides.py::Test_read_prompt_file::test2
+  class_scripts/test/test_for_loop_lessons.py::Test_expand_lecture_range::test1
+  class_scripts/test/test_for_loop_lessons.py::Test_expand_lecture_range::test2
+  class_scripts/test/test_for_loop_lessons.py::Test_generate_pdf_e2e::test2
+  class_scripts/test/test_for_loop_lessons.py::Test_generate_script_e2e::test1
+  class_scripts/test/test_for_loop_lessons.py::Test_generate_tex::test1
+  class_scripts/test/test_for_loop_lessons.py::Test_process_lecture_file_e2e::test3
+  class_scripts/test/test_for_loop_slides.py::Test_read_prompt_file::test1
+  class_scripts/test/test_for_loop_slides.py::Test_read_prompt_file::test2
 - [ ] Run coverage
 - [ ] Do a run of all the tests in `pytest_log .` (with the 3 builds)
 

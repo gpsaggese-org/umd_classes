@@ -142,7 +142,7 @@ def count_pdf_pages(pdf_path: str) -> int:
     # Use mdls to get page count.
     cmd = f"mdls -name kMDItemNumberOfPages '{pdf_path}'"
     _LOG.debug("Running command: %s", cmd)
-    output = hsystem.system_to_string(cmd)
+    _, output = hsystem.system_to_string(cmd)
     # Parse output like "kMDItemNumberOfPages = 42".
     parts = output.strip().split("=")
     hdbg.dassert_eq(len(parts), 2, "Unexpected mdls output format:", output)

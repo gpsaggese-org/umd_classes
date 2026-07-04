@@ -28,7 +28,7 @@ from typing import List, Optional
 
 import tqdm
 
-import class_scripts.slides_utils as dshsslut
+import class_scripts.slides_utils as cscsluti
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
@@ -75,7 +75,7 @@ def _process_slides_group(
     hdbg.dassert_isinstance(slides_group, list)
     hdbg.dassert_lt(0, len(slides_group))
     # Process images from slides.
-    processed_slides, images_as_base64 = dshsslut.process_slide_images(
+    processed_slides, images_as_base64 = cscsluti.process_slide_images(
         slides_group
     )
     # Combine slides into user prompt.
@@ -92,6 +92,7 @@ def _process_slides_group(
         temperature=0.1,
         # images_as_base64=tuple(images_as_base64) if images_as_base64 else None,
     )
+    hdbg.dassert_isinstance(response, str)
     return response
 
 
@@ -113,7 +114,7 @@ def _generate_slide_script(
         processed
     """
     _LOG.info("Reading slides from: %s", in_file)
-    slides, _ = dshsslut.extract_slides_from_file(in_file)
+    slides, _ = cscsluti.extract_slides_from_file(in_file)
     _LOG.info("Found %d slides total", len(slides))
     # Apply limit range if specified.
     if limit_range is not None:

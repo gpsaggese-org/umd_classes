@@ -124,7 +124,6 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     COURSE_DIR: str = ""
     FIRST_LESSON_FILENAME: str = ""
 
-
     def test_check_lesson_discovery(self) -> None:
         """
         Check that the first lesson file is discovered in the course.
