@@ -1,0 +1,396 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{10.1: Parallel and Distributed Systems / DBs}}$$**
+\endgroup
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+
+::::
+:::: {.column width=20%}
+::::
+:::
+
+#### Client-Server Architecture
+:::columns
+::::{.column width=60%}
+- **\textcolor{red}{Client-server}**: Model for distributed applications partitioning tasks
+  between:
+  - _Clients_: Request services (e.g., dashboard, GUI, client applications)
+  - _Servers_: Provide resources or services (e.g., database)
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_2_image_2.png)
+::::
+:::
+
+\vspace{1cm}
+
+:::columns
+::::{.column width=60%}
+- **\textcolor{blue}{Architecture of a database system}**:
+  - _Back-end_ (Server): Manages access, query evaluation, optimization,
+    concurrency control, and recovery
+  - _Front-end_ (Clients): Tools like forms, report-writers, GUI
+- Interface between front-end and back-end:
+  - SQL
+  - Application programming interface (API)
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_2_image_1.png)
+::::
+:::
+
+#### Parallel vs Distributed Computing
+:::columns
+::::{.column width=60%}
+- **\textcolor{red}{Parallel computing}**
+  - One computer, multiple CPUs
+  - Cluster: many computers, each with multiple CPUs
+  - Homogeneous, geographically close nodes
+  - Work on one task simultaneously
+
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_3_image_2.png)
+::::
+:::
+
+\vspace{1cm}
+
+:::columns
+::::{.column width=60%}
+- **\textcolor{blue}{Distributed computing}**
+  - Autonomous, geographically separate systems
+  - Heterogeneous and distant nodes
+  - Perform separate tasks or parts of a larger task
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_3_image_1.png)
+::::
+:::
+
+#### Parallel Systems
+:::columns
+::::{.column width=55%}
+- **\textcolor{red}{Parallel systems}** consist of:
+  - Multiple processors
+  - Multiple memories
+  - Multiple disks
+  - Fast interconnection network
+
+- **\textcolor{darkgreen}{Coarse-grain parallel machine}**
+  - Small number of powerful processors
+  - E.g., your laptop with multiple CPUs
+
+- **\textcolor{blue}{Fine-grain parallel machine}**
+  - Aka massively parallel
+  - Thousands of smaller processors
+  - Larger degree of parallelism
+  - With or without shared memory
+  - E.g., GPUs, The Connection Machine
+::::
+::::{.column width=40%}
+\center \scriptsize
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_4_image_3.png){width=70%}
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_4_image_1.png){width=70%}
+
+_The Connection Machine, MIT, 1980s_
+::::
+:::
+
+#### Parallel Databases: Introduction
+- **\textcolor{red}{Parallel DBs}** were the standard approach before MapReduce
+
+- **\textcolor{darkgreen}{Parallel machines have become common and affordable}**
+  - Prices of microprocessors, memory, and disks drop sharply
+  - Desktop/laptop computers feature multiple processors
+  - Trend will continue
+
+- **\textcolor{blue}{DBs are growing increasingly large}**
+  - Large volumes of transaction data collected and stored for analysis
+  - Multimedia objects increasingly stored in databases
+
+- **\textcolor{violet}{Large-scale parallel DBs increasingly used for:}**
+  - Storing large volumes of data
+  - Processing time-consuming queries
+  - Providing high throughput for transaction processing
+
+#### Parallel Databases
+- Internet / Big Data created need for large, fast DBs
+  - Store petabytes of data
+  - Process thousands of transactions per second (e.g., commerce website)
+
+- **\textcolor{red}{Databases can be parallelized}**
+  - Set-oriented nature of DB queries suits parallelization
+  - Some operations are embarrassingly parallel
+    - E.g., join between \textcolor{blue}{\texttt{R}} and \textcolor{blue}{\texttt{S on R.b = S.b}} as MapReduce task
+
+- **\textcolor{darkgreen}{Parallel DBs}**
+  - More transactions per second or less time per query
+  - Throughput vs response time
+  - Speed-up vs scale-up
+
+- **\textcolor{blue}{Perfect speedup doesn't happen}** due to:
+  - Start-up costs
+  - Task interference
+  - Skew
+
+#### How to Measure Parallel Performance
+:::columns
+::::{.column width=55%}
+- **\textcolor{red}{Throughput}**
+  - Number of tasks completed in given time
+  - Increase by processing tasks in parallel
+
+- **\textcolor{darkgreen}{Latency}**
+  - Time to complete single task from submission
+  - Decrease by performing subtasks in parallel
+
+- **\textcolor{blue}{Throughput and latency are related but not the same}**
+  - Increase throughput by reducing latency
+  - Increase throughput by pipelining (overlapping task execution)
+    - E.g., building a car takes weeks, but one car is completed per hour
+    - Pipelining of microprocessor instructions
+::::
+::::{.column width=40%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_1.png)
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_3.png)
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_7_image_2.png)
+\center \scriptsize
+_Pipelining of instructions in microprocessor_
+::::
+:::
+
+#### Speed-Up and Scale-Up: Intuition
+- **\textcolor{red}{You have a workload to execute}**
+  - Change workload $M$
+    - Number of DB transactions
+    - Amount of DB data to query
+
+- **\textcolor{darkgreen}{You need to execute the workload on a machine}**
+  - Change computing power $N$
+    - Better CPU (scale vertically, scale up)
+    - More CPUs (scale horizontally, scale out)
+
+- Two **\textcolor{blue}{ways to measure efficiency}** when increasing workload and computing
+  power
+  - _Speed-up_
+    - Keep constant problem size $M$
+    - Increase machine power $N$
+  - _Scale-up_
+    - Increase problem size $M$
+    - Increase machine power $N$
+
+#### Speed-Up vs Scale-Up
+- The amount of computing power $N$ can be changed
+- The amount of work $M$ can be changed
+
+:::columns
+::::{.column width=60%}
+- **\textcolor{red}{Speed-up}**: fixed-sized problem on a small system given to a system
+  $N$-times larger
+    $$\text{speed-up} = \frac{\text{small system elapsed time}}
+      {\text{large system elapsed time}}$$
+  - Speed-up is linear if equation equals $N$
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_9_image_1.png)
+::::
+:::
+
+\vspace{0.5cm}
+
+:::columns
+::::{.column width=60%}
+- **\textcolor{blue}{Scale-up}**: increase size of both problem $M$ and system $N$
+  - $N$-times larger system to perform $M$-times larger job
+    $$\text{scale-up} = \frac{\text{small system-problem time}}
+      {\text{big system-problem time}}$$
+  - Scale-up is linear if equation equals 1
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_9_image_2.png)
+::::
+:::
+
+#### Factors Limiting Speed-up and Scale-up
+- **\textcolor{red}{Speed-up and scale-up are typically sub-linear}** due to several issues
+  - E.g., not all computation is parallelizable
+
+:::columns
+::::{.column width=60%}
+- **\textcolor{blue}{Amdahl's Law}**
+  - $p$ = fraction parallelizable
+  - $s$ = number of nodes
+  - $T$ = execution time serially
+  - $T(p)$ = execution time on s nodes = $(1-p)T + (p / s)T$
+  $$
+  Speedup(s)
+  = \frac{T}{T(s)}
+  = \frac{1}{(1 - p) + \frac{p}{s}}
+  $$
+- E.g.,
+  - 90% parallelizable $\to$ max speed-up 10x
+  - 50% parallelizable $\to$ max speed-up 2x (even with infinite nodes)
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_10_image_1.png)
+::::
+:::
+
+#### Factors Limiting Speed-up and Scale-up
+- **\textcolor{red}{Startup costs}**
+  - Starting processes may dominate computation time
+  - E.g., dBs create thread pool at startup
+
+- **\textcolor{darkgreen}{Interference}**
+  - Processes compete for shared resources (e.g., system bus, disks, locks)
+  - Time spent waiting on other processes
+  - E.g., devs touching same code create merge conflicts
+
+- **\textcolor{blue}{Cost of synchronization}**
+  - Smaller work pieces increase synchronization complexity
+  - E.g., hiring many developers in a company
+
+- **\textcolor{violet}{Skew}**
+  - Splitting work increases variance in task response time
+  - Difficult to split tasks equally
+  - Execution time determined by slowest task
+
+#### Topology of Parallel Systems
+:::columns
+::::{.column width=35%}
+- Many ways to organize computation and storage
+  - $M$ = memory
+  - $P$ = processors
+  - $D$ = disks
+
+- **\textcolor{red}{Topology}**
+  - Shared memory
+  - Shared disk
+  - Shared nothing
+  - Hierarchical
+
+- **\textcolor{blue}{Problems}**
+  - Cache coherency
+  - Data communication
+  - Fault tolerance
+  - Resource congestion
+::::
+::::{.column width=60%}
+\vspace{0.2cm}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_12_image_1.png){width=30%}
+\vspace{0.2cm}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_12_image_2.png){width=30%}
+\vspace{0.2cm}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_12_image_3.png){width=30%}
+\vspace{0.2cm}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_12_image_4.png)
+::::
+:::
+
+#### Topology of Parallel Systems: Comparison
+:::columns
+::::{.column width=60%}
+\vspace{1cm}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_13_image_1.png)
+::::
+::::{.column width=35%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_13_image_2.png){width=60%}
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_13_image_3.png){width=60%}
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_13_image_4.png){width=60%}
+::::
+:::
+
+#### Distributed Databases
+:::columns
+::::{.column width=65%}
+- **\textcolor{red}{Distributed DBs}**
+  - DB stored on nodes at geographically separated sites
+  - Communicate through high-speed private networks or Internet
+
+- **\textcolor{darkgreen}{Why needed?}**
+  - Large corporation with global offices
+  - Redundancy and disaster recovery
+  - Natural disasters, power outage, hacker attacks
+  - Achieve high-availability despite failures
+  - Typically not for performance
+    - Use parallel DB for high performance
+::::
+::::{.column width=30%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_15_image_2.png)
+::::
+:::
+
+- **\textcolor{blue}{Wide-area networks (WAN) vs Local-area networks (LAN)}**
+  - Lower bandwidth
+  - Higher latency
+  - Greater probability of failures and network partition
+  - No sharing of memory or disks
+    - Communication delay is dominant
+  - Nodes can differ in size and functions
+    - Parallel DBs have similar nodes
+
+#### Consistency Issues in Distributed DB Systems
+:::columns
+::::{.column width=70%}
+- **\textcolor{red}{Parallel and distributed DBs}**
+  - Efficient for query processing (read-only)
+  - Requires consistency enforcement
+
+- **\textcolor{blue}{Atomicity issues}**
+  - _Problem_: Transaction is all-or-nothing across nodes
+  - Two-phase commit (2PC) is centralized
+    - Commit decision by a single coordinator node
+    - Each node executes transaction, reaching "ready state"
+    - If all nodes reach ready state, coordinator commits
+    - If a node fails in ready state, it can recover (e.g., write-ahead logs)
+    - If a node aborts, coordinator aborts transaction
+  - Distributed consensus, e.g.,
+    - Paxos
+    - Blockchain
+::::
+::::{.column width=30%}
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_16_image_1.png)
+
+![](data605/lectures_source/images/lecture_10_2/lec_10_2_slide_16_image_2.png)
+::::
+:::
+
+#### Consistency Issues in Distributed DB Systems
+- **\textcolor{red}{Concurrency issues}**
+  - _Problem_: Multiple processes writing and reading simultaneously
+  - Locks / deadlock management
+
+- **\textcolor{blue}{Autonomy issues}**
+  - _Problem_: Units/departments protective of their systems
+  - E.g., administering systems, patching, updating
