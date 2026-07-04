@@ -392,7 +392,9 @@ def _generate_book_chapter(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    hdbg.dassert_is_not(match, None, "Could not extract lesson number from %s", source_name)
+    hdbg.dassert_is_not(
+        match, None, "Could not extract lesson number from %s", source_name
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(
@@ -422,7 +424,9 @@ def _generate_class_quizzes(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    hdbg.dassert_is_not(match, None, "Could not extract lesson number from %s", source_name)
+    hdbg.dassert_is_not(
+        match, None, "Could not extract lesson number from %s", source_name
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(

@@ -43,11 +43,11 @@ warnings.filterwarnings("ignore")
 
 # %%
 import helpers.hdbg as hdbg
-import helpers.hnotebook as hnotebook
+import helpers.hnotebook as hnotebo
 
 hdbg.init_logger(verbosity=logging.INFO)
 _LOG = logging.getLogger(__name__)
-hnotebook.config_notebook()
+hnotebo.config_notebook()
 
 try:
     from IPython.display import display
@@ -255,7 +255,7 @@ hintros.print_public_methods(linear_explainer, use_markdown=True)
 # prediction[i] = base_values[i] + sum(values[i, :])
 # ```
 #
-# This always holds exactly for tree and linear explainers. 
+# This always holds exactly for tree and linear explainers.
 
 # %% [markdown]
 # ## Cell 3.1: Compute SHAP values (get an `Explanation`)
