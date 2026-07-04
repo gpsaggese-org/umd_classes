@@ -72,9 +72,10 @@ helping you improve test quality.
     my_module.py      10      2    80%
     ```
 
-- The table shows the coverage data: `Stmts` is the number of statements, `Miss`
-  shows how many statements were not executed, and `Cover` is the percentage of
-  statements covered by tests
+- The table shows the coverage data:
+  - `Stmts` is the number of statements
+  - `Miss` shows how many statements were not executed
+  - `Cover` is the percentage of statements covered by tests
 
 ## Interactive Coverage Analysis
 
@@ -393,3 +394,85 @@ dev_scripts_helpers/documentation/documentation_utils.py                  169   
 dev_scripts_helpers/documentation/__init__.py                               0      0      0      0   100%
 ---------------------------------------------------------------------------------------------------------
 TOTAL                                                                    4853   3403   1512     78    30%
+
+# 
+
+- Find the changed Python files in the branch
+  ```
+  > i git_files --branch --file-types "py"
+  18:26:55 - INFO  hdbg.py init_logger:1088                               > cmd='/Users/saggese/src/venv/client_venv.helpers/bin/invoke git_files --branch --file-types py'
+  # git_files: files='', from_file='', modified=False, branch=True, last_commit=False, all_files=False, file_types='py', skip_file_types='', pbcopy=False, only_print_files=False, on_one_line=False, mode='files'
+  18:26:55 - WARN  hsystem.py remove_dirs:496                             Removed dirs: helpers_root
+  ================================================================================
+  Results
+  ================================================================================
+  class_scripts/common_utils.py
+  class_scripts/for_loop_lessons.py
+  class_scripts/gen_slides.py
+  class_scripts/gen_slides_test_utils.py
+  class_scripts/generate_book_chapter.py
+  class_scripts/generate_slide_script.py
+  class_scripts/test/test_for_loop_lessons.py
+  class_scripts/test/test_for_loop_slides.py
+  msml610/test/test_gen_slides.py
+  tutorials/lime/01.API.lime.py
+  tutorials/lime/test/test_docker_all.py
+  tutorials/shap/01.API.shap.py
+  tutorials/shap/test/test_docker_all.py
+  ```
+
+- Remove the paired one
+  ```
+  class_scripts/common_utils.py
+  class_scripts/for_loop_lessons.py
+  class_scripts/gen_slides.py
+  class_scripts/gen_slides_test_utils.py
+  class_scripts/generate_book_chapter.py
+  class_scripts/generate_slide_script.py
+  class_scripts/test/test_for_loop_lessons.py
+  class_scripts/test/test_for_loop_slides.py
+  msml610/test/test_gen_slides.py
+  ```
+- The interesting directories are:
+  ```
+  class_scripts
+  msml610
+  data605
+  ```
+  > pytest class_scripts --cov=class_scripts
+
+Name                                               Stmts   Miss Branch BrPart  Cover
+------------------------------------------------------------------------------------
+class_scripts/__init__.py                              0      0      0      0   100%
+class_scripts/common_utils.py                         59     42      4      0    27%
+class_scripts/count_lecture_commentary_pages.py       21     21      4      0     0%
+class_scripts/count_lecture_pages.py                  21     21      4      0     0%
+class_scripts/count_lecture_slides.py                 71     12     10      1    84%
+class_scripts/count_words.py                          29     29      6      0     0%
+class_scripts/create_book_toc_from_slides.py         177    177     62      0     0%
+class_scripts/extract_png_from_pdf.py                 40     40      4      0     0%
+class_scripts/for_loop_lessons.py                    220     83     60     10    60%
+class_scripts/for_loop_slides.py                      73     35     10      1    57%
+class_scripts/gen_lecture_commentary.py               51     51      2      0     0%
+class_scripts/gen_lecture_script.py                   57     57      4      0     0%
+class_scripts/gen_quizzes.py                          62     62      8      0     0%
+class_scripts/gen_slides.py                           67     28     16      1    51%
+class_scripts/gen_slides_test_utils.py               259    172     32      1    33%
+class_scripts/generate_book_chapter.py               153    153     24      0     0%
+class_scripts/generate_class_images.py                92     92     18      0     0%
+class_scripts/generate_slide_script.py                58     58      8      0     0%
+class_scripts/get_lecture_file.py                     20     20      2      0     0%
+class_scripts/process_slides.py                      101    101     14      0     0%
+class_scripts/slide_check.py                          29     29      4      0     0%
+class_scripts/slide_improve.py                        29     29      4      0     0%
+class_scripts/slide_reduce.py                         28     28      4      0     0%
+class_scripts/slides_utils.py                         54     54     10      0     0%
+class_scripts/test/__init__.py                         0      0      0      0   100%
+class_scripts/test/test_count_lecture_slides.py       98      0      0      0   100%
+class_scripts/test/test_for_loop_lessons.py          281      0      2      0   100%
+class_scripts/test/test_for_loop_slides.py            71      0      0      0   100%
+class_scripts/test/test_gen_slides.py                103      0      2      0   100%
+class_scripts/test/test_gen_slides_validation.py      33      0      6      0   100%
+class_scripts/test/test_lesson_round_trip.py          29      0      2      0   100%
+------------------------------------------------------------------------------------
+TOTAL                                               2386   1394    326     14    39%
