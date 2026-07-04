@@ -8,12 +8,18 @@
 
 ### [x] Improve linters2/lint.py
 
+### [.] Improve coverage of dev_scripts_helpers/documentation/
+
+pytest dev_scripts_helpers/documentation --cov=dev_scripts_helpers/documentation
+
+### [.] Improve coverage of class_scripts
+
 ### [.] Make the unit tests pass
 
 - [x] Run `pytest_log msml610/test/test_gen_slides.py`
 - [x] Run `pytest_log data605/test/test_gen_slides.py`
 - [.] Run `linters2/lint.py --action pyright`
-- [x] PASS `pytest_log /Users/saggese/src/umd_classes2/class_scripts`
+- [x] PASS `pytest_log class_scripts`
 - [ ] Run coverage
 - [.] Do a run of all the tests in `pytest_log .` (with the 3 builds)
 
