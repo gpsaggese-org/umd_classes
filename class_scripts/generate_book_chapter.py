@@ -42,12 +42,12 @@ from typing import List, Optional, cast
 import pdf2image  # type: ignore
 import tqdm
 
+import class_scripts.slides_utils as dshsslut
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
 import helpers.hparser as hparser
-import dev_scripts_helpers.slides.slides_utils as dshsslut
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 
 _LOG = logging.getLogger(__name__)

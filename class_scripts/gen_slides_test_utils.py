@@ -61,6 +61,32 @@ def _get_lesson_numbers(course_dir: str) -> List[str]:
     return lessons
 
 
+def get_lesson_files(course_dir: str) -> List[str]:
+    """
+    Discover all lesson files in a course directory.
+
+    :param course_dir: Course directory (data605 or msml610)
+    :return: Sorted list of lesson file paths, e.g.,
+        ```
+        ["data605/lectures_source/Lesson01.1-BigData.txt",
+        "data605/lectures_source/Lesson01.2-History.txt"]
+        ```
+    """
+    _LOG.debug(hprint.to_str("course_dir"))
+    lectures_source_dir = os.path.join(course_dir, "lectures_source")
+    hdbg.dassert_dir_exists(lectures_source_dir)
+    lesson_files = []
+    for file in os.listdir(lectures_source_dir):
+        # Match files like "Lesson01.1-BigData.txt" or
+        # "Lesson02-Introduction.txt".
+        if re.match(r"^Lesson\d+", file):
+            file_path = os.path.join(lectures_source_dir, file)
+            lesson_files.append(file_path)
+    lesson_files = sorted(lesson_files)
+    _LOG.debug("return=%s", lesson_files)
+    return lesson_files
+
+
 def collect_all_lessons() -> Dict[str, List[str]]:
     """
     Collect all lessons organized by course.
@@ -98,31 +124,6 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
     COURSE_DIR: str = ""
     FIRST_LESSON_FILENAME: str = ""
 
-    @staticmethod
-    def get_lesson_files(course_dir: str) -> List[str]:
-        """
-        Discover all lesson files in a course directory.
-
-        :param course_dir: Course directory (data605 or msml610)
-        :return: Sorted list of lesson file paths, e.g.,
-            ```
-            ["data605/lectures_source/Lesson01.1-BigData.txt",
-            "data605/lectures_source/Lesson01.2-History.txt"]
-            ```
-        """
-        _LOG.debug(hprint.to_str("course_dir"))
-        lectures_source_dir = os.path.join(course_dir, "lectures_source")
-        hdbg.dassert_dir_exists(lectures_source_dir)
-        lesson_files = []
-        for file in os.listdir(lectures_source_dir):
-            # Match files like "Lesson01.1-BigData.txt" or
-            # "Lesson02-Introduction.txt".
-            if re.match(r"^Lesson\d+", file):
-                file_path = os.path.join(lectures_source_dir, file)
-                lesson_files.append(file_path)
-        lesson_files = sorted(lesson_files)
-        _LOG.debug("return=%s", lesson_files)
-        return lesson_files
 
     def test_check_lesson_discovery(self) -> None:
         """
@@ -131,7 +132,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         _LOG.debug(hprint.to_str("self.COURSE_DIR self.FIRST_LESSON_FILENAME"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
         hdbg.dassert_ne(self.FIRST_LESSON_FILENAME, "")
-        lesson_files = self.get_lesson_files(self.COURSE_DIR)
+        lesson_files = get_lesson_files(self.COURSE_DIR)
         self.assertGreater(len(lesson_files), 0)
         # Compare only basenames since discovered paths are full file paths.
         basenames = [os.path.basename(f) for f in lesson_files]
@@ -175,7 +176,7 @@ class LessonDiscovery_TestCase(hunitest.TestCase):
         """
         _LOG.debug(hprint.to_str("self.COURSE_DIR"))
         hdbg.dassert_ne(self.COURSE_DIR, "")
-        files = self.get_lesson_files(self.COURSE_DIR)
+        files = get_lesson_files(self.COURSE_DIR)
         self.assertGreater(len(files), 0)
         _LOG.debug("Found %d lesson files", len(files))
 

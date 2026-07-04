@@ -224,7 +224,7 @@ def _generate_pdf(
         "--debug_on_error",
     ]
     if limit:
-        cmd.extend([f"--limit {limit}"])
+        cmd.extend([f"--filter_by_slides {limit}"])
     # Execute command.
     cmd_str = " ".join(cmd)
     _LOG.info("Executing: %s", cmd_str)
@@ -267,7 +267,7 @@ def _generate_tex(
         "--debug_on_error",
     ]
     if limit:
-        cmd.extend([f"--limit {limit}"])
+        cmd.extend([f"--filter_by_slides {limit}"])
     # Execute command.
     cmd_str = " ".join(cmd)
     _LOG.info("Executing: %s", cmd_str)

@@ -28,12 +28,12 @@ from typing import List, Optional
 
 import tqdm
 
+import class_scripts.slides_utils as dshsslut
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
 import helpers.hselect_input_output as hseinout
 import helpers.hparser as hparser
-import dev_scripts_helpers.slides.slides_utils as dshsslut
 
 _LOG = logging.getLogger(__name__)
 
