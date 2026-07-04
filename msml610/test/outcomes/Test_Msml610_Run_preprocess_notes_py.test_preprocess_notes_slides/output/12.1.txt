@@ -2192,6 +2192,7 @@ digraph Transfer {
 | **Scalability** | Integrate causal structure into deep RL | Current methods don't scale to high-dim state spaces; risk losing features |
 | **Sample Efficiency** | Necessary causal knowledge for robustness | Open question: complete graph vs. partial knowledge vs. statistical approximation |
 | **Partial Observability** | Agent observes limited state; hidden variables affect action and reward | Confounding hides in unobserved state; deconfounding harder |
+\endgroup
 
 - **\textcolor{red}{Key Open Question}**: Can you learn enough causal structure online to improve
   generalization and robustness without full causal discovery cost?

@@ -4,6 +4,11 @@
 
 ### IN PROGRESS: [ ] Make the unit tests pass
 
+- Doing a full run pytest_log msml610/test/test_gen_slides.py
+- Run the same tests for Data605
+- Run linters2/pyright
+- Run coverage
+
 Test_Msml610_Run_notes_to_pdf_py
 
 ```
@@ -18,14 +23,9 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [x] IN PROGRESS Save tex and typ files for all the lessons
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
-- [ ] Make all the lessons compile to latex
+- [x] Make all the lessons compile to latex
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
-  - [ ] IN PROGRESS pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
-
-- Run the same tests for Data605
-
-- Run linters2/pyright
-- Run coverage
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
 
 ### IN PROGRESS: Slides for Agentic AI
 

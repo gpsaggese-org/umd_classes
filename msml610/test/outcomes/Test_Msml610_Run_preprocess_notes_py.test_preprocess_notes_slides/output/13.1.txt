@@ -167,8 +167,8 @@ mindmap
 
 ```{=typst}
 #styled-table(
-  ("Aspect", "Intrinsic", "Post-Hoc"),
-  (
+  headers: ("Aspect", "Intrinsic", "Post-Hoc"),
+  rows: (
     ("When", "Built into model", "Applied after training"),
     ("Examples", "Decision trees, linear models, GAMs", "LIME, SHAP, saliency maps"),
     ("Faithfulness", "Perfect (model = explanation)", "Approximate (explanation $\\approx$ model)"),
@@ -323,8 +323,8 @@ mindmap
 
 ```{=typst}
 #styled-table(
-  ("Order", "A Contribution", "B Contribution", "C Contribution"),
-  (
+  headers: ("Order", "A Contribution", "B Contribution", "C Contribution"),
+  rows: (
     ("A → B → C", "\$40k", "\$50k", "\$10k"),
     ("A → C → B", "\$40k", "\$45k", "\$15k"),
     ("B → A → C", "\$20k", "\$70k", "\$10k"),
@@ -348,8 +348,8 @@ mindmap
 
 ```{=typst}
 #styled-table(
-  ("Order", "B (Bedrooms)", "L (Location)", "S (Sq. Ft.)"),
-  (
+  headers: ("Order", "B (Bedrooms)", "L (Location)", "S (Sq. Ft.)"),
+  rows: (
     ("B → L → S", "\$30k", "\$50k", "\$20k"),
     ("L → B → S", "\$35k", "\$40k", "\$25k"),
     ("B → S → L", "\$25k", "\$35k", "\$40k"),
@@ -550,8 +550,8 @@ digraph LIME {
 
 ```{=typst}
 #styled-table(
-  ("Property", "SHAP", "LIME", "Permutation Importance"),
-  (
+  headers: ("Property", "SHAP", "LIME", "Permutation Importance"),
+  rows: (
     ("Scope", "Local / Global", "Local", "Global"),
     ("Consistency", "Guaranteed", "Depends on perturbations", "Stable with enough repeats"),
     ("Speed", "Slow (exact), fast (TreeSHAP)", "Moderate", "Fast"),
@@ -871,8 +871,6 @@ digraph CausalVsAttribution {
 - **\textcolor{red}{Key idea}**: the _accuracy-interpretability tradeoff_ is the central tension
   in explainable ML
 
-::: columns
-:::: {.column width=55%}
 - **\textcolor{orange}{Intuition}**: as models grow more complex, they capture more patterns in the
   data (higher accuracy) but become harder to understand
 
@@ -880,8 +878,8 @@ digraph CausalVsAttribution {
 
 ```{=typst}
 #styled-table(
-  ("Model Type", "Interpretability", "Capacity", "Accuracy"),
-  (
+  headers: ("Model Type", "Interpretability", "Capacity", "Accuracy"),
+  rows: (
     ("Linear regression", "Fully interpretable", "Limited", "Low-Moderate"),
     ("Decision trees", "Interpretable if shallow", "Moderate", "Moderate"),
     ("GAMs", "Moderate", "Moderate-High", "Moderate-High"),

@@ -1483,11 +1483,12 @@ digraph FeedbackSystem {
   - The results are concatenated together to form $\vc_i$
   - Concatenating is better than summing to keep important information
   - Captures different types of relationships at different subspaces
-  - E.g., in a Transformer model, different heads might focus on different parts
-    of a sentence, such as subject-verb agreement or noun-adjective
-    relationships
+  - E.g., in a Transformer model, different heads might focus on different
+    relationships of a sentence (e.g., subject-verb agreement, noun-adjective
+    relationships)
 
 * Attention: Vectorized Formula
+// TODO(ai_gp): Use matrix notation \mQ, \vvv
 - **Definition**: compute a weighted sum of values ($V$) using weights
   derived from queries ($Q$) and keys ($K$)
   $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
@@ -1499,15 +1500,15 @@ digraph FeedbackSystem {
   - $QK^T$: dot products between each query and all keys (shape: $n_q \times n_k$)
 
 - **Steps**:
-  1. **Dot Product**: Compute similarity between each query and all keys
+  1. _Dot Product_: Compute similarity between each query and all keys
      - $QK^T$ produces attention scores
-  2. **Scaling**: Divide scores by $\sqrt{d_k}$
+  2. _Scaling_: Divide scores by $\sqrt{d_k}$
      - To stabilize gradients
-  3. **Softmax**: Apply softmax to each row of the scaled scores
+  3. _Softmax_: Apply softmax to each row of the scaled scores
      - Converts scores into a probability distribution (attention weights)
-  4. **Weighted Sum**: Multiply weights by $V$ to produce context vectors
+  4. _Weighted Sum_: Multiply weights by $V$ to produce context vectors
 
-- **Advantages**
+- **Pros**
   - Parallelizable computation
   - Better handling of long-range dependencies than RNNs
 

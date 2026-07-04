@@ -362,7 +362,6 @@ MSML610: Advanced Machine Learning
 
 - **\textcolor{darkgreen}{Example}**: \textcolor{blue}{\texttt{AND}} is implemented by a single neuron with 2 inputs $x_1$ and
   $x_2$ and bias
-  - Implement in terms of $s$:
     ```
     x_1   x_2   AND
      -1    -1    -1
@@ -385,16 +384,15 @@ MSML610: Advanced Machine Learning
 
 - **\textcolor{red}{Power of Composition}**
   - Connecting perceptrons enables complex functions
-  - A network of sufficient size and depth can approximate any Boolean or
-    continuous function to arbitrary precision
-  - Compositional structure: each layer builds on the previous one
+  - A network of sufficient size and depth can approximate any (Boolean or
+    continuous) function to arbitrary precision
+  - Each layer builds on the previous one
 
 - **\textcolor{darkgreen}{Role of Nonlinearity}**
   - Nonlinear activation functions (e.g., sigmoid, tanh, ReLU) are essential
   - Without nonlinearity, layers reduce to a single linear transformation
-  - Nonlinearity allows modeling of complex, non-linear decision boundaries
 
-- **\textcolor{blue}{Geometric Intuition}**
+- **\textcolor{blue}{Example}**
   - To separate two classes with a circular boundary:
     - Use multiple perceptrons (e.g., 8-16) to approximate the circle with a
       polygon
@@ -402,52 +400,69 @@ MSML610: Advanced Machine Learning
   - This forms a _"lookup table"_ over regions of input space, similar to
     decision trees
 
+```tikz
+\draw[thick, blue] (0,0) circle (2cm);
+\draw[thick, red, dashed]
+  (2,0) -- (1.414,1.414) -- (0,2) -- (-1.414,1.414) -- (-2,0) --
+  (-1.414,-1.414) -- (0,-2) -- (1.414,-1.414) -- cycle;
+\node[circle, fill=blue!15, draw=blue, thick, minimum size=1.6cm] at (0,0) {$+$};
+\node[red] at (2.4,-1.1) {$-$};
+\node[blue] at (0,-2.6) {Circular decision boundary};
+\node[red] at (0,2.6) {Octagon from 8 perceptrons};
+```
+
 #### Feedforward vs Recurrent Neural Networks
 
 - **\textcolor{red}{Feedforward Neural Networks}**
-  - Information flows in one direction from inputs to outputs without cycles in
-    the computational graph
-  - Can model static relationships between inputs and outputs
+  - Information flows in one direction from inputs to outputs without feedback in
+    the graph
+  - Limited in handling "static" / one-shot dependencies
     - E.g., classifying a handwritten digit from an image
-  - Limited in handling sequential dependencies (only fixed window of inputs)
 
 - **\textcolor{blue}{Recurrent Neural Networks (RNNs)}**
-  $$z_t = f_w(z_{t-1}, x_t)$$
-  - Allow cycles in the computational graph with delays
-    - Each unit can take inputs from its previous output: adds memory
+  - Allow cycles in the computational graph (with delays)
+    - Each unit can take inputs from its previous output (memory)
     - Process sequences: outputs depend on current and previous inputs
-  - Suitable for sequential data (e.g., time series, language modeling) and
-    model longer-range dependencies
-  - E.g., predicting the next word in a sentence based on previous words
+      $$z_t = f_w(z_{t-1}, x_t)$$
+  - Suitable for sequential data (with longer-range dependencies), e.g.,
+    - Time series
+    - Language models (predict next word in a sentence based on previous words)
 
 #### Structure of Feedforward Neural Network
 
 - **\textcolor{red}{Layered Architecture}**
-  - A feedforward network consists of an ordered set of layers indexed by $l$
+  - A feedforward network consists of an ordered set of $L+1$ layers, indexed by
+    $l$
     1. Input layer ($l = 0$)
     2. One or more hidden layers ($0 < l < L$)
     3. Output layer ($l = L$)
   - Each layer $l$ contains $d(l)$ units or neurons, and can vary in size
 
-- **\textcolor{blue}{Input Layer ($l = 0$)}**
-  - Represents the input vector $(x_0=1, x_1, x_2, ..., x_d)$
+- **\textcolor{blue}{Input Layer}**
+  - $l = 0$
+  - Represents the input vector $(x_0, x_1, x_2, ..., x_d)$
   - $x_0 = 1$ acts as the bias input
-  - Booleans are mapped to 0/1 or -1/+1
-  - Numeric attributes are left unchanged (scaled to fit a fixed range, logged)
-  - Categorical attributes can be one-hot encoded
+  - Encoding
+    - Booleans: mapped to 0/1 or -1/+1
+    - Numeric attributes: scaled / transformed to fit a fixed range
+    - Categorical attributes: can be one-hot encoded
 
 #### Structure of Feedforward Neural Network
 
 ::: columns
 :::: {.column width=55%}
-- **\textcolor{red}{Hidden Layers ($0 < l < L$)}**
-  - Each neuron computes a weighted sum of inputs from the previous layer
-  - Applies a nonlinear activation function $\theta$
-  - Includes a bias unit with constant output 1
-  - Fully connected: every node in layer $l-1$ connects to every node in layer $l$
+- **\textcolor{red}{Hidden Layers}**
+  - $0 < l < L$
+  - Each neuron
+    - Includes a bias unit with constant output 1
+    - Computes weighted sum of inputs from the previous layer
+    - Applies a nonlinear activation function $\theta$
+  - Each layer is fully connected
+    - Every node in layer $l-1$ connects to every node in layer $l$
 
-- **\textcolor{blue}{Output Layer ($l = L$)}**
-  - Final layer producing the output vector $\mathbf{y}$
+- **\textcolor{blue}{Output Layer}**
+  - $l = L$
+  - Final layer producing the output vector $\vy$
   - Output can be:
     - Linear: for regression tasks
     - Nonlinear (e.g., softmax, sigmoid): for classification tasks
@@ -530,18 +545,34 @@ MSML610: Advanced Machine Learning
 #### Conventions for Neurons in a Neural Network
 - **\textcolor{red}{Definition}**: each neuron $x^{(l)}_j$:
   - Belongs to a layer with index $l$
-  - Accepts inputs from the previous layer (scanning index $i$)
+  - Accepts inputs from the previous layer (index $i$)
   - Has an index $j$ in the layer for its output
 
 - **\textcolor{blue}{Definition}**: weights are identified by 3 indices $w^{(l)}_{ij}$ where:
   - $ij$ are organized as input-output
-  - $0 \le l \le L$ denotes the layer
-  - $0 \le j \le d(l)$ denotes the output of the layer (i.e., the neuron in the
+  - $0 \le l \le L$: denotes the layer
+  - $0 \le j \le d(l)$: denotes the output of the layer (i.e., the neuron in the
     layer)
-  - $0 \le i \le d(l-1)$ denotes the inputs: start from 0 to account for the
+  - $0 \le i \le d(l-1)$ denotes the inputs, starting from 0 to account for the
     bias
     - Use $l - 1$ in $d(l-1)$ since you look at the previous layer
 
+```tikz
+\node[draw=none, fill=none] (x0) at (0,2.2) {$x_0^{(l-1)} = 1$};
+\node[draw=none, fill=none] (x1) at (0,1.1) {$x_1^{(l-1)}$};
+\node[draw=none, fill=none] (x2) at (0,0) {$x_2^{(l-1)}$};
+\node[draw=none, fill=none] (xd) at (0,-1.6) {$x_{d(l-1)}^{(l-1)}$};
+
+\node[circle, draw, thick, line width=1.2pt, minimum size=1.3cm] (neuron) at (4,0.3) {$x_j^{(l)}$};
+
+\draw[->, thick] (x0) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{0j}$} (neuron);
+\draw[->, thick] (x1) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{1j}$} (neuron);
+\draw[->, thick] (x2) -- node[above, sloped, font=\scriptsize] {$w^{(l)}_{2j}$} (neuron);
+\draw[->, thick] (xd) -- node[below, sloped, font=\scriptsize] {$w^{(l)}_{d(l-1)j}$} (neuron);
+
+\node[draw=none, fill=none, font=\small] at (-0.8,2.9) {layer $l-1$};
+\node[draw=none, fill=none, font=\small] at (5.6,0.3) {layer $l$};
+```
 
 #### Feedforward Propagation Algorithm
 - **\textcolor{red}{Algorithm}**: compute the output $\vx^{(l)}$ of the generic $l$-th layer
@@ -586,27 +617,30 @@ MSML610: Advanced Machine Learning
      $$
 
 #### Cost Function for Single-Class NN Classification
-- **Definition**: for binary classification using neural networks, use
-  \textcolor{red}{\text{logistic regression}} cost function with a \textcolor{blue}{\text{regularization term}}
+- **\textcolor{red}{Definition}**: for binary classification using neural networks, use
+  _logistic regression_ cost function with a
+  _regularization term_
+
   $$
   E_{in}(\vw)
   = - \frac{1}{N}
-  \sum_{i=1}^N (\red{y_i \log h(\vx_i) + (1 - y_i) \log (1 - h(\vx_i))}) +
-  \blue{\frac{\lambda}{N} \sum_{\green{j=1}}^p \|\vw_j\|^2}
+  \sum_{i=1}^N (y_i \log h(\vx_i) + (1 - y_i) \log (1 - h(\vx_i))) +
+  \frac{\lambda}{N} \sum_{j=1}^p \|\vw_j\|^2
   $$
 
-- **Remark**: by convention, we don't regularize the \textcolor{darkgreen}{\text{bias}} ($j=1$ and
-  not $j=0$), as it is constant and does not affect the minimum $\vw$
+- **\textcolor{blue}{Remark}**: by convention, we don't regularize the bias (i.e., $j$ starts from
+  =1 and not 0), as it is constant and does not affect the minimum $\vw$
 
-#### Multi-output Neural Networks for Multi-class Classification
+#### Multi-output NN for Multi-class Classification
 - **\textcolor{red}{(Naive) Solution}**: one-vs-all approach
-  - Train $n$ models, one per class, to recognize each class
+  - Train $n$ models (one per class) to recognize each class
   - Pick the model with the highest probability
   - The output is a one-hot encoding of each class
-  - E.g.,
-    - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
-    - Encode pedestrian = \textcolor{blue}{\texttt{(1, 0, 0, 0)}}
-    - Encode car = \textcolor{blue}{\texttt{(0, 1, 0, 0)}}
+
+- **\textcolor{darkgreen}{Example}**
+  - Use 4 output neurons to discriminate pedestrian, car, motorcycle, truck
+  - Encode pedestrian = \textcolor{blue}{\texttt{(1, 0, 0, 0)}}
+  - Encode car = \textcolor{blue}{\texttt{(0, 1, 0, 0)}}
 
 - **\textcolor{blue}{Solution}**: instead of training $n$ neural networks, train a single neural
   network with an output layer of $n$ nodes
@@ -615,11 +649,12 @@ MSML610: Advanced Machine Learning
 
 #### Cost Function for Multi-Class NN Classification
 - **\textcolor{red}{Definition}**: the loss function for multi-class classification using
-  neural networks
+  neural networks:
   - encode one-hot
   - the expected outputs $\vy_i$
   - the outputs from the model $\vh(\vx_i)$
 
+  $$
   \begin{alignat*}{2}
   E_{in}(\vw)
   & = - \frac{1}{N}
@@ -628,6 +663,7 @@ MSML610: Advanced Machine Learning
   & \frac{\lambda}{N}
   \sum_{l=1}^L \sum_{j=1}^{d(l)} \sum_{i=1}^{d(l-1)} (w^{(l)}_{ij})^2 \\
   \end{alignat*}
+  $$
 
 - **\textcolor{blue}{Remark}**: avoid to consider the inputs ($l \ne 0$) and the bias terms
   ($i \ne 0, j \ne 0$)
@@ -636,7 +672,7 @@ MSML610: Advanced Machine Learning
 
 - **\textcolor{red}{Generalization}**
   - Match model complexity to data resources
-  - High flexibility $to$ lots of data is needed
+  - High flexibility, so lots of data is needed
   - Overly complex models can overfit if data is insufficient
   - E.g., a deep neural network with millions of parameters requires a large
     dataset to train effectively without overfitting
@@ -686,17 +722,16 @@ MSML610: Advanced Machine Learning
   $$\nabla_{\vw} e(\vw)$$
 
 - **\textcolor{darkgreen}{You can}**:
-  - Compute the analytic expression of the derivatives by brute force
-  - Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
-    computing the variation of $e$
-  - Use a very efficient algorithm (backpropagation) to compute the gradient
+  1. Compute the analytic expression of the derivatives by brute force
+  2. Approximate the derivatives numerically by changing each $w^{(l)}_{ij}$ and
+     computing the variation of $e$
+  3. Use backpropagation to compute the gradient
 
 - **\textcolor{blue}{Backpropagation}** (or "backprop")
-  - Efficient algorithm for computing gradients of the loss function with
+  - Very efficient algorithm for computing gradients of the loss function with
     respect to all weights in the network
   - Enables training of multi-layer neural networks via gradient descent
   - Based on the chain rule of calculus
-  - Updates weights to minimize the overall prediction error
 
 - **\textcolor{violet}{Intuition}**
   - Forward pass computes predictions
@@ -738,7 +773,7 @@ MSML610: Advanced Machine Learning
   becomes complicated: mistakes are possible
   - E.g., back-propagation in neural networks
 
-- **\textcolor{darkgreen}{Solution}**: one approach is
+- **\textcolor{darkgreen}{Solution}**: one approach is to:
   1. Compute the gradient analytically
   2. Compute the gradient numerically
      $$
@@ -747,8 +782,8 @@ MSML610: Advanced Machine Learning
      {2 \varepsilon}
      $$
   3. Compare the gradients within numerical approximation
-  4. Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
-     to cause too many numerical issues
+     - Pick $\varepsilon$ small (e.g., $\varepsilon = 10^{-4}$) but not so small
+       to cause too many numerical issues
 
 - **\textcolor{blue}{Remark}**: automatic differentiation packages solve this issue
 
@@ -758,15 +793,15 @@ MSML610: Advanced Machine Learning
   - Applies the chain rule efficiently from output to input
   - Avoids manual gradient derivation for new architectures
 
-- **\textcolor{darkgreen}{Practical Benefits}**
-  - Major deep learning frameworks (E.g., tensorFlow, PyTorch) implement
+- **\textcolor{darkgreen}{Pros}**
+  - Major deep learning frameworks (e.g., \textcolor{blue}{\texttt{TensorFlow}}, \textcolor{blue}{\texttt{PyTorch}}) implement
     automatic differentiation
   - Enables rapid experimentation with network structures, activation functions,
     and loss functions
   - Frees you from manually re-deriving learning rules
 
-- **\textcolor{blue}{Encouragement of End-to-End Learning}**
-  - Complex tasks (E.g., machine translation) modeled as compositions of
+- **\textcolor{blue}{Encourage end-to-end learning}**
+  - Complex tasks (e.g., machine translation) modeled as compositions of
     trainable subsystems
   - Trained on input-output pairs without explicit internal supervision
   - Requires minimal prior knowledge about internal components or roles
@@ -778,19 +813,18 @@ MSML610: Advanced Machine Learning
 #### Convolutional Neural Networks
 
 - **\textcolor{red}{Motivation}**
-  - Feedforward networks do not scale with high-dimensional inputs like images
-  - Convolutional neural networks (CNNs) are designed to exploit spatial
-    structure in data
+  - Feedforward networks don't scale with high-dimensional inputs like images
+  - CNNs exploit spatial structure in data
 
 - **\textcolor{darkgreen}{Key Idea}**
-  - Local connectivity: adjacent pixels have meaning
-  - Weight sharing to detect spatially local patterns
-  - Convolutions act as learnable filters applied across input regions
+  - Local connectivity leverages adjacent pixels' meaning
+  - Weight sharing detects spatially local patterns
+  - Convolutions are learnable filters applied across input regions
 
 - **\textcolor{blue}{Basic Components}**
   - Convolutional layer: applies multiple filters across input
   - Activation function: non-linearity (e.g., ReLU) after convolution
-  - Pooling layer: reduces spatial dimensions (e.g., max pooling)
+  - Pooling layer (e.g., max pooling): reduces spatial dimensions
   - Fully connected layers: typically at the end for classification
 
 ![](msml610/lectures_source/figures/L11.CNN.png)
@@ -798,18 +832,17 @@ MSML610: Advanced Machine Learning
 #### Convolutional Neural Networks
 
 - **\textcolor{red}{Convolutional Layer Mechanics}**
-  - Filter (or kernel): small matrix of weights (E.g., $3 \times 3$)
+  - _Filter_ (aka _kernel_) is small matrix of weights (E.g., $3 \times 3$)
   - Apply dot product between filter and local patch of input
 
 - **\textcolor{orange}{Weight Sharing}**
   - Each filter is reused across all spatial locations
-  - Spatial invariance: things detectable in an image should be independent of
+  - _Spatial invariance_: things detectable in an image should be independent of
     the position in the image
   - Reduces number of parameters and improves generalization
 
-- **\textcolor{darkgreen}{Feature Map}**
-  - Output of a convolutional layer after applying filters (kernels) to the
-    input
+- **\textcolor{darkgreen}{Feature Map}** is the output of a convolutional layer after applying filters
+  to the input
   - Represents spatial patterns such as edges, textures, or more complex
     features learned by the network
 
@@ -819,18 +852,39 @@ MSML610: Advanced Machine Learning
     - Later layers detect object parts or entire objects
 
 - **\textcolor{cyan}{Example}**
-  - An image of size $32 \times 32 \times 3$ with a $5 \times 5$ filter creates a
-    $28 \times 28$ feature map (ignoring padding)
+  - An image of size 32 x 32 x 3 with a 5 x 5 filter creates a 28 x 28 feature
+    map (ignoring padding)
+
+```tikz
+\foreach \i in {0,...,4} {
+  \foreach \j in {0,...,4} {
+    \node[draw, minimum size=0.6cm, fill=blue!10] at (\j*0.6,-\i*0.6) {};
+  }
+}
+\draw[thick, red, line width=1.4pt] (-0.3,0.3) rectangle (1.5,-1.5);
+\node[red, font=\scriptsize] at (0.6,0.9) {filter ($3\times3$)};
+
+\draw[->, thick] (3.2,-0.9) -- (4.4,-0.9);
+\node[font=\scriptsize] at (3.8,-0.6) {convolve};
+
+\foreach \i in {0,...,2} {
+  \foreach \j in {0,...,2} {
+    \node[draw, minimum size=0.6cm, fill=green!10] at (5+\j*0.6,-\i*0.6) {};
+  }
+}
+\draw[thick, red, line width=1.4pt] (4.7,0.3) rectangle (5.3,-0.3);
+\node[font=\scriptsize] at (6.1,0.9) {feature map};
+```
 
 #### Convolutional Neural Networks
 
 - **\textcolor{red}{Pros}**
   - Parameter efficiency due to local connectivity and weight sharing
   - Invariant to translation and small distortions in input
-  - Scalable to large input sizes (E.g., high-resolution images)
+  - Scalable to large input sizes
 
-- **\textcolor{darkgreen}{Definition}**: pooling is a downsampling operation that reduces the spatial
-  dimensions (width and height) of feature maps
+- **\textcolor{darkgreen}{Definition}**: _pooling_ is a downsampling operation that reduces the spatial
+  dimensions (both width and depth) of feature maps
   - Reducing computation
   - Controlling overfitting
   - Making features more translation-invariant
@@ -856,10 +910,9 @@ MSML610: Advanced Machine Learning
   - Deeper networks perform better on complex tasks
   - Very deep networks suffer from vanishing/exploding gradient problems
 
-- **\textcolor{orange}{Key Idea: Residual Learning}**
+- **\textcolor{orange}{Key Idea}**: Residual Learning
   - Learn a residual function $F(x) = H(x) - x$ instead of a direct mapping
     $H(x)$
-  - Original function becomes $H(x) = F(x) + x$
   - Easier to learn a small change from a function than a new function
 
 - **\textcolor{darkgreen}{Residual Block Structure}**
@@ -874,7 +927,7 @@ MSML610: Advanced Machine Learning
   - ResNets outperform plain networks of the same depth
   - Achieved state-of-the-art results on ImageNet and other benchmarks
 ::::
-:::: {.column width=25%}
+:::: {.column width=35%}
 ```graphviz[width=50%]
 digraph ResidualBlock {
     rankdir=LR;
@@ -905,33 +958,12 @@ digraph ResidualBlock {
 ## Recurrent Neural Networks
 
 #### Recurrent Neural Networks (RNNs)
-::: columns
-:::: {.column width=55%}
-- **\textcolor{red}{Definition}**: maintain a hidden state that evolves over time
-  - Process input sequences one element at a time, maintaining a memory of
-    previous inputs
+- **\textcolor{red}{Definition}**: _Recurrent Neural Networks_:
+  - Process input sequences one element at a time
+  - Maintain memory of previous inputs (hidden state)
   - Output depends on current input and previous hidden state
-  - Useful for tasks where the order of data is crucial
-- **\textcolor{orange}{Remark}**: trained using backpropagation through time
+  - Useful for tasks where order of data is crucial
 
-- **\textcolor{darkgreen}{Pros}**
-  - Designed for sequential data
-    - E.g., time series, text
-  - Can, in theory, capture temporal dependencies of arbitrary length
-
-- **\textcolor{teal}{Cons}**
-  - Struggle with long-term dependencies (vanishing gradients)
-  - Training is slow due to sequential processing (no parallelism over time steps)
-  - Struggles with long-term memory retention
-  - Suitable for simple sequences
-
-- **\textcolor{cyan}{Examples}**:
-  - Language modeling: Given a sequence of words, predict the next word
-  - Time series prediction: Forecast future values based on past observations
-  - Sentiment analysis: Determine the sentiment of a sentence by considering the
-    sequence of words
-::::
-:::: {.column width=40%}
 ```graphviz
 digraph FeedbackSystem {
     rankdir=TB;
@@ -958,43 +990,60 @@ digraph FeedbackSystem {
     {rank=same; x; Input; Block1; Block2; join1; Output}
 }
 ```
-::::
-:::
+
+- **\textcolor{blue}{Remark}**: Trained using backpropagation through time
+
+#### Recurrent Neural Networks (RNNs)
+
+- **\textcolor{red}{Pros}**
+  - Designed for sequential data
+    - E.g., time series, text
+  - Capture temporal dependencies of arbitrary length (in theory)
+
+- **\textcolor{darkgreen}{Cons}**
+  - Struggle with vanishing gradients
+  - Slow training due to sequential processing (no parallelism over time steps)
+  - Struggle with long-term memory retention
+
+- **\textcolor{blue}{Examples}**:
+  - Time series prediction: Forecast future values based on past observations
+  - Language modeling: Predict next word in a sequence
+  - Sentiment analysis: Determine sentiment of a sentence by considering
+    sequence of words
 
 #### Vanishing and Exploding Gradient Problem
 
-- **\textcolor{red}{Remark}**: arise due to repeated multiplication of gradients in the chain
-  rule
+- **\textcolor{red}{Problem}**:
+  - _Vanishing Gradient_:
+    - Gradients become small in early layers during backpropagation
+    - Leads to slow or no learning
+    - Common with sigmoid or tanh activations
+  - _Exploding Gradient_
+    - Gradients grow exponentially during backpropagation
+    - Causes unstable updates and potential overflow
+    - Seen with large initial weights
+  - Both issues are caused by repeated multiplication of gradients in the chain
+    rule
 
-- **\textcolor{orange}{Vanishing Gradient}**
-  - Gradients become very small in early layers as they are propagated backward
-  - Leads to extremely slow learning or no learning
-  - Common with activation functions like sigmoid or tanh
-
-- **\textcolor{darkgreen}{Exploding Gradient}**
-  - Gradients grow exponentially during backpropagation
-  - Causes unstable updates and potential overflow in weights
-  - Often seen when weights are initialized with large values
-
-- **\textcolor{teal}{Solutions}**
-  - Use ReLU or similar activations to mitigate vanishing gradients
-  - Apply gradient clipping to handle exploding gradients
+- **\textcolor{darkgreen}{Solutions}**
   - Normalize inputs
+  - Use ReLU or similar activations to mitigate vanishing gradients
+  - Apply gradient clipping for exploding gradients
   - Apply batch normalization
 
-- **\textcolor{cyan}{Remark}**: these issues motivated the design of architectures like LSTM and
-  ResNet
+- **\textcolor{blue}{Remark}**: These issues motivated architectures like LSTM and ResNet
 
 #### Long Short-Term Memory (LSTM) Networks
 
 
 
-- Special architecture with memory cells and gates
-  - Forget gate: decides what information to discard from the cell state
-  - Input gate: controls what new information to store
-  - Output gate: determines what to output from the cell
+- **\textcolor{red}{Definition}**: Long Short-Term Memory is an architecture with memory cells and
+  several special gates:
+  - _Forget gate_: decides what information to discard from the cell state
+  - _Input gate_: controls what new information to store
+  - _Output gate_: determines what to output from the cell
 
-- **\textcolor{red}{Pros}**
+- **\textcolor{darkgreen}{Pros}**
   - Designed to overcome vanishing gradient problem in standard RNNs
   - Captures long-range dependencies through gated memory cells
   - Flexible architecture for learning when to remember or forget
@@ -1005,50 +1054,95 @@ digraph FeedbackSystem {
   - Slower training and inference compared to simpler models (e.g., GRUs)
   - Difficult to parallelize over time steps
 
-- Especially effective in natural language processing and time series tasks
-- E.g., used in machine translation, speech recognition, and language modeling
+- **\textcolor{violet}{Remark}**: especially effective in natural language processing and time
+  series tasks
+  - E.g., machine translation, speech recognition, and language modeling
 
+```tikz
+\node[draw=none] (Ctm1) at (-6,1) {$C_{t-1}$};
+\node[draw=none] (htm1) at (-6,-1) {$h_{t-1}$};
+\node[draw=none] (xt) at (-6,-2) {$x_t$};
+
+\node[draw, fill=orange!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (forget) at (-3,-0.5) {Forget gate\\$f_t = \sigma(\cdot)$};
+\node[draw, fill=teal!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (input) at (-0.3,-0.5) {Input gate\\$i_t = \sigma(\cdot)$};
+\node[draw, fill=violet!20, rounded corners, align=center, minimum width=2cm, minimum height=1cm] (cand) at (2.4,-0.5) {Candidate\\$\tilde{C}_t = \tanh(\cdot)$};
+\node[draw, fill=blue!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (output) at (5.1,-0.5) {Output gate\\$o_t = \sigma(\cdot)$};
+
+\draw[->, thick] (Ctm1) -| (forget.north);
+\draw[->, thick] (htm1) -- (forget);
+\draw[->, thick] (htm1) -| (input.south);
+\draw[->, thick] (htm1) -| (cand.south);
+\draw[->, thick] (htm1) -| (output.south);
+\draw[->, thick] (xt) -- (-4.3,-2) -- (forget);
+
+\draw[->, thick] (forget) -- (input);
+\draw[->, thick] (input) -- (cand);
+\draw[->, thick] (cand) -- (output);
+
+\node[draw=none, align=left] (Ct) at (8.3,1) {$C_t = f_t C_{t-1}$\\$\hspace{0.65cm} + i_t \tilde{C}_t$};
+\node[draw=none] (ht) at (8.3,-1.5) {$h_t = o_t \tanh(C_t)$};
+\draw[->, thick] (output) -- (7,1) -- (Ct);
+\draw[->, thick] (output) -- (7,-1.5) -- (ht);
+```
 
 #### Gated Recurrent Units (GRUs)
 
 
-- Alternative to LSTMs for sequential modeling
-  - Combine **\textcolor{red}{forget}** and **\textcolor{orange}{input}** gates into a single **\textcolor{darkgreen}{update gate}**
+- **\textcolor{red}{Definition}**: Gated Recurrent Unites are alternative to LSTMs for sequential
+  modeling
+  - Combine forget and input gates into a single _update gate_
   - Retain essential functionality with fewer components:
     - Update gate controls how much of the past state to keep
     - Reset gate controls how much of the past information to forget
 
-- **\textcolor{teal}{Pros}**
+- **\textcolor{darkgreen}{Pros}**
   - Requires fewer parameters, leading to faster training
   - Comparable or better performance than LSTM on many tasks
   - Easier to tune and implement
   - Suitable for real-time and low-resource applications
 
-- **\textcolor{cyan}{Cons}**
-  - May be less expressive than LSTM for very complex patterns
+- **\textcolor{blue}{Cons}**
+  - Less expressive than LSTM for very complex patterns
   - Lacks a separate memory cell, which may limit ability to retain long-term
     information
-  - Slightly less studied and standardized than LSTM in some domains
 
-- **\textcolor{blue}{Example}**
+- **\textcolor{violet}{Example}**
   - GRUs are preferred in real-time speech recognition systems due to their
     efficiency
 
+```tikz
+\node[draw=none] (htm1) at (-6,0.5) {$h_{t-1}$};
+\node[draw=none] (xt) at (-6,-1.5) {$x_t$};
+
+\node[draw, fill=teal!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (update) at (-3,1) {Update gate\\$z_t = \sigma(\cdot)$};
+\node[draw, fill=orange!20, rounded corners, align=center, minimum width=1.8cm, minimum height=1cm] (reset) at (-3,-1) {Reset gate\\$r_t = \sigma(\cdot)$};
+\node[draw, fill=violet!20, rounded corners, align=center, minimum width=2.1cm, minimum height=1cm] (cand) at (0,-1) {Candidate\\$\tilde{h}_t = \tanh(\cdot)$};
+
+\draw[->, thick] (htm1) -- (update);
+\draw[->, thick] (htm1) -- (reset);
+\draw[->, thick] (xt) -- (-4.3,-1.6) -- (reset);
+\draw[->, thick] (xt) -- (-4.3,0.4) -- (update);
+\draw[->, thick] (reset) -- (cand);
+
+\node[draw=none, align=left] (ht) at (4,0) {$h_t = (1-z_t) h_{t-1}$\\$\hspace{0.85cm} + z_t \tilde{h}_t$};
+\draw[->, thick] (cand) -- (2,-1) -- (ht);
+\draw[->, thick] (update) -- (2,1) -- (ht);
+```
 
 ## Deep Learning Learning Algorithms
 
 #### Techniques for Training Deep Neural Networks
 
-- Deep networks are hard to train 
-  - Due to vanishing/exploding gradients
-  - Optimization can be slow and sensitive to hyperparameters
+- **\textcolor{red}{Problem}**: deep networks are hard to train for several reasons:
+  1. Vanishing/exploding gradients
+  2. Training can be slow
+  3. Optimization is sensitive to hyperparameters
 
-- **\textcolor{red}{Momentum}**
+- **\textcolor{darkgreen}{Momentum}**
   - Modifies gradient descent to accelerate convergence
   - Updates use an exponentially decaying average of past gradients
-  - Update rule: $v_t = \beta v_{t-1} + \eta \nabla \theta_t$,
-    $\theta_{t+1} = \theta_t - v_t$
-  - Helps overcome local minima and reduces oscillations in ravines
+  - Update rule: $v_t = \beta v_{t-1} + \eta \nabla \theta_t$
+  - Helps overcome local minima and reduces oscillations
 
 - **\textcolor{blue}{Adam (Adaptive Moment Estimation)}**
   - Combines momentum with adaptive learning rates
@@ -1068,98 +1162,98 @@ digraph FeedbackSystem {
     $$\hat{x} = \frac{x - \mu_B}{\sqrt{\sigma_B^2 + \epsilon}}$$
   - Introduces learnable parameters $\gamma$ and $\beta$ to scale and shift the
     normalized values
-  - Benefits:
-    - Reduces internal covariate shift
-    - Enables higher learning rates
-    - Acts as a regularizer, reducing need for dropout
 
+- **\textcolor{blue}{Pros}**
+  - Reduces internal covariate shift
+  - Enables higher learning rates
+  - Acts as a regularizer, reducing need for dropout
 
 #### Regularization in Neural Networks
-- (Soft) weight elimination: fewer weights $\implies$ smaller VC dimension, so
-  we would like to remove some neurons (i.e., push weights towards 0)
-- For any activation function (e.g., tanh()) a small weight means that we work
-  in the linear regime, while a large weight leaves us in the binary regime
-- Using a normal regularization
+- **\textcolor{red}{Goal}**: (soft) weight elimination
+  - Fewer weights $\implies$ smaller VC dimension
+  - Remove neurons (push weights towards 0)
+
+- **\textcolor{darkgreen}{Remark}**: Regardless of activation function (e.g., \textcolor{blue}{\texttt{tanh}}), small weight
+  means linear regime, large weight means binary regime
+
+- **\textcolor{blue}{(Naive) Solution}**: using a normal regularization
   $$
   \Omega(\vw) = \sum_{i,j,l} (w^{(l)}_{ij})^2
   $$
-  we have the problem that a neuron in binary regime is penalized more than many
-  neurons in linear regime
-- So for neural networks we use a regularizer as:
+  - Cons: a neuron in binary regime is penalized more than many neurons in
+    linear regime
 
+- **\textcolor{violet}{Solution}**: so for neural networks use a regularizer as:
   $$
   \Omega(\vw) = \lambda \sum_{i, j, l} \frac{(w^{(l)}_{ij})^2}{\beta^2 + (w^{(l)}_{ij})^2}
   $$
-
-  so that the penalization is quadratic for small $\vw$ and then it saturates as
-  function of the weight magnitude
-
+  - Penalization is quadratic for small $\vw$ and then it saturates as function
+    of the weight magnitude
 
 ## Deep Learning for NLP
 
 #### NLP Tasks
 - **\textcolor{red}{Part-of-speech (POS) tagging}**
   - Assign a POS (e.g., noun, verb, adjective) to each word in a sentence 
-  - Data needs: labelled data
+  - Need: labelled data
 
 - **\textcolor{orange}{Co-reference resolution}**
   - E.g., _"Mike told that John was sick, so I took him to the hospital"_
     - Who does _"him"_ refer to?
     - _"John"_ with high probability
   - The output is a distribution over possible antecedents
-  - Data needs: labelled data
+  - Need: labelled data
 
 - **\textcolor{darkgreen}{Sentiment analysis}**
   - Classify a text as having positive or negative sentiment
     - E.g., "the movie was poorly written and acted" $\to$ negative
-  - Data needs: nothing in theory
+  - Need: nothing in theory
 
 - **\textcolor{teal}{Machine translation}**
   - Translate a sentence from a source language to a target language
     - E.g., from Spanish to English
-  - Data needs: large corpus of source/target sentence pairs
+  - Need: large corpus of source/target sentence pairs
 
 - **\textcolor{cyan}{Information extraction}**
-  - Automatically extracting structured information from unstructured text
+  - Extract structured information from unstructured text
 
-- **\textcolor{blue}{Named entity recognition}**
+- **\textcolor{blue}{Named entity recognition}** (NER)
   - Identify and classify named entities (e.g., people, organizations, locations)
     in text
 
 #### Part-of-speech (POS) Tagging
 - **\textcolor{red}{Example}**
-  - Input: "The dog barks loudly"
-  - Output: [Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)]
+  - Input: _"The dog barks loudly"_
+  - Output: \textcolor{blue}{\texttt{Determiner (DT), Noun (NN), Verb (VB), Adverb (RB)}}
 
 - **\textcolor{darkgreen}{Techniques}**
-  - *Rule-based*: hand-crafted grammar rules
-  - *Statistical*: models like Hidden Markov Models (HMMs)
-  - *Machine Learning*: classifiers (e.g., SVM)
-  - *Neural Networks*: LSTM, BiLSTM, or Transformers
+  - _Rule-based_: hand-crafted grammar rules
+  - _Statistical_: models (e.g., Hidden Markov Models)
+  - _Machine Learning_: classifiers (e.g., SVM)
+  - _Neural Networks_: LSTM, BiLSTM, or Transformers
 
-- **\textcolor{blue}{Challenges}**
-  - Ambiguity: "can" can be a verb or a noun
-  - Context-dependency: Tags depend on the surrounding words
+- **\textcolor{blue}{Problems}**
+  - _Ambiguity_: "can" can be a verb or a noun
+  - _Context-dependency_: Tags depend on the surrounding words
 
 #### NLP Using Rules-Based Systems
-- Systems based on rules for parsing and semantic analysis have shown:
-  - Success in many tasks
-  - Performance limited by linguistic complexity
-  - E.g., "cut" can be a verb or a noun
-    - Present, past, infinite verb
-    - Transitive or intransitive
-    - The meaning depends on the context
+- **\textcolor{red}{(Naive) Solution}**: systems based on rules for parsing and semantic
+  analysis
+  - Cons: performance limited by linguistic complexity
+    - E.g., _"cut"_ can be a verb or a noun
+      - Present, past, infinite verb
+      - Transitive or intransitive
+      - The meaning depends on the context
 
-- Idea:
-  - Vast amount of text in machine-readable form $\to$ use data-driven ML
-    approach 
+- **\textcolor{blue}{Solution}**: vast amount of text in machine-readable form $\to$ use
+  data-driven ML approach
 
 #### The Bitter Lesson
-- _"General methods leveraging computation ultimately outperform
+- **\textcolor{red}{Fact}**: _"General methods leveraging computation ultimately outperform
   human-knowledge-based systems"_, Sutton (2019)
 
-- Key Observation
-  - Human-designed heuristics and domain knowledge lose
+- **\textcolor{darkgreen}{Key Observation}**
+  - Human-designed heuristics and domain knowledge tend to lose
   - General-purpose learning algorithms that scale with computation tend to win
   - E.g.,
     - Chess: hand-crafted rules outperformed by AlphaZero using self-play and
@@ -1167,7 +1261,7 @@ digraph FeedbackSystem {
     - Vision: feature-engineered models replaced by end-to-end trained
       convolutional networks
 
-- The "bitter" part
+- **\textcolor{blue}{Why "Bitter"?}**
   - Humans like to inject knowledge into systems
   - But machines learn better when allowed to discover patterns from data
     themselves
@@ -1187,14 +1281,14 @@ digraph FeedbackSystem {
 - **\textcolor{red}{Goal}**: create representation of words for NLP tasks
 
 - **\textcolor{darkgreen}{Requirements}**:
-  - No need for manual feature engineering
+  - No manual feature engineering (not scalable)
   - Allow for generalization between related words
     - Syntactically: "colorless" and "ideal" are both adjectives
     - Semantically: "cat" and "kitten" are both felines
     - Topically: "sunny" and "rainy" are both weather terms
     - Sentiment: "awesome" and "cringeworthy" are opposite
 
-- **\textcolor{blue}{Approaches}**:
+- **\textcolor{blue}{Solutions}**:
   1. Encode a word into an input vector (e.g., one-hot vector)
      - Cons: doesn't capture similarity between words
   2. Represent as a vector of n-gram counts
@@ -1207,41 +1301,46 @@ digraph FeedbackSystem {
      - E.g., 100 dimensions
 
 #### Word Embeddings: Emerging Properties
-- Similar words have similar word embeddings
-  - Words cluster based on their topics
+- **\textcolor{red}{Fact}**: similar words have similar word embeddings
+  - Words tend to cluster based on their topics
 
-- Difference between related words seems to have a meaning
+- **\textcolor{darkgreen}{Fact}**: difference between embeddings of related words seems to have a
+  meaning
+  - E.g., negative, plural, superlative, past tense are "vectors" in embedding
+    space
   - E.g., \textcolor{blue}{\texttt{Greece}} - \textcolor{blue}{\texttt{Athens}} = country/capital relationship
-  - E.g., negative, plural, superlative, past tense
 
-- These properties are:
-  - Not really enforced
+- **\textcolor{blue}{Remark}**: these properties are:
+  - Not enforced
   - Approximate
   - Emergent
 
 #### Word Embeddings: Pretrained vs Custom
-- Word embedding representations are independent of the task
+- **\textcolor{red}{Remark}**: word embeddings can be used independently of the task
   - Can pretrain and reuse them
     - Word2vec
     - GloVe (global vectors)
     - FastText
 
-- For some tasks better to learn word embeddings end-to-end with the task
+- **\textcolor{blue}{Remark}**: for some tasks better to learn word embeddings end-to-end with
+  the task
   - E.g., POS tagging: the same word needs to be represented in different ways
-    - E.g., "cut" can be verb or noun $\to$ multiple semantic embeddings
+    - E.g., _"cut"_ can be verb or noun $\to$ multiple semantic embeddings
 
 #### Language Models
-- Word embedding are a good representation for words in isolation
-- Language consists of sequence of words where context of each word is important
+- **\textcolor{red}{Problem}**:
+  - Word embedding are a good representation for words in isolation
+  - Language consists of sequence of words where the context of each word is
+    important
   - E.g., in _"Michael told me that John was sick, so I took him to the
-    hospital"_, "him" can refer to multiple people
+    hospital"_, _"him"_ can refer to multiple people
 
-- A **\textcolor{red}{language model}** is a probability distribution of sequences of words
-  - Predict the next word in a text given all the previous words
-    - Supervised learning
-    - Enormous amount of data
+- **\textcolor{darkgreen}{Definition}**: a _language model_ is a probability distribution of sequences
+  of words
+  - I.e., predict the next word in a text given all the previous words
+  - Supervised learning on enormous amount of data
 
-- How to learn a language model?
+- **\textcolor{blue}{Question}**: how to learn a language model?
   1. Feedforward neural network
   2. Recurrent neural network
   3. Transformer architecture
@@ -1252,27 +1351,61 @@ digraph FeedbackSystem {
   - Fixed-size context window of $n$ words
   - Word embeddings
 
-- **\textcolor{blue}{Problems:}**
-  1. Context might need to be very long
+- **\textcolor{blue}{Problems}**:
+  1. _Context_ might need to be very long
      - Not all the words are important
      - E.g., a sentence with 20 words requires a large number of parameters if
        each word is considered in any context
-  2. Problem of asymmetry
+  2. _Asymmetry_
      - Weights need to be learned for each word in each position
-     - E.g., different weights for the word "cat" when it appears at the
+     - E.g., different weights for the word _"cat"_ when it appears at the
        beginning versus the end of a sentence
-   - Too many parameters to learn
-   - Computationally expensive
+     - Many parameters to learn $\to$ computationally expensive
+
+```tikz
+\node[draw, fill=orange!20, minimum width=1.1cm, minimum height=0.7cm] (w1) at (-3,2) {$w_{t-n}$};
+\node[draw=none] at (-1.8,2) {$\cdots$};
+\node[draw, fill=orange!20, minimum width=1.1cm, minimum height=0.7cm] (w2) at (-0.6,2) {$w_{t-1}$};
+
+\node[draw, fill=teal!20, minimum width=1.1cm, minimum height=0.7cm] (e1) at (-3,1) {embed};
+\node[draw, fill=teal!20, minimum width=1.1cm, minimum height=0.7cm] (e2) at (-0.6,1) {embed};
+
+\node[draw, fill=blue!20, rounded corners, minimum width=3.2cm, minimum height=0.8cm] (hidden) at (-1.8,0) {Hidden layer};
+
+\node[draw, fill=violet!20, rounded corners, minimum width=3.2cm, minimum height=0.8cm] (softmax) at (-1.8,-1.2) {Softmax over vocabulary};
+\node[draw=none, font=\scriptsize] at (-1.8,-2.1) {$\Pr(w_t | w_{t-n}, ..., w_{t-1})$};
+
+\draw[->, thick] (w1) -- (e1);
+\draw[->, thick] (w2) -- (e2);
+\draw[->, thick] (e1) -- (hidden);
+\draw[->, thick] (e2) -- (hidden);
+\draw[->, thick] (hidden) -- (softmax);
+```
 
 #### RNNs for Language Models
-- RNNs process sequence of data, one piece of data at a time
+- **\textcolor{red}{Intuition}**: RNNs process sequence of data, one piece of data at a time
   - Process language, one word at a time
 
-- Architecture
+- **\textcolor{blue}{Architecture}**
   1. Each input word is encoded as word embedding vector
   2. A hidden layer gets the previous state and the new word
      - Allocate storage space for features of inputs useful for the task
   3. The output is a probability over output words
+
+```tikz
+\node[draw=none] (wt) at (-1.5,2.2) {$w_t$};
+\node[draw, fill=teal!20, minimum width=1.2cm, minimum height=0.7cm] (embed) at (-1.5,1) {embed};
+\node[draw, fill=blue!20, rounded corners, minimum width=1.6cm, minimum height=1cm] (h) at (-1.5,-0.5) {$h_t$};
+\node[draw=none] (htm1) at (-4,-0.5) {$h_{t-1}$};
+
+\draw[->, thick] (wt) -- (embed);
+\draw[->, thick] (embed) -- (h);
+\draw[->, thick] (htm1) -- (h);
+
+\node[draw, fill=violet!20, rounded corners, minimum width=2.2cm, minimum height=0.7cm] (softmax) at (-1.5,-2) {Softmax};
+\draw[->, thick] (h) -- (softmax);
+\node[draw=none, font=\scriptsize] at (-1.5,-2.9) {$\Pr(w_{t+1} | w_1, ..., w_t)$};
+```
 
 #### RNNs for Language Models: Pros and Cons
 - **\textcolor{red}{Pros}**:
@@ -1293,22 +1426,23 @@ digraph FeedbackSystem {
     - Solution: Use LSTMs
 
 #### Sequence-to-Sequence Models
-- Enable learning of mappings between sequences of differing lengths and
-  structures
-  - Used for transforming one sequence into another, e.g.,
-    - Machine translation
-    - Text summarization
-    - Speech recognition
+- **\textcolor{red}{Definition}**: Seq-to-Seq learn to transform sequences of differing lengths
+  and structures
+  - Training is supervised with input-output sequence pairs
 
-- Composed of two main components:
-  - **\textcolor{red}{Encoder}**: Compress information from input sequence into a fixed-size
-    context vector
-  - **\textcolor{blue}{Decoder}**: Generates output sequence from the context vector
+- **\textcolor{darkgreen}{Examples}**
+  - Machine translation
+  - Text summarization
+  - Speech recognition
+
+- **\textcolor{blue}{Remark}**: models are composed of two main components:
+  - _Encoder_: Compress information from input sequence into a fixed-size context
+    vector
+  - _Decoder_: Generates output sequence from the context vector
   - Both encoder and decoder are typically RNNs (e.g., LSTM or GRU)
 
-- Training is supervised with input-output sequence pairs
-
-- Limitation:
+- **\textcolor{violet}{Limitations}**:
+  // TODO(ai_gp): The following is unclear, explain better
   - Fixed-size context vector can become a bottleneck for long sequences
   - Attention mechanisms so decoder can access all encoder states
 
@@ -1318,9 +1452,9 @@ digraph FeedbackSystem {
   - Instead of processing input sequentially (like RNNs), attention processes all
     simultaneously
   - Each token can "look at" others and decide which are most important
-    - E.g., in translation, the word "bank" in "river bank" gets higher attention
-      from nearby words like "river"
-  - It's like "context-based summarization" of the source sentence into a
+    - E.g., in translation, the word _"bank"_ in _"river bank"_ gets higher
+      attention from nearby words like _"river"_
+  - It's like context-based summarization of the source sentence into a
     fixed-dimensional representation
 
 - **\textcolor{blue}{Motivation}**
@@ -1330,11 +1464,13 @@ digraph FeedbackSystem {
 #### Sequence-to-Sequence Attention
 ::: columns
 :::: {.column width=65%}
-- If the RNN model is
+- **\textcolor{red}{Definition}**: if the RNN model is
   $\vh_i = RNN(\vh_{i-1}, \vx_i)$
-- The sequence-to-sequence attention is the concatenation of $\vx_i$
-  and the context vector $\vc_i$
+
+- The sequence-to-sequence attention is the concatenation of
+  $\vx_i$ and the context vector $\vc_i$
   $$\vh_i = RNN(\vh_{i-1}, [\vx_i, \vc_i])$$
+
 - The raw attention score $r_{ij}$ is:
   $$r_{ij} = \vh_{i-1} \cdot \vs_j$$
   where
@@ -1349,7 +1485,8 @@ digraph FeedbackSystem {
 ::::
 :::
 
-- The attention scores are normalized into probability using a softmax:
+- The attention scores are normalized into probability using
+  a softmax:
   $$a_{ij} = \frac{e^{r_{ij}}}{\sum_k e^{r_{ik}}}$$
 
 - Finally the vectors $\vs_j$ are weighted and summed as:
@@ -1361,23 +1498,25 @@ digraph FeedbackSystem {
   - Useful for capturing dependencies within a single sequence
   - E.g., in language models, each word can attend to all other words in a
     sentence
+
 - **\textcolor{darkgreen}{Cross-Attention}**: One sequence attends to another
   - Facilitates the interaction between different sequences
   - E.g., in machine translation, the target language sequence attends to the
     source language sequence
+
 - **\textcolor{blue}{Multi-Head Attention}**
   - Applies attention multiple times in parallel (with different linear
     projections)
   - The results are concatenated together to form $\vc_i$
   - Concatenating is better than summing to keep important information
   - Captures different types of relationships at different subspaces
-  - E.g., in a Transformer model, different heads might focus on different parts
-    of a sentence, such as subject-verb agreement or noun-adjective
-    relationships
+  - E.g., in a Transformer model, different heads might focus on different
+    relationships of a sentence (e.g., subject-verb agreement, noun-adjective
+    relationships)
 
 #### Attention: Vectorized Formula
-- Compute a weighted sum of values ($V$) using weights derived from queries
-  ($Q$) and keys ($K$)
+- **\textcolor{red}{Definition}**: compute a weighted sum of values ($V$) using weights
+  derived from queries ($Q$) and keys ($K$)
   $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
   where:
   - $Q$: matrix of query vectors (shape: $n_q \times d_k$)
@@ -1386,74 +1525,75 @@ digraph FeedbackSystem {
   - $d_k$: dimensionality of the key vectors
   - $QK^T$: dot products between each query and all keys (shape: $n_q \times n_k$)
 
-- **\textcolor{red}{Steps}**:
-  1. **\textcolor{orange}{Dot Product}**: Compute similarity between each query and all keys
+- **\textcolor{darkgreen}{Steps}**:
+  1. _Dot Product_: Compute similarity between each query and all keys
      - $QK^T$ produces attention scores
-  2. **\textcolor{darkgreen}{Scaling}**: Divide scores by $\sqrt{d_k}$
+  2. _Scaling_: Divide scores by $\sqrt{d_k}$
      - To stabilize gradients
-  3. **\textcolor{teal}{Softmax}**: Apply softmax to each row of the scaled scores
+  3. _Softmax_: Apply softmax to each row of the scaled scores
      - Converts scores into a probability distribution (attention weights)
-  4. **\textcolor{cyan}{Weighted Sum}**: Multiply weights by $V$ to produce context vectors
+  4. _Weighted Sum_: Multiply weights by $V$ to produce context vectors
 
-- **\textcolor{blue}{Advantages}**
+- **\textcolor{blue}{Pros}**
   - Parallelizable computation
   - Better handling of long-range dependencies than RNNs
 
 #### Sequence-to-Sequence: Decoding
-- Training a sequence-to-sequence model requires to:
+- **\textcolor{red}{Goal}**: training a sequence-to-sequence model requires to:
   - Maximize the probability of each word in the target training sentence
   - Conditioned on the source and previous target words
 
-- At inference time:
+- **\textcolor{orange}{Remark}**: at inference time:
   - Given a source sentence
   - Generate the target word one at a time
   - Feed back the target word for the next time step
 
-- Greedy decoding
+- **\textcolor{darkgreen}{Greedy Decoding}**
   - Pick the next word that has the highest probability
-  - Pros
+  - **\textcolor{teal}{Pros}**
     - Fast
-  - Cons
+  - **\textcolor{cyan}{Cons}**
     - We need to maximize the probability of the entire target sequence
     - Greedy decoding doesn't have a mechanism to correct a mistake
     - Many times the model needs to see what comes next
 
-- Beam search:
+- **\textcolor{blue}{Beam Search}**:
   - Keep the top $k$ hypotheses at each stage
   - Choose the hypothesis with the best score
 
 #### Transformer Architecture
-- Revolutionized sequence modeling through combining several ideas
+- **\textcolor{red}{Remark}**: revolutionized sequence modeling through combining several ideas
 
-- **\textcolor{red}{Self-attention}**
+- **\textcolor{orange}{Self-attention}**
   - Eliminates recurrence by processing sequences in parallel
   - Model long-distance context without a sequential dependency
   - Multi-head attention to capture different aspects of relationships between
     tokens
 
-- Transformer has many (6 or more) transformer layers
-  - **\textcolor{darkgreen}{Transformer layer}**
+- **\textcolor{darkgreen}{Remark}**: transformer has many (6 or more) transformer layers
+  - **\textcolor{teal}{Transformer layer}**
     - Self-attention
     - Residual connection
     - Feedforward layer (with ReLU)
     - Residual connection
 
-- **\textcolor{blue}{Positional embedding}**: injects sequence order into token embeddings
+- **\textcolor{cyan}{Positional embedding}**: injects sequence order into token embeddings
   - Transformer architecture has no inherent way to capture token order in
     sequences
   - Add "positional embeddings" to input embeddings to provide information about
     the position of each token in the sequence
 
-- **\textcolor{violet}{Pros}**
+- **\textcolor{blue}{Pros}**
   - Enables greater scalability and parallelization
 
-- Dominates current state-of-the-art in NLP
+- **\textcolor{violet}{Remark}**: dominates current state-of-the-art in NLP
   - E.g., BERT, GPT, T5, and others
 
 
 #### Pretraining
-- For computer vision train using large collections of hand-labeled images (e.g., ImageNet)
-- For text use un-labeled data
+- **\textcolor{red}{Remark}**: for computer vision train using large collections of
+  hand-labeled images (e.g., ImageNet)
+- **\textcolor{darkgreen}{Remark}**: for text use un-labeled data
   - NLP tasks are not easy for labellers (e.g., POS)
   - Internet has large amount of text (100b words added every day)
     - Common crawl
@@ -1461,16 +1601,16 @@ digraph FeedbackSystem {
     - FAQs can be used (for question-answering)
     - Websites have multiple version (for translation)
 
-- Pretrain using a large amount of text data
+- **\textcolor{blue}{Solution}**: pretrain using a large amount of text data
   - Fine tune the model with labeled data
   - It's an example of transfer learning
 
 #### Masked Language Models
-- Word prediction in language models are made left-to-right
-- Sometimes the context comes later in the context
+- **\textcolor{red}{Remark}**: word prediction in language models are made left-to-right
+- **\textcolor{darkgreen}{Problem}**: sometimes the context comes later in the context
   - E.g., "the river rose five feet"
 
-- Train models using masking a word and predicting it
+- **\textcolor{blue}{Solution}**: train models using masking a word and predicting it
   - E.g., "the river _______ five feet"
 
-- The sentence provides its own labels
+- **\textcolor{violet}{Remark}**: the sentence provides its own labels
