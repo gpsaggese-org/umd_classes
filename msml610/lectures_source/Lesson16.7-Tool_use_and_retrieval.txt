@@ -1,0 +1,465 @@
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=Lesson 16.7: Tool Use and Retrieval
+// slides_engine=typst
+
+// References:
+//- Google Cloud expands grounding capabilities on Vertex AI:
+//  https://cloud.google.com/blog/products/ai-machine-learning/rag-and-grounding-on-vertex-ai
+//- The Needle In a Haystack Test: Evaluating the performance of RAG systems:
+//  https://towardsdatascience.com/the-needle-in-a-haystack-test-a94974c1ad38
+//- The AI detective: The Needle in a Haystack test and how Gemini 1.5 Pro
+//  solves it:
+//  https://cloud.google.com/blog/products/ai-machine-learning/the-needle-in-the-haystack-test-and-how-gemini-pro-solves-it
+
+# Tool Use and Retrieval
+
+## Motivation: Two Failure Modes and a Roadmap
+
+* Two Ways an Answer Can Be Wrong
+
+- **Motivation**: an agent answering purely from its own weights can fail
+  in two distinct ways
+  - _Knowledge cutoff_: the world changed after training ended, so the
+    weights encode a stale snapshot
+  - _Hallucination_: the model produces a fluent, confident claim with no
+    basis in any fact it actually knows
+- **Question**: can an agent supply itself with facts at inference time,
+  instead of relying only on what training baked into the weights?
+- **Key idea**: both failure modes share one fix: give the model access to
+  an external, checkable source of facts before it answers
+
+* Grounding Facts, Not Just Actions
+
+- **Recap**: grounding connects a model's internal representations to
+  something external and verifiable
+- **Definition**: _retrieval grounding_ supplies the model with _facts_
+  pulled from an external source, as opposed to _action grounding_, which
+  supplies the model with the _consequences_ of an action it takes
+  - E.g., calling a search tool and reading back a passage is retrieval
+    grounding
+  - E.g., calling a checkout API and reading back an order confirmation is
+    action grounding
+- **Key idea**: retrieval turns "the model claims X" into "the model
+  quotes a source that says X"
+
+* From Vectors to Enterprise Grounding
+
+- **Roadmap**:
+  1. Treat retrieval as a tool the agent decides to call
+  2. Open up how a vector database finds relevant passages
+  3. See how enterprises ground answers in proprietary data
+  4. Ask whether a large enough context window can replace retrieval, and
+     how the needle-in-a-haystack test answers that
+- **Key idea**: retrieval is not a single algorithm, it is a design space
+  with cost, freshness, and reliability trade-offs at every step
+
+## Retrieval as a Tool Call
+
+* Retrieval-Augmented Generation: The Loop
+
+- **Definition**: _retrieval-augmented generation_ (RAG) answers a query
+  by first fetching relevant text, then conditioning generation on it
+  1. Embed the query
+  2. Search an index for the most similar passages
+  3. Insert the retrieved passages into the prompt
+  4. Generate the answer conditioned on the query and the passages
+- **Key idea**: RAG splits answering into two separable problems: finding
+  the right passages, and writing an answer given they are found
+- **Limitations**: an answer is only as good as the passages retrieved, a
+  fluent generator cannot repair a missing or irrelevant passage
+
+* RAG as a Special Case of Tool Use
+
+- **Definition**: a _retrieval tool_ takes a query string as input and
+  returns a ranked list of passages as output, exactly like any other
+  callable tool
+- **Key idea**: nothing about the perceive-plan-act loop changes when the
+  action is "search a corpus" instead of "call an API"
+  - The agent still chooses to invoke the tool, observes the returned
+    passages, and decides what to do next
+- **Example**: an agent facing _"What is our current refund policy?"_
+  calls `search_policies(query)`, observes three passages, and drafts an
+  answer citing them
+
+* Deciding Whether to Retrieve
+
+- **Question**: should an agent always retrieve before answering?
+- **Problem**: retrieval has a cost, a network call's latency and a risk
+  of returning irrelevant passages that distract the generator
+- **Solution**: treat retrieval as optional, gated by an explicit decision
+  - Static, well-known facts: answer directly from parametric knowledge
+  - Fast-changing or proprietary facts: call the retrieval tool first
+- **Key idea**: the agent, not a fixed pipeline, decides whether the
+  marginal cost of a retrieval call is worth its expected benefit
+
+* Single-Hop Retrieval: When Similarity Is Enough
+
+- **Definition**: a _single-hop_ query is answerable from one passage that
+  directly discusses the query's topic
+- **Key idea**: similarity search between the query and each candidate
+  passage is enough when the needed fact was stated in one place, in
+  roughly the query's own words
+- **Remark**: chaining facts across passages that never co-occur is a
+  harder, separate problem, addressed by graph-structured retrieval
+  rather than similarity search alone
+- **Question**: how does similarity search find the closest passage among
+  millions of candidates?
+
+## Vector Databases and Search
+
+* Embeddings: Turning Text into Vectors
+
+- **Definition**: an _embedding_ maps a piece of text to a dense vector
+  $\vx \in \mathbb{R}^d$ such that semantically similar text maps to
+  nearby vectors
+  $$
+  \text{sim}(\vx_q, \vx_d) = \frac{\vx_q \cdot \vx_d}{\|\vx_q\| \, \|\vx_d\|}
+  $$
+- **Key idea**: search becomes geometry, "find passages about topic $T$"
+  becomes "find vectors close to the query vector $\vx_q$"
+- **Algorithm** (building an index):
+  1. Split each document into chunks small enough to embed meaningfully
+  2. Encode every chunk into a vector $\vx_d$ with an embedding model
+  3. Store each vector alongside a pointer back to its source chunk
+- **Remark**: chunk size trades off two failure modes, chunks too large
+  dilute a single fact among unrelated text, chunks too small lose the
+  surrounding context that disambiguates them
+
+* Nearest-Neighbor Search: Exact vs Approximate
+
+- **Problem**: given a query vector, find the $k$ stored vectors closest
+  to it, out of a corpus that can hold billions of entries
+- **(Naive) Solution**: brute-force search computes the distance from the
+  query to every stored vector
+  - Cons: linear in corpus size, too slow once a corpus reaches millions
+    of vectors
+- **Solution**: _approximate nearest-neighbor_ (ANN) search trades a
+  small, controllable amount of recall for large gains in speed
+- **Key idea**: an ANN index is a data structure built once, offline, so
+  each query only inspects a small fraction of the corpus
+
+* Approximate Nearest-Neighbor Indexes
+
+- **Algorithm** (hierarchical navigable small-world graphs):
+  1. Build a multi-layer graph where each stored vector is a node
+  2. Upper layers hold few nodes with long-range links, lower layers hold
+     all nodes with short-range links
+  3. At query time, descend from long-range hops at the top layer to
+     short-range hops at the bottom, greedily moving toward the query
+- **Algorithm** (inverted-file indexes):
+  1. Cluster all stored vectors offline into $n$ partitions
+  2. At query time, compare the query only against the few partitions
+     closest to it
+- **Key idea**: both trade an exhaustive scan for a structure that prunes
+  most of the corpus before ever computing an exact distance
+
+* Hybrid Search: Semantic Plus Keyword
+
+- **Problem**: pure similarity search can miss an exact term a user
+  deliberately typed, e.g., a product code or a proper name
+- **Solution**: _hybrid search_ combines dense embedding similarity with
+  a sparse keyword score and merges the two rankings
+- **Example**: the query _"a gift for my daughter who loves soccer and is
+  a fan of Messi"_ matches products by semantic intent even when no
+  listing contains the literal word _"gift"_
+- **Key idea**: dense and sparse signals fail on different queries, so
+  combining them covers more of the query distribution than either alone
+
+* Vector Database Pipeline: Worked Example
+
+::: columns
+:::: {.column width=55%}
+- **Solution**: an end-to-end pipeline separates a one-time offline stage
+  from a per-query online stage
+  1. (Offline) Chunk documents, embed each chunk, insert into an ANN index
+  2. (Online) Embed the incoming query
+  3. (Online) Run ANN search to get the top-$k$ candidate chunks
+  4. (Online) Insert the candidates into the prompt as retrieved context
+- **Key idea**: only the online stage runs per query, the expensive
+  indexing work is amortized across every future query
+::::
+:::: {.column width=40%}
+```graphviz
+digraph VectorDB {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=11, penwidth=1.7];
+    Docs   [label="Documents", fillcolor="#FFD1A6"];
+    Chunk  [label="Chunk + Embed", fillcolor="#A0D6D1"];
+    Index  [label="ANN Index", fillcolor="#B2E2B2"];
+    Query  [label="Query", fillcolor="#F4A6A6"];
+    Search [label="ANN Search", fillcolor="#A0D6D1"];
+    Ctx    [label="Retrieved\nContext", fillcolor="#A6C8F4"];
+    Docs -> Chunk -> Index;
+    Query -> Search;
+    Index -> Search -> Ctx;
+}
+```
+::::
+:::
+
+## Grounding on Enterprise Knowledge
+
+* Grounding: Definition and Enterprise Stakes
+
+- **Definition**: _grounding_ supplies a model with facts from a reliable
+  source before it generates, so the output is anchored rather than
+  freely invented
+- **Problem**: an enterprise agent answering from proprietary policies,
+  contracts, or records cannot rely on parametric knowledge at all, since
+  that knowledge was never in any training set
+- **Key idea**: for enterprise data, grounding is not optional polish, it
+  is the only way the agent could possibly be correct
+
+* Three Enterprise Grounding Strategies
+
+```{=typst}
+#styled-table(
+  headers: ("Strategy", "Source of facts", "Best for"),
+  rows: (
+    ("Search grounding", "Public web index", "Current events, general facts"),
+    ("Vector search and RAG", "Proprietary documents", "Internal policies, product data"),
+    ("Third-party datasets", "Licensed external providers", "Financial, ESG, and news data"),
+  ),
+)
+```
+
+- **Key idea**: the three strategies differ only in _where_ the facts
+  come from, the retrieve-then-generate loop is the same for all of them
+- **Question**: does an agent need to decide, per query, which of these
+  sources to consult?
+
+* Dynamic Retrieval: Search vs Parametric Knowledge
+
+- **Problem**: calling a search tool on every query wastes latency and
+  cost on facts the model already knows cold
+- **Solution**: _dynamic retrieval_ classifies each query before
+  answering
+  - Fast-changing facts (e.g., _"who won last night's game"_): route to a
+    retrieval tool
+  - Static, well-known facts (e.g., _"what is the capital of France"_):
+    answer directly from parametric knowledge
+- **Key idea**: this is the same decide-whether-to-retrieve question
+  raised earlier, resolved here by an explicit query classifier rather
+  than by a per-agent judgment call
+
+* High-Fidelity Grounding for Regulated Domains
+
+- **Problem**: in finance, healthcare, or insurance, an ungrounded claim
+  is not just wrong, it can be a compliance failure
+- **Solution**: a generation mode restricted to answer only from the
+  supplied context, never from parametric knowledge, paired with
+  - A source citation attached to every sentence of the answer
+  - A grounding confidence score per sentence
+- **Key idea**: restricting the model to context-only generation trades
+  some fluency and coverage for a strong, checkable guarantee, every
+  claim traces back to a supplied document
+
+* Fact-Checking Grounded Answers
+
+- **Problem**: even context-only generation can still misread or
+  overstate what a source actually says
+- **Solution**: a separate fact-checking pass compares each generated
+  claim against the retrieved sources and flags unsupported ones
+- **Key idea**: verification is independent of generation, so the checker
+  can catch a mistake the generator would not catch by reviewing itself
+- **Limitations**: the checker only verifies consistency with the
+  supplied sources, it cannot catch an error already present in those
+  sources
+
+## Long-Context vs. Retrieval
+
+* Do Agents Still Need Retrieval?
+
+- **Motivation**: context windows have grown from thousands of tokens to
+  millions of tokens
+- **Question**: if an entire enterprise document set fits in a single
+  prompt, is a retrieval step still necessary at all?
+- **Key idea**: this is a genuine engineering trade-off, not a settled
+  question, both stuffing everything into context and retrieving a
+  subset are viable, with different costs
+
+* Two Ways to Supply Knowledge: Stuff vs Retrieve
+
+- **Definition**: _long-context stuffing_ places an entire corpus (or as
+  much as fits) directly in the prompt, every query, with no selection
+  step
+- **Definition**: _retrieval_ selects a small, query-specific subset of a
+  much larger corpus and places only that subset in the prompt
+- **Key idea**: stuffing shifts the burden onto the model's ability to
+  attend over everything, retrieval shifts the burden onto the search
+  step's ability to find the right subset
+
+* The Cost of Long-Context Stuffing
+
+- **Problem**: attention cost grows with the square of the number of
+  tokens processed
+  - 2x the context length $\implies$ 4x the attention cost
+- **Problem**: every token in the prompt is paid for again on every
+  query, even if only a few sentences of it end up mattering
+- **Key idea**: long-context stuffing trades a search problem for a
+  compute and latency problem, it does not remove the underlying cost
+
+* The Cost of Retrieval Failures
+
+- **Problem**: retrieval only helps if the right passage is actually
+  fetched
+- Failure modes:
+  - _Recall miss_: the needed passage is never returned to the model
+  - _Embedding mismatch_: the query and the passage express the same
+    fact in different words, so their vectors end up far apart
+  - _Chunk boundary_: the needed fact is split across two chunks, so
+    neither chunk alone answers the query
+- **Key idea**: retrieval trades the compute cost of stuffing for a
+  reliability cost, a wrong or missing selection cannot be corrected by
+  the generator
+
+* Long-Context vs Retrieval: A Comparison
+
+```{=typst}
+#styled-table(
+  headers: ("Property", "Long-context stuffing", "Retrieval"),
+  rows: (
+    ("Per-query cost", "Grows with corpus size", "Grows with index size, not prompt size"),
+    ("Update cost", "None, re-send updated text", "Re-index the changed document"),
+    ("Failure mode", "Truncation, quadratic latency", "Recall miss, embedding mismatch"),
+    ("Guarantee", "Every token is technically visible", "Only the retrieved subset is visible"),
+  ),
+)
+```
+
+- **Key idea**: neither strategy dominates, the right choice depends on
+  corpus size, update frequency, and latency budget
+
+## The Needle-in-a-Haystack Evaluation
+
+* Needle-in-a-Haystack: Test Design
+
+- **Definition**: the _needle-in-a-haystack_ test embeds one out-of-place
+  fact (the _needle_) inside a long, unrelated passage (the _haystack_),
+  then asks the model to recall it
+- **Algorithm**:
+  1. Insert the needle at a chosen depth, from the very start to the
+     very end of the context
+  2. Vary the total context length from a few thousand tokens up to the
+     model's maximum
+  3. Prompt the model to state the needle's content
+  4. Score whether the returned answer matches the needle
+- **Key idea**: this isolates one narrow capability, can the model find
+  one planted fact, independent of whether it can reason over it
+
+* Early Findings: Position and Prompt Sensitivity
+
+- **Findings** (Kamradt, 2023):
+  - Recall is worse for needles placed at middle depths than for needles
+    near the very start or the very end of the context
+  - One 2023 frontier model's recall fell sharply once context length
+    passed about 64,000 tokens, and fell further beyond 100,000
+  - Adding one sentence to the prompt (_"here is the most relevant
+    sentence in the context"_) raised a 2023 frontier model's recall from
+    about 27% to about 98% on the same test
+- **Key idea**: recall failures are not purely a model-capacity limit, a
+  prompt that tells the model what kind of answer to look for can
+  recover most of the gap
+
+* Long-Context Recall at Scale
+
+```{=typst}
+#styled-table(
+  headers: ("Test", "Context length", "Recall"),
+  rows: (
+    ("Single needle, text", "up to 1M tokens", "over 99.7%"),
+    ("Single needle, text", "10M tokens", "99.2%"),
+    ("Single needle, audio", "107 hours (about 9.7M tokens)", "100%"),
+    ("Single needle, video", "10.5 hours (about 9.9M tokens)", "about 99.8%"),
+  ),
+)
+```
+
+- **Findings** (Google Cloud, 2024): a 2024 frontier long-context model
+  reaches this recall across text, audio, and video, not only short text
+  windows
+- **Key idea**: near-perfect single-needle recall no longer depends on
+  the modality or on staying within a short context
+
+* Multiple Needles: Where Recall Breaks Down
+
+- **Problem**: a single planted fact is the easiest possible case, most
+  real questions need more than one fact
+- **Findings** (Google Cloud, 2024): on a task with 100 unique needles
+  planted in the same 1M-token context, recall dropped to about 60%
+  - A competing 2024 model tested at its own 128,000-token maximum
+    recalled only about 50% of the same multiple needles, and
+    inconsistently across runs
+- **Key idea**: multi-needle recall degrades well before context length
+  becomes the bottleneck, so single-needle results overstate how much a
+  long context window helps on realistic, fact-dense queries
+
+* What the Needle Test Misses
+
+- **Limitations**:
+  - It scores exact recall of one planted sentence, not whether the
+    model can combine several recalled facts correctly
+  - A model can pass the test while still failing to use the recalled
+    fact correctly in a downstream answer
+  - It says nothing about the compute cost of scanning the full context,
+    only about whether the fact was found
+- **Key idea**: a high needle-test score is necessary but not sufficient
+  evidence that long context can replace retrieval on a real task
+
+## Summary
+
+* When to Retrieve vs Stuff Context
+
+- **Practical implication**: prefer long-context stuffing when
+  - The corpus is small enough to fit with room to spare
+  - It changes rarely, so the token cost is paid once and reused
+  - The task genuinely needs facts scattered across the whole corpus
+- **Practical implication**: prefer retrieval when
+  - The corpus is large, frequently updated, or shared across many
+    queries
+  - Most queries only need a small, identifiable subset of it
+  - Latency or cost per query matters
+- **Key idea**: the needle test's own limitation, degrading multi-fact
+  recall, is itself an argument for retrieval whenever a query needs more
+  than one or two facts
+
+* Tool Use and Retrieval: The Full Picture
+
+- **Putting it together**:
+  - _Retrieval_ is a tool call like any other: query in, passages out,
+    invoked when the agent decides it is worth the cost
+  - _Vector search_ makes that tool call fast at scale, trading exact
+    recall for approximate, sub-linear search
+  - _Enterprise grounding_ picks the source of facts, web, proprietary
+    documents, or licensed data, and checks the generated answer against
+    it
+  - _Long context_ substitutes for retrieval only up to the point where
+    multi-fact recall starts to degrade
+- **Key idea**: every mechanism in this lesson answers the same question,
+  where should the facts an agent needs actually live
+
+* Summary and Open Questions
+
+- **Key takeaways**:
+  - Retrieval-augmented generation treats retrieval as a tool call: embed,
+    search, insert, generate
+  - Vector databases make that search fast at scale using approximate
+    nearest-neighbor indexes and, increasingly, hybrid semantic-plus-keyword
+    matching
+  - Enterprise grounding chooses among search, proprietary vector search,
+    and licensed datasets, and can restrict generation to context-only
+    claims with per-sentence citations
+  - Long-context stuffing and retrieval trade compute cost against recall
+    reliability, neither dominates the other
+  - The needle-in-a-haystack test shows near-perfect single-fact recall
+    at million-token scale, but recall on realistic, multi-fact queries
+    still degrades well short of the context limit
+
+- **Open questions**:
+  - As context windows keep growing, at what corpus size does retrieval
+    stop paying for itself?
+  - Can a single system combine hybrid vector search with a fact-checking
+    pass, so retrieval and verification share one mechanism?
+  - How should a compute-optimal inference budget be split between
+    retrieving more passages and reasoning longer over fewer of them?

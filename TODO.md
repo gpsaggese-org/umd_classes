@@ -45,7 +45,7 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 ### IN PROGRESS: Slides for Agentic AI
 
-/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
+- TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
   - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
 - [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
@@ -54,7 +54,9 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
 - [x] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
   - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-- [ ] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
+- [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
+- [.] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
+- [ ] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
   > gen_slides.py msml610/16.5 --slides_engine typst --daemon
   > gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
 
