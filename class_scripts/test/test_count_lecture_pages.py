@@ -6,6 +6,8 @@ Import as:
 import class_scripts.test.test_count_lecture_pages as csttclpa
 """
 
+# TODO(gp): Make sure this file follows our unit test conventions
+
 import os
 from unittest import mock
 
@@ -30,11 +32,13 @@ class Test_parse(hunitest.TestCase):
         """
         # Prepare inputs.
         arg_list = ["msml610"]
+        # Prepare outputs.
+        expected = "msml610"
         # Run test.
         parser = clcolepa._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assertEqual(args.dir, "msml610")
+        self.assert_equal(args.dir, expected)
 
 
 # #############################################################################
@@ -57,6 +61,9 @@ class Test_main(hunitest.TestCase):
         os.makedirs(os.path.join(scratch_dir, "lectures"), exist_ok=True)
         arg_list = [scratch_dir]
         page_counts = {"Lesson01.pdf": 10, "Lesson02.pdf": 20}
+        # Prepare outputs.
+        expected_dir = f"{scratch_dir}/lectures"
+        expected_log = "Lesson01.pdf\t10\nLesson02.pdf\t20"
         # Run test.
         with mock.patch(
             "class_scripts.common_utils.get_pdf_page_counts",
@@ -70,10 +77,12 @@ class Test_main(hunitest.TestCase):
                 ):
                     clcolepa._main(clcolepa._parse())
         # Check outputs.
-        expected_dir = f"{scratch_dir}/lectures"
         mock_get_counts.assert_called_once_with(
             expected_dir, pattern="Lesson*.pdf"
         )
-        actual_log = "\n".join(cm.output)
-        self.assertIn("Lesson01.pdf\t10", actual_log)
-        self.assertIn("Lesson02.pdf\t20", actual_log)
+        # Log records are prefixed with the level and logger name, so only
+        # the last two records (one per page count) are checked.
+        actual_log = "\n".join(
+            record.split(":", 2)[-1] for record in cm.output[-2:]
+        )
+        self.assert_equal(actual_log, expected_log)

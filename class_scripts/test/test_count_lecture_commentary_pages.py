@@ -6,6 +6,8 @@ Import as:
 import class_scripts.test.test_count_lecture_commentary_pages as csttclcp
 """
 
+# TODO(gp): Make sure this file follows our unit test conventions
+
 import os
 from unittest import mock
 
@@ -30,11 +32,13 @@ class Test_parse(hunitest.TestCase):
         """
         # Prepare inputs.
         arg_list = ["data605"]
+        # Prepare outputs.
+        expected = "data605"
         # Run test.
         parser = clclecopa._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assertEqual(args.dir, "data605")
+        self.assert_equal(args.dir, expected)
 
 
 # #############################################################################
@@ -57,6 +61,9 @@ class Test_main(hunitest.TestCase):
         os.makedirs(os.path.join(scratch_dir, "book"), exist_ok=True)
         arg_list = [scratch_dir]
         page_counts = {"Lesson01.pdf": 5}
+        # Prepare outputs.
+        expected_dir = f"{scratch_dir}/book"
+        expected_log = "Lesson01.pdf\t5"
         # Run test.
         with mock.patch(
             "class_scripts.common_utils.get_pdf_page_counts",
@@ -66,13 +73,15 @@ class Test_main(hunitest.TestCase):
                 "class_scripts.count_lecture_commentary_pages", level="INFO"
             ) as cm:
                 with mock.patch(
-                    "sys.argv", ["count_lecture_commentary_pages.py"] + arg_list
+                    "sys.argv",
+                    ["count_lecture_commentary_pages.py"] + arg_list,
                 ):
                     clclecopa._main(clclecopa._parse())
         # Check outputs.
-        expected_dir = f"{scratch_dir}/book"
         mock_get_counts.assert_called_once_with(
             expected_dir, pattern="Lesson*.pdf"
         )
-        actual_log = "\n".join(cm.output)
-        self.assertIn("Lesson01.pdf\t5", actual_log)
+        # Log records are prefixed with the level and logger name, so only
+        # the last record (the single page count) is checked.
+        actual_log = cm.output[-1].split(":", 2)[-1]
+        self.assert_equal(actual_log, expected_log)

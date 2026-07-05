@@ -6,6 +6,8 @@ Import as:
 import class_scripts.test.test_slide_improve as csttslim
 """
 
+# TODO(gp): Make sure this file follows our unit test conventions
+
 import os
 import pprint
 from unittest import mock
@@ -46,13 +48,17 @@ class Test_parse(hunitest.TestCase):
         """
         # Prepare inputs.
         arg_list = ["msml610", "01.1"]
+        # Prepare outputs.
+        expected_dir = "msml610"
+        expected_lesson = "01.1"
+        expected_extra_opts: list = []
         # Run test.
         parser = clslimpr._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assertEqual(args.dir, "msml610")
-        self.assertEqual(args.lesson, "01.1")
-        self.assertEqual(args.extra_opts, [])
+        self.assert_equal(args.dir, expected_dir)
+        self.assert_equal(args.lesson, expected_lesson)
+        self.assert_equal(str(args.extra_opts), str(expected_extra_opts))
 
     def test2(self) -> None:
         """
@@ -60,11 +66,13 @@ class Test_parse(hunitest.TestCase):
         """
         # Prepare inputs.
         arg_list = ["msml610", "01.1", "extra_arg1", "extra_arg2"]
+        # Prepare outputs.
+        expected_extra_opts = ["extra_arg1", "extra_arg2"]
         # Run test.
         parser = clslimpr._parse()
         args = parser.parse_args(arg_list)
         # Check outputs.
-        self.assertEqual(args.extra_opts, ["extra_arg1", "extra_arg2"])
+        self.assert_equal(str(args.extra_opts), str(expected_extra_opts))
 
 
 # #############################################################################
@@ -88,12 +96,7 @@ class Test_main(hunitest.TestCase):
             scratch_dir, "lectures_source", "Lesson01.1-Intro.txt"
         )
         arg_list = [scratch_dir, "01.1"]
-        # Run test.
-        with hunteuti.capture_system_calls() as invocations:
-            with mock.patch("sys.argv", ["slide_improve.py"] + arg_list):
-                clslimpr._main(clslimpr._parse())
-        # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        # Prepare outputs.
         expected_cmd = (
             f"process_slides.py --in_file {lecture_file} "
             "--action slide_improve "
@@ -108,6 +111,12 @@ class Test_main(hunitest.TestCase):
                 }
             ]
         )
+        # Run test.
+        with hunteuti.capture_system_calls() as invocations:
+            with mock.patch("sys.argv", ["slide_improve.py"] + arg_list):
+                clslimpr._main(clslimpr._parse())
+        # Check outputs.
+        actual_str = pprint.pformat(invocations)
         self.assert_equal(actual_str, expected_str)
 
     def test2(self) -> None:
@@ -120,12 +129,7 @@ class Test_main(hunitest.TestCase):
             scratch_dir, "lectures_source", "Lesson01.1-Intro.txt"
         )
         arg_list = [scratch_dir, "01.1", "extra_arg1", "extra_arg2"]
-        # Run test.
-        with hunteuti.capture_system_calls() as invocations:
-            with mock.patch("sys.argv", ["slide_improve.py"] + arg_list):
-                clslimpr._main(clslimpr._parse())
-        # Check outputs.
-        actual_str = pprint.pformat(invocations)
+        # Prepare outputs.
         expected_cmd = (
             f"process_slides.py --in_file {lecture_file} "
             "--action slide_improve "
@@ -141,4 +145,10 @@ class Test_main(hunitest.TestCase):
                 }
             ]
         )
+        # Run test.
+        with hunteuti.capture_system_calls() as invocations:
+            with mock.patch("sys.argv", ["slide_improve.py"] + arg_list):
+                clslimpr._main(clslimpr._parse())
+        # Check outputs.
+        actual_str = pprint.pformat(invocations)
         self.assert_equal(actual_str, expected_str)
