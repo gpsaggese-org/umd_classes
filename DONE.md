@@ -1,3 +1,9 @@
+### [x] Improve last_cmd and notify.py
+
+/Users/saggese/src/umd_classes2/helpers_root/dev_scripts_helpers/coding_tools/last_cmd.py
+
+### [x] Improve linters2/lint.py
+
 - [x] IN PROGRESS: Fix the names of the tests
 helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
 

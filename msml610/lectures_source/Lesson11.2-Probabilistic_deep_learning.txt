@@ -1555,7 +1555,7 @@ digraph FeedbackSystem {
     - Feedforward layer (with ReLU)
     - Residual connection
 
-// TODO(TA): Add a graphviz pic
+// TODO(ai_gp): Add a graphviz pic
 
 - **Positional embedding**
   - Transformer architecture has no inherent way to capture token order in
