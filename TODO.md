@@ -2,7 +2,21 @@
 # IN PROGRESS
 # #############################################################################
 
-### [.] /testing.triage_unit_tests dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+### [.] Merge gp_scratch_29
+- In `umd_classes1`
+- i gh_watch
+- It crashes with no space on disk
+
+### [.] HelpersTask1273_Get_Mac_tests_to_pass
+- In `csfy1`
+- [.] Get all the tests in master to pass
+- [.] run.sh running
+
+### [.] Make `dev_scripts_helpers/documentation/test/test_notes_to_pdf.py` pass
+- In `umd_classes2` // gp_scratch
+
+- [.] pytest_log dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+- [.] /testing.triage_unit_tests dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
 
 ### [.] Improve coverage of dev_scripts_helpers/documentation/
 
@@ -12,14 +26,15 @@
 
 ### [.] Improve coverage of class_scripts
 
-### [.] Make the unit tests pass
+### [.] Make the unit tests pass in `umd_classes`
 
 - [x] Run `pytest_log msml610/test/test_gen_slides.py`
 - [x] Run `pytest_log data605/test/test_gen_slides.py`
 - [.] Run `linters2/lint.py --action pyright`
 - [x] PASS `pytest_log class_scripts`
+- [ ] Run `pytest_log msml610/test data605/test class_scripts`
+- [ ] Do a run of all the tests in `pytest_log .` (with the 3 builds)
 - [ ] Run coverage
-- [.] Do a run of all the tests in `pytest_log .` (with the 3 builds)
 
 data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
 
@@ -43,7 +58,22 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
 
-### IN PROGRESS: Slides for Agentic AI
+### [.] Read Academic Articles
+
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
+> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+> summarize_md.py
+```
+
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
+claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
+> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
+claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
+```
+
+### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
   - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
@@ -55,7 +85,7 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [x] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
   - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
 - [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
-- [.] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
+- [x] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
 - [ ] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
   > gen_slides.py msml610/16.5 --slides_engine typst --daemon
   > gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
@@ -79,6 +109,7 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - Kaparthy's AutoResearch
 - https://www.manning.com/books/build-a-large-language-model-from-scratch
 - https://www.manning.com/books/build-a-reasoning-model-from-scratch
+- https://aman.ai/primers/ai/top-30-papers/
 
 - Add references to papers
 - Add more / better pictures
@@ -97,14 +128,18 @@ book.AI_for_data_science/book_map.md
 
 /Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
 
-# Downloading Papers
+# Downloading HN Links
 
+```
 export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999
 
 > download_link_articles.py --url "$LINKS_GSHEET" --row_idx 1
+```
 
 - To understand the structure
+```
 > ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+```
 
 - Create unit tests from the cache
 
@@ -135,12 +170,13 @@ class_scripts/create_book_toc_from_slides.py --max_number 2 --max_level 2
 
 - [x] Add comments to README
 
-## The old flow
+### [.] Improve Generating Book
+
+#### The old flow
 The output looks like 
 https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson01.1-Intro.book_chapter.pdf
 
-## The new flow 
-
+#### The new flow 
 - The style is like:
   > vi helpers_root/dev_scripts_helpers/typst/aima_style.typ
   ```
@@ -182,58 +218,14 @@ https://github.com/causify-ai/helpers/issues/1276
 - [x] Test dev_scripts_helpers/documentation/open_md.sh
 - [x] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
-## Get typst slides as close as possible to latex ones
+### [ ] Get typst slides as close as possible to latex ones
 
 ```
 notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
 vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.notes_to_pdf.render_image2.typ
 ```
 
-### Create branch for 1276
-https://github.com/causify-ai/helpers/issues/1276
-
-### IN PROGRESS: [ ] Handle the latex macros
-
-> notes_to_pdf.py --input=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt --output=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
-
-- [ ] All unit tests should freeze the output of the script
-- [x] Use the right idiom for the command line construction
-
-Remove --fail_on_pandoc_warnings
-Remove open by default
-
-### IN PROGRESS: Failing tests
-
-pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
-
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test3
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test3
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test4
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test3
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test3_ast_transform_inline_formatting_columns
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test1
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test2
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test3
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test4
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_typst_abbrevs::test_end_to_end
-
-### IN PROGRESS: [ ] Improve unit testing
+### [ ] Improve unit testing
 
 ```
 > pytest dev_scripts_helpers/documentation/test/
@@ -271,30 +263,31 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 
 ./dev_scripts_helpers/documentation/notes_to_pdf.py
 
-### Improve unit tests
+### Improve linting
+
+- Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
+- Add spaces between first level bullets
+- Make the definitions bold and black for visibility
+  - -*Definition*- for bold and color
+  - **Definition** for black and color
+
+### [ ] Improve _LOG output
 
 ```
-> pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
-```
-
-### Improve output
-
 18:05:06 common_utils.py find_lecture_file:62                Searching for files matching pattern='msml610/lectures_source/Lesson00*'
 18:05:06 - INFO  common_utils.py find_lecture_file:74                   Found lecture file: msml610/lectures_source/Lesson00-Class.txt
 18:05:06 common_utils.py get_source_name:92                  Source name='Lesson00-Class.txt'
+```
 
-- Remove - which wastes space
+- Remove `-` which wastes space
 - Align everything
 - Maybe add DEBUG?
-
-### What tests pass on master vs local?
-
-### [x] Make the second and 3rd level of text smaller
+  - Use `I`, `D`, `W`
 
 ### Use Latex font
 https://tug.org/FontCatalogue/computermodern/ instead of DejaVu
 
-### IN PROGRESS: [ ] Fix Latex Preamble
+### [.] Fix Latex Preamble
 
 dev_scripts_helpers/documentation/preprocess_notes.py
 
@@ -302,23 +295,14 @@ dev_scripts_helpers/documentation/preprocess_notes.py
 - [ ] Add unit tests
 - [ ] Factor out code to umd_classes
 
-### IN PROGRESS: [ ] Fix div stuff
-
-- [x] Add two steps of AST unit test
-- [x] Add unit tests (for 1 and 2 phases)
-- [ ] Add processing of AST
-
-### [x] Fix gen_slides.py msml610/11.1
-
-It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
-
-> notes_to_pdf.py --input=msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt --output=msml610/lectures/Lesson11.1-Decision_Making_with_Causal_Models.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine=beamer --skip_pandoc_ast_transform
-
-### 
+### Update documentation
 
 Add https://typst.app/play/ to the 
 
-### Improve tables
+### Improve pandoc/typst tables
+
+- Not needed since we are inlining directly the slides in Latex format
+  - It might be nice to have markdown only
 
 - [ ] Use table from let styled-table using AST transform
 - [ ] Add processing of AST
@@ -351,17 +335,6 @@ dev_scripts_helpers/documentation/notes_to_pdf.py
 
 > notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
 
-### [ ] Fix pandoc/core:3.7
-
-- my typst path used container_type = "pandoc_only", which points at the bare
-  pandoc/core:3.7 image. That image isn't built/pulled locally (only
-  pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
-  ```
-  > container image pull pandoc/core:3.7
-  ```
-
-msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
-
 ### [ ] Reorg dev_scripts_helpers/documentation
 - Too many files
 
@@ -382,11 +355,10 @@ smd = slide markdown
 ### [ ] Update render_images.py
 
 - [ ] Add an option to only render without commenting out the code
-
+- [ ] Render many different files at once
 - [ ] Clarify what is the boilerplate for Latex and Tikz
 - [x] IN PROGRESS: Fix the names of the tests
 helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
-
 
 - [ ] Improve documentation
 
@@ -421,7 +393,7 @@ claude -p "your prompt" --output-format stream-json --include-partial-messages
 So if you want the normal printed output but with debug info attached:
 claude -p "your prompt" --debug
 
-## Add support for nitro models and reasoning in llm_cli and in cc
+### [ ] Add support for nitro models and reasoning in llm_cli and in cc
 
 ```
 {
@@ -438,7 +410,7 @@ openai/o3:nitro
        "effort": "high"    }
 ```
 
-## Improve llm_compare.py
+### [ ] Improve llm_compare.py
 
 llm_compare.py --models "openrouter/openai/gpt-4o-mini,openrouter/openai/gpt-oss-120b" --benchmark summarization1 --output_dir results/
 
@@ -449,7 +421,7 @@ dev_scripts_helpers/llms/openrouter_models_table.py --models dev_scripts_helpers
 
 helpers_root/dev_scripts_helpers/llms/openrouter_models_table.py --models_from_file helpers_root/dev_scripts_helpers/llms/text_models.txt
 
-## Test lint_txt.py with new backends
+### [ ] Test lint_txt.py with new backends
 
 lint_txt.py -i dev_scripts_helpers/ai/README.md --backend mdformat --mode uvx
 
@@ -466,40 +438,17 @@ Need to disable the protection and keep it only for prettier
 
 Merge --backend and --mode
 
-## Improve cost and speed accounting for hllm
+### [ ] Improve cost and speed accounting for hllm
 
-## Managing gsheet links
-
-vi dev_scripts_helpers/scraping/README.link_flow.md
-
-download_link_articles.py --url https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999 --row_idx 2
-
-llm_cli.py -p "Summarize the following text in 5 bullet points and less than 200 words" --input We_should_be_more_tired_than_the_model.hn_comments.txt --model openrouter/anthropic/claude-haiku-4.5 --lint
-
-## Fix annoying claude code scrolling
+### [ ] Fix annoying claude code scrolling
 
 tmux focus-events off · add 'set -g focus-events on' to ~/.tmux.conf and reattach for focus tracking
 tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll
 
-## Process Academic Articles
-
-```
-> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
-> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
-> summarize_md.py
-```
-
-```
-> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
-claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
-> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
-claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
-```
-
-## Convert llm_transform.py to llm_cli.py
+### [ ] Convert llm_transform.py to llm_cli.py
 Move prompts and action into a YAML file
 
-## Merge markdown. and text.
+### [ ] Merge markdown.rules.md and text.rules.md?
 Is there any difference?
 
   ```
@@ -548,23 +497,6 @@ Is there any difference?
   ```
 
 # Springer
-
-- Title
-  - From Data Science to Decision Science for Business
-
-### [x] Improve Springer proposal
-
-springer.Causal_Inference_for_Machine_Learning_Engineers.md
-springer.changes.md
-springer.proposal.2026-06-18.md
-springer.proposal.md
-springer.review.md
-springer.template.md
-
-### [x] Finalize TOC
-- Very short intro about causality and probability
-- Part 3 of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
-- Look at review
 
 # ? AI Agents for Big Data
 

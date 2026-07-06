@@ -24,85 +24,104 @@
     weights encode a stale snapshot
   - _Hallucination_: the model produces a fluent, confident claim with no
     basis in any fact it actually knows
+
 - **Question**: can an agent supply itself with facts at inference time,
   instead of relying only on what training baked into the weights?
-- **Key idea**: both failure modes share one fix: give the model access to
-  an external, checkable source of facts before it answers
+
+- **Solution**: both failure modes share one fix
+  - Give the model access to an external, checkable source of facts before it
+    answers
 
 * Grounding Facts, Not Just Actions
 
 - **Recap**: grounding connects a model's internal representations to
   something external and verifiable
-- **Definition**: _retrieval grounding_ supplies the model with _facts_
-  pulled from an external source, as opposed to _action grounding_, which
-  supplies the model with the _consequences_ of an action it takes
-  - E.g., calling a search tool and reading back a passage is retrieval
+
+- **Definition**: _retrieval grounding_ supplies the model with facts pulled from
+  an external source (similar to action grounding, which supplies the model with
+  the consequences of an action it takes)
+  - E.g., calling a search tool and reading back the result is retrieval
     grounding
   - E.g., calling a checkout API and reading back an order confirmation is
     action grounding
-- **Key idea**: retrieval turns "the model claims X" into "the model
-  quotes a source that says X"
+  - Retrieval turns _"the model claims X"_ into _"the model quotes a source that
+    says X"_
 
 * From Vectors to Enterprise Grounding
 
 - **Roadmap**:
   1. Treat retrieval as a tool the agent decides to call
-  2. Open up how a vector database finds relevant passages
+  2. Describe how a vector database finds relevant passages
   3. See how enterprises ground answers in proprietary data
   4. Ask whether a large enough context window can replace retrieval, and
      how the needle-in-a-haystack test answers that
-- **Key idea**: retrieval is not a single algorithm, it is a design space
-  with cost, freshness, and reliability trade-offs at every step
+
+- **Key idea**: retrieval is not a single algorithm, it is set of tools with
+  cost, freshness, and reliability trade-offs at every step
 
 ## Retrieval as a Tool Call
 
 * Retrieval-Augmented Generation: The Loop
 
 - **Definition**: _retrieval-augmented generation_ (RAG) answers a query
-  by first fetching relevant text, then conditioning generation on it
-  1. Embed the query
+  by splits answering into two separable problems:
+  - Finding the right passages
+  - Writing an answer given they are found
+
+- **Algorithm**
+  1. Embed the query (i.e., compute the embeddings)
   2. Search an index for the most similar passages
   3. Insert the retrieved passages into the prompt
   4. Generate the answer conditioned on the query and the passages
-- **Key idea**: RAG splits answering into two separable problems: finding
-  the right passages, and writing an answer given they are found
-- **Limitations**: an answer is only as good as the passages retrieved, a
-  fluent generator cannot repair a missing or irrelevant passage
+
+- **Limitations**: an answer is only as good as the passages retrieved
+  - An LLM cannot repair a missing or irrelevant passage
 
 * RAG as a Special Case of Tool Use
 
 - **Definition**: a _retrieval tool_ takes a query string as input and
   returns a ranked list of passages as output, exactly like any other
   callable tool
+
 - **Key idea**: nothing about the perceive-plan-act loop changes when the
-  action is "search a corpus" instead of "call an API"
+  action is _"search a corpus"_ instead of _"call an API"_
   - The agent still chooses to invoke the tool, observes the returned
     passages, and decides what to do next
-- **Example**: an agent facing _"What is our current refund policy?"_
-  calls `search_policies(query)`, observes three passages, and drafts an
-  answer citing them
+
+- **Example**: An agent:
+  - Is asked _"What is our current refund policy?"_
+  - Calls `search_policies(query)`
+  - Observes three passages
+  - Drafts an answer citing them
 
 * Deciding Whether to Retrieve
 
 - **Question**: should an agent always retrieve before answering?
-- **Problem**: retrieval has a cost, a network call's latency and a risk
-  of returning irrelevant passages that distract the generator
+
+- **Problem**: retrieval has costs:
+  - Tool call's actual cost
+  - Tool call's latency
+  - Risk of returning irrelevant passages that distract the generator
+
 - **Solution**: treat retrieval as optional, gated by an explicit decision
-  - Static, well-known facts: answer directly from parametric knowledge
-  - Fast-changing or proprietary facts: call the retrieval tool first
-- **Key idea**: the agent, not a fixed pipeline, decides whether the
-  marginal cost of a retrieval call is worth its expected benefit
+  - _Static_: for well-known facts answer directly from parametric knowledge
+  - _Fast-changing_ or _proprietary facts_: call the retrieval tool first
+  - The agent decides whether the marginal cost of a retrieval call is worth its
+    expected benefit
 
 * Single-Hop Retrieval: When Similarity Is Enough
 
 - **Definition**: a _single-hop_ query is answerable from one passage that
   directly discusses the query's topic
+
 - **Key idea**: similarity search between the query and each candidate
   passage is enough when the needed fact was stated in one place, in
   roughly the query's own words
+
 - **Remark**: chaining facts across passages that never co-occur is a
   harder, separate problem, addressed by graph-structured retrieval
   rather than similarity search alone
+
 - **Question**: how does similarity search find the closest passage among
   millions of candidates?
 

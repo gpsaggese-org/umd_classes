@@ -1,3 +1,86 @@
+### [x] Improve Springer proposal
+- Title
+  - From Data Science to Decision Science for Business
+
+springer.Causal_Inference_for_Machine_Learning_Engineers.md
+springer.changes.md
+springer.proposal.2026-06-18.md
+springer.proposal.md
+springer.review.md
+springer.template.md
+
+### [x] Finalize TOC
+- Very short intro about causality and probability
+- Part 3 of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
+- Look at review
+### Create branch for 1276
+https://github.com/causify-ai/helpers/issues/1276
+
+### [x] Handle the latex macros
+
+> notes_to_pdf.py --input=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt --output=msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
+
+- [ ] All unit tests should freeze the output of the script
+- [x] Use the right idiom for the command line construction
+
+Remove --fail_on_pandoc_warnings
+Remove open by default
+
+### IN PROGRESS: Failing tests
+
+pytest_log dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_actions::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_edge_cases::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_latex_options::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_pandoc_ast::test3_ast_transform_inline_formatting_columns
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_script_generation::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test1
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test2
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test3
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_toc_options::test4
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_typst_abbrevs::test_end_to_end
+
+### [x] Fix pandoc/core:3.7
+
+- my typst path used container_type = "pandoc_only", which points at the bare
+  pandoc/core:3.7 image. That image isn't built/pulled locally (only
+  pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
+  ```
+  > container image pull pandoc/core:3.7
+  ```
+
+msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
+
+### [x] Make the second and 3rd level of text smaller
+
+### [x] Fix div stuff
+
+- [x] Add two steps of AST unit test
+- [x] Add unit tests (for 1 and 2 phases)
+- [ ] Add processing of AST
+
+### [x] Fix gen_slides.py msml610/11.1
+
+It doesn't work since it requires --slides_engine=beamer --skip_pandoc_ast_transform
+
+> notes_to_pdf.py --input=msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt --output=msml610/lectures/Lesson11.1-Decision_Making_with_Causal_Models.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine=beamer --skip_pandoc_ast_transform
 ### [x] Improve last_cmd and notify.py
 
 /Users/saggese/src/umd_classes2/helpers_root/dev_scripts_helpers/coding_tools/last_cmd.py
