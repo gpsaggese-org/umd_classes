@@ -1,11 +1,78 @@
 # #############################################################################
+# High level
+# #############################################################################
+
+- There are too many failures across multiple builds
+  - Do not add more code but focus on getting to stable build
+  - Disable the failing tests
+  - Merge gp_scratch_29
+  - Merge HelpersTask1273_Get_Mac_tests_to_pass
+
+- HelpersTask1273_Get_Mac_tests_to_pass_3
+  - Create tools for analyzing and helping with the unit tests
+  - Improvements to pytest_failed
+
+- Find a workflow to make it easier to create smaller PRs
+  - Instead of having lots of agents making changes to the same branch
+  - Have a way to delegate to an agent to create a small PR, do the change,
+    regress, review and merge
+  - Always create PRs associated to each branch with a clear description
+    - i git_branch_create -> i gh_create_pr --no-draft
+  - Find an easy way to check which PR is still to merge, which one was merged
+
+- Have a thread that looks for TODOs in the code (gp, ai_gp)
+  - Ranks them by simplicity
+  - Create a branch, PR, run tests and merge
+
+# #############################################################################
 # IN PROGRESS
 # #############################################################################
+
+helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Password:
+Sorry, try again.
+Password:
 
 ### [.] Merge gp_scratch_29
 - In `umd_classes1`
 - i gh_watch
 - It crashes with no space on disk
+
+```
+dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py::Test_end_to_end::test1 (0.84 s) FAILED
+```
+
+- Disable all the Test_notes_to_pdf1
+
+```
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test1 (2.06 s) PASSED [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (128.13 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (74.34 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (71.27 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.75 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.67 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (78.41 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (69.69 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (70.50 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (79.34 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (71.62 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (62.83 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (74.26 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5 (2.24 s) FAILED [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.78 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.50 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.55 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.71 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.89 s) RERUN                                                                    [ 15%]
+```
+
+### [ ] Improve pytest_failed
+
+- Read output from any pytest (local, docker, github)
+- Make it into a script called by invoke
+- Extract the failing tests
+- Extract the longest tests
+- Report the updated tests
+...
 
 ### [.] HelpersTask1273_Get_Mac_tests_to_pass
 - In `csfy1`
@@ -110,6 +177,7 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
 - https://www.manning.com/books/build-a-large-language-model-from-scratch
 - https://www.manning.com/books/build-a-reasoning-model-from-scratch
 - https://aman.ai/primers/ai/top-30-papers/
+  - https://arc.net/folder/D0472A20-9C20-4D3F-B145-D2865C0A9FEE
 
 - Add references to papers
 - Add more / better pictures
@@ -137,9 +205,9 @@ export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6
 ```
 
 - To understand the structure
-```
-> ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
-```
+  ```
+  > ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+  ```
 
 - Create unit tests from the cache
 
@@ -263,13 +331,45 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 
 ./dev_scripts_helpers/documentation/notes_to_pdf.py
 
-### Improve linting
+### Improve lint_txt.py
+
+- -> lint_text.py
 
 - Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
+
+- txt -> smd, or mds (slide markdown) 
+
+- The transforms are:
+
+                             preprocess: Yes
+                               prettier: Yes
+                            postprocess: Yes
+    remove_code_block_extra_indentation: Yes
+                 remove_page_separators: Yes
+                     handle_empty_lines: Yes
+        add_blank_lines_between_headers: Yes
+     convert_asterisk_bullets_to_dashes: Yes
+                remove_trailing_periods: Yes
+             replace_em_dash_with_colon: Yes
+             remove_markdown_formatting: -
+                         frame_chapters: -
+                      capitalize_header: Yes
+                            refresh_toc: -
+                            check_links: -
+
+- The preprocess stage should handle everything that is not standard markdown
+
+- prettier doesn't handle well
+  - //
+  - The * slides
+
 - Add spaces between first level bullets
+
 - Make the definitions bold and black for visibility
   - -*Definition*- for bold and color
   - **Definition** for black and color
+
+
 
 ### [ ] Improve _LOG output
 
