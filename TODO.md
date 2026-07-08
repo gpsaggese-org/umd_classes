@@ -15,11 +15,13 @@
 
 > export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
 
-- [x] HelpersTask1273_Get_Mac_tests_to_pass_3
+- [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass_5`
+
+- [x] `HelpersTask1273_Get_Mac_tests_to_pass_3`
   - Create tools for analyzing and helping with the unit tests
   - Improvements to pytest_failed
 
-- [x] HelpersTask1273_Get_Mac_tests_to_pass_4
+- [x] `HelpersTask1273_Get_Mac_tests_to_pass_4`
   - Merge in all the branches
 
 ##
@@ -159,19 +161,21 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 ## Books
 
 ### [ ] From Data To Decisions
-/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
-/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
-/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
-/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_toc.md
+/Users/saggese/src/notes1/book.springer/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book.springer/springer.saggese.full_proposal_v2.md
+/Users/saggese/src/umd_classes2/book.springer/book_map.md
+/Users/saggese/src/umd_classes2/book.springer/book_toc.md
 
-- [ ] Create a Springer dir (similar to msml610)
+- `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
+
+- [.] Create a Springer dir (similar to msml610)
 - [ ] ## 1: From Prediction Pipelines to Decision Pipelines
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
-- [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
-  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
-- [x] Merge ~/src/umd_classes2/book.From_Data_To_Decisions/OLD 
-  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+- [x] Merge /Users/saggese/src/notes1/book.springer/springer.toc_v2.md
+  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
+- [x] Merge ~/src/umd_classes2/book.springer/OLD 
+  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
 - [x] Check what is already covered by the slides in msml610/lectures_source
 
 ### [.] Read Academic Articles

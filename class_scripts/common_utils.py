@@ -24,7 +24,7 @@ _LOG = logging.getLogger(__name__)
 
 
 # Valid course directories.
-VALID_DIRS = ["data605", "msml610"]
+VALID_DIRS = ["data605", "msml610", "book.springer"]
 
 
 # #############################################################################

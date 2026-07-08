@@ -585,7 +585,7 @@ def _parse() -> argparse.ArgumentParser:
         dest="class_name",
         action="store",
         required=True,
-        choices=["data605", "msml610"],
+        choices=["data605", "msml610", "book.springer"],
         help="Class directory name",
     )
     parser.add_argument(
