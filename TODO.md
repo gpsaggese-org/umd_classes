@@ -8,10 +8,21 @@
   - Merge `gp_scratch_29`
   - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
+> export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
+> export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
+
+> export CSFY_DOCKER_ENGINE="docker"; pytest_log dev_scripts_helpers
+
+> export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
+
 - [x] HelpersTask1273_Get_Mac_tests_to_pass_3
   - Create tools for analyzing and helping with the unit tests
   - Improvements to pytest_failed
 
+- [x] HelpersTask1273_Get_Mac_tests_to_pass_4
+  - Merge in all the branches
+
+##
 - Find a workflow to make it easier to create smaller PRs
   - Instead of having lots of agents making changes to the same branch
   - Have a way to delegate to an agent to create a small PR, do the change,
@@ -24,18 +35,13 @@
   - Review edit github_pr_plan.md
   - /github.create_child_pr PR2
 
+##
 - Extend i create_branch_copy to work with only a subset of files / dirs
 
+##
 - Have a thread that looks for TODOs in the code (gp, ai_gp)
   - Ranks them by simplicity
   - Create a branch, PR, run tests and merge
-
-> export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
-> export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
-
-> export CSFY_DOCKER_ENGINE="docker"; pytest_log dev_scripts_helpers
-
-> export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
 
 # #############################################################################
 # IN PROGRESS
@@ -158,6 +164,10 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
 /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_toc.md
 
+- [ ] Create a Springer dir (similar to msml610)
+- [ ] ## 1: From Prediction Pipelines to Decision Pipelines
+- [ ] Remove ###### from files
+- [ ] Convert files to typst
 - [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
   into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
 - [x] Merge ~/src/umd_classes2/book.From_Data_To_Decisions/OLD 
