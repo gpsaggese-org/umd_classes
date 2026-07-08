@@ -14,12 +14,12 @@
 ## 1: From Prediction Pipelines to Decision Pipelines
 
 ### Topics
-- Why organizations fail with good data
-- Prediction vs. decision: Simpson's paradox and policy reversals
-- The decision pipeline
-  - Data → Probabilistic Causal Model → Effect Estimation → Policy → Action → Feedback → Learning Loop
-- Ladder of causation as decision tool
-- Causal maturity model: from descriptive to autonomous decisions
+- Prediction vs. decision: fundamentally different mathematical problems
+- Simpson's paradox and policy reversals: why predictive accuracy fails in decisions
+- Ladder of causation: observation, intervention, and counterfactual reasoning
+- The decision pipeline: from causal models to utility-maximizing actions
+- Causal models as the foundation for decision-making
+- Why organizations fail: the cost of ignoring causality in data-driven systems
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -53,11 +53,12 @@
 ## 2: Why Good Data Leads to Bad Decisions
 
 ### Topics
-- Statistical significance trap in business
-- A/B tests and heterogeneous treatment effects
-- Causal ML failure modes in production
-- When correct estimates lead to bad policies
-- Decision Readiness Scorecard
+- Statistical significance traps: peeking, multiple comparisons, and novelty effects
+- Heterogeneous treatment effects: when average effects mask sub-group reversals
+- Confounding in causal ML: biases when causal assumptions are unmet
+- Feedback loops: how predictions change the world and break model assumptions
+- Distribution shift and causal assumptions under intervention
+- Decision readiness: knowing when causal claims are safe to act on
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -88,11 +89,12 @@
 ## 3: Problem Framing and Intervention Design
 
 ### Topics
-- From KPI selection to decision objectives
-- Intervention design: lever, target, timing
-- Data collection strategy for identifiability
-- Decision artifacts and templates
-- Causal Project Checklist
+- From KPI selection to causal objectives and utilities
+- Building causal DAGs: variable identification, temporal structure, and domain knowledge
+- Intervention design: choosing levers, targets, scales, and timing
+- Causal variable types: confounders, mediators, colliders, and their adjustment rules
+- Identifiability and causal assumptions: backdoor, frontdoor, and IV conditions
+- Data collection strategy aligned with causal identification requirements
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -120,11 +122,12 @@
 ## 4: Knowledge Representation
 
 ### Topics
-- Problem scope and system boundaries
-- Domain knowledge and constraints
-- Data availability and measurement
-- Variables, relationships, and temporal structure
-- Stakeholders and decision levers
+- Causal DAGs vs. Bayesian networks: how causality orients edges
+- Structural equations and mechanisms: modeling how variables depend on parents
+- Variable types and adjustment rules: confounders, mediators, colliders, moderators
+- Temporal structure: causal order, feedback delays, and acyclicity
+- Building DAGs from domain knowledge and expert judgment
+- Measurement validity and causal assumptions in data collection
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
@@ -140,16 +143,23 @@
 
 ### Related books
 - [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
+- [B054] Spirtes et al., "Causation, Prediction, and Search", 2000
+- [B055] Heckerman et al., "Learning Bayesian Networks", 1995
+
+### Related papers
+- [P064] Lauritzen, "Graphical Models", 1996
+- [P065] Richardson, "Markov Properties for Acyclic Directed Mixed Graphs", 2003
+  https://arxiv.org/abs/1209.1514
 
 ## 5: Advanced Probabilistic ML
 
 ### Topics
-- Gaussian processes: kernels, inference, and uncertainty
-- Variational inference and amortized VI in deep models
-- Normalizing flows and expressive density estimation
-- Probabilistic programs: Pyro, NumPyro, Stan
-- Neural posterior estimation and simulation-based inference
-- Calibration and conformal prediction at scale
+- Gaussian processes for continuous uncertainty: kernels, posterior inference, and extrapolation
+- Variational inference for scalable Bayesian modeling: ELBO, amortized inference, and gradient estimation
+- Normalizing flows: flexible density estimation for complex posterior approximation
+- Probabilistic programming: specifying generative models in Pyro, NumPyro, and Stan
+- Calibration and uncertainty quantification: coverage guarantees and conformal prediction
+- Neural posterior estimation: learning to invert simulators and likelihood-free inference
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
@@ -169,16 +179,30 @@
 - [B004] Koller et al., "Probabilistic Graphical Models", 2009
 - [B043] Pearl, "Probabilistic Reasoning in Intelligent Systems: Networks of
   Plausible Inference", 1988
+- [B056] Blei et al., "Variational Inference: A Review for Statisticians", 2017
+- [B057] Rezende & Mohamed, "Variational Inference with Normalizing Flows", 2015
+
+### Related papers
+- [P066] Kingma & Welling, "Auto-Encoding Variational Bayes", 2014
+  https://arxiv.org/abs/1312.6114
+- [P067] Rezende et al., "Stochastic Backpropagation and Approximate Inference in Deep Generative Models", 2014
+  https://arxiv.org/abs/1401.4082
+- [P068] Hoffman et al., "Stochastic Variational Inference", 2013
+  https://arxiv.org/abs/1206.7051
+- [P069] Lakshminarayanan et al., "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles", 2017
+  https://arxiv.org/abs/1706.04599
+- [P070] Grangier et al., "Exploring the Space of Neural Processes with Variational Inference", 2019
+  https://arxiv.org/abs/1905.12141
 
 ## 6: Advanced Causal Modeling
 
 ### Topics
-- Causal basics assumed (DAGs, SCMs, do-calculus — see Durai 2025)
-- Latent confounders: proxy variables and negative controls
-- Causal representation learning and disentanglement
-- Causal discovery: constraint-based (PC/FCI), score-based (GES), FCMs (LiNGAM, ANM)
-- Nonparametric identification and generalized do-calculus
-- Sensitivity analysis: E-values, amplification, sharp bounds
+- Causal discovery from data: identifiability, Markov equivalence, and assumptions
+- Discovery algorithms: constraint-based (PC/FCI), score-based (GES), functional (LiNGAM, ANM)
+- Faithfulness and causal sufficiency: when discovery succeeds and fails
+- Latent confounders: proxy variables, negative controls, and adjustment strategies
+- Causal representation learning: disentangling mechanisms for domain transfer
+- Sensitivity analysis and robustness: E-values, bounds, and partial identification
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
@@ -217,11 +241,12 @@
 ## 7: Decision Theory Foundations
 
 ### Topics
-- Expected utility maximization
-- Utility functions in business
-- From treatment effects to expected value
-- Influence diagrams and policy solving
-- Risk and uncertainty quantification
+- Von Neumann-Morgenstern theorem: axioms of rational choice and utility existence
+- Utility functions in practice: eliciting preferences and encoding business objectives
+- Subjective expected utility: belief updating and decision-making under uncertainty
+- Multi-criteria trade-offs: value functions, weights, and Pareto optimality
+- Influence diagrams and solving decision networks: backward induction and policy extraction
+- Risk preferences and utility curvature: risk-aversion, neutrality, and seeking
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -235,17 +260,25 @@
 
 ### Related books
 - [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
+- [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
+- [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
+
+### Related papers
+- [P071] von Neumann & Morgenstern, "Theory of Games and Economic Behavior", 1944
+- [P072] Savage, "The Foundations of Statistics", 1954
+- [P073] Raiffa, "Decision Analysis: Introductory Lectures on Choices under Uncertainty", 1968
+- [P074] Keeney & Raiffa, "Decisions with Multiple Objectives: Preferences and Value Trade-offs", 1976
 
 ## 8: Decision-Making with Causal Models
 
 ### Topics
-- Translating causal effects into decisions
-- Bayesian decision-making and belief updating
-- Value of information and experimental design
-- Bayesian optimization for experimentation
-- Exploration vs. exploitation trade-offs
-- Decision robustness under model misspecification
-- Counterfactual decision analysis
+- From causal effects to expected value: plugging treatment effects into utility functions
+- Bayesian decision-making: posterior-based choices and belief updating from data
+- Value of information: EVPI, EVSI, and when to experiment vs. observe
+- Bayesian optimization and acquisition functions: efficient search over decision spaces
+- Exploration vs. exploitation: Thompson sampling, UCB, and contextual bandits
+- Counterfactual decision analysis: reasoning about alternative choices
+- Robustness under model misspecification: decisions that work across causal assumptions
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -266,15 +299,23 @@
 ### Related books
 - [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
 - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
+- [B058] Bishop & Nasrabadi, "Pattern Recognition and Machine Learning", 2006
+
+### Related papers
+- [P075] Gittins, "Bandit Processes and Dynamic Allocation Indices", 1979
+- [P076] Thompson, "On the Likelihood that One Unknown Probability Exceeds Another in View of the Evidence of Two Samples", 1933
+- [P077] Auer, "Using Confidence Bounds for Exploration-Exploitation Trade-offs", 2002
+- [P078] Mockus et al., "Bayesian Approach to Global Optimization and Application to Multiphase and Multicriteria Design", 1978
 
 ## 9: Policy Learning & Distributional Causal Effects
 
 ### Topics
-- Beyond ATE: quantile and distributional treatment effects
-- Doubly robust and debiased/double-ML estimation
-- Meta-learners: T-, S-, X-, R-learner comparison
-- Off-policy optimization and safe policy improvement
-- Multi-task and transfer learning for policy adaptation
+- Heterogeneous treatment effects and CATE: learning who benefits from treatment
+- Doubly robust estimation and double/debiased ML: reducing sensitivity to nuisance parameters
+- Meta-learners for heterogeneity: T-, S-, X-, R-learners and when to use each
+- Distributional and quantile effects: going beyond average treatment effects
+- Off-policy learning and policy optimization: evaluating and improving policies from data
+- Safe policy improvement: deployable decisions with finite-sample guarantees
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -292,15 +333,27 @@
 ### Related books
 - [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
 - [B014] Angrist et al., "Mostly Harmless Econometrics", 2008
+- [B059] Athey & Wager, "Policy Learning with Observational Data", 2019
+
+### Related papers
+- [P079] Athey & Wager, "Efficient Policy Learning", 2021
+  https://arxiv.org/abs/2011.02038
+- [P080] Kennedy, "Optimal Uniform Convergence Rates and Adaptive Estimation of Nonparametric Quantile Effects", 2020
+  https://arxiv.org/abs/2010.05893
+- [P081] Chernozhukov et al., "Double Machine Learning for Treatment and Causal Parameters", 2018
+  https://arxiv.org/abs/1701.08687
+- [P082] Kunzel et al., "Metalearners for Estimating Heterogeneous Treatment Effects Using Machine Learning", 2019
+  https://arxiv.org/abs/1706.03762
 
 ## 10: Partial Identification & Robust Inference
 
 ### Topics
-- Partial identification: Manski bounds, IV bounds, sharp bounds
-- Sensitivity analysis: Rosenbaum bounds, E-values, amplification factors
-- Relaxing positivity: trimming, extrapolation, and weighting
-- Distributional robustness and minimax causal inference
-- Domain adaptation under covariate and concept shift
+- Partial identification: when point estimates are impossible, bound what you can
+- Manski bounds and instrumental variable bounds: leveraging assumptions strategically
+- Sensitivity analysis: Rosenbaum bounds and E-values for robustness to unmeasured confounding
+- Positivity violations: trimming, extrapolation, and inverse-probability weighting trade-offs
+- Distributional robustness and minimax inference: decisions robust to model misspecification
+- Causal generalization and domain adaptation: transferring lessons across environments
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -317,23 +370,29 @@
 
 ### Related books
 - [B051] Cunningham, "Causal Inference: The Mixtape", 2021
+- [B060] Manski, "Identification for Prediction and Decision", 2007
+- [B061] Rotnitzky et al., "Semiparametric Regression for the Social, Behavioral, and Biomedical Sciences", 2011
+
+### Related papers
+- [P083] Manski, "Partial Identification of Probability Distributions", 2003
+  https://doi.org/10.1007/978-1-4419-1254-1_1
+- [P084] Rosenbaum & Rubin, "Assessing Sensitivity to an Unobserved Binary Covariate in an Observational Study with Binary Outcome", 1983
+  https://doi.org/10.1080/01621459.1983.10478144
+- [P085] VanderWeele & Ding, "Sensitivity Analysis in Observational Research: Introducing the E-Value", 2017
+  https://doi.org/10.7326/M16-2607
+- [P086] Chernozhukov et al., "Bounds on Treatment Effects in the Presence of Unobserved Confounding", 2013
+  https://arxiv.org/abs/1311.2884
 
 ## 11: Agentic Causal Reasoning
 
 ### Topics
-- Causal reasoning limits in LLMs and foundation models
-- Pattern-based reasoning vs. causal reasoning
-- Chain-of-thought prompting for causal reasoning
-- Integrating causal and probabilistic frameworks
-- SCM-augmented agents: structured causal knowledge in the loop
-- Tool-use and causal simulation for multi-step planning
-- Multi-agent interference: spillover, coordination, and equilibrium
-- Trustworthy AI through causality:
-  - Transparency and interpretability
-  - Robustness through causal constraints
-  - Fairness through causal reasoning
-  - Safety through causal reasoning
-- Causal guardrails and safety constraints for autonomous agents
+- Causal reasoning in LLMs: pattern-based limits and why foundation models struggle with counterfactuals
+- Chain-of-thought and tree-of-thought prompting: structured reasoning for causal inference
+- SCM-augmented agents: embedding causal world models in agent architectures
+- Tool-use and causal simulation: planning with learned or specified dynamics
+- Integrating causality with probabilistic inference: hybrid reasoning systems
+- Trustworthy AI through causality: transparency, robustness, fairness, and safety
+- Causal guardrails and safety constraints: preventing harmful behaviors in autonomous agents
 
 ### Lessons
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
@@ -438,14 +497,13 @@
 ## 12: Causal World Models & Reinforcement Learning
 
 ### Topics
-- Sequential decision problems: MDPs and POMDPs
-- Utilities over time and discount factors
-- Solving MDPs: value iteration and policy iteration
-- Causal world models: learning and planning with SCMs
-- Model-based causal RL: counterfactual rollouts and policy search
-- Off-policy evaluation with causal guarantees (DM, IPW, DR estimators)
-- Invariant causal mechanisms and distribution-shift robustness
-- Multi-agent causal RL: interference, Nash equilibria, and spillover
+- Markov decision processes: states, actions, transitions, and solving with value/policy iteration
+- Utilities over time: discount factors, finite vs. infinite horizons, and optimality criteria
+- Causal world models: structural causal models as environment dynamics for planning
+- Model-based reinforcement learning: learning dynamics, counterfactual rollouts, and policy search
+- Off-policy evaluation with causal guarantees: doubly robust, IPW, and DR estimators
+- Invariant causal mechanisms and environment generalization: learning robust policies across shifts
+- Partially observable MDPs: state inference and planning under hidden variables
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
@@ -468,17 +526,30 @@
 - [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
 - [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
 - [B032] Ness et al., "Causal AI", 2023
-- [B044] Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic
-  Programming", 1994
+- [B044] Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic Programming", 1994
+- [B062] Barto & Sutton, "Reinforcement Learning: An Introduction", 2018
+
+### Related papers
+- [P087] Hafner et al., "Dream to Control: Learning Behaviors by Latent Imagination", 2020
+  https://arxiv.org/abs/1912.01603
+- [P088] Chua et al., "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models", 2018
+  https://arxiv.org/abs/1805.12114
+- [P089] Janner et al., "When to Trust Your Model: Model-Based Policy Optimization", 2019
+  https://arxiv.org/abs/1907.04629
+- [P090] Dai et al., "Causal Policy Gradient for Lifelong Reinforcement Learning", 2022
+  https://arxiv.org/abs/2206.14925
+- [P091] Precup et al., "Off-Policy Temporal-Difference Learning with Function Approximation", 2001
+  https://arxiv.org/abs/cs/0106227
 
 ## 13: Forecasting Under Causal Intervention
 
 ### Topics
-- Why standard forecasting breaks under intervention
-- Causal constraints on time-series models
-- Bayesian structural time series with causal priors
-- Counterfactual forecasting and synthetic control
-- Adaptive forecasting under feedback and regime shifts
+- Why temporal patterns fail under intervention: distribution shift and causal assumptions
+- Granger causality and causal constraints on time-series models
+- Difference-in-differences and synthetic control: comparing counterfactual scenarios
+- Structural time series with causal priors: Bayesian modeling of interventions
+- Online learning under nonstationarity: adapting to feedback and regime shifts
+- Forecasting with SCMs: causal models as alternatives to black-box time-series
 
 ### Lessons
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
@@ -501,15 +572,26 @@
 - [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
 - [B033] Hanke et al., "Business Forecasting", 2009
 - [B022] Hamilton, "Time Series Analysis", 1994
+- [B063] Brodsky & Darkhovsky, "Nonparametric Methods in Change Point Problems", 1993
+
+### Related papers
+- [P092] Abadie & Gardeazabal, "The Economic Costs of Conflict: A Case Study of the Basque Country", 2003
+  https://doi.org/10.1257/000282803321455188
+- [P093] Angrist & Pischke, "Mostly Harmless Econometrics: An Empiricist's Companion", 2008
+  https://www.mostlyharmlesseconometrics.com
+- [P094] Brodsky & Darkhovsky, "Non-parametric Statistical Diagnosis: Problems and Methods", 1993
+- [P095] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program Evaluation", 2009
+  https://doi.org/10.1016/j.jeconom.2008.12.010
 
 ## 14: Feedback Loops & Adaptive Causal Systems
 
 ### Topics
-- Decisions change the system: performativity and Goodhart's law
-- Time-varying and non-stationary causal graphs
-- Online causal discovery and structure adaptation
-- Bandit algorithms with causal side information
-- Causal inference under feedback: dynamic treatment regimes
+- Performativity and Goodhart's law: decisions that change the world and break past patterns
+- Causal graphs that change over time: nonstationarity and structural adaptation
+- Online causal discovery: learning and revising the causal model from feedback
+- Contextual and causal bandits: exploration with side information under feedback
+- Dynamic treatment regimes: adaptive decisions that respond to evolving patient/environment state
+- Learning from adaptive experiments: methods for sequential decision-making with feedback
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -527,17 +609,31 @@
 ### Related packages
 
 ### Related books
+- [B064] Goodhart, "Monetary Theory and Practice", 1975
+- [B065] Campbell & Shiller, "Valuation Ratios and the Long-Run Stock Market Outlook", 1998
+- [B066] Acemoglu & Robinson, "Why Nations Fail: The Origins of Power, Prosperity, and Poverty", 2012
+
+### Related papers
+- [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984
+  https://doi.org/10.1016/S0261-5606(84)80005-8
+- [P097] Strathern, "Improving Ratings: Audit in the British University System", 1997
+  https://doi.org/10.1080/03075079712331380714
+- [P098] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2023
+  https://arxiv.org/abs/2209.03942
+- [P099] Liu et al., "Performative Prediction", 2021
+  https://arxiv.org/abs/2007.02153
 
 # Part V: Implementation (Deployment, Monitoring, Communication)
 
 ## 15: Communicating Decisions to Executives
 
 ### Topics
-- From causal estimates to recommendations
-- Visualizing uncertainty and trade-offs
-- Communicating risk and assumptions
-- Narrative structure for decisions
-- Executive decision brief template
+- Translating causal estimates to actionable recommendations
+- Visualizing uncertainty: trade-offs, distributions, and risk profiles
+- Communicating assumptions: identifying and challenging causal beliefs
+- Narrative structure for decisions: framing findings and implications for stakeholders
+- Multi-stakeholder trade-offs: value functions across objectives and groups
+- Decision brief templates: reproducible formats for decision documentation
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -551,15 +647,29 @@
 ### Related packages
 
 ### Related books
+- [B067] Tufte, "The Visual Display of Quantitative Information", 2001
+- [B068] Cairo, "The Functional Art: An Introduction to Information Graphics and Visualization", 2012
+- [B069] Spiegelhalter et al., "Sex by Numbers: What Statistics Can and Cannot Tell Us About Sexuality", 2016
+- [B070] Few, "Now You See It: Simple Visualization Techniques for Quantitative Analysis", 2009
+
+### Related papers
+- [P100] Kahneman & Tversky, "Prospect Theory: An Analysis of Decision under Risk", 1979
+  https://doi.org/10.2307/1914185
+- [P101] Tversky & Kahneman, "Judgment under Uncertainty: Heuristics and Biases", 1974
+  https://doi.org/10.1126/science.185.4157.1124
+- [P102] Slovic, "Perception of Risk", 2000
+  https://doi.org/10.1126/science.280.5364.1030
+- [P103] Spiegelhalter, "Trust, but Verify: The Role of Uncertainty in Data Visualization", 2019
 
 ## 16: Deployment and the Decision Lifecycle
 
 ### Topics
-- Bridging development and production
-- Deployment strategies and rollout
-- Monitoring causal assumptions in production
-- A/B testing and continuous experimentation
-- Shadow deployment and canary analysis
+- From notebook to production: operationalizing causal decision systems
+- Deployment strategies: phased rollout, shadow mode, and canary analysis
+- Monitoring causal assumptions: detecting when the world changes
+- Continuous experimentation and A/B testing: maintaining and improving policies
+- Feedback loops in production: learning from deployed decisions
+- Technical debt and decision system maintenance: keeping systems reliable over time
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
@@ -581,15 +691,27 @@
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 - [B052] Géron, "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", 2022
+- [B071] Reinsel et al., "The Digitization of the World: From Edge to Core", 2018
+
+### Related papers
+- [P104] Amershi et al., "Software Engineering for Machine Learning: A Case Study", 2019
+  https://arxiv.org/abs/1909.09090
+- [P105] Sculley et al., "Technical Debt in Machine Learning Systems", 2015
+  https://doi.org/10.5555/2969442.2969519
+- [P106] Polyzotis et al., "Data Validation for Machine Learning", 2019
+  https://arxiv.org/abs/1901.09162
+- [P107] Breck et al., "The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction", 2017
+  https://arxiv.org/abs/1702.06783
 
 ## 17: Trust, Explainability, and Failure Modes
 
 ### Topics
-- Building trust in decision systems
-- Model auditing and causal explainability
-- Failure modes and ethical pitfalls
-- Guardrails and human-in-the-loop
-- Governance and accountability
+- Building trust: transparency, fairness, and justified confidence in decisions
+- Causal explainability: explaining decisions through causal mechanisms, not just feature importance
+- Identifying failure modes: when decisions fail and why (misspecification, distribution shift, etc.)
+- Algorithmic fairness through causality: ensuring decisions don't encode discrimination
+- Guardrails and human-in-the-loop: oversight mechanisms and when to overrule algorithms
+- Governance and accountability: institutional controls and auditing for decision systems
 
 ### Lessons
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
@@ -607,10 +729,20 @@
 - [B019] Molnar, "Interpretable Machine Learning", 2022
 - [B045] Barocas et al., "Fairness and Machine Learning", 2019
   https://fairmlbook.org
+- [B072] Metcalf & Moss, "Owning Ethics: Corporate Logics, Silicon Valley, and the Social Implications of Ethical AI", 2019
+- [B073] Eubanks, "Automating Inequality: How High-Tech Tools Profile, Police, and Punish the Poor", 2018
 
 ### Related papers
-- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with
-  Contrastive Pertinent Features", 2019 https://arxiv.org/pdf/1906.04957.pdf
+- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with Contrastive Pertinent Features", 2019
+  https://arxiv.org/pdf/1906.04957.pdf
+- [P108] Corbett-Davies et al., "Algorithmic Decision Making and the Cost of Fairness", 2017
+  https://arxiv.org/abs/1701.08230
+- [P109] Mitchell et al., "Model Cards for Model Reporting", 2019
+  https://arxiv.org/abs/1810.03993
+- [P110] Buolamwini & Busch, "The Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification", 2018
+  https://arxiv.org/abs/1801.09453
+- [P111] Selbst & Barocas, "The Intuitive Appeal of Explainable Machines", 2018
+  https://arxiv.org/abs/1805.06959
 
 # Appendix
 

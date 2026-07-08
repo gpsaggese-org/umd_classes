@@ -172,6 +172,16 @@ claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining
 claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
 ```
 
+### [ ] Add scripts to read / cache books and papers
+
+/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books
+How to find a book with a title like "The Book of Why" in /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books
+
+> echo "$PAPERS_ROOT_DIR"
+/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers
+
+download_academic_paper.py
+
 ### [ ] From Data To Decisions
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
