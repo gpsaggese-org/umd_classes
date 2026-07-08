@@ -43,22 +43,24 @@
 
 ## pytest_failed
 
-### Improve pytest_failed.py
+### [ ] Improve pytest_failed.py
 
 - Accept multiple files and create a single table
 pytest_failed.py -i ...
 
-### Why there are two updated
-
+### [ ] Why there are two updated?
 Updated:    2/3346
 
-### Print the files that have been updated
+### [ ] Print the files that have been updated
+- Add report in files
 
-### Automatically git add
+### [ ] Automatically run git add for golden outcomes
+
+### [ ] Convert ./run_multiple_builds.sh into an invoke target
 
 ## Breaks
 
-### 
+### [ ] Password requested by Docker
 
 helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Password:
 Sorry, try again.
@@ -96,15 +98,6 @@ dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_o
 dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.71 s) RERUN                                                                    [ 15%]
 dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.89 s) RERUN                                                                    [ 15%]
 ```
-
-### [.] Improve pytest_failed
-
-- Read output from any pytest (local, docker, github)
-- Make it into a script called by invoke
-- Extract the failing tests
-- Extract the longest tests
-- Report the updated tests
-...
 
 ### [.] HelpersTask1273_Get_Mac_tests_to_pass
 - In `csfy1`
@@ -157,6 +150,20 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
 
+## Books
+
+### [ ] From Data To Decisions
+/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
+/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_toc.md
+
+- [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
+  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+- [x] Merge ~/src/umd_classes2/book.From_Data_To_Decisions/OLD 
+  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+- [x] Check what is already covered by the slides in msml610/lectures_source
+
 ### [.] Read Academic Articles
 
 ```
@@ -181,19 +188,6 @@ How to find a book with a title like "The Book of Why" in /Users/saggese/Library
 /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers
 
 download_academic_paper.py
-
-### [ ] From Data To Decisions
-/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
-/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
-/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
-/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_toc.md
-
-- [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
-  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
-- [ ] Merge ~/src/umd_classes2/book.From_Data_To_Decisions/OLD 
-  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
-
-- [ ] Check what is already covered by the slides in msml610/lectures_source
 
 ### [.] Create and review slides for Agentic AI
 

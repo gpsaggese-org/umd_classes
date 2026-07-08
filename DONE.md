@@ -1,3 +1,12 @@
+### [x] Improve pytest_failed
+
+- Read output from any pytest (local, docker, github)
+- Make it into a script called by invoke
+- Extract the failing tests
+- Extract the longest tests
+- Report the updated tests
+...
+
 ### [x] Improve Springer proposal
 - Title
   - From Data Science to Decision Science for Business
