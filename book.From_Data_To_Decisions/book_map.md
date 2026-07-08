@@ -171,6 +171,8 @@ Data → Causal Model → Effect Estimation → Policy → Action → Feedback �
 - Translating causal effects into decisions
 - Bayesian decision-making and belief updating
 - Value of information and experimental design
+- Bayesian optimization for experimentation
+- Exploration vs. exploitation trade-offs
 - Decision robustness under model misspecification
 - Counterfactual decision analysis
 
@@ -225,9 +227,17 @@ Data → Causal Model → Effect Estimation → Policy → Action → Feedback �
 ## 11: Agentic Causal Reasoning
 
 - Causal reasoning limits in LLMs and foundation models
+- Pattern-based reasoning vs. causal reasoning
+- Chain-of-thought prompting for causal reasoning
+- Integrating causal and probabilistic frameworks
 - SCM-augmented agents: structured causal knowledge in the loop
 - Tool-use and causal simulation for multi-step planning
 - Multi-agent interference: spillover, coordination, and equilibrium
+- Trustworthy AI through causality:
+  - Transparency and interpretability
+  - Robustness through causal constraints
+  - Fairness through causal reasoning
+  - Safety through causal reasoning
 - Causal guardrails and safety constraints for autonomous agents
 
 ### Lessons
@@ -338,6 +348,9 @@ Data → Causal Model → Effect Estimation → Policy → Action → Feedback �
 
 ## 12: Causal World Models & Reinforcement Learning
 
+- Sequential decision problems: MDPs and POMDPs
+- Utilities over time and discount factors
+- Solving MDPs: value iteration and policy iteration
 - Causal world models: learning and planning with SCMs
 - Model-based causal RL: counterfactual rollouts and policy search
 - Off-policy evaluation with causal guarantees (DM, IPW, DR estimators)

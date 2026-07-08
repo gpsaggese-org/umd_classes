@@ -144,9 +144,13 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
 /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_toc.md
 
 - [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
   into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+- [ ] Merge ~/src/umd_classes2/book.From_Data_To_Decisions/OLD 
+  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+
 - [ ] Check what is already covered by the slides in msml610/lectures_source
 
 ### [.] Create and review slides for Agentic AI

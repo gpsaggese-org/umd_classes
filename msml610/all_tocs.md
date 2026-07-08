@@ -896,6 +896,10 @@
         - Techniques for Interpretability
         - Causal AI in Interpretable AI
         - The Future of Causal AI
+        - Why Probabilistic Machine Learning Matters
+        - Probabilistic ML: Robustness Through Uncertainty
+        - Why Explainability Matters
+        - Approaches to Explainability
 
 # Lesson08.2-Causal_Networks.txt
 
@@ -1079,6 +1083,56 @@
 - Geo and switchback experiments
 - Non-compliance and instruments
 - Next steps
+
+# Lesson08.5-Experimentation.txt
+
+- Introduction and Motivation
+        - Why A/B Testing Matters
+- Randomization as Causal Identification
+  - Why Randomization Breaks Confounding
+        - The Core Problem: Confounding
+        - Randomization: Causal Identification from Design
+        - Causal Graph of an Observational Study
+        - Causal Graph of a Randomized Experiment
+        - Do-Operator View of Randomization
+  - Potential Outcomes and ATE
+        - Potential Outcomes Framework
+        - The Difference-in-Means Estimator
+        - SUTVA: The Silent Assumption
+- A/B Testing in Practice
+  - Classic A/B Test Design
+        - Anatomy of a Classic A/B Test
+        - Hypothesis Testing Refresher
+  - Power Analysis and Sample Size
+        - Power Analysis: The Key Formula
+        - Power Analysis: Worked Example
+        - Minimum Detectable Effect (MDE)
+  - Common A/B Testing Pitfalls
+        - Peeking and the Multiple Comparisons Trap
+        - Sample Ratio Mismatch (SRM)
+        - Novelty and Primacy Effects
+        - Cannibalization and Interference
+- Advanced Experimental Designs
+  - Switchback Experiments
+        - Why Switchbacks? The Marketplace Problem
+        - Switchback Design: Schematic
+        - Switchback: Pros and Cons
+  - Multi-Armed Bandits
+        - From A/B to Multi-Armed Bandits
+        - Exploration vs. Exploitation
+        - Epsilon-Greedy Algorithm
+        - Upper Confidence Bound (UCB)
+        - Thompson Sampling
+        - Contextual Bandits
+  - Limits of Standard A/B Testing
+        - When A/B Testing Is Not Enough
+        - Network Effects and Interference
+- When to Experiment vs. Observe
+        - Decision Framework: Experiment or Observe?
+        - Feasibility Constraints on Experiments
+        - Hybrid Approaches: Experiments + Causal Methods
+        - Policy Evaluation and Off-Policy Learning
+        - Case Study: Marketing Campaign Uplift
 
 # Lesson09.1-Reasoning_over_time.txt
 
@@ -1281,10 +1335,10 @@
         - DBN: Inference
         - DBN: Optimization for Inference
 
-# Lesson10-Timeseries_forecasting.txt
+# Lesson10.1-Timeseries_forecasting.txt
 
 - Time Series
-  - Basic definition
+  - Basic Definition
         - Time Series
         - Time Series
         - Time Series: Visualization and Exploration
@@ -1292,17 +1346,16 @@
         - Stationarity: Intuition
         - Strictly Stationary: Definition
         - Weakly Stationary: Definition
-      - Original ####
         - Auto-Correlation Function (ACF)
         - Transformation of a time series
-  - Time series operators
+  - Time Series Operators
         - Lag Operator
         - Lead Operator
         - Shifting More Than One Time Step
         - Difference Operator
         - Second Difference Operator
         - N-th Difference Operator
-  - Time series decomposition
+  - Time Series Decomposition
         - Decomposition of Time Series
         - Seasonality: Example
         - Cycle: Example
@@ -1310,36 +1363,35 @@
         - Seasonal Differencing
         - Spectral Plot
 - Classical Methods
-  - Simple Models for Stochastic Process
+  - Simple Models for Stochastic Processes
         - White Noise Process
         - Deterministically Trending Process
         - Random Walk
-  - Autoregressive models
+  - Autoregressive Models
         - Autoregressive (AR) Models
-        - AR(1) process
-        - AR(1) process: mean
-        - AR(1) process: in terms of mean
-        - AR(1) process: properties
-        - AR(1) process is mean-reverting
-        - AR(1) Process Approximates Ergodicity
+        - AR(1) Process
+        - AR(1) Process: Mean
+        - AR(1) Process: Formulation in Terms of Mean
+        - AR(1) Process: Properties
+        - AR(1) Process is Mean-reverting
+        - AR(1) Process is Ergodic
         - AR(1) Process vs Gaussian White Noise
-        - AR(1) to model financial time series
-        - AR(p) model
-        - AR(p) model in terms of lag operator
-  - Moving average models
+        - AR(1) to Model Financial Time Series
+        - AR(p) Model
+        - AR(p) Model in Terms of Lag Operator
+  - Moving Average Models
         - Moving Average (MA) Models
-        - MA(1) process: def
-        - MA(1) process: properties
-        - MA(q) model
-        - MA(q) model in terms of lag operator
-  - ARMA(p, q) process
-        - ARMA(p, q) model
-        - Residuals of ARMA model
+        - MA(1) Model: Definition
+        - MA(1) Model: Properties
+        - MA(q) Model
+        - MA(q) Model in Terms of Lag Operator
+  - ARMA(p, q) Process
+        - ARMA(p, q) Model
         - ARIMA Models
         - ARIMA Models: Differencing
         - SARIMA
         - Fitting ARMA / ARIMA models
-  - ARCH model
+  - ARCH Model
         - ARCH: Intuition
         - ARCH(q): definition
         - GARCH(p, q): definition
@@ -1362,16 +1414,8 @@
         - Granger Causality
         - Change Point Detection in Time Series
         - Markov-Switching Models
-  - Self-Supervised and Representation Learning for Time Series
-  - Hierarchical Bayesian Forecasting
-  - Reinforcement Learning for Time Series Decision Making
-  - Transformers and Attention Mechanisms for Time Series
-  - Energy-Based Models and Diffusion Models for Forecasting
-  - Time Series Generative Models
-  - Long-Horizon Forecasting Challenges
-  - Uncertainty Quantification and Calibration
 
-# Lesson10.1-Causal_Inference_for_Time_Series.txt
+# Lesson10.2-Causal_Inference_for_Time_Series.txt
 
 - Time Series vs. Cross-Sectional Causality
   - Temporal Causal Structures
@@ -1379,35 +1423,27 @@
         - Temporal Causal Structures: Basic Setup
         - Temporal Causal Structures: Key Quantities
   - Challenges Specific to Time Series
-        - Autocorrelation: The First Challenge
+        - Autocorrelation
         - Non-Stationarity and Trends
         - Feedback Loops and Simultaneity
+        - Structural Vector Autoregressions (VARs)
+        - Instrumental Variables (IV)
+        - Natural Experiments
         - Unobserved Confounders That Vary Over Time
         - Other Common Challenges
-  - When Temporal Structure Helps and When It Misleads
         - When Temporal Structure Helps
         - When Temporal Structure Misleads
 - Granger Causality
-  - Definition and Intuition
-        - Granger Causality: Motivation
+        - Granger Causality: Intuition
         - Granger Causality: Formal Definition
-        - Granger Causality: Intuition and Geometry
-  - Assumptions and Limitations
         - Granger Causality: Key Assumptions
         - Granger Causality: Limitations
-  - Practical Examples
         - Granger Causality: Practical Example 1
-        - Granger Causality: Practical Example 2
 - Interrupted Time Series (ITS)
   - Design and Estimation
         - Interrupted Time Series: Motivation
-        - ITS: Design
-        - ITS: Basic Regression Formulation
-        - ITS: Estimation Details
-  - ITS and Regression Discontinuity
-        - ITS as a Regression Discontinuity in Time
-        - ITS vs. Cross-Sectional RDD: Comparison
-  - Applications in Causal Inference
+        - ITS: Segmented Regression Formulation
+        - ITS: Details
         - ITS: Applications
         - ITS: Strengths and Weaknesses
 - Difference-in-Differences (DiD)
@@ -1416,13 +1452,7 @@
         - DiD: The Core Idea
         - DiD: Regression Formulation
         - Parallel Trends Assumption
-        - Checking Parallel Trends: Visual and Statistical Tests
-  - Estimation and Robustness
-        - DiD: Estimation Details
         - DiD: Robustness Checks
-  - Extensions: Multiple Time Periods
-        - DiD with Multiple Periods: Staggered Adoption
-        - Modern Staggered DiD Estimators
         - DiD: Summary of Strengths and Limits
 - Synthetic Control Methods
   - Constructing a Counterfactual from Donor Series
@@ -1432,53 +1462,10 @@
         - Synthetic Control: Formal Setup
         - Synthetic Control: Optimization
         - Synthetic Control: Inference via Placebos
-  - When Synthetic Control Succeeds and Fails
         - Synthetic Control: When It Works Well
         - Synthetic Control: When It Fails
+- Summary
         - Synthetic Control vs. Other Methods: Summary
-        - Putting It All Together: Which Method When?
-
-# Lesson10.2-Causal_Discovery.txt
-
-- The Discovery Problem
-  - Inferring Causal Structure from Observational Data
-        - Causal Discovery: Motivation
-        - Causal Discovery: Formal Definition
-        - Observational vs Interventional Data
-        - The Discovery Problem
-  - Identifiability and Causal Sufficiency
-        - Markov Equivalence
-        - Markov Equivalence: Examples
-        - Typical Assumptions for Causal Discovery
-        - Identifiability
-        - Faithfulness
-  - Practical Limitations
-        - Practical Challenges for Causal Discovery
-        - Practical Challenges for Causal Discovery
-- When to Use Discovery vs Domain Knowledge
-  - Discovery as Hypothesis Generation
-        - Discovery vs Domain Knowledge
-        - Discovery as Hypothesis Generation
-  - Combining Discovery with Domain Knowledge
-        - Using Domain Knowledge as Constraints
-        - Combining Automated Discovery with Expert Judgment
-- Discovery Algorithm Families
-        - Three Main Algorithm Families
-        - Metrics
-        - Edge-Level Metrics
-        - Structure-Level and Complexity Metrics
-        - Discovery Algorithm Families: Overview
-        - Discovery Algorithm Families: Detailed Comparison
-        - Constraint-Based Discovery
-        - Score-Based Discovery
-        - Functional Discovery
-        - Interventional Discovery
-        - Choosing an Algorithm Family
-- Challenges and Validation
-        - Validating a Discovered DAG
-        - Refutation Testing
-        - When Discovery Should Change Your DAG
-        - Causal Discovery: Key Takeaways
 
 # Lesson11.1-Decision_Making_with_Causal_Models.txt
 
@@ -1556,37 +1543,37 @@
 
 # Lesson11.2-Probabilistic_deep_learning.txt
 
-- Neural networks
-        - Deep learning
+- Neural Networks
+        - Deep Learning: Definition
         - DL vs ML
-  - Biological inspiration
+  - Biological Inspiration
         - Biological Inspiration for Neural Networks
-        - Neurons in the brain
+        - Neurons in the Brain
         - Neural Network
-        - The "one learning algorithm" theory
-        - Why resurgence of neural networks?
-        - NN vs logistic regression + non-linear transform
-  - Neural networks
+        - The "One Learning Algorithm" Theory
+        - Why Resurgence of Neural Networks?
+        - NN vs Logistic Regression + Non-linear Transform
+  - Neural Networks
         - Neural Network Perceptron
         - Activation Functions
         - Activation Functions
-        - Neural networks to compute boolean functions
+        - Neural Networks to Compute Boolean Functions
         - Universal Approximation in Feedforward Networks
         - Feedforward vs Recurrent Neural Networks
-        - Structure of feedforward neural network
-        - Structure of feedforward neural network
-        - Conventions for neurons in a neural network
-        - Feedforward propagation algorithm
-        - Vectorized feedforward propagation algorithm
+        - Structure of Feedforward Neural Network
+        - Structure of Feedforward Neural Network
+        - Conventions for Neurons in a Neural Network
+        - Feedforward Propagation Algorithm
+        - Vectorized Feedforward Propagation Algorithm
         - Cost Function for Single-Class NN Classification
-        - Multi-output neural networks for multi-class classification
+        - Multi-output NN for Multi-class Classification
         - Cost Function for Multi-Class NN Classification
-        - Issues with fitting a neural networks
-        - Fitting a neural networks for SGD
-        - Computing the gradient
+        - Issues with Fitting a Neural Networks
+        - Fitting a Neural Networks for SGD
+        - Computing the Gradient
         - Backpropagation in Neural Networks
         - Backpropagation in Neural Networks
-        - Gradient checking
+        - Gradient Checking
         - Automatic Differentiation
 - Advanced Neural Network Architectures
   - Convolutional Neural Networks
@@ -1596,26 +1583,27 @@
         - Residual Networks (ResNets)
   - Recurrent Neural Networks
         - Recurrent Neural Networks (RNNs)
+        - Recurrent Neural Networks (RNNs)
         - Vanishing and Exploding Gradient Problem
         - Long Short-Term Memory (LSTM) Networks
         - Gated Recurrent Units (GRUs)
-  - Deep learning learning algorithms
+  - Deep Learning Learning Algorithms
         - Techniques for Training Deep Neural Networks
         - Techniques for Training Deep Neural Networks
-        - Regularization in neural networks
-  - Deep learning for NLP
+        - Regularization in Neural Networks
+  - Deep Learning for NLP
         - NLP Tasks
-        - Part-of-speech (POS) tagging
-        - NLP using Rules-Based Systems
-        - The bitter lesson
-        - The bitter lesson
+        - Part-of-speech (POS) Tagging
+        - NLP Using Rules-Based Systems
+        - The Bitter Lesson
+        - The Bitter Lesson
         - Word Representation
         - Word Embeddings: Emerging Properties
         - Word Embeddings: Pretrained vs Custom
         - Language Models
-        - Feedforward network for language models
-        - RNNs for language models
-        - RNNs for language models: pros and cons
+        - Feedforward Network for Language Models
+        - RNNs for Language Models
+        - RNNs for Language Models: Pros and Cons
         - Sequence-to-Sequence Models
         - Sequence-to-Sequence Attention
         - Sequence-to-Sequence Attention
@@ -1624,7 +1612,7 @@
         - Sequence-to-Sequence: Decoding
         - Transformer Architecture
         - Pretraining
-        - Masked language models
+        - Masked Language Models
 - Fundamentals of Deep Learning
         - Neural Networks and Backpropagation
         - Loss Functions
@@ -1755,6 +1743,571 @@
         - Deconfounding Offline / Off-Policy Data
         - Causal Generalization Across Environments
         - Causal RL: Open Challenges
+
+# Lesson12.2-Causal_Discovery.txt
+
+- The Discovery Problem
+  - Inferring Causal Structure from Observational Data
+        - Causal Discovery: Motivation
+        - Causal Discovery: Formal Definition
+        - Observational vs Interventional Data
+        - The Discovery Problem
+  - Identifiability and Causal Sufficiency
+        - Markov Equivalence
+        - Markov Equivalence: Examples
+        - Typical Assumptions for Causal Discovery
+        - Identifiability
+        - Faithfulness
+  - Practical Limitations
+        - Practical Challenges for Causal Discovery
+        - Practical Challenges for Causal Discovery
+- When to Use Discovery vs Domain Knowledge
+  - Discovery as Hypothesis Generation
+        - Discovery vs Domain Knowledge
+        - Discovery as Hypothesis Generation
+  - Combining Discovery with Domain Knowledge
+        - Using Domain Knowledge as Constraints
+        - Combining Automated Discovery with Expert Judgment
+- Discovery Algorithm Families
+        - Three Main Algorithm Families
+        - Metrics
+        - Edge-Level Metrics
+        - Structure-Level and Complexity Metrics
+        - Discovery Algorithm Families: Overview
+        - Discovery Algorithm Families: Detailed Comparison
+        - Constraint-Based Discovery
+        - Score-Based Discovery
+        - Functional Discovery
+        - Interventional Discovery
+        - Choosing an Algorithm Family
+- Challenges and Validation
+        - Validating a Discovered DAG
+        - Refutation Testing
+        - When Discovery Should Change Your DAG
+        - Causal Discovery: Key Takeaways
+
+# Lesson13.1-Explainability.txt
+
+- Introduction and Motivation
+        - Machine Learning Explainability
+        - Accuracy vs Interpretability
+        - Taxonomy of Explainability Methods
+        - Local vs. Global Explanations
+        - Model-Agnostic vs. Model-Specific Methods
+        - Intrinsic Interpretability vs. Post-Hoc Explanation
+        - Decision Trees and Rule-Based Models
+        - Linear and Generalized Additive Models (GAMs)
+        - Feature Attribution Methods: Overview
+  - Explainability Methods
+        - SHAP: Shapley Values Foundation
+        - SHAP: Intuition and Example
+        - SHAP: ML Example
+        - SHAP: Properties and Computation
+        - SHAP: Visualization and Interpretation
+        - LIME: Local Interpretable Model-agnostic Explanations
+        - LIME: Formal Objective
+        - LIME: Limitations
+        - LIME: Detecting Broken Model
+        - Permutation Feature Importance
+        - Permutation Feature Importance: Pros and Cons
+        - Comparing Feature Attribution Methods
+  - Counterfactual Explanations
+        - Counterfactual Explanations
+        - Counterfactual Explanations: Formal Framework
+  - Explainability in Bayesian Models
+        - Explainability in Bayesian Models
+        - Credible Intervals
+        - Interpretability of Bayesian Networks
+        - Uncertainty Quantification as a Form of Explanation
+- Causal AI and Explainability
+        - Causal AI and Explainability
+        - Counterfactual Reasoning in Causal Frameworks
+        - Distinguishing Causal Explanations from Feature Attribution
+- Quality of Explanations
+        - Quality of Explanations
+        - Faithfulness of Explanations
+        - Stability and Robustness of Explanations
+        - The Accuracy-Interpretability Tradeoff
+
+# Lesson15.1-Causal_Reasoning_Agents.txt
+
+- LLMs and Causal Reasoning
+  - LLMs: Strengths and Limitations
+        - Where LLMs They Excel
+        - Critical LLMs Limitations
+  - Pattern-Based Reasoning vs. Causal Reasoning
+        - Pattern Recognition and Its Limits
+        - Robustness: When Pattern Matching Fails
+- Enhancing LLM Reasoning with Causality
+  - Chain-of-Thought Prompting for Causal Reasoning
+        - Chain-of-Thought Prompting
+        - Causal Prompting Frameworks
+  - Integrating Causal and Probabilistic Frameworks
+        - Connecting LLMs to Formal Causal Models
+        - Bayesian Networks and Causal DAGs
+        - Integrating Causal Inference into LLM Workflows (1/2)
+        - Integrating Causal Inference into LLM Workflows (2/2)
+- Causal Agent Architectures
+  - Agents with Explicit Causal Models
+        - Causal Reasoning Agents: Design
+        - Causal Agent Architecture (1/2)
+        - Causal Agent Architecture (2/2)
+  - Integrating Causal Inference into Planning
+        - Planning Under Causal Uncertainty
+        - Causal Markov Decision Processes (MDPs)
+        - Value Functions and Causal Effects
+        - Policy Robustness: Worst-Case Planning
+- Trustworthy AI Through Causality
+  - Transparency and Interpretability
+        - Making Reasoning Explicit and Interpretable
+        - Causal Explanations for Decisions
+  - Robustness Through Causal Constraints
+        - Finding Brittle Decisions Through Causal Analysis
+        - Causal Constraints on Model Predictions
+        - Adversarial Robustness with Causal Models
+  - Fairness Through Causal Reasoning
+        - Causal Approaches to Bias and Discrimination
+        - Causal Definitions of Fairness
+        - Causal Constraints for Fair Models
+  - Safety Through Causal Reasoning
+        - Causal Constraints on Harmful Outcomes
+        - Transparency for Trustworthy Autonomy
+        - Causal Monitoring and Adaptation
+        - Causal Reasoning for Trustworthy AI
+        - The Path Forward
+
+# Lesson16.1-What_Is_An_Agentic_AI.txt
+
+- What Is an Agentic AI?
+  - Motivation: From Generation to Action
+        - From Language Models to Agents
+        - The Limits of Pure Text Generation
+        - What Makes a System "Agentic"?
+  - Agents vs. Chatbots
+        - Chatbots: Definition
+        - Agents: Definition
+        - Agents vs. Chatbots: Key Differences
+        - The Spectrum of Autonomy
+        - Autonomy Levels: Worked Examples
+        - Human-in-the-Loop vs. Full Autonomy
+  - The Perceive-Plan-Act Loop
+        - The Perceive-Plan-Act Loop: Overview
+        - Perceive: Observations and State
+        - Plan: Reasoning About the Next Action
+        - Act: Executing in the Environment
+        - Closing the Loop: Feedback and Iteration
+        - Preview: ReAct and the Loop in Practice
+  - Tools, Environments, and Observations
+        - What Is a Tool? Definition
+        - Tool Use: From Function Calls to APIs
+        - Environment: Definition
+        - Types of Environments: A Taxonomy
+        - Observations: What the Agent Sees
+        - Agent, Tools, and Environment: Putting It Together
+  - Grounding Language in Action
+        - The Grounding Problem: Definition
+        - From Tokens to Actions: Action Spaces
+        - Grounding via Tool Schemas and APIs
+        - Example: Grounding in WebShop
+  - A Taxonomy of Agentic Systems
+        - Dimensions of an Agentic Taxonomy
+        - Reactive vs. Deliberative Agents
+        - Single-Agent vs. Multi-Agent Systems
+        - Taxonomy Overview: Putting It Together
+  - Summary
+        - What Is an Agentic AI? Summary and Open Questions
+
+# Lesson16.10_Open_training_recipes_for_reasoning.txt
+
+- Open Training Recipes for Reasoning
+  - Motivation: From Proprietary to Open Post-Training
+        - Why Open Training Recipes Matter
+        - The Reproducibility Challenge
+  - DPO vs. PPO: Theory, Practice, and Pitfalls
+        - From PPO to DPO: A Brief Recap
+        - PPO in Practice: Setup and Challenges
+        - DPO in Practice: Simplicity and Tradeoffs
+        - When to Use Each: Decision Framework
+        - Common Pitfalls: Preference Hacking and Mode Collapse
+  - Tulu 3: An Open Post-Training Pipeline
+        - Tulu 3: Overview and Goals
+        - Tulu 3: Data Pipeline
+        - Tulu 3: Training Configuration
+        - Tulu 3: Evaluation and Results
+        - Ablations and Lessons from Tulu 3
+  - Preference Feedback: Collection and Best Practices
+        - Preference Feedback at Scale
+        - Preference Feedback: Human Annotation
+        - Preference Feedback: Automatic Scoring
+        - Mixing Multiple Preference Sources
+        - Handling Edge Cases in Preference Data
+  - OpenScholar: Applying Reasoning Training to Scientific Synthesis
+        - OpenScholar: Motivation and Scope
+        - OpenScholar: The RAG + Reasoning Pipeline
+        - OpenScholar: Training Data
+        - OpenScholar: Results and Implications
+  - Reproducibility and Open-Source Lessons
+        - Anatomy of a Reproducible Pipeline
+        - The Reproducibility-Performance Tradeoff
+        - Common Pitfalls in Open Release
+        - Lessons for Open-Source Reasoning Models
+        - Open Problems and Future Directions
+        - Scaling Preference Feedback: Current Approaches
+        - Beyond Pairs: Future Preference Formats
+        - Integration with Lesson 16.9: Verification and Preferences
+        - Recap: From Closed to Open Reasoning
+
+# Lesson16.11_Lessons_from_training_agentic_models.txt
+
+- Lessons from Training Agentic Models
+  - Motivation: From Theory to Practice
+        - Why Training Recipes Matter
+        - The Scaling Challenge
+  - Part I: Data Curation for Agentic Behavior
+        - What Makes Data Agentic?
+        - Data Sources: Synthetic vs. Real
+        - Trajectory Quality and Filtering
+        - Preference Data for Agentic Tasks
+        - Curriculum Learning for Agent Training
+  - Part II: Case Study — KIMI K2
+        - KIMI K2: Overview
+        - K2 Data Curation: Quantity and Quality
+        - K2 Training Pipeline: Multi-Stage
+        - K2 Tool Grounding: In-Context vs. Weights
+        - K2 Cost and Efficiency
+  - Part III: Case Study — DeepSeek-V3
+        - DeepSeek-V3: Mixture-of-Experts at Scale
+        - DeepSeek-V3: Expert Specialization
+        - DeepSeek-V3 Training Data
+        - DeepSeek-V3: Training Challenges and Solutions
+        - DeepSeek-V3: Cost Breakdown
+  - Part IV: Stability and Cost of Large-Scale RL
+        - The Stability Challenge
+        - Techniques for Stable RL
+        - Cost of Verification at Scale
+        - Cost vs. Capability Trade-off
+  - Part V: Practical Pitfalls and Recipes
+        - Pitfall 1: Reward Hacking
+        - Pitfall 2: Domain Generalization
+        - Recipe: The Stable Training Loop
+  - Part VI: Outlook and Recommendations
+        - Key Takeaways
+        - Emerging Patterns
+        - Recommendations for Practitioners
+        - Open Problems
+        - Monitoring and Metrics That Matter
+        - Conclusion
+
+# Lesson16.2-LLM_Building_Blocks.txt
+
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+        - From Agents to Their Engine
+        - What Is a Language Model? Definition
+        - Tokenization: From Text to Tokens
+  - The Transformer Architecture
+        - The Transformer: Motivation
+        - The Transformer: High-Level Architecture
+        - Vector Embeddings
+        - Positional Encoding
+        - The Transformer Block
+        - Residual Connections and Layer Normalization
+        - Feed-Forward Networks
+  - Attention as the Core Mechanism
+        - Attention: Motivation
+        - Attention: Query, Key, Value
+        - Scaled Dot-Product Attention
+        - Multi-Head Attention
+        - Self-Attention vs. Cross-Attention
+        - Causal (Masked) Attention
+        - Attention: Complexity and Cost
+  - Pretraining Objectives and Scaling
+        - Pretraining: The Objective
+        - Masked vs. Autoregressive Objectives
+        - The Pretraining Pipeline
+        - Scaling Laws
+        - Emergent Abilities
+  - Inference, Decoding, and Context Windows
+        - Inference: Autoregressive Generation
+        - Decoding Strategies: Greedy vs. Sampling
+        - Top-k and Top-p Sampling
+        - The Context Window
+        - The KV Cache
+  - Expressivity: What Transformers Can and Cannot Compute
+        - The Question of "Expressivity"
+        - Chain-of-Thought as Serial Computation
+        - What Transformers Cannot (Easily) Compute
+        - Summary and Open Questions
+
+# Lesson16.3-History_of_LLM_Agents.txt
+
+- A Brief History of LLM Agents
+  - Motivation: Why the History Matters
+        - Why Study the History of LLM Agents?
+        - A Timeline of LLM Agents
+  - From Prompting to Acting
+        - Prompting: Language Models as Text Predictors
+        - In-Context Learning
+        - Chain-of-Thought: Reasoning in Text
+        - Acting on the World
+        - From Prompting to Acting
+  - ReAct and the Reasoning-Acting Synergy
+        - ReAct: Motivation
+        - ReAct: The Thought-Action-Observation Trace
+        - ReAct: Worked Example
+        - ReAct vs. Chain-of-Thought vs. Act-Only
+        - Why ReAct Worked
+  - Grounded Web Agents
+        - Grounding Language in Web Environments
+        - WebShop: Motivation
+        - WebShop: Environment and Action Space
+        - WebShop: What It Revealed
+        - The Human-Machine Gap in Web Agents
+  - Early Failures and Lessons
+        - Early Failures: Overview
+        - Failure: Compounding Errors
+        - Failure: Hallucinated Tool Calls
+        - Failure: Getting Stuck in Loops
+        - Failure: Brittle Parsing and Grounding
+  - The Road to General-Purpose Agents
+        - From Narrow to General-Purpose Agents
+        - The Rise of Tool-Use Standards
+        - Scaling Meets Agents
+        - Open Challenges on the Road Ahead
+  - Summary
+        - A Brief History of LLM Agents: Summary
+
+# Lesson16.4-LLM_Reasoning.txt
+
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+        - Why Study LLM Reasoning?
+        - What Do We Mean by "Reasoning"?
+        - Reasoning as Serial Computation: Recap and Beyond
+  - Chain-of-Thought and Its Variants
+        - Chain-of-Thought: Quick Recap
+        - Why Does CoT Help? Two Hypotheses
+        - Zero-Shot vs. Few-Shot CoT
+        - Self-Consistency
+        - Search Over Reasoning: Tree and Graph of Thought
+        - CoT Variants: Comparison
+  - Reasoning Without Explicit Prompting
+        - Problem: Does Reasoning Require a Prompt?
+        - Greedy Decoding Hides Reasoning
+        - CoT-Decoding: The Algorithm
+        - The Confidence Signal
+        - CoT-Decoding: Findings and Implications
+  - Premise Order and Brittleness
+        - Premise Order Matters: The Finding
+        - Worked Example: Reordering Premises
+        - Measuring the Effect on Math (R-GSM)
+        - Why Order Matters: An Autoregressive Bias
+        - Brittleness Beyond Order
+  - Serial Computation and Depth
+        - The Depth Limit and CoT
+        - CoT Empowers Serial Computation: The Result
+        - Intuition: Each Token Simulates One Gate
+        - Trading Tokens for Depth
+  - Limits of Self-Correction
+        - Can Models Fix Their Own Mistakes?
+        - When Self-Correction Does Help
+  - Summary
+        - LLM Reasoning: Summary and Open Questions
+
+# Lesson16.5-Reasoning_Memory_and_Planning.txt
+
+- Reasoning, Memory, and Planning
+  - Motivation: From Single-Shot Reasoning to a Persistent Loop
+        - Why Memory and Planning Deserve Their Own Lesson
+        - What Do We Mean by Memory and Planning?
+        - Two Threads to Reconnect
+  - Working Memory vs. Long-Term Memory
+        - Working Memory
+        - Long-Term Memory
+        - Working vs. Long-Term Memory: Comparison
+        - The Core Problem: Retrieval, Not Storage
+  - Neurobiologically Inspired Memory
+        - Why Standard RAG Struggles with Multi-Hop Facts
+        - Biological Inspiration: The Hippocampal Indexing Theory
+        - HippoRAG: Architecture Overview
+        - Step 1: Offline Indexing
+        - Step 2: Building the Knowledge Graph
+        - Step 3: Online Retrieval via Personalized PageRank
+        - HippoRAG: Worked Example
+        - HippoRAG: Results and Efficiency
+  - Implicit Reasoning and Grokking
+        - Problem: Can Reasoning Live Inside the Weights?
+        - What Is Grokking?
+        - Experimental Setup: Composition vs. Comparison
+        - Finding: Composition Fails to Generalize
+        - Why the Difference? Generalizing vs. Memorizing Circuits
+        - Grokked Transformers vs. Frontier Models
+        - Weights as Implicit Long-Term Memory
+  - World Models for Planning
+        - Problem: Reactive Agents and the Cost of Search
+        - Solution: An LLM as a World Model
+        - Training the World Model: Predicting State Transitions
+        - WebDreamer: Simulate Before You Act
+        - WebDreamer: Efficiency and Real-World Results
+        - Reasoning, Memory, and Planning: The Full Loop
+  - Summary
+        - Summary and Open Questions
+
+# Lesson16.6-Inference_time_techniques.txt
+
+- Inference-Time Techniques
+  - Motivation: Beyond a Single Reasoning Chain
+        - Inference-Time Techniques
+        - Inference-Time Compute So Far
+        - Three New Levers: Optimize, Debug, Allocate
+  - LLMs as Optimizers
+        - Optimization Without Gradients
+        - OPRO: The Core Idea
+        - OPRO: The Meta-Prompt
+        - OPRO Algorithm
+        - Worked Example: Optimizing a Prompt for GSM8K
+        - OPRO vs. Gradient-Based Optimization
+        - OPRO: Results and Generality
+        - OPRO: Why Grounded Scores Matter
+  - Self-Debugging Code
+        - Generate-Once Code Is Often Wrong
+        - Self-Debug
+        - Two Feedback Channels: Unit Tests vs. Code Explanation
+        - Self-Debug Algorithm
+        - Worked Example: Debugging a SQL Query
+        - Self-Debug: Results Across Benchmarks
+  - When Does Iterative Refinement Help?
+        - Grounded Code, Ungrounded Reasoning
+        - The Common Factor: Grounded vs. Self-Judged Feedback
+        - A Spectrum of Groundedness
+        - Design the Verifier, Not Just the Loop
+  - Compute-Optimal Inference Strategies
+        - How Much Inference Compute Should an Agent Spend?
+        - Compute-Optimal Scaling: The Finding
+        - Easy vs. Hard Prompts: Adaptive Allocation
+        - Worked Comparison: Best-of-N vs. Compute-Optimal Search
+        - Inference-Time Compute vs. Training-Time Compute
+  - Summary
+        - Inference-Time Techniques: The Full Picture
+        - Summary and Open Questions
+
+# Lesson16.7-Tool_use_and_retrieval.txt
+
+- Tool Use and Retrieval
+  - Motivation: Two Failure Modes and a Roadmap
+        - Two Ways an Answer Can Be Wrong
+        - Grounding Facts, Not Just Actions
+        - From Vectors to Enterprise Grounding
+  - Retrieval as a Tool Call
+        - Retrieval-Augmented Generation: The Loop
+        - RAG as a Special Case of Tool Use
+        - Deciding Whether to Retrieve
+        - Single-Hop Retrieval: When Similarity Is Enough
+  - Vector Databases and Search
+        - Embeddings: Turning Text into Vectors
+        - Nearest-Neighbor Search: Exact vs Approximate
+        - Approximate Nearest-Neighbor Indexes
+        - Hybrid Search: Semantic Plus Keyword
+        - Vector Database Pipeline: Worked Example
+  - Grounding on Enterprise Knowledge
+        - Grounding: Definition and Enterprise Stakes
+        - Three Enterprise Grounding Strategies
+        - Dynamic Retrieval: Search vs Parametric Knowledge
+        - High-Fidelity Grounding for Regulated Domains
+        - Fact-Checking Grounded Answers
+  - Long-Context vs. Retrieval
+        - Two Ways to Supply Knowledge: Stuff vs Retrieve
+        - The Cost of Long-Context Stuffing
+        - The Cost of Retrieval Failures
+        - Long-Context vs Retrieval: A Comparison
+  - The Needle-in-a-Haystack Evaluation
+        - Needle-in-a-Haystack: Test Design
+        - Needle-in-a-Haystack: Results
+        - What the Needle Test Misses
+        - Multiple Needles: Where Recall Breaks Down
+        - When to Retrieve vs Stuff Context
+        - Tool Use and Retrieval: The Full Picture
+  - Summary
+        - Summary and Open Questions
+
+# Lesson16.8-Learning_to_reason.txt
+
+- Learning to Reason
+  - Motivation: From Inference-Time Fixes to Learned Reasoning
+        - Why Learning to Reason Deserves Its Own Lesson
+        - Two Routes to Better Reasoning, and a Roadmap
+  - Reward Models and Preference Data
+        - What Objective Trains a Better Reasoner?
+        - Preference Data: Definition
+        - The Bradley-Terry Model of Preferences
+        - Classical Pipeline: Reward Model and PPO
+  - Direct Preference Optimization
+        - Can We Skip the Reward Model?
+        - The Optimal Policy in Closed Form
+        - Reparameterizing the Reward via the Policy
+        - The DPO Loss
+        - DPO Algorithm
+        - What the DPO Gradient Rewards
+        - DPO: Results
+        - DPO vs. RLHF: Comparison
+  - Iterative Preference Optimization
+        - Why DPO Struggles at Multi-Step Reasoning
+        - From Human Preferences to Correctness-Based Preferences
+        - Building Preference Pairs from Self-Generated Chains of Thought
+        - The Missing Ingredient: An NLL Term
+        - Iterative Reasoning Preference Optimization: Algorithm
+        - IRPO: Results
+  - Reducing Hallucination via Verification
+        - Reasoning Can Be Fluent Yet Wrong
+        - Why Holistic Self-Review Failed
+        - Chain-of-Verification: The Core Idea
+        - CoVe: Algorithm
+        - Why Factored Verification Escapes Anchoring Bias
+        - CoVe: Results
+  - Aligning Reasoning with Feedback
+        - Where Does the Training Signal Come From?
+        - Training-Time vs. Inference-Time Grounding
+        - Learning to Reason: The Full Picture
+  - Summary
+        - Summary and Open Questions
+
+# Lesson16.9_Post_training_and_verifiable_agents.txt
+
+- Post-Training and Verifiable Agents
+  - Motivation: The Verification Problem
+        - Why Preference Feedback Alone Is Not Enough
+        - The Verification-Utility Trade-off
+  - Verifiable Rewards from Real Tasks
+        - What Makes a Task Verifiable?
+        - From Verification to Training Signals
+        - From DPO to Verifiable RL
+  - SWE-Bench Verified: Software Tasks with Deterministic Outcomes
+        - The SWE-Bench Family
+        - What Makes SWE-Bench Valuable
+        - Training on SWE-Bench Verified Trajectories
+        - Empirical Results: Agent Performance Before and After
+  - SWE-Bench Verified: Challenges and Insights
+        - The Setup Burden
+        - Distribution Shift: Training Errors vs. Real Errors
+        - Edge Case: What If Tests Are Wrong?
+  - BrowseComp: Benchmarking Browsing Agents
+        - Browsing as a Verifiable Task
+        - BrowseComp Benchmark Structure
+        - Training on BrowseComp
+        - Why BrowseComp Matters
+  - Comparing Verifiable Benchmarks
+        - SWE-Bench vs. BrowseComp: Task Structure
+        - Solving Rate vs. Generalization
+  - Reward Hacking and Verification Gaps
+        - What Is Reward Hacking?
+        - Why Reward Hacking Happens
+        - Testing Against Reward Hacking
+        - The Verification Gap: What We Measure vs. What We Care About
+  - Lessons and Future Directions
+        - What We Learn From Verifiable Training
+        - The Path Forward: Combining Multiple Signals
+        - Open Questions
+        - Conclusion: Why Verification Matters for Post-Training
 
 # Lesson91.Refresher_probability.txt
 
