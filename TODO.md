@@ -3,12 +3,12 @@
 # #############################################################################
 
 - There are too many failures across multiple builds
-  - Do not add more code but focus on getting to stable build
+  - Do not add more code but focus on getting to a stable build
   - Disable the failing tests
-  - Merge gp_scratch_29
-  - Merge HelpersTask1273_Get_Mac_tests_to_pass
+  - Merge `gp_scratch_29`
+  - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
-- HelpersTask1273_Get_Mac_tests_to_pass_3
+- [.] HelpersTask1273_Get_Mac_tests_to_pass_3
   - Create tools for analyzing and helping with the unit tests
   - Improvements to pytest_failed
 
@@ -65,7 +65,7 @@ dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_o
 dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.89 s) RERUN                                                                    [ 15%]
 ```
 
-### [ ] Improve pytest_failed
+### [.] Improve pytest_failed
 
 - Read output from any pytest (local, docker, github)
 - Make it into a script called by invoke
@@ -143,7 +143,7 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
-  - `/Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
+  - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
 - [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
 - [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
@@ -153,7 +153,11 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
   - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
 - [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
 - [x] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
-- [ ] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
+- [x] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
+- [ ] msml610/lectures_source/Lesson16.8
+- [ ] msml610/lectures_source/Lesson16.9
+- [ ] msml610/lectures_source/Lesson16.10
+- [ ] msml610/lectures_source/Lesson16.11
   > gen_slides.py msml610/16.5 --slides_engine typst --daemon
   > gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
 

@@ -13,6 +13,7 @@ springer.template.md
 - Very short intro about causality and probability
 - Part 3 of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
 - Look at review
+
 ### Create branch for 1276
 https://github.com/causify-ai/helpers/issues/1276
 
