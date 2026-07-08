@@ -166,6 +166,9 @@
 
 ### Related books
 - [B048] Bishop, "Pattern Recognition and Machine Learning", 2006
+- [B004] Koller et al., "Probabilistic Graphical Models", 2009
+- [B043] Pearl, "Probabilistic Reasoning in Intelligent Systems: Networks of
+  Plausible Inference", 1988
 
 ## 6: Advanced Causal Modeling
 
@@ -193,10 +196,14 @@
 ### Related packages
 
 ### Related books
-- [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
 - [B049] Imbens, Angrist & Rubin, "Causal Inference for the Social, Biological, and Biomedical Sciences", 2015
 - [B050] Hernán & Robins, "Causal Inference: What If", 2020
 - [B053] Molak, "Causal Inference and Discovery in Python", 2023
+- [B007] Pearl, "Causality", 2009
+- [B008] Peters et al., "Elements of Causal Inference", 2017
+- [B027] Spirtes et al., "Causation, Prediction, and Search", 2000
+- [B042] Pearl et al., "Causal Inference in Statistics: A Primer", 2016
+  https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
 
 ### Related papers
 - [P008] Peters et al., "Causality: Models, Learning, and Inference", 2023
@@ -259,7 +266,6 @@
 ### Related books
 - [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
 - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
-- [B002] Pearl et al., "The Book of Why", 2018
 
 ## 9: Policy Learning & Distributional Causal Effects
 
@@ -285,6 +291,7 @@
 
 ### Related books
 - [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
+- [B014] Angrist et al., "Mostly Harmless Econometrics", 2008
 
 ## 10: Partial Identification & Robust Inference
 
@@ -350,24 +357,9 @@
 - ALICE (1,000): ML and econometrics integration
 
 ### Related books
-- [B002] Pearl et al., "The Book of Why", 2018
-- [B004] Koller et al., "Probabilistic Graphical Models", 2009
-- [B007] Pearl, "Causality", 2009
-- [B008] Peters et al., "Elements of Causal Inference", 2017
-- [B014] Angrist et al., "Mostly Harmless Econometrics", 2008
-- [B019] Molnar, "Interpretable Machine Learning", 2022
-- [B027] Spirtes et al., "Causation, Prediction, and Search", 2000
 - [B036] Christian, "The Alignment Problem", 2020
 - [B037] Russell, "Human Compatible", 2019
 - [B038] Schölkopf et al., "Causal Artificial Intelligence", 2021
-- [B042] Pearl et al., "Causal Inference in Statistics: A Primer", 2016
-  https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
-- [B043] Pearl, "Probabilistic Reasoning in Intelligent Systems: Networks of
-  Plausible Inference", 1988
-- [B044] Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic
-  Programming", 1994
-- [B045] Barocas et al., "Fairness and Machine Learning", 2019
-  https://fairmlbook.org
 
 ### Related papers
 - [P029] Brown et al., "Language Models are Few-Shot Learners", 2020
@@ -476,6 +468,8 @@
 - [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
 - [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
 - [B032] Ness et al., "Causal AI", 2023
+- [B044] Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic
+  Programming", 1994
 
 ## 13: Forecasting Under Causal Intervention
 
@@ -585,7 +579,6 @@
 
 ### Related books
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
-- [B001] Agrawal et al., "Prediction Machines", 2018
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 - [B052] Géron, "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", 2022
 
@@ -611,6 +604,9 @@
 ### Related packages
 
 ### Related books
+- [B019] Molnar, "Interpretable Machine Learning", 2022
+- [B045] Barocas et al., "Fairness and Machine Learning", 2019
+  https://fairmlbook.org
 
 ### Related papers
 - [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with

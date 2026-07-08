@@ -8,7 +8,7 @@
   - Merge `gp_scratch_29`
   - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
-- [.] HelpersTask1273_Get_Mac_tests_to_pass_3
+- [x] HelpersTask1273_Get_Mac_tests_to_pass_3
   - Create tools for analyzing and helping with the unit tests
   - Improvements to pytest_failed
 
@@ -20,13 +20,45 @@
     - i git_branch_create -> i gh_create_pr --no-draft
   - Find an easy way to check which PR is still to merge, which one was merged
 
+  - /github.split_branch_in_PRs
+  - Review edit github_pr_plan.md
+  - /github.create_child_pr PR2
+
+- Extend i create_branch_copy to work with only a subset of files / dirs
+
 - Have a thread that looks for TODOs in the code (gp, ai_gp)
   - Ranks them by simplicity
   - Create a branch, PR, run tests and merge
 
+> export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
+> export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
+
+> export CSFY_DOCKER_ENGINE="docker"; pytest_log dev_scripts_helpers
+
+> export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
+
 # #############################################################################
 # IN PROGRESS
 # #############################################################################
+
+## pytest_failed
+
+### Improve pytest_failed.py
+
+- Accept multiple files and create a single table
+pytest_failed.py -i ...
+
+### Why there are two updated
+
+Updated:    2/3346
+
+### Print the files that have been updated
+
+### Automatically git add
+
+## Breaks
+
+### 
 
 helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Password:
 Sorry, try again.
