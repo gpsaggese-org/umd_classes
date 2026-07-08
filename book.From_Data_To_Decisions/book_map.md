@@ -1,8 +1,24 @@
-- [ ] TODO: Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
+**Title**:
+- From Data to Decisions: Building Decision Systems with Probabilistic Causal
+  Reasoning
 
-# Part I: Understanding Causality
+**Target audience:**
+- Senior ML engineers and data scientists with a statistics and probabilistic ML
+  background who build production decision systems
+- Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
+
+**Decision Pipeline (Book Spine):**
+Data → Causal Model → Effect Estimation → Policy → Action → Feedback → Learning Loop
+
+# Part I: Why Businesses Need Decisions, not Predictions (Motivation)
 
 ## 1: From Prediction Pipelines to Decision Pipelines
+
+- Why organizations fail with good data
+- Prediction vs. decision: Simpson's paradox and policy reversals
+- The decision pipeline: data → causal model → effect → policy → action → feedback
+- Ladder of causation as decision tool
+- Causal maturity model: from descriptive to autonomous decisions
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -48,52 +64,115 @@
   Algorithms", 2020
   https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
-## Summary of Probabilistic and Causal Machine Learning
+## 2: Why Good Data Leads to Bad Decisions
 
-## Advanced Topics for Time Series Predictions
+- Statistical significance trap in business
+- A/B tests and heterogeneous treatment effects
+- Causal ML failure modes in production
+- When correct estimates lead to bad policies
+- Decision Readiness Scorecard
 
-- Self-Supervised and Representation Learning for Time Series
-  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
-  - Predictive coding models (e.g., CPC)
-  - Applications: few-shot forecasting, anomaly detection
+### Lessons
 
-- Hierarchical Bayesian Forecasting
-  - Multi-level time series models
-  - Shrinkage across groups
-  - Handling partial pooling across different but related series
+### Tutorials
 
-- Reinforcement Learning for Time Series Decision Making
-  - Forecasting coupled with decision making
-  - Inventory control, dynamic pricing
-  - Predict-then-Optimize pipelines
+### Related packages
 
-- Transformers and Attention Mechanisms for Time Series
-  - Temporal Fusion Transformer (TFT)
-  - Informer, Autoformer, FEDformer
-  - Handling long-term dependencies better than RNNs
+### Related books
 
-- Energy-Based Models and Diffusion Models for Forecasting
-  - Energy-based forecasting models
-  - Diffusion probabilistic models adapted for sequences
+## 3: Problem Framing and Intervention Design
 
-- Time Series Generative Models
-  - GANs for time series (e.g., TimeGAN)
-  - Variational Autoencoders (VAEs) for synthetic data generation
-  - Applications: simulation, data augmentation
+- From KPI selection to decision objectives
+- Intervention design: lever, target, timing
+- Data collection strategy for identifiability
+- Decision artifacts and templates
+- Causal Project Checklist
 
-- Long-Horizon Forecasting Challenges
-  - Distribution shift over long horizons
-  - Degradation of model accuracy
-  - Specialized architectures: recurrent decoders, multi-resolution forecasting
+### Lessons
 
-- Uncertainty Quantification and Calibration
-  - Prediction intervals
-  - Coverage probability and reliability diagrams
-  - Post-hoc calibration (e.g., temperature scaling)
+### Tutorials
 
-# Part III: Making Decisions with Causality
+### Related packages
 
-## 11: Decision-Making with Causal Models
+### Related books
+
+# Part II: Advanced Tools & Theory (Foundations)
+
+## 4: Knowledge Representation
+
+- Problem scope and system boundaries
+- Domain knowledge and constraints
+- Data availability and measurement
+- Variables, relationships, and temporal structure
+- Stakeholders and decision levers
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+## 5: Advanced Probabilistic ML
+
+- Gaussian processes: kernels, inference, and uncertainty
+- Variational inference and amortized VI in deep models
+- Normalizing flows and expressive density estimation
+- Probabilistic programs: Pyro, NumPyro, Stan
+- Neural posterior estimation and simulation-based inference
+- Calibration and conformal prediction at scale
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+## 6: Advanced Causal Modeling
+
+- Causal basics assumed (DAGs, SCMs, do-calculus — see Durai 2025)
+- Latent confounders: proxy variables and negative controls
+- Causal representation learning and disentanglement
+- Causal discovery: constraint-based (PC/FCI), score-based (GES), FCMs (LiNGAM, ANM)
+- Nonparametric identification and generalized do-calculus
+- Sensitivity analysis: E-values, amplification, sharp bounds
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+# Part III: Single-Step Decisions
+
+## 7: Decision Theory Foundations
+
+- Expected utility maximization
+- Utility functions in business
+- From treatment effects to expected value
+- Influence diagrams and policy solving
+- Risk and uncertainty quantification
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+## 8: Decision-Making with Causal Models
+
+- Translating causal effects into decisions
+- Bayesian decision-making and belief updating
+- Value of information and experimental design
+- Decision robustness under model misspecification
+- Counterfactual decision analysis
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -111,62 +190,45 @@
 - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
 - [B002] Pearl et al., "The Book of Why", 2018
 
-## 12: Causal Reinforcement Learning
+## 9: Policy Learning & Distributional Causal Effects
 
-### Lessons
-- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-
-### Tutorials
-
-### Related packages
-- contextualbandits (1,700): Python implementations of contextual bandit
-  algorithms
-- MABWiser (280): Multi-armed bandit library with sklearn-style API
-- PyXAB (200): Research-focused library for X-armed bandits and online
-  optimization
-
-### Related books
-- [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
-- [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
-- [B032] Ness et al., "Causal AI", 2023
-
-## 13: Forecasting Under Causal Intervention
+- Beyond ATE: quantile and distributional treatment effects
+- Doubly robust and debiased/double-ML estimation
+- Meta-learners: T-, S-, X-, R-learner comparison
+- Off-policy optimization and safe policy improvement
+- Multi-task and transfer learning for policy adaptation
 
 ### Lessons
 
 ### Tutorials
 
 ### Related packages
-- TiMINo (3,600): Time-series causal discovery under independent noise
-  assumptions
-- orbit (2,000): Bayesian time series models
-- HMMlearn (1,600): Hidden Markov Models with sklearn API
-- BETS (350): Time-series causal network inference using elastic net regression
 
 ### Related books
-- [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
-- [B033] Hanke et al., "Business Forecasting", 2009
-- [B022] Hamilton, "Time Series Analysis", 1994
 
-## 14: Causal Decision Making in Practice
+## 10: Partial Identification & Robust Inference
+
+- Partial identification: Manski bounds, IV bounds, sharp bounds
+- Sensitivity analysis: Rosenbaum bounds, E-values, amplification factors
+- Relaxing positivity: trimming, extrapolation, and weighting
+- Distributional robustness and minimax causal inference
+- Domain adaptation under covariate and concept shift
 
 ### Lessons
 
 ### Tutorials
 
 ### Related packages
-- CausalImpact (5,600): Causal inference for intervention analysis
-- CausalML (4,800): Uplift modeling and causal inference
-- EconML (4,600): ML-based causal effect estimation
-- Azua (1,400): Causal decision-making framework
-- ALICE (1,000): ML and econometrics integration
 
 ### Related books
-- [B034] Iansiti et al., "Competing in the Age of AI", 2020
-- [B001] Agrawal et al., "Prediction Machines", 2018
-- [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 
-## 15: Causal Reasoning in AI Systems
+## 11: Agentic Causal Reasoning
+
+- Causal reasoning limits in LLMs and foundation models
+- SCM-augmented agents: structured causal knowledge in the loop
+- Tool-use and causal simulation for multi-step planning
+- Multi-agent interference: spillover, coordination, and equilibrium
+- Causal guardrails and safety constraints for autonomous agents
 
 ### Lessons
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
@@ -271,3 +333,171 @@
   against machine learning models", 2018 https://arxiv.org/abs/1712.04248
 - [P063] Rubin, "Estimating causal effects of treatments in randomized and
   nonrandomized studies", 1974 https://doi.org/10.1037/h0037350
+
+# Part IV: Multi-Step & Dynamic Decisions
+
+## 12: Causal World Models & Reinforcement Learning
+
+- Causal world models: learning and planning with SCMs
+- Model-based causal RL: counterfactual rollouts and policy search
+- Off-policy evaluation with causal guarantees (DM, IPW, DR estimators)
+- Invariant causal mechanisms and distribution-shift robustness
+- Multi-agent causal RL: interference, Nash equilibria, and spillover
+
+### Lessons
+- `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+
+### Tutorials
+
+### Related packages
+- contextualbandits (1,700): Python implementations of contextual bandit
+  algorithms
+- MABWiser (280): Multi-armed bandit library with sklearn-style API
+- PyXAB (200): Research-focused library for X-armed bandits and online
+  optimization
+
+### Related books
+- [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
+- [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
+- [B032] Ness et al., "Causal AI", 2023
+
+## 13: Forecasting Under Causal Intervention
+
+- Why standard forecasting breaks under intervention
+- Causal constraints on time-series models
+- Bayesian structural time series with causal priors
+- Counterfactual forecasting and synthetic control
+- Adaptive forecasting under feedback and regime shifts
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+- TiMINo (3,600): Time-series causal discovery under independent noise
+  assumptions
+- orbit (2,000): Bayesian time series models
+- HMMlearn (1,600): Hidden Markov Models with sklearn API
+- BETS (350): Time-series causal network inference using elastic net regression
+
+### Related books
+- [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
+- [B033] Hanke et al., "Business Forecasting", 2009
+- [B022] Hamilton, "Time Series Analysis", 1994
+
+## 14: Feedback Loops & Adaptive Causal Systems
+
+- Decisions change the system: performativity and Goodhart's law
+- Time-varying and non-stationary causal graphs
+- Online causal discovery and structure adaptation
+- Bandit algorithms with causal side information
+- Causal inference under feedback: dynamic treatment regimes
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+# Part V: Implementation (Deployment, Monitoring, Communication)
+
+## 15: Communicating Decisions to Executives
+
+- From causal estimates to recommendations
+- Visualizing uncertainty and trade-offs
+- Communicating risk and assumptions
+- Narrative structure for decisions
+- Executive decision brief template
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+## 16: Deployment and the Decision Lifecycle
+
+- Bridging development and production
+- Deployment strategies and rollout
+- Monitoring causal assumptions in production
+- A/B testing and continuous experimentation
+- Shadow deployment and canary analysis
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+- CausalImpact (5,600): Causal inference for intervention analysis
+- CausalML (4,800): Uplift modeling and causal inference
+- EconML (4,600): ML-based causal effect estimation
+- Azua (1,400): Causal decision-making framework
+- ALICE (1,000): ML and econometrics integration
+
+### Related books
+- [B034] Iansiti et al., "Competing in the Age of AI", 2020
+- [B001] Agrawal et al., "Prediction Machines", 2018
+- [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
+
+## 17: Trust, Explainability, and Failure Modes
+
+- Building trust in decision systems
+- Model auditing and causal explainability
+- Failure modes and ethical pitfalls
+- Guardrails and human-in-the-loop
+- Governance and accountability
+
+### Lessons
+
+### Tutorials
+
+### Related packages
+
+### Related books
+
+# Appendix
+
+## Advanced Topics for Time Series Predictions
+
+- Self-Supervised and Representation Learning for Time Series
+  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
+  - Predictive coding models (e.g., CPC)
+  - Applications: few-shot forecasting, anomaly detection
+
+- Hierarchical Bayesian Forecasting
+  - Multi-level time series models
+  - Shrinkage across groups
+  - Handling partial pooling across different but related series
+
+- Reinforcement Learning for Time Series Decision Making
+  - Forecasting coupled with decision making
+  - Inventory control, dynamic pricing
+  - Predict-then-Optimize pipelines
+
+- Transformers and Attention Mechanisms for Time Series
+  - Temporal Fusion Transformer (TFT)
+  - Informer, Autoformer, FEDformer
+  - Handling long-term dependencies better than RNNs
+
+- Energy-Based Models and Diffusion Models for Forecasting
+  - Energy-based forecasting models
+  - Diffusion probabilistic models adapted for sequences
+
+- Time Series Generative Models
+  - GANs for time series (e.g., TimeGAN)
+  - Variational Autoencoders (VAEs) for synthetic data generation
+  - Applications: simulation, data augmentation
+
+- Long-Horizon Forecasting Challenges
+  - Distribution shift over long horizons
+  - Degradation of model accuracy
+  - Specialized architectures: recurrent decoders, multi-resolution forecasting
+
+- Uncertainty Quantification and Calibration
+  - Prediction intervals
+  - Coverage probability and reliability diagrams
+  - Post-hoc calibration (e.g., temperature scaling)

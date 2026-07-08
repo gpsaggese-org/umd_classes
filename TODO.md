@@ -140,6 +140,15 @@ claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining
 claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
 ```
 
+### [ ] From Data To Decisions
+/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.saggese.full_proposal_v2.md
+/Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+
+- [x] Merge /Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.toc_v2.md
+  into /Users/saggese/src/umd_classes2/book.From_Data_To_Decisions/book_map.md
+- [ ] Check what is already covered by the slides in msml610/lectures_source
+
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
@@ -154,7 +163,7 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
 - [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
 - [x] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
 - [x] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
-- [ ] msml610/lectures_source/Lesson16.8
+- [.] msml610/lectures_source/Lesson16.8
 - [ ] msml610/lectures_source/Lesson16.9
 - [ ] msml610/lectures_source/Lesson16.10
 - [ ] msml610/lectures_source/Lesson16.11
@@ -186,11 +195,6 @@ claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gma
 - Add references to papers
 - Add more / better pictures
 - Summary
-
-## From Data To Decisions
-book.From_Data_To_Decisions
-
-/Users/saggese/src/notes1/book.Springer.From_Data_to_Decision_Science/springer.proposal_v2.toc.md
 
 ## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
