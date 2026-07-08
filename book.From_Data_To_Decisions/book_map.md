@@ -39,36 +39,16 @@
 ### Related books
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B002] Pearl et al., "The Book of Why", 2018
-- [B003] Huyen, "Designing Machine Learning Systems", 2022
 - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
-- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
-- [B041] Angrist & Pischke, "Probability, Statistics, and Causal Inference", 2020
 
-### Related Papers
-- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
-  Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
-- [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions",
-  2017 https://arxiv.org/pdf/1705.07874.pdf
-- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of
-  Dataset Biases", 2020 https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
-- [P004] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program
-  Evaluation", 2018 https://www.nber.org/papers/w24318
+### Related papers
 - [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
   https://bayes.cs.ucla.edu/BOOK-2K
-- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery
-  Algorithms", 2023 https://www.nature.com/articles/s41598-020-59669-x
 - [P007] Zhang et al., "A Survey on Causal Inference", 2020
   https://arxiv.org/pdf/2002.05209.pdf
-- [P008] Peters et al., "Causality: Models, Learning, and Inference", 2023
-  https://arxiv.org/pdf/2012.13993.pdf
 - [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
   Machine Learning", 2021
   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
-- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with
-  Contrastive Pertinent Features", 2019 https://arxiv.org/pdf/1906.04957.pdf
-- [P011] Peters et al., "Elements of Causal Inference: Foundations and Learning
-  Algorithms", 2020
-  https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
 ## 2: Why Good Data Leads to Bad Decisions
 
@@ -95,6 +75,15 @@
 ### Related packages
 
 ### Related books
+- [B003] Huyen, "Designing Machine Learning Systems", 2022
+
+### Related papers
+- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
+  Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
+- [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions",
+  2017 https://arxiv.org/pdf/1705.07874.pdf
+- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of
+  Dataset Biases", 2020 https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
 
 ## 3: Problem Framing and Intervention Design
 
@@ -117,6 +106,14 @@
 ### Related packages
 
 ### Related books
+- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
+- [B041] Angrist & Pischke, "Probability, Statistics, and Causal Inference", 2020
+
+### Related papers
+- [P004] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program
+  Evaluation", 2018 https://www.nber.org/papers/w24318
+- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery
+  Algorithms", 2023 https://www.nature.com/articles/s41598-020-59669-x
 
 # Part II: Advanced Tools & Theory (Foundations)
 
@@ -142,6 +139,7 @@
 ### Related packages
 
 ### Related books
+- [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
 
 ## 5: Advanced Probabilistic ML
 
@@ -167,6 +165,7 @@
 ### Related packages
 
 ### Related books
+- [B048] Bishop, "Pattern Recognition and Machine Learning", 2006
 
 ## 6: Advanced Causal Modeling
 
@@ -194,6 +193,17 @@
 ### Related packages
 
 ### Related books
+- [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
+- [B049] Imbens, Angrist & Rubin, "Causal Inference for the Social, Biological, and Biomedical Sciences", 2015
+- [B050] Hernán & Robins, "Causal Inference: What If", 2020
+- [B053] Molak, "Causal Inference and Discovery in Python", 2023
+
+### Related papers
+- [P008] Peters et al., "Causality: Models, Learning, and Inference", 2023
+  https://arxiv.org/pdf/2012.13993.pdf
+- [P011] Peters et al., "Elements of Causal Inference: Foundations and Learning
+  Algorithms", 2020
+  https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
 
 # Part III: Single-Step Decisions
 
@@ -217,6 +227,7 @@
 ### Related packages
 
 ### Related books
+- [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
 
 ## 8: Decision-Making with Causal Models
 
@@ -273,6 +284,7 @@
 ### Related packages
 
 ### Related books
+- [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
 
 ## 10: Partial Identification & Robust Inference
 
@@ -297,6 +309,7 @@
 ### Related packages
 
 ### Related books
+- [B051] Cunningham, "Causal Inference: The Mixtape", 2021
 
 ## 11: Agentic Causal Reasoning
 
@@ -356,7 +369,7 @@
 - [B045] Barocas et al., "Fairness and Machine Learning", 2019
   https://fairmlbook.org
 
-### Related Papers
+### Related papers
 - [P029] Brown et al., "Language Models are Few-Shot Learners", 2020
   https://arxiv.org/abs/2005.14165
 - [P030] Kaplan et al., "Scaling Laws for Neural Language Models", 2020
@@ -574,6 +587,7 @@
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
 - [B001] Agrawal et al., "Prediction Machines", 2018
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
+- [B052] Géron, "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", 2022
 
 ## 17: Trust, Explainability, and Failure Modes
 
@@ -597,6 +611,10 @@
 ### Related packages
 
 ### Related books
+
+### Related papers
+- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with
+  Contrastive Pertinent Features", 2019 https://arxiv.org/pdf/1906.04957.pdf
 
 # Appendix
 
