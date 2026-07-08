@@ -14,9 +14,11 @@
 ## 1: From Prediction Pipelines to Decision Pipelines
 
 ### Topics
-- Prediction vs. decision: fundamentally different mathematical problems
+- Prediction vs. decision: fundamentally different mathematical problems (traditional ML relies on correlation)
+- Correlation-based ML encodes confounding as causation: Pr(Y | X) ≠ Pr(Y | do(X)), so acting on correlations backfires
+- No interventions or counterfactuals, and the ladder of causation: observation, intervention, and counterfactual reasoning
 - Simpson's paradox and policy reversals: why predictive accuracy fails in decisions
-- Ladder of causation: observation, intervention, and counterfactual reasoning
+- Predictions are not recommendations: black-box scores give no actionable lever or "why"
 - The decision pipeline: from causal models to utility-maximizing actions
 - Causal models as the foundation for decision-making
 - Why organizations fail: the cost of ignoring causality in data-driven systems
@@ -53,12 +55,14 @@
 ## 2: Why Good Data Leads to Bad Decisions
 
 ### Topics
-- Statistical significance traps: peeking, multiple comparisons, and novelty effects
+- Statistical significance traps and overfitting: peeking, multiple comparisons, novelty effects, and burning the test set
 - Heterogeneous treatment effects: when average effects mask sub-group reversals
 - Confounding in causal ML: biases when causal assumptions are unmet
+- Selection bias and the missing-counterfactual problem: data reflects only decisions actually made (e.g., approved loans)
 - Feedback loops: how predictions change the world and break model assumptions
+- Strategic and adversarial response: deployed models get gamed (credit gaming, SEO), violating passive-agent assumptions
 - Distribution shift and causal assumptions under intervention
-- Decision readiness: knowing when causal claims are safe to act on
+- Decision readiness under uncertainty: knowing when causal claims are safe to act on, especially in small-data regimes
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -89,11 +93,13 @@
 ## 3: Problem Framing and Intervention Design
 
 ### Topics
-- From KPI selection to causal objectives and utilities
+- From KPI selection to causal objectives and utilities: avoiding Goodhart's law when a proxy becomes the target
+- Cost-asymmetry in decisions: why symmetric losses (log-loss, MSE) misprice asymmetric business errors
 - Building causal DAGs: variable identification, temporal structure, and domain knowledge
 - Intervention design: choosing levers, targets, scales, and timing
 - Causal variable types: confounders, mediators, colliders, and their adjustment rules
 - Identifiability and causal assumptions: backdoor, frontdoor, and IV conditions
+- End-to-end decision framing vs. splitting into individually-solved sub-problems
 - Data collection strategy aligned with causal identification requirements
 
 ### Lessons

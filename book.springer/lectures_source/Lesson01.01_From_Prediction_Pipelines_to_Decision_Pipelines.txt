@@ -19,6 +19,9 @@
 
 ## The Problem with Predictions in Business Decisions
 
+// TODO(ai_gp): Add a hint of a solution using causal and probabilistic
+// machine learning
+
 * Limitations of Traditional Machine Learning in Business Setups
 
 - **Traditional ML relies on correlation**: it learns $\Pr(Y | X)$ from
@@ -44,6 +47,48 @@
 
 - **Lack of assessing uncertainty**
   - Most problems are "small data" problems
+
+* Limitations of Traditional Machine Learning in Business Setups (cont.)
+
+- **Optimizes the wrong objective**
+  - Models chase a proxy metric (clicks, accuracy) instead of the actual
+    business goal (revenue, retention, wellbeing)
+  - _Goodhart's Law_: once a proxy becomes a target, it stops measuring what you
+    care about
+
+- **Selection bias baked into the training data**
+  - Historical data only reflects decisions actually made — loan data shows
+    outcomes for approved applicants, never rejected ones
+  - A missing-counterfactual problem present _before_ modeling starts, distinct
+    from confounding
+
+- **Simpson's paradox as a concrete failure mode**
+  - Aggregate trends can reverse when split by subgroup (or vice versa)
+  - A model can look correct overall yet be wrong — or harmful — for every
+    segment
+
+- **No native cost-asymmetry handling**
+  - Standard losses (log-loss, MSE) treat errors symmetrically
+  - Business errors are not: a fraud false negative costs differently than a
+    false positive; requires cost matrices bolted on after the fact
+
+- **Strategic / adversarial response unmodeled**
+  - Once deployed, people optimize against the model (credit gaming, SEO, resume
+    keyword-stuffing)
+  - Traditional ML assumes passive agents; in business, they are not
+
+- **Black-box outputs aren't actionable or auditable**
+  - A prediction is not a recommendation — it says no _why_, no lever to pull
+  - Credit, hiring, healthcare increasingly require explanations, not just scores
+
+- **Lack of end-to-end learning**
+  - Problems are split into smaller problems and solved individually
+  - Learning end-to-end has shown to 
+
+- **Overfitting**
+  - Statistical significance traps: peeking, multiple comparisons, and novelty effects
+  - Not only in one single run, but from buring the "test set"
+  - Lack of assumptions doesn't limit the fit (prior)
 
 * What Prediction Tells You
 
@@ -656,7 +701,7 @@ digraph DecisionLoop {
   - Can extrapolate to new contexts better
   - Mechanisms are often invariant; correlations are not
 
-* Why Causal AI Matters: Summary
+* Summary
 
 - **Prediction is not enough**
   - Correlation-based models cannot answer _what if_ questions
