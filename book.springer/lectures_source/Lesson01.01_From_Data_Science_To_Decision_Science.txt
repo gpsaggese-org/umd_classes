@@ -1,35 +1,42 @@
 # 1. From Data Science to Decision Science
 
+## Course Roadmap
+
 * The Path Towards Decision Science
-- The book is organized 
-  - data → causal and probabilistic model → policy → action → feedback
 
-- The book walks this end-to-end across five parts:
+- **Key idea**: the book walks one pipeline end-to-end, from data to action
+  - $data \to model \to policy \to action \to feedback$
+  - The model is both causal and probabilistic
 
-- Part I: Why Businesses Need Decisions, not Predictions
+- **Part I**: Why Businesses Need Decisions, not Predictions
   - The limitations and costs of current machine learning
 
-- Part II: Advanced Tools & Theory: the advanced probabilistic and causal
-  foundations required to model real systems, including Gaussian processes,
-  variational inference, normalizing flows, and modern causal discovery
+- **Part II**: Advanced Tools & Theory
+  - The advanced probabilistic and causal foundations required to model real
+    systems, including Gaussian processes, variational inference, normalizing
+    flows, and modern causal discovery
 
-- Part III: Single-Step Decisions: single-step decisions, covering decision
-  theory, policy learning, partial identification, and agentic causal reasoning
+- **Part III**: Single-Step Decisions
+  - Decision theory, policy learning, partial identification, and agentic causal
+    reasoning
 
-- Part IV: Multi-Step & Dynamic Decisions: multi-step and dynamic decisions,
-  covering causal world models, causal reinforcement learning, forecasting under
-  intervention, and feedback loops
+- **Part IV**: Multi-Step & Dynamic Decisions
+  - Causal world models, causal reinforcement learning, forecasting under
+    intervention, and feedback loops
 
-- Part V: Implementation: the implementation concerns of deploying, monitoring,
-  communicating, and governing decision systems in production
+- **Part V**: Implementation
+  - Deploying, monitoring, communicating, and governing decision systems in
+    production
 
 * Limitations of Traditional ML in Business
+
+- **Key idea**: traditional ML ignores four things that decisions require
 
 1. Ignoring causality
    - Modeling correlation, not mechanisms
 
 2. Ignoring uncertainty
-   - No uncertainty quantification (especially on "small data" problem)
+   - No uncertainty quantification
 
 3. Ignoring the business objective
    - A prediction is not a decision
@@ -37,7 +44,9 @@
 4. Ignoring dynamics
    - The world isn't static or passive, but it reacts
 
-* The Cost of Ignoring Causality
+## The Four Costs
+
+* The Cost of Ignoring Causality (1/2)
 
 - **Traditional ML relies on correlation**: it learns $\Pr(Y | X)$ from
   historical data
@@ -54,16 +63,18 @@
   - Cannot answer _"if we change $X$, what happens to $Y$?"_
   - Cannot reason about _"what would have happened otherwise?"_
 
-- **Interference / spillovers (SUTVA violation)**
-  - One unit's action changes another's outcome — marketplaces, pricing
-    equilibria, social networks
-  - Pervasive in business, yet standard ML assumes units are independent
-
 - **Selection bias baked into the training data**
   - Historical data only reflects decisions actually made — loan data shows
     outcomes for approved applicants, never rejected ones
   - A missing-counterfactual problem present _before_ modeling starts, distinct
     from confounding
+
+* The Cost of Ignoring Causality (2/2)
+
+- **Interference / spillovers (SUTVA violation)**
+  - One unit's action changes another's outcome — marketplaces, pricing
+    equilibria, social networks
+  - Pervasive in business, yet standard ML assumes units are independent
 
 - **Simpson's paradox as a concrete failure mode**
   - Aggregate trends can reverse when split by subgroup (or vice versa)
@@ -80,8 +91,8 @@
 
 * The Cost of Ignoring Uncertainty
 
-- **Lack of assessing uncertainty**
-  - Most problems are "small data" problems
+- **Point estimates only**
+  - No error bars or posterior; most problems are "small data" problems
 
 - **Epistemic vs. aleatoric uncertainty conflated**
   - No "known-unknowns": the model cannot flag what it has not seen
@@ -93,7 +104,7 @@
 - **Overfitting**
   - Statistical significance traps: peeking, multiple comparisons, and novelty effects
   - Not only in one single run, but from burning the "test set"
-  - Lack of assumptions doesn't limit the fit (prior)
+  - No prior or assumptions to constrain the fit $\to$ nothing bounds overfitting
 
 * The Cost of Ignoring the Business Objective
 
