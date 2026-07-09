@@ -2,7 +2,7 @@
 
 * The Path Towards Decision Science
 - The book is organized 
-  - data → causal model → effect estimation → policy → action → feedback
+  - data → causal and probabilistic model → policy → action → feedback
 
 - The book walks this end-to-end across five parts:
 

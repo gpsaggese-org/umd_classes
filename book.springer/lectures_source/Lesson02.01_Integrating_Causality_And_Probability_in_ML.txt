@@ -63,3 +63,50 @@
 - **Decision readiness under uncertainty**: knowing when causal claims are safe to
   act on
 
+// ### Lessons
+// - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+//   correlation ≠ causation; ladder of causation; prediction → decision;
+//   feedback loops; distribution shift; cost of ignoring causality
+// - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+//   prediction vs decision; Simpson's paradox / policy reversal; aleatoric vs
+//   epistemic uncertainty
+// - `msml610/lectures_source/Lesson08.4.txt`
+//   potential outcomes; SUTVA / interference; selection bias; collider;
+//   confounding bias; CATE / heterogeneous effects
+// - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+//   building causal DAGs; variable types (confounder / mediator / collider);
+//   collider bias; SCM
+// - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
+//   interventions; counterfactuals; back-door / front-door adjustment;
+//   do-calculus (identifiability)
+// - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
+//   significance traps (peeking, multiple comparisons, SRM); SUTVA / interference
+// - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
+//   data snooping; burning the test set; sampling bias
+// - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
+//   variational inference; normalizing flows; Bayesian NNs; calibration;
+//   conformal prediction
+//
+// ### Related books
+// - [B002] Pearl et al., "The Book of Why", 2018
+// - [B001] Agrawal et al., "Prediction Machines", 2018
+// - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
+// - [B050] Hernán & Robins, "Causal Inference: What If", 2020
+// - [B042] Pearl et al., "Causal Inference in Statistics: A Primer", 2016
+// - [B008] Peters et al., "Elements of Causal Inference", 2017
+// - [B003] Huyen, "Designing Machine Learning Systems", 2022
+// - [B048] Bishop, "Pattern Recognition and Machine Learning", 2006
+//
+// ### Related papers
+// - [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
+//   Machine Learning", 2021
+//   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
+// - [P007] Zhang et al., "A Survey on Causal Inference", 2020
+//   https://arxiv.org/pdf/2002.05209.pdf
+// - [P063] Rubin, "Estimating Causal Effects of Treatments in Randomized and
+//   Nonrandomized Studies", 1974 https://doi.org/10.1037/h0037350
+// - [P069] Lakshminarayanan et al., "Simple and Scalable Predictive Uncertainty
+//   Estimation Using Deep Ensembles", 2017 https://arxiv.org/abs/1706.04599
+
