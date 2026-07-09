@@ -1,0 +1,65 @@
+# Integrating Causality and Uncertainty in Machine Learning
+
+### The Problem
+- **Prediction vs. decision are different mathematical problems**:
+  - Traditional ML learns $\Pr(Y | X)$ to answer _"what will happen?"_
+  - It is optimized for predictive accuracy, not for _"what should we do?"_ and
+    decision quality
+- **Correlation encodes confounding as causation**:
+  - A hidden common cause makes $X$ and $Y$ correlate spuriously
+  - $\Pr(Y | X) \neq \Pr(Y | do(X))$, so acting on correlations backfires
+- **No interventions or counterfactuals**: correlation models cannot answer
+  - _"if we change $X$, what happens to $Y$?"_
+  - _"what would have happened otherwise?"_
+- **Selection bias and the missing-counterfactual problem**:
+  - Data reflects only decisions actually made — approved loans, never rejected
+    ones
+  - A problem present _before_ modeling starts, distinct from confounding
+- **Simpson's paradox and policy reversals**:
+  - Aggregate trends reverse by subgroup
+  - A model correct overall can be wrong — or harmful — for every segment
+- **Heterogeneous treatment effects**: average effects mask sub-group reversals
+- **Interference / spillovers (SUTVA violation)**:
+  - One unit's action changes another's outcome — marketplaces, pricing
+    equilibria, social networks
+  - Standard ML assumes independent units; business rarely obliges
+- **Collider bias / Berkson's paradox**: conditioning on a common effect induces
+  a spurious association — a concrete failure mode alongside Simpson's
+- **Ignoring domain knowledge / mechanism**: pure ML discards known structure,
+  with no principled way to inject constraints or priors
+
+### Toward a Solution (Causal Modeling)
+- **The ladder of causation**: observation, intervention, and counterfactual
+  reasoning as distinct rungs
+- **Building causal DAGs**: variable identification, temporal structure, and
+  domain knowledge
+- **Causal variable types**: confounders, mediators, colliders, and their
+  adjustment rules
+- **Identifiability and causal assumptions**: backdoor, frontdoor, and
+  instrumental-variable conditions
+- **Intervention design**: choosing levers, targets, scales, and timing
+- **Data collection strategy** aligned with causal identification requirements
+- **Assumptions are not free**: causal estimates are biased when identification
+  assumptions (ignorability, positivity) are unmet
+- **Causal models as the foundation** for utility-maximizing decisions
+
+### The Problem
+- **No uncertainty quantification**: most problems are "small data" problems, yet
+  models emit point estimates as if they were certain
+- **Overfitting and statistical significance traps**:
+  - Peeking, multiple comparisons, and novelty effects
+  - Not only in a single run, but from burning the test set
+  - Without assumptions (priors), nothing limits the fit
+- **Epistemic vs. aleatoric uncertainty conflated**: no "known-unknowns", so the
+  model is confidently wrong off-distribution — exactly where decisions bite
+- **No abstention or deferral**: cannot say _"I don't know"_ and route the case
+  to a human
+
+### Toward a Solution (Probabilistic ML)
+- **Posteriors over effects, not point estimates**: priors encode assumptions and
+  regularize the "small data" regime
+- **Probabilistic toolkit** (developed in Part II): Gaussian processes,
+  variational inference, and normalizing flows
+- **Decision readiness under uncertainty**: knowing when causal claims are safe to
+  act on
+

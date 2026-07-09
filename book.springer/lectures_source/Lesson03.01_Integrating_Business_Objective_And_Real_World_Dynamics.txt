@@ -1,0 +1,55 @@
+# 3: Integrating Business Objective and Real-World Dynamics in ML
+
+### The Problem
+- **Optimizes the wrong objective**:
+  - Models chase a proxy (clicks, accuracy) instead of the business goal
+    (revenue, retention, wellbeing)
+  - _Goodhart's law_: once a proxy becomes the target, it stops measuring what
+    you care about
+- **No native cost-asymmetry handling**:
+  - Symmetric losses (log-loss, MSE) misprice asymmetric business errors
+  - A fraud false negative costs differently than a false positive
+- **Predictions are not recommendations**:
+  - Black-box scores give no actionable lever and no _"why"_
+  - Credit, hiring, and healthcare increasingly require explanations, not just
+    scores
+- **No end-to-end learning**: splitting a problem into individually-solved
+  sub-problems loses the joint objective
+- **Multi-objective decisions under constraints**: real decisions trade off
+  competing goals under budget, capacity, and legal limits — not one scalar loss
+
+### Toward a Solution (Decision Theory)
+- **From KPIs to causal objectives and utilities**: optimize the decision, not a
+  proxy metric
+- **Cost matrices and asymmetric loss**: price business errors explicitly instead
+  of bolting fixes on after the fact
+- **The decision pipeline**: data → causal model → effect estimation → policy →
+  action → feedback
+- **End-to-end, decision-focused learning**: optimize the whole pipeline for
+  decision quality
+
+### The Problem
+- **Assumes a static world**:
+  - Any decision changes the world and breaks the training distribution
+  - Concept, covariate, and label shift degrade accuracy over time
+- **Feedback loops**: predictions act on the world and reshape future data,
+  amplifying bias (echo chambers, over-policing)
+- **Strategic and adversarial response**:
+  - Deployed models get gamed (credit gaming, SEO, resume keyword-stuffing)
+  - This violates the passive-agent assumption
+- **Performativity**: the prediction changes the very quantity it predicts — a
+  sharper, named form of feedback loops
+- **No exploration (observational-only)**:
+  - The model never experiments; it is trapped in the support of the logged
+    policy
+  - Cannot learn the effect of never-taken actions (an overlap / positivity
+    violation)
+- **Delayed and long-horizon effects**: optimizes an immediate proxy, ignoring
+  downstream outcomes and credit assignment over time (short-termism, surrogate
+  outcomes)
+
+### Toward a Solution (Dynamic Causal ML)
+- **Model the world's response** (developed in Part IV): causal world models,
+  causal reinforcement learning, and forecasting under intervention
+- **Feedback-aware design**: anticipate distribution shift and bias amplification
+  before deployment

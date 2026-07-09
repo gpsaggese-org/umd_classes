@@ -11,8 +11,9 @@
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
-## From Predictions to Decisions
+## 1. From Data Science to Decision Science
 
+* The Path Towards Decision Science
 - The book is organized 
   - data → causal model → effect estimation → policy → action → feedback
 
@@ -35,10 +36,6 @@
 - Part V: Implementation: the implementation concerns of deploying, monitoring,
   communicating, and governing decision systems in production
 
-// TODO(ai_gp): Add a hint of a solution using causal and probabilistic
-// machine learning
-// From Data Science vs. Decision Science
-
 * Limitations of Traditional ML in Business
 
 1. Ignoring causality
@@ -58,6 +55,8 @@
 - **Traditional ML relies on correlation**: it learns $\Pr(Y | X)$ from
   historical data
   - Answers _"what will happen?"_, not _"what should we do?"_
+  - Assumes the world will not change (including and especially because of the
+    actions that are informed by the predictions), but this is never true
   - Optimized for predictive accuracy, not decision quality
 
 - **Confounding is encoded as causation**
@@ -133,7 +132,8 @@
 
 - **Lack of end-to-end learning**
   - Problems are split into smaller problems and solved individually
-  - Learning end-to-end has shown to
+  - Learning end-to-end has been shown to outperform stitching together
+    separately-optimized parts (decision-focused learning)
 
 * The Cost of Ignoring Dynamics and Feedback
 
@@ -164,7 +164,7 @@
     keyword-stuffing)
   - Traditional ML assumes passive agents; in business, they are not
 
-## 1: Ignoring Causality and Uncertainty
+## 2: The Costs of Ignoring Causality and Uncertainty
 
 ### The Problem
 - **Prediction vs. decision are different mathematical problems**:
@@ -229,7 +229,7 @@
 - **Decision readiness under uncertainty**: knowing when causal claims are safe to
   act on
 
-## 3: Ignoring the Business Objective and Real-World Dynamics
+## 3: The Costs of Ignoring Business Objective and Real-World Dynamics
 
 ### The Problem
 - **Optimizes the wrong objective**:
