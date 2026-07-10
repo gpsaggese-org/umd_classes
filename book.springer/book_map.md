@@ -709,11 +709,16 @@
 - [P099] Liu et al., "Performative Prediction", 2021
   https://arxiv.org/abs/2007.02153
 
-# Part V: Implementation (Deployment, Monitoring, Communication)
+# Part V: Implementation, Deployment, Governance
 
 ## 15: Building Stakeholder Alignment
 
 ### Topics
+- Eliciting causal knowledge from domain experts during DAG construction: structured
+  elicitation methods, disagreement resolution, and iterative refinement of causal
+  structures before model building
+- Stakeholder feedback loops during model development: reviewing intermediate
+  results, sensitivity analyses, and refining assumptions based on expert critique
 - Communicating causal assumptions to different audiences: domain experts,
   operations teams, business leadership
 - Causal DAG visualization and debate: handling disagreement on causal structures
@@ -770,14 +775,21 @@
 - Cost-aware deployment strategies: phased rollout, shadow mode, and canary
   analysis tailored to decision cost asymmetry
 - Operationalizing causal assumption monitoring: testable vs. untestable
-  assumptions, failure detection
+  assumptions, failure detection, and implementation strategies
   - **Directly testable assumptions**: temporal stability of effects, proxy
-    variable validity, treatment effect heterogeneity stability
+    variable validity, treatment effect heterogeneity stability; monitoring via
+    time-series trend detection, proxy correlation drift, stratified effect
+    estimates in real-time dashboards
   - **Indirectly testable assumptions**: robustness bounds via sensitivity
-    analysis, negative controls, instrumental variable diagnostics
+    analysis, negative controls, instrumental variable diagnostics; pre-compute
+    E-value bounds and flag when observational data approaches these thresholds
   - **Domain-assessed assumptions**: causal graph structure, sufficiency of
-    confounding set (requires expert re-assessment)
+    confounding set (requires periodic expert re-assessment; schedule quarterly
+    or post-deployment reviews)
   - Concrete monitoring dashboards: metrics that flag assumption breakdown
+    (e.g., alert when treatment effect heterogeneity variance exceeds baseline,
+    when proxy validity correlation drops below threshold, when negative control
+    estimates diverge from zero)
 - A/B testing vs. causal inference in production: when to run experiments vs rely
   on observational causal models
 - Continuous experimentation and policy improvement: sequential testing,
@@ -848,16 +860,23 @@
   in causal decisions
 - Causal vs. statistical explainability: distinguishing mechanisms (do-calculus,
   SCM) from attribution (SHAP, LIME, permutation importance)
-  - Causal explainability answers: "Why did we intervene?" (via causal mechanisms
-    and counterfactuals)
-  - Statistical explainability answers: "What features correlated with this
-    decision?" (can be misleading if features are confounders, not levers)
-  - Operational risk: high statistical importance + low causal relevance, or vice
-    versa
+  - Causal explainability tools and answers: "Why did we intervene?" via causal
+    mechanisms (backdoor/frontdoor adjustment paths), mediation analysis (direct
+    vs. indirect effects), counterfactual reasoning (what if we had intervened
+    differently?), and SCM-based decision explanations
+  - Statistical explainability tools and answers: "What features correlated with
+    this decision?" (SHAP, LIME, permutation importance); risk: features may be
+    confounders or colliders, not causal levers; can mislead stakeholders about
+    what they can actually change
+  - Operational risk: high statistical importance + low causal relevance (e.g.,
+    a confounding variable ranked high by SHAP but not actionable), or vice versa
 - Operationalizing causal explainability in production: decision explanations at
   serve-time, contrast with feature importance
-- Identifying failure modes: when decisions fail and why (model misspecification,
-  distribution shift, assumption breakdown, feedback loops)
+- Identifying failure modes in production: when decisions fail and why at runtime
+  (model misspecification becoming evident, distribution shift, causal assumption
+  breakdown, unexpected feedback loops); differs from Ch16 assumption monitoring
+  in scope (early detection vs. post-facto diagnosis) and remediation (emergency
+  rollback vs. controlled re-calibration)
 - Fairness under deployment: preventing disparate impact, fairness monitoring
   across subgroups, heterogeneous decision effects
 - Override procedures and human-in-the-loop: escalation mechanisms, decision
@@ -866,8 +885,11 @@
   and remediation
 - Decision governance and audit trails: who approved what, when assumptions
   broke, what was the impact, and institutional accountability
-- Regulatory alignment: GDPR right-to-explanation, fairness certifications, ML
-  Act compliance, and documentation requirements
+- Regulatory and compliance alignment: overview of regulatory landscape (GDPR,
+  EU AI Act, fairness certifications) and engineer accountability; focus on
+  documentation requirements (causal assumptions, deployment decisions, override
+  logs), audit trails for decisions, and when to involve compliance/legal teams
+  rather than deep regulatory expertise
 - Guardrails and safety constraints: preventing harmful behaviors, maintaining
   causal assumptions, and safeguarding against edge cases
 
