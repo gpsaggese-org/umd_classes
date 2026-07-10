@@ -38,14 +38,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [FULL] — Ladder of Causation; Data Science → Decision Science; Causal vs
+  - [85%] — Ladder of Causation; Data Science → Decision Science; Causal vs
     Predictive Questions; Roadmap Prediction→Decision; Data Analytics
     Sophistication (maturity model); Why AI Projects Fail
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [PART] — From Predictions to Decisions; Prediction vs Decision Side-by-Side;
+  - [40%] — From Predictions to Decisions; Prediction vs Decision Side-by-Side;
     Simpson's Paradox (+Causal Resolution); Policy Reversal
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [PART] — Example of ladder of causation (Tornado Warning)
+  - [5%] — Example of ladder of causation (Tornado Warning)
 
 ### Tutorials
 
@@ -86,14 +86,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [PART] — Effect heterogeneity; CATE; Why Prediction Is Not the Answer
+  - [50%] — Effect heterogeneity; CATE; Why Prediction Is Not the Answer
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Problem 2 Decision Making; Problem 5 Feedback Loops; Problem 6 Distribution Shift; Cost of Ignoring Causality
+  - [45%] — Problem 2 Decision Making; Problem 5 Feedback Loops; Problem 6 Distribution Shift; Cost of Ignoring Causality
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [PART] — Peeking/Multiple Comparisons; SRM; Novelty/Primacy (significance traps)
+  - [40%] — Peeking/Multiple Comparisons; SRM; Novelty/Primacy (significance traps)
 - `msml610/lectures_source/Lesson91.Refresher_probability.txt`
-  - [WEAK] — p-hacking; multiple hypothesis testing; FDR
-- No slide for "Decision Readiness Scorecard"
+  - [15%] — p-hacking; multiple hypothesis testing; FDR
+- Gap: Selection bias detail; missing-counterfactual problem; strategic/adversarial gaming; decision-readiness scorecard
 
 ### Tutorials
 
@@ -128,12 +128,13 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Causal AI Workflow Steps 1–7 (Intended Outcomes → Interventions →
+  - [60%] — Causal AI Workflow Steps 1–7 (Intended Outcomes → Interventions →
     Factors → Build DAG → Data Acquisition → Model Modification → Deployment);
     Marketing Example: Price Intervention
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [PART] — Decision Framework: Experiment or Observe?; Feasibility Constraints
-- No slide for "Causal Project Checklist"
+  - [30%] — Decision Framework: Experiment or Observe?; Feasibility Constraints
+- Gap: Identifiability formal conditions (backdoor/frontdoor/IV); cost-asymmetry pricing; data collection strategy alignment
+- Missing: Causal Project Checklist
 
 ### Tutorials
 
@@ -168,14 +169,15 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [PART] — Building a Causal DAG; variable types
+  - [70%] — Building a Causal DAG; variable types
     (mediator/moderator/confounder/collider); temporal structure
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [PART] — Using Domain Knowledge as Constraints; Combining Discovery with
+  - [40%] — Using Domain Knowledge as Constraints; Combining Discovery with
     Expert Judgment
 - `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
-  - [WEAK] — symbolic KR (ontologies, FOL, knowledge graphs); thin overlap — book
+  - [5%] — symbolic KR (ontologies, FOL, knowledge graphs); thin overlap — book
     Ch4 = decision scoping, not symbolic logic
+- Gap: Structural equations/mechanisms; DAGs vs Bayesian networks distinction; measurement validity; SCM formalism
 
 ### Tutorials
 
@@ -198,12 +200,12 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
-  - [FULL] — VAEs; Normalizing Flows; Bayesian NNs; VI/SVI; MCMC; Calibration;
+  - [95%] — VAEs; Normalizing Flows; Bayesian NNs; VI/SVI; MCMC; Calibration;
     Conformal Prediction; Neural Processes; Deep Latent Variable Models
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
-  - [PART] — PPLs, Bayesian models (Pyro/PyMC/Stan)
+  - [35%] — PPLs, Bayesian models (Pyro/PyMC/Stan)
 - `msml610/lectures_source/Lesson96.Refresher_stochastic_processes.txt`
-  - [WEAK] — Gaussian Processes (one slide)
+  - [10%] — Gaussian Processes (one slide)
 - Gap: amortized VI; neural posterior estimation / simulation-based inference
 
 ### Tutorials
@@ -246,17 +248,17 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [FULL] — algorithm families (constraint/PC-FCI, score/GES,
+  - [75%] — algorithm families (constraint/PC-FCI, score/GES,
     functional/LiNGAM-ANM); Markov equivalence; identifiability; faithfulness;
     refutation
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [PART] — do-calculus rules; back/front-door adjustment
+  - [25%] — do-calculus rules; back/front-door adjustment
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [PART] — SCM; causal DAGs (basics)
+  - [15%] — SCM; causal DAGs (basics)
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
-  - [PART] — Causal Deep Learning (representation learning)
+  - [20%] — Causal Deep Learning (representation learning)
 - Gap: latent confounders/proxy/negative controls; E-values/sharp-bounds
-  sensitivity
+  sensitivity analysis depth
 
 ### Tutorials
 
@@ -297,12 +299,13 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [FULL] — Utility Functions; Expected Utility Principle
+  - [90%] — Utility Functions; Expected Utility Principle
     (+insurance/two-treatment examples); Decision Networks (=influence diagrams);
     Solving a Decision Network; Risk Preferences; Aleatoric vs Epistemic
     Uncertainty
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-  - [PART] — MEU; Dynamic Decision Networks
+  - [25%] — MEU; Dynamic Decision Networks
+- Gap: von Neumann-Morgenstern axioms explicit formulation; multi-criteria/Pareto optimality; deep elicitation methods
 
 ### Tutorials
 
@@ -335,14 +338,15 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [FULL] — Bayesian Decision-Making; Value of Information (EVPI/EVSI); Bayesian
+  - [95%] — Bayesian Decision-Making; Value of Information (EVPI/EVSI); Bayesian
     Optimization for Experimentation; Acquisition Functions; Causal Bayesian
     Optimization; Exploration vs Exploitation; Causal Multi-Armed Bandits;
     Counterfactual decisions
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
-  - [PART] — Thompson Sampling; Bayesian Bandits; UCB
+  - [40%] — Thompson Sampling; Bayesian Bandits; UCB
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
-  - [PART] — posterior-based decisions; loss functions
+  - [30%] — posterior-based decisions; loss functions
+- Gap: Robustness under model misspecification; explicit causal-effect-to-utility pathway
 
 ### Tutorials
 
@@ -377,14 +381,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [FULL] — Metalearners T/S/X/R-Learner; R-learner (Double/Debiased ML);
+  - [85%] — Metalearners T/S/X/R-Learner; R-learner (Double/Debiased ML);
     Double-ML for CATE; Effect heterogeneity; CATE evaluation; Cumulative
     Gain/AUC
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [PART] — Policy Evaluation and Off-Policy Learning
+  - [40%] — Policy Evaluation and Off-Policy Learning
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-  - [WEAK] — off-policy / deconfounding
-- Gap: quantile/distributional treatment effects; safe policy improvement
+  - [20%] — off-policy / deconfounding
+- Gap: distributional/quantile effects; safe policy improvement with finite-sample guarantees; deep off-policy optimization
 
 ### Tutorials
 
@@ -422,12 +426,12 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [PART] — Positivity; IPW Sensitivity; Positivity-Bias Trade-Off; Non-compliance and instruments
+  - [50%] — Positivity; IPW Sensitivity; Positivity-Bias Trade-Off; Non-compliance and instruments
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [PART] — Instrumental Variables (IV)
+  - [30%] — Instrumental Variables (IV)
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-  - [WEAK] — Causal Generalization Across Environments
-- Gap: Manski/Rosenbaum bounds; E-values; minimax/distributional robustness
+  - [15%] — Causal Generalization Across Environments
+- Gap: Manski bounds; Rosenbaum bounds; E-values; distributional robustness/minimax; domain adaptation depth; partial identification theory
 
 ### Tutorials
 
@@ -465,18 +469,19 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
-  - [FULL] — LLM causal limits; pattern vs causal reasoning; CoT causal
+  - [90%] — LLM causal limits; pattern vs causal reasoning; CoT causal
     prompting; integrating causal+probabilistic; causal agent architectures;
     causal MDPs; Trustworthy AI (transparency/robustness/fairness/safety);
     guardrails
 - `msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt`
-  - [PART] — Chain-of-Thought and variants
+  - [30%] — Chain-of-Thought and variants
 - `msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt`
-  - [PART] — agents, tools, perceive-plan-act loop
+  - [25%] — agents, tools, perceive-plan-act loop
 - `msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt`
-  - [PART] — world models for planning
+  - [35%] — world models for planning
 - `msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt`
-  - [PART] — tool use, retrieval/grounding
+  - [30%] — tool use, retrieval/grounding
+- Gap: Deep integration of SCMs in agent loops; causal simulation for planning; tool-use calibration under causality; stronger guardrail frameworks
 
 ### Tutorials
 
@@ -585,13 +590,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-  - [FULL] — MDPs/POMDPs; utilities/discount; value & policy iteration;
+  - [90%] — MDPs/POMDPs; utilities/discount; value & policy iteration;
     model-based/free RL; Causal RL; SCMs for MDPs; Counterfactual credit
     assignment; Deconfounding off-policy; Causal Generalization
 - `msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt`
-  - [PART] — World Models (WebDreamer)
+  - [30%] — World Models (WebDreamer)
 - `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`
-  - [PART] — POMDP-adjacent state estimation
+  - [20%] — POMDP-adjacent state estimation
+- Gap: Detailed POMDP algorithms; counterfactual rollout mechanics; off-policy evaluation proofs; environment generalization mechanisms
 
 ### Tutorials
 
@@ -635,12 +641,13 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [FULL] — forecasting breaks under intervention; Granger; ITS; DiD; Synthetic
+  - [85%] — forecasting breaks under intervention; Granger; ITS; DiD; Synthetic
     Control; Structural VARs; when temporal structure misleads
 - `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`
-  - [PART] — Bayesian Time Series Models; Markov-Switching (regime shifts); State Space Models
+  - [35%] — Bayesian Time Series Models; Markov-Switching (regime shifts); State Space Models
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [PART] — Synthetic control; Difference-in-differences
+  - [20%] — Synthetic control; Difference-in-differences
+- Gap: Structural time series with causal priors detail; online learning/adaptation algorithms; nonstationarity handling depth
 
 ### Tutorials
 
@@ -681,14 +688,14 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Feedback Loops (Problem 5); Distribution Shift
+  - [45%] — Feedback Loops (Problem 5); Distribution Shift
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
-  - [PART] — Non-Stationary Bandits; Contextual Bandits
+  - [55%] — Non-Stationary Bandits; Contextual Bandits
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [PART] — Causal Multi-Armed Bandits
+  - [30%] — Causal Multi-Armed Bandits
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [WEAK] — When Discovery Should Change Your DAG (online adaptation)
-- Gap: performativity/Goodhart; dynamic treatment regimes
+  - [10%] — When Discovery Should Change Your DAG (online adaptation)
+- Gap: Performativity/Goodhart's law formalization; online causal discovery algorithms; dynamic treatment regimes (DTRs); adaptive experiments (SMART trials); structural adaptation mechanisms
 
 ### Tutorials
 
@@ -736,15 +743,17 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [PART] — Communicating Uncertainty to Stakeholders (+Worked Example);
+  - [40%] — Communicating Uncertainty to Stakeholders (+Worked Example);
     Multi-Criteria Trade-offs; Visualizing Risk Aversion
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Roles in Hybrid Teams; Executing a Hybrid Team Project; Causal AI
+  - [45%] — Roles in Hybrid Teams; Executing a Hybrid Team Project; Causal AI
     Workflow (domain knowledge elicitation)
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [PART] — Visual DAG explanation, confounding intuition
+  - [25%] — Visual DAG explanation, confounding intuition
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [PART] — Using Domain Knowledge as Constraints; Combining Discovery with Expert Judgment
+  - [25%] — Using Domain Knowledge as Constraints; Combining Discovery with Expert Judgment
+- Gap: Structured elicitation methods (Delphi, SGE); disagreement resolution; sensitivity analysis pedagogy; risk tolerance elicitation; buy-in protocols; intervention justification frameworks
+- Missing: Communication toolkit for different stakeholder personas
 
 ### Tutorials
 
@@ -807,15 +816,17 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [FULL] — A/B testing; continuous experimentation; when to experiment vs
+  - [75%] — A/B testing; continuous experimentation; when to experiment vs
     observe; Feasibility Constraints; sequential decision-making
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Step 7: Preparing for Deployment in Business; Feedback Loops;
+  - [35%] — Step 7: Preparing for Deployment in Business; Feedback Loops;
     Distribution Shift
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [PART] — Effect heterogeneity and subgroup analysis
+  - [25%] — Effect heterogeneity and subgroup analysis
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
-  - [PART] — Exploration vs Exploitation; Sequential Decision-Making
+  - [30%] — Exploration vs Exploitation; Sequential Decision-Making
+- Gap: Assumption monitoring operationalization (dashboards, metrics); cost-aware rollout strategy depth; model versioning/error budgets; technical debt frameworks; production monitoring architecture; failure detection systems
+- Missing: Concrete monitoring dashboard specs; rollback decision protocols
 
 ### Tutorials
 
@@ -897,13 +908,15 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
-  - [FULL] — SHAP; LIME; permutation importance; counterfactual explanations; Causal AI and Explainability; Quality/Faithfulness/Stability of Explanations
+  - [80%] — SHAP; LIME; permutation importance; counterfactual explanations; Causal AI and Explainability; Quality/Faithfulness/Stability of Explanations
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
-  - [FULL] — Trustworthy AI Through Causality; Transparency/Robustness/Fairness/Safety; guardrails; human oversight; causal guardrails
+  - [75%] — Trustworthy AI Through Causality; Transparency/Robustness/Fairness/Safety; guardrails; human oversight; causal guardrails
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Importance of Explainability; Approaches to Explainability; Why Organizations Fail
+  - [25%] — Importance of Explainability; Approaches to Explainability; Why Organizations Fail
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [PART] — Effect heterogeneity and fairness implications
+  - [20%] — Effect heterogeneity and fairness implications
+- Gap: Operational causal explainability (serve-time implementations); deep fairness monitoring systems; regulatory compliance architecture; governance frameworks; override protocols; root-cause analysis for failures; audit trail design
+- Missing: Governance/compliance depth; regulatory landscape specifics; failure-response playbooks
 
 ### Tutorials
 
