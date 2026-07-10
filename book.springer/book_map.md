@@ -711,23 +711,35 @@
 
 # Part V: Implementation (Deployment, Monitoring, Communication)
 
-## 15: Communicating Decisions to Executives
+## 15: Building Stakeholder Alignment
 
 ### Topics
-- Translating causal estimates to actionable recommendations
-- Visualizing uncertainty: trade-offs, distributions, and risk profiles
-- Communicating assumptions: identifying and challenging causal beliefs
-- Narrative structure for decisions: framing findings and implications for stakeholders
-- Multi-stakeholder trade-offs: value functions across objectives and groups
-- Decision brief templates: reproducible formats for decision documentation
+- Communicating causal assumptions to different audiences: domain experts,
+  operations teams, business leadership
+- Causal DAG visualization and debate: handling disagreement on causal structures
+  and variable selection
+- Sensitivity analysis as a communication tool: demonstrating robustness to
+  assumption violations
+- Intervention design communication: selecting and justifying decision levers
+  with stakeholders
+- Risk tolerance and decision cost asymmetry: aligning stakeholders on cost of
+  false positives vs false negatives
+- Stakeholder buy-in before deployment: achieving consensus on causal model
+  adequacy and assumptions
+
+### TODO
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
   - [PART] — Communicating Uncertainty to Stakeholders (+Worked Example);
     Multi-Criteria Trade-offs; Visualizing Risk Aversion
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [WEAK] — Roles in Hybrid Teams; Executing a Hybrid Team Project
-- No slide for "Executive decision brief template"
+  - [PART] — Roles in Hybrid Teams; Executing a Hybrid Team Project; Causal AI
+    Workflow (domain knowledge elicitation)
+- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
+  - [PART] — Visual DAG explanation, confounding intuition
+- `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
+  - [PART] — Using Domain Knowledge as Constraints; Combining Discovery with Expert Judgment
 
 ### Tutorials
 
@@ -738,6 +750,7 @@
 - [B068] Cairo, "The Functional Art: An Introduction to Information Graphics and Visualization", 2012
 - [B069] Spiegelhalter et al., "Sex by Numbers: What Statistics Can and Cannot Tell Us About Sexuality", 2016
 - [B070] Few, "Now You See It: Simple Visualization Techniques for Quantitative Analysis", 2009
+- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
 
 ### Related papers
 - [P100] Kahneman & Tversky, "Prospect Theory: An Analysis of Decision under Risk", 1979
@@ -747,24 +760,50 @@
 - [P102] Slovic, "Perception of Risk", 2000
   https://doi.org/10.1126/science.280.5364.1030
 - [P103] Spiegelhalter, "Trust, but Verify: The Role of Uncertainty in Data Visualization", 2019
+- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms", 2023
+  https://www.nature.com/articles/s41598-020-59669-x
 
-## 16: Deployment and the Decision Lifecycle
+## 16: Deployment, Monitoring, and Adaptation
 
 ### Topics
 - From notebook to production: operationalizing causal decision systems
-- Deployment strategies: phased rollout, shadow mode, and canary analysis
-- Monitoring causal assumptions: detecting when the world changes
-- Continuous experimentation and A/B testing: maintaining and improving policies
-- Feedback loops in production: learning from deployed decisions
+- Cost-aware deployment strategies: phased rollout, shadow mode, and canary
+  analysis tailored to decision cost asymmetry
+- Operationalizing causal assumption monitoring: testable vs. untestable
+  assumptions, failure detection
+  - **Directly testable assumptions**: temporal stability of effects, proxy
+    variable validity, treatment effect heterogeneity stability
+  - **Indirectly testable assumptions**: robustness bounds via sensitivity
+    analysis, negative controls, instrumental variable diagnostics
+  - **Domain-assessed assumptions**: causal graph structure, sufficiency of
+    confounding set (requires expert re-assessment)
+  - Concrete monitoring dashboards: metrics that flag assumption breakdown
+- A/B testing vs. causal inference in production: when to run experiments vs rely
+  on observational causal models
+- Continuous experimentation and policy improvement: sequential testing,
+  exploration vs exploitation, incremental policy updates
+- Heterogeneous deployment: adapting rollout to treatment effect variation across
+  subgroups
+- Model versioning, error budgets, and rollback: decision error thresholds and
+  when/how to revert
+- Feedback loops in production: learning from deployed decisions to update causal
+  models iteratively
 - Technical debt and decision system maintenance: keeping systems reliable over
   time
 
+### TODO
+
 ### Lessons
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [PART] — A/B testing; continuous experimentation; when to experiment vs observe
+  - [FULL] — A/B testing; continuous experimentation; when to experiment vs
+    observe; Feasibility Constraints; sequential decision-making
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [WEAK] — Step 7: Preparing for Deployment in Business
-- Gap: rollout/shadow/canary; monitoring causal assumptions
+  - [PART] — Step 7: Preparing for Deployment in Business; Feedback Loops;
+    Distribution Shift
+- `msml610/lectures_source/Lesson08.4.txt`
+  - [PART] — Effect heterogeneity and subgroup analysis
+- `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
+  - [PART] — Exploration vs Exploitation; Sequential Decision-Making
 
 ### Tutorials
 
@@ -773,13 +812,16 @@
 - CausalML (4,800): Uplift modeling and causal inference
 - EconML (4,600): ML-based causal effect estimation
 - Azua (1,400): Causal decision-making framework
-- ALICE (1,000): ML and econometrics integration
+- Evidently (2,500): ML monitoring and data drift detection
+- WhyLabs (—): ML observability and monitoring
+- Feature Store (e.g., Tecton, Feast): managing features for causal models in production
 
 ### Related books
 - [B034] Iansiti et al., "Competing in the Age of AI", 2020
 - [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
 - [B052] Géron, "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", 2022
 - [B071] Reinsel et al., "The Digitization of the World: From Edge to Core", 2018
+- [B003] Huyen, "Designing Machine Learning Systems", 2022
 
 ### Related papers
 - [P104] Amershi et al., "Software Engineering for Machine Learning: A Case Study", 2019
@@ -790,33 +832,62 @@
   https://arxiv.org/abs/1901.09162
 - [P107] Breck et al., "The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction", 2017
   https://arxiv.org/abs/1702.06783
+- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2020
+  https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
+- [P098] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2023
+  https://arxiv.org/abs/2209.03942
+- [P099] Liu et al., "Performative Prediction", 2021
+  https://arxiv.org/abs/2007.02153
+- [P079] Athey & Wager, "Efficient Policy Learning", 2021
+  https://arxiv.org/abs/2011.02038
 
-## 17: Trust, Explainability, and Failure Modes
+## 17: Trust, Explainability, Fairness, and Governance
 
 ### Topics
-- Building trust: transparency, fairness, and justified confidence in decisions
-- Causal explainability: explaining decisions through causal mechanisms, not just
-  feature importance
-- Identifying failure modes: when decisions fail and why (misspecification,
-  distribution shift, etc.)
-- Algorithmic fairness through causality: ensuring decisions don't encode
-  discrimination
-- Guardrails and human-in-the-loop: oversight mechanisms and when to overrule
-  algorithms
-- Governance and accountability: institutional controls and auditing for decision
-  systems
+- Building trust: transparency, stakeholder alignment, and justified confidence
+  in causal decisions
+- Causal vs. statistical explainability: distinguishing mechanisms (do-calculus,
+  SCM) from attribution (SHAP, LIME, permutation importance)
+  - Causal explainability answers: "Why did we intervene?" (via causal mechanisms
+    and counterfactuals)
+  - Statistical explainability answers: "What features correlated with this
+    decision?" (can be misleading if features are confounders, not levers)
+  - Operational risk: high statistical importance + low causal relevance, or vice
+    versa
+- Operationalizing causal explainability in production: decision explanations at
+  serve-time, contrast with feature importance
+- Identifying failure modes: when decisions fail and why (model misspecification,
+  distribution shift, assumption breakdown, feedback loops)
+- Fairness under deployment: preventing disparate impact, fairness monitoring
+  across subgroups, heterogeneous decision effects
+- Override procedures and human-in-the-loop: escalation mechanisms, decision
+  disputes, and when to trust vs. challenge the system
+- Failure mode detection and response: monitoring, alerting, root cause analysis,
+  and remediation
+- Decision governance and audit trails: who approved what, when assumptions
+  broke, what was the impact, and institutional accountability
+- Regulatory alignment: GDPR right-to-explanation, fairness certifications, ML
+  Act compliance, and documentation requirements
+- Guardrails and safety constraints: preventing harmful behaviors, maintaining
+  causal assumptions, and safeguarding against edge cases
+
+### TODO
 
 ### Lessons
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
   - [FULL] — SHAP; LIME; permutation importance; counterfactual explanations; Causal AI and Explainability; Quality/Faithfulness/Stability of Explanations
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
-  - [PART] — Trustworthy AI Through Causality; guardrails; human oversight
+  - [FULL] — Trustworthy AI Through Causality; Transparency/Robustness/Fairness/Safety; guardrails; human oversight; causal guardrails
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Importance of Explainability; Approaches to Explainability
+  - [PART] — Importance of Explainability; Approaches to Explainability; Why Organizations Fail
+- `msml610/lectures_source/Lesson08.4.txt`
+  - [PART] — Effect heterogeneity and fairness implications
 
 ### Tutorials
 
 ### Related packages
+- InterpretML (—): Model agnostic interpretation
+- Alibi Explain (—): Model explanation algorithms
 
 ### Related books
 - [B019] Molnar, "Interpretable Machine Learning", 2022
@@ -824,6 +895,7 @@
   https://fairmlbook.org
 - [B072] Metcalf & Moss, "Owning Ethics: Corporate Logics, Silicon Valley, and the Social Implications of Ethical AI", 2019
 - [B073] Eubanks, "Automating Inequality: How High-Tech Tools Profile, Police, and Punish the Poor", 2018
+- [B036] Christian, "The Alignment Problem", 2020
 
 ### Related papers
 - [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with Contrastive Pertinent Features", 2019
@@ -836,5 +908,21 @@
   https://arxiv.org/abs/1801.09453
 - [P111] Selbst & Barocas, "The Intuitive Appeal of Explainable Machines", 2018
   https://arxiv.org/abs/1805.06959
+- [P047] Lipton, "The Mythos of Model Interpretability", 2018
+  https://arxiv.org/abs/1606.03490
+- [P048] Sundararajan et al., "The many Shapley values for model explanation", 2020
+  https://arxiv.org/abs/1908.08474
+- [P049] Miller, "Explanation in artificial intelligence: Insights from the social sciences", 2019
+  https://arxiv.org/abs/1706.07269
+- [P054] Kusner et al., "Counterfactual Fairness", 2017
+  https://arxiv.org/abs/1705.10264
+- [P055] Zhang et al., "Mitigating Unwanted Biases with Adversarial Learning", 2018
+  https://arxiv.org/abs/1801.07593
+- [P056] Nabi et al., "Fair inference through semiparametric-efficient estimation over constraint-specific paths", 2018
+  https://arxiv.org/abs/1806.09055
+- [P057] Hardt et al., "Equality of Opportunity in Supervised Learning", 2016
+  https://arxiv.org/abs/1610.02413
+- [P058] Amodei et al., "Concrete Problems in AI Safety", 2016
+  https://arxiv.org/abs/1606.06565
 
 # Appendix
