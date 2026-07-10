@@ -39,25 +39,6 @@
 
 ### Tutorials
 
-### Related packages
-- DoWhy (6,600): Causal inference using graphical models
-- PyWhy (2,400): Python ecosystem for causal inference
-- Azua (1,400): Causal decision-making framework
-
-### Related books
-- [B001] Agrawal et al., "Prediction Machines", 2018
-- [B002] Pearl et al., "The Book of Why", 2018
-- [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
-
-### Related papers
-- [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
-  https://bayes.cs.ucla.edu/BOOK-2K
-- [P007] Zhang et al., "A Survey on Causal Inference", 2020
-  https://arxiv.org/pdf/2002.05209.pdf
-- [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
-  Machine Learning", 2021
-  https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
-
 ## 2: Why Good Data Leads to Bad Decisions
 
 ### Topics
@@ -87,19 +68,6 @@
 
 ### Tutorials
 
-### Related packages
-
-### Related books
-- [B003] Huyen, "Designing Machine Learning Systems", 2022
-
-### Related papers
-- [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
-  Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
-- [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model Predictions",
-  2017 https://arxiv.org/pdf/1705.07874.pdf
-- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of
-  Dataset Biases", 2020 https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
-
 ## 3: Problem Framing and Intervention Design
 
 ### Topics
@@ -127,18 +95,6 @@
 - Missing: Causal Project Checklist
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
-- [B041] Angrist & Pischke, "Probability, Statistics, and Causal Inference", 2020
-
-### Related papers
-- [P004] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program
-  Evaluation", 2018 https://www.nber.org/papers/w24318
-- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery
-  Algorithms", 2023 https://www.nature.com/articles/s41598-020-59669-x
 
 # Part II: Advanced Tools & Theory (Foundations)
 
@@ -171,18 +127,6 @@
 
 ### Tutorials
 
-### Related packages
-
-### Related books
-- [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
-- [B054] Spirtes et al., "Causation, Prediction, and Search", 2000
-- [B055] Heckerman et al., "Learning Bayesian Networks", 1995
-
-### Related papers
-- [P064] Lauritzen, "Graphical Models", 1996
-- [P065] Richardson, "Markov Properties for Acyclic Directed Mixed Graphs", 2003
-  https://arxiv.org/abs/1209.1514
-
 ## 5: Advanced Probabilistic ML
 
 ### Topics
@@ -199,28 +143,6 @@
 - Gap: amortized VI; neural posterior estimation / simulation-based inference
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B048] Bishop, "Pattern Recognition and Machine Learning", 2006
-- [B004] Koller et al., "Probabilistic Graphical Models", 2009
-- [B043] Pearl, "Probabilistic Reasoning in Intelligent Systems: Networks of
-  Plausible Inference", 1988
-- [B056] Blei et al., "Variational Inference: A Review for Statisticians", 2017
-- [B057] Rezende & Mohamed, "Variational Inference with Normalizing Flows", 2015
-
-### Related papers
-- [P066] Kingma & Welling, "Auto-Encoding Variational Bayes", 2014
-  https://arxiv.org/abs/1312.6114
-- [P067] Rezende et al., "Stochastic Backpropagation and Approximate Inference in Deep Generative Models", 2014
-  https://arxiv.org/abs/1401.4082
-- [P068] Hoffman et al., "Stochastic Variational Inference", 2013
-  https://arxiv.org/abs/1206.7051
-- [P069] Lakshminarayanan et al., "Simple and Scalable Predictive Uncertainty Estimation using Deep Ensembles", 2017
-  https://arxiv.org/abs/1706.04599
-- [P070] Grangier et al., "Exploring the Space of Neural Processes with Variational Inference", 2019
-  https://arxiv.org/abs/1905.12141
 
 ## 6: Advanced Causal Modeling
 
@@ -252,25 +174,6 @@
 
 ### Tutorials
 
-### Related packages
-
-### Related books
-- [B049] Imbens, Angrist & Rubin, "Causal Inference for the Social, Biological, and Biomedical Sciences", 2015
-- [B050] Hernán & Robins, "Causal Inference: What If", 2020
-- [B053] Molak, "Causal Inference and Discovery in Python", 2023
-- [B007] Pearl, "Causality", 2009
-- [B008] Peters et al., "Elements of Causal Inference", 2017
-- [B027] Spirtes et al., "Causation, Prediction, and Search", 2000
-- [B042] Pearl et al., "Causal Inference in Statistics: A Primer", 2016
-  https://ftp.cs.ucla.edu/pub/stat_ser/r481.pdf
-
-### Related papers
-- [P008] Peters et al., "Causality: Models, Learning, and Inference", 2023
-  https://arxiv.org/pdf/2012.13993.pdf
-- [P011] Peters et al., "Elements of Causal Inference: Foundations and Learning
-  Algorithms", 2020
-  https://mitpress.mit.edu/9780262037310/elements-of-causal-inference/
-
 # Part III: Single-Step Decisions
 
 ## 7: Decision Theory Foundations
@@ -298,19 +201,6 @@
 - Gap: von Neumann-Morgenstern axioms explicit formulation; multi-criteria/Pareto optimality; deep elicitation methods
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B047] Jensen & Nielsen, "Bayesian Networks and Decision Graphs", 2007
-- [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
-- [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
-
-### Related papers
-- [P071] von Neumann & Morgenstern, "Theory of Games and Economic Behavior", 1944
-- [P072] Savage, "The Foundations of Statistics", 1954
-- [P073] Raiffa, "Decision Analysis: Introductory Lectures on Choices under Uncertainty", 1968
-- [P074] Keeney & Raiffa, "Decisions with Multiple Objectives: Preferences and Value Trade-offs", 1976
 
 ## 8: Decision-Making with Causal Models
 
@@ -340,23 +230,6 @@
 
 ### Tutorials
 
-### Related packages
-- DoWhy (6,600): Causal inference using graphical models
-- EconML (4,600): ML-based causal effect estimation
-- BoTorch (3,300): Bayesian optimization in PyTorch
-- Azua (1,400): Causal decision-making framework
-
-### Related books
-- [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
-- [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
-- [B058] Bishop & Nasrabadi, "Pattern Recognition and Machine Learning", 2006
-
-### Related papers
-- [P075] Gittins, "Bandit Processes and Dynamic Allocation Indices", 1979
-- [P076] Thompson, "On the Likelihood that One Unknown Probability Exceeds Another in View of the Evidence of Two Samples", 1933
-- [P077] Auer, "Using Confidence Bounds for Exploration-Exploitation Trade-offs", 2002
-- [P078] Mockus et al., "Bayesian Approach to Global Optimization and Application to Multiphase and Multicriteria Design", 1978
-
 ## 9: Policy Learning & Distributional Causal Effects
 
 ### Topics
@@ -381,23 +254,6 @@
 - Gap: distributional/quantile effects; safe policy improvement with finite-sample guarantees; deep off-policy optimization
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B046] Durai Rajamanickam, "Causal Inference for Machine Learning Engineers", 2024
-- [B014] Angrist et al., "Mostly Harmless Econometrics", 2008
-- [B059] Athey & Wager, "Policy Learning with Observational Data", 2019
-
-### Related papers
-- [P079] Athey & Wager, "Efficient Policy Learning", 2021
-  https://arxiv.org/abs/2011.02038
-- [P080] Kennedy, "Optimal Uniform Convergence Rates and Adaptive Estimation of Nonparametric Quantile Effects", 2020
-  https://arxiv.org/abs/2010.05893
-- [P081] Chernozhukov et al., "Double Machine Learning for Treatment and Causal Parameters", 2018
-  https://arxiv.org/abs/1701.08687
-- [P082] Kunzel et al., "Metalearners for Estimating Heterogeneous Treatment Effects Using Machine Learning", 2019
-  https://arxiv.org/abs/1706.03762
 
 ## 10: Partial Identification & Robust Inference
 
@@ -424,23 +280,6 @@
 - Gap: Manski bounds; Rosenbaum bounds; E-values; distributional robustness/minimax; domain adaptation depth; partial identification theory
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B051] Cunningham, "Causal Inference: The Mixtape", 2021
-- [B060] Manski, "Identification for Prediction and Decision", 2007
-- [B061] Rotnitzky et al., "Semiparametric Regression for the Social, Behavioral, and Biomedical Sciences", 2011
-
-### Related papers
-- [P083] Manski, "Partial Identification of Probability Distributions", 2003
-  https://doi.org/10.1007/978-1-4419-1254-1_1
-- [P084] Rosenbaum & Rubin, "Assessing Sensitivity to an Unobserved Binary Covariate in an Observational Study with Binary Outcome", 1983
-  https://doi.org/10.1080/01621459.1983.10478144
-- [P085] VanderWeele & Ding, "Sensitivity Analysis in Observational Research: Introducing the E-Value", 2017
-  https://doi.org/10.7326/M16-2607
-- [P086] Chernozhukov et al., "Bounds on Treatment Effects in the Presence of Unobserved Confounding", 2013
-  https://arxiv.org/abs/1311.2884
 
 ## 11: Agentic Causal Reasoning
 
@@ -475,90 +314,6 @@
 
 ### Tutorials
 
-### Related packages
-- DoWhy (6,600): Causal inference using graphical models
-- PyWhy (2,400): Python ecosystem for causal inference
-- Causica (2,000): Microsoft tool combining causal discovery and inference with
-  deep learning
-- ALICE (1,000): ML and econometrics integration
-
-### Related books
-- [B036] Christian, "The Alignment Problem", 2020
-- [B037] Russell, "Human Compatible", 2019
-- [B038] Schölkopf et al., "Causal Artificial Intelligence", 2021
-
-### Related papers
-- [P029] Brown et al., "Language Models are Few-Shot Learners", 2020
-  https://arxiv.org/abs/2005.14165
-- [P030] Kaplan et al., "Scaling Laws for Neural Language Models", 2020
-  https://arxiv.org/abs/2001.08361
-- [P031] Hoffmann et al., "Training Compute-Optimal Large Language Models", 2022
-  https://arxiv.org/abs/2203.15556
-- [P032] Kojima et al., "Large Language Models are Zero-Shot Reasoners", 2022
-  https://arxiv.org/abs/2205.11916
-- [P033] Wei et al., "Chain-of-Thought Prompting Elicits Reasoning in Large
-  Language Models", 2022 https://arxiv.org/abs/2201.11903
-- [P034] Yao et al., "Tree of Thoughts: Deliberate Problem Solving with Large
-  Language Models", 2023 https://arxiv.org/abs/2305.10601
-- [P035] Wei et al., "Emergent Abilities of Large Language Models", 2022
-  https://arxiv.org/abs/2206.07682
-- [P036] Bottou et al., "Counterfactual reasoning and learning systems: The
-  example of computational advertising", 2013 https://arxiv.org/abs/1209.0467
-- [P037] Rotnitzky et al., "Semiparametric regression adjustment to estimate
-  policy effects", 2005 https://doi.org/10.1198/016214504000001646
-- [P038] Richards et al., "A deep learning framework for neuroscience", 2019
-  https://doi.org/10.1038/s41593-019-0520-2
-- [P039] Peters et al., "Causal inference using invariant prediction:
-  identification and outlook", 2015 https://arxiv.org/abs/1501.01332
-- [P040] Precup et al., "Reinforcement learning with unsupervised auxiliary
-  tasks", 2017 https://arxiv.org/abs/1611.05397
-- [P041] Schaal et al., "Computational approaches to motor learning by
-  imitation", 2003 https://doi.org/10.1098/rstb.2003.1257
-- [P042] Hafner et al., "Mastering Atari, Go, Chess and Shogi by Planning with a
-  Learned World Model", 2023 https://arxiv.org/abs/2104.06294
-- [P043] Dasgupta et al., "Causal reasoning from meta-reinforcement learning",
-  2019 https://arxiv.org/abs/1901.08162
-- [P044] Ivgi et al., "Causal Effect Inference with Deep Latent-Variable Models",
-  2022
-- [P045] Buesing et al., "Learning and Policy Search in Stochastic Dynamical
-  Systems with Bayesian Neural Networks", 2018 https://arxiv.org/abs/1805.12114
-- [P046] Bareinboim et al., "Causal inference and the data-fusion problem", 2016
-  https://arxiv.org/abs/1412.3608
-- [P047] Lipton, "The Mythos of Model Interpretability", 2018
-  https://arxiv.org/abs/1606.03490
-- [P048] Sundararajan et al., "The many Shapley values for model explanation",
-  2020 https://arxiv.org/abs/1908.08474
-- [P049] Miller, "Explanation in artificial intelligence: Insights from the
-  social sciences", 2019 https://arxiv.org/abs/1706.07269
-- [P050] Goodfellow et al., "Explaining and Harnessing Adversarial Examples",
-  2014 https://arxiv.org/abs/1412.6572
-- [P051] Papernot et al., "Practical Black-Box Attacks against Machine Learning",
-  2016 https://arxiv.org/abs/1602.02697
-- [P052] Schott et al., "Towards the first adversarially robust neural network
-  model on MNIST", 2019 https://arxiv.org/abs/1805.09190
-- [P053] Scholkopf et al., "Toward Causal Representation Learning", 2021
-  https://arxiv.org/abs/2102.11107
-- [P054] Kusner et al., "Counterfactual Fairness", 2017
-  https://arxiv.org/abs/1705.10264
-- [P055] Zhang et al., "Mitigating Unwanted Biases with Adversarial Learning",
-  2018 https://arxiv.org/abs/1801.07593
-- [P056] Nabi et al., "Fair inference through semiparametric-efficient estimation
-  over constraint-specific paths", 2018 https://arxiv.org/abs/1806.09055
-- [P057] Hardt et al., "Equality of Opportunity in Supervised Learning", 2016
-  https://arxiv.org/abs/1610.02413
-- [P058] Amodei et al., "Concrete Problems in AI Safety", 2016
-  https://arxiv.org/abs/1606.06565
-- [P059] Soares et al., "Agent Foundations for Artificial General Intelligence",
-  2017 https://intelligence.org/files/Foundations.pdf
-- [P060] Everitt et al., "Sequential Extensions of Causal Models", 2018
-  https://arxiv.org/abs/1807.10470
-- [P061] Hendrycks, "Natural and Artificial Intelligence", 2023
-  https://arxiv.org/abs/2307.04187
-- [P062] Brendel et al., "Decision-based adversarial attacks: reliable attacks
-  against machine learning models", 2018 https://arxiv.org/abs/1712.04248
-- [P063] Rubin, "Estimating causal effects of treatments in randomized and
-  nonrandomized studies", 1974 https://doi.org/10.1037/h0037350
-
 # Part IV: Multi-Step & Dynamic Decisions
 
 ## 12: Causal World Models & Reinforcement Learning
@@ -591,32 +346,6 @@
 
 ### Tutorials
 
-### Related packages
-- contextualbandits (1,700): Python implementations of contextual bandit
-  algorithms
-- MABWiser (280): Multi-armed bandit library with sklearn-style API
-- PyXAB (200): Research-focused library for X-armed bandits and online
-  optimization
-
-### Related books
-- [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
-- [B031] Szepesvári, "Algorithms for Reinforcement Learning", 2010
-- [B032] Ness et al., "Causal AI", 2023
-- [B044] Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic Programming", 1994
-- [B062] Barto & Sutton, "Reinforcement Learning: An Introduction", 2018
-
-### Related papers
-- [P087] Hafner et al., "Dream to Control: Learning Behaviors by Latent Imagination", 2020
-  https://arxiv.org/abs/1912.01603
-- [P088] Chua et al., "Deep Reinforcement Learning in a Handful of Trials using Probabilistic Dynamics Models", 2018
-  https://arxiv.org/abs/1805.12114
-- [P089] Janner et al., "When to Trust Your Model: Model-Based Policy Optimization", 2019
-  https://arxiv.org/abs/1907.04629
-- [P090] Dai et al., "Causal Policy Gradient for Lifelong Reinforcement Learning", 2022
-  https://arxiv.org/abs/2206.14925
-- [P091] Precup et al., "Off-Policy Temporal-Difference Learning with Function Approximation", 2001
-  https://arxiv.org/abs/cs/0106227
-
 ## 13: Forecasting Under Causal Intervention
 
 ### Topics
@@ -640,28 +369,6 @@
 - Gap: Structural time series with causal priors detail; online learning/adaptation algorithms; nonstationarity handling depth
 
 ### Tutorials
-
-### Related packages
-- TiMINo (3,600): Time-series causal discovery under independent noise
-  assumptions
-- orbit (2,000): Bayesian time series models
-- HMMlearn (1,600): Hidden Markov Models with sklearn API
-- BETS (350): Time-series causal network inference using elastic net regression
-
-### Related books
-- [B023] Hyndman et al., "Forecasting: Principles and Practice", 2021
-- [B033] Hanke et al., "Business Forecasting", 2009
-- [B022] Hamilton, "Time Series Analysis", 1994
-- [B063] Brodsky & Darkhovsky, "Nonparametric Methods in Change Point Problems", 1993
-
-### Related papers
-- [P092] Abadie & Gardeazabal, "The Economic Costs of Conflict: A Case Study of the Basque Country", 2003
-  https://doi.org/10.1257/000282803321455188
-- [P093] Angrist & Pischke, "Mostly Harmless Econometrics: An Empiricist's Companion", 2008
-  https://www.mostlyharmlesseconometrics.com
-- [P094] Brodsky & Darkhovsky, "Non-parametric Statistical Diagnosis: Problems and Methods", 1993
-- [P095] Imbens & Wooldridge, "Recent Developments in the Econometrics of Program Evaluation", 2009
-  https://doi.org/10.1016/j.jeconom.2008.12.010
 
 ## 14: Feedback Loops & Adaptive Causal Systems
 
@@ -688,23 +395,6 @@
 - Gap: Performativity/Goodhart's law formalization; online causal discovery algorithms; dynamic treatment regimes (DTRs); adaptive experiments (SMART trials); structural adaptation mechanisms
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B064] Goodhart, "Monetary Theory and Practice", 1975
-- [B065] Campbell & Shiller, "Valuation Ratios and the Long-Run Stock Market Outlook", 1998
-- [B066] Acemoglu & Robinson, "Why Nations Fail: The Origins of Power, Prosperity, and Poverty", 2012
-
-### Related papers
-- [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984
-  https://doi.org/10.1016/S0261-5606(84)80005-8
-- [P097] Strathern, "Improving Ratings: Audit in the British University System", 1997
-  https://doi.org/10.1080/03075079712331380714
-- [P098] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2023
-  https://arxiv.org/abs/2209.03942
-- [P099] Liu et al., "Performative Prediction", 2021
-  https://arxiv.org/abs/2007.02153
 
 # Part V: Implementation, Deployment, Governance
 
@@ -746,26 +436,6 @@
 - Missing: Communication toolkit for different stakeholder personas
 
 ### Tutorials
-
-### Related packages
-
-### Related books
-- [B067] Tufte, "The Visual Display of Quantitative Information", 2001
-- [B068] Cairo, "The Functional Art: An Introduction to Information Graphics and Visualization", 2012
-- [B069] Spiegelhalter et al., "Sex by Numbers: What Statistics Can and Cannot Tell Us About Sexuality", 2016
-- [B070] Few, "Now You See It: Simple Visualization Techniques for Quantitative Analysis", 2009
-- [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
-
-### Related papers
-- [P100] Kahneman & Tversky, "Prospect Theory: An Analysis of Decision under Risk", 1979
-  https://doi.org/10.2307/1914185
-- [P101] Tversky & Kahneman, "Judgment under Uncertainty: Heuristics and Biases", 1974
-  https://doi.org/10.1126/science.185.4157.1124
-- [P102] Slovic, "Perception of Risk", 2000
-  https://doi.org/10.1126/science.280.5364.1030
-- [P103] Spiegelhalter, "Trust, but Verify: The Role of Uncertainty in Data Visualization", 2019
-- [P006] Kaddour et al., "Challenges and Opportunities with Causal Discovery Algorithms", 2023
-  https://www.nature.com/articles/s41598-020-59669-x
 
 ## 16: Deployment, Monitoring, and Adaptation
 
@@ -819,40 +489,6 @@
 - Missing: Concrete monitoring dashboard specs; rollback decision protocols
 
 ### Tutorials
-
-### Related packages
-- CausalImpact (5,600): Causal inference for intervention analysis
-- CausalML (4,800): Uplift modeling and causal inference
-- EconML (4,600): ML-based causal effect estimation
-- Azua (1,400): Causal decision-making framework
-- Evidently (2,500): ML monitoring and data drift detection
-- WhyLabs (—): ML observability and monitoring
-- Feature Store (e.g., Tecton, Feast): managing features for causal models in production
-
-### Related books
-- [B034] Iansiti et al., "Competing in the Age of AI", 2020
-- [B035] Kleppmann, "Designing Data-Intensive Applications", 2017
-- [B052] Géron, "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", 2022
-- [B071] Reinsel et al., "The Digitization of the World: From Edge to Core", 2018
-- [B003] Huyen, "Designing Machine Learning Systems", 2022
-
-### Related papers
-- [P104] Amershi et al., "Software Engineering for Machine Learning: A Case Study", 2019
-  https://arxiv.org/abs/1909.09090
-- [P105] Sculley et al., "Technical Debt in Machine Learning Systems", 2015
-  https://doi.org/10.5555/2969442.2969519
-- [P106] Polyzotis et al., "Data Validation for Machine Learning", 2019
-  https://arxiv.org/abs/1901.09162
-- [P107] Breck et al., "The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction", 2017
-  https://arxiv.org/abs/1702.06783
-- [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2020
-  https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
-- [P098] Taori et al., "Data Feedback Loops: Model-driven Amplification of Dataset Biases", 2023
-  https://arxiv.org/abs/2209.03942
-- [P099] Liu et al., "Performative Prediction", 2021
-  https://arxiv.org/abs/2007.02153
-- [P079] Athey & Wager, "Efficient Policy Learning", 2021
-  https://arxiv.org/abs/2011.02038
 
 ## 17: Trust, Explainability, Fairness, and Governance
 
@@ -909,45 +545,5 @@
 - Missing: Governance/compliance depth; regulatory landscape specifics; failure-response playbooks
 
 ### Tutorials
-
-### Related packages
-- InterpretML (—): Model agnostic interpretation
-- Alibi Explain (—): Model explanation algorithms
-
-### Related books
-- [B019] Molnar, "Interpretable Machine Learning", 2022
-- [B045] Barocas et al., "Fairness and Machine Learning", 2019
-  https://fairmlbook.org
-- [B072] Metcalf & Moss, "Owning Ethics: Corporate Logics, Silicon Valley, and the Social Implications of Ethical AI", 2019
-- [B073] Eubanks, "Automating Inequality: How High-Tech Tools Profile, Police, and Punish the Poor", 2018
-- [B036] Christian, "The Alignment Problem", 2020
-
-### Related papers
-- [P010] Joshi et al., "Towards Realistic Counterfactual Explanations with Contrastive Pertinent Features", 2019
-  https://arxiv.org/pdf/1906.04957.pdf
-- [P108] Corbett-Davies et al., "Algorithmic Decision Making and the Cost of Fairness", 2017
-  https://arxiv.org/abs/1701.08230
-- [P109] Mitchell et al., "Model Cards for Model Reporting", 2019
-  https://arxiv.org/abs/1810.03993
-- [P110] Buolamwini & Busch, "The Gender Shades: Intersectional Accuracy Disparities in Commercial Gender Classification", 2018
-  https://arxiv.org/abs/1801.09453
-- [P111] Selbst & Barocas, "The Intuitive Appeal of Explainable Machines", 2018
-  https://arxiv.org/abs/1805.06959
-- [P047] Lipton, "The Mythos of Model Interpretability", 2018
-  https://arxiv.org/abs/1606.03490
-- [P048] Sundararajan et al., "The many Shapley values for model explanation", 2020
-  https://arxiv.org/abs/1908.08474
-- [P049] Miller, "Explanation in artificial intelligence: Insights from the social sciences", 2019
-  https://arxiv.org/abs/1706.07269
-- [P054] Kusner et al., "Counterfactual Fairness", 2017
-  https://arxiv.org/abs/1705.10264
-- [P055] Zhang et al., "Mitigating Unwanted Biases with Adversarial Learning", 2018
-  https://arxiv.org/abs/1801.07593
-- [P056] Nabi et al., "Fair inference through semiparametric-efficient estimation over constraint-specific paths", 2018
-  https://arxiv.org/abs/1806.09055
-- [P057] Hardt et al., "Equality of Opportunity in Supervised Learning", 2016
-  https://arxiv.org/abs/1610.02413
-- [P058] Amodei et al., "Concrete Problems in AI Safety", 2016
-  https://arxiv.org/abs/1606.06565
 
 # Appendix
