@@ -18,14 +18,16 @@
 
 ## From Costs to Tools
 
-* From Costs to Tools: What This Lesson Builds
+* From Costs to Tools: What This Chapter Builds
 
-- **Key idea**: the previous lesson catalogued four costs of ignoring
-  causality, uncertainty, the business objective, and dynamics; this lesson
-  builds the causal and probabilistic tools that address the first two
-- The business framing stays fixed: a prediction says what will happen, a
-  decision says what to do
-- This lesson goes underneath that framing to the machinery that makes causal
+- The previous chapter catalogued four costs of ignoring causality, uncertainty,
+  the business objective, and dynamics
+- This lesson builds the causal and probabilistic tools that address the first
+  two
+- The business framing stays fixed
+  - a prediction says what will happen
+  - a decision says what to do
+- This chapter goes underneath that framing to the machinery that makes causal
   claims precise enough to act on:
   - The ladder of causation, formalizing what _"what if"_ and _"why"_ mean
   - Causal graphs and identification, turning a causal question into a

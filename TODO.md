@@ -317,14 +317,15 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 
 - Generate the text from the slides
   ```
-  export FILE=Lesson08.1-Causal_AI_intro
+  > export FILE=Lesson08.1-Causal_AI_intro
   claude> /model sonnet
-  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.slides_to_text.txt on msml610/lectures_source/${FILE}.txt
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.update_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
   ```
 
 - Render with
   ```
-  > ./msml610/book/render_chapter.sh msml610/book/$FILE
+  > ./helpers_root/dev_scripts_helpers/typst/render_typst.sh msml610/book/$FILE
   ```
   which is equivalent to:
   ```
@@ -658,12 +659,69 @@ Is there any difference?
   Causal and Probabilistic Machine Learning in Action
   ```
 
-# Springer
+## Springer
 
-# ? AI Agents for Big Data
+## ? AI Agents for Big Data
 
 - DATA605
 - Agents stuff
 
-# AI for Finance
+## AI for Finance
 - ?
+
+## Interesting slide lectures outside of books
+
+### ?
+- Gaussian processes for continuous uncertainty: kernels, posterior inference,
+  and extrapolation
+- Variational inference for scalable Bayesian modeling: ELBO, amortized
+  inference, and gradient estimation
+- Normalizing flows: flexible density estimation for complex posterior
+  approximation
+- Probabilistic programming: specifying generative models in Pyro, NumPyro, and
+  Stan
+- Calibration and uncertainty quantification: coverage guarantees and conformal
+  prediction
+- Neural posterior estimation: learning to invert simulators and likelihood-free
+  inference
+
+## Advanced Topics for Time Series Predictions
+
+- Self-Supervised and Representation Learning for Time Series
+  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
+  - Predictive coding models (e.g., CPC)
+  - Applications: few-shot forecasting, anomaly detection
+
+- Hierarchical Bayesian Forecasting
+  - Multi-level time series models
+  - Shrinkage across groups
+  - Handling partial pooling across different but related series
+
+- Reinforcement Learning for Time Series Decision Making
+  - Forecasting coupled with decision making
+  - Inventory control, dynamic pricing
+  - Predict-then-Optimize pipelines
+
+- Transformers and Attention Mechanisms for Time Series
+  - Temporal Fusion Transformer (TFT)
+  - Informer, Autoformer, FEDformer
+  - Handling long-term dependencies better than RNNs
+
+- Energy-Based Models and Diffusion Models for Forecasting
+  - Energy-based forecasting models
+  - Diffusion probabilistic models adapted for sequences
+
+- Time Series Generative Models
+  - GANs for time series (e.g., TimeGAN)
+  - Variational Autoencoders (VAEs) for synthetic data generation
+  - Applications: simulation, data augmentation
+
+- Long-Horizon Forecasting Challenges
+  - Distribution shift over long horizons
+  - Degradation of model accuracy
+  - Specialized architectures: recurrent decoders, multi-resolution forecasting
+
+- Uncertainty Quantification and Calibration
+  - Prediction intervals
+  - Coverage probability and reliability diagrams
+  - Post-hoc calibration (e.g., temperature scaling)

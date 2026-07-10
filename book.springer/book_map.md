@@ -14,20 +14,36 @@
 ## 1: From Prediction Pipelines to Decision Pipelines
 
 ### Topics
-- Prediction vs. decision: fundamentally different mathematical problems (traditional ML relies on correlation)
-- Correlation-based ML encodes confounding as causation: Pr(Y | X) ≠ Pr(Y | do(X)), so acting on correlations backfires
-- No interventions or counterfactuals, and the ladder of causation: observation, intervention, and counterfactual reasoning
-- Simpson's paradox and policy reversals: why predictive accuracy fails in decisions
-- Predictions are not recommendations: black-box scores give no actionable lever or "why"
+- Prediction vs. decision: fundamentally different mathematical problems
+  (traditional ML relies on correlation)
+- Correlation-based ML encodes confounding as causation: Pr(Y | X) ≠ Pr(Y |
+  do(X)), so acting on correlations backfires
+- No interventions or counterfactuals, and the ladder of causation: observation,
+  intervention, and counterfactual reasoning
+- Simpson's paradox and policy reversals: why predictive accuracy fails in
+  decisions
+- Predictions are not recommendations: black-box scores give no actionable lever
+  or "why"
 - The decision pipeline: from causal models to utility-maximizing actions
 - Causal models as the foundation for decision-making
 - Why organizations fail: the cost of ignoring causality in data-driven systems
 
+### TODO
+- [ ] Add the topics from actual slides
+- [ ] Split Chap 1 in more chapters with also "solutions" and "examples"
+- [ ] Add
+  - /Users/saggese/src/csfy1/blog/docs/posts/Cracking_the_Long_Tail_of_Data_Science_Problems.md
+  - /Users/saggese/src/csfy1/blog/docs/posts/Data_Is_Dumb_And_Thats_Why_Causality_Matters.md
+- [ ] Replace some of the introduction with a Chapter on "Data"?
+
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [FULL] — Ladder of Causation; Data Science → Decision Science; Causal vs Predictive Questions; Roadmap Prediction→Decision; Data Analytics Sophistication (maturity model); Why AI Projects Fail
+  - [FULL] — Ladder of Causation; Data Science → Decision Science; Causal vs
+    Predictive Questions; Roadmap Prediction→Decision; Data Analytics
+    Sophistication (maturity model); Why AI Projects Fail
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [PART] — From Predictions to Decisions; Prediction vs Decision Side-by-Side; Simpson's Paradox (+Causal Resolution); Policy Reversal
+  - [PART] — From Predictions to Decisions; Prediction vs Decision Side-by-Side;
+    Simpson's Paradox (+Causal Resolution); Policy Reversal
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - [PART] — Example of ladder of causation (Tornado Warning)
 
@@ -55,14 +71,18 @@
 ## 2: Why Good Data Leads to Bad Decisions
 
 ### Topics
-- Statistical significance traps and overfitting: peeking, multiple comparisons, novelty effects, and burning the test set
+- Statistical significance traps and overfitting: peeking, multiple comparisons,
+  novelty effects, and burning the test set
 - Heterogeneous treatment effects: when average effects mask sub-group reversals
 - Confounding in causal ML: biases when causal assumptions are unmet
-- Selection bias and the missing-counterfactual problem: data reflects only decisions actually made (e.g., approved loans)
+- Selection bias and the missing-counterfactual problem: data reflects only
+  decisions actually made (e.g., approved loans)
 - Feedback loops: how predictions change the world and break model assumptions
-- Strategic and adversarial response: deployed models get gamed (credit gaming, SEO), violating passive-agent assumptions
+- Strategic and adversarial response: deployed models get gamed (credit gaming,
+  SEO), violating passive-agent assumptions
 - Distribution shift and causal assumptions under intervention
-- Decision readiness under uncertainty: knowing when causal claims are safe to act on, especially in small-data regimes
+- Decision readiness under uncertainty: knowing when causal claims are safe to
+  act on, especially in small-data regimes
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -93,18 +113,24 @@
 ## 3: Problem Framing and Intervention Design
 
 ### Topics
-- From KPI selection to causal objectives and utilities: avoiding Goodhart's law when a proxy becomes the target
-- Cost-asymmetry in decisions: why symmetric losses (log-loss, MSE) misprice asymmetric business errors
-- Building causal DAGs: variable identification, temporal structure, and domain knowledge
+- From KPI selection to causal objectives and utilities: avoiding Goodhart's law
+  when a proxy becomes the target
+- Cost-asymmetry in decisions: why symmetric losses (log-loss, MSE) misprice
+  asymmetric business errors
+- Building causal DAGs: variable identification, temporal structure, and domain
+  knowledge
 - Intervention design: choosing levers, targets, scales, and timing
-- Causal variable types: confounders, mediators, colliders, and their adjustment rules
+- Causal variable types: confounders, mediators, colliders, and their adjustment
+  rules
 - Identifiability and causal assumptions: backdoor, frontdoor, and IV conditions
 - End-to-end decision framing vs. splitting into individually-solved sub-problems
 - Data collection strategy aligned with causal identification requirements
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [PART] — Causal AI Workflow Steps 1–7 (Intended Outcomes → Interventions → Factors → Build DAG → Data Acquisition → Model Modification → Deployment); Marketing Example: Price Intervention
+  - [PART] — Causal AI Workflow Steps 1–7 (Intended Outcomes → Interventions →
+    Factors → Build DAG → Data Acquisition → Model Modification → Deployment);
+    Marketing Example: Price Intervention
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
   - [PART] — Decision Framework: Experiment or Observe?; Feasibility Constraints
 - No slide for "Causal Project Checklist"
@@ -130,18 +156,26 @@
 ### Topics
 - Causal DAGs vs. Bayesian networks: how causality orients edges
 - Structural equations and mechanisms: modeling how variables depend on parents
-- Variable types and adjustment rules: confounders, mediators, colliders, moderators
+- Variable types and adjustment rules: confounders, mediators, colliders,
+  moderators
 - Temporal structure: causal order, feedback delays, and acyclicity
 - Building DAGs from domain knowledge and expert judgment
 - Measurement validity and causal assumptions in data collection
 
+### TODO
+- [ ] Use and improve the lesson03 content
+- [ ] Symbolic logic + embeddings
+
 ### Lessons
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [PART] — Building a Causal DAG; variable types (mediator/moderator/confounder/collider); temporal structure
+  - [PART] — Building a Causal DAG; variable types
+    (mediator/moderator/confounder/collider); temporal structure
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [PART] — Using Domain Knowledge as Constraints; Combining Discovery with Expert Judgment
+  - [PART] — Using Domain Knowledge as Constraints; Combining Discovery with
+    Expert Judgment
 - `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
-  - [WEAK] — symbolic KR (ontologies, FOL, knowledge graphs); thin overlap — book Ch4 = decision scoping, not symbolic logic
+  - [WEAK] — symbolic KR (ontologies, FOL, knowledge graphs); thin overlap — book
+    Ch4 = decision scoping, not symbolic logic
 
 ### Tutorials
 
@@ -160,16 +194,12 @@
 ## 5: Advanced Probabilistic ML
 
 ### Topics
-- Gaussian processes for continuous uncertainty: kernels, posterior inference, and extrapolation
-- Variational inference for scalable Bayesian modeling: ELBO, amortized inference, and gradient estimation
-- Normalizing flows: flexible density estimation for complex posterior approximation
-- Probabilistic programming: specifying generative models in Pyro, NumPyro, and Stan
-- Calibration and uncertainty quantification: coverage guarantees and conformal prediction
-- Neural posterior estimation: learning to invert simulators and likelihood-free inference
+- Short summary from Lesson6*
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
-  - [FULL] — VAEs; Normalizing Flows; Bayesian NNs; VI/SVI; MCMC; Calibration; Conformal Prediction; Neural Processes; Deep Latent Variable Models
+  - [FULL] — VAEs; Normalizing Flows; Bayesian NNs; VI/SVI; MCMC; Calibration;
+    Conformal Prediction; Neural Processes; Deep Latent Variable Models
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
   - [PART] — PPLs, Bayesian models (Pyro/PyMC/Stan)
 - `msml610/lectures_source/Lesson96.Refresher_stochastic_processes.txt`
@@ -203,23 +233,30 @@
 ## 6: Advanced Causal Modeling
 
 ### Topics
-- Causal discovery from data: identifiability, Markov equivalence, and assumptions
-- Discovery algorithms: constraint-based (PC/FCI), score-based (GES), functional (LiNGAM, ANM)
+- Causal discovery from data: identifiability, Markov equivalence, and
+  assumptions
+- Discovery algorithms: constraint-based (PC/FCI), score-based (GES), functional
+  (LiNGAM, ANM)
 - Faithfulness and causal sufficiency: when discovery succeeds and fails
-- Latent confounders: proxy variables, negative controls, and adjustment strategies
+- Latent confounders: proxy variables, negative controls, and adjustment
+  strategies
 - Causal representation learning: disentangling mechanisms for domain transfer
-- Sensitivity analysis and robustness: E-values, bounds, and partial identification
+- Sensitivity analysis and robustness: E-values, bounds, and partial
+  identification
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [FULL] — algorithm families (constraint/PC-FCI, score/GES, functional/LiNGAM-ANM); Markov equivalence; identifiability; faithfulness; refutation
+  - [FULL] — algorithm families (constraint/PC-FCI, score/GES,
+    functional/LiNGAM-ANM); Markov equivalence; identifiability; faithfulness;
+    refutation
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - [PART] — do-calculus rules; back/front-door adjustment
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - [PART] — SCM; causal DAGs (basics)
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
   - [PART] — Causal Deep Learning (representation learning)
-- Gap: latent confounders/proxy/negative controls; E-values/sharp-bounds sensitivity
+- Gap: latent confounders/proxy/negative controls; E-values/sharp-bounds
+  sensitivity
 
 ### Tutorials
 
@@ -247,16 +284,23 @@
 ## 7: Decision Theory Foundations
 
 ### Topics
-- Von Neumann-Morgenstern theorem: axioms of rational choice and utility existence
-- Utility functions in practice: eliciting preferences and encoding business objectives
-- Subjective expected utility: belief updating and decision-making under uncertainty
+- Von Neumann-Morgenstern theorem: axioms of rational choice and utility
+  existence
+- Utility functions in practice: eliciting preferences and encoding business
+  objectives
+- Subjective expected utility: belief updating and decision-making under
+  uncertainty
 - Multi-criteria trade-offs: value functions, weights, and Pareto optimality
-- Influence diagrams and solving decision networks: backward induction and policy extraction
+- Influence diagrams and solving decision networks: backward induction and policy
+  extraction
 - Risk preferences and utility curvature: risk-aversion, neutrality, and seeking
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [FULL] — Utility Functions; Expected Utility Principle (+insurance/two-treatment examples); Decision Networks (=influence diagrams); Solving a Decision Network; Risk Preferences; Aleatoric vs Epistemic Uncertainty
+  - [FULL] — Utility Functions; Expected Utility Principle
+    (+insurance/two-treatment examples); Decision Networks (=influence diagrams);
+    Solving a Decision Network; Risk Preferences; Aleatoric vs Epistemic
+    Uncertainty
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
   - [PART] — MEU; Dynamic Decision Networks
 
@@ -278,17 +322,23 @@
 ## 8: Decision-Making with Causal Models
 
 ### Topics
-- From causal effects to expected value: plugging treatment effects into utility functions
+- From causal effects to expected value: plugging treatment effects into utility
+  functions
 - Bayesian decision-making: posterior-based choices and belief updating from data
 - Value of information: EVPI, EVSI, and when to experiment vs. observe
-- Bayesian optimization and acquisition functions: efficient search over decision spaces
+- Bayesian optimization and acquisition functions: efficient search over decision
+  spaces
 - Exploration vs. exploitation: Thompson sampling, UCB, and contextual bandits
 - Counterfactual decision analysis: reasoning about alternative choices
-- Robustness under model misspecification: decisions that work across causal assumptions
+- Robustness under model misspecification: decisions that work across causal
+  assumptions
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [FULL] — Bayesian Decision-Making; Value of Information (EVPI/EVSI); Bayesian Optimization for Experimentation; Acquisition Functions; Causal Bayesian Optimization; Exploration vs Exploitation; Causal Multi-Armed Bandits; Counterfactual decisions
+  - [FULL] — Bayesian Decision-Making; Value of Information (EVPI/EVSI); Bayesian
+    Optimization for Experimentation; Acquisition Functions; Causal Bayesian
+    Optimization; Exploration vs Exploitation; Causal Multi-Armed Bandits;
+    Counterfactual decisions
 - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
   - [PART] — Thompson Sampling; Bayesian Bandits; UCB
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
@@ -317,15 +367,19 @@
 
 ### Topics
 - Heterogeneous treatment effects and CATE: learning who benefits from treatment
-- Doubly robust estimation and double/debiased ML: reducing sensitivity to nuisance parameters
+- Doubly robust estimation and double/debiased ML: reducing sensitivity to
+  nuisance parameters
 - Meta-learners for heterogeneity: T-, S-, X-, R-learners and when to use each
 - Distributional and quantile effects: going beyond average treatment effects
-- Off-policy learning and policy optimization: evaluating and improving policies from data
+- Off-policy learning and policy optimization: evaluating and improving policies
+  from data
 - Safe policy improvement: deployable decisions with finite-sample guarantees
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [FULL] — Metalearners T/S/X/R-Learner; R-learner (Double/Debiased ML); Double-ML for CATE; Effect heterogeneity; CATE evaluation; Cumulative Gain/AUC
+  - [FULL] — Metalearners T/S/X/R-Learner; R-learner (Double/Debiased ML);
+    Double-ML for CATE; Effect heterogeneity; CATE evaluation; Cumulative
+    Gain/AUC
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
   - [PART] — Policy Evaluation and Off-Policy Learning
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
@@ -355,11 +409,16 @@
 
 ### Topics
 - Partial identification: when point estimates are impossible, bound what you can
-- Manski bounds and instrumental variable bounds: leveraging assumptions strategically
-- Sensitivity analysis: Rosenbaum bounds and E-values for robustness to unmeasured confounding
-- Positivity violations: trimming, extrapolation, and inverse-probability weighting trade-offs
-- Distributional robustness and minimax inference: decisions robust to model misspecification
-- Causal generalization and domain adaptation: transferring lessons across environments
+- Manski bounds and instrumental variable bounds: leveraging assumptions
+  strategically
+- Sensitivity analysis: Rosenbaum bounds and E-values for robustness to
+  unmeasured confounding
+- Positivity violations: trimming, extrapolation, and inverse-probability
+  weighting trade-offs
+- Distributional robustness and minimax inference: decisions robust to model
+  misspecification
+- Causal generalization and domain adaptation: transferring lessons across
+  environments
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -392,17 +451,24 @@
 ## 11: Agentic Causal Reasoning
 
 ### Topics
-- Causal reasoning in LLMs: pattern-based limits and why foundation models struggle with counterfactuals
-- Chain-of-thought and tree-of-thought prompting: structured reasoning for causal inference
+- Causal reasoning in LLMs: pattern-based limits and why foundation models
+  struggle with counterfactuals
+- Chain-of-thought and tree-of-thought prompting: structured reasoning for causal
+  inference
 - SCM-augmented agents: embedding causal world models in agent architectures
 - Tool-use and causal simulation: planning with learned or specified dynamics
 - Integrating causality with probabilistic inference: hybrid reasoning systems
-- Trustworthy AI through causality: transparency, robustness, fairness, and safety
-- Causal guardrails and safety constraints: preventing harmful behaviors in autonomous agents
+- Trustworthy AI through causality: transparency, robustness, fairness, and
+  safety
+- Causal guardrails and safety constraints: preventing harmful behaviors in
+  autonomous agents
 
 ### Lessons
 - `msml610/lectures_source/Lesson15.1-Causal_Reasoning_Agents.txt`
-  - [FULL] — LLM causal limits; pattern vs causal reasoning; CoT causal prompting; integrating causal+probabilistic; causal agent architectures; causal MDPs; Trustworthy AI (transparency/robustness/fairness/safety); guardrails
+  - [FULL] — LLM causal limits; pattern vs causal reasoning; CoT causal
+    prompting; integrating causal+probabilistic; causal agent architectures;
+    causal MDPs; Trustworthy AI (transparency/robustness/fairness/safety);
+    guardrails
 - `msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt`
   - [PART] — Chain-of-Thought and variants
 - `msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt`
@@ -503,17 +569,25 @@
 ## 12: Causal World Models & Reinforcement Learning
 
 ### Topics
-- Markov decision processes: states, actions, transitions, and solving with value/policy iteration
-- Utilities over time: discount factors, finite vs. infinite horizons, and optimality criteria
-- Causal world models: structural causal models as environment dynamics for planning
-- Model-based reinforcement learning: learning dynamics, counterfactual rollouts, and policy search
-- Off-policy evaluation with causal guarantees: doubly robust, IPW, and DR estimators
-- Invariant causal mechanisms and environment generalization: learning robust policies across shifts
+- Markov decision processes: states, actions, transitions, and solving with
+  value/policy iteration
+- Utilities over time: discount factors, finite vs. infinite horizons, and
+  optimality criteria
+- Causal world models: structural causal models as environment dynamics for
+  planning
+- Model-based reinforcement learning: learning dynamics, counterfactual rollouts,
+  and policy search
+- Off-policy evaluation with causal guarantees: doubly robust, IPW, and DR
+  estimators
+- Invariant causal mechanisms and environment generalization: learning robust
+  policies across shifts
 - Partially observable MDPs: state inference and planning under hidden variables
 
 ### Lessons
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
-  - [FULL] — MDPs/POMDPs; utilities/discount; value & policy iteration; model-based/free RL; Causal RL; SCMs for MDPs; Counterfactual credit assignment; Deconfounding off-policy; Causal Generalization
+  - [FULL] — MDPs/POMDPs; utilities/discount; value & policy iteration;
+    model-based/free RL; Causal RL; SCMs for MDPs; Counterfactual credit
+    assignment; Deconfounding off-policy; Causal Generalization
 - `msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt`
   - [PART] — World Models (WebDreamer)
 - `msml610/lectures_source/Lesson09.5-Kalman_Filter.txt`
@@ -550,16 +624,19 @@
 ## 13: Forecasting Under Causal Intervention
 
 ### Topics
-- Why temporal patterns fail under intervention: distribution shift and causal assumptions
+- Why temporal patterns fail under intervention: distribution shift and causal
+  assumptions
 - Granger causality and causal constraints on time-series models
-- Difference-in-differences and synthetic control: comparing counterfactual scenarios
+- Difference-in-differences and synthetic control: comparing counterfactual
+  scenarios
 - Structural time series with causal priors: Bayesian modeling of interventions
 - Online learning under nonstationarity: adapting to feedback and regime shifts
 - Forecasting with SCMs: causal models as alternatives to black-box time-series
 
 ### Lessons
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [FULL] — forecasting breaks under intervention; Granger; ITS; DiD; Synthetic Control; Structural VARs; when temporal structure misleads
+  - [FULL] — forecasting breaks under intervention; Granger; ITS; DiD; Synthetic
+    Control; Structural VARs; when temporal structure misleads
 - `msml610/lectures_source/Lesson10.1-Timeseries_forecasting.txt`
   - [PART] — Bayesian Time Series Models; Markov-Switching (regime shifts); State Space Models
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -592,12 +669,15 @@
 ## 14: Feedback Loops & Adaptive Causal Systems
 
 ### Topics
-- Performativity and Goodhart's law: decisions that change the world and break past patterns
+- Performativity and Goodhart's law: decisions that change the world and break
+  past patterns
 - Causal graphs that change over time: nonstationarity and structural adaptation
 - Online causal discovery: learning and revising the causal model from feedback
 - Contextual and causal bandits: exploration with side information under feedback
-- Dynamic treatment regimes: adaptive decisions that respond to evolving patient/environment state
-- Learning from adaptive experiments: methods for sequential decision-making with feedback
+- Dynamic treatment regimes: adaptive decisions that respond to evolving
+  patient/environment state
+- Learning from adaptive experiments: methods for sequential decision-making with
+  feedback
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -643,7 +723,8 @@
 
 ### Lessons
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [PART] — Communicating Uncertainty to Stakeholders (+Worked Example); Multi-Criteria Trade-offs; Visualizing Risk Aversion
+  - [PART] — Communicating Uncertainty to Stakeholders (+Worked Example);
+    Multi-Criteria Trade-offs; Visualizing Risk Aversion
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [WEAK] — Roles in Hybrid Teams; Executing a Hybrid Team Project
 - No slide for "Executive decision brief template"
@@ -675,7 +756,8 @@
 - Monitoring causal assumptions: detecting when the world changes
 - Continuous experimentation and A/B testing: maintaining and improving policies
 - Feedback loops in production: learning from deployed decisions
-- Technical debt and decision system maintenance: keeping systems reliable over time
+- Technical debt and decision system maintenance: keeping systems reliable over
+  time
 
 ### Lessons
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
@@ -713,11 +795,16 @@
 
 ### Topics
 - Building trust: transparency, fairness, and justified confidence in decisions
-- Causal explainability: explaining decisions through causal mechanisms, not just feature importance
-- Identifying failure modes: when decisions fail and why (misspecification, distribution shift, etc.)
-- Algorithmic fairness through causality: ensuring decisions don't encode discrimination
-- Guardrails and human-in-the-loop: oversight mechanisms and when to overrule algorithms
-- Governance and accountability: institutional controls and auditing for decision systems
+- Causal explainability: explaining decisions through causal mechanisms, not just
+  feature importance
+- Identifying failure modes: when decisions fail and why (misspecification,
+  distribution shift, etc.)
+- Algorithmic fairness through causality: ensuring decisions don't encode
+  discrimination
+- Guardrails and human-in-the-loop: oversight mechanisms and when to overrule
+  algorithms
+- Governance and accountability: institutional controls and auditing for decision
+  systems
 
 ### Lessons
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
@@ -751,44 +838,3 @@
   https://arxiv.org/abs/1805.06959
 
 # Appendix
-
-## Advanced Topics for Time Series Predictions
-
-- Self-Supervised and Representation Learning for Time Series
-  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
-  - Predictive coding models (e.g., CPC)
-  - Applications: few-shot forecasting, anomaly detection
-
-- Hierarchical Bayesian Forecasting
-  - Multi-level time series models
-  - Shrinkage across groups
-  - Handling partial pooling across different but related series
-
-- Reinforcement Learning for Time Series Decision Making
-  - Forecasting coupled with decision making
-  - Inventory control, dynamic pricing
-  - Predict-then-Optimize pipelines
-
-- Transformers and Attention Mechanisms for Time Series
-  - Temporal Fusion Transformer (TFT)
-  - Informer, Autoformer, FEDformer
-  - Handling long-term dependencies better than RNNs
-
-- Energy-Based Models and Diffusion Models for Forecasting
-  - Energy-based forecasting models
-  - Diffusion probabilistic models adapted for sequences
-
-- Time Series Generative Models
-  - GANs for time series (e.g., TimeGAN)
-  - Variational Autoencoders (VAEs) for synthetic data generation
-  - Applications: simulation, data augmentation
-
-- Long-Horizon Forecasting Challenges
-  - Distribution shift over long horizons
-  - Degradation of model accuracy
-  - Specialized architectures: recurrent decoders, multi-resolution forecasting
-
-- Uncertainty Quantification and Calibration
-  - Prediction intervals
-  - Coverage probability and reliability diagrams
-  - Post-hoc calibration (e.g., temperature scaling)
