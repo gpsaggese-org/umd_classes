@@ -14,22 +14,9 @@
 ## 1: From Prediction Pipelines to Decision Pipelines
 
 ### Topics
-- Prediction vs. decision: fundamentally different mathematical problems
-  (traditional ML relies on correlation)
-- Correlation-based ML encodes confounding as causation: Pr(Y | X) ≠ Pr(Y |
-  do(X)), so acting on correlations backfires
-- No interventions or counterfactuals, and the ladder of causation: observation,
-  intervention, and counterfactual reasoning
-- Simpson's paradox and policy reversals: why predictive accuracy fails in
-  decisions
-- Predictions are not recommendations: black-box scores give no actionable lever
-  or "why"
-- The decision pipeline: from causal models to utility-maximizing actions
-- Causal models as the foundation for decision-making
-- Why organizations fail: the cost of ignoring causality in data-driven systems
+- [ ] Add the topics from actual slides
 
 ### TODO
-- [ ] Add the topics from actual slides
 - [ ] Split Chap 1 in more chapters with also "solutions" and "examples"
 - [ ] Add
   - /Users/saggese/src/csfy1/blog/docs/posts/Cracking_the_Long_Tail_of_Data_Science_Problems.md
@@ -37,6 +24,9 @@
 - [ ] Replace some of the introduction with a Chapter on "Data"?
 
 ### Lessons
+- `book.springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
+- `book.springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+- `book.springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [85%] — Ladder of Causation; Data Science → Decision Science; Causal vs
     Predictive Questions; Roadmap Prediction→Decision; Data Analytics
