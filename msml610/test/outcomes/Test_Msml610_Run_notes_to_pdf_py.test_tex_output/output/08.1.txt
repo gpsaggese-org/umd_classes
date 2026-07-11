@@ -1,0 +1,3854 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 08.1: Intro to Causal AI}}\]} \endgroup
+
+\vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\tightlist
+\item
+  Hurwitz, Thompson: Causal Artificial Intelligence, 2024
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Introduction and Motivation}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Background}}}
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Big Data and Traditional AI}
+\protect\phantomsection\label{big-data-and-traditional-ai}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Focus for past 10 years}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Collect and organize massive data volumes
+  \item
+    Run analytics (dashboards, models, reports) on data
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{What Are Data Analytics?}}
+\end{itemize}
+
+\begingroup \footnotesize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2393}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4017}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3590}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Category}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Description}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Example}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\textbf{Collections of data} & Organized datasets for analysis &
+Customer purchase histories in CRM \\
+\textbf{Descriptive statistics} & Key metrics: mean, median, standard
+deviation & Average quarterly sales to track trends \\
+\textbf{Historical reports} & Review of past performance & Monthly sales
+reports from last year \\
+\textbf{Dashboards} & Visuals of key metrics for quick insights &
+Quarterly revenue and expense dashboard \\
+\textbf{Models} & Statistical tools to forecast, explain & Churn
+prediction from customer behavior \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Data Analytics Sophistication}
+\protect\phantomsection\label{data-analytics-sophistication}
+\begingroup \footnotesize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+\textbf{Business Question} & \textbf{Methodology} \\
+\midrule\noalign{}
+\endhead
+What happened? & Descriptive statistics \\
+What will happen? & Predictive models \\
+What should we do? & Prescriptive programs \\
+What's the best we can do? & Simulation + optimization \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{center}
+  \includegraphics[width=0.9\textwidth]{msml610/lectures_source/figures/L08.1.Analytical_sophistication.png}
+\end{center}
+\end{frame}
+
+\begin{frame}{Test}
+\protect\phantomsection\label{test}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    \emph{\textbf{\textcolor{red}{What ML Systems Can and Cannot Tell You}}}
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Illusion of Understanding}
+\protect\phantomsection\label{the-illusion-of-understanding}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Prediction vs. Explanation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models find patterns in historical data
+  \item
+    Can't explain mechanisms or answer ``what if'' scenarios
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{High accuracy $\neq$ Understanding causation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A model with 95\% churn prediction accuracy won't tell you what
+    \emph{causes} churn
+  \item
+    Accurate sales forecasts can't predict effects of \emph{pricing
+    changes}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{The Real Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Without causation, you react to past events
+  \item
+    You can't proactively \emph{change outcomes}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Association, Correlation, and Causation}
+\protect\phantomsection\label{association-correlation-and-causation}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Association}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Variables co-occur or are statistically dependent
+  \item
+    E.g., \emph{``People who buy diapers also buy beer''}
+  \item
+    No info on direction or mechanism
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Correlation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Linear relationship between variables
+  \item
+    E.g., \emph{``Ice cream sales and drowning deaths correlate''} (both
+    seasonal)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Causation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Changing one variable \emph{directly} changes another
+  \item
+    E.g., \emph{``Asbestos causes cancer''}
+  \item
+    Requires causal model or experiment
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{The illusion}}: high correlation
+  \emph{feels like} understanding
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Real understanding means knowing what happens when you
+    \emph{intervene}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What ML Systems Can Tell You}
+\protect\phantomsection\label{what-ml-systems-can-tell-you}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Pattern recognition}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Find correlations in data
+  \item
+    Identify similar items (e.g., through clustering, classification)
+  \item
+    Forecast based on past trends
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Predictive accuracy on held-out test data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Accurate prediction if conditions remain stable
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Only works when training and future data match
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Feature importance}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Find variables with strongest statistical associations
+  \item
+    Doesn't distinguish correlation from causation
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What ML Systems Cannot Tell You}
+\protect\phantomsection\label{what-ml-systems-cannot-tell-you}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Causation from observational data alone}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Strong correlations \(\leftarrow\) confounding, reverse causation,
+    or coincidence
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Effects of interventions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``If we change X, what happens to Y?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \emph{``If we lower prices by 10\%, will revenue
+      increase?''}
+    \end{itemize}
+  \item
+    Observational data can't answer without causal assumptions
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Counterfactuals}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``What would have happened with a different decision?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \emph{``Would customer churn if we offered them a
+      discount?''}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Fairness}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A model can be \emph{statistically} unbiased but \emph{causally}
+    biased
+  \item
+    \emph{Statistically unbiased}: \(\EE[Prediction] = \EE[True Value]\)
+  \item
+    \emph{Causally biased}: model uses variables that are proxies for
+    protected attributes, even if those variables aren't explicitly
+    protected
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., using variables correlated to race, gender in decisions
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Optimal decisions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ML optimizes for accuracy, not business outcomes
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., a 90\% accurate model might lead to worse decisions than an
+      85\% accurate one, depending on the consequences of different
+      errors
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Why Causal AI Matters}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Problems with Traditional AI}}}
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 1: Correlation is Not Causation!}
+\protect\phantomsection\label{problem-1-correlation-is-not-causation}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Correlation}}: statistical relationships
+  between variables
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Pros:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Find patterns in past data to predict future
+    \end{itemize}
+  \item
+    Cons:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Doesn't explain cause
+    \item
+      Variables move together by coincidence or hidden factors
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Causation}} explains how changing one
+  variable influences another
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Cannot be concluded from correlation alone
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Data doesn't understand causes and effects}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Only humans identify variables and relationships from context
+  \item
+    Without causation, you can't make intelligent decisions
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Correlation is Not Causation: Examples}
+\protect\phantomsection\label{correlation-is-not-causation-examples}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Intuitively}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You know that association is not causation
+  \item
+    Humans confuse association with causation, e.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      \emph{``You eat X, get stomachaches''} \(\to\) infer \emph{``X is
+      bad for you''}
+    \item
+      \emph{``Buy stock before price spikes''} \(\to\) infer \emph{``you
+      can time markets''}
+    \end{itemize}
+  \end{itemize}
+\item
+  Sometimes both directions are possible, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Top-notch consulting improves businesses''} or
+  \item
+    \emph{``Do successful businesses hire top consultants?''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Correlation is Not Causation: Examples}
+\protect\phantomsection\label{correlation-is-not-causation-examples-1}
+:::: :::: \{.column width=35\%\} -
+\textbf{\textcolor{red}{In hotel industry}} - Prices are low when hotel
+is empty - Prices are high when demand is high and hotel full - A naive
+prediction suggests to increase prices to sell more rooms :::: ::::
+\{.column width=35\%\} TODO(gp): Add figure :::: :::
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Online marketplace company}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Decide how to set prices and when to have sales
+  \item
+    Causal question: \emph{``What is the impact of lowering prices on
+    units sold?''}
+  \item
+    Gains from selling more need to compensate for the loss of selling
+    cheaper
+  \item
+    Price cuts can have different impacts depending on:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The \emph{type} of business (e.g., clothing vs drugs)
+    \item
+      The \emph{timing} (e.g., before Christmas)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 2: Decision Making}
+\protect\phantomsection\label{problem-2-decision-making}
+\begin{itemize}
+\item
+  Businesses need
+  \textbf{\textcolor{red}{decisions, not just predictions}}
+\item
+  E.g., \emph{``What happens if a product price is reduced by 10\%?''}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Will more customers buy?
+  \item
+    Will revenue decrease? What to do then?
+  \item
+    Why are customers leaving? Quality issue? Emerging competitor?
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example of policy questions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Low-sugar vs low-fat diet: which works?''}
+  \item
+    \emph{``If we increase credit lines, how does bank margin change?''}
+  \item
+    \emph{``Build a library or give tablets to boost test scores?''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 3: ML Explainability}
+\protect\phantomsection\label{problem-3-ml-explainability}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Regulators require defense of ML/AI decisions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., hiring decisions, policy setup
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Many ML systems are black boxes}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., neural networks
+  \item
+    Humans can't understand input-to-output process
+  \item
+    Can't explain decisions to shareholders
+  \item
+    Features like age, race, sex introduce bias
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Drawbacks}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fines
+  \item
+    Customer backlash
+  \item
+    Activist pressure
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Solution}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Explainable AI lets users comprehend, explain, trust machine results
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 4: How ML Systems Make Decisions Today}
+\protect\phantomsection\label{problem-4-how-ml-systems-make-decisions-today}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Typical workflow}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Collect data \(\to\) Train model \(\to\) Make predictions
+  \item
+    Deploy: \emph{``If model predicts X, take action Y''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Critical limitation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Systems optimize
+
+    \begin{itemize}
+    \tightlist
+    \item
+      For prediction accuracy
+    \item
+      Not for decision quality or business outcomes
+    \end{itemize}
+  \item
+    E.g., fraud detector with 95\% accuracy that blocks 50\% legitimate
+    transactions is a poor system
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data Science for Decisions: Examples}
+\protect\phantomsection\label{data-science-for-decisions-examples}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Recommendation systems}} (e.g., Netflix,
+  Amazon, TikTok)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model predicts which items users will click based on historical
+    clicks
+  \item
+    System recommends top-N items based on predicted clicks
+  \item
+    \emph{Problem}: Can't run counterfactual experiments offline
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Recommending novel items has no historical data to learn from
+    \item
+      Optimizing purely for clicks may harm long-term engagement (users
+      get bored, echo chambers, filter bubbles)
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Hiring pipelines}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model scores candidates
+  \item
+    HR uses scores to rank applicants
+  \item
+    \emph{Problem}: Training data encodes historical hiring bias
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Fraud detection}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model flags suspicious transactions
+  \item
+    System blocks transactions automatically
+  \item
+    \emph{Problem}: High false positive rate without knowing how to
+    improve
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 5: Feedback Loops}
+\protect\phantomsection\label{problem-5-feedback-loops}
+\begin{itemize}
+\item
+  Prediction systems can change the world through
+  \textbf{\textcolor{red}{feedback loops}}
+\item
+  \textbf{\textcolor{darkgreen}{Recommendation systems}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model recommends sensational content \(\to\) users click more
+  \item
+    Future training data has more clicks on sensational content
+  \item
+    Model recommends even more sensational content
+  \item
+    \emph{Problem}: Radicalization, echo chambers, mental health issues
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Criminal justice relapse prediction}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Minorities policed more \(\to\) arrested more \(\to\) data more
+    biased
+  \item
+    Model trained on arrest data (biased against minorities)
+  \item
+    Judges use models for bail/sentencing
+  \item
+    \emph{Problem}: Model becomes increasingly biased over time
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{College admissions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model trained on past acceptance decisions (which encode historical
+    racism, sexism)
+  \item
+    Model used to screen applications
+  \item
+    Filter for applicants is biased
+  \item
+    \emph{Problem}: Historical biases are perpetuated
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Problem 6: Distribution Shift}
+\protect\phantomsection\label{problem-6-distribution-shift}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{The world is always changing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Concept drift}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      I.e., \(\Pr(Y | X)\), the link between inputs and predictions
+      changes over time, the ``rules''
+    \item
+      E.g., customer preferences change over times \(\to\) model trained
+      on 2020 data becomes less accurate by 2023
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Covariate shift}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      I.e., \(\Pr(X)\), input distribution changes but relationship
+      stays the same
+    \item
+      E.g., more young customers join platform \(\to\) model trained on
+      older customer base performs worse
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Label shift}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      I.e., \(\Pr(Y)\), outcome distribution changes
+    \item
+      E.g., fraud rate increases due to new fraud tactics \(\to\) model
+      trained on old fraud rate is less effective
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Why causal models help}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Encode mechanisms, not just patterns
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Mechanisms more stable across distribution shifts
+    \end{itemize}
+  \item
+    Understand ``why'' \(\to\) predict in new contexts
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    \emph{\textbf{\textcolor{red}{Optimization vs. Inference vs. Decision Theory}}}
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Optimization vs.~Inference vs.~Decision Theory}
+\protect\phantomsection\label{optimization-vs.-inference-vs.-decision-theory}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Three paradigms that ML conflates}}
+\item
+  \textbf{\textcolor{darkgreen}{Optimization}}: find best action given
+  \emph{known} objective
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Assumes world behavior is known
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., minimize cost, maximize throughput, tune parameters
+    \end{itemize}
+  \item
+    \emph{Tools}: gradient descent, linear programming, evolutionary
+    algorithms
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Statistical inference}}: estimate parameters
+  from data
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learns from observations given model structure
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., estimate treatment effects, compute confidence intervals
+    \end{itemize}
+  \item
+    \emph{Tools}: regression, Bayesian estimation, hypothesis testing
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Decision theory}}: choose actions under
+  \emph{uncertainty}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., \emph{``Launch product with uncertain demand?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Requires reasoning about interventions and outcomes
+    \end{itemize}
+  \item
+    \emph{Tools}: utility functions, expected value of information,
+    causal models
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Where ML Falls Short}
+\protect\phantomsection\label{where-ml-falls-short}
+\begin{itemize}
+\tightlist
+\item
+  ML focuses on \textbf{\textcolor{red}{inference and optimization}}
+\item
+  \textbf{\textcolor{darkgreen}{Real problems need decision theory}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Act under uncertainty with causal knowledge
+  \end{itemize}
+\end{itemize}
+
+\begingroup \footnotesize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2024}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3214}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2024}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2738}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Paradigm}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Question}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Assumes}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Output}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Optimization & What maximizes \(f(x)\)? & Known objective & Optimal
+\(x^*\) \\
+Inference & What is \(\theta\)? & Model structure & Parameter
+estimates \\
+Decision theory & What should we \emph{do}? & Uncertainty & Recommended
+action \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Causal AI bridges inference and decision theory}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Inference: what the world looks like
+  \item
+    Causal models: what happens when you act
+  \item
+    Decision theory: which action to choose
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    \emph{\textbf{\textcolor{red}{The Cost of Ignoring Causality}}}
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Cost of Ignoring Causality (1/2)}
+\protect\phantomsection\label{the-cost-of-ignoring-causality-12}
+\begin{itemize}
+\item
+  Wrong decisions, wasted resources occur when organizations ignore
+  causality
+\item
+  \textbf{\textcolor{red}{Simpson's Paradox}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aggregate data shows opposite trend from subgroups
+  \item
+    E.g., Berkeley admissions: overall bias shown, but no bias within
+    departments
+  \item
+    \emph{Causal fix}: condition on the right variables using DAG
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Confounding bias}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hidden variable drives both treatment and outcome
+  \item
+    E.g., ice cream sales and drowning deaths both rise in summer
+  \item
+    \emph{Causal fix}: identify and control for confounders
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Collider bias}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Conditioning on common effect creates false associations
+  \item
+    E.g., in hospitalized patients unrelated diseases appear correlated
+    (since they both cause hospitalization)
+  \item
+    \emph{Causal fix}: don't condition on colliders
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Cost of Ignoring Causality (2/2)}
+\protect\phantomsection\label{the-cost-of-ignoring-causality-22}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Feedback loop amplification}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Biased predictions reinforce bias in future training data
+  \item
+    E.g., more police to minority neighborhoods \(\to\) more arrests
+    \(\to\) model learns neighborhoods are more dangerous \(\to\) send
+    more police
+  \item
+    \emph{Causal fix}: model feedback explicitly
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Intervention backfire}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Acting on correlation leads to wrong actions
+  \item
+    E.g., hospitals with more staff have higher mortality rates
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Confounded by patient severity: sicker patients need more staff
+    \end{itemize}
+  \item
+    A naive intervention (\emph{``reduce staff to lower mortality''})
+    would be catastrophic
+  \item
+    \emph{Causal fix}: distinguish correlation from causal effect before
+    acting
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal AI}
+\protect\phantomsection\label{causal-ai}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Understands the why}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Determines cause-and-effect between variables
+  \item
+    E.g., \emph{``Did marketing campaign increase sales?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Identify interventions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Identifies variables and interventions to change outcomes
+  \item
+    E.g., \emph{``Which lifestyle changes reduce blood pressure?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Predict counterfactuals}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Hypothesize outcomes under different circumstances
+  \item
+    E.g., student grades if they attended a different school
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Avoid bias}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ensure fairness beyond training data biases by accounting for
+    confounding variables
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Improve decisions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand relationships for better choices
+  \item
+    E.g., improve supply chain by understanding impact of decisions on
+    logistics
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal AI vs Traditional AI}
+\protect\phantomsection\label{causal-ai-vs-traditional-ai}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Current AI}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use correlation to:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Analyze data
+    \item
+      Identify patterns
+    \item
+      Make predictions
+    \end{itemize}
+  \item
+    Model quality depends on data quality
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Biased or unclean data \(\to\) poor model
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Causal AI}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Science of inferring causation from association
+  \item
+    Understanding when and why causation and association differ
+  \item
+    Understand cause-and-effect relationships to intervene on the cause
+    for desired effect
+  \end{itemize}
+\item
+  \emph{``The next revolution of data science is the science of
+  interpreting reality, not of summarizing data''} (Judea Pearl, 2021)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-7}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Causal AI Fundamentals}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-8}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{The Ladder of Causation}}}
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Ladder of Causation}
+\protect\phantomsection\label{the-ladder-of-causation}
+\begin{itemize}
+\tightlist
+\item
+  Pearl provided a 3-level framework for understanding causality
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Association
+  \item
+    Intervention
+  \item
+    Counterfactuals
+  \end{enumerate}
+\end{itemize}
+
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2812}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2031}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2188}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Level}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Symbol}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Activity}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Questions}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+1. Association & \(\Pr(Y | X)\) & Observing & What is? \\
+2. Intervention & \(\Pr(Y | do(X), Z)\) & Intervening & What if? \\
+3. Counterfactuals & \(\Pr(Y_X | x', y')\) & Imagining & Why? \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Rung 1: Association}
+\protect\phantomsection\label{rung-1-association}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Question}}: \emph{``How would seeing \(X\)
+  change your belief in \(Y\)?''}
+\item
+  \textbf{\textcolor{darkgreen}{Math}}: \(\Pr(Y|X)\)
+\item
+  \textbf{\textcolor{blue}{Activity}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Passive observation to determine if \(X, Y\) relate
+  \item
+    Traditional AI/ML based on this
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Trees have green leaves in spring''}
+  \item
+    \emph{``What does a symptom tell you about disease?''}
+  \item
+    \emph{``What does a survey tell you about elections?''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rung 2: Intervention}
+\protect\phantomsection\label{rung-2-intervention}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Question}}: \emph{``What happens to \(Y\) if
+  you do \(X\)?''}
+\item
+  \textbf{\textcolor{darkgreen}{Math}}: \(\Pr(Y | do(X), Z)\)
+\item
+  \textbf{\textcolor{blue}{Activity}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand impact of action \(X\) on \(Y\) under conditions \(Z\)
+  \item
+    Requires causal model, not just observations
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Spring makes leaves turn green''}
+  \item
+    \emph{``Did headache disappear from pain reliever or food?''}
+  \item
+    \emph{``If I take aspirin, will headache cure?''}
+  \item
+    \emph{``If we ban sodas, what happens?''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Rung 3: Counterfactuals}
+\protect\phantomsection\label{rung-3-counterfactuals}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Question}}: \emph{``Was \(X\) that caused
+  \(Y\)?''}
+\item
+  \textbf{\textcolor{darkgreen}{Symbol}}: \(\Pr(Y_X | x', y')\)
+\item
+  \textbf{\textcolor{blue}{Activity}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Imagine what would happen if facts were different
+  \item
+    Highest form of reasoning---requires understanding cause-and-effect
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``What if child received adult drug dose?''}
+  \item
+    \emph{``What would jury conclude?''}
+  \item
+    \emph{``Why did marketing campaign fail?''}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-9}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    \emph{\textbf{\textcolor{red}{Correlation vs Causation Models}}}
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Correlation vs Causation Model}
+\protect\phantomsection\label{correlation-vs-causation-model}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Correlation}}: how variables relate
+\item
+  \textbf{\textcolor{darkgreen}{Causality}}: whether one variable causes
+  another
+\item
+  Both accept inputs, transform, compute predictions
+\item
+  \textbf{\textcolor{blue}{Correlation-based AI}}: works with abundant
+  historical data
+\item
+  \textbf{\textcolor{violet}{Causal-based AI}}: build business model
+  first, then integrate data
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Correlation-Based Model Process}
+\protect\phantomsection\label{correlation-based-model-process}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{"Data first" approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    More data = better
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Process}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Acquire data
+  \item
+    Integrate and clean data
+  \item
+    Exploratory data analysis (EDA)
+  \item
+    Feature engineering
+  \item
+    Build and test models
+  \item
+    Deploy models in production
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Common failures of correlation-based AI}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Organizational issues
+  \item
+    Opaque models, lack explainability
+  \item
+    Spurious correlations
+  \item
+    Never articulate ``what's the business goal?''
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causation-based Model Process}
+\protect\phantomsection\label{causation-based-model-process}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{"Model first" approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand business question before data
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Process}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What is the intended outcome?
+  \item
+    What is the proposed intervention?
+  \item
+    What are confounding and effecting factors?
+  \item
+    Create model diagram/graph
+  \item
+    Data acquisition
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-10}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    \emph{\textbf{\textcolor{red}{Data Science vs. Decision Science}}}
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{From Data Science to Decision Science}
+\protect\phantomsection\label{from-data-science-to-decision-science}
+\begin{itemize}
+\tightlist
+\item
+  Data science and Decision science are
+  \textbf{\textcolor{red}{two different paradigms}}
+\end{itemize}
+
+\begingroup \footnotesize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2289}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3735}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3976}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Dimension}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Data Science}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Decision Science}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Goal & Predict outcomes & Choose best actions \\
+Core question & \emph{``What will happen?''} & \emph{``What should we
+do?''} \\
+Method & Statistical models, ML & Causal models, decision theory \\
+Output & Score, forecast, cluster & Recommended action + expected
+outcome \\
+Success metric & Accuracy, AUC, RMSE & Business outcome, ROI, impact \\
+Data requirement & Historical observations & Observations + causal
+structure \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{Key insight}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Organizations have data science teams doing prediction
+  \item
+    Business stakeholders need decision science
+  \item
+    Gap between ``what will happen'' and ``what should we do'' is
+    \emph{causal reasoning}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Machine learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Excels at prediction
+  \item
+    Fails at ``what-if'' questions
+  \item
+    Fails for decisions involving interventions
+  \item
+    Association works for predicting without intervention
+  \item
+    Models can be useless or harmful
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal Questions vs.~Predictive Questions}
+\protect\phantomsection\label{causal-questions-vs.-predictive-questions}
+\begin{itemize}
+\tightlist
+\item
+  Predictive question: \emph{what will happen?}
+\item
+  Causal question: \emph{what to do?}, \emph{why it happened?},
+  \emph{what will happen}?
+\end{itemize}
+
+\begingroup \footnotesize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4773}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5227}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Predictive Question}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Causal Question}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+Which patients will be readmitted? & Which intervention reduces
+readmission? \\
+Which customers will churn? & What action prevents churn? \\
+What will sales be next quarter? & How would a 10\% price cut affect
+sales? \\
+Which students will fail the exam? & Does tutoring improve exam
+scores? \\
+Which transactions are fraudulent? & What policy changes reduce
+fraud? \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Predictive questions}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Standard ML, observational data only
+  \item
+    Useful for \emph{monitoring} and \emph{alerting}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Causal questions}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Causal models or experiments
+  \item
+    Answer ``what if'' and ``why''
+  \item
+    Useful for \emph{decisions} and \emph{policy design}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A Roadmap From Prediction to Decision Intelligence}
+\protect\phantomsection\label{a-roadmap-from-prediction-to-decision-intelligence}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Level 0: Descriptive}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``What happened?''}
+  \item
+    Dashboards, reports, statistics (backward-looking)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Level 1: Predictive}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``What will happen?''}
+  \item
+    ML models, forecasting (assumes stable world)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Level 2: Causal}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``Why?''} and \emph{``What if we intervene?''}
+  \item
+    DAGs, do-calculus (understand mechanisms)
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Level 3: Decision}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{``What should we do?''}
+  \item
+    Causal models + decision theory + business goals
+  \end{itemize}
+\item
+  Most organizations stuck at Level 1
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Causal AI enables jump to Levels 2 and 3
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-11}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  \emph{\textbf{\textcolor{red}{Causal AI in Business}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-12}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{Business Context and Motivation}}}
+  \item
+    The Causal AI Workflow
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Digital Transformation in Business}
+\protect\phantomsection\label{digital-transformation-in-business}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Digital transformation}} uses digital
+  technologies to:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Reduce costs
+  \item
+    Improve revenues
+  \end{itemize}
+\item
+  How?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Integration of digital technology}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Embed digital tools (AI, cloud, IoT, automation) into business
+      areas
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Cultural and organizational change}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Encourage innovation, agility, data-driven mindset
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Customer-centric approach}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Use digital solutions (personalized experiences, AI-driven
+      insights) to enhance customer engagement, satisfaction
+    \end{itemize}
+  \item
+    \textbf{\textcolor{cyan}{Process automation and optimization}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Streamline operations through AI, robots, analytics
+    \end{itemize}
+  \item
+    \textbf{\textcolor{blue}{Data-driven decision making}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Leverage big data, machine learning, real-time analytics for
+      smarter, faster, strategic decisions
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why AI Projects Fail?}
+\protect\phantomsection\label{why-ai-projects-fail}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{AI projects fail}} because they approach
+  problems only from an ML perspective
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Data scientists:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Focus on model accuracy and technical metrics
+    \item
+      Work in isolation from domain experts, business users, and data
+      engineers
+    \end{itemize}
+  \item
+    Lack of understanding of problem context leads to irrelevant
+    solutions
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Misalignment with business goals}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models solve the wrong problem or answer irrelevant questions
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Black-box models}} fail to solve
+  real-world problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models are difficult to interpret or explain to stakeholders
+  \item
+    Lack of transparency reduces trust and adoption
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Data issues}} undermine model performance
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Poor quality, missing, or biased data
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Deployment and integration challenges}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Models not easily integrated into production systems
+  \item
+    Real-time constraints or infrastructure limitations
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Lack of feedback loops}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    No process for monitoring model performance post-deployment
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How to Make AI Project Succeed}
+\protect\phantomsection\label{how-to-make-ai-project-succeed}
+\begin{enumerate}
+\item
+  \textbf{\textcolor{red}{Create a hybrid team}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Represents all business aspects
+  \item
+    Uses collaborative framework
+  \item
+    Communicates with a single language (e.g., DAGs)
+  \item
+    Team size varies by company and project complexity
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Meet regularly to ensure continuity}}
+\item
+  \textbf{\textcolor{blue}{Find an executive sponsor}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understands project's goals and potential
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Initial pilot}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Small team for targeted problem
+  \item
+    Demonstrate AI approach merit
+  \end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-13}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    \emph{\textbf{\textcolor{red}{The Causal AI Workflow}}}
+  \item
+    Explainability and Interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{AI in Business}
+\protect\phantomsection\label{ai-in-business}
+\begin{itemize}
+\tightlist
+\item
+  How do you use Causal AI in Business?
+\end{itemize}
+
+\centering
+
+\includegraphics[width=0.8\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}
+\end{frame}
+
+\begin{frame}{Step 1: What Are the Intended Outcomes?}
+\protect\phantomsection\label{step-1-what-are-the-intended-outcomes}
+\begin{itemize}
+\tightlist
+\item
+  Most AI projects (even 90\%) fail
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misalignment between business goals and project
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Questions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What process are you analyzing?
+  \item
+    What happens if a course of action is taken or not?
+  \item
+    Outcomes: positive, negative, unacceptable, optimal?
+  \item
+    What related data can be combined and leveraged?
+  \item
+    What are possible and feasible interventions?
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Confounding factors correlated with outcomes and treatments?
+    \item
+      Factors exist but cannot be accurately measured?
+    \end{itemize}
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 2: What Are the Proposed Interventions?}
+\protect\phantomsection\label{step-2-what-are-the-proposed-interventions}
+\begin{itemize}
+\item
+  What are \textbf{\textcolor{red}{levers}} to achieve a business
+  outcome?
+\item
+  E.g., customer marketing for a product
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Introduce a new product?
+  \item
+    Does bundling multiple products
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Improve sales?
+    \item
+      Inhibit long-term sales?
+    \end{itemize}
+  \item
+    Should advertisement focus on product quality vs other options?
+  \item
+    Add more variations of the same product?
+  \item
+    Discontinue the product?
+  \item
+    Divest the product line?
+  \item
+    \ldots{}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 3: What Factors Create Changes?}
+\protect\phantomsection\label{step-3-what-factors-create-changes}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Identify confounders}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Obscure relationship between variables
+  \item
+    Mute or inflate relationship
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Direct effect}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Effect through intervention
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Indirect effect}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Effect by environment or intervention byproduct
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Total causal effect}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Effect of all factors modifying outcome
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 4: Build Causal DAG}
+\protect\phantomsection\label{step-4-build-causal-dag}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Causal models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simplify systems without losing key relationships
+  \item
+    Focus on essential variables and interactions
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Visual models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Abstract complexity into interpretable formats
+  \item
+    Highlight direction and strength of influence
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Simplicity}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Aid communication between stakeholders
+  \item
+    Reduce cognitive overload by excluding irrelevant details
+  \item
+    Guide data collection by identifying impactful variables
+  \item
+    Support hypothesis testing through counterfactual and intervention
+    scenarios
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Balance is key}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Too much simplicity loses insight
+  \item
+    Too much complexity loses clarity
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Marketing Example: Price Intervention}
+\protect\phantomsection\label{marketing-example-price-intervention}
+\begin{itemize}
+\tightlist
+\item
+  Assume \textbf{\textcolor{red}{price is intervention}} and you want to
+  \textbf{\textcolor{blue}{maximize revenue}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Increase price? By how much?
+  \item
+    Decrease price? By how much?
+  \item
+    Change price one-time or over time?
+  \item
+    Develop individual pricing model for each customer?
+  \end{itemize}
+\item
+  The causal DAG is:
+  \includegraphics[width=\linewidth,height=0.5\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Lots of confounders!
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 5: Data Acquisition and Integration}
+\protect\phantomsection\label{step-5-data-acquisition-and-integration}
+\begin{itemize}
+\item
+  Use \textbf{\textcolor{red}{data collected}} for correlation-based ML
+\item
+  Collect \textbf{\textcolor{darkgreen}{data specifically}} for causal
+  AI
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Treat, condition, transform data
+  \end{itemize}
+\item
+  Prepare data to match refined causal model
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Clean, normalize, align data with model assumptions
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Transformation data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Map observed variables to DAG nodes
+  \item
+    Encode categorical variables
+  \item
+    Handle missing data (imputation or exclusion)
+  \item
+    Normalize or scale values
+  \end{itemize}
+\item
+  Control for bias and confounding
+\item
+  \textbf{\textcolor{violet}{Goal}}: Ensure data structure supports
+  causal estimation
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 6: Model Modification}
+\protect\phantomsection\label{step-6-model-modification}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{After initial DAG}} is designed
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Refine to reduce bias and improve reliability
+  \item
+    Clarify variables as confounders, mediators, or outcomes
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Avoid common pitfalls}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Do not control for mediators or colliders, which can distort results
+  \item
+    Control for direct and indirect confounders to prevent biased
+    estimates
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Test models}} against technical and business
+  objectives
+\item
+  Determines necessary controls to
+  \textbf{\textcolor{violet}{isolate causal effects}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ensure causal assumptions align with data and domain logic
+  \item
+    Improve model interpretability and predictive power
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Step 7: Preparing for Deployment in Business}
+\protect\phantomsection\label{step-7-preparing-for-deployment-in-business}
+\begin{itemize}
+\tightlist
+\item
+  Transition
+  \textbf{\textcolor{red}{from experimentation to decision-making processes}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Validate model against real-world business outcomes
+  \item
+    Ensure stakeholders understand and trust causal logic and
+    assumptions
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Develop user-friendly interfaces}} for
+  business users
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Automate data pipelines for timely updates and monitoring
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Set up monitoring}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Establish metrics for performance tracking and drift detection
+  \item
+    Create feedback loops to refine and improve models post-deployment
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Document and train}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Provide clear model documentation for auditors and users
+  \item
+    Train stakeholders on interpreting results and making informed
+    decisions
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Goal}}: Deliver measurable business value
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Roles in Hybrid Teams}
+\protect\phantomsection\label{roles-in-hybrid-teams}
+\begingroup \scriptsize
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+\textbf{Role} & \textbf{Responsibilities} \\
+\midrule\noalign{}
+\endhead
+Business Strategists & Align modeling with business goals \\
+& Sponsor projects \\
+& Communicate insights to stakeholders \\
+Subject-Matter Experts & Provide domain expertise \\
+& Identify relevant variables \\
+& Validate DAGs \\
+Data Experts & Source and clean data \\
+& Map data to model variables \\
+& Handle missing values \\
+Data Scientists & Construct and validate DAGs \\
+& Apply causal inference methods \\
+& Simulate decisions \\
+Software Developers & Build tools and interfaces \\
+& Create data pipelines \\
+IT Professionals & Provide infrastructure and governance \\
+& Ensure model execution \\
+& Integrate with enterprise systems \\
+Project Managers & Coordinate collaboration and timelines \\
+& Manage documentation \\
+& Ensure alignment with strategic goals \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\endgroup
+\end{frame}
+
+\begin{frame}{Executing for a Hybrid Team Project}
+\protect\phantomsection\label{executing-for-a-hybrid-team-project}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Establish a collaborative approach}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Align strategic goals with technical efforts
+  \item
+    Emphasize early stakeholder engagement and shared ownership
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Define team goals}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use SMART objectives aligned with business strategy
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Target a project}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Choose a bounded, feasible, high-value use case
+  \item
+    Prioritize early wins for trust and momentum
+  \end{itemize}
+\item
+  \textbf{\textcolor{teal}{Define the hypothesis}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Build a preliminary DAG with experts' input
+  \end{itemize}
+\item
+  \textbf{\textcolor{cyan}{Incremental model development}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Build the model in small stages
+  \item
+    Iterate with regular feedback
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-14}
+\begin{itemize}
+\tightlist
+\item
+  Introduction and Motivation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Background
+  \item
+    What ML Systems Can and Cannot Tell You
+  \end{itemize}
+\item
+  Why Causal AI Matters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problems with Traditional AI
+  \item
+    Optimization vs.~Inference vs.~Decision Theory
+  \item
+    The Cost of Ignoring Causality
+  \end{itemize}
+\item
+  Causal AI Fundamentals
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The Ladder of Causation
+  \item
+    Correlation vs Causation Models
+  \item
+    Data Science vs.~Decision Science
+  \end{itemize}
+\item
+  Causal AI in Business
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Business Context and Motivation
+  \item
+    The Causal AI Workflow
+  \item
+    \emph{\textbf{\textcolor{red}{Explainability and Interpretability}}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Importance of Explainability}
+\protect\phantomsection\label{the-importance-of-explainability}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Understanding AI-based models}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    How do ML models make decisions?
+  \item
+    Can they be trusted?
+  \item
+    Are they biased?
+  \end{itemize}
+\item
+  AI systems need to foster trust, transparency, and user confidence
+\item
+  Management faces
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Loss of trust, regulation violations, fines, lawsuits
+  \item
+    E.g., false negative in medical screening for cancer
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Humans in the loop}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Ensure interpretation and context are considered
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Techniques for Interpretability}
+\protect\phantomsection\label{techniques-for-interpretability}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Local Interpretable Model-agnostic Explanations}}
+  (LIME)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Focus on single prediction
+  \item
+    Approximate model locally with interpretable model
+  \item
+    Perturb input data, observe prediction changes
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Partial Dependence Plots}} (PDP)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Show marginal effect of features on predicted outcome
+  \item
+    Vary one feature, keep others constant
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Individual Conditional Expectation}} (ICE)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Show feature-prediction relationship for individual instances
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{SHapley Additive exPlanations}} (SHAP)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Quantify feature contribution to specific prediction
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal AI in Interpretable AI}
+\protect\phantomsection\label{causal-ai-in-interpretable-ai}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Understand causes, effects, and solutions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    DAGs present variables, relationships, strengths
+  \item
+    Counterfactuals predict action outcomes
+  \item
+    Remove confounders to prevent skewed estimates
+  \item
+    Humans understand output (experts and non-experts)
+  \item
+    Hybrid teams enhance context, reduce blind spots
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Future of Causal AI}
+\protect\phantomsection\label{the-future-of-causal-ai}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Causal AI}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Moves from academia to commercial use
+  \item
+    Departs from purely data-driven systems
+  \item
+    Reflects human thinking and decision-making
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Convergence}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Causal AI
+  \item
+    Traditional AI
+  \item
+    Deep learning
+  \item
+    Generative techniques
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Probabilistic Machine Learning Matters}
+\protect\phantomsection\label{why-probabilistic-machine-learning-matters}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Question}}: When is knowing \emph{how
+  confident} a model is more important than the prediction itself?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Medical diagnosis: A classifier that says ``cancer'' needs to know
+    how sure it is
+  \item
+    Autonomous driving: When should the car defer to human control?
+  \item
+    Financial risk: Which decisions warrant caution despite high
+    confidence?
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Key advantage}}: Probabilistic models
+  output full distributions, not point estimates
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Standard ML: ``The diagnosis is pneumonia''
+  \item
+    Probabilistic ML: ``87\% pneumonia, 13\% flu, plus credible
+    intervals for each''
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Why it matters in practice}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Uncertainty quantification drives better decisions under risk
+  \item
+    Limited or noisy data is handled naturally, not forced into
+    deterministic assumptions
+  \item
+    Priors encode domain expertise formally, crucial when data is
+    expensive or scarce
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Intuition}}: Probability embraces what we
+  \emph{don't} know, treating it as information rather than failure
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Probabilistic ML: Robustness Through Uncertainty}
+\protect\phantomsection\label{probabilistic-ml-robustness-through-uncertainty}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Deterministic models fail silently
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Overfit to small datasets (commit to one ``best'' explanation)
+  \item
+    Produce overconfident predictions on out-of-distribution data
+  \item
+    Struggle with missing values (requires imputation or row deletion)
+  \end{itemize}
+\item
+  \textbf{\textcolor{orange}{Solution}}: Probabilistic frameworks solve
+  these naturally
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{darkgreen}{Uncertainty propagation}}: Bayesian
+    model averaging marginalizes over plausible explanations, building
+    in Occam's razor
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Naturally penalizes unnecessary complexity
+    \item
+      Confidence grows only when data strongly supports a model
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Principled handling of incomplete data}}:
+    Integrate over unknown values instead of guessing or dropping rows
+  \item
+    \textbf{\textcolor{cyan}{Composability}}: Chain probabilistic models
+    (graphical models, hierarchical Bayes) and reason about how
+    uncertainty flows through pipelines
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Deterministic models bolted together hide how errors accumulate
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Key insight}}: Probability isn't just about
+  predictions---it's about decision-making under uncertainty
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When to act, when to wait for more data, when to defer to humans
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Explainability Matters}
+\protect\phantomsection\label{why-explainability-matters}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: Modern AI systems are powerful but
+  opaque
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Deep neural networks with millions of parameters are hard to
+    interpret
+  \item
+    Business logic becomes implicit rather than explicit
+  \item
+    Regulators and stakeholders demand accountability
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Question}}: When do we need
+  explanations?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    High-stakes decisions: healthcare diagnosis, loan approval, criminal
+    justice
+  \item
+    Safety-critical systems: autonomous vehicles, aircraft control
+  \item
+    Building trust: users and decision-makers need to verify model
+    behavior
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Example}}: Medical diagnosis
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Model predicts patient has 85\% likelihood of disease X
+  \item
+    Question: Which symptoms drove this prediction?
+  \item
+    Without explanation: doctor cannot assess clinical validity
+  \item
+    With explanation: doctor can override or accept the prediction
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Key idea}}: Explainability enables
+  accountability and builds trust
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Approaches to Explainability}
+\protect\phantomsection\label{approaches-to-explainability}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Definition}}: Explainability is the degree to
+  which we can understand why a model made a particular prediction
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Global explanation: \emph{``How does the model work overall?''}
+  \item
+    Local explanation: \emph{``Why did the model predict this specific
+    outcome?''}
+  \item
+    Feature importance: \emph{``Which input features most influence the
+    prediction?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Main approaches}}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Intrinsic methods: Design inherently interpretable models
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Decision trees, linear regression, rule-based systems
+    \item
+      Transparent structure allows direct inspection
+    \end{itemize}
+  \item
+    Post-hoc methods: Explain predictions after training
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Feature attribution (LIME, SHAP, integrated gradients)
+    \item
+      Attention mechanisms in neural networks
+    \item
+      Counterfactual explanations: \emph{``What would need to change for
+      a different prediction?''}
+    \end{itemize}
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Example}}: SHAP (SHapley Additive
+  exPlanations)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Computes each feature's contribution to moving the prediction from
+    baseline to actual
+  \item
+    Assigns a value to each feature showing how much it pushed the
+    decision
+  \item
+    Enables ranking features by importance and visualizing their impact
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Remark}}: Trade-off between model
+  performance and explainability
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simpler models are easier to explain but may have lower accuracy
+  \item
+    Complex models achieve better performance but require post-hoc
+    explanation techniques
+  \item
+    Choice depends on the application's requirements for accuracy vs
+    interpretability
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

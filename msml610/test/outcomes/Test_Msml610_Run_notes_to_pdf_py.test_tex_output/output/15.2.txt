@@ -1,0 +1,1856 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+%\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+%\newcommand{\red}[1]{\textcolor{red}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Neural-Symbolic Decision Making}}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{\textbf{\textcolor{red}{I. Motivation and Overview}}}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\item
+  Neural-Symbolic AI: The Integration Problem
+\item
+  \textbf{Motivation}: Classical AI excels at structured reasoning; deep
+  learning excels at pattern recognition
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Classical symbolic systems: rigid, interpretable, struggle with
+    perception
+  \item
+    Neural networks: flexible, learn from data, opaque reasoning
+  \item
+    Gap: how to combine strengths of both?
+  \end{itemize}
+\item
+  \textbf{Goal}: Create decision-making systems that combine
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learned representations from data (neural)
+  \item
+    Structured planning and reasoning (symbolic)
+  \end{itemize}
+\item
+  \textbf{Question}: Can we use neural networks to enhance classical
+  planning algorithms like A*?
+\item
+  \textbf{Key insight}: Neural-symbolic integration is not about
+  replacing one with the other---it's about orchestrating them
+  synergistically
+\item
+  The Four Pillars of Neural-Symbolic Decision Making
+\item
+  \textbf{Pillar 1: Learning Dynamics}: Capture planning algorithm
+  behavior via neural models
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Bootstrapping Search Dynamics} (Beyond A*)
+  \end{itemize}
+\item
+  \textbf{Pillar 2: Dual-Process Reasoning}: Fast intuition + slow
+  deliberation
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Dualformer} (fast heuristics, slow reasoning traces)
+  \end{itemize}
+\item
+  \textbf{Pillar 3: Algebraic Abstraction}: Compose optimizers as
+  algebraic objects
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Composing Global Optimizers} (functional composition of
+    solvers)
+  \end{itemize}
+\item
+  \textbf{Pillar 4: Surrogate Learning}: Learn tractable approximations
+  of hard problems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{SurCo} (linear surrogates for combinatorial optimization)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \emph{\textbf{\textcolor{red}{II. Beyond A\*: Search Dynamics Bootstrapping}}}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\item
+  Beyond A*: Problem Setup
+\item
+  \textbf{Classical A* Planning}: \(f(n) = g(n) + h(n)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(g(n)\) = cost to reach node \(n\)
+  \item
+    \(h(n)\) = heuristic estimate to goal
+  \item
+    Greedy: expand node with lowest \(f(n)\)
+  \end{itemize}
+\item
+  \textbf{The Core Limitation}: Heuristics are hand-crafted
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Admissible heuristics (underestimate true cost) guarantee optimality
+    but may be weak
+  \item
+    Informed heuristics are domain-specific, not generalizable
+  \end{itemize}
+\item
+  \textbf{Key Question}: Can we learn \(h(n)\) from data instead of
+  designing it?
+\item
+  \textbf{Naive Approach}: Train neural network as heuristic function
+  \(h_\theta(n) \approx h^*(n)\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Problem: Requires extensive labeled data on \((n, h^*(n))\) pairs
+  \item
+    Problem: No guarantee on admissibility; may overestimate and miss
+    optimal solutions
+  \end{itemize}
+\item
+  Beyond A*: Search Dynamics Bootstrapping (Core Idea)
+\item
+  \textbf{Central Insight}: Don't just learn heuristics---learn the
+  \emph{dynamics} of how A* explores
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Observation: The \emph{sequence} of nodes A* expands encodes rich
+    planning information
+  \item
+    Dynamics: How does A* decide which node to expand next?
+  \end{itemize}
+\item
+  \textbf{Bootstrapping Strategy}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Run classical A* with hand-crafted heuristic on training problems
+  \item
+    Record the \emph{search trajectory}: sequence of expanded nodes
+    \((n_1, n_2, ..., n_T)\)
+  \item
+    Train transformer to predict the next node to expand from partial
+    trajectory
+  \item
+    Use learned transformer as an \emph{enhanced} heuristic for new
+    instances
+  \end{enumerate}
+\item
+  \textbf{Why Transformers?}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Attention mechanism captures dependencies between nodes in search
+    trajectory
+  \item
+    Can learn patterns in \emph{when} to expand nodes based on path
+    structure
+  \item
+    Transferable: trained on one domain, generalizes to similar
+    instances
+  \end{itemize}
+\item
+  \textbf{Mathematical Formulation}:
+
+  \[
+  \Pr(\text{expand } n_t | n_1, ..., n_{t-1})
+  = \text{Transformer}(n_1, ..., n_{t-1})
+  \]
+\item
+  Beyond A*: Ensuring Guarantees
+\item
+  \textbf{Problem with Direct Learning}: Learned heuristics may violate
+  admissibility
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(h_\theta(n) > h^*(n)\), A* may miss optimal solutions
+  \end{itemize}
+\item
+  \textbf{Solution: Admissibility-Aware Training}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use the learned transformer not as a replacement heuristic, but as a
+    \emph{policy}
+  \item
+    At each step, the transformer suggests which node to expand
+  \item
+    Only accept suggestion if it maintains admissibility constraints
+  \end{itemize}
+\item
+  \textbf{Hybrid Approach}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transformer learns to imitate A* behavior on training set
+  \item
+    On new instances, use transformer to guide search (faster
+    exploration)
+  \item
+    Fall back to classical A* guarantees if needed
+  \end{itemize}
+\item
+  \textbf{Empirical Results}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Faster convergence on learned domains
+  \item
+    Maintains solution quality of classical A*
+  \item
+    Generalizes to unseen problem instances
+  \end{itemize}
+\item
+  Beyond A*: Applications and Limitations
+\item
+  \textbf{Applications}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Path planning in robotics
+  \item
+    Puzzle solving (Sokoban, Rubik's cube)
+  \item
+    Planning under constraints
+  \end{itemize}
+\item
+  \textbf{Limitations}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Requires representative training trajectories
+  \item
+    Computational cost of training transformer
+  \item
+    Domain-specific tuning needed for new problem classes
+  \end{itemize}
+\item
+  \textbf{Key Takeaway}: Neural networks can learn and enhance classical
+  algorithms by capturing algorithmic \emph{dynamics} rather than just
+  mimicking outputs
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-3}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \emph{\textbf{\textcolor{red}{III. Dualformer: Controllable Fast and Slow Thinking}}}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\item
+  Dualformer: The Dual-Process Reasoning Framework
+\item
+  \textbf{Cognitive Science Inspiration}: Humans solve problems via two
+  systems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{System 1 (Fast)}: Quick intuition, heuristic reasoning
+  \item
+    \emph{System 2 (Slow)}: Deliberate, step-by-step verification
+  \item
+    Both are necessary: speed for time-critical decisions, accuracy for
+    complex reasoning
+  \end{itemize}
+\item
+  \textbf{Question}: Can neural networks also learn to switch between
+  fast intuition and slow deliberation?
+\item
+  \textbf{Dualformer Architecture}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Fast Path}: Quick neural heuristic (learned directly)
+  \item
+    \emph{Slow Path}: Iterative reasoning via transformed reasoning
+    traces
+  \item
+    \emph{Control Mechanism}: Learn \emph{when} to use which path
+  \end{itemize}
+\item
+  \textbf{Key Insight}: Don't train a single monolithic model---train
+  two complementary pathways with learned control logic
+\item
+  Dualformer: The Two Reasoning Paths
+\item
+  \textbf{Fast Path} (Intuitive Heuristic):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Single-pass neural network \(f_{\text{fast}}(x) \to a\)
+  \item
+    Extremely fast (milliseconds)
+  \item
+    Lower accuracy, but sufficient for many decisions
+  \item
+    Example: Quick classification, fast planning
+  \end{itemize}
+\item
+  \textbf{Slow Path} (Deliberative Reasoning):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Iterative refinement via reasoning traces \(r_1, r_2, ..., r_T\)
+  \item
+    Each trace \(r_t\) is an intermediate reasoning step
+  \item
+    Composed via transformer: \(a = \text{Transformer}(r_1, ..., r_T)\)
+  \item
+    Much slower, but higher accuracy
+  \end{itemize}
+\item
+  \textbf{Reasoning Traces}: What is \(r_t\)?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Intermediate representations generated during solving
+  \item
+    Example: partial solutions in planning, intermediate thoughts in
+    reasoning
+  \item
+    Can be learned or extracted from symbolic solvers
+  \end{itemize}
+\item
+  \textbf{Hybrid Decision}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For each input \(x\), predict:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Should we use fast path? (confidence threshold)
+    \item
+      Or should we use slow path? (when certainty is low)
+    \end{itemize}
+  \end{itemize}
+\item
+  Dualformer: Randomized Training for Robustness
+\item
+  \textbf{Key Problem}: Training on fixed traces is brittle
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If traces are always the same sequence, model overfits
+  \item
+    Real solvers produce varied traces depending on initial conditions
+  \end{itemize}
+\item
+  \textbf{Solution: Randomized Reasoning Traces}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    During training, add randomness to trace generation
+  \item
+    Different runs of same solver produce slightly different traces
+  \item
+    Force model to be robust to trace variations
+  \end{itemize}
+\item
+  \textbf{Training Objective}:
+
+  \[
+  \mathcal{L} = \mathbb{E}_{r \sim \text{RandomTraces}(x)}
+    \left[ \ell(f_\text{slow}(r), y) \right] + \text{ControlLoss}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\text{RandomTraces}(x)\) samples reasoning traces stochastically
+  \item
+    ControlLoss encourages efficient use of slow path (only when needed)
+  \end{itemize}
+\item
+  \textbf{Why Randomization Helps}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Simulates distribution shift (traces vary in practice)
+  \item
+    Prevents overfitting to specific trace sequences
+  \item
+    Improves generalization to new problem instances
+  \end{itemize}
+\item
+  Dualformer: Control and Efficiency
+\item
+  \textbf{Learning When to Deliberate}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Fast path produces answer \(a_f\) and confidence \(c_f\)
+  \item
+    If \(c_f > \tau\) (threshold), return \(a_f\) (save time)
+  \item
+    Else, invoke slow path (deliberate longer)
+  \end{itemize}
+\item
+  \textbf{Cost-Accuracy Tradeoff}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Threshold \(\tau\) controls accuracy vs.~speed
+  \item
+    High \(\tau\): use fast path often (fast but less accurate)
+  \item
+    Low \(\tau\): use slow path often (accurate but slow)
+  \end{itemize}
+\item
+  \textbf{Empirical Performance}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Achieves fast-path speed on \(\sim 70\%\) of instances
+  \item
+    Uses slow path for hard instances requiring deliberation
+  \item
+    Outperforms pure fast or pure slow approaches
+  \end{itemize}
+\item
+  \textbf{Key Takeaway}: Dual-process reasoning via controlled switching
+  enables \emph{adaptive} complexity---simple cases resolved quickly,
+  hard cases receive extended reasoning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-4}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \emph{\textbf{\textcolor{red}{IV. Composing Global Optimizers Via Algebraic Objects}}}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\item
+  The Composition Problem in Optimization
+\item
+  \textbf{Motivation}: Real problems often combine multiple objectives
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Optimize cost AND minimize time AND satisfy constraints
+  \item
+    Different sub-problems have different optimal solvers
+  \item
+    Need to compose specialized solvers into unified optimizer
+  \end{itemize}
+\item
+  \textbf{Classical Challenge}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Monolithic solver: must handle all problem types (slow)
+  \item
+    Pipeline of solvers: hard to integrate results (inconsistent)
+  \item
+    Goal: compose solvers as \emph{building blocks} with clear semantics
+  \end{itemize}
+\item
+  \textbf{Algebraic Perspective}: Treat optimizers as algebraic objects
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Solvers form a \emph{semigroup} or \emph{monoid} under composition
+  \item
+    Can combine via operator overloading and functional composition
+  \item
+    Get composability ``for free'' via algebraic properties
+  \end{itemize}
+\item
+  \textbf{Question}: What algebraic structure makes sense for
+  optimization?
+\item
+  Algebraic Objects for Optimization
+\item
+  \textbf{Definition}: A \emph{global optimizer} \(\mathcal{O}\) is a
+  map
+
+  \[
+  \mathcal{O}: \mathcal{X} \to \mathcal{P}(\mathcal{X})
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Input: feasible solution set \(\mathcal{X}\)
+  \item
+    Output: set of \emph{optimal} solutions
+    \(\mathcal{P}(\mathcal{X}) \subseteq \mathcal{X}\)
+  \end{itemize}
+\item
+  \textbf{Composition of Optimizers}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mathcal{O}_1 \circ \mathcal{O}_2\): Apply \(\mathcal{O}_2\)
+    first, then refine with \(\mathcal{O}_1\)
+  \item
+    \(\mathcal{O}_1 \cap \mathcal{O}_2\): Find solutions satisfying both
+  \end{itemize}
+\item
+  \textbf{Monoid Structure}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Identity: trivial optimizer (return all feasible solutions)
+  \item
+    Associativity:
+    \((\mathcal{O}_1 \circ \mathcal{O}_2) \circ \mathcal{O}_3 = \mathcal{O}_1 \circ (\mathcal{O}_2 \circ \mathcal{O}_3)\)
+  \item
+    Closure: composition of optimizers is an optimizer
+  \end{itemize}
+\item
+  \textbf{Benefits}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Modular reasoning about optimizers
+  \item
+    Reuse existing solvers without modification
+  \item
+    Automatic composition guarantees correctness
+  \end{itemize}
+\item
+  Algebraic Optimization in Practice
+\item
+  \textbf{Example: Multi-Objective Knapsack}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\mathcal{O}_1\): maximize value
+  \item
+    \(\mathcal{O}_2\): minimize weight
+  \item
+    \(\mathcal{O}_3\): satisfy constraints
+  \item
+    Composed: \(\mathcal{O}_3 \circ \mathcal{O}_1 \cap \mathcal{O}_2\)
+  \end{itemize}
+\item
+  \textbf{Algebraic Solver Composition}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Encode objective functions as optimization problems
+  \item
+    Represent solvers as algebraic operations
+  \item
+    Compose via functional combinators
+  \item
+    Derive composite solver automatically
+  \end{enumerate}
+\item
+  \textbf{Neural Integration}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learn which composition sequence is optimal via gradient descent
+  \item
+    Meta-learning: which optimizer order minimizes total solving time?
+  \item
+    Data-driven composition beats hand-designed pipelines
+  \end{itemize}
+\item
+  \textbf{Complexity Analysis}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Composing \(k\) optimizers: \(O(T_1 + T_2 + ... + T_k)\) time
+    (sequential)
+  \item
+    Parallelization possible if optimizers are independent
+  \item
+    Memory overhead minimal (solvers share solution cache)
+  \end{itemize}
+\item
+  Algebraic Objects: Limitations and Extensions
+\item
+  \textbf{Limitations}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not all optimization problems fit cleanly into algebraic framework
+  \item
+    Non-monotonic objectives (e.g., sparsity) harder to compose
+  \item
+    Theoretical guarantees weaker than problem-specific solvers
+  \end{itemize}
+\item
+  \textbf{Extensions}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Extend to \emph{partial orders} instead of total orders
+  \item
+    Incorporate uncertainty via stochastic optimizers
+  \item
+    Learn adaptive composition strategies via RL
+  \end{itemize}
+\item
+  \textbf{Key Takeaway}: Algebraic structure enables composable, modular
+  optimization---leverage it to build complex solvers from simple,
+  verified components
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-5}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    \emph{\textbf{\textcolor{red}{V. SurCo: Learning Linear Surrogates for Combinatorial Optimization}}}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{5}
+    \tightlist
+    \item
+      Integration and Future Directions
+    \end{enumerate}
+  \end{itemize}
+\item
+  The Combinatorial Optimization Challenge
+\item
+  \textbf{Definition}: Combinatorial optimization seeks
+
+  \[
+  x^* = \arg\max_{x \in \{0,1\}^n} f(x)
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Discrete variables (binary, integer, categorical)
+  \item
+    Nonlinear, hard-to-optimize objective \(f\)
+  \item
+    Example: graph coloring, SAT, scheduling, portfolio optimization
+  \end{itemize}
+\item
+  \textbf{Classical Approaches}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Exact solvers (branch-and-bound, ILP): exponential in \(n\), only
+    feasible for small \(n\)
+  \item
+    Heuristics (greedy, genetic algorithms): fast but no guarantees
+  \item
+    Meta-heuristics (simulated annealing, tabu search): slow but
+    occasionally good
+  \end{itemize}
+\item
+  \textbf{Core Challenge}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Objective \(f\) is black-box or computationally expensive
+  \item
+    Gradient-based optimization impossible (discrete variables)
+  \item
+    Sampling \(f\) is costly
+  \end{itemize}
+\item
+  \textbf{Question}: Can we learn a \emph{cheap-to-optimize}
+  approximation of \(f\)?
+\item
+  SurCo: Surrogate Model Learning
+\item
+  \textbf{Core Idea}: Learn a \emph{surrogate function} \(\hat{f}\) that
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Is fast to evaluate (milliseconds, not seconds)
+  \item
+    Correlates strongly with true objective \(f\)
+  \item
+    Is easy to optimize (e.g., convex or linear)
+  \end{itemize}
+\item
+  \textbf{Surrogate-Based Optimization Loop}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Sample \(f\) at a few initial points
+    \(\mathcal{D} = \{(x_i, f(x_i))\}\)
+  \item
+    Fit surrogate \(\hat{f}\) to \(\mathcal{D}\)
+  \item
+    Optimize \(\hat{f}\) (cheap) to find promising candidate
+    \(x_{\text{cand}}\)
+  \item
+    Evaluate \(f(x_{\text{cand}})\) (expensive)
+  \item
+    Add to dataset and repeat
+  \end{enumerate}
+\item
+  \textbf{Why This Matters}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(\hat{f}\) is good, we find high-quality solutions with far
+    fewer \(f\) evaluations
+  \item
+    Especially valuable when \(f\) is expensive (simulation, real-world
+    test, inference)
+  \end{itemize}
+\item
+  SurCo: Linear Surrogates for Discrete Optimization
+\item
+  \textbf{Why Linear Surrogates?}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{Interpretability}: coefficients show variable importance
+  \item
+    \textbf{Efficiency}: Linear optimization is polynomial (integer
+    linear programming via solver)
+  \item
+    \textbf{Stability}: fewer parameters → less overfitting on small
+    samples
+  \end{itemize}
+\item
+  \textbf{Key Challenge}: Learning linear approximation to highly
+  nonlinear \(f\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Naive regression (minimize \(\|\hat{f}(x) - f(x)\|^2\) over training
+    data) produces poor optimizer
+  \item
+    Regression minimizes pointwise error, not \emph{optimization error}
+  \end{itemize}
+\item
+  \textbf{SurCo Approach: Optimize for Optimization}, not prediction
+
+  \[
+  \hat{f}_\text{SurCo}
+    = \arg\min_{\hat{f} \in \text{Linear}}
+      \mathbb{E}_{f}
+      \left[
+        \left| f(x^*_{\hat{f}}) - f(x^*_f) \right|
+      \right]
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(x^*_{\hat{f}}\) = argmax of surrogate
+  \item
+    \(x^*_f\) = argmax of true function
+  \item
+    Minimize \emph{optimization loss}, not prediction loss
+  \end{itemize}
+\item
+  \textbf{Why It Works}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Focuses learning on high-value region (where optimum is)
+  \item
+    Ignores prediction error in unimportant regions
+  \item
+    Often finds near-optimal solutions even with poor pointwise fit
+  \end{itemize}
+\item
+  SurCo: Algorithm and Complexity
+\item
+  \textbf{Training Algorithm}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Collect training data \(\mathcal{D} = \{(x_i, f(x_i))\}_{i=1}^m\)
+    via sampling
+  \item
+    For each candidate linear model \(\hat{f} \in \mathcal{F}\):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Optimize \(\hat{f}\) over discrete space:
+      \(x_{\hat{f}} = \arg\max_x \hat{f}(x)\)
+    \item
+      Evaluate true objective:
+      \(\text{loss} = f(x^*_{\hat{f}}) - f(x^*_f)\) (or regret)
+    \end{itemize}
+  \item
+    Select \(\hat{f}\) with lowest optimization loss
+  \end{enumerate}
+\item
+  \textbf{Computational Complexity}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Training data collection: \(O(m \cdot T_f)\) (sample \(m\) points,
+    each cost \(T_f\))
+  \item
+    Surrogate learning: \(O(m \cdot |\mathcal{F}|)\) (search linear
+    model space)
+  \item
+    Optimization via surrogate: \(O(\text{poly}(n))\) (integer linear
+    program)
+  \item
+    Total: feasible when true objective \(f\) is very expensive
+  \end{itemize}
+\item
+  \textbf{Empirical Results}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Achieves near-optimal solutions with \(5\)-\(10\times\) fewer \(f\)
+    evaluations than random search
+  \item
+    Often competitive with problem-specific solvers
+  \item
+    Generalizes across problem instances
+  \end{itemize}
+\item
+  SurCo: Real-World Applications
+\item
+  \textbf{Portfolio Optimization}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f\) = portfolio return (requires simulation or historical
+    backtest)
+  \item
+    SurCo learns linear surrogate of risk-return tradeoff
+  \item
+    Finds good allocations with few expensive evaluations
+  \end{itemize}
+\item
+  \textbf{Drug Discovery}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f\) = binding affinity (requires molecular simulation or
+    experiment)
+  \item
+    Surrogate guides molecular search with limited lab evaluations
+  \item
+    Accelerates discovery pipeline
+  \end{itemize}
+\item
+  \textbf{Hardware Design}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f\) = chip performance (requires synthesis, simulation, or
+    fabrication)
+  \item
+    Surrogate optimizes design parameters with fewer expensive runs
+  \end{itemize}
+\item
+  \textbf{Key Takeaway}: When objective is expensive, optimize for
+  \emph{optimization quality}, not \emph{prediction quality}---learn
+  surrogates that find good optima, not surrogates that fit data well
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-6}
+\begin{itemize}
+\item
+  Neural-Symbolic Decision Making
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I. Motivation and Overview
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{1}
+    \tightlist
+    \item
+      Beyond A*: Search Dynamics Bootstrapping
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{2}
+    \tightlist
+    \item
+      Dualformer: Controllable Fast and Slow Thinking
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    [I.]
+    \setcounter{enumi}{3}
+    \tightlist
+    \item
+      Composing Global Optimizers Via Algebraic Objects
+    \end{enumerate}
+  \item
+    V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+  \item
+    \emph{\textbf{\textcolor{red}{VI. Integration and Future Directions}}}
+  \end{itemize}
+\item
+  Unifying the Four Approaches
+\item
+  \textbf{Common Thread}: All four methods combine neural learning with
+  structured reasoning
+\end{itemize}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2105}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2456}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2105}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Neural Component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Symbolic Component
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Integration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\textbf{Beyond A*} & Transformer learns dynamics & A* search algorithm &
+Learned guidance for classical planner \\
+\textbf{Dualformer} & Fast neural path & Slow reasoning traces &
+Adaptive routing via confidence \\
+\textbf{Algebraic Optimizers} & Meta-learn composition order & Formal
+optimizer algebra & Modular solver composition \\
+\textbf{SurCo} & Linear regression & ILP optimizer & Surrogate-based
+optimization \\
+\bottomrule\noalign{}
+\end{longtable}
+}
+
+\begin{itemize}
+\item
+  \textbf{Shared Principles}:
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Leverage neural networks for learning from data
+  \item
+    Preserve structured reasoning for interpretability and guarantees
+  \item
+    Learn to \emph{integrate} the two (not just juxtapose them)
+  \end{enumerate}
+\item
+  Open Challenges in Neural-Symbolic Decision Making
+\item
+  \textbf{Challenge 1: Generalization}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Beyond A*: does learned dynamics transfer to different domains?
+  \item
+    Dualformer: can fast/slow tradeoff adapt to new reasoning types?
+  \item
+    Open: transfer learning across symbolic and neural components
+  \end{itemize}
+\item
+  \textbf{Challenge 2: Theoretical Guarantees}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    SurCo: can we bound optimization loss in terms of sample complexity?
+  \item
+    Beyond A*: when does bootstrapped heuristic remain admissible?
+  \item
+    Open: formal analysis of neural-symbolic hybrid systems
+  \end{itemize}
+\item
+  \textbf{Challenge 3: Scalability}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Dualformer: how to handle reasoning traces of variable length?
+  \item
+    Algebraic optimizers: composing 100+ solvers efficiently?
+  \item
+    Open: efficient meta-reasoning over large solver libraries
+  \end{itemize}
+\item
+  \textbf{Challenge 4: Interpretability}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    When neural components learn to enhance symbolic methods, what do
+    they learn?
+  \item
+    Can we extract human-interpretable insights from learned dynamics?
+  \item
+    Open: explainability of neural-symbolic systems
+  \end{itemize}
+\item
+  Emerging Directions
+\item
+  \textbf{Neuro-Symbolic Program Synthesis}: Learn to \emph{generate}
+  algorithms (not just execute them)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Parse problem structure, synthesize optimal solver pipeline
+  \end{itemize}
+\item
+  \textbf{Continual Learning for Planning}: Update learned heuristics as
+  new environments encountered
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Online adaptation of neural guidance without retraining
+  \end{itemize}
+\item
+  \textbf{Formal Verification}: Prove properties of neural-symbolic
+  systems
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Can we verify that composed optimizers maintain key invariants?
+  \end{itemize}
+\item
+  \textbf{Hybrid Reasoning}: Combine logical inference with neural
+  embeddings
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Symbolic knowledge graphs enhanced with learned representations
+  \end{itemize}
+\item
+  \textbf{Autonomous Solver Selection}: Learn which approach (Beyond A*,
+  SurCo, etc.) to use for new problem
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Meta-learning over algorithm portfolio
+  \end{itemize}
+\item
+  Conclusion: Why Neural-Symbolic Matters
+\item
+  \textbf{Practical}: Most real-world decisions require both learning
+  and reasoning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Autonomous driving: learn perceptions (neural), plan safely
+    (symbolic)
+  \item
+    Robotics: learn skills (neural), compose into behaviors (symbolic)
+  \item
+    Scientific discovery: learn patterns (neural), derive predictions
+    (symbolic)
+  \end{itemize}
+\item
+  \textbf{Theoretical}: Unifies classical AI and modern ML under unified
+  framework
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Not ``symbolic vs.~neural''---it's ``how to combine them?''
+  \item
+    Opens new research directions at intersection
+  \end{itemize}
+\item
+  \textbf{Future}: Neural-symbolic integration is path to more capable,
+  interpretable, robust AI
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Learning provides flexibility and data efficiency
+  \item
+    Symbolic reasoning provides guarantees and explainability
+  \item
+    Together: best of both worlds
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

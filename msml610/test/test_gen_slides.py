@@ -20,6 +20,17 @@ class Test_Msml610_LessonDiscovery(csgsteut.LessonDiscovery_TestCase):
 
 
 # #############################################################################
+# Test_Msml610_Run_preprocess_notes_py
+# #############################################################################
+
+
+class Test_Msml610_Run_preprocess_notes_py(
+    csgsteut.Run_preprocess_notes_py_TestCase
+):
+    COURSE_DIR = "msml610"
+
+
+# #############################################################################
 # Test_Msml610_Run_notes_to_pdf_py
 # #############################################################################
 
@@ -35,4 +46,5 @@ class Test_Msml610_Run_notes_to_pdf_py(csgsteut.Run_notes_to_pdf_py_TestCase):
 
 class Test_Msml610_Run_gen_slides_py(csgsteut.Run_gen_slides_py_TestCase):
     COURSE_DIR = "msml610"
+    FIRST_LESSON = "01.1"
     SECOND_LESSON = "08.1"

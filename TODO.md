@@ -1,6 +1,246 @@
+# #############################################################################
+# High level
+# #############################################################################
+
+- There are too many failures across multiple builds
+  - Do not add more code but focus on getting to a stable build
+  - Disable the failing tests
+  - Merge `gp_scratch_29`
+  - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
+
+> export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
+> export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
+
+> export CSFY_DOCKER_ENGINE="docker"; pytest_log dev_scripts_helpers
+
+> export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
+
+##
+- Find a workflow to make it easier to create smaller PRs
+  - Instead of having lots of agents making changes to the same branch
+  - Have a way to delegate to an agent to create a small PR, do the change,
+    regress, review and merge
+  - Always create PRs associated to each branch with a clear description
+    - i git_branch_create -> i gh_create_pr --no-draft
+  - Find an easy way to check which PR is still to merge, which one was merged
+
+  - /github.split_branch_in_PRs
+  - Review edit github_pr_plan.md
+  - /github.create_child_pr PR2
+
+##
+- Have a thread that looks for TODOs in the code (gp, ai_gp)
+  - Ranks them by simplicity
+  - Create a branch, PR, run tests and merge
+
+# #############################################################################
+# IN PROGRESS
+# #############################################################################
+
+## pytest_failed
+
+### [.] Improve pytest_failed.py
+
+- Accept multiple files and create a single table
+pytest_failed.py -i ...
+
+### [ ] Why there are two updated?
+Updated:    2/3346
+
+### [ ] Print the files that have been updated
+- Add report in files
+
+### [ ] Automatically run git add for golden outcomes
+
+## Breaks
+
+### [ ] Password requested by Docker
+
+helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Password:
+Sorry, try again.
+Password:
+
+### [.] HelpersTask1273_Get_Mac_tests_to_pass
+- In `csfy1`
+- [.] Get all the tests in master to pass
+- [.] run.sh running
+
+### [.] Make `dev_scripts_helpers/documentation/test/test_notes_to_pdf.py` pass
+- In `umd_classes2` // gp_scratch
+
+- [.] pytest_log dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+- [.] /testing.triage_unit_tests dev_scripts_helpers/documentation/test/test_notes_to_pdf.py
+
+### [.] Improve coverage of dev_scripts_helpers/documentation/
+
+> pytest dev_scripts_helpers/documentation --cov=dev_scripts_helpers/documentation
+
+- Need to check again
+
+### [.] Improve coverage of class_scripts
+
+### [.] Make the unit tests pass in `umd_classes`
+
+- [x] Run `pytest_log msml610/test/test_gen_slides.py`
+- [x] Run `pytest_log data605/test/test_gen_slides.py`
+- [.] Run `linters2/lint.py --action pyright`
+- [x] PASS `pytest_log class_scripts`
+- [ ] Run `pytest_log msml610/test data605/test class_scripts`
+- [ ] Do a run of all the tests in `pytest_log .` (with the 3 builds)
+- [ ] Run coverage
+
+data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
+
+data605/test/test_gen_slides.py::Test_Data605_Run_notes_to_pdf_py::test_tex_pdf
+
+Test_Msml610_Run_notes_to_pdf_py
+
+```
+pytest msml610/test
+
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_gen_slides_first_lesson
+msml610/test/test_gen_slides.py::Test_Msml610_Run_gen_slides_py::test_render_all_lessons
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_md
+msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to_pdf_tex
+```
+
+- [x] IN PROGRESS Save tex and typ files for all the lessons
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_output
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_output
+- [x] Make all the lessons compile to latex
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
+  - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
+
+## Books
+
+### [ ] From Data To Decisions
+/Users/saggese/src/notes1/book.springer/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book.springer/springer.saggese.full_proposal_v2.md
+/Users/saggese/src/umd_classes2/book.springer/book_map.md
+/Users/saggese/src/umd_classes2/book.springer/book_toc.md
+
+- `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
+
+- [ ] ## 1: From Prediction Pipelines to Decision Pipelines
+- [ ] Remove ###### from files
+- [ ] Convert files to typst
+
+### [.] Create and review slides for Agentic AI
+
+- TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
+  - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
+
+- [.] book.Agentic_AI/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.10
+- [ ] book.springer/lectures_source/Lesson01.11
+  > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
+
+## Content Summarization
+
+### [ ] 
+
+- Create a script that given an input (url, pdf article, book title)
+- Download the PDF and cache it in Books or Papers dir
+- Converts it to markdown (if necessary)
+- Apply a text transform
+
+### [.] Read Academic Articles
+
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
+> convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
+> summarize_md.py
+```
+
+/markdown.summarize
+/text.explain
+/text.extract_ideas
+
+```
+> download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
+claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
+> mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
+claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
+```
+
+### [ ] Add scripts to read / cache books and papers
+
+/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books
+How to find a book with a title like "The Book of Why" in /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/books
+
+> echo "$PAPERS_ROOT_DIR"
+/Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers
+
+download_academic_paper.py
+
+# #############################################################################
+# BACKLOG
+# #############################################################################
+
 # Work on slides
 
+- LLM
+  - Kaparthy's LLM
+  - https://github.com/karpathy/nanochat
+  - https://github.com/karpathy/nanoGPT
+  - https://github.com/karpathy/micrograd
+  - https://karpathy.ai/
+- AutoEDA
+- IN PROGRESS: Topics from Berkeley class
+- AlphaEvolve
+- Monte Carlo search
+- Kaparthy's AutoResearch
+- https://www.manning.com/books/build-a-large-language-model-from-scratch
+- https://www.manning.com/books/build-a-reasoning-model-from-scratch
+- https://aman.ai/primers/ai/top-30-papers/
+  - https://arc.net/folder/D0472A20-9C20-4D3F-B145-D2865C0A9FEE
+
+- Add references to papers
+- Add more / better pictures
+- Summary
+
+## Causal Probabilistic ML
 book.Causal_Probabilistic_ML/book_map.md
+
+## AI for Data Science
+book.AI_for_data_science/book_map.md
+
+/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md
+
+# Downloading HN Links
+
+```
+export LINKS_GSHEET=https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999
+
+> download_link_articles.py --url "$LINKS_GSHEET" --row_idx 1
+```
+
+- To understand the structure
+  ```
+  > ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+  ```
+
+- Create unit tests from the cache
+
+- Run a test_generator.py with a command
+  ./dev_scripts_helpers/coding_tools/build_call_graph.py --input dev_scripts_helpers/scraping/download_link_articles.py
+  1) the cache gets warmed up and saved in the right position (using a command
+     line switch)
+  2) test code gets generated that in practice runs the command (using the proper
+  command line switch)
+
+hcacsimp.add_cache_control_arg(parser)
+
+- Switch the order of HN and article
+- Article_url is always present (even if we bookmark the url)
+  - If url is not hackernews than propagate
+- Check that the gsheet has all the expected columns in the expected order
+
+- Add a mode --cache_mode TRACE_CACHE to show the behavior of the cache (e.g.,
+  warning when there are cache hits), maybe different colors
+
+# Download and process Dwakersh blogs and LexFriedman blogs
 
 # Convert slides into book
 
@@ -10,12 +250,13 @@ class_scripts/create_book_toc_from_slides.py --max_number 2 --max_level 2
 
 - [x] Add comments to README
 
-## The old flow
+### [.] Improve Generating Book
+
+#### The old flow
 The output looks like 
 https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson01.1-Intro.book_chapter.pdf
 
-## The new flow 
-
+#### The new flow 
 - The style is like:
   > vi helpers_root/dev_scripts_helpers/typst/aima_style.typ
   ```
@@ -26,14 +267,15 @@ https://github.com/gpsaggese/gpsaggese.github.io/blob/master/data605/book/Lesson
 
 - Generate the text from the slides
   ```
-  export FILE=Lesson08.1-Causal_AI_intro
+  > export FILE=Lesson08.1-Causal_AI_intro
   claude> /model sonnet
-  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.slides_to_text.txt on msml610/lectures_source/${FILE}.txt
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.update_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
   ```
 
 - Render with
   ```
-  > ./msml610/book/render_chapter.sh msml610/book/$FILE
+  > ./helpers_root/dev_scripts_helpers/typst/render_typst.sh msml610/book/$FILE
   ```
   which is equivalent to:
   ```
@@ -57,45 +299,133 @@ https://github.com/causify-ai/helpers/issues/1276
 - [x] Test dev_scripts_helpers/documentation/open_md.sh
 - [x] Finish website/docs/blog/posts/draft.how_to.Render_md_from_terminal.md
 
-## Get typst slides as close as possible to latex ones
-notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.new.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --skip_action=open --slides_engine typst
+### [ ] Get typst slides as close as possible to latex ones
 
-### [ ] Fix Latex Preamble
+```
+notes_to_pdf.py --input=msml610/lectures_source/Lesson13.1-Explainability.txt --output=msml610/lectures/Lesson13.1-Explainability.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warnings
+vi msml610/lectures/tmp.notes_to_pdf.render_image2.txt msml610/lectures/tmp.notes_to_pdf.render_image2.typ
+```
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
+### [ ] Improve unit testing
 
-\vspace{1cm}
+```
+> pytest dev_scripts_helpers/documentation/test/
+```
 
-\begingroup \Large
-**$$\text{\blue{Lesson 10.2: Causal Discovery}}$$**
-\endgroup
+- [ ] Do test runs and which is disabled?
+- [ ] What is the coverage?
+- [ ] What is not tested?
 
-\vspace{1cm}
+- [ ] Check CsfyIssue8889
 
-### [ ] Fix the bold colored
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py   85     12      8      2    83%
+dev_scripts_helpers/documentation/preprocess_notes.py        349     78    140     19    77%
+dev_scripts_helpers/documentation/render_images.py           381    174    142      9    53%
 
-**\textcolor{red}{Question}**
+dev_scripts_helpers/dockerize/lib_pandoc.py                  110     40     20      3    59%
+dev_scripts_helpers/dockerize/lib_prettier.py                124     15     34      6    84%
 
-2. preprocess_notes.py: _transform_lines() function (line 463-465) processes color commands and then:
-  - Line 542: calls hmarkdo.colorize_bullet_points_in_slide() for slides
-  - This function automatically colorizes specific keywords (like Question, Definition, Key idea, etc.) with red/blue colors
-3. The coloring happens here in preprocess_notes.py lines 524-560 via the _colorize_bullets() helper function which wraps hmarkdo.colorize_bullet_points_in_slide()
+helpers/hmarkdown.py                                          13      0      0      0   100%
+helpers/hmarkdown_bullets.py                                  93     81     44      0     9%
+helpers/hmarkdown_coloring.py                                108     59     38      5    41%
+helpers/hmarkdown_comments.py                                 28      9     10      3    63%
+helpers/hmarkdown_div_blocks.py                               54     23     24      4    55%
+helpers/hmarkdown_fenced_blocks.py                            55      0     14      1    99%
+helpers/hmarkdown_filtering.py                                68     56      8      0    16%
+helpers/hmarkdown_formatting.py                              335    259     84      1    19%
+helpers/hmarkdown_headers.py                                 330    156    144     18    50%
+helpers/hmarkdown_rules.py                                   104     86     42      0    12%
+helpers/hmarkdown_select.py                                  251    112     92     14    54%
+helpers/hmarkdown_slides.py                                   90     24     30      5    69%
+helpers/hmarkdown_tables.py                                   48     31     14      1    32%
+helpers/hmarkdown_toc.py                                      92     24     26      8    68%
 
-### [ ] The title of a slide is not showing up
+- [ ] Extract lib_notes_to_pdf.py
+
+./dev_scripts_helpers/documentation/notes_to_pdf.py
+
+### Improve lint_txt.py
+
+- -> lint_text.py
+
+- Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
+
+- txt -> smd, or mds (slide markdown) 
+
+- The transforms are:
+
+                             preprocess: Yes
+                               prettier: Yes
+                            postprocess: Yes
+    remove_code_block_extra_indentation: Yes
+                 remove_page_separators: Yes
+                     handle_empty_lines: Yes
+        add_blank_lines_between_headers: Yes
+     convert_asterisk_bullets_to_dashes: Yes
+                remove_trailing_periods: Yes
+             replace_em_dash_with_colon: Yes
+             remove_markdown_formatting: -
+                         frame_chapters: -
+                      capitalize_header: Yes
+                            refresh_toc: -
+                            check_links: -
+
+- The preprocess stage should handle everything that is not standard markdown
+
+- prettier doesn't handle well
+  - //
+  - The * slides
+
+- Add spaces between first level bullets
+
+- Make the definitions bold and black for visibility
+  - -*Definition*- for bold and color
+  - **Definition** for black and color
+
+
+
+### [ ] Improve _LOG output
+
+```
+18:05:06 common_utils.py find_lecture_file:62                Searching for files matching pattern='msml610/lectures_source/Lesson00*'
+18:05:06 - INFO  common_utils.py find_lecture_file:74                   Found lecture file: msml610/lectures_source/Lesson00-Class.txt
+18:05:06 common_utils.py get_source_name:92                  Source name='Lesson00-Class.txt'
+```
+
+- Remove `-` which wastes space
+- Align everything
+- Maybe add DEBUG?
+  - Use `I`, `D`, `W`
+
+### Use Latex font
+https://tug.org/FontCatalogue/computermodern/ instead of DejaVu
+
+### [.] Fix Latex Preamble
+
+dev_scripts_helpers/documentation/preprocess_notes.py
+
+- [x] Get it working
+- [ ] Add unit tests
+- [ ] Factor out code to umd_classes
+
+### Update documentation
+
+Add https://typst.app/play/ to the 
+
+### Improve pandoc/typst tables
+
+- Not needed since we are inlining directly the slides in Latex format
+  - It might be nice to have markdown only
+
+- [ ] Use table from let styled-table using AST transform
+- [ ] Add processing of AST
+- [ ] Add unit tests
 
 ### [ ] Autoscale the font to fit the slide
 
 ### [ ] Document current system
 - `helpers_root/dev_scripts_helpers/documentation/README.md`
-- `helpers_root/dev_scripts_helpers/documentation/README.notes_to_pdf.md`
-
-website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
--> create blog
+- `helpers_root/dev_scripts_helpers/documentation/notes_to_pdf.README.md`
 
 ### [ ] Document typst and slides
 
@@ -103,6 +433,9 @@ website/README.blog.md
 
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md
 - Create blog
+
+website/docs/blog/posts/draft.in_30_mins.helpers_typesetting_system.md
+-> create blog
 
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.all_examples.typ
 website/docs/blog/posts/draft.how_to.Use_typst_for_slides.md.mats/polylux.hello_world.typ
@@ -115,27 +448,30 @@ dev_scripts_helpers/documentation/notes_to_pdf.py
 
 > notes_to_pdf.py --input=data605/lectures_source/Lesson01.1-Intro.txt --output=data605/lectures/Lesson01.1-Intro.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst
 
-### [ ] Fix pandoc/core:3.7
-
-- my typst path used container_type = "pandoc_only", which points at the bare
-  pandoc/core:3.7 image. That image isn't built/pulled locally (only
-  pandoc_texlive and pandoc_latex get auto-built), so the assert fails.
-  ```
-  > container image pull pandoc/core:3.7
-  ```
-
-msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
-
-## Step 4: Reorg dev_scripts_helpers/documentation
+### [ ] Reorg dev_scripts_helpers/documentation
 - Too many files
+
+### Rename the txt files to smd
+
+smd = slide markdown
 
 # Mix
 
-## render_images.py
+### [ ] Clean up all the messy interfaces
+
+    use_host_tools,
+    dockerized_force_rebuild,
+    dockerized_use_sudo,
+
+- It's not clear how to do it, maybe pass a config?
+
+### [ ] Update render_images.py
 
 - [ ] Add an option to only render without commenting out the code
-
+- [ ] Render many different files at once
 - [ ] Clarify what is the boilerplate for Latex and Tikz
+- [x] IN PROGRESS: Fix the names of the tests
+helpers_root/dev_scripts_helpers/documentation/test/test_check_links.py
 
 - [ ] Improve documentation
 
@@ -147,7 +483,7 @@ msml610/lectures_source/Lesson10.2-Causal_Discovery.txt
 
   - `website/docs/blog/posts/draft.in_5_mins.helpers_render_images.md`
 
-## Fix output of lint_cc.py
+### [ ] Fix output of lint_cc.py
 
 Right now the output has all the verbose output from the model
 
@@ -170,7 +506,7 @@ claude -p "your prompt" --output-format stream-json --include-partial-messages
 So if you want the normal printed output but with debug info attached:
 claude -p "your prompt" --debug
 
-## Add support for nitro models and reasoning in llm_cli and in cc
+### [ ] Add support for nitro models and reasoning in llm_cli and in cc
 
 ```
 {
@@ -187,7 +523,8 @@ openai/o3:nitro
        "effort": "high"    }
 ```
 
-## Improve llm_compare.py
+### [ ] Improve llm_compare.py
+
 llm_compare.py --models "openrouter/openai/gpt-4o-mini,openrouter/openai/gpt-oss-120b" --benchmark summarization1 --output_dir results/
 
 run_eval.sh
@@ -197,7 +534,7 @@ dev_scripts_helpers/llms/openrouter_models_table.py --models dev_scripts_helpers
 
 helpers_root/dev_scripts_helpers/llms/openrouter_models_table.py --models_from_file helpers_root/dev_scripts_helpers/llms/text_models.txt
 
-## Test lint_txt.py with new backends
+### [ ] Test lint_txt.py with new backends
 
 lint_txt.py -i dev_scripts_helpers/ai/README.md --backend mdformat --mode uvx
 
@@ -208,40 +545,25 @@ test_hmarkdown_formatting.py
 > pytest helpers/test/test_hmarkdown_formatting.py::Test_format_md_comparison_and_performance
 ```
 
-## Improve cost and speed accounting for hllm
+mdformat .claude/skills/slides.write/SKILL.md --number
 
-## Managing gsheet links
+Need to disable the protection and keep it only for prettier
 
-vi dev_scripts_helpers/scraping/README.link_flow.md
+Merge --backend and --mode
 
-download_link_articles.py --url https://docs.google.com/spreadsheets/d/1i6Z7v2TzPdftR9BQ5Ia6jrrNWvVy-pUCxZAt4A59l8M/edit?gid=2008094999#gid=2008094999 --row_idx 2
+### [ ] Improve cost and speed accounting for hllm
 
-llm_cli.py -p "Summarize the following text in 5 bullet points and less than 200 words" --input We_should_be_more_tired_than_the_model.hn_comments.txt --model openrouter/anthropic/claude-haiku-4.5 --lint
-
-## Fix annoying claude code scrolling
+### [ ] Fix annoying claude code scrolling
 
 tmux focus-events off · add 'set -g focus-events on' to ~/.tmux.conf and reattach for focus tracking
 tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.conf for wheel scroll
 
-## Process Academic Articles
-
-  ```
-  > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
-  > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
-  > summarize_md.py
-  ```
-
-  ```
-  > download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
-  claude> /text.extract_ideas 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.pdf
-  > mv 2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.* "$PAPERS_ROOT_DIR"/2026
-  claude> /book.incorporate_content ~/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers/2026/2016.Ribeiro_et_al.Why_Should_I_Trust_You_Explaining_the_Predictions_of_Any_Classifier.ideas.md
-```
-
-## Convert llm_transform.py to llm_cli.py
+### [ ] Convert llm_transform.py to llm_cli.py
 Move prompts and action into a YAML file
 
-## Merge markdown. and text.
+Remove hllm.py
+
+### [ ] Merge markdown.rules.md and text.rules.md?
 Is there any difference?
 
   ```
@@ -263,12 +585,23 @@ Is there any difference?
   .claude/skills/text.use_bullet_lists
   ```
 
+### [ ] Add a test case for all the dockerized executables
+
+Use Test_build_pandoc_container1 as a reference
+
+- Build from scratch on slow_tests
+
+### [ ] Remove use_sudo
+
+- use_sudo is a property of the machine
+  - Make use_sudo = None and then deduce it from the config
+
 ## Improve / unify --rule, --skill, ...
 
 - Move --skill and --topic from ./linters2/lint_cc.py to this parser hmarsele.add_rule_cli_arg(action_group)
 - Merge rigrule into mdm
 
-## Make file interfaces aligned
+### [x] Make file interfaces aligned
 - Make compatible in terms of options
   ```
   i git_files
@@ -289,30 +622,69 @@ Is there any difference?
   Causal and Probabilistic Machine Learning in Action
   ```
 
-# Springer
+## Springer
 
-- Title
-  - From Data Science to Decision Science for Business
-
-## Improve Springer proposal
-
-springer.Causal_Inference_for_Machine_Learning_Engineers.md
-springer.changes.md
-springer.proposal.2026-06-18.md
-springer.proposal.md
-springer.review.md
-springer.template.md
-
-
-## [ ] Finalize TOC
-- Very short intro about causality and probability
-- Part 3 of [Book plan](https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=0#gid=0)
-- Look at review
-
-# ? AI Agents for Big Data
+## ? AI Agents for Big Data
 
 - DATA605
 - Agents stuff
 
-# AI for Finance
+## AI for Finance
 - ?
+
+## Interesting slide lectures outside of books
+
+### ?
+- Gaussian processes for continuous uncertainty: kernels, posterior inference,
+  and extrapolation
+- Variational inference for scalable Bayesian modeling: ELBO, amortized
+  inference, and gradient estimation
+- Normalizing flows: flexible density estimation for complex posterior
+  approximation
+- Probabilistic programming: specifying generative models in Pyro, NumPyro, and
+  Stan
+- Calibration and uncertainty quantification: coverage guarantees and conformal
+  prediction
+- Neural posterior estimation: learning to invert simulators and likelihood-free
+  inference
+
+## Advanced Topics for Time Series Predictions
+
+- Self-Supervised and Representation Learning for Time Series
+  - Contrastive learning (e.g., TS-TCC, SimCLR adaptations)
+  - Predictive coding models (e.g., CPC)
+  - Applications: few-shot forecasting, anomaly detection
+
+- Hierarchical Bayesian Forecasting
+  - Multi-level time series models
+  - Shrinkage across groups
+  - Handling partial pooling across different but related series
+
+- Reinforcement Learning for Time Series Decision Making
+  - Forecasting coupled with decision making
+  - Inventory control, dynamic pricing
+  - Predict-then-Optimize pipelines
+
+- Transformers and Attention Mechanisms for Time Series
+  - Temporal Fusion Transformer (TFT)
+  - Informer, Autoformer, FEDformer
+  - Handling long-term dependencies better than RNNs
+
+- Energy-Based Models and Diffusion Models for Forecasting
+  - Energy-based forecasting models
+  - Diffusion probabilistic models adapted for sequences
+
+- Time Series Generative Models
+  - GANs for time series (e.g., TimeGAN)
+  - Variational Autoencoders (VAEs) for synthetic data generation
+  - Applications: simulation, data augmentation
+
+- Long-Horizon Forecasting Challenges
+  - Distribution shift over long horizons
+  - Degradation of model accuracy
+  - Specialized architectures: recurrent decoders, multi-resolution forecasting
+
+- Uncertainty Quantification and Calibration
+  - Prediction intervals
+  - Coverage probability and reliability diagrams
+  - Post-hoc calibration (e.g., temperature scaling)
