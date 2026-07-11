@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.4: LLM Reasoning
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.04: LLM Reasoning
 // slides_engine=typst
 
 // References:

@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.5: Reasoning, Memory, and Planning
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.05: Reasoning, Memory, and Planning
 // slides_engine=typst
 
 // References

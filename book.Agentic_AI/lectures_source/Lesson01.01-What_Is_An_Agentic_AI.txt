@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.1: What Is an Agentic AI?
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.01: What Is an Agentic AI?
 // slides_engine=typst
 
 // References:

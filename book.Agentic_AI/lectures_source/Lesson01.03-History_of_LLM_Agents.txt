@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.3: A Brief History of LLM Agents
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.03: A Brief History of LLM Agents
 // slides_engine=typst
 
 // References:
