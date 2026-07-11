@@ -155,21 +155,11 @@ download_academic_paper.py
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
   - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
-- [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
-- [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
-- [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
-- [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
-- [x] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-  - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
-- [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
-- [x] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
-- [x] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
-- [.] msml610/lectures_source/Lesson16.8
-- [ ] msml610/lectures_source/Lesson16.9
-- [ ] msml610/lectures_source/Lesson16.10
-- [ ] msml610/lectures_source/Lesson16.11
-  > gen_slides.py msml610/16.5 --slides_engine typst --daemon
-  > gen_slides.py msml610/16.4 --slides_engine typst --no_fail_on_warnings
+- [.] book.Agentic_AI/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.10
+- [ ] book.springer/lectures_source/Lesson01.11
+  > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
 
 # #############################################################################
 # BACKLOG

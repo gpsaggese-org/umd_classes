@@ -97,7 +97,9 @@ def collect_all_lessons() -> Dict[str, List[str]]:
         ```
     """
     all_lessons = {}
-    for course_dir in csccouti.VALID_DIRS:
+    # TODO(ai_gp): Look for all dirs that have a lectures_source.
+    valid_dirs = ["data605", "msml610", "book.springer"]
+    for course_dir in valid_dirs:
         all_lessons[course_dir] = _get_lesson_numbers(course_dir)
     _LOG.debug("return=%s", all_lessons)
     return all_lessons

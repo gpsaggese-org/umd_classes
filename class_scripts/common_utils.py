@@ -18,14 +18,6 @@ import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
 
-# #############################################################################
-# Constants
-# #############################################################################
-
-
-# Valid course directories.
-VALID_DIRS = ["data605", "msml610", "book.springer"]
-
 
 # #############################################################################
 # Helper functions

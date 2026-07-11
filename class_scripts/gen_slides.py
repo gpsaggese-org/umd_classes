@@ -49,11 +49,8 @@ def _extract_lesson_from_file(file_path_str: str) -> Tuple[str, str]:
     )
     lesson = match.group(1)  # type: ignore[union-attr]
     dir_name = file_path_str.split(os.sep)[0]
-    hdbg.dassert_in(
+    hdbg.dassert_dir_exists(
         dir_name,
-        csccouti.VALID_DIRS,
-        "Directory extracted from %s is invalid",
-        file_path_str,
     )
     _LOG.debug(
         "Extracted lesson='%s', dir='%s' from path='%s'",
@@ -89,10 +86,8 @@ def _parse_first_arg(arg: str) -> Tuple[str, str]:
         f"Expected dir/lesson format, got '{arg}'. Use 'data605/08.1'",
     )
     dir_input, lesson = parts
-    hdbg.dassert_in(
-        dir_input,
-        csccouti.VALID_DIRS,
-        f"Invalid directory '{dir_input}'. Must be one of: {csccouti.VALID_DIRS}",
+    hdbg.dassert_dir_exists(
+        dir_input
     )
     return dir_input, lesson
 

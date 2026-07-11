@@ -1,3 +1,13 @@
+- [x] msml610/lectures_source/Lesson16.1-What_Is_An_Agentic_AI.txt
+- [x] msml610/lectures_source/Lesson16.2-LLM_Building_Blocks.txt
+- [x] msml610/lectures_source/Lesson16.3-History_of_LLM_Agents.txt
+- [x] msml610/lectures_source/Lesson16.4-LLM_Reasoning.txt
+- [x] msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+  - /slides.lint_5_at_the_time msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt
+- [x] msml610/lectures_source/Lesson16.5-Reasoning_Memory_and_Planning.txt
+- [x] msml610/lectures_source/Lesson16.6-Inference_time_techniques.txt
+- [x] msml610/lectures_source/Lesson16.7-Tool_use_and_retrieval.txt
+
 - [x] Create a Springer dir (similar to msml610)
 - [x] Merge /Users/saggese/src/notes1/book.springer/springer.toc_v2.md
   into /Users/saggese/src/umd_classes2/book.springer/book_map.md
