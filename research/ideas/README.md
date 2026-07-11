@@ -1,17 +1,18 @@
 # Research Ideas
 
-This directory contains research project idea documents for data science, machine
-learning, and AI engineering topics. Each file describes a potential research
-project, study, or tutorial with motivation, methodology, and expected outcomes.
+- This directory contains research project idea documents for data science,
+  machine learning, and AI engineering topics.
+
+- Each file describes a potential research project, study, or tutorial with
+  motivation, methodology, and expected outcomes
 
 ## Description of Files
 
-Files are prefixed with their status when applicable:
-
-- `draft.*`: early-stage, incomplete ideas
-- `ready.*`: the specs are completed
-- `done.*`: project is completed
-- `in_progress.*`: actively being worked on
+- Files in `research/ideas/*.md` are prefixed with their status when applicable:
+  - `draft.*`: early-stage, incomplete ideas
+  - `ready.*`: the specs are completed
+  - `done.*`: project is completed
+  - `in_progress.*`: actively being worked on
 
 | File | Links | Status | Assignee | Specs Complete | GitHub Issue | Result |
 | :-------------------------------------------- | :---- | :---------- | :------- | :------------- | :----------- | :----- |
@@ -36,12 +37,21 @@ Files are prefixed with their status when applicable:
 | `draft.Create_a_tutorial_about_Sampling.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Create_a_tutorial_about_Sampling.md) | draft | - | 60% | - | - |
 | `done.Causal_Analysis_of_Success_in_Modern_Society.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/done.Causal_Analysis_of_Success_in_Modern_Society.md) | done | - | 100% | [#339](https://github.com/gpsaggese/gpsaggese.github.io/issues/339) | completed |
 | `draft.Backtesting_Complexity.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Backtesting_Complexity.md) | draft | - | 10% | - | - |
+| `draft.Codebase_autocleanup.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Codebase_autocleanup.md) | draft | - | 10% | - | - |
+| `draft.Codebase_automerge.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Codebase_automerge.md) | draft | - | 10% | - | - |
+| `draft.Compute_Test_Transitive_Closure.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Compute_Test_Transitive_Closure.md) | draft | - | 10% | - | - |
+| `draft.Cursor_for_writing_terminal.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Cursor_for_writing_terminal.md) | draft | - | 10% | - | - |
 | `draft.Forgetting_Mechanisms.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Forgetting_Mechanisms.md) | draft | - | 10% | - | - |
+| `draft.How_alpha_zero.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.How_alpha_zero.md) | draft | - | 10% | - | - |
+| `draft.How_to_measure_LLM_compliance.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.How_to_measure_LLM_compliance.md) | draft | - | 10% | - | - |
 | `draft.Improve_dockerized_executables.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Improve_dockerized_executables.md) | draft | - | 10% | - | - |
 | `draft.Kolmogorov_Complexity_Over_Time.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Kolmogorov_Complexity_Over_Time.md) | draft | - | 10% | - | - |
 | `draft.Lean.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Lean.md) | draft | - | 30% | - | - |
 | `draft.MDL_Extensions_with_Research_Process.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.MDL_Extensions_with_Research_Process.md) | draft | - | 10% | - | - |
 | `draft.Misc_ML_ideas.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Misc_ML_ideas.md) | draft | - | 10% | - | - |
+| `draft.Prompt_fine_tuning.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Prompt_fine_tuning.md) | draft | - | 10% | - | - |
+| `draft.RL_for_auto_EDA.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_auto_EDA.md) | draft | - | 10% | - | - |
+| `draft.RL_for_pickleball.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.RL_for_pickleball.md) | draft | - | 10% | - | - |
 | `draft.Symbolic_regression.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Symbolic_regression.md) | draft | - | 10% | - | - |
 | `draft.Temporal_VC_Dimension.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Temporal_VC_Dimension.md) | draft | - | 10% | - | - |
 | `draft.Time_as_a_Feature_in_Learning_Theory.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Time_as_a_Feature_in_Learning_Theory.md) | draft | - | 10% | - | - |
@@ -55,3 +65,7 @@ Files are prefixed with their status when applicable:
 | `draft.Measuring_Quality_of_Skills_and_Prompts.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Measuring_Quality_of_Skills_and_Prompts.md) | draft | - | 50% | - | - |
 | `draft.Train_LLM_on_simple_language.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Train_LLM_on_simple_language.md) | draft | - | 10% | - | - |
 | `draft.Unit_Testing_LLM_Skills.md` | [proposal](https://github.com/gpsaggese/gpsaggese.github.io/tree/master/research/ideas/draft.Unit_Testing_LLM_Skills.md) | draft | - | 50% | - | - |
+
+# Note
+- If the specs are not complete for a task you are interested in, before starting
+  the work, ask GP to improve them so that there is clarity on what's the goal
