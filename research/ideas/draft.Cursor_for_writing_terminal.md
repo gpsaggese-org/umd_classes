@@ -1,0 +1,2 @@
+- Cursor for writing (e.g., advanced autocomplete) maybe in Zed
+- Cursor for terminal bash

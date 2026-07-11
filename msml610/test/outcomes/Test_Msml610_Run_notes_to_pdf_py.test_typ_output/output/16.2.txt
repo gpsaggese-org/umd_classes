@@ -1,0 +1,760 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Make the inline verbatim font bigger.
+#show raw.where(block: false): set text(size: 1.15em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  // TODO(ai_gp): Add explanation of parameters
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (15%, 85%),
+    gutter: 0.15cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 4.0cm)],
+    align(left)[
+      #v(-0.1cm)
+      #text(size: 20pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(0.15cm)
+  #text(size: 24pt)[*#text(fill: blue)[Lesson 16.2: LLM Building Blocks}}]*]
+
+  #v(0.1cm)
+  #text(size: 20pt)[Dr. GP Saggese (#link("mailto:gsaggese@umd.edu")[gsaggese\@umd.edu])]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[LLM Building Blocks]]
+  - Motivation: The Engine Inside the Agent
+  - The Transformer Architecture
+  - Attention as the Core Mechanism
+  - Pretraining Objectives and Scaling
+  - Inference, Decoding, and Context Windows
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== Table of Content
+<table-of-content-1>
+- LLM Building Blocks
+  - #text(fill: red, weight: "bold")[#emph[Motivation: The Engine Inside the Agent]]
+  - The Transformer Architecture
+  - Attention as the Core Mechanism
+  - Pretraining Objectives and Scaling
+  - Inference, Decoding, and Context Windows
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== From Agents to Their Engine
+<from-agents-to-their-engine>
+- #text(fill: red, weight: "bold")[Motivation]: an agent is the
+  #emph[controller] of a perceive-plan-act loop
+
+  - The controller that does the reasoning is almost always a
+    #emph[large language model] (LLM)
+  - What the agent can plan, remember, and compute is bounded by what
+    its LLM can do
+
+- #text(fill: green, weight: "bold")[Question]: what is inside an LLM,
+  and how do those parts constrain agent behavior?
+
+- #text(fill: blue, weight: "bold")[Key idea]:
+
+  - An LLM is a #emph[transformer] trained to predict the next token
+  - Understanding attention, pretraining, decoding, and expressivity
+    explains both the power and the failure modes of agents built on top
+
+==== What Is a Language Model? Definition
+<what-is-a-language-model-definition>
+- #text(fill: red, weight: "bold")[Definition]: a #emph[language model]
+  is a probability distribution over sequences of tokens
+  $x_1 \, dots.h \, x_T$
+  - It factorizes the joint distribution autoregressively:
+    $ Pr \( x_1 \, dots.h \, x_T \) = product_(t = 1)^T Pr \( x_t divides x_1 \, dots.h \, x_(t - 1) \) $
+- #text(fill: green, weight: "bold")[Key idea]: the entire model
+  implements one task
+  - #emph["Given the tokens so far, predict a distribution over the
+    #emph[next] token"]
+- #text(fill: blue, weight: "bold")[Example]:
+  - Given #emph["the capital of France is"]
+  - The model puts most probability mass on the token #emph["Paris"]
+
+==== Tokenization: From Text to Tokens
+<tokenization-from-text-to-tokens>
+- #text(fill: red, weight: "bold")[Problem]: models operate on a fixed,
+  finite vocabulary, but text is an open-ended stream of characters
+
+  - Word-level vocabularies explode and cannot handle unseen words
+  - Character-level sequences are too long to model efficiently
+
+- #text(fill: green, weight: "bold")[Solution]: #emph[subword
+  tokenization] splits text into frequent subword units
+
+  - Common words become single tokens
+  - Rare words split into several subword tokens
+
+- #text(fill: blue, weight: "bold")[Example]: The word
+  #emph["tokenization"] $arrow.r$ #text(fill: blue)[`token`] +
+  #text(fill: blue)[`ization`]
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: token count (not
+  word count) drives context limits and cost
+
+==== Table of Content
+<table-of-content-2>
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+  - #text(fill: red, weight: "bold")[#emph[The Transformer Architecture]]
+  - Attention as the Core Mechanism
+  - Pretraining Objectives and Scaling
+  - Inference, Decoding, and Context Windows
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== The Transformer: Motivation
+<the-transformer-motivation>
+- #text(fill: red, weight: "bold")[Problem]: earlier sequence models
+  (RNNs, LSTMs) process tokens #emph[one at a time]
+  - Sequential dependencies prevent parallel training
+  - Long-range dependencies vanish across many steps
+- #text(fill: green, weight: "bold")[(Naive) Solution]: stack more
+  recurrent layers and add gating
+  - #emph[Cons];: still inherently sequential, still forgets distant
+    context
+- #text(fill: blue, weight: "bold")[Solution]: the #emph[transformer]
+  (Vaswani et al., 2017) replaces recurrence with #emph[attention]
+  - Every position can directly attend to every other position
+  - The whole sequence is processed in parallel during training
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key idea]:
+  - #emph["Attention Is All You Need"]
+  - No recurrence, no convolution
+
+==== The Transformer: High-Level Architecture
+<the-transformer-high-level-architecture>
+#grid(
+  columns: (50%, 35%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Definition]: a decoder-only
+    transformer is a stack of $N$ identical #emph[blocks] applied to token
+    embeddings
+    - Each block mixes information across positions (attention) and
+      transforms each position (feed-forward)
+  - #text(fill: blue, weight: "bold")[Remark]: modern LLMs are almost all
+    #emph[decoder-only] stacks of this form
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_16.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+  ]
+)
+==== Vector Embeddings
+<vector-embeddings>
+- #text(fill: red, weight: "bold")[Definition]: an #emph[embedding] maps
+  each token id to a dense vector $bold(underline(e)) in bb(R)^d$
+  learned during training \/\/ TODO(ai\_gp): Add example
+
+- #text(fill: blue, weight: "bold")[Property]:
+
+  - Semantically similar tokens end up with nearby vectors \/\/
+    TODO(ai\_gp): Elaborate example
+
+==== Positional Encoding
+<positional-encoding>
+- #text(fill: red, weight: "bold")[Problem]: attention is
+  #emph[permutation invariant];, so the raw model has no notion of token
+  order
+  - #emph["dog bites man"] and #emph["man bites dog"] would look
+    identical
+- #text(fill: green, weight: "bold")[Solution]: add a #emph[positional
+  encoding] to each embedding
+  - Sinusoidal (fixed) or learned position vectors
+  - Modern variants use #emph[rotary] position embeddings (RoPE)
+- #text(fill: blue, weight: "bold")[Key idea]: content ("what") comes
+  from embeddings, order ("where") comes from positional encoding
+
+==== The Transformer Block
+<the-transformer-block>
+- #text(fill: red, weight: "bold")[Definition]: a #emph[transformer] is
+  composed of two sublayers, each wrapped with a residual connection and
+  normalization
+
+  + #emph[Multi-head self-attention];: mixes information across
+    positions
+  + #emph[Feed-forward network] (FFN): transforms each position
+    independently
+
+- Schematically, for input $bold(underline(x))$:
+  $ bold(underline(x))' = bold(underline(x)) + upright("Attention") \( upright("LN") \( bold(underline(x)) \) \) $
+  $ bold(underline(x))'' = bold(underline(x))' + upright("FFN") \( upright("LN") \( bold(underline(x))' \) \) $
+
+- #text(fill: blue, weight: "bold")[Intuition]:
+
+  - Attention decides #emph[what to read]
+  - The FFN decides #emph[how to transform] what was read
+
+==== Residual Connections and Layer Normalization
+<residual-connections-and-layer-normalization>
+- #text(fill: red, weight: "bold")[Problem]: stacking dozens of layers
+  makes gradients unstable and hard to train
+
+- #text(fill: green, weight: "bold")[Solution]: two ingredients
+  stabilize deep stacks
+
+  - #emph[Residual connections];: add the input back to each sublayer
+    output, $bold(underline(x)) + f \( bold(underline(x)) \)$, giving
+    gradients a direct path
+  - #emph[Layer normalization];: rescale activations to zero mean, unit
+    variance per token
+
+- #text(fill: blue, weight: "bold")[Intuition]: residuals let each layer
+  learn a small #emph[correction] rather than a full transformation
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: this is what
+  makes 30-100+ layer models trainable in practice
+
+==== Feed-Forward Networks
+<feed-forward-networks>
+- #text(fill: red, weight: "bold")[Definition]: the #emph[feed-forward
+  network] (FFN) is a two-layer MLP (multi-layer perceptron) applied
+  #emph[independently] to each position
+  $ upright("FFN") \( bold(underline(x)) \) = W_2 thin sigma \( W_1 bold(underline(x)) + b_1 \) + b_2 $
+  - Inner dimension is typically $4 times$ the model dimension $d$
+- #text(fill: green, weight: "bold")[Key idea]: the FFN is where most of
+  the model's #emph[parameters] and stored #emph[knowledge] live
+  - Attention moves information around
+  - The FFN does the per-token computation and lookup
+- #text(fill: blue, weight: "bold")[Remark]: mixture-of-experts models
+  replace this dense FFN with many sparse experts
+
+==== Table of Content
+<table-of-content-3>
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+  - The Transformer Architecture
+  - #text(fill: red, weight: "bold")[#emph[Attention as the Core Mechanism]]
+  - Pretraining Objectives and Scaling
+  - Inference, Decoding, and Context Windows
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== Attention: Motivation
+<attention-motivation>
+- #text(fill: red, weight: "bold")[Question]: when predicting the next
+  token, which #emph[previous] tokens matter most?
+
+- #text(fill: green, weight: "bold")[Example]:
+
+  - #emph["The trophy did not fit in the suitcase because it was too
+    big"]
+  - Resolving #emph["it"] requires looking back at #emph["trophy"];, not
+    #emph["suitcase"]
+
+- #text(fill: blue, weight: "bold")[Key idea]: attention lets each
+  position #emph[selectively read] from all other positions, weighted by
+  relevance
+
+  - Not a fixed window, not a fixed decay
+  - The weights are computed from the content itself
+
+==== Attention: Query, Key, Value
+<attention-query-key-value>
+- #text(fill: red, weight: "bold")[Definition]: each token produces
+  three learned projections
+
+  - #emph[Query] $bold(underline(q))$: #emph["what am I looking for?"]
+  - #emph[Key] $bold(underline(k))$: #emph["what do I offer to others?"]
+  - #emph[Value] $bold(underline(v))$: #emph["what do I contribute if
+    attended to?"]
+
+- Computed as linear maps of the input $bold(underline(x))$:
+  $ Q = X W_Q \, quad K = X W_K \, quad V = X W_V $
+
+- #text(fill: green, weight: "bold")[Intuition]:
+
+  - A query is matched against every key
+  - Strong matches pull in the corresponding values
+
+- #text(fill: blue, weight: "bold")[Analogy]: a differentiable
+  dictionary lookup
+
+==== Scaled Dot-Product Attention
+<scaled-dot-product-attention>
+- #text(fill: red, weight: "bold")[Definition]: attention output is a
+  weighted average of values, with weights from a softmax over query-key
+  similarities
+  $ upright("Attention") \( Q \, K \, V \) = upright("softmax") #h(-1em) (frac(Q K^top, sqrt(d_k))) V $
+
+- #text(fill: green, weight: "bold")[Steps]:
+
+  + Score every query against every key: $Q K^top$
+  + Scale by $sqrt(d_k)$ to keep the softmax well-conditioned
+  + Normalize scores into weights with softmax
+  + Take the weighted sum of value vectors
+
+- #text(fill: blue, weight: "bold")[Remark]: the $sqrt(d_k)$ scaling
+  prevents large dot products from saturating the softmax into
+  near-one-hot weights
+
+==== Multi-Head Attention
+<multi-head-attention>
+- #text(fill: red, weight: "bold")[Problem]: a single attention pattern
+  can only capture one kind of relationship at a time (e.g., -syntax\_
+  or #emph[coreference];)
+
+- #text(fill: green, weight: "bold")[Solution]:
+
+  - Run $h$ attention operations (#emph[heads];) in parallel
+  - Each attention with its own $W_Q \, W_K \, W_V$
+  - Then concatenate and project
+    $ upright("MHA") \( X \) = upright("Concat") \( upright("head")_1 \, dots.h \, upright("head")_h \) thin W_O $
+
+- #text(fill: blue, weight: "bold")[Intuition]: different heads
+  specialize
+
+  - One head tracks the previous token
+  - Another tracks the subject of the sentence
+  - Another tracks matching brackets
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key idea]: parallel heads
+  give the model multiple #emph[relational lenses]
+
+==== Self-Attention vs.~Cross-Attention
+<self-attention-vs.-cross-attention>
+- #text(fill: red, weight: "bold")[Self-attention]: queries, keys, and
+  values all come from the #emph[same] sequence
+
+  - Used inside decoder blocks so tokens attend to earlier tokens
+
+- #text(fill: green, weight: "bold")[Cross-attention]: queries come from
+  one sequence, keys and values from #emph[another]
+
+  - Used in encoder-decoder models (e.g., translation) so the decoder
+    reads the source
+
+- #text(fill: blue, weight: "bold")[Example]: in a translation model,
+  the decoder's cross-attention lets each output word look back at the
+  input sentence
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: decoder-only LLMs
+  use only #emph[self];-attention
+
+==== Causal (Masked) Attention
+<causal-masked-attention>
+- #text(fill: red, weight: "bold")[Problem]: during training the model
+  sees the whole sequence, but at inference it must predict token $t$
+  using #emph[only] tokens $< t$
+  - Without a fix, it could "cheat" by attending to future tokens
+- #text(fill: green, weight: "bold")[Solution]: apply a #emph[causal
+  mask] that sets attention scores to $- oo$ for any future position
+  before the softmax
+  $ upright("score")_(i \, j) = - oo quad upright("if ") j > i $
+  - E.g., when predicting the 5th token, positions 6, 7, … are masked
+    out
+- #text(fill: blue, weight: "bold")[Key idea]: masking enforces the
+  autoregressive factorization: each position only attends to itself and
+  the past
+
+==== Attention: Complexity and Cost
+<attention-complexity-and-cost>
+- #text(fill: red, weight: "bold")[Problem]: computing $Q K^top$
+  compares every token with every other token
+  - Time and memory scale as $O \( T^2 \)$ in the sequence length $T$
+- #text(fill: green, weight: "bold")[Consequence]: 2x the context length
+  4x the attention cost
+  - This is the main obstacle to very long context windows
+  - This $O \( T^2 \)$ cost is why context length is a scarce, expensive
+    resource for agents
+- #text(fill: blue, weight: "bold")[Partial solutions]:
+  - Sparse / local attention (attend to a window)
+  - Linear-attention approximations
+  - I/O-aware exact kernels (e.g., FlashAttention)
+
+==== Table of Content
+<table-of-content-4>
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+  - The Transformer Architecture
+  - Attention as the Core Mechanism
+  - #text(fill: red, weight: "bold")[#emph[Pretraining Objectives and Scaling]]
+  - Inference, Decoding, and Context Windows
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== Pretraining: The Objective
+<pretraining-the-objective>
+- #text(fill: red, weight: "bold")[Definition]: #emph[pretraining]
+  optimizes the model to predict the next token on a massive text
+  corpus, minimizing the #emph[cross-entropy] loss
+  $ cal(L) = - sum_(t = 1)^T log Pr \( x_t divides x_1 \, dots.h \, x_(t - 1) \) $
+
+- #text(fill: green, weight: "bold")[Key idea]: no human labels are
+  needed
+
+  - The text itself provides the supervision (the next token is the
+    target)
+  - This is why it is called #emph[self-supervised] learning
+
+- #text(fill: blue, weight: "bold")[Remark]: minimizing next-token loss
+  forces the model to absorb grammar, facts, and reasoning patterns
+
+==== Masked vs.~Autoregressive Objectives
+<masked-vs.-autoregressive-objectives>
+#grid(
+  columns: (48%, 48%),
+  gutter: 0.5em,
+  [
+  #text(fill: red, weight: "bold")[Autoregressive (GPT-style)]
+  
+  - Predicts the next token left-to-right
+  - Uses a causal mask
+  - Naturally #emph[generative]
+  - Basis of modern LLMs and agents
+  ],
+  [
+  #text(fill: green, weight: "bold")[Masked (BERT-style)]
+  
+  - Predicts randomly #emph[masked] tokens
+  - Uses bidirectional context
+  - Naturally #emph[discriminative]
+  - Strong for classification, weak at free generation
+  ]
+)
+- #text(fill: blue, weight: "bold")[Key idea]: agentic LLMs need to
+  #emph[generate] actions and text, so they use the autoregressive
+  objective
+
+==== The Pretraining Pipeline
+<the-pretraining-pipeline>
+- #text(fill: red, weight: "bold")[Steps]:
+  + Collect and filter a large corpus (web, code, books)
+  + Tokenize into subword units
+  + Train the transformer to minimize next-token loss
+  + Optionally #emph[post-train];: instruction tuning + preference
+    optimization
+- #text(fill: green, weight: "bold")[Key idea]:
+  - Pretraining builds a broad #emph[base model]
+  - Post-training makes it follow instructions and act as an assistant
+- #text(fill: blue, weight: "bold")[Remark]: the agent capabilities
+  mostly emerge in the post-training stage, on top of the pretrained
+  base
+
+==== Scaling Laws
+<scaling-laws>
+- #text(fill: red, weight: "bold")[Fact]: model loss falls
+  #emph[predictably] as a power law in model size $N$, data $D$, and
+  compute $C$ $ cal(L) \( N \) approx cal(L)_oo + (N_0 / N)^alpha $
+
+- #text(fill: green, weight: "bold")[Key idea]: bigger models trained on
+  more data with more compute get reliably better, with no sign of a
+  sharp ceiling
+
+  - Enables planning: predict a large model's loss from small-model runs
+
+- #text(fill: blue, weight: "bold")[Remark]: compute-optimal training
+  balances $N$ and $D$ together, rather than growing parameters alone
+
+==== Emergent Abilities
+<emergent-abilities>
+- #text(fill: red, weight: "bold")[Definition]: an #emph[emergent
+  ability] is a capability that is absent in small models but appears,
+  often abruptly, past some scale
+
+- #text(fill: orange, weight: "bold")[Example]:
+
+  - Multi-step arithmetic
+  - In-context learning
+  - Instruction following
+
+- #text(fill: green, weight: "bold")[Intuition]: some skills only become
+  useful once the model is accurate enough at each intermediate step
+
+- #text(fill: teal, weight: "bold")[Remark]: emergence is debated ---
+  partly real, partly an artifact of discontinuous, all-or-nothing
+  metrics
+
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Connection]: in-context
+  learning is what lets agents adapt from a few examples in the prompt,
+  with no weight updates
+
+==== Table of Content
+<table-of-content-5>
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+  - The Transformer Architecture
+  - Attention as the Core Mechanism
+  - Pretraining Objectives and Scaling
+  - #text(fill: red, weight: "bold")[#emph[Inference, Decoding, and Context Windows]]
+  - Expressivity: What Transformers Can and Cannot Compute
+
+==== Inference: Autoregressive Generation
+<inference-autoregressive-generation>
+- #text(fill: red, weight: "bold")[Definition]: #emph[inference]
+  generates text one token at a time, feeding each sampled token back in
+  as input
+  - Predict a distribution over the next token
+  - Choose a token from it
+  - Append and repeat until a stop condition
+
+#box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_16.2/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png"))
+
+- #text(fill: blue, weight: "bold")[Remark]: generation cost is
+  #emph[sequential];: each new token needs another forward pass
+
+==== Decoding Strategies: Greedy vs.~Sampling
+<decoding-strategies-greedy-vs.-sampling>
+- #text(fill: red, weight: "bold")[Greedy decoding]: always take the
+  highest-probability token
+  - #emph[Pros];: deterministic, fast
+  - #emph[Cons];: repetitive, bland, gets stuck in loops
+- #text(fill: green, weight: "bold")[Sampling]: draw the next token from
+  the distribution
+  - #emph[Temperature] $tau$ rescales the logits before softmax
+    $ Pr \( x_i \) prop exp #h(-1em) (z_i / tau) $ where:
+    - $tau arrow.r 0$: approaches greedy
+    - $tau > 1$: more random / diverse
+- #text(fill: blue, weight: "bold")[Key idea]: temperature trades off
+  #emph[coherence] against #emph[diversity]
+
+==== Top-k and Top-p Sampling
+<top-k-and-top-p-sampling>
+- #text(fill: red, weight: "bold")[Problem]: plain sampling can pick
+  very low-probability tokens, producing incoherent text
+
+- #text(fill: green, weight: "bold")[Solution]: restrict sampling to a
+  high-probability subset
+
+  - #emph[Top-k];: keep only the $k$ most likely tokens, renormalize,
+    then sample
+  - #emph[Top-p];: keep the smallest set of tokens whose cumulative
+    probability exceeds $p$
+
+- #text(fill: blue, weight: "bold")[Intuition]: cut the unreliable tail
+  while keeping genuine diversity in the top tokens
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: for agents, lower
+  temperature and tighter top-p give more #emph[reliable];, reproducible
+  tool calls
+
+==== The Context Window
+<the-context-window>
+- #text(fill: red, weight: "bold")[Definition]: the #emph[context
+  window] is the maximum number of tokens the model can attend to at
+  once
+  - Prompt + generated tokens must fit within it
+- #text(fill: green, weight: "bold")[Problem]:
+  - The $O \( T^2 \)$ attention cost makes long windows expensive
+  - Positional generalization degrades beyond training length
+- #text(fill: blue, weight: "bold")[Consequence for agents]:
+  - Long histories, tool outputs, and documents compete for limited
+    space
+  - Motivates the #emph[retrieval] and #emph[memory] mechanisms
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Example]: an agent must
+  summarize or truncate a huge log rather than process it whole
+
+==== The KV Cache
+<the-kv-cache>
+- #text(fill: red, weight: "bold")[Problem]: naively, generating token
+  $t$ recomputes attention keys and values for #emph[all] previous
+  tokens every step, hugely wasteful
+
+- #text(fill: green, weight: "bold")[Solution]: cache the keys and
+  values of past tokens (the #emph[KV cache];) and reuse them
+
+  - Each new token computes only its own $Q \, K \, V$
+  - Attends against the cached $K \, V$
+
+- #text(fill: blue, weight: "bold")[Key idea]: the KV cache turns
+  per-token cost from $O \( T^2 \)$ to $O \( T \)$ per step (at the
+  price of memory)
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Remark]: KV-cache memory
+  is a primary driver of serving cost and the practical limit on batch
+  size and context length
+
+==== Table of Content
+<table-of-content-6>
+- LLM Building Blocks
+  - Motivation: The Engine Inside the Agent
+  - The Transformer Architecture
+  - Attention as the Core Mechanism
+  - Pretraining Objectives and Scaling
+  - Inference, Decoding, and Context Windows
+  - #text(fill: red, weight: "bold")[#emph[Expressivity: What Transformers Can and Cannot Compute]]
+
+==== The Question of "Expressivity"
+<the-question-of-expressivity>
+- #text(fill: red, weight: "bold")[Question]: a single forward pass is a
+  #emph[fixed-depth] circuit: what class of problems can it actually
+  solve?
+
+- #text(fill: green, weight: "bold")[Key idea]: without intermediate
+  outputs, a transformer's per-token computation is bounded
+
+  - It cannot, in one pass, carry out an arbitrarily long chain of
+    dependent steps
+  - Some problems are #emph[inherently serial] and need many steps
+
+- #text(fill: blue, weight: "bold")[Remark]: this is why agents "think
+  out loud" and take multiple steps instead of answering in one shot
+
+==== Chain-of-Thought as Serial Computation
+<chain-of-thought-as-serial-computation>
+- #text(fill: red, weight: "bold")[Problem]: tasks like multi-digit
+  arithmetic or multi-hop reasoning need many #emph[dependent]
+  intermediate steps
+
+- #text(fill: green, weight: "bold")[Solution]: #emph[chain-of-thought]
+  (CoT) prompting (Wei et al., 2022) makes the model emit intermediate
+  steps as tokens before the answer
+
+  ```
+  LLM> Let's think step by step
+  ```
+
+  - E.g., solving 17 x 24 by writing partial products, instead of
+    emitting the answer in a single step
+
+- #text(fill: blue, weight: "bold")[Key idea]: each generated token is
+  another forward pass, so writing out steps effectively adds
+  #emph[serial depth] to the computation
+
+  - CoT trades extra tokens (time) for extra reasoning depth
+
+==== What Transformers Cannot (Easily) Compute
+<what-transformers-cannot-easily-compute>
+- #text(fill: red, weight: "bold")[Limitations]: a fixed-depth
+  transformer without scratch space struggles with:
+
+  - Unbounded exact state tracking
+  - Problems requiring computation that grows with input size in one
+    pass
+  - Reliable, long multi-step reasoning without writing steps out
+
+- #text(fill: green, weight: "bold")[Fact]: with a long enough
+  chain-of-thought scratchpad, transformers become far more powerful,
+  approaching general computation
+
+- #text(fill: blue, weight: "bold")[Interpretation]:
+
+  - Its effective computational power of a model depends on #emph[how
+    many steps] it is allowed to take, which motivates agentic loops
+
+==== Summary and Open Questions
+<summary-and-open-questions>
+- #text(fill: red, weight: "bold")[Key takeaways]:
+  - An LLM is a #emph[transformer] trained to predict the next token via
+    self-supervised cross-entropy loss
+  - #emph[Attention] (query-key-value, multi-head, causal) is the core
+    mechanism that mixes information across positions at $O \( T^2 \)$
+    cost
+  - #emph[Scaling laws] make bigger-model, more-data, more-compute
+    improvements predictable, with some abilities emerging at scale
+  - #emph[Decoding] (temperature, top-k, top-p) and the #emph[context
+    window] / #emph[KV cache] govern how agents generate and how much
+    they can attend to
+  - A single forward pass has bounded depth, so #emph[chain-of-thought]
+    and agentic loops add the serial computation the architecture lacks
+- #text(fill: blue, weight: "bold")[Open questions]:
+  - How did the field move from raw prompting to acting agents like
+    ReAct?
+  - How can retrieval and memory extend the limited context window?
+  - How do we train models whose reasoning steps are reliable and
+    verifiable?

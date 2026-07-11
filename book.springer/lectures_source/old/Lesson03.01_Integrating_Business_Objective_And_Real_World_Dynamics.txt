@@ -1,0 +1,104 @@
+# 3: Integrating Business Objective and Real-World Dynamics in ML
+
+### The Problem
+- **Optimizes the wrong objective**:
+  - Models chase a proxy (clicks, accuracy) instead of the business goal
+    (revenue, retention, wellbeing)
+  - _Goodhart's law_: once a proxy becomes the target, it stops measuring what
+    you care about
+- **No native cost-asymmetry handling**:
+  - Symmetric losses (log-loss, MSE) misprice asymmetric business errors
+  - A fraud false negative costs differently than a false positive
+- **Predictions are not recommendations**:
+  - Black-box scores give no actionable lever and no _"why"_
+  - Credit, hiring, and healthcare increasingly require explanations, not just
+    scores
+- **No end-to-end learning**: splitting a problem into individually-solved
+  sub-problems loses the joint objective
+- **Multi-objective decisions under constraints**: real decisions trade off
+  competing goals under budget, capacity, and legal limits — not one scalar loss
+
+### Toward a Solution (Decision Theory)
+- **From KPIs to causal objectives and utilities**: optimize the decision, not a
+  proxy metric
+- **Cost matrices and asymmetric loss**: price business errors explicitly instead
+  of bolting fixes on after the fact
+- **The decision pipeline**: data → causal model → effect estimation → policy →
+  action → feedback
+- **End-to-end, decision-focused learning**: optimize the whole pipeline for
+  decision quality
+
+### The Problem
+- **Assumes a static world**:
+  - Any decision changes the world and breaks the training distribution
+  - Concept, covariate, and label shift degrade accuracy over time
+- **Feedback loops**: predictions act on the world and reshape future data,
+  amplifying bias (echo chambers, over-policing)
+- **Strategic and adversarial response**:
+  - Deployed models get gamed (credit gaming, SEO, resume keyword-stuffing)
+  - This violates the passive-agent assumption
+- **Performativity**: the prediction changes the very quantity it predicts — a
+  sharper, named form of feedback loops
+- **No exploration (observational-only)**:
+  - The model never experiments; it is trapped in the support of the logged
+    policy
+  - Cannot learn the effect of never-taken actions (an overlap / positivity
+    violation)
+- **Delayed and long-horizon effects**: optimizes an immediate proxy, ignoring
+  downstream outcomes and credit assignment over time (short-termism, surrogate
+  outcomes)
+
+### Toward a Solution (Dynamic Causal ML)
+- **Model the world's response** (developed in Part IV): causal world models,
+  causal reinforcement learning, and forecasting under intervention
+- **Feedback-aware design**: anticipate distribution shift and bias amplification
+  before deployment
+
+// ### Lessons
+// - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+//   decision making (Problem 2); feedback loops (Problem 5); distribution shift
+//   (Problem 6); optimization vs inference vs decision theory; cost of ignoring
+//   causality; why AI projects fail
+// - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+//   utility functions; expected utility; cost / asymmetric loss; multi-criteria
+//   trade-offs; risk preferences; decision networks; predictions → decisions
+// - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
+//   causal world models (SCMs for MDPs); causal RL; utilities over time /
+//   long-horizon; counterfactual credit assignment; deconfounding off-policy
+// - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
+//   experiment vs observe; exploration vs exploitation; policy / off-policy
+//   evaluation; interference and network effects; feasibility constraints
+// - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
+//   feedback loops and simultaneity; non-stationarity; forecasting breaks under
+//   intervention; when temporal structure misleads
+// - `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
+//   exploration vs exploitation; non-stationary bandits; adversarial bandits;
+//   contextual bandits
+//
+// ### Related books
+// - [B001] Agrawal et al., "Prediction Machines", 2018
+// - [B028] Kochenderfer, "Decision Making Under Uncertainty", 2015
+// - [B029] Russell et al., "Artificial Intelligence: A Modern Approach", 2020
+// - [B003] Huyen, "Designing Machine Learning Systems", 2022
+// - [B032] Ness et al., "Causal AI", 2023
+// - [B030] Sutton et al., "Reinforcement Learning: An Introduction", 2018
+// - [B040] Brynjolfsson & McAfee, "Machine, Platform, Crowd", 2021
+// - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
+//
+// ### Related papers
+// - [P099] Liu et al., "Performative Prediction", 2021
+//   https://arxiv.org/abs/2007.02153
+// - [P098] Taori et al., "Data Feedback Loops: Model-driven Amplification of
+//   Dataset Biases", 2023 https://arxiv.org/abs/2209.03942
+// - [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984
+//   https://doi.org/10.1016/S0261-5606(84)80005-8
+// - [P036] Bottou et al., "Counterfactual Reasoning and Learning Systems: The
+//   Example of Computational Advertising", 2013 https://arxiv.org/abs/1209.0467
+// - [P039] Peters et al., "Causal Inference Using Invariant Prediction:
+//   Identification and Outlook", 2015 https://arxiv.org/abs/1501.01332
+// - [P042] Hafner et al., "Mastering Atari, Go, Chess and Shogi by Planning with
+//   a Learned World Model", 2023 https://arxiv.org/abs/2104.06294
+// - [P100] Kahneman & Tversky, "Prospect Theory: An Analysis of Decision under
+//   Risk", 1979 https://doi.org/10.2307/1914185
+// - [P002] Lundberg & Lee, "A Unified Approach to Interpreting Model
+//   Predictions", 2017 https://arxiv.org/pdf/1705.07874.pdf

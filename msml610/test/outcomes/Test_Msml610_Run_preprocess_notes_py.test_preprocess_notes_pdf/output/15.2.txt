@@ -1,0 +1,505 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+# Neural-Symbolic Decision Making
+
+## I. Motivation and Overview
+- Neural-Symbolic AI: The Integration Problem
+
+- **Motivation**: Classical AI excels at structured reasoning; deep learning
+  excels at pattern recognition
+  - Classical symbolic systems: rigid, interpretable, struggle with perception
+  - Neural networks: flexible, learn from data, opaque reasoning
+  - Gap: how to combine strengths of both?
+
+- **Goal**: Create decision-making systems that combine
+  - Learned representations from data (neural)
+  - Structured planning and reasoning (symbolic)
+
+- **Question**: Can we use neural networks to enhance classical planning
+  algorithms like A\*?
+
+- **Key insight**: Neural-symbolic integration is not about replacing one with
+  the other—it's about orchestrating them synergistically
+
+- The Four Pillars of Neural-Symbolic Decision Making
+
+- **Pillar 1: Learning Dynamics**: Capture planning algorithm behavior via
+  neural models
+  - _Bootstrapping Search Dynamics_ (Beyond A\*)
+
+- **Pillar 2: Dual-Process Reasoning**: Fast intuition + slow deliberation
+  - _Dualformer_ (fast heuristics, slow reasoning traces)
+
+- **Pillar 3: Algebraic Abstraction**: Compose optimizers as algebraic objects
+  - _Composing Global Optimizers_ (functional composition of solvers)
+
+- **Pillar 4: Surrogate Learning**: Learn tractable approximations of hard
+  problems
+  - _SurCo_ (linear surrogates for combinatorial optimization)
+
+## II. Beyond A\*: Search Dynamics Bootstrapping
+- Beyond A\*: Problem Setup
+
+- **Classical A\* Planning**: $f(n) = g(n) + h(n)$
+  - $g(n)$ = cost to reach node $n$
+  - $h(n)$ = heuristic estimate to goal
+  - Greedy: expand node with lowest $f(n)$
+
+- **The Core Limitation**: Heuristics are hand-crafted
+  - Admissible heuristics (underestimate true cost) guarantee optimality but may
+    be weak
+  - Informed heuristics are domain-specific, not generalizable
+
+- **Key Question**: Can we learn $h(n)$ from data instead of designing it?
+
+- **Naive Approach**: Train neural network as heuristic function
+  $h_\theta(n) \approx h^*(n)$
+  - Problem: Requires extensive labeled data on $(n, h^*(n))$ pairs
+  - Problem: No guarantee on admissibility; may overestimate and miss optimal
+    solutions
+
+- Beyond A\*: Search Dynamics Bootstrapping (Core Idea)
+
+- **Central Insight**: Don't just learn heuristics—learn the _dynamics_ of how
+  A\* explores
+  - Observation: The _sequence_ of nodes A\* expands encodes rich planning
+    information
+  - Dynamics: How does A\* decide which node to expand next?
+
+- **Bootstrapping Strategy**:
+  1. Run classical A\* with hand-crafted heuristic on training problems
+  2. Record the _search trajectory_: sequence of expanded nodes
+     $(n_1, n_2, ..., n_T)$
+  3. Train transformer to predict the next node to expand from partial
+     trajectory
+  4. Use learned transformer as an _enhanced_ heuristic for new instances
+
+- **Why Transformers?**
+  - Attention mechanism captures dependencies between nodes in search trajectory
+  - Can learn patterns in _when_ to expand nodes based on path structure
+  - Transferable: trained on one domain, generalizes to similar instances
+
+- **Mathematical Formulation**:
+
+  $$
+  \Pr(\text{expand } n_t | n_1, ..., n_{t-1})
+  = \text{Transformer}(n_1, ..., n_{t-1})
+  $$
+
+- Beyond A\*: Ensuring Guarantees
+
+- **Problem with Direct Learning**: Learned heuristics may violate admissibility
+  - If $h_\theta(n) > h^*(n)$, A\* may miss optimal solutions
+
+- **Solution: Admissibility-Aware Training**
+  - Use the learned transformer not as a replacement heuristic, but as a
+    _policy_
+  - At each step, the transformer suggests which node to expand
+  - Only accept suggestion if it maintains admissibility constraints
+
+- **Hybrid Approach**:
+  - Transformer learns to imitate A\* behavior on training set
+  - On new instances, use transformer to guide search (faster exploration)
+  - Fall back to classical A\* guarantees if needed
+
+- **Empirical Results**:
+  - Faster convergence on learned domains
+  - Maintains solution quality of classical A\*
+  - Generalizes to unseen problem instances
+
+- Beyond A\*: Applications and Limitations
+
+- **Applications**:
+  - Path planning in robotics
+  - Puzzle solving (Sokoban, Rubik's cube)
+  - Planning under constraints
+
+- **Limitations**:
+  - Requires representative training trajectories
+  - Computational cost of training transformer
+  - Domain-specific tuning needed for new problem classes
+
+- **Key Takeaway**: Neural networks can learn and enhance classical algorithms
+  by capturing algorithmic _dynamics_ rather than just mimicking outputs
+
+## III. Dualformer: Controllable Fast and Slow Thinking
+- Dualformer: The Dual-Process Reasoning Framework
+
+- **Cognitive Science Inspiration**: Humans solve problems via two systems
+  - _System 1 (Fast)_: Quick intuition, heuristic reasoning
+  - _System 2 (Slow)_: Deliberate, step-by-step verification
+  - Both are necessary: speed for time-critical decisions, accuracy for complex
+    reasoning
+
+- **Question**: Can neural networks also learn to switch between fast intuition
+  and slow deliberation?
+
+- **Dualformer Architecture**:
+  - _Fast Path_: Quick neural heuristic (learned directly)
+  - _Slow Path_: Iterative reasoning via transformed reasoning traces
+  - _Control Mechanism_: Learn _when_ to use which path
+
+- **Key Insight**: Don't train a single monolithic model—train two complementary
+  pathways with learned control logic
+
+- Dualformer: The Two Reasoning Paths
+
+- **Fast Path** (Intuitive Heuristic):
+  - Single-pass neural network $f_{\text{fast}}(x) \to a$
+  - Extremely fast (milliseconds)
+  - Lower accuracy, but sufficient for many decisions
+  - Example: Quick classification, fast planning
+
+- **Slow Path** (Deliberative Reasoning):
+  - Iterative refinement via reasoning traces $r_1, r_2, ..., r_T$
+  - Each trace $r_t$ is an intermediate reasoning step
+  - Composed via transformer: $a = \text{Transformer}(r_1, ..., r_T)$
+  - Much slower, but higher accuracy
+
+- **Reasoning Traces**: What is $r_t$?
+  - Intermediate representations generated during solving
+  - Example: partial solutions in planning, intermediate thoughts in reasoning
+  - Can be learned or extracted from symbolic solvers
+
+- **Hybrid Decision**:
+  - For each input $x$, predict:
+    - Should we use fast path? (confidence threshold)
+    - Or should we use slow path? (when certainty is low)
+
+- Dualformer: Randomized Training for Robustness
+
+- **Key Problem**: Training on fixed traces is brittle
+  - If traces are always the same sequence, model overfits
+  - Real solvers produce varied traces depending on initial conditions
+
+- **Solution: Randomized Reasoning Traces**
+  - During training, add randomness to trace generation
+  - Different runs of same solver produce slightly different traces
+  - Force model to be robust to trace variations
+
+- **Training Objective**:
+
+  $$
+  \mathcal{L} = \mathbb{E}_{r \sim \text{RandomTraces}(x)}
+    \left[ \ell(f_\text{slow}(r), y) \right] + \text{ControlLoss}
+  $$
+  - $\text{RandomTraces}(x)$ samples reasoning traces stochastically
+  - ControlLoss encourages efficient use of slow path (only when needed)
+
+- **Why Randomization Helps**:
+  - Simulates distribution shift (traces vary in practice)
+  - Prevents overfitting to specific trace sequences
+  - Improves generalization to new problem instances
+
+- Dualformer: Control and Efficiency
+
+- **Learning When to Deliberate**:
+  - Fast path produces answer $a_f$ and confidence $c_f$
+  - If $c_f > \tau$ (threshold), return $a_f$ (save time)
+  - Else, invoke slow path (deliberate longer)
+
+- **Cost-Accuracy Tradeoff**:
+  - Threshold $\tau$ controls accuracy vs. speed
+  - High $\tau$: use fast path often (fast but less accurate)
+  - Low $\tau$: use slow path often (accurate but slow)
+
+- **Empirical Performance**:
+  - Achieves fast-path speed on $\sim 70\%$ of instances
+  - Uses slow path for hard instances requiring deliberation
+  - Outperforms pure fast or pure slow approaches
+
+- **Key Takeaway**: Dual-process reasoning via controlled switching enables
+  _adaptive_ complexity—simple cases resolved quickly, hard cases receive
+  extended reasoning
+
+## IV. Composing Global Optimizers Via Algebraic Objects
+- The Composition Problem in Optimization
+
+- **Motivation**: Real problems often combine multiple objectives
+  - Optimize cost AND minimize time AND satisfy constraints
+  - Different sub-problems have different optimal solvers
+  - Need to compose specialized solvers into unified optimizer
+
+- **Classical Challenge**:
+  - Monolithic solver: must handle all problem types (slow)
+  - Pipeline of solvers: hard to integrate results (inconsistent)
+  - Goal: compose solvers as _building blocks_ with clear semantics
+
+- **Algebraic Perspective**: Treat optimizers as algebraic objects
+  - Solvers form a _semigroup_ or _monoid_ under composition
+  - Can combine via operator overloading and functional composition
+  - Get composability "for free" via algebraic properties
+
+- **Question**: What algebraic structure makes sense for optimization?
+
+- Algebraic Objects for Optimization
+
+- **Definition**: A _global optimizer_ $\mathcal{O}$ is a map
+
+  $$
+  \mathcal{O}: \mathcal{X} \to \mathcal{P}(\mathcal{X})
+  $$
+  - Input: feasible solution set $\mathcal{X}$
+  - Output: set of _optimal_ solutions
+    $\mathcal{P}(\mathcal{X}) \subseteq \mathcal{X}$
+
+- **Composition of Optimizers**:
+  - $\mathcal{O}_1 \circ \mathcal{O}_2$: Apply $\mathcal{O}_2$ first, then
+    refine with $\mathcal{O}_1$
+  - $\mathcal{O}_1 \cap \mathcal{O}_2$: Find solutions satisfying both
+
+- **Monoid Structure**:
+  - Identity: trivial optimizer (return all feasible solutions)
+  - Associativity:
+    $(\mathcal{O}_1 \circ \mathcal{O}_2) \circ \mathcal{O}_3 = \mathcal{O}_1 \circ (\mathcal{O}_2 \circ \mathcal{O}_3)$
+  - Closure: composition of optimizers is an optimizer
+
+- **Benefits**:
+  - Modular reasoning about optimizers
+  - Reuse existing solvers without modification
+  - Automatic composition guarantees correctness
+
+- Algebraic Optimization in Practice
+
+- **Example: Multi-Objective Knapsack**
+  - $\mathcal{O}_1$: maximize value
+  - $\mathcal{O}_2$: minimize weight
+  - $\mathcal{O}_3$: satisfy constraints
+  - Composed: $\mathcal{O}_3 \circ \mathcal{O}_1 \cap \mathcal{O}_2$
+
+- **Algebraic Solver Composition**:
+  1. Encode objective functions as optimization problems
+  2. Represent solvers as algebraic operations
+  3. Compose via functional combinators
+  4. Derive composite solver automatically
+
+- **Neural Integration**:
+  - Learn which composition sequence is optimal via gradient descent
+  - Meta-learning: which optimizer order minimizes total solving time?
+  - Data-driven composition beats hand-designed pipelines
+
+- **Complexity Analysis**:
+  - Composing $k$ optimizers: $O(T_1 + T_2 + ... + T_k)$ time (sequential)
+  - Parallelization possible if optimizers are independent
+  - Memory overhead minimal (solvers share solution cache)
+
+- Algebraic Objects: Limitations and Extensions
+
+- **Limitations**:
+  - Not all optimization problems fit cleanly into algebraic framework
+  - Non-monotonic objectives (e.g., sparsity) harder to compose
+  - Theoretical guarantees weaker than problem-specific solvers
+
+- **Extensions**:
+  - Extend to _partial orders_ instead of total orders
+  - Incorporate uncertainty via stochastic optimizers
+  - Learn adaptive composition strategies via RL
+
+- **Key Takeaway**: Algebraic structure enables composable, modular
+  optimization—leverage it to build complex solvers from simple, verified
+  components
+
+## V. SurCo: Learning Linear Surrogates for Combinatorial Optimization
+- The Combinatorial Optimization Challenge
+
+- **Definition**: Combinatorial optimization seeks
+
+  $$
+  x^* = \arg\max_{x \in \{0,1\}^n} f(x)
+  $$
+  - Discrete variables (binary, integer, categorical)
+  - Nonlinear, hard-to-optimize objective $f$
+  - Example: graph coloring, SAT, scheduling, portfolio optimization
+
+- **Classical Approaches**:
+  - Exact solvers (branch-and-bound, ILP): exponential in $n$, only feasible for
+    small $n$
+  - Heuristics (greedy, genetic algorithms): fast but no guarantees
+  - Meta-heuristics (simulated annealing, tabu search): slow but occasionally
+    good
+
+- **Core Challenge**:
+  - Objective $f$ is black-box or computationally expensive
+  - Gradient-based optimization impossible (discrete variables)
+  - Sampling $f$ is costly
+
+- **Question**: Can we learn a _cheap-to-optimize_ approximation of $f$?
+
+- SurCo: Surrogate Model Learning
+
+- **Core Idea**: Learn a _surrogate function_ $\hat{f}$ that
+  - Is fast to evaluate (milliseconds, not seconds)
+  - Correlates strongly with true objective $f$
+  - Is easy to optimize (e.g., convex or linear)
+
+- **Surrogate-Based Optimization Loop**:
+  1. Sample $f$ at a few initial points $\mathcal{D} = \{(x_i, f(x_i))\}$
+  2. Fit surrogate $\hat{f}$ to $\mathcal{D}$
+  3. Optimize $\hat{f}$ (cheap) to find promising candidate $x_{\text{cand}}$
+  4. Evaluate $f(x_{\text{cand}})$ (expensive)
+  5. Add to dataset and repeat
+
+- **Why This Matters**:
+  - If $\hat{f}$ is good, we find high-quality solutions with far fewer $f$
+    evaluations
+  - Especially valuable when $f$ is expensive (simulation, real-world test,
+    inference)
+
+- SurCo: Linear Surrogates for Discrete Optimization
+
+- **Why Linear Surrogates?**
+  - **Interpretability**: coefficients show variable importance
+  - **Efficiency**: Linear optimization is polynomial (integer linear
+    programming via solver)
+  - **Stability**: fewer parameters → less overfitting on small samples
+
+- **Key Challenge**: Learning linear approximation to highly nonlinear $f$
+  - Naive regression (minimize $\|\hat{f}(x) - f(x)\|^2$ over training data)
+    produces poor optimizer
+  - Regression minimizes pointwise error, not _optimization error_
+
+- **SurCo Approach: Optimize for Optimization**, not prediction
+
+  $$
+  \hat{f}_\text{SurCo}
+    = \arg\min_{\hat{f} \in \text{Linear}}
+      \mathbb{E}_{f}
+      \left[
+        \left| f(x^*_{\hat{f}}) - f(x^*_f) \right|
+      \right]
+  $$
+  - $x^*_{\hat{f}}$ = argmax of surrogate
+  - $x^*_f$ = argmax of true function
+  - Minimize _optimization loss_, not prediction loss
+
+- **Why It Works**:
+  - Focuses learning on high-value region (where optimum is)
+  - Ignores prediction error in unimportant regions
+  - Often finds near-optimal solutions even with poor pointwise fit
+
+- SurCo: Algorithm and Complexity
+
+- **Training Algorithm**:
+  1. Collect training data $\mathcal{D} = \{(x_i, f(x_i))\}_{i=1}^m$ via
+     sampling
+  2. For each candidate linear model $\hat{f} \in \mathcal{F}$:
+     - Optimize $\hat{f}$ over discrete space:
+       $x_{\hat{f}} = \arg\max_x \hat{f}(x)$
+     - Evaluate true objective: $\text{loss} = f(x^*_{\hat{f}}) - f(x^*_f)$ (or
+       regret)
+  3. Select $\hat{f}$ with lowest optimization loss
+
+- **Computational Complexity**:
+  - Training data collection: $O(m \cdot T_f)$ (sample $m$ points, each cost
+    $T_f$)
+  - Surrogate learning: $O(m \cdot |\mathcal{F}|)$ (search linear model space)
+  - Optimization via surrogate: $O(\text{poly}(n))$ (integer linear program)
+  - Total: feasible when true objective $f$ is very expensive
+
+- **Empirical Results**:
+  - Achieves near-optimal solutions with $5$-$10\times$ fewer $f$ evaluations
+    than random search
+  - Often competitive with problem-specific solvers
+  - Generalizes across problem instances
+
+- SurCo: Real-World Applications
+
+- **Portfolio Optimization**:
+  - $f$ = portfolio return (requires simulation or historical backtest)
+  - SurCo learns linear surrogate of risk-return tradeoff
+  - Finds good allocations with few expensive evaluations
+
+- **Drug Discovery**:
+  - $f$ = binding affinity (requires molecular simulation or experiment)
+  - Surrogate guides molecular search with limited lab evaluations
+  - Accelerates discovery pipeline
+
+- **Hardware Design**:
+  - $f$ = chip performance (requires synthesis, simulation, or fabrication)
+  - Surrogate optimizes design parameters with fewer expensive runs
+
+- **Key Takeaway**: When objective is expensive, optimize for _optimization
+  quality_, not _prediction quality_—learn surrogates that find good optima, not
+  surrogates that fit data well
+
+## VI. Integration and Future Directions
+- Unifying the Four Approaches
+
+- **Common Thread**: All four methods combine neural learning with structured
+  reasoning
+
+| Method                   | Neural Component             | Symbolic Component       | Integration                            |
+| ------------------------ | ---------------------------- | ------------------------ | -------------------------------------- |
+| **Beyond A\***           | Transformer learns dynamics  | A\* search algorithm     | Learned guidance for classical planner |
+| **Dualformer**           | Fast neural path             | Slow reasoning traces    | Adaptive routing via confidence        |
+| **Algebraic Optimizers** | Meta-learn composition order | Formal optimizer algebra | Modular solver composition             |
+| **SurCo**                | Linear regression            | ILP optimizer            | Surrogate-based optimization           |
+
+- **Shared Principles**:
+  1. Leverage neural networks for learning from data
+  2. Preserve structured reasoning for interpretability and guarantees
+  3. Learn to _integrate_ the two (not just juxtapose them)
+
+- Open Challenges in Neural-Symbolic Decision Making
+
+- **Challenge 1: Generalization**
+  - Beyond A\*: does learned dynamics transfer to different domains?
+  - Dualformer: can fast/slow tradeoff adapt to new reasoning types?
+  - Open: transfer learning across symbolic and neural components
+
+- **Challenge 2: Theoretical Guarantees**
+  - SurCo: can we bound optimization loss in terms of sample complexity?
+  - Beyond A\*: when does bootstrapped heuristic remain admissible?
+  - Open: formal analysis of neural-symbolic hybrid systems
+
+- **Challenge 3: Scalability**
+  - Dualformer: how to handle reasoning traces of variable length?
+  - Algebraic optimizers: composing 100+ solvers efficiently?
+  - Open: efficient meta-reasoning over large solver libraries
+
+- **Challenge 4: Interpretability**
+  - When neural components learn to enhance symbolic methods, what do they
+    learn?
+  - Can we extract human-interpretable insights from learned dynamics?
+  - Open: explainability of neural-symbolic systems
+
+- Emerging Directions
+
+- **Neuro-Symbolic Program Synthesis**: Learn to _generate_ algorithms (not just
+  execute them)
+  - Parse problem structure, synthesize optimal solver pipeline
+
+- **Continual Learning for Planning**: Update learned heuristics as new
+  environments encountered
+  - Online adaptation of neural guidance without retraining
+
+- **Formal Verification**: Prove properties of neural-symbolic systems
+  - Can we verify that composed optimizers maintain key invariants?
+
+- **Hybrid Reasoning**: Combine logical inference with neural embeddings
+  - Symbolic knowledge graphs enhanced with learned representations
+
+- **Autonomous Solver Selection**: Learn which approach (Beyond A\*, SurCo,
+  etc.) to use for new problem
+  - Meta-learning over algorithm portfolio
+
+- Conclusion: Why Neural-Symbolic Matters
+
+- **Practical**: Most real-world decisions require both learning and reasoning
+  - Autonomous driving: learn perceptions (neural), plan safely (symbolic)
+  - Robotics: learn skills (neural), compose into behaviors (symbolic)
+  - Scientific discovery: learn patterns (neural), derive predictions (symbolic)
+
+- **Theoretical**: Unifies classical AI and modern ML under unified framework
+  - Not "symbolic vs. neural"—it's "how to combine them?"
+  - Opens new research directions at intersection
+
+- **Future**: Neural-symbolic integration is path to more capable,
+  interpretable, robust AI
+  - Learning provides flexibility and data efficiency
+  - Symbolic reasoning provides guarantees and explainability
+  - Together: best of both worlds
