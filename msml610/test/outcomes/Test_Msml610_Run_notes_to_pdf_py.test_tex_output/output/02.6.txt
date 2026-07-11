@@ -1,0 +1,1539 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 02.6: ML Techniques - How to Do Research}}\]}
+\endgroup \vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\item
+  Burkov: \emph{``The Hundred-Page Machine Learning Book''} (2019)
+\item
+  Russell et al.: \emph{``Artificial Intelligence: A Modern Approach''}
+  (4th ed, 2020)
+\item
+  Hastie et al.: \emph{``The Elements of Statistical Learning''} (2nd
+  ed, 2009)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Hundred_page_ML_book.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_The_Elements_of_Statistical_Learning.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{How to Do Research}}}
+\end{itemize}
+\end{frame}
+
+\subsubsection{Simple Is Better}\label{simple-is-better}
+
+\begin{frame}{Occam's Razor}
+\protect\phantomsection\label{occams-razor}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Simple is better}}
+
+  \begin{itemize}
+  \item
+    \emph{``The simplest model that fits the data is also the most
+    plausible''} (Occam)
+  \item
+    \emph{``An explanation of the data should be as simple as possible,
+    but not simpler''} (Einstein?)
+  \end{itemize}
+\item
+  Corollary:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Trim the model to the bare minimum necessary to explain the data
+  \end{itemize}
+\item
+  What does \textbf{\textcolor{darkgreen}{simple}} mean?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A model is simple when it is one of few possible objects
+  \end{itemize}
+\item
+  What does \textbf{\textcolor{blue}{better}} mean?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A model is better means better out of sample performance
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Why it's true}}?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Less likely to fit a given data by coincidence
+  \item
+    An event is more significant if it is unlikely (formalized in terms
+    entropy)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What is a ``simple model''?}
+\protect\phantomsection\label{what-is-a-simple-model}
+\begin{itemize}
+\item
+  An object is \textbf{\textcolor{red}{simple}} when it is one of few
+  possible objects
+\item
+  \textbf{\textcolor{darkgreen}{Examples}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Polynomial of order 2 is simpler than order 17
+
+    \begin{itemize}
+    \tightlist
+    \item
+      More polynomials of order 17 than order 2, though both are
+      infinite sets
+    \end{itemize}
+  \item
+    SVM (Support Vector Machine) characteristics:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Separating hyperplane appears wiggly, but defined by few support
+      vectors
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Measures of complexity}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Complexity of a single hypothesis \(h\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., polynomial order, MDL (describe hypothesis in bits),
+      Kolmogorov complexity
+    \end{itemize}
+  \item
+    Complexity of a hypothesis set \(\calH\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., VC dimension of the model
+    \end{itemize}
+  \item
+    Complexity of \(h\) and \(\calH\) related by counting:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      If you need \(l\) bits to specify \(h\), then \(h\) is one of
+      \(2^l\) elements of set \(\calH\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model Soundness}
+\protect\phantomsection\label{model-soundness}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Model should tell a story}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You cannot blindly accept results of modeling
+  \item
+    Ask: \emph{``What criticisms would you give if the model was
+    presented for the first time?''}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Benchmark models}}: compute performance
+  if model outputs:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Always 0 or 1
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., long-only model for stock predictions
+    \end{itemize}
+  \item
+    Random results
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., bootstrap of null hypothesis ``no prediction power''
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Perfect fit can mean nothing}}, e.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Get 2 data points on a plane
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Fit data with a linear relationship
+    \item
+      Perfect fit
+    \end{itemize}
+  \item
+    Means nothing since:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Always a line between 2 points
+    \item
+      Data cannot falsify hypothesis
+    \end{itemize}
+  \item
+    The model (line) is too complex for data set (only 2 points)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sampling Bias (1/2)}
+\protect\phantomsection\label{sampling-bias-12}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Sampling bias}} occurs when data is not
+  representative of the intended population
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Biased sampling leads to biased outcomes
+  \item
+    Model views world through training data
+  \item
+    Hoeffding's hypothesis: training and testing distributions are the
+    same
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Causes of Sampling Bias}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Non-random sampling}: Favors certain outcomes or groups
+  \item
+    \emph{Undercoverage}: Inadequate representation of some population
+    members
+  \item
+    \emph{Survivorship bias}: Includes only successful subjects
+  \item
+    \emph{Self-selection bias}: Participants choose to participate,
+    introducing bias
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Consequences}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Systematic errors distort relationships or predictions
+  \item
+    Models trained on biased samples perform poorly on real-world data
+  \item
+    Leads to incorrect or unfair decisions
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sampling Bias (2/2)}
+\protect\phantomsection\label{sampling-bias-22}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Training facial recognition on lighter-skinned faces reduces
+    accuracy on darker-skinned faces
+  \item
+    Predicting income using data only from employed individuals omits
+    unemployed people
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Mitigation}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Compare sample statistics with population statistics
+  \item
+    Use stratified sampling or resampling to balance data
+  \item
+    Apply re-weighting or bias correction techniques
+  \item
+    If data points have zero probability (\(\Pr = 0\)), no remedies
+    possible
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data Snooping (1/2)}
+\protect\phantomsection\label{data-snooping-12}
+\begin{itemize}
+\item
+  \textbf{\textcolor{red}{Data snooping}} occurs when test set
+  information improperly influences model-building
+\item
+  \textbf{\textcolor{darkgreen}{Typical Sources}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Train-test contamination}: Test data leaks into training
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., Using test data during feature engineering, model selection,
+      or tuning
+    \end{itemize}
+  \item
+    \emph{Multiple hypothesis testing}: Trying many models inflates
+    performance
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Consequences}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Overly optimistic evaluations
+  \item
+    Models perform well in validation but fail on unseen data
+  \end{itemize}
+\item
+  \textbf{\textcolor{violet}{Why It's Dangerous}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Misleading results
+  \item
+    False confidence in model quality
+  \item
+    Common pitfall in machine learning workflows
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Data Snooping (2/2)}
+\protect\phantomsection\label{data-snooping-22}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Examples}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Choosing features based on the full dataset before splitting gives
+    foresight not present in deployment
+  \item
+    E.g., demean the entire data and then split in train / test
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Preventive Strategies}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Keep training, validation, and test sets separate
+  \item
+    Use cross-validation properly
+  \item
+    Fit preprocessing steps only on training data, then apply to test
+    data
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{``Burning the Test Set''}
+\protect\phantomsection\label{burning-the-test-set}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Repeated test set use during development leaks into training
+  \item
+    Overfitting to test data
+  \item
+    \emph{``If you torture the data long enough, it will confess
+    whatever you want''} (Coase, 1982)
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Symptoms}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Test accuracy improves; real-world performance stagnates or degrades
+  \item
+    Model evaluation becomes untrustworthy
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solutions}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{One-time use principle}: Evaluate on test set once,
+    post-tuning
+  \item
+    \emph{Use a validation set}: For model development and tuning
+  \item
+    \emph{Statistical adjustments}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Adjust p-values for multiple testing
+    \item
+      Use Bonferroni or False Discovery Rate corrections
+    \end{itemize}
+  \item
+    \emph{Theoretical tools}:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      VC dimension reflects learning capacity, including repeated trials
+    \item
+      Minimum Description Length (MDL) penalizes complex models and
+      repeated fitting
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\subsubsection{Research Methodology}\label{research-methodology}
+
+\begin{frame}{How to Achieve Out-Of-Sample Fit}
+\protect\phantomsection\label{how-to-achieve-out-of-sample-fit}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Goal}}: Choose an hypothesis \(g \in \calH\)
+  approximates the unknown target function \(f\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What does \(g \approx f\) mean? \[
+    g \approx f \iff E_{out}(g) \approx 0
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Solution}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Achieve:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Good in-sample performance \(E_{in}(g) \approx 0\)
+    \item
+      Good generalization \(E_{out}(g) \approx E_{in}(g)\)
+    \end{itemize}
+  \item
+    Together \(\implies\) good out-of-sample performance
+    \(E_{out}(g) \approx 0\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What If Out-Of-Sample Fit Is Poor?}
+\protect\phantomsection\label{what-if-out-of-sample-fit-is-poor}
+\begin{itemize}
+\item
+  The model performs well in sample (\(E_{in} \approx 0\)) but poorly
+  out of sample (\(E_{out} \gg E_{in}\))
+\item
+  \textbf{\textcolor{red}{What does it mean?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In-sample performance is optimistic
+  \item
+    Model is overfitted and fails to generalize
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{What do you do?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Run diagnostics before long-term projects
+  \item
+    Gain insight on what works/doesn't to improve performance
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., bias-variance curves and learning curves
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{How to fix?}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Training data
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Get more training data \(\iff\) fixes high variance
+    \end{itemize}
+  \item
+    Features
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Remove features \(\iff\) fixes high variance
+    \item
+      Add features \(\iff\) fixes high bias
+    \item
+      Add derived features (e.g., polynomial features) \(\iff\) fixes
+      high bias
+    \end{itemize}
+  \item
+    Regularization
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Decrease regularization \(\lambda\) \(\iff\) fixes high bias
+    \item
+      Increase regularization \(\lambda\) \(\iff\) fixes high variance
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why Using a Lot of Data?}
+\protect\phantomsection\label{why-using-a-lot-of-data}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Several studies}} show that:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Different algorithms/models have remarkably similar performance
+  \item
+    Increasing training set improves performance
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Consequence}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    High capacity model + massive training set = good performance
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Why}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Using a high capacity model with many parameters (e.g., neural
+    network) \[
+    E_{in} \approx 0
+    \] due to low bias (and high variance)
+  \item
+    A massive data set helps avoid overfitting \[
+    E_{out} \approx E_{in}
+    \]
+  \item
+    These two conditions together \[
+    E_{out} \approx E_{in} \approx 0 \implies E_{out} \approx 0
+    \]
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What to Do When You Have Lots of Data?}
+\protect\phantomsection\label{what-to-do-when-you-have-lots-of-data}
+\begin{itemize}
+\item
+  You have \(m\) = 100M examples in data set: great!
+\item
+  \textbf{\textcolor{red}{Cons}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Scalability issue (slow, lots of compute)
+  \item
+    Require work on infrastructure
+  \end{itemize}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{darkgreen}{First step}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot learning curves (in-sample and out-of-sample performance) for
+    increasing amount of data \(m = 1k, 10k, 100k, 1M, ...\)
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Next step}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If model has large bias
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Training and validation performance are similar at \(1M\)
+    \item
+      Next step: use more complex model rather than training on \(100M\)
+      instances
+    \end{itemize}
+  \item
+    If model has large variance
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Next step: use all \(100M\) instances to train the model
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L02.6.Learning_curves.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Why We Do Things?}
+\protect\phantomsection\label{why-we-do-things}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Always, always, always:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Understand the purpose of the task
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Ask: \emph{``Why are we doing something?''}
+    \end{itemize}
+  \item
+    Clarify goals and outcomes of the task
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Ask: \emph{``What do we hope to determine by performing the
+      task?''}
+    \end{itemize}
+  \item
+    Think about actions with the bigger picture in mind
+  \item
+    Avoid going through the motions
+  \item
+    Prioritize tasks by importance and impact
+  \end{itemize}
+\item
+  E.g., when conducting a customer survey:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Q: \emph{``Why is the feedback being collected?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      A: To improve product features and customer service
+    \end{itemize}
+  \item
+    Q: \emph{``What is the desired outcome?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      A: To identify areas for improvement and innovation
+    \end{itemize}
+  \end{itemize}
+\item
+  E.g., before starting a marketing campaign:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Q: \emph{``Why is this campaign run?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      A: To increase brand awareness or drive sales
+    \end{itemize}
+  \item
+    Q: \emph{``What are the specific goals?''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      A: Set target number of new leads or click-through rates
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Summary of the Results, Next Steps}
+\protect\phantomsection\label{summary-of-the-results-next-steps}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Always have a summary of results}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    High-level map of discoveries
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., ``smoothing model coefficients helps''
+    \end{itemize}
+  \item
+    Highlight major findings
+  \item
+    Interpret results
+
+    \begin{itemize}
+    \tightlist
+    \item
+      E.g., \emph{``Increase in sales likely due to new marketing
+      strategy.''}
+    \end{itemize}
+  \item
+    Conclusions
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Summarize data suggestions or confirmations
+    \item
+      E.g., \emph{``Hypothesis that user engagement increases retention
+      is supported''}
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Always have a reference to detailed results}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Provide quick insights before details
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Always have next steps}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    What do you expect to happen?
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Like thinking \(n\) moves ahead in chess
+    \end{itemize}
+  \item
+    E.g., \emph{``Next, conduct detailed analysis on demographics
+    contributing most to sales growth''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Outline potential experiments or analyses to validate findings
+      further
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Spam Filter Classification}
+\protect\phantomsection\label{example-spam-filter-classification}
+\begin{itemize}
+\tightlist
+\item
+  You use \(N = 5\) words in an email to distinguish spam / non-spam
+  emails using logistic regression
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Words are \textcolor{blue}{\texttt{buy}},
+    \textcolor{blue}{\texttt{now}}, \textcolor{blue}{\texttt{deal}},
+    \textcolor{blue}{\texttt{discount}},
+    \textcolor{blue}{\texttt{<your name>}}
+  \end{itemize}
+\item
+  \textbf{\textcolor{red}{Goal}}: improve classifier performance
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    \textbf{\textcolor{orange}{Collect more data}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Honeypot project: fake email account to collect spam
+    \end{itemize}
+  \item
+    \textbf{\textcolor{darkgreen}{Use better features}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Email routing info (spammers use unusual accounts, mask emails as
+      legitimate)
+    \end{itemize}
+  \item
+    \textbf{\textcolor{teal}{Use better features from message body}}
+  \item
+    \textbf{\textcolor{cyan}{Detect intentional misspellings}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Spammers use misspelled words (e.g.,
+      \textcolor{blue}{\texttt{w4tch}} for
+      \textcolor{blue}{\texttt{watch}})
+    \item
+      Use stemming software
+    \end{itemize}
+  \end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Right and Wrong Approach to Research}
+\protect\phantomsection\label{right-and-wrong-approach-to-research}
+\begin{itemize}
+\item
+  It is not clear how to prioritize the different possible tasks
+\item
+  \textbf{\textcolor{red}{Bad}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Use gut feeling to choose a task
+  \item
+    Complete task
+  \item
+    Re-evaluate performance
+  \end{enumerate}
+\item
+  \textbf{\textcolor{blue}{Good}}
+
+  \begin{enumerate}
+  \tightlist
+  \item
+    Build a simple algorithm
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Within 1 day
+    \end{itemize}
+  \item
+    Set up performance evaluation
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Single number and bounds to improve
+    \item
+      Use cross-validation
+    \end{itemize}
+  \item
+    Set up diagnostic tools
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Compute learning and bias-variance curves
+    \item
+      Understand issues before fixing (avoid premature optimization)
+    \end{itemize}
+  \item
+    Review misclassified emails manually
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Identify features to improve performance
+    \item
+      E.g., what are types of misclassified emails?
+    \end{itemize}
+  \end{enumerate}
+\item
+  Sometimes you just need to try approaches to see if they work
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., use stemming software to equate words
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Incremental vs Iterative}
+\protect\phantomsection\label{incremental-vs-iterative}
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Incremental Development}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each increment adds functional components
+  \item
+    Require upfront planning to divide features meaningfully
+  \item
+    Integration of increments can be complex
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{Iterative Development}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Each increment delivers usable system
+  \item
+    Refine and improve product through repeated cycles
+  \item
+    Get feedback
+  \item
+    Uncover and adjust for unknown requirements
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Incremental $\gg$ Iterative}}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\linewidth}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L02.6.Monalisa_incremental.png}
+
+\small \_Incremental
+
+\vspace{0.5cm}
+
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L02.6.Monalisa_iterative.png}
+
+\small \emph{Iterative}
+
+\vspace{0.5cm}
+
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{msml610/lectures_source/figures/L02.6.Skateboard.png}
+
+\small \emph{Incremental vs Iterative}
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}

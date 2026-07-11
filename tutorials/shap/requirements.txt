@@ -1,0 +1,8 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+ipywidgets
+
+shap==0.52.0

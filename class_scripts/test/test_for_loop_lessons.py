@@ -394,7 +394,7 @@ class Test_generate_tex(hunitest.TestCase):
             # Check outputs.
             self.assertEqual(len(invocations), 1)
             cmd_str = invocations[0]["args"][0]
-            self.assertIn(f"--limit {limit}", cmd_str)
+            self.assertIn(f"--filter_by_slides {limit}", cmd_str)
 
 
 # #############################################################################
@@ -462,7 +462,7 @@ class Test_generate_pdf(hunitest.TestCase):
                        '--output '
                        '$GIT_ROOT/class_scripts/test/outcomes/Test_generate_pdf.test2/tmp.scratch/msml610/lectures/Lesson01.1-Intro.pdf '
                        '--type slides --toc_type navigation --skip_action open '
-                       '--debug_on_error --limit 1:5',),
+                       '--debug_on_error --filter_by_slides 1:5',),
               'function': 'hsystem.system',
               'kwargs': {'suppress_output': False}}]
             """)
@@ -572,15 +572,15 @@ class Test_generate_pdf_e2e(hunitest.TestCase):
         source_content = """
         # Lesson 02.1: Advanced Topics
 
-        ## Slide 1
+        * Slide 1
         Content.
 
-        ## Slide 2
+        * Slide 2
         More content.
         """
         source_content = hprint.dedent(source_content)
         hio.to_file(source_path, source_content)
-        limit = "1:1"
+        limit = "0:1"
         csfolole._generate_pdf(class_dir, source_path, source_name, limit=limit)
 
 

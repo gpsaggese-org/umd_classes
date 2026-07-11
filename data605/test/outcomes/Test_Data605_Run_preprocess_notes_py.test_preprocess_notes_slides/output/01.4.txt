@@ -1,0 +1,374 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](msml610/lectures_source/figures/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605: Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{01.4: Data Models}}$$**
+\endgroup
+
+\vspace{1cm}
+
+**Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+
+#### Data Models
+- **\textcolor{red}{Data modeling}**
+  - Represents and captures structure and properties of real-world entities
+  - Abstraction: real-world $\to$ **\textcolor{darkgreen}{representation}**
+
+- **\textcolor{blue}{Data model}**
+  - Describes how data is _represented_ (e.g., relational, key-value) and _accessed_ (e.g., insert operations, query)
+  - Schema in a DB describes a specific data collection using a data model
+
+- **\textcolor{violet}{Why need data model?}**
+  - Know data structure to write general-purpose code
+  - Share data across programs, organizations, systems
+  - Integrate information from multiple sources
+  - Preprocess data for efficient access (e.g., building an index)
+
+#### Multiple Layers of Data Modeling
+::: columns
+:::: {.column width=50%}
+
+- **\textcolor{red}{Physical layer}**
+  - How is the data physically stored
+  - How to represent complex data structures (e.g., B-trees for indexing)
+- **\textcolor{darkgreen}{Logical layer}**
+  - Entities
+  - Attributes
+  - Type of information stored
+  - Relationships among the above
+- **\textcolor{blue}{Views}**
+  - Restrict information flow
+  - Security and/or ease-of-use
+
+::::
+:::: {.column width=45%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_43_image_1.png)
+
+::::
+:::
+
+#### Data Models: Logical Layer
+
+::: columns
+:::: {.column width=50%}
+
+- **\textcolor{red}{Modeling constructs}**
+  - Concepts to represent data structure
+  - E.g.,
+    - Entity types
+    - Entity attributes
+    - Relationships between entities
+    - Relationships between attributes
+- **\textcolor{darkgreen}{Integrity constraints}**
+  - Ensure data integrity
+    - Avoid errors and inconsistencies
+    - E.g., field can't be empty, must be an integer
+- **\textcolor{blue}{Manipulation constructs}**
+  - E.g., insert, update, delete data
+
+::::
+:::: {.column width=45%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_44_image_1.png)
+
+::::
+:::
+
+#### Data Independence
+- **\textcolor{red}{Logical data independence}**
+  - Change data representation without altering programs
+  - E.g., API abstracting backend
+
+- **\textcolor{blue}{Physical data independence}**
+  - Change data layout on disk without altering programs
+    - Index data
+    - Partition/distribute/replicate data
+    - Compress data
+    - Sort data
+
+#### Examples of Data Models
+- **\textcolor{red}{Some examples of data models}**
+  - Relational model (SQL)
+  - Entity-relationship (ER) model
+  - XML
+  - Object-oriented (OO)
+  - Object-relational
+  - RDF
+  - Property graph
+- **\textcolor{blue}{Serialization formats}** as data models
+  - CSV
+  - Parquet
+  - JSON
+  - Protocol Buffer
+  - Avro/Thrift
+  - Python Pickle
+
+#### Good Data Models
+- **\textcolor{red}{Good data model}** should be:
+  - Expressive
+    - Capture real-world data
+  - Easy to use
+  - Perform well
+
+- **\textcolor{darkgreen}{Trade-off between characteristics}**
+  - E.g., more powerful models
+    - Represent more datasets
+    - Harder to use/query
+    - Less efficient (e.g., more memory, time)
+
+- **\textcolor{blue}{Evolution of data models}** captures data structure
+  - Structured data $\to$ Relational DBs
+  - Semi-structured web data $\to$ XML, JSON
+  - Unstructured data $\to$ NoSQL DBs
+
+#### A Brief History of Databases (Early 1960s)
+- **\textcolor{red}{1960s: Early beginning}**
+  - Computers become attractive technology
+  - Enterprises adopt computers
+  - Applications use own data stores
+    - Each application has its own format
+    - Data unavailable to other programs
+
+- **\textcolor{darkgreen}{Database}**: term for "shared data banks" by multiple applications
+  - Define data format
+  - Store as "data dictionary" (schema)
+  - Implement "database management" software to access data
+
+- **\textcolor{blue}{Issues}**
+  - How to write data dictionaries?
+  - How to access data?
+  - Who controls the data?
+    - E.g., integrity, security, privacy concerns
+
+#### A Brief History of Databases (1960s)
+- **\textcolor{red}{1960s, Hierarchical and Network Model}**
+  - Connect records of different types
+  - Example: connect accounts with customers
+  - Network model aimed for generality and flexibility
+
+- IBM's IMS Hierarchical Database (1966)
+  - Designed for Apollo space program
+  - Predates hard disks
+  - Used by over 95% of top Fortune 1000 companies
+  - Processes 50 billion transactions daily, manages 15 million GBs of data
+
+- **\textcolor{blue}{Cons}**
+  - Exposed too much internal data (structures/pointers)
+  - Leaky abstraction
+
+#### Relational, Hierarchical, Network Model
+
+::: columns
+:::: {.column width=50%}
+- **\textcolor{red}{Relational model}**
+  - Data as tuples in relations
+  - SQL
+
+\vspace{1cm}
+
+- **\textcolor{darkgreen}{Hierarchical model}**
+  - Tree-like structure
+    - One parent, many children
+    - Connected through links
+  - XML DBs resurgence in 1990s
+
+\vspace{1cm}
+
+- **\textcolor{blue}{Network model}**
+  - Graph organization
+    - Multiple parents and children
+  - Graph DBs resurgence in 2010s
+::::
+:::: {.column width=45%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_2.png)
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_3.png)
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_50_image_1.png)
+::::
+:::
+
+#### A Brief History of Databases (1970s)
+- **\textcolor{red}{1970s: Relational model}**
+  - Set theory, first-order predicate logic
+    - Ted Codd developed the Relational Model
+  - Elegant, formal model
+    - Provided data independence
+    - Users didn't worry about data storage, processing
+  - High-level query language
+    - SQL based on relational algebra
+  - Notion of normal forms
+    - Reason about data and relations
+    - Remove redundancies
+
+- **\textcolor{darkgreen}{Influential projects}**
+  - INGRES (UC Berkeley), System R (IBM)
+  - Ignored IMS compatibility
+
+- **\textcolor{blue}{Debates}**:
+  - Relational Model vs Network Model proponents
+
+#### Entity-Relationship Model
+
+::: columns
+:::: {.column width=50%}
+
+- **\textcolor{red}{Entity-Relationship Model}**
+  - Proposed in 1976 by Peter Chen
+
+- Describes knowledge as:
+  - **\textcolor{darkgreen}{Entities}**: Physical or logical objects, "Nouns"
+  - **\textcolor{blue}{Relationships}**: Connections between entities, "Verbs"
+
+- Map ER model to relational DB
+  - Entities, relationships $\to$ tables
+::::
+:::: {.column width=45%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_2.png)
+
+\vspace{0.5cm}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_52_image_3.png)
+
+::::
+:::
+
+#### A Brief History of Databases (1980s)
+- **\textcolor{red}{1980s: Relational model acceptance}**
+  - SQL standard due to IBM's backing
+  - Enhanced relational model
+    - Set-valued attributes, aggregation
+
+- **\textcolor{blue}{Late 80's}**
+  - Object-oriented DBs
+    - Store objects, not tables
+    - Overcome _impedance mismatch_ between languages and databases
+  - Object-relational DBs
+    - User-defined types
+    - Combine object-oriented benefits with relational model
+  - No expressive difference from pure relational model
+
+#### Object-Oriented
+- OOP is a data model
+  - Object behavior described through data (fields) and code (methods)
+
+- **\textcolor{red}{Composition}**
+  - \textcolor{blue}{\texttt{has-a}} relationships
+  - E.g., \textcolor{blue}{\texttt{Employee}} class has an \textcolor{blue}{\texttt{Address}} class
+- **\textcolor{darkgreen}{Inheritance}**
+  - \textcolor{blue}{\texttt{is-a}} relationships
+  - E.g., \textcolor{blue}{\texttt{Employee}} class derives from \textcolor{blue}{\texttt{Person}} class
+
+- **\textcolor{blue}{Polymorphism}**
+  - Code executed depends on the class of the object
+  - One interface, many implementations
+  - E.g., \textcolor{blue}{\texttt{draw()}} method on a \textcolor{blue}{\texttt{Circle}} vs \textcolor{blue}{\texttt{Square}} object, both descending from
+    \textcolor{blue}{\texttt{Shape}} class
+
+- **\textcolor{violet}{Encapsulation}**
+  - E.g., private vs public fields/members
+  - Prevents external code from accessing inner workings of an object
+
+#### A Brief History of Databases (1990s)
+::: columns
+:::: {.column width=50%}
+- **\textcolor{red}{Late 90's-today}**
+- Web/Internet emerges
+- XML: eXtensible Markup Language
+  - For _semi-structured_ data
+  - Tree-like structure
+  - Flexible schema
+
+::::
+:::: {.column width=45%}
+
+\scriptsize
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+  <CATALOG>
+    <CD>
+      <TITLE>Empire Burlesque</TITLE>
+      <ARTIST>Bob Dylan</ARTIST>
+      <COUNTRY>USA</COUNTRY>
+      <COMPANY>Columbia</COMPANY>
+      <PRICE>10.90</PRICE>
+      <YEAR>1985</YEAR>
+    </CD>
+    <CD>
+      <TITLE>Hide your heart</TITLE>
+      <ARTIST>Bonnie Tyler</ARTIST>
+      <COUNTRY>UK</COUNTRY>
+      <COMPANY>CBS Records</COMPANY>
+      <PRICE>9.90</PRICE>
+      <YEAR>1988</YEAR>
+    </CD>
+    ...
+```
+::::
+:::
+
+#### Resource Description Framework
+::: columns
+:::: {.column width=40%}
+- Aka RDF
+- **\textcolor{red}{(subject, predicate, object) triple}**
+
+- Example of RDF triple
+  - \textcolor{blue}{\texttt{Subject}}=sky
+  - \textcolor{blue}{\texttt{Predicate}}=has-the-color
+  - \textcolor{blue}{\texttt{Object}}=blue
+
+- Maps to a labeled, directed multi-graph
+  - More general than a tree
+
+- **\textcolor{blue}{Stored in}**:
+  - Relational DBs
+  - Dedicated "triple-stores" DBs
+::::
+:::: {.column width=55%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_56_image_1.png)
+::::
+:::
+
+#### Property Graph Model
+
+::: columns
+:::: {.column width=40%}
+- **\textcolor{red}{Graph}**:
+  - Vertices and edges
+  - Properties for each edge and vertex
+
+- **\textcolor{blue}{Stored in}**:
+  - Relational DBs
+  - Graph DBs
+::::
+:::: {.column width=55%}
+
+![](data605/lectures_source/images/lecture_1/lec_1_slide_57_image_1.jpeg)
+
+::::
+:::

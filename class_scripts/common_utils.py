@@ -18,14 +18,6 @@ import helpers.hsystem as hsystem
 
 _LOG = logging.getLogger(__name__)
 
-# #############################################################################
-# Constants
-# #############################################################################
-
-
-# Valid course directories.
-VALID_DIRS = ["data605", "msml610"]
-
 
 # #############################################################################
 # Helper functions
@@ -58,7 +50,7 @@ def find_lecture_file(dir_path: str, lesson: str) -> Path:
     :return: path to the found lecture file
     """
     # Build the search pattern.
-    pattern = f"{dir_path}/lectures_source/Lesson{lesson}*"
+    pattern = f"{dir_path}/lectures_source/Lesson{lesson}*.txt"
     _LOG.debug("Searching for files matching pattern='%s'", pattern)
     # Find matching files.
     files = glob.glob(pattern)
@@ -71,7 +63,7 @@ def find_lecture_file(dir_path: str, lesson: str) -> Path:
         files,
     )
     file_path = Path(files[0])
-    _LOG.info("Found lecture file: %s", file_path)
+    _LOG.debug("Found lecture file: %s", file_path)
     return file_path
 
 
@@ -142,7 +134,7 @@ def count_pdf_pages(pdf_path: str) -> int:
     # Use mdls to get page count.
     cmd = f"mdls -name kMDItemNumberOfPages '{pdf_path}'"
     _LOG.debug("Running command: %s", cmd)
-    output = hsystem.system_to_string(cmd)
+    _, output = hsystem.system_to_string(cmd)
     # Parse output like "kMDItemNumberOfPages = 42".
     parts = output.strip().split("=")
     hdbg.dassert_eq(len(parts), 2, "Unexpected mdls output format:", output)

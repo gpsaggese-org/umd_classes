@@ -1,0 +1,207 @@
+# 1. From Data Science to Decision Science
+
+## Course Roadmap
+
+* The Path Towards Decision Science
+
+- **Key idea**: the book walks one pipeline end-to-end, from data to action
+  - $data \to model \to policy \to action \to feedback$
+  - The model is both causal and probabilistic
+
+- **Part I**: Why Businesses Need Decisions, not Predictions
+  - The limitations and costs of current machine learning
+
+- **Part II**: Advanced Tools & Theory
+  - The advanced probabilistic and causal foundations required to model real
+    systems, including Gaussian processes, variational inference, normalizing
+    flows, and modern causal discovery
+
+- **Part III**: Single-Step Decisions
+  - Decision theory, policy learning, partial identification, and agentic causal
+    reasoning
+
+- **Part IV**: Multi-Step & Dynamic Decisions
+  - Causal world models, causal reinforcement learning, forecasting under
+    intervention, and feedback loops
+
+- **Part V**: Implementation
+  - Deploying, monitoring, communicating, and governing decision systems in
+    production
+
+* Limitations of Traditional ML in Business
+
+- **Key idea**: traditional ML ignores four things that decisions require
+
+1. Ignoring causality
+   - Modeling correlation, not mechanisms
+
+2. Ignoring uncertainty
+   - No uncertainty quantification
+
+3. Ignoring the business objective
+   - A prediction is not a decision
+
+4. Ignoring dynamics
+   - The world isn't static or passive, but it reacts
+
+## The Four Costs
+
+* The Cost of Ignoring Causality (1/2)
+
+- **Traditional ML relies on correlation**: it learns $\Pr(Y | X)$ from
+  historical data
+  - Answers _"what will happen?"_, not _"what should we do?"_
+  - Assumes the world will not change (including and especially because of the
+    actions that are informed by the predictions), but this is never true
+  - Optimized for predictive accuracy, not decision quality
+
+- **Confounding is encoded as causation**
+  - A hidden common cause makes $X$ and $Y$ correlate spuriously
+  - $\Pr(Y | X) \neq \Pr(Y | do(X))$; acting on correlations backfires
+
+- **No interventions or counterfactuals**
+  - Cannot answer _"if we change $X$, what happens to $Y$?"_
+  - Cannot reason about _"what would have happened otherwise?"_
+
+- **Selection bias baked into the training data**
+  - Historical data only reflects decisions actually made — loan data shows
+    outcomes for approved applicants, never rejected ones
+  - A missing-counterfactual problem present _before_ modeling starts, distinct
+    from confounding
+
+* The Cost of Ignoring Causality (2/2)
+
+- **Interference / spillovers (SUTVA violation)**
+  - One unit's action changes another's outcome — marketplaces, pricing
+    equilibria, social networks
+  - Pervasive in business, yet standard ML assumes units are independent
+
+- **Simpson's paradox as a concrete failure mode**
+  - Aggregate trends can reverse when split by subgroup (or vice versa)
+  - A model can look correct overall yet be wrong — or harmful — for every
+    segment
+
+- **Collider bias / Berkson's paradox**
+  - Conditioning on a common effect induces a spurious association
+  - Another concrete failure mode alongside Simpson's paradox
+
+- **Ignoring domain knowledge / mechanism**
+  - Pure ML discards known structure (physics, economics, the causal graph)
+  - No principled way to inject constraints or priors
+
+* The Cost of Ignoring Uncertainty
+
+- **Point estimates only**
+  - No error bars or posterior; most problems are "small data" problems
+
+- **Epistemic vs. aleatoric uncertainty conflated**
+  - No "known-unknowns": the model cannot flag what it has not seen
+  - Confidently wrong off-distribution — exactly where decisions bite
+
+- **No abstention or deferral**
+  - Cannot say _"I don't know"_ and route the case to a human
+
+- **Overfitting**
+  - Statistical significance traps: peeking, multiple comparisons, and novelty effects
+  - Not only in one single run, but from burning the "test set"
+  - No prior or assumptions to constrain the fit $\to$ nothing bounds overfitting
+
+* The Cost of Ignoring the Business Objective
+
+- **Optimizes the wrong objective**
+  - Models chase a proxy metric (clicks, accuracy) instead of the actual
+    business goal (revenue, retention, wellbeing)
+  - _Goodhart's Law_: once a proxy becomes a target, it stops measuring what you
+    care about
+
+- **No native cost-asymmetry handling**
+  - Standard losses (log-loss, MSE) treat errors symmetrically
+  - Business errors are not: a fraud false negative costs differently than a
+    false positive; requires cost matrices bolted on after the fact
+
+- **Multi-objective decisions under constraints**
+  - Real decisions trade off competing goals under budget, capacity, and legal
+    limits
+  - A single scalar loss cannot express constrained, multi-stakeholder trade-offs
+
+- **Black-box outputs aren't actionable or auditable**
+  - A prediction is not a recommendation — it says no _why_, no lever to pull
+  - Credit, hiring, healthcare increasingly require explanations, not just scores
+
+- **Lack of end-to-end learning**
+  - Problems are split into smaller problems and solved individually
+  - Learning end-to-end has been shown to outperform stitching together
+    separately-optimized parts (decision-focused learning)
+
+* The Cost of Ignoring Dynamics and Feedback
+
+- **Assumes a static world**
+  - Any decision changes the world, breaking the training distribution
+  - Concept, covariate, and label shift degrade accuracy over time
+
+- **Ignores feedback loops**
+  - Predictions act on the world and reshape future data
+  - Leads to bias amplification (echo chambers, over-policing)
+
+- **Performativity**
+  - The prediction changes the very quantity it predicts
+  - A sharper, named form of feedback loops
+
+- **No exploration (observational-only)**
+  - The model never experiments; it is trapped in the support of the logged
+    policy
+  - Cannot learn the effect of never-taken actions (an overlap / positivity
+    violation)
+
+- **Delayed and long-horizon effects**
+  - Optimizes an immediate proxy, ignoring downstream outcomes
+  - No credit assignment over time (short-termism, surrogate outcomes)
+
+- **Strategic / adversarial response unmodeled**
+  - Once deployed, people optimize against the model (credit gaming, SEO, resume
+    keyword-stuffing)
+  - Traditional ML assumes passive agents; in business, they are not
+
+// ### Lessons
+// - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+//   - Cost of ignoring causality; correlation != causation; feedback loops;
+//     distribution shift; data science -> decision science; ladder of causation
+// - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+//   - Confounder / mediator / collider; collider bias; SCM
+// - `msml610/lectures_source/Lesson08.4.txt`
+//   - Simpson's paradox; the bias equation; selection bias (collider / mediator);
+//     no interference (SUTVA); confounding
+// - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
+//   - Significance traps (peeking, multiple comparisons, SRM); interference /
+//     cannibalization; exploration vs exploitation
+// - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+//   - Prediction vs decision; policy reversal; utility functions; aleatoric vs
+//     epistemic uncertainty
+// - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
+//   - Overfitting; data snooping; burning the test set; sampling bias
+// - `msml610/lectures_source/Lesson13.1-Explainability.txt`
+//   - Black-box outputs; SHAP / LIME; counterfactual explanations (actionability)
+//
+// ### Related books
+// - [B001] Agrawal et al., "Prediction Machines", 2018
+// - [B002] Pearl et al., "The Book of Why", 2018
+// - [B003] Huyen, "Designing Machine Learning Systems", 2022
+// - [B032] Ness et al., "Causal AI", 2023
+// - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
+//
+// ### Related papers
+// - [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
+//   https://bayes.cs.ucla.edu/BOOK-2K
+// - [P007] Zhang et al., "A Survey on Causal Inference", 2020
+//   https://arxiv.org/pdf/2002.05209.pdf
+// - [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
+//   Machine Learning", 2021
+//   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
+// - [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
+//   Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
+// - [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of
+//   Dataset Biases", 2020 https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
+// - [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984
+//   https://doi.org/10.1016/S0261-5606(84)80005-8
+// - [P099] Liu et al., "Performative Prediction", 2021
+//   https://arxiv.org/abs/2007.02153

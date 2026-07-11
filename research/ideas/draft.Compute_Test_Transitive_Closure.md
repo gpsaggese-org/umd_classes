@@ -1,0 +1,2 @@
+- Use static analysis from pyan
+- Use dynamic analysis (if possible)

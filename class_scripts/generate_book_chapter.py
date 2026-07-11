@@ -42,12 +42,12 @@ from typing import List, Optional, cast
 import pdf2image  # type: ignore
 import tqdm
 
+import class_scripts.slides_utils as cscsluti
 import helpers.hcache_simple as hcacsimp
 import helpers.hdbg as hdbg
 import helpers.hio as hio
 import helpers.hllm as hllm
 import helpers.hparser as hparser
-import dev_scripts_helpers.slides.slides_utils as dshsslut
 import dev_scripts_helpers.dockerize.lib_prettier as dshdlipr
 
 _LOG = logging.getLogger(__name__)
@@ -170,7 +170,7 @@ def _generate_slide_commentary(
     """
     _LOG.debug("Generating commentary for slide")
     # Process images from slide.
-    processed_slides, images_as_base64 = dshsslut.process_slide_images(
+    processed_slides, images_as_base64 = cscsluti.process_slide_images(
         [slide_content]
     )
     user_prompt = processed_slides[0]
@@ -243,7 +243,7 @@ def _generate_book_chapter(
     # Extract title from markdown file for YAML preamble.
     title = _extract_title_from_markdown(input_file)
     # Extract slides from markdown file.
-    slides, titles = dshsslut.extract_slides_from_file(input_file)
+    slides, titles = cscsluti.extract_slides_from_file(input_file)
     num_slides = len(slides)
     _LOG.info("Found %d slides in markdown file", num_slides)
     # Get PNG files from directory.
