@@ -15,15 +15,6 @@
 
 > export CSFY_DOCKER_ENGINE="apple"; pytest_log dev_scripts_helpers
 
-- [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass_5`
-
-- [x] `HelpersTask1273_Get_Mac_tests_to_pass_3`
-  - Create tools for analyzing and helping with the unit tests
-  - Improvements to pytest_failed
-
-- [x] `HelpersTask1273_Get_Mac_tests_to_pass_4`
-  - Merge in all the branches
-
 ##
 - Find a workflow to make it easier to create smaller PRs
   - Instead of having lots of agents making changes to the same branch
@@ -38,9 +29,6 @@
   - /github.create_child_pr PR2
 
 ##
-- Extend i create_branch_copy to work with only a subset of files / dirs
-
-##
 - Have a thread that looks for TODOs in the code (gp, ai_gp)
   - Ranks them by simplicity
   - Create a branch, PR, run tests and merge
@@ -51,7 +39,7 @@
 
 ## pytest_failed
 
-### [ ] Improve pytest_failed.py
+### [.] Improve pytest_failed.py
 
 - Accept multiple files and create a single table
 pytest_failed.py -i ...
@@ -64,8 +52,6 @@ Updated:    2/3346
 
 ### [ ] Automatically run git add for golden outcomes
 
-### [ ] Convert ./run_multiple_builds.sh into an invoke target
-
 ## Breaks
 
 ### [ ] Password requested by Docker
@@ -73,39 +59,6 @@ Updated:    2/3346
 helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Password:
 Sorry, try again.
 Password:
-
-### [.] Merge gp_scratch_29
-- In `umd_classes1`
-- i gh_watch
-- It crashes with no space on disk
-
-```
-dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py::Test_end_to_end::test1 (0.84 s) FAILED
-```
-
-- Disable all the Test_notes_to_pdf1
-
-```
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test1 (2.06 s) PASSED [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (128.13 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (74.34 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (71.27 s) FAILED                                                                   [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.75 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.67 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (78.41 s) FAILED                                                                   [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (69.69 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (70.50 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (79.34 s) FAILED                                                                   [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (71.62 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (62.83 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (74.26 s) FAILED                                                                   [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5 (2.24 s) FAILED [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.78 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.50 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.55 s) FAILED                                                                   [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.71 s) RERUN                                                                    [ 15%]
-dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.89 s) RERUN                                                                    [ 15%]
-```
 
 ### [.] HelpersTask1273_Get_Mac_tests_to_pass
 - In `csfy1`
@@ -168,15 +121,9 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 - `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
 
-- [.] Create a Springer dir (similar to msml610)
 - [ ] ## 1: From Prediction Pipelines to Decision Pipelines
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
-- [x] Merge /Users/saggese/src/notes1/book.springer/springer.toc_v2.md
-  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
-- [x] Merge ~/src/umd_classes2/book.springer/OLD 
-  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
-- [x] Check what is already covered by the slides in msml610/lectures_source
 
 ### [.] Read Academic Articles
 

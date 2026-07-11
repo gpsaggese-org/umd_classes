@@ -1,3 +1,53 @@
+- [x] Create a Springer dir (similar to msml610)
+- [x] Merge /Users/saggese/src/notes1/book.springer/springer.toc_v2.md
+  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
+- [x] Merge ~/src/umd_classes2/book.springer/OLD 
+  into /Users/saggese/src/umd_classes2/book.springer/book_map.md
+- [x] Check what is already covered by the slides in msml610/lectures_source
+### [x] Merge gp_scratch_29
+- In `umd_classes1`
+- i gh_watch
+- It crashes with no space on disk
+
+```
+dev_scripts_helpers/documentation/test/test_convert_pandoc_divved_fence.py::Test_end_to_end::test1 (0.84 s) FAILED
+```
+
+- Disable all the Test_notes_to_pdf1
+
+```
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf1::test1 (2.06 s) PASSED [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (128.13 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (74.34 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test1 (71.27 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.75 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (70.67 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test2 (78.41 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (69.69 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (70.50 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test3 (79.34 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (71.62 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (62.83 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test4 (74.26 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_filters::test5 (2.24 s) FAILED [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.78 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.50 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test1 (6.55 s) FAILED                                                                   [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.71 s) RERUN                                                                    [ 15%]
+dev_scripts_helpers/documentation/test/test_notes_to_pdf.py::Test_notes_to_pdf_output_types::test2 (70.89 s) RERUN                                                                    [ 15%]
+```
+
+### [x] Convert ./run_multiple_builds.sh into an invoke target
+- Extend i create_branch_copy to work with only a subset of files / dirs
+
+- [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass_5`
+
+- [x] `HelpersTask1273_Get_Mac_tests_to_pass_3`
+  - Create tools for analyzing and helping with the unit tests
+  - Improvements to pytest_failed
+
+- [x] `HelpersTask1273_Get_Mac_tests_to_pass_4`
+  - Merge in all the branches
 ### [x] Improve pytest_failed
 
 - Read output from any pytest (local, docker, github)

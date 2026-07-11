@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.8: Learning to Reason
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.08: Learning to Reason
 // slides_engine=typst
 
 // References:

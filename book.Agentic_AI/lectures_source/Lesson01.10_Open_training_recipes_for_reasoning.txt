@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.10: Open Training Recipes for Reasoning
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.10: Open Training Recipes for Reasoning
 // slides_engine=typst
 
 // References:

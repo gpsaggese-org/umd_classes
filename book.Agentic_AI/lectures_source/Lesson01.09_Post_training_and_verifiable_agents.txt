@@ -1,6 +1,6 @@
 // type=UMD_slides
-// course_title=MSML610: Advanced Machine Learning
-// lesson_title=Lesson 16.9: Post-Training and Verifiable Agents
+// course_title=Agentic_AI
+// lesson_title=Lesson 01.09: Post-Training and Verifiable Agents
 // slides_engine=typst
 
 // References:
