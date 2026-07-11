@@ -15,13 +15,13 @@
 
 ## Motivation: From Inference-Time Fixes to Learned Reasoning
 
-* Why Learning to Reason Deserves Its Own Lesson
+* Why Learning to Reason
 
-- **Motivation**: every reasoning technique so far, from chain-of-thought to
-  OPRO, Self-Debug, and compute-optimal search, operates entirely at
+- **Motivation**: every reasoning technique so far (e.g., chain-of-thought to
+  OPRO, Self-Debug, and compute-optimal search) operates entirely at
   _inference time_
-  - The weights stay fixed, only how the model samples, searches, or revises
-    at query time changes
+  - The weights stay fixed
+  - Only how the model samples, searches, or revises at query time changes
 
 - **Question**:
   - Could a grounded feedback signal be baked directly into the weights,
@@ -29,8 +29,8 @@
   - What kind of training signal teaches a model to reason _better_, rather
     than just to imitate more text?
 
-- **Key idea**: this lesson moves the grounding-and-feedback story from
-  inference time to training time
+- **Key idea**: Move the grounding-and-feedback approach from inference time to
+  training time
 
 * Two Routes to Better Reasoning, and a Roadmap
 
@@ -39,23 +39,29 @@
   target sequence
 
 - Two threads to follow
-  - Thread 1: turn preference data into a training objective, from reward
+  - _Thread 1_: turn preference data into a training objective, from reward
     models to Direct Preference Optimization
-  - Thread 2: turn preferences over the model's _own_ reasoning attempts into
-    an iterative training loop, then extend correction to claims with no
-    single checkable answer
+  - _Thread 2_:
+    - Turn preferences over the model's own reasoning attempts into an iterative
+      training loop
+    - Then extend correction to claims with no single checkable answer
 
-- **Roadmap**: preference data $\to$ reward models $\to$ DPO $\to$ iterative
-  preference optimization $\to$ verification-based hallucination reduction
-  $\to$ aligning reasoning with feedback
+- **Roadmap**:
+  - Preference data
+  - Reward models
+  - DPO
+  - Iterative preference optimization
+  - Verification-based hallucination reduction
+  - Aligning reasoning with feedback
 
 ## Reward Models and Preference Data
 
 * What Objective Trains a Better Reasoner?
 
-- **Question**: supervised fine-tuning needs a single "correct" target
-  sequence per prompt; what if there is no unique correct way to reason, only
-  better and worse attempts?
+- **Question**:
+  - Supervised fine-tuning needs a single "correct" target sequence per prompt
+  - What if there is no unique correct way to reason, only better and worse
+    attempts?
 
 - **Problem**: for open-ended tasks (summaries, dialogue, multi-step
   reasoning), it is often easier for a labeler to _compare_ two candidate
@@ -67,14 +73,18 @@
 
 * Preference Data: Definition
 
-- **Definition**: a _preference pair_ is a tuple $(x, y_w, y_l)$: a prompt
-  $x$, a _preferred_ (winning) response $y_w$, and a _dispreferred_ (losing)
-  response $y_l$
-  - Collected by presenting two candidate responses for the same $x$ to a
-    labeler (human or automatic) and asking which is better
+- **Definition**: a _preference pair_ is a tuple $(x, y_w, y_l)$ where
+  - $x$ is a prompt
+  - $y_w$ is a preferred (winning) response
+  - $y_l$ is a dispreferred (losing) response 
 
-- **Example**: for $x = $ _"Summarize this article"_, $y_w$ is a concise,
-  accurate summary and $y_l$ is a verbose or inaccurate one
+- **Example**:
+  - $x$ is _"Summarize this article"_
+  - $y_w$ is a concise, accurate summary
+  - $y_l$ is a verbose or inaccurate one
+
+- Preference pairs are collected by presenting two candidate responses for the
+  same $x$ to a labeler (human or automatic) and asking which is better
 
 - **Key idea**: a preference pair says nothing about how good $y_w$ is in
   absolute terms, only that it beats $y_l$ for this particular $x$
@@ -85,7 +95,7 @@
   underlying scalar reward $r(x,y)$, with the probability that $y_w$ beats
   $y_l$ given by
   $$
-  p^*(y_w \succ y_l \mid x) = \sigma\big(r(x,y_w) - r(x,y_l)\big)
+  \Pr(y_w \succ y_l \mid x) = \sigma(r(x,y_w) - r(x,y_l))
   $$
   where $\sigma$ is the logistic function
 
@@ -99,9 +109,11 @@
 * Classical Pipeline: Reward Model and PPO
 
 ::: columns
-:::: {.column width=55%}
-- **Solution** (classical RLHF): fit a reward model to the Bradley-Terry
-  likelihood on labeled preference pairs, then optimize the policy against it
+:::: {.column width=75%}
+- **Solution** (classical RLHF)
+  - Fit a reward model to the Bradley-Terry likelihood on labeled preference
+    pairs
+  - Then optimize the policy against it
 
 - **Steps**:
   1. Collect preference pairs $(x, y_w, y_l)$ from human labelers
@@ -121,7 +133,7 @@
   - The policy can learn to exploit quirks of $r_\phi$ (_reward hacking_)
     instead of genuinely improving
 ::::
-:::: {.column width=40%}
+:::: {.column width=20%}
 ```graphviz
 digraph RLHF {
     rankdir=TB;
@@ -147,18 +159,19 @@ digraph RLHF {
 - **Motivation**: PPO's instability and cost come from optimizing an _RL_
   objective against $r_\phi$, not from the reward model's existence by itself
 
-- **Key idea** (Rafailov et al., 2023): the KL-regularized RLHF objective has
-  a closed-form optimal policy, so the whole reward-model-then-RL pipeline
-  can be replaced by directly fitting that closed form
+- **Key idea** (Rafailov et al., 2023):
+  - The KL-regularized RLHF objective has a closed-form optimal policy
+  - So the whole reward-model-then-RL pipeline can be replaced by directly
+    fitting that closed form
 
 * The Optimal Policy in Closed Form
 
 - **Fact**: for a fixed reward $r$, the policy maximizing
-  $\EE_{\pi}[r(x,y)] - \beta D_{KL}(\pi \| \pi_{ref})$ has a closed-form
-  solution
+  $$\EE_{\pi}[r(x,y)] - \beta D_{KL}(\pi \| \pi_{ref})$$
+  has a closed-form solution
   $$
   \pi^*(y \mid x) = \frac{1}{Z(x)} \, \pi_{ref}(y \mid x) \,
-    \exp\!\left(\frac{1}{\beta} r(x,y)\right)
+    \exp \left(\frac{1}{\beta} r(x,y)\right)
   $$
   where $Z(x) = \sum_y \pi_{ref}(y|x) \exp(r(x,y)/\beta)$ normalizes the
   distribution

@@ -125,6 +125,26 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
 
+### [.] Create and review slides for Agentic AI
+
+- TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
+  - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
+
+- [.] book.Agentic_AI/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.08
+- [ ] book.springer/lectures_source/Lesson01.10
+- [ ] book.springer/lectures_source/Lesson01.11
+  > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
+
+## Content Summarization
+
+### [ ] 
+
+- Create a script that given an input (url, pdf article, book title)
+- Download the PDF and cache it in Books or Papers dir
+- Converts it to markdown (if necessary)
+- Apply a text transform
+
 ### [.] Read Academic Articles
 
 ```
@@ -132,6 +152,10 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
 > summarize_md.py
 ```
+
+/markdown.summarize
+/text.explain
+/text.extract_ideas
 
 ```
 > download_academic_paper.py -i https://arxiv.org/pdf/1602.04938.pdf
@@ -149,17 +173,6 @@ How to find a book with a title like "The Book of Why" in /Users/saggese/Library
 /Users/saggese/Library/CloudStorage/GoogleDrive-saggese@gmail.com/My Drive/papers
 
 download_academic_paper.py
-
-### [.] Create and review slides for Agentic AI
-
-- TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
-  - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
-
-- [.] book.Agentic_AI/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.10
-- [ ] book.springer/lectures_source/Lesson01.11
-  > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
 
 # #############################################################################
 # BACKLOG
@@ -548,6 +561,8 @@ tmux detected · scroll with PgUp/PgDn · or add 'set -g mouse on' to ~/.tmux.co
 ### [ ] Convert llm_transform.py to llm_cli.py
 Move prompts and action into a YAML file
 
+Remove hllm.py
+
 ### [ ] Merge markdown.rules.md and text.rules.md?
 Is there any difference?
 
@@ -569,6 +584,17 @@ Is there any difference?
   .claude/skills/text.summarize_in_bullet_points
   .claude/skills/text.use_bullet_lists
   ```
+
+### [ ] Add a test case for all the dockerized executables
+
+Use Test_build_pandoc_container1 as a reference
+
+- Build from scratch on slow_tests
+
+### [ ] Remove use_sudo
+
+- use_sudo is a property of the machine
+  - Make use_sudo = None and then deduce it from the config
 
 ## Improve / unify --rule, --skill, ...
 
