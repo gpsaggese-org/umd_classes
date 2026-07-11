@@ -11,6 +11,7 @@ import os
 from typing import List
 
 import helpers.hio as hio
+import helpers.hmarkdown_select as hmarsele
 import helpers.hmarkdown_slide_iterator as hmaslite
 import helpers.hprint as hprint
 import helpers.hunit_test as hunitest
@@ -27,7 +28,7 @@ _LOG = logging.getLogger(__name__)
 
 class Test_read_prompt_file(hunitest.TestCase):
     """
-    Tests for the _read_prompt_file function.
+    Tests for reading a whole rule file via `extract_rule_from_file()`.
     """
 
     def test1(self) -> None:
@@ -45,7 +46,7 @@ class Test_read_prompt_file(hunitest.TestCase):
         rule_file = os.path.join(self.get_scratch_space(), "test_rule.md")
         hio.to_file(rule_file, rule_content)
         # Run test.
-        result = csfolosl._read_prompt_file(rule_file)
+        result = hmarsele.extract_rule_from_file(rule_file)
         # Check outputs.
         self.assertEqual(result, rule_content)
 
@@ -58,7 +59,7 @@ class Test_read_prompt_file(hunitest.TestCase):
         rule_file = os.path.join(self.get_scratch_space(), "empty_rule.md")
         hio.to_file(rule_file, rule_content)
         # Run test.
-        result = csfolosl._read_prompt_file(rule_file)
+        result = hmarsele.extract_rule_from_file(rule_file)
         # Check outputs.
         self.assertEqual(result, rule_content)
 

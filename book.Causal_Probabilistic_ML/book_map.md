@@ -379,11 +379,11 @@
 ## 7: Explainability and Causal Attribution
 
 ### TODOs
-- [ ] Make sure to use definitions and other tags
+- [x] Make sure to use definitions and other tags
+- [ ] IN PROGRESS: Finalize tutorial
 - [ ] Check slides for mistakes
 - [ ] Improve graphics and visuals
 - [ ] Generate book
-- [ ] Finalize tutorial
 
 ### Lessons
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
@@ -400,8 +400,14 @@
 - Summary
 
 ### Tutorials
+- tutorials/shap
+- tutorials/lime
 
 ### Related packages
+- SHAP → shap package with real datasets
+- LIME → lime package with tabular & text examples
+- Permutation Importance → sklearn.inspection
+- Counterfactuals → alibi or dice-ml
 - DoWhy (6,600): Causal inference using graphical models
 - CausalNex (3,000): Causal reasoning with Bayesian Networks
 - CausalGraphicalModels (1,500): Toolkit for causal graphs in Python

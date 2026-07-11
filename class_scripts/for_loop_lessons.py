@@ -224,7 +224,7 @@ def _generate_pdf(
         "--debug_on_error",
     ]
     if limit:
-        cmd.extend([f"--limit {limit}"])
+        cmd.extend([f"--filter_by_slides {limit}"])
     # Execute command.
     cmd_str = " ".join(cmd)
     _LOG.info("Executing: %s", cmd_str)
@@ -241,7 +241,7 @@ def _generate_tex(
     """
     Generate TeX files from a lecture source file.
 
-    Calls notes_to_pdf.py with tex_only and skip_action open to generate
+    Calls notes_to_pdf.py with `--no_pdf` and `--skip_action=open` to generate
     TeX files without opening them.
 
     :param class_dir: class directory (data605 or msml610)
@@ -262,12 +262,12 @@ def _generate_tex(
         f"--output {output_path}",
         "--type slides",
         "--toc_type navigation",
-        "--tex_only",
+        "--no_pdf",
         "--skip_action open",
         "--debug_on_error",
     ]
     if limit:
-        cmd.extend([f"--limit {limit}"])
+        cmd.extend([f"--filter_by_slides {limit}"])
     # Execute command.
     cmd_str = " ".join(cmd)
     _LOG.info("Executing: %s", cmd_str)
@@ -392,8 +392,9 @@ def _generate_book_chapter(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    if not match:
-        hdbg.dfatal("Could not extract lesson number from:", source_name)
+    hdbg.dassert_is_not(
+        match, None, "Could not extract lesson number from %s", source_name
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(
@@ -423,8 +424,9 @@ def _generate_class_quizzes(
     """
     # Extract lesson number from source name (e.g., Lesson01.1-Intro.txt -> 01.1)
     match = re.match(r"Lesson([\d.]+)", source_name)
-    if not match:
-        hdbg.dfatal("Could not extract lesson number from:", source_name)
+    hdbg.dassert_is_not(
+        match, None, "Could not extract lesson number from %s", source_name
+    )
     lesson_number = match.group(1)
     # Build command using Python script.
     _LOG.info(
@@ -455,6 +457,7 @@ def _generate_class_recap(
     match = re.match(r"Lesson([\d.]+)", source_name)
     hdbg.dassert_is_not(
         match,
+        None,
         "Could not extract lesson number from: %s",
         source_name,
     )
@@ -582,7 +585,6 @@ def _parse() -> argparse.ArgumentParser:
         dest="class_name",
         action="store",
         required=True,
-        choices=["data605", "msml610"],
         help="Class directory name",
     )
     parser.add_argument(

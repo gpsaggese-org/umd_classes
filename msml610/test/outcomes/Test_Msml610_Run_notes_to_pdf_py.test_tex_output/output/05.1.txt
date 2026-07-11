@@ -1,0 +1,1870 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  10pt,
+  ignorenonframetext,
+]{beamer}
+\newif\ifbibliography
+\usepackage{pgfpages}
+\setbeamertemplate{caption}[numbered]
+\setbeamertemplate{caption label separator}{: }
+\setbeamercolor{caption name}{fg=normal text.fg}
+\beamertemplatenavigationsymbolsempty
+% remove section numbering
+\setbeamertemplate{part page}{
+  \centering
+  \begin{beamercolorbox}[sep=16pt,center]{part title}
+    \usebeamerfont{part title}\insertpart\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{section page}{
+  \centering
+  \begin{beamercolorbox}[sep=12pt,center]{section title}
+    \usebeamerfont{section title}\insertsection\par
+  \end{beamercolorbox}
+}
+\setbeamertemplate{subsection page}{
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center]{subsection title}
+    \usebeamerfont{subsection title}\insertsubsection\par
+  \end{beamercolorbox}
+}
+% Prevent slide breaks in the middle of a paragraph
+\widowpenalties 1 10000
+\raggedbottom
+\AtBeginPart{
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \ifbibliography
+  \else
+    \frame{\sectionpage}
+  \fi
+}
+\AtBeginSubsection{
+  \frame{\subsectionpage}
+}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\usetheme[]{SimplePlus}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% From https://tex.stackexchange.com/questions/75667/change-colour-on-chapter-section-headings-lyx
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{violet}{rgb}{0.93,0.51,0.93}
+\definecolor{cyan}{rgb}{0,1,1}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+
+\usepackage{cancel}
+\usepackage{listings}
+
+%\usepackage{sectsty}
+%\chapterfont{\color{blue}}
+%\sectionfont{\color{red}}
+%\subsectionfont{\color{purple}}
+%\subsubsectionfont{\color{blue}}
+
+% From https://tex.stackexchange.com/questions/1455/how-to-set-the-font-for-a-section-title-and-chapter-etc
+%\usepackage{titlesec}
+%\titleformat{\chapter}[display]
+%  {\normalfont\sffamily\huge\bfseries\color{blue}}
+%  {\chaptertitlename\ \thechapter}{20pt}{\Huge}
+%\titleformat{\section}
+%  {\normalfont\sffamily\Large\bfseries\color{cyan}}
+%  {\thesection}{1em}{}
+
+% Work-around for too deeply nested error.
+\usepackage{enumitem}
+\setlistdepth{9}
+\setlist[itemize,1]{label=\textendash}
+\setlist[itemize,2]{label=\textendash}
+\setlist[itemize,3]{label=\textendash}
+\setlist[itemize,4]{label=\textendash}
+\setlist[itemize,5]{label=\textendash}
+\setlist[itemize,6]{label=\textendash}
+\setlist[itemize,7]{label=\textendash}
+\setlist[itemize,8]{label=\textendash}
+\setlist[itemize,9]{label=\textendash}
+\renewlist{itemize}{itemize}{9}
+
+% \setlist[itemize,1]{label=\textbullet}
+% \setlist[itemize,2]{label=\textendash}
+% \setlist[itemize,3]{label=\textasteriskcentered}
+% \setlist[itemize,4]{label=\textperiodcentered}
+% setlist[itemize,5]{label=\textbullet}
+% \setlist[itemize,6]{label=\textbullet}
+% \setlist[itemize,7]{label=\textbullet}
+% \setlist[itemize,8]{label=\textbullet}
+% \setlist[itemize,9]{label=\textbullet}
+
+% Configure enumerate lists to prevent infinite recursion in Beamer themes.
+\setlist[enumerate,1]{label=\arabic*.,ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*.,ref=\theenumi.\alph*}
+\setlist[enumerate,3]{label=\roman*.,ref=\theenumi.\theenumii.\roman*}
+\setlist[enumerate,4]{label=\Alph*.,ref=\theenumi.\theenumii.\theenumiii.\Alph*}
+\setlist[enumerate,5]{label=\Roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\Roman*}
+\setlist[enumerate,6]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\arabic*}
+\setlist[enumerate,7]{label=\alph*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\alph*}
+\setlist[enumerate,8]{label=\roman*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\roman*}
+\setlist[enumerate,9]{label=\arabic*.,ref=\theenumi.\theenumii.\theenumiii.\theenumiv.\theenumv.\theenumvi.\theenumvii.\theenumviii.\arabic*}
+\renewlist{enumerate}{enumerate}{9}
+
+% #############################################################################
+% Vector / matrix notation
+% #############################################################################
+
+% \vec is already defined so we use \vv
+
+% Use bold.
+%\newcommand{\vv}[1]{\boldsymbol{#1}}
+%\newcommand{\mat}[1]{\boldsymbol{#1}}
+
+% Use underline.
+% From https://latex.org/forum/viewtopic.php?t=17798
+% ulem doesn't work well in math mode.
+%\newcommand{\vv}[1]{\boldsymbol{\uline{#1}}}
+%\newcommand{\mat}[1]{\boldsymbol{\uuline{#1}}}
+\newcommand{\vv}[1]{\boldsymbol{\underline{#1}}}
+\newcommand{\mat}[1]{\boldsymbol{\underline{\underline{#1}}}}
+
+% TODO(saggese): Remove this and use \quad.
+\newcommand{\eqspace}{\hspace{10 mm}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+% NOTE: These shortcuts are not only to make the latex code easier but also to
+% make easy to find out what the standard representation is.
+% In general we prefer to put \vv{} and \mat{} at outermost.
+
+% #############################################################################
+% Newshortcuts for matrices and vectors.
+% #############################################################################
+
+% - v* for vectors, e.g., va, vb, ..., vmu, vA, vGamma
+% - m* for matrices, e.g., mA, ..., mSigma
+
+% Vector.
+\newcommand{\vA}{\vv{A}}
+\newcommand{\vB}{\vv{B}}
+\newcommand{\vC}{\vv{C}}
+\newcommand{\vD}{\vv{D}}
+\newcommand{\vDelta}{\vv{\Delta}}
+\newcommand{\vE}{\vv{E}}
+\newcommand{\vF}{\vv{F}}
+\newcommand{\vG}{\vv{G}}
+\newcommand{\vGamma}{\vv{\Gamma}}
+\newcommand{\vH}{\vv{H}}
+\newcommand{\vI}{\vv{I}}
+\newcommand{\vJ}{\vv{J}}
+\newcommand{\vK}{\vv{K}}
+\newcommand{\vL}{\vv{L}}
+\newcommand{\vLambda}{\vv{\Lambda}}
+\newcommand{\vM}{\vv{M}}
+\newcommand{\vN}{\vv{N}}
+\newcommand{\vO}{\vv{O}}
+\newcommand{\vOmega}{\vv{\Omega}}
+\newcommand{\vP}{\vv{P}}
+\newcommand{\vPhi}{\vv{\Phi}}
+\newcommand{\vPi}{\vv{\Pi}}
+\newcommand{\vPsi}{\vv{\Psi}}
+\newcommand{\vQ}{\vv{Q}}
+\newcommand{\vR}{\vv{R}}
+\newcommand{\vS}{\vv{S}}
+\newcommand{\vSigma}{\vv{\Sigma}}
+\newcommand{\vT}{\vv{T}}
+\newcommand{\vU}{\vv{U}}
+\newcommand{\vUpsilon}{\vv{\Upsilon}}
+\newcommand{\vV}{\vv{V}}
+\newcommand{\vW}{\vv{W}}
+\newcommand{\vX}{\vv{X}}
+\newcommand{\vXi}{\vv{\Xi}}
+\newcommand{\vY}{\vv{Y}}
+\newcommand{\vZ}{\vv{Z}}
+\newcommand{\va}{\vv{a}}
+\newcommand{\valpha}{\vv{\alpha}}
+\newcommand{\vb}{\vv{b}}
+\newcommand{\vbeta}{\vv{\beta}}
+\newcommand{\vc}{\vv{c}}
+\newcommand{\vchi}{\vv{\chi}}
+\newcommand{\vd}{\vv{d}}
+\newcommand{\vdelta}{\vv{\delta}}
+\newcommand{\ve}{\vv{e}}
+\newcommand{\vepsilon}{\vv{\epsilon}}
+\newcommand{\veta}{\vv{\eta}}
+\newcommand{\vf}{\vv{f}}
+\newcommand{\vg}{\vv{g}}
+\newcommand{\vgamma}{\vv{\gamma}}
+\newcommand{\vh}{\vv{h}}
+\newcommand{\vi}{\vv{i}}
+\newcommand{\viota}{\vv{\iota}}
+\newcommand{\vj}{\vv{j}}
+\newcommand{\vk}{\vv{k}}
+\newcommand{\vkappa}{\vv{\kappa}}
+\newcommand{\vl}{\vv{l}}
+\newcommand{\vlambda}{\vv{\lambda}}
+\newcommand{\vm}{\vv{m}}
+\newcommand{\vmu}{\vv{\mu}}
+\newcommand{\vn}{\vv{n}}
+\newcommand{\vnu}{\vv{\nu}}
+\newcommand{\vo}{\vv{o}}
+\newcommand{\vomega}{\vv{\omega}}
+\newcommand{\vp}{\vv{p}}
+\newcommand{\vphi}{\vv{\phi}}
+\newcommand{\vpi}{\vv{\pi}}
+\newcommand{\vpsi}{\vv{\psi}}
+\newcommand{\vq}{\vv{q}}
+\newcommand{\vr}{\vv{r}}
+\newcommand{\vrho}{\vv{\rho}}
+\newcommand{\vs}{\vv{s}}
+\newcommand{\vsigma}{\vv{\sigma}}
+\newcommand{\vt}{\vv{t}}
+\newcommand{\vtau}{\vv{\tau}}
+\newcommand{\vtheta}{\vv{\theta}}
+\newcommand{\vu}{\vv{u}}
+\newcommand{\vupsilon}{\vv{\upsilon}}
+\newcommand{\vvarepsilon}{\vv{\varepsilon}}
+\newcommand{\vvarphi}{\vv{\varphi}}
+\newcommand{\vvarrho}{\vv{\varrho}}
+\newcommand{\vvartheta}{\vv{\vartheta}}
+\newcommand{\vvv}{\vv{v}}
+\newcommand{\vw}{\vv{w}}
+\newcommand{\vx}{\vv{x}}
+\newcommand{\vxi}{\vv{\xi}}
+\newcommand{\vy}{\vv{y}}
+\newcommand{\vz}{\vv{z}}
+\newcommand{\vzeta}{\vv{\zeta}}
+
+% Matrix.
+% \mat -> \mm?
+\newcommand{\mA}{\mat{A}}
+\newcommand{\mB}{\mat{B}}
+\newcommand{\mC}{\mat{C}}
+\newcommand{\mD}{\mat{D}}
+\newcommand{\mDelta}{\mat{\Delta}}
+\newcommand{\mE}{\mat{E}}
+\newcommand{\mF}{\mat{F}}
+\newcommand{\mG}{\mat{G}}
+\newcommand{\mGamma}{\mat{\Gamma}}
+\newcommand{\mH}{\mat{H}}
+\newcommand{\mI}{\mat{I}}
+\newcommand{\mJ}{\mat{J}}
+\newcommand{\mK}{\mat{K}}
+\newcommand{\mL}{\mat{L}}
+\newcommand{\mLambda}{\mat{\Lambda}}
+\newcommand{\mM}{\mat{M}}
+\newcommand{\mN}{\mat{N}}
+\newcommand{\mO}{\mat{O}}
+\newcommand{\mOmega}{\mat{\Omega}}
+\newcommand{\mP}{\mat{P}}
+\newcommand{\mPi}{\mat{\Pi}}
+\newcommand{\mPsi}{\mat{\Psi}}
+\newcommand{\mQ}{\mat{Q}}
+\newcommand{\mR}{\mat{R}}
+\newcommand{\mS}{\mat{S}}
+\newcommand{\mSigma}{\mat{\Sigma}}
+\newcommand{\mT}{\mat{T}}
+\newcommand{\mU}{\mat{U}}
+\newcommand{\mUpsilon}{\mat{\Upsilon}}
+\newcommand{\mV}{\mat{V}}
+\newcommand{\mW}{\mat{W}}
+\newcommand{\mX}{\mat{X}}
+\newcommand{\mXi}{\mat{\Xi}}
+\newcommand{\mY}{\mat{Y}}
+\newcommand{\mZ}{\mat{Z}}
+
+% #############################################################################
+% Other shortcuts
+% #############################################################################
+
+% Number fields
+% TODO: use \R, \N, ... and the standard symbols (see
+% http://oeis.org/wiki/List_of_LaTeX_mathematical_symbols)
+\newcommand{\bbB}{\mathbb{B}}
+\newcommand{\bbC}{\mathbb{C}}
+\newcommand{\bbF}{\mathbb{F}}
+\newcommand{\bbL}{\mathbb{L}}
+\newcommand{\bbN}{\mathbb{N}}
+\newcommand{\bbQ}{\mathbb{Q}}
+\newcommand{\bbR}{\mathbb{R}}
+\newcommand{\bbS}{\mathbb{S}}
+\newcommand{\bbZ}{\mathbb{Z}}
+
+% Script vars.
+\newcommand{\cala}{\mathcal{a}}
+\newcommand{\calb}{\mathcal{b}}
+\newcommand{\calc}{\mathcal{c}}
+\newcommand{\cald}{\mathcal{d}}
+\newcommand{\cale}{\mathcal{e}}
+\newcommand{\calf}{\mathcal{f}}
+\newcommand{\calg}{\mathcal{g}}
+\newcommand{\calh}{\mathcal{h}}
+\newcommand{\cali}{\mathcal{i}}
+\newcommand{\calj}{\mathcal{j}}
+\newcommand{\calk}{\mathcal{k}}
+\newcommand{\call}{\mathcal{l}}
+\newcommand{\calm}{\mathcal{m}}
+\newcommand{\caln}{\mathcal{n}}
+\newcommand{\calo}{\mathcal{o}}
+\newcommand{\calp}{\mathcal{p}}
+\newcommand{\calq}{\mathcal{q}}
+\newcommand{\calr}{\mathcal{r}}
+\newcommand{\cals}{\mathcal{s}}
+\newcommand{\calt}{\mathcal{t}}
+\newcommand{\calu}{\mathcal{u}}
+\newcommand{\calv}{\mathcal{v}}
+\newcommand{\calw}{\mathcal{w}}
+\newcommand{\calx}{\mathcal{x}}
+\newcommand{\caly}{\mathcal{y}}
+\newcommand{\calz}{\mathcal{z}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calD}{\mathcal{D}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calF}{\mathcal{F}}
+\newcommand{\calG}{\mathcal{G}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calN}{\mathcal{N}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calT}{\mathcal{T}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calY}{\mathcal{Y}}
+\newcommand{\calZ}{\mathcal{Z}}
+
+% tilde
+% TODO(gp): Expand this.
+\newcommand{\ttau}{\tilde{\tau}}
+% Irregular to avoid conflict.
+\newcommand{\ttt}{\tilde{t}}
+\newcommand{\ty}{\tilde{y}}
+
+% TODO(gp): Expand this.
+\newcommand{\hF}{\widehat{F}}
+\newcommand{\hvF}{\vv{\widehat{F}}}
+\newcommand{\hG}{\widehat{G}}
+\newcommand{\hvG}{\vv{\widehat{G}}}
+\newcommand{\hX}{\widehat{X}}
+\newcommand{\hvX}{\vv{\widehat{X}}}
+
+% Unit vector.
+% Same as the vector name with unit
+% TODO(gp): Merge with above.
+\newcommand{\vvvhat}{\vv{\hat{v}}}
+\newcommand{\uuhat}{\vv{\hat{u}}}
+\newcommand{\xxhat}{\vv{\hat{x}}}
+%
+\newcommand{\tildeAAA}{\mat{\tilde{A}}}
+
+% Basic.
+
+% Define.
+%\def\defeq{\overset{\begin{tiny}def\end{tiny}}{=}}
+\def\defeq{\triangleq}
+% TODO: This is already defined, but not clear where
+%\newcommand{\gcd}{\text{gcd}}
+\newcommand{\lcm}{\text{lcm}}
+
+% Mean and variance.
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\VV}{\mathbb{V}}
+\newcommand{\Cov}{\text{Cov}}
+\newcommand{\Corr}{\text{Corr}}
+%\newcommand{\Pr}{\mathbb{P}}
+
+% Color shortcuts for slides.
+\newcommand{\black}[1]{\textcolor{black}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\brown}[1]{\textcolor{brown}{#1}}
+\newcommand{\cyan}[1]{\textcolor{cyan}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\olive}[1]{\textcolor{olive}{#1}}
+\newcommand{\orange}[1]{\textcolor{orange}{#1}}
+\newcommand{\purple}[1]{\textcolor{purple}{#1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\teal}[1]{\textcolor{teal}{#1}}
+\newcommand{\violet}[1]{\textcolor{violet}{#1}}
+
+% Distributions.
+% text{} or textsf
+\def\Bernoulli{\textsf{Bernoulli}}
+\def\Beta{\textsf{Beta}}
+\def\Binomial{\textsf{Binomial}}
+\def\Exponential{\textsf{Exponential}}
+\def\LogNormal{\textsf{LogNormal}}
+\def\N{\textsf{N}}
+\def\Poisson{\textsf{Poisson}}
+\def\Uniform{\textsf{Uniform}}
+\def\WN{\textsf{WN}}
+\def\GWN{\textsf{GWN}}
+
+% Linear algebra.
+\def\Col{\textsf{Col}}
+\def\Dim{\textsf{Dim}}
+\def\Re{\textsf{Re}}
+\def\Im{\textsf{Im}}
+\def\Ker{\textsf{Ker}}
+\def\Null{\textsf{Null}}
+\def\Rank{\textsf{Rank}}
+\def\Row{\textsf{Row}}
+\def\Span{\textsf{Span}}
+\def\Det{\textsf{Det}}
+\def\Tr{\textsf{Tr}}
+\def\Diag{\textsf{Diag}}
+\def\sign{\textsf{sign}}
+\def\argmin{\textsf{argmin}}
+\def\argmax{\textsf{argmax}}
+\def\mod{\textsf{ mod }}
+\def\min{\textsf{min}}
+\def\max{\textsf{max}}
+\def\avg{\textsf{avg}}
+
+% Derivative at a point
+% https://tex.stackexchange.com/questions/64176/derivative-at-a-point
+\newcommand{\at}[2][]{#1|_{#2}}
+
+% Logic operators.
+\def\NOT{\textsf{\begin{footnotesize}NOT\end{footnotesize}}}
+\def\OR{\textsf{\begin{footnotesize} OR \end{footnotesize}}}
+\def\AND{\textsf{\begin{footnotesize} AND \end{footnotesize}}}
+\def\XOR{\textsf{\begin{footnotesize} XOR \end{footnotesize}}}
+\def\IFF{\textsf{\begin{footnotesize} IFF \end{footnotesize}}}
+
+% For some reasons new commands can't end with a number.
+%\newcommand{\v0}{\vv{0}}
+%\newcommand{\v1}{\vv{1}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\author{\texorpdfstring{}{}}
+\date{}
+
+\begin{document}
+
+\begin{frame}
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+\begin{columns}[T]
+\begin{column}{0.15\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/UMD_Logo.png}}
+\end{column}
+
+\begin{column}{0.75\linewidth}
+\vspace{0.4cm}
+\begingroup \large
+
+MSML610: Advanced Machine Learning \endgroup
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begingroup \Large
+
+\textbf{\[\text{\blue{Lesson 05.1: Machine Learning Theories}}\]}
+\endgroup \vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.75\linewidth}
+\vspace{1cm}
+
+\textbf{Instructor}: Dr.~GP Saggese,
+\href{gsaggese@umd.edu}{\textcolor{blue}{\underline{gsaggese@umd.edu}}}
+
+\textbf{References}:
+
+\begin{itemize}
+\tightlist
+\item
+  Abu-Mostafa et al.: \emph{``Learning From Data''} (2012)
+\end{itemize}
+\end{column}
+
+\begin{column}{0.2\linewidth}
+\includegraphics[width=\linewidth,height=0.2\textheight,keepaspectratio]{msml610/lectures_source/figures/book_covers/Book_cover_Learning_from_Data.jpg}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content}
+\begin{itemize}
+\tightlist
+\item
+  \emph{\textbf{\textcolor{red}{Is Machine Learning Even Possible?}}}
+\item
+  Growth Function
+\item
+  The VC Dimension
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A Simple Visual ML Experiment (1/2)}
+\protect\phantomsection\label{a-simple-visual-ml-experiment-12}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\item
+  Consider the supervised classification problem
+\item
+  \textbf{\black{Input}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A 9 bit vector represented as a 3x3 array
+  \end{itemize}
+\item
+  \textbf{\black{Training set}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The \blue{blue row} \(\vx_1, \vx_2, \vx_3\) for \(f(\vx) = -1\)
+  \item
+    The \green{green row} \(\vx_4, \vx_5, \vx_6\) for \(f(\vx) = +1\)
+  \end{itemize}
+\item
+  \textbf{\black{Test set}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    For the \red{red pattern} \(\vx_0\), is
+    \(f(\vx_0) = -1 \text{ or } +1\)?
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.5\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{A Simple Visual ML Experiment (2/2)}
+\protect\phantomsection\label{a-simple-visual-ml-experiment-22}
+\begin{columns}[T]
+\begin{column}{0.7\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\black{Model 1}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f(\vx) = +1\) when \(\vx\) has an axis of symmetry
+  \item
+    \(f(\vx) = -1\) when \(\vx\) is not symmetric
+  \item
+    The test set is symmetrical \(\implies f(\vx_0) = +1\)
+  \end{itemize}
+\item
+  \textbf{\black{Model 2}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(f(\vx) = +1\) when the top left square \(\vx\) is empty
+  \item
+    \(f(\vx) = -1\) when the top left square \(\vx\) is full
+  \item
+    The test set has top left square full \(\implies f(\vx_0) = -1\)
+  \end{itemize}
+\item
+  Many functions fit the 6 training examples
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Some have a value of -1 on the test point, others +1
+  \item
+    Which one is it?
+  \end{itemize}
+\item
+  How can a limited data set reveal enough information to define the
+  entire target function?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\black{Is machine learning possible?}}
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Is Machine Learning Possible?}
+\protect\phantomsection\label{is-machine-learning-possible}
+\begin{itemize}
+\tightlist
+\item
+  The function can assume
+  \textbf{\textcolor{red}{any value outside data}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., with summer temperature data, the function could assume a
+    different value for winter
+  \end{itemize}
+\item
+  \textbf{\textcolor{darkgreen}{How to learn an unknown function?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Estimating at unseen points seems impossible in general
+  \item
+    Requires assumptions or models about behavior
+  \end{itemize}
+\item
+  Difference between:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{\textcolor{blue}{Possible}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      No knowledge of the unknown function
+    \item
+      E.g., could be linear, quadratic, or sine wave outside known data
+    \end{itemize}
+  \item
+    \textbf{\textcolor{violet}{Probable}}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Some knowledge of the unknown function from domain knowledge or
+      historical data patterns
+    \item
+      E.g., if historical weather data forms a sinusoidal pattern,
+      unknown points likely follow that pattern
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Supervised Learning: Bin Analogy (1/2)}
+\protect\phantomsection\label{supervised-learning-bin-analogy-12}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Consider a bin with \red{red} and \green{green} marbles
+
+  \begin{itemize}
+  \tightlist
+  \item
+    We want to estimate \(\Pr(\text{pick a \red{red} marble}) = \mu\)
+    where the value of \(\mu\) is unknown
+  \item
+    We pick \(N\) marbles independently with replacement
+  \item
+    The fraction of \red{red} marbles is \(\nu\)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L05.1.Bin_with_marbles.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Does \(\nu\) say anything about \(\mu\)?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \textbf{``No''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      In strict terms, we don't know anything about the marbles we
+      didn't pick
+    \item
+      The sample can be mostly \green{green}, while the bin is mostly
+      \red{red}
+    \item
+      This is \emph{possible}, but \emph{not probable}
+    \end{itemize}
+  \item
+    \textbf{``Yes''}
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Under certain conditions, the sample frequency is close to the
+      real frequency
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{Possible vs probable}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    It is \textbf{possible} that we don't know anything about the
+    marbles in the bin
+  \item
+    It is \textbf{probable} that we know something
+  \item
+    Hoeffding inequality makes this intuition formal
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Hoeffding Inequality}
+\protect\phantomsection\label{hoeffding-inequality}
+\begin{itemize}
+\item
+  Consider a Bernoulli random variable \(X\) with probability of success
+  \(\mu\)
+\item
+  Estimate the mean \(\mu\) using \(N\) samples with
+  \(\nu = \frac{1}{N} \sum_i X_i\)
+\item
+  The \textbf{\textcolor{red}{probably approximately correct}} (PAC)
+  statement holds: \[
+  \Pr(|\nu - \mu| > \varepsilon) \le \frac{2}{e^{2 \varepsilon^2 N}}
+  \]
+\item
+  \textbf{\textcolor{blue}{Remarks:}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Valid for all \(N\) and \(\varepsilon\), not an asymptotic result
+  \item
+    Holds only if you sample \(\nu\) and \(\mu\) at random and in the
+    same way
+  \item
+    If \(N\) increases, it is exponentially small that \(\nu\) will
+    deviate from \(\mu\) by more than \(\varepsilon\)
+  \item
+    The bound does not depend on \(\mu\)
+  \item
+    Trade-off between \(N\), \(\varepsilon\), and the bound:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Smaller \(\varepsilon\) requires larger \(N\) for the same
+      probability bound
+    \item
+      Since \(\nu \in [\mu - \varepsilon, \mu + \varepsilon]\), you want
+      small \(\varepsilon\) with a large probability
+    \end{itemize}
+  \item
+    It is a statement about \(\nu\) and not \(\mu\) although you use it
+    to state something about \(\nu\) (like for a confidence interval)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Supervised Learning: Bin Analogy (2/2)}
+\protect\phantomsection\label{supervised-learning-bin-analogy-22}
+\begin{itemize}
+\tightlist
+\item
+  Let's connect the bin analogy, Hoeffding inequality, and feasibility
+  of machine learning
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You know \(f(\vx)\) at points \(\vx \in \calX\)
+  \item
+    You choose an hypothesis \(h: \calX \rightarrow \calY = \{0, 1\}\)
+  \item
+    Each point \(\vx \in \calX\) is a marble
+  \item
+    You color \red{red} if the hypothesis is correct
+    \(h(\vx) = f(\vx)\), \green{green} otherwise
+  \item
+    The in-sample error \(E_{in}(h)\) corresponds to \(\nu\)
+  \item
+    The marbles of unknown color corresponds to \(E_{out}(h) = \mu\)
+  \item
+    \(\vx_1, ..., \vx_n\) are picked randomly and independently from a
+    distribution over \(\calX\) which is the same as for \(E_{out}\)
+  \end{itemize}
+\item
+  Hoeffding inequality holds and bounds the error going from in-sample
+  to out-of-sample \[
+  \Pr(|E_{in} - E_{out}| > \varepsilon) \le c
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Generalization over unknown points (i.e., marbles) is possible
+  \item
+    \textbf{Machine learning is possible!}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation vs Learning: Bin Analogy}
+\protect\phantomsection\label{validation-vs-learning-bin-analogy}
+\begin{itemize}
+\tightlist
+\item
+  You have learned that for a given \(h\), in-sample performance
+  \(E_{in}(h) = \nu\) needs to be close to out-of-sample performance
+  \(E_{out}(h) = \mu\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the \textbf{\textcolor{red}{validation setup}}, after you
+    have already learned a model
+  \end{itemize}
+\item
+  In a \textbf{\textcolor{darkgreen}{learning setup}} you have \(h\) to
+  choose from \(M\) hypotheses
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You need a bound on the out-of-sample performance of the chosen
+    hypothesis \(h \in \calH\), regardless of which hypothesis you
+    choose
+  \item
+    You need a Hoeffding counterpart for the case of choosing from
+    multiple hypotheses \begingroup \small
+    \begin{alignat*}{2}
+    & \forall g \in \calH = \{h_1, ... , h_M\} \; \Pr(|E_{in}(g) - E_{out}(g)| > \varepsilon)
+    &
+    \\
+    & \hspace{1cm} \le \Pr(\bigcup_{i=1}^M (|E_{in}(h_i) - E_{out}(h_i) | > \varepsilon))
+    &
+    \\
+    & \hspace{1cm} \le \sum_{i=1}^M \Pr(|E_{in}(h_i) - E_{out}(h_i)| > \varepsilon)
+    & \text{  (by the union bound)}
+    \\
+    & \hspace{1cm} \le 2 M \exp(-2 \varepsilon^2 N)
+    & \text{  (by Hoeffding)}
+    \\
+    \end{alignat*}
+    \endgroup
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Problem}}: the bound is weak
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation vs Learning: Coin Analogy}
+\protect\phantomsection\label{validation-vs-learning-coin-analogy}
+\begin{itemize}
+\item
+  In a \textbf{\textcolor{red}{validation set-up}}, you have a coin and
+  want to determine if it is fair
+\item
+  Assume the coin is unbiased: \(\mu = 0.5\)
+\item
+  Toss the coin 10 times
+\item
+  How likely is that you get 10 heads (i.e., the coin looks biased
+  \(\nu = 0\))? \[
+  \Pr(\text{coin shows } \nu = 0) = 1 / 2^{10} = 1 / 1024 \approx 0.1\%
+  \]
+\item
+  \textbf{\textcolor{blue}{Conclusion}}: the probability that the
+  out-of-sample performance (\(\nu=0.0\)) is completely different from
+  the in-sample perf (\(\mu=0.5\)) is very low
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation vs Learning: Coin Analogy}
+\protect\phantomsection\label{validation-vs-learning-coin-analogy-1}
+\begin{itemize}
+\item
+  In a \textbf{\textcolor{red}{learning set-up}}, you have many coins
+  and you need to choose one and determine if it's fair
+\item
+  If you have 1000 fair coins, how likely is it that at least one
+  appears totally biased using 10 experiments?
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., out-of-sample performance is completely different from
+    in-sample performance \[
+    \begin{aligned}
+    \Pr(\text{at least one coin has } \nu = 0) &
+    = 1 - \Pr(\text{all coins have } \nu \neq 0)\\
+    &= 1 - (\Pr(\text{a coin has } \nu \neq 0)) ^{10}\\
+    &= 1 - (1 - \Pr(\text{a coin has } \nu = 0)) ^{10}\\
+    &= 1 - (1 - 1 / 2 ^ {10}) ^ {1000}\\
+    &\approx 0.63\%
+    \end{aligned}
+    \]
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Conclusion}}: It is probable, more than 50\%
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Validation vs Learning: Hoeffding Inequality}
+\protect\phantomsection\label{validation-vs-learning-hoeffding-inequality}
+\begin{itemize}
+\tightlist
+\item
+  In \textbf{\textcolor{red}{validation / testing}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use Hoeffding to assess how well our \(g\) (the \emph{chosen
+    hypothesis}) approximates \(f\) (the \emph{unknown hypothesis}): \[
+    \Pr(|E_{in} - E_{out}| > \varepsilon) \le 2 \exp(-2 \varepsilon^2 N)
+    \] where: \begingroup \small
+    \begin{alignat*}{2}
+    & E_{in}(g) = \frac{1}{N} \sum_i e(g(\vx_i), f(\vx_i)) \\
+    & E_{out}(g) = \EE_{\vx}[e(g(\vx), f(\vx))] \\
+    \end{alignat*}
+    \endgroup
+  \item
+    Since the hypothesis \(g\) is final and fixed, Hoeffding inequality
+    guarantees that you can learn since it gives a bound for \(E_{out}\)
+    to track \(E_{in}\)
+  \end{itemize}
+\item
+  In \textbf{\textcolor{darkgreen}{learning}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Need to account that our hypothesis is the best of \(M\) hypotheses,
+    so: \[
+    \Pr(|E_{in} - E_{out}| > \varepsilon) \le 2 M \exp(-2 \varepsilon^2 N)
+    \]
+  \item
+    The bound for \(E_{out}\) from Hoeffding is weak
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Questions}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Is the bound weak because it needs to be?
+  \item
+    Is it possible to replace it with a stricter bound?
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Intuition Why Bound for Hoeffding Is Weak}
+\protect\phantomsection\label{intuition-why-bound-for-hoeffding-is-weak}
+\begin{itemize}
+\item
+  The Hoeffding inequality and the union bound applied to training set
+  \[
+  \Pr(|E_{in} - E_{out}| > \varepsilon) \le 2 M \exp(-2 \varepsilon^2 N)
+  \] is \textbf{\textcolor{red}{artificially}} too loose
+\item
+  \(M\) was coming from the bad event: \begin{alignat*}{2}
+  \calB_i
+  &= \textit{"hypothesis $h_i$ does not generalize out-of-sample"} \\
+  &= "|E_{in}(h_i) - E_{out}(h_i)| > \varepsilon"
+  \end{alignat*}
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\item
+  Since \(g \in \{h_1, h_2, \cdots, h_M\}\) then \(\Pr(\calB)
+  \le \Pr(\bigcup_i \calB_i)
+  \le \sum_i \Pr(\calB_i)\)
+\item
+  The union bound assumes the events are disjoint, leading to a
+  conservative estimate if events overlap
+\item
+  \textbf{\textcolor{blue}{In reality}}, bad events are extremely
+  overlapping because bad hypotheses are extremely similar
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\includegraphics[width=0.9\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.3.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Training vs Testing: College Course Analogy (1/2)}
+\protect\phantomsection\label{training-vs-testing-college-course-analogy-12}
+\begin{itemize}
+\item
+  In machine learning there are several phases
+  \pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.4.png}}
+\item
+  This set-up is very similar to studying and exams in a college course
+\item
+  Students study the material
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the \textbf{\textcolor{red}{learning phase}}
+  \end{itemize}
+\item
+  Before the final exam, students receive practice problems and
+  solutions
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Studying the problems improves performance by understating what they
+    need to improve
+  \item
+    This corresponds to the \textbf{\textcolor{blue}{validation set}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Training vs Testing: College Course Analogy (2/2)}
+\protect\phantomsection\label{training-vs-testing-college-course-analogy-22}
+\begin{itemize}
+\tightlist
+\item
+  The final exam corresponds to the
+  \textbf{\textcolor{red}{testing phase}}
+
+  \begin{itemize}
+  \item
+    These problems are different than the problems in the validation set
+  \item
+    Why not give out exam problems to improve performance?
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Doing well in the exam isn't the goal
+    \item
+      The goal is to learn the course material
+    \end{itemize}
+  \item
+    The final exam isn't strictly necessary
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Gauges how well you've learned
+    \item
+      Motivates you to study
+    \item
+      Knowing exam problems in advance wouldn't gauge learning
+      effectively
+    \end{itemize}
+  \end{itemize}
+\item
+  What matters is how students do once they graduate and find a job
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the \textbf{\textcolor{blue}{out-of-sample phase}}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-1}
+\begin{itemize}
+\tightlist
+\item
+  Is Machine Learning Even Possible?
+\item
+  \emph{\textbf{\textcolor{red}{Growth Function}}}
+\item
+  The VC Dimension
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Dichotomy: Definition}
+\protect\phantomsection\label{dichotomy-definition}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Problem}}: classify \(N\) (fixed) points
+  \(\vx_1, ..., \vx_N\) with an hypothesis set \(\calH\) of multi-class
+  classifiers
+\item
+  Consider an assignment \(D\) of the points to certain class
+  \(\vd_1, ..., \vd_N\)
+\item
+  \(D\) is a \textbf{\textcolor{darkgreen}{dichotomy}} for hypothesis
+  set \(\calH\) \(\iff\) there exists \(h \in \calH\) that gets the
+  desired classification \(D\)
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.65\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Example}}
+
+  \begin{itemize}
+  \item
+    4 points in a plane \(A, B, C, D\)
+  \item
+    Binary classification
+  \item
+    \(\calH\) = \{ bidimensional perceptrons \}
+  \item
+    Moving the separating hyperplane, you get different classifications
+    for the points (i.e., dichotomies)
+
+\begin{verbatim}
+      D1    D2   D3   D4   D...
+A     o     x      ...
+B     x     x
+C     o     o
+D     x     o      ...
+\end{verbatim}
+  \item
+    There are at most \(2^N\) dichotomies
+  \item
+    Certain classifications are not possible (e.g., XOR assignment)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.3\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.5.png}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.6.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Dichotomies vs Hypotheses}
+\protect\phantomsection\label{dichotomies-vs-hypotheses}
+\begin{itemize}
+\item
+  An \textbf{\textcolor{red}{hypothesis}} classifies each point of
+  \(\calX\): \(\calX \rightarrow \{-1, +1\}\)
+\item
+  A \textbf{\textcolor{darkgreen}{dichotomy}} classifies each point of a
+  fixed set: \(\{\vx_1, ..., \vx_N\} \rightarrow \{-1, +1\}\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Dichotomies are ``mini-hypotheses'', i.e., hypotheses restricted to
+    given points
+  \item
+    A dichotomy depends on:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      The number of points \(N\)
+    \item
+      Hypothesis set \(\calH\) (i.e., the possible models)
+    \item
+      Where the points are placed
+    \item
+      How the points are assigned
+    \end{itemize}
+  \end{itemize}
+\item
+  The \textbf{\textcolor{blue}{number of different dichotomies}} is
+  indicated by \(|\calH(\vx_1, ..., \vx_N)|\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The number of dichotomies is always finite, since
+    \(|\calH(\vx_1, ..., \vx_N)| \le N^K\)
+  \item
+    The number of hypotheses is usually infinite, i.e.,
+    \(|\calH| = \infty\)
+  \end{itemize}
+\item
+  The ``complexity'' of \(\calH\) is related to the number of hypothesis
+\item
+  From the training set point of view what matters are dichotomies and
+  not hypotheses
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Many (infinite) hypotheses can correspond to the same dichotomy
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Growth Function}
+\protect\phantomsection\label{growth-function}
+\begin{itemize}
+\item
+  The \textbf{\textcolor{red}{growth function}} counts the maximum
+  number of possible dichotomies on \(N\) points for a hypothesis set
+  \(\calH\):
+
+  \[
+  m_{\calH}(N)
+  = \max_{\vx_1, \cdots, \vx_N \in \calX} |\calH(\vx_1, \cdots, \vx_N)|
+  \]
+\item
+  \textbf{\textcolor{darkgreen}{Why growth function?}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The dichotomies depend on point distribution and assignment
+  \item
+    The growth function considers the maximum by placing points in the
+    most ``favorable way'' for the hypothesis set
+  \end{itemize}
+\item
+  To compute \(m_{\calH}(N)\) by \textbf{\textcolor{blue}{brute force}}:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Consider all possible placements of \(N\) points
+    \(\vx_1, ..., \vx_N\)
+  \item
+    Consider all possible assignments of the points to the classes
+  \item
+    Consider all possible hypotheses \(h \in \calH\)
+  \item
+    Compute the corresponding dichotomy for \(h\) on
+    \(\vx_1, ..., \vx_N\)
+  \item
+    Count the number of different dichotomies
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{What Can Vary in a Dichotomy}
+\protect\phantomsection\label{what-can-vary-in-a-dichotomy}
+\begin{itemize}
+\item
+  Given:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    An hypothesis set \(\calH\) (e.g., bidimensional perceptrons)
+  \item
+    \(N\) (fixed) points \(\vx_1, ..., \vx_N\)
+  \item
+    An assignment \(D\) of the points to certain class
+    \(\vd_1, ..., \vd_N\)
+  \end{itemize}
+\item
+  \(D\) is a \textbf{\textcolor{red}{dichotomy}} for hypothesis set
+  \(\calH\) \(\iff\) there exists \(h \in \calH\) that gets the desired
+  classification \(D\)
+\item
+  There are various quantities in the definition of dichotomy
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The hypothesis set \(\calH\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      It is fixed
+    \end{itemize}
+  \item
+    The number of dimensions of the input space
+
+    \begin{itemize}
+    \tightlist
+    \item
+      It is fixed through the hypothesis set \(\calH\)
+    \end{itemize}
+  \item
+    The number of points \(N\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Input to the growth function \(m_{\calH}(N)\)
+    \end{itemize}
+  \item
+    How the points are assigned to the classes \(\vd_1, ..., \vd_N\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      It is a free parameter, removed by how each hypothesis in
+      \(\calH\) ``splits'' the space
+    \end{itemize}
+  \item
+    Where the points are positioned \(\vx_1, ..., \vx_N\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      It is a free parameter, removed by the growth function through
+      \(\max\)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Growth Function Is Increasing}
+\protect\phantomsection\label{growth-function-is-increasing}
+\begin{itemize}
+\item
+  \(m_{\calH}(N)\) increases (although not monotonically) with \(N\)
+\item
+  E.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The number of dichotomies on \(N=3\) points \(m_{\calH}(3)\) is
+    smaller or equal than the number of dichotomies on \(N=4\) points
+  \item
+    In fact we can ignore a new point and get the same classification
+  \end{itemize}
+\item
+  \(m_{\calH}(N)\) increases with the complexity of \(\calH\)
+\item
+  \(m_{\calH}(N)\) increases with the number of dimensions in the input
+  space (i.e., feature space)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Growth Function: Examples}
+\protect\phantomsection\label{growth-function-examples}
+\begin{itemize}
+\tightlist
+\item
+  Consider the growth function \(m_{\calH}\) for different hypothesis
+  sets \(\calH\)
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Perceptron on a plane}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m_{\calH}(3) = 8\)
+  \item
+    \(m_{\calH}(4) = 14\) (2 XOR classifications not possible)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\includegraphics[width=0.6\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.7.png}
+
+\vspace{1cm}
+\end{column}
+\end{columns}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Positive rays}} \(\sign(x - a)\) on \(\bbR\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m_{\calH}(N) = N + 1\)
+  \item
+    Origin of rays \(a\) can be placed in \(N + 1\) intervals
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.8.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Growth Function: Examples}
+\protect\phantomsection\label{growth-function-examples-1}
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{red}{Positive intervals}} on \(\bbR\)
+  \(x \in [a, b]\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m_{\calH}(N) = {N + 1 \choose 2} + 1 \sim \N^2\)
+  \item
+    Pick 2 distinct intervals out of \(N + 1\), and there is a dichotomy
+    with 2 points in the same interval
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.9.png}}
+\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+\begin{columns}[T]
+\begin{column}{0.5\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \textbf{\textcolor{blue}{Convex sets on a plane}}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m_{\calH}(N) = 2^N\)
+  \item
+    Place points in a circle and can classify \(N\) points in any way
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.45\linewidth}
+\includegraphics[width=0.5\linewidth,height=\textheight,keepaspectratio]{tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.10.png}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Break Point of an Hypothesis Set}
+\protect\phantomsection\label{break-point-of-an-hypothesis-set}
+\begin{itemize}
+\item
+  Given an hypothesis set \(\calH\)
+\item
+  A hypothesis set \(\calH\)
+  \textbf{\textcolor{red}{shatters $N$ points}} \(\iff\)
+  \(m_{\calH}(N) = 2^N\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    There is a position of \(N\) points and a class assignment that you
+    can classify using \(h \in \calH\)
+  \item
+    It does not mean all sets of \(N\) points can be classified in any
+    way
+  \end{itemize}
+\item
+  \(k\) is a \textbf{\textcolor{blue}{break point}} for \(\calH\)
+  \(\iff m_{\calH}(k) < 2^k\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., no data set of size \(k\) can be shattered by \(\calH\)
+  \item
+    E.g.,
+
+    \begin{itemize}
+    \tightlist
+    \item
+      For 2D perceptron: a break point is 4
+    \item
+      For positive rays: a break point is 2
+    \item
+      For positive intervals: a break point is 3
+    \item
+      For convex set on a plane: there is no break point
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Break Point for an Hypothesis Set and Learning}
+\protect\phantomsection\label{break-point-for-an-hypothesis-set-and-learning}
+\begin{itemize}
+\item
+  If there is a break point for a hypothesis set \(\calH\), it can be
+  shown that:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(m_{\calH}(N)\) is polynomial in \(N\)
+  \item
+    Instead of Hoeffding's inequality for learning \[
+    \Pr(|E_{in}(g) - E_{out}(g)| > \varepsilon) \le 2 M e^{-2 \varepsilon^2 N}
+    \] you can use the Vapnik-Chervonenkis inequality: \[
+    \Pr(\text{bad generalization}) \le
+    4 m_\calH(2N) e^{-\frac{1}{8} \varepsilon^2 N}
+    \]
+  \item
+    Since \(m_{\calH}(N)\) is polynomial in \(N\), it will be dominated
+    by the negative exponential, given enough examples
+  \item
+    You can have a generalization bound: machine learning works!
+  \end{itemize}
+\item
+  A hypothesis set can be characterized from the learning point of view
+  by the \textbf{\textcolor{red}{existence and value of a break point}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Table of Content}
+\protect\phantomsection\label{table-of-content-2}
+\begin{itemize}
+\tightlist
+\item
+  Is Machine Learning Even Possible?
+\item
+  Growth Function
+\item
+  \emph{\textbf{\textcolor{red}{The VC Dimension}}}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{VC Dimension of an Hypothesis Set}
+\protect\phantomsection\label{vc-dimension-of-an-hypothesis-set}
+\begin{itemize}
+\item
+  The \textbf{\textcolor{red}{VC dimension of a hypothesis set}}
+  \(\calH\), denoted as \(d_{VC}(\calH)\), is defined as the largest
+  value of \(N\) for which \(m_{\calH}(N) = 2^N\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    I.e., the VC dimension is the most points \(\calH\) can shatter
+  \end{itemize}
+\item
+  \textbf{\textcolor{blue}{Properties}} of the VC dimension: if
+  \(d_{VC}(\calH) = N\) then
+
+  \begin{itemize}
+  \item
+    Exists a constellation of \(N\) points that can be shattered by
+    \(\calH\)
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Not all sets of \(N\) points can be shattered
+    \item
+      If \(N\) points were placed randomly, they could not be
+      necessarily shattered
+    \end{itemize}
+  \item
+    \(\calH\) can \emph{shatter} \(N\) points for any
+    \(N \le d_{VC}(\calH)\)
+  \item
+    The \emph{smallest break point} is \(d_{VC} - 1\)
+  \item
+    The \emph{growth function} in terms of the VC dimension is
+    \(m_{\calH} \le \sum_{i=0}^{d_{VC}} {N \choose i}\)
+  \item
+    The VC dimension is the \emph{order of the polynomial bounding}
+    \(m_{\calH}\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{VC Dimension: Interpretation}
+\protect\phantomsection\label{vc-dimension-interpretation}
+\begin{itemize}
+\item
+  The VC dimension \textbf{\textcolor{red}{measures the complexity}} of
+  a hypothesis set in terms of
+  \textbf{\textcolor{blue}{effective parameters}}
+\item
+  E.g.,
+
+  \begin{itemize}
+  \tightlist
+  \item
+    A perceptron in a \(d\)-dimensional space has \(d_{VC} = d + 1\)
+  \item
+    In fact \(d_{VC}\) is the number of perceptron parameters!
+  \item
+    E.g., for a 2D perceptron (\(d = 2\)), the break point is 2, so
+    \(d_{VC} = 3\)
+  \end{itemize}
+\item
+  The VC dimension considers the model as a black box in order to
+  estimate effective parameters
+
+  \begin{itemize}
+  \tightlist
+  \item
+    How many points \(N\) a model can shatter, not the number of
+    parameters
+  \end{itemize}
+\item
+  Not all parameters contribute to degrees of freedom
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., combining \(N\) 1D perceptrons gives \(2N\) parameters, but
+    the effective degrees of freedom remain 2
+  \end{itemize}
+\item
+  A complex hypothesis \(\calH\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Has more parameters (higher VC dimension \(d_{VC}\))
+  \item
+    Requires more examples for training
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{VC Generalization Bounds}
+\protect\phantomsection\label{vc-generalization-bounds}
+\begin{itemize}
+\item
+  How many data points are needed to obtain
+  \(\Pr(|E_{in} - E_{out}| > \varepsilon) \le \delta\)?
+\item
+  The VC inequality states \[
+  \Pr(\text{bad generalization}) \le
+    4 m_\calH(2N) e^{-\frac{1}{8} \varepsilon^2 N}
+  \]
+\end{itemize}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  \(N^d e^{-N}\) abstracts the upper bound term
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Plot \(N^d e^{-N}\) vs.~\(N\): Power dominates for small \(N\),
+    exponential for large \(N\) and brings it to 0
+  \item
+    Vary \(d\) (VC dimension) function peaks for larger \(N\), then
+    approaches the region of interest \(< 1\)
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L05.1.VC_Generalization_Bounds.png}}
+\end{column}
+\end{columns}
+
+\begin{columns}[T]
+\begin{column}{0.55\linewidth}
+\begin{itemize}
+\tightlist
+\item
+  Plot intersection of \(N^d e^{-N}\) with a probability as a function
+  of \(d\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Examples \(N\) needed are proportional to \(d\)
+  \item
+    Rule of thumb: \(N \ge 10 d_{VC}\) for generalization
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L05.1.VC_Generalization_Bounds2.png}}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{VC Generalization Bounds}
+\protect\phantomsection\label{vc-generalization-bounds-1}
+\begin{itemize}
+\item
+  The VC inequality \[
+  \Pr(|E_{in} - E_{out}| > \varepsilon) \le 
+    4 m_\calH(2N) e^{-\frac{1}{8} \varepsilon^2 N}
+  \] can be used in several ways to relate \(\varepsilon\), \(\delta\),
+  and \(N\), e.g.,
+\item
+  Examples
+
+  \begin{itemize}
+  \tightlist
+  \item
+    ``Given \(\varepsilon\) = 1\% error, how many examples \(N\) are
+    needed to get \(\delta = 0.05\)?''
+  \item
+    ``Given \(N\) examples, what's the probability of an error larger
+    than \(\varepsilon\)?''
+  \end{itemize}
+\item
+  You can equate \(\delta\) to
+  \(4 m_{\calH}(2N) e^{\frac{1}{8}\varepsilon^2 N}\) and solve for
+  \(\varepsilon\), getting \[
+  \Omega(N, \calH, \delta)
+  = \sqrt{\frac{8}{N} \ln \frac{4 m_{\calH}(2N)}{\delta}}
+  \]
+\item
+  Then you can say \(|E_{out} - E_{in}| \le \Omega(N, \calH, \delta)\)
+  with probability \(\ge 1 - \delta\)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    The generalization bounds are then:
+    \(\Pr(E_{out} \le E_{in} + \Omega) \ge 1 - \delta\)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{How to Void the VC Analysis Guarantee}
+\protect\phantomsection\label{how-to-void-the-vc-analysis-guarantee}
+\begin{columns}[T]
+\begin{column}{0.6\linewidth}
+\begin{itemize}
+\item
+  Consider the case where data is genuinely non-linear
+
+  \begin{itemize}
+  \tightlist
+  \item
+    E.g., ``o'' points in the center and ``x'' in the corners
+  \end{itemize}
+\item
+  Transform to high-dimensional \(\calZ\) with: \[
+  \Phi: \vx = (x_0, ... , x_d) \rightarrow \vz = (z_0, ... , z_{\tilde{d}})
+  \]
+\item
+  \(d_{VC} \le \tilde{d} + 1\); smaller \(\tilde{d}\) improves
+  generalization
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Use \(\vz = (1, x_1, x_2, x_1 x_2, x_1^2, x_2^2)\)
+  \item
+    Why not \(\vz = (1, x_1^2, x_2^2)\)?
+  \item
+    Why not \(\vz = (1, x_1^2 + x_2^2)\)?
+  \item
+    Why not \(\vz = (x_1^2 + x_2^2 - 0.6)\)?
+  \end{itemize}
+\end{itemize}
+\end{column}
+
+\begin{column}{0.35\linewidth}
+\pandocbounded{\includegraphics[keepaspectratio]{msml610/lectures_source/figures/L05.1.Void_VC_guarantee.png}}
+\end{column}
+\end{columns}
+
+\begin{itemize}
+\tightlist
+\item
+  Some model coefficients were zero and discarded, leaving machine
+  learning the rest
+
+  \begin{itemize}
+  \tightlist
+  \item
+    VC analysis is a warranty, forfeited if data is examined before
+    model selection (data snooping)
+  \item
+    From VC analysis, complexity is that of the initial hypothesis set
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\end{document}

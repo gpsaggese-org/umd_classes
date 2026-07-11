@@ -1,0 +1,7 @@
+- Look for TODOs in the code
+- Rank them in order of complexity / risk
+- Have user approve
+- Then iterate by filing GH bugs
+- Creating a fix
+- Regress
+- Open PR

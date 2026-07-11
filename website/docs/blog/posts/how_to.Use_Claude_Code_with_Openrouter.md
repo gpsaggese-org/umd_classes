@@ -99,21 +99,20 @@ enabling access to models from multiple providers through a single API.
     ```
   - Select the models to use for the different Claude Code tier (e.g., using
     OpenAI GPT-5 using OpenRouter)
-    ```
+    ```bash
     > export ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
     > export ANTHROPIC_DEFAULT_OPUS_MODEL=openai/gpt-5
     > export ANTHROPIC_DEFAULT_SONNET_MODEL=openai/gpt-5
     ```
-
+  - Unset the direct Anthropic key to avoid conflicts
     ```
-    # Unset the direct Anthropic key to avoid conflicts.
     > unset ANTHROPIC_API_KEY
     ```
 
 - Verify the environment is configured correctly:
 
     ```bash
-    > env | sort | grep ANT
+    > env | grep ANT | sort
     ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
     ANTHROPIC_BASE_URL=https://openrouter.ai/api
     ANTHROPIC_DEFAULT_HAIKU_MODEL=openai/gpt-5
@@ -125,59 +124,11 @@ enabling access to models from multiple providers through a single API.
 
 <!-- TODO(ai_gp): move to repo and point to it -->
 
-- Create a quick test script (`quick_test.py`):
-
-    ```python
-    import os
-    import sys
-    from anthropic import Anthropic
-
-    BASE_URL = os.environ["ANTHROPIC_BASE_URL"]
-    API_KEY = os.environ["ANTHROPIC_AUTH_TOKEN"]
-    MODEL = os.environ["ANTHROPIC_DEFAULT_HAIKU_MODEL"]
-
-    if not API_KEY:
-        print("ERROR: ANTHROPIC_AUTH_TOKEN is not set")
-        sys.exit(1)
-
-    print(f"Endpoint : {BASE_URL}")
-    print(f"Model    : {MODEL}")
-    print("Testing...\n")
-
-    try:
-        client = Anthropic(
-            api_key=API_KEY,
-            base_url=BASE_URL,
-        )
-
-        response = client.messages.create(
-            model=MODEL,
-            max_tokens=20,
-            messages=[
-                {
-                    "role": "user",
-                    "content": "Reply with exactly: API_OK"
-                }
-            ],
-        )
-
-        text = "".join(
-            block.text
-            for block in response.content
-            if getattr(block, "type", None) == "text"
-        )
-
-        print("SUCCESS")
-
-    except Exception as e:
-        print("FAILED")
-        sys.exit(2)
-    ```
-
-- Run the test:
+- Run the script `.claude/test_openrouter_api.py` to verify that OpenRouter
+  responds when using the Anthropic API
 
     ```bash
-    > python quick_test.py
+    > .claude/test_openrouter_api.py
     Endpoint : https://openrouter.ai/api
     Model    : openai/gpt-5
     Testing...
@@ -202,21 +153,17 @@ enabling access to models from multiple providers through a single API.
 - Verify the current configuration:
 
     ```bash
-    > env | grep ANTH
+    > env | grep ANTH | sort
+    ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
+    ANTHROPIC_BASE_URL=https://openrouter.ai/api
     ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek/deepseek-v4-flash
     ANTHROPIC_DEFAULT_OPUS_MODEL=anthropic/haiku-4.5
     ANTHROPIC_DEFAULT_SONNET_MODEL=anthropic/haiku-4.5
-    ANTHROPIC_BASE_URL=https://openrouter.ai/api
-    ANTHROPIC_AUTH_TOKEN=sk-or-v1-...
     ```
 
 ## Test Claude Code
 
 <!-- TODO(ai_gp): Show commands with /models /doctor -->
-
-- This repository also ships a `cc` wrapper script that automates the environment
-  variable setup for OpenRouter (see [The `cc` Convenience
-  Wrapper](draft.in_5_mins.helpers_cc.md))
 
 ### Verifying the Model in Claude Code
 
@@ -228,11 +175,11 @@ enabling access to models from multiple providers through a single API.
    ▐▛███▜▌   Claude Code v2.1.158
   ▝▜█████▛▘  deepseek/deepseek-v4-flash · API Usage Billing
     ▘▘ ▝▝    ~/src/xyz
-    ```
+  ```
 
-check which model is active with the `/model` command:
+- Check which model is active with the `/model` command:
 
-
+  ```
     ❯ /model
 
     Select model
@@ -264,5 +211,10 @@ check which model is active with the `/model` command:
     - **Model not found**: Check the exact model ID on OpenRouter's models page
       (e.g., `deepseek/deepseek-v4-flash`, not `deepseek-v4-flash`)
     - **Rate limiting**: OpenRouter applies rate limits per provider
-    - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter — it
+    - **Key conflicts**: Unset `ANTHROPIC_API_KEY` when using OpenRouter since it
       can conflict with `ANTHROPIC_AUTH_TOKEN`
+
+# Using cc
+- This repository also ships a `cc` wrapper script that automates the environment
+  variable setup for OpenRouter
+- See [The `cc` Convenience Wrapper](draft.in_5_mins.helpers_cc.md))
