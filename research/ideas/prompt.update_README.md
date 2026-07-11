@@ -10,3 +10,4 @@ Update the file `research/ideas/README.md` given the content of the directory
 - If a file was not modified, do not update its entry
 - If there are files in `research/ideas/*.md` that are not present in the table
   than create an entry filling up all the entries
+- Sort the rows by descending "Specs Complete"
