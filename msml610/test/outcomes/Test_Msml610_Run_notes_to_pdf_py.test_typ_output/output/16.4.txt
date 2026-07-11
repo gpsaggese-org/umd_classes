@@ -1,0 +1,704 @@
+// Pandoc Typst template producing Touying slides.
+//
+// Used by `notes_to_pdf.py --type slides --slides_engine typst`.
+//
+// - Pandoc maps markdown headings to Typst headings, e.g.,
+//   - `#` -> `=`
+//   - `####` -> `====`
+// - `config-common(slide-level: 4)` makes level-4 headings (`####`) start a
+//   new slide, mirroring the beamer `--slide-level 4` convention. Headings of
+//   level 1-3 become section/structure slides
+// - See https://github.com/touying-typ/touying
+#import "@preview/touying:0.6.1": *
+#import themes.simple: *
+
+#include "/helpers_root/dev_scripts_helpers/documentation/typst_abbrevs.typ"
+
+// Configure theme to match beamer's 4:3 aspect ratio.
+// Note: Touying's simple-theme controls page size internally;
+// exact beamer dimensions (362.835 x 272.126 pts) cannot be overridden.
+#show: simple-theme.with(
+  aspect-ratio: "4-3",
+  config-common(slide-level: 4),
+  subslide-preamble: block(below: 1em)[
+    #v(-0.6em)
+    #text(1.2em, weight: "bold", fill: rgb("#003366"),
+      utils.display-current-heading(level: 4))
+    #v(-0.5em)
+    #line(length: 100%, stroke: 2.0pt + rgb("#003366"))
+  ],
+  config-info(
+  ),
+)
+
+// Make the inline math font bigger.
+#show math.equation.where(block: false): set text(size: 1.15em)
+
+// Make the inline verbatim font bigger.
+#show raw.where(block: false): set text(size: 1.15em)
+
+// Styled table with zebra striping, lateral lines, and configurable width.
+#let styled-table(headers: (), rows: (), caption: none, col-widths: none, bold-first-col: true, size: 0.8em, width: 80%) = {
+  // TODO(ai_gp): Add explanation of parameters
+  let n = headers.len()
+  let widths = if col-widths != none { col-widths } else { (1fr,) * n }
+
+  // Zebra striping: alternate white and darker gray backgrounds on full rows
+  let processed-rows = rows.enumerate().map(((idx, row)) => {
+    let bg-color = if calc.rem(idx, 2) == 0 { white } else { rgb("#e8e8e8") }
+    if bold-first-col {
+      (
+        table.cell(fill: bg-color, text(fill: black, weight: "bold", row.at(0))),
+        ..row.slice(1).map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+      )
+    } else {
+      row.map(cell => table.cell(fill: bg-color, text(fill: rgb("#555555"), cell)))
+    }
+  })
+
+  text(size: size,
+    figure(
+      align(center,
+        block(width: width,
+          table(
+            columns: widths,
+            align: (left,) * n,
+            stroke: none,
+            table.vline(x: 0, stroke: 2pt),
+            table.hline(stroke: 2pt),
+            table.header(
+              ..headers.map(h => table.cell(fill: black, text(fill: white, weight: "bold", h)))
+            ),
+            table.hline(stroke: 1.5pt),
+            ..processed-rows.flatten(),
+            table.hline(stroke: 2pt),
+            table.vline(x: n, stroke: 2pt),
+          )
+        )
+      ),
+      kind: table,
+      caption: caption,
+    )
+  )
+}
+
+// Use DejaVu Sans (available in Alpine) with reduced size.
+// Applied AFTER theme to override theme defaults.
+#set text(font: "DejaVu Sans", size: 20pt, fill: black)
+#show heading: set text(font: "DejaVu Sans", size: 28pt)
+
+// Track list nesting depth with counter
+#let list-nesting = counter("list-nesting")
+
+// Use en-dashes for all bullet points (override default circle/triangle markers).
+#show list: set list(marker: "–")
+
+// Reduce font size for nested list levels.
+#show list: it => {
+  list-nesting.step()
+  let depth = list-nesting.get().first()
+  let size = if depth == 1 { 1em } else if depth == 2 { 0.95em } else { 0.90em }
+  set text(size: size)
+  [#it]
+  list-nesting.update(n => n - 1)
+}
+
+// Make footer text smaller.
+#let footer-text(body) = text(size: 0.8em, fill: black, body)
+
+
+====
+
+#slide[
+  #grid(
+    columns: (15%, 85%),
+    gutter: 0.15cm,
+    align(top + left)[#image("/msml610/lectures_source/figures/UMD_Logo.png", width: 4.0cm)],
+    align(left)[
+      #v(-0.1cm)
+      #text(size: 20pt)[MSML610: Advanced Machine Learning]
+    ]
+  )
+
+  #v(0.15cm)
+  #text(size: 24pt)[*#text(fill: blue)[Lesson 16.4: LLM Reasoning]*]
+
+  #v(0.1cm)
+  #text(size: 20pt)[Dr. GP Saggese (#link("mailto:gsaggese@umd.edu")[gsaggese\@umd.edu])]
+]
+==== Table of Content
+<table-of-content>
+- #text(fill: red, weight: "bold")[#emph[LLM Reasoning]]
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - Summary
+
+==== Table of Content
+<table-of-content-1>
+- LLM Reasoning
+  - #text(fill: red, weight: "bold")[#emph[Motivation: Why Reasoning Deserves Its Own Lesson]]
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - Summary
+
+==== Why Study LLM Reasoning?
+<why-study-llm-reasoning>
+- #text(fill: red, weight: "bold")[Motivation]: an agent is only as
+  reliable as the #emph[reasoning] that drives its control loop
+  - As we saw, the #text(fill: blue)[`Thought`] step is what chooses
+    each action
+  - A weak reasoner produces wasted actions, wrong plans, and
+    unrecoverable errors
+- #text(fill: blue, weight: "bold")[Question]: we have seen that models
+  #emph[can] reason step by step, but
+  - #emph[When] does that reasoning actually help?
+  - #emph[How robust] is it to irrelevant changes in the prompt?
+  - #emph[Can] a model check and fix its own reasoning?
+- This lesson looks #emph[inside] the reasoning step
+
+==== What Do We Mean by "Reasoning"?
+<what-do-we-mean-by-reasoning>
+- #text(fill: red, weight: "bold")[Definition]: #emph[reasoning] is
+  producing a conclusion through a chain of intermediate inferences,
+  each following from the previous ones
+  - Contrast with #emph[recall] (the answer is retrieved in a single
+    step)
+- #text(fill: green, weight: "bold")[Example]:
+  - Recall: #emph["What is the capital of France?"] $arrow.r$ direct
+    lookup
+  - Reasoning: #emph["If a train leaves at 2pm going 60mph…"] $arrow.r$
+    multiple dependent steps
+- #text(fill: blue, weight: "bold")[Key idea]: reasoning needs
+  #emph[serial depth];, several dependent steps that cannot be collapsed
+  into one
+  - For an LLM, those intermediate steps are made of #emph[tokens];, so
+    reasoning is literally text the model writes and then reads back
+
+==== Reasoning as Serial Computation: Recap and Beyond
+<reasoning-as-serial-computation-recap-and-beyond>
+- #text(fill: red, weight: "bold")[Recap]: a single forward pass is a
+  #emph[fixed-depth] circuit
+  - It cannot carry out an arbitrarily long chain of dependent steps in
+    one shot
+  - Writing tokens adds serial depth like further forward passes
+- #text(fill: green, weight: "bold")[Beyond the recap]: this raises four
+  questions
+  + Are there #emph[variants] of chain-of-thought that reason better?
+  + Does reasoning #emph[require] a special prompt, or is it latent in
+    the model?
+  + Why is reasoning #emph[brittle] to superficial changes like premise
+    order?
+  + Can a model #emph[self-correct] its own reasoning?
+- #text(fill: blue, weight: "bold")[Key idea]: #emph[capability] and
+  #emph[brittleness] are two sides of the same mechanism
+
+==== Table of Content
+<table-of-content-2>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - #text(fill: red, weight: "bold")[#emph[Chain-of-Thought and Its Variants]]
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - Summary
+
+==== Chain-of-Thought: Quick Recap
+<chain-of-thought-quick-recap>
+- #text(fill: red, weight: "bold")[Recap] #emph[Chain-of-thought] (CoT)
+  prompting (Wei et al., 2022) makes the model emit intermediate steps
+  before the answer
+
+  ```
+  prompt> Let's think step by step
+  ```
+
+- #text(fill: green, weight: "bold")[Key idea]: CoT trades extra tokens
+  (time) for extra reasoning depth
+
+  - Externalizes reasoning so it can be inspected and continued
+
+- #text(fill: blue, weight: "bold")[Question]: CoT is one recipe, but a
+  whole family grew around it
+
+  - What do the main variants change, and why?
+
+==== Why Does CoT Help? Two Hypotheses
+<why-does-cot-help-two-hypotheses>
+- #text(fill: red, weight: "bold")[Question]: is CoT giving the model
+  #emph[more computation];, or just a better #emph[prompt pattern];?
+
+  - #text(fill: green, weight: "bold")[Computation]: each step is a
+    forward pass, so CoT adds serial depth the architecture lacks
+
+  - #text(fill: blue, weight: "bold")[Elicitation]: the steps put the
+    model into a region of its distribution where the right facts and
+    format are more likely
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key idea]: both are partly
+  true
+
+  - Computation view: helps most on #emph[serial] tasks (e.g.,
+    arithmetic, multi-hop)
+  - Elicitation view: reasoning may be #emph[latent] and recoverable
+    without a prompt
+
+==== Zero-Shot vs.~Few-Shot CoT
+<zero-shot-vs.-few-shot-cot>
+- #text(fill: red, weight: "bold")[Definition]: #emph[zero-shot CoT]
+  adds only a trigger phrase (#emph["Let's think step by step"];) with
+  no worked examples
+
+- #text(fill: green, weight: "bold")[Definition]: #emph[few-shot CoT]
+  places a handful of worked examples (with their reasoning) in the
+  prompt before the target question
+
+  - Demonstrates both the format #emph[and] the reasoning style
+
+#styled-table(
+  headers: ("Variant", "Prompt cost", "When to prefer"),
+  rows: (
+    ("Zero-shot CoT", "Low (one phrase)", "General reasoning, cheap"),
+    ("Few-shot CoT", "High (examples)", "Format matters, niche task"),
+  ),
+)
+- #text(fill: blue, weight: "bold")[Key idea]: both rely on an explicit
+  textual trigger to #emph[switch on] reasoning, an assumption we
+  question in the next section
+
+==== Self-Consistency
+<self-consistency>
+- #text(fill: red, weight: "bold")[Problem]: a single CoT chain can take
+  one wrong turn and commit to it
+
+- #text(fill: green, weight: "bold")[Solution]: #emph[self-consistency]
+  (Wang et al., 2022)
+
+  + Sample #emph[many] reasoning chains with temperature $> 0$
+  + Extract the final answer from each
+  + Return the #emph[majority] answer (marginalize over reasoning paths)
+    $ hat(y) = arg sans("max")_y #h(0em) sum_i bb(1) \[ upright("answer") \( upright("chain")_i \) = y \] $
+
+- #text(fill: blue, weight: "bold")[Intuition]:
+
+  - Reasoning becomes a #emph[distribution];, not a single trace to
+    trust
+  - Many #emph[different] correct derivations reach the same answer
+  - Wrong derivations scatter across many different answers
+
+==== Search Over Reasoning: Tree and Graph of Thought
+<search-over-reasoning-tree-and-graph-of-thought>
+#grid(
+  columns: (50%, 45%),
+  gutter: 0.5em,
+  [
+  - #text(fill: red, weight: "bold")[Problem]: self-consistency samples
+    #emph[independent] chains and cannot revisit a promising partial path
+  
+  - #text(fill: green, weight: "bold")[Solution]: treat reasoning as
+    #emph[search] over a structure of partial thoughts
+  
+    - #emph[Tree-of-Thought];: branch into candidate steps, evaluate,
+      expand the best
+    - #emph[Graph-of-Thought];: allow merging and reuse of intermediate
+      results
+  
+  - #text(fill: blue, weight: "bold")[Key idea]: adds an explicit
+    #emph[evaluator] and #emph[backtracking] (that a linear chain lacks),
+    at the cost of many more model calls
+  ],
+  [
+  #box(image("/msml610/test/outcomes/Test_Msml610_Run_notes_to_pdf_py.test_typ_output/tmp.scratch/lesson_16.4/tmp.notes_to_pdf.preprocess_notes.txt.figs/tmp.notes_to_pdf.render_image.1.png"))
+  ]
+)
+==== CoT Variants: Comparison
+<cot-variants-comparison>
+#styled-table(
+  headers: ("Method", "Structure", "Aggregation", "Cost"),
+  rows: (
+    ("Zero/few-shot CoT", "Single chain", "None", "1 call"),
+    ("Self-consistency", "Many chains", "Majority vote", "K calls"),
+    ("Tree-of-Thought", "Tree + evaluator", "Best path", "Many calls"),
+  ),
+)
+- #text(fill: red, weight: "bold")[Key idea]: these are all
+  #emph[inference-time] techniques
+  - The variants trade #emph[compute] for #emph[reliability]
+  - More sampling and search reduce variance and catch wrong turns
+
+==== Table of Content
+<table-of-content-3>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - #text(fill: red, weight: "bold")[#emph[Reasoning Without Explicit Prompting]]
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - Summary
+
+==== Problem: Does Reasoning Require a Prompt?
+<problem-does-reasoning-require-a-prompt>
+- #text(fill: red, weight: "bold")[Question]:
+
+  - Every variant so far #emph[asks] the model to reason (through a
+    phrase or examples)
+  - Does reasoning even need an explicit CoT #emph[prompt];?
+  - Is step-by-step reasoning a capability #emph[created] by the prompt,
+    or one that is #emph[latent] and merely #emph[uncovered] by it?
+
+- #text(fill: green, weight: "bold")[Motivation]: if reasoning is
+  latent, prompt engineering is only #emph[one] way to access it, and
+  maybe not the best one
+
+- #text(fill: blue, weight: "bold")[Key idea] (Wang & Zhou, 2024): the
+  way we #emph[decode];, not the prompt, can be what hides the model's
+  reasoning
+
+==== Greedy Decoding Hides Reasoning
+<greedy-decoding-hides-reasoning>
+- #text(fill: red, weight: "bold")[Observation]: standard #emph[greedy]
+  decoding always takes the single most-likely first token
+  - For a math question, that token is often the final answer
+- #text(fill: green, weight: "bold")[Problem]: committing to that first
+  token can skip the reasoning entirely
+  - The model #emph[has] a reasoning path, but greedy decoding never
+    enters it
+- #text(fill: blue, weight: "bold")[Key idea]: the first token is a
+  #emph[fork in the road]
+  - One branch answers immediately (often wrong)
+  - Another branch starts a chain of thought
+
+==== CoT-Decoding: The Algorithm
+<cot-decoding-the-algorithm>
+- #text(fill: red, weight: "bold")[Input]: a question with a plain
+  prompt (no #emph["think step by step"];)
+
+- #text(fill: green, weight: "bold")[Algorithm] (#emph[CoT-decoding];):
+
+  + At the #emph[first] decoding step, take the #emph[top-$k$] candidate
+    tokens (not just the top-1)
+  + Continue greedy decoding from each of the $k$ alternatives
+  + This yields $k$ candidate completions, some containing a CoT
+  + Score each path by its answer confidence and pick the best
+
+- #text(fill: blue, weight: "bold")[Key idea]: branching only at the
+  first step is enough to #emph[surface] latent reasoning paths already
+  inside a pretrained model
+
+==== The Confidence Signal
+<the-confidence-signal>
+- #text(fill: red, weight: "bold")[Problem]: how to pick the reasoning
+  path among the $k$ without knowing the answer?
+
+- #text(fill: green, weight: "bold")[Solution]: measure the model's
+  #emph[confidence] in its final answer tokens
+
+  - Paths that contain a chain of thought show a #emph[larger
+    probability gap] between the top and second answer token
+    $ Delta_(upright("answer")) = Pr \( upright("token")_1 \) - Pr \( upright("token")_2 \) $
+
+- #text(fill: blue, weight: "bold")[Interpretation]: when the model has
+  #emph[reasoned];, it is more #emph[committed] to its answer, and
+  $Delta_(upright("answer"))$ is high
+
+  - The presence of CoT #emph[correlates] with answer confidence, giving
+    an unsupervised way to select the reasoning path
+
+==== CoT-Decoding: Findings and Implications
+<cot-decoding-findings-and-implications>
+- #text(fill: red, weight: "bold")[Findings] (Wang & Zhou, 2024):
+  - Reasoning paths are #emph[frequently] present among top-$k$
+    alternatives, even with no CoT prompt
+  - Selecting them by confidence recovers much of the accuracy of
+    prompted CoT
+  - Instruction tuning makes CoT easier to elicit but does not
+    #emph[create] the ability
+- #text(fill: blue, weight: "bold")[Interpretation]: reasoning is
+  (partly) an #emph[intrinsic] property of the pretrained model,
+  obscured by greedy decoding
+  - Yet this latent reasoning is fragile
+
+==== Table of Content
+<table-of-content-4>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - #text(fill: red, weight: "bold")[#emph[Premise Order and Brittleness]]
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - Summary
+
+==== Premise Order Matters: The Finding
+<premise-order-matters-the-finding>
+- #text(fill: red, weight: "bold")[Question]: does an LLM respect this
+  invariance, or does merely #emph[reordering] the same facts change its
+  answer?
+  - Robustness to irrelevant changes is a basic test of whether a model
+    #emph[reasons] or #emph[pattern-matches]
+- #text(fill: green, weight: "bold")[Fact]: in formal logic, the order
+  of premises is irrelevant
+  - ${ A \, B \, C } tack.r Q$ holds regardless of how $A \, B \, C$ are
+    listed
+- #text(fill: blue, weight: "bold")[Answer] (Chen et al., 2024): LLMs
+  are surprisingly #emph[sensitive] to premise order
+  - Reasoning is not fully logical
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Findings]:
+  - Take a reasoning problem and permute only the #emph[order] of its
+    premises, keeping the content identical
+  - Performance is #emph[best] when premise order matches the order
+    needed in the reasoning steps (the ground-truth proof order)
+  - Reordering causes a performance drop of #emph[over 30%] on deductive
+    tasks
+  - The model prefers to consume premises in the order it will
+    #emph[use] them, rather than searching for the relevant one
+  - A logically irrelevant change causes a large, systematic accuracy
+    loss
+
+==== Worked Example: Reordering Premises
+<worked-example-reordering-premises>
+- #text(fill: red, weight: "bold")[Example]: same facts, two orders
+
+#styled-table(
+  headers: ("Forward order (easy)", "Shuffled order (hard)"),
+  rows: (
+    ("If A then B", "If C then D"),
+    ("If B then C", "If A then B"),
+    ("If C then D", "If B then C"),
+    ("Given A, prove D", "Given A, prove D"),
+  ),
+)
+- #text(fill: green, weight: "bold")[Interpretation]: the left column
+  lets the model chain $A arrow.r B arrow.r C arrow.r D$ by reading top
+  to bottom
+  - The right column forces it to #emph[jump around] to find the next
+    usable premise
+- #text(fill: blue, weight: "bold")[Key idea]: extra "distance" between
+  where a premise sits and where it is needed degrades reasoning
+
+==== Measuring the Effect on Math (R-GSM)
+<measuring-the-effect-on-math-r-gsm>
+- #text(fill: red, weight: "bold")[Problem]: is premise-order
+  sensitivity limited to synthetic logic puzzles?
+
+- #text(fill: green, weight: "bold")[Solution]: #emph[R-GSM] (Chen et
+  al., 2024), a #emph[reordered] variant of the GSM8K grade-school math
+  benchmark
+
+  - Same problems, sentences reordered without changing the math
+
+- #text(fill: blue, weight: "bold")[Finding]: accuracy drops
+  #emph[significantly] on R-GSM versus GSM8K across models
+
+  - The effect grows with the number of premises to reorder
+  - Brittleness to order shows up on #emph[realistic] math word
+    problems, not just toy logic
+
+==== Why Order Matters: An Autoregressive Bias
+<why-order-matters-an-autoregressive-bias>
+- #text(fill: red, weight: "bold")[Question]: why should a left-to-right
+  model care about premise order?
+
+- #text(fill: blue, weight: "bold")[Interpretation]:
+
+  - As we know, attention and generation are "causal" (i.e., the model
+    builds its chain forward)
+  - It is easier to attend to the #emph[next] needed premise if it is
+    #emph[nearby and ahead];, not buried earlier or later
+  - Out-of-order premises force long-range, non-monotonic lookups the
+    model does poorly
+  - The same causal mechanism that #emph[enables] serial reasoning also
+    #emph[biases] it toward a particular input order
+
+==== Brittleness Beyond Order
+<brittleness-beyond-order>
+- #text(fill: red, weight: "bold")[Remark]: premise order is one of
+  several #emph[superficial] perturbations that break reasoning
+  - Irrelevant #emph[distractor] sentences added to a problem
+  - Renaming entities or changing surface wording
+  - Changing numeric values that should not affect the method
+- #text(fill: blue, weight: "bold")[Key idea]:
+  - A truly reasoning system would be invariant to all of these
+  - Current LLMs are only #emph[approximately] so
+  - Robustness, not raw accuracy, is the frontier for reasoning
+
+==== Table of Content
+<table-of-content-5>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - #text(fill: red, weight: "bold")[#emph[Serial Computation and Depth]]
+  - Limits of Self-Correction
+  - Summary
+
+==== The Depth Limit and CoT
+<the-depth-limit-and-cot>
+- #text(fill: red, weight: "bold")[Recap]:
+  - A constant-depth transformer is a highly #emph[parallel];,
+    fixed-depth circuit
+  - Without intermediate tokens, its per-token power is bounded
+  - It struggles with problems that are #emph[inherently serial]
+- #text(fill: blue, weight: "bold")[Question]: can we make this precise?
+  - #emph[Exactly] how much does chain-of-thought add to what a
+    transformer can compute?
+
+==== CoT Empowers Serial Computation: The Result
+<cot-empowers-serial-computation-the-result>
+- #text(fill: red, weight: "bold")[Theorem] (informal, Li et al., 2024):
+  consider constant-depth transformers with constant-bit precision
+  - #emph[Without] CoT: they can only solve problems in $sans(A C)^0$ (a
+    strict subset of $sans(T C)^0$), i.e., highly parallel problems
+  - #emph[With] $T$ steps of CoT: they can solve #emph[any] problem
+    computable by a Boolean circuit of size $T$
+- #text(fill: blue, weight: "bold")[Interpretation]:
+  - Adding $T$ reasoning tokens is like being handed a circuit with $T$
+    gates of #emph[serial] compute
+  - CoT does not just help empirically, it #emph[provably] enlarges the
+    class of solvable problems
+
+==== Intuition: Each Token Simulates One Gate
+<intuition-each-token-simulates-one-gate>
+- #text(fill: red, weight: "bold")[Intuition]: the model uses generated
+  tokens as a #emph[scratchpad] (a tape)
+  + Each CoT step writes one intermediate result as tokens
+  + Later steps #emph[attend] to earlier results and combine them
+  + $T$ steps simulate a size-$T$ computation, one gate at a time
+- #text(fill: green, weight: "bold")[Example]: tasks that are hard in
+  one pass but easy with CoT
+  - Composition of permutations
+  - Iterated squaring / modular arithmetic
+  - Evaluating a Boolean circuit step by step
+- #text(fill: blue, weight: "bold")[Fact]: #emph[Depth in time] (tokens)
+  supplies the extra power
+
+==== Trading Tokens for Depth
+<trading-tokens-for-depth>
+- #text(fill: red, weight: "bold")[Interpretation]: there is a
+  #emph[depth-for-tokens] trade-off
+  - A shallow model with a long CoT can match tasks that would otherwise
+    need a much deeper network
+- #text(fill: green, weight: "bold")[Consequences]:
+  - Serial tasks #emph[require] enough CoT tokens; truncating the
+    scratchpad caps capability
+  - "Answer immediately" prompts throw away exactly the resource serial
+    problems need
+  - Longer allowed reasoning (bigger token budget) is a genuine
+    #emph[capability] lever, not just style
+- #text(fill: blue, weight: "bold")[Key idea]: reasoning length is
+  compute
+  - But more compute does not imply the model can #emph[judge] its own
+    output, our last theme
+
+==== Table of Content
+<table-of-content-6>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - #text(fill: red, weight: "bold")[#emph[Limits of Self-Correction]]
+  - Summary
+
+==== Can Models Fix Their Own Mistakes?
+<can-models-fix-their-own-mistakes>
+- #text(fill: red, weight: "bold")[Motivation]: a natural idea for
+  reliability is to let the model #emph[review and revise] its own
+  answer
+
+  - #emph["Here is your answer; find any mistakes and correct them"]
+
+- #text(fill: orange, weight: "bold")[Definition]: #emph[intrinsic
+  self-correction] = the model critiques and revises using #emph[only]
+  its own capabilities, with no oracle label or tool
+
+- #text(fill: green, weight: "bold")[Question]: does this
+  #emph[intrinsic self-correction] (no external feedback, no ground
+  truth) actually improve reasoning?
+
+- #text(fill: teal, weight: "bold")[Finding] (Huang et al., 2023): with
+  no external feedback, self-correction #emph[does not] reliably improve
+  reasoning
+
+  - At times, performance #emph[degrades] after the model "corrects"
+    itself
+
+- #text(fill: rgb("#00FFFF"), weight: "bold")[Problem]: earlier
+  optimistic results often used #emph[oracle labels]
+
+  - The loop was stopped only when the answer became correct
+  - This #emph[leaks] the ground truth and hides the true (weak)
+    behavior
+  - Remove the oracle, and the gains largely disappear
+  - The model cannot tell #emph[which] of its answers was right
+
+- #text(fill: blue, weight: "bold")[Remark]: #emph[multi-agent debate]
+  and re-prompting mostly recover the benefit of #emph[self-consistency]
+  (sampling and voting), not a new correcting ability
+
+- #text(fill: rgb("#8B00FF"), weight: "bold")[Key idea]: verification,
+  not just generation, is the missing ingredient
+
+==== When Self-Correction Does Help
+<when-self-correction-does-help>
+- #text(fill: red, weight: "bold")[Solution]: self-correction works when
+  feedback is #emph[external] and #emph[reliable]
+
+  - A #emph[code interpreter] or unit tests (does it run and pass?)
+  - A #emph[search / retrieval] tool that supplies missing facts
+  - A separate #emph[verifier] trained to judge answers
+
+- #text(fill: green, weight: "bold")[Key idea]: the fix is to
+  #emph[ground] the correction signal, exactly the grounding lesson from
+  ReAct (Lesson 16.3)
+
+- #text(fill: blue, weight: "bold")[Remark]: how to #emph[build] these
+  signals?
+
+  - Inference-time techniques (self-debugging, verifier-guided search)
+  - Learning to reason from preference and verifiable rewards
+
+==== Table of Content
+<table-of-content-7>
+- LLM Reasoning
+  - Motivation: Why Reasoning Deserves Its Own Lesson
+  - Chain-of-Thought and Its Variants
+  - Reasoning Without Explicit Prompting
+  - Premise Order and Brittleness
+  - Serial Computation and Depth
+  - Limits of Self-Correction
+  - #text(fill: red, weight: "bold")[#emph[Summary]]
+
+==== LLM Reasoning: Summary and Open Questions
+<llm-reasoning-summary-and-open-questions>
+- #text(fill: red, weight: "bold")[Key takeaways]:
+  - Reasoning is #emph[serial computation] made of tokens; CoT and its
+    variants (self-consistency, tree search) trade compute for
+    reliability
+  - Reasoning is partly #emph[latent];: #emph[CoT-decoding] surfaces it
+    from top-$k$ first tokens with no prompt, selected by answer
+    confidence
+  - Reasoning is #emph[brittle];: reordering logically identical
+    premises drops accuracy over 30% (R-GSM), a sign of
+    pattern-matching, not pure logic
+  - CoT #emph[provably] adds power: $T$ reasoning steps let a
+    constant-depth transformer simulate a size-$T$ circuit (beyond
+    $sans(A C)^0$)
+  - Models #emph[cannot] yet self-correct reasoning intrinsically;
+    reliable correction needs an #emph[external] verifier
+- #text(fill: blue, weight: "bold")[Open questions]:
+  - How do we make reasoning #emph[robust] to superficial perturbations?
+  - How do we build reliable verifiers so agents can safely
+    self-correct?
+  - How do memory and planning extend single-shot reasoning across a
+    full loop?

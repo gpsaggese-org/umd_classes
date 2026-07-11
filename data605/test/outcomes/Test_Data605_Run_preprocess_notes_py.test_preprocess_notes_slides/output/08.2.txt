@@ -1,0 +1,526 @@
+---
+fontsize: 10pt
+---
+\let\emph\textit
+\let\uline\underline
+\let\ul\underline
+
+::: columns
+:::: {.column width=15%}
+![](data605/lectures_source/images/UMD_Logo.png)
+::::
+:::: {.column width=75%}
+
+\vspace{0.4cm}
+\begingroup \large
+UMD DATA605 - Big Data Systems
+\endgroup
+::::
+:::
+
+\vspace{1cm}
+
+\begingroup \Large
+**$$\text{\blue{08.2: Map Reduce}}$$**
+\endgroup
+
+\vspace{1cm}
+
+::: columns
+:::: {.column width=75%}
+- **Instructor**: Dr. GP Saggese, [\textcolor{blue}{\underline{gsaggese@umd.edu}}](gsaggese@umd.edu)
+
+- **References**
+  - Silbershatz: Chap 10
+  - Ghemawat et al.: _The Google File System_, 2003
+  - Dean et al.: _MapReduce: Simplified Data Processing on Large Clusters_, 2004
+::::
+:::: {.column width=20%}
+![](data605/lectures_source/images/Silberschatz_book.png)
+::::
+:::
+
+#### MapReduce: Overview
+
+- **\textcolor{red}{MapReduce programming model}**
+  - Inspired by functional programming (e.g., Lisp)
+  - Common pattern of parallel programming to process large number of records
+
+- **\textcolor{darkgreen}{Basic algorithm}**
+  - Apply \textcolor{blue}{\texttt{map()}} to each record
+  - Group results by key
+  - Apply \textcolor{blue}{\texttt{reduce()}} to results of \textcolor{blue}{\texttt{map()}}
+
+- **\textcolor{blue}{Example}**
+  - _Goal_: Sum length of all tuples in a document
+    - E.g.,
+      ```python
+      [() (a,) (a, b) (a, b, c)]
+      ```
+  - _map(function, set of values)_
+    - Apply function to each value (e.g., len)
+      ```python
+      map(len, [(), (a), (a, b), (a, b, c))]) -> [0, 1, 2, 3]
+      ```
+  - _reduce(function, set of values)_
+    - Combine values using a binary function (e.g., add)
+      ```python
+      reduce(add, [0, 1, 2, 3]) -> 6
+      ```
+
+#### MapReduce: Overview
+
+- **\textcolor{red}{Structure of computation}**
+  - _Read input_
+    - Sequentially or in parallel
+  - _Map_
+    - Extract / compute from records
+  - _Group by key_
+    - Sort and shuffle
+  - _Reduce_
+    - Aggregate, summarize, filter, transform
+  - _Write result_
+
+- **\textcolor{blue}{Division of responsibilities}**
+  - User specifies \textcolor{blue}{\texttt{map()}} and \textcolor{blue}{\texttt{reduce()}} functions to solve problem
+  - MapReduce framework (e.g., Hadoop, Spark) implements algorithm
+
+#### MapReduce: Word Count
+
+- **\textcolor{red}{Word Count}**
+  - "Hello world" of MapReduce
+  - Huge text file (can't fit in memory)
+  - Count occurrences of each distinct word
+
+::: columns
+:::: {.column width=60%}
+- **\textcolor{darkgreen}{Linux solution}**
+  \begingroup \small \color{blue}
+  ```bash
+  > more doc.txt
+  One a penny, two a penny, hot cross buns.
+  > words doc.txt | sort | uniq -c
+  a 2
+  buns 1
+  cross 1
+  ...
+  ```
+  \endgroup
+  - \textcolor{blue}{\texttt{words}} outputs words one per line
+  - Unix pipeline is parallelizable in MapReduce sense
+::::
+:::: {.column width=35%}
+
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_25_image_1.png){width=80%}
+
+::::
+:::
+
+- **\textcolor{blue}{Sample application}**
+  - Analyze web server logs for popular URLs
+
+
+#### MapReduce: Word Count
+::: columns
+:::: {.column width=30%}
+
+**\textcolor{red}{Action}**
+\vspace{0.15cm}
+\footnotesize
+```
+Read input
+```
+
+\vspace{0.15cm}
+
+```
+Map:
+```
+- Invoke **\textcolor{orange}{map}**() on each input record
+- Emit 0 or more output data items
+
+\vspace{0.5cm}
+
+```
+Group by key:
+```
+- Gather all outputs from **\textcolor{darkgreen}{map}**() stage
+- Collect outputs by keys
+
+\vspace{0.2cm}
+
+```
+Reduce:
+```
+- Combine the list of outputs with same keys
+
+::::
+:::: {.column width=30%}
+**\textcolor{teal}{Python code}**
+\vspace{0.15cm}
+\footnotesize
+
+```python
+values = read(file_name)
+```
+
+\vspace{0.15cm}
+
+```python
+def map(values):
+  # values: words in document
+  for word in values:
+		emit(word, 1)
+```
+
+\vspace{0.4cm}
+
+```python
+def reduce(key, values):
+   # key: a word
+   # value: a list of counts
+   result = 0
+   # result = sum(values)
+   for count in values:
+	result += count
+   emit(key, result)
+```
+::::
+:::: {.column width=30%}
+**\textcolor{cyan}{Example}**
+
+\vspace{0.15cm}
+
+\begingroup \footnotesize \color{blue}
+```
+"One a penny, two a penny,
+hot cross buns."
+```
+\endgroup
+
+\footnotesize
+```
+Map:
+```
+\begingroup \tiny \color{blue}
+```python
+  [("one", 1), ("a", 1),
+  ("penny", 1),("two", 1),
+  ("a", 1), ("penny", 1),
+  ("hot", 1), ("cross", 1),
+  ("buns", 1)]
+```
+\endgroup
+
+\vspace{0.5cm}
+
+```
+Group by key:
+```
+\begingroup \tiny \color{blue}
+```python
+  [("a", [1, 1]),
+  ("buns", [1]),
+  ("cross", [1]),
+  ("hot", [1]),
+  ("one", [1]),
+  ("penny", [1, 1]),
+  ("two", [1])]
+```
+\endgroup
+
+```
+Reduce:
+```
+\begingroup\tiny\color{blue}
+```python
+  [("one", 1),
+  ("a", 2),
+  ("penny", 2),
+  ("two", 1),
+  ("hot", 1),
+  ("cross", 1),
+  ("buns", 1)]
+```
+\endgroup
+::::
+:::
+
+#### MapReduce: Log Processing
+::: columns
+:::: {.column width=60%}
+- **\textcolor{red}{Goal}**:
+  - Log file records website access \textcolor{blue}{\texttt{(date, hour, filename)}}
+  - Count file accesses in Feb 2013
+
+- **\textcolor{orange}{Input}**
+  - Read file, split into lines
+
+- **\textcolor{darkgreen}{Map}**
+  - Parse line into 3 fields
+  - If date is in interval, \textcolor{blue}{\texttt{emit(dir\_name, 1)}}
+
+- **\textcolor{teal}{GroupBy}**
+  - Reduce key: filename
+  - Accumulate \textcolor{blue}{\texttt{(key, value)}} with same filename
+
+- **\textcolor{cyan}{Reduce}**
+  - Sum values for each \textcolor{blue}{\texttt{(key, value)}} list with same filename
+  - Output file access count
+
+- **\textcolor{blue}{Output}**
+  - Write results to disk, newline-separated
+
+::::
+:::: {.column width=40%}
+\scriptsize
+_After Input_
+```
+2013/02/21 10:31:22.00EST  /slide-dir/11.ppt
+2013/02/21 10:43:12.00EST  /slide-dir/12.ppt
+2013/02/22 18:26:45.00EST  /slide-dir/13.ppt
+2013/02/22 18:26:48.00EST  /exer-dir/2.pdf
+2013/02/22 18:26:54.00EST  /exer-dir/3.pdf
+2013/02/22 20:53:29.00EST  /slide-dir/12.ppt
+```
+
+_After Map_
+```python
+['/slide-dir/11.ppt', 1), ...)]
+```
+\vspace{0.2cm}
+_After GroupBy_
+
+```python
+[('/slide_dir/11.ppt', 1), ...,
+('/slide-dir/12.ppt', [1, 1]), ...]
+```
+\vspace{0.2cm}
+
+_After Reduce_
+```python
+[('/slide_dir/11.ppt', 1), ...,
+('/slide-dir/12.ppt', 2), ...]
+```
+\vspace{0.2cm}
+
+_Output_
+```
+/slide_dir/11.ppt 1
+...
+/slide-dir/12.ppt 2
+...
+```
+::::
+:::
+
+#### MapReduce: Interfaces
+- **\textcolor{red}{Input}**: Read key-value pairs \textcolor{blue}{\texttt{List[Tuple[k, v]]}}
+
+- **\textcolor{orange}{Programmer}** specifies two methods \textcolor{blue}{\texttt{map}} and \textcolor{blue}{\texttt{reduce}}
+
+- **\textcolor{darkgreen}{Map}**
+  - \textcolor{blue}{\texttt{Map(Tuple[k, v]) $\rightarrow$ List[Tuple[k, v]]}}
+  - Take a key-value pair and output a set of key-value pairs
+    - E.g., key is a file, value is occurrences
+    - "One a penny" $\to$ \textcolor{blue}{\texttt{[("One", 1), ("a", 1), ("penny", 1)]}}
+  - One \textcolor{blue}{\texttt{Map}} call for every \textcolor{blue}{\texttt{(k, v)}} pair
+
+- **\textcolor{teal}{GroupBy}**
+  - \textcolor{blue}{\texttt{GroupBy(List[Tuple[k, v]]) $\rightarrow$ List[Tuple[k, List[v]]]]}}
+  - Group and optionally sort records with the reduce key
+
+- **\textcolor{cyan}{Reduce}**
+  - \textcolor{blue}{\texttt{Reduce(Tuple[k, List[v]]) $\rightarrow$ Tuple[k, v]}}
+  - Reduce all values \textcolor{blue}{\texttt{v'}} with same key \textcolor{blue}{\texttt{k'}}
+  - One \textcolor{blue}{\texttt{Reduce}} call per unique key \textcolor{blue}{\texttt{*k'}}
+
+- **\textcolor{blue}{Output}**: Write key-value pairs \textcolor{blue}{\texttt{List[Tuple[k, v]]}}
+
+#### MapReduce: Data Flow
+- Focusing on MapReduce flow of the data to expose the parallelism
+
+::: columns
+:::: {.column width=60%}
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_32_image_1.png){width=110%}
+::::
+:::: {.column width=40%}
+- **\textcolor{red}{Input}**
+- **\textcolor{darkgreen}{Map}**
+  - $mk_i$ = map keys
+  - $mv_i$ = map values
+- **\textcolor{blue}{GroupBy}**
+  - Shuffle / collect the data
+- **\textcolor{violet}{Reduce}**
+  - $rk_i$ = reduce keys
+  - $rv_i$ = reduce values
+  - Reduce outputs are not shown
+::::
+:::
+\hspace{0.5cm}
+Input
+\hspace{1.5cm}
+Map
+\hspace{0.5cm}
+GroupBy
+\hspace{0.5cm}
+Reduce
+
+#### MapReduce: Parallel Data Flow
+::: columns
+:::: {.column width=55%}
+
+- **\textcolor{red}{User program}** specifies map/reduce code
+  - _MasterNode_ sends code to all computing nodes
+  - _Machines_ reused for multiple computations (\textcolor{blue}{\texttt{Map}}, \textcolor{blue}{\texttt{Reduce}}) at different
+    times
+  - All operations use HDFS as storage
+
+::::
+:::: {.column width=40%}
+
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_33_image_1.png)
+
+::::
+:::
+
+\small
+
+- **\textcolor{darkgreen}{Map}**
+  - _n_ data chunks to process
+  - Functions executed in parallel on _k_ machines
+  - Output data saved on disk
+
+- **\textcolor{blue}{GroupBy / Sort}**
+  - Output data sorted and partitioned by reduce key
+  - Files created for each \textcolor{blue}{\texttt{Reduce}} task
+
+- **\textcolor{violet}{Reduce}**
+  - Functions executed in parallel on multiple machines
+  - Each works on part of the data
+  - Output data saved on disk
+
+#### MasterNode Responsibilities
+::: columns
+:::: {.column width=50%}
+
+- _MasterNode_ **\textcolor{red}{coordinates / schedule tasks}**
+  - Task status: idle, in-progress, completed
+  - Schedule idle tasks as workers become available
+  - \textcolor{blue}{\texttt{Map}} task completion sends location and sizes of intermediate files to
+    Master
+  - Master informs \textcolor{blue}{\texttt{Reduce}} tasks
+  - Schedule idle \textcolor{blue}{\texttt{Reduce}} tasks
+
+- _MasterNode_ **\textcolor{blue}{pings workers to detect failures}**
+  - Heartbeat
+::::
+:::: {.column width=50%}
+![](data605/lectures_source/images/lecture_8_1/lec_8_1_slide_34_image_1.png)
+::::
+:::
+
+#### Dealing with Failures
+
+- **\textcolor{red}{Map worker failure}**
+  - Reset failed map tasks to idle
+  - Notify reduce workers when task is rescheduled
+
+- **\textcolor{darkgreen}{Reduce worker failure}**
+  - Reset in-progress tasks to idle
+  - Restart reduce task
+
+- **\textcolor{blue}{Master failure}**
+  - Abort MapReduce task
+  - Notify client
+
+#### How Many \textcolor{blue}{\texttt{Map}} and \textcolor{blue}{\texttt{Reduce}} Jobs?
+- Number of:
+  - Map tasks: $M$
+  - Reduce tasks: $R$
+  - Worker nodes: $N$
+
+- Typically $M \gg N$
+  - Pros:
+    - Improve dynamic load balancing
+    - Speed up recovery from worker failures
+  - Cons:
+    - More communication between _MasterNode_ and _WorkerNodes_
+    - Lots of smaller files
+
+- Typically $R > N$
+
+- Usually $R < M$, output is spread across fewer files
+
+#### Refinements: Backup Tasks
+- **\textcolor{red}{Problem}**
+  - Slow workers significantly lengthen the job completion time
+  - Slow workers due to:
+    - Older processor
+    - Not enough RAM
+    - Other jobs on the machine
+    - Bad disks
+    - OS thrashing / virtual memory hell
+
+- **\textcolor{darkgreen}{Solution}**
+  - Near the end of \textcolor{blue}{\texttt{Map}} / \textcolor{blue}{\texttt{Reduce}} phase
+    - Spawn backup copies of tasks
+    - Whichever one finishes first "wins"
+
+- **\textcolor{blue}{Result}**
+  - Shorten job completion time
+
+#### Refinement: Combiners
+- **\textcolor{red}{Problem}**
+  - Often a \textcolor{blue}{\texttt{Map}} task produces many pairs for the same key \textcolor{blue}{\texttt{k}}
+    ```python
+    [(k1, v1), (k1, v2), ...]
+    ```
+  - E.g., common words in the word count example
+  - Increase complexity of the \textcolor{blue}{\texttt{GroupBy}} stage
+
+- **\textcolor{darkgreen}{Solution}**
+  - Pre-aggregate values in the \textcolor{blue}{\texttt{Map}} with a \textcolor{blue}{\texttt{Combine}}
+    ```python
+    [k1, (v1, v2, ...), k2, ([...])]
+    ```
+  - \textcolor{blue}{\texttt{Combine}} is usually the same as the \textcolor{blue}{\texttt{Reduce}} function
+  - Works only if \textcolor{blue}{\texttt{Reduce}} function is commutative and associative
+
+- **\textcolor{blue}{Result}**
+  - Better data locality
+  - Less shuffling and reordering
+  - Less network / disk traffic
+
+#### Refinement: Partition Function
+- **\textcolor{red}{Problem}**
+  - Users want to control key partitioning
+  - Inputs to \textcolor{blue}{\texttt{Map}} tasks created by contiguous input file splits
+  - Default partition function: \textcolor{blue}{\texttt{hash(key) mod R}}
+  - Ensure records with the same intermediate key go to the same worker
+
+- **\textcolor{blue}{Solution}**
+  - Override hash function:
+  - E.g., \textcolor{blue}{\texttt{hash(hostname(URL)) mod R}} ensures URLs from a host end up in the
+    same output file
+
+#### Implementations of MapReduce
+- There are many implementations of MapReduce:
+  - **\textcolor{red}{Google}**
+    - Proprietary implementation
+  - **\textcolor{orange}{Hadoop}**
+    - Open-source in Java
+    - Uses HDFS for storage
+    - Used by Yahoo, Facebook for large-scale data processing
+  - **\textcolor{darkgreen}{Amazon Elastic MapReduce (EMR)}**
+    - Hadoop MapReduce on Amazon EC2
+    - Supports Spark, HBase, Hive, other big data frameworks
+    - Used for processing large datasets on AWS
+  - **\textcolor{teal}{Spark}**
+    - Open-source cluster-computing framework
+    - Known for speed, ease of use
+    - Used by Netflix for real-time analytics
+  - **\textcolor{cyan}{Dask}**
+    - Parallel computing with task scheduling
+    - Integrates with Python's ecosystem
+    - Suitable for large datasets on a single machine or cluster

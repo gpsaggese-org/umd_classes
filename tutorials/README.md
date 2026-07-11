@@ -35,12 +35,11 @@
 
 - Edit `tutorials/${PROJ}/${PROJ}.py`
 
-
 ## Create Notebook about API intro
 
 - Create a short README for the blog:
   ```
-  claude> /notebook.create_api_intro ... https://....html and save it in tutorials/${PROJ}/${PROJ}.01.API.XYZ.ipynb
+  claude> /notebook.create_api_intro https://....html and save it in tutorials/${PROJ}/${PROJ}.01.API.XYZ.ipynb
   ```
 - The file is `.claude/skills/notebook.create_api_intro/SKILL.md`
 
@@ -77,8 +76,12 @@
   > docker_cmd.sh "python /git_root/tutorials/pgmpy/probabilistic_inference.py"
   ```
 
+## 
 - Edit and improve the notebook
   ```
   > docker_jupyter.sh
-  http://localhost:8888/lab/tree/git_root/tutorials/pgmpy/probabilistic_inference.ipynb
+  > docker_jupyter_port_forward.sh umd_project_ml_explainability.jupyter <PORT>
+  Open http://localhost:8889/lab
   ```
+
+
