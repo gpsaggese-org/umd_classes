@@ -33,6 +33,18 @@
   - Ranks them by simplicity
   - Create a branch, PR, run tests and merge
 
+##
+
+Create a script to apply a skill to a set of files
+
+Is there anything already?
+
+apply_cc_skill.py --skill ... or --rule ... --files ...
+
+Do it in parallel
+
+Fix the output
+
 # #############################################################################
 # IN PROGRESS
 # #############################################################################
@@ -41,11 +53,16 @@
 
 ### [.] Improve pytest_failed.py as pytest_failed_multi_build.py
 
+Short tests
+
+> pytest_multi_build.py --target dev_scripts_helpers/documentation/test/test_split_text_in_chapters.py
 > pytest_multi_build.py --target dev_scripts_helpers/documentation/test/
 generates `tmp.pytest_multi_build.<build_name>.txt`
 
+Run for a single build
 pytest_failed.py -i tmp.pytest_multi_build.apple.txt
 
+Run for all builds
 > pytest_failed_multi_build.py
 generates `tmp.pytest_failed.<build_name>.<tag>.txt` for each build
 and then 
@@ -142,10 +159,16 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
 - [.] book.Agentic_AI/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.10
-- [ ] book.springer/lectures_source/Lesson01.11
+  -> Reading the RHLF book before continuing
+- [ ] book.Agentic_AI/lectures_source/Lesson01.09
+- [ ] book.Agentic_AI/lectures_source/Lesson01.10
+- [ ] book.Agentic_AI/lectures_source/Lesson01.11
   > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
+
+## RHLF Book
+
+- notes/math.rlhfbook.txt
+  - Chap 6
 
 ## Content Summarization
 
