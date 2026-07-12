@@ -5,39 +5,86 @@ Each category shows concrete examples and key solution algorithms.
 
 ## Structural Dimensions Overview
 
-Decision-making problems vary along **10 orthogonal dimensions**:
-- **Observability**: What information is available to the agent
-  - Full (MDP) ← → Partial (POMDP) ← → Hidden/Noisy
-- **Time Horizon**: Planning window and reward accumulation
-  - One-step ← → Multi-step (finite) ← → Infinite (discounted)
-- **Action Space**: Structure of available decisions
-  - Discrete ← → Continuous ← → Hybrid (mixed)
-- **Multi-Agent**: Number and objectives of decision-makers
-  - Single-agent ← → Multi-agent (cooperative/competitive/mixed)
-- **Information Structure**: Symmetry and knowledge distribution
-  - Perfect info ← → Imperfect info ← → Asymmetric
-- **Model Availability**: Access to world model/dynamics
-  - Model-based ← → Model-free ← → Hybrid
-- **Update Mechanism**: When and how learning occurs
-  - Online ← → Batch ← → Replay-based
-- **Solution Concept**: How policy is represented/optimized
-  - Value-based ← → Policy-based ← → Actor-Critic ← → Search
-- **Optimality Criterion**: Policy structure and goal
-  - Deterministic ← → Stochastic; Optimal ← → Approximate
-- **Scalability**: State/action space size and representation
-  - Tabular ← → Linear FA ← → Deep NN
+Decision-making problems vary along 10 _orthogonal dimensions_:
+
+- _Observability_: What information is available to the agent
+  - Full (MDP): Agent observes complete state; all needed information available
+    each step
+  - Partial (POMDP): Observations don't uniquely determine state; must maintain
+    belief state
+  - Hidden/Noisy: Environment has hidden state; observations are
+    corrupted/stochastic
+  
+- _Time Horizon_: Planning window and reward accumulation
+  - One-step: Optimize immediate reward only (greedy decisions)
+  - Multi-step (finite): Consider consequences over fixed lookahead horizon
+  - Infinite (discounted): Long-term optimization with discount factor $\gamma$
+  
+- _Action Space_: Structure of available decisions
+  - Discrete: Finite set of actions (can enumerate)
+  - Continuous: Action space $\mathcal{R}^n$ (uncountably infinite)
+  - Hybrid (mixed): Some actions discrete, some continuous
+  
+- _Multi-Agent_: Number and objectives of decision-makers
+  - Single-agent: One decision-maker, one objective -> no strategic interaction
+  - Cooperative: Multiple agents, shared objective -> must coordinate
+  - Competitive/Mixed: Agents with conflicting or mixed objectives; game theory
+    applies
+  
+- _Information Structure_: Symmetry and knowledge distribution
+  - Perfect info: All players know all relevant information
+  - Imperfect info: Players have asymmetric or hidden information
+  - Asymmetric: Players have fundamentally different information sets and
+    capabilities
+  
+- _Model Availability_: Access to world model/dynamics
+  - Model-based: Agent has (or learns) transition model $p(s'|s,a)$ and reward
+    $r(s,a)$
+  - Model-free: Agent learns directly from experience; no explicit model
+  - Hybrid: Learns approximate model or uses model selectively
+  
+- _Update Mechanism_: When and how learning occurs
+  - Online: Agent learns and acts in real-time; single trajectory
+  - Batch: Agent trains on fixed dataset; replay or offline learning
+  - Replay-based: Agent stores experiences and replays for training
+  
+- _Solution Concept_: How policy is represented/optimized
+  - Value-based: Learn state or state-action values; derive policy from values
+  - Policy-based: Learn policy directly without explicit value function
+  - Actor-Critic: Combine value function and policy learning
+  - Search: Use tree search or planning to find optimal actions
+  
+- _Optimality Criterion_: Policy structure and goal
+  - Deterministic: Policy outputs single action per state
+  - Stochastic: Policy outputs probability distribution over actions
+  - Optimal: Find best possible policy (exact or approximate)
+  - Approximate: Satisfice with good-enough policy; bounded suboptimality
+    acceptable
+  
+- _Scalability_: State/action space size and representation
+  - Tabular: |S| and |A| small enough for lookup tables (<10k states)
+  - Linear FA: Medium-scale; use linear function approximation V(s) = w·φ(s)
+  - Deep NN: Large/high-dimensional; use deep neural networks
 
 ## 1. Observability: Full Vs. Partial
 
 ### 1A. Fully Observable (MDP)
 
-Agent sees complete state; all needed information available each step
+- **Setup**:
+  - Agent sees complete state
+  - All needed information available each step
 
-- **Example: Tic-Tac-Toe**
+- **Example**: Tic-Tac-Toe
   - Board state fully visible to both players
   - All moves and outcomes deterministic and known
   - Perfect information game
-- **Algorithms**: Q-Learning, SARSA, Value Iteration, Policy Iteration, MCTS
+
+- **Algorithms**:
+  - Q-Learning
+  - SARSA
+  - Value Iteration
+  - Policy Iteration
+  - MCTS
 
 ### 1B. Partially Observable (POMDP)
 
