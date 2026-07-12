@@ -72,6 +72,21 @@ and then
 ./dev_scripts_helpers/testing/pytest_failed_multi_build.py ./dev_scripts_helpers/testing/pytest_failed.py ./dev_scripts_helpers/testing/pytest_multi_build.py
 ./dev_scripts_helpers/testing/test/test_pytest_failed_multi_build.py ./dev_scripts_helpers/testing/test/test_pytest_failed.py ./dev_scripts_helpers/testing/test/test_pytest_multi_build.py
 
+ /pytest.triage_local_unit_tests tmp.pytest_failed_multi_build.repro.sh
+
+Fix group
+
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_build_tag
+
+tmp.pytest_failed_multi_build.repro.sh
+
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_build_tag
+
+tmp.pytest_failed_multi_build.repro.sh
+
+### [ ] Why there are two updated?
+Updated:    2/3346
+
 ### [ ] Why there are two updated?
 Updated:    2/3346
 
