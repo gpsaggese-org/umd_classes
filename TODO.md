@@ -84,11 +84,14 @@ pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_bu
 
 tmp.pytest_failed_multi_build.repro.sh
 
-### [ ] Why there are two updated?
-Updated:    2/3346
+## Improve unit test
 
 ### [ ] Why there are two updated?
 Updated:    2/3346
+
+### [ ] pass regex
+expected = "Version: ImageMagick 7.1.2-\S+ Q16-HDRI aarch64 24116 https://imagemagick.org"
+self.assert_equal(..., regex=True)
 
 ### [ ] Print the files that have been updated in hunit_test.py
 - Add report in files
