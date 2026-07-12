@@ -2,42 +2,30 @@
 
 ## Status
 Prefixes: draft | in_progress | done
--->
+
 **Status:** draft
 **Complete Specs:** 0-100%
 **Assignee:**: ...
 
-<!--
-INSTRUCTIONS (remove before saving):
-- Sections marked [REQUIRED] must always be filled in.
-- Sections marked [OPTIONAL] can be deleted if not applicable.
-- Two templates follow this header:
-    A) Theory / Draft Sketch — for early-stage mathematical or conceptual ideas
-    B) Full Research Project — for concrete, data-driven research projects
-  Delete the template variant you are NOT using.
--->
-
----
-
 # Template A: Theory / Draft Sketch
 
-<!--
-Use this variant for early-stage mathematical or conceptual ideas,
-learning theory papers, algorithm proposals, etc.
--->
+// Use this variant for early-stage mathematical or conceptual ideas, // learning
+theory papers, algorithm proposals, etc.
 
 ## Core Idea [REQUIRED]
 
-[1–2 paragraphs. What is the central insight or hypothesis? What problem does it
-solve? Why is it non-obvious or interesting?]
+- 1–2 paragraphs
+- What is the central insight or hypothesis?
+- What problem does it solve?
+- Why is it non-obvious or interesting?
 
 ## Formalization [OPTIONAL]
 
-[Mathematical notation, definitions, or pseudocode. Use LaTeX where helpful.]
-
-```
-VC_eff = VC(H) + log(N_strategies_tested)
-```
+- Mathematical notation, definitions, or pseudocode
+- Use LaTeX where helpful
+  ```
+  VC_eff = VC(H) + log(N_strategies_tested)
+  ```
 
 ## Key Examples [REQUIRED]
 
@@ -62,14 +50,10 @@ VC_eff = VC(H) + log(N_strategies_tested)
 - [Author(s) (Year). _Title_. Venue. URL]
 - Derived from [source document or prior work]
 
----
-
 # Template B: Full Research Project
 
-<!--
-Use this variant for concrete, data-driven research projects with datasets,
-tasks, and deliverables (causal inference, ML benchmarking, empirical studies).
--->
+// Use this variant for concrete, data-driven research projects with datasets,
+// tasks, and deliverables (causal inference, ML benchmarking, empirical studies).
 
 ## Description [REQUIRED]
 
@@ -138,18 +122,14 @@ Who benefits? What causal, empirical, or modeling approach is used?]
 - [Resource title](url) — [One-line description]
 - [Resource title](url) — [One-line description]
 
----
-
 # Deep Research
 
-<!--
-This section is populated by the deep-research skill or manual literature
-review. Fill in subsections as the research matures.
--->
+// This section is populated by the deep-research skill or manual literature
+// review. Fill in subsections as the research matures.
 
 ## Abstract
 
-[Summary of empirical or theoretical literature relevant to this idea.]
+Summary of empirical or theoretical literature relevant to this idea.
 
 ## Introduction
 
@@ -196,6 +176,7 @@ Reference: [Author(s) (Year). _Title_. Venue. URL]
 
 ### Control Variables
 
+-->
 - [Confounder 1]
 - [Confounder 2]
 

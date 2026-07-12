@@ -5,8 +5,8 @@
 - There are too many failures across multiple builds
   - Do not add more code but focus on getting to a stable build
   - Disable the failing tests
-  - Merge `gp_scratch_29`
-  - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
+  - [.] Merge `gp_scratch_29`
+  - [.] Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
 > export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
 > export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
@@ -39,15 +39,25 @@
 
 ## pytest_failed
 
-### [.] Improve pytest_failed.py
+### [.] Improve pytest_failed.py as pytest_failed_multi_build.py
 
-- Accept multiple files and create a single table
-pytest_failed.py -i ...
+> pytest_multi_build.py --target dev_scripts_helpers/documentation/test/
+generates `tmp.pytest_multi_build.<build_name>.txt`
+
+> pytest_failed_multi_build.py
+generates `tmp.pytest_failed.<build_name>.<tag>.txt` for each build
+and then 
+`tmp.pytest_failed_multi_build.failed_tests.txt`
+`tmp.pytest_failed_multi_build.repro.sh`
+
+./dev_scripts_helpers/testing/pytest_failed_multi_build.py ./dev_scripts_helpers/testing/pytest_failed.py ./dev_scripts_helpers/testing/pytest_multi_build.py ./dev_scripts_helpers/testing/pytest_utils.py
+
+./dev_scripts_helpers/testing/test/test_pytest_failed_multi_build.py ./dev_scripts_helpers/testing/test/test_pytest_failed.py ./dev_scripts_helpers/testing/test/test_pytest_multi_build.py
 
 ### [ ] Why there are two updated?
 Updated:    2/3346
 
-### [ ] Print the files that have been updated
+### [ ] Print the files that have been updated in hunit_test.py
 - Add report in files
 
 ### [ ] Automatically run git add for golden outcomes
