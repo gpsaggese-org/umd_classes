@@ -5,52 +5,61 @@ Each category shows concrete examples and key solution algorithms
 ## Structural Dimensions Overview
 Decision-making problems vary along 10 _orthogonal dimensions_:
 
-- _Observability_: What information is available to the agent
+1. **_Observability_**: What information is available to the agent
   - Full (MDP – Markov Decision Process): Agent observes complete state; all
     needed information available each step
   - Partial (POMDP – Partially Observable Markov Decision Process): Observations
     don't uniquely determine state; must maintain belief state
   - Hidden/Noisy: Environment has hidden state; observations are
     corrupted/stochastic
-- _Time Horizon_: Planning window and reward accumulation
+
+2. **_Time Horizon_**: Planning window and reward accumulation
   - One-step (Bandit): Optimize immediate reward only (greedy decisions)
   - Multi-step (finite): Consider consequences over fixed lookahead horizon
   - Infinite (discounted): Long-term optimization with discount factor $\gamma$
-- _Action Space_: Structure of available decisions
+
+3. **_Action Space_**: Structure of available decisions
   - Discrete: Finite set of actions (can enumerate)
   - Continuous: Action space $\mathbb{R}^n$ (uncountably infinite)
   - Hybrid (mixed): Some actions discrete, some continuous
-- _Multi-Agent_: Number and objectives of decision-makers
+
+4. **_Multi-Agent_**: Number and objectives of decision-makers
   - Single-agent: One decision-maker, one objective → no strategic interaction
   - Cooperative: Multiple agents, shared objective → must coordinate
   - Competitive/Mixed: Agents with conflicting or mixed objectives; game theory
     applies
-- _Information Structure_: Symmetry and knowledge distribution
+
+5. **_Information Structure_**: Symmetry and knowledge distribution
   - Perfect info: All players know all relevant information
   - Imperfect info: Players have asymmetric or hidden information
   - Asymmetric: Players have fundamentally different information sets and
     capabilities
-- _Model Availability_: Access to world model/dynamics
+
+6. **_Model Availability_**: Access to world model/dynamics
   - Model-based: Agent has (or learns) transition model $p(s'|s,a)$ (state
     transition probability) and reward $r(s,a)$ (reward function)
   - Model-free: Agent learns directly from experience; no explicit model
   - Hybrid: Learns approximate model or uses model selectively
-- _Update Mechanism_: When and how learning occurs
+
+7. **_Update Mechanism_**: When and how learning occurs
   - Online: Agent learns and acts in real-time; single trajectory
   - Batch: Agent trains on fixed dataset; replay or offline learning
   - Replay-based: Agent stores experiences and replays for training
-- _Solution Concept_: How policy is represented/optimized
+
+8. **_Solution Concept_**: How policy is represented/optimized
   - Value-based: Learn state or state-action values; derive policy from values
   - Policy-based: Learn policy directly without explicit value function
   - Actor-Critic: Combine value function and policy learning
   - Search/Planning: Use tree search or planning to find optimal actions
-- _Optimality Criterion_: Policy structure and goal
+
+9. **_Optimality Criterion_**: Policy structure and goal
   - Deterministic: Policy outputs single action per state
   - Stochastic: Policy outputs probability distribution over actions
   - Optimal: Find best possible policy (exact or approximate)
   - Approximate: Satisfice with good-enough policy; bounded suboptimality
     acceptable
-- _Scalability_: State/action space size and representation
+
+10. **_Scalability_**: State/action space size and representation
   - Tabular: |S| and |A| small enough for lookup tables (<10k states)
   - Linear FA (Function Approximation): Medium-scale; use linear function
     approximation V(s) = w·φ(s)
@@ -284,9 +293,71 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Nash Equilibrium Solvers
   - CFR (Counterfactual Regret Minimization)
 
-## 5. Model Knowledge: Model-Based Vs. Model-Free
+## 5. Information Structure: Perfect Vs. Imperfect Vs. Asymmetric
 
-### 5A. Model-Based (Planning)
+### 5A. Perfect Information
+
+- **Setup**:
+  - All players know all relevant information
+  - No hidden state or hidden actions
+  - Complete game tree visibility
+
+- **Example**: Chess Match
+  - Both players see entire board
+  - All past moves known to both
+  - No hidden pieces or secret moves
+  - Perfect information game
+
+- **Algorithms**:
+  - Minimax with Alpha-Beta Pruning
+  - MCTS (Monte Carlo Tree Search)
+  - AlphaZero
+  - Exact Game Solvers
+  - Negamax
+
+### 5B. Imperfect Information
+
+- **Setup**:
+  - Players have asymmetric or incomplete information
+  - Hidden moves or hidden state
+  - Information gap between players
+
+- **Example**: Poker Match
+  - Players don't see opponents' hole cards
+  - Betting history is visible but card values hidden
+  - Uncertainty over opponent's hand strength
+  - Information asymmetry drives strategy
+
+- **Algorithms**:
+  - CFR (Counterfactual Regret Minimization)
+  - Nash Equilibrium Solvers
+  - Regret Matching
+  - Self-Play in imperfect information games
+  - Information Set Abstractions
+
+### 5C. Asymmetric Information
+
+- **Setup**:
+  - Players have fundamentally different information sets
+  - Different access to actions or observations
+  - Capabilities differ by player type
+
+- **Example**: Principal-Agent Problem
+  - Principal (employer) cannot directly observe agent (employee) effort
+  - Agent knows own effort level; principal only sees output
+  - Different information available to each party
+  - Creates incentive alignment problem
+
+- **Algorithms**:
+  - Mechanism Design
+  - Game Theory with Asymmetric Info
+  - Signaling Equilibrium Solvers
+  - Information-dependent policies
+  - Bayesian Games
+
+## 6. Model Knowledge: Model-Based Vs. Model-Free
+
+### 6A. Model-Based (Planning)
 - **Setup**:
   - Agent has or learns transition model p(s'|s,a) and reward r(s,a)
   - Uses model to plan
@@ -303,7 +374,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - AlphaGo
   - MuZero
 
-### 5B. Model-Free (Learning)
+### 6B. Model-Free (Learning)
 - **Setup**:
   - No model available
   - Agent learns directly from experience
@@ -323,9 +394,227 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - SAC (Soft Actor-Critic)
   - A3C (Asynchronous Advantage Actor-Critic)
 
-## 6. State & Action Space Size: Scalability
+## 7. Update Mechanism: Online Vs. Batch Vs. Replay
 
-### 6A. Small Tabular Problem
+### 7A. Online Learning
+
+- **Setup**:
+  - Agent learns and acts in real-time
+  - Single trajectory; immediate feedback
+  - No stored experience buffer
+
+- **Example**: Autonomous Vehicle Learning to Brake
+  - Must learn immediately from driving interactions
+  - Cannot wait for batch processing
+  - Single continuous trajectory through environment
+
+- **Algorithms**:
+  - Q-Learning (on-policy)
+  - SARSA (State-Action-Reward-State-Action)
+  - Policy Gradient (REINFORCE)
+  - Actor-Critic (A3C, on-policy variants)
+  - Temporal Difference (TD) Learning
+
+### 7B. Batch Learning / Offline RL
+
+- **Setup**:
+  - Agent trains on fixed dataset
+  - No interaction with environment
+  - All data collected in advance
+
+- **Example**: Movie Recommendation System
+  - Training on historical user interactions
+  - No access to live users during training
+  - Prevent bad recommendations in production
+
+- **Algorithms**:
+  - Batch Q-Learning
+  - Offline RL
+  - Behavior Cloning
+  - Batch Policy Gradient
+  - Conservative Q-Learning (CQL)
+
+### 7C. Replay-based / Experience Replay
+
+- **Setup**:
+  - Agent stores experiences in replay buffer
+  - Replays for training; combines online and batch
+  - Decorrelates samples for stable learning
+
+- **Example**: DQN Training on Atari
+  - Interacts online with game (stores frames)
+  - Stores (state, action, reward, next_state) tuples
+  - Trains on random minibatches from replay buffer
+
+- **Algorithms**:
+  - DQN (Deep Q-Network) with Experience Replay
+  - Prioritized Experience Replay (PER)
+  - Hindsight Experience Replay (HER)
+  - Rainbow DQN
+  - Off-policy methods with replay buffer
+
+## 8. Solution Concept: How Policy is Represented
+
+### 8A. Value-based Methods
+
+- **Setup**:
+  - Learn state or state-action value functions
+  - Derive policy greedily from values
+  - No explicit policy representation
+
+- **Example**: Chess Position Evaluator
+  - Assigns numerical value to each board position
+  - Policy: play move leading to highest-value next position
+  - Value function captures position quality
+
+- **Algorithms**:
+  - Q-Learning
+  - Value Iteration
+  - DQN (Deep Q-Network)
+  - Dueling DQN
+  - Double Q-Learning
+
+### 8B. Policy-based Methods
+
+- **Setup**:
+  - Learn policy directly without explicit value function
+  - No intermediate value function needed
+  - Direct policy parameterization
+
+- **Example**: Robot Arm Joint Control
+  - Learns probability distribution over joint angles
+  - Policy outputs action directly (not via value function)
+  - Handles continuous action exploration naturally
+
+- **Algorithms**:
+  - Policy Gradient (REINFORCE)
+  - PPO (Proximal Policy Optimization)
+  - TRPO (Trust Region Policy Optimization)
+  - Evolutionary Strategies
+  - Natural Policy Gradient
+
+### 8C. Actor-Critic Methods
+
+- **Setup**:
+  - Learn both policy (actor) and value function (critic)
+  - Critic guides actor training via TD error
+  - Combines benefits of value and policy methods
+
+- **Example**: Game Playing with Separate Evaluator
+  - Actor network: selects moves
+  - Critic network: evaluates board positions
+  - Critic provides learning signal for actor
+
+- **Algorithms**:
+  - A3C (Asynchronous Advantage Actor-Critic)
+  - A2C (Advantage Actor-Critic)
+  - SAC (Soft Actor-Critic)
+  - DDPG (Deep Deterministic Policy Gradient)
+  - TD3 (Twin Delayed DDPG)
+  - PPO (also uses value baseline)
+
+### 8D. Search/Planning Methods
+
+- **Setup**:
+  - Use forward search or tree planning to find actions
+  - May use learned model or environment simulator
+  - Explicit look-ahead before committing to action
+
+- **Example**: AlphaGo Playing Chess
+  - Uses MCTS to search game tree
+  - Searches before playing each move
+  - Evaluates leaf nodes with neural network
+
+- **Algorithms**:
+  - MCTS (Monte Carlo Tree Search)
+  - Minimax with Alpha-Beta Pruning
+  - A* (A-Star) Search
+  - MPC (Model Predictive Control)
+  - AlphaGo / AlphaZero
+  - MuZero
+
+## 9. Optimality Criterion: Policy Structure and Goal
+
+### 9A. Deterministic Policies
+
+- **Setup**:
+  - Policy outputs single action per state
+  - No randomness (except in exploration)
+  - Greedy policy maximizes value
+
+- **Example**: Traffic Light Controller
+  - Given road state, always choose same action
+  - {State = heavy_left_traffic} → {Action = green_left}
+  - No randomness in operation
+
+- **Algorithms**:
+  - Deterministic Policy Gradient (DPG)
+  - DDPG (Deep Deterministic Policy Gradient)
+  - TD3 (Twin Delayed DDPG)
+  - Q-Learning (greedy policy)
+  - Minimax
+
+### 9B. Stochastic Policies
+
+- **Setup**:
+  - Policy outputs probability distribution over actions
+  - Agent samples actions from distribution
+  - Exploration built into policy
+
+- **Example**: Card Game Strategy
+  - Randomizes strategy to avoid being predictable
+  - Policy outputs: {play_aggressive: 30%, play_conservative: 70%}
+  - Exploits opponent's inability to predict exactly
+
+- **Algorithms**:
+  - Policy Gradient (REINFORCE)
+  - PPO (Proximal Policy Optimization)
+  - A3C (Asynchronous Advantage Actor-Critic)
+  - SAC (Soft Actor-Critic)
+  - Thompson Sampling
+
+### 9C. Optimal Policies
+
+- **Setup**:
+  - Find provably best policy
+  - Exact optimality or ε-optimal guarantee
+  - May be computationally expensive
+
+- **Example**: Chess Solver
+  - Finding perfect play from any position
+  - Can prove move is optimal for that state
+  - Uses exhaustive search or strong bounds
+
+- **Algorithms**:
+  - Value Iteration (exact solution)
+  - Policy Iteration (exact solution)
+  - Minimax with Alpha-Beta Pruning
+  - AlphaZero (near-optimal via search + learning)
+  - Exhaustive Search (when feasible)
+
+### 9D. Approximate / Satisficing Policies
+
+- **Setup**:
+  - Good-enough policy; bounded suboptimality
+  - Not necessarily optimal
+  - Practical for time/compute constraints
+
+- **Example**: Real-time Chess Engine
+  - Cannot search entire game tree
+  - Searches fixed depth in time limit
+  - Guaranteed suboptimality, but practical
+
+- **Algorithms**:
+  - Anytime Algorithms
+  - Bounded Suboptimality Algorithms
+  - Approximate Dynamic Programming
+  - Greedy with bounded approximation ratio
+  - Satisficing (good enough) methods
+
+## 10. State & Action Space Size: Scalability
+
+### 10A. Small Tabular Problem
+
 - **Setup**:
   - |S| and |A| small enough to store in table (e.g., <10,000 states)
 
@@ -340,7 +629,8 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Tabular Policy Iteration
   - MCTS (Monte Carlo Tree Search)
 
-### 6B. Medium: Linear Function Approximation
+### 10B. Medium: Linear Function Approximation
+
 - **Setup**:
   - |S| or |A| too large for table
   - Use linear function approximation
@@ -357,7 +647,8 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Contextual Bandits
   - Least-Squares Temporal Difference (LSTD)
 
-### 6C. Large: Deep Neural Networks
+### 10C. Large: Deep Neural Networks
+
 - **Setup**:
   - High-dimensional state (images, speech)
   - Large action space; use deep NN
@@ -428,6 +719,10 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Discrete → enumerate
   - Continuous → learn policy distribution
   - Mixed → hierarchical or branching policies
+- **Information Structure**
+  - Perfect info → deterministic solutions (Minimax, MCTS)
+  - Imperfect info → uncertainty handling (CFR, Nash equilibrium)
+  - Asymmetric info → mechanism design, signaling
 - **Agents**
   - Single → standard RL (Reinforcement Learning)
   - Multi-cooperative → shared reward, coordinated learning
@@ -435,6 +730,20 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 - **Model**
   - Model-based (planning): sample-efficient but requires accurate model
   - Model-free (learning): asymptotically optimal but needs more data
+- **Update Mechanism**
+  - Online: immediate learning, single trajectory
+  - Batch: learn from static dataset, no environment interaction
+  - Replay-based: combines online and batch via experience replay buffer
+- **Solution Concept**
+  - Value-based: learn values, derive policy greedily
+  - Policy-based: learn policy directly without value function
+  - Actor-Critic: learn both value and policy jointly
+  - Search/Planning: forward planning via tree search
+- **Optimality Criterion**
+  - Deterministic: single action per state (e.g., DDPG, Q-Learning greedy)
+  - Stochastic: probability distribution over actions (e.g., Policy Gradient)
+  - Optimal: provably best policy (Value/Policy Iteration, AlphaZero)
+  - Approximate: bounded suboptimality (practical algorithms with time limits)
 - **Scalability**
   - Tabular → small problems only
   - Linear FA (Function Approximation) → medium
