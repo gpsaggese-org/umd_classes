@@ -44,14 +44,15 @@
 > pytest_multi_build.py --target dev_scripts_helpers/documentation/test/
 generates `tmp.pytest_multi_build.<build_name>.txt`
 
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt
+
 > pytest_failed_multi_build.py
 generates `tmp.pytest_failed.<build_name>.<tag>.txt` for each build
 and then 
 `tmp.pytest_failed_multi_build.failed_tests.txt`
 `tmp.pytest_failed_multi_build.repro.sh`
 
-./dev_scripts_helpers/testing/pytest_failed_multi_build.py ./dev_scripts_helpers/testing/pytest_failed.py ./dev_scripts_helpers/testing/pytest_multi_build.py ./dev_scripts_helpers/testing/pytest_utils.py
-
+./dev_scripts_helpers/testing/pytest_failed_multi_build.py ./dev_scripts_helpers/testing/pytest_failed.py ./dev_scripts_helpers/testing/pytest_multi_build.py
 ./dev_scripts_helpers/testing/test/test_pytest_failed_multi_build.py ./dev_scripts_helpers/testing/test/test_pytest_failed.py ./dev_scripts_helpers/testing/test/test_pytest_multi_build.py
 
 ### [ ] Why there are two updated?
