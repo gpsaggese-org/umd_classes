@@ -1,75 +1,64 @@
 # Decision-Making Problem Categories: Examples & Solutions
-
-Taxonomy of decision-making problems organized by key structural dimensions.
-Each category shows concrete examples and key solution algorithms.
+Taxonomy of decision-making problems organized by key structural dimensions
+Each category shows concrete examples and key solution algorithms
 
 ## Structural Dimensions Overview
-
 Decision-making problems vary along 10 _orthogonal dimensions_:
 
 - _Observability_: What information is available to the agent
-  - Full (MDP – Markov Decision Process): Agent observes complete state; all needed information available
-    each step
-  - Partial (POMDP – Partially Observable Markov Decision Process): Observations don't uniquely determine state; must maintain
-    belief state
+  - Full (MDP – Markov Decision Process): Agent observes complete state; all
+    needed information available each step
+  - Partial (POMDP – Partially Observable Markov Decision Process): Observations
+    don't uniquely determine state; must maintain belief state
   - Hidden/Noisy: Environment has hidden state; observations are
     corrupted/stochastic
-  
 - _Time Horizon_: Planning window and reward accumulation
   - One-step (Bandit): Optimize immediate reward only (greedy decisions)
   - Multi-step (finite): Consider consequences over fixed lookahead horizon
   - Infinite (discounted): Long-term optimization with discount factor $\gamma$
-  
 - _Action Space_: Structure of available decisions
   - Discrete: Finite set of actions (can enumerate)
   - Continuous: Action space $\mathbb{R}^n$ (uncountably infinite)
   - Hybrid (mixed): Some actions discrete, some continuous
-  
 - _Multi-Agent_: Number and objectives of decision-makers
   - Single-agent: One decision-maker, one objective → no strategic interaction
   - Cooperative: Multiple agents, shared objective → must coordinate
   - Competitive/Mixed: Agents with conflicting or mixed objectives; game theory
     applies
-  
 - _Information Structure_: Symmetry and knowledge distribution
   - Perfect info: All players know all relevant information
   - Imperfect info: Players have asymmetric or hidden information
   - Asymmetric: Players have fundamentally different information sets and
     capabilities
-  
 - _Model Availability_: Access to world model/dynamics
-  - Model-based: Agent has (or learns) transition model $p(s'|s,a)$ (state transition probability) and reward
-    $r(s,a)$ (reward function)
+  - Model-based: Agent has (or learns) transition model $p(s'|s,a)$ (state
+    transition probability) and reward $r(s,a)$ (reward function)
   - Model-free: Agent learns directly from experience; no explicit model
   - Hybrid: Learns approximate model or uses model selectively
-  
 - _Update Mechanism_: When and how learning occurs
   - Online: Agent learns and acts in real-time; single trajectory
   - Batch: Agent trains on fixed dataset; replay or offline learning
   - Replay-based: Agent stores experiences and replays for training
-  
 - _Solution Concept_: How policy is represented/optimized
   - Value-based: Learn state or state-action values; derive policy from values
   - Policy-based: Learn policy directly without explicit value function
   - Actor-Critic: Combine value function and policy learning
   - Search/Planning: Use tree search or planning to find optimal actions
-  
 - _Optimality Criterion_: Policy structure and goal
   - Deterministic: Policy outputs single action per state
   - Stochastic: Policy outputs probability distribution over actions
   - Optimal: Find best possible policy (exact or approximate)
   - Approximate: Satisfice with good-enough policy; bounded suboptimality
     acceptable
-  
 - _Scalability_: State/action space size and representation
   - Tabular: |S| and |A| small enough for lookup tables (<10k states)
-  - Linear FA (Function Approximation): Medium-scale; use linear function approximation V(s) = w·φ(s)
+  - Linear FA (Function Approximation): Medium-scale; use linear function
+    approximation V(s) = w·φ(s)
   - Deep NN (Neural Network): Large/high-dimensional; use deep neural networks
 
 ## 1. Observability: Full Vs. Partial
 
 ### 1A. Fully Observable (MDP)
-
 - **Setup**:
   - Agent sees complete state
   - All needed information available each step
@@ -87,7 +76,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - MCTS (Monte Carlo Tree Search)
 
 ### 1B. Partially Observable (POMDP)
-
 - **Setup**:
   - Observations don't uniquely determine state
   - Must maintain belief state (probability distribution)
@@ -105,7 +93,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Belief State Planning
 
 ### 1C. Stochastic Observations with Hidden State
-
 - **Setup**:
   - Environment has hidden state
   - Observations are noisy/corrupted
@@ -124,7 +111,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 ## 2. Time Horizon: One-Step Vs. Multi-Step
 
 ### 2A. One-Step / Myopic Decision
-
 - **Setup**:
   - Optimize immediate reward only
   - No consideration of future
@@ -136,13 +122,12 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 
 - **Algorithms**:
   - Greedy
-  - ε-Greedy (Epsilon-Greedy)
+  - Ε-Greedy (Epsilon-Greedy)
   - UCB (Upper Confidence Bound)
   - Thompson Sampling
   - Contextual Bandits
 
 ### 2B. Multi-Step Lookahead (Finite Horizon)
-
 - **Setup**:
   - Consider future consequences over fixed horizon
 
@@ -154,12 +139,11 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 - **Algorithms**:
   - Minimax
   - Alpha-Beta Pruning
-  - A* (A-Star)
+  - A\* (A-Star)
   - RRT (Rapidly-exploring Random Tree)
   - MCTS (Monte Carlo Tree Search)
 
 ### 2C. Infinite Horizon (Discounted)
-
 - **Setup**:
   - Long-term optimization
   - Infinite horizon with discount factor $\gamma \in [0, 1)$
@@ -175,10 +159,10 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Value Iteration
   - Policy Iteration
   - Actor-Critic methods
-  - Deep RL: DQN (Deep Q-Network), PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic)
+  - Deep RL: DQN (Deep Q-Network), PPO (Proximal Policy Optimization), SAC (Soft
+    Actor-Critic)
 
 ### 2D. Episodic / Finite Horizon
-
 - **Setup**:
   - Fixed episode length T
   - Sum undiscounted rewards (or discounted differently)
@@ -197,7 +181,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 ## 3. Action Space: Discrete Vs. Continuous
 
 ### 3A. Discrete Actions
-
 - **Setup**:
   - Finite set of actions {a₁, a₂, ..., aₙ}
   - Can enumerate and compare
@@ -215,7 +198,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Value Iteration (when feasible)
 
 ### 3B. Continuous Actions
-
 - **Setup**:
   - Action space $\mathbb{R}^n$ (uncountably infinite)
   - Cannot enumerate
@@ -227,14 +209,14 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 
 - **Algorithms**:
   - Policy Gradient (REINFORCE)
-  - Actor-Critic: A3C (Asynchronous Advantage Actor-Critic), SAC (Soft Actor-Critic)
+  - Actor-Critic: A3C (Asynchronous Advantage Actor-Critic), SAC (Soft
+    Actor-Critic)
   - DDPG (Deep Deterministic Policy Gradient)
   - TD3 (Twin Delayed DDPG)
   - PPO (Proximal Policy Optimization, with continuous output)
   - Evolutionary Strategies
 
 ### 3C. Hybrid (Mixed Discrete-Continuous)
-
 - **Setup**:
   - Some actions discrete
   - Some actions continuous
@@ -252,7 +234,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 ## 4. Multi-Agent Interaction
 
 ### 4A. Single-Agent
-
 - **Setup**:
   - One decision-maker, one objective
   - No strategic interaction
@@ -270,7 +251,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Actor-Critic
 
 ### 4B. Multi-Agent Cooperative
-
 - **Setup**:
   - Multiple agents, shared objective
   - Must coordinate
@@ -289,7 +269,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - MADDPG (Multi-Agent Deep Deterministic Policy Gradient)
 
 ### 4C. Multi-Agent Competitive
-
 - **Setup**:
   - Agents with conflicting objectives
   - Game theory, Nash equilibrium applies
@@ -308,7 +287,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 ## 5. Model Knowledge: Model-Based Vs. Model-Free
 
 ### 5A. Model-Based (Planning)
-
 - **Setup**:
   - Agent has or learns transition model p(s'|s,a) and reward r(s,a)
   - Uses model to plan
@@ -326,7 +304,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - MuZero
 
 ### 5B. Model-Free (Learning)
-
 - **Setup**:
   - No model available
   - Agent learns directly from experience
@@ -349,7 +326,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 ## 6. State & Action Space Size: Scalability
 
 ### 6A. Small Tabular Problem
-
 - **Setup**:
   - |S| and |A| small enough to store in table (e.g., <10,000 states)
 
@@ -365,7 +341,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - MCTS (Monte Carlo Tree Search)
 
 ### 6B. Medium: Linear Function Approximation
-
 - **Setup**:
   - |S| or |A| too large for table
   - Use linear function approximation
@@ -383,7 +358,6 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Least-Squares Temporal Difference (LSTD)
 
 ### 6C. Large: Deep Neural Networks
-
 - **Setup**:
   - High-dimensional state (images, speech)
   - Large action space; use deep NN
@@ -404,25 +378,30 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Evolutionary Strategies
 
 ## Quick Reference: Problem Type → Algorithm
-
 - **Full observability, small state**
   - Example: Tic-tac-toe
-  - Algorithms: Q-Learning (tabular), Value Iteration, MCTS (Monte Carlo Tree Search)
+  - Algorithms: Q-Learning (tabular), Value Iteration, MCTS (Monte Carlo Tree
+    Search)
 - **Full observability, large state (pixels)**
   - Example: Atari game
-  - Algorithms: DQN (Deep Q-Network), A3C (Asynchronous Advantage Actor-Critic), PPO (Proximal Policy Optimization)
+  - Algorithms: DQN (Deep Q-Network), A3C (Asynchronous Advantage Actor-Critic),
+    PPO (Proximal Policy Optimization)
 - **Partially observable**
   - Example: Robot localization
-  - Algorithms: Particle Filter, POMCP (Partially Observable Monte Carlo Planning), HMM (Hidden Markov Model)
+  - Algorithms: Particle Filter, POMCP (Partially Observable Monte Carlo
+    Planning), HMM (Hidden Markov Model)
 - **Continuous control, known model**
   - Example: Trajectory optimization
-  - Algorithms: MPC (Model Predictive Control), iLQR (iterative Linear Quadratic Regulator)
+  - Algorithms: MPC (Model Predictive Control), iLQR (iterative Linear Quadratic
+    Regulator)
 - **Continuous control, unknown model**
   - Example: Robotic arm
-  - Algorithms: PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic), DDPG (Deep Deterministic Policy Gradient), TD3 (Twin Delayed DDPG)
+  - Algorithms: PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic),
+    DDPG (Deep Deterministic Policy Gradient), TD3 (Twin Delayed DDPG)
 - **Discrete actions, exploration**
   - Example: Web ads (bandit)
-  - Algorithms: UCB (Upper Confidence Bound), Thompson Sampling, ε-Greedy (Epsilon-Greedy)
+  - Algorithms: UCB (Upper Confidence Bound), Thompson Sampling, ε-Greedy
+    (Epsilon-Greedy)
 - **Game playing (perfect info)**
   - Example: Chess
   - Algorithms: Minimax, Alpha-Beta, MCTS (Monte Carlo Tree Search), AlphaZero
@@ -431,13 +410,13 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Algorithms: CFR (Counterfactual Regret Minimization), Nash Solver
 - **Multi-agent cooperative**
   - Example: Warehouse robots
-  - Algorithms: MAAC (Multi-Agent Actor-Critic), MAPPO (Multi-Agent Proximal Policy Optimization), QMIX (Q-value Mixing)
+  - Algorithms: MAAC (Multi-Agent Actor-Critic), MAPPO (Multi-Agent Proximal
+    Policy Optimization), QMIX (Q-value Mixing)
 - **Multi-agent competitive**
   - Example: Video game enemy AI
   - Algorithms: Self-Play, Nash Learning
 
 ## Key Takeaways
-
 - **Observable vs. Partial**
   - Full observability enables direct value/policy learning
   - Partial observability requires belief state tracking
