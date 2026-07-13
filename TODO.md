@@ -190,13 +190,12 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 - `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
 
-- [ ] ## 1: From Prediction Pipelines to Decision Pipelines
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
-
 - [ ] Compare the TOC book.springer/decision_making_categories_with_examples.md
-  to AIMA, 
+  to AIMA
   https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
+- [ ] Review book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
 
 ### [.] Create and review slides for Agentic AI
 
