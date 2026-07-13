@@ -14,16 +14,16 @@
 ## Short TOC
 - The sequence of the parts in the books are:
   - Motivation
-    - 1. Why Decisions, Not Predictions
-    - 2. The Cost of Ignoring Causality
-    - 3. The Cost of Ignoring Uncertainty
+    - 01. Why Decisions, Not Predictions
+    - 02. The Cost of Ignoring Causality
+    - 03. The Cost of Ignoring Uncertainty
   - Advanced Modeling Theory & Tools
-    - 6. Knowledge Representation
-    - 7. Probalistic ML
-    - 8. Causal ML
+    - 04. Knowledge Representation
+    - 05. Probalistic ML
+    - 06. Causal ML
   - Data
-    - 4. Building Causal Knowledge
-    - 5. Causal data pipelines
+    - 07. Building Causal Knowledge
+    - 08. Causal data pipelines
       - Selection Bias
         - How data collection processes bias what you observe
         - Missing data mechanisms (MCAR, MAR, MNAR)
@@ -33,15 +33,15 @@
         - Covariate shift, label shift, and concept drift
         - Detecting and mitigating distribution changes
   - Decision-Making Theory & Tools
-    - 10. Decision Theory Foundations
-    - 11. Taxonomy of Decision-Making
-    - 12. Simple Decisions
-    - 13. Complex Decisions
-    - 14. Agentic Causal Reasoning
+    - 09. Decision Theory Foundations
+    - 10. Taxonomy of Decision-Making Problems and Algorithms
+    - 11. Simple Decisions
+    - 12. Complex Decisions
+    - 13. Agentic Causal Reasoning
   - Implementation, Deployment, & Governance
-    - 15. Building Stakeholder Alignment
-    - 16. Deployment, Monitoring, and Adaptation
-    - 17. Trust, Explainability, Fairness, and Governance
+    - 14. Building Stakeholder Alignment
+    - 15. Deployment, Monitoring, and Adaptation
+    - 16. Trust, Explainability, Fairness, and Governance
 
 # Detailed TOC
 
@@ -92,41 +92,93 @@
   - Overfitting and statistical significance traps: peeking, multiple
     comparisons, burned test sets
 
-# Part II: Advanced Tools & Theory (Foundations)
+# Part II: Data
 
-## 4: Knowledge Representation
-
-### Topics
-- Causal DAGs vs. Bayesian networks: how causality orients edges
-- Structural equations and mechanisms: modeling how variables depend on parents
-- Variable types and adjustment rules: confounders, mediators, colliders,
-  moderators
-- Temporal structure: causal order, feedback delays, and acyclicity
-- Building DAGs from domain knowledge and expert judgment
-- Measurement validity and causal assumptions in data collection
-
-## 5: Advanced Probabilistic ML
+## 4: Building Causal Knowledge
 
 ### Topics
-- Short summary from Lesson6*
+- Eliciting causal knowledge from domain experts: structured methods, expert
+  judgment, and iterative refinement
+- Building causal DAGs: variable selection, causal assumptions, and graph
+  construction from domain knowledge
+- Variable types and relationships: confounders, mediators, colliders,
+  moderators, and their roles in causal inference
+- Temporal structure in causal systems: causal order, feedback delays, causal
+  acyclicity, and dynamic relationships
+- Measurement and operationalization: defining variables, measurement validity,
+  proxy variables for latent constructs
+- Documenting causal assumptions: transparency, validation, and stakeholder
+  alignment on causal structures
 
-## 6: Advanced Causal Modeling
+## 5: Causal Data Pipelines
 
 ### Topics
-- Causal discovery from data: identifiability, Markov equivalence, and
-  assumptions
+- Data collection and its biases: how collection processes introduce selection
+  bias and confounding
+- Selection bias and incomplete populations: missing data mechanisms (MCAR, MAR,
+  MNAR) and their impact on causal inference
+- Distribution shift and covariate mismatch: training vs. production misalignment,
+  concept drift, and environment shifts
+- Measurement error and proxy validity: assessing proxy variable quality,
+  attenuation in causal effects, and measurement error correction
+- Pre-flight checks: validating data quality, assessing confounder balance,
+  checking assumptions before causal modeling
+- Data quality for causal inference: handling missingness, outliers, and data
+  anomalies in causal analysis
+
+# Part III: Advanced Modeling Theory & Tools
+
+## 6: Knowledge Representation
+
+### Topics
+- Causal DAGs vs. Bayesian networks: how causality orients edges and encodes
+  independence
+- Structural equations and mechanisms: modeling causal relationships, functional
+  forms, and how variables depend on parents
+- Causal assumptions and identifiability: what assumptions enable causal
+  inference (consistency, SUTVA, no unmeasured confounding)
+- D-separation and graphical criteria: reading independence from DAG structure,
+  backdoor/frontdoor criteria for adjustment
+- Structural causal models (SCMs): formal representation of causal mechanisms
+  and counterfactual reasoning
+- Causal invariance and modularity: which causal relationships persist across
+  environments and why
+
+## 7: Probabilistic ML
+
+### Topics
+- Bayesian inference fundamentals: posterior updating, conjugate priors, and
+  probabilistic decision-making
+- Uncertainty quantification: epistemic vs. aleatoric uncertainty, confidence
+  intervals, and posterior predictive distributions
+- Generative models and latent variables: topic models, mixture models, and
+  disentangled representations
+- Approximate inference: variational inference, Markov Chain Monte Carlo (MCMC),
+  expectation-propagation
+- Graphical models: factor graphs, belief propagation, and message-passing
+  algorithms
+- Modern probabilistic programming: probabilistic languages and tools for
+  building uncertainty-aware systems
+
+## 8: Causal ML
+
+### Topics
+- Causal discovery from data: when and how to learn causal structure from
+  observational data
 - Discovery algorithms: constraint-based (PC/FCI), score-based (GES), functional
   (LiNGAM, ANM)
-- Faithfulness and causal sufficiency: when discovery succeeds and fails
-- Latent confounders: proxy variables, negative controls, and adjustment
-  strategies
+- Identifiability and Markov equivalence: what can and cannot be learned from
+  observational data
+- Latent confounders and hidden variables: proxy variables, negative controls,
+  sensitivity analysis, and incomplete adjustment
 - Causal representation learning: disentangling mechanisms for domain transfer
-- Sensitivity analysis and robustness: E-values, bounds, and partial
-  identification
+  and generalization across environments
+- Robustness and sensitivity: E-values, bounding unmeasured confounding, and
+  partial identification
 
-# Part III: Single-Step Decisions
+# Part IV: Decision-Making Theory & Tools
 
-## 7: Decision Theory Foundations
+## 10: Decision Theory Foundations
 
 ### Topics
 - Von Neumann-Morgenstern theorem: axioms of rational choice and utility
@@ -140,7 +192,7 @@
   extraction
 - Risk preferences and utility curvature: risk-aversion, neutrality, and seeking
 
-## 8: Decision-Making with Causal Models
+## 11: Taxonomy of Decision-Making
 
 ### Topics
 - From causal effects to expected value: plugging treatment effects into utility
@@ -154,7 +206,7 @@
 - Robustness under model misspecification: decisions that work across causal
   assumptions
 
-## 9: Policy Learning & Distributional Causal Effects
+## 12: Simple Decisions
 
 ### Topics
 - Heterogeneous treatment effects and CATE: learning who benefits from treatment
@@ -166,7 +218,7 @@
   from data
 - Safe policy improvement: deployable decisions with finite-sample guarantees
 
-## 10: Partial Identification & Robust Inference
+## 13: Complex Decisions
 
 ### Topics
 - Partial identification: when point estimates are impossible, bound what you can
@@ -180,8 +232,12 @@
   misspecification
 - Causal generalization and domain adaptation: transferring lessons across
   environments
+- Markov decision processes and multi-step planning: states, actions, transitions,
+  and solving with value/policy iteration
+- Causal world models as environment dynamics: planning, counterfactual rollouts,
+  and policy search
 
-## 11: Agentic Causal Reasoning
+## 14: Agentic Causal Reasoning
 
 ### Topics
 - Causal reasoning in LLMs: pattern-based limits and why foundation models
@@ -195,49 +251,9 @@
   safety
 - Causal guardrails and safety constraints: preventing harmful behaviors in
   autonomous agents
-
-# Part IV: Multi-Step & Dynamic Decisions
-
-## 12: Causal World Models & Reinforcement Learning
-
-### Topics
-- Markov decision processes: states, actions, transitions, and solving with
-  value/policy iteration
-- Utilities over time: discount factors, finite vs. infinite horizons, and
-  optimality criteria
-- Causal world models: structural causal models as environment dynamics for
-  planning
-- Model-based reinforcement learning: learning dynamics, counterfactual rollouts,
-  and policy search
-- Off-policy evaluation with causal guarantees: doubly robust, IPW, and DR
-  estimators
-- Invariant causal mechanisms and environment generalization: learning robust
-  policies across shifts
-- Partially observable MDPs: state inference and planning under hidden variables
-
-## 13: Forecasting Under Causal Intervention
-
-### Topics
-- Why temporal patterns fail under intervention: distribution shift and causal
-  assumptions
-- Granger causality and causal constraints on time-series models
-- Difference-in-differences and synthetic control: comparing counterfactual
-  scenarios
-- Structural time series with causal priors: Bayesian modeling of interventions
-- Online learning under nonstationarity: adapting to feedback and regime shifts
-- Forecasting with SCMs: causal models as alternatives to black-box time-series
-
-## 14: Feedback Loops & Adaptive Causal Systems
-
-### Topics
-- Performativity and Goodhart's law: decisions that change the world and break
-  past patterns
-- Causal graphs that change over time: nonstationarity and structural adaptation
-- Online causal discovery: learning and revising the causal model from feedback
-- Contextual and causal bandits: exploration with side information under feedback
-- Dynamic treatment regimes: adaptive decisions that respond to evolving
-  patient/environment state
-- Learning from adaptive experiments: methods for sequential decision-making with
+- Performativity and adaptive systems: decisions that change the world, feedback
+  loops, and learning from outcomes
+- Online causal discovery: learning and revising causal models from deployment
   feedback
 
 # Part V: Implementation, Deployment, Governance
