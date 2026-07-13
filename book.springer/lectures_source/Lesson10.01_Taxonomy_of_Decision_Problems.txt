@@ -26,57 +26,110 @@
 
 * The 10 Structural Dimensions
 
-// TODO(ai_gp): Describe the 10 dimensions and the values they can assume
+1. _Observability_: What information is available to the agent
+   - E.g., full, partial, hidden
+2. _Time Horizon_: How far ahead the agent should plan
+   - E.g., one-step, finite, infinite
+3. _Action Space_: Type of actions available to the agent
+   - E.g., discrete, continuous, hybrid
+4. _Multi-Agent_: Number of agents and their objectives
+   - E.g., single, cooperative, competitive
+5. _Info Structure_: What information each player has access to
+   - E.g., perfect, imperfect, asymmetric
+6. _Model Knowledge_: Whether the agent knows the environment model
+   - E.g., model-based, model-free
+7. _Update Mechanism_: How the agent learns from experience
+   - E.g., online, batch, replay
+8. _Solution Concept_: How the optimal policy is computed or represented
+   - E.g., value, policy, actor-critic, search
+9. _Optimality Criterion_: Type of policy goal
+   - E.g., deterministic, stochastic, optimal, approximate
+10. _State-Action Space Size_: Scalability / complexity of the state-action
+    space
+   - E.g., tabular, linear function approximation, deep neural networks
 
-- **Key idea**: each dimension is a _knob_; setting all 10 pins down the problem
+* The 10 Structural Dimensions
 
-```mermaid
-mindmap
-  root((**Decision Problem**))
-    (**1 Observability**)
-      Full MDP
-      Partial POMDP
-      Hidden HMM
-    (**2 Time Horizon**)
-      One-step
-      Finite
-      Infinite
-    (**3 Action Space**)
-      Discrete
-      Continuous
-      Hybrid
-    (**4 Multi-Agent**)
-      Single
-      Cooperative
-      Competitive
-    (**5 Info Structure**)
-      Perfect
-      Imperfect
-      Asymmetric
-    (**6 Model**)
-      Model-based
-      Model-free
-    (**7 Update**)
-      Online
-      Batch
-      Replay
-    (**8 Solution**)
-      Value
-      Policy
-      Actor-Critic
-      Search
-    (**9 Optimality**)
-      Deterministic
-      Stochastic
-      Optimal
-      Approximate
-    (**10 Scale**)
-      Tabular
-      Linear FA
-      Deep NN
+```graphviz
+digraph DecisionProblemDimensions {
+    layout=circo;
+    splines=spline;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=9];
+    edge [fontsize=7, arrowsize=0.5];
+
+    // Center node
+    DP [label="Decision\nProblem", fillcolor="#FFE6B3", shape="ellipse", fontsize=11, penwidth=2.5];
+
+    // Inner ring: Dimensions (Level 1)
+    Obs [label="1. Observability", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Horiz [label="2. Time Horizon", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Action [label="3. Action Space", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Multi [label="4. Multi-Agent", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Info [label="5. Info Structure", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Model [label="6. Model Knowledge", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Update [label="7. Update Mechanism", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Soln [label="8. Solution Concept", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Opt [label="9. Optimality Criterion", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    Scale [label="10. State-Action Size", fillcolor="#E6F3FF", width=1.5, height=0.6];
+
+    // Connections from center to dimensions
+    DP -> {Obs Horiz Action Multi Info Model Update Soln Opt Scale} [style=solid, weight=2];
+
+    // Outer ring: Values (Level 2)
+    ObsF [label="Full\n(MDP)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ObsP [label="Partial\n(POMDP)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ObsH [label="Hidden\n(HMM)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Obs -> {ObsF ObsP ObsH} [style=dashed, weight=1];
+
+    HorizO [label="One-step", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    HorizF [label="Finite", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    HorizI [label="Infinite", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Horiz -> {HorizO HorizF HorizI} [style=dashed, weight=1];
+
+    ActionD [label="Discrete", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ActionC [label="Continuous", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ActionH [label="Hybrid", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Action -> {ActionD ActionC ActionH} [style=dashed, weight=1];
+
+    MultiS [label="Single", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    MultiCo [label="Cooperative", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    MultiCm [label="Competitive", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Multi -> {MultiS MultiCo MultiCm} [style=dashed, weight=1];
+
+    InfoPe [label="Perfect", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    InfoIm [label="Imperfect", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    InfoAs [label="Asymmetric", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Info -> {InfoPe InfoIm InfoAs} [style=dashed, weight=1];
+
+    ModelB [label="Model-based", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ModelF [label="Model-free", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Model -> {ModelB ModelF} [style=dashed, weight=1];
+
+    UpdateO [label="Online", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    UpdateBa [label="Batch", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    UpdateR [label="Replay", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Update -> {UpdateO UpdateBa UpdateR} [style=dashed, weight=1];
+
+    SolnV [label="Value", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    SolnP [label="Policy", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    SolnA [label="Actor-Critic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    SolnS [label="Search", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Soln -> {SolnV SolnP SolnA SolnS} [style=dashed, weight=1];
+
+    OptD [label="Deterministic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    OptSt [label="Stochastic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    OptOp [label="Optimal", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    OptAp [label="Approximate", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Opt -> {OptD OptSt OptOp OptAp} [style=dashed, weight=1];
+
+    ScaleT [label="Tabular", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ScaleL [label="Linear FA", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    ScaleD [label="Deep NN", fillcolor="#F0F0F0", fontsize=8, height=0.5];
+    Scale -> {ScaleT ScaleL ScaleD} [style=dashed, weight=1];
+}
 ```
 
-# 1. Observability: Full Vs. Partial
+# 1. Observability
 
 * Fully Observable (MDP)
 
@@ -176,7 +229,7 @@ digraph POMDP {
 - **Algorithms**: Hidden Markov Models, Kalman Filter (linear-Gaussian),
   Extended/Unscented KF (nonlinear), Particle Filters
 
-# 2. Time Horizon: One-Step Vs. Multi-Step
+# 2. Time Horizon
 
 * One-Step / Myopic Decision (Bandit)
 
@@ -253,7 +306,7 @@ digraph POMDP {
 
 - **Algorithms**: Monte Carlo methods, MCTS, Policy Gradient (REINFORCE)
 
-# 3. Action Space: Discrete Vs. Continuous
+# 3. Action Space
 
 * Discrete Actions
 
@@ -373,7 +426,7 @@ digraph POMDP {
 
 - **Algorithms**: Minimax + Alpha-Beta, Self-Play, CFR, Nash Solvers
 
-# 5. Information Structure: Perfect Vs. Imperfect Vs. Asymmetric
+# 5. Information Structure
 
 * Perfect Information
 
@@ -433,7 +486,7 @@ digraph POMDP {
 - **Algorithms**: Mechanism Design, Bayesian Games, Signaling Equilibria,
   Information-dependent policies
 
-# 6. Model Knowledge: Model-Based Vs. Model-Free
+# 6. Model Knowledge
 
 * Model-Based (Planning)
 
@@ -474,7 +527,7 @@ digraph POMDP {
 
 - **Algorithms**: Q-Learning, SARSA, REINFORCE, Actor-Critic, DQN, PPO, SAC, A3C
 
-# 7. Update Mechanism: Online Vs. Batch Vs. Replay
+# 7. Update Mechanism
 
 * Online Learning
 
@@ -531,7 +584,7 @@ digraph POMDP {
 - **Algorithms**: DQN with Experience Replay, Prioritized ER (PER), Hindsight ER
   (HER), Rainbow DQN
 
-# 8. Solution Concept: How Policy is Represented
+# 8. Solution Concept
 
 * Value-based Methods
 
@@ -633,7 +686,7 @@ digraph AC {
 
 - **Algorithms**: MCTS, Minimax + Alpha-Beta, A\*, MPC, AlphaZero, MuZero
 
-# 9. Optimality Criterion: Policy Structure and Goal
+# 9. Optimality Criterion
 
 * Deterministic Policies
 
@@ -715,7 +768,7 @@ digraph AC {
 - **Algorithms**: Anytime Algorithms, Approximate Dynamic Programming, Bounded
   Suboptimality, Satisficing methods
 
-# 10. State - Action Space Size: Scalability
+# 10. State - Action Space Size
 
 * Small Tabular Problem
 
