@@ -171,6 +171,10 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
 
+- [ ] Compare the TOC book.springer/decision_making_categories_with_examples.md
+  to AIMA, 
+  https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
+
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
