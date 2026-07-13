@@ -1,0 +1,826 @@
+// type=UMD_slides
+// course_title=From Data to Decisions: Building Decision Systems with Probabilistic Causal Reasoning
+// lesson_title=Lesson 10.01: Taxonomy of Decision-Making Problems and Algorithms
+// slides_engine=typst
+
+# Decision-Making Problem Categories
+
+* Decision-Making Problem Categories: Overview
+
+- **Goal**: build a _taxonomy_ of decision-making problems so the right
+  algorithm can be matched to each problem
+  - Every problem is a point in a structured space
+  - Knowing its coordinates tells you which algorithms apply
+
+- **Key idea**: decision problems vary along _10 orthogonal dimensions_
+  - Each dimension asks one question about problem _structure_
+  - The answers jointly determine tractability and method choice
+
+- **Example**:
+  - "Tic-Tac-Toe" is fully observable, multi-step, discrete, competitive,
+    perfect-info, tabular
+  - $\to$ solvable by Minimax or tabular Value Iteration
+
+- **Remark**: same task can shift dimensions
+  - E.g., add noise $\to$ becomes partially observable
+
+* The 10 Structural Dimensions
+
+// TODO(ai_gp): Describe the 10 dimensions and the values they can assume
+
+- **Key idea**: each dimension is a _knob_; setting all 10 pins down the problem
+
+```mermaid
+mindmap
+  root((**Decision Problem**))
+    (**1 Observability**)
+      Full MDP
+      Partial POMDP
+      Hidden HMM
+    (**2 Time Horizon**)
+      One-step
+      Finite
+      Infinite
+    (**3 Action Space**)
+      Discrete
+      Continuous
+      Hybrid
+    (**4 Multi-Agent**)
+      Single
+      Cooperative
+      Competitive
+    (**5 Info Structure**)
+      Perfect
+      Imperfect
+      Asymmetric
+    (**6 Model**)
+      Model-based
+      Model-free
+    (**7 Update**)
+      Online
+      Batch
+      Replay
+    (**8 Solution**)
+      Value
+      Policy
+      Actor-Critic
+      Search
+    (**9 Optimality**)
+      Deterministic
+      Stochastic
+      Optimal
+      Approximate
+    (**10 Scale**)
+      Tabular
+      Linear FA
+      Deep NN
+```
+
+# 1. Observability: Full Vs. Partial
+
+* Fully Observable (MDP)
+
+::: columns
+:::: {.column width=58%}
+- **Intuition**: agent sees the _complete state_; all needed information is
+  available each step
+
+- **Definition**: modeled as an _MDP_ tuple
+  $$(\mathcal{S}, \mathcal{A}, P, R, \gamma)$$
+  - Observes full state $s_t \in \mathcal{S}$ each step
+  - Dynamics $P(s'|s,a)$ and reward $R(s,a)$ fully known
+  - No hidden state
+::::
+:::: {.column width=42%}
+```graphviz
+digraph MDP {
+    rankdir=LR;
+    splines=spline;
+    nodesep=0.6;
+    ranksep=0.7;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.5];
+
+    Agent [label="Agent", fillcolor="#F4A6A6"];
+    Env   [label="Environment", fillcolor="#B2E2B2"];
+
+    Agent -> Env [label="  action a"];
+    Env -> Agent [label="  state s, reward r"];
+}
+```
+::::
+:::
+
+- **Example**: "Inventory Management" — current stock observed, demand known,
+  decide order quantity each period
+
+- **Algorithms**: Q-Learning, SARSA, Value Iteration, Policy Iteration, MCTS
+
+* Partially Observable (POMDP)
+
+::: columns
+:::: {.column width=58%}
+- **Intuition**: observations don't uniquely determine state $\to$ must track a
+  _belief state_
+
+- **Definition**: modeled as a _POMDP_ tuple
+  $$(\mathcal{S}, \mathcal{A}, P, R, \Omega, O, \gamma)$$
+  - Observes $o_t \sim O(\cdot | s_t)$, not true $s_t$
+  - Maintains belief
+    $$b_t(s) = \Pr(s_t = s \mid o_1, a_1, \ldots, o_t)$$
+::::
+:::: {.column width=42%}
+```graphviz
+digraph POMDP {
+    rankdir=LR;
+    splines=spline;
+    nodesep=0.6;
+    ranksep=0.7;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.5];
+
+    State  [label="Hidden\nstate s", fillcolor="#C6A6F4"];
+    Obs    [label="Observation o", fillcolor="#FFD1A6"];
+    Belief [label="Belief b(s)", fillcolor="#A6C8F4"];
+    Agent  [label="Agent", fillcolor="#F4A6A6"];
+
+    State -> Obs [label="  O(o|s)"];
+    Obs -> Belief;
+    Belief -> Agent;
+    Agent -> State [label="  action", style=dashed];
+}
+```
+::::
+:::
+
+- **Example**: "Poker" — see own hand, infer opponent hand distribution from
+  betting behavior
+
+- **Algorithms**: Particle Filtering, Kalman Filter, POMCP, Belief-State
+  Planning
+
+* Stochastic Observations with Hidden State
+
+- **Intuition**: environment has a _hidden state_; observations are
+  noisy/corrupted, revealed only over time
+
+- **Definition**: modeled as a _Hidden Markov Model_ (HMM)
+  - Latent transition $\Pr(s_{t+1} \mid s_t)$
+  - Noisy emission $o_t \sim O(\cdot \mid s_t)$
+  - Goal: infer hidden sequence via _filtering / smoothing_
+
+- **Example**: "Speech Recognition" — true phoneme sequence hidden, observe
+  noisy mel-spectrogram features, infer phonemes
+
+- **Example**: "Weather from noisy thermometer" — infer hot/cold/rainy from a
+  drifting sensor over time
+
+- **Algorithms**: Hidden Markov Models, Kalman Filter (linear-Gaussian),
+  Extended/Unscented KF (nonlinear), Particle Filters
+
+# 2. Time Horizon: One-Step Vs. Multi-Step
+
+* One-Step / Myopic Decision (Bandit)
+
+- **Intuition**: optimize _immediate reward only_; no future consequences, no
+  state transitions
+
+- **Definition**: _bandit_ problem over arms $a$
+  $$\max_a \; \mathbb{E}[R(a)] \quad\text{or learn}\quad \mu_a = \mathbb{E}[R(a)]$$
+  - Action and reward independent of history
+
+- **Example**: "Online Ad Selection" — choose ad, observe click/no-click,
+  maximize click-through for current user
+
+- **Example**: "Email Spam Filter" — classify one email; decision affects only
+  that email
+
+- **Algorithms**: $\varepsilon$-Greedy, UCB (Upper Confidence Bound), Thompson
+  Sampling, Contextual Bandits
+
+* Multi-Step Lookahead (Finite Horizon)
+
+- **Intuition**: a move cannot be judged in isolation; must consider
+  consequences over a fixed horizon $H$
+
+- **Definition**: finite-horizon MDP solved by _backward induction_
+  $$
+  V_h(s)
+    = \max_a \big[ R(s,a) + V_{h-1}(s') \big]
+  $$
+  - Maximize $\sum_{t=0}^{H} R(s_t, a_t)$ with $s_{t+1} \sim P(\cdot|s_t,a_t)$
+
+- **Example**: "Chess move selection" — look ahead 20+ moves to evaluate current
+  move
+
+- **Example**: "Grasp Planning" — plan ~10-step gripper sequence to reach a
+  feasible grasp
+
+- **Algorithms**: Minimax, Alpha-Beta Pruning, A\*, RRT, MCTS
+
+* Infinite Horizon (Discounted)
+
+- **Intuition**: process never terminates; balance immediate vs. long-term via
+  discount $\gamma \in [0,1)$
+
+- **Definition**: maximize discounted return, obeying the _Bellman equation_
+  $$
+  V^*(s)
+    = \max_a \Big[ R(s,a) + \gamma \, \mathbb{E}_{s' \sim P(\cdot|s,a)}[V^*(s')] \Big]
+  $$
+  - Optimal policy $\pi^*$ is _stationary_ (time-invariant)
+
+- **Example**: "Portfolio Management" — allocate today to maximize wealth
+  forever; distant rewards down-weighted by $\gamma^t$
+
+- **Algorithms**: Q-Learning, SARSA, Value/Policy Iteration, Actor-Critic;
+  Deep RL — DQN, PPO, SAC
+
+* Episodic / Finite Horizon
+
+- **Intuition**: task runs for a _fixed episode length_ $T$, then resets to an
+  initial state
+
+- **Definition**: episodic return, usually undiscounted
+  $$
+  J = \mathbb{E}\Big[ \sum_{t=0}^{T} R(s_t, a_t) \Big]
+  $$
+  - Agent resets after step $T$; next episode is independent
+
+- **Example**: "Video-game level" — episode lasts exactly 300 frames; maximize
+  total score, then the level ends
+
+- **Example**: "Student studying for an exam" — fixed study time, maximize exam
+  score, knowledge resets next episode
+
+- **Algorithms**: Monte Carlo methods, MCTS, Policy Gradient (REINFORCE)
+
+# 3. Action Space: Discrete Vs. Continuous
+
+* Discrete Actions
+
+- **Intuition**: a _finite_ action set $\mathcal{A} = \{a_1, \ldots, a_n\}$ can
+  be enumerated and compared directly
+
+- **Definition**: pick the best action by enumeration
+  $$
+  a^* = \arg\max_{a \in \mathcal{A}} Q(s, a)
+  $$
+  - $Q$-function is a table with $|\mathcal{S}| \times n$ entries
+
+- **Example**: "Traffic Light Controller" — actions $\{$Green-NS, Green-EW,
+  Yellow, Red$\}$; small branching factor
+
+- **Example**: "Document Recommendation" — $\{$Like, Dislike, Bookmark, Share,
+  Ignore$\}$; learn $Q$ for each of 5 actions
+
+- **Algorithms**: Q-Learning, DQN, MCTS, Minimax, Value Iteration
+
+* Continuous Actions
+
+- **Intuition**: action space $\mathcal{A} \subseteq \mathbb{R}^n$ is
+  uncountably infinite $\to$ _cannot enumerate or tabulate_
+
+- **Definition**: learn a parameterized _function_, not a table
+  $$
+  a = \mu(s) \;\text{(deterministic)} \quad\text{or}\quad a \sim \pi(a \mid s) \;\text{(stochastic)}
+  $$
+  - Approximated with neural networks
+
+- **Example**: "Autonomous Vehicle Control" — steering
+  $\alpha \in [-\pi/4, \pi/4]$ and acceleration $a \in [-10, 5]$ m/s$^2$
+
+- **Example**: "Robot Arm" — continuous joint angles
+  $(\theta_1, \theta_2, \theta_3) \in \mathbb{R}^3$
+
+- **Algorithms**: DDPG, TD3, SAC, PPO (continuous), Policy Gradient,
+  Evolutionary Strategies
+
+* Hybrid (Mixed Discrete-Continuous)
+
+- **Intuition**: some actions _discrete_, some _continuous_ $\to$ a two-level
+  hierarchical decision
+
+- **Definition**: factorize the policy over a discrete then a continuous action
+  $$
+  \pi(a_d, a_c \mid s) = \pi_d(a_d \mid s)\, \pi_c(a_c \mid s, a_d)
+  $$
+  - Continuous choice $a_c$ conditioned on discrete choice $a_d$
+
+- **Example**: "Manufacturing Robot" — discrete: select tool (gripper, welder,
+  sprayer); continuous: trajectory speed and position
+
+- **Example**: "Robotic Gripper" — discrete: which of 5 objects; continuous:
+  grasp force and angle
+
+- **Algorithms**: Branching DQN, Hierarchical RL, Multi-task Learning with
+  shared base
+
+# 4. Multi-Agent Interaction
+
+* Single-Agent
+
+- **Intuition**: _one_ decision-maker, _one_ objective, no strategic
+  interaction; the environment is stochastic but non-adversarial
+
+- **Definition**: a standard MDP with optimal $\pi^*$ satisfying Bellman
+  $$
+  J = \mathbb{E}\Big[ \sum_t \gamma^t R(s_t, a_t) \Big]
+  $$
+  - No game theory needed
+
+- **Example**: "Personalized Movie Recommendation" — one system, one user,
+  maximize user satisfaction
+
+- **Example**: "Inventory Management" — one company minimizes cost + stockout
+  penalties
+
+- **Algorithms**: Q-Learning, DQN, SARSA, PPO, Actor-Critic
+
+* Multi-Agent Cooperative
+
+- **Intuition**: $n$ agents share _one objective_ and must _coordinate_ actions
+
+- **Definition**: cooperative multi-agent MDP with a _shared_ reward
+  $$
+  J = \mathbb{E}\Big[ \sum_t R(s_t, a_{1,t}, \ldots, a_{n,t}) \Big]
+  $$
+  - Challenge: _decentralized execution_ via communication / parameter sharing
+
+- **Example**: "Warehouse Robot Team" — 5 robots minimize delivery time, must
+  avoid collisions and deadlocks under one team reward
+
+- **Example**: "Vehicle Network Optimization" — cooperatively route packets to
+  maximize throughput $-$ delay
+
+- **Algorithms**: QMIX, MAPPO, MAAC, MADDPG, CommNet
+
+* Multi-Agent Competitive
+
+- **Intuition**: agents have _conflicting_ objectives $\to$ game theory and
+  _Nash equilibrium_ apply
+
+- **Definition**: each agent $i$ maximizes $J_i$; at a Nash equilibrium no
+  unilateral deviation helps
+  $$
+  R_i(s, \pi_i^*, \pi_{-i}^*) \geq R_i(s, \pi_i, \pi_{-i}^*) \quad \forall \pi_i
+  $$
+  - Zero-sum special case: $R_1 + R_2 = \text{const}$
+
+- **Example**: "Chess Match" — two players, zero-sum; optimal play is a Nash
+  equilibrium
+
+- **Example**: "Auction Bidding" — your gain is others' loss; truthful bidding
+  is equilibrium in a second-price auction
+
+- **Algorithms**: Minimax + Alpha-Beta, Self-Play, CFR, Nash Solvers
+
+# 5. Information Structure: Perfect Vs. Imperfect Vs. Asymmetric
+
+* Perfect Information
+
+- **Intuition**: all players know _all_ relevant information; the entire game
+  tree is visible, no hidden moves
+
+- **Definition**: every information set is a _singleton_
+  $$
+  I_i(h) = \{ h' : \text{player } i \text{ cannot distinguish } h \text{ from } h' \}
+  $$
+  - Optimal play by _backward induction_ on the game tree
+
+- **Example**: "Chess" — both players see the board and full move history
+
+- **Example**: "Tic-Tac-Toe" — fully solvable; all Nash equilibria via Minimax
+
+- **Algorithms**: Minimax + Alpha-Beta, Negamax, MCTS, AlphaZero, exact solvers
+
+* Imperfect Information
+
+- **Intuition**: hidden moves or hidden state create an _information gap_
+  between players
+
+- **Definition**: non-singleton information sets $\to$ act on _beliefs_
+  $$
+  b_i(h) = \Pr(h \mid \text{player } i\text{'s observations})
+  $$
+  - Equilibrium is a _mixed strategy_ $\sigma_i^*$ with no profitable deviation
+
+- **Example**: "Poker" — betting history visible but hole cards hidden;
+  asymmetry drives strategy
+
+- **Example**: "Business Competition" — firms price without knowing rivals'
+  costs; randomize to avoid exploitation
+
+- **Algorithms**: CFR (Counterfactual Regret Minimization), Regret Matching,
+  Nash Solvers, Information-Set Abstraction
+
+* Asymmetric Information
+
+- **Intuition**: players have _fundamentally different_ information sets and
+  capabilities (one side cannot observe the other)
+
+- **Definition**: principal designs a contract to align an unobserved agent
+  $$
+  \max_{c} \; u_1(c(y)) - c(y)
+  \quad \text{s.t.} \quad
+  a_2^* = \arg\max_a u_2(c(y(a))) - \psi(a)
+  $$
+
+- **Example**: "Principal-Agent" — employer sees output, not employee effort;
+  must incentivize
+
+- **Example**: "Insurance Market" — buyer knows health, insurer does not
+  (adverse selection); screen via deductibles
+
+- **Algorithms**: Mechanism Design, Bayesian Games, Signaling Equilibria,
+  Information-dependent policies
+
+# 6. Model Knowledge: Model-Based Vs. Model-Free
+
+* Model-Based (Planning)
+
+- **Intuition**: agent _has or learns_ a world model, then _plans_ against it
+  without touching the real environment
+
+- **Definition**: solve planning on learned $\hat{P}, \hat{R}$
+  $$
+  V(s) = \max_a \Big[ \hat{R}(s,a) + \gamma \, \mathbb{E}_{s' \sim \hat{P}}[V(s')] \Big]
+  $$
+  - _Sample-efficient_ but sensitive to model error
+
+- **Example**: "GPS Route Planner" — model of roads and travel times finds the
+  fastest route without driving all routes
+
+- **Example**: "Game AI Lookahead" — simulate future states, avoid risky actions
+  in simulation
+
+- **Algorithms**: Value/Policy Iteration, Dyna-Q, MCTS, AlphaGo, MuZero
+
+* Model-Free (Learning)
+
+- **Intuition**: _no model_; the agent learns directly from experience by
+  trial-and-error
+
+- **Definition**: learn value/policy from transitions
+  $(s_t, a_t, r_t, s_{t+1})$
+  $$
+  Q(s, a) \leftarrow Q(s,a) + \alpha \big[ r + \gamma \max_{a'} Q(s', a') - Q(s,a) \big]
+  $$
+  - No explicit $\hat{P}$ or $\hat{R}$; _asymptotically optimal_ but data-hungry
+
+- **Example**: "Atari from Pixels" — no game code, learn $Q$ from screen +
+  rewards
+
+- **Example**: "Robot Grasping" — learn from grasp success/failure, no physics
+  model
+
+- **Algorithms**: Q-Learning, SARSA, REINFORCE, Actor-Critic, DQN, PPO, SAC, A3C
+
+# 7. Update Mechanism: Online Vs. Batch Vs. Replay
+
+* Online Learning
+
+- **Intuition**: learn and act in _real time_ on a single trajectory; each
+  sample used _once_, no buffer
+
+- **Definition**: immediate on-policy update after each transition
+  $$
+  \theta_t \rightarrow \theta_{t+1} \quad\text{from}\quad (s_t, a_t, r_t, s_{t+1})
+  $$
+  - High variance, low memory, must handle _non-stationary_ data
+
+- **Example**: "Autonomous Vehicle Braking" — learn immediately while driving;
+  cannot wait for batch processing
+
+- **Example**: "Live Customer Support" — update after each interaction from
+  satisfaction feedback
+
+- **Algorithms**: SARSA, TD Learning, REINFORCE, on-policy Actor-Critic (A3C)
+
+* Batch Learning / Offline RL
+
+- **Intuition**: train on a _fixed dataset_ with _no_ environment interaction;
+  all data collected in advance
+
+- **Definition**: optimize over a static dataset
+  $\mathcal{D} = \{(s_i, a_i, r_i, s_i')\}$
+  - Core challenge: _off-policy_ data $\to$ _distribution shift_
+  - Fixes: importance sampling, conservative value estimates
+
+- **Example**: "Medical Treatment Policy" — learn from historical (state,
+  treatment, outcome); cannot experiment on new patients
+
+- **Example**: "Movie Recommendation" — train on historical interactions, avoid
+  bad recommendations in production
+
+- **Algorithms**: Batch Q-Learning, Offline RL, Behavior Cloning, Conservative
+  Q-Learning (CQL)
+
+* Replay-based / Experience Replay
+
+- **Intuition**: store experiences in a buffer and _replay_ them $\to$ combines
+  online acting with batch updates, _decorrelating_ samples
+
+- **Definition**: maintain buffer $\mathcal{B}$ of size $N$; each step
+  1. Act via $\pi_t$, add $(s_t, a_t, r_t, s_{t+1})$ to $\mathcal{B}$
+  2. Sample a minibatch from $\mathcal{B}$
+  3. Update $\theta$ on the minibatch
+  - Benefits: breaks correlation, reuses samples, enables off-policy learning
+
+- **Example**: "DQN on Atari" — store frames, train on random minibatches from
+  the replay buffer
+
+- **Algorithms**: DQN with Experience Replay, Prioritized ER (PER), Hindsight ER
+  (HER), Rainbow DQN
+
+# 8. Solution Concept: How Policy is Represented
+
+* Value-based Methods
+
+- **Intuition**: learn _values_, then act _greedily_; no explicit policy is
+  stored
+
+- **Definition**: learn $Q$ (or $V$), derive $\pi(s) = \arg\max_a Q(s,a)$
+  $$
+  Q(s,a) \leftarrow Q(s,a) + \alpha \big[ r + \gamma \max_{a'} Q(s', a') - Q(s,a) \big]
+  $$
+  - _Off-policy_ and sample-efficient
+
+- **Example**: "Chess Position Evaluator" — score each board; play the move to
+  the highest-value position
+
+- **Example**: "Traffic Signal Control" — $Q(\text{state}, \text{signal})$
+  predicts queue reduction
+
+- **Algorithms**: Q-Learning, Value Iteration, DQN, Double DQN, Dueling DQN
+
+* Policy-based Methods
+
+- **Intuition**: learn the _policy directly_; no intermediate value function
+  needed
+
+- **Definition**: parameterize $\pi_\theta(a \mid s)$, ascend the policy gradient
+  $$
+  \nabla_\theta J = \mathbb{E}\big[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q(s,a) \big]
+  $$
+  - Handles continuous actions; _higher variance_; on-policy
+
+- **Example**: "Robot Arm Joint Control" — output a distribution over joint
+  angles, explore continuous actions naturally
+
+- **Example**: "Game NPC Strategy" — learn a stochastic strategy (aggressive /
+  defensive / evasive), unpredictable to the player
+
+- **Algorithms**: REINFORCE, PPO, TRPO, Natural Policy Gradient, Evolutionary
+  Strategies
+
+* Actor-Critic Methods
+
+::: columns
+:::: {.column width=58%}
+- **Intuition**: combine both — an _actor_ picks actions, a _critic_ evaluates
+  them; the critic reduces the actor's variance
+
+- **Definition**: actor $\pi_\theta$, critic $V_\phi$, using advantage
+  $$
+  A(s,a) = r + \gamma V_\phi(s') - V_\phi(s)
+  $$
+  - Actor update: $\nabla_\theta \log \pi_\theta(a|s)\, A(s,a)$
+::::
+:::: {.column width=42%}
+```graphviz
+digraph AC {
+    rankdir=TB;
+    splines=spline;
+    nodesep=0.6;
+    ranksep=0.7;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.5];
+
+    State  [label="State s", fillcolor="#B2E2B2"];
+    Actor  [label="Actor\npi(a|s)", fillcolor="#F4A6A6"];
+    Critic [label="Critic\nV(s)", fillcolor="#C6A6F4"];
+    Env    [label="Environment", fillcolor="#A0D6D1"];
+
+    State -> Actor;
+    State -> Critic;
+    Actor -> Env [label="  action"];
+    Env -> Critic [label="  reward"];
+    Critic -> Actor [label="  TD error", style=dashed];
+}
+```
+::::
+:::
+
+- **Example**: "Robot Locomotion" — actor outputs joint torques, critic predicts
+  forward progress; lower variance than pure policy gradient
+
+- **Algorithms**: A2C, A3C, SAC, DDPG, TD3, PPO (value baseline)
+
+* Search / Planning Methods
+
+- **Intuition**: _look ahead_ by building a tree at decision time, using a model
+  or simulator before committing
+
+- **Definition**: expand a tree, evaluate leaves, backprop, select by UCB
+  $$
+  a^* = \arg\max_a \frac{Q(s,a)}{N(s,a)} + c \sqrt{\frac{\ln N(s)}{N(s,a)}}
+  $$
+  - Sample-heavy but _asymptotically optimal_
+
+- **Example**: "AlphaGo" — MCTS searches the game tree, evaluates leaves with a
+  neural network before each move
+
+- **Example**: "Robot Task Planning" — search 5-10 steps ahead, backtrack from
+  failure states
+
+- **Algorithms**: MCTS, Minimax + Alpha-Beta, A\*, MPC, AlphaZero, MuZero
+
+# 9. Optimality Criterion: Policy Structure and Goal
+
+* Deterministic Policies
+
+- **Intuition**: one _fixed action_ per state; randomness appears only during
+  exploration in training
+
+- **Definition**: deterministic map $\mu(s) \in \mathcal{A}$ with gradient
+  $$
+  \nabla_\theta J = \mathbb{E}\big[ \nabla_a Q(s,a)\, \nabla_\theta \mu_\theta(s) \big|_{a=\mu_\theta(s)} \big]
+  $$
+  - Off-policy, sample-efficient; exploration via noise injection
+
+- **Example**: "Traffic Light Controller" — {heavy left traffic} $\to$ {green
+  left}, always the same
+
+- **Example**: "Robot End-Effector" — vision input maps to a fixed target
+  gripper position at deployment
+
+- **Algorithms**: DPG, DDPG, TD3, greedy Q-Learning, Minimax
+
+* Stochastic Policies
+
+- **Intuition**: output a _distribution_ over actions; exploration is _built
+  into_ the policy
+
+- **Definition**: sample $a \sim \pi(\cdot \mid s)$ and follow the policy
+  gradient
+  $$
+  \nabla_\theta J = \mathbb{E}_{a \sim \pi}\big[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q(s,a) \big]
+  $$
+  - Handles _multimodal_ actions; more stable
+
+- **Example**: "Card-Game Strategy" — {aggressive: 30%, conservative: 70%} to
+  stay unpredictable
+
+- **Example**: "Diverse Recommender" — sample {news 40%, entertainment 30%,
+  educational 30%} to avoid local optima
+
+- **Algorithms**: REINFORCE, PPO, A3C, SAC, Thompson Sampling
+
+* Optimal Policies
+
+- **Intuition**: find the _provably best_ policy — exact or $\varepsilon$-optimal
+  — even if computationally expensive
+
+- **Definition**: $\pi^* = \arg\max_\pi J(\pi)$ with optimal value satisfying
+  Bellman
+  $$
+  V^*(s) = \max_a \big[ r(s,a) + \gamma \, \mathbb{E}[V^*(s')] \big]
+  $$
+  - Value Iteration _converges_ in finite MDPs
+
+- **Example**: "Chess Solver" — prove a move is optimal from a given position
+
+- **Example**: "Trajectory Optimization" — globally optimal path (e.g.,
+  power-minimal route) for convex cost
+
+- **Algorithms**: Value/Policy Iteration, Minimax + Alpha-Beta, AlphaZero,
+  Exhaustive Search
+
+* Approximate / Satisficing Policies
+
+- **Intuition**: accept a _good-enough_ policy with _bounded_ suboptimality when
+  time or compute is limited
+
+- **Definition**: $\varepsilon$-optimal policy with a guarantee
+  $$
+  V^\varepsilon(s) \geq V^*(s) - \varepsilon
+  $$
+  - Bounded-depth search: error $\leq \varepsilon / (1 - \gamma)$; _anytime_
+    algorithms stop early
+
+- **Example**: "Real-time Chess Engine" — search a fixed depth within the time
+  limit; suboptimal but practical
+
+- **Example**: "Robot Obstacle Avoidance" — must react in 50 ms; greedy/myopic
+  avoidance, safe not optimal
+
+- **Algorithms**: Anytime Algorithms, Approximate Dynamic Programming, Bounded
+  Suboptimality, Satisficing methods
+
+# 10. State - Action Space Size: Scalability
+
+* Small Tabular Problem
+
+- **Intuition**: $|\mathcal{S}|$ and $|\mathcal{A}|$ are small enough to store in
+  a _lookup table_ (e.g., < 10k states)
+
+- **Definition**: $Q$-table is a $|\mathcal{S}| \times |\mathcal{A}|$ matrix
+  $$
+  V(s) \leftarrow \max_a \Big[ R(s,a) + \gamma \sum_{s'} P(s'|s,a)\, V(s') \Big]
+  $$
+  - _Exact_ solution with guaranteed convergence
+
+- **Example**: "Grid World" — $10 \times 10$ grid = 100 states, 4 actions; full
+  $Q$-table fits
+
+- **Example**: "Small Inventory" — 20 levels $\times$ 5 order quantities; solve
+  by tabular Q-learning
+
+- **Algorithms**: Tabular Q-Learning, Tabular Value/Policy Iteration, MCTS
+
+* Medium: Linear Function Approximation
+
+- **Intuition**: state space _too large_ for a table $\to$ compress via features
+
+- **Definition**: linear value in a feature vector $\phi(s) \in \mathbb{R}^d$,
+  $d \ll |\mathcal{S}|$
+  $$
+  V(s) \approx w^\top \phi(s),
+  \qquad
+  w \leftarrow w + \alpha \big[ r + \gamma V(s') - V(s) \big] \phi(s)
+  $$
+  - _Basis-function design_ is the key challenge
+
+- **Example**: "Adaptive Auction Bidding" — features [price history, competitor
+  bids, budget remaining] too many to tabulate
+
+- **Example**: "Online Resource Allocation" — features [load, queue length, time
+  of day, priority]
+
+- **Algorithms**: Q-Learning / SARSA with FA, LSTD, Linear/Contextual Bandits
+
+* Large: Deep Neural Networks
+
+- **Intuition**: _high-dimensional_ inputs (images, speech) demand a learned
+  feature extractor
+
+- **Definition**: value as a deep network $V(s) = f_\theta(s)$
+  $$
+  \theta \leftarrow \theta + \alpha \big[ r + \gamma \max_{a'} f_{\theta'}(s') - f_\theta(s) \big] \nabla_\theta f_\theta(s)
+  $$
+  - Challenges: non-stationary targets, off-policy data
+  - Fixes: _experience replay_, _target networks_
+
+- **Example**: "Self-Driving Car" — camera image ($1920 \times 1440 \times 3$)
+  $\to$ CNN features $\to$ continuous control
+
+- **Example**: "Atari" — $84 \times 84 \times 3$ screen, CNN extracts sprites and
+  terrain, DQN learns $Q$
+
+- **Algorithms**: DQN (Double / Dueling / Rainbow), A3C, PPO, TRPO, SAC, TD3
+
+# Summary
+
+* Quick Reference: Problem Type $\to$ Algorithm
+
+```{=typst}
+#styled-table(
+  headers: ("Problem type", "Example", "Algorithms"),
+  rows: (
+    ("Full obs., small state", "Tic-Tac-Toe", "Q-Learning, Value Iteration, MCTS"),
+    ("Full obs., large state", "Atari (pixels)", "DQN, A3C, PPO"),
+    ("Partially observable", "Robot localization", "Particle Filter, POMCP, HMM"),
+    ("Continuous, known model", "Trajectory opt.", "MPC, iLQR"),
+    ("Continuous, unknown model", "Robotic arm", "PPO, SAC, DDPG, TD3"),
+    ("Discrete, exploration", "Web ads (bandit)", "UCB, Thompson, e-Greedy"),
+    ("Game, perfect info", "Chess", "Minimax, Alpha-Beta, AlphaZero"),
+    ("Game, imperfect info", "Poker", "CFR, Nash Solver"),
+    ("Multi-agent cooperative", "Warehouse robots", "MAAC, MAPPO, QMIX"),
+    ("Multi-agent competitive", "Enemy AI", "Self-Play, Nash Learning"),
+  ),
+  caption: "Mapping problem coordinates to solution methods",
+  col-widths: (1.2fr, 1fr, 1.6fr),
+  bold-first-col: true
+)
+```
+
+* Key Takeaways
+
+- **Key idea**: locate a problem on the _10 dimensions_, then read off the
+  algorithm family
+
+- **Observability + Model**: full obs. $\to$ direct learning; partial $\to$
+  belief tracking; model-based is sample-efficient, model-free is
+  asymptotically optimal
+
+- **Horizon + Actions**: myopic $\to$ bandits; multi-step $\to$ search; infinite
+  $\to$ stationary policy; discrete $\to$ enumerate, continuous $\to$ learn a
+  distribution
+
+- **Agents + Information**: single $\to$ standard RL; competitive $\to$ Nash /
+  game theory; imperfect info $\to$ CFR; asymmetric $\to$ mechanism design
+
+- **Solution + Optimality + Scale**: value / policy / actor-critic / search;
+  optimal vs. satisficing; tabular $\to$ linear FA $\to$ deep NN as dimension
+  grows
+
+- **Remark**: the dimensions are _orthogonal_ — changing one (e.g., adding
+  noise, more agents) moves the problem and its method independently

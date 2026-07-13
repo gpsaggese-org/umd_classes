@@ -358,7 +358,7 @@
   - Bayesian models for decision-making, posterior-based choices, uncertainty in utility
 - [60%]: Not covered - Formal axiomatic foundations of utility theory, advanced risk-preference elicitation, cooperative game theory
 
-## 10: Taxonomy of Decision-Making
+## 10: Taxonomy of Decision-Making Problems and Algorithms
 
 ### Topics
 - From causal effects to expected value: plugging treatment effects into utility
