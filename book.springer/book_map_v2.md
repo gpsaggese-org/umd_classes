@@ -1,15 +1,17 @@
-**Title**:
+# Summary
+
+## Title
 - From Data to Decisions: Building Decision Systems with Probabilistic Causal
   Reasoning
 
 - Reasoning under Uncertainty: Causal Machine Learning for Decision Making
 
-**Target audience:**
+## Target audience
 - Senior ML engineers and data scientists with a statistics and probabilistic ML
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
-**Progression**
+## Short TOC
 - The sequence of the parts in the books are:
   - Motivation
     - 1. Why Decisions, Not Predictions
@@ -40,6 +42,8 @@
     - 15. Building Stakeholder Alignment
     - 16. Deployment, Monitoring, and Adaptation
     - 17. Trust, Explainability, Fairness, and Governance
+
+# Detailed TOC
 
 # Part I: Why Businesses Need Decisions, not Predictions (Motivation)
 
