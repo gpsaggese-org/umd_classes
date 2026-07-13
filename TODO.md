@@ -84,6 +84,29 @@ pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_bu
 
 tmp.pytest_failed_multi_build.repro.sh
 
+// Using GH
+i gh_workflow_list
+
+tmp.failure.check_if_the_linter_was_run.helperstask1273_get_mac_tests_to_pass.txt
+
+pytest_failed.py -i tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt
+
+20:17:32 - INFO  pytest_failed.py _process_single_file:227              Created 'passed_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:233              Created 'failed_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:239              Created 'skipped_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:245              Created 'updated_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:252              Created 'tests_by_duration.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:258              Created 'duration_stats.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:264              Created 'stacktraces.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:270              Created 'info.json'
+
+################################################################################
+Test Outcome Summary
+################################################################################
+Build                                                            | Status | Passed | Skipped | Failed | Total | Duration |
+---------------------------------------------------------------- | ------ | ------ | ------- | ------ | ----- | -------- |
+tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt | FAIL   | 3106   | 172     | 3      | 3281  | 263.28s  |
+
 ## Improve unit test
 
 ### [ ] Why there are two updated?

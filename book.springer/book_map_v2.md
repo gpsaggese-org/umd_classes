@@ -11,42 +11,18 @@
 
 # Part I: Why Businesses Need Decisions, not Predictions (Motivation)
 
-## 1: From Prediction Pipelines to Decision Pipelines
+## 1: Why Decisions, Not Predictions
 
 ### Topics
-- [ ] Add the topics from actual slides
 
-## 2: Why Good Data Leads to Bad Decisions
-
-### Topics
-- Statistical significance traps and overfitting: peeking, multiple comparisons,
-  novelty effects, and burning the test set
-- Heterogeneous treatment effects: when average effects mask sub-group reversals
-- Confounding in causal ML: biases when causal assumptions are unmet
-- Selection bias and the missing-counterfactual problem: data reflects only
-  decisions actually made (e.g., approved loans)
-- Feedback loops: how predictions change the world and break model assumptions
-- Strategic and adversarial response: deployed models get gamed (credit gaming,
-  SEO), violating passive-agent assumptions
-- Distribution shift and causal assumptions under intervention
-- Decision readiness under uncertainty: knowing when causal claims are safe to
-  act on, especially in small-data regimes
-
-## 3: Problem Framing and Intervention Design
+## 2: The Cost of Ignoring Causality
 
 ### Topics
-- From KPI selection to causal objectives and utilities: avoiding Goodhart's law
-  when a proxy becomes the target
-- Cost-asymmetry in decisions: why symmetric losses (log-loss, MSE) misprice
-  asymmetric business errors
-- Building causal DAGs: variable identification, temporal structure, and domain
-  knowledge
-- Intervention design: choosing levers, targets, scales, and timing
-- Causal variable types: confounders, mediators, colliders, and their adjustment
-  rules
-- Identifiability and causal assumptions: backdoor, frontdoor, and IV conditions
-- End-to-end decision framing vs. splitting into individually-solved sub-problems
-- Data collection strategy aligned with causal identification requirements
+
+## 3: The Cost of Ignoring Uncertainty
+
+### Topics
+- Point Estimates in a Small-Data World
 
 # Part II: Advanced Tools & Theory (Foundations)
 
