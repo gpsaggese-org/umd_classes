@@ -9,20 +9,84 @@
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
+**Progression**
+- The sequence of the parts in the books are:
+  - Motivation
+    - 1. Why Decisions, Not Predictions
+    - 2. The Cost of Ignoring Causality
+    - 3. The Cost of Ignoring Uncertainty
+  - Advanced Modeling Theory & Tools
+    - 6. Knowledge Representation
+    - 7. Probalistic ML
+    - 8. Causal ML
+  - Data
+    - 4. Building Causal Knowledge
+    - 5. Causal data pipelines
+      - Selection Bias
+        - How data collection processes bias what you observe
+        - Missing data mechanisms (MCAR, MAR, MNAR)
+        - Biases introduced by how samples were selected
+      - Distribution Shift
+        - Training vs. production data distribution mismatch
+        - Covariate shift, label shift, and concept drift
+        - Detecting and mitigating distribution changes
+  - Decision-Making Theory & Tools
+    - 10. Decision Theory Foundations
+    - 11. Taxonomy of Decision-Making
+    - 12. Simple Decisions
+    - 13. Complex Decisions
+    - 14. Agentic Causal Reasoning
+  - Implementation, Deployment, & Governance
+    - 15. Building Stakeholder Alignment
+    - 16. Deployment, Monitoring, and Adaptation
+    - 17. Trust, Explainability, Fairness, and Governance
+
 # Part I: Why Businesses Need Decisions, not Predictions (Motivation)
 
 ## 1: Why Decisions, Not Predictions
 
 ### Topics
+- Course Roadmap: the decision pipeline ($data \to model \to policy \to action
+  \to feedback$) and five-part structure
+- Why Traditional ML Falls Short: four critical gaps (causality, uncertainty,
+  business objective, dynamics)
+- From Data Science to Decision Science: predictive vs. decision-making paradigms
+- Causal vs Predictive Questions: predictive form vs. causal form of business
+  questions
+- The Analytics Maturity Ladder: from descriptive (level 0) through predictive
+  (level 1), causal (level 2), to decision (level 3)
 
 ## 2: The Cost of Ignoring Causality
 
 ### Topics
+- When Correlation Misleads
+  - Correlation encodes confounding as causation: $\Pr(Y | X) \neq \Pr(Y |
+    do(X))$
+  - Missing interventions and counterfactuals: observational models cannot answer
+    "what if?" questions
+  - Selection bias and the missing counterfactual: incomplete populations in
+    historical data
+- Structural Failure Modes
+  - Interference and spillovers across units: SUTVA violations in marketplaces
+    and networks
+  - Simpson's Paradox: when aggregates reverse while subgroups show consistent
+    effects
+  - Collider bias: conditioning creates illusions (Berkson's paradox)
+  - Discarding domain knowledge and mechanism: pattern-driven models inherit
+    training data artifacts
 
 ## 3: The Cost of Ignoring Uncertainty
 
 ### Topics
 - Point Estimates in a Small-Data World
+  - Point estimates without error bars: single numbers hide decision-relevant
+    variance
+  - Epistemic vs aleatoric uncertainty conflated: inability to detect
+    out-of-distribution inputs
+  - No abstention: systems that never say "I don't know" are overconfident
+    off-distribution
+  - Overfitting and statistical significance traps: peeking, multiple
+    comparisons, burned test sets
 
 # Part II: Advanced Tools & Theory (Foundations)
 
