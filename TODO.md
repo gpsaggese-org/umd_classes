@@ -226,6 +226,14 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 ### [.] Read Academic Articles
 
+- [ ] Add a script to download an HTML file to markdown
+
+- [ ] Merge the two
+
+./dev_scripts_helpers/documentation/summarize_chapters.py
+./dev_scripts_helpers/documentation/summarize_md.py
+.claude/skills/markdown.summarize/SKILL.md
+
 ```
 > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
 > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
