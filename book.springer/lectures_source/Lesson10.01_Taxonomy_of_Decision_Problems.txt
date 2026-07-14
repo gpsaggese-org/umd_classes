@@ -166,7 +166,7 @@ digraph MDP {
 ::::
 :::
 
-- **Example**: Inventory Management
+- **Example**: inventory management
   - Current stock observed
   - Demand known
   - Decide order quantity each period
@@ -210,7 +210,7 @@ digraph POMDP {
 ::::
 :::
 
-- **Example**: "Poker"
+- **Example**: poker
   - See your own hand
   - Infer opponent hand distribution from betting behavior
 
@@ -228,12 +228,12 @@ digraph POMDP {
   - Noisy emission $o_t \sim O(\cdot | s_t)$
   - Goal: infer hidden sequence via filtering / smoothing
 
-- **Example**: "Speech Recognition"
+- **Example**: speech recognition
   - True phoneme sequence hidden
   - Observe noisy features
   - Infer phonemes
 
-- **Example**: "Weather from noisy thermometer"
+- **Example**: weather from noisy thermometer
   - Infer hot/cold/rainy from a drifting sensor over time
 
 - **Algorithms**:
@@ -253,12 +253,12 @@ digraph POMDP {
   $$\max_a \; \EE[R(a)] \quad\text{or learn}\quad \mu_a = \EE[R(a)]$$
   - Action and reward independent of history
 
-- **Example**: "Online Ad Selection"
+- **Example**: online ad selection
   - Choose ad
   - Observe click/no-click,
   - Maximize click-through for current user
 
-- **Example**: "Email Spam Filter"
+- **Example**: email spam filter
   - Classify one email
   - Decision affects only that email
 
@@ -274,14 +274,17 @@ digraph POMDP {
 - **Definition**: finite-horizon MDP solved by _backward induction_
   $$
   V_h(s)
-  = \max_a \big[ R(s,a) + V_{h-1}(s') \big]
+    = \max_a
+        \left[
+          R(s,a) + V_{h-1}(s')
+        \right]
   $$
   - Maximize $\sum_{t=0}^{H} R(s_t, a_t)$ with $s_{t+1} \sim P(\cdot|s_t,a_t)$
 
-- **Example**: Chess move selection
+- **Example**: chess move selection
   - Look ahead 20+ moves to evaluate current move
 
-- **Example**: Grasp Planning
+- **Example**: grasp planning
   - Plan ~10-step gripper sequence to reach a feasible grasp
 
 - **Algorithms**: Minimax, Alpha-Beta Pruning, A\*, RRT, MCTS
@@ -295,11 +298,14 @@ digraph POMDP {
 - **Definition**: maximize discounted return, obeying the _Bellman equation_
   $$
   V^*(s)
-    = \max_a \Big[ R(s,a) + \gamma \, \EE_{s' \sim P(\cdot|s,a)}[V^*(s')] \Big]
+    = \max_a
+        \Big[
+          R(s,a) + \gamma \, \EE_{s' \sim P(\cdot|s,a)}[V^*(s')]
+        \Big]
   $$
   - Optimal policy $\pi^*$ is _stationary_ (time-invariant)
 
-- **Example**: Portfolio Management
+- **Example**: portfolio management
   - Allocate today to maximize wealth forever
   - Distant rewards down-weighted by $\gamma^t$
 
@@ -314,16 +320,18 @@ digraph POMDP {
 
 - **Definition**: episodic return (usually undiscounted)
   $$
-  J = \EE\Big[ \sum_{t=0}^{T} R(s_t, a_t) \Big]
+  J = \EE\left[
+    \sum_{t=0}^{T} R(s_t, a_t)
+  \right]
   $$
   - Agent resets after step $T$ and next episode is independent
 
-- **Example**: Video-game level
+- **Example**: video-game level
   - Episode lasts exactly 300 frames
   - Maximize total score
   - Then the level ends
 
-- **Example**: Student studying for an exam
+- **Example**: student studying for an exam
   - Fixed study time
   - Maximize exam score
   - Knowledge "resets" next episode
@@ -344,11 +352,11 @@ digraph POMDP {
   $$
   - $Q$-function is a table with $|\mathcal{S}| \times n$ entries
 
-- **Example**: Traffic Light Controller
+- **Example**: traffic light controller
   - Actions: $\{$Green-NS, Green-EW, Yellow, Red$\}$
   - Small branching factor
 
-- **Example**: Document Recommendation
+- **Example**: document recommendation
   - Actions: $\{$Like, Dislike, Bookmark, Share, Ignore$\}$
   - Learn $Q$ for each of 5 actions
 
@@ -367,11 +375,11 @@ digraph POMDP {
   $$
   - Approximated with neural networks
 
-- **Example**: Autonomous Vehicle Control
+- **Example**: autonomous vehicle control
   - Steering: $\alpha \in [-\pi/4, \pi/4]$
   - Acceleration: $a \in [-10, 5]$ m/s$^2$
 
-- **Example**: Robot Arm
+- **Example**: robot arm
   - Continuous joint angles: $(\theta_1, \theta_2, \theta_3) \in \mathbb{R}^3$
 
 - **Algorithms**: DDPG, TD3, SAC, PPO (continuous), Policy Gradient,
@@ -385,15 +393,16 @@ digraph POMDP {
 
 - **Definition**: factorize the policy over a discrete then a continuous action
   $$
-  \pi(a_d, a_c | s) = \pi_{discrete}(a_d | s)\, \pi_{continuous}(a_c | s, a_d)
+  \pi(a_d, a_c | s)
+    = \pi_{discrete}(a_d | s)\, \pi_{continuous}(a_c | s, a_d)
   $$
   - Continuous choice $a_c$ conditioned on discrete choice $a_d$
 
-- **Example**: Manufacturing Robot
+- **Example**: manufacturing robot
   - Discrete: select tool (gripper, welder, sprayer)
   - Continuous: trajectory speed and position
 
-- **Example**: Robotic Gripper
+- **Example**: robotic gripper
   - Discrete: which of 5 objects
   - Continuous: grasp force and angle
 
@@ -411,11 +420,13 @@ digraph POMDP {
 
 - **Definition**: a standard MDP with optimal $\pi^*$ satisfying Bellman equation
   $$
-  J = \EE\Big[ \sum_t \gamma^t R(s_t, a_t) \Big]
+  J = \EE\left[
+    \sum_t \gamma^t R(s_t, a_t)
+  \right]
   $$
   - No game theory needed
 
-- **Example**: Personalized Movie Recommendation
+- **Example**: personalized movie recommendation
   - One system, one user
   - Maximize user satisfaction
 
@@ -432,15 +443,17 @@ digraph POMDP {
 
 - **Definition**: cooperative multi-agent MDP with a _shared_ reward
   $$
-  J = \EE\Big[ \sum_t R(s_t, a_{1,t}, \ldots, a_{n,t}) \Big]
+  J = \EE\left[
+    \sum_t R(s_t, a_{1,t}, \ldots, a_{n,t})
+  \right]
   $$
   - Challenge: _decentralized execution_ via communication / parameter sharing
 
-- **Example**: Warehouse Robot Team
+- **Example**: warehouse robot team
   - 5 robots minimize delivery time
   - Avoid collisions and deadlocks under one team reward
 
-- **Example**: Vehicle Network Optimization
+- **Example**: vehicle network optimization
   - Cooperatively route packets
   - Maximize throughput (minimize delay)
 
@@ -456,15 +469,16 @@ digraph POMDP {
   - Each agent $i$ maximizes $J_i$
   - At a Nash equilibrium no unilateral deviation helps
     $$
-    R_i(s, \pi_i^*, \pi_{-i}^*) \geq R_i(s, \pi_i, \pi_{-i}^*) \quad \forall \pi_i
+    R_i(s, \pi_i^*, \pi_{-i}^*)
+      \geq R_i(s, \pi_i, \pi_{-i}^*) \quad \forall \pi_i
     $$
   - Zero-sum special case: $R_1 + R_2 = \text{const}$
 
-- **Example**: Chess Match
+- **Example**: chess match
   - Two players, zero-sum
   - Optimal play is a Nash equilibrium
 
-- **Example**: Auction Bidding
+- **Example**: auction bidding
   - Your gain is others' loss
   - Truthful bidding is equilibrium in a second-price auction
 
@@ -481,14 +495,17 @@ digraph POMDP {
 
 - **Definition**: every information set is a _singleton_
   $$
-  I_i(h) = \{ h' : \text{player } i \text{ cannot distinguish } h \text{ from } h' \}
+  I_i(h) =
+    \left\{
+      h' : \text{player } i \text{ cannot distinguish } h \text{ from } h'
+    \right\}
   $$
   - Optimal play by _backward induction_ on the game tree
 
 - **Example**: Chess
   - Both players see the board and full move history
 
-- **Example**: Tic-Tac-Toe
+- **Example**: tic-tac-toe
   - Fully solvable: all Nash equilibria via Minimax
 
 - **Algorithms**: Minimax + Alpha-Beta, Negamax, MCTS, AlphaZero, exact solvers
@@ -501,7 +518,10 @@ digraph POMDP {
 
 - **Definition**: non-singleton information sets $\to$ act on _beliefs_
   $$
-  b_i(h) = \Pr(h | \text{player } i\text{'s observations})
+  b_i(h) =
+    \Pr\left(
+      h \,\Big|\, \text{player } i\text{'s observations}
+    \right)
   $$
   - Equilibrium is a _mixed strategy_ $\sigma_i^*$ with no profitable deviation
 
@@ -509,7 +529,7 @@ digraph POMDP {
   - Betting history visible but hole cards hidden
   - Asymmetry drives strategy
 
-- **Example**: Business Competition
+- **Example**: business competition
   - Firms price without knowing rivals' costs
   - Randomize to avoid exploitation
 
@@ -525,16 +545,20 @@ digraph POMDP {
 // TODO(ai_gp): Unclear
 - **Definition**: principal designs a contract to align an unobserved agent
   $$
-  \max_{c} \; u_1(c(y)) - c(y)
+  \max_{c}
+    \Big[ u_1(c(y)) - c(y) \Big]
   \quad \text{s.t.} \quad
-  a_2^* = \arg\max_a u_2(c(y(a))) - \psi(a)
+  a_2^* = \arg\max_a
+    \big[
+      u_2(c(y(a))) - \psi(a)
+    \big]
   $$
 
-- **Example**: Principal-Agent
+- **Example**: principal-agent
   - Employer sees output, not employee effort
   - Must incentivize
 
-- **Example**: Insurance Market
+- **Example**: insurance market
   - Buyer knows its health, insurer does not (adverse selection)
   - Screen via deductibles
 
@@ -552,9 +576,10 @@ digraph POMDP {
 - **Definition**: solve planning on learned $\hat{P}, \hat{R}$
   $$
   V(s)
-  = \max_a [
-    \hat{R}(s,a) + \gamma \, \EE_{s' \sim \hat{P}}[V(s')]
-  ]
+    = \max_a
+        \left[
+          \hat{R}(s,a) + \gamma \, \EE_{s' \sim \hat{P}}[V(s')]
+        \right]
   $$
 // TODO(ai_gp): Add description
   - Pros
@@ -562,11 +587,11 @@ digraph POMDP {
   - Cons
     - sensitive to model error
 
-- **Example**: GPS Route Planner
+- **Example**: GPS route planner
   - Model of roads and travel times
   - Finds fastest route without driving all routes
 
-- **Example**: Game AI Lookahead
+- **Example**: game AI lookahead
   - Simulate future states
   - Avoid risky actions in simulation
 
@@ -580,15 +605,18 @@ digraph POMDP {
 - **Definition**: learn value/policy from transitions
   $(s_t, a_t, r_t, s_{t+1})$
   $$
-  Q(s, a) \leftarrow Q(s,a) + \alpha \big[ r + \gamma \max_{a'} Q(s', a') - Q(s,a) \big]
+  Q(s, a)
+    \leftarrow Q(s,a) + \alpha \left[
+      r + \gamma \max_{a'} Q(s', a') - Q(s,a)
+    \right]
   $$
   - No explicit $\hat{P}$ or $\hat{R}$; _asymptotically optimal_ but data-hungry
 
-- **Example**: Atari from Pixels
+- **Example**: Atari from pixels
   - No game code
   - Learn $Q$ from screen + rewards
 
-- **Example**: Robot Grasping
+- **Example**: robot grasping
   - Learn from grasp success/failure
   - No physics model
 
@@ -605,15 +633,16 @@ digraph POMDP {
 
 - **Definition**: immediate on-policy update after each transition
   $$
-  \theta_t \rightarrow \theta_{t+1} \quad\text{from}\quad (s_t, a_t, r_t, s_{t+1})
+  \theta_t \to \theta_{t+1}
+    \quad\text{from}\quad (s_t, a_t, r_t, s_{t+1})
   $$
   - High variance, low memory, must handle _non-stationary_ data
 
-- **Example**: Autonomous Vehicle Braking
+- **Example**: autonomous vehicle braking
   - Learn immediately while driving
   - Cannot wait for batch processing
 
-- **Example**: Live Customer Support
+- **Example**: live customer support
   - Update after each interaction
   - Use satisfaction feedback
 
@@ -626,15 +655,15 @@ digraph POMDP {
   - All data collected in advance
 
 - **Definition**: optimize over a static dataset
-  $\mathcal{D} = \{(s_i, a_i, r_i, s_i')\}$
+  $$\mathcal{D} = \{(s_i, a_i, r_i, s_i')\}$$
   - Core challenge: _off-policy_ data $\to$ _distribution shift_
   - Fixes: importance sampling, conservative value estimates
 
-- **Example**: Medical Treatment Policy
+- **Example**: medical treatment policy
   - Learn from historical (state, treatment, outcome)
   - Cannot experiment on new patients
 
-- **Example**: Movie Recommendation
+- **Example**: movie recommendation
   - Train on historical interactions
   - Avoid bad recommendations in production
 
@@ -654,7 +683,7 @@ digraph POMDP {
   3. Update $\theta$ on the minibatch
   - Benefits: breaks correlation, reuses samples, enables off-policy learning
 
-- **Example**: DQN on Atari
+- **Example**: DQN on Atari games
   - Store frames
   - Train on random minibatches from the replay buffer
 
@@ -671,15 +700,18 @@ digraph POMDP {
 
 - **Definition**: learn $Q$ (or $V$), derive $\pi(s) = \arg\max_a Q(s,a)$
   $$
-  Q(s,a) \leftarrow Q(s,a) + \alpha \big[ r + \gamma \max_{a'} Q(s', a') - Q(s,a) \big]
+  Q(s,a)
+    \leftarrow Q(s,a) + \alpha \left[
+      r + \gamma \max_{a'} Q(s', a') - Q(s,a)
+    \right]
   $$
   - _Off-policy_ and sample-efficient
 
-- **Example**: Chess Position Evaluator
+- **Example**: chess position evaluator
   - Score each board
   - Play the move to the highest-value position
 
-- **Example**: Traffic Signal Control
+- **Example**: traffic signal control
   - $Q(\text{state}, \text{signal})$ predicts queue reduction
 
 - **Algorithms**: Q-Learning, Value Iteration, DQN, Double DQN, Dueling DQN
@@ -692,15 +724,18 @@ digraph POMDP {
 
 - **Definition**: parameterize $\pi_\theta(a | s)$, ascend the policy gradient
   $$
-  \nabla_\theta J = \EE\big[ \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a) \big]
+  \nabla_\theta J
+    = \EE\left[
+      \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a)
+    \right]
   $$
   - Handles continuous actions; _higher variance_; on-policy
 
-- **Example**: Robot Arm Joint Control
+- **Example**: robot arm joint control
   - Output a distribution over joint angles
   - Explore continuous actions naturally
 
-- **Example**: Game NPC Strategy
+- **Example**: game NPC strategy
   - Learn a stochastic strategy (aggressive / defensive / evasive)
   - Unpredictable to the player
 
@@ -717,7 +752,8 @@ digraph POMDP {
 
 - **Definition**: actor $\pi_\theta$, critic $V_\phi$, using advantage
   $$
-  A(s,a) = r + \gamma V_\phi(s') - V_\phi(s)
+  A(s,a)
+    = r + \gamma V_\phi(s') - V_\phi(s)
   $$
   - Actor update: $\nabla_\theta \log \pi_\theta(a|s)\, A(s,a)$
 ::::
@@ -745,7 +781,7 @@ digraph AC {
 ::::
 :::
 
-- **Example**: Robot Locomotion
+- **Example**: robot locomotion
   - Actor outputs joint torques
   - Critic predicts forward progress
   - Lower variance than pure policy gradient
@@ -760,15 +796,18 @@ digraph AC {
 
 - **Definition**: expand a tree, evaluate leaves, backprop, select by UCB
   $$
-  a^* = \arg\max_a \frac{Q(s,a)}{N(s,a)} + c \sqrt{\frac{\ln N(s)}{N(s,a)}}
+  a^* = \arg\max_a
+    \left[
+      \frac{Q(s,a)}{N(s,a)} + c \sqrt{\frac{\ln N(s)}{N(s,a)}}
+    \right]
   $$
   - Sample-heavy but _asymptotically optimal_
 
-- **Example**: AlphaGo
+- **Example**: AlphaGo game playing
   - MCTS searches the game tree
   - Evaluates leaves with a neural network before each move
 
-- **Example**: Robot Task Planning
+- **Example**: robot task planning
   - Search 5-10 steps ahead
   - Backtrack from failure states
 
@@ -784,15 +823,18 @@ digraph AC {
 
 - **Definition**: deterministic map $\mu(s) \in \mathcal{A}$ with gradient
   $$
-  \nabla_\theta J = \EE\big[ \nabla_a Q(s,a)\, \nabla_\theta \mu_\theta(s) \big|_{a=\mu_\theta(s)} \big]
+  \nabla_\theta J
+    = \EE\left[
+      \nabla_a Q(s,a)\, \nabla_\theta \mu_\theta(s) \big|_{a=\mu_\theta(s)}
+    \right]
   $$
   - Off-policy, sample-efficient; exploration via noise injection
 
-- **Example**: Traffic Light Controller
+- **Example**: traffic light controller
   - Heavy left traffic → green left
   - Always the same action
 
-- **Example**: Robot End-Effector
+- **Example**: robot end-effector control
   - Vision input maps to a fixed target gripper position
   - Used at deployment
 
@@ -806,17 +848,19 @@ digraph AC {
 
 - **Definition**: sample $a \sim \pi(\cdot | s)$ and follow the policy
   gradient
-  // TODO(ai_gp): Apply "Use \EE instead of \EE for expectation operator"
   $$
-  \nabla_\theta J = \EE_{a \sim \pi}\big[ \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a) \big]
+  \nabla_\theta J
+    = \EE_{a \sim \pi}\left[
+      \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a)
+    \right]
   $$
   - Handles _multimodal_ actions; more stable
 
-- **Example**: Card-Game Strategy
+- **Example**: card-game strategy
   - Aggressive: 30%, conservative: 70%
   - Stay unpredictable
 
-- **Example**: Diverse Recommender
+- **Example**: diverse recommender
   - Sample: news 40%, entertainment 30%, educational 30%
   - Avoid local optima
 
@@ -831,14 +875,18 @@ digraph AC {
 - **Definition**: $\pi^* = \arg\max_\pi J(\pi)$ with optimal value satisfying
   Bellman
   $$
-  V^*(s) = \max_a \big[ r(s,a) + \gamma \, \EE[V^*(s')] \big]
+  V^*(s)
+    = \max_a
+        \left[
+          r(s,a) + \gamma \, \EE[V^*(s')]
+        \right]
   $$
   - Value Iteration _converges_ in finite MDPs
 
-- **Example**: Chess Solver
+- **Example**: chess solver
   - Prove a move is optimal from a given position
 
-- **Example**: Trajectory Optimization
+- **Example**: trajectory optimization
   - Globally optimal path (e.g., power-minimal route)
   - For convex cost
 
@@ -853,15 +901,16 @@ digraph AC {
 
 - **Definition**: $\varepsilon$-optimal policy with a guarantee
   $$
-  V^\varepsilon(s) \geq V^*(s) - \varepsilon
+  V^\varepsilon(s)
+    \geq V^*(s) - \varepsilon
   $$
   - Bounded-depth search: error $\leq \varepsilon / (1 - \gamma)$; _anytime_
     algorithms stop early
 
-- **Example**: "Real-time Chess Engine" — search a fixed depth within the time
+- **Example**: real-time chess engine — search a fixed depth within the time
   limit; suboptimal but practical
 
-- **Example**: "Robot Obstacle Avoidance" — must react in 50 ms; greedy/myopic
+- **Example**: robot obstacle avoidance — must react in 50 ms; greedy/myopic
   avoidance, safe not optimal
 
 - **Algorithms**: Anytime Algorithms, Approximate Dynamic Programming, Bounded
@@ -876,15 +925,19 @@ digraph AC {
 
 - **Definition**: $Q$-table is a $|\mathcal{S}| \times |\mathcal{A}|$ matrix
   $$
-  V(s) \leftarrow \max_a \Big[ R(s,a) + \gamma \sum_{s'} P(s'|s,a)\, V(s') \Big]
+  V(s)
+    \leftarrow \max_a
+      \Big[
+        R(s,a) + \gamma \sum_{s'} P(s'|s,a)\, V(s')
+      \Big]
   $$
   - _Exact_ solution with guaranteed convergence
 
-- **Example**: Grid World
+- **Example**: grid world
   - $10 \times 10$ grid = 100 states, 4 actions
   - Full $Q$-table fits
 
-- **Example**: Small Inventory
+- **Example**: small inventory
   - 20 levels $\times$ 5 order quantities
   - Solve by tabular Q-learning
 
@@ -899,17 +952,20 @@ digraph AC {
 - **Definition**: linear value in a feature vector $\phi(s) \in \mathbb{R}^d$,
   $d \ll |\mathcal{S}|$
   $$
-  V(s) \approx w^\top \phi(s),
-  \qquad
-  w \leftarrow w + \alpha \big[ r + \gamma V(s') - V(s) \big] \phi(s)
+  V(s) \approx w^\top \phi(s)
+  $$
+  $$
+  w \leftarrow w + \alpha \left[
+    r + \gamma V(s') - V(s)
+  \right] \phi(s)
   $$
   - _Basis-function design_ is the key challenge
 
-- **Example**: Adaptive Auction Bidding
+- **Example**: adaptive auction bidding
   - Features: price history, competitor bids, budget remaining
   - Too many to tabulate
 
-- **Example**: Online Resource Allocation
+- **Example**: online resource allocation
   - Features: load, queue length, time of day, priority
 
 - **Algorithms**: Q-Learning / SARSA with FA, LSTD, Linear/Contextual Bandits
@@ -922,16 +978,18 @@ digraph AC {
 
 - **Definition**: value as a deep network $V(s) = f_\theta(s)$
   $$
-  \theta \leftarrow \theta + \alpha \big[ r + \gamma \max_{a'} f_{\theta'}(s') - f_\theta(s) \big] \nabla_\theta f_\theta(s)
+  \theta \leftarrow \theta + \alpha \left[
+    r + \gamma \max_{a'} f_{\theta'}(s') - f_\theta(s)
+  \right] \nabla_\theta f_\theta(s)
   $$
   - Challenges: non-stationary targets, off-policy data
   - Fixes: _experience replay_, _target networks_
 
-- **Example**: Self-Driving Car
-  - Camera image: $1920 \times 1440 \times 3$
+- **Example**: self-driving car
+  - Camera image: 1920 x 1440 x 3
   - CNN features → continuous control
 
-- **Example**: Atari
+- **Example**: Atari games
   - $84 \times 84 \times 3$ screen
   - CNN extracts sprites and terrain
   - DQN learns $Q$
