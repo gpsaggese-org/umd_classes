@@ -6,7 +6,7 @@
   - Do not add more code but focus on getting to a stable build
   - Disable the failing tests
   - [.] Merge `gp_scratch_29`
-  - [.] Merge `HelpersTask1273_Get_Mac_tests_to_pass`
+  - [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
 > export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
 > export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
@@ -196,6 +196,7 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   to AIMA
   https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
 - [ ] Review book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
+- [ ] Review book.springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt
 
 ### [.] Create and review slides for Agentic AI
 
@@ -259,16 +260,26 @@ download_academic_paper.py
 # Work on slides
 
 - LLM
-  - Kaparthy's LLM
-  - https://github.com/karpathy/nanochat
-  - https://github.com/karpathy/nanoGPT
+  - Karpathy's LLM
+  - https://www.youtube.com/@AndrejKarpathy
   - https://github.com/karpathy/micrograd
+    - A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API
+    - https://www.youtube.com/watch?v=VMj-3S1tku0
+  - https://github.com/karpathy/nanochat
+    - The best ChatGPT that $100 can buy
+  - https://github.com/karpathy/nanoGPT
+    - The simplest, fastest repository for training/finetuning medium-sized GPTs.
+  - MicroGPT
+    - https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95
   - https://karpathy.ai/
-- AutoEDA
-- IN PROGRESS: Topics from Berkeley class
+  - https://karpathy.ai/zero-to-hero.html
+  - https://github.com/karpathy/makemore
+    - [.] The spelled-out intro to language modeling: building makemore 47
+  - Karpathy's AutoResearch
+- [ ]: AutoEDA
+- [ ]: Topics from Berkeley class
 - AlphaEvolve
 - Monte Carlo search
-- Kaparthy's AutoResearch
 - https://www.manning.com/books/build-a-large-language-model-from-scratch
 - https://www.manning.com/books/build-a-reasoning-model-from-scratch
 - https://aman.ai/primers/ai/top-30-papers/
@@ -689,6 +700,50 @@ Use Test_build_pandoc_container1 as a reference
   ```
 
 - Add -i, --input together with files
+
+# Tutorials
+
+## Existing
+> ls -1 tutorials/
+Asana
+Autogen
+Ax_Multi_Objective_Optimization
+BambooAI
+CausalML_Diabetes_Study
+causalnex
+crewai
+data_science_packages
+dowhy
+FilterPy
+gCastle
+GitHub_Stats
+GluonTS_COVID19_Prediction
+gymnasium
+Jupyter_Extension_Langchain
+LangChain
+LangChain_LangGraph
+LangGraph
+lime
+LlamaIndex
+Neo4j
+OpenAI
+pgmpy
+project_template
+Prophet
+README.md
+shap
+TensorFlow
+TorchRL_MAC
+tsfresh
+tutorial_data_science
+tutorial_forecast_as_service
+tutorial_pydanticAI
+
+## 
+numpy
+torch
+scipy
+pandas
 
 # Book proposals
 

@@ -50,6 +50,7 @@
 
 * The 10 Structural Dimensions
 
+// TODO(ai_gp): Improve
 ```graphviz
 digraph DecisionProblemDimensions {
     layout=circo;
@@ -131,12 +132,14 @@ digraph DecisionProblemDimensions {
 
 # 1. Observability
 
-* Fully Observable (MDP)
+* Fully Observable
+
+- **Intuition**:
+  - Agent sees the _complete state_ (all needed information is available each
+    step)
 
 ::: columns
 :::: {.column width=58%}
-- **Intuition**: agent sees the _complete state_; all needed information is
-  available each step
 
 - **Definition**: modeled as an _MDP_ tuple
   $$(\mathcal{S}, \mathcal{A}, P, R, \gamma)$$
@@ -163,23 +166,26 @@ digraph MDP {
 ::::
 :::
 
-- **Example**: "Inventory Management" — current stock observed, demand known,
-  decide order quantity each period
+- **Example**: Inventory Management
+  - Current stock observed
+  - Demand known
+  - Decide order quantity each period
 
 - **Algorithms**: Q-Learning, SARSA, Value Iteration, Policy Iteration, MCTS
 
-* Partially Observable (POMDP)
+* Partially Observable
+
+- **Intuition**:
+  - Observations don't uniquely determine state
+  - The system must track a _belief state_
 
 ::: columns
 :::: {.column width=58%}
-- **Intuition**: observations don't uniquely determine state $\to$ must track a
-  _belief state_
-
 - **Definition**: modeled as a _POMDP_ tuple
   $$(\mathcal{S}, \mathcal{A}, P, R, \Omega, O, \gamma)$$
-  - Observes $o_t \sim O(\cdot | s_t)$, not true $s_t$
+  - Observes $o_t \sim O(\cdot | s_t)$ (not the true state $s_t$)
   - Maintains belief
-    $$b_t(s) = \Pr(s_t = s \mid o_1, a_1, \ldots, o_t)$$
+    $$b_t(s) = \Pr(s_t = s | o_1, a_1, \ldots, o_t)$$
 ::::
 :::: {.column width=42%}
 ```graphviz
@@ -204,68 +210,79 @@ digraph POMDP {
 ::::
 :::
 
-- **Example**: "Poker" — see own hand, infer opponent hand distribution from
-  betting behavior
+- **Example**: "Poker"
+  - See your own hand
+  - Infer opponent hand distribution from betting behavior
 
 - **Algorithms**: Particle Filtering, Kalman Filter, POMCP, Belief-State
   Planning
 
 * Stochastic Observations with Hidden State
 
-- **Intuition**: environment has a _hidden state_; observations are
-  noisy/corrupted, revealed only over time
+- **Intuition**:
+  - Environment has a _hidden state_
+  - Observations are noisy/corrupted, revealed only over time
 
 - **Definition**: modeled as a _Hidden Markov Model_ (HMM)
-  - Latent transition $\Pr(s_{t+1} \mid s_t)$
-  - Noisy emission $o_t \sim O(\cdot \mid s_t)$
-  - Goal: infer hidden sequence via _filtering / smoothing_
+  - Latent transition $\Pr(s_{t+1} | s_t)$
+  - Noisy emission $o_t \sim O(\cdot | s_t)$
+  - Goal: infer hidden sequence via filtering / smoothing
 
-- **Example**: "Speech Recognition" — true phoneme sequence hidden, observe
-  noisy mel-spectrogram features, infer phonemes
+- **Example**: "Speech Recognition"
+  - True phoneme sequence hidden
+  - Observe noisy features
+  - Infer phonemes
 
-- **Example**: "Weather from noisy thermometer" — infer hot/cold/rainy from a
-  drifting sensor over time
+- **Example**: "Weather from noisy thermometer"
+  - Infer hot/cold/rainy from a drifting sensor over time
 
-- **Algorithms**: Hidden Markov Models, Kalman Filter (linear-Gaussian),
-  Extended/Unscented KF (nonlinear), Particle Filters
+- **Algorithms**:
+  - Hidden Markov Models
+  - Kalman Filter (linear-Gaussian), Extended/Unscented KF (nonlinear), Particle
+    Filters
 
 # 2. Time Horizon
 
-* One-Step / Myopic Decision (Bandit)
+* One-Step
 
-- **Intuition**: optimize _immediate reward only_; no future consequences, no
-  state transitions
+- **Intuition**:
+  - No future consequences, no state transitions
+  - Optimize _immediate reward only_
 
 - **Definition**: _bandit_ problem over arms $a$
   $$\max_a \; \mathbb{E}[R(a)] \quad\text{or learn}\quad \mu_a = \mathbb{E}[R(a)]$$
   - Action and reward independent of history
 
-- **Example**: "Online Ad Selection" — choose ad, observe click/no-click,
-  maximize click-through for current user
+- **Example**: "Online Ad Selection"
+  - Choose ad
+  - Observe click/no-click,
+  - Maximize click-through for current user
 
-- **Example**: "Email Spam Filter" — classify one email; decision affects only
-  that email
+- **Example**: "Email Spam Filter"
+  - Classify one email
+  - Decision affects only that email
 
 - **Algorithms**: $\varepsilon$-Greedy, UCB (Upper Confidence Bound), Thompson
   Sampling, Contextual Bandits
 
-* Multi-Step Lookahead (Finite Horizon)
+* Finite Horizon
 
-- **Intuition**: a move cannot be judged in isolation; must consider
-  consequences over a fixed horizon $H$
+- **Intuition**:
+  - A move cannot be judged in isolation, but must consider consequences over a
+    fixed horizon $H$
 
 - **Definition**: finite-horizon MDP solved by _backward induction_
   $$
   V_h(s)
-    = \max_a \big[ R(s,a) + V_{h-1}(s') \big]
+  = \max_a \big[ R(s,a) + V_{h-1}(s') \big]
   $$
   - Maximize $\sum_{t=0}^{H} R(s_t, a_t)$ with $s_{t+1} \sim P(\cdot|s_t,a_t)$
 
-- **Example**: "Chess move selection" — look ahead 20+ moves to evaluate current
-  move
+- **Example**: Chess move selection
+  - Look ahead 20+ moves to evaluate current move
 
-- **Example**: "Grasp Planning" — plan ~10-step gripper sequence to reach a
-  feasible grasp
+- **Example**: Grasp Planning
+  - Plan ~10-step gripper sequence to reach a feasible grasp
 
 - **Algorithms**: Minimax, Alpha-Beta Pruning, A\*, RRT, MCTS
 
@@ -281,8 +298,9 @@ digraph POMDP {
   $$
   - Optimal policy $\pi^*$ is _stationary_ (time-invariant)
 
-- **Example**: "Portfolio Management" — allocate today to maximize wealth
-  forever; distant rewards down-weighted by $\gamma^t$
+- **Example**: Portfolio Management
+  - Allocate today to maximize wealth forever
+  - Distant rewards down-weighted by $\gamma^t$
 
 - **Algorithms**: Q-Learning, SARSA, Value/Policy Iteration, Actor-Critic;
   Deep RL — DQN, PPO, SAC
@@ -334,7 +352,7 @@ digraph POMDP {
 
 - **Definition**: learn a parameterized _function_, not a table
   $$
-  a = \mu(s) \;\text{(deterministic)} \quad\text{or}\quad a \sim \pi(a \mid s) \;\text{(stochastic)}
+  a = \mu(s) \;\text{(deterministic)} \quad\text{or}\quad a \sim \pi(a | s) \;\text{(stochastic)}
   $$
   - Approximated with neural networks
 
@@ -354,7 +372,7 @@ digraph POMDP {
 
 - **Definition**: factorize the policy over a discrete then a continuous action
   $$
-  \pi(a_d, a_c \mid s) = \pi_d(a_d \mid s)\, \pi_c(a_c \mid s, a_d)
+  \pi(a_d, a_c | s) = \pi_d(a_d | s)\, \pi_c(a_c | s, a_d)
   $$
   - Continuous choice $a_c$ conditioned on discrete choice $a_d$
 
@@ -452,7 +470,7 @@ digraph POMDP {
 
 - **Definition**: non-singleton information sets $\to$ act on _beliefs_
   $$
-  b_i(h) = \Pr(h \mid \text{player } i\text{'s observations})
+  b_i(h) = \Pr(h | \text{player } i\text{'s observations})
   $$
   - Equilibrium is a _mixed strategy_ $\sigma_i^*$ with no profitable deviation
 
@@ -610,9 +628,9 @@ digraph POMDP {
 - **Intuition**: learn the _policy directly_; no intermediate value function
   needed
 
-- **Definition**: parameterize $\pi_\theta(a \mid s)$, ascend the policy gradient
+- **Definition**: parameterize $\pi_\theta(a | s)$, ascend the policy gradient
   $$
-  \nabla_\theta J = \mathbb{E}\big[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q(s,a) \big]
+  \nabla_\theta J = \mathbb{E}\big[ \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a) \big]
   $$
   - Handles continuous actions; _higher variance_; on-policy
 
@@ -712,10 +730,10 @@ digraph AC {
 - **Intuition**: output a _distribution_ over actions; exploration is _built
   into_ the policy
 
-- **Definition**: sample $a \sim \pi(\cdot \mid s)$ and follow the policy
+- **Definition**: sample $a \sim \pi(\cdot | s)$ and follow the policy
   gradient
   $$
-  \nabla_\theta J = \mathbb{E}_{a \sim \pi}\big[ \nabla_\theta \log \pi_\theta(a \mid s)\, Q(s,a) \big]
+  \nabla_\theta J = \mathbb{E}_{a \sim \pi}\big[ \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a) \big]
   $$
   - Handles _multimodal_ actions; more stable
 

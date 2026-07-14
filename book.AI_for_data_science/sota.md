@@ -6,29 +6,23 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
 
 ### AutoML Papers
 
-#### 2025 - A Literature Review on Automated Machine Learning
-- **Date**: November 11, 2025
-- **Journal**: Artificial Intelligence Review | Springer Nature
+#### Alcobaca et al., "A Literature Review on Automated Machine Learning", 2025
 - **Description**: Traces AutoML evolution from early metalearning and
   hyperparameter optimization to latest advancements in neural architecture
   search and automated pipeline design
-- **Focus Areas**:
-  - Classical approaches (metalearning, HPO, transfer learning)
-  - Modern applications (NAS, pipeline design, few-shot learning)
-  - Emerging topics and ethical implications
-- **Link**: https://link.springer.com/article/10.1007/s10462-025-11397-2
+- **Link**:
+  - https://repositorio.usp.br/bitstreams/866fc2e9-8e21-4460-a0d8-87b40fc88222
+  - https://link.springer.com/article/10.1007/s10462-025-11397-2
 
-#### 2024 - Automated Machine Learning: Past, Present and Future
-- **Authors**: Baratchi, M., et al
-- **Journal**: Artificial Intelligence Review | Springer Nature
-- **Date**: April 18, 2024
+#### Baratchi, M. et al., "Automated Machine Learning: Past, Present and Future", 2024
 - **Description**: Comprehensive overview covering search space, search
   strategy, performance evaluation, hyperparameter optimization, and neural
   architecture search
-- **Link**: https://link.springer.com/article/10.1007/s10462-024-10726-1
+- **Link**:
+  - https://publications.rwth-aachen.de/record/985693/files/985693.pdf
+  - https://link.springer.com/article/10.1007/s10462-024-10726-1
 
-#### 2024 - Automated Machine Learning: From Principles to Practices
-- **Date**: February 27, 2024
+#### He, X. et al., "Automated Machine Learning: From Principles to Practices", 2024
 - **Description**: Focuses on principle analysis of AutoML
   - Formal definitions
   - Bi-level optimization formulation
@@ -36,9 +30,7 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
   - Real-world AutoML practices
 - **Link**: https://arxiv.org/html/1810.13306v5
 
-#### 2023 - A Survey on Recent Advancements in Auto-Machine Learning with a Focus on Feature Engineering
-- **Date**: May 24, 2023
-- **Journal**: Journal of Computational and Cognitive Engineering
+#### Zhang, Y. et al., "A Survey on Recent Advancements in Auto-Machine Learning with a Focus on Feature Engineering", 2023
 - **Description**: Detailed study on AutoML pipeline steps including:
   - Feature selection (FS)
   - Feature engineering (FE)
@@ -47,49 +39,36 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
   - Model selection (MS)
 - **Link**: https://www.researchgate.net/publication/371726620
 
-#### Earlier Key References
-- **2024**: Latest Research
-  - URL: https://arxiv.org/pdf/2410.02958
+#### Jomaa, H. S. et al., "AutoML: A Survey of the State-of-the-Art", 2021
+- **Link**: https://arxiv.org/abs/1908.00709
 
-- **2021**: AutoML: A Survey of the State-of-the-Art
-  - URL: https://arxiv.org/pdf/1908.00709
-
-- **2021**: AutoML to Date and Beyond: Challenges and Opportunities
-  - URL: https://arxiv.org/pdf/2010.10777
+#### Zoeller, M. A. et al., "AutoML to Date and Beyond: Challenges and Opportunities", 2021
+- **Link**: https://arxiv.org/abs/2010.10777
 
 ### Auto EDA Papers
 
-#### 2024 - Towards Automated Cross-domain Exploratory Data Analysis Through Large Language Models
-- **ArXiv ID**: 2412.07214
-- **Date**: February 14, 2025 (latest version)
-- **Authors**: Jun-Peng Zhu and 12 other authors
+#### Zhu, J.-P. et al., "Towards Automated Cross-domain Exploratory Data Analysis Through Large Language Models", 2025
 - **Description**: Latest LLM-based EDA approach addressing:
   - SQL query generation for data exploration
   - Automated visualization type selection
   - Cross-domain applicability
 - **Link**: https://arxiv.org/abs/2412.07214
 
-#### 2024 - QUIS: Question-guided Insights Generation for Automated Exploratory Data Analysis
-- **ArXiv ID**: 2410.10270
-- **Date**: October 21, 2024
-- **Authors**: Ashlesha Akella, Krishnasuri Narayanam (IBM Research, India)
+#### Akella, A. and Narayanam, K., "QUIS: Question-guided Insights Generation for Automated Exploratory Data Analysis", 2024
 - **Description**: Recent approach to automated EDA with ISGen module
   - Produces multiple relevant insights in response to questions
   - Requires no prior training
   - Enables adaptation to new datasets
 - **Link**: https://arxiv.org/abs/2410.10270
-- **PDF**: https://arxiv.org/pdf/2410.10270
 
-#### 2024 - Automated Data Exploration and Analysis
-- **Conference**: CGI 2024
-- **Publisher**: Springer Nature
+#### Li, X. et al., "Automated Data Exploration and Analysis", 2024
 - **Description**: Presents AutoEDA system with:
   - Dynamic field recognition framework
   - Analysis strategy evaluation based on Chart Attribute Length
   - Interactive visual backtracking
 - **Link**: https://link.springer.com/chapter/10.1007/978-3-031-82021-2_27
 
-#### Historical Approach - Automating Exploratory Data Analysis Via Machine Learning: an Overview
+#### Milo, T. and Somech, A., "Automating Exploratory Data Analysis Via Machine Learning: an Overview", (date unknown)
 - **Description**: Comprehensive tutorial on automating EDA covering:
   - Single exploratory action recommenders
   - KNN-based classifiers for interestingness prediction
@@ -187,14 +166,10 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
   tutorials, slides and projects
 - **Includes**: Up-to-date overviews of AutoML techniques
 - **Key Papers**:
-  - 2024: Automated machine learning: past, present and future (Baratchi, M., et
-    al.)
-  - 2020: On Hyperparameter Optimization of Machine Learning Algorithms (Li
-    Yang, et al.)
-  - 2019: Automated Machine Learning: State-of-The-Art and Open Challenges
-    (Radwa Elshawi, et al.)
-  - 2018: Taking Human out of Learning Applications: A Survey on Automated
-    Machine Learning (Quanming Yao, et al.)
+  - Baratchi, M. et al., "Automated machine learning: past, present and future", 2024
+  - Li, Y. et al., "On Hyperparameter Optimization of Machine Learning Algorithms", 2020
+  - Elshawi, R. et al., "Automated Machine Learning: State-of-The-Art and Open Challenges", 2019
+  - Yao, Q. et al., "Taking Human out of Learning Applications: A Survey on Automated Machine Learning", 2018
 - **GitHub**: https://github.com/hibayesian/awesome-automl-papers
 
 #### Automl-list
@@ -476,8 +451,7 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
 - **Tools Benchmarked**: TPOT, auto-sklearn, H2O AutoML, AutoGluon-Tabular
 - **Repository**: https://github.com/h2oai/h2o-automl-paper
 - **Includes**: Results files, benchmark instructions, framework comparisons
-- **Paper**: "H2O AutoML: Scalable Automatic Machine Learning" (ICML 2020 AutoML
-  Workshop)
+- **Paper**: LeDell, E. et al., "H2O AutoML: Scalable Automatic Machine Learning", 2020 (ICML AutoML Workshop)
 
 ### H2O AutoML Paper Repository
 - **Description**: Code and experiments for H2O AutoML paper
@@ -505,6 +479,7 @@ Machine Learning (AutoML) and Automated Exploratory Data Analysis (Auto EDA)
 - **Description**: Recent research on pipeline embeddings
 - **Focus**: Advanced AutoML techniques and architecture
 - **Reference Paper**: arXiv:2305.14009
+- **Link**: https://arxiv.org/abs/2305.14009
 
 ## Quick Comparison: Popular Tools
 
