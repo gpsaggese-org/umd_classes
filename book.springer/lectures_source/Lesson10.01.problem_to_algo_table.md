@@ -81,18 +81,3 @@
 | **Small Tabular** | State and action spaces small enough for lookup table (<10k states) | Tabular Q-Learning, Tabular Value/Policy Iteration, MCTS |
 | **Medium: Linear Function Approximation** | State space too large for table; compress via features | Q-Learning/SARSA with FA, LSTD, Linear Bandits, Contextual Bandits |
 | **Large: Deep Neural Networks** | High-dimensional inputs (images, speech); learned feature extraction | DQN, A3C, PPO, TRPO, SAC, TD3, Rainbow DQN |
-
-## Quick Reference: Common Problem Combinations
-
-| Problem Type | Example | Key Algorithms |
-|---|---|---|
-| Full obs., small state | Tic-Tac-Toe | Q-Learning, Value Iteration, MCTS |
-| Full obs., large state | Atari (pixels) | DQN, A3C, PPO |
-| Partially observable | Robot localization | Particle Filter, POMCP, HMM |
-| Continuous, known model | Trajectory optimization | MPC, iLQR |
-| Continuous, unknown model | Robotic arm control | PPO, SAC, DDPG, TD3 |
-| Discrete, exploration | Web ads (bandit) | UCB, Thompson, ε-Greedy |
-| Game, perfect info | Chess | Minimax, Alpha-Beta, AlphaZero |
-| Game, imperfect info | Poker | CFR, Nash Solver |
-| Multi-agent cooperative | Warehouse robots | MAAC, MAPPO, QMIX |
-| Multi-agent competitive | Enemy AI | Self-Play, Nash Learning |
