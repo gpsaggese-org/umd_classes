@@ -226,7 +226,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Infinite-horizon discounted MDP
   - Maximize: $J = \mathbb{E}[\sum_{t=0}^{\infty} \gamma^t R(s_t, a_t)]$
   - Bellman equation: $V^*(s) = \max_a [R(s,a) + \gamma \mathbb{E}_{s' \sim P(\cdot|s,a)}[V^*(s')]]$
-  - Optimal policy: $\pi^*(s) = \arg\max_a [R(s,a) + \gamma \mathbb{E}[V^*(s')]]$ is stationary
+  - Optimal policy: $\pi^*(s) = \argmax_a [R(s,a) + \gamma \mathbb{E}[V^*(s')]]$ is stationary
 
 - **Example 1**: Portfolio Management
   - Allocate investments today to maximize wealth forever
@@ -289,7 +289,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Action space: $|\mathcal{A}| = n$ is finite
   - Agent selects: $a_t \in \mathcal{A}$ at each step
   - Q-function representation: table with $|\mathcal{S}| \times n$ entries
-  - Optimal action: $a^* = \arg\max_{a \in \mathcal{A}} Q(s, a)$ via enumeration
+  - Optimal action: $a^* = \argmax_{a \in \mathcal{A}} Q(s, a)$ via enumeration
 
 - **Example 1**: Traffic Light Controller
   - Actions: {Green (NS), Green (EW), Yellow, Red}
@@ -536,7 +536,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Two-player game: player 1 (principal) does not observe player 2 (agent)
   - Principal cannot observe: agent's action $a_2$ or private information $\theta_2$
   - Principal designs: contract/mechanism to incentivize agent
-  - Optimal contract: $\max_{c} u_1(c(y)) - c(y)$ subject to agent IC: $a_2^* = \arg\max_{a} u_2(c(y(a))) - \psi(a)$
+  - Optimal contract: $\max_{c} u_1(c(y)) - c(y)$ subject to agent IC: $a_2^* = \argmax_{a} u_2(c(y(a))) - \psi(a)$
 
 - **Example 1**: Principal-Agent Problem
   - Principal (employer) cannot directly observe agent (employee) effort
@@ -730,7 +730,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
 
 - **Formulation**:
   - Learn Q-values or state values: $Q(s, a) \approx \mathbb{E}[\sum_t \gamma^t r_t | s_t=s, a_t=a]$ or $V(s) \approx \mathbb{E}[\sum_t \gamma^t r_t | s_t = s]$
-  - Deterministic policy: $\pi(s) = \arg\max_a Q(s, a)$
+  - Deterministic policy: $\pi(s) = \argmax_a Q(s, a)$
   - TD update: $Q(s,a) \leftarrow Q(s,a) + \alpha [r + \gamma \max_a' Q(s', a') - Q(s,a)]$
   - Off-policy and sample-efficient
 
@@ -826,7 +826,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - Expand nodes via model $P(s' | s, a)$ or environment
   - Evaluate leaf at depth $d$ via value function $V(s_d)$ or rollout
   - Backpropagate value up tree
-  - Select action: $a^* = \arg\max_a N(s,a)$ (visits) or $\arg\max_a \frac{Q(s,a)}{N(s,a)} + c\sqrt{\frac{\ln N(s)}{N(s,a)}}$ (UCB)
+  - Select action: $a^* = \argmax_a N(s,a)$ (visits) or $\argmax_a \frac{Q(s,a)}{N(s,a)} + c\sqrt{\frac{\ln N(s)}{N(s,a)}}$ (UCB)
   - Sample-heavy but asymptotically optimal
 
 - **Example 1**: AlphaGo Playing Chess
@@ -921,7 +921,7 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - May be computationally expensive
 
 - **Formulation**:
-  - Optimal policy: $\pi^* = \arg\max_\pi J(\pi)$ where $J(\pi) = \mathbb{E}[\sum_t \gamma^t r_t]$
+  - Optimal policy: $\pi^* = \argmax_\pi J(\pi)$ where $J(\pi) = \mathbb{E}[\sum_t \gamma^t r_t]$
   - Optimal value satisfies: $V^*(s) = \max_a [r(s,a) + \gamma \mathbb{E}[V^*(s')]]$ (Bellman)
   - Convergence: value iteration in finite MDPs
   - Continuous spaces: epsilon-optimal via function approximation with error bounds
@@ -1071,84 +1071,3 @@ Decision-making problems vary along 10 _orthogonal dimensions_:
   - SAC (Soft Actor-Critic)
   - TD3 (Twin Delayed DDPG)
   - Evolutionary Strategies
-
-## Quick Reference: Problem Type → Algorithm
-- **Full observability, small state**
-  - Example: Tic-tac-toe
-  - Algorithms: Q-Learning (tabular), Value Iteration, MCTS (Monte Carlo Tree
-    Search)
-- **Full observability, large state (pixels)**
-  - Example: Atari game
-  - Algorithms: DQN (Deep Q-Network), A3C (Asynchronous Advantage Actor-Critic),
-    PPO (Proximal Policy Optimization)
-- **Partially observable**
-  - Example: Robot localization
-  - Algorithms: Particle Filter, POMCP (Partially Observable Monte Carlo
-    Planning), HMM (Hidden Markov Model)
-- **Continuous control, known model**
-  - Example: Trajectory optimization
-  - Algorithms: MPC (Model Predictive Control), iLQR (iterative Linear Quadratic
-    Regulator)
-- **Continuous control, unknown model**
-  - Example: Robotic arm
-  - Algorithms: PPO (Proximal Policy Optimization), SAC (Soft Actor-Critic),
-    DDPG (Deep Deterministic Policy Gradient), TD3 (Twin Delayed DDPG)
-- **Discrete actions, exploration**
-  - Example: Web ads (bandit)
-  - Algorithms: UCB (Upper Confidence Bound), Thompson Sampling, ε-Greedy
-    (Epsilon-Greedy)
-- **Game playing (perfect info)**
-  - Example: Chess
-  - Algorithms: Minimax, Alpha-Beta, MCTS (Monte Carlo Tree Search), AlphaZero
-- **Game playing (imperfect info)**
-  - Example: Poker
-  - Algorithms: CFR (Counterfactual Regret Minimization), Nash Solver
-- **Multi-agent cooperative**
-  - Example: Warehouse robots
-  - Algorithms: MAAC (Multi-Agent Actor-Critic), MAPPO (Multi-Agent Proximal
-    Policy Optimization), QMIX (Q-value Mixing)
-- **Multi-agent competitive**
-  - Example: Video game enemy AI
-  - Algorithms: Self-Play, Nash Learning
-
-## Key Takeaways
-- **Observable vs. Partial**
-  - Full observability enables direct value/policy learning
-  - Partial observability requires belief state tracking
-- **Time Horizon**
-  - Myopic (bandit) → simple greedy/UCB
-  - Multi-step finite → lookahead search
-  - Infinite → stationary policy with discounting
-- **Action Space**
-  - Discrete → enumerate
-  - Continuous → learn policy distribution
-  - Mixed → hierarchical or branching policies
-- **Information Structure**
-  - Perfect info → deterministic solutions (Minimax, MCTS)
-  - Imperfect info → uncertainty handling (CFR, Nash equilibrium)
-  - Asymmetric info → mechanism design, signaling
-- **Agents**
-  - Single → standard RL (Reinforcement Learning)
-  - Multi-cooperative → shared reward, coordinated learning
-  - Multi-competitive → game theory, Nash equilibrium
-- **Model**
-  - Model-based (planning): sample-efficient but requires accurate model
-  - Model-free (learning): asymptotically optimal but needs more data
-- **Update Mechanism**
-  - Online: immediate learning, single trajectory
-  - Batch: learn from static dataset, no environment interaction
-  - Replay-based: combines online and batch via experience replay buffer
-- **Solution Concept**
-  - Value-based: learn values, derive policy greedily
-  - Policy-based: learn policy directly without value function
-  - Actor-Critic: learn both value and policy jointly
-  - Search/Planning: forward planning via tree search
-- **Optimality Criterion**
-  - Deterministic: single action per state (e.g., DDPG, Q-Learning greedy)
-  - Stochastic: probability distribution over actions (e.g., Policy Gradient)
-  - Optimal: provably best policy (Value/Policy Iteration, AlphaZero)
-  - Approximate: bounded suboptimality (practical algorithms with time limits)
-- **Scalability**
-  - Tabular → small problems only
-  - Linear FA (Function Approximation) → medium
-  - Deep NN (Neural Network) → large, high-dimensional spaces

@@ -49,7 +49,7 @@
     Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]
     $$
   - Decay $\varepsilon$ over episodes, then read off the greedy policy
-    $\arg\max_a Q(s,a)$
+    $\argmax_a Q(s,a)$
 
 ## 2. SARSA
 
@@ -120,7 +120,7 @@
 - **Solution sketch**: alternate evaluation and improvement with `pymdptoolbox`
   - Start from an arbitrary policy and evaluate it by solving the linear Bellman
     system for $V^\pi$
-  - Improve greedily: $\pi(s) \leftarrow \arg\max_a [R(s,a) + \gamma \sum_{s'} P(s'|s,a) V^\pi(s')]$
+  - Improve greedily: $\pi(s) \leftarrow \argmax_a [R(s,a) + \gamma \sum_{s'} P(s'|s,a) V^\pi(s')]$
   - Repeat evaluation and improvement until the policy stops changing, which
     converges in finite steps
 
@@ -165,7 +165,7 @@
   - `river` (bandit module)
 - **Solution sketch**: run UCB1 with `mabwiser`
   - Track pull count $N(a)$ and empirical mean reward $\hat\mu(a)$ per arm
-  - Each round pick $a^* = \arg\max_a \hat\mu(a) + c\sqrt{\ln t / N(a)}$
+  - Each round pick $a^* = \argmax_a \hat\mu(a) + c\sqrt{\ln t / N(a)}$
   - Update $\hat\mu(a)$ after observing the reward; the confidence bonus
     shrinks as an arm is pulled more, forcing exploration only while uncertain
 

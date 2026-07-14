@@ -115,7 +115,7 @@ digraph Lifecycle {
   returns the action that maximizes _interventional_ expected utility
   $$
   a^*(\vx)
-    = \arg\max_{a \in \mathcal{A}}
+    = \argmax_{a \in \mathcal{A}}
       \EE_{Y \sim \Pr(Y | do(a), \vx)}[U(Y)]
   $$
 
@@ -506,7 +506,7 @@ digraph Gain {
   - The _causal graph_ and adjustment set
   - The _estimators_ for each mechanism and their training data snapshot
   - The _utility function_ and its elicited weights
-  - The _policy_ (the $\arg\max$ rule) and its rollout state
+  - The _policy_ (the $\argmax$ rule) and its rollout state
 
 - **Why the utility counts**: a re-weighted utility silently changes every
   action, yet leaves the model unchanged

@@ -670,7 +670,7 @@ digraph FrontDoor {
   $$
   data \to \text{causal DAG} \to \text{identification}
        \to \Pr(Y|do(a)) \to \text{posterior}
-       \to \arg\max_a \EE[U(Y)|do(a)]
+       \to \argmax_a \EE[U(Y)|do(a)]
   $$
 - Everything before the last arrow is this lesson; the last arrow, turning
   an identified, uncertain effect into a choice of action, is decision

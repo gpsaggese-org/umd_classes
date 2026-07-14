@@ -38,7 +38,7 @@
 ### Q-Learning
 - **Short description**: Foundation of value-based RL; off-policy TD learning for optimal action values
 - **Key papers:**
-  - Watkins & Dayan, "Q-learning" (1992) - *Machine Learning*, 8(3-4), 279-292
+  - Watkins & Dayan, "Q-learning" (1992) - doi.org/10.1007/BF00992698
 - **Key Authors:** Christopher Watkins, Peter Dayan
 - **Key Variants:** van Hasselt et al., "Deep Reinforcement Learning with Double Q-learning" (2015) - arxiv.org/abs/1509.06461
 - **Python Packages:**
@@ -58,8 +58,8 @@
 ### Value Iteration / Policy Iteration
 - **Short description**: Dynamic programming methods for solving MDPs with known models
 - **Key papers:**
-  - Puterman, M. L. (2005) - "Markov Decision Processes: Discrete Stochastic Dynamic Programming"
-  - Bellman, R. E. (1957) - "Dynamic Programming"
+  - Puterman, "Markov Decision Processes: Discrete Stochastic Dynamic Programming" (2005)
+  - Bellman, "Dynamic Programming" (1957)
 - **Key Authors:** Richard Bellman, Martin Puterman
 - **Python Packages:**
   - `scipy` (for small MDPs)
@@ -87,7 +87,7 @@
 ### REINFORCE (Policy Gradient)
 - **Short description**: On-policy policy gradient method; high variance baseline for gradient-based RL
 - **Key papers:**
-  - Williams, "Simple statistical gradient-following algorithms for connectionist reinforcement learning" (1992) - *Machine Learning*, 8(3-4), 229-256
+  - Williams, "Simple statistical gradient-following algorithms for connectionist reinforcement learning" (1992) - doi.org/10.1007/BF00992696
 - **Key Authors:** Ronald J. Williams
 - **Python Packages:**
   - `stable-baselines3` (A2C, A3C implementations)
@@ -138,7 +138,7 @@
 ### Actor-Critic (General Framework)
 - **Short description**: Combines policy-based (actor) and value-based (critic) methods for reduced variance and on-policy learning
 - **Key papers:**
-  - Konda & Tsitsiklis, "Actor-Critic Algorithms" (2000) - *SIAM Journal on Control and Optimization*, 42(4), 1143-1166
+  - Konda & Tsitsiklis, "Actor-Critic Algorithms" (2000) - doi.org/10.1137/S0363012901385691
 - **Key Authors:** Vijay Konda, John Tsitsiklis
 
 ### A2C (Advantage Actor-Critic)
@@ -202,7 +202,7 @@
 ### MCTS (Monte Carlo Tree Search)
 - **Short description**: Best-first planning algorithm using random tree exploration; foundation for AlphaGo and game AI
 - **Key papers:**
-  - Kocsis & Szepesvári, "Bandit based Monte-Carlo Tree Search" (2006) - *ECML 2006*
+  - Kocsis & Szepesvári, "Bandit based Monte-Carlo Tree Search" (2006) - doi.org/10.1007/11871842_29
   - Coulom, "Efficient Selectivity and Backup Operators in Monte-Carlo Tree Search" (2006)
 - **Key Authors:** Rémi Coulom, Levente Kocsis, Csaba Szepesvári
 - **Python Packages:**
@@ -272,7 +272,7 @@
 ### AlphaGo
 - **Short description**: Combines deep neural networks with MCTS for superhuman Go performance; landmark in AI
 - **Key papers:**
-  - Silver et al., "Mastering the game of Go with deep neural networks and tree search" (2016) - *Nature*, 529(7587), 484-489
+  - Silver et al., "Mastering the game of Go with deep neural networks and tree search" (2016) - doi.org/10.1038/nature16961
 - **Key Authors:** David Silver, Aja Huang, Chris J. Maddison, Arthur Guez, et al.
 - **Key Variants:** AlphaGo Zero, AlphaZero
 
@@ -308,7 +308,7 @@
 ### Hidden Markov Models (HMM)
 - **Short description**: Probabilistic model for sequences with hidden state dynamics; classical approach for time series inference
 - **Key papers:**
-  - Rabiner, L. R., "A tutorial on hidden Markov models and selected applications in speech recognition" (1989) - *IEEE*, 77(2), 257-286
+  - Rabiner, L. R., "A tutorial on hidden Markov models and selected applications in speech recognition" (1989) - doi.org/10.1109/5.18626
 - **Key Authors:** Lawrence Rabiner
 - **Python Packages:**
   - `hmmlearn` (scikit-learn HMM)
@@ -320,7 +320,7 @@
 - **Key papers:**
   - Julier & Uhlmann, "Unscented Kalman Filter" (1997)
   - Jazwinski, "Extended Kalman Filter" (1970)
-  - Kalman, "A new approach to linear filtering and prediction problems" (1960) - *Journal of Basic Engineering*, 82(1), 35-45
+  - Kalman, "A new approach to linear filtering and prediction problems" (1960) - doi.org/10.1115/1.3662552
 - **Key Authors:** Rudolf Kálmán
 - **Python Packages:**
   - `filterpy` (Kalman filters and Bayesian filtering)
@@ -330,7 +330,7 @@
 ### Particle Filtering
 - **Short description**: Sequential Monte Carlo for nonlinear/non-Gaussian filtering; particle representation of posterior
 - **Key papers:**
-  - Gordon et al., "Novel approach to nonlinear/non-Gaussian Bayesian state estimation" (1993) - *IEE Proceedings-F*, 140(2), 107-113
+  - Gordon et al., "Novel approach to nonlinear/non-Gaussian Bayesian state estimation" (1993) - doi.org/10.1049/ip-f-2.1993.0015
 - **Key Authors:** Neil J. Gordon, David J. Salmond, Adrian F. M. Smith
 - **Python Packages:**
   - `filterpy` (Particle filters)
@@ -340,7 +340,7 @@
 ### POMDP (Partially Observable MDP)
 - **Short description**: Extension of MDPs for partial observability; solved via belief state planning
 - **Key papers:**
-  - Kaelbling et al., "The complexity of solving partially observable Markov decision problems and belief updating" (1998) - *Journal of Artificial Intelligence Research*, 11, 99-143
+  - Kaelbling, Littman & Cassandra, "Planning and acting in partially observable stochastic domains" (1998) - doi.org/10.1016/S0004-3702(98)00023-X
 - **Key Authors:** Leslie Pack Kaelbling, Michael L. Littman, Anthony R. Cassandra
 - **Python Packages:**
   - `pomdp-solve` (Exact POMDP solver)
@@ -349,7 +349,7 @@
 ### POMCP (Partially Observable Monte Carlo Planning)
 - **Short description**: MCTS-based online planning for large POMDPs; scalable alternative to belief space planning
 - **Key papers:**
-  - Silver & Veness, "Monte-Carlo Planning in Large POMDPs" (2010) - *NIPS 2010*
+  - Silver & Veness, "Monte-Carlo Planning in Large POMDPs" (2010) - papers.nips.cc/paper/4031-monte-carlo-planning-in-large-pomdps
 - **Key Authors:** David Silver, Joel Veness
 - **Python Packages:**
   - Custom implementations
@@ -362,7 +362,7 @@
 - **Key papers:**
   - Brown et al., "Neural Replicator Dynamics" (2019)
   - Hladík et al., "Solving Imperfect Information Games" (2017)
-  - Zinkevich et al., "Regret Minimization in Games with Incomplete Information" (2007) - *NIPS 2007*
+  - Zinkevich et al., "Regret Minimization in Games with Incomplete Information" (2007) - papers.nips.cc/paper/3306-regret-minimization-in-games-with-incomplete-information
 - **Key Authors:** Michael Zinkevich, Michael Bowling
 - **Python Packages:**
   - `poker-cfr` (Pure Python CFR)
@@ -434,7 +434,7 @@
 - **Key papers:**
   - Kumar et al., "Conservative Q-Learning for Offline Reinforcement Learning" (2020) - arxiv.org/abs/2006.04779
   - Levine et al., "Offline Reinforcement Learning: Tutorial, Review, and Perspectives on Open Problems" (2020) - arxiv.org/abs/2005.01643
-  - Lange et al., "Batch Reinforcement Learning" (2012) - *Journal of Machine Learning Research*, 13(4), 1–45
+  - Lange et al., "Batch Reinforcement Learning" (2012) - doi.org/10.1007/978-3-642-27645-3_2
 - **Key Authors:** Sergey Levine, Aviral Kumar, George Tucker, Justin Fu
 
 ### Behavior Cloning
@@ -460,7 +460,7 @@
 ### Dyna-Q (Integration of Learning and Planning)
 - **Short description**: Combines model-free learning with model-based planning using learned environment model
 - **Key papers:**
-  - Moore & Atkeson, "Integrating Learning and Planning in the Dyna Architecture" (1993) - *Artificial Intelligence*, 72(1-2), 49-80
+  - Moore & Atkeson, "Prioritized Sweeping: Reinforcement Learning with Less Data and Less Time" (1993) - doi.org/10.1007/BF00993104
 - **Key Authors:** Andrew W. Moore, Christopher G. Atkeson
 - **Python Packages:**
   - Custom implementations
@@ -472,14 +472,14 @@
 - **Short description**: Multi-level abstraction enabling learning at different temporal scales; improves sample efficiency on complex tasks
 - **Key papers:**
   - Vezhnevets et al., "Feudal Networks for Hierarchical Reinforcement Learning" (2017) - arxiv.org/abs/1703.03400
-  - Dietterich, "Hierarchical Reinforcement Learning with the MAXQ Value Function Decomposition" (2000) - *Journal of Artificial Intelligence Research*, 13, 227-303
+  - Dietterich, "Hierarchical Reinforcement Learning with the MAXQ Value Function Decomposition" (2000) - doi.org/10.1613/jair.639
   - Sutton et al., "Between MDPs and semi-MDPs: Learning, Planning, and Representing Knowledge at Multiple Temporal Scales" (1999)
 - **Key Authors:** Tom Dietterich, Richard S. Sutton, Doina Precup, Satinder Singh
 
 ### Options Framework
 - **Short description**: Temporal abstraction using options (multi-step actions with intrinsic policies); hierarchical RL foundation
 - **Key papers:**
-  - Sutton et al., "Between MDPs and semi-MDPs: Learning, Planning, and Representing Knowledge at Multiple Temporal Scales" (1999) - *JMLR*, 2000, 201-240
+  - Sutton et al., "Between MDPs and semi-MDPs: Learning, Planning, and Representing Knowledge at Multiple Temporal Scales" (1999) - doi.org/10.1016/S0004-3702(99)00052-1
 - **Key Authors:** Richard S. Sutton, Doina Precup, Satinder Singh
 
 ## Bandit Algorithms
@@ -494,7 +494,7 @@
 - **Short description**: Bandit algorithm using upper confidence bounds to balance exploration and exploitation
 - **Key papers:**
   - Garivier & Kaufmann, "Optimal Best Arm Identification with Fixed Budget" (2016) - arxiv.org/abs/1505.04627
-  - Auer et al., "Finite-Time Analysis of the Multiarmed Bandit Problem" (2002) - *Machine Learning*, 47(2/3), 235-256
+  - Auer et al., "Finite-Time Analysis of the Multiarmed Bandit Problem" (2002) - doi.org/10.1023/A:1013689704352
 - **Key Authors:** Peter Auer, Nicolò Cesa-Bianchi, Paul Fischer
 - **Python Packages:**
   - `vowpalwabbit` (Bandit algorithms)
@@ -504,8 +504,8 @@
 ### Thompson Sampling
 - **Short description**: Bayesian approach to exploration using posterior sampling; optimal asymptotic regret bounds
 - **Key papers:**
-  - Chapelle & Li, "An Empirical Evaluation of Thompson Sampling" (2011) - *NIPS 2011*
-  - Thompson, W. R., "On the likelihood that one unknown probability exceeds another" (1933) - *Biometrika*, 25(3/4), 285-294
+  - Chapelle & Li, "An Empirical Evaluation of Thompson Sampling" (2011) - proceedings.neurips.cc/paper/2011/hash/e53a0a2978c28872a4505bdb51db06dc-Abstract.html
+  - Thompson, W. R., "On the likelihood that one unknown probability exceeds another" (1933) - doi.org/10.1093/biomet/25.3-4.285
 - **Key Authors:** William R. Thompson, Olivier Chapelle, Lihong Li
 - **Python Packages:**
   - `vowpalwabbit`
@@ -515,7 +515,7 @@
 ### Contextual Bandits
 - **Short description**: Bandit setting with context-dependent rewards; bridges bandits and supervised learning
 - **Key papers:**
-  - Li et al., "A Contextual-Bandit Approach to Personalized News Recommendation" (2010) - *WWW 2010*
+  - Li et al., "A Contextual-Bandit Approach to Personalized News Recommendation" (2010) - doi.org/10.1145/1772690.1772758
 - **Key Authors:** Lihong Li, Wei Chu, John Langford, Robert E. Schapire
 - **Python Packages:**
   - `vowpalwabbit`

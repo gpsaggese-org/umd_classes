@@ -548,7 +548,7 @@ digraph POMDP {
   \max_{c}
     \Big[ u_1(c(y)) - c(y) \Big]
   \quad \text{s.t.} \quad
-  a_2^* = \arg\max_a
+  a_2^* = \argmax_a
     \big[
       u_2(c(y(a))) - \psi(a)
     \big]
@@ -698,7 +698,7 @@ digraph POMDP {
   - Learn _values_, then act _greedily_
   - No explicit policy is stored
 
-- **Definition**: learn $Q$ (or $V$), derive $\pi(s) = \arg\max_a Q(s,a)$
+- **Definition**: learn $Q$ (or $V$), derive $\pi(s) = \argmax_a Q(s,a)$
   $$
   Q(s,a)
     \leftarrow Q(s,a) + \alpha \left[
@@ -796,7 +796,7 @@ digraph AC {
 
 - **Definition**: expand a tree, evaluate leaves, backprop, select by UCB
   $$
-  a^* = \arg\max_a
+  a^* = \argmax_a
     \left[
       \frac{Q(s,a)}{N(s,a)} + c \sqrt{\frac{\ln N(s)}{N(s,a)}}
     \right]

@@ -69,7 +69,7 @@
 
 - **Fact**: a rational agent chooses the action maximizing expected utility
   under uncertainty
-  $$a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y|a)}[U(Y)]$$
+  $$a^* = \argmax_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y|a)}[U(Y)]$$
 - **Theorem** (von Neumann-Morgenstern, 1944): if preferences over lotteries
   satisfy completeness, transitivity, continuity, and independence, a
   utility function exists such that the agent acts as if maximizing
@@ -256,7 +256,7 @@ digraph DecisionNet {
   yields a biased action ranking whenever confounders are present
 - **Solution**: causal decision theory replaces it with the interventional
   distribution identified in Lesson 2.1
-  $$a^* = \arg\max_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y|do(a))}[U(Y)]$$
+  $$a^* = \argmax_{a \in \mathcal{A}} \EE_{Y \sim \Pr(Y|do(a))}[U(Y)]$$
 - **Example**: comparing drugs on observational recovery rates conflates
   who a doctor chose to treat with what the treatment does; adjusting for
   the back-door set before computing expected utility fixes the ranking
@@ -274,7 +274,7 @@ digraph DecisionNet {
 - **Key idea**: the full pipeline now reads
   $$
   data \to \text{causal model} \to \Pr(Y|do(a))
-       \to U(y,a) \to a^* = \arg\max_a \EE[U(Y)|do(a)]
+       \to U(y,a) \to a^* = \argmax_a \EE[U(Y)|do(a)]
   $$
   - Everything up to this point in the book fills in one arrow at a time
 
@@ -437,7 +437,7 @@ digraph ExploreExploit {
 - **Idea**: be optimistic about arms you are uncertain of, and let that
   optimism drive exploration automatically
 - **Algorithm**: pull the arm maximizing an optimism-adjusted estimate
-  $$a_t = \arg\max_i \left[\hat\mu_i + \sqrt{\frac{2\log t}{n_i}}\right]$$
+  $$a_t = \argmax_i \left[\hat\mu_i + \sqrt{\frac{2\log t}{n_i}}\right]$$
   - Arms pulled less often carry a larger confidence bonus
   - The bonus shrinks as an arm is explored, converging to its true mean
 - **Key idea**: unlike randomly exploring a fixed fraction of the time,
