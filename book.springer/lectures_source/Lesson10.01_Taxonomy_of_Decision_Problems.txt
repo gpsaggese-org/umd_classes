@@ -288,8 +288,9 @@ digraph POMDP {
 
 * Infinite Horizon (Discounted)
 
-- **Intuition**: process never terminates; balance immediate vs. long-term via
-  discount $\gamma \in [0,1)$
+- **Intuition**:
+  - Process never terminates
+  - Balance immediate vs. long-term via discount $\gamma \in [0,1)$
 
 - **Definition**: maximize discounted return, obeying the _Bellman equation_
   $$
@@ -307,8 +308,9 @@ digraph POMDP {
 
 * Episodic / Finite Horizon
 
-- **Intuition**: task runs for a _fixed episode length_ $T$, then resets to an
-  initial state
+- **Intuition**:
+  - Task runs for a _fixed episode length_ $T$
+  - Then resets to an initial state
 
 - **Definition**: episodic return, usually undiscounted
   $$
@@ -328,8 +330,9 @@ digraph POMDP {
 
 * Discrete Actions
 
-- **Intuition**: a _finite_ action set $\mathcal{A} = \{a_1, \ldots, a_n\}$ can
-  be enumerated and compared directly
+- **Intuition**:
+  - _Finite_ action set $\mathcal{A} = \{a_1, \ldots, a_n\}$
+  - Can be enumerated and compared directly
 
 - **Definition**: pick the best action by enumeration
   $$
@@ -337,18 +340,21 @@ digraph POMDP {
   $$
   - $Q$-function is a table with $|\mathcal{S}| \times n$ entries
 
-- **Example**: "Traffic Light Controller" — actions $\{$Green-NS, Green-EW,
-  Yellow, Red$\}$; small branching factor
+- **Example**: Traffic Light Controller
+  - Actions: $\{$Green-NS, Green-EW, Yellow, Red$\}$
+  - Small branching factor
 
-- **Example**: "Document Recommendation" — $\{$Like, Dislike, Bookmark, Share,
-  Ignore$\}$; learn $Q$ for each of 5 actions
+- **Example**: Document Recommendation
+  - Actions: $\{$Like, Dislike, Bookmark, Share, Ignore$\}$
+  - Learn $Q$ for each of 5 actions
 
 - **Algorithms**: Q-Learning, DQN, MCTS, Minimax, Value Iteration
 
 * Continuous Actions
 
-- **Intuition**: action space $\mathcal{A} \subseteq \mathbb{R}^n$ is
-  uncountably infinite $\to$ _cannot enumerate or tabulate_
+- **Intuition**:
+  - Action space $\mathcal{A} \subseteq \mathbb{R}^n$ is uncountably infinite
+  - _Cannot enumerate or tabulate_
 
 - **Definition**: learn a parameterized _function_, not a table
   $$
@@ -356,19 +362,21 @@ digraph POMDP {
   $$
   - Approximated with neural networks
 
-- **Example**: "Autonomous Vehicle Control" — steering
-  $\alpha \in [-\pi/4, \pi/4]$ and acceleration $a \in [-10, 5]$ m/s$^2$
+- **Example**: Autonomous Vehicle Control
+  - Steering: $\alpha \in [-\pi/4, \pi/4]$
+  - Acceleration: $a \in [-10, 5]$ m/s$^2$
 
-- **Example**: "Robot Arm" — continuous joint angles
-  $(\theta_1, \theta_2, \theta_3) \in \mathbb{R}^3$
+- **Example**: Robot Arm
+  - Continuous joint angles: $(\theta_1, \theta_2, \theta_3) \in \mathbb{R}^3$
 
 - **Algorithms**: DDPG, TD3, SAC, PPO (continuous), Policy Gradient,
   Evolutionary Strategies
 
 * Hybrid (Mixed Discrete-Continuous)
 
-- **Intuition**: some actions _discrete_, some _continuous_ $\to$ a two-level
-  hierarchical decision
+- **Intuition**:
+  - Some actions _discrete_, some _continuous_
+  - Two-level hierarchical decision
 
 - **Definition**: factorize the policy over a discrete then a continuous action
   $$
@@ -376,11 +384,13 @@ digraph POMDP {
   $$
   - Continuous choice $a_c$ conditioned on discrete choice $a_d$
 
-- **Example**: "Manufacturing Robot" — discrete: select tool (gripper, welder,
-  sprayer); continuous: trajectory speed and position
+- **Example**: Manufacturing Robot
+  - Discrete: select tool (gripper, welder, sprayer)
+  - Continuous: trajectory speed and position
 
-- **Example**: "Robotic Gripper" — discrete: which of 5 objects; continuous:
-  grasp force and angle
+- **Example**: Robotic Gripper
+  - Discrete: which of 5 objects
+  - Continuous: grasp force and angle
 
 - **Algorithms**: Branching DQN, Hierarchical RL, Multi-task Learning with
   shared base
@@ -389,8 +399,10 @@ digraph POMDP {
 
 * Single-Agent
 
-- **Intuition**: _one_ decision-maker, _one_ objective, no strategic
-  interaction; the environment is stochastic but non-adversarial
+- **Intuition**:
+  - _One_ decision-maker, _one_ objective
+  - No strategic interaction
+  - Environment is stochastic but non-adversarial
 
 - **Definition**: a standard MDP with optimal $\pi^*$ satisfying Bellman
   $$
@@ -398,17 +410,20 @@ digraph POMDP {
   $$
   - No game theory needed
 
-- **Example**: "Personalized Movie Recommendation" — one system, one user,
-  maximize user satisfaction
+- **Example**: Personalized Movie Recommendation
+  - One system, one user
+  - Maximize user satisfaction
 
-- **Example**: "Inventory Management" — one company minimizes cost + stockout
-  penalties
+- **Example**: Inventory Management
+  - One company minimizes cost + stockout penalties
 
 - **Algorithms**: Q-Learning, DQN, SARSA, PPO, Actor-Critic
 
 * Multi-Agent Cooperative
 
-- **Intuition**: $n$ agents share _one objective_ and must _coordinate_ actions
+- **Intuition**:
+  - $n$ agents share _one objective_
+  - Must _coordinate_ actions
 
 - **Definition**: cooperative multi-agent MDP with a _shared_ reward
   $$
@@ -416,18 +431,21 @@ digraph POMDP {
   $$
   - Challenge: _decentralized execution_ via communication / parameter sharing
 
-- **Example**: "Warehouse Robot Team" — 5 robots minimize delivery time, must
-  avoid collisions and deadlocks under one team reward
+- **Example**: Warehouse Robot Team
+  - 5 robots minimize delivery time
+  - Avoid collisions and deadlocks under one team reward
 
-- **Example**: "Vehicle Network Optimization" — cooperatively route packets to
-  maximize throughput $-$ delay
+- **Example**: Vehicle Network Optimization
+  - Cooperatively route packets
+  - Maximize throughput $-$ delay
 
 - **Algorithms**: QMIX, MAPPO, MAAC, MADDPG, CommNet
 
 * Multi-Agent Competitive
 
-- **Intuition**: agents have _conflicting_ objectives $\to$ game theory and
-  _Nash equilibrium_ apply
+- **Intuition**:
+  - Agents have _conflicting_ objectives
+  - Game theory and _Nash equilibrium_ apply
 
 - **Definition**: each agent $i$ maximizes $J_i$; at a Nash equilibrium no
   unilateral deviation helps
@@ -436,11 +454,13 @@ digraph POMDP {
   $$
   - Zero-sum special case: $R_1 + R_2 = \text{const}$
 
-- **Example**: "Chess Match" — two players, zero-sum; optimal play is a Nash
-  equilibrium
+- **Example**: Chess Match
+  - Two players, zero-sum
+  - Optimal play is a Nash equilibrium
 
-- **Example**: "Auction Bidding" — your gain is others' loss; truthful bidding
-  is equilibrium in a second-price auction
+- **Example**: Auction Bidding
+  - Your gain is others' loss
+  - Truthful bidding is equilibrium in a second-price auction
 
 - **Algorithms**: Minimax + Alpha-Beta, Self-Play, CFR, Nash Solvers
 
@@ -448,8 +468,10 @@ digraph POMDP {
 
 * Perfect Information
 
-- **Intuition**: all players know _all_ relevant information; the entire game
-  tree is visible, no hidden moves
+- **Intuition**:
+  - All players know _all_ relevant information
+  - Entire game tree is visible
+  - No hidden moves
 
 - **Definition**: every information set is a _singleton_
   $$
@@ -465,8 +487,9 @@ digraph POMDP {
 
 * Imperfect Information
 
-- **Intuition**: hidden moves or hidden state create an _information gap_
-  between players
+- **Intuition**:
+  - Hidden moves or hidden state
+  - Create an _information gap_ between players
 
 - **Definition**: non-singleton information sets $\to$ act on _beliefs_
   $$
@@ -474,19 +497,22 @@ digraph POMDP {
   $$
   - Equilibrium is a _mixed strategy_ $\sigma_i^*$ with no profitable deviation
 
-- **Example**: "Poker" — betting history visible but hole cards hidden;
-  asymmetry drives strategy
+- **Example**: Poker
+  - Betting history visible but hole cards hidden
+  - Asymmetry drives strategy
 
-- **Example**: "Business Competition" — firms price without knowing rivals'
-  costs; randomize to avoid exploitation
+- **Example**: Business Competition
+  - Firms price without knowing rivals' costs
+  - Randomize to avoid exploitation
 
 - **Algorithms**: CFR (Counterfactual Regret Minimization), Regret Matching,
   Nash Solvers, Information-Set Abstraction
 
 * Asymmetric Information
 
-- **Intuition**: players have _fundamentally different_ information sets and
-  capabilities (one side cannot observe the other)
+- **Intuition**:
+  - Players have _fundamentally different_ information sets and capabilities
+  - One side cannot observe the other
 
 - **Definition**: principal designs a contract to align an unobserved agent
   $$
@@ -495,11 +521,13 @@ digraph POMDP {
   a_2^* = \arg\max_a u_2(c(y(a))) - \psi(a)
   $$
 
-- **Example**: "Principal-Agent" — employer sees output, not employee effort;
-  must incentivize
+- **Example**: Principal-Agent
+  - Employer sees output, not employee effort
+  - Must incentivize
 
-- **Example**: "Insurance Market" — buyer knows health, insurer does not
-  (adverse selection); screen via deductibles
+- **Example**: Insurance Market
+  - Buyer knows health, insurer does not (adverse selection)
+  - Screen via deductibles
 
 - **Algorithms**: Mechanism Design, Bayesian Games, Signaling Equilibria,
   Information-dependent policies
@@ -508,8 +536,9 @@ digraph POMDP {
 
 * Model-Based (Planning)
 
-- **Intuition**: agent _has or learns_ a world model, then _plans_ against it
-  without touching the real environment
+- **Intuition**:
+  - Agent _has or learns_ a world model
+  - Then _plans_ against it without touching the real environment
 
 - **Definition**: solve planning on learned $\hat{P}, \hat{R}$
   $$
@@ -517,18 +546,21 @@ digraph POMDP {
   $$
   - _Sample-efficient_ but sensitive to model error
 
-- **Example**: "GPS Route Planner" — model of roads and travel times finds the
-  fastest route without driving all routes
+- **Example**: GPS Route Planner
+  - Model of roads and travel times
+  - Finds fastest route without driving all routes
 
-- **Example**: "Game AI Lookahead" — simulate future states, avoid risky actions
-  in simulation
+- **Example**: Game AI Lookahead
+  - Simulate future states
+  - Avoid risky actions in simulation
 
 - **Algorithms**: Value/Policy Iteration, Dyna-Q, MCTS, AlphaGo, MuZero
 
 * Model-Free (Learning)
 
-- **Intuition**: _no model_; the agent learns directly from experience by
-  trial-and-error
+- **Intuition**:
+  - _No model_
+  - Agent learns directly from experience by trial-and-error
 
 - **Definition**: learn value/policy from transitions
   $(s_t, a_t, r_t, s_{t+1})$
@@ -537,11 +569,13 @@ digraph POMDP {
   $$
   - No explicit $\hat{P}$ or $\hat{R}$; _asymptotically optimal_ but data-hungry
 
-- **Example**: "Atari from Pixels" — no game code, learn $Q$ from screen +
-  rewards
+- **Example**: Atari from Pixels
+  - No game code
+  - Learn $Q$ from screen + rewards
 
-- **Example**: "Robot Grasping" — learn from grasp success/failure, no physics
-  model
+- **Example**: Robot Grasping
+  - Learn from grasp success/failure
+  - No physics model
 
 - **Algorithms**: Q-Learning, SARSA, REINFORCE, Actor-Critic, DQN, PPO, SAC, A3C
 
@@ -549,8 +583,10 @@ digraph POMDP {
 
 * Online Learning
 
-- **Intuition**: learn and act in _real time_ on a single trajectory; each
-  sample used _once_, no buffer
+- **Intuition**:
+  - Learn and act in _real time_ on a single trajectory
+  - Each sample used _once_
+  - No buffer
 
 - **Definition**: immediate on-policy update after each transition
   $$
@@ -558,37 +594,44 @@ digraph POMDP {
   $$
   - High variance, low memory, must handle _non-stationary_ data
 
-- **Example**: "Autonomous Vehicle Braking" — learn immediately while driving;
-  cannot wait for batch processing
+- **Example**: Autonomous Vehicle Braking
+  - Learn immediately while driving
+  - Cannot wait for batch processing
 
-- **Example**: "Live Customer Support" — update after each interaction from
-  satisfaction feedback
+- **Example**: Live Customer Support
+  - Update after each interaction
+  - Use satisfaction feedback
 
 - **Algorithms**: SARSA, TD Learning, REINFORCE, on-policy Actor-Critic (A3C)
 
 * Batch Learning / Offline RL
 
-- **Intuition**: train on a _fixed dataset_ with _no_ environment interaction;
-  all data collected in advance
+- **Intuition**:
+  - Train on a _fixed dataset_ with _no_ environment interaction
+  - All data collected in advance
 
 - **Definition**: optimize over a static dataset
   $\mathcal{D} = \{(s_i, a_i, r_i, s_i')\}$
   - Core challenge: _off-policy_ data $\to$ _distribution shift_
   - Fixes: importance sampling, conservative value estimates
 
-- **Example**: "Medical Treatment Policy" — learn from historical (state,
-  treatment, outcome); cannot experiment on new patients
+- **Example**: Medical Treatment Policy
+  - Learn from historical (state, treatment, outcome)
+  - Cannot experiment on new patients
 
-- **Example**: "Movie Recommendation" — train on historical interactions, avoid
-  bad recommendations in production
+- **Example**: Movie Recommendation
+  - Train on historical interactions
+  - Avoid bad recommendations in production
 
 - **Algorithms**: Batch Q-Learning, Offline RL, Behavior Cloning, Conservative
   Q-Learning (CQL)
 
 * Replay-based / Experience Replay
 
-- **Intuition**: store experiences in a buffer and _replay_ them $\to$ combines
-  online acting with batch updates, _decorrelating_ samples
+- **Intuition**:
+  - Store experiences in a buffer and _replay_ them
+  - Combines online acting with batch updates
+  - _Decorrelates_ samples
 
 - **Definition**: maintain buffer $\mathcal{B}$ of size $N$; each step
   1. Act via $\pi_t$, add $(s_t, a_t, r_t, s_{t+1})$ to $\mathcal{B}$
@@ -596,8 +639,9 @@ digraph POMDP {
   3. Update $\theta$ on the minibatch
   - Benefits: breaks correlation, reuses samples, enables off-policy learning
 
-- **Example**: "DQN on Atari" — store frames, train on random minibatches from
-  the replay buffer
+- **Example**: DQN on Atari
+  - Store frames
+  - Train on random minibatches from the replay buffer
 
 - **Algorithms**: DQN with Experience Replay, Prioritized ER (PER), Hindsight ER
   (HER), Rainbow DQN
@@ -606,8 +650,9 @@ digraph POMDP {
 
 * Value-based Methods
 
-- **Intuition**: learn _values_, then act _greedily_; no explicit policy is
-  stored
+- **Intuition**:
+  - Learn _values_, then act _greedily_
+  - No explicit policy is stored
 
 - **Definition**: learn $Q$ (or $V$), derive $\pi(s) = \arg\max_a Q(s,a)$
   $$
@@ -615,18 +660,20 @@ digraph POMDP {
   $$
   - _Off-policy_ and sample-efficient
 
-- **Example**: "Chess Position Evaluator" — score each board; play the move to
-  the highest-value position
+- **Example**: Chess Position Evaluator
+  - Score each board
+  - Play the move to the highest-value position
 
-- **Example**: "Traffic Signal Control" — $Q(\text{state}, \text{signal})$
-  predicts queue reduction
+- **Example**: Traffic Signal Control
+  - $Q(\text{state}, \text{signal})$ predicts queue reduction
 
 - **Algorithms**: Q-Learning, Value Iteration, DQN, Double DQN, Dueling DQN
 
 * Policy-based Methods
 
-- **Intuition**: learn the _policy directly_; no intermediate value function
-  needed
+- **Intuition**:
+  - Learn the _policy directly_
+  - No intermediate value function needed
 
 - **Definition**: parameterize $\pi_\theta(a | s)$, ascend the policy gradient
   $$
@@ -634,11 +681,13 @@ digraph POMDP {
   $$
   - Handles continuous actions; _higher variance_; on-policy
 
-- **Example**: "Robot Arm Joint Control" — output a distribution over joint
-  angles, explore continuous actions naturally
+- **Example**: Robot Arm Joint Control
+  - Output a distribution over joint angles
+  - Explore continuous actions naturally
 
-- **Example**: "Game NPC Strategy" — learn a stochastic strategy (aggressive /
-  defensive / evasive), unpredictable to the player
+- **Example**: Game NPC Strategy
+  - Learn a stochastic strategy (aggressive / defensive / evasive)
+  - Unpredictable to the player
 
 - **Algorithms**: REINFORCE, PPO, TRPO, Natural Policy Gradient, Evolutionary
   Strategies
@@ -647,8 +696,9 @@ digraph POMDP {
 
 ::: columns
 :::: {.column width=58%}
-- **Intuition**: combine both — an _actor_ picks actions, a _critic_ evaluates
-  them; the critic reduces the actor's variance
+- **Intuition**:
+  - Combine both — an _actor_ picks actions, a _critic_ evaluates them
+  - Critic reduces the actor's variance
 
 - **Definition**: actor $\pi_\theta$, critic $V_\phi$, using advantage
   $$
@@ -680,15 +730,18 @@ digraph AC {
 ::::
 :::
 
-- **Example**: "Robot Locomotion" — actor outputs joint torques, critic predicts
-  forward progress; lower variance than pure policy gradient
+- **Example**: Robot Locomotion
+  - Actor outputs joint torques
+  - Critic predicts forward progress
+  - Lower variance than pure policy gradient
 
 - **Algorithms**: A2C, A3C, SAC, DDPG, TD3, PPO (value baseline)
 
 * Search / Planning Methods
 
-- **Intuition**: _look ahead_ by building a tree at decision time, using a model
-  or simulator before committing
+- **Intuition**:
+  - _Look ahead_ by building a tree at decision time
+  - Use a model or simulator before committing
 
 - **Definition**: expand a tree, evaluate leaves, backprop, select by UCB
   $$
@@ -696,11 +749,13 @@ digraph AC {
   $$
   - Sample-heavy but _asymptotically optimal_
 
-- **Example**: "AlphaGo" — MCTS searches the game tree, evaluates leaves with a
-  neural network before each move
+- **Example**: AlphaGo
+  - MCTS searches the game tree
+  - Evaluates leaves with a neural network before each move
 
-- **Example**: "Robot Task Planning" — search 5-10 steps ahead, backtrack from
-  failure states
+- **Example**: Robot Task Planning
+  - Search 5-10 steps ahead
+  - Backtrack from failure states
 
 - **Algorithms**: MCTS, Minimax + Alpha-Beta, A\*, MPC, AlphaZero, MuZero
 
@@ -708,8 +763,9 @@ digraph AC {
 
 * Deterministic Policies
 
-- **Intuition**: one _fixed action_ per state; randomness appears only during
-  exploration in training
+- **Intuition**:
+  - One _fixed action_ per state
+  - Randomness appears only during exploration in training
 
 - **Definition**: deterministic map $\mu(s) \in \mathcal{A}$ with gradient
   $$
@@ -717,18 +773,21 @@ digraph AC {
   $$
   - Off-policy, sample-efficient; exploration via noise injection
 
-- **Example**: "Traffic Light Controller" — {heavy left traffic} $\to$ {green
-  left}, always the same
+- **Example**: Traffic Light Controller
+  - Heavy left traffic → green left
+  - Always the same action
 
-- **Example**: "Robot End-Effector" — vision input maps to a fixed target
-  gripper position at deployment
+- **Example**: Robot End-Effector
+  - Vision input maps to a fixed target gripper position
+  - Used at deployment
 
 - **Algorithms**: DPG, DDPG, TD3, greedy Q-Learning, Minimax
 
 * Stochastic Policies
 
-- **Intuition**: output a _distribution_ over actions; exploration is _built
-  into_ the policy
+- **Intuition**:
+  - Output a _distribution_ over actions
+  - Exploration is _built into_ the policy
 
 - **Definition**: sample $a \sim \pi(\cdot | s)$ and follow the policy
   gradient
@@ -737,18 +796,21 @@ digraph AC {
   $$
   - Handles _multimodal_ actions; more stable
 
-- **Example**: "Card-Game Strategy" — {aggressive: 30%, conservative: 70%} to
-  stay unpredictable
+- **Example**: Card-Game Strategy
+  - Aggressive: 30%, conservative: 70%
+  - Stay unpredictable
 
-- **Example**: "Diverse Recommender" — sample {news 40%, entertainment 30%,
-  educational 30%} to avoid local optima
+- **Example**: Diverse Recommender
+  - Sample: news 40%, entertainment 30%, educational 30%
+  - Avoid local optima
 
 - **Algorithms**: REINFORCE, PPO, A3C, SAC, Thompson Sampling
 
 * Optimal Policies
 
-- **Intuition**: find the _provably best_ policy — exact or $\varepsilon$-optimal
-  — even if computationally expensive
+- **Intuition**:
+  - Find the _provably best_ policy — exact or $\varepsilon$-optimal
+  - Even if computationally expensive
 
 - **Definition**: $\pi^* = \arg\max_\pi J(\pi)$ with optimal value satisfying
   Bellman
@@ -757,18 +819,21 @@ digraph AC {
   $$
   - Value Iteration _converges_ in finite MDPs
 
-- **Example**: "Chess Solver" — prove a move is optimal from a given position
+- **Example**: Chess Solver
+  - Prove a move is optimal from a given position
 
-- **Example**: "Trajectory Optimization" — globally optimal path (e.g.,
-  power-minimal route) for convex cost
+- **Example**: Trajectory Optimization
+  - Globally optimal path (e.g., power-minimal route)
+  - For convex cost
 
 - **Algorithms**: Value/Policy Iteration, Minimax + Alpha-Beta, AlphaZero,
   Exhaustive Search
 
 * Approximate / Satisficing Policies
 
-- **Intuition**: accept a _good-enough_ policy with _bounded_ suboptimality when
-  time or compute is limited
+- **Intuition**:
+  - Accept a _good-enough_ policy with _bounded_ suboptimality
+  - When time or compute is limited
 
 - **Definition**: $\varepsilon$-optimal policy with a guarantee
   $$
@@ -790,8 +855,8 @@ digraph AC {
 
 * Small Tabular Problem
 
-- **Intuition**: $|\mathcal{S}|$ and $|\mathcal{A}|$ are small enough to store in
-  a _lookup table_ (e.g., < 10k states)
+- **Intuition**:
+  - $|\mathcal{S}|$ and $|\mathcal{A}|$ are small enough to store in a _lookup table_ (e.g., < 10k states)
 
 - **Definition**: $Q$-table is a $|\mathcal{S}| \times |\mathcal{A}|$ matrix
   $$
@@ -799,17 +864,21 @@ digraph AC {
   $$
   - _Exact_ solution with guaranteed convergence
 
-- **Example**: "Grid World" — $10 \times 10$ grid = 100 states, 4 actions; full
-  $Q$-table fits
+- **Example**: Grid World
+  - $10 \times 10$ grid = 100 states, 4 actions
+  - Full $Q$-table fits
 
-- **Example**: "Small Inventory" — 20 levels $\times$ 5 order quantities; solve
-  by tabular Q-learning
+- **Example**: Small Inventory
+  - 20 levels $\times$ 5 order quantities
+  - Solve by tabular Q-learning
 
 - **Algorithms**: Tabular Q-Learning, Tabular Value/Policy Iteration, MCTS
 
 * Medium: Linear Function Approximation
 
-- **Intuition**: state space _too large_ for a table $\to$ compress via features
+- **Intuition**:
+  - State space _too large_ for a table
+  - Compress via features
 
 - **Definition**: linear value in a feature vector $\phi(s) \in \mathbb{R}^d$,
   $d \ll |\mathcal{S}|$
@@ -820,18 +889,20 @@ digraph AC {
   $$
   - _Basis-function design_ is the key challenge
 
-- **Example**: "Adaptive Auction Bidding" — features [price history, competitor
-  bids, budget remaining] too many to tabulate
+- **Example**: Adaptive Auction Bidding
+  - Features: price history, competitor bids, budget remaining
+  - Too many to tabulate
 
-- **Example**: "Online Resource Allocation" — features [load, queue length, time
-  of day, priority]
+- **Example**: Online Resource Allocation
+  - Features: load, queue length, time of day, priority
 
 - **Algorithms**: Q-Learning / SARSA with FA, LSTD, Linear/Contextual Bandits
 
 * Large: Deep Neural Networks
 
-- **Intuition**: _high-dimensional_ inputs (images, speech) demand a learned
-  feature extractor
+- **Intuition**:
+  - _High-dimensional_ inputs (images, speech)
+  - Demand a learned feature extractor
 
 - **Definition**: value as a deep network $V(s) = f_\theta(s)$
   $$
@@ -840,11 +911,14 @@ digraph AC {
   - Challenges: non-stationary targets, off-policy data
   - Fixes: _experience replay_, _target networks_
 
-- **Example**: "Self-Driving Car" — camera image ($1920 \times 1440 \times 3$)
-  $\to$ CNN features $\to$ continuous control
+- **Example**: Self-Driving Car
+  - Camera image: $1920 \times 1440 \times 3$
+  - CNN features → continuous control
 
-- **Example**: "Atari" — $84 \times 84 \times 3$ screen, CNN extracts sprites and
-  terrain, DQN learns $Q$
+- **Example**: Atari
+  - $84 \times 84 \times 3$ screen
+  - CNN extracts sprites and terrain
+  - DQN learns $Q$
 
 - **Algorithms**: DQN (Double / Dueling / Rainbow), A3C, PPO, TRPO, SAC, TD3
 
