@@ -286,7 +286,7 @@ digraph POMDP {
 
 - **Algorithms**: Minimax, Alpha-Beta Pruning, A\*, RRT, MCTS
 
-* Infinite Horizon (Discounted)
+* Infinite Horizon
 
 - **Intuition**:
   - Process never terminates
@@ -312,17 +312,21 @@ digraph POMDP {
   - Task runs for a _fixed episode length_ $T$
   - Then resets to an initial state
 
-- **Definition**: episodic return, usually undiscounted
+- **Definition**: episodic return (usually undiscounted)
   $$
   J = \mathbb{E}\Big[ \sum_{t=0}^{T} R(s_t, a_t) \Big]
   $$
-  - Agent resets after step $T$; next episode is independent
+  - Agent resets after step $T$ and next episode is independent
 
-- **Example**: "Video-game level" — episode lasts exactly 300 frames; maximize
-  total score, then the level ends
+- **Example**: Video-game level
+  - Episode lasts exactly 300 frames
+  - Maximize total score
+  - Then the level ends
 
-- **Example**: "Student studying for an exam" — fixed study time, maximize exam
-  score, knowledge resets next episode
+- **Example**: Student studying for an exam
+  - Fixed study time
+  - Maximize exam score
+  - Knowledge "resets" next episode
 
 - **Algorithms**: Monte Carlo methods, MCTS, Policy Gradient (REINFORCE)
 
@@ -331,12 +335,12 @@ digraph POMDP {
 * Discrete Actions
 
 - **Intuition**:
-  - _Finite_ action set $\mathcal{A} = \{a_1, \ldots, a_n\}$
-  - Can be enumerated and compared directly
+  - Action set $\mathcal{A} = \{a_1, \ldots, a_n\}$ is _finite_
+  - Can be enumerated
 
 - **Definition**: pick the best action by enumeration
   $$
-  a^* = \arg\max_{a \in \mathcal{A}} Q(s, a)
+  a^* = \argmax_{a \in \mathcal{A}} Q(s, a)
   $$
   - $Q$-function is a table with $|\mathcal{S}| \times n$ entries
 
@@ -353,10 +357,11 @@ digraph POMDP {
 * Continuous Actions
 
 - **Intuition**:
-  - Action space $\mathcal{A} \subseteq \mathbb{R}^n$ is uncountably infinite
-  - _Cannot enumerate or tabulate_
+  - Action space $\mathcal{A} \subseteq \mathbb{R}^n$ is _uncountably infinite_
+  - Cannot enumerate or tabulate
 
 - **Definition**: learn a parameterized _function_, not a table
+// TODO(ai_gp): Improve
   $$
   a = \mu(s) \;\text{(deterministic)} \quad\text{or}\quad a \sim \pi(a | s) \;\text{(stochastic)}
   $$
@@ -380,7 +385,7 @@ digraph POMDP {
 
 - **Definition**: factorize the policy over a discrete then a continuous action
   $$
-  \pi(a_d, a_c | s) = \pi_d(a_d | s)\, \pi_c(a_c | s, a_d)
+  \pi(a_d, a_c | s) = \pi_{discrete}(a_d | s)\, \pi_{continuous}(a_c | s, a_d)
   $$
   - Continuous choice $a_c$ conditioned on discrete choice $a_d$
 
@@ -404,7 +409,7 @@ digraph POMDP {
   - No strategic interaction
   - Environment is stochastic but non-adversarial
 
-- **Definition**: a standard MDP with optimal $\pi^*$ satisfying Bellman
+- **Definition**: a standard MDP with optimal $\pi^*$ satisfying Bellman equation
   $$
   J = \mathbb{E}\Big[ \sum_t \gamma^t R(s_t, a_t) \Big]
   $$
@@ -437,7 +442,7 @@ digraph POMDP {
 
 - **Example**: Vehicle Network Optimization
   - Cooperatively route packets
-  - Maximize throughput $-$ delay
+  - Maximize throughput (minimize delay)
 
 - **Algorithms**: QMIX, MAPPO, MAAC, MADDPG, CommNet
 
@@ -447,11 +452,12 @@ digraph POMDP {
   - Agents have _conflicting_ objectives
   - Game theory and _Nash equilibrium_ apply
 
-- **Definition**: each agent $i$ maximizes $J_i$; at a Nash equilibrium no
-  unilateral deviation helps
-  $$
-  R_i(s, \pi_i^*, \pi_{-i}^*) \geq R_i(s, \pi_i, \pi_{-i}^*) \quad \forall \pi_i
-  $$
+- **Definition**:
+  - Each agent $i$ maximizes $J_i$
+  - At a Nash equilibrium no unilateral deviation helps
+    $$
+    R_i(s, \pi_i^*, \pi_{-i}^*) \geq R_i(s, \pi_i, \pi_{-i}^*) \quad \forall \pi_i
+    $$
   - Zero-sum special case: $R_1 + R_2 = \text{const}$
 
 - **Example**: Chess Match
@@ -479,9 +485,11 @@ digraph POMDP {
   $$
   - Optimal play by _backward induction_ on the game tree
 
-- **Example**: "Chess" — both players see the board and full move history
+- **Example**: Chess
+  - Both players see the board and full move history
 
-- **Example**: "Tic-Tac-Toe" — fully solvable; all Nash equilibria via Minimax
+- **Example**: Tic-Tac-Toe
+  - Fully solvable: all Nash equilibria via Minimax
 
 - **Algorithms**: Minimax + Alpha-Beta, Negamax, MCTS, AlphaZero, exact solvers
 
