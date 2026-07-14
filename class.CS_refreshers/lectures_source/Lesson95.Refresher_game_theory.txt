@@ -1,139 +1,113 @@
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
+# Game Theory Refresher
 
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
+## Introduction
+* What is Game Theory?
+* Historical Development and Key Figures
+* Applications Across Disciplines
 
-\vspace{1cm}
+## Part I: Foundations
 
-\begingroup \Large
-**$$\text{\blue{Refresher 05: Game Theory}}$$**
-\endgroup
-\vspace{1cm}
+### Chapter 1: Basic Concepts
+* Games and Payoffs
+* Players and Strategies
+* Zero-Sum vs. Non-Zero-Sum Games
+* Normal Form Representation
+* Extensive Form Representation
 
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
+### Chapter 2: Dominant Strategies and Rationality
+* Dominant Strategies
+* Dominated Strategies
+* Rational Choice Theory
+* Limitations of Rationality Assumptions
 
-**References**:
+### Chapter 3: Nash Equilibrium
+* Definition and Intuition
+* Finding Nash Equilibria
+* Pure vs. Mixed Strategy Equilibria
+* Existence and Uniqueness
 
-- AIMA 5: Adversarial search and game theory
-- AIMA 18: Multiagent decision making
+## Part II: Strategic Interactions
 
-# Game theory
+### Chapter 4: Simultaneous-Move Games
+* The Prisoner's Dilemma
+* Battle of the Sexes
+* Matching Pennies
+* Coordination Games
 
-* Normal Form Games
-- Representation of games using a payoff matrix
-- Players choose strategies simultaneously
-- Used to study strategic interactions
-- Example: Prisoner’s Dilemma
+### Chapter 5: Sequential-Move Games
+* Game Trees and Backward Induction
+* Subgame Perfect Equilibrium
+* First-Mover Advantages and Disadvantages
+* Credible Commitments
 
-* Extensive Form Games
-- Game represented as a tree with sequential moves
-- Captures order of play, decisions, and information
-- Includes concepts like subgames and information sets
-- Used in modeling turn-based interactions (e.g., poker)
+### Chapter 6: Mixed Strategies and Uncertainty
+* Mixed Strategy Equilibria
+* Probability and Randomization
+* Interpreting Mixed Strategies
+* Information Asymmetry
 
-* Pure and Mixed Strategies
-- Pure strategy: deterministic choice
-- Mixed strategy: probability distribution over actions
-- Mixed strategies allow randomization and increase flexibility
-- Mixed strategies are crucial in achieving equilibrium in some games
+## Part III: Advanced Concepts
 
-* Nash Equilibrium
-- A set of strategies where no player has an incentive to deviate
-- Can be in pure or mixed strategies
-- Existence guaranteed (in mixed strategies) by Nash's theorem
-- Central concept in game theory
+### Chapter 7: Cooperative Games
+* Coalition Formation
+* Bargaining Solutions
+* The Core and Shapley Value
+* Applications in Economics and Politics
 
-* Dominant and Dominated Strategies
-- A strategy dominates another if it always yields better payoff
-- Dominated strategies are never rational to play
-- Iterated elimination of dominated strategies simplifies games
-
-* Best Response and Reaction Functions
-- Best response: strategy that maximizes a player’s payoff given others’ strategies
-- Nash equilibrium occurs where all players play best responses
-- Used to derive and analyze equilibria
-
-* Zero-Sum Games
-- One player’s gain is another player’s loss
-- Payoffs satisfy $u_1 = -u_2$
-- Solvable using minimax theorem
-- Important in adversarial ML (e.g., GANs)
-
-* Minimax Theorem
-- In zero-sum games: $\min_{\pi_1} \max_{\pi_2} u = \max_{\pi_2} \min_{\pi_1} u$
-- Players choose strategies to minimize their maximum possible loss
-- Foundation for robust optimization and adversarial training
-
-* Correlated Equilibrium
-- Players coordinate using a shared signal
-- Generalization of Nash equilibrium
-- Can lead to better outcomes than Nash equilibrium
-- Enables learning equilibria via no-regret algorithms
-
+### Chapter 8: Incomplete Information
 * Bayesian Games
-- Games with incomplete information
-- Players have private types and beliefs
-- Strategies depend on beliefs about others
-- Relevant to modeling uncertainty in ML
+* Signaling Games
+* Screening and Separating Equilibria
+* Mechanism Design Basics
 
-* Evolutionary Game Theory
-- Studies dynamics of strategy changes in populations
-- Focuses on replicator dynamics and evolutionarily stable strategies (ESS)
-- Used in multi-agent learning and biology-inspired algorithms
+### Chapter 9: Evolutionary Game Theory
+* Replicator Dynamics
+* Evolutionarily Stable Strategies
+* Population Games
+* Biological Applications
 
-* Repeated Games
-- Same game played multiple times
-- History of play influences future actions
-- Cooperation can emerge (e.g., tit-for-tat)
-- Important for modeling long-term interaction
+## Part IV: Applications
 
-* Stochastic Games
-- Generalization of repeated games with state transitions
-- Combines game theory with Markov decision processes (MDPs)
-- Used in reinforcement learning and dynamic competition
-
-* Mechanism Design
-- Inverse game theory: design rules to achieve desired outcomes
-- Ensures incentive compatibility and individual rationality
-- Applied in auctions, resource allocation, and blockchain systems
-
+### Chapter 10: Economics and Markets
+* Duopoly and Oligopoly Models
+* Cournot and Bertrand Competition
 * Auction Theory
-- Study of bidding strategies and auction formats
-- Types: first-price, second-price (Vickrey), all-pay, etc.
-- Truthful bidding is optimal in second-price auctions
-- Used in online ad auctions and marketplaces
+* Price Discrimination and Monopoly
 
-* Potential Games
-- Games with a potential function aligning with player incentives
-- Any change in individual utility reflects a global change
-- Facilitates convergence to equilibrium via learning
+### Chapter 11: Politics and Social Choice
+* Voting and Preference Aggregation
+* Legislative Bargaining
+* Political Equilibrium
+* International Conflicts and Arms Races
 
-* Learning in Games
-- Fictitious play, regret minimization, Q-learning in multi-agent settings
-- Focus on convergence to equilibrium through repeated interaction
-- No-regret algorithms converge to correlated equilibria
+### Chapter 12: Business and Strategy
+* Entry and Exit Decisions
+* Product Differentiation
+* R&D and Innovation Games
+* Strategic Alliances
 
-* Multi-Agent Reinforcement Learning (MARL)
-- Agents learn by interacting with other learning agents
-- Combines RL with game-theoretic reasoning
-- Challenges: non-stationarity, exploration, coordination
+### Chapter 13: Behavioral and Experimental Game Theory
+* Deviations from Rational Play
+* Laboratory Experiments
+* Trust and Reciprocity
+* Bounded Rationality
 
-* Cooperative Game Theory
-- Focuses on group outcomes and coalition formation
-- Concepts: core, Shapley value, bargaining
-- Useful in team-based ML and federated learning
+## Part V: Contemporary Topics
 
-* Social Choice and Voting
-- Aggregation of individual preferences into a collective decision
-- Arrow’s impossibility theorem: no perfect voting system exists
-- Relevant in ensemble methods and preference aggregation
+### Chapter 14: Network Games and Social Networks
+* Games on Networks
+* Information Diffusion
+* Adoption and Herding
+* Decentralized Decision-Making
 
-## Connections between Machine Learning and Game Theory
+### Chapter 15: Algorithmic Game Theory
+* Computational Complexity
+* Approximation Algorithms
+* Online Games
+* Artificial Intelligence and Equilibrium
+
+### Chapter 16: Future Directions and Open Questions
+* Emerging Applications
+* Computational Challenges
+* Limitations of Game Theory
+* Interdisciplinary Frontiers
