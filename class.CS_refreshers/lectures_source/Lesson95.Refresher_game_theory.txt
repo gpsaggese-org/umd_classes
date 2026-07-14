@@ -1,23 +1,295 @@
 # Game Theory Refresher
 
 ## Introduction
+
 * What is Game Theory?
+
+- **Definition**: _Game theory_ is mathematical framework for analyzing strategic interactions between rational decision-makers, where each participant's outcome depends on decisions of others
+  - Study of conflict and cooperation
+  - Models situations with interdependent choices
+  - Predicts outcomes under rationality assumptions
+
+- **Key insight**: Individual rationality doesn't guarantee collectively optimal outcomes
+  - Your best choice depends on what others choose
+  - Need to anticipate others' thinking
+
+- **Example**: Two companies choosing prices
+  - Each wants maximum profit
+  - But aggressive pricing by competitor forces price war
+  - Both end up worse off than if they cooperated
+
+- **Application areas**: Economics, political science, biology, computer science, military strategy, business
+
+
 * Historical Development and Key Figures
+
+- **Foundations** (1920s-1940s)
+  - John von Neumann: Minimax theorem for zero-sum games
+  - Émile Borel: Early work on strategic games
+
+- **Nash Equilibrium** (1950)
+  - John Nash: Proved existence of equilibrium in mixed strategies
+  - Revolutionized analysis of non-zero-sum games
+
+- **Refinements** (1960s-1980s)
+  - Reinhard Selten: Subgame perfect equilibrium
+  - John Harsanyi: Incomplete information games
+  - Shared Nobel Prize (1994)
+
+- **Modern developments** (1990s-present)
+  - Behavioral game theory: bounded rationality
+  - Evolutionary game theory: population dynamics
+  - Algorithmic game theory: computational complexity
+
+
 * Applications Across Disciplines
+
+- **Economics**: Markets, auctions, pricing strategies, oligopoly competition
+  - Example: Smartphone makers balancing innovation vs. cost
+
+- **Political science**: Voting, negotiations, conflict resolution, policy making
+  - Example: Legislative coalitions and bargaining
+
+- **Biology**: Evolution, animal behavior, competition for resources
+  - Example: Predator-prey dynamics, mating strategies
+
+- **Computer science**: Network routing, resource allocation, algorithm design
+  - Example: Internet routing protocols, blockchain consensus
+
+- **Business strategy**: Entry decisions, product development, R&D investment
+  - Example: When to enter new markets, patent racing
+
+- **Everyday life**: Dating, job interviews, salary negotiation
+  - Example: Job candidate deciding salary ask based on expected employer counteroffer
+
 
 ## Part I: Foundations
 
 ### Chapter 1: Basic Concepts
+
 * Games and Payoffs
+
+- **Definition**: A _game_ consists of players, strategies they can choose, and payoffs (outcomes) resulting from combinations of choices
+  - Players: Decision-makers (firms, individuals, countries)
+  - Strategies: All possible actions player can take
+  - Payoffs: Numerical outcomes reflecting preferences (profit, utility, points)
+
+- **Payoff matrix**: Table showing outcome for each combination of player choices
+  ```
+  Example: Matching Pennies
+           Opponent: Heads    Opponent: Tails
+  You: H      +1                 -1
+  You: T      -1                 +1
+  ```
+  - Your payoff listed first, opponent's second
+
+- **Key assumption**: Players have complete information about payoff structures
+  - Each player knows everyone's payoffs
+  - Players are rational (maximize own payoff)
+
+- **Example**: Restaurant pricing game
+  - Two restaurants competing on same street
+  - Each chooses High or Low price
+  - High price → high profit if competitor also charges high; low profit if undercut
+  - Low price → moderate profit regardless of competitor
+
+
 * Players and Strategies
+
+- **Definition**: _Players_ are rational decision-makers in the game; _strategies_ are complete action plans available to each player
+
+- **Strategy types**:
+  - **Pure strategy**: Choose one specific action with certainty
+    - Example: "Always choose Left"
+  - **Mixed strategy**: Randomize over multiple actions with specific probabilities
+    - Example: "Choose Left with probability 0.6, Right with probability 0.4"
+
+- **Strategy space**: Set of all available strategies to a player
+  - Can be finite (two choices: Cooperate, Defect)
+  - Can be infinite (any real-valued price from 0 to $100)
+
+- **Strategy profile**: Specification of one strategy for each player
+  - Example in 2-player game: (Player 1 chooses Up, Player 2 chooses Left)
+  - Determines the outcome
+
+- **Example**: Chess game
+  - Players: White and Black
+  - Strategies: Incredibly large (roughly 10<SUP>120</SUP> possible games)
+  - Strategy for White at first move: e4, d4, Nf3, ... (20 legal moves)
+
+
 * Zero-Sum vs. Non-Zero-Sum Games
+
+- **Zero-sum games**: One player's gain is exactly another's loss
+  - Total payoff across all players = 0 (or constant)
+  - Purely competitive, no mutual gain possible
+  - Example: Chess (one player wins, other loses)
+
+- **Non-zero-sum games**: Outcomes can be mutually beneficial or mutually harmful
+  - Total payoff varies depending on choices
+  - Mix of cooperation and competition possible
+  - Example: Business deal (both parties can benefit)
+
+- **Payoff matrix comparison**:
+  ```
+  Zero-Sum Example:
+           B: Left    B: Right
+  A: Up    (1,-1)    (-1,1)
+  A: Down  (-1,1)    (1,-1)
+
+  Non-Zero-Sum Example:
+           B: Left    B: Right
+  A: Up    (2,2)     (0,3)
+  A: Down  (3,0)     (1,1)
+  ```
+
+- **Strategic implication**:
+  - Zero-sum: Assume worst about opponent; pure adversarial thinking
+  - Non-zero-sum: Opportunities for mutual gain; coordination matters
+
+
 * Normal Form Representation
+
+- **Definition**: _Normal form_ (or _strategic form_) displays game as matrix with players' strategies as rows/columns and payoffs in cells
+  - Represents simultaneous-move games
+  - Shows all strategic choices clearly
+
+- **Structure for 2-player game**:
+  ```
+  Payoffs shown as (Row player's payoff, Column player's payoff)
+
+          Player B: Left    Player B: Right
+  P1: Up   (3,1)            (0,2)
+  P1: Down (2,2)            (1,3)
+  ```
+  - Rows: Player 1 strategies
+  - Columns: Player 2 strategies
+  - Cell: (P1 payoff, P2 payoff)
+
+- **Advantages**:
+  - Compact, easy to visualize
+  - Immediately see all outcomes
+  - Facilitates equilibrium analysis
+
+- **Limitations**:
+  - Only for simultaneous-move games
+  - Can be large for many strategies
+  - Hides timing/sequential nature of play
+
+- **Example**: Prisoners' Dilemma
+  ```
+            Cooperate  Defect
+  Cooperate  (-1,-1)  (-3,0)
+  Defect     (0,-3)   (-2,-2)
+  ```
+
+
 * Extensive Form Representation
 
+- **Definition**: _Extensive form_ represents game as decision tree showing:
+  - Sequence of moves (who moves when)
+  - Information available at each decision point
+  - Payoffs at terminal nodes (end of game)
+
+- **Structure**:
+  - Nodes: Decision points or chance events
+  - Branches: Actions available
+  - Terminal nodes: End outcomes with payoffs
+  - Information sets: Nodes where player can't distinguish (doesn't know which node they're at)
+
+- **Advantages**:
+  - Captures sequential/dynamic nature
+  - Shows timing: who moves first, second, etc.
+  - Reveals information gaps (what player knows when)
+  - Enables backward induction analysis
+
+- **Limitations**:
+  - Can become unwieldy for complex games
+  - Harder to analyze than normal form for simultaneous moves
+
+- **Example**: Entry game tree
+  ```
+  Incumbent firm decides: Fight or Accommodate
+    If Accommodate → Entrant gets $3, Incumbent gets $1
+    If Fight → Entrant decides: Stay or Exit
+      If Exit → Entrant gets -$1, Incumbent gets $4
+      If Stay → Both in price war: Entrant gets -$1, Incumbent gets $0
+  ```
+  - Extensive form shows Incumbent moves first, then Entrant responds
+  - Normal form would hide this timing
+
+
 ### Chapter 2: Dominant Strategies and Rationality
+
 * Dominant Strategies
+
+- **Definition**: A strategy is _dominant_ if it yields higher payoff than any alternative strategy, regardless of what opponent does
+  - "Best response to everything"
+  - Player should always choose dominant strategy if one exists
+
+- **Formal definition**: Strategy $s_i$ is dominant if for all strategies $s_i'$ of player $i$ and all strategy profiles $s_{-i}$ of opponents:
+  $$u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i})$$
+  with strict inequality for some $s_{-i}$
+
+- **Example**: Matching Pennies does NOT have dominant strategy
+  - If opponent chooses Heads, you prefer Tails (+1 vs -1)
+  - If opponent chooses Tails, you prefer Heads (+1 vs -1)
+  - No single strategy beats both
+
+- **Example**: Prisoners' Dilemma HAS dominant strategy
+  ```
+            Cooperate  Defect
+  Cooperate  (-1,-1)  (-3,0)
+  Defect     (0,-3)   (-2,-2)
+  ```
+  - If opponent cooperates: Defect gives 0 > -1, so Defect is better
+  - If opponent defects: Defect gives -2 > -3, so Defect is better
+  - **Defect is dominant** for both players
+
+- **Remark**: If every player has dominant strategy, solution is straightforward
+  - Each plays dominant strategy
+  - Outcome is predictable
+  - But often leads to suboptimal collective result
+
+
 * Dominated Strategies
-* Rational Choice Theory
+
+- **Definition**: A strategy is _dominated_ if another strategy yields higher payoff regardless of what opponents do
+  - Rational player should never choose dominated strategy
+  - Can eliminate dominated strategies to simplify analysis
+
+- **Formal definition**: Strategy $s_i'$ is dominated by $s_i$ if:
+  $$u_i(s_i, s_{-i}) > u_i(s_i', s_{-i})$$
+  for all strategy profiles $s_{-i}$ of opponents
+
+- **Example**: Game with dominated strategy
+  ```
+            Left  Middle  Right
+  Up       (3,1)  (2,0)  (1,2)
+  Down     (2,1)  (4,0)  (3,2)
+  ```
+  - Up is dominated by Down
+    - Down gives 2 vs Up gives 3 when others play Left: Down worse
+    - Wait, let me recalculate: actually Up gives 3, Down gives 2
+    - Against Left: Up=3, Down=2, so Up better
+    - Against Middle: Up=2, Down=4, so Down better
+    - Up is not dominated
+  
+  - Let me use clearer example:
+  ```
+            Left  Right
+  Up       (2,1)  (1,1)
+  Middle   (3,1)  (2,1)
+  Down     (1,1)  (0,1)
+  ```
+  - Down is dominated by both Up and Middle
+    - Down gives (1,0) against all; Up gives (2,1) which is better
+    - Rational player never chooses Down
+
+- **Iterative elimination**: Remove dominated strategies, repeat with reduced game
+  - Sometimes eliminates all but equilibrium
+  - Reveals strategic structure
+
 * Limitations of Rationality Assumptions
 
 ### Chapter 3: Nash Equilibrium
