@@ -828,10 +828,11 @@ digraph AC {
       \nabla_a Q(s,a)\, \nabla_\theta \mu_\theta(s) \big|_{a=\mu_\theta(s)}
     \right]
   $$
-  - Off-policy, sample-efficient; exploration via noise injection
+  - Off-policy, sample-efficient
+  - Exploration via noise injection
 
 - **Example**: traffic light controller
-  - Heavy left traffic → green left
+  - Heavy left traffic $\to$ green left
   - Always the same action
 
 - **Example**: robot end-effector control
@@ -854,7 +855,8 @@ digraph AC {
       \nabla_\theta \log \pi_\theta(a | s)\, Q(s,a)
     \right]
   $$
-  - Handles _multimodal_ actions; more stable
+  - Handles _multimodal_ actions
+  - More stable
 
 - **Example**: card-game strategy
   - Aggressive: 30%, conservative: 70%
@@ -869,10 +871,10 @@ digraph AC {
 * Optimal Policies
 
 - **Intuition**:
-  - Find the _provably best_ policy — exact or $\varepsilon$-optimal
-  - Even if computationally expensive
+  - Find the _provably best_ policy, exact or $\varepsilon$-optimal (even if
+    computationally expensive)
 
-- **Definition**: $\pi^* = \arg\max_\pi J(\pi)$ with optimal value satisfying
+- **Definition**: $\pi^* = \argmax_\pi J(\pi)$ with optimal value satisfying
   Bellman
   $$
   V^*(s)
@@ -881,7 +883,7 @@ digraph AC {
           r(s,a) + \gamma \, \EE[V^*(s')]
         \right]
   $$
-  - Value Iteration _converges_ in finite MDPs
+  - Value Iteration converges in finite MDPs
 
 - **Example**: chess solver
   - Prove a move is optimal from a given position
@@ -897,21 +899,22 @@ digraph AC {
 
 - **Intuition**:
   - Accept a _good-enough_ policy with _bounded_ suboptimality
-  - When time or compute is limited
+  - Useful when time or compute is limited
 
 - **Definition**: $\varepsilon$-optimal policy with a guarantee
   $$
   V^\varepsilon(s)
     \geq V^*(s) - \varepsilon
   $$
-  - Bounded-depth search: error $\leq \varepsilon / (1 - \gamma)$; _anytime_
-    algorithms stop early
+  - Bounded-depth search with error $\leq \varepsilon / (1 - \gamma)$
 
-- **Example**: real-time chess engine — search a fixed depth within the time
-  limit; suboptimal but practical
+- **Example**: real-time chess engine
+  - Search a fixed depth within the time limit
+  - Suboptimal but practical
 
-- **Example**: robot obstacle avoidance — must react in 50 ms; greedy/myopic
-  avoidance, safe not optimal
+- **Example**: robot obstacle avoidance
+  - Must react in 50 ms
+  - Greedy/myopic avoidance, safe not optimal
 
 - **Algorithms**: Anytime Algorithms, Approximate Dynamic Programming, Bounded
   Suboptimality, Satisficing methods
@@ -921,7 +924,8 @@ digraph AC {
 * Small Tabular Problem
 
 - **Intuition**:
-  - $|\mathcal{S}|$ and $|\mathcal{A}|$ are small enough to store in a _lookup table_ (e.g., < 10k states)
+  - $|\mathcal{S}|$ and $|\mathcal{A}|$ are small enough to store in a _lookup
+    table_ (e.g., < 10k states)
 
 - **Definition**: $Q$-table is a $|\mathcal{S}| \times |\mathcal{A}|$ matrix
   $$
@@ -934,11 +938,11 @@ digraph AC {
   - _Exact_ solution with guaranteed convergence
 
 - **Example**: grid world
-  - $10 \times 10$ grid = 100 states, 4 actions
+  - 10 x 10 grid = 100 states, 4 actions
   - Full $Q$-table fits
 
 - **Example**: small inventory
-  - 20 levels $\times$ 5 order quantities
+  - 20 levels x 5 order quantities
   - Solve by tabular Q-learning
 
 - **Algorithms**: Tabular Q-Learning, Tabular Value/Policy Iteration, MCTS
@@ -951,6 +955,7 @@ digraph AC {
 
 - **Definition**: linear value in a feature vector $\phi(s) \in \mathbb{R}^d$,
   $d \ll |\mathcal{S}|$
+  // TODO(ai_gp): Use a system equation
   $$
   V(s) \approx w^\top \phi(s)
   $$
@@ -983,63 +988,15 @@ digraph AC {
   \right] \nabla_\theta f_\theta(s)
   $$
   - Challenges: non-stationary targets, off-policy data
-  - Fixes: _experience replay_, _target networks_
+  - Fixes: experience replay, target networks
 
 - **Example**: self-driving car
   - Camera image: 1920 x 1440 x 3
-  - CNN features → continuous control
+  - CNN features $\to$ continuous control
 
 - **Example**: Atari games
-  - $84 \times 84 \times 3$ screen
+  - 84 x 84 x 3 screen
   - CNN extracts sprites and terrain
   - DQN learns $Q$
 
 - **Algorithms**: DQN (Double / Dueling / Rainbow), A3C, PPO, TRPO, SAC, TD3
-
-# Summary
-
-* Quick Reference: Problem Type $\to$ Algorithm
-
-```{=typst}
-#styled-table(
-  headers: ("Problem type", "Example", "Algorithms"),
-  rows: (
-    ("Full obs., small state", "Tic-Tac-Toe", "Q-Learning, Value Iteration, MCTS"),
-    ("Full obs., large state", "Atari (pixels)", "DQN, A3C, PPO"),
-    ("Partially observable", "Robot localization", "Particle Filter, POMCP, HMM"),
-    ("Continuous, known model", "Trajectory opt.", "MPC, iLQR"),
-    ("Continuous, unknown model", "Robotic arm", "PPO, SAC, DDPG, TD3"),
-    ("Discrete, exploration", "Web ads (bandit)", "UCB, Thompson, e-Greedy"),
-    ("Game, perfect info", "Chess", "Minimax, Alpha-Beta, AlphaZero"),
-    ("Game, imperfect info", "Poker", "CFR, Nash Solver"),
-    ("Multi-agent cooperative", "Warehouse robots", "MAAC, MAPPO, QMIX"),
-    ("Multi-agent competitive", "Enemy AI", "Self-Play, Nash Learning"),
-  ),
-  caption: "Mapping problem coordinates to solution methods",
-  col-widths: (1.2fr, 1fr, 1.6fr),
-  bold-first-col: true
-)
-```
-
-* Key Takeaways
-
-- **Key idea**: locate a problem on the _10 dimensions_, then read off the
-  algorithm family
-
-- **Observability + Model**: full obs. $\to$ direct learning; partial $\to$
-  belief tracking; model-based is sample-efficient, model-free is
-  asymptotically optimal
-
-- **Horizon + Actions**: myopic $\to$ bandits; multi-step $\to$ search; infinite
-  $\to$ stationary policy; discrete $\to$ enumerate, continuous $\to$ learn a
-  distribution
-
-- **Agents + Information**: single $\to$ standard RL; competitive $\to$ Nash /
-  game theory; imperfect info $\to$ CFR; asymmetric $\to$ mechanism design
-
-- **Solution + Optimality + Scale**: value / policy / actor-critic / search;
-  optimal vs. satisficing; tabular $\to$ linear FA $\to$ deep NN as dimension
-  grows
-
-- **Remark**: the dimensions are _orthogonal_ — changing one (e.g., adding
-  noise, more agents) moves the problem and its method independently
