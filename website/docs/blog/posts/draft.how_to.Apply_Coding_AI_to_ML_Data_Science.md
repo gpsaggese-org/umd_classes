@@ -1,3 +1,20 @@
+---
+title: "How to Apply Coding AI to Machine Learning and Data Science"
+authors:
+  - gpsaggese
+date: 2026-01-10
+description:
+draft: true
+categories:
+  - AI Coding
+  - Data Science
+  - Machine Learning
+---
+
+TL;DR: AI coding assistants accelerate ML workflows by automating boilerplate, catching bugs, and bridging domain knowledge gaps.
+
+<!-- more -->
+
 Coding AI applies to ML and data science in several key ways:
 
 1. Accelerating Experimentation

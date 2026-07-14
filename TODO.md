@@ -180,6 +180,20 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
 
+## Create book to publish
+
+### 
+- Use the same flow (slides + commentary)
+- Pointer to GitHub
+- Pointer to Videos
+- Pointer to Tutorials
+- Pointer to Video Tutorial (on YouTube)
+
+### Add counter and Google Analytics
+- Count download, visits, etc
+
+### Start Promoting
+
 ## Books
 
 ### [ ] From Data To Decisions
@@ -228,13 +242,15 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 ### [.] Read Academic Articles
 
-- [ ] Add a script to download an HTML file to markdown
-
-- [ ] Merge the two
-
+- [x] Add a script to download an HTML file to markdown
+  
+- [ ] Merge the flows if possible
 ./dev_scripts_helpers/documentation/summarize_chapters.py
 ./dev_scripts_helpers/documentation/summarize_md.py
 .claude/skills/markdown.summarize/SKILL.md
+  - html_to_md.py + /markdown.summarize seems to work well
+  - summarize_chapters.py seems a worse version than /markdown.summarize
+  - Maybe summarize_md.py allows to summarize in one shot or chapter by chapter
 
 ```
 > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032

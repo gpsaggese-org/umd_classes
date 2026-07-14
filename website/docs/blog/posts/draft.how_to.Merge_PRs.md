@@ -1,3 +1,19 @@
+---
+title: "How To Merge Prs"
+authors:
+  - gpsaggese
+date: 2026-01-01
+description:
+draft: true
+categories:
+  - Developer Tools
+  - Teaching
+---
+
+TL;DR: How To Merge Prs.
+
+<!-- more -->
+
 ./.claude/skills/github.split_branch_in_PRs/SKILL.md
 
 i git_files

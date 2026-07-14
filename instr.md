@@ -1,13 +1,14 @@
-In book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt 
-convert the intuition from one line to nested bullet points, if possible
+Read the first 5 algorithms of
+book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
 
-E.g., convert
+Come up with a plan for each of the algorithms to
+- Have the description of a simple Python example of a problem explaining the
+  algorithm (using the example in the slides or a "famous one" in the literature)
+- A "brute" force solution
+- Point to the Python packages that can be used to solve the problem
+- Sketch how to solve the problem using one of the packages
 
-- **Intuition**: environment has a _hidden state_; observations are
-  noisy/corrupted, revealed only over time
+Do not write code, but only write 10 nested bullet points per algorithm
 
-to
-
-- **Intuition**:
-  - Environment has a _hidden state_
-  - Observations are noisy/corrupted, revealed only over time
+Write the result using .claude/skills/markdown.rules.md in
+book.springer/lectures_source/Lesson10.01.tutorial_plan.md

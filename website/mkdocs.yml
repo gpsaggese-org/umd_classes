@@ -9,7 +9,7 @@ theme:
   name: material
   analytics:
     provider: google
-    property: G-QMS5WDYD0N
+    property: G-4QREMZZGV6
   custom_dir: overrides
   logo: assets/logo.png  # Custom logo in header
   favicon: assets/favicon.png  # Custom favicon in browser tab
