@@ -220,6 +220,8 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 ### [ ] 
 
 - Create a script that given an input (url, pdf article, book title)
+  - html_to_md.py 
+  - download_academic_paper.py
 - Download the PDF and cache it in Books or Papers dir
 - Converts it to markdown (if necessary)
 - Apply a text transform
