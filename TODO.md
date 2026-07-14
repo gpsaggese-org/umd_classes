@@ -252,6 +252,12 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - summarize_chapters.py seems a worse version than /markdown.summarize
   - Maybe summarize_md.py allows to summarize in one shot or chapter by chapter
 
+2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice
+
+Zanga et al, "A Survey on Causal Discovery Theory and Practice" (2023)
+
+Also use arxiv link whenever possible
+
 ```
 > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
 > convert_pdf_to_md.py -i 2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice.pdf
