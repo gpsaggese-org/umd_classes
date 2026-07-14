@@ -24,7 +24,7 @@
 - **Remark**: same task can shift dimensions
   - E.g., add noise $\to$ becomes partially observable
 
-* The 10 Structural Dimensions
+* The 10 Structural Dimensions (Algorithmic)
 
 1. _Observability_: What information is available to the agent
    - E.g., full, partial, hidden
@@ -48,87 +48,175 @@
     space
    - E.g., tabular, linear function approximation, deep neural networks
 
-* The 10 Structural Dimensions
+* Causal Knowledge Incorporation Dimension
+
+- **Intuition**: Can the algorithm leverage _domain expertise_ and _causal knowledge_
+  to improve learning efficiency and decision quality?
+
+- **No Causal Knowledge**:
+  - Algorithm learns from data alone, no expert input
+  - Examples: pure data-driven ML, standard RL from scratch
+  - Risk: slow convergence, may learn spurious correlations
+
+- **Causal Knowledge Available but Not Used**:
+  - Domain expert or causal DAG exists, but algorithm ignores it
+  - Algorithm must rediscover causal structure from data
+  - Example: Decision-maker has a mental model, but feeds only data to ML
+  - Inefficient, wastes prior expertise
+
+- **Can Incorporate Causal DAG Structure**:
+  - Algorithm accepts causal assumptions (confounders, mediators, intervention targets)
+  - Restricts search space, improves identifiability
+  - Example: Causal discovery with expert-specified DAG skeleton; do-calculus adjustment
+  - Related to Ch4 (Knowledge Representation), Ch6 (Causal Modeling)
+
+- **Can Incorporate Bayesian Priors over Causal Effects & Parameters**:
+  - Combines domain belief (as prior) with observed data (likelihood)
+  - Faster learning; gracefully handles small-data regimes
+  - Example: Expert says "marketing spend has ~3% ROI ± 1%"; Bayesian update refines it
+  - Related to Ch3 (Problem Framing with Domain Knowledge), Ch5 (Probabilistic ML), Ch7 (Bayesian Decision Theory)
+
+* Uncertainty Representation & Bayesian Learning Dimension
+
+- **Intuition**: Can the algorithm distinguish and reason about _different types of
+  uncertainty_, and incorporate probabilistic priors?
+
+- **No Explicit Uncertainty**:
+  - Algorithm outputs point estimates only
+  - Example: standard supervised learning (neural net classifier)
+  - Risk: overconfident predictions; can't assess decision safety
+
+- **Aleatoric Uncertainty Only**:
+  - Captures inherent randomness in the environment (noise, stochasticity)
+  - Example: $P(\text{click} | \text{features})$ in ads; outcome is inherently random
+  - Blind to model ignorance; can't distinguish "I know little" from "outcome is noisy"
+
+- **Epistemic Uncertainty Only**:
+  - Captures model/parameter ignorance (reducible with more data)
+  - Example: Parametric confidence intervals; Bayesian posterior over parameters
+  - Ignores inherent randomness; assumes noiseless (or averaged-out) outcomes
+
+- **Both Aleatoric & Epistemic**:
+  - Distinguishes inherent randomness from learnable uncertainty
+  - Example: Bayesian Neural Networks, probabilistic forecasting
+  - Critical for decision safety: epistemic uncertainty drives "how much data do I need?"
+  - Related to Ch5 (Probabilistic Deep Learning), Ch7 (Decision Under Uncertainty)
+
+- **Can Incorporate Bayesian Priors**:
+  - Formalizes domain beliefs as probability distributions over parameters/effects
+  - Prior + likelihood → posterior; learning is principled belief update
+  - Example: "marketing ROI is normal(3%, 1%)" → updated after campaign; posterior guides next allocation
+  - Enables small-data decisions; graceful degradation when data is limited
+  - Related to Ch7 (Utility Functions & Bayesian Decision Making), Ch8 (Value of Information)
+
+- **Model Misspecification & Robustness**:
+  - Can reason about what happens if causal/probabilistic assumptions are wrong
+  - Example: Sensitivity analysis, E-values, Manski bounds for partial identification
+  - Critical for deployment: quantifies decision safety under assumption violation
+  - Related to Ch10 (Partial Identification & Robustness), Ch17 (Trust & Governance)
+
+* The 12 Decision Problem Dimensions (Complete)
 
 // TODO(ai_gp): Improve
 ```graphviz
 digraph DecisionProblemDimensions {
     layout=circo;
     splines=spline;
-    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=9];
-    edge [fontsize=7, arrowsize=0.5];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=8];
+    edge [fontsize=6, arrowsize=0.4];
 
     // Center node
-    DP [label="Decision\nProblem", fillcolor="#FFE6B3", shape="ellipse", fontsize=11, penwidth=2.5];
+    DP [label="Decision\nProblem", fillcolor="#FFE6B3", shape="ellipse", fontsize=10, penwidth=2.5];
 
-    // Inner ring: Dimensions (Level 1)
-    Obs [label="1. Observability", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Horiz [label="2. Time Horizon", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Action [label="3. Action Space", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Multi [label="4. Multi-Agent", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Info [label="5. Info Structure", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Model [label="6. Model Knowledge", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Update [label="7. Update Mechanism", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Soln [label="8. Solution Concept", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Opt [label="9. Optimality Criterion", fillcolor="#E6F3FF", width=1.5, height=0.6];
-    Scale [label="10. State-Action Size", fillcolor="#E6F3FF", width=1.5, height=0.6];
+    // Inner ring: Algorithmic Dimensions (Level 1, blue)
+    Obs [label="1. Observability", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Horiz [label="2. Time Horizon", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Action [label="3. Action Space", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Multi [label="4. Multi-Agent", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Info [label="5. Info Structure", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Model [label="6. Model Knowledge", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Update [label="7. Update Mechanism", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Soln [label="8. Solution Concept", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Opt [label="9. Optimality Criterion", fillcolor="#E6F3FF", width=1.3, height=0.55];
+    Scale [label="10. State-Action Size", fillcolor="#E6F3FF", width=1.3, height=0.55];
 
-    // Connections from center to dimensions
-    DP -> {Obs Horiz Action Multi Info Model Update Soln Opt Scale} [style=solid, weight=2];
+    // Causal & Probabilistic Dimensions (green/red)
+    Causal [label="11. Causal Knowledge\nIncorporation", fillcolor="#E6FFE6", width=1.4, height=0.55];
+    Uncert [label="12. Uncertainty Type &\nBayesian Priors", fillcolor="#FFE6E6", width=1.4, height=0.55];
 
-    // Outer ring: Values (Level 2)
-    ObsF [label="Full\n(MDP)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ObsP [label="Partial\n(POMDP)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ObsH [label="Hidden\n(HMM)", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Obs -> {ObsF ObsP ObsH} [style=dashed, weight=1];
+    // Connections from center to all dimensions
+    DP -> {Obs Horiz Action Multi Info Model Update Soln Opt Scale Causal Uncert} [style=solid, weight=2];
 
-    HorizO [label="One-step", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    HorizF [label="Finite", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    HorizI [label="Infinite", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Horiz -> {HorizO HorizF HorizI} [style=dashed, weight=1];
+    // Outer ring: Values (Level 2) — show a few examples
+    ObsF [label="Full", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    ObsP [label="Partial", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    Obs -> {ObsF ObsP} [style=dashed, weight=1];
 
-    ActionD [label="Discrete", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ActionC [label="Continuous", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ActionH [label="Hybrid", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Action -> {ActionD ActionC ActionH} [style=dashed, weight=1];
+    HorizO [label="One-step", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    HorizF [label="Multi-step", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    Horiz -> {HorizO HorizF} [style=dashed, weight=1];
 
-    MultiS [label="Single", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    MultiCo [label="Cooperative", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    MultiCm [label="Competitive", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Multi -> {MultiS MultiCo MultiCm} [style=dashed, weight=1];
+    ActionD [label="Discrete", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    ActionC [label="Continuous", fillcolor="#F0F0F0", fontsize=7, height=0.45];
+    Action -> {ActionD ActionC} [style=dashed, weight=1];
 
-    InfoPe [label="Perfect", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    InfoIm [label="Imperfect", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    InfoAs [label="Asymmetric", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Info -> {InfoPe InfoIm InfoAs} [style=dashed, weight=1];
+    CausalNo [label="None", fillcolor="#E6FFE6", fontsize=7, height=0.45];
+    CausalDAG [label="DAG+Priors", fillcolor="#E6FFE6", fontsize=7, height=0.45];
+    Causal -> {CausalNo CausalDAG} [style=dashed, weight=1];
 
-    ModelB [label="Model-based", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ModelF [label="Model-free", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Model -> {ModelB ModelF} [style=dashed, weight=1];
-
-    UpdateO [label="Online", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    UpdateBa [label="Batch", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    UpdateR [label="Replay", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Update -> {UpdateO UpdateBa UpdateR} [style=dashed, weight=1];
-
-    SolnV [label="Value", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    SolnP [label="Policy", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    SolnA [label="Actor-Critic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    SolnS [label="Search", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Soln -> {SolnV SolnP SolnA SolnS} [style=dashed, weight=1];
-
-    OptD [label="Deterministic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    OptSt [label="Stochastic", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    OptOp [label="Optimal", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    OptAp [label="Approximate", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Opt -> {OptD OptSt OptOp OptAp} [style=dashed, weight=1];
-
-    ScaleT [label="Tabular", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ScaleL [label="Linear FA", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    ScaleD [label="Deep NN", fillcolor="#F0F0F0", fontsize=8, height=0.5];
-    Scale -> {ScaleT ScaleL ScaleD} [style=dashed, weight=1];
+    UncertPoint [label="Point Est.", fillcolor="#FFE6E6", fontsize=7, height=0.45];
+    UncertBayes [label="Bayesian", fillcolor="#FFE6E6", fontsize=7, height=0.45];
+    UncertRobust [label="Robust", fillcolor="#FFE6E6", fontsize=7, height=0.45];
+    Uncert -> {UncertPoint UncertBayes UncertRobust} [style=dashed, weight=1];
 }
 ```
+
+# How Causal & Probabilistic Dimensions Affect Algorithm Selection
+
+* Interaction: Causal Knowledge + Model-Based/Free
+
+- **No causal knowledge + Model-Free**: Pure data-driven RL
+  - Example: Atari from pixels; learn $Q$ by trial-and-error
+  - Risk: learns spurious correlations, ignores confounding
+
+- **Causal DAG + Model-Based**: Causal world model
+  - Example: Marketing campaigns; DAG says "spend → impressions → clicks"; learn effects of each link
+  - Benefit: fewer data, faster convergence, interpretable
+
+- **Causal DAG + Bayesian Priors + Model-Free**: Expert belief guides exploration
+  - Example: "Spend has ~3% ROI"; learn with regularization toward prior
+  - Benefit: combines expert judgment + data; small-data regime friendly
+
+* Interaction: Uncertainty Type + Observability + Decision Horizon
+
+- **Point Estimates + Partial Observability + One-Step**: Risky
+  - Example: Loan approval with limited info, single decision; no uncertainty quantification
+  - Risk: overconfident; can't judge "do I have enough data?"
+
+- **Bayesian + Both Uncertainties + Multi-Step**: Decision-ready
+  - Example: Sequential medical treatment; posterior over drug efficacy (epistemic); patient outcome noise (aleatoric)
+  - Benefit: can compute value of information; decide when to treat vs. wait for more data
+
+- **Robustness-Checked + Asymmetric Cost + Partial Info**: Safe deployment
+  - Example: Credit scoring; assume confounding exists; compute E-value bounds; deploy only if bounds favor lending
+  - Benefit: safe under assumption violations; satisfies governance (Ch17)
+
+* Interaction: Causal Knowledge + Decision Horizon + Uncertainty
+
+- **One-Step Decision** (bandit, classification, allocation):
+  - Causal need: identifiability (backdoor criterion met?)
+  - Uncertainty need: epistemic must be low (else "wait for data"); aleatoric inherent
+  - Bayesian priors: critical in small-data regimes (e.g., A/B tests with n<30)
+
+- **Multi-Step Decision** (sequential, adaptive):
+  - Causal need: world model must encode causal mechanisms (SCM or learned dynamics)
+  - Uncertainty need: must track epistemic uncertainty over time; exploration vs exploitation
+  - Bayesian priors: prior over dynamics; update as you observe transitions
+
+- **Offline Decision** (batch learning, no exploration):
+  - Causal need: must recover effects from observational data (high bar: frontdoor? IV?)
+  - Uncertainty need: cannot distinguish model error from data scarcity; robustness critical
+  - Bayesian priors: stabilize when data is limited or confounded
 
 # 1. Observability
 
@@ -1000,3 +1088,124 @@ digraph AC {
   - DQN learns $Q$
 
 - **Algorithms**: DQN (Double / Dueling / Rainbow), A3C, PPO, TRPO, SAC, TD3
+
+# Using the 12-Dimensional Taxonomy: Decision Trees & Algorithm Selection
+
+* Example 1: Online Ad Selection (Contextual Bandits)
+
+| Dimension | Value | Impact |
+|-----------|-------|--------|
+| Observability | Full | Observe user features, click outcome |
+| Time Horizon | One-step | Maximize this ad's CTR; no future consequence |
+| Action Space | Discrete | Choose from ~1000 ad creatives |
+| Multi-Agent | Single | One recommender system |
+| Info Structure | Perfect | System sees all relevant user data |
+| Model Knowledge | Model-free | Learn $Q(context, ad)$ from clicks |
+| Update Mechanism | Online | Update after each user interaction |
+| Solution Concept | Value-based | Greedy best ad + Thompson sampling exploration |
+| Optimality Criterion | Approximate | Regret-optimal; balance exploration/exploitation |
+| State-Action Size | Large (deep) | User features are high-dim; use neural net |
+| **Causal Knowledge** | **None** | No causal DAG needed; correlation sufficient |
+| **Uncertainty Type** | **Aleatoric** | User click is inherently random |
+
+- **Algorithm Choice**: Contextual Thompson Sampling or UCB with neural network
+- **Causal Risk**: Ignores confounding (e.g., if CTR correlates with user's budget, not ad quality)
+  - If quality matters for long-term retention: incorporate causal DAG (Ch3)
+- **Decision-Readiness**: High; one-step decisions, immediate feedback
+- **Book References**: Ch8 (Decision-Making), Ch9 (Exploration vs Exploitation)
+
+* Example 2: Medical Treatment Policy (Sequential, Offline)
+
+| Dimension | Value | Impact |
+|-----------|-------|--------|
+| Observability | Partial | Observe patient symptoms, test results; not disease mechanism |
+| Time Horizon | Multi-step | Treatment plan spans weeks; future health matters |
+| Action Space | Discrete | Drug A, B, C, or no treatment |
+| Multi-Agent | Single | Clinician + patient system |
+| Info Structure | Asymmetric | Patient knows symptoms; clinician infers from tests |
+| Model Knowledge | Model-based | Causal understanding of disease trajectory |
+| Update Mechanism | Batch (Offline) | Learn from historical patient records only |
+| Solution Concept | Policy-based | Develop adaptive policy (response-dependent treatment) |
+| Optimality Criterion | Optimal / Safe | Must find best AND avoid harm |
+| State-Action Size | Small-medium | Tabular or linear FA; few treatments |
+| **Causal Knowledge** | **DAG + Priors** | Medical literature + domain expert DAG (Ch4) |
+| **Uncertainty Type** | **Both + Robustness** | Patient outcome is aleatoric; drug efficacy is epistemic (small trials); robustness bounds (Ch10) |
+
+- **Algorithm Choice**: Double Machine Learning (DML) with offline RL + sensitivity analysis (Ch9, Ch10)
+- **Causal Need**: Identify treatment effect despite confounding (sicker patients get different drugs)
+  - Use backdoor criterion + propensity score matching or inverse-probability weighting
+- **Probabilistic Need**: Can't experiment; must reason under uncertainty
+  - Bayesian prior over drug efficacy; posterior updates as historical data accumulates
+  - Quantify epistemic uncertainty (are we confident?) and aleatoric risk (does drug always work?)
+- **Decision-Readiness**: Low to medium; robustness checks required before deployment (Ch17)
+- **Book References**: Ch6 (Causal Discovery), Ch8 (Causal Decision-Making), Ch10 (Robust Inference), Ch12 (RL with Causal Models), Ch16 (Deployment & Monitoring)
+
+* Example 3: Autonomous Robot Grasping (Model-Based, Real-Time)
+
+| Dimension | Value | Impact |
+|-----------|-------|--------|
+| Observability | Full | RGB-D camera sees gripper, object, environment |
+| Time Horizon | Finite | 5-10 steps to reach grasp; then success/fail |
+| Action Space | Continuous | Gripper position, angle, force trajectory |
+| Multi-Agent | Single | One robot arm |
+| Info Structure | Perfect | Sees all task-relevant state |
+| Model Knowledge | Model-based | Physics simulator (learned or analytical) |
+| Update Mechanism | Online | React in real-time during grasp |
+| Solution Concept | Search / Planning | Tree search (MCTS) or trajectory optimization |
+| Optimality Criterion | Approximate | Feasible grasp within 50ms; not optimal |
+| State-Action Size | Continuous high-dim | 3D pose space; requires trajectory optimization |
+| **Causal Knowledge** | **Physics Model** | Causal understanding of gripper-object dynamics |
+| **Uncertainty Type** | **Aleatoric only** | Outcome randomness (friction, contact); model is deterministic |
+
+- **Algorithm Choice**: Model Predictive Control (MPC) or MCTS with learned dynamics
+- **Causal Need**: Encode physics as world model; don't learn from data alone (too slow)
+- **Probabilistic Need**: Minimal; physics is known; sample randomness in simulation
+- **Decision-Readiness**: High; online feedback; can retry on failure
+- **Book References**: Ch12 (World Models), Ch8 (Causal Decision-Making)
+
+* Decision Tree: "Which Algorithm Family?"
+
+```
+START: Characterize your 12 dimensions
+
+Step 1: Time Horizon?
+├─ One-step → Bandit / Classification
+│  ├─ Full observability + large actions → Contextual Bandits (Thompson, UCB)
+│  └─ Partial observability → Belief-state Bandit
+├─ Multi-step + model known → Planning
+│  ├─ Discrete actions → MCTS, Minimax, Dynamic Programming
+│  └─ Continuous actions → MPC, Trajectory Optimization
+└─ Multi-step + model unknown → Reinforcement Learning
+   ├─ Model-based → Learn dynamics, then plan (Dyna-Q, MuZero)
+   ├─ Model-free + discrete → Q-Learning, DQN
+   └─ Model-free + continuous → Policy gradient (PPO, SAC, DDPG)
+
+Step 2: Observability?
+├─ Full → Use state directly (MDP)
+└─ Partial → Track belief or use RNN (POMDP, HMM)
+
+Step 3: Causal Knowledge Available?
+├─ None → Pure ML (data-driven)
+├─ DAG structure → Constrain discovery / adjust confounding
+└─ DAG + Bayesian priors → Prior-regularized learning + Causal inference
+
+Step 4: Uncertainty Quantification?
+├─ No → Point estimates (efficient, risky)
+├─ Aleatoric only → Heteroscedastic regression
+├─ Epistemic only → Uncertainty over parameters (Bayesian)
+├─ Both → Probabilistic models (BNN, Ensemble, VI)
+└─ Robustness → Sensitivity analysis + bounds (partial ID)
+
+→ Output: Algorithm family + Causal assumptions to verify + Uncertainty handling strategy
+```
+
+* Deployment Readiness Check (Ch15-17)
+
+Before deploying, ask:
+
+- **Causal**: Can you identify the effect of your intervention? (Backdoor? IV? Experiment?)
+- **Probabilistic**: Do you quantify uncertainty? Can you distinguish "I'm unsure" from "outcome is random"?
+- **Bayesian**: Did you elicit and encode domain priors? Did they stabilize learning?
+- **Robustness**: How safe is your decision if assumptions break? (E-values, bounds)
+- **Stakeholder**: Do domain experts agree on causal model and utility function?
+- **Monitoring**: Can you track assumption violations in production? (drift, confounding emergence)
