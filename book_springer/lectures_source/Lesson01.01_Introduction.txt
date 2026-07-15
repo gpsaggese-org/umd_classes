@@ -5,21 +5,41 @@
 
 # Introduction
 
-## Book Roadmap
+* Audience and Approach
+- Explain the audience and the philosophy of the book
 
-- Explain the philosophy of the book
+- Target Audience
+  - Senior ML engineers and data scientists with a statistics and probabilistic ML
+    background who build production decision systems
+  - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
+
+- Approach of the book
+  - Focus on:
+    - The minimal mathematics to understand the problem and the solutions
+    - Intuition
+    - Toy examples
+    - How to make the theory operational
+      - Referring to packages in the Python ecosystem
+    - Jupyter notebooks to back up the intuition with toy and more complex examples
+
+  - Provide resources to go one level deep
+    - My classes
+    - References to books and papers
+
+* Decision Pipeline
 - The Decision Pipeline Framework
   - From raw data to prediction to causal effect estimation to
     utility-maximizing policy
   - Feedback loops and learning from outcomes
   - Why each stage matters and what breaks when stages are skipped
+
+* Book Roadmap
+
 - How This Book Is Organized
   - Five-part structure: motivation, theory, data, algorithms,
     deployment/governance
   - Intended audience and prerequisites
   - How chapters build on each other and fit into the decision pipeline
-
-* Book Roadmap
 
 - **Key idea**: this book walks a single pipeline end-to-end, from data to action
   $$data \to model \to policy \to action \to feedback$$
@@ -37,25 +57,6 @@
 - This lesson opens Part I by cataloging what traditional machine learning
   leaves out
 
-## Target Audience
-- Senior ML engineers and data scientists with a statistics and probabilistic ML
-  background who build production decision systems
-- Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
-
-## Approach of the book
-- Focus on:
-  - The minimal mathematics to understand the problem and the solutions
-  - Intuition
-  - Toy examples
-  - How to make the theory operational
-    - Referring to packages in the Python ecosystem
-  - Jupyter notebooks to back up the intuition with toy and more complex examples
-
-- Provide resources to go one level deep
-  - My classes
-  - References to books and papers
-
-## Short TOC
 - The sequence of the parts in the books are:
   - Motivation
     - 01, Introduction

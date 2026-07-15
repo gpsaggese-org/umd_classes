@@ -3,50 +3,6 @@
 // lesson_title=Lesson 02.1: From Data Science to Decision Science
 // slides_engine=typst
 
-// ### Lessons
-// - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-//   - Cost of ignoring causality; correlation != causation; feedback loops;
-//     distribution shift; data science -> decision science; ladder of causation
-// - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-//   - Confounder / mediator / collider; collider bias; SCM
-// - `msml610/lectures_source/Lesson08.4.txt`
-//   - Simpson's paradox; the bias equation; selection bias (collider / mediator);
-//     no interference (SUTVA); confounding
-// - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-//   - Significance traps (peeking, multiple comparisons, SRM); interference /
-//     cannibalization; exploration vs exploitation
-// - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-//   - Prediction vs decision; policy reversal; utility functions; aleatoric vs
-//     epistemic uncertainty
-// - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
-//   - Overfitting; data snooping; burning the test set; sampling bias
-// - `msml610/lectures_source/Lesson13.1-Explainability.txt`
-//   - Black-box outputs; SHAP / LIME; counterfactual explanations (actionability)
-//
-// ### Related books
-// - [B001] Agrawal et al., "Prediction Machines", 2018
-// - [B002] Pearl et al., "The Book of Why", 2018
-// - [B003] Huyen, "Designing Machine Learning Systems", 2022
-// - [B032] Ness et al., "Causal AI", 2023
-// - [B039] Hurwitz & Thompson, "Causal Artificial Intelligence", 2024
-//
-// ### Related papers
-// - [P005] Pearl, "Simpson's Paradox, Confounding, and Collapsibility", 1999
-//   https://bayes.cs.ucla.edu/BOOK-2K
-// - [P007] Zhang et al., "A Survey on Causal Inference", 2020
-//   https://arxiv.org/pdf/2002.05209.pdf
-// - [P009] Pearl, "The Seven Pillars of Causal Reasoning with Reflections on
-//   Machine Learning", 2021
-//   https://cacm.acm.org/research/seven-pillars-of-causal-reasoning-with-reflections-on-machine-learning/
-// - [P001] Ribeiro et al., "Why Should I Trust You? Explaining the Predictions of
-//   Any Classifier", 2016 https://arxiv.org/pdf/1602.04938.pdf
-// - [P003] Taori et al., "Data Feedback Loops: Model-driven Amplification of
-//   Dataset Biases", 2020 https://proceedings.mlr.press/v202/taori23a/taori23a.pdf
-// - [P096] Goodhart, "Problems of Monetary Management: The U.K. Experience", 1984
-//   https://doi.org/10.1016/S0261-5606(84)80005-8
-// - [P099] Liu et al., "Performative Prediction", 2021
-//   https://arxiv.org/abs/2007.02153
-
 # Why Decisions, Not Predictions
 
 ## Course Roadmap

@@ -241,6 +241,8 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
   ```
 
+  render_typst.sh book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.typ
+
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
