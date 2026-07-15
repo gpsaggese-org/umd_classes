@@ -243,6 +243,8 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
   render_typst.sh book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.typ
 
+ ~/src/umd_classes2/book_springer/latex_template/book/run_latex.sh
+
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
