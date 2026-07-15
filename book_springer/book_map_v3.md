@@ -163,28 +163,34 @@
 ## 04: Knowledge Representation
 
 ### Topics
-- Causal DAGs vs. Bayesian networks: how causality orients edges and encodes
-  independence
-- Structural equations and mechanisms: modeling causal relationships, functional
-  forms, and how variables depend on parents
-- Causal assumptions and identifiability: what assumptions enable causal
-  inference (consistency, SUTVA, no unmeasured confounding)
-- D-separation and graphical criteria: reading independence from DAG structure,
-  backdoor/frontdoor criteria for adjustment
-- Structural causal models (SCMs): formal representation of causal mechanisms
-  and counterfactual reasoning
-- Causal invariance and modularity: which causal relationships persist across
-  environments and why
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+- Propositional logic
+  - Syntax
+  - Semantics
+- First-order Logic
+  - Syntax
+  - Semantics
+- Non-classical Logics
+  - Intro and Examples
+  - Description Logics
+  - Semantic Web
+- Bayesian networks
+- Causal networks
 
 ### Lesson Materials
+- [85%]: `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
+  - Knowledge representation fundamentals, logic, symbolic representation, ontologies, first-order logic
 - [100%]: `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - Causal DAGs, structural causal models, causal edges and stability, mechanisms, observed vs unobserved variables
 - [95%]: `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Do-calculus, interventions, counterfactuals, back-door and front-door adjustments, do-operator, graphical criteria
 - [90%]: `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
   - Bayesian networks as graphical models, conditional independence, d-separation, Markov blanket
-- [85%]: `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
-  - Knowledge representation fundamentals, logic, symbolic representation, ontologies, first-order logic
 - [75%]: `msml610/lectures_source/Lesson08.4.txt`
   - Causal models, potential outcomes, consistency, identification, d-separation, graphical models, confounding
 - [70%]: `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
@@ -194,66 +200,71 @@
 ## 05: Probabilistic ML
 
 ### Topics
-- Bayesian inference fundamentals: posterior updating, conjugate priors, and
-  probabilistic decision-making
-- Uncertainty quantification: epistemic vs. aleatoric uncertainty, confidence
-  intervals, and posterior predictive distributions
-- Generative models and latent variables: topic models, mixture models, and
-  disentangled representations
-- Approximate inference: variational inference, Markov Chain Monte Carlo (MCMC),
-  expectation-propagation
-- Graphical models: factor graphs, belief propagation, and message-passing
-  algorithms
-- Modern probabilistic programming: probabilistic languages and tools for
-  building uncertainty-aware systems
+- Logic-Based AI Under Uncertainty
+  - Problem
+  - Solution
+- Probabilistic Reasoning
+  - Conditional Independence
+  - Bayesian Networks
+- Semantics of Bayesian Networks
+- Constructing a Bayesian Network
+- Exact Inference in Bayesian Networks
+- Approximate Inference in Bayesian Networks
+- Concepts
+- Coin Example
+  - Analytical Approach
+  - Frequentist vs Bayesian
+  - Probabilistic Programming
+- Posterior-Based Decisions
+  - Chemical Shift: Example
+  - Posterior Predictive Checks
+    - Robust Inference
+  - Groups Comparison
+- Hierarchical Models
+- Generalized Linear Models
+  - Simple Linear Model
+  - Logistic Regression
+  - Multiple Linear Regression
+- Bayesian Model Comparison
+    - Posterior Predictive Checks
+  - The Balance Between Simplicity and Accuracy
+  - Measures of Predictive Accuracy
+    - Information Criteria
+    - Cross-Validation
+  - Bayesian Model Selection and Ensemble
+  - Bayesian Hypothesis Testing
+    - Bayes Factors and Information Criteria
+  - Regularizing Priors
 
 ### Lesson Materials
-- [95%]: `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
-  - Bayesian inference fundamentals, EDA vs inference, modern probabilistic tools (PyMC, Pyro), MCMC introduction
-- [95%]: `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
+- `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
   - Graphical models for uncertainty, probabilistic reasoning, conditional independence, Bayesian network structure
-- [90%]: `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
+- `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
   - Constructing Bayesian networks, inference algorithms, message-passing, belief propagation
-- [90%]: `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
+- `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
+  - Bayesian inference fundamentals, EDA vs inference, modern probabilistic tools (PyMC, Pyro), MCMC introduction
+- `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
   - Posterior-based choices, Bayesian decision-making, utility under uncertainty, loss functions
-- [85%]: `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
-  - Bayesian model selection, posterior predictive checks, model comparison criteria (AIC, BIC, WAIC)
-- [70%]: `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
-  - Probabilistic GLMs, generative models, hierarchical probabilistic structures, Bayesian regression
-- [60%]: `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
+- `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
   - Hierarchical Bayesian models, structured latent variables, multi-level probabilistic modeling
-- [40%]: `msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt`
-  - Thompson sampling, Bayesian optimization, probabilistic exploration-exploitation
-- [15%]: Not covered - Advanced variational inference details, normalizing flows, specialized approximate inference
+- `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
+  - Probabilistic GLMs, generative models, hierarchical probabilistic structures, Bayesian regression
+- `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
+  - Bayesian model selection, posterior predictive checks, model comparison criteria (AIC, BIC, WAIC)
 
 ## 06: Causal ML
 
 ### Topics
-- Causal discovery from data: when and how to learn causal structure from
-  observational data
-- Discovery algorithms: constraint-based (PC/FCI), score-based (GES), functional
-  (LiNGAM, ANM)
-- Identifiability and Markov equivalence: what can and cannot be learned from
-  observational data
-- Latent confounders and hidden variables: proxy variables, negative controls,
-  sensitivity analysis, and incomplete adjustment
-- Causal representation learning: disentangling mechanisms for domain transfer
-  and generalization across environments
-- Robustness and sensitivity: E-values, bounding unmeasured confounding, and
-  partial identification
 
 ### Lesson Materials
-- [95%]: `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - Causal discovery from observational data, identifiability, Markov equivalence, algorithm families (constraint, score, functional), validation
-- [85%]: `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+- `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - Causal DAGs, structural causal models, mechanisms, identifying causal structures
-- [75%]: `msml610/lectures_source/Lesson08.4.txt`
-  - Identification, d-separation, graphical criteria, confounding bias, instrumental variables
-- [70%]: `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
+- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Do-calculus, interventional identification, front-door and back-door criteria
-- [60%]: `msml610/lectures_source/Lesson13.1-Explainability.txt`
-  - Causal explanations vs feature attribution, distinguishing causal from correlational discovery
-- [50%]: Not covered - Latent variable models, LiNGAM/ANM algorithms, sensitivity analysis bounds, E-values, causal representation learning
+- `msml610/lectures_source/Lesson08.4.txt`
+  - Identification, d-separation, graphical criteria, confounding bias, instrumental variables
+- `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
+  - Causal discovery from observational data, identifiability, Markov equivalence, algorithm families (constraint, score, functional), validation
 
 # Part III: Data
 
@@ -274,18 +285,18 @@
   alignment on causal structures
 
 ### Lesson Materials
-- [95%]: `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - Building causal DAGs, variable types (mediators, confounders, colliders, moderators), observed vs unobserved variables
 - [90%]: `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - Causal AI workflow, building causal DAGs, eliciting from domain experts, step-by-step process
-- [85%]: `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - Using domain knowledge as constraints, combining discovery with expert judgment, validation
-- [75%]: `msml610/lectures_source/Lesson08.4.txt`
-  - Confounding, mediation, moderators, causal assumptions, temporal structure
+- [95%]: `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+  - Building causal DAGs, variable types (mediators, confounders, colliders, moderators), observed vs unobserved variables
 - [70%]: `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
   - Structural causal models, mechanisms, functional forms, causal order
+- [75%]: `msml610/lectures_source/Lesson08.4.txt`
+  - Confounding, mediation, moderators, causal assumptions, temporal structure
 - [60%]: `msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt`
   - Temporal causal structures, Markov property, feedback delays, dynamic systems
+- [85%]: `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
+  - Using domain knowledge as constraints, combining discovery with expert judgment, validation
 - [50%]: Not covered - Formal elicitation methods, measurement error correction, proxy variable selection strategies
 
 ## 08: Causal Data Pipelines
