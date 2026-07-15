@@ -73,9 +73,15 @@
 ## 00: Introduction
 
 ### Topics
-- Path of the book
-- Description of the goals
-- Description of the chapters
+- **The Decision Pipeline Framework**:
+  - From raw data to prediction to causal effect estimation to utility-maximizing
+    policy
+  - Feedback loops and learning from outcomes
+  - Why each stage matters and what breaks when stages are skipped
+- **Why Traditional ML Falls Short for Decision-Making**: Predictive accuracy does not equal decision quality; four critical gaps in standard approaches (causality, uncertainty, business objectives, dynamics); cost of ignoring each gap and real-world examples
+- **Causal Reasoning as the Bridge**: Moving beyond correlation to counterfactual reasoning; what "causal" means in practice; why domain experts and formal models both matter
+- **Uncertainty as Signal, Not Noise**: Decision-relevant variance; when point estimates fail; confidence vs. credibility in high-stakes environments
+- **How This Book Is Organized**: Five-part structure (motivation, theory, data, decision algorithms, deployment/governance); intended audience and prerequisites; how to navigate and how chapters build on each other
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -341,25 +347,21 @@
 
 ### Topics
 - Data collection and its biases: how collection processes introduce selection
-  bias and confounding
+  bias and confounding; design choices that shape what data we observe
 - Selection bias and incomplete populations: missing data mechanisms (MCAR, MAR,
-  MNAR) and their impact on causal inference
+  MNAR) and their impact on causal inference; how historical data misses critical
+  subgroups or outcomes
 - Distribution shift and covariate mismatch: training vs. production misalignment,
-  concept drift, and environment shifts
+  concept drift, and environment shifts; detecting when causal effects learned
+  offline break in new contexts
 - Measurement error and proxy validity: assessing proxy variable quality,
-  attenuation in causal effects, and measurement error correction
+  attenuation in causal effects, and measurement error correction; when proxies
+  are valid surrogates and when they mislead
 - Pre-flight checks: validating data quality, assessing confounder balance,
-  checking assumptions before causal modeling
+  checking causal assumptions before modeling; diagnostics that flag problems
+  early
 - Data quality for causal inference: handling missingness, outliers, and data
-  anomalies in causal analysis
-- Selection Bias
-  - How data collection processes bias what you observe
-  - Missing data mechanisms (MCAR, MAR, MNAR)
-  - Biases introduced by how samples were selected
-- Distribution Shift
-  - Training vs. production data distribution mismatch
-  - Covariate shift, label shift, and concept drift
-  - Detecting and mitigating distribution changes
+  anomalies in causal analysis; robust inference under imperfect data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -442,21 +444,11 @@
 ## 11: Simple Decisions
 
 ### Topics
-- Heterogeneous treatment effects and CATE: learning who benefits from treatment
-- Doubly robust estimation and double/debiased ML: reducing sensitivity to
-  nuisance parameters
-- Meta-learners for heterogeneity: T-, S-, X-, R-learners and when to use each
-- Distributional and quantile effects: going beyond average treatment effects
-- Off-policy learning and policy optimization: evaluating and improving policies
-  from data
-- Safe policy improvement: deployable decisions with finite-sample guarantees
-
-### Foundational Algorithms for Decision-Making
-- Bayesian Inference: Bayesian Networks, Variational Inference, Bayesian Neural Networks, MCMC
-- Hidden State & Sequential Inference: HMM, Kalman Filter, Particle Filtering, POMDP, POMCP
-- Bandit Algorithms: ε-Greedy, UCB, Thompson Sampling, Contextual Bandits
-- Planning & Search: MCTS, Minimax/Alpha-Beta, A* Search, MPC, iLQR, RRT
-- Core Value-Based RL: Q-Learning, SARSA, Value/Policy Iteration, DQN
+- **Bayesian Inference for Decisions**: Reasoning about uncertainty over model parameters and predictions using Bayesian networks, variational inference, and MCMC; encoding prior knowledge and updating beliefs from data to support decision-making under partial information
+- **Sequential Inference with Hidden State**: Tracking unobserved system state over time using HMMs, Kalman filters, and particle filters; partially observable decision problems (POMDPs) where decisions must be made without full observability
+- **Bandit Algorithms**: Sequential decision-making with online exploration-exploitation tradeoff; algorithms (ε-greedy, UCB, Thompson sampling, contextual variants) that learn which actions are best while maintaining uncertainty over alternatives
+- **Planning and Search**: Deterministic and stochastic planning methods (MCTS, minimax, A* search, MPC) for finding near-optimal action sequences when the decision horizon is finite and environment dynamics are known
+- **Value-Based Reinforcement Learning**: Learning optimal policies from trial-and-error experience using value functions (Q-learning, SARSA, value/policy iteration, DQN); applicable when rewards are delayed and environment structure is learned from interaction
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.4.txt`
@@ -475,30 +467,13 @@
 ## 12: Complex Decisions
 
 ### Topics
-- Partial identification: when point estimates are impossible, bound what you can
-- Manski bounds and instrumental variable bounds: leveraging assumptions
-  strategically
-- Sensitivity analysis: Rosenbaum bounds and E-values for robustness to
-  unmeasured confounding
-- Positivity violations: trimming, extrapolation, and inverse-probability
-  weighting trade-offs
-- Distributional robustness and minimax inference: decisions robust to model
-  misspecification
-- Causal generalization and domain adaptation: transferring lessons across
-  environments
-- Markov decision processes and multi-step planning: states, actions, transitions,
-  and solving with value/policy iteration
-- Causal world models as environment dynamics: planning, counterfactual rollouts,
-  and policy search
-
-### Advanced Algorithms for Complex Multi-Step Decisions
-- Policy-Based Algorithms: REINFORCE, PPO, TRPO, Natural Policy Gradient, Evolutionary Strategies
-- Actor-Critic Methods: Actor-Critic Framework, A2C, A3C, DDPG, TD3, SAC
-- Integrated Learning & Planning: Dyna-Q
-- Deep RL & Foundational Models: AlphaGo, AlphaZero, MuZero, Hindsight Experience Replay
-- Hierarchical & Modular Approaches: Hierarchical RL, Options Framework
-- Offline/Batch Learning: Batch Q-Learning/Offline RL, Behavior Cloning, CQL
-- Game Theory & Multi-Agent Algorithms: CFR, Nash Equilibrium Solvers, QMIX, MAPPO, MAAC, MADDPG, CommNet
+- **Policy-Based and Gradient Methods**: Directly parameterizing and optimizing decision policies using gradient ascent (REINFORCE, PPO, TRPO, natural policy gradient); applicable to high-dimensional or continuous action spaces where value-based methods struggle
+- **Actor-Critic Architectures**: Combining value estimation (critic) with policy optimization (actor) for stable, efficient learning; practical algorithms (A2C, A3C, DDPG, TD3, SAC) that balance bias-variance and sample efficiency in continuous control
+- **Planning with Learned Models**: Integrating learning (model identification) and planning (lookahead) in the same agent; algorithms like Dyna-Q that use imagined rollouts to accelerate policy improvement
+- **Deep Reinforcement Learning and Search**: Scaling decision-making to high-dimensional state spaces via neural networks combined with search (AlphaGo, AlphaZero, MuZero); learning world models that enable long-horizon reasoning
+- **Hierarchical and Modular Decision-Making**: Decomposing complex decisions into subtasks or options; hierarchical abstractions that make long-horizon planning tractable and enable knowledge reuse across related problems
+- **Offline and Batch Learning**: Learning policies from logged data without interaction; addressing distribution mismatch between behavior policy and learned policy; algorithms (batch Q-learning, offline RL, behavior cloning, CQL) for decision-making from observational data
+- **Multi-Agent and Game-Theoretic Algorithms**: Reasoning about decisions when multiple agents interact; Nash equilibrium solvers (CFR), coordination methods (QMIX, CommNet), and policy distribution learning (MAPPO, MAAC, MADDPG) for competitive and cooperative settings
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt`
