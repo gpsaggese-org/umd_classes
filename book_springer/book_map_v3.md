@@ -96,6 +96,10 @@
     - [<Amount of topics not covered by any lesson>]: <topics>
   ```
 
+# Roadmap
+
+// https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=831837256#gid=831837256
+
 # Detailed TOC
 
 # Part I: Why Businesses Need Decisions, Not Predictions
@@ -200,6 +204,7 @@
     performativity
 
 ### Lesson Materials
+// TODO(ai_gp): Reduce this
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [100%]: Correlation is not causation, problems with traditional AI, cost of
     ignoring causality, causal vs predictive questions

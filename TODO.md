@@ -208,6 +208,7 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 ### [ ] From Data To Decisions
 /Users/saggese/src/umd_classes2/book_springer/book_map_vXYZ.md
+/Users/saggese/src/umd_classes2/book_springer/book_map_v3.md
 /Users/saggese/src/umd_classes2/book_springer/book_toc.md
 /Users/saggese/src/notes1/book_springer/springer.proposal_v2.toc.md
 /Users/saggese/src/notes1/book_springer/springer.saggese.full_proposal_v2.md
