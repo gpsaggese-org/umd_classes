@@ -79,14 +79,14 @@
 
 - **Payoff matrix**: Table showing outcome for each combination of player choices
 
-- **Example**: Matching Pennies
+- **Example**: _Matching Pennies_
+  - Two players A, B throw head or tail (`H` or `T`)
+  - A payoff listed first, B second (zero-sum: gains sum to 0)
 
-| | Opponent: H | Opponent: T |
+| | B: H | B: T |
 |---|---|---|
-| You: H | (+1,-1) | (-1,+1) |
-| You: T | (-1,+1) | (+1,-1) |
-
-- Your payoff listed first, opponent's second (zero-sum: gains sum to 0)
+| A: H | (+1,-1) | (-1,+1) |
+| A: T | (-1,+1) | (+1,-1) |
 
 - **Key assumption**: 
   - Each player knows everyone's payoffs (complete information)
@@ -96,11 +96,11 @@
 
 - **Example**: _Restaurant pricing game_
   - Two restaurants competing on same street
-  - Each chooses High or Low price
-  - High price
+  - Each chooses `High` or `Low` price
+  - `High` price
     - High profit if competitor also charges high
     - Low profit if undercut
-  - Low price
+  - `Low` price
     - Moderate profit regardless of competitor
 
 | | Competitor: High | Competitor: Low |
@@ -108,81 +108,75 @@
 | You: High | (2,2) | (0,3) |
 | You: Low | (3,0) | (1,1) |
 
-- Both preferring to charge high (2 > 3 if only you switch), but fear being
+- Both preferring to charge high (2 > 3 if the other switches), but fear being
   undercut
 
 * Players and Strategies
 
-- **Definition**: _Players_ are rational decision-makers in the game
-  - _Strategies_ are complete action plans available to each player
+- **Players** are rational decision-makers in the game
 
-- **Pure strategy**: Choose one specific action with certainty
-  - E.g., _"Always choose Left"_
-
-- **Mixed strategy**: Randomize over multiple actions with specific
-  probabilities
-  - E.g., _"Choose Left with probability 0.6, Right with probability 0.4"_
+- **Strategies** are complete action plans available to each player
+  - Equivalent to policy in RL: "given a state, this is the action"
 
 - **Strategy space**: Set of all available strategies to a player
   - Can be finite
     - E.g., two choices: "Cooperate", "Defect"
   - Can be infinite
     - E.g., any real-valued price from \$0 to \$100
+    - E.g., all possible ways to play a game in chess ($10^{120}$ possible games)
 
-- **Strategy profile**: Specification of one strategy for each player
-  - Example in 2-player game: (Player 1 chooses Up, Player 2 chooses Left)
-  - Determines the outcome
+- **Pure strategy**: Choose one specific action with certainty
+  - E.g., _"Always choose Left"_
+  - Equivalent to deterministic policy in RL
 
-- **Example**: Chess game
-  - Players: White and Black
-  - Strategies: Incredibly large (roughly $10^{120}$ possible games)
-  - Strategy for White at first move: `e4`, `d4`, ... (20 legal moves)
+- **Mixed strategy**: Randomize over multiple actions with specific
+  probabilities
+  - E.g., _"Choose Left with probability 0.6, Right with probability 0.4"_
+  - Equivalent to stochastic policy in RL
 
 * Zero-Sum vs. Non-Zero-Sum Games
 
 - **Zero-sum games**: One player's gain is exactly another's loss
-  - Total payoff across all players = 0 (or constant)
-  - Purely competitive, no mutual gain possible
+  - Total payoff across all players = 0 or constant for all the outcomes
+  - Purely competitive: no mutual gain possible
+  - Assume worst about opponent: adversarial thinking
   - E.g., chess (one player wins, other loses)
 
-Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
-
-| | B: Left | B: Right |
-|---|---|---|
-| A: Up | (`1`{color="red"},`-1`{color="blue"}) | (`-1`{color="red"},`1`{color="blue"}) |
-| A: Down | (`-1`{color="red"},`1`{color="blue"}) | (`1`{color="red"},`-1`{color="blue"}) |
-
-- **Non-zero-sum games**: Outcomes can be mutually beneficial or mutually harmful
-  - Total payoff varies depending on choices
-  - Mix of cooperation and competition possible
-  - E.g., business deal (both parties can benefit)
-
-- **Payoff matrix comparison**:
-
-  Zero-Sum Example:
+- Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
 
   | | B: Left | B: Right |
   |---|---|---|
-  | A: Up | (1,-1) | (-1,1) |
-  | A: Down | (-1,1) | (1,-1) |
+  | A: Up | (`1`{color="red"},`-1`{color="blue"}) | (`-1`{color="red"},`1`{color="blue"}) |
+  | A: Down | (`-1`{color="red"},`1`{color="blue"}) | (`1`{color="red"},`-1`{color="blue"}) |
 
-  Non-Zero-Sum Example:
+* Non-Zero-Sum Games
+
+- **Non-zero-sum games**: Outcomes can be mutually beneficial (or harmful)
+  - Total payoff varies depending on choices
+  - Mix of cooperation and competition possible
+  - E.g., in a business deal both parties can benefit
+
+- **Example**: Restaurant
 
   | | B: Left | B: Right |
   |---|---|---|
   | A: Up | (2,2) | (0,3) |
   | A: Down | (3,0) | (1,1) |
 
-- **Strategic implication**:
-  - Zero-sum: Assume worst about opponent; pure adversarial thinking
-  - Non-zero-sum: Opportunities for mutual gain; coordination matters
+- **Example**: Prisoners' Dilemma
+
+  | | Cooperate | Defect |
+  |---|---|---|
+  | Cooperate | (-1,-1) | (-3,0) |
+  | Defect | (0,-3) | (-2,-2) |
 
 * Normal Form Representation
 
-- **Definition**: _Normal form_ (or _strategic form_) displays game as matrix
-  with players' strategies as rows/columns and payoffs in cells
-  - Represents simultaneous-move games
+- **Definition**: _Normal form_ displays game as matrix with players' strategies
+  as rows/columns and payoffs in cells
+  - Represents simultaneous-move games (non-sequential)
   - Shows all strategic choices clearly
+  - Same as payoff matrix
 
 - **Structure for 2-player game**:
   - Rows: Player A strategies
@@ -201,13 +195,6 @@ Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
 - **Limitations**:
   - Only for simultaneous-move games (hides timing/sequential nature of play)
   - Can be large for many strategies
-
-- **Example**: Prisoners' Dilemma
-
-  | | Cooperate | Defect |
-  |---|---|---|
-  | Cooperate | (-1,-1) | (-3,0) |
-  | Defect | (0,-3) | (-2,-2) |
 
 * Extensive Form Representation
 
@@ -232,16 +219,13 @@ Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
   - Can become unwieldy for complex games
   - Harder to analyze than normal form for simultaneous moves
 
-- **Example**: Entry game tree
-  ```
-  Incumbent firm decides: Fight or Accommodate
-    If Accommodate → Entrant gets $3, Incumbent gets $1
-    If Fight → Entrant decides: Stay or Exit
-      If Exit → Entrant gets -$1, Incumbent gets $4
-      If Stay → Both in price war: Entrant gets -$1, Incumbent gets $0
-  ```
+* Extensive Form Representation: Entry Game Example
 
-  Graphviz visualization:
+- Incumbent firm decides: `Fight` or `Accommodate`
+  - If `Accommodate`: Entrant gets \$3, Incumbent gets \$1
+  - If `Fight`: Entrant decides: `Stay` or `Exit`
+    - If `Exit` $\to$ Entrant gets -\$1, Incumbent gets \$4
+    - If `Stay` $\to$ price war: Entrant gets -\$1, Incumbent gets \$0
 
   ```graphviz
   digraph EntryGameExtended {
@@ -257,14 +241,14 @@ Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
       Exit [label="Exit\n(-1, 4)", fillcolor="#FFD966"];
       Stay [label="Stay\n(-1, 0)", fillcolor="#C5E0B4"];
 
-      Incumbent -> Accommodate [label=" Acc."];
+      Incumbent -> Accommodate [label=" Accomodate"];
       Incumbent -> Entrant1 [label=" Fight"];
       Entrant1 -> Exit [label=" Exit"];
       Entrant1 -> Stay [label=" Stay"];
   }
   ```
 
-  - Extensive form shows Incumbent moves first, then Entrant responds
+- Extensive form shows _Incumbent_ moves first, then _Entrant_ responds
   - Normal form would hide this timing
 
 ### Chapter 2: Dominant Strategies and Rationality
@@ -282,34 +266,37 @@ Payoffs shown as (`A's payoff`{color="red"}, `B's payoff`{color="blue"}):
   $$u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i})$$
   with strict inequality for some $s_{-i}$
 
+- On the payoff matrix for the row player, if its payoff on row 1 is larger than
+  payoff on row 2 for all columns $\implies$ dominant strategy
+
 * Dominant Strategies: Examples
 
 - **Example**: Matching Pennies does _not_ have dominant strategy
 
-  | | Opponent: Heads | Opponent: Tails |
+  | | B: Heads | B: Tails |
   |---|---|---|
-  | You: Heads | (+1,-1) | (-1,+1) |
-  | You: Tails | (-1,+1) | (+1,-1) |
+  | A: Heads | (+1,-1) | (-1,+1) |
+  | A: Tails | (-1,+1) | (+1,-1) |
 
-  - If opponent chooses Heads, you prefer Tails (+1 vs -1)
-  - If opponent chooses Tails, you prefer Heads (+1 vs -1)
-  - No single strategy beats both; no dominant strategy exists
+  - If B chooses `Heads`, A prefers `Tails` (+1 vs -1)
+  - If B chooses `Tails`, A prefers `Heads` (+1 vs -1)
+  - No single strategy beats both $\implies$ no dominant strategy exists
 
 - **Example**: Prisoners' Dilemma _has_ dominant strategy
 
-  | | Opponent: Cooperate | Opponent: Defect |
+  | | B: Cooperate | B: Defect |
   |---|---|---|
-  | You: Cooperate | (-1,-1) | (-3,0) |
-  | You: Defect | (0,-3) | (-2,-2) |
+  | A: Cooperate | (-1,-1) | (-3,0) |
+  | A: Defect | (0,-3) | (-2,-2) |
 
-  - If opponent cooperates: Defect gives 0 > -1, so Defect is better
-  - If opponent defects: Defect gives -2 > -3, so Defect is better
-  - **Defect is dominant** for both players; regardless of opponent's choice, defecting is always optimal
+  - If B cooperates: `Defect` gives 0 > -1, so `Defect` is better
+  - If B defects: `Defect` gives -2 > -3, so `Defect` is better
+  - Defect is dominant for both players; regardless of opponent's choice,
+    defecting is always optimal
 
 - **Remark**: If every player has dominant strategy, solution is straightforward
   - Each plays dominant strategy
-  - Outcome is predictable
-  - But often leads to suboptimal collective result
+  - Can lead to suboptimal collective result
 
 * Dominated Strategies
 
