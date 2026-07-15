@@ -259,18 +259,20 @@
 
 - **Definition**: A strategy is _dominant_ if it yields higher payoff than any
   alternative strategy, regardless of what opponent does
-  - Player should always choose dominant strategy if one exists
-
-- **Intuition**: "Best response to everything"
+  - Player should always choose dominant strategy, if one exists
+  - It's your best strategy (even if it's not necessarily a win)
+  - It's a property of your choices, indipendently of the opponents' choices
 
 - **Formal definition**: Strategy $s_i$ is dominant if for all strategies $s_i'$
   of player $i$ and all strategy profiles $s_{-i}$ of opponents:
   $$u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i})$$
   with strict inequality for some $s_{-i}$
 
-- On the payoff matrix consider the row player
+- **Example**: on the payoff matrix consider the row player
   - If its payoff on row 1 is larger than payoff on row 2 for all columns
     $\implies$ choosing 1 is dominant strategy
+
+// TODO(ai_gp): Add example
 
 * Dominant Strategies: Examples
 
@@ -283,7 +285,7 @@
 
   - If B chooses `Heads`, A prefers `Tails` (+1 vs -1)
   - If B chooses `Tails`, A prefers `Heads` (+1 vs -1)
-  - No single strategy beats both $\implies$ no dominant strategy exists
+  - No single best strategy $\implies$ no dominant strategy exists
 
 - **Example**: Prisoners' Dilemma _has_ dominant strategy
 
@@ -294,23 +296,30 @@
 
   - If B cooperates: `Defect` gives 0 > -1, so `Defect` is better
   - If B defects: `Defect` gives -2 > -3, so `Defect` is better
-  - Defect is dominant for both players; regardless of opponent's choice,
-    defecting is always optimal
+  - `Defect` is dominant for both players
+  - Regardless of opponent's choice, defecting is always optimal
 
 - **Remark**: If every player has dominant strategy, solution is straightforward
-  - Each plays dominant strategy
+  - Each player plays dominant strategy
   - Can lead to suboptimal collective result
 
 * Dominated Strategies
 
 - **Definition**: A strategy is _dominated_ if another strategy yields higher
   payoff regardless of what opponents do
-  - Rational player should never choose dominated strategy
+
+- **Consequence**: Rational players
+  - Should never choose a dominated strategy
   - Can eliminate dominated strategies to simplify analysis
 
 - **Formal definition**: Strategy $s_i'$ is dominated by $s_i$ if:
   $$u_i(s_i, s_{-i}) > u_i(s_i', s_{-i})$$
   for all strategy profiles $s_{-i}$ of opponents
+
+- **Iterative elimination**:
+  - Remove dominated strategies, then repeat with the reduced game
+  - Sometimes eliminates all but equilibrium
+  - Reveals strategic structure
 
 * Dominated Strategies: Example
 - A game with dominated strategy is:
@@ -322,28 +331,23 @@
   | Down | (1,1) | (0,1) |
 
 - `Down` is dominated by both `Up` and `Middle`
-  - `Down` gives (1,0) against all; `Up` gives (2,1) which is better
+  - `Down` gives (1,0) against all
+  - `Up` gives (2,1), which is better than `Down`
+  - `Middle` gives (3, 2) which is better than `Down`
+  - There is no relationship of dominance between `Up` and `Middle`
   - Rational player never chooses `Down`
-
-- **Iterative elimination**:
-  - Remove dominated strategies, then repeat with the reduced game
-  - Sometimes eliminates all but equilibrium
-  - Reveals strategic structure
 
 * Limitations of Rationality Assumptions
 
-- **Problem**: classical game theory assumes _perfect rationality_, which real
-  players violate
+- **Problem**: classical game theory assumes _perfect rationality_, which
+  players in the real-world violate
   - Players have limited computation, memory, and attention
   - Emotions, fairness, and mistakes shape actual choices
 
 - **Bounded rationality** (Simon): players _satisfice_ rather than optimize
-  - Search for a "good enough" action, not the provably best one
+  - Search for a "good enough" action, not for the provably best one
 
-- **Common knowledge** rarely holds
-  - Iterated elimination of dominated strategies can require implausibly many
-    reasoning steps to reach the predicted outcome
-
+// TODO(ai_gp): Explain better
 - **Example**: _"guess 2/3 of the average"_ contest
   - Nash prediction: everyone guesses $0$
   - Human play: typically 20-35, reflecting finite reasoning depth
@@ -356,8 +360,9 @@
 
 * Definition and Intuition
 
-- **Definition**: a _Nash equilibrium_ (NE) is a strategy profile in which no
-  player can increase their payoff by unilaterally changing strategy
+- **Definition**: a _Nash equilibrium_ (NE) is a strategy profile (i.e., a choice
+  of a strategy for all players) in which no player can increase their payoff by
+  unilaterally changing strategy
   - Every player is playing a _best response_ to the others
   - Self-enforcing: no player has an incentive to deviate
 
@@ -369,16 +374,17 @@
   - Given what everyone else does, you would not change your own choice
   - Requires no central coordinator or enforcement
 
-- **Example**: Prisoners' Dilemma has unique NE $(Defect, Defect)$
+- **Example**: Prisoners' Dilemma has unique NE (`Defect`, `Defect`)
   - Each player defects as a best response to the other defecting
 
 - **Remark**: a NE need not be Pareto optimal
-  - $(Defect, Defect)$ is worse for both than $(Cooperate, Cooperate)$
+  - (`Defect`, `Defect`) is worse for both than (`Cooperate`, `Cooperate`)
 
 * Finding Nash Equilibria
 
-- **Best-response method** (finite games): for each opponent choice, mark each
-  player's best response; a cell where all players' responses coincide is a NE
+- **Best-response method** (finite games):
+  - For each opponent choice, mark each player's best response
+  - A cell where all players' responses coincide is a NE
 
 - **Example**: underline best responses
 
@@ -387,21 +393,20 @@
   | A: Up | (3,1) | (0,0) |
   | A: Down | (1,0) | (2,2) |
 
-  - Column Left: A prefers Up (3>1); row Up: B prefers Left (1>0) $\to$ $(Up,
+  - Column Left:
+    - A prefers `Up` (3>1); row Up: B prefers Left (1>0) $\to$ $(Up,
     Left)$ is a NE
   - Column Right: A prefers Down (2>0); row Down: B prefers Right (2>0) $\to$
     $(Down, Right)$ is a NE
-
-- **Continuous strategies**: solve players' _best-response functions_
-  simultaneously; the NE is their intersection (e.g., Cournot competition)
 
 - **Remark**: a game can have zero pure-strategy NE, one, or many
   - Multiplicity creates an _equilibrium selection_ problem
 
 * Pure vs. Mixed Strategy Equilibria
 
-- **Definition**: a _pure strategy_ NE assigns each player one deterministic
-  action; a _mixed strategy_ NE has at least one player randomizing
+- **Definition**:
+  - a _pure strategy_ NE assigns each player one deterministic action
+  - a _mixed strategy_ NE has at least one player randomizing
 
 - **Indifference principle**: in a mixed NE, each randomizing player must be
   _indifferent_ among the actions they mix over
@@ -535,6 +540,7 @@
   conventions even without communication
 
 ### Chapter 5: Sequential-Move Games
+
 * Game Trees and Backward Induction
 
 - **Definition**: _backward induction_ solves a sequential game by reasoning from

@@ -223,9 +223,6 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
   - http://localhost:8888/lab/tree/git_root/book_springer/tutorials/Lesson10_01_q_learning
 
-- [ ] class_CS_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt
-  - http://localhost:8888/lab/tree/git_root/class_cs_refreshers/tutorials/notebooks/L95_05_game_theory.ipynb
-
 - [ ] Review `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
 - [ ] Review `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
 - [ ] Review `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
@@ -257,6 +254,10 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
   pandoc book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.tex -s -o document.html --mathjax
 
+- [ ] Remove Abstract
+- [ ] Decrease one level
+- [ ] Tweak prompt to fix these problems
+
 ### [.] Create and review slides for Agentic AI
 
 - TOC is at `/Users/saggese/src/notes1/book.AI_For_Data_Science/agentic_ai_toc.md`
@@ -268,6 +269,15 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] book.Agentic_AI/lectures_source/Lesson01.10
 - [ ] book.Agentic_AI/lectures_source/Lesson01.11
   > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
+
+## CS Refresher
+
+- [ ] class_CS_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt
+  - http://localhost:8888/lab/tree/git_root/class_cs_refreshers/tutorials/notebooks/L95_05_game_theory.ipynb
+
+- Tutorials
+  - [ ] Show how the game is played
+  - [ ] Show examples of dominant strategies
 
 ## RHLF Book
 
