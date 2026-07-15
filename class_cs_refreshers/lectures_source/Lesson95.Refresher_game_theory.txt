@@ -266,8 +266,9 @@
   $$u_i(s_i, s_{-i}) \geq u_i(s_i', s_{-i})$$
   with strict inequality for some $s_{-i}$
 
-- On the payoff matrix for the row player, if its payoff on row 1 is larger than
-  payoff on row 2 for all columns $\implies$ dominant strategy
+- On the payoff matrix consider the row player
+  - If its payoff on row 1 is larger than payoff on row 2 for all columns
+    $\implies$ choosing 1 is dominant strategy
 
 * Dominant Strategies: Examples
 
@@ -312,39 +313,25 @@
 * Dominated Strategies: Example
 - A game with dominated strategy is:
 
-  | | Left | Middle | Right |
-  |---|---|---|---|
-  | Up | (3,1) | (2,0) | (1,2) |
-  | Down | (2,1) | (4,0) | (3,2) |
-
-  - Up is dominated by Down
-    - Down gives 2 vs Up gives 3 when others play Left: Down worse
-    - Wait, let me recalculate: actually Up gives 3, Down gives 2
-    - Against Left: Up=3, Down=2, so Up better
-    - Against Middle: Up=2, Down=4, so Down better
-    - Up is not dominated
-
-  - Let me use clearer example:
-
   | | Left | Right |
   |---|---|---|
   | Up | (2,1) | (1,1) |
   | Middle | (3,1) | (2,1) |
   | Down | (1,1) | (0,1) |
 
-  - Down is dominated by both Up and Middle
-    - Down gives (1,0) against all; Up gives (2,1) which is better
-    - Rational player never chooses Down
+- `Down` is dominated by both `Up` and `Middle`
+  - `Down` gives (1,0) against all; `Up` gives (2,1) which is better
+  - Rational player never chooses `Down`
 
-- **Iterative elimination**: Remove dominated strategies, repeat with reduced
-  game
+- **Iterative elimination**:
+  - Remove dominated strategies, then repeat with the reduced game
   - Sometimes eliminates all but equilibrium
   - Reveals strategic structure
 
 * Limitations of Rationality Assumptions
 
-- **Problem**: classical game theory assumes _perfect rationality_ and _common
-  knowledge_ of rationality, which real players violate
+- **Problem**: classical game theory assumes _perfect rationality_, which real
+  players violate
   - Players have limited computation, memory, and attention
   - Emotions, fairness, and mistakes shape actual choices
 
@@ -355,10 +342,10 @@
   - Iterated elimination of dominated strategies can require implausibly many
     reasoning steps to reach the predicted outcome
 
-- **Example**: _"guess $2/3$ of the average"_ contest
+- **Example**: _"guess 2/3 of the average"_ contest
   - Nash prediction: everyone guesses $0$
-  - Human play: typically $20$-$35$, reflecting finite reasoning depth
-  - Reasoning depth is finite (I think, you think, I think you think, ...)
+  - Human play: typically 20-35, reflecting finite reasoning depth
+  - Reasoning depth is finite ("I think", "you think", "I think you think", ...)
 
 - **Remark**: these gaps motivate _behavioral_ and _evolutionary_ game theory
   which relax full rationality

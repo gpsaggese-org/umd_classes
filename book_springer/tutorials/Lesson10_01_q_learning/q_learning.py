@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -43,6 +43,10 @@ import seaborn as sns
 
 sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (14, 5)
+
+# %%
+import helpers.hmodule as hmodule
+hmodule.install_module_if_not_present("gymnasium", use_activate=True, use_sudo=False, venv_path="/opt/venv")
 
 # %%
 import helpers.hnotebook as hnotebook
