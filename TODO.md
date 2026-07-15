@@ -234,6 +234,18 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] Review `book_springer/lectures_source/Lesson12.01_Complex_Decisions.txt`
 - [ ] Review `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
 
+### Typst flow
+
+- [ ] Generate some chapters to see how they look like
+  ```
+  > export FILE=Lesson08.1-Causal_AI_intro
+  claude> /model sonnet
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_latex_text.txt on msml610/lectures_source/${FILE}.txt
+  ```
+
+  render_typst.sh book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.typ
+
+### Latex flow
 - [ ] Generate some chapters to see how they look like
   ```
   > export FILE=Lesson08.1-Causal_AI_intro
@@ -241,9 +253,9 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
   ```
 
-  render_typst.sh book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.typ
+  ~/src/umd_classes2/book_springer/latex_template/book/run_latex.sh
 
- ~/src/umd_classes2/book_springer/latex_template/book/run_latex.sh
+  pandoc book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.tex -s -o document.html --mathjax
 
 ### [.] Create and review slides for Agentic AI
 
