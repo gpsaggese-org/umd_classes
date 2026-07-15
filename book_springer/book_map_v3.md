@@ -35,7 +35,7 @@
     - 15. Deployment, Monitoring, and Adaptation
     - 16. Trust, Explainability, Fairness, and Governance
 
-## Lesson Materials
+## All Lesson Materials
 // From ./generate_all_tocs.sh
 - `msml610/all_tocs.md`
 - `msml610/lectures_source/*.txt`
@@ -51,6 +51,11 @@
 
 ## Chapter Template
 
+- <Invariant>: for each chapter
+  - Find the relevant material from the materials in `## All Lesson Materials`
+    above to cover the corresponding `### Topics`
+  - Use the template below
+
 ### Topics
 - Topic 1
   - Subtopic 1.1
@@ -60,7 +65,7 @@
 
 ### Lesson Materials
 - `pointer to a lecture`
-  - [Amount of lecture used in this chapter]: <topics>
+  - [<Amount of the lecture material covering this chapter>]: <topics>
 - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
   - [100%]: Integration of causality and uncertainty into ML systems, moving beyond correlation
 - Not covered
@@ -73,15 +78,26 @@
 ## 00: Introduction
 
 ### Topics
-- **The Decision Pipeline Framework**:
-  - From raw data to prediction to causal effect estimation to utility-maximizing
-    policy
+- The Decision Pipeline Framework
+  - From raw data to prediction to causal effect estimation to utility-maximizing policy
   - Feedback loops and learning from outcomes
   - Why each stage matters and what breaks when stages are skipped
-- **Why Traditional ML Falls Short for Decision-Making**: Predictive accuracy does not equal decision quality; four critical gaps in standard approaches (causality, uncertainty, business objectives, dynamics); cost of ignoring each gap and real-world examples
-- **Causal Reasoning as the Bridge**: Moving beyond correlation to counterfactual reasoning; what "causal" means in practice; why domain experts and formal models both matter
-- **Uncertainty as Signal, Not Noise**: Decision-relevant variance; when point estimates fail; confidence vs. credibility in high-stakes environments
-- **How This Book Is Organized**: Five-part structure (motivation, theory, data, decision algorithms, deployment/governance); intended audience and prerequisites; how to navigate and how chapters build on each other
+- Why Traditional ML Falls Short for Decision-Making
+  - Predictive accuracy ≠ decision quality: optimizing the wrong metric
+  - Four critical gaps: causality, uncertainty, business objectives, dynamics
+  - Real-world costs of ignoring each gap
+- Causal Reasoning as the Bridge
+  - Moving beyond correlation to counterfactual reasoning
+  - What "causal" means in practice and why it matters
+  - Why domain experts and formal models are both necessary
+- Uncertainty as Signal, Not Noise
+  - Decision-relevant variance: what point estimates hide
+  - Confidence vs. credibility: when estimates are trustworthy
+  - Overconfidence: systems that never say "I don't know"
+- How This Book Is Organized
+  - Five-part structure: motivation, theory, data, algorithms, deployment/governance
+  - Intended audience and prerequisites
+  - How chapters build on each other and fit into the decision pipeline
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -96,15 +112,23 @@
 ## 01: Why Decisions, Not Predictions
 
 ### Topics
-- Course Roadmap: the decision pipeline ($data \to model \to policy \to action
-  \to feedback$) and five-part structure
-- Why Traditional ML Falls Short: four critical gaps (causality, uncertainty,
-  business objective, dynamics)
-- From Data Science to Decision Science: predictive vs. decision-making paradigms
-- Causal vs Predictive Questions: predictive form vs. causal form of business
-  questions
-- The Analytics Maturity Ladder: from descriptive (level 0) through predictive
-  (level 1), causal (level 2), to decision (level 3)
+- Course Roadmap
+  - The decision pipeline: data → model → policy → action → feedback loops
+  - Five-part book structure (motivation, theory, data, algorithms, deployment)
+- Why Traditional ML Falls Short
+  - Four critical gaps: causality, uncertainty, business objectives, dynamics
+  - Real-world costs of ignoring each gap
+- From Data Science to Decision Science
+  - Predictive paradigm: optimize accuracy on held-out test data
+  - Decision paradigm: optimize business value of actions taken
+- Causal vs Predictive Questions
+  - Predictive form: "What will happen if we observe X?"
+  - Causal form: "What will happen if we intervene and set X?"
+- The Analytics Maturity Ladder
+  - Level 0 (Descriptive): "What happened in the past?"
+  - Level 1 (Predictive): "What will likely happen?"
+  - Level 2 (Causal): "What will happen if we intervene?"
+  - Level 3 (Decision): "What should we do?"
 
 ### Lesson Materials
 - `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
@@ -120,24 +144,23 @@
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - [5%] Example of ladder of causation (Tornado Warning)
 
-## 02: The Cost of Ignoring Causality
+## 02: The Cost of Ignoring Causality, Uncertainty and Dynamics
 
 ### Topics
 - When Correlation Misleads
-  - Correlation encodes confounding as causation: $\Pr(Y | X) \neq \Pr(Y |
-    do(X))$
-  - Missing interventions and counterfactuals: observational models cannot answer
-    "what if?" questions
-  - Selection bias and the missing counterfactual: incomplete populations in
-    historical data
+  - Confounding: $\Pr(Y | X) \neq \Pr(Y | do(X))$ when unobserved variables affect both X and Y
+  - Missing counterfactuals: observational models cannot answer "what if we intervene?" questions
+  - Selection bias: incomplete historical populations hide causal mechanisms
 - Structural Failure Modes
-  - Interference and spillovers across units: SUTVA violations in marketplaces
-    and networks
-  - Simpson's Paradox: when aggregates reverse while subgroups show consistent
-    effects
-  - Collider bias: conditioning creates illusions (Berkson's paradox)
-  - Discarding domain knowledge and mechanism: pattern-driven models inherit
-    training data artifacts
+  - Interference and spillovers: SUTVA violations when units interact (marketplaces, networks)
+  - Simpson's Paradox: aggregates reverse while subgroups show consistent effects
+  - Collider bias: conditioning on outcomes creates spurious correlations (Berkson's paradox)
+  - Mechanistic blindness: pattern-driven models inherit artifacts from training data
+- Point Estimates in a Small-Data World
+  - Single numbers hide decision-relevant variance; error bars are essential
+  - Epistemic vs. aleatoric uncertainty: conflating known unknowns with unknown unknowns
+  - Overconfidence off-distribution: systems that never say "I don't know" fail on novel inputs
+  - Statistical traps: p-hacking, multiple comparisons, test set reuse, peeking at data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -152,21 +175,6 @@
   - [70%] Markov equivalence, identifiability, faithfulness, challenges in causal discovery from observational data
 - Not covered
   - [30%] Advanced sensitivity analysis, bounding methods for unmeasured confounding
-
-## 03: The Cost of Ignoring Uncertainty
-
-### Topics
-- Point Estimates in a Small-Data World
-  - Point estimates without error bars: single numbers hide decision-relevant
-    variance
-  - Epistemic vs aleatoric uncertainty conflated: inability to detect
-    out-of-distribution inputs
-  - No abstention: systems that never say "I don't know" are overconfident
-    off-distribution
-  - Overfitting and statistical significance traps: peeking, multiple
-    comparisons, burned test sets
-
-### Lesson Materials
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
   - [100%] Aleatoric vs epistemic uncertainty, representing uncertainty in decisions, communicating uncertainty to stakeholders
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
@@ -190,21 +198,20 @@
 
 ### Topics
 - Formal Knowledge Representation
-  - Symbolic logic and reasoning systems
-  - Propositional and first-order logic
-  - Ontologies and semantic web
-  - Logic-based agents and inference
+  - Symbolic logic: propositional and first-order logic for structured reasoning
+  - Ontologies and semantic networks: organizing domain knowledge
+  - Logic-based agents: inference engines and rule-based systems
 - Graphical Models for Uncertainty
-  - Bayesian networks: structure, conditional independence, d-separation
-  - Markov blankets and efficient inference
-  - Constructing and interpreting probabilistic models
+  - Bayesian networks: encoding conditional independence and probabilistic structure
+  - D-separation and Markov blankets: reading independence from graphs
+  - Inference algorithms: belief propagation and variable elimination
 - Causal Graphical Models
-  - Structural causal models (SCMs) and directed acyclic graphs (DAGs)
-  - Causal mechanisms and variable relationships
-  - Observed vs. unobserved confounders
+  - Structural causal models (SCMs): formal representation of mechanisms
+  - DAGs: encoding causal order, observed vs. unobserved variables
+  - Identifying confounders, mediators, colliders from graph structure
 - Integrating Logic and Causality
-  - Moving from correlation to causal reasoning
-  - Combining symbolic representation with probabilistic inference
+  - Combining symbolic reasoning with probabilistic inference
+  - From correlation to causal reasoning: what graphs add beyond data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
@@ -226,32 +233,31 @@
 
 ### Topics
 - Foundations of Bayesian Inference
-  - Frequentist vs. Bayesian frameworks
-  - Bayesian networks as joint probability distributions
-  - Conditional independence and d-separation
-  - Prior specification and elicitation
+  - Bayesian framework: updating beliefs from prior and data
+  - Frequentist vs. Bayesian views: philosophical differences and practical implications
+  - Prior specification and elicitation: encoding domain knowledge
 - Inference in Probabilistic Models
-  - Exact inference algorithms (belief propagation, variable elimination)
-  - Approximate inference (sampling, variational inference, MCMC)
-  - Probabilistic programming languages and tools
+  - Exact algorithms: belief propagation, variable elimination for graphical models
+  - Approximate inference: sampling, variational inference, MCMC for complex models
+  - Probabilistic programming: languages and tools (PyMC, Pyro, Stan)
 - Bayesian Generative Models
-  - Linear regression with uncertainty quantification
-  - Logistic regression and classification
-  - Hierarchical models and multi-level structures
-  - Regularization via priors
+  - Linear regression: uncertainty quantification via posterior distributions
+  - Logistic regression and classification: Bayesian approach
+  - Hierarchical models: multi-level structure and pooling information across groups
+  - Regularization via priors: soft constraints on parameters
 - Uncertainty in Predictions
-  - Posterior predictive distributions
-  - Epistemic vs. aleatoric uncertainty
-  - Posterior predictive checks for model validation
+  - Posterior predictive distributions: averaging over model uncertainty
+  - Epistemic vs. aleatoric uncertainty: model uncertainty vs. irreducible noise
+  - Posterior predictive checks: validating model fit against data
 - Bayesian Decision-Making
-  - Expected utility under posterior uncertainty
-  - Utility functions and loss encoding
-  - Decision-making with incomplete information
+  - Expected utility: maximizing decision value under posterior uncertainty
+  - Loss functions and utility encoding: connecting preferences to parameters
+  - Sequential decision-making: updating beliefs and acting
 - Model Comparison and Selection
-  - Information criteria (AIC, BIC, WAIC)
-  - Cross-validation and out-of-sample prediction
-  - Bayes factors and Bayesian hypothesis testing
-  - Model ensembles and averaging
+  - Information criteria (AIC, BIC, WAIC): balancing fit and complexity
+  - Cross-validation and out-of-sample error: evaluating generalization
+  - Bayes factors and hypothesis testing: comparing model hypotheses
+  - Model ensembles: combining multiple models for robustness
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
@@ -275,27 +281,26 @@
 
 ### Topics
 - Causal Graphical Models
-  - Structural causal models (SCMs) and causal mechanisms
-  - Causal DAGs: identifying causal structures and variable relationships
-  - Observed vs. unobserved confounders and hidden variables
+  - Structural causal models (SCMs): formal specification of mechanisms
+  - DAGs: encoding causal order, variable dependencies, latent confounders
+  - Identifying confounders, mediators, colliders from graph structure
 - Do-Calculus and Interventional Reasoning
-  - The do-operator and interventional distributions
+  - The do-operator: distinguishing intervention from observation
   - Transforming observational queries into interventional quantities
-  - Three rules of do-calculus for causal identification
+  - Three rules of do-calculus: identifying when interventions are identifiable
 - Identification Criteria
-  - Graphical criteria for causal effect identification
-  - Back-door criterion: adjusting for confounders
-  - Front-door criterion: handling unobserved confounding
-  - D-separation and conditional independence in causal graphs
+  - Back-door criterion: adjusting for confounders to identify effects
+  - Front-door criterion: handling unobserved confounding via mediators
+  - D-separation: reading conditional independence from causal graphs
 - Advanced Identification Methods
-  - Instrumental variables: leveraging natural experiments and exogenous variation
-  - Confounding bias quantification and adjustment strategies
-  - When identification is possible vs. impossible
+  - Instrumental variables: leveraging exogenous variation to break confounding
+  - Sensitivity analysis: quantifying robustness to unmeasured confounding
+  - Identifying limits: when causal effects are unidentifiable from data
 - Causal Discovery from Observational Data
-  - Learning causal structures from data without experiments
-  - Constraint-based, score-based, and functional causal models
-  - Markov equivalence and identifiability from observational data
-  - Validation and robustness of discovered causal structures
+  - Learning causal DAGs from observational data without experiments
+  - Constraint-based methods: using conditional independence tests
+  - Score-based methods: searching over graph structures
+  - Markov equivalence: understanding discovery limits from observational data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
@@ -314,18 +319,31 @@
 ## 07: Building Causal Knowledge
 
 ### Topics
-- Eliciting causal knowledge from domain experts: structured methods, expert
-  judgment, and iterative refinement
-- Building causal DAGs: variable selection, causal assumptions, and graph
-  construction from domain knowledge
-- Variable types and relationships: confounders, mediators, colliders,
-  moderators, and their roles in causal inference
-- Temporal structure in causal systems: causal order, feedback delays, causal
-  acyclicity, and dynamic relationships
-- Measurement and operationalization: defining variables, measurement validity,
-  proxy variables for latent constructs
-- Documenting causal assumptions: transparency, validation, and stakeholder
-  alignment on causal structures
+- Eliciting Causal Knowledge from Experts
+  - Structured elicitation methods and expert judgment techniques
+  - Iterative refinement: cycling between experts and data
+  - Handling disagreement and uncertainty among stakeholders
+- Building Causal DAGs
+  - Variable selection: identifying relevant nodes and boundaries
+  - Encoding causal assumptions: direction, mechanisms, feedback
+  - Graph construction: translating domain knowledge into formal structure
+- Variable Types and Relationships
+  - Confounders: common causes that bias estimation
+  - Mediators: mechanisms through which effects operate
+  - Colliders: outcomes of multiple causes; conditioning dangers
+  - Moderators: variables that change effect size across subgroups
+- Temporal Structure
+  - Causal order: establishing precedence and acyclicity
+  - Feedback delays: when current outcomes influence future causes
+  - Dynamic systems: modeling evolution over time
+- Measurement and Operationalization
+  - Defining variables: translating concepts to measurable quantities
+  - Proxy variables: when direct measurement impossible
+  - Validity assessment: does the proxy capture the construct?
+- Documenting Assumptions
+  - Transparency: making causal structures explicit and testable
+  - Validation: checking assumptions against domain knowledge and data
+  - Stakeholder alignment: ensuring shared understanding of causal structure
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -346,22 +364,30 @@
 ## 08: Causal Data Pipelines
 
 ### Topics
-- Data collection and its biases: how collection processes introduce selection
-  bias and confounding; design choices that shape what data we observe
-- Selection bias and incomplete populations: missing data mechanisms (MCAR, MAR,
-  MNAR) and their impact on causal inference; how historical data misses critical
-  subgroups or outcomes
-- Distribution shift and covariate mismatch: training vs. production misalignment,
-  concept drift, and environment shifts; detecting when causal effects learned
-  offline break in new contexts
-- Measurement error and proxy validity: assessing proxy variable quality,
-  attenuation in causal effects, and measurement error correction; when proxies
-  are valid surrogates and when they mislead
-- Pre-flight checks: validating data quality, assessing confounder balance,
-  checking causal assumptions before modeling; diagnostics that flag problems
-  early
-- Data quality for causal inference: handling missingness, outliers, and data
-  anomalies in causal analysis; robust inference under imperfect data
+- Data Collection and Its Biases
+  - Collection design: how sampling and measurement choices shape data
+  - Selection mechanisms: who and what is captured vs. missed
+  - Confounder introduction: biases built into acquisition process
+- Selection Bias and Incomplete Populations
+  - Missing data mechanisms: MCAR (random), MAR (depends on observed), MNAR (depends on unobserved)
+  - Subgroup representation: historical data misses critical populations
+  - Impact on causal inference: incomplete data breaks identifiability assumptions
+- Distribution Shift and Covariate Mismatch
+  - Training vs. production: when learned causal effects fail in new environments
+  - Concept drift: non-stationary relationships over time
+  - Detecting shift: monitoring data distributions for changes
+- Measurement Error and Proxy Validity
+  - Proxy variable quality: does the proxy capture the true construct?
+  - Attenuation: measurement error weakens causal effect estimates
+  - Correction methods: debiasing estimates under known measurement error
+- Pre-Flight Checks
+  - Data quality validation: assessing completeness, accuracy, consistency
+  - Confounder balance: checking covariate distributions match assumptions
+  - Assumption diagnostics: verifying causal identification conditions hold
+- Data Quality for Causal Inference
+  - Handling missingness: understanding patterns and implications
+  - Outlier detection: distinguishing errors from true anomalies
+  - Robust inference: methods that work under imperfect data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -386,16 +412,30 @@
 ## 09: Decision Theory Foundations
 
 ### Topics
-- Von Neumann-Morgenstern theorem: axioms of rational choice and utility
-  existence
-- Utility functions in practice: eliciting preferences and encoding business
-  objectives
-- Subjective expected utility: belief updating and decision-making under
-  uncertainty
-- Multi-criteria trade-offs: value functions, weights, and Pareto optimality
-- Influence diagrams and solving decision networks: backward induction and policy
-  extraction
-- Risk preferences and utility curvature: risk-aversion, neutrality, and seeking
+- Von Neumann-Morgenstern Axioms
+  - Rational choice axioms: completeness, transitivity, continuity, independence
+  - Utility existence theorem: rational preferences representable as utility function
+  - Implications: why expected utility is the right framework
+- Utility Functions in Practice
+  - Eliciting preferences: methods for extracting stakeholder objectives
+  - Encoding business value: linking decisions to monetary or non-monetary outcomes
+  - Designing utility: avoiding common pitfalls in preference specification
+- Subjective Expected Utility
+  - Belief + Preference: combining uncertainty (beliefs) with values (preferences)
+  - Bayesian updating: revising beliefs from new information
+  - Decision rules: how to choose actions under posterior uncertainty
+- Multi-Criteria Trade-Offs
+  - Value functions: combining multiple objectives into single metric
+  - Pareto optimality: solutions that dominate no alternatives
+  - Weight elicitation: balancing competing criteria
+- Influence Diagrams and Decision Networks
+  - Graphical representation: nodes for decisions, uncertainties, values
+  - Backward induction: solving networks to extract optimal policies
+  - Value of information: computing worth of additional observations
+- Risk Preferences and Utility Curvature
+  - Risk aversion: decreasing marginal utility of wealth
+  - Risk neutrality: linear utility function
+  - Risk seeking: increasing marginal utility (rare, context-dependent)
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -414,16 +454,34 @@
 ## 10: Taxonomy of Decision-Making Problems and Algorithms
 
 ### Topics
-- From causal effects to expected value: plugging treatment effects into utility
-  functions
-- Bayesian decision-making: posterior-based choices and belief updating from data
-- Value of information: EVPI, EVSI, and when to experiment vs. observe
-- Bayesian optimization and acquisition functions: efficient search over decision
-  spaces
-- Exploration vs. exploitation: Thompson sampling, UCB, and contextual bandits
-- Counterfactual decision analysis: reasoning about alternative choices
-- Robustness under model misspecification: decisions that work across causal
-  assumptions
+- From Causal Effects to Expected Value
+  - Causal effect estimates: treatment effects on outcomes
+  - Utility encoding: translating effects into decision value
+  - Decision rule: maximizing expected utility over actions
+- Bayesian Decision-Making
+  - Posterior-based choices: using full posterior distribution, not point estimates
+  - Belief updating: iterative learning from data
+  - Sequential decisions: adapting choices as information arrives
+- Value of Information
+  - EVPI (perfect information): upper bound on experimentation value
+  - EVSI (sample information): value of specific experiments
+  - When to experiment: comparing cost of experiment vs. value of learning
+- Bayesian Optimization and Acquisition Functions
+  - Efficient exploration: guided search over high-dimensional decision spaces
+  - Acquisition functions: balancing exploitation (use what works) and exploration
+  - Active learning: selecting experiments intelligently
+- Exploration vs. Exploitation
+  - Thompson sampling: drawing from posterior beliefs and acting
+  - Upper confidence bound (UCB): balancing uncertainty and performance
+  - Contextual bandits: making decisions conditional on context
+- Counterfactual Decision Analysis
+  - Alternative scenarios: "What if we had chosen differently?"
+  - Causal reasoning about decisions: understanding decision consequences
+  - Regret analysis: evaluating decision quality retrospectively
+- Robustness Under Misspecification
+  - Decisions under model uncertainty: when causal assumptions may be wrong
+  - Minimax and distributional robustness: hedging against unknown unknowns
+  - Sensitivity analysis: how much do conclusions change with assumptions?
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
@@ -494,21 +552,38 @@
 ## 13: Agentic Causal Reasoning
 
 ### Topics
-- Causal reasoning in LLMs: pattern-based limits and why foundation models
-  struggle with counterfactuals
-- Chain-of-thought and tree-of-thought prompting: structured reasoning for causal
-  inference
-- SCM-augmented agents: embedding causal world models in agent architectures
-- Tool-use and causal simulation: planning with learned or specified dynamics
-- Integrating causality with probabilistic inference: hybrid reasoning systems
-- Trustworthy AI through causality: transparency, robustness, fairness, and
-  safety
-- Causal guardrails and safety constraints: preventing harmful behaviors in
-  autonomous agents
-- Performativity and adaptive systems: decisions that change the world, feedback
-  loops, and learning from outcomes
-- Online causal discovery: learning and revising causal models from deployment
-  feedback
+- Causal Reasoning in LLMs
+  - Pattern-based limits: why foundation models struggle with counterfactuals
+  - Knowledge vs. reasoning: language models know facts but may not reason causally
+  - In-context learning: eliciting causal reasoning via prompting
+- Chain-of-Thought and Tree-of-Thought Prompting
+  - Structured reasoning: breaking problems into steps
+  - Causal decomposition: reasoning about mechanisms explicitly
+  - Verification: checking causal chains for consistency
+- SCM-Augmented Agents
+  - Embedding causal world models: agents that understand mechanisms
+  - Model-based reasoning: planning using causal models of environment
+  - Integration with learning: updating SCMs from experience
+- Tool-Use and Causal Simulation
+  - External tools: calculators, simulators, retrieval systems
+  - Causal simulation: planning by running forward models
+  - Grounding reasoning: connecting abstract reasoning to executable actions
+- Integrating Causality with Probabilistic Inference
+  - Hybrid reasoning: combining symbolic causal models with learned probabilities
+  - Joint planning: reasoning about both what will happen and what we should do
+  - Uncertainty quantification: maintaining belief distributions over causal structures
+- Trustworthy Agentic AI
+  - Transparency: explaining agent decisions causally
+  - Robustness: decisions that work under causal assumption violations
+  - Fairness: ensuring decisions treat groups equitably
+- Performativity and Adaptive Systems
+  - Decisions that change the world: acknowledging feedback from actions
+  - Adaptive learning: updating models based on outcome observations
+  - Avoiding traps: recognizing when interventions alter underlying distributions
+- Online Causal Discovery
+  - Learning from deployment: discovering causal structures from live data
+  - Iterative refinement: updating DAGs as new evidence arrives
+  - Stability guarantees: maintaining safe assumptions during learning
 
 ### Lesson Materials
 - `book.Agentic_AI/lectures_source/Lesson01.07-Tool_use_and_retrieval.txt`
@@ -541,23 +616,38 @@
 ## 14: Building Stakeholder Alignment
 
 ### Topics
-- Eliciting causal knowledge from domain experts during DAG construction: structured
-  elicitation methods, disagreement resolution, and iterative refinement of causal
-  structures before model building
-- Stakeholder feedback loops during model development: reviewing intermediate
-  results, sensitivity analyses, and refining assumptions based on expert critique
-- Communicating causal assumptions to different audiences: domain experts,
-  operations teams, business leadership
-- Causal DAG visualization and debate: handling disagreement on causal structures
-  and variable selection
-- Sensitivity analysis as a communication tool: demonstrating robustness to
-  assumption violations
-- Intervention design communication: selecting and justifying decision levers
-  with stakeholders
-- Risk tolerance and decision cost asymmetry: aligning stakeholders on cost of
-  false positives vs false negatives
-- Stakeholder buy-in before deployment: achieving consensus on causal model
-  adequacy and assumptions
+- Eliciting Causal Knowledge from Experts
+  - Structured methods: interviews, surveys, consensus-building
+  - Handling disagreement: when experts disagree on causal structure
+  - Iterative refinement: cycling between expert input and data validation
+- Stakeholder Feedback During Development
+  - Intermediate results: sharing findings and getting expert critique
+  - Sensitivity analyses: showing impact of assumption changes
+  - Refinement loop: updating DAGs based on feedback
+- Communicating Causal Assumptions
+  - Audience targeting: tailoring message for experts vs. operations vs. leadership
+  - Precision without jargon: explaining technical concepts accessibly
+  - Honest uncertainty: being clear about what is known vs. assumed
+- Causal DAG Visualization and Debate
+  - Graphical representation: making causal structures visible and debatable
+  - Disagreement resolution: protocols for handling conflicting opinions
+  - Documentation: recording assumptions and decisions
+- Sensitivity Analysis as Communication Tool
+  - Robustness demonstration: showing decisions work across assumptions
+  - Threshold identification: finding breaking points in assumptions
+  - Stakeholder confidence: building trust through thorough analysis
+- Intervention Design Communication
+  - Lever identification: which variables can we actually control?
+  - Justification: why these interventions are causal levers
+  - Trade-offs: costs, side effects, feasibility of different options
+- Risk Tolerance and Cost Asymmetry
+  - False positives vs. false negatives: aligning on acceptable error rates
+  - Business impact: tying decision errors to business consequences
+  - Stakeholder agreement: consensus on acceptable risk levels
+- Stakeholder Buy-In Before Deployment
+  - Model adequacy review: does the model capture the business problem?
+  - Assumption sign-off: stakeholders endorse causal structure
+  - Go/no-go decision: readiness for production deployment
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
@@ -578,37 +668,44 @@
 ## 15: Deployment, Monitoring, and Adaptation
 
 ### Topics
-- From notebook to production: operationalizing causal decision systems
-- Cost-aware deployment strategies: phased rollout, shadow mode, and canary
-  analysis tailored to decision cost asymmetry
-- Operationalizing causal assumption monitoring: testable vs. untestable
-  assumptions, failure detection, and implementation strategies
-  - **Directly testable assumptions**: temporal stability of effects, proxy
-    variable validity, treatment effect heterogeneity stability; monitoring via
-    time-series trend detection, proxy correlation drift, stratified effect
-    estimates in real-time dashboards
-  - **Indirectly testable assumptions**: robustness bounds via sensitivity
-    analysis, negative controls, instrumental variable diagnostics; pre-compute
-    E-value bounds and flag when observational data approaches these thresholds
-  - **Domain-assessed assumptions**: causal graph structure, sufficiency of
-    confounding set (requires periodic expert re-assessment; schedule quarterly
-    or post-deployment reviews)
-  - Concrete monitoring dashboards: metrics that flag assumption breakdown
-    (e.g., alert when treatment effect heterogeneity variance exceeds baseline,
-    when proxy validity correlation drops below threshold, when negative control
-    estimates diverge from zero)
-- A/B testing vs. causal inference in production: when to run experiments vs rely
-  on observational causal models
-- Continuous experimentation and policy improvement: sequential testing,
-  exploration vs exploitation, incremental policy updates
-- Heterogeneous deployment: adapting rollout to treatment effect variation across
-  subgroups
-- Model versioning, error budgets, and rollback: decision error thresholds and
-  when/how to revert
-- Feedback loops in production: learning from deployed decisions to update causal
-  models iteratively
-- Technical debt and decision system maintenance: keeping systems reliable over
-  time
+- From Notebook to Production
+  - Infrastructure: moving models from experimentation to operational systems
+  - Data pipelines: integrating real-time data streams
+  - Latency and throughput: meeting production performance requirements
+- Cost-Aware Deployment Strategies
+  - Phased rollout: gradual expansion to manage risk
+  - Shadow mode: running model in parallel without affecting decisions
+  - Canary analysis: testing on small user subsets before full deployment
+  - Cost asymmetry: tailoring rollout to false positive vs. false negative costs
+- Monitoring Causal Assumptions
+  - Directly testable: effect stability, proxy validity, heterogeneity patterns
+  - Indirectly testable: sensitivity bounds, negative controls, balancing checks
+  - Domain-assessed: causal structure validity (periodic expert review)
+  - Dashboards: alerting on threshold violations and assumption breakdown
+- A/B Testing vs. Observational Methods
+  - When to experiment: high-uncertainty decisions warrant experiment cost
+  - When to trust causal models: observational methods faster but riskier
+  - Hybrid approaches: combining both for robustness
+- Continuous Experimentation
+  - Sequential testing: running experiments iteratively as data arrives
+  - Exploration vs. exploitation: balancing learning and decision value
+  - Policy improvement: incremental updates based on experimental evidence
+- Heterogeneous Deployment
+  - Effect heterogeneity: recognizing treatment effects vary across subgroups
+  - Stratified rollout: different policies for different segments
+  - Monitoring divergence: detecting when effect heterogeneity changes
+- Versioning and Rollback
+  - Error budgets: acceptable decision error thresholds
+  - Model versioning: tracking causal assumptions and model changes
+  - Rollback procedures: reverting to previous models when failures detected
+- Feedback Loops and Adaptation
+  - Learning from deployed decisions: updating models from real outcomes
+  - Concept drift: adapting to changes in causal relationships
+  - Iterative refinement: continuous improvement over time
+- Technical Debt and Maintenance
+  - System reliability: monitoring and fixing technical issues
+  - Documentation: keeping causal assumptions and decisions documented
+  - Legacy management: managing old systems and transitions
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.5-Experimentation.txt`
@@ -631,42 +728,52 @@
 ## 16: Trust, Explainability, Fairness, and Governance
 
 ### Topics
-- Building trust: transparency, stakeholder alignment, and justified confidence
-  in causal decisions
-- Causal vs. statistical explainability: distinguishing mechanisms (do-calculus,
-  SCM) from attribution (SHAP, LIME, permutation importance)
-  - Causal explainability tools and answers: "Why did we intervene?" via causal
-    mechanisms (backdoor/frontdoor adjustment paths), mediation analysis (direct
-    vs. indirect effects), counterfactual reasoning (what if we had intervened
-    differently?), and SCM-based decision explanations
-  - Statistical explainability tools and answers: "What features correlated with
-    this decision?" (SHAP, LIME, permutation importance); risk: features may be
-    confounders or colliders, not causal levers; can mislead stakeholders about
-    what they can actually change
-  - Operational risk: high statistical importance + low causal relevance (e.g.,
-    a confounding variable ranked high by SHAP but not actionable), or vice versa
-- Operationalizing causal explainability in production: decision explanations at
-  serve-time, contrast with feature importance
-- Identifying failure modes in production: when decisions fail and why at runtime
-  (model misspecification becoming evident, distribution shift, causal assumption
-  breakdown, unexpected feedback loops); differs from Ch16 assumption monitoring
-  in scope (early detection vs. post-facto diagnosis) and remediation (emergency
-  rollback vs. controlled re-calibration)
-- Fairness under deployment: preventing disparate impact, fairness monitoring
-  across subgroups, heterogeneous decision effects
-- Override procedures and human-in-the-loop: escalation mechanisms, decision
-  disputes, and when to trust vs. challenge the system
-- Failure mode detection and response: monitoring, alerting, root cause analysis,
-  and remediation
-- Decision governance and audit trails: who approved what, when assumptions
-  broke, what was the impact, and institutional accountability
-- Regulatory and compliance alignment: overview of regulatory landscape (GDPR,
-  EU AI Act, fairness certifications) and engineer accountability; focus on
-  documentation requirements (causal assumptions, deployment decisions, override
-  logs), audit trails for decisions, and when to involve compliance/legal teams
-  rather than deep regulatory expertise
-- Guardrails and safety constraints: preventing harmful behaviors, maintaining
-  causal assumptions, and safeguarding against edge cases
+- Building Trust
+  - Transparency: making decisions and assumptions visible
+  - Stakeholder alignment: shared understanding of decision rationale
+  - Justified confidence: earned trust through evidence and validation
+- Causal vs. Statistical Explainability
+  - Causal explainability: "Why did we intervene?" via mechanisms and counterfactuals
+  - Statistical explainability: "What features correlated?" via SHAP, LIME, importance
+  - Risks of confusion: confounders ranked high by SHAP but not actionable levers
+  - Danger zone: conflating correlation importance with causal relevance
+- Operationalizing Causal Explanations
+  - Serve-time explanations: generating reasons for individual decisions
+  - Mechanism-based: explaining via causal paths, not feature ranks
+  - Stakeholder communication: tailoring explanations to audience
+- Identifying Failure Modes
+  - Runtime detection: when decisions fail in production
+  - Root causes: model misspecification, distribution shift, assumption breakdown
+  - Diagnosis vs. prevention: post-facto diagnosis vs. proactive monitoring
+  - Emergency response: rapid detection and rollback
+- Fairness Under Deployment
+  - Disparate impact: preventing systematic harm to groups
+  - Fairness monitoring: tracking outcomes across subgroups
+  - Heterogeneous effects: recognizing treatment effects vary, planning accordingly
+  - Fairness-robustness tradeoff: balancing group fairness and model accuracy
+- Override Procedures and Human-in-the-Loop
+  - Escalation mechanisms: when and how to flag decisions for human review
+  - Decision disputes: protocols for challenging system recommendations
+  - Trust calibration: knowing when to rely on vs. override the system
+- Failure Detection and Response
+  - Monitoring systems: dashboards and alerts for anomalies
+  - Root cause analysis: diagnosing why failures occurred
+  - Remediation: fixing root causes, not just symptoms
+- Decision Governance and Audit Trails
+  - Documentation: who approved decisions, what assumptions were made
+  - Audit trails: logging decisions and outcomes for accountability
+  - Change history: tracking model versions and deployment decisions
+  - Impact assessment: understanding consequences of decisions
+- Regulatory and Compliance Alignment
+  - Regulatory landscape: GDPR, EU AI Act, fairness standards, compliance frameworks
+  - Documentation requirements: causal assumptions, deployment decisions, override logs
+  - Audit preparation: demonstrating compliance and responsible use
+  - Lawyer coordination: knowing when to involve legal/compliance teams
+- Guardrails and Safety Constraints
+  - Harmful behavior prevention: blocking dangerous decisions
+  - Assumption safeguards: enforcing causal structure constraints
+  - Edge case management: handling distribution tails and anomalies
+  - Graceful degradation: safe fallbacks when systems fail
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson13.1-Explainability.txt`
