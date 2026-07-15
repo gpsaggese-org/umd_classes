@@ -71,14 +71,14 @@ SCRIPT_DIR=$(dirname $SCRIPT_SOURCE)
 echo $SCRIPT_DIR
 echo "SCRIPT_DIR=$SCRIPT_DIR"
 
-if [[ ./figs ]]; then
-    rm -rf figs
-fi;
-EXEC=$GIT_ROOT/helpers_root/dev_scripts_helpers/documentation/render_images.py
-for FILE_NAME in $SCRIPT_DIR/*.tex; do
-  echo "Processing $FILE_NAME"
-  "$EXEC" -i "$FILE_NAME"
-done
+#if [[ ./figs ]]; then
+#    rm -rf figs
+#fi;
+#EXEC=$GIT_ROOT/helpers_root/dev_scripts_helpers/documentation/render_images.py
+#for FILE_NAME in $SCRIPT_DIR/*.tex; do
+#  echo "Processing $FILE_NAME"
+#  "$EXEC" -i "$FILE_NAME"
+#done
 
 #if [[ ./figs ]]; then
 #    cp figs/* $SCRIPT_DIR/figs
@@ -130,27 +130,27 @@ if [[ -f "$LOGFILE" ]]; then
     grep -E "LaTeX Warning:|Package .* Warning:|Class .* Warning:" "$LOGFILE" || true
 fi
 
-# Copy to Google Drive locations if they exist
-GDRIVE_PAPERS="/Users/saggese/Library/CloudStorage/GoogleDrive-gp@causify.ai/Shared drives/Eng - External (GP)/Papers/"
-GDRIVE_INTERNAL="/Users/saggese/Library/CloudStorage/GoogleDrive-gp@causify.ai/Shared drives/Eng - External (GP)/Internal_Papers_Latest"
-
-if [[ -d "$GDRIVE_PAPERS" ]]; then
-    echo "Copying to Google Drive Papers folder..."
-    cmd="cp -f $PDF_FILE_NAME '$GDRIVE_PAPERS'"
-    echo $cmd
-    eval $cmd
-else
-    echo "Warning: Google Drive Papers folder not found, skipping copy"
-fi
-
-if [[ -d "$GDRIVE_INTERNAL" ]]; then
-    echo "Copying to Google Drive Internal Papers folder..."
-    cmd="cp -f $PDF_FILE_NAME '$GDRIVE_INTERNAL'"
-    echo $cmd
-    eval $cmd
-else
-    echo "Warning: Google Drive Internal Papers folder not found, skipping copy"
-fi
+## Copy to Google Drive locations if they exist
+#GDRIVE_PAPERS="/Users/saggese/Library/CloudStorage/GoogleDrive-gp@causify.ai/Shared drives/Eng - External (GP)/Papers/"
+#GDRIVE_INTERNAL="/Users/saggese/Library/CloudStorage/GoogleDrive-gp@causify.ai/Shared drives/Eng - External (GP)/Internal_Papers_Latest"
+#
+#if [[ -d "$GDRIVE_PAPERS" ]]; then
+#    echo "Copying to Google Drive Papers folder..."
+#    cmd="cp -f $PDF_FILE_NAME '$GDRIVE_PAPERS'"
+#    echo $cmd
+#    eval $cmd
+#else
+#    echo "Warning: Google Drive Papers folder not found, skipping copy"
+#fi
+#
+#if [[ -d "$GDRIVE_INTERNAL" ]]; then
+#    echo "Copying to Google Drive Internal Papers folder..."
+#    cmd="cp -f $PDF_FILE_NAME '$GDRIVE_INTERNAL'"
+#    echo $cmd
+#    eval $cmd
+#else
+#    echo "Warning: Google Drive Internal Papers folder not found, skipping copy"
+#fi
 
 # Check if we're on macOS
 if [[ "$OSTYPE" == "darwin"* ]]; then

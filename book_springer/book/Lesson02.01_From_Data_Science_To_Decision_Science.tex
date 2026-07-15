@@ -45,7 +45,7 @@ Data science and decision science are frequently used as if they were the same d
 \begin{table}[!t]
 \caption{Data science and decision science compared across six dimensions.}
 \label{tab:data-science-vs-decision-science}
-\begin{tabular}{p{2.6cm}p{4.8cm}p{5.2cm}}
+\begin{tabular}{p{2.3cm}p{4.3cm}p{4.7cm}}
 \hline\noalign{\smallskip}
 Dimension & Data Science & Decision Science \\
 \noalign{\smallskip}\svhline\noalign{\smallskip}
@@ -73,7 +73,7 @@ The distinction between data science and decision science becomes concrete once 
 \begin{table}[!t]
 \caption{The same business situation, phrased as a predictive question and as a causal question.}
 \label{tab:predictive-vs-causal-questions}
-\begin{tabular}{p{6.2cm}p{6.2cm}}
+\begin{tabular}{p{5.7cm}p{5.7cm}}
 \hline\noalign{\smallskip}
 Predictive Question & Causal Question \\
 \noalign{\smallskip}\svhline\noalign{\smallskip}
@@ -99,7 +99,7 @@ Organizations do not arrive at decision science all at once; they climb toward i
 \begin{table}[!t]
 \caption{The four levels of the analytics maturity ladder, from descriptive reporting to full decision optimization.}
 \label{tab:analytics-maturity-ladder}
-\begin{tabular}{p{2.6cm}p{4.6cm}p{5.4cm}}
+\begin{tabular}{p{2.3cm}p{4.1cm}p{4.9cm}}
 \hline\noalign{\smallskip}
 Level & Question & Tools \\
 \noalign{\smallskip}\svhline\noalign{\smallskip}
@@ -156,7 +156,7 @@ A correlation model answers \emph{``what is?''}, and it can be pushed, with enou
 
 The first is the \textbf{intervention} question: \emph{``if we cut price 10\%, how do units sold and revenue change?''} Answering this requires knowing what would happen under a price that, in the historical data, may never have been charged, or was charged under circumstances that differed from today's in ways the model cannot separate out. The second is the \textbf{counterfactual} question: \emph{``would this customer have churned had we offered a discount?''} This asks about a specific individual, under an action that was not actually taken for them, which is a strictly harder question than the population-level intervention question, since it requires reasoning about what would have happened to this exact customer in a world that did not occur.
 
-The tutoring example makes the difficulty concrete. A dataset shows that students who receive tutoring tend to score higher on exams. Does tutoring cause the improvement, or do already-strong students disproportionately choose to sign up for tutoring in the first place, so that the correlation reflects self-selection rather than the effect of tutoring itself? No amount of additional observational data on tutored and untutored students resolves this question, because the same correlation pattern is consistent with both explanations. Distinguishing them requires either an experiment, such as randomly assigning tutoring, or a causal model that encodes assumptions about how students select into tutoring in the first place. \textbf{Key idea}: answering intervention and counterfactual questions requires a causal model, not a more accurate predictor, since accuracy on observed data says nothing about behavior under an action the data never contained.
+The tutoring example makes the difficulty concrete. A dataset shows that students who receive tutoring tend to score higher on exams. Does tutoring cause the improvement, or do already-strong students disproportionately choose to sign up for tutoring in the first place, so that the correlation reflects self-selection rather than the effect of tutoring itself? No amount of additional observational data on tutored and untutored students resolves this question, because the same correlation pattern is consistent with both explanations. Distinguishing them requires either an experiment, such as randomly assigning tutoring, or a causal model that encodes assumptions about how students select into tutoring in the first place, assumptions that can then be checked, argued about, and revised, unlike the assumptions buried inside a purely correlational fit. \textbf{Key idea}: answering intervention and counterfactual questions requires a causal model, not a more accurate predictor, since accuracy on observed data says nothing about behavior under an action the data never contained.
 
 \subsection{Selection Bias and the Missing Counterfactual}
 \label{subsec:selection-bias-missing-counterfactual}
@@ -273,6 +273,8 @@ Even when a model does report some notion of uncertainty, standard pipelines typ
 
 The distinction matters because the two kinds of uncertainty call for different responses, and without separating them a model cannot flag the situation where it is most likely to be dangerously wrong: exactly off its training distribution, on inputs unlike anything it has seen before, which is also exactly where high-stakes decisions tend to bite hardest. A fraud-detection model that reports low predicted risk for a novel transaction pattern might be reporting a genuinely low aleatoric risk, or it might simply have never seen this pattern before and be reporting a confident-sounding number that reflects epistemic ignorance rather than genuine safety. The two cases look identical in the output but call for opposite responses: one calls for approving the transaction, the other for routing it to a human reviewer or collecting more data before trusting the model's answer.
 
+The two kinds of uncertainty also imply different remedies at the system level, not just at the level of a single prediction. Aleatoric uncertainty is a property of the outcome itself, so no amount of additional modeling effort or additional data collection reduces it; a coin flip stays a coin flip. Epistemic uncertainty is a property of what the model has been shown, so it responds to exactly the interventions a decision-maker can actually take: collecting more examples from the sparse region of the input space, gathering an additional feature that resolves the ambiguity, or deploying a more flexible model class. Conflating the two into a single reported number obscures which of these responses, if any, is worth pursuing for a given prediction.
+
 \textbf{Key idea}: only epistemic uncertainty shrinks as more data is collected, since aleatoric uncertainty is a property of the outcome, not of the model's knowledge; treating both kinds of uncertainty as a single number misleads not just the current decision but also the decision of when it is worth collecting more data at all.
 
 \subsection{No Abstention: Systems That Never Say ``I Don't Know''}
@@ -282,7 +284,9 @@ A standard classifier or regressor is built to always return an answer. Given an
 
 A loan-approval model illustrates the cost of this gap concretely. When the model is handed an applicant profile that looks unlike anything in its training data, perhaps an unusual combination of income source, credit history, and requested loan amount, it does not, and structurally cannot, respond by saying the case is out of distribution and should be reviewed manually. It still returns a confident-looking approval or denial, computed from whatever the model's decision boundary happens to say about that region of the input space, a region the model has effectively no evidence about.
 
-This is a design gap, not a training failure: no amount of additional training on the existing distribution adds an abstention mechanism, because abstention has to be built into the system as an explicit option, typically by comparing a case's estimated uncertainty against a threshold and routing high-uncertainty cases elsewhere. \textbf{Key idea}: a decision system that cannot say \emph{``I don't know''} cannot be trusted with precisely the cases that matter most, since those are disproportionately the cases where the training data gave it the least evidence to go on.
+This is a design gap, not a training failure: no amount of additional training on the existing distribution adds an abstention mechanism, because abstention has to be built into the system as an explicit option, typically by comparing a case's estimated uncertainty against a threshold and routing high-uncertainty cases elsewhere.
+
+Building that option in is not free, since it depends on the model having a trustworthy estimate of its own uncertainty in the first place, exactly the epistemic-versus-aleatoric distinction from the previous section. A model with no notion of epistemic uncertainty has nothing reliable to threshold on, so adding an abstention rule on top of it can end up deferring the wrong cases, the ones that happen to sit near a decision boundary for aleatoric reasons, while confidently answering the out-of-distribution cases it should have deferred instead. Abstention and calibrated uncertainty are therefore not two independent features to add to a pipeline; the second is a prerequisite for the first to work as intended. \textbf{Key idea}: a decision system that cannot say \emph{``I don't know''} cannot be trusted with precisely the cases that matter most, since those are disproportionately the cases where the training data gave it the least evidence to go on.
 
 \subsection{Overfitting and the Statistical Significance Traps}
 \label{subsec:overfitting-significance-traps}
@@ -295,7 +299,9 @@ Without a prior or some other constraint on how closely a model is allowed to fi
   \item \textbf{Burning the test set}: reusing the same held-out data across many rounds of model tuning turns that data into training data in disguise, since each round of tuning is implicitly fit to whatever patterns, real or spurious, that specific held-out sample happens to contain.
 \end{itemize}
 
-Each of these traps is individually well known, yet they compound across the life of a typical project: a team peeks at an experiment's results a few times before deciding to ship, checks several metrics rather than one pre-registered metric, and reuses the same validation set across dozens of tuning iterations, with no single step looking like a mistake in isolation. \textbf{Key idea}: overfitting is not one mistake made in one run; it accumulates from every repeated look taken at the same data, which is why disciplined experimental protocol, not just a better model, is what keeps it in check.
+Each of these traps is individually well known, yet they compound across the life of a typical project: a team peeks at an experiment's results a few times before deciding to ship, checks several metrics rather than one pre-registered metric, and reuses the same validation set across dozens of tuning iterations, with no single step looking like a mistake in isolation.
+
+What makes the three traps dangerous together, rather than merely additive, is that each one on its own can look like ordinary, disciplined data science practice. Checking an experiment's dashboard periodically is standard operating procedure; tracking several metrics rather than a single one is usually recommended, not discouraged; and reusing a validation set across iterations is simply what iterative model development looks like day to day. None of these steps triggers an alarm, and none of them is a mistake in the sense of violating an explicit rule, which is exactly why the inflated false-positive rate they jointly produce tends to surface only much later, as a model that looked strong in development quietly underperforms once it meets data it was not, in effect, evaluated against even once. \textbf{Key idea}: overfitting is not one mistake made in one run; it accumulates from every repeated look taken at the same data, which is why disciplined experimental protocol, not just a better model, is what keeps it in check.
 
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for The Cost of Ignoring the Business Objective %%%%
@@ -326,6 +332,8 @@ Machine learning models chase whatever objective they are given, and that object
 
 A recommender system optimized purely for click-through rate is the standard illustration. Click-through rate is easy to log and easy to optimize directly, and a system trained to maximize it will find the content most likely to earn a click, which is often sensational, outrage-inducing, or otherwise attention-grabbing content. Click-through rate rises exactly as intended, while the deeper goal the metric was supposed to proxy for, sustained long-term engagement, or user trust in the platform, quietly erodes, because the content that wins clicks in the short run is not the content that keeps users satisfied over time. The model has not failed by its own lights; it has succeeded perfectly at the objective it was actually given.
 
+The reason a proxy is chosen in the first place is usually a reasonable one: revenue, retention, and wellbeing are often slow to observe, expensive to measure directly, or only available with a lag long enough to make them impractical as a training signal for a system that needs to update frequently. Clicks, by contrast, are available instantly and in volume. The failure is not in choosing a proxy, which is frequently unavoidable, but in treating the proxy as though it were the goal once it has been chosen, rather than continuing to check it against the goal it was meant to stand in for.
+
 \textbf{Key idea}: the objective a model is trained on becomes the objective the business actually gets, regardless of whether that was the intent behind choosing the proxy in the first place, which makes the choice of training objective one of the highest-leverage decisions in building a model, not a minor implementation detail to settle after the modeling is done.
 
 \subsection{Symmetric Losses for Asymmetric Errors}
@@ -335,7 +343,7 @@ Standard loss functions, log-loss, mean squared error, treat every unit of error
 
 A fraud model that reaches 95\% accuracy sounds like a success by the standard metric, but if that accuracy comes from a model that blocks half of all legitimate transactions in order to catch a small number of fraudulent ones, it is an expensive and damaging decision system in practice, no matter how good its accuracy number looks on a dashboard. The accuracy metric does not know, and cannot know on its own, that a blocked legitimate customer and a missed fraudulent charge are not the same size of mistake to the business.
 
-\textbf{Key idea}: cost asymmetry has to be built directly into the training objective, through a weighted loss, a cost matrix, or an explicit decision threshold chosen to reflect the relative costs, rather than bolted on after deployment as a post-hoc adjustment to a model that was never asked to care about the difference in the first place.
+The deeper issue is that a symmetric loss is a modeling convenience, not a business fact: it is chosen because it is differentiable, well studied, and easy to optimize with standard tools, not because the business genuinely experiences every error as equally costly. Recovering an asymmetric-cost model from a symmetric-loss training run is possible only by adjusting the decision threshold after the fact, which helps but is a strictly weaker fix than training against the true costs directly, since a threshold adjustment cannot correct for a model that learned the wrong decision boundary in the first place because it was never shown that the two error types differ in cost during training. \textbf{Key idea}: cost asymmetry has to be built directly into the training objective, through a weighted loss, a cost matrix, or an explicit decision threshold chosen to reflect the relative costs, rather than bolted on after deployment as a post-hoc adjustment to a model that was never asked to care about the difference in the first place.
 
 \subsection{Multi-Objective Decisions Under Constraints}
 \label{subsec:multi-objective-decisions}
@@ -403,6 +411,8 @@ This break happens in three distinct ways. \textbf{Concept shift} occurs when th
 
 A fraud model trained on last year's fraud rate illustrates the danger of the third kind. As attackers adopt new tactics, the base rate and pattern of fraud shifts, a label shift the model has no built-in way to detect on its own, since the model only knows the fraud patterns it was shown during training and has no signal that the world it is now scoring has moved on from that training period.
 
+The three kinds of shift are worth keeping separate because they call for different monitoring signals: concept shift shows up as a change in the relationship between features and outcomes even when the feature distribution looks stable, covariate shift shows up as a change in the feature distribution even when the model's accuracy on familiar inputs looks unchanged, and label shift shows up as a change in the base rate of the outcome itself. A monitoring system that only tracks overall accuracy can miss all three kinds of shift for a while, since a model can compensate for one kind of drift by accident while a different kind is silently accumulating underneath it.
+
 \textbf{Key idea}: a model that encodes mechanism, the actual causal process generating an outcome, rather than just surface pattern, degrades more gracefully under all three kinds of shift, because mechanisms tend to be far more stable across a distribution shift than the correlational patterns a purely predictive model relies on.
 
 \subsection{Feedback Loops and Bias Amplification}
@@ -414,7 +424,7 @@ A content recommender illustrates the loop directly. A recommender that surfaces
 
 A second illustration comes from policing: over-policing a particular neighborhood produces more recorded arrests there, simply because more police presence generates more arrests for a given underlying crime rate; that arrest data then trains a model that flags the neighborhood as higher risk, and that risk flag is used to justify allocating even more policing to the same neighborhood, closing the loop.
 
-\textbf{Key idea}: a feedback loop turns a small initial bias into a growing one, purely as a consequence of the model being retrained on the outcomes of its own past decisions, which means the bias compounds even if every individual retraining step is executed correctly by the standards of ordinary supervised learning.
+Both examples share a structural feature that makes feedback loops especially hard to catch in ordinary model monitoring: every individual retraining cycle can look like the model is doing exactly what it is supposed to do, fitting the newest available data more closely than the previous version did. The problem is invisible at the level of a single retraining step and only becomes visible by comparing the trajectory of the system across many cycles, which is a comparison most monitoring dashboards, built around a single model's current-period metrics, are not set up to make. \textbf{Key idea}: a feedback loop turns a small initial bias into a growing one, purely as a consequence of the model being retrained on the outcomes of its own past decisions, which means the bias compounds even if every individual retraining step is executed correctly by the standards of ordinary supervised learning.
 
 \subsection{Performativity: When the Prediction Changes the Outcome}
 \label{subsec:performativity}
@@ -442,7 +452,7 @@ A model trained purely on observational data never experiments; it only ever see
 
 A pricing model illustrates the limitation cleanly. If historical prices for a product never dropped below \$20, a model trained on that history, no matter how much of it there is, cannot say with any evidence what would happen to demand at \$15, because the training data simply contains no observations at that price. The model can extrapolate a curve fit to the \$20-and-above region, but that extrapolation is a modeling assumption, not evidence, and the true demand curve below \$20 could easily behave in a way the extrapolation does not anticipate, for instance if a lower price triggers a qualitatively different customer segment or a different perception of the product.
 
-\textbf{Key idea}: some business questions cannot be answered by collecting more historical data of the same kind; they can only be answered by a deliberate intervention, actually trying the untried price, action, or policy, on at least a controlled subset of cases, which is exactly the kind of exploration a purely observational pipeline never performs.
+The overlap violation at the heart of this example is a property of the data, not of the model fit to it, which means no amount of architectural sophistication closes the gap. A more flexible model fit to the same \$20-and-above history produces a more flexible-looking extrapolation below \$20, not a better-evidenced one, since flexibility only changes the shape of the guess, not whether the guess is grounded in any observed outcome. The only way to generate genuine evidence about the untried region is to enter it, which is exactly what a deliberate pricing experiment does and what a purely observational pipeline, by construction, never does on its own. \textbf{Key idea}: some business questions cannot be answered by collecting more historical data of the same kind; they can only be answered by a deliberate intervention, actually trying the untried price, action, or policy, on at least a controlled subset of cases, which is exactly the kind of exploration a purely observational pipeline never performs.
 
 \subsection{Delayed and Long-Horizon Effects}
 \label{subsec:delayed-long-horizon-effects}
@@ -463,6 +473,8 @@ Once a model is deployed and its scores start to matter, the people being scored
 Publishing details about how a credit-scoring model works invites applicants to game the specific features the model relies on rather than to improve the underlying creditworthiness the model is meant to assess. Publishing details of a search-ranking algorithm invites keyword-stuffing and other manipulations aimed at the ranking signal itself, rather than at improving the underlying content quality the ranking was designed to surface.
 
 This is a close relative of Goodhart's law introduced earlier in this lesson, but it is worth separating as its own failure mode because the mechanism is different: Goodhart's law describes what happens when an organization optimizes a proxy directly, while strategic response describes what happens when the people being scored optimize the proxy on their own initiative, in response to a model whose scoring logic they have inferred or been told. The model's training data reflects behavior recorded before the agents had this incentive or this knowledge, so the statistical relationship the model learned between features and outcomes is a relationship that held under a specific, and temporary, set of behavioral conditions.
+
+The more consequential and the more transparent a deployed model is, the faster this adaptation tends to happen, since agents then have both a strong incentive to respond and enough information about the scoring rule to know how to respond effectively.
 
 \textbf{Key idea}: a model trained on how agents behaved before it was deployed can become systematically wrong the moment those same agents learn how the model scores them, because the training data reflects a world in which the agents had not yet adapted, and adaptation is precisely what a deployed, consequential model invites.
 
