@@ -4,18 +4,30 @@
 // slides_engine=typst
 
 // References:
-//- msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
-//- msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
-//- msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt
 //- msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt
 //- msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt
+//- msml610/lectures_source/Lesson09.1-Reasoning_over_time.txt
+//- msml610/lectures_source/Lesson09.3-Multi_Armed_Bandits.txt
+//- msml610/lectures_source/Lesson12.1-Reinforcement_learning.txt
+
+// Each algorithm has:
+// - Problem formulation
+// - Assumptions made
+// - Example of formulating the example from 10.1 using that formalism
+// - Intuition of a (naive) solution
+// - Intuition of more effective solutions
+// - Packages in the Python ecosystem
+// - Solving the example with Python
+// - In-depth treatment
 
 # From Algorithmic Taxonomy to Concrete Methods
 
 * From Taxonomy to Algorithms
 
-- **Goal**: turn the taxonomy of decision problems into working algorithms for
-  the _simple_ end of the decision spectrum
+- **Goal**: Analyze and study algorithms for the _simple_ end of the decision
+  spectrum
+
+- **Assumptions**
   - Single agent, one objective, a model that is either fully known or
     learnable from direct interaction
   - No hierarchy, no policy-gradient search, no other agents to coordinate
@@ -23,18 +35,17 @@
 
 - **Key idea**: five algorithm families cover most single-agent decisions
   once a problem's structure is known
+// TODO(gp): How much to cover here since it overlaps with chapter 5?
   1. _Bayesian inference_: decide when the state of the world is a
      distribution, not a point
   2. _Sequential inference_: track a hidden state that observations only
      partially reveal
+// TODO(gp): Maybe 3 before 2
   3. _Bandits_: decide with no state at all, only which action to try next
   4. _Planning and search_: decide by looking ahead through a known or
      simulated model
   5. _Value-based reinforcement learning_: decide by learning values from
      trial and error
-
-- **Remark**: policy-based, hierarchical, offline, and multi-agent methods
-  are deferred until these building blocks are in place
 
 # Bayesian Inference for Decisions
 
@@ -43,6 +54,7 @@
 
 - **Definition**: Bayesian updating revises a belief over an unknown $\theta$
   by combining a _prior_ with the _likelihood_ of observed data $X$
+  /*
   $$
   \blue{\Pr(\theta | X)}
     = \frac{\teal{\Pr(X | \theta)} \cdot \green{\Pr(\theta)}}{\violet{\Pr(X)}}
@@ -52,6 +64,7 @@
   - $\green{\Pr(\theta)}$: prior, belief before seeing $X$
   - $\violet{\Pr(X)}$: evidence, the normalizing constant averaging over all
     $\theta$
+  */
 
 - **Intuition**: the posterior is a compromise between what was believed
   before and what the data says now
@@ -64,9 +77,8 @@
     heads in $N$ tosses
   - Posterior: updated belief about $\theta$ after observing the tosses
 
-- **Key idea**: this prior $\to$ likelihood $\to$ posterior pattern recurs
-  everywhere a decision must be made under parameter uncertainty, not just
-  outcome uncertainty
+- **Key idea**: this pattern "prior $\to$ likelihood $\to$ posterior" recurs
+  everywhere a decision must be made under parameter and outcome uncertainty
 
 * Conjugate Priors: Beta-Binomial Example
 // From Lesson07.1 (conjugate priors, coin-bias example)
@@ -101,8 +113,9 @@
   (all tosses at once) reach the same posterior
   - The order evidence arrives in does not change the final belief
 
-- **Key idea**: conjugacy is a convenience, not a requirement; most real
-  models need approximate inference instead
+- **Key idea**:
+  - Conjugacy is a convenience, not a requirement
+  - Most real models need approximate / numerical inference instead
 
 * Approximate Inference: MCMC and Variational Methods
 

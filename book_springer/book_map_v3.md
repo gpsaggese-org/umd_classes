@@ -11,32 +11,48 @@
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
+## Approach of the book
+- Focus on:
+  - The minimal mathematics to understand the problem and the solutions
+  - Intuition
+  - Toy examples
+  - How to make the theory operational
+    - Referring to packages in the Python ecosystem
+  - Jupyter notebooks to back up the intuition with toy and more complex examples
+
+- Provide resources to go one level deep
+  - My classes
+  - References to books and papers
+
 ## Short TOC
 - The sequence of the parts in the books are:
   - Motivation
-    - 01. Why Decisions, Not Predictions
-    - 02. The Cost of Ignoring Causality
-    - 03. The Cost of Ignoring Uncertainty
+    - 01, Introduction
+    - 02, Why Decisions, Not Predictions
+    - 03, the Cost of Ignoring Causality, Uncertainty and Dynamics
   - Advanced Modeling Theory & Tools
-    - 04. Knowledge Representation
-    - 05. Probalistic ML
-    - 06. Causal ML
+    - 04, Knowledge Representation
+    - 05, Probabilistic ML
+    - 06, Causal ML
   - Data
-    - 07. Building Causal Knowledge
-    - 08. Causal data pipelines
+    - 07, Building Causal Knowledge
+    - 08, Causal data pipelines
   - Decision-Making Theory & Tools
-    - 09. Decision Theory Foundations
-    - 10. Taxonomy of Decision-Making Problems and Algorithms
-    - 11. Simple Decisions
-    - 12. Complex Decisions
-    - 13. Agentic Causal Reasoning
+    - 09, Decision Theory Foundations
+    - 10, Taxonomy of Decision-Making Problems and Algorithms
+    - 11, Simple Decisions
+    - 12, Complex Decisions
+    - 13, Agentic Causal Reasoning
   - Implementation, Deployment, & Governance
-    - 14. Building Stakeholder Alignment
-    - 15. Deployment, Monitoring, and Adaptation
-    - 16. Trust, Explainability, Fairness, and Governance
+    - 14, Building Stakeholder Alignment
+    - 15, Deployment, Monitoring, and Adaptation
+    - 16, Trust, Explainability, Fairness, and Governance
 
 ## All Lesson Materials
 // From ./generate_all_tocs.sh
+
+- `data605/all_tocs.md`
+- `data605/lectures_source/*.txt`
 
 - `msml610/all_tocs.md`
 - `msml610/lectures_source/*.txt`
@@ -47,24 +63,21 @@
 - `book_springer/all_tocs.md`
 - `book_springer/lectures_source/*.txt`
 
-- `data605/all_tocs.md`
-- `data605/lectures_source/*.txt`
-
-## Chapter Template
+## Chapter Template and Invariants
 - <Invariant>: each `### Topics` for each chapter should be in nested bullet
   points
   - Level 1 bullets: the title of the subchapter
   - Level 2 bullets: a short list of topics
 - The `### Topics` should be less than 20-25 lines and 175-200 words
 - The output must follow the template below
-```
-### Topics
-- Topic 1
-  - Subtopic 1.1
-  - Subtopic 1.2
-- Topic 2
-  ...
-```
+  ```
+  ### Topics
+  - Topic 1
+    - Subtopic 1.1
+    - Subtopic 1.2
+  - Topic 2
+    ...
+  ```
 
 - <Invariant>: for each chapter
   - Read the table of content for the slides in `### Topics` and the content in
@@ -73,56 +86,44 @@
     materials listed above in `## All Lesson Materials`
   - Reference the actual lecture files to verify coverage percentages
   - The output must follow the template below
-```
-### Lesson Materials
-- `pointer to a lecture`
-  - [<Amount of the lecture material covering this chapter>]: <topics>
-- `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-  - [100%]: Integration of causality and uncertainty into ML systems, moving beyond correlation
-- Not covered
-  - [<Amount of topics not covered by any lesson>]: <topics>
-```
+  ```
+  ### Lesson Materials
+  - `pointer to a lecture`
+    - [<Amount of the lecture material covering this chapter>]: <topics>
+  - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+    - [100%]: Integration of causality and uncertainty into ML systems, moving beyond correlation
+  - Not covered
+    - [<Amount of topics not covered by any lesson>]: <topics>
+  ```
 
 # Detailed TOC
 
-# Part I: Why Businesses Need Decisions, Not Predictions (Motivation)
+# Part I: Why Businesses Need Decisions, Not Predictions
 
-## 00: Introduction
+## 01: Introduction
 
 ### Topics
+- Explain the philosophy of the book
 - The Decision Pipeline Framework
   - From raw data to prediction to causal effect estimation to
     utility-maximizing policy
   - Feedback loops and learning from outcomes
   - Why each stage matters and what breaks when stages are skipped
-- Why Traditional ML Falls Short for Decision-Making
-  - Predictive accuracy ≠ decision quality: optimizing the wrong metric
-  - Four critical gaps: causality, uncertainty, business objectives, dynamics
-  - Real-world costs of ignoring each gap
-- Causal Reasoning as the Bridge
-  - Moving beyond correlation to counterfactual reasoning
-  - What "causal" means in practice and why it matters
-  - Why domain experts and formal models are both necessary
-- Uncertainty as Signal, Not Noise
-  - Decision-relevant variance: what point estimates hide
-  - Confidence vs. credibility: when estimates are trustworthy
-  - Overconfidence: systems that never say "I don't know"
 - How This Book Is Organized
   - Five-part structure: motivation, theory, data, algorithms,
     deployment/governance
   - Intended audience and prerequisites
   - How chapters build on each other and fit into the decision pipeline
 
+### Slides
+
 ### Lesson Materials
-- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [100%]: Motivation for causal AI, business context, workflow overview, role
-    of decision systems
 - `msml610/lectures_source/Lesson00-Class.txt`
   - [90%]: Course structure, books and resources, grading, class map and
     organization
-- `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
-  - [90%]: Decision pipeline (data to model to policy to action to feedback),
-    why AI projects fail, four-costs overview, five-part book roadmap
+- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+  - [100%]: Motivation for causal AI, business context, workflow overview, role
+    of decision systems
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
   - [45%]: Utility functions, expected utility, causal interventions and
     expected outcomes, decision networks: grounds the utility-maximizing policy
@@ -131,13 +132,9 @@
   - [25%]: Detailed chapter-by-chapter preview, prerequisites/audience framing,
     book-specific narrative
 
-## 01: Why Decisions, Not Predictions
+## 02: Why Decisions, Not Predictions
 
 ### Topics
-- Course Roadmap
-  - The decision pipeline: data → model → policy → action → feedback loops
-  - Five-part book structure (motivation, theory, data, algorithms, deployment)
-  - Running example: one decision revisited across the book
 - Why Traditional ML Falls Short
   - Four critical gaps: causality, uncertainty, business objectives, dynamics
   - Real-world costs of ignoring each gap
@@ -155,16 +152,12 @@
   - Level 2 (Causal): "What will happen if we intervene?"
   - Level 3 (Decision): "What should we do?"
 
-### Lesson Materials
+### Slides
 - `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
   - [100%]: Decision pipeline framework, data science vs decision science
     paradigm shift, prediction vs action framing
-- `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-  - [100%]: Integration of causality and uncertainty into ML systems, moving
-    beyond correlation
-- `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
-  - [100%]: Business objective encoding, real-world dynamics, feedback loops,
-    performativity
+
+### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [85%]: Ladder of Causation; Data Science → Decision Science; Causal vs
     Predictive Questions; Analytics Sophistication; Why AI Projects Fail
@@ -174,7 +167,7 @@
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
   - [5%]: Example of ladder of causation (Tornado Warning)
 
-## 02: the Cost of Ignoring Causality, Uncertainty and Dynamics
+## 03: the Cost of Ignoring Causality, Uncertainty and Dynamics
 
 ### Topics
 - When Correlation Misleads
@@ -198,14 +191,15 @@
   - Feedback loops and performativity reshape training distributions
   - Myopic optimization ignores long-horizon consequences
 
+### Slides
+- `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+  - [100%]: Integration of causality and uncertainty into ML systems, moving
+    beyond correlation
+- `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
+  - [100%]: Business objective encoding, real-world dynamics, feedback loops,
+    performativity
+
 ### Lesson Materials
-- `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
-  - [100%]: Direct source text for all four topics —
-    correlation/confounding/counterfactual/selection-bias failures,
-    interference/Simpson's/collider/mechanistic-blindness structural failures,
-    point-estimate/epistemic-aleatoric/no-abstention/significance-trap
-    uncertainty costs, and
-    static-world/feedback-loop/performativity/long-horizon dynamics costs
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - [100%]: Correlation is not causation, problems with traditional AI, cost of
     ignoring causality, causal vs predictive questions
@@ -228,10 +222,6 @@
 - Not covered
   - [20%]: Advanced sensitivity analysis, bounding methods for unmeasured
     confounding
-- `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-  - [65%]: Posteriors vs point estimates, epistemic vs aleatoric uncertainty,
-    calibration and conformal prediction, decision-readiness under a wide
-    posterior
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
   - [95%]: Bayesian approach to uncertainty, confidence vs credible intervals,
     posterior predictive distributions, uncertainty quantification
@@ -301,6 +291,8 @@
   - Connecting knowledge representation to the causal ML techniques in later
     chapters
 
+### Slides
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
   - [90%]: Formal knowledge representation: propositional/first-order logic,
@@ -357,27 +349,27 @@
   - Model ensembles: combining multiple models for robustness
 
 ### Lesson Materials
+- `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
+  - [95%]: Graphical models for uncertainty, probabilistic reasoning,
+    conditional independence, Bayesian network structure
+- `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
+  - [90%]: Constructing Bayesian networks, exact/approximate inference (Monte
+    Carlo, rejection/importance sampling, MCMC), belief propagation
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
   - [100%]: Bayesian inference fundamentals, EDA vs. inference, modern
     probabilistic tools (PyMC, Pyro), MCMC introduction
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
   - [95%]: Posterior-based choices, Bayesian decision-making, utility under
     uncertainty, loss functions
-- `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
-  - [95%]: Graphical models for uncertainty, probabilistic reasoning,
-    conditional independence, Bayesian network structure
-- `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
-  - [95%]: Bayesian model selection, posterior predictive checks, model
-    comparison criteria (AIC, BIC, WAIC)
-- `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
-  - [90%]: Probabilistic GLMs, generative models, hierarchical probabilistic
-    structures, Bayesian regression
-- `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
-  - [90%]: Constructing Bayesian networks, exact/approximate inference (Monte
-    Carlo, rejection/importance sampling, MCMC), belief propagation
 - `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
   - [85%]: Hierarchical Bayesian models, structured latent variables,
     multi-level probabilistic modeling
+- `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
+  - [90%]: Probabilistic GLMs, generative models, hierarchical probabilistic
+    structures, Bayesian regression
+- `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
+  - [95%]: Bayesian model selection, posterior predictive checks, model
+    comparison criteria (AIC, BIC, WAIC)
 - `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
   - [55%]: Bayesian deep learning (Bayesian neural nets, MC dropout, deep
     ensembles), stochastic/structured variational inference at scale,

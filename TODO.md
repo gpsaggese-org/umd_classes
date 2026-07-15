@@ -91,6 +91,7 @@ tmp.failure.check_if_the_linter_was_run.helperstask1273_get_mac_tests_to_pass.tx
 
 pytest_failed.py -i tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt
 
+```
 20:17:32 - INFO  pytest_failed.py _process_single_file:227              Created 'passed_tests.txt'
 20:17:32 - INFO  pytest_failed.py _process_single_file:233              Created 'failed_tests.txt'
 20:17:32 - INFO  pytest_failed.py _process_single_file:239              Created 'skipped_tests.txt'
@@ -106,6 +107,7 @@ Test Outcome Summary
 Build                                                            | Status | Passed | Skipped | Failed | Total | Duration |
 ---------------------------------------------------------------- | ------ | ------ | ------- | ------ | ----- | -------- |
 tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt | FAIL   | 3106   | 172     | 3      | 3281  | 263.28s  |
+```
 
 ## Improve unit test
 
@@ -192,17 +194,23 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - Pointer to Video Tutorial (on YouTube)
 
 ### Add counter and Google Analytics
-- Count download, visits, etc
+- [.] Count download, visits, etc
+
+### Publish on Substack
+- [ ] Start with copy-paste
 
 ### Start Promoting
+- Same as causify substack
+- LinkedIn
+- Email to my students
 
 ## Books
 
 ### [ ] From Data To Decisions
+/Users/saggese/src/umd_classes2/book_springer/book_map_vXYZ.md
+/Users/saggese/src/umd_classes2/book_springer/book_toc.md
 /Users/saggese/src/notes1/book_springer/springer.proposal_v2.toc.md
 /Users/saggese/src/notes1/book_springer/springer.saggese.full_proposal_v2.md
-/Users/saggese/src/umd_classes2/book_springer/book_map_v2.md
-/Users/saggese/src/umd_classes2/book_springer/book_toc.md
 
 - `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
 
@@ -211,13 +219,21 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] Compare the TOC book_springer/decision_making_categories_with_examples.md
   to AIMA
   https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
-- [ ] Review book_springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
-- [ ] Review book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt
 
   - http://localhost:8888/lab/tree/git_root/book_springer/tutorials/Lesson10_01_q_learning
 
 - [ ] class_CS_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt
   - http://localhost:8888/lab/tree/git_root/class_cs_refreshers/tutorials/notebooks/L95_05_game_theory.ipynb
+
+- [ ] Review `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
+- [ ] Review `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+- [ ] Review `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
+- [ ] Review `book_springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt`
+- [ ] Review `book_springer/lectures_source/Lesson11.01_Simple_Decisions.txt`
+- [ ] Review `book_springer/lectures_source/Lesson12.01_Complex_Decisions.txt`
+- [ ] Review `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
+
+- [ ] Generate some chapters to see how they look like
 
 ### [.] Create and review slides for Agentic AI
 
@@ -509,8 +525,6 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 - Make the definitions bold and black for visibility
   - -*Definition*- for bold and color
   - **Definition** for black and color
-
-
 
 ### [ ] Improve _LOG output
 
