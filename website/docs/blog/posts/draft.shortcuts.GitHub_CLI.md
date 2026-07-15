@@ -1,61 +1,156 @@
-# GitHub CLI - Complete Command Reference
+# GitHub CLI Shortcuts
 
-A comprehensive guide to the most useful GitHub CLI commands for managing repositories, issues, pull requests, and workflows.
+A guide to the most useful GitHub CLI commands for managing repositories, issues,
+pull requests, and workflows.
 
 ## Authentication & Setup
 
-```bash
-gh auth status             # Check authentication status
-```
+- Check authentication status
+  ```
+  > gh auth status
+  Logged in to github.com with oauth_token stored in /Users/saggese/.config/gh/hosts.yml
+  ```
 
 ## Repository Management
-
-```bash
-gh repo view                         # View repository details
-gh repo list                         # List your repositories
-```
 
 - View repository details
   ```
   > gh repo view
   gpsaggese/gpsaggese.github.io
   No description provided
+  GP's University of Maryland Machine Learning Classes
+  ...
+  ```
 
-     GP's University of Maryland Machine Learning Classes
-
-    ## Courses
-    ...
+- List your repositories
+  ```
+  > gh repo list
+  gpsaggese/umd_classes2              public
+  gpsaggese/gpsaggese.github.io       public
+  gpsaggese/ml-tutorials              private
   ```
 
 ## Issues
 
-```bash
-gh issue list                        # List issues
-gh issue create                      # Create a new issue
-gh issue view <number>               # View a specific issue
-gh issue close <number>              # Close an issue
-gh issue comment <number>            # Add a comment to an issue
-gh issue edit <number>               # Edit an issue
-```
+- List issues
+  ```
+  > gh issue list
+  #42    Update documentation         open      about 2 days ago
+  #41    Fix authentication bug       open      about 5 days ago
+  #40    Add caching support          closed    about 1 week ago
+  ```
+
+- View a specific issue
+  ```
+  > gh issue view 42
+  Update documentation
+  #42 · OPEN
+  opened by gpsaggese about 2 days ago
+  This PR needs documentation updates.
+  ```
+
+- Create a new issue
+  ```
+  > gh issue create --title "Bug: offline mode" --body "App crashes when offline"
+  Creating issue in gpsaggese/umd_classes2
+  #43 (https://github.com/gpsaggese/umd_classes2/issues/43)
+  ```
+
+- Add a comment to an issue
+  ```
+  > gh issue comment 42 --body "I'm working on this"
+  Commenting on issue #42 in gpsaggese/umd_classes2
+  https://github.com/gpsaggese/umd_classes2/issues/42#issuecomment-1234567
+  ```
+
+- Close an issue
+  ```
+  > gh issue close 42
+  Closed issue #42 in gpsaggese/umd_classes2
+  ```
 
 ## Pull Requests
 
-```bash
-gh pr list                           # List pull requests
-gh pr create                         # Create a new PR
-gh pr view <number>                  # View a PR
-gh pr merge <number>                 # Merge a PR
-gh pr status                         # Check PR status
-```
+- List pull requests
+  ```
+  > gh pr list
+  #38    Add feature flags               open      about 1 day ago
+  #37    Refactor data pipeline          open      about 3 days ago
+  #36    Update dependencies             merged    about 1 week ago
+  ```
+
+- View a PR
+  ```
+  > gh pr view 38
+  Add feature flags
+  #38 · OPEN
+  opened by gpsaggese about 1 day ago
+  Adds configurable feature toggles for A/B testing.
+  ```
+
+- Create a new PR
+  ```
+  > gh pr create --title "Add caching layer" --body "Improves query latency"
+  Creating pull request for feature/caching into main
+  #39 (https://github.com/gpsaggese/umd_classes2/pull/39)
+  ```
+
+- Check PR status
+  ```
+  > gh pr status
+  Relevant pull requests in gpsaggese/umd_classes2
+  Current branch
+    #38  Add feature flags [OPEN]
+         - Review by alice (approved)
+         - Review by bob (changes-requested)
+  ```
+
+- Merge a PR
+  ```
+  > gh pr merge 36
+  Merging PR #36 (Update dependencies)
+  Merged via squash commit
+  ```
 
 ## Workflows & Actions
 
-```bash
-gh workflow list                     # List GitHub Actions workflows
-gh run list                          # List workflow runs
-gh run view <run-id>                 # View a specific run
-gh run watch <run-id>                # Watch a run in progress
-```
+- List GitHub Actions workflows
+  ```
+  > gh workflow list
+  ID     Name               State  
+  12345  Tests              active
+  12346  Deploy             active
+  12347  Lint Code          active
+  ```
+
+- List workflow runs
+  ```
+  > gh run list
+  STATUS  TITLE                BRANCH  EVENT  ID        ELAPSED
+  ✓       Tests                main    push   1234567   2m34s
+  ✓       Tests                main    push   1234566   2m18s
+  ✗       Tests                main    push   1234565   1m52s
+  ```
+
+- View a specific run
+  ```
+  > gh run view 1234567
+  ID: 1234567
+  Name: Tests
+  Status: COMPLETED
+  Conclusion: SUCCESS
+  Branch: main
+  Event: push
+  ```
+
+- Watch a run in progress
+  ```
+  > gh run watch 1234567
+  Watching run 1234567...
+  ✓ Test (3m2s)
+  ✓ Build (2m45s)
+  ✓ Deploy (1m30s)
+  ```
 
 ## Useful Flags & Options
 
@@ -73,60 +168,74 @@ gh run watch <run-id>                # Watch a run in progress
 
 ### Useful One-Liners
 
-  ```bash
-  # List all open PRs with JSON output
-  gh pr list --state open --json number,title,author
+- List all open PRs with JSON output
+  ```
+  > gh pr list --state open --json number,title,author
+  [
+    {"number":38,"title":"Add feature flags","author":{"login":"gpsaggese"}},
+    {"number":37,"title":"Refactor data pipeline","author":{"login":"gpsaggese"}}
+  ]
+  ```
 
-  # Create an issue with a label
-  gh issue create --title "Bug Report" --label "bug"
+- Create an issue with a label
+  ```
+  > gh issue create --title "Bug Report" --label "bug"
+  Creating issue in gpsaggese/umd_classes2
+  #44 (https://github.com/gpsaggese/umd_classes2/issues/44)
+  ```
 
-  # List PRs and filter by assignee
-  gh pr list --assignee @me
+- List PRs assigned to you
+  ```
+  > gh pr list --assignee @me
+  #38    Add feature flags               open      about 1 day ago
+  #37    Refactor data pipeline          open      about 3 days ago
   ```
 
 ### Working with Multiple Repositories
 
-  ```bash
-  # Use -R flag to specify a different repo
-  gh issue list -R owner/another-repo
+- List issues from a different repo
+  ```
+  > gh issue list -R owner/another-repo
+  #5     Fix typo in README          open      about 2 hours ago
+  #4     Update API docs             closed    about 1 week ago
+  ```
 
-  # List issues from multiple repos
-  gh issue list -R owner/repo1
-  gh issue list -R owner/repo2
+- Check PRs across repos
+  ```
+  > gh pr list -R owner/repo1 && gh pr list -R owner/repo2
+  repo1:
+  #12    Feature X                   open
+  repo2:
+  #8     Bugfix Y                    open
   ```
 
 ## Common Workflows
 
 - Creating a Pull Request
-  ```bash
-  # 1. Create and checkout a new branch
-  git checkout -b feature/my-feature
-
-  # 2. Make your changes
-  # ...
-
-  # 3. Commit and push
-  git add .
-  git commit -m "Add my feature"
-  git push origin feature/my-feature
-
-  # 4. Create PR using GitHub CLI
-  gh pr create --title "Add my feature" --body "Description of changes"
+  ```
+  > git checkout -b feature/my-feature
+  Switched to a new branch 'feature/my-feature'
+  
+  > git add . && git commit -m "Add my feature" && git push origin feature/my-feature
+  [feature/my-feature abc1234] Add my feature
+  
+  > gh pr create --title "Add my feature" --body "Description of changes"
+  Creating pull request for feature/my-feature into main
+  #39 (https://github.com/gpsaggese/umd_classes2/pull/39)
   ```
 
 - Managing Issues
-  ```bash
-  # Create an issue
-  gh issue create --title "Bug title" --body "Bug description" --label "bug,urgent"
-
-  # Add a comment
-  gh issue comment 10 --body "I'm working on this"
-
-  # Close the issue
-  gh issue close 10
-
-  # Reopen the issue
-  gh issue reopen 10
+  ```
+  > gh issue create --title "Bug: crashes on logout" --body "App crashes when user logs out" --label "bug,urgent"
+  Creating issue in gpsaggese/umd_classes2
+  #45 (https://github.com/gpsaggese/umd_classes2/issues/45)
+  
+  > gh issue comment 45 --body "I'm working on this"
+  Commenting on issue #45 in gpsaggese/umd_classes2
+  https://github.com/gpsaggese/umd_classes2/issues/45#issuecomment-1234567
+  
+  > gh issue close 45
+  Closed issue #45 in gpsaggese/umd_classes2
   ```
 
 ## Additional Resources

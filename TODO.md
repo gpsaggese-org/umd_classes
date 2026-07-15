@@ -28,6 +28,9 @@
   - Review edit github_pr_plan.md
   - /github.create_child_pr PR2
 
+dev_scripts_helpers/git/git_create_nested_worktree.sh
+dev_scripts_helpers/git/git_remove_nested_worktree.sh
+
 ##
 - Have a thread that looks for TODOs in the code (gp, ai_gp)
   - Ranks them by simplicity
