@@ -43,8 +43,8 @@
 - `book.Agentic_AI/all_tocs.md`
 - `book.Agentic_AI/lectures_source/*.txt`
 
-- `book.springer/all_tocs.md`
-- `book.springer/lectures_source/*.txt`
+- `book_springer/all_tocs.md`
+- `book_springer/lectures_source/*.txt`
 
 - `data605/all_tocs.md`
 - `data605/lectures_source/*.txt`
@@ -65,7 +65,7 @@
   - Motivation for causal AI, business context, workflow overview, role of decision systems
 - [90%]: `msml610/lectures_source/Lesson00-Class.txt`
   - Course structure, books and resources, grading, class map and organization
-- [80%]: `book.springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
+- [80%]: `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
   - Decision science framework, decision pipeline overview, transition from data science
 - [50%]: Not covered - Detailed chapter-by-chapter preview, book-specific narrative
 
@@ -83,11 +83,11 @@
   (level 1), causal (level 2), to decision (level 3)
 
 ### Lesson Materials
-- [100%]: `book.springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
+- [100%]: `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
   - Decision pipeline framework, data science vs decision science paradigm shift, prediction vs action framing
-- [100%]: `book.springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+- [100%]: `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
   - Integration of causality and uncertainty into ML systems, moving beyond correlation
-- [100%]: `book.springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
+- [100%]: `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
   - Business objective encoding, real-world dynamics, feedback loops, performativity
 - [85%]: `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
   - Ladder of Causation; Data Science → Decision Science; Causal vs Predictive Questions; Analytics Sophistication; Why AI Projects Fail

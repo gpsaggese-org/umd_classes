@@ -1,3 +1,5 @@
+// gen_slides.py class.CS_refreshers/95 --daemon --slides_engine=typst
+
 # Game Theory Refresher
 
 ## Introduction

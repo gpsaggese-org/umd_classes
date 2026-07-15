@@ -5,7 +5,7 @@
 - There are too many failures across multiple builds
   - Do not add more code but focus on getting to a stable build
   - Disable the failing tests
-  - [.] Merge `gp_scratch_29`
+  - [x] Merge `gp_scratch_29`
   - [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
 > export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
@@ -51,7 +51,7 @@ Fix the output
 
 ## pytest_failed
 
-### [.] Improve pytest_failed.py as pytest_failed_multi_build.py
+### [.] Improve pytest_failed.py and pytest_failed_multi_build.py
 
 Short tests
 
@@ -129,10 +129,10 @@ helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Pass
 Sorry, try again.
 Password:
 
-### [.] HelpersTask1273_Get_Mac_tests_to_pass
+### [x] HelpersTask1273_Get_Mac_tests_to_pass
 - In `csfy1`
-- [.] Get all the tests in master to pass
-- [.] run.sh running
+- [x] Get all the tests in master to pass
+- [x] run.sh running
 
 ### [.] Make `dev_scripts_helpers/documentation/test/test_notes_to_pdf.py` pass
 - In `umd_classes2` // gp_scratch
@@ -199,20 +199,25 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 ## Books
 
 ### [ ] From Data To Decisions
-/Users/saggese/src/notes1/book.springer/springer.proposal_v2.toc.md
-/Users/saggese/src/notes1/book.springer/springer.saggese.full_proposal_v2.md
-/Users/saggese/src/umd_classes2/book.springer/book_map.md
-/Users/saggese/src/umd_classes2/book.springer/book_toc.md
+/Users/saggese/src/notes1/book_springer/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book_springer/springer.saggese.full_proposal_v2.md
+/Users/saggese/src/umd_classes2/book_springer/book_map_v2.md
+/Users/saggese/src/umd_classes2/book_springer/book_toc.md
 
 - `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
 
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
-- [ ] Compare the TOC book.springer/decision_making_categories_with_examples.md
+- [ ] Compare the TOC book_springer/decision_making_categories_with_examples.md
   to AIMA
   https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
-- [ ] Review book.springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
-- [ ] Review book.springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt
+- [ ] Review book_springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt
+- [ ] Review book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt
+
+  - http://localhost:8888/lab/tree/git_root/book_springer/tutorials/Lesson10_01_q_learning
+
+- [ ] class_CS_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt
+  - http://localhost:8888/lab/tree/git_root/class_cs_refreshers/tutorials/notebooks/L95_05_game_theory.ipynb
 
 ### [.] Create and review slides for Agentic AI
 

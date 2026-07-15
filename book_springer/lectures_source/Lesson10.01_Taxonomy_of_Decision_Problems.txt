@@ -3,6 +3,8 @@
 // lesson_title=Lesson 10.01: Taxonomy of Decision-Making Problems and Algorithms
 // slides_engine=typst
 
+// gen_slides.py book_springer/10.01 --daemon --slides_engine=typst
+
 # Decision-Making Problem Categories
 
 * Decision-Making Problem Categories: Overview

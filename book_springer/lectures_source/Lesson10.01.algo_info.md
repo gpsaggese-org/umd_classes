@@ -33,7 +33,7 @@
   ```
 - Keep the references in reverse chronological order
 
-## Core Value-Based RL Algorithms
+## 4. Core Value-Based RL Algorithms
 
 ### Q-Learning
 - **Short description**: Foundation of value-based RL; off-policy TD learning for optimal action values
@@ -82,7 +82,7 @@
   - `rllib` (Ray RLlib)
   - `keras-rl2`
 
-## Policy-Based Algorithms
+## 5. Policy-Based Algorithms
 
 ### REINFORCE (Policy Gradient)
 - **Short description**: On-policy policy gradient method; high variance baseline for gradient-based RL
@@ -133,7 +133,7 @@
   - `deap` (Distributed Evolutionary Algorithms in Python)
   - Custom PyTorch implementations
 
-## Actor-Critic Methods
+## 6. Actor-Critic Methods
 
 ### Actor-Critic (General Framework)
 - **Short description**: Combines policy-based (actor) and value-based (critic) methods for reduced variance and on-policy learning
@@ -197,7 +197,7 @@
   - `rllib`
   - `spinningup`
 
-## Planning and Search Algorithms
+## 3. Planning and Search Algorithms
 
 ### MCTS (Monte Carlo Tree Search)
 - **Short description**: Best-first planning algorithm using random tree exploration; foundation for AlphaGo and game AI
@@ -267,7 +267,7 @@
   - `ompl` (Open Motion Planning Library)
   - `moveit` (ROS motion planning)
 
-## Deep RL and Foundational Models
+## 8. Deep RL and Foundational Models
 
 ### AlphaGo
 - **Short description**: Combines deep neural networks with MCTS for superhuman Go performance; landmark in AI
@@ -303,7 +303,7 @@
   - `stable-baselines3` (DDPG + HER, SAC + HER)
   - `tensorflow-agents`
 
-## Partially Observable / Hidden State Algorithms
+## 1. Partially Observable / Hidden State Algorithms
 
 ### Hidden Markov Models (HMM)
 - **Short description**: Probabilistic model for sequences with hidden state dynamics; classical approach for time series inference
@@ -355,7 +355,7 @@
   - Custom implementations
   - `mcts` (General MCTS adaptable to POMDPs)
 
-## Game Theory & Multi-Agent Algorithms
+## 11. Game Theory & Multi-Agent Algorithms
 
 ### CFR (Counterfactual Regret Minimization)
 - **Short description**: Iterative algorithm for computing Nash equilibria in imperfect information games; breakthrough for poker
@@ -427,7 +427,7 @@
   - `pytorch-geometric` (Graph neural networks)
   - Custom implementations
 
-## Offline / Batch Learning
+## 10. Offline / Batch Learning
 
 ### Batch Q-Learning / Offline RL
 - **Short description**: Learning from fixed datasets without online interaction; critical for safety-sensitive applications
@@ -455,7 +455,7 @@
   - `d3rlpy` (Offline RL library)
   - `pyrl` (Policy learning library)
 
-## Integrated Learning & Planning
+## 7. Integrated Learning & Planning
 
 ### Dyna-Q (Integration of Learning and Planning)
 - **Short description**: Combines model-free learning with model-based planning using learned environment model
@@ -466,7 +466,7 @@
   - Custom implementations
   - Part of general RL frameworks
 
-## Hierarchical & Modular Approaches
+## 9. Hierarchical & Modular Approaches
 
 ### Hierarchical Reinforcement Learning
 - **Short description**: Multi-level abstraction enabling learning at different temporal scales; improves sample efficiency on complex tasks
@@ -482,7 +482,7 @@
   - Sutton et al., "Between MDPs and semi-MDPs: Learning, Planning, and Representing Knowledge at Multiple Temporal Scales" (1999) - doi.org/10.1016/S0004-3702(99)00052-1
 - **Key Authors:** Richard S. Sutton, Doina Precup, Satinder Singh
 
-## Bandit Algorithms
+## 2. Bandit Algorithms
 
 ### ε-Greedy
 - **Short description**: Simple exploration strategy balancing greedy action selection with random exploration
@@ -522,26 +522,3 @@
   - `contextual` (Full library)
   - `bandit` (Python Bandit)
   - `ml-logger` (Experiment tracking for bandits)
-
-## Integrated Python Libraries & Frameworks
-
-### All-In-One RL Frameworks
-- **Short description**: Complete RL libraries implementing multiple algorithms and environments
-- **Python Packages:**
-  - `stable-baselines3` (PyTorch-based, most popular) - https://github.com/DLR-RM/stable-baselines3
-  - `ray-rllib` (Distributed, scalable) - https://docs.ray.io/en/latest/rllib/
-  - `tensorflow-agents` (TensorFlow-based) - https://github.com/tensorflow/agents
-  - `openai-baselines` (Reference implementations) - https://github.com/openai/baselines
-  - `pymarl` (Multi-agent RL) - https://github.com/oxwhirl/pymarl
-  - `garage` (Academic research toolkit) - https://github.com/rlworkgroup/garage
-
-### Environment & Simulation
-- **Short description**: Simulation environments and benchmarks for RL agent training and evaluation
-- **Python Packages:**
-  - `gymnasium` (Modern successor to OpenAI Gym) - https://gymnasium.farama.org/
-  - `atari-py` (Atari 2600 game environments) - https://github.com/openai/atari-py
-  - `pybullet` (Physics simulation and robotics) - https://pybullet.org/
-  - `mujoco` (Advanced physics engine) - https://mujoco.org/
-  - `carla` (Autonomous driving simulator) - http://carla.org/
-  - `deepmind-lab` (3D environment with Lua scripting) - https://github.com/deepmind/lab
-  - `procgen` (Procedurally generated environments) - https://github.com/openai/procgen
