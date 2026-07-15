@@ -8,5 +8,5 @@
 
 REPO_NAME=gpsaggese
 # The file should be all lower case.
-IMAGE_NAME=cs_refreshers
+IMAGE_NAME=book_springer
 FULL_IMAGE_NAME=$REPO_NAME/$IMAGE_NAME
