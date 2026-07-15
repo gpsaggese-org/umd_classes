@@ -1,6 +1,6 @@
 // type=UMD_slides
 // course_title=From Data to Decisions: Building Decision Systems with Probabilistic Causal Reasoning
-// lesson_title=Lesson 1.1: From Data Science to Decision Science
+// lesson_title=Lesson 02.1: From Data Science to Decision Science
 // slides_engine=typst
 
 // ### Lessons
@@ -51,23 +51,7 @@
 
 ## Course Roadmap
 
-* The Decision Pipeline: One Book, Five Parts
-
-- **Key idea**: this book walks a single pipeline end-to-end, from data to action
-  $$data \to model \to policy \to action \to feedback$$
-  - The model is both causal and probabilistic
-- The book is organized in five parts:
-  - **Part I**: why businesses need decisions, not predictions
-  - **Part II**: probabilistic and causal foundations, including Gaussian
-    processes, variational inference, normalizing flows, and causal discovery
-  - **Part III**: single-step decisions, including decision theory, policy
-    learning, and partial identification
-  - **Part IV**: multi-step and dynamic decisions, including causal world
-    models, causal reinforcement learning, and feedback loops
-  - **Part V**: deploying, monitoring, and governing decision systems in
-    production
-- This lesson opens Part I by cataloging what traditional machine learning
-  leaves out
+## From Data Science to Decision Science
 
 * Why Traditional ML Falls Short
 // From Lesson 08.1
@@ -79,10 +63,9 @@
   3. The business objective: a prediction is not a decision
   4. Dynamics: the world reacts to the actions informed by the prediction
 - Each gap turns a technically accurate model into a poor decision-maker
+
 - **Key idea**: the rest of this lesson works through the cost of each gap in
   turn
-
-## From Data Science to Decision Science
 
 * From Data Science to Decision Science
 // From Lesson 08.1
