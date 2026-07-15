@@ -526,7 +526,16 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 
 - Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
 
-- txt -> smd, or mds (slide markdown) 
+- txt -> emd (extended markdown) or smd (slide markdown)
+  - I prefer emd
+
+- If the file is emd then do a certain list of transforms,
+  add an option to force recognizing a certain format
+  - tex, txt, md, emd
+- prettier -> beautify
+  - For md only lint, ...
+- preprocess and postprocess are used to transform / comment out stuff that the
+  beautifier doesn't like, or support (e.g., since it's not markdown like *)
 
 - The transforms are:
 
@@ -546,8 +555,6 @@ helpers/hmarkdown_toc.py                                      92     24     26  
                             refresh_toc: -
                             check_links: -
 
-- The preprocess stage should handle everything that is not standard markdown
-
 - prettier doesn't handle well
   - //
   - The * slides
@@ -555,7 +562,7 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 - Add spaces between first level bullets
 
 - Make the definitions bold and black for visibility
-  - -*Definition*- for bold and color
+  - @Definition@: for bold and color
   - **Definition** for black and color
 
 ### [ ] Improve _LOG output
