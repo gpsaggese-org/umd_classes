@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.0
+#       jupytext_version: 1.19.3
 #   kernelspec:
 #     display_name: Python 3 (ipykernel)
 #     language: python
@@ -46,10 +46,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # %%
-# Use this for most notebooks.
+import helpers.hmodule as hmodule
+hmodule.install_module_if_not_present("networkx", use_activate=True, use_sudo=False, venv_path="/opt/venv")
+
+# %%
 import helpers.htutorial as htutori
 
-import L95_05_game_theory_utils as utils
+import class_cs_refreshers.tutorials.notebooks.L95_05_game_theory_utils as utils
 
 htutori.config_notebook()
 
@@ -87,7 +90,7 @@ utils.cell1_1_show_payoff_matrix()
 # **Key observations**:
 # - The matrix packs 4 numbers per outcome (2 per player) into one compact
 #   structure
-# - Player 1's best cell in one column is not necessarily best in another
+# - Row Player 1 best cell in one column is not necessarily best in another
 #   column: payoffs are interdependent
 # - Reading a payoff matrix is the prerequisite for every equilibrium concept
 #   that follows
