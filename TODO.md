@@ -184,6 +184,8 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 
 ### 
 - Use the same flow (slides + commentary)
+  > gen_lecture_commentary.py data605 01.1 (it's broken)
+
 - Pointer to GitHub
 - Pointer to Videos
 - Pointer to Tutorials

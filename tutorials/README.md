@@ -58,8 +58,8 @@
   claude> /notebook.implement_outline tutorials/pgmpy/notebook_outline.probabilistic_inference.md
   ```
 - This creates:
-  - probabilistic_inference.ipynb
-  - probabilistic_inference_utils.py
+  - `probabilistic_inference.ipynb`
+  - `probabilistic_inference_utils.py`
 
 - Create paired Python
   ```
@@ -76,12 +76,10 @@
   > docker_cmd.sh "python /git_root/tutorials/pgmpy/probabilistic_inference.py"
   ```
 
-## 
+## Improve the Notebook
 - Edit and improve the notebook
   ```
   > docker_jupyter.sh
   > docker_jupyter_port_forward.sh umd_project_ml_explainability.jupyter <PORT>
   Open http://localhost:8889/lab
   ```
-
-
