@@ -235,6 +235,11 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
 - [ ] Review `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
 
 - [ ] Generate some chapters to see how they look like
+  ```
+  > export FILE=Lesson08.1-Causal_AI_intro
+  claude> /model sonnet
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
+  ```
 
 ### [.] Create and review slides for Agentic AI
 

@@ -54,7 +54,7 @@
 ## From Data Science to Decision Science
 
 * Why Traditional ML Falls Short
-// From Lesson 08.1
+// From msml610/08.1/Why Traditional ML Falls Short
 
 - Traditional machine learning optimizes prediction accuracy on a fixed
   distribution, which ignores four things a decision requires:
@@ -64,11 +64,8 @@
   4. Dynamics: the world reacts to the actions informed by the prediction
 - Each gap turns a technically accurate model into a poor decision-maker
 
-- **Key idea**: the rest of this lesson works through the cost of each gap in
-  turn
-
 * From Data Science to Decision Science
-// From Lesson 08.1
+// From msml610/08.1/From Data Science to Decision Science
 
 - Data science and decision science optimize for different things
 ```{=typst}
@@ -78,18 +75,20 @@
     ("Goal", "Predict outcomes", "Choose best actions"),
     ("Question", "What will happen?", "What should we do?"),
     ("Method", "Statistical models, ML", "Causal models, decision theory"),
-    ("Output", "Score, forecast", "Action + expected outcome"),
+    ("Output", "Forecast", "Action, uncertainty, expected outcome"),
     ("Metric", "Accuracy, AUC, RMSE", "Business outcome, ROI"),
     ("Data", "Observations", "Observations + causal structure"),
   ),
   bold-first-col: true,
 )
 ```
+
+// TODO(ai_gp): Make it stronger
 - **Key idea**: teams that ship predictions while the business needs decisions
-  leave the causal step, and the value, on the table
+  leave the value on the table
 
 * Causal vs Predictive Questions
-// From Lesson 08.1
+// From msml610/08.1/Causal vs Predictive Questions
 
 - Every business question has a predictive form and a causal form, and only
   one of them says what to do
@@ -102,18 +101,22 @@
     ("Which students will fail the exam?", "Does tutoring improve exam scores?"),
     ("Which transactions are fraudulent?", "What policy change reduces fraud?"),
   ),
-  bold-first-col: true,
+  bold-first-col: false,
 )
 ```
+
+// TODO(ai_gp): Improve
 - Predictive questions need only observational data and support monitoring and
   alerting
 - **Key idea**: causal questions need causal models or experiments, and support
   decisions and policy design
 
 * The Analytics Maturity Ladder
-// From Lesson 08.1
+// From msml610/08.1/The Analytics Maturity Ladder
 
 - Organizations climb four levels of analytical sophistication
+
+// TODO(ai_gp): Start from 1
 ```{=typst}
 #styled-table(
   headers: ("Level", "Question", "Tools"),
@@ -136,7 +139,7 @@
 ## When Correlation Misleads
 
 * Correlation Encodes Confounding as Causation
-// From Lesson 08.1, 11.1
+// From msml610/08.1/Correlation Encodes Confounding as Causation, msml610/11.1/Correlation Encodes Confounding as Causation
 // From paper [P007] A Survey on Causal Inference
 
 - **Problem**: a purely predictive model learns $\Pr(Y | X)$ from historical
@@ -148,19 +151,20 @@
   - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
   - Decision built on it: _"ban ice cream to cut drownings"_ (disastrous)
   - Confounder: hot weather drives both
-- **Key idea**: the observational and interventional quantities disagree
-  $$\Pr(Y | X) \neq \Pr(Y | do(X))$$
+- **Key idea**:
+  - The observational and interventional quantities disagree
+    $$\Pr(Y | X) \neq \Pr(Y | do(X))$$
   - Acting on $\Pr(Y | X)$ is what makes correlation-based decisions backfire
 
 * Missing Interventions and Counterfactuals
-// From Lesson 08.1
+// From msml610/08.1/Missing Interventions and Counterfactuals
 
 - **Problem**: a correlation model answers _"what is?"_, never _"what if?"_ or
   _"why?"_
 - Two classes of business question stay permanently out of reach:
-  - **Intervention**: _"If we cut price 10%, how do units sold and revenue
+  - _Intervention_: _"If we cut price 10%, how do units sold and revenue
     change?"_
-  - **Counterfactual**: _"Would this customer have churned had we offered a
+  - _Counterfactual_: _"Would this customer have churned had we offered a
     discount?"_
 - **Example**: a tutoring program correlates with higher exam scores
   - Does tutoring cause the improvement, or do strong students self-select
@@ -170,7 +174,7 @@
   accurate predictor
 
 * Selection Bias and the Missing Counterfactual
-// From Lesson 08.1
+// From msml610/08.1/Selection Bias and the Missing Counterfactual
 
 - **Problem**: historical data records only the decisions actually made, never
   the alternative
@@ -186,7 +190,7 @@
 ## Structural Failure Modes
 
 * Interference and Spillovers Across Units
-// From Lesson 08.1
+// From msml610/08.1/Interference and Spillovers Across Units
 
 - **Problem**: standard ML assumes each unit's outcome depends only on its own
   treatment
@@ -201,7 +205,7 @@
   underlying predictor is
 
 * Simpson's Paradox: When Aggregates Lie
-// From Lesson 08.1, 11.1
+// From msml610/08.1/Simpson's Paradox: When Aggregates Lie, msml610/11.1/Simpson's Paradox: When Aggregates Lie
 // From paper [P005] Simpson's Paradox, Confounding, and Collapsibility
 
 - **Definition**: a trend within every subgroup _reverses_ once the subgroups
@@ -225,7 +229,7 @@
   harmful, for every segment it is applied to
 
 * Collider Bias: Conditioning Creates Illusions
-// From Lesson 08.1, 08.2
+// From msml610/08.1/Collider Bias: Conditioning Creates Illusions, msml610/08.2/Collider Bias: Conditioning Creates Illusions
 
 - **Definition**: a _collider_ is a variable influenced by two or more
   independent causes
@@ -239,7 +243,7 @@
   right one, is enough to manufacture a correlation with no causal meaning
 
 * Discarding Domain Knowledge and Mechanism
-// From Lesson 08.1
+// From msml610/08.1/Discarding Domain Knowledge and Mechanism
 
 - **Problem**: a purely correlation-based pipeline discards known structure,
   physics, economics, or the causal graph, in favor of whatever pattern the
@@ -256,7 +260,7 @@
 ## Point Estimates in a Small-Data World
 
 * Point Estimates Without Error Bars
-// From Lesson 08.1
+// From msml610/08.1/Point Estimates Without Error Bars
 
 - **Problem**: most business problems are "small data" problems, yet standard
   ML pipelines emit a single number as if it were certain
@@ -268,7 +272,7 @@
   much as its center
 
 * Epistemic vs Aleatoric Uncertainty Conflated
-// From Lesson 08.1
+// From msml610/08.1/Epistemic vs Aleatoric Uncertainty Conflated
 
 - **Problem**: standard models collapse two different kinds of uncertainty
   into one number
@@ -284,7 +288,7 @@
   both as the same number misleads the decision of when to collect more
 
 * No Abstention: Systems That Never Say "I Don't Know"
-// From Lesson 08.1
+// From msml610/08.1/No Abstention: Systems That Never Say "I Don't Know"
 
 - **Problem**: a standard classifier or regressor always returns an answer,
   even when the input falls far outside its training distribution
@@ -296,7 +300,7 @@
   trusted with the cases that matter most
 
 * Overfitting and the Statistical Significance Traps
-// From Lesson 08.1
+// From msml610/08.1/Overfitting and the Statistical Significance Traps
 
 - **Problem**: without a prior or assumptions to constrain the fit, nothing
   bounds overfitting
@@ -315,7 +319,7 @@
 ## Proxies, Costs, and Trade-offs
 
 * Optimizing the Wrong Objective
-// From Lesson 08.1
+// From msml610/08.1/Optimizing the Wrong Objective
 // From paper [P096] Problems of Monetary Management
 
 - **Problem**: models chase a proxy metric such as clicks or accuracy instead
@@ -330,7 +334,7 @@
   business actually gets, whether or not that was the intent
 
 * Symmetric Losses for Asymmetric Errors
-// From Lesson 08.1
+// From msml610/08.1/Symmetric Losses for Asymmetric Errors
 
 - **Problem**: standard losses such as log-loss and mean squared error treat
   every error the same size
@@ -343,7 +347,7 @@
   on after deployment as an afterthought
 
 * Multi-Objective Decisions Under Constraints
-// From Lesson 08.1
+// From msml610/08.1/Multi-Objective Decisions Under Constraints
 
 - **Problem**: real decisions trade off competing goals under budget,
   capacity, and legal limits
@@ -359,7 +363,7 @@
 ## From Scores to Actionable Decisions
 
 * Black-Box Scores Are Not Recommendations
-// From Lesson 08.1, 13.1
+// From msml610/08.1/Black-Box Scores Are Not Recommendations, msml610/13.1/Black-Box Scores Are Not Recommendations
 // From paper [P001] Why Should I Trust You?
 
 - **Problem**: a black-box score ranks units but names no lever and gives no
@@ -375,7 +379,7 @@
   neither of which a bare prediction provides
 
 * The Cost of Solving Sub-Problems Separately
-// From Lesson 08.1
+// From msml610/08.1/The Cost of Solving Sub-Problems Separately
 
 - **Problem**: a decision pipeline is often split into smaller, individually
   optimized pieces, a prediction model followed by a separate rule that turns
@@ -393,7 +397,7 @@
 ## A World That Reacts
 
 * The Static-World Assumption Breaks
-// From Lesson 08.1
+// From msml610/08.1/The Static-World Assumption Breaks
 
 - **Problem**: any decision changes the world, breaking the distribution the
   model was trained on
@@ -410,7 +414,7 @@
   shift than surface correlations
 
 * Feedback Loops and Bias Amplification
-// From Lesson 08.1
+// From msml610/08.1/Feedback Loops and Bias Amplification
 // From paper [P003] Data Feedback Loops
 
 - **Problem**: predictions act on the world and reshape the future data the
@@ -425,7 +429,7 @@
   purely from the model training on the outcomes of its own past decisions
 
 * Performativity: When the Prediction Changes the Outcome
-// From Lesson 08.1
+// From msml610/08.1/Performativity: When the Prediction Changes the Outcome
 // From paper [P099] Performative Prediction
 
 - **Definition**: _performativity_ is a prediction that changes the very
@@ -438,7 +442,7 @@
 ## Missing Exploration and Long Horizons
 
 * No Exploration: Trapped in the Logged Policy
-// From Lesson 08.1
+// From msml610/08.1/No Exploration: Trapped in the Logged Policy
 
 - **Problem**: an observational-only model never experiments, so it stays
   trapped inside the support of whatever policy logged the training data
@@ -451,7 +455,7 @@
   data, only by a deliberate intervention
 
 * Delayed and Long-Horizon Effects
-// From Lesson 08.1
+// From msml610/08.1/Delayed and Long-Horizon Effects
 
 - **Problem**: a model optimized for an immediate proxy ignores downstream
   outcomes and has no way to assign credit over time
@@ -464,7 +468,7 @@
   cares about
 
 * Strategic and Adversarial Response
-// From Lesson 08.1
+// From msml610/08.1/Strategic and Adversarial Response
 
 - **Problem**: once a model is deployed, the people it scores learn to
   optimize against it
@@ -480,7 +484,7 @@
 ## Roadmap
 
 * Why AI Projects Fail
-// From Lesson 08.1
+// From msml610/08.1/Why AI Projects Fail
 
 - Most AI project failures are not modeling failures, they are framing
   failures:
