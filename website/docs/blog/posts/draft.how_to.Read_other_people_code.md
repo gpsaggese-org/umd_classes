@@ -1,3 +1,19 @@
+---
+title: "How To Read Other People Code"
+authors:
+  - gpsaggese
+date: 2026-01-01
+description:
+draft: true
+categories:
+  - Developer Tools
+  - Teaching
+---
+
+TL;DR: How To Read Other People Code.
+
+<!-- more -->
+
 # How to Read Other People's Code
 
 ## Reading Other People Code

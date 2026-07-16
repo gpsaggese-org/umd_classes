@@ -1,0 +1,1 @@
+- Fine-tune an LLM using news and the response of the market
