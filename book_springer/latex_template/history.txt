@@ -1,0 +1,172 @@
+Version history for the SNmono LaTeX2e class
+
+date      filename   version  action/reason/acknowledgements
+-----------------------------------------------------------------
+ 1.04.01  svmono.cls    2.0   initial release
+
+28.05.01  history.txt         introducing this file
+
+28.05.01  svmono.cls    2.1   fixed wrong french \proofname, fixed bad
+                              start of TOC (\l@chapter)
+
+22.08.01  svmono.cls    2.2   fixed math indentation when using [fleqn]
+
+22.08.01  svmono.cls    2.3   TOC lines ragged right and without hyphenation
+
+23.08.01  svmono.cls    2.4   introduced own abstract environment
+
+23.08.01  svmono.cls    2.5   \backmatter always starts new recto page
+
+28.08.01  svmono.cls    2.6   saves token space
+                              (no more: 0 pt plus 1pt minus 1pt)
+
+19.09.01  svmono.cls    2.7   introduced \processchapstarthook for
+                              chapter "motto" and the like
+
+24.09.01  svmono.cls    2.8   hanging chapter or section heading with
+                              class option [sechang]
+
+17.12.01  svmono.cls    2.9   removed bug that prevented \listoftables,
+                              found by Dr. Karsten Urban, RWTH Aachen,
+                              theorem name and its number can be permuted
+                              by using \normalthmheadings vs. \reversethmheadings
+
+20.12.01  svmono.cls    2.10  fixed changeable indentation of itemize environment
+
+26.02.02  svmono.cls    2.11  move \set@numbering to \AtEndOfClass to allow
+                              for flexible numbering of floats and equations
+
+19.03.02  svmono.cls    2.12  an extra dimen (\spthmsep) is used for the gap
+                              between the label of a "SP-Theorem", enhance the
+                              "theopargself" environment with a "*" version to
+                              get *FULL* control over \spnewtheorems, \subfigures
+                              provides for a correct \label that refers to the
+                              whole current figure
+
+21.03.02  svmono.cls    2.13  fixed changeable indentation of itemize environment
+
+16.05.02  svmono.cls    3.0   first release of "the global class",
+                              enabled usage of so called .clo (class option) files
+
+16.05.02  svmonohd.clo  1.0   initial release of the monohd class option, to revive
+                              the "pre global" layout for HD monographs
+
+05.08.02  svmono.cls    3.1   improved handling of class options
+
+08.10.02  svmono.cls    3.2   corrected \vec command for bold vectors, bug reported
+                              by Michael Beer, Univ. Freiburg
+
+08.10.02 svmonophys.clo 1.0   initial release of the monophys class option,
+                              to foster the diversity of layouts
+
+11.11.02  svmono.cls    3.3   corrected Springer branches on title page
+
+19.11.02  svmono.cls    3.4   new option "vecarrow" to preserve the original \vec
+                              command; revived the defective "footinfo" option
+
+23.01.03  svmono.cls    3.5   remove spurious spaces from language section to allow
+                              for correctly spaced headings with "babel";
+                              fixed "l@chapter" to honor \addtocmark
+
+14.04.03  svmono.cls    3.6   remove multiple info about language switch
+                              caused by [german] option of "babel", bug reported
+                              by R diger Wapler, Universit t T bingen
+
+15.04.03  svmono.cls    3.7   corrected French translation of \bibname
+
+23.07.03  svmono.cls    3.8   changed German Index to Sachverzeichnis
+
+23.07.03  svmono.cls    3.9   ordinal numbers of headings made more flexible
+
+20.11.03  svmono.cls    4.0   new problems-solutions
+                              environments (counted chapterwise)
+                              for usage in extra section(s) or
+                              chapters of e.g. textbooks
+
+07.04.04  svmono.cls    4.1   made headlines more flexible using \runheadstyle
+
+16.04.04  svmono.cls    4.2   fixed footinfo option
+
+17.05.04  svmono.cls    4.3   fix for babel option "ngerman", normal dot
+                              leaders for TOC entries of type "chapter"
+
+13.10.04  svmono.cls    4.4   fixed footnote layout when using footmisc package
+
+12.11.04  svmono.cls    4.5   corrected french spelling, gr ce   Jean-Pierre
+                              Francoise, Laboratoire Jacques-Louis Lions,
+                              Universit  Pierre et Marie Curie, Jussieu
+
+07.12.04  svmono.cls    4.6   math material unboldened in \chapstarthook,
+                              bug reported by Richard Belshoff, SMSU,
+                              Springfield, Missouri
+
+11.02.05  svmono.cls    4.7   new environment "partbacktext" to place text
+                              on a part's (otherwise empty) back side
+
+15.03.05  svmono.cls    4.8   fixed \sidecaption; it was broken when used
+                              along with hyperref package
+
+20.06.05  svmono.cls    4.9   revive running heads for float pages at
+                              chapter ends - experimental
+
+19.07.05  svmono.cls    4.10  trying harder to revive running heads for float
+                              pages at chapter ends - still experimental
+
+23.09.05  svmono.cls    4.11  fix for babel option "french"
+
+12.01.06  svmono.cls    4.12  removed Springer branches from titlepage
+
+24.01.06  svmono.cls    4.13  corrected position of pagenumbers in TOC,
+                              bug report and patch by Joachim Schrod
+
+11.05.06  svmono.cls    4.14  changed internal structure of TOC entry for
+                              \part to prevent bookmark errors with pdftex,
+                              bug reported by Bernhard Kleine
+
+03.08.06  svmono.cls    4.15  new command \Preface: \preface with TOC entry,
+                              suggested by Deborah Doherty, Springer Norwell
+
+01.09.06  svmono.cls    4.16  allow hyphenation in \chapstarthook
+
+31.10.06  svmono.cls    4.17  fix for various babel dialects in english
+                              by Ben Liblit, university of Wisconsin, Madison
+
+29.06.07  svmono.cls    5.4   first release of the SVMono class
+                              with new global Springer layout "T1"
+
+18.12.09  svmono.cls    5.5   fixed LaTeX error of undefined "\thesubequation"
+                              when using option "nochapnum", error reported
+                              by Yoram Burak, Harvard University
+
+25.06.18  svmono.cls    5.6   defined special elements for Sophie
+
+25.06.18  svmono.cls    5.7   Removed "mathptmx" and replaced "newtxtext" 
+                              and "newtxmath" package in preamble
+
+10.07.21  svmono.cls    5.8   Added "varvw" option in "newtxmath" package, 
+			      reported by Masayuki Nakamura, Springer Japan
+
+10.07.21  svmono.cls    5.9   corrected "vecarrow" option to preserve the original \vec
+                              command, bug reported by Peter
+
+08.09.21  svmono.cls    5.10  The German for electronic letter is  E-Mail , with a capital  M , 
+			      \def\emailname{E-mail} changed to \def\emailname{E-Mail}
+                              reported by Peter
+
+12.06.23  svmono.cls    5.11  (a) The gap between the label separation has been fixed in Theorem,
+			          reported by Alexander.
+			      (b) Two new sections added in instruction.pdf,
+			          1.Important Notes for the Production Process and 2. LaTeX Good Practices.
+			      (c) Competing Interests and Ethics Approval, added in book.pdf
+                              (d) \Description element added in refguide.pdf.
+			      (e) \begin{question}...\end{question} changed to \begin{questype}...\end{questype} to follow Sophie special headings.
+
+15.03.24  svmono.cls    5.12  Italian lanugage has been implemented using option "italiano" in documentclass.
+
+25.11.24  svmono.cls    5.13  (a) Single and Double Column Trim Size Table included in quickstart.pdf
+			      (b) Chapterwise bibliography style included in bookbib.pdf and refguide.pdf
+07.02.25  svmono.cls	5.14 Added revised text for Best Practice Guidelines to instruction.pdf and quickstart.pdf
+07.05.25  svmono.cls	5.15 Updated svgraybox environment for top and bottom spacing in the event of multiple pages, as well as a defined description element for the figure's alt-text.
+
+11.11.25  SNmono.cls    6.00  Renamed to SNmono.cls. Added support for Spanish and Portuguese. Enables output of \Description texts for figures in separate file DescriptionTexts.txt 
+

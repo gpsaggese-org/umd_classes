@@ -1,3 +1,18 @@
+---
+title: "Ideas Deterministic Skills"
+authors:
+  - gpsaggese
+date: 2026-01-01
+description:
+draft: true
+categories:
+  - AI Research
+---
+
+TL;DR: Ideas Deterministic Skills.
+
+<!-- more -->
+
 ./helpers/hllm_decorator.py
 
 research/ideas/draft.Language_Mixing_LLM_and_Code.md
