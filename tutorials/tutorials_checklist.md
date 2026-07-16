@@ -33,7 +33,7 @@ Before starting, understand these non-negotiable principles:
 
 ## Tutorial Checklist
 
-Create an issue called "Clean up tutorial XYZ" with the following action items.
+- Create an issue called "Clean up tutorial XYZ" with the following action items
 
 ### 1. Understand the Core Documentation
 

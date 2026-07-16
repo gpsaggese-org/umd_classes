@@ -525,7 +525,7 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 
 ### Improve lint_txt.py
 
-- -> lint_text.py
+- Rename -> lint_text.py
 
 - Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
 
