@@ -102,10 +102,13 @@
   - It answers _"what will happen?"_, not _"what should we do?"_
   - It assumes the world stays fixed, even though the actions informed by the
     prediction change it
+
+// TODO(ai_gp): Add a causal graph for this
 - **Example**: ice cream sales and drowning deaths are highly correlated
   - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
   - Decision built on it: _"ban ice cream to cut drownings"_ (disastrous)
   - Confounder: hot weather drives both
+
 - **Key idea**:
   - The observational and interventional quantities disagree
     $$\Pr(Y | X) \neq \Pr(Y | do(X))$$
