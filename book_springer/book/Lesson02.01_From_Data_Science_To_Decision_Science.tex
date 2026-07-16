@@ -4,18 +4,17 @@
 
 \chapter{Introduction}
 
+% From: '# Why Decisions, Not Predictions'
 \section{Why Decisions, Not Predictions}
 \label{chap:why-decisions-not-predictions}
 
-% Slide: From Data Science to Decision Science
+% From: '* From Data Science to Decision Science'
 \subsection{From Data Science to Decision Science}
 \label{sec:data-science-to-decision-science}
 
 The next four sections work through why a purely predictive pipeline falls short and contrast it with the goals, methods, and outputs decision science supplies in its place. Each section builds on the last, moving from the four ingredients a decision needs, to the sharper predictive-versus-causal distinction, to the maturity ladder that measures how many of those ingredients an organization has actually put in place.
 
-%\subsection{Overview}
-%\label{subsec:data-science-overview}
-
+% From: '* Why Traditional ML Falls Short'
 \textbf{Why Traditional ML Falls Short}
 
 Traditional machine learning was built to answer one question well: given a fixed distribution of data, what does the pattern say will happen? \textbf{Predictive accuracy} on a held-out sample is the quantity that gets tuned, reported, and celebrated, and by that yardstick the field has been remarkably successful. The trouble is that turning a prediction into a decision asks for more than an accurate guess about the future, and standard ML pipelines are silent on four things a decision requires.
@@ -56,6 +55,7 @@ The practical stakes of this distinction are not abstract. Teams that keep shipp
 
 This gap is also an organizational one, not just a technical one. A data science team is typically staffed, evaluated, and incentivized around predictive metrics, accuracy, AUC, RMSE, because those are the metrics a supervised learning pipeline naturally produces and that a manager can compare across projects. A decision science team has to be evaluated against business outcomes instead, ROI, cost saved, revenue generated, which are slower to observe, harder to attribute to a single model, and often require the causal reasoning this book builds toward just to measure correctly. Many organizations that believe they have built a decision science capability have, in practice, only renamed their data science team, keeping the old predictive metrics while adopting the new vocabulary. \textbf{Key idea}: the gap between data science and decision science is a gap in what gets optimized and what gets output, and closing it is the organizing theme of this book.
 
+% From: '* Causal vs Predictive Questions'
 \textbf{Causal vs Predictive Questions}
 
 The distinction between data science and decision science becomes concrete once it is applied to a specific business question, because almost every business question has two forms: a predictive form and a causal form, and only one of them says what to do. Table~\ref{tab:predictive-vs-causal-questions} lines up four common examples side by side.
@@ -81,6 +81,7 @@ This is not a minor technical distinction. A model that answers only the predict
 
 The practical reason organizations gravitate toward the predictive column first is that it is genuinely cheaper to answer: fitting $\Pr(Y \mid X)$ from logged data requires no experiment, no willingness to intervene on real customers or real prices, and no causal assumptions that a stakeholder has to sign off on. The causal column asks for exactly the ingredients a predictive pipeline was never built to supply, either a randomized experiment, which costs time and carries its own risk, or a causal model built from domain knowledge about how the system actually works, which the data alone cannot validate. That asymmetry in cost is precisely why so many organizations answer the predictive question and stop, quietly treating the ranked list of at-risk customers as if it were already a plan of action, when in fact it is only the first half of one. \textbf{Key idea}: predictive questions need only observational data and support monitoring, while causal questions need causal models or experiments and support the decisions and policy design that monitoring alone cannot provide.
 
+% From: '* The Analytics Maturity Ladder'
 \textbf{The Analytics Maturity Ladder}
 
 Organizations do not arrive at decision science all at once; they climb toward it through four levels of increasing analytical sophistication, summarized in Table~\ref{tab:analytics-maturity-ladder}.
@@ -106,21 +107,17 @@ The problem this ladder exposes is that most organizations are stuck at Level~1:
 
 The jump from Level~1 to Levels~2 and~3 is not an incremental improvement in model accuracy; it is a change in what kind of question the pipeline is built to answer at all. Level~2 requires being explicit about the causal structure connecting actions to outcomes, structure a purely predictive model never needs to represent, let alone get right. Level~3 requires, in addition, an explicit utility function that says how to weigh one outcome against another, which forces a business to make its trade-offs precise rather than leaving them implicit in whichever proxy metric happened to be easiest to log. \textbf{Key idea}: climbing to Levels~2 and~3 is the jump this book makes, moving the reader from building prediction pipelines to building decision pipelines, and every subsequent chapter contributes a piece of that climb.
 
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for The Cost of Ignoring Causality %%%%
-
+% From: '# The Cost of Ignoring Causality'
 \section{The Cost of Ignoring Causality}
 \label{chap:cost-ignoring-causality}
 
-% Slide: When Correlation Misleads
+% From: '## When Correlation Misleads'
 \subsection{When Correlation Misleads}
 \label{sec:when-correlation-misleads}
 
 The first three sections of this chapter show that a purely predictive model, however well it fits the data it was trained on, answers a narrower question than the one a decision-maker needs answered. Fitting $\Pr(Y \mid X)$ tells you what tends to co-occur with what; it does not tell you what happens if you reach in and change $X$ yourself, and it says nothing at all about the cases history never let you observe.
 
-%\subsection{Core Concepts}
-%\label{subsec:correlation-misleads-concepts}
-
+% From: '* Correlation Encodes Confounding as Causation'
 \textbf{Correlation Encodes Confounding as Causation}
 
 A purely predictive model learns $\Pr(Y \mid X)$ from historical data, and in doing so it absorbs every association present in that data, whether or not the association reflects a causal mechanism. This is not a flaw in the fitting procedure; it is what fitting $\Pr(Y \mid X)$ means. The model answers \emph{``what will happen?''}, never \emph{``what should we do?''}, and it implicitly assumes the world stays fixed even though the whole point of acting on a prediction is to change the world the prediction was made about.
@@ -134,6 +131,7 @@ This is why the observational and interventional quantities can disagree even wh
 \end{equation}
 The left-hand side of Eq.~\eqref{eq:obs-vs-int} is what a predictive model estimates: the distribution of $Y$ conditional on having observed a particular value of $X$. The right-hand side is the distribution of $Y$ under an intervention that sets $X$ to that value directly, severing whatever else in the world was previously responsible for $X$ taking that value. \textbf{Key idea}: acting on $\Pr(Y \mid X)$ as if it were $\Pr(Y \mid do(X))$ is exactly what makes correlation-based decisions backfire, and the gap between the two is not a modeling error to be fixed with more data, but a structural feature of observational data that only a causal model can address.
 
+% From: '* Missing Interventions and Counterfactuals'
 \textbf{Missing Interventions and Counterfactuals}
 
 A correlation model answers \emph{``what is?''}, and it can be pushed, with enough data, to answer \emph{``what is likely to be?''}. It cannot answer \emph{``what if?''} or \emph{``why?''}, no matter how much observational data is fed into it. Two classes of business question fall squarely into this gap and stay permanently out of reach of a purely predictive pipeline.
@@ -142,6 +140,7 @@ The first is the \textbf{intervention} question: \emph{``if we cut price 10\%, h
 
 The tutoring example makes the difficulty concrete. A dataset shows that students who receive tutoring tend to score higher on exams. Does tutoring cause the improvement, or do already-strong students disproportionately choose to sign up for tutoring in the first place, so that the correlation reflects self-selection rather than the effect of tutoring itself? No amount of additional observational data on tutored and untutored students resolves this question, because the same correlation pattern is consistent with both explanations. Distinguishing them requires either an experiment, such as randomly assigning tutoring, or a causal model that encodes assumptions about how students select into tutoring in the first place, assumptions that can then be checked, argued about, and revised, unlike the assumptions buried inside a purely correlational fit. \textbf{Key idea}: answering intervention and counterfactual questions requires a causal model, not a more accurate predictor, since accuracy on observed data says nothing about behavior under an action the data never contained.
 
+% From: '* Selection Bias and the Missing Counterfactual'
 \textbf{Selection Bias and the Missing Counterfactual}
 
 A separate and more basic problem sits upstream of confounding: historical data records only the decision that was actually made, never the alternative that was not. This is a missing-counterfactual problem that exists before any modeling begins, built into the data-collection process itself rather than introduced by a poor choice of model.
@@ -152,15 +151,13 @@ This creates a subtle trap for anyone evaluating the model purely by predictive 
 
 The trap is subtle precisely because nothing about it shows up as a data quality problem in the usual sense: there are no missing values, no corrupted labels, no obviously wrong entries to flag. The data is a completely accurate record of what happened to the people the bank chose to lend to. The distortion is entirely in what is absent, a systematic silence about an entire population, and silence of this kind does not trigger any of the standard checks a data science team runs before trusting a model, since those checks are built to catch errors in the data that exists, not the absence of data that was never generated in the first place. \textbf{Key idea}: a model can be accurate on the population it happened to observe and still be blind to the population the business actually needed to reason about, and no amount of tuning on the observed population fixes a gap in what was observed to begin with.
 
-% Slide: Structural Failure Modes
+% From: '## Structural Failure Modes'
 \subsection{Structural Failure Modes}
 \label{sec:structural-failure-modes}
 
 Confounding and selection bias are not the only ways a correlation-based pipeline goes wrong. The next four sections survey structural failure modes that can corrupt a causal or predictive estimate even when the usual confounding checks have been satisfied: violations of independence across units, reversals under aggregation, illusions created by conditioning on the wrong variable, and the discarding of mechanism in favor of whatever the training data happens to contain.
 
-%\subsection{Failure Modes}
-%\label{subsec:structural-failure-modes}
-
+% From: '* Interference and Spillovers Across Units'
 \textbf{Interference and Spillovers Across Units}
 
 Standard machine learning and standard causal inference both typically assume that each unit's outcome depends only on that unit's own treatment, an assumption sometimes called the stable unit treatment value assumption. Marketplaces, pricing systems, and social networks routinely violate it, because units in these settings do not act in isolation; they compete for the same limited resources or influence one another directly.
@@ -171,6 +168,7 @@ This is not a failure of estimation technique; it is a failure of the assumption
 
 The bias this introduces does not announce itself the way a missing feature or an obviously wrong label would; the experiment can be run correctly, the randomization can be clean, and the estimate can still be wrong, because the violated assumption lives outside the data the experiment collected, in the market or network structure connecting the groups to each other. \textbf{Key idea}: when one unit's action changes another unit's outcome, the usual estimate of a treatment effect, computed by comparing a treated group to an untreated group, is biased, no matter how accurate the underlying predictive model of each individual outcome is. Interference has to be modeled explicitly, through network structure or market-clearing constraints, rather than assumed away.
 
+% From: '* Simpson's Paradox: When Aggregates Lie'
 \textbf{Simpson's Paradox: When Aggregates Lie}
 
 \begin{definition}
@@ -197,6 +195,7 @@ Reading Table~\ref{tab:simpsons-paradox} row by row, the drug helps male patient
 
 The paradox is easy to dismiss as a curiosity, yet the pooled row in Table~\ref{tab:simpsons-paradox} is exactly the number a Level~0 dashboard would surface: an overall recovery rate, computed without regard to any subgroup structure, because that is the number that is cheapest to compute and easiest to put in a single-line summary. Nothing about the computation is wrong; the aggregate recovery rate really is what it says it is. What is wrong is treating that single number as though it settled the causal question of whether the drug helps, when the answer depends entirely on which stratification the analyst chose to stop at. The same mechanics generalize well past a two-category example: any variable that correlates with both treatment assignment and outcome can drive a reversal, and the more subgroups a population can be split along, the more directions a naive aggregate can be pulled in. \textbf{Key idea}: a model can look correct, or even look harmful, in aggregate and be exactly wrong about every segment it is actually applied to, which is why a causal analysis needs to identify the right level of stratification, guided by the causal structure connecting treatment, subgroup, and outcome, before trusting an aggregate number.
 
+% From: '* Collider Bias: Conditioning Creates Illusions'
 \textbf{Collider Bias: Conditioning Creates Illusions}
 
 \begin{definition}
@@ -209,6 +208,7 @@ Nothing about statistics skill and flattery changed; what changed is the populat
 
 Collider bias is easy to introduce by accident, because the instinct in most predictive modeling workflows is to add any available variable as a covariate on the assumption that more information can only help. If that variable happens to be a collider of two other variables already in the model, adding it does not add information, it manufactures a spurious association between them that the model then has no way to distinguish from a genuine one. Recognizing a collider requires knowing, or hypothesizing, the causal graph connecting the variables under study; it is not something that can be read off the correlational structure of the data alone, since the spurious association a collider creates looks, statistically, exactly like a real one. \textbf{Key idea}: conditioning on the wrong variable, not merely omitting the right one, is by itself enough to manufacture a correlation with no causal meaning at all, which is why deciding what to control for in an analysis requires knowing the causal structure, not just adding available covariates to a regression.
 
+% From: '* Discarding Domain Knowledge and Mechanism'
 \textbf{Discarding Domain Knowledge and Mechanism}
 
 A purely correlation-based pipeline discards known structure, whether physics, economics, or an explicit causal graph, in favor of whatever pattern happens to be present in the training data. Standard supervised learning offers no principled way to inject such structure as a constraint or a prior; the model is free to fit any pattern that reduces training loss, whether or not that pattern reflects the actual mechanism generating the outcome.
@@ -219,21 +219,17 @@ This is not an isolated anecdote; it is the generic failure mode of any model th
 
 \textbf{Key idea}: a model that ignores the mechanism generating its data inherits every artifact of how that training data happened to be collected, and no amount of additional training data of the same kind fixes the problem, since more data of the same kind only reinforces the spurious pattern rather than correcting it.
 
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for The Cost of Ignoring Uncertainty %%%%
-
+% From: '# The Cost of Ignoring Uncertainty'
 \section{The Cost of Ignoring Uncertainty}
 \label{chap:cost-ignoring-uncertainty}
 
-% Slide: Point Estimates in a Small-Data World
+% From: '## Point Estimates in a Small-Data World'
 \subsection{Point Estimates in a Small-Data World}
 \label{sec:point-estimates-small-data}
 
 The four sections below trace what goes wrong when a pipeline reports a single number without saying how much to trust it: the spread hidden behind a point forecast, the two different sources of uncertainty that get flattened into one, the absence of any mechanism for a model to admit it does not know, and the statistical traps that let unwarranted confidence accumulate silently over a project.
 
-%\subsection{Uncertainty in Models}
-%\label{subsec:uncertainty-in-models}
-
+% From: '* Point Estimates Without Error Bars'
 \textbf{Point Estimates Without Error Bars}
 
 Most business problems are, in the relevant sense, small-data problems: the number of comparable historical episodes, a product launch, a pricing change, a new market, is small relative to how much variation the outcome can show, even when the raw row count in a database looks large. Standard machine learning pipelines are not built with this in mind. They are built to emit a single number, and that number is typically reported and consumed as though it were certain, with no error bars, no posterior distribution, and no sense of how far off the estimate could plausibly be.
@@ -244,6 +240,7 @@ This is not a minor omission that a more careful analyst can patch after the fac
 
 The small-data character of most business problems makes this worse, not better, because the usual intuition that more data shrinks uncertainty automatically applies most cleanly in the large-sample regime, and a great many consequential business decisions, a product launch, a new market entry, a pricing change, do not have that luxury. A model can still report a single confident-looking number in these settings, since nothing about a standard training pipeline forces it to acknowledge how thin the evidence actually is, which means the point estimate can look identical whether it rests on a thousand comparable historical episodes or on three. \textbf{Key idea}: a decision-maker needs the spread of an estimate at least as much as its center, since the center alone cannot distinguish a safe bet from a gamble.
 
+% From: '* Epistemic vs Aleatoric Uncertainty Conflated'
 \textbf{Epistemic vs Aleatoric Uncertainty Conflated}
 
 Even when a model does report some notion of uncertainty, standard pipelines typically collapse two genuinely different kinds of uncertainty into a single number. \textbf{Aleatoric} uncertainty is irreducible randomness in the outcome itself: even with a perfect model and infinite data, the outcome would still vary, because the underlying process is stochastic. \textbf{Epistemic} uncertainty, by contrast, comes from not having seen enough data, or from using the wrong model; it reflects what the model does not yet know, rather than randomness inherent to the world.
@@ -254,6 +251,7 @@ The two kinds of uncertainty also imply different remedies at the system level, 
 
 \textbf{Key idea}: only epistemic uncertainty shrinks as more data is collected, since aleatoric uncertainty is a property of the outcome, not of the model's knowledge; treating both kinds of uncertainty as a single number misleads not just the current decision but also the decision of when it is worth collecting more data at all.
 
+% From: '* No Abstention: Systems That Never Say "I Don't Know"'
 \textbf{No Abstention: Systems That Never Say ``I Don't Know''}
 
 A standard classifier or regressor is built to always return an answer. Given any input, including an input that falls far outside the range of anything the model was trained on, the model still produces a prediction, because nothing in its architecture or training procedure includes a mechanism for declining to answer. There is no built-in notion of abstention or deferral that would route an unusually uncertain case to a human decision-maker instead of forcing the model to guess.
@@ -264,6 +262,7 @@ This is a design gap, not a training failure: no amount of additional training o
 
 Building that option in is not free, since it depends on the model having a trustworthy estimate of its own uncertainty in the first place, exactly the epistemic-versus-aleatoric distinction from the previous section. A model with no notion of epistemic uncertainty has nothing reliable to threshold on, so adding an abstention rule on top of it can end up deferring the wrong cases, the ones that happen to sit near a decision boundary for aleatoric reasons, while confidently answering the out-of-distribution cases it should have deferred instead. Abstention and calibrated uncertainty are therefore not two independent features to add to a pipeline; the second is a prerequisite for the first to work as intended. \textbf{Key idea}: a decision system that cannot say \emph{``I don't know''} cannot be trusted with precisely the cases that matter most, since those are disproportionately the cases where the training data gave it the least evidence to go on.
 
+% From: '* Overfitting and the Statistical Significance Traps'
 \textbf{Overfitting and the Statistical Significance Traps}
 
 Without a prior or some other constraint on how closely a model is allowed to fit its training data, nothing bounds how much a model can overfit, memorizing noise in the training sample rather than learning the pattern that generalizes. This basic overfitting risk is compounded, in practice, by a set of statistical significance traps that let unwarranted confidence build up gradually over the course of a project rather than appearing as a single identifiable error.
@@ -278,21 +277,17 @@ Each of these traps is individually well known, yet they compound across the lif
 
 What makes the three traps dangerous together, rather than merely additive, is that each one on its own can look like ordinary, disciplined data science practice. Checking an experiment's dashboard periodically is standard operating procedure; tracking several metrics rather than a single one is usually recommended, not discouraged; and reusing a validation set across iterations is simply what iterative model development looks like day to day. None of these steps triggers an alarm, and none of them is a mistake in the sense of violating an explicit rule, which is exactly why the inflated false-positive rate they jointly produce tends to surface only much later, as a model that looked strong in development quietly underperforms once it meets data it was not, in effect, evaluated against even once. \textbf{Key idea}: overfitting is not one mistake made in one run; it accumulates from every repeated look taken at the same data, which is why disciplined experimental protocol, not just a better model, is what keeps it in check.
 
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for The Cost of Ignoring the Business Objective %%%%
-
+% From: '# The Cost of Ignoring the Business Objective'
 \section{The Cost of Ignoring the Business Objective}
 \label{chap:cost-ignoring-business-objective}
 
-% Slide: Proxies, Costs, and Trade-offs
+% From: '## Proxies, Costs, and Trade-offs'
 \subsection{Proxies, Costs, and Trade-offs}
 \label{sec:proxies-costs-tradeoffs}
 
 The next three sections examine the objective function itself: what happens when it is a proxy rather than the true business goal, what happens when it treats every error as equally costly, and what happens when a real decision has to trade off several goals at once rather than optimize a single scalar.
 
-%\subsection{Objective Functions}
-%\label{subsec:objective-functions}
-
+% From: '* Optimizing the Wrong Objective'
 \textbf{Optimizing the Wrong Objective}
 
 Machine learning models chase whatever objective they are given, and that objective is frequently a proxy metric, clicks, engagement time, predictive accuracy, rather than the underlying business goal the proxy was chosen to stand in for, such as revenue, customer retention, or user wellbeing. The proxy is usually chosen because it is easy to measure and easy to optimize, while the true goal is harder to quantify or only observable with a long delay.
@@ -307,6 +302,7 @@ The reason a proxy is chosen in the first place is usually a reasonable one: rev
 
 \textbf{Key idea}: the objective a model is trained on becomes the objective the business actually gets, regardless of whether that was the intent behind choosing the proxy in the first place, which makes the choice of training objective one of the highest-leverage decisions in building a model, not a minor implementation detail to settle after the modeling is done.
 
+% From: '* Symmetric Losses for Asymmetric Errors'
 \textbf{Symmetric Losses for Asymmetric Errors}
 
 Standard loss functions, log-loss, mean squared error, treat every unit of error identically: a false positive costs the same as a false negative of the same magnitude, and an overestimate costs the same as an equally sized underestimate. Real business errors are almost never symmetric in this way. A fraud false negative, letting a fraudulent transaction through, and a fraud false positive, blocking a legitimate customer's purchase, impose very different costs on the business, and treating them as interchangeable in the loss function bakes a mismatch into the model from the start.
@@ -315,6 +311,7 @@ A fraud model that reaches 95\% accuracy sounds like a success by the standard m
 
 The deeper issue is that a symmetric loss is a modeling convenience, not a business fact: it is chosen because it is differentiable, well studied, and easy to optimize with standard tools, not because the business genuinely experiences every error as equally costly. Recovering an asymmetric-cost model from a symmetric-loss training run is possible only by adjusting the decision threshold after the fact, which helps but is a strictly weaker fix than training against the true costs directly, since a threshold adjustment cannot correct for a model that learned the wrong decision boundary in the first place because it was never shown that the two error types differ in cost during training. \textbf{Key idea}: cost asymmetry has to be built directly into the training objective, through a weighted loss, a cost matrix, or an explicit decision threshold chosen to reflect the relative costs, rather than bolted on after deployment as a post-hoc adjustment to a model that was never asked to care about the difference in the first place.
 
+% From: '* Multi-Objective Decisions Under Constraints'
 \textbf{Multi-Objective Decisions Under Constraints}
 
 Real decisions rarely optimize one thing at a time; they trade off several competing goals simultaneously, and they do so under hard constraints of budget, capacity, or legal requirement. A single scalar loss function, no matter how carefully weighted, cannot fully express a constrained, multi-stakeholder trade-off, because collapsing several goals into one number requires deciding, in advance and often implicitly, exactly how much of one goal is worth sacrificing for how much of another.
@@ -325,15 +322,13 @@ The usual engineering response to a multi-objective problem is to scalarize it, 
 
 \textbf{Key idea}: collapsing a genuinely multi-objective decision into a single loss function does not solve the trade-off, it hides it, silently baking in someone's judgment about the relative weights instead of surfacing that judgment where it can be examined, debated, and adjusted by the people accountable for the decision.
 
-% Slide: From Scores to Actionable Decisions
+% From: '## From Scores to Actionable Decisions'
 \subsection{From Scores to Actionable Decisions}
 \label{sec:scores-to-actionable-decisions}
 
 Even a well-specified objective is not enough if the pipeline's final output is a bare score with no attached lever, and even a well-designed individual model is not enough if it sits inside a pipeline optimized piece by piece rather than as a whole. The next two sections take up these two remaining gaps between a technically sound model and a usable decision.
 
-%\subsection{Score to Action Translation}
-%\label{subsec:score-to-action}
-
+% From: '* Black-Box Scores Are Not Recommendations'
 \textbf{Black-Box Scores Are Not Recommendations}
 
 A black-box score ranks units against one another but names no lever and gives no reason \emph{why} a given unit received the score it did. A churn score of 0.8 tells a business that a customer is likely to leave; it does not say what action, if any, would change that outcome. As credit, hiring, and healthcare decisions increasingly require explanations to satisfy regulators and justify outcomes to the people affected by them, a bare score is decreasingly sufficient even where it once might have passed as adequate.
@@ -344,6 +339,7 @@ Notice that the second statement is a causal claim, not a predictive one: it say
 
 \textbf{Key idea}: a genuine recommendation needs both an actionable lever and an explanation of why that lever works, neither of which a bare predictive score provides on its own, which is why moving from scoring to recommending requires causal reasoning about the effect of specific interventions, not just a ranking of who is most at risk.
 
+% From: '* The Cost of Solving Sub-Problems Separately'
 \textbf{The Cost of Solving Sub-Problems Separately}
 
 A decision pipeline is frequently built as a chain of smaller pieces, each optimized on its own: a prediction model trained to minimize forecast error, followed by a separate, often hand-written rule that converts the prediction into an action. Each piece can be individually well engineered and still add up to a pipeline that performs worse than one trained to optimize the final decision directly, an approach known as \textbf{decision-focused learning}, which has been shown to outperform this kind of piecewise construction.
@@ -354,21 +350,17 @@ The reason the split hurts is structural, not incidental: gradient information a
 
 \textbf{Key idea}: optimizing each piece of a pipeline in isolation does not add up to optimizing the decision the pipeline as a whole is meant to produce, since the seam between the pieces, here the fixed reorder rule, is exactly where the objective the business cares about can leak out of the optimization entirely.
 
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for The Cost of Ignoring Dynamics and Feedback %%%%
-
+% From: '# The Cost of Ignoring Dynamics and Feedback'
 \section{The Cost of Ignoring Dynamics and Feedback}
 \label{chap:cost-ignoring-dynamics-feedback}
 
-% Slide: A World That Reacts
+% From: '## A World That Reacts'
 \subsection{A World That Reacts}
 \label{sec:world-that-reacts}
 
 The first three sections below take up what happens once a deployed model starts influencing the very world it was trained to describe: the distribution it was fit to can shift, the shift can compound into a feedback loop, and in the sharpest case the prediction itself becomes the cause of the outcome it was meant to forecast.
 
-%\subsection{Dynamics and Feedback}
-%\label{subsec:dynamics-feedback}
-
+% From: '* The Static-World Assumption Breaks'
 \textbf{The Static-World Assumption Breaks}
 
 Every decision changes the world in some way, and that change breaks the assumption, implicit in almost all standard machine learning, that the distribution a model was trained on will still hold once the model is deployed and acting on that world. The world a model was fit to is not the world the model then operates in, because the model's own outputs are part of what shapes the world going forward.
@@ -381,6 +373,7 @@ The three kinds of shift are worth keeping separate because they call for differ
 
 \textbf{Key idea}: a model that encodes mechanism, the actual causal process generating an outcome, rather than just surface pattern, degrades more gracefully under all three kinds of shift, because mechanisms tend to be far more stable across a distribution shift than the correlational patterns a purely predictive model relies on.
 
+% From: '* Feedback Loops and Bias Amplification'
 \textbf{Feedback Loops and Bias Amplification}
 
 Predictions do not just describe the world; once deployed, they act on it, and the world they act on then reshapes the very data the model is later retrained on. This creates a feedback loop: the model's past decisions become part of the future training set, and whatever bias was present in the original model gets reinforced rather than corrected by the retraining process.
@@ -391,6 +384,7 @@ A second illustration comes from policing: over-policing a particular neighborho
 
 Both examples share a structural feature that makes feedback loops especially hard to catch in ordinary model monitoring: every individual retraining cycle can look like the model is doing exactly what it is supposed to do, fitting the newest available data more closely than the previous version did. The problem is invisible at the level of a single retraining step and only becomes visible by comparing the trajectory of the system across many cycles, which is a comparison most monitoring dashboards, built around a single model's current-period metrics, are not set up to make. \textbf{Key idea}: a feedback loop turns a small initial bias into a growing one, purely as a consequence of the model being retrained on the outcomes of its own past decisions, which means the bias compounds even if every individual retraining step is executed correctly by the standards of ordinary supervised learning.
 
+% From: '* Performativity: When the Prediction Changes the Outcome'
 \textbf{Performativity: When the Prediction Changes the Outcome}
 
 \begin{definition}
@@ -403,15 +397,13 @@ Performativity sharpens the feedback-loop idea from the previous section in one 
 
 \textbf{Key idea}: once a prediction is performative, $\Pr(Y \mid X)$ is no longer a fixed target that a model can be fit to and then left alone; it becomes a function of which model is deployed, since deploying a different model changes the behavior that generates $Y$ in the first place, a possibility that standard supervised learning, built around the assumption of a fixed target distribution, has no native way to represent.
 
-% Slide: Missing Exploration and Long Horizons
+% From: '## Missing Exploration and Long Horizons'
 \subsection{Missing Exploration and Long Horizons}
 \label{sec:missing-exploration-long-horizons}
 
 The final three sections of this chapter turn to what a model cannot know because it was never allowed to find out: the effect of actions nobody has tried, the consequences that only appear long after the decision was made, and the responses of people who learn how the model scores them and adjust their behavior accordingly.
 
-%\subsection{Limitations and Constraints}
-%\label{subsec:exploration-constraints}
-
+% From: '* No Exploration: Trapped in the Logged Policy'
 \textbf{No Exploration: Trapped in the Logged Policy}
 
 A model trained purely on observational data never experiments; it only ever sees the outcomes of whatever policy was actually in force when the training data was logged, and it stays trapped inside the support of that logged policy no matter how much data accumulates. It cannot learn the effect of an action nobody has ever taken, a gap known as an overlap violation, or a positivity violation, in the causal inference literature.
@@ -420,6 +412,7 @@ A pricing model illustrates the limitation cleanly. If historical prices for a p
 
 The overlap violation at the heart of this example is a property of the data, not of the model fit to it, which means no amount of architectural sophistication closes the gap. A more flexible model fit to the same \$20-and-above history produces a more flexible-looking extrapolation below \$20, not a better-evidenced one, since flexibility only changes the shape of the guess, not whether the guess is grounded in any observed outcome. The only way to generate genuine evidence about the untried region is to enter it, which is exactly what a deliberate pricing experiment does and what a purely observational pipeline, by construction, never does on its own. \textbf{Key idea}: some business questions cannot be answered by collecting more historical data of the same kind; they can only be answered by a deliberate intervention, actually trying the untried price, action, or policy, on at least a controlled subset of cases, which is exactly the kind of exploration a purely observational pipeline never performs.
 
+% From: '* Delayed and Long-Horizon Effects'
 \textbf{Delayed and Long-Horizon Effects}
 
 A model optimized for an immediate proxy metric has no visibility into downstream outcomes that only materialize later, and consequently no way to assign credit or blame across time for the outcomes it actually cares about. Optimizing what is easy to measure right now can actively work against optimizing what only becomes measurable much later.
@@ -430,6 +423,7 @@ The underlying difficulty is a credit-assignment problem: even once the long-hor
 
 \textbf{Key idea}: short-term proxies and long-term business outcomes can point in opposite directions, and only one of them, the long-term outcome, is what the business actually cares about in the end, which means a decision system needs some mechanism for crediting today's action with tomorrow's consequence, not just today's easily observed result.
 
+% From: '* Strategic and Adversarial Response'
 \textbf{Strategic and Adversarial Response}
 
 Once a model is deployed and its scores start to matter, the people being scored have an incentive to learn how the model works and to adjust their behavior to score better under it, whether or not that adjustment reflects any genuine change in the underlying quality the model was originally trying to measure. Standard machine learning assumes passive agents whose behavior does not respond to the model; in essentially any business setting, the agents being scored are not passive.
@@ -442,21 +436,17 @@ The more consequential and the more transparent a deployed model is, the faster 
 
 \textbf{Key idea}: a model trained on how agents behaved before it was deployed can become systematically wrong the moment those same agents learn how the model scores them, because the training data reflects a world in which the agents had not yet adapted, and adaptation is precisely what a deployed, consequential model invites.
 
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for Why This Matters %%%%
-
+% From: '# Why This Matters'
 \section{Why This Matters}
 \label{chap:why-this-matters}
 
-% Slide: Roadmap
+% From: '## Roadmap'
 \subsection{Roadmap}
 \label{sec:why-this-matters-roadmap}
 
 The lesson closes by pulling back from the four individual costs to ask why they matter together, what they share as a root cause, and where the rest of the book goes to address them.
 
-%\subsection{Key Takeaways}
-%\label{subsec:key-takeaways}
-
+% From: '* Why AI Projects Fail'
 \textbf{Why AI Projects Fail}
 
 Most AI project failures are not, on close inspection, modeling failures; they are framing failures, cases where the model itself works as intended but was pointed at the wrong problem from the start. Four recurring patterns account for the majority of these framing failures.
@@ -472,6 +462,7 @@ Each of these four patterns can coexist with a model that is, by every standard 
 
 Recognizing these four patterns as framing failures rather than modeling failures changes where the fix belongs: the remedy is not a better model architecture or more training data, but a different specification of the problem before any model is built, one that names the true objective, requires an explainable structure, identifies the lever a stakeholder needs, and builds in monitoring from the start. \textbf{Key idea}: an accurate model that answers the wrong question is a failed project, however good its metrics look on a dashboard, because the dashboard is measuring fit to a proxy, not success at the decision the business actually needed made.
 
+% From: '* Four Costs, One Root Cause'
 \textbf{Four Costs, One Root Cause}
 
 The four costs surveyed across this lesson, ignoring causality, ignoring uncertainty, ignoring the business objective, and ignoring dynamics, can look like four unrelated engineering gaps, each requiring its own separate fix. They share a single root cause. Each one arises from optimizing prediction accuracy on a fixed distribution, instead of optimizing decision quality on a distribution that the decision itself changes once it is acted upon.
@@ -480,6 +471,7 @@ Causality is ignored because a fixed-distribution predictor never needs to disti
 
 Seen this way, the four chapters are not four independent lessons to be learned separately; they are four consequences of the same modeling choice, examined from four different angles. \textbf{Key idea}: fixing all four costs at once is not four separate engineering projects bolted onto an existing pipeline; it is a single shift in what the pipeline is built to optimize, from prediction accuracy on data already collected to decision quality on the consequences the decision itself sets in motion.
 
+% From: '* Roadmap: Where the Book Goes From Here'
 \textbf{Roadmap: Where the Book Goes From Here}
 
 This lesson has catalogued what a purely predictive pipeline misses: causal mechanism, calibrated uncertainty, an explicit business objective, and an accounting for the dynamics a decision sets off. The rest of the book builds the pipeline that does not miss these things, organized into four parts that build on one another.
