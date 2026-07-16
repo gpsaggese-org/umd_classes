@@ -5,8 +5,8 @@
 - There are too many failures across multiple builds
   - Do not add more code but focus on getting to a stable build
   - Disable the failing tests
-  - Merge `gp_scratch_29`
-  - Merge `HelpersTask1273_Get_Mac_tests_to_pass`
+  - [x] Merge `gp_scratch_29`
+  - [x] Merge `HelpersTask1273_Get_Mac_tests_to_pass`
 
 > export CSFY_DOCKER_ENGINE="docker"; i docker_bash --stage=local -v 1.6.0;
 > export CSFY_DOCKER_ENGINE="docker"; i docker_cmd --stage=local -v 1.6.0 --cmd "pytest_log dev_scripts_helpers"
@@ -28,10 +28,25 @@
   - Review edit github_pr_plan.md
   - /github.create_child_pr PR2
 
+dev_scripts_helpers/git/git_create_nested_worktree.sh
+dev_scripts_helpers/git/git_remove_nested_worktree.sh
+
 ##
 - Have a thread that looks for TODOs in the code (gp, ai_gp)
   - Ranks them by simplicity
   - Create a branch, PR, run tests and merge
+
+##
+
+Create a script to apply a skill to a set of files
+
+Is there anything already?
+
+apply_cc_skill.py --skill ... or --rule ... --files ...
+
+Do it in parallel
+
+Fix the output
 
 # #############################################################################
 # IN PROGRESS
@@ -39,15 +54,74 @@
 
 ## pytest_failed
 
-### [.] Improve pytest_failed.py
+### [.] Improve pytest_failed.py and pytest_failed_multi_build.py
 
-- Accept multiple files and create a single table
-pytest_failed.py -i ...
+Short tests
+
+> pytest_multi_build.py --target dev_scripts_helpers/documentation/test/test_split_text_in_chapters.py
+> pytest_multi_build.py --target dev_scripts_helpers/documentation/test/
+generates `tmp.pytest_multi_build.<build_name>.txt`
+
+Run for a single build
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt
+
+Run for all builds
+> pytest_failed_multi_build.py
+generates `tmp.pytest_failed.<build_name>.<tag>.txt` for each build
+and then 
+`tmp.pytest_failed_multi_build.failed_tests.txt`
+`tmp.pytest_failed_multi_build.repro.sh`
+
+./dev_scripts_helpers/testing/pytest_failed_multi_build.py ./dev_scripts_helpers/testing/pytest_failed.py ./dev_scripts_helpers/testing/pytest_multi_build.py
+./dev_scripts_helpers/testing/test/test_pytest_failed_multi_build.py ./dev_scripts_helpers/testing/test/test_pytest_failed.py ./dev_scripts_helpers/testing/test/test_pytest_multi_build.py
+
+ /pytest.triage_local_unit_tests tmp.pytest_failed_multi_build.repro.sh
+
+Fix group
+
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_build_tag
+
+tmp.pytest_failed_multi_build.repro.sh
+
+pytest_failed.py -i tmp.pytest_multi_build.apple.txt --in_build_tag ... --out_build_tag
+
+tmp.pytest_failed_multi_build.repro.sh
+
+// Using GH
+i gh_workflow_list
+
+tmp.failure.check_if_the_linter_was_run.helperstask1273_get_mac_tests_to_pass.txt
+
+pytest_failed.py -i tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt
+
+```
+20:17:32 - INFO  pytest_failed.py _process_single_file:227              Created 'passed_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:233              Created 'failed_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:239              Created 'skipped_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:245              Created 'updated_tests.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:252              Created 'tests_by_duration.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:258              Created 'duration_stats.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:264              Created 'stacktraces.txt'
+20:17:32 - INFO  pytest_failed.py _process_single_file:270              Created 'info.json'
+
+################################################################################
+Test Outcome Summary
+################################################################################
+Build                                                            | Status | Passed | Skipped | Failed | Total | Duration |
+---------------------------------------------------------------- | ------ | ------ | ------- | ------ | ----- | -------- |
+tmp.failure.fast_tests.helperstask1273_get_mac_tests_to_pass.txt | FAIL   | 3106   | 172     | 3      | 3281  | 263.28s  |
+```
+
+## Improve unit test
 
 ### [ ] Why there are two updated?
 Updated:    2/3346
 
-### [ ] Print the files that have been updated
+### [ ] pass regex
+expected = "Version: ImageMagick 7.1.2-\S+ Q16-HDRI aarch64 24116 https://imagemagick.org"
+self.assert_equal(..., regex=True)
+
+### [ ] Print the files that have been updated in hunit_test.py
 - Add report in files
 
 ### [ ] Automatically run git add for golden outcomes
@@ -60,10 +134,10 @@ helpers/test/test_amp_dev_scripts.py::Test_env1::test_get_system_signature1 Pass
 Sorry, try again.
 Password:
 
-### [.] HelpersTask1273_Get_Mac_tests_to_pass
+### [x] HelpersTask1273_Get_Mac_tests_to_pass
 - In `csfy1`
-- [.] Get all the tests in master to pass
-- [.] run.sh running
+- [x] Get all the tests in master to pass
+- [x] run.sh running
 
 ### [.] Make `dev_scripts_helpers/documentation/test/test_notes_to_pdf.py` pass
 - In `umd_classes2` // gp_scratch
@@ -111,19 +185,81 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_typ_pdf
   - [x] pytest_log msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_tex_pdf
 
+## Create book to publish
+
+### 
+- Use the same flow (slides + commentary)
+  > gen_lecture_commentary.py data605 01.1 (it's broken)
+
+- Pointer to GitHub
+- Pointer to Videos
+- Pointer to Tutorials
+- Pointer to Video Tutorial (on YouTube)
+
+### Add counter and Google Analytics
+- [.] Count download, visits, etc
+
+### Publish on Substack
+- [ ] Start with copy-paste
+
+### Start Promoting
+- Same as causify substack
+- LinkedIn
+- Email to my students
+
 ## Books
 
 ### [ ] From Data To Decisions
-/Users/saggese/src/notes1/book.springer/springer.proposal_v2.toc.md
-/Users/saggese/src/notes1/book.springer/springer.saggese.full_proposal_v2.md
-/Users/saggese/src/umd_classes2/book.springer/book_map.md
-/Users/saggese/src/umd_classes2/book.springer/book_toc.md
+/Users/saggese/src/umd_classes2/book_springer/book_map_vXYZ.md
+/Users/saggese/src/umd_classes2/book_springer/book_map_v3.md
+/Users/saggese/src/umd_classes2/book_springer/book_toc.md
+/Users/saggese/src/notes1/book_springer/springer.proposal_v2.toc.md
+/Users/saggese/src/notes1/book_springer/springer.saggese.full_proposal_v2.md
 
 - `Execute /Users/saggese/src/notes1/book_proposals/prompt.springer.from_toc_to_slides.md`
 
-- [ ] ## 1: From Prediction Pipelines to Decision Pipelines
 - [ ] Remove ###### from files
 - [ ] Convert files to typst
+- [ ] Compare the TOC book_springer/decision_making_categories_with_examples.md
+  to AIMA
+  https://docs.google.com/spreadsheets/d/1MSpnfnFz4JZXEnn_fd3QPkjtZmHhol-AJOO_kguO7Bg/edit?gid=1589123179#gid=1589123179
+
+  - http://localhost:8888/lab/tree/git_root/book_springer/tutorials/Lesson10_01_q_learning
+
+- [ ] Review `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
+- [ ] Review `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
+- [ ] Review `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
+- [ ] Review `book_springer/lectures_source/Lesson10.01_Taxonomy_of_Decision_Problems.txt`
+- [ ] Review `book_springer/lectures_source/Lesson11.01_Simple_Decisions.txt`
+- [ ] Review `book_springer/lectures_source/Lesson12.01_Complex_Decisions.txt`
+- [ ] Review `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
+
+### Typst flow
+
+- [ ] Generate some chapters to see how they look like
+  ```
+  > export FILE=Lesson08.1-Causal_AI_intro
+  claude> /model sonnet
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_latex_text.txt on msml610/lectures_source/${FILE}.txt
+  ```
+
+  render_typst.sh book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.typ
+
+### Latex flow
+- [ ] Generate some chapters to see how they look like
+  ```
+  > export FILE=Lesson08.1-Causal_AI_intro
+  claude> /model sonnet
+  claude> Execute /Users/saggese/src/notes1/book_proposals/prompt.create_slides_to_typst_text.txt on msml610/lectures_source/${FILE}.txt
+  ```
+
+  ~/src/umd_classes2/book_springer/latex_template/book/run_latex.sh
+
+  pandoc book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.tex -s -o document.html --mathjax
+
+- [ ] Remove Abstract
+- [ ] Decrease one level
+- [ ] Tweak prompt to fix these problems
 
 ### [.] Create and review slides for Agentic AI
 
@@ -131,21 +267,54 @@ msml610/test/test_gen_slides.py::Test_Msml610_Run_notes_to_pdf_py::test_notes_to
   - `Execute /Users/saggese/src/notes1/book_proposals/prompt.from_toc_to_slides.md`
 
 - [.] book.Agentic_AI/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.08
-- [ ] book.springer/lectures_source/Lesson01.10
-- [ ] book.springer/lectures_source/Lesson01.11
+  -> Reading the RHLF book before continuing
+- [ ] book.Agentic_AI/lectures_source/Lesson01.09
+- [ ] book.Agentic_AI/lectures_source/Lesson01.10
+- [ ] book.Agentic_AI/lectures_source/Lesson01.11
   > gen_slides.py book.Agentic_AI/01.08 --slides_engine typst --daemon
+
+## CS Refresher
+
+- [ ] class_CS_refreshers/lectures_source/Lesson95.Refresher_game_theory.txt
+  - http://localhost:8888/lab/tree/git_root/class_cs_refreshers/tutorials/notebooks/L95_05_game_theory.ipynb
+
+- Tutorials
+  - [ ] Show how the game is played
+  - [ ] Show examples of dominant strategies
+
+## RHLF Book
+
+- notes/math.rlhfbook.txt
+  - Chap 6
 
 ## Content Summarization
 
 ### [ ] 
 
 - Create a script that given an input (url, pdf article, book title)
+  - html_to_md.py 
+  - download_academic_paper.py
 - Download the PDF and cache it in Books or Papers dir
 - Converts it to markdown (if necessary)
 - Apply a text transform
 
 ### [.] Read Academic Articles
+
+- [x] Add a script to download an HTML file to markdown
+  
+- [ ] Merge the flows if possible
+./dev_scripts_helpers/documentation/summarize_chapters.py
+./dev_scripts_helpers/documentation/summarize_md.py
+.claude/skills/markdown.summarize/SKILL.md
+  - html_to_md.py + /markdown.summarize seems to work well
+  - summarize_chapters.py seems a worse version than /markdown.summarize
+  - Maybe summarize_md.py allows to summarize in one shot or chapter by chapter
+
+2023.Zanga.et.al.A_Survey_on_Causal_Discovery_Theory_and_Practice
+
+Zanga et al, "A Survey on Causal Discovery Theory and Practice" (2023)
+
+Also use arxiv link whenever possible
 
 ```
 > download_academic_paper.py -i https://arxiv.org/pdf/2305.10032
@@ -181,16 +350,26 @@ download_academic_paper.py
 # Work on slides
 
 - LLM
-  - Kaparthy's LLM
-  - https://github.com/karpathy/nanochat
-  - https://github.com/karpathy/nanoGPT
+  - Karpathy's LLM
+  - https://www.youtube.com/@AndrejKarpathy
   - https://github.com/karpathy/micrograd
+    - A tiny scalar-valued autograd engine and a neural net library on top of it with PyTorch-like API
+    - https://www.youtube.com/watch?v=VMj-3S1tku0
+  - https://github.com/karpathy/nanochat
+    - The best ChatGPT that $100 can buy
+  - https://github.com/karpathy/nanoGPT
+    - The simplest, fastest repository for training/finetuning medium-sized GPTs.
+  - MicroGPT
+    - https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95
   - https://karpathy.ai/
-- AutoEDA
-- IN PROGRESS: Topics from Berkeley class
+  - https://karpathy.ai/zero-to-hero.html
+  - https://github.com/karpathy/makemore
+    - [.] The spelled-out intro to language modeling: building makemore 47
+  - Karpathy's AutoResearch
+- [ ]: AutoEDA
+- [ ]: Topics from Berkeley class
 - AlphaEvolve
 - Monte Carlo search
-- Kaparthy's AutoResearch
 - https://www.manning.com/books/build-a-large-language-model-from-scratch
 - https://www.manning.com/books/build-a-reasoning-model-from-scratch
 - https://aman.ai/primers/ai/top-30-papers/
@@ -346,11 +525,20 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 
 ### Improve lint_txt.py
 
-- -> lint_text.py
+- Rename -> lint_text.py
 
 - Test lint_txt.py to see which tool is best (prettier, mdformat, ...)
 
-- txt -> smd, or mds (slide markdown) 
+- txt -> emd (extended markdown) or smd (slide markdown)
+  - I prefer emd
+
+- If the file is emd then do a certain list of transforms,
+  add an option to force recognizing a certain format
+  - tex, txt, md, emd
+- prettier -> beautify
+  - For md only lint, ...
+- preprocess and postprocess are used to transform / comment out stuff that the
+  beautifier doesn't like, or support (e.g., since it's not markdown like *)
 
 - The transforms are:
 
@@ -370,8 +558,6 @@ helpers/hmarkdown_toc.py                                      92     24     26  
                             refresh_toc: -
                             check_links: -
 
-- The preprocess stage should handle everything that is not standard markdown
-
 - prettier doesn't handle well
   - //
   - The * slides
@@ -379,10 +565,8 @@ helpers/hmarkdown_toc.py                                      92     24     26  
 - Add spaces between first level bullets
 
 - Make the definitions bold and black for visibility
-  - -*Definition*- for bold and color
+  - @Definition@: for bold and color
   - **Definition** for black and color
-
-
 
 ### [ ] Improve _LOG output
 
@@ -611,6 +795,50 @@ Use Test_build_pandoc_container1 as a reference
   ```
 
 - Add -i, --input together with files
+
+# Tutorials
+
+## Existing
+> ls -1 tutorials/
+Asana
+Autogen
+Ax_Multi_Objective_Optimization
+BambooAI
+CausalML_Diabetes_Study
+causalnex
+crewai
+data_science_packages
+dowhy
+FilterPy
+gCastle
+GitHub_Stats
+GluonTS_COVID19_Prediction
+gymnasium
+Jupyter_Extension_Langchain
+LangChain
+LangChain_LangGraph
+LangGraph
+lime
+LlamaIndex
+Neo4j
+OpenAI
+pgmpy
+project_template
+Prophet
+README.md
+shap
+TensorFlow
+TorchRL_MAC
+tsfresh
+tutorial_data_science
+tutorial_forecast_as_service
+tutorial_pydanticAI
+
+## 
+numpy
+torch
+scipy
+pandas
 
 # Book proposals
 
