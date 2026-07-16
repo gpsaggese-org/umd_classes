@@ -1,11 +1,16 @@
 # Goal
-Given a file from the user, you will apply the template below
-and write the result in the same file
+- Given a file from the user, you will apply the template below and write the
+  result in the same file
 
-Follow the conventions in `.claude/skills/markdown.rules.md`
+- Examples of good research specifications are:
+  - `research/ideas/prompt.format_research_idea.md`
+  - `research/ideas/draft.RL_for_pickleball.md`
+
+- Follow the conventions in `.claude/skills/markdown.rules.md` and
+  `.claude/skills/text.rules.md`
 
 # Template
-```
+````
 # [Title of Research Idea]
 
 ## Status
@@ -46,7 +51,27 @@ Follow the conventions in `.claude/skills/markdown.rules.md`
 - [Topic 2]: [What to investigate]
 - [Topic 3]: [What to investigate]
 
-## References
+## Next steps
+[ ] Look for related research (what has already been done)
+[ ] Finalize the implementation plan
+[ ] GP to review / approve the plan
+[ ] Hack a quick end-to-end prototype (e.g., in 1-2 days) to show that you
+    understood the problem and can make progress
+[ ] Break the problem down in phases and milestones
+[ ] Execute one step at the time
 
+## Implementation plan
+
+- Milestone 1
+  - Do this and that
+  - This is the result
+
+- Milestone 2
+  - Do this and that
+  - This is the result
+
+## References
 - Author(s), _Title_. (Year)
-```
+````
+
+
