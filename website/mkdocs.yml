@@ -7,10 +7,7 @@ strict: true
 
 theme:
   name: material
-  analytics:
-    provider: google
-    property: G-QMS5WDYD0N
-  custom_dir: overrides
+  custom_dir: docs/overrides
   logo: assets/logo.png  # Custom logo in header
   favicon: assets/favicon.png  # Custom favicon in browser tab
   generator: false  # Remove "Made with Material for MkDocs" from footer

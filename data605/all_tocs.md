@@ -1,5 +1,3 @@
-// for_loop_lessons.py --class data605 --action generate_toc
-
 # Lesson01.1-Intro.txt
 
 - Invariants of a Class Lecture
@@ -684,3 +682,18 @@
         - Pregel
         - Apache Giraph
         - Apache Spark GraphX
+
+# Lesson_93_Sorrentum_Project.txt
+
+- Overview
+        - Sorrentum Primitives
+        - Sorrentum: Financial Machine Learning
+        - Blockchain
+        - Smart Contract
+        - DApps and DAO
+        - Current Financial System is Failing
+        - Decentralized Finance
+        - Sorrentum: Projects
+        - Sorrentum: Projects
+        - Additional Resources
+        - Sorrentum Sandbox

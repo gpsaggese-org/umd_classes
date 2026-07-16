@@ -1,0 +1,141 @@
+# Lesson01.01_From_Data_Science_To_Decision_Science.txt
+
+- Why Decisions, Not Predictions
+  - Course Roadmap
+        - The Decision Pipeline: One Book, Five Parts
+        - Why Traditional ML Falls Short
+  - From Data Science to Decision Science
+        - From Data Science to Decision Science
+        - Causal vs Predictive Questions
+        - The Analytics Maturity Ladder
+- The Cost of Ignoring Causality
+  - When Correlation Misleads
+        - Correlation Encodes Confounding as Causation
+        - Missing Interventions and Counterfactuals
+        - Selection Bias and the Missing Counterfactual
+  - Structural Failure Modes
+        - Interference and Spillovers Across Units
+        - Simpson's Paradox: When Aggregates Lie
+        - Collider Bias: Conditioning Creates Illusions
+        - Discarding Domain Knowledge and Mechanism
+- The Cost of Ignoring Uncertainty
+  - Point Estimates in a Small-Data World
+        - Point Estimates Without Error Bars
+        - Epistemic vs Aleatoric Uncertainty Conflated
+        - No Abstention: Systems That Never Say "I Don't Know"
+        - Overfitting and the Statistical Significance Traps
+- The Cost of Ignoring the Business Objective
+  - Proxies, Costs, and Trade-offs
+        - Optimizing the Wrong Objective
+        - Symmetric Losses for Asymmetric Errors
+        - Multi-Objective Decisions Under Constraints
+  - From Scores to Actionable Decisions
+        - Black-Box Scores Are Not Recommendations
+        - The Cost of Solving Sub-Problems Separately
+- The Cost of Ignoring Dynamics and Feedback
+  - A World That Reacts
+        - The Static-World Assumption Breaks
+        - Feedback Loops and Bias Amplification
+        - Performativity: When the Prediction Changes the Outcome
+  - Missing Exploration and Long Horizons
+        - No Exploration: Trapped in the Logged Policy
+        - Delayed and Long-Horizon Effects
+        - Strategic and Adversarial Response
+- Why This Matters
+  - Roadmap
+        - Why AI Projects Fail
+        - Four Costs, One Root Cause
+        - Roadmap: Where the Book Goes From Here
+
+# Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt
+
+- Bridging Prediction and Decision
+  - From Costs to Tools
+        - From Costs to Tools: What This Chapter Builds
+        - Prediction vs Decision, Formally
+- The Ladder of Causation
+  - Three Rungs of Causal Reasoning
+        - The Ladder of Causation
+        - Rung 1: Association
+        - Rung 2: Intervention
+        - Rung 3: Counterfactuals
+        - Seeing vs Doing: A Worked Example
+- Causal Graphical Models
+  - Structure and Variable Types
+        - Structural Causal Models
+        - Confounders: The Fork Structure
+        - Mediators: The Chain Structure
+        - Colliders Revisited: A Formal Treatment
+        - Building a Causal DAG from Domain Knowledge
+- Identifying Causal Effects
+  - From Association to Intervention
+        - The Do-Operator: Simulating Intervention
+        - Randomized Controlled Trials: The Gold Standard
+        - The Back-Door Criterion
+        - Back-Door Adjustment: A Worked Example
+        - When Back-Door Fails: The Front-Door Criterion
+        - Instrumental Variables: A Third Path
+- Potential Outcomes and Treatment Effects
+  - Measuring What Cannot Be Observed
+        - Potential Outcomes: Rubin's Framework
+        - The Bias Equation
+        - Average and Conditional Treatment Effects
+        - Assumptions Are Not Free
+- Toward Probabilistic Decision-Making
+  - Why Point Estimates Are Not Enough
+        - Posteriors, Not Point Estimates
+        - Variational Inference: Scaling Bayesian Updating
+        - Normalizing Flows: Flexible Posteriors
+        - Calibration and Conformal Prediction
+        - Decision Readiness Under Uncertainty
+- Roadmap
+        - Causal Models as the Foundation for Decisions
+        - From Identification to Decisions
+        - Roadmap: What Comes Next
+
+# Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt
+
+- From Objectives to Actions
+  - Recap and Transition
+        - From Catalog to Calculus: What This Lesson Builds
+        - From KPIs to Causal Objectives
+- Decision Theory: Utility and Rational Choice
+  - Utility Functions and Expected Utility
+        - Utility Functions: Encoding What Matters
+        - The Expected Utility Principle
+        - Two Treatments: A Worked Utility Computation
+        - Risk Preferences and the Shape of Utility
+        - Cost Matrices and Asymmetric Loss, Formally
+        - Multi-Objective Trade-offs and the Pareto Frontier
+- Decision Theory: Networks and Bayesian Choice
+  - From Graphs to Optimal Policies
+        - Decision Networks: Chance, Decision, and Utility Nodes
+        - Solving a Decision Network
+        - Bayesian Decision Rules and Admissibility
+        - Prior Elicitation: Where Priors Come From
+        - The Value of Information
+- Decision-Focused Learning
+        - Interventions Inside the Decision
+        - End-to-End, Decision-Focused Learning
+- Dynamics: When the World Reacts
+  - Feedback in Time
+        - The Static-World Assumption, Formally
+        - Feedback Loops and Simultaneity in Time Series
+        - Granger Causality: Prediction Is Not Causation
+        - When Temporal Structure Misleads
+        - Measuring Effects Under Non-Stationarity: Interrupted Time Series
+        - Synthetic Control: A Counterfactual Without a Control Group
+- Sequential Decisions and Exploration
+  - Exploring Under Uncertainty
+        - The Exploration-Exploitation Trade-off
+        - Upper Confidence Bound: Optimism Under Uncertainty
+        - Contextual and Non-Stationary Bandits
+        - Causal Bandits: Sharing Information Across Interventions
+- Causal Reinforcement Learning
+  - Long-Horizon Decisions
+        - Utilities Over Time and the Bellman Equation
+        - Structural Causal Models for Sequential Decisions
+        - Counterfactual Credit Assignment
+        - Deconfounding Off-Policy Evaluation
+- Roadmap
+        - Roadmap: The Decision Pipeline, Complete
