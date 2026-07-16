@@ -423,6 +423,8 @@
   attackers adopt new tactics, a label shift the model has no way to detect on
   its own
 
+// TODO(ai_gp): Come up with an additional example
+
 - **Key idea**: a model that encodes (causal) mechanisms, not just patterns,
   degrades more gracefully because mechanisms are more stable across distribution
   shift than surface correlations
@@ -455,6 +457,7 @@
 - **Definition**: _performativity_ is a prediction that changes the very
   quantity it predicts
 
+// TODO(ai_gp): Come up with an additional example
 - **Example**: a published credit-risk score moves borrower behavior, which
   moves the true default rate the score was trying to predict
 
@@ -482,11 +485,14 @@
 // From msml610/08.1/Delayed and Long-Horizon Effects
 
 - **Problem**: a model optimized for an immediate proxy ignores downstream
-  outcomes and has no way to assign credit over time
+  outcomes and has no way to assign credit to actions over time
+
+// TODO(ai_gp): Come up with an additional example
 - **Example**: a support team optimized for fast ticket closure closes
   tickets quickly, whether or not the underlying issue is resolved
   - The true cost, repeat complaints and lost trust, shows up months later,
     in a different metric
+
 - **Key idea**: short-term proxies and long-term business outcomes can point
   in opposite directions, and only one of them is what the business actually
   cares about
@@ -497,9 +503,13 @@
 - **Problem**: once a model is deployed, the people it scores learn to
   optimize against it
   - Standard ML assumes passive agents; in business, agents are not passive
+
 - **Example**: publishing the features of a credit-scoring model invites
   credit gaming; publishing a search-ranking algorithm invites
   keyword-stuffing
+
+// TODO(ai_gp): Come up with an additional example
+
 - **Key idea**: a model trained on how agents behaved before deployment can
   become wrong the moment agents learn how it scores them
 
@@ -510,29 +520,32 @@
 * Why AI Projects Fail
 // From msml610/08.1/Why AI Projects Fail
 
-- Most AI project failures are not modeling failures, they are framing
-  failures:
+- Most AI projects fail not because of failures at the modeling phase, but
+  because they frame the problems incorrectly 
   - **Misalignment**: the model optimizes a proxy, not the business goal
   - **Black boxes**: outputs cannot be explained, so they are not trusted or
     adopted
   - **No lever**: a score is delivered where an action was needed
   - **No feedback**: performance is never monitored after deployment
-- **Key idea**: an accurate model that answers the wrong question is a failed
-  project, however good its metrics look on a dashboard
 
-* Four Costs, One Root Cause
+- Any accurate model that answers the wrong question is a failed project, however
+  good its metrics look on a dashboard
 
-- The four costs surveyed in this lesson, ignoring causality, uncertainty,
-  the business objective, and dynamics, look unrelated but share a single
-  root cause
+* The Root Cause of the Four Costs
+
+- The four costs surveyed in this chapter (i.e., ignoring causality, uncertainty,
+  the business objective, and dynamics) share a single root cause
+
 - Each one comes from optimizing prediction accuracy on a fixed distribution
   instead of decision quality on a distribution the decision itself changes
-- **Key idea**: fixing all four costs at once is not four separate projects,
-  it is one shift in what the pipeline is built to optimize
 
-* Roadmap: Where the Book Goes From Here
+- This book shows how to solve all the 4 problems using causal and probabilistic
+  approaches to build
+- Every technique plugs into one loop
+// TODO(ai_gp): Convert it into a block diagram with mermaid or graphviz
+  $$data \to model \to policy \to action \to feedback$$
 
-- This lesson catalogued what a purely predictive pipeline misses
+// TODO(ai_gp): Expand more and use the latest TOC in book_map_v3.md
 - The rest of the book builds the pipeline that does not miss it:
   - **Part II** supplies the probabilistic and causal tools: Gaussian
     processes, variational inference, normalizing flows, and causal discovery
@@ -542,5 +555,3 @@
     models, causal reinforcement learning, and feedback loops
   - **Part V** covers deploying, monitoring, and governing the resulting
     decision systems in production
-- **Key idea**: every later technique plugs into one loop
-  $$data \to model \to policy \to action \to feedback$$

@@ -1,31 +1,30 @@
-Understand why running
+Create a script get_catalog.py --target manning
+to scrape the content of the pages
+using https://www.manning.com/catalog?page=1
 
-lint_txt.py -i book_springer/book/Lesson02.01_From_Data_Science_To_Decision_Science.tex --action prettier -v DEBUG 2>&1 | tee log.txt
+The output is a CSV like
 
-the following incorrect transformations are performed
+Title, Author, Year, Link
+"Retrieval Augmented Generation, The Seminal Papers", "Ben Auffarth", "2026", "https://www.manning.com/books/retrieval-augmented-generation-the-seminal-papers"
 
-From
+- [ ] 2 Extend the script to O'Reilly using --target oreilly1
 
-```
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
-%%%% Chapter file for Why Decisions, Not Predictions %%%%
-% This chapter file can be compiled standalone or included in the root book.tex
-```
+https://www.oreilly.com/pub/q/book_all_date_desc
 
-to
+Download the page, if tmp.get_catalog.oreilly.txt and then parse it
 
-```
-% git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT %%%% Chapter file for Why Decisions, Not Predictions %%%% % This chapter file can be compiled standalone or included in the root book.tex
-```
+- [ ] 3 Extend the script to O'Reilly using --target oreilly2
 
-From
-```
-% From: '* Why Traditional ML Falls Short'
-\textbf{Why Traditional ML Falls Short}
-```
+https://www.oreilly.com/search/?q=*&type=book&publishers=O%27Reilly%20Media%2C%20Inc.&order_by=created_at&rows=100
 
-to
+same approach of specifying the number of pages
 
-```
-% From: '* Why Traditional ML Falls Short' \textbf{Why Traditional ML Falls Short}
-```
+# Conventions
+- When writing code you must always follow the instructions in
+  `.claude/skills/coding.rules.md`
+
+# Create a plan, if needed
+- If the task is not perfectly clear, you MUST not perform it, but ask for
+  clarifications
+  - When the task is complex, create a `plan.md` with 5 bullet points explaining
+    what the plan is
