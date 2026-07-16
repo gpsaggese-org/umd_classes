@@ -118,4 +118,3 @@
 
 - If conflicts arise between your branch and the main branch, sync your fork
   (Step 3) and rebase or merge main into your branch before requesting a review.
-

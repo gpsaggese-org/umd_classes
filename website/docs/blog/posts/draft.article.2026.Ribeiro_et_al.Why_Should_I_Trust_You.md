@@ -1,4 +1,20 @@
-https://arxiv.org/pdf/1602.04938
+---
+title: "Why Should I Trust You: Explaining the Predictions of Any Classifier"
+authors:
+  - gpsaggese
+date: 2026-01-15
+description:
+draft: true
+categories:
+  - AI Research
+  - Machine Learning
+---
+
+TL;DR: LIME explains predictions of any classifier by fitting interpretable local models around specific instances.
+
+<!-- more -->
+
+Source: https://arxiv.org/pdf/1602.04938
 
 # Introduction
 
