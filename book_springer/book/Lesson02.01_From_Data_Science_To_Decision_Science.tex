@@ -2,23 +2,19 @@
 %%%% Chapter file for Why Decisions, Not Predictions %%%%
 % This chapter file can be compiled standalone or included in the root book.tex
 
-\chapter{Why Decisions, Not Predictions}
+\chapter{Introduction}
+
+\section{Why Decisions, Not Predictions}
 \label{chap:why-decisions-not-predictions}
 
-% Slide: Course Roadmap
-\section{Course Roadmap}
-\label{sec:course-roadmap}
-
-This lesson opens the first part of the book, which motivates the shift from prediction to decision before Part~II introduces the probabilistic and causal machinery that makes the shift concrete. The remaining sections build the vocabulary the rest of the book relies on: the distinction between data science and decision science, the difference between a predictive and a causal question, and the four-level analytics maturity ladder that locates an organization's current capability and the capability this book aims to build.
-
 % Slide: From Data Science to Decision Science
-\section{From Data Science to Decision Science}
+\subsection{From Data Science to Decision Science}
 \label{sec:data-science-to-decision-science}
 
 The next four sections work through why a purely predictive pipeline falls short and contrast it with the goals, methods, and outputs decision science supplies in its place. Each section builds on the last, moving from the four ingredients a decision needs, to the sharper predictive-versus-causal distinction, to the maturity ladder that measures how many of those ingredients an organization has actually put in place.
 
-\subsection{Overview}
-\label{subsec:data-science-overview}
+%\subsection{Overview}
+%\label{subsec:data-science-overview}
 
 \textbf{Why Traditional ML Falls Short}
 
@@ -113,17 +109,17 @@ The jump from Level~1 to Levels~2 and~3 is not an incremental improvement in mod
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for The Cost of Ignoring Causality %%%%
 
-\chapter{The Cost of Ignoring Causality}
+\section{The Cost of Ignoring Causality}
 \label{chap:cost-ignoring-causality}
 
 % Slide: When Correlation Misleads
-\section{When Correlation Misleads}
+\subsection{When Correlation Misleads}
 \label{sec:when-correlation-misleads}
 
 The first three sections of this chapter show that a purely predictive model, however well it fits the data it was trained on, answers a narrower question than the one a decision-maker needs answered. Fitting $\Pr(Y \mid X)$ tells you what tends to co-occur with what; it does not tell you what happens if you reach in and change $X$ yourself, and it says nothing at all about the cases history never let you observe.
 
-\subsection{Core Concepts}
-\label{subsec:correlation-misleads-concepts}
+%\subsection{Core Concepts}
+%\label{subsec:correlation-misleads-concepts}
 
 \textbf{Correlation Encodes Confounding as Causation}
 
@@ -157,13 +153,13 @@ This creates a subtle trap for anyone evaluating the model purely by predictive 
 The trap is subtle precisely because nothing about it shows up as a data quality problem in the usual sense: there are no missing values, no corrupted labels, no obviously wrong entries to flag. The data is a completely accurate record of what happened to the people the bank chose to lend to. The distortion is entirely in what is absent, a systematic silence about an entire population, and silence of this kind does not trigger any of the standard checks a data science team runs before trusting a model, since those checks are built to catch errors in the data that exists, not the absence of data that was never generated in the first place. \textbf{Key idea}: a model can be accurate on the population it happened to observe and still be blind to the population the business actually needed to reason about, and no amount of tuning on the observed population fixes a gap in what was observed to begin with.
 
 % Slide: Structural Failure Modes
-\section{Structural Failure Modes}
+\subsection{Structural Failure Modes}
 \label{sec:structural-failure-modes}
 
 Confounding and selection bias are not the only ways a correlation-based pipeline goes wrong. The next four sections survey structural failure modes that can corrupt a causal or predictive estimate even when the usual confounding checks have been satisfied: violations of independence across units, reversals under aggregation, illusions created by conditioning on the wrong variable, and the discarding of mechanism in favor of whatever the training data happens to contain.
 
-\subsection{Failure Modes}
-\label{subsec:structural-failure-modes}
+%\subsection{Failure Modes}
+%\label{subsec:structural-failure-modes}
 
 \textbf{Interference and Spillovers Across Units}
 
@@ -226,17 +222,17 @@ This is not an isolated anecdote; it is the generic failure mode of any model th
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for The Cost of Ignoring Uncertainty %%%%
 
-\chapter{The Cost of Ignoring Uncertainty}
+\section{The Cost of Ignoring Uncertainty}
 \label{chap:cost-ignoring-uncertainty}
 
 % Slide: Point Estimates in a Small-Data World
-\section{Point Estimates in a Small-Data World}
+\subsection{Point Estimates in a Small-Data World}
 \label{sec:point-estimates-small-data}
 
 The four sections below trace what goes wrong when a pipeline reports a single number without saying how much to trust it: the spread hidden behind a point forecast, the two different sources of uncertainty that get flattened into one, the absence of any mechanism for a model to admit it does not know, and the statistical traps that let unwarranted confidence accumulate silently over a project.
 
-\subsection{Uncertainty in Models}
-\label{subsec:uncertainty-in-models}
+%\subsection{Uncertainty in Models}
+%\label{subsec:uncertainty-in-models}
 
 \textbf{Point Estimates Without Error Bars}
 
@@ -285,17 +281,17 @@ What makes the three traps dangerous together, rather than merely additive, is t
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for The Cost of Ignoring the Business Objective %%%%
 
-\chapter{The Cost of Ignoring the Business Objective}
+\section{The Cost of Ignoring the Business Objective}
 \label{chap:cost-ignoring-business-objective}
 
 % Slide: Proxies, Costs, and Trade-offs
-\section{Proxies, Costs, and Trade-offs}
+\subsection{Proxies, Costs, and Trade-offs}
 \label{sec:proxies-costs-tradeoffs}
 
 The next three sections examine the objective function itself: what happens when it is a proxy rather than the true business goal, what happens when it treats every error as equally costly, and what happens when a real decision has to trade off several goals at once rather than optimize a single scalar.
 
-\subsection{Objective Functions}
-\label{subsec:objective-functions}
+%\subsection{Objective Functions}
+%\label{subsec:objective-functions}
 
 \textbf{Optimizing the Wrong Objective}
 
@@ -330,13 +326,13 @@ The usual engineering response to a multi-objective problem is to scalarize it, 
 \textbf{Key idea}: collapsing a genuinely multi-objective decision into a single loss function does not solve the trade-off, it hides it, silently baking in someone's judgment about the relative weights instead of surfacing that judgment where it can be examined, debated, and adjusted by the people accountable for the decision.
 
 % Slide: From Scores to Actionable Decisions
-\section{From Scores to Actionable Decisions}
+\subsection{From Scores to Actionable Decisions}
 \label{sec:scores-to-actionable-decisions}
 
 Even a well-specified objective is not enough if the pipeline's final output is a bare score with no attached lever, and even a well-designed individual model is not enough if it sits inside a pipeline optimized piece by piece rather than as a whole. The next two sections take up these two remaining gaps between a technically sound model and a usable decision.
 
-\subsection{Score to Action Translation}
-\label{subsec:score-to-action}
+%\subsection{Score to Action Translation}
+%\label{subsec:score-to-action}
 
 \textbf{Black-Box Scores Are Not Recommendations}
 
@@ -361,17 +357,17 @@ The reason the split hurts is structural, not incidental: gradient information a
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for The Cost of Ignoring Dynamics and Feedback %%%%
 
-\chapter{The Cost of Ignoring Dynamics and Feedback}
+\section{The Cost of Ignoring Dynamics and Feedback}
 \label{chap:cost-ignoring-dynamics-feedback}
 
 % Slide: A World That Reacts
-\section{A World That Reacts}
+\subsection{A World That Reacts}
 \label{sec:world-that-reacts}
 
 The first three sections below take up what happens once a deployed model starts influencing the very world it was trained to describe: the distribution it was fit to can shift, the shift can compound into a feedback loop, and in the sharpest case the prediction itself becomes the cause of the outcome it was meant to forecast.
 
-\subsection{Dynamics and Feedback}
-\label{subsec:dynamics-feedback}
+%\subsection{Dynamics and Feedback}
+%\label{subsec:dynamics-feedback}
 
 \textbf{The Static-World Assumption Breaks}
 
@@ -408,13 +404,13 @@ Performativity sharpens the feedback-loop idea from the previous section in one 
 \textbf{Key idea}: once a prediction is performative, $\Pr(Y \mid X)$ is no longer a fixed target that a model can be fit to and then left alone; it becomes a function of which model is deployed, since deploying a different model changes the behavior that generates $Y$ in the first place, a possibility that standard supervised learning, built around the assumption of a fixed target distribution, has no native way to represent.
 
 % Slide: Missing Exploration and Long Horizons
-\section{Missing Exploration and Long Horizons}
+\subsection{Missing Exploration and Long Horizons}
 \label{sec:missing-exploration-long-horizons}
 
 The final three sections of this chapter turn to what a model cannot know because it was never allowed to find out: the effect of actions nobody has tried, the consequences that only appear long after the decision was made, and the responses of people who learn how the model scores them and adjust their behavior accordingly.
 
-\subsection{Limitations and Constraints}
-\label{subsec:exploration-constraints}
+%\subsection{Limitations and Constraints}
+%\label{subsec:exploration-constraints}
 
 \textbf{No Exploration: Trapped in the Logged Policy}
 
@@ -449,17 +445,17 @@ The more consequential and the more transparent a deployed model is, the faster 
 % git_hash=f15bc6b9, timestamp=2026-07-15 14:41:12 EDT
 %%%% Chapter file for Why This Matters %%%%
 
-\chapter{Why This Matters}
+\section{Why This Matters}
 \label{chap:why-this-matters}
 
 % Slide: Roadmap
-\section{Roadmap}
+\subsection{Roadmap}
 \label{sec:why-this-matters-roadmap}
 
 The lesson closes by pulling back from the four individual costs to ask why they matter together, what they share as a root cause, and where the rest of the book goes to address them.
 
-\subsection{Key Takeaways}
-\label{subsec:key-takeaways}
+%\subsection{Key Takeaways}
+%\label{subsec:key-takeaways}
 
 \textbf{Why AI Projects Fail}
 
