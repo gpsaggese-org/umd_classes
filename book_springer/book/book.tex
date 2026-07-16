@@ -20,8 +20,10 @@
 \usepackage{multicol}        % used for the two-column index
 \usepackage[bottom]{footmisc}% places footnotes at page bottom
 
-\usepackage{newtxtext}       % 
+\usepackage{newtxtext}       %
 \usepackage[varvw]{newtxmath}       % selects Times Roman as basic font
+
+\input{latex_abbrevs.tex}  % custom abbreviations and mathematical notation
 
 \makeindex             % used for the subject index
                        % please use the style svind.ist with
@@ -50,8 +52,8 @@
 
 \mainmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\include{part}
-\include{Lesson02.01_From_Data_Science_To_Decision_Science}
-\include{Lesson02.02_Integrating_Causality_And_Probability_in_ML.small.tex}
+\include{Lesson02.01_From_Data_Science_To_Decision_Science.tex}
+\include{Lesson02.02_Integrating_Causality_And_Probability_in_ML.tex}
 %\include{chapter}
 %\include{appendix}
 
