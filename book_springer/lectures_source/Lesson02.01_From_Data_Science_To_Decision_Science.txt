@@ -3,21 +3,20 @@
 // lesson_title=Lesson 02.1: From Data Science to Decision Science
 // slides_engine=typst
 
+// gen_slides.py book_springer/02.01 --daemon --slides_engine typst
+
 # Why Decisions, Not Predictions
-
-## Course Roadmap
-
-## From Data Science to Decision Science
 
 * Why Traditional ML Falls Short
 // From msml610/08.1/Why Traditional ML Falls Short
 
 - Traditional machine learning optimizes prediction accuracy on a fixed
   distribution, which ignores four things a decision requires:
-  1. Causality: modeling correlation, not mechanisms
-  2. Uncertainty: no quantification of what the model does not know
-  3. The business objective: a prediction is not a decision
-  4. Dynamics: the world reacts to the actions informed by the prediction
+  1. _Causality_: modeling correlation, not mechanisms
+  2. _Uncertainty_: no quantification of what the model does not know
+  3. _Business objective_: a prediction is not a decision
+  4. _Dynamics_: the world reacts to the actions informed by the prediction
+
 - Each gap turns a technically accurate model into a poor decision-maker
 
 * From Data Science to Decision Science
