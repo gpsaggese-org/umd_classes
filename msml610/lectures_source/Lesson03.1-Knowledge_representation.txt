@@ -21,12 +21,12 @@
 
 * What is Knowledge Representation?
 
-- **Definition**: _Knowledge Representation (KR)_ is the study of how to formally encode
-  information so that machines can reason with it
+- @Definition@: **Knowledge Representation (KR)** is the study of how to formally
+  encode information so that machines can reason with it
   - E.g., rules, logic, ontologies, semantic networks
-  - KR defines
-    - _structure_: how knowledge is organized
-    - _semantics_: what it means
+  - KR defines:
+    - _Structure_: how knowledge is organized
+    - _Semantics_: what it means
 
 - **Fact**:
   - KR is at the heart of AI and complements learning-based approaches
@@ -234,16 +234,18 @@
 
 * Propositional Logic
 
-- **Fact**: Propositional logic uses atomic statements (propositions) and logical connectives
-  - **Syntax**
+- **Fact**: Propositional logic uses atomic statements (propositions) and logical
+  connectives to represent knowledge
+  - _Syntax_
     - Atomic formulas: $P$, $Q$
-    - Connectives: NOT ($\lnot$), AND ($\land$), OR ($\lor$), IMPLIES ($\implies$)
-  - **Semantics**
+    - Connectives: NOT $\lnot$, AND $\land$, OR $\lor$, IMPLIES $\implies$
+  - _Semantics_
     - Based on truth tables
     - Each proposition has a binary truth value: true or false
-  - **Inference mechanisms**
-    - Modus ponens: from $P$ and $P \implies Q$, infer $Q$
+  - _Inference mechanisms_
+    - Modus ponens: from statements "$P$" and "$P \implies Q$", infer "$Q$"
     - Resolution: derive contradictions to infer conclusions
+    - ...
 
 - **Applications**: best used in closed and well-defined environments
   - Digital circuit design
@@ -256,7 +258,7 @@
 
 * First-Order Logic (FOL)
 
-- **Extension of propositional logic**:
+- **Fact**: first-order logic is an extension of propositional logic:
   - Introduces predicates, variables, and quantifiers
     - Variables $x$
     - Predicate $Human(x)$
@@ -304,7 +306,7 @@
     - A complete inference rule for propositional and first-order logic
     - Useful in automated theorem proving
 
-  - **Entailment ($KB \models \alpha$)**:
+  - **Entailment** ($KB \models \alpha$):
     - Sentence $\alpha$ is entailed by KB if it is true in all models where KB is
       true
 
