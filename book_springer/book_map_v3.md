@@ -193,9 +193,14 @@
 ## 03: Handling Causality, Uncertainty, Business Objectives, and Dynamics
 
 ### Goals
-- Integrate causality and probability to build models that identify true causal effects, handle confounding, and distinguish mechanisms from spurious correlations
-- Quantify uncertainty end-to-end—from domain knowledge through inference to decision-relevant confidence bounds—enabling robust decisions despite incomplete information
-- Encode business objectives as utility functions and incorporate real-world dynamics, feedback loops, and cost asymmetries into the decision system
+- Integrate causality and probability to build models that identify true causal
+  effects, handle confounding, and distinguish mechanisms from spurious
+  correlations
+- Quantify uncertainty end-to-end—from domain knowledge through inference to
+  decision-relevant confidence bounds—enabling robust decisions despite
+  incomplete information
+- Encode business objectives as utility functions and incorporate real-world
+  dynamics, feedback loops, and cost asymmetries into the decision system
 
 ### Topics
 - Causal Models and Effect Identification

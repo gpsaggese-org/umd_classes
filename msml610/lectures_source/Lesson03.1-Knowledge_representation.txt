@@ -1,45 +1,19 @@
-// notes_to_pdf.py --input lectures_source/Lesson13-Knowledge_representation.txt --output tmp.pdf --type slides
+// type=UMD_slides
+// course_title=MSML610: Advanced Machine Learning
+// lesson_title=L03.1: Knowledge Representation
+// slides_engine=typst
+// references=
+// - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
+//  - Chap 7: Logical agents
+//  - Chap 8, First-order logic
+//  - Chap 9: Inference in first-order logic
+//  - Chap 10, Knowledge representation
 
-::: columns
-:::: {.column width=15%}
-![](msml610/lectures_source/figures/UMD_Logo.png)
-::::
-:::: {.column width=75%}
-
-\vspace{0.4cm}
-\begingroup \large
-MSML610: Advanced Machine Learning
-\endgroup
-::::
-:::
-
-\vspace{1cm}
-
-\begingroup \Large
-**$$\text{\blue{Lesson 03: Knowledge Representation}}$$**
-\endgroup
-\vspace{1cm}
-
-::: columns
-:::: {.column width=65%}
-
-**Instructor**: Dr. GP Saggese, [gsaggese@umd.edu](gsaggese@umd.edu)
-
-**References**:
-
-- Papers and Internet
-- Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
-  - Chap 7: Logical agents
-  - Chap 8, First-order logic
-  - Chap 9: Inference in first-order logic
-  - Chap 10, Knowledge representation
-
-::::
-:::: {.column width=40%}
-
-![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
-::::
-:::
+// How to run:
+// > notes_to_pdf.py --input lectures_source/Lesson03.1-Knowledge_representation.txt --output tmp.pdf --type slides
+// > gen_slides.py msml610/03.1 --slides_engine typst
+//
+// ![](msml610/lectures_source/figures/book_covers/Book_cover_AIMA.jpg){ height=20% }
 
 # Knowledge Representation
 

@@ -1,12 +1,16 @@
-Each lesson should be around 30 slides and correspond to a chapter of a book
+- Each lesson should be around 30 slides and correspond to a chapter of a book
+```
 > grep "^* " msml610/lectures_source/Lesson01.1-AI_and_Machine_Learning.txt | wc -l
+```
 
 Lesson00-Class.txt
 
+// Shrink?
 Lesson01.1-AI_and_Machine_Learning.txt (18)
 Lesson01.2-The_Foundations_of_AI.txt (13)
 Lesson01.3-Brief_History_of_AI.txt (26)
 
+// Shrink?
 Lesson02.1-A_Map_of_Machine_Learning.txt
 Lesson02.2-ML_Paradigms.txt
 
