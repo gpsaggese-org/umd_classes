@@ -178,7 +178,7 @@
     - Meaning depends on the sentence and context
     - E.g., "Look!"
 
-- **Concept**: _Sapir-Whorf hypothesis_
+- @Concept@: _Sapir-Whorf hypothesis_
   - _"The language you speak shapes how you perceive, think about, and experience
     the world"_
     - Even through arbitrary grammatical features (e.g., gender of nouns)
@@ -201,16 +201,16 @@
   - E.g., describing the goal "reach the exit of the maze" and letting the robot
     find the path
 
-- **Comparison**:
+- @Comparison@:
   - Procedural: more control, less flexibility
   - Declarative: more abstraction, easier to modify or extend
 
-- **Approach**: Many successful AI systems use a hybrid approach
+- @Approach@: Many successful AI systems use a hybrid approach
   - Declarative knowledge can be compiled into procedural code
   - E.g., a planner generates procedures (plans) from declarative goals
 
 * Programming Languages
-- **Concept**: A _programming language_ (e.g., C++, Python) is a formal language
+- @Concept@: A _programming language_ (e.g., C++, Python) is a formal language
   - Data structures represent facts
   - Code updates data structures in a domain-specific way
   - Programming is procedural (vs declarative)
@@ -223,7 +223,7 @@
      - Can't easily handle partial information or quantify uncertainty
      - E.g., "A white knight is in `b1` or in `f6`"
 
-- **Concept**: In _declarative language_ knowledge and inference are separate:
+- @Concept@: In _declarative language_ knowledge and inference are separate:
   1. Knowledge represents the domain-specific problem
   2. Compositional semantics: the meaning of a sentence is a function of the
      meaning of its parts
@@ -247,7 +247,7 @@
     - Resolution: derive contradictions to infer conclusions
     - ...
 
-- **Applications**: best used in closed and well-defined environments
+- @Applications@: best used in closed and well-defined environments
   - Digital circuit design
   - Rule-based systems
   - Simplified AI models
@@ -277,7 +277,7 @@
   - Inference is semi-decidable: valid conclusions may require infinite time
   - More powerful but computationally more complex than propositional logic
 
-- **Applications**:
+- @Applications@:
   - Knowledge representation
   - Automated theorem proving
   - Semantic web and ontologies
@@ -344,7 +344,7 @@
   - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
   - Rule conflicts and maintenance can become challenging
 
-- **Applications**:
+- @Applications@:
   - Expert systems
     - E.g., medical diagnosis, technical troubleshooting
   - Business rule engines
@@ -389,7 +389,7 @@ digraph G {
   - Noisy, incomplete sensory data
   - Complex, context-dependent mapping from inputs to concepts
 
-- **Applications**:
+- @Applications@:
   - Robotics: object recognition, manipulation
   - Natural language understanding
   - Autonomous agents, cognitive systems
@@ -1638,7 +1638,7 @@ digraph UniversityOntology {
     - Nothing is said about Bob
     - Under OWA: Can't conclude if Bob takes CS101 or not it is unknown
 
-- **Applications**
+- @Applications@
   - CWA
     - Traditional relational databases (SQL)
     - Logic programming
@@ -1770,7 +1770,7 @@ digraph UniversityOntology {
   - OWL DL: full expressiveness with decidable reasoning
   - OWL Full: maximum expressiveness, but undecidable
 
-- **Applications**
+- @Applications@
   - Semantic search
   - Biomedical data
 
@@ -1936,7 +1936,7 @@ digraph OWL_Example {
       `dbo:populationTotal 3.5M`
   - Enables semantic queries over Wikipedia data via SPARQL endpoints
 
-- **Applications**
+- @Applications@
   - Semantic Web
   - Enhancing AI models with real-world knowledge
 
@@ -1987,7 +1987,7 @@ digraph OWL_Example {
     - Part-whole relationships (e.g., `Wheel` is a part of `Car`)
     - Opposite meanings
 
-- **Applications**
+- @Applications@
   - Word sense disambiguation: choose correct word meaning in context
   - Semantic similarity measures: assess concept closeness
   - Information retrieval and question answering systems
@@ -2019,7 +2019,7 @@ digraph OWL_Example {
 ::::
 :::
 
-- **Applications**
+- @Applications@
   - Natural language understanding
   - Question answering and chatbots
   - Commonsense reasoning in AI

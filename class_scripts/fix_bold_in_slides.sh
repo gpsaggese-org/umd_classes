@@ -11,11 +11,33 @@ fi
 perl -i -pe '
     BEGIN {
         @tags = (
-            "Definition", "Question", "Goal", "Assumptions", "Problem",
-            "(Naive) Solution", "Solution", "Pros", "Cons", "Example",
-            "Intuition", "Key idea", "Remark", "Fact", "Theorem", "Proof",
-            "Proposition", "Lemma", "Claim", "Algorithm", "Input", "Output",
-            "Limitations", "Counterexample",
+            "(Naive) Solution",
+            "Algorithm",
+            "Applications",
+            "Approach",
+            "Assumptions",
+            "Claim",
+            "Concept",
+            "Cons",
+            "Counterexample",
+            "Definition",
+            "Example",
+            "Fact",
+            "Goal",
+            "Input",
+            "Intuition",
+            "Key idea",
+            "Lemma",
+            "Limitations",
+            "Output",
+            "Problem",
+            "Proof",
+            "Proposition",
+            "Pros",
+            "Question",
+            "Remark",
+            "Solution",
+            "Theorem"
         );
     }
     for my $tag (@tags) {
