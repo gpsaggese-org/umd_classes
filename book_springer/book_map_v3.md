@@ -63,13 +63,16 @@
 - `book_springer/all_tocs.md`
 - `book_springer/lectures_source/*.txt`
 
-## Chapter Template and Invariants
-- <Invariant>: each `### Topics` for each chapter should be in nested bullet
-  points
+## Chapter Templates and Invariants
+
+### Goals
+- 3 short bullet points explaining what are the goals of the chapter
+
+### Topics
+- The `### Topics` section for each chapter should be in nested bullet points
   - Level 1 bullets: the title of the subchapter
   - Level 2 bullets: a short list of topics
-- The `### Topics` should be less than 20-25 lines and 175-200 words
-- The output must follow the template below
+- It should follow the template
   ```
   ### Topics
   - Topic 1
@@ -78,8 +81,10 @@
   - Topic 2
     ...
   ```
+- The `### Topics` should be less than 20-25 lines and 175-200 words
 
-- <Invariant>: for each chapter
+### Chapter
+- For each chapter
   - Read the table of content for the slides in `### Topics` and the content in
     `### Lesson Materials`
   - Update the `### Lesson Materials` to cover the `### Topics` using the
@@ -156,44 +161,19 @@
   quantification, business objectives, and dynamics
 
 ### Topics
-- Why Traditional ML Falls Short
-  - Four critical gaps: causality, uncertainty, business objectives, dynamics
-  - Real-world costs of ignoring each gap
-  - Case vignette: a high-accuracy churn model with negative-ROI offers
-- From Data Science to Decision Science
-  - Predictive paradigm: optimize accuracy on held-out test data
-  - Decision paradigm: optimize business value of actions taken
-  - Organizational shift: incentives move from accuracy to decision value
-- Causal vs Predictive Questions
-  - Predictive form: "What will happen if we observe X?"
-  - Causal form: "What will happen if we intervene and set X?"
-- The Analytics Maturity Ladder
-  - Level 0 (Descriptive): "What happened in the past?"
-  - Level 1 (Predictive): "What will likely happen?"
-  - Level 2 (Causal): "What will happen if we intervene?"
-  - Level 3 (Decision): "What should we do?"
-- When Correlation Misleads
-  - Confounding: unobserved variables bias both X and Y
-  - Missing counterfactuals: no way to answer "what if we intervene?"
-  - Selection bias: incomplete populations hide causal mechanisms
-  - Reverse causality: correlation can't distinguish X to Y from Y to X
-- Structural Failure Modes
-  - Interference and spillovers: SUTVA violations in networks
-  - Simpson's Paradox: aggregates reverse subgroup trends
-  - Collider bias: conditioning on outcomes creates spurious links
-  - Mechanistic blindness: models inherit training-data artifacts
-- Point Estimates in a Small-Data World
-  - Single numbers hide decision-relevant variance
-  - Epistemic vs. aleatoric uncertainty: known vs. unknown unknowns
-  - Overconfidence off-distribution: never saying "I don't know"
-  - Statistical traps: p-hacking, multiple comparisons, peeking at data
-  - Silent failure cost: confident decisions on wide error bars
-- The Cost of Ignoring Dynamics
-  - Static models assumed frozen while conditions drift
-  - Feedback loops and performativity reshape training distributions
-  - Myopic optimization ignores long-horizon consequences
-
-// TODO(ai_gp): Make sure this is aligned with the slides and the text
+- Why Decisions, Not Predictions
+- The Cost of Ignoring Causality
+  - When Correlation Misleads
+  - Structural Failure Modes
+- The Cost of Ignoring Uncertainty
+- The Cost of Ignoring the Business Objective
+  - Proxies, Costs, and Trade-offs
+  - From Scores to Actionable Decisions
+- The Cost of Ignoring Dynamics and Feedback
+  - A World That Reacts
+  - Missing Exploration and Long Horizons
+- Why This Matters
+  - Roadmap
 
 ### Slides
 - `book_springer/lectures_source/Lesson02.01_From_Data_Science_To_Decision_Science.txt`
@@ -212,10 +192,31 @@
 
 ## 03: Handling Causality, Uncertainty, Business Objectives, and Dynamics
 
-### Topics
-// TODO(ai_gp): Decide how to address this
+### Goals
+- Integrate causality and probability to build models that identify true causal effects, handle confounding, and distinguish mechanisms from spurious correlations
+- Quantify uncertainty end-to-end—from domain knowledge through inference to decision-relevant confidence bounds—enabling robust decisions despite incomplete information
+- Encode business objectives as utility functions and incorporate real-world dynamics, feedback loops, and cost asymmetries into the decision system
 
-### Slides
+### Topics
+- Causal Models and Effect Identification
+  - Moving beyond correlation: confounding, mediators, and spurious paths in observational data
+  - Structural causal models (SCMs) and DAGs: formalizing mechanisms
+  - Identification criteria: back-door, front-door, do-calculus
+- Probabilistic Uncertainty Quantification
+  - Bayesian inference: priors, posteriors, posterior predictive distributions
+  - Epistemic uncertainty over model; aleatoric irreducible noise
+  - Decision-relevant bounds: confidence intervals, credible intervals, thresholds
+- Business Objectives and Decision Rules
+  - Utility functions: preferences, risk attitudes, multi-criteria trade-offs
+  - Cost asymmetries: false-positive and false-negative costs
+  - From predictions to actions: translating scores into decisions
+- Dynamics, Feedback, and Performativity
+  - Temporal causality: feedback loops linking past decisions to future causes
+  - Performativity: how decisions change the systems they operate on
+  - Sequential reasoning: multi-period consequences and adaptation
+// TODO(ai_gp): Check this
+
+### Slides 
 - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
   - [100%]: Integration of causality and uncertainty into ML systems, moving
     beyond correlation
@@ -223,70 +224,16 @@
   - [100%]: Business objective encoding, real-world dynamics, feedback loops,
     performativity
 
-// TODO(ai_gp): The slides are out of sync and needs to be 
-
 ### Lesson Materials
-// TODO(ai_gp): Reduce this
-- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [100%]: Correlation is not causation, problems with traditional AI, cost of
-    ignoring causality, causal vs predictive questions
-- `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [95%]: Causal DAGs, structural causal models, confounding bias, collider
-    bias, mediators and moderators, types of paths
-- `msml610/lectures_source/Lesson08.4.txt`
-  - [90%]: Simpson's Paradox, confounding bias, selection bias, SUTVA
-    violations, interference, causal inference basics
-- `msml610/lectures_source/Lesson08.5-Experimentation.txt`
-  - [85%]: Why randomization breaks confounding, causal identification through
-    design, network effects and interference, plus significance traps (peeking,
-    multiple comparisons, sample-ratio mismatch)
-- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [60%]: Interventions vs counterfactuals, RCTs, back-door/front-door
-    adjustment, do-calculus: technical grounding for "missing counterfactuals"
-- `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [70%]: Markov equivalence, identifiability, faithfulness, challenges in
-    causal discovery from observational data
-- Not covered
-  - [20%]: Advanced sensitivity analysis, bounding methods for unmeasured
-    confounding
-- `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
-  - [95%]: Bayesian approach to uncertainty, confidence vs credible intervals,
-    posterior predictive distributions, uncertainty quantification
-- `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
-  - [70%]: Posterior-based decision rules (loss functions, region of practical
-    equivalence), robust inference beyond point estimates, group-comparison
-    pitfalls
-- `msml610/lectures_source/Lesson05.2-Overfitting.txt`
-  - [90%]: Overfitting and underfitting, bias-variance decomposition,
-    high-variance regime, learning curves, statistical significance traps
-- `msml610/lectures_source/Lesson05.1-Learning_Theory.txt`
-  - [85%]: Generalization bounds, Hoeffding inequality, VC dimension, when
-    learning is possible
-- `msml610/lectures_source/Lesson05.3-Learn_Validation.txt`
-  - [80%]: Train-test split, cross-validation, bootstrap methods, confidence
-    intervals, out-of-sample error estimation
-- `class_cs_refreshers/lectures_source/Lesson91.Refresher_probability.txt`
-  - [85%]: Probability fundamentals, confidence intervals, hypothesis testing,
-    multiple-comparison problem, p-hacking
-- `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
-  - [65%]: Sampling bias, data snooping, burning the test set: statistical
-    traps behind silent overconfidence
-- `msml610/lectures_source/Lesson02.5-ML_Techniques_Model_Evaluation.txt`
-  - [60%]: Model selection, performance metrics, precision-recall trade-offs,
-    evaluation methodology
-- Not covered
-  - [15%]: Deep-neural-network-specific calibration methods (e.g., temperature
-    scaling), formal conformal-prediction algorithm details
-- `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [55%]: Non-stationarity and trends, feedback loops and simultaneity,
-    time-varying unobserved confounders
-- Not covered
-  - [20%]: Quantitative/game-theoretic treatment of performativity and strategic
-    response over multiple rounds
 
 # Part II: Advanced Modeling Theory & Tools
 
 ## 04: Knowledge Representation
+
+### Goals
+- Understand representation as a foundation for reasoning
+- Master formal knowledge representation schemes
+- Integrate symbolic and probabilistic reasoning
 
 ### Topics
 - Representation as a Foundation for Decisions
@@ -299,8 +246,8 @@
 - Graphical Models for Uncertainty
   - Bayesian networks: encoding conditional independence and probabilistic
     structure
-  - D-separation and Markov blankets: reading independence directly from graph
-    topology
+// - D-separation and Markov blankets: reading independence directly from graph
+//    topology
   - Inference algorithms: belief propagation and variable elimination for exact
     answers
 - Causal Graphical Models
@@ -308,8 +255,8 @@
     mechanisms
   - DAGs: encoding causal order, observed vs. unobserved variables, edge
     direction
-  - Identifying confounders, mediators, and colliders directly from graph
-    structure
+//  - Identifying confounders, mediators, and colliders directly from graph
+//    structure
 - Integrating Logic and Causality
   - Combining symbolic reasoning with probabilistic inference for hybrid systems
   - From correlation to causal reasoning: what graphs add beyond raw data
@@ -319,7 +266,7 @@
 ### Slides
 
 ### Lesson Materials
-- `msml610/lectures_source/Lesson03-Knowledge_representation.txt`
+- `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt`
   - [90%]: Formal knowledge representation: propositional/first-order logic,
     symbolic vs. sub-symbolic representation, ontologies,
     logic-based/knowledge-based agents and inference
@@ -347,6 +294,8 @@
     generalization across environments
 
 ## 05: Probabilistic ML
+
+### Goals
 
 ### Topics
 - Bayesian Inference Foundations
