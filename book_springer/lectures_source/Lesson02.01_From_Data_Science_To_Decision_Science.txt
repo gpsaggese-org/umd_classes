@@ -38,9 +38,8 @@
 )
 ```
 
-// TODO(ai_gp): Make it stronger
-- **Key idea**: teams that ship predictions while the business needs decisions
-  leave the value on the table
+- **Key idea**: shipping a prediction when the business needs a decision delivers
+  little or no business value, however accurate the prediction is
 
 * Causal vs Predictive Questions
 // From msml610/08.1/Causal vs Predictive Questions
@@ -60,33 +59,32 @@
 )
 ```
 
-// TODO(ai_gp): Improve
-- Predictive questions need only observational data and support monitoring and
-  alerting
-- **Key idea**: causal questions need causal models or experiments, and support
-  decisions and policy design
+- **Key idea**
+  - Predictive questions can be answered from observational data alone, which is
+    enough for monitoring and alerting, but not for choosing an action
+  - Causal questions require causal models or experiments, and are the only ones
+    that support decisions and policy design
 
 * The Analytics Maturity Ladder
 // From msml610/08.1/The Analytics Maturity Ladder
 
 - Organizations climb four levels of analytical sophistication
 
-// TODO(ai_gp): Start from 1
 ```{=typst}
 #styled-table(
   headers: ("Level", "Question", "Tools"),
   rows: (
-    ("0. Descriptive", "What happened?", "Dashboards, reports"),
-    ("1. Predictive", "What will happen?", "ML, forecasting"),
-    ("2. Causal", "Why? What if we act?", "DAGs, do-calculus"),
-    ("3. Decision", "What should we do?", "Causal models + utility"),
+    ("1. Descriptive", "What happened?", "Dashboards, reports"),
+    ("2. Predictive", "What will happen?", "ML, forecasting"),
+    ("3. Causal", "Why? What if we act?", "DAGs, do-calculus"),
+    ("4. Decision", "What should we do?", "Causal models + utility"),
   ),
   bold-first-col: true,
 )
 ```
-- **Problem**: most organizations are stuck at Level 1, predicting well but
+- **Problem**: most organizations are stuck at Level 2, predicting well but
   unable to say what to do
-- **Key idea**: climbing to Levels 2 and 3 is the jump this book makes, from
+- **Key idea**: climbing to Levels 3 and 4 is the jump this book makes, from
   prediction pipelines to decision pipelines
 
 # The Cost of Ignoring Causality
@@ -103,11 +101,31 @@
   - It assumes the world stays fixed, even though the actions informed by the
     prediction change it
 
-// TODO(ai_gp): Add a causal graph for this
+::: columns
+:::: {.column width=55%}
 - **Example**: ice cream sales and drowning deaths are highly correlated
   - Predictor: _"more ice cream $\to$ predict more drownings"_ (accurate)
   - Decision built on it: _"ban ice cream to cut drownings"_ (disastrous)
   - Confounder: hot weather drives both
+::::
+:::: {.column width=40%}
+// TODO(ai_gp): Make the hot water up and the other 2 down and aligned
+```graphviz
+digraph IceCreamDrowning {
+    rankdir=LR; nodesep=0.6; ranksep=0.6;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    H [label="Hot Weather", fillcolor="#A6E7F4"];
+    I [label="Ice Cream Sales", fillcolor="#FFD1A6"];
+    D [label="Drownings", fillcolor="#F4A6A6"];
+
+    H -> I; H -> D;
+    I -> D [label="  spurious", style=dashed, color="#8C8C8C"];
+}
+```
+::::
+:::
 
 - **Key idea**:
   - The observational and interventional quantities disagree
@@ -140,9 +158,9 @@
   the alternative
   - E.g., loan data shows outcomes for approved applicants, but not always data
     for rejected ones
-// TODO(ai_gp): Can't understand the next point
-  - A missing-counterfactual problem present _before_ modeling starts,
-    distinct from confounding
+  - Unlike confounding, which biases the _relationship_ between variables
+    that were recorded, this bias comes from which units got recorded at
+    all, a problem baked into the data before any model is fit
 
 - **Example**: a credit model trained only on approved loans learns what
   predicts repayment among people the bank already trusted
@@ -174,10 +192,11 @@
 // From msml610/08.1/Simpson's Paradox: When Aggregates Lie, msml610/11.1/Simpson's Paradox: When Aggregates Lie
 // From paper [P005] Simpson's Paradox, Confounding, and Collapsibility
 
-- **Definition**: the _Simplson's paradox_ is a trend within every subgroup
+- **Definition**: the _Simpson's paradox_ is a trend within every subgroup
   reverses once the subgroups are pooled
 
-// TODO(ai_gp): Add picture
+// TODO(gp): Add a better picture of a Simpson's paradox
+
 - **Example**: a drug's recovery rate
 ```{=typst}
 #styled-table(
@@ -190,10 +209,30 @@
   bold-first-col: true,
 )
 ```
-// TODO(ai_gp): Explain better
+
+// TODO(gp): Improve
+```graphviz
+digraph SimpsonsParadox {
+    rankdir=LR; nodesep=0.6; ranksep=0.6;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    G [label="Gender", fillcolor="#A6E7F4"];
+    T [label="Drug Choice", fillcolor="#FFD1A6"];
+    R [label="Recovery", fillcolor="#A6C8F4"];
+
+    G -> T; G -> R; T -> R;
+}
+```
+
 - The drug helps _each_ subgroup, yet appears to hurt when the groups are
   pooled
-  - Gender correlates with both treatment choice and baseline recovery
+  - Gender confounds both treatment assignment and the outcome: females
+    receive the drug far more often (263 of 350) than males (87 of 350), and
+    recover less easily than males regardless of treatment
+  - Pooling stacks a mostly-female drug group against a mostly-male no-drug
+    group, so the harder-to-treat gender dominates the "drug" column and
+    reverses the sign of an effect that helps everyone
 
 - **Key idea**: a model can look correct in aggregate and be wrong, or
   harmful, for every segment it is applied to
@@ -212,21 +251,45 @@
   - Among the _promoted_ only, they become negatively associated: bad at
     statistics implies must be a good flatterer
 
+// TODO(ai_gp): Add another example and explain
+// TODO(gp): Add reference to Pearl's book about how many studies are wrong
+
 - **Key idea**: conditioning on the wrong variable, not just omitting the
   right one, is enough to manufacture a correlation with no causal meaning
 
 * Discarding Domain Knowledge and Mechanisms
 // From msml610/08.1/Discarding Domain Knowledge and Mechanism
+// From paper [P001] Why Should I Trust You?
 
 - **Problem**: a purely correlation-based pipeline discards known structure,
   physics, economics, or the causal graph, in favor of whatever pattern the
   data happens to contain
   - No principled way to inject constraints or priors
 
-// TODO(ai_gp): Add picture and reference
+::: columns
+:::: {.column width=55%}
 - **Example**: a wolf-vs-husky classifier with high test accuracy keys on
   _snow_ in the background, not on the animal
   - Accurate for the wrong reason, and worthless once conditions change
+::::
+:::: {.column width=40%}
+// TODO(gp): Add reference and maybe picture
+```graphviz
+digraph WolfHusky {
+    rankdir=LR; nodesep=0.6; ranksep=0.6;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
+
+    Species [label="True Species\n(Wolf vs Husky)", fillcolor="#A6C8F4"];
+    Snow    [label="Snow in Background", fillcolor="#FFD1A6"];
+    Pred    [label="Classifier Prediction", fillcolor="#F4A6A6"];
+
+    Species -> Pred [style=dashed, color="#8C8C8C", label="  ignored"];
+    Snow -> Pred [label="  used instead", penwidth=2.0, color="#B23A48", fontcolor="#B23A48"];
+}
+```
+::::
+:::
 
 - **Key idea**: a model that ignores mechanism inherits every artifact of how
   the training data was collected
@@ -258,10 +321,11 @@
 
 - **Problem**: standard models collapse two different kinds of uncertainty
   into one number
-// TODO(ai_gp): Add examples
   - _Aleatoric_ uncertainty is irreducible randomness in the outcome itself
+    - E.g., the outcome of a fair coin flip
   - _Epistemic_ uncertainty comes from not having seen enough data, or from
     the wrong model
+    - E.g., a rare disease with only 10 recorded cases
 - Without separating them, a model cannot flag what it has never seen: it can
   exhibit maximal confidence off-distribution, precisely where it should exhibit
   maximal uncertainty
@@ -418,12 +482,19 @@
     relationship stays the same
   - _Label shift_: the outcome distribution $\Pr(Y)$ itself changes
 
-// TODO(ai_gp): Make an example for all the 3 shifts using a single use cases
-- **Example**: a fraud model trained on last year's fraud rate degrades as
-  attackers adopt new tactics, a label shift the model has no way to detect on
-  its own
+- **Example**: a card-fraud model trained on last year's transactions
+  - _Concept shift_: attackers adopt new tactics, so a transaction pattern
+    that used to be safe now signals fraud, changing $\Pr(Y | X)$
+  - _Covariate shift_: contactless payments become far more common, changing
+    $\Pr(X)$ even though fraud tactics on that channel are unchanged
+  - _Label shift_: a data breach leaks card numbers and the overall fraud
+    rate itself rises, changing $\Pr(Y)$
+  - The model has no way to detect any of the three on its own
 
-// TODO(ai_gp): Come up with an additional example
+- **Example**: a house-price model trained on pre-pandemic listings
+  - Remote work permanently changes what commute distance is worth (concept
+    shift), while a shift to lower interest rates raises average sale prices
+    across the board (label shift)
 
 - **Key idea**: a model that encodes (causal) mechanisms, not just patterns,
   degrades more gracefully because mechanisms are more stable across distribution
@@ -457,9 +528,12 @@
 - **Definition**: _performativity_ is a prediction that changes the very
   quantity it predicts
 
-// TODO(ai_gp): Come up with an additional example
 - **Example**: a published credit-risk score moves borrower behavior, which
   moves the true default rate the score was trying to predict
+
+- **Example**: a navigation app that predicts a route as fastest routes many
+  drivers onto it at once, congesting the road until it is no longer the
+  fastest option, invalidating the very prediction that attracted them
 
 - **Key idea**: once a prediction is performative, $\Pr(Y | X)$ is no longer a
   fixed target to fit, it is a function of which model gets deployed
@@ -487,11 +561,16 @@
 - **Problem**: a model optimized for an immediate proxy ignores downstream
   outcomes and has no way to assign credit to actions over time
 
-// TODO(ai_gp): Come up with an additional example
 - **Example**: a support team optimized for fast ticket closure closes
   tickets quickly, whether or not the underlying issue is resolved
   - The true cost, repeat complaints and lost trust, shows up months later,
     in a different metric
+
+- **Example**: a collections agency optimized to maximize dollars recovered
+  this quarter pushes aggressive repayment plans that borrowers later
+  default on
+  - The extra recovery this quarter is repaid, months later, with a lower
+    lifetime repayment rate and reputational damage
 
 - **Key idea**: short-term proxies and long-term business outcomes can point
   in opposite directions, and only one of them is what the business actually
@@ -508,7 +587,9 @@
   credit gaming; publishing a search-ranking algorithm invites
   keyword-stuffing
 
-// TODO(ai_gp): Come up with an additional example
+- **Example**: a tax-audit model that flags returns above a reported-income
+  threshold causes self-employed filers to bunch their reported income just
+  below that threshold once the rule becomes known
 
 - **Key idea**: a model trained on how agents behaved before deployment can
   become wrong the moment agents learn how it scores them
@@ -542,16 +623,36 @@
 - This book shows how to solve all the 4 problems using causal and probabilistic
   approaches to build
 - Every technique plugs into one loop
-// TODO(ai_gp): Convert it into a block diagram with mermaid or graphviz
-  $$data \to model \to policy \to action \to feedback$$
+```graphviz
+digraph DecisionLoop {
+    rankdir=LR; nodesep=0.6; ranksep=0.6;
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fontsize=12, penwidth=1.4];
+    edge [penwidth=1.2, color="#555555", arrowsize=0.9];
 
-// TODO(ai_gp): Expand more and use the latest TOC in book_map_v3.md
-- The rest of the book builds the pipeline that does not miss it:
-  - **Part II** supplies the probabilistic and causal tools: Gaussian
-    processes, variational inference, normalizing flows, and causal discovery
-  - **Part III** turns those tools into single-step decisions: decision
-    theory, policy learning, and partial identification
-  - **Part IV** extends to multi-step and dynamic decisions: causal world
-    models, causal reinforcement learning, and feedback loops
-  - **Part V** covers deploying, monitoring, and governing the resulting
-    decision systems in production
+    Data     [label="Data", fillcolor="#FFD1A6"];
+    Model    [label="Model", fillcolor="#A0D6D1"];
+    Policy   [label="Policy", fillcolor="#A6E7F4"];
+    Action   [label="Action", fillcolor="#A6C8F4"];
+    Feedback [label="Feedback", fillcolor="#B2E2B2"];
+
+    Data -> Model -> Policy -> Action -> Feedback;
+    Feedback -> Data [label="  retrain / adapt", style=dashed, color="#8C8C8C"];
+}
+```
+
+* Book Roadmap
+
+- The rest of the book builds the pipeline that proposes solutions for
+  the problem highlighted in this chapter
+  - **Part II: Advanced Modeling Theory & Tools** supplies the machinery:
+    knowledge representation, probabilistic ML (Bayesian inference,
+    uncertainty), and causal ML (SCMs, do-calculus, causal discovery)
+  - **Part III: Data** turns domain knowledge into causal DAGs and causal
+    data pipelines, and confronts selection bias and distribution shift
+  - **Part IV: Decision-Making Theory & Tools** turns causal models into
+    actions: decision theory, the taxonomy of decision problems, simple
+    decisions (bandits, RL), complex decisions (policy gradients, multi-agent),
+    and agentic causal reasoning
+  - **Part V: Implementation, Deployment & Governance** covers stakeholder
+    alignment, deployment/monitoring/adaptation, and trust, explainability,
+    fairness, and governance
