@@ -623,6 +623,7 @@ digraph WolfHusky {
 - This book shows how to solve all the 4 problems using causal and probabilistic
   approaches to build
 - Every technique plugs into one loop
+
 ```graphviz
 digraph DecisionLoop {
     rankdir=LR; nodesep=0.6; ranksep=0.6;

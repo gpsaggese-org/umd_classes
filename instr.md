@@ -1,30 +1,28 @@
-Create a script get_catalog.py --target manning
-to scrape the content of the pages
-using https://www.manning.com/catalog?page=1
+ In book_springer/book/Lesson02.02... text
 
-The output is a CSV like
+## Step 1
 
-Title, Author, Year, Link
-"Retrieval Augmented Generation, The Seminal Papers", "Ben Auffarth", "2026", "https://www.manning.com/books/retrieval-augmented-generation-the-seminal-papers"
+- Use this idiom
 
-- [ ] 2 Extend the script to O'Reilly using --target oreilly1
+  % From: '* Why Traditional ML Falls Short'
+  \textbf{Why Traditional ML Falls Short}
+  Traditional machine learning was
+  ...
 
-https://www.oreilly.com/pub/q/book_all_date_desc
+  to
 
-Download the page, if tmp.get_catalog.oreilly.txt and then parse it
+  % From: '* Why Traditional ML Falls Short'
+  \textbf{Why Traditional ML Falls Short} --- Traditional machine learning was
+  built to answer one question well: given a fixed distribution of data, what
+  does the pattern say will happen? \textbf{Predictive accuracy} on a held-out
 
-- [ ] 3 Extend the script to O'Reilly using --target oreilly2
+ In book_springer/book/ How to merge the "Key idea
 
-https://www.oreilly.com/search/?q=*&type=book&publishers=O%27Reilly%20Media%2C%20Inc.&order_by=created_at&rows=100
+## Step 2
 
-same approach of specifying the number of pages
+When highlighting words use italic / emph instead of bold
 
-# Conventions
-- When writing code you must always follow the instructions in
-  `.claude/skills/coding.rules.md`
+## Step 3
 
-# Create a plan, if needed
-- If the task is not perfectly clear, you MUST not perform it, but ask for
-  clarifications
-  - When the task is complex, create a `plan.md` with 5 bullet points explaining
-    what the plan is
+Integrate the "Key idea" into prose (weave each into surrounding text instead of
+callouts)

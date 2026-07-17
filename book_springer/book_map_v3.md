@@ -106,11 +106,21 @@
 
 ## 01: Introduction
 
+### Goals
+- Frame the core premise: ML systems must optimize for decision value, not
+  prediction accuracy
+- Introduce the Decision Pipeline Framework (data → prediction → causal effect →
+  policy)
+- Explain why causal and probabilistic reasoning for business decision-making
+
 ### Topics
-- Explain the philosophy of the book
+- The Philosophy and Motivation
+  - Why prediction accuracy alone fails to drive business value
+  - Decision-centric framing: from data science to decision science
+  - Role of causal reasoning and probabilistic models in decision systems
 - The Decision Pipeline Framework
-  - From raw data to prediction to causal effect estimation to
-    utility-maximizing policy
+  - From raw data to prediction to causal effect estimation to utility-maximizing
+    policy
   - Feedback loops and learning from outcomes
   - Why each stage matters and what breaks when stages are skipped
 - How This Book Is Organized
@@ -120,6 +130,7 @@
   - How chapters build on each other and fit into the decision pipeline
 
 ### Slides
+- N/A
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson00-Class.txt`
@@ -138,6 +149,12 @@
 
 ## 02: Why Decisions, Not Predictions
 
+### Goals
+- Show the gap: High prediction accuracy ≠ good business value (ROI)
+- Distinguish prediction from decision
+- Expose four critical failure modes: ignoring causality, uncertainty
+  quantification, business objectives, and dynamics
+
 ### Topics
 - Why Traditional ML Falls Short
   - Four critical gaps: causality, uncertainty, business objectives, dynamics
@@ -155,25 +172,6 @@
   - Level 1 (Predictive): "What will likely happen?"
   - Level 2 (Causal): "What will happen if we intervene?"
   - Level 3 (Decision): "What should we do?"
-
-### Slides
-- `book_springer/lectures_source/Lesson01.01_From_Data_Science_To_Decision_Science.txt`
-  - [100%]: Decision pipeline framework, data science vs decision science
-    paradigm shift, prediction vs action framing
-
-### Lesson Materials
-- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [85%]: Ladder of Causation; Data Science → Decision Science; Causal vs
-    Predictive Questions; Analytics Sophistication; Why AI Projects Fail
-- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [40%]: Predictions vs Decisions Side-by-Side; Simpson's Paradox; Causal
-    Resolution; Policy Reversal
-- `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [5%]: Example of ladder of causation (Tornado Warning)
-
-## 03: the Cost of Ignoring Causality, Uncertainty and Dynamics
-
-### Topics
 - When Correlation Misleads
   - Confounding: unobserved variables bias both X and Y
   - Missing counterfactuals: no way to answer "what if we intervene?"
@@ -195,6 +193,28 @@
   - Feedback loops and performativity reshape training distributions
   - Myopic optimization ignores long-horizon consequences
 
+// TODO(ai_gp): Make sure this is aligned with the slides and the text
+
+### Slides
+- `book_springer/lectures_source/Lesson02.01_From_Data_Science_To_Decision_Science.txt`
+  - [100%]: Decision pipeline framework, data science vs decision science
+    paradigm shift, prediction vs action framing
+
+### Lesson Materials
+- `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
+  - [85%]: Ladder of Causation; Data Science → Decision Science; Causal vs
+    Predictive Questions; Analytics Sophistication; Why AI Projects Fail
+- `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
+  - [40%]: Predictions vs Decisions Side-by-Side; Simpson's Paradox; Causal
+    Resolution; Policy Reversal
+- `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
+  - [5%]: Example of ladder of causation (Tornado Warning)
+
+## 03: Handling Causality, Uncertainty, Business Objectives, and Dynamics
+
+### Topics
+// TODO(ai_gp): Decide how to address this
+
 ### Slides
 - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
   - [100%]: Integration of causality and uncertainty into ML systems, moving
@@ -202,6 +222,8 @@
 - `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
   - [100%]: Business objective encoding, real-world dynamics, feedback loops,
     performativity
+
+// TODO(ai_gp): The slides are out of sync and needs to be 
 
 ### Lesson Materials
 // TODO(ai_gp): Reduce this
@@ -267,6 +289,8 @@
 ## 04: Knowledge Representation
 
 ### Topics
+- Representation as a Foundation for Decisions
+  - Why representation choice shapes what questions a model can answer
 - Formal Knowledge Representation
   - Symbolic logic: propositional and first-order logic for structured reasoning
   - Ontologies and semantic networks: organizing domain knowledge into reusable
@@ -291,10 +315,6 @@
   - From correlation to causal reasoning: what graphs add beyond raw data
   - Choosing a representation: when logic, probability, or causal graphs fit
     best
-- Representation as a Foundation for Decisions
-  - Why representation choice shapes what questions a model can answer
-  - Connecting knowledge representation to the causal ML techniques in later
-    chapters
 
 ### Slides
 

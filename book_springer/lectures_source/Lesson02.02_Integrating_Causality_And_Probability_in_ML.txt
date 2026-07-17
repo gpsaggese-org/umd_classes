@@ -16,11 +16,9 @@
 
 # Bridging Prediction and Decision
 
-## From Costs to Tools
+* Introduction
 
-* From Costs to Tools: What This Chapter Builds
-
-- The previous chapter catalogued four costs of ignoring causality, uncertainty,
+- The previous lesson catalogued four costs of ignoring causality, uncertainty,
   the business objective, and dynamics
 - This lesson builds the causal and probabilistic tools that address the first
   two
