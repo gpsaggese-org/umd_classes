@@ -1,14 +1,33 @@
-- Extend the function colorize_bullets to render
+When running
 
-@xyz@ for colored bold
+notes_to_pdf.py --input=msml610/lectures_source/Lesson03.1-Knowledge_representation.txt --output=msml610/lectures/Lesson03.1-Knowledge_representation.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warning
 
-and
+in the typst file generated 
 
-**xyz** as black bold
+msml610/lectures/tmp.notes_to_pdf.render_image2.typ
 
-- It should work for both Latex and Typst
+there are two Syntax highlighted
 
-- Update the unit tests
+==== Table of Content
+<table-of-content-10>
+- Knowledge Representation
+  - Basics of Knowledge Representation
+  - Examples of Logic
+  - Logical Agents
+  - Ontologies
+  - Reasoning in Ontologies
+- Propositional logic
+  - #text(fill: red, weight: "bold")[#emph[Syntax]]
+  - Semantics
+- First-order Logic
+  - #text(fill: red, weight: "bold")[#emph[Syntax]]
+  - Semantics
+- Non-classical Logics
+  - Intro and Examples
+  - Description Logics
+
+Understand why and propose a fix
+
 
 # Conventions
 - When writing code you must always follow the instructions in

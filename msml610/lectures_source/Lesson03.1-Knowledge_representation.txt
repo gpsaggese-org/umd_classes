@@ -28,7 +28,7 @@
     - _Structure_: how knowledge is organized
     - _Semantics_: what it means
 
-- **Fact**:
+- @Fact@:
   - KR is at the heart of AI and complements learning-based approaches
   - Serves as a bridge between perception (data) and reasoning (logic)
   - Essential for explainability and transparency in intelligent systems
@@ -43,11 +43,11 @@
 ::: columns
 :::: {.column width=60%}
 
-- **Definition**: Tradeoff in AI / ML between:
+- @Definition@: Tradeoff in AI / ML between:
   - _Expressiveness_: richness of concepts that can be captured
   - _Tractability_: whether reasoning can be performed efficiently
 
-- **Fact**: More expressive languages lead to harder computation
+- @Fact@: More expressive languages lead to harder computation
 
 ::::
 :::: {.column width=35%}
@@ -116,16 +116,16 @@
 ::: columns
 :::: {.column width=55%}
 
-- **Definition**: _Symbolic_ KR uses discrete, human-readable symbols
+- @Definition@: _Symbolic_ KR uses discrete, human-readable symbols
   - E.g., logic, knowledge graphs
   - Interpretable and suitable for rule-based reasoning
   - Struggle with ambiguity
 
-- **Definition**: _Sub-symbolic_ KR uses learned, distributed representations
+- @Definition@: _Sub-symbolic_ KR uses learned, distributed representations
   - E.g., vector embeddings
   - Lack transparency
 
-- **Definition**: _Neuro-symbolic_ KR blend the two approaches
+- @Definition@: _Neuro-symbolic_ KR blend the two approaches
   - Reason over learned concepts using structured logic
 
 ::::
@@ -139,13 +139,13 @@
 
 * Neuro-symbolic Approach: Conceptual Spaces
 
-- **Definition**: _Conceptual spaces_ are frameworks for representing knowledge
+- @Definition@: _Conceptual spaces_ are frameworks for representing knowledge
   using geometric structures
   - Each dimension represents an interpretable feature
   - Similarity between objects is modeled by spatial distance
   - A _concepts_ is a region in a multidimensional space
 
-- **Pros**:
+- @Pros@:
   - Natural modeling of similarity and vagueness
   - Symbolic systems use discrete symbols without structure (e.g., `Car` vs
     `Bicycle`)
@@ -153,7 +153,7 @@
 ::: columns
 :::: {.column width=55%}
 
-- **Example**: Transportation methods
+- @Example@: Transportation methods
   - Dimensions: `Environmental Friendliness`, `Technological Advancement`
   - Wooden Transportation (red region)
   - Vehicles (blue region)
@@ -169,7 +169,7 @@
 
 * Natural languages
 
-- **Definition**: _Natural languages_ (e.g., English, Italian) are:
+- @Definition@: _Natural languages_ (e.g., English, Italian) are:
   - _Expressive_
     - Medium for communication rather than representation
   - _Ambiguous_
@@ -190,11 +190,11 @@
 
 * Procedural vs Declarative Approaches
 
-- **Definition**: _Procedural approach_ focuses on _how_ a task is done
+- @Definition@: _Procedural approach_ focuses on _how_ a task is done
   - Encodes desired behavior directly into the program
   - E.g., a robot programmed with specific steps to navigate a maze
 
-- **Definition**: _Declarative approach_ specifies _what_ the goal is, but _not
+- @Definition@: _Declarative approach_ specifies _what_ the goal is, but _not
   how_ to achieve it
   - Describes relationships between actions and goals
   - Leaves solution search to the system
@@ -215,7 +215,7 @@
   - Code updates data structures in a domain-specific way
   - Programming is procedural (vs declarative)
 
-- **Limitations**: Programming languages lack:
+- @Limitations@: Programming languages lack:
   1. A general mechanism for deriving facts from other facts
      - Code updates data structures based on programmer's domain knowledge
   2. Expressiveness to handle partial information
@@ -234,7 +234,7 @@
 
 * Propositional Logic
 
-- **Fact**: Propositional logic uses atomic statements (propositions) and logical
+- @Fact@: Propositional logic uses atomic statements (propositions) and logical
   connectives to represent knowledge
   - _Syntax_
     - Atomic formulas: $P$, $Q$
@@ -252,13 +252,13 @@
   - Rule-based systems
   - Simplified AI models
 
-- **Limitations**:
+- @Limitations@:
   - Cannot represent objects, relations, or quantifiers
   - Not suitable for open or dynamic domains
 
 * First-Order Logic (FOL)
 
-- **Fact**: first-order logic is an extension of propositional logic:
+- @Fact@: first-order logic is an extension of propositional logic:
   - Introduces predicates, variables, and quantifiers
     - Variables $x$
     - Predicate $Human(x)$
@@ -311,7 +311,7 @@
       true
 
 * Rule-Based Systems (1/2)
-- **Definition**: A _rule-based system_ uses "if-then" rules to derive conclusions or make
+- @Definition@: A _rule-based system_ uses "if-then" rules to derive conclusions or make
   decisions
   - It mimics human decision-making by applying logical rules to a set of facts
 
@@ -334,12 +334,12 @@
 
 * Rule-Based Systems (2/2)
 
-- **Pros**:
+- @Pros@:
   - Easy to modify and update rules
   - Transparent and explainable reasoning
   - Good when expert knowledge can be clearly articulated
 
-- **Cons**:
+- @Cons@:
   - Hard to scale to very large or complex domains
   - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
   - Rule conflicts and maintenance can become challenging
@@ -356,7 +356,7 @@
 ::: columns
 :::: {.column width=50%}
 
-- **Definition**: _Grounding_ connects abstract symbols to real-world entities or observations
+- @Definition@: _Grounding_ connects abstract symbols to real-world entities or observations
   - E.g., link `Apple` to the fruit "apple"
   - Make representations meaningful beyond syntax
     - Enable agents to act meaningfully in the real world
@@ -400,16 +400,16 @@ digraph G {
 
 * Reflex Agents
 
-- **Definition**: _Reflex agents_ act based on the current percept, ignoring percept history
+- @Definition@: _Reflex agents_ act based on the current percept, ignoring percept history
   - Operate using a condition-action rule: _"if condition, then action"_
   - Rely on predefined rules
   - Have no internal state or memory
     - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
 
-- **Pros**:
+- @Pros@:
   - Fast and efficient in well-defined environments
 
-- **Cons**:
+- @Cons@:
   - Struggle with complex or partially observable environments
   - Cannot plan ahead or learn from experience
 
@@ -418,10 +418,10 @@ digraph G {
 
 * Knowledge-based Agents
 
-- **Fact**: Intelligence is achieved by _reasoning_ on an internal _representation of
+- @Fact@: Intelligence is achieved by _reasoning_ on an internal _representation of
   knowledge_
 
-- **Definition**: _Knowledge-based agents_
+- @Definition@: _Knowledge-based agents_
   - Form representations of a complex world
   - Use inference to derive new representations
   - Deduce actions from new representations
@@ -436,24 +436,24 @@ digraph G {
 
 * Logic / Knowledge Base (1/2)
 
-- **Definition**: _Knowledge base (KB)_ is a set of:
+- @Definition@: _Knowledge base (KB)_ is a set of:
   - **Sentences** $\alpha$ expressing assertions (observed, assumed or derived)
     about the world
     - E.g., "it rains", "the ground is dry", "the ground is wet"
   - **Rules**
     - E.g, "If it rains, the ground gets wet"
 
-- **Definition**: _Knowledge representation language_ is a formal way of creating sentences about
+- @Definition@: _Knowledge representation language_ is a formal way of creating sentences about
   the world
 
-- **Definition**: _Syntax_ specifies all the sentences $\alpha$ that are well-formed in a logic
+- @Definition@: _Syntax_ specifies all the sentences $\alpha$ that are well-formed in a logic
   / knowledge
   base
   - E.g., in arithmetic the sentence:
     - "$x + y = 4$" is well-formed
     - "$x4y+ =$" is not well-formed
 
-- **Definition**: _Semantics_ is the meaning of sentences (i.e., their truth) with respect to each
+- @Definition@: _Semantics_ is the meaning of sentences (i.e., their truth) with respect to each
   possible world
   - E.g., the sentence $x + y = 4$
     - Is true in the world (model) in which $x = 2, y = 2$
@@ -461,13 +461,13 @@ digraph G {
 
 * Logic / Knowledge Base (2/2)
 
-- **Definition**: An _Axiom_ is a sentence taken as given
+- @Definition@: An _Axiom_ is a sentence taken as given
   - Not derived from other sentences
 
-- **Definition**: _Inference_ is the process of deriving new sentences from old ones
+- @Definition@: _Inference_ is the process of deriving new sentences from old ones
   - It should be done in a "logical" way
 
-- **Definition**: _Truth values_ of a sentence
+- @Definition@: _Truth values_ of a sentence
   - In most logics every sentence is either true or false
   - **Fuzzy logic** allows sentences to have different degrees of truth
     - $Belief(\alpha) = 0.5$
@@ -480,7 +480,7 @@ digraph G {
 ::: columns
 :::: {.column width=80%}
 
-- **Example**: world where there is rain and wet ground
+- @Example@: world where there is rain and wet ground
   - In each possible world/model, values are assigned to all relevant variables
   - "Possible worlds" can be thought of as real the environments
   - Model $m$ is a mathematical abstraction of "possible world"
@@ -492,7 +492,7 @@ digraph G {
     - World 3: $(Rain = F, WetGround = T)$
     - World 4: $(Rain = F, WetGround = F)$
 
-- **Example**: represent worlds with "men and women sitting at a table"
+- @Example@: represent worlds with "men and women sitting at a table"
   - Model represents all possible worlds as ($x$ men, $y$ women)
   - Sentence $x + y = 4$ is true in certain worlds, false in others
   - In worlds with $x = 2$ men and $y = 2$ women, $x + y = 4$ is true
@@ -555,7 +555,7 @@ digraph G {
   - $\alpha$ entails $\beta$ since in any model in which $x = 0$ is true, also
     $x \cdot y = 0$ is true, regardless of the value of $y$
 
-- **Intuition**:
+- @Intuition@:
   - Entailment is not related to a proof, it just "preserves truth" across all
     models
   - _"If you believe your KB, you must believe the entailed sentences"_
@@ -581,7 +581,7 @@ digraph G {
     - $A \implies B$ is the statement "If it is raining, then the ground is wet"
     - This statement can be true even if it's not raining
 
-- **Intuition**:
+- @Intuition@:
   - Entailment is "meta-level truth-following"
   - Implication is "within the logic"
 
@@ -589,11 +589,11 @@ digraph G {
 - $M(KB)$ represents all the models / possible worlds that are true given our
   $KB$
 
-- **Problem**:
+- @Problem@:
   - We want to verify whether "a sentence $\alpha$ is entailed by $KB$"
     ($KB \models \alpha$)
 
-- **Solution**:
+- @Solution@:
   - According to the definition, we need to verify that $\alpha$ is true in all
     the models in which $KB$ is true
     - I.e., $M(KB) \subseteq M(\alpha)$
@@ -741,7 +741,7 @@ digraph EntailmentSemantics {
   - A geographical ontology describes cities, states, and countries
   - Semantic web (an extension of the current web to give meaning to information)
 
-- **Goal**
+- @Goal@
   - Provide a vocabulary for a domain of knowledge
   - Enable machines and humans to understand and share information consistently
   - Enable reasoning about entities and their relationships
@@ -1295,7 +1295,7 @@ digraph UniversityOntology {
 
 * Propositional Logic
 - E.g., $P \land Q$
-- **Pros**
+- @Pros@
   - Declarative
     - Semantics is based on relation between sentences and possible worlds
   - Can deal with partial information
@@ -1306,7 +1306,7 @@ digraph UniversityOntology {
   - Context independent
   - Unambiguous
 
-- **Cons**
+- @Cons@
   - Can't concisely describe environment with many objects, e.g.,
     - In English _"The pawn is in a cell around `b1`"_ requires all the possible
       states to be enumerated
@@ -1395,7 +1395,7 @@ digraph UniversityOntology {
 - More complex sentences can be expressed using **multiple quantifiers**
   - The order of quantifiers is important, so one can use parentheses to clarify
 
-- **Example**:
+- @Example@:
   - _"Brothers are siblings"_: $\forall x, y \; Brother(x, y) \implies Sibling(x, y)$
   - Siblings is a symmetric relationship: $\forall x, y \; Sibling(x, y) \iff Sibling(y, x)$
   - _"Everybody loves somebody"_: $\forall x \; \exists y \; Loves(x, y)$
@@ -1457,7 +1457,7 @@ digraph UniversityOntology {
 - Enables reasoning about objects, properties, and their relationships
 
 * First-Order Logic: Inference
-- **Goal**: derive new sentences from existing ones using sound rules
+- @Goal@: derive new sentences from existing ones using sound rules
 
   - **Universal Instantiation**:
     - From $\forall x\, P(x)$ infer $P(c)$ for any constant $c$
@@ -1539,7 +1539,7 @@ digraph UniversityOntology {
     found
   - Relates to "common sense"
 
-- **Key idea**
+- @Key idea@
   - Assume the most likely case unless specified otherwise
   - If new information contradicts the assumption, revise the conclusion
 
@@ -1654,7 +1654,7 @@ digraph UniversityOntology {
   - Given positive and negative examples, and background facts, infer logical
     rules that explain the examples
 
-- **Example**
+- @Example@
   - Commonsense knowledge: _"Birds have wings"_
   - Positive example: _"Tweety is a bird that can fly"_
   - Negative example: _"Penguin cannot fly"_
@@ -1762,7 +1762,7 @@ digraph UniversityOntology {
   - Key constructs:
     - Classes, properties, individuals, axioms
 
-- **Example**
+- @Example@
   - "Every cat is a mammal": $Cat \sqsubseteq Mammal$
 
 - **OWL variants**:
@@ -1863,7 +1863,7 @@ digraph OWL_Example {
   - `ASK`: Return a boolean indicating whether a pattern exists
   - `DESCRIBE`: Return an RDF graph describing resources
 
-- **Example**:
+- @Example@:
   - _"Find all resources that are of type Bird"_
     ```
     SELECT ?animal WHERE { ?animal rdf:type ex:Bird }
@@ -1956,7 +1956,7 @@ digraph OWL_Example {
     - E.g., if a `Dog` is an `Animal`, it inherits `Animal` traits
   - Examples: WordNet, ConceptNet
 
-- **Pros**
+- @Pros@
   - Easy to visualize and traverse
   - Support reasoning
   - Common in early AI systems and current KG applications
