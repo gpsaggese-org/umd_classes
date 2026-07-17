@@ -1,28 +1,20 @@
- In book_springer/book/Lesson02.02... text
+When running 
 
-## Step 1
+notes_to_pdf.py --input=msml610/lectures_source/Lesson03.1-Knowledge_representation.txt --output=msml610/lectures/Lesson03.1-Knowledge_representation.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warning
 
-- Use this idiom
+In 
 
-  % From: '* Why Traditional ML Falls Short'
-  \textbf{Why Traditional ML Falls Short}
-  Traditional machine learning was
-  ...
+/Users/saggese/src/umd_classes2/msml610/lectures/tmp.notes_to_pdf.render_image2.typ
 
-  to
+I see
 
-  % From: '* Why Traditional ML Falls Short'
-  \textbf{Why Traditional ML Falls Short} --- Traditional machine learning was
-  built to answer one question well: given a fixed distribution of data, what
-  does the pattern say will happen? \textbf{Predictive accuracy} on a held-out
+- #strong[Definition];: #emph[Knowledge Representation (KR)] is the
 
- In book_springer/book/ How to merge the "Key idea
+without colors, so colorize_bullet_points_in_slide doesn't seem to work
 
-## Step 2
+but the tests
 
-When highlighting words use italic / emph instead of bold
+pytest ./helpers_root/helpers/test/test_hmarkdown_coloring.py
 
-## Step 3
+are passing
 
-Integrate the "Key idea" into prose (weave each into surrounding text instead of
-callouts)

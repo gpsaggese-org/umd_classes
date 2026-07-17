@@ -21,36 +21,39 @@
 
 * What is Knowledge Representation?
 
-- **Knowledge Representation (KR)** is the study of how to formally encode
+- **Definition**: _Knowledge Representation (KR)_ is the study of how to formally encode
   information so that machines can reason with it
   - E.g., rules, logic, ontologies, semantic networks
-  - It is at the heart of symbolic AI and complements learning-based approaches
+  - KR defines
+    - _structure_: how knowledge is organized
+    - _semantics_: what it means
 
-- Defines:
-  - **structure** (how knowledge is organized)
-  - **semantics** (what it means)
-
-- Serves as a bridge between perception (data) and reasoning (logic)
+- **Fact**:
+  - KR is at the heart of AI and complements learning-based approaches
+  - Serves as a bridge between perception (data) and reasoning (logic)
   - Essential for explainability and transparency in intelligent systems
-
-- Enables machines to:
-  - Draw conclusions
-  - Perform planning
-  - Answer queries
-  - ...
+  - Machines can use knowledge representation
+    - Draw conclusions
+    - Perform planning
+    - Answer queries
+    - ...
 
 * Expressiveness vs. Tractability
 
 ::: columns
-:::: {.column width=55%}
+:::: {.column width=60%}
 
-- **Tradeoff in AI / ML**
-  - **Expressiveness**: richness of concepts that can be captured
-  - **Tractability**: whether reasoning can be performed efficiently
-  - More expressive languages lead to harder computation
+- **Definition**: Tradeoff in AI / ML between:
+  - _Expressiveness_: richness of concepts that can be captured
+  - _Tractability_: whether reasoning can be performed efficiently
+
+- **Fact**: More expressive languages lead to harder computation
 
 ::::
-:::: {.column width=40%}
+:::: {.column width=35%}
+
+// TODO(ai_gp): Switch to a more similar font to DejaVu or Computer Modern
+// TODO(ai_gp): Make the comments on the axes bigger and closer to the axes
 
 ```tikz
 \begin{axis}[
@@ -93,40 +96,36 @@
 ::::
 :::
 
-- Choosing the right knowledge representation formalism depends on the
-  application needs
-  - **Atomic**
-    - Treats each state as a single, indivisible entity
-    - E.g., depth-first search algorithms (e.g., `E3` in Chess)
-    - Simple and fast but limited in capturing complex relationships
-  - **Factored**
-    - E.g., propositional logic
-    - E.g., $P_{1,1}$: _"Pit in square (1,1)"_,
-      $B_{1,2} \Leftrightarrow (P_{1,1} \lor P_{2,2} \lor P_{1,3})$
-    - Captures relationships between variables but can't express complex
-      structures
-  - **Structured**
-    - E.g., first-order logic
-    - $\forall x \, \forall y \, Father(x, y) \Rightarrow Parent(x, y)$ =
+- **Key insight**: choosing the right knowledge representation depends on the
+  application
+
+- **Examples**
+  - _Atomic_: treats each state as a single, indivisible entity: simple but
+    limited
+    - E.g., depth-first search algorithms (e.g., `E3` in chess)
+  - _Factored_: captures relationships between variables but can't express complex
+    structures
+    - E.g., propositional logic: $B_{1,2} \Leftrightarrow (P_{1,1} \lor P_{2,2} \lor P_{1,3})$
+  - _Structured_: more expressive but undecidable in general
+    - E.g., first-order logic:
+      $\forall x \, \forall y \, Father(x, y) \Rightarrow Parent(x, y)$ =
       _"A father of a person is their parent"_
-    - More expressive but undecidable in general
 
 * Symbolic vs. Sub-symbolic Representation
 
 ::: columns
 :::: {.column width=55%}
 
-- **Symbolic knowledge** representation uses discrete, human-readable symbols
+- **Definition**: _Symbolic_ KR uses discrete, human-readable symbols
   - E.g., logic, knowledge graphs
   - Interpretable and suitable for rule-based reasoning
   - Struggle with ambiguity
 
-- **Sub-symbolic knowledge** representation uses learned, distributed representations
+- **Definition**: _Sub-symbolic_ KR uses learned, distributed representations
   - E.g., vector embeddings
-  - E.g., deep learning excels at perception and pattern recognition
   - Lack transparency
 
-- **Neuro-symbolic approaches** blends the two approaches
+- **Definition**: _Neuro-symbolic_ KR blend the two approaches
   - Reason over learned concepts using structured logic
 
 ::::
@@ -140,15 +139,25 @@
 
 * Neuro-symbolic Approach: Conceptual Spaces
 
+- **Definition**: _Conceptual spaces_ are frameworks for representing knowledge
+  using geometric structures
+  - Each dimension represents an interpretable feature
+  - Similarity between objects is modeled by spatial distance
+  - A _concepts_ is a region in a multidimensional space
+
+- **Pros**:
+  - Natural modeling of similarity and vagueness
+  - Symbolic systems use discrete symbols without structure (e.g., `Car` vs
+    `Bicycle`)
+
 ::: columns
 :::: {.column width=55%}
 
-- **Conceptual spaces** are frameworks for representing knowledge using geometric
-  structures
-  - A concepts is a region in a multidimensional space defined by quality
-    dimensions
-  - Similarity between objects is modeled by spatial distance
-  - Each dimension represents an interpretable feature
+- **Example**: Transportation methods
+  - Dimensions: `Environmental Friendliness`, `Technological Advancement`
+  - Wooden Transportation (red region)
+  - Vehicles (blue region)
+  - Advanced Vehicles (nested subset)
 
 ::::
 :::: {.column width=40%}
@@ -158,70 +167,55 @@
 ::::
 :::
 
-- **Example**
-  - Dimensions: `Color`, `Size`, `Shape`
-  - "Apple" occupies a region that is typically red / medium-sized / round
-  - "Banana" occupies a different region: yellow / medium / curved and long
-
-- Differences from symbolic representations
-  - Symbolic systems use discrete symbols without structure
-    - E.g., `Apple` vs `Banana`
-
-- **Benefits**
-  - Natural modeling of similarity and vagueness
-  - Useful for grounding symbols in perception (link between sensory inputs and
-    symbolic language)
-
 * Natural languages
-- **Natural languages** (e.g., English, Italian) are:
-  - **Expressive**
+
+- **Definition**: _Natural languages_ (e.g., English, Italian) are:
+  - _Expressive_
     - Medium for communication rather than representation
-  - **Ambiguous**
-    - E.g., "spring" is both a "season" and "something that goes boing"
-  - **Context-dependent**
+  - _Ambiguous_
+    - E.g., _"spring"_ is both a "season" and "something that goes boing"
+  - _Context-dependent_
     - Meaning depends on the sentence and context
     - E.g., "Look!"
 
-- **Sapir-Whorf hypothesis**
-  - The language you speak shapes how you perceive, think about, and experience
-    the world
-    - Even through arbitrary grammatical features, such as gender of nouns
+- **Concept**: _Sapir-Whorf hypothesis_
+  - _"The language you speak shapes how you perceive, think about, and experience
+    the world"_
+    - Even through arbitrary grammatical features (e.g., gender of nouns)
   - Some languages lack words for certain concepts (e.g., direction)
   - Some languages have many words for the same concepts
-    - E.g., Arctic languages have many words for snow (fresh, hard)
+    - E.g., Arctic languages have many words for snow (e.g., fresh, hard)
   - Newspeak from 1984 (Orwell)
     - You can't think certain concepts since you don't have words for it
 
 * Procedural vs Declarative Approaches
 
-- **Procedural approach**
-  - Focuses on _how_ a task is done
+- **Definition**: _Procedural approach_ focuses on _how_ a task is done
   - Encodes desired behavior directly into the program
   - E.g., a robot programmed with specific steps to navigate a maze
 
-- **Declarative approach**
-  - Specifies _what_ the goal is, _not how_ to achieve it
+- **Definition**: _Declarative approach_ specifies _what_ the goal is, but _not
+  how_ to achieve it
   - Describes relationships between actions and goals
   - Leaves solution search to the system
-  - E.g., describing the goal "reach the exit" and letting the system find the path
+  - E.g., describing the goal "reach the exit of the maze" and letting the robot
+    find the path
 
-- **Comparison**
+- **Comparison**:
   - Procedural: more control, less flexibility
   - Declarative: more abstraction, easier to modify or extend
 
-- **Integration of approaches**
-  - Many successful AI systems use a hybrid approach
+- **Approach**: Many successful AI systems use a hybrid approach
   - Declarative knowledge can be compiled into procedural code
   - E.g., a planner generates procedures (plans) from declarative goals
 
 * Programming Languages
-- A **programming language** (e.g., C++, Python) is a formal language
+- **Concept**: A _programming language_ (e.g., C++, Python) is a formal language
   - Data structures represent facts
   - Code updates data structures in a domain-specific way
   - Programming is procedural (vs declarative)
 
-- **Limitations**:
-  - Programming languages lack:
+- **Limitations**: Programming languages lack:
   1. A general mechanism for deriving facts from other facts
      - Code updates data structures based on programmer's domain knowledge
   2. Expressiveness to handle partial information
@@ -229,19 +223,18 @@
      - Can't easily handle partial information or quantify uncertainty
      - E.g., "A white knight is in `b1` or in `f6`"
 
-- **Declarative language**
+- **Concept**: In _declarative language_ knowledge and inference are separate:
+  1. Knowledge represents the domain-specific problem
+  2. Compositional semantics: the meaning of a sentence is a function of the
+     meaning of its parts
+  3. Inference is domain independent
   - E.g., propositional logic, first order logic
-  - Knowledge and inference are separate:
-    1. Knowledge represents the domain-specific problem
-    2. Inference is domain independent
-  - Compositional semantics
-    - The meaning of a sentence is a function of the meaning of its parts
 
 ## Examples of Logic
 
 * Propositional Logic
 
-- Uses atomic statements (propositions) and logical connectives
+- **Fact**: Propositional logic uses atomic statements (propositions) and logical connectives
   - **Syntax**
     - Atomic formulas: $P$, $Q$
     - Connectives: NOT ($\lnot$), AND ($\land$), OR ($\lor$), IMPLIES ($\implies$)
@@ -257,13 +250,13 @@
   - Rule-based systems
   - Simplified AI models
 
-- **Limitations**
+- **Limitations**:
   - Cannot represent objects, relations, or quantifiers
   - Not suitable for open or dynamic domains
 
 * First-Order Logic (FOL)
 
-- **Extension of propositional logic**
+- **Extension of propositional logic**:
   - Introduces predicates, variables, and quantifiers
     - Variables $x$
     - Predicate $Human(x)$
@@ -273,16 +266,16 @@
   - Represents more complex and structured knowledge than propositional logic
   - Can model properties, relationships, and quantification over objects
 
-- **Inference mechanisms**
+- **Inference mechanisms**:
   - Unification: matches predicates with variables
   - Resolution: deduces new facts from known statements
   - Model checking: verifies truth of statements under specific interpretations
 
-- **Computational properties**
+- **Computational properties**:
   - Inference is semi-decidable: valid conclusions may require infinite time
   - More powerful but computationally more complex than propositional logic
 
-- **Applications**
+- **Applications**:
   - Knowledge representation
   - Automated theorem proving
   - Semantic web and ontologies
@@ -316,18 +309,18 @@
       true
 
 * Rule-Based Systems (1/2)
-- A rule-based system uses "if-then" rules to derive conclusions or make
+- **Definition**: A _rule-based system_ uses "if-then" rules to derive conclusions or make
   decisions
   - It mimics human decision-making by applying logical rules to a set of facts
 
-- **Key components**
+- **Key components**:
   - Knowledge base: stores facts and rules
   - Inference engine: applies rules to known facts to infer new facts or take
     actions
   - Working memory: holds current facts being considered
 
 
-- **How it works**
+- **How it works**:
   - _Match_: find rules whose conditions match current facts
   - _Conflict resolution_: decide which rule to apply if multiple rules match
   - _Act_: apply the chosen rule to modify facts or trigger actions
@@ -339,17 +332,17 @@
 
 * Rule-Based Systems (2/2)
 
-- **Pros**
+- **Pros**:
   - Easy to modify and update rules
   - Transparent and explainable reasoning
   - Good when expert knowledge can be clearly articulated
 
-- **Cons**
+- **Cons**:
   - Hard to scale to very large or complex domains
   - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
   - Rule conflicts and maintenance can become challenging
 
-- **Applications**
+- **Applications**:
   - Expert systems
     - E.g., medical diagnosis, technical troubleshooting
   - Business rule engines
@@ -361,8 +354,7 @@
 ::: columns
 :::: {.column width=50%}
 
-- **Grounding**
-  - Connect abstract symbols to real-world entities or observations
+- **Definition**: _Grounding_ connects abstract symbols to real-world entities or observations
   - E.g., link `Apple` to the fruit "apple"
   - Make representations meaningful beyond syntax
     - Enable agents to act meaningfully in the real world
@@ -391,11 +383,11 @@ digraph G {
 ::::
 :::
 
-- **Challenges**
+- **Challenges**:
   - Noisy, incomplete sensory data
   - Complex, context-dependent mapping from inputs to concepts
 
-- **Applications**
+- **Applications**:
   - Robotics: object recognition, manipulation
   - Natural language understanding
   - Autonomous agents, cognitive systems
@@ -406,28 +398,28 @@ digraph G {
 
 * Reflex Agents
 
-- **Reflex agents** act based on the current percept, ignoring percept history
+- **Definition**: _Reflex agents_ act based on the current percept, ignoring percept history
   - Operate using a condition-action rule: _"if condition, then action"_
   - Rely on predefined rules
   - Have no internal state or memory
     - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
 
-- **Pros**
+- **Pros**:
   - Fast and efficient in well-defined environments
 
-- **Cons**
+- **Cons**:
   - Struggle with complex or partially observable environments
   - Cannot plan ahead or learn from experience
 
-- **Application**
+- **Application**:
   - Simple or fully observable environments where quick reactions are sufficient
 
 * Knowledge-based Agents
 
-- **Intelligence** is achieved by _reasoning_ on an internal _representation of
+- **Fact**: Intelligence is achieved by _reasoning_ on an internal _representation of
   knowledge_
 
-- **Knowledge-based agents:**
+- **Definition**: _Knowledge-based agents_
   - Form representations of a complex world
   - Use inference to derive new representations
   - Deduce actions from new representations
@@ -442,24 +434,24 @@ digraph G {
 
 * Logic / Knowledge Base (1/2)
 
-- **Knowledge base (KB)** is a set of:
+- **Definition**: _Knowledge base (KB)_ is a set of:
   - **Sentences** $\alpha$ expressing assertions (observed, assumed or derived)
     about the world
     - E.g., "it rains", "the ground is dry", "the ground is wet"
   - **Rules**
     - E.g, "If it rains, the ground gets wet"
 
-- **Knowledge representation language** is a formal way of creating sentences about
+- **Definition**: _Knowledge representation language_ is a formal way of creating sentences about
   the world
 
-- **Syntax** specifies all the sentences $\alpha$ that are well-formed in a logic
+- **Definition**: _Syntax_ specifies all the sentences $\alpha$ that are well-formed in a logic
   / knowledge
   base
   - E.g., in arithmetic the sentence:
     - "$x + y = 4$" is well-formed
     - "$x4y+ =$" is not well-formed
 
-- **Semantics** is the meaning of sentences (i.e., their truth) with respect to each
+- **Definition**: _Semantics_ is the meaning of sentences (i.e., their truth) with respect to each
   possible world
   - E.g., the sentence $x + y = 4$
     - Is true in the world (model) in which $x = 2, y = 2$
@@ -467,13 +459,13 @@ digraph G {
 
 * Logic / Knowledge Base (2/2)
 
-- **Axiom** is a sentence taken as given
+- **Definition**: An _Axiom_ is a sentence taken as given
   - Not derived from other sentences
 
-- **Inference** is the process of deriving new sentences from old ones
+- **Definition**: _Inference_ is the process of deriving new sentences from old ones
   - It should be done in a "logical" way
 
-- **Truth values** of a sentence
+- **Definition**: _Truth values_ of a sentence
   - In most logics every sentence is either true or false
   - **Fuzzy logic** allows sentences to have different degrees of truth
     - $Belief(\alpha) = 0.5$
