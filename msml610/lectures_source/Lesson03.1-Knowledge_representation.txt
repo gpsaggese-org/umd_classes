@@ -28,10 +28,12 @@
     - _Structure_: how knowledge is organized
     - _Semantics_: what it means
 
-- @Fact@:
-  - KR is at the heart of AI and complements learning-based approaches
+- @Fact@: **Knowledge Representation (KR)**
+  - Is at the heart of AI and complements learning-based approaches
   - Serves as a bridge between perception (data) and reasoning (logic)
-  - Essential for explainability and transparency in intelligent systems
+  - Is essential for explainability and transparency in intelligent systems
+
+- @Example@:
   - Machines can use knowledge representation
     - Draw conclusions
     - Perform planning
@@ -96,10 +98,10 @@
 ::::
 :::
 
-- **Key insight**: choosing the right knowledge representation depends on the
+- @Key insight@: choosing the right knowledge representation depends on the
   application
 
-- **Examples**
+- @Example@
   - _Atomic_: treats each state as a single, indivisible entity: simple but
     limited
     - E.g., depth-first search algorithms (e.g., `E3` in chess)
@@ -116,16 +118,16 @@
 ::: columns
 :::: {.column width=55%}
 
-- @Definition@: _Symbolic_ KR uses discrete, human-readable symbols
+- @Definition@: **Symbolic** KR uses discrete, human-readable symbols
   - E.g., logic, knowledge graphs
   - Interpretable and suitable for rule-based reasoning
   - Struggle with ambiguity
 
-- @Definition@: _Sub-symbolic_ KR uses learned, distributed representations
+- @Definition@: **Sub-symbolic** KR uses learned, distributed representations
   - E.g., vector embeddings
   - Lack transparency
 
-- @Definition@: _Neuro-symbolic_ KR blend the two approaches
+- @Definition@: **Neuro-symbolic** KR blend the two approaches
   - Reason over learned concepts using structured logic
 
 ::::
@@ -139,11 +141,11 @@
 
 * Neuro-symbolic Approach: Conceptual Spaces
 
-- @Definition@: _Conceptual spaces_ are frameworks for representing knowledge
+- @Definition@: **Conceptual spaces** are frameworks for representing knowledge
   using geometric structures
   - Each dimension represents an interpretable feature
   - Similarity between objects is modeled by spatial distance
-  - A _concepts_ is a region in a multidimensional space
+  - A **concepts** is a region in a multidimensional space
 
 - @Pros@:
   - Natural modeling of similarity and vagueness
@@ -169,19 +171,21 @@
 
 * Natural languages
 
-- @Definition@: _Natural languages_ (e.g., English, Italian) are:
-  - _Expressive_
+- @Definition@: **Natural languages** (e.g., English, Italian) are:
+  - **Expressive**
     - Medium for communication rather than representation
-  - _Ambiguous_
+  - **Ambiguous**
     - E.g., _"spring"_ is both a "season" and "something that goes boing"
-  - _Context-dependent_
+  - **Context-dependent**
     - Meaning depends on the sentence and context
     - E.g., "Look!"
 
-- @Concept@: _Sapir-Whorf hypothesis_
+- @Concept@: **Sapir-Whorf hypothesis**
   - _"The language you speak shapes how you perceive, think about, and experience
     the world"_
     - Even through arbitrary grammatical features (e.g., gender of nouns)
+
+- @Example@
   - Some languages lack words for certain concepts (e.g., direction)
   - Some languages have many words for the same concepts
     - E.g., Arctic languages have many words for snow (e.g., fresh, hard)
@@ -190,11 +194,11 @@
 
 * Procedural vs Declarative Approaches
 
-- @Definition@: _Procedural approach_ focuses on _how_ a task is done
+- @Definition@: **Procedural approach** focuses on _how_ a task is done
   - Encodes desired behavior directly into the program
   - E.g., a robot programmed with specific steps to navigate a maze
 
-- @Definition@: _Declarative approach_ specifies _what_ the goal is, but _not
+- @Definition@: **Declarative approach** specifies _what_ the goal is, but _not
   how_ to achieve it
   - Describes relationships between actions and goals
   - Leaves solution search to the system
@@ -320,7 +324,6 @@
   - Inference engine: applies rules to known facts to infer new facts or take
     actions
   - Working memory: holds current facts being considered
-
 
 - **How it works**:
   - _Match_: find rules whose conditions match current facts
