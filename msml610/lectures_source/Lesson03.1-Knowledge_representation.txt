@@ -53,7 +53,7 @@
 ::::
 :::: {.column width=35%}
 
-// TODO(ai_gp): Switch to a more similar font to DejaVu or Computer Modern
+// TODO(ai_gp): Switch to a font more similar to DejaVu or Computer Modern
 // TODO(ai_gp): Make the comments on the axes bigger and closer to the axes
 
 ```tikz
@@ -106,7 +106,9 @@
     - E.g., depth-first search algorithms (e.g., `E3` in chess)
   - _Factored_: captures relationships between variables but can't express complex
     structures
-    - E.g., propositional logic: $B_{1,2} \Leftrightarrow (P_{1,1} \lor P_{2,2} \lor P_{1,3})$
+    - E.g., propositional logic: 
+      _"Minesweeper example: breeze at 1,2 iff pit at adjacent cells"_
+      $B_{1,2} \Leftrightarrow (P_{1,1} \lor P_{2,2} \lor P_{1,3})$
   - _Structured_: more expressive but undecidable in general
     - E.g., first-order logic:
       $\forall x \, \forall y \, Father(x, y) \Rightarrow Parent(x, y)$ =
@@ -309,132 +311,7 @@
     - Sentence $\alpha$ is entailed by KB if it is true in all models where KB is
       true
 
-* Rule-Based Systems (1/2)
-- @Definition@: A **rule-based system** uses "if-then" rules to derive
-  conclusions or make decisions
-  - It mimics human decision-making by applying logical rules to a set of facts
-
-- @Key components@
-  - _Knowledge base_: stores facts and rules
-  - _Inference engine_: applies rules to known facts to infer new facts or take
-    actions
-  - _Working memory_: holds current facts being considered
-
-- @Algorithm@
-  - _Match_: find rules whose conditions match current facts
-  - _Conflict resolution_: decide which rule to apply if multiple rules match
-  - _Act_: apply the chosen rule to modify facts or trigger actions
-  - _Repeat_: continue until no more rules can be applied
-
-- @Example@
-  - _Rule_: If a patient has a fever and a rash, then suggest measles
-  - _Fact_: Patient has a fever and a rash
-  - _Conclusion_: Suggest measles
-
-* Rule-Based Systems (2/2)
-
-- @Pros@
-  - Easy to modify and update rules
-  - Transparent and explainable reasoning
-  - Good when expert knowledge can be clearly articulated
-
-- @Cons@
-  - Hard to scale to very large or complex domains
-  - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
-  - Rule conflicts and maintenance can become challenging
-
-- @Applications@
-  - Expert systems
-    - E.g., medical diagnosis, technical troubleshooting
-  - Business rule engines
-  - Game AI
-  - Tools for legal reasoning
-
-* Grounding
-
-::: columns
-:::: {.column width=50%}
-
-- @Definition@: **Grounding** connects abstract symbols to real-world entities or
-  observations
-  - E.g., link the symbol in the KB `Apple` to the fruit "apple"
-
-::::
-:::: {.column width=40%}
-
-// TODO(ai_gp): Improve it
-```graphviz
-digraph G {
-    rankdir=TB;
-    node [shape=box, style=rounded, fontsize=14];
-
-    R1 [label="Reality"];
-    R2 [label="Reality"];
-    Repr1 [label="Representation"];
-    Reason [label="Reason"];
-    Repr2 [label="Representation"];
-
-    {rank=same; R1; R2}
-    {rank=same; Repr1; Reason, Repr2}
-
-    R1 -> Repr1 -> Reason -> Repr2 -> R2;
-}
-```
-::::
-:::
-
-- @Goals@: make representations meaningful beyond syntax
-  - Enable agents to act meaningfully in the real world
-  - Avoid purely symbolic manipulation without real-world relevance
-
-- @Limitations@
-  - Noisy, incomplete sensory data
-  - Complex, context-dependent mapping from inputs to concepts
-
-- @Applications@
-  - Robotics: object recognition, manipulation
-  - Natural language understanding
-  - Autonomous agents, cognitive systems
-
-// # 7, Logical agents (p. 221)
-
-## Logical Agents
-
-// TODO(gp): Merge with rule systems
-* Reflex Agents
-
-- @Definition@: **Reflex agents** act based on the current percept, ignoring
-  percept history
-  - Operate using predefined condition-action rule: _"if condition, then action"_
-    - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
-
-- @Pros@
-  - Fast and efficient in well-defined environments
-
-- @Cons@
-  - Struggle with complex or partially observable environments
-  - Cannot plan ahead or learn from experience
-
-- @Applications@
-  - Simple or fully observable environments where quick reactions are sufficient
-
-* Knowledge-based Agents
-
-- @Fact@: Intelligence is achieved by _reasoning_ on an internal representation
-  of knowledge
-
-- @Definition@: **Knowledge-based agents**
-  - Form representations of a complex world using a knowledge base
-  - Use inference to derive new representations
-  - Deduce actions from representations
-  - Accept tasks as goal descriptions
-  - Update knowledge using information from sensors
-  - Explain actions based on knowledge
-    - E.g., medical diagnosis system infers diseases, suggests treatments
-    - E.g., chess program uses move database to plan strategy
-  - Handle incomplete or uncertain information through probabilistic reasoning
-
-// TODO(gp): Repeatitive: need to merge with previous stuff
+// TODO(gp): Repeatitive: need to merge with previous slides about knowledge base
 * Logic / Knowledge Base (1/2)
 
 - @Definition@: **Knowledge base (KB)** is a set of:
@@ -476,30 +353,132 @@ digraph G {
     being true
     - $\Pr(\alpha) = 0.3$
 
+* Rule-Based Systems (1/2)
+- @Definition@: A **rule-based system** uses "if-then" rules to derive
+  conclusions or make decisions
+  - It mimics human decision-making by applying logical rules to a set of facts
+
+- @Key components@
+  - _Knowledge base_: stores facts and rules
+  - _Inference engine_: applies rules to known facts to infer new facts or take
+    actions
+  - _Working memory_: holds current facts being considered
+
+- @Algorithm@
+  - _Match_: find rules whose conditions match current facts
+  - _Conflict resolution_: decide which rule to apply if multiple rules match
+  - _Act_: apply the chosen rule to modify facts or trigger actions
+  - _Repeat_: continue until no more rules can be applied
+
+- @Example@
+  - _Rule_: If a patient has a fever and a rash, then suggest measles
+  - _Fact_: Patient has a fever and a rash
+  - _Conclusion_: Suggest measles
+
+* Rule-Based Systems (2/2)
+
+- @Pros@
+  - Easy to modify and update rules
+  - Transparent and explainable reasoning
+  - Good when expert knowledge can be clearly articulated
+
+- @Cons@
+  - Hard to scale to very large or complex domains
+  - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
+  - Rule conflicts and maintenance can become challenging
+
+- @Applications@
+  - Expert systems
+    - E.g., medical diagnosis, technical troubleshooting
+  - Business rule engines
+  - Game AI
+  - Tools for legal reasoning
+
+// TODO(ai_gp): Merge the sections about Grounding into a single one
+* Grounding
+
+::: columns
+:::: {.column width=50%}
+
+- @Definition@: **Grounding** connects abstract symbols to real-world entities or
+  observations
+  - E.g., link the symbol in the KB `Apple` to the fruit "apple"
+
+::::
+:::: {.column width=50%}
+
+// include:msml610/lectures_source/Lesson01.1.aux.md "L03.1_Grounding"
+
+::::
+:::
+
+- @Goals@: make representations meaningful beyond syntax
+  - Enable agents to act meaningfully in the real world
+  - Avoid purely symbolic manipulation without real-world relevance
+
+- @Limitations@
+  - Noisy, incomplete sensory data
+  - Complex, context-dependent mapping from inputs to concepts
+
+- @Applications@
+  - Robotics: object recognition, manipulation
+  - Natural language understanding
+  - Autonomous agents, cognitive systems
+
+// # 7, Logical agents (p. 221)
+
+## Logical Agents
+
+// TODO(gp): Merge with rule systems in next slides
+* Reflex Agents
+
+- @Definition@: **Reflex agents** act based on the current percept, ignoring
+  percept history
+  - Operate using predefined condition-action rule: _"if condition, then action"_
+    - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
+
+- @Pros@
+  - Fast and efficient in well-defined environments
+
+- @Cons@
+  - Struggle with complex or partially observable environments
+  - Cannot plan ahead or learn from experience
+
+- @Applications@
+  - Simple or fully observable environments where quick reactions are sufficient
+
+* Knowledge-based Agents
+
+- @Fact@: Intelligence is achieved by _reasoning_ on an internal representation
+  of knowledge
+
+- @Definition@: **Knowledge-based agents**
+  - Form representations of a complex world using a knowledge base
+  - Use inference to derive new representations
+  - Deduce actions from representations
+  - Accept tasks as goal descriptions
+  - Update knowledge using information from sensors
+  - Explain actions based on knowledge
+    - E.g., medical diagnosis system infers diseases, suggests treatments
+    - E.g., chess program uses move database to plan strategy
+  - Handle incomplete or uncertain information through probabilistic reasoning
+
 * Model and Possible Worlds: Examples
 
 ::: columns
-:::: {.column width=80%}
+:::: {.column width=60%}
 
-- @Example@: world where there is rain and wet ground
+- @Example@: Consider a world where there is _rain_ and _wet ground_
   - In each possible world/model, values are assigned to all relevant variables
-  - "Possible worlds" can be thought of as real the environments
-  - Model $m$ is a mathematical abstraction of "possible world"
-    - E.g., $m$ is $(Rain = F, WetGround = T)$
-  - Each possible world is a complete assignment of truth values to all
-    relevant propositions
     - World 1: $(Rain = T, WetGround = T)$
     - World 2: $(Rain = T, WetGround = F)$
     - World 3: $(Rain = F, WetGround = T)$
     - World 4: $(Rain = F, WetGround = F)$
-
-- @Example@: represent worlds with "men and women sitting at a table"
-  - Model represents all possible worlds as ($x$ men, $y$ women)
-  - Sentence $x + y = 4$ is true in certain worlds, false in others
-  - In worlds with $x = 2$ men and $y = 2$ women, $x + y = 4$ is true
+  - Model $m$ is a mathematical abstraction of "possible world"
+    - E.g., $m$ is $(Rain = F, WetGround = T)$
 
 ::::
-:::: {.column width=20%}
+:::: {.column width=40%}
 
 ```graphviz
 digraph G {
@@ -524,34 +503,43 @@ digraph G {
 ::::
 :::
 
+- @Example@: Consider worlds with _"men and women sitting at a table"_
+  - Model represents all possible worlds as _"there are ($x$ men, $y$ women)"_
+  - Sentence $x + y = 4$ is true in certain worlds and false in others
+  - E.g., in worlds with $x = 2$ men and $y = 2$ women, $x + y = 4$ is true
+
 * Satisfaction of a Sentence in a Model
-- A model $m$ fixes all the variables $x_1, ..., x_n$ used in sentences
+- @Recap@: A model $m$ fixes all the variables $x_1, ..., x_n$ used in sentences
   - E.g., $(Rain = T, WetGround = T)$
 
-- If a sentence $\alpha$ is true in model $m$, we say _"the model $m$
-  **satisfies** the sentence $\alpha$"_
+- @Definition@: If a sentence $\alpha$ is true in model $m$, we say _"the model
+  $m$ **satisfies** the sentence $\alpha$"_
   - E.g., the model $(Rain = T, WetGround = F)$ satisfies $\alpha: Rain = T$
-  - Note: this seems backwards, since in our common way of reasoning, the world
-    is fixed and sentences are evaluated as true or false
+  - This seems backwards, since in our common way of reasoning, the world is
+    fixed and sentences are evaluated as true or false
 
-- $M(\alpha)$ is the set of all the models in which $\alpha$ is true
+- @Definition@: $M(\alpha)$ is the set of all the models in which $\alpha$ is
+  true
   - E.g.,
     - $\alpha: Rain = T$
     - $M(Rain = T) = \{(Rain, WetGround), (Rain, \lnot WetGround)\}$
 
 * Logical Entailment
-- **Logical entailment** between sentences is the fact that a sentence follows
-  logically from another sentence in a KB
-
-- "$\alpha$ **entails** $\beta$" (written $\alpha \models \beta$) iff (by def) in
-  every model in which $\alpha$ is true, $\beta$ is also true
+- @Definition@: **Logical entailment** between sentences is the fact that a
+  sentence follows logically from another sentence in a KB
+  - "$\alpha$ **entails** $\beta$" (written $\alpha \models \beta$) iff (by def)
+    in every model in which $\alpha$ is true, $\beta$ is also true
   - Equivalent to $M(\alpha) \subseteq M(\beta)$
 
-- E.g., in the "rain and wet ground" world
-  - $\alpha: "Rain \implies WetGround"$ entails
-    $\beta: "(Rain = T, WetGround = T)"$
+- @Example@: in the "rain and wet ground" world
+  - $\alpha: "(Rain = T, WetGround = T)"$ entails
+    $\beta: "Rain \implies WetGround"$
+  - If you know for a fact that it's raining and the ground is wet, then you can
+    confidently conclude that the rule "if it rains, then the ground is wet" must
+    be true (at least in this world)
+  - The specific concrete fact supports the general conditional rule
 
-- E.g., in the "sitting table" world
+- @Example@: in the "sitting table" world
   - $\alpha$: "$x = 0$", $\beta$: "$x \cdot y = 0$"
   - $\alpha$ entails $\beta$ since in any model in which $x = 0$ is true, also
     $x \cdot y = 0$ is true, regardless of the value of $y$
@@ -559,27 +547,29 @@ digraph G {
 - @Intuition@:
   - Entailment is not related to a proof, it just "preserves truth" across all
     models
+  - Entailment is a constraint on consistent belief
   - _"If you believe your KB, you must believe the entailed sentences"_
 
 * Logical Entailment vs Implication
 
 - Entailment and implication are related but distinct
-  - **Logical entailment** is about truth following from known facts
-  - **Implication** is about a relationship between two statements
+  - _Logical entailment_ is about truth following from known facts
+  - _Implication_ is about a relationship between two statements
 
 - **Logical entailment** ($KB \models \alpha$):
   - Means $\alpha$ is always true in any world where KB is true
   - E.g.,
-    - KB: "It is raining", "If it rains, the ground is wet"
-    - Entailed: "The ground is wet"
+    - KB: _"It is raining"_, _"If it rains, the ground is wet"_
+    - Entailed: _"The ground is wet"_
 
 - **Implication** ($A \implies B$):
-  - A statement in logic that says: "If A is true, then B is true"
+  - A statement in logic that says: _"If A is true, then B is true"_
     - Doesn't guarantee A or B is true by itself
     - Implication is true unless A is true and B is false
   - E.g.,
-    - $A$: "It is raining", $B$: "The ground is wet"
-    - $A \implies B$ is the statement "If it is raining, then the ground is wet"
+    - $A$: _"It is raining"_, $B$: _"The ground is wet"_
+    - $A \implies B$ is the statement _"If it is raining, then the ground is
+      wet"_
     - This statement can be true even if it's not raining
 
 - @Intuition@:
@@ -587,12 +577,12 @@ digraph G {
   - Implication is "within the logic"
 
 * Model Checking Procedure
-- $M(KB)$ represents all the models / possible worlds that are true given our
-  $KB$
+- @Recap@: $M(KB)$ represents all the models / possible worlds that are true
+  given our $KB$
 
 - @Problem@:
-  - We want to verify whether "a sentence $\alpha$ is entailed by $KB$"
-    ($KB \models \alpha$)
+  - We want to verify whether "a sentence $\alpha$ is entailed by $KB$",
+    i.e., $KB \models \alpha$
 
 - @Solution@:
   - According to the definition, we need to verify that $\alpha$ is true in all
@@ -606,40 +596,41 @@ digraph G {
      compatible with the $KB$
 
 * Sound and Complete Inference Algorithm
-- Inference: a syntactic process of deriving new sentences from others, using
-  formal rules of a proof system (e.g., modus ponens, resolution, etc.)
-  - You know: "If it rains, the ground gets wet."
-  - You see: "It is raining."
-  - You infer: "The ground must be wet."
+- @Definition@: **Inference** is a syntactic process of deriving new sentences
+  from others, using formal rules of a proof system (e.g., modus ponens,
+  resolution, etc.)
+  - You know: _"If it rains, the ground gets wet"_
+  - You see: _"It is raining"_
+  - You infer: _"The ground must be wet"_
 
-- The ideal inference algorithm is both sound and complete
-
-- **Sound** inference algorithm
+- @Definition@: **Sound** inference algorithm
   - Derives only sentences entailed from $KB$
-  - "Whatever the inference algorithm finds, it's correct", i.e., no false
+  - _"Whatever the inference algorithm finds, it's correct"_, i.e., no false
     positives
   - E.g., model checking is sound
     - It works only when the space of models is finite
     - When it works, it is truth preserving
 
-- **Complete** inference algorithm
+- @Definition@: **Complete** inference algorithm
   - Can derive any sentence entailed from $KB$
-  - "The inference algorithm doesn't miss anything," i.e., no false negatives
+  - _"The inference algorithm doesn't miss anything"_ i.e., no false negatives
+
+- The ideal inference algorithm is both sound and complete
 
 * Isomorphism between Model and Possible Worlds
-::: columns
-:::: {.column width=55%}
-- A sound and complete inference algorithm should yield conclusions guaranteed to
-  be true in any world where the premises are true
-  - 
+- A sound and complete inference algorithm yields conclusions guaranteed to be
+  true in any world where the premises are true
 
+::: columns
+:::: {.column width=40%}
 - In other words, even if the inference operates on "syntax" (the internal
   representation):
-  - "Sentences in the representation" correspond to "aspects of the real world"
-  - "Entailment between sentences in the representation" corresponds to
-    "implication between aspects of the real world"
+  - _"Sentences in the representation"_ correspond to _"aspects of the real
+    world"_
+  - _"Entailment between sentences in the representation"_ corresponds to
+    _"implication between aspects of the real world"_
 ::::
-:::: {.column width=40%}
+:::: {.column width=55%}
 
 ```graphviz
 digraph EntailmentSemantics {
@@ -680,6 +671,16 @@ digraph EntailmentSemantics {
 :::
 
 * Entailment vs Inference vs Implication
+- **Implication**
+  - _"If $A$, then $B$"_
+  - It doesn't say whether A is true; it just says, if it happens, then B follows
+  - It's a "statement inside the logic system"
+
+- **Inference**
+  - This is what you (a person or a computer) figure out based on what you know
+  - You start with some truths, then reason your way to new truths
+  - It's "reasoning inside the logic system"
+
 - **Logical entailment**
   - $A$ entails $B$: if the fact $A$ is true and that automatically guarantees
     that fact $B$ must also be true
@@ -688,16 +689,6 @@ digraph EntailmentSemantics {
     - $Rain = T, WetGround = F \to$ violation
     - Since there is at least one counterexample, $Rain$ does not entail
       $WetGround$
-
-- **Inference**
-  - This is what you (a person or a computer) figure out based on what you know
-  - You start with some truths, then reason your way to new truths
-  - It's "reasoning inside the logic system"
-
-- **Implication**
-  - "If $A$, then $B$"
-  - It doesn't say whether A is true; it just says, if it happens, then B follows
-  - It's a "statement inside the logic system"
 
 * Grounding
 - **Grounding** is the operation of linking abstract symbols to reality
