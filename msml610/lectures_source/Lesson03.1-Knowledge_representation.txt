@@ -33,12 +33,11 @@
   - Serves as a bridge between perception (data) and reasoning (logic)
   - Is essential for explainability and transparency in intelligent systems
 
-- @Example@:
-  - Machines can use knowledge representation
-    - Draw conclusions
-    - Perform planning
-    - Answer queries
-    - ...
+- @Example@: Machines can use knowledge representation to:
+  - Draw conclusions
+  - Perform planning
+  - Answer queries
+  - ...
 
 * Expressiveness vs. Tractability
 
@@ -118,16 +117,16 @@
 ::: columns
 :::: {.column width=55%}
 
-- @Definition@: **Symbolic** KR uses discrete, human-readable symbols
+- @Definition@: **Symbolic KR** uses discrete, human-readable symbols
   - E.g., logic, knowledge graphs
   - Interpretable and suitable for rule-based reasoning
   - Struggle with ambiguity
 
-- @Definition@: **Sub-symbolic** KR uses learned, distributed representations
+- @Definition@: **Sub-symbolic KR** uses learned, distributed representations
   - E.g., vector embeddings
   - Lack transparency
 
-- @Definition@: **Neuro-symbolic** KR blend the two approaches
+- @Definition@: **Neuro-symbolic KR** blend the two approaches
   - Reason over learned concepts using structured logic
 
 ::::
@@ -172,11 +171,11 @@
 * Natural languages
 
 - @Definition@: **Natural languages** (e.g., English, Italian) are:
-  - **Expressive**
+  - _Expressive_
     - Medium for communication rather than representation
-  - **Ambiguous**
+  - _Ambiguous_
     - E.g., _"spring"_ is both a "season" and "something that goes boing"
-  - **Context-dependent**
+  - _Context-dependent_
     - Meaning depends on the sentence and context
     - E.g., "Look!"
 
@@ -205,6 +204,7 @@
   - E.g., describing the goal "reach the exit of the maze" and letting the robot
     find the path
 
+// TODO(ai_gp): Convert it into a table?
 - @Comparison@:
   - Procedural: more control, less flexibility
   - Declarative: more abstraction, easier to modify or extend
@@ -214,24 +214,24 @@
   - E.g., a planner generates procedures (plans) from declarative goals
 
 * Programming Languages
-- @Concept@: A _programming language_ (e.g., C++, Python) is a formal language
-  - Data structures represent facts
-  - Code updates data structures in a domain-specific way
-  - Programming is procedural (vs declarative)
+- @Concept@: A **programming language** (e.g., C++, Python) is a formal and
+  procedural language
+  - _Data structures_ represent facts
+  - _Code_ updates data structures in a domain-specific way
 
 - @Limitations@: Programming languages lack:
-  1. A general mechanism for deriving facts from other facts
+  1. A general _mechanism for deriving facts from other facts_
      - Code updates data structures based on programmer's domain knowledge
-  2. Expressiveness to handle partial information
-     - A variable represents a single value or unknown
-     - Can't easily handle partial information or quantify uncertainty
-     - E.g., "A white knight is in `b1` or in `f6`"
+  2. Expressiveness to _handle partial information_
+     - A variable represents a single value or unknown, can't handle partial
+       information or quantify uncertainty
+     - E.g., _"A white knight is in `b1` or in `f6`"_
 
-- @Concept@: In _declarative language_ knowledge and inference are separate:
-  1. Knowledge represents the domain-specific problem
-  2. Compositional semantics: the meaning of a sentence is a function of the
-     meaning of its parts
-  3. Inference is domain independent
+- @Concept@: In **declarative language** knowledge and inference are separate:
+  1. _Knowledge_ represents the domain-specific problem
+     - The meaning of a sentence is a function of the meaning of its parts
+       (compositional semantics)
+  2. _Inference_ is domain independent
   - E.g., propositional logic, first order logic
 
 ## Examples of Logic
@@ -262,24 +262,23 @@
 
 * First-Order Logic (FOL)
 
-- @Fact@: first-order logic is an extension of propositional logic:
-  - Introduces predicates, variables, and quantifiers
-    - Variables $x$
-    - Predicate $Human(x)$
-    - Universal quantifier "for all" $\forall$
-    - Existential quantifier "there exists" $\exists$
-  - E.g., $\forall x (Human(x) \implies Mortal(x))$ = _"All humans are mortal"_
-  - Represents more complex and structured knowledge than propositional logic
-  - Can model properties, relationships, and quantification over objects
+- @Definition@: **first-order logic** is an extension of propositional logic
+  - _Syntax_
+    - Atomic formulas and connectives from propositional logic
+    - _Variables_ $x$
+    - _Predicate_ $Human(x)$
+    - _Quantifiers_ (e.g., universal "for all" $\forall$, existential "there
+      exists" $\exists$)
 
-- **Inference mechanisms**:
-  - Unification: matches predicates with variables
-  - Resolution: deduces new facts from known statements
-  - Model checking: verifies truth of statements under specific interpretations
+  - _Semantics_
+    - Represents more complex and structured knowledge than propositional logic
+    - Can model properties, relationships, and quantification over objects
+      - E.g., $\forall x (Human(x) \implies Mortal(x))$ = _"All humans are mortal"_
 
-- **Computational properties**:
-  - Inference is semi-decidable: valid conclusions may require infinite time
-  - More powerful but computationally more complex than propositional logic
+  - _Inference mechanisms_
+    - Unification: matches predicates with variables
+    - Resolution: deduces new facts from known statements
+    - Model checking: verifies truth of statements under specific interpretations
 
 - @Applications@:
   - Knowledge representation
@@ -288,66 +287,63 @@
 
 * Reasoning and Inference in Logic
 
+- **Knowledge base (KB)** is a structured set of facts and rules used for logical
+  reasoning
+
 - **Logical inference** is the process of deriving new facts from known ones
   using formal rules
-  - Used to make decisions and answer questions based on a Knowledge Base
+  - E.g., answer questions based on a Knowledge Base
 
-- **Knowledge base (KB)**:
-  - A structured set of facts and rules used for logical reasoning
-
-- **Inference engine**:
-  - Mechanism that applies logical rules to a KB to derive conclusions or answer
-    queries
-  - **Forward chaining**:
+- **Inference engine**: mechanism that applies logical rules to a KB to derive
+  conclusions or answer queries
+  - _Forward chaining_
     - Starts with known facts and applies inference rules to extract more data
-    - E.g., given $A \rightarrow B$ and $A$, infer $B$
-
-  - **Backward chaining**:
+    - E.g., given "$A \rightarrow B$" and $A$, infer $B$
+  - _Backward chaining_
     - Begins with a goal and works backward to find supporting facts
     - E.g., to prove $B$, check if $A \rightarrow B$ and then prove $A$
-
-  - **Resolution**:
+  - _Resolution_
     - A complete inference rule for propositional and first-order logic
     - Useful in automated theorem proving
-
-  - **Entailment** ($KB \models \alpha$):
+  - _Entailment_ ($KB \models \alpha$):
     - Sentence $\alpha$ is entailed by KB if it is true in all models where KB is
       true
 
 * Rule-Based Systems (1/2)
-- @Definition@: A _rule-based system_ uses "if-then" rules to derive conclusions or make
+- @Definition@: A **rule-based system** uses "if-then" rules to derive conclusions or make
   decisions
   - It mimics human decision-making by applying logical rules to a set of facts
 
-- **Key components**:
-  - Knowledge base: stores facts and rules
-  - Inference engine: applies rules to known facts to infer new facts or take
+- @Key components@
+  - _Knowledge base_: stores facts and rules
+  - _Inference engine_: applies rules to known facts to infer new facts or take
     actions
-  - Working memory: holds current facts being considered
+  - _Working memory_: holds current facts being considered
 
-- **How it works**:
+- @Algorithm@
   - _Match_: find rules whose conditions match current facts
   - _Conflict resolution_: decide which rule to apply if multiple rules match
   - _Act_: apply the chosen rule to modify facts or trigger actions
   - _Repeat_: continue until no more rules can be applied
-  - **E.g.,**
-    - _Rule_: If a patient has a fever and a rash, then suggest measles
-    - _Fact_: Patient has a fever and a rash
-    - _Conclusion_: Suggest measles
+
+- @Example@
+  - _Rule_: If a patient has a fever and a rash, then suggest measles
+  - _Fact_: Patient has a fever and a rash
+  - _Conclusion_: Suggest measles
 
 * Rule-Based Systems (2/2)
 
-- @Pros@:
+- @Pros@
   - Easy to modify and update rules
   - Transparent and explainable reasoning
   - Good when expert knowledge can be clearly articulated
 
-- @Cons@:
+- @Cons@
   - Hard to scale to very large or complex domains
   - Cannot handle uncertainty without extensions (e.g., probabilistic reasoning)
   - Rule conflicts and maintenance can become challenging
 
-- @Applications@:
+- @Applications@
   - Expert systems
     - E.g., medical diagnosis, technical troubleshooting
   - Business rule engines
@@ -359,15 +355,14 @@
 ::: columns
 :::: {.column width=50%}
 
-- @Definition@: _Grounding_ connects abstract symbols to real-world entities or observations
+- @Definition@: **Grounding** connects abstract symbols to real-world entities or
+  observations
   - E.g., link `Apple` to the fruit "apple"
-  - Make representations meaningful beyond syntax
-    - Enable agents to act meaningfully in the real world
-    - Avoid purely symbolic manipulation without real-world relevance
 
 ::::
 :::: {.column width=40%}
 
+// TODO(ai_gp): Improve it
 ```graphviz
 digraph G {
     rankdir=TB;
@@ -388,11 +383,15 @@ digraph G {
 ::::
 :::
 
-- **Challenges**:
+- @Goals@: make representations meaningful beyond syntax
+  - Enable agents to act meaningfully in the real world
+  - Avoid purely symbolic manipulation without real-world relevance
+
+- @Limitations@
   - Noisy, incomplete sensory data
   - Complex, context-dependent mapping from inputs to concepts
 
-- @Applications@:
+- @Applications@
   - Robotics: object recognition, manipulation
   - Natural language understanding
   - Autonomous agents, cognitive systems
@@ -403,7 +402,7 @@ digraph G {
 
 * Reflex Agents
 
-- @Definition@: _Reflex agents_ act based on the current percept, ignoring percept history
+- @Definition@: **Reflex agents** act based on the current percept, ignoring percept history
   - Operate using a condition-action rule: _"if condition, then action"_
   - Rely on predefined rules
   - Have no internal state or memory
@@ -424,7 +423,7 @@ digraph G {
 - @Fact@: Intelligence is achieved by _reasoning_ on an internal _representation of
   knowledge_
 
-- @Definition@: _Knowledge-based agents_
+- @Definition@: **Knowledge-based agents**
   - Form representations of a complex world
   - Use inference to derive new representations
   - Deduce actions from new representations
@@ -439,24 +438,24 @@ digraph G {
 
 * Logic / Knowledge Base (1/2)
 
-- @Definition@: _Knowledge base (KB)_ is a set of:
+- @Definition@: **Knowledge base (KB)** is a set of:
   - **Sentences** $\alpha$ expressing assertions (observed, assumed or derived)
     about the world
     - E.g., "it rains", "the ground is dry", "the ground is wet"
   - **Rules**
     - E.g, "If it rains, the ground gets wet"
 
-- @Definition@: _Knowledge representation language_ is a formal way of creating sentences about
+- @Definition@: **Knowledge representation language** is a formal way of creating sentences about
   the world
 
-- @Definition@: _Syntax_ specifies all the sentences $\alpha$ that are well-formed in a logic
+- @Definition@: **Syntax** specifies all the sentences $\alpha$ that are well-formed in a logic
   / knowledge
   base
   - E.g., in arithmetic the sentence:
     - "$x + y = 4$" is well-formed
     - "$x4y+ =$" is not well-formed
 
-- @Definition@: _Semantics_ is the meaning of sentences (i.e., their truth) with respect to each
+- @Definition@: **Semantics** is the meaning of sentences (i.e., their truth) with respect to each
   possible world
   - E.g., the sentence $x + y = 4$
     - Is true in the world (model) in which $x = 2, y = 2$
@@ -464,13 +463,13 @@ digraph G {
 
 * Logic / Knowledge Base (2/2)
 
-- @Definition@: An _Axiom_ is a sentence taken as given
+- @Definition@: An **Axiom** is a sentence taken as given
   - Not derived from other sentences
 
-- @Definition@: _Inference_ is the process of deriving new sentences from old ones
+- @Definition@: **Inference** is the process of deriving new sentences from old ones
   - It should be done in a "logical" way
 
-- @Definition@: _Truth values_ of a sentence
+- @Definition@: **Truth values** of a sentence
   - In most logics every sentence is either true or false
   - **Fuzzy logic** allows sentences to have different degrees of truth
     - $Belief(\alpha) = 0.5$

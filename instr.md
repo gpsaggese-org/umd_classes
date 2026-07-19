@@ -1,32 +1,54 @@
-When running
+From each issue plan.todo_janitor.md
 
-notes_to_pdf.py --input=msml610/lectures_source/Lesson03.1-Knowledge_representation.txt --output=msml610/lectures/Lesson03.1-Knowledge_representation.pdf --type=slides --toc_type=navigation --debug_on_error --skip_action=cleanup_before --skip_action=cleanup_after --slides_engine typst --no_fail_on_warning
+- Create a GitHub issue in a certain repo
+  gh issue create --title "Fix bug X" --body "Description here" --assignee @me
+  --title <title>
+  --body <file>
 
-in the typst file generated 
+gh issue create --title "Refactor Regex to Use re.VERBOSE and Comments" --body-file ...
 
-msml610/lectures/tmp.notes_to_pdf.render_image2.typ
+or i gh_issue_title
+GitHub issue link: https://github.com/causify-ai/helpers/issues/1290
 
-there are two Syntax highlighted
+- Get the name of the issue
+i gh_issue_title -i 1290
+HelpersTask1290_Refactor_Regex_to_Use_re.VERBOSE_and_Comments
 
-==== Table of Content
-<table-of-content-10>
-- Knowledge Representation
-  - Basics of Knowledge Representation
-  - Examples of Logic
-  - Logical Agents
-  - Ontologies
-  - Reasoning in Ontologies
-- Propositional logic
-  - #text(fill: red, weight: "bold")[#emph[Syntax]]
-  - Semantics
-- First-order Logic
-  - #text(fill: red, weight: "bold")[#emph[Syntax]]
-  - Semantics
-- Non-classical Logics
-  - Intro and Examples
-  - Description Logics
+- Create a branch and a worktree
 
-Understand why and propose a fix
+```
+#!/bin/bash
+
+# Pass
+# feature_name (e.g., HelpersXYZ)
+# worktree_path (e.g., /Users/saggese/src/umd_classes4), it should be found automatically
+# subrepo_path (look for subrepos and add helpers)
+
+gh issue create --title "Fix bug X" --body "Description here" --assignee @me
+
+FEATURE_NAME="HelpersTask"
+export WORKTREE_PATH=/Users/saggese/src/todo_janitor/HelpersTask1290
+
+SUBREPO_PATH="path/to/subrepo"  # Update this with your subrepo path
+
+# Create branch and worktree in main repo
+git branch $FEATURE_NAME origin/master
+git worktree add $WORKTREE_PATH $FEATURE_NAME
+
+cd $WORKTREE_PATH
+
+# Update submodules
+git submodule update --init --recursive
+
+# Create and checkout branch in subrepo
+cd $SUBREPO_PATH
+git branch $FEATURE_NAME
+git checkout $FEATURE_NAME
+
+echo "✓ Worktree and branches created successfully!"
+echo "Main repo worktree: $WORKTREE_PATH"
+echo "Branch: $FEATURE_NAME (in both repos)"
+```
 
 
 # Conventions
