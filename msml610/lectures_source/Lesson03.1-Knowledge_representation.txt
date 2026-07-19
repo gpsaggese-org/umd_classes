@@ -394,7 +394,6 @@
   - Game AI
   - Tools for legal reasoning
 
-// TODO(ai_gp): Merge the sections about Grounding into a single one
 * Grounding
 
 ::: columns
@@ -425,43 +424,31 @@
   - Natural language understanding
   - Autonomous agents, cognitive systems
 
-// # 7, Logical agents (p. 221)
+* Grounding
+- **Grounding** is the operation of linking abstract symbols to reality
+  - E.g., words, variables in the representation ... $\to$ objects, entities, or
+    situations in the real world
+  - It is the bridge between representation in a KB and the world
 
-## Logical Agents
+- How **can we know** that a KB accurately reflects the real world?
+  - We can't be sure!
+  - Do we live in a simulation? What is reality?
 
-// TODO(gp): Merge with rule systems in next slides
-* Reflex Agents
+- We **assume** that is correct
+  - Agent's sensors create a sentence in the KB when something happens in the
+    real world
+    ```
+    IF smell = burning THEN food_is_burning
+    ```
+  - Agent learns rules and acts
+    ```
+    IF food_is_burning THEN turn_off_stove
+    ```
 
-- @Definition@: **Reflex agents** act based on the current percept, ignoring
-  percept history
-  - Operate using predefined condition-action rule: _"if condition, then action"_
-    - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
-
-- @Pros@
-  - Fast and efficient in well-defined environments
-
-- @Cons@
-  - Struggle with complex or partially observable environments
-  - Cannot plan ahead or learn from experience
-
-- @Applications@
-  - Simple or fully observable environments where quick reactions are sufficient
-
-* Knowledge-based Agents
-
-- @Fact@: Intelligence is achieved by _reasoning_ on an internal representation
-  of knowledge
-
-- @Definition@: **Knowledge-based agents**
-  - Form representations of a complex world using a knowledge base
-  - Use inference to derive new representations
-  - Deduce actions from representations
-  - Accept tasks as goal descriptions
-  - Update knowledge using information from sensors
-  - Explain actions based on knowledge
-    - E.g., medical diagnosis system infers diseases, suggests treatments
-    - E.g., chess program uses move database to plan strategy
-  - Handle incomplete or uncertain information through probabilistic reasoning
+- We assume that "learning" (going from particular cases to general cases) is
+  typically correct
+  - Learning is still fallible
+  - E.g., `smell = burning` because maybe somebody is cooking on a grill
 
 * Model and Possible Worlds: Examples
 
@@ -690,101 +677,106 @@ digraph EntailmentSemantics {
     - Since there is at least one counterexample, $Rain$ does not entail
       $WetGround$
 
-* Grounding
-- **Grounding** is the operation of linking abstract symbols to reality
-  - E.g., words, variables in the representation ... $\to$ objects, entities, or
-    situations in the real world
-  - It is the bridge between representation in a KB and the world
+// # 7, Logical agents (p. 221)
 
-- How **can we know** that a KB accurately reflects the real world?
-  - We can't be sure!
-  - Do we live in a simulation? What is reality?
+## Logical Agents
 
-- We **assume** that is correct
-  - Agent's sensors create a sentence in the KB when something happens in the
-    real world
-    ```
-    IF smell = burning THEN food_is_burning
-    ```
-  - Agent learns rules and acts
-    ```
-    IF food_is_burning THEN turn_off_stove
-    ```
+// TODO(gp): Merge with rule systems in next slides
+* Reflex Agents
 
-- We assume that "learning" (going from particular cases to general cases) is
-  typically correct
-  - Learning is still fallible
-  - E.g., `smell = burning` because maybe somebody is cooking on a grill
+- @Definition@: **Reflex agents** act based on the current percept, ignoring
+  percept history
+  - Operate using predefined condition-action rule: _"if condition, then action"_
+    - E.g., a thermostat: _"if temperature < threshold, turn on the heater"_
+
+- @Pros@
+  - Fast and efficient in well-defined environments
+
+- @Cons@
+  - Struggle with complex or partially observable environments
+  - Cannot plan ahead or learn from experience
+
+- @Applications@
+  - Simple or fully observable environments where quick reactions are sufficient
+
+* Knowledge-based Agents
+
+- @Fact@: Intelligence is achieved by _reasoning_ on an internal representation
+  of knowledge
+
+- @Definition@: **Knowledge-based agents**
+  - Form representations of a complex world using a knowledge base
+  - Use inference to derive new representations
+  - Deduce actions from representations
+  - Accept tasks as goal descriptions
+  - Update knowledge using information from sensors
+  - Explain actions based on knowledge
+    - E.g., medical diagnosis system infers diseases, suggests treatments
+    - E.g., chess program uses move database to plan strategy
+  - Handle incomplete or uncertain information through probabilistic reasoning
 
 ## Ontologies
 
-* Ontologies (in computer science)
+* Ontologies (in Computer Science)
 
-- **Ontology:**
-  - Is a formal, explicit representation of a domain
+- @Definition@: **Ontology:** is a formal and explicit representation of a domain
   - Describes the types of things that exist and how they relate to each other
-    - Classes: types of things
-    - Individuals: specific objects
-    - Properties: how things are related
+    - _Classes_: types of things
+    - _Individuals_: specific objects
+    - _Properties_: how things are related
 
-- **Examples**:
+- @Example@
   - A medical ontology defines relationships between diseases, symptoms, and
     treatments
   - A geographical ontology describes cities, states, and countries
-  - Semantic web (an extension of the current web to give meaning to information)
 
 - @Goal@
   - Provide a vocabulary for a domain of knowledge
-  - Enable machines and humans to understand and share information consistently
   - Enable reasoning about entities and their relationships
+  - Enable machines and humans to understand and share information consistently
 
-- **Related Concepts**
-  - Schema: database-oriented structure, often more rigid than ontologies
-  - Taxonomy: simpler hierarchical tree-like classification
-  - Knowledge base: a collection of facts and rules, sometimes built from an
+- @Related Concepts@
+  - _Schema in a database_: columns with types (more rigid than ontologies)
+  - _Taxonomy_: simpler hierarchical tree-like classification
+  - _Knowledge base_: a collection of facts and rules, sometimes built from an
     ontology
 
 * Ontologies: Components
 
-- **Classes / Concepts**:
-  - Represent general concepts in a domain
+- **Classes / Concepts**: Represent general concepts in a domain
   - E.g., `Person`, `City`, `Car`
 
-- **Individuals / Instances**:
-  - Specific, concrete examples of classes
+- **Individuals / Instances**: Specific, concrete examples of classes
   - E.g., `GP` (an instance of `Person`), `Rome`, `Ferrari 458`
 
-- **Properties / Relations**:
-  - Describe interactions or associations between classes or instances
+- **Properties / Relations**: Describe interactions or associations between
+  classes or instances
   - E.g., `isMortal`, `locatedIn`, `hasAge`
 
-- **Attributes / Data values**
-  - Specify data associated with instances
+- **Attributes / Data values**: Specify data associated with instances
   - E.g., (`GP`, `hasAge`, `<your_guess>`)
 
-- **Constraints**
-  - Rules that restrict the kinds of values a property can take
+- **Constraints**: Rules that restrict the kinds of values a property can take
   - E.g., (`Ferrari 458`, `mustBe`, `red`)
 
-- **Axioms**:
-  - Logical statements that define rules and constraints
+- **Axioms**: Logical statements that define rules and constraints
   - E.g., all humans are mortal: $\forall x (Person(x) \implies Mortal(x))$
 
-- **Hierarchies**:
-  - Organize classes and properties into parent-child relationships
+- **Hierarchies**: Organize classes and properties into parent-child
+  relationships
   - E.g., `Student` is a subclass of `Person`
 
 * Ontology: Example University
 
 ::: columns
-:::: {.column width=25%}
+:::: {.column width=35%}
 - **Classes**
   - `Student`
   - `Professor`
   - `Course`
   - `Department`
 ::::
-:::: {.column width=70%}
+:::: {.column width=60%}
 
 ```graphviz
 digraph UniversityOntology {
@@ -849,20 +841,20 @@ digraph UniversityOntology {
 
 * Example of Reasoning Tasks (1/4)
 - **Subsumption**
-  - "Is class `A` a subclass of `B`?"
+  - _"Is class `A` a subclass of `B`?"_
   - Check whether one concept is more general than another
   - E.g., if `Person` subsumes `Student`, every `Student` is necessarily a
     `Person`
   - Important for building taxonomies and ontologies
 
 - **Satisfiability**
-  - "Can an instance of a concept exist?"
+  - _"Can an instance of a concept exist?"_
   - Test if a concept is logically consistent (i.e., without contradiction)
   - E.g., if the concept `FlyingPenguin` requires flying but is also defined as a
     penguin (which cannot fly), it might be not satisfiable
 
 - **Classification**
-  - Organize concepts into a hierarchy
+  - _Organize concepts into a hierarchy_
   - Automatically organize concepts into a hierarchy by checking subsumption
     relationships
   - E.g., given definitions of `Animal`, `Bird`, and `Penguin`, classification
@@ -870,49 +862,49 @@ digraph UniversityOntology {
 
 * Example of reasoning tasks in KR (2/4)
 - **Instance Checking**
-  - "Is a specific individual an instance of a concept?"
+  - _"Is a specific individual an instance of a concept?"_
   - E.g., is `GP` an instance of `Student`?
 
 - **Consistency Checking**
-  - "Is the entire knowledge base free of contradictions?"
+  - _"Is the entire knowledge base free of contradictions?"_
   - E.g., no `Person` is both `Alive` and `Dead` at the same time
 
 - **Realization**
-  - "What is the most specific class an instance belongs to?"
+  - _"What is the most specific class an instance belongs to?"_
   - E.g., discovering that `GP` is a `Professor` rather than just a `Human`
 
 - **Retrieval**
-  - Find all individuals that satisfy a certain condition
+  - _Find all individuals that satisfy a certain condition_
   - E.g., retrieve all instances classified as `TeachingAssistant`
 
 * Example of reasoning tasks in KR (3/4)
 - **Query Answering**
-  - Answer complex queries about the knowledge base
-  - E.g., "Find all `Person` that study at the university and are not `Student`"
+  - _Answer complex queries about the knowledge base_
+  - E.g., find all `Person` that study at the university and are not `Student`
 
 - **Abduction**
-  - Given an observation, infer the best explanation
+  - _Given an observation, infer the best explanation_
   - E.g., seeing a `Person` carrying a backpack and wearing flip-flops in the
     snow and infer that is likely a `Student`
 
 - **Deduction**
-  - Infer consequences that logically follow from facts and rules
+  - _Infer consequences that logically follow from facts and rules_
   - E.g., if `John` is a `Student` in `ComputerScience` then he can attend `MSML610`
 
 * Example of reasoning tasks in KR (4/4)
 - **Belief Revision**
-  - Update the knowledge base when new, possibly conflicting, information
-    arrives
+  - _Update the knowledge base when new, possibly conflicting, information
+    arrives_
   - E.g., learning that not every student in `ComputerScience` can take `MSML610`
     and revise a previous rule
 
 - **Temporal Reasoning**
-  - Reason about events over time
-  - E.g., If `EventA` happens before `EventB`, then `EventB` cannot `Cause`
+  - _Reason about events over time_
+  - E.g., if `EventA` happens before `EventB`, then `EventB` cannot `Cause`
     `EventA`
 
 - **Causal Reasoning**
-  - Infer causes and effects among entities or events
+  - _Infer causes and effects among entities or events_
   - E.g., inferring that (`Storm`, `Cause`, `Flooding`) based on temporal and
     physical knowledge
 
