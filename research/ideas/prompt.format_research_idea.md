@@ -2,11 +2,7 @@
 - Given a file from the user, you will apply the template below and write the
   result in the same file
 
-- Examples of good research specifications are:
-  - `research/ideas/prompt.format_research_idea.md`
-  - `research/ideas/draft.RL_for_pickleball.md`
-
-- Follow the conventions in `.claude/skills/markdown.rules.md` and
+- When writing follow the conventions in `.claude/skills/markdown.rules.md` and
   `.claude/skills/text.rules.md`
 
 # Template
@@ -74,4 +70,9 @@
 - Author(s), _Title_. (Year)
 ````
 
+# Examples
+
+- Examples of good research specifications are:
+  - `research/ideas/prompt.format_research_idea.md`
+  - `research/ideas/draft.RL_for_pickleball.md`
 

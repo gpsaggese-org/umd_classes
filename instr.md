@@ -1,55 +1,26 @@
-From each issue plan.todo_janitor.md
+When running lint_txt.py, the script calls an Apple container which prints
+  ... [0/6] [0s]
+  ... [1/6] Fetching image [0s]
+  ... [2/6] Unpacking image [0s]
+  ... [3/6] Fetching kernel [0s]
+  ... [4/6] Fetching init image [0s]
+  ... [5/6] Unpacking init image [0s]
+  ... [6/6] Starting container [0s]
+  ... [6/6] Starting container [0s]
 
-- Create a GitHub issue in a certain repo
-  gh issue create --title "Fix bug X" --body "Description here" --assignee @me
-  --title <title>
-  --body <file>
+Change the script so that 
 
-gh issue create --title "Refactor Regex to Use re.VERBOSE and Comments" --body-file ...
+  ... [0/6] [0s]
+  ... [1/6] Fetching image [0s]
+  ... [2/6] Unpacking image [0s]
+  ... [3/6] Fetching kernel [0s]
+  ... [4/6] Fetching init image [0s]
+  ... [5/6] Unpacking init image [0s]
+  ... [6/6] Starting container [0s]
+  ... [6/6] Starting container [0s]
 
-or i gh_issue_title
-GitHub issue link: https://github.com/causify-ai/helpers/issues/1290
-
-- Get the name of the issue
-i gh_issue_title -i 1290
-HelpersTask1290_Refactor_Regex_to_Use_re.VERBOSE_and_Comments
-
-- Create a branch and a worktree
-
-```
-#!/bin/bash
-
-# Pass
-# feature_name (e.g., HelpersXYZ)
-# worktree_path (e.g., /Users/saggese/src/umd_classes4), it should be found automatically
-# subrepo_path (look for subrepos and add helpers)
-
-gh issue create --title "Fix bug X" --body "Description here" --assignee @me
-
-FEATURE_NAME="HelpersTask"
-export WORKTREE_PATH=/Users/saggese/src/todo_janitor/HelpersTask1290
-
-SUBREPO_PATH="path/to/subrepo"  # Update this with your subrepo path
-
-# Create branch and worktree in main repo
-git branch $FEATURE_NAME origin/master
-git worktree add $WORKTREE_PATH $FEATURE_NAME
-
-cd $WORKTREE_PATH
-
-# Update submodules
-git submodule update --init --recursive
-
-# Create and checkout branch in subrepo
-cd $SUBREPO_PATH
-git branch $FEATURE_NAME
-git checkout $FEATURE_NAME
-
-echo "✓ Worktree and branches created successfully!"
-echo "Main repo worktree: $WORKTREE_PATH"
-echo "Branch: $FEATURE_NAME (in both repos)"
-```
-
+is removed from the output
+using an already existing function in hunit test purification 
 
 # Conventions
 - When writing code you must always follow the instructions in

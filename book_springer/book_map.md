@@ -9,6 +9,33 @@
   background who build production decision systems
 - Working knowledge of causal basics (DAGs, SCMs, do-calculus) assumed
 
+# Status
+
+| Chap                                                    | Slides                                                                     | TOC complete | Mat complete | Slides finalized | Tutorial complete | Book complete |
+| ------------------------------------------------------- | -------------------------------------------------------------------------- | ------------ | ------------ | ---------------- | ----------------- | ------------- |
+| Motivation                                              |                                                                            |              |              |                  |                   |               |
+| 01. Why Decisions, Not Predictions                      | Lesson01.01_From_Data_Science_To_Decision_Science.txt                      | 50%          |              |                  |                   |               |
+| 02. The Cost of Ignoring Causality                      | Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt                |              |              |                  |                   |               |
+| Advanced Modeling Theory & Tools                        |                                                                            |              |              |                  |                   |               |
+| 04. Knowledge Representation                            | msml610/lectures_source/Lesson03.1-Knowledge_representation.txt            | 70%          | 80%          | 50%              |                   |               |
+|                                                         | msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt |              |              |                  |                   |               |
+|                                                         | msml610/lectures_source/Lesson03.3-Non_classical_logics.txt                |              |              |                  |                   |               |
+| 05. Probalistic ML                                      |                                                                            |              |              |                  |                   |               |
+| 06. Causal ML                                           |                                                                            |              |              |                  |                   |               |
+| Data                                                    |                                                                            |              |              |                  |                   |               |
+| 07. Building Causal Knowledge                           |                                                                            |              |              |                  |                   |               |
+| 08. Causal data pipelines                               |                                                                            |              |              |                  |                   |               |
+| Decision-Making Theory & Tools                          |                                                                            |              |              |                  |                   |               |
+| 09. Decision Theory Foundations                         |                                                                            |              |              |                  |                   |               |
+| 10. Taxonomy of Decision-Making Problems and Algorithms | Lesson10.01_Taxonomy_of_Decision_Problems.txt                              |              |              |                  |                   |               |
+| 11. Simple Decisions                                    | Lesson11.01_Simple_Decisions.txt                                           |              |              |                  |                   |               |
+| 12. Complex Decisions                                   | Lesson12.01_Complex_Decisions.txt                                          |              |              |                  |                   |               |
+| 13. Agentic Causal Reasoning                            |                                                                            |              |              |                  |                   |               |
+| Implementation, Deployment, & Governance                |                                                                            |              |              |                  |                   |               |
+| 14. Building Stakeholder Alignment                      |                                                                            |              |              |                  |                   |               |
+| 15. Deployment, Monitoring, and Adaptation              | Lesson15.01_Deployment_Monitoring_And_Adaptation.txt                       |              |              |                  |                   |               |
+| 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |                  |                   |               |
+
 # Part I: Why Businesses Need Decisions, not Predictions (Motivation)
 
 ## 1: From Prediction Pipelines to Decision Pipelines

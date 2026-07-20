@@ -19,7 +19,7 @@
 
 * The ML Development Lifecycle: Overview
 
-- **Definition**: The _ML development lifecycle_ is the sequence of steps from
+- @Definition@: The _ML development lifecycle_ is the sequence of steps from
   raw data to a deployed, monitored production model
 ::: columns
 :::: {.column width=40%}
@@ -261,7 +261,7 @@ digraph AILeverage {
 
 * From Autocomplete to AI Agents
 
-- **Definition**: _AI pair programming_ is the use of language models to assist
+- @Definition@: _AI pair programming_ is the use of language models to assist
   software development tasks in real time
 
 - **Key idea**: the unit of AI assistance has grown over time:
@@ -359,7 +359,7 @@ digraph AILeverage {
 
 * Agentic CLI Tools (2024+): The Third Wave
 
-- **Definition**: _agentic CLI tools_ are AI assistants that can read files, run
+- @Definition@: _agentic CLI tools_ are AI assistants that can read files, run
   shell commands, iterate on errors, and edit code autonomously within a project
   directory
 
@@ -507,7 +507,7 @@ mindmap
 
 * IDE Integrations: GitHub Copilot
 
-- **Definition**: _GitHub Copilot_ is an LLM-powered IDE plugin that suggests
+- @Definition@: _GitHub Copilot_ is an LLM-powered IDE plugin that suggests
   code completions inline as you type
 
 - **How it works**:
@@ -553,7 +553,7 @@ mindmap
 
 * Claude Code: CLI Agent
 
-- **Definition**: _Claude Code_ is Anthropic's CLI coding agent -- a terminal
+- @Definition@: _Claude Code_ is Anthropic's CLI coding agent -- a terminal
   program that reads project files, writes code, and runs commands autonomously
 
 - **Key capabilities**:
@@ -597,7 +597,7 @@ install + `CLAUDE.md` config | \endgroup
 
 * LLM-Powered Code Review Tools
 
-- **Definition**: _code review tools_ use LLMs to analyze diffs and flag bugs,
+- @Definition@: _code review tools_ use LLMs to analyze diffs and flag bugs,
   security issues, and style violations automatically
 
 - **Tools**:
