@@ -32,124 +32,133 @@
       sentences
     - E.g., if $P$ is true and $Q$ is false then $P \land Q$ is false
 
-- @Definition@: **Atomic representation** has no internal structure within atomic
-  propositions
-
 - @Applications@:
-  - SAT solvers
+  - _SAT solvers_
     - Tools for determining if a propositional logic formula can be satisfied
     - E.g., used in hardware verification and scheduling problems
-  - Expert systems
+  - _Expert systems_
     - Use logic rules to mimic human decision-making
     - E.g., medical diagnosis systems
-  - Rule-based agents
+  - _Rule-based agents_
     - Agents that operate based on a set of predefined rules
     - E.g., automated customer service chatbots
 
 // ## Syntax of propositional logic
 
 * Proposition Symbol
-- @Definition@: A **proposition symbol** is an atomic sentence consisting of a single symbol
+- @Definition@: A **proposition symbol** is an atomic sentence consisting of a
+  single symbol
   - E.g., $P$, $Q$, $North$
-  - Doesn't have truth value, it is just a symbol for a real-world statement (needs grounding)
+  - Doesn't have truth value, it is just a symbol for a real-world statement
+    (needs grounding for semantics)
   - Stands for a proposition that can be true or false
     - E.g., $K_{E,5}$ = "the Knight is in E5"
     - $K_{E,5}$ is not composed of any other symbol, it is an atomic symbol
+  - **Built-in symbols**: $True$ and $False$ are proposition symbols with
+    inherent truth values
 
-- **Built-in symbols**: $True$ and $False$ are proposition symbols with inherent truth values
+- @Fact@: Propositional logic is an _atomic representation_ since 
+  propositions have no internal structure
 
 * Sentences
-- @Definition@: An **atomic sentence** is a sentence composed of a single proposition symbol
+- @Definition@: An **atomic sentence** is a sentence composed of a single
+  proposition symbol
   - E.g., $P$
 
-- @Definition@: A **complex sentence** is constructed from simpler sentences using parentheses and logical connectives
+- @Definition@: A **complex sentence** is constructed from simpler sentences
+  using parentheses and logical connectives
   - E.g., $(P \land Q) \lor R$
   - Recursive definition allows building more complex sentences
 
-- **Logical connectives**:
+- @Definition@: **Logical connectives** are:
   - Not: $\lnot$
   - And: $\land$ (looks like an "A" for "and")
   - Or: $\lor$ (comes from Latin "vel" which means "or")
   - Implies: $\implies$
   - If and only if: $\iff$
 
-- **Key principle**: Each sentence (atomic or complex) can be only true or false
+- @Key principle@: Each sentence (atomic or complex) can be only true or false
 
 * Proposition Logic: Weather Example
-- **Notation**:
+- **Atomic sentences**:
   - $Rain$ = _"it's raining"_
   - $Cold$ = _"it's cold"_
   - $Sunny$ = _"it's sunny"_
   - $Snow$ = _"it's snowing"_
   - $Cloudy$ = _"it's cloudy"_
 
-- **Atomic sentence** can be positive or negated
+- _Atomic sentence_ can be positive or negated
   - E.g., $Rain$, $\lnot Rain$ = _"it's not raining"_
 
 - **Negation**
-  - E.g., $\lnot (Rain \lor Cloudy)$ = _"it's not the case that it's raining or cloudy"_
+  - E.g., $\lnot (Rain \lor Cloudy)$ = _"it's not the case that it's raining or
+    cloudy"_
 
 - **Conjunction / Disjunction**
   - E.g., $Rain \land Cold$ = _"it's raining and it's cold"_
   - E.g., $Rain \lor Snow$ = _"it's either raining or snowing"_
 
-- **Implication** is a sentence containing a premise $\implies$ conclusion
+- **Implication** is a sentence containing "premise $\implies$ conclusion"
   - Aka _"if-then statements"_, _"rules"_
   - E.g., $Rain \implies \lnot Snow$ = _"if it's raining, it's not snowing"_
 
 - **Biconditional**: $(A \implies B) \land (B \implies A)$
-  - E.g., $Sunny \iff \lnot Cloudy$ = _"it's sunny if and only if it's not cloudy"_
+  - E.g., $Sunny \iff \lnot Cloudy$ = _"it's sunny if and only if it's not
+    cloudy"_
 
 * Grammar in BNF form
 ::: columns
 :::: {.column width=50%}
-- @Definition@: **Backus Normal Form** formally represents the grammar of propositional logic
+- @Definition@: **Backus Normal Form** formally represents the grammar of
+  propositional logic
 
-- **Ambiguity**: the same sentence can be parsed in multiple ways
+- @Problem@: _Ambiguity_: the same sentence can be parsed in multiple ways
   - E.g., $\lnot A \lor B = (\lnot A) \lor B$ or $\lnot (A \lor B)$ ?
 
-- **Precedence**: eliminate ambiguity by defining operator precedence
-  - E.g., $\lnot$ has higher precedence than $\land, \lor$ so: $\lnot A \lor B \text{ means } (\lnot A) \lor B$
+- @Solution@: Eliminate ambiguity by defining operator precedence
+  - E.g., $\lnot$ has higher precedence than $\land, \lor$
+  - So $\lnot A \lor B$ means $(\lnot A) \lor B$
 ::::
 :::: {.column width=45%}
-![](msml610/lectures_source/figures/L03.propositional_logic_BNF.png){ height=50% }
+![](msml610/lectures_source/figures/L03.propositional_logic_BNF.png){ height=40% }
 ::::
 :::
 
 ## Semantics
 
 * Semantics of Propositional Logic
-- **Semantics** are rules for determining the truth of a sentence $\alpha$ with
-  respect to a model $m$
+- @Definition@: **Semantics** are rules for determining the truth of a sentence
+  $\alpha$ with respect to a model $m$
   - Determine if a sentence is true or false, given a possible world
 
-- In propositional logic, a model $m$ fixes the truth value (true or false) for
-  every proposition symbol/atomic sentence, e.g.,
-
-- The models are **abstractions** of the real world and have no a-priori
-  connection to a specific world, e.g.,
-  - $P_{1,2}$ is just a symbol and can mean:
-    - "There is a pit in [1, 2]" or
-    - "I'm in Paris today and tomorrow"
-  - Need grounding
+- @Definition@: **Model definition**: In propositional logic, a model $m$ fixes
+  the truth value (true or false) for every atomic sentence
+  - The models are **abstractions** of the real world and have no a-priori
+    connection to a specific world, e.g.,
+    - $P_{1,2}$ is just a symbol and can mean:
+      - _"There is a pit in [1, 2]"_ or
+      - _"I'm in Paris today and tomorrow"_
+    - Need grounding
 
 * Computing the Truth Value of a Sentence
-- The **truth value of a sentence** is derived from the truth of the proposition
-  symbols (recursively from the model $m$)
+- @Algorithm@: the **truth value of a sentence** is derived from the truth of the
+  proposition symbols (recursively from the model $m$)
   $$
   m = \{ P_{1,2}=F, P_{2,2}=F, P_{3,1}=T \}
   $$
 
 - All sentences $\alpha$ are constructed from atomic sentences (assigned by model
   $m$) and connectives:
-  - $\lnot P$ is T iff $P$ is F in $m$
-  - $P \land Q$ is T iff $P$ and $Q$ are both true in $m$
-  - $P \lor Q$ is T iff $P$ or $Q$ are true in $m$
+  - $\lnot P$ is true iff $P$ is false in $m$
+  - $P \land Q$ is true iff $P$ and $Q$ are both true in $m$
+  - $P \lor Q$ is true iff $P$ or $Q$ are true in $m$
   - $P \implies Q$ is true unless $P$ is true and $Q$ is false in $m$
   - $P \iff Q$ is true iff $P$ and $Q$ are both true or both false in $m$
 
-- **Truth table** contains truth value of a sentence for each possible model $m$
+- @Definition@: **Truth table** contains truth value of a sentence for each
+  possible model $m$
   - E.g., $X = A \land B \lor C$
+// TODO(ai_gp): Use a better table and put it on a side with more rows
     ```
     A   B   C   X
     -------------
@@ -159,24 +168,21 @@
     ```
 
 * Interpretation of Implication
-- In a **logical implication** "$P \implies Q$" there is **no causation** between
-  $P$ and $Q$
-
-- "$P \implies Q$" says _"If $P$ is true, I claim that $Q$ is true. Otherwise I am
-  making no claim"_
-  - E.g., _"5 is odd implies that Tokyo is the capital of Japan"_ is a true
-    sentence in propositional logic (although very odd)
-
-- **Pathological cases** for implication
+- @Fact@: in a logical implication "$P \implies Q$" there is **no causation**
+  between $P$ and $Q$
+  - "$P \implies Q$" says _"If $P$ is true, I claim that $Q$ is true. Otherwise I
+    am making no claim"_
+    - E.g., _"5 is odd implies that Tokyo is the capital of Japan"_ is a true
+      sentence in propositional logic (although very odd)
   - An implication is true whenever the antecedent is false
-  - E.g., _"5 is even implies pigs fly"_ is true
+    - E.g., _"5 is even implies pigs fly"_ is true
 
 * Model Checking is Sound and Complete
-- **Model checking algorithm**
-  - Enumerate all the models (truth tables)
-  - Check if $\alpha$ is true for every model where $KB$ is true
+- @Remember@: **Model checking algorithm**
+  - Enumerates all the models (truth tables)
+  - Checks if $\alpha$ is true for every model where $KB$ is true
 
-- The model checking algorithm is:
+- **Fact**: in propositional logic, the model checking algorithm is:
   - **Sound**
     - "Any inference made by the algorithm is correct"
     - Implements the definition of entailment
@@ -185,47 +191,49 @@
     - Works for any $KB$ and $\alpha$
     - Always terminates (finite number of models)
 
-- Complexity of model checking with $n$ variables
-  - Time complexity is $O(2^n)$ (NP-complete)
+- **Fact**: complexity of model checking with $n$ variables
+  - _Time complexity_ is $O(2^n)$ (NP-complete)
     - Worst case is exponential
     - Average case is better than exponential
-  - Space complexity is $O(n)$ since enumeration is depth-first
+  - _Space complexity_ is $O(n)$ since enumeration is depth-first
 
 * Inference in Propositional Logic
-- Inference are the rules of reasoning
-  - **Modus Ponens**: if $p \implies q$ and $p$, infer $q$
-    - If it rains, the ground will be wet. It rains.
-    - Therefore, the ground is wet.
-  - **Modus Tollens**: if $p \implies q$ and $\lnot q$, infer $\lnot p$
-    - If it rains, the ground will be wet. The ground is not wet.
-    - Therefore, it did not rain.
-  - **Syllogism (Transitivity)**
+- @Definition@: **Inference rules** are rules of reasoning (i.e., deriving
+  correct statements from the statements of the knowledge base)
+  - _Modus Ponens_: if $p \implies q$ and $p$, infer $q$
+    - _"If it rains, the ground will be wet"_
+    - _"It rains. Therefore, the ground is wet_"
+  - _Modus Tollens_: if $p \implies q$ and $\lnot q$, infer $\lnot p$
+    - _"If it rains, the ground will be wet. The ground is not wet. Therefore, it
+      did not rain._"
+  - _Syllogism_ (aka transitivity)
     - If $p \implies q$ and $q \implies r$, then $p \implies r$
-  - **Disjunctive Syllogism**
+  - _Disjunctive Syllogism_
     - If $p \lor q$ and $\lnot p$, infer $q$
-  - **Addition**: if $p$, then $p \lor q$
-  - **Simplification**: from $p \land q$, infer $p$ (or $q$)
-  - **Conjunction**: from $p$ and k$q$, infer $p \land q$
-  - **Resolution Rule**
+  - _Addition_: if $p$, then $p \lor q$
+  - _Simplification_: from $p \land q$, infer $p$ (or $q$)
+  - _Conjunction_: from $p$ and $q$, infer $p \land q$
+  - _Resolution Rule_
     - From $(p \lor q)$ and $(\lnot p \lor r)$, infer $(q \lor r)$
 
 * Propositional Theorem Proving
-- To **prove** a desired sentence $\alpha$ under a knowledge base KB
+- @Algorithm@: **Prove a sentence** $\alpha$ under a knowledge base KB in
+  propositional logic
   - Apply rules of inference to construct a proof of $\alpha$
   - Any sentence can have only one of the following truth values:
     1. True
     2. False
     3. Undecidable under the KB
 
-- **Theorem proving vs model checking**
-  - Model checking involves enumerating all models to show the sentence is
+- @Comparison@
+  - _Model checking_ involves enumerating all models to show the sentence is
     true/false in all models where KB is true
-  - Propositional theorem proving builds a proof
+  - _Propositional theorem proving_ builds a proof
   - If the proof is short, theorem proving can be more efficient than model
     checking
 
 * Logical Equivalence of Sentences
-- Two sentences $\alpha$ and $\beta$ are logically equivalent 
+- **Logical equivalence**: Two sentences $\alpha$ and $\beta$ are logically equivalent
   $\alpha \equiv \beta$
   - Iff they are true in the same set of models:
     $$
@@ -235,17 +243,17 @@
     $$
     \alpha \models \beta \land \beta \models \alpha
     $$
-- E.g., $P \lor Q \equiv Q \lor P$
+- **Example**: $P \lor Q \equiv Q \lor P$
 
 * Logical Equivalences (1/2)
-- Commutativity of $\land$ and $\lor$
+- **Commutativity** of $\land$ and $\lor$
   $$
   (\alpha \land \beta) \equiv (\beta \land \alpha)
   $$
   $$
   (\alpha \lor \beta) \equiv (\beta \lor \alpha)
   $$
-- Associativity of $\land$ and $\lor$
+- **Associativity** of $\land$ and $\lor$
   $$
   (\alpha \land \beta) \land \gamma
   \equiv \alpha \land (\beta \land \gamma)
@@ -256,37 +264,37 @@
   \equiv \alpha \lor (\beta \lor \gamma)
   \equiv \alpha \lor \beta \lor \gamma
   $$
-- Distributivity of $\land$ over $\lor$
+- **Distributivity** of $\land$ over $\lor$
   $$
   \alpha \land (\beta \lor \gamma) \equiv
     (\alpha \land \beta) \lor (\alpha \land \gamma)
   $$
-- Distributivity of $\lor$ over $\land$
+- **Distributivity (dual)** of $\lor$ over $\land$
   $$
   \alpha \lor (\beta \land \gamma) \equiv
     (\alpha \lor \beta) \land (\alpha \lor \gamma)
   $$
-- Double negation elimination:
+- **Double negation** elimination:
   $$
   \lnot (\lnot \alpha) \equiv \alpha
   $$
 
 * Logical Equivalences (2/2)
 
-- Contraposition:
+- **Contraposition**:
   $$
   (\alpha \implies \beta) \equiv (\lnot \beta \implies \lnot \alpha)
   $$
-- Implication elimination:
+- **Implication elimination**:
   $$
   (\alpha \implies \beta) \equiv (\lnot \alpha \lor \beta)
   $$
-- Biconditional elimination:
+- **Biconditional elimination**:
   $$
   (\alpha \iff \beta)
   \equiv (\alpha \implies \beta) \land (\beta \implies \alpha)
   $$
-- De Morgan equivalence:
+- **De Morgan laws**:
   $$
   \lnot (\alpha \land \beta) \equiv (\lnot \alpha \lor \lnot \beta)
   $$
@@ -294,51 +302,54 @@
   \lnot (\alpha \lor \beta) \equiv (\lnot \alpha \land \lnot \beta)
   $$
 
-* Deduction theorem
-- A **valid sentence** $\alpha$ is true for all the models
+* Deduction Theorem
+- @Definition@: A **valid sentence** $\alpha$ that is true for all the models
   - E.g., $P \lor \lnot P$
   - Aka "tautology"
   - Every tautology is equivalent to the sentence $True$
 
-- **Contradiction** is a sentence $\alpha$ that is false for all the models
+- @Definition@: **Contradiction** is a sentence $\alpha$ that is false for all
+  the models
   - E.g., $P \land \lnot P$
   - Every contradiction is equivalent to the sentence $False$
 
-- **Deduction theorem**
+- @Theorem@: **Deduction theorem**
   - The sentence $\alpha$ entails $\beta$ (written $\alpha \models \beta$) iff the
     sentence $\alpha \implies \beta$ is a tautology
 
-- The deduction theorem is like a **bridge** between two different but closely
-  related ideas:
-  - Entailment $\models$ is a semantic notion
+- @Key insight@: The deduction theorem is like a _bridge_ between two different
+  but closely related ideas:
+  - _Entailment_ $\models$ is a semantic notion
     - It's about truth across all models
-    - $\alpha entails \beta$ means in every possible world where $\alpha$ is true,
-      $\beta$ is also true
-  - Implication $\implies$ is a syntactic notion
+    - $\alpha$ entails $\beta$ means in every possible world where $\alpha$ is
+      true, $\beta$ is also true
+  - _Implication_ $\implies$ is a syntactic notion
     - $\alpha \implies \beta$ is just another formula inside the logic
 
 * Satisfiability
-- A sentence $\alpha$ is **satisfiable** iff $\alpha$ is true for some model
+- @Definition@: A sentence $\alpha$ is **satisfiable** iff $\alpha$ is true for
+  some model
 
-- **SAT problem** is about determining satisfiability of sentence in
-  propositional logic
+- @Definition@: **SAT problem** is about determining satisfiability of sentence
+  in propositional logic
   - One can enumerate all the possible models until one is found to satisfy the
     sentence $\alpha$
   - It is NP-complete
 
-- A sentence $\alpha$ is **un-satisfiable** iff $\alpha$ is never true (i.e., a
-  contradiction)
+- @Corollary@: A sentence $\alpha$ is **un-satisfiable** iff $\alpha$ is never
+  true (i.e., a contradiction)
 
-- **Validity and satisfiability**
+- @Corollary@: **Validity and satisfiability**
   - $\alpha$ is valid (i.e., a tautology) iff $\lnot \alpha$ is un-satisfiable
   - By contrapositive, $\alpha$ is satisfiable iff $\lnot \alpha$ is not valid
     ($\lnot \alpha$ is not a tautology)
 
 * Proof by Contraction
-- The sentence $\alpha \models \beta$ is true iff the sentence
+- @Definition@: **Proof method**: The sentence $\alpha \models \beta$ is true iff
+  the sentence
   "$\alpha \lor \lnot \beta)$" is un-satisfiable (i.e., a contradiction)
 
-- In other words in a proof by contradiction:
+- @Algorithm@: In a proof by contradiction:
   - Assume $\alpha$
   - Assume that the sentence $\beta$ is false
   - Prove that this leads to a contradiction
@@ -346,8 +357,7 @@
 
 // TODO(gp): Finish this
 
-* Propositional Logic
-- E.g., $P \land Q$
+* Propositional Logic: Pros and Cons
 - @Pros@
   - Declarative
     - Semantics is based on relation between sentences and possible worlds
@@ -361,10 +371,10 @@
 
 - @Cons@
   - Can't concisely describe environment with many objects, e.g.,
-    - In English _"The pawn is in a cell around `b1`"_ requires all the possible
+    - E.g., _"The pawn is in a cell around `b1`"_ requires all the possible
       states to be enumerated
   - Can't represent uncertainty
-    - _"There is 50% of probability that the pawn is in `b1`"_
+    - E.g., _"There is 50% of probability that the pawn is in `b1`"_
 
 # First-order Logic
 
@@ -373,17 +383,17 @@
 ## Syntax
 
 * First-Order Logic (FOL)
-- First-order logic (FOL) extends propositional logic by:
+- **Extensions**: First-order logic (FOL) extends propositional logic by:
   - Introducing **quantifiers** (e.g., $\forall$, $\exists$)
   - Using **predicates** to represent properties and relations
 
-- Combines pros of propositional logic with pros of natural language
+- **Advantages**: Combines pros of propositional logic with pros of natural language
   - Built around objects and relations
   - Allows to express facts about some or all objects, e.g.,
      - _"Some humans have green eyes"_
      - _"Chess pieces around the Queen are at risk"_
 
-- FOL provides expressive power to represent structured, relational knowledge
+- **Key capability**: FOL provides expressive power to represent structured, relational knowledge
 
 * First-Order Logic: Syntax
 
@@ -495,19 +505,19 @@
     mortal
 
 * Representing Knowledge in FOL
-- FOL enables representation of:
+- **Capabilities**: FOL enables representation of:
   - General rules: $\forall x\, (Bird(x) \rightarrow CanFly(x))$
   - Specific facts: $Bird(Tweety)$
 
-- Complex relations captured through predicates:
+- **Relations**: Complex relations captured through predicates:
   - $Loves(Romeo, Juliet)$, $GreaterThan(3, 2)$
 
-- Functions express object construction:
+- **Functions**: Functions express object construction:
   - $FatherOf(John)$
 
-- Knowledge base is built from axioms and facts
+- **Knowledge base**: Built from axioms and facts
 
-- Enables reasoning about objects, properties, and their relationships
+- **Reasoning**: Enables reasoning about objects, properties, and their relationships
 
 * First-Order Logic: Inference
 - @Goal@: derive new sentences from existing ones using sound rules
@@ -518,10 +528,10 @@
   - **Existential Instantiation**:
     - From $\exists x\, P(x)$ infer $P(c)$ with a new constant $c$
 
-  - Standard propositional logic rules such as Modus Ponens, Modus Tollens,
+  - **Standard rules**: Propositional logic rules such as Modus Ponens, Modus Tollens,
     Resolution, etc., also apply within FOL
     - Modus ponens: from $P$ and $P \implies Q$, infer $Q$
 
-- FOL inference is semi-decidable:
+- **Complexity**: FOL inference is semi-decidable:
   - If a sentence is entailed, a proof can be found
   - If not entailed, proof search may not terminate
