@@ -20,7 +20,8 @@
 ## Intro and Examples
 
 * Motivation
-// TODO(ai_gp): Add one
+// TODO(ai_gp): Add one slide with motivation
+
 - Distinction
   - Ontological commitment: what exists in the world
   - Epistemological commitment: what an agent believes about facts
@@ -501,12 +502,18 @@ digraph OWL_Example {
 ::::
 :::
 
-- Graph structure: synsets as nodes, relations as edges
+- @Components@
+  - Graph structure
+  - Synsets as nodes, relations as edges
   - _Synsets_: sets of synonyms expressing distinct concepts
     - Example: {`car`, `automobile`} share same synset
-  - _Relations_: is-a (e.g., `Dog` is `Animal`), part-whole (e.g., `Wheel` part of `Car`), opposites
+  - _Relations_:
+    - Is-a (e.g., `Dog` is `Animal`)
+    - Part-whole (e.g., `Wheel` part of `Car`)
+    - Opposites
 
-- @Applications@: word sense disambiguation; semantic similarity measures; information retrieval, question answering
+- @Applications@: word sense disambiguation; semantic similarity measures;
+  information retrieval, question answering
 
 * ConceptNet
 
@@ -518,7 +525,7 @@ digraph OWL_Example {
 ::: columns
 :::: {.column width=55%}
 
-- @Components@:
+- @Components@
   - Nodes: concepts (words, phrases)
   - Edges: semantic relationships
     - _IsA_: (`dog`, `animal`)
@@ -544,18 +551,18 @@ digraph OWL_Example {
 - @Definition@: **Knowledge Graphs (KGs)** represent entities and relationships
   as graph structures
 
-- @Components@:
+- @Components@
   - _Nodes_: entities
   - _Edges_: relations
   - E.g., "Paris $\to$ isCapitalOf $\to$ France"
 
-- Capabilities
+- @Capabilities@
   - Query via SPARQL for expressive information retrieval
   - Reason via path traversal and schema inference
 
 - @Applications@: question answering, recommendation, semantic search
+  - Used by Google, Facebook, academic search engines
 
-- Used by Google, Facebook, academic search engines
 
 * Knowledge Graph: University Example
 ```graphviz
