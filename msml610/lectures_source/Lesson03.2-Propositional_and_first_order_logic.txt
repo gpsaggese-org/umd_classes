@@ -22,8 +22,8 @@
 // ## 7.4, Propositional logic (p. 263)
 
 * Propositional Logic
-- **Propositional logic** is a formal system for reasoning about statements that
-  can be true or false
+- @Definition@: **Propositional logic** is a formal system for reasoning about
+  statements that can be true or false
   - **Syntax** defines the allowable sentences
     - Consists of proposition symbol and logical connectives
     - E.g., $P \land Q$
@@ -32,10 +32,10 @@
       sentences
     - E.g., if $P$ is true and $Q$ is false then $P \land Q$ is false
 
-- **Atomic representation**
-  - No internal structure within atomic propositions
+- @Definition@: **Atomic representation** has no internal structure within atomic
+  propositions
 
-- **Uses**
+- @Applications@:
   - SAT solvers
     - Tools for determining if a propositional logic formula can be satisfied
     - E.g., used in hardware verification and scheduling problems
@@ -49,74 +49,67 @@
 // ## Syntax of propositional logic
 
 * Proposition Symbol
-- **Proposition symbol**
-  - Is an atomic sentence consisting of a single symbol
-    - E.g., $P$, $Q$, $North$
-  - Doesn't have truth value, it is just a symbol for a real-world statement
-    - Needs grounding
+- @Definition@: A **proposition symbol** is an atomic sentence consisting of a single symbol
+  - E.g., $P$, $Q$, $North$
+  - Doesn't have truth value, it is just a symbol for a real-world statement (needs grounding)
   - Stands for a proposition that can be true or false
     - E.g., $K_{E,5}$ = "the Knight is in E5"
     - $K_{E,5}$ is not composed of any other symbol, it is an atomic symbol
 
-- $True$ and $False$ are proposition symbols with inherent truth values
+- **Built-in symbols**: $True$ and $False$ are proposition symbols with inherent truth values
 
 * Sentences
-- **Atomic sentence**
-  - Is a sentence composed of a single proposition symbol
+- @Definition@: An **atomic sentence** is a sentence composed of a single proposition symbol
   - E.g., $P$
 
-- **Complex sentence**
-  - Is constructed from simpler (sentences) using parentheses and logical
-    connectives
+- @Definition@: A **complex sentence** is constructed from simpler sentences using parentheses and logical connectives
   - E.g., $(P \land Q) \lor R$
-  - It is a recursive definition that allow to build more complex sentences
+  - Recursive definition allows building more complex sentences
 
-- Common logical connectives
+- **Logical connectives**:
   - Not: $\lnot$
   - And: $\land$ (looks like an "A" for "and")
   - Or: $\lor$ (comes from Latin "vel" which means "or")
   - Implies: $\implies$
   - If and only if: $\iff$
 
-- Each sentence (atomic or complex) can be only true or false
+- **Key principle**: Each sentence (atomic or complex) can be only true or false
 
 * Proposition Logic: Weather Example
-- Proposition symbols are:
-  - $Rain$ = "it's raining"
-  - $Cold$ = "it's cold"
-  - $Sunny$ = "it's sunny"
-  - $Snow$ = "it's snowing"
-  - $Cloudy$ = "it's cloudy"
+- **Notation**:
+  - $Rain$ = _"it's raining"_
+  - $Cold$ = _"it's cold"_
+  - $Sunny$ = _"it's sunny"_
+  - $Snow$ = _"it's snowing"_
+  - $Cloudy$ = _"it's cloudy"_
 
 - **Atomic sentence** can be positive or negated
-  - E.g., $Rain$, $\lnot Rain$ = "it's not raining"
+  - E.g., $Rain$, $\lnot Rain$ = _"it's not raining"_
 
 - **Negation**
-  - E.g., $\lnot (Rain \lor Cloudy)$ = "it's not the case that it's raining or
-    cloudy"
+  - E.g., $\lnot (Rain \lor Cloudy)$ = _"it's not the case that it's raining or cloudy"_
 
 - **Conjunction / Disjunction**
-  - E.g., $Rain \land Cold$ = "it's raining and it's cold"
-  - E.g., $Rain \lor Snow$ = "it's either raining or snowing"
+  - E.g., $Rain \land Cold$ = _"it's raining and it's cold"_
+  - E.g., $Rain \lor Snow$ = _"it's either raining or snowing"_
 
 - **Implication** is a sentence containing a premise $\implies$ conclusion
-  - Aka "if-then statements", "rules"
-  - E.g., $Rain \implies \lnot Snow$ = "if it's raining, it's not snowing"
+  - Aka _"if-then statements"_, _"rules"_
+  - E.g., $Rain \implies \lnot Snow$ = _"if it's raining, it's not snowing"_
 
-- **Biconditional**: $A \implies B \land B \implies A$
-  - E.g., $Sunny \iff \lnot Cloudy$ = "it's sunny if and only if it's not cloudy"
+- **Biconditional**: $(A \implies B) \land (B \implies A)$
+  - E.g., $Sunny \iff \lnot Cloudy$ = _"it's sunny if and only if it's not cloudy"_
 
 * Grammar in BNF form
 ::: columns
 :::: {.column width=50%}
-- **Backus Normal Form** formally represents the grammar of propositional logic
+- @Definition@: **Backus Normal Form** formally represents the grammar of propositional logic
 
-- Ambiguous, i.e., the same sentence can be parsed in multiple ways
+- **Ambiguity**: the same sentence can be parsed in multiple ways
   - E.g., $\lnot A \lor B = (\lnot A) \lor B$ or $\lnot (A \lor B)$ ?
 
-- To eliminate ambiguity define the precedence for each operator
-  - E.g., $\lnot$ has higher precedence than $\land, \lor$ so:
-    $\lnot A \lor B \text{ means } (\lnot A) \lor B$
+- **Precedence**: eliminate ambiguity by defining operator precedence
+  - E.g., $\lnot$ has higher precedence than $\land, \lor$ so: $\lnot A \lor B \text{ means } (\lnot A) \lor B$
 ::::
 :::: {.column width=45%}
 ![](msml610/lectures_source/figures/L03.propositional_logic_BNF.png){ height=50% }
