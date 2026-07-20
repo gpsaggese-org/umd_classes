@@ -383,22 +383,21 @@
 ## Syntax
 
 * First-Order Logic (FOL)
-- **Extensions**: First-order logic (FOL) extends propositional logic by:
-  - Introducing **quantifiers** (e.g., $\forall$, $\exists$)
-  - Using **predicates** to represent properties and relations
+- @Definition@: **First-order logic** (FOL) extends propositional logic by:
+  - Introducing _quantifiers_ (e.g., $\forall$, $\exists$)
+  - Using _predicates_ to represent properties and relations
 
-- **Advantages**: Combines pros of propositional logic with pros of natural language
+- @Pros@: Combines pros of propositional logic with pros of natural language
   - Built around objects and relations
   - Allows to express facts about some or all objects, e.g.,
      - _"Some humans have green eyes"_
      - _"Chess pieces around the Queen are at risk"_
-
-- **Key capability**: FOL provides expressive power to represent structured, relational knowledge
+  - FOL provides expressive power to represent structured, relational knowledge
 
 * First-Order Logic: Syntax
 
 ::: columns
-:::: {.column width=60%}
+:::: {.column width=50%}
 - **Constants**: represent specific objects
   - E.g., $Socrates$
 - **Predicates**: describe properties or relations
@@ -408,9 +407,10 @@
 - **Variables**: act as placeholders
   - E.g., $x, y$
 - **Quantifiers**
-  - E.g., $\forall x$ (for all $x$), $\exists x$ (there exists an $x$)
+  - E.g., $\forall x$ (for all $x$)
+  - E.g., $\exists x$ (there exists an $x$)
 ::::
-:::: {.column width=45%}
+:::: {.column width=50%}
 
 ![](msml610/lectures_source/figures/L03.FOL_Syntax.png)
 
@@ -441,11 +441,12 @@
 
 * Quantifiers
 - **Quantifiers** express properties of entire collections of objects, instead of
-  enumerating objects by name (like in propositional logic)
+  enumerating objects by name (like done in propositional logic)
 
 - **Universal quantifier**: $\forall x\, P(x)$
   - Universal quantifier makes a statement about _every_ object
   - Statement is true if $P(x)$ is true for all $x$
+
 - **Existential quantifier**: $\exists x\, P(x)$
   - Existential quantifier makes a statement about _some_ object (without naming
     it)
@@ -455,18 +456,24 @@
   - E.g., $\forall x (Cat(x) \rightarrow Mammal(x))$
 
 * Nested Quantifiers
-- More complex sentences can be expressed using **multiple quantifiers**
-  - The order of quantifiers is important, so one can use parentheses to clarify
+- Complex sentences can be expressed using **multiple quantifiers**
+  - The order of quantifiers is important
+  - Need to use parentheses to clarify
 
 - @Example@:
-  - _"Brothers are siblings"_: $\forall x, y \; Brother(x, y) \implies Sibling(x, y)$
-  - Siblings is a symmetric relationship: $\forall x, y \; Sibling(x, y) \iff Sibling(y, x)$
-  - _"Everybody loves somebody"_: $\forall x \; \exists y \; Loves(x, y)$
-  - _"There is someone loved by everyone"_: $\exists y \; \forall x \; Loves(x, y)$
+  - _"Brothers are siblings"_
+    - $\forall x, y \; Brother(x, y) \implies Sibling(x, y)$
+  - Siblings is a symmetric relationship
+    - $\forall x, y \; Sibling(x, y) \iff Sibling(y, x)$
+  - _"Everybody loves somebody"_
+    - $\forall x \; \exists y \; Loves(x, y)$
+  - _"There is someone loved by everyone"_
+    - $\exists y \; \forall x \; Loves(x, y)$
 
 * Connection between $\forall$ and $\exists$
-- The universal and existential quantifiers are **connected** through negation
-  and De Morgan rules
+- @Axiom@: the universal and existential quantifiers are **connected** through
+  negation and De Morgan rules
+// TODO(ai_gp): Use a better latex
   $$
   \forall x \; \lnot P(x) \iff \lnot \exists x: P(x)
   $$
@@ -483,33 +490,34 @@
 ## Semantics
 
 * First-order Logic: Semantics
-- **Semantics** define how sentences are interpreted in a domain
+- @Definition@: **Semantics** define how sentences are interpreted in a domain
 
 - Symbols represent entities, relationships, and functions in the domain
   - **Constant symbols** represent specific objects
     - E.g., $Alice$, $GP$, $CS101$
 
-  - **Predicate symbols** represent relationships among objects
-    - E.g., $EnrolledIn(Student, Class)$, $Teaches(Professor, Class)$,
-      $IsStudent(x)$, $IsProfessor(x)$
+  - **Predicate symbols** represent relationships among objects, e.g.,
+    - $EnrolledIn(Student, Class)$
+    - $Teaches(Professor, Class)$
+    - $IsStudent(x)$, $IsProfessor(x)$
 
   - **Function symbols** represent mappings between objects
     - E.g., $AdvisorOf(Student)$, $DepartmentOf(Professor)$
 
-- An **interpretation** maps the world to its mathematical description, and vice
-  versa
+- @Definition@: an **interpretation** (aka grounding) maps the world to its
+  mathematical description, and vice versa
   - There are many possible interpretations
-  - The intended interpretation is the one that is the most natural
-  - E.g., map the symbol $GP$ $\to$ me
-  - $\forall x \, (Human(x) \rightarrow Mortal(x))$ means that every human is
-    mortal
+  - The intended interpretation is often the one that is the most natural
+    - E.g., map the symbol $GP$ $\to$ me
+    - E.g., $\forall x \, (Human(x) \rightarrow Mortal(x))$ means that every
+      human is mortal
 
 * Representing Knowledge in FOL
-- **Capabilities**: FOL enables representation of:
+- @Pros@: FOL enables representation of:
   - General rules: $\forall x\, (Bird(x) \rightarrow CanFly(x))$
   - Specific facts: $Bird(Tweety)$
 
-- **Relations**: Complex relations captured through predicates:
+- **Relations**: Complex relations are captured through predicates:
   - $Loves(Romeo, Juliet)$, $GreaterThan(3, 2)$
 
 - **Functions**: Functions express object construction:
@@ -517,7 +525,8 @@
 
 - **Knowledge base**: Built from axioms and facts
 
-- **Reasoning**: Enables reasoning about objects, properties, and their relationships
+- **Reasoning**: Enables reasoning about objects, properties, and their
+  relationships
 
 * First-Order Logic: Inference
 - @Goal@: derive new sentences from existing ones using sound rules
@@ -528,10 +537,10 @@
   - **Existential Instantiation**:
     - From $\exists x\, P(x)$ infer $P(c)$ with a new constant $c$
 
-  - **Standard rules**: Propositional logic rules such as Modus Ponens, Modus Tollens,
-    Resolution, etc., also apply within FOL
+  - **Standard rules**: Propositional logic rules such as Modus Ponens, Modus
+    Tollens, Resolution, etc., also apply within FOL
     - Modus ponens: from $P$ and $P \implies Q$, infer $Q$
 
-- **Complexity**: FOL inference is semi-decidable:
+- @Complexity@: FOL inference is semi-decidable:
   - If a sentence is entailed, a proof can be found
   - If not entailed, proof search may not terminate
