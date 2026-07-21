@@ -1,6 +1,6 @@
 // type=UMD_slides
 // course_title=MSML610: Advanced Machine Learning
-// lesson_title=L03.3: Non-classical Logics
+// lesson_title=L03.3: Non-classical Logics and Knowledge Representation
 // slides_engine=typst
 // references=
 // - Russell et al.: _"Artificial Intelligence: A Modern Approach"_ (4th ed, 2020)
