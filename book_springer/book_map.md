@@ -324,6 +324,9 @@
   - Information criteria, cross-validation, ensembles, and Bayes factors for
     choosing among models
 
+### Slides
+- `book_springer/lectures_source/Lesson05.01_Probabilistic_ML.txt`
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
@@ -362,92 +365,65 @@
   - Sensitivity analysis for unmeasured confounding, and the limits of
     identifiability from observational data
 
+### Slides
+- `book_springer/lectures_source/Lesson06.01_Causal_ML.txt`
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [100%]: Causal DAGs, structural causal models, mechanisms, identifying
-    causal structures
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [100%]: Do-calculus, interventional identification, front-door and back-door
-    criteria
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [90%]: Identification, d-separation, graphical criteria, confounding bias,
-    back-door adjustment, propensity-score/IPW methods
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [20%]: Instrumental variables: exogenous variable Z breaking confounding
-    when back-door adjustment fails, complier-effect limitation, natural
-    experiments as an alternative source of exogenous variation
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [90%]: Causal discovery from observational data, identifiability, Markov
-    equivalence, algorithm families (constraint, score, functional), validation
-- Not covered
-  - [15%]: Sensitivity analysis for unmeasured confounding, formal
-    non-identifiability bounds, online/real-time causal discovery in streaming
-    data
 
 # Part III: Data
 
 ## 07: Building Probabilistic and Causal Knowledge
 
 ### Goals
-- How to build probabilistic and causal networks
-- Causal Discovery from Observational Data
-  - Learning causal DAGs without running experiments
-  - Constraint-based and score-based search methods over graph space
-  - Markov equivalence: understanding the limits of discovery from data alone
-
-- DAGs: causal order, observed vs. unobserved variables, edge direction
-- Confounders, mediators, moderators, and colliders: reading variable roles
-  from graph structure
+- Elicit causal structure from experts and encode it as a validated DAG
+- Distinguish confounders, mediators, moderators, and colliders in a graph
+- Learn causal structure from data and reason about time-dependent causality
 
 ### Topics
 - Eliciting Causal Knowledge from Experts
-  - Structured elicitation methods, refined iteratively against incoming data
-  - Handling disagreement among stakeholders about the causal structure
-  - Documenting and validating assumptions before they enter the model
+  - Structured, step-by-step elicitation of outcomes, interventions, and
+    drivers from stakeholders
+  - Handling disagreement in hybrid teams; eliciting and validating priors
 - Building Causal DAGs
-  - Variable selection: identifying relevant nodes and system boundaries
-  - Encoding causal assumptions: direction, mechanisms, and feedback paths
-  - Translating domain knowledge into a formal graphical structure
+  - From a business question to a graph: choosing variables and encoding
+    assumed mechanisms
+  - Specifying edges and validating the resulting DAG against a worked example
 - Variable Types and Relationships
-  - Confounders: common causes that bias effect estimation
-  - Mediators and moderators: mechanisms and shifts in effect size
-  - Colliders: variables where conditioning creates spurious associations
-- Temporal Structure
-  - Causal order: establishing precedence and acyclicity among variables
-  - Feedback delays: current outcomes influencing future causes over time
-  - Dynamic systems: modeling how causal relationships evolve
-- Measurement and Operationalization
-  - Defining variables: translating abstract concepts into measurable quantities
-  - Proxy variables: substitutes used when direct measurement is impossible
-  - Validity assessment: checking whether the proxy captures the construct
+  - Observed vs. unobserved and endogenous vs. exogenous variables
+  - Confounders, moderators, colliders, and fork structures; how each role
+    biases or clarifies effect estimation
+- Causal Discovery from Data
+  - Formal discovery problem; observational vs. interventional data
+  - Constraint-based and score-based algorithm families
+  - Combining automated discovery with domain knowledge, and validating the
+    resulting DAG
+- Temporal Structure in Causal Models
+  - Why time series causality differs from the cross-sectional case
+  - Feedback loops, simultaneity, and non-stationarity
+  - When temporal structure helps identification, and when it misleads it
+
+### Slides
+- `book_springer/lectures_source/Lesson07.01_Building_Probabilistic_And_Causal_Knowledge.txt`
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [90%]: Causal AI workflow, building causal DAGs, eliciting from domain
-    experts, step-by-step process
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-  - [95%]: Building causal DAGs, variable types (mediators, confounders,
-    colliders, moderators), observed vs unobserved variables
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [80%]: Structural causal models, confounding, mediation, selection bias via
-    colliders/mediators, surrogate confounding (using proxy variables when a
-    confounder is unmeasurable)
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [65%]: Temporal causal structure: arrow-of-time causal order, feedback loops
-    and simultaneity bias, time-varying confounders
 - `msml610/lectures_source/Lesson12.2-Causal_Discovery.txt`
-  - [85%]: Using domain knowledge as constraints, combining automated discovery
-    with expert judgment, DAG validation/refutation testing
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [30%]: Structured elicitation methodology (quantile elicitation, pairwise
-    judgment, historical calibration): applied to priors, transferable to
-    structured causal-knowledge elicitation
-- Not covered
-  - [45%]: Stakeholder-disagreement resolution processes for causal DAGs, formal
-    proxy/construct validity assessment methods, explicit modeling of evolving
-    dynamic causal systems
 
 ## 08: Causal Data Pipelines
+
+### Goals
+- Trace how data collection and selection choices bias causal estimates
+- Detect distribution shift and proxy decay before they corrupt decisions
+- Run pre-flight checks so causal assumptions hold before modeling begins
 
 ### Topics
 - Data Collection and Its Biases
@@ -473,41 +449,19 @@
   - Missingness and outlier detection before modeling begins
   - Robust inference: methods that tolerate imperfect, noisy data
 
+### Slides
+- `book_springer/lectures_source/Lesson08.01_Causal_Data_Pipelines.txt`
+
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [95%]: Data acquisition/integration step in the causal workflow;
-    distribution-shift taxonomy (concept drift, covariate shift, label shift)
-    with worked examples
 - `msml610/lectures_source/Lesson08.4.txt`
-  - [70%]: Selection bias from conditioning on
-    colliders/mediators/post-treatment variables, survivorship and
-    self-selection bias, confounding from data collection, SUTVA violations and
-    interference
 - `data605/lectures_source/Lesson02.3-Data_Pipelines.txt`
-  - [75%]: Data pipeline architectures (ETL/ELT), data cleanliness issues
-    (duplicates, missing records, inconsistent formats), pipeline challenges
 - `data605/lectures_source/Lesson07.2-Data_Wrangling.txt`
-  - [80%]: Data cleaning, univariate/multivariate/time-series outlier detection,
-    data preprocessing workflow
 - `msml610/lectures_source/Lesson10.2-Causal_Inference_for_Time_Series.txt`
-  - [75%]: Non-stationarity and trends, time-varying confounders, temporal
-    structure in causal estimation
 - `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-  - [70%]: Causal identification under confounding, backdoor and frontdoor
-    criteria for confounder balance
 - `msml610/lectures_source/Lesson02.3-ML_Techniques_Input_Processing.txt`
-  - [65%]: Missing-data remediation (deletion, mean/KNN/regression imputation),
-    outlier detection, normalization
 - `msml610/lectures_source/Lesson02.6-ML_Techniques_How_To_Do_Research.txt`
-  - [60%]: Sampling bias causes (non-random sampling, undercoverage,
-    survivorship bias, self-selection bias) with concrete examples
 - `book_springer/lectures_source/Lesson15.01_Deployment_Monitoring_And_Adaptation.txt`
-  - [40%]: Production monitoring of proxy-variable validity (correlation drift)
-    and distribution shift (covariates drifting from fitted support)
-- Not covered
-  - [40%]: Formal MCAR/MAR/MNAR missing-data taxonomy, measurement-error
-    attenuation-correction methods, covariate-shift adaptation/reweighting
-    algorithms
 
 # Part IV: Decision-Making Theory & Tools
 
