@@ -1,44 +1,74 @@
 # Representation as a Foundation for Decisions
 
 * Why Knowledge Representation Matters
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Why Knowledge Representation Matters
 * What Is Knowledge Representation?
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:What is Knowledge Representation?
 * Expressiveness vs. Tractability
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Expressiveness vs. Tractability
 * Symbolic vs. Sub-symbolic Representation
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Symbolic vs. Sub-symbolic Representation
 * Neuro-symbolic Approach: Conceptual Spaces
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Neuro-symbolic Approach: Conceptual Spaces
 * Procedural vs. Declarative Representation
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Procedural vs Declarative Approaches
 * Natural Language as a Representation
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Natural languages
 * Programming Languages as a Representation
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Programming Languages
 
 # Formal Knowledge Representation
 
 * Propositional Logic: Syntax and Semantics
+// From msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt:Propositional Logic
 * First-Order Logic: Quantifiers and Inference
+// From msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt:Quantifiers
 * Logical Entailment and Inference
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Logical Entailment
 * Non-Monotonic Logic and Default Reasoning
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:Non-monotonic Logic
 * Open World vs. Closed World Assumptions
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:Open World vs Closed World Assumptions
 * Inductive Logic Programming: Learning Rules from Examples
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:Inductive Logic Programming
 * Rule-Based Systems and Knowledge-Based Agents
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Rule-Based Systems (1/2)
 * Grounding: Connecting Symbols to the World
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Grounding: Definition and Framework
 * Ontologies: Components and Structure
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Ontologies: Components
 * Ontologies: A Worked Example (University Domain)
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Ontology: Example University
 * Reasoning in Ontologies: Inference Tasks
+// From msml610/lectures_source/Lesson03.1-Knowledge_representation.txt:Example of Reasoning Tasks (1/4)
 * Description Logics and OWL
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:Description Logic
 * RDF and SPARQL: Representation Standards
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:RDF (Resource Description Framework)
 * Semantic Networks and Knowledge Graphs
+// From msml610/lectures_source/Lesson03.3-Non_classical_logics.txt:Semantic Networks
 
 # Graphical Models for Uncertainty
 
 * Why Logic Fails Under Uncertainty
+// From msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt:Why Logic Fails Under Uncertainty
 * Bayesian Networks: Definition and Structure
+// From msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt:Bayesian Networks: Definition
 
 # Causal Graphical Models
 
 * Causal Networks (Causal DAGs): Definition and Structure
+// From msml610/lectures_source/Lesson08.2-Causal_Networks.txt:Causal DAG
 * The Ladder of Causation: Association, Intervention, Counterfactual
+// From msml610/lectures_source/Lesson08.2-Causal_Networks.txt:Example: Tornado Warning
 * Structural Causal Models (SCM): Definition
+// From msml610/lectures_source/Lesson08.2-Causal_Networks.txt:Structural Causal Model
 
 # Integrating Logic and Causality
 
 * Markov Logic Networks: Combining Logic and Probability
+// From msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt:Markov Logic Networks: Basics
 * From Correlation to Causal Reasoning: What Graphs Add
+// From msml610/lectures_source/Lesson08.2-Causal_Networks.txt:(Non-Causal) Bayesian Networks
 * Choosing a Representation: Logic, Probability, or Causal Graphs
+// From msml610/lectures_source/Lesson08.2-Causal_Networks.txt:Causal (Bayesian) Networks
