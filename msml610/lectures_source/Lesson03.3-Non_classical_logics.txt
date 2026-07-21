@@ -17,8 +17,6 @@
 
 # Non-classical Logics
 
-## Intro and Examples
-
 * Motivation
 // TODO(ai_gp): Add one slide with motivation
 
@@ -202,6 +200,8 @@
   - Computational complexity with large datasets
   - Can Handle noisy, incomplete data
 
+# Knowledge Representation Frameworks
+
 ## Description Logics
 
 // https://en.wikipedia.org/wiki/Description_logic
@@ -322,6 +322,8 @@ digraph OWL_Example {
 ::::
 :::
 
+## Knowledge Representation Standards
+
 * RDF (Resource Description Framework)
 
 - @Definition@: **Resource Description Framework (RDF)**
@@ -349,6 +351,16 @@ digraph OWL_Example {
 | Author456  | hasName           | "F. Scott Fitzgerald"    |
 | Book123    | publishedYear     | "1925"                   |
 | Book123    | belongsToGenre    | "Fiction"                |
+
+- @Pros@
+  - Statements form directed graphs of nodes and edges
+  - Components are URIs to ensure global uniqueness or literals
+    - E.g., `http://example.org/Nuvolo`
+
+- @Applications@:
+  - Building knowledge graphs
+  - Semantic search
+  - Supporting ontologies
 
 \endgroup
 
@@ -389,7 +401,7 @@ digraph OWL_Example {
   SELECT ?animal WHERE { ?animal rdf:type ex:Bird }
   ```
 
-## Semantic Web
+# Knowledge Graphs & The Semantic Web
 
 * Semantic Web
 
@@ -545,6 +557,8 @@ digraph OWL_Example {
 
 - @Applications@: natural language understanding; question answering, chatbots;
   commonsense AI reasoning; semantic search, recommendation
+
+### Knowledge Graphs
 
 * Knowledge Graphs
 
