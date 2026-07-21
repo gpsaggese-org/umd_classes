@@ -336,27 +336,31 @@
 ## 06: Causal ML
 
 ### Goals
-- Do calculus
-- Confounders, mediators
+- Represent causal assumptions with DAGs and structural causal models
+- Use do-calculus to identify interventional effects from observational data
+- Apply back-door, front-door, and IV methods; know when identification fails
 
 ### Topics
 - Causal Graphical Models
-  - Structural causal models (SCMs): formal specification of generative
-    mechanisms
-  - DAGs: encoding causal order, variable dependencies, and latent confounders
-  - Identifying confounders, mediators, and colliders from graph structure
+  - Structural causal models and DAGs: formal specification of generative
+    mechanisms and causal order
+  - Confounders, mediators, and colliders; the ladder of causation from
+    association to counterfactuals
 - Do-Calculus and Interventional Reasoning
-  - The do-operator: distinguishing intervention from passive observation
-  - Transforming observational queries into interventional quantities
-  - Three rules of do-calculus: identifying when interventions are identifiable
+  - The do-operator: distinguishing intervention from passive observation, and
+    the three rules of do-calculus
+  - From interventions to potential outcomes: individual, average, and
+    conditional treatment effects
 - Identification Criteria
-  - Back-door criterion: adjusting for confounders to identify effects
-  - Front-door criterion: handling unobserved confounding via mediators
-  - D-separation: reading conditional independence from causal graphs
+  - Back-door and front-door criteria for identifying effects under
+    confounding and mediation
+  - D-separation and graph structure; confounding bias and propensity-score
+    adjustment in practice
 - Advanced Identification Methods
-  - Instrumental variables: leveraging exogenous variation to break confounding
-  - Sensitivity analysis: quantifying robustness to unmeasured confounding
-  - Identifying limits: when causal effects are unidentifiable from data
+  - Instrumental variables and natural experiments for breaking confounding
+    via exogenous variation
+  - Sensitivity analysis for unmeasured confounding, and the limits of
+    identifiability from observational data
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
