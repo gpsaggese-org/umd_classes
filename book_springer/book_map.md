@@ -107,6 +107,8 @@
     - [<Amount of topics not covered by any lesson>]: <topics>
   ```
 
+### Notes
+
 # Roadmap
 
 // https://docs.google.com/spreadsheets/d/1dU3crReWWLcSG8jI4jTvA4430-yMkqvdOEXEIbmktPQ/edit?gid=831837256#gid=831837256
@@ -138,8 +140,6 @@
 | 14. Building Stakeholder Alignment                      |                                                                            |              |              |           |                  |                   |               |
 | 15. Deployment, Monitoring, and Adaptation              | Lesson15.01_Deployment_Monitoring_And_Adaptation.txt                       |              |              |           |                  |                   |               |
 | 16. Trust, Explainability, Fairness, and Governance     |                                                                            |              |              |           |                  |                   |               |
-
-
 
 # Detailed TOC
 
@@ -175,18 +175,8 @@
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson00-Class.txt`
-  - [90%]: Course structure, books and resources, grading, class map and
-    organization
 - `msml610/lectures_source/Lesson08.1-Causal_AI_intro.txt`
-  - [100%]: Motivation for causal AI, business context, workflow overview, role
-    of decision systems
 - `msml610/lectures_source/Lesson11.1-Decision_Making_with_Causal_Models.txt`
-  - [45%]: Utility functions, expected utility, causal interventions and
-    expected outcomes, decision networks: grounds the utility-maximizing policy
-    pipeline stage
-- Not covered
-  - [25%]: Detailed chapter-by-chapter preview, prerequisites/audience framing,
-    book-specific narrative
 
 ## 02: Why Decisions, Not Predictions
 
@@ -249,11 +239,7 @@
 
 ### Slides 
 - `book_springer/lectures_source/Lesson01.02_Integrating_Causality_And_Probability_in_ML.txt`
-  - [100%]: Integration of causality and uncertainty into ML systems, moving
-    beyond correlation
 - `book_springer/lectures_source/Lesson01.03_Integrating_Business_Objective_And_Real_World_Dynamics.txt`
-  - [100%]: Business objective encoding, real-world dynamics, feedback loops,
-    performativity
 
 ### Lesson Materials
 
@@ -269,22 +255,26 @@
 ### Topics
 - Representation as a Foundation for Decisions
   - Why representation choice shapes what questions a model can answer
+  - Symbolic, sub-symbolic, procedural, declarative, and natural-language
+    representations: trade-offs in expressiveness and tractability
 - Formal Knowledge Representation
-  - Symbolic and non-classical logic: propositional/first-order logic,
-    non-monotonic reasoning, open- vs. closed-world assumptions
-  - Ontologies, semantic networks, and knowledge graphs: organizing domain
-    knowledge into reusable structures
-  - Logic-based agents: inference engines and rule-based reasoning systems
+  - Propositional and first-order logic, entailment, and inference: symbolic
+    reasoning foundations
+  - Non-monotonic reasoning, default logic, and open- vs. closed-world
+    assumptions
+  - Rule-based and knowledge-based agents; grounding symbols in the world
+  - Ontologies, description logics, RDF/SPARQL, semantic networks, and
+    knowledge graphs: organizing domain knowledge into reusable structures
 - Graphical Models for Uncertainty
-  - Bayesian networks: conditional independence, d-separation, and Markov
-    blankets
-  - Inference algorithms: exact inference, belief propagation, and MCMC
-    sampling for exact and approximate answers
+  - Why logic fails under uncertainty
+  - Bayesian networks: definition and structure
 - Causal Graphical Models
-  - Structural causal models (SCMs): formal representation of generative
-    mechanisms
+  - Causal networks (causal DAGs) and the ladder of causation: association,
+    intervention, and counterfactual
+  - Structural causal models (SCMs): definition
 - Integrating Logic and Causality
-  - Combining symbolic reasoning with probabilistic inference for hybrid systems
+  - Markov logic networks: combining symbolic reasoning with probabilistic
+    inference
   - From correlation to causal reasoning: what graphs add beyond raw data
   - Choosing a representation: when logic, probability, or causal graphs fit
     best
@@ -294,77 +284,54 @@
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson03.1-Knowledge_representation.txt`
+- `msml610/lectures_source/Lesson03.2-Propositional_and_first_order_logic.txt`
+- `msml610/lectures_source/Lesson03.3-Non_classical_logics.txt`
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
 - `msml610/lectures_source/Lesson08.2-Causal_Networks.txt`
-- `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
-- `msml610/lectures_source/Lesson08.3-Do_Calculus.txt`
-- `msml610/lectures_source/Lesson08.4.txt`
 - `msml610/lectures_source/Lesson09.2-Hidden_Markov_Models.txt`
 
 ## 05: Probabilistic ML
 
 ### Goals
-- Master Bayesian inference: priors, posteriors, and approximate inference (MCMC, VI)
-- Build probabilistic models that quantify epistemic and aleatoric uncertainty
-- Convert posterior uncertainty into decisions and principled model choices
+- Master Bayesian updating: priors, posteriors, and approximate inference methods
+- Build Bayesian generative models: networks, regression, and hierarchical models
+- Turn posterior uncertainty into decisions, comparisons, and model choices
 
 ### Topics
 - Bayesian Inference Foundations
-  - Bayesian framework: updating beliefs from priors as new data arrives
-  - Frequentist vs. Bayesian views: philosophical differences with practical
-    modeling implications
-  - Approximate inference: sampling, variational inference, and MCMC for
-    intractable posteriors
+  - Bayesian updating: turning priors into posteriors as evidence arrives,
+    versus the frequentist view
+  - Approximate inference: sampling, variational methods, and MCMC for
+    posteriors with no closed form
 - Bayesian Generative Models
-  - Linear and logistic regression: posterior-based uncertainty over parameters
-  - Hierarchical models: multi-level structure pooling information across groups
-  - Regularization via priors: soft constraints that shrink unstable estimates
+  - Bayesian networks: structure, semantics, and exact vs. approximate
+    inference
+  - Regression and hierarchical models: posterior-based uncertainty over
+    parameters, pooled across groups
 - Uncertainty in Predictions
-  - Posterior predictive distributions: averaging predictions over model
-    uncertainty
-  - Epistemic vs. aleatoric uncertainty: model uncertainty vs. irreducible noise
-  - Posterior predictive checks: validating model fit against observed data
+  - Posterior predictive distributions and checks: averaging over model
+    uncertainty, validating fit
+  - Epistemic vs. aleatoric uncertainty; robust inference and effect-size
+    comparison across groups
 - Bayesian Decision-Making
-  - Expected utility: maximizing decision value under posterior uncertainty
-  - Loss functions: connecting stakeholder preferences to model parameters
-  - Sequential decision-making: updating beliefs and acting as evidence arrives
+  - Expected utility and loss functions: turning posterior uncertainty into
+    a decision
+  - Savage-Dickey ratios, credible intervals, and prior choice for
+    communicating results
 - Model Comparison and Selection
-  - Information criteria (AIC, BIC, WAIC): balancing model fit and complexity
-  - Cross-validation: evaluating out-of-sample generalization performance
-  - Model ensembles: combining multiple models for robustness
+  - Balancing fit and complexity: Occam's razor, overfitting, and the
+    bias-variance trade-off
+  - Information criteria, cross-validation, ensembles, and Bayes factors for
+    choosing among models
 
 ### Lesson Materials
 - `msml610/lectures_source/Lesson06.1-Bayesian_Networks.txt`
-  - [95%]: Graphical models for uncertainty, probabilistic reasoning,
-    conditional independence, Bayesian network structure
 - `msml610/lectures_source/Lesson06.2-Using_Bayesian_Networks.txt`
-  - [90%]: Constructing Bayesian networks, exact/approximate inference (Monte
-    Carlo, rejection/importance sampling, MCMC), belief propagation
 - `msml610/lectures_source/Lesson07.1-Intro_to_Probabilistic_Programming.txt`
-  - [100%]: Bayesian inference fundamentals, EDA vs. inference, modern
-    probabilistic tools (PyMC, Pyro), MCMC introduction
 - `msml610/lectures_source/Lesson07.2-Posterior_Based_Decisions.txt`
-  - [95%]: Posterior-based choices, Bayesian decision-making, utility under
-    uncertainty, loss functions
 - `msml610/lectures_source/Lesson07.3-Hierarchical_Models.txt`
-  - [85%]: Hierarchical Bayesian models, structured latent variables,
-    multi-level probabilistic modeling
 - `msml610/lectures_source/Lesson07.4-Generalized_Linear_Models.txt`
-  - [90%]: Probabilistic GLMs, generative models, hierarchical probabilistic
-    structures, Bayesian regression
 - `msml610/lectures_source/Lesson07.5-Bayesian_Model_Comparison.txt`
-  - [95%]: Bayesian model selection, posterior predictive checks, model
-    comparison criteria (AIC, BIC, WAIC)
-- `msml610/lectures_source/Lesson11.2-Probabilistic_deep_learning.txt`
-  - [55%]: Bayesian deep learning (Bayesian neural nets, MC dropout, deep
-    ensembles), stochastic/structured variational inference at scale,
-    uncertainty quantification (calibration, conformal prediction, aleatoric vs
-    epistemic), probabilistic programming for deep generative/latent-variable
-    models
-- Not covered
-  - [5%]: Production-scale black-box VI for billion-parameter posteriors;
-    probabilistic-programming frameworks beyond PyMC/Pyro (e.g., NumPyro, Stan)
-    in depth
 
 ## 06: Causal ML
 

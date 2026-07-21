@@ -4,40 +4,41 @@
 * What Is Knowledge Representation?
 * Expressiveness vs. Tractability
 * Symbolic vs. Sub-symbolic Representation
+* Neuro-symbolic Approach: Conceptual Spaces
+* Procedural vs. Declarative Representation
+* Natural Language as a Representation
+* Programming Languages as a Representation
 
 # Formal Knowledge Representation
 
 * Propositional Logic: Syntax and Semantics
 * First-Order Logic: Quantifiers and Inference
+* Logical Entailment and Inference
 * Non-Monotonic Logic and Default Reasoning
 * Open World vs. Closed World Assumptions
-* Ontologies: Components and Structure
-* Description Logics and OWL
-* Knowledge Graphs and the Semantic Web
-* Logical Entailment and Inference
+* Inductive Logic Programming: Learning Rules from Examples
 * Rule-Based Systems and Knowledge-Based Agents
+* Grounding: Connecting Symbols to the World
+* Ontologies: Components and Structure
+* Ontologies: A Worked Example (University Domain)
+* Reasoning in Ontologies: Inference Tasks
+* Description Logics and OWL
+* RDF and SPARQL: Representation Standards
+* Semantic Networks and Knowledge Graphs
 
 # Graphical Models for Uncertainty
 
 * Why Logic Fails Under Uncertainty
-* Full Joint Probability Distribution and Conditional Independence
 * Bayesian Networks: Definition and Structure
-* Constructing a Bayesian Network: Ordering and Causal vs. Diagnostic Models
-* Case Study: The Burglar Alarm Example
 
 # Causal Graphical Models
 
-* Causal DAGs vs. Non-Causal Bayesian Networks
-* The Ladder of Causation: Tornado Warning Example
-* Structural Causal Models: Sprinkler Example
-* Observed vs. Unobserved, Endogenous vs. Exogenous Variables
-* Building a Causal DAG
-* Mediators and Moderators
-* Confounders and Colliders
-* Fork and Inverted Fork Path Structures
+* Causal Networks (Causal DAGs): Definition and Structure
+* The Ladder of Causation: Association, Intervention, Counterfactual
+* Structural Causal Models (SCM): Definition
 
 # Integrating Logic and Causality
 
 * Markov Logic Networks: Combining Logic and Probability
-* From Correlation to Causal Reasoning
+* From Correlation to Causal Reasoning: What Graphs Add
 * Choosing a Representation: Logic, Probability, or Causal Graphs
