@@ -1,0 +1,18 @@
+# Core.
+numpy==2.2.3
+pandas==2.2.3
+scipy==1.15.2
+
+# Visualization.
+matplotlib==3.10.1
+seaborn==0.13.2
+
+# Machine learning.
+scikit-learn==1.6.1
+statsmodels==0.14.4
+
+# Causal inference.
+dowhy==0.14
+
+# Utilities.
+tqdm==4.67.1

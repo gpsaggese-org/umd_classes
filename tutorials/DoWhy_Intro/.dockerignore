@@ -1,0 +1,49 @@
+# Python.
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments.
+venv/
+.venv/
+env/
+.env/
+
+# Jupyter.
+.ipynb_checkpoints/
+
+# Git.
+.git/
+.gitignore
+.gitattributes
+
+# Docker build scripts.
+docker_build.sh
+docker_push.sh
+docker_clean.sh
+docker_exec.sh
+docker_cmd.sh
+docker_bash.sh
+docker_jupyter.sh
+docker_name.sh
+Dockerfile.*
+
+# Data.
+data/
+*.csv
+*.pkl
+*.h5
+*.parquet
+
+# Documentation.
+README.md
+docs/
+*.md
+
+# Generated files.
+*.log
+*.tmp
+*.cache
+build/
+dist/
